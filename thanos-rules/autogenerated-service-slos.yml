@@ -3208,6 +3208,15 @@ groups:
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:
+      component: loadbalancer
+      global_aggregation: "no"
+      regional_aggregation: "no"
+      service_aggregation: "no"
+      tier: sv
+      type: errortracking
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
       component: cnyHttpServices
       global_aggregation: "no"
       regional_aggregation: "no"

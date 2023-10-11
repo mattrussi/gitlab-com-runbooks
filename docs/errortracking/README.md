@@ -6,12 +6,13 @@
 
 # Errortracking Service
 
+* [Service Overview](https://dashboards.gitlab.net/d/observability-errortracking/observability-errortracking-api)
 * **Alerts**: <https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22errortracking%22%2C%20tier%3D%22sv%22%7D>
 * **Label**: gitlab-com/gl-infra/production~"Service::ErrorTracking"
 
 ## Logging
 
-* [Rails](None)
+* [Kibana](https://log.gprd.gitlab.net/app/r/s/Kvsjn)
 
 ## Troubleshooting Pointers
 

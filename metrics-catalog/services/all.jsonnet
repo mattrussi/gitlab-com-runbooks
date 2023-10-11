@@ -14,6 +14,7 @@
   import 'code-suggestions.jsonnet',
   import 'consul.jsonnet',
   import 'customersdot.jsonnet',
+  import 'errortracking.jsonnet',
   import 'external-dns.jsonnet',
   import 'frontend.jsonnet',
   import 'google-cloud-storage.jsonnet',
