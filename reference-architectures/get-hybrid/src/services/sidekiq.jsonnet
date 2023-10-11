@@ -9,6 +9,7 @@ local highUrgencySelector = { urgency: 'high' };
 local lowUrgencySelector = { urgency: 'low' };
 local throttledUrgencySelector = { urgency: 'throttled' };
 local noUrgencySelector = { urgency: '' };
+local sliLibrary = import 'gitlab-slis/library.libsonnet';
 
 local slos = {
   urgent: {
@@ -43,11 +44,10 @@ metricsCatalog.serviceDefinition({
   // cardinality. The metrics catalog will generate recording rules with
   // the appropriate aggregations based on this set.
   // Use sparingly, and don't overuse.
-  recordingRuleMetrics: [
-    'sidekiq_jobs_completion_seconds_bucket',
-    'sidekiq_jobs_queue_duration_seconds_bucket',
-    'sidekiq_jobs_failed_total',
-  ],
+  recordingRuleMetrics: (
+    sliLibrary.get('sidekiq_execution').recordingRuleMetrics
+    + sliLibrary.get('sidekiq_queueing').recordingRuleMetrics
+  ),
   kubeConfig: {
     local kubeSelector = { app: 'sidekiq' },
     labelSelectors: kubeLabelSelectors(
@@ -68,75 +68,6 @@ metricsCatalog.serviceDefinition({
     },
   },
   serviceLevelIndicators: {
-    shard_catchall: {
-      userImpacting: true,
-      ignoreTrafficCessation: false,
-      upscaleLongerBurnRates: true,
-
-      description: |||
-        All Sidekiq jobs
-      |||,
-
-      apdex: combined(
-        [
-          histogramApdex(
-            histogram='sidekiq_jobs_completion_seconds_bucket',
-            selector=highUrgencySelector,
-            satisfiedThreshold=slos.urgent.executionDurationSeconds,
-          ),
-          histogramApdex(
-            histogram='sidekiq_jobs_queue_duration_seconds_bucket',
-            selector=highUrgencySelector,
-            satisfiedThreshold=slos.urgent.queueingDurationSeconds,
-          ),
-          histogramApdex(
-            histogram='sidekiq_jobs_completion_seconds_bucket',
-            selector=lowUrgencySelector,
-            satisfiedThreshold=slos.lowUrgency.executionDurationSeconds,
-          ),
-          histogramApdex(
-            histogram='sidekiq_jobs_queue_duration_seconds_bucket',
-            selector=lowUrgencySelector,
-            satisfiedThreshold=slos.lowUrgency.queueingDurationSeconds,
-          ),
-          histogramApdex(
-            histogram='sidekiq_jobs_completion_seconds_bucket',
-            selector=throttledUrgencySelector,
-            satisfiedThreshold=slos.throttled.executionDurationSeconds,
-          ),
-          // TODO: remove this once all unattribute jobs are removed
-          // Treat `urgency=""` as low urgency jobs.
-          histogramApdex(
-            histogram='sidekiq_jobs_completion_seconds_bucket',
-            selector=noUrgencySelector,
-            satisfiedThreshold=slos.lowUrgency.executionDurationSeconds,
-          ),
-          histogramApdex(
-            histogram='sidekiq_jobs_queue_duration_seconds_bucket',
-            selector=noUrgencySelector,
-            satisfiedThreshold=slos.lowUrgency.queueingDurationSeconds,
-          ),
-        ]
-      ),
-
-      requestRate: rateMetric(
-        counter='sidekiq_jobs_completion_seconds_bucket',
-        selector={ le: '+Inf' },
-      ),
-
-      errorRate: rateMetric(
-        counter='sidekiq_jobs_failed_total',
-        selector={},
-      ),
-
-      // Note: these labels will also be included in the
-      // intermediate recording rules specified in the
-      // `recordingRuleMetrics` stanza above
-      significantLabels: ['feature_category', 'queue', 'urgency', 'worker'],
-
-      // Consider adding useful links for the environment in the future.
-      toolingLinks: [],
-    },
     email_receiver: {
       userImpacting: true,
       severity: 's3',
@@ -165,5 +96,10 @@ metricsCatalog.serviceDefinition({
       // Consider adding useful links for the environment in the future.
       toolingLinks: [],
     },
-  },
+  } + sliLibrary.get('sidekiq_execution').generateServiceLevelIndicator({ external_dependencies: { ne: 'yes' } }, {
+    serviceAggregation: true,
+  }) + sliLibrary.get('sidekiq_queueing').generateServiceLevelIndicator({ external_dependencies: { ne: 'yes' } }, {
+    serviceAggregation: false,  // Don't add this to the request rate of the service
+    featureCategory: 'not_owned',
+  }),
 })
