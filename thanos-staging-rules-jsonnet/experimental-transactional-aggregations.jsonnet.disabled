@@ -86,7 +86,7 @@ local filesForService(service, aggregationSet, extraSelector) =
   };
 
 local testServices = std.filter(
-  function(s) std.member(['web'], s.type),
+  function(s) std.member(['web', 'api', 'gitaly', 'sidekiq'], s.type),
   metricsConfig.monitoredServices
 );
 std.foldl(
