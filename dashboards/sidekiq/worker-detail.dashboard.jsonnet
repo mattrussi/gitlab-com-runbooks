@@ -32,10 +32,15 @@ local transactionSelector = {
 local avgResourceUsageTimeSeries(title, metricName) =
   basic.timeseries(
     title=title,
+    // TODO: Remove %(metricName)s_count metric once they're removed in https://gitlab.com/gitlab-org/gitlab/-/merge_requests/131001
     query=|||
       sum by (worker) (rate(%(metricName)s_sum{%(selector)s}[$__interval]))
       /
-      sum by (worker) (rate(%(metricName)s_count{%(selector)s}[$__interval]))
+      sum by (worker) (
+        rate(sidekiq_jobs_completion_count{%(selector)s}[$__interval])
+        or
+        rate(%(metricName)s_count{%(selector)s}[$__interval])
+      )
     ||| % {
       selector: selectors.serializeHash(selector),
       metricName: metricName,
