@@ -5,7 +5,6 @@ local singleMetricRow = import 'key-metric-panels/single-metric-row.libsonnet';
 local utilizationRatesPanel = import 'key-metric-panels/utilization-rates-panel.libsonnet';
 local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
 local row = grafana.row;
-local misc = import 'utils/misc.libsonnet';
 
 local managedDashboardsForService(serviceType) =
   {
