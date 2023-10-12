@@ -119,7 +119,7 @@ basic.dashboard(
         - [💿 `gstg` API logs](https://nonprod-log.gitlab.net/app/r/s/mGwlo)
         - [💿 `gprd` API logs](https://log.gprd.gitlab.net/app/r/s/nVbro)
         - [🦵 `gstg` sidekiq logs for repository moves](https://nonprod-log.gitlab.net/app/r/s/GS5F1)
-        - [🦵 `gprd` sidekiq logs for repository moves](https://log.gprd.gitlab.net/app/r/s/urrqF)
+        - [🦵 `gprd` sidekiq logs for repository moves](https://log.gprd.gitlab.net/app/r/s/2E90v)
 
         ## References
 
