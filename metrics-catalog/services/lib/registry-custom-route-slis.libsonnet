@@ -69,8 +69,8 @@ local customRouteSLIs = [
     monitoringThresholds+: {
       apdexScore: 0.997,
     },
-    satisfiedThreshold: 2.5,
-    toleratedThreshold: 5,
+    satisfiedThreshold: 3,
+    toleratedThreshold: 6,
     route: '/v2/{name}/blobs/uploads/{uuid}',
     methods: ['delete'],
   },
