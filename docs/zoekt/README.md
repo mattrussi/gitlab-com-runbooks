@@ -26,16 +26,27 @@ number of customers as part of this [epic](https://gitlab.com/groups/gitlab-org/
 
 ### How-to guides
 
-#### Enabling/Disabling Zoekt integration
+#### Enabling/Disabling Zoekt search
 
-You can prevent Gitlab from using Zoekt integration for searching, but leave the integration itself enabled. An example of when this is useful is during an incident where users are experiencing slow searches or Zoekt is unresponsive.
+You can prevent Gitlab from using Zoekt integration for searching, but leave the indexing integration itself enabled. An example of when this is useful is during an incident where users are experiencing slow searches or Zoekt is unresponsive.
 
-Currently we use 2 feature flags for Zoekt:
-
-* [`index_code_with_zoekt`](https://gitlab.com/gitlab-org/gitlab/blob/master/ee/config/feature_flags/development/index_code_with_zoekt.yml)
 * [`search_code_with_zoekt`](https://gitlab.com/gitlab-org/gitlab/blob/master/ee/config/feature_flags/development/search_code_with_zoekt.yml)
 
-For indexing and searching respectively. These feature flags can be triggered independently.
+#### Pausing Zoekt indexing
+
+Zoekt indexing can be paused. The [jobs are stored in a separate `ZSET`](https://docs.gitlab.com/ee/development/sidekiq/worker_attributes.html#job-pause-control) and re-enqueued when indexing is unpaused. An example
+of when this is useful is during an incident when there are a large number of indexing Sidekiq jobs failing.
+
+* [`zoekt_pause_indexing`](https://gitlab.com/gitlab-org/gitlab/blob/master/ee/config/feature_flags/ops/zoekt_pause_indexing.yml)
+
+#### Disabling Zoekt indexing
+
+Zoekt indexing can be completely disabled. Pausing indexing is the preferred method to halt Zoekt indexing.
+
+WARNING:
+Indexed data will be stale after indexing is re-enabled. Reindexing from scratch may be necessary to ensure up to date search results.
+
+* [`index_code_with_zoekt`](https://gitlab.com/gitlab-org/gitlab/blob/master/ee/config/feature_flags/development/index_code_with_zoekt.yml)
 
 #### Shards management
 
@@ -43,30 +54,36 @@ At the moment, we have the `zoekt_shards` table for assigning shards. In order t
 
 #### Limitations
 
-1. We can't delete data from the index, you can follow the progress in <https://gitlab.com/gitlab-org/gitlab/-/issues/389760>
-1. Project deletions and transfers are not implemented. You can follow the progress in <https://gitlab.com/gitlab-org/gitlab/-/issues/389760> and <https://gitlab.com/gitlab-org/gitlab/-/issues/389761> respectively.
+1. Multiple shards and replication are not supported yet. You can follow the progress in <https://gitlab.com/groups/gitlab-org/-/epics/11382>.
 
 ## Architecture
 
 ### How Zoekt is used
 
-In order to index repositories and provide search functionality we use 2 binaries from the Zoekt repository:
+In order to index repositories and provide search functionality we use 1 binary from the Zoekt repository and
+1 binary from the gitlab-org repository:
 
-* [`zoekt-dynamic-indexserver`](https://github.com/sourcegraph/zoekt/tree/main/cmd/zoekt-dynamic-indexserver) is
-used to receive requests from GitLab and index provided repositories.
-* [`zoekt-webserver`](https://github.com/sourcegraph/zoekt/tree/main/cmd/zoekt-webserver) is used to serve search requests. Needs to have access to index files produced by `zoekt-dynamic-indexserver`.
-
-`zoekt-dynamic-indexserver` also shells out [`zoekt-git-clone`](https://github.com/sourcegraph/zoekt/tree/main/cmd/zoekt-git-clone) and [`zoekt-git-index`](https://github.com/sourcegraph/zoekt/tree/main/cmd/zoekt-git-index),
-which means that these binaries should also be present in the path. In turn `zoekt-git-clone` is shelling out to `git` so this must also be in the path.
+* [`gitlab-zoekt-indexer`](https://gitlab.com/gitlab-org/gitlab-zoekt-indexer) is built using the
+[`github.com/sourcegraph/zoekt`](https://github.com/sourcegraph/zoekt) and [`gitlab-org/gitaly`](https://gitlab.com/gitlab-org/gitaly/) libraries.
+It is used to receive requests from GitLab and index provided repositories.
+* [`zoekt-webserver`](https://github.com/sourcegraph/zoekt/tree/main/cmd/zoekt-webserver) is used to serve search requests. Needs to have access to index files produced by `gitlab-zoekt-indexer`.
 
 ### Zoekt API
 
 #### Indexing
 
-For `zoekt-dynamic-indexserver` we use `/index` requests with repository URL and project ID:
+For `gitlab-zoekt-indexer` we use `/indexer/index` requests with repository URL and project ID:
 
 ```shell
-curl -s -XPOST -d '{"CloneUrl":"https://gitlab.com/gitlab-org/gitlab.git","RepoId":278964}' -H 'Content-Type: application/json' https://zoekt-indexer.url/index
+curl -s -XPOST -d '{"CloneUrl":"https://gitlab.com/gitlab-org/gitlab.git","RepoId":278964, "FileSizeLimit": 2097152, "Timeout": "1h", "GitalyConnectionInfo": {"Address": "gitaly.address", "Storage": "default", "Path": "path/gitlab-org/gitlab.git"} }' -H 'Content-Type: application/json' https://zoekt-indexer.url/indexer/index
+```
+
+#### Delete
+
+For `gitlab-zoekt-indexer` we use `/indexer/index/:repoId` requests with the project ID:
+
+```shell
+curl -s -XDELETE https://zoekt-indexer.url/indexer/index/278964
 ```
 
 #### Searching
@@ -118,4 +135,4 @@ This is a significant storage overhead so we plan to optimize this in <https://g
 
 GitLab application has a dedicated `zoekt.log` file for Zoekt-related log entries. This will be handled by the standard logging infrastructure. You may also find indexing related errors in `sidekiq.log` and search related errors in `production_json.log`.
 
-As for `zoekt-dynamic-indexserver` and `zoekt-webserver`, they write logs to stdout.
+As for `gitlab-zoekt-indexer` and `zoekt-webserver`, they write logs to stdout.
