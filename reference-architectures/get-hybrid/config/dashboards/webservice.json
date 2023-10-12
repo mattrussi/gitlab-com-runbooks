@@ -207,6 +207,10 @@
           "zindex": -2
         },
         {
+          "alias": "/.*shard (apdex|error ratio|RPS)$/",
+          "color": "#E7D551"
+        },
+        {
           "alias": "webservice apdex",
           "color": "#E7D551",
           "zindex": 3
@@ -579,6 +583,10 @@
           "zindex": -2
         },
         {
+          "alias": "/.*shard (apdex|error ratio|RPS)$/",
+          "color": "#E7D551"
+        },
+        {
           "alias": "webservice error ratio",
           "color": "#E7D551",
           "fillBelowTo": "webservice error ratio avg",
@@ -919,6 +927,10 @@
       "renderer": "flot",
       "seriesOverrides": [
         {
+          "alias": "/.*shard (apdex|error ratio|RPS)$/",
+          "color": "#E7D551"
+        },
+        {
           "alias": "webservice RPS",
           "color": "#E7D551",
           "zindex": 3
@@ -1222,6 +1234,10 @@
           "nullPointMode": "connected",
           "spaceLength": 4,
           "zindex": -2
+        },
+        {
+          "alias": "/.*shard (apdex|error ratio|RPS)$/",
+          "color": "#E7D551"
         },
         {
           "alias": "puma apdex",
@@ -1596,6 +1612,10 @@
           "zindex": -2
         },
         {
+          "alias": "/.*shard (apdex|error ratio|RPS)$/",
+          "color": "#E7D551"
+        },
+        {
           "alias": "puma error ratio",
           "color": "#E7D551",
           "fillBelowTo": "puma error ratio avg",
@@ -1936,6 +1956,10 @@
       "renderer": "flot",
       "seriesOverrides": [
         {
+          "alias": "/.*shard (apdex|error ratio|RPS)$/",
+          "color": "#E7D551"
+        },
+        {
           "alias": "puma RPS",
           "color": "#E7D551",
           "zindex": 3
@@ -2097,6 +2121,10 @@
           "nullPointMode": "connected",
           "spaceLength": 4,
           "zindex": -2
+        },
+        {
+          "alias": "/.*shard (apdex|error ratio|RPS)$/",
+          "color": "#E7D551"
         },
         {
           "alias": "workhorse apdex",
@@ -2471,6 +2499,10 @@
           "zindex": -2
         },
         {
+          "alias": "/.*shard (apdex|error ratio|RPS)$/",
+          "color": "#E7D551"
+        },
+        {
           "alias": "workhorse error ratio",
           "color": "#E7D551",
           "fillBelowTo": "workhorse error ratio avg",
@@ -2811,6 +2843,10 @@
       "renderer": "flot",
       "seriesOverrides": [
         {
+          "alias": "/.*shard (apdex|error ratio|RPS)$/",
+          "color": "#E7D551"
+        },
+        {
           "alias": "workhorse RPS",
           "color": "#E7D551",
           "zindex": 3
@@ -2972,6 +3008,10 @@
           "nullPointMode": "connected",
           "spaceLength": 4,
           "zindex": -2
+        },
+        {
+          "alias": "/.*shard (apdex|error ratio|RPS)$/",
+          "color": "#E7D551"
         },
         {
           "alias": "workhorse_api apdex",
@@ -3346,6 +3386,10 @@
           "zindex": -2
         },
         {
+          "alias": "/.*shard (apdex|error ratio|RPS)$/",
+          "color": "#E7D551"
+        },
+        {
           "alias": "workhorse_api error ratio",
           "color": "#E7D551",
           "fillBelowTo": "workhorse_api error ratio avg",
@@ -3685,6 +3729,10 @@
       "points": false,
       "renderer": "flot",
       "seriesOverrides": [
+        {
+          "alias": "/.*shard (apdex|error ratio|RPS)$/",
+          "color": "#E7D551"
+        },
         {
           "alias": "workhorse_api RPS",
           "color": "#E7D551",

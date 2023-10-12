@@ -207,6 +207,10 @@
           "zindex": -2
         },
         {
+          "alias": "/.*shard (apdex|error ratio|RPS)$/",
+          "color": "#E7D551"
+        },
+        {
           "alias": "gitaly apdex",
           "color": "#E7D551",
           "zindex": 3
@@ -579,6 +583,10 @@
           "zindex": -2
         },
         {
+          "alias": "/.*shard (apdex|error ratio|RPS)$/",
+          "color": "#E7D551"
+        },
+        {
           "alias": "gitaly error ratio",
           "color": "#E7D551",
           "fillBelowTo": "gitaly error ratio avg",
@@ -919,6 +927,10 @@
       "renderer": "flot",
       "seriesOverrides": [
         {
+          "alias": "/.*shard (apdex|error ratio|RPS)$/",
+          "color": "#E7D551"
+        },
+        {
           "alias": "gitaly RPS",
           "color": "#E7D551",
           "zindex": 3
@@ -1238,6 +1250,10 @@
           "nullPointMode": "connected",
           "spaceLength": 4,
           "zindex": -2
+        },
+        {
+          "alias": "/.*shard (apdex|error ratio|RPS)$/",
+          "color": "#E7D551"
         },
         {
           "alias": "goserver apdex",
@@ -1612,6 +1628,10 @@
           "zindex": -2
         },
         {
+          "alias": "/.*shard (apdex|error ratio|RPS)$/",
+          "color": "#E7D551"
+        },
+        {
           "alias": "goserver error ratio",
           "color": "#E7D551",
           "fillBelowTo": "goserver error ratio avg",
@@ -1951,6 +1971,10 @@
       "points": false,
       "renderer": "flot",
       "seriesOverrides": [
+        {
+          "alias": "/.*shard (apdex|error ratio|RPS)$/",
+          "color": "#E7D551"
+        },
         {
           "alias": "goserver RPS",
           "color": "#E7D551",
