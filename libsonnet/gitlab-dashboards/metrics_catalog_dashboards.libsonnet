@@ -89,7 +89,7 @@ local sliOverviewMatrixRow(
       serviceType=serviceType,
       aggregationSet=if shardAggregationSet != null && sli.shardLevelMonitoring then shardAggregationSet else aggregationSet,
       selectorHash=selectorHashWithExtras,
-      titlePrefix='%(sliName)s SLI' % formatConfig,
+      titlePrefix=if !sli.shardLevelMonitoring then '%(sliName)s SLI' % formatConfig else '%(sliName)s SLI (By Shard)' % formatConfig,
       stableIdPrefix='sli-%(sliName)s' % formatConfig,
       legendFormatPrefix='%(legendFormatPrefix)s' % formatConfig,
       expectMultipleSeries=expectMultipleSeries,
