@@ -544,9 +544,9 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_shard_ops:rate_30m{component="sidekiq_execution",env="gprd",monitor="global",type="sidekiq"} == 0
+      gitlab_component_shard_ops:rate_30m{component="sidekiq_execution",env="gprd",monitor="global",shard!~"database-throttled|elasticsearch|gitaly-throttled|memory-bound|quarantine|urgent-authorized-projects",type="sidekiq"} == 0
       and
-      gitlab_component_shard_ops:rate_30m{component="sidekiq_execution",env="gprd",monitor="global",type="sidekiq"} offset 1h >= 0.16666666666666666
+      gitlab_component_shard_ops:rate_30m{component="sidekiq_execution",env="gprd",monitor="global",shard!~"database-throttled|elasticsearch|gitaly-throttled|memory-bound|quarantine|urgent-authorized-projects",type="sidekiq"} offset 1h >= 0.16666666666666666
   - alert: SidekiqServiceSidekiqExecutionTrafficAbsentSingleShard
     for: 30m
     annotations:
@@ -586,9 +586,9 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_shard_ops:rate_5m{component="sidekiq_execution",env="gprd",monitor="global",type="sidekiq"} offset 1h
+      gitlab_component_shard_ops:rate_5m{component="sidekiq_execution",env="gprd",monitor="global",shard!~"database-throttled|elasticsearch|gitaly-throttled|memory-bound|quarantine|urgent-authorized-projects",type="sidekiq"} offset 1h
       unless
-      gitlab_component_shard_ops:rate_5m{component="sidekiq_execution",env="gprd",monitor="global",type="sidekiq"}
+      gitlab_component_shard_ops:rate_5m{component="sidekiq_execution",env="gprd",monitor="global",shard!~"database-throttled|elasticsearch|gitaly-throttled|memory-bound|quarantine|urgent-authorized-projects",type="sidekiq"}
   - alert: SidekiqServiceSidekiqExecutionWithExternalDependencyApdexSLOViolation
     for: 2m
     annotations:
@@ -986,9 +986,9 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_shard_ops:rate_30m{component="sidekiq_queueing",env="gprd",monitor="global",type="sidekiq"} == 0
+      gitlab_component_shard_ops:rate_30m{component="sidekiq_queueing",env="gprd",monitor="global",shard!~"database-throttled|elasticsearch|gitaly-throttled|memory-bound|quarantine|urgent-authorized-projects",type="sidekiq"} == 0
       and
-      gitlab_component_shard_ops:rate_30m{component="sidekiq_queueing",env="gprd",monitor="global",type="sidekiq"} offset 1h >= 0.16666666666666666
+      gitlab_component_shard_ops:rate_30m{component="sidekiq_queueing",env="gprd",monitor="global",shard!~"database-throttled|elasticsearch|gitaly-throttled|memory-bound|quarantine|urgent-authorized-projects",type="sidekiq"} offset 1h >= 0.16666666666666666
   - alert: SidekiqServiceSidekiqQueueingTrafficAbsentSingleShard
     for: 30m
     annotations:
@@ -1028,9 +1028,9 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_shard_ops:rate_5m{component="sidekiq_queueing",env="gprd",monitor="global",type="sidekiq"} offset 1h
+      gitlab_component_shard_ops:rate_5m{component="sidekiq_queueing",env="gprd",monitor="global",shard!~"database-throttled|elasticsearch|gitaly-throttled|memory-bound|quarantine|urgent-authorized-projects",type="sidekiq"} offset 1h
       unless
-      gitlab_component_shard_ops:rate_5m{component="sidekiq_queueing",env="gprd",monitor="global",type="sidekiq"}
+      gitlab_component_shard_ops:rate_5m{component="sidekiq_queueing",env="gprd",monitor="global",shard!~"database-throttled|elasticsearch|gitaly-throttled|memory-bound|quarantine|urgent-authorized-projects",type="sidekiq"}
   - alert: SidekiqServiceSidekiqQueueingWithExternalDependencyApdexSLOViolation
     for: 2m
     annotations:
