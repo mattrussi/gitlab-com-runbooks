@@ -309,11 +309,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(registry_http_request_duration_seconds_bucket{le="2.5",method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[5m] offset 30s)
+          rate(registry_http_request_duration_seconds_bucket{le="3",method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[5m] offset 30s)
         )
         +
         sum by (env,environment,stage) (
-          rate(registry_http_request_duration_seconds_bucket{le="5",method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[5m] offset 30s)
+          rate(registry_http_request_duration_seconds_bucket{le="6",method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[5m] offset 30s)
         )
       )
       /
@@ -798,11 +798,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(registry_http_request_duration_seconds_bucket{le="2.5",method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[30m] offset 30s)
+          rate(registry_http_request_duration_seconds_bucket{le="3",method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[30m] offset 30s)
         )
         +
         sum by (env,environment,stage) (
-          rate(registry_http_request_duration_seconds_bucket{le="5",method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[30m] offset 30s)
+          rate(registry_http_request_duration_seconds_bucket{le="6",method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[30m] offset 30s)
         )
       )
       /
@@ -1287,11 +1287,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(registry_http_request_duration_seconds_bucket{le="2.5",method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[1h] offset 30s)
+          rate(registry_http_request_duration_seconds_bucket{le="3",method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[1h] offset 30s)
         )
         +
         sum by (env,environment,stage) (
-          rate(registry_http_request_duration_seconds_bucket{le="5",method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[1h] offset 30s)
+          rate(registry_http_request_duration_seconds_bucket{le="6",method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[1h] offset 30s)
         )
       )
       /
