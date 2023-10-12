@@ -204,7 +204,7 @@ expires, so that well-behaved clients can back off and try again only when they'
 request is logged in the usual rails logs as a 429, but an additional log is emitted that ends up in ElasticSearch with
 `json.message=Rack_Attack` (note the underscore) including the throttle that caused the block in `json.matched`, and
 whether it was a dry-run (track) or active block (throttle) in `json.env`.  Note that `json.env=blocklist` comes from
-an internal use of RackAttack for [rate-limiting git auth failures](https://docs.gitlab.com/ee/security/rack_attack.html#git-and-container-registry-failed-authentication-ban)
+an internal use of RackAttack for [rate-limiting git auth failures](https://docs.gitlab.com/ee/security/rate_limits.html#failed-authentication-ban-for-git-and-container-registry)
 and can generally be ignored.  As for all Rails logs, the `json.meta.user` field is set if the request was authenticated
 and is missing if it was anonymous.  The
 [Rack Attack](https://log.gprd.gitlab.net/app/discover#/view/78d62060-560b-11eb-ad2c-31b27cd4579b?_g=%28filters%3A!%28%29%2CrefreshInterval%3A%28pause%3A!t%2Cvalue%3A0%29%2Ctime%3A%28from%3Anow-1d%2Cto%3Anow%29%29)
