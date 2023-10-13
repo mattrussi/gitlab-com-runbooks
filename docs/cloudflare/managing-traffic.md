@@ -192,6 +192,7 @@ In order for automation to do its job, it is required to have a standardized for
      complete description of how "minimum time in hours" and "maximum time in hours" are
      applied.
 - A description may be provided to add further detail, but may be omitted.
+- When choosing the `Block` action, set the `response type` to the default: `Default Cloudflare WAF block page`.
 
 Examples:
 
