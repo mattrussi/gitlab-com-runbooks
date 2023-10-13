@@ -99,6 +99,7 @@ metricsCatalog.serviceDefinition({
       toolingLinks.sentry(projectId=3, type='sidekiq', variables=['environment', 'stage']),
       toolingLinks.kibana(title='Sidekiq execution', index='sidekiq_execution', type='sidekiq'),
     ],
+    trafficCessationAlertConfig: sidekiqHelpers.shardTrafficCessationAlertConfig,
   }) + sliLibrary.get('sidekiq_queueing').generateServiceLevelIndicator(baseSelector { external_dependencies: { ne: 'yes' } }, {
     serviceAggregation: false,  // Don't add this to the request rate of the service
     severity: 's2',
@@ -106,6 +107,7 @@ metricsCatalog.serviceDefinition({
       toolingLinks.kibana(title='Sidekiq queueing', index='sidekiq_queueing', type='sidekiq'),
     ],
     featureCategory: 'not_owned',
+    trafficCessationAlertConfig: sidekiqHelpers.shardTrafficCessationAlertConfig,
   }) + sliLibrary.get('sidekiq_execution_with_external_dependency').generateServiceLevelIndicator(baseSelector { external_dependencies: { eq: 'yes' } }, {
     serviceAggregation: false,  // Don't add this to the request rate of the service
     shardLevelMonitoring: false,
@@ -113,6 +115,7 @@ metricsCatalog.serviceDefinition({
     monitoringThresholds+: {
       errorRatio: 0.9,
     },
+    trafficCessationAlertConfig: sidekiqHelpers.shardTrafficCessationAlertConfig,
   }) + sliLibrary.get('sidekiq_queueing_with_external_dependency').generateServiceLevelIndicator(baseSelector { external_dependencies: { eq: 'yes' } }, {
     serviceAggregation: false,  // Don't add this to the request rate of the service
     shardLevelMonitoring: false,
@@ -123,6 +126,7 @@ metricsCatalog.serviceDefinition({
     shardLevelMonitoring: false,
     severity: 's4',
     toolingLinks: [],
+    trafficCessationAlertConfig: sidekiqHelpers.shardTrafficCessationAlertConfig,
   }),
 
   // Special per-worker recording rules
