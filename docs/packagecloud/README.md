@@ -18,6 +18,7 @@
 ## Troubleshooting Pointers
 
 * [Packagecloud Infrastructure and Backups](infrastructure.md)
+* [GPG Keys for Repository Metadata Signing](manage-repository-metadata-signing-keys.md)
 * [Re-indexing a package](reindex-package.md)
 * [GPG Keys for Package Signing](../packaging/manage-package-signing-keys.md)
 <!-- END_MARKER -->

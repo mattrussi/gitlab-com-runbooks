@@ -58,6 +58,7 @@
 * [Upgrading Monitoring Components](../monitoring/upgrades.md)
 * [Session: Application architecture](../onboarding/architecture.md)
 * [Gitlab.com on Kubernetes](../onboarding/gitlab.com_on_k8s.md)
+* [GPG Keys for Repository Metadata Signing](../packagecloud/manage-repository-metadata-signing-keys.md)
 * [GPG Keys for Package Signing](../packaging/manage-package-signing-keys.md)
 * [Troubleshooting LetsEncrypt for Pages](../pages/pages-letsencrypt.md)
 * [Log analysis on PostgreSQL, Pgbouncer, Patroni and consul Runbook](../patroni/log_analysis.md)
