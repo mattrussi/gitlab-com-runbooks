@@ -209,4 +209,8 @@ local capacityComponentColors = {
     alias: '/.*/',
     transform: 'negative-Y',
   },
+  shardLevelSli:: {
+    alias: '/.*shard (apdex|error ratio|RPS)$/',
+    color: '#E7D551',  // "Yellow"
+  },
 }

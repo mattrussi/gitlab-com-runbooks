@@ -23,7 +23,8 @@ local generalGraphPanel(
   )
   .addSeriesOverride(seriesOverrides.degradationSlo)
   .addSeriesOverride(seriesOverrides.outageSlo)
-  .addSeriesOverride(seriesOverrides.slo);
+  .addSeriesOverride(seriesOverrides.slo)
+  .addSeriesOverride(seriesOverrides.shardLevelSli);
 
 local genericApdexPanel(
   title,

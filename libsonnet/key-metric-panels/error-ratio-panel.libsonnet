@@ -28,6 +28,7 @@ local genericErrorPanel(
   )
   .addSeriesOverride(seriesOverrides.degradationSlo)
   .addSeriesOverride(seriesOverrides.outageSlo)
+  .addSeriesOverride(seriesOverrides.shardLevelSli)
 
   .addTarget(
     promQuery.target(

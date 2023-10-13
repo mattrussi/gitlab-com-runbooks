@@ -207,6 +207,10 @@
           "zindex": -2
         },
         {
+          "alias": "/.*shard (apdex|error ratio|RPS)$/",
+          "color": "#E7D551"
+        },
+        {
           "alias": "registry apdex",
           "color": "#E7D551",
           "zindex": 3
@@ -579,6 +583,10 @@
           "zindex": -2
         },
         {
+          "alias": "/.*shard (apdex|error ratio|RPS)$/",
+          "color": "#E7D551"
+        },
+        {
           "alias": "registry error ratio",
           "color": "#E7D551",
           "fillBelowTo": "registry error ratio avg",
@@ -919,6 +927,10 @@
       "renderer": "flot",
       "seriesOverrides": [
         {
+          "alias": "/.*shard (apdex|error ratio|RPS)$/",
+          "color": "#E7D551"
+        },
+        {
           "alias": "registry RPS",
           "color": "#E7D551",
           "zindex": 3
@@ -1214,6 +1226,10 @@
           "nullPointMode": "connected",
           "spaceLength": 4,
           "zindex": -2
+        },
+        {
+          "alias": "/.*shard (apdex|error ratio|RPS)$/",
+          "color": "#E7D551"
         },
         {
           "alias": "server apdex",
@@ -1588,6 +1604,10 @@
           "zindex": -2
         },
         {
+          "alias": "/.*shard (apdex|error ratio|RPS)$/",
+          "color": "#E7D551"
+        },
+        {
           "alias": "server error ratio",
           "color": "#E7D551",
           "fillBelowTo": "server error ratio avg",
@@ -1928,6 +1948,10 @@
       "renderer": "flot",
       "seriesOverrides": [
         {
+          "alias": "/.*shard (apdex|error ratio|RPS)$/",
+          "color": "#E7D551"
+        },
+        {
           "alias": "server RPS",
           "color": "#E7D551",
           "zindex": 3
@@ -2089,6 +2113,10 @@
           "nullPointMode": "connected",
           "spaceLength": 4,
           "zindex": -2
+        },
+        {
+          "alias": "/.*shard (apdex|error ratio|RPS)$/",
+          "color": "#E7D551"
         },
         {
           "alias": "server_route_blob_digest_deletes apdex",
@@ -2430,6 +2458,10 @@
       "renderer": "flot",
       "seriesOverrides": [
         {
+          "alias": "/.*shard (apdex|error ratio|RPS)$/",
+          "color": "#E7D551"
+        },
+        {
           "alias": "server_route_blob_digest_deletes RPS",
           "color": "#E7D551",
           "zindex": 3
@@ -2591,6 +2623,10 @@
           "nullPointMode": "connected",
           "spaceLength": 4,
           "zindex": -2
+        },
+        {
+          "alias": "/.*shard (apdex|error ratio|RPS)$/",
+          "color": "#E7D551"
         },
         {
           "alias": "server_route_blob_digest_reads apdex",
@@ -2932,6 +2968,10 @@
       "renderer": "flot",
       "seriesOverrides": [
         {
+          "alias": "/.*shard (apdex|error ratio|RPS)$/",
+          "color": "#E7D551"
+        },
+        {
           "alias": "server_route_blob_digest_reads RPS",
           "color": "#E7D551",
           "zindex": 3
@@ -3093,6 +3133,10 @@
           "nullPointMode": "connected",
           "spaceLength": 4,
           "zindex": -2
+        },
+        {
+          "alias": "/.*shard (apdex|error ratio|RPS)$/",
+          "color": "#E7D551"
         },
         {
           "alias": "server_route_blob_digest_writes apdex",
@@ -3434,6 +3478,10 @@
       "renderer": "flot",
       "seriesOverrides": [
         {
+          "alias": "/.*shard (apdex|error ratio|RPS)$/",
+          "color": "#E7D551"
+        },
+        {
           "alias": "server_route_blob_digest_writes RPS",
           "color": "#E7D551",
           "zindex": 3
@@ -3595,6 +3643,10 @@
           "nullPointMode": "connected",
           "spaceLength": 4,
           "zindex": -2
+        },
+        {
+          "alias": "/.*shard (apdex|error ratio|RPS)$/",
+          "color": "#E7D551"
         },
         {
           "alias": "server_route_blob_upload_uuid_deletes apdex",
@@ -3936,6 +3988,10 @@
       "renderer": "flot",
       "seriesOverrides": [
         {
+          "alias": "/.*shard (apdex|error ratio|RPS)$/",
+          "color": "#E7D551"
+        },
+        {
           "alias": "server_route_blob_upload_uuid_deletes RPS",
           "color": "#E7D551",
           "zindex": 3
@@ -4097,6 +4153,10 @@
           "nullPointMode": "connected",
           "spaceLength": 4,
           "zindex": -2
+        },
+        {
+          "alias": "/.*shard (apdex|error ratio|RPS)$/",
+          "color": "#E7D551"
         },
         {
           "alias": "server_route_blob_upload_uuid_reads apdex",
@@ -4438,6 +4498,10 @@
       "renderer": "flot",
       "seriesOverrides": [
         {
+          "alias": "/.*shard (apdex|error ratio|RPS)$/",
+          "color": "#E7D551"
+        },
+        {
           "alias": "server_route_blob_upload_uuid_reads RPS",
           "color": "#E7D551",
           "zindex": 3
@@ -4599,6 +4663,10 @@
           "nullPointMode": "connected",
           "spaceLength": 4,
           "zindex": -2
+        },
+        {
+          "alias": "/.*shard (apdex|error ratio|RPS)$/",
+          "color": "#E7D551"
         },
         {
           "alias": "server_route_blob_upload_uuid_writes apdex",
@@ -4939,6 +5007,10 @@
       "points": false,
       "renderer": "flot",
       "seriesOverrides": [
+        {
+          "alias": "/.*shard (apdex|error ratio|RPS)$/",
+          "color": "#E7D551"
+        },
         {
           "alias": "server_route_blob_upload_uuid_writes RPS",
           "color": "#E7D551",

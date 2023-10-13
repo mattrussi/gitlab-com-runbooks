@@ -33,7 +33,8 @@ local genericOperationRatePanel(
     max=1,
     min=0,
     show=false,
-  );
+  )
+  .addSeriesOverride(seriesOverrides.shardLevelSli);
 
 local operationRatePanel(
   title,

@@ -207,6 +207,10 @@
           "zindex": -2
         },
         {
+          "alias": "/.*shard (apdex|error ratio|RPS)$/",
+          "color": "#E7D551"
+        },
+        {
           "alias": "sidekiq apdex",
           "color": "#E7D551",
           "zindex": 3
@@ -579,6 +583,10 @@
           "zindex": -2
         },
         {
+          "alias": "/.*shard (apdex|error ratio|RPS)$/",
+          "color": "#E7D551"
+        },
+        {
           "alias": "sidekiq error ratio",
           "color": "#E7D551",
           "fillBelowTo": "sidekiq error ratio avg",
@@ -919,6 +927,10 @@
       "renderer": "flot",
       "seriesOverrides": [
         {
+          "alias": "/.*shard (apdex|error ratio|RPS)$/",
+          "color": "#E7D551"
+        },
+        {
           "alias": "sidekiq RPS",
           "color": "#E7D551",
           "zindex": 3
@@ -1206,6 +1218,10 @@
           "nullPointMode": "connected",
           "spaceLength": 4,
           "zindex": -2
+        },
+        {
+          "alias": "/.*shard (apdex|error ratio|RPS)$/",
+          "color": "#E7D551"
         },
         {
           "alias": "email_receiver error ratio",
@@ -1548,6 +1564,10 @@
       "renderer": "flot",
       "seriesOverrides": [
         {
+          "alias": "/.*shard (apdex|error ratio|RPS)$/",
+          "color": "#E7D551"
+        },
+        {
           "alias": "email_receiver RPS",
           "color": "#E7D551",
           "zindex": 3
@@ -1709,6 +1729,10 @@
           "nullPointMode": "connected",
           "spaceLength": 4,
           "zindex": -2
+        },
+        {
+          "alias": "/.*shard (apdex|error ratio|RPS)$/",
+          "color": "#E7D551"
         },
         {
           "alias": "shard_catchall apdex",
@@ -2083,6 +2107,10 @@
           "zindex": -2
         },
         {
+          "alias": "/.*shard (apdex|error ratio|RPS)$/",
+          "color": "#E7D551"
+        },
+        {
           "alias": "shard_catchall error ratio",
           "color": "#E7D551",
           "fillBelowTo": "shard_catchall error ratio avg",
@@ -2422,6 +2450,10 @@
       "points": false,
       "renderer": "flot",
       "seriesOverrides": [
+        {
+          "alias": "/.*shard (apdex|error ratio|RPS)$/",
+          "color": "#E7D551"
+        },
         {
           "alias": "shard_catchall RPS",
           "color": "#E7D551",
