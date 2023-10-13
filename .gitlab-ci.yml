@@ -1208,7 +1208,7 @@ deploy-thanos-rules:staging:
     - export VAULT_TOKEN="$(vault write -field=token "auth/${VAULT_AUTH_PATH}/login" role="${RUNBOOKS_VAULT_AUTH_ROLE}" jwt="${VAULT_ID_TOKEN}")"
     - export CLOUDSDK_AUTH_ACCESS_TOKEN="$(vault read -field=token "gcp/impersonated-account/${VAULT_GCP_IMPERSONATED_ACCOUNT}/token")"
   script:
-    - tar -czvf thanos-rules.tar.gz thanos-rules
+    - tar -czvf thanos-rules.tar.gz thanos-rules rules consoles
     - gcloud storage cp thanos-rules.tar.gz gs://${THANOS_RULES_BUCKET}
 
 deploy-thanos-rules:production:
