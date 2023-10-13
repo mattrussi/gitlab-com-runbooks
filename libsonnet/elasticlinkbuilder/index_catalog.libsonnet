@@ -284,6 +284,13 @@ local indexDefaults = {
     ],
     defaultSeriesSplitField: 'json.path.keyword',
     failureFilter: statusCode('json.status'),
+    defaultLatencyField: 'json.duration',
+    latencyFieldUnitMultiplier: 1000,
+    slowRequestFilter: [
+      existsFilter('json.duration_threshold'),
+      existsFilter('json.duration'),
+      matching.matchers({ anyScript: ["doc['json.duration'].value > (doc['json.duration_threshold'].value * 1000)"] }),
+    ],
   },
 
   redis: indexDefaults {
@@ -443,6 +450,12 @@ local indexDefaults = {
     failureFilter: [matchFilter('json.job_status', 'fail')],
     defaultSeriesSplitField: 'json.class.keyword',
     defaultLatencyField: 'json.duration',
+    latencyFieldUnitMultiplier: 1,
+    slowRequestFilter: [
+      existsFilter('json.duration_threshold'),
+      existsFilter('json.duration'),
+      matching.matchers({ anyScript: ["doc['json.duration'].value > doc['json.duration_threshold'].value"] }),
+    ],
   },
 
   local sidekiq_viz = indexDefaults {
