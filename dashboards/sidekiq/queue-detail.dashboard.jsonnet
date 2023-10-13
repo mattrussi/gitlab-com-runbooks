@@ -89,7 +89,7 @@ basic.dashboard(
 .addTemplate(template.new(
   'queue',
   '$PROMETHEUS_DS',
-  'label_values(gitlab_background_jobs:queue:ops:rate_1h{environment="$environment", type="sidekiq", monitor="global"}, queue)',
+  'label_values(application_sli_aggregation:sidekiq_queueing:apdex:weight:score_1h{environment="$environment"}, queue)',
   current='default',
   refresh='load',
   sort=1,
