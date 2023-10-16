@@ -70,7 +70,7 @@ of the same information via a web browser, as well.
 * [ ] Initiate an SSH connection to one of the production nodes, this requires a fairly recent version of gsuite
 
 ```bash
-kubectl get pods -o wide  # find the name of the node that you want to access
+kubectl get nodes -o wide  # find the name of the node that you want to access
 gcloud compute --project "gitlab-production" ssh <node name> --tunnel-through-iap
 ```
 
