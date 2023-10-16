@@ -33,6 +33,7 @@
 * [Blocking individual IPs using Redis and Rack Attack](ban-an-IP-with-redis.md)
 * [Clearing sessions for anonymous users](clear_anonymous_sessions.md)
 * [Redis on Kubernetes](kubernetes.md)
+* [Memory space analysis with cupcake-rdb](memory-space-analysis-cupcake-rdb.md)
 * [Provisioning Redis Cluster](provisioning-redis-cluster.md)
 * [Redis Cluster](redis-cluster.md)
 * [redis-functional-partitioning.md](redis-functional-partitioning.md)
