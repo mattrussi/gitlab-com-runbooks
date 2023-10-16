@@ -42,7 +42,7 @@
 * [Possible Breach of SSH MaxStartups](../frontend/ssh-maxstartups-breach.md)
 * [Purge Git data](../git/purge-git-data.md)
 * [../gitaly/git-high-cpu-and-memory-usage.md](../gitaly/git-high-cpu-and-memory-usage.md)
-* [Gitaly multi-project migration](../gitaly/multi-proect-migration.md)
+* [Gitaly multi-project migration](../gitaly/multi-project-migration.md)
 * [GitLab Storage Re-balancing](../gitaly/storage-rebalancing.md)
 * [Web IDE Assets](../gitlab-static/web-ide-assets.md)
 * [Kubernetes-Agent Basic Troubleshooting](../kas/kubernetes-agent-basic-troubleshooting.md)
