@@ -22,7 +22,7 @@
 
 * [CustomersDot main troubleshoot documentation](../customersdot/overview.md)
 * [../elastic/elasticsearch-integration-in-gitlab.md](../elastic/elasticsearch-integration-in-gitlab.md)
-* [Gitaly multi-project migration](../gitaly/multi-proect-migration.md)
+* [Gitaly multi-project migration](../gitaly/multi-project-migration.md)
 * [GitLab Storage Re-balancing](../gitaly/storage-rebalancing.md)
 * [GKE Cluster Upgrade Procedure](../kube/k8s-cluster-upgrade.md)
 * [../kube/k8s-operations.md](../kube/k8s-operations.md)

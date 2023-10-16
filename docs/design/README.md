@@ -17,7 +17,7 @@
 
 * [Chef Guidelines](../config_management/chef-guidelines.md)
 * [design.gitlab.com Runbook](design-gitlab-com.md)
-* [Gitaly multi-project migration](../gitaly/multi-proect-migration.md)
+* [Gitaly multi-project migration](../gitaly/multi-project-migration.md)
 * [../kube/k8s-operations.md](../kube/k8s-operations.md)
 * [../patroni/postgres-checkup.md](../patroni/postgres-checkup.md)
 * [PostgreSQL VACUUM](../patroni/postgresql-vacuum.md)

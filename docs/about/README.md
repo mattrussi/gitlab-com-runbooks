@@ -40,7 +40,7 @@
 * [Upgrading the OS of Gitaly VMs](../gitaly/gitaly-os-upgrade.md)
 * [Gitaly repository cgroups](../gitaly/gitaly-repos-cgroup.md)
 * [Restoring gitaly data corruption on a project after an unclean shutdown](../gitaly/gitaly-repository-corruption.md)
-* [Gitaly multi-project migration](../gitaly/multi-proect-migration.md)
+* [Gitaly multi-project migration](../gitaly/multi-project-migration.md)
 * [GitLab Storage Re-balancing](../gitaly/storage-rebalancing.md)
 * [GKE Cluster Upgrade Procedure](../kube/k8s-cluster-upgrade.md)
 * [GitLab.com on Kubernetes](../kube/k8s-new-cluster.md)
