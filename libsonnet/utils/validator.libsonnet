@@ -1,3 +1,4 @@
+local misc = import 'utils/misc.libsonnet';
 // Recursively validate an object using the provided definition
 local validateNested(prefix, definition, object) =
   if object == null then
@@ -7,20 +8,19 @@ local validateNested(prefix, definition, object) =
       function(field)
         local fullField = std.join('.', prefix + [field]);
         local validator = definition[field];
+        local value = misc.dig(object, [field]);
 
-        if std.objectHas(object, field) then
-          if std.isObject(validator) then
-            // Recursively validate
-            validateNested(prefix + [field], validator, object[field])
-          else
-            local failureMessage = validator(object[field]);
-            if failureMessage == null then
-              /* success! */
-              []
-            else
-              ['field %s: %s' % [fullField, failureMessage]]
+        if std.isObject(validator) then
+          // Recursively validate
+          validateNested(prefix + [field], validator, value)
         else
-          ['field %s is required' % [fullField]],
+          assert std.isFunction(validator) : 'invalid validator for %s' % [fullField];
+          local failureMessage = validator(value);
+          if failureMessage == null then
+            /* success! */
+            []
+          else
+            ['field %s: %s' % [fullField, failureMessage]],
       std.objectFields(definition)
     );
 
@@ -78,8 +78,11 @@ local optional(validator) =
     if v == null then
       null
     else
-      local result = validator(v);
-      if result == null then
+      local result = if std.isObject(validator) then
+        validateNested([], validator, v)
+      else
+        validator(v);
+      if result == null || result == [] then
         null
       else
         // Extend the message to include the null optional
@@ -106,7 +109,7 @@ local isDuration(v) =
 {
   new:: newValidator,
   array:: validator(std.isArray, 'expected an array'),
-  boolean:: validator(std.isBoolean, 'expected an boolean'),
+  boolean:: validator(std.isBoolean, 'expected a boolean'),
   func:: validator(std.isFunction, 'expected a function'),
   number:: validator(std.isNumber, 'expected a number'),
   object:: validator(std.isObject, 'expected an object'),
