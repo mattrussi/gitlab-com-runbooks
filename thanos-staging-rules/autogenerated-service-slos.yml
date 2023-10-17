@@ -3029,6 +3029,15 @@ spec:
       expr: "1"
     - record: gitlab_component_service:mapping
       labels:
+        component: llm_completion
+        global_aggregation: "no"
+        regional_aggregation: "no"
+        service_aggregation: "yes"
+        tier: sv
+        type: ai-abstraction-layer
+      expr: "1"
+    - record: gitlab_component_service:mapping
+      labels:
         component: rails_request
         global_aggregation: "no"
         regional_aggregation: "no"

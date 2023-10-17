@@ -4,6 +4,7 @@
 //
 // NOTE: PLEASE KEEP THIS FILE IN ALPHABETICAL ORDER
 [
+  import 'ai-abstraction-layer.jsonnet',
   import 'ai-assisted.jsonnet',
   import 'ai-gateway.jsonnet',
   import 'api.jsonnet',

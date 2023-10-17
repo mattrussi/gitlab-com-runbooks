@@ -756,6 +756,24 @@ services:
       monitors:
         primary_grafana_dashboard: ai-gateway-main/ai-gateway-overview
 
+  - name: ai-abstraction-layer
+    tier: sv
+    friendly_name: AI Abstraction Layer
+    label: AIAbstractionLayer
+    owner: ai_framework
+    technical:
+      project:
+        - https://gitlab.com/gitlab-org/gitlab
+      documents:
+        architecture: https://docs.gitlab.com/ee/development/ai_architecture.html
+        readiness_review: https://gitlab.com/gitlab-com/gl-infra/readiness/-/issues/90
+      logging:
+        - name: GraphQL Chat operations
+          permalink: https://log.gprd.gitlab.net/app/r/s/3yuLD
+    observability:
+      monitors:
+        primary_grafana_dashboard: ai-abstraction-layer-main/ai-abstraction-layer-overview
+
   - name: mailroom
     tier: sv
     friendly_name: Mailroom Incoming Mail Service
