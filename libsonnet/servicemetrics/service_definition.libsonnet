@@ -13,7 +13,9 @@ local serviceDefaults = {
   autogenerateRecordingRules: true,
   disableOpsRatePrediction: false,
   nodeLevelMonitoring: false,  // By default we do not use node-level monitoring
-  monitoring: {},
+  monitoring: {
+    shard: { enabled: false },
+  },
   kubeConfig: {},
   kubeResources: {},
   regional: false,  // By default we don't support regional monitoring for services
@@ -26,41 +28,36 @@ local serviceDefaults = {
   },
 };
 
-local shardLevelMonitoringEnabled(serviceDefinition) = misc.dig(
-  serviceDefinition, ['monitoring', 'shard', 'enabled']
-) == true;
+local shardLevelMonitoringEnabled(serviceDefinition) =
+  misc.dig(serviceDefinition, ['monitoring', 'shard', 'enabled']) == true;
 
 local validateMonitoring(serviceDefinition) =
-  if std.length(std.objectFields(serviceDefinition.monitoring)) > 0 then
-    local shardValidator = if std.objectHas(serviceDefinition.monitoring, 'shard') then
-      validator.new({
-        monitoring: {
-          shard: {
-            enabled: validator.boolean,
-            overrides: validator.optional(validator.object),
-          },
-        },
-      })
-    else
-      validator.new({});
+  local shardLevelSlis = [
+    sli.key
+    for sli in std.objectKeysValues(serviceDefinition.serviceLevelIndicators)
+    if sli.value.shardLevelMonitoring
+  ];
+  local validShardOverridesValidator = validator.validator(
+    function(overridenShardSlis)
+      local sliNames = std.objectFields(overridenShardSlis);
+      misc.arrayDiff(sliNames, shardLevelSlis) == [],
+    'SLI must be present and has shardLevelMonitoring enabled. Supported SLIs: %s'
+    % [std.join(', ', shardLevelSlis)]
+  );
 
-    local shardValidated = shardValidator.assertValid(serviceDefinition);
+  local monitoringValidator = validator.new({
+    monitoring: {
+      shard: {
+        enabled: validator.boolean,
+        overrides: validator.and(
+          validator.optional(validator.object),
+          validShardOverridesValidator
+        ),
+      },
+    },
+  });
 
-    local shardLevelSlis = [
-      sli.key
-      for sli in std.objectKeysValues(serviceDefinition.serviceLevelIndicators)
-      if sli.value.shardLevelMonitoring
-    ];
-    local overridenShardSlis = std.objectFields(misc.dig(shardValidated.monitoring, ['shard', 'overrides']));
-    assert misc.arrayDiff(
-      overridenShardSlis, shardLevelSlis
-    ) == [] : 'SLIs in `monitoring.shard.overrides` must be present and has shardLevelMonitoring enabled. Illegal SLIs: %s' % [
-      misc.arrayDiff(overridenShardSlis, shardLevelSlis),
-    ];
-
-    serviceDefinition
-  else
-    serviceDefinition;
+  monitoringValidator.assertValid(serviceDefinition);
 
 // Convience method, will wrap a raw definition in a serviceLevelIndicatorDefinition if needed
 local prepareComponent(definition) =
@@ -171,7 +168,33 @@ local serviceDefinition(service) =
       service.kubeConfig.labelSelectors.hasNodeSelector(),
 
     isShardLevelMonitored():: shardLevelMonitoringEnabled(service),
-    shardMonitoringOverrides():: misc.dig(service, ['monitoring', 'shard', 'overrides']),
+    getShardMonitoringOverrides():: misc.dig(service, ['monitoring', 'shard', 'overrides']),
+
+    // Returns true if the SLI has shardLevelMonitoring enabled and
+    // specified in `monitoring.shard.overrides`
+    hasShardMonitoringOverrides(sli)::
+      sli.shardLevelMonitoring &&
+      std.objectHas(self.getShardMonitoringOverrides(), sli.name),
+
+    // Returns an array of { shard: shardName, threshold: thresholdField }
+    // for each shard with overriden SLI for the given thresholdField.
+    // Example: [ { name: 'urgent-other' }, { threshold: 0.97 } ]
+    listOverridenShardsMonitoringThresholds(sli, thresholdField)::
+      std.filter(
+        function(shardWithThreshold) std.isNumber(shardWithThreshold.threshold),
+        std.map(
+          function(shard)
+            {
+              shard: shard.key,
+              threshold: std.get(shard.value, thresholdField),
+            },
+          std.objectKeysValues(std.get(
+            self.getShardMonitoringOverrides(),
+            sli.name,
+            default={}
+          ))
+        )
+      ),
   };
 
 {

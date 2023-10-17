@@ -18,7 +18,7 @@ local shardLevelOverridesExists(service, sli) =
   std.length(
     std.objectFields(
       std.get(
-        service.shardMonitoringOverrides(),
+        service.getShardMonitoringOverrides(),
         sli.name,
         default={}
       )
@@ -26,32 +26,12 @@ local shardLevelOverridesExists(service, sli) =
   ) > 0;
 
 local generateShardSelectorsAndThreshold(service, sli, thresholdField) =
-  local overridenShards = std.objectFields(
-    std.get(
-      service.shardMonitoringOverrides(),
-      sli.name,
-      default={}
-    )
-  );
-  local overridenShardsSelector = std.filter(
-    function(shardSelector) shardSelector.threshold != {},
-    std.map(
-      function(shard)
-        {
-          shard: shard,
-          threshold: misc.dig(
-            service.shardMonitoringOverrides(),
-            [sli.name, shard, thresholdField]
-          ),
-        },
-      overridenShards
-    )
-  );
+  local overridenShardsSelector = service.listOverridenShardsMonitoringThresholds(sli, thresholdField);
 
   if std.length(overridenShardsSelector) > 0 then
     local otherShardsSelector = [
       {
-        shard: { noneOf: overridenShards },
+        shard: { noneOf: std.map(function(s) s.shard, overridenShardsSelector) },
         threshold: std.get(sli.monitoringThresholds, thresholdField),
       },
     ];
@@ -65,7 +45,7 @@ local apdexAlertForSLIForAlertDescriptor(service, sli, alertDescriptor, extraSel
     serviceType: service.type,
   };
 
-  local shardSelectors = if shardLevelOverridesExists(service, sli) then
+  local shardSelectors = if service.hasShardMonitoringOverrides(sli) then
     generateShardSelectorsAndThreshold(service, sli, 'apdexScore')
   else
     [];

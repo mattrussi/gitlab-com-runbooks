@@ -1,4 +1,6 @@
 local thresholds = import 'mwmbr/thresholds.libsonnet';
+local array = import 'utils/array.libsonnet';
+local misc = import 'utils/misc.libsonnet';
 
 local minApdexDeprecatedSingleBurnSLO(labels, expr) =
   {
@@ -72,26 +74,56 @@ local otherRules(serviceDefinition, labels) =
     )
   else [];
 
+local minApdexMonitoringSLOWithShards(serviceDefinition, sli, labels) =
+  local overridenShards = serviceDefinition.listOverridenShardsMonitoringThresholds(sli, 'apdexScore');
+
+  [minApdexMonitoringSLO(labels=labels, expr='%f' % [sli.monitoringThresholds.apdexScore])] + std.map(
+    function(shard)
+      minApdexMonitoringSLO(
+        labels=labels { shard: shard.shard },
+        expr='%f' % [shard.threshold]
+      ),
+    overridenShards
+  );
+
+local maxErrorsMonitoringSloWithShards(serviceDefinition, sli, labels) =
+  local overridenShards = serviceDefinition.listOverridenShardsMonitoringThresholds(sli, 'errorRatio');
+
+  [maxErrorsMonitoringSLO(labels=labels, expr='%f' % [1 - sli.monitoringThresholds.errorRatio])] + std.map(
+    function(shard)
+      maxErrorsMonitoringSLO(
+        labels=labels { shard: shard.shard },
+        expr='%f' % [1 - shard.threshold]
+      ),
+    overridenShards
+  );
+
 local monitoringSLOsPerSLIsForService(serviceDefinition, serviceLabels) =
   std.flatMap(
     function(sli)
       local labels = serviceLabels { component: sli.name };
-      [
+      array.compact([
         if sli.hasApdexSLO() then
-          minApdexMonitoringSLO(
-            labels=labels,
-            expr='%f' % [sli.monitoringThresholds.apdexScore],
-          )
+          if !sli.shardLevelMonitoring then
+            minApdexMonitoringSLO(
+              labels=labels,
+              expr='%f' % [sli.monitoringThresholds.apdexScore],
+            )
+          else
+            minApdexMonitoringSLOWithShards(serviceDefinition, sli, labels)
         else
           null,
         if sli.hasErrorRateSLO() then
-          maxErrorsMonitoringSLO(
-            labels=labels,
-            expr='%f' % [1 - sli.monitoringThresholds.errorRatio],
-          )
+          if !sli.shardLevelMonitoring then
+            maxErrorsMonitoringSLO(
+              labels=labels,
+              expr='%f' % [1 - sli.monitoringThresholds.errorRatio],
+            )
+          else
+            maxErrorsMonitoringSloWithShards(serviceDefinition, sli, labels)
         else
           null,
-      ],
+      ]),
     serviceDefinition.listServiceLevelIndicators()
   );
 

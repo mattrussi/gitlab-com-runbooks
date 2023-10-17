@@ -2474,6 +2474,13 @@ groups:
       tier: sv
       type: sidekiq
     expr: "0.995000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      component: sidekiq_execution
+      shard: urgent-authorized-projects
+      tier: sv
+      type: sidekiq
+    expr: "0.980000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: sidekiq_execution
@@ -2498,6 +2505,13 @@ groups:
       tier: sv
       type: sidekiq
     expr: "0.995000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      component: sidekiq_queueing
+      shard: urgent-other
+      tier: sv
+      type: sidekiq
+    expr: "0.970000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: sidekiq_queueing
