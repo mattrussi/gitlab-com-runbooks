@@ -222,10 +222,10 @@ on a business day and 2.5k to 3.5k requests/s to
 Performance of the API service mainly depends on these factors:
 
 * Node Pool:
-  * <https://ops.gitlab.net/gitlab-com/gitlab-com-infrastructure/-/blob/07a258b2420778c1f49839367ea9fb1b1ca13460/environments/gprd/gke-zonal.tf#L51-55>
+  * <https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/6ac69bda99a722b0238c28fa348ddb85436c54f6/environments/gprd/gke-zonal.tf>
   * This configuration exists for EACH cluster
 * Node type:
-  <https://ops.gitlab.net/gitlab-com/gitlab-com-infrastructure/-/blob/07a258b2420778c1f49839367ea9fb1b1ca13460/environments/gprd/variables.tf#L354>
+  <https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/6ac69bda99a722b0238c28fa348ddb85436c54f6/environments/gprd/variables.tf#L422>
 * Number of puma worker_processes: [`sum(puma_workers{env="gprd",
   type="api"})`](https://thanos.gitlab.net/graph?g0.range_input=1h&g0.max_source_resolution=0s&g0.expr=sum(puma_workers%7Benv%3D%22gprd%22%2C%20type%3D%22api%22%7D)&g0.tab=0)
 * Number of puma threads: [`sum(puma_max_threads{env="gprd",
@@ -254,7 +254,7 @@ POD is taking a long time. Have a look at:
 Requests are limited mainly by HAProxy (2000rps per IP) and RackAttack. See the
 [handbook](https://docs.gitlab.com/ee/user/gitlab_com/#gitlabcom-specific-rate-limits)
 for published limits and
-[../rate-limiting/README.md](../rate-limiting/README.md]) for details of our
+[../rate-limiting/README.md](../rate-limiting/README.md) for details of our
 rate limiting. A few customer IPs are still excluded from rate limiting.
 
 ## Scalability
@@ -340,10 +340,10 @@ To minimize interrupted requests between the client and the API service, we have
 a special workhorse configuration to prevent unnecessary HTTP502 errors from
 occurring during deployments.
 
-1. We extend how long a Pod waits until it is `SIGKILL`'d by Kuberentes -
-   <https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-com/-/blob/8b9068833c57a1d986a6461e1f6b5aa61b79b7e4/releases/gitlab/values/values.yaml.gotmpl#L664>
-1. We enable apiLong Polling
-<https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-com/-/blob/8b9068833c57a1d986a6461e1f6b5aa61b79b7e4/releases/gitlab/values/values.yaml.gotmpl#L695>
+1. We extend how long a Pod waits until it is `SIGKILL`'d by Kubernetes -
+   <https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-com/-/blob/1f0a73923666f8bb50085362d2771653e8001308/releases/gitlab/values/values.yaml.gotmpl#L658>
+1. We enable API Long Polling
+<https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-com/-/blob/1f0a73923666f8bb50085362d2771653e8001308/releases/gitlab/values/values.yaml.gotmpl#L651>
 
 With API Long Polling configured, we for requests that are destined for
 `/api/v4/jobs/request` to sit in a lengthy poll such that Runner clients are not
