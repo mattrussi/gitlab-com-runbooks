@@ -1,6 +1,5 @@
 local thresholds = import 'mwmbr/thresholds.libsonnet';
 local array = import 'utils/array.libsonnet';
-local misc = import 'utils/misc.libsonnet';
 
 local minApdexDeprecatedSingleBurnSLO(labels, expr) =
   {
