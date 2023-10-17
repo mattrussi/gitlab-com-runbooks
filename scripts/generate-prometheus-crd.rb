@@ -53,7 +53,7 @@ rule_files.each do |rule_file|
     shard_value = mapping_yaml[filename_base]
   else
     hash_value = OpenSSL::Digest::SHA256.hexdigest(filename_base)
-    shard_value = hash_value.to_i(16) % (shards + 1)
+    shard_value = hash_value.to_i(16) % shards
   end
 
   # Create new yaml
