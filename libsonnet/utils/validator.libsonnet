@@ -115,6 +115,6 @@ local isDuration(v) =
   optional:: optional,
   or:: or,
   and:: and,
-  setMember(set):: validator(function(v) std.setMember(v, set), 'value not in valid set'),
+  setMember(set):: validator(function(v) std.setMember(v, set), 'value not in valid set: %s' % [set]),
   validator:: validator,
 }
