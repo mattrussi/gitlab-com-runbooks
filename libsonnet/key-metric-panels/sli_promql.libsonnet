@@ -125,7 +125,8 @@ local sloLabels(selectorHash) =
   local supportedStaticLabels = std.set(labelTaxonomy.labelTaxonomy(
     labelTaxonomy.labels.sliComponent |
     labelTaxonomy.labels.tier |
-    labelTaxonomy.labels.service
+    labelTaxonomy.labels.service |
+    labelTaxonomy.labels.shard
   ));
   local supportedSelector = std.foldl(
     function(memo, labelName)
