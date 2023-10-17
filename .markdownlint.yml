@@ -6,6 +6,7 @@ line-length: false
 no-inline-html: false
 first-line-h1: false
 emphasis-style: false
+commands-show-output: false
 
 # TODO:
 code-block-style: false
