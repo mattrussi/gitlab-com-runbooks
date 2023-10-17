@@ -25,14 +25,10 @@ The Reliability team validates the ability of recovery from a disaster that impa
 
 ### Zonal recovery checklist
 
-The following steps should be completed in the following order in the unlikely scenario of a zonal outage on GitLab.com:
+In the unlikely scenario of a zonal outage on GitLab:
 
-- [ ] Drain the corresponding zonal Kubernetes cluster using [`set-server-state`](/docs/frontend/haproxy.md#set-server-state) for the failed zone, and evaluate recovery of the other zonal clusters.
-- [ ] Drain the canary environment with [GitLab Chatops](https://gitlab.com/gitlab-org/release/docs/blob/master/general/deploy/canary.md#how-to-stop-all-production-traffic-to-canary).
-- [ ] Reconfigure the regional cluster to exclude the affected zone by setting `regional_cluster_zones` in Terraform to a list of zones that are not impacted ([example MR](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/merge_requests/4862)).
-- [ ] Provision new database replicas in the affected zone.
-- [ ] Provision new Gitaly servers from snapshot in the affected zone ([example MR](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/merge_requests/4863)).
-- [ ] (optional) Provision new Redis VMs to add additional capacity.
+- [ ] Declare a change request by running the command `/change decare` in the production channel.
+- [ ] Select the `change_zonal_recovery.md` template and follow the steps in the template.
 
 **Note**: When the outage ends, it is not recommended to fail back or use the old infrastructure (if it is available) to avoid losing additional data.
 
