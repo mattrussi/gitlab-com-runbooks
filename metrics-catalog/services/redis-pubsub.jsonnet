@@ -6,25 +6,8 @@ metricsCatalog.serviceDefinition(
   redisArchetype(
     type='redis-pubsub',
     // via Gitlab::Redis::Workhorse and Gitlab::Redis::Pubsub (initially, to be replaced by ActionCable)
-    railsStorageSelector=redisHelpers.storageSelector({ oneOf: ['workhorse', 'pubsub'] }),
+    railsStorageSelector=redisHelpers.storageSelector({ oneOf: ['workhorse', 'pubsub', 'action_cable'] }),
     descriptiveName='Redis that handles predominantly pub/sub operations',
   )
-  {
-    // TODO: set severity to s2 after migration is completed
-    serviceLevelIndicators+: {
-      rails_redis_client+: {
-        userImpacting: true,
-        severity: 's4',
-      },
-      primary_server+: {
-        userImpacting: true,
-        severity: 's4',
-      },
-      secondary_servers+: {
-        userImpacting: true,
-        severity: 's4',
-      },
-    },
-  }
   + redisHelpers.gitlabcomObservabilityToolingForRedis('redis-pubsub')
 )
