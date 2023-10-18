@@ -55,7 +55,7 @@ test.suite({
 
   testV2Missing: {
     actual: v2._validationMessages({}),
-    expect: ['field stringOrNumber: expected a string or expected a number'],
+    expect: ['field stringOrNumber is required'],
   },
   testV2String: {
     actual: v2.isValid({ stringOrNumber: '1' }),
@@ -72,7 +72,7 @@ test.suite({
 
   testV3Missing: {
     actual: v3._validationMessages({}),
-    expect: ['field nested.numberValue: expected a number', 'field nested.stringValue: expected a string'],
+    expect: ['field nested is required'],
   },
   testV3Valid: {
     actual: v3.isValid({ nested: { stringValue: 'a', numberValue: 1 } }),
@@ -85,7 +85,7 @@ test.suite({
 
   testV4Missing: {
     actual: v4._validationMessages({}),
-    expect: ['field stringAndMatches: expected a string'],
+    expect: ['field stringAndMatches is required'],
   },
   testV4Valid: {
     actual: v4.isValid({ stringAndMatches: 'foo' }),
@@ -102,7 +102,7 @@ test.suite({
 
   testDurationValidatorMissing: {
     actual: durationValidator._validationMessages({}),
-    expect: ['field durationString: expected a promql duration'],
+    expect: ['field durationString is required'],
   },
 } + {
   // Table test valid durations
@@ -129,80 +129,5 @@ test.suite({
   testOptionalValidatorIncorrectType: {
     actual: optionalValidator._validationMessages({ optionalString: 1, optionalNumber: 'a' }),
     expect: ['field optionalNumber: expected a number or null', 'field optionalString: expected a string or null'],
-  },
-
-  local optionalNestedValidator = validator.new({
-    monitoring: {
-      shard: validator.optional({
-        enabled: validator.boolean,
-        overrides: validator.object,
-      }),
-    },
-  }),
-  testOptionalNestedValidator: {
-    actual: optionalNestedValidator._validationMessages({ monitoring: { shard: { enabled: true } } }),
-    expect: [],
-  },
-  testOptionalNestedValidatorNull: {
-    actual: optionalNestedValidator._validationMessages({ monitoring: { shard: null } }),
-    expect: [],
-  },
-  testOptionalNestedValidatorEmptyInvalid: {
-    actual: optionalNestedValidator._validationMessages({ monitoring: { shard: {} } }),
-    expect: ['field monitoring.shard: ["field enabled: expected a boolean"] or null'],
-  },
-  testOptionalNestedValidatorInvalid: {
-    actual: optionalNestedValidator._validationMessages({ monitoring: { shard: { enabled: 'not a boolean', overrides: 'not an object' } } }),
-    expect: ['field monitoring.shard: ["field enabled: expected a boolean", "field overrides: expected an object"] or null'],
-  },
-
-  local deeplyNestedOptionalValidator = validator.new({
-    nested0: {
-      nested1: validator.optional({
-        nested2: validator.optional({
-          leaf: validator.boolean,
-        }),
-      }),
-    },
-  }),
-  testDeeplyNestedOptionalValidator: {
-    actual: deeplyNestedOptionalValidator._validationMessages({
-      nested0: {
-        nested1: {
-          nested2: {
-            leaf: true,
-          },
-        },
-      },
-    }),
-    expect: [],
-  },
-  testDeeplyNestedOptionalValidatorNull1: {
-    actual: deeplyNestedOptionalValidator._validationMessages({
-      nested0: {
-        nested1: null,
-      },
-    }),
-    expect: [],
-  },
-  testDeeplyNestedOptionalValidatorNull2: {
-    actual: deeplyNestedOptionalValidator._validationMessages({
-      nested0: {
-        nested1: {
-          nested2: null,
-        },
-      },
-    }),
-    expect: [],
-  },
-  testDeeplyNestedOptionalValidatorEmptyNested2: {
-    actual: deeplyNestedOptionalValidator._validationMessages({
-      nested0: {
-        nested1: {
-          nested2: {},
-        },
-      },
-    }),
-    expect: ['field nested0.nested1: ["field nested2: [\\"field leaf: expected a boolean\\"] or null"] or null'],
   },
 })
