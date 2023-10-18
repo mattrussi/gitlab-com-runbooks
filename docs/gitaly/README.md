@@ -102,7 +102,6 @@ graph TD
 graph TD
     gstg-base-stor-gitaly-->gstg-base-stor-gitaly-cny
     gstg-base-stor-gitaly-->gstg-base-stor-gitaly-hdd
-    gstg-base-stor-gitaly-->gstg-base-stor-gitaly-zfs
     gstg-base-stor-gitaly-->gstg-base-stor-gitaly-praefect
     gstg-base-stor-gitaly-->gstg-base-stor-gitaly-praefect-cny
 
@@ -113,7 +112,6 @@ graph TD
 * `gstg-base-stor-gitaly`: The base configuration which is common for all Gitaly shards and stages.
 * `gstg-base-stor-gitaly-cny`: Any extra configuration we might want to add for Gitaly `shard=default, stage=cny`.
 * `gstg-base-stor-gitaly-hdd`: Any extra configuration we might want to add for Gitaly `shard=main, stage=main`.
-* `gstg-base-stor-gitaly-zfs`: Any extra configuration for `file-zfs-01-stor-gstg.c.gitlab-staging-1.internal`.
 * `gstg-base-stor-gitaly-praefect`: Any extra configuration we might want to add for Gitaly `shard=praefect, stage=main`.
 * `gstg-base-stor-gitaly-praefect-cny`: Any extra configuration we might want to add for Gitaly `shard=praefect, stage=cny`.
 * `gstg-base-stor-praefect`: Configuration for the praefect server for `stage=main`.
