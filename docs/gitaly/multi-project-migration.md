@@ -130,3 +130,41 @@ Runbook:
 1. If you need more context about the failure for example the failure came form Gitaly, fetch `json.correlation_id` and check the correlation dashboard: [gstg](https://nonprod-log.gitlab.net/app/r/s/F9zdz) | [gprd](https://log.gprd.gitlab.net/app/r/s/gOgAn)
 
     ![screenshot of logs with failed moves using the correlation dashboard](./img/gitalyctl-repo-move-fail-correlation-logs.png)
+
+1. Confirm that the repository is not left in `read-only` mode
+
+    ```irb
+    # If Project
+    [ gstg ] production> Project.find_by_full_path('sxuereb/gitaly').repository_read_only?
+    => true
+
+    # If Snippet
+    [ gstg ] production> Snippet.find(3029095).repository_read_only?
+    => true
+
+    # If Group
+    [ gstg ] production> Group.find(13181226).repository_read_only?
+    => true
+    ```
+
+1. Change repository to be writeable if `read-only`
+
+    ```irb
+    # If Project
+    [ gstg ] production> Project.find_by_full_path('sxuereb/gitaly').set_repository_writable!
+    => nil
+    [ gstg ] production> Project.find_by_full_path('sxuereb/gitaly').repository_read_only?
+    => false
+
+    # If Snippet
+    [ gstg ] production> Snippet.find(3029095).set_repository_writable!
+    => nil
+    [ gstg ] production> Snippet.find(3029095).repository_read_only?
+    => false
+
+    # If Group
+    [ gstg ] production> Group.find(13181226).set_repository_writable!
+    => nil
+    [ gstg ] production> Group.find(13181226).repository_read_only?
+    => false
+    ```
