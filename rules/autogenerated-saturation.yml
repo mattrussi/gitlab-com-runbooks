@@ -360,6 +360,26 @@ groups:
     labels:
       component: kube_container_cpu
     expr: |
+      quantile by(environment, tier, type, stage, shard) (
+        0.99,
+        clamp_min(
+          clamp_max(
+            sum by (environment, tier, type, stage, pod, container) (
+              rate(container_cpu_usage_seconds_total:labeled{container!="", container!="POD", type=~"web|ai-assisted|api|internal-api|camoproxy|consul|external-dns|git|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis-cluster-cache|redis-cluster-feature-flag|redis-cluster-shared-state|redis-cluster-queues-meta|redis-sidekiq|redis-tracechunks|redis-cluster-ratelimiting|redis-cluster-chat-cache|redis-sessions|redis-registry-cache|redis-repository-cache|redis-db-load-balancing|redis-pubsub|redis|registry|sidekiq|vault|web-pages|websockets|woodhouse"}[1h])
+            )
+            /
+            sum by(environment, tier, type, stage, pod, container) (
+              kube_pod_container_resource_requests:labeled{container!="", container!="POD", resource="cpu", type=~"web|ai-assisted|api|internal-api|camoproxy|consul|external-dns|git|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis-cluster-cache|redis-cluster-feature-flag|redis-cluster-shared-state|redis-cluster-queues-meta|redis-sidekiq|redis-tracechunks|redis-cluster-ratelimiting|redis-cluster-chat-cache|redis-sessions|redis-registry-cache|redis-repository-cache|redis-db-load-balancing|redis-pubsub|redis|registry|sidekiq|vault|web-pages|websockets|woodhouse"}
+            )
+            ,
+            1)
+        ,
+        0)
+      )
+  - record: gitlab_component_saturation:ratio
+    labels:
+      component: kube_container_cpu_limit
+    expr: |
       max by(environment, tier, type, stage, shard) (
         clamp_min(
           clamp_max(
@@ -1564,10 +1584,18 @@ groups:
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:
       component: kube_container_cpu
-    expr: "0.9"
+    expr: "0.95"
   - record: slo:max:hard:gitlab_component_saturation:ratio
     labels:
       component: kube_container_cpu
+    expr: "0.99"
+  - record: slo:max:soft:gitlab_component_saturation:ratio
+    labels:
+      component: kube_container_cpu_limit
+    expr: "0.9"
+  - record: slo:max:hard:gitlab_component_saturation:ratio
+    labels:
+      component: kube_container_cpu_limit
     expr: "0.99"
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:
@@ -2190,8 +2218,16 @@ groups:
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
-      capacity_planning_strategy: quantile95_1h
+      capacity_planning_strategy: quantile99_1h
       component: kube_container_cpu
+      horiz_scaling: "yes"
+      quantile: "0.99"
+      severity: s4
+    expr: "1"
+  - record: gitlab_component_saturation_info
+    labels:
+      capacity_planning_strategy: exclude
+      component: kube_container_cpu_limit
       horiz_scaling: "yes"
       quantile: max
       severity: s4
@@ -3953,21 +3989,21 @@ groups:
   - alert: component_saturation_slo_out_of_bounds
     for: 15m
     annotations:
-      title: The Kube Container CPU Utilization resource of the {{ $labels.type }}
-        service ({{ $labels.stage }} stage) has a saturation exceeding SLO and is
-        close to its capacity limit.
+      title: The Kube Container CPU over-utilization resource of the {{ $labels.type
+        }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
+        is close to its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
-        Details of the Kube Container CPU Utilization resource:
+        Details of the Kube Container CPU over-utilization resource:
 
-        Kubernetes containers are allocated a share of CPU. When this is exhausted, the container may be thottled.
-      grafana_dashboard_id: alerts-sat_kube_container_cpu
-      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_kube_container_cpu?from=now-6h/m&to=now-1m/m&var-environment={{
+        Kubernetes containers can have a limit configured on how much CPU they can consume in a burst. If we are at this limit, exceeding the allocated requested resources, we should consider revisting the container's HPA configuration
+      grafana_dashboard_id: alerts-sat_kube_container_cpu_limit
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_kube_container_cpu_limit?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
         }}
       grafana_min_zoom_hours: "6"
-      grafana_panel_id: "2713861591"
+      grafana_panel_id: "1262336683"
       grafana_variables: environment,type,stage
       promql_query: |
         max by(environment, tier, type, stage, shard, pod, container) (
@@ -4011,8 +4047,8 @@ groups:
       rules_domain: general
       severity: s4
     expr: |
-      gitlab_component_saturation:ratio{component="kube_container_cpu"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="kube_container_cpu"}
+      gitlab_component_saturation:ratio{component="kube_container_cpu_limit"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="kube_container_cpu_limit"}
   - alert: component_saturation_slo_out_of_bounds
     for: 15m
     annotations:
