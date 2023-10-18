@@ -14,7 +14,7 @@ local serviceDefaults = {
   disableOpsRatePrediction: false,
   nodeLevelMonitoring: false,  // By default we do not use node-level monitoring
   monitoring: {
-    shard: { enabled: false },
+    shard: { enabled: false, overrides: {} },
   },
   kubeConfig: {},
   kubeResources: {},
@@ -37,21 +37,19 @@ local validateMonitoring(serviceDefinition) =
     for sli in std.objectKeysValues(serviceDefinition.serviceLevelIndicators)
     if sli.value.shardLevelMonitoring
   ];
-  local validShardOverridesValidator = validator.validator(
-    function(overridenShardSlis)
-      local sliNames = std.objectFields(overridenShardSlis);
-      misc.arrayDiff(sliNames, shardLevelSlis) == [],
-    'SLI must be present and has shardLevelMonitoring enabled. Supported SLIs: %s'
-    % [std.join(', ', shardLevelSlis)]
-  );
+  local validateShardOverrides(obj) =
+    if std.length(obj) == 0 then
+      true
+    else
+      misc.arrayDiff(std.objectFields(obj), shardLevelSlis) == [];
 
   local monitoringValidator = validator.new({
     monitoring: {
       shard: {
         enabled: validator.boolean,
-        overrides: validator.and(
-          validator.optional(validator.object),
-          validShardOverridesValidator
+        overrides: validator.validator(
+          validateShardOverrides,
+          'SLI must be present and has shardLevelMonitoring enabled. Supported SLIs: %s' % std.join(', ', shardLevelSlis)
         ),
       },
     },
