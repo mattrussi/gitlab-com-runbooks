@@ -1197,30 +1197,6 @@ services:
       monitors:
         grafana_folder: monitoring
         primary_grafana_dashboard: monitoring-main/monitoring-overview
-  - name: loki
-    tier: inf
-    friendly_name: loki
-    label: Loki
-    owner: reliability_observability
-    technical:
-      project:
-        - https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles
-      documents:
-        design:
-        architecture:
-        readiness_review:
-        sre_guide: https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/loki
-        developer_guide:
-        service:
-          - https://grafana.com/docs/loki/latest/get-started/architecture/
-        security:
-      dependencies:
-        - service: google-cloud-storage
-      logging: []
-    observability:
-      monitors:
-        grafana_folder: loki
-        primary_grafana_dashboard: loki/loki-overview
   - name: thanos
     tier: inf
     friendly_name: thanos
