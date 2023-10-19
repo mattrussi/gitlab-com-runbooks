@@ -5,8 +5,7 @@ local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 metricsCatalog.serviceDefinition(
   redisArchetype(
     type='redis-pubsub',
-    // via Gitlab::Redis::Workhorse and Gitlab::Redis::Pubsub (initially, to be replaced by ActionCable)
-    railsStorageSelector=redisHelpers.storageSelector({ oneOf: ['workhorse', 'pubsub', 'action_cable'] }),
+    railsStorageSelector=redisHelpers.storageSelector({ oneOf: ['workhorse', 'action_cable'] }),
     descriptiveName='Redis that handles predominantly pub/sub operations',
   )
   + redisHelpers.gitlabcomObservabilityToolingForRedis('redis-pubsub')
