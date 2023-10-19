@@ -6,6 +6,7 @@ local saturation = import 'servicemetrics/saturation-resources.libsonnet';
 local serviceCatalog = import 'service-catalog/service-catalog.libsonnet';
 local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
 local dashboard = import './grafana.libsonnet';
+local prom = import './prom.libsonnet';
 
 local uniqServices(saturationPoints) = std.foldl(
   function(memo, definition) std.set(memo + definition.appliesTo),
@@ -56,14 +57,7 @@ local page(path, title, service_pattern) =
 
 {
   defaults: {
-    prometheus: {
-      baseURL: 'https://thanos.ops.gitlab.net',
-      defaultSelectors: {
-        env: 'gprd',
-        stage: 'main',
-      },
-      serviceLabel: 'type',
-    },
+    prometheus: prom.defaults,
   },
   services: services(uniqServices(saturation)),
   saturationPoints: saturation,
