@@ -144,7 +144,7 @@ The steps to extend are as follows:
 
 * Edit the key interactively with `gpg`:
 
-  ```
+  ```sh
   gpg --edit-key <KEYID>
   ```
 
@@ -175,12 +175,12 @@ storage_**, it is **very important** that they then **purge** the signing keys o
 
 ## Reference material
 
-* [http://irtfweb.ifa.hawaii.edu/~lockhart/gpg/]()
-* [http://blog.jonliv.es/blog/2011/04/26/creating-your-own-signed-apt-repository-and-debian-packages/]()
-* [https://www.2uo.de/myths-about-urandom/]()
-* [http://cromwell-intl.com/linux/dev-random.html]()
-* [https://www.gnupg.org/faq/gnupg-faq.html#new_key_after_generation]()
-* [https://www.gnupg.org/gph/en/manual/c235.html#AEN328]()
-* [https://riseup.net/en/security/message-security/openpgp/best-practices]()
+* <http://irtfweb.ifa.hawaii.edu/~lockhart/gpg/>
+* <http://blog.jonliv.es/blog/2011/04/26/creating-your-own-signed-apt-repository-and-debian-packages/>
+* <https://www.2uo.de/myths-about-urandom/>
+* <http://cromwell-intl.com/linux/dev-random.html>
+* <https://www.gnupg.org/faq/gnupg-faq.html#new_key_after_generation>
+* <https://www.gnupg.org/gph/en/manual/c235.html#AEN328>
+* <https://riseup.net/en/security/message-security/openpgp/best-practices>
 
 [CSPRNG]: https://en.wikipedia.org/wiki/Cryptographically_secure_pseudorandom_number_generator
