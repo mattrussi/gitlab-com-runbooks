@@ -40,6 +40,7 @@ local commonDefinition = {
 
     capacityPlanning: {
       forecast_days: 180,
+      changepoint_range: 0.98,
     },
   }),
 }
