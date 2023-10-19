@@ -63,7 +63,7 @@ local simpleDefaults = {
 };
 
 local nestedDefaults = {
-  capacityPlanning: {
+  capacityPlanning+: {
     strategy: 'quantile95_1h',
     forecast_days: 90,
     historical_days: 365,

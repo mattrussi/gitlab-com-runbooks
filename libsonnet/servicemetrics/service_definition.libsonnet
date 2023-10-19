@@ -21,6 +21,9 @@ local serviceDefaults = {
   thanosType: 'none',  // This is only used to differentate thanos-staging vs thanos.
   capacityPlanning: {  // Consumed by Tamland
     environment: 'gprd',
+    stage: {
+      oneOf: ['main'],
+    },
   },
 };
 

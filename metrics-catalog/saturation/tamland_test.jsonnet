@@ -60,7 +60,7 @@ test.suite({
     expectThat: {
       local promFields = std.objectFields(self.actual.prometheus),
       result: std.objectHas(self.actual, 'prometheus')
-              && promFields == ['baseURL', 'defaultSelectors', 'serviceLabel'],
+              && promFields == ['baseURL', 'defaultSelectors', 'queryTemplates', 'serviceLabel'],
       description: 'Expect object to have default configurations',
     },
   },
