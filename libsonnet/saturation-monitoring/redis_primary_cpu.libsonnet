@@ -31,6 +31,11 @@ local commonDefinition = {
   redis_primary_cpu: resourceSaturationPoint(commonDefinition {
     appliesTo: metricsCatalog.findServicesWithTag(tag='redis-sentinel'),
     grafana_dashboard_uid: 'sat_redis_primary_cpu',
+
+    capacityPlanning: {
+      forecast_days: 180,
+      changepoint_range: 0.98,
+    },
   }),
 
   redis_cluster_primary_cpu: resourceSaturationPoint(commonDefinition {
