@@ -75,8 +75,6 @@ local diskUtilization() =
     alias: '80% Threshold',
     color: 'red',
     dashes: true,
-    dashLength: 2,
-    spaceLength: 1,
     stack: true,
   })
 ;
@@ -99,13 +97,28 @@ local diskWrites() =
   );
 
 local memoryUsage() =
-  timeseriesGraph(
-    title='Memory Usage',
+  local title = 'Memory Map Usage';
+  basic.timeseries(
+    title=title,
+    stableId='gitlab-zoekt-%s' % std.asciiLower(title),
     query=|||
-      (sum(go_memstats_heap_sys_bytes{pod=~"gitlab-gitlab-zoekt.*", container=~"zoekt.*", env="$environment"}) by (container, pod)
-      / sum(go_memstats_heap_alloc_bytes{pod=~"gitlab-gitlab-zoekt.*", container=~"zoekt.*", env="$environment"}) by (container, pod)) / 100
+      sum(proc_metrics_memory_map_current_count{pod=~"gitlab-gitlab-zoekt.*", container=~"zoekt.*", env="$environment"}) by (container, pod)
     |||,
-  );
+  )
+  .addTarget(
+    promQuery.target(
+      |||
+        min(proc_metrics_memory_map_max_limit{pod=~"gitlab-gitlab-zoekt.*", container=~"zoekt.*", env="$environment"})
+      |||,
+      legendFormat='Memory Map Limit'
+    )
+  )
+  .addSeriesOverride({
+    alias: 'Memory Map Limit',
+    color: 'red',
+    dashes: true,
+  })
+;
 
 local cpuUsage() =
   timeseriesGraph(
@@ -161,5 +174,26 @@ basic.dashboard(
 
     ],
     startRow=30,
+  )
+)
+.addPanels(
+  layout.rowGrid(
+    'Additional Resources',
+    [
+      basic.text(
+        content=|||
+
+          ### Zoekt Rollout Epic
+
+          See https://gitlab.com/groups/gitlab-org/-/epics/9404
+
+          ### Helpful Links
+
+          - [Memory Usage](https://dashboards.gitlab.net/d/kubernetes-resources-pod/kubernetes-compute-resources-pod?orgId=1&var-datasource=default&var-cluster=gprd-gitlab-gke&var-namespace=gitlab&var-pod=gitlab-gitlab-zoekt-0&from=now-6h&to=now)
+          - [Sourcegraph Observability Documentation](https://docs.sourcegraph.com/admin/observability/dashboards)
+        |||,
+      ),
+    ],
+    startRow=40
   )
 )
