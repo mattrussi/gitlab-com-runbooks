@@ -4,8 +4,6 @@
 
 From time to time we create Patroni cluster(s) in the `db-benchmarking` environment, with or without, using data disk snapshot of `gstg` or `gprd`. We understand the need to provision and use GCP resources in the `db-benchmarking` environment for a project/task but we want to be frugal and control the cost associated with such transient GCP resources. 
 
-Our desire is to have automation to deprovision unused GCP resources based on TTL. We want to automate the deprovisioning of unused GCP resources based on TTL. But for now, the DBRE team will use a manual procedure for it.
-
 We want automation to deprovision GCP resources according to TTL. While we are awaiting the automation, as a stop-gap solution, the DBRE team will use a manual procedure for it.
 
 This runbook describes the procedure the DBRE team uses to deprovision the GCP resource (VMs, disk storage, disk snapshots etc.) in the `db-benchmarking` environment. 
