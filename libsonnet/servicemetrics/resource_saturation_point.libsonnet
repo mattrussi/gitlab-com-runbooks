@@ -23,7 +23,15 @@ local defaultAlertingLabels =
   labelTaxonomy.labels.service |
   labelTaxonomy.labels.stage;
 
-local capacityPlanningStrategies = std.set(['quantile95_1w', 'quantile99_1w', 'quantile95_1h', 'exclude']);
+local recordedQuantiles = [0.95, 0.99];
+local capacityPlanningStrategies = std.set(
+  std.foldl(
+    function(memo, quantile)
+      memo + ['quantile%i_1h' % [quantile * 100], 'quantile%i_1w' % [quantile * 100]],
+    recordedQuantiles,
+    []
+  ) + ['exclude']
+);
 
 local sloValidator = validator.validator(function(v) v > 0 && v <= 1, 'SLO threshold should be in the range (0,1]');
 
@@ -378,5 +386,6 @@ local resourceSaturationPoint = function(options)
   };
 
 {
+  recordedQuantiles: recordedQuantiles,
   resourceSaturationPoint(definition):: resourceSaturationPoint(definition),
 }
