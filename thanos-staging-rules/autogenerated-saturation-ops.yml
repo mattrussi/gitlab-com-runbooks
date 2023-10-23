@@ -281,15 +281,15 @@ spec:
           clamp_min(
             clamp_max(
               (
-                process_open_fds{env="ops",type=~"ai-gateway|code_suggestions"}
+                process_open_fds{env="ops",type=~"ai-gateway|code_suggestions|errortracking"}
                 /
-                process_max_fds{env="ops",type=~"ai-gateway|code_suggestions"}
+                process_max_fds{env="ops",type=~"ai-gateway|code_suggestions|errortracking"}
               )
               or
               (
-                ruby_file_descriptors{env="ops",type=~"ai-gateway|code_suggestions"}
+                ruby_file_descriptors{env="ops",type=~"ai-gateway|code_suggestions|errortracking"}
                 /
-                ruby_process_max_fds{env="ops",type=~"ai-gateway|code_suggestions"}
+                ruby_process_max_fds{env="ops",type=~"ai-gateway|code_suggestions|errortracking"}
               )
               ,
               1)
