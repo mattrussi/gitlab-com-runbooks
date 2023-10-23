@@ -28,7 +28,6 @@
 * [Rebuilding a kubernetes cluster](../kube/k8s-cluster-rebuild.md)
 * [GitLab.com on Kubernetes](../kube/k8s-new-cluster.md)
 * [../kube/k8s-operations.md](../kube/k8s-operations.md)
-* [How to resize Persistent Volumes in Kubernetes](../kube/k8s-pvc-resize.md)
 * [StatefulSet Guidelines](../kube/sts-guidelines.md)
 * [Service-Level Monitoring](../metrics-catalog/service-level-monitoring.md)
 * [Alertmanager Notification Failures](alertmanager-notification-failures.md)
