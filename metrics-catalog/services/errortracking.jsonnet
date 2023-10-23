@@ -4,6 +4,14 @@ local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 local rateMetric = metricsCatalog.rateMetric;
 
 metricsCatalog.serviceDefinition({
+  // This is important for recording-rules corresponding to this
+  // service to be evaluated on Thanos instead. Within services
+  // owned by Monitor::Observability, we ship our metrics to an
+  // internal Thanos instance which is then setup as a remote
+  // query endpoint for the upstream GitLab Thanos instance, see
+  // https://thanos.gitlab.net/stores -> thanos-query.opstracegcp.com:80
+  dangerouslyThanosEvaluated: true,
+
   type: 'errortracking',
   tier: 'sv',
   monitoringThresholds: {
