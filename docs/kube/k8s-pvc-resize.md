@@ -1,23 +1,31 @@
 # How to resize Persistent Volumes in Kubernetes
 
-Suppose you have some Persistent Volumes attached to Pods from a StatefulSet
-and you need to increase their size because it is getting full. Unfortunately
-[Kubernetes is currently unable to apply this change without recreating the
-StatefulSet](https://github.com/kubernetes/kubernetes/issues/68737) so you will
-need to do some additional manual work to carry it. This runbook will guide you
-through the necessary steps to do so safely and without downtime.
+Suppose you have some Persistent Volumes attached to Pods from a Controller
+(StatefulSet/Deployment/DaemonSet) and you need to increase their size because
+it is getting full. Kubernetes supports volume expansion by default (>=
+Kubernetes 1.24).
 
-You can find a real life application of this procedure
-[here](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/5239), which
-we will use as an example in this runbook.
+This feature allows Kubernetes users to simply edit their PersistentVolumeClaim
+objects and specify new size in PVC Spec and Kubernetes will automatically
+expand the volume using storage backend and also expand the underlying file
+system in-use by the Pod without requiring any downtime at all if possible.
+
+You can only resize volumes containing a file system if the file system is XFS,
+Ext3, or Ext4.
+
+Additional read:
+
+- [Kubernetes docs](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#expanding-persistent-volumes-claims)
+- [Feature announce](https://kubernetes.io/blog/2022/05/05/volume-expansion-ga/)
 
 ## Procedure
 
 As an example here, we will be resizing the Persistent Volumes for the
-StatefulFul sets `thanos-store-0` from 5GiB to 20GiB.
+Deployment `receive-gitlab-thanos-compactor` from 10GiB to 20GiB.
 
 ### Step 1: Preflight checks
 
+- [ ] Verify storage class supports volume expansion `kubectl get storageclass`
 - [ ] Make sure your PVC size changes in Helm/Tanka/other are ready to merge
       and deploy (but don't merge yet!)
 - [ ] Confirm you have access to the targeted Kubernetes cluster as [described
@@ -25,147 +33,62 @@ StatefulFul sets `thanos-store-0` from 5GiB to 20GiB.
 
 ### Step 2: Check the current state
 
-Check that the current Persistent Volume Claim in the targeted StateFul Set
-matches its original definition, and than the existing Persistent Volumes are
-really those you are targeting and that their original size also matches:
+Check that the current Persistent Volume Claim in the targeted resource matches
+its original definition, and than the existing Persistent Volumes are really
+those you are targeting and that their original size also matches:
 
 ```
-$ kubectl -n monitoring describe sts/thanos-store-0
-Name:               thanos-store-0
-Namespace:          monitoring
-[...]
-Volume Claims:
-  Name:          data
-  StorageClass:  ssd
-  Labels:        app.kubernetes.io/component=object-store-gateway
-                 app.kubernetes.io/instance=thanos-store-0
-                 app.kubernetes.io/name=thanos-store
-                 store.observatorium.io/shard=shard-0
-  Annotations:   <none>
-  Capacity:      5Gi
-  Access Modes:  [ReadWriteOnce]
+$ kubectl -n thanos describe Deployment/receive-gitlab-thanos-compactor
+Name:               receive-gitlab-thanos-compactor
+Namespace:          thanos
+CreationTimestamp:  Wed, 04 Oct 2023 05:50:04 +0100
+Labels:             app.kubernetes.io/component=compactor
+                    app.kubernetes.io/instance=receive-gitlab
+                    app.kubernetes.io/managed-by=Helm
+                    app.kubernetes.io/name=thanos
+                    helm.sh/chart=thanos-12.11.0
+...
+  Volumes:
+   objstore-config:
+    Type:        Secret (a volume populated by a Secret)
+    SecretName:  receive-gitlab-thanos-objstore-secret
+    Optional:    false
+   data:
+    Type:       PersistentVolumeClaim (a reference to a PersistentVolumeClaim in the same namespace)
+    ClaimName:  receive-gitlab-thanos-compactor
+    ReadOnly:   false
+...
 Events:          <none>
 
-$ kubectl -n monitoring get pvc -l app.kubernetes.io/name=thanos-store -o wide
-NAME                    STATUS   VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS   AGE    VOLUMEMODE
-data-thanos-store-0-0   Bound    pvc-c013133d-91d1-4a4c-9289-895a7792aa61   5Gi        RWO            ssd            250d   Filesystem
-data-thanos-store-0-1   Bound    pvc-9d8cc41f-cfb5-4828-ad55-3e703337c6e2   5Gi        RWO            ssd            250d   Filesystem
+$ kubectl -n thanos get pvc receive-gitlab-thanos-compactor
+
+NAME                               STATUS   VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS   AGE    VOLUMEMODE
+receive-gitlab-thanos-compactor    Bound    pvc-897d200e-b8af-4fd0-a5ac-a7142b2662b9   20Gi       RWO            pd-balanced    16d    Filesystem
 ```
 
 Nothing unexpected? Great, let's proceed!
 
-### Step 3: Delete the StateFul Set
+### Step 3: Merge your Merge Request
 
-Delete the StatefulSet object without deleting the pods underneath:
-
-```
-kubectl -n monitoring delete --cascade=orphan sts/thanos-store-0
-```
-
-Confirm that the pods still exist:
+After the pipeline ran, you can check if the PVC has been resized. A few minutes
+later the file system is resized online by Kubernetes.
 
 ```
-kubectl -n monitoring get pod -l app.kubernetes.io/name=thanos-store
+$ kubectl -n thanos get pvc -l app.kubernetes.io/component=compactor -o wide
+
+NAME                               STATUS   VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS   AGE    VOLUMEMODE
+receive-default-thanos-compactor   Bound    pvc-d4590947-3b34-4d59-9f36-44ff6bc1a11b   10Gi       RWO            pd-balanced    48d    Filesystem
+receive-gitlab-thanos-compactor    Bound    pvc-897d200e-b8af-4fd0-a5ac-a7142b2662b9   100Gi      RWO            pd-balanced    19d    Filesystem
+receive-ruler-thanos-compactor     Bound    pvc-9847345f-493e-4c90-81f1-918313169004   10Gi       RWO            pd-balanced    48d    Filesystem
 ```
 
-Our service is still up? Let's continue!
-
-### Step 4: Resize the Persistent Volumes
-
-Manually patch the Persistent Volume Claims to their new size:
-
-```
-kubectl -n monitoring patch pvc/data-thanos-store-0-0 -p '{ "spec": { "resources": { "requests": { "storage": "20Gi" }}}}'
-kubectl -n monitoring patch pvc/data-thanos-store-0-1 -p '{ "spec": { "resources": { "requests": { "storage": "20Gi" }}}}'
-```
-
-Their status should show that the resize is pending, waiting for the attached pods to be restarted:
-
-```
-$ kubectl -n monitoring get pvc -l app.kubernetes.io/name=thanos-store -o yaml
-apiVersion: v1
-kind: PersistentVolumeClaim
-[...]
-spec:
-  resources:
-    requests:
-      storage: 20Gi
-[...]
-status:
-  accessModes:
-  - ReadWriteOnce
-  capacity:
-    storage: 5Gi
-  conditions:
-  - lastProbeTime: null
-    lastTransitionTime: "2021-08-02T12:34:56Z"
-    message: Waiting for user to (re-)start a pod to finish file system resize of
-      volume on node.
-    status: "True"
-    type: FileSystemResizePending
-  phase: Bound
-```
-
-Now you can merge and deploy your changes normally, this should recreate the
-StatefulSet with the new PVC size and it will recover its running pods without
-recreating them.
-
-At this point the Persistent Volumes are still at their original size and their
-resize is still pending, so let's restart the attached pods one at a time to
-arrange that:
-
-```
-kubectl -n monitoring delete pod/thanos-store-0-0
-kubectl -n monitoring get pods -l app.kubernetes.io/name=thanos-store -o wide
-# Wait for the pod to be running then proceed to the next one
-kubectl -n monitoring delete pod/thanos-store-0-1
-kubectl -n monitoring get pods -l app.kubernetes.io/name=thanos-store -o wide
-```
-
-Are the pods running? Awesome! The Persistent Volumes should now be resized, let's check that.
-
-# Step 5: Post-operation checks
-
-Check that the Persistent Volume Claims are showing the new size:
-
-```
-$ kubectl -n monitoring get pvc -l app.kubernetes.io/name=thanos-store -o wide
-NAME                    STATUS   VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS   AGE    VOLUMEMODE
-data-thanos-store-0-0   Bound    pvc-c013133d-91d1-4a4c-9289-895a7792aa61   20Gi       RWO            ssd            250d   Filesystem
-data-thanos-store-0-1   Bound    pvc-9d8cc41f-cfb5-4828-ad55-3e703337c6e2   20Gi       RWO            ssd            250d   Filesystem
-```
-
-You can also confirm inside a pod that new volume mount shows an increased size:
-
-```
-kubectl -n monitoring exec -it thanos-store-0-0 -- df -h /var/thanos/store
-kubectl -n monitoring exec -it thanos-store-0-1 -- df -h /var/thanos/store
-```
-
-And finally, check that the Stateful Set exists:
-
-```
-kubectl -n monitoring get sts/thanos-store-0
-```
+If alerts were firing due to reaching the saturation threshold, confirm that
+they aren't firing any longer.
 
 If everything is looking good, you're finished!
 
 ## Rollback
 
-In case something goes unexpectedly wrong and the resize fails, you can simply
-revert the Stateful Set to its previous state.
-
-If the StateFul Set exists, delete it with `--cascade=orphan`:
-
-```
-kubectl -n monitoring delete --cascade=orphan sts/thanos-store-0
-```
-
-Then create a revert MR for your changes and apply it.
-
-And finally, confirm that the Stateful Set and its pods exist:
-
-```
-kubectl -n monitoring get sts/thanos-store-0
-kubectl -n monitoring get pod -l app.kubernetes.io/name=thanos-store
-```
+Please be aware that it is not possible to shrink a PVC. Any new Spec whose size
+reverts the PVC to its previous size (is less than the current one) will be
+rejected by the Kubernetes API.
