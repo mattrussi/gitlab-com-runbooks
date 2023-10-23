@@ -70,8 +70,8 @@ Nothing unexpected? Great, let's proceed!
 
 ### Step 3: Merge your Merge Request
 
-After the pipeline ran, you can check if the PVC has been resize. A few minutes
-later the file system is resize online by Kubernetes.
+After the pipeline ran, you can check if the PVC has been resized. A few minutes
+later the file system is resized online by Kubernetes.
 
 ```
 $ kubectl -n thanos get pvc -l app.kubernetes.io/component=compactor -o wide
@@ -89,6 +89,6 @@ If everything is looking good, you're finished!
 
 ## Rollback
 
-Please be aware that it is not possible to shrink a PVC —any new Spec which size
+Please be aware that it is not possible to shrink a PVC. Any new Spec whose size
 reverts the PVC to its previous size (is less than the current one) will be
 rejected by the Kubernetes API.
