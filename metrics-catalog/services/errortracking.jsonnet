@@ -6,7 +6,10 @@ local rateMetric = metricsCatalog.rateMetric;
 metricsCatalog.serviceDefinition({
   type: 'errortracking',
   tier: 'sv',
-  monitoringThresholds: {},
+  monitoringThresholds: {
+    apdexScore: 0.995,
+    errorRatio: 0.999,
+  },
   serviceDependencies: {
     api: true,
   },
