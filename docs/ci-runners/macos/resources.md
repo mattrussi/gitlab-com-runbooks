@@ -12,8 +12,8 @@ Go to [access.md](./access.md) for information on how to access the resources de
 
 - All the VMs found here are in `us-east-1` region.
 - All the VMs are considered _ephemeral VMs_.
-    - These are short lived VMs, in the case of MacOS, they live for _at least_ 24h.
-    - The 24h rule is due to licensing limitations, see [licensing.md](./licensing.md) for details.
+  - These are short lived VMs, in the case of MacOS, they live for _at least_ 24h.
+  - The 24h rule is due to licensing limitations, see [licensing.md](./licensing.md) for details.
 - There are firewall rules between AWS and GCP (`gitlab-ci-155816` project) to allow `ssh` and other traffic from these VMs.
 - See [architecture.md](./architecture.md) for more details about the connections established between AWS and GCP.
 
@@ -44,7 +44,6 @@ For more details on the architecture of these runners, have a look at [architect
 
 ### Auto Scaling Groups
 
-
 ## Service Quotas
 
 [console.aws.amazon.com/servicequotas](https://us-east-1.console.aws.amazon.com/servicequotas/home?region=us-east-1#)
@@ -57,7 +56,6 @@ Quota limits for how many _dedicated_ Mac VMs we can run at a time. To view thes
 
 For Staging, the limits at the time of this writing are `8` machines, while for Production, the limits are `20`.
 
-
 ## Elastic container registery
 
 [console.aws.amazon.com/repositories](https://us-east-1.console.aws.amazon.com/ecr/repositories?region=us-east-1)
@@ -65,8 +63,6 @@ For Staging, the limits at the time of this writing are `8` machines, while for 
 - This is where the images used by [nesting](./architecture.md#nesting) are stored.
 - These are big images, about 50GBs each. Pulling that everytime a user requests a VM would take nearly 30 minutes, which is not an acceptable queuing time. _Nesting_ was introduced to solve this problem; by pre-downloading two images (maxmimum disk capacity) in the Parent VM, which then become available for end users to use, and takes just under 15 seconds to pick a new job, and another 15 seconds to re-cycle before it's ready for another job.
 - NOTE: These images live in the Staging environment only, but can be pulled from the Production environment.
-
-
 
 ## S3
 

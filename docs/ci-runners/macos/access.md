@@ -16,16 +16,16 @@ Most of the resources exist in the `N. Virginia` (`us-east-1`) region; if you're
 
 If you think you have the appropriate access in the sandbox, you can view the Staging environment following these steps:
 
-- Go to https://gitlabsandbox.cloud/cloud/accounts/5442c67c-1673-4351-b85d-e366c328bfea
+- Go to the [sandbox](https://gitlabsandbox.cloud/cloud/accounts/5442c67c-1673-4351-b85d-e366c328bfea)
 - Choose `eng-dev-verify-runner`.
 - Click `View IAM Credentials`.
 - Click the `AWS Console URL`.
 - Copy the username and password; beaware that sometimes the copy can produce extra spaces before and after the text.
 
-
 Just like the Production environment, resources are mostly in `N. Virginia` (`us-east-1`) region, for more info go to [resource.md](./resources.md).
 
 You can optionally switch to the Production environment without using Okta:
+
 - Click your username in the upper right corner.
 - From the dropdown menu, choose `Switch role`.
-- Enter the details in https://about.gitlab.com/handbook/engineering/development/ops/verify/runner/team-resources/#access-mac-runner-production
+- Enter the details in [verify-runner handbook](https://about.gitlab.com/handbook/engineering/development/ops/verify/runner/team-resources/#access-mac-runner-production).
