@@ -26,6 +26,16 @@ For Staging, the limits at the time of this writing are `8` machines, while for 
 
 #### AMI
 
+The images appearing in the AMI view have two purposes:
+
+- images for the EC2 instances
+- images for the user facing jobs*
+
+* To understand the difference between these two images, you should have a basic understanding of the architecutre of these runners.
+In a nutshell, each EC2 VM you see in the console, spins up two **nested VMs** within itself.
+These nested VMs use the `user facing jobs` images, while the parent VM, uses the EC2 instance images.
+For more details on the architecture of these runners, have a look at [architecture.md](./architecture.md).
+
 #### Elastic container registery
 
 #### Volumes and snapshots
