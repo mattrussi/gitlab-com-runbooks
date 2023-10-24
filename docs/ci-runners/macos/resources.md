@@ -24,7 +24,7 @@ https://us-east-1.console.aws.amazon.com/ec2/home?region=us-east-1
 - _Released_ state means the instance is no longer connected to our AWS account, it's not clear how long it takes for these entries to be deleted.
 - _Pending_ indicates the instance is currently being provisioned.
 
-### AMI
+### AMIs
 
 The images appearing in the AMI view have two purposes:
 
@@ -63,7 +63,7 @@ For Staging, the limits at the time of this writing are `8` machines, while for 
 https://us-east-1.console.aws.amazon.com/ecr/repositories?region=us-east-1
 
 - This is where the images used by [nesting](./architecture.md#nesting) are stored.
-- These are big images, about 50GBs each. Pulling that everytime a user requests a VM would take nearly 30 minutes. _Nesting_ was introduced to solve this problem; and pre-downloading two images (maxmimum capacity) in the Parent VM, which then become available for end users to use.
+- These are big images, about 50GBs each. Pulling that everytime a user requests a VM would take nearly 30 minutes, which is not an acceptable queuing time. _Nesting_ was introduced to solve this problem; by pre-downloading two images (maxmimum disk capacity) in the Parent VM, which then become available for end users to use, and takes just under 15 seconds to pick a new job, and another 15 seconds to re-cycle before it's ready for another job.
 - NOTE: These images live in the Staging environment only, but can be pulled from the Production environment.
 
 
