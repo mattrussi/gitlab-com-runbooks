@@ -12,13 +12,12 @@
 
 ## Logging
 
-
 <!-- END_MARKER -->
-
 
 ### Tenant Provisioning
 
 Tenant provisioning is currently handled by the [tenant-provisioner](https://gitlab.com/gitlab-com/gl-infra/sre-observability/tenant-provisioner), its a very simple service thats essentially a hosted shell script. You can use it like this:
+
 ```
 curl -X POST --header "Authorization: $VAULT_TOKEN" --data '{ "name": "TENANT_NAME" }' https://observability-gateway.ops.gke.gitlab.net/tenants
 ```
