@@ -6,7 +6,7 @@ Go to [access.md](./access.md) for information on how to access the resources de
 
 ## EC2
 
-https://us-east-1.console.aws.amazon.com/ec2/home?region=us-east-1
+[console.aws.amazon.com/ec2](https://us-east-1.console.aws.amazon.com/ec2/home?region=us-east-1)
 
 ### Instances
 
@@ -47,7 +47,7 @@ For more details on the architecture of these runners, have a look at [architect
 
 ## Service Quotas
 
-https://us-east-1.console.aws.amazon.com/servicequotas/home?region=us-east-1#
+[console.aws.amazon.com/servicequotas](https://us-east-1.console.aws.amazon.com/servicequotas/home?region=us-east-1#)
 
 Quota limits for how many _dedicated_ Mac VMs we can run at a time. To view these limits:
 
@@ -60,7 +60,7 @@ For Staging, the limits at the time of this writing are `8` machines, while for 
 
 ## Elastic container registery
 
-https://us-east-1.console.aws.amazon.com/ecr/repositories?region=us-east-1
+[console.aws.amazon.com/repositories](https://us-east-1.console.aws.amazon.com/ecr/repositories?region=us-east-1)
 
 - This is where the images used by [nesting](./architecture.md#nesting) are stored.
 - These are big images, about 50GBs each. Pulling that everytime a user requests a VM would take nearly 30 minutes, which is not an acceptable queuing time. _Nesting_ was introduced to solve this problem; by pre-downloading two images (maxmimum disk capacity) in the Parent VM, which then become available for end users to use, and takes just under 15 seconds to pick a new job, and another 15 seconds to re-cycle before it's ready for another job.
@@ -70,11 +70,11 @@ https://us-east-1.console.aws.amazon.com/ecr/repositories?region=us-east-1
 
 ## S3
 
-https://s3.console.aws.amazon.com/s3/home?region=us-east-1
+[console.aws.amazon.com/s3](https://s3.console.aws.amazon.com/s3/home?region=us-east-1)
 
 ## VPC
 
-https://us-east-1.console.aws.amazon.com/vpcconsole/home?region=us-east-1#Home:
+[console.aws.amazon.com/vpc](https://us-east-1.console.aws.amazon.com/vpcconsole/home?region=us-east-1#Home:)
 
 ### Route table
 
@@ -84,4 +84,4 @@ https://us-east-1.console.aws.amazon.com/vpcconsole/home?region=us-east-1#Home:
 
 ## IAM
 
-https://us-east-1.console.aws.amazon.com/iamv2/home?region=us-east-1#/home
+[console.aws.amazon.com/iam](https://us-east-1.console.aws.amazon.com/iamv2/home?region=us-east-1#/home)
