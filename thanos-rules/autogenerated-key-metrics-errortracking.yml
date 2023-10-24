@@ -160,7 +160,7 @@ groups:
       component: loadbalancer
       global_aggregation: "yes"
       regional_aggregation: "no"
-      service_aggregation: "no"
+      service_aggregation: "yes"
       tier: sv
       type: errortracking
     expr: "1"
