@@ -29,10 +29,10 @@ Go to [access.md](./access.md) for information on how to access the resources de
 The images appearing in the AMI view have two purposes:
 
 - images for the EC2 instances
-- images for the user facing jobs*
+- images for the user facing jobs
 
-NOTE: *To understand the difference between these two images, you should have a basic understanding of the architecutre of these runners.
-In a nutshell, each EC2 VM you see in the console, spins up two **nested VMs** within itself.
+*NOTE*: To understand the difference between these two images, you should have a basic understanding of the architecutre of these runners.
+In summary, each EC2 VM you see in the console, spins up two **nested VMs** within itself.
 These nested VMs use the `user facing jobs` images, while the parent VM, uses the EC2 instance images.
 For more details on the architecture of these runners, have a look at [architecture.md](./architecture.md).
 
