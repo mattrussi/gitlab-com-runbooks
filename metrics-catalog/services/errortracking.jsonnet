@@ -2,6 +2,7 @@ local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 
 local rateMetric = metricsCatalog.rateMetric;
+local histogramApdex = metricsCatalog.histogramApdex;
 
 metricsCatalog.serviceDefinition({
   // This is important for recording-rules corresponding to this
@@ -51,6 +52,13 @@ metricsCatalog.serviceDefinition({
         selector=errortrackingSelector {
           code: { re: '^5.*' },
         },
+      ),
+
+      apdex: histogramApdex(
+        histogram='traefik_service_request_duration_seconds_bucket',
+        selector=errortrackingSelector { code: { noneOf: ['4xx', '5xx'] } },
+        satisfiedThreshold='0.3',
+        toleratedThreshold='5'
       ),
 
       significantLabels: [],
