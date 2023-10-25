@@ -89,20 +89,8 @@ local capacityComponentColors = {
     zindex: 3,
     color: colorScheme.primaryMetricColor,
   } + overrides,
-  slo:: {
-    alias: 'SLO',
-    color: '#FF4500',  // "Orange red"
-    dashes: true,
-    legend: true,
-    lines: true,
-    linewidth: 4,
-    dashLength: 4,
-    spaceLength: 4,
-    nullPointMode: 'connected',
-    zindex: -2,
-  },
   degradationSlo:: {
-    alias: '6h Degradation SLO (5% of monthly error budget)',
+    alias: '/6h Degradation SLO \\(5% of monthly error budget\\).*/',
     color: '#FF4500',  // "Orange red"
     dashes: true,
     legend: true,
@@ -114,7 +102,7 @@ local capacityComponentColors = {
     zindex: -2,
   },
   outageSlo:: {
-    alias: '1h Outage SLO (2% of monthly error budget)',
+    alias: '/1h Outage SLO \\(2% of monthly error budget\\).*/',
     color: '#F2495C',  // "Red"
     dashes: true,
     legend: true,

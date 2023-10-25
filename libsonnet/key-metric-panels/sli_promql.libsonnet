@@ -139,32 +139,45 @@ local sloLabels(selectorHash) =
   );
   defaults + supportedSelector;
 
-local thresholdExpressionFor(metric, selectorHash, fixedThreshold) =
+local thresholdExpressionFor(metric, selectorHash, fixedThreshold, includeDefaultShardSlo) =
   if fixedThreshold == null then
-    |||
-      avg(%(metric)s{%(selectors)s})
-    ||| % {
-      metric: metric,
-      selectors: selectors.serializeHash(sloLabels(selectorHash)),
-    }
+    if !includeDefaultShardSlo then
+      |||
+        avg(%(metric)s{%(selectors)s})
+      ||| % {
+        metric: metric,
+        selectors: selectors.serializeHash(sloLabels(selectorHash)),
+      }
+    else
+      |||
+        (
+        avg by (shard) (%(metric)s{%(selectors)s})
+        or
+        avg by (shard) (%(metric)s{%(selectorsDefaultShard)s})
+        )
+      ||| % {
+        metric: metric,
+        selectors: selectors.serializeHash(sloLabels(selectorHash)),
+        selectorsDefaultShard: selectors.serializeHash(sloLabels(selectorHash { shard: '' })),
+      }
   else
     '%g' % [fixedThreshold];
 
-local getApdexThresholdExpressionForWindow(selectorHash, windowDuration, fixedThreshold) =
+local getApdexThresholdExpressionForWindow(selectorHash, windowDuration, fixedThreshold, includeDefaultShardSlo) =
   |||
     (1 - %(factor)g * (1 - %(expression)s))
   ||| % {
-    expression: thresholdExpressionFor('slo:min:events:gitlab_service_apdex:ratio', selectorHash, fixedThreshold),
+    expression: thresholdExpressionFor('slo:min:events:gitlab_service_apdex:ratio', selectorHash, fixedThreshold, includeDefaultShardSlo),
     factor: multiburnFactors.errorBudgetFactorFor(windowDuration),
   };
 
-local getErrorRateThresholdExpressionForWindow(selectorHash, windowDuration, fixedThreshold) =
+local getErrorRateThresholdExpressionForWindow(selectorHash, windowDuration, fixedThreshold, includeDefaultShardSlo) =
   local threshold = if fixedThreshold == null then fixedThreshold else 1 - fixedThreshold;
 
   |||
     (%(factor)g * %(expression)s)
   ||| % {
-    expression: thresholdExpressionFor('slo:max:events:gitlab_service_errors:ratio', selectorHash, threshold),
+    expression: thresholdExpressionFor('slo:max:events:gitlab_service_errors:ratio', selectorHash, threshold, includeDefaultShardSlo),
     factor: multiburnFactors.errorBudgetFactorFor(windowDuration),
   };
 
@@ -180,11 +193,11 @@ local getErrorRateThresholdExpressionForWindow(selectorHash, windowDuration, fix
      *
      * @return a string representation of the PromQL query
      */
-    serviceApdexDegradationSLOQuery(selectorHash, fixedThreshold=null)::
-      getApdexThresholdExpressionForWindow(selectorHash, '6h', fixedThreshold),
+    serviceApdexDegradationSLOQuery(selectorHash, fixedThreshold=null, includeDefaultShardSlo=false)::
+      getApdexThresholdExpressionForWindow(selectorHash, '6h', fixedThreshold, includeDefaultShardSlo),
 
-    serviceApdexOutageSLOQuery(selectorHash, fixedThreshold=null)::
-      getApdexThresholdExpressionForWindow(selectorHash, '1h', fixedThreshold),
+    serviceApdexOutageSLOQuery(selectorHash, fixedThreshold=null, includeDefaultShardSlo=false)::
+      getApdexThresholdExpressionForWindow(selectorHash, '1h', fixedThreshold, includeDefaultShardSlo),
   },
 
   opsRate:: {
@@ -205,10 +218,10 @@ local getErrorRateThresholdExpressionForWindow(selectorHash, windowDuration, fix
   },
 
   errorRate:: {
-    serviceErrorRateDegradationSLOQuery(type, fixedThreshold=null)::
-      getErrorRateThresholdExpressionForWindow(type, '6h', fixedThreshold),
+    serviceErrorRateDegradationSLOQuery(type, fixedThreshold=null, includeDefaultShardSlo=false)::
+      getErrorRateThresholdExpressionForWindow(type, '6h', fixedThreshold, includeDefaultShardSlo),
 
-    serviceErrorRateOutageSLOQuery(type, fixedThreshold=null)::
-      getErrorRateThresholdExpressionForWindow(type, '1h', fixedThreshold),
+    serviceErrorRateOutageSLOQuery(type, fixedThreshold=null, includeDefaultShardSlo=false)::
+      getErrorRateThresholdExpressionForWindow(type, '1h', fixedThreshold, includeDefaultShardSlo),
   },
 }

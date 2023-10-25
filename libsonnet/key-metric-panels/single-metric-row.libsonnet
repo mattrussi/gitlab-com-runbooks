@@ -32,6 +32,7 @@ local row(
   compact=false,
   includeLastWeek=true,
   fixedThreshold=null,
+  shardLevelSli=false,
       ) =
   local typeSelector = if serviceType == null then {} else { type: serviceType };
   local selectorHashWithExtras = selectorHash + typeSelector;
@@ -59,6 +60,7 @@ local row(
             compact=compact,
             fixedThreshold=fixedThreshold,
             includeLastWeek=includeLastWeek,
+            shardLevelSli=shardLevelSli
           )
           .addDataLink({
             url: '/d/alerts-%(aggregationId)s_slo_apdex?${__url_time_range}&${__all_variables}&%(grafanaURLPairs)s' % formatConfig {},
@@ -98,6 +100,7 @@ local row(
             compact=compact,
             fixedThreshold=fixedThreshold,
             includeLastWeek=includeLastWeek,
+            shardLevelSli=shardLevelSli
           )
           .addDataLink({
             url: '/d/alerts-%(aggregationId)s_slo_error?${__url_time_range}&${__all_variables}&%(grafanaURLPairs)s' % formatConfig,

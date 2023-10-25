@@ -76,7 +76,7 @@ local otherRules(serviceDefinition, labels) =
 local minApdexMonitoringSLOWithShards(serviceDefinition, sli, labels) =
   local overridenShards = serviceDefinition.listOverridenShardsMonitoringThresholds(sli, 'apdexScore');
 
-  [minApdexMonitoringSLO(labels=labels, expr='%f' % [sli.monitoringThresholds.apdexScore])] + std.map(
+  [minApdexMonitoringSLO(labels=labels { shard: '' }, expr='%f' % [sli.monitoringThresholds.apdexScore])] + std.map(
     function(shard)
       minApdexMonitoringSLO(
         labels=labels { shard: shard.shard },
@@ -88,7 +88,7 @@ local minApdexMonitoringSLOWithShards(serviceDefinition, sli, labels) =
 local maxErrorsMonitoringSloWithShards(serviceDefinition, sli, labels) =
   local overridenShards = serviceDefinition.listOverridenShardsMonitoringThresholds(sli, 'errorRatio');
 
-  [maxErrorsMonitoringSLO(labels=labels, expr='%f' % [1 - sli.monitoringThresholds.errorRatio])] + std.map(
+  [maxErrorsMonitoringSLO(labels=labels { shard: '' }, expr='%f' % [1 - sli.monitoringThresholds.errorRatio])] + std.map(
     function(shard)
       maxErrorsMonitoringSLO(
         labels=labels { shard: shard.shard },

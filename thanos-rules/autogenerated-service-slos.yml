@@ -2471,6 +2471,7 @@ groups:
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: sidekiq_execution
+      shard: ""
       tier: sv
       type: sidekiq
     expr: "0.995000"
@@ -2484,6 +2485,7 @@ groups:
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: sidekiq_execution
+      shard: ""
       tier: sv
       type: sidekiq
     expr: "0.005000"
@@ -2502,6 +2504,7 @@ groups:
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: sidekiq_queueing
+      shard: ""
       tier: sv
       type: sidekiq
     expr: "0.995000"
@@ -2515,6 +2518,7 @@ groups:
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: sidekiq_queueing
+      shard: ""
       tier: sv
       type: sidekiq
     expr: "0.005000"
