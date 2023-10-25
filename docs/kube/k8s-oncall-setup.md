@@ -158,7 +158,7 @@ FORCE_KUBE_CONTEXT=1 ./bin/k-ctl -e pre list
 ```bash
 $ vi releases/gitlab/values/pre.yaml.gotmpl
 # Make a change
-./bin/k-ctl -e pre -D apply
+./bin/k-ctl -e pre -D upgrade
 ```
 
 # Getting or setting HAProxy state for the zonal clusters
