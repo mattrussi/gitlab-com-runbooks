@@ -13,7 +13,6 @@ local processExporter = import 'gitlab-dashboards/process_exporter.libsonnet';
 local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
 local aggregationSets = (import 'gitlab-metrics-config.libsonnet').aggregationSets;
 local singleMetricRow = import 'key-metric-panels/single-metric-row.libsonnet';
-local textPanel = grafana.text;
 
 local gitalyCommandStats = import 'gitlab-dashboards/gitaly/command_stats.libsonnet';
 local gitalyPackObjectsDashboards = import 'gitlab-dashboards/gitaly/pack_objects.libsonnet';
@@ -312,26 +311,6 @@ basic.dashboard(
   }
 )
 .addPanel(
-  row.new(title='gitaly-ruby process activity', collapse=true)
-  .addPanels(
-    processExporter.namedGroup(
-      'gitaly-ruby processes',
-      selectorHash
-      {
-        groupname: 'gitaly-ruby',
-      },
-      aggregationLabels=[],
-      startRow=5401
-    )
-  ),
-  gridPos={
-    x: 0,
-    y: 5400,
-    w: 24,
-    h: 1,
-  }
-)
-.addPanel(
   row.new(title='gitaly command stats by command', collapse=true)
   .addPanels(
     gitalyCommandStats.metricsForNode(
@@ -413,6 +392,7 @@ basic.dashboard(
       gitalyPackObjectsDashboards.cache_served(selectorHash, 'cache served'),
       gitalyPackObjectsDashboards.cache_generated(selectorHash, 'cache generated'),
       gitalyPackObjectsDashboards.cache_lookup(selectorHash, '{{ result }}'),
+      gitalyPackObjectsDashboards.pack_objects_info(),
     ], startRow=5902)
   ),
   gridPos={
@@ -432,7 +412,7 @@ basic.dashboard(
       gitalyCGroupMemoryQuantile(selectorSerialized),
       oomKillsPerNode(selectorSerialized),
       gitalyCgroupCPUThrottling(selectorSerialized),
-      textPanel.new(
+      basic.text(
         title='cgroup runbook',
         content=|||
           Gitaly spawns git processes into cgroups to limit their cpu and memory

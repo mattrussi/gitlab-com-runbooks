@@ -214,6 +214,7 @@ serviceDashboard.overview('gitaly')
     gitalyPackObjectsDashboards.queueing_time(selector, '{{ fqdn }}'),
     gitalyPackObjectsDashboards.dropped_commands(selector, '{{ fqdn }}'),
     gitalyPackObjectsDashboards.cache_lookup(selector, '{{ result }}'),
+    gitalyPackObjectsDashboards.pack_objects_info(),
   ], startRow=4001)
 )
 .addPanel(
