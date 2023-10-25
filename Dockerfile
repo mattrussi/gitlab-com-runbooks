@@ -62,5 +62,4 @@ COPY --from=thanos /bin/thanos /bin/thanos
 COPY --from=vault /bin/vault /bin/vault
 COPY --from=yq /usr/bin/yq /usr/bin/yq
 
-
 ENTRYPOINT ["/bin/sh", "-c"]
