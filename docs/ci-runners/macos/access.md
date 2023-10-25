@@ -1,6 +1,6 @@
 #### How to access MacOS VMs?
 
-MacOS VMs are currently hosted in AWS. SRE should have access via Okta, if you don't, then open an individual [Access Request](https://gitlab.com/gitlab-com/team-member-epics/access-requests/-/issues), to get access to the AWS account:  `saas-mac-runners-b6fd8d28`. See past [bulk access request](https://gitlab.com/gitlab-com/team-member-epics/access-requests/-/issues/21531).
+MacOS VMs are currently hosted in AWS. SRE should have access to the Production environment via Okta.
 
 ### Production
 
@@ -11,6 +11,8 @@ All SRE should have access to the MacOS Production environment through Okta:
 - Under `AWS Account` pick `saas-mac-runners-b6fd8d28`.
 
 Most of the resources exist in the `N. Virginia` (`us-east-1`) region; if you're looking for more info, go to [resources.md](./resources.md) for information about the used resources.
+
+*NOTE*: if you don't see `AWS Services Org`, then open an individual [Access Request](https://gitlab.com/gitlab-com/team-member-epics/access-requests/-/issues), to get access to the AWS account:  `saas-mac-runners-b6fd8d28`. See past [bulk access request](https://gitlab.com/gitlab-com/team-member-epics/access-requests/-/issues/21531).
 
 ### Staging
 
