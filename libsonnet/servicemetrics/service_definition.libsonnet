@@ -67,8 +67,12 @@ local prepareComponent(definition) =
     serviceLevelIndicatorDefinition.serviceLevelIndicatorDefinition(definition);
 
 local validateAndApplyServiceDefaults(service) =
+  local serviceWithMonitoringDefaults =
+    // std.mergePatch applies the default on deeply nested objects
+    service { monitoring: std.mergePatch(serviceDefaults.monitoring, std.get(service, 'monitoring', default={})) };
+
   local serviceWithProvisioningDefaults =
-    serviceDefaults + ({ provisioning: provisioningDefaults } + service);
+    serviceDefaults { provisioning: provisioningDefaults } + serviceWithMonitoringDefaults;
 
   local serviceWithDefaults = if serviceWithProvisioningDefaults.provisioning.kubernetes then
     local labelSelectors = if std.objectHas(serviceWithProvisioningDefaults.kubeConfig, 'labelSelectors') then
