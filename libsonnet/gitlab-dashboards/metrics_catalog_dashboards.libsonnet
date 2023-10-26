@@ -96,7 +96,8 @@ local sliOverviewMatrixRow(
       showApdex=sli.hasApdex(),
       showErrorRatio=sli.hasErrorRate(),
       showOpsRate=true,
-      includePredictions=false
+      includePredictions=false,
+      shardLevelSli=sli.shardLevelMonitoring
     )
     +
     (
