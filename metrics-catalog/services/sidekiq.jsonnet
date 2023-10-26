@@ -21,7 +21,7 @@ metricsCatalog.serviceDefinition({
 
   contractualThresholds: {
     apdexRatio: 0.9,
-    errorRatio: 0.005,
+    errorRatio: 0.1,
   },
   monitoringThresholds: {
     apdexScore: 0.995,
