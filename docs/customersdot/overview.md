@@ -124,4 +124,4 @@ At the moment, we rely on [this Uptime Kuma instance for CustomersDot production
 
 #### Unschedule maintenance
 
-When Zuora is down (reported to `#s_fulfillment_status`) and CustomersDot is in auto-maintenance mode for longer than 5 minutes, we can create an S3 incident with the CMOC updating the status page based on updates from <https://trust.zuora.com/>.
++When Zuora is down (reported to `#s_fulfillment_status`) and CustomersDot is in auto-maintenance mode for longer than 5 minutes, we should create an S3 incident with the CMOC updating the status page based on updates from <https://trust.zuora.com/>.
