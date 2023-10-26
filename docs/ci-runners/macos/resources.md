@@ -22,16 +22,15 @@ Go to [access.md](./access.md) for information on how to access the resources de
 - Perhaps the most important column in this view is the `State` of each of the Hosts.
 - When a host is missing `vCPU utilization` info, it could indicate the instance is deleted, but not yet deleted from the account's pool.
 - _Released_ state means the instance is no longer connected to our AWS account, it's not clear how long it takes for these entries to be deleted.
-- _Pending_ indicates the instance is currently being provisioned.
+- _Pending_ indicates the instance is currently being reprovisioned.
 
 ### AMIs
 
-The images appearing in the AMI view have two purposes:
+The images appearing in the AMI view are images that are used for provisioning the EC2 instances.
 
-- images for the EC2 instances
-- images for the user facing jobs
+The AMIs generated here also contain the user facing images, which are pulled from ECR.
 
-*NOTE*: To understand the difference between these two images, you should have a basic understanding of the architecutre of these runners.
+*NOTE*: To understand the difference between an EC2 AMI and user-facing AMI, you should have a basic understanding of the architecutre of these runners.
 In summary, each EC2 VM you see in the console, spins up two **nested VMs** within itself.
 These nested VMs use the `user facing jobs` images, while the parent VM, uses the EC2 instance images.
 For more details on the architecture of these runners, have a look at [architecture.md](./architecture.md).
