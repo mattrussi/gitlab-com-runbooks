@@ -68,7 +68,7 @@ local recordingRuleGroup(aggregationSet, service, burnRate, extraSelector) = {
   name: '%s: %s - %s burn-rate' % [aggregationSet.name, service.type, burnRate],
   interval: intervalForDuration.intervalForDuration(burnRate),
   rules: recordingRules.componentMetricsRuleSetGenerator(
-    burnRate=burnRate, aggregationSet=aggregationSet { selector+: extraSelector }
+    burnRate=burnRate, aggregationSet=aggregationSet, extraSourceSelector=extraSelector
   ).generateRecordingRulesForService(service),
 };
 
