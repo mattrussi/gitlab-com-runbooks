@@ -2,7 +2,7 @@
 
 MacOS VMs are currently hosted in AWS. SRE should have access to the Production environment via Okta.
 
-### Production
+### Production via Okta
 
 All SRE should have access to the MacOS Production environment through Okta:
 
@@ -14,7 +14,7 @@ Most of the resources exist in the `N. Virginia` (`us-east-1`) region; if you're
 
 *NOTE*: if you don't see `AWS Services Org`, then open an individual [Access Request](https://gitlab.com/gitlab-com/team-member-epics/access-requests/-/issues), to get access to the AWS account:  `saas-mac-runners-b6fd8d28`. See past [bulk access request](https://gitlab.com/gitlab-com/team-member-epics/access-requests/-/issues/21531).
 
-### Staging
+### Staging / Production via gitlabsandbox
 
 If you think you have the appropriate access in the sandbox, you can view the Staging environment following these steps:
 
@@ -23,11 +23,9 @@ If you think you have the appropriate access in the sandbox, you can view the St
 - Click `View IAM Credentials`.
 - Click the `AWS Console URL`.
 - Copy the username and password; beaware that sometimes the copy can produce extra spaces before and after the text.
-
-Just like the Production environment, resources are mostly in `N. Virginia` (`us-east-1`) region, for more info go to [resource.md](./resources.md).
-
-You can optionally switch to the Production environment without using Okta:
-
+- Login to AWS.
 - Click your username in the upper right corner.
 - From the dropdown menu, choose `Switch role`.
 - Enter the details in [verify-runner handbook](https://about.gitlab.com/handbook/engineering/development/ops/verify/runner/team-resources/#access-mac-runner-production).
+
+Just like the Production environment, resources are mostly in `N. Virginia` (`us-east-1`) region, for more info go to [resource.md](./resources.md).
