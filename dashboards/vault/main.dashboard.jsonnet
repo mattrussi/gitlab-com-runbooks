@@ -3,13 +3,21 @@ local basic = import 'grafana/basic.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
 local promQuery = import 'grafana/prom_query.libsonnet';
 local row = grafana.row;
+local template = grafana.template;
 
 local serviceDashboard = import 'gitlab-dashboards/service_dashboard.libsonnet';
 local thresholds = import 'gitlab-dashboards/thresholds.libsonnet';
 
 // See https://www.vaultproject.io/docs/internals/telemetry for more details about Vault metrics
 
-serviceDashboard.overview('vault', startRow=1)
+serviceDashboard.overview('vault', startRow=1, omitEnvironmentDropdown=true)
+.addTemplate(
+  template.custom(
+    'environment',
+    'ops,pre,',
+    'ops',
+  ),
+)
 .addPanels(
   layout.grid([
     basic.statPanel(
