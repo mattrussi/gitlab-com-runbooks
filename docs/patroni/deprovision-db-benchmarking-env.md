@@ -14,3 +14,4 @@ This runbook describes the procedure the DBRE team uses to deprovision the GCP r
 - Destroy and deprovision VM and all the associated resources including the storage if the VM is stopped for more than 7 days. We use Terraform to manage our infrastructure - Config Management [repo link](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt).
 
 ### How do we enforce deprovisioning GCP resources in the db-benchmarking environment?
+- For now, I've added a agenda item in our weekly DBRE conference call to review any pending deprovisioning of GCP resources in the db-benchmarking environment.
