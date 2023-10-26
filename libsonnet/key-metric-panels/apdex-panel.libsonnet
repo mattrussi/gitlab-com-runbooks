@@ -23,7 +23,6 @@ local generalGraphPanel(
   )
   .addSeriesOverride(seriesOverrides.degradationSlo)
   .addSeriesOverride(seriesOverrides.outageSlo)
-  .addSeriesOverride(seriesOverrides.slo)
   .addSeriesOverride(seriesOverrides.shardLevelSli);
 
 local genericApdexPanel(
@@ -39,6 +38,7 @@ local genericApdexPanel(
   expectMultipleSeries=false,
   selectorHash,
   fixedThreshold=null,
+  shardLevelSli
       ) =
   generalGraphPanel(
     title,
@@ -56,16 +56,16 @@ local genericApdexPanel(
   )
   .addTarget(  // Min apdex score SLO for gitlab_service_errors:ratio metric
     promQuery.target(
-      sliPromQL.apdex.serviceApdexDegradationSLOQuery(selectorHash, fixedThreshold),
+      sliPromQL.apdex.serviceApdexDegradationSLOQuery(selectorHash, fixedThreshold, shardLevelSli),
       interval='5m',
-      legendFormat='6h Degradation SLO (5% of monthly error budget)',
+      legendFormat='6h Degradation SLO (5% of monthly error budget)' + (if shardLevelSli then ' - {{ shard }} shard' else ''),
     ),
   )
   .addTarget(  // Double apdex SLO is Outage-level SLO
     promQuery.target(
-      sliPromQL.apdex.serviceApdexOutageSLOQuery(selectorHash, fixedThreshold),
+      sliPromQL.apdex.serviceApdexOutageSLOQuery(selectorHash, fixedThreshold, shardLevelSli),
       interval='5m',
-      legendFormat='1h Outage SLO (2% of monthly error budget)',
+      legendFormat='1h Outage SLO (2% of monthly error budget)' + (if shardLevelSli then ' - {{ shard }} shard' else ''),
     ),
   )
   .resetYaxes()
@@ -93,6 +93,7 @@ local apdexPanel(
   includeLastWeek=true,
   expectMultipleSeries=false,
   fixedThreshold=null,
+  shardLevelSli
       ) =
   local selectorHashWithExtras = selectorHash + aggregationSet.selector;
 
@@ -106,6 +107,7 @@ local apdexPanel(
     linewidth=if expectMultipleSeries then 1 else 2,
     selectorHash=selectorHashWithExtras,
     fixedThreshold=fixedThreshold,
+    shardLevelSli=shardLevelSli,
   );
 
   local panelWithAverage = if !expectMultipleSeries then

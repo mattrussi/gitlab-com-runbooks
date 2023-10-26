@@ -52,6 +52,7 @@ local selectors = import 'promql/selectors.libsonnet';
       legendFormat=legend,
       interval='$__interval',
       linewidth=1,
+      decimals=2,
     ),
   cache_served(selectorHash, legend)::
     basic.timeseries(
@@ -63,6 +64,7 @@ local selectors = import 'promql/selectors.libsonnet';
       format='bytes',
       interval='$__interval',
       linewidth=1,
+      decimals=2,
     ),
   cache_generated(selectorHash, legend)::
     basic.timeseries(
@@ -74,5 +76,20 @@ local selectors = import 'promql/selectors.libsonnet';
       format='bytes',
       interval='$__interval',
       linewidth=1,
+      decimals=2,
+    ),
+  pack_objects_info()::
+    basic.text(
+      title='Gitaly Pack-Objects cache info',
+      content=|||
+        Gitaly is caching short rolling window of <a href="https://gitlab.com/gitlab-com/gl-infra/chef-repo/-/blob/master/roles/gprd-base-stor-gitaly-common.json?ref_type=heads#L185">5 minutes</a> of Git fetch responses. It is independent of (verbatim from <a href="https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/gitaly/gitaly-repos-cgroup.md">docs</a>):
+
+        1. The transport (HTTP or SSH)
+        2. Git protocol version (v0 or v2)
+        3. The type of fetch, such as full clones, incremental fetches, shallow clones, or partial clones]
+
+        Here is the link to docs to understand more about pack-object cache:
+        https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/gitaly/gitaly-repos-cgroup.md
+      |||
     ),
 }

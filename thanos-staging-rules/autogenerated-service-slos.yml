@@ -555,6 +555,28 @@ spec:
       expr: "0.050000"
     - record: slo:min:events:gitlab_service_apdex:ratio
       labels:
+        tier: sv
+        type: errortracking
+      expr: "0.995000"
+    - record: slo:max:events:gitlab_service_errors:ratio
+      labels:
+        tier: sv
+        type: errortracking
+      expr: "0.001000"
+    - record: slo:min:events:gitlab_service_apdex:ratio
+      labels:
+        component: loadbalancer
+        tier: sv
+        type: errortracking
+      expr: "0.995000"
+    - record: slo:max:events:gitlab_service_errors:ratio
+      labels:
+        component: loadbalancer
+        tier: sv
+        type: errortracking
+      expr: "0.001000"
+    - record: slo:min:events:gitlab_service_apdex:ratio
+      labels:
         tier: lb
         type: frontend
       expr: "0.999000"
@@ -2455,7 +2477,7 @@ spec:
       labels:
         tier: sv
         type: sidekiq
-      expr: "0.005000"
+      expr: "0.100000"
     - record: slo:min:events:gitlab_service_apdex:ratio
       labels:
         tier: sv
@@ -2481,12 +2503,21 @@ spec:
     - record: slo:min:events:gitlab_service_apdex:ratio
       labels:
         component: sidekiq_execution
+        shard: ""
         tier: sv
         type: sidekiq
       expr: "0.995000"
+    - record: slo:min:events:gitlab_service_apdex:ratio
+      labels:
+        component: sidekiq_execution
+        shard: urgent-authorized-projects
+        tier: sv
+        type: sidekiq
+      expr: "0.980000"
     - record: slo:max:events:gitlab_service_errors:ratio
       labels:
         component: sidekiq_execution
+        shard: ""
         tier: sv
         type: sidekiq
       expr: "0.005000"
@@ -2505,12 +2536,21 @@ spec:
     - record: slo:min:events:gitlab_service_apdex:ratio
       labels:
         component: sidekiq_queueing
+        shard: ""
         tier: sv
         type: sidekiq
       expr: "0.995000"
+    - record: slo:min:events:gitlab_service_apdex:ratio
+      labels:
+        component: sidekiq_queueing
+        shard: urgent-other
+        tier: sv
+        type: sidekiq
+      expr: "0.970000"
     - record: slo:max:events:gitlab_service_errors:ratio
       labels:
         component: sidekiq_queueing
+        shard: ""
         tier: sv
         type: sidekiq
       expr: "0.005000"
@@ -3215,15 +3255,6 @@ spec:
         service_aggregation: "no"
         tier: sv
         type: customersdot
-      expr: "1"
-    - record: gitlab_component_service:mapping
-      labels:
-        component: loadbalancer
-        global_aggregation: "no"
-        regional_aggregation: "no"
-        service_aggregation: "no"
-        tier: sv
-        type: errortracking
       expr: "1"
     - record: gitlab_component_service:mapping
       labels:

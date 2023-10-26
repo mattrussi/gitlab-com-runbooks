@@ -41,11 +41,11 @@ Runbook:
     ID: 219566, valid: false, errors: ["Name can contain only letters..."]
     ```
 
-### Project repository move timeout with `state: schedule`
+### Project repository move timeout with `state:initial` / `state: schedule` / `state:started`
 
 Symptoms:
 
-Move timeout and `state="scheduled"`
+Move timeout and `state="initial"` / `state="scheduled"` / `state="started"`
 
 ```json
 {

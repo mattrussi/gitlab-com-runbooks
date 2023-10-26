@@ -90,10 +90,18 @@ spec:
     - record: slo:max:soft:gitlab_component_saturation:ratio
       labels:
         component: kube_container_cpu
-      expr: "0.9"
+      expr: "0.95"
     - record: slo:max:hard:gitlab_component_saturation:ratio
       labels:
         component: kube_container_cpu
+      expr: "0.99"
+    - record: slo:max:soft:gitlab_component_saturation:ratio
+      labels:
+        component: kube_container_cpu_limit
+      expr: "0.9"
+    - record: slo:max:hard:gitlab_component_saturation:ratio
+      labels:
+        component: kube_container_cpu_limit
       expr: "0.99"
     - record: slo:max:soft:gitlab_component_saturation:ratio
       labels:
@@ -277,8 +285,16 @@ spec:
       expr: "1"
     - record: gitlab_component_saturation_info
       labels:
-        capacity_planning_strategy: quantile95_1h
+        capacity_planning_strategy: quantile99_1h
         component: kube_container_cpu
+        horiz_scaling: "yes"
+        quantile: "0.99"
+        severity: s4
+      expr: "1"
+    - record: gitlab_component_saturation_info
+      labels:
+        capacity_planning_strategy: exclude
+        component: kube_container_cpu_limit
         horiz_scaling: "yes"
         quantile: max
         severity: s4

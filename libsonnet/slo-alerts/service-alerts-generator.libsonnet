@@ -13,52 +13,110 @@ local errorRatioThreshold(sli, alertDescriptor) =
   local specificThreshold = misc.dig(sli.monitoringThresholds, [alertDescriptor.aggregationSet.id, 'errorRatio']);
   if specificThreshold != {} then specificThreshold else sli.monitoringThresholds.errorRatio;
 
-local apdexAlertForSLIForAlertDescriptor(service, sli, alertDescriptor, extraSelector) =
-  local apdexScoreSLO = apdexScoreThreshold(sli, alertDescriptor);
+local shardLevelOverridesExists(service, sli) =
+  sli.shardLevelMonitoring &&
+  std.length(
+    std.objectFields(
+      std.get(
+        service.getShardMonitoringOverrides(),
+        sli.name,
+        default={}
+      )
+    )
+  ) > 0;
 
+local generateShardSelectorsAndThreshold(service, sli, thresholdField) =
+  local overridenShardsSelector = service.listOverridenShardsMonitoringThresholds(sli, thresholdField);
+
+  if std.length(overridenShardsSelector) > 0 then
+    local otherShardsSelector = [
+      {
+        shard: { noneOf: std.map(function(s) s.shard, overridenShardsSelector) },
+        threshold: std.get(sli.monitoringThresholds, thresholdField),
+      },
+    ];
+    otherShardsSelector + overridenShardsSelector
+  else
+    [];
+
+local apdexAlertForSLIForAlertDescriptor(service, sli, alertDescriptor, extraSelector) =
   local formatConfig = {
     sliName: sli.name,
     serviceType: service.type,
   };
 
-  serviceLevelAlerts.apdexAlertsForSLI(
+  local shardSelectors = if service.hasShardMonitoringOverrides(sli) then
+    generateShardSelectorsAndThreshold(service, sli, 'apdexScore')
+  else
+    [];
+
+  local apdexAlerts = function(thresholdSLOValue, metricSelectorHash) serviceLevelAlerts.apdexAlertsForSLI(
     alertName=serviceLevelAlerts.nameSLOViolationAlert(service.type, sli.name, 'ApdexSLOViolation' + alertDescriptor.alertSuffix),
     alertTitle=(alertDescriptor.alertTitleTemplate + ' has an apdex violating SLO') % formatConfig,
     alertDescriptionLines=[sli.description] + if alertDescriptor.alertExtraDetail != null then [alertDescriptor.alertExtraDetail] else [],
     serviceType=service.type,
     severity=sli.severity,
-    thresholdSLOValue=apdexScoreSLO,
+    thresholdSLOValue=thresholdSLOValue,
     aggregationSet=alertDescriptor.aggregationSet,
     windows=service.alertWindows,
-    metricSelectorHash={ type: service.type, component: sli.name } + extraSelector,
+    metricSelectorHash=metricSelectorHash,
     minimumSamplesForMonitoring=alertDescriptor.minimumSamplesForMonitoring,
     alertForDuration=alertDescriptor.alertForDuration,
     extraLabels=labelsForSLIAlert(sli),
     extraAnnotations=sloAlertAnnotations(service.type, sli, alertDescriptor.aggregationSet, 'apdex')
   );
 
+  if std.length(shardSelectors) > 0 then
+    std.flatMap(
+      function(shardSelector) apdexAlerts(
+        shardSelector.threshold,
+        { type: service.type, component: sli.name, shard: shardSelector.shard } + extraSelector
+      ),
+      shardSelectors
+    )
+  else
+    local apdexScoreSLO = apdexScoreThreshold(sli, alertDescriptor);
+    apdexAlerts(apdexScoreSLO, { type: service.type, component: sli.name } + extraSelector);
+
+
 local errorAlertForSLIForAlertDescriptor(service, sli, alertDescriptor, extraSelector) =
-  local errorRateSLO = errorRatioThreshold(sli, alertDescriptor);
   local formatConfig = {
     sliName: sli.name,
     serviceType: service.type,
   };
 
-  serviceLevelAlerts.errorAlertsForSLI(
+  local shardSelectors = if shardLevelOverridesExists(service, sli) then
+    generateShardSelectorsAndThreshold(service, sli, 'errorRatio')
+  else
+    [];
+
+  local errorAlerts = function(thresholdSLOValue, metricSelectorHash) serviceLevelAlerts.errorAlertsForSLI(
     alertName=serviceLevelAlerts.nameSLOViolationAlert(service.type, sli.name, 'ErrorSLOViolation' + alertDescriptor.alertSuffix),
     alertTitle=(alertDescriptor.alertTitleTemplate + ' has an error rate violating SLO') % formatConfig,
     alertDescriptionLines=[sli.description] + if alertDescriptor.alertExtraDetail != null then [alertDescriptor.alertExtraDetail] else [],
     serviceType=service.type,
     severity=sli.severity,
-    thresholdSLOValue=errorRateSLO,
+    thresholdSLOValue=thresholdSLOValue,
     aggregationSet=alertDescriptor.aggregationSet,
     windows=service.alertWindows,
-    metricSelectorHash={ type: service.type, component: sli.name } + extraSelector,
+    metricSelectorHash=metricSelectorHash,
     minimumSamplesForMonitoring=alertDescriptor.minimumSamplesForMonitoring,
     extraLabels=labelsForSLIAlert(sli),
     alertForDuration=alertDescriptor.alertForDuration,
     extraAnnotations=sloAlertAnnotations(service.type, sli, alertDescriptor.aggregationSet, 'error'),
   );
+
+  if std.length(shardSelectors) > 0 then
+    std.flatMap(
+      function(shardSelector) errorAlerts(
+        shardSelector.threshold,
+        { type: service.type, component: sli.name, shard: shardSelector.shard } + extraSelector
+      ),
+      shardSelectors
+    )
+  else
+    local errorRateSLO = errorRatioThreshold(sli, alertDescriptor);
+    errorAlerts(errorRateSLO, { type: service.type, component: sli.name } + extraSelector);
 
 // Generates an apdex alert for an SLI
 local apdexAlertForSLI(service, sli, alertDescriptors, extraSelector) =

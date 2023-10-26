@@ -138,7 +138,7 @@
       "renderer": "flot",
       "seriesOverrides": [
         {
-          "alias": "6h Degradation SLO (5% of monthly error budget)",
+          "alias": "/6h Degradation SLO \\(5% of monthly error budget\\).*/",
           "color": "#FF4500",
           "dashLength": 4,
           "dashes": true,
@@ -150,20 +150,8 @@
           "zindex": -2
         },
         {
-          "alias": "1h Outage SLO (2% of monthly error budget)",
+          "alias": "/1h Outage SLO \\(2% of monthly error budget\\).*/",
           "color": "#F2495C",
-          "dashLength": 4,
-          "dashes": true,
-          "legend": true,
-          "lines": true,
-          "linewidth": 4,
-          "nullPointMode": "connected",
-          "spaceLength": 4,
-          "zindex": -2
-        },
-        {
-          "alias": "SLO",
-          "color": "#FF4500",
           "dashLength": 4,
           "dashes": true,
           "legend": true,
@@ -526,7 +514,7 @@
       "renderer": "flot",
       "seriesOverrides": [
         {
-          "alias": "6h Degradation SLO (5% of monthly error budget)",
+          "alias": "/6h Degradation SLO \\(5% of monthly error budget\\).*/",
           "color": "#FF4500",
           "dashLength": 4,
           "dashes": true,
@@ -538,7 +526,7 @@
           "zindex": -2
         },
         {
-          "alias": "1h Outage SLO (2% of monthly error budget)",
+          "alias": "/1h Outage SLO \\(2% of monthly error budget\\).*/",
           "color": "#F2495C",
           "dashLength": 4,
           "dashes": true,
@@ -1043,6 +1031,10 @@
           "url": "https://dashboards.gitlab.net/d/alerts-sat_kube_container_cpu/?var-environment=gprd\u0026var-type=gitlab-shell\u0026var-stage=main\u0026var-component=kube_container_cpu"
         },
         {
+          "title": "gitlab-shell Service | kube_container_cpu_limit resource Dashboard",
+          "url": "https://dashboards.gitlab.net/d/alerts-sat_kube_container_cpu_limit/?var-environment=gprd\u0026var-type=gitlab-shell\u0026var-stage=main\u0026var-component=kube_container_cpu_limit"
+        },
+        {
           "title": "gitlab-shell Service | kube_container_memory resource Dashboard",
           "url": "https://dashboards.gitlab.net/d/alerts-sat_kube_container_memory/?var-environment=gprd\u0026var-type=gitlab-shell\u0026var-stage=main\u0026var-component=kube_container_memory"
         }
@@ -1181,7 +1173,7 @@
       "renderer": "flot",
       "seriesOverrides": [
         {
-          "alias": "6h Degradation SLO (5% of monthly error budget)",
+          "alias": "/6h Degradation SLO \\(5% of monthly error budget\\).*/",
           "color": "#FF4500",
           "dashLength": 4,
           "dashes": true,
@@ -1193,20 +1185,8 @@
           "zindex": -2
         },
         {
-          "alias": "1h Outage SLO (2% of monthly error budget)",
+          "alias": "/1h Outage SLO \\(2% of monthly error budget\\).*/",
           "color": "#F2495C",
-          "dashLength": 4,
-          "dashes": true,
-          "legend": true,
-          "lines": true,
-          "linewidth": 4,
-          "nullPointMode": "connected",
-          "spaceLength": 4,
-          "zindex": -2
-        },
-        {
-          "alias": "SLO",
-          "color": "#FF4500",
           "dashLength": 4,
           "dashes": true,
           "legend": true,
@@ -1569,7 +1549,7 @@
       "renderer": "flot",
       "seriesOverrides": [
         {
-          "alias": "6h Degradation SLO (5% of monthly error budget)",
+          "alias": "/6h Degradation SLO \\(5% of monthly error budget\\).*/",
           "color": "#FF4500",
           "dashLength": 4,
           "dashes": true,
@@ -1581,7 +1561,7 @@
           "zindex": -2
         },
         {
-          "alias": "1h Outage SLO (2% of monthly error budget)",
+          "alias": "/1h Outage SLO \\(2% of monthly error budget\\).*/",
           "color": "#F2495C",
           "dashLength": 4,
           "dashes": true,
@@ -2086,6 +2066,10 @@
           "url": "https://dashboards.gitlab.net/d/alerts-sat_kube_container_cpu/?var-environment=gprd\u0026var-type=registry\u0026var-stage=main\u0026var-component=kube_container_cpu"
         },
         {
+          "title": "registry Service | kube_container_cpu_limit resource Dashboard",
+          "url": "https://dashboards.gitlab.net/d/alerts-sat_kube_container_cpu_limit/?var-environment=gprd\u0026var-type=registry\u0026var-stage=main\u0026var-component=kube_container_cpu_limit"
+        },
+        {
           "title": "registry Service | kube_container_memory resource Dashboard",
           "url": "https://dashboards.gitlab.net/d/alerts-sat_kube_container_memory/?var-environment=gprd\u0026var-type=registry\u0026var-stage=main\u0026var-component=kube_container_memory"
         }
@@ -2224,7 +2208,7 @@
       "renderer": "flot",
       "seriesOverrides": [
         {
-          "alias": "6h Degradation SLO (5% of monthly error budget)",
+          "alias": "/6h Degradation SLO \\(5% of monthly error budget\\).*/",
           "color": "#FF4500",
           "dashLength": 4,
           "dashes": true,
@@ -2236,20 +2220,8 @@
           "zindex": -2
         },
         {
-          "alias": "1h Outage SLO (2% of monthly error budget)",
+          "alias": "/1h Outage SLO \\(2% of monthly error budget\\).*/",
           "color": "#F2495C",
-          "dashLength": 4,
-          "dashes": true,
-          "legend": true,
-          "lines": true,
-          "linewidth": 4,
-          "nullPointMode": "connected",
-          "spaceLength": 4,
-          "zindex": -2
-        },
-        {
-          "alias": "SLO",
-          "color": "#FF4500",
           "dashLength": 4,
           "dashes": true,
           "legend": true,
@@ -2612,7 +2584,7 @@
       "renderer": "flot",
       "seriesOverrides": [
         {
-          "alias": "6h Degradation SLO (5% of monthly error budget)",
+          "alias": "/6h Degradation SLO \\(5% of monthly error budget\\).*/",
           "color": "#FF4500",
           "dashLength": 4,
           "dashes": true,
@@ -2624,7 +2596,7 @@
           "zindex": -2
         },
         {
-          "alias": "1h Outage SLO (2% of monthly error budget)",
+          "alias": "/1h Outage SLO \\(2% of monthly error budget\\).*/",
           "color": "#F2495C",
           "dashLength": 4,
           "dashes": true,
@@ -3129,6 +3101,10 @@
           "url": "https://dashboards.gitlab.net/d/alerts-sat_kube_container_cpu/?var-environment=gprd\u0026var-type=sidekiq\u0026var-stage=main\u0026var-component=kube_container_cpu"
         },
         {
+          "title": "sidekiq Service | kube_container_cpu_limit resource Dashboard",
+          "url": "https://dashboards.gitlab.net/d/alerts-sat_kube_container_cpu_limit/?var-environment=gprd\u0026var-type=sidekiq\u0026var-stage=main\u0026var-component=kube_container_cpu_limit"
+        },
+        {
           "title": "sidekiq Service | kube_container_memory resource Dashboard",
           "url": "https://dashboards.gitlab.net/d/alerts-sat_kube_container_memory/?var-environment=gprd\u0026var-type=sidekiq\u0026var-stage=main\u0026var-component=kube_container_memory"
         },
@@ -3271,7 +3247,7 @@
       "renderer": "flot",
       "seriesOverrides": [
         {
-          "alias": "6h Degradation SLO (5% of monthly error budget)",
+          "alias": "/6h Degradation SLO \\(5% of monthly error budget\\).*/",
           "color": "#FF4500",
           "dashLength": 4,
           "dashes": true,
@@ -3283,20 +3259,8 @@
           "zindex": -2
         },
         {
-          "alias": "1h Outage SLO (2% of monthly error budget)",
+          "alias": "/1h Outage SLO \\(2% of monthly error budget\\).*/",
           "color": "#F2495C",
-          "dashLength": 4,
-          "dashes": true,
-          "legend": true,
-          "lines": true,
-          "linewidth": 4,
-          "nullPointMode": "connected",
-          "spaceLength": 4,
-          "zindex": -2
-        },
-        {
-          "alias": "SLO",
-          "color": "#FF4500",
           "dashLength": 4,
           "dashes": true,
           "legend": true,
@@ -3659,7 +3623,7 @@
       "renderer": "flot",
       "seriesOverrides": [
         {
-          "alias": "6h Degradation SLO (5% of monthly error budget)",
+          "alias": "/6h Degradation SLO \\(5% of monthly error budget\\).*/",
           "color": "#FF4500",
           "dashLength": 4,
           "dashes": true,
@@ -3671,7 +3635,7 @@
           "zindex": -2
         },
         {
-          "alias": "1h Outage SLO (2% of monthly error budget)",
+          "alias": "/1h Outage SLO \\(2% of monthly error budget\\).*/",
           "color": "#F2495C",
           "dashLength": 4,
           "dashes": true,
@@ -4176,6 +4140,10 @@
           "url": "https://dashboards.gitlab.net/d/alerts-sat_kube_container_cpu/?var-environment=gprd\u0026var-type=webservice\u0026var-stage=main\u0026var-component=kube_container_cpu"
         },
         {
+          "title": "webservice Service | kube_container_cpu_limit resource Dashboard",
+          "url": "https://dashboards.gitlab.net/d/alerts-sat_kube_container_cpu_limit/?var-environment=gprd\u0026var-type=webservice\u0026var-stage=main\u0026var-component=kube_container_cpu_limit"
+        },
+        {
           "title": "webservice Service | kube_container_rss resource Dashboard",
           "url": "https://dashboards.gitlab.net/d/alerts-sat_kube_container_rss/?var-environment=gprd\u0026var-type=webservice\u0026var-stage=main\u0026var-component=kube_container_rss"
         },
@@ -4322,7 +4290,7 @@
       "renderer": "flot",
       "seriesOverrides": [
         {
-          "alias": "6h Degradation SLO (5% of monthly error budget)",
+          "alias": "/6h Degradation SLO \\(5% of monthly error budget\\).*/",
           "color": "#FF4500",
           "dashLength": 4,
           "dashes": true,
@@ -4334,20 +4302,8 @@
           "zindex": -2
         },
         {
-          "alias": "1h Outage SLO (2% of monthly error budget)",
+          "alias": "/1h Outage SLO \\(2% of monthly error budget\\).*/",
           "color": "#F2495C",
-          "dashLength": 4,
-          "dashes": true,
-          "legend": true,
-          "lines": true,
-          "linewidth": 4,
-          "nullPointMode": "connected",
-          "spaceLength": 4,
-          "zindex": -2
-        },
-        {
-          "alias": "SLO",
-          "color": "#FF4500",
           "dashLength": 4,
           "dashes": true,
           "legend": true,
@@ -4710,7 +4666,7 @@
       "renderer": "flot",
       "seriesOverrides": [
         {
-          "alias": "6h Degradation SLO (5% of monthly error budget)",
+          "alias": "/6h Degradation SLO \\(5% of monthly error budget\\).*/",
           "color": "#FF4500",
           "dashLength": 4,
           "dashes": true,
@@ -4722,7 +4678,7 @@
           "zindex": -2
         },
         {
-          "alias": "1h Outage SLO (2% of monthly error budget)",
+          "alias": "/1h Outage SLO \\(2% of monthly error budget\\).*/",
           "color": "#F2495C",
           "dashLength": 4,
           "dashes": true,
@@ -5389,7 +5345,7 @@
       "renderer": "flot",
       "seriesOverrides": [
         {
-          "alias": "6h Degradation SLO (5% of monthly error budget)",
+          "alias": "/6h Degradation SLO \\(5% of monthly error budget\\).*/",
           "color": "#FF4500",
           "dashLength": 4,
           "dashes": true,
@@ -5401,20 +5357,8 @@
           "zindex": -2
         },
         {
-          "alias": "1h Outage SLO (2% of monthly error budget)",
+          "alias": "/1h Outage SLO \\(2% of monthly error budget\\).*/",
           "color": "#F2495C",
-          "dashLength": 4,
-          "dashes": true,
-          "legend": true,
-          "lines": true,
-          "linewidth": 4,
-          "nullPointMode": "connected",
-          "spaceLength": 4,
-          "zindex": -2
-        },
-        {
-          "alias": "SLO",
-          "color": "#FF4500",
           "dashLength": 4,
           "dashes": true,
           "legend": true,
@@ -5777,7 +5721,7 @@
       "renderer": "flot",
       "seriesOverrides": [
         {
-          "alias": "6h Degradation SLO (5% of monthly error budget)",
+          "alias": "/6h Degradation SLO \\(5% of monthly error budget\\).*/",
           "color": "#FF4500",
           "dashLength": 4,
           "dashes": true,
@@ -5789,7 +5733,7 @@
           "zindex": -2
         },
         {
-          "alias": "1h Outage SLO (2% of monthly error budget)",
+          "alias": "/1h Outage SLO \\(2% of monthly error budget\\).*/",
           "color": "#F2495C",
           "dashLength": 4,
           "dashes": true,
@@ -6456,6 +6400,10 @@
         {
           "title": "consul Service | kube_container_cpu resource Dashboard",
           "url": "https://dashboards.gitlab.net/d/alerts-sat_kube_container_cpu/?var-environment=gprd\u0026var-type=consul\u0026var-stage=main\u0026var-component=kube_container_cpu"
+        },
+        {
+          "title": "consul Service | kube_container_cpu_limit resource Dashboard",
+          "url": "https://dashboards.gitlab.net/d/alerts-sat_kube_container_cpu_limit/?var-environment=gprd\u0026var-type=consul\u0026var-stage=main\u0026var-component=kube_container_cpu_limit"
         },
         {
           "title": "consul Service | kube_container_memory resource Dashboard",

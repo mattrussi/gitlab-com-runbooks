@@ -67,7 +67,7 @@ local generateSaturationAuxRulesGroup(
   local filtered = filterSaturationDefinitions(saturationResources, knownEvaluation, thanosSelfMonitoring);
 
   local saturationAlerts = std.flatMap(function(key) saturationResources[key].getSaturationAlerts(key, selectorHash), filtered);
-  local recordedQuantiles = [0.95, 0.99];
+  local recordedQuantiles = (import 'servicemetrics/resource_saturation_point.libsonnet').recordedQuantiles;
 
   prepareGroups([{
     // Alerts for saturation metrics being out of threshold

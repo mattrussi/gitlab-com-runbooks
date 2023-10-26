@@ -17,6 +17,7 @@ local genericErrorPanel(
   legend_show=null,
   selectorHash,
   fixedThreshold=null,
+  shardLevelSli
       ) =
   basic.graphPanel(
     title,
@@ -38,16 +39,16 @@ local genericErrorPanel(
   )
   .addTarget(  // Maximum error rate SLO for gitlab_service_errors:ratio metric
     promQuery.target(
-      sliPromQL.errorRate.serviceErrorRateDegradationSLOQuery(selectorHash, fixedThreshold),
+      sliPromQL.errorRate.serviceErrorRateDegradationSLOQuery(selectorHash, fixedThreshold, shardLevelSli),
       interval='5m',
-      legendFormat='6h Degradation SLO (5% of monthly error budget)',
+      legendFormat='6h Degradation SLO (5% of monthly error budget)' + (if shardLevelSli then ' - {{ shard }} shard' else ''),
     ),
   )
   .addTarget(  // Outage level SLO
     promQuery.target(
-      sliPromQL.errorRate.serviceErrorRateOutageSLOQuery(selectorHash, fixedThreshold),
+      sliPromQL.errorRate.serviceErrorRateOutageSLOQuery(selectorHash, fixedThreshold, shardLevelSli),
       interval='5m',
-      legendFormat='1h Outage SLO (2% of monthly error budget)',
+      legendFormat='1h Outage SLO (2% of monthly error budget)' + (if shardLevelSli then ' - {{ shard }} shard' else ''),
     ),
   )
   .resetYaxes()
@@ -73,6 +74,7 @@ local errorRatioPanel(
   includeLastWeek=true,
   expectMultipleSeries=false,
   fixedThreshold=null,
+  shardLevelSli
       ) =
   local selectorHashWithExtras = selectorHash + aggregationSet.selector;
 
@@ -86,6 +88,7 @@ local errorRatioPanel(
       linewidth=if expectMultipleSeries then 1 else 2,
       selectorHash=selectorHashWithExtras,
       fixedThreshold=fixedThreshold,
+      shardLevelSli=shardLevelSli
     );
 
   local panelWithAverage = if !expectMultipleSeries then

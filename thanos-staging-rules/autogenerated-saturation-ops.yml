@@ -162,6 +162,26 @@ spec:
       labels:
         component: kube_container_cpu
       expr: |
+        quantile by(env, environment, tier, type, stage, shard) (
+          0.99,
+          clamp_min(
+            clamp_max(
+              sum by (environment, tier, type, stage, pod, container) (
+                rate(container_cpu_usage_seconds_total:labeled{container!="", container!="POD", env="ops",type="code_suggestions"}[1h])
+              )
+              /
+              sum by(environment, tier, type, stage, pod, container) (
+                kube_pod_container_resource_requests:labeled{container!="", container!="POD", resource="cpu", env="ops",type="code_suggestions"}
+              )
+              ,
+              1)
+          ,
+          0)
+        )
+    - record: gitlab_component_saturation:ratio
+      labels:
+        component: kube_container_cpu_limit
+      expr: |
         max by(env, environment, tier, type, stage, shard) (
           clamp_min(
             clamp_max(
@@ -281,15 +301,15 @@ spec:
           clamp_min(
             clamp_max(
               (
-                process_open_fds{env="ops",type=~"ai-gateway|code_suggestions"}
+                process_open_fds{env="ops",type=~"ai-gateway|code_suggestions|errortracking"}
                 /
-                process_max_fds{env="ops",type=~"ai-gateway|code_suggestions"}
+                process_max_fds{env="ops",type=~"ai-gateway|code_suggestions|errortracking"}
               )
               or
               (
-                ruby_file_descriptors{env="ops",type=~"ai-gateway|code_suggestions"}
+                ruby_file_descriptors{env="ops",type=~"ai-gateway|code_suggestions|errortracking"}
                 /
-                ruby_process_max_fds{env="ops",type=~"ai-gateway|code_suggestions"}
+                ruby_process_max_fds{env="ops",type=~"ai-gateway|code_suggestions|errortracking"}
               )
               ,
               1)
@@ -961,21 +981,21 @@ spec:
     - alert: component_saturation_slo_out_of_bounds
       for: 15m
       annotations:
-        title: The Kube Container CPU Utilization resource of the {{ $labels.type }}
-          service ({{ $labels.stage }} stage) has a saturation exceeding SLO and is
-          close to its capacity limit.
+        title: The Kube Container CPU over-utilization resource of the {{ $labels.type
+          }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
+          is close to its capacity limit.
         description: |
           This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
-          Details of the Kube Container CPU Utilization resource:
+          Details of the Kube Container CPU over-utilization resource:
 
-          Kubernetes containers are allocated a share of CPU. When this is exhausted, the container may be thottled.
-        grafana_dashboard_id: alerts-sat_kube_container_cpu
-        grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_kube_container_cpu?from=now-6h/m&to=now-1m/m&var-environment={{
+          Kubernetes containers can have a limit configured on how much CPU they can consume in a burst. If we are at this limit, exceeding the allocated requested resources, we should consider revisting the container's HPA configuration
+        grafana_dashboard_id: alerts-sat_kube_container_cpu_limit
+        grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_kube_container_cpu_limit?from=now-6h/m&to=now-1m/m&var-environment={{
           $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
           }}
         grafana_min_zoom_hours: "6"
-        grafana_panel_id: "2713861591"
+        grafana_panel_id: "1262336683"
         grafana_variables: environment,type,stage
         promql_query: |
           max by(environment, tier, type, stage, shard, pod, container) (
@@ -1019,8 +1039,8 @@ spec:
         rules_domain: general
         severity: s4
       expr: |
-        gitlab_component_saturation:ratio{component="kube_container_cpu",env="ops"} > on(component) group_left
-        slo:max:hard:gitlab_component_saturation:ratio{component="kube_container_cpu",env="ops"}
+        gitlab_component_saturation:ratio{component="kube_container_cpu_limit",env="ops"} > on(component) group_left
+        slo:max:hard:gitlab_component_saturation:ratio{component="kube_container_cpu_limit",env="ops"}
     - alert: component_saturation_slo_out_of_bounds
       for: 15m
       annotations:
