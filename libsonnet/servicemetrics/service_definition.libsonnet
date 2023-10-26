@@ -180,7 +180,7 @@ local serviceDefinition(service) =
 
     // Returns an array of { shard: shardName, threshold: thresholdField }
     // for each shard with overriden SLI for the given thresholdField.
-    // Example: [ { name: 'urgent-other' }, { threshold: 0.97 } ]
+    // Example: [ { name: 'urgent-other', threshold: 0.97 } ]
     listOverridenShardsMonitoringThresholds(sli, thresholdField)::
       std.filter(
         function(shardWithThreshold) std.isNumber(shardWithThreshold.threshold),
