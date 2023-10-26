@@ -29,6 +29,7 @@
 * [Check the status of transaction wraparound Runbook](check_wraparound.md)
 * [Custom PostgreSQL Package Build Process for Ubuntu Xenial 16.04](custom_postgres_packages.md)
 * [database_peak_analysis.md](database_peak_analysis.md)
+* [How and when to deprovision the db-benchmarking environment](deprovision-db-benchmarking-env.md)
 * [Patroni GCS Snapshots](gcs-snapshots.md)
 * [Geo Patroni Cluster Management](geo-patroni-cluster.md)
 * [gitlab-com-wale-backups.md](gitlab-com-wale-backups.md)
