@@ -10,7 +10,7 @@ Go to [access.md](./access.md) for information on how to access the resources de
 
 ### Instances
 
-- All the VMs found here are in `us-east-1` region.
+- All the VMs here are in the 'us-east-1' region.
 - All the VMs are considered _ephemeral VMs_.
   - These are short lived VMs, in the case of MacOS, they live for _at least_ 24h.
   - The 24h rule is due to licensing limitations, see [licensing.md](./licensing.md) for details.
