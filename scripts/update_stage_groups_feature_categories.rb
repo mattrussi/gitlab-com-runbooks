@@ -37,7 +37,7 @@ class UpdateStageGroupsFeatureCategories
         categories_in_group = group_info['categories'] || []
         categories = categories_in_group - known_category_map.keys
 
-        if categories.size != group_info['categories'].size
+        if categories.size != categories_in_group.size
           duplicates = categories_in_group & known_category_map.keys
 
           msg = duplicates.map do |duplicate|

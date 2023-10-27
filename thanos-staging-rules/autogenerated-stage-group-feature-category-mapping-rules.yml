@@ -17,6 +17,36 @@ spec:
     rules:
     - record: gitlab:feature_category:stage_group:mapping
       labels:
+        feature_category: acquisition
+        product_stage: growth
+        stage_group: acquisition
+      expr: "1"
+    - record: gitlab:feature_category:stage_group:mapping
+      labels:
+        feature_category: experimentation_expansion
+        product_stage: growth
+        stage_group: acquisition
+      expr: "1"
+    - record: gitlab:feature_category:stage_group:mapping
+      labels:
+        feature_category: activation
+        product_stage: growth
+        stage_group: activation
+      expr: "1"
+    - record: gitlab:feature_category:stage_group:mapping
+      labels:
+        feature_category: experimentation_activation
+        product_stage: growth
+        stage_group: activation
+      expr: "1"
+    - record: gitlab:feature_category:stage_group:mapping
+      labels:
+        feature_category: experimentation_adoption
+        product_stage: growth
+        stage_group: activation
+      expr: "1"
+    - record: gitlab:feature_category:stage_group:mapping
+      labels:
         feature_category: advisory_database
         product_stage: secure
         stage_group: vulnerability_research
@@ -59,12 +89,6 @@ spec:
       expr: "1"
     - record: gitlab:feature_category:stage_group:mapping
       labels:
-        feature_category: application_performance
-        product_stage: data_stores
-        stage_group: application_performance
-      expr: "1"
-    - record: gitlab:feature_category:stage_group:mapping
-      labels:
         feature_category: attack_emulation
         product_stage: secure
         stage_group: dynamic_analysis
@@ -86,12 +110,6 @@ spec:
         feature_category: backup_restore
         product_stage: systems
         stage_group: geo
-      expr: "1"
-    - record: gitlab:feature_category:stage_group:mapping
-      labels:
-        feature_category: billing_and_payments
-        product_stage: fulfillment
-        stage_group: billing_and_subscription_management
       expr: "1"
     - record: gitlab:feature_category:stage_group:mapping
       labels:
@@ -122,6 +140,18 @@ spec:
         feature_category: ci-cd_visibility
         product_stage: verify
         stage_group: pipeline_execution
+      expr: "1"
+    - record: gitlab:feature_category:stage_group:mapping
+      labels:
+        feature_category: cloud_connector
+        product_stage: data_stores
+        stage_group: cloud_connector
+      expr: "1"
+    - record: gitlab:feature_category:stage_group:mapping
+      labels:
+        feature_category: application_performance
+        product_stage: data_stores
+        stage_group: cloud_connector
       expr: "1"
     - record: gitlab:feature_category:stage_group:mapping
       labels:
@@ -323,30 +353,6 @@ spec:
       expr: "1"
     - record: gitlab:feature_category:stage_group:mapping
       labels:
-        feature_category: experimentation_activation
-        product_stage: growth
-        stage_group: activation
-      expr: "1"
-    - record: gitlab:feature_category:stage_group:mapping
-      labels:
-        feature_category: experimentation_adoption
-        product_stage: growth
-        stage_group: activation
-      expr: "1"
-    - record: gitlab:feature_category:stage_group:mapping
-      labels:
-        feature_category: experimentation_conversion
-        product_stage: growth
-        stage_group: acquisition
-      expr: "1"
-    - record: gitlab:feature_category:stage_group:mapping
-      labels:
-        feature_category: experimentation_expansion
-        product_stage: growth
-        stage_group: acquisition
-      expr: "1"
-    - record: gitlab:feature_category:stage_group:mapping
-      labels:
         feature_category: feature_flags
         product_stage: deploy
         stage_group: environments
@@ -458,12 +464,6 @@ spec:
         feature_category: integrations
         product_stage: manage
         stage_group: import_and_integrate
-      expr: "1"
-    - record: gitlab:feature_category:stage_group:mapping
-      labels:
-        feature_category: interactive_application_security_testing
-        product_stage: secure
-        stage_group: dynamic_analysis
       expr: "1"
     - record: gitlab:feature_category:stage_group:mapping
       labels:
@@ -701,12 +701,6 @@ spec:
       expr: "1"
     - record: gitlab:feature_category:stage_group:mapping
       labels:
-        feature_category: security_benchmarking
-        product_stage: secure
-        stage_group: vulnerability_research
-      expr: "1"
-    - record: gitlab:feature_category:stage_group:mapping
-      labels:
         feature_category: security_policy_management
         product_stage: govern
         stage_group: security_policies
@@ -751,7 +745,13 @@ spec:
       labels:
         feature_category: subscription_management
         product_stage: fulfillment
-        stage_group: billing_and_subscription_management
+        stage_group: subscription_management
+      expr: "1"
+    - record: gitlab:feature_category:stage_group:mapping
+      labels:
+        feature_category: billing_and_payments
+        product_stage: fulfillment
+        stage_group: subscription_management
       expr: "1"
     - record: gitlab:feature_category:stage_group:mapping
       labels:
@@ -763,7 +763,7 @@ spec:
       labels:
         feature_category: system_access
         product_stage: govern
-        stage_group: authentication_and_authorization
+        stage_group: authentication
       expr: "1"
     - record: gitlab:feature_category:stage_group:mapping
       labels:
@@ -787,7 +787,7 @@ spec:
       labels:
         feature_category: user_management
         product_stage: govern
-        stage_group: authentication_and_authorization
+        stage_group: authentication
       expr: "1"
     - record: gitlab:feature_category:stage_group:mapping
       labels:

@@ -19,12 +19,12 @@ test.suite({
     expect: 'not_owned',
   },
   testStageGroupAddsKey: {
-    actual: stages.stageGroup('authentication_and_authorization').key,
-    expect: 'authentication_and_authorization',
+    actual: stages.stageGroup('authentication').key,
+    expect: 'authentication',
   },
   testStageGroupAddsTeam: {
-    actual: stages.stageGroup('authentication_and_authorization').slack_alerts_channel,
-    expect: 'g_govern_auth',
+    actual: stages.stageGroup('authentication').slack_alerts_channel,
+    expect: 'g_govern_authentication',
   },
   testStageGroupNotOwnedLookup: {
     actual: stages.notOwned,

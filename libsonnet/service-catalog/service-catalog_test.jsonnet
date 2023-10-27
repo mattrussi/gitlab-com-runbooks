@@ -97,15 +97,15 @@ test.suite({
     expect: std.set(['package_registry', 'scalability']),
   },
   testLookupExistingTeamForStageGroup: {
-    actual: serviceCatalog.lookupTeamForStageGroup('authentication_and_authorization'),
+    actual: serviceCatalog.lookupTeamForStageGroup('authentication'),
     expect: {
       issue_tracker: null,
-      name: 'authentication_and_authorization',
-      product_stage_group: 'authentication_and_authorization',
+      name: 'authentication',
+      product_stage_group: 'authentication',
       send_error_budget_weekly_to_slack: true,
       send_slo_alerts_to_team_slack_channel: false,
-      slack_alerts_channel: 'g_govern_auth',
-      slack_error_budget_channel:'g_govern_auth',
+      slack_alerts_channel: 'g_govern_authentication',
+      slack_error_budget_channel: 'g_govern_authentication',
       ignored_components: ['graphql_query'],
     },
     testLookupNonExistingTeamForStageGroup: {

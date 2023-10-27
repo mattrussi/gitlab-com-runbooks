@@ -125,7 +125,7 @@ local rules = {
           ),
           'for': '1h',
           labels: {
-            team: 'authentication_and_authorization',
+            team: 'authentication',
             severity: 's4',
             alert_type: 'cause',
           },

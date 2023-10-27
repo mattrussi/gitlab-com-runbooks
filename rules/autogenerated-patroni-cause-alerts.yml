@@ -105,7 +105,7 @@ groups:
     labels:
       alert_type: cause
       severity: s4
-      team: authentication_and_authorization
+      team: authentication
     expr: |
       (
         sum by (environment,tier,type,fqdn,relname) (
