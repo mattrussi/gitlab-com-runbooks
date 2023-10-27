@@ -30,6 +30,8 @@ In the unlikely scenario of a zonal outage on GitLab:
 - [ ] Declare a change request by running the command `/change decare` in the production channel.
 - [ ] Select the `change_zonal_recovery.md` template and follow the steps in the template.
 
+**Note**: If GitLab.com is unavailable, [create a new issue on the ops instance](https://ops.gitlab.net/gitlab-com/gl-infra/production/-/issues/new?issuable_template=change_zonal_recovery) and select the `change_zonal_recovery` template.
+
 **Note**: When the outage ends, it is not recommended to fail back or use the old infrastructure (if it is available) to avoid losing additional data.
 
 #### Draining HAProxy traffic to divert traffic away from the affected zone
