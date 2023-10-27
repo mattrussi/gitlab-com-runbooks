@@ -3,6 +3,8 @@
 - Epic: <https://gitlab.com/groups/gitlab-com/gl-infra/-/epics/935>
 - Design Document: <https://gitlab.com/gitlab-com/gl-infra/readiness/-/blob/master/library/gitaly-multi-project/README.md>
 
+[[_TOC_]]
+
 ## `gitalyctl`
 
 ### `500 Internal Server Error`
@@ -147,7 +149,33 @@ Runbook:
     => true
     ```
 
-1. Change repository to be writeable if `read-only`
+1. Change repository to be [writeable](#repository-read-only) if `repository_read_only? => true`
+
+### Repository read-only
+
+Symptoms:
+
+Move fails:
+
+```
+{
+  "caller": "project_repository.go:160",
+  "event": "move repository",
+  "level": "warn",
+  "msg": "project is read-only",
+  "project": "https://gitlab.com/sxuereb/gitaly",
+  "repository_size": 0,
+  "storage": "nfs-file102",
+  "timeout_duration": "1h0m0s",
+  "ts": "2023-10-27T08:43:43.15835397Z"
+}
+```
+
+[source](https://dashboards.gitlab.net/explore?orgId=1&left=%7B%22datasource%22:%22R8ugoM-Vk%22,%22queries%22:%5B%7B%22refId%22:%22A%22,%22datasource%22:%7B%22type%22:%22loki%22,%22uid%22:%22R8ugoM-Vk%22%7D,%22editorMode%22:%22builder%22,%22expr%22:%22%7Bcontainer%3D%5C%22gitalyctl%5C%22%7D%20%7C%3D%20%60read-only%60%20%7C%20json%20level%3D%5C%22level%5C%22%20%7C%20level%20%3D%20%60warn%60%22,%22queryType%22:%22range%22%7D%5D,%22range%22:%7B%22from%22:%22now-1h%22,%22to%22:%22now%22%7D%7D)
+
+Runbook:
+
+1. Change repository to be writable if `read-only`
 
     ```irb
     # If Project
