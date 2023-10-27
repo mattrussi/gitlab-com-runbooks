@@ -14,6 +14,9 @@
 
 * [Woodhouse](https://console.cloud.google.com/logs/viewer?project=gitlab-ops&minLogLevel=0&expandAll=false)
 
+## Troubleshooting Pointers
+
+* [`gitalyctl`](../gitaly/gitalyctl.md)
 <!-- END_MARKER -->
 
 <!-- ## Summary -->
