@@ -18,6 +18,15 @@ Cloudflare provides a web application firewall (WAF), domain name system
 
 ## [Change Workflow](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/10993)
 
+## Dashboard authentication
+
+Cloudflare dashboard authentication uses Okta SSO, once a `@gitlab.com` email is typed in, the password field will fade out and the `Log in` button will switch to `Log in with SSO`.
+From there you will be redirected to GitLab's Okta instance for authentication.
+
+Roles along with IdP configuration is managed by Terraform in the `cloudflare` environment in [`config-mgmt`](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/tree/master/environments/cloudflare?ref_type=heads).
+
+Okta app membership is managed in the Google [`okta-cloudflare-users` group](https://groups.google.com/a/gitlab.com/g/okta-cloudflare-users/members).
+
 ## When to use a Page Rule vs WAF Rules vs [cf_allowlists]
 
 Whatever it is. Create an issue [**in the Firewall tracker**](https://gitlab.com/gitlab-com/gl-infra/cloudflare-firewall/-/issues) first and link it to the relevant issues. This firewall tracker is used to keep track of existing rules. This applies to all rules, regardless of how they are managed.

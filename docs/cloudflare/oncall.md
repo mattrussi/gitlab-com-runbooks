@@ -5,11 +5,11 @@
 
 ## Using Cloudflare to look for problems
 
-The firewall section of the Cloudflare web UI is a convenient way to filter
+The security section of the Cloudflare web UI is a convenient way to filter
 on specific meta-data to find problematic traffic. This interface is also
-very useful to see what firewall rules are being applied to traffic.
+very useful to see what rules are being applied to traffic.
 
-- [Understanding Cloudflare Firewall Analytics](https://support.cloudflare.com/hc/en-us/articles/360024520152-Understanding-Cloudflare-Firewall-Analytics)
+- [Understanding Cloudflare Security Analytics](https://developers.cloudflare.com/waf/security-analytics/)
 
 ## Using Cloudflare to stop problems
 
