@@ -166,7 +166,6 @@
       'dynamic_application_security_testing',
       'fuzz_testing',
       'api_security',
-      'interactive_application_security_testing',
       'attack_emulation',
     ],
   },
@@ -183,7 +182,6 @@
     stage: 'secure',
     feature_categories: [
       'advisory_database',
-      'security_benchmarking',
     ],
   },
   environments: {
@@ -208,12 +206,19 @@
       'service_desk',
     ],
   },
-  authentication_and_authorization: {
-    name: 'Authentication and Authorization',
+  authentication: {
+    name: 'Authentication',
     stage: 'govern',
     feature_categories: [
       'user_management',
       'system_access',
+    ],
+  },
+  authorization: {
+    name: 'Authorization',
+    stage: 'govern',
+    feature_categories: [
+
     ],
   },
   security_policies: {
@@ -308,11 +313,10 @@
       'fulfillment_admin_tooling',
     ],
   },
-  billing_and_subscription_management: {
-    name: 'Billing and Subscription Management',
+  subscription_management: {
+    name: 'Subscription Management',
     stage: 'fulfillment',
     feature_categories: [
-      'billing_and_payments',
       'subscription_management',
     ],
   },
@@ -320,8 +324,7 @@
     name: 'Acquisition',
     stage: 'growth',
     feature_categories: [
-      'experimentation_conversion',
-      'experimentation_expansion',
+      'acquisition',
       'measurement_and_locking',
       'onboarding',
     ],
@@ -330,8 +333,7 @@
     name: 'Activation',
     stage: 'growth',
     feature_categories: [
-      'experimentation_adoption',
-      'experimentation_activation',
+      'activation',
     ],
   },
   distribution_build: {
@@ -372,11 +374,11 @@
       'backup_restore',
     ],
   },
-  application_performance: {
-    name: 'Application Performance',
+  cloud_connector: {
+    name: 'Cloud Connector',
     stage: 'data_stores',
     feature_categories: [
-      'application_performance',
+      'cloud_connector',
     ],
   },
   global_search: {

@@ -152,12 +152,20 @@ teams:
   slack_alerts_channel: subtransaction_troubleshooting
   send_slo_alerts_to_team_slack_channel: true
 
-- name: authentication_and_authorization
-  slack_alerts_channel: g_govern_auth
-  slack_error_budget_channel: g_govern_auth
+- name: authentication
+  slack_alerts_channel: g_govern_authentication
+  slack_error_budget_channel: g_govern_authentication
   send_error_budget_weekly_to_slack: true
   send_slo_alerts_to_team_slack_channel: false
-  product_stage_group: authentication_and_authorization
+  product_stage_group: authentication
+  ignored_components:
+  - graphql_query
+- name: authorization
+  slack_alerts_channel: g_govern_authorization
+  slack_error_budget_channel: g_govern_authorization
+  send_error_budget_weekly_to_slack: true
+  send_slo_alerts_to_team_slack_channel: false
+  product_stage_group: authorization
   ignored_components:
   - graphql_query
 
@@ -258,8 +266,8 @@ teams:
   product_stage_group: provision
   ignored_components:
   - graphql_query
-- name: application_performance
-  product_stage_group: application_performance
+- name: cloud_connector
+  product_stage_group: cloud_connector
   ignored_components:
   - graphql_query
 - name: mlops
@@ -358,8 +366,8 @@ teams:
   slack_error_budget_channel: g_ai_framework
   send_error_budget_weekly_to_slack: true
   slack_alerts_channel: g_ai_framework
-- name: billing_and_subscription_management
-  product_stage_group: billing_and_subscription_management
+- name: subscription_management
+  product_stage_group: subscription_management
   ignored_components:
   - graphql_query
 - name: utilization

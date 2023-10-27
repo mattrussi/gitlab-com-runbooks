@@ -71,17 +71,7 @@ spec:
         product_stage: analyze
         stage_group: analytics_instrumentation
       expr: "1"
-  - name: 'Stage group Ignored components: data_stores - Application Performance'
-    interval: 1m
-    partial_response_strategy: warn
-    rules:
-    - record: gitlab:ignored_component:stage_group
-      labels:
-        component: graphql_query
-        product_stage: data_stores
-        stage_group: application_performance
-      expr: "1"
-  - name: 'Stage group Ignored components: govern - Authentication and Authorization'
+  - name: 'Stage group Ignored components: govern - Authentication'
     interval: 1m
     partial_response_strategy: warn
     rules:
@@ -89,17 +79,27 @@ spec:
       labels:
         component: graphql_query
         product_stage: govern
-        stage_group: authentication_and_authorization
+        stage_group: authentication
       expr: "1"
-  - name: 'Stage group Ignored components: fulfillment - Billing and Subscription Management'
+  - name: 'Stage group Ignored components: govern - Authorization'
     interval: 1m
     partial_response_strategy: warn
     rules:
     - record: gitlab:ignored_component:stage_group
       labels:
         component: graphql_query
-        product_stage: fulfillment
-        stage_group: billing_and_subscription_management
+        product_stage: govern
+        stage_group: authorization
+      expr: "1"
+  - name: 'Stage group Ignored components: data_stores - Cloud Connector'
+    interval: 1m
+    partial_response_strategy: warn
+    rules:
+    - record: gitlab:ignored_component:stage_group
+      labels:
+        component: graphql_query
+        product_stage: data_stores
+        stage_group: cloud_connector
       expr: "1"
   - name: 'Stage group Ignored components: create - Code Creation'
     interval: 1m
@@ -450,6 +450,16 @@ spec:
         component: graphql_query
         product_stage: create
         stage_group: source_code
+      expr: "1"
+  - name: 'Stage group Ignored components: fulfillment - Subscription Management'
+    interval: 1m
+    partial_response_strategy: warn
+    rules:
+    - record: gitlab:ignored_component:stage_group
+      labels:
+        component: graphql_query
+        product_stage: fulfillment
+        stage_group: subscription_management
       expr: "1"
   - name: 'Stage group Ignored components: data_stores - Tenant Scale'
     interval: 1m
