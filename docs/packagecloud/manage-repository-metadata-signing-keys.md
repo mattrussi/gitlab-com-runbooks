@@ -18,58 +18,67 @@ Read on to find out how to make changes to the key (e.g., due to expiry extensio
 
 The private key lives in [Vault](https://vault.gitlab.net) under the path `k8s/ops-gitlab-gke/packagecloud/gpg`.
 
-## Generating or extending the expiry on an existing key
+## Process
 
-Irrespective of whether you're generating or extending the key, don't forget to [cleanup after yourself](../packaging/manage-package-signing-keys.md#purging-local-copies)!
+This process should be carried out by a member of the [Distribution team](https://about.gitlab.com/handbook/engineering/development/enablement/systems/distribution/).
 
-### Generating the GPG Keys Pair
+1. [Generate GPG keys pair](../packaging/manage-package-signing-keys.md#generating-the-gpg-keys-pair) **OR** [extend expiry
+   date on existing keys](../packaging/manage-package-signing-keys.md#extending-key-expiration)
 
-If you need to generate a GPG key pair, see [this section](../packaging/manage-package-signing-keys.md#generating-the-gpg-keys-pair).
+    If you are looking to rotate the key, then you should **generate a new GPG key pair**. If the current key is due to
+    expire soon and you are happy to keep the existing key, then you can just **extend the expiry**.
 
-### Extending Key Expiration
+    The outcome of this step should be a new or extended private key.
 
-If, instead of generating a GPG key pair, you need to extend the expiry on an existing key, see [this section](../packaging/manage-package-signing-keys.md#extending-key-expiration).
+1. Create AR to **request** read/write access to the secret in Vault:
 
-## Updating Packagecloud with the new/updated key
+    1. [Create issue in
+       tracker](https://gitlab.com/gitlab-com/team-member-epics/access-requests/-/issues/new?issuable_template=Individual_Bulk_Access_Request)
+    1. For _System(s)_, specify _Okta Group Membership_
+    1. For _System Name_, specify: `Okta Group: Team - Distribution - Packagecloud Repository Metadata Signing Key`
+    1. For _Justification for this access_, specify: `Temporary group membership required to update the Packagecloud repository metadata
+       signing key in Vault.`
 
-Once you've exported your new private key (or extended the expiry on an existing one), you need to tell Packagecloud to
-use it. There is no need to tell Packagecloud about the _public_ key as it's part of the container bootstrap to do a GPG
-public key export, which is placed in the right directory so it's downloadable via
-<https://packages.gitlab.com/gpg.key>.
+1. Once your AR has been actioned, update the secret in Vault:
 
-### Update Vault
+    1. Open <https://vault.gitlab.net> and sign-in using Okta
+    1. Head to the path: `k8s/ops-gitlab-gke/packagecloud/gpg`
+    1. Click on _Create new version_
+    1. Update the value of `private_key` with the contents of your exported private key
+    1. Click _Save_
+    1. Take note of the `version` of the secret (next to _Create new version_). You'll need this next!
 
-As a member of the distribution team:
+1. Update [gitlab-helmfiles](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles):
 
-1. Open <https://vault.gitlab.net> and sign-in using Okta
-1. Head to the path: `k8s/ops-gitlab-gke/packagecloud/gpg`
-1. Click on _Create new version_
-1. Update the value of `private_key` with the contents of your exported private key
-1. Click _Save_
-1. Take note of the `version` of the secret (next to _Create new version_). You'll need this next!
+    1. Update version to the new version number from the previous
+      step:
+      [here](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/blob/0b89319cf24f82bdeb978b9d6f101f7c7d73483c/releases/packagecloud/values-secrets/ops.yaml.gotmpl#L75)
+      and [here](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/blob/0b89319cf24f82bdeb978b9d6f101f7c7d73483c/releases/packagecloud/values-secrets/ops.yaml.gotmpl#L86)
+    1. Update `secretName` to match: [here](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/blob/0b89319cf24f82bdeb978b9d6f101f7c7d73483c/releases/packagecloud/ops.yaml.gotmpl#L64)
+    1. File an MR with the above changes and have someone in `#infrastructure-lounge` review/approve/merge it for you.
 
-### Update gitlab-helmfiles
+1. Validation:
 
-Now we need to tell the Packagecloud deployments to use this new updated secret, so you'll need to make the following changes:
+    Once the `gitlab-helmfiles` CI pipeline has finished, you're ready to do a quick test:
 
-1. Update version to the new version number from the previous
-   step:
-   [here](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/blob/0b89319cf24f82bdeb978b9d6f101f7c7d73483c/releases/packagecloud/values-secrets/ops.yaml.gotmpl#L75)
-   and [here](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/blob/0b89319cf24f82bdeb978b9d6f101f7c7d73483c/releases/packagecloud/values-secrets/ops.yaml.gotmpl#L86)
-1. Update `secretName` to match: [here](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/blob/0b89319cf24f82bdeb978b9d6f101f7c7d73483c/releases/packagecloud/ops.yaml.gotmpl#L64)
+    ```sh
+    $ curl -s https://packages.gitlab.com/gpg.key | gpg --show-key
+    pub   rsa4096 2020-03-02 [SC] [expires: 2024-03-01]
+          F6403F6544A38863DAA0B6E03F01618A51312F3F
+    uid                      GitLab B.V. (package repository signing key) <packages@gitlab.com>
+    sub   rsa4096 2020-03-02 [E] [expires: 2024-03-01]
+    ```
 
-File an MR with the above changes and have someone in `#infrastructure-lounge` review/approve/merge it for you.
+    Check that the fingerprint & expiry matches your new/extended key.
 
-### Validation
+1. Create AR to **revoke** read/write access to the secret in Vault:
 
-Once the `gitlab-helmfiles` CI pipeline has finished, you're ready to do a quick test:
+    1. [Create issue in
+       tracker](https://gitlab.com/gitlab-com/team-member-epics/access-requests/-/issues/new?issuable_template=Access_Change_Request)
+    1. For _System_, specify _Okta Group Membership_
+    1. For _System Name_, specify: `Okta Group`
+    1. For _Other details_, specify: `Group Name: Team - Distribution - Packagecloud Repository Metadata Signing Key`
+    1. For _Justification for this access change/removal_, specify: `Access no longer required.`
+    1. Assign the issue to the Okta provisioners as no approval is needed for access removal.
 
-```sh
-$ curl -s https://packages.gitlab.com/gpg.key | gpg --show-key
-pub   rsa4096 2020-03-02 [SC] [expires: 2024-03-01]
-      F6403F6544A38863DAA0B6E03F01618A51312F3F
-uid                      GitLab B.V. (package repository signing key) <packages@gitlab.com>
-sub   rsa4096 2020-03-02 [E] [expires: 2024-03-01]
-```
-
-Check that the fingerprint & expiry matches your new/extended key.
+1. [Clean up after yourself](../packaging/manage-package-signing-keys.md#purging-local-copies)
