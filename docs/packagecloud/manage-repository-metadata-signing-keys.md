@@ -38,6 +38,7 @@ This process should be carried out by a member of the [Distribution team](https:
     1. For _System Name_, specify: `Okta Group: Team - Distribution - Packagecloud Repository Metadata Signing Key`
     1. For _Justification for this access_, specify: `Temporary group membership required to update the Packagecloud repository metadata
        signing key in Vault.`
+    1. Follow the instructions in the issue to get your AR approved & actioned by the provisioners.
 
 1. Once your AR has been actioned, update the secret in Vault:
 
