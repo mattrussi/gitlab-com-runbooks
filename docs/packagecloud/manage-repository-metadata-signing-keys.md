@@ -22,14 +22,6 @@ The private key lives in [Vault](https://vault.gitlab.net) under the path `k8s/o
 
 This process should be carried out by a member of the [Distribution team](https://about.gitlab.com/handbook/engineering/development/enablement/systems/distribution/).
 
-1. [Generate GPG keys pair](../packaging/manage-package-signing-keys.md#generating-the-gpg-keys-pair) **OR** [extend expiry
-   date on existing keys](../packaging/manage-package-signing-keys.md#extending-key-expiration)
-
-    If you are looking to rotate the key, then you should **generate a new GPG key pair**. If the current key is due to
-    expire soon and you are happy to keep the existing key, then you can just **extend the expiry**.
-
-    The outcome of this step should be a new or extended private key.
-
 1. Create AR to **request** read/write access to the secret in Vault:
 
     1. [Create issue in
@@ -39,6 +31,19 @@ This process should be carried out by a member of the [Distribution team](https:
     1. For _Justification for this access_, specify: `Temporary group membership required to update the Packagecloud repository metadata
        signing key in Vault.`
     1. Follow the instructions in the issue to get your AR approved & actioned by the provisioners.
+
+1. [Generate GPG keys pair](../packaging/manage-package-signing-keys.md#generating-the-gpg-keys-pair) **OR** [extend expiry
+   date on existing keys](../packaging/manage-package-signing-keys.md#extending-key-expiration)
+
+    If you are looking to rotate the key, then you should **generate a new GPG key pair**.
+
+    If the current key is due to expire soon and you are happy to keep the existing key, then you can just **extend the
+    expiry**. You will need to import the existing private key, which you can obtain by going to
+    <https://vault.gitlab.net> (sign-in using Okta) and accessing `k8s/ops-gitlab-gke/packagecloud/gpg`. If you see an
+    access denied message then you will need to reach out to #it_help and confirm that you were added to the correct
+    group.
+
+    The outcome of this step should be a new or extended private key.
 
 1. Once your AR has been actioned, update the secret in Vault:
 
