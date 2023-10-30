@@ -143,7 +143,13 @@ metricsCatalog.serviceDefinition({
     serviceAggregation: false,
     shardLevelMonitoring: false,
     severity: 's4',
-    toolingLinks: [],
+    toolingLinks: [
+      toolingLinks.kibana(
+        title='Sidekiq CompletionWorker',
+        index='sidekiq',
+        matches={ 'json.class.keyword': 'Llm::CompletionWorker' }
+      ),
+    ],
     trafficCessationAlertConfig: sidekiqHelpers.shardTrafficCessationAlertConfig,
   }),
 
