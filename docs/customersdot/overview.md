@@ -120,4 +120,8 @@ Chef is used essentially to bootstrap user access for users and Ansible.
 
 ### Alerting
 
-At the moment, we rely on [this Uptime Kuma instance for CustomersDot production](https://customersdot.cloudwatch.net/status/customersdot-production) for stack monitoring. When an Uptime Kuma alert is created from this instance, it is sent to the `#s_fulfillment_status` Slack channel.
+At the moment, we rely on [this Uptime Kuma instance for CustomersDot production](https://customersdot.us.to/) for stack monitoring. When an Uptime Kuma alert is created from this instance, it is sent to the `#s_fulfillment_status` Slack channel.
+
+#### Unschedule maintenance
+
++When Zuora is down (reported to `#s_fulfillment_status`) and CustomersDot is in auto-maintenance mode for longer than 5 minutes, we should create an S3 incident with the CMOC updating the status page based on updates from <https://trust.zuora.com/>.
