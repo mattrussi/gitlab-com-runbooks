@@ -114,17 +114,14 @@ local resourceSaturationPoint = (import 'servicemetrics/resource_saturation_poin
       tier: 'inf',
       stage: 'main',
     },
-    queryFormatConfig: {
-      maximumRequestsPerContainer: 80,
-    },
     query: |||
-      sum by (%(aggregationLabels)s) (
-        avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_container_max_request_concurrencies_sum{job="runway-exporter",state="active",%(selector)s}[%(rangeInterval)s])
-      )
-      /
-      %(maximumRequestsPerContainer)g * sum by (%(aggregationLabels)s) (
-        stackdriver_cloud_run_revision_run_googleapis_com_container_instance_count{job="runway-exporter",state="active",%(selector)s}
-      )
+      histogram_quantile(0.9999, sum by(le, %(aggregationLabels)s)
+        (
+          rate(
+            stackdriver_cloud_run_revision_run_googleapis_com_container_max_request_concurrencies_bucket{job="runway-exporter",state="active",%(selector)s}[%(rangeInterval)s]
+          )
+        )
+      ) / 100
     |||,
     slos: {
       soft: 0.80,
