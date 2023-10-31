@@ -87,4 +87,4 @@ This process should be carried out by a member of the [Distribution team](https:
     1. For _Justification for this access change/removal_, specify: `Access no longer required.`
     1. Assign the issue to the Okta provisioners as no approval is needed for access removal.
 
-1. [Clean up after yourself](../packaging/manage-package-signing-keys.md#purging-local-copies)
+1. [Clean up after yourself](../packaging/manage-package-signing-keys.md#purging-local-copies).
