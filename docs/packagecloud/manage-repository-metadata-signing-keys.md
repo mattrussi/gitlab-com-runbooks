@@ -25,9 +25,9 @@ This process should be carried out by a member of the [Distribution team](https:
 1. Create AR to **request** read/write access to the secret in Vault:
 
     1. [Create issue in
-       tracker](https://gitlab.com/gitlab-com/team-member-epics/access-requests/-/issues/new?issuable_template=Individual_Bulk_Access_Request)
-    1. For _System(s)_, specify _Okta Group Membership_
-    1. For _System Name_, specify: `Okta Group: Team - Distribution - Packagecloud Repository Metadata Signing Key`
+       tracker](https://gitlab.com/gitlab-com/team-member-epics/access-requests/-/issues/new?issuable_template=Individual_Bulk_Access_Request).
+    1. For _System(s)_, specify _Okta Group Membership_.
+    1. For _System Name_, specify: `Okta Group: Team - Distribution - Packagecloud Repository Metadata Signing Key`.
     1. For _Justification for this access_, specify: `Temporary group membership required to update the Packagecloud repository metadata
        signing key in Vault.`
     1. Follow the instructions in the issue to get your AR approved & actioned by the provisioners.
@@ -47,11 +47,11 @@ This process should be carried out by a member of the [Distribution team](https:
 
 1. Once your AR has been actioned, update the secret in Vault:
 
-    1. Open <https://vault.gitlab.net> and sign-in using Okta
-    1. Head to the path: `k8s/ops-gitlab-gke/packagecloud/gpg`
-    1. Click on _Create new version_
-    1. Update the value of `private_key` with the contents of your exported private key
-    1. Click _Save_
+    1. Open <https://vault.gitlab.net> and sign-in using Okta.
+    1. Head to the path: `k8s/ops-gitlab-gke/packagecloud/gpg`.
+    1. Click on _Create new version_.
+    1. Update the value of `private_key` with the contents of your exported private key.
+    1. Click _Save_.
     1. Take note of the `version` of the secret (next to _Create new version_). You'll need this next!
 
 1. Update [gitlab-helmfiles](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles):
@@ -59,8 +59,8 @@ This process should be carried out by a member of the [Distribution team](https:
     1. Update version to the new version number from the previous
       step:
       [here](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/blob/0b89319cf24f82bdeb978b9d6f101f7c7d73483c/releases/packagecloud/values-secrets/ops.yaml.gotmpl#L75)
-      and [here](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/blob/0b89319cf24f82bdeb978b9d6f101f7c7d73483c/releases/packagecloud/values-secrets/ops.yaml.gotmpl#L86)
-    1. Update `secretName` to match: [here](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/blob/0b89319cf24f82bdeb978b9d6f101f7c7d73483c/releases/packagecloud/ops.yaml.gotmpl#L64)
+      and [here](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/blob/0b89319cf24f82bdeb978b9d6f101f7c7d73483c/releases/packagecloud/values-secrets/ops.yaml.gotmpl#L86).
+    1. Update `secretName` to match: [here](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/blob/0b89319cf24f82bdeb978b9d6f101f7c7d73483c/releases/packagecloud/ops.yaml.gotmpl#L64).
     1. File an MR with the above changes and have someone in `#infrastructure-lounge` review/approve/merge it for you.
 
 1. Validation:
@@ -80,10 +80,10 @@ This process should be carried out by a member of the [Distribution team](https:
 1. Create AR to **revoke** read/write access to the secret in Vault:
 
     1. [Create issue in
-       tracker](https://gitlab.com/gitlab-com/team-member-epics/access-requests/-/issues/new?issuable_template=Access_Change_Request)
-    1. For _System_, specify _Okta Group Membership_
-    1. For _System Name_, specify: `Okta Group`
-    1. For _Other details_, specify: `Group Name: Team - Distribution - Packagecloud Repository Metadata Signing Key`
+       tracker](https://gitlab.com/gitlab-com/team-member-epics/access-requests/-/issues/new?issuable_template=Access_Change_Request).
+    1. For _System_, specify _Okta Group Membership_.
+    1. For _System Name_, specify: `Okta Group`.
+    1. For _Other details_, specify: `Group Name: Team - Distribution - Packagecloud Repository Metadata Signing Key`.
     1. For _Justification for this access change/removal_, specify: `Access no longer required.`
     1. Assign the issue to the Okta provisioners as no approval is needed for access removal.
 
