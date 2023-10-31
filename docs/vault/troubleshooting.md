@@ -33,5 +33,6 @@ At the time of this writing, [the Vault audit logs are written directly to `stdo
 
 If Vault fails to write its audit logs it could mean:
 
+- it's a temporary failure that will self-recover in under 10m, this could happen after the pods are rotated.
 - a bug introduced in Vault: has it been upgraded recently? Search the [issues on GitHub](https://github.com/hashicorp/vault/issues).
 - `containerd` not able to handle the container's output, possibly affecting other workloads, check the health of node running the active Vault pod.
