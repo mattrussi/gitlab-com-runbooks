@@ -24,12 +24,16 @@ This process should be carried out by a member of the [Distribution team](https:
 
 1. Create AR to **request** read/write access to the secret in Vault:
 
-    1. [Create issue in
-       tracker](https://gitlab.com/gitlab-com/team-member-epics/access-requests/-/issues/new?issuable_template=Individual_Bulk_Access_Request).
+    1. [Create access request issue](https://gitlab.com/gitlab-com/team-member-epics/access-requests/-/issues/new?issuable_template=Individual_Bulk_Access_Request)
     1. For _System(s)_, specify _Okta Group Membership_.
     1. For _System Name_, specify: `Okta Group: Team - Distribution - Packagecloud Repository Metadata Signing Key`.
-    1. For _Justification for this access_, specify: `Temporary group membership required to update the Packagecloud repository metadata
-       signing key in Vault.`
+    1. For _Justification for this access_, specify:
+
+        ```text
+        Temporary group membership required to update the Packagecloud repository metadata
+        signing key in Vault. Process outlined in https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/packagecloud/manage-repository-metadata-signing-keys.md.
+        ```
+
     1. Follow the instructions in the issue to get your AR approved & actioned by the provisioners.
 
 1. [Generate GPG keys pair](../packaging/manage-package-signing-keys.md#generating-the-gpg-keys-pair) **OR** [extend expiry
@@ -79,12 +83,17 @@ This process should be carried out by a member of the [Distribution team](https:
 
 1. Create AR to **revoke** read/write access to the secret in Vault:
 
-    1. [Create issue in
-       tracker](https://gitlab.com/gitlab-com/team-member-epics/access-requests/-/issues/new?issuable_template=Access_Change_Request).
+    1. [Create access change issue](https://gitlab.com/gitlab-com/team-member-epics/access-requests/-/issues/new?issuable_template=Access_Change_Request)
     1. For _System_, specify _Okta Group Membership_.
     1. For _System Name_, specify: `Okta Group`.
     1. For _Other details_, specify: `Group Name: Team - Distribution - Packagecloud Repository Metadata Signing Key`.
-    1. For _Justification for this access change/removal_, specify: `Access no longer required.`
+    1. For _Justification for this access change/removal_, specify:
+
+        ```text
+        Temporary group membership no longer required. See
+        https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/packagecloud/manage-repository-metadata-signing-keys.md for more info.
+        ```
+
     1. Assign the issue to the Okta provisioners as no approval is needed for access removal.
 
 1. [Clean up after yourself](../packaging/manage-package-signing-keys.md#purging-local-copies).
