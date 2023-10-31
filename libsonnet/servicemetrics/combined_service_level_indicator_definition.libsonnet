@@ -78,16 +78,16 @@ local combinedServiceLevelIndicatorDefinition(
           toolingLinks.renderLinks(self.getToolingLinks()),
 
         // Generate recording rules for apdex
-        generateApdexRecordingRules(burnRate, aggregationSet, recordingRuleStaticLabels, selector={})::
-          std.flatMap(function(c) c.generateApdexRecordingRules(burnRate, aggregationSet, recordingRuleStaticLabels, selector), componentsInitialised),
+        generateApdexRecordingRules(burnRate, aggregationSet, recordingRuleStaticLabels)::
+          std.flatMap(function(c) c.generateApdexRecordingRules(burnRate, aggregationSet, recordingRuleStaticLabels), componentsInitialised),
 
         // Generate recording rules for request rate
-        generateRequestRateRecordingRules(burnRate, aggregationSet, recordingRuleStaticLabels, selector={})::
-          std.flatMap(function(c) c.generateRequestRateRecordingRules(burnRate, aggregationSet, recordingRuleStaticLabels, selector), componentsInitialised),
+        generateRequestRateRecordingRules(burnRate, aggregationSet, recordingRuleStaticLabels)::
+          std.flatMap(function(c) c.generateRequestRateRecordingRules(burnRate, aggregationSet, recordingRuleStaticLabels), componentsInitialised),
 
         // Generate recording rules for error rate
-        generateErrorRateRecordingRules(burnRate, aggregationSet, recordingRuleStaticLabels, selector={})::
-          std.flatMap(function(c) c.generateErrorRateRecordingRules(burnRate, aggregationSet, recordingRuleStaticLabels, selector), componentsInitialised),
+        generateErrorRateRecordingRules(burnRate, aggregationSet, recordingRuleStaticLabels)::
+          std.flatMap(function(c) c.generateErrorRateRecordingRules(burnRate, aggregationSet, recordingRuleStaticLabels), componentsInitialised),
 
         // Significant labels are the union of all significantLabels from the components
         significantLabels:

@@ -68,7 +68,7 @@ local recordingRuleGroup(aggregationSet, service, burnRate, extraSelector) = {
   name: '%s: %s - %s burn-rate' % [aggregationSet.name, service.type, burnRate],
   interval: intervalForDuration.intervalForDuration(burnRate),
   rules: recordingRules.componentMetricsRuleSetGenerator(
-    burnRate=burnRate, aggregationSet=aggregationSet, extraSourceSelector=extraSelector
+    burnRate=burnRate, aggregationSet=aggregationSet { selector+: extraSelector }
   ).generateRecordingRulesForService(service),
 };
 
@@ -86,7 +86,7 @@ local filesForService(service, aggregationSet, extraSelector) =
   };
 
 local testServices = std.filter(
-  function(s) std.member(['web'], s.type),
+  function(s) std.member(['web', 'api', 'gitaly', 'sidekiq'], s.type),
   metricsConfig.monitoredServices
 );
 std.foldl(
