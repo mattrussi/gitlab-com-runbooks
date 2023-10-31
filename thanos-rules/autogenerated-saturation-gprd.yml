@@ -419,13 +419,13 @@ groups:
       max by(env, environment, type, shard) (
         clamp_min(
           clamp_max(
-            sum by (env, environment, type, shard, revision_name) (
-              avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_container_max_request_concurrencies_sum{job="runway-exporter",state="active",env="gprd",type="ai-gateway"}[30m])
-            )
-            /
-            80 * sum by (env, environment, type, shard, revision_name) (
-              stackdriver_cloud_run_revision_run_googleapis_com_container_instance_count{job="runway-exporter",state="active",env="gprd",type="ai-gateway"}
-            )
+            histogram_quantile(0.9999, sum by(le, env, environment, type, shard, revision_name)
+              (
+                rate(
+                  stackdriver_cloud_run_revision_run_googleapis_com_container_max_request_concurrencies_bucket{job="runway-exporter",state="active",env="gprd",type="ai-gateway"}[30m]
+                )
+              )
+            ) / 100
             ,
             1)
         ,
@@ -1741,13 +1741,13 @@ groups:
         max by(environment, type, shard, revision_name) (
           clamp_min(
             clamp_max(
-              sum by (environment, type, shard, revision_name) (
-                avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_container_max_request_concurrencies_sum{job="runway-exporter",state="active",environment="{{ $labels.environment }}",type="{{ $labels.type }}"}[30m])
-              )
-              /
-              80 * sum by (environment, type, shard, revision_name) (
-                stackdriver_cloud_run_revision_run_googleapis_com_container_instance_count{job="runway-exporter",state="active",environment="{{ $labels.environment }}",type="{{ $labels.type }}"}
-              )
+              histogram_quantile(0.9999, sum by(le, environment, type, shard, revision_name)
+                (
+                  rate(
+                    stackdriver_cloud_run_revision_run_googleapis_com_container_max_request_concurrencies_bucket{job="runway-exporter",state="active",environment="{{ $labels.environment }}",type="{{ $labels.type }}"}[30m]
+                  )
+                )
+              ) / 100
               ,
               1)
           ,
@@ -1757,13 +1757,13 @@ groups:
         max by(environment, type, shard, revision_name) (
           clamp_min(
             clamp_max(
-              sum by (environment, type, shard, revision_name) (
-                avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_container_max_request_concurrencies_sum{job="runway-exporter",state="active",environment="{{ $labels.environment }}",type="{{ $labels.type }}"}[30m])
-              )
-              /
-              80 * sum by (environment, type, shard, revision_name) (
-                stackdriver_cloud_run_revision_run_googleapis_com_container_instance_count{job="runway-exporter",state="active",environment="{{ $labels.environment }}",type="{{ $labels.type }}"}
-              )
+              histogram_quantile(0.9999, sum by(le, environment, type, shard, revision_name)
+                (
+                  rate(
+                    stackdriver_cloud_run_revision_run_googleapis_com_container_max_request_concurrencies_bucket{job="runway-exporter",state="active",environment="{{ $labels.environment }}",type="{{ $labels.type }}"}[30m]
+                  )
+                )
+              ) / 100
               ,
               1)
           ,
