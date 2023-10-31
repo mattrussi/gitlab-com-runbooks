@@ -33,12 +33,12 @@ local ratesAggregationSet = aggregationSet.AggregationSet({
 
 test.suite({
   testGenerateApdexRecordingRules: {
-    actual: testSli.generateApdexRecordingRules('5m', ratesAggregationSet, { hello: 'world' }, { selector: 'is-present' }),
+    actual: testSli.generateApdexRecordingRules('5m', ratesAggregationSet, { hello: 'world' }),
     expect: [
       {
         expr: |||
           sum by (a,b) (
-            rate(some_apdex_success_total_count{selector="is-present"}[5m] offset 2s)
+            rate(some_apdex_success_total_count{}[5m] offset 2s)
           )
         |||,
         labels: { hello: 'world' },
@@ -47,7 +47,7 @@ test.suite({
       {
         expr: |||
           sum by (a,b) (
-            rate(some_apdex_total_count{selector="is-present"}[5m] offset 2s)
+            rate(some_apdex_total_count{}[5m] offset 2s)
           )
         |||,
         labels: { hello: 'world' },
@@ -57,14 +57,14 @@ test.suite({
         expr: |||
           label_replace(
             sum by (a,b) (
-              rate(some_apdex_success_total_count{selector="is-present"}[5m] offset 2s)
+              rate(some_apdex_success_total_count{}[5m] offset 2s)
             ),
             'recorded_rate', 'success_rate' , '', ''
           )
           or
           label_replace(
             sum by (a,b) (
-              rate(some_apdex_total_count{selector="is-present"}[5m] offset 2s)
+              rate(some_apdex_total_count{}[5m] offset 2s)
             ),
             'recorded_rate', 'apdex_weight' , '', ''
           )
@@ -75,13 +75,13 @@ test.suite({
     ],
   },
   testGenerateErrorRateRecordingRules: {
-    actual: testSli.generateErrorRateRecordingRules('5m', ratesAggregationSet, { hello: 'world' }, { selector: 'is-present' }),
+    actual: testSli.generateErrorRateRecordingRules('5m', ratesAggregationSet, { hello: 'world' }),
     expect: [
       {
         expr: |||
           (
             sum by (a,b) (
-              rate(some_error_total_count{selector="is-present"}[5m] offset 2s)
+              rate(some_error_total_count{}[5m] offset 2s)
             )
           )
           or
@@ -98,12 +98,12 @@ test.suite({
         expr: |||
           label_replace(
             sum by (a,b) (
-              rate(some_error_total_count{selector="is-present"}[5m] offset 2s)
+              rate(some_error_total_count{}[5m] offset 2s)
             )
             or
             (
               0 * sum by (a,b) (
-                rate(some_total_count{selector="is-present"}[5m] offset 2s)
+                rate(some_total_count{}[5m] offset 2s)
               )
             ),
             'recorded_rate', 'error_rate' , '', ''
@@ -111,7 +111,7 @@ test.suite({
           or
           label_replace(
             sum by (a,b) (
-              rate(some_total_count{selector="is-present"}[5m] offset 2s)
+              rate(some_total_count{}[5m] offset 2s)
             ),
             'recorded_rate', 'ops_rate' , '', ''
           )
