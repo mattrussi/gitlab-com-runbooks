@@ -14,7 +14,7 @@ local selectors = import 'promql/selectors.libsonnet';
       query=|||
         max(gitaly_concurrency_limiting_current_limit{%(selector)s}) by (fqdn, limit)
       ||| % { selector: selectors.serializeHash(selectorHash { limit: 'packObjects' }) },
-      legendFormat=legend,
+      legendFormat=legend + "- Per IP",
       interval='$__interval',
       linewidth=1,
     ),
