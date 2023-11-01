@@ -228,6 +228,7 @@ serviceDashboard.overview('gitaly')
 )
 .addPanels(
   layout.grid([
+    gitalyAdaptiveLimitDashboards.per_rpc_current_limit(selector, '{{ limit }} - {{ fqdn }}'),
     gitalyPerRPCDashboards.in_progress_requests_by_node(selector),
     gitalyPerRPCDashboards.queued_requests_by_node(selector),
     gitalyPerRPCDashboards.queueing_time_by_node(selector),
