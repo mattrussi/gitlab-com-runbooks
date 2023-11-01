@@ -16,7 +16,7 @@
 ## Troubleshooting Pointers
 
 * [ErrorTracking main troubleshooting document](../errortracking/overview.md)
-* [Managing Sentry in Kubernetes](../sentry/sentry-in-kube.md)
+* [Managing Sentry in Kubernetes](../sentry/sentry.md)
 <!-- END_MARKER -->
 
 ## Summary

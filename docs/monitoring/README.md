@@ -59,7 +59,6 @@
 * [../redis/redis.md](../redis/redis.md)
 * [Container Registry database post-deployment migrations](../registry/db-post-deployment-migrations.md)
 * [Runway Observability](../runway/observability.md)
-* [Sentry is down and gives error 500](../sentry/sentry-is-down.md)
 * [A survival guide for SREs to working with Sidekiq at GitLab](../sidekiq/sidekiq-survival-guide-for-sres.md)
 * [../spamcheck/index.md](../spamcheck/index.md)
 * [GET Monitoring Setup](../staging-ref/get-monitoring-setup.md)

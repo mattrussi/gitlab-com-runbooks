@@ -17,6 +17,7 @@
 ## Troubleshooting Pointers
 
 * [Diagnosis with Kibana](../onboarding/kibana-diagnosis.md)
+* [Managing Sentry in Kubernetes](../sentry/sentry.md)
 <!-- END_MARKER -->
 
 <!-- ## Summary -->
