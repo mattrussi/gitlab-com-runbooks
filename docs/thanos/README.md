@@ -26,6 +26,7 @@
 * [Google Cloud Snapshots](../disaster-recovery/gcp-snapshots.md)
 * [ErrorTracking main troubleshooting document](../errortracking/overview.md)
 * [Gitaly token rotation](../gitaly/gitaly-token-rotation.md)
+* [`gitalyctl`](../gitaly/gitalyctl.md)
 * [GitLab.com on Kubernetes](../kube/k8s-new-cluster.md)
 * [How to resize Persistent Volumes in Kubernetes](../kube/k8s-pvc-resize.md)
 * [StatefulSet Guidelines](../kube/sts-guidelines.md)

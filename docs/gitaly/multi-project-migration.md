@@ -1,7 +1,8 @@
 # Gitaly multi-project migration
 
-- Epic: <https://gitlab.com/groups/gitlab-com/gl-infra/-/epics/935>
-- Design Document: <https://gitlab.com/gitlab-com/gl-infra/readiness/-/blob/master/library/gitaly-multi-project/README.md>
+- [Epic](https://gitlab.com/groups/gitlab-com/gl-infra/-/epics/935)
+- [Design Document](https://gitlab.com/gitlab-com/gl-infra/readiness/-/blob/master/library/gitaly-multi-project/README.md)
+- [`gitalyctl`](./gitalyctl.md)
 
 [[_TOC_]]
 

@@ -48,6 +48,7 @@
 * [Restoring gitaly data corruption on a project after an unclean shutdown](../gitaly/gitaly-repository-corruption.md)
 * [Gitaly Repository Export](../gitaly/gitaly-repositry-export.md)
 * [Gitaly unusual activity alert](../gitaly/gitaly-unusual-activity.md)
+* [`gitalyctl`](../gitaly/gitalyctl.md)
 * [Moving repositories from one Gitaly node to another](../gitaly/move-repositories.md)
 * [GitLab Storage Re-balancing](../gitaly/storage-rebalancing.md)
 * [Managing GitLab Storage Shards (Gitaly)](../gitaly/storage-sharding.md)

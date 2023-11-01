@@ -39,6 +39,7 @@
 * [Gitaly Repository Export](gitaly-repositry-export.md)
 * [Gitaly token rotation](gitaly-token-rotation.md)
 * [Gitaly unusual activity alert](gitaly-unusual-activity.md)
+* [`gitalyctl`](gitalyctl.md)
 * [Gracefully restart gitaly-ruby](gracefully-restart-gitaly-ruby.md)
 * [Moving repositories from one Gitaly node to another](move-repositories.md)
 * [Gitaly multi-project migration](multi-project-migration.md)
