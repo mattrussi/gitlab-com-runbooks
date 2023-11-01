@@ -2,6 +2,36 @@
 
 The following runbooks only applies to the instance of Sentry running in the `ops-gitlab-gke` cluster (running Sentry 22.9.0+). They are **not applicable** to the old instance of Sentry running on a single VM (version 9.1.2).
 
+## Architecture
+
+The figure below is overly simplified and likely woefully incomplete, but should give you a good idea of how many moving parts are involved in this Sentry installation.
+
+```mermaid
+graph TD
+app["GitLab.com (Sentry SDKs)"] ==port 80==> lb{{Nginx Ingress}}
+sentry_web ==port 5432==> postgres[("Cloud SQL (Postgres)")]
+sentry_worker ==port 5432==> postgres
+subgraph Sentry["Ops GKE cluster"]
+    lb --> |"port 9000"| relay
+    lb --> |"port 8080"| sentry_web["Sentry (web)"]
+    relay --> |"port 9092"| kafka
+    relay --> |"port 6379"| redis[(redis)]
+    sentry_web --> |"port 1218"| snuba
+    sentry_web --> |"port 11211"| memcached[(memcached)]
+    sentry_web --> |"port 6379"| redis
+    snuba --> kafka
+    snuba --> |"port 6379"| redis
+    snuba --> |"port 8123"| clickhouse[(clickhouse)]
+    kafka --> |"port 2181"| zookeeper1[(zookeeper)]
+    sentry_worker["Sentry (worker)"] --> |"port 11211"| memcached
+    sentry_worker --> |"port 6379"| redis
+    sentry_worker --> |"port 5672"| rabbitmq
+    clickhouse --> |"port 2181"| zookeeper2[(zookeeper)]
+end
+```
+
+The Cloud SQL Postgres database can be accessed in the GCP console [here](https://console.cloud.google.com/sql/instances/sentry/overview?project=gitlab-ops).
+
 ## Charts
 
 The Helm chart we are using to manage the Sentry deployment is located [here](https://github.com/sentry-kubernetes/charts/tree/develop/sentry). The maintainers are very open to contributions!
@@ -13,13 +43,53 @@ The Helm release for our deployment can be found [here](https://gitlab.com/gitla
 * [Cloud SQL proxy](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/blob/master/releases/sentry/ops-sql-proxy.yaml.gotmpl) (which uses [this chart](https://github.com/rimusz/charts/tree/master/stable/gcloud-sqlproxy))
 * [Clickhouse](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/blob/master/releases/sentry/charts/sentry-extras/templates/clickhouse.yaml) (managed via an [operator](https://github.com/Altinity/clickhouse-operator), which uses [this chart](https://github.com/Altinity/clickhouse-operator/tree/master/deploy/helm))
 
-## User Management
+## Administration
 
-Access to Sentry is granted through Okta assignment - i.e. if the user is in a group that is assigned Sentry in Okta, they can access it (see [this comment](https://gitlab.com/gitlab-com/team-member-epics/access-requests/-/issues/23666#note_1534063888) as an example).
+### Access to Sentry
 
-For teams that are requesting access, it is *preferable* that their team Okta group is assigned to Sentry, so that any changes in membership (e.g. people leaving/joining) are automatically synced over. This means creating an [access request](https://about.gitlab.com/handbook/business-technology/end-user-services/onboarding-access-requests/access-requests/) for IT to action as we do not have admin access to Okta.
+Access to Sentry is granted through Okta assignment - i.e. if the user is in a group that is assigned Sentry in Okta, they can access it (see [this comment](https://gitlab.com/gitlab-com/team-member-epics/access-requests/-/issues/23666#note_1534063888) as an example). If they don't have access, they'll see a message like _User is not assigned to this application_ after attempting to login.
+
+For teams that are requesting access, it is *highly recommended* that their team Okta group is assigned to Sentry, so that any changes in membership (e.g. people leaving/joining) are automatically synced over. This means creating an [access request](https://about.gitlab.com/handbook/business-technology/end-user-services/onboarding-access-requests/access-requests/) for IT to action as we do not have admin access to Okta.
 
 For individuals who are in teams that don't need day-to-day access to Sentry, the [`okta-sentry-member-users` Google group](https://groups.google.com/a/gitlab.com/g/okta-sentry-member-users/about) can be used to grant access. This is especially useful when we want to unblock people ASAP without having to wait on IT to action an AR. Simply add the person requesting access to the group and they should be able to access Sentry within an hour.
+
+### User roles
+
+Sentry's various roles are documented [here](https://docs.sentry.io/product/accounts/membership/).
+
+All users are provisioned as `Members` of the GitLab org in Sentry by default. This allows them to view and act on issues, as well as join or leave Sentry teams.
+
+Confusingly, Sentry's org-level `Admin` role is not the one with the most permissions (that's `Owner`, and only the `ops-contact` user has this role).
+
+There is a [`okta-sentry-admin-users`](https://groups.google.com/a/gitlab.com/g/okta-sentry-admin-users/about) Google group, intended to grant the `Admin` role to its members. However, due to some strangeness with either Sentry or Okta, the updates aren't pushed to Sentry.
+
+For the purposes of supporting Sentry (e.g. adding new projects, configuring existing ones, etc.), the `Manager` role should be enough. Since we don't have a Google group for that role, you may need to use the following workaround to assign the role to someone who needs it, e.g. a new member of the Observability team.
+
+1. Go to [this page](https://new-sentry.gitlab.net/manage/). You _should_ be prompted to re-authenticate as superuser, do so.
+1. Go to the user you want to give the new role to via the [list of members](https://new-sentry.gitlab.net/settings/gitlab/members/).
+1. If the options under `Organization Role` are greyed out, force refresh the page.
+1. Select the new role and click **Save Member**.
+
+### Projects and teams
+
+The `Member` role does not allow people to create new projects or teams in Sentry, so they have to be provisioned by us manually. This gives us the opportunity to gatekeep a little. Ensure that:
+
+* There isn't already an existing project for what the user is requesting
+* Only one project is created for an application, even if it has different environments (i.e. `my-awesome-app` in `pre`, `gstg` and `gprd` does **not** need 3 different projects like `my-awesome-app-pre`, `my-awesome-app-gstg`, `my-awesome-app-gprd`...)
+* The project is assigned to the appropriate team, if the user is also requesting a new Sentry team to be created
+  * Otherwise it can go into the `gitlab` Sentry team
+
+## Integrations
+
+The [Slack](https://docs.sentry.io/product/integrations/notification-incidents/slack/) and [GitLab](https://docs.sentry.io/product/integrations/source-code-mgmt/gitlab/) integrations have been set up. For more details see [this issue](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/17483).
+
+### Slack
+
+The Slack integration allows alerts to be sent to channels and interacted with from within Slack. No special permissions are required to set up a new alert - a user simply needs to go to the [Alerts](https://new-sentry.gitlab.net/organizations/gitlab/alerts/rules/) page in Sentry to set up a new alerting rule and configure it to fire into a Slack channel.
+
+### GitLab
+
+The GitLab integration allows, amongst other things, for GitLab issues to be linked to Sentry events. Currently the integration is configured to use the `gitlab-com`[https://gitlab.com/gitlab-com] and [`gitlab-org`](https://gitlab.com/gitlab-org) groups which should hopefully cover 99% of use cases. Unfortunately the downside is that when creating an issue link, the integration will need to call the GitLab.com API to list _all_ subgroups and projects under those groups, and this call times out more often than not. This is a known issue with the endpoint: see [this issue](https://gitlab.com/gitlab-org/gitlab/-/issues/427965) and [this issue](https://gitlab.com/gitlab-org/gitlab/-/issues/427966). One possible workaround would be to reconfigure the integration so it only uses specific subgroups, but the downside is users will need to get in touch with us every time they want to link events to a GitLab project that isn't already covered by the integration. (This wasn't a problem in the old Sentry instance because it used the legacy GitLab integration that only did 1:1 links between Sentry and GitLab projects.)
 
 ## Upgrading Sentry
 
@@ -65,7 +135,18 @@ Major upgrades usually involve database migrations.
     * The Sentry UI shows the new version number (in the footer)
     * Running `sentry --version` in a shell on the web/worker pods should also return the new version number
 
-## Application errors
+## Troubleshooting
+
+### Event ingestion
+
+If the [stats page](https://new-sentry.gitlab.net/organizations/gitlab/stats/) shows unexplained drops in event ingestion like this:
+
+![Sentry stats page showing periodic drops in event ingestion](sentry-event-drops.png)
+
+1. Check CPU and memory utilisation on the [Cloud SQL database](https://console.cloud.google.com/sql/instances/sentry/overview?project=gitlab-ops). If CPU is pinned at 99%-100% at peak times then it will need more cores.
+1. Check if there are errors in Kafka. Refer to the section on [Kafka](#kafka) for common errors and remediation steps.
+    * Also check that there is enough free space on the [Kafka PVs](https://dashboards.gitlab.net/d/kubernetes-persistentvolumesusage/kubernetes-persistent-volumes?orgId=1&refresh=5m&var-datasource=default&var-cluster=ops-gitlab-gke&var-namespace=sentry&var-volume=data-sentry-kafka-0).
+1. Check if there are errors in the Redis master pod.
 
 ### UI
 

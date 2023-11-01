@@ -96,7 +96,7 @@
 * [../redis/redis.md](../redis/redis.md)
 * [Container Registry database post-deployment migrations](../registry/db-post-deployment-migrations.md)
 * [../registry/gitlab-registry.md](../registry/gitlab-registry.md)
-* [Sentry is down and gives error 500](../sentry/sentry-is-down.md)
+* [Managing Sentry in Kubernetes](../sentry/sentry.md)
 * [Sidekiq Queue Out of Control](../sidekiq/large-sidekiq-queue.md)
 * [Poking around at sidekiq's running state](../sidekiq/sidekiq-inspection.md)
 * [A survival guide for SREs to working with Sidekiq at GitLab](../sidekiq/sidekiq-survival-guide-for-sres.md)
