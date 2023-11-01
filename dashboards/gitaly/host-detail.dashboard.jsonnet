@@ -385,7 +385,7 @@ basic.dashboard(
   .addPanels(
     layout.grid([
       gitalyAdaptiveLimitDashboards.pack_objects_current_limit(selectorHash, '{{ limit }}'),
-      gitalyPackObjectsDashboards.in_process(selectorHash, 'concurrency by repository'),
+      gitalyPackObjectsDashboards.in_process(selectorHash, 'concurrency by gitaly process'),
       gitalyPackObjectsDashboards.queued_commands(selectorHash, 'queued commands'),
       gitalyPackObjectsDashboards.queueing_time(selectorHash, '95th queueing time'),
       gitalyPackObjectsDashboards.dropped_commands(selectorHash, '{{ reason }}'),
