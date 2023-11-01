@@ -23,12 +23,7 @@ local serviceDefaults = {
   skippedMaturityCriteria: {},
   dangerouslyThanosEvaluated: false,  // This is only used for thanos self-monitoring
   thanosType: 'none',  // This is only used to differentate thanos-staging vs thanos.
-  capacityPlanning: {  // Consumed by Tamland
-    environment: 'gprd',
-    stage: {
-      oneOf: ['main'],
-    },
-  },
+  capacityPlanning: {},  // Consumed by Tamland
 };
 
 local shardLevelMonitoringEnabled(serviceDefinition) =

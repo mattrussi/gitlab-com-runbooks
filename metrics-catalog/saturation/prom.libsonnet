@@ -4,7 +4,8 @@ local defaults = {
   baseURL: 'https://thanos.ops.gitlab.net',
   defaultSelectors: {
     env: 'gprd',
-    stage: 'main',
+    environment: 'gprd',
+    stage: ['main', ''],
   },
   serviceLabel: 'type',
   queryTemplates: std.foldl(
