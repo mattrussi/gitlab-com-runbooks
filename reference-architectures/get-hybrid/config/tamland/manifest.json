@@ -1,0 +1,1318 @@
+{
+  "defaults": {
+    "prometheus": {
+      "baseURL": "http://kube-prometheus-stack-prometheus.monitoring:9090",
+      "defaultSelectors": {},
+      "queryTemplates": {
+        "quantile95_1h": "max(gitlab_component_saturation:ratio_quantile95_1h{%s})",
+        "quantile95_1w": "max(gitlab_component_saturation:ratio_quantile95_1w{%s})",
+        "quantile99_1h": "max(gitlab_component_saturation:ratio_quantile99_1h{%s})",
+        "quantile99_1w": "max(gitlab_component_saturation:ratio_quantile99_1w{%s})"
+      },
+      "serviceLabel": "type"
+    }
+  },
+  "report": {
+    "pages": [
+      {
+        "path": "all.md",
+        "service_pattern": ".*",
+        "title": "All components"
+      }
+    ]
+  },
+  "saturationPoints": {
+    "cpu": {
+      "alertRunbook": "docs/{{ $labels.type }}/README.md",
+      "alerting": {
+        "enabled": true
+      },
+      "appliesTo": [
+        "gitaly",
+        "consul",
+        "praefect"
+      ],
+      "burnRatePeriod": "5m",
+      "capacityPlanning": {
+        "changepoints_count": 25,
+        "forecast_days": 90,
+        "historical_days": 365,
+        "strategy": "quantile95_1h"
+      },
+      "dangerouslyThanosEvaluated": false,
+      "description": "This resource measures average CPU utilization across an all cores in a service fleet.\nIf it is becoming saturated, it may indicate that the fleet needs\nhorizontal or vertical scaling.\n",
+      "grafana_dashboard_uid": "sat_cpu",
+      "horizontallyScalable": true,
+      "linear_prediction_saturation_alert": null,
+      "quantileAggregation": "max",
+      "query": "1 - avg by (%(aggregationLabels)s) (\n  rate(node_cpu_seconds_total{mode=\"idle\", %(selector)s}[%(rangeInterval)s])\n)\n",
+      "queryFormatConfig": {},
+      "resourceLabels": [],
+      "severity": "s3",
+      "slos": {
+        "alertTriggerDuration": "5m",
+        "hard": 0.9,
+        "soft": 0.8
+      },
+      "title": "Average Service CPU Utilization"
+    },
+    "disk_inodes": {
+      "alertRunbook": "docs/{{ $labels.type }}/README.md",
+      "alerting": {
+        "enabled": true
+      },
+      "appliesTo": [
+        "gitaly",
+        "consul",
+        "praefect"
+      ],
+      "capacityPlanning": {
+        "changepoints_count": 25,
+        "forecast_days": 90,
+        "historical_days": 365,
+        "strategy": "quantile95_1h"
+      },
+      "dangerouslyThanosEvaluated": false,
+      "description": "Disk inode utilization per device per node.\n\nIf this is too high, its possible that a directory is filling up with\nfiles. Consider logging in an checking temp directories for large numbers\nof files\n",
+      "grafana_dashboard_uid": "sat_disk_inodes",
+      "horizontallyScalable": true,
+      "linear_prediction_saturation_alert": "6h",
+      "quantileAggregation": "max",
+      "query": "1 - (\n  node_filesystem_files_free{fstype=~\"(ext.|xfs)\", %(selector)s}\n  /\n  node_filesystem_files{fstype=~\"(ext.|xfs)\", %(selector)s}\n)\n",
+      "queryFormatConfig": {},
+      "resourceLabels": [
+        "fqdn",
+        "device"
+      ],
+      "severity": "s2",
+      "slos": {
+        "alertTriggerDuration": "15m",
+        "hard": 0.8,
+        "soft": 0.75
+      },
+      "title": "Disk inode Utilization per Device per Node"
+    },
+    "disk_space": {
+      "alertRunbook": "docs/{{ $labels.type }}/README.md",
+      "alerting": {
+        "enabled": true
+      },
+      "appliesTo": [
+        "gitaly",
+        "consul",
+        "praefect"
+      ],
+      "capacityPlanning": {
+        "changepoints_count": 25,
+        "forecast_days": 90,
+        "historical_days": 365,
+        "strategy": "quantile95_1h"
+      },
+      "dangerouslyThanosEvaluated": false,
+      "description": "Disk space utilization per device per node.\n",
+      "grafana_dashboard_uid": "sat_disk_space",
+      "horizontallyScalable": true,
+      "linear_prediction_saturation_alert": "6h",
+      "quantileAggregation": "max",
+      "query": "(\n  1 - node_filesystem_avail_bytes{fstype=~\"ext.|xfs\", %(selector)s} / node_filesystem_size_bytes{fstype=~\"ext.|xfs\", %(selector)s}\n)\n",
+      "queryFormatConfig": {},
+      "resourceLabels": [
+        "node",
+        "device"
+      ],
+      "severity": "s2",
+      "slos": {
+        "alertTriggerDuration": "15m",
+        "hard": 0.9,
+        "soft": 0.85
+      },
+      "title": "Disk Space Utilization per Device per Node"
+    },
+    "go_goroutines": {
+      "alertRunbook": "docs/{{ $labels.type }}/README.md",
+      "alerting": {
+        "enabled": true
+      },
+      "appliesTo": [
+        "gitaly",
+        "praefect"
+      ],
+      "capacityPlanning": {
+        "changepoints_count": 25,
+        "forecast_days": 90,
+        "historical_days": 365,
+        "strategy": "quantile95_1h"
+      },
+      "dangerouslyThanosEvaluated": true,
+      "description": "Go goroutines utilization per node.\n\nGoroutines leaks can cause memory saturation which can cause service degradation.\n\nA limit of 250k goroutines is very generous, so if a service exceeds this limit,\nit's a sign of a leak and it should be dealt with.\n",
+      "grafana_dashboard_uid": "sat_go_goroutines",
+      "horizontallyScalable": true,
+      "linear_prediction_saturation_alert": null,
+      "quantileAggregation": "max",
+      "query": "sum by (%(aggregationLabels)s) (\n  go_goroutines{%(selector)s}\n)\n/\n%(maxGoroutines)g\n",
+      "queryFormatConfig": {
+        "maxGoroutines": 250000
+      },
+      "resourceLabels": [
+        "fqdn"
+      ],
+      "severity": "s2",
+      "slos": {
+        "alertTriggerDuration": "5m",
+        "hard": 0.98,
+        "soft": 0.9
+      },
+      "title": "Go goroutines Utilization per Node"
+    },
+    "go_memory": {
+      "alertRunbook": "docs/{{ $labels.type }}/README.md",
+      "alerting": {
+        "enabled": true
+      },
+      "appliesTo": [
+        "gitaly",
+        "praefect"
+      ],
+      "capacityPlanning": {
+        "changepoints_count": 25,
+        "forecast_days": 90,
+        "historical_days": 365,
+        "strategy": "quantile95_1h"
+      },
+      "dangerouslyThanosEvaluated": true,
+      "description": "Go's memory allocation strategy can make it look like a Go process is saturating memory when measured using RSS, when in fact\nthe process is not at risk of memory saturation. For this reason, we measure Go processes using the `go_memstat_alloc_bytes`\nmetric instead of RSS.\n",
+      "grafana_dashboard_uid": "sat_go_memory",
+      "horizontallyScalable": true,
+      "linear_prediction_saturation_alert": null,
+      "quantileAggregation": "max",
+      "query": "sum by (%(aggregationLabels)s) (\n  go_memstats_alloc_bytes{%(selector)s}\n)\n/\nsum by (%(aggregationLabels)s) (\n  node_memory_MemTotal_bytes{%(selector)s}\n)\n",
+      "queryFormatConfig": {},
+      "resourceLabels": [
+        "fqdn"
+      ],
+      "severity": "s4",
+      "slos": {
+        "alertTriggerDuration": "5m",
+        "hard": 0.98,
+        "soft": 0.9
+      },
+      "title": "Go Memory Utilization per Node"
+    },
+    "kube_container_cpu": {
+      "alertRunbook": "docs/{{ $labels.type }}/README.md",
+      "alerting": {
+        "enabled": false
+      },
+      "appliesTo": [
+        "consul",
+        "gitlab-shell",
+        "registry",
+        "sidekiq",
+        "webservice"
+      ],
+      "burnRatePeriod": "1h",
+      "capacityPlanning": {
+        "changepoints_count": 25,
+        "forecast_days": 90,
+        "historical_days": 365,
+        "strategy": "quantile99_1h"
+      },
+      "dangerouslyThanosEvaluated": false,
+      "description": "Kubernetes containers are allocated a share of CPU. Configured using resource requests.\nWhen this is exhausted, the container may be thottled.\n",
+      "grafana_dashboard_uid": "sat_kube_container_cpu",
+      "horizontallyScalable": true,
+      "linear_prediction_saturation_alert": null,
+      "quantileAggregation": 0.99,
+      "query": "sum by (environment, tier, type, stage, pod, container) (\n  rate(container_cpu_usage_seconds_total:labeled{container!=\"\", container!=\"POD\", %(selector)s}[%(rangeInterval)s])\n)\n/\nsum by(environment, tier, type, stage, pod, container) (\n  kube_pod_container_resource_requests:labeled{container!=\"\", container!=\"POD\", resource=\"cpu\", %(selector)s}\n)\n",
+      "queryFormatConfig": {},
+      "resourceLabels": [
+        "pod",
+        "container"
+      ],
+      "severity": "s4",
+      "slos": {
+        "alertTriggerDuration": "5m",
+        "hard": 0.99,
+        "soft": 0.95
+      },
+      "title": "Kube Container CPU Utilization"
+    },
+    "kube_container_cpu_limit": {
+      "alertRunbook": "docs/{{ $labels.type }}/README.md",
+      "alerting": {
+        "enabled": true
+      },
+      "appliesTo": [
+        "consul",
+        "gitlab-shell",
+        "registry",
+        "sidekiq",
+        "webservice"
+      ],
+      "burnRatePeriod": "5m",
+      "capacityPlanning": {
+        "changepoints_count": 25,
+        "forecast_days": 90,
+        "historical_days": 365,
+        "strategy": "exclude"
+      },
+      "dangerouslyThanosEvaluated": false,
+      "description": "Kubernetes containers can have a limit configured on how much CPU they can consume in\na burst. If we are at this limit, exceeding the allocated requested resources, we\nshould consider revisting the container's HPA configuration\n",
+      "grafana_dashboard_uid": "sat_kube_container_cpu_limit",
+      "horizontallyScalable": true,
+      "linear_prediction_saturation_alert": null,
+      "quantileAggregation": "max",
+      "query": "sum by (%(aggregationLabels)s) (\n  rate(container_cpu_usage_seconds_total:labeled{container!=\"\", container!=\"POD\", %(selector)s}[%(rangeInterval)s])\n)\n/\nsum by(%(aggregationLabels)s) (\n  container_spec_cpu_quota:labeled{container!=\"\", container!=\"POD\", %(selector)s}\n  /\n  container_spec_cpu_period:labeled{container!=\"\", container!=\"POD\", %(selector)s}\n)\n",
+      "queryFormatConfig": {},
+      "resourceLabels": [
+        "pod",
+        "container"
+      ],
+      "severity": "s4",
+      "slos": {
+        "alertTriggerDuration": "15m",
+        "hard": 0.99,
+        "soft": 0.9
+      },
+      "title": "Kube Container CPU over-utilization"
+    },
+    "kube_container_memory": {
+      "alertRunbook": "docs/{{ $labels.type }}/README.md",
+      "alerting": {
+        "enabled": true
+      },
+      "appliesTo": [
+        "consul",
+        "gitlab-shell",
+        "registry",
+        "sidekiq"
+      ],
+      "capacityPlanning": {
+        "changepoints_count": 25,
+        "forecast_days": 90,
+        "historical_days": 365,
+        "strategy": "quantile95_1h"
+      },
+      "dangerouslyThanosEvaluated": false,
+      "description": "This uses the working set size from cAdvisor for the cgroup's memory usage. That may\nnot be a good measure as it includes filesystem cache pages that are not necessarily\nattributable to the application inside the cgroup, and are permitted to be evicted\ninstead of being OOM killed.\n",
+      "grafana_dashboard_uid": "sat_kube_container_memory",
+      "horizontallyScalable": true,
+      "linear_prediction_saturation_alert": null,
+      "quantileAggregation": "max",
+      "query": "container_memory_working_set_bytes:labeled{container!=\"\", container!=\"POD\", %(selector)s}\n/\n(container_spec_memory_limit_bytes:labeled{container!=\"\", container!=\"POD\", %(selector)s} \u003e 0)\n",
+      "queryFormatConfig": {},
+      "resourceLabels": [],
+      "severity": "s4",
+      "slos": {
+        "alertTriggerDuration": "15m",
+        "hard": 0.9,
+        "soft": 0.8
+      },
+      "title": "Kube Container Memory Utilization"
+    },
+    "kube_container_rss": {
+      "alertRunbook": "docs/{{ $labels.type }}/README.md",
+      "alerting": {
+        "enabled": true
+      },
+      "appliesTo": [
+        "webservice"
+      ],
+      "capacityPlanning": {
+        "changepoints_count": 25,
+        "forecast_days": 90,
+        "historical_days": 365,
+        "strategy": "quantile95_1h"
+      },
+      "dangerouslyThanosEvaluated": false,
+      "description": "Records the total anonymous (unevictable) memory utilization for containers for this\nservice, as a percentage of the memory limit as configured through Kubernetes.\n\nThis is computed using the container's resident set size (RSS), as opposed to\nkube_container_memory which uses the working set size. For our purposes, RSS is the\nbetter metric as cAdvisor's working set calculation includes pages from the\nfilesystem cache that can (and will) be evicted before the OOM killer kills the\ncgroup.\n\nA container's RSS (anonymous memory usage) is still not precisely what the OOM\nkiller will use, but it's a better approximation of what the container's workload is\nactually using. RSS metrics can, however, be dramatically inflated if a process in\nthe container uses MADV_FREE (lazy-free) memory. RSS will include the memory that is\navailable to be reclaimed without a page fault, but not currently in use.\n\nThe most common case of OOM kills is for anonymous memory demand to overwhelm the\ncontainer's memory limit. On swapless hosts, anonymous memory cannot be evicted from\nthe page cache, so when a container's memory usage is mostly anonymous pages, the\nonly remaining option to relieve memory pressure may be the OOM killer.\n\nAs container RSS approaches container memory limit, OOM kills become much more\nlikely. Consequently, this ratio is a good leading indicator of memory saturation\nand OOM risk.\n",
+      "grafana_dashboard_uid": "sat_kube_container_rss",
+      "horizontallyScalable": true,
+      "linear_prediction_saturation_alert": null,
+      "quantileAggregation": "max",
+      "query": "container_memory_rss:labeled{container!=\"\", container!=\"POD\", %(selector)s}\n/\n(container_spec_memory_limit_bytes:labeled{container!=\"\", container!=\"POD\", %(selector)s} \u003e 0)\n",
+      "queryFormatConfig": {},
+      "resourceLabels": [],
+      "severity": "s4",
+      "slos": {
+        "alertTriggerDuration": "15m",
+        "hard": 0.9,
+        "soft": 0.8
+      },
+      "title": "Kube Container Memory Utilization (RSS)"
+    },
+    "kube_pool_cpu": {
+      "alertRunbook": "docs/{{ $labels.type }}/README.md",
+      "alerting": {
+        "enabled": true
+      },
+      "appliesTo": [
+        "sidekiq",
+        "webservice"
+      ],
+      "burnRatePeriod": "5m",
+      "capacityPlanning": {
+        "changepoints_count": 25,
+        "forecast_days": 90,
+        "historical_days": 365,
+        "strategy": "quantile95_1h"
+      },
+      "dangerouslyThanosEvaluated": false,
+      "description": "This resource measures average CPU utilization across an all cores in the node pool for\na service fleet.\n\nIf it is becoming saturated, it may indicate that the fleet needs horizontal scaling.\n",
+      "grafana_dashboard_uid": "sat_kube_pool_cpu",
+      "horizontallyScalable": true,
+      "linear_prediction_saturation_alert": null,
+      "quantileAggregation": "max",
+      "query": "1 - avg by (%(aggregationLabels)s) (\n  rate(node_cpu_seconds_total:labeled{mode=\"idle\", %(selector)s}[%(rangeInterval)s])\n)\n",
+      "queryFormatConfig": {},
+      "resourceLabels": [],
+      "severity": "s3",
+      "slos": {
+        "alertTriggerDuration": "5m",
+        "hard": 0.9,
+        "soft": 0.8
+      },
+      "title": "Average Node Pool CPU Utilization"
+    },
+    "memory": {
+      "alertRunbook": "docs/{{ $labels.type }}/README.md",
+      "alerting": {
+        "enabled": true
+      },
+      "appliesTo": [
+        "gitaly",
+        "consul",
+        "praefect"
+      ],
+      "capacityPlanning": {
+        "changepoints_count": 25,
+        "forecast_days": 90,
+        "historical_days": 365,
+        "strategy": "quantile95_1h"
+      },
+      "dangerouslyThanosEvaluated": false,
+      "description": "Memory utilization per device per node.\n",
+      "grafana_dashboard_uid": "sat_memory",
+      "horizontallyScalable": true,
+      "linear_prediction_saturation_alert": null,
+      "quantileAggregation": "max",
+      "query": "instance:node_memory_utilization:ratio{%(selector)s} or instance:node_memory_utilisation:ratio{%(selector)s}\n",
+      "queryFormatConfig": {},
+      "resourceLabels": [
+        "node"
+      ],
+      "severity": "s4",
+      "slos": {
+        "alertTriggerDuration": "5m",
+        "hard": 0.98,
+        "soft": 0.9
+      },
+      "title": "Memory Utilization per Node"
+    },
+    "memory_redis_cache": {
+      "alertRunbook": "docs/{{ $labels.type }}/README.md",
+      "alerting": {
+        "enabled": true
+      },
+      "appliesTo": [
+        "redis-cluster-cache"
+      ],
+      "capacityPlanning": {
+        "changepoints_count": 25,
+        "forecast_days": 90,
+        "historical_days": 365,
+        "strategy": "exclude"
+      },
+      "dangerouslyThanosEvaluated": false,
+      "description": "Memory utilization per device per node.\n\n\nredis-cluster-cache has a separate saturation point for this to exclude it from capacity planning calculations.\n",
+      "grafana_dashboard_uid": "sat_memory_redis_cache",
+      "horizontallyScalable": true,
+      "linear_prediction_saturation_alert": null,
+      "quantileAggregation": "max",
+      "query": "instance:node_memory_utilization:ratio{%(selector)s} or instance:node_memory_utilisation:ratio{%(selector)s}\n",
+      "queryFormatConfig": {},
+      "resourceLabels": [
+        "node"
+      ],
+      "severity": "s4",
+      "slos": {
+        "alertTriggerDuration": "5m",
+        "hard": 0.98,
+        "soft": 0.9
+      },
+      "title": "Memory Utilization per Node"
+    },
+    "node_schedstat_waiting": {
+      "alertRunbook": "docs/{{ $labels.type }}/README.md",
+      "alerting": {
+        "enabled": true
+      },
+      "appliesTo": [
+        "consul",
+        "gitaly",
+        "praefect"
+      ],
+      "burnRatePeriod": "1h",
+      "capacityPlanning": {
+        "changepoints_count": 25,
+        "forecast_days": 90,
+        "historical_days": 365,
+        "strategy": "quantile95_1h"
+      },
+      "dangerouslyThanosEvaluated": false,
+      "description": "Measures the amount of scheduler waiting time that processes are waiting\nto be scheduled, according to [`CPU Scheduling Metrics`](https://www.robustperception.io/cpu-scheduling-metrics-from-the-node-exporter).\n\nA high value indicates that a node has more processes to be run than CPU time available\nto handle them, and may lead to degraded responsiveness and performance from the application.\n\nAdditionally, it may indicate that the fleet is under-provisioned.\n",
+      "grafana_dashboard_uid": "sat_node_schedstat_waiting",
+      "horizontallyScalable": true,
+      "linear_prediction_saturation_alert": null,
+      "quantileAggregation": "max",
+      "query": "avg without (cpu) (rate(node_schedstat_waiting_seconds_total{%(selector)s}[%(rangeInterval)s]))\n",
+      "queryFormatConfig": {},
+      "resourceLabels": [
+        "fqdn",
+        "shard"
+      ],
+      "severity": "s4",
+      "slos": {
+        "alertTriggerDuration": "90m",
+        "hard": 0.15,
+        "soft": 0.1
+      },
+      "title": "Node Scheduler Waiting Time"
+    },
+    "opensearch_cpu": {
+      "alertRunbook": "docs/{{ $labels.type }}/README.md",
+      "alerting": {
+        "enabled": true
+      },
+      "appliesTo": [
+        "logging"
+      ],
+      "capacityPlanning": {
+        "changepoints_count": 25,
+        "forecast_days": 90,
+        "historical_days": 365,
+        "strategy": "quantile95_1h"
+      },
+      "dangerouslyThanosEvaluated": false,
+      "description": "Average CPU utilization.\n\nThis resource measures the CPU utilization for the selected cluster or domain. If it is becoming saturated, it may indicate that the fleet needs horizontal or\nvertical scaling. The metrics are coming from cloudwatch_exporter.\n",
+      "grafana_dashboard_uid": "sat_opensearch_cpu",
+      "horizontallyScalable": true,
+      "linear_prediction_saturation_alert": null,
+      "quantileAggregation": "max",
+      "query": "avg_over_time(aws_es_cpuutilization_average[%(rangeInterval)s])/100\n",
+      "queryFormatConfig": {},
+      "resourceLabels": [],
+      "severity": "s4",
+      "slos": {
+        "alertTriggerDuration": "5m",
+        "hard": 0.8,
+        "soft": 0.65
+      },
+      "title": "Average CPU Utilization for Opensearch"
+    },
+    "opensearch_disk_space": {
+      "alertRunbook": "docs/{{ $labels.type }}/README.md",
+      "alerting": {
+        "enabled": true
+      },
+      "appliesTo": [
+        "logging"
+      ],
+      "capacityPlanning": {
+        "changepoints_count": 25,
+        "forecast_days": 90,
+        "historical_days": 365,
+        "strategy": "quantile95_1h"
+      },
+      "dangerouslyThanosEvaluated": false,
+      "description": "Disk utilization for Opensearch\n",
+      "grafana_dashboard_uid": "sat_opensearch_disk_space",
+      "horizontallyScalable": true,
+      "linear_prediction_saturation_alert": null,
+      "quantileAggregation": "max",
+      "query": "aws_es_cluster_used_space_average/(aws_es_free_storage_space_average+aws_es_cluster_used_space_average)\n",
+      "queryFormatConfig": {},
+      "resourceLabels": [],
+      "severity": "s3",
+      "slos": {
+        "alertTriggerDuration": "5m",
+        "hard": 0.75,
+        "soft": 0.6
+      },
+      "title": "Disk Utilization Overall"
+    },
+    "puma_workers": {
+      "alertRunbook": "docs/{{ $labels.type }}/README.md",
+      "alerting": {
+        "enabled": true
+      },
+      "appliesTo": [
+        "webservice"
+      ],
+      "capacityPlanning": {
+        "changepoints_count": 25,
+        "forecast_days": 90,
+        "historical_days": 365,
+        "strategy": "quantile95_1h"
+      },
+      "dangerouslyThanosEvaluated": false,
+      "description": "Puma thread utilization.\n\nPuma uses a fixed size thread pool to handle HTTP requests. This metric shows how many threads are busy handling requests. When this resource is saturated,\nwe will see puma queuing taking place. Leading to slowdowns across the application.\n\nPuma saturation is usually caused by latency problems in downstream services: usually Gitaly or Postgres, but possibly also Redis.\nPuma saturation can also be caused by traffic spikes.\n",
+      "grafana_dashboard_uid": "sat_puma_workers",
+      "horizontallyScalable": true,
+      "linear_prediction_saturation_alert": null,
+      "quantileAggregation": "max",
+      "query": "sum by(%(aggregationLabels)s) (avg_over_time(sum without (pid,worker) (puma_active_connections{%(selector)s})[%(rangeInterval)s:]))\n/\nsum by(%(aggregationLabels)s) (sum without (pid,worker) (puma_max_threads{pid=\"puma_master\", %(selector)s}))\n",
+      "queryFormatConfig": {},
+      "resourceLabels": [],
+      "severity": "s2",
+      "slos": {
+        "alertTriggerDuration": "5m",
+        "hard": 0.9,
+        "soft": 0.85
+      },
+      "title": "Puma Worker Saturation"
+    },
+    "single_node_cpu": {
+      "alertRunbook": "docs/{{ $labels.type }}/README.md",
+      "alerting": {
+        "enabled": true
+      },
+      "appliesTo": [
+        "gitaly",
+        "consul",
+        "praefect"
+      ],
+      "burnRatePeriod": "5m",
+      "capacityPlanning": {
+        "changepoints_count": 25,
+        "forecast_days": 90,
+        "historical_days": 365,
+        "strategy": "quantile95_1h"
+      },
+      "dangerouslyThanosEvaluated": false,
+      "description": "Average CPU utilization per Node.\n\nIf average CPU is saturated, it may indicate that a fleet is in need to horizontal or vertical scaling. It may also indicate\nimbalances in load in a fleet.\n",
+      "grafana_dashboard_uid": "sat_single_node_cpu",
+      "horizontallyScalable": true,
+      "linear_prediction_saturation_alert": null,
+      "quantileAggregation": "max",
+      "query": "avg without(cpu, mode) (1 - rate(node_cpu_seconds_total{mode=\"idle\", %(selector)s}[%(rangeInterval)s]))\n",
+      "queryFormatConfig": {},
+      "resourceLabels": [
+        "node"
+      ],
+      "severity": "s4",
+      "slos": {
+        "alertTriggerDuration": "10m",
+        "hard": 0.95,
+        "soft": 0.9
+      },
+      "title": "Average CPU Utilization per Node"
+    }
+  },
+  "services": {
+    "consul": {
+      "capacityPlanning": {},
+      "name": "consul",
+      "overviewDashboard": {
+        "name": "",
+        "url": ""
+      },
+      "resourceDashboard": {
+        "cpu": {
+          "name": "cpu",
+          "url": ""
+        },
+        "disk_inodes": {
+          "name": "disk_inodes",
+          "url": ""
+        },
+        "disk_space": {
+          "name": "disk_space",
+          "url": ""
+        },
+        "go_goroutines": {
+          "name": "go_goroutines",
+          "url": ""
+        },
+        "go_memory": {
+          "name": "go_memory",
+          "url": ""
+        },
+        "kube_container_cpu": {
+          "name": "kube_container_cpu",
+          "url": ""
+        },
+        "kube_container_cpu_limit": {
+          "name": "kube_container_cpu_limit",
+          "url": ""
+        },
+        "kube_container_memory": {
+          "name": "kube_container_memory",
+          "url": ""
+        },
+        "kube_container_rss": {
+          "name": "kube_container_rss",
+          "url": ""
+        },
+        "kube_pool_cpu": {
+          "name": "kube_pool_cpu",
+          "url": ""
+        },
+        "memory": {
+          "name": "memory",
+          "url": ""
+        },
+        "memory_redis_cache": {
+          "name": "memory_redis_cache",
+          "url": ""
+        },
+        "node_schedstat_waiting": {
+          "name": "node_schedstat_waiting",
+          "url": ""
+        },
+        "opensearch_cpu": {
+          "name": "opensearch_cpu",
+          "url": ""
+        },
+        "opensearch_disk_space": {
+          "name": "opensearch_disk_space",
+          "url": ""
+        },
+        "puma_workers": {
+          "name": "puma_workers",
+          "url": ""
+        },
+        "single_node_cpu": {
+          "name": "single_node_cpu",
+          "url": ""
+        }
+      }
+    },
+    "gitaly": {
+      "capacityPlanning": {},
+      "name": "gitaly",
+      "overviewDashboard": {
+        "name": "",
+        "url": ""
+      },
+      "resourceDashboard": {
+        "cpu": {
+          "name": "cpu",
+          "url": ""
+        },
+        "disk_inodes": {
+          "name": "disk_inodes",
+          "url": ""
+        },
+        "disk_space": {
+          "name": "disk_space",
+          "url": ""
+        },
+        "go_goroutines": {
+          "name": "go_goroutines",
+          "url": ""
+        },
+        "go_memory": {
+          "name": "go_memory",
+          "url": ""
+        },
+        "kube_container_cpu": {
+          "name": "kube_container_cpu",
+          "url": ""
+        },
+        "kube_container_cpu_limit": {
+          "name": "kube_container_cpu_limit",
+          "url": ""
+        },
+        "kube_container_memory": {
+          "name": "kube_container_memory",
+          "url": ""
+        },
+        "kube_container_rss": {
+          "name": "kube_container_rss",
+          "url": ""
+        },
+        "kube_pool_cpu": {
+          "name": "kube_pool_cpu",
+          "url": ""
+        },
+        "memory": {
+          "name": "memory",
+          "url": ""
+        },
+        "memory_redis_cache": {
+          "name": "memory_redis_cache",
+          "url": ""
+        },
+        "node_schedstat_waiting": {
+          "name": "node_schedstat_waiting",
+          "url": ""
+        },
+        "opensearch_cpu": {
+          "name": "opensearch_cpu",
+          "url": ""
+        },
+        "opensearch_disk_space": {
+          "name": "opensearch_disk_space",
+          "url": ""
+        },
+        "puma_workers": {
+          "name": "puma_workers",
+          "url": ""
+        },
+        "single_node_cpu": {
+          "name": "single_node_cpu",
+          "url": ""
+        }
+      }
+    },
+    "gitlab-shell": {
+      "capacityPlanning": {},
+      "name": "gitlab-shell",
+      "overviewDashboard": {
+        "name": "",
+        "url": ""
+      },
+      "resourceDashboard": {
+        "cpu": {
+          "name": "cpu",
+          "url": ""
+        },
+        "disk_inodes": {
+          "name": "disk_inodes",
+          "url": ""
+        },
+        "disk_space": {
+          "name": "disk_space",
+          "url": ""
+        },
+        "go_goroutines": {
+          "name": "go_goroutines",
+          "url": ""
+        },
+        "go_memory": {
+          "name": "go_memory",
+          "url": ""
+        },
+        "kube_container_cpu": {
+          "name": "kube_container_cpu",
+          "url": ""
+        },
+        "kube_container_cpu_limit": {
+          "name": "kube_container_cpu_limit",
+          "url": ""
+        },
+        "kube_container_memory": {
+          "name": "kube_container_memory",
+          "url": ""
+        },
+        "kube_container_rss": {
+          "name": "kube_container_rss",
+          "url": ""
+        },
+        "kube_pool_cpu": {
+          "name": "kube_pool_cpu",
+          "url": ""
+        },
+        "memory": {
+          "name": "memory",
+          "url": ""
+        },
+        "memory_redis_cache": {
+          "name": "memory_redis_cache",
+          "url": ""
+        },
+        "node_schedstat_waiting": {
+          "name": "node_schedstat_waiting",
+          "url": ""
+        },
+        "opensearch_cpu": {
+          "name": "opensearch_cpu",
+          "url": ""
+        },
+        "opensearch_disk_space": {
+          "name": "opensearch_disk_space",
+          "url": ""
+        },
+        "puma_workers": {
+          "name": "puma_workers",
+          "url": ""
+        },
+        "single_node_cpu": {
+          "name": "single_node_cpu",
+          "url": ""
+        }
+      }
+    },
+    "logging": {
+      "capacityPlanning": {},
+      "name": "logging",
+      "overviewDashboard": {
+        "name": "",
+        "url": ""
+      },
+      "resourceDashboard": {
+        "cpu": {
+          "name": "cpu",
+          "url": ""
+        },
+        "disk_inodes": {
+          "name": "disk_inodes",
+          "url": ""
+        },
+        "disk_space": {
+          "name": "disk_space",
+          "url": ""
+        },
+        "go_goroutines": {
+          "name": "go_goroutines",
+          "url": ""
+        },
+        "go_memory": {
+          "name": "go_memory",
+          "url": ""
+        },
+        "kube_container_cpu": {
+          "name": "kube_container_cpu",
+          "url": ""
+        },
+        "kube_container_cpu_limit": {
+          "name": "kube_container_cpu_limit",
+          "url": ""
+        },
+        "kube_container_memory": {
+          "name": "kube_container_memory",
+          "url": ""
+        },
+        "kube_container_rss": {
+          "name": "kube_container_rss",
+          "url": ""
+        },
+        "kube_pool_cpu": {
+          "name": "kube_pool_cpu",
+          "url": ""
+        },
+        "memory": {
+          "name": "memory",
+          "url": ""
+        },
+        "memory_redis_cache": {
+          "name": "memory_redis_cache",
+          "url": ""
+        },
+        "node_schedstat_waiting": {
+          "name": "node_schedstat_waiting",
+          "url": ""
+        },
+        "opensearch_cpu": {
+          "name": "opensearch_cpu",
+          "url": ""
+        },
+        "opensearch_disk_space": {
+          "name": "opensearch_disk_space",
+          "url": ""
+        },
+        "puma_workers": {
+          "name": "puma_workers",
+          "url": ""
+        },
+        "single_node_cpu": {
+          "name": "single_node_cpu",
+          "url": ""
+        }
+      }
+    },
+    "praefect": {
+      "capacityPlanning": {},
+      "name": "praefect",
+      "overviewDashboard": {
+        "name": "",
+        "url": ""
+      },
+      "resourceDashboard": {
+        "cpu": {
+          "name": "cpu",
+          "url": ""
+        },
+        "disk_inodes": {
+          "name": "disk_inodes",
+          "url": ""
+        },
+        "disk_space": {
+          "name": "disk_space",
+          "url": ""
+        },
+        "go_goroutines": {
+          "name": "go_goroutines",
+          "url": ""
+        },
+        "go_memory": {
+          "name": "go_memory",
+          "url": ""
+        },
+        "kube_container_cpu": {
+          "name": "kube_container_cpu",
+          "url": ""
+        },
+        "kube_container_cpu_limit": {
+          "name": "kube_container_cpu_limit",
+          "url": ""
+        },
+        "kube_container_memory": {
+          "name": "kube_container_memory",
+          "url": ""
+        },
+        "kube_container_rss": {
+          "name": "kube_container_rss",
+          "url": ""
+        },
+        "kube_pool_cpu": {
+          "name": "kube_pool_cpu",
+          "url": ""
+        },
+        "memory": {
+          "name": "memory",
+          "url": ""
+        },
+        "memory_redis_cache": {
+          "name": "memory_redis_cache",
+          "url": ""
+        },
+        "node_schedstat_waiting": {
+          "name": "node_schedstat_waiting",
+          "url": ""
+        },
+        "opensearch_cpu": {
+          "name": "opensearch_cpu",
+          "url": ""
+        },
+        "opensearch_disk_space": {
+          "name": "opensearch_disk_space",
+          "url": ""
+        },
+        "puma_workers": {
+          "name": "puma_workers",
+          "url": ""
+        },
+        "single_node_cpu": {
+          "name": "single_node_cpu",
+          "url": ""
+        }
+      }
+    },
+    "redis-cluster-cache": {
+      "capacityPlanning": {},
+      "name": "redis-cluster-cache",
+      "overviewDashboard": {
+        "name": "",
+        "url": ""
+      },
+      "resourceDashboard": {
+        "cpu": {
+          "name": "cpu",
+          "url": ""
+        },
+        "disk_inodes": {
+          "name": "disk_inodes",
+          "url": ""
+        },
+        "disk_space": {
+          "name": "disk_space",
+          "url": ""
+        },
+        "go_goroutines": {
+          "name": "go_goroutines",
+          "url": ""
+        },
+        "go_memory": {
+          "name": "go_memory",
+          "url": ""
+        },
+        "kube_container_cpu": {
+          "name": "kube_container_cpu",
+          "url": ""
+        },
+        "kube_container_cpu_limit": {
+          "name": "kube_container_cpu_limit",
+          "url": ""
+        },
+        "kube_container_memory": {
+          "name": "kube_container_memory",
+          "url": ""
+        },
+        "kube_container_rss": {
+          "name": "kube_container_rss",
+          "url": ""
+        },
+        "kube_pool_cpu": {
+          "name": "kube_pool_cpu",
+          "url": ""
+        },
+        "memory": {
+          "name": "memory",
+          "url": ""
+        },
+        "memory_redis_cache": {
+          "name": "memory_redis_cache",
+          "url": ""
+        },
+        "node_schedstat_waiting": {
+          "name": "node_schedstat_waiting",
+          "url": ""
+        },
+        "opensearch_cpu": {
+          "name": "opensearch_cpu",
+          "url": ""
+        },
+        "opensearch_disk_space": {
+          "name": "opensearch_disk_space",
+          "url": ""
+        },
+        "puma_workers": {
+          "name": "puma_workers",
+          "url": ""
+        },
+        "single_node_cpu": {
+          "name": "single_node_cpu",
+          "url": ""
+        }
+      }
+    },
+    "registry": {
+      "capacityPlanning": {},
+      "name": "registry",
+      "overviewDashboard": {
+        "name": "",
+        "url": ""
+      },
+      "resourceDashboard": {
+        "cpu": {
+          "name": "cpu",
+          "url": ""
+        },
+        "disk_inodes": {
+          "name": "disk_inodes",
+          "url": ""
+        },
+        "disk_space": {
+          "name": "disk_space",
+          "url": ""
+        },
+        "go_goroutines": {
+          "name": "go_goroutines",
+          "url": ""
+        },
+        "go_memory": {
+          "name": "go_memory",
+          "url": ""
+        },
+        "kube_container_cpu": {
+          "name": "kube_container_cpu",
+          "url": ""
+        },
+        "kube_container_cpu_limit": {
+          "name": "kube_container_cpu_limit",
+          "url": ""
+        },
+        "kube_container_memory": {
+          "name": "kube_container_memory",
+          "url": ""
+        },
+        "kube_container_rss": {
+          "name": "kube_container_rss",
+          "url": ""
+        },
+        "kube_pool_cpu": {
+          "name": "kube_pool_cpu",
+          "url": ""
+        },
+        "memory": {
+          "name": "memory",
+          "url": ""
+        },
+        "memory_redis_cache": {
+          "name": "memory_redis_cache",
+          "url": ""
+        },
+        "node_schedstat_waiting": {
+          "name": "node_schedstat_waiting",
+          "url": ""
+        },
+        "opensearch_cpu": {
+          "name": "opensearch_cpu",
+          "url": ""
+        },
+        "opensearch_disk_space": {
+          "name": "opensearch_disk_space",
+          "url": ""
+        },
+        "puma_workers": {
+          "name": "puma_workers",
+          "url": ""
+        },
+        "single_node_cpu": {
+          "name": "single_node_cpu",
+          "url": ""
+        }
+      }
+    },
+    "sidekiq": {
+      "capacityPlanning": {},
+      "name": "sidekiq",
+      "overviewDashboard": {
+        "name": "",
+        "url": ""
+      },
+      "resourceDashboard": {
+        "cpu": {
+          "name": "cpu",
+          "url": ""
+        },
+        "disk_inodes": {
+          "name": "disk_inodes",
+          "url": ""
+        },
+        "disk_space": {
+          "name": "disk_space",
+          "url": ""
+        },
+        "go_goroutines": {
+          "name": "go_goroutines",
+          "url": ""
+        },
+        "go_memory": {
+          "name": "go_memory",
+          "url": ""
+        },
+        "kube_container_cpu": {
+          "name": "kube_container_cpu",
+          "url": ""
+        },
+        "kube_container_cpu_limit": {
+          "name": "kube_container_cpu_limit",
+          "url": ""
+        },
+        "kube_container_memory": {
+          "name": "kube_container_memory",
+          "url": ""
+        },
+        "kube_container_rss": {
+          "name": "kube_container_rss",
+          "url": ""
+        },
+        "kube_pool_cpu": {
+          "name": "kube_pool_cpu",
+          "url": ""
+        },
+        "memory": {
+          "name": "memory",
+          "url": ""
+        },
+        "memory_redis_cache": {
+          "name": "memory_redis_cache",
+          "url": ""
+        },
+        "node_schedstat_waiting": {
+          "name": "node_schedstat_waiting",
+          "url": ""
+        },
+        "opensearch_cpu": {
+          "name": "opensearch_cpu",
+          "url": ""
+        },
+        "opensearch_disk_space": {
+          "name": "opensearch_disk_space",
+          "url": ""
+        },
+        "puma_workers": {
+          "name": "puma_workers",
+          "url": ""
+        },
+        "single_node_cpu": {
+          "name": "single_node_cpu",
+          "url": ""
+        }
+      }
+    },
+    "webservice": {
+      "capacityPlanning": {},
+      "name": "webservice",
+      "overviewDashboard": {
+        "name": "",
+        "url": ""
+      },
+      "resourceDashboard": {
+        "cpu": {
+          "name": "cpu",
+          "url": ""
+        },
+        "disk_inodes": {
+          "name": "disk_inodes",
+          "url": ""
+        },
+        "disk_space": {
+          "name": "disk_space",
+          "url": ""
+        },
+        "go_goroutines": {
+          "name": "go_goroutines",
+          "url": ""
+        },
+        "go_memory": {
+          "name": "go_memory",
+          "url": ""
+        },
+        "kube_container_cpu": {
+          "name": "kube_container_cpu",
+          "url": ""
+        },
+        "kube_container_cpu_limit": {
+          "name": "kube_container_cpu_limit",
+          "url": ""
+        },
+        "kube_container_memory": {
+          "name": "kube_container_memory",
+          "url": ""
+        },
+        "kube_container_rss": {
+          "name": "kube_container_rss",
+          "url": ""
+        },
+        "kube_pool_cpu": {
+          "name": "kube_pool_cpu",
+          "url": ""
+        },
+        "memory": {
+          "name": "memory",
+          "url": ""
+        },
+        "memory_redis_cache": {
+          "name": "memory_redis_cache",
+          "url": ""
+        },
+        "node_schedstat_waiting": {
+          "name": "node_schedstat_waiting",
+          "url": ""
+        },
+        "opensearch_cpu": {
+          "name": "opensearch_cpu",
+          "url": ""
+        },
+        "opensearch_disk_space": {
+          "name": "opensearch_disk_space",
+          "url": ""
+        },
+        "puma_workers": {
+          "name": "puma_workers",
+          "url": ""
+        },
+        "single_node_cpu": {
+          "name": "single_node_cpu",
+          "url": ""
+        }
+      }
+    }
+  },
+  "shardMapping": {},
+  "teams": []
+}
