@@ -2,7 +2,6 @@ local aggregationSets = (import 'gitlab-metrics-config.libsonnet').aggregationSe
 local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
 local keyMetrics = import './key_metrics.libsonnet';
 local kubeServiceDashboards = import './kube_service_dashboards.libsonnet';
-local runwayServiceDashboards = import './runway_service_dashboards.libsonnet';
 local metricsCatalogDashboards = import './metrics_catalog_dashboards.libsonnet';
 local nodeMetrics = import './node_metrics.libsonnet';
 local platformLinks = import './platform_links.libsonnet';
@@ -138,14 +137,6 @@ local overviewDashboard(
         row.new(title='☸️ Kubernetes Overview', collapse=true)
         .addPanels(kubeServiceDashboards.deploymentOverview(type, environmentSelectorHash, startRow=1)) +
         { gridPos: { x: 0, y: 400, w: 24, h: 1 } },
-      ]
-    )
-    .addPanelsIf(
-      showProvisioningDetails && std.objectHas(metricsCatalogServiceInfo.getProvisioning(), 'runway') && metricsCatalogServiceInfo.getProvisioning().runway == true,
-      [
-        row.new(title='🛫 Runway Overview', collapse=true)
-        .addPanels(runwayServiceDashboards.serviceOverview(type)) +
-        { gridPos: { x: 0, y: 600, w: 24, h: 1 } },
       ]
     )
     .addPanelsIf(
