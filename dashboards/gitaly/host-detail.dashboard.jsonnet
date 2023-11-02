@@ -435,19 +435,19 @@ basic.dashboard(
   }
 )
 .addPanel(
-  row.new(title='Adaptive limit metrics', collapse=true),
+  row.new(title='Adaptive limit metrics', collapse=true)
+  .addPanels(
+    layout.grid([
+      gitalyAdaptiveLimitDashboards.backoff_events(selectorHash, '{{ watcher }}'),
+      gitalyAdaptiveLimitDashboards.watcher_errors(selectorHash, '{{ watcher }}'),
+    ], startRow=7001)
+  ),
   gridPos={
     x: 0,
     y: 7000,
     w: 24,
     h: 1,
   }
-)
-.addPanels(
-  layout.grid([
-    gitalyAdaptiveLimitDashboards.backoff_events(selectorHash, '{{ watcher }}'),
-    gitalyAdaptiveLimitDashboards.watcher_errors(selectorHash, '{{ watcher }}'),
-  ], startRow=7001)
 )
 .trailer()
 + {
