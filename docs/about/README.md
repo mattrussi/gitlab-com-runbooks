@@ -90,7 +90,6 @@
 * [../redis/redis.md](../redis/redis.md)
 * [Container Registry database post-deployment migrations](../registry/db-post-deployment-migrations.md)
 * [High Number of Overdue Online GC Tasks](../registry/online-gc-high-overdue-tasks.md)
-* [Runway Observability](../runway/observability.md)
 * [Managing Sentry in Kubernetes](../sentry/sentry.md)
 * [A survival guide for SREs to working with Sidekiq at GitLab](../sidekiq/sidekiq-survival-guide-for-sres.md)
 * [GET Monitoring Setup](../staging-ref/get-monitoring-setup.md)

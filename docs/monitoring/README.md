@@ -58,7 +58,6 @@
 * [Redis Cluster](../redis/redis-cluster.md)
 * [../redis/redis.md](../redis/redis.md)
 * [Container Registry database post-deployment migrations](../registry/db-post-deployment-migrations.md)
-* [Runway Observability](../runway/observability.md)
 * [A survival guide for SREs to working with Sidekiq at GitLab](../sidekiq/sidekiq-survival-guide-for-sres.md)
 * [../spamcheck/index.md](../spamcheck/index.md)
 * [GET Monitoring Setup](../staging-ref/get-monitoring-setup.md)
