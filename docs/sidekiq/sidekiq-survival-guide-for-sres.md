@@ -387,6 +387,10 @@ duplicate_key = "resque:gitlab:#{idempotency_key}:cookie:v2"
 Gitlab::Redis::Queues.with { |c| c.del(duplicate_key) }
 ```
 
+## Deferring Sidekiq jobs
+
+In case there's an incident and the cause is runaway worker instances, you can use [Deferring Sidekiq middleware](./deferring-jobs.md#2-using-feature-flags-via-chatops) to stop the worker from running immediately.
+
 ## Sidekiq-cron
 
 This is an [additional gem](https://github.com/ondrejbartas/sidekiq-cron) that allows Sidekiq jobs to be scheduled
