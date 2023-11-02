@@ -111,6 +111,25 @@ metricsCatalog.serviceDefinition({
         },
       },
       {
+        name: 'disk_space',
+        parameters: {
+          changepoint_range: 0.98,
+          changepoints: [
+            '2023-10-23',
+          ],
+          ignore_outliers: [
+            {
+              end: '2023-04-18',
+              start: '2023-04-16',
+            },
+            {
+              end: '2023-10-22',
+              start: '2023-10-19',
+            },
+          ],
+        },
+      },
+      {
         name: 'gitaly_active_node_available_space',
         parameters: {
           changepoints: [
