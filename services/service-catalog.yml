@@ -1676,6 +1676,31 @@ services:
         grafana_folder: Ymoh2MEmk
         primary_grafana_dashboard: registry-main/registry-overview
 
+  - name: runway
+    tier: inf
+    friendly_name: Runway Platform
+    label: Runway
+    owner: scalability_frameworks
+    technical:
+      project:
+        - https://gitlab.com/gitlab-com/gl-infra/platform/runway
+      documents:
+        design:
+        architecture: https://gitlab.com/gitlab-com/gl-infra/platform/runway/docs/-/blob/master/architecture.md
+        readiness_review: https://gitlab.com/gitlab-com/gl-infra/readiness/-/merge_requests/180
+        sre_guide: https://gitlab.com/gitlab-com/gl-infra/platform/runway/docs/-/blob/master/scalability.md
+        developer_guide: https://gitlab-com.gitlab.io/gl-infra/platform/runway/runwayctl/manifest.schema.html
+        service:
+        security:
+      logging:
+        - name: stackdriver
+          permalink: https://console.cloud.google.com/logs
+      dependencies:
+        - service:
+    observability:
+      monitors:
+        primary_grafana_dashboard: runway-main/runway-overview
+
   - name: nat
     tier: inf
     friendly_name: NAT

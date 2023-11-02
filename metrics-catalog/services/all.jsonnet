@@ -59,6 +59,7 @@
   import 'redis-pubsub.jsonnet',
   import 'redis.jsonnet',
   import 'registry.jsonnet',
+  import 'runway.jsonnet',
   import 'search.jsonnet',
   import 'sentry.jsonnet',
   import 'sidekiq.jsonnet',

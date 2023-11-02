@@ -2424,6 +2424,16 @@ spec:
         tier: sv
         type: registry
       expr: "0.000050"
+    - record: slo:min:events:gitlab_service_apdex:ratio
+      labels:
+        tier: inf
+        type: runway
+      expr: "0.990000"
+    - record: slo:max:events:gitlab_service_errors:ratio
+      labels:
+        tier: inf
+        type: runway
+      expr: "0.010000"
     - record: slo:min:deployment:gitlab_service_apdex:ratio
       labels:
         tier: inf

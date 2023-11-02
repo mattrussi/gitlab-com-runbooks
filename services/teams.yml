@@ -132,6 +132,11 @@ teams:
   slack_alerts_channel: scalability-619-redis-k8s
   send_slo_alerts_to_team_slack_channel: true
 
+- name: scalability_frameworks
+  url: https://about.gitlab.com/handbook/engineering/infrastructure/team/scalability/frameworks.html
+  manager: lmcandrew
+  label: team::frameworks
+
 # Workhorse is a virtual team
 - name: workhorse
   slack_alerts_channel: workhorse
