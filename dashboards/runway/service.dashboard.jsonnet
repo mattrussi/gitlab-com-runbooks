@@ -24,7 +24,7 @@ basic.dashboard(
   layout.grid(
     [
       basic.timeseries(
-        title='Runway Request Count',
+        title='Runway Service Request Count',
         description='Number of requests reaching the service.',
         yAxisLabel='Requests per Second',
         query=|||
@@ -38,7 +38,7 @@ basic.dashboard(
         intervalFactor=2,
       ),
       basic.latencyTimeseries(
-        title='Runway Request Latency',
+        title='Runway Service Request Latency',
         description='Distribution of request times reaching the service, in milliseconds.',
         yAxisLabel='Duration',
         query=|||
@@ -54,7 +54,7 @@ basic.dashboard(
         intervalFactor=2,
       ),
       basic.timeseries(
-        title='Runway Container Instance Count',
+        title='Runway Service Container Instance Count',
         description='Number of container instances that exist for the service.',
         yAxisLabel='Container Instances per Second',
         query=|||
@@ -68,7 +68,7 @@ basic.dashboard(
         intervalFactor=2,
       ),
       basic.timeseries(
-        title='Runway Billable Container Instance Time',
+        title='Runway Service Billable Container Instance Time',
         description='Billable time aggregated from all container instances.',
         yAxisLabel='Requests per Second',
         query=|||
@@ -82,7 +82,7 @@ basic.dashboard(
         intervalFactor=2,
       ),
       basic.percentageTimeseries(
-        title='Runway CPU Utilization',
+        title='Runway Service CPU Utilization',
         description='Container CPU utilization distribution across all container instances.',
         query=|||
           histogram_quantile(
@@ -100,7 +100,7 @@ basic.dashboard(
         decimals=2,
       ),
       basic.percentageTimeseries(
-        title='Runway Memory Utilization',
+        title='Runway Service Memory Utilization',
         description='Container memory utilization distribution across all container instances.',
         query=|||
           histogram_quantile(
@@ -118,7 +118,7 @@ basic.dashboard(
         decimals=2,
       ),
       basic.networkTrafficGraph(
-        title='Runway Sent Bytes',
+        title='Runway Service Sent Bytes',
         description='Outgoing socket and HTTP response traffic, in bytes.',
         sendQuery=|||
           sum by (revision_name, kind) (
@@ -130,7 +130,7 @@ basic.dashboard(
         legendFormat='{{kind}} {{revision_name}}',
       ),
       basic.networkTrafficGraph(
-        title='Runway Received Bytes',
+        title='Runway Service Received Bytes',
         description='Incoming socket and HTTP response traffic, in bytes.',
         receiveQuery=|||
           sum by (revision_name, kind) (
@@ -142,7 +142,7 @@ basic.dashboard(
         legendFormat='{{kind}} {{revision_name}}',
       ),
       basic.percentageTimeseries(
-        title='Runway Max Concurrent Requests',
+        title='Runway Service Max Concurrent Requests',
         description='Distribution of the maximum number number of concurrent requests being served by each container instance over a minute.',
         query=|||
           histogram_quantile(
@@ -160,7 +160,7 @@ basic.dashboard(
         decimals=2,
       ),
       basic.latencyTimeseries(
-        title='Runway Container Startup Latency',
+        title='Runway Service Container Startup Latency',
         description='Distribution of time spent starting a new container instance, in milliseconds.',
         query=|||
           sum by (revision_name) (
