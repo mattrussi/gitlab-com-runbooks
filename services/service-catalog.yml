@@ -245,6 +245,26 @@ services:
       monitors:
         primary_grafana_dashboard: observability-errortracking/observability-errortracking-api
 
+  - name: tracing
+    tier: sv
+    friendly_name: Tracing
+    teams:
+      - observability
+    label: Tracing
+    owner: observability
+    technical:
+      project:
+        - https://gitlab.com/gitlab-org/opstrace/opstrace
+      documents:
+        architecture: https://gitlab.com/gitlab-org/opstrace/runbooks/#architecture
+        developer_guide: https://gitlab.com/gitlab-org/opstrace/opstrace/-/tree/main/docs
+      logging:
+        - name: Kibana
+          permalink: https://log.gprd.gitlab.net/app/r/s/Kvsjn
+    observability:
+      monitors:
+        primary_grafana_dashboard: observability-tracing/observability3a-tracing
+
   - name: customersdot
     tier: sv
     friendly_name: CustomersDot
