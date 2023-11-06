@@ -247,7 +247,7 @@ services:
 
   - name: tracing
     tier: sv
-    friendly_name: Tracing
+    friendly_name: Distributed Tracing
     teams:
       - observability
     label: Tracing
@@ -256,6 +256,7 @@ services:
       project:
         - https://gitlab.com/gitlab-org/opstrace/opstrace
       documents:
+        service: https://docs.gitlab.com/ee/operations/tracing.html
         architecture: https://gitlab.com/gitlab-org/opstrace/runbooks/#architecture
         developer_guide: https://gitlab.com/gitlab-org/opstrace/opstrace/-/tree/main/docs
       logging:
