@@ -4,7 +4,6 @@ local platformLinks = import 'gitlab-dashboards/platform_links.libsonnet';
 local saturationDetail = import 'gitlab-dashboards/saturation_detail.libsonnet';
 local basic = import 'grafana/basic.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
-local quantilePanel = import 'grafana/quantile_panel.libsonnet';
 local templates = import 'grafana/templates.libsonnet';
 local row = grafana.row;
 local metricsCatalogDashboards = import 'gitlab-dashboards/metrics_catalog_dashboards.libsonnet';
@@ -18,6 +17,7 @@ local gitalyCommandStats = import 'gitlab-dashboards/gitaly/command_stats.libson
 local gitalyPackObjectsDashboards = import 'gitlab-dashboards/gitaly/pack_objects.libsonnet';
 local gitalyPerRPCDashboards = import 'gitlab-dashboards/gitaly/per_rpc.libsonnet';
 local gitalyAdaptiveLimitDashboards = import 'gitlab-dashboards/gitaly/adaptive_limit.libsonnet';
+local gitalyCgroupDashboards = import 'gitlab-dashboards/gitaly/cgroup.libsonnet';
 
 local serviceType = 'gitaly';
 
@@ -96,77 +96,6 @@ local gitalySpawnTokenWaitingTimePerNode(selector) =
     linewidth=1,
     legend_show=false,
   );
-
-local gitalyCGroupCPUUsagePerCGroup(selector) =
-  basic.timeseries(
-    title='cgroup: CPU per cgroup',
-    description='Rate of CPU usage on every cgroup available on the Gitaly node.',
-    query=|||
-      topk(20, sum by (id) (rate(container_cpu_usage_seconds_total{%(selector)s}[$__interval])))
-    ||| % { selector: selector },
-    format='percentunit',
-    interval='1m',
-    linewidth=1,
-    legend_show=false,
-    legendFormat='{{ id }}',
-  );
-
-local gitalyCGroupCPUQuantile(selector) =
-  quantilePanel.timeseries(
-    title='cgroup: CPU',
-    description='P99/PX CPU usage of all cgroups available on the Gitaly node.',
-    query=|||
-      rate(
-        container_cpu_usage_seconds_total{%(selector)s}[$__interval]
-      )
-    ||| % { selector: selector },
-    format='percentunit',
-    interval='1m',
-    linewidth=1,
-    legendFormat='cgroup: CPU',
-  );
-
-local gitalyCGroupMemoryUsagePerCGroup(selector) =
-  basic.timeseries(
-    title='cgroup: Memory per cgroup',
-    description='RSS usage on every cgroup available on the Gitaly node.',
-    query=|||
-      topk(20, sum by (id) (container_memory_usage_bytes{%(selector)s}))
-    ||| % { selector: selector },
-    format='bytes',
-    interval='1m',
-    linewidth=1,
-    legend_show=false,
-    legendFormat='{{ id }}',
-  );
-
-local gitalyCGroupMemoryQuantile(selector) =
-  quantilePanel.timeseries(
-    title='cgroup: Memory',
-    description='P99/PX RRS usage of all cgroups available on the Gitaly node.',
-    query=|||
-      container_memory_usage_bytes{%(selector)s}
-    ||| % { selector: selector },
-    format='bytes',
-    interval='1m',
-    linewidth=1,
-    legendFormat='cgroup: Memory',
-  );
-
-local gitalyCgroupCPUThrottling(selector) =
-  basic.timeseries(
-    title='cgroup: CPU Throttling',
-    description='Cgroups that are getting CPU throttled. If the cgroup is not visible it is not getting throttled.',
-    query=|||
-      rate(
-        container_cpu_cfs_throttled_seconds_total{%(selector)s}[$__rate_interval]
-      ) > 0
-    ||| % { selector: selector },
-    interval='1m',
-    linewidth=1,
-    legendFormat='{{ id }}',
-  );
-
 
 local selectorHash = {
   environment: '$environment',
@@ -406,12 +335,12 @@ basic.dashboard(
   row.new(title='cgroup', collapse=true)
   .addPanels(
     layout.grid([
-      gitalyCGroupCPUUsagePerCGroup(selectorSerialized),
-      gitalyCGroupCPUQuantile(selectorSerialized),
-      gitalyCGroupMemoryUsagePerCGroup(selectorSerialized),
-      gitalyCGroupMemoryQuantile(selectorSerialized),
+      gitalyCgroupDashboards.CPUUsagePerCGroup(selectorSerialized),
+      gitalyCgroupDashboards.CPUQuantile(selectorSerialized),
+      gitalyCgroupDashboards.MemoryUsagePerCGroup(selectorSerialized),
+      gitalyCgroupDashboards.MemoryQuantile(selectorSerialized),
       oomKillsPerNode(selectorSerialized),
-      gitalyCgroupCPUThrottling(selectorSerialized),
+      gitalyCgroupDashboards.CPUThrottling(selectorSerialized),
       basic.text(
         title='cgroup runbook',
         content=|||
