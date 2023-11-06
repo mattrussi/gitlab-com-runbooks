@@ -335,12 +335,16 @@ basic.dashboard(
   row.new(title='cgroup', collapse=true)
   .addPanels(
     layout.grid([
-      gitalyCgroupDashboards.CPUUsagePerCGroup(selectorSerialized),
-      gitalyCgroupDashboards.CPUQuantile(selectorSerialized),
-      gitalyCgroupDashboards.MemoryUsagePerCGroup(selectorSerialized),
-      gitalyCgroupDashboards.MemoryQuantile(selectorSerialized),
+      gitalyCgroupDashboards.CPUUsagePerCGroup(selectorHash),
+      gitalyCgroupDashboards.CPUThrottling(selectorHash),
+      gitalyCgroupDashboards.MemoryUsageBytes('cgroup: Memory usage bytes (parent cgroups)', false, selectorHash),
+      gitalyCgroupDashboards.MemoryUsageBytes('cgroup: Top usage bytes (repository cgroups)', true, selectorHash),
+      gitalyCgroupDashboards.MemoryWorkingSetBytes('cgroup: Memory working set bytes (parent cgroups)', false, selectorHash),
+      gitalyCgroupDashboards.MemoryWorkingSetBytes('cgroup: Top working set bytes (repository cgroups)', true, selectorHash),
+      gitalyCgroupDashboards.MemoryCacheBytes('cgroup: Memory cache bytes (parent cgroups)', false, selectorHash),
+      gitalyCgroupDashboards.MemoryCacheBytes('cgroup: Top cache bytes (repository cgroups)', true, selectorHash),
+      gitalyCgroupDashboards.MemoryFailcnt('cgroup: failcnt', selectorHash),
       oomKillsPerNode(selectorSerialized),
-      gitalyCgroupDashboards.CPUThrottling(selectorSerialized),
       basic.text(
         title='cgroup runbook',
         content=|||
