@@ -27,6 +27,9 @@ metricsCatalog.serviceDefinition({
           'urgent-authorized-projects': {
             apdexScore: 0.98,
           },
+          'urgent-other': {
+            apdexScore: 0.985,
+          },
         },
         sidekiq_queueing: {
           'urgent-other': {
