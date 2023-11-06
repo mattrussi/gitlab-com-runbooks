@@ -125,3 +125,7 @@ At the moment, we rely on [this Uptime Kuma instance for CustomersDot production
 #### Unschedule maintenance
 
 +When Zuora is down (reported to `#s_fulfillment_status`) and CustomersDot is in auto-maintenance mode for longer than 5 minutes, we should create an S3 incident with the CMOC updating the status page based on updates from <https://trust.zuora.com/>.
+
+#### Service degradation during SeatLink traffic hour
+
+[`maintenance_mode_seat_link`](https://gitlab.com/gitlab-org/customers-gitlab-com/-/feature_flags/236/edit) is a feature flag for just blocking seat link traffic. This was implemented because we suspect SeatLink was the cause of several [service degradations](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/8741). If a similar degradation occurs during SeatLink traffic hour (typically around 4 AM UTC), we can enable this flag to block SeatLink traffic.
