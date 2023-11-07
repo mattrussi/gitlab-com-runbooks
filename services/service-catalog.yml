@@ -61,6 +61,28 @@ services:
         primary_grafana_dashboard: api-main/api-overview
         sentry_slug: gitlab/gitlabcom/?query=program%3A%22rails%22
 
+  - name: atlantis
+    tier: inf
+    friendly_name: Atlantis
+    label: atlantis
+    owner: reliability_foundations
+    technical:
+      project:
+      documents:
+        design:
+        architecture:
+        sre_guide: https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/atlantis
+        developer_guide:
+        service:
+        security:
+      dependencies:
+      logging:
+        - name: Atlantis
+          permalink: https://dashboards.gitlab.net/goto/ZJOLqE4SR
+    observability:
+      monitors:
+        primary_grafana_dashboard: atlantis-main/atlantis-overview
+
   - name: blackbox
     tier: inf
     friendly_name: Blackbox Exporters
