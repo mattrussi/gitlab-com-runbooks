@@ -218,7 +218,7 @@
     name: 'Authorization',
     stage: 'govern',
     feature_categories: [
-
+      'permissions',
     ],
   },
   security_policies: {
@@ -467,19 +467,19 @@
       'ai_abstraction_layer',
     ],
   },
+  duo_chat: {
+    name: 'Duo Chat',
+    stage: 'ai-powered',
+    feature_categories: [
+      'duo_chat',
+    ],
+  },
   ai_model_validation: {
     name: 'AI Model Validation',
     stage: 'ai-powered',
     feature_categories: [
       'ai_evaluation',
       'ai_research',
-    ],
-  },
-  duo_chat: {
-    name: 'Duo Chat',
-    stage: 'ai-powered',
-    feature_categories: [
-      'duo_chat',
     ],
   },
   mobile_devops: {
