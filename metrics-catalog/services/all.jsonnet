@@ -8,6 +8,7 @@
   import 'ai-gateway.jsonnet',
   import 'api.jsonnet',
   import 'internal-api.jsonnet',
+  import 'atlantis.jsonnet',
   import 'camoproxy.jsonnet',
   import 'ci-runners.jsonnet',
   import 'cloud-sql.jsonnet',

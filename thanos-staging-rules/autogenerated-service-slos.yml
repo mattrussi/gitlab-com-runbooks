@@ -295,6 +295,28 @@ spec:
       expr: "0.000200"
     - record: slo:min:events:gitlab_service_apdex:ratio
       labels:
+        tier: inf
+        type: atlantis
+      expr: "0.999000"
+    - record: slo:max:events:gitlab_service_errors:ratio
+      labels:
+        tier: inf
+        type: atlantis
+      expr: "0.001000"
+    - record: slo:min:events:gitlab_service_apdex:ratio
+      labels:
+        component: atlantis_google_lb
+        tier: inf
+        type: atlantis
+      expr: "0.999000"
+    - record: slo:max:events:gitlab_service_errors:ratio
+      labels:
+        component: atlantis_google_lb
+        tier: inf
+        type: atlantis
+      expr: "0.001000"
+    - record: slo:min:events:gitlab_service_apdex:ratio
+      labels:
         tier: sv
         type: camoproxy
       expr: "0.999000"
@@ -3166,6 +3188,15 @@ spec:
         service_aggregation: "no"
         tier: sv
         type: internal-api
+      expr: "1"
+    - record: gitlab_component_service:mapping
+      labels:
+        component: atlantis_google_lb
+        global_aggregation: "no"
+        regional_aggregation: "no"
+        service_aggregation: "yes"
+        tier: inf
+        type: atlantis
       expr: "1"
     - record: gitlab_component_service:mapping
       labels:
