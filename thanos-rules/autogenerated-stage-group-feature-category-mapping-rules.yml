@@ -13,25 +13,7 @@ groups:
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
-      feature_category: experimentation_expansion
-      product_stage: growth
-      stage_group: acquisition
-    expr: "1"
-  - record: gitlab:feature_category:stage_group:mapping
-    labels:
       feature_category: activation
-      product_stage: growth
-      stage_group: activation
-    expr: "1"
-  - record: gitlab:feature_category:stage_group:mapping
-    labels:
-      feature_category: experimentation_activation
-      product_stage: growth
-      stage_group: activation
-    expr: "1"
-  - record: gitlab:feature_category:stage_group:mapping
-    labels:
-      feature_category: experimentation_adoption
       product_stage: growth
       stage_group: activation
     expr: "1"
@@ -134,12 +116,6 @@ groups:
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: cloud_connector
-      product_stage: data_stores
-      stage_group: cloud_connector
-    expr: "1"
-  - record: gitlab:feature_category:stage_group:mapping
-    labels:
-      feature_category: application_performance
       product_stage: data_stores
       stage_group: cloud_connector
     expr: "1"
@@ -553,6 +529,12 @@ groups:
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
+      feature_category: permissions
+      product_stage: govern
+      stage_group: authorization
+    expr: "1"
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
       feature_category: pipeline_composition
       product_stage: verify
       stage_group: pipeline_authoring
@@ -734,12 +716,6 @@ groups:
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: subscription_management
-      product_stage: fulfillment
-      stage_group: subscription_management
-    expr: "1"
-  - record: gitlab:feature_category:stage_group:mapping
-    labels:
-      feature_category: billing_and_payments
       product_stage: fulfillment
       stage_group: subscription_management
     expr: "1"

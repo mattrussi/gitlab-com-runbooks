@@ -6,12 +6,4 @@
 //
 // Blank values will be ignored.
 {
-  experimentation_conversion: 'aquisition',
-  experimentation_expansion: 'acquisition',
-  experimentation_adoption: 'activation',
-  experimentation_activation: 'activation',
-  application_performance: 'cloud_connector',
-  billing_and_payments: 'subscription_management',
-  interactive_application_security_testing: '',
-  security_benchmarking: '',
 }
