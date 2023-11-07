@@ -35,20 +35,6 @@ groups:
           "shard", "$0", "label_shard", ".*"
         )
       )
-  - record: kube_node_labels:labeled
-    labels:
-      tier: sv
-      type: ai-assisted
-    expr: |
-      group without(label_stage,label_shard) (
-        label_replace(
-          label_replace(
-            topk by(environment,cluster,node) (1, kube_node_labels{label_type="ai-assisted"}),
-            "stage", "$0", "label_stage", ".*"
-          ),
-          "shard", "$0", "label_shard", ".*"
-        )
-      )
   - record: kube_ingress_labels:labeled
     labels:
       tier: sv
@@ -111,20 +97,6 @@ groups:
           "shard", "$0", "label_shard", ".*"
         )
       )
-  - record: kube_node_labels:labeled
-    labels:
-      tier: sv
-      type: api
-    expr: |
-      group without(label_stage,label_shard) (
-        label_replace(
-          label_replace(
-            topk by(environment,cluster,node) (1, kube_node_labels{label_type="api"}),
-            "stage", "$0", "label_stage", ".*"
-          ),
-          "shard", "$0", "label_shard", ".*"
-        )
-      )
   - record: kube_ingress_labels:labeled
     labels:
       tier: sv
@@ -182,20 +154,6 @@ groups:
         label_replace(
           label_replace(
             topk by(environment,cluster,horizontalpodautoscaler) (1, kube_horizontalpodautoscaler_labels{label_type="internal-api"}),
-            "stage", "$0", "label_stage", ".*"
-          ),
-          "shard", "$0", "label_shard", ".*"
-        )
-      )
-  - record: kube_node_labels:labeled
-    labels:
-      tier: sv
-      type: internal-api
-    expr: |
-      group without(label_stage,label_shard) (
-        label_replace(
-          label_replace(
-            topk by(environment,cluster,node) (1, kube_node_labels{label_type="internal-api"}),
             "stage", "$0", "label_stage", ".*"
           ),
           "shard", "$0", "label_shard", ".*"
@@ -402,20 +360,6 @@ groups:
         label_replace(
           label_replace(
             topk by(environment,cluster,horizontalpodautoscaler) (1, kube_horizontalpodautoscaler_labels{label_type="git"}),
-            "stage", "$0", "label_stage", ".*"
-          ),
-          "shard", "$0", "label_shard", ".*"
-        )
-      )
-  - record: kube_node_labels:labeled
-    labels:
-      tier: sv
-      type: git
-    expr: |
-      group without(label_stage,label_shard) (
-        label_replace(
-          label_replace(
-            topk by(environment,cluster,node) (1, kube_node_labels{label_type="git"}),
             "stage", "$0", "label_stage", ".*"
           ),
           "shard", "$0", "label_shard", ".*"
@@ -1804,20 +1748,6 @@ groups:
           "shard", "$0", "label_shard", ".*"
         )
       )
-  - record: kube_node_labels:labeled
-    labels:
-      tier: sv
-      type: registry
-    expr: |
-      group without(label_stage,label_shard) (
-        label_replace(
-          label_replace(
-            topk by(environment,cluster,node) (1, kube_node_labels{label_stage=~"cny|main",label_type="registry"}),
-            "stage", "$0", "label_stage", ".*"
-          ),
-          "shard", "$0", "label_shard", ".*"
-        )
-      )
   - record: kube_deployment_labels:labeled
     labels:
       tier: sv
@@ -1863,18 +1793,6 @@ groups:
             topk by(environment,cluster,horizontalpodautoscaler) (1, kube_horizontalpodautoscaler_labels{label_type="sidekiq"}),
             "stage", "$0", "label_stage", ".*"
           ),
-          "shard", "$0", "label_shard", ".*"
-        )
-      )
-  - record: kube_node_labels:labeled
-    labels:
-      stage: main
-      tier: sv
-      type: sidekiq
-    expr: |
-      group without(label_shard) (
-        label_replace(
-          topk by(environment,cluster,node) (1, kube_node_labels{label_type="sidekiq"}),
           "shard", "$0", "label_shard", ".*"
         )
       )
@@ -2002,18 +1920,6 @@ groups:
           "shard", "$0", "label_shard", ".*"
         )
       )
-  - record: kube_node_labels:labeled
-    labels:
-      stage: main
-      tier: sv
-      type: web-pages
-    expr: |
-      group without(label_shard) (
-        label_replace(
-          topk by(environment,cluster,node) (1, kube_node_labels{label_type="web-pages"}),
-          "shard", "$0", "label_shard", ".*"
-        )
-      )
   - record: kube_deployment_labels:labeled
     labels:
       tier: sv
@@ -2057,20 +1963,6 @@ groups:
         label_replace(
           label_replace(
             topk by(environment,cluster,horizontalpodautoscaler) (1, kube_horizontalpodautoscaler_labels{label_type="web"}),
-            "stage", "$0", "label_stage", ".*"
-          ),
-          "shard", "$0", "label_shard", ".*"
-        )
-      )
-  - record: kube_node_labels:labeled
-    labels:
-      tier: sv
-      type: web
-    expr: |
-      group without(label_stage,label_shard) (
-        label_replace(
-          label_replace(
-            topk by(environment,cluster,node) (1, kube_node_labels{label_type="web"}),
             "stage", "$0", "label_stage", ".*"
           ),
           "shard", "$0", "label_shard", ".*"
@@ -2133,20 +2025,6 @@ groups:
         label_replace(
           label_replace(
             topk by(environment,cluster,horizontalpodautoscaler) (1, kube_horizontalpodautoscaler_labels{label_type="websockets"}),
-            "stage", "$0", "label_stage", ".*"
-          ),
-          "shard", "$0", "label_shard", ".*"
-        )
-      )
-  - record: kube_node_labels:labeled
-    labels:
-      tier: sv
-      type: websockets
-    expr: |
-      group without(label_stage,label_shard) (
-        label_replace(
-          label_replace(
-            topk by(environment,cluster,node) (1, kube_node_labels{label_type="websockets"}),
             "stage", "$0", "label_stage", ".*"
           ),
           "shard", "$0", "label_shard", ".*"

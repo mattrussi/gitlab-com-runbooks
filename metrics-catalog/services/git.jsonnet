@@ -67,7 +67,6 @@ metricsCatalog.serviceDefinition({
   kubeConfig: {
     labelSelectors: kubeLabelSelectors(
       ingressSelector=null,
-      nodeSelector={ type: 'git' },
     ),
   },
 

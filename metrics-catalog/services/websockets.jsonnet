@@ -47,7 +47,6 @@ metricsCatalog.serviceDefinition({
   kubeConfig: {
     labelSelectors: kubeLabelSelectors(
       ingressSelector=null,  // Websockets does not have its own ingress
-      nodeSelector={ type: 'websockets' },
     ),
   },
   kubeResources: {

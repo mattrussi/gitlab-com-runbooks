@@ -73,12 +73,6 @@ metricsCatalog.serviceDefinition({
     kubernetes: true,
   },
   regional: true,
-  kubeConfig: {
-    labelSelectors: kubeLabelSelectors(
-      nodeSelector={ type: 'web' }
-    ),
-  },
-
   kubeResources: {
     web: {
       kind: 'Deployment',

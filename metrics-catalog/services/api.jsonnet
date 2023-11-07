@@ -69,11 +69,6 @@ metricsCatalog.serviceDefinition({
   recordingRuleMetrics:
     sliLibrary.get('graphql_query').recordingRuleMetrics,
   regional: true,
-  kubeConfig: {
-    labelSelectors: kubeLabelSelectors(
-      nodeSelector={ type: 'api' }
-    ),
-  },
   kubeResources: {
     api: {
       kind: 'Deployment',

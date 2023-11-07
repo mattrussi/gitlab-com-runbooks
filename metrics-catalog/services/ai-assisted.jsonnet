@@ -30,11 +30,6 @@ metricsCatalog.serviceDefinition({
     vms: false,
     kubernetes: true,
   },
-  kubeConfig: {
-    labelSelectors: kubeLabelSelectors(
-      nodeSelector={ type: 'ai-assisted' }
-    ),
-  },
   kubeResources: {
     'ai-assisted': {
       kind: 'Deployment',
