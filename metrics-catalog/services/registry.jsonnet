@@ -37,7 +37,6 @@ metricsCatalog.serviceDefinition(
     kubeConfig={
       labelSelectors: kubeLabelSelectors(
         ingressSelector=null,  // no ingress for registry
-        nodeSelector={ type: 'registry', stage: { oneOf: ['main', 'cny'] } },
       ),
     },
     otherThresholds={

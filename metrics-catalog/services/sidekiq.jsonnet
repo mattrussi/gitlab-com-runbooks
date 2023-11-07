@@ -85,7 +85,6 @@ metricsCatalog.serviceDefinition({
   kubeConfig: {
     labelSelectors: kubeLabelSelectors(
       ingressSelector=null,  // no ingress for sidekiq
-      nodeSelector={ type: 'sidekiq' },
       // Sidekiq nodes don't present a stage label at present, so\
       // we hardcode to main stage
       nodeStaticLabels={ stage: 'main' },
