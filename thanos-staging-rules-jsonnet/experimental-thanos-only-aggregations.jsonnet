@@ -17,10 +17,8 @@ local componentSLIs = AggregationSet({
   metricFormats: {
     apdexSuccessRate: 'experimental:gitlab_component_apdex:success:rate_%s',
     apdexWeight: 'experimental:gitlab_component_apdex:weight:score_%s',
-    apdexRates: 'experimental:gitlab_component_apdex:rates_%s',
     opsRate: 'experimental:gitlab_component_ops:rate_%s',
     errorRate: 'experimental:gitlab_component_errors:rate_%s',
-    errorRates: 'experimental:gitlab_component_errors:rates_%s',
     // TODO: record ratio from source metrics
   },
 });
@@ -36,11 +34,9 @@ local serviceSLIs = AggregationSet({
     apdexSuccessRate: 'experimental:gitlab_service_apdex:success:rate_%s',
     apdexWeight: 'experimental:gitlab_service_apdex:weight:score_%s',
     apdexRatio: 'experimental:gitlab_service_apdex:ratio_%s',
-    apdexRates: 'experimental:gitlab_service_apdex:rates_%s',
     opsRate: 'experimental:gitlab_service_ops:rate_%s',
     errorRate: 'experimental:gitlab_service_errors:rate_%s',
     errorRatio: 'experimental:gitlab_service_errors:ratio_%s',
-    errorRates: 'experimental:gitlab_service_errors:rates_%s',
   },
   // Only include components (SLIs) with service_aggregation="yes"
   // The recording of this mapping is currently happening in prometheus and generated
