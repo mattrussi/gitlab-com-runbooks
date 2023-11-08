@@ -20,11 +20,11 @@ local commonMemory = {
     capacityPlanning: { strategy: 'quantile99_1h' },
     alerting: { enabled: false },
     query: |||
-      sum by (environment, tier, type, stage, pod, container) (
+      sum by (%(aggregationLabels)s) (
         rate(container_cpu_usage_seconds_total:labeled{container!="", container!="POD", %(selector)s}[%(rangeInterval)s])
       )
       /
-      sum by(environment, tier, type, stage, pod, container) (
+      sum by(%(aggregationLabels)s) (
         kube_pod_container_resource_requests:labeled{container!="", container!="POD", resource="cpu", %(selector)s}
       )
     |||,

@@ -223,7 +223,7 @@
       "horizontallyScalable": true,
       "linear_prediction_saturation_alert": null,
       "quantileAggregation": 0.99,
-      "query": "sum by (environment, tier, type, stage, pod, container) (\n  rate(container_cpu_usage_seconds_total:labeled{container!=\"\", container!=\"POD\", %(selector)s}[%(rangeInterval)s])\n)\n/\nsum by(environment, tier, type, stage, pod, container) (\n  kube_pod_container_resource_requests:labeled{container!=\"\", container!=\"POD\", resource=\"cpu\", %(selector)s}\n)\n",
+      "query": "sum by (%(aggregationLabels)s) (\n  rate(container_cpu_usage_seconds_total:labeled{container!=\"\", container!=\"POD\", %(selector)s}[%(rangeInterval)s])\n)\n/\nsum by(%(aggregationLabels)s) (\n  kube_pod_container_resource_requests:labeled{container!=\"\", container!=\"POD\", resource=\"cpu\", %(selector)s}\n)\n",
       "queryFormatConfig": {},
       "resourceLabels": [
         "pod",
