@@ -33,6 +33,18 @@ The buckets are:
 - `gitlab-diagnostic-reports-gstg` in the `gitlab-staging-1` GCP project
 - `gitlab-diagnostic-reports-gprd` in the `gitlab-production` GCP project
 
+For example, to get a list of staging reports:
+
+```shell
+gsutil ls -p gitlab-staging-1 'gs://gitlab-diagnostic-reports-gstg/heap_dump.2023-11-09*'
+```
+
+To download a report:
+
+```shell
+gsutil cp gs://gitlab-diagnostic-reports-gstg/heap_dump.2023-11-09.09:26:27:876.puma_3.57fe1402-4ee4-4523-a3f2-58ed2cadc7cd.gz /path/to/destination
+```
+
 We configured a GCS Lifecycle rule to delete all report files after a successful upload to save storage costs.
 Refer to [this MR](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/merge_requests/4632) for more details.
 
