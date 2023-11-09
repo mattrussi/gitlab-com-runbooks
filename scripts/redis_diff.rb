@@ -103,9 +103,9 @@ def migrate_hash(src, dst, key)
 
   # to ensure that destination hash does not have excess fields
   dst.with do |r|
-    r.pipelined do |p|
-      p.del(key)
-      p.hset(key, hash_details)
+    r.del(key)
+    hash_details.each_slice(10).each do |chunk|
+      r.hset(key, *chunk)
     end
   end
   migrate_ttl(src, dst, key)
