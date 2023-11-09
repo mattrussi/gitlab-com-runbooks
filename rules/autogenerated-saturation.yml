@@ -364,11 +364,11 @@ groups:
         0.99,
         clamp_min(
           clamp_max(
-            sum by (environment, tier, type, stage, pod, container) (
+            sum by (environment, tier, type, stage, shard, pod, container) (
               rate(container_cpu_usage_seconds_total:labeled{container!="", container!="POD", type=~"web|ai-assisted|api|internal-api|atlantis|camoproxy|consul|external-dns|git|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis-cluster-cache|redis-cluster-feature-flag|redis-cluster-shared-state|redis-cluster-queues-meta|redis-sidekiq|redis-tracechunks|redis-cluster-ratelimiting|redis-cluster-chat-cache|redis-sessions|redis-registry-cache|redis-repository-cache|redis-db-load-balancing|redis-pubsub|redis|registry|sidekiq|vault|web-pages|websockets|woodhouse"}[1h])
             )
             /
-            sum by(environment, tier, type, stage, pod, container) (
+            sum by(environment, tier, type, stage, shard, pod, container) (
               kube_pod_container_resource_requests:labeled{container!="", container!="POD", resource="cpu", type=~"web|ai-assisted|api|internal-api|atlantis|camoproxy|consul|external-dns|git|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis-cluster-cache|redis-cluster-feature-flag|redis-cluster-shared-state|redis-cluster-queues-meta|redis-sidekiq|redis-tracechunks|redis-cluster-ratelimiting|redis-cluster-chat-cache|redis-sessions|redis-registry-cache|redis-repository-cache|redis-db-load-balancing|redis-pubsub|redis|registry|sidekiq|vault|web-pages|websockets|woodhouse"}
             )
             ,

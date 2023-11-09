@@ -130,11 +130,11 @@ spec:
           0.99,
           clamp_min(
             clamp_max(
-              sum by (environment, tier, type, stage, pod, container) (
+              sum by (type, shard, pod, container) (
                 rate(container_cpu_usage_seconds_total:labeled{container!="", container!="POD", env="ops",type="thanos-staging"}[1h])
               )
               /
-              sum by(environment, tier, type, stage, pod, container) (
+              sum by(type, shard, pod, container) (
                 kube_pod_container_resource_requests:labeled{container!="", container!="POD", resource="cpu", env="ops",type="thanos-staging"}
               )
               ,
