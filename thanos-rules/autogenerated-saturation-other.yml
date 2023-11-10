@@ -291,15 +291,15 @@ groups:
         clamp_min(
           clamp_max(
             (
-              process_open_fds{env!~"gprd|ops",type=~"ai-gateway|code_suggestions|errortracking"}
+              process_open_fds{env!~"gprd|ops",type=~"ai-gateway|code_suggestions|errortracking|tracing"}
               /
-              process_max_fds{env!~"gprd|ops",type=~"ai-gateway|code_suggestions|errortracking"}
+              process_max_fds{env!~"gprd|ops",type=~"ai-gateway|code_suggestions|errortracking|tracing"}
             )
             or
             (
-              ruby_file_descriptors{env!~"gprd|ops",type=~"ai-gateway|code_suggestions|errortracking"}
+              ruby_file_descriptors{env!~"gprd|ops",type=~"ai-gateway|code_suggestions|errortracking|tracing"}
               /
-              ruby_process_max_fds{env!~"gprd|ops",type=~"ai-gateway|code_suggestions|errortracking"}
+              ruby_process_max_fds{env!~"gprd|ops",type=~"ai-gateway|code_suggestions|errortracking|tracing"}
             )
             ,
             1)
