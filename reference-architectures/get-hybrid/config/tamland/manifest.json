@@ -541,6 +541,38 @@
       },
       "title": "Disk Utilization Overall"
     },
+    "pg_primary_cpu": {
+      "alertRunbook": "docs/{{ $labels.type }}/README.md",
+      "alerting": {
+        "enabled": true
+      },
+      "appliesTo": [],
+      "burnRatePeriod": "5m",
+      "capacityPlanning": {
+        "changepoints_count": 25,
+        "forecast_days": 730,
+        "historical_days": 365,
+        "strategy": "quantile95_1h"
+      },
+      "dangerouslyThanosEvaluated": true,
+      "description": "Average CPU utilization across all cores on the Postgres primary instance.\n",
+      "grafana_dashboard_uid": "sat_pg_primary_cpu",
+      "horizontallyScalable": false,
+      "linear_prediction_saturation_alert": null,
+      "quantileAggregation": "max",
+      "query": "avg without(cpu, mode) (\n  1\n  -\n  (\n    rate(node_cpu_seconds_total{mode=\"idle\", %(selector)s}[%(rangeInterval)s])\n    and on(fqdn)\n    pg_replication_is_replica{%(selector)s} == 0\n  )\n)\n",
+      "queryFormatConfig": {},
+      "resourceLabels": [
+        "fqdn"
+      ],
+      "severity": "s2",
+      "slos": {
+        "alertTriggerDuration": "5m",
+        "hard": 0.9,
+        "soft": 0.8
+      },
+      "title": "Average CPU Utilization on Postgres Primary Instance"
+    },
     "puma_workers": {
       "alertRunbook": "docs/{{ $labels.type }}/README.md",
       "alerting": {
@@ -571,6 +603,46 @@
         "soft": 0.85
       },
       "title": "Puma Worker Saturation"
+    },
+    "rails_db_connection_pool": {
+      "alertRunbook": "docs/{{ $labels.type }}/README.md",
+      "alerting": {
+        "enabled": true
+      },
+      "appliesTo": [
+        "web",
+        "api",
+        "git",
+        "sidekiq",
+        "websockets"
+      ],
+      "burnRatePeriod": "5m",
+      "capacityPlanning": {
+        "changepoints_count": 25,
+        "forecast_days": 90,
+        "historical_days": 365,
+        "strategy": "quantile95_1h"
+      },
+      "dangerouslyThanosEvaluated": false,
+      "description": "Rails uses connection pools for its database connections. As each\nnode may have multiple connection pools, this is by node and by\ndatabase host.\n\nRead more about this resource in our [documentation](https://docs.gitlab.com/ee/development/database/client_side_connection_pool.html#client-side-connection-pool).\n\nIf this resource is saturated, it may indicate that our connection\npools are not correctly sized, perhaps because an unexpected\napplication thread is using a database connection.\n",
+      "grafana_dashboard_uid": "sat_rails_db_connection_pool",
+      "horizontallyScalable": true,
+      "linear_prediction_saturation_alert": null,
+      "quantileAggregation": "max",
+      "query": "(\n  avg_over_time(gitlab_database_connection_pool_busy{class=\"ActiveRecord::Base\", %(selector)s}[%(rangeInterval)s])\n  +\n  avg_over_time(gitlab_database_connection_pool_dead{class=\"ActiveRecord::Base\", %(selector)s}[%(rangeInterval)s])\n)\n/\ngitlab_database_connection_pool_size{class=\"ActiveRecord::Base\", %(selector)s}\n",
+      "queryFormatConfig": {},
+      "resourceLabels": [
+        "instance",
+        "host",
+        "port"
+      ],
+      "severity": "s4",
+      "slos": {
+        "alertTriggerDuration": "15m",
+        "hard": 0.99,
+        "soft": 0.9
+      },
+      "title": "Rails DB Connection Pool Utilization"
     },
     "single_node_cpu": {
       "alertRunbook": "docs/{{ $labels.type }}/README.md",
@@ -610,6 +682,92 @@
     }
   },
   "services": {
+    "api": {
+      "capacityPlanning": {},
+      "name": "api",
+      "overviewDashboard": {
+        "name": "",
+        "url": ""
+      },
+      "resourceDashboard": {
+        "cpu": {
+          "name": "cpu",
+          "url": ""
+        },
+        "disk_inodes": {
+          "name": "disk_inodes",
+          "url": ""
+        },
+        "disk_space": {
+          "name": "disk_space",
+          "url": ""
+        },
+        "go_goroutines": {
+          "name": "go_goroutines",
+          "url": ""
+        },
+        "go_memory": {
+          "name": "go_memory",
+          "url": ""
+        },
+        "kube_container_cpu": {
+          "name": "kube_container_cpu",
+          "url": ""
+        },
+        "kube_container_cpu_limit": {
+          "name": "kube_container_cpu_limit",
+          "url": ""
+        },
+        "kube_container_memory": {
+          "name": "kube_container_memory",
+          "url": ""
+        },
+        "kube_container_rss": {
+          "name": "kube_container_rss",
+          "url": ""
+        },
+        "kube_pool_cpu": {
+          "name": "kube_pool_cpu",
+          "url": ""
+        },
+        "memory": {
+          "name": "memory",
+          "url": ""
+        },
+        "memory_redis_cache": {
+          "name": "memory_redis_cache",
+          "url": ""
+        },
+        "node_schedstat_waiting": {
+          "name": "node_schedstat_waiting",
+          "url": ""
+        },
+        "opensearch_cpu": {
+          "name": "opensearch_cpu",
+          "url": ""
+        },
+        "opensearch_disk_space": {
+          "name": "opensearch_disk_space",
+          "url": ""
+        },
+        "pg_primary_cpu": {
+          "name": "pg_primary_cpu",
+          "url": ""
+        },
+        "puma_workers": {
+          "name": "puma_workers",
+          "url": ""
+        },
+        "rails_db_connection_pool": {
+          "name": "rails_db_connection_pool",
+          "url": ""
+        },
+        "single_node_cpu": {
+          "name": "single_node_cpu",
+          "url": ""
+        }
+      }
+    },
     "consul": {
       "capacityPlanning": {},
       "name": "consul",
@@ -678,8 +836,102 @@
           "name": "opensearch_disk_space",
           "url": ""
         },
+        "pg_primary_cpu": {
+          "name": "pg_primary_cpu",
+          "url": ""
+        },
         "puma_workers": {
           "name": "puma_workers",
+          "url": ""
+        },
+        "rails_db_connection_pool": {
+          "name": "rails_db_connection_pool",
+          "url": ""
+        },
+        "single_node_cpu": {
+          "name": "single_node_cpu",
+          "url": ""
+        }
+      }
+    },
+    "git": {
+      "capacityPlanning": {},
+      "name": "git",
+      "overviewDashboard": {
+        "name": "",
+        "url": ""
+      },
+      "resourceDashboard": {
+        "cpu": {
+          "name": "cpu",
+          "url": ""
+        },
+        "disk_inodes": {
+          "name": "disk_inodes",
+          "url": ""
+        },
+        "disk_space": {
+          "name": "disk_space",
+          "url": ""
+        },
+        "go_goroutines": {
+          "name": "go_goroutines",
+          "url": ""
+        },
+        "go_memory": {
+          "name": "go_memory",
+          "url": ""
+        },
+        "kube_container_cpu": {
+          "name": "kube_container_cpu",
+          "url": ""
+        },
+        "kube_container_cpu_limit": {
+          "name": "kube_container_cpu_limit",
+          "url": ""
+        },
+        "kube_container_memory": {
+          "name": "kube_container_memory",
+          "url": ""
+        },
+        "kube_container_rss": {
+          "name": "kube_container_rss",
+          "url": ""
+        },
+        "kube_pool_cpu": {
+          "name": "kube_pool_cpu",
+          "url": ""
+        },
+        "memory": {
+          "name": "memory",
+          "url": ""
+        },
+        "memory_redis_cache": {
+          "name": "memory_redis_cache",
+          "url": ""
+        },
+        "node_schedstat_waiting": {
+          "name": "node_schedstat_waiting",
+          "url": ""
+        },
+        "opensearch_cpu": {
+          "name": "opensearch_cpu",
+          "url": ""
+        },
+        "opensearch_disk_space": {
+          "name": "opensearch_disk_space",
+          "url": ""
+        },
+        "pg_primary_cpu": {
+          "name": "pg_primary_cpu",
+          "url": ""
+        },
+        "puma_workers": {
+          "name": "puma_workers",
+          "url": ""
+        },
+        "rails_db_connection_pool": {
+          "name": "rails_db_connection_pool",
           "url": ""
         },
         "single_node_cpu": {
@@ -756,8 +1008,16 @@
           "name": "opensearch_disk_space",
           "url": ""
         },
+        "pg_primary_cpu": {
+          "name": "pg_primary_cpu",
+          "url": ""
+        },
         "puma_workers": {
           "name": "puma_workers",
+          "url": ""
+        },
+        "rails_db_connection_pool": {
+          "name": "rails_db_connection_pool",
           "url": ""
         },
         "single_node_cpu": {
@@ -834,8 +1094,16 @@
           "name": "opensearch_disk_space",
           "url": ""
         },
+        "pg_primary_cpu": {
+          "name": "pg_primary_cpu",
+          "url": ""
+        },
         "puma_workers": {
           "name": "puma_workers",
+          "url": ""
+        },
+        "rails_db_connection_pool": {
+          "name": "rails_db_connection_pool",
           "url": ""
         },
         "single_node_cpu": {
@@ -912,8 +1180,16 @@
           "name": "opensearch_disk_space",
           "url": ""
         },
+        "pg_primary_cpu": {
+          "name": "pg_primary_cpu",
+          "url": ""
+        },
         "puma_workers": {
           "name": "puma_workers",
+          "url": ""
+        },
+        "rails_db_connection_pool": {
+          "name": "rails_db_connection_pool",
           "url": ""
         },
         "single_node_cpu": {
@@ -990,8 +1266,16 @@
           "name": "opensearch_disk_space",
           "url": ""
         },
+        "pg_primary_cpu": {
+          "name": "pg_primary_cpu",
+          "url": ""
+        },
         "puma_workers": {
           "name": "puma_workers",
+          "url": ""
+        },
+        "rails_db_connection_pool": {
+          "name": "rails_db_connection_pool",
           "url": ""
         },
         "single_node_cpu": {
@@ -1068,8 +1352,16 @@
           "name": "opensearch_disk_space",
           "url": ""
         },
+        "pg_primary_cpu": {
+          "name": "pg_primary_cpu",
+          "url": ""
+        },
         "puma_workers": {
           "name": "puma_workers",
+          "url": ""
+        },
+        "rails_db_connection_pool": {
+          "name": "rails_db_connection_pool",
           "url": ""
         },
         "single_node_cpu": {
@@ -1146,8 +1438,16 @@
           "name": "opensearch_disk_space",
           "url": ""
         },
+        "pg_primary_cpu": {
+          "name": "pg_primary_cpu",
+          "url": ""
+        },
         "puma_workers": {
           "name": "puma_workers",
+          "url": ""
+        },
+        "rails_db_connection_pool": {
+          "name": "rails_db_connection_pool",
           "url": ""
         },
         "single_node_cpu": {
@@ -1224,8 +1524,102 @@
           "name": "opensearch_disk_space",
           "url": ""
         },
+        "pg_primary_cpu": {
+          "name": "pg_primary_cpu",
+          "url": ""
+        },
         "puma_workers": {
           "name": "puma_workers",
+          "url": ""
+        },
+        "rails_db_connection_pool": {
+          "name": "rails_db_connection_pool",
+          "url": ""
+        },
+        "single_node_cpu": {
+          "name": "single_node_cpu",
+          "url": ""
+        }
+      }
+    },
+    "web": {
+      "capacityPlanning": {},
+      "name": "web",
+      "overviewDashboard": {
+        "name": "",
+        "url": ""
+      },
+      "resourceDashboard": {
+        "cpu": {
+          "name": "cpu",
+          "url": ""
+        },
+        "disk_inodes": {
+          "name": "disk_inodes",
+          "url": ""
+        },
+        "disk_space": {
+          "name": "disk_space",
+          "url": ""
+        },
+        "go_goroutines": {
+          "name": "go_goroutines",
+          "url": ""
+        },
+        "go_memory": {
+          "name": "go_memory",
+          "url": ""
+        },
+        "kube_container_cpu": {
+          "name": "kube_container_cpu",
+          "url": ""
+        },
+        "kube_container_cpu_limit": {
+          "name": "kube_container_cpu_limit",
+          "url": ""
+        },
+        "kube_container_memory": {
+          "name": "kube_container_memory",
+          "url": ""
+        },
+        "kube_container_rss": {
+          "name": "kube_container_rss",
+          "url": ""
+        },
+        "kube_pool_cpu": {
+          "name": "kube_pool_cpu",
+          "url": ""
+        },
+        "memory": {
+          "name": "memory",
+          "url": ""
+        },
+        "memory_redis_cache": {
+          "name": "memory_redis_cache",
+          "url": ""
+        },
+        "node_schedstat_waiting": {
+          "name": "node_schedstat_waiting",
+          "url": ""
+        },
+        "opensearch_cpu": {
+          "name": "opensearch_cpu",
+          "url": ""
+        },
+        "opensearch_disk_space": {
+          "name": "opensearch_disk_space",
+          "url": ""
+        },
+        "pg_primary_cpu": {
+          "name": "pg_primary_cpu",
+          "url": ""
+        },
+        "puma_workers": {
+          "name": "puma_workers",
+          "url": ""
+        },
+        "rails_db_connection_pool": {
+          "name": "rails_db_connection_pool",
           "url": ""
         },
         "single_node_cpu": {
@@ -1302,8 +1696,102 @@
           "name": "opensearch_disk_space",
           "url": ""
         },
+        "pg_primary_cpu": {
+          "name": "pg_primary_cpu",
+          "url": ""
+        },
         "puma_workers": {
           "name": "puma_workers",
+          "url": ""
+        },
+        "rails_db_connection_pool": {
+          "name": "rails_db_connection_pool",
+          "url": ""
+        },
+        "single_node_cpu": {
+          "name": "single_node_cpu",
+          "url": ""
+        }
+      }
+    },
+    "websockets": {
+      "capacityPlanning": {},
+      "name": "websockets",
+      "overviewDashboard": {
+        "name": "",
+        "url": ""
+      },
+      "resourceDashboard": {
+        "cpu": {
+          "name": "cpu",
+          "url": ""
+        },
+        "disk_inodes": {
+          "name": "disk_inodes",
+          "url": ""
+        },
+        "disk_space": {
+          "name": "disk_space",
+          "url": ""
+        },
+        "go_goroutines": {
+          "name": "go_goroutines",
+          "url": ""
+        },
+        "go_memory": {
+          "name": "go_memory",
+          "url": ""
+        },
+        "kube_container_cpu": {
+          "name": "kube_container_cpu",
+          "url": ""
+        },
+        "kube_container_cpu_limit": {
+          "name": "kube_container_cpu_limit",
+          "url": ""
+        },
+        "kube_container_memory": {
+          "name": "kube_container_memory",
+          "url": ""
+        },
+        "kube_container_rss": {
+          "name": "kube_container_rss",
+          "url": ""
+        },
+        "kube_pool_cpu": {
+          "name": "kube_pool_cpu",
+          "url": ""
+        },
+        "memory": {
+          "name": "memory",
+          "url": ""
+        },
+        "memory_redis_cache": {
+          "name": "memory_redis_cache",
+          "url": ""
+        },
+        "node_schedstat_waiting": {
+          "name": "node_schedstat_waiting",
+          "url": ""
+        },
+        "opensearch_cpu": {
+          "name": "opensearch_cpu",
+          "url": ""
+        },
+        "opensearch_disk_space": {
+          "name": "opensearch_disk_space",
+          "url": ""
+        },
+        "pg_primary_cpu": {
+          "name": "pg_primary_cpu",
+          "url": ""
+        },
+        "puma_workers": {
+          "name": "puma_workers",
+          "url": ""
+        },
+        "rails_db_connection_pool": {
+          "name": "rails_db_connection_pool",
           "url": ""
         },
         "single_node_cpu": {

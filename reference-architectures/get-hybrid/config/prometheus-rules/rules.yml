@@ -3838,6 +3838,25 @@ groups:
       max by(type) (
         clamp_min(
           clamp_max(
+            (
+              avg_over_time(gitlab_database_connection_pool_busy{class="ActiveRecord::Base", type="sidekiq"}[5m])
+              +
+              avg_over_time(gitlab_database_connection_pool_dead{class="ActiveRecord::Base", type="sidekiq"}[5m])
+            )
+            /
+            gitlab_database_connection_pool_size{class="ActiveRecord::Base", type="sidekiq"}
+            ,
+            1)
+        ,
+        0)
+      )
+    labels:
+      component: rails_db_connection_pool
+    record: gitlab_component_saturation:ratio
+  - expr: |
+      max by(type) (
+        clamp_min(
+          clamp_max(
             avg without(cpu, mode) (1 - rate(node_cpu_seconds_total{mode="idle", type=~"gitaly|consul|praefect"}[5m]))
             ,
             1)
@@ -3956,6 +3975,14 @@ groups:
     record: slo:max:hard:gitlab_component_saturation:ratio
   - expr: "0.9"
     labels:
+      component: rails_db_connection_pool
+    record: slo:max:soft:gitlab_component_saturation:ratio
+  - expr: "0.99"
+    labels:
+      component: rails_db_connection_pool
+    record: slo:max:hard:gitlab_component_saturation:ratio
+  - expr: "0.9"
+    labels:
       component: single_node_cpu
     record: slo:max:soft:gitlab_component_saturation:ratio
   - expr: "0.95"
@@ -4068,6 +4095,14 @@ groups:
       horiz_scaling: "yes"
       quantile: max
       severity: s2
+    record: gitlab_component_saturation_info
+  - expr: "1"
+    labels:
+      capacity_planning_strategy: quantile95_1h
+      component: rails_db_connection_pool
+      horiz_scaling: "yes"
+      quantile: max
+      severity: s4
     record: gitlab_component_saturation_info
   - expr: "1"
     labels:
@@ -4855,6 +4890,68 @@ groups:
       pager: pagerduty
       rules_domain: general
       severity: s2
+  - alert: component_saturation_slo_out_of_bounds
+    annotations:
+      description: |+
+        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
+
+        Details of the Rails DB Connection Pool Utilization resource:
+
+        Rails uses connection pools for its database connections. As each node may have multiple connection pools, this is by node and by database host.
+
+        Read more about this resource in our [documentation](https://docs.gitlab.com/ee/development/database/client_side_connection_pool.html#client-side-connection-pool).
+
+        If this resource is saturated, it may indicate that our connection pools are not correctly sized, perhaps because an unexpected application thread is using a database connection.
+
+      grafana_dashboard_id: alerts-sat_rails_db_connection_pool
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_rails_db_connection_pool?from=now-6h/m&to=now-1m/m&var-type={{
+        $labels.type }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "391047339"
+      grafana_variables: type
+      promql_query: |
+        max by(type, instance, host, port) (
+          clamp_min(
+            clamp_max(
+              (
+                avg_over_time(gitlab_database_connection_pool_busy{class="ActiveRecord::Base", type="{{ $labels.type }}"}[5m])
+                +
+                avg_over_time(gitlab_database_connection_pool_dead{class="ActiveRecord::Base", type="{{ $labels.type }}"}[5m])
+              )
+              /
+              gitlab_database_connection_pool_size{class="ActiveRecord::Base", type="{{ $labels.type }}"}
+              ,
+              1)
+          ,
+          0)
+        )
+      promql_template_1: |
+        max by(type, instance, host, port) (
+          clamp_min(
+            clamp_max(
+              (
+                avg_over_time(gitlab_database_connection_pool_busy{class="ActiveRecord::Base", type="{{ $labels.type }}"}[5m])
+                +
+                avg_over_time(gitlab_database_connection_pool_dead{class="ActiveRecord::Base", type="{{ $labels.type }}"}[5m])
+              )
+              /
+              gitlab_database_connection_pool_size{class="ActiveRecord::Base", type="{{ $labels.type }}"}
+              ,
+              1)
+          ,
+          0)
+        )
+      runbook: docs/{{ $labels.type }}/README.md
+      title: The Rails DB Connection Pool Utilization resource of the {{ $labels.type
+        }} service has a saturation exceeding SLO and is close to its capacity limit.
+    expr: |
+      gitlab_component_saturation:ratio{component="rails_db_connection_pool"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="rails_db_connection_pool"}
+    for: 15m
+    labels:
+      alert_type: cause
+      rules_domain: general
+      severity: s4
   - alert: component_saturation_slo_out_of_bounds
     annotations:
       description: |+

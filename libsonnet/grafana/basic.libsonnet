@@ -1,5 +1,4 @@
-//local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
-local grafana = import 'github.com/grafana/grafonnet/gen/grafonnet-v10.1.0/main.libsonnet';
+local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
 local promQuery = import 'grafana/prom_query.libsonnet';
 local graphPanel = grafana.graphPanel;
 local heatmapPanel = grafana.heatmapPanel;

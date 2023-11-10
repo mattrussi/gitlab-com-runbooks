@@ -3111,6 +3111,10 @@
         {
           "title": "sidekiq Service | kube_pool_cpu resource Dashboard",
           "url": "https://dashboards.gitlab.net/d/alerts-sat_kube_pool_cpu/?var-environment=gprd\u0026var-type=sidekiq\u0026var-stage=main\u0026var-component=kube_pool_cpu"
+        },
+        {
+          "title": "sidekiq Service | rails_db_connection_pool resource Dashboard",
+          "url": "https://dashboards.gitlab.net/d/alerts-sat_rails_db_connection_pool/?var-environment=gprd\u0026var-type=sidekiq\u0026var-stage=main\u0026var-component=rails_db_connection_pool"
         }
       ],
       "nullPointMode": "null",
