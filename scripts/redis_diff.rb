@@ -249,9 +249,8 @@ ignore_regexp = /#{options[:ignore_pattern]}/ if options[:ignore_pattern]
 # migrate manual keys
 if options[:input_source] == 'args'
   ARGV.each do |key|
-    result = compare_and_migrate(key, src_db, dest_db, options[:migrate])
+    compare_and_migrate(key, src_db, dest_db, options[:migrate])
   end
-
   return
 end
 
