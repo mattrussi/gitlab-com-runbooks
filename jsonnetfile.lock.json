@@ -14,6 +14,16 @@
     {
       "source": {
         "git": {
+          "remote": "https://github.com/grafana/grafonnet.git",
+          "subdir": "gen/grafonnet-v10.1.0"
+        }
+      },
+      "version": "9e217263ac4b922ca2e00bc5cc36ada2311bb5a6",
+      "sum": "GpXlwBysu8dnoH9oYmsJj31CCVsL+wXnbWMxq7sl5Gg="
+    },
+    {
+      "source": {
+        "git": {
           "remote": "https://github.com/grafana/jsonnet-libs.git",
           "subdir": "grafana-builder"
         }
@@ -30,6 +40,16 @@
       },
       "version": "931f6b1139bb3694b06f2261279ba3dc01aca5b8",
       "sum": "19h3uGkLOW44JulE/k3jcJ/1YQelJaxhZFIiNk4Lqys="
+    },
+    {
+      "source": {
+        "git": {
+          "remote": "https://github.com/jsonnet-libs/docsonnet.git",
+          "subdir": "doc-util"
+        }
+      },
+      "version": "503e5c8fe96d6b55775037713ac10b184709ad93",
+      "sum": "BY4u0kLF3Qf/4IB4HnX9S5kEQIpHb4MUrppp6WLDtlU="
     },
     {
       "source": {
