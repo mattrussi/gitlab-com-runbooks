@@ -25,8 +25,6 @@ This is a known limitation but it is possible to set a touch policy of "cached" 
 1. Ensure that you have `ykman` installed and it works, you may need to re-insert your yubikey, run `ykman info` to confirm.
 1. Run the following script, `PIN=<your pin> ./reset-yubikey.sh`, **this will invalidate the previous key and set a new one**:
 
-<details>
-
 ```bash
 #!/usr/bin/env bash
 
@@ -57,8 +55,6 @@ ykman piv certificates generate --subject="CN=SSH Name+O=yubikey-agent+OU=0.1.5"
 # Read the public key and use it as you normally would
 ssh-add -L
 ```
-
-</details>
 
 ### Workaround if your yubikey is not responding
 
