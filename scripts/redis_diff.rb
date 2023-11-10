@@ -33,6 +33,10 @@ OptionParser.new do |opts|
     options[:migrate] = v
   end
 
+  opts.on("-s", "--source=<input_source>", "source of keys") do |v|
+    options[:input_source] = v
+  end
+
   opts.on("-k", "--keys=<number_of_keys>", "Number of keys to check") do |number_of_keys|
     options[:keys] = number_of_keys
   end
@@ -103,9 +107,9 @@ def migrate_hash(src, dst, key)
 
   # to ensure that destination hash does not have excess fields
   dst.with do |r|
-    r.del(key)
-    hash_details.each_slice(10).each do |chunk|
-      r.hset(key, *chunk)
+    r.pipelined do |p|
+      p.del(key)
+      p.hset(key, hash_details)
     end
   end
   migrate_ttl(src, dst, key)
@@ -186,17 +190,20 @@ def compare_and_migrate(key, src, dst, migrate)
   identical = send("compare_#{ktype}", src, dst, key) # rubocop:disable GitlabSecurity/PublicSend
 
   unless identical
-    puts "key #{key} differs"
+    puts "key #{key} differs, migrating: #{migrate}"
 
     # alternatively we can run MIGRATE command but we need to know which port
     # and it only works when migrating from a lower Redis version to a higher Redis version
     if migrate # some argv
-      puts "migrating #{key}..."
       send("migrate_#{ktype}", src, dst, key) # rubocop:disable GitlabSecurity/PublicSend
     end
   end
 
   !identical
+rescue StandardError => e
+  ktype ||= "unknown"
+  puts "Error in compare_and_migrate #{key} of type #{ktype}"
+  puts e.message
 end
 
 def src_redis
@@ -238,6 +245,15 @@ scan_params[:type] = options[:key_type] if options[:key_type]
 scan_params[:match] = options[:match] if options[:match]
 
 ignore_regexp = /#{options[:ignore_pattern]}/ if options[:ignore_pattern]
+
+# migrate manual keys
+if options[:input_source] == 'args'
+  ARGV.each do |key|
+    result = compare_and_migrate(key, src_db, dest_db, options[:migrate])
+  end
+
+  return
+end
 
 begin
   loop do
