@@ -18,12 +18,7 @@ local defaults = {
       },
     recordedQuantiles,
     {}
-  ) {
-    // Here we're overriding the quantile95_1h again to _not_ use a recording, even though we can.
-    // Ideally, we'd use the recorded quantile in tamland, making each query cheaper to make,
-    // but doing that would bust the tamland-data-cache in parquet files.
-    quantile95_1h: 'max(quantile_over_time(0.95, gitlab_component_saturation:ratio{%s}[1h]))',
-  },
+  ),
 };
 
 {
