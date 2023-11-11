@@ -42,7 +42,7 @@ repos:
       - id: shfmt
         args: ["-i", "2", "-ci"]
   - repo: https://github.com/adrienverge/yamllint.git
-    rev: v1.32.0  # renovate:managed
+    rev: v1.33.0  # renovate:managed
     hooks:
       - id: yamllint
         args: [-c=.yamllint.yaml]
