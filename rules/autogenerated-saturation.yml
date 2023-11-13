@@ -1568,11 +1568,11 @@ groups:
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:
       component: gitaly_active_node_available_space
-    expr: "0.8"
+    expr: "0.85"
   - record: slo:max:hard:gitlab_component_saturation:ratio
     labels:
       component: gitaly_active_node_available_space
-    expr: "0.85"
+    expr: "0.9"
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:
       component: gitaly_total_disk_space
@@ -3910,7 +3910,7 @@ groups:
           ,
           0)
         )
-      runbook: docs/{{ $labels.type }}/README.md
+      runbook: docs/gitaly/gitalyctl.md#stopping-migration-during-emergency
     labels:
       alert_type: cause
       pager: pagerduty
