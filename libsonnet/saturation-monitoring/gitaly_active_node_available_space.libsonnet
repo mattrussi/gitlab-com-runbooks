@@ -8,6 +8,7 @@ local selectors = import 'promql/selectors.libsonnet';
     severity: 's2',
     horizontallyScalable: true,
     appliesTo: ['gitaly'],
+    alertRunbook: 'docs/gitaly/gitalyctl.md#stopping-migration-during-emergency',
     description: |||
       Available space on active gitaly nodes
 
@@ -50,8 +51,8 @@ local selectors = import 'promql/selectors.libsonnet';
       }),
     },
     slos: {
-      soft: 0.80,
-      hard: 0.85,
+      soft: 0.85,
+      hard: 0.90,
     },
   }),
 }

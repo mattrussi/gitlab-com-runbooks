@@ -49,3 +49,27 @@ When draining storage there are multiple configuration fields to increase the th
     * [Disk Write throughput](https://thanos.gitlab.net/graph?g0.expr=max(%0A%20%20rate(node_disk_written_bytes_total%7Benv%3D%22gprd%22%2Cenvironment%3D%22gprd%22%2Cfqdn%3D~%22gitaly-01-stor-gprd.c.gitlab-gitaly-gprd-83fd.internal%22%2Ctype%3D%22gitaly%22%7D%5B1m%5D)%0A)%20by%20(fqdn)%0A&g0.tab=0&g0.stacked=0&g0.range_input=1h&g0.max_source_resolution=0s&g0.deduplicate=1&g0.partial_response=0&g0.store_matches=%5B%5D)
     * [CPU scheduling wait](https://thanos.gitlab.net/graph?g0.expr=max%20by%20(fqdn)%20(%0A%20%20rate(node_schedstat_waiting_seconds_total%7Benv%3D%22gprd%22%2Cenvironment%3D%22gprd%22%2Cfqdn%3D~%22gitaly-01-stor-gprd.c.gitlab-gitaly-gprd-83fd.internal%22%2Ctype%3D%22gitaly%22%7D%5B5m%5D)%0A)%0A&g0.tab=0&g0.stacked=0&g0.range_input=1h&g0.max_source_resolution=0s&g0.deduplicate=1&g0.partial_response=0&g0.store_matches=%5B%5D)
     * [CPU](https://thanos.gitlab.net/graph?g0.expr=avg(instance%3Anode_cpu_utilization%3Aratio%7Benv%3D%22gprd%22%2Cenvironment%3D%22gprd%22%2Cfqdn%3D~%22gitaly-01-stor-gprd.c.gitlab-gitaly-gprd-83fd.internal%22%2Ctype%3D%22gitaly%22%7D)%20by%20(fqdn)%0A&g0.tab=0&g0.stacked=0&g0.range_input=1h&g0.max_source_resolution=0s&g0.deduplicate=1&g0.partial_response=0&g0.store_matches=%5B%5D)
+
+## Stopping migration during emergency
+
+During migration of gitaly projects from current to new servers, we are perodically moving projects in bulk from old servers (`file-*`) to new (`gitaly-*`) servers and that is being done concurrently while new projects are also being created on the same set of available servers. If a migration is not going as expected, we can quickly overrun available disk space and soon be unable to create new projects for customers.
+
+We can determine if there is an ongoing migration by seeing an uptrend in `Repository on new Gitaly VMs` [here](https://dashboards.gitlab.net/d/gitaly-multi-project-move/gitaly3a-gitaly-multi-project-move?orgId=1&from=now-7d&to=now)
+
+To stop migrations in emergency situation, run:
+
+(`gitalyctl` is running in `ops` cluster)
+
+```shell
+glsh kube use-cluster ops
+```
+
+Then in a separate session/window, scale down the replicas to zero:
+
+```shell
+kubectl scale deployment gitalyctl-gprd -n gitalyctl --replicas=0
+```
+
+And reach out to [#wg_disaster-recovery](https://gitlab.slack.com/archives/C01D6Q0DHAL) slack channel as a followup, to let the team now.
+
+**Note:** This will not leave any repositories in a bad state.
