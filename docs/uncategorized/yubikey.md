@@ -23,42 +23,7 @@ This is a known limitation but it is possible to set a touch policy of "cached" 
 
 1. Run through the `yubikey-agent` setup as instructed above in step 1.
 1. Ensure that you have `ykman` installed and it works, you may need to re-insert your yubikey, run `ykman info` to confirm.
-1. Run the following script, `PIN=<your pin> ./reset-yubikey.sh`, **this will invalidate the previous key and set a new one**:
-
-<details>
-
-```bash
-#!/usr/bin/env bash
-
-# Resets yubikey with a cached touch policy, cribbed from
-# https://github.com/FiloSottile/yubikey-agent/issues/95#issuecomment-904101391
-
-set -e
-
-PIN=${PIN:-000000}
-
-read -rp "THIS WILL RESET YOUR YUBIKEY WITH PIN=$PIN, type "CTRL+C" to cancel"
-
-# Reset PIV module
-ykman piv reset -f
-
-# Using PIN $PIN just for the sake of example, ofc.
-ykman piv access change-pin -P 123456 -n $PIN
-# Set the same PUK
-ykman piv access change-puk -p 12345678 -n $PIN
-# Store management key on the device, protect by pin
-ykman piv access change-management-key -P $PIN -p
-
-# Generate a key in slot 9a
-ykman piv keys generate --pin=$PIN -a ECCP256 --pin-policy=ONCE --touch-policy=CACHED 9a /var/tmp/pkey.pub
-# Generate cert
-ykman piv certificates generate --subject="CN=SSH Name+O=yubikey-agent+OU=0.1.5" --valid-days=10950  9a /var/tmp/pkey.pub
-
-# Read the public key and use it as you normally would
-ssh-add -L
-```
-
-</details>
+1. Run the [`scripts/yubikey-reset.sh` script](https://gitlab.com/gitlab-com/runbooks/-/blob/master/scripts/reset-yubikey.sh), `PIN=<your pin> scripts/reset-yubikey.sh`, **this will invalidate the previous key and set a new one**:
 
 ### Workaround if your yubikey is not responding
 
