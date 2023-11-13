@@ -6,7 +6,7 @@
 # Resets yubikey with a cached touch policy, cribbed from
 # https://github.com/FiloSottile/yubikey-agent/issues/95#issuecomment-904101391
 
-if [[ ! -d $(which ykman) ]]; then
+if ! command -v ykman >/dev/null 2>&1; then
     echo "Please install ykman"
     echo "See: https://docs.yubico.com/software/yubikey/tools/ykman/Install_ykman.html"
     exit
