@@ -1243,6 +1243,8 @@ vault read -field=private_key_data "gcp/roleset/my-project--service-account-bar/
 
 #### GitLab CI configuration example
 
+Note: For projects on GitLab.com, make sure to disable the use of shared runners as those cannot connect to vault directly.
+
 ```yaml
 variables:
   GOOGLE_PROJECT: my-project
