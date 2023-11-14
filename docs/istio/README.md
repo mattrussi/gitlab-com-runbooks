@@ -38,8 +38,8 @@ Istio components are managed with the help of several Helm Charts. They are depl
   * [Istio Base](https://gitlab.com/gitlab-com/gl-infra/k8s-mgmt/components/-/blob/main/istio/base.yaml): Cluster Wide Resources and CRDs.
   * [IstioD](https://gitlab.com/gitlab-com/gl-infra/k8s-mgmt/components/-/blob/main/istio/istiod.yaml): Istio Control Plane.
   * [Istio Gateway](https://gitlab.com/gitlab-com/gl-infra/k8s-mgmt/components/-/blob/main/istio/istio-ingress.yaml): Helm release for the Public Istio Ingress Gateways.
-  * [Istio Internal Gateway](https://gitlab.com/gitlab-com/gl-infra/k8s-mgmt/components/-/blob/main/istio/istio-internal-ingress.yaml?ref_type=heads): Helm release for the Internal Istio Ingress Gateways.
-  * [Istio CNI](https://gitlab.com/gitlab-com/gl-infra/k8s-mgmt/components/-/blob/main/istio/cni.yaml?ref_type=heads) Helm Release for istio-cni.
+  * [Istio Internal Gateway](https://gitlab.com/gitlab-com/gl-infra/k8s-mgmt/components/-/blob/main/istio/istio-internal-ingress.yaml): Helm release for the Internal Istio Ingress Gateways.
+  * [Istio CNI](https://gitlab.com/gitlab-com/gl-infra/k8s-mgmt/components/-/blob/main/istio/cni.yaml) Helm Release for the Istio CNI plugin.
 
 We use `overlays` on a per environment and cluster level using Flux `kustomizations`, to override helm chart values and create additional supporting manifest for the Istio deployments.
 
@@ -50,17 +50,16 @@ We use `overlays` on a per environment and cluster level using Flux `kustomizati
 
 Renovate will create an MR whenever there are updates available for the Istio Helm Charts. We have defined dependencies between all HelmRelease definitions in Flux, so after merging the Renovate MR all Istio components will be will be upgraded as follows:
 
- 1. istio-base
- 1. istiod
- 1. Others: istio-gateway, istio-internal-gateway, istio-cni
+ 1. `istio-base`
+ 1. `istiod`
+ 1. Others: `istio-gateway`, `istio-internal-gateway`, `istio-cni`
 
 ### Upgrade Istio Gateways
 
 The [istio/gateway Helm Chart](https://artifacthub.io/packages/helm/istio-official/gateway) doesn't replace the Gateway Deployment pods automatically. After the Renovate MR is merged and Flux has reconciled the changes, we need to execute a rolling restart of both `istio-gateway` and `istio-internal-gateway` Deployments.
 
 ```
-# kubectl rollout restart deployment -n istio-ingress istio-gateway
-# kubectl rollout restart deployment -n istio-ingress istio-internal-gateway
+# kubectl rollout restart deployments -n istio-ingress
 ```
 
 You can monitor the upgrade procedure as follows:
