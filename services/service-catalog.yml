@@ -2409,10 +2409,17 @@ services:
         security: https://istio.io/latest/docs/concepts/security/
       dependencies:
       logging:
-        - name: Istio
-          permalink:
+        - name: istiod (Control Plane)
+          permalink: https://dashboards.gitlab.net/goto/thvr5ISSR?orgId=1
+        - name: istio-gateway
+          permalink: https://dashboards.gitlab.net/goto/OAw6cISSR?orgId=1
+        - name: istio-internal-gateway
+          permalink: https://dashboards.gitlab.net/goto/IdERpIISR?orgId=1
+        - name: istio-cni-node
+          permalink: https://dashboards.gitlab.net/goto/sdWmpISSg?orgId=1
     observability:
       monitors:
+        grafana_folder: istio
         primary_grafana_dashboard: istio-istio_control_plane/istio-istio-control-plane-dashboard
 
   - name: gitlab-static
