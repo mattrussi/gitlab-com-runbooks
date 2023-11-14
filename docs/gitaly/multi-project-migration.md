@@ -197,3 +197,46 @@ Runbook:
     [ gstg ] production> Group.find(13181226).repository_read_only?
     => false
     ```
+
+### Timeout waiting for project repository pushes
+
+Symptoms:
+
+- Sidekiq jobs failing this exception message: `Timeout waiting for project repository pushes` ([Kibana](https://log.gprd.gitlab.net/app/r/s/5PjXd))
+
+Runbook:
+
+- Check the project's reference counter multiple times, if the number is not growing up then you can reset the counter and wait for the project to be moved by gitalyctl:
+
+    ```ruby
+    project = Project.find_by_full_path('sxuereb/gitaly')
+    project.reference_counter(type: project.repository.repo_type).value
+    # => 6
+    project.reference_counter(type: project.repository.repo_type).value
+    # => 6
+    project.reference_counter(type: project.repository.repo_type).reset!
+    # => true
+    ```
+
+- If number is increasing over time, then it's a little tricky and a manual scheduling of movement is required. In a Rails console run all the following:
+
+    ```ruby
+    class Projects::RepositoryStorageMove
+      override :schedule_repository_storage_update_worker
+      def schedule_repository_storage_update_worker
+        Projects::UpdateRepositoryStorageWorker.new.perform(
+          project_id,
+          destination_storage_name,
+          id
+        )
+      end
+    end
+
+    project = Project.find_by_full_path('sxuereb/gitaly')
+    # Try these two lines until you get a `true`
+    project.reference_counter(type: project.repository.repo_type).reset!
+    project.repository_storage_moves.build(source_storage_name: project.repository_storage).schedule
+    # => true
+    ```
+
+_For more context around this error and its remedies, please check this [thread](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/17061#note_1638971869)_.
