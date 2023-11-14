@@ -138,6 +138,7 @@ local list = [
     name: 'llm_completion',
     kinds: [sliDefinition.apdexKind, sliDefinition.errorRateKind],
     significantLabels: ['feature_category', 'service_class'],
+    featureCategory: 'ai_abstraction_layer',
     description: |||
       These signifies operations that reach out to a language model with a prompt. These interactions
       with an AI provider are executed within `Llm::CompletionWorker`-jobs. The worker could execute multiple

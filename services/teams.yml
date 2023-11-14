@@ -365,6 +365,9 @@ teams:
   slack_error_budget_channel: g_govern_threat_insights
   send_error_budget_weekly_to_slack: true
 - name: ai_framework
+  url: https://about.gitlab.com/handbook/engineering/development/data-science/ai-framework/
+  manager: oregand
+  label: group::ai framework
   product_stage_group: ai_framework
   ignored_components:
   - graphql_query

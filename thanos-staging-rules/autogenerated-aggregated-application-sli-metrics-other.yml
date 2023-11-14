@@ -427,42 +427,58 @@ spec:
     partial_response_strategy: warn
     rules:
     - record: application_sli_aggregation:llm_completion:error:rate_5m
+      labels:
+        feature_category: ai_abstraction_layer
       expr: |
-        sum by (env,environment,tier,type,stage,feature_category,service_class) (
+        sum by (env,environment,tier,type,stage,service_class) (
           (application_sli_aggregation:llm_completion:error:rate_5m{env!~"gprd|ops",monitor!="global"} >= 0)
         )
     - record: application_sli_aggregation:llm_completion:ops:rate_5m
+      labels:
+        feature_category: ai_abstraction_layer
       expr: |
-        sum by (env,environment,tier,type,stage,feature_category,service_class) (
+        sum by (env,environment,tier,type,stage,service_class) (
           (application_sli_aggregation:llm_completion:ops:rate_5m{env!~"gprd|ops",monitor!="global"} >= 0)
         )
     - record: application_sli_aggregation:llm_completion:apdex:weight:score_5m
+      labels:
+        feature_category: ai_abstraction_layer
       expr: |
-        sum by (env,environment,tier,type,stage,feature_category,service_class) (
+        sum by (env,environment,tier,type,stage,service_class) (
           (application_sli_aggregation:llm_completion:apdex:weight:score_5m{env!~"gprd|ops",monitor!="global"} >= 0)
         )
     - record: application_sli_aggregation:llm_completion:apdex:success:rate_5m
+      labels:
+        feature_category: ai_abstraction_layer
       expr: |
-        sum by (env,environment,tier,type,stage,feature_category,service_class) (
+        sum by (env,environment,tier,type,stage,service_class) (
           (application_sli_aggregation:llm_completion:apdex:success:rate_5m{env!~"gprd|ops",monitor!="global"} >= 0)
         )
     - record: application_sli_aggregation:llm_completion:error:rate_1h
+      labels:
+        feature_category: ai_abstraction_layer
       expr: |
-        sum by (env,environment,tier,type,stage,feature_category,service_class) (
+        sum by (env,environment,tier,type,stage,service_class) (
           (application_sli_aggregation:llm_completion:error:rate_1h{env!~"gprd|ops",monitor!="global"} >= 0)
         )
     - record: application_sli_aggregation:llm_completion:ops:rate_1h
+      labels:
+        feature_category: ai_abstraction_layer
       expr: |
-        sum by (env,environment,tier,type,stage,feature_category,service_class) (
+        sum by (env,environment,tier,type,stage,service_class) (
           (application_sli_aggregation:llm_completion:ops:rate_1h{env!~"gprd|ops",monitor!="global"} >= 0)
         )
     - record: application_sli_aggregation:llm_completion:apdex:weight:score_1h
+      labels:
+        feature_category: ai_abstraction_layer
       expr: |
-        sum by (env,environment,tier,type,stage,feature_category,service_class) (
+        sum by (env,environment,tier,type,stage,service_class) (
           (application_sli_aggregation:llm_completion:apdex:weight:score_1h{env!~"gprd|ops",monitor!="global"} >= 0)
         )
     - record: application_sli_aggregation:llm_completion:apdex:success:rate_1h
+      labels:
+        feature_category: ai_abstraction_layer
       expr: |
-        sum by (env,environment,tier,type,stage,feature_category,service_class) (
+        sum by (env,environment,tier,type,stage,service_class) (
           (application_sli_aggregation:llm_completion:apdex:success:rate_1h{env!~"gprd|ops",monitor!="global"} >= 0)
         )
