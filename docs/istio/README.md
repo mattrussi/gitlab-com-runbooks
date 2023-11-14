@@ -12,9 +12,7 @@
 
 ## Logging
 
-Istio logs are exported to Loki and can be found in Grafana:
-
-* [istiod](https://dashboards.gitlab.net/goto/thvr5ISSR?orgId=1)
+* [istiod (Control Plane)](https://dashboards.gitlab.net/goto/thvr5ISSR?orgId=1)
 * [istio-gateway](https://dashboards.gitlab.net/goto/OAw6cISSR?orgId=1)
 * [istio-internal-gateway](https://dashboards.gitlab.net/goto/IdERpIISR?orgId=1)
 * [istio-cni-node](https://dashboards.gitlab.net/goto/sdWmpISSg?orgId=1)
@@ -84,6 +82,22 @@ You can monitor the upgrade procedure as follows:
 
 <!-- ## Security/Compliance -->
 
-<!-- ## Monitoring/Alerting -->
+## Monitoring/Alerting
+
+### Istio Grafana Dashboards
+
+* [Istio Control Plane Dashboard](https://dashboards.gitlab.net/d/istio-istio_control_plane/istio-istio-control-plane-dashboard)
+* [Istio Mesh Dashboard](https://dashboards.gitlab.net/d/istio-istio_mesh/istio-istio-mesh-dashboard)
+* [Istio Service Dashboard](https://dashboards.gitlab.net/d/istio-istio_service/istio-istio-service-dashboard)
+* [Istio Workload Dashboard](https://dashboards.gitlab.net/d/istio-istio_workload/istio-istio-workload-dashboard)
+
+### Istio Mesh Observability Tool - Kiali
+
+* [gstg-gitlab-gke](https://kiali.gstg-gitlab-gke.us-east1.gitlab-staging-1.gke.gitlab.net/kiali)
+* [gstg-us-east1-b](https://kiali.gstg-us-east1-b.us-east1-b.gitlab-staging-1.gke.gitlab.net/kiali)
+* [gstg-us-east1-c](https://kiali.gstg-us-east1-c.us-east1-c.gitlab-staging-1.gke.gitlab.net/kiali)
+* [gstg-us-east1-d](https://kiali.gstg-us-east1-d.us-east1-d.gitlab-staging-1.gke.gitlab.net/kiali)
+* [ops-gitlab-gke](https://kiali.ops-gitlab-gke.us-east1.gitlab-ops.gke.gitlab.net/kiali)
+* [ops-central](https://kiali.ops-central.us-central1.gitlab-ops.gke.gitlab.net/kiali)
 
 <!-- ## Links to further Documentation -->
