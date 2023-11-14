@@ -17,13 +17,17 @@ metricsCatalog.serviceDefinition({
 
   // Since each Gitaly node is a SPOF for a subset of repositories, we need to ensure that
   // we have node-level monitoring on these hosts
-  nodeLevelMonitoring: true,
-  monitoringThresholds: {
-    apdexScore: 0.999,
-    errorRatio: 0.9995,
+  monitoring: {
+    node: {
+      enabled: true,
+    },
     component_node: {
       apdexScore: 0.97,
     },
+  },
+  monitoringThresholds: {
+    apdexScore: 0.999,
+    errorRatio: 0.9995,
   },
   otherThresholds: {
     // Deployment thresholds are optional, and when they are specified, they are

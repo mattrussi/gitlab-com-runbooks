@@ -5,12 +5,12 @@ local trafficCessationAlertForSLIForAlertDescriptor = import './traffic-cessatio
 local alerts = import 'alerts/alerts.libsonnet';
 local misc = import 'utils/misc.libsonnet';
 
-local apdexScoreThreshold(sli, alertDescriptor) =
-  local specificThreshold = misc.dig(sli.monitoringThresholds, [alertDescriptor.aggregationSet.id, 'apdexScore']);
+local apdexScoreThreshold(service, sli, alertDescriptor) =
+  local specificThreshold = misc.dig(service.monitoring, [alertDescriptor.aggregationSet.id, 'apdexScore']);
   if specificThreshold != {} then specificThreshold else sli.monitoringThresholds.apdexScore;
 
-local errorRatioThreshold(sli, alertDescriptor) =
-  local specificThreshold = misc.dig(sli.monitoringThresholds, [alertDescriptor.aggregationSet.id, 'errorRatio']);
+local errorRatioThreshold(service, sli, alertDescriptor) =
+  local specificThreshold = misc.dig(service.monitoring, [alertDescriptor.aggregationSet.id, 'errorRatio']);
   if specificThreshold != {} then specificThreshold else sli.monitoringThresholds.errorRatio;
 
 local shardLevelOverridesExists(service, sli) =
@@ -75,7 +75,7 @@ local apdexAlertForSLIForAlertDescriptor(service, sli, alertDescriptor, extraSel
       shardSelectors
     )
   else
-    local apdexScoreSLO = apdexScoreThreshold(sli, alertDescriptor);
+    local apdexScoreSLO = apdexScoreThreshold(service, sli, alertDescriptor);
     apdexAlerts(apdexScoreSLO, { type: service.type, component: sli.name } + extraSelector);
 
 
@@ -115,7 +115,7 @@ local errorAlertForSLIForAlertDescriptor(service, sli, alertDescriptor, extraSel
       shardSelectors
     )
   else
-    local errorRateSLO = errorRatioThreshold(sli, alertDescriptor);
+    local errorRateSLO = errorRatioThreshold(service, sli, alertDescriptor);
     errorAlerts(errorRateSLO, { type: service.type, component: sli.name } + extraSelector);
 
 // Generates an apdex alert for an SLI

@@ -14,7 +14,15 @@ local serviceDefaults = {
   disableOpsRatePrediction: false,
   nodeLevelMonitoring: false,  // By default we do not use node-level monitoring
   monitoring: {
-    shard: { enabled: false, overrides: {} },
+    shard: {
+      enabled: false,
+      overrides: {},  // To override shard-level SLO for specific shards
+    },
+    node: {
+      enabled: false,
+      overrides: {},  // To override node-level SLO for specific nodes
+    },
+    component_node: {},  // To override the SLO for nodeComponentSLIs aggregationSet
   },
   kubeConfig: {},
   kubeResources: {},
@@ -50,6 +58,11 @@ local validateMonitoring(serviceDefinition) =
           'SLI must be present and has shardLevelMonitoring enabled. Supported SLIs: %s' % std.join(', ', shardLevelSlis)
         ),
       },
+      node: {
+        enabled: validator.boolean,
+        overrides: validator.object,
+      },
+      component_node: validator.object,
     },
   });
 

@@ -14,7 +14,7 @@ local recordingRuleGroupsForServiceForBurnRate(serviceDefinition, componentAggre
     ]
     +
     (
-      if serviceDefinition.nodeLevelMonitoring then
+      if serviceDefinition.monitoring.node.enabled then
         [
           recordingRules.componentMetricsRuleSetGenerator(
             burnRate=burnRate,
