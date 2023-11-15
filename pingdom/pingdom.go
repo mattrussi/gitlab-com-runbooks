@@ -8,7 +8,6 @@ import (
 	"net/url"
 	"os"
 	"regexp"
-	"strconv"
 	"strings"
 
 	pingdom "github.com/russellcardullo/go-pingdom/pingdom"
@@ -97,12 +96,8 @@ func (c PingdomCheck) getCheck(config PingdomChecks, teamMap map[string]pingdom.
 		if !ok {
 			log.Fatalf("Unable to find team %v", v)
 		}
-		teamID, err := strconv.Atoi(team.ID)
-		if err != nil {
-			log.Fatalf("TeamID is not an integer: %s", team.ID)
-		}
 
-		teamIds = append(teamIds, teamID)
+		teamIds = append(teamIds, team.ID)
 	}
 
 	integrationIDs := []int{}
@@ -265,17 +260,15 @@ var (
 )
 
 func newClient() (*pingdom.Client, error) {
-	username := os.Getenv("PINGDOM_USERNAME")
-	password := os.Getenv("PINGDOM_PASSWORD")
-	appkey := os.Getenv("PINGDOM_APPKEY")
-	accountEmail := os.Getenv("PINGDOM_ACCOUNT_EMAIL")
+	apiToken := os.Getenv("PINGDOM_API_TOKEN")
 
-	if username == "" || password == "" || appkey == "" || accountEmail == "" {
-		return nil, fmt.Errorf("please configure the PINGDOM_USERNAME, PINGDOM_PASSWORD, PINGDOM_APPKEY, PINGDOM_ACCOUNT_EMAIL environment variables")
+	if apiToken == "" {
+		return nil, fmt.Errorf("please configure the PINGDOM_API_TOKEN environment variable")
 	}
 
-	client := pingdom.NewMultiUserClient(username, password, appkey, accountEmail)
-	return client, nil
+	clientConfig := pingdom.ClientConfig{APIToken: apiToken}
+	client, err := pingdom.NewClientWithConfig(clientConfig)
+	return client, err
 }
 
 func main() {
