@@ -959,18 +959,9 @@ update-elastic-ilm:monitoring-es7:
   extends: .id-tokens
   image: $GOLANG_IMAGE
   secrets:
-    PINGDOM_ACCOUNT_EMAIL:
+    PINGDOM_API_TOKEN:
       file: false
-      vault: ${VAULT_SECRETS_PATH}/shared/pingdom/account_email@ci
-    PINGDOM_APPKEY:
-      file: false
-      vault: ${VAULT_SECRETS_PATH}/shared/pingdom/app_key@ci
-    PINGDOM_USERNAME:
-      file: false
-      vault: ${VAULT_SECRETS_PATH}/shared/pingdom/username@ci
-    PINGDOM_PASSWORD:
-      file: false
-      vault: ${VAULT_SECRETS_PATH}/shared/pingdom/password@ci
+      vault: ${VAULT_SECRETS_PATH}/shared/pingdom/api_token@ci
   before_script:
     - cd pingdom
     - go build
