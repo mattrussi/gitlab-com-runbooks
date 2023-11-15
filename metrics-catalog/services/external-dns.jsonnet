@@ -1,16 +1,30 @@
 local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
-local rateMetric = metricsCatalog.rateMetric;
 
 metricsCatalog.serviceDefinition({
   type: 'external-dns',
   tier: 'sv',
+
+  monitoringThresholds: {
+    apdexScore: 0.999,
+    errorRatio: 0.999,
+  },
+
   provisioning: {
-    vms: false,
     kubernetes: true,
+    vms: false,
   },
 
   serviceDependencies: {
     kube: true,
+  },
+
+  kubeResources: {
+    'external-dns': {
+      kind: 'Deployment',
+      containers: [
+        'external-dns',
+      ],
+    },
   },
 
   serviceLevelIndicators: {},
