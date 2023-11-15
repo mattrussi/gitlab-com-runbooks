@@ -32,6 +32,9 @@ This should be done from within a registry instance in K8s, using the built-in `
    kubectl exec -it <pod_name> -- sh
    ```
 
+   If it's on a `gprd` cluster, notify `#sd_security_operations` slack channel that you are exec-ing into the pod with
+   a link to the change request, as they will receive a SIRT alert about it.
+
 1. List pending migrations:
 
    ```sh
@@ -123,14 +126,16 @@ Proceed as follows to apply pending migrations, if they include long-running one
 1. Determine the current PostgreSQL primary server, by using the following command in one of the registry database servers:
 
    ```sh
-   ssh patroni-v12-registry-01-db-<env>.c.<project>.internal sudo gitlab-patronictl list
+   ssh <patroni-registry instance for env>.c.<project>.internal sudo gitlab-patronictl list
    ```
+
+   The `patroni-registry` server instance name can be found by running `knife node list | grep patroni-registry` in the [chef-repo](https://gitlab.com/gitlab-com/gl-infra/chef-repo) repository.
 
    Note that there is a small chance of having a primary rotation either due to failure or maintenance. If so, applying schema migrations will fail due to permission issues and the command above should be retried to obtain the new primary address. Confirm that the rotation was not due to a production incident first.
 
    See [this runbook](https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/patroni/patroni-management.md#cluster-information) for more details about this command.
 
-1. Modify the `database.host` and `database.port` attributes in the `/tmp/config.yaml` configuration file, so that it points to the primary server identified above. Additionally, set `database.pool.maxopen` to `1` and `database.pool.maxlifetime` to `1h`:
+1. Modify the `database.host` (and `database.port`) attributes in the `/tmp/config.yaml` configuration file (`busybox vi /tmp/config.yaml`), so that it points to the primary server identified above. Additionally, set `database.pool.maxopen` to `1` and `database.pool.maxlifetime` to `1h`:
 
    ```yaml
    database:
@@ -142,12 +147,12 @@ Proceed as follows to apply pending migrations, if they include long-running one
          maxlifetime: 1h # maximum amount of time a connection may be reused (up from 30m, for precaution)
    ```
 
-1. Save the file
+1. Save the file.
 
 1. Apply pending migrations, providing the temporary configuration file as argument:
 
    ```sh
-   registry database migrate up /tmp/config.yml
+   registry database migrate up /tmp/config.yaml
    ```
 
 1. Continue as described in [Applying post-deployment migrations](#applying-post-deployment-migrations).
