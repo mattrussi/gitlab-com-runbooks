@@ -138,7 +138,7 @@ spec:
         description: |
           Wait events related to subtransactions locking have been detected in the database in the last 5 minutes.
 
-          This can eventually saturate entire database cluster if this sitation continues for a longer period of time.
+          This can eventually saturate entire database cluster if this situation continues for a longer period of time.
         runbook: docs/patroni/postgresql-subtransactions.md
       labels:
         alert_type: cause
@@ -146,7 +146,7 @@ spec:
         team: subtransaction_troubleshooting
       expr: |
         sum by (environment) (
-          sum_over_time(pg_stat_activity_marginalia_sampler_active_count{wait_event=~"[Ss]ubtrans.*"}[10m])
+          sum_over_time(pg_stat_activity_marginalia_sampler_active_count{env="ops",wait_event=~"[Ss]ubtrans.*"}[10m])
         ) > 10
     - alert: PatroniLongRunningTransactionDetected
       for: 1m
@@ -172,16 +172,7 @@ spec:
       expr: |
         topk by (environment, type, stage, shard) (1,
           max by (environment, type, stage, shard, application, endpoint, fqdn) (
-            pg_stat_activity_marginalia_sampler_max_tx_age_in_seconds{
-              type="patroni",
-              command!="vacuum",
-              command!="autovacuum",
-              command!~"[cC][rR][eE][aA][tT][eE]",
-              command!~"[aA][nN][aA][lL][yY][zZ][eE]",
-              command!~"[rR][eE][iI][nN][dD][eE][xX]",
-              command!~"[aA][lL][tT][eE][rR]",
-              command!~"[dD][rR][oO][pP]",
-            }
+            pg_stat_activity_marginalia_sampler_max_tx_age_in_seconds{command!="vacuum",command!="autovacuum",command!~"[cC][rR][eE][aA][tT][eE]",command!~"[aA][nN][aA][lL][yY][zZ][eE]",command!~"[aA][lL][tT][eE][rR]",command!~"[dD][rR][oO][pP]",env="ops",type="patroni"}
           )
           > 540
         )

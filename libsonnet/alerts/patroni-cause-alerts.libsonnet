@@ -155,9 +155,11 @@ local rules(extraSelector={}) = {
           alert: 'PatroniSubtransControlLocksDetected',
           expr: |||
             sum by (environment) (
-              sum_over_time(pg_stat_activity_marginalia_sampler_active_count{wait_event=~"[Ss]ubtrans.*"}[10m])
+              sum_over_time(pg_stat_activity_marginalia_sampler_active_count{%(selector)s}[10m])
             ) > 10
-          |||,
+          ||| % {
+            selector: selectors.serializeHash({ wait_event: { re: '[Ss]ubtrans.*' } } + extraSelector),
+          },
           'for': '5m',
           labels: {
             team: 'subtransaction_troubleshooting',
@@ -169,7 +171,7 @@ local rules(extraSelector={}) = {
             description: |||
               Wait events related to subtransactions locking have been detected in the database in the last 5 minutes.
 
-              This can eventually saturate entire database cluster if this sitation continues for a longer period of time.
+              This can eventually saturate entire database cluster if this situation continues for a longer period of time.
             |||,
             runbook: 'docs/patroni/postgresql-subtransactions.md',
           },
@@ -181,20 +183,24 @@ local rules(extraSelector={}) = {
           expr: |||
             topk by (environment, type, stage, shard) (1,
               max by (environment, type, stage, shard, application, endpoint, fqdn) (
-                pg_stat_activity_marginalia_sampler_max_tx_age_in_seconds{
-                  type="patroni",
-                  command!="vacuum",
-                  command!="autovacuum",
-                  command!~"[cC][rR][eE][aA][tT][eE]",
-                  command!~"[aA][nN][aA][lL][yY][zZ][eE]",
-                  command!~"[rR][eE][iI][nN][dD][eE][xX]",
-                  command!~"[aA][lL][tT][eE][rR]",
-                  command!~"[dD][rR][oO][pP]",
-                }
+                pg_stat_activity_marginalia_sampler_max_tx_age_in_seconds{%(selector)s}
               )
               > 540
             )
-          |||,
+          ||| % {
+            selector: selectors.serializeHash({
+              type: 'patroni',
+              command: [
+                { ne: 'vacuum' },
+                { ne: 'autovacuum' },
+                { nre: '[cC][rR][eE][aA][tT][eE]' },
+                { nre: '[aA][nN][aA][lL][yY][zZ][eE]' },
+                { nre: '[rR][eE][iI][nN][dD][eE][xX]' }
+                { nre: '[aA][lL][tT][eE][rR]' },
+                { nre: '[dD][rR][oO][pP]' },
+              ],
+            } + extraSelector),
+          },
           'for': '1m',
           labels: {
             severity: 's2',
