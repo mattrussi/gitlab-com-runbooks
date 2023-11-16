@@ -8,10 +8,9 @@ local basic = import 'grafana/basic.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
 
 basic.dashboard(
-  'Ingress-nginx',
+  'Ingress',
   tags=[
     'k8s',
-    'gos',
     'gitlab-observability',
   ],
 )
@@ -33,10 +32,10 @@ basic.dashboard(
   sort=1,
 ))
 .addTemplate(template.new(
-  'nginxPods',
+  'pods',
   '$PROMETHEUS_DS',
-  'label_values(kube_pod_container_info{env="$environment", cluster=~"opstrace-.*", container="nginx-ingress"}, pod)',
-  label='Nginx pods',
+  'label_values(kube_pod_container_info{env="$environment", cluster=~"opstrace-.*", container="traefik"}, pod)',
+  label='Traefik pods',
   refresh='time',
   sort=1,
   multi=true,
@@ -45,8 +44,8 @@ basic.dashboard(
 .addTemplate(
   template.custom(
     name='Deployment',
-    query='nginx-ingress,',
-    current='nginx-ingress',
+    query='traefik',
+    current='traefik',
     hide='variable',
   )
 )
@@ -59,7 +58,7 @@ basic.dashboard(
   )
 )
 .addPanel(
-  row.new(title='Ingress-nginx version'),
+  row.new(title='Traefik version'),
   gridPos={
     x: 0,
     y: 0,
@@ -98,7 +97,7 @@ basic.dashboard(
     h: 1,
   }
 )
-.addPanels(k8sPodsCommon.memory(startRow=301, container='nginx-ingress'))
+.addPanels(k8sPodsCommon.memory(startRow=301, container='traefik'))
 .addPanel(
   row.new(title='Network'),
   gridPos={
@@ -122,54 +121,78 @@ basic.dashboard(
   layout.grid([
     basic.timeseries(
       title='Requests per second by HTTP status',
-      query='sum(rate(nginx_ingress_controller_request_duration_seconds_count{env="$environment", cluster=~"$cluster", pod=~"$nginxPods"}[$__rate_interval])) by (status) > 0 ',
-      legendFormat='HTTP {{status}}',
-      yAxisLabel='conn/sec',
+      query=|||
+        sum(
+          rate(
+            traefik_service_requests_total{env="$environment", cluster=~"$cluster", pod=~"$pods"}[$__rate_interval]
+          )
+        ) by (code) > 0
+      |||,
+      legendFormat='HTTP {{code}}',
+      yAxisLabel='rps',
       fill=5,
       stack=true,
       legend_rightSide=true,
     ),
     basic.multiQuantileTimeseries(
       title='Requests duration by HTTP status',
-      selector='env="$environment", cluster=~"$cluster", pod=~"$nginxPods"',
-      legendFormat='HTTP {{status}}',
-      bucketMetric='nginx_ingress_controller_request_duration_seconds_bucket',
-      aggregators='status',
+      selector='env="$environment", cluster=~"$cluster", pod=~"$pods"',
+      legendFormat='HTTP {{code}}',
+      bucketMetric='traefik_service_request_duration_seconds_bucket',
+      aggregators='code',
       legend_rightSide=true,
     ),
     basic.timeseries(
-      title='Requests per second by ingress',
-      query='sum(rate(nginx_ingress_controller_request_duration_seconds_count{env="$environment", cluster=~"$cluster", pod=~"$nginxPods"}[$__rate_interval])) by (host, path) > 0 ',
-      legendFormat='{{host}}{{path}}',
-      yAxisLabel='req/sec',
+      title='Requests per second by Service',
+      query=|||
+        sum(
+          rate(
+            traefik_service_requests_total{env="$environment", cluster=~"$cluster", pod=~"$pods"}[$__rate_interval]
+          )
+        ) by (service) > 0
+      |||,
+      legendFormat='{{service}}',
+      yAxisLabel='rps',
       fill=5,
       stack=true,
       legend_rightSide=true,
     ),
     basic.multiQuantileTimeseries(
-      title='Requests duration by ingress',
-      selector='env="$environment", cluster=~"$cluster", pod=~"$nginxPods"',
-      legendFormat='{{host}}{{path}}',
-      bucketMetric='nginx_ingress_controller_request_duration_seconds_bucket',
-      aggregators='host,path',
+      title='Requests duration by Service',
+      selector='env="$environment", cluster=~"$cluster", pod=~"$pods"',
+      legendFormat='{{service}}',
+      bucketMetric='traefik_service_request_duration_seconds_bucket',
+      aggregators='service',
       legend_rightSide=true,
     ),
     basic.timeseries(
-      title='Connections per second',
-      query='sum(rate(nginx_ingress_controller_nginx_process_connections_total{env="$environment", cluster=~"$cluster", pod=~"$nginxPods"}[$__rate_interval])) by (state)',
-      legendFormat='{{state}}',
+      title='Open Connections per Service',
+      query=|||
+        sum(
+          rate(
+            traefik_service_open_connections{env="$environment", cluster=~"$cluster", pod=~"$pods"}[$__rate_interval]
+          )
+        ) by (service) > 0
+      |||,
+      legendFormat='{{service}}',
       yAxisLabel='conn/sec',
       fill=5,
       stack=true,
       legend_rightSide=true,
     ),
     basic.timeseries(
-      title='Response Error Rate by Method and Path',
-      query='sum by (method, host, path) (rate(nginx_ingress_controller_request_duration_seconds_count{env="$environment", cluster=~"$cluster", pod=~"$nginxPods", status =~ "[4-5].*"}[$__rate_interval]))',
-      legendFormat='{{ method }} {{ host }}{{ path }}',
+      title='Error Rate by Service',
+      query=|||
+        sum(
+          rate(
+            traefik_service_requests_total{env="$environment", cluster=~"$cluster", pod=~"$pods", code =~ "[4-5].*"}[$__rate_interval]
+          )
+        ) by (method, service, code) > 0
+      |||,
+      legendFormat='{{ method }} {{ service }} {{code}}',
       fill=5,
       stack=true,
       legend_rightSide=true,
     ),
-  ], cols=2, rowHeight=10, startRow=601)
+  ], cols=1, rowHeight=10, startRow=601)
 )
