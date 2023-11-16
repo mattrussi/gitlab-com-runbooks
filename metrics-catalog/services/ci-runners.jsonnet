@@ -220,4 +220,20 @@ metricsCatalog.serviceDefinition({
       ],
     },
   },
+} + {
+  capacityPlanning+: {
+    components: [
+      {
+        name: 'node_schedstat_waiting',
+        parameters: {
+          ignore_outliers: [
+            {
+              start: '2023-07-01',
+              end: '2023-09-10',
+            },
+          ],
+        },
+      },
+    ],
+  },
 })
