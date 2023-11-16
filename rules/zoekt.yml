@@ -15,7 +15,7 @@ groups:
       severity: s3
       alert_type: cause
       team: global_search
-      user_impacting: yes
+      user_impacting: "yes"
     annotations:
       description: >
         The zoekt `{{ $labels.container }}` container is being OOM killed and restarting. This will likely affect users performing code searches.
