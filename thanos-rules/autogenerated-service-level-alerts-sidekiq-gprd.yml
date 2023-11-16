@@ -33,7 +33,7 @@ groups:
       aggregation: component
       alert_class: slo_violation
       alert_type: symptom
-      feature_category: in_source_metrics
+      feature_category: ai_abstraction_layer
       rules_domain: general
       severity: s4
       sli_type: apdex
@@ -84,7 +84,7 @@ groups:
       aggregation: component
       alert_class: slo_violation
       alert_type: symptom
-      feature_category: in_source_metrics
+      feature_category: ai_abstraction_layer
       rules_domain: general
       severity: s4
       sli_type: apdex
@@ -139,7 +139,7 @@ groups:
       aggregation: component
       alert_class: slo_violation
       alert_type: symptom
-      feature_category: in_source_metrics
+      feature_category: ai_abstraction_layer
       rules_domain: general
       severity: s4
       sli_type: error
@@ -194,7 +194,7 @@ groups:
       aggregation: component
       alert_class: slo_violation
       alert_type: symptom
-      feature_category: in_source_metrics
+      feature_category: ai_abstraction_layer
       rules_domain: general
       severity: s4
       sli_type: error
@@ -249,7 +249,7 @@ groups:
       aggregation: component
       alert_class: traffic_cessation
       alert_type: cause
-      feature_category: in_source_metrics
+      feature_category: ai_abstraction_layer
       rules_domain: general
       severity: s4
       sli_type: ops
@@ -293,7 +293,7 @@ groups:
       aggregation: component
       alert_class: traffic_cessation
       alert_type: cause
-      feature_category: in_source_metrics
+      feature_category: ai_abstraction_layer
       rules_domain: general
       severity: s4
       sli_type: ops

@@ -365,11 +365,15 @@ teams:
   slack_error_budget_channel: g_govern_threat_insights
   send_error_budget_weekly_to_slack: true
 - name: ai_framework
+  url: https://about.gitlab.com/handbook/engineering/development/data-science/ai-framework/
+  manager: oregand
+  label: group::ai framework
   product_stage_group: ai_framework
   ignored_components:
   - graphql_query
   slack_error_budget_channel: g_ai_framework
   send_error_budget_weekly_to_slack: true
+  send_slo_alerts_to_team_slack_channel: true
   slack_alerts_channel: g_ai_framework
 - name: subscription_management
   product_stage_group: subscription_management
