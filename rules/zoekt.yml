@@ -1,0 +1,22 @@
+groups:
+- name: Zoekt Rules
+  rules:
+  - record: gitlab:zoekt_gke_oom_events
+    expr: >
+      (sum by (environment, container) (kube_pod_container_status_last_terminated_reason{pod="gitlab-gitlab-zoekt-0", reason="OOMKilled"})
+      * on (container, pod) group_left
+      sum by (container, pod) (changes(kube_pod_container_status_restarts_total{container=~"zoekt.*"}[1m]) > 0))
+- name: Zoekt Alerts
+  rules:
+  - alert: ZoektContainersRestartsDueToOOM
+    expr: gitlab:zoekt_gke_oom_events{env="gprd"} > 0
+    for: 5m
+    labels:
+      severity: s3
+      alert_type: cause
+      team: global_search
+      user_impacting: yes
+    annotations:
+      description: >
+        The zoekt `{{ $labels.container }}` container is being OOM killed and restarting. This will likely affect users performing code searches.
+      title: Zoekt GKE containers are being OOM killed
