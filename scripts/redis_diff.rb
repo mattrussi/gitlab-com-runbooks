@@ -6,13 +6,17 @@ require 'redis'
 require 'redis-clustering'
 require 'yaml'
 
-# This file requires the `redis` and `connection_pool` gems.
+# This file requires the `redis`, `redis-clustering` and `connection_pool` gems.
 #
 # On a VM node, run the following to setup
 # ```
-# gem install redis -v '~> 4.8.0'
+# gem install redis -v '~> 5.0.8'
+# gem install redis-clustering
 # gem install connection_pool -v '~> 2.0'
 # ```
+# ENV vars may need to be specified
+# export REDIS_CLIENT_SLOW_COMMAND_TIMEOUT=10
+# export REDIS_CLIENT_MAX_STARTUP_SAMPLE=1
 #
 # Usage: ruby redis_diff.rb --migrate --keys=1000
 #
@@ -27,6 +31,10 @@ OptionParser.new do |opts|
 
   opts.on("-m", "--migrate", "Copy mismatched key values (and their TTLs) from src to dst redis") do |v|
     options[:migrate] = v
+  end
+
+  opts.on("-s", "--source=<input_source>", "source of keys") do |v|
+    options[:input_source] = v
   end
 
   opts.on("-k", "--keys=<number_of_keys>", "Number of keys to check") do |number_of_keys|
@@ -98,9 +106,11 @@ def migrate_hash(src, dst, key)
   return if hash_details.empty?
 
   # to ensure that destination hash does not have excess fields
-  dst.pipelined do |p|
-    p.del(key)
-    p.hset(key, hash_details)
+  dst.with do |r|
+    r.pipelined do |p|
+      p.del(key)
+      p.hset(key, hash_details)
+    end
   end
   migrate_ttl(src, dst, key)
 end
@@ -120,9 +130,11 @@ def migrate_set(src, dst, key)
   return if members.empty?
 
   # to ensure that destination hash does not have excess fields
-  dst.pipelined do |p|
-    p.del(key)
-    p.sadd(key, members)
+  dst.with do |r|
+    r.pipelined do |p|
+      p.del(key)
+      p.sadd(key, members)
+    end
   end
   migrate_ttl(src, dst, key)
 end
@@ -137,9 +149,11 @@ end
 
 def migrate_list(src, dst, key)
   src_list = src.with { |c| c.lrange(key, 0, -1) }
-  dst.pipelined do |p|
-    p.del(key)
-    p.rpush(key, src_list) # rpush to maintain order
+  dst.with do |r|
+    r.pipelined do |p|
+      p.del(key)
+      p.rpush(key, src_list) # rpush to maintain order
+    end
   end
   migrate_ttl(src, dst, key)
 end
@@ -156,9 +170,11 @@ def migrate_zset(src, dst, key)
   # map to switch order of score and member as zrange returns <member, score>
   # but zadd expects <score, member>
   source_zset = src.with { |c| c.zrange(key, 0, -1, withscores: true) }.map { |x, y| [y, x] }
-  dst.pipelined do |p|
-    p.del(key)
-    p.zadd(key, source_zset)
+  dst.with do |r|
+    r.pipelined do |p|
+      p.del(key)
+      p.zadd(key, source_zset)
+    end
   end
   migrate_ttl(src, dst, key)
 end
@@ -174,24 +190,27 @@ def compare_and_migrate(key, src, dst, migrate)
   identical = send("compare_#{ktype}", src, dst, key) # rubocop:disable GitlabSecurity/PublicSend
 
   unless identical
-    puts "key #{key} differs"
+    puts "key #{key} differs, migrating: #{migrate}"
 
     # alternatively we can run MIGRATE command but we need to know which port
     # and it only works when migrating from a lower Redis version to a higher Redis version
     if migrate # some argv
-      puts "migrating #{key}..."
       send("migrate_#{ktype}", src, dst, key) # rubocop:disable GitlabSecurity/PublicSend
     end
   end
 
   !identical
+rescue StandardError => e
+  ktype ||= "unknown"
+  puts "Error in compare_and_migrate #{key} of type #{ktype}"
+  puts e.message
 end
 
 def src_redis
   puts "creating src_redis object"
   config = YAML.load_file('source.yml').transform_keys(&:to_sym)
   if config[:nodes]
-    ::Redis::Cluster.new(config)
+    ::Redis::Cluster.new(config.merge({ concurrency: { model: :none } }))
   else
     ::Redis.new(config)
   end
@@ -201,7 +220,7 @@ def dest_redis
   puts "creating dest_redis object"
   config = YAML.load_file('destination.yml').transform_keys(&:to_sym)
   if config[:nodes]
-    ::Redis::Cluster.new(config)
+    ::Redis::Cluster.new(config.merge({ concurrency: { model: :none } }))
   else
     ::Redis.new(config)
   end
@@ -226,6 +245,14 @@ scan_params[:type] = options[:key_type] if options[:key_type]
 scan_params[:match] = options[:match] if options[:match]
 
 ignore_regexp = /#{options[:ignore_pattern]}/ if options[:ignore_pattern]
+
+# migrate manual keys
+if options[:input_source] == 'args'
+  ARGV.each do |key|
+    compare_and_migrate(key, src_db, dest_db, options[:migrate])
+  end
+  return
+end
 
 begin
   loop do
