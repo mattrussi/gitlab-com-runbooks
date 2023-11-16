@@ -18,42 +18,42 @@ spec:
     - record: application_sli_aggregation:rails_request:error:rate_5m
       expr: |
         sum by (env,environment,tier,type,stage,endpoint_id,feature_category,request_urgency) (
-          (sli_aggregations:gitlab_sli_rails_request_error_total_rate5m{env="gprd",monitor!="global"} >= 0)
+          (sli_aggregations:gitlab_sli_rails_request_error_total_rate5m{env="gprd"} >= 0)
         )
     - record: application_sli_aggregation:rails_request:ops:rate_5m
       expr: |
         sum by (env,environment,tier,type,stage,endpoint_id,feature_category,request_urgency) (
-          (sli_aggregations:gitlab_sli_rails_request_total_rate5m{env="gprd",monitor!="global"} >= 0)
+          (sli_aggregations:gitlab_sli_rails_request_total_rate5m{env="gprd"} >= 0)
         )
     - record: application_sli_aggregation:rails_request:apdex:weight:score_5m
       expr: |
         sum by (env,environment,tier,type,stage,endpoint_id,feature_category,request_urgency) (
-          (sli_aggregations:gitlab_sli_rails_request_apdex_total_rate5m{env="gprd",monitor!="global"} >= 0)
+          (sli_aggregations:gitlab_sli_rails_request_apdex_total_rate5m{env="gprd"} >= 0)
         )
     - record: application_sli_aggregation:rails_request:apdex:success:rate_5m
       expr: |
         sum by (env,environment,tier,type,stage,endpoint_id,feature_category,request_urgency) (
-          (sli_aggregations:gitlab_sli_rails_request_apdex_success_total_rate5m{env="gprd",monitor!="global"} >= 0)
+          (sli_aggregations:gitlab_sli_rails_request_apdex_success_total_rate5m{env="gprd"} >= 0)
         )
     - record: application_sli_aggregation:rails_request:error:rate_1h
       expr: |
         sum by (env,environment,tier,type,stage,endpoint_id,feature_category,request_urgency) (
-          (sli_aggregations:gitlab_sli_rails_request_error_total_rate1h{env="gprd",monitor!="global"} >= 0)
+          (sli_aggregations:gitlab_sli_rails_request_error_total_rate1h{env="gprd"} >= 0)
         )
     - record: application_sli_aggregation:rails_request:ops:rate_1h
       expr: |
         sum by (env,environment,tier,type,stage,endpoint_id,feature_category,request_urgency) (
-          (sli_aggregations:gitlab_sli_rails_request_total_rate1h{env="gprd",monitor!="global"} >= 0)
+          (sli_aggregations:gitlab_sli_rails_request_total_rate1h{env="gprd"} >= 0)
         )
     - record: application_sli_aggregation:rails_request:apdex:weight:score_1h
       expr: |
         sum by (env,environment,tier,type,stage,endpoint_id,feature_category,request_urgency) (
-          (sli_aggregations:gitlab_sli_rails_request_apdex_total_rate1h{env="gprd",monitor!="global"} >= 0)
+          (sli_aggregations:gitlab_sli_rails_request_apdex_total_rate1h{env="gprd"} >= 0)
         )
     - record: application_sli_aggregation:rails_request:apdex:success:rate_1h
       expr: |
         sum by (env,environment,tier,type,stage,endpoint_id,feature_category,request_urgency) (
-          (sli_aggregations:gitlab_sli_rails_request_apdex_success_total_rate1h{env="gprd",monitor!="global"} >= 0)
+          (sli_aggregations:gitlab_sli_rails_request_apdex_success_total_rate1h{env="gprd"} >= 0)
         )
   - name: 'Application Defined SLI Global metrics: graphql_query (fast burn)'
     interval: 1m
@@ -62,22 +62,22 @@ spec:
     - record: application_sli_aggregation:graphql_query:apdex:weight:score_5m
       expr: |
         sum by (env,environment,tier,type,stage,endpoint_id,feature_category,query_urgency) (
-          (sli_aggregations:gitlab_sli_graphql_query_apdex_total_rate5m{env="gprd",monitor!="global"} >= 0)
+          (sli_aggregations:gitlab_sli_graphql_query_apdex_total_rate5m{env="gprd"} >= 0)
         )
     - record: application_sli_aggregation:graphql_query:apdex:success:rate_5m
       expr: |
         sum by (env,environment,tier,type,stage,endpoint_id,feature_category,query_urgency) (
-          (sli_aggregations:gitlab_sli_graphql_query_apdex_success_total_rate5m{env="gprd",monitor!="global"} >= 0)
+          (sli_aggregations:gitlab_sli_graphql_query_apdex_success_total_rate5m{env="gprd"} >= 0)
         )
     - record: application_sli_aggregation:graphql_query:apdex:weight:score_1h
       expr: |
         sum by (env,environment,tier,type,stage,endpoint_id,feature_category,query_urgency) (
-          (sli_aggregations:gitlab_sli_graphql_query_apdex_total_rate1h{env="gprd",monitor!="global"} >= 0)
+          (sli_aggregations:gitlab_sli_graphql_query_apdex_total_rate1h{env="gprd"} >= 0)
         )
     - record: application_sli_aggregation:graphql_query:apdex:success:rate_1h
       expr: |
         sum by (env,environment,tier,type,stage,endpoint_id,feature_category,query_urgency) (
-          (sli_aggregations:gitlab_sli_graphql_query_apdex_success_total_rate1h{env="gprd",monitor!="global"} >= 0)
+          (sli_aggregations:gitlab_sli_graphql_query_apdex_success_total_rate1h{env="gprd"} >= 0)
         )
   - name: 'Application Defined SLI Global metrics: customers_dot_sidekiq_jobs (fast
       burn)'
@@ -87,42 +87,42 @@ spec:
     - record: application_sli_aggregation:customers_dot_sidekiq_jobs:error:rate_5m
       expr: |
         sum by (env,environment,tier,type,stage,endpoint_id,feature_category) (
-          (application_sli_aggregation:customers_dot_sidekiq_jobs:error:rate_5m{env="gprd",monitor!="global"} >= 0)
+          (application_sli_aggregation:customers_dot_sidekiq_jobs:error:rate_5m{env="gprd"} >= 0)
         )
     - record: application_sli_aggregation:customers_dot_sidekiq_jobs:ops:rate_5m
       expr: |
         sum by (env,environment,tier,type,stage,endpoint_id,feature_category) (
-          (application_sli_aggregation:customers_dot_sidekiq_jobs:ops:rate_5m{env="gprd",monitor!="global"} >= 0)
+          (application_sli_aggregation:customers_dot_sidekiq_jobs:ops:rate_5m{env="gprd"} >= 0)
         )
     - record: application_sli_aggregation:customers_dot_sidekiq_jobs:apdex:weight:score_5m
       expr: |
         sum by (env,environment,tier,type,stage,endpoint_id,feature_category) (
-          (application_sli_aggregation:customers_dot_sidekiq_jobs:apdex:weight:score_5m{env="gprd",monitor!="global"} >= 0)
+          (application_sli_aggregation:customers_dot_sidekiq_jobs:apdex:weight:score_5m{env="gprd"} >= 0)
         )
     - record: application_sli_aggregation:customers_dot_sidekiq_jobs:apdex:success:rate_5m
       expr: |
         sum by (env,environment,tier,type,stage,endpoint_id,feature_category) (
-          (application_sli_aggregation:customers_dot_sidekiq_jobs:apdex:success:rate_5m{env="gprd",monitor!="global"} >= 0)
+          (application_sli_aggregation:customers_dot_sidekiq_jobs:apdex:success:rate_5m{env="gprd"} >= 0)
         )
     - record: application_sli_aggregation:customers_dot_sidekiq_jobs:error:rate_1h
       expr: |
         sum by (env,environment,tier,type,stage,endpoint_id,feature_category) (
-          (application_sli_aggregation:customers_dot_sidekiq_jobs:error:rate_1h{env="gprd",monitor!="global"} >= 0)
+          (application_sli_aggregation:customers_dot_sidekiq_jobs:error:rate_1h{env="gprd"} >= 0)
         )
     - record: application_sli_aggregation:customers_dot_sidekiq_jobs:ops:rate_1h
       expr: |
         sum by (env,environment,tier,type,stage,endpoint_id,feature_category) (
-          (application_sli_aggregation:customers_dot_sidekiq_jobs:ops:rate_1h{env="gprd",monitor!="global"} >= 0)
+          (application_sli_aggregation:customers_dot_sidekiq_jobs:ops:rate_1h{env="gprd"} >= 0)
         )
     - record: application_sli_aggregation:customers_dot_sidekiq_jobs:apdex:weight:score_1h
       expr: |
         sum by (env,environment,tier,type,stage,endpoint_id,feature_category) (
-          (application_sli_aggregation:customers_dot_sidekiq_jobs:apdex:weight:score_1h{env="gprd",monitor!="global"} >= 0)
+          (application_sli_aggregation:customers_dot_sidekiq_jobs:apdex:weight:score_1h{env="gprd"} >= 0)
         )
     - record: application_sli_aggregation:customers_dot_sidekiq_jobs:apdex:success:rate_1h
       expr: |
         sum by (env,environment,tier,type,stage,endpoint_id,feature_category) (
-          (application_sli_aggregation:customers_dot_sidekiq_jobs:apdex:success:rate_1h{env="gprd",monitor!="global"} >= 0)
+          (application_sli_aggregation:customers_dot_sidekiq_jobs:apdex:success:rate_1h{env="gprd"} >= 0)
         )
   - name: 'Application Defined SLI Global metrics: customers_dot_requests (fast burn)'
     interval: 1m
@@ -131,42 +131,42 @@ spec:
     - record: application_sli_aggregation:customers_dot_requests:error:rate_5m
       expr: |
         sum by (env,environment,tier,type,stage,endpoint_id,feature_category) (
-          (application_sli_aggregation:customers_dot_requests:error:rate_5m{env="gprd",monitor!="global"} >= 0)
+          (application_sli_aggregation:customers_dot_requests:error:rate_5m{env="gprd"} >= 0)
         )
     - record: application_sli_aggregation:customers_dot_requests:ops:rate_5m
       expr: |
         sum by (env,environment,tier,type,stage,endpoint_id,feature_category) (
-          (application_sli_aggregation:customers_dot_requests:ops:rate_5m{env="gprd",monitor!="global"} >= 0)
+          (application_sli_aggregation:customers_dot_requests:ops:rate_5m{env="gprd"} >= 0)
         )
     - record: application_sli_aggregation:customers_dot_requests:apdex:weight:score_5m
       expr: |
         sum by (env,environment,tier,type,stage,endpoint_id,feature_category) (
-          (application_sli_aggregation:customers_dot_requests:apdex:weight:score_5m{env="gprd",monitor!="global"} >= 0)
+          (application_sli_aggregation:customers_dot_requests:apdex:weight:score_5m{env="gprd"} >= 0)
         )
     - record: application_sli_aggregation:customers_dot_requests:apdex:success:rate_5m
       expr: |
         sum by (env,environment,tier,type,stage,endpoint_id,feature_category) (
-          (application_sli_aggregation:customers_dot_requests:apdex:success:rate_5m{env="gprd",monitor!="global"} >= 0)
+          (application_sli_aggregation:customers_dot_requests:apdex:success:rate_5m{env="gprd"} >= 0)
         )
     - record: application_sli_aggregation:customers_dot_requests:error:rate_1h
       expr: |
         sum by (env,environment,tier,type,stage,endpoint_id,feature_category) (
-          (application_sli_aggregation:customers_dot_requests:error:rate_1h{env="gprd",monitor!="global"} >= 0)
+          (application_sli_aggregation:customers_dot_requests:error:rate_1h{env="gprd"} >= 0)
         )
     - record: application_sli_aggregation:customers_dot_requests:ops:rate_1h
       expr: |
         sum by (env,environment,tier,type,stage,endpoint_id,feature_category) (
-          (application_sli_aggregation:customers_dot_requests:ops:rate_1h{env="gprd",monitor!="global"} >= 0)
+          (application_sli_aggregation:customers_dot_requests:ops:rate_1h{env="gprd"} >= 0)
         )
     - record: application_sli_aggregation:customers_dot_requests:apdex:weight:score_1h
       expr: |
         sum by (env,environment,tier,type,stage,endpoint_id,feature_category) (
-          (application_sli_aggregation:customers_dot_requests:apdex:weight:score_1h{env="gprd",monitor!="global"} >= 0)
+          (application_sli_aggregation:customers_dot_requests:apdex:weight:score_1h{env="gprd"} >= 0)
         )
     - record: application_sli_aggregation:customers_dot_requests:apdex:success:rate_1h
       expr: |
         sum by (env,environment,tier,type,stage,endpoint_id,feature_category) (
-          (application_sli_aggregation:customers_dot_requests:apdex:success:rate_1h{env="gprd",monitor!="global"} >= 0)
+          (application_sli_aggregation:customers_dot_requests:apdex:success:rate_1h{env="gprd"} >= 0)
         )
   - name: 'Application Defined SLI Global metrics: global_search (fast burn)'
     interval: 1m
@@ -177,56 +177,56 @@ spec:
         feature_category: global_search
       expr: |
         sum by (env,environment,tier,type,stage,endpoint_id,search_level,search_scope,search_type) (
-          (application_sli_aggregation:global_search:error:rate_5m{env="gprd",monitor!="global"} >= 0)
+          (application_sli_aggregation:global_search:error:rate_5m{env="gprd"} >= 0)
         )
     - record: application_sli_aggregation:global_search:ops:rate_5m
       labels:
         feature_category: global_search
       expr: |
         sum by (env,environment,tier,type,stage,endpoint_id,search_level,search_scope,search_type) (
-          (application_sli_aggregation:global_search:ops:rate_5m{env="gprd",monitor!="global"} >= 0)
+          (application_sli_aggregation:global_search:ops:rate_5m{env="gprd"} >= 0)
         )
     - record: application_sli_aggregation:global_search:apdex:weight:score_5m
       labels:
         feature_category: global_search
       expr: |
         sum by (env,environment,tier,type,stage,endpoint_id,search_level,search_scope,search_type) (
-          (application_sli_aggregation:global_search:apdex:weight:score_5m{env="gprd",monitor!="global"} >= 0)
+          (application_sli_aggregation:global_search:apdex:weight:score_5m{env="gprd"} >= 0)
         )
     - record: application_sli_aggregation:global_search:apdex:success:rate_5m
       labels:
         feature_category: global_search
       expr: |
         sum by (env,environment,tier,type,stage,endpoint_id,search_level,search_scope,search_type) (
-          (application_sli_aggregation:global_search:apdex:success:rate_5m{env="gprd",monitor!="global"} >= 0)
+          (application_sli_aggregation:global_search:apdex:success:rate_5m{env="gprd"} >= 0)
         )
     - record: application_sli_aggregation:global_search:error:rate_1h
       labels:
         feature_category: global_search
       expr: |
         sum by (env,environment,tier,type,stage,endpoint_id,search_level,search_scope,search_type) (
-          (application_sli_aggregation:global_search:error:rate_1h{env="gprd",monitor!="global"} >= 0)
+          (application_sli_aggregation:global_search:error:rate_1h{env="gprd"} >= 0)
         )
     - record: application_sli_aggregation:global_search:ops:rate_1h
       labels:
         feature_category: global_search
       expr: |
         sum by (env,environment,tier,type,stage,endpoint_id,search_level,search_scope,search_type) (
-          (application_sli_aggregation:global_search:ops:rate_1h{env="gprd",monitor!="global"} >= 0)
+          (application_sli_aggregation:global_search:ops:rate_1h{env="gprd"} >= 0)
         )
     - record: application_sli_aggregation:global_search:apdex:weight:score_1h
       labels:
         feature_category: global_search
       expr: |
         sum by (env,environment,tier,type,stage,endpoint_id,search_level,search_scope,search_type) (
-          (application_sli_aggregation:global_search:apdex:weight:score_1h{env="gprd",monitor!="global"} >= 0)
+          (application_sli_aggregation:global_search:apdex:weight:score_1h{env="gprd"} >= 0)
         )
     - record: application_sli_aggregation:global_search:apdex:success:rate_1h
       labels:
         feature_category: global_search
       expr: |
         sum by (env,environment,tier,type,stage,endpoint_id,search_level,search_scope,search_type) (
-          (application_sli_aggregation:global_search:apdex:success:rate_1h{env="gprd",monitor!="global"} >= 0)
+          (application_sli_aggregation:global_search:apdex:success:rate_1h{env="gprd"} >= 0)
         )
   - name: 'Application Defined SLI Global metrics: global_search_indexing (fast burn)'
     interval: 1m
@@ -237,28 +237,28 @@ spec:
         feature_category: global_search
       expr: |
         sum by (env,environment,tier,type,stage,document_type) (
-          (application_sli_aggregation:global_search_indexing:apdex:weight:score_5m{env="gprd",monitor!="global"} >= 0)
+          (application_sli_aggregation:global_search_indexing:apdex:weight:score_5m{env="gprd"} >= 0)
         )
     - record: application_sli_aggregation:global_search_indexing:apdex:success:rate_5m
       labels:
         feature_category: global_search
       expr: |
         sum by (env,environment,tier,type,stage,document_type) (
-          (application_sli_aggregation:global_search_indexing:apdex:success:rate_5m{env="gprd",monitor!="global"} >= 0)
+          (application_sli_aggregation:global_search_indexing:apdex:success:rate_5m{env="gprd"} >= 0)
         )
     - record: application_sli_aggregation:global_search_indexing:apdex:weight:score_1h
       labels:
         feature_category: global_search
       expr: |
         sum by (env,environment,tier,type,stage,document_type) (
-          (application_sli_aggregation:global_search_indexing:apdex:weight:score_1h{env="gprd",monitor!="global"} >= 0)
+          (application_sli_aggregation:global_search_indexing:apdex:weight:score_1h{env="gprd"} >= 0)
         )
     - record: application_sli_aggregation:global_search_indexing:apdex:success:rate_1h
       labels:
         feature_category: global_search
       expr: |
         sum by (env,environment,tier,type,stage,document_type) (
-          (application_sli_aggregation:global_search_indexing:apdex:success:rate_1h{env="gprd",monitor!="global"} >= 0)
+          (application_sli_aggregation:global_search_indexing:apdex:success:rate_1h{env="gprd"} >= 0)
         )
   - name: 'Application Defined SLI Global metrics: sidekiq_execution (fast burn)'
     interval: 1m
@@ -267,42 +267,42 @@ spec:
     - record: application_sli_aggregation:sidekiq_execution:error:rate_5m
       expr: |
         sum by (env,environment,tier,type,stage,worker,feature_category,urgency,external_dependencies,queue) (
-          (sli_aggregations:gitlab_sli_sidekiq_execution_error_total_rate5m{env="gprd",monitor!="global"} >= 0)
+          (sli_aggregations:gitlab_sli_sidekiq_execution_error_total_rate5m{env="gprd"} >= 0)
         )
     - record: application_sli_aggregation:sidekiq_execution:ops:rate_5m
       expr: |
         sum by (env,environment,tier,type,stage,worker,feature_category,urgency,external_dependencies,queue) (
-          (sli_aggregations:gitlab_sli_sidekiq_execution_total_rate5m{env="gprd",monitor!="global"} >= 0)
+          (sli_aggregations:gitlab_sli_sidekiq_execution_total_rate5m{env="gprd"} >= 0)
         )
     - record: application_sli_aggregation:sidekiq_execution:apdex:weight:score_5m
       expr: |
         sum by (env,environment,tier,type,stage,worker,feature_category,urgency,external_dependencies,queue) (
-          (sli_aggregations:gitlab_sli_sidekiq_execution_apdex_total_rate5m{env="gprd",monitor!="global"} >= 0)
+          (sli_aggregations:gitlab_sli_sidekiq_execution_apdex_total_rate5m{env="gprd"} >= 0)
         )
     - record: application_sli_aggregation:sidekiq_execution:apdex:success:rate_5m
       expr: |
         sum by (env,environment,tier,type,stage,worker,feature_category,urgency,external_dependencies,queue) (
-          (sli_aggregations:gitlab_sli_sidekiq_execution_apdex_success_total_rate5m{env="gprd",monitor!="global"} >= 0)
+          (sli_aggregations:gitlab_sli_sidekiq_execution_apdex_success_total_rate5m{env="gprd"} >= 0)
         )
     - record: application_sli_aggregation:sidekiq_execution:error:rate_1h
       expr: |
         sum by (env,environment,tier,type,stage,worker,feature_category,urgency,external_dependencies,queue) (
-          (sli_aggregations:gitlab_sli_sidekiq_execution_error_total_rate1h{env="gprd",monitor!="global"} >= 0)
+          (sli_aggregations:gitlab_sli_sidekiq_execution_error_total_rate1h{env="gprd"} >= 0)
         )
     - record: application_sli_aggregation:sidekiq_execution:ops:rate_1h
       expr: |
         sum by (env,environment,tier,type,stage,worker,feature_category,urgency,external_dependencies,queue) (
-          (sli_aggregations:gitlab_sli_sidekiq_execution_total_rate1h{env="gprd",monitor!="global"} >= 0)
+          (sli_aggregations:gitlab_sli_sidekiq_execution_total_rate1h{env="gprd"} >= 0)
         )
     - record: application_sli_aggregation:sidekiq_execution:apdex:weight:score_1h
       expr: |
         sum by (env,environment,tier,type,stage,worker,feature_category,urgency,external_dependencies,queue) (
-          (sli_aggregations:gitlab_sli_sidekiq_execution_apdex_total_rate1h{env="gprd",monitor!="global"} >= 0)
+          (sli_aggregations:gitlab_sli_sidekiq_execution_apdex_total_rate1h{env="gprd"} >= 0)
         )
     - record: application_sli_aggregation:sidekiq_execution:apdex:success:rate_1h
       expr: |
         sum by (env,environment,tier,type,stage,worker,feature_category,urgency,external_dependencies,queue) (
-          (sli_aggregations:gitlab_sli_sidekiq_execution_apdex_success_total_rate1h{env="gprd",monitor!="global"} >= 0)
+          (sli_aggregations:gitlab_sli_sidekiq_execution_apdex_success_total_rate1h{env="gprd"} >= 0)
         )
   - name: 'Application Defined SLI Global metrics: sidekiq_queueing (fast burn)'
     interval: 1m
@@ -311,22 +311,22 @@ spec:
     - record: application_sli_aggregation:sidekiq_queueing:apdex:weight:score_5m
       expr: |
         sum by (env,environment,tier,type,stage,worker,feature_category,urgency,external_dependencies,queue) (
-          (sli_aggregations:gitlab_sli_sidekiq_queueing_apdex_total_rate5m{env="gprd",monitor!="global"} >= 0)
+          (sli_aggregations:gitlab_sli_sidekiq_queueing_apdex_total_rate5m{env="gprd"} >= 0)
         )
     - record: application_sli_aggregation:sidekiq_queueing:apdex:success:rate_5m
       expr: |
         sum by (env,environment,tier,type,stage,worker,feature_category,urgency,external_dependencies,queue) (
-          (sli_aggregations:gitlab_sli_sidekiq_queueing_apdex_success_total_rate5m{env="gprd",monitor!="global"} >= 0)
+          (sli_aggregations:gitlab_sli_sidekiq_queueing_apdex_success_total_rate5m{env="gprd"} >= 0)
         )
     - record: application_sli_aggregation:sidekiq_queueing:apdex:weight:score_1h
       expr: |
         sum by (env,environment,tier,type,stage,worker,feature_category,urgency,external_dependencies,queue) (
-          (sli_aggregations:gitlab_sli_sidekiq_queueing_apdex_total_rate1h{env="gprd",monitor!="global"} >= 0)
+          (sli_aggregations:gitlab_sli_sidekiq_queueing_apdex_total_rate1h{env="gprd"} >= 0)
         )
     - record: application_sli_aggregation:sidekiq_queueing:apdex:success:rate_1h
       expr: |
         sum by (env,environment,tier,type,stage,worker,feature_category,urgency,external_dependencies,queue) (
-          (sli_aggregations:gitlab_sli_sidekiq_queueing_apdex_success_total_rate1h{env="gprd",monitor!="global"} >= 0)
+          (sli_aggregations:gitlab_sli_sidekiq_queueing_apdex_success_total_rate1h{env="gprd"} >= 0)
         )
   - name: 'Application Defined SLI Global metrics: sidekiq_execution_with_external_dependency
       (fast burn)'
@@ -338,56 +338,56 @@ spec:
         feature_category: not_owned
       expr: |
         sum by (env,environment,tier,type,stage,worker,urgency,external_dependencies) (
-          (sli_aggregations:gitlab_sli_sidekiq_execution_error_total_rate5m{env="gprd",monitor!="global"} >= 0)
+          (sli_aggregations:gitlab_sli_sidekiq_execution_error_total_rate5m{env="gprd"} >= 0)
         )
     - record: application_sli_aggregation:sidekiq_execution_with_external_dependency:ops:rate_5m
       labels:
         feature_category: not_owned
       expr: |
         sum by (env,environment,tier,type,stage,worker,urgency,external_dependencies) (
-          (sli_aggregations:gitlab_sli_sidekiq_execution_total_rate5m{env="gprd",monitor!="global"} >= 0)
+          (sli_aggregations:gitlab_sli_sidekiq_execution_total_rate5m{env="gprd"} >= 0)
         )
     - record: application_sli_aggregation:sidekiq_execution_with_external_dependency:apdex:weight:score_5m
       labels:
         feature_category: not_owned
       expr: |
         sum by (env,environment,tier,type,stage,worker,urgency,external_dependencies) (
-          (sli_aggregations:gitlab_sli_sidekiq_execution_apdex_total_rate5m{env="gprd",monitor!="global"} >= 0)
+          (sli_aggregations:gitlab_sli_sidekiq_execution_apdex_total_rate5m{env="gprd"} >= 0)
         )
     - record: application_sli_aggregation:sidekiq_execution_with_external_dependency:apdex:success:rate_5m
       labels:
         feature_category: not_owned
       expr: |
         sum by (env,environment,tier,type,stage,worker,urgency,external_dependencies) (
-          (sli_aggregations:gitlab_sli_sidekiq_execution_apdex_success_total_rate5m{env="gprd",monitor!="global"} >= 0)
+          (sli_aggregations:gitlab_sli_sidekiq_execution_apdex_success_total_rate5m{env="gprd"} >= 0)
         )
     - record: application_sli_aggregation:sidekiq_execution_with_external_dependency:error:rate_1h
       labels:
         feature_category: not_owned
       expr: |
         sum by (env,environment,tier,type,stage,worker,urgency,external_dependencies) (
-          (sli_aggregations:gitlab_sli_sidekiq_execution_error_total_rate1h{env="gprd",monitor!="global"} >= 0)
+          (sli_aggregations:gitlab_sli_sidekiq_execution_error_total_rate1h{env="gprd"} >= 0)
         )
     - record: application_sli_aggregation:sidekiq_execution_with_external_dependency:ops:rate_1h
       labels:
         feature_category: not_owned
       expr: |
         sum by (env,environment,tier,type,stage,worker,urgency,external_dependencies) (
-          (sli_aggregations:gitlab_sli_sidekiq_execution_total_rate1h{env="gprd",monitor!="global"} >= 0)
+          (sli_aggregations:gitlab_sli_sidekiq_execution_total_rate1h{env="gprd"} >= 0)
         )
     - record: application_sli_aggregation:sidekiq_execution_with_external_dependency:apdex:weight:score_1h
       labels:
         feature_category: not_owned
       expr: |
         sum by (env,environment,tier,type,stage,worker,urgency,external_dependencies) (
-          (sli_aggregations:gitlab_sli_sidekiq_execution_apdex_total_rate1h{env="gprd",monitor!="global"} >= 0)
+          (sli_aggregations:gitlab_sli_sidekiq_execution_apdex_total_rate1h{env="gprd"} >= 0)
         )
     - record: application_sli_aggregation:sidekiq_execution_with_external_dependency:apdex:success:rate_1h
       labels:
         feature_category: not_owned
       expr: |
         sum by (env,environment,tier,type,stage,worker,urgency,external_dependencies) (
-          (sli_aggregations:gitlab_sli_sidekiq_execution_apdex_success_total_rate1h{env="gprd",monitor!="global"} >= 0)
+          (sli_aggregations:gitlab_sli_sidekiq_execution_apdex_success_total_rate1h{env="gprd"} >= 0)
         )
   - name: 'Application Defined SLI Global metrics: sidekiq_queueing_with_external_dependency
       (fast burn)'
@@ -399,28 +399,28 @@ spec:
         feature_category: not_owned
       expr: |
         sum by (env,environment,tier,type,stage,worker,urgency,external_dependencies) (
-          (sli_aggregations:gitlab_sli_sidekiq_queueing_apdex_total_rate5m{env="gprd",monitor!="global"} >= 0)
+          (sli_aggregations:gitlab_sli_sidekiq_queueing_apdex_total_rate5m{env="gprd"} >= 0)
         )
     - record: application_sli_aggregation:sidekiq_queueing_with_external_dependency:apdex:success:rate_5m
       labels:
         feature_category: not_owned
       expr: |
         sum by (env,environment,tier,type,stage,worker,urgency,external_dependencies) (
-          (sli_aggregations:gitlab_sli_sidekiq_queueing_apdex_success_total_rate5m{env="gprd",monitor!="global"} >= 0)
+          (sli_aggregations:gitlab_sli_sidekiq_queueing_apdex_success_total_rate5m{env="gprd"} >= 0)
         )
     - record: application_sli_aggregation:sidekiq_queueing_with_external_dependency:apdex:weight:score_1h
       labels:
         feature_category: not_owned
       expr: |
         sum by (env,environment,tier,type,stage,worker,urgency,external_dependencies) (
-          (sli_aggregations:gitlab_sli_sidekiq_queueing_apdex_total_rate1h{env="gprd",monitor!="global"} >= 0)
+          (sli_aggregations:gitlab_sli_sidekiq_queueing_apdex_total_rate1h{env="gprd"} >= 0)
         )
     - record: application_sli_aggregation:sidekiq_queueing_with_external_dependency:apdex:success:rate_1h
       labels:
         feature_category: not_owned
       expr: |
         sum by (env,environment,tier,type,stage,worker,urgency,external_dependencies) (
-          (sli_aggregations:gitlab_sli_sidekiq_queueing_apdex_success_total_rate1h{env="gprd",monitor!="global"} >= 0)
+          (sli_aggregations:gitlab_sli_sidekiq_queueing_apdex_success_total_rate1h{env="gprd"} >= 0)
         )
   - name: 'Application Defined SLI Global metrics: llm_completion (fast burn)'
     interval: 1m
@@ -431,54 +431,54 @@ spec:
         feature_category: ai_abstraction_layer
       expr: |
         sum by (env,environment,tier,type,stage,service_class) (
-          (application_sli_aggregation:llm_completion:error:rate_5m{env="gprd",monitor!="global"} >= 0)
+          (application_sli_aggregation:llm_completion:error:rate_5m{env="gprd"} >= 0)
         )
     - record: application_sli_aggregation:llm_completion:ops:rate_5m
       labels:
         feature_category: ai_abstraction_layer
       expr: |
         sum by (env,environment,tier,type,stage,service_class) (
-          (application_sli_aggregation:llm_completion:ops:rate_5m{env="gprd",monitor!="global"} >= 0)
+          (application_sli_aggregation:llm_completion:ops:rate_5m{env="gprd"} >= 0)
         )
     - record: application_sli_aggregation:llm_completion:apdex:weight:score_5m
       labels:
         feature_category: ai_abstraction_layer
       expr: |
         sum by (env,environment,tier,type,stage,service_class) (
-          (application_sli_aggregation:llm_completion:apdex:weight:score_5m{env="gprd",monitor!="global"} >= 0)
+          (application_sli_aggregation:llm_completion:apdex:weight:score_5m{env="gprd"} >= 0)
         )
     - record: application_sli_aggregation:llm_completion:apdex:success:rate_5m
       labels:
         feature_category: ai_abstraction_layer
       expr: |
         sum by (env,environment,tier,type,stage,service_class) (
-          (application_sli_aggregation:llm_completion:apdex:success:rate_5m{env="gprd",monitor!="global"} >= 0)
+          (application_sli_aggregation:llm_completion:apdex:success:rate_5m{env="gprd"} >= 0)
         )
     - record: application_sli_aggregation:llm_completion:error:rate_1h
       labels:
         feature_category: ai_abstraction_layer
       expr: |
         sum by (env,environment,tier,type,stage,service_class) (
-          (application_sli_aggregation:llm_completion:error:rate_1h{env="gprd",monitor!="global"} >= 0)
+          (application_sli_aggregation:llm_completion:error:rate_1h{env="gprd"} >= 0)
         )
     - record: application_sli_aggregation:llm_completion:ops:rate_1h
       labels:
         feature_category: ai_abstraction_layer
       expr: |
         sum by (env,environment,tier,type,stage,service_class) (
-          (application_sli_aggregation:llm_completion:ops:rate_1h{env="gprd",monitor!="global"} >= 0)
+          (application_sli_aggregation:llm_completion:ops:rate_1h{env="gprd"} >= 0)
         )
     - record: application_sli_aggregation:llm_completion:apdex:weight:score_1h
       labels:
         feature_category: ai_abstraction_layer
       expr: |
         sum by (env,environment,tier,type,stage,service_class) (
-          (application_sli_aggregation:llm_completion:apdex:weight:score_1h{env="gprd",monitor!="global"} >= 0)
+          (application_sli_aggregation:llm_completion:apdex:weight:score_1h{env="gprd"} >= 0)
         )
     - record: application_sli_aggregation:llm_completion:apdex:success:rate_1h
       labels:
         feature_category: ai_abstraction_layer
       expr: |
         sum by (env,environment,tier,type,stage,service_class) (
-          (application_sli_aggregation:llm_completion:apdex:success:rate_1h{env="gprd",monitor!="global"} >= 0)
+          (application_sli_aggregation:llm_completion:apdex:success:rate_1h{env="gprd"} >= 0)
         )

@@ -62,7 +62,7 @@ local sourceAggregationSet(sli) =
       name: 'Application Defined SLI Source metrics: %s' % sli.name,
       labels: defaultLabels + sli.significantLabels,
       intermediateSource: true,
-      selector: { monitor: { ne: 'global' } },
+      selector: {},
       supportedBurnRates: supportedBurnRates,
     }
     +
