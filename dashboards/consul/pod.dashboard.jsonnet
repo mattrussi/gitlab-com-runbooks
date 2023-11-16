@@ -7,7 +7,7 @@ local row = grafana.row;
 local basic = import 'grafana/basic.libsonnet';
 
 basic.dashboard(
-  'Pod Info',
+  'Consul Client Pod Info',
   tags=[
     'consul',
   ],
@@ -19,8 +19,8 @@ basic.dashboard(
 .addTemplate(
   template.custom(
     name='Daemonset',
-    query='consul-consul',
-    current='consul-consul',
+    query='consul-gl-consul',
+    current='consul-gl-consul',
     hide='variable',
   )
 )
