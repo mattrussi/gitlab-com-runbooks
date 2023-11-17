@@ -1,10 +1,12 @@
-local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
 local basic = import 'grafana/basic.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
 local prebuiltTemplates = import 'grafana/templates.libsonnet';
 local runnersService = (import 'servicemetrics/metrics-catalog.libsonnet').getService('ci-runners');
 local keyMetrics = import 'gitlab-dashboards/key_metrics.libsonnet';
 local platformLinks = import 'gitlab-dashboards/platform_links.libsonnet';
+
+local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
+local template = grafana.template;
 
 local dashboardFilters = import './dashboard_filters.libsonnet';
 
@@ -29,6 +31,11 @@ local underConstructionNote = layout.singleRow(
 local commonFilters = [
   dashboardFilters.shard,
 ];
+
+local typeFilter =
+ prebuiltTemplates.type + {
+   current: template.current(runnerServiceType)
+ };
 
 local runnerServiceDashboardsLinks = [
   platformLinks.dynamicLinks('%s Detail' % runnerServiceType, 'type:%s' % runnerServiceType),
@@ -56,6 +63,7 @@ local dashboard(
     includeEnvironmentTemplate=true,
   )
   .addTemplate(prebuiltTemplates.stage)
+  .addTemplate(typeFilter)
   .addTemplates(filters)
   .trailer() + {
     links+: runnerServiceDashboardsLinks,
