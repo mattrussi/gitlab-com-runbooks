@@ -190,7 +190,7 @@ def migrate_direct(key, src, dst)
   end
 
   args = ['migrate', host, port, key, 0, 50000, 'COPY', 'REPLACE']
-  args = args.concat(['AUTH2', username, password]) if username && password
+  args.concat(['AUTH2', username, password]) if username && password
 
   src.with do |redis|
     redis._client.call_v(args)
