@@ -6,7 +6,7 @@ local shard = template.new(
   'shard',
   '$PROMETHEUS_DS',
   query=|||
-    label_values(gitlab_runner_version_info{environment=~"$environment",stage=~"$stage",job=~".*",job!~"omnibus-runners|gprd-runner",shard!="default"}, shard)
+    label_values(gitlab_runner_version_info{environment=~"$environment",stage=~"$stage",type=~"$type",job=~".*",job!~"omnibus-runners|gprd-runner",shard!="default"}, shard)
   |||,
   current=null,
   refresh='load',
@@ -145,7 +145,7 @@ local dbTopDeadTuples = template.new(
 );
 
 local selectorHash = {
-  type: runnersService.type,
+  type: '$type',
   tier: runnersService.tier,
   environment: '$environment',
   stage: '$stage',
