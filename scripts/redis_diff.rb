@@ -29,8 +29,9 @@ options = {}
 OptionParser.new do |opts|
   opts.banner = "Usage: example.rb [options]"
 
-  opts.on("-m", "--migrate", "Copy mismatched key values (and their TTLs) from src to dst redis") do |v|
-    options[:migrate] = v
+  opts.on("-m", "--migrate=<method>", "Copy mismatched key values (and their TTLs) from src to dst redis") do |method|
+    # direct or copywrite
+    options[:migrate] = method
   end
 
   opts.on("-s", "--source=<input_source>", "source of keys") do |v|
@@ -179,6 +180,23 @@ def migrate_zset(src, dst, key)
   migrate_ttl(src, dst, key)
 end
 
+def migrate_direct(key, src, dst)
+  host, port, username, password = dst.with do |redis|
+    hostname = redis._client.instance_variable_get(:@router).find_node_key(["TYPE", key])
+    host, port = hostname.split(':')
+    config = redis._client.config.instance_variable_get(:@client_config)
+
+    [host, port, config[:username], config[:password]]
+  end
+
+  args = ['migrate', host, port, key, 0, 50000, 'COPY', 'REPLACE']
+  args = args.concat(['AUTH2', username, password]) if username && password
+
+  src.with do |redis|
+    redis._client.call_v(args)
+  end
+end
+
 def compare_and_migrate(key, src, dst, migrate)
   ktype = src.with { |r| r.type(key) }
 
@@ -194,8 +212,12 @@ def compare_and_migrate(key, src, dst, migrate)
 
     # alternatively we can run MIGRATE command but we need to know which port
     # and it only works when migrating from a lower Redis version to a higher Redis version
-    if migrate # some argv
+    if migrate == 'direct' # some argv
+      migrate_direct(key, src, dst)
+    elsif migrate == 'copywrite'
       send("migrate_#{ktype}", src, dst, key) # rubocop:disable GitlabSecurity/PublicSend
+    else
+      pass # just a check without migrate
     end
   end
 
@@ -249,6 +271,7 @@ ignore_regexp = /#{options[:ignore_pattern]}/ if options[:ignore_pattern]
 # migrate manual keys
 if options[:input_source] == 'args'
   ARGV.each do |key|
+    puts key
     compare_and_migrate(key, src_db, dest_db, options[:migrate])
   end
   return
@@ -293,7 +316,7 @@ begin
         next unless keys_to_recheck.include?(idx)
 
         threads << Thread.new do
-          if !compare_and_migrate(key, src_db, dest_db, false)
+          if !compare_and_migrate(key, src_db, dest_db, nil)
             migrated_count += 1
           else
             # TODO write persistent mismatches into a tmp file?
