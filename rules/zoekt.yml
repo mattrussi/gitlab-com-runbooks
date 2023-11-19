@@ -5,7 +5,7 @@ groups:
     expr: >
       (sum by (environment, container) (kube_pod_container_status_last_terminated_reason{pod="gitlab-gitlab-zoekt-0", reason="OOMKilled"})
       * on (container, pod) group_left
-      sum by (container, pod) (changes(kube_pod_container_status_restarts_total{container=~"zoekt.*"}[1m]) > 0))
+      sum by (container, pod) (changes(kube_pod_container_status_restarts_total{pod="gitlab-gitlab-zoekt-0"}[1m]) > 0))
 - name: Zoekt Alerts
   rules:
   - alert: ZoektContainersRestartsDueToOOM
