@@ -7,9 +7,9 @@
 # https://github.com/FiloSottile/yubikey-agent/issues/95#issuecomment-904101391
 
 if ! command -v ykman >/dev/null 2>&1; then
-    echo "Please install ykman"
-    echo "See: https://docs.yubico.com/software/yubikey/tools/ykman/Install_ykman.html"
-    exit
+  echo "Please install ykman"
+  echo "See: https://docs.yubico.com/software/yubikey/tools/ykman/Install_ykman.html"
+  exit
 fi
 
 set -e
@@ -31,8 +31,7 @@ ykman piv access change-management-key -P $PIN -p
 # Generate a key in slot 9a
 ykman piv keys generate --pin=$PIN -a ECCP256 --pin-policy=ONCE --touch-policy=CACHED 9a /var/tmp/pkey.pub
 # Generate cert
-ykman piv certificates generate --subject="CN=SSH Name+O=yubikey-agent+OU=0.1.5" --valid-days=10950  9a /var/tmp/pkey.pub
+ykman piv certificates generate --subject="CN=SSH Name+O=yubikey-agent+OU=0.1.5" --valid-days=10950 9a /var/tmp/pkey.pub
 
 # Read the public key and use it as you normally would
 ssh-add -L
-
