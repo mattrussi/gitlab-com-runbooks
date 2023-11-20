@@ -107,7 +107,7 @@ check_global_golang_install() {
   ) >/dev/null 2>/dev/null
 }
 
-if command -v rtx 2> /dev/null; then
+if command -v rtx 2>/dev/null; then
   setup_rtx
 elif [[ -n ${ASDF_DIR-} ]]; then
   setup_asdf
@@ -117,7 +117,7 @@ fi
 install_plugin golang
 
 # Jumping through these hoops does not seem necessary for rtx, only asdf
-if [[ -z "${CI:-}" ]] && [[ -n ${ASDF_DIR-} ]]; then
+if [[ -z ${CI:-} ]] && [[ -n ${ASDF_DIR-} ]]; then
   # The go-jsonnet plugin requires a global golang version to be configured
   # and will otherwise fail to install.
   #

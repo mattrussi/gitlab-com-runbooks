@@ -4,8 +4,8 @@ set -efo pipefail
 
 usage() {
   case $1 in
-    storages)
-      cat <<HELP >&2
+  storages)
+    cat <<HELP >&2
 USAGE:
   glsh gitaly storages [SUBCOMMAND]
 
@@ -13,9 +13,9 @@ SUBCOMMANDS:
   list       List storages and their weights
   validate   Validate a storage by performing a project move
 HELP
-      ;;
-    storages_list)
-      cat <<HELP >&2
+    ;;
+  storages_list)
+    cat <<HELP >&2
 USAGE:
   glsh gitaly storages list -e [gstg,gprd]
 
@@ -23,10 +23,10 @@ Example:
   # list storages and their weights in staging
   glsh gitaly storages list -e gstg
 HELP
-      exit 2
-      ;;
-    storages_validate)
-      cat <<HELP >&2
+    exit 2
+    ;;
+  storages_validate)
+    cat <<HELP >&2
 Creates a test project on a storage, moves it to a new storage and does some validation to ensure
 the new storage is functioning properly.
 
@@ -46,20 +46,20 @@ Example:
 Note:
   To list available storages use \`glsh gitaly storage list -e [gstg,gprd]\`
 HELP
-      exit 2
-      ;;
-    repositories)
-      cat <<HELP >&2
+    exit 2
+    ;;
+  repositories)
+    cat <<HELP >&2
 USAGE:
   glsh gitaly repositories [SUBCOMMAND]
 
 SUBCOMMANDS:
   move       Move repositories to a different storage
 HELP
-      ;;
+    ;;
 
-    repositories_move)
-      cat <<HELP >&2
+  repositories_move)
+    cat <<HELP >&2
 USAGE:
   glsh gitaly repositories move -e [gstg,gprd] [-d [destination storage]] <project names>
 
@@ -78,10 +78,10 @@ Example:
 Note:
   To list available storages use \`glsh gitaly storage list -e [gstg,gprd]\`
 HELP
-      exit 2
-      ;;
-    *)
-      cat <<HELP >&2
+    exit 2
+    ;;
+  *)
+    cat <<HELP >&2
 USAGE:
   glsh gitaly [SUBCOMMAND]
 
@@ -90,7 +90,7 @@ SUBCOMMANDS:
   repositories   Manage repositories
 HELP
 
-      ;;
+    ;;
   esac
 }
 
@@ -105,16 +105,16 @@ storages_list() {
 
   while getopts "h?e:" opt; do
     case "$opt" in
-      h | \?)
-        usage "${FUNCNAME[0]}"
-        ;;
-      e)
-        env=${OPTARG}
-        ;;
+    h | \?)
+      usage "${FUNCNAME[0]}"
+      ;;
+    e)
+      env=${OPTARG}
+      ;;
     esac
   done
 
-  [[ -z "${env:-}" ]] && usage "${FUNCNAME[0]}"
+  [[ -z ${env:-} ]] && usage "${FUNCNAME[0]}"
   local pat
   pat=$(admin_pat)
 
@@ -160,20 +160,20 @@ storages_validate() {
 
   while getopts "h?e:s:" opt; do
     case "$opt" in
-      h | \?)
-        usage "${FUNCNAME[0]}"
-        ;;
-      e)
-        env=${OPTARG}
-        ;;
-      s)
-        src_storage=${OPTARG}
-        ;;
+    h | \?)
+      usage "${FUNCNAME[0]}"
+      ;;
+    e)
+      env=${OPTARG}
+      ;;
+    s)
+      src_storage=${OPTARG}
+      ;;
     esac
   done
   shift "$((OPTIND - 1))"
 
-  [[ -z "${env:-}" ]] && usage "${FUNCNAME[0]}"
+  [[ -z ${env:-} ]] && usage "${FUNCNAME[0]}"
 
   if [[ $# -eq 0 ]]; then
     echo_err "No destination storages specified!"
@@ -194,7 +194,7 @@ storages_validate() {
     echo "  $dst_storage:"
 
     local storage_create
-    if [[ -n "${src_storage}" ]]; then
+    if [[ -n ${src_storage} ]]; then
       storage_create="$src_storage"
     else
       storage_create="$dst_storage"
@@ -205,7 +205,7 @@ storages_validate() {
     echo "✔"
     project_id="$(jq -r '.id' <<<"$create_resp")"
 
-    if [[ -n "$src_storage" ]]; then
+    if [[ -n $src_storage ]]; then
       printf "    moving to %s..." "$dst_storage"
       local move_resp move_id
       move_resp=$(move_project "$project_id" "$dst_storage")
@@ -243,20 +243,20 @@ repositories_move() {
   local env dst_storage
   while getopts "h?e:d:" opt; do
     case "$opt" in
-      h | \?)
-        usage "${FUNCNAME[0]}"
-        ;;
-      e)
-        env=${OPTARG}
-        ;;
-      d)
-        dst_storage=${OPTARG}
-        ;;
+    h | \?)
+      usage "${FUNCNAME[0]}"
+      ;;
+    e)
+      env=${OPTARG}
+      ;;
+    d)
+      dst_storage=${OPTARG}
+      ;;
     esac
   done
   shift "$((OPTIND - 1))"
 
-  [[ -z "${env:-}" ]] && usage "${FUNCNAME[0]}"
+  [[ -z ${env:-} ]] && usage "${FUNCNAME[0]}"
   local pat
   pat=$(admin_pat)
 
@@ -367,7 +367,7 @@ create_project() {
 
   local storage_json_fragment=""
 
-  if [[ -n "$repository_storage" ]]; then
+  if [[ -n $repository_storage ]]; then
     storage_json_fragment=$(printf '"repository_storage": "%s", ' "$repository_storage")
   fi
 
@@ -416,7 +416,7 @@ move_project() {
     --header "Content-Type: application/json"
     "$(api_for_env)/projects/${project_id}/repository_storage_moves"
   )
-  [[ -n "$dst_storage" ]] && curl_opts+=(--data "$(printf '{"destination_storage_name": "%s"}' "$dst_storage")")
+  [[ -n $dst_storage ]] && curl_opts+=(--data "$(printf '{"destination_storage_name": "%s"}' "$dst_storage")")
 
   local resp
   if ! resp=$(curl "${curl_opts[@]}" 2>&1); then
@@ -457,18 +457,18 @@ wait_move_finished() {
     fi
     move_state="$(jq -r '.state' <<<"$resp")"
     case $move_state in
-      finished)
-        echo "[$move_state].✔"
-        return
-        ;;
-      initial | scheduled | started | replicated)
-        echo -n "[$move_state]."
-        ;;
-      *)
-        echo_err ""
-        echo_err "Error moving project ${web_url}, got unexpected state: $move_state, aborting!"
-        exit 1
-        ;;
+    finished)
+      echo "[$move_state].✔"
+      return
+      ;;
+    initial | scheduled | started | replicated)
+      echo -n "[$move_state]."
+      ;;
+    *)
+      echo_err ""
+      echo_err "Error moving project ${web_url}, got unexpected state: $move_state, aborting!"
+      exit 1
+      ;;
     esac
     sleep 1
   done
@@ -522,16 +522,16 @@ api_for_env() {
 ###################################################
 gitlab_host() {
   case $env in
-    gprd)
-      echo "gitlab.com"
-      ;;
-    gstg)
-      echo "staging.gitlab.com"
-      ;;
-    *)
-      echo_err "Invalid environment '$env', must be 'gprd' or 'gstg'."
-      exit 1
-      ;;
+  gprd)
+    echo "gitlab.com"
+    ;;
+  gstg)
+    echo "staging.gitlab.com"
+    ;;
+  *)
+    echo_err "Invalid environment '$env', must be 'gprd' or 'gstg'."
+    exit 1
+    ;;
   esac
 }
 
@@ -573,36 +573,36 @@ echo_err() {
 
 main() {
   case $1 in
-    storages)
-      case $2 in
-        list)
-          shift 2
-          storages_list "$@"
-          ;;
-        validate)
-          shift 2
-          storages_validate "$@"
-          ;;
-        *)
-          usage storages
-          ;;
-      esac
+  storages)
+    case $2 in
+    list)
+      shift 2
+      storages_list "$@"
       ;;
-    repositories)
-      case $2 in
-        move)
-          shift 2
-          repositories_move "$@"
-          ;;
-
-        *)
-          usage repositories
-          ;;
-      esac
+    validate)
+      shift 2
+      storages_validate "$@"
       ;;
     *)
-      usage
+      usage storages
       ;;
+    esac
+    ;;
+  repositories)
+    case $2 in
+    move)
+      shift 2
+      repositories_move "$@"
+      ;;
+
+    *)
+      usage repositories
+      ;;
+    esac
+    ;;
+  *)
+    usage
+    ;;
   esac
 }
 
