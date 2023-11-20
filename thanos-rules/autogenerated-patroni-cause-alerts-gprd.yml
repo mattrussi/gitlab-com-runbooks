@@ -2,6 +2,7 @@
 # YOUR CHANGES WILL BE OVERRIDDEN
 groups:
 - name: patroni_cause_alerts
+  partial_response_strategy: warn
   rules:
   - alert: PostgreSQL_HotSpotTupleFetchingPrimary
     for: 10m

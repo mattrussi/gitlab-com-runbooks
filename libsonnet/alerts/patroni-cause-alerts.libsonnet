@@ -98,6 +98,7 @@ local rules(extraSelector={}) = {
   groups: [
     {
       name: 'patroni_cause_alerts',
+      partial_response_strategy: 'warn',
       rules: [
         hotspotTupleAlert(
           'PostgreSQL_HotSpotTupleFetchingPrimary',
