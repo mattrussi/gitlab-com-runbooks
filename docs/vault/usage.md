@@ -351,7 +351,9 @@ my_terraform_job:
       aud: https://vault.gitlab.net
 ```
 
-Then a secret can be fetched using the [`vault_kv_secret_v2` data source](https://registry.terraform.io/providers/hashicorp/vault/latest/docs/data-sources/kv_secret_v2), and its content can be retrieved from the [`data`](https://registry.terraform.io/providers/hashicorp/vault/latest/docs/data-sources/kv_secret_v2#data) attribute:
+Then a secret can be fetched using the [`vault_kv_secret_v2` data source](https://registry.terraform.io/providers/hashicorp/vault/latest/docs/data-sources/kv_secret_v2), and its content can be retrieved from the [`data`](https://registry.terraform.io/providers/hashicorp/vault/latest/docs/data-sources/kv_secret_v2#data) attribute.
+
+For example, for the secret path `${var.vault_secrets_path}/some-secret` and a secret key named `token`:
 
 ```terraform
 data "vault_kv_secret_v2" "some-secret" {
@@ -363,6 +365,10 @@ resource "google_some_service" "foo" {
   token = data.vault_kv_secret_v2.some-secret.data.token
 }
 ```
+
+**Note**: Due to how access permissions work, the secret must be in a containing folder for the Terraform environment, for example:
+- ❌ Invalid: `name  = "ops-gitlab-net/gitlab-com/gl-infra/my-project/some-env"
+- ✅ OK: `name  = "ops-gitlab-net/gitlab-com/gl-infra/my-project/some-env/some-secret"
 
 Terraform can also write a secret to Vault using the `vault_kv_secret_v2` resource:
 
