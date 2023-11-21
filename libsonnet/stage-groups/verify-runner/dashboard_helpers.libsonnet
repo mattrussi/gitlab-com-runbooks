@@ -29,13 +29,9 @@ local underConstructionNote = layout.singleRow(
 );
 
 local commonFilters = [
+  dashboardFilters.type,
   dashboardFilters.shard,
 ];
-
-local typeFilter =
- prebuiltTemplates.type + {
-   current: template.current(runnerServiceType)
- };
 
 local runnerServiceDashboardsLinks = [
   platformLinks.dynamicLinks('%s Detail' % runnerServiceType, 'type:%s' % runnerServiceType),
@@ -63,7 +59,6 @@ local dashboard(
     includeEnvironmentTemplate=true,
   )
   .addTemplate(prebuiltTemplates.stage)
-  .addTemplate(typeFilter)
   .addTemplates(filters)
   .trailer() + {
     links+: runnerServiceDashboardsLinks,
