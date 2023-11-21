@@ -79,6 +79,10 @@ Check how many targets are not scraped at the moment. alerts are in flight right
     - try to figure out why there is scraping problems and try to fix it. Note that sometimes there can be temporary scraping problems because of exporter errors.
     - be sure to create an issue, particularly to declare toil so we can work on it and suppress it.
 
+### Security
+
+If you find any abnormal or suspicious activity during the course of your on call on-call rotation, please do not hesitate to [contact security](https://handbook.gitlab.com/handbook/security/security-operations/sirt/engaging-security-on-call/).
+
 ## Rotation Schedule
 
 We use [PagerDuty](https://gitlab.pagerduty.com) to manage our on-call rotation schedule and alerting for emergency issues.
