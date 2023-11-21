@@ -2,11 +2,22 @@ local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libso
 local template = grafana.template;
 local runnersService = (import 'servicemetrics/metrics-catalog.libsonnet').getService('ci-runners');
 
+local type = template.new(
+  'type',
+  '$PROMETHEUS_DS',
+  query=|||
+    label_values(gitlab_runner_version_info{job="runners-manager", environment="$environment"}, type)
+  |||,
+  current=runnersService.type,
+  refresh='load',
+  sort=1,
+);
+
 local shard = template.new(
   'shard',
   '$PROMETHEUS_DS',
   query=|||
-    label_values(gitlab_runner_version_info{environment=~"$environment",stage=~"$stage",type=~"$type",job=~".*",job!~"omnibus-runners|gprd-runner",shard!="default"}, shard)
+    label_values(gitlab_runner_version_info{environment=~"$environment",stage=~"$stage",type=~"$type",shard!="default"}, shard)
   |||,
   current=null,
   refresh='load',
@@ -152,6 +163,7 @@ local selectorHash = {
 };
 
 {
+  type:: type,
   shard:: shard,
   runnerManager:: runnerManager,
   runnerJobFailureReason:: runnerJobFailureReason,
