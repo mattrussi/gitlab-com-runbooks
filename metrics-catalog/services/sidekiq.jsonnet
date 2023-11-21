@@ -30,6 +30,9 @@ metricsCatalog.serviceDefinition({
           'urgent-other': {
             apdexScore: 0.985,
           },
+          'urgent-cpu-bound': {
+            apdexScore: 0.99,
+          },
         },
         sidekiq_queueing: {
           'urgent-other': {
