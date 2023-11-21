@@ -20,9 +20,9 @@ metricsCatalog.serviceDefinition({
   monitoring: {
     node: {
       enabled: true,
-    },
-    component_node: {
-      apdexScore: 0.97,
+      thresholds: {
+        apdexScore: 0.97,
+      },
     },
   },
   monitoringThresholds: {

@@ -20,9 +20,9 @@ local serviceDefaults = {
     },
     node: {
       enabled: false,
+      thresholds: {},  // To set node level SLO thresholds
       overrides: {},  // To override node-level SLO for specific nodes
     },
-    component_node: {},  // To override the SLO for nodeComponentSLIs aggregationSet
   },
   kubeConfig: {},
   kubeResources: {},
@@ -60,9 +60,9 @@ local validateMonitoring(serviceDefinition) =
       },
       node: {
         enabled: validator.boolean,
+        thresholds: validator.object,
         overrides: validator.object,
       },
-      component_node: validator.object,
     },
   });
 
