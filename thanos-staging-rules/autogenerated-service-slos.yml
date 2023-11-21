@@ -2559,6 +2559,13 @@ spec:
     - record: slo:min:events:gitlab_service_apdex:ratio
       labels:
         component: sidekiq_execution
+        shard: urgent-cpu-bound
+        tier: sv
+        type: sidekiq
+      expr: "0.990000"
+    - record: slo:min:events:gitlab_service_apdex:ratio
+      labels:
+        component: sidekiq_execution
         shard: urgent-other
         tier: sv
         type: sidekiq
