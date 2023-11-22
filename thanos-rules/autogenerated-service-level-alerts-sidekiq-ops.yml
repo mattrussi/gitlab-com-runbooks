@@ -438,12 +438,12 @@ groups:
       (
         (
           gitlab_component_shard_apdex:ratio_1h{component="sidekiq_execution",env="ops",monitor="global",shard="urgent-authorized-projects",type="sidekiq"}
-          < (1 - 14.4 * 0.020000)
+          < (1 - 14.4 * 0.050000)
         )
         and
         (
           gitlab_component_shard_apdex:ratio_5m{component="sidekiq_execution",env="ops",monitor="global",shard="urgent-authorized-projects",type="sidekiq"}
-          < (1 - 14.4 * 0.020000)
+          < (1 - 14.4 * 0.050000)
         )
       )
       and on(env,environment,tier,type,stage,shard,component)
@@ -487,12 +487,12 @@ groups:
       (
         (
           gitlab_component_shard_apdex:ratio_6h{component="sidekiq_execution",env="ops",monitor="global",shard="urgent-authorized-projects",type="sidekiq"}
-          < (1 - 6 * 0.020000)
+          < (1 - 6 * 0.050000)
         )
         and
         (
           gitlab_component_shard_apdex:ratio_30m{component="sidekiq_execution",env="ops",monitor="global",shard="urgent-authorized-projects",type="sidekiq"}
-          < (1 - 6 * 0.020000)
+          < (1 - 6 * 0.050000)
         )
       )
       and on(env,environment,tier,type,stage,shard,component)

@@ -25,7 +25,7 @@ metricsCatalog.serviceDefinition({
       overrides: {
         sidekiq_execution: {
           'urgent-authorized-projects': {
-            apdexScore: 0.98,
+            apdexScore: 0.95,
           },
           'urgent-other': {
             apdexScore: 0.985,
