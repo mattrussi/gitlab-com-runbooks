@@ -179,6 +179,8 @@ local indexDefaults = {
     latencyFieldUnitMultiplier: 1,
   },
 
+  postgresql: self.postgres,
+
   postgres_archive: self.postgres {
     defaultFilters: [matchFilter('json.type', 'archive')],
   },

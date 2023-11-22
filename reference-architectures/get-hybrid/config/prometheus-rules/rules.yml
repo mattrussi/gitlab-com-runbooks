@@ -487,19 +487,139 @@ groups:
     record: gitlab_component_service:mapping
 - interval: 1m
   name: 'Component-Level SLIs: postgresql - 5m burn-rate'
-  rules: []
+  rules:
+  - expr: |
+      sum by () (
+        label_replace(rate(pg_stat_database_xact_commit{}[5m]), "_c", "0", "", "")
+        or
+        label_replace(rate(pg_stat_database_xact_rollback{}[5m]), "_c", "1", "", "")
+      )
+    labels:
+      component: transactions
+      tier: db
+      type: postgresql
+    record: gitlab_component_ops:rate_5m
+  - expr: |
+      (
+        sum by () (
+          rate(pg_stat_database_xact_rollback{}[5m])
+        )
+      )
+      or
+      (
+        0 * group by() (
+          gitlab_component_ops:rate_5m{component="transactions",tier="db",type="postgresql"}
+        )
+      )
+    labels:
+      component: transactions
+      tier: db
+      type: postgresql
+    record: gitlab_component_errors:rate_5m
 - interval: 2m
   name: 'Component-Level SLIs: postgresql - 30m burn-rate'
-  rules: []
+  rules:
+  - expr: |
+      sum by () (
+        label_replace(rate(pg_stat_database_xact_commit{}[30m]), "_c", "0", "", "")
+        or
+        label_replace(rate(pg_stat_database_xact_rollback{}[30m]), "_c", "1", "", "")
+      )
+    labels:
+      component: transactions
+      tier: db
+      type: postgresql
+    record: gitlab_component_ops:rate_30m
+  - expr: |
+      (
+        sum by () (
+          rate(pg_stat_database_xact_rollback{}[30m])
+        )
+      )
+      or
+      (
+        0 * group by() (
+          gitlab_component_ops:rate_30m{component="transactions",tier="db",type="postgresql"}
+        )
+      )
+    labels:
+      component: transactions
+      tier: db
+      type: postgresql
+    record: gitlab_component_errors:rate_30m
 - interval: 1m
   name: 'Component-Level SLIs: postgresql - 1h burn-rate'
-  rules: []
+  rules:
+  - expr: |
+      sum by () (
+        label_replace(rate(pg_stat_database_xact_commit{}[1h]), "_c", "0", "", "")
+        or
+        label_replace(rate(pg_stat_database_xact_rollback{}[1h]), "_c", "1", "", "")
+      )
+    labels:
+      component: transactions
+      tier: db
+      type: postgresql
+    record: gitlab_component_ops:rate_1h
+  - expr: |
+      (
+        sum by () (
+          rate(pg_stat_database_xact_rollback{}[1h])
+        )
+      )
+      or
+      (
+        0 * group by() (
+          gitlab_component_ops:rate_1h{component="transactions",tier="db",type="postgresql"}
+        )
+      )
+    labels:
+      component: transactions
+      tier: db
+      type: postgresql
+    record: gitlab_component_errors:rate_1h
 - interval: 2m
   name: 'Component-Level SLIs: postgresql - 6h burn-rate'
-  rules: []
+  rules:
+  - expr: |
+      sum by () (
+        label_replace(rate(pg_stat_database_xact_commit{}[6h]), "_c", "0", "", "")
+        or
+        label_replace(rate(pg_stat_database_xact_rollback{}[6h]), "_c", "1", "", "")
+      )
+    labels:
+      component: transactions
+      tier: db
+      type: postgresql
+    record: gitlab_component_ops:rate_6h
+  - expr: |
+      (
+        sum by () (
+          rate(pg_stat_database_xact_rollback{}[6h])
+        )
+      )
+      or
+      (
+        0 * group by() (
+          gitlab_component_ops:rate_6h{component="transactions",tier="db",type="postgresql"}
+        )
+      )
+    labels:
+      component: transactions
+      tier: db
+      type: postgresql
+    record: gitlab_component_errors:rate_6h
 - interval: 1m
   name: 'Component mapping: postgresql'
-  rules: []
+  rules:
+  - expr: "1"
+    labels:
+      component: transactions
+      regional_aggregation: "no"
+      service_aggregation: "yes"
+      tier: db
+      type: postgresql
+    record: gitlab_component_service:mapping
 - interval: 1m
   name: 'Component-Level SLIs: praefect - 5m burn-rate'
   rules:
@@ -3428,6 +3548,28 @@ groups:
       tier: sv
       type: gitlab-shell
     record: slo:max:events:gitlab_service_errors:ratio
+  - expr: "0.500000"
+    labels:
+      tier: db
+      type: postgresql
+    record: slo:min:events:gitlab_service_apdex:ratio
+  - expr: "0.500000"
+    labels:
+      tier: db
+      type: postgresql
+    record: slo:max:events:gitlab_service_errors:ratio
+  - expr: "0.500000"
+    labels:
+      component: transactions
+      tier: db
+      type: postgresql
+    record: slo:min:events:gitlab_service_apdex:ratio
+  - expr: "0.500000"
+    labels:
+      component: transactions
+      tier: db
+      type: postgresql
+    record: slo:max:events:gitlab_service_errors:ratio
   - expr: "0.995000"
     labels:
       tier: stor
@@ -3644,7 +3786,7 @@ groups:
         clamp_min(
           clamp_max(
             1 - avg by (type) (
-              rate(node_cpu_seconds_total{mode="idle", type=~"gitaly|consul|praefect"}[5m])
+              rate(node_cpu_seconds_total{mode="idle", type=~"gitaly|consul|postgresql|praefect"}[5m])
             )
             ,
             1)
@@ -3659,9 +3801,9 @@ groups:
         clamp_min(
           clamp_max(
             1 - (
-              node_filesystem_files_free{fstype=~"(ext.|xfs)", type=~"gitaly|consul|praefect"}
+              node_filesystem_files_free{fstype=~"(ext.|xfs)", type=~"gitaly|consul|postgresql|praefect"}
               /
-              node_filesystem_files{fstype=~"(ext.|xfs)", type=~"gitaly|consul|praefect"}
+              node_filesystem_files{fstype=~"(ext.|xfs)", type=~"gitaly|consul|postgresql|praefect"}
             )
             ,
             1)
@@ -3676,7 +3818,7 @@ groups:
         clamp_min(
           clamp_max(
             (
-              1 - node_filesystem_avail_bytes{fstype=~"ext.|xfs", type=~"gitaly|consul|praefect"} / node_filesystem_size_bytes{fstype=~"ext.|xfs", type=~"gitaly|consul|praefect"}
+              1 - node_filesystem_avail_bytes{fstype=~"ext.|xfs", type=~"gitaly|consul|postgresql|praefect"} / node_filesystem_size_bytes{fstype=~"ext.|xfs", type=~"gitaly|consul|postgresql|praefect"}
             )
             ,
             1)
@@ -3812,7 +3954,7 @@ groups:
       max by(type) (
         clamp_min(
           clamp_max(
-            instance:node_memory_utilization:ratio{type=~"gitaly|consul|praefect"} or instance:node_memory_utilisation:ratio{type=~"gitaly|consul|praefect"}
+            instance:node_memory_utilization:ratio{type=~"gitaly|consul|postgresql|praefect"} or instance:node_memory_utilisation:ratio{type=~"gitaly|consul|postgresql|praefect"}
             ,
             1)
         ,
@@ -3825,7 +3967,7 @@ groups:
       max by(type) (
         clamp_min(
           clamp_max(
-            avg without (cpu) (rate(node_schedstat_waiting_seconds_total{type=~"consul|gitaly|praefect"}[1h]))
+            avg without (cpu) (rate(node_schedstat_waiting_seconds_total{type=~"consul|gitaly|postgresql|praefect"}[1h]))
             ,
             1)
         ,
@@ -3872,7 +4014,7 @@ groups:
       max by(type) (
         clamp_min(
           clamp_max(
-            avg without(cpu, mode) (1 - rate(node_cpu_seconds_total{mode="idle", type=~"gitaly|consul|praefect"}[5m]))
+            avg without(cpu, mode) (1 - rate(node_cpu_seconds_total{mode="idle", type=~"gitaly|consul|postgresql|praefect"}[5m]))
             ,
             1)
         ,
@@ -6197,7 +6339,179 @@ groups:
       user_impacting: "yes"
 - interval: 1m
   name: 'Service Component Alerts: postgresql'
-  rules: []
+  rules:
+  - alert: PostgresqlServiceTransactionsErrorSLOViolation
+    annotations:
+      description: |
+        Represents all SQL transactions issued to the primary Postgres instance. Errors represent transaction rollbacks.
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: postgresql-main/postgresql-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/postgresql-main/postgresql-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "182327166"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by () (
+          rate(pg_stat_database_xact_rollback{}[5m])
+        )
+      runbook: docs/postgresql/README.md
+      title: The transactions SLI of the postgresql service has an error rate violating
+        SLO
+    expr: |
+      (
+        (
+          gitlab_component_errors:ratio_1h{component="transactions",type="postgresql"}
+          > (14.4 * 0.500000)
+        )
+        and
+        (
+          gitlab_component_errors:ratio_5m{component="transactions",type="postgresql"}
+          > (14.4 * 0.500000)
+        )
+      )
+      and on(type,component)
+      (
+        sum by(type,component) (gitlab_component_ops:rate_1h{component="transactions",type="postgresql"}) >= 1
+      )
+    for: 2m
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: error
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 1h
+  - alert: PostgresqlServiceTransactionsErrorSLOViolation
+    annotations:
+      description: |
+        Represents all SQL transactions issued to the primary Postgres instance. Errors represent transaction rollbacks.
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: postgresql-main/postgresql-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/postgresql-main/postgresql-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "182327166"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by () (
+          rate(pg_stat_database_xact_rollback{}[5m])
+        )
+      runbook: docs/postgresql/README.md
+      title: The transactions SLI of the postgresql service has an error rate violating
+        SLO
+    expr: |
+      (
+        (
+          gitlab_component_errors:ratio_6h{component="transactions",type="postgresql"}
+          > (6 * 0.500000)
+        )
+        and
+        (
+          gitlab_component_errors:ratio_30m{component="transactions",type="postgresql"}
+          > (6 * 0.500000)
+        )
+      )
+      and on(type,component)
+      (
+        sum by(type,component) (gitlab_component_ops:rate_6h{component="transactions",type="postgresql"}) >= 0.16667
+      )
+    for: 2m
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: error
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+  - alert: PostgresqlServiceTransactionsTrafficCessation
+    annotations:
+      description: |
+        Represents all SQL transactions issued to the primary Postgres instance. Errors represent transaction rollbacks.
+
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
+      grafana_dashboard_id: postgresql-main/postgresql-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/postgresql-main/postgresql-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2867357670"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by () (
+          label_replace(rate(pg_stat_database_xact_commit{}[5m]), "_c", "0", "", "")
+          or
+          label_replace(rate(pg_stat_database_xact_rollback{}[5m]), "_c", "1", "", "")
+        )
+      runbook: docs/postgresql/README.md
+      title: The transactions SLI of the postgresql service has not received any traffic
+        in the past 30m
+    expr: |
+      gitlab_component_ops:rate_30m{component="transactions",type="postgresql"} == 0
+      and
+      gitlab_component_ops:rate_30m{component="transactions",type="postgresql"} offset 1h >= 0.16666666666666666
+    for: 5m
+    labels:
+      aggregation: component
+      alert_class: traffic_cessation
+      alert_type: cause
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: ops
+      slo_alert: "no"
+      user_impacting: "yes"
+  - alert: PostgresqlServiceTransactionsTrafficAbsent
+    annotations:
+      description: |
+        Represents all SQL transactions issued to the primary Postgres instance. Errors represent transaction rollbacks.
+
+        This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
+
+        This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
+      grafana_dashboard_id: postgresql-main/postgresql-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/postgresql-main/postgresql-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2867357670"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by () (
+          label_replace(rate(pg_stat_database_xact_commit{}[5m]), "_c", "0", "", "")
+          or
+          label_replace(rate(pg_stat_database_xact_rollback{}[5m]), "_c", "1", "", "")
+        )
+      runbook: docs/postgresql/README.md
+      title: The transactions SLI of the postgresql service has not reported any traffic
+        in the past 30m
+    expr: |
+      gitlab_component_ops:rate_5m{component="transactions",type="postgresql"} offset 1h
+      unless
+      gitlab_component_ops:rate_5m{component="transactions",type="postgresql"}
+    for: 30m
+    labels:
+      aggregation: component
+      alert_class: traffic_cessation
+      alert_type: cause
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: ops
+      slo_alert: "no"
+      user_impacting: "yes"
 - interval: 1m
   name: 'Service Component Alerts: praefect'
   rules:
