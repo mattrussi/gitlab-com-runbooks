@@ -765,7 +765,9 @@ spec:
 
           Details of the Kube Container CPU over-utilization resource:
 
-          Kubernetes containers can have a limit configured on how much CPU they can consume in a burst. If we are at this limit, exceeding the allocated requested resources, we should consider revisting the container's HPA configuration
+          Kubernetes containers can have a limit configured on how much CPU they can consume in a burst. If we are at this limit, exceeding the allocated requested resources, we should consider revisting the container's HPA configuration.
+
+          When a container is utilizing CPU resources up-to it's configured limit for extended periods of time, this could cause it and other running containers to be throttled.
         grafana_dashboard_id: alerts-sat_kube_container_cpu_limit
         grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_kube_container_cpu_limit?from=now-6h/m&to=now-1m/m&var-environment={{
           $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
