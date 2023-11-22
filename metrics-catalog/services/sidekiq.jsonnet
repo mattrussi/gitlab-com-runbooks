@@ -8,10 +8,16 @@ local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 local kubeLabelSelectors = metricsCatalog.kubeLabelSelectors;
 local sliLibrary = import 'gitlab-slis/library.libsonnet';
 
-local baseSelector = { type: 'sidekiq' };
-local highUrgencySelector = { urgency: 'high' };
-local lowUrgencySelector = { urgency: 'low' };
-local throttledUrgencySelector = { urgency: 'throttled' };
+// Some workers have known performance issues that surpass our thresholds.
+// Each worker should have a link to an issue to fix the performance issues.
+local ignoredWorkers = { worker: {
+  ne: [
+    'ProjectExportWorker',  // https://gitlab.com/groups/gitlab-org/-/epics/7940
+  ],
+} };
+
+local baseSelector = { type: 'sidekiq' } + ignoredWorkers;
+
 
 metricsCatalog.serviceDefinition({
   type: 'sidekiq',
