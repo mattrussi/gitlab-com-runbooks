@@ -25,7 +25,7 @@ FROM quay.io/thanos/thanos:v${GL_ASDF_THANOS_VERSION} AS thanos
 FROM registry.gitlab.com/gitlab-com/gl-infra/jsonnet-tool:v${GL_ASDF_JSONNET_TOOL_VERSION} AS jsonnet-tool
 FROM registry.gitlab.com/gitlab-com/gl-infra/third-party-container-images/go-jsonnet:v${GL_ASDF_GO_JSONNET_VERSION} AS go-jsonnet
 FROM registry.gitlab.com/gitlab-com/gl-infra/third-party-container-images/jb:v${GL_ASDF_JB_VERSION} AS jb
-FROM grafana/mimirtool:${GITLAB_LOGGER_VERSION} as mimirtool
+FROM grafana/mimirtool:${MIMIRTOOL_VERSION} as mimirtool
 
 # Main stage build
 FROM ruby:${GL_ASDF_RUBY_VERSION}-alpine
