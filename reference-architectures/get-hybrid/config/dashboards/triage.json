@@ -88,6 +88,124 @@
       "repeatIteration": null,
       "repeatRowId": null,
       "showTitle": true,
+      "title": "postgresql Service",
+      "titleSize": "h6",
+      "type": "row"
+    },
+    {
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "$PROMETHEUS_DS",
+      "decimals": 2,
+      "description": "Saturation is a measure of what ratio of a finite resource is currently being utilized. Lower is better.",
+      "fill": 0,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 7,
+        "w": 21,
+        "x": 0,
+        "y": 1101
+      },
+      "id": 3317405167,
+      "legend": {
+        "alignAsTable": true,
+        "avg": true,
+        "current": true,
+        "hideEmpty": true,
+        "max": true,
+        "min": true,
+        "rightSide": false,
+        "show": true,
+        "total": false,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 2,
+      "nullPointMode": "null",
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "spaceLength": 10,
+      "stableId": "postgresqlservice-utilization",
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "max(\n  max_over_time(\n    gitlab_component_saturation:ratio{type=\"postgresql\"}[$__interval]\n  )\n) by (component)\n",
+          "format": "time_series",
+          "interval": "1m",
+          "intervalFactor": 1,
+          "legendFormat": "{{ component }} component",
+          "refId": "A"
+        }
+      ],
+      "title": "Saturation",
+      "tooltip": {
+        "shared": true,
+        "sort": 2,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "mode": "time",
+        "show": true
+      },
+      "yaxes": [
+        {
+          "format": "percentunit",
+          "label": "Saturation %",
+          "logBase": 1,
+          "max": 1,
+          "show": true
+        },
+        {
+          "format": "short",
+          "logBase": 1,
+          "max": 1,
+          "min": 0,
+          "show": false
+        }
+      ]
+    },
+    {
+      "description": "",
+      "gridPos": {
+        "h": 7,
+        "w": 3,
+        "x": 21,
+        "y": 1101
+      },
+      "headings": false,
+      "id": 5,
+      "limit": 10,
+      "pluginVersion": "7.2.0",
+      "query": "",
+      "recent": false,
+      "search": true,
+      "starred": false,
+      "tags": [
+        "type:postgresql"
+      ],
+      "title": "",
+      "type": "dashlist"
+    },
+    {
+      "collapse": false,
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 1400
+      },
+      "id": 6,
+      "panels": [],
+      "repeat": null,
+      "repeatIteration": null,
+      "repeatRowId": null,
+      "showTitle": true,
       "title": "gitlab-shell Service",
       "titleSize": "h6",
       "type": "row"
@@ -105,7 +223,7 @@
         "h": 6,
         "w": 5,
         "x": 0,
-        "y": 1101
+        "y": 1401
       },
       "id": 690904570,
       "legend": {
@@ -435,9 +553,9 @@
         "h": 1,
         "w": 5,
         "x": 0,
-        "y": 1107
+        "y": 1407
       },
-      "id": 5,
+      "id": 8,
       "options": {
         "colorMode": "background",
         "graphMode": "none",
@@ -481,7 +599,7 @@
         "h": 6,
         "w": 5,
         "x": 5,
-        "y": 1101
+        "y": 1401
       },
       "id": 3043487758,
       "legend": {
@@ -812,9 +930,9 @@
         "h": 1,
         "w": 5,
         "x": 5,
-        "y": 1107
+        "y": 1407
       },
-      "id": 7,
+      "id": 10,
       "options": {
         "colorMode": "background",
         "graphMode": "none",
@@ -858,7 +976,7 @@
         "h": 7,
         "w": 5,
         "x": 10,
-        "y": 1101
+        "y": 1401
       },
       "id": 2751514846,
       "legend": {
@@ -1008,7 +1126,7 @@
         "h": 7,
         "w": 6,
         "x": 15,
-        "y": 1101
+        "y": 1401
       },
       "id": 91681108,
       "legend": {
@@ -1092,10 +1210,10 @@
         "h": 7,
         "w": 3,
         "x": 21,
-        "y": 1101
+        "y": 1401
       },
       "headings": false,
-      "id": 10,
+      "id": 13,
       "limit": 10,
       "pluginVersion": "7.2.0",
       "query": "",
@@ -1115,9 +1233,9 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 1900
+        "y": 2200
       },
-      "id": 11,
+      "id": 14,
       "panels": [],
       "repeat": null,
       "repeatIteration": null,
@@ -1140,7 +1258,7 @@
         "h": 6,
         "w": 5,
         "x": 0,
-        "y": 1901
+        "y": 2201
       },
       "id": 1020364880,
       "legend": {
@@ -1470,9 +1588,9 @@
         "h": 1,
         "w": 5,
         "x": 0,
-        "y": 1907
+        "y": 2207
       },
-      "id": 13,
+      "id": 16,
       "options": {
         "colorMode": "background",
         "graphMode": "none",
@@ -1516,7 +1634,7 @@
         "h": 6,
         "w": 5,
         "x": 5,
-        "y": 1901
+        "y": 2201
       },
       "id": 3392065145,
       "legend": {
@@ -1847,9 +1965,9 @@
         "h": 1,
         "w": 5,
         "x": 5,
-        "y": 1907
+        "y": 2207
       },
-      "id": 15,
+      "id": 18,
       "options": {
         "colorMode": "background",
         "graphMode": "none",
@@ -1893,7 +2011,7 @@
         "h": 7,
         "w": 5,
         "x": 10,
-        "y": 1901
+        "y": 2201
       },
       "id": 750584801,
       "legend": {
@@ -2043,7 +2161,7 @@
         "h": 7,
         "w": 6,
         "x": 15,
-        "y": 1901
+        "y": 2201
       },
       "id": 1808812872,
       "legend": {
@@ -2127,10 +2245,10 @@
         "h": 7,
         "w": 3,
         "x": 21,
-        "y": 1901
+        "y": 2201
       },
       "headings": false,
-      "id": 18,
+      "id": 21,
       "limit": 10,
       "pluginVersion": "7.2.0",
       "query": "",
@@ -2150,9 +2268,9 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 2700
+        "y": 3000
       },
-      "id": 19,
+      "id": 22,
       "panels": [],
       "repeat": null,
       "repeatIteration": null,
@@ -2175,7 +2293,7 @@
         "h": 6,
         "w": 5,
         "x": 0,
-        "y": 2701
+        "y": 3001
       },
       "id": 3725127254,
       "legend": {
@@ -2505,9 +2623,9 @@
         "h": 1,
         "w": 5,
         "x": 0,
-        "y": 2707
+        "y": 3007
       },
-      "id": 21,
+      "id": 24,
       "options": {
         "colorMode": "background",
         "graphMode": "none",
@@ -2551,7 +2669,7 @@
         "h": 6,
         "w": 5,
         "x": 5,
-        "y": 2701
+        "y": 3001
       },
       "id": 2740455213,
       "legend": {
@@ -2882,9 +3000,9 @@
         "h": 1,
         "w": 5,
         "x": 5,
-        "y": 2707
+        "y": 3007
       },
-      "id": 23,
+      "id": 26,
       "options": {
         "colorMode": "background",
         "graphMode": "none",
@@ -2928,7 +3046,7 @@
         "h": 7,
         "w": 5,
         "x": 10,
-        "y": 2701
+        "y": 3001
       },
       "id": 365480900,
       "legend": {
@@ -3078,7 +3196,7 @@
         "h": 7,
         "w": 6,
         "x": 15,
-        "y": 2701
+        "y": 3001
       },
       "id": 1954725218,
       "legend": {
@@ -3170,10 +3288,10 @@
         "h": 7,
         "w": 3,
         "x": 21,
-        "y": 2701
+        "y": 3001
       },
       "headings": false,
-      "id": 26,
+      "id": 29,
       "limit": 10,
       "pluginVersion": "7.2.0",
       "query": "",
@@ -3193,9 +3311,9 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 3500
+        "y": 3800
       },
-      "id": 27,
+      "id": 30,
       "panels": [],
       "repeat": null,
       "repeatIteration": null,
@@ -3218,7 +3336,7 @@
         "h": 6,
         "w": 5,
         "x": 0,
-        "y": 3501
+        "y": 3801
       },
       "id": 2821070550,
       "legend": {
@@ -3548,9 +3666,9 @@
         "h": 1,
         "w": 5,
         "x": 0,
-        "y": 3507
+        "y": 3807
       },
-      "id": 29,
+      "id": 32,
       "options": {
         "colorMode": "background",
         "graphMode": "none",
@@ -3594,7 +3712,7 @@
         "h": 6,
         "w": 5,
         "x": 5,
-        "y": 3501
+        "y": 3801
       },
       "id": 2793174379,
       "legend": {
@@ -3925,9 +4043,9 @@
         "h": 1,
         "w": 5,
         "x": 5,
-        "y": 3507
+        "y": 3807
       },
-      "id": 31,
+      "id": 34,
       "options": {
         "colorMode": "background",
         "graphMode": "none",
@@ -3971,7 +4089,7 @@
         "h": 7,
         "w": 5,
         "x": 10,
-        "y": 3501
+        "y": 3801
       },
       "id": 1244022200,
       "legend": {
@@ -4121,7 +4239,7 @@
         "h": 7,
         "w": 6,
         "x": 15,
-        "y": 3501
+        "y": 3801
       },
       "id": 3156200393,
       "legend": {
@@ -4213,10 +4331,10 @@
         "h": 7,
         "w": 3,
         "x": 21,
-        "y": 3501
+        "y": 3801
       },
       "headings": false,
-      "id": 34,
+      "id": 37,
       "limit": 10,
       "pluginVersion": "7.2.0",
       "query": "",
@@ -4236,9 +4354,9 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 4300
+        "y": 4600
       },
-      "id": 35,
+      "id": 38,
       "panels": [],
       "repeat": null,
       "repeatIteration": null,
@@ -4261,7 +4379,7 @@
         "h": 6,
         "w": 5,
         "x": 0,
-        "y": 4301
+        "y": 4601
       },
       "id": 3032091142,
       "legend": {
@@ -4591,9 +4709,9 @@
         "h": 1,
         "w": 5,
         "x": 0,
-        "y": 4307
+        "y": 4607
       },
-      "id": 37,
+      "id": 40,
       "options": {
         "colorMode": "background",
         "graphMode": "none",
@@ -4637,7 +4755,7 @@
         "h": 6,
         "w": 5,
         "x": 5,
-        "y": 4301
+        "y": 4601
       },
       "id": 1775121435,
       "legend": {
@@ -4968,9 +5086,9 @@
         "h": 1,
         "w": 5,
         "x": 5,
-        "y": 4307
+        "y": 4607
       },
-      "id": 39,
+      "id": 42,
       "options": {
         "colorMode": "background",
         "graphMode": "none",
@@ -5014,7 +5132,7 @@
         "h": 7,
         "w": 5,
         "x": 10,
-        "y": 4301
+        "y": 4601
       },
       "id": 2407688615,
       "legend": {
@@ -5164,7 +5282,7 @@
         "h": 7,
         "w": 6,
         "x": 15,
-        "y": 4301
+        "y": 4601
       },
       "id": 3608557538,
       "legend": {
@@ -5268,10 +5386,10 @@
         "h": 7,
         "w": 3,
         "x": 21,
-        "y": 4301
+        "y": 4601
       },
       "headings": false,
-      "id": 42,
+      "id": 45,
       "limit": 10,
       "pluginVersion": "7.2.0",
       "query": "",
@@ -5291,9 +5409,9 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 5100
+        "y": 5400
       },
-      "id": 43,
+      "id": 46,
       "panels": [],
       "repeat": null,
       "repeatIteration": null,
@@ -5316,7 +5434,7 @@
         "h": 6,
         "w": 5,
         "x": 0,
-        "y": 5101
+        "y": 5401
       },
       "id": 1462485464,
       "legend": {
@@ -5646,9 +5764,9 @@
         "h": 1,
         "w": 5,
         "x": 0,
-        "y": 5107
+        "y": 5407
       },
-      "id": 45,
+      "id": 48,
       "options": {
         "colorMode": "background",
         "graphMode": "none",
@@ -5692,7 +5810,7 @@
         "h": 6,
         "w": 5,
         "x": 5,
-        "y": 5101
+        "y": 5401
       },
       "id": 4217231753,
       "legend": {
@@ -6023,9 +6141,9 @@
         "h": 1,
         "w": 5,
         "x": 5,
-        "y": 5107
+        "y": 5407
       },
-      "id": 47,
+      "id": 50,
       "options": {
         "colorMode": "background",
         "graphMode": "none",
@@ -6069,7 +6187,7 @@
         "h": 7,
         "w": 5,
         "x": 10,
-        "y": 5101
+        "y": 5401
       },
       "id": 3420507204,
       "legend": {
@@ -6219,7 +6337,7 @@
         "h": 7,
         "w": 6,
         "x": 15,
-        "y": 5101
+        "y": 5401
       },
       "id": 1588309641,
       "legend": {
@@ -6323,10 +6441,10 @@
         "h": 7,
         "w": 3,
         "x": 21,
-        "y": 5101
+        "y": 5401
       },
       "headings": false,
-      "id": 50,
+      "id": 53,
       "limit": 10,
       "pluginVersion": "7.2.0",
       "query": "",
@@ -6346,9 +6464,9 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 5900
+        "y": 6200
       },
-      "id": 51,
+      "id": 54,
       "panels": [],
       "repeat": null,
       "repeatIteration": null,
@@ -6371,7 +6489,7 @@
         "h": 7,
         "w": 21,
         "x": 0,
-        "y": 5901
+        "y": 6201
       },
       "id": 2120645664,
       "legend": {
@@ -6479,10 +6597,10 @@
         "h": 7,
         "w": 3,
         "x": 21,
-        "y": 5901
+        "y": 6201
       },
       "headings": false,
-      "id": 53,
+      "id": 56,
       "limit": 10,
       "pluginVersion": "7.2.0",
       "query": "",
@@ -6504,7 +6622,7 @@
         "x": 0,
         "y": 110000
       },
-      "id": 54,
+      "id": 57,
       "mode": "markdown",
       "title": "Source",
       "type": "text"
