@@ -10,6 +10,8 @@ ARG GL_ASDF_TERRAFORM_VERSION
 ARG GL_ASDF_THANOS_VERSION
 ARG GL_ASDF_VAULT_VERSION
 ARG GL_ASDF_YQ_VERSION
+# renovate: datasource=github-releases depName=grafana/mimir
+ARG MIMIRTOOL_VERSION=2.10.4
 
 # Referenced container images
 FROM docker.io/mikefarah/yq:${GL_ASDF_YQ_VERSION} as yq
@@ -23,6 +25,7 @@ FROM quay.io/thanos/thanos:v${GL_ASDF_THANOS_VERSION} AS thanos
 FROM registry.gitlab.com/gitlab-com/gl-infra/jsonnet-tool:v${GL_ASDF_JSONNET_TOOL_VERSION} AS jsonnet-tool
 FROM registry.gitlab.com/gitlab-com/gl-infra/third-party-container-images/go-jsonnet:v${GL_ASDF_GO_JSONNET_VERSION} AS go-jsonnet
 FROM registry.gitlab.com/gitlab-com/gl-infra/third-party-container-images/jb:v${GL_ASDF_JB_VERSION} AS jb
+FROM grafana/mimirtool:${GITLAB_LOGGER_VERSION} as mimirtool
 
 # Main stage build
 FROM ruby:${GL_ASDF_RUBY_VERSION}-alpine
@@ -61,5 +64,6 @@ COPY --from=terraform /bin/terraform /bin/terraform
 COPY --from=thanos /bin/thanos /bin/thanos
 COPY --from=vault /bin/vault /bin/vault
 COPY --from=yq /usr/bin/yq /usr/bin/yq
+COPY --from=mimirtool /bin/mimirtool /bin/mimirtool
 
 ENTRYPOINT ["/bin/sh", "-c"]
