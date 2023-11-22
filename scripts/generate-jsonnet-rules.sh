@@ -34,14 +34,14 @@ function render_multi_jsonnet() {
 if [[ $# == 0 ]]; then
   cd "${REPO_DIR}"
   for file in ./rules-jsonnet/*.jsonnet; do
-    render_multi_jsonnet "${REPO_DIR}/rules" "${file}"
+    render_multi_jsonnet "${REPO_DIR}/rules" "${file}" &
   done
   for file in ./thanos-rules-jsonnet/*.jsonnet; do
-    render_multi_jsonnet "${REPO_DIR}/thanos-rules" "${file}"
+    render_multi_jsonnet "${REPO_DIR}/thanos-rules" "${file}" &
   done
   for file in ./thanos-staging-rules-jsonnet/*.jsonnet; do
-    if [[ -f ${file} ]]; then
-      render_multi_jsonnet "${REPO_DIR}/thanos-staging-rules" "${file}"
+    if [[ -f "${file}" ]]; then
+      render_multi_jsonnet "${REPO_DIR}/thanos-staging-rules" "${file}" &
     fi
   done
 else
@@ -51,5 +51,7 @@ else
   done
 fi
 
+wait
+
 # Update generated rules to CRD spec
-${REPO_DIR}/scripts/generate-prometheus-crd.rb thanos-staging-rules
+"${REPO_DIR}"/scripts/generate-prometheus-crd.rb thanos-staging-rules
