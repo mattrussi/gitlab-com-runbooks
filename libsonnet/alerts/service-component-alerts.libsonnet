@@ -69,14 +69,25 @@ local groupsForService(service, selector) = {
 
 local filteredServices = std.filter(function(s) s.type != 'thanos-staging', metricsCatalog.services);
 
-separateGlobalRecordingFiles(
-  function(selector)
-    std.foldl(
-      function(docs, service)
-        docs {
-          ['service-level-alerts-%s' % [service.type]]: std.manifestYamlDoc(groupsForService(service, selector)),
-        },
-      filteredServices,
-      {},
-    )
-)
+// totalPage must match with the `thanos-rules-jsonnet/service-component-alerts-{page}.jsonnet`
+local totalPage = 2;
+
+local alerts(pageNum) =
+  local totalServices = std.length(filteredServices);
+  local pageSize = std.floor(totalServices / totalPage);
+  local idxStart = (pageNum - 1) * pageSize;
+  local idxEnd = if pageNum < totalPage then pageNum * pageSize else totalServices;
+
+  separateGlobalRecordingFiles(
+    function(selector)
+      std.foldl(
+        function(docs, service)
+          docs {
+            ['service-level-alerts-%s' % [service.type]]: std.manifestYamlDoc(groupsForService(service, selector)),
+          },
+        filteredServices[idxStart:idxEnd],
+        {},
+      )
+  );
+
+alerts
