@@ -21,7 +21,7 @@ basic.dashboard(
       query=|||
         sum (increase(flux_git_push_notifications_total{%s}[$__rate_interval]))
       ||| % selectorString,
-      yAxisLabel='Count',
+      yAxisLabel='count',
       legend_show=false,
       linewidth=1,
     ),
@@ -31,7 +31,7 @@ basic.dashboard(
       query=|||
         sum (increase(flux_dropped_git_push_notifications_total{%s}[$__rate_interval]))
       ||| % selectorString,
-      yAxisLabel='Count',
+      yAxisLabel='count',
       legend_show=false,
       linewidth=1,
     ),

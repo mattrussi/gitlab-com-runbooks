@@ -28,7 +28,7 @@ serviceDashboard.overview('kas')
           query: 'avg(connected_agents_count{type="kas", stage="$stage", env="$environment"})',
         },
       ],
-      yAxisLabel='Count',
+      yAxisLabel='count',
       legend_show=true,
     ),
   ], cols=1, rowHeight=10, startRow=1001)
