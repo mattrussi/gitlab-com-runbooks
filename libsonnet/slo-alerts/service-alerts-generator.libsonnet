@@ -5,13 +5,23 @@ local trafficCessationAlertForSLIForAlertDescriptor = import './traffic-cessatio
 local alerts = import 'alerts/alerts.libsonnet';
 local misc = import 'utils/misc.libsonnet';
 
-local apdexScoreThreshold(sli, alertDescriptor) =
-  local specificThreshold = misc.dig(sli.monitoringThresholds, [alertDescriptor.aggregationSet.id, 'apdexScore']);
-  if specificThreshold != {} then specificThreshold else sli.monitoringThresholds.apdexScore;
+// maps aggregationSet.id to corresponding field in service.monitoring (following misc.dig key path)
+local aggregationSetToServiceMonitoringField = {
+  component_node: ['node', 'thresholds'],
+};
 
-local errorRatioThreshold(sli, alertDescriptor) =
-  local specificThreshold = misc.dig(sli.monitoringThresholds, [alertDescriptor.aggregationSet.id, 'errorRatio']);
-  if specificThreshold != {} then specificThreshold else sli.monitoringThresholds.errorRatio;
+// thresholdField is either 'apdexScore' or 'errorRatio'
+local getThresholdSLOValue(service, sli, alertDescriptor, thresholdField) =
+  local monitoringObjField = std.get(aggregationSetToServiceMonitoringField, alertDescriptor.aggregationSet.id);
+  local monitoringObjValue = if monitoringObjField != null then
+    misc.dig(service.monitoring, monitoringObjField + [thresholdField])
+  else
+    {};
+
+  if monitoringObjValue != {} then
+    monitoringObjValue
+  else
+    std.get(sli.monitoringThresholds, thresholdField);
 
 local shardLevelOverridesExists(service, sli) =
   sli.shardLevelMonitoring &&
@@ -75,7 +85,7 @@ local apdexAlertForSLIForAlertDescriptor(service, sli, alertDescriptor, extraSel
       shardSelectors
     )
   else
-    local apdexScoreSLO = apdexScoreThreshold(sli, alertDescriptor);
+    local apdexScoreSLO = getThresholdSLOValue(service, sli, alertDescriptor, 'apdexScore');
     apdexAlerts(apdexScoreSLO, { type: service.type, component: sli.name } + extraSelector);
 
 
@@ -115,7 +125,7 @@ local errorAlertForSLIForAlertDescriptor(service, sli, alertDescriptor, extraSel
       shardSelectors
     )
   else
-    local errorRateSLO = errorRatioThreshold(sli, alertDescriptor);
+    local errorRateSLO = getThresholdSLOValue(service, sli, alertDescriptor, 'errorRatio');
     errorAlerts(errorRateSLO, { type: service.type, component: sli.name } + extraSelector);
 
 // Generates an apdex alert for an SLI

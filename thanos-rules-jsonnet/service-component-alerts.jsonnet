@@ -32,7 +32,7 @@ local alertDescriptors = [{
   trafficCessationSelector: { stage: 'main' },  // Don't alert on cny stage traffic cessation for now
   minimumSamplesForTrafficCessation: minimumSamplesForTrafficCessation,
 }, {
-  predicate: function(service, sli) service.nodeLevelMonitoring,
+  predicate: function(service, sli) service.monitoring.node.enabled,
   alertSuffix: 'SingleNode',
   alertTitleTemplate: 'The %(sliName)s SLI of the %(serviceType)s service on node `{{ $labels.fqdn }}`',
   alertExtraDetail: 'Since the `{{ $labels.type }}` service is not fully redundant, SLI violations on a single node may represent a user-impacting service degradation.',
