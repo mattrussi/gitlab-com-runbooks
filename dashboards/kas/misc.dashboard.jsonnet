@@ -6,6 +6,9 @@ local selectors = import 'promql/selectors.libsonnet';
 local selector = { env: '$environment', stage: '$stage', type: 'kas' };
 local selectorString = selectors.serializeHash(selector);
 
+local envSelector = { env: '$environment', type: 'kas' };
+local envSelectorString = selectors.serializeHash(envSelector);
+
 basic.dashboard(
   'Miscellaneous metrics',
   tags=[
@@ -137,6 +140,18 @@ basic.dashboard(
           yAxisLabel='time',
           legend_show=false,
           linewidth=1,
+        ),
+        basic.timeseries(
+          title='Running version',
+          description='Running version of kas',
+          query=|||
+            count by (version, stage) (gitlab_build_info{%s})
+          ||| % envSelectorString,
+          yAxisLabel='pods',
+          legend_show=false,
+          linewidth=1,
+          stack=true,
+          fill=3,
         ),
     ], startRow=5000),
     collapse=false,
