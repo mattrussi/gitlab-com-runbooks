@@ -1,3 +1,12 @@
+local nestedMerge(target, override) =
+  target + {
+    [attr]:
+      if std.isObject(override[attr])
+      then nestedMerge(std.get(target, attr, {}), override[attr])
+      else override[attr]
+    for attr in std.objectFieldsAll(override)
+  };
+
 {
   fromPairs(items):
     std.foldl(
@@ -66,4 +75,5 @@
       std.objectFields(object),
       {}
     ),
+  nestedMerge:: nestedMerge,
 }

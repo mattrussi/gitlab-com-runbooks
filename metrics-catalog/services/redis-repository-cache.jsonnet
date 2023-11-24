@@ -40,7 +40,7 @@ metricsCatalog.serviceDefinition(
   }
   + redisHelpers.gitlabcomObservabilityToolingForRedis('redis-repository-cache')
   + {
-    capacityPlanning+: {
+    capacityPlanning: {
       components: [
         {
           name: 'disk_space',

@@ -25,7 +25,7 @@ metricsCatalog.serviceDefinition(
   }
   + redisHelpers.gitlabcomObservabilityToolingForRedis('redis-sidekiq')
   + {
-    capacityPlanning+: {
+    capacityPlanning: {
       components: [
         {
           name: 'redis_primary_cpu',

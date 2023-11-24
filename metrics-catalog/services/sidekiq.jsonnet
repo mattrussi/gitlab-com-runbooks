@@ -167,7 +167,7 @@ metricsCatalog.serviceDefinition({
     // across multiple burn rates
     perWorkerRecordingRules,
   ],
-  capacityPlanning+: {
+  capacityPlanning: {
     components: [
       {
         name: 'rails_db_connection_pool',

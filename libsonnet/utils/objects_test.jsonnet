@@ -89,4 +89,40 @@ test.suite({
     actual: objects.invert({ a: '', b: '', c: 3, d: '', e: '' }),
     expect: { '': ['a', 'b', 'd', 'e'], '3': 'c' },
   },
+
+  testNestedMergeMultipleLevels: {
+    local objectA = { a: { b: { c: { d: 0 } } } },
+    local objectB = { a: { b: { c: { f: 1 }, g: 2 }, h: 3 } },
+    actual: objects.nestedMerge(objectA, objectB),
+    expect: { a: { b: { c: { d: 0, f: 1 }, g: 2 }, h: 3 } },
+  },
+  testAbsenseOfAttributesOnTarget: {
+    local objectA = { z: 'z', y: 'y' },
+    local objectB = { a: { b: 1 }, c: 2 },
+    actual: objects.nestedMerge(objectA, objectB),
+    expect: { a: { b: 1 }, c: 2, z: 'z', y: 'y' },
+  },
+  testNestedMergeWithMethods: {
+    local objectA = {
+      a: 1,
+      methodA(var):: var + self.a,
+      overrideMe(var)::
+        assert false : 'This is never called';
+        var,
+    },
+    local objectB = {
+      b: 2,
+      methodB(var):: var + self.b,
+      overrideMe(var):: 'Overridden: ' + var,
+    },
+    actual: objects.nestedMerge(objectA, objectB),
+    expectThat: {
+      result:
+        self.actual.a == 1 &&
+        self.actual.b == 2 &&
+        self.actual.methodA('varA') == 'varA1' &&
+        self.actual.methodB('varB') == 'varB2' &&
+        self.actual.overrideMe('var') == 'Overridden: var',
+    },
+  },
 })
