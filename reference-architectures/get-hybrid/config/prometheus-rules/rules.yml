@@ -3786,7 +3786,7 @@ groups:
         clamp_min(
           clamp_max(
             1 - avg by (type) (
-              rate(node_cpu_seconds_total{mode="idle", type=~"gitaly|consul|postgresql|praefect"}[5m])
+              rate(node_cpu_seconds_total{mode="idle", type=~"gitaly|consul|praefect"}[5m])
             )
             ,
             1)
@@ -3801,9 +3801,9 @@ groups:
         clamp_min(
           clamp_max(
             1 - (
-              node_filesystem_files_free{fstype=~"(ext.|xfs)", type=~"gitaly|consul|postgresql|praefect"}
+              node_filesystem_files_free{fstype=~"(ext.|xfs)", type=~"gitaly|consul|praefect"}
               /
-              node_filesystem_files{fstype=~"(ext.|xfs)", type=~"gitaly|consul|postgresql|praefect"}
+              node_filesystem_files{fstype=~"(ext.|xfs)", type=~"gitaly|consul|praefect"}
             )
             ,
             1)
@@ -3818,7 +3818,7 @@ groups:
         clamp_min(
           clamp_max(
             (
-              1 - node_filesystem_avail_bytes{fstype=~"ext.|xfs", type=~"gitaly|consul|postgresql|praefect"} / node_filesystem_size_bytes{fstype=~"ext.|xfs", type=~"gitaly|consul|postgresql|praefect"}
+              1 - node_filesystem_avail_bytes{fstype=~"ext.|xfs", type=~"gitaly|consul|praefect"} / node_filesystem_size_bytes{fstype=~"ext.|xfs", type=~"gitaly|consul|praefect"}
             )
             ,
             1)
@@ -3954,7 +3954,7 @@ groups:
       max by(type) (
         clamp_min(
           clamp_max(
-            instance:node_memory_utilization:ratio{type=~"gitaly|consul|postgresql|praefect"} or instance:node_memory_utilisation:ratio{type=~"gitaly|consul|postgresql|praefect"}
+            instance:node_memory_utilization:ratio{type=~"gitaly|consul|praefect"} or instance:node_memory_utilisation:ratio{type=~"gitaly|consul|praefect"}
             ,
             1)
         ,
@@ -3967,7 +3967,7 @@ groups:
       max by(type) (
         clamp_min(
           clamp_max(
-            avg without (cpu) (rate(node_schedstat_waiting_seconds_total{type=~"consul|gitaly|postgresql|praefect"}[1h]))
+            avg without (cpu) (rate(node_schedstat_waiting_seconds_total{type=~"consul|gitaly|praefect"}[1h]))
             ,
             1)
         ,
@@ -4014,7 +4014,7 @@ groups:
       max by(type) (
         clamp_min(
           clamp_max(
-            avg without(cpu, mode) (1 - rate(node_cpu_seconds_total{mode="idle", type=~"gitaly|consul|postgresql|praefect"}[5m]))
+            avg without(cpu, mode) (1 - rate(node_cpu_seconds_total{mode="idle", type=~"gitaly|consul|praefect"}[5m]))
             ,
             1)
         ,

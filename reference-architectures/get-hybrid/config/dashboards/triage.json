@@ -649,32 +649,6 @@
       },
       "lines": true,
       "linewidth": 2,
-      "links": [
-        {
-          "title": "postgresql Service | cpu resource Dashboard",
-          "url": "https://dashboards.gitlab.net/d/alerts-sat_cpu/?var-environment=gprd\u0026var-type=postgresql\u0026var-stage=main\u0026var-component=cpu"
-        },
-        {
-          "title": "postgresql Service | disk_inodes resource Dashboard",
-          "url": "https://dashboards.gitlab.net/d/alerts-sat_disk_inodes/?var-environment=gprd\u0026var-type=postgresql\u0026var-stage=main\u0026var-component=disk_inodes"
-        },
-        {
-          "title": "postgresql Service | disk_space resource Dashboard",
-          "url": "https://dashboards.gitlab.net/d/alerts-sat_disk_space/?var-environment=gprd\u0026var-type=postgresql\u0026var-stage=main\u0026var-component=disk_space"
-        },
-        {
-          "title": "postgresql Service | memory resource Dashboard",
-          "url": "https://dashboards.gitlab.net/d/alerts-sat_memory/?var-environment=gprd\u0026var-type=postgresql\u0026var-stage=main\u0026var-component=memory"
-        },
-        {
-          "title": "postgresql Service | node_schedstat_waiting resource Dashboard",
-          "url": "https://dashboards.gitlab.net/d/alerts-sat_node_schedstat_waiting/?var-environment=gprd\u0026var-type=postgresql\u0026var-stage=main\u0026var-component=node_schedstat_waiting"
-        },
-        {
-          "title": "postgresql Service | single_node_cpu resource Dashboard",
-          "url": "https://dashboards.gitlab.net/d/alerts-sat_single_node_cpu/?var-environment=gprd\u0026var-type=postgresql\u0026var-stage=main\u0026var-component=single_node_cpu"
-        }
-      ],
       "nullPointMode": "null",
       "percentage": false,
       "pointradius": 5,

@@ -16,6 +16,12 @@ metricsCatalog.serviceDefinition({
     apdexScore: 0.5,
     errorRatio: 0.5,
   },
+  
+  // We leverage <some cloud service provided database> instead of our own infra here.
+  provisioning: {
+    vms: false,
+    kubernetes: false,
+  },
 
   serviceLevelIndicators: {
     transactions: {

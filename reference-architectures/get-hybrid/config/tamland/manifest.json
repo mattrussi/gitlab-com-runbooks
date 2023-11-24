@@ -30,7 +30,6 @@
       "appliesTo": [
         "gitaly",
         "consul",
-        "postgresql",
         "praefect"
       ],
       "burnRatePeriod": "5m",
@@ -65,7 +64,6 @@
       "appliesTo": [
         "gitaly",
         "consul",
-        "postgresql",
         "praefect"
       ],
       "capacityPlanning": {
@@ -102,7 +100,6 @@
       "appliesTo": [
         "gitaly",
         "consul",
-        "postgresql",
         "praefect"
       ],
       "capacityPlanning": {
@@ -385,7 +382,6 @@
       "appliesTo": [
         "gitaly",
         "consul",
-        "postgresql",
         "praefect"
       ],
       "capacityPlanning": {
@@ -454,7 +450,6 @@
       "appliesTo": [
         "consul",
         "gitaly",
-        "postgresql",
         "praefect"
       ],
       "burnRatePeriod": "1h",
@@ -657,7 +652,6 @@
       "appliesTo": [
         "gitaly",
         "consul",
-        "postgresql",
         "praefect"
       ],
       "burnRatePeriod": "5m",
@@ -1121,92 +1115,6 @@
     "logging": {
       "capacityPlanning": {},
       "name": "logging",
-      "overviewDashboard": {
-        "name": "",
-        "url": ""
-      },
-      "resourceDashboard": {
-        "cpu": {
-          "name": "cpu",
-          "url": ""
-        },
-        "disk_inodes": {
-          "name": "disk_inodes",
-          "url": ""
-        },
-        "disk_space": {
-          "name": "disk_space",
-          "url": ""
-        },
-        "go_goroutines": {
-          "name": "go_goroutines",
-          "url": ""
-        },
-        "go_memory": {
-          "name": "go_memory",
-          "url": ""
-        },
-        "kube_container_cpu": {
-          "name": "kube_container_cpu",
-          "url": ""
-        },
-        "kube_container_cpu_limit": {
-          "name": "kube_container_cpu_limit",
-          "url": ""
-        },
-        "kube_container_memory": {
-          "name": "kube_container_memory",
-          "url": ""
-        },
-        "kube_container_rss": {
-          "name": "kube_container_rss",
-          "url": ""
-        },
-        "kube_pool_cpu": {
-          "name": "kube_pool_cpu",
-          "url": ""
-        },
-        "memory": {
-          "name": "memory",
-          "url": ""
-        },
-        "memory_redis_cache": {
-          "name": "memory_redis_cache",
-          "url": ""
-        },
-        "node_schedstat_waiting": {
-          "name": "node_schedstat_waiting",
-          "url": ""
-        },
-        "opensearch_cpu": {
-          "name": "opensearch_cpu",
-          "url": ""
-        },
-        "opensearch_disk_space": {
-          "name": "opensearch_disk_space",
-          "url": ""
-        },
-        "pg_primary_cpu": {
-          "name": "pg_primary_cpu",
-          "url": ""
-        },
-        "puma_workers": {
-          "name": "puma_workers",
-          "url": ""
-        },
-        "rails_db_connection_pool": {
-          "name": "rails_db_connection_pool",
-          "url": ""
-        },
-        "single_node_cpu": {
-          "name": "single_node_cpu",
-          "url": ""
-        }
-      }
-    },
-    "postgresql": {
-      "capacityPlanning": {},
-      "name": "postgresql",
       "overviewDashboard": {
         "name": "",
         "url": ""
