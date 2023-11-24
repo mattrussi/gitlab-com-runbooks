@@ -385,6 +385,198 @@ groups:
       (
         sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="istio_public_ingress",env="ops",monitor="global",type="vault"}) >= 0.16667
       )
+  - alert: VaultServiceVaultAuditLogRequestErrorSLOViolation
+    for: 2m
+    annotations:
+      title: The vault_audit_log_request SLI of the vault service (`{{ $labels.stage
+        }}` stage) has an error rate violating SLO
+      description: |
+        Vault failed to make an audit log request to any of the configured audit log devices, ceasing all user operations.
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: vault-main/vault-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/vault-main/vault-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "4110925204"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(vault_audit_log_request_failure{environment="{{ $labels.environment }}",job="vault-active",stage="{{ $labels.stage }}"}[5m])
+        )
+      runbook: docs/vault/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: error
+      slo_alert: "yes"
+      user_impacting: "no"
+      window: 1h
+    expr: |
+      (
+        (
+          gitlab_component_errors:ratio_1h{component="vault_audit_log_request",env="ops",monitor="global",type="vault"}
+          > (14.4 * 0.001000)
+        )
+        and
+        (
+          gitlab_component_errors:ratio_5m{component="vault_audit_log_request",env="ops",monitor="global",type="vault"}
+          > (14.4 * 0.001000)
+        )
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="vault_audit_log_request",env="ops",monitor="global",type="vault"}) >= 1
+      )
+  - alert: VaultServiceVaultAuditLogRequestErrorSLOViolation
+    for: 2m
+    annotations:
+      title: The vault_audit_log_request SLI of the vault service (`{{ $labels.stage
+        }}` stage) has an error rate violating SLO
+      description: |
+        Vault failed to make an audit log request to any of the configured audit log devices, ceasing all user operations.
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: vault-main/vault-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/vault-main/vault-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "4110925204"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(vault_audit_log_request_failure{environment="{{ $labels.environment }}",job="vault-active",stage="{{ $labels.stage }}"}[5m])
+        )
+      runbook: docs/vault/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: error
+      slo_alert: "yes"
+      user_impacting: "no"
+      window: 6h
+    expr: |
+      (
+        (
+          gitlab_component_errors:ratio_6h{component="vault_audit_log_request",env="ops",monitor="global",type="vault"}
+          > (6 * 0.001000)
+        )
+        and
+        (
+          gitlab_component_errors:ratio_30m{component="vault_audit_log_request",env="ops",monitor="global",type="vault"}
+          > (6 * 0.001000)
+        )
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="vault_audit_log_request",env="ops",monitor="global",type="vault"}) >= 0.16667
+      )
+  - alert: VaultServiceVaultAuditLogResponseErrorSLOViolation
+    for: 2m
+    annotations:
+      title: The vault_audit_log_response SLI of the vault service (`{{ $labels.stage
+        }}` stage) has an error rate violating SLO
+      description: |
+        Vault failed to make an audit log responses to any of the configured audit log devices, ceasing all user operations.
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: vault-main/vault-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/vault-main/vault-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "298512225"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(vault_audit_log_response_failure{environment="{{ $labels.environment }}",job="vault-active",stage="{{ $labels.stage }}"}[5m])
+        )
+      runbook: docs/vault/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: error
+      slo_alert: "yes"
+      user_impacting: "no"
+      window: 1h
+    expr: |
+      (
+        (
+          gitlab_component_errors:ratio_1h{component="vault_audit_log_response",env="ops",monitor="global",type="vault"}
+          > (14.4 * 0.001000)
+        )
+        and
+        (
+          gitlab_component_errors:ratio_5m{component="vault_audit_log_response",env="ops",monitor="global",type="vault"}
+          > (14.4 * 0.001000)
+        )
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="vault_audit_log_response",env="ops",monitor="global",type="vault"}) >= 1
+      )
+  - alert: VaultServiceVaultAuditLogResponseErrorSLOViolation
+    for: 2m
+    annotations:
+      title: The vault_audit_log_response SLI of the vault service (`{{ $labels.stage
+        }}` stage) has an error rate violating SLO
+      description: |
+        Vault failed to make an audit log responses to any of the configured audit log devices, ceasing all user operations.
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: vault-main/vault-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/vault-main/vault-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "298512225"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(vault_audit_log_response_failure{environment="{{ $labels.environment }}",job="vault-active",stage="{{ $labels.stage }}"}[5m])
+        )
+      runbook: docs/vault/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: error
+      slo_alert: "yes"
+      user_impacting: "no"
+      window: 6h
+    expr: |
+      (
+        (
+          gitlab_component_errors:ratio_6h{component="vault_audit_log_response",env="ops",monitor="global",type="vault"}
+          > (6 * 0.001000)
+        )
+        and
+        (
+          gitlab_component_errors:ratio_30m{component="vault_audit_log_response",env="ops",monitor="global",type="vault"}
+          > (6 * 0.001000)
+        )
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="vault_audit_log_response",env="ops",monitor="global",type="vault"}) >= 0.16667
+      )
   - alert: VaultServiceVaultGoogleLbErrorSLOViolation
     for: 2m
     annotations:

@@ -134,6 +134,60 @@ metricsCatalog.serviceDefinition({
 
       significantLabels: ['pod'],
     },
+
+    vault_audit_log_request: {
+      userImpacting: false,
+      featureCategory: 'not_owned',
+      trafficCessationAlertConfig: false,
+
+      description: |||
+        Vault failed to make an audit log request to any of the configured
+        audit log devices, ceasing all user operations.
+      |||,
+
+      local vaultSelector = {
+        job: 'vault-active',
+      },
+
+      requestRate: rateMetric(
+        counter='vault_audit_log_request_count',
+        selector=vaultSelector
+      ),
+
+      errorRate: rateMetric(
+        counter='vault_audit_log_request_failure',
+        selector=vaultSelector,
+      ),
+
+      significantLabels: ['pod'],
+    },
+
+    vault_audit_log_response: {
+      userImpacting: false,
+      featureCategory: 'not_owned',
+      trafficCessationAlertConfig: false,
+
+      description: |||
+        Vault failed to make an audit log responses to any of the configured
+        audit log devices, ceasing all user operations.
+      |||,
+
+      local vaultSelector = {
+        job: 'vault-active',
+      },
+
+      requestRate: rateMetric(
+        counter='vault_audit_log_response_count',
+        selector=vaultSelector
+      ),
+
+      errorRate: rateMetric(
+        counter='vault_audit_log_response_failure',
+        selector=vaultSelector,
+      ),
+
+      significantLabels: ['pod'],
+    },
   },
   skippedMaturityCriteria: {
     'Structured logs available in Kibana': "Vault is a pending project at the moment. There is no traffic at the moment. We'll add logs and metrics in https://gitlab.com/groups/gitlab-com/gl-infra/-/epics/739",
