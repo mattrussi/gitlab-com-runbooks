@@ -3,6 +3,7 @@ local multiburnExpression = import 'mwmbr/expression.libsonnet';
 local maturityLevels = import 'service-maturity/levels.libsonnet';
 local serviceLevelIndicatorDefinition = import 'service_level_indicator_definition.libsonnet';
 local misc = import 'utils/misc.libsonnet';
+local objects = import 'utils/objects.libsonnet';
 local validator = import 'utils/validator.libsonnet';
 
 // For now we assume that services are provisioned on vms and not kubernetes
@@ -79,11 +80,12 @@ local prepareComponent(definition) =
 
 local validateAndApplyServiceDefaults(service) =
   local serviceWithMonitoringDefaults =
-    // std.mergePatch applies the default on deeply nested objects
-    service { monitoring: std.mergePatch(serviceDefaults.monitoring, std.get(service, 'monitoring', default={})) };
+    service { monitoring: objects.nestedMerge(serviceDefaults.monitoring, std.get(service, 'monitoring', default={})) };
 
   local serviceWithProvisioningDefaults =
-    serviceDefaults { provisioning: provisioningDefaults } + serviceWithMonitoringDefaults;
+    objects.nestedMerge(
+      serviceDefaults { provisioning: provisioningDefaults }, serviceWithMonitoringDefaults
+    );
 
   local serviceWithDefaults = if serviceWithProvisioningDefaults.provisioning.kubernetes then
     local labelSelectors = if std.objectHas(serviceWithProvisioningDefaults.kubeConfig, 'labelSelectors') then
