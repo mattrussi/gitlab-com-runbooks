@@ -129,7 +129,7 @@ basic.dashboard(
 )
 .addPanels(
      layout.titleRowWithPanels(
-    'Misc',
+    'Performance',
     layout.grid([
         basic.timeseries(
           title='CPU throttling',
@@ -142,6 +142,25 @@ basic.dashboard(
           linewidth=1,
         ),
         basic.timeseries(
+          title='Go GC',
+          description='',
+          query=|||
+            1000*go_gc_duration_seconds{%s,quantile="1"}
+          ||| % selectorString,
+          yAxisLabel='milliseconds',
+          legend_show=false,
+          linewidth=1,
+        ),
+    ], startRow=5000),
+    collapse=false,
+    startRow=4000
+    )
+)
+.addPanels(
+     layout.titleRowWithPanels(
+    'Misc',
+    layout.grid([
+        basic.timeseries(
           title='Running version',
           description='Running version of kas',
           query=|||
@@ -153,8 +172,8 @@ basic.dashboard(
           stack=true,
           fill=3,
         ),
-    ], startRow=5000),
+    ], startRow=7000),
     collapse=false,
-    startRow=4000
+    startRow=6000
     )
 )
