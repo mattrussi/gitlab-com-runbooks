@@ -151,6 +151,16 @@ basic.dashboard(
           legend_show=false,
           linewidth=1,
         ),
+        basic.timeseries(
+          title='Go goroutines',
+          description='',
+          query=|||
+            go_goroutines{%s}
+          ||| % selectorString,
+          yAxisLabel='',
+          legend_show=false,
+          linewidth=1,
+        ),
     ], startRow=5000),
     collapse=false,
     startRow=4000
