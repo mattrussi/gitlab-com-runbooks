@@ -13,7 +13,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(traefik_service_request_duration_seconds_bucket{code!~"4xx|5xx",job="default/traefik",le="0.3",service=~".*errortracking-api.*",team="observability"}[1m] offset 30s)
+          rate(traefik_service_request_duration_seconds_bucket{code!~"4xx|5xx",job="default/traefik",le="1.2",service=~".*errortracking-api.*",team="observability"}[1m] offset 30s)
         )
         +
         sum by (env,environment,stage) (
@@ -69,7 +69,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(traefik_service_request_duration_seconds_bucket{code!~"4xx|5xx",job="default/traefik",le="0.3",service=~".*errortracking-api.*",team="observability"}[5m] offset 30s)
+          rate(traefik_service_request_duration_seconds_bucket{code!~"4xx|5xx",job="default/traefik",le="1.2",service=~".*errortracking-api.*",team="observability"}[5m] offset 30s)
         )
         +
         sum by (env,environment,stage) (
@@ -125,7 +125,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(traefik_service_request_duration_seconds_bucket{code!~"4xx|5xx",job="default/traefik",le="0.3",service=~".*errortracking-api.*",team="observability"}[30m] offset 30s)
+          rate(traefik_service_request_duration_seconds_bucket{code!~"4xx|5xx",job="default/traefik",le="1.2",service=~".*errortracking-api.*",team="observability"}[30m] offset 30s)
         )
         +
         sum by (env,environment,stage) (
@@ -181,7 +181,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(traefik_service_request_duration_seconds_bucket{code!~"4xx|5xx",job="default/traefik",le="0.3",service=~".*errortracking-api.*",team="observability"}[1h] offset 30s)
+          rate(traefik_service_request_duration_seconds_bucket{code!~"4xx|5xx",job="default/traefik",le="1.2",service=~".*errortracking-api.*",team="observability"}[1h] offset 30s)
         )
         +
         sum by (env,environment,stage) (
@@ -237,7 +237,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(traefik_service_request_duration_seconds_bucket{code!~"4xx|5xx",job="default/traefik",le="0.3",service=~".*errortracking-api.*",team="observability"}[6h] offset 30s)
+          rate(traefik_service_request_duration_seconds_bucket{code!~"4xx|5xx",job="default/traefik",le="1.2",service=~".*errortracking-api.*",team="observability"}[6h] offset 30s)
         )
         +
         sum by (env,environment,stage) (

@@ -43,12 +43,12 @@ groups:
       (
         (
           gitlab_component_apdex:ratio_1h{component="loadbalancer",env!~"gprd|ops",monitor="global",type="errortracking"}
-          < (1 - 14.4 * 0.005000)
+          < (1 - 14.4 * 0.050000)
         )
         and
         (
           gitlab_component_apdex:ratio_5m{component="loadbalancer",env!~"gprd|ops",monitor="global",type="errortracking"}
-          < (1 - 14.4 * 0.005000)
+          < (1 - 14.4 * 0.050000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -93,12 +93,12 @@ groups:
       (
         (
           gitlab_component_apdex:ratio_6h{component="loadbalancer",env!~"gprd|ops",monitor="global",type="errortracking"}
-          < (1 - 6 * 0.005000)
+          < (1 - 6 * 0.050000)
         )
         and
         (
           gitlab_component_apdex:ratio_30m{component="loadbalancer",env!~"gprd|ops",monitor="global",type="errortracking"}
-          < (1 - 6 * 0.005000)
+          < (1 - 6 * 0.050000)
         )
       )
       and on(env,environment,tier,type,stage,component)

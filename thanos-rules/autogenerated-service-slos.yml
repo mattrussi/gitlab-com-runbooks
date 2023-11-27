@@ -569,7 +569,7 @@ groups:
     labels:
       tier: sv
       type: errortracking
-    expr: "0.995000"
+    expr: "0.950000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       tier: sv
@@ -580,7 +580,7 @@ groups:
       component: loadbalancer
       tier: sv
       type: errortracking
-    expr: "0.995000"
+    expr: "0.950000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: loadbalancer
