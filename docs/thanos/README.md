@@ -62,7 +62,7 @@
 * [A survival guide for SREs to working with Redis at GitLab](../redis/redis-survival-guide-for-sres.md)
 * [../redis/redis.md](../redis/redis.md)
 * [Container Registry Database Index Bloat](../registry/db-index-bloat.md)
-* [Deferring Sidekiq jobs](../sidekiq/deferring-jobs.md)
+* [Disabling Sidekiq workers](../sidekiq/disabling-a-worker.md)
 * [GET Monitoring Setup](../staging-ref/get-monitoring-setup.md)
 * [Thanos Architecture Overview](architecture.md)
 * [Vault Secrets Management](../vault/vault.md)

@@ -97,6 +97,7 @@
 * [Container Registry database post-deployment migrations](../registry/db-post-deployment-migrations.md)
 * [../registry/gitlab-registry.md](../registry/gitlab-registry.md)
 * [Managing Sentry in Kubernetes](../sentry/sentry.md)
+* [Disabling Sidekiq workers](../sidekiq/disabling-a-worker.md)
 * [Sidekiq Queue Out of Control](../sidekiq/large-sidekiq-queue.md)
 * [Poking around at sidekiq's running state](../sidekiq/sidekiq-inspection.md)
 * [A survival guide for SREs to working with Sidekiq at GitLab](../sidekiq/sidekiq-survival-guide-for-sres.md)

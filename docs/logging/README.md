@@ -45,7 +45,7 @@
 * [PubSub Queuing Rate Increasing](../pubsub/pubsub-queing.md)
 * [../registry/gitlab-registry.md](../registry/gitlab-registry.md)
 * [Creating a Sidekiq Shard](../sidekiq/creating-a-shard.md)
-* [Deferring Sidekiq jobs](../sidekiq/deferring-jobs.md)
+* [Disabling Sidekiq workers](../sidekiq/disabling-a-worker.md)
 * [Example Tutorial Template](../tutorials/example_tutorial_template.md)
 * [Life of a Git Request](../tutorials/overview_life_of_a_git_request.md)
 * [Life of a Web Request](../tutorials/overview_life_of_a_web_request.md)

@@ -1,32 +1,49 @@
-# Deferring Sidekiq jobs
+# Disabling Sidekiq workers
+
+## Incident Quick Reference
+
+In case of an incident caused by a misbehaving sidekiq worker, here's the immediate actions you should take.
+
+1. Identify which sidekiq job class (worker) is causing the incident.
+
+The [sidekiq: Worker Detail dashboard](https://dashboards.gitlab.net/d/sidekiq-worker-detail/sidekiq3a-worker-detail) may be helpful in checking a worker's enqueue rate, queue size, and summed execution time spent in shared dependencies like the DB.
+
+2. Defer execution of all jobs of that class, using either:
+
+- Chatops:
+
+```shell
+/chatops run feature set run_sidekiq_jobs_Example::SlowWorker false --ignore-feature-flag-consistency-check --ignore-production-check
+```
+
+- Rails console:
+
+```ruby
+Feature.disable(:"run_sidekiq_jobs_Example::SlowWorker")
+```
+
+The above action will cause sidekiq workers to defer (rather than execute) all jobs of that class, including jobs currently waiting in the queue.  This should provide some immediate relief.
+The details below give more background and show how to revert this (either instantly or gradually, depending on your needs).
 
 ## Details
 
 During an incident, some runaway worker instances could saturate infrastructure resources (database and database connection pool).
 If we let these workers to keep running, the entire system performance can be significantly impacted. Workers can be deferred to prevent such extreme cases, more development details can be found [here](https://docs.gitlab.com/ee/development/sidekiq/#deferring-sidekiq-workers).
 
-Sidekiq workers can be deferred in two ways, automatically based on database health check (opt-in per worker) or on-demand using feature flags (for all workers). If an incident is ongoing and you need to stop the worker from running immediately, refer to the [Using feature flags via ChatOps](#2-using-feature-flags-via-chatops) section below.
+Sidekiq workers can be deferred in two ways, automatically based on database health check (opt-in per worker) or on-demand using feature flags (for all workers). If an incident is ongoing and you need to stop the worker from running immediately, refer to the [Using feature flags via ChatOps](#1-using-feature-flags-via-chatops) section below.
 
-### 1. Based on database health check
-
-Batched background migrations framework has a [throttling mechanism](https://docs.gitlab.com/ee/development/database/batched_background_migrations.html#throttling-batched-migrations) based on certain database health indicators, the same is extended for Sidekiq workers too.
-
-On getting a stop signal from any of those health indicators, the sidekiq worker will be deferred (by default for 5 seconds). To enable this automatic deferring each worker should explicitly opt-in by calling `defer_on_database_health_signal` with appropriate parameters.
-
-Example: [MR!127732](https://gitlab.com/gitlab-org/gitlab/-/merge_requests/127732)
-
-#### Possible downside
-
-With increased number of workers opting in for this, there can be an overload on database health check indicators. Current [indicators](https://gitlab.com/gitlab-org/gitlab/-/tree/master/lib/gitlab/database/health_status/indicators) query database and the prometheus to determine the overall health, there is an [issue!413961](https://gitlab.com/gitlab-org/gitlab/-/issues/413961) opened to cache the indicator results to make the process more performant.
-
-#### Controlling indicator checks using feature flags
-
-Each indicator has it's own feature flag (eg: [db_health_check_wal_rate](https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/database/health_status/indicators/wal_rate.rb#L11)). They can be disabled to allow the sidekiq worker to ignore that particular indicator, but please be aware that those FFs are not worker specific (i.e: it applies to all opted in workers and batched background migrations).
-
-### 2. Using feature flags via ChatOps
+### 1. Using feature flags via ChatOps
 
 We have a mechanism to defer jobs from a Worker class by disabling a feature flag `run_sidekiq_jobs_{WorkerName}` via ChatOps.
-This feature flag is enabled for all workers by default.
+
+Because there is [overhead](#disabling-the-skipjobs-middleware) in checking the feature flag for each worker, the default is that jobs are enabled and the feature flags do not exist.
+
+There are two feature flags that can be used to modify worker behavior:
+
+| Feature flag                     | Effect                   | Default state |
+|----------------------------------|--------------------------|---------------|
+| `run_sidekiq_jobs_{WorkerName}`  | Defer jobs when disabled | Enabled       |
+| `drop_sidekiq_jobs_{WorkerName}` | Drop jobs when enabled   | Disabled      |
 
 By default, jobs are **delayed for 5 minutes** indefinitely until the feature flag is enabled. The delay can be set via
 setting environment variable `SIDEKIQ_DEFER_JOBS_DELAY` in seconds.
@@ -36,12 +53,7 @@ We've seen this happened during [incident 14758](https://gitlab.com/gitlab-com/g
 
 If we could get away with not processing the backlog jobs at all, we can [drop the jobs](#dropping-jobs-using-feature-flags-via-chatops) entirely instead of deferring them.
 
-The table below shows an overview of both deferring and dropping FFs and their behavior:
-
-| Feature flag                     | Effect                   | Default state |
-|----------------------------------|--------------------------|---------------|
-| `run_sidekiq_jobs_{WorkerName}`  | Defer jobs when disabled | Enabled       |
-| `drop_sidekiq_jobs_{WorkerName}` | Drop jobs when enabled   | Disabled      |
+The `WorkerName` portion of the feature flag name is the fully qualified ruby class, with no escaping for the colons.  For example, [job class `Users::TrackNamespaceVisitsWorker`](https://gitlab.com/gitlab-org/gitlab/-/blob/master/app/workers/users/track_namespace_visits_worker.rb) would be controlled by feature flag `run_sidekiq_jobs_Users::TrackNamespaceVisitsWorker`.
 
 Refer to the flowchart below to better understand the scenarios between dropping and deferring jobs:
 
@@ -72,16 +84,16 @@ to progressively let the jobs processed. For example:
 
 ```shell
 # not running any jobs, deferring all 100% of the jobs
-/chatops run feature set `run_sidekiq_jobs_SlowRunningWorker` false --ignore-feature-flag-consistency-check
+/chatops run feature set run_sidekiq_jobs_SlowRunningWorker false --ignore-feature-flag-consistency-check
 
 # only running 10% of the jobs, deferring 90% of the jobs
-/chatops run feature set `run_sidekiq_jobs_SlowRunningWorker` --actors 10 --ignore-feature-flag-consistency-check
+/chatops run feature set run_sidekiq_jobs_SlowRunningWorker --actors 10 --ignore-feature-flag-consistency-check
 
 # running 50% of the jobs, deferring 50% of the jobs
-/chatops run feature set `run_sidekiq_jobs_SlowRunningWorker` --actors 50 --ignore-feature-flag-consistency-check
+/chatops run feature set run_sidekiq_jobs_SlowRunningWorker --actors 50 --ignore-feature-flag-consistency-check
 
 # back to running all jobs normally
-/chatops run feature delete `run_sidekiq_jobs_SlowRunningWorker` --ignore-feature-flag-consistency-check
+/chatops run feature delete run_sidekiq_jobs_SlowRunningWorker --ignore-feature-flag-consistency-check
 ```
 
 Note that `--ignore-feature-flag-consistency-check` is necessary as it bypasses the consistency check between staging and production.
@@ -105,8 +117,8 @@ This production check might fail in case of:
 
 In this case, we can use `--ignore-production-check` in case the ongoing incident itself has ~"blocks feature-flags":
 
-```
-/chatops run feature set `run_sidekiq_jobs_SlowRunningWorker` false --ignore-feature-flag-consistency-check --ignore-production-check
+```shell
+/chatops run feature set run_sidekiq_jobs_SlowRunningWorker false --ignore-feature-flag-consistency-check --ignore-production-check
 ```
 
 ## Dropping jobs using feature flags via ChatOps
@@ -117,14 +129,30 @@ Example:
 
 ```shell
 # drop all jobs
-/chatops run feature set `drop_sidekiq_jobs_SlowRunningWorker` true --ignore-feature-flag-consistency-check
+/chatops run feature set drop_sidekiq_jobs_SlowRunningWorker true --ignore-feature-flag-consistency-check
 
 # back to running all jobs normally
-/chatops run feature delete `drop_sidekiq_jobs_SlowRunningWorker` --ignore-feature-flag-consistency-check
+/chatops run feature delete drop_sidekiq_jobs_SlowRunningWorker --ignore-feature-flag-consistency-check
 ```
 
 Note that `drop_sidekiq_jobs` FF has precedence over the `run_sidekiq_jobs` FF. This means when `drop_sidekiq_jobs` FF is enabled and `run_sidekiq_jobs` FF is disabled,
 `drop_sidekiq_jobs` FF takes priority, thus the job is dropped. Once `drop_sidekiq_jobs` FF is back to disabled, jobs are then deferred due to `run_sidekiq_jobs` still disabled.
+
+### 2. Based on database health check
+
+Batched background migrations framework has a [throttling mechanism](https://docs.gitlab.com/ee/development/database/batched_background_migrations.html#throttling-batched-migrations) based on certain database health indicators, the same is extended for Sidekiq workers too.
+
+On getting a stop signal from any of those health indicators, the sidekiq worker will be deferred (by default for 5 seconds). To enable this automatic deferring each worker should explicitly opt-in by calling `defer_on_database_health_signal` with appropriate parameters.
+
+Example: [MR!127732](https://gitlab.com/gitlab-org/gitlab/-/merge_requests/127732)
+
+#### Possible downside
+
+With increased number of workers opting in for this, there can be an overload on database health check indicators. Current [indicators](https://gitlab.com/gitlab-org/gitlab/-/tree/master/lib/gitlab/database/health_status/indicators) query database and the prometheus to determine the overall health, there is an [issue!413961](https://gitlab.com/gitlab-org/gitlab/-/issues/413961) opened to cache the indicator results to make the process more performant.
+
+#### Controlling indicator checks using feature flags
+
+Each indicator has it's own feature flag (eg: [db_health_check_wal_rate](https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/database/health_status/indicators/wal_rate.rb#L11)). They can be disabled to allow the sidekiq worker to ignore that particular indicator, but please be aware that those FFs are not worker specific (i.e: it applies to all opted in workers and batched background migrations).
 
 ## Disabling the SkipJobs middleware
 
