@@ -389,7 +389,7 @@ Gitlab::Redis::Queues.with { |c| c.del(duplicate_key) }
 
 ## Deferring Sidekiq jobs
 
-In case there's an incident and the cause is runaway worker instances, you can use [Deferring Sidekiq middleware](./deferring-jobs.md#2-using-feature-flags-via-chatops) to stop the worker from running immediately.
+In case there's an incident and the cause is runaway worker instances, you can use [Deferring Sidekiq middleware](./disabling-a-worker.md#1-using-feature-flags-via-chatops) to stop the worker from running immediately.
 
 ## Sidekiq-cron
 

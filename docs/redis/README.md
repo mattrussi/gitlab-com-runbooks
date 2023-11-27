@@ -42,7 +42,7 @@
 * [A survival guide for SREs to working with Redis at GitLab](redis-survival-guide-for-sres.md)
 * [redis.md](redis.md)
 * [Managing Sentry in Kubernetes](../sentry/sentry.md)
-* [Deferring Sidekiq jobs](../sidekiq/deferring-jobs.md)
+* [Disabling Sidekiq workers](../sidekiq/disabling-a-worker.md)
 * [Pull mirror overdue queue is too large](../sidekiq/large-pull-mirror-queue.md)
 * [Sidekiq queue migration](../sidekiq/queue-migration.md)
 * [Poking around at sidekiq's running state](../sidekiq/sidekiq-inspection.md)
