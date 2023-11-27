@@ -2841,6 +2841,30 @@ groups:
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
+      component: vault_audit_log_request
+      tier: inf
+      type: vault
+    expr: "0.999000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      component: vault_audit_log_request
+      tier: inf
+      type: vault
+    expr: "0.001000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      component: vault_audit_log_response
+      tier: inf
+      type: vault
+    expr: "0.999000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      component: vault_audit_log_response
+      tier: inf
+      type: vault
+    expr: "0.001000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
       component: vault_google_lb
       tier: inf
       type: vault
@@ -4702,6 +4726,24 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: vault
+      global_aggregation: "no"
+      regional_aggregation: "no"
+      service_aggregation: "yes"
+      tier: inf
+      type: vault
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: vault_audit_log_request
+      global_aggregation: "no"
+      regional_aggregation: "no"
+      service_aggregation: "yes"
+      tier: inf
+      type: vault
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: vault_audit_log_response
       global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
