@@ -102,10 +102,12 @@ Instead what you'll want to do is make the update in helmfiles as usual and appl
 0. Make your changes in gitlab-helmfiles as usual, and apply it prior to the steps listed here.
 
 1. Find the relevant pvc, there's a bunch of ways to do this - for this example ill be using the mimir compactor pvc.
+
 ```bash
 $ kubectl -n mimir get pvc | grep compact
 storage-mimir-compactor-0                  Bound    pvc-cf8dd77f-b178-4327-95a0-790e71515b5d   30Gi       RWO            pd-balanced    40d
 ```
+
 2. Manually adjust the pvcs' .spec.resources.requests.storage to the same value as you set in helmfiles. Do this for each item in the statefulset.
 
 3. Each altered pvc should now have a condition like this:
@@ -120,6 +122,7 @@ storage-mimir-compactor-0                  Bound    pvc-cf8dd77f-b178-4327-95a0-
 ```
 
 4. Scale the statefulset to 0, then back to whatever it was before:
+
 ```
 # There's only 1 pod in mimir/compactor;
 
@@ -127,7 +130,9 @@ kubectl -n mimir scale statefulsets/mimir-compactor --replicas=0
 sleep 5 # Give it a moment for pity's sake.
 kubectl -n mimir scale statefulsets/mimir-compactor --replicas=1
 ```
+
 5. Confirm new size, revel in your newfound powers
+
 ```
 $ kubectl -n mimir get pvc | grep compact
 storage-mimir-compactor-0                  Bound    pvc-cf8dd77f-b178-4327-95a0-790e71515b5d   50Gi       RWO            pd-balanced    40d
