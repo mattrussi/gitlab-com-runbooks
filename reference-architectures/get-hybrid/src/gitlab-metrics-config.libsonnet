@@ -21,6 +21,7 @@ local options = validateReferenceArchitectureOptions(import 'gitlab-metrics-opti
   // Hash of all saturation metric types that are monitored on gitlab.com
   saturationMonitoring:: objects.mergeAll(
     [
+      import 'saturation-monitoring/aws_rds_disk.libsonnet',
       import 'saturation-monitoring/cpu.libsonnet',
       import 'saturation-monitoring/disk_inodes.libsonnet',
       import 'saturation-monitoring/disk_space.libsonnet',
