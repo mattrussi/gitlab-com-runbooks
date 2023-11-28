@@ -92,3 +92,43 @@ If everything is looking good, you're finished!
 Please be aware that it is not possible to shrink a PVC. Any new Spec whose size
 reverts the PVC to its previous size (is less than the current one) will be
 rejected by the Kubernetes API.
+
+## Stateful Sets
+
+Stateful sets do not automatically resize when updating the corrosponding set, see: https://github.com/kubernetes/enhancements/issues/661
+
+Instead what you'll want to do is make the update in helmfiles as usual and apply it, then you'll need to make a manual change to each pvc;
+
+0. Make your changes in gitlab-helmfiles as usual, and apply it prior to the steps listed here.
+
+1. Find the relevant pvc, there's a bunch of ways to do this - for this example ill be using the mimir compactor pvc.
+```bash
+$ kubectl -n mimir get pvc | grep compact
+storage-mimir-compactor-0                  Bound    pvc-cf8dd77f-b178-4327-95a0-790e71515b5d   30Gi       RWO            pd-balanced    40d
+```
+2. Manually adjust the pvcs' .spec.resources.requests.storage to the same value as you set in helmfiles. Do this for each item in the statefulset.
+
+3. Each altered pvc should now have a condition like this:
+
+```
+  - lastProbeTime: null
+    lastTransitionTime: "2023-11-28T12:33:24Z"
+    message: Waiting for user to (re-)start a pod to finish file system resize of
+      volume on node.
+    status: "True"
+    type: FileSystemResizePending
+```
+
+4. Scale the statefulset to 0, then back to whatever it was before:
+```
+# There's only 1 pod in mimir/compactor;
+
+kubectl -n mimir scale statefulsets/mimir-compactor --replicas=0
+sleep 5 # Give it a moment for pity's sake.
+kubectl -n mimir scale statefulsets/mimir-compactor --replicas=1
+```
+5. Confirm new size, revel in your newfound powers
+```
+$ kubectl -n mimir get pvc | grep compact
+storage-mimir-compactor-0                  Bound    pvc-cf8dd77f-b178-4327-95a0-790e71515b5d   50Gi       RWO            pd-balanced    40d
+```
