@@ -95,7 +95,7 @@ rejected by the Kubernetes API.
 
 ## Stateful Sets
 
-Stateful sets do not automatically resize when updating the corrosponding set, see: https://github.com/kubernetes/enhancements/issues/661
+Stateful sets do not automatically resize when updating the corrosponding set, see: [here](https://github.com/kubernetes/enhancements/issues/661)
 
 Instead what you'll want to do is make the update in helmfiles as usual and apply it, then you'll need to make a manual change to each pvc;
 
