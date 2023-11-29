@@ -1074,10 +1074,6 @@
         {
           "title": "sidekiq Service | kube_pool_cpu resource Dashboard",
           "url": "https://dashboards.gitlab.net/d/alerts-sat_kube_pool_cpu/?var-environment=gprd\u0026var-type=sidekiq\u0026var-stage=main\u0026var-component=kube_pool_cpu"
-        },
-        {
-          "title": "sidekiq Service | rails_db_connection_pool resource Dashboard",
-          "url": "https://dashboards.gitlab.net/d/alerts-sat_rails_db_connection_pool/?var-environment=gprd\u0026var-type=sidekiq\u0026var-stage=main\u0026var-component=rails_db_connection_pool"
         }
       ],
       "nullPointMode": "null",
@@ -4857,193 +4853,6 @@
               "show": false
             }
           ]
-        },
-        {
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": "$PROMETHEUS_DS",
-          "decimals": 2,
-          "description": "Rails uses connection pools for its database connections. As each\nnode may have multiple connection pools, this is by node and by\ndatabase host.\n\nRead more about this resource in our [documentation](https://docs.gitlab.com/ee/development/database/client_side_connection_pool.html#client-side-connection-pool).\n\nIf this resource is saturated, it may indicate that our connection\npools are not correctly sized, perhaps because an unexpected\napplication thread is using a database connection.\n Lower is better.",
-          "fill": 0,
-          "fillGradient": 0,
-          "gridPos": {
-            "h": 10,
-            "w": 12,
-            "x": 0,
-            "y": 20
-          },
-          "id": 391047339,
-          "legend": {
-            "alignAsTable": true,
-            "avg": true,
-            "current": true,
-            "hideEmpty": true,
-            "max": true,
-            "min": true,
-            "rightSide": false,
-            "show": true,
-            "sideWidth": null,
-            "sort": "max",
-            "sortDesc": true,
-            "total": false,
-            "values": true
-          },
-          "lines": true,
-          "linewidth": 1,
-          "links": [],
-          "nullPointMode": "null",
-          "percentage": false,
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "repeat": null,
-          "seriesOverrides": [
-            {
-              "alias": "/^Soft SLO/",
-              "color": "#FF4500",
-              "dashLength": 4,
-              "dashes": true,
-              "legend": true,
-              "lines": true,
-              "linewidth": 2,
-              "nullPointMode": "connected",
-              "spaceLength": 10,
-              "zindex": -2
-            },
-            {
-              "alias": "/^Hard SLO/",
-              "color": "#F2495C",
-              "dashLength": 4,
-              "dashes": true,
-              "legend": true,
-              "lines": true,
-              "linewidth": 4,
-              "nullPointMode": "connected",
-              "spaceLength": 4,
-              "zindex": -2
-            },
-            {
-              "alias": "/aggregated /",
-              "color": "#E7D551",
-              "linewidth": 2,
-              "zindex": 3
-            },
-            {
-              "alias": "/^95th quantile for week/",
-              "color": "#37872D",
-              "dashLength": 4,
-              "dashes": true,
-              "legend": true,
-              "lines": true,
-              "linewidth": 1,
-              "nullPointMode": "connected",
-              "spaceLength": 10,
-              "zindex": -2
-            },
-            {
-              "alias": "/^99th quantile for week/",
-              "color": "#56A64B",
-              "dashLength": 4,
-              "dashes": true,
-              "legend": true,
-              "lines": true,
-              "linewidth": 2,
-              "nullPointMode": "connected",
-              "spaceLength": 4,
-              "zindex": -2
-            }
-          ],
-          "spaceLength": 10,
-          "stableId": "saturation-rails_db_connection_pool",
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {
-              "expr": "clamp_min(\n  clamp_max(\n    max by(type, instance, host, port) (\n  clamp_min(\n    clamp_max(\n      (\n        avg_over_time(gitlab_database_connection_pool_busy{class=\"ActiveRecord::Base\", type=\"sidekiq\"}[5m])\n        +\n        avg_over_time(gitlab_database_connection_pool_dead{class=\"ActiveRecord::Base\", type=\"sidekiq\"}[5m])\n      )\n      /\n      gitlab_database_connection_pool_size{class=\"ActiveRecord::Base\", type=\"sidekiq\"}\n      ,\n      1)\n  ,\n  0)\n)\n\n  ,1)\n,0)\n",
-              "format": "time_series",
-              "interval": "1m",
-              "intervalFactor": 1,
-              "legendFormat": "{{ instance }} {{ host }} {{ port }}",
-              "refId": "A"
-            },
-            {
-              "expr": "clamp_min(\n  clamp_max(\n    max(\n      max_over_time(gitlab_component_saturation:ratio{type=\"sidekiq\", component=\"rails_db_connection_pool\"}[$__interval])\n    ) by (component)\n  ,1)\n,0)\n",
-              "format": "time_series",
-              "interval": "1m",
-              "intervalFactor": 1,
-              "legendFormat": "aggregated {{ component }}",
-              "refId": "B"
-            },
-            {
-              "expr": "max(\n  gitlab_component_saturation:ratio_quantile95_1w{type=\"sidekiq\", component=\"rails_db_connection_pool\"}\n)\n",
-              "format": "time_series",
-              "interval": "1m",
-              "intervalFactor": 1,
-              "legendFormat": "95th quantile for week {{ component }}",
-              "refId": "C"
-            },
-            {
-              "expr": "max(\n  gitlab_component_saturation:ratio_quantile99_1w{type=\"sidekiq\", component=\"rails_db_connection_pool\"}\n)\n",
-              "format": "time_series",
-              "interval": "1m",
-              "intervalFactor": 1,
-              "legendFormat": "99th quantile for week {{ component }}",
-              "refId": "D"
-            },
-            {
-              "expr": "avg(slo:max:soft:gitlab_component_saturation:ratio{component=\"rails_db_connection_pool\"}) by (component)\n",
-              "format": "time_series",
-              "interval": "1m",
-              "intervalFactor": 1,
-              "legendFormat": "Soft SLO: {{ component }}",
-              "refId": "E"
-            },
-            {
-              "expr": "avg(slo:max:hard:gitlab_component_saturation:ratio{component=\"rails_db_connection_pool\"}) by (component)\n",
-              "format": "time_series",
-              "interval": "1m",
-              "intervalFactor": 1,
-              "legendFormat": "Hard SLO: {{ component }}",
-              "refId": "F"
-            }
-          ],
-          "thresholds": [],
-          "timeFrom": null,
-          "timeShift": null,
-          "title": "rails_db_connection_pool component saturation: Rails DB Connection Pool Utilization",
-          "tooltip": {
-            "shared": true,
-            "sort": 2,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "buckets": null,
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "format": "percentunit",
-              "label": "Saturation %",
-              "logBase": 1,
-              "max": 1,
-              "min": null,
-              "show": true
-            },
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": 1,
-              "min": 0,
-              "show": false
-            }
-          ]
         }
       ],
       "repeat": null,
@@ -5063,7 +4872,7 @@
         "x": 0,
         "y": 110000
       },
-      "id": 47,
+      "id": 46,
       "mode": "markdown",
       "title": "Source",
       "type": "text"

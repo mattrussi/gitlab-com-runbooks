@@ -29,7 +29,6 @@ Here are some examples of the dashboards generated for this reference architectu
 | ----------- | ------------- | --------------- | --------- | --------------- | ------------------ |
 | `gitaly` | `goserver` | This SLI monitors all Gitaly GRPC requests in aggregate, excluding the OperationService. GRPC failures which are considered to be the "server's fault" are counted as errors. The apdex score is based on a subset of GRPC methods which are expected to be fast.  | ✅ SLO: 99.9% | ✅ SLO: 99.95% | ✅ |
 | `gitlab-shell` | `grpc_requests` | A proxy measurement of the number of GRPC SSH service requests made to Gitaly and Praefect.  Since we are unable to measure gitlab-shell directly at present, this is the best substitute we can provide.  | ✅ SLO: 99.9% | ✅ SLO: 99.9% | ✅ |
-| `postgresql` | `transactions` | Represents all SQL transactions issued to the primary Postgres instance. Errors represent transaction rollbacks.  | - | ✅ SLO: 50% | ✅ |
 | `praefect` | `proxy` | All Gitaly operations pass through the Praefect proxy on the way to a Gitaly instance. This SLI monitors those operations in aggregate.  | ✅ SLO: 99.5% | ✅ SLO: 99.95% | ✅ |
 | `praefect` | `replicator_queue` | Praefect replication operations. Latency represents the queuing delay before replication is carried out.  | ✅ SLO: 99.5% | - | ✅ |
 | `registry` | `server` | Aggregation of all registry HTTP requests.  | ✅ SLO: 99.7% | ✅ SLO: 99.99% | ✅ |
@@ -55,7 +54,7 @@ Saturation monitoring is handled differently to the service-level monitoring des
 
 | **Resource** | **Applicable Services** | **Description** | **Horizontally Scalable?** | **Alerting Threshold** |
 | ------------ | ----------------------- | --------------- | -------------------------- | -----------------------|
-| `aws_rds_disk_space` | `postgresql` | We are fully saturated when we are at 2GB remaining free space, we have no way of knowing the total available space and RDS will autoscale storage for us when we are at 10GB or 10% free space, whichever is greater.  | ✅ | 95% |
+| `aws_rds_disk_space` |  | We are fully saturated when we are at 2GB remaining free space, we have no way of knowing the total available space and RDS will autoscale storage for us when we are at 10GB or 10% free space, whichever is greater.  | ✅ | 95% |
 | `cpu` | `consul`, `gitaly`, `praefect` | This resource measures average CPU utilization across an all cores in a service fleet. If it is becoming saturated, it may indicate that the fleet needs horizontal or vertical scaling.  | ✅ | 90% |
 | `disk_inodes` | `consul`, `gitaly`, `praefect` | Disk inode utilization per device per node.  If this is too high, its possible that a directory is filling up with files. Consider logging in an checking temp directories for large numbers of files  | ✅ | 80% |
 | `disk_space` | `consul`, `gitaly`, `praefect` | Disk space utilization per device per node.  | ✅ | 90% |
@@ -71,9 +70,7 @@ Saturation monitoring is handled differently to the service-level monitoring des
 | `node_schedstat_waiting` | `consul`, `gitaly`, `praefect` | Measures the amount of scheduler waiting time that processes are waiting to be scheduled, according to [`CPU Scheduling Metrics`](https://www.robustperception.io/cpu-scheduling-metrics-from-the-node-exporter).  A high value indicates that a node has more processes to be run than CPU time available to handle them, and may lead to degraded responsiveness and performance from the application.  Additionally, it may indicate that the fleet is under-provisioned.  | ✅ | 15% |
 | `opensearch_cpu` |  | Average CPU utilization.  This resource measures the CPU utilization for the selected cluster or domain. If it is becoming saturated, it may indicate that the fleet needs horizontal or vertical scaling. The metrics are coming from cloudwatch_exporter.  | ✅ | 80% |
 | `opensearch_disk_space` |  | Disk utilization for Opensearch  | ✅ | 75% |
-| `pg_primary_cpu` |  | Average CPU utilization across all cores on the Postgres primary instance.  | - | 90% |
 | `puma_workers` | `webservice` | Puma thread utilization.  Puma uses a fixed size thread pool to handle HTTP requests. This metric shows how many threads are busy handling requests. When this resource is saturated, we will see puma queuing taking place. Leading to slowdowns across the application.  Puma saturation is usually caused by latency problems in downstream services: usually Gitaly or Postgres, but possibly also Redis. Puma saturation can also be caused by traffic spikes.  | ✅ | 90% |
-| `rails_db_connection_pool` | `sidekiq` | Rails uses connection pools for its database connections. As each node may have multiple connection pools, this is by node and by database host.  Read more about this resource in our [documentation](https://docs.gitlab.com/ee/development/database/client_side_connection_pool.html#client-side-connection-pool).  If this resource is saturated, it may indicate that our connection pools are not correctly sized, perhaps because an unexpected application thread is using a database connection.  | ✅ | 99% |
 | `single_node_cpu` | `consul`, `gitaly`, `praefect` | Average CPU utilization per Node.  If average CPU is saturated, it may indicate that a fleet is in need to horizontal or vertical scaling. It may also indicate imbalances in load in a fleet.  | ✅ | 95% |
 <!-- END_MARKER:saturation -->
 

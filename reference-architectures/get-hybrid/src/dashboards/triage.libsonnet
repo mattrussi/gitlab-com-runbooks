@@ -9,7 +9,6 @@ local text = grafana.text;
 local selector = {};
 
 local tierOrder = [
-  'db',
   'sv',
   'stor',
   'inf',
