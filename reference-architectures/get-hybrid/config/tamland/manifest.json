@@ -36,7 +36,7 @@
       },
       "dangerouslyThanosEvaluated": false,
       "description": "We are fully saturated when we are at 2GB remaining free space, we have\nno way of knowing the total available space and RDS will autoscale storage for us\nwhen we are at 10GB or 10% free space, whichever is greater.\n",
-      "grafana_dashboard_uid": "sat_disk_space",
+      "grafana_dashboard_uid": "aws_rds_disk_space",
       "horizontallyScalable": true,
       "linear_prediction_saturation_alert": "6h",
       "quantileAggregation": "max",

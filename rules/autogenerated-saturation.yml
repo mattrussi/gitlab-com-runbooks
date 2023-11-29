@@ -2741,8 +2741,8 @@ groups:
         Details of the Disk Space Utilization per RDS Instance resource:
 
         We are fully saturated when we are at 2GB remaining free space, we have no way of knowing the total available space and RDS will autoscale storage for us when we are at 10GB or 10% free space, whichever is greater.
-      grafana_dashboard_id: alerts-sat_disk_space
-      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_disk_space?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_id: alerts-aws_rds_disk_space
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-aws_rds_disk_space?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
         }}
       grafana_min_zoom_hours: "6"
@@ -2797,8 +2797,8 @@ groups:
         Details of the Disk Space Utilization per RDS Instance resource:
 
         We are fully saturated when we are at 2GB remaining free space, we have no way of knowing the total available space and RDS will autoscale storage for us when we are at 10GB or 10% free space, whichever is greater.
-      grafana_dashboard_id: alerts-sat_disk_space
-      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_disk_space?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_id: alerts-aws_rds_disk_space
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-aws_rds_disk_space?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
         }}
       grafana_min_zoom_hours: "6"
