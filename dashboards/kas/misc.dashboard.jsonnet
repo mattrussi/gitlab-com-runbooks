@@ -6,6 +6,9 @@ local selectors = import 'promql/selectors.libsonnet';
 local selector = { env: '$environment', stage: '$stage', type: 'kas' };
 local selectorString = selectors.serializeHash(selector);
 
+local envSelector = { env: '$environment', type: 'kas' };
+local envSelectorString = selectors.serializeHash(envSelector);
+
 basic.dashboard(
   'Miscellaneous metrics',
   tags=[
@@ -126,7 +129,7 @@ basic.dashboard(
 )
 .addPanels(
      layout.titleRowWithPanels(
-    'Misc',
+    'Performance',
     layout.grid([
         basic.timeseries(
           title='CPU throttling',
@@ -138,8 +141,49 @@ basic.dashboard(
           legend_show=false,
           linewidth=1,
         ),
+        basic.timeseries(
+          title='Go GC',
+          description='',
+          query=|||
+            1000*go_gc_duration_seconds{%s,quantile="1"}
+          ||| % selectorString,
+          yAxisLabel='milliseconds',
+          legend_show=false,
+          linewidth=1,
+        ),
+        basic.timeseries(
+          title='Go goroutines',
+          description='',
+          query=|||
+            go_goroutines{%s}
+          ||| % selectorString,
+          yAxisLabel='',
+          legend_show=false,
+          linewidth=1,
+        ),
     ], startRow=5000),
     collapse=false,
     startRow=4000
+    )
+)
+.addPanels(
+     layout.titleRowWithPanels(
+    'Misc',
+    layout.grid([
+        basic.timeseries(
+          title='Running version',
+          description='Running version of kas',
+          query=|||
+            count by (version, stage) (gitlab_build_info{%s})
+          ||| % envSelectorString,
+          yAxisLabel='pods',
+          legend_show=false,
+          linewidth=1,
+          stack=true,
+          fill=3,
+        ),
+    ], startRow=7000),
+    collapse=false,
+    startRow=6000
     )
 )
