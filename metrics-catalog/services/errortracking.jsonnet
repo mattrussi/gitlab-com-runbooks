@@ -58,7 +58,7 @@ metricsCatalog.serviceDefinition({
       apdex: histogramApdex(
         histogram='traefik_service_request_duration_seconds_bucket',
         selector=errortrackingSelector { code: { noneOf: ['4xx', '5xx'] } },
-        satisfiedThreshold='0.3',
+        satisfiedThreshold='1.2',
         toleratedThreshold='5'
       ),
 
