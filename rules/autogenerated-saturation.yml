@@ -6,6 +6,23 @@ groups:
   rules:
   - record: gitlab_component_saturation:ratio
     labels:
+      component: aws_rds_disk_space
+    expr: |
+      max by(environment, tier, type, stage, shard) (
+        clamp_min(
+          clamp_max(
+            (
+              ( 2 * (1024*1024*1024))
+              /
+              (sum by (dbinstance_identifier) (aws_rds_free_storage_space_maximum)))
+            )
+            ,
+            1)
+        ,
+        0)
+      )
+  - record: gitlab_component_saturation:ratio
+    labels:
       component: cgroup_memory
     expr: |
       max by(environment, tier, type, stage, shard) (
@@ -1415,6 +1432,14 @@ groups:
   rules:
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:
+      component: aws_rds_disk_space
+    expr: "0.9"
+  - record: slo:max:hard:gitlab_component_saturation:ratio
+    labels:
+      component: aws_rds_disk_space
+    expr: "0.95"
+  - record: slo:max:soft:gitlab_component_saturation:ratio
+    labels:
       component: cgroup_memory
     expr: "0.8"
   - record: slo:max:hard:gitlab_component_saturation:ratio
@@ -2048,6 +2073,14 @@ groups:
 - name: GitLab Component Saturation Metadata
   interval: 5m
   rules:
+  - record: gitlab_component_saturation_info
+    labels:
+      capacity_planning_strategy: quantile95_1h
+      component: aws_rds_disk_space
+      horiz_scaling: "yes"
+      quantile: max
+      severity: s2
+    expr: "1"
   - record: gitlab_component_saturation_info
     labels:
       capacity_planning_strategy: quantile95_1h
@@ -2696,6 +2729,120 @@ groups:
 - name: GitLab Saturation Alerts
   interval: 1m
   rules:
+  - alert: component_saturation_slo_out_of_bounds
+    for: 15m
+    annotations:
+      title: The Disk Space Utilization per RDS Instance resource of the {{ $labels.type
+        }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
+        is close to its capacity limit.
+      description: |
+        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
+
+        Details of the Disk Space Utilization per RDS Instance resource:
+
+        We are fully saturated when we are at 2GB remaining free space, we have no way of knowing the total available space and RDS will autoscale storage for us when we are at 10GB or 10% free space, whichever is greater.
+      grafana_dashboard_id: alerts-sat_disk_space
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_disk_space?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "1891685914"
+      grafana_variables: environment,type,stage
+      promql_query: |
+        max by(environment, tier, type, stage, shard, fqdn, device) (
+          clamp_min(
+            clamp_max(
+              (
+                ( 2 * (1024*1024*1024))
+                /
+                (sum by (dbinstance_identifier) (aws_rds_free_storage_space_maximum)))
+              )
+              ,
+              1)
+          ,
+          0)
+        )
+      promql_template_1: |
+        max by(environment, tier, type, stage, shard, fqdn, device) (
+          clamp_min(
+            clamp_max(
+              (
+                ( 2 * (1024*1024*1024))
+                /
+                (sum by (dbinstance_identifier) (aws_rds_free_storage_space_maximum)))
+              )
+              ,
+              1)
+          ,
+          0)
+        )
+      runbook: docs/{{ $labels.type }}/README.md
+    labels:
+      alert_type: cause
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+    expr: |
+      gitlab_component_saturation:ratio{component="aws_rds_disk_space"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="aws_rds_disk_space"}
+  - alert: ComponentResourceRunningOut_aws_rds_disk_space
+    for: 15m
+    annotations:
+      title: The Disk Space Utilization per RDS Instance resource of the {{ $labels.type
+        }} service ({{ $labels.stage }} stage) is on track to hit capacity within
+        6h
+      description: |
+        This means that this resource is growing rapidly and is predicted to exceed saturation threshold within 6h.
+
+        Details of the Disk Space Utilization per RDS Instance resource:
+
+        We are fully saturated when we are at 2GB remaining free space, we have no way of knowing the total available space and RDS will autoscale storage for us when we are at 10GB or 10% free space, whichever is greater.
+      grafana_dashboard_id: alerts-sat_disk_space
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_disk_space?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "1891685914"
+      grafana_variables: environment,type,stage
+      promql_query: |
+        max by(environment, tier, type, stage, shard, fqdn, device) (
+          clamp_min(
+            clamp_max(
+              (
+                ( 2 * (1024*1024*1024))
+                /
+                (sum by (dbinstance_identifier) (aws_rds_free_storage_space_maximum)))
+              )
+              ,
+              1)
+          ,
+          0)
+        )
+      promql_template_1: |
+        max by(environment, tier, type, stage, shard, fqdn, device) (
+          clamp_min(
+            clamp_max(
+              (
+                ( 2 * (1024*1024*1024))
+                /
+                (sum by (dbinstance_identifier) (aws_rds_free_storage_space_maximum)))
+              )
+              ,
+              1)
+          ,
+          0)
+        )
+      runbook: docs/{{ $labels.type }}/README.md
+    labels:
+      alert_type: cause
+      linear_prediction_saturation_alert: 6h
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+    expr: |
+      predict_linear(gitlab_component_saturation:ratio{component="aws_rds_disk_space"}[6h], 21600)
+      > on (component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="aws_rds_disk_space"}
   - alert: component_saturation_slo_out_of_bounds
     for: 5m
     annotations:

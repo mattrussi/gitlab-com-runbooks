@@ -3,7 +3,7 @@ local resourceSaturationPoint = (import 'servicemetrics/resource_saturation_poin
 local labelTaxonomy = import 'label-taxonomy/label-taxonomy.libsonnet';
 
 {
-  disk_space: resourceSaturationPoint({
+  aws_rds_disk_space: resourceSaturationPoint({
     title: 'Disk Space Utilization per RDS Instance',
     severity: 's2',
     horizontallyScalable: true,

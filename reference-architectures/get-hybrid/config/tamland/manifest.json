@@ -22,6 +22,40 @@
     ]
   },
   "saturationPoints": {
+    "aws_rds_disk_space": {
+      "alertRunbook": "docs/{{ $labels.type }}/README.md",
+      "alerting": {
+        "enabled": true
+      },
+      "appliesTo": [
+        "postgresql"
+      ],
+      "capacityPlanning": {
+        "changepoints_count": 25,
+        "forecast_days": 90,
+        "historical_days": 365,
+        "strategy": "quantile95_1h"
+      },
+      "dangerouslyThanosEvaluated": false,
+      "description": "We are fully saturated when we are at 2GB remaining free space, we have\nno way of knowing the total available space and RDS will autoscale storage for us\nwhen we are at 10GB or 10% free space, whichever is greater.\n",
+      "grafana_dashboard_uid": "sat_disk_space",
+      "horizontallyScalable": true,
+      "linear_prediction_saturation_alert": "6h",
+      "quantileAggregation": "max",
+      "query": "(\n  ( 2 * (1024*1024*1024))\n  /\n  (sum by (dbinstance_identifier) (aws_rds_free_storage_space_maximum)))\n)\n",
+      "queryFormatConfig": {},
+      "resourceLabels": [
+        "node",
+        "device"
+      ],
+      "severity": "s2",
+      "slos": {
+        "alertTriggerDuration": "15m",
+        "hard": 0.95,
+        "soft": 0.9
+      },
+      "title": "Disk Space Utilization per RDS Instance"
+    },
     "cpu": {
       "alertRunbook": "docs/{{ $labels.type }}/README.md",
       "alerting": {
@@ -690,6 +724,10 @@
         "url": ""
       },
       "resourceDashboard": {
+        "aws_rds_disk_space": {
+          "name": "aws_rds_disk_space",
+          "url": ""
+        },
         "cpu": {
           "name": "cpu",
           "url": ""
@@ -776,6 +814,10 @@
         "url": ""
       },
       "resourceDashboard": {
+        "aws_rds_disk_space": {
+          "name": "aws_rds_disk_space",
+          "url": ""
+        },
         "cpu": {
           "name": "cpu",
           "url": ""
@@ -862,6 +904,10 @@
         "url": ""
       },
       "resourceDashboard": {
+        "aws_rds_disk_space": {
+          "name": "aws_rds_disk_space",
+          "url": ""
+        },
         "cpu": {
           "name": "cpu",
           "url": ""
@@ -948,6 +994,10 @@
         "url": ""
       },
       "resourceDashboard": {
+        "aws_rds_disk_space": {
+          "name": "aws_rds_disk_space",
+          "url": ""
+        },
         "cpu": {
           "name": "cpu",
           "url": ""
@@ -1034,6 +1084,10 @@
         "url": ""
       },
       "resourceDashboard": {
+        "aws_rds_disk_space": {
+          "name": "aws_rds_disk_space",
+          "url": ""
+        },
         "cpu": {
           "name": "cpu",
           "url": ""
@@ -1120,6 +1174,100 @@
         "url": ""
       },
       "resourceDashboard": {
+        "aws_rds_disk_space": {
+          "name": "aws_rds_disk_space",
+          "url": ""
+        },
+        "cpu": {
+          "name": "cpu",
+          "url": ""
+        },
+        "disk_inodes": {
+          "name": "disk_inodes",
+          "url": ""
+        },
+        "disk_space": {
+          "name": "disk_space",
+          "url": ""
+        },
+        "go_goroutines": {
+          "name": "go_goroutines",
+          "url": ""
+        },
+        "go_memory": {
+          "name": "go_memory",
+          "url": ""
+        },
+        "kube_container_cpu": {
+          "name": "kube_container_cpu",
+          "url": ""
+        },
+        "kube_container_cpu_limit": {
+          "name": "kube_container_cpu_limit",
+          "url": ""
+        },
+        "kube_container_memory": {
+          "name": "kube_container_memory",
+          "url": ""
+        },
+        "kube_container_rss": {
+          "name": "kube_container_rss",
+          "url": ""
+        },
+        "kube_pool_cpu": {
+          "name": "kube_pool_cpu",
+          "url": ""
+        },
+        "memory": {
+          "name": "memory",
+          "url": ""
+        },
+        "memory_redis_cache": {
+          "name": "memory_redis_cache",
+          "url": ""
+        },
+        "node_schedstat_waiting": {
+          "name": "node_schedstat_waiting",
+          "url": ""
+        },
+        "opensearch_cpu": {
+          "name": "opensearch_cpu",
+          "url": ""
+        },
+        "opensearch_disk_space": {
+          "name": "opensearch_disk_space",
+          "url": ""
+        },
+        "pg_primary_cpu": {
+          "name": "pg_primary_cpu",
+          "url": ""
+        },
+        "puma_workers": {
+          "name": "puma_workers",
+          "url": ""
+        },
+        "rails_db_connection_pool": {
+          "name": "rails_db_connection_pool",
+          "url": ""
+        },
+        "single_node_cpu": {
+          "name": "single_node_cpu",
+          "url": ""
+        }
+      }
+    },
+    "postgresql": {
+      "capacityPlanning": {},
+      "name": "postgresql",
+      "overviewDashboard": {
+        "name": "",
+        "url": ""
+      },
+      "resourceDashboard": {
+        "aws_rds_disk_space": {
+          "name": "aws_rds_disk_space",
+          "url": ""
+        },
         "cpu": {
           "name": "cpu",
           "url": ""
@@ -1206,6 +1354,10 @@
         "url": ""
       },
       "resourceDashboard": {
+        "aws_rds_disk_space": {
+          "name": "aws_rds_disk_space",
+          "url": ""
+        },
         "cpu": {
           "name": "cpu",
           "url": ""
@@ -1292,6 +1444,10 @@
         "url": ""
       },
       "resourceDashboard": {
+        "aws_rds_disk_space": {
+          "name": "aws_rds_disk_space",
+          "url": ""
+        },
         "cpu": {
           "name": "cpu",
           "url": ""
@@ -1378,6 +1534,10 @@
         "url": ""
       },
       "resourceDashboard": {
+        "aws_rds_disk_space": {
+          "name": "aws_rds_disk_space",
+          "url": ""
+        },
         "cpu": {
           "name": "cpu",
           "url": ""
@@ -1464,6 +1624,10 @@
         "url": ""
       },
       "resourceDashboard": {
+        "aws_rds_disk_space": {
+          "name": "aws_rds_disk_space",
+          "url": ""
+        },
         "cpu": {
           "name": "cpu",
           "url": ""
@@ -1550,6 +1714,10 @@
         "url": ""
       },
       "resourceDashboard": {
+        "aws_rds_disk_space": {
+          "name": "aws_rds_disk_space",
+          "url": ""
+        },
         "cpu": {
           "name": "cpu",
           "url": ""
@@ -1636,6 +1804,10 @@
         "url": ""
       },
       "resourceDashboard": {
+        "aws_rds_disk_space": {
+          "name": "aws_rds_disk_space",
+          "url": ""
+        },
         "cpu": {
           "name": "cpu",
           "url": ""
@@ -1722,6 +1894,10 @@
         "url": ""
       },
       "resourceDashboard": {
+        "aws_rds_disk_space": {
+          "name": "aws_rds_disk_space",
+          "url": ""
+        },
         "cpu": {
           "name": "cpu",
           "url": ""

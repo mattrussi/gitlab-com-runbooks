@@ -55,6 +55,7 @@ Saturation monitoring is handled differently to the service-level monitoring des
 
 | **Resource** | **Applicable Services** | **Description** | **Horizontally Scalable?** | **Alerting Threshold** |
 | ------------ | ----------------------- | --------------- | -------------------------- | -----------------------|
+| `aws_rds_disk_space` | `postgresql` | We are fully saturated when we are at 2GB remaining free space, we have no way of knowing the total available space and RDS will autoscale storage for us when we are at 10GB or 10% free space, whichever is greater.  | ✅ | 95% |
 | `cpu` | `consul`, `gitaly`, `praefect` | This resource measures average CPU utilization across an all cores in a service fleet. If it is becoming saturated, it may indicate that the fleet needs horizontal or vertical scaling.  | ✅ | 90% |
 | `disk_inodes` | `consul`, `gitaly`, `praefect` | Disk inode utilization per device per node.  If this is too high, its possible that a directory is filling up with files. Consider logging in an checking temp directories for large numbers of files  | ✅ | 80% |
 | `disk_space` | `consul`, `gitaly`, `praefect` | Disk space utilization per device per node.  | ✅ | 90% |

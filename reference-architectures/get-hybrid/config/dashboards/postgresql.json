@@ -136,7 +136,7 @@
       "fillGradient": 0,
       "gridPos": {
         "h": 7,
-        "w": 12,
+        "w": 8,
         "x": 0,
         "y": 1
       },
@@ -467,7 +467,7 @@
       },
       "gridPos": {
         "h": 1,
-        "w": 12,
+        "w": 8,
         "x": 0,
         "y": 8
       },
@@ -513,8 +513,8 @@
       "fillGradient": 0,
       "gridPos": {
         "h": 8,
-        "w": 12,
-        "x": 12,
+        "w": 8,
+        "x": 8,
         "y": 1
       },
       "id": 2917777342,
@@ -653,6 +653,89 @@
       ]
     },
     {
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "$PROMETHEUS_DS",
+      "decimals": 2,
+      "description": "Saturation is a measure of what ratio of a finite resource is currently being utilized. Lower is better.",
+      "fill": 0,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 8,
+        "w": 8,
+        "x": 16,
+        "y": 1
+      },
+      "id": 1217942947,
+      "legend": {
+        "alignAsTable": true,
+        "avg": true,
+        "current": true,
+        "hideEmpty": true,
+        "max": true,
+        "min": true,
+        "rightSide": false,
+        "show": false,
+        "total": false,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [
+        {
+          "title": "postgresql Service | aws_rds_disk_space resource Dashboard",
+          "url": "https://dashboards.gitlab.net/d/alerts-sat_disk_space/?var-environment=gprd\u0026var-type=postgresql\u0026var-stage=main\u0026var-component=aws_rds_disk_space"
+        }
+      ],
+      "nullPointMode": "null",
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "spaceLength": 10,
+      "stableId": "service-utilization",
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "max(\n  max_over_time(\n    gitlab_component_saturation:ratio{type=\"postgresql\"}[$__interval]\n  )\n) by (component)\n",
+          "format": "time_series",
+          "interval": "1m",
+          "intervalFactor": 1,
+          "legendFormat": "{{ component }} component",
+          "refId": "A"
+        }
+      ],
+      "title": "Saturation",
+      "tooltip": {
+        "shared": true,
+        "sort": 2,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "mode": "time",
+        "show": true
+      },
+      "yaxes": [
+        {
+          "format": "percentunit",
+          "label": "",
+          "logBase": 1,
+          "max": 1,
+          "show": true
+        },
+        {
+          "format": "short",
+          "logBase": 1,
+          "max": 1,
+          "min": 0,
+          "show": false
+        }
+      ]
+    },
+    {
       "collapse": false,
       "collapsed": false,
       "gridPos": {
@@ -661,7 +744,7 @@
         "x": 0,
         "y": 20
       },
-      "id": 6,
+      "id": 7,
       "panels": [],
       "repeat": null,
       "repeatIteration": null,
@@ -1017,7 +1100,7 @@
         "x": 0,
         "y": 28
       },
-      "id": 8,
+      "id": 9,
       "options": {
         "colorMode": "background",
         "graphMode": "none",
@@ -1165,7 +1248,7 @@
         "x": 16,
         "y": 21
       },
-      "id": 10,
+      "id": 11,
       "mode": "markdown",
       "title": "Details",
       "type": "text"
@@ -1179,7 +1262,7 @@
         "x": 0,
         "y": 200
       },
-      "id": 11,
+      "id": 12,
       "panels": [
         {
           "bars": false,
@@ -1196,7 +1279,7 @@
             "x": 0,
             "y": 0
           },
-          "id": 12,
+          "id": 13,
           "legend": {
             "alignAsTable": true,
             "avg": true,
@@ -1272,7 +1355,7 @@
             "x": 12,
             "y": 0
           },
-          "id": 13,
+          "id": 14,
           "legend": {
             "alignAsTable": true,
             "avg": true,
@@ -1343,6 +1426,213 @@
       "type": "row"
     },
     {
+      "collapse": true,
+      "collapsed": true,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 500
+      },
+      "id": 15,
+      "panels": [
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "$PROMETHEUS_DS",
+          "decimals": 2,
+          "description": "We are fully saturated when we are at 2GB remaining free space, we have\nno way of knowing the total available space and RDS will autoscale storage for us\nwhen we are at 10GB or 10% free space, whichever is greater.\n Lower is better.",
+          "fill": 0,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 10,
+            "w": 12,
+            "x": 0,
+            "y": 0
+          },
+          "id": 1891685914,
+          "legend": {
+            "alignAsTable": true,
+            "avg": true,
+            "current": true,
+            "hideEmpty": true,
+            "max": true,
+            "min": true,
+            "rightSide": false,
+            "show": true,
+            "sideWidth": null,
+            "sort": "max",
+            "sortDesc": true,
+            "total": false,
+            "values": true
+          },
+          "lines": true,
+          "linewidth": 1,
+          "links": [],
+          "nullPointMode": "null",
+          "percentage": false,
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "repeat": null,
+          "seriesOverrides": [
+            {
+              "alias": "/^Soft SLO/",
+              "color": "#FF4500",
+              "dashLength": 4,
+              "dashes": true,
+              "legend": true,
+              "lines": true,
+              "linewidth": 2,
+              "nullPointMode": "connected",
+              "spaceLength": 10,
+              "zindex": -2
+            },
+            {
+              "alias": "/^Hard SLO/",
+              "color": "#F2495C",
+              "dashLength": 4,
+              "dashes": true,
+              "legend": true,
+              "lines": true,
+              "linewidth": 4,
+              "nullPointMode": "connected",
+              "spaceLength": 4,
+              "zindex": -2
+            },
+            {
+              "alias": "/aggregated /",
+              "color": "#E7D551",
+              "linewidth": 2,
+              "zindex": 3
+            },
+            {
+              "alias": "/^95th quantile for week/",
+              "color": "#37872D",
+              "dashLength": 4,
+              "dashes": true,
+              "legend": true,
+              "lines": true,
+              "linewidth": 1,
+              "nullPointMode": "connected",
+              "spaceLength": 10,
+              "zindex": -2
+            },
+            {
+              "alias": "/^99th quantile for week/",
+              "color": "#56A64B",
+              "dashLength": 4,
+              "dashes": true,
+              "legend": true,
+              "lines": true,
+              "linewidth": 2,
+              "nullPointMode": "connected",
+              "spaceLength": 4,
+              "zindex": -2
+            }
+          ],
+          "spaceLength": 10,
+          "stableId": "saturation-aws_rds_disk_space",
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "expr": "clamp_min(\n  clamp_max(\n    max by(type, node, device) (\n  clamp_min(\n    clamp_max(\n      (\n        ( 2 * (1024*1024*1024))\n        /\n        (sum by (dbinstance_identifier) (aws_rds_free_storage_space_maximum)))\n      )\n      ,\n      1)\n  ,\n  0)\n)\n\n  ,1)\n,0)\n",
+              "format": "time_series",
+              "interval": "1m",
+              "intervalFactor": 1,
+              "legendFormat": "{{ node }} {{ device }}",
+              "refId": "A"
+            },
+            {
+              "expr": "clamp_min(\n  clamp_max(\n    max(\n      max_over_time(gitlab_component_saturation:ratio{type=\"postgresql\", component=\"aws_rds_disk_space\"}[$__interval])\n    ) by (component)\n  ,1)\n,0)\n",
+              "format": "time_series",
+              "interval": "1m",
+              "intervalFactor": 1,
+              "legendFormat": "aggregated {{ component }}",
+              "refId": "B"
+            },
+            {
+              "expr": "max(\n  gitlab_component_saturation:ratio_quantile95_1w{type=\"postgresql\", component=\"aws_rds_disk_space\"}\n)\n",
+              "format": "time_series",
+              "interval": "1m",
+              "intervalFactor": 1,
+              "legendFormat": "95th quantile for week {{ component }}",
+              "refId": "C"
+            },
+            {
+              "expr": "max(\n  gitlab_component_saturation:ratio_quantile99_1w{type=\"postgresql\", component=\"aws_rds_disk_space\"}\n)\n",
+              "format": "time_series",
+              "interval": "1m",
+              "intervalFactor": 1,
+              "legendFormat": "99th quantile for week {{ component }}",
+              "refId": "D"
+            },
+            {
+              "expr": "avg(slo:max:soft:gitlab_component_saturation:ratio{component=\"aws_rds_disk_space\"}) by (component)\n",
+              "format": "time_series",
+              "interval": "1m",
+              "intervalFactor": 1,
+              "legendFormat": "Soft SLO: {{ component }}",
+              "refId": "E"
+            },
+            {
+              "expr": "avg(slo:max:hard:gitlab_component_saturation:ratio{component=\"aws_rds_disk_space\"}) by (component)\n",
+              "format": "time_series",
+              "interval": "1m",
+              "intervalFactor": 1,
+              "legendFormat": "Hard SLO: {{ component }}",
+              "refId": "F"
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "aws_rds_disk_space component saturation: Disk Space Utilization per RDS Instance",
+          "tooltip": {
+            "shared": true,
+            "sort": 2,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "format": "percentunit",
+              "label": "Saturation %",
+              "logBase": 1,
+              "max": 1,
+              "min": null,
+              "show": true
+            },
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": 1,
+              "min": 0,
+              "show": false
+            }
+          ]
+        }
+      ],
+      "repeat": null,
+      "repeatIteration": null,
+      "repeatRowId": null,
+      "showTitle": true,
+      "title": "🌡 Saturation Details",
+      "titleSize": "h6",
+      "type": "row"
+    },
+    {
       "content": "Made with ❤️ and [Grafonnet](https://github.com/grafana/grafonnet-lib). [Contribute to this dashboard on GitLab.com](https://gitlab.com/gitlab-com/runbooks/blob/master/dashboards)\n",
       "datasource": null,
       "gridPos": {
@@ -1351,7 +1641,7 @@
         "x": 0,
         "y": 110000
       },
-      "id": 14,
+      "id": 17,
       "mode": "markdown",
       "title": "Source",
       "type": "text"
