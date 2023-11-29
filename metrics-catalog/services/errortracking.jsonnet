@@ -16,7 +16,7 @@ metricsCatalog.serviceDefinition({
   type: 'errortracking',
   tier: 'sv',
   monitoringThresholds: {
-    apdexScore: 0.95,
+    apdexScore: 0.995,
     errorRatio: 0.999,
   },
   serviceDependencies: {
