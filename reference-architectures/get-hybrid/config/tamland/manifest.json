@@ -42,7 +42,7 @@
       "horizontallyScalable": true,
       "linear_prediction_saturation_alert": "6h",
       "quantileAggregation": "max",
-      "query": "(\n  ( 2 * (1024*1024*1024))\n  /\n  (sum by (dbinstance_identifier) (aws_rds_free_storage_space_maximum)))\n)\n",
+      "query": "(\n  ( 2 * (1024*1024*1024))\n  /\n  (sum by (dbinstance_identifier) (aws_rds_free_storage_space_maximum))\n)\n",
       "queryFormatConfig": {},
       "resourceLabels": [
         "node",

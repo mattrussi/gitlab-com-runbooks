@@ -21,7 +21,7 @@ local labelTaxonomy = import 'label-taxonomy/label-taxonomy.libsonnet';
       (
         ( 2 * (1024*1024*1024))
         /
-        (sum by (dbinstance_identifier) (aws_rds_free_storage_space_maximum)))
+        (sum by (dbinstance_identifier) (aws_rds_free_storage_space_maximum))
       )
     |||,
     slos: {

@@ -3788,7 +3788,7 @@ groups:
             (
               ( 2 * (1024*1024*1024))
               /
-              (sum by (dbinstance_identifier) (aws_rds_free_storage_space_maximum)))
+              (sum by (dbinstance_identifier) (aws_rds_free_storage_space_maximum))
             )
             ,
             1)
@@ -4340,7 +4340,7 @@ groups:
               (
                 ( 2 * (1024*1024*1024))
                 /
-                (sum by (dbinstance_identifier) (aws_rds_free_storage_space_maximum)))
+                (sum by (dbinstance_identifier) (aws_rds_free_storage_space_maximum))
               )
               ,
               1)
@@ -4354,7 +4354,7 @@ groups:
               (
                 ( 2 * (1024*1024*1024))
                 /
-                (sum by (dbinstance_identifier) (aws_rds_free_storage_space_maximum)))
+                (sum by (dbinstance_identifier) (aws_rds_free_storage_space_maximum))
               )
               ,
               1)
@@ -4395,7 +4395,7 @@ groups:
               (
                 ( 2 * (1024*1024*1024))
                 /
-                (sum by (dbinstance_identifier) (aws_rds_free_storage_space_maximum)))
+                (sum by (dbinstance_identifier) (aws_rds_free_storage_space_maximum))
               )
               ,
               1)
@@ -4409,7 +4409,7 @@ groups:
               (
                 ( 2 * (1024*1024*1024))
                 /
-                (sum by (dbinstance_identifier) (aws_rds_free_storage_space_maximum)))
+                (sum by (dbinstance_identifier) (aws_rds_free_storage_space_maximum))
               )
               ,
               1)
