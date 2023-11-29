@@ -13,7 +13,7 @@ local labelTaxonomy = import 'label-taxonomy/label-taxonomy.libsonnet';
       no way of knowing the total available space and RDS will autoscale storage for us
       when we are at 10GB or 10% free space, whichever is greater.
     |||,
-    grafana_dashboard_uid: 'sat_disk_space',
+    grafana_dashboard_uid: 'aws_rds_disk_space',
     resourceLabels: [labelTaxonomy.getLabelFor(labelTaxonomy.labels.node), 'device'],
     linear_prediction_saturation_alert: '6h',  // Alert if this is going to exceed the hard threshold within 6h
 
