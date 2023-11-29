@@ -12,6 +12,7 @@ local tierOrder = [
   'sv',
   'stor',
   'inf',
+  'db',
 ];
 
 local servicesOrdered = std.sort(

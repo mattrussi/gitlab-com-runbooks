@@ -2,6 +2,7 @@ local gitlabMetricsConfig = (import 'gitlab-metrics-config.libsonnet');
 
 local all =
   [
+    import 'aws-rds.jsonnet',
     import 'consul.jsonnet',
     import 'gitaly.jsonnet',
     import 'gitlab-shell.jsonnet',

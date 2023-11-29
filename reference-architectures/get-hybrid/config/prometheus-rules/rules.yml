@@ -833,6 +833,21 @@ groups:
       type: praefect
     record: gitlab_component_service:mapping
 - interval: 1m
+  name: 'Component-Level SLIs: rds - 5m burn-rate'
+  rules: []
+- interval: 2m
+  name: 'Component-Level SLIs: rds - 30m burn-rate'
+  rules: []
+- interval: 1m
+  name: 'Component-Level SLIs: rds - 1h burn-rate'
+  rules: []
+- interval: 2m
+  name: 'Component-Level SLIs: rds - 6h burn-rate'
+  rules: []
+- interval: 1m
+  name: 'Component mapping: rds'
+  rules: []
+- interval: 1m
   name: 'Component-Level SLIs: registry - 5m burn-rate'
   rules:
   - expr: |
@@ -6526,6 +6541,9 @@ groups:
       sli_type: ops
       slo_alert: "no"
       user_impacting: "no"
+- interval: 1m
+  name: 'Service Component Alerts: rds'
+  rules: []
 - interval: 1m
   name: 'Service Component Alerts: registry'
   rules:
