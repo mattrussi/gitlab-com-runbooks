@@ -258,6 +258,8 @@ services:
         developer_guide: https://docs.gitlab.com/ee/administration/postgresql/external.html
       logging:
     observability:
+      monitors:
+        primary_grafana_dashboard: rds-main/rds-service-overview
 
   - name: tracing
     tier: sv
