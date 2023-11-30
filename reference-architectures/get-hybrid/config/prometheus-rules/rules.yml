@@ -3643,6 +3643,19 @@ groups:
       max by(type) (
         clamp_min(
           clamp_max(
+            aws_rds_cpuutilization_maximum
+            ,
+            1)
+        ,
+        0)
+      )
+    labels:
+      component: aws_rds_cpu_utilization
+    record: gitlab_component_saturation:ratio
+  - expr: |
+      max by(type) (
+        clamp_min(
+          clamp_max(
             (
               ( 2 * (1024*1024*1024))
               /
@@ -3655,6 +3668,40 @@ groups:
       )
     labels:
       component: aws_rds_disk_space
+    record: gitlab_component_saturation:ratio
+  - expr: |
+      max by(type) (
+        clamp_min(
+          clamp_max(
+            (
+              ( 1 * (1024*1024*1024))
+              /
+              (sum by (dbinstance_identifier) (aws_rds_freeable_memory_maximum))
+            )
+            ,
+            1)
+        ,
+        0)
+      )
+    labels:
+      component: aws_rds_freeable_memory
+    record: gitlab_component_saturation:ratio
+  - expr: |
+      max by(type) (
+        clamp_min(
+          clamp_max(
+            (
+              (sum by (dbinstance_identifier) (aws_rds_swap_usage))
+              /
+              ( 1 * (1024*1024*1024))
+            )
+            ,
+            1)
+        ,
+        0)
+      )
+    labels:
+      component: aws_rds_swap_usage
     record: gitlab_component_saturation:ratio
   - expr: |
       max by(type) (
@@ -3884,11 +3931,35 @@ groups:
   rules:
   - expr: "0.9"
     labels:
+      component: aws_rds_cpu_utilization
+    record: slo:max:soft:gitlab_component_saturation:ratio
+  - expr: "0.95"
+    labels:
+      component: aws_rds_cpu_utilization
+    record: slo:max:hard:gitlab_component_saturation:ratio
+  - expr: "0.9"
+    labels:
       component: aws_rds_disk_space
     record: slo:max:soft:gitlab_component_saturation:ratio
   - expr: "0.95"
     labels:
       component: aws_rds_disk_space
+    record: slo:max:hard:gitlab_component_saturation:ratio
+  - expr: "0.95"
+    labels:
+      component: aws_rds_freeable_memory
+    record: slo:max:soft:gitlab_component_saturation:ratio
+  - expr: "0.99"
+    labels:
+      component: aws_rds_freeable_memory
+    record: slo:max:hard:gitlab_component_saturation:ratio
+  - expr: "0.05"
+    labels:
+      component: aws_rds_swap_usage
+    record: slo:max:soft:gitlab_component_saturation:ratio
+  - expr: "0.1"
+    labels:
+      component: aws_rds_swap_usage
     record: slo:max:hard:gitlab_component_saturation:ratio
   - expr: "0.8"
     labels:
@@ -4008,8 +4079,32 @@ groups:
   - expr: "1"
     labels:
       capacity_planning_strategy: quantile95_1h
+      component: aws_rds_cpu_utilization
+      horiz_scaling: "no"
+      quantile: max
+      severity: s2
+    record: gitlab_component_saturation_info
+  - expr: "1"
+    labels:
+      capacity_planning_strategy: quantile95_1h
       component: aws_rds_disk_space
       horiz_scaling: "yes"
+      quantile: max
+      severity: s2
+    record: gitlab_component_saturation_info
+  - expr: "1"
+    labels:
+      capacity_planning_strategy: quantile95_1h
+      component: aws_rds_freeable_memory
+      horiz_scaling: "no"
+      quantile: max
+      severity: s4
+    record: gitlab_component_saturation_info
+  - expr: "1"
+    labels:
+      capacity_planning_strategy: quantile95_1h
+      component: aws_rds_swap_usage
+      horiz_scaling: "no"
       quantile: max
       severity: s2
     record: gitlab_component_saturation_info
@@ -4146,9 +4241,111 @@ groups:
       description: |+
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
+        Details of the CPU Utilization per RDS Instance resource:
+
+        The percentage of CPU utilization.
+
+        Additional details here: https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/rds-metrics.html#rds-cw-metrics-instance
+
+      grafana_dashboard_id: alerts-aws_rds_cpu_utilization
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-aws_rds_cpu_utilization?from=now-6h/m&to=now-1m/m&var-type={{
+        $labels.type }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2696602888"
+      grafana_variables: type
+      promql_query: |
+        max by(type) (
+          clamp_min(
+            clamp_max(
+              aws_rds_cpuutilization_maximum
+              ,
+              1)
+          ,
+          0)
+        )
+      promql_template_1: |
+        max by(type) (
+          clamp_min(
+            clamp_max(
+              aws_rds_cpuutilization_maximum
+              ,
+              1)
+          ,
+          0)
+        )
+      runbook: docs/{{ $labels.type }}/README.md
+      title: The CPU Utilization per RDS Instance resource of the {{ $labels.type
+        }} service has a saturation exceeding SLO and is close to its capacity limit.
+    expr: |
+      gitlab_component_saturation:ratio{component="aws_rds_cpu_utilization"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="aws_rds_cpu_utilization"}
+    for: 15m
+    labels:
+      alert_type: cause
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+  - alert: ComponentResourceRunningOut_aws_rds_cpu_utilization
+    annotations:
+      description: |+
+        This means that this resource is growing rapidly and is predicted to exceed saturation threshold within 6h.
+
+        Details of the CPU Utilization per RDS Instance resource:
+
+        The percentage of CPU utilization.
+
+        Additional details here: https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/rds-metrics.html#rds-cw-metrics-instance
+
+      grafana_dashboard_id: alerts-aws_rds_cpu_utilization
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-aws_rds_cpu_utilization?from=now-6h/m&to=now-1m/m&var-type={{
+        $labels.type }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2696602888"
+      grafana_variables: type
+      promql_query: |
+        max by(type) (
+          clamp_min(
+            clamp_max(
+              aws_rds_cpuutilization_maximum
+              ,
+              1)
+          ,
+          0)
+        )
+      promql_template_1: |
+        max by(type) (
+          clamp_min(
+            clamp_max(
+              aws_rds_cpuutilization_maximum
+              ,
+              1)
+          ,
+          0)
+        )
+      runbook: docs/{{ $labels.type }}/README.md
+      title: The CPU Utilization per RDS Instance resource of the {{ $labels.type
+        }} service is on track to hit capacity within 6h
+    expr: |
+      predict_linear(gitlab_component_saturation:ratio{component="aws_rds_cpu_utilization"}[6h], 21600)
+      > on (component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="aws_rds_cpu_utilization"}
+    for: 15m
+    labels:
+      alert_type: cause
+      linear_prediction_saturation_alert: 6h
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+  - alert: component_saturation_slo_out_of_bounds
+    annotations:
+      description: |+
+        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
+
         Details of the Disk Space Utilization per RDS Instance resource:
 
         We are fully saturated when we are at 2GB remaining free space, we have no way of knowing the total available space and RDS will autoscale storage for us when we are at 10GB or 10% free space, whichever is greater.
+
+        Additional details here: https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/rds-metrics.html#rds-cw-metrics-instance
 
       grafana_dashboard_id: alerts-aws_rds_disk_space
       grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-aws_rds_disk_space?from=now-6h/m&to=now-1m/m&var-type={{
@@ -4205,6 +4402,8 @@ groups:
 
         We are fully saturated when we are at 2GB remaining free space, we have no way of knowing the total available space and RDS will autoscale storage for us when we are at 10GB or 10% free space, whichever is greater.
 
+        Additional details here: https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/rds-metrics.html#rds-cw-metrics-instance
+
       grafana_dashboard_id: alerts-aws_rds_disk_space
       grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-aws_rds_disk_space?from=now-6h/m&to=now-1m/m&var-type={{
         $labels.type }}
@@ -4250,6 +4449,189 @@ groups:
     labels:
       alert_type: cause
       linear_prediction_saturation_alert: 6h
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+  - alert: component_saturation_slo_out_of_bounds
+    annotations:
+      description: |+
+        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
+
+        Details of the Freeable Memory for an RDS instance resource:
+
+        The amount of available random access memory. This metric reports the value of the MemAvailable field of /proc/meminfo.
+
+        A high saturation point indicates that Swap may be in use lowering the performance of an RDS instance.
+
+        Since we do not know the memory allocation of an RDS instance, we begin alerting when we are below 1GB of freeable memory.
+
+        Additional details here: https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/rds-metrics.html#rds-cw-metrics-instance
+
+      grafana_dashboard_id: alerts-aws_rds_freeable_memory
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-aws_rds_freeable_memory?from=now-6h/m&to=now-1m/m&var-type={{
+        $labels.type }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3062469817"
+      grafana_variables: type
+      promql_query: |
+        max by(type) (
+          clamp_min(
+            clamp_max(
+              (
+                ( 1 * (1024*1024*1024))
+                /
+                (sum by (dbinstance_identifier) (aws_rds_freeable_memory_maximum))
+              )
+              ,
+              1)
+          ,
+          0)
+        )
+      promql_template_1: |
+        max by(type) (
+          clamp_min(
+            clamp_max(
+              (
+                ( 1 * (1024*1024*1024))
+                /
+                (sum by (dbinstance_identifier) (aws_rds_freeable_memory_maximum))
+              )
+              ,
+              1)
+          ,
+          0)
+        )
+      runbook: docs/{{ $labels.type }}/README.md
+      title: The Freeable Memory for an RDS instance resource of the {{ $labels.type
+        }} service has a saturation exceeding SLO and is close to its capacity limit.
+    expr: |
+      gitlab_component_saturation:ratio{component="aws_rds_freeable_memory"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="aws_rds_freeable_memory"}
+    for: 30m
+    labels:
+      alert_type: cause
+      rules_domain: general
+      severity: s4
+  - alert: ComponentResourceRunningOut_aws_rds_freeable_memory
+    annotations:
+      description: |+
+        This means that this resource is growing rapidly and is predicted to exceed saturation threshold within 6h.
+
+        Details of the Freeable Memory for an RDS instance resource:
+
+        The amount of available random access memory. This metric reports the value of the MemAvailable field of /proc/meminfo.
+
+        A high saturation point indicates that Swap may be in use lowering the performance of an RDS instance.
+
+        Since we do not know the memory allocation of an RDS instance, we begin alerting when we are below 1GB of freeable memory.
+
+        Additional details here: https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/rds-metrics.html#rds-cw-metrics-instance
+
+      grafana_dashboard_id: alerts-aws_rds_freeable_memory
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-aws_rds_freeable_memory?from=now-6h/m&to=now-1m/m&var-type={{
+        $labels.type }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3062469817"
+      grafana_variables: type
+      promql_query: |
+        max by(type) (
+          clamp_min(
+            clamp_max(
+              (
+                ( 1 * (1024*1024*1024))
+                /
+                (sum by (dbinstance_identifier) (aws_rds_freeable_memory_maximum))
+              )
+              ,
+              1)
+          ,
+          0)
+        )
+      promql_template_1: |
+        max by(type) (
+          clamp_min(
+            clamp_max(
+              (
+                ( 1 * (1024*1024*1024))
+                /
+                (sum by (dbinstance_identifier) (aws_rds_freeable_memory_maximum))
+              )
+              ,
+              1)
+          ,
+          0)
+        )
+      runbook: docs/{{ $labels.type }}/README.md
+      title: The Freeable Memory for an RDS instance resource of the {{ $labels.type
+        }} service is on track to hit capacity within 6h
+    expr: |
+      predict_linear(gitlab_component_saturation:ratio{component="aws_rds_freeable_memory"}[6h], 21600)
+      > on (component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="aws_rds_freeable_memory"}
+    for: 30m
+    labels:
+      alert_type: cause
+      linear_prediction_saturation_alert: 6h
+      rules_domain: general
+      severity: s4
+  - alert: component_saturation_slo_out_of_bounds
+    annotations:
+      description: |+
+        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
+
+        Details of the Swap usage for an RDS instance resource:
+
+        The amount of used swap.
+
+        A high saturation point indicates that Swap may be in use lowering the performance of an RDS instance.
+
+        Since we do not know the memory allocation of an RDS instance, we begin alerting when we are using 1GB of swap. Swap is usually used a little even when an instance isn't under pressure, therefore we do not alert when we are using a value greater than 0.  Otherwise we'd always be alerting.
+
+        Additional details here: https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/rds-metrics.html#rds-cw-metrics-instance
+
+      grafana_dashboard_id: alerts-aws_rds_swap_usage
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-aws_rds_swap_usage?from=now-6h/m&to=now-1m/m&var-type={{
+        $labels.type }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "434393155"
+      grafana_variables: type
+      promql_query: |
+        max by(type) (
+          clamp_min(
+            clamp_max(
+              (
+                (sum by (dbinstance_identifier) (aws_rds_swap_usage))
+                /
+                ( 1 * (1024*1024*1024))
+              )
+              ,
+              1)
+          ,
+          0)
+        )
+      promql_template_1: |
+        max by(type) (
+          clamp_min(
+            clamp_max(
+              (
+                (sum by (dbinstance_identifier) (aws_rds_swap_usage))
+                /
+                ( 1 * (1024*1024*1024))
+              )
+              ,
+              1)
+          ,
+          0)
+        )
+      runbook: docs/{{ $labels.type }}/README.md
+      title: The Swap usage for an RDS instance resource of the {{ $labels.type }}
+        service has a saturation exceeding SLO and is close to its capacity limit.
+    expr: |
+      gitlab_component_saturation:ratio{component="aws_rds_swap_usage"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="aws_rds_swap_usage"}
+    for: 15m
+    labels:
+      alert_type: cause
       pager: pagerduty
       rules_domain: general
       severity: s2

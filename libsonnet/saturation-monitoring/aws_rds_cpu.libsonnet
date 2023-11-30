@@ -3,29 +3,21 @@ local resourceSaturationPoint = (import 'servicemetrics/resource_saturation_poin
 local labelTaxonomy = import 'label-taxonomy/label-taxonomy.libsonnet';
 
 {
-  aws_rds_disk_space: resourceSaturationPoint({
-    title: 'Disk Space Utilization per RDS Instance',
+  aws_rds_cpu_utilization: resourceSaturationPoint({
+    title: 'CPU Utilization per RDS Instance',
     severity: 's2',
-    horizontallyScalable: true,
+    horizontallyScalable: false,
     appliesTo: ['rds'],
     description: |||
-      We are fully saturated when we are at 2GB remaining free space, we have
-      no way of knowing the total available space and RDS will autoscale storage for us
-      when we are at 10GB or 10% free space, whichever is greater.
+      The percentage of CPU utilization.
 
       Additional details here: https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/rds-metrics.html#rds-cw-metrics-instance
     |||,
-    grafana_dashboard_uid: 'aws_rds_disk_space',
+    grafana_dashboard_uid: 'aws_rds_cpu_utilization',
     resourceLabels: [],
     linear_prediction_saturation_alert: '6h',  // Alert if this is going to exceed the hard threshold within 6h
 
-    query: |||
-      (
-        ( 2 * (1024*1024*1024))
-        /
-        (sum by (dbinstance_identifier) (aws_rds_free_storage_space_maximum))
-      )
-    |||,
+    query: 'aws_rds_cpuutilization_maximum',
     slos: {
       soft: 0.90,
       hard: 0.95,
