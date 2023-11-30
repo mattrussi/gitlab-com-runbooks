@@ -23,7 +23,6 @@
 * [Set up bastions for Release managers](../bastions/rm-bastion-access.md)
 * [../certificates/chef_hybrid.md](../certificates/chef_hybrid.md)
 * [../certificates/chef_vault.md](../certificates/chef_vault.md)
-* [../certificates/fastly.md](../certificates/fastly.md)
 * [../certificates/forum.md](../certificates/forum.md)
 * [../certificates/gcp.md](../certificates/gcp.md)
 * [../certificates/gkms.md](../certificates/gkms.md)
