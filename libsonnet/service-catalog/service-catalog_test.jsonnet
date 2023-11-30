@@ -71,17 +71,18 @@ test.suite({
     },
   },
   testGetTeam: {
-    actual: serviceCatalog.getTeam('scalability'),
+    actual: serviceCatalog.getTeam('scalability:observability'),
     expect: {
-      ignored_components: ['graphql_query'],
+      alerts: ['thanos', 'ops', 'gstg'],
+      ignored_components: [],
       issue_tracker: null,
-      name: 'scalability',
-      product_stage_group: 'scalability',
-      send_slo_alerts_to_team_slack_channel: false,
-      slack_alerts_channel: 'g_scalability',
-      manager: 'rnienaber',
-      label: 'group::scalability',
-      url: 'https://about.gitlab.com/handbook/engineering/infrastructure/team/scalability/',
+      name: 'scalability:observability',
+      product_stage_group: null,
+      send_slo_alerts_to_team_slack_channel: true,
+      slack_alerts_channel: 'g_infra_observability_alerts',
+      manager: 'lmcandrew',
+      label: 'team::Scalability-Practices',
+      url: 'https://about.gitlab.com/handbook/engineering/infrastructure/team/scalability/#scalabilityobservability',
     },
   },
   testTeams: {
@@ -89,12 +90,12 @@ test.suite({
     // a team
     actual: std.set(
       std.filterMap(
-        function(team) team.name == 'package_registry' || team.name == 'scalability',
+        function(team) team.name == 'package_registry' || team.name == 'scalability:observability',
         function(team) team.name,
         serviceCatalog.getTeams()
       )
     ),
-    expect: std.set(['package_registry', 'scalability']),
+    expect: std.set(['package_registry', 'scalability:observability']),
   },
   testLookupExistingTeamForStageGroup: {
     actual: serviceCatalog.lookupTeamForStageGroup('authentication'),

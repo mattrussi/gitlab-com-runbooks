@@ -119,23 +119,22 @@ teams:
   ignored_components:
   - graphql_query
 
-- name: scalability
-  url: https://about.gitlab.com/handbook/engineering/infrastructure/team/scalability/
-  manager: rnienaber
-  label: group::scalability
-  slack_alerts_channel: g_scalability
-  product_stage_group: scalability
-  ignored_components:
-  - graphql_query
+- name: scalability:practices
+  url: https://about.gitlab.com/handbook/engineering/infrastructure/team/scalability/#scalabilitypractices
+  manager: kwanyangu
+  label: team::Scalability-Practices
+  slack_alerts_channel: g_scalability-practices
 
-- name: scalability-619-redis-k8s
-  slack_alerts_channel: scalability-619-redis-k8s
-  send_slo_alerts_to_team_slack_channel: true
-
-- name: scalability_frameworks
-  url: https://about.gitlab.com/handbook/engineering/infrastructure/team/scalability/frameworks.html
+- name: scalability:observability
+  url: https://about.gitlab.com/handbook/engineering/infrastructure/team/scalability/#scalabilityobservability
   manager: lmcandrew
-  label: team::frameworks
+  label: team::Scalability-Practices
+  slack_alerts_channel: g_infra_observability_alerts
+  send_slo_alerts_to_team_slack_channel: true
+  alerts:
+  - thanos
+  - ops
+  - gstg
 
 # Workhorse is a virtual team
 - name: workhorse
@@ -415,17 +414,6 @@ teams:
   alerts:
   - ops
 
-- name: reliability_observability
-  url: https://about.gitlab.com/handbook/engineering/infrastructure/team/reliability/observability.html
-  manager: dawsmith
-  label: team::Observability
-  slack_alerts_channel: g_infra_observability_alerts
-  send_slo_alerts_to_team_slack_channel: true
-  alerts:
-  - thanos
-  - ops
-  - gstg
-
 - name: reliability_foundations
   url: https://about.gitlab.com/handbook/engineering/infrastructure/team/reliability/foundations.html
   manager: amoter
@@ -434,11 +422,6 @@ teams:
   send_slo_alerts_to_team_slack_channel: true
   alerts:
   - ops
-
-- name: reliability_practices
-  url: https://about.gitlab.com/handbook/engineering/infrastructure/team/reliability/practices.html
-  manager: kwanyangu
-  label: team::Practices
 
 - name: reliability_database_reliability
   url: https://about.gitlab.com/handbook/engineering/infrastructure/team/reliability/database-reliability.html#ownership

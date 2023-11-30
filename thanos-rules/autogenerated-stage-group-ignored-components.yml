@@ -421,16 +421,6 @@ groups:
       product_stage: verify
       stage_group: runner
     expr: "1"
-- name: 'Stage group Ignored components: platforms - Scalability'
-  interval: 1m
-  partial_response_strategy: warn
-  rules:
-  - record: gitlab:ignored_component:stage_group
-    labels:
-      component: graphql_query
-      product_stage: platforms
-      stage_group: scalability
-    expr: "1"
 - name: 'Stage group Ignored components: create - Source Code'
   interval: 1m
   partial_response_strategy: warn

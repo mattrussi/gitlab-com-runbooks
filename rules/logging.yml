@@ -45,7 +45,7 @@ groups:
     for: 1h
     labels:
       severity: s3
-      team: reliability_observability
+      team: scalability:observability
       alert_type: symptom
       type: logging
     annotations:
