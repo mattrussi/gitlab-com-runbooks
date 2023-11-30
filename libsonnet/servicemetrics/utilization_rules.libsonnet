@@ -1,6 +1,10 @@
-local generateUtilizationRules(utilizationRules) =
+local generateUtilizationRules(utilizationRules, environmentLabels, extraSelector={}) =
   local utilizationRuleNames = std.objectFields(utilizationRules);
-  local rules = std.flatMap(function(key) utilizationRules[key].getRecordingRuleDefinitions(key), utilizationRuleNames);
+  local rules = std.flatMap(
+    function(key)
+      utilizationRules[key].getRecordingRuleDefinitions(key, environmentLabels=environmentLabels, extraSelector=extraSelector),
+    utilizationRuleNames
+  );
 
   {
     'utilization.yml':
