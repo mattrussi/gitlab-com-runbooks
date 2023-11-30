@@ -1,5 +1,4 @@
 [
-  import 'saturation-monitoring/aws_rds_disk.libsonnet',
   import 'saturation-monitoring/cgroup_memory.libsonnet',
   import 'saturation-monitoring/cloudsql_cpu.libsonnet',
   import 'saturation-monitoring/cloudsql_disk.libsonnet',

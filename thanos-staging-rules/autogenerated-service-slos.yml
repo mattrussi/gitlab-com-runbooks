@@ -295,16 +295,6 @@ spec:
       expr: "0.000200"
     - record: slo:min:events:gitlab_service_apdex:ratio
       labels:
-        tier: db
-        type: rds
-      expr: "0.995000"
-    - record: slo:max:events:gitlab_service_errors:ratio
-      labels:
-        tier: db
-        type: rds
-      expr: "0.000100"
-    - record: slo:min:events:gitlab_service_apdex:ratio
-      labels:
         tier: inf
         type: atlantis
       expr: "0.999000"
