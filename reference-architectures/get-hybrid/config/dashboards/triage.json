@@ -6540,6 +6540,12 @@
       },
       "lines": true,
       "linewidth": 2,
+      "links": [
+        {
+          "title": "rds Service | aws_rds_disk_space resource Dashboard",
+          "url": "https://dashboards.gitlab.net/d/alerts-aws_rds_disk_space/?var-environment=gprd\u0026var-type=rds\u0026var-stage=main\u0026var-component=aws_rds_disk_space"
+        }
+      ],
       "nullPointMode": "null",
       "percentage": false,
       "pointradius": 5,

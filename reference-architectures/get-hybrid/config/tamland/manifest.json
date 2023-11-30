@@ -27,7 +27,9 @@
       "alerting": {
         "enabled": true
       },
-      "appliesTo": [],
+      "appliesTo": [
+        "rds"
+      ],
       "capacityPlanning": {
         "changepoints_count": 25,
         "forecast_days": 90,
@@ -42,10 +44,7 @@
       "quantileAggregation": "max",
       "query": "(\n  ( 2 * (1024*1024*1024))\n  /\n  (sum by (dbinstance_identifier) (aws_rds_free_storage_space_maximum))\n)\n",
       "queryFormatConfig": {},
-      "resourceLabels": [
-        "node",
-        "device"
-      ],
+      "resourceLabels": [],
       "severity": "s2",
       "slos": {
         "alertTriggerDuration": "15m",
@@ -973,6 +972,88 @@
     "praefect": {
       "capacityPlanning": {},
       "name": "praefect",
+      "overviewDashboard": {
+        "name": "",
+        "url": ""
+      },
+      "resourceDashboard": {
+        "aws_rds_disk_space": {
+          "name": "aws_rds_disk_space",
+          "url": ""
+        },
+        "cpu": {
+          "name": "cpu",
+          "url": ""
+        },
+        "disk_inodes": {
+          "name": "disk_inodes",
+          "url": ""
+        },
+        "disk_space": {
+          "name": "disk_space",
+          "url": ""
+        },
+        "go_goroutines": {
+          "name": "go_goroutines",
+          "url": ""
+        },
+        "go_memory": {
+          "name": "go_memory",
+          "url": ""
+        },
+        "kube_container_cpu": {
+          "name": "kube_container_cpu",
+          "url": ""
+        },
+        "kube_container_cpu_limit": {
+          "name": "kube_container_cpu_limit",
+          "url": ""
+        },
+        "kube_container_memory": {
+          "name": "kube_container_memory",
+          "url": ""
+        },
+        "kube_container_rss": {
+          "name": "kube_container_rss",
+          "url": ""
+        },
+        "kube_pool_cpu": {
+          "name": "kube_pool_cpu",
+          "url": ""
+        },
+        "memory": {
+          "name": "memory",
+          "url": ""
+        },
+        "memory_redis_cache": {
+          "name": "memory_redis_cache",
+          "url": ""
+        },
+        "node_schedstat_waiting": {
+          "name": "node_schedstat_waiting",
+          "url": ""
+        },
+        "opensearch_cpu": {
+          "name": "opensearch_cpu",
+          "url": ""
+        },
+        "opensearch_disk_space": {
+          "name": "opensearch_disk_space",
+          "url": ""
+        },
+        "puma_workers": {
+          "name": "puma_workers",
+          "url": ""
+        },
+        "single_node_cpu": {
+          "name": "single_node_cpu",
+          "url": ""
+        }
+      }
+    },
+    "rds": {
+      "capacityPlanning": {},
+      "name": "rds",
       "overviewDashboard": {
         "name": "",
         "url": ""
