@@ -19,7 +19,7 @@ initial setup) under "[Environment] static objects external storage token" item
 by Terraform, more on that below.
 
 The base URL is endpoint that will serve the cached objects, it depends on the
-CDN used. Currently, we use an entry point URL to a [CloudFlare
+CDN used. Currently, we use an entry point URL to a [Cloudflare
 worker][cloudflare-worker], which is provisioned by Terraform, more on that
 below.
 
@@ -35,10 +35,10 @@ worker.
 The application makes no assumptions about the external storage, it only expects
 a certain header to be set correctly in order to identify requests originating
 from the external storage. As such, an external storage can be a Fastly service,
-a FaaS, or a CloudFlare Worker. We use the latter for GitLab.com.
+a FaaS, or a Cloudflare Worker. We use the latter for GitLab.com.
 
 Using [Terraform][static-objects-cache-tf], we provision a worker; a worker
-route; and a proxied DNS A record, all in CloudFlare.
+route; and a proxied DNS A record, all in Cloudflare.
 
 The DNS record and the worker route are used primarily for cosmetic purposes, as
 a worker domain may not be aesthetically pleasing to users. This DNS record is
@@ -47,12 +47,12 @@ provided to the application as an entry point URL (see above).
 We can't use worker routes directly to handle caching as a route pattern doesn't
 allow multiple wildcards in the path segment (i.e. we can't have such patterns
 `*/-/archive/*`or `*/raw/*`). If the zone of the entry point domain is not
-hosted by CloudFlare then we can't use worker routes and the raw worker domain
+hosted by Cloudflare then we can't use worker routes and the raw worker domain
 has to be used. If the worker domain is to be used, due to limitations in
-Terraform's CloudFlare provider, the worker provisioned is not deployed
-automatically, it has be to deployed manually through CloudFlare's dashboard.
+Terraform's Cloudflare provider, the worker provisioned is not deployed
+automatically, it has be to deployed manually through Cloudflare's dashboard.
 
-![Deploying a CloudFlare worker](img/deploy-cf-worker-howto.gif)
+![Deploying a Cloudflare worker](img/deploy-cf-worker-howto.gif)
 
 ## Operation modes
 
@@ -89,13 +89,13 @@ directive in the `Cache-Control` header.
 If enabled, any private object requested is invalidated regardless of the
 current mode, to enforce authentication and authorization.
 
-## CloudFlare caching behavior
+## Cloudflare caching behavior
 
 We utilize [Cache API][cf-cache-api] in the worker script, this means cached
-objects are not replicated across CloudFlare data centers. This is important to
+objects are not replicated across Cloudflare data centers. This is important to
 know because, in aggressive mode, if a repository object is suddenly in a high
 demand across the globe, we may observe a small surge of 200 responses as
-opposed to the expected 304 ones. The 200s would be individual CloudFlare data
+opposed to the expected 304 ones. The 200s would be individual Cloudflare data
 centers warming their caches, afterwards it should be a steady flow of 304s.
 
 ## Protection against cache bypassing
@@ -123,11 +123,11 @@ GCS.
 
 Elasticsearch endpoint and credentials are provided through [Terraform][tf-logging].
 
-CloudFlare Logs wasn't used as it doesn't provide a way to filter logs for
+Cloudflare Logs wasn't used as it doesn't provide a way to filter logs for
 certain routes or workers. Using it would cause logging redundancy if the site
-is completely behind CloudFlare (as is the case with staging), and would prove
+is completely behind Cloudflare (as is the case with staging), and would prove
 difficult to have immediate visibility into the worker as logs would need to be
-imported from GCS (after they're exported from CloudFlare) to BigQuery for
+imported from GCS (after they're exported from Cloudflare) to BigQuery for
 analysis.
 
 [requests-flow-example]: https://docs.gitlab.com/ee/administration/static_objects_external_storage.html#requests-flow-example
