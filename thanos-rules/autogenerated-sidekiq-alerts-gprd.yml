@@ -146,7 +146,7 @@ groups:
     labels:
       alert_type: cause
       severity: s4
-      team: scalability
+      team: scalability:practices
     expr: |
       sum by (environment, worker, action)  (
         rate(

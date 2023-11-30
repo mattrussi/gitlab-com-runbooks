@@ -20,7 +20,6 @@ metricsCatalog.serviceDefinition(
       registry_redis_client: {
         userImpacting: false,
         severity: 's3',
-        team: 'scalability-619-redis-k8s',
         description: |||
           Aggregation of all container registry Redis operations.
         |||,

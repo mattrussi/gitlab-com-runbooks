@@ -87,7 +87,7 @@ services:
     tier: inf
     friendly_name: Blackbox Exporters
     label: Blackbox
-    owner: reliability_observability
+    owner: scalability:observability
     technical:
       project:
         - https://gitlab.com/gitlab-cookbooks/gitlab-exporters
@@ -355,7 +355,7 @@ services:
     tier: inf
     friendly_name: Logging
     label: Logging
-    owner: reliability_observability
+    owner: scalability:observability
     technical:
       project:
       documents:
@@ -643,7 +643,7 @@ services:
     teams:
       - gitaly
     label: Gitaly
-    owner: reliability_practices
+    owner: scalability:practices
     technical:
       project:
         - https://gitlab.com/gitlab-org/gitaly
@@ -677,7 +677,7 @@ services:
     tier: inf
     friendly_name: InfluxDB (deprecated)
     label: Influxdb
-    owner: reliability_observability
+    owner: scalability:observability
     technical:
       project:
         - https://github.com/influxdata/influxdb
@@ -703,7 +703,7 @@ services:
     teams:
       - gitaly
     label: Praefect
-    owner: reliability_practices
+    owner: gitaly
     technical:
       project:
         - https://gitlab.com/gitlab-org/gitaly
@@ -1217,7 +1217,7 @@ services:
     tier: inf
     friendly_name: Monitoring
     label: Prometheus
-    owner: reliability_observability
+    owner: scalability:observability
     technical:
       project:
         - https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/tanka-deployments
@@ -1245,7 +1245,7 @@ services:
     tier: inf
     friendly_name: thanos
     label: Thanos
-    owner: reliability_observability
+    owner: scalability:observability
     technical:
       project:
         - https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/tanka-deployments
@@ -1280,7 +1280,7 @@ services:
     tier: inf
     friendly_name: thanos-staging
     label: Thanos-staging
-    owner: reliability_observability
+    owner: scalability:observability
     technical:
       documents:
         design:
@@ -1308,7 +1308,7 @@ services:
     tier: db
     friendly_name: Persistent Redis
     label: Redis
-    owner: scalability
+    owner: scalability:practices
     technical:
       project:
         - https://github.com/antirez/redis/
@@ -1338,7 +1338,7 @@ services:
     tier: db
     friendly_name: Redis Pub/Sub
     label: RedisPubsub
-    owner: scalability
+    owner: scalability:practices
     technical:
       project:
         - https://github.com/antirez/redis/
@@ -1366,7 +1366,7 @@ services:
     tier: db
     friendly_name: Redis Cluster SharedState
     label: RedisClusterSharedState
-    owner: scalability
+    owner: scalability:practices
     technical:
       project:
         - https://github.com/antirez/redis/
@@ -1393,7 +1393,7 @@ services:
     tier: db
     friendly_name: Redis Cluster Feature Flag
     label: RedisClusterFeatureFlag
-    owner: scalability
+    owner: scalability:practices
     technical:
       project:
         - https://github.com/antirez/redis/
@@ -1420,7 +1420,7 @@ services:
     tier: db
     friendly_name: Redis Cluster Cache
     label: RedisClusterCache
-    owner: scalability
+    owner: scalability:practices
     technical:
       project:
         - https://github.com/antirez/redis/
@@ -1447,7 +1447,7 @@ services:
     tier: db
     friendly_name: Redis Cluster RateLimiting
     label: RedisClusterRateLimiting
-    owner: scalability
+    owner: scalability:practices
     technical:
       project:
         - https://github.com/redis/redis
@@ -1474,7 +1474,7 @@ services:
     tier: db
     friendly_name: Redis Cluster Chat Cache
     label: RedisClusterChatCache
-    owner: scalability
+    owner: scalability:practices
     technical:
       project:
         - https://github.com/redis/redis
@@ -1501,7 +1501,7 @@ services:
     tier: db
     friendly_name: Redis Repository Cache
     label: RedisRepositoryCache
-    owner: scalability
+    owner: scalability:practices
     technical:
       project:
         - https://github.com/redis/redis
@@ -1528,7 +1528,7 @@ services:
     tier: db
     friendly_name: Redis Sessions
     label: RedisSessions
-    owner: scalability
+    owner: scalability:practices
     technical:
       project:
         - https://github.com/antirez/redis/
@@ -1555,7 +1555,7 @@ services:
     tier: db
     friendly_name: Redis Sidekiq
     label: RedisSidekiq
-    owner: scalability
+    owner: scalability:practices
     technical:
       project:
         - https://github.com/antirez/redis/
@@ -1582,7 +1582,7 @@ services:
     tier: db
     friendly_name: Redis Cluster Queues Meta
     label: RedisClusterQueuesMeta
-    owner: scalability
+    owner: scalability:practices
     technical:
       project:
         - https://github.com/redis/redis
@@ -1609,7 +1609,7 @@ services:
     tier: db
     friendly_name: Redis TraceChunks
     label: RedisTraceChunks
-    owner: scalability
+    owner: scalability:practices
     technical:
       project:
         - https://github.com/antirez/redis/
@@ -1636,7 +1636,7 @@ services:
     tier: db
     friendly_name: Redis Registry Cache
     label: RedisRegistryCache
-    owner: scalability
+    owner: scalability:practices
     technical:
       project:
         - https://github.com/antirez/redis/
@@ -1661,7 +1661,7 @@ services:
     tier: db
     friendly_name: Redis Database Load Balancing
     label: RedisDbLoadBalancing
-    owner: scalability
+    owner: scalability:practices
     technical:
       project:
         - https://github.com/redis/redis
@@ -1724,7 +1724,7 @@ services:
     tier: inf
     friendly_name: Runway Platform
     label: Runway
-    owner: scalability_frameworks
+    owner: scalability:practices
     technical:
       project:
         - https://gitlab.com/gitlab-com/gl-infra/platform/runway
@@ -1772,7 +1772,7 @@ services:
     tier: inf
     friendly_name: Monitoring
     label: Sentry
-    owner: reliability_observability
+    owner: scalability:observability
     technical:
       project:
         - https://github.com/getsentry/sentry
@@ -1922,7 +1922,7 @@ services:
     tier: inf
     friendly_name: Pubsub for Logging
     label: PubSub
-    owner: reliability_observability
+    owner: scalability:observability
     technical:
       project:
         - https://cloud.google.com/pubsub/docs/overview
@@ -1956,7 +1956,7 @@ services:
     tier: sv
     friendly_name: CI Runners
     label: CI Runners
-    owner: reliability_practices
+    owner: scalability:practices
     business:
       SLA:
         overall_sla_weighting: 0 # Treated as a primary service, but with a zero weight for now
@@ -1987,7 +1987,7 @@ services:
     tier: inf
     friendly_name: Stackdriver Metrics
     label: Stackdriver
-    owner: reliability_observability
+    owner: scalability:observability
     technical:
       project:
       documents:
@@ -2055,7 +2055,7 @@ services:
     tier: inf
     friendly_name: Jaeger
     label: Jaeger
-    owner: reliability_observability
+    owner: scalability:observability
     technical:
       project:
         - https://www.jaegertracing.io/

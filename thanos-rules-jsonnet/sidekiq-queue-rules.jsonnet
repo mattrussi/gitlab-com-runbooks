@@ -146,7 +146,7 @@ local sidekiqThanosAlerts(extraSelector) =
       },
       'for': '3h',
       labels: {
-        team: 'scalability',
+        team: 'scalability:practices',
         severity: 's4',
         alert_type: 'cause',
       },

@@ -108,7 +108,7 @@ metricsCatalog.serviceDefinition({
     thanos_query: {
       staticLabels: staticLabels,
       severity: 's3',
-      team: 'reliability_observability',
+      team: 'scalability:observability',
       monitoringThresholds: {
         apdexScore: 0.95,
         errorRatio: 0.95,
@@ -147,7 +147,7 @@ metricsCatalog.serviceDefinition({
     thanos_query_frontend: {
       staticLabels: staticLabels,
       severity: 's3',
-      team: 'reliability_observability',
+      team: 'scalability:observability',
       monitoringThresholds: {
         apdexScore: 0.95,
         errorRatio: 0.95,
@@ -190,7 +190,7 @@ metricsCatalog.serviceDefinition({
     thanos_store: {
       staticLabels: staticLabels,
       severity: 's3',
-      team: 'reliability_observability',
+      team: 'scalability:observability',
       monitoringThresholds: {
         apdexScore: 0.95,
         errorRatio: 0.95,
@@ -236,7 +236,7 @@ metricsCatalog.serviceDefinition({
     thanos_compactor: {
       staticLabels: staticLabels,
       severity: 's3',
-      team: 'reliability_observability',
+      team: 'scalability:observability',
       userImpacting: false,
       featureCategory: 'not_owned',
       trafficCessationAlertConfig: false,
@@ -271,7 +271,7 @@ metricsCatalog.serviceDefinition({
     thanos_rule_alert_sender: {
       staticLabels: staticLabels,
       severity: 's3',
-      team: 'reliability_observability',
+      team: 'scalability:observability',
       userImpacting: true,
       featureCategory: 'not_owned',
       description: |||
@@ -308,7 +308,7 @@ metricsCatalog.serviceDefinition({
     rule_evaluation: {
       staticLabels: staticLabels,
       severity: 's3',
-      team: 'reliability_observability',
+      team: 'scalability:observability',
       userImpacting: false,
       featureCategory: 'not_owned',
       description: |||
@@ -356,7 +356,7 @@ metricsCatalog.serviceDefinition({
     thanos_memcached: {
       staticLabels: staticLabels,
       severity: 's3',
-      team: 'reliability_observability',
+      team: 'scalability:observability',
       userImpacting: false,
       serviceAggregation: false,
       featureCategory: 'not_owned',
