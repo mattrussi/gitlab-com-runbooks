@@ -3,8 +3,6 @@ local selectors = import 'promql/selectors.libsonnet';
 local strings = import 'utils/strings.libsonnet';
 local validator = import 'utils/validator.libsonnet';
 
-local environmentLabels = ['environment', 'tier', 'type', 'stage'];
-
 local definitionValidor = validator.new({
   rangeDuration: validator.string,
   title: validator.string,
@@ -39,7 +37,7 @@ local utilizationMetric = function(options)
           { type: definition.appliesTo[0] }
       ),
 
-    getFormatConfig()::
+    getFormatConfig(environmentLabels, extraSelector={})::
       local s = self;
       local selectorHash = s.getTypeFilter();
       local staticLabels = s.staticLabels;
@@ -56,14 +54,14 @@ local utilizationMetric = function(options)
 
       s.queryFormatConfig {
         rangeDuration: s.rangeDuration,
-        selector: selectors.serializeHash(selectorWithoutStaticLabels),
+        selector: selectors.serializeHash(selectorWithoutStaticLabels + extraSelector),
         aggregationLabels: aggregations.serialize(aggregationLabelsWithoutStaticLabels),
         environmentLabels: aggregations.serialize(environmentLabels),
       },
 
-    getTopkQuery()::
+    getTopkQuery(environmentLabels, extraSelector={})::
       local s = self;
-      local formatConfig = s.getFormatConfig();
+      local formatConfig = s.getFormatConfig(environmentLabels, extraSelector);
       local preaggregationQuery = s.query % formatConfig;
 
       |||
@@ -75,13 +73,13 @@ local utilizationMetric = function(options)
         preaggregationQuery: strings.indent(preaggregationQuery, 2),
       },
 
-    getTotalQuery():: self.query % self.getFormatConfig(),
+    getTotalQuery(environmentLabels, extraSelector={}):: self.query % self.getFormatConfig(environmentLabels, extraSelector),
 
-    getRecordingRuleQuery()::
+    getRecordingRuleQuery(environmentLabels, extraSelector={})::
       if self.topk == null then
-        self.getTotalQuery()
+        self.getTotalQuery(environmentLabels, extraSelector)
       else
-        self.getTopkQuery(),
+        self.getTopkQuery(environmentLabels, extraSelector),
 
     getLegendFormat()::
       if std.length(definition.resourceLabels) > 0 then
@@ -103,7 +101,7 @@ local utilizationMetric = function(options)
 
       'gitlab_component_utilization:%(componentName)s_%(unit)s:%(topKComponent)s%(rangeDuration)s' % formatConfig,
 
-    getRecordingRuleDefinitions(componentName)::
+    getRecordingRuleDefinitions(componentName, environmentLabels, extraSelector={})::
       local s = self;
 
       local labels = {
@@ -118,7 +116,7 @@ local utilizationMetric = function(options)
       [{
         record: s.getRecordingRuleName(componentName),
         labels: labels,
-        expr: s.getRecordingRuleQuery(),
+        expr: s.getRecordingRuleQuery(environmentLabels, extraSelector),
       }],
 
     // Returns a boolean to indicate whether this saturation point applies to

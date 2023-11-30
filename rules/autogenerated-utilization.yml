@@ -25,7 +25,7 @@ groups:
     expr: |
       avg by (environment,tier,type,stage,shard) (
         sum by (environment,tier,type,stage,node) (
-          kube_pod_container_resource_requests{resource="cpu", unit="core"}
+          kube_pod_container_resource_requests{resource="cpu", unit="core", type=~"kube|redis-cluster-cache|redis-cluster-feature-flag|redis-cluster-shared-state|redis-cluster-queues-meta|redis-sidekiq|redis-tracechunks|redis-cluster-ratelimiting|redis-cluster-chat-cache|redis-sessions|redis-registry-cache|redis-repository-cache|redis-db-load-balancing|redis-pubsub|redis|vault"}
         )
         / on (node) group_left(cluster,env,tier,type,stage,shard)
         kube_node_status_allocatable:labeled{type=~"kube|redis-cluster-cache|redis-cluster-feature-flag|redis-cluster-shared-state|redis-cluster-queues-meta|redis-sidekiq|redis-tracechunks|redis-cluster-ratelimiting|redis-cluster-chat-cache|redis-sessions|redis-registry-cache|redis-repository-cache|redis-db-load-balancing|redis-pubsub|redis|vault",resource="cpu"}
@@ -41,7 +41,7 @@ groups:
     expr: |
       avg by (environment,tier,type,stage,shard) (
         sum by (environment,tier,type,stage,node) (
-          kube_pod_container_resource_requests{resource="memory", unit="byte"}
+          kube_pod_container_resource_requests{resource="memory", unit="byte", type=~"kube|redis-cluster-cache|redis-cluster-feature-flag|redis-cluster-shared-state|redis-cluster-queues-meta|redis-sidekiq|redis-tracechunks|redis-cluster-ratelimiting|redis-cluster-chat-cache|redis-sessions|redis-registry-cache|redis-repository-cache|redis-db-load-balancing|redis-pubsub|redis|vault"}
         )
         / on (node) group_left(cluster,env,tier,type,stage,shard)
         kube_node_status_allocatable:labeled{type=~"kube|redis-cluster-cache|redis-cluster-feature-flag|redis-cluster-shared-state|redis-cluster-queues-meta|redis-sidekiq|redis-tracechunks|redis-cluster-ratelimiting|redis-cluster-chat-cache|redis-sessions|redis-registry-cache|redis-repository-cache|redis-db-load-balancing|redis-pubsub|redis|vault",resource="memory"}
