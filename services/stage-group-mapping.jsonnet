@@ -197,15 +197,6 @@
       'release_orchestration',
     ],
   },
-  respond: {
-    name: 'Respond',
-    stage: 'monitor',
-    feature_categories: [
-      'incident_management',
-      'on_call_schedule_management',
-      'service_desk',
-    ],
-  },
   authentication: {
     name: 'Authentication',
     stage: 'govern',
@@ -256,7 +247,7 @@
   },
   analytics_instrumentation: {
     name: 'Analytics Instrumentation',
-    stage: 'analyze',
+    stage: 'monitor',
     feature_categories: [
       'service_ping',
       'application_instrumentation',
@@ -264,7 +255,7 @@
   },
   product_analytics: {
     name: 'Product Analytics',
-    stage: 'analyze',
+    stage: 'monitor',
     feature_categories: [
       'product_analytics_visualization',
       'product_analytics_data_management',
@@ -272,7 +263,7 @@
   },
   observability: {
     name: 'Observability',
-    stage: 'analyze',
+    stage: 'monitor',
     feature_categories: [
       'metrics',
       'tracing',
@@ -496,11 +487,13 @@
       'five_minute_production_app',
     ],
   },
-  no_code_automation: {
-    name: 'No-code Automation',
-    stage: 'no_code',
+  respond: {
+    name: 'Respond',
+    stage: 'service_management',
     feature_categories: [
-      'no_code_automation',
+      'incident_management',
+      'on_call_schedule_management',
+      'service_desk',
     ],
   },
 }

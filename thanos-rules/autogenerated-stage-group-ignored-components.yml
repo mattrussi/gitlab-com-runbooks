@@ -51,14 +51,14 @@ groups:
       product_stage: ai-powered
       stage_group: ai_model_validation
     expr: "1"
-- name: 'Stage group Ignored components: analyze - Analytics Instrumentation'
+- name: 'Stage group Ignored components: monitor - Analytics Instrumentation'
   interval: 1m
   partial_response_strategy: warn
   rules:
   - record: gitlab:ignored_component:stage_group
     labels:
       component: graphql_query
-      product_stage: analyze
+      product_stage: monitor
       stage_group: analytics_instrumentation
     expr: "1"
 - name: 'Stage group Ignored components: govern - Authentication'
@@ -301,14 +301,14 @@ groups:
       product_stage: mobile
       stage_group: mobile_devops
     expr: "1"
-- name: 'Stage group Ignored components: analyze - Observability'
+- name: 'Stage group Ignored components: monitor - Observability'
   interval: 1m
   partial_response_strategy: warn
   rules:
   - record: gitlab:ignored_component:stage_group
     labels:
       component: graphql_query
-      product_stage: analyze
+      product_stage: monitor
       stage_group: observability
     expr: "1"
 - name: 'Stage group Ignored components: plan - Optimize'
@@ -401,14 +401,14 @@ groups:
       product_stage: fulfillment
       stage_group: purchase
     expr: "1"
-- name: 'Stage group Ignored components: monitor - Respond'
+- name: 'Stage group Ignored components: service_management - Respond'
   interval: 1m
   partial_response_strategy: warn
   rules:
   - record: gitlab:ignored_component:stage_group
     labels:
       component: graphql_query
-      product_stage: monitor
+      product_stage: service_management
       stage_group: respond
     expr: "1"
 - name: 'Stage group Ignored components: verify - Runner'

@@ -6,4 +6,5 @@
 //
 // Blank values will be ignored.
 {
+  no_code_automation: '',
 }
