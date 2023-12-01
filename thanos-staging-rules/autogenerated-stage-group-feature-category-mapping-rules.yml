@@ -66,7 +66,7 @@ spec:
     - record: gitlab:feature_category:stage_group:mapping
       labels:
         feature_category: application_instrumentation
-        product_stage: analyze
+        product_stage: monitor
         stage_group: analytics_instrumentation
       expr: "1"
     - record: gitlab:feature_category:stage_group:mapping
@@ -324,7 +324,7 @@ spec:
     - record: gitlab:feature_category:stage_group:mapping
       labels:
         feature_category: error_tracking
-        product_stage: analyze
+        product_stage: monitor
         stage_group: observability
       expr: "1"
     - record: gitlab:feature_category:stage_group:mapping
@@ -408,7 +408,7 @@ spec:
     - record: gitlab:feature_category:stage_group:mapping
       labels:
         feature_category: incident_management
-        product_stage: monitor
+        product_stage: service_management
         stage_group: respond
       expr: "1"
     - record: gitlab:feature_category:stage_group:mapping
@@ -450,7 +450,7 @@ spec:
     - record: gitlab:feature_category:stage_group:mapping
       labels:
         feature_category: logging
-        product_stage: analyze
+        product_stage: monitor
         stage_group: observability
       expr: "1"
     - record: gitlab:feature_category:stage_group:mapping
@@ -468,7 +468,7 @@ spec:
     - record: gitlab:feature_category:stage_group:mapping
       labels:
         feature_category: metrics
-        product_stage: analyze
+        product_stage: monitor
         stage_group: observability
       expr: "1"
     - record: gitlab:feature_category:stage_group:mapping
@@ -491,12 +491,6 @@ spec:
       expr: "1"
     - record: gitlab:feature_category:stage_group:mapping
       labels:
-        feature_category: no_code_automation
-        product_stage: no_code
-        stage_group: no_code_automation
-      expr: "1"
-    - record: gitlab:feature_category:stage_group:mapping
-      labels:
         feature_category: not_owned
         product_stage: not_owned
         stage_group: not_owned
@@ -510,7 +504,7 @@ spec:
     - record: gitlab:feature_category:stage_group:mapping
       labels:
         feature_category: on_call_schedule_management
-        product_stage: monitor
+        product_stage: service_management
         stage_group: respond
       expr: "1"
     - record: gitlab:feature_category:stage_group:mapping
@@ -558,13 +552,13 @@ spec:
     - record: gitlab:feature_category:stage_group:mapping
       labels:
         feature_category: product_analytics_data_management
-        product_stage: analyze
+        product_stage: monitor
         stage_group: product_analytics
       expr: "1"
     - record: gitlab:feature_category:stage_group:mapping
       labels:
         feature_category: product_analytics_visualization
-        product_stage: analyze
+        product_stage: monitor
         stage_group: product_analytics
       expr: "1"
     - record: gitlab:feature_category:stage_group:mapping
@@ -690,13 +684,13 @@ spec:
     - record: gitlab:feature_category:stage_group:mapping
       labels:
         feature_category: service_desk
-        product_stage: monitor
+        product_stage: service_management
         stage_group: respond
       expr: "1"
     - record: gitlab:feature_category:stage_group:mapping
       labels:
         feature_category: service_ping
-        product_stage: analyze
+        product_stage: monitor
         stage_group: analytics_instrumentation
       expr: "1"
     - record: gitlab:feature_category:stage_group:mapping
@@ -750,7 +744,7 @@ spec:
     - record: gitlab:feature_category:stage_group:mapping
       labels:
         feature_category: tracing
-        product_stage: analyze
+        product_stage: monitor
         stage_group: observability
       expr: "1"
     - record: gitlab:feature_category:stage_group:mapping
