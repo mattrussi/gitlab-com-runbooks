@@ -199,7 +199,7 @@ module "project_my-project" {
 }
 ```
 
-⚠️ Note: if your project doesn't exist yet in `infra-mgmt`, you will need to add and import it (documentation for this to be added later at the time of this writing).
+⚠️ Note: if your project doesn't exist yet in `infra-mgmt`, you will need to add and [import it](https://gitlab.com/gitlab-com/gl-infra/infra-mgmt/-/blob/main/CONTRIBUTING.md?ref_type=heads#how-to-addupdatedelete-projects) (example: <https://gitlab.com/gitlab-com/gl-infra/infra-mgmt/-/merge_requests/498>).
 
 There are additional attributes that you can set to allow access to more secrets paths and policies, see [the project module documentation](https://gitlab.com/gitlab-com/gl-infra/infra-mgmt/-/tree/main/modules/project#input_vault) to learn more about those.
 
