@@ -2495,3 +2495,47 @@ services:
       monitors:
         grafana_folder: memorystore
         primary_grafana_dashboard: memorystore-main/memorystore-overview
+  - name: loki
+    tier: inf
+    friendly_name: Grafana Loki
+    label: Loki
+    owner: scalability:observability
+    technical:
+      project:
+      documents:
+        design:
+        architecture:
+        readiness_review:
+        sre_guide:
+        developer_guide:
+        service:
+        security:
+      logging:
+        - name:
+          permalink:
+    observability:
+      monitors:
+        grafana_folder:
+        primary_grafana_dashboard:
+  - name: mimir
+    tier: inf
+    friendly_name: Grafana Mimir
+    label: Mimir
+    owner: scalability:observability
+    technical:
+      project:
+      documents:
+        design:
+        architecture:
+        readiness_review:
+        sre_guide:
+        developer_guide:
+        service:
+        security:
+      logging:
+        - name:
+          permalink:
+    observability:
+      monitors:
+        grafana_folder:
+        primary_grafana_dashboard:
