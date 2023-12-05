@@ -53,37 +53,6 @@
       },
       "title": "CPU Utilization per RDS Instance"
     },
-    "aws_rds_disk_space": {
-      "alertRunbook": "docs/{{ $labels.type }}/README.md",
-      "alerting": {
-        "enabled": true
-      },
-      "appliesTo": [
-        "rds"
-      ],
-      "capacityPlanning": {
-        "changepoints_count": 25,
-        "forecast_days": 90,
-        "historical_days": 365,
-        "strategy": "quantile95_1h"
-      },
-      "dangerouslyThanosEvaluated": false,
-      "description": "We are fully saturated when we are at 2GB remaining free space, we have\nno way of knowing the total available space and RDS will autoscale storage for us\nwhen we are at 10GB or 10% free space, whichever is greater.\n\nAdditional details here: https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/rds-metrics.html#rds-cw-metrics-instance\n",
-      "grafana_dashboard_uid": "aws_rds_disk_space",
-      "horizontallyScalable": true,
-      "linear_prediction_saturation_alert": "6h",
-      "quantileAggregation": "max",
-      "query": "(\n  ( 2 * (1024*1024*1024))\n  /\n  (sum by (dbinstance_identifier) (aws_rds_free_storage_space_maximum))\n)\n",
-      "queryFormatConfig": {},
-      "resourceLabels": [],
-      "severity": "s2",
-      "slos": {
-        "alertTriggerDuration": "15m",
-        "hard": 0.95,
-        "soft": 0.9
-      },
-      "title": "Disk Space Utilization per RDS Instance"
-    },
     "aws_rds_freeable_memory": {
       "alertRunbook": "docs/{{ $labels.type }}/README.md",
       "alerting": {
@@ -746,10 +715,6 @@
           "name": "aws_rds_cpu_utilization",
           "url": ""
         },
-        "aws_rds_disk_space": {
-          "name": "aws_rds_disk_space",
-          "url": ""
-        },
         "aws_rds_freeable_memory": {
           "name": "aws_rds_freeable_memory",
           "url": ""
@@ -838,10 +803,6 @@
       "resourceDashboard": {
         "aws_rds_cpu_utilization": {
           "name": "aws_rds_cpu_utilization",
-          "url": ""
-        },
-        "aws_rds_disk_space": {
-          "name": "aws_rds_disk_space",
           "url": ""
         },
         "aws_rds_freeable_memory": {
@@ -934,10 +895,6 @@
           "name": "aws_rds_cpu_utilization",
           "url": ""
         },
-        "aws_rds_disk_space": {
-          "name": "aws_rds_disk_space",
-          "url": ""
-        },
         "aws_rds_freeable_memory": {
           "name": "aws_rds_freeable_memory",
           "url": ""
@@ -1026,10 +983,6 @@
       "resourceDashboard": {
         "aws_rds_cpu_utilization": {
           "name": "aws_rds_cpu_utilization",
-          "url": ""
-        },
-        "aws_rds_disk_space": {
-          "name": "aws_rds_disk_space",
           "url": ""
         },
         "aws_rds_freeable_memory": {
@@ -1122,10 +1075,6 @@
           "name": "aws_rds_cpu_utilization",
           "url": ""
         },
-        "aws_rds_disk_space": {
-          "name": "aws_rds_disk_space",
-          "url": ""
-        },
         "aws_rds_freeable_memory": {
           "name": "aws_rds_freeable_memory",
           "url": ""
@@ -1214,10 +1163,6 @@
       "resourceDashboard": {
         "aws_rds_cpu_utilization": {
           "name": "aws_rds_cpu_utilization",
-          "url": ""
-        },
-        "aws_rds_disk_space": {
-          "name": "aws_rds_disk_space",
           "url": ""
         },
         "aws_rds_freeable_memory": {
@@ -1310,10 +1255,6 @@
           "name": "aws_rds_cpu_utilization",
           "url": ""
         },
-        "aws_rds_disk_space": {
-          "name": "aws_rds_disk_space",
-          "url": ""
-        },
         "aws_rds_freeable_memory": {
           "name": "aws_rds_freeable_memory",
           "url": ""
@@ -1402,10 +1343,6 @@
       "resourceDashboard": {
         "aws_rds_cpu_utilization": {
           "name": "aws_rds_cpu_utilization",
-          "url": ""
-        },
-        "aws_rds_disk_space": {
-          "name": "aws_rds_disk_space",
           "url": ""
         },
         "aws_rds_freeable_memory": {
@@ -1498,10 +1435,6 @@
           "name": "aws_rds_cpu_utilization",
           "url": ""
         },
-        "aws_rds_disk_space": {
-          "name": "aws_rds_disk_space",
-          "url": ""
-        },
         "aws_rds_freeable_memory": {
           "name": "aws_rds_freeable_memory",
           "url": ""
@@ -1590,10 +1523,6 @@
       "resourceDashboard": {
         "aws_rds_cpu_utilization": {
           "name": "aws_rds_cpu_utilization",
-          "url": ""
-        },
-        "aws_rds_disk_space": {
-          "name": "aws_rds_disk_space",
           "url": ""
         },
         "aws_rds_freeable_memory": {
