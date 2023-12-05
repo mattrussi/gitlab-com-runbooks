@@ -24,69 +24,63 @@ basic.dashboard(
           title='Rate limiter delay (allowed, agent_connection)',
           description='Rate limiter delay for an allowed request',
           query='sum by (le) (
-            rate(limiter_block_duration_milliseconds_bucket{%s, allowed="true", limiter_name="agent_connection"}[$__rate_interval])
+            rate(limiter_block_duration_seconds_bucket{%s, allowed="true", limiter_name="agent_connection"}[$__rate_interval])
           )' % selectorString,
           dataFormat='tsbuckets',
           color_cardColor='#00ff00',
           legendFormat='__auto',
-          yAxis_format='ms',
         ),
         basic.heatmap(
           title='Rate limiter delay (denied, agent_connection)',
           description='Rate limiter delay for a denied request',
           query='sum by (le) (
-            rate(limiter_block_duration_milliseconds_bucket{%s, allowed="false", limiter_name="agent_connection"}[$__rate_interval])
+            rate(limiter_block_duration_seconds_bucket{%s, allowed="false", limiter_name="agent_connection"}[$__rate_interval])
           )' % selectorString,
           dataFormat='tsbuckets',
           color_cardColor='#ff0000',
           legendFormat='__auto',
-          yAxis_format='ms',
         ),
 
         basic.heatmap(
           title='Rate limiter delay (allowed, gitaly_client_global)',
           description='Rate limiter delay for an allowed request',
           query='sum by (le) (
-            rate(limiter_block_duration_milliseconds_bucket{%s, allowed="true", limiter_name="gitaly_client_global"}[$__rate_interval])
+            rate(limiter_block_duration_seconds_bucket{%s, allowed="true", limiter_name="gitaly_client_global"}[$__rate_interval])
           )' % selectorString,
           dataFormat='tsbuckets',
           color_cardColor='#00ff00',
           legendFormat='__auto',
-          yAxis_format='ms',
         ),
         basic.heatmap(
           title='Rate limiter delay (denied, gitaly_client_global)',
           description='Rate limiter delay for a denied request',
           query='sum by (le) (
-            rate(limiter_block_duration_milliseconds_bucket{%s, allowed="false", limiter_name="gitaly_client_global"}[$__rate_interval])
+            rate(limiter_block_duration_seconds_bucket{%s, allowed="false", limiter_name="gitaly_client_global"}[$__rate_interval])
           )' % selectorString,
           dataFormat='tsbuckets',
           color_cardColor='#ff0000',
           legendFormat='__auto',
-          yAxis_format='ms',
         ),
 
         basic.heatmap(
           title='Rate limiter delay (allowed, gitlab_client)',
           description='Rate limiter delay for an allowed request',
           query='sum by (le) (
-            rate(limiter_block_duration_milliseconds_bucket{%s, allowed="true", limiter_name="gitlab_client"}[$__rate_interval])
+            rate(limiter_block_duration_seconds_bucket{%s, allowed="true", limiter_name="gitlab_client"}[$__rate_interval])
           )' % selectorString,
           dataFormat='tsbuckets',
           color_cardColor='#00ff00',
           legendFormat='__auto',
-          yAxis_format='ms',
         ),
         basic.heatmap(
           title='Rate limiter delay (denied, gitlab_client)',
           description='Rate limiter delay for a denied request',
           query='sum by (le) (
-            rate(limiter_block_duration_milliseconds_bucket{%s, allowed="false", limiter_name="gitlab_client"}[$__rate_interval])
+            rate(limiter_block_duration_seconds_bucket{%s, allowed="false", limiter_name="gitlab_client"}[$__rate_interval])
           )' % selectorString,
           dataFormat='tsbuckets',
           color_cardColor='#ff0000',
           legendFormat='__auto',
-          yAxis_format='ms',
         ),
 
     ], startRow=1000),
