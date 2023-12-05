@@ -68,6 +68,9 @@ local combinedServiceLevelIndicatorDefinition(
         hasErrorRate():: componentsInitialised[0].hasErrorRate(),
         hasDependencies():: std.length(self.dependsOn) > 0,
 
+        recordingRuleMetrics:
+          std.uniq(std.flatMap(function(c) c.recordingRuleMetrics, componentsInitialised)),
+
         hasToolingLinks()::
           std.length(self.getToolingLinks()) > 0,
 

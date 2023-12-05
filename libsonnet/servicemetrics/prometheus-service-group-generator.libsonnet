@@ -2,13 +2,22 @@ local intervalForDuration = import './interval-for-duration.libsonnet';
 local recordingRuleRegistry = import './recording-rule-registry.libsonnet';
 local recordingRules = import 'recording-rules/recording-rules.libsonnet';
 
-local recordingRuleGroupsForServiceForBurnRate(serviceDefinition, componentAggregationSet, nodeAggregationSet, shardAggregationSet, burnRate) =
+local recordingRuleGroupsForServiceForBurnRate(
+  serviceDefinition,
+  componentAggregationSet,
+  nodeAggregationSet,
+  shardAggregationSet,
+  burnRate,
+  aggregateAllSourceMetrics,
+  extraSelector,
+      ) =
   local rulesetGenerators =
     [
-      recordingRules.sliRecordingRulesSetGenerator(burnRate, recordingRuleRegistry),
+      recordingRules.sliRecordingRulesSetGenerator(burnRate, recordingRuleRegistry, aggregateAllSourceMetrics, extraSelector),
       recordingRules.componentMetricsRuleSetGenerator(
         burnRate=burnRate,
-        aggregationSet=componentAggregationSet
+        aggregationSet=componentAggregationSet,
+        extraSourceSelector=extraSelector,
       ),
       recordingRules.extraRecordingRuleSetGenerator(burnRate),
     ]
@@ -56,13 +65,28 @@ local featureCategoryRecordingRuleGroupsForService(serviceDefinition, aggregatio
    * These are the first level aggregation, for normalizing source metrics
    * into a consistent format
    */
-  recordingRuleGroupsForService(serviceDefinition, componentAggregationSet, nodeAggregationSet, shardAggregationSet)::
+  recordingRuleGroupsForService(
+    serviceDefinition,
+    componentAggregationSet,
+    nodeAggregationSet,
+    shardAggregationSet,
+    aggregateAllSourceMetrics=false,
+    extraSelector={},
+  )::
     local componentMappingRuleSetGenerator = recordingRules.componentMappingRuleSetGenerator();
 
     local burnRates = componentAggregationSet.getBurnRates();
 
     [
-      recordingRuleGroupsForServiceForBurnRate(serviceDefinition, componentAggregationSet, nodeAggregationSet, shardAggregationSet, burnRate)
+      recordingRuleGroupsForServiceForBurnRate(
+        serviceDefinition,
+        componentAggregationSet,
+        nodeAggregationSet,
+        shardAggregationSet,
+        burnRate,
+        aggregateAllSourceMetrics,
+        extraSelector,
+      )
       for burnRate in burnRates
     ]
     +

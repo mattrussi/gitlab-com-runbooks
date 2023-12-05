@@ -74,12 +74,16 @@ local generateRangeFunctionQuery(rate, rangeFunction, additionalSelectors, range
       local query = generateRangeFunctionQuery(self, 'increase', selector, rangeInterval, withoutLabels=withoutLabels);
       aggregations.aggregateOverQuery('sum', aggregationLabels, query),
 
+    local metricNames = [counter],
+    getMetricNames():: metricNames,
+
     // Only support reflection on hash selectors
     [if std.isObject(selector) then 'supportsReflection']():: {
       // Returns a list of metrics and the labels that they use
       getMetricNamesAndLabels()::
         {
-          [counter]: std.set(std.objectFields(selector)),
+          [metric]: std.set(std.objectFields(selector))
+          for metric in metricNames
         },
     },
   }),
@@ -133,12 +137,16 @@ local generateRangeFunctionQuery(rate, rangeFunction, additionalSelectors, range
       local query = generateRangeFunctionQuery(self, 'increase', selector, rangeInterval, withoutLabels=withoutLabels);
       aggregations.aggregateOverQuery('sum', aggregationLabels, query),
 
+    local metricNames = [counter],
+    getMetricNames():: metricNames,
+
     // Only support reflection on hash selectors
     [if std.isObject(selector) then 'supportsReflection']():: {
       // Returns a list of metrics and the labels that they use
       getMetricNamesAndLabels()::
         {
-          [counter]: std.set(std.objectFields(selector)),
+          [metric]: std.set(std.objectFields(selector))
+          for metric in metricNames
         },
     },
   }),

@@ -65,13 +65,16 @@ local generateApdexRatio(successCounterApdex, aggregationLabels, additionalSelec
     apdexAttribution(aggregationLabel, selector, rangeInterval, withoutLabels=[])::
       generateApdexAttributionQuery(self, aggregationLabel, selector, rangeInterval, withoutLabels),
 
+    local metricNames = [successRateMetric, operationRateMetric],
+    getMetricNames():: metricNames,
+
     // Only support reflection on hash selectors
     [if std.isObject(selector) then 'supportsReflection']():: {
       // Returns a list of metrics and the labels that they use
       getMetricNamesAndLabels()::
         {
-          [successRateMetric]: std.set(std.objectFields(selector)),
-          [operationRateMetric]: std.set(std.objectFields(selector)),
+          [metric]: std.set(std.objectFields(selector))
+          for metric in metricNames
         },
     },
   }),

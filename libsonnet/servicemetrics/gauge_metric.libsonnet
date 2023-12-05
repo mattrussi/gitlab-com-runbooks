@@ -29,5 +29,8 @@ local validateMetric = (import './validation.libsonnet').validateMetric;
       };
 
       aggregations.aggregateOverQuery('sum', aggregationLabels, query),
+
+    local metricNames = [gauge],
+    getMetricNames():: metricNames,
   }),
 }

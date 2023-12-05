@@ -16,5 +16,7 @@ local aggregations = import 'promql/aggregations.libsonnet';
         aggregationLabels: aggregations.serialize(aggregationLabels),
       };
       aggregations.aggregateOverQuery('sum', aggregationLabels, queryText),
+
+    getMetricNames():: [],
   },
 }

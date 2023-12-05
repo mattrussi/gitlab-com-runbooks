@@ -1,6 +1,6 @@
-local generateRecordingRulesForMetric(recordingRuleMetric, burnRate, recordingRuleRegistry) =
-  if recordingRuleRegistry.recordingRuleForMetricAtBurnRate(metricName=recordingRuleMetric, rangeInterval=burnRate) then
-    local expression = recordingRuleRegistry.recordingRuleExpressionFor(metricName=recordingRuleMetric, rangeInterval=burnRate);
+local generateRecordingRulesForMetric(recordingRuleMetric, burnRate, recordingRuleRegistry, aggregateAllSourceMetrics, extraSelector) =
+  if aggregateAllSourceMetrics || recordingRuleRegistry.recordingRuleForMetricAtBurnRate(metricName=recordingRuleMetric, rangeInterval=burnRate) then
+    local expression = recordingRuleRegistry.recordingRuleExpressionFor(metricName=recordingRuleMetric, rangeInterval=burnRate, extraSelector=extraSelector);
     local recordingRuleName = recordingRuleRegistry.recordingRuleNameFor(metricName=recordingRuleMetric, rangeInterval=burnRate);
 
     [{
@@ -17,19 +17,28 @@ local generateRecordingRulesForMetric(recordingRuleMetric, burnRate, recordingRu
   sliRecordingRulesSetGenerator(
     burnRate,
     recordingRuleRegistry,
+    aggregateAllSourceMetrics,
+    extraSelector
   )::
     {
       burnRate: burnRate,
 
       // Generates the recording rules given a service definition
       generateRecordingRulesForService(serviceDefinition)::
-        if std.objectHas(serviceDefinition, 'recordingRuleMetrics') then
+        local metrics = if aggregateAllSourceMetrics then
           std.flatMap(
-            function(recordingRuleMetric) generateRecordingRulesForMetric(recordingRuleMetric, burnRate, recordingRuleRegistry),
-            serviceDefinition.recordingRuleMetrics
+            function(sli) sli.recordingRuleMetrics,
+            serviceDefinition.listServiceLevelIndicators(),
           )
         else
-          [],
+          std.get(serviceDefinition, 'recordingRuleMetrics', default=[]);
+
+        std.flatMap(
+          function(recordingRuleMetric) generateRecordingRulesForMetric(
+            recordingRuleMetric, burnRate, recordingRuleRegistry, aggregateAllSourceMetrics, extraSelector
+          ),
+          metrics,
+        ),
     },
 
 }
