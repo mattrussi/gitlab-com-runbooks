@@ -17,6 +17,7 @@
   import 'customersdot.jsonnet',
   import 'errortracking.jsonnet',
   import 'external-dns.jsonnet',
+  import 'ext-pvs.jsonnet',
   import 'frontend.jsonnet',
   import 'google-cloud-storage.jsonnet',
   import 'git.jsonnet',

@@ -301,15 +301,15 @@ spec:
           clamp_min(
             clamp_max(
               (
-                process_open_fds{env="ops",type=~"ai-gateway|code_suggestions|errortracking|tracing"}
+                process_open_fds{env="ops",type=~"ai-gateway|code_suggestions|errortracking|ext-pvs|tracing"}
                 /
-                process_max_fds{env="ops",type=~"ai-gateway|code_suggestions|errortracking|tracing"}
+                process_max_fds{env="ops",type=~"ai-gateway|code_suggestions|errortracking|ext-pvs|tracing"}
               )
               or
               (
-                ruby_file_descriptors{env="ops",type=~"ai-gateway|code_suggestions|errortracking|tracing"}
+                ruby_file_descriptors{env="ops",type=~"ai-gateway|code_suggestions|errortracking|ext-pvs|tracing"}
                 /
-                ruby_process_max_fds{env="ops",type=~"ai-gateway|code_suggestions|errortracking|tracing"}
+                ruby_process_max_fds{env="ops",type=~"ai-gateway|code_suggestions|errortracking|ext-pvs|tracing"}
               )
               ,
               1)
@@ -392,7 +392,7 @@ spec:
               histogram_quantile(0.9999, sum by(le, env, environment, type, shard, revision_name)
                 (
                   avg_over_time(
-                    stackdriver_cloud_run_revision_run_googleapis_com_container_cpu_utilizations_bucket{job="runway-exporter",env="ops",type="ai-gateway"}[30m]
+                    stackdriver_cloud_run_revision_run_googleapis_com_container_cpu_utilizations_bucket{job="runway-exporter",env="ops",type=~"ai-gateway|ext-pvs"}[30m]
                   )
                 )
               )
@@ -411,7 +411,7 @@ spec:
           clamp_min(
             clamp_max(
               sum by (env, environment, type, shard, revision_name) (
-                stackdriver_cloud_run_revision_run_googleapis_com_container_instance_count{job="runway-exporter",state="active",env="ops",type="ai-gateway"}
+                stackdriver_cloud_run_revision_run_googleapis_com_container_instance_count{job="runway-exporter",state="active",env="ops",type=~"ai-gateway|ext-pvs"}
               )
               /
               100
@@ -432,7 +432,7 @@ spec:
               histogram_quantile(0.9999, sum by(le, env, environment, type, shard, revision_name)
                 (
                   rate(
-                    stackdriver_cloud_run_revision_run_googleapis_com_container_max_request_concurrencies_bucket{job="runway-exporter",state="active",env="ops",type="ai-gateway"}[30m]
+                    stackdriver_cloud_run_revision_run_googleapis_com_container_max_request_concurrencies_bucket{job="runway-exporter",state="active",env="ops",type=~"ai-gateway|ext-pvs"}[30m]
                   )
                 )
               ) / 100
@@ -453,7 +453,7 @@ spec:
               histogram_quantile(0.9999, sum by(le, env, environment, type, shard, revision_name)
                 (
                   avg_over_time(
-                    stackdriver_cloud_run_revision_run_googleapis_com_container_memory_utilizations_bucket{job="runway-exporter",env="ops",type="ai-gateway"}[30m]
+                    stackdriver_cloud_run_revision_run_googleapis_com_container_memory_utilizations_bucket{job="runway-exporter",env="ops",type=~"ai-gateway|ext-pvs"}[30m]
                   )
                 )
               )

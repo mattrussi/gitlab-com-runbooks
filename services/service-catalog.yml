@@ -313,6 +313,31 @@ services:
       documents:
         readiness_review: https://gitlab.com/gitlab-com/gl-infra/readiness/-/merge_requests/183/diffs
 
+  - name: ext-pvs
+    tier: inf
+    friendly_name: External Pipeline Validation Service
+    label: ExtPVS
+    owner: trust_and_safety
+    technical:
+      project:
+        - https://gitlab.com/gitlab-org/modelops/anti-abuse/pipeline-validation-service
+      documents:
+        design:
+        architecture:
+        readiness_review: https://gitlab.com/gitlab-com/gl-infra/readiness/-/issues/17
+        sre_guide: https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/pipeline-validation-service
+        developer_guide: https://docs.gitlab.com/ee/administration/external_pipeline_validation.html
+        service:
+        security:
+      dependencies:
+      logging:
+        - name: stackdriver
+          permalink: https://cloudlogging.app.goo.gl/2Nwee4eLCHa8Zcp87
+    observability:
+      monitors:
+        grafana_folder: pvs
+        primary_grafana_dashboard: ext-pvs-main/ext-pvs-overview
+
   - name: forum
     tier: sv
     friendly_name: forum.gitlab.com

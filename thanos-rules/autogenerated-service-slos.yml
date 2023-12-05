@@ -599,6 +599,28 @@ groups:
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
+      tier: sv
+      type: ext-pvs
+    expr: "0.999000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      tier: sv
+      type: ext-pvs
+    expr: "0.001000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      component: runway_ingress
+      tier: sv
+      type: ext-pvs
+    expr: "0.999000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      component: runway_ingress
+      tier: sv
+      type: ext-pvs
+    expr: "0.001000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
       tier: lb
       type: frontend
     expr: "0.999000"
