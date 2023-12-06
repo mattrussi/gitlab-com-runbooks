@@ -1,5 +1,7 @@
 # Domain Registration
 
+See the latest policy on domain registration in the [handbook](https://handbook.gitlab.com/handbook/it/guides/domains-dns/).
+
 So you want to register a domain? This is the guide for you!
 
 We register our domains with AWS Route53 and also use them for DNS. If the TLD you wish to use is not available at AWS, please
