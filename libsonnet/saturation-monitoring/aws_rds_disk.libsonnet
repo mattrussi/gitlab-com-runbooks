@@ -28,7 +28,10 @@ local maxAllocatedStorage = rdsConfiguration.maxAllocatedStorage;
       sum(pg_database_size_bytes)
       /
       %(maxAllocatedStorage)d
-    ||| %maxAllocatedStorage,
+    |||,
+    queryFormatConfig: {
+      maxAllocatedStorage: maxAllocatedStorage
+    },
     slos: {
       soft: 0.95,
       hard: 0.99,
