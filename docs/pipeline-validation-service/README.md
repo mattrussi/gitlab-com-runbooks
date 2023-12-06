@@ -130,3 +130,7 @@ To set these options, obtain an admin-level Personal Access Token and run someth
 The token is optional; if provided it is passed to the external service in a header (`X-Gitlab-Token`), the alternative being a query parameter embedded in the URL.  We use the token/header functionality for the GitLab implementation of PVS so that it is unlikely to logged in any normal scenarios.
 
 The values for the URL and Token are saved in 1Password, in the Engineering Vault in an item called `Pipeline Authorization Configuration`
+
+## Runway
+
+External Pipeline Validation Service is in the process of being [migrated to Runway](https://gitlab.com/groups/gitlab-com/gl-infra/platform/runway/-/epics/1). For Runway-specific configuration, refer to [documentation](https://gitlab.com/gitlab-org/modelops/anti-abuse/pipeline-validation-service#deployment-runway).

@@ -15,10 +15,10 @@ metricsCatalog.serviceDefinition(
     trafficCessationAlertConfig=false,
     customToolingLinks=[
       toolingLinks.kibana(
-        title='MLOps',
-        index='mlops',
+        title='PVS',
+        index='pvs',
         includeMatchersForPrometheusSelector=false,
-        matches={ 'json.jsonPayload.project_id': 'gitlab-runway-production' }
+        matches={ 'json.resource.labels.project_id': 'gitlab-runway-production' }
       ),
     ]
   )

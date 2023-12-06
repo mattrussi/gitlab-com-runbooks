@@ -18,6 +18,8 @@
 
 <!-- ## Summary -->
 
+External Pipeline Validation Service is in the process of being [migrated to Runway](https://gitlab.com/groups/gitlab-com/gl-infra/platform/runway/-/epics/1). During migration, refer to [documentation](https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/pipeline-validation-service?ref_type=heads).
+
 <!-- ## Architecture -->
 
 <!-- ## Performance -->
