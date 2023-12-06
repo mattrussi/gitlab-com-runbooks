@@ -26,7 +26,7 @@ metricsCatalog.serviceDefinition({
       ],
     },
   },
-  
+
   serviceLevelIndicators: {
   },
 
