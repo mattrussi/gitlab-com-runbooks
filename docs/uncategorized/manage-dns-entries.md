@@ -35,7 +35,7 @@ If your record is dependent on the output from creating another terraform resour
     - Copy and paste the last record (to re-use the same formatting without making a syntax typo).
     - To ensure validate JSON syntax, add a comma after the `}` for the record that you just copied from. The last record will not have a trailing comma, however all records in the array will have a comma.
     - Update the JSON key (ex. `"old-record.gitlab.com": {` to include the full FQDN of the subdomain (ex. `example.gitlab.com`).
-    - Update the `records` array with the value of the value of this record. 
+    - Update the `records` array with the value of the value of this record.
         - For CNAME records, ensure that you do not include any `https://` or trailing `/` or paths. This is a FQDN (domain name).
     - You do not need to edit the TTL.
 1. Repeat the steps above for each of the records being requested.
