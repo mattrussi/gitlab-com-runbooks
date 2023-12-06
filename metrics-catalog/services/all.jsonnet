@@ -72,5 +72,6 @@
   import 'web-pages.jsonnet',
   import 'web.jsonnet',
   import 'websockets.jsonnet',
+  import 'wiz-sensor.jsonnet',
   import 'woodhouse.jsonnet',
 ]
