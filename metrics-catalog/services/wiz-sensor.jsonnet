@@ -28,7 +28,6 @@ metricsCatalog.serviceDefinition({
   },
   
   serviceLevelIndicators: {
- 
   },
 
   skippedMaturityCriteria: {
