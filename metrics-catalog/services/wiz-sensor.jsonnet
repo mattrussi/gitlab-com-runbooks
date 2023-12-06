@@ -26,6 +26,10 @@ metricsCatalog.serviceDefinition({
       ],
     },
   },
+  
+  serviceLevelIndicators: {
+ 
+  },
 
   skippedMaturityCriteria: {
     'Third Party Scanner Agent': 'Wiz Sensor is an runtime scan agent installed on K8s as daemonsets, it generates findings and send it to portal',
