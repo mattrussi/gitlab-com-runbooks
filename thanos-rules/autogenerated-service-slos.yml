@@ -2593,13 +2593,6 @@ groups:
       tier: sv
       type: sidekiq
     expr: "0.940000"
-  - record: slo:min:events:gitlab_service_apdex:ratio
-    labels:
-      component: sidekiq_queueing
-      shard: urgent-other
-      tier: sv
-      type: sidekiq
-    expr: "0.970000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: sidekiq_queueing
