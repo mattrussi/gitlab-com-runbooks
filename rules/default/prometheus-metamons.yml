@@ -28,7 +28,7 @@ groups:
   - alert: PrometheusNotConnectedToAlertmanagers
     expr: >
       sum without (fqdn,instance,pod) (
-        prometheus_notifications_alertmanagers_discovered
+        prometheus_notifications_alertmanagers_discovered{job!="gitlab-rw-prometheus"}
       ) < 1
     for: 30m
     labels:
