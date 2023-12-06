@@ -94,7 +94,7 @@ local options = validateReferenceArchitectureOptions(import 'gitlab-metrics-opti
     sliComponent: 'component',
   }),
 
-  rdsConfiguration: {maxAllocatedStorage: null},
+  rdsMaxAllocatedStorage: null,
 
   separateGlobalRecordingSelectors: {},
 }

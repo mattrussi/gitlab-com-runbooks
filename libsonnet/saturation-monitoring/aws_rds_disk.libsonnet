@@ -1,12 +1,13 @@
 local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
 local resourceSaturationPoint = (import 'servicemetrics/resource_saturation_point.libsonnet').resourceSaturationPoint;
 local labelTaxonomy = import 'label-taxonomy/label-taxonomy.libsonnet';
-local rdsConfiguration = (import './gitlab-metrics-config.libsonnet').rdsConfiguration;
+local config = import './gitlab-metrics-config.libsonnet';
 
-local maxAllocatedStorage = rdsConfiguration.maxAllocatedStorage;
+// input for this is in GB, we'll convert it to bytes below
+local rdsMaxAllocatedStorage = std.get(config.options, 'rdsMaxAllocatedStorage', null);
 
 {
-    [if std.isNumber(maxAllocatedStorage) then 'aws_rds_disk_space']: resourceSaturationPoint({
+    [if rdsMaxAllocatedStorage != null then 'aws_rds_disk_space']: resourceSaturationPoint({
     title: 'Disk Space Utilization per RDS Instance',
     severity: 's2',
     horizontallyScalable: true,
@@ -27,10 +28,10 @@ local maxAllocatedStorage = rdsConfiguration.maxAllocatedStorage;
     query: |||
       sum(pg_database_size_bytes)
       /
-      %(maxAllocatedStorage)d
+      (%(rdsMaxAllocatedStorage)d * (1024 * 1024 * 1024))
     |||,
     queryFormatConfig: {
-      maxAllocatedStorage: maxAllocatedStorage
+      rdsMaxAllocatedStorage: rdsMaxAllocatedStorage
     },
     slos: {
       soft: 0.95,
