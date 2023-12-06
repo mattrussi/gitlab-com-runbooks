@@ -81,7 +81,7 @@ test.suite({
       send_slo_alerts_to_team_slack_channel: true,
       slack_alerts_channel: 'g_infra_observability_alerts',
       manager: 'lmcandrew',
-      label: 'team::Scalability-Practices',
+      label: 'team::Scalability-Observability',
       url: 'https://about.gitlab.com/handbook/engineering/infrastructure/team/scalability/#scalabilityobservability',
     },
   },
