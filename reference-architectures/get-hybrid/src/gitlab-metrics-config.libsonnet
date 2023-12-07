@@ -22,6 +22,7 @@ local options = validateReferenceArchitectureOptions(import 'gitlab-metrics-opti
   saturationMonitoring:: objects.mergeAll(
     [
       import 'saturation-monitoring/aws_rds_cpu.libsonnet',
+      import 'saturation-monitoring/aws_rds_db.libsonnet',
       import 'saturation-monitoring/aws_rds_disk.libsonnet',
       import 'saturation-monitoring/aws_rds_memory.libsonnet',
       import 'saturation-monitoring/cpu.libsonnet',
@@ -95,6 +96,7 @@ local options = validateReferenceArchitectureOptions(import 'gitlab-metrics-opti
   }),
 
   rdsMaxAllocatedStorage: null,
+  rdsMaxConnections: null,
 
   separateGlobalRecordingSelectors: {},
 }
