@@ -94,6 +94,8 @@ local combinedServiceLevelIndicatorDefinition(
         significantLabels:
           std.set(std.flatMap(function(c) c.significantLabels, componentsInitialised)),
 
+        components: componentsInitialised,
+
         shardLevelMonitoring: false,
       },
   };
