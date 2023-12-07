@@ -17,7 +17,8 @@ local labelTaxonomy = import 'label-taxonomy/label-taxonomy.libsonnet';
     resourceLabels: [],
     linear_prediction_saturation_alert: '6h',  // Alert if this is going to exceed the hard threshold within 6h
 
-    query: 'aws_rds_cpuutilization_maximum',
+    // This value is presented as a percentage.  We divide by 100 such that it is more consistent with our metrics system.
+    query: 'aws_rds_cpuutilization_maximum / 100',
     slos: {
       soft: 0.90,
       hard: 0.95,

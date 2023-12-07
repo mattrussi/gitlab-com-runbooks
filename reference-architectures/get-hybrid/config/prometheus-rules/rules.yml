@@ -3643,7 +3643,7 @@ groups:
       max by(type) (
         clamp_min(
           clamp_max(
-            aws_rds_cpuutilization_maximum
+            aws_rds_cpuutilization_maximum / 100
             ,
             1)
         ,
@@ -4224,7 +4224,7 @@ groups:
         max by(type) (
           clamp_min(
             clamp_max(
-              aws_rds_cpuutilization_maximum
+              aws_rds_cpuutilization_maximum / 100
               ,
               1)
           ,
@@ -4234,7 +4234,7 @@ groups:
         max by(type) (
           clamp_min(
             clamp_max(
-              aws_rds_cpuutilization_maximum
+              aws_rds_cpuutilization_maximum / 100
               ,
               1)
           ,
@@ -4273,7 +4273,7 @@ groups:
         max by(type) (
           clamp_min(
             clamp_max(
-              aws_rds_cpuutilization_maximum
+              aws_rds_cpuutilization_maximum / 100
               ,
               1)
           ,
@@ -4283,7 +4283,7 @@ groups:
         max by(type) (
           clamp_min(
             clamp_max(
-              aws_rds_cpuutilization_maximum
+              aws_rds_cpuutilization_maximum / 100
               ,
               1)
           ,

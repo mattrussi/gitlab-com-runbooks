@@ -42,7 +42,7 @@
       "horizontallyScalable": false,
       "linear_prediction_saturation_alert": "6h",
       "quantileAggregation": "max",
-      "query": "aws_rds_cpuutilization_maximum",
+      "query": "aws_rds_cpuutilization_maximum / 100",
       "queryFormatConfig": {},
       "resourceLabels": [],
       "severity": "s2",
