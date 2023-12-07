@@ -56,7 +56,7 @@ local labelTaxonomy = import 'label-taxonomy/label-taxonomy.libsonnet';
 
     query: |||
       (
-        (sum by (dbinstance_identifier) (aws_rds_swap_usage))
+        (sum by (dbinstance_identifier) (aws_rds_swap_usage_maximum))
         /
         ( 1 * (1024*1024*1024))
       )

@@ -104,7 +104,7 @@
       "horizontallyScalable": false,
       "linear_prediction_saturation_alert": null,
       "quantileAggregation": "max",
-      "query": "(\n  (sum by (dbinstance_identifier) (aws_rds_swap_usage))\n  /\n  ( 1 * (1024*1024*1024))\n)\n",
+      "query": "(\n  (sum by (dbinstance_identifier) (aws_rds_swap_usage_maximum))\n  /\n  ( 1 * (1024*1024*1024))\n)\n",
       "queryFormatConfig": {},
       "resourceLabels": [],
       "severity": "s2",
