@@ -44,6 +44,24 @@
             client_port: {
               type: 'long',
             },
+            content_above_cursor: {
+              type: 'text',
+              fields: {
+                keyword: {
+                  type: 'keyword',
+                  ignore_above: 256,
+                },
+              },
+            },
+            content_below_cursor: {
+              type: 'text',
+              fields: {
+                keyword: {
+                  type: 'keyword',
+                  ignore_above: 256,
+                },
+              },
+            },
             correlation_id: {
               type: 'text',
               fields: {
@@ -89,7 +107,25 @@
                 },
               },
             },
+            model_output: {
+              type: 'text',
+              fields: {
+                keyword: {
+                  type: 'keyword',
+                  ignore_above: 256,
+                },
+              },
+            },
             path: {
+              type: 'text',
+              fields: {
+                keyword: {
+                  type: 'keyword',
+                  ignore_above: 256,
+                },
+              },
+            },
+            prompt: {
               type: 'text',
               fields: {
                 keyword: {
