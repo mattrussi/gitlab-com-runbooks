@@ -70,6 +70,36 @@ OptionParser.new do |opts|
   end
 end.parse!
 
+class KeyTracker
+  attr_reader :keys
+
+  def initialize
+    @mu = Mutex.new
+    @keys = []
+  end
+
+  def track(key)
+    @mu.synchronize do
+      @keys << key
+    end
+  end
+end
+
+class Counter
+  attr_reader :count
+
+  def initialize
+    @mu = Mutex.new
+    @count = 0
+  end
+
+  def add(delta)
+    @mu.synchronize do
+      @count += delta
+    end
+  end
+end
+
 # Ensure the ttl is also migrated for a key
 def migrate_ttl(src, dst, key)
   ttl = src.with { |c| c.ttl(key) }
@@ -227,9 +257,9 @@ def dest_redis
 end
 
 checked = 0
-diffcount = 0
+diffcount = Counter.new
 migrated_count = 0
-unsupported_count = 0
+unsupported_count = Counter.new
 ignored_count = 0
 
 max_allowed_rate = (options[:max_allowed_rate] || 500.0).to_f
@@ -262,7 +292,7 @@ begin
     puts "Scanned #{keys.size} for #{current_cursor}"
 
     start = Time.now
-    keys_to_recheck = []
+    keys_to_recheck = KeyTracker.new
 
     threads = []
     # first pass to compare and migrate keys if not identical
@@ -275,11 +305,11 @@ begin
       threads << Thread.new do
         result = compare_and_migrate(key, src_db, dest_db, options[:migrate])
 
-        unsupported_count += 1 if result.nil?
+        unsupported_count.add(1) if result.nil?
 
         if result
-          diffcount += 1
-          keys_to_recheck << idx
+          diffcount.add(1)
+          keys_to_recheck.track(idx)
         end
       end
     end
@@ -290,7 +320,7 @@ begin
     # instead of immediately checking in the above loop
     if options[:migrate]
       keys.each_with_index do |key, idx|
-        next unless keys_to_recheck.include?(idx)
+        next unless keys_to_recheck.keys.include?(idx)
 
         threads << Thread.new do
           if !compare_and_migrate(key, src_db, dest_db, false)
@@ -323,7 +353,7 @@ rescue StandardError => e
 end
 
 puts "Checked #{checked}"
-puts "#{diffcount} different keys"
-puts "#{unsupported_count} unsupported type keys"
+puts "#{diffcount.count} different keys"
+puts "#{unsupported_count.count} unsupported type keys"
 puts "#{ignored_count} ignored keys"
 puts "Migrated #{migrated_count} keys successfully"
