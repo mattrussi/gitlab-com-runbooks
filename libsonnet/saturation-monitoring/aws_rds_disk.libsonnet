@@ -25,6 +25,7 @@ local rdsMaxAllocatedStorage = std.get(config.options, 'rdsMaxAllocatedStorage',
     linear_prediction_saturation_alert: '6h',  // Alert if this is going to exceed the hard threshold within 6h
 
     // Sum ALL relations stored on the RDS instance
+    // `rdsMaxAllocatedStorage` is specified as GB, convert to bytes to match `pg_database_size_bytes`
     query: |||
       sum(pg_database_size_bytes)
       /

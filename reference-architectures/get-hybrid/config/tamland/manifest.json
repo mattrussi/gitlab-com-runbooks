@@ -53,37 +53,6 @@
       },
       "title": "CPU Utilization per RDS Instance"
     },
-    "aws_rds_freeable_memory": {
-      "alertRunbook": "docs/{{ $labels.type }}/README.md",
-      "alerting": {
-        "enabled": true
-      },
-      "appliesTo": [
-        "rds"
-      ],
-      "capacityPlanning": {
-        "changepoints_count": 25,
-        "forecast_days": 90,
-        "historical_days": 365,
-        "strategy": "quantile95_1h"
-      },
-      "dangerouslyThanosEvaluated": false,
-      "description": "The amount of available random access memory. This metric reports the value of the MemAvailable field of /proc/meminfo.\n\nA high saturation point indicates that Swap may be in use lowering the performance of an RDS instance.\n\nSince we do not know the memory allocation of an RDS instance, we begin alerting when we are below 1GB of freeable memory.\n\nAdditional details here: https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/rds-metrics.html#rds-cw-metrics-instance\n",
-      "grafana_dashboard_uid": "aws_rds_freeable_memory",
-      "horizontallyScalable": false,
-      "linear_prediction_saturation_alert": "6h",
-      "quantileAggregation": "max",
-      "query": "(\n  ( 1 * (1024*1024*1024))\n  /\n  (sum by (dbinstance_identifier) (aws_rds_freeable_memory_maximum))\n)\n",
-      "queryFormatConfig": {},
-      "resourceLabels": [],
-      "severity": "s4",
-      "slos": {
-        "alertTriggerDuration": "30m",
-        "hard": 0.99,
-        "soft": 0.95
-      },
-      "title": "Freeable Memory for an RDS instance"
-    },
     "aws_rds_swap_usage": {
       "alertRunbook": "docs/{{ $labels.type }}/README.md",
       "alerting": {
@@ -99,7 +68,7 @@
         "strategy": "quantile95_1h"
       },
       "dangerouslyThanosEvaluated": false,
-      "description": "The amount of used swap.\n\nA high saturation point indicates that Swap may be in use lowering the performance of an RDS instance.\n\nSince we do not know the memory allocation of an RDS instance, we begin alerting when we are using 1GB of swap.\nSwap is usually used a little even when an instance isn't under pressure, therefore we do not alert when we are using\na value greater than 0.  Otherwise we'd always be alerting.\n\nAdditional details here: https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/rds-metrics.html#rds-cw-metrics-instance\n",
+      "description": "The amount of used swap.\n\nA high saturation point indicates that Swap may be in use lowering the performance of an RDS instance.\n\nSwap is usually used a little even when an instance isn't under pressure, therefore we do not alert when we are using\na value greater than 0.  To avoid always alerting, we alert when we start using near 1GB of swap.\n\nAdditional details here: https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/rds-metrics.html#rds-cw-metrics-instance\n",
       "grafana_dashboard_uid": "aws_rds_swap_usage",
       "horizontallyScalable": false,
       "linear_prediction_saturation_alert": null,
@@ -715,10 +684,6 @@
           "name": "aws_rds_cpu_utilization",
           "url": ""
         },
-        "aws_rds_freeable_memory": {
-          "name": "aws_rds_freeable_memory",
-          "url": ""
-        },
         "aws_rds_swap_usage": {
           "name": "aws_rds_swap_usage",
           "url": ""
@@ -803,10 +768,6 @@
       "resourceDashboard": {
         "aws_rds_cpu_utilization": {
           "name": "aws_rds_cpu_utilization",
-          "url": ""
-        },
-        "aws_rds_freeable_memory": {
-          "name": "aws_rds_freeable_memory",
           "url": ""
         },
         "aws_rds_swap_usage": {
@@ -895,10 +856,6 @@
           "name": "aws_rds_cpu_utilization",
           "url": ""
         },
-        "aws_rds_freeable_memory": {
-          "name": "aws_rds_freeable_memory",
-          "url": ""
-        },
         "aws_rds_swap_usage": {
           "name": "aws_rds_swap_usage",
           "url": ""
@@ -983,10 +940,6 @@
       "resourceDashboard": {
         "aws_rds_cpu_utilization": {
           "name": "aws_rds_cpu_utilization",
-          "url": ""
-        },
-        "aws_rds_freeable_memory": {
-          "name": "aws_rds_freeable_memory",
           "url": ""
         },
         "aws_rds_swap_usage": {
@@ -1075,10 +1028,6 @@
           "name": "aws_rds_cpu_utilization",
           "url": ""
         },
-        "aws_rds_freeable_memory": {
-          "name": "aws_rds_freeable_memory",
-          "url": ""
-        },
         "aws_rds_swap_usage": {
           "name": "aws_rds_swap_usage",
           "url": ""
@@ -1163,10 +1112,6 @@
       "resourceDashboard": {
         "aws_rds_cpu_utilization": {
           "name": "aws_rds_cpu_utilization",
-          "url": ""
-        },
-        "aws_rds_freeable_memory": {
-          "name": "aws_rds_freeable_memory",
           "url": ""
         },
         "aws_rds_swap_usage": {
@@ -1255,10 +1200,6 @@
           "name": "aws_rds_cpu_utilization",
           "url": ""
         },
-        "aws_rds_freeable_memory": {
-          "name": "aws_rds_freeable_memory",
-          "url": ""
-        },
         "aws_rds_swap_usage": {
           "name": "aws_rds_swap_usage",
           "url": ""
@@ -1343,10 +1284,6 @@
       "resourceDashboard": {
         "aws_rds_cpu_utilization": {
           "name": "aws_rds_cpu_utilization",
-          "url": ""
-        },
-        "aws_rds_freeable_memory": {
-          "name": "aws_rds_freeable_memory",
           "url": ""
         },
         "aws_rds_swap_usage": {
@@ -1435,10 +1372,6 @@
           "name": "aws_rds_cpu_utilization",
           "url": ""
         },
-        "aws_rds_freeable_memory": {
-          "name": "aws_rds_freeable_memory",
-          "url": ""
-        },
         "aws_rds_swap_usage": {
           "name": "aws_rds_swap_usage",
           "url": ""
@@ -1523,10 +1456,6 @@
       "resourceDashboard": {
         "aws_rds_cpu_utilization": {
           "name": "aws_rds_cpu_utilization",
-          "url": ""
-        },
-        "aws_rds_freeable_memory": {
-          "name": "aws_rds_freeable_memory",
           "url": ""
         },
         "aws_rds_swap_usage": {

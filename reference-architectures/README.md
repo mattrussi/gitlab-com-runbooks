@@ -94,3 +94,4 @@ The following configuration options are available in `gitlab-metrics-options.lib
 | `saturationMonitoring`        | Array    | empty       | Import any customized saturation monitoring. For examples see [`reference-architectures/get-hybrid/src/services/`](reference-architectures/get-hybrid/src/services/)  |
 | `rdsMaxStorageAllocation`     | int      | null   | Configure the size of the maximum allocated storage for a given RDS instance.  Specified in unit GB. |
 | `rdsMaxConnections`           | int      | null   | Configure the count of the maximum allowed connections for a given RDS instance.  Specified as count. |
+| `rdsInstanceRAM`              | int      | null   | Configure the size of the RAM for a given RDS instance.  Specified in unit GB. |
