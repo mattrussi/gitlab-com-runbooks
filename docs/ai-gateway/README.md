@@ -32,23 +32,40 @@ For a higher level view of how the AI Gateway fits into our AI Architecture, see
 
 ## Deployment
 
-The AI Gateway is deployed through Runway. For more details, see [the Runway runbook](../runway/README.md).
+AI Gateway is deployed through Runway:
 
-<!-- ## Performance -->
+* [Runway Deployment](https://gitlab.com/gitlab-com/gl-infra/platform/runway/deployments/ai-gateway)
+* [Runway Service](https://console.cloud.google.com/run/detail/us-east1/ai-gateway/metrics?project=gitlab-runway-production)
+
+For more details, refer to [Runway runbook](../runway/README.md).
+
+## Environments
+
+* [Production](https://gitlab.com/gitlab-com/gl-infra/platform/runway/deployments/ai-gateway/-/environments/15709878)
+* [Staging](https://gitlab.com/gitlab-com/gl-infra/platform/runway/deployments/ai-gateway/-/environments/15709877)
+
+## Performance
+
+AI Gateway includes the following SLIs/SLOs:
+
+* [Apdex](https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway3a-overview?orgId=1&viewPanel=380731558)
+* [Error Rate](https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway3a-overview?orgId=1&viewPanel=144302059)
+
+Service degradation could be result of the following saturation resources:
+
+* [Memory Utilization](https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway3a-overview?orgId=1&from=now-1h&to=now&viewPanel=377718254)
+* [CPU Utilization](https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway3a-overview?orgId=1&from=now-1h&to=now&viewPanel=1050857443)
+* [Instance Utilization](https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway3a-overview?orgId=1&from=now-1h&to=now&viewPanel=1738137433)
+* [Concurency Utilization](https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway3a-overview?orgId=1&from=now-1h&to=now&viewPanel=4285373877)
+* [Vertex AI API Quota Limit](https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway3a-overview?orgId=1&from=now-1h&to=now&viewPanel=1515902021)
 
 ## Scalability
 
-### Horizontal
+AI Gateway will autoscale with traffic. To manually scale, update [`runway.yml`](https://gitlab.com/gitlab-org/modelops/applied-ml/code-suggestions/ai-assist/-/blob/main/.runway/runway.yml?ref_type=heads) based on [documentation](../runway/README.md#scalability).
 
-The AI Gateway service is [automatically scaled](https://cloud.google.com/run/docs/container-contract#service-lifecycle) up to handle all incoming requests and scaled down when not receiving any traffic. To avoid cold-start latency, a minimum of 3 instances are running in production.
+### Capacity Planning
 
-If necessary, minimum and maximum instance count can be [configured](https://gitlab.com/gitlab-com/gl-infra/platform/runway/runwayctl/-/merge_requests/84) by platform engineers.
-
-### Vertical
-
-The AI Gateway service resources can be configured for [CPU](https://cloud.google.com/run/docs/configuring/services/cpu) and [memory](https://cloud.google.com/run/docs/configuring/services/memory-limits).
-
-If necessary, resources can be [configured](https://gitlab.com/gitlab-org/modelops/applied-ml/code-suggestions/ai-assist/-/merge_requests/363) by service owners.
+AI Gateway uses [capacity planning](https://about.gitlab.com/handbook/engineering/infrastructure/capacity-planning/) provided by Runway for long-term forecasting of saturation resources. To view forecasts, refer to [Tamland page](https://gitlab-com.gitlab.io/gl-infra/tamland/runway.html#ai-gateway-service-runway_container_memory_utilization-resource-saturation).
 
 ### GCP quotas usage
 
@@ -74,6 +91,26 @@ To request a quota alteration:
 
 <!-- ## Security/Compliance -->
 
-<!-- ## Monitoring/Alerting -->
+## Monitoring/Alerting
 
-<!-- ## Links to further Documentation -->
+AI Gateway uses both [custom metrics](../../metrics-catalog/services/ai-gateway.jsonnet) scrapped from application and default metrics provided by [Runway](../runway/README.md#monitoringalerting). Right now, alerts are routed to `#g_mlops-alerts` in Slack. To route to different channel, refer to [documentation](../uncategorized/alert-routing.md).
+
+* [AI Gateway Service Overview Dashboard](https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway3a-overview?orgId=1)
+* [AI Gateway Logs](https://log.gprd.gitlab.net/app/r/s/mkS0F)
+* [AI Gateway Alerts](https://gitlab.enterprise.slack.com/archives/C0586SBDZU2)
+* [AI Gateway Logs Overview Dashboard](https://log.gprd.gitlab.net/app/dashboards#/view/6c947f80-7c07-11ed-9f43-e3784d7fe3ca?_g=h@2294574)
+* [AI Gateway Logs Errors Dashboard](https://log.gprd.gitlab.net/app/dashboards#/view/031cd3a0-61c0-11ee-ac5b-8f88ebd04638?_g=h@2294574)
+* [Runway Service Metrics](https://dashboards.gitlab.net/d/runway-service/runway3a-runway-service-metrics?orgId=1&var-environment=gprd&var-service=ai-gateway)
+* [Runway Service Logs](https://cloudlogging.app.goo.gl/SXc6rpSwfkH4rCD9A)
+
+## Troubleshooting
+
+### How do I rotate `ANTHROPIC_API_KEY`?
+
+AI Gateway uses secrets management for Anthropic API key. To rotate a secret, refer to [documentation](https://gitlab.com/gitlab-com/gl-infra/platform/runway/docs/-/blob/master/secrets-management.md?ref_type=heads#rotating-a-secret).
+
+For troubleshooting deployment pipelines, refer to [Runway runbook](../runway/README.md#troubleshooting).
+
+## Links to further Documentation
+
+* [AI Gateway Blueprint](https://docs.gitlab.com/ee/architecture/blueprints/ai_gateway/)
