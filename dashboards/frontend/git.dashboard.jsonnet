@@ -1,9 +1,7 @@
 local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
-local text = grafana.text;
-local template = grafana.template;
 local basic = import 'grafana/basic.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
-local platformLinks = import 'gitlab-dashboards//platform_links.libsonnet';
+local platformLinks = import 'gitlab-dashboards/platform_links.libsonnet';
 
 local httpsIngressTrafficFrontend = 'haproxy_frontend_bytes_in_total{frontend="https",env=~"${environment}"}';
 local httpsEgressTrafficFrontend = 'haproxy_frontend_bytes_out_total{frontend="https",env=~"${environment}"}';
@@ -16,15 +14,9 @@ local rate = function(metric)
   'rate(%s[$__rate_interval])' % metric;
 
 local dashboardRow = function(title, startRow, panels)
-  layout.rowGrid(
-    title,
-    panels,
-    startRow=startRow,
-    rowHeight=6,
-    collapse=false,
-  );
+  layout.rowGrid(title, panels, startRow=startRow, rowHeight=6, collapse=false);
 
-local environmentTemplate = template.new(
+local environmentTemplate = grafana.template.new(
   'environment',
   '$PROMETHEUS_DS',
   query=|||
@@ -190,76 +182,67 @@ local httpsGitCiGatewayInHttpsGitEgressTrafficGraph =
     rate(httpsGitEgressTrafficBackend),
   );
 
-basic.dashboard(
-  'ci-gateway Git utilisation based on HaProxy',
-  tags=[
-    'managed',
-    'type:frontend',
-  ],
+basic.dashboard('Git Utilization',
+  tags=['managed', 'type:frontend'],
   time_from='now-24h/m',
   time_to='now/m',
   graphTooltip='shared_crosshair',
-  includeStandardEnvironmentAnnotations=false,
   includeEnvironmentTemplate=false,
+  includeStandardEnvironmentAnnotations=false,
 )
-.addTemplate(environmentTemplate)
-.addPanels(
-  dashboardRow(
-    'HTTPs Git traffic as a percentage of main HTTPs frontend traffic',
-    10,
-    [
-      httpsGitInHttpsTrafficGraph,
-      httpsGitInHttpsIngressTrafficGraph,
-      httpsGitInHttpsEgressTrafficGraph,
-    ],
+  .addTemplate(environmentTemplate)
+  .addPanels(
+    dashboardRow(
+      'HTTPs Git Traffic as a Percentage of Main HTTPS Frontend Traffic',
+      10,
+      [
+        httpsGitInHttpsTrafficGraph,
+        httpsGitInHttpsIngressTrafficGraph,
+        httpsGitInHttpsEgressTrafficGraph,
+      ],
+    )
   )
-)
-.addPanels(
-  dashboardRow(
-    'HTTPs CI Gateway traffic as a percentage of all Git HTTPs backend traffic',
-    20,
-    [
-      httpsGitCiGatewayInHttpsGitTrafficGraph,
-      httpsGitCiGatewayInHttpsGitIngressTrafficGraph,
-      httpsGitCiGatewayInHttpsGitEgressTrafficGraph,
-    ],
+  .addPanels(
+    dashboardRow(
+      'HTTPS CI Gateway Traffic as a Percentage of All Git HTTPS Backend Traffic',
+      20,
+      [
+        httpsGitCiGatewayInHttpsGitTrafficGraph,
+        httpsGitCiGatewayInHttpsGitIngressTrafficGraph,
+        httpsGitCiGatewayInHttpsGitEgressTrafficGraph,
+      ],
+    )
   )
-)
-.addPanels(
-  dashboardRow(
-    'HTTPs traffic - based on the main HTTPs HaProxy frontend',
-    30,
-    [
-      httpsTrafficGraph,
-      httpsIngressTrafficGraph,
-      httpsEgressTrafficGraph,
-    ],
+  .addPanels(
+    dashboardRow(
+      'HTTPS Traffic - Based on the Main HTTPS HAProxy Frontend',
+      30,
+      [
+        httpsTrafficGraph,
+        httpsIngressTrafficGraph,
+        httpsEgressTrafficGraph,
+      ],
+    )
   )
-)
-.addPanels(
-  dashboardRow(
-    'HTTPs Git traffic - based on the HaProxy backend',
-    40,
-    [
-      httpsGitTrafficGraph,
-      httpsGitIngressTrafficGraph,
-      httpsGitEgressTrafficGraph,
-    ],
+  .addPanels(
+    dashboardRow(
+      'HTTPS Git Traffic - Based on the HAProxy Backend',
+      40,
+      [
+        httpsGitTrafficGraph,
+        httpsGitIngressTrafficGraph,
+        httpsGitEgressTrafficGraph,
+      ],
+    )
   )
-)
-.addPanels(
-  dashboardRow(
-    'HTTPs CI Gateway traffic - based on the dedicated HaProxy frontend',
-    50,
-    [
-      httpsGitCiGatewayTrafficGraph,
-      httpsGitCiGatewayIngressTrafficGraph,
-      httpsGitCiGatewayEgressTrafficGraph,
-    ],
+  .addPanels(
+    dashboardRow(
+      'HTTPS CI Gateway Traffic - Based on the Dedicated HAProxy Frontend',
+      50,
+      [
+        httpsGitCiGatewayTrafficGraph,
+        httpsGitCiGatewayIngressTrafficGraph,
+        httpsGitCiGatewayEgressTrafficGraph,
+      ],
+    )
   )
-)
-.trailer() + {
-  links+: [
-    platformLinks.dynamicLinks('frontend Detail', 'type:frontend'),
-  ],
-}
