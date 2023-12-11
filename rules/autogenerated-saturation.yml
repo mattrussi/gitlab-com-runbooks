@@ -1568,11 +1568,11 @@ groups:
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:
       component: gitaly_active_node_available_space
-    expr: "0.85"
+    expr: "0.95"
   - record: slo:max:hard:gitlab_component_saturation:ratio
     labels:
       component: gitaly_active_node_available_space
-    expr: "0.9"
+    expr: "0.965"
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:
       component: gitaly_total_disk_space
@@ -3854,7 +3854,7 @@ groups:
 
         Active nodes are Gitaly nodes that are currently receiving new repositories
 
-        We allow new Gitaly nodes to receive traffic until their disk is about 80% full. After which we mark the weight of the node as 0 in the [Gitaly shard weights assigner](https://gitlab.com/gitlab-com/gl-infra/gitaly-shard-weights-assigner/-/blob/master/assigner.rb#L9).
+        We allow new Gitaly nodes to receive traffic until their disk is about 75% full. After which we mark the weight of the node as 0 in the [Gitaly shard weights assigner](https://gitlab.com/gitlab-com/gl-infra/gitaly-shard-weights-assigner/-/blob/master/assigner.rb#L9).
 
         To make sure we always have enough shards receiving new repositories, we want to have at least 8% of the total storage to be available for new projects. When this resource gets saturated, we could be creating to many projects on a limited set of nodes, which could cause these nodes to be busier than usual. To add new nodes start a new change issue with `/change declare` in Slack, and select the `change_gitaly_storage_creation.md` template.
       grafana_dashboard_id: alerts-sat_gitaly_active_available_space

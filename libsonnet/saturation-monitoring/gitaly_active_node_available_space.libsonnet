@@ -14,7 +14,7 @@ local selectors = import 'promql/selectors.libsonnet';
 
       Active nodes are Gitaly nodes that are currently receiving new repositories
 
-      We allow new Gitaly nodes to receive traffic until their disk is about 80%
+      We allow new Gitaly nodes to receive traffic until their disk is about 75%
       full. After which we mark the weight of the node as 0 in the
       [Gitaly shard weights assigner](https://gitlab.com/gitlab-com/gl-infra/gitaly-shard-weights-assigner/-/blob/master/assigner.rb#L9).
 
@@ -51,8 +51,8 @@ local selectors = import 'promql/selectors.libsonnet';
       }),
     },
     slos: {
-      soft: 0.85,
-      hard: 0.90,
+      soft: 0.95,
+      hard: 0.965,
     },
   }),
 }
