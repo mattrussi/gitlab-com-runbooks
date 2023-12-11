@@ -37,7 +37,7 @@ function install_jq() {
 
 function pod_ip_addr_for_pod_id() {
   local POD_ID=$1
-  crictl inspectp "$POD_ID" 2>/dev/null | toolbox jq -r '.info.cniResult.Interfaces.eth0.IPConfigs[].IP' 2>/dev/null
+  crictl inspectp "$POD_ID" 2>/dev/null | toolbox --pipe jq -r '.info.cniResult.Interfaces.eth0.IPConfigs[].IP' 2>/dev/null
 }
 
 main "$@"
