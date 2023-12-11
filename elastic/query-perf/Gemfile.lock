@@ -2,11 +2,10 @@ GEM
   remote: https://rubygems.org/
   specs:
     HDRHistogram (0.1.11)
-    addressable (2.8.4)
+    addressable (2.8.6)
       public_suffix (>= 2.0.2, < 6.0)
-    domain_name (0.5.20190701)
-      unf (>= 0.0.5, < 1.0.0)
-    ffi (1.15.5)
+    domain_name (0.6.20231109)
+    ffi (1.16.3)
     ffi-compiler (1.0.1)
       ffi (>= 1.0.0)
       rake
@@ -21,11 +20,8 @@ GEM
     llhttp-ffi (0.4.0)
       ffi-compiler (~> 1.0)
       rake (~> 13.0)
-    public_suffix (5.0.1)
-    rake (13.0.6)
-    unf (0.1.4)
-      unf_ext
-    unf_ext (0.0.8.2)
+    public_suffix (5.0.4)
+    rake (13.1.0)
 
 PLATFORMS
   ruby
