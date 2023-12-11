@@ -43,13 +43,13 @@ function find_default_net_iface_for_host() {
 
 function find_net_iface_for_pod_id() {
   assert_is_pod_id "${POD_ID}"
-  NET_IFACE=$(crictl inspectp "${POD_ID}" | toolbox jq -r '.info.cniResult.Interfaces | with_entries(select(.value.IPConfigs | not)) | keys[0]' 2>/dev/null)
+  NET_IFACE=$(crictl inspectp "${POD_ID}" | toolbox --pipe jq -r '.info.cniResult.Interfaces | with_entries(select(.value.IPConfigs | not)) | keys[0]' 2>/dev/null)
   [[ -n ${NET_IFACE} ]] || die "Could not identify virtual network interface for pod."
 }
 
 function find_netns_for_pod_id() {
   assert_is_pod_id "${POD_ID}"
-  NET_NS_PATH=$(crictl inspectp "${POD_ID}" | toolbox jq -r '.info.runtimeSpec.linux.namespaces[] | select(.type == "network") | .path' 2>/dev/null)
+  NET_NS_PATH=$(crictl inspectp "${POD_ID}" | toolbox --pipe jq -r '.info.runtimeSpec.linux.namespaces[] | select(.type == "network") | .path' 2>/dev/null)
   [[ -n ${NET_NS_PATH} ]] || die "Could not identify network namespace for pod."
 }
 
