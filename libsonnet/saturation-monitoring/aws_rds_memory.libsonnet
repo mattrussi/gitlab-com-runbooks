@@ -23,7 +23,9 @@ local rdsInstanceRAM = std.get(config.options, 'rdsInstanceRAM', null);
     linear_prediction_saturation_alert: '6h',  // Alert if this is going to exceed the hard threshold within 6h
 
     query: |||
-      sum by (dbinstance_identifier) (aws_rds_freeable_memory_maximum)
+      1- (sum by (dbinstance_identifier) (aws_rds_freeable_memory_maximum)
+      /
+      (%(rdsInstanceRAM)d * 1024 * 1024 * 1024))
       /
       (%(rdsInstanceRAM)d * 1024 * 1024 * 1024)
     |||,
