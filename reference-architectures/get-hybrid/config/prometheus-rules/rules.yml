@@ -3656,23 +3656,6 @@ groups:
       max by(type) (
         clamp_min(
           clamp_max(
-            (
-              (sum by (dbinstance_identifier) (aws_rds_swap_usage_maximum))
-              /
-              ( 1 * (1024*1024*1024))
-            )
-            ,
-            1)
-        ,
-        0)
-      )
-    labels:
-      component: aws_rds_swap_usage
-    record: gitlab_component_saturation:ratio
-  - expr: |
-      max by(type) (
-        clamp_min(
-          clamp_max(
             1 - avg by (type) (
               rate(node_cpu_seconds_total{mode="idle", type=~"gitaly|consul|praefect"}[5m])
             )
@@ -3903,14 +3886,6 @@ groups:
     labels:
       component: aws_rds_cpu_utilization
     record: slo:max:hard:gitlab_component_saturation:ratio
-  - expr: "0.05"
-    labels:
-      component: aws_rds_swap_usage
-    record: slo:max:soft:gitlab_component_saturation:ratio
-  - expr: "0.1"
-    labels:
-      component: aws_rds_swap_usage
-    record: slo:max:hard:gitlab_component_saturation:ratio
   - expr: "0.8"
     labels:
       component: cpu
@@ -4030,14 +4005,6 @@ groups:
     labels:
       capacity_planning_strategy: quantile95_1h
       component: aws_rds_cpu_utilization
-      horiz_scaling: "no"
-      quantile: max
-      severity: s2
-    record: gitlab_component_saturation_info
-  - expr: "1"
-    labels:
-      capacity_planning_strategy: quantile95_1h
-      component: aws_rds_swap_usage
       horiz_scaling: "no"
       quantile: max
       severity: s2
@@ -4267,67 +4234,6 @@ groups:
     labels:
       alert_type: cause
       linear_prediction_saturation_alert: 6h
-      pager: pagerduty
-      rules_domain: general
-      severity: s2
-  - alert: component_saturation_slo_out_of_bounds
-    annotations:
-      description: |+
-        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
-
-        Details of the Swap usage for an RDS instance resource:
-
-        The amount of used swap.
-
-        A high saturation point indicates that Swap may be in use lowering the performance of an RDS instance.
-
-        Swap is usually used a little even when an instance isn't under pressure, therefore we do not alert when we are using a value greater than 0.  To avoid always alerting, we alert when we start using near 1GB of swap.
-
-        Additional details here: https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/rds-metrics.html#rds-cw-metrics-instance
-
-      grafana_dashboard_id: alerts-aws_rds_swap_usage
-      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-aws_rds_swap_usage?from=now-6h/m&to=now-1m/m&var-type={{
-        $labels.type }}
-      grafana_min_zoom_hours: "6"
-      grafana_panel_id: "434393155"
-      grafana_variables: type
-      promql_query: |
-        max by(type) (
-          clamp_min(
-            clamp_max(
-              (
-                (sum by (dbinstance_identifier) (aws_rds_swap_usage_maximum))
-                /
-                ( 1 * (1024*1024*1024))
-              )
-              ,
-              1)
-          ,
-          0)
-        )
-      promql_template_1: |
-        max by(type) (
-          clamp_min(
-            clamp_max(
-              (
-                (sum by (dbinstance_identifier) (aws_rds_swap_usage_maximum))
-                /
-                ( 1 * (1024*1024*1024))
-              )
-              ,
-              1)
-          ,
-          0)
-        )
-      runbook: docs/{{ $labels.type }}/README.md
-      title: The Swap usage for an RDS instance resource of the {{ $labels.type }}
-        service has a saturation exceeding SLO and is close to its capacity limit.
-    expr: |
-      gitlab_component_saturation:ratio{component="aws_rds_swap_usage"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="aws_rds_swap_usage"}
-    for: 15m
-    labels:
-      alert_type: cause
       pager: pagerduty
       rules_domain: general
       severity: s2

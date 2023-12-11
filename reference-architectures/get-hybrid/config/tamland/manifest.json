@@ -53,37 +53,6 @@
       },
       "title": "CPU Utilization per RDS Instance"
     },
-    "aws_rds_swap_usage": {
-      "alertRunbook": "docs/{{ $labels.type }}/README.md",
-      "alerting": {
-        "enabled": true
-      },
-      "appliesTo": [
-        "rds"
-      ],
-      "capacityPlanning": {
-        "changepoints_count": 25,
-        "forecast_days": 90,
-        "historical_days": 365,
-        "strategy": "quantile95_1h"
-      },
-      "dangerouslyThanosEvaluated": false,
-      "description": "The amount of used swap.\n\nA high saturation point indicates that Swap may be in use lowering the performance of an RDS instance.\n\nSwap is usually used a little even when an instance isn't under pressure, therefore we do not alert when we are using\na value greater than 0.  To avoid always alerting, we alert when we start using near 1GB of swap.\n\nAdditional details here: https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/rds-metrics.html#rds-cw-metrics-instance\n",
-      "grafana_dashboard_uid": "aws_rds_swap_usage",
-      "horizontallyScalable": false,
-      "linear_prediction_saturation_alert": null,
-      "quantileAggregation": "max",
-      "query": "(\n  (sum by (dbinstance_identifier) (aws_rds_swap_usage_maximum))\n  /\n  ( 1 * (1024*1024*1024))\n)\n",
-      "queryFormatConfig": {},
-      "resourceLabels": [],
-      "severity": "s2",
-      "slos": {
-        "alertTriggerDuration": "15m",
-        "hard": 0.1,
-        "soft": 0.05
-      },
-      "title": "Swap usage for an RDS instance"
-    },
     "cpu": {
       "alertRunbook": "docs/{{ $labels.type }}/README.md",
       "alerting": {
@@ -684,10 +653,6 @@
           "name": "aws_rds_cpu_utilization",
           "url": ""
         },
-        "aws_rds_swap_usage": {
-          "name": "aws_rds_swap_usage",
-          "url": ""
-        },
         "cpu": {
           "name": "cpu",
           "url": ""
@@ -768,10 +733,6 @@
       "resourceDashboard": {
         "aws_rds_cpu_utilization": {
           "name": "aws_rds_cpu_utilization",
-          "url": ""
-        },
-        "aws_rds_swap_usage": {
-          "name": "aws_rds_swap_usage",
           "url": ""
         },
         "cpu": {
@@ -856,10 +817,6 @@
           "name": "aws_rds_cpu_utilization",
           "url": ""
         },
-        "aws_rds_swap_usage": {
-          "name": "aws_rds_swap_usage",
-          "url": ""
-        },
         "cpu": {
           "name": "cpu",
           "url": ""
@@ -940,10 +897,6 @@
       "resourceDashboard": {
         "aws_rds_cpu_utilization": {
           "name": "aws_rds_cpu_utilization",
-          "url": ""
-        },
-        "aws_rds_swap_usage": {
-          "name": "aws_rds_swap_usage",
           "url": ""
         },
         "cpu": {
@@ -1028,10 +981,6 @@
           "name": "aws_rds_cpu_utilization",
           "url": ""
         },
-        "aws_rds_swap_usage": {
-          "name": "aws_rds_swap_usage",
-          "url": ""
-        },
         "cpu": {
           "name": "cpu",
           "url": ""
@@ -1112,10 +1061,6 @@
       "resourceDashboard": {
         "aws_rds_cpu_utilization": {
           "name": "aws_rds_cpu_utilization",
-          "url": ""
-        },
-        "aws_rds_swap_usage": {
-          "name": "aws_rds_swap_usage",
           "url": ""
         },
         "cpu": {
@@ -1200,10 +1145,6 @@
           "name": "aws_rds_cpu_utilization",
           "url": ""
         },
-        "aws_rds_swap_usage": {
-          "name": "aws_rds_swap_usage",
-          "url": ""
-        },
         "cpu": {
           "name": "cpu",
           "url": ""
@@ -1284,10 +1225,6 @@
       "resourceDashboard": {
         "aws_rds_cpu_utilization": {
           "name": "aws_rds_cpu_utilization",
-          "url": ""
-        },
-        "aws_rds_swap_usage": {
-          "name": "aws_rds_swap_usage",
           "url": ""
         },
         "cpu": {
@@ -1372,10 +1309,6 @@
           "name": "aws_rds_cpu_utilization",
           "url": ""
         },
-        "aws_rds_swap_usage": {
-          "name": "aws_rds_swap_usage",
-          "url": ""
-        },
         "cpu": {
           "name": "cpu",
           "url": ""
@@ -1456,10 +1389,6 @@
       "resourceDashboard": {
         "aws_rds_cpu_utilization": {
           "name": "aws_rds_cpu_utilization",
-          "url": ""
-        },
-        "aws_rds_swap_usage": {
-          "name": "aws_rds_swap_usage",
           "url": ""
         },
         "cpu": {

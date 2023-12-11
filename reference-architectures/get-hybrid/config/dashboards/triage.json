@@ -6544,10 +6544,6 @@
         {
           "title": "rds Service | aws_rds_cpu_utilization resource Dashboard",
           "url": "https://dashboards.gitlab.net/d/alerts-aws_rds_cpu_utilization/?var-environment=gprd\u0026var-type=rds\u0026var-stage=main\u0026var-component=aws_rds_cpu_utilization"
-        },
-        {
-          "title": "rds Service | aws_rds_swap_usage resource Dashboard",
-          "url": "https://dashboards.gitlab.net/d/alerts-aws_rds_swap_usage/?var-environment=gprd\u0026var-type=rds\u0026var-stage=main\u0026var-component=aws_rds_swap_usage"
         }
       ],
       "nullPointMode": "null",

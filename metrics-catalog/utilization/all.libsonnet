@@ -3,6 +3,7 @@
 // saturation monitoring, utilization metrics to not have a defined maximum
 // value which they cannot exceed.
 [
+  import 'aws_rds_memory.libsonnet',
   import 'cloudflare_data_transfer.libsonnet',
   import 'kube_node_requests.libsonnet',
   import 'pg_table_size.libsonnet',
