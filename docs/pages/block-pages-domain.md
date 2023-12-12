@@ -4,7 +4,7 @@ If the pages service is saturated you can view which
 [pages domain is getting the most traffic](https://log.gprd.gitlab.net/app/dashboards#/view/8a1a3c40-7bf2-11ec-a649-b7cbb8e4f62e)
 and place a block for that domain through HAproxy.
 
-### See what domains are currently blocked
+## See what domains are currently blocked
 
 - Add the domain as a new line in
 [deny-403-pages-domains.lst](https://gitlab.com/gitlab-com/security-tools/front-end-security/-/blob/master/deny-403-pages-domains.lst).

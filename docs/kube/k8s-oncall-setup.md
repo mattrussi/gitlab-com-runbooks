@@ -51,7 +51,7 @@ through a proxy.
 1. In a new window run `kubectl get nodes`: This will list all the nodes
    available in cluster.
 
-### GUI consoles and metrics
+## GUI consoles and metrics
 
 When troubleshooting issues, it can often be helpful to have a graphical
 overview of resources within the cluster, and basic metric data.  For more

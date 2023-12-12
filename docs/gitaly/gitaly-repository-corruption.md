@@ -104,7 +104,7 @@ Alternatively, if you saw dangling commits during `git fsck` it is very likely, 
 **Regardless which approach you take** you might end up with multiple root commits (if there was an orphaned branch created for example). In those cases, you can use `git log <hash>` to see if there are any indicators for the commit belonging to another ref, that was not destroyed.
 Once you restored the primary branch with the root commit, things will start working again, but you **must** to make an effort to find the latest commit for that branch, once context is available.
 
-###### Approach 1
+##### Approach 1
 
 Git's fsck can probably find the root for us.
 
@@ -117,7 +117,7 @@ root 17f4d6097a063c78f16e6a31e41e0e7ba753228e
 [...]
 ```
 
-###### Approach 2
+##### Approach 2
 
 If this fails, there is a good chance we can still reach all commits, so we can probably use `git cat-file` to find it.
 
@@ -125,7 +125,7 @@ If this fails, there is a good chance we can still reach all commits, so we can 
 git cat-file --batch-all-objects --batch-check | awk '$2~/commit/ {print $1}' | xargs -rn1 git rev-list --max-parents=0 | sort -Vu
 ```
 
-###### Approach 3
+##### Approach 3
 
 If this fails, we need to bypass git.
 To do this, we need to first unpack any `.pack` files. No data is being lost, we just unpack it, so we can work around git.
@@ -172,7 +172,7 @@ Once those are identified:
 - grab a copy of the contents of their `objects` directory. (*hint* on the earlier snapshot you can also see a vaild ref for the primary branch, if required)
 - merge the contents of both `objects` directories into the `objects` directory you want to restore. Do **not** overwrite files. If they are there, they are probably fine.
 
-###### What did we just do?
+### What did we just do?
 
 We supplied git with any object it had before. While this is inefficient, as the `.pack` files in the more recent repo have most of the objects packed into them, this also provides a fallback for git to retrieve the objects, that were previously lost.
 This is fine, as a garbage collection run later on will just clean up anything that it does not need anymore.

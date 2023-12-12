@@ -267,7 +267,7 @@ An initial security review was done at <https://gitlab.com/gitlab-com/gl-securit
 
 # Monitoring/Alerting
 
-### Kibana
+## Kibana
 
 Select the pubsub-kas-inf-gprd-*index pattern. (pubsub-kas-inf-gstg-* for staging)
 
@@ -275,7 +275,7 @@ staging: <https://nonprod-log.gitlab.net/goto/9f205372ad310869528fc2cb5336baff>
 
 production: <https://log.gprd.gitlab.net/goto/33a5e2d548b67b2247de5aa8169c47e8>
 
-### Grafana Dashboards
+## Grafana Dashboards
 
 Kubernetes Pods : httpis://dashboards.gitlab.net/d/kubernetes-pods/kubernetes-pods?orgId=1&var-datasource=Global&var-cluster=gstg-gitlab-gke&var-namespace=gitlab
 
@@ -287,7 +287,7 @@ KAS pod detail: <https://dashboards.gitlab.net/d/kas-pod/kas-pod-info?orgId=1&va
 
 Overview and SLIs : <https://dashboards.gitlab.net/d/kas-main/kas-overview?orgId=1&var-PROMETHEUS_DS=Global&var-environment=gstg&var-stage=main&var-sigma=2&from=now-15m&to=now>
 
-### Thanos Queries
+## Thanos Queries
 
 Metrics are being collected from kas via the prometheus job name `gitlab-kas`. E.g. for staging <https://thanos.gitlab.net/graph?g0.range_input=1h&g0.max_source_resolution=0s&g0.expr=%7Bjob%3D%22gitlab-kas%22%2C%20env%3D%22gstg%22%7D&g0.tab=1>
 

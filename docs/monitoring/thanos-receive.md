@@ -11,12 +11,12 @@ The receivers[run in ops](https://gitlab.com/gitlab-com/gl-infra/readiness/-/blo
 
 There are 4 components that make up the receiver.
 
-#### Nginx
+### Nginx
 
 Nginx is currently used for autthentication and tenant head injection.
 When a request is sent to the remote-write endpoint, nginx first authenticates the credentials using htpasswd/basicAuth, and then maps the `THANOS_TENANT` header to the username.
 
-#### Receive Distributor (Router)
+### Receive Distributor (Router)
 
 The distributor (AKA router) is responsible for routing requests to downstream receivers.
 It leverages a hashring config file `hashring.json` which instructs the distibutor what tenants should be sent to which receiver.
@@ -42,13 +42,13 @@ It works on a first match basis. In the above example `tenant_b` would match `ha
 
 The hashring config file is updated automatically be the [receive-controller](#receive-controller).
 
-#### Receive (Ingester)
+### Receive (Ingester)
 
 The receive ingester is the statefulset responsible for persistening the write requests to disks.
 It also replicates data based on the set replication factor, to ensure data availability in the event a pod goes down.
 Much like other components in thanos that receive or write data, it uploads on a 2 hour interval (by default) to our long term storage bucket.
 
-#### Receive Controller
+### Receive Controller
 
 The receive controller helps with discoverability and scalability of receive ingester pods, and updates the distributor as needed.
 It does this by looking up the k8s api and discovering the provisioned pods in a given statefulset.
@@ -106,7 +106,7 @@ We have implemented initial rules to notify us when a tenant is approaching thie
 
 ## Troubleshooting
 
-#### Prometheus Remote Write 429 Errors
+### Prometheus Remote Write 429 Errors
 
 We enforce limits for tenants in thanos. 429s indicate rate limiting on the client side.
 If this is seen from a prometheus client:
@@ -119,7 +119,7 @@ Before increasing limits, it's important we ensure that the given tenants increa
 This is a good opportunity to look into un-used metrics and potential cardinality explosions.
 If possible we should encourge dropping metrics that are not in use, before increasing the setl imits.
 
-#### Remote Write requests failing
+### Remote Write requests failing
 
 Likely resuting in 500 errors, we have a few things we can check on.
 

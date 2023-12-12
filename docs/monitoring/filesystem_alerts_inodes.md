@@ -18,7 +18,7 @@ df -hi
 
 ## Likely suspects
 
-#### Linux kernels and headers
+### Linux kernels and headers
 
 We have `unattended-upgrades` enabled, which install the kernel updates.
 

@@ -1,6 +1,6 @@
 ## GSTG bastion hosts
 
-##### How to start using them
+### How to start using them
 
 Add the following to your `~/.ssh/config` (specify your username and path to ssh private key):
 
@@ -29,7 +29,7 @@ $> be knife ssh 'roles:gstg-base-deploy-node' 'hostname'
 deploy-01-sv-gstg.c.gitlab-staging-1.internal deploy-01-sv-gstg
 ```
 
-##### Console access
+### Console access
 
 There is a dedicated server for console access named
 `console-01-sv-gstg.c.gitlab-staging-1.internal`
@@ -51,7 +51,7 @@ With this config, you can access the console using `ssh gstg-console`
 See [granting rails or db access](../uncategorized/granting-rails-or-db-access.md) for more
 information on how to request console access.
 
-##### Host keys
+### Host keys
 
 If you care about security enough to compare ssh host keys, here they are, both sha256 and md5 sums:
 
@@ -67,7 +67,7 @@ $> ssh-keygen -E md5 -lf <(ssh-keyscan lb-bastion.gstg.gitlab.com 2>/dev/null)
 256 MD5:08:bc:a7:52:60:25:bc:65:13:96:d7:44:be:11:d9:40 lb-bastion.gstg.gitlab.com (ED25519)
 ```
 
-##### Tunnel https traffic
+### Tunnel https traffic
 
 gstg public https access is [blocked](https://gitlab.com/gitlab-com/migration/issues/509).
 Therefore to connect to gstg, you'll need to set up a tunnel.
@@ -102,7 +102,7 @@ To set up such a tunnel:
 
     Visiting `https://gstg.gitlab.com/users/sign_in` will now work as a charm.
 
-##### Tunnel git-over-ssh traffic
+### Tunnel git-over-ssh traffic
 
 Similar to setting up a tunnel for the https traffic, you can set up a
 tunnel for git-over-ssh traffic:
@@ -145,7 +145,7 @@ Although, you still need to run `socat` twice. But check out
 [bin/staging-tunnel.sh](https://gitlab.com/gitlab-com/migration/blob/master/bin/staging-tunnel.sh)
 in [gitlab-com/migration](https://gitlab.com/gitlab-com/migration/) for an automated script to set up the tunnels.
 
-##### IAP tunnel alternative
+### IAP tunnel alternative
 
 If tunneling over `lb-bastion` is too slow due to high latency, [GCP Identity-Aware Proxy](https://cloud.google.com/iap/) can be used to tunnel TCP directly to the target VM (if allowed), this is faster than SSH over SSH.
 
@@ -156,7 +156,7 @@ Host console-01-sv-gstg.c.gitlab-staging-1.internal
         ProxyCommand gcloud compute start-iap-tunnel console-01-sv-gstg 22 --listen-on-stdin --project=gitlab-staging-1 --zone=us-east1-c --verbosity=warning
 ```
 
-##### Links
+### Links
 
  1. [Issue](https://gitlab.com/gitlab-com/migration/issues/299) describing what was done in scope of the migration project to quickly set them up.
  1. [META](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/3995) issue that is a source of truth regarding middleterm/longterm setup.

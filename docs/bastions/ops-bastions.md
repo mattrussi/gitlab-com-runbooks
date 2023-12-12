@@ -1,6 +1,6 @@
 ## OPS bastion hosts
 
-##### How to start using them
+### How to start using them
 
 Add the following to your `~/.ssh/config` (specify your username and path to ssh private key):
 
@@ -20,7 +20,7 @@ Host ops-console
   ProxyCommand ssh lb-bastion.ops.gitlab.com -W %h:%p
 ```
 
-##### Host keys
+### Host keys
 
 If you care about security enough to compare ssh host keys, here they are, both sha256 and md5 sums:
 

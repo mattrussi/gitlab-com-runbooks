@@ -1,12 +1,12 @@
 # How to provision the benchmark environment
 
-# Intro
+## Intro
 
 This document will explain how is organized the benchmark environment and how to provision it. Also, we explain how it is being used in our use case for testing a switchover and promotion.
 
 The benchmark environment consists of the following layers:
 
-#### Database layer
+### Database layer
 
 - Source cluster: 3 nodes with a Patroni cluster.
 
@@ -22,7 +22,7 @@ The benchmark environment consists of the following layers:
   - pg12ute-patroni-target-02-db-db-benchmarking.c.gitlab-db-benchmarking.internal
   - pg12ute-patroni-target-03-db-db-benchmarking.c.gitlab-db-benchmarking.internal
 
-#### PGBouncer layer
+### PGBouncer layer
 
 - Pgbouncer webapi cluster: 3 nodes from pgbouncer pointing to the source cluster.
 
@@ -52,7 +52,7 @@ The benchmark environment consists of the following layers:
   - ci-pgbouncer-sidekiq-02-db-db-benchmarking.c.gitlab-db-benchmarking.internal
   - ci-pgbouncer-sidekiq-03-db-db-benchmarking.c.gitlab-db-benchmarking.internal
 
-#### Jmeter layer
+### Jmeter layer
 
 - Jmeter: 2 instances to run Jmeter against the pgbouncers that will connect to the database.
 
@@ -60,7 +60,7 @@ The benchmark environment consists of the following layers:
   - jmeter-01-inf-db-benchmarking.c.gitlab-db-benchmarking.internal
   - jmeter-02-inf-db-benchmarking.c.gitlab-db-benchmarking.internal
 
-#### Console layer
+### Console layer
 
 - Console: one console box where we execute the ansible code.
 
@@ -74,7 +74,7 @@ The benchmark environment consists of the following layers:
   Host:
   - pgwatch-01-sv-db-benchmarking.c.gitlab-db-benchmarking.internal
 
-# How to initialize the benchmark environment in Terraform
+## How to initialize the benchmark environment in Terraform
 
 To generate the environment, please consider the following files on the [terraform repo]():
 
