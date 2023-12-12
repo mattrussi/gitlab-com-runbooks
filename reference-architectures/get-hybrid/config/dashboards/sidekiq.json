@@ -4113,7 +4113,7 @@
           "dashes": false,
           "datasource": "$PROMETHEUS_DS",
           "decimals": 2,
-          "description": "Kubernetes containers are allocated a share of CPU. Configured using resource requests.\nWhen this is exhausted, the container may be thottled.\n Lower is better.",
+          "description": "Kubernetes containers are allocated a share of CPU. Configured using resource requests.\n\nThis is the amount of CPU that a container should always have available,\nthough it can briefly utilize more. However, if a lot of pods on the same\nhost exceed their requested CPU the container could be throttled earlier.\n\nThis monitors utilization/allocated requests over a 1 hour period, and takes\nthe 99th quantile of that utilization percentage in that period.\nWe want the worst case to be around 80%-90% utilization,\nmeaning we've sized the container correctly. If utilization is much higher than that\nthe container could already be throttled because the host is overused, if it\nis much lower, then we could be underutilizing a host.\n\nThis saturation point is only used for capacity planning.\nThe burst utilization of a CPU is monitored and alerted upon using the\n`kube_container_cpu_limit` saturation point.\n Lower is better.",
           "fill": 0,
           "fillGradient": 0,
           "gridPos": {
@@ -4300,7 +4300,7 @@
           "dashes": false,
           "datasource": "$PROMETHEUS_DS",
           "decimals": 2,
-          "description": "Kubernetes containers can have a limit configured on how much CPU they can consume in\na burst. If we are at this limit, exceeding the allocated requested resources, we\nshould consider revisting the container's HPA configuration\n Lower is better.",
+          "description": "Kubernetes containers can have a limit configured on how much CPU they can consume in\na burst. If we are at this limit, exceeding the allocated requested resources, we\nshould consider revisting the container's HPA configuration.\n\nWhen a container is utilizing CPU resources up-to it's configured limit for\nextended periods of time, this could cause it and other running containers to be\nthrottled.\n Lower is better.",
           "fill": 0,
           "fillGradient": 0,
           "gridPos": {
