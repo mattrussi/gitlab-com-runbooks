@@ -2,6 +2,10 @@ local googleCloudRunComponents = import './lib/google_cloud_run_components.libso
 local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 
+// PVS is old Cloud Run deployment, ExtPVS is new Runway deployment
+// Both services types will be merged after migration is complete:
+// https://gitlab.com/groups/gitlab-com/gl-infra/platform/runway/-/epics/1
+
 metricsCatalog.serviceDefinition({
   type: 'pvs',
   tier: 'sv',
