@@ -342,6 +342,10 @@ metricsCatalog.serviceDefinition({
         rateMetric(
           counter='thanos_rule_evaluation_with_warnings_total'
         ),
+        rateMetric(
+          counter='prometheus_rule_group_iterations_missed_total',
+          selector=rulerSelector,
+        ),
       ]),
 
       apdex: errorCounterApdex(

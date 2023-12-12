@@ -131,6 +131,8 @@ groups:
           label_replace(rate(prometheus_rule_evaluation_failures_total{environment="{{ $labels.environment }}",job="thanos-ruler",namespace="thanos",stage="{{ $labels.stage }}",type="thanos"}[5m]), "_c", "0", "", "")
           or
           label_replace(rate(thanos_rule_evaluation_with_warnings_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m]), "_c", "1", "", "")
+          or
+          label_replace(rate(prometheus_rule_group_iterations_missed_total{environment="{{ $labels.environment }}",job="thanos-ruler",namespace="thanos",stage="{{ $labels.stage }}",type="thanos"}[5m]), "_c", "2", "", "")
         )
       runbook: docs/thanos/README.md
     labels:
@@ -187,6 +189,8 @@ groups:
           label_replace(rate(prometheus_rule_evaluation_failures_total{environment="{{ $labels.environment }}",job="thanos-ruler",namespace="thanos",stage="{{ $labels.stage }}",type="thanos"}[5m]), "_c", "0", "", "")
           or
           label_replace(rate(thanos_rule_evaluation_with_warnings_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m]), "_c", "1", "", "")
+          or
+          label_replace(rate(prometheus_rule_group_iterations_missed_total{environment="{{ $labels.environment }}",job="thanos-ruler",namespace="thanos",stage="{{ $labels.stage }}",type="thanos"}[5m]), "_c", "2", "", "")
         )
       runbook: docs/thanos/README.md
     labels:

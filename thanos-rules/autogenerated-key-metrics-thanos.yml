@@ -66,6 +66,8 @@ groups:
           label_replace(rate(prometheus_rule_evaluation_failures_total{job="thanos-ruler",namespace="thanos",type="thanos"}[1m] offset 30s), "_c", "0", "", "")
           or
           label_replace(rate(thanos_rule_evaluation_with_warnings_total{}[1m] offset 30s), "_c", "1", "", "")
+          or
+          label_replace(rate(prometheus_rule_group_iterations_missed_total{job="thanos-ruler",namespace="thanos",type="thanos"}[1m] offset 30s), "_c", "2", "", "")
         )
       )
       or
@@ -455,6 +457,8 @@ groups:
           label_replace(rate(prometheus_rule_evaluation_failures_total{job="thanos-ruler",namespace="thanos",type="thanos"}[5m] offset 30s), "_c", "0", "", "")
           or
           label_replace(rate(thanos_rule_evaluation_with_warnings_total{}[5m] offset 30s), "_c", "1", "", "")
+          or
+          label_replace(rate(prometheus_rule_group_iterations_missed_total{job="thanos-ruler",namespace="thanos",type="thanos"}[5m] offset 30s), "_c", "2", "", "")
         )
       )
       or
@@ -844,6 +848,8 @@ groups:
           label_replace(rate(prometheus_rule_evaluation_failures_total{job="thanos-ruler",namespace="thanos",type="thanos"}[30m] offset 30s), "_c", "0", "", "")
           or
           label_replace(rate(thanos_rule_evaluation_with_warnings_total{}[30m] offset 30s), "_c", "1", "", "")
+          or
+          label_replace(rate(prometheus_rule_group_iterations_missed_total{job="thanos-ruler",namespace="thanos",type="thanos"}[30m] offset 30s), "_c", "2", "", "")
         )
       )
       or
@@ -1233,6 +1239,8 @@ groups:
           label_replace(rate(prometheus_rule_evaluation_failures_total{job="thanos-ruler",namespace="thanos",type="thanos"}[1h] offset 30s), "_c", "0", "", "")
           or
           label_replace(rate(thanos_rule_evaluation_with_warnings_total{}[1h] offset 30s), "_c", "1", "", "")
+          or
+          label_replace(rate(prometheus_rule_group_iterations_missed_total{job="thanos-ruler",namespace="thanos",type="thanos"}[1h] offset 30s), "_c", "2", "", "")
         )
       )
       or
@@ -1622,6 +1630,8 @@ groups:
           label_replace(rate(prometheus_rule_evaluation_failures_total{job="thanos-ruler",namespace="thanos",type="thanos"}[6h] offset 30s), "_c", "0", "", "")
           or
           label_replace(rate(thanos_rule_evaluation_with_warnings_total{}[6h] offset 30s), "_c", "1", "", "")
+          or
+          label_replace(rate(prometheus_rule_group_iterations_missed_total{job="thanos-ruler",namespace="thanos",type="thanos"}[6h] offset 30s), "_c", "2", "", "")
         )
       )
       or
