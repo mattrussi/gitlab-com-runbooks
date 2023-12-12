@@ -191,7 +191,7 @@ metricsCatalog.serviceDefinition({
       |||,
 
       local baseSelector = gitWorkhorseJobNameSelector {
-        type: 'git',
+        type: 'internal-api',
         route: '^/api/',
       },
 
