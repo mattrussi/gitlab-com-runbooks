@@ -609,25 +609,25 @@ groups:
     expr: "0.000100"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
-      component: cnyHttpServices
+      component: cnyHttpsServices
       tier: lb
       type: frontend
     expr: "0.999000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
-      component: cnyHttpServices
+      component: cnyHttpsServices
       tier: lb
       type: frontend
     expr: "0.000100"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
-      component: mainHttpServices
+      component: mainHttpsServices
       tier: lb
       type: frontend
     expr: "0.999000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
-      component: mainHttpServices
+      component: mainHttpsServices
       tier: lb
       type: frontend
     expr: "0.000100"
@@ -636,95 +636,13 @@ groups:
       component: sshServices
       tier: lb
       type: frontend
-    expr: "0.995000"
+    expr: "0.990000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: sshServices
       tier: lb
       type: frontend
     expr: "0.001000"
-  - record: slo:min:events:gitlab_service_apdex:ratio
-    labels:
-      tier: stor
-      type: google-cloud-storage
-    expr: "0.997000"
-  - record: slo:max:events:gitlab_service_errors:ratio
-    labels:
-      tier: stor
-      type: google-cloud-storage
-    expr: "0.000100"
-  - record: slo:min:events:gitlab_service_apdex:ratio
-    labels:
-      component: artifacts_cdn
-      tier: stor
-      type: google-cloud-storage
-    expr: "0.997000"
-  - record: slo:max:events:gitlab_service_errors:ratio
-    labels:
-      component: artifacts_cdn
-      tier: stor
-      type: google-cloud-storage
-    expr: "0.000100"
-  - record: slo:min:events:gitlab_service_apdex:ratio
-    labels:
-      component: pages_range_requests
-      tier: stor
-      type: google-cloud-storage
-    expr: "0.997000"
-  - record: slo:max:events:gitlab_service_errors:ratio
-    labels:
-      component: pages_range_requests
-      tier: stor
-      type: google-cloud-storage
-    expr: "0.000100"
-  - record: slo:min:events:gitlab_service_apdex:ratio
-    labels:
-      component: pages_request_duration
-      tier: stor
-      type: google-cloud-storage
-    expr: "0.997000"
-  - record: slo:max:events:gitlab_service_errors:ratio
-    labels:
-      component: pages_request_duration
-      tier: stor
-      type: google-cloud-storage
-    expr: "0.000100"
-  - record: slo:min:events:gitlab_service_apdex:ratio
-    labels:
-      component: pages_total_requests
-      tier: stor
-      type: google-cloud-storage
-    expr: "0.997000"
-  - record: slo:max:events:gitlab_service_errors:ratio
-    labels:
-      component: pages_total_requests
-      tier: stor
-      type: google-cloud-storage
-    expr: "0.000100"
-  - record: slo:min:events:gitlab_service_apdex:ratio
-    labels:
-      component: registry_storage
-      tier: stor
-      type: google-cloud-storage
-    expr: "0.997000"
-  - record: slo:max:events:gitlab_service_errors:ratio
-    labels:
-      component: registry_storage
-      tier: stor
-      type: google-cloud-storage
-    expr: "0.000100"
-  - record: slo:min:events:gitlab_service_apdex:ratio
-    labels:
-      component: workhorse_upload
-      tier: stor
-      type: google-cloud-storage
-    expr: "0.997000"
-  - record: slo:max:events:gitlab_service_errors:ratio
-    labels:
-      component: workhorse_upload
-      tier: stor
-      type: google-cloud-storage
-    expr: "0.000100"
   - record: slo:min:gitlab_service_apdex:ratio
     labels:
       tier: sv
@@ -881,6 +799,88 @@ groups:
       tier: stor
       type: gitaly
     expr: "0.000500"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      tier: stor
+      type: google-cloud-storage
+    expr: "0.997000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      tier: stor
+      type: google-cloud-storage
+    expr: "0.000100"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      component: artifacts_cdn
+      tier: stor
+      type: google-cloud-storage
+    expr: "0.997000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      component: artifacts_cdn
+      tier: stor
+      type: google-cloud-storage
+    expr: "0.000100"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      component: pages_range_requests
+      tier: stor
+      type: google-cloud-storage
+    expr: "0.997000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      component: pages_range_requests
+      tier: stor
+      type: google-cloud-storage
+    expr: "0.000100"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      component: pages_request_duration
+      tier: stor
+      type: google-cloud-storage
+    expr: "0.997000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      component: pages_request_duration
+      tier: stor
+      type: google-cloud-storage
+    expr: "0.000100"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      component: pages_total_requests
+      tier: stor
+      type: google-cloud-storage
+    expr: "0.997000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      component: pages_total_requests
+      tier: stor
+      type: google-cloud-storage
+    expr: "0.000100"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      component: registry_storage
+      tier: stor
+      type: google-cloud-storage
+    expr: "0.997000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      component: registry_storage
+      tier: stor
+      type: google-cloud-storage
+    expr: "0.000100"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      component: workhorse_upload
+      tier: stor
+      type: google-cloud-storage
+    expr: "0.997000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      component: workhorse_upload
+      tier: stor
+      type: google-cloud-storage
+    expr: "0.000100"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       tier: inf
@@ -3366,7 +3366,7 @@ groups:
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:
-      component: cnyHttpServices
+      component: cnyHttpsServices
       global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
@@ -3375,7 +3375,7 @@ groups:
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:
-      component: mainHttpServices
+      component: mainHttpsServices
       global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
@@ -3390,60 +3390,6 @@ groups:
       service_aggregation: "yes"
       tier: lb
       type: frontend
-    expr: "1"
-  - record: gitlab_component_service:mapping
-    labels:
-      component: artifacts_cdn
-      global_aggregation: "no"
-      regional_aggregation: "no"
-      service_aggregation: "yes"
-      tier: stor
-      type: google-cloud-storage
-    expr: "1"
-  - record: gitlab_component_service:mapping
-    labels:
-      component: pages_range_requests
-      global_aggregation: "no"
-      regional_aggregation: "no"
-      service_aggregation: "yes"
-      tier: stor
-      type: google-cloud-storage
-    expr: "1"
-  - record: gitlab_component_service:mapping
-    labels:
-      component: pages_request_duration
-      global_aggregation: "no"
-      regional_aggregation: "no"
-      service_aggregation: "yes"
-      tier: stor
-      type: google-cloud-storage
-    expr: "1"
-  - record: gitlab_component_service:mapping
-    labels:
-      component: pages_total_requests
-      global_aggregation: "no"
-      regional_aggregation: "no"
-      service_aggregation: "yes"
-      tier: stor
-      type: google-cloud-storage
-    expr: "1"
-  - record: gitlab_component_service:mapping
-    labels:
-      component: registry_storage
-      global_aggregation: "no"
-      regional_aggregation: "no"
-      service_aggregation: "yes"
-      tier: stor
-      type: google-cloud-storage
-    expr: "1"
-  - record: gitlab_component_service:mapping
-    labels:
-      component: workhorse_upload
-      global_aggregation: "no"
-      regional_aggregation: "no"
-      service_aggregation: "yes"
-      tier: stor
-      type: google-cloud-storage
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:
@@ -3534,6 +3480,60 @@ groups:
       service_aggregation: "yes"
       tier: inf
       type: gitlab-static
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: artifacts_cdn
+      global_aggregation: "no"
+      regional_aggregation: "no"
+      service_aggregation: "yes"
+      tier: stor
+      type: google-cloud-storage
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: pages_range_requests
+      global_aggregation: "no"
+      regional_aggregation: "no"
+      service_aggregation: "yes"
+      tier: stor
+      type: google-cloud-storage
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: pages_request_duration
+      global_aggregation: "no"
+      regional_aggregation: "no"
+      service_aggregation: "yes"
+      tier: stor
+      type: google-cloud-storage
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: pages_total_requests
+      global_aggregation: "no"
+      regional_aggregation: "no"
+      service_aggregation: "yes"
+      tier: stor
+      type: google-cloud-storage
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: registry_storage
+      global_aggregation: "no"
+      regional_aggregation: "no"
+      service_aggregation: "yes"
+      tier: stor
+      type: google-cloud-storage
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: workhorse_upload
+      global_aggregation: "no"
+      regional_aggregation: "no"
+      service_aggregation: "yes"
+      tier: stor
+      type: google-cloud-storage
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:
