@@ -10,7 +10,7 @@ Rails consoles in Staging/Production are accessed via Gravitational [Teleport](h
 
 ## Access Request
 
-Before you start using Teleport, you must be assigned the app in Okta.  This should be a part of your role's baseline group assignment. In most cases there should be no additional action required to gain access to the services appropriate to your role. If your onboarding is complete and you still do not have access to the Teleport app in Okta, open an [access request](https://about.gitlab.com/handbook/business-technology/team-member-enablement/onboarding-access-requests/access-requests/) and follow the appropriate approval methods.
+Before you start using Teleport, you must be assigned the app in Okta.  This should be a part of your role's baseline group assignment. In most cases there should be no additional action required to gain access to the services appropriate to your role. If your onboarding is complete and you still do not see the Teleport app listed in Okta, open an [access request](https://about.gitlab.com/handbook/business-technology/team-member-enablement/onboarding-access-requests/access-requests/) and follow the appropriate approval methods. Note that trying to login to the Teleport Console from Okta dashboard can fail with a message "Login Unsuccessful", this is totally expected and does not mean you need to open an access request.
 
 It is worth noting that the current access granted is a read-only access, if you need to perform write operations to the production environment, then declare a change in `#production` slack channel using the `/change declare` command, after filling the steps and other details, an SRE should be able to execute the change for you.
 
