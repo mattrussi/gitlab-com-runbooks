@@ -3,7 +3,7 @@
 Postgres Development community is no longer building packages for Ubuntu Xenial 16.04.
 This procedure explains the process of building custom PostgreSQL 12.X packages that we can use until we migrate off Xenial.
 
-### Package Build Process
+## Package Build Process
 
 For building new versions, copy the [postgresql-12.9-1](https://gitlab.com/gitlab-com/gl-infra/database/postgresql/postgresql-12.9-1/-/blob/main/README.md) repo into a separate project (stay consistent with naming: postgresql-version in the database/postgresql hierarchy
 Edit the build.sh script to:
@@ -16,11 +16,11 @@ find the appropriate tag to clone from <https://salsa.debian.org/postgresql/post
 * Let the pipelines do the rest.
 * Download created artifactory from the pipeline.
 
-### Upload and Publish packages to Aptly
+## Upload and Publish packages to Aptly
 
 Follow the instructions from the [Aptly Runbook](../uncategorized/aptly.md) to add new files to the gitlab-utils repository.
 
-### Set required Chef attributes
+## Set required Chef attributes
 
 Update chef roles attributes to use the Aptly server for installing PostgreSQL packages, as well as the correct debug info packages:
 

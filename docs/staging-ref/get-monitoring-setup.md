@@ -2,15 +2,15 @@
 
 This documentation outlines setting up the staging-ref environment to work with GitLab infrastructure monitoring.
 
-#### Prerequisites
+## Prerequisites
 
 * A private cluster is prefered for setting up alertmanager.
 
-#### Notes
+## Notes
 
 * Staging-ref is not VPC peered environment therefore we had to add workarounds such as [adding an ingress for each alertmanager and configuring Cloud Armor](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/merge_requests/551).
 
-### Disable built-in GET monitoring
+## Disable built-in GET monitoring
 
 GET sets up Prometheus and Grafana in a VM and the default GitLab Helm chart defaults which enable Prometheus and Grafana. They will not be used and can be disabled. You can view examples of how to do this via the following MRs:
 
@@ -27,7 +27,7 @@ GET sets up Prometheus and Grafana in a VM and the default GitLab Helm chart def
    install: false
  ```
 
-#### Enable labels
+## Enable labels
 
 Labels help organize metrics by service. Labels can be added via the GitLab helm chart.
 
@@ -44,17 +44,17 @@ Labels help organize metrics by service. Labels can be added via the GitLab helm
 
 * Deployment labels need to be added. For an up-to date list check out [`gitlab_charts.yml.j2`](https://gitlab.com/gitlab-org/quality/gitlab-environment-toolkit-configs/staging-ref/-/blob/main/3k_hybrid_geo/ansible/us-east1/files/gitlab_configs/gitlab_charts.yml.j2) in the `staging-ref` repository.
 
-### Prometheus
+## Prometheus
 
 [Prometheus](https://prometheus.io/docs/introduction/overview/) an open-source monitoring and alerting tool used to monitor all services within GitLab infrastructure. You can read more about technical details the project [here](https://prometheus.io/docs/introduction/overview/).
 
-#### Deploy `prometheus-stack`
+### Deploy `prometheus-stack`
 
 [Prometheus-stack](https://gitlab.com/gitlab-org/quality/gitlab-environment-toolkit-configs/staging-ref/-/tree/main/3k_hybrid_geo/ansible/us-east1/helm/prometheus-stack) is a helm chart that bundles cluster monitoring with prometheus using the prometheus operator. We'll be using this chart to deploy prometheus.
 
 * Deploy to the GET cluster under the `prometheus` namespace via helm. In staging-ref, this is managed by CI jobs that [validate](https://gitlab.com/gitlab-org/quality/gitlab-environment-toolkit-configs/staging-ref/-/blob/697ef75e1a81da4942274fce3eacfebce4f50152/.gitlab/ci/.mr_checks.yml#L43-53) and [configure](https://gitlab.com/gitlab-org/quality/gitlab-environment-toolkit-configs/staging-ref/-/blob/2005cbcc49034513111dd3f9ed842bfba5e9dcc2/.gitlab-ci.yml#L139-145) any changes to the helm chart. You can view the setup of this chart in [this directory](https://gitlab.com/gitlab-org/quality/gitlab-environment-toolkit-configs/staging-ref/-/tree/main/3k_hybrid_geo/ansible/us-east1/helm/prometheus-stack).
 
-#### Scraping targets
+### Scraping targets
 
 Scrape targets are configured in the `values.yaml` file under the `prometheus-stack` directory. Scrape targets are applied relabeling to match what is used in staging and production.
 
@@ -62,18 +62,18 @@ Scrape targets are configured in the `values.yaml` file under the `prometheus-st
 
 2. Omnibus targets. Prometheus scrape targets can be found under `additionalScrapeConfigs` in [`values.yaml`](https://gitlab.com/gitlab-org/quality/gitlab-environment-toolkit-configs/staging-ref/-/blob/a57560afd38e55f46676d4848b6f9024cb4ac81a/3k_hybrid_geo/ansible/us-east1/helm/prometheus-stack/values.yaml#L206).
 
-#### Exporters
+### Exporters
 
 Exporters are "exporting" existing metrics from their applications or services. These are used by prometheus to scrape metrics. A few of them are disabled by default and we'll need to enable them in order to use them. Exporters that need to be enabled manually within the GitLab helm values are:
 
 * gitlab-shell [(merge request example)](https://gitlab.com/gitlab-org/quality/gitlab-environment-toolkit-configs/staging-ref/-/commit/bb55ac754f937f07eabd6ec3d108094630c4c648)
 * http-workhorse-exporter [(merge request example)](https://gitlab.com/gitlab-org/quality/gitlab-environment-toolkit-configs/staging-ref/-/commit/05b590a610f0853f6eaac567c0a31288d614005f)
 
-### Thanos
+## Thanos
 
 Thanos is a set of components that aids in maintaining a highly available Prometheus setup with long term storage capabilities. Here we will not be deploying thanos, but rather connecting prometheus to our already existing thanos cluster.
 
-#### Thanos sidecar
+### Thanos sidecar
 
 The sidecar component of Thanos gets deployed along with the Prometheus instance.  This configuration exists in the `prometheus-stack` helm chart. Thanos-sidecar will backup Prometheus data into an Object Storage bucket, and give other Thanos components access to the Prometheus metrics via a gRPC API.
 
@@ -93,7 +93,7 @@ The sidecar component of Thanos gets deployed along with the Prometheus instance
 
 3. Lastly, you need to add prometheus to thanos-store in order be able to query historical data from thanos-query. You can view an [example MR on how to do that here](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/tanka-deployments/-/merge_requests/303/diffs).
 
-### Alerts and Alertmanager
+## Alerts and Alertmanager
 
 Alerting rules are configured in Prometheus and then it sends alerts to an Alertmanager. The Alertmanager then manages those alerts and sends notifications, such as to a slack channel. We will not be using the bundled Alertmanager in `prometheus-stack`. Instead we've configured the use of existing alertmanager cluster.
 
@@ -115,11 +115,11 @@ Note: If using a public cluster you will need to configure [IP Masquerade Agent]
 1. Configure Dead Man's Snitch for Alertmanager. Alertmanager should send notifications for the dead man’s switch to the configured notification provider. This ensures that communication between the Alertmanager and the notification provider is working. ([example merge request](https://gitlab.com/gitlab-com/runbooks/-/merge_requests/4287))
 1. Configure routing to Slack channels ([example merge request](https://gitlab.com/gitlab-com/runbooks/-/merge_requests/4281/diffs)).
 
-### Prometheus rules
+## Prometheus rules
 
 * TBA.
 
-### Dashboards
+## Dashboards
 
 Dashboards for staging-ref can be found in Grafana under the [staging-ref folder](https://dashboards.gitlab.net/d/Fyic5Wanz/server-performance?orgId=1). If additional dashboards need to be added they can be added through [the runbooks](https://gitlab.com/gitlab-com/runbooks/-/tree/master/dashboards) or they can be added manually.
 

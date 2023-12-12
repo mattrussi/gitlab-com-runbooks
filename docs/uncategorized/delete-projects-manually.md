@@ -2,12 +2,12 @@
 
 Sometimes projects are not completely deleted due to [postgres statement timeouts](https://gitlab.com/gitlab-org/gitlab-ce/issues/52517) and can end up in a half-deleted state where it cannot be deleted via the admin dashboard.
 
-### Preparation
+## Preparation
 
 1. You will need to know the ID or path of the project. For example, the path for the runbooks project `https://gitlab.com/gitlab-com/runbooks` will be `gitlab-com/runbooks`.
 1. You will need a user id or username that has the ability to delete a project, such as the user that created the project or an admin on GitLab.com.
 
-### Steps
+## Steps
 
 1. Start a rails console issuing the command `sudo gitlab-rails console`.
 1. Verify that the delete error is due to a hitting a database timeout. `PG::QueryCanceled: ERROR:  canceling statement due to statement timeout`. You can do this like so :

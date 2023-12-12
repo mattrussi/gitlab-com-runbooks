@@ -46,7 +46,7 @@ There are two Teleport cluster/servers:
 - <https://staging.teleport.gitlab.net/> for staging
 - <https://production.teleport.gitlab.net/> for production
 
-##### Staging
+#### Staging
 
 1. Authenticate to the Teleport proxy/server. This command opens Okta in a browser window:
 
@@ -132,7 +132,7 @@ tsh db connect db-ci-dr-archive-gstg
 tsh db connect db-registry-dr-archive-gstg
 ```
 
-##### Production
+#### Production
 
 1. Authenticate to the Teleport proxy/server. This command opens Okta in a browser window:
 

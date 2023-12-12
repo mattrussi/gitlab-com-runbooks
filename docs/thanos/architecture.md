@@ -4,7 +4,7 @@
 
 ## Overview
 
-#### Metric Ingestion (Write Path)
+### Metric Ingestion (Write Path)
 
 We have two main ways of ingesting metrics in Thanos.
 
@@ -36,7 +36,7 @@ Basics of a sidecar metric process:
 - The thanos sidecar process periodically uploads this local prometheus TSDB to the object storage of choice. In our case this is GCS.
 - Any queries that require the most recent 2 hours of data are forwarded from thanos to the sidecar process which handles the promql and returns the data from the local prometheus TSDB.
 
-#### Querying Metrics (Read Path)
+### Querying Metrics (Read Path)
 
 Querying of metrics in Thanos is done either through the Thanos UI/API or leveraging another interface like Grafana.
 When a request comes in to thanos, by default it operates a fan out request to all of the downstream components and returning any time series data that matches the query.
@@ -52,49 +52,49 @@ Basics of a Thanos Query request:
 
 ## Components
 
-#### Nginx
+### Nginx
 
 Handles incoming remote-write requests, authenticates these and matches the authenticated user to a thanos tenant.
 
-#### Receive Distributor
+### Receive Distributor
 
 Deployment that routes remote write requests to other recievers that handle the replication and perisstence of data.
 It leverages a hashring configuration file to know which receivers it can forward requests to - managed by the [receive controller](#receive-controller).
 
-#### Receive
+### Receive
 
 Statefulset that handles remote write request persistence to disk. It also takes care of replication, to ensure multiple copies of each write exist.
 We have the ability to spin these up for dedicated tenants to help distribute write requests, improve performance, and provide multiple failure domains.
 
-#### Receive Controller
+### Receive Controller
 
 The receive controller watches the receive statefulsets for changes, updates the hashring and notifies the receive distribotrs on any changes to reread its hashring config.
 This is allows us to horizontally scale our receiver statefulsets as load demands, and spin up new ones for dedicated tenants as desired.
 
-#### Query Frontend
+### Query Frontend
 
 A caching frontend for Thanos Query. It helps to cache common requests, allowing us to speed up repeative queries. E.g Grafana Dashboards.
 
-#### Query
+### Query
 
 Handles the PromQL queries and fans out the requests to downstream store APIs. This includes receivers,ruler,storegateway,sidecar.
 It can also forward requests onto other thanos query instances.
 Once requests are returned it then handles the deduplication of data before returning the results to the user.
 
-#### Store
+### Store
 
 The store, also known as the storegateway, is responsible for handling promql queries and converting them in to bucket fetch requests.
 This enables thanos to provide long term metrics retnetion via cheaper storage means in object storage.
 
-#### Sidecar
+### Sidecar
 
 Enables the upload of prometheus TSDB data to object storage. This is an alternative to using prometheus remote-write.
 As the block upload process only runs periodically (default 2hours), it's also responsidble for handling thanos-query requests for the most recent datasets.
 
-#### Redis/Memcached
+### Redis/Memcached
 
 Redis and Memcached both provide caching for various components in thanos.
 
-#### Rule
+### Rule
 
 Processes prometheus recording and alerting rules. This acts in the same way as native prometheus rules, but enables us to process these over the global view of all environments that thanos provides.

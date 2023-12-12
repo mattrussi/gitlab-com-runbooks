@@ -2,7 +2,7 @@
 
 A collection of info about gitlab.com on K8S
 
-### Which workloads are actually running on k8s?
+## Which workloads are actually running on k8s?
 
 - Production:
   - Regional
@@ -43,7 +43,7 @@ A collection of info about gitlab.com on K8S
        gitlab-nginx-ingress-default-backend
        gitlab-webservice-api
 
-### Image building
+## Image building
 
 - Docker images for each component: <https://gitlab.com/gitlab-org/build/CNG>
   - Example: gitlab-shell Dockerfile: <https://gitlab.com/gitlab-org/build/CNG/-/blob/master/gitlab-shell/Dockerfile>
@@ -54,7 +54,7 @@ A collection of info about gitlab.com on K8S
   - Danger review: gitlab-org/gitlab-build-images
 - The bigger picture, example pipeline: <https://gitlab.com/gitlab-org/build/CNG/-/pipelines/281835958>
 
-### Deployment pipeline to k8s
+## Deployment pipeline to k8s
 
 1. This is a rabbit hole.
 1. There's a full team maintaing (Delivery) this, thankfully.
@@ -63,7 +63,7 @@ A collection of info about gitlab.com on K8S
 1. The Deployer, pipeline example: <https://ops.gitlab.net/gitlab-com/gl-infra/deployer/-/pipelines/516853>
    - This triggers a k8s-workloads pipeline: <https://ops.gitlab.net/gitlab-com/gl-infra/k8s-workloads/gitlab-com/-/pipelines/517366>
 
-### Regional vs Zonal clusters, node pools, taints
+## Regional vs Zonal clusters, node pools, taints
 
 - Resources in a region are available to all zones.
   - Are Pods that are assigned to a Region automatically deployed to all Zones in a Region, or is it manually specified somewhere?
@@ -72,13 +72,13 @@ A collection of info about gitlab.com on K8S
 - Regional Node pools: <https://ops.gitlab.net/gitlab-com/gitlab-com-infrastructure/-/blob/master/environments/gprd/gke-regional.tf#L161>
 - We don’t use taints, epic to implement them: <https://gitlab.com/groups/gitlab-com/gl-infra/-/epics/393>
 
-### Resources, requests, limits
+## Resources, requests, limits
 
 Kubernetes limit and request values for each environment can be found under: <https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-com/-/tree/master/releases/gitlab/values>.
 
 For example, GPRD values are in [gprd.yaml.gotmpl](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-com/-/blob/master/releases/gitlab/values/gprd.yaml.gotmpl).
 
-#### Example: GPRD gitlab-shell
+### Example: GPRD gitlab-shell
 
 Link to config in [k8s-workloads](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-com/-/blob/master/releases/gitlab/values/gprd.yaml.gotmpl#L30-37).
 
@@ -102,4 +102,4 @@ map[limits:map[memory:1G] requests:map[cpu:2 memory:1G]]
 
 Also see [official kubernetes docs for assigning CPU limits and requests](https://kubernetes.io/docs/tasks/configure-pod-container/assign-cpu-resource/).
 
-### Low-level: How do resource limits translate to kernel concepts like cgroups and namespaces? (WIP)
+## Low-level: How do resource limits translate to kernel concepts like cgroups and namespaces? (WIP)

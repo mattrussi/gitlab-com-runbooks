@@ -1,6 +1,6 @@
 ## GPRD bastion hosts
 
-##### How to start using them
+### How to start using them
 
 Add the following to your `~/.ssh/config` (specify your username and path to ssh private key):
 
@@ -22,7 +22,7 @@ $> be knife ssh 'roles:gprd-base-deploy-node' 'hostname'
 deploy-01-sv-gprd.c.gitlab-production.internal deploy-01-sv-gprd
 ```
 
-##### Console access
+### Console access
 
 There is a dedicated server for console access named
 `console-01-sv-gprd.c.gitlab-production.internal`
@@ -42,7 +42,7 @@ where `SERVICE_NAME` is either `rails` or `db`.
 See [granting rails or db access](../uncategorized/granting-rails-or-db-access.md) for more
 information on how to request console access.
 
-##### Host keys
+### Host keys
 
 If you care about security enough to compare ssh host keys, here they are, both sha256 and md5 sums:
 
@@ -58,7 +58,7 @@ $> ssh-keygen -E md5 -lf <(ssh-keyscan lb-bastion.gprd.gitlab.com 2>/dev/null)
 256 MD5:ab:2b:c8:a7:48:b6:67:1a:cb:94:b0:a3:3f:d6:a0:b3 lb-bastion.gprd.gitlab.com (ED25519)
 ```
 
-##### Tunnel https traffic
+### Tunnel https traffic
 
 gprd public https access is [blocked](https://gitlab.com/gitlab-com/migration/issues/359).
 Therefore to connect to gprd, you'll need to set up a tunnel.
@@ -93,7 +93,7 @@ To set up such a tunnel:
 
     Visiting `https://gprd.gitlab.com/users/sign_in` will now work as a charm.
 
-##### Tunnel git-over-ssh traffic
+### Tunnel git-over-ssh traffic
 
 Similar to setting up a tunnel for the https traffic, you can set up a
 tunnel for git-over-ssh traffic:
@@ -134,7 +134,7 @@ ssh -N -L 8443:haproxy-main-01-lb-gprd.c.gitlab-production.internal:443 \
 
 Although, you still need to run `socat` twice.
 
-##### IAP tunnel alternative
+### IAP tunnel alternative
 
 If tunneling over `lb-bastion` is too slow due to high latency, [GCP Identity-Aware Proxy](https://cloud.google.com/iap/) can be used to tunnel TCP directly to the target VM (if allowed), this is faster than SSH over SSH.
 
@@ -145,7 +145,7 @@ Host console-01-sv-gprd.c.gitlab-production.internal
         ProxyCommand gcloud compute start-iap-tunnel console-01-sv-gprd 22 --listen-on-stdin --project=gitlab-production --zone=us-east1-c --verbosity=warning
 ```
 
-##### Links
+### Links
 
  1. [Issue](https://gitlab.com/gitlab-com/migration/issues/299) describing what was done in scope of the migration project to quickly set them up.
  1. [META](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/3995) issue that is a source of truth regarding middleterm/longterm setup.
