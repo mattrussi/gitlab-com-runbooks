@@ -19,16 +19,12 @@ Use ChatOps commands in the #production channel to manage deployments. It's cruc
 ### Deploying and Draining Runner Managers
 
 1. **Deploy the Green Environment (When Blue is Active):** This command enables and executes chef-client on the green deployment to install the [GitLab Runner version](https://gitlab.com/gitlab-com/gl-infra/chef-repo/-/blob/master/roles/runners-manager-private-blue.json?ref_type=heads#L13) defined in the [Chef repository](https://gitlab.com/gitlab-com/gl-infra/chef-repo/-/blob/master/roles/runners-manager-private-blue.json?ref_type=heads). It also starts the GitLab Runner service.
-    
-    
-    `/runner run start private green` 
-    
-    
-2. **Drain the Blue Environment (After Green is Deployed):** This command initiates the process of draining the runners and deleting the machines in the blue environment. This operation may take some time to complete.
-    
-    
-    `/runner run stop private blue`
 
+    `/runner run start private green`
+
+2. **Drain the Blue Environment (After Green is Deployed):** This command initiates the process of draining the runners and deleting the machines in the blue environment. This operation may take some time to complete.
+
+    `/runner run stop private blue`
 
 ## Support and Queries
 
