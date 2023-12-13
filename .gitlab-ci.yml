@@ -1274,11 +1274,11 @@ validate-mimir-rules:
           - mimir-rules/**/*
   script:
     - |
-    for dir in mimir-rules/*; do
-      tenant=$(basename ${dir})
-      printf "Checking rules for tenant: ${tenant}"
-      mimirtool rules check --rule-dirs="${dir}"
-    done
+      for dir in mimir-rules/*; do
+        tenant=$(basename ${dir})
+        printf "Checking rules for tenant: ${tenant}"
+        mimirtool rules check --rule-dirs="${dir}"
+      done
 
 deploy-mimir-rules:
   stage: deploy
@@ -1289,7 +1289,7 @@ deploy-mimir-rules:
       file: false
     MIMIR_API_KEY:
       vault: ops-gitlab-net/gitlab-com/runbooks/mimir/token@ci
-      file:
+      file: false
   rules:
     - *ops-gitlab-net-only-rule
     - <<: *if-main-branch-rule
@@ -1298,8 +1298,8 @@ deploy-mimir-rules:
           - mimir-rules/**/*
   script:
     - |
-    for dir in mimir-rules/*; do
-      tenant=$(basename ${dir})
-      printf "Deployings rules for tenant: ${tenant}"
-      mimirtool rules sync --rule-dirs="${dir} --id=${tenant}"
-    done
+      for dir in mimir-rules/*; do
+        tenant=$(basename ${dir})
+        printf "Deployings rules for tenant: ${tenant}"
+        mimirtool rules sync --rule-dirs="${dir} --id=${tenant}"
+      done
