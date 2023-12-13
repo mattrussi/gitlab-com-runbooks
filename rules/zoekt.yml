@@ -3,9 +3,9 @@ groups:
   rules:
   - record: gitlab:zoekt_gke_oom_events
     expr: >
-      (sum by (environment, container) (kube_pod_container_status_last_terminated_reason{pod="gitlab-gitlab-zoekt-0", reason="OOMKilled"})
+      (sum by (container, pod, environment) (kube_pod_container_status_last_terminated_reason{pod=~"gitlab-gitlab-zoekt-[0-9]+", reason="OOMKilled"})
       * on (container, pod, environment) group_left
-      sum by (container, pod, environment) (changes(kube_pod_container_status_restarts_total{pod="gitlab-gitlab-zoekt-0"}[1m]) > 0))
+      sum by (container, pod, environment) (changes(kube_pod_container_status_restarts_total{pod=~"gitlab-gitlab-zoekt-[0-9]+"}[1m]) > 0))
 - name: Zoekt Alerts
   rules:
   - alert: ZoektContainersRestartsDueToOOM
