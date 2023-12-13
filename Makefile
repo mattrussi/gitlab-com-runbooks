@@ -136,10 +136,10 @@ update-feature-categories-ci: .update-feature-categories generate
 .PHONY: validate-mimir-rules
 validate-mimir-rules:
 	@for dir in mimir-rules/*; do \
-    	tenant=$(basename $${dir}); \
-    	echo "Checking rules for tenant: $${tenant}"; \
+		tenant=$(basename $${dir}); \
+		echo "Checking rules for tenant: $${tenant}"; \
 		mimirtool rules check --rule-dirs="$${dir}"; \
-    done
+	done
 
 # Ensure that you have Graphviz and Python installed
 # Instructions at https://diagrams.mingrammer.com/docs/getting-started/installation
