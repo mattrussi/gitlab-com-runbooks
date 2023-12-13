@@ -2,6 +2,7 @@
 
 require 'redis'
 require 'yaml'
+require 'redis-clustering'
 
 def get_data(key, ktype, datastore)
   case ktype
@@ -31,7 +32,7 @@ end
 # if cluster, define cluster(list of objects with host and port keys) + username + password
 
 src = ::Redis.new(YAML.load_file('source.yml').transform_keys(&:to_sym))
-dst = ::Redis.new(YAML.load_file('destination.yml').transform_keys(&:to_sym))
+dst = ::Redis::Cluster.new(YAML.load_file('destination.yml').transform_keys(&:to_sym).merge({ concurrency: { model: :none } }))
 
 ARGV.each do |key|
   ktype = src.type(key)
