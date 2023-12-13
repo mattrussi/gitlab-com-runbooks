@@ -65,7 +65,7 @@ metricsCatalog.serviceDefinition({
   },
   serviceLevelIndicators: {
     workhorse: {
-      userImpacting: false,
+      userImpacting: true,
       serviceAggregation: false,
       featureCategory: 'not_owned',
       team: 'workhorse',
@@ -104,7 +104,6 @@ metricsCatalog.serviceDefinition({
       ],
 
       dependsOn: dependOnPatroni.sqlComponents,
-      severity: 's3',  // Don't page SREs for this SLI
     },
   } + sliLibrary.get('rails_request').generateServiceLevelIndicator(railsSelector, {
     monitoringThresholds+: {
@@ -115,6 +114,5 @@ metricsCatalog.serviceDefinition({
       toolingLinks.kibana(title='Rails', index='rails'),
     ],
     dependsOn: dependOnPatroni.sqlComponents,
-    severity: 's3',  // Don't page SREs for this SLI
   }),
 })
