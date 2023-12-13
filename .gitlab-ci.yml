@@ -1256,7 +1256,7 @@ publish-periodic-queries:
       - periodic-query-results/
 
 ##########
-# Mimir 
+# Mimir
 ##########
 
 .mimir:
