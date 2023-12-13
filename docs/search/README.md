@@ -55,6 +55,7 @@
 * [../uncategorized/gcp-network-intelligence.md](../uncategorized/gcp-network-intelligence.md)
 * [GCP Projects](../uncategorized/gcp-project.md)
 * [Managing Chef](../uncategorized/manage-chef.md)
+* [Manage DNS entries](../uncategorized/manage-dns-entries.md)
 * [Node Reboots](../uncategorized/node-reboots.md)
 * [OPS-GITLAB-NET Users and Access Tokens](../uncategorized/ops-gitlab-net-pat.md)
 * [Uploads](../uncategorized/uploads.md)

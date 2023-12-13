@@ -79,6 +79,7 @@
 * [Debug failed chef provisioning](../uncategorized/debug-failed-chef-provisioning.md)
 * [Domain Registration](../uncategorized/domain-registration.md)
 * [Gemnasium is down](../uncategorized/gemnasium_is_down.md)
+* [Manage DNS entries](../uncategorized/manage-dns-entries.md)
 * [Project exports](../uncategorized/project-export.md)
 * [Ruby profiling](../uncategorized/ruby-profiling.md)
 * [How to Use Vault for Secrets Management in Infrastructure](../vault/usage.md)

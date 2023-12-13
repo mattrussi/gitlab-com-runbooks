@@ -19,7 +19,7 @@ If your record is dependent on the output from creating another terraform resour
 
 ## Non-SRE updates to gitlab.com subdomains and DNS records
 
-1. Create a new branch in [config-mgmt](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/branches/new) named `{username}/dns-{subdomain}-gitlab-com` (ex. `dmurphy/dns-example-gitlab-com`). If you do not have access, ask in `#infrastructure-lounge` for help.
+1. Create a new branch in [config-mgmt](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/branches/new) named `{username}/dns-{subdomain}-gitlab-com` (ex. `dmurphy/dns-example-gitlab-com`). If you do not have access, ask in [#production_engineering](https://gitlab.enterprise.slack.com/archives/C03QC5KNW5N) for help.
 1. At the top of the page, click **Create merge request**
     - Change the title to `DNS {subdomain}.gitlab.com`.
     - Add a justification message between the `Terraform merge-request checklist` and `General` headings.
@@ -47,4 +47,4 @@ If your record is dependent on the output from creating another terraform resour
     - This should **only** have the changes that you explicitely want. Anything unexpected means that you should stop and perform a peer review to understand what is changing and why. A successful result will look like `Plan: 1 to add, 0 to change, 0 to destroy`.
 1. Check the box on the merge request `Plan has been reviewed and has no unexpected changes`.
 1. Navigate to the changes tab of the merge request. (Optional) Take a screenshot of the lines and add the screenshot as a comment to the your team's issue related to what you're working on.
-1. Post in `#infrastructure-lounge` - `Can I please get a review/approval/merge/apply on config-mgmt!#### for a new DNS record? Thank you!`
+1. Post in [#production_engineering](https://gitlab.enterprise.slack.com/archives/C03QC5KNW5N) - `Can I please get a review/approval/merge/apply on config-mgmt!#### for a new DNS record? Thank you!`
