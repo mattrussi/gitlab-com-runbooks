@@ -42,6 +42,7 @@ describe 'libsonnet/servicemetrics/service_definition.libsonnet' do
     let(:default_monitoring) do
       {
         monitoring: {
+          node: { enabled: false, overrides: {}, thresholds: {} },
           shard: { enabled: false, overrides: {} }
         }
       }
@@ -52,9 +53,9 @@ describe 'libsonnet/servicemetrics/service_definition.libsonnet' do
         [{}, ref(:default_monitoring)],
         [{ monitoring: {} }, ref(:default_monitoring)],
         [{ monitoring: { shard: {} } }, ref(:default_monitoring)],
-        [{ monitoring: { shard: { enabled: true } } }, { monitoring: { shard: { enabled: true, overrides: {} } } }],
+        [{ monitoring: { shard: { enabled: true } } }, { monitoring: { node: { enabled: false, overrides: {}, thresholds: {} }, shard: { enabled: true, overrides: {} } } }],
         [{ monitoring: { shard: { enabled: false } } }, ref(:default_monitoring)],
-        [{ monitoring: { shard: { enabled: true, overrides: {} } } }, { monitoring: { shard: { enabled: true, overrides: {} } } }],
+        [{ monitoring: { shard: { enabled: true, overrides: {} } } }, { monitoring: { node: { enabled: false, overrides: {}, thresholds: {} }, shard: { enabled: true, overrides: {} } } }],
         [
           {
             monitoring: {
@@ -72,6 +73,7 @@ describe 'libsonnet/servicemetrics/service_definition.libsonnet' do
           },
           {
             monitoring: {
+              node: { enabled: false, overrides: {}, thresholds: {} },
               shard: {
                 enabled: true,
                 overrides: {
