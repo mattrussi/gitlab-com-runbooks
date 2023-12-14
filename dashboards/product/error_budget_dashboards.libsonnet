@@ -6,11 +6,13 @@ local errorBudgetUtils = import 'stage-groups/error-budget/utils.libsonnet';
 local errorBudget = import 'stage-groups/error_budget.libsonnet';
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 
+local grafanaNormalizeGroupKey(key) = std.strReplace(key, '-', '_');
+
 local groupDashboardLink(group) =
   toolingLinks.generateMarkdown([
     toolingLinks.grafana(
       "%(group)s's group dashboard" % group.name,
-      toolingLinks.grafanaUid('stage-groups/%s.jsonnet' % group.key),
+      toolingLinks.grafanaUid('stage-groups/%s.jsonnet' % grafanaNormalizeGroupKey(group.key)),
     ),
   ]);
 
@@ -18,7 +20,7 @@ local groupDetailDashboardLink(group) =
   toolingLinks.generateMarkdown([
     toolingLinks.grafana(
       "%(group)s's error budget detail dashboard" % group.name,
-      toolingLinks.grafanaUid('stage-groups/detail-%s.jsonnet' % group.key),
+      toolingLinks.grafanaUid('stage-groups/detail-%s.jsonnet' % grafanaNormalizeGroupKey(group.key)),
     ),
   ]);
 
