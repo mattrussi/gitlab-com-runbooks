@@ -1,6 +1,31 @@
 local resourceSaturationPoint = (import 'servicemetrics/metrics.libsonnet').resourceSaturationPoint;
 local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
 
+local originalQuery = |||
+      (
+        max without (series) (
+          label_replace(pg_database_wraparound_age_datfrozenxid{%(selector)s}, "series", "datfrozenxid", "", "")
+          or
+          label_replace(pg_database_wraparound_age_datminmxid{%(selector)s}, "series", "datminmxid", "", "")
+        )
+        and on (instance, job) (pg_replication_is_replica{%(selector)s} == 0)
+      )
+      /
+      (%(wraparoundValue)s)
+    |||;
+
+local rdsQuery = |||
+      (
+        max without (series) (
+          label_replace(pg_database_wraparound_age_datfrozenxid{%(selector)s}, "series", "datfrozenxid", "", "")
+          or
+          label_replace(pg_database_wraparound_age_datminmxid{%(selector)s}, "series", "datminmxid", "", "")
+        )
+      )
+      /
+      (%(wraparoundValue)s)
+    |||;
+
 {
   pg_xid_wraparound: resourceSaturationPoint({
     title: 'Transaction ID Wraparound',
@@ -9,7 +34,8 @@ local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
 
     // Use patroni tag, not postgres since we only want clusters that have primaries
     // not postgres-archive, or postgres-delayed nodes for example
-    appliesTo: metricsCatalog.findServicesWithTag(tag='postgres_with_primaries'),
+    // I need to add RDS to this array, how can I do that?
+    appliesTo: ['rds'],
 
     alertRunbook: 'docs/patroni/pg_xid_wraparound_alert.md',
     description: |||
@@ -40,18 +66,12 @@ local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
     queryFormatConfig: {
       wraparoundValue: '2^31 - 10^6',  // Keep this as a string
     },
-    query: |||
-      (
-        max without (series) (
-          label_replace(pg_database_wraparound_age_datfrozenxid{%(selector)s}, "series", "datfrozenxid", "", "")
-          or
-          label_replace(pg_database_wraparound_age_datminmxid{%(selector)s}, "series", "datminmxid", "", "")
-        )
-        and on (instance, job) (pg_replication_is_replica{%(selector)s} == 0)
-      )
-      /
-      (%(wraparoundValue)s)
-    |||,
+    // how do I figure out the `selectors` if those are not defined in here?
+
+    foo: std.trace('----- TRACE ----- %(selector)s', '%(selector)s'),
+
+    // how do I determine what system is using this file such that I can build an appropriate if statement here?
+    query: if true then rdsQuery else originalQuery,
     slos: {
       soft: 0.60,
       hard: 0.70,
