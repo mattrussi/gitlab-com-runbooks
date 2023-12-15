@@ -30,6 +30,69 @@ See the AI Gateway architecture blueprint at <https://docs.gitlab.com/ee/archite
 For a higher level view of how the AI Gateway fits into our AI Architecture, see
 <https://docs.gitlab.com/ee/development/ai_architecture.html>
 
+### Example API call graph
+
+For context, here is a typical call graph for a Code Suggestions API request from an IDE on an end-user's laptop.  This call graph is current as of 2023-12-15 but may change in the future.
+
+```mermaid
+sequenceDiagram
+    box User laptop
+    actor User
+    participant IDE as VSCode
+    participant LS as LanguageServer
+    end
+    box Cloudflare POP nearest to User
+    participant CFGL as gitlab.com
+    end
+    box GitLab Rails infrastructure
+    participant WH as Workhorse
+    participant RB as Rails
+    end
+    box Cloudflare POP nearest to Rails
+    participant CFCS as codesuggestions.gitlab.com
+    end
+    box GitLab AI-gateway infrastructure (GCP)
+    participant GW as AI gateway
+    end
+    box Executor service
+    participant ML as ML model executor
+    end
+
+    IDE ->>+ LS: Request code completion for cursor context
+    LS ->>+ CFGL: /api/v4/code_suggestions/completions
+    CFGL ->>+ WH: /api/v4/code_suggestions/completions
+    WH ->>+ RB: /api/v4/code_suggestions/completions
+    RB ->>+ CFCS: /v2/code/completions
+    CFCS ->>+ GW: /v2/code/completions
+    GW ->>+ ML: model params
+
+    ML -->>- GW: model response
+    GW -->>- CFCS: ai-gateway API response
+    CFCS -->>- RB: ai-gateway API response
+    RB -->>- WH: rails API response
+    WH -->>- CFGL: rails API response
+    CFGL -->>- LS: rails API response
+    LS -->>- IDE: Code completion suggestion
+```
+
+Notes:
+
+* Transits Cloudflare twice, once from end-user to Rails, and later from Rails to ai-gateway.
+  * Typically at least one of those is fairly low latency: only 10 ms RTT between GCP's `us-east1` region and Cloudflare's `ATL` POP.
+  * Cloudflare tools (logs, analytics, rules, etc.) are available for both of those API calls.
+* Caching and reuse of TCP and TLS sessions allows most requests to avoid extra round-trips for connection setup.
+* Currently `ai-gateway` containers run as a GCP Cloud Run service.
+  * See the Cloud Run [docs](https://cloud.google.com/run/docs/resource-model) and [console](https://console.cloud.google.com/run/detail/us-east1/ai-gateway/metrics?project=gitlab-runway-production).
+  * Those containers are not accessible via the tools we use for GKE-based services (`kubectl`, etc.).
+  * The `gcloud` CLI tool exposes specs for the containers and their revisions (deployments).
+
+Starter `gcloud` commands:
+
+```
+$ gcloud run services describe --project gitlab-runway-production --region us-east1 --format yaml ai-gateway
+$ gcloud run revisions list --project gitlab-runway-production --region us-east1 --service ai-gateway
+```
+
 ## Deployment
 
 AI Gateway is deployed through Runway:
