@@ -3851,6 +3851,27 @@ groups:
       max by(type) (
         clamp_min(
           clamp_max(
+            (
+              max (
+                pg_database_wraparound_age_datfrozenxid_seconds{type="rds"}
+                or
+                pg_database_wraparound_age_datminmxid_seconds{type="rds"}
+              )
+            )
+            /
+            (2^31 - 3000000)
+            ,
+            1)
+        ,
+        0)
+      )
+    labels:
+      component: pg_xid_wraparound
+    record: gitlab_component_saturation:ratio
+  - expr: |
+      max by(type) (
+        clamp_min(
+          clamp_max(
             sum by(type) (avg_over_time(sum without (pid,worker) (puma_active_connections{type="webservice"})[1m:]))
             /
             sum by(type) (sum without (pid,worker) (puma_max_threads{pid="puma_master", type="webservice"}))
@@ -3982,6 +4003,14 @@ groups:
     labels:
       component: node_schedstat_waiting
     record: slo:max:hard:gitlab_component_saturation:ratio
+  - expr: "0.6"
+    labels:
+      component: pg_xid_wraparound
+    record: slo:max:soft:gitlab_component_saturation:ratio
+  - expr: "0.7"
+    labels:
+      component: pg_xid_wraparound
+    record: slo:max:hard:gitlab_component_saturation:ratio
   - expr: "0.85"
     labels:
       component: puma_workers
@@ -4104,6 +4133,14 @@ groups:
       horiz_scaling: "yes"
       quantile: max
       severity: s4
+    record: gitlab_component_saturation_info
+  - expr: "1"
+    labels:
+      capacity_planning_strategy: quantile95_1h
+      component: pg_xid_wraparound
+      horiz_scaling: "no"
+      quantile: max
+      severity: s1
     record: gitlab_component_saturation_info
   - expr: "1"
     labels:
@@ -4944,6 +4981,89 @@ groups:
       alert_type: cause
       rules_domain: general
       severity: s4
+  - alert: component_saturation_slo_out_of_bounds
+    annotations:
+      description: |+
+        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
+
+        Details of the Transaction ID Wraparound resource:
+
+        Risk of DB shutdown in the near future, approaching transaction ID wraparound.
+
+        This is a critical situation.
+
+        This saturation metric measures how close the database is to Transaction ID wraparound.
+
+        When wraparound occurs, the database will automatically shutdown to prevent data loss, causing a full outage.
+
+        Recovery would require entering single-user mode to run vacuum, taking the site down for a potentially multi-hour maintenance session.
+
+        To avoid reaching the db shutdown threshold, consider the following short-term actions:
+
+        1. Escalate to the SRE Datastores team, and then,
+
+        2. Find and terminate any very old transactions. The runbook for this alert has details.  Do this first.  It is the most critical step and may be all that is necessary to let autovacuum do its job.
+
+        3. Run a manual vacuum on tables with oldest relfrozenxid.  Manual vacuums run faster than autovacuum.
+
+        4. Add autovacuum workers or reduce autovacuum cost delay, if autovacuum is chronically unable to keep up with the transaction rate.
+
+        Long running transaction dashboard: https://dashboards.gitlab.net/d/alerts-long_running_transactions/alerts-long-running-transactions?orgId=1
+
+      grafana_dashboard_id: alerts-sat_pg_xid_wraparound
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_pg_xid_wraparound?from=now-6h/m&to=now-1m/m&var-type={{
+        $labels.type }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3666116359"
+      grafana_variables: type
+      promql_query: |
+        max by(type, datname) (
+          clamp_min(
+            clamp_max(
+              (
+                max (
+                  pg_database_wraparound_age_datfrozenxid_seconds{type="{{ $labels.type }}"}
+                  or
+                  pg_database_wraparound_age_datminmxid_seconds{type="{{ $labels.type }}"}
+                )
+              )
+              /
+              (2^31 - 3000000)
+              ,
+              1)
+          ,
+          0)
+        )
+      promql_template_1: |
+        max by(type, datname) (
+          clamp_min(
+            clamp_max(
+              (
+                max (
+                  pg_database_wraparound_age_datfrozenxid_seconds{type="{{ $labels.type }}"}
+                  or
+                  pg_database_wraparound_age_datminmxid_seconds{type="{{ $labels.type }}"}
+                )
+              )
+              /
+              (2^31 - 3000000)
+              ,
+              1)
+          ,
+          0)
+        )
+      runbook: docs/patroni/pg_xid_wraparound_alert.md
+      title: The Transaction ID Wraparound resource of the {{ $labels.type }} service
+        has a saturation exceeding SLO and is close to its capacity limit.
+    expr: |
+      gitlab_component_saturation:ratio{component="pg_xid_wraparound"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="pg_xid_wraparound"}
+    for: 5m
+    labels:
+      alert_type: cause
+      pager: pagerduty
+      rules_domain: general
+      severity: s1
   - alert: component_saturation_slo_out_of_bounds
     annotations:
       description: |+

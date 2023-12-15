@@ -38,6 +38,7 @@ local options = validateReferenceArchitectureOptions(import 'gitlab-metrics-opti
       import 'saturation-monitoring/node_schedstat_waiting.libsonnet',
       import 'saturation-monitoring/opensearch_cpu.libsonnet',
       import 'saturation-monitoring/opensearch_disk_space.libsonnet',
+      import 'saturation-monitoring/pg_txid_wraparound.libsonnet',
       import 'saturation-monitoring/single_node_cpu.libsonnet',
       import 'saturation-monitoring/puma_workers.libsonnet',
     ] +
@@ -94,6 +95,11 @@ local options = validateReferenceArchitectureOptions(import 'gitlab-metrics-opti
     node: 'node',
     sliComponent: 'component',
   }),
+
+  // Our Reference Architectures support various Cloud Providers, but we currently only leverage RDS
+  // This will expand in the future as support for other Cloud Providers is added to
+  // our metrics system
+  dbType: 'rds',
 
   rdsInstanceRAM: null,
   rdsMaxAllocatedStorage: null,

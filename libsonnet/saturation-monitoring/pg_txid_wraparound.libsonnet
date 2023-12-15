@@ -1,6 +1,10 @@
 local resourceSaturationPoint = (import 'servicemetrics/metrics.libsonnet').resourceSaturationPoint;
 local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
+local config = import './gitlab-metrics-config.libsonnet';
 
+local dbType = std.get(config, 'dbType', null);
+
+// All of the below metrics are reported by the postgres exporter
 local originalQuery = |||
       (
         max without (series) (
@@ -14,12 +18,14 @@ local originalQuery = |||
       (%(wraparoundValue)s)
     |||;
 
+// `pg_database_wraparound_age_datfrozenxid_seconds` provided by the postgres exporter
+// `pg_database_wraparound_age_datminxid_seconds` provided by the postgres exporter
 local rdsQuery = |||
       (
-        max without (series) (
-          label_replace(pg_database_wraparound_age_datfrozenxid{%(selector)s}, "series", "datfrozenxid", "", "")
+        max (
+          pg_database_wraparound_age_datfrozenxid_seconds{%(selector)s}
           or
-          label_replace(pg_database_wraparound_age_datminmxid{%(selector)s}, "series", "datminmxid", "", "")
+          pg_database_wraparound_age_datminmxid_seconds{%(selector)s}
         )
       )
       /
@@ -34,8 +40,8 @@ local rdsQuery = |||
 
     // Use patroni tag, not postgres since we only want clusters that have primaries
     // not postgres-archive, or postgres-delayed nodes for example
-    // I need to add RDS to this array, how can I do that?
-    appliesTo: ['rds'],
+    // Add RDS for instances where RDS is leveraged
+    appliesTo: metricsCatalog.findServicesWithTag(tag='postgres_with_primaries') + ['rds'],
 
     alertRunbook: 'docs/patroni/pg_xid_wraparound_alert.md',
     description: |||
@@ -64,14 +70,12 @@ local rdsQuery = |||
     grafana_dashboard_uid: 'sat_pg_xid_wraparound',
     resourceLabels: ['datname'],
     queryFormatConfig: {
-      wraparoundValue: '2^31 - 10^6',  // Keep this as a string
+      // Transaction ID's contain at most 2^32 available ID's.  Postgres (>= version 14) reserves 3 million of said ID's
+      wraparoundValue: '2^31 - 3000000',
     },
-    // how do I figure out the `selectors` if those are not defined in here?
 
-    foo: std.trace('----- TRACE ----- %(selector)s', '%(selector)s'),
-
-    // how do I determine what system is using this file such that I can build an appropriate if statement here?
-    query: if true then rdsQuery else originalQuery,
+    query: if dbType == 'rds' then rdsQuery else originalQuery,
+    trace: std.trace('The chosen database type is: ' + dbType, dbType),
     slos: {
       soft: 0.60,
       hard: 0.70,
