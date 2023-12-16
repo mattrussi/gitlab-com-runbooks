@@ -294,7 +294,7 @@ groups:
       )
   - record: gitlab_component_saturation:ratio
     labels:
-      component: gcp_quota_limit
+      component: gcp_quota
     expr: |
       max by(environment, tier, type, stage, shard) (
         clamp_min(
@@ -1559,11 +1559,11 @@ groups:
     expr: "0.95"
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:
-      component: gcp_quota_limit
+      component: gcp_quota
     expr: "0.85"
   - record: slo:max:hard:gitlab_component_saturation:ratio
     labels:
-      component: gcp_quota_limit
+      component: gcp_quota
     expr: "0.9"
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:
@@ -2195,7 +2195,7 @@ groups:
   - record: gitlab_component_saturation_info
     labels:
       capacity_planning_strategy: quantile95_1h
-      component: gcp_quota_limit
+      component: gcp_quota
       horiz_scaling: "no"
       quantile: max
       severity: s2
@@ -3795,12 +3795,12 @@ groups:
         Saturation on a quota may cause problems with creating infrastructure resources on GCP.
 
         To fix, we can request a quota increase for the specific resource to the GCP support team.
-      grafana_dashboard_id: alerts-gcp_quota_limit
-      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-gcp_quota_limit?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_id: alerts-gcp_quota
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-gcp_quota?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
         }}
       grafana_min_zoom_hours: "6"
-      grafana_panel_id: "2585628061"
+      grafana_panel_id: "935820816"
       grafana_variables: environment,type,stage
       promql_query: |
         max by(environment, tier, type, stage, shard, project, metric, quotaregion) (
@@ -3837,8 +3837,8 @@ groups:
       rules_domain: general
       severity: s2
     expr: |
-      gitlab_component_saturation:ratio{component="gcp_quota_limit"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="gcp_quota_limit"}
+      gitlab_component_saturation:ratio{component="gcp_quota"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="gcp_quota"}
   - alert: component_saturation_slo_out_of_bounds
     for: 5m
     annotations:
