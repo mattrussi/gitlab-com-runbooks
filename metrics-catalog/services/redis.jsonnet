@@ -5,7 +5,9 @@ local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 metricsCatalog.serviceDefinition(
   redisArchetype(
     type='redis',
-    railsStorageSelector=redisHelpers.storageSelector({ oneOf: ['shared_state', 'buffered_counter'] }),
+    // only Gitlab::Redis::BufferedCounter use ~service::Redis
+    // this will be removed when buffered counter workload is migrated to redis-cluster-shared-state
+    railsStorageSelector=redisHelpers.storageSelector('buffered_counter'),
     descriptiveName='Persistent Redis',
   )
   + redisHelpers.gitlabcomObservabilityToolingForRedis('redis')
