@@ -23,6 +23,8 @@
 The AI-gateway is a standalone-service that will give access to AI features to all users of GitLab, no matter which
 instance they are using: self-managed, dedicated or GitLab.com.
 
+The AI Gateway was formerly known as Model Gateway and Code Suggestions.
+
 ## Architecture
 
 See the AI Gateway architecture blueprint at <https://docs.gitlab.com/ee/architecture/blueprints/ai_gateway/>

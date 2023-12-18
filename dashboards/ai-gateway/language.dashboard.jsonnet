@@ -1,10 +1,9 @@
-
 local basic = import 'grafana/basic.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
 local promQuery = import 'grafana/prom_query.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
 
-local type = 'code_suggestions';
+local type = 'ai-gateway';
 local formatConfig = {
   selector: selectors.serializeHash({ env: '$environment', environment: '$environment', type: type }),
 };
@@ -39,36 +38,36 @@ local bargaugePanel(
   },
   unit='none',
   transformations=[],
-) =
-{
-  description: description,
-  fieldConfig: {
-    values: false,
-    defaults: {
-      color: {
-        mode: 'continuous-GrYlRd',
+      ) =
+  {
+    description: description,
+    fieldConfig: {
+      values: false,
+      defaults: {
+        color: {
+          mode: 'continuous-GrYlRd',
+        },
+        decimals: 1,
+        thresholds: thresholds,
+        unit: unit,
       },
-      decimals: 1,
-      thresholds: thresholds,
-      unit: unit,
     },
-  },
-  options: {
-    displayMode: 'basic',
-    orientation: orientation,
-    reduceOptions: reduceOptions,
-    showUnfilled: true,
-    valueMode: 'color',
-  },
-  targets: [
-    promQuery.target(
-      query, format=format, legendFormat=legendFormat, instant=instant
-    )
-  ],
-  title: title,
-  type: 'bargauge',
-  transformations: transformations,
-};
+    options: {
+      displayMode: 'basic',
+      orientation: orientation,
+      reduceOptions: reduceOptions,
+      showUnfilled: true,
+      valueMode: 'color',
+    },
+    targets: [
+      promQuery.target(
+        query, format=format, legendFormat=legendFormat, instant=instant
+      ),
+    ],
+    title: title,
+    type: 'bargauge',
+    transformations: transformations,
+  };
 
 basic.dashboard(
   'Language',
