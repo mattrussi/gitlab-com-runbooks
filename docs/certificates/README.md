@@ -52,7 +52,11 @@ which the command was executed.
 
 *Make sure to add the new certificate to the list below!*
 
-Also create a 1Password entry for the key (and the new cert) in the "SSLCerts Lockbox" vault.
+Add the private key to vault:
+
+```sh
+cat $DOMAIN.key.pem | vault kv put shared/env/gprd/sslmate/$DOMAIN key.pem=-
+```
 
 ### Renew a certificate
 
@@ -103,8 +107,11 @@ Previous renewals:
 ### Re-keying a certificate
 
 If a certificate auto-renews but we have lost the private key, generate a new
-one (and CSR) using SSLMate's web UI. Download the private key and create a
-1password entry for it (and the new cert) in the "SSLCerts Lockbox" vault.
+one (and CSR) using SSLMate's web UI. Download the private key and upload to vault:
+
+```sh
+cat $DOMAIN.key.pem | vault kv put shared/env/gprd/sslmate/$DOMAIN key.pem=-
+```
 
 ### Verify the certificate
 
