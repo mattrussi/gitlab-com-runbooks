@@ -11,10 +11,11 @@ local stage = std.extVar('stage', 'main');
     query: |||
       avg_over_time(gitlab_service_ops:rate_5m{
         env:        "${env}",
+        environment: "${env}",
         stage:      "${stage}",
         monitor:    "global",
         type:       "gitaly",
-      }[$__interval])
+      }[1h])
     |||,
     time: now,
   }),
