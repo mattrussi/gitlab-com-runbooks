@@ -107,7 +107,6 @@ local resolveRecordingRuleFor(metricName, requiredAggregationLabels, selector, d
     rangeInterval='5m',
     selector={},
     offset=null
-
   )::
     // Currently only support sum/rate recording rules,
     // possibly support other options in future
@@ -126,13 +125,12 @@ local resolveRecordingRuleFor(metricName, requiredAggregationLabels, selector, d
         else
           null,
 
-  recordingRuleExpressionFor(metricName, rangeInterval, extraSelector={})::
+  recordingRuleExpressionFor(metricName, rangeInterval)::
     local aggregationLabels = metricsLabelRegistry.lookupLabelsForMetricName(metricName);
     local allRequiredLabelsPlusStandards = std.setUnion(aggregationLabels, standardEnvironmentLabels);
-    local query = 'rate(%(metricName)s%(selector)s[%(rangeInterval)s] offset 30s)' % {
+    local query = 'rate(%(metricName)s[%(rangeInterval)s] offset 30s)' % {
       metricName: metricName,
       rangeInterval: rangeInterval,
-      selector: selectors.serializeHash(extraSelector, withBraces=true),
     };
     aggregations.aggregateOverQuery('sum', allRequiredLabelsPlusStandards, query),
 
