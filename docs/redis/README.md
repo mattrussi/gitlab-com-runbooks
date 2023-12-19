@@ -44,6 +44,7 @@
 * [Managing Sentry in Kubernetes](../sentry/sentry.md)
 * [Disabling Sidekiq workers](../sidekiq/disabling-a-worker.md)
 * [Pull mirror overdue queue is too large](../sidekiq/large-pull-mirror-queue.md)
+* [[`SidekiqQueueTooLarge`](../../rules/sidekiq-queues.yml)](../sidekiq/large-sidekiq-queue.md)
 * [Sidekiq queue migration](../sidekiq/queue-migration.md)
 * [Poking around at sidekiq's running state](../sidekiq/sidekiq-inspection.md)
 * [A survival guide for SREs to working with Sidekiq at GitLab](../sidekiq/sidekiq-survival-guide-for-sres.md)

@@ -59,6 +59,7 @@
 * [Praefect error rate is too high](../praefect/praefect-error-rate.md)
 * [Add and remove file storages to praefect](../praefect/praefect-file-storages.md)
 * [A survival guide for SREs to working with Redis at GitLab](../redis/redis-survival-guide-for-sres.md)
+* [[`SidekiqQueueTooLarge`](../../rules/sidekiq-queues.yml)](../sidekiq/large-sidekiq-queue.md)
 * [Life of a Git Request](../tutorials/overview_life_of_a_git_request.md)
 * [Life of a Web Request](../tutorials/overview_life_of_a_web_request.md)
 * [Deleted Project Restoration](../uncategorized/deleted-project-restore.md)
