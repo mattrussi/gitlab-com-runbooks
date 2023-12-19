@@ -31,7 +31,13 @@ metricsCatalog.serviceDefinition(
           name: 'redis_primary_cpu',
           parameters: {
             changepoints: ['2023-08-22', '2023-09-27'],
-
+            ignore_outliers: [
+              {
+                // https://gitlab.com/gitlab-com/gl-infra/capacity-planning-trackers/gitlab-com/-/issues/1452#note_1700126988
+                start: '2023-12-16',
+                end: '2023-12-19',
+              },
+            ],
           },
           events: [
             {
@@ -51,6 +57,16 @@ metricsCatalog.serviceDefinition(
                 {
                   title: '&431',
                   ref: 'https://gitlab.com/groups/gitlab-com/gl-infra/-/epics/431#note_1582594368',
+                },
+              ],
+            },
+            {
+              date: '2023-12-16',
+              name: 'Incident: SidekiqQueueTooLarge default queue',
+              references: [
+                {
+                  title: 'incident',
+                  ref: 'https://gitlab.com/gitlab-com/gl-infra/production/-/issues/17294#note_1698952114',
                 },
               ],
             },
