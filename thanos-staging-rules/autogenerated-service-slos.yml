@@ -107,6 +107,18 @@ spec:
       expr: "0.001000"
     - record: slo:min:events:gitlab_service_apdex:ratio
       labels:
+        component: vertex_ai_code_completion
+        tier: sv
+        type: ai-gateway
+      expr: "0.990000"
+    - record: slo:max:events:gitlab_service_errors:ratio
+      labels:
+        component: vertex_ai_code_completion
+        tier: sv
+        type: ai-gateway
+      expr: "0.001000"
+    - record: slo:min:events:gitlab_service_apdex:ratio
+      labels:
         component: waf
         tier: sv
         type: ai-gateway

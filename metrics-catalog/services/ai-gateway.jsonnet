@@ -13,7 +13,7 @@ metricsCatalog.serviceDefinition(
     team='code_creation',
     apdexScore=0.99,
     featureCategory='code_suggestions',
-    apdexSatisfiedThreshold="2079.650567184067",
+    apdexSatisfiedThreshold='2079.650567184067',
     customToolingLinks=[
       toolingLinks.kibana(
         title='MLOps',
@@ -90,6 +90,44 @@ metricsCatalog.serviceDefinition(
         requestRate: rateMetric(
           counter='code_suggestions_inference_requests_total',
           selector=baseSelector,
+        ),
+
+        significantLabels: ['model_engine', 'model_name'],
+
+        toolingLinks: [
+          toolingLinks.kibana(
+            title='Model Inference',
+            index='mlops',
+            includeMatchersForPrometheusSelector=false,
+            matches={ 'json.jsonPayload.model_engine': 'vertex-ai' }
+          ),
+        ],
+      },
+      vertex_ai_code_completion: {
+        local inferenceSelector = baseSelector { model_engine: { eq: 'vertex-ai' }, model_name: { re: 'code-gecko@' } },
+        severity: 's4',
+        userImpacting: true,
+        serviceAggregation: false,
+        team: 'code_creation',
+        featureCategory: 'code_suggestions',
+        trafficCessationAlertConfig: false,
+        description: |||
+          Vertex AI API code completion inference requests for AI Gateway.
+
+          https://cloud.google.com/vertex-ai/docs/generative-ai/model-reference/code-completion
+        |||,
+
+        apdex: histogramApdex(
+          histogram='code_suggestions_inference_request_duration_seconds_bucket',
+          selector=inferenceSelector,
+          satisfiedThreshold=0.75,
+          toleratedThreshold=1,
+          metricsFormat='migrating',
+        ),
+
+        requestRate: rateMetric(
+          counter='code_suggestions_inference_requests_total',
+          selector=inferenceSelector,
         ),
 
         significantLabels: ['model_engine', 'model_name'],
