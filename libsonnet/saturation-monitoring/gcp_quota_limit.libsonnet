@@ -36,7 +36,7 @@ local selectors = import 'promql/selectors.libsonnet';
   // is https://gitlab.com/gitlab-com/gl-infra/readiness/-/merge_requests/161
   gcp_quota_limit_s4: resourceSaturationPoint(self.gcp_quota_limit {
     severity: 's4',
-    appliesTo: ['code_suggestions', 'ai-gateway'],
+    appliesTo: ['ai-gateway'],
     grafana_dashboard_uid: 'gcp_quota_limit_s4',
   }),
 
