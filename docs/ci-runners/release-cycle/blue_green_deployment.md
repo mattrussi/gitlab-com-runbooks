@@ -1,6 +1,6 @@
 # Blue_Green_Deployment
 
-This document outlines the blue/green deployment strategy where we maintain a single active cluster serving production traffic. The inactive cluster is deleted as part of our [cost optimization strategy](https://gitlab.com/groups/gitlab-com/gl-infra/-/epics/1090).
+This document outlines the blue/green deployment strategy where we maintain a single active cluster serving production traffic. The inactive cluster sits around awaiting a new deployment, before becoming active again.
 
 While troubleshooting or working with blue-green deployments you might need to:
 
