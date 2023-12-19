@@ -15,6 +15,7 @@ To determine which deployment is currently active:
 ## Executing ChatOps Commands
 
 Use ChatOps commands in the #production channel to manage deployments. It's crucial to deploy only one environment (blue or green) at a time.
+The ChatOps commands logic lives in the [Deployer repo](https://gitlab.com/gitlab-com/gl-infra/ci-runners/deployer)
 
 ### Deploying and Draining Runner Managers
 
@@ -25,6 +26,8 @@ Use ChatOps commands in the #production channel to manage deployments. It's cruc
 2. **Drain the Blue Environment (After Green is Deployed):** This command initiates the process of draining the runners and deleting the machines in the blue environment. This operation may take some time to complete.
 
     `/runner run stop private blue`
+
+A list of all the the available commands can be found in [Deployer repo](https://gitlab.com/gitlab-com/gl-infra/ci-runners/deployer)
 
 ## Support and Queries
 
