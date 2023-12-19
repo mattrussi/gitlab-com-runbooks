@@ -73,7 +73,8 @@ interventions and MRs:
 
 1. Obtain the new certificate from [SSLMate](https://sslmate.com/console/orders/).
    *You will not be able to obtain a backup from via GCP!*
-1. Get the current private key from the `SSLCerts Lockbox` 1Password vault and save it to your machine. (preferably on a tmpfs)
+1. Get the current private key from vault and save it to your machine. (preferably on a tmpfs)
+    - `vault kv get -field key.pem shared/env/gprd/sslmate/$DOMAIN`
 1. Determine the expiration date of the new certificate: `< certificate.pem openssl x509 -noout -text | grep 'Not After'`
 1. Upload the certificate (chain) and private key from your local machine:
 
