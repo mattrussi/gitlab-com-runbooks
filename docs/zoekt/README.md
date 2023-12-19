@@ -133,6 +133,17 @@ This is a significant storage overhead so we plan to optimize this in <https://g
 
 ## Monitoring/Alerting
 
+### Dashboards
+
+There are a few dashboards to monitor Zoekt health:
+
+* [Zoekt Health Dashboard](https://log.gprd.gitlab.net/app/r/s/jR5H5): Monitor search and indexing operations
+* [Zoekt memory usage](https://thanos-query.ops.gitlab.net/graph?g0.expr=sum(process_resident_memory_bytes%7Benv%3D%22gprd%22,%20container%3D~%22zoekt.*%22%7D)%20by%20(container,%20pod)&g0.tab=0&g0.stacked=0&g0.range_input=2h&g0.max_source_resolution=0s&g0.deduplicate=1&g0.partial_response=0&g0.store_matches=%5B%5D&g0.step_input=60) : View memory utilization for Zoekt containers
+* [Zoekt OOM errors](https://thanos.gitlab.net/graph?g0.expr=(sum%20by%20(container%2C%20pod%2C%20environment)%20(kube_pod_container_status_last_terminated_reason%7Benv%3D%22gprd%22%2C%20cluster%3D%22gprd-gitlab-gke%22%2C%20pod%3D~%22gitlab-gitlab-zoekt-%5B0-9%5D%2B%22%2C%20reason%3D%22OOMKilled%22%7D)%0A%20%20%20%20%20%20*%20on%20(container%2C%20pod%2C%20environment)%20group_left%0A%20%20%20%20%20%20sum%20by%20(container%2C%20pod%2C%20environment)%20(changes(kube_pod_container_status_restarts_total%7Benv%3D%22gprd%22%2C%20cluster%3D%22gprd-gitlab-gke%22%2C%20pod%3D~%22gitlab-gitlab-zoekt-%5B0-9%5D%2B%22%7D%5B1m%5D)%20%3E%200))%0A&g0.tab=0&g0.stacked=0&g0.range_input=12h&g0.max_source_resolution=0s&g0.deduplicate=1&g0.partial_response=0&g0.store_matches=%5B%5D): View any Out Of Memory exceptions for Zoekt containrs
+* [Zoekt Info Dashboard](https://dashboards.gitlab.net/d/search-zoekt/search3a-zoekt-info)
+
+### Kibana logs
+
 GitLab application has a dedicated `zoekt.log` file for Zoekt-related log entries. This will be handled by the standard logging infrastructure. You may also find indexing related errors in `sidekiq.log` and search related errors in `production_json.log`.
 
 As for `gitlab-zoekt-indexer` and `zoekt-webserver`, they write logs to stdout.
