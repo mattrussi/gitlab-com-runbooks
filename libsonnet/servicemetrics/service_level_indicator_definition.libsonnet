@@ -161,10 +161,7 @@ local serviceLevelIndicatorDefinition(sliName, serviceLevelIndicator) =
         [],
 
     local requestRateMetrics =
-      if self.hasRequestRate() then
-        self.requestRate.getMetricNames()
-      else
-        [],
+      self.requestRate.getMetricNames(),
 
     local errorRateMetrics =
       if self.hasErrorRate() then
