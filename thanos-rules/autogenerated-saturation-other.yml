@@ -141,6 +141,21 @@ groups:
       )
   - record: gitlab_component_saturation:ratio
     labels:
+      component: max_concurrent_inferences
+    expr: |
+      max by(env, environment, tier, type, stage, shard) (
+        clamp_min(
+          clamp_max(
+            sum by (env, environment, tier, type, stage, shard, model_engine, model_name)(max_over_time(model_inferences_in_flight{env!~"gprd|ops",type="ai-gateway"}[10m]))
+            /
+            min by (env, environment, tier, type, stage, shard, model_engine, model_name)(min_over_time(model_inferences_max_concurrent{env!~"gprd|ops",type="ai-gateway"}[10m]))
+            ,
+            1)
+        ,
+        0)
+      )
+  - record: gitlab_component_saturation:ratio
+    labels:
       component: open_fds
     expr: |
       max by(env, environment, tier, type, stage, shard) (
@@ -752,6 +767,65 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="kube_pool_max_nodes",env!~"gprd|ops",monitor="global"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="kube_pool_max_nodes",env!~"gprd|ops",monitor="global"}
+  - alert: component_saturation_slo_out_of_bounds
+    for: 5m
+    annotations:
+      title: The Maximum number of concurrent inferences to a large language model
+        resource of the {{ $labels.type }} service ({{ $labels.stage }} stage) has
+        a saturation exceeding SLO and is close to its capacity limit.
+      description: |
+        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
+
+        Details of the Maximum number of concurrent inferences to a large language model resource:
+
+        The maximum number of inferences (requests) we can concurrently make to a single LLM.
+
+        Anthropic is enforcing different concurrency limits per model they provide. When we make a new request when we already have the maximum number of concurrent requests in flight, Anthropic responds with a 429. The client-library in the AI-gateway is set to retry once on errors.
+
+        When Anthropic rejects the requests, this leads to a 500 error in the AI-gateway and Workhorse. This results in clients not getting a response (code suggestion).
+
+        To fix this, we need to request a larger concurrency to Anthropic. Currently in the `#ext-anthropic` slack channel.
+
+        Bear in mind that this metric is sampled at scrape time. So it is only an approximation of the actual number of requests in flight. We should assume the actual utilization is higher and request increases sooner.
+      grafana_dashboard_id: alerts-max_concurrent_inferences
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-max_concurrent_inferences?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "621984338"
+      grafana_variables: environment,type,stage
+      promql_query: |
+        max by(environment, tier, type, stage, shard, model_engine, model_name) (
+          clamp_min(
+            clamp_max(
+              sum by (environment, tier, type, stage, shard, model_engine, model_name)(max_over_time(model_inferences_in_flight{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[10m]))
+              /
+              min by (environment, tier, type, stage, shard, model_engine, model_name)(min_over_time(model_inferences_max_concurrent{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[10m]))
+              ,
+              1)
+          ,
+          0)
+        )
+      promql_template_1: |
+        max by(environment, tier, type, stage, shard, model_engine, model_name) (
+          clamp_min(
+            clamp_max(
+              sum by (environment, tier, type, stage, shard, model_engine, model_name)(max_over_time(model_inferences_in_flight{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[10m]))
+              /
+              min by (environment, tier, type, stage, shard, model_engine, model_name)(min_over_time(model_inferences_max_concurrent{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[10m]))
+              ,
+              1)
+          ,
+          0)
+        )
+      runbook: docs/{{ $labels.type }}/README.md
+    labels:
+      alert_type: cause
+      rules_domain: general
+      severity: s3
+    expr: |
+      gitlab_component_saturation:ratio{component="max_concurrent_inferences",env!~"gprd|ops",monitor="global"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="max_concurrent_inferences",env!~"gprd|ops",monitor="global"}
   - alert: component_saturation_slo_out_of_bounds
     for: 5m
     annotations:
