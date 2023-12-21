@@ -3,11 +3,14 @@
 
 require 'json'
 require 'net/http'
+require 'stringio'
+require_relative 'compile_jsonnet'
 
-# Takes the input from `./scripts/compile_jsonnet.rb scripts/generate-service-dependencies.jsonnet > service-dependencies-raw.json`
 THANOS_URL = ENV['THANOS_URL'] || 'http://localhost:10902'
 THANOS_QUERY_API = "#{THANOS_URL}/api/v1/query"
-SOURCE_JSON_FILE = 'service-dependencies-raw.json'
+
+source = StringIO.new
+CompileJsonnet.new(source).run(['scripts/generate-service-dependencies.jsonnet'])
 
 $service_dependencies_from_slis = {}
 def fetch_type_dependencies(service, sli, query)
@@ -29,13 +32,15 @@ def fetch_type_dependencies(service, sli, query)
     next if emitting_service == service
 
     $service_dependencies_from_slis[emitting_service] ||= {}
+    if !emitting_service
+      puts "Empty emitting_service for #{service} #{sli} #{query}"
+    end
     $service_dependencies_from_slis[emitting_service][sli] ||= Set.new
     $service_dependencies_from_slis[emitting_service][sli] << service
   end
 end
 
-file = File.read(SOURCE_JSON_FILE)
-data = JSON.parse(file)
+data = JSON.parse(source.string)
 $all_services = data.keys
 
 data.each do |service, value|
