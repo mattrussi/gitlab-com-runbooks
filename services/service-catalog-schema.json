@@ -44,6 +44,10 @@
           },
           "uniqueItems": true
         },
+        "issue_tracker": {
+          "description": "The URL used to receive incident alerts in the team's issue tracker",
+          "type": "string"
+        },
         "ignored_components": {
           "description": "The list of components that should not feed into the team's error budget",
           "type": "array",

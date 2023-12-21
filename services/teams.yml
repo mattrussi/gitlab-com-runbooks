@@ -208,7 +208,7 @@ teams:
   manager: dsatcher
   label: group::code creation
   slack_alerts_channel: g_mlops-alerts
-  issue_tracker: https://gitlab.com/gitlab-org/ai-powered/ai-framework/team-hq
+  issue_tracker: gitlab.com/gitlab-org/ai-powered/ai-framework/team-hq
   product_stage_group: code_creation
   ignored_components:
   - graphql_query

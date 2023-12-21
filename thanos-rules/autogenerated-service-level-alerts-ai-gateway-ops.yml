@@ -33,7 +33,7 @@ groups:
       alert_class: slo_violation
       alert_type: symptom
       feature_category: code_suggestions
-      incident_project: https://gitlab.com/gitlab-org/ai-powered/ai-framework/team-hq
+      incident_project: gitlab.com/gitlab-org/ai-powered/ai-framework/team-hq
       rules_domain: general
       severity: s4
       sli_type: apdex
@@ -84,7 +84,7 @@ groups:
       alert_class: slo_violation
       alert_type: symptom
       feature_category: code_suggestions
-      incident_project: https://gitlab.com/gitlab-org/ai-powered/ai-framework/team-hq
+      incident_project: gitlab.com/gitlab-org/ai-powered/ai-framework/team-hq
       rules_domain: general
       severity: s4
       sli_type: apdex
@@ -135,7 +135,7 @@ groups:
       alert_class: slo_violation
       alert_type: symptom
       feature_category: code_suggestions
-      incident_project: https://gitlab.com/gitlab-org/ai-powered/ai-framework/team-hq
+      incident_project: gitlab.com/gitlab-org/ai-powered/ai-framework/team-hq
       rules_domain: general
       severity: s4
       sli_type: apdex
@@ -186,7 +186,7 @@ groups:
       alert_class: slo_violation
       alert_type: symptom
       feature_category: code_suggestions
-      incident_project: https://gitlab.com/gitlab-org/ai-powered/ai-framework/team-hq
+      incident_project: gitlab.com/gitlab-org/ai-powered/ai-framework/team-hq
       rules_domain: general
       severity: s4
       sli_type: apdex
@@ -234,7 +234,7 @@ groups:
       alert_class: slo_violation
       alert_type: symptom
       feature_category: code_suggestions
-      incident_project: https://gitlab.com/gitlab-org/ai-powered/ai-framework/team-hq
+      incident_project: gitlab.com/gitlab-org/ai-powered/ai-framework/team-hq
       rules_domain: general
       severity: s4
       sli_type: error
@@ -282,7 +282,7 @@ groups:
       alert_class: slo_violation
       alert_type: symptom
       feature_category: code_suggestions
-      incident_project: https://gitlab.com/gitlab-org/ai-powered/ai-framework/team-hq
+      incident_project: gitlab.com/gitlab-org/ai-powered/ai-framework/team-hq
       rules_domain: general
       severity: s4
       sli_type: error
@@ -330,7 +330,7 @@ groups:
       alert_class: traffic_cessation
       alert_type: cause
       feature_category: code_suggestions
-      incident_project: https://gitlab.com/gitlab-org/ai-powered/ai-framework/team-hq
+      incident_project: gitlab.com/gitlab-org/ai-powered/ai-framework/team-hq
       rules_domain: general
       severity: s4
       sli_type: ops
@@ -367,7 +367,7 @@ groups:
       alert_class: traffic_cessation
       alert_type: cause
       feature_category: code_suggestions
-      incident_project: https://gitlab.com/gitlab-org/ai-powered/ai-framework/team-hq
+      incident_project: gitlab.com/gitlab-org/ai-powered/ai-framework/team-hq
       rules_domain: general
       severity: s4
       sli_type: ops
@@ -405,7 +405,7 @@ groups:
       alert_class: slo_violation
       alert_type: symptom
       feature_category: code_suggestions
-      incident_project: https://gitlab.com/gitlab-org/ai-powered/ai-framework/team-hq
+      incident_project: gitlab.com/gitlab-org/ai-powered/ai-framework/team-hq
       rules_domain: general
       severity: s4
       sli_type: apdex
@@ -456,7 +456,7 @@ groups:
       alert_class: slo_violation
       alert_type: symptom
       feature_category: code_suggestions
-      incident_project: https://gitlab.com/gitlab-org/ai-powered/ai-framework/team-hq
+      incident_project: gitlab.com/gitlab-org/ai-powered/ai-framework/team-hq
       rules_domain: general
       severity: s4
       sli_type: apdex
@@ -504,7 +504,7 @@ groups:
       alert_class: slo_violation
       alert_type: symptom
       feature_category: code_suggestions
-      incident_project: https://gitlab.com/gitlab-org/ai-powered/ai-framework/team-hq
+      incident_project: gitlab.com/gitlab-org/ai-powered/ai-framework/team-hq
       rules_domain: general
       severity: s4
       sli_type: error
@@ -552,7 +552,7 @@ groups:
       alert_class: slo_violation
       alert_type: symptom
       feature_category: code_suggestions
-      incident_project: https://gitlab.com/gitlab-org/ai-powered/ai-framework/team-hq
+      incident_project: gitlab.com/gitlab-org/ai-powered/ai-framework/team-hq
       rules_domain: general
       severity: s4
       sli_type: error
@@ -600,7 +600,7 @@ groups:
       alert_class: traffic_cessation
       alert_type: cause
       feature_category: code_suggestions
-      incident_project: https://gitlab.com/gitlab-org/ai-powered/ai-framework/team-hq
+      incident_project: gitlab.com/gitlab-org/ai-powered/ai-framework/team-hq
       rules_domain: general
       severity: s4
       sli_type: ops
@@ -637,7 +637,7 @@ groups:
       alert_class: traffic_cessation
       alert_type: cause
       feature_category: code_suggestions
-      incident_project: https://gitlab.com/gitlab-org/ai-powered/ai-framework/team-hq
+      incident_project: gitlab.com/gitlab-org/ai-powered/ai-framework/team-hq
       rules_domain: general
       severity: s4
       sli_type: ops
@@ -672,7 +672,7 @@ groups:
       alert_class: slo_violation
       alert_type: symptom
       feature_category: code_suggestions
-      incident_project: https://gitlab.com/gitlab-org/ai-powered/ai-framework/team-hq
+      incident_project: gitlab.com/gitlab-org/ai-powered/ai-framework/team-hq
       rules_domain: general
       severity: s4
       sli_type: error
@@ -720,7 +720,7 @@ groups:
       alert_class: slo_violation
       alert_type: symptom
       feature_category: code_suggestions
-      incident_project: https://gitlab.com/gitlab-org/ai-powered/ai-framework/team-hq
+      incident_project: gitlab.com/gitlab-org/ai-powered/ai-framework/team-hq
       rules_domain: general
       severity: s4
       sli_type: error
@@ -768,7 +768,7 @@ groups:
       alert_class: traffic_cessation
       alert_type: cause
       feature_category: code_suggestions
-      incident_project: https://gitlab.com/gitlab-org/ai-powered/ai-framework/team-hq
+      incident_project: gitlab.com/gitlab-org/ai-powered/ai-framework/team-hq
       rules_domain: general
       severity: s4
       sli_type: ops
@@ -805,7 +805,7 @@ groups:
       alert_class: traffic_cessation
       alert_type: cause
       feature_category: code_suggestions
-      incident_project: https://gitlab.com/gitlab-org/ai-powered/ai-framework/team-hq
+      incident_project: gitlab.com/gitlab-org/ai-powered/ai-framework/team-hq
       rules_domain: general
       severity: s4
       sli_type: ops
