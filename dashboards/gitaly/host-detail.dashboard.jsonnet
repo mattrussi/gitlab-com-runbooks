@@ -18,6 +18,7 @@ local gitalyPackObjectsDashboards = import 'gitlab-dashboards/gitaly/pack_object
 local gitalyPerRPCDashboards = import 'gitlab-dashboards/gitaly/per_rpc.libsonnet';
 local gitalyAdaptiveLimitDashboards = import 'gitlab-dashboards/gitaly/adaptive_limit.libsonnet';
 local gitalyCgroupDashboards = import 'gitlab-dashboards/gitaly/cgroup.libsonnet';
+local gitalyBackupDashboards = import 'gitlab-dashboards/gitaly/backup.libsonnet';
 
 local serviceType = 'gitaly';
 
@@ -378,6 +379,23 @@ basic.dashboard(
   gridPos={
     x: 0,
     y: 7000,
+    w: 24,
+    h: 1,
+  }
+)
+.addPanel(
+  row.new(title='Server-side backup metrics', collapse=true)
+  .addPanels(
+    layout.grid([
+      gitalyBackupDashboards.backup_duration(selectorHash),
+      gitalyBackupDashboards.backup_rpc_status(selectorHash),
+      gitalyBackupDashboards.backup_rpc_latency(selectorHash),
+      gitalyBackupDashboards.backup_bundle_upload_rate(selectorHash),
+    ], startRow=8001)
+  ),
+  gridPos={
+    x: 0,
+    y: 8000,
     w: 24,
     h: 1,
   }

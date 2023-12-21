@@ -12,6 +12,7 @@ local selectors = import 'promql/selectors.libsonnet';
 local gitalyPackObjectsDashboards = import 'gitlab-dashboards/gitaly/pack_objects.libsonnet';
 local gitalyPerRPCDashboards = import 'gitlab-dashboards/gitaly/per_rpc.libsonnet';
 local gitalyAdaptiveLimitDashboards = import 'gitlab-dashboards/gitaly/adaptive_limit.libsonnet';
+local gitalyBackupDashboards = import 'gitlab-dashboards/gitaly/backup.libsonnet';
 
 local selector = {
   environment: '$environment',
@@ -248,5 +249,22 @@ serviceDashboard.overview('gitaly')
     gitalyAdaptiveLimitDashboards.backoff_events(selector, '{{ fqdn }}'),
     gitalyAdaptiveLimitDashboards.watcher_errors(selector, '{{ fqdn }}'),
   ], startRow=6001)
+)
+.addPanel(
+  row.new(title='Server-side backup metrics'),
+  gridPos={
+    x: 0,
+    y: 7000,
+    w: 24,
+    h: 1,
+  }
+)
+.addPanels(
+  layout.grid([
+    gitalyBackupDashboards.backup_duration(selector),
+    gitalyBackupDashboards.backup_rpc_status(selector),
+    gitalyBackupDashboards.backup_rpc_latency(selector),
+    gitalyBackupDashboards.backup_bundle_upload_rate(selector),
+  ], startRow=7001)
 )
 .overviewTrailer()
