@@ -41,7 +41,7 @@ sequenceDiagram
     box User laptop
     actor User
     participant IDE as VSCode
-    participant LS as LanguageServer
+    participant LS as LanguageServer process
     end
     box Cloudflare POP nearest to User
     participant CFGL as gitlab.com
@@ -56,32 +56,37 @@ sequenceDiagram
     box GitLab AI-gateway infrastructure (GCP)
     participant GW as AI gateway
     end
-    box Executor service
-    participant ML as ML model executor
+    box Model engine service
+    participant ML as ML model engine (Vertex or Anthropic)
     end
 
     IDE ->>+ LS: Request code completion for cursor context
     LS ->>+ CFGL: /api/v4/code_suggestions/completions
     CFGL ->>+ WH: /api/v4/code_suggestions/completions
+
     WH ->>+ RB: /api/v4/code_suggestions/completions
-    RB ->>+ CFCS: /v2/code/completions
+    RB -->>- WH: composes request for ai-gateway and delegates to workhorse
+
+    WH ->>+ CFCS: /v2/code/completions
     CFCS ->>+ GW: /v2/code/completions
     GW ->>+ ML: model params
 
     ML -->>- GW: model response
     GW -->>- CFCS: ai-gateway API response
-    CFCS -->>- RB: ai-gateway API response
-    RB -->>- WH: rails API response
-    WH -->>- CFGL: rails API response
-    CFGL -->>- LS: rails API response
+    CFCS -->>- WH: ai-gateway API response
+    WH -->>- CFGL: workhorse API response
+    CFGL -->>- LS: workhorse API response
     LS -->>- IDE: Code completion suggestion
 ```
 
 Notes:
 
-* Transits Cloudflare twice, once from end-user to Rails, and later from Rails to ai-gateway.
+* Over the last few months, the endpoints and control flow have evolved, sometimes in non-backward-compatible ways.
+  * e.g. Prior to GitLab 16.3, clients directly accessed a now deprecated request endpoint `/v2/completions`.  Some self-managed GitLab deployments running older versions while Code Suggestions was still in beta release may still be using those now-broken endpoints.
+* Transits Cloudflare twice, once from end-user to Rails, and later from Rails to `ai-gateway`.
   * Typically at least one of those is fairly low latency: only 10 ms RTT between GCP's `us-east1` region and Cloudflare's `ATL` POP.
   * Cloudflare tools (logs, analytics, rules, etc.) are available for both of those API calls.
+* The requests to `ai-gateway` are expected to be slow, so Rails composes the request headers and then delegates it for Workhorse to send that request to `ai-gateway`.  (Workhorse can handle slow requests much more efficiently than Rails; this conserves puma worker threads.)
 * Caching and reuse of TCP and TLS sessions allows most requests to avoid extra round-trips for connection setup.
 * Currently `ai-gateway` containers run as a GCP Cloud Run service.
   * See the Cloud Run [docs](https://cloud.google.com/run/docs/resource-model) and [console](https://console.cloud.google.com/run/detail/us-east1/ai-gateway/metrics?project=gitlab-runway-production).
@@ -127,6 +132,8 @@ Service degradation could be result of the following saturation resources:
 ## Scalability
 
 AI Gateway will autoscale with traffic. To manually scale, update [`runway.yml`](https://gitlab.com/gitlab-org/modelops/applied-ml/code-suggestions/ai-assist/-/blob/main/.runway/runway.yml?ref_type=heads) based on [documentation](../runway/README.md#scalability).
+
+It is also possible to directly edit the tunables for the `ai-gateway` service via the [Cloud Run console's Edit YAML interface](https://console.cloud.google.com/run/detail/us-east1/ai-gateway/yaml/view?project=gitlab-runway-production).  This takes effect faster, but be sure to make the equivalent updates to the `runway.yml` as described above; otherwise the next deploy will revert your manual changes to the service YAML.
 
 ### Capacity Planning
 
