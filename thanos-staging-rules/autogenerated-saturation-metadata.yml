@@ -81,6 +81,14 @@ spec:
       expr: "0.8"
     - record: slo:max:soft:gitlab_component_saturation:ratio
       labels:
+        component: max_concurrent_inferences_per_engine
+      expr: "0.6"
+    - record: slo:max:hard:gitlab_component_saturation:ratio
+      labels:
+        component: max_concurrent_inferences_per_engine
+      expr: "0.8"
+    - record: slo:max:soft:gitlab_component_saturation:ratio
+      labels:
         component: open_fds
       expr: "0.8"
     - record: slo:max:hard:gitlab_component_saturation:ratio
@@ -207,6 +215,14 @@ spec:
       labels:
         capacity_planning_strategy: quantile95_1h
         component: max_concurrent_inferences
+        horiz_scaling: "no"
+        quantile: max
+        severity: s3
+      expr: "1"
+    - record: gitlab_component_saturation_info
+      labels:
+        capacity_planning_strategy: quantile95_1h
+        component: max_concurrent_inferences_per_engine
         horiz_scaling: "no"
         quantile: max
         severity: s3
