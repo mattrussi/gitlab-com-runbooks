@@ -7,5 +7,6 @@ serviceDashboard.overview('ai-gateway')
 .overviewTrailer() + {
   links+: [
     platformLinks.dynamicLinks('Runway Dashboards', 'type:runway'),
+    platformLinks.dynamicLinks('AI Assisted Dashboards', 'type:ai-assisted'),
   ],
 }

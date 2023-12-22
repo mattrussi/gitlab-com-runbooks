@@ -16,9 +16,13 @@
 
 <!-- END_MARKER -->
 
-<!-- ## Summary -->
+## Summary
 
-<!-- ## Architecture -->
+AI Assisted is a dedicated Rails fleet that provides an AI Abstraction Layer in front of [AI Gateway](../ai-gateway/README.md).
+
+## Architecture
+
+For diagram, refer to [architecture blueprint](https://docs.gitlab.com/ee/development/ai_architecture.html#saas-based-ai-abstraction-layer).
 
 <!-- ## Performance -->
 
@@ -32,4 +36,6 @@
 
 <!-- ## Monitoring/Alerting -->
 
-<!-- ## Links to further Documentation -->
+## Links to further Documentation
+
+* <https://gitlab.com/gitlab-com/gl-infra/production-engineering/-/issues/24005>

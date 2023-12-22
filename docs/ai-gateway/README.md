@@ -46,7 +46,7 @@ sequenceDiagram
     box Cloudflare POP nearest to User
     participant CFGL as gitlab.com
     end
-    box GitLab Rails infrastructure
+    box GitLab Rails AI-assisted infrastructure
     participant WH as Workhorse
     participant RB as Rails
     end
@@ -83,7 +83,7 @@ Notes:
 
 * Over the last few months, the endpoints and control flow have evolved, sometimes in non-backward-compatible ways.
   * e.g. Prior to GitLab 16.3, clients directly accessed a now deprecated request endpoint `/v2/completions`.  Some self-managed GitLab deployments running older versions while Code Suggestions was still in beta release may still be using those now-broken endpoints.
-* Transits Cloudflare twice, once from end-user to Rails, and later from Rails to `ai-gateway`.
+* Transits Cloudflare twice, once from end-user to Rails [AI Assisted](../ai-assisted/README.md), and later from Rails to `ai-gateway`.
   * Typically at least one of those is fairly low latency: only 10 ms RTT between GCP's `us-east1` region and Cloudflare's `ATL` POP.
   * Cloudflare tools (logs, analytics, rules, etc.) are available for both of those API calls.
 * The requests to `ai-gateway` are expected to be slow, so Rails composes the request headers and then delegates it for Workhorse to send that request to `ai-gateway`.  (Workhorse can handle slow requests much more efficiently than Rails; this conserves puma worker threads.)

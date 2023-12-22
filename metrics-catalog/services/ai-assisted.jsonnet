@@ -25,6 +25,7 @@ metricsCatalog.serviceDefinition({
   },
   serviceDependencies: {
     api: true,
+    'ai-gateway': true,
   },
   provisioning: {
     vms: false,
