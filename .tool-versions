@@ -16,6 +16,6 @@ ruby 3.2.2 # datasource=ruby-version depName=ruby/ruby
 shellcheck 0.9.0 # datasource=github-releases depName=koalaman/shellcheck
 shfmt 3.7.0 # datasource=github-releases depName=mvdan/sh
 terraform 1.6.5 # datasource=github-releases depName=hashicorp/terraform
-thanos 0.32.5 # datasource=github-releases depName=thanos-io/thanos
+thanos 0.33.0 # datasource=github-releases depName=thanos-io/thanos
 vault 1.15.4 # datasource=github-releases depName=hashicorp/vault
 yq 4.40.4 # datasource=github-releases depName=mikefarah/yq
