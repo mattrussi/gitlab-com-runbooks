@@ -42,6 +42,8 @@ local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
         selector=baseSelector { response_code_class: '500' },
       ),
 
+      emittedBy: ['monitoring'],
+
       significantLabels: ['proxy_continent', 'response_code'],
 
       toolingLinks:

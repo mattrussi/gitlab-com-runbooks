@@ -60,6 +60,8 @@ metricsCatalog.serviceDefinition({
 
       errorRate: gitalyHelper.gitalyGRPCErrorRate(baseSelector),
 
+      emittedBy: ['monitoring'],
+
       significantLabels: ['fqdn'],
 
       toolingLinks: [
@@ -93,6 +95,8 @@ metricsCatalog.serviceDefinition({
         counter='gitaly_praefect_replication_delay_bucket',
         selector=baseSelector { le: '+Inf' }
       ),
+
+      emittedBy: [],  // TODO: type label doesn't mean "service emitting this metric" https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/2873
 
       significantLabels: ['fqdn', 'type'],
     },

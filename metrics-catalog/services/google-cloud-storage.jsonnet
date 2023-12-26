@@ -42,6 +42,8 @@ metricsCatalog.serviceDefinition({
         counter='registry_storage_action_seconds_count',
       ),
 
+      emittedBy: ['ops-gitlab-net', 'registry'],
+
       significantLabels: ['action'],
     },
 
@@ -91,6 +93,8 @@ metricsCatalog.serviceDefinition({
         selector={ request_stage: 'httptrace.ClientTrace.GotFirstResponseByte', le: '+Inf' },
       ),
 
+      emittedBy: ['web-pages'],
+
       significantLabels: [],
     },
 
@@ -125,6 +129,7 @@ metricsCatalog.serviceDefinition({
         counter='gitlab_pages_httprange_requests_total',
         selector={}
       ),
+      emittedBy: ['web-pages'],
       significantLabels: ['type'],
     },
   },

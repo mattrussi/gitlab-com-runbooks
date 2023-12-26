@@ -371,7 +371,7 @@ metricsCatalog.serviceDefinition({
       |||,
 
       local thanosMemcachedSelector = thanosServiceSelector {
-        job: { re: 'thanos-(labels|querier)-metrics|thanos-(.+)-(bucket|index)-metrics' },
+        job: { oneOf: ['thanos-(labels|querier)-metrics|thanos-(.+)-(bucket|index)-metrics'] },
         grpc_type: 'unary',
       },
 

@@ -3,6 +3,7 @@ local histogramApdex = metricsCatalog.histogramApdex;
 local rateMetric = metricsCatalog.rateMetric;
 local redisArchetype = import 'service-archetypes/redis-rails-archetype.libsonnet';
 local redisHelpers = import './lib/redis-helpers.libsonnet';
+local findServicesWithTag = (import 'servicemetrics/metrics-catalog.libsonnet').findServicesWithTag;
 
 local railsCacheSelector = redisHelpers.storeSelector('RedisCacheStore');
 
@@ -39,6 +40,8 @@ metricsCatalog.serviceDefinition(
           counter='gitlab_cache_operation_duration_seconds_count',
           selector=railsCacheSelector,
         ),
+
+        emittedBy: findServicesWithTag(tag='rails'),
 
         significantLabels: [],
       },

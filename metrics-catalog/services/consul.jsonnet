@@ -55,6 +55,7 @@ metricsCatalog.serviceDefinition({
         counter='consul_client_rpc_failed',
         selector=ConsulSelector,
       ),
+      emittedBy: [],  // TODO: Add type label in the source metrics https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/2873
       toolingLinks: [
         toolingLinks.kibana(title='Consul', index='consul', includeMatchersForPrometheusSelector=false),
       ],

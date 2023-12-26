@@ -165,6 +165,7 @@ metricsCatalog.serviceDefinition({
       ),
     ],
     trafficCessationAlertConfig: sidekiqHelpers.shardTrafficCessationAlertConfig,
+    emittedBy: ['ops-gitlab-net', 'sidekiq'],
   }),
 
   // Special per-worker recording rules

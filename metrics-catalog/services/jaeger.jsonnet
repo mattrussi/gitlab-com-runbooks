@@ -20,6 +20,8 @@ metricsCatalog.serviceDefinition({
         counter='jaeger_agent_reporter_spans_failures_total',
       ),
 
+      emittedBy: [],  // TODO: Add type label in the source metrics https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/2873
+
       significantLabels: ['fqdn', 'instance'],
     },
 
@@ -56,6 +58,7 @@ metricsCatalog.serviceDefinition({
         counter='jaeger_query_requests_total',
         selector={ result: 'err' },
       ),
+      emittedBy: [],  // TODO: Add type label in the source metrics https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/2873
 
       significantLabels: ['fqdn', 'pod'],
     },

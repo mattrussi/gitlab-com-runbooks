@@ -78,6 +78,7 @@ metricsCatalog.serviceDefinition({
           response_code: { re: '^5.*' },
         }
       ),
+      emittedBy: [],  // TODO: Add type label in the source metrics https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/2873
 
       significantLabels: ['destination_service', 'response_code'],
     },
@@ -110,6 +111,8 @@ metricsCatalog.serviceDefinition({
         }
       ),
 
+      emittedBy: [],  // TODO: Add type label in the source metrics https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/2873
+
       significantLabels: ['destination_service', 'response_code'],
     },
 
@@ -131,6 +134,7 @@ metricsCatalog.serviceDefinition({
         counter='vault_core_handle_request_count',
         selector=vaultSelector,
       ),
+      emittedBy: [],  // TODO: Add type label in the source metrics https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/2873
 
       significantLabels: ['pod'],
     },
@@ -158,6 +162,7 @@ metricsCatalog.serviceDefinition({
         counter='vault_audit_log_request_failure',
         selector=vaultSelector,
       ),
+      emittedBy: [],  // TODO: Add type label in the source metrics https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/2873
 
       significantLabels: ['pod'],
     },
@@ -185,6 +190,7 @@ metricsCatalog.serviceDefinition({
         counter='vault_audit_log_response_failure',
         selector=vaultSelector,
       ),
+      emittedBy: [],  // TODO: Add type label in the source metrics https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/2873
 
       significantLabels: ['pod'],
     },
