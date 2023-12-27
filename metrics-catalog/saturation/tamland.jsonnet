@@ -54,13 +54,40 @@ local page(path, title, service_pattern) =
     service_pattern: service_pattern,
   };
 
+/*
+Saturation points from 'servicemetrics/saturation-resources.libsonnet' carry all sorts of information.
+This slices saturation points and only exposes what's relevant for Tamland.
+*/
+local saturationPoints = {
+  local point = saturation[name],
+
+  [name]: {
+    title: point.title,
+    description: point.description,
+    appliesTo: point.appliesTo,
+    capacityPlanning: point.capacityPlanning,
+    horizontallyScalable: point.horizontallyScalable,
+    severity: point.severity,
+    slos: point.slos,
+    raw_query: point.query % (
+      point.queryFormatConfig
+      {
+        selector: '%(selector)s',  // This will be replaced in Tamland, not here
+        rangeInterval: std.get(point, 'burnRatePeriod', '5m'),
+        aggregationLabels: std.join(',', point.resourceLabels),
+      }
+    ),
+  }
+  for name in std.objectFields(saturation)
+};
+
 
 {
   defaults: {
     prometheus: prom.defaults,
   },
   services: services(uniqServices(saturation)),
-  saturationPoints: saturation,
+  saturationPoints: saturationPoints,
   shardMapping: {
     sidekiq: sidekiqHelpers.shards.listByName(),
   },
