@@ -4,6 +4,7 @@ local derivMetric = metricsCatalog.derivMetric;
 local googleLoadBalancerComponents = import './lib/google_load_balancer_components.libsonnet';
 local kubeLabelSelectors = metricsCatalog.kubeLabelSelectors;
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
+local baseSelector = { type: 'logging' };
 
 metricsCatalog.serviceDefinition(
   {
@@ -57,7 +58,7 @@ metricsCatalog.serviceDefinition(
 
         requestRate: derivMetric(
           counter='elasticsearch_indices_search_query_total',
-          selector='type="logging"',
+          selector=baseSelector,
           clampMinZero=true,
         ),
 
@@ -77,7 +78,7 @@ metricsCatalog.serviceDefinition(
 
         requestRate: derivMetric(
           counter='elasticsearch_indices_indexing_index_total',
-          selector='type="logging"',
+          selector=baseSelector,
           clampMinZero=true,
         ),
 
@@ -97,7 +98,7 @@ metricsCatalog.serviceDefinition(
 
         requestRate: derivMetric(
           counter='elasticsearch_index_stats_search_query_total',
-          selector='type="logging"',
+          selector=baseSelector,
           clampMinZero=true,
         ),
 
@@ -117,7 +118,7 @@ metricsCatalog.serviceDefinition(
 
         requestRate: derivMetric(
           counter='elasticsearch_index_stats_indexing_index_total',
-          selector='type="logging"',
+          selector=baseSelector,
           clampMinZero=true,
         ),
 
@@ -162,6 +163,7 @@ metricsCatalog.serviceDefinition(
         significantLabels: ['log', 'severity'],
       },
 
+      local monitoringTypeSelector = { type: 'monitoring' },
       pubsub_topics: {
         userImpacting: false,
         featureCategory: 'not_owned',
@@ -171,7 +173,7 @@ metricsCatalog.serviceDefinition(
 
         requestRate: rateMetric(
           counter='stackdriver_pubsub_topic_pubsub_googleapis_com_topic_byte_cost',
-          selector='type="monitoring"',
+          selector=monitoringTypeSelector,
         ),
 
         significantLabels: ['topic_id'],
@@ -190,7 +192,7 @@ metricsCatalog.serviceDefinition(
 
         requestRate: rateMetric(
           counter='stackdriver_pubsub_subscription_pubsub_googleapis_com_subscription_byte_cost',
-          selector='type="monitoring"',
+          selector=monitoringTypeSelector,
         ),
 
         significantLabels: ['subscription_id'],

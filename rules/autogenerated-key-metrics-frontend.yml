@@ -12,7 +12,7 @@ groups:
       type: frontend
     expr: |
       sum by (env,environment) (
-        rate(haproxy_backend_http_requests_total{type="frontend", backend=~"canary_.*"}[1m] offset 30s)
+        rate(haproxy_backend_http_requests_total{backend=~"canary_.*",type="frontend"}[1m] offset 30s)
       )
   - record: gitlab_component_errors:rate
     labels:
@@ -23,7 +23,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(haproxy_backend_response_errors_total{type="frontend", backend=~"canary_.*"}[1m] offset 30s)
+          rate(haproxy_backend_response_errors_total{backend=~"canary_.*",type="frontend"}[1m] offset 30s)
         )
       )
       or
@@ -40,7 +40,7 @@ groups:
       type: frontend
     expr: |
       sum by (env,environment) (
-        rate(haproxy_backend_http_requests_total{type="frontend", backend!~"ssh|api_rate_limit|canary_.*"}[1m] offset 30s)
+        rate(haproxy_backend_http_requests_total{backend!~"api_rate_limit|canary_.*|ssh",type="frontend"}[1m] offset 30s)
       )
   - record: gitlab_component_errors:rate
     labels:
@@ -51,7 +51,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(haproxy_backend_response_errors_total{type="frontend", backend!~"ssh|api_rate_limit|canary_.*"}[1m] offset 30s)
+          rate(haproxy_backend_response_errors_total{backend!~"api_rate_limit|canary_.*|ssh",type="frontend"}[1m] offset 30s)
         )
       )
       or
@@ -67,7 +67,7 @@ groups:
       type: frontend
     expr: |
       sum by (env,environment,stage) (
-        rate(haproxy_backend_http_requests_total{type="frontend", backend="ssh"}[1m] offset 30s)
+        rate(haproxy_backend_http_requests_total{backend="ssh",type="frontend"}[1m] offset 30s)
       )
   - record: gitlab_component_errors:rate
     labels:
@@ -77,7 +77,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(haproxy_backend_response_errors_total{type="frontend", backend="ssh"}[1m] offset 30s)
+          rate(haproxy_backend_response_errors_total{backend="ssh",type="frontend"}[1m] offset 30s)
         )
       )
       or
@@ -97,7 +97,7 @@ groups:
       type: frontend
     expr: |
       sum by (env,environment) (
-        rate(haproxy_backend_http_requests_total{type="frontend", backend=~"canary_.*"}[5m] offset 30s)
+        rate(haproxy_backend_http_requests_total{backend=~"canary_.*",type="frontend"}[5m] offset 30s)
       )
   - record: gitlab_component_errors:rate_5m
     labels:
@@ -108,7 +108,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(haproxy_backend_response_errors_total{type="frontend", backend=~"canary_.*"}[5m] offset 30s)
+          rate(haproxy_backend_response_errors_total{backend=~"canary_.*",type="frontend"}[5m] offset 30s)
         )
       )
       or
@@ -125,7 +125,7 @@ groups:
       type: frontend
     expr: |
       sum by (env,environment) (
-        rate(haproxy_backend_http_requests_total{type="frontend", backend!~"ssh|api_rate_limit|canary_.*"}[5m] offset 30s)
+        rate(haproxy_backend_http_requests_total{backend!~"api_rate_limit|canary_.*|ssh",type="frontend"}[5m] offset 30s)
       )
   - record: gitlab_component_errors:rate_5m
     labels:
@@ -136,7 +136,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(haproxy_backend_response_errors_total{type="frontend", backend!~"ssh|api_rate_limit|canary_.*"}[5m] offset 30s)
+          rate(haproxy_backend_response_errors_total{backend!~"api_rate_limit|canary_.*|ssh",type="frontend"}[5m] offset 30s)
         )
       )
       or
@@ -152,7 +152,7 @@ groups:
       type: frontend
     expr: |
       sum by (env,environment,stage) (
-        rate(haproxy_backend_http_requests_total{type="frontend", backend="ssh"}[5m] offset 30s)
+        rate(haproxy_backend_http_requests_total{backend="ssh",type="frontend"}[5m] offset 30s)
       )
   - record: gitlab_component_errors:rate_5m
     labels:
@@ -162,7 +162,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(haproxy_backend_response_errors_total{type="frontend", backend="ssh"}[5m] offset 30s)
+          rate(haproxy_backend_response_errors_total{backend="ssh",type="frontend"}[5m] offset 30s)
         )
       )
       or
@@ -182,7 +182,7 @@ groups:
       type: frontend
     expr: |
       sum by (env,environment) (
-        rate(haproxy_backend_http_requests_total{type="frontend", backend=~"canary_.*"}[30m] offset 30s)
+        rate(haproxy_backend_http_requests_total{backend=~"canary_.*",type="frontend"}[30m] offset 30s)
       )
   - record: gitlab_component_errors:rate_30m
     labels:
@@ -193,7 +193,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(haproxy_backend_response_errors_total{type="frontend", backend=~"canary_.*"}[30m] offset 30s)
+          rate(haproxy_backend_response_errors_total{backend=~"canary_.*",type="frontend"}[30m] offset 30s)
         )
       )
       or
@@ -210,7 +210,7 @@ groups:
       type: frontend
     expr: |
       sum by (env,environment) (
-        rate(haproxy_backend_http_requests_total{type="frontend", backend!~"ssh|api_rate_limit|canary_.*"}[30m] offset 30s)
+        rate(haproxy_backend_http_requests_total{backend!~"api_rate_limit|canary_.*|ssh",type="frontend"}[30m] offset 30s)
       )
   - record: gitlab_component_errors:rate_30m
     labels:
@@ -221,7 +221,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(haproxy_backend_response_errors_total{type="frontend", backend!~"ssh|api_rate_limit|canary_.*"}[30m] offset 30s)
+          rate(haproxy_backend_response_errors_total{backend!~"api_rate_limit|canary_.*|ssh",type="frontend"}[30m] offset 30s)
         )
       )
       or
@@ -237,7 +237,7 @@ groups:
       type: frontend
     expr: |
       sum by (env,environment,stage) (
-        rate(haproxy_backend_http_requests_total{type="frontend", backend="ssh"}[30m] offset 30s)
+        rate(haproxy_backend_http_requests_total{backend="ssh",type="frontend"}[30m] offset 30s)
       )
   - record: gitlab_component_errors:rate_30m
     labels:
@@ -247,7 +247,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(haproxy_backend_response_errors_total{type="frontend", backend="ssh"}[30m] offset 30s)
+          rate(haproxy_backend_response_errors_total{backend="ssh",type="frontend"}[30m] offset 30s)
         )
       )
       or
@@ -267,7 +267,7 @@ groups:
       type: frontend
     expr: |
       sum by (env,environment) (
-        rate(haproxy_backend_http_requests_total{type="frontend", backend=~"canary_.*"}[1h] offset 30s)
+        rate(haproxy_backend_http_requests_total{backend=~"canary_.*",type="frontend"}[1h] offset 30s)
       )
   - record: gitlab_component_errors:rate_1h
     labels:
@@ -278,7 +278,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(haproxy_backend_response_errors_total{type="frontend", backend=~"canary_.*"}[1h] offset 30s)
+          rate(haproxy_backend_response_errors_total{backend=~"canary_.*",type="frontend"}[1h] offset 30s)
         )
       )
       or
@@ -295,7 +295,7 @@ groups:
       type: frontend
     expr: |
       sum by (env,environment) (
-        rate(haproxy_backend_http_requests_total{type="frontend", backend!~"ssh|api_rate_limit|canary_.*"}[1h] offset 30s)
+        rate(haproxy_backend_http_requests_total{backend!~"api_rate_limit|canary_.*|ssh",type="frontend"}[1h] offset 30s)
       )
   - record: gitlab_component_errors:rate_1h
     labels:
@@ -306,7 +306,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(haproxy_backend_response_errors_total{type="frontend", backend!~"ssh|api_rate_limit|canary_.*"}[1h] offset 30s)
+          rate(haproxy_backend_response_errors_total{backend!~"api_rate_limit|canary_.*|ssh",type="frontend"}[1h] offset 30s)
         )
       )
       or
@@ -322,7 +322,7 @@ groups:
       type: frontend
     expr: |
       sum by (env,environment,stage) (
-        rate(haproxy_backend_http_requests_total{type="frontend", backend="ssh"}[1h] offset 30s)
+        rate(haproxy_backend_http_requests_total{backend="ssh",type="frontend"}[1h] offset 30s)
       )
   - record: gitlab_component_errors:rate_1h
     labels:
@@ -332,7 +332,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(haproxy_backend_response_errors_total{type="frontend", backend="ssh"}[1h] offset 30s)
+          rate(haproxy_backend_response_errors_total{backend="ssh",type="frontend"}[1h] offset 30s)
         )
       )
       or
@@ -352,7 +352,7 @@ groups:
       type: frontend
     expr: |
       sum by (env,environment) (
-        rate(haproxy_backend_http_requests_total{type="frontend", backend=~"canary_.*"}[6h] offset 30s)
+        rate(haproxy_backend_http_requests_total{backend=~"canary_.*",type="frontend"}[6h] offset 30s)
       )
   - record: gitlab_component_errors:rate_6h
     labels:
@@ -363,7 +363,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(haproxy_backend_response_errors_total{type="frontend", backend=~"canary_.*"}[6h] offset 30s)
+          rate(haproxy_backend_response_errors_total{backend=~"canary_.*",type="frontend"}[6h] offset 30s)
         )
       )
       or
@@ -380,7 +380,7 @@ groups:
       type: frontend
     expr: |
       sum by (env,environment) (
-        rate(haproxy_backend_http_requests_total{type="frontend", backend!~"ssh|api_rate_limit|canary_.*"}[6h] offset 30s)
+        rate(haproxy_backend_http_requests_total{backend!~"api_rate_limit|canary_.*|ssh",type="frontend"}[6h] offset 30s)
       )
   - record: gitlab_component_errors:rate_6h
     labels:
@@ -391,7 +391,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(haproxy_backend_response_errors_total{type="frontend", backend!~"ssh|api_rate_limit|canary_.*"}[6h] offset 30s)
+          rate(haproxy_backend_response_errors_total{backend!~"api_rate_limit|canary_.*|ssh",type="frontend"}[6h] offset 30s)
         )
       )
       or
@@ -407,7 +407,7 @@ groups:
       type: frontend
     expr: |
       sum by (env,environment,stage) (
-        rate(haproxy_backend_http_requests_total{type="frontend", backend="ssh"}[6h] offset 30s)
+        rate(haproxy_backend_http_requests_total{backend="ssh",type="frontend"}[6h] offset 30s)
       )
   - record: gitlab_component_errors:rate_6h
     labels:
@@ -417,7 +417,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(haproxy_backend_response_errors_total{type="frontend", backend="ssh"}[6h] offset 30s)
+          rate(haproxy_backend_response_errors_total{backend="ssh",type="frontend"}[6h] offset 30s)
         )
       )
       or

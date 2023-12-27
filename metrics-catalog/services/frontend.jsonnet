@@ -3,6 +3,8 @@ local histogramApdex = metricsCatalog.histogramApdex;
 local rateMetric = metricsCatalog.rateMetric;
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 
+local baseSelector = { type: 'frontend' };
+
 metricsCatalog.serviceDefinition({
   type: 'frontend',
   tier: 'lb',
@@ -31,19 +33,20 @@ metricsCatalog.serviceDefinition({
         stage: 'main',
       },
 
+      local mainHttpsSelector = { backend: { noneOf: ['ssh', 'api_rate_limit', 'canary_.*'] } },
       requestRate: rateMetric(
         counter='haproxy_backend_http_requests_total',
-        selector='type="frontend", backend!~"ssh|api_rate_limit|canary_.*"'
+        selector=baseSelector + mainHttpsSelector,
       ),
 
       responseRate: rateMetric(
         counter='haproxy_backend_http_responses_total',
-        selector='type="frontend", backend!~"ssh|api_rate_limit|canary_.*"'
+        selector=baseSelector + mainHttpsSelector,
       ),
 
       errorRate: rateMetric(
         counter='haproxy_backend_response_errors_total',
-        selector='type="frontend", backend!~"ssh|api_rate_limit|canary_.*"'
+        selector=baseSelector + mainHttpsSelector,
       ),
 
       toolingLinks: [
@@ -64,19 +67,20 @@ metricsCatalog.serviceDefinition({
         stage: 'cny',
       },
 
+      local cnyHttpsSelector = { backend: { re: 'canary_.*' } },
       requestRate: rateMetric(
         counter='haproxy_backend_http_requests_total',
-        selector='type="frontend", backend=~"canary_.*"'
+        selector=baseSelector + cnyHttpsSelector
       ),
 
       responseRate: rateMetric(
         counter='haproxy_backend_http_responses_total',
-        selector='type="frontend", backend=~"canary_.*"'
+        selector=baseSelector + cnyHttpsSelector
       ),
 
       errorRate: rateMetric(
         counter='haproxy_backend_response_errors_total',
-        selector='type="frontend", backend=~"canary_.*"'
+        selector=baseSelector + cnyHttpsSelector
       ),
 
       toolingLinks: [
@@ -99,19 +103,20 @@ metricsCatalog.serviceDefinition({
         errorRatio: 0.999,
       },
 
+      local sshSelector = { backend: 'ssh' },
       requestRate: rateMetric(
         counter='haproxy_backend_http_requests_total',
-        selector='type="frontend", backend="ssh"'
+        selector=baseSelector + sshSelector,
       ),
 
       responseRate: rateMetric(
         counter='haproxy_backend_http_responses_total',
-        selector='type="frontend", backend="ssh"'
+        selector=baseSelector + sshSelector,
       ),
 
       errorRate: rateMetric(
         counter='haproxy_backend_response_errors_total',
-        selector='type="frontend", backend="ssh"'
+        selector=baseSelector + sshSelector,
       ),
 
       toolingLinks: [

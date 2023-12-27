@@ -11,7 +11,7 @@ groups:
       type: jaeger
     expr: |
       sum by (env,environment,stage) (
-        rate(jaeger_agent_reporter_spans_submitted_total{type="jaeger"}[1m] offset 30s)
+        rate(jaeger_agent_reporter_spans_submitted_total{}[1m] offset 30s)
       )
   - record: gitlab_component_errors:rate
     labels:
@@ -21,7 +21,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(jaeger_agent_reporter_spans_failures_total{type="jaeger"}[1m] offset 30s)
+          rate(jaeger_agent_reporter_spans_failures_total{}[1m] offset 30s)
         )
       )
       or
@@ -37,7 +37,7 @@ groups:
       type: jaeger
     expr: |
       sum by (env,environment,stage) (
-        rate(jaeger_collector_save_latency_bucket{type="jaeger", le="10"}[1m] offset 30s)
+        rate(jaeger_collector_save_latency_bucket{le="10"}[1m] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score
     labels:
@@ -46,7 +46,7 @@ groups:
       type: jaeger
     expr: |
       sum by (env,environment,stage) (
-        rate(jaeger_collector_save_latency_bucket{type="jaeger", le="+Inf"}[1m] offset 30s)
+        rate(jaeger_collector_save_latency_bucket{le="+Inf"}[1m] offset 30s)
       )
   - record: gitlab_component_ops:rate
     labels:
@@ -55,7 +55,7 @@ groups:
       type: jaeger
     expr: |
       sum by (env,environment,stage) (
-        rate(jaeger_collector_spans_received_total{type="jaeger"}[1m] offset 30s)
+        rate(jaeger_collector_spans_received_total{}[1m] offset 30s)
       )
   - record: gitlab_component_errors:rate
     labels:
@@ -65,7 +65,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(jaeger_collector_spans_dropped_total{type="jaeger"}[1m] offset 30s)
+          rate(jaeger_collector_spans_dropped_total{}[1m] offset 30s)
         )
       )
       or
@@ -81,7 +81,7 @@ groups:
       type: jaeger
     expr: |
       sum by (env,environment,stage) (
-        rate(jaeger_query_latency_bucket{type="jaeger", le="10"}[1m] offset 30s)
+        rate(jaeger_query_latency_bucket{le="10"}[1m] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score
     labels:
@@ -90,7 +90,7 @@ groups:
       type: jaeger
     expr: |
       sum by (env,environment,stage) (
-        rate(jaeger_query_latency_bucket{type="jaeger", le="+Inf"}[1m] offset 30s)
+        rate(jaeger_query_latency_bucket{le="+Inf"}[1m] offset 30s)
       )
   - record: gitlab_component_ops:rate
     labels:
@@ -99,7 +99,7 @@ groups:
       type: jaeger
     expr: |
       sum by (env,environment,stage) (
-        rate(jaeger_query_requests_total{type="jaeger"}[1m] offset 30s)
+        rate(jaeger_query_requests_total{}[1m] offset 30s)
       )
   - record: gitlab_component_errors:rate
     labels:
@@ -128,7 +128,7 @@ groups:
       type: jaeger
     expr: |
       sum by (env,environment,stage) (
-        rate(jaeger_agent_reporter_spans_submitted_total{type="jaeger"}[5m] offset 30s)
+        rate(jaeger_agent_reporter_spans_submitted_total{}[5m] offset 30s)
       )
   - record: gitlab_component_errors:rate_5m
     labels:
@@ -138,7 +138,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(jaeger_agent_reporter_spans_failures_total{type="jaeger"}[5m] offset 30s)
+          rate(jaeger_agent_reporter_spans_failures_total{}[5m] offset 30s)
         )
       )
       or
@@ -154,7 +154,7 @@ groups:
       type: jaeger
     expr: |
       sum by (env,environment,stage) (
-        rate(jaeger_collector_save_latency_bucket{type="jaeger", le="10"}[5m] offset 30s)
+        rate(jaeger_collector_save_latency_bucket{le="10"}[5m] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_5m
     labels:
@@ -163,7 +163,7 @@ groups:
       type: jaeger
     expr: |
       sum by (env,environment,stage) (
-        rate(jaeger_collector_save_latency_bucket{type="jaeger", le="+Inf"}[5m] offset 30s)
+        rate(jaeger_collector_save_latency_bucket{le="+Inf"}[5m] offset 30s)
       )
   - record: gitlab_component_ops:rate_5m
     labels:
@@ -172,7 +172,7 @@ groups:
       type: jaeger
     expr: |
       sum by (env,environment,stage) (
-        rate(jaeger_collector_spans_received_total{type="jaeger"}[5m] offset 30s)
+        rate(jaeger_collector_spans_received_total{}[5m] offset 30s)
       )
   - record: gitlab_component_errors:rate_5m
     labels:
@@ -182,7 +182,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(jaeger_collector_spans_dropped_total{type="jaeger"}[5m] offset 30s)
+          rate(jaeger_collector_spans_dropped_total{}[5m] offset 30s)
         )
       )
       or
@@ -198,7 +198,7 @@ groups:
       type: jaeger
     expr: |
       sum by (env,environment,stage) (
-        rate(jaeger_query_latency_bucket{type="jaeger", le="10"}[5m] offset 30s)
+        rate(jaeger_query_latency_bucket{le="10"}[5m] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_5m
     labels:
@@ -207,7 +207,7 @@ groups:
       type: jaeger
     expr: |
       sum by (env,environment,stage) (
-        rate(jaeger_query_latency_bucket{type="jaeger", le="+Inf"}[5m] offset 30s)
+        rate(jaeger_query_latency_bucket{le="+Inf"}[5m] offset 30s)
       )
   - record: gitlab_component_ops:rate_5m
     labels:
@@ -216,7 +216,7 @@ groups:
       type: jaeger
     expr: |
       sum by (env,environment,stage) (
-        rate(jaeger_query_requests_total{type="jaeger"}[5m] offset 30s)
+        rate(jaeger_query_requests_total{}[5m] offset 30s)
       )
   - record: gitlab_component_errors:rate_5m
     labels:
@@ -245,7 +245,7 @@ groups:
       type: jaeger
     expr: |
       sum by (env,environment,stage) (
-        rate(jaeger_agent_reporter_spans_submitted_total{type="jaeger"}[30m] offset 30s)
+        rate(jaeger_agent_reporter_spans_submitted_total{}[30m] offset 30s)
       )
   - record: gitlab_component_errors:rate_30m
     labels:
@@ -255,7 +255,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(jaeger_agent_reporter_spans_failures_total{type="jaeger"}[30m] offset 30s)
+          rate(jaeger_agent_reporter_spans_failures_total{}[30m] offset 30s)
         )
       )
       or
@@ -271,7 +271,7 @@ groups:
       type: jaeger
     expr: |
       sum by (env,environment,stage) (
-        rate(jaeger_collector_save_latency_bucket{type="jaeger", le="10"}[30m] offset 30s)
+        rate(jaeger_collector_save_latency_bucket{le="10"}[30m] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_30m
     labels:
@@ -280,7 +280,7 @@ groups:
       type: jaeger
     expr: |
       sum by (env,environment,stage) (
-        rate(jaeger_collector_save_latency_bucket{type="jaeger", le="+Inf"}[30m] offset 30s)
+        rate(jaeger_collector_save_latency_bucket{le="+Inf"}[30m] offset 30s)
       )
   - record: gitlab_component_ops:rate_30m
     labels:
@@ -289,7 +289,7 @@ groups:
       type: jaeger
     expr: |
       sum by (env,environment,stage) (
-        rate(jaeger_collector_spans_received_total{type="jaeger"}[30m] offset 30s)
+        rate(jaeger_collector_spans_received_total{}[30m] offset 30s)
       )
   - record: gitlab_component_errors:rate_30m
     labels:
@@ -299,7 +299,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(jaeger_collector_spans_dropped_total{type="jaeger"}[30m] offset 30s)
+          rate(jaeger_collector_spans_dropped_total{}[30m] offset 30s)
         )
       )
       or
@@ -315,7 +315,7 @@ groups:
       type: jaeger
     expr: |
       sum by (env,environment,stage) (
-        rate(jaeger_query_latency_bucket{type="jaeger", le="10"}[30m] offset 30s)
+        rate(jaeger_query_latency_bucket{le="10"}[30m] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_30m
     labels:
@@ -324,7 +324,7 @@ groups:
       type: jaeger
     expr: |
       sum by (env,environment,stage) (
-        rate(jaeger_query_latency_bucket{type="jaeger", le="+Inf"}[30m] offset 30s)
+        rate(jaeger_query_latency_bucket{le="+Inf"}[30m] offset 30s)
       )
   - record: gitlab_component_ops:rate_30m
     labels:
@@ -333,7 +333,7 @@ groups:
       type: jaeger
     expr: |
       sum by (env,environment,stage) (
-        rate(jaeger_query_requests_total{type="jaeger"}[30m] offset 30s)
+        rate(jaeger_query_requests_total{}[30m] offset 30s)
       )
   - record: gitlab_component_errors:rate_30m
     labels:
@@ -362,7 +362,7 @@ groups:
       type: jaeger
     expr: |
       sum by (env,environment,stage) (
-        rate(jaeger_agent_reporter_spans_submitted_total{type="jaeger"}[1h] offset 30s)
+        rate(jaeger_agent_reporter_spans_submitted_total{}[1h] offset 30s)
       )
   - record: gitlab_component_errors:rate_1h
     labels:
@@ -372,7 +372,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(jaeger_agent_reporter_spans_failures_total{type="jaeger"}[1h] offset 30s)
+          rate(jaeger_agent_reporter_spans_failures_total{}[1h] offset 30s)
         )
       )
       or
@@ -388,7 +388,7 @@ groups:
       type: jaeger
     expr: |
       sum by (env,environment,stage) (
-        rate(jaeger_collector_save_latency_bucket{type="jaeger", le="10"}[1h] offset 30s)
+        rate(jaeger_collector_save_latency_bucket{le="10"}[1h] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_1h
     labels:
@@ -397,7 +397,7 @@ groups:
       type: jaeger
     expr: |
       sum by (env,environment,stage) (
-        rate(jaeger_collector_save_latency_bucket{type="jaeger", le="+Inf"}[1h] offset 30s)
+        rate(jaeger_collector_save_latency_bucket{le="+Inf"}[1h] offset 30s)
       )
   - record: gitlab_component_ops:rate_1h
     labels:
@@ -406,7 +406,7 @@ groups:
       type: jaeger
     expr: |
       sum by (env,environment,stage) (
-        rate(jaeger_collector_spans_received_total{type="jaeger"}[1h] offset 30s)
+        rate(jaeger_collector_spans_received_total{}[1h] offset 30s)
       )
   - record: gitlab_component_errors:rate_1h
     labels:
@@ -416,7 +416,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(jaeger_collector_spans_dropped_total{type="jaeger"}[1h] offset 30s)
+          rate(jaeger_collector_spans_dropped_total{}[1h] offset 30s)
         )
       )
       or
@@ -432,7 +432,7 @@ groups:
       type: jaeger
     expr: |
       sum by (env,environment,stage) (
-        rate(jaeger_query_latency_bucket{type="jaeger", le="10"}[1h] offset 30s)
+        rate(jaeger_query_latency_bucket{le="10"}[1h] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_1h
     labels:
@@ -441,7 +441,7 @@ groups:
       type: jaeger
     expr: |
       sum by (env,environment,stage) (
-        rate(jaeger_query_latency_bucket{type="jaeger", le="+Inf"}[1h] offset 30s)
+        rate(jaeger_query_latency_bucket{le="+Inf"}[1h] offset 30s)
       )
   - record: gitlab_component_ops:rate_1h
     labels:
@@ -450,7 +450,7 @@ groups:
       type: jaeger
     expr: |
       sum by (env,environment,stage) (
-        rate(jaeger_query_requests_total{type="jaeger"}[1h] offset 30s)
+        rate(jaeger_query_requests_total{}[1h] offset 30s)
       )
   - record: gitlab_component_errors:rate_1h
     labels:
@@ -479,7 +479,7 @@ groups:
       type: jaeger
     expr: |
       sum by (env,environment,stage) (
-        rate(jaeger_agent_reporter_spans_submitted_total{type="jaeger"}[6h] offset 30s)
+        rate(jaeger_agent_reporter_spans_submitted_total{}[6h] offset 30s)
       )
   - record: gitlab_component_errors:rate_6h
     labels:
@@ -489,7 +489,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(jaeger_agent_reporter_spans_failures_total{type="jaeger"}[6h] offset 30s)
+          rate(jaeger_agent_reporter_spans_failures_total{}[6h] offset 30s)
         )
       )
       or
@@ -505,7 +505,7 @@ groups:
       type: jaeger
     expr: |
       sum by (env,environment,stage) (
-        rate(jaeger_collector_save_latency_bucket{type="jaeger", le="10"}[6h] offset 30s)
+        rate(jaeger_collector_save_latency_bucket{le="10"}[6h] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_6h
     labels:
@@ -514,7 +514,7 @@ groups:
       type: jaeger
     expr: |
       sum by (env,environment,stage) (
-        rate(jaeger_collector_save_latency_bucket{type="jaeger", le="+Inf"}[6h] offset 30s)
+        rate(jaeger_collector_save_latency_bucket{le="+Inf"}[6h] offset 30s)
       )
   - record: gitlab_component_ops:rate_6h
     labels:
@@ -523,7 +523,7 @@ groups:
       type: jaeger
     expr: |
       sum by (env,environment,stage) (
-        rate(jaeger_collector_spans_received_total{type="jaeger"}[6h] offset 30s)
+        rate(jaeger_collector_spans_received_total{}[6h] offset 30s)
       )
   - record: gitlab_component_errors:rate_6h
     labels:
@@ -533,7 +533,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(jaeger_collector_spans_dropped_total{type="jaeger"}[6h] offset 30s)
+          rate(jaeger_collector_spans_dropped_total{}[6h] offset 30s)
         )
       )
       or
@@ -549,7 +549,7 @@ groups:
       type: jaeger
     expr: |
       sum by (env,environment,stage) (
-        rate(jaeger_query_latency_bucket{type="jaeger", le="10"}[6h] offset 30s)
+        rate(jaeger_query_latency_bucket{le="10"}[6h] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_6h
     labels:
@@ -558,7 +558,7 @@ groups:
       type: jaeger
     expr: |
       sum by (env,environment,stage) (
-        rate(jaeger_query_latency_bucket{type="jaeger", le="+Inf"}[6h] offset 30s)
+        rate(jaeger_query_latency_bucket{le="+Inf"}[6h] offset 30s)
       )
   - record: gitlab_component_ops:rate_6h
     labels:
@@ -567,7 +567,7 @@ groups:
       type: jaeger
     expr: |
       sum by (env,environment,stage) (
-        rate(jaeger_query_requests_total{type="jaeger"}[6h] offset 30s)
+        rate(jaeger_query_requests_total{}[6h] offset 30s)
       )
   - record: gitlab_component_errors:rate_6h
     labels:
