@@ -196,13 +196,7 @@ local rules(extraSelector={}) = {
               > 540
             )
           ||| % {
-            selector: selectors.serializeHash({
-              tier: 'db',
-              shard: 'default',
-              type: [
-                { nre: '.*archive' },
-                { nre: '.*delayed' },
-              ],
+            selector: selectors.serializeHash(selector {
               command: [
                 { ne: 'vacuum' },
                 { ne: 'autovacuum' },
