@@ -6,7 +6,14 @@ local selectors = import 'promql/selectors.libsonnet';
 
 local aggregationLabelsForPrimary = ['environment', 'tier', 'type', 'fqdn'];
 local aggregationLabelsForReplicas = ['environment', 'tier', 'type'];
-local selector = { type: 'patroni' };
+local selector = {
+  tier: 'db',
+  shard: 'default',
+  type: [
+    { nre: '.*archive' },
+    { nre: '.*delayed' },
+  ],
+};
 
 local alertExpr(aggregationLabels, selectorNumerator, selectorDenominator, replica, threshold, window='5m', extraSelector) =
   local aggregationLabelsWithRelName = aggregationLabels + ['relname'];
@@ -189,8 +196,7 @@ local rules(extraSelector={}) = {
               > 540
             )
           ||| % {
-            selector: selectors.serializeHash({
-              type: 'patroni',
+            selector: selectors.serializeHash(selector {
               command: [
                 { ne: 'vacuum' },
                 { ne: 'autovacuum' },
