@@ -154,24 +154,38 @@ local serviceLevelIndicatorDefinition(sliName, serviceLevelIndicator) =
       std.objectHas(serviceLevelIndicator, 'dashboardFeatureCategories') &&
       std.length(serviceLevelIndicator.dashboardFeatureCategories) > 0,
 
-    local apdexMetrics =
+    local apdexMetricsAndLabels =
       if self.hasApdex() then
-        self.apdex.getMetricNames()
+        self.apdex.supportsReflection().getMetricNamesAndLabels()
       else
-        [],
+        {},
 
-    local requestRateMetrics =
-      self.requestRate.getMetricNames(),
+    local requestRateMetricsAndLabels =
+      self.requestRate.supportsReflection().getMetricNamesAndLabels(),
 
-    local errorRateMetrics =
+    local errorRateMetricsAndLabels =
       if self.hasErrorRate() then
-        self.errorRate.getMetricNames()
+        self.errorRate.supportsReflection().getMetricNamesAndLabels()
       else
-        [],
+        {},
 
-    recordingRuleMetrics:
-      std.uniq(
-        apdexMetrics + requestRateMetrics + errorRateMetrics,
+    // Return a hash of { metric: set(labels) } from all defined metrics
+    metricNamesAndLabels()::
+      std.foldl(
+        function(memo, obj)
+          // merge labels for the same metric
+          if std.objectHas(memo, obj.key) then
+            memo {
+              [obj.key]: std.setUnion(memo[obj.key], obj.value),
+            }
+          else
+            memo {
+              [obj.key]: obj.value,
+            },
+        (std.objectKeysValues(apdexMetricsAndLabels) +
+         std.objectKeysValues(requestRateMetricsAndLabels) +
+         std.objectKeysValues(errorRateMetricsAndLabels)),
+        {}
       ),
 
     // Generate recording rules for apdex

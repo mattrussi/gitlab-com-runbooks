@@ -4,6 +4,9 @@ local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local test = import 'test.libsonnet';
 local rateMetric = metricsCatalog.rateMetric;
 local successCounterApdex = metricsCatalog.successCounterApdex;
+local histogramApdex = metricsCatalog.histogramApdex;
+local errorCounterApdex = metricsCatalog.errorCounterApdex;
+local combined = metricsCatalog.combined;
 
 local testSli = underTest.serviceLevelIndicatorDefinition({
   significantLabels: [],
@@ -121,4 +124,98 @@ test.suite({
       },
     ],
   },
+
+  local testSliBase = {
+    significantLabels: [],
+    userImpacting: false,
+  },
+
+  local testSliWithSelectorHistogramApdex = underTest.serviceLevelIndicatorDefinition(testSliBase {
+    apdex: histogramApdex('some_histogram_metrics', selector={ foo: 'bar' }),
+    requestRate: rateMetric('some_total_count', selector={ label_a: 'bar' }),
+    errorRate: rateMetric('some_total_count', selector={ label_b: 'foo' }),
+  }).initServiceLevelIndicatorWithName('test_sli', {}),
+  testMetricNamesAndLabelsHistogramApdex: {
+    actual: testSliWithSelectorHistogramApdex.metricNamesAndLabels(),
+    expect: {
+      some_histogram_metrics: std.set(['foo', 'le']),
+      some_total_count: std.set(['label_a', 'label_b']),
+    },
+  },
+
+  local testSliWithSelectorSuccessCounterApdex = underTest.serviceLevelIndicatorDefinition(testSliBase {
+    apdex: successCounterApdex(successRateMetric='success_total_count', operationRateMetric='some_total_count', selector={ foo: 'bar', baz: 'qux' }),
+    requestRate: rateMetric('some_total_count', selector={ label_a: 'bar' }),
+    errorRate: rateMetric('some_total_count', selector={ label_b: 'foo' }),
+  }).initServiceLevelIndicatorWithName('test_sli', {}),
+  testMetricNamesAndLabelsSuccessCounterApdex: {
+    actual: testSliWithSelectorSuccessCounterApdex.metricNamesAndLabels(),
+    expect: {
+      success_total_count: std.set(['foo', 'baz']),
+      some_total_count: std.set(['label_a', 'label_b', 'foo', 'baz']),
+    },
+  },
+
+  local testSliWithSelectorErrorCounterApdex = underTest.serviceLevelIndicatorDefinition(testSliBase {
+    apdex: errorCounterApdex(errorRateMetric='error_total_count', operationRateMetric='some_total_count', selector={ foo: 'bar', baz: 'qux' }),
+    requestRate: rateMetric('some_total_count', selector={ label_a: 'bar' }),
+    errorRate: rateMetric('some_total_count', selector={ label_b: 'foo' }),
+  }).initServiceLevelIndicatorWithName('test_sli', {}),
+  testMetricNamesAndLabelsErrorCounterApdex: {
+    actual: testSliWithSelectorErrorCounterApdex.metricNamesAndLabels(),
+    expect: {
+      error_total_count: std.set(['foo', 'baz']),
+      some_total_count: std.set(['label_a', 'label_b', 'foo', 'baz']),
+    },
+  },
+
+  local testSliWithSelectorRequestRateOnly = underTest.serviceLevelIndicatorDefinition(testSliBase {
+    requestRate: rateMetric('some_total_count', selector={ label_a: 'bar', type: 'foo' }),
+  }).initServiceLevelIndicatorWithName('test_sli', {}),
+  testMetricNamesAndLabelsRequestRateOnly: {
+    actual: testSliWithSelectorRequestRateOnly.metricNamesAndLabels(),
+    expect: {
+      some_total_count: std.set(['label_a', 'type']),
+    },
+  },
+
+  local testSliWithoutSelector = underTest.serviceLevelIndicatorDefinition(testSliBase {
+    apdex: histogramApdex('some_histogram_metrics'),
+    requestRate: rateMetric('some_total_count'),
+    errorRate: rateMetric('some_total_count'),
+  }).initServiceLevelIndicatorWithName('test_sli', {}),
+  testMetricNamesAndLabelsWithoutSelector: {
+    actual: testSliWithoutSelector.metricNamesAndLabels(),
+    expect: {
+      some_histogram_metrics: ['le'],
+      some_total_count: [],
+    },
+  },
+
+  local testSliWithCombinedMetric = underTest.serviceLevelIndicatorDefinition(testSliBase {
+    apdex: histogramApdex('some_histogram_metrics'),
+    requestRate: combined([
+      rateMetric(
+        counter='pg_stat_database_xact_commit',
+        selector={ type: 'patroni', tier: 'db' },
+        instanceFilter='(pg_replication_is_replica == 0)'
+      ),
+      rateMetric(
+        counter='pg_stat_database_xact_rollback',
+        selector={ type: 'patroni', tier: 'db', some_label: 'true' },
+        instanceFilter='(pg_replication_is_replica == 0)'
+      ),
+    ]),
+    errorRate: rateMetric('some_total_count'),
+  }).initServiceLevelIndicatorWithName('test_sli', {}),
+  testMetricNamesAndLabelsWithCombinedMetric: {
+    actual: testSliWithCombinedMetric.metricNamesAndLabels(),
+    expect: {
+      some_histogram_metrics: ['le'],
+      pg_stat_database_xact_commit: std.set(['type', 'tier']),
+      pg_stat_database_xact_rollback: std.set(['type', 'tier', 'some_label']),
+      some_total_count: [],
+    },
+  },
+
 })
