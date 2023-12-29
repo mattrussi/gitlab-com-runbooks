@@ -5,6 +5,7 @@
 local dependencies = import 'servicemetrics/dependencies_definition.libsonnet';
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 local misc = import 'utils/misc.libsonnet';
+local collectMetricNamesAndLabels = (import './service_level_indicator_helper.libsonnet').collectMetricNamesAndLabels;
 
 // Combined component definitions are a specialisation of the service-component.
 // They allow multiple components to be combined under a single name, but with different
@@ -68,8 +69,11 @@ local combinedServiceLevelIndicatorDefinition(
         hasErrorRate():: componentsInitialised[0].hasErrorRate(),
         hasDependencies():: std.length(self.dependsOn) > 0,
 
-        recordingRuleMetrics:
-          std.uniq(std.flatMap(function(c) c.recordingRuleMetrics, componentsInitialised)),
+        // Return a hash of { metric: set(labels) } from all defined metrics
+        metricNamesAndLabels()::
+          collectMetricNamesAndLabels(
+            [component.metricNamesAndLabels() for component in componentsInitialised]
+          ),
 
         hasToolingLinks()::
           std.length(self.getToolingLinks()) > 0,

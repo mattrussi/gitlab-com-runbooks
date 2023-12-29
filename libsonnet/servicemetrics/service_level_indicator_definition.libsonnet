@@ -6,6 +6,7 @@ local dependencies = import 'servicemetrics/dependencies_definition.libsonnet';
 local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 local strings = import 'utils/strings.libsonnet';
+local collectMetricNamesAndLabels = (import './service_level_indicator_helper.libsonnet').collectMetricNamesAndLabels;
 
 local featureCategoryFromSourceMetrics = 'featureCategoryFromSourceMetrics';
 
@@ -171,21 +172,8 @@ local serviceLevelIndicatorDefinition(sliName, serviceLevelIndicator) =
 
     // Return a hash of { metric: set(labels) } from all defined metrics
     metricNamesAndLabels()::
-      std.foldl(
-        function(memo, obj)
-          // merge labels for the same metric
-          if std.objectHas(memo, obj.key) then
-            memo {
-              [obj.key]: std.setUnion(memo[obj.key], obj.value),
-            }
-          else
-            memo {
-              [obj.key]: obj.value,
-            },
-        (std.objectKeysValues(apdexMetricsAndLabels) +
-         std.objectKeysValues(requestRateMetricsAndLabels) +
-         std.objectKeysValues(errorRateMetricsAndLabels)),
-        {}
+      collectMetricNamesAndLabels(
+        [apdexMetricsAndLabels, requestRateMetricsAndLabels, errorRateMetricsAndLabels]
       ),
 
     // Generate recording rules for apdex
