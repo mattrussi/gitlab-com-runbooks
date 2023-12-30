@@ -198,13 +198,13 @@ local rules(extraSelector={}) = {
           ||| % {
             selector: selectors.serializeHash(selector {
               command: [
-                { ne: 'vacuum' },
                 { ne: 'autovacuum' },
-                { nre: '[cC][rR][eE][aA][tT][eE]' },
-                { nre: '[aA][nN][aA][lL][yY][zZ][eE]' },
-                { nre: '[rR][eE][iI][nN][dD][eE][xX]' }
-                { nre: '[aA][lL][tT][eE][rR]' },
-                { nre: '[dD][rR][oO][pP]' },
+                { nre: '(?i:VACUUM)' },
+                { nre: '(?i:CREATE)' },
+                { nre: '(?i:ANALYZE)' },
+                { nre: '(?i:REINDEX)' },
+                { nre: '(?i:ALTER)' },
+                { nre: '(?i:DROP)' },
               ],
             } + extraSelector),
           },
