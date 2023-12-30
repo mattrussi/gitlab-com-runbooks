@@ -12,7 +12,7 @@ nodejs 20.10.0 # datasource=node depName=nodejs/node
 pre-commit 3.6.0 # datasource=github-releases depName=pre-commit/pre-commit
 promtool 2.48.1 # datasource=github-releases depName=prometheus/prometheus
 python system
-ruby 3.2.2 # datasource=ruby-version depName=ruby/ruby
+ruby 3.3.0 # datasource=ruby-version depName=ruby/ruby
 shellcheck 0.9.0 # datasource=github-releases depName=koalaman/shellcheck
 shfmt 3.7.0 # datasource=github-releases depName=mvdan/sh
 terraform 1.6.5 # datasource=github-releases depName=hashicorp/terraform
