@@ -53,7 +53,7 @@ groups:
     labels:
       tier: sv
       type: ai-gateway
-    expr: "0.990000"
+    expr: "0.980000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       tier: sv
@@ -64,7 +64,7 @@ groups:
       component: inference
       tier: sv
       type: ai-gateway
-    expr: "0.990000"
+    expr: "0.980000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: inference
@@ -76,7 +76,7 @@ groups:
       component: runway_ingress
       tier: sv
       type: ai-gateway
-    expr: "0.990000"
+    expr: "0.980000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: runway_ingress
@@ -88,7 +88,7 @@ groups:
       component: server
       tier: sv
       type: ai-gateway
-    expr: "0.990000"
+    expr: "0.980000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: server
@@ -100,7 +100,7 @@ groups:
       component: waf
       tier: sv
       type: ai-gateway
-    expr: "0.990000"
+    expr: "0.980000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: waf
