@@ -3,6 +3,7 @@ local aggregations = import 'promql/aggregations.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
 local optionalOffset = import 'recording-rules/lib/optional-offset.libsonnet';
 local strings = import 'utils/strings.libsonnet';
+local validateSelector = (import '../validation.libsonnet').validateSelector;
 
 // A general apdex query is:
 //
@@ -198,7 +199,7 @@ local generateApdexAttributionQuery(histogram, selector, rangeInterval, aggregat
   ):: {
     histogram: histogram,
     rangeVectorFunction: rangeVectorFunction,
-    selector: selector,
+    selector: validateSelector(selector),
     satisfiedThreshold: satisfiedThreshold,
     toleratedThreshold: toleratedThreshold,
     metricsFormat: metricsFormat,

@@ -572,7 +572,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
-            rate(gitlab_workhorse_http_request_duration_seconds_bucket{job=~"gitlab-workhorse-api|gitlab-workhorse", type="internal-api", route!="^/-/health$", route!="^/-/(readiness|liveness)$", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+            rate(gitlab_workhorse_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",job=~"gitlab-workhorse-api|gitlab-workhorse",route!="^/-/health$",route!="^/-/(readiness|liveness)$",stage="{{ $labels.stage }}",type="internal-api"}[5m])
           )
         )
       runbook: docs/internal-api/README.md
@@ -623,7 +623,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
-            rate(gitlab_workhorse_http_request_duration_seconds_bucket{job=~"gitlab-workhorse-api|gitlab-workhorse", type="internal-api", route!="^/-/health$", route!="^/-/(readiness|liveness)$", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+            rate(gitlab_workhorse_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",job=~"gitlab-workhorse-api|gitlab-workhorse",route!="^/-/health$",route!="^/-/(readiness|liveness)$",stage="{{ $labels.stage }}",type="internal-api"}[5m])
           )
         )
       runbook: docs/internal-api/README.md
@@ -676,7 +676,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,region,le) (
-            rate(gitlab_workhorse_http_request_duration_seconds_bucket{job=~"gitlab-workhorse-api|gitlab-workhorse", type="internal-api", route!="^/-/health$", route!="^/-/(readiness|liveness)$", environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}"}[5m])
+            rate(gitlab_workhorse_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",job=~"gitlab-workhorse-api|gitlab-workhorse",region="{{ $labels.region }}",route!="^/-/health$",route!="^/-/(readiness|liveness)$",stage="{{ $labels.stage }}",type="internal-api"}[5m])
           )
         )
       runbook: docs/internal-api/README.md
@@ -729,7 +729,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,region,le) (
-            rate(gitlab_workhorse_http_request_duration_seconds_bucket{job=~"gitlab-workhorse-api|gitlab-workhorse", type="internal-api", route!="^/-/health$", route!="^/-/(readiness|liveness)$", environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}"}[5m])
+            rate(gitlab_workhorse_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",job=~"gitlab-workhorse-api|gitlab-workhorse",region="{{ $labels.region }}",route!="^/-/health$",route!="^/-/(readiness|liveness)$",stage="{{ $labels.stage }}",type="internal-api"}[5m])
           )
         )
       runbook: docs/internal-api/README.md
@@ -778,7 +778,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(gitlab_workhorse_http_requests_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}", job=~"gitlab-workhorse-api|gitlab-workhorse", type="internal-api", code=~"^5.*", route!="^/-/health$", route!="^/-/(readiness|liveness)$"}[5m])
+          rate(gitlab_workhorse_http_requests_total{code=~"^5.*",environment="{{ $labels.environment }}",job=~"gitlab-workhorse-api|gitlab-workhorse",route!="^/-/health$",route!="^/-/(readiness|liveness)$",stage="{{ $labels.stage }}",type="internal-api"}[5m])
         )
       runbook: docs/internal-api/README.md
     labels:
@@ -826,7 +826,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(gitlab_workhorse_http_requests_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}", job=~"gitlab-workhorse-api|gitlab-workhorse", type="internal-api", code=~"^5.*", route!="^/-/health$", route!="^/-/(readiness|liveness)$"}[5m])
+          rate(gitlab_workhorse_http_requests_total{code=~"^5.*",environment="{{ $labels.environment }}",job=~"gitlab-workhorse-api|gitlab-workhorse",route!="^/-/health$",route!="^/-/(readiness|liveness)$",stage="{{ $labels.stage }}",type="internal-api"}[5m])
         )
       runbook: docs/internal-api/README.md
     labels:
@@ -876,7 +876,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage,region) (
-          rate(gitlab_workhorse_http_requests_total{environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}", job=~"gitlab-workhorse-api|gitlab-workhorse", type="internal-api", code=~"^5.*", route!="^/-/health$", route!="^/-/(readiness|liveness)$"}[5m])
+          rate(gitlab_workhorse_http_requests_total{code=~"^5.*",environment="{{ $labels.environment }}",job=~"gitlab-workhorse-api|gitlab-workhorse",region="{{ $labels.region }}",route!="^/-/health$",route!="^/-/(readiness|liveness)$",stage="{{ $labels.stage }}",type="internal-api"}[5m])
         )
       runbook: docs/internal-api/README.md
     labels:
@@ -926,7 +926,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage,region) (
-          rate(gitlab_workhorse_http_requests_total{environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}", job=~"gitlab-workhorse-api|gitlab-workhorse", type="internal-api", code=~"^5.*", route!="^/-/health$", route!="^/-/(readiness|liveness)$"}[5m])
+          rate(gitlab_workhorse_http_requests_total{code=~"^5.*",environment="{{ $labels.environment }}",job=~"gitlab-workhorse-api|gitlab-workhorse",region="{{ $labels.region }}",route!="^/-/health$",route!="^/-/(readiness|liveness)$",stage="{{ $labels.stage }}",type="internal-api"}[5m])
         )
       runbook: docs/internal-api/README.md
     labels:
@@ -974,7 +974,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(gitlab_workhorse_http_requests_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}", job=~"gitlab-workhorse-api|gitlab-workhorse", type="internal-api"}[5m])
+          rate(gitlab_workhorse_http_requests_total{environment="{{ $labels.environment }}",job=~"gitlab-workhorse-api|gitlab-workhorse",stage="{{ $labels.stage }}",type="internal-api"}[5m])
         )
       runbook: docs/internal-api/README.md
     labels:
@@ -1011,7 +1011,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(gitlab_workhorse_http_requests_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}", job=~"gitlab-workhorse-api|gitlab-workhorse", type="internal-api"}[5m])
+          rate(gitlab_workhorse_http_requests_total{environment="{{ $labels.environment }}",job=~"gitlab-workhorse-api|gitlab-workhorse",stage="{{ $labels.stage }}",type="internal-api"}[5m])
         )
       runbook: docs/internal-api/README.md
     labels:
@@ -1048,7 +1048,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage,region) (
-          rate(gitlab_workhorse_http_requests_total{environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}", job=~"gitlab-workhorse-api|gitlab-workhorse", type="internal-api"}[5m])
+          rate(gitlab_workhorse_http_requests_total{environment="{{ $labels.environment }}",job=~"gitlab-workhorse-api|gitlab-workhorse",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="internal-api"}[5m])
         )
       runbook: docs/internal-api/README.md
     labels:
@@ -1087,7 +1087,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage,region) (
-          rate(gitlab_workhorse_http_requests_total{environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}", job=~"gitlab-workhorse-api|gitlab-workhorse", type="internal-api"}[5m])
+          rate(gitlab_workhorse_http_requests_total{environment="{{ $labels.environment }}",job=~"gitlab-workhorse-api|gitlab-workhorse",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="internal-api"}[5m])
         )
       runbook: docs/internal-api/README.md
     labels:
