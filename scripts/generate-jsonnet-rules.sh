@@ -34,7 +34,7 @@ function render_multi_jsonnet() {
 if [[ $# == 0 ]]; then
   cd "${REPO_DIR}"
 
-  find ./thanos-rules-jsonnet ./rules-jsonnet ./thanos-staging-rules-jsonnet -name '*.jsonnet' -print0 |
+  find ./thanos-rules-jsonnet ./rules-jsonnet ./thanos-staging-rules-jsonnet ./mimir-rules-jsonnet -name '*.jsonnet' -print0 |
     xargs -0 -P 2 -n 1 ./scripts/generate-jsonnet-rules.sh
 else
   for file in "$@"; do
