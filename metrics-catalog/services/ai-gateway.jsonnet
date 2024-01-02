@@ -14,6 +14,7 @@ metricsCatalog.serviceDefinition(
     apdexScore=0.99,
     featureCategory='code_suggestions',
     apdexSatisfiedThreshold="2079.650567184067",
+    severity='s2',
     customToolingLinks=[
       toolingLinks.kibana(
         title='MLOps',
@@ -27,7 +28,7 @@ metricsCatalog.serviceDefinition(
   {
     serviceLevelIndicators+: {
       server: {
-        severity: 's4',
+        severity: 's2',
         userImpacting: true,
         serviceAggregation: false,
         team: 'code_creation',
@@ -69,7 +70,7 @@ metricsCatalog.serviceDefinition(
       },
       inference: {
         local inferenceSelector = baseSelector { model_engine: { ne: 'codegen' } },
-        severity: 's4',
+        severity: 's2',
         userImpacting: true,
         serviceAggregation: false,
         team: 'code_creation',
