@@ -11,7 +11,7 @@ metricsCatalog.serviceDefinition(
   runwayArchetype(
     type='ai-gateway',
     team='code_creation',
-    apdexScore=0.98,
+    apdexScore=0.9,
     featureCategory='code_suggestions',
     apdexSatisfiedThreshold="2079.650567184067",
     severity='s2',
