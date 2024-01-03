@@ -32,6 +32,31 @@ You can prevent Gitlab from using Zoekt integration for searching, but leave the
 
 * [`search_code_with_zoekt`](https://gitlab.com/gitlab-org/gitlab/blob/master/ee/config/feature_flags/development/search_code_with_zoekt.yml)
 
+#### Removing namespaces from the zoekt node
+
+If Zoekt search FF is disabled, but you still see that some nodes misbehave (OOM for example),
+you can evict some of the namespaces from the node:
+
+1. Execute the script in rails console
+
+   ```ruby
+   # Find the offending node (gitlab-gitlab-zoekt-1 in this example)
+   node = Search::Zoekt::Node.where("metadata @> ?", { name: 'gitlab-gitlab-zoekt-1' }.to_json).order(:last_seen_at).last
+
+   # Load indexed namespaces
+   node.indexed_namespaces.map{ |n| n.attributes.slice('id', 'namespace_id', 'search') }
+   ```
+
+1. Pick the largest ones (you can use `/chatops run namespace find <NAMESPACE_ID>` to get the namespace size)
+1. Destroy these `Zoekt::IndexedNamespace` records
+
+   ```
+   zoekt_indexed_namespace_ids = [1000072, 1000073]
+   node.indexed_namespaces.where(id: zoekt_indexed_namespace_ids).destroy_all
+   ```
+
+1. Post namespace_ids on the incident issue as a private comment so that we can add these back later
+
 #### Pausing Zoekt indexing
 
 Zoekt indexing can be paused. The [jobs are stored in a separate `ZSET`](https://docs.gitlab.com/ee/development/sidekiq/worker_attributes.html#job-pause-control) and re-enqueued when indexing is unpaused. An example
