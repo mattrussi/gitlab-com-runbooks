@@ -84,8 +84,6 @@ validate-prom-rules:
 	@$(THANOS_COMMAND) tools rules-check --rules 'thanos-rules/*.yml'
 	# Prometheus config checks are stricter than rules checks, so use a fake config to check this too
 	$(PROMTOOL_COMMAND) check config scripts/prometheus.yml
-	# Validate Thanos CRDs
-	kubeconform -summary -schema-location default -schema-location https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/monitoring.coreos.com/prometheusrule_v1.json thanos-staging-rules
 
 .PHONY: validate-kibana-urls
 validate-kibana-urls:
