@@ -1183,9 +1183,7 @@ deploy-prometheus-rules:production:
 deploy-thanos-rules:production:
   stage: deploy-rules-production
   environment: ops
-  needs:
-    - job: deploy-thanos-rules:staging
-      artifacts: false
+  needs: []
   variables:
     GOOGLE_PROJECT: gitlab-ops
   extends:
