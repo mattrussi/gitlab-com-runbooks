@@ -156,16 +156,19 @@ local serviceLevelIndicatorDefinition(sliName, serviceLevelIndicator) =
       std.length(serviceLevelIndicator.dashboardFeatureCategories) > 0,
 
     local apdexMetricsAndLabels =
-      if self.hasApdex() then
+      if self.hasApdex() && std.objectHasAll(self.apdex, 'supportsReflection') then
         self.apdex.supportsReflection().getMetricNamesAndLabels()
       else
         {},
 
     local requestRateMetricsAndLabels =
-      self.requestRate.supportsReflection().getMetricNamesAndLabels(),
+      if std.objectHasAll(self.requestRate, 'supportsReflection') then
+        self.requestRate.supportsReflection().getMetricNamesAndLabels()
+      else
+        {},
 
     local errorRateMetricsAndLabels =
-      if self.hasErrorRate() then
+      if self.hasErrorRate() && std.objectHasAll(self.errorRate, 'supportsReflection') then
         self.errorRate.supportsReflection().getMetricNamesAndLabels()
       else
         {},
