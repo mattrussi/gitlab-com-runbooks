@@ -122,4 +122,38 @@ metricsCatalog.serviceDefinition({
     ],
     dependsOn: dependOnPatroni.sqlComponents,
   }),
+  capacityPlanning: {
+    components: [
+      {
+        name: 'kube_container_cpu',
+        events: [
+          {
+            date: '2023-12-12',
+            name: 'Git service Auth API started going through internal-api',
+            references: [
+              {
+                title: 'MR with the change',
+                ref: 'https://gitlab.com/gitlab-com/runbooks/-/merge_requests/6655',
+              },
+            ],
+          },
+        ],
+      },
+      {
+        name: 'kube_container_rss',
+        events: [
+          {
+            date: '2023-12-12',
+            name: 'Git service Auth API started going through internal-api',
+            references: [
+              {
+                title: 'MR with the change',
+                ref: 'https://gitlab.com/gitlab-com/runbooks/-/merge_requests/6655',
+              },
+            ],
+          },
+        ],
+      },
+    ],
+  },
 })
