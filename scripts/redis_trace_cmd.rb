@@ -26,6 +26,8 @@ ARGV.each do |idx_filename|
     index_vals << timestamp.to_f
   end
 
+  next if index_keys == [] || index_vals == []
+
   File.open(filename, 'r:ASCII-8BIT') do |f|
     until f.eof?
       begin
