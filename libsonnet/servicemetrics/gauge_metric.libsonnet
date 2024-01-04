@@ -32,5 +32,14 @@ local validateMetric = (import './validation.libsonnet').validateMetric;
 
     local metricNames = [gauge],
     getMetricNames():: metricNames,
+
+    [if std.isObject(selector) then 'supportsReflection']():: {
+      // Returns a list of metrics and the labels that they use
+      getMetricNamesAndLabels()::
+        {
+          [metric]: std.set(std.objectFields(selector))
+          for metric in metricNames
+        },
+    },
   }),
 }
