@@ -1098,7 +1098,6 @@ generate-prometheus-rules:
           - scripts/prometheus.yml
           - rules/**/*
           - thanos-rules/**/*
-          - thanos-staging-rules/**/*
   script:
     - gem install bundler --no-document -v "${BUNDLER_VERSION}"
     - bundle install
@@ -1161,27 +1160,6 @@ deploy-prometheus-rules:production:
     - .deploy-prometheus-rules
     - .gke-clusters-production
 
-deploy-thanos-rules:staging:
-  stage: deploy
-  environment: $DEPLOY_ENV
-  variables:
-    DEPLOY_ENV: ops
-    GKE_CLUSTER: ops-gitlab-gke
-    LOCATION: us-east1
-    GOOGLE_PROJECT: gitlab-ops
-    KUBE_NAMESPACE: thanos-staging
-    PROMETHEUS_RULE_DIR: thanos-staging-rules
-  rules:
-    - !reference [.default-job-rules, rules]
-    - *ops-gitlab-net-only-rule
-    - <<: *if-main-branch-rule
-      changes:
-        paths:
-          - thanos-staging-rules/**/*
-          - thanos-rules/**/*
-  extends:
-    - .deploy-prometheus-rules
-
 .deploy-thanos-rules:
   extends:
     - .id-tokens
@@ -1205,9 +1183,7 @@ deploy-thanos-rules:staging:
 deploy-thanos-rules:production:
   stage: deploy-rules-production
   environment: ops
-  needs:
-    - job: deploy-thanos-rules:staging
-      artifacts: false
+  needs: []
   variables:
     GOOGLE_PROJECT: gitlab-ops
   extends:
