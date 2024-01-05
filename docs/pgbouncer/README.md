@@ -19,8 +19,8 @@
 
 * [Interacting with Consul](../consul/interaction.md)
 * [../frontend/gitlab-com-is-down.md](../frontend/gitlab-com-is-down.md)
-* [Recovering from CI Patroni cluster lagging too much or becoming completely broken](../patroni-ci/recovering_patroni_ci_intense_lagging_or_replication_stopped.md)
 * [Steps to create (or recreate) a Standby CLuster using a Snapshot from a Production cluster as Master cluster (instead of pg_basebackup)](../patroni/build_cluster_from_snapshot.md)
+* [Recovering from CI Patroni cluster lagging too much or becoming completely broken](../patroni-ci/recovering_patroni_ci_intense_lagging_or_replication_stopped.md)
 * [Log analysis on PostgreSQL, Pgbouncer, Patroni and consul Runbook](../patroni/log_analysis.md)
 * [OS Upgrade Reference Architecture](../patroni/os_upgrade_reference_architecture.md)
 * [Patroni Cluster Management](../patroni/patroni-management.md)

@@ -1,4 +1,4 @@
-SHELL := /bin/bash
+SHELL := /usr/bin/env bash
 
 # Exclude vendor and dot directories, but do include the `.gitlab` directory
 VERIFY_PATH_SELECTOR := \( -not \( -path "*/vendor/*" -o -path "*/.*/*" \) -o -path "*/.gitlab/*" \)

@@ -146,8 +146,8 @@ spec:
         max by(env, environment, tier, type, stage, shard) (
           clamp_min(
             clamp_max(
-              sum by (env, environment, tier, type, stage, shard, fqdn) (
-                go_memstats_alloc_bytes{env="ops",type=~"gitaly|monitoring|praefect|registry|web-pages"}
+              sum by (env, environment, tier, type, stage, shard, fqdn, "metric_prefix") (
+                process_resident_memory_bytes{env="ops",type=~"gitaly|monitoring|praefect|registry|web-pages"}
               )
               /
               sum by (env, environment, tier, type, stage, shard, fqdn) (
@@ -930,7 +930,7 @@ spec:
 
           Details of the Go Memory Utilization per Node resource:
 
-          Go's memory allocation strategy can make it look like a Go process is saturating memory when measured using RSS, when in fact the process is not at risk of memory saturation. For this reason, we measure Go processes using the `go_memstat_alloc_bytes` metric instead of RSS.
+          Go's memory allocation strategy can make it look like a Go process is saturating memory when measured using `go_memstat_alloc_bytes`, as this includes the heap, which isnt actually used memory and can be freely allocated by the OS (but it's currently being held by go).
         grafana_dashboard_id: alerts-sat_go_memory
         grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_go_memory?from=now-6h/m&to=now-1m/m&var-environment={{
           $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
@@ -942,8 +942,8 @@ spec:
           max by(env, environment, tier, type, stage, shard, fqdn) (
             clamp_min(
               clamp_max(
-                sum by (env, environment, tier, type, stage, shard, fqdn) (
-                  go_memstats_alloc_bytes{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
+                sum by (env, environment, tier, type, stage, shard, fqdn, "metric_prefix") (
+                  process_resident_memory_bytes{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
                 )
                 /
                 sum by (env, environment, tier, type, stage, shard, fqdn) (
@@ -958,8 +958,8 @@ spec:
           max by(env, environment, tier, type, stage, shard, fqdn) (
             clamp_min(
               clamp_max(
-                sum by (env, environment, tier, type, stage, shard, fqdn) (
-                  go_memstats_alloc_bytes{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
+                sum by (env, environment, tier, type, stage, shard, fqdn, "metric_prefix") (
+                  process_resident_memory_bytes{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
                 )
                 /
                 sum by (env, environment, tier, type, stage, shard, fqdn) (

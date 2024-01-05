@@ -180,12 +180,12 @@
         "strategy": "quantile95_1h"
       },
       "dangerouslyThanosEvaluated": true,
-      "description": "Go's memory allocation strategy can make it look like a Go process is saturating memory when measured using RSS, when in fact\nthe process is not at risk of memory saturation. For this reason, we measure Go processes using the `go_memstat_alloc_bytes`\nmetric instead of RSS.\n",
+      "description": "Go's memory allocation strategy can make it look like a Go process is saturating memory when measured using `go_memstat_alloc_bytes`,\nas this includes the heap, which isnt actually used memory and can be freely allocated by the OS (but it's currently being held by go).\n",
       "grafana_dashboard_uid": "sat_go_memory",
       "horizontallyScalable": true,
       "linear_prediction_saturation_alert": null,
       "quantileAggregation": "max",
-      "query": "sum by (%(aggregationLabels)s) (\n  go_memstats_alloc_bytes{%(selector)s}\n)\n/\nsum by (%(aggregationLabels)s) (\n  node_memory_MemTotal_bytes{%(selector)s}\n)\n",
+      "query": "sum by (%(aggregationLabels)s, \"metric_prefix\") (\n  process_resident_memory_bytes{%(selector)s}\n)\n/\nsum by (%(aggregationLabels)s) (\n  node_memory_MemTotal_bytes{%(selector)s}\n)\n",
       "queryFormatConfig": {},
       "resourceLabels": [
         "fqdn"

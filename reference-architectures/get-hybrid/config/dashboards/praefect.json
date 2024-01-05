@@ -4589,7 +4589,7 @@
           "dashes": false,
           "datasource": "$PROMETHEUS_DS",
           "decimals": 2,
-          "description": "Go's memory allocation strategy can make it look like a Go process is saturating memory when measured using RSS, when in fact\nthe process is not at risk of memory saturation. For this reason, we measure Go processes using the `go_memstat_alloc_bytes`\nmetric instead of RSS.\n Lower is better.",
+          "description": "Go's memory allocation strategy can make it look like a Go process is saturating memory when measured using `go_memstat_alloc_bytes`,\nas this includes the heap, which isnt actually used memory and can be freely allocated by the OS (but it's currently being held by go).\n Lower is better.",
           "fill": 0,
           "fillGradient": 0,
           "gridPos": {
@@ -4685,7 +4685,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "clamp_min(\n  clamp_max(\n    max by(type, fqdn) (\n  clamp_min(\n    clamp_max(\n      sum by (type, fqdn) (\n        go_memstats_alloc_bytes{type=\"praefect\"}\n      )\n      /\n      sum by (type, fqdn) (\n        node_memory_MemTotal_bytes{type=\"praefect\"}\n      )\n      ,\n      1)\n  ,\n  0)\n)\n\n  ,1)\n,0)\n",
+              "expr": "clamp_min(\n  clamp_max(\n    max by(type, fqdn) (\n  clamp_min(\n    clamp_max(\n      sum by (type, fqdn, \"metric_prefix\") (\n        process_resident_memory_bytes{type=\"praefect\"}\n      )\n      /\n      sum by (type, fqdn) (\n        node_memory_MemTotal_bytes{type=\"praefect\"}\n      )\n      ,\n      1)\n  ,\n  0)\n)\n\n  ,1)\n,0)\n",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
