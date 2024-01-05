@@ -180,7 +180,7 @@
         "strategy": "quantile95_1h"
       },
       "dangerouslyThanosEvaluated": true,
-      "description": "Go's memory allocation strategy can make it look like a Go process is saturating memory when measured using RSS, when in fact\\nthe process is not at risk of memory saturation. For this reason, we measure Go processes using the `go_memstat_alloc_bytes`\\nmetric instead of RSS.\\n Lower is better.\n",
+      "description": "Go's memory allocation strategy can make it look like a Go process is saturating memory when measured using RSS, when in fact\\nthe process is not at risk of memory saturation. For this reason, we measure Go processes using the `go_memstat_alloc_bytes`\nmetric instead of RSS.\nLower is better.\n",
       "grafana_dashboard_uid": "sat_go_memory",
       "horizontallyScalable": true,
       "linear_prediction_saturation_alert": null,
