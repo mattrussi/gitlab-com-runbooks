@@ -11,7 +11,7 @@ ARG GL_ASDF_THANOS_VERSION
 ARG GL_ASDF_VAULT_VERSION
 ARG GL_ASDF_YQ_VERSION
 # renovate: datasource=github-releases depName=grafana/mimir
-ARG MIMIRTOOL_VERSION=2.10.4
+ARG MIMIRTOOL_VERSION=2.10.5
 
 # Referenced container images
 FROM docker.io/mikefarah/yq:${GL_ASDF_YQ_VERSION} as yq
@@ -55,6 +55,8 @@ RUN curl --silent --fail --show-error -L https://github.com/yannh/kubeconform/re
 COPY --from=amtool /bin/amtool /bin/amtool
 COPY --from=go-jsonnet /usr/bin/jsonnet /bin/jsonnet
 COPY --from=go-jsonnet /usr/bin/jsonnetfmt /bin/jsonnetfmt
+COPY --from=go-jsonnet /usr/bin/jsonnet-deps /bin/jsonnet-deps
+COPY --from=go-jsonnet /usr/bin/jsonnet-lint /bin/jsonnet-lint
 COPY --from=jb /usr/bin/jb /bin/jb
 COPY --from=jsonnet-tool /usr/local/bin/jsonnet-tool /bin/jsonnet-tool
 COPY --from=promtool /bin/promtool /bin/promtool

@@ -14,12 +14,10 @@ metricsCatalog.serviceDefinition({
       userImpacting: false,
       requestRate: rateMetric(
         counter='jaeger_agent_reporter_spans_submitted_total',
-        selector='type="jaeger"',
       ),
 
       errorRate: rateMetric(
         counter='jaeger_agent_reporter_spans_failures_total',
-        selector='type="jaeger"',
       ),
 
       significantLabels: ['fqdn', 'instance'],
@@ -29,18 +27,15 @@ metricsCatalog.serviceDefinition({
       userImpacting: false,
       apdex: histogramApdex(
         histogram='jaeger_collector_save_latency_bucket',
-        selector='type="jaeger"',
         satisfiedThreshold=10,
       ),
 
       requestRate: rateMetric(
         counter='jaeger_collector_spans_received_total',
-        selector='type="jaeger"',
       ),
 
       errorRate: rateMetric(
         counter='jaeger_collector_spans_dropped_total',
-        selector='type="jaeger"'
       ),
 
       significantLabels: ['fqdn', 'pod'],
@@ -50,18 +45,16 @@ metricsCatalog.serviceDefinition({
       userImpacting: false,
       apdex: histogramApdex(
         histogram='jaeger_query_latency_bucket',
-        selector='type="jaeger"',
         satisfiedThreshold=10,
       ),
 
       requestRate: rateMetric(
         counter='jaeger_query_requests_total',
-        selector='type="jaeger"',
       ),
 
       errorRate: rateMetric(
         counter='jaeger_query_requests_total',
-        selector='result="err"'
+        selector={ result: 'err' },
       ),
 
       significantLabels: ['fqdn', 'pod'],

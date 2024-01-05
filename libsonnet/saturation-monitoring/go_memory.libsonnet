@@ -12,13 +12,12 @@ local resourceSaturationPoint = (import 'servicemetrics/resource_saturation_poin
       std.set(metricsCatalog.findVMProvisionedServices())
     ),
     description: |||
-      Go's memory allocation strategy can make it look like a Go process is saturating memory when measured using `go_memstat_alloc_bytes`,
-      as this includes the heap, which isnt actually used memory and can be freely allocated by the OS (but it's currently being held by go).
+      Go's memory allocation strategy can make it look like a Go process is saturating memory when measured using RSS, when in fact\nthe process is not at risk of memory saturation. For this reason, we measure Go processes using the `go_memstat_alloc_bytes`\nmetric instead of RSS.\n Lower is better.
     |||,
     grafana_dashboard_uid: 'sat_go_memory',
     resourceLabels: ['fqdn'],
     query: |||
-      sum by (%(aggregationLabels)s, "metric_prefix") (
+      sum by (%(aggregationLabels)s, metric_prefix) (
         process_resident_memory_bytes{%(selector)s}
       )
       /

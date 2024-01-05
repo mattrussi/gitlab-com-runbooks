@@ -33,8 +33,9 @@ groups:
       alert_class: slo_violation
       alert_type: symptom
       feature_category: code_suggestions
+      pager: pagerduty
       rules_domain: general
-      severity: s4
+      severity: s2
       sli_type: apdex
       slo_alert: "yes"
       user_impacting: "yes"
@@ -43,12 +44,12 @@ groups:
       (
         (
           gitlab_component_apdex:ratio_1h{component="inference",env="gprd",monitor="global",type="ai-gateway"}
-          < (1 - 14.4 * 0.010000)
+          < (1 - 14.4 * 0.020000)
         )
         and
         (
           gitlab_component_apdex:ratio_5m{component="inference",env="gprd",monitor="global",type="ai-gateway"}
-          < (1 - 14.4 * 0.010000)
+          < (1 - 14.4 * 0.020000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -83,8 +84,9 @@ groups:
       alert_class: slo_violation
       alert_type: symptom
       feature_category: code_suggestions
+      pager: pagerduty
       rules_domain: general
-      severity: s4
+      severity: s2
       sli_type: apdex
       slo_alert: "yes"
       user_impacting: "yes"
@@ -93,12 +95,12 @@ groups:
       (
         (
           gitlab_component_apdex:ratio_6h{component="inference",env="gprd",monitor="global",type="ai-gateway"}
-          < (1 - 6 * 0.010000)
+          < (1 - 6 * 0.020000)
         )
         and
         (
           gitlab_component_apdex:ratio_30m{component="inference",env="gprd",monitor="global",type="ai-gateway"}
-          < (1 - 6 * 0.010000)
+          < (1 - 6 * 0.020000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -133,8 +135,9 @@ groups:
       alert_class: slo_violation
       alert_type: symptom
       feature_category: code_suggestions
+      pager: pagerduty
       rules_domain: general
-      severity: s4
+      severity: s2
       sli_type: apdex
       slo_alert: "yes"
       user_impacting: "yes"
@@ -143,12 +146,12 @@ groups:
       (
         (
           gitlab_component_apdex:ratio_1h{component="runway_ingress",env="gprd",monitor="global",type="ai-gateway"}
-          < (1 - 14.4 * 0.010000)
+          < (1 - 14.4 * 0.020000)
         )
         and
         (
           gitlab_component_apdex:ratio_5m{component="runway_ingress",env="gprd",monitor="global",type="ai-gateway"}
-          < (1 - 14.4 * 0.010000)
+          < (1 - 14.4 * 0.020000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -183,8 +186,9 @@ groups:
       alert_class: slo_violation
       alert_type: symptom
       feature_category: code_suggestions
+      pager: pagerduty
       rules_domain: general
-      severity: s4
+      severity: s2
       sli_type: apdex
       slo_alert: "yes"
       user_impacting: "yes"
@@ -193,12 +197,12 @@ groups:
       (
         (
           gitlab_component_apdex:ratio_6h{component="runway_ingress",env="gprd",monitor="global",type="ai-gateway"}
-          < (1 - 6 * 0.010000)
+          < (1 - 6 * 0.020000)
         )
         and
         (
           gitlab_component_apdex:ratio_30m{component="runway_ingress",env="gprd",monitor="global",type="ai-gateway"}
-          < (1 - 6 * 0.010000)
+          < (1 - 6 * 0.020000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -230,8 +234,9 @@ groups:
       alert_class: slo_violation
       alert_type: symptom
       feature_category: code_suggestions
+      pager: pagerduty
       rules_domain: general
-      severity: s4
+      severity: s2
       sli_type: error
       slo_alert: "yes"
       user_impacting: "yes"
@@ -277,8 +282,9 @@ groups:
       alert_class: slo_violation
       alert_type: symptom
       feature_category: code_suggestions
+      pager: pagerduty
       rules_domain: general
-      severity: s4
+      severity: s2
       sli_type: error
       slo_alert: "yes"
       user_impacting: "yes"
@@ -324,8 +330,9 @@ groups:
       alert_class: traffic_cessation
       alert_type: cause
       feature_category: code_suggestions
+      pager: pagerduty
       rules_domain: general
-      severity: s4
+      severity: s2
       sli_type: ops
       slo_alert: "no"
       user_impacting: "yes"
@@ -360,8 +367,9 @@ groups:
       alert_class: traffic_cessation
       alert_type: cause
       feature_category: code_suggestions
+      pager: pagerduty
       rules_domain: general
-      severity: s4
+      severity: s2
       sli_type: ops
       slo_alert: "no"
       user_impacting: "yes"
@@ -397,8 +405,9 @@ groups:
       alert_class: slo_violation
       alert_type: symptom
       feature_category: code_suggestions
+      pager: pagerduty
       rules_domain: general
-      severity: s4
+      severity: s2
       sli_type: apdex
       slo_alert: "yes"
       user_impacting: "yes"
@@ -407,12 +416,12 @@ groups:
       (
         (
           gitlab_component_apdex:ratio_1h{component="server",env="gprd",monitor="global",type="ai-gateway"}
-          < (1 - 14.4 * 0.010000)
+          < (1 - 14.4 * 0.020000)
         )
         and
         (
           gitlab_component_apdex:ratio_5m{component="server",env="gprd",monitor="global",type="ai-gateway"}
-          < (1 - 14.4 * 0.010000)
+          < (1 - 14.4 * 0.020000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -447,8 +456,9 @@ groups:
       alert_class: slo_violation
       alert_type: symptom
       feature_category: code_suggestions
+      pager: pagerduty
       rules_domain: general
-      severity: s4
+      severity: s2
       sli_type: apdex
       slo_alert: "yes"
       user_impacting: "yes"
@@ -457,12 +467,12 @@ groups:
       (
         (
           gitlab_component_apdex:ratio_6h{component="server",env="gprd",monitor="global",type="ai-gateway"}
-          < (1 - 6 * 0.010000)
+          < (1 - 6 * 0.020000)
         )
         and
         (
           gitlab_component_apdex:ratio_30m{component="server",env="gprd",monitor="global",type="ai-gateway"}
-          < (1 - 6 * 0.010000)
+          < (1 - 6 * 0.020000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -494,8 +504,9 @@ groups:
       alert_class: slo_violation
       alert_type: symptom
       feature_category: code_suggestions
+      pager: pagerduty
       rules_domain: general
-      severity: s4
+      severity: s2
       sli_type: error
       slo_alert: "yes"
       user_impacting: "yes"
@@ -541,8 +552,9 @@ groups:
       alert_class: slo_violation
       alert_type: symptom
       feature_category: code_suggestions
+      pager: pagerduty
       rules_domain: general
-      severity: s4
+      severity: s2
       sli_type: error
       slo_alert: "yes"
       user_impacting: "yes"
@@ -588,8 +600,9 @@ groups:
       alert_class: traffic_cessation
       alert_type: cause
       feature_category: code_suggestions
+      pager: pagerduty
       rules_domain: general
-      severity: s4
+      severity: s2
       sli_type: ops
       slo_alert: "no"
       user_impacting: "yes"
@@ -624,8 +637,9 @@ groups:
       alert_class: traffic_cessation
       alert_type: cause
       feature_category: code_suggestions
+      pager: pagerduty
       rules_domain: general
-      severity: s4
+      severity: s2
       sli_type: ops
       slo_alert: "no"
       user_impacting: "yes"

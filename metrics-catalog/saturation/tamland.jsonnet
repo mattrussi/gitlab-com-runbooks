@@ -54,13 +54,40 @@ local page(path, title, service_pattern) =
     service_pattern: service_pattern,
   };
 
+/*
+Saturation points from 'servicemetrics/saturation-resources.libsonnet' carry all sorts of information.
+This slices saturation points and only exposes what's relevant for Tamland.
+*/
+local saturationPoints = {
+  local point = saturation[name],
+
+  [name]: {
+    title: point.title,
+    description: point.description,
+    appliesTo: point.appliesTo,
+    capacityPlanning: point.capacityPlanning,
+    horizontallyScalable: point.horizontallyScalable,
+    severity: point.severity,
+    slos: point.slos,
+    raw_query: point.query % (
+      point.queryFormatConfig
+      {
+        selector: '%(selector)s',  // This will be replaced in Tamland, not here
+        rangeInterval: std.get(point, 'burnRatePeriod', '5m'),
+        aggregationLabels: std.join(',', point.resourceLabels),
+      }
+    ),
+  }
+  for name in std.objectFields(saturation)
+};
+
 
 {
   defaults: {
     prometheus: prom.defaults,
   },
   services: services(uniqServices(saturation)),
-  saturationPoints: saturation,
+  saturationPoints: saturationPoints,
   shardMapping: {
     sidekiq: sidekiqHelpers.shards.listByName(),
   },
@@ -79,8 +106,8 @@ local page(path, title, service_pattern) =
       page('ai-assisted.md', 'AI-assisted', 'ai-assisted'),
       page('search-service.md', 'Search', 'search'),
       page('sidekiq.md', 'Sidekiq', 'sidekiq'),
-      page('other.md', 'Other services', 'thanos-staging|errortracking|atlantis|tracing|ext-pvs'),
-      page('saturation.md', 'Other Utilization and Saturation Forecasting', 'camoproxy|cloud-sql|consul|frontend|google-cloud-storage|jaeger|kas|mailroom|nat|nginx|plantuml|pvs|registry|sentry|vault|web-pages|woodhouse|code_suggestions|ops-gitlab-net|memorystore|packagecloud'),
+      page('other.md', 'Other services', 'thanos-staging|errortracking|atlantis|tracing'),
+      page('saturation.md', 'Other Utilization and Saturation Forecasting', 'camoproxy|cloud-sql|consul|frontend|google-cloud-storage|jaeger|kas|mailroom|nat|nginx|plantuml|pvs|registry|sentry|vault|web-pages|woodhouse|ops-gitlab-net|memorystore|packagecloud'),
     ],
   },
 }

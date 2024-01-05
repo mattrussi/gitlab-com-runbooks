@@ -97,7 +97,6 @@
 * [../registry/gitlab-registry.md](../registry/gitlab-registry.md)
 * [Managing Sentry in Kubernetes](../sentry/sentry.md)
 * [Disabling Sidekiq workers](../sidekiq/disabling-a-worker.md)
-* [Sidekiq Queue Out of Control](../sidekiq/large-sidekiq-queue.md)
 * [../sidekiq/sidekiq_error_rate_high.md](../sidekiq/sidekiq_error_rate_high.md)
 * [Poking around at sidekiq's running state](../sidekiq/sidekiq-inspection.md)
 * [../sidekiq/sidekiq_stats_no_longer_showing.md](../sidekiq/sidekiq_stats_no_longer_showing.md)

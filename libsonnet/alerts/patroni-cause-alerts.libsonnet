@@ -6,7 +6,14 @@ local selectors = import 'promql/selectors.libsonnet';
 
 local aggregationLabelsForPrimary = ['environment', 'tier', 'type', 'fqdn'];
 local aggregationLabelsForReplicas = ['environment', 'tier', 'type'];
-local selector = { type: 'patroni' };
+local selector = {
+  tier: 'db',
+  shard: 'default',
+  type: [
+    { nre: '.*archive' },
+    { nre: '.*delayed' },
+  ],
+};
 
 local alertExpr(aggregationLabels, selectorNumerator, selectorDenominator, replica, threshold, window='5m', extraSelector) =
   local aggregationLabelsWithRelName = aggregationLabels + ['relname'];
@@ -189,16 +196,15 @@ local rules(extraSelector={}) = {
               > 540
             )
           ||| % {
-            selector: selectors.serializeHash({
-              type: 'patroni',
+            selector: selectors.serializeHash(selector {
               command: [
-                { ne: 'vacuum' },
                 { ne: 'autovacuum' },
-                { nre: '[cC][rR][eE][aA][tT][eE]' },
-                { nre: '[aA][nN][aA][lL][yY][zZ][eE]' },
-                { nre: '[rR][eE][iI][nN][dD][eE][xX]' }
-                { nre: '[aA][lL][tT][eE][rR]' },
-                { nre: '[dD][rR][oO][pP]' },
+                { nre: '(?i:VACUUM)' },
+                { nre: '(?i:CREATE)' },
+                { nre: '(?i:ANALYZE)' },
+                { nre: '(?i:REINDEX)' },
+                { nre: '(?i:ALTER)' },
+                { nre: '(?i:DROP)' },
               ],
             } + extraSelector),
           },

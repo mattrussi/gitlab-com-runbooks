@@ -32,6 +32,31 @@ You can prevent Gitlab from using Zoekt integration for searching, but leave the
 
 * [`search_code_with_zoekt`](https://gitlab.com/gitlab-org/gitlab/blob/master/ee/config/feature_flags/development/search_code_with_zoekt.yml)
 
+#### Removing namespaces from the zoekt node
+
+If Zoekt search FF is disabled, but you still see that some nodes misbehave (OOM for example),
+you can evict some of the namespaces from the node:
+
+1. Execute the script in rails console
+
+   ```ruby
+   # Find the offending node (gitlab-gitlab-zoekt-1 in this example)
+   node = Search::Zoekt::Node.where("metadata @> ?", { name: 'gitlab-gitlab-zoekt-1' }.to_json).order(:last_seen_at).last
+
+   # Load indexed namespaces
+   node.indexed_namespaces.map{ |n| n.attributes.slice('id', 'namespace_id', 'search') }
+   ```
+
+1. Pick the largest ones (you can use `/chatops run namespace find <NAMESPACE_ID>` to get the namespace size)
+1. Destroy these `Zoekt::IndexedNamespace` records
+
+   ```
+   zoekt_indexed_namespace_ids = [1000072, 1000073]
+   node.indexed_namespaces.where(id: zoekt_indexed_namespace_ids).destroy_all
+   ```
+
+1. Post namespace_ids on the incident issue as a private comment so that we can add these back later
+
 #### Pausing Zoekt indexing
 
 Zoekt indexing can be paused. The [jobs are stored in a separate `ZSET`](https://docs.gitlab.com/ee/development/sidekiq/worker_attributes.html#job-pause-control) and re-enqueued when indexing is unpaused. An example
@@ -132,6 +157,17 @@ This is a significant storage overhead so we plan to optimize this in <https://g
 <!-- ## Security/Compliance -->
 
 ## Monitoring/Alerting
+
+### Dashboards
+
+There are a few dashboards to monitor Zoekt health:
+
+* [Zoekt Health Dashboard](https://log.gprd.gitlab.net/app/r/s/jR5H5): Monitor search and indexing operations
+* [Zoekt memory usage](https://thanos-query.ops.gitlab.net/graph?g0.expr=sum(process_resident_memory_bytes%7Benv%3D%22gprd%22,%20container%3D~%22zoekt.*%22%7D)%20by%20(container,%20pod)&g0.tab=0&g0.stacked=0&g0.range_input=2h&g0.max_source_resolution=0s&g0.deduplicate=1&g0.partial_response=0&g0.store_matches=%5B%5D&g0.step_input=60) : View memory utilization for Zoekt containers
+* [Zoekt OOM errors](https://thanos.gitlab.net/graph?g0.expr=(sum%20by%20(container%2C%20pod%2C%20environment)%20(kube_pod_container_status_last_terminated_reason%7Benv%3D%22gprd%22%2C%20cluster%3D%22gprd-gitlab-gke%22%2C%20pod%3D~%22gitlab-gitlab-zoekt-%5B0-9%5D%2B%22%2C%20reason%3D%22OOMKilled%22%7D)%0A%20%20%20%20%20%20*%20on%20(container%2C%20pod%2C%20environment)%20group_left%0A%20%20%20%20%20%20sum%20by%20(container%2C%20pod%2C%20environment)%20(changes(kube_pod_container_status_restarts_total%7Benv%3D%22gprd%22%2C%20cluster%3D%22gprd-gitlab-gke%22%2C%20pod%3D~%22gitlab-gitlab-zoekt-%5B0-9%5D%2B%22%7D%5B1m%5D)%20%3E%200))%0A&g0.tab=0&g0.stacked=0&g0.range_input=12h&g0.max_source_resolution=0s&g0.deduplicate=1&g0.partial_response=0&g0.store_matches=%5B%5D): View any Out Of Memory exceptions for Zoekt containrs
+* [Zoekt Info Dashboard](https://dashboards.gitlab.net/d/search-zoekt/search3a-zoekt-info)
+
+### Kibana logs
 
 GitLab application has a dedicated `zoekt.log` file for Zoekt-related log entries. This will be handled by the standard logging infrastructure. You may also find indexing related errors in `sidekiq.log` and search related errors in `production_json.log`.
 

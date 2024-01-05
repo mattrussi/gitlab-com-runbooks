@@ -7,46 +7,6 @@ groups:
   rules:
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:
-      component: filestore_disk_read_iops_saturation
-    expr: "0.85"
-  - record: slo:max:hard:gitlab_component_saturation:ratio
-    labels:
-      component: filestore_disk_read_iops_saturation
-    expr: "0.9"
-  - record: slo:max:soft:gitlab_component_saturation:ratio
-    labels:
-      component: filestore_disk_read_throughput_saturation
-    expr: "0.85"
-  - record: slo:max:hard:gitlab_component_saturation:ratio
-    labels:
-      component: filestore_disk_read_throughput_saturation
-    expr: "0.9"
-  - record: slo:max:soft:gitlab_component_saturation:ratio
-    labels:
-      component: filestore_disk_utilization
-    expr: "0.85"
-  - record: slo:max:hard:gitlab_component_saturation:ratio
-    labels:
-      component: filestore_disk_utilization
-    expr: "0.9"
-  - record: slo:max:soft:gitlab_component_saturation:ratio
-    labels:
-      component: filestore_disk_write_iops_saturation
-    expr: "0.85"
-  - record: slo:max:hard:gitlab_component_saturation:ratio
-    labels:
-      component: filestore_disk_write_iops_saturation
-    expr: "0.9"
-  - record: slo:max:soft:gitlab_component_saturation:ratio
-    labels:
-      component: filestore_disk_write_throughput_saturation
-    expr: "0.85"
-  - record: slo:max:hard:gitlab_component_saturation:ratio
-    labels:
-      component: filestore_disk_write_throughput_saturation
-    expr: "0.9"
-  - record: slo:max:soft:gitlab_component_saturation:ratio
-    labels:
       component: gcp_quota_limit_s4
     expr: "0.85"
   - record: slo:max:hard:gitlab_component_saturation:ratio
@@ -79,30 +39,6 @@ groups:
     expr: "0.98"
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:
-      component: kube_container_cpu
-    expr: "0.95"
-  - record: slo:max:hard:gitlab_component_saturation:ratio
-    labels:
-      component: kube_container_cpu
-    expr: "0.99"
-  - record: slo:max:soft:gitlab_component_saturation:ratio
-    labels:
-      component: kube_container_cpu_limit
-    expr: "0.9"
-  - record: slo:max:hard:gitlab_component_saturation:ratio
-    labels:
-      component: kube_container_cpu_limit
-    expr: "0.99"
-  - record: slo:max:soft:gitlab_component_saturation:ratio
-    labels:
-      component: kube_container_memory
-    expr: "0.8"
-  - record: slo:max:hard:gitlab_component_saturation:ratio
-    labels:
-      component: kube_container_memory
-    expr: "0.9"
-  - record: slo:max:soft:gitlab_component_saturation:ratio
-    labels:
       component: kube_go_memory
     expr: "0.9"
   - record: slo:max:hard:gitlab_component_saturation:ratio
@@ -111,14 +47,6 @@ groups:
     expr: "0.98"
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:
-      component: kube_horizontalpodautoscaler_desired_replicas
-    expr: "0.9"
-  - record: slo:max:hard:gitlab_component_saturation:ratio
-    labels:
-      component: kube_horizontalpodautoscaler_desired_replicas
-    expr: "0.95"
-  - record: slo:max:soft:gitlab_component_saturation:ratio
-    labels:
       component: kube_node_ips
     expr: "0.8"
   - record: slo:max:hard:gitlab_component_saturation:ratio
@@ -133,6 +61,22 @@ groups:
     labels:
       component: kube_pool_max_nodes
     expr: "0.95"
+  - record: slo:max:soft:gitlab_component_saturation:ratio
+    labels:
+      component: max_concurrent_inferences
+    expr: "0.6"
+  - record: slo:max:hard:gitlab_component_saturation:ratio
+    labels:
+      component: max_concurrent_inferences
+    expr: "0.8"
+  - record: slo:max:soft:gitlab_component_saturation:ratio
+    labels:
+      component: max_concurrent_inferences_per_engine
+    expr: "0.6"
+  - record: slo:max:hard:gitlab_component_saturation:ratio
+    labels:
+      component: max_concurrent_inferences_per_engine
+    expr: "0.8"
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:
       component: open_fds
@@ -204,46 +148,6 @@ groups:
   - record: gitlab_component_saturation_info
     labels:
       capacity_planning_strategy: quantile95_1h
-      component: filestore_disk_read_iops_saturation
-      horiz_scaling: "yes"
-      quantile: max
-      severity: s4
-    expr: "1"
-  - record: gitlab_component_saturation_info
-    labels:
-      capacity_planning_strategy: quantile95_1h
-      component: filestore_disk_read_throughput_saturation
-      horiz_scaling: "yes"
-      quantile: max
-      severity: s4
-    expr: "1"
-  - record: gitlab_component_saturation_info
-    labels:
-      capacity_planning_strategy: quantile95_1h
-      component: filestore_disk_utilization
-      horiz_scaling: "yes"
-      quantile: max
-      severity: s4
-    expr: "1"
-  - record: gitlab_component_saturation_info
-    labels:
-      capacity_planning_strategy: quantile95_1h
-      component: filestore_disk_write_iops_saturation
-      horiz_scaling: "yes"
-      quantile: max
-      severity: s4
-    expr: "1"
-  - record: gitlab_component_saturation_info
-    labels:
-      capacity_planning_strategy: quantile95_1h
-      component: filestore_disk_write_throughput_saturation
-      horiz_scaling: "yes"
-      quantile: max
-      severity: s4
-    expr: "1"
-  - record: gitlab_component_saturation_info
-    labels:
-      capacity_planning_strategy: quantile95_1h
       component: gcp_quota_limit_s4
       horiz_scaling: "no"
       quantile: max
@@ -275,43 +179,11 @@ groups:
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
-      capacity_planning_strategy: quantile99_1h
-      component: kube_container_cpu
-      horiz_scaling: "yes"
-      quantile: "0.99"
-      severity: s4
-    expr: "1"
-  - record: gitlab_component_saturation_info
-    labels:
-      capacity_planning_strategy: exclude
-      component: kube_container_cpu_limit
-      horiz_scaling: "yes"
-      quantile: max
-      severity: s4
-    expr: "1"
-  - record: gitlab_component_saturation_info
-    labels:
-      capacity_planning_strategy: quantile95_1h
-      component: kube_container_memory
-      horiz_scaling: "yes"
-      quantile: max
-      severity: s4
-    expr: "1"
-  - record: gitlab_component_saturation_info
-    labels:
       capacity_planning_strategy: quantile95_1h
       component: kube_go_memory
       horiz_scaling: "yes"
       quantile: max
       severity: s4
-    expr: "1"
-  - record: gitlab_component_saturation_info
-    labels:
-      capacity_planning_strategy: quantile95_1h
-      component: kube_horizontalpodautoscaler_desired_replicas
-      horiz_scaling: "yes"
-      quantile: max
-      severity: s3
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
@@ -326,6 +198,22 @@ groups:
       capacity_planning_strategy: quantile95_1h
       component: kube_pool_max_nodes
       horiz_scaling: "yes"
+      quantile: max
+      severity: s3
+    expr: "1"
+  - record: gitlab_component_saturation_info
+    labels:
+      capacity_planning_strategy: quantile95_1h
+      component: max_concurrent_inferences
+      horiz_scaling: "no"
+      quantile: max
+      severity: s3
+    expr: "1"
+  - record: gitlab_component_saturation_info
+    labels:
+      capacity_planning_strategy: quantile95_1h
+      component: max_concurrent_inferences_per_engine
+      horiz_scaling: "no"
       quantile: max
       severity: s3
     expr: "1"

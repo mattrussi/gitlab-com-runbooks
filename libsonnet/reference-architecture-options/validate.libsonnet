@@ -13,12 +13,14 @@ local defaults = {
     // Override this to disable Praefect monitoring
     enable: true,
   },
+  rdsMonitoring: false,
 };
 
 local referenceArchitectureOptionsValidator = validator.new({
   praefect: {
     enable: validator.boolean,
   },
+  rdsMonitoring: validator.boolean,
 });
 
 function(overrides)

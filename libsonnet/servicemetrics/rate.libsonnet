@@ -2,6 +2,7 @@ local aggregations = import 'promql/aggregations.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
 local recordingRuleRegistry = import 'recording-rule-registry.libsonnet';  // TODO: fix circular dependency
 local optionalOffset = import 'recording-rules/lib/optional-offset.libsonnet';
+local validateSelector = (import './validation.libsonnet').validateSelector;
 
 local generateInstanceFilterQuery(instanceFilter) =
   if instanceFilter == '' then
@@ -32,7 +33,7 @@ local generateRangeFunctionQuery(rate, rangeFunction, additionalSelectors, range
     useRecordingRuleRegistry=true,
   ):: {
     counter: counter,
-    selector: selector,
+    selector: validateSelector(selector),
     instanceFilter: instanceFilter,
     useRecordingRuleRegistry:: useRecordingRuleRegistry,
 
@@ -97,7 +98,7 @@ local generateRangeFunctionQuery(rate, rangeFunction, additionalSelectors, range
     clampMinZero=false,
   ):: {
     counter: counter,
-    selector: selector,
+    selector: validateSelector(selector),
     instanceFilter: instanceFilter,
     clampMinZero: clampMinZero,
     useRecordingRuleRegistry:: false,

@@ -75,24 +75,31 @@ metricsCatalog.serviceDefinition({
         are excluded from the apdex score.
       |||,
 
+      local workhorseSelector = {
+        job: { re: 'gitlab-workhorse-api|gitlab-workhorse' },
+        type: 'internal-api',
+      },
+      local healthCheckSelector = {
+        route: { ne: ['^/-/health$', '^/-/(readiness|liveness)$'] },
+      },
+
       apdex: histogramApdex(
         histogram='gitlab_workhorse_http_request_duration_seconds_bucket',
-        // Note, using `|||` avoids having to double-escape the backslashes in the selector query
-        selector=|||
-          job=~"gitlab-workhorse-api|gitlab-workhorse", type="internal-api", route!="^/-/health$", route!="^/-/(readiness|liveness)$"
-        |||,
+        selector=workhorseSelector + healthCheckSelector,
         satisfiedThreshold=1,
         toleratedThreshold=10
       ),
 
       requestRate: rateMetric(
         counter='gitlab_workhorse_http_requests_total',
-        selector='job=~"gitlab-workhorse-api|gitlab-workhorse", type="internal-api"'
+        selector=workhorseSelector,
       ),
 
       errorRate: rateMetric(
         counter='gitlab_workhorse_http_requests_total',
-        selector='job=~"gitlab-workhorse-api|gitlab-workhorse", type="internal-api", code=~"^5.*", route!="^/-/health$", route!="^/-/(readiness|liveness)$"'
+        selector=workhorseSelector + healthCheckSelector + {
+          code: { re: '^5.*' },
+        }
       ),
 
       significantLabels: ['region', 'method', 'route'],
@@ -115,4 +122,38 @@ metricsCatalog.serviceDefinition({
     ],
     dependsOn: dependOnPatroni.sqlComponents,
   }),
+  capacityPlanning: {
+    components: [
+      {
+        name: 'kube_container_cpu',
+        events: [
+          {
+            date: '2023-12-12',
+            name: 'Git service Auth API started going through internal-api',
+            references: [
+              {
+                title: 'MR with the change',
+                ref: 'https://gitlab.com/gitlab-com/runbooks/-/merge_requests/6655',
+              },
+            ],
+          },
+        ],
+      },
+      {
+        name: 'kube_container_rss',
+        events: [
+          {
+            date: '2023-12-12',
+            name: 'Git service Auth API started going through internal-api',
+            references: [
+              {
+                title: 'MR with the change',
+                ref: 'https://gitlab.com/gitlab-com/runbooks/-/merge_requests/6655',
+              },
+            ],
+          },
+        ],
+      },
+    ],
+  },
 })

@@ -25,6 +25,7 @@ metricsCatalog.serviceDefinition({
   },
   serviceDependencies: {
     api: true,
+    'ai-gateway': true,
   },
   provisioning: {
     vms: false,
@@ -51,24 +52,31 @@ metricsCatalog.serviceDefinition({
         are excluded from the apdex score.
       |||,
 
+      local workhorseSelector = {
+        job: { re: 'gitlab-workhorse-api|gitlab-workhorse' },
+        type: 'ai-assisted',
+      },
+      local healthCheckSelector = {
+        route: { ne: ['^/-/health$', '^/-/(readiness|liveness)$'] },
+      },
+
       apdex: histogramApdex(
         histogram='gitlab_workhorse_http_request_duration_seconds_bucket',
-        // Note, using `|||` avoids having to double-escape the backslashes in the selector query
-        selector=|||
-          job=~"gitlab-workhorse-api|gitlab-workhorse", type="ai-assisted", route!="^/-/health$", route!="^/-/(readiness|liveness)$"
-        |||,
+        selector=workhorseSelector + healthCheckSelector,
         satisfiedThreshold=1,
         toleratedThreshold=10
       ),
 
       requestRate: rateMetric(
         counter='gitlab_workhorse_http_requests_total',
-        selector='job=~"gitlab-workhorse-api|gitlab-workhorse", type="ai-assisted"'
+        selector=workhorseSelector
       ),
 
       errorRate: rateMetric(
         counter='gitlab_workhorse_http_requests_total',
-        selector='job=~"gitlab-workhorse-api|gitlab-workhorse", type="ai-assisted", code=~"^5.*", route!="^/-/health$", route!="^/-/(readiness|liveness)$"'
+        selector=workhorseSelector + healthCheckSelector + {
+          code: { re: '^5.*' },
+        }
       ),
 
       significantLabels: ['region', 'method', 'route'],

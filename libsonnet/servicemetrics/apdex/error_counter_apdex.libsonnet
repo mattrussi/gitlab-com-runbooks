@@ -3,6 +3,7 @@ local generateApdexAttributionQuery = (import './lib/counter-apdex-attribution-q
 local aggregations = import 'promql/aggregations.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
 local strings = import 'utils/strings.libsonnet';
+local validateSelector = (import '../validation.libsonnet').validateSelector;
 
 local transformErrorRateToSuccessRate(errorRateMetric, operationRateMetric, selector, rangeInterval, aggregationLabels, useRecordingRuleRegistry, offset) =
   |||
@@ -49,7 +50,7 @@ local transformErrorRateToSuccessRate(errorRateMetric, operationRateMetric, sele
   errorCounterApdex(errorRateMetric, operationRateMetric, selector, useRecordingRuleRegistry=true):: {
     errorRateMetric: errorRateMetric,
     operationRateMetric: operationRateMetric,
-    selector: selector,
+    selector: validateSelector(selector),
     useRecordingRuleRegistry:: useRecordingRuleRegistry,
 
     apdexSuccessRateQuery(aggregationLabels, selector, rangeInterval, withoutLabels=[], offset=null)::

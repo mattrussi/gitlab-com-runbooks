@@ -42,7 +42,6 @@
 * [../redis/redis.md](../redis/redis.md)
 * [Redis RDB Snapshots](../redis/redis-rdb-snapshots.md)
 * [Container Registry CDN](../registry/cdn.md)
-* [Sidekiq Queue Out of Control](../sidekiq/large-sidekiq-queue.md)
 * [A survival guide for SREs to working with Sidekiq at GitLab](../sidekiq/sidekiq-survival-guide-for-sres.md)
 * [GET Monitoring Setup](../staging-ref/get-monitoring-setup.md)
 * [Managing Chef](../uncategorized/manage-chef.md)
