@@ -8,7 +8,7 @@
           "subdir": "grafonnet"
         }
       },
-      "version": "a1d61cce1da59c71409b99b5c7568511fec661ea",
+      "version": "30280196507e0fe6fa978a3e0eaca3a62844f817",
       "sum": "342u++/7rViR/zj2jeJOjshzglkZ1SY+hFNuyCBFMdc="
     },
     {
@@ -18,8 +18,8 @@
           "subdir": "grafana-builder"
         }
       },
-      "version": "931f6b1139bb3694b06f2261279ba3dc01aca5b8",
-      "sum": "VmOxvg9FuY9UYr3lN6ZJe2HhuIErJoWimPybQr3S3yQ="
+      "version": "c31b164f453738582defd06feea3a139732b6faf",
+      "sum": "tDR6yT2GVfw0wTU12iZH+m01HrbIr6g/xN+/8nzNkU0="
     },
     {
       "source": {
@@ -28,8 +28,18 @@
           "subdir": "memcached-mixin"
         }
       },
-      "version": "931f6b1139bb3694b06f2261279ba3dc01aca5b8",
-      "sum": "19h3uGkLOW44JulE/k3jcJ/1YQelJaxhZFIiNk4Lqys="
+      "version": "c31b164f453738582defd06feea3a139732b6faf",
+      "sum": "jRfh78aSGmRvGPxhlRJTbiJ5nuZ06lm238m7VjIGrdc="
+    },
+    {
+      "source": {
+        "git": {
+          "remote": "https://github.com/jsonnet-libs/docsonnet.git",
+          "subdir": "doc-util"
+        }
+      },
+      "version": "c9cc5534fc5197fb256f323f6b953a7a6bfd9ed6",
+      "sum": "BlqtCzZg0p9B69rQISOsdZpOZVjov7+7ul80zPmh82M="
     },
     {
       "source": {
@@ -38,8 +48,8 @@
           "subdir": ""
         }
       },
-      "version": "c1a315a7dbead0335a5e0486acc5583395b22a24",
-      "sum": "UVdL+uuFI8BSQgLfMJEJk2WDKsQXNT3dRHcr2Ti9rLI="
+      "version": "a040840d2853ee07eb5fc7f144af3536573c38b7",
+      "sum": "eoEiHjbYtMjThfyj8GZWugArl9cOVFSW8nb6zyfGbuc="
     },
     {
       "source": {
@@ -48,8 +58,8 @@
           "subdir": ""
         }
       },
-      "version": "2dbe4f9625a811b8b89f0495e74509c74779da82",
-      "sum": "Fe7bN9E6qeKNUdENjQvYttgf4S1DDqXRVB80wdmQgHQ="
+      "version": "eed459199703c969afc318ea55b9361ae48180a7",
+      "sum": "iKDOR7+jXw3Rctog6Z1ofweIK5BLjuGeguIZjXLP8ls="
     },
     {
       "source": {
@@ -58,8 +68,8 @@
           "subdir": "mixin"
         }
       },
-      "version": "32f227a45b802f347b317328c628636461b8e6cf",
-      "sum": "HhSSbGGCNHCMy1ee5jElYDm0yS9Vesa7QB2/SHKdjsY="
+      "version": "2165d8cd7392f3231f9cb81bbb2a6ed65584e275",
+      "sum": "U83c7tJSrhSWAr4c6TsY4FXN1OoiW0zF751bg1W5ydE="
     },
     {
       "source": {

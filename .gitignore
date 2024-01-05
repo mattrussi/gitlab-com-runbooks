@@ -2,6 +2,7 @@
 .env
 .env.sh
 .vscode
+/.cache
 /dashboards/.env.sh
 /dashboards/vendor
 /dashboards/generated
