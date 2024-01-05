@@ -446,6 +446,18 @@ For example, count per key pattern:
 cat trace.txt | awk '{ print $5 }' | sort -n | uniq -c | sort -nr
 ```
 
+It is also possible to output in JSON format for processing via `jq`:
+
+```shell
+find redis-analysis -name '*.06379.findx' | GITLAB_REDIS_CLUSTER=cache OUTPUT_FORMAT=json parallel -j0 -n100 ruby runbooks/scripts/redis_trace_cmd.rb | sed '/^$/d' > trace.json
+```
+
+This allows for a similar count per command and key pattern:
+
+```shell
+cat trace.json | jq -c '[.cmd, .patterns]' | sort | uniq -c | sort -rn | head
+```
+
 ##### key size estimation
 
 The following commands are meant to be run on a replica instance, for example `redis-cache-01-db-gprd`.
