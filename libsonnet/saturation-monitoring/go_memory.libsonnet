@@ -19,7 +19,7 @@ local resourceSaturationPoint = (import 'servicemetrics/resource_saturation_poin
     grafana_dashboard_uid: 'sat_go_memory',
     resourceLabels: ['fqdn'],
     query: |||
-      sum by (%(aggregationLabels)s, metric_prefix) (
+      max by (%(aggregationLabels)s) (
         process_resident_memory_bytes{%(selector)s}
       )
       /
