@@ -1,5 +1,9 @@
 # GPG Keys for Package Signing
 
+[Packagecloud](https://packagecloud.io), the application that powers packages.gitlab.com, supports two different types of GPG signatures: **packages** and **repository metadata**.
+
+This document is concerned with the signing of **packages**. For repository metadata signing, see [manage repository metadata signing keys](../packagecloud/manage-repository-metadata-signing-keys.md).
+
 As described in the [omnibus project for GitLab](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/doc/package-information/signed_packages.md),
 GitLab, Inc. provides signed packages starting with the release of `9.5`, and
 all packages on stable trees from that point forward as well (e.g. `9.3.x` as
@@ -120,7 +124,7 @@ Next, we'll to export the entire secret key:
 
 This key should be uploaded to the secure storage location.
 
-### Extending Key Expiration
+## Extending Key Expiration
 
 By "extending" keys, we're actually referring to extending the `expire` field into the future, thus extending the useful lifespan of the key(s). To extend the signing key pair, one needs access to the original private key and passphrase.
 
@@ -128,13 +132,22 @@ The steps to extend are as follows:
 
 * Import the original private key, as this should *never* be kept on a system.
 
-  `gpg --allow-secret-key-import --import packages.gitlab.gpg`
+  ```sh
+  gpg --allow-secret-key-import --import packages.gitlab.gpg
+  ````
+
 * Confirm the key is imported and accessible with the private key:
 
-  `gpg -k support@gitlab.com`
+  ```sh
+  gpg -k support@gitlab.com
+  ```
+
 * Edit the key interactively with `gpg`:
 
-  `gpg --edit-key <KEYID>`
+  ```sh
+  gpg --edit-key <KEYID>
+  ```
+
 * Enter `expire`, follow prompts to expire by X years with `2y`
 * At this stage, you will be prompted to the key's passphrase.
 * Enter `key 1` to select the subkey
@@ -143,7 +156,7 @@ The steps to extend are as follows:
 * Export the updated key(s), and upload to appropriate storage locations & systems.
 * Ensure to copy the original key to a backup file in the secure storage location.
 
-See [Exporting the Keys]()
+Now you can [export the keys](#export-the-keys).
 
 Citing from [gpg-announce in 2009'Q1](http://lists.gnupg.org/pipermail/gnupg-announce/2009q1/000282.html) :
 
@@ -153,7 +166,7 @@ Citing from [gpg-announce in 2009'Q1](http://lists.gnupg.org/pipermail/gnupg-ann
 > using your existing key include keeping the signatures on the key so that any
 > trust you've built up by others signing your key remains."
 
-### Purging local copies
+## Purging local copies
 
 Once one has completed any step here, and have **_safely uploaded to secure
 storage_**, it is **very important** that they then **purge** the signing keys off their system.
@@ -162,12 +175,12 @@ storage_**, it is **very important** that they then **purge** the signing keys o
 
 ## Reference material
 
-* [http://irtfweb.ifa.hawaii.edu/~lockhart/gpg/]()
-* [http://blog.jonliv.es/blog/2011/04/26/creating-your-own-signed-apt-repository-and-debian-packages/]()
-* [https://www.2uo.de/myths-about-urandom/]()
-* [http://cromwell-intl.com/linux/dev-random.html]()
-* [https://www.gnupg.org/faq/gnupg-faq.html#new_key_after_generation]()
-* [https://www.gnupg.org/gph/en/manual/c235.html#AEN328]()
-* [https://riseup.net/en/security/message-security/openpgp/best-practices]()
+* <http://irtfweb.ifa.hawaii.edu/~lockhart/gpg/>
+* <http://blog.jonliv.es/blog/2011/04/26/creating-your-own-signed-apt-repository-and-debian-packages/>
+* <https://www.2uo.de/myths-about-urandom/>
+* <http://cromwell-intl.com/linux/dev-random.html>
+* <https://www.gnupg.org/faq/gnupg-faq.html#new_key_after_generation>
+* <https://www.gnupg.org/gph/en/manual/c235.html#AEN328>
+* <https://riseup.net/en/security/message-security/openpgp/best-practices>
 
 [CSPRNG]: https://en.wikipedia.org/wiki/Cryptographically_secure_pseudorandom_number_generator
