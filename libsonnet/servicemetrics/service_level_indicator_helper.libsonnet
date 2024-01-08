@@ -39,13 +39,24 @@ local mergeSelector(from, to) =
     {}
   );
 
-// input: array of hashes [ {metric: { label: value } ]
+// input: array of hashes [ {metric: { label: value } ] or [ {metric: { label: [value] } ]
 // output: merged label selectors in a hash { metric: { label: [value] } }
 local collectMetricNamesAndSelectors(metricSelectors) =
   std.foldl(
     function(memo, obj)
       local metricName = obj.key;
-      local selector = { [label]: [obj.value[label]] for label in std.objectFields(obj.value) };
+      // cast value to array if not an array yet
+      local selector = std.foldl(
+        function(m, label)
+          local value = if std.isArray(obj.value[label]) then
+            obj.value[label]
+          else
+            [obj.value[label]];
+
+          m { [label]: value },
+        std.objectFields(obj.value),
+        {}
+      );
 
       // merge labels for the same metric
       if std.objectHas(memo, metricName) then

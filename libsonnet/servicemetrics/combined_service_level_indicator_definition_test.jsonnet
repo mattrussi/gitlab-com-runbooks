@@ -54,4 +54,11 @@ test.suite({
       some_other_total: std.set(['foo', 'backend', 'code']),
     },
   },
+  testMetricNamesAndSelectorsCombined: {
+    actual: testSli.metricNamesAndSelectors(),
+    expect: {
+      some_total: { foo: ['bar'], backend: ['abc', 'web'], type: ['baz'], code: ['5xx'] },
+      some_other_total: { foo: ['bar'], backend: ['abc'], code: ['5xx'] },
+    },
+  },
 })
