@@ -6,5 +6,6 @@
 //
 // Blank values will be ignored.
 {
-  no_code_automation: '',
+  'ci-cd_visibility': 'fleet_visibility',
+  runner_fleet: 'fleet_visibility',
 }

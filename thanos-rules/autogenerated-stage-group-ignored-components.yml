@@ -81,14 +81,14 @@ groups:
       product_stage: govern
       stage_group: authorization
     expr: "1"
-- name: 'Stage group Ignored components: data_stores - Cloud Connector'
+- name: 'Stage group Ignored components: systems - Cloud Connector'
   interval: 1m
   partial_response_strategy: warn
   rules:
   - record: gitlab:ignored_component:stage_group
     labels:
       component: graphql_query
-      product_stage: data_stores
+      product_stage: systems
       stage_group: cloud_connector
     expr: "1"
 - name: 'Stage group Ignored components: create - Code Creation'
