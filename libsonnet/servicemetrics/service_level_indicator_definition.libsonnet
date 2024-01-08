@@ -7,6 +7,7 @@ local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 local strings = import 'utils/strings.libsonnet';
 local collectMetricNamesAndLabels = (import './service_level_indicator_helper.libsonnet').collectMetricNamesAndLabels;
+local collectMetricNamesAndSelectors = (import './service_level_indicator_helper.libsonnet').collectMetricNamesAndSelectors;
 
 local featureCategoryFromSourceMetrics = 'featureCategoryFromSourceMetrics';
 
@@ -177,6 +178,30 @@ local serviceLevelIndicatorDefinition(sliName, serviceLevelIndicator) =
     metricNamesAndLabels()::
       collectMetricNamesAndLabels(
         [apdexMetricsAndLabels, requestRateMetricsAndLabels, errorRateMetricsAndLabels]
+      ),
+
+    local apdexMetricsAndSelectors =
+      if self.hasApdex() && std.objectHasAll(self.apdex, 'supportsReflection') then
+        self.apdex.supportsReflection().getMetricNamesAndSelectors()
+      else
+        {},
+
+    local requestRateMetricsAndSelectors =
+      if std.objectHasAll(self.requestRate, 'supportsReflection') then
+        self.requestRate.supportsReflection().getMetricNamesAndSelectors()
+      else
+        {},
+
+    local errorRateMetricsAndSelectors =
+      if self.hasErrorRate() && std.objectHasAll(self.errorRate, 'supportsReflection') then
+        self.errorRate.supportsReflection().getMetricNamesAndSelectors()
+      else
+        {},
+
+    // Return a hash of { metric: { label: [value] } } from all defined metrics
+    metricNamesAndSelectors()::
+      collectMetricNamesAndSelectors(
+        [apdexMetricsAndSelectors, requestRateMetricsAndSelectors, errorRateMetricsAndSelectors]
       ),
 
     // Generate recording rules for apdex

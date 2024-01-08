@@ -262,6 +262,12 @@ local generateApdexAttributionQuery(histogram, selector, rangeInterval, aggregat
           [metric]: std.set(std.objectFields(selector) + ['le'])
           for metric in metricNames
         },
+
+      getMetricNamesAndSelectors()::
+        {
+          [metric]: selector { le: '' }
+          for metric in metricNames
+        },
     },
   }),
 }

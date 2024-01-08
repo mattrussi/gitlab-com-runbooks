@@ -2,11 +2,13 @@ local underTest = import './service_level_indicator_definition.libsonnet';
 local aggregationSet = import 'servicemetrics/aggregation-set.libsonnet';
 local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local test = import 'test.libsonnet';
-local rateMetric = metricsCatalog.rateMetric;
-local successCounterApdex = metricsCatalog.successCounterApdex;
 local histogramApdex = metricsCatalog.histogramApdex;
+local successCounterApdex = metricsCatalog.successCounterApdex;
 local errorCounterApdex = metricsCatalog.errorCounterApdex;
 local combined = metricsCatalog.combined;
+local rateMetric = metricsCatalog.rateMetric;
+local derivMetric = metricsCatalog.derivMetric;
+local gaugeMetric = metricsCatalog.gaugeMetric;
 
 local testSli = underTest.serviceLevelIndicatorDefinition({
   significantLabels: [],
@@ -142,6 +144,13 @@ test.suite({
       some_total_count: std.set(['label_a', 'label_b']),
     },
   },
+  testMetricNamesAndSelectorsHistogramApdex: {
+    actual: testSliWithSelectorHistogramApdex.metricNamesAndSelectors(),
+    expect: {
+      some_histogram_metrics: { foo: ['bar'], le: [''] },
+      some_total_count: { label_a: ['bar'], label_b: ['foo'] },
+    },
+  },
 
   local testSliWithSelectorSuccessCounterApdex = underTest.serviceLevelIndicatorDefinition(testSliBase {
     apdex: successCounterApdex(successRateMetric='success_total_count', operationRateMetric='some_total_count', selector={ foo: 'bar', baz: 'qux' }),
@@ -155,6 +164,14 @@ test.suite({
       some_total_count: std.set(['label_a', 'label_b', 'foo', 'baz']),
     },
   },
+  testMetricNamesAndSelectorsSuccessCounterApdex: {
+    actual: testSliWithSelectorSuccessCounterApdex.metricNamesAndSelectors(),
+    expect: {
+      success_total_count: { foo: ['bar'], baz: ['qux'] },
+      some_total_count: { foo: ['bar'], baz: ['qux'], label_a: ['bar'], label_b: ['foo'] },
+    },
+  },
+
 
   local testSliWithSelectorErrorCounterApdex = underTest.serviceLevelIndicatorDefinition(testSliBase {
     apdex: errorCounterApdex(errorRateMetric='error_total_count', operationRateMetric='some_total_count', selector={ foo: 'bar', baz: 'qux' }),
@@ -168,6 +185,13 @@ test.suite({
       some_total_count: std.set(['label_a', 'label_b', 'foo', 'baz']),
     },
   },
+  testMetricNamesAndSelectorsErrorCounterApdex: {
+    actual: testSliWithSelectorErrorCounterApdex.metricNamesAndSelectors(),
+    expect: {
+      error_total_count: { foo: ['bar'], baz: ['qux'] },
+      some_total_count: { foo: ['bar'], baz: ['qux'], label_a: ['bar'], label_b: ['foo'] },
+    },
+  },
 
   local testSliWithSelectorRequestRateOnly = underTest.serviceLevelIndicatorDefinition(testSliBase {
     requestRate: rateMetric('some_total_count', selector={ label_a: 'bar', type: 'foo' }),
@@ -178,6 +202,13 @@ test.suite({
       some_total_count: std.set(['label_a', 'type']),
     },
   },
+  testMetricNamesAndSelectorsRequestRateOnly: {
+    actual: testSliWithSelectorRequestRateOnly.metricNamesAndSelectors(),
+    expect: {
+      some_total_count: { label_a: ['bar'], type: ['foo'] },
+    },
+  },
+
 
   local testSliWithoutSelector = underTest.serviceLevelIndicatorDefinition(testSliBase {
     apdex: histogramApdex('some_histogram_metrics'),
@@ -189,6 +220,13 @@ test.suite({
     expect: {
       some_histogram_metrics: ['le'],
       some_total_count: [],
+    },
+  },
+  testMetricNamesAndSelectorsWithoutSelector: {
+    actual: testSliWithoutSelector.metricNamesAndSelectors(),
+    expect: {
+      some_histogram_metrics: { le: [''] },
+      some_total_count: {},
     },
   },
 
@@ -217,5 +255,44 @@ test.suite({
       some_total_count: [],
     },
   },
+  testMetricNamesAndSelectorsWithCombinedMetric: {
+    actual: testSliWithCombinedMetric.metricNamesAndSelectors(),
+    expect: {
+      some_histogram_metrics: { le: [''] },
+      pg_stat_database_xact_commit: { type: ['patroni'], tier: ['db'] },
+      pg_stat_database_xact_rollback: { type: ['patroni'], tier: ['db'], some_label: ['true'] },
+      some_total_count: {},
+    },
+  },
 
+  local testSliWithDerivMetric = underTest.serviceLevelIndicatorDefinition(testSliBase {
+    requestRate: derivMetric('some_total_count', { type: 'foo', job: 'bar' }),
+  }).initServiceLevelIndicatorWithName('test_sli', {}),
+  testMetricNamesAndLabelsDerivMetric: {
+    actual: testSliWithDerivMetric.metricNamesAndLabels(),
+    expect: {
+      some_total_count: ['job', 'type'],
+    },
+  },
+  testMetricNamesAndSelectorsDerivMetric: {
+    actual: testSliWithDerivMetric.metricNamesAndSelectors(),
+    expect: {
+      some_total_count: { type: ['foo'], job: ['bar'] },
+    },
+  },
+  local testSliWithGaugeMetric = underTest.serviceLevelIndicatorDefinition(testSliBase {
+    requestRate: gaugeMetric('some_total_count', { type: 'foo', job: 'bar' }),
+  }).initServiceLevelIndicatorWithName('test_sli', {}),
+  testMetricNamesAndLabelsGaugeMetric: {
+    actual: testSliWithDerivMetric.metricNamesAndLabels(),
+    expect: {
+      some_total_count: ['job', 'type'],
+    },
+  },
+  testMetricNamesAndSelectorsGaugeMetric: {
+    actual: testSliWithDerivMetric.metricNamesAndSelectors(),
+    expect: {
+      some_total_count: { type: ['foo'], job: ['bar'] },
+    },
+  },
 })

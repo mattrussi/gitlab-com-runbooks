@@ -107,6 +107,11 @@ local transformErrorRateToSuccessRate(errorRateMetric, operationRateMetric, sele
           [metric]: std.set(std.objectFields(selector))
           for metric in metricNames
         },
+      getMetricNamesAndSelectors()::
+        {
+          [metric]: selector
+          for metric in metricNames
+        },
     },
   }),
 }

@@ -40,6 +40,11 @@ local validateMetric = (import './validation.libsonnet').validateMetric;
           [metric]: std.set(std.objectFields(selector))
           for metric in metricNames
         },
+      getMetricNamesAndSelectors()::
+        {
+          [metric]: selector
+          for metric in metricNames
+        },
     },
   }),
 }

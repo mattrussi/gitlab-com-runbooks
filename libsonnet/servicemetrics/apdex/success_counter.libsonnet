@@ -76,6 +76,11 @@ local generateApdexRatio(successCounterApdex, aggregationLabels, additionalSelec
           [metric]: std.set(std.objectFields(selector))
           for metric in metricNames
         },
+      getMetricNamesAndSelectors()::
+        {
+          [metric]: selector
+          for metric in metricNames
+        },
     },
   }),
 }

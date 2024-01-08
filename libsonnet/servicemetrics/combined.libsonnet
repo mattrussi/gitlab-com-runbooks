@@ -157,6 +157,12 @@ local generateApdexPercentileLatencyQuery(c, percentile, aggregationLabels, sele
               metrics,
               {}
             ),
+          getMetricNamesAndSelectors()::
+            std.foldl(
+              function(memo, metric) merge(memo, metric.supportsReflection().getMetricNamesAndSelectors()),
+              metrics,
+              {}
+            ),
         },
       },
 }
