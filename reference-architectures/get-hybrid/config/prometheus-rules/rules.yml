@@ -3692,7 +3692,7 @@ groups:
       max by(type) (
         clamp_min(
           clamp_max(
-            sum by (type, fqdn, metric_prefix) (
+            max by (type, fqdn) (
               process_resident_memory_bytes{type=~"gitaly|praefect"}
             )
             /
@@ -4441,7 +4441,7 @@ groups:
         max by(type, fqdn) (
           clamp_min(
             clamp_max(
-              sum by (type, fqdn, metric_prefix) (
+              max by (type, fqdn) (
                 process_resident_memory_bytes{type="{{ $labels.type }}"}
               )
               /
@@ -4457,7 +4457,7 @@ groups:
         max by(type, fqdn) (
           clamp_min(
             clamp_max(
-              sum by (type, fqdn, metric_prefix) (
+              max by (type, fqdn) (
                 process_resident_memory_bytes{type="{{ $labels.type }}"}
               )
               /

@@ -63,7 +63,7 @@ groups:
       max by(env, environment, tier, type, stage, shard) (
         clamp_min(
           clamp_max(
-            sum by (env, environment, tier, type, stage, shard, fqdn, metric_prefix) (
+            max by (env, environment, tier, type, stage, shard, fqdn) (
               process_resident_memory_bytes{env="gprd",type=~"gitaly|monitoring|praefect|registry|web-pages"}
             )
             /
@@ -557,7 +557,7 @@ groups:
         max by(env, environment, tier, type, stage, shard, fqdn) (
           clamp_min(
             clamp_max(
-              sum by (env, environment, tier, type, stage, shard, fqdn, metric_prefix) (
+              max by (env, environment, tier, type, stage, shard, fqdn) (
                 process_resident_memory_bytes{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
               )
               /
@@ -573,7 +573,7 @@ groups:
         max by(env, environment, tier, type, stage, shard, fqdn) (
           clamp_min(
             clamp_max(
-              sum by (env, environment, tier, type, stage, shard, fqdn, metric_prefix) (
+              max by (env, environment, tier, type, stage, shard, fqdn) (
                 process_resident_memory_bytes{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
               )
               /

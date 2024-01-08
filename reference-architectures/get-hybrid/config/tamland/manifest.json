@@ -185,7 +185,7 @@
       "horizontallyScalable": true,
       "linear_prediction_saturation_alert": null,
       "quantileAggregation": "max",
-      "query": "sum by (%(aggregationLabels)s, metric_prefix) (\n  process_resident_memory_bytes{%(selector)s}\n)\n/\nsum by (%(aggregationLabels)s) (\n  node_memory_MemTotal_bytes{%(selector)s}\n)\n",
+      "query": "max by (%(aggregationLabels)s) (\n  process_resident_memory_bytes{%(selector)s}\n)\n/\nsum by (%(aggregationLabels)s) (\n  node_memory_MemTotal_bytes{%(selector)s}\n)\n",
       "queryFormatConfig": {},
       "resourceLabels": [
         "fqdn"
