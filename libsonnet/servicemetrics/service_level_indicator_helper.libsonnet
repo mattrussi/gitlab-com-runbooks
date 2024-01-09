@@ -45,27 +45,30 @@ local collectMetricNamesAndSelectors(metricSelectors) =
   std.foldl(
     function(memo, obj)
       local metricName = obj.key;
+      local selectorHash = obj.value;
       // cast value to array if not an array yet
-      local selector = std.foldl(
+      local selectorHashWithArrayValues = std.foldl(
         function(m, label)
-          local value = if std.isArray(obj.value[label]) then
-            obj.value[label]
+          if std.isArray(selectorHash[label]) then
+            m { [label]: selectorHash[label] }
+          else if std.isObject(selectorHash[label]) then
+            // ignore object selector for now, eg { code: { re: '^5.*' } }
+            // we're only interested in type selector which is usually a simple string value, eg { type: 'web' }
+            m
           else
-            [obj.value[label]];
-
-          m { [label]: value },
-        std.objectFields(obj.value),
+            m { [label]: [selectorHash[label]] },
+        std.objectFields(selectorHash),
         {}
       );
 
       // merge labels for the same metric
       if std.objectHas(memo, metricName) then
         memo {
-          [metricName]: mergeSelector(memo[metricName], selector),
+          [metricName]: mergeSelector(memo[metricName], selectorHashWithArrayValues),
         }
       else
         memo {
-          [metricName]: selector,
+          [metricName]: selectorHashWithArrayValues,
         },
     std.flatMap(
       function(ms)

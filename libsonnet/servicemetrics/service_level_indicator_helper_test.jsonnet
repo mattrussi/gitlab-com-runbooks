@@ -51,4 +51,20 @@ test.suite({
       metric_foo: { type: ['foo'], le: [''] },
     },
   },
+  testCollectMetricNamesAndSelectorsNestedSelector1: {
+    actual: collectMetricNamesAndSelectors([
+      { metric_foo: { code: { re: '^5.*' } } },
+      { metric_foo: { code: { re: '^4.*' } } },
+    ]),
+    expect: { metric_foo: {} },
+  },
+  testCollectMetricNamesAndSelectorsNestedSelector2: {
+    actual: collectMetricNamesAndSelectors([
+      { metric_foo: { code: { re: '^5.*' }, type: 'foo' } },
+      { metric_foo: { code: { re: '^4.*' }, type: 'bar' } },
+    ]),
+    expect: {
+      metric_foo: { type: ['bar', 'foo'] },
+    },
+  },
 })
