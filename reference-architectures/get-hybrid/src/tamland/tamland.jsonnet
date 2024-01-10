@@ -35,6 +35,33 @@ local services(services) = {
   for service in services
 };
 
+/*
+Saturation points from 'servicemetrics/saturation-resources.libsonnet' carry all sorts of information.
+This slices saturation points and only exposes what's relevant for Tamland.
+*/
+local saturationPoints = {
+  local point = metrics.saturationMonitoring[name],
+
+  [name]: {
+    title: point.title,
+    description: point.description,
+    appliesTo: point.appliesTo,
+    capacityPlanning: point.capacityPlanning,
+    horizontallyScalable: point.horizontallyScalable,
+    severity: point.severity,
+    slos: point.slos,
+    raw_query: point.query % (
+      point.queryFormatConfig
+      {
+        selector: '%(selector)s',  // This will be replaced in Tamland, not here
+        rangeInterval: std.get(point, 'burnRatePeriod', '5m'),
+        aggregationLabels: std.join(',', point.resourceLabels),
+      }
+    ),
+  }
+  for name in std.objectFields(metrics.saturationMonitoring)
+};
+
 local page(path, title, service_pattern) =
   {
     path: path,
@@ -58,7 +85,7 @@ local page(path, title, service_pattern) =
       },
     },
     services: services(uniqServices(metrics.saturationMonitoring)),
-    saturationPoints: metrics.saturationMonitoring,
+    saturationPoints: saturationPoints,
     shardMapping: {},
     teams: [],
     report: {

@@ -5,7 +5,7 @@
 Add the following to your `~/.ssh/config` (specify your username and path to ssh private key):
 
 ```
-# GCP staging bastion host
+# GCP ops bastion host
 Host lb-bastion.ops.gitlab.com
         User                            YOUR_SSH_USERNAME
 

@@ -43,6 +43,7 @@
 * [Thanos Compact](../monitoring/thanos-compact.md)
 * [Deleting series over a given interval from thanos](../monitoring/thanos-delete-series-interval.md)
 * [Session: Application architecture](../onboarding/architecture.md)
+* [GPG Keys for Repository Metadata Signing](../packagecloud/manage-repository-metadata-signing-keys.md)
 * [Re-indexing a package](../packagecloud/reindex-package.md)
 * [GPG Keys for Package Signing](../packaging/manage-package-signing-keys.md)
 * [Steps to create (or recreate) a Standby CLuster using a Snapshot from a Production cluster as Master cluster (instead of pg_basebackup)](../patroni/build_cluster_from_snapshot.md)

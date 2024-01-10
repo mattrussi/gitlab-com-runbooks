@@ -361,7 +361,8 @@ Selected logging documents and resources:
 
 ### Manage Package Signing Keys
 
-- [Manage Package Signing Keys](docs/uncategorized/manage-package-signing-keys.md)
+- [Manage Repository Metadata Signing Keys](docs/packagecloud/manage-repository-metadata-signing-keys.md)
+- [Manage Package Signing Keys](docs/packaging/manage-package-signing-keys.md)
 
 ### Adding runbooks rules
 

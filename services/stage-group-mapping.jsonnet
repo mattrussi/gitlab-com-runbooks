@@ -33,6 +33,7 @@
     stage: 'plan',
     feature_categories: [
       'portfolio_management',
+      'okr_management',
       'design_management',
       'requirements_management',
       'quality_management',
@@ -100,7 +101,6 @@
       'merge_trains',
       'code_testing',
       'review_apps',
-      'ci-cd_visibility',
     ],
   },
   pipeline_authoring: {
@@ -115,7 +115,7 @@
     stage: 'verify',
     feature_categories: [
       'runner',
-      'runner_fleet',
+      'fleet_visibility',
     ],
   },
   runner_saas: {
@@ -327,6 +327,13 @@
       'activation',
     ],
   },
+  cloud_connector: {
+    name: 'Cloud Connector',
+    stage: 'systems',
+    feature_categories: [
+      'cloud_connector',
+    ],
+  },
   distribution_build: {
     name: 'Distribution::Build',
     stage: 'systems',
@@ -363,13 +370,6 @@
       'geo_replication',
       'disaster_recovery',
       'backup_restore',
-    ],
-  },
-  cloud_connector: {
-    name: 'Cloud Connector',
-    stage: 'data_stores',
-    feature_categories: [
-      'cloud_connector',
     ],
   },
   global_search: {
