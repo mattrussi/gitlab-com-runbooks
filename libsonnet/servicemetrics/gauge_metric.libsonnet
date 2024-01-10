@@ -8,7 +8,7 @@ local validateMetric = (import './validation.libsonnet').validateMetric;
   // Some metrics from stackdriver are presented in this form
   gaugeMetric(
     gauge,
-    selector=null,
+    selector={},
     samplingInterval=1  // in seconds
   ):: validateMetric({
     useRecordingRuleRegistry:: false,
