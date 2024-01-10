@@ -17,8 +17,8 @@
 ## Troubleshooting Pointers
 
 * [Redis Cluster](../redis/redis-cluster.md)
-* [../redis/redis.md](../redis/redis.md)
 * [A survival guide for SREs to working with Redis at GitLab](../redis/redis-survival-guide-for-sres.md)
+* [../redis/redis.md](../redis/redis.md)
 <!-- END_MARKER -->
 
 <!-- ## Summary -->

@@ -18,8 +18,8 @@
 
 ## Troubleshooting Pointers
 
-* [Cloudflare: Managing Traffic](../cloudflare/managing-traffic.md)
 * [Cloud SQL Troubleshooting](../cloud-sql/cloud-sql.md)
+* [Cloudflare: Managing Traffic](../cloudflare/managing-traffic.md)
 * [Interacting with Consul](../consul/interaction.md)
 * [Blocking individual IPs and Net Blocks on HA Proxy](../frontend/ban-netblocks-on-haproxy.md)
 * [HAProxy Management at GitLab](../frontend/haproxy.md)
