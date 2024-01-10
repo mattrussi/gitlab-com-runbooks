@@ -432,7 +432,9 @@ rubocop:
 ################
 
 ensure-generated-content-up-to-date:
-  extends: .default-job
+  extends:
+    - .default-job
+    - .jsonnet-cache
   stage: test
   needs: []
   rules:
@@ -462,6 +464,7 @@ test-jsonnet:
         files:
           - jsonnetfile.lock.json
       paths:
+        - .cache
         - vendor
 
 .dashboards:
@@ -486,7 +489,9 @@ test-jsonnet:
     - dashboards/generate-mixins.sh  # Generate dashboards from mixins
 
 prepare-service-health-dashboard-json:
-  extends: .id-tokens
+  extends:
+    - .id-tokens
+    - .jsonnet-cache
   stage: prepare
   environment:
     name: ops
@@ -564,6 +569,8 @@ check-stage-groups:
     - git diff --exit-code
 
 ensure-maturity-model-minimum-level:
+  extends:
+    - .jsonnet-cache
   stage: test
   needs:
     - job: prepare-service-health-dashboard-json
@@ -651,7 +658,9 @@ test-shunit:
     - make jsonnet-bundle test-shunit
 
 test-dashboards:
-  extends: .dashboards
+  extends:
+    - .dashboards
+    - .jsonnet-cache
   stage: test
   environment:
     action: verify
@@ -703,6 +712,7 @@ verify:
 deploy-dashboards:
   extends:
     - .dashboards
+    - .jsonnet-cache
   stage: deploy
   needs:
     - job: prepare-service-health-dashboard-json

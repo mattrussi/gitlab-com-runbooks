@@ -18,8 +18,8 @@
           "subdir": "grafana-builder"
         }
       },
-      "version": "931f6b1139bb3694b06f2261279ba3dc01aca5b8",
-      "sum": "VmOxvg9FuY9UYr3lN6ZJe2HhuIErJoWimPybQr3S3yQ="
+      "version": "f3b9fbe2d7010c08be332c243a2714a2ac75248f",
+      "sum": "B49EzIY2WZsFxNMJcgRxE/gcZ9ltnS8pkOOV6Q5qioc="
     },
     {
       "source": {
@@ -28,8 +28,18 @@
           "subdir": "memcached-mixin"
         }
       },
-      "version": "931f6b1139bb3694b06f2261279ba3dc01aca5b8",
+      "version": "f3b9fbe2d7010c08be332c243a2714a2ac75248f",
       "sum": "19h3uGkLOW44JulE/k3jcJ/1YQelJaxhZFIiNk4Lqys="
+    },
+    {
+      "source": {
+        "git": {
+          "remote": "https://github.com/jsonnet-libs/docsonnet.git",
+          "subdir": "doc-util"
+        }
+      },
+      "version": "6ac6c69685b8c29c54515448eaca583da2d88150",
+      "sum": "BrAL/k23jq+xy9oA7TWIhUx07dsA/QLm3g7ktCwe//U="
     },
     {
       "source": {
@@ -38,8 +48,8 @@
           "subdir": ""
         }
       },
-      "version": "c1a315a7dbead0335a5e0486acc5583395b22a24",
-      "sum": "UVdL+uuFI8BSQgLfMJEJk2WDKsQXNT3dRHcr2Ti9rLI="
+      "version": "80bdea46b69cfbd5a6b57789ad856d3cb525e956",
+      "sum": "eUSd6nmI07Zl4pYuDnhasQ7Ua37HfHcBVItfvroVUGU="
     },
     {
       "source": {
@@ -48,8 +58,8 @@
           "subdir": ""
         }
       },
-      "version": "2dbe4f9625a811b8b89f0495e74509c74779da82",
-      "sum": "Fe7bN9E6qeKNUdENjQvYttgf4S1DDqXRVB80wdmQgHQ="
+      "version": "c72ac0392998343d53bd73343467f8bf2aa4e333",
+      "sum": "VWD9c9I1Q2252HgV/Ao/4mvdATy5GAyZASO30ituyJU="
     },
     {
       "source": {
@@ -58,7 +68,7 @@
           "subdir": "mixin"
         }
       },
-      "version": "32f227a45b802f347b317328c628636461b8e6cf",
+      "version": "7794d785b1dd2486b18d1f77f61600893638e1cf",
       "sum": "HhSSbGGCNHCMy1ee5jElYDm0yS9Vesa7QB2/SHKdjsY="
     },
     {
