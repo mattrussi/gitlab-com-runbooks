@@ -1,8 +1,7 @@
 local aggregations = import 'promql/aggregations.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
 local optionalOffset = import 'recording-rules/lib/optional-offset.libsonnet';
-local validateSelector = (import './validation.libsonnet').validateSelector;
-
+local validateMetric = (import './validation.libsonnet').validateMetric;
 
 {
   // A rate that is precalcuated, not stored as a counter
@@ -11,9 +10,9 @@ local validateSelector = (import './validation.libsonnet').validateSelector;
     gauge,
     selector=null,
     samplingInterval=1  // in seconds
-  ):: {
+  ):: validateMetric({
     useRecordingRuleRegistry:: false,
-    selector: validateSelector(selector),
+    selector: selector,
 
     local baseSelector = selector,  // alias
     aggregatedRateQuery(aggregationLabels, selector, rangeInterval, withoutLabels=[], offset=null)::
@@ -30,5 +29,5 @@ local validateSelector = (import './validation.libsonnet').validateSelector;
       };
 
       aggregations.aggregateOverQuery('sum', aggregationLabels, query),
-  },
+  }),
 }

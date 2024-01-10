@@ -1,7 +1,9 @@
-local validateSelector(selector) =
-  assert std.isObject(selector) : 'selector %s must be an object' % selector;
-  selector;
+local validator = import 'utils/validator.libsonnet';
+
+local metricValidator = validator.new({
+  selector: validator.object,
+});
 
 {
-  validateSelector: validateSelector,
+  validateMetric(metric):: metricValidator.assertValid(metric),
 }
