@@ -89,8 +89,8 @@ def generate_header(service, tier)
   MARKDOWN_EOF
 
   data = OpenStruct.new(
-    service: ,
-    tier: ,
+    service:,
+    tier:,
     troubeshooting_docs:
   )
 
