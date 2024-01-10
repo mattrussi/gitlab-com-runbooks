@@ -3693,7 +3693,7 @@ groups:
         clamp_min(
           clamp_max(
             max by (type, fqdn) (
-              process_resident_memory_bytes{type=~"gitaly|praefect"}
+              go_memstats_alloc_bytes{type=~"gitaly|praefect"}
             )
             /
             sum by (type, fqdn) (
@@ -4442,7 +4442,7 @@ groups:
           clamp_min(
             clamp_max(
               max by (type, fqdn) (
-                process_resident_memory_bytes{type="{{ $labels.type }}"}
+                go_memstats_alloc_bytes{type="{{ $labels.type }}"}
               )
               /
               sum by (type, fqdn) (
@@ -4458,7 +4458,7 @@ groups:
           clamp_min(
             clamp_max(
               max by (type, fqdn) (
-                process_resident_memory_bytes{type="{{ $labels.type }}"}
+                go_memstats_alloc_bytes{type="{{ $labels.type }}"}
               )
               /
               sum by (type, fqdn) (

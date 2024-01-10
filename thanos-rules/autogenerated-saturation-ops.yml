@@ -64,7 +64,7 @@ groups:
         clamp_min(
           clamp_max(
             max by (env, environment, tier, type, stage, shard, fqdn) (
-              process_resident_memory_bytes{env="ops",type=~"gitaly|monitoring|praefect|registry|web-pages"}
+              go_memstats_alloc_bytes{env="ops",type=~"gitaly|monitoring|praefect|registry|web-pages"}
             )
             /
             sum by (env, environment, tier, type, stage, shard, fqdn) (
@@ -558,7 +558,7 @@ groups:
           clamp_min(
             clamp_max(
               max by (env, environment, tier, type, stage, shard, fqdn) (
-                process_resident_memory_bytes{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
+                go_memstats_alloc_bytes{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
               )
               /
               sum by (env, environment, tier, type, stage, shard, fqdn) (
@@ -574,7 +574,7 @@ groups:
           clamp_min(
             clamp_max(
               max by (env, environment, tier, type, stage, shard, fqdn) (
-                process_resident_memory_bytes{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
+                go_memstats_alloc_bytes{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
               )
               /
               sum by (env, environment, tier, type, stage, shard, fqdn) (

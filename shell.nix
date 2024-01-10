@@ -24,7 +24,7 @@ in pkgs.mkShell {
   name     = "runbooks";
   packages = with pkgs; [
     jsonnet-tool
-    ruby
+    ruby_3_2
     go-jsonnet
     jsonnet-bundler
     prometheus-alertmanager

@@ -97,7 +97,7 @@ groups:
         clamp_min(
           clamp_max(
             max by (type, shard, fqdn) (
-              process_resident_memory_bytes{env="ops",type="thanos"}
+              go_memstats_alloc_bytes{env="ops",type="thanos"}
             )
             /
             sum by (type, shard, fqdn) (
@@ -709,7 +709,7 @@ groups:
           clamp_min(
             clamp_max(
               max by (env, environment, tier, type, stage, shard, fqdn) (
-                process_resident_memory_bytes{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
+                go_memstats_alloc_bytes{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
               )
               /
               sum by (env, environment, tier, type, stage, shard, fqdn) (
@@ -725,7 +725,7 @@ groups:
           clamp_min(
             clamp_max(
               max by (env, environment, tier, type, stage, shard, fqdn) (
-                process_resident_memory_bytes{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
+                go_memstats_alloc_bytes{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
               )
               /
               sum by (env, environment, tier, type, stage, shard, fqdn) (

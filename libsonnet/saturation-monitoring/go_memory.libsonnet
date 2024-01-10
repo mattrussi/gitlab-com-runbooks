@@ -20,7 +20,7 @@ local resourceSaturationPoint = (import 'servicemetrics/resource_saturation_poin
     resourceLabels: ['fqdn'],
     query: |||
       max by (%(aggregationLabels)s) (
-        process_resident_memory_bytes{%(selector)s}
+        go_memstats_alloc_bytes{%(selector)s}
       )
       /
       sum by (%(aggregationLabels)s) (
