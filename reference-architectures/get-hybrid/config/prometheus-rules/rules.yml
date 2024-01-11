@@ -4429,7 +4429,7 @@ groups:
 
         Details of the Go Memory Utilization per Node resource:
 
-        Go's memory allocation strategy can make it look like a Go process is saturating memory when measured using RSS, when in fact\nthe process is not at risk of memory saturation. For this reason, we measure Go processes using the `go_memstat_alloc_bytes` metric instead of RSS. Lower is better.
+        Go's memory allocation strategy can make it look like a Go process is saturating memory when measured using RSS, when in fact the process is not at risk of memory saturation. For this reason, we measure Go processes using the `go_memstat_alloc_bytes`
 
       grafana_dashboard_id: alerts-sat_go_memory
       grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_go_memory?from=now-6h/m&to=now-1m/m&var-type={{
