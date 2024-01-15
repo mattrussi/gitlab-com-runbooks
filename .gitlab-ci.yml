@@ -1260,7 +1260,7 @@ validate-mimir-rules:
           - mimir-rules/**/*
   script:
     - |
-      for dir in $(find mimir-rules -maxdepth 1 -type d); do
+      for dir in $(find mimir-rules -mindepth 1 -maxdepth 1 -type d); do
         tenant=$(basename ${dir})
         printf "Checking rules for tenant: ${tenant}\n"
         mimirtool rules check --rule-dirs="${dir}"
@@ -1285,7 +1285,7 @@ validate-mimir-rules:
           - mimir-rules/**/*
   script:
     - |
-      for dir in $(find mimir-rules -maxdepth 1 -type d); do
+      for dir in $(find mimir-rules -mindepth 1 -maxdepth 1 -type d); do
         tenant=$(basename ${dir})
         printf "Deployings rules for tenant: ${tenant}\n"
         mimirtool rules sync --rule-dirs="${dir} --id=${tenant}"
