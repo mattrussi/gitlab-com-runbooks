@@ -135,7 +135,7 @@ update-feature-categories-ci: .update-feature-categories generate
 
 .PHONY: validate-mimir-rules
 validate-mimir-rules:
-	@for dir in mimir-rules/*; do \
+	@for dir in $(find mimir-rules/ -maxdepth 1 -type d); do \
 		tenant=$(basename $${dir}); \
 		echo "Checking rules for tenant: $${tenant}"; \
 		mimirtool rules check --rule-dirs="$${dir}"; \
