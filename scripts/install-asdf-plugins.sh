@@ -65,7 +65,7 @@ setup_mise() {
 
   do_mise_install() {
     cat "$temp_MISE_SHORTHANDS_FILE"
-    MISE_SHORTHANDS_FILE=$temp_MISE_SHORTHANDS_FILE mise install -y
+    MISE_SHORTHANDS_FILE=$temp_MISE_SHORTHANDS_FILE $MISE_COMMAND install -y
     rm -f "$temp_MISE_SHORTHANDS_FILE"
   }
 
@@ -76,7 +76,7 @@ setup_mise() {
     # No source? mise defaults should suffice.
     if [[ -z $source ]]; then return; fi
 
-    # See https://mise.jdx.dev/faq.html#how-do-the-shorthand-plugin-names-map-to-repositories
+    # See https://mise.jdx.dev/configuration.html#mise-shorthands-file-config-mise-shorthands-toml
     echo "$plugin = \"$source\"" >>"$temp_MISE_SHORTHANDS_FILE"
   }
 
@@ -84,12 +84,12 @@ setup_mise() {
     local plugin=$1
     local source=$2
 
-    if ! mise plugin list --urls | grep -qF "${source}"; then
+    if ! $MISE_COMMAND plugin list --urls | grep -qF "${source}"; then
       return
     fi
 
     echo "# Removing plugin ${plugin} installed from ${source}"
-    mise plugin remove "${plugin}" || {
+    $MISE_COMMAND plugin remove "${plugin}" || {
       echo "Failed to remove plugin: ${plugin}"
       exit 1
     } >&2
@@ -110,6 +110,10 @@ check_global_golang_install() {
 
 if command -v mise >/dev/null; then
   MISE_COMMAND=$(which mise)
+  export MISE_COMMAND
+  setup_mise
+elif command -v rtx >/dev/null; then
+  MISE_COMMAND=$(which rtx)
   export MISE_COMMAND
   setup_mise
 elif [[ -n ${ASDF_DIR-} ]]; then

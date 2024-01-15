@@ -23,8 +23,7 @@ warn() {
 if command -v mise >/dev/null; then
   echo >&2 -e "mise installed..."
 elif command -v rtx >/dev/null; then
-  warn "⚠️ 2024-01-02: 'rtx' has changed to 'mise' ; please switch"
-  exit 1
+  warn "⚠️ 2024-01-02: 'rtx' has changed to 'mise' ; please upgrade before rtx is deprecated"
 elif [[ -n ${ASDF_DIR-} ]]; then
   warn "asdf installed, but deprecated. Consider switching over to rtx."
 else
