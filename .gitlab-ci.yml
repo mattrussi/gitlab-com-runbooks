@@ -1266,7 +1266,8 @@ validate-mimir-rules:
         mimirtool rules check --rule-dirs="${dir}"
       done
 
-deploy-mimir-rules:
+# Disable until work on jsonnet is completed.
+.deploy-mimir-rules:
   stage: deploy
   extends: .mimir
   secrets:
