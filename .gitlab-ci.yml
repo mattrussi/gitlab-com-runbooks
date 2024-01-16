@@ -1287,6 +1287,6 @@ validate-mimir-rules:
     - |
       for dir in $(find mimir-rules -mindepth 1 -maxdepth 1 -type d); do
         tenant=$(basename ${dir})
-        printf "Deployings rules for tenant: ${tenant}\n"
+        printf "Deploying rules for tenant: ${tenant}\n"
         mimirtool rules sync --rule-dirs="${dir} --id=${tenant}"
       done
