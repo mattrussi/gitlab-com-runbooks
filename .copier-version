@@ -1,2 +1,2 @@
 # This file is used to track the version of copier uses
-v1.12.1 # datasource=gitlab-releases depName=gitlab-com/gl-infra/common-template-copier
+v1.13.0 # datasource=gitlab-releases depName=gitlab-com/gl-infra/common-template-copier
