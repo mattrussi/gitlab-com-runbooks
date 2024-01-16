@@ -3,7 +3,6 @@
 groups:
 - name: 'kube-state-metrics-recording-rules: thanos'
   interval: 1m
-  partial_response_strategy: warn
   rules:
   - record: kube_pod_labels:labeled
     labels:
@@ -66,7 +65,6 @@ groups:
       )
 - name: 'kube-state-metrics-recording-rules: thanos-staging'
   interval: 1m
-  partial_response_strategy: warn
   rules:
   - record: kube_pod_labels:labeled
     labels:
@@ -129,7 +127,6 @@ groups:
       )
 - name: 'kube-state-metrics-recording-rules: enriched label recording rules'
   interval: 1m
-  partial_response_strategy: warn
   rules:
   - record: container_start_time_seconds:labeled
     expr: |
