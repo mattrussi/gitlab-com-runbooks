@@ -2,6 +2,7 @@ local aggregations = import 'promql/aggregations.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
 local optionalOffset = import 'recording-rules/lib/optional-offset.libsonnet';
 local validateMetric = (import './validation.libsonnet').validateMetric;
+local metricLabelsSelectorsMixin = (import './metrics-mixin.libsonnet').metricLabelsSelectorsMixin;
 
 {
   // A rate that is precalcuated, not stored as a counter
@@ -29,22 +30,5 @@ local validateMetric = (import './validation.libsonnet').validateMetric;
       };
 
       aggregations.aggregateOverQuery('sum', aggregationLabels, query),
-
-    local metricNames = [gauge],
-    getMetricNames():: metricNames,
-
-    [if std.isObject(selector) then 'supportsReflection']():: {
-      // Returns a list of metrics and the labels that they use
-      getMetricNamesAndLabels()::
-        {
-          [metric]: std.set(std.objectFields(selector))
-          for metric in metricNames
-        },
-      getMetricNamesAndSelectors()::
-        {
-          [metric]: selector
-          for metric in metricNames
-        },
-    },
-  }),
+  } + metricLabelsSelectorsMixin(selector, [gauge])),
 }

@@ -3,6 +3,7 @@ local selectors = import 'promql/selectors.libsonnet';
 local recordingRuleRegistry = import 'recording-rule-registry.libsonnet';  // TODO: fix circular dependency
 local optionalOffset = import 'recording-rules/lib/optional-offset.libsonnet';
 local validateMetric = (import './validation.libsonnet').validateMetric;
+local metricLabelsSelectorsMixin = (import './metrics-mixin.libsonnet').metricLabelsSelectorsMixin;
 
 local generateInstanceFilterQuery(instanceFilter) =
   if instanceFilter == '' then
@@ -74,25 +75,7 @@ local generateRangeFunctionQuery(rate, rangeFunction, additionalSelectors, range
       local query = generateRangeFunctionQuery(self, 'increase', selector, rangeInterval, withoutLabels=withoutLabels);
       aggregations.aggregateOverQuery('sum', aggregationLabels, query),
 
-    local metricNames = [counter],
-    getMetricNames():: metricNames,
-
-    // Only support reflection on hash selectors
-    [if std.isObject(selector) then 'supportsReflection']():: {
-      // Returns a list of metrics and the labels that they use
-      getMetricNamesAndLabels()::
-        {
-          [metric]: std.set(std.objectFields(selector))
-          for metric in metricNames
-        },
-
-      getMetricNamesAndSelectors()::
-        {
-          [metric]: selector
-          for metric in metricNames
-        },
-    },
-  }),
+  } + metricLabelsSelectorsMixin(selector, [counter])),
 
   // clampMinZero is useful for taking derivatives of poorly-behaved counters
   // that sometimes decrease, such as Elasticsearch indexing rate and Linux
@@ -143,23 +126,5 @@ local generateRangeFunctionQuery(rate, rangeFunction, additionalSelectors, range
       local query = generateRangeFunctionQuery(self, 'increase', selector, rangeInterval, withoutLabels=withoutLabels);
       aggregations.aggregateOverQuery('sum', aggregationLabels, query),
 
-    local metricNames = [counter],
-    getMetricNames():: metricNames,
-
-    // Only support reflection on hash selectors
-    [if std.isObject(selector) then 'supportsReflection']():: {
-      // Returns a list of metrics and the labels that they use
-      getMetricNamesAndLabels()::
-        {
-          [metric]: std.set(std.objectFields(selector))
-          for metric in metricNames
-        },
-      getMetricNamesAndSelectors()::
-        {
-          [metric]: selector
-          for metric in metricNames
-        },
-
-    },
-  }),
+  } + metricLabelsSelectorsMixin(selector, [counter])),
 }

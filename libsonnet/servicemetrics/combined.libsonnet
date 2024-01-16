@@ -144,12 +144,6 @@ local generateApdexPercentileLatencyQuery(c, percentile, aggregationLabels, sele
         unit:
           metrics[0].unit,
 
-        getMetricNames()::
-          std.flatMap(
-            function(metric) metric.getMetricNames(),
-            metrics
-          ),
-
         [if std.objectHasAll(metrics[0], 'supportsReflection') then 'supportsReflection']():: {
           // Returns a list of metrics and the labels that they use
           getMetricNamesAndLabels()::

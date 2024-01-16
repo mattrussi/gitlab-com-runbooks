@@ -4,6 +4,7 @@ local selectors = import 'promql/selectors.libsonnet';
 local optionalOffset = import 'recording-rules/lib/optional-offset.libsonnet';
 local strings = import 'utils/strings.libsonnet';
 local validateMetric = (import '../validation.libsonnet').validateMetric;
+local metricLabelsSelectorsMixin = (import '../metrics-mixin.libsonnet').metricLabelsSelectorsMixin;
 
 // A general apdex query is:
 //
@@ -250,24 +251,5 @@ local generateApdexAttributionQuery(histogram, selector, rangeInterval, aggregat
 
     apdexAttribution(aggregationLabel, selector, rangeInterval, withoutLabels=[])::
       generateApdexAttributionQuery(self, selector, rangeInterval, aggregationLabel=aggregationLabel, withoutLabels=withoutLabels),
-
-    local metricNames = [histogram],
-    getMetricNames():: metricNames,
-
-    // Only support reflection on hash selectors
-    [if std.isObject(selector) then 'supportsReflection']():: {
-      // Returns a list of metrics and the labels that they use
-      getMetricNamesAndLabels()::
-        {
-          [metric]: std.set(std.objectFields(selector) + ['le'])
-          for metric in metricNames
-        },
-
-      getMetricNamesAndSelectors()::
-        {
-          [metric]: selector { le: '' }
-          for metric in metricNames
-        },
-    },
-  }),
+  } + metricLabelsSelectorsMixin(selector { le: '' }, [histogram])),
 }
