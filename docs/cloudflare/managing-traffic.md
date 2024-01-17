@@ -4,7 +4,7 @@
 
 Cloudflare settings are managed with [Terraform](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/master/environments/gprd)
 
-Any changes to Cloudflare settings should be made via an MR to the appropriate environment in *config-mgmt*. Any settings changes that are not commited to the source code may be overwritten next time the terraform apply pipeline runs.
+Any changes to Cloudflare settings should be made via an MR to the appropriate environment in `config-mgmt`. Any settings changes that are not committed to the source code may be overwritten next time the Terraform apply pipeline runs.
 
 GitLab Pages and the GitLab registry are not yet fronted by Cloudflare, so these blocks would not affect them.
 
@@ -12,8 +12,8 @@ GitLab Pages and the GitLab registry are not yet fronted by Cloudflare, so these
 
 #### via MR to Terraform
 
-- New WAF rules to block traffic (or add a challenge to traffic) should be added to the Custom Rules [ruleset](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/master/environments/gprd/cloudflare-custom-rules.tf) via an MR to config-mgmt
-- New rules to rate limit traffic should be added to the Rate Limit [ruleset](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/master/environments/gprd/cloudflare-rate-limits-waf-and-rules.tf) via an MR to config-mgmt
+- New WAF rules to block traffic (or add a challenge to traffic) should be added to the Custom Rules [ruleset](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/master/environments/gprd/cloudflare-custom-rules.tf) via an MR to `config-mgmt`
+- New rules to rate limit traffic should be added to the Rate Limit [ruleset](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/master/environments/gprd/cloudflare-rate-limits-waf-and-rules.tf) via an MR to `config-mgmt`
 - These MRs _must_ contain a link to the issue explaining why the change was made (probably an incident issue), for audit and tracking purposes
 
 #### Manually 
