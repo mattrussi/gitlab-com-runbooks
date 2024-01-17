@@ -26,25 +26,25 @@ local fakeService = serviceDefinition.serviceDefinition({
 test.suite({
   testSeparateMimirRecordingFiles: {
     actual: separateMimirRecordingFiles(
-      function(service, selector, extraArgs) { hello: selector },
+      function(service, selector, extraArgs) { rule_file_basename: selector },
       serviceDefinition=fakeService,
       metricsConfig=fakeMetricsConfig
     ),
     expect: {
-      'gitlab-ops/ops/foo/hello.yml': { env: 'ops' },
-      'gitlab-gprd/gprd/foo/hello.yml': { env: 'gprd' },
-      'gitlab-others/others/foo/hello.yml': { env: { noneOf: ['ops', 'gprd'] } },
+      'gitlab-ops/ops/foo/rule_file_basename.yml': { env: 'ops' },
+      'gitlab-gprd/gprd/foo/rule_file_basename.yml': { env: 'gprd' },
+      'gitlab-others/others/foo/rule_file_basename.yml': { env: { noneOf: ['ops', 'gprd'] } },
     },
   },
   testSeparateMimirRecordingFilesWithoutService: {
     actual: separateMimirRecordingFiles(
-      function(service, selector, extraArgs) { hello: selector },
+      function(service, selector, extraArgs) { rule_file_basename: selector },
       metricsConfig=fakeMetricsConfig
     ),
     expect: {
-      'gitlab-ops/ops/hello.yml': { env: 'ops' },
-      'gitlab-gprd/gprd/hello.yml': { env: 'gprd' },
-      'gitlab-others/others/hello.yml': { env: { noneOf: ['ops', 'gprd'] } },
+      'gitlab-ops/ops/rule_file_basename.yml': { env: 'ops' },
+      'gitlab-gprd/gprd/rule_file_basename.yml': { env: 'gprd' },
+      'gitlab-others/others/rule_file_basename.yml': { env: { noneOf: ['ops', 'gprd'] } },
     },
   },
 })
