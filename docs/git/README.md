@@ -28,7 +28,7 @@
 * [../ci-runners/ci_pending_builds.md](../ci-runners/ci_pending_builds.md)
 * [Chef Vault Basics](../config_management/chef-vault.md)
 * [Chef Tips and Tools](../config_management/chef-workflow.md)
-* [../elastic/elasticsearch-integration-in-gitlab.md](../elastic/elasticsearch-integration-in-gitlab.md)
+* [../elastic/advanced-search-in-gitlab.md](../elastic/advanced-search-in-gitlab.md)
 * [Blocking and Disabling Things in HAProxy](../frontend/block-things-in-haproxy.md)
 * [HAProxy Management at GitLab](../frontend/haproxy.md)
 * [Possible Breach of SSH MaxStartups](../frontend/ssh-maxstartups-breach.md)

@@ -20,8 +20,8 @@
 
 * [Cloudflare: Managing Traffic](../cloudflare/managing-traffic.md)
 * [Google Cloud Snapshots](../disaster-recovery/gcp-snapshots.md)
+* [../elastic/advanced-search-in-gitlab.md](../elastic/advanced-search-in-gitlab.md)
 * [Elastic Nodes Disk Space Saturation](../elastic/disk_space_saturation.md)
-* [../elastic/elasticsearch-integration-in-gitlab.md](../elastic/elasticsearch-integration-in-gitlab.md)
 * [Deploying a change to gitlab.rb](../git/deploy-gitlab-rb-change.md)
 * [Workhorse Session Alerts](../git/workhorse-git-session-alerts.md)
 * [Find a project from its hashed storage path](find-project-from-hashed-storage.md)

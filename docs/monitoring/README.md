@@ -21,7 +21,7 @@
 * [../ci-runners/ci_pending_builds.md](../ci-runners/ci_pending_builds.md)
 * [CustomersDot main troubleshoot documentation](../customersdot/overview.md)
 * [design.gitlab.com Runbook](../design/design-gitlab-com.md)
-* [../elastic/elasticsearch-integration-in-gitlab.md](../elastic/elasticsearch-integration-in-gitlab.md)
+* [../elastic/advanced-search-in-gitlab.md](../elastic/advanced-search-in-gitlab.md)
 * [ErrorTracking main troubleshooting document](../errortracking/overview.md)
 * [Upgrading the OS of Gitaly VMs](../gitaly/gitaly-os-upgrade.md)
 * [Gitaly repository cgroups](../gitaly/gitaly-repos-cgroup.md)
