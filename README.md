@@ -309,9 +309,9 @@ Selected elastic documents and resources:
   - [scripts/](elastic/scripts) (api calls used for admin tasks documented as bash scripts)
   - watchers/
 
-### ElasticStack integration in Gitlab (indexing Gitlab data)
+### Advanced search integration in Gitlab (indexing Gitlab data)
 
-[elasticsearch-integration-in-gitlab.md](docs/elastic/elasticsearch-integration-in-gitlab.md)
+[advanced-search-integration-in-gitlab.md](docs/elastic/advanced-search-integration-in-gitlab.md)
 
 ### Zoekt integration in Gitlab (indexing code, BETA)
 

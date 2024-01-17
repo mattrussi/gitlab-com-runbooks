@@ -21,7 +21,7 @@
 ## Troubleshooting Pointers
 
 * [CustomersDot main troubleshoot documentation](../customersdot/overview.md)
-* [../elastic/elasticsearch-integration-in-gitlab.md](../elastic/elasticsearch-integration-in-gitlab.md)
+* [../elastic/advanced-search-in-gitlab.md](../elastic/advanced-search-in-gitlab.md)
 * [`gitalyctl`](../gitaly/gitalyctl.md)
 * [Gitaly multi-project migration](../gitaly/multi-project-migration.md)
 * [GitLab Storage Re-balancing](../gitaly/storage-rebalancing.md)
