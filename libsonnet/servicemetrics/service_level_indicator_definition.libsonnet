@@ -176,8 +176,20 @@ local serviceLevelIndicatorDefinition(sliName, serviceLevelIndicator) =
 
     // Return a hash of { metric: set(labels) } from all defined metrics
     metricNamesAndLabels()::
-      collectMetricNamesAndLabels(
+      local metricNamesAndLabels = collectMetricNamesAndLabels(
         [apdexMetricsAndLabels, requestRateMetricsAndLabels, errorRateMetricsAndLabels]
+      );
+
+      std.foldl(
+        function(memo, metric)
+          memo {
+            [metric]: std.setUnion(
+              metricNamesAndLabels[metric],
+              serviceLevelIndicator.significantLabels
+            ),
+          },
+        std.objectFields(metricNamesAndLabels),
+        {}
       ),
 
     local apdexMetricsAndSelectors =
@@ -200,8 +212,26 @@ local serviceLevelIndicatorDefinition(sliName, serviceLevelIndicator) =
 
     // Return a hash of { metric: { label: [value] } } from all defined metrics
     metricNamesAndSelectors()::
-      collectMetricNamesAndSelectors(
+      local metricsAndSelectors = collectMetricNamesAndSelectors(
         [apdexMetricsAndSelectors, requestRateMetricsAndSelectors, errorRateMetricsAndSelectors]
+      );
+      // Add significantLabels in
+      std.foldl(
+        function(memo, metric)
+          local selectors = metricsAndSelectors[metric];
+          memo {
+            [metric]: std.foldl(
+              function(innerMemo, significantLabel)
+                if std.objectHas(selectors, significantLabel) then
+                  innerMemo
+                else
+                  innerMemo { [significantLabel]: { oneOf: [''] } },
+              serviceLevelIndicator.significantLabels,
+              selectors
+            ),
+          },
+        std.objectFields(metricsAndSelectors),
+        {}
       ),
 
     // Generate recording rules for apdex

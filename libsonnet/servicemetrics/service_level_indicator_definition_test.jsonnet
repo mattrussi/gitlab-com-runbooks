@@ -147,8 +147,14 @@ test.suite({
   testMetricNamesAndSelectorsHistogramApdex: {
     actual: testSliWithSelectorHistogramApdex.metricNamesAndSelectors(),
     expect: {
-      some_histogram_metrics: { foo: ['bar'], le: [''] },
-      some_total_count: { label_a: ['bar'], label_b: ['foo'] },
+      some_histogram_metrics: {
+        foo: { oneOf: ['bar'] },
+        le: { oneOf: [''] },
+      },
+      some_total_count: {
+        label_a: { oneOf: ['bar'] },
+        label_b: { oneOf: ['foo'] },
+      },
     },
   },
 
@@ -167,8 +173,16 @@ test.suite({
   testMetricNamesAndSelectorsSuccessCounterApdex: {
     actual: testSliWithSelectorSuccessCounterApdex.metricNamesAndSelectors(),
     expect: {
-      success_total_count: { foo: ['bar'], baz: ['qux'] },
-      some_total_count: { foo: ['bar'], baz: ['qux'], label_a: ['bar'], label_b: ['foo'] },
+      success_total_count: {
+        foo: { oneOf: ['bar'] },
+        baz: { oneOf: ['qux'] },
+      },
+      some_total_count: {
+        foo: { oneOf: ['bar'] },
+        baz: { oneOf: ['qux'] },
+        label_a: { oneOf: ['bar'] },
+        label_b: { oneOf: ['foo'] },
+      },
     },
   },
 
@@ -188,8 +202,16 @@ test.suite({
   testMetricNamesAndSelectorsErrorCounterApdex: {
     actual: testSliWithSelectorErrorCounterApdex.metricNamesAndSelectors(),
     expect: {
-      error_total_count: { foo: ['bar'], baz: ['qux'] },
-      some_total_count: { foo: ['bar'], baz: ['qux'], label_a: ['bar'], label_b: ['foo'] },
+      error_total_count: {
+        foo: { oneOf: ['bar'] },
+        baz: { oneOf: ['qux'] },
+      },
+      some_total_count: {
+        foo: { oneOf: ['bar'] },
+        baz: { oneOf: ['qux'] },
+        label_a: { oneOf: ['bar'] },
+        label_b: { oneOf: ['foo'] },
+      },
     },
   },
 
@@ -205,7 +227,10 @@ test.suite({
   testMetricNamesAndSelectorsRequestRateOnly: {
     actual: testSliWithSelectorRequestRateOnly.metricNamesAndSelectors(),
     expect: {
-      some_total_count: { label_a: ['bar'], type: ['foo'] },
+      some_total_count: {
+        label_a: { oneOf: ['bar'] },
+        type: { oneOf: ['foo'] },
+      },
     },
   },
 
@@ -225,7 +250,9 @@ test.suite({
   testMetricNamesAndSelectorsWithoutSelector: {
     actual: testSliWithoutSelector.metricNamesAndSelectors(),
     expect: {
-      some_histogram_metrics: { le: [''] },
+      some_histogram_metrics: {
+        le: { oneOf: [''] },
+      },
       some_total_count: {},
     },
   },
@@ -258,9 +285,9 @@ test.suite({
   testMetricNamesAndSelectorsWithCombinedMetric: {
     actual: testSliWithCombinedMetric.metricNamesAndSelectors(),
     expect: {
-      some_histogram_metrics: { le: [''] },
-      pg_stat_database_xact_commit: { type: ['patroni'], tier: ['db'] },
-      pg_stat_database_xact_rollback: { type: ['patroni'], tier: ['db'], some_label: ['true'] },
+      pg_stat_database_xact_commit: { tier: { oneOf: ['db'] }, type: { oneOf: ['patroni'] } },
+      pg_stat_database_xact_rollback: { some_label: { oneOf: ['true'] }, tier: { oneOf: ['db'] }, type: { oneOf: ['patroni'] } },
+      some_histogram_metrics: { le: { oneOf: [''] } },
       some_total_count: {},
     },
   },
@@ -277,7 +304,10 @@ test.suite({
   testMetricNamesAndSelectorsDerivMetric: {
     actual: testSliWithDerivMetric.metricNamesAndSelectors(),
     expect: {
-      some_total_count: { type: ['foo'], job: ['bar'] },
+      some_total_count: {
+        type: { oneOf: ['foo'] },
+        job: { oneOf: ['bar'] },
+      },
     },
   },
   local testSliWithGaugeMetric = underTest.serviceLevelIndicatorDefinition(testSliBase {
@@ -292,7 +322,53 @@ test.suite({
   testMetricNamesAndSelectorsGaugeMetric: {
     actual: testSliWithDerivMetric.metricNamesAndSelectors(),
     expect: {
-      some_total_count: { type: ['foo'], job: ['bar'] },
+      some_total_count: {
+        type: { oneOf: ['foo'] },
+        job: { oneOf: ['bar'] },
+      },
+    },
+  },
+
+  local testSliWithMultipleSelectors = underTest.serviceLevelIndicatorDefinition(testSliBase {
+    requestRate: rateMetric('some_total_count', { type: 'foo', job: { re: 'hello|world' } }),
+    errorRate: rateMetric('some_total_count', { type: 'bar', job: { eq: 'boo' } }),
+  }).initServiceLevelIndicatorWithName('test_sli', {}),
+  testMetricNamesAndLabelsMultipleSelectors: {
+    actual: testSliWithMultipleSelectors.metricNamesAndLabels(),
+    expect: {
+      some_total_count: ['job', 'type'],
+    },
+  },
+  testMetricNamesAndSelectorsMultipleSelectors: {
+    actual: testSliWithMultipleSelectors.metricNamesAndSelectors(),
+    expect: {
+      some_total_count: {
+        type: { oneOf: ['bar', 'foo'] },
+        job: { oneOf: ['boo', 'hello', 'world'] },
+      },
+    },
+  },
+
+  local testSliWithSignificantLabels = underTest.serviceLevelIndicatorDefinition(testSliBase {
+    requestRate: rateMetric('some_total_count', { type: 'foo', job: { re: 'hello|world' } }),
+    errorRate: rateMetric('some_total_count', { type: 'bar', job: { eq: 'boo' } }),
+    significantLabels: ['fizz', 'buzz'],
+  }).initServiceLevelIndicatorWithName('test_sli', {}),
+  testMetricNamesAndLabelsSignificantLabels: {
+    actual: testSliWithSignificantLabels.metricNamesAndLabels(),
+    expect: {
+      some_total_count: ['fizz', 'buzz', 'job', 'type'],
+    },
+  },
+  testMetricNamesAndSelectorsSignificantLabels: {
+    actual: testSliWithSignificantLabels.metricNamesAndSelectors(),
+    expect: {
+      some_total_count: {
+        type: { oneOf: ['bar', 'foo'] },
+        job: { oneOf: ['boo', 'hello', 'world'] },
+        fizz: { oneOf: [''] },
+        buzz: { oneOf: [''] },
+      },
     },
   },
 })

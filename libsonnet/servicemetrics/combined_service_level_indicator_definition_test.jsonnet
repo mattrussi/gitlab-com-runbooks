@@ -9,7 +9,7 @@ local testSli = metricsCatalog.combinedServiceLevelIndicatorDefinition(
   components=[
     metricsCatalog.serviceLevelIndicatorDefinition({
       userImpacting: false,
-      significantLabels: [],
+      significantLabels: ['hello'],
       requestRate: rateMetric(
         counter='some_total',
         selector={ foo: 'bar', backend: 'web' }
@@ -21,7 +21,7 @@ local testSli = metricsCatalog.combinedServiceLevelIndicatorDefinition(
     }),
     metricsCatalog.serviceLevelIndicatorDefinition({
       userImpacting: false,
-      significantLabels: [],
+      significantLabels: ['world'],
       requestRate: rateMetric(
         counter='some_total',
         selector={ foo: 'bar', backend: 'abc', type: 'baz' }
@@ -50,15 +50,28 @@ test.suite({
   testMetricNamesAndLabelsCombined: {
     actual: testSli.metricNamesAndLabels(),
     expect: {
-      some_total: std.set(['foo', 'backend', 'code', 'type']),
-      some_other_total: std.set(['foo', 'backend', 'code']),
+      some_total: std.set(['foo', 'backend', 'code', 'type', 'hello', 'world']),
+      some_other_total: std.set(['foo', 'backend', 'code', 'hello', 'world']),
     },
   },
   testMetricNamesAndSelectorsCombined: {
     actual: testSli.metricNamesAndSelectors(),
     expect: {
-      some_total: { foo: ['bar'], backend: ['abc', 'web'], type: ['baz'], code: ['5xx'] },
-      some_other_total: { foo: ['bar'], backend: ['abc'], code: ['5xx'] },
+      some_total: {
+        foo: { oneOf: ['bar'] },
+        backend: { oneOf: ['abc', 'web'] },
+        type: { oneOf: ['baz'] },
+        code: { oneOf: ['5xx'] },
+        hello: { oneOf: [''] },
+        world: { oneOf: [''] },
+      },
+      some_other_total: {
+        foo: { oneOf: ['bar'] },
+        backend: { oneOf: ['abc'] },
+        code: { oneOf: ['5xx'] },
+        hello: { oneOf: [''] },
+        world: { oneOf: [''] },
+      },
     },
   },
 })

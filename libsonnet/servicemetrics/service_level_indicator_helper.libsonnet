@@ -20,56 +20,101 @@ local collectMetricNamesAndLabels(metricLabels) =
     {}
   );
 
+local normalizeSelectorExpression(exp) =
+  // This function only takes positive expression ('eq', 're', 'oneOf') and turns them into { oneOf: array } form.
+  // Negative expressions ('ne', 'nre', 'noneOf') are ignored.
+  // Examples:
+  // 'a'                => { oneOf: ['a'] }
+  // { eq: 'a' }        => { oneOf: ['a'] }
+  // { re: 'a|b' }      => { oneOf: ['a', 'b'] }
+  // { oneOf: ['a'] }   => { oneOf: ['a'] }
+  // { ne: 'a' }        => {}
+  // { nre: 'a' }       => {}
+  // { noneOf: ['a'] }  => {}
+  if std.isObject(exp) then
+    std.foldl(
+      function(memo, keyword)
+        local base = std.get(memo, 'oneOf', []);
+        if keyword == 'eq' then
+          memo {
+            oneOf: std.setUnion(base, [exp[keyword]]),
+          }
+        else if keyword == 're' then
+          memo {
+            oneOf: std.setUnion(base, std.split(exp[keyword], '|')),
+          }
+        else if keyword == 'oneOf' then
+          memo {
+            oneOf: std.setUnion(base, exp[keyword]),
+          }
+        else memo,
+      std.objectFields(exp),
+      {}
+    )
+  else if std.isArray(exp) then
+    local normalizedArr = [normalizeSelectorExpression(e) for e in exp];
+    std.foldl(
+      function(memo, obj)
+        memo {
+          oneOf: std.setUnion(
+            std.get(memo, 'oneOf', []),
+            std.get(obj, 'oneOf', []),
+          ),
+        },
+      normalizedArr,
+      {}
+    )
+  else
+    { oneOf: [exp] };
+
+local normalize(selector) =
+  std.foldl(
+    function(memo, key)
+      local value = selector[key];
+      memo { [key]: normalizeSelectorExpression(value) },
+    std.objectFields(selector),
+    {}
+  );
+
 local mergeSelector(from, to) =
+  local normalizedFrom = normalize(from);
+  local normalizedTo = normalize(to);
   std.foldl(
     function(memo, label)
       if std.objectHas(from, label) && std.objectHas(to, label) then
         memo {
-          [label]: std.setUnion(from[label], to[label]),
+          [label]: {
+            oneOf: std.setUnion(
+              std.get(normalizedFrom[label], 'oneOf', []),
+              std.get(normalizedTo[label], 'oneOf', []),
+            ),
+          },
         }
       else if std.objectHas(from, label) then
         memo {
-          [label]: from[label],
+          [label]: normalizedFrom[label],
         }
       else
         memo {
-          [label]: to[label],
+          [label]: normalizedTo[label],
         },
-    std.setUnion(std.objectFields(from), std.objectFields(to)),
+    std.setUnion(std.objectFields(normalizedFrom), std.objectFields(normalizedTo)),
     {}
   );
 
-// input: array of hashes [ {metric: { label: value } ] or [ {metric: { label: [value] } ]
-// output: merged label selectors in a hash { metric: { label: [value] } }
+// input: array of hashes [ {metric: { label: value } ]
+// output: merged label selectors in a hash { metric: { label: {oneOf: [value] } } }
 local collectMetricNamesAndSelectors(metricSelectors) =
   std.foldl(
     function(memo, obj)
       local metricName = obj.key;
       local selectorHash = obj.value;
-      // cast value to array if not an array yet
-      local selectorHashWithArrayValues = std.foldl(
-        function(m, label)
-          if std.isArray(selectorHash[label]) then
-            m { [label]: selectorHash[label] }
-          else if std.isObject(selectorHash[label]) then
-            // ignore object selector for now, eg { code: { re: '^5.*' } }
-            // we're only interested in type selector which is usually a simple string value, eg { type: 'web' }
-            m
-          else
-            m { [label]: [selectorHash[label]] },
-        std.objectFields(selectorHash),
-        {}
-      );
-
-      // merge labels for the same metric
-      if std.objectHas(memo, metricName) then
-        memo {
-          [metricName]: mergeSelector(memo[metricName], selectorHashWithArrayValues),
-        }
-      else
-        memo {
-          [metricName]: selectorHashWithArrayValues,
-        },
+      memo {
+        [metricName]: mergeSelector(
+          std.get(memo, metricName, {}),
+          selectorHash
+        ),
+      },
     std.flatMap(
       function(ms)
         std.objectKeysValues(ms),
@@ -81,4 +126,9 @@ local collectMetricNamesAndSelectors(metricSelectors) =
 {
   collectMetricNamesAndLabels: collectMetricNamesAndLabels,
   collectMetricNamesAndSelectors: collectMetricNamesAndSelectors,
+
+  // only for testing
+  _normalizeSelectorExpression: normalizeSelectorExpression,
+  _normalize: normalize,
+  _mergeSelector: mergeSelector,
 }

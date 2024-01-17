@@ -70,16 +70,47 @@ local combinedServiceLevelIndicatorDefinition(
         hasErrorRate():: componentsInitialised[0].hasErrorRate(),
         hasDependencies():: std.length(self.dependsOn) > 0,
 
+        local significantLabels = std.flattenArrays(
+          [component.significantLabels for component in componentsInitialised]
+        ),
         // Return a hash of { metric: set(labels) } from all defined metrics
         metricNamesAndLabels()::
-          collectMetricNamesAndLabels(
+          local metricNamesAndLabels = collectMetricNamesAndLabels(
             [component.metricNamesAndLabels() for component in componentsInitialised]
+          );
+          std.foldl(
+            function(memo, metric)
+              memo {
+                [metric]: std.setUnion(
+                  metricNamesAndLabels[metric],
+                  significantLabels
+                ),
+              },
+            std.objectFields(metricNamesAndLabels),
+            {}
           ),
 
-        // Return a hash of { metric: {label: [value]} } from all defined metrics
+        // Return a hash of { metric: { label: { oneOf: [value] } } } from all defined metrics
         metricNamesAndSelectors()::
-          collectMetricNamesAndSelectors(
+          local metricsAndSelectors = collectMetricNamesAndSelectors(
             [component.metricNamesAndSelectors() for component in componentsInitialised]
+          );
+          std.foldl(
+            function(memo, metric)
+              local selectors = metricsAndSelectors[metric];
+              memo {
+                [metric]: std.foldl(
+                  function(innerMemo, significantLabel)
+                    if std.objectHas(selectors, significantLabel) then
+                      innerMemo
+                    else
+                      innerMemo { [significantLabel]: { oneOf: [''] } },
+                  significantLabels,
+                  selectors
+                ),
+              },
+            std.objectFields(metricsAndSelectors),
+            {}
           ),
 
         hasToolingLinks()::
