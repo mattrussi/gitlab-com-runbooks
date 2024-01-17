@@ -2,7 +2,7 @@
 
 ## General
 
-Cloudflare settings are managed with [Terraform](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/master/environments/gprd)
+Cloudflare settings are managed with Terraform in the [`config-mgmt`](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt) repo.
 
 Any changes to Cloudflare settings should be made via an MR to the appropriate environment in `config-mgmt`. Any settings changes that are not committed to the source code may be overwritten next time the Terraform apply pipeline runs.
 
@@ -17,11 +17,11 @@ GitLab Pages and the GitLab registry are not yet fronted by Cloudflare, so these
 - These MRs _must_ contain a link to the issue explaining why the change was made (probably an incident issue), for audit and tracking purposes
 
 #### Manually 
-- **If it is necessary to make changes via the Cloudflare UI** (for example, during an incident) this can still be done manually, however the changes will be overwritten the next time there is a `terraform apply`. As such, any new rules will need to be committed to terraform after the incident (either by the EOC, or asking for help from infrastructure)
+- **If it is necessary to make changes via the Cloudflare UI** (for example, during an incident) this can still be done manually, however the changes will be overwritten the next time there is a `terraform apply`. As such, any new rules will need to be committed to Terraform after the incident (either by the EOC, or asking for help from Infrastructure).
 
 - Create the rule using the [Cloudflare UI](https://dash.cloudflare.com/852e9d53d0f8adbd9205389356f2303d/gitlab.com/firewall/firewall-rules) with a description explaining why the rule was created (ideally include an issue number). For further detail refer to the [Cloudflare documentation on managing rules.](https://developers.cloudflare.com/firewall/cf-dashboard/create-edit-delete-rules/).
 
-*Note:* For audit purposes, any manual changes in the UI must be documented in the associated incident or issue. Please note the ResourceID and add `~Cloudflare UI Change` label.
+*Note:* For audit purposes, any manual changes in the UI must be documented in the associated incident or issue. Please note the Resource ID (you can find this in the URL when editing a rule) and add the `~Cloudflare UI Change` label.
 
 ## How do I Enable "I'm Under Attack Mode" in Cloudflare once I determine we are under a large scale attack?
 
@@ -167,4 +167,4 @@ rules to respond to incidents.
 
 ### Removing rules
 
-If a rule is intended to be temporary, please remove it (via MR to config-mgmt) when it is no longer necessary. The Foundations team currently has an [open issue](https://gitlab.com/gitlab-com/gl-infra/production-engineering/-/issues/24832) to create automation for rule expiry.
+If a rule is intended to be temporary, please remove it (via MR to `config-mgmt`) when it is no longer necessary. The Foundations team currently has an [open issue](https://gitlab.com/gitlab-com/gl-infra/production-engineering/-/issues/24832) to create automation for rule expiry.
