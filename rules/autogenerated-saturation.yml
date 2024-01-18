@@ -725,7 +725,7 @@ groups:
               and on (instance, job) (pg_replication_is_replica{type=~"patroni|patroni-registry|patroni-embedding|patroni-ci|sentry"} == 0)
             )
             /
-            (2^31 - 10^6)
+            (2^31 - 3000000)
             ,
             1)
         ,
@@ -5243,7 +5243,7 @@ groups:
                 and on (instance, job) (pg_replication_is_replica{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"} == 0)
               )
               /
-              (2^31 - 10^6)
+              (2^31 - 3000000)
               ,
               1)
           ,
@@ -5262,7 +5262,7 @@ groups:
                 and on (instance, job) (pg_replication_is_replica{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"} == 0)
               )
               /
-              (2^31 - 10^6)
+              (2^31 - 3000000)
               ,
               1)
           ,
