@@ -19,6 +19,11 @@ local objects = import 'utils/objects.libsonnet';
   // Hash of all aggregation sets
   aggregationSets:: aggregationSets,
 
+  // dbPlatform: either a cloud service or "default"
+  //  - `rds` - enables any RDS specific items
+  //  - `default` - postgres installations on VM's
+  dbPlatform:: 'default',
+
   // Hash of all saturation metric types that are monitored on gitlab.com
   saturationMonitoring:: objects.mergeAll(allSaturationTypes),
 
