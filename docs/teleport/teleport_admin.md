@@ -99,7 +99,7 @@ $ tctl auth sign --user=teleport-event-handler --ttl=8760h --out=auth-id-staging
 
 # Write the secret to Vault
 $ vault login -method oidc role=admin
-$ vault kv put k8s/ops-gitlab-gke/teleport-cluster-staging/event-handler auth_id="$(cat auth-id-staging)"
+$ vault kv put k8s/ops-gitlab-gke/teleport-cluster-staging/event-handler auth_id=@auth-id-staging
 $ vault kv get -format=json k8s/ops-gitlab-gke/teleport-cluster-staging/event-handler | jq '.data.metadata.version'
 ```
 
@@ -126,7 +126,7 @@ $ tctl auth sign --user=teleport-event-handler --ttl=8760h --out=auth-id-product
 
 # Write the secret to Vault
 $ vault login -method oidc role=admin
-$ vault kv put k8s/ops-central/teleport-cluster-production/event-handler auth_id="$(cat auth-id-production)"
+$ vault kv put k8s/ops-central/teleport-cluster-production/event-handler auth_id=@auth-id-production
 $ vault kv get -format=json k8s/ops-central/teleport-cluster-production/event-handler | jq '.data.metadata.version'
 ```
 
@@ -332,3 +332,65 @@ for authenticating to Google Cloud. The *Workload Identity* is configured
 [here](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/master/modules/teleport-cluster/service-account.tf)
 and the required *Roles* are configured
 [here](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/master/modules/teleport-project/pubsub.tf).
+
+## Updating Enterprise License
+
+We use the same License for both [staging](https://staging.teleport.gitlab.net)
+and [production](https://production.teleport.gitlab.net) instances teleport.
+
+When our license is about to expire, we need to obtain a new license file and update our Teleport instances with.
+Read more about the *Enterprise License file* [here](https://goteleport.com/docs/choose-an-edition/teleport-enterprise/license/).
+In short, you need to login to [gitlab.teleport.sh](https://gitlab.teleport.sh) as an admin and download the new license file (`license.pem`).
+You can also ask an admin user to do so and share the license file with you through a secure channel (*1Password*).
+
+### Staging
+
+Add the new license to Vault.
+
+```bash
+# Run this command from the runbooks repo
+$ glsh vault proxy
+
+# Write the new license to Vault
+$ vault login -method oidc role=admin
+$ vault kv put k8s/ops-gitlab-gke/teleport-cluster-staging/license license.pem=@license.pem
+```
+
+Grab the latest version from the output last command and update it
+[here](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/blob/master/releases/teleport-cluster/values-secrets/ops-staging.yaml.gotmpl?ref_type=heads#L10).
+
+Finally restart the Teleport Auth component.
+
+```bash
+# Run this command from the runbooks repo
+$ glsh kube use-cluster ops
+
+# Restart the teleport auth pods
+$ kubectl rollout restart deployment/teleport-staging-auth --namespace=teleport-cluster-staging
+```
+
+### Production
+
+Add the new license to Vault.
+
+```bash
+# Run this command from the runbooks repo
+$ glsh vault proxy
+
+# Write the new license to Vault
+$ vault login -method oidc role=admin
+$ vault kv put k8s/ops-central/teleport-cluster-production/license license.pem=@license.pem
+```
+
+Grab the latest version from the output last command and update it
+[here](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/blob/master/releases/teleport-cluster/values-secrets/ops-central-production.yaml.gotmpl?ref_type=heads#L10).
+
+Finally restart the Teleport Auth component.
+
+```bash
+# Run this command from the runbooks repo
+$ glsh kube use-cluster ops-central
+
+# Restart the teleport auth pods
+$ kubectl rollout restart deployment/teleport-production-auth --namespace=teleport-cluster-production
+```
