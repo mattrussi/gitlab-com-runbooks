@@ -2,7 +2,10 @@
 
 ## Introduction
 
-This document aims to analyze key wait events in PostgreSQL that may indicate performance issues or other critical aspects of database operation. It is not intended to be an exhaustive overview of all wait events, but rather focuses on highlighting some important ones. For a comprehensive description and detailed analysis of all wait events, refer to the [official PostgreSQL documentation](https://www.postgresql.org/docs/current/monitoring-stats.html#WAIT-EVENT-TABLE) and the Amazon RDS User Guide section on ["RDS for PostgreSQL wait events"](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/PostgreSQL.Tuning.concepts.summary.html), which includes tables of the most commonly encountered events indicating performance problems, along with their common causes and corrective actions.
+This document aims to analyze key wait events in PostgreSQL that may indicate performance issues or other critical aspects of database operation.
+
+It is not intended to be an exhaustive overview of all wait events, but rather focuses on highlighting some important ones. \
+For a comprehensive description and detailed analysis of all wait events, refer to the [official PostgreSQL documentation](https://www.postgresql.org/docs/current/monitoring-stats.html#WAIT-EVENT-TABLE) and the Amazon RDS User Guide section on ["RDS for PostgreSQL wait events"](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/PostgreSQL.Tuning.concepts.summary.html), which includes tables of the most commonly encountered events indicating performance problems, along with their common causes and corrective actions.
 
 ## Dashboard:
 
