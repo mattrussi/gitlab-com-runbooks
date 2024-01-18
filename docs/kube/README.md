@@ -32,6 +32,7 @@
 * [Redis on Kubernetes](../redis/kubernetes.md)
 * [Container Registry database post-deployment migrations](../registry/db-post-deployment-migrations.md)
 * [../registry/gitlab-registry.md](../registry/gitlab-registry.md)
+* [Teleport Administration](../teleport/teleport_admin.md)
 * [version.gitlab.com Runbook](../version/version-gitlab-com.md)
 <!-- END_MARKER -->
 
