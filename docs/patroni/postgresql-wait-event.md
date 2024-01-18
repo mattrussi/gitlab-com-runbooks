@@ -32,7 +32,7 @@ Chart: `Wait Events` (Detailed information about wait events, based on [pg_wait_
       - `Lock`
         - Description: The server process is waiting for a heavyweight lock. wait_event will identify the type of lock awaited; see [Table 28.11](https://www.postgresql.org/docs/current/monitoring-stats.html#WAIT-EVENT-LOCK-TABLE).
           - Actions:
-            - If you observe frequent lock-related wait events (e.q., `relation`, `transactionid`, `tuple`, [etc](https://www.postgresql.org/docs/current/monitoring-stats.html#WAIT-EVENT-LOCK-TABLE)), perform a detailed analysis heavyweight locks using [Runbook #5: Locks details](./runbook_5.md). Determine which specific objects (relation, statement) are the sources of locks and how long they hold them.
+            - If you observe frequent lock-related wait events (e.q., `relation`, `transactionid`, `tuple`, [etc](https://www.postgresql.org/docs/current/monitoring-stats.html#WAIT-EVENT-LOCK-TABLE)), perform a detailed analysis heavyweight locks using runbook [_link here_]. Determine which specific objects (relation, statement) are the sources of locks and how long they hold them.
       - `LWLock`
         - `LockManager` ('lock_manager' in Postgres 12 and older)
           - Description: This event occurs when the PostgreSQL maintains the shared lock's memory area to allocate, check, and deallocate a lock when a fast path lock isn't possible. When this wait event occurs more than normal, possibly indicating a performance problem. For more information, see [GitLab's challenge with Postgres LWLock lock_manager contention](https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/2301).
