@@ -23,6 +23,9 @@ local collectMetricNamesAndLabels(metricLabels) =
 local normalizeSelectorExpression(exp) =
   // This function only takes positive expression ('eq', 're', 'oneOf') and turns them into { oneOf: array } form.
   // Negative expressions ('ne', 'nre', 'noneOf') are ignored.
+  // When selecting for negative values in an SLI selector, we can ignore the selector
+  // for the recording rule registry and include these metrics in the aggregation to filter
+  // them out in the recording rules for the aggregation set.
   // Examples:
   // 'a'                => { oneOf: ['a'] }
   // { eq: 'a' }        => { oneOf: ['a'] }
@@ -47,7 +50,9 @@ local normalizeSelectorExpression(exp) =
           memo {
             oneOf: std.setUnion(base, exp[keyword]),
           }
-        else memo,
+        else if std.member(['ne', 'nre', 'noneOf'], keyword) then memo
+        else assert false : 'Unknown selector keyword: %s' % [keyword];
+             {},
       std.objectFields(exp),
       {}
     )
