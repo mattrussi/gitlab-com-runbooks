@@ -34,13 +34,13 @@ Chart: `Wait Events` (Detailed information about wait events, based on [pg_wait_
           - Actions:
             - If you observe frequent lock-related wait events (e.q., `relation`, `transactionid`, `tuple`, [etc](https://www.postgresql.org/docs/current/monitoring-stats.html#WAIT-EVENT-LOCK-TABLE)), perform a detailed analysis heavyweight locks using runbook [_link here_]. Determine which specific objects (relation, statement) are the sources of locks and how long they hold them.
       - `LWLock`
-        - `LockManager` ('lock_manager' in Postgres 12 and older)
+        - `LockManager`
           - Description: This event occurs when the PostgreSQL maintains the shared lock's memory area to allocate, check, and deallocate a lock when a fast path lock isn't possible. When this wait event occurs more than normal, possibly indicating a performance problem. For more information, see [GitLab's challenge with Postgres LWLock lock_manager contention](https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/2301).
           - Actions:
             - Remove unnecessary indexes: Your database might contain unused or rarely used indexes. If so, consider deleting them.
             - Reduce number of relations per query: to fewer than 16 (to use the Fast path locking).
             - Use prepared statements or PL/PgSQL functions: See the tests [here](https://gitlab.com/postgres-ai/postgresql-consulting/tests-and-benchmarks/-/issues/41) and [here](https://gitlab.com/postgres-ai/postgresql-consulting/tests-and-benchmarks/-/issues/42) which demonstrate a reduction in the number of LWLocks and queries latency by caching the plans using prepared statements.
-        - `SubtransBuffer` or `SubtransSLRU` ('subtrans' or 'SubtransControlLock' in Postgres 12 and older)
+        - `SubtransBuffer` or `SubtransSLRU`
           - Description: Waiting for I/O on a sub-transaction SLRU buffer or access to the sub-transaction SLRU cache. This waiting event can usually be seen in highly loaded databases (thousands of TPS), and when we see this wait event, it may indicate a possible performance problem. For more information, see [PostgreSQL Subtransactions Considered Harmful](https://postgres.ai/blog/20210831-postgresql-subtransactions-considered-harmful).
           - Actions:
             - If subtransactions are used, it does not immediately mean that they need to be eliminated – it all depends on the risks of your particular case. But if you are seeing an increase in the number of expectation events related to subtransactions and this begins to correlate with the degradation of database performance, consider getting rid of the use of subtransactions.
