@@ -1,11 +1,15 @@
-local metricLabelsSelectorsMixin(selector, metricNames) =
+local metricLabelsSelectorsMixin(
+  selector,
+  metricNames,
+  labels=std.objectFields(selector)
+      ) =
   {
     // Only support reflection on hash selectors
     [if std.isObject(selector) then 'supportsReflection']():: {
       // Returns a list of metrics and the labels that they use
       getMetricNamesAndLabels()::
         {
-          [metric]: std.set(std.objectFields(selector))
+          [metric]: std.set(labels)
           for metric in metricNames
         },
 

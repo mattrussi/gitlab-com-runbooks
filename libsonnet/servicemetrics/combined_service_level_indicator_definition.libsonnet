@@ -42,6 +42,7 @@ local combinedServiceLevelIndicatorDefinition(
         severity: componentsInitialised[0].severity,
         dependsOn: dependsOn,
         dependencies: dependencies.new(inheritedDefaults.type, componentName, dependsOn),
+        components: componentsInitialised,
 
         serviceAggregation: serviceAggregation,
 
@@ -69,49 +70,6 @@ local combinedServiceLevelIndicatorDefinition(
         hasErrorRateSLO():: std.objectHas(self.monitoringThresholds, 'errorRatio'),
         hasErrorRate():: componentsInitialised[0].hasErrorRate(),
         hasDependencies():: std.length(self.dependsOn) > 0,
-
-        local significantLabels = std.flattenArrays(
-          [component.significantLabels for component in componentsInitialised]
-        ),
-        // Return a hash of { metric: set(labels) } from all defined metrics
-        metricNamesAndLabels()::
-          local metricNamesAndLabels = collectMetricNamesAndLabels(
-            [component.metricNamesAndLabels() for component in componentsInitialised]
-          );
-          std.foldl(
-            function(memo, metric)
-              memo {
-                [metric]: std.setUnion(
-                  metricNamesAndLabels[metric],
-                  significantLabels
-                ),
-              },
-            std.objectFields(metricNamesAndLabels),
-            {}
-          ),
-
-        // Return a hash of { metric: { label: { oneOf: [value] } } } from all defined metrics
-        metricNamesAndSelectors()::
-          local metricsAndSelectors = collectMetricNamesAndSelectors(
-            [component.metricNamesAndSelectors() for component in componentsInitialised]
-          );
-          std.foldl(
-            function(memo, metric)
-              local selectors = metricsAndSelectors[metric];
-              memo {
-                [metric]: std.foldl(
-                  function(innerMemo, significantLabel)
-                    if std.objectHas(selectors, significantLabel) then
-                      innerMemo
-                    else
-                      innerMemo { [significantLabel]: { oneOf: [''] } },
-                  significantLabels,
-                  selectors
-                ),
-              },
-            std.objectFields(metricsAndSelectors),
-            {}
-          ),
 
         hasToolingLinks()::
           std.length(self.getToolingLinks()) > 0,

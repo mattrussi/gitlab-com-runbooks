@@ -251,5 +251,7 @@ local generateApdexAttributionQuery(histogram, selector, rangeInterval, aggregat
 
     apdexAttribution(aggregationLabel, selector, rangeInterval, withoutLabels=[])::
       generateApdexAttributionQuery(self, selector, rangeInterval, aggregationLabel=aggregationLabel, withoutLabels=withoutLabels),
-  } + metricLabelsSelectorsMixin(selector { le: '' }, [histogram])),
+  } + metricLabelsSelectorsMixin(
+    selector, [histogram], labels=std.objectFields(selector) + ['le']
+  )),
 }

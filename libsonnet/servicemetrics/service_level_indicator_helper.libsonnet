@@ -107,6 +107,8 @@ local mergeSelector(from, to) =
     {}
   );
 
+local isCombinedSli(sliDefinition) = std.objectHas(sliDefinition, 'components');
+
 // input: array of hashes [ {metric: { label: value } ]
 // output: merged label selectors in a hash { metric: { label: {oneOf: [value] } } }
 local collectMetricNamesAndSelectors(metricSelectors) =
@@ -128,9 +130,78 @@ local collectMetricNamesAndSelectors(metricSelectors) =
     {}
   );
 
+// Return a hash of { metric: set(labels) } from all defined metrics
+local generateMetricNamesAndAggregationLabels(sliDefinition) =
+  local metricsAndLabels = if isCombinedSli(sliDefinition) then
+    [generateMetricNamesAndAggregationLabels(component) for component in sliDefinition.components]
+  else
+    local apdexMetricsAndLabels =
+      if sliDefinition.hasApdex() && std.objectHasAll(sliDefinition.apdex, 'supportsReflection') then
+        sliDefinition.apdex.supportsReflection().getMetricNamesAndLabels()
+      else
+        {};
+
+    local requestRateMetricsAndLabels =
+      if std.objectHasAll(sliDefinition.requestRate, 'supportsReflection') then
+        sliDefinition.requestRate.supportsReflection().getMetricNamesAndLabels()
+      else
+        {};
+
+    local errorRateMetricsAndLabels =
+      if sliDefinition.hasErrorRate() && std.objectHasAll(sliDefinition.errorRate, 'supportsReflection') then
+        sliDefinition.errorRate.supportsReflection().getMetricNamesAndLabels()
+      else
+        {};
+    [apdexMetricsAndLabels, requestRateMetricsAndLabels, errorRateMetricsAndLabels];
+
+  local metricNamesAndLabels = collectMetricNamesAndLabels(metricsAndLabels);
+  std.foldl(
+    function(memo, metric)
+      memo {
+        [metric]: std.setUnion(
+          metricNamesAndLabels[metric],
+          std.set(sliDefinition.significantLabels)
+        ),
+      },
+    std.objectFields(metricNamesAndLabels),
+    {}
+  );
+
+// Return a hash of { metric: { label: { oneOf: [value] } } } from all defined metrics
+local generateMetricNamesAndSelectors(sliDefinition) =
+  local metricsAndSelectors = if isCombinedSli(sliDefinition) then
+    [generateMetricNamesAndSelectors(component) for component in sliDefinition.components]
+  else
+    local apdexMetricsAndSelectors =
+      if sliDefinition.hasApdex() && std.objectHasAll(sliDefinition.apdex, 'supportsReflection') then
+        sliDefinition.apdex.supportsReflection().getMetricNamesAndSelectors()
+      else
+        {};
+
+    local requestRateMetricsAndSelectors =
+      if std.objectHasAll(sliDefinition.requestRate, 'supportsReflection') then
+        sliDefinition.requestRate.supportsReflection().getMetricNamesAndSelectors()
+      else
+        {};
+
+    local errorRateMetricsAndSelectors =
+      if sliDefinition.hasErrorRate() && std.objectHasAll(sliDefinition.errorRate, 'supportsReflection') then
+        sliDefinition.errorRate.supportsReflection().getMetricNamesAndSelectors()
+      else
+        {};
+    [apdexMetricsAndSelectors, requestRateMetricsAndSelectors, errorRateMetricsAndSelectors];
+
+  collectMetricNamesAndSelectors(metricsAndSelectors);
+
 {
   collectMetricNamesAndLabels: collectMetricNamesAndLabels,
   collectMetricNamesAndSelectors: collectMetricNamesAndSelectors,
+
+  sliMetricsDescriptor(sliDefinition):: {
+    metricNamesAndAggregationLabels():: generateMetricNamesAndAggregationLabels(sliDefinition),
+
+    metricNamesAndSelectors():: generateMetricNamesAndSelectors(sliDefinition),
+  },
 
   // only for testing
   _normalizeSelectorExpression: normalizeSelectorExpression,
