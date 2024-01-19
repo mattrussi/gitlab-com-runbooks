@@ -86,23 +86,22 @@ local mergeSelector(from, to) =
   local normalizedTo = normalize(to);
   std.foldl(
     function(memo, label)
-      if std.objectHas(from, label) && std.objectHas(to, label) then
-        memo {
-          [label]: {
-            oneOf: std.setUnion(
-              std.get(normalizedFrom[label], 'oneOf', []),
-              std.get(normalizedTo[label], 'oneOf', []),
-            ),
-          },
-        }
-      else if std.objectHas(from, label) then
-        memo {
-          [label]: normalizedFrom[label],
-        }
-      else
-        memo {
-          [label]: normalizedTo[label],
-        },
+      if std.objectHas(normalizedFrom, label) && std.objectHas(normalizedTo, label) then
+        local value = std.setUnion(
+          std.get(normalizedFrom[label], 'oneOf', []),
+          std.get(normalizedTo[label], 'oneOf', []),
+        );
+        if std.length(value) > 0 then
+          memo {
+            [label]: {
+              oneOf: value,
+            },
+          }
+        else
+          memo { [label]: {} }
+      // if the label doesn't exist in both selectors, we drop the value for that label
+      // otherwise we'll only record a subset of the series for the SLI
+      else memo { [label]: {} },
     std.setUnion(std.objectFields(normalizedFrom), std.objectFields(normalizedTo)),
     {}
   );
@@ -116,12 +115,17 @@ local collectMetricNamesAndSelectors(metricSelectors) =
     function(memo, obj)
       local metricName = obj.key;
       local selectorHash = obj.value;
-      memo {
-        [metricName]: mergeSelector(
-          std.get(memo, metricName, {}),
-          selectorHash
-        ),
-      },
+      if std.objectHas(memo, metricName) then
+        memo {
+          [metricName]: mergeSelector(
+            memo[metricName],
+            selectorHash
+          ),
+        }
+      else
+        memo {
+          [metricName]: normalize(selectorHash),
+        },
     std.flatMap(
       function(ms)
         std.objectKeysValues(ms),

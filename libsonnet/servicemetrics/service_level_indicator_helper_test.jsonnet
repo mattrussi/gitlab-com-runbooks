@@ -49,16 +49,7 @@ test.suite({
     ]),
     expect: {
       metric_foo: { type: { oneOf: ['foo'] }, job: { oneOf: ['bar', 'baz'] } },
-      metric_boo: { type: { oneOf: ['boo'] }, job: { oneOf: ['boo'] } },
-    },
-  },
-  testCollectMetricNamesAndSelectorsEmptyStringLabelValue: {
-    actual: collectMetricNamesAndSelectors([
-      { metric_foo: { type: 'foo', le: '' } },
-      { metric_foo: { type: 'foo' } },
-    ]),
-    expect: {
-      metric_foo: { type: { oneOf: ['foo'] }, le: { oneOf: [''] } },
+      metric_boo: { type: {}, job: {} },
     },
   },
   testCollectMetricNamesAndSelectorsNestedSelector1: {
@@ -105,11 +96,55 @@ test.suite({
     expect: {
       some_total: {
         backend: { oneOf: ['abc', 'web'] },
-        code: { oneOf: ['5xx'] },
+        code: {},
+      },
+    },
+  },
+  testCollectMetricNamesAndSelectorsNestedSelector6: {
+    actual: collectMetricNamesAndSelectors(
+      [
+        { some_total: { backend: { oneOf: ['web'] } } },
+        { some_total: { backend: { oneOf: ['abc'] }, code: { oneOf: ['5xx'] } } },
+      ]
+    ),
+    expect: {
+      some_total: {
+        backend: { oneOf: ['abc', 'web'] },
+        code: {},
+      },
+    },
+  },
+  testCollectMetricNamesAndSelectorsNestedSelector7: {
+    actual: collectMetricNamesAndSelectors(
+      [
+        { some_total: { backend: { oneOf: ['web'] } } },
+        {},
+      ]
+    ),
+    expect: {
+      some_total: {
+        backend: { oneOf: ['web'] },
+      },
+    },
+  },
+  testCollectMetricNamesAndSelectorsNestedSelector8: {
+    actual: collectMetricNamesAndSelectors(
+      [
+        { some_total: { backend: { oneOf: ['web'] } } },
+        { some_total: {} },
+      ]
+    ),
+    expect: {
+      some_total: {
+        backend: {},
       },
     },
   },
 
+  testNormalizeSelectorHashEmpty: {
+    actual: sliHelper._normalizeSelectorExpression({}),
+    expect: {},
+  },
   testNormalizeSelectorHash1: {
     actual: sliHelper._normalizeSelectorExpression({ eq: 'a' }),
     expect: { oneOf: ['a'] },
@@ -235,7 +270,7 @@ test.suite({
     ),
     expect: {
       backend: { oneOf: ['abc', 'web'] },
-      code: { oneOf: ['5xx'] },
+      code: {},
     },
   },
   testMergeSelector7: {
@@ -245,8 +280,24 @@ test.suite({
     ),
     expect: {
       backend: { oneOf: ['abc', 'web'] },
-      code: { oneOf: ['5xx'] },
+      code: {},
     },
+  },
+  testMergeSelector8: {
+    actual: sliHelper._mergeSelector(
+      { backend: {} },
+      { backend: {} },
+    ),
+    expect: {
+      backend: {},
+    },
+  },
+  testMergeSelector9: {
+    actual: sliHelper._mergeSelector(
+      { code: '500' },
+      {},
+    ),
+    expect: { code: {} },
   },
 
   local testSliBase = {
@@ -284,8 +335,8 @@ test.suite({
         foo: { oneOf: ['bar'] },
       },
       some_total_count: {
-        label_a: { oneOf: ['bar'] },
-        label_b: { oneOf: ['foo'] },
+        label_a: {},
+        label_b: {},
       },
 
     }
@@ -311,10 +362,10 @@ test.suite({
         baz: { oneOf: ['qux'] },
       },
       some_total_count: {
-        foo: { oneOf: ['bar'] },
-        baz: { oneOf: ['qux'] },
-        label_a: { oneOf: ['bar'] },
-        label_b: { oneOf: ['foo'] },
+        foo: {},
+        baz: {},
+        label_a: {},
+        label_b: {},
       },
     }
   ),
@@ -339,10 +390,10 @@ test.suite({
         baz: { oneOf: ['qux'] },
       },
       some_total_count: {
-        foo: { oneOf: ['bar'] },
-        baz: { oneOf: ['qux'] },
-        label_a: { oneOf: ['bar'] },
-        label_b: { oneOf: ['foo'] },
+        foo: {},
+        baz: {},
+        label_a: {},
+        label_b: {},
       },
     },
   ),
@@ -556,13 +607,13 @@ test.suite({
       some_total: {
         foo: { oneOf: ['bar'] },
         backend: { oneOf: ['abc', 'web'] },
-        type: { oneOf: ['baz'] },
-        code: { oneOf: ['5xx'] },
+        type: {},
+        code: {},
       },
       some_other_total: {
         foo: { oneOf: ['bar'] },
         backend: { oneOf: ['abc'] },
-        code: { oneOf: ['5xx'] },
+        code: {},
       },
     },
   ),
