@@ -20,9 +20,9 @@ local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
     burnRatePeriod: '5m',
 
     query: |||
-      sum by (%(aggregationLabels)s) (last_over_time(gitlab_database_bloat_btree_bloat_size{job="gitlab-monitor-database-bloat", %(selector)s}[1h]))
+      sum by (%(aggregationLabels)s) (last_over_time(gitlab_database_bloat_btree_bloat_size{%(selector)s}[1h]))
       /
-      sum by (%(aggregationLabels)s) (last_over_time(gitlab_database_bloat_btree_real_size{job="gitlab-monitor-database-bloat", %(selector)s}[1h]))
+      sum by (%(aggregationLabels)s) (last_over_time(gitlab_database_bloat_btree_real_size{%(selector)s}[1h]))
     |||,
     slos: {
       soft: 0.50,
