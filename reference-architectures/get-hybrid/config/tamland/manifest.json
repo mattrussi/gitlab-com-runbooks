@@ -124,9 +124,9 @@
         "historical_days": 365,
         "strategy": "quantile95_1h"
       },
-      "description": "Go's memory allocation strategy can make it look like a Go process is saturating memory when measured using RSS, when in fact\nthe process is not at risk of memory saturation. For this reason, we measure Go processes using the `go_memstat_alloc_bytes`\nmetric instead of RSS.\n",
+      "description": "Go's memory allocation strategy can make it look like a Go process is saturating memory when measured using RSS, when in fact\nthe process is not at risk of memory saturation. For this reason, we measure Go processes using the `go_memstat_alloc_bytes`\n",
       "horizontallyScalable": true,
-      "raw_query": "sum by (fqdn) (\n  go_memstats_alloc_bytes{%(selector)s}\n)\n/\nsum by (fqdn) (\n  node_memory_MemTotal_bytes{%(selector)s}\n)\n",
+      "raw_query": "max by (fqdn) (\n  go_memstats_alloc_bytes{%(selector)s}\n)\n/\nsum by (fqdn) (\n  node_memory_MemTotal_bytes{%(selector)s}\n)\n",
       "severity": "s4",
       "slos": {
         "alertTriggerDuration": "5m",
