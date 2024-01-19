@@ -9,10 +9,13 @@ function main() {
     pwd
   )
 
+  cd "${REPO_DIR}"
+
   # Check that jsonnet-tool is installed
   "${REPO_DIR}/scripts/ensure-jsonnet-tool.sh"
 
   local params=()
+  local paths=()
 
   # Pass a header via GL_GENERATE_CONFIG_HEADER
   if [[ -n ${GL_GENERATE_CONFIG_HEADER:-} ]]; then
@@ -25,22 +28,64 @@ function main() {
 
     if [[ $# -eq 3 ]]; then
       overrides_dir="$3"
-      params+=("-J" "${overrides_dir}")
+      paths+=("-J" "${overrides_dir}")
     fi
   else
     echo "$# is "
     usage
   fi
 
-  set -x
-  jsonnet-tool render \
-    --multi "$dest_dir" \
-    -J "${REPO_DIR}/libsonnet/" \
-    -J "${REPO_DIR}/reference-architectures/default-overrides" \
-    -J "${reference_architecture_src_dir}" \
-    -J "${REPO_DIR}/vendor/" \
-    "${params[@]}" \
-    "${reference_architecture_src_dir}/generate.jsonnet"
+  local source_file="${reference_architecture_src_dir}/generate.jsonnet"
+  local sha256sum_file="${REPO_DIR}/.cache/$source_file.sha256sum"
+  local cache_out_file="${REPO_DIR}/.cache/$source_file.out"
+
+  if [[ "${GL_JSONNET_CACHE_SKIP:-}" != 'true' ]]; then
+    mkdir -p "$(dirname "$sha256sum_file")" "$(dirname "$cache_out_file")"
+
+    if [[ -f "$cache_out_file" ]] && [[ -f "$sha256sum_file" ]] && sha256sum --check --status <"$sha256sum_file"; then
+      for file in $(cat "$cache_out_file"); do
+        mkdir -p "$(dirname "$file")"
+        cp "${REPO_DIR}/.cache/$file" "$file"
+      done
+      cat "$cache_out_file"
+      return 0
+    fi
+
+    if [[ "${GL_JSONNET_CACHE_DEBUG:-}" == 'true' ]]; then
+      echo >&2 "jsonnet_cache: miss: $source_file"
+    fi
+  fi
+
+  out="$(
+    jsonnet-tool render \
+      --multi "$dest_dir" \
+      -J "${REPO_DIR}/libsonnet/" \
+      -J "${REPO_DIR}/reference-architectures/default-overrides" \
+      -J "${reference_architecture_src_dir}" \
+      -J "${REPO_DIR}/vendor/" \
+      "${paths[@]}" \
+      "${params[@]}" \
+      "$source_file"
+  )"
+  echo "$out"
+
+  if [[ "${GL_JSONNET_CACHE_SKIP:-}" != 'true' ]]; then
+    echo "$out" >"$cache_out_file"
+    for file in $out; do
+      mkdir -p "$(dirname "${REPO_DIR}/.cache/$file")"
+      cp "$file" "${REPO_DIR}/.cache/$file"
+    done
+    jsonnet-deps \
+      -J "${REPO_DIR}/metrics-catalog/" \
+      -J "${REPO_DIR}/dashboards/" \
+      -J "${REPO_DIR}/libsonnet/" \
+      -J "${REPO_DIR}/reference-architectures/default-overrides" \
+      -J "${reference_architecture_src_dir}" \
+      -J "${REPO_DIR}/vendor/" \
+      "${paths[@]}" \
+      "$source_file" | xargs sha256sum >"$sha256sum_file"
+    echo "$source_file" "${REPO_DIR}/.tool-versions" | xargs realpath | xargs sha256sum >>"$sha256sum_file"
+  fi
 }
 
 function usage() {

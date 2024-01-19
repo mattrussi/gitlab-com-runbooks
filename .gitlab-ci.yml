@@ -432,7 +432,9 @@ rubocop:
 ################
 
 ensure-generated-content-up-to-date:
-  extends: .default-job
+  extends:
+    - .default-job
+    - .jsonnet-cache
   stage: test
   needs: []
   rules:
@@ -462,6 +464,7 @@ test-jsonnet:
         files:
           - jsonnetfile.lock.json
       paths:
+        - .cache
         - vendor
 
 .dashboards:
@@ -486,7 +489,9 @@ test-jsonnet:
     - dashboards/generate-mixins.sh  # Generate dashboards from mixins
 
 prepare-service-health-dashboard-json:
-  extends: .id-tokens
+  extends:
+    - .id-tokens
+    - .jsonnet-cache
   stage: prepare
   environment:
     name: ops
@@ -564,6 +569,8 @@ check-stage-groups:
     - git diff --exit-code
 
 ensure-maturity-model-minimum-level:
+  extends:
+    - .jsonnet-cache
   stage: test
   needs:
     - job: prepare-service-health-dashboard-json
@@ -651,7 +658,9 @@ test-shunit:
     - make jsonnet-bundle test-shunit
 
 test-dashboards:
-  extends: .dashboards
+  extends:
+    - .dashboards
+    - .jsonnet-cache
   stage: test
   environment:
     action: verify
@@ -703,6 +712,7 @@ verify:
 deploy-dashboards:
   extends:
     - .dashboards
+    - .jsonnet-cache
   stage: deploy
   needs:
     - job: prepare-service-health-dashboard-json
@@ -1230,3 +1240,53 @@ publish-periodic-queries:
     expose_as: thanos query results
     paths:
       - periodic-query-results/
+
+##########
+# Mimir
+##########
+
+.mimir:
+  variables:
+    MIMIR_URL: http://mimir-internal.ops-gitlab-gke.us-east1.gitlab-ops.gke.gitlab.net
+
+validate-mimir-rules:
+  stage: validate
+  extends: .mimir
+  rules:
+    - *avoid-merge-train-rule
+    - <<: *if-merge-request-rule
+      changes:
+        paths:
+          - mimir-rules/**/*
+  script:
+    - |
+      for dir in $(find mimir-rules -mindepth 1 -maxdepth 1 -type d); do
+        tenant=$(basename ${dir})
+        printf "Checking rules for tenant: ${tenant}\n"
+        mimirtool rules check --rule-dirs="${dir}"
+      done
+
+# Disable until work on jsonnet is completed.
+.deploy-mimir-rules:
+  stage: deploy
+  extends: .mimir
+  secrets:
+    MIMIR_API_USER:
+      vault: ops-gitlab-net/gitlab-com/runbooks/mimir/username@ci
+      file: false
+    MIMIR_API_KEY:
+      vault: ops-gitlab-net/gitlab-com/runbooks/mimir/token@ci
+      file: false
+  rules:
+    - *ops-gitlab-net-only-rule
+    - <<: *if-main-branch-rule
+      changes:
+        paths:
+          - mimir-rules/**/*
+  script:
+    - |
+      for dir in $(find mimir-rules -mindepth 1 -maxdepth 1 -type d); do
+        tenant=$(basename ${dir})
+        printf "Deploying rules for tenant: ${tenant}\n"
+        mimirtool rules sync --rule-dirs="${dir} --id=${tenant}"
+      done

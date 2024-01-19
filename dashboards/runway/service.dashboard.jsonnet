@@ -173,6 +173,31 @@ basic.dashboard(
         format='ms',
         intervalFactor=2,
       ),
+      basic.timeseries(
+        title='Runway Service Container Healthcheck Requests',
+        description='Request rate of healthcheck attempts for the ingress container',
+        query=|||
+          sum by (revision_name, probe_type, is_healthy) (
+            stackdriver_cloud_run_revision_run_googleapis_com_container_completed_probe_attempt_count{%(selector)s, container_name='ingress'}
+          )
+        ||| % formatConfig,
+        legendFormat='{{revision_name}} {{probe_type}} healthy: {{is_healthy}}',
+        intervalFactor=2,
+      ),
+      basic.latencyTimeseries(
+        title='Runway Service Container Healthcheck Latency',
+        description='Distribution of time spent probing a container instance, in milliseconds.',
+        query=|||
+          sum by (revision_name, probe_type, is_healthy) (
+            rate(
+              stackdriver_cloud_run_revision_run_googleapis_com_container_probe_attempt_latencies_sum{%(selector)s, container_name='ingress'}[$__interval]
+            )
+          )
+        ||| % formatConfig,
+        legendFormat='{{revision_name}} {{probe_type}} healthy: {{is_healthy}}',
+        format='ms',
+        intervalFactor=2,
+      ),
     ]
   )
 )

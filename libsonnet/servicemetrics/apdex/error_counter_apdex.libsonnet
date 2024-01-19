@@ -3,7 +3,7 @@ local generateApdexAttributionQuery = (import './lib/counter-apdex-attribution-q
 local aggregations = import 'promql/aggregations.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
 local strings = import 'utils/strings.libsonnet';
-local validateSelector = (import '../validation.libsonnet').validateSelector;
+local validateMetric = (import '../validation.libsonnet').validateMetric;
 
 local transformErrorRateToSuccessRate(errorRateMetric, operationRateMetric, selector, rangeInterval, aggregationLabels, useRecordingRuleRegistry, offset) =
   |||
@@ -47,10 +47,10 @@ local transformErrorRateToSuccessRate(errorRateMetric, operationRateMetric, sele
   // errorCounterApdex constructs an apdex score (ie, successes/total) from an error score (ie, errors/total).
   // This can be useful for latency metrics that count latencies that exceed threshold, instead of the more
   // common form of latencies that are within threshold.
-  errorCounterApdex(errorRateMetric, operationRateMetric, selector, useRecordingRuleRegistry=true):: {
+  errorCounterApdex(errorRateMetric, operationRateMetric, selector, useRecordingRuleRegistry=true):: validateMetric({
     errorRateMetric: errorRateMetric,
     operationRateMetric: operationRateMetric,
-    selector: validateSelector(selector),
+    selector: selector,
     useRecordingRuleRegistry:: useRecordingRuleRegistry,
 
     apdexSuccessRateQuery(aggregationLabels, selector, rangeInterval, withoutLabels=[], offset=null)::
@@ -105,5 +105,5 @@ local transformErrorRateToSuccessRate(errorRateMetric, operationRateMetric, sele
           [operationRateMetric]: std.set(std.objectFields(selector)),
         },
     },
-  },
+  }),
 }

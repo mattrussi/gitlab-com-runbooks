@@ -19,7 +19,7 @@
 
 * [../ci-runners/ci_graphs.md](../ci-runners/ci_graphs.md)
 * [Chef Guidelines](../config_management/chef-guidelines.md)
-* [../elastic/elasticsearch-integration-in-gitlab.md](../elastic/elasticsearch-integration-in-gitlab.md)
+* [../elastic/advanced-search-in-gitlab.md](../elastic/advanced-search-in-gitlab.md)
 * [Kubernetes-Agent Disable Integrations](../kas/kubernetes-agent-disable-integrations.md)
 * [Ad hoc observability tools on Kubernetes nodes](../kube/k8s-adhoc-observability.md)
 * [How to take a snapshot of an application running in a StatefulSet](../kube/k8s-sts-snapshot.md)

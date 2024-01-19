@@ -1,0 +1,41 @@
+groups:
+  - name: kubernetes-resources.rules
+    rules:
+
+      - alert: KubeCPUOvercommit
+        annotations:
+          title: Cluster CPU Overcommitted
+          description: Cluster has overcommitted CPU resource requests for Pods and cannot tolerate node failure.
+          runbook: docs/kube/kubernetes.md
+        expr: |-
+          sum(namespace:kube_pod_container_resource_requests:sum{resource="cpu", unit="core"})
+            /
+          sum(node:node_num_cpu:sum)
+            >
+          (count(node:node_num_cpu:sum)-1) / count(node:node_num_cpu:sum)
+        for: 5m
+        labels:
+          tier: inf
+          type: kube
+          severity: s3
+          alert_type: cause
+
+      - alert: KubeMemOvercommit
+        annotations:
+          title: Cluster Memory Overcommitted
+          description: Cluster has overcommitted memory resource requests for Pods and cannot tolerate node failure.
+          runbook: docs/kube/kubernetes.md
+        expr: |-
+          sum(namespace:kube_pod_container_resource_requests:sum{resource="memory", unit="byte"})
+            /
+          sum(node_memory_MemTotal_bytes)
+            >
+          (count(node:node_num_cpu:sum)-1)
+            /
+          count(node:node_num_cpu:sum)
+        for: 5m
+        labels:
+          tier: inf
+          type: kube
+          severity: s3
+          alert_type: cause

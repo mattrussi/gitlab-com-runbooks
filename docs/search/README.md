@@ -25,7 +25,7 @@
 * [Chef Tips and Tools](../config_management/chef-workflow.md)
 * [Google Cloud Snapshots](../disaster-recovery/gcp-snapshots.md)
 * [What is Programmable Search Engine?](../docs.gitlab.com/programmableSearch.md)
-* [../elastic/elasticsearch-integration-in-gitlab.md](../elastic/elasticsearch-integration-in-gitlab.md)
+* [../elastic/advanced-search-in-gitlab.md](../elastic/advanced-search-in-gitlab.md)
 * [HAProxy Logging](../frontend/haproxy-logging.md)
 * [Find a project from its hashed storage path](../gitaly/find-project-from-hashed-storage.md)
 * [Gitaly unusual activity alert](../gitaly/gitaly-unusual-activity.md)

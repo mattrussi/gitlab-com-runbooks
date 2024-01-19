@@ -1,0 +1,252 @@
+groups:
+  - name: kubernetes.rules
+    rules:
+
+      - alert: GitLabZonalComponentVersionsOutOfSync
+        expr: |-
+          sum by (image, env) (
+            group by (image, cluster, env) (kube_pod_container_info{env=~"gprd|gstg", cluster=~".*-us-east1-.*", container_id!="", namespace=~"gitlab", image=~"dev.gitlab.org.*"})
+          ) != 3
+        for: 3h
+        labels:
+          severity: s3
+          alert_type: symptom
+          team: delivery
+        annotations:
+          description: Versions of GitLab components in {{ $labels.env }} have differed across our clusters for greater than 3 hours.
+          runbook: docs/kube/kubernetes.md#gitlabcomponentversionoutofsync
+          title: GitLab Versions differ across our zonal clusters.
+          promql_template_1: |-
+            sum by (image, env) (
+              group by (image, cluster, env) (kube_pod_container_info{env=~"gprd|gstg", cluster=~".*-us-east1-.*", container_id!="", namespace=~"gitlab", image=~"dev.gitlab.org.*"})
+            )
+
+      - alert: KubeReplicasSetPodMismatch
+        annotations:
+          title: Deployment Replicas Mismatch
+          description: Deployment {{ $labels.namespace }}/{{ $labels.replicaset }} has not matched the expected number of replicas for longer than an hour.
+          runbook: docs/kube/kubernetes.md#replica-mismatch
+        expr: |-
+          kube_replicaset_spec_replicas{job="kube-state-metrics"}
+          !=
+          kube_replicaset_status_ready_replicas{job="kube-state-metrics"}
+        for: 1h
+        labels:
+          tier: inf
+          type: kube
+          severity: s3
+          alert_type: cause
+
+      - alert: KubePodNotReady
+        annotations:
+          title: Pod not healthy
+          description: Pod {{ $labels.namespace }}/{{ $labels.pod }} has been in a non-ready state for longer than an hour.
+          runbook: docs/kube/kubernetes.md#kubepodnotready
+        expr: sum by (namespace, pod, env, stage) (kube_pod_status_phase{job="kube-state-metrics", phase=~"Pending|Unknown|Failed"}) > 0
+        for: 1h
+        labels:
+          tier: inf
+          type: kube
+          severity: s3
+          alert_type: cause
+
+      - alert: KubePodRestarting
+        annotations:
+          title: Pod Restarting Often
+          description: Pod {{ $labels.namespace }}/{{ $labels.pod }} ({{ $labels.container }}) is restarting {{ printf "%.2f" $value }} times / 5 minutes.
+          runbook: docs/kube/kubernetes.md
+        expr: rate(kube_pod_container_status_restarts_total{job="kube-state-metrics"}[15m]) * 60 * 5 > 0
+        for: 1h
+        labels:
+          tier: inf
+          type: kube
+          severity: s3
+          alert_type: cause
+
+      - alert: KubePodCrashLooping
+        annotations:
+          title: Pod CrashLooping
+          description: Pod {{ $labels.namespace }}/{{ $labels.pod }} ({{ $labels.container }}) is reporting CrashLoopBackOff restarts.
+          runbook: docs/kube/kubernetes.md
+        expr: |
+          sum by (environment,type,stage,tier,deployment) (kube_pod_container_status_waiting_reason:labeled{reason="CrashLoopBackOff"} > 0)
+            /
+          sum by (environment,type,stage,tier,deployment) (kube_pod_container_status_waiting_reason:labeled > 0)
+            > 0.5
+        for: 5m
+        labels:
+          severity: s3
+          alert_type: cause
+
+      - alert: KubeDeploymentReplicasMismatch
+        annotations:
+          title: Deployment Replicas Mismatch
+          description: Deployment {{ $labels.namespace }}/{{ $labels.deployment }} has not
+            matched the expected number of replicas for longer than an hour.
+          runbook_url: https://github.com/kubernetes-monitoring/kubernetes-mixin/tree/master/runbook.md#alert-name-kubedeploymentreplicasmismatch
+        expr: |
+          kube_deployment_spec_replicas{job="kube-state-metrics"}
+            !=
+          kube_deployment_status_replicas_available{job="kube-state-metrics"}
+        for: 1h
+        labels:
+          tier: inf
+          type: kube
+          severity: s3
+          alert_type: cause
+
+      - alert: KubeDeploymentGenerationMismatch
+        annotations:
+          title: Duplicate Deployments detected
+          description: Deployment generation for {{ $labels.namespace }}/{{ $labels.deployment }} does not match, this indicates that the Deployment has failed but has not been rolled back.
+          runbook: docs/kube/kubernetes.md
+        expr: |-
+          kube_deployment_status_observed_generation{job="kube-state-metrics"}
+            !=
+          kube_deployment_metadata_generation{job="kube-state-metrics"}
+        for: 15m
+        labels:
+          tier: inf
+          type: kube
+          severity: s3
+          alert_type: cause
+
+      - alert: KubeStatefulSetReplicasMismatch
+        annotations:
+          title: StatefulSet Replicas Mismatch
+          description: StatefulSet {{ $labels.namespace }}/{{ $labels.statefulset }} has not matched the expected number of replicas for longer than 12 hours.
+          runbook: docs/kube/kubernetes.md
+        expr: |-
+          kube_statefulset_status_replicas_ready{job="kube-state-metrics"}
+            !=
+          kube_statefulset_status_replicas{job="kube-state-metrics"}
+        for: 6h
+        labels:
+          tier: inf
+          type: kube
+          severity: s3
+          alert_type: cause
+
+      - alert: KubeStatefulSetGenerationMismatch
+        annotations:
+          title: Duplicate StatefulSets detected
+          description: StatefulSet generation for {{ $labels.namespace }}/{{ $labels.statefulset }} does not match, this indicates that the StatefulSet has failed but has not been rolled back.
+          runbook: docs/kube/kubernetes.md
+        expr: |-
+          kube_statefulset_status_observed_generation{job="kube-state-metrics"}
+            !=
+          kube_statefulset_metadata_generation{job="kube-state-metrics"}
+        for: 15m
+        labels:
+          tier: inf
+          type: kube
+          severity: s3
+          alert_type: cause
+
+      - alert: KubeStatefulSetUpdateNotRolledOut
+        annotations:
+          title: StatefulSet update incomplete
+          description: StatefulSet {{ $labels.namespace }}/{{ $labels.statefulset }} update has not been rolled out.
+          runbook: docs/kube/kubernetes.md
+        expr: |-
+          max without (revision) (
+            kube_statefulset_status_current_revision{job="kube-state-metrics"}
+              unless
+            kube_statefulset_status_update_revision{job="kube-state-metrics"}
+          )
+            *
+          (
+            kube_statefulset_replicas{job="kube-state-metrics"}
+              !=
+            kube_statefulset_status_replicas_updated{job="kube-state-metrics"}
+          )
+        for: 15m
+        labels:
+          tier: inf
+          type: kube
+          severity: s3
+          alert_type: cause
+
+      - alert: KubeDaemonSetRolloutStuck
+        annotations:
+          title: Daemonset Rollout incomplete
+          description: Only {{ $value }}% of the desired Pods of DaemonSet {{ $labels.namespace }}/{{ $labels.daemonset }} are scheduled and ready.
+          runbook: docs/kube/kubernetes.md
+        expr: |-
+          kube_daemonset_status_number_ready{job="kube-state-metrics"}
+            /
+          kube_daemonset_status_desired_number_scheduled{job="kube-state-metrics"} * 100 < 100
+        for: 15m
+        labels:
+          tier: inf
+          type: kube
+          severity: s3
+          alert_type: cause
+
+      - alert: KubeDaemonSetNotScheduled
+        annotations:
+          title: DaemonSet Pod(s) unable to be scheduled
+          description: '{{ $value }} Pods of DaemonSet {{ $labels.namespace }}/{{ $labels.daemonset }} are not scheduled.'
+          runbook: docs/kube/kubernetes.md
+        expr: |-
+          kube_daemonset_status_desired_number_scheduled{job="kube-state-metrics"}
+            -
+          kube_daemonset_status_current_number_scheduled{job="kube-state-metrics"} > 0
+        for: 10m
+        labels:
+          tier: inf
+          type: kube
+          severity: s4
+          alert_type: cause
+
+      - alert: KubeDaemonSetMisScheduled
+        annotations:
+          title: DaemonSet Pod(s) unable to be scheduled
+          description: '{{ $value }} Pods of DaemonSet {{ $labels.namespace }}/{{ $labels.daemonset }} are running where they are not supposed to run.'
+          runbook: docs/kube/kubernetes.md
+        expr: kube_daemonset_status_number_misscheduled{job="kube-state-metrics"} > 0
+        for: 10m
+        labels:
+          tier: inf
+          type: kube
+          severity: s4
+          alert_type: cause
+
+      - alert: KubeCronJobRunning
+        annotations:
+          title: CronJob Running too long
+          description: CronJob {{ $labels.namespace }}/{{ $labels.cronjob }} is taking more than 1h to complete.
+          runbook: docs/kube/kubernetes.md
+        expr: time() - kube_cronjob_next_schedule_time{job="kube-state-metrics"} > 3600
+        for: 1h
+        labels:
+          tier: inf
+          type: kube
+          severity: s4
+          alert_type: cause
+
+      - alert: KubeJobCompletion
+        annotations:
+          title: CronJob Running too long
+          description: Job {{ $labels.namespace }}/{{ $labels.job_name }} is taking more than one hour to complete.
+          runbook: docs/kube/kubernetes.md
+        expr: kube_job_spec_completions{job="kube-state-metrics"} - kube_job_status_succeeded{job="kube-state-metrics"}  > 0
+        for: 1h
+        labels:
+          tier: inf
+          type: kube
+          severity: s4
+          alert_type: cause
+
+      - alert: KubeJobFailed
+        annotations:
+          title: Job failed
+          description: Job {{ $labels.namespace }}/{{ $labels.job_name }} failed to complete.
+          runbook: docs/kube/kubernetes.md
+        expr: kube_job_status_failed{job="kube-state-metrics"}  > 0
+        for: 1h
+        labels:
+          tier: inf
+          type: kube
+          severity: s4
+          alert_type: cause

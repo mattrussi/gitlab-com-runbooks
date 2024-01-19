@@ -1,0 +1,28 @@
+groups:
+- name: pages-gitlab-io-status.rules
+  rules:
+  - alert: GitLabPagesNotScraped
+    expr: (1 - avg(up{job="gitlab-pages"})) * 100 > 20
+    for: 5m
+    labels:
+      severity: s4
+      alert_type: cause
+      team: gitlab-pages
+    annotations:
+      title: GitLab pages servers are failing
+      description: "{{ $value }}% of pages servers have been down for 5 minutes"
+      environment: "{{ $labels.environment }}"
+      runbook: docs/pages/gitlab-pages.md
+  - alert: GitLabPagesLowDomains
+    expr: gitlab_pages_domains_served_total / scalar(quantile(0.9, gitlab_pages_domains_served_total)) < 0.9 or gitlab_pages_domains_served_total < 1000
+    for: 5m
+    labels:
+      severity: s4
+      alert_type: cause
+      team: gitlab-pages
+    annotations:
+      title: GitLab Pages server(s) have low number of hosted domains
+      description: >
+        GitLab Pages on {{ $labels.environment }} {{ $labels.fqdn }} have an unusually low number of hosted domains.
+      environment: "{{ $labels.environment }}"
+      runbook: docs/pages/gitlab-pages.md

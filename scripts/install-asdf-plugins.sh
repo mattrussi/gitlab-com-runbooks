@@ -1,11 +1,12 @@
 #!/usr/bin/env bash
+# Vendored from https://gitlab.com/gitlab-com/gl-infra/common-template-copier/-/blob/main/scripts/install-asdf-plugins.sh
 
 # This script will install the ASDF plugins required for this project
 
 set -euo pipefail
 IFS=$'\n\t'
 
-# Temporary transition over to rtx from asdf
+# Temporary transition over to mise from asdf
 # see https://gitlab.com/gitlab-com/runbooks/-/issues/134
 # for details
 setup_asdf() {
@@ -58,44 +59,44 @@ setup_asdf() {
   }
 }
 
-setup_rtx() {
-  temp_RTX_SHORTHANDS_FILE=$(mktemp)
-  trap 'do_rtx_install' EXIT
+setup_mise() {
+  temp_MISE_SHORTHANDS_FILE=$(mktemp)
+  trap 'do_mise_install' EXIT
 
-  do_rtx_install() {
-    cat "$temp_RTX_SHORTHANDS_FILE"
-    RTX_SHORTHANDS_FILE=$temp_RTX_SHORTHANDS_FILE rtx install
-    rm -f "$temp_RTX_SHORTHANDS_FILE"
+  do_mise_install() {
+    cat "$temp_MISE_SHORTHANDS_FILE"
+    MISE_SHORTHANDS_FILE=$temp_MISE_SHORTHANDS_FILE $MISE_COMMAND install -y
+    rm -f "$temp_MISE_SHORTHANDS_FILE"
   }
 
   install_plugin() {
     local plugin=$1
     local source=${2-}
 
-    # No source? rtx defaults should suffice.
+    # No source? mise defaults should suffice.
     if [[ -z $source ]]; then return; fi
 
-    # See https://github.com/jdxcode/rtx#rtx_shorthands_fileconfigrtxshorthandstoml
-    echo "$plugin = \"$source\"" >>"$temp_RTX_SHORTHANDS_FILE"
+    # See https://mise.jdx.dev/configuration.html#mise-shorthands-file-config-mise-shorthands-toml
+    echo "$plugin = \"$source\"" >>"$temp_MISE_SHORTHANDS_FILE"
   }
 
   remove_plugin_with_source() {
     local plugin=$1
     local source=$2
 
-    if ! rtx plugin list --urls | grep -qF "${source}"; then
+    if ! $MISE_COMMAND plugin list --urls | grep -qF "${source}"; then
       return
     fi
 
     echo "# Removing plugin ${plugin} installed from ${source}"
-    rtx plugin remove "${plugin}" || {
+    $MISE_COMMAND plugin remove "${plugin}" || {
       echo "Failed to remove plugin: ${plugin}"
       exit 1
     } >&2
   }
 
   current() {
-    rtx current "$1" | awk '{print $2}'
+    mise current "$1" | awk '{print $2}'
   }
 }
 
@@ -107,8 +108,14 @@ check_global_golang_install() {
   ) >/dev/null 2>/dev/null
 }
 
-if command -v rtx 2>/dev/null; then
-  setup_rtx
+if command -v mise >/dev/null; then
+  MISE_COMMAND=$(which mise)
+  export MISE_COMMAND
+  setup_mise
+elif command -v rtx >/dev/null; then
+  MISE_COMMAND=$(which rtx)
+  export MISE_COMMAND
+  setup_mise
 elif [[ -n ${ASDF_DIR-} ]]; then
   setup_asdf
 fi
@@ -116,7 +123,7 @@ fi
 # Install golang first as some of the other plugins require it.
 install_plugin golang
 
-# Jumping through these hoops does not seem necessary for rtx, only asdf
+# Jumping through these hoops does not seem necessary for mise, only asdf
 if [[ -z ${CI:-} ]] && [[ -n ${ASDF_DIR-} ]]; then
   # The go-jsonnet plugin requires a global golang version to be configured
   # and will otherwise fail to install.

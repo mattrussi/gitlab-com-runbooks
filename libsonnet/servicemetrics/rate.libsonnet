@@ -2,7 +2,7 @@ local aggregations = import 'promql/aggregations.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
 local recordingRuleRegistry = import 'recording-rule-registry.libsonnet';  // TODO: fix circular dependency
 local optionalOffset = import 'recording-rules/lib/optional-offset.libsonnet';
-local validateSelector = (import './validation.libsonnet').validateSelector;
+local validateMetric = (import './validation.libsonnet').validateMetric;
 
 local generateInstanceFilterQuery(instanceFilter) =
   if instanceFilter == '' then
@@ -31,9 +31,9 @@ local generateRangeFunctionQuery(rate, rangeFunction, additionalSelectors, range
     selector={},
     instanceFilter='',
     useRecordingRuleRegistry=true,
-  ):: {
+  ):: validateMetric({
     counter: counter,
-    selector: validateSelector(selector),
+    selector: selector,
     instanceFilter: instanceFilter,
     useRecordingRuleRegistry:: useRecordingRuleRegistry,
 
@@ -82,7 +82,7 @@ local generateRangeFunctionQuery(rate, rangeFunction, additionalSelectors, range
           [counter]: std.set(std.objectFields(selector)),
         },
     },
-  },
+  }),
 
   // clampMinZero is useful for taking derivatives of poorly-behaved counters
   // that sometimes decrease, such as Elasticsearch indexing rate and Linux
@@ -96,9 +96,9 @@ local generateRangeFunctionQuery(rate, rangeFunction, additionalSelectors, range
     selector='',
     instanceFilter='',
     clampMinZero=false,
-  ):: {
+  ):: validateMetric({
     counter: counter,
-    selector: validateSelector(selector),
+    selector: selector,
     instanceFilter: instanceFilter,
     clampMinZero: clampMinZero,
     useRecordingRuleRegistry:: false,
@@ -141,5 +141,5 @@ local generateRangeFunctionQuery(rate, rangeFunction, additionalSelectors, range
           [counter]: std.set(std.objectFields(selector)),
         },
     },
-  },
+  }),
 }

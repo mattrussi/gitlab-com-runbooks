@@ -639,9 +639,9 @@ groups:
       max by(environment, tier, type, stage, shard) (
         clamp_min(
           clamp_max(
-            sum by (environment, tier, type, stage, shard, fqdn) (last_over_time(gitlab_database_bloat_btree_bloat_size{job="gitlab-monitor-database-bloat", type=~"patroni|patroni-registry|patroni-embedding|patroni-ci|postgres-archive"}[1h]))
+            sum by (environment, tier, type, stage, shard, fqdn) (last_over_time(gitlab_database_bloat_btree_bloat_size{type=~"patroni|patroni-registry|patroni-embedding|patroni-ci|postgres-archive"}[1h]))
             /
-            sum by (environment, tier, type, stage, shard, fqdn) (last_over_time(gitlab_database_bloat_btree_real_size{job="gitlab-monitor-database-bloat", type=~"patroni|patroni-registry|patroni-embedding|patroni-ci|postgres-archive"}[1h]))
+            sum by (environment, tier, type, stage, shard, fqdn) (last_over_time(gitlab_database_bloat_btree_real_size{type=~"patroni|patroni-registry|patroni-embedding|patroni-ci|postgres-archive"}[1h]))
             ,
             1)
         ,
@@ -669,9 +669,9 @@ groups:
       max by(environment, tier, type, stage, shard) (
         clamp_min(
           clamp_max(
-            sum by (environment, tier, type, stage, shard, fqdn) (avg_over_time(gitlab_database_bloat_table_bloat_size{job="gitlab-monitor-database-bloat", type=~"patroni|patroni-registry|patroni-embedding|patroni-ci|postgres-archive"}[58m]))
+            sum by (environment, tier, type, stage, shard, fqdn) (avg_over_time(gitlab_database_bloat_table_bloat_size{type=~"patroni|patroni-registry|patroni-embedding|patroni-ci|postgres-archive"}[58m]))
             /
-            sum by (environment, tier, type, stage, shard, fqdn) (avg_over_time(gitlab_database_bloat_table_real_size{job="gitlab-monitor-database-bloat", type=~"patroni|patroni-registry|patroni-embedding|patroni-ci|postgres-archive"}[58m]))
+            sum by (environment, tier, type, stage, shard, fqdn) (avg_over_time(gitlab_database_bloat_table_real_size{type=~"patroni|patroni-registry|patroni-embedding|patroni-ci|postgres-archive"}[58m]))
             ,
             1)
         ,
@@ -725,7 +725,7 @@ groups:
               and on (instance, job) (pg_replication_is_replica{type=~"patroni|patroni-registry|patroni-embedding|patroni-ci|sentry"} == 0)
             )
             /
-            (2^31 - 10^6)
+            (2^31 - 3000000)
             ,
             1)
         ,
@@ -4962,9 +4962,9 @@ groups:
         max by(environment, tier, type, stage, shard, fqdn) (
           clamp_min(
             clamp_max(
-              sum by (environment, tier, type, stage, shard, fqdn) (last_over_time(gitlab_database_bloat_btree_bloat_size{job="gitlab-monitor-database-bloat", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[1h]))
+              sum by (environment, tier, type, stage, shard, fqdn) (last_over_time(gitlab_database_bloat_btree_bloat_size{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[1h]))
               /
-              sum by (environment, tier, type, stage, shard, fqdn) (last_over_time(gitlab_database_bloat_btree_real_size{job="gitlab-monitor-database-bloat", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[1h]))
+              sum by (environment, tier, type, stage, shard, fqdn) (last_over_time(gitlab_database_bloat_btree_real_size{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[1h]))
               ,
               1)
           ,
@@ -4974,9 +4974,9 @@ groups:
         max by(environment, tier, type, stage, shard, fqdn) (
           clamp_min(
             clamp_max(
-              sum by (environment, tier, type, stage, shard, fqdn) (last_over_time(gitlab_database_bloat_btree_bloat_size{job="gitlab-monitor-database-bloat", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[1h]))
+              sum by (environment, tier, type, stage, shard, fqdn) (last_over_time(gitlab_database_bloat_btree_bloat_size{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[1h]))
               /
-              sum by (environment, tier, type, stage, shard, fqdn) (last_over_time(gitlab_database_bloat_btree_real_size{job="gitlab-monitor-database-bloat", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[1h]))
+              sum by (environment, tier, type, stage, shard, fqdn) (last_over_time(gitlab_database_bloat_btree_real_size{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[1h]))
               ,
               1)
           ,
@@ -5069,9 +5069,9 @@ groups:
         max by(environment, tier, type, stage, shard, fqdn) (
           clamp_min(
             clamp_max(
-              sum by (environment, tier, type, stage, shard, fqdn) (avg_over_time(gitlab_database_bloat_table_bloat_size{job="gitlab-monitor-database-bloat", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[58m]))
+              sum by (environment, tier, type, stage, shard, fqdn) (avg_over_time(gitlab_database_bloat_table_bloat_size{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[58m]))
               /
-              sum by (environment, tier, type, stage, shard, fqdn) (avg_over_time(gitlab_database_bloat_table_real_size{job="gitlab-monitor-database-bloat", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[58m]))
+              sum by (environment, tier, type, stage, shard, fqdn) (avg_over_time(gitlab_database_bloat_table_real_size{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[58m]))
               ,
               1)
           ,
@@ -5081,9 +5081,9 @@ groups:
         max by(environment, tier, type, stage, shard, fqdn) (
           clamp_min(
             clamp_max(
-              sum by (environment, tier, type, stage, shard, fqdn) (avg_over_time(gitlab_database_bloat_table_bloat_size{job="gitlab-monitor-database-bloat", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[58m]))
+              sum by (environment, tier, type, stage, shard, fqdn) (avg_over_time(gitlab_database_bloat_table_bloat_size{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[58m]))
               /
-              sum by (environment, tier, type, stage, shard, fqdn) (avg_over_time(gitlab_database_bloat_table_real_size{job="gitlab-monitor-database-bloat", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[58m]))
+              sum by (environment, tier, type, stage, shard, fqdn) (avg_over_time(gitlab_database_bloat_table_real_size{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[58m]))
               ,
               1)
           ,
@@ -5243,7 +5243,7 @@ groups:
                 and on (instance, job) (pg_replication_is_replica{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"} == 0)
               )
               /
-              (2^31 - 10^6)
+              (2^31 - 3000000)
               ,
               1)
           ,
@@ -5262,7 +5262,7 @@ groups:
                 and on (instance, job) (pg_replication_is_replica{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"} == 0)
               )
               /
-              (2^31 - 10^6)
+              (2^31 - 3000000)
               ,
               1)
           ,

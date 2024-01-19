@@ -19,7 +19,7 @@
 * [Chef Vault Basics](../config_management/chef-vault.md)
 * [Chef Tips and Tools](../config_management/chef-workflow.md)
 * [customers.gitlab.com](../customersdot/api-key-rotation.md)
-* [../elastic/elasticsearch-integration-in-gitlab.md](../elastic/elasticsearch-integration-in-gitlab.md)
+* [../elastic/advanced-search-in-gitlab.md](../elastic/advanced-search-in-gitlab.md)
 * [Deploying a change to gitlab.rb](../git/deploy-gitlab-rb-change.md)
 * [Upgrading the OS of Gitaly VMs](../gitaly/gitaly-os-upgrade.md)
 * [Gitaly Queuing](../gitaly/gitaly-rate-limiting.md)

@@ -8,7 +8,7 @@ separateGlobalRecordingFiles(
         groups:
           std.map(
             function(group)
-              group { partial_response_strategy: 'warn' },
+              group,
             recordingRules.groupsWithFilter(function(service) service.dangerouslyThanosEvaluated, selector)
           ),
       }),

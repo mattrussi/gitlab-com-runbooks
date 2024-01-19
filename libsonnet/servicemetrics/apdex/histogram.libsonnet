@@ -3,7 +3,7 @@ local aggregations = import 'promql/aggregations.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
 local optionalOffset = import 'recording-rules/lib/optional-offset.libsonnet';
 local strings = import 'utils/strings.libsonnet';
-local validateSelector = (import '../validation.libsonnet').validateSelector;
+local validateMetric = (import '../validation.libsonnet').validateMetric;
 
 // A general apdex query is:
 //
@@ -196,10 +196,10 @@ local generateApdexAttributionQuery(histogram, selector, rangeInterval, aggregat
     metricsFormat='prometheus',
     unit='s',
     useRecordingRuleRegistry=true
-  ):: {
+  ):: validateMetric({
     histogram: histogram,
     rangeVectorFunction: rangeVectorFunction,
-    selector: validateSelector(selector),
+    selector: selector,
     satisfiedThreshold: satisfiedThreshold,
     toleratedThreshold: toleratedThreshold,
     metricsFormat: metricsFormat,
@@ -259,5 +259,5 @@ local generateApdexAttributionQuery(histogram, selector, rangeInterval, aggregat
           [histogram]: std.set(std.objectFields(selector) + ['le']),
         },
     },
-  },
+  }),
 }

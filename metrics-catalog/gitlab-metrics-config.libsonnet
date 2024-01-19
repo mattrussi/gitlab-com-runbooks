@@ -19,6 +19,11 @@ local objects = import 'utils/objects.libsonnet';
   // Hash of all aggregation sets
   aggregationSets:: aggregationSets,
 
+  // dbPlatform: either a cloud service or "default"
+  //  - `rds` - enables any RDS specific items
+  //  - `default` - postgres installations on VM's
+  dbPlatform:: 'default',
+
   // Hash of all saturation metric types that are monitored on gitlab.com
   saturationMonitoring:: objects.mergeAll(allSaturationTypes),
 
@@ -69,6 +74,29 @@ local objects = import 'utils/objects.libsonnet';
     gprd: { env: 'gprd' },
     ops: { env: 'ops' },
     other: { env: { noneOf: ['gprd', 'ops'] } },
+  },
+
+  separateMimirRecordingSelectors: {
+    'gitlab-gprd': {
+      selector: { env: 'gprd' },
+      envName: 'gprd',
+    },
+    'gitlab-ops': {
+      selector: { env: 'ops' },
+      envName: 'ops',
+    },
+    'gitlab-gstg': {
+      selector: { env: 'gstg' },
+      envName: 'gstg',
+    },
+    'gitlab-pre': {
+      selector: { env: 'pre' },
+      envName: 'pre',
+    },
+    'gitlab-others': {
+      selector: { env: { noneOf: ['gprd', 'ops', 'gstg', 'pre'] } },
+      envName: 'others',
+    },
   },
 
   // This selector is used in a handful of places where there are too many "type" labels
