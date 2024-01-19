@@ -67,8 +67,6 @@ local groupsForService(service, selector) = {
   groups: serviceAlertsGenerator(service, alertDescriptors, groupExtras={ partial_response_strategy: 'warn' }, extraSelector=selector),
 };
 
-local filteredServices = std.filter(function(s) s.type != 'thanos-staging', metricsCatalog.services);
-
 separateGlobalRecordingFiles(
   function(selector)
     std.foldl(
@@ -76,7 +74,7 @@ separateGlobalRecordingFiles(
         docs {
           ['service-level-alerts-%s' % [service.type]]: std.manifestYamlDoc(groupsForService(service, selector)),
         },
-      filteredServices,
+      metricsCatalog.services,
       {},
     )
 )
