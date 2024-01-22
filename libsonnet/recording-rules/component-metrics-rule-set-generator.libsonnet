@@ -76,7 +76,7 @@ local generateRecordingRulesForComponent(burnRate, aggregationSet, serviceDefini
   componentMetricsRuleSetGenerator(
     burnRate,
     aggregationSet,
-    extraSourceSelector={}
+    extraSourceSelector={},
   )::
     {
       // Generates the recording rules given a service definition

@@ -2,8 +2,8 @@ local underTest = import './service_level_indicator_definition.libsonnet';
 local aggregationSet = import 'servicemetrics/aggregation-set.libsonnet';
 local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local test = import 'test.libsonnet';
-local rateMetric = metricsCatalog.rateMetric;
 local successCounterApdex = metricsCatalog.successCounterApdex;
+local rateMetric = metricsCatalog.rateMetric;
 
 local testSli = underTest.serviceLevelIndicatorDefinition({
   significantLabels: [],
