@@ -93,10 +93,6 @@ local objects = import 'utils/objects.libsonnet';
       selector: { env: 'pre' },
       envName: 'pre',
     },
-    'gitlab-others': {
-      selector: { env: { noneOf: ['gprd', 'ops', 'gstg', 'pre'] } },
-      envName: 'others',
-    },
   },
 
   // This selector is used in a handful of places where there are too many "type" labels
