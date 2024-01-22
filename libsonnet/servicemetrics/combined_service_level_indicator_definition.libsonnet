@@ -5,8 +5,6 @@
 local dependencies = import 'servicemetrics/dependencies_definition.libsonnet';
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 local misc = import 'utils/misc.libsonnet';
-local collectMetricNamesAndLabels = (import './service_level_indicator_helper.libsonnet').collectMetricNamesAndLabels;
-local collectMetricNamesAndSelectors = (import './service_level_indicator_helper.libsonnet').collectMetricNamesAndSelectors;
 
 // Combined component definitions are a specialisation of the service-component.
 // They allow multiple components to be combined under a single name, but with different

@@ -1,7 +1,7 @@
 local aggregations = import 'promql/aggregations.libsonnet';
 local misc = import 'utils/misc.libsonnet';
 local strings = import 'utils/strings.libsonnet';
-local collectMetricNamesAndSelectors = (import 'servicemetrics/service_level_indicator_helper.libsonnet').collectMetricNamesAndSelectors;
+local collectMetricNamesAndSelectors = (import 'servicemetrics/sli_metric_descriptor.libsonnet').collectMetricNamesAndSelectors;
 
 // Merge two hashes of the form { key: set },
 local merge(h1, h2) =

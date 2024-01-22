@@ -6,8 +6,6 @@ local dependencies = import 'servicemetrics/dependencies_definition.libsonnet';
 local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 local strings = import 'utils/strings.libsonnet';
-local collectMetricNamesAndLabels = (import './service_level_indicator_helper.libsonnet').collectMetricNamesAndLabels;
-local collectMetricNamesAndSelectors = (import './service_level_indicator_helper.libsonnet').collectMetricNamesAndSelectors;
 
 local featureCategoryFromSourceMetrics = 'featureCategoryFromSourceMetrics';
 

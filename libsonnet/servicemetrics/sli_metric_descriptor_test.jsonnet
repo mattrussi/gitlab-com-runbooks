@@ -1,6 +1,6 @@
 local sliDefinition = import './service_level_indicator_definition.libsonnet';
-local sliHelper = import './service_level_indicator_helper.libsonnet';
-local collectMetricNamesAndSelectors = sliHelper.collectMetricNamesAndSelectors;
+local sliMetricsDescriptor = import './sli_metric_descriptor.libsonnet';
+local collectMetricNamesAndSelectors = sliMetricsDescriptor.collectMetricNamesAndSelectors;
 local test = import 'test.libsonnet';
 local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local histogramApdex = metricsCatalog.histogramApdex;
@@ -142,119 +142,119 @@ test.suite({
   },
 
   testNormalizeSelectorHashEmpty: {
-    actual: sliHelper._normalizeSelectorExpression({}),
+    actual: sliMetricsDescriptor._normalizeSelectorExpression({}),
     expect: {},
   },
   testNormalizeSelectorHash1: {
-    actual: sliHelper._normalizeSelectorExpression({ eq: 'a' }),
+    actual: sliMetricsDescriptor._normalizeSelectorExpression({ eq: 'a' }),
     expect: { oneOf: ['a'] },
   },
   testNormalizeSelectorHash2: {
-    actual: sliHelper._normalizeSelectorExpression({ re: 'a' }),
+    actual: sliMetricsDescriptor._normalizeSelectorExpression({ re: 'a' }),
     expect: { oneOf: ['a'] },
   },
   testNormalizeSelectorHash3: {
-    actual: sliHelper._normalizeSelectorExpression({ re: 'a|b' }),
+    actual: sliMetricsDescriptor._normalizeSelectorExpression({ re: 'a|b' }),
     expect: { oneOf: ['a', 'b'] },
   },
   testNormalizeSelectorHash4: {
-    actual: sliHelper._normalizeSelectorExpression({ oneOf: ['a'] }),
+    actual: sliMetricsDescriptor._normalizeSelectorExpression({ oneOf: ['a'] }),
     expect: { oneOf: ['a'] },
   },
   testNormalizeSelectorHash5: {
-    actual: sliHelper._normalizeSelectorExpression({ ne: 'a' }),
+    actual: sliMetricsDescriptor._normalizeSelectorExpression({ ne: 'a' }),
     expect: {},
   },
   testNormalizeSelectorHash6: {
-    actual: sliHelper._normalizeSelectorExpression({ nre: 'a|b' }),
+    actual: sliMetricsDescriptor._normalizeSelectorExpression({ nre: 'a|b' }),
     expect: {},
   },
   testNormalizeSelectorHash7: {
-    actual: sliHelper._normalizeSelectorExpression({ noneOf: ['a', 'b'] }),
+    actual: sliMetricsDescriptor._normalizeSelectorExpression({ noneOf: ['a', 'b'] }),
     expect: {},
   },
   testNormalizeSelectorHash8: {
-    actual: sliHelper._normalizeSelectorExpression({ eq: 'a', re: 'b' }),
+    actual: sliMetricsDescriptor._normalizeSelectorExpression({ eq: 'a', re: 'b' }),
     expect: { oneOf: ['a', 'b'] },
   },
   testNormalizeSelectorHash9: {
-    actual: sliHelper._normalizeSelectorExpression({ eq: 'a', re: 'a|b|c' }),
+    actual: sliMetricsDescriptor._normalizeSelectorExpression({ eq: 'a', re: 'a|b|c' }),
     expect: { oneOf: ['a', 'b', 'c'] },
   },
   testNormalizeSelectorHash10: {
-    actual: sliHelper._normalizeSelectorExpression({ eq: 'a', oneOf: ['a', 'b', 'c'] }),
+    actual: sliMetricsDescriptor._normalizeSelectorExpression({ eq: 'a', oneOf: ['a', 'b', 'c'] }),
     expect: { oneOf: ['a', 'b', 'c'] },
   },
   testNormalizeSelectorHash11: {
-    actual: sliHelper._normalizeSelectorExpression({ re: 'a|d|e|f', oneOf: ['a', 'b', 'c'] }),
+    actual: sliMetricsDescriptor._normalizeSelectorExpression({ re: 'a|d|e|f', oneOf: ['a', 'b', 'c'] }),
     expect: { oneOf: ['a', 'b', 'c', 'd', 'e', 'f'] },
   },
   testNormalizeSimpleInt: {
-    actual: sliHelper._normalize({ a: '1' }),
+    actual: sliMetricsDescriptor._normalize({ a: '1' }),
     expect: { a: { oneOf: ['1'] } },
   },
   testNormalizeSimpleStr: {
-    actual: sliHelper._normalize({ a: 1 }),
+    actual: sliMetricsDescriptor._normalize({ a: 1 }),
     expect: { a: { oneOf: [1] } },
   },
   testNormalizeObject1: {
-    actual: sliHelper._normalize({ a: { eq: '1' } }),
+    actual: sliMetricsDescriptor._normalize({ a: { eq: '1' } }),
     expect: { a: { oneOf: ['1'] } },
   },
   testNormalizeObject2: {
-    actual: sliHelper._normalize({ a: { eq: '1', re: '2' } }),
+    actual: sliMetricsDescriptor._normalize({ a: { eq: '1', re: '2' } }),
     expect: { a: { oneOf: ['1', '2'] } },
   },
   testNormalizeObject3: {
-    actual: sliHelper._normalize({ a: [{ eq: '1' }, { re: '2' }] }),
+    actual: sliMetricsDescriptor._normalize({ a: [{ eq: '1' }, { re: '2' }] }),
     expect: { a: { oneOf: ['1', '2'] } },
   },
   testNormalizeObjectMultipleKeys: {
-    actual: sliHelper._normalize({ a: '1', b: '2' }),
+    actual: sliMetricsDescriptor._normalize({ a: '1', b: '2' }),
     expect: { a: { oneOf: ['1'] }, b: { oneOf: ['2'] } },
   },
   testNormalizeObjectWithNegativeExp: {
-    actual: sliHelper._normalize({ a: { ne: '1', nre: '2|3' } }),
+    actual: sliMetricsDescriptor._normalize({ a: { ne: '1', nre: '2|3' } }),
     expect: { a: {} },
   },
   testNormalizeObjectWithNegativeExp2: {
-    actual: sliHelper._normalize({ a: { ne: '1', nre: '2|3', eq: '4', re: '1|2|5' } }),
+    actual: sliMetricsDescriptor._normalize({ a: { ne: '1', nre: '2|3', eq: '4', re: '1|2|5' } }),
     expect: { a: { oneOf: ['1', '2', '4', '5'] } },
   },
   testNormalizeObjectWithNegativeExp3: {
-    actual: sliHelper._normalize({ a: [{ ne: '1' }, '2'] }),
+    actual: sliMetricsDescriptor._normalize({ a: [{ ne: '1' }, '2'] }),
     expect: { a: { oneOf: ['2'] } },
   },
   testMergeSelector1: {
-    actual: sliHelper._mergeSelector(
+    actual: sliMetricsDescriptor._mergeSelector(
       { a: '1' },
       { a: '1' },
     ),
     expect: { a: { oneOf: ['1'] } },
   },
   testMergeSelector2: {
-    actual: sliHelper._mergeSelector(
+    actual: sliMetricsDescriptor._mergeSelector(
       { a: '1' },
       { a: '2' },
     ),
     expect: { a: { oneOf: ['1', '2'] } },
   },
   testMergeSelector3: {
-    actual: sliHelper._mergeSelector(
+    actual: sliMetricsDescriptor._mergeSelector(
       { a: { eq: '1', re: '2|3' } },
       { a: { eq: '4', oneOf: ['5', '6'] } },
     ),
     expect: { a: { oneOf: ['1', '2', '3', '4', '5', '6'] } },
   },
   testMergeSelector4: {
-    actual: sliHelper._mergeSelector(
+    actual: sliMetricsDescriptor._mergeSelector(
       { a: [{ eq: '1' }, { re: '2|3' }] },
       { a: { eq: '4', oneOf: ['5', '6'] } },
     ),
     expect: { a: { oneOf: ['1', '2', '3', '4', '5', '6'] } },
   },
   testMergeSelector5: {
-    actual: sliHelper._mergeSelector(
+    actual: sliMetricsDescriptor._mergeSelector(
       { a: '1', b: '10' },
       { a: { re: '2|3|4', ne: '2' }, b: { re: '11|12' } },
     ),
@@ -264,7 +264,7 @@ test.suite({
     },
   },
   testMergeSelector6: {
-    actual: sliHelper._mergeSelector(
+    actual: sliMetricsDescriptor._mergeSelector(
       { backend: { oneOf: ['web'] }, code: { oneOf: ['5xx'] } },
       { backend: { oneOf: ['abc'] } },
     ),
@@ -274,7 +274,7 @@ test.suite({
     },
   },
   testMergeSelector7: {
-    actual: sliHelper._mergeSelector(
+    actual: sliMetricsDescriptor._mergeSelector(
       { backend: { oneOf: ['web'] } },
       { backend: { oneOf: ['abc'] }, code: { oneOf: ['5xx'] } },
     ),
@@ -284,7 +284,7 @@ test.suite({
     },
   },
   testMergeSelector8: {
-    actual: sliHelper._mergeSelector(
+    actual: sliMetricsDescriptor._mergeSelector(
       { backend: {} },
       { backend: {} },
     ),
@@ -293,7 +293,7 @@ test.suite({
     },
   },
   testMergeSelector9: {
-    actual: sliHelper._mergeSelector(
+    actual: sliMetricsDescriptor._mergeSelector(
       { code: '500' },
       {},
     ),
@@ -306,12 +306,12 @@ test.suite({
   },
 
   local testMetricsDescriptorAggregationLabels(sliDefinition, expect) = {
-    local descriptor = sliHelper.sliMetricsDescriptor(sliDefinition),
+    local descriptor = sliMetricsDescriptor.sliMetricsDescriptor(sliDefinition),
     actual: descriptor.metricNamesAndAggregationLabels(),
     expect: expect,
   },
   local testMetricsDescriptorSelectors(sliDefinition, expect) = {
-    local descriptor = sliHelper.sliMetricsDescriptor(sliDefinition),
+    local descriptor = sliMetricsDescriptor.sliMetricsDescriptor(sliDefinition),
     actual: descriptor.metricNamesAndSelectors(),
     expect: expect,
   },
