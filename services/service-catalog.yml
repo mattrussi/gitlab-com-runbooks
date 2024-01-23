@@ -668,7 +668,7 @@ services:
     teams:
       - gitaly
     label: Gitaly
-    owner: scalability:practices
+    owner: gitaly
     technical:
       project:
         - https://gitlab.com/gitlab-org/gitaly
