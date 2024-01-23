@@ -63,7 +63,7 @@ function main() {
       -J "${REPO_DIR}/reference-architectures/default-overrides" \
       -J "${reference_architecture_src_dir}" \
       -J "${REPO_DIR}/vendor/" \
-      "${paths[@]:''}" \
+      "${paths[@]}" \
       "${params[@]}" \
       "$source_file"
   )"
@@ -82,7 +82,7 @@ function main() {
       -J "${REPO_DIR}/reference-architectures/default-overrides" \
       -J "${reference_architecture_src_dir}" \
       -J "${REPO_DIR}/vendor/" \
-      "${paths[@]:''}" \
+      "${paths[@]}" \
       "$source_file" | xargs sha256sum >"$sha256sum_file"
     echo "$source_file" "${REPO_DIR}/.tool-versions" | xargs realpath | xargs sha256sum >>"$sha256sum_file"
   fi
