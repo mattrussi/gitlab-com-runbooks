@@ -12,8 +12,9 @@ metricsCatalog.serviceDefinition(
     type='ai-gateway',
     team='code_creation',
     apdexScore=0.98,
+    errorRatio=0.98,  // Temporary reduce until https://gitlab.com/gitlab-com/gl-infra/production/-/issues/17366 is fixed.
     featureCategory='code_suggestions',
-    apdexSatisfiedThreshold="2079.650567184067",
+    apdexSatisfiedThreshold='2079.650567184067',
     severity='s2',
     customToolingLinks=[
       toolingLinks.kibana(
