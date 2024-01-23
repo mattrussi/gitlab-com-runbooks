@@ -245,12 +245,12 @@ groups:
       (
         (
           gitlab_component_errors:ratio_1h{component="runway_ingress",env="ops",monitor="global",type="ai-gateway"}
-          > (14.4 * 0.001000)
+          > (14.4 * 0.020000)
         )
         and
         (
           gitlab_component_errors:ratio_5m{component="runway_ingress",env="ops",monitor="global",type="ai-gateway"}
-          > (14.4 * 0.001000)
+          > (14.4 * 0.020000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -293,12 +293,12 @@ groups:
       (
         (
           gitlab_component_errors:ratio_6h{component="runway_ingress",env="ops",monitor="global",type="ai-gateway"}
-          > (6 * 0.001000)
+          > (6 * 0.020000)
         )
         and
         (
           gitlab_component_errors:ratio_30m{component="runway_ingress",env="ops",monitor="global",type="ai-gateway"}
-          > (6 * 0.001000)
+          > (6 * 0.020000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -515,12 +515,12 @@ groups:
       (
         (
           gitlab_component_errors:ratio_1h{component="server",env="ops",monitor="global",type="ai-gateway"}
-          > (14.4 * 0.001000)
+          > (14.4 * 0.020000)
         )
         and
         (
           gitlab_component_errors:ratio_5m{component="server",env="ops",monitor="global",type="ai-gateway"}
-          > (14.4 * 0.001000)
+          > (14.4 * 0.020000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -563,12 +563,12 @@ groups:
       (
         (
           gitlab_component_errors:ratio_6h{component="server",env="ops",monitor="global",type="ai-gateway"}
-          > (6 * 0.001000)
+          > (6 * 0.020000)
         )
         and
         (
           gitlab_component_errors:ratio_30m{component="server",env="ops",monitor="global",type="ai-gateway"}
-          > (6 * 0.001000)
+          > (6 * 0.020000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -682,12 +682,12 @@ groups:
       (
         (
           gitlab_component_errors:ratio_1h{component="waf",env="ops",monitor="global",type="ai-gateway"}
-          > (14.4 * 0.001000)
+          > (14.4 * 0.020000)
         )
         and
         (
           gitlab_component_errors:ratio_5m{component="waf",env="ops",monitor="global",type="ai-gateway"}
-          > (14.4 * 0.001000)
+          > (14.4 * 0.020000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -729,12 +729,12 @@ groups:
       (
         (
           gitlab_component_errors:ratio_6h{component="waf",env="ops",monitor="global",type="ai-gateway"}
-          > (6 * 0.001000)
+          > (6 * 0.020000)
         )
         and
         (
           gitlab_component_errors:ratio_30m{component="waf",env="ops",monitor="global",type="ai-gateway"}
-          > (6 * 0.001000)
+          > (6 * 0.020000)
         )
       )
       and on(env,environment,tier,type,stage,component)
