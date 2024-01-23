@@ -32,6 +32,7 @@ local kubeStateMetricTypeDescriptors = {
       'container_start_time_seconds',
       'container_cpu_cfs_periods_total',
       'container_cpu_cfs_throttled_periods_total',
+      'container_cpu_cfs_throttled_seconds_total',
       'container_cpu_usage_seconds_total',
       'container_memory_cache',
       'container_memory_rss',

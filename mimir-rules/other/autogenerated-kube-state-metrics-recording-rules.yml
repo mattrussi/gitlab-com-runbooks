@@ -84,6 +84,12 @@ groups:
       *
       on(environment,cluster,pod) group_left(tier,type,stage,shard,deployment)
       topk by (environment,cluster,pod) (1, kube_pod_labels:labeled{env!~"gprd|ops",type=~"thanos"})
+  - record: container_cpu_cfs_throttled_seconds_total:labeled
+    expr: |
+      container_cpu_cfs_throttled_seconds_total{env!~"gprd|ops",metrics_path="/metrics/cadvisor"}
+      *
+      on(environment,cluster,pod) group_left(tier,type,stage,shard,deployment)
+      topk by (environment,cluster,pod) (1, kube_pod_labels:labeled{env!~"gprd|ops",type=~"thanos"})
   - record: container_cpu_usage_seconds_total:labeled
     expr: |
       container_cpu_usage_seconds_total{env!~"gprd|ops",metrics_path="/metrics/cadvisor"}

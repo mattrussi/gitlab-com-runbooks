@@ -5055,6 +5055,12 @@ groups:
       topk by (cluster,pod) (1, kube_pod_labels:labeled{type=~"consul|gitlab-shell|registry|sidekiq|webservice"})
     record: container_cpu_cfs_throttled_periods_total:labeled
   - expr: |
+      container_cpu_cfs_throttled_seconds_total{metrics_path="/metrics/cadvisor"}
+      *
+      on(cluster,pod) group_left(type,deployment)
+      topk by (cluster,pod) (1, kube_pod_labels:labeled{type=~"consul|gitlab-shell|registry|sidekiq|webservice"})
+    record: container_cpu_cfs_throttled_seconds_total:labeled
+  - expr: |
       container_cpu_usage_seconds_total{metrics_path="/metrics/cadvisor"}
       *
       on(cluster,pod) group_left(type,deployment)

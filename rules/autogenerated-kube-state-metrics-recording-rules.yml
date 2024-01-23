@@ -2175,6 +2175,12 @@ groups:
       *
       on(environment,cluster,pod) group_left(tier,type,stage,shard,deployment)
       topk by (environment,cluster,pod) (1, kube_pod_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-repository-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
+  - record: container_cpu_cfs_throttled_seconds_total:labeled
+    expr: |
+      container_cpu_cfs_throttled_seconds_total{metrics_path="/metrics/cadvisor"}
+      *
+      on(environment,cluster,pod) group_left(tier,type,stage,shard,deployment)
+      topk by (environment,cluster,pod) (1, kube_pod_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-repository-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
   - record: container_cpu_usage_seconds_total:labeled
     expr: |
       container_cpu_usage_seconds_total{metrics_path="/metrics/cadvisor"}
