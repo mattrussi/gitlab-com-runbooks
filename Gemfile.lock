@@ -146,7 +146,7 @@ GEM
     optimist (3.1.0)
     os (1.1.4)
     parallel (1.24.0)
-    parser (3.2.2.4)
+    parser (3.3.0.5)
       ast (~> 2.4.1)
       racc
     patience_diff (1.2.0)
@@ -173,7 +173,7 @@ GEM
     redis-clustering (5.0.8)
       redis (= 5.0.8)
       redis-cluster-client (>= 0.7.0)
-    regexp_parser (2.8.3)
+    regexp_parser (2.9.0)
     representable (3.2.0)
       declarative (< 0.1.0)
       trailblazer-option (>= 0.1.1, < 0.2.0)
