@@ -30,6 +30,7 @@ teams:
 
 - name: gitaly
   url: https://about.gitlab.com/handbook/engineering/dev-backend/gitaly/
+  manager: andrashorvath
   slack_alerts_channel: gitaly-alerts
   product_stage_group: gitaly
   ignored_components:
