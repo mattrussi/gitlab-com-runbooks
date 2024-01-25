@@ -6,6 +6,14 @@ local defaultPathFormat(serviceDefinition) = if misc.isPresent(serviceDefinition
 else
   '%(tenantName)s/%(envName)s/%(baseName)s.yml';
 
+// namespaceFormat generates a namespace such as gitlab-gprd-gprd-cloudflare-utilization
+local namespaceFormat(tenant, env, serviceDefinition, baseName) =
+  local service =
+    if misc.isPresent(serviceDefinition)
+    then serviceDefinition.type
+    else null;
+  std.join('-', std.prune([tenant, env, service, baseName]));
+
 {
   separateMimirRecordingFiles(
     filesForSeparateSelector,
@@ -18,10 +26,14 @@ else
       function(memo, tenantName)
         memo + objects.transformKeys(
           function(baseName)
+            local envName = metricsConfig.separateMimirRecordingSelectors[tenantName].envName;
+            local namespace = namespaceFormat(tenantName, envName, serviceDefinition, baseName);
             pathFormat % {
-              baseName: baseName,
+              // Mimir implicitly uses the filename as a namespace
+              // so baseName follows the pattern gitlab-gprd-gprd-cloudflare-utilization
+              baseName: namespace,
               tenantName: tenantName,
-              envName: metricsConfig.separateMimirRecordingSelectors[tenantName].envName,
+              envName: envName,
               serviceName: serviceDefinition.type,
             },
           filesForSeparateSelector(serviceDefinition, metricsConfig.separateMimirRecordingSelectors[tenantName].selector, extraArgs)
