@@ -31,9 +31,9 @@ test.suite({
       metricsConfig=fakeMetricsConfig
     ),
     expect: {
-      'gitlab-ops/ops/foo/rule_file_basename.yml': { env: 'ops' },
-      'gitlab-gprd/gprd/foo/rule_file_basename.yml': { env: 'gprd' },
-      'gitlab-others/others/foo/rule_file_basename.yml': { env: { noneOf: ['ops', 'gprd'] } },
+      'gitlab-ops/ops/foo/gitlab-ops-ops-foo-rule_file_basename.yml': { env: 'ops' },
+      'gitlab-gprd/gprd/foo/gitlab-gprd-gprd-foo-rule_file_basename.yml': { env: 'gprd' },
+      'gitlab-others/others/foo/gitlab-others-others-foo-rule_file_basename.yml': { env: { noneOf: ['ops', 'gprd'] } },
     },
   },
   testSeparateMimirRecordingFilesWithoutService: {
@@ -42,9 +42,9 @@ test.suite({
       metricsConfig=fakeMetricsConfig
     ),
     expect: {
-      'gitlab-ops/ops/rule_file_basename.yml': { env: 'ops' },
-      'gitlab-gprd/gprd/rule_file_basename.yml': { env: 'gprd' },
-      'gitlab-others/others/rule_file_basename.yml': { env: { noneOf: ['ops', 'gprd'] } },
+      'gitlab-ops/ops/gitlab-ops-ops-rule_file_basename.yml': { env: 'ops' },
+      'gitlab-gprd/gprd/gitlab-gprd-gprd-rule_file_basename.yml': { env: 'gprd' },
+      'gitlab-others/others/gitlab-others-others-rule_file_basename.yml': { env: { noneOf: ['ops', 'gprd'] } },
     },
   },
 })
