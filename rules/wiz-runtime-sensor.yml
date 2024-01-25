@@ -10,4 +10,3 @@ groups:
     annotations:
       description: The Wiz Runtime Sensors are running out of memory, {{ $labels.pod }}.
       title: Wiz Runtime Sensors getting OOMkilled.
-
