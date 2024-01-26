@@ -13,7 +13,8 @@ GitLab Pages and the GitLab registry are not yet fronted by Cloudflare, so these
 #### via MR to Terraform
 
 - New WAF rules to block traffic (or add a challenge to traffic) should be added to the Custom Rules [ruleset](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/master/environments/gprd/cloudflare-custom-rules.tf) via an MR to `config-mgmt`
-- New rules to rate limit traffic should be added to the Rate Limit [ruleset](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/master/environments/gprd/cloudflare-rate-limits-waf-and-rules.tf) via an MR to `config-mgmt`
+- New rules to rate limit traffic should be added to the Rate Limit [ruleset](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/master/environments/gprd/cloudflare-rate-limits-waf-and-rules.tf#L41) via an MR to `config-mgmt` 
+Note: take care to add these to the ruleset, and not as `cloudflare_rate_limit` resources. These are now [deprecated](https://developers.cloudflare.com/waf/reference/migration-guides/old-rate-limiting-deprecation) and will be removed by May 1st 2024
 - These MRs _must_ contain a link to the issue explaining why the change was made (probably an incident issue), for audit and tracking purposes
 
 #### Manually 
@@ -99,71 +100,6 @@ What to consider repeated abuse?
 For geo-political reasons outside our control, and to remain in compliance with applicable law, we must from time to time [block access to our services from specific geographical locations](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/master/environments/gprd/cloudflare-custom-rules.tf?ref_type=heads#L21).
 
 CloudFlare's firewall rules support doing this using the `ip.geoip` filter; we currently use `country` and `subdivision_1_iso_code` below that, although there are a few other options as well (see <https://developers.cloudflare.com/firewall/cf-firewall-language/fields>).  The implementation of this is apparently built on the MaxMind GeoIP database; in the event of questions about classification (the topic is tricky, shifting, and occasionally fraught) <https://www.maxmind.com/en/geoip2-precision-demo> can be used to confirm the classification from MaxMind, and in the event that it needs to be disputed, <https://support.maxmind.com/geoip-data-correction-request/> can be used to submit a correction.  However, unless we have first-hand positive knowledge regarding the location of the IP address we should usually leave that to the affected parties who can be expected to have access to any required proof.
-
-### Labels
-
-In order to keep the promise of a searchable database, we are using labels to categorize each rule. These labels will be applied by automation, except for manual actions such as `rule-origin` labels.
-
-Each issue should be labeled with with either of these labels:
-
-- `firewall-action::block`: The rule associated to the issue is blocking traffic
-  - Applied by automation for a newly created block.
-    - Might also be applied by an engineer to manually created issues
-  - This label must only be used while the block is active.
-  - While this label is applied the issue should not be closed, but may be for long-term rules.
-- `firewall-action::bypass`: The rule associated to the issue is bypassing traffic
-  - Applied by an engineer documenting a allowlist.
-  - This label must only be used while the allowlist is in place.
-  - While this label is applied the issue should not be closed, but may be for long-term rules.
-  - The following applicable labels have to be applied to indicate the type(s) of bypass.
-    - `bypass-action:hot`: The rule associated to the issue bypasses [Hotlinking Protection](https://support.cloudflare.com/hc/en-us/articles/200170026-What-does-enabling-Cloudflare-Hotlink-Protection-do-)
-    - `bypass-action:bic`: The rule associated to the issue bypasses the [Browser Integrity Check](https://support.cloudflare.com/hc/en-us/articles/200170086-Understanding-the-Cloudflare-Browser-Integrity-Check)
-    - `bypass-action:waf`: The rule associated to the issue bypasses managed WAF rules
-    - `bypass-action:rateLimit`: The rule associated to the issue bypasses Cloudflare Rate Limiting
-    - `bypass-action:uaBlock`: The rule associated to the issue bypasses User-agent blocking
-    - `bypass-action:zoneLockdown`: The rule associated to the issue bypasses a Zone Lockdown
-    - `bypass-action:securityLevel`: The rule associated to the issue bypasses Security Level (IP Reputation)
-- `firewall-action::expired`: The rule associated to the issue has expired
-  - Applied by automation for `temporary` rules as described in [automated expiration of temporary rules](#automated-expiration-of-temporary-rules)
-    - The minimum block time of 48h has passed
-    - Metrics indicate, the rule has had little to no traffic in the last 12h
-      - Little to no traffic = less than 7200 requests (10 requests/minute over 12h)
-    - The rule was removed from Cloudflare
-  - Issues with this label should also be closed
-  - Manually applied by an engineer, once a long-term rule has been sunset.
-- `firewall-action::other`: The rule associated to the issue is documented in the issue
-  - In other cases. Mostly reserved for manual actions on firewall rules not forseen in this document.
-  - The exact state and purpose of the rule has to be described in the issue.
-  - This will also disable automatic closing of the issue by automation. A rule might still get removed.
-
-In addition to the state, the type of block/allowlist should be documented by applying all appropriate type labels. In case of a rule created via automation, these will be applied automatically.
-
-- `rule-filter:ip`: The rule filters based on IPs or CIDRs
-- `rule-filter:uri`: The rule filters based on the URI
-- `rule-filter:user-agent`: The rule filters based on the user-agent
-- `rule-filter:other-identifier`: The rule filters based on another identifier
-- `rule-filter:external`: There is an (additional) component, not managed in Cloudflare rules
-  - A good example would be an additional block on the registry HAProxy to block traffic on the registry.
-
-Because there are multiple ways to create a rule, please also apply one of the following labels to specify the rule origin.
-
-- `rule-origin::terraform`: The rule was created via terraform. Please also note in the issue where to find the resource in question.
-- `rule-origin::chatops`: The rule was created via ChatOps.
-- `rule-origin::manual`: The rule was added manually.
-
-The longevity of a rule is to be indicated by either of these labels:
-
-- `rule-duration::long-term`: The rule is intended to stay active for a long time. Examples include allowlisting Customers or blocking repeated offenders.
-- `rule-duration::temporary`: The rule is intended to be short-lived. Its lifetime will in most cases be determined by automation.
-
-Add labels for the Cloudflare zones that the rule should be present in. This can be used
-to specify rules for creation in staging prior to production, or production only
-rules to respond to incidents.
-
-- `zone:gitlab-com`
-- `zone:staging-gitlab-com`
-- `zone:gitlab-net`
-
 
 ### Removing rules
 
