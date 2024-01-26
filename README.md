@@ -443,7 +443,9 @@ If you get errors while doing any of these steps, then read on for more details 
 
 To generate a new image you must follow the git commit guidelines below, this
 will trigger a semantic version bump which will then cause a new pipeline
-that will build and tag the new image
+that will build and tag the new image.
+
+:warning: **Note that Docker builds only occur when this repo is tagged.  When built, we also build the `${CI_DEFAULT_BRANCH}` and `latest` tags.  This also means that there's the potential that latest version of our Docker image **may not** match the latest code base in the repository.**
 
 ### Git Commit Guidelines
 
