@@ -5133,12 +5133,6 @@ groups:
       topk by (cluster,pod) (1, kube_pod_labels:labeled{type=~"consul|gitlab-shell|registry|sidekiq|webservice"})
     record: container_spec_memory_limit_bytes:labeled
   - expr: |
-      kube_pod_container_status_running
-      *
-      on(cluster,pod) group_left(type,deployment)
-      topk by (cluster,pod) (1, kube_pod_labels:labeled{type=~"consul|gitlab-shell|registry|sidekiq|webservice"})
-    record: kube_pod_container_status_running:labeled
-  - expr: |
       kube_pod_container_resource_limits
       *
       on(cluster,pod) group_left(type,deployment)

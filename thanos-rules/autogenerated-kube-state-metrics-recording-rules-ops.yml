@@ -164,12 +164,6 @@ groups:
       *
       on(environment,cluster,pod) group_left(tier,type,stage,shard,deployment)
       topk by (environment,cluster,pod) (1, kube_pod_labels:labeled{env="ops",type=~"thanos"})
-  - record: kube_pod_container_status_running:labeled
-    expr: |
-      kube_pod_container_status_running{env="ops"}
-      *
-      on(environment,cluster,pod) group_left(tier,type,stage,shard,deployment)
-      topk by (environment,cluster,pod) (1, kube_pod_labels:labeled{env="ops",type=~"thanos"})
   - record: kube_pod_container_resource_limits:labeled
     expr: |
       kube_pod_container_resource_limits{env="ops"}
