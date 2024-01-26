@@ -13,11 +13,12 @@ GitLab Pages and the GitLab registry are not yet fronted by Cloudflare, so these
 #### via MR to Terraform
 
 - New WAF rules to block traffic (or add a challenge to traffic) should be added to the Custom Rules [ruleset](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/master/environments/gprd/cloudflare-custom-rules.tf) via an MR to `config-mgmt`
-- New rules to rate limit traffic should be added to the Rate Limit [ruleset](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/master/environments/gprd/cloudflare-rate-limits-waf-and-rules.tf#L41) via an MR to `config-mgmt` 
+- New rules to rate limit traffic should be added to the Rate Limit [ruleset](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/master/environments/gprd/cloudflare-rate-limits-waf-and-rules.tf#L41) via an MR to `config-mgmt`
 Note: take care to add these to the ruleset, and not as `cloudflare_rate_limit` resources. These are now [deprecated](https://developers.cloudflare.com/waf/reference/migration-guides/old-rate-limiting-deprecation) and will be removed by May 1st 2024
 - These MRs _must_ contain a link to the issue explaining why the change was made (probably an incident issue), for audit and tracking purposes
 
-#### Manually 
+#### Manually
+
 - **If it is necessary to make changes via the Cloudflare UI** (for example, during an incident) this can still be done manually, however the changes **will be overwritten** the next time there is a `terraform apply`. As such, any new rules will need to be committed to Terraform after the incident (either by the EOC, or asking for help from Infrastructure).
 
 - Create the rule using the [Cloudflare UI](https://dash.cloudflare.com/852e9d53d0f8adbd9205389356f2303d/gitlab.com/firewall/firewall-rules) with a description explaining why the rule was created (ideally include an issue number). For further detail refer to the [Cloudflare documentation on managing rules.](https://developers.cloudflare.com/firewall/cf-dashboard/create-edit-delete-rules/).
