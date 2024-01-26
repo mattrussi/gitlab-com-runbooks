@@ -1,17 +1,18 @@
 local recordingRules = import 'kube-state-metrics/recording-rules.libsonnet';
-local separateGlobalRecordingFiles = (import 'recording-rules/lib/thanos/separate-global-recording-files.libsonnet').separateGlobalRecordingFiles;
+local separateMimirRecordingFiles = (import 'recording-rules/lib/mimir/separate-mimir-recording-files.libsonnet').separateMimirRecordingFiles;
 
-separateGlobalRecordingFiles(
-  function(selector)
-    {
-      'kube-state-metrics-recording-rules.yml': std.manifestYamlDoc({
-        groups:
-          std.map(
-            function(group)
-              group,
-            recordingRules.groupsWithFilter(function(service) service.dangerouslyThanosEvaluated, selector)
-          ),
-      }),
-    },
-  pathFormat='%(envName)s/%(baseName)s'
+local filesForSeparateSelector(service, selector, extraArgs) =
+  local groups = recordingRules.groupsWithFilter(
+    function(s) !s.dangerouslyThanosEvaluated && s.type == service.type,
+    selector
+  );
+  {
+    [if std.length(groups) > 0 then 'kube-state-metrics']: std.manifestYamlDoc({ groups: groups }),
+  };
+
+std.foldl(
+  function(memo, service)
+    memo + separateMimirRecordingFiles(filesForSeparateSelector, service),
+  recordingRules.kubeServices,
+  {}
 )
