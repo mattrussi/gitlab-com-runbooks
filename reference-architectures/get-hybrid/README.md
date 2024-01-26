@@ -49,11 +49,15 @@ Here are some examples of the dashboards generated for this reference architectu
 
 Saturation monitoring is handled differently to the service-level monitoring described above. Each monitored resource is represented as a finite resource with a current value between 0% (unutilized) and 100% (completely saturated). Each saturation resource has a threshold SLO over which it will alert.
 
+:warning: Some metrics below require the use of recording rules in order for these to work properly.
+
 <!-- MARKER:saturation: do not edit this section directly. -->
 ### Monitored Saturation Resources
 
 | **Resource** | **Applicable Services** | **Description** | **Horizontally Scalable?** | **Alerting Threshold** |
 | ------------ | ----------------------- | --------------- | -------------------------- | -----------------------|
+| `aws_rds_memory_saturation` |  | The amount of available random access memory. This metric reports the value of the MemAvailable field of /proc/meminfo.  A high saturation point indicates that we are low on available memory and Swap may be in use, lowering the performance of an RDS instance.  Additional details here: https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/rds-metrics.html#rds-cw-metrics-instance  | - | 90% |
+| `aws_rds_used_connections` |  | The number of client network connections to the database instance.  Instance Type: %s  Further details: https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/rds-metrics.html#rds-cw-metrics-instance  | - | 95% |
 | `cpu` | `consul`, `gitaly`, `praefect` | This resource measures average CPU utilization across an all cores in a service fleet. If it is becoming saturated, it may indicate that the fleet needs horizontal or vertical scaling.  | ✅ | 90% |
 | `disk_inodes` | `consul`, `gitaly`, `praefect` | Disk inode utilization per device per node.  If this is too high, its possible that a directory is filling up with files. Consider logging in an checking temp directories for large numbers of files  | ✅ | 80% |
 | `disk_space` | `consul`, `gitaly`, `praefect` | Disk space utilization per device per node.  | ✅ | 90% |

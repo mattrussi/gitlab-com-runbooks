@@ -7,7 +7,7 @@ local rdsMonitoring = std.get(config.options, 'rdsMonitoring', false);
 local rdsInstanceRAMGB = std.get(config.options, 'rdsInstanceRAMGB', null);
 
 {
-  [if rdsMonitoring && rdsInstanceRAMGB != null then 'aws_rds_freeable_memory']: resourceSaturationPoint({
+  [if rdsMonitoring != null then 'aws_rds_memory_saturation']: resourceSaturationPoint({
     title: 'Memory Availability for an RDS instance',
     severity: 's4',
     horizontallyScalable: false,
@@ -15,11 +15,11 @@ local rdsInstanceRAMGB = std.get(config.options, 'rdsInstanceRAMGB', null);
     description: |||
       The amount of available random access memory. This metric reports the value of the MemAvailable field of /proc/meminfo.
 
-      A high saturation point indicates that Swap may be in use, lowering the performance of an RDS instance.
+      A high saturation point indicates that we are low on available memory and Swap may be in use, lowering the performance of an RDS instance.
 
       Additional details here: https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/rds-metrics.html#rds-cw-metrics-instance
     |||,
-    grafana_dashboard_uid: 'aws_rds_freeable_memory',
+    grafana_dashboard_uid: 'aws_rds_memory_saturation',
     resourceLabels: [],
     linear_prediction_saturation_alert: '6h',  // Alert if this is going to exceed the hard threshold within 6h
 
@@ -27,14 +27,15 @@ local rdsInstanceRAMGB = std.get(config.options, 'rdsInstanceRAMGB', null);
     // to leverage saturation in a more universal way.  Example
     // high saturation, say 99% would mean there's less than a few
     // MB of available RAM that is freeable.
+
+    // Note that we are using a metric, `rds_instance_ram_bytes` to capture the amount of RAM
+    // specified in bytes, available to us.  This is to be defined by the
+    // customer as a prometheus recording rule.
     query: |||
       1- (sum by (dbinstance_identifier) (aws_rds_freeable_memory_maximum)
       /
-      (%(rdsInstanceRAMGB)d * 1024 * 1024 * 1024))
+      rds_instance_ram_bytes
     |||,
-    queryFormatConfig: {
-      rdsInstanceRAMGB: rdsInstanceRAMGB
-    },
     slos: {
       soft: 0.85,
       hard: 0.90,
