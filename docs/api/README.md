@@ -27,7 +27,6 @@
 * [Cloudflare Logs](../cloudflare/logging.md)
 * [Cloudflare: Managing Traffic](../cloudflare/managing-traffic.md)
 * [Service Locations](../cloudflare/services-locations.md)
-* [Cloudflare: Terraform Configuration](../cloudflare/terraform.md)
 * [Chef Tips and Tools](../config_management/chef-workflow.md)
 * [customers.gitlab.com](../customersdot/api-key-rotation.md)
 * [CustomersDot main troubleshoot documentation](../customersdot/overview.md)
