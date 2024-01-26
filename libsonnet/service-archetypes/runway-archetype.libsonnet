@@ -9,7 +9,7 @@ function(
   team,
   apdexScore=0.999,
   errorRatio=0.999,
-  apdexSatisfiedThreshold="1067.1895716335973",
+  apdexSatisfiedThreshold='1067.1895716335973',
   featureCategory='not_owned',
   userImpacting=true,
   trafficCessationAlertConfig=true,
@@ -45,7 +45,7 @@ function(
         apdex: histogramApdex(
           histogram='stackdriver_cloud_run_revision_run_googleapis_com_request_latencies_bucket',
           rangeVectorFunction='avg_over_time',
-          selector=baseSelector,
+          selector=baseSelector { response_code_class: { noneOf: ['4xx', '5xx'] } },
           satisfiedThreshold=apdexSatisfiedThreshold,
           unit='ms',
         ),
@@ -53,7 +53,7 @@ function(
         requestRate: gaugeMetric(
           gauge='stackdriver_cloud_run_revision_run_googleapis_com_request_count',
           selector=baseSelector,
-          samplingInterval=60, //seconds. See https://cloud.google.com/monitoring/api/metrics_gcp#run/request_count
+          samplingInterval=60,  //seconds. See https://cloud.google.com/monitoring/api/metrics_gcp#run/request_count
         ),
 
         errorRate: gaugeMetric(

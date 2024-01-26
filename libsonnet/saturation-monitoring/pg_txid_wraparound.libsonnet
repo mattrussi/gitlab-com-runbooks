@@ -1,5 +1,36 @@
 local resourceSaturationPoint = (import 'servicemetrics/metrics.libsonnet').resourceSaturationPoint;
 local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
+local config = import './gitlab-metrics-config.libsonnet';
+
+local dbPlatform = std.get(config, 'dbPlatform', null);
+
+// All of the below metrics are reported by the postgres exporter
+local originalQuery = |||
+      (
+        max without (series) (
+          label_replace(pg_database_wraparound_age_datfrozenxid{%(selector)s}, "series", "datfrozenxid", "", "")
+          or
+          label_replace(pg_database_wraparound_age_datminmxid{%(selector)s}, "series", "datminmxid", "", "")
+        )
+        and on (instance, job) (pg_replication_is_replica{%(selector)s} == 0)
+      )
+      /
+      (%(wraparoundValue)s)
+    |||;
+
+// `pg_database_wraparound_age_datfrozenxid_seconds` provided by the postgres exporter
+// `pg_database_wraparound_age_datminxid_seconds` provided by the postgres exporter
+local rdsQuery = |||
+      (
+        max (
+          pg_database_wraparound_age_datfrozenxid_seconds{%(selector)s}
+          or
+          pg_database_wraparound_age_datminmxid_seconds{%(selector)s}
+        )
+      )
+      /
+      (%(wraparoundValue)s)
+    |||;
 
 {
   pg_xid_wraparound: resourceSaturationPoint({
@@ -9,7 +40,8 @@ local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
 
     // Use patroni tag, not postgres since we only want clusters that have primaries
     // not postgres-archive, or postgres-delayed nodes for example
-    appliesTo: metricsCatalog.findServicesWithTag(tag='postgres_with_primaries'),
+    // Add RDS for instances where RDS is leveraged
+    appliesTo: metricsCatalog.findServicesWithTag(tag='postgres_with_primaries') + metricsCatalog.findServicesWithTag(tag='rds'),
 
     alertRunbook: 'docs/patroni/pg_xid_wraparound_alert.md',
     description: |||
@@ -38,20 +70,10 @@ local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
     grafana_dashboard_uid: 'sat_pg_xid_wraparound',
     resourceLabels: ['datname'],
     queryFormatConfig: {
-      wraparoundValue: '2^31 - 10^6',  // Keep this as a string
+      // Transaction ID's contain at most 2^32 available ID's.  Postgres (>= version 14) reserves 3 million of said ID's
+      wraparoundValue: '2^31 - 3000000',
     },
-    query: |||
-      (
-        max without (series) (
-          label_replace(pg_database_wraparound_age_datfrozenxid{%(selector)s}, "series", "datfrozenxid", "", "")
-          or
-          label_replace(pg_database_wraparound_age_datminmxid{%(selector)s}, "series", "datminmxid", "", "")
-        )
-        and on (instance, job) (pg_replication_is_replica{%(selector)s} == 0)
-      )
-      /
-      (%(wraparoundValue)s)
-    |||,
+    query: if dbPlatform == 'rds' then rdsQuery else originalQuery,
     slos: {
       soft: 0.60,
       hard: 0.70,

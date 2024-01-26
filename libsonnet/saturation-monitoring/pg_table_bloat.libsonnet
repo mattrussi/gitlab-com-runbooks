@@ -19,9 +19,9 @@ local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
     // 5 minutes. For this reason, we use `avg_over_time(...[58m])`. Once we upgrade to
     // at least 2.26 of Prometheus, we can switch this to `last_over_time(...[1h])` function instead.
     query: |||
-      sum by (%(aggregationLabels)s) (avg_over_time(gitlab_database_bloat_table_bloat_size{job="gitlab-monitor-database-bloat", %(selector)s}[58m]))
+      sum by (%(aggregationLabels)s) (avg_over_time(gitlab_database_bloat_table_bloat_size{%(selector)s}[58m]))
       /
-      sum by (%(aggregationLabels)s) (avg_over_time(gitlab_database_bloat_table_real_size{job="gitlab-monitor-database-bloat", %(selector)s}[58m]))
+      sum by (%(aggregationLabels)s) (avg_over_time(gitlab_database_bloat_table_real_size{%(selector)s}[58m]))
     |||,
     slos: {
       soft: 0.30,

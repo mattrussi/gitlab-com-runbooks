@@ -22,6 +22,8 @@ The current architecture looks like this:
 
 See [#24245](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/24245) for more context.
 
+[Memory Store and CloudSQL config in Terraform](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/master/environments/ops/packagecloud.tf)
+
 ## Environments
 
 | Environment | URL                             | GKE Cluster    | CloudFlare | Terraform                                                                                             |
@@ -73,6 +75,8 @@ The GCP Ingress that sits in front of these deployments is configured to route a
 
 - `/*` -> `web`
 - `/api/*` -> `rainbows`
+
+The main configuration is in [K8s-workloads](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/blob/master/releases/packagecloud/ops.yaml.gotmpl)
 
 ### Why does the rainbows container also run nginx & unicorn?
 

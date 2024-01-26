@@ -160,3 +160,4 @@ install_plugin nodejs
 install_plugin yq
 install_plugin pre-commit
 install_plugin python
+install_plugin mimirtool https://github.com/asdf-community/asdf-mimirtool

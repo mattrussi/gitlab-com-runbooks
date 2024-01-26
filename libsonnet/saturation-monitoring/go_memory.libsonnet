@@ -14,12 +14,11 @@ local resourceSaturationPoint = (import 'servicemetrics/resource_saturation_poin
     description: |||
       Go's memory allocation strategy can make it look like a Go process is saturating memory when measured using RSS, when in fact
       the process is not at risk of memory saturation. For this reason, we measure Go processes using the `go_memstat_alloc_bytes`
-      metric instead of RSS.
     |||,
     grafana_dashboard_uid: 'sat_go_memory',
     resourceLabels: ['fqdn'],
     query: |||
-      sum by (%(aggregationLabels)s) (
+      max by (%(aggregationLabels)s) (
         go_memstats_alloc_bytes{%(selector)s}
       )
       /

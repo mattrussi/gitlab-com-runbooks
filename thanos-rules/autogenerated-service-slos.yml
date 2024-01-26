@@ -58,7 +58,7 @@ groups:
     labels:
       tier: sv
       type: ai-gateway
-    expr: "0.001000"
+    expr: "0.020000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: inference
@@ -70,7 +70,7 @@ groups:
       component: inference
       tier: sv
       type: ai-gateway
-    expr: "0.001000"
+    expr: "0.020000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: runway_ingress
@@ -82,7 +82,7 @@ groups:
       component: runway_ingress
       tier: sv
       type: ai-gateway
-    expr: "0.001000"
+    expr: "0.020000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: server
@@ -94,7 +94,7 @@ groups:
       component: server
       tier: sv
       type: ai-gateway
-    expr: "0.001000"
+    expr: "0.020000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: waf
@@ -106,7 +106,7 @@ groups:
       component: waf
       tier: sv
       type: ai-gateway
-    expr: "0.001000"
+    expr: "0.020000"
   - record: slo:min:gitlab_service_apdex:ratio
     labels:
       tier: sv
@@ -2689,54 +2689,6 @@ groups:
     expr: "0.050000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
-      component: thanos_memcached
-      tier: inf
-      type: thanos-staging
-    expr: "0.999000"
-  - record: slo:max:events:gitlab_service_errors:ratio
-    labels:
-      component: thanos_memcached
-      tier: inf
-      type: thanos-staging
-    expr: "0.050000"
-  - record: slo:min:events:gitlab_service_apdex:ratio
-    labels:
-      component: thanos_query
-      tier: inf
-      type: thanos-staging
-    expr: "0.950000"
-  - record: slo:max:events:gitlab_service_errors:ratio
-    labels:
-      component: thanos_query
-      tier: inf
-      type: thanos-staging
-    expr: "0.050000"
-  - record: slo:min:events:gitlab_service_apdex:ratio
-    labels:
-      component: thanos_query_frontend
-      tier: inf
-      type: thanos-staging
-    expr: "0.950000"
-  - record: slo:max:events:gitlab_service_errors:ratio
-    labels:
-      component: thanos_query_frontend
-      tier: inf
-      type: thanos-staging
-    expr: "0.050000"
-  - record: slo:min:events:gitlab_service_apdex:ratio
-    labels:
-      component: thanos_store
-      tier: inf
-      type: thanos-staging
-    expr: "0.950000"
-  - record: slo:max:events:gitlab_service_errors:ratio
-    labels:
-      component: thanos_store
-      tier: inf
-      type: thanos-staging
-    expr: "0.050000"
-  - record: slo:min:events:gitlab_service_apdex:ratio
-    labels:
       tier: sv
       type: tracing
     expr: "0.995000"
@@ -3124,11 +3076,6 @@ groups:
     labels:
       tier: inf
       type: thanos
-    expr: "1"
-  - record: gitlab_service:mapping:disable_ops_rate_prediction
-    labels:
-      tier: inf
-      type: thanos-staging
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:

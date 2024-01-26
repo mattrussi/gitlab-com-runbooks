@@ -4,6 +4,7 @@ local aggregations = import 'promql/aggregations.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
 local strings = import 'utils/strings.libsonnet';
 local validateMetric = (import '../validation.libsonnet').validateMetric;
+local metricLabelsSelectorsMixin = (import '../metrics-mixin.libsonnet').metricLabelsSelectorsMixin;
 
 local transformErrorRateToSuccessRate(errorRateMetric, operationRateMetric, selector, rangeInterval, aggregationLabels, useRecordingRuleRegistry, offset) =
   |||
@@ -96,14 +97,5 @@ local transformErrorRateToSuccessRate(errorRateMetric, operationRateMetric, sele
     apdexAttribution(aggregationLabel, selector, rangeInterval, withoutLabels=[])::
       generateApdexAttributionQuery(self, aggregationLabel, selector, rangeInterval, withoutLabels),
 
-    // Only support reflection on hash selectors
-    [if std.isObject(selector) then 'supportsReflection']():: {
-      // Returns a list of metrics and the labels that they use
-      getMetricNamesAndLabels()::
-        {
-          [errorRateMetric]: std.set(std.objectFields(selector)),
-          [operationRateMetric]: std.set(std.objectFields(selector)),
-        },
-    },
-  }),
+  } + metricLabelsSelectorsMixin(selector, [errorRateMetric, operationRateMetric])),
 }

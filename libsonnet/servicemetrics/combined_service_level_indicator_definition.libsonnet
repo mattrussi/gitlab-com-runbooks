@@ -40,6 +40,7 @@ local combinedServiceLevelIndicatorDefinition(
         severity: componentsInitialised[0].severity,
         dependsOn: dependsOn,
         dependencies: dependencies.new(inheritedDefaults.type, componentName, dependsOn),
+        components: componentsInitialised,
 
         serviceAggregation: serviceAggregation,
 

@@ -124,9 +124,9 @@
         "historical_days": 365,
         "strategy": "quantile95_1h"
       },
-      "description": "Go's memory allocation strategy can make it look like a Go process is saturating memory when measured using RSS, when in fact\nthe process is not at risk of memory saturation. For this reason, we measure Go processes using the `go_memstat_alloc_bytes`\nmetric instead of RSS.\n",
+      "description": "Go's memory allocation strategy can make it look like a Go process is saturating memory when measured using RSS, when in fact\nthe process is not at risk of memory saturation. For this reason, we measure Go processes using the `go_memstat_alloc_bytes`\n",
       "horizontallyScalable": true,
-      "raw_query": "sum by (fqdn) (\n  go_memstats_alloc_bytes{%(selector)s}\n)\n/\nsum by (fqdn) (\n  node_memory_MemTotal_bytes{%(selector)s}\n)\n",
+      "raw_query": "max by (fqdn) (\n  go_memstats_alloc_bytes{%(selector)s}\n)\n/\nsum by (fqdn) (\n  node_memory_MemTotal_bytes{%(selector)s}\n)\n",
       "severity": "s4",
       "slos": {
         "alertTriggerDuration": "5m",
@@ -361,6 +361,25 @@
       },
       "title": "Disk Utilization Overall"
     },
+    "pg_xid_wraparound": {
+      "appliesTo": [],
+      "capacityPlanning": {
+        "changepoints_count": 25,
+        "forecast_days": 90,
+        "historical_days": 365,
+        "strategy": "quantile95_1h"
+      },
+      "description": "Risk of DB shutdown in the near future, approaching transaction ID wraparound.\n\nThis is a critical situation.\n\nThis saturation metric measures how close the database is to Transaction ID wraparound.\n\nWhen wraparound occurs, the database will automatically shutdown to prevent data loss, causing a full outage.\n\nRecovery would require entering single-user mode to run vacuum, taking the site down for a potentially multi-hour maintenance session.\n\nTo avoid reaching the db shutdown threshold, consider the following short-term actions:\n\n1. Escalate to the SRE Datastores team, and then,\n\n2. Find and terminate any very old transactions. The runbook for this alert has details.  Do this first.  It is the most critical step and may be all that is necessary to let autovacuum do its job.\n\n3. Run a manual vacuum on tables with oldest relfrozenxid.  Manual vacuums run faster than autovacuum.\n\n4. Add autovacuum workers or reduce autovacuum cost delay, if autovacuum is chronically unable to keep up with the transaction rate.\n\nLong running transaction dashboard: https://dashboards.gitlab.net/d/alerts-long_running_transactions/alerts-long-running-transactions?orgId=1\n",
+      "horizontallyScalable": false,
+      "raw_query": "(\n  max (\n    pg_database_wraparound_age_datfrozenxid_seconds{%(selector)s}\n    or\n    pg_database_wraparound_age_datminmxid_seconds{%(selector)s}\n  )\n)\n/\n(2^31 - 3000000)\n",
+      "severity": "s1",
+      "slos": {
+        "alertTriggerDuration": "5m",
+        "hard": 0.7,
+        "soft": 0.6
+      },
+      "title": "Transaction ID Wraparound"
+    },
     "puma_workers": {
       "appliesTo": [
         "webservice"
@@ -475,6 +494,10 @@
           "name": "opensearch_disk_space",
           "url": ""
         },
+        "pg_xid_wraparound": {
+          "name": "pg_xid_wraparound",
+          "url": ""
+        },
         "puma_workers": {
           "name": "puma_workers",
           "url": ""
@@ -551,6 +574,10 @@
         },
         "opensearch_disk_space": {
           "name": "opensearch_disk_space",
+          "url": ""
+        },
+        "pg_xid_wraparound": {
+          "name": "pg_xid_wraparound",
           "url": ""
         },
         "puma_workers": {
@@ -631,6 +658,10 @@
           "name": "opensearch_disk_space",
           "url": ""
         },
+        "pg_xid_wraparound": {
+          "name": "pg_xid_wraparound",
+          "url": ""
+        },
         "puma_workers": {
           "name": "puma_workers",
           "url": ""
@@ -707,6 +738,10 @@
         },
         "opensearch_disk_space": {
           "name": "opensearch_disk_space",
+          "url": ""
+        },
+        "pg_xid_wraparound": {
+          "name": "pg_xid_wraparound",
           "url": ""
         },
         "puma_workers": {
@@ -787,6 +822,10 @@
           "name": "opensearch_disk_space",
           "url": ""
         },
+        "pg_xid_wraparound": {
+          "name": "pg_xid_wraparound",
+          "url": ""
+        },
         "puma_workers": {
           "name": "puma_workers",
           "url": ""
@@ -863,6 +902,10 @@
         },
         "opensearch_disk_space": {
           "name": "opensearch_disk_space",
+          "url": ""
+        },
+        "pg_xid_wraparound": {
+          "name": "pg_xid_wraparound",
           "url": ""
         },
         "puma_workers": {
@@ -943,6 +986,10 @@
           "name": "opensearch_disk_space",
           "url": ""
         },
+        "pg_xid_wraparound": {
+          "name": "pg_xid_wraparound",
+          "url": ""
+        },
         "puma_workers": {
           "name": "puma_workers",
           "url": ""
@@ -1021,6 +1068,10 @@
           "name": "opensearch_disk_space",
           "url": ""
         },
+        "pg_xid_wraparound": {
+          "name": "pg_xid_wraparound",
+          "url": ""
+        },
         "puma_workers": {
           "name": "puma_workers",
           "url": ""
@@ -1097,6 +1148,10 @@
         },
         "opensearch_disk_space": {
           "name": "opensearch_disk_space",
+          "url": ""
+        },
+        "pg_xid_wraparound": {
+          "name": "pg_xid_wraparound",
           "url": ""
         },
         "puma_workers": {

@@ -668,7 +668,7 @@ services:
     teams:
       - gitaly
     label: Gitaly
-    owner: scalability:practices
+    owner: gitaly
     technical:
       project:
         - https://gitlab.com/gitlab-org/gitaly
@@ -1276,34 +1276,6 @@ services:
       monitors:
         grafana_folder: thanos
         primary_grafana_dashboard: thanos-main/thanos-overview
-
-  - name: thanos-staging
-    tier: inf
-    friendly_name: thanos-staging
-    label: Thanos-staging
-    owner: scalability:observability
-    technical:
-      documents:
-        design:
-        architecture: https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/thanos/architecture.md
-        readiness_review:
-        sre_guide: https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/thanos
-        developer_guide:
-        service:
-          - https://thanos.io/tip/thanos/design.md/#architecture
-      project:
-        - https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/tanka-deployments
-        - https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles
-      dependencies:
-        - service: prometheus
-        - service: google-cloud-storage
-      logging:
-        - name: Thanos-staging namespace
-          permalink: https://nonprod-log.gitlab.net/app/r/s/rEC7f
-    observability:
-      monitors:
-        grafana_folder: thanos-staging
-        primary_grafana_dashboard: thanos-staging-main/thanos-staging-overview
 
   - name: redis
     tier: db

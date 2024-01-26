@@ -48,8 +48,6 @@ metricsCatalog.serviceDefinition({
   // this should not be required for other services.
   dangerouslyThanosEvaluated: true,
 
-  thanosType: 'thanos',
-
   // No stages for Thanos
   serviceIsStageless: true,
 

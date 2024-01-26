@@ -17,9 +17,9 @@ You'll be using the following tooling:
 
 **WARNING**: When setting a pin, make sure it is between 6 and 8 ASCII characters, longer pins may be silently truncated.
 
-1. Follow the instructions for [installing `yubikey-agent`](https://github.com/FiloSottile/yubikey-agent#installation). **But do not run the `setup` command for your yubikey yet.**
+1. Follow the instructions for [installing `yubikey-agent`](https://github.com/FiloSottile/yubikey-agent#installation). **But do not run the `setup` command for your yubikey. This is handled as part of the yubikey-reset.sh script below.**
 1. Follow the instructions for [installing `ykman`](https://docs.yubico.com/software/yubikey/tools/ykman/)
-1. Follow the instructions below for setting a "cached" touch policy.
+1. Follow the instructions below for setting a "cached" touch policy. These steps, and the script run, will create keys and certificates using ykman.
 1. Follow the instructions to [use your ssh key for signing](https://docs.gitlab.com/ee/user/project/repository/ssh_signed_commits/#configure-git-to-sign-commits-with-your-ssh-key).
    * [.com](https://gitlab.com/-/profile/keys)
    * [ops](https://ops.gitlab.net/-/profile/keys)

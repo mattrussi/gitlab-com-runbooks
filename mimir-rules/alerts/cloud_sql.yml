@@ -1,0 +1,45 @@
+groups:
+- name: cloud_sql.rules
+  rules:
+  - alert: CloudSQLDatabaseDown
+    expr: stackdriver_cloudsql_database_cloudsql_googleapis_com_database_up != 1
+    for: 5m
+    labels:
+      pager: pagerduty
+      severity: s2
+      alert_type: cause
+    annotations:
+      title: CloudSQL database {{ $labels.database_id }} is down
+      description: The CloudSQL database {{ $labels.database_id }} appears to be down.
+      runbook: docs/cloud-sql/cloud-sql.md
+  - alert: CloudSQLDatabaseFailedCreate
+    expr: stackdriver_cloudsql_database_cloudsql_googleapis_com_database_instance_state{state="FAILED"} == 1
+    for: 5m
+    labels:
+      severity: s3
+      alert_type: cause
+    annotations:
+      title: CloudSQL database instance {{ $labels.database_id }} has failed to create
+      description: The creation of the CloudSQL database instance {{ $labels.database_id }} appears to have failed.
+      runbook: docs/cloud-sql/cloud-sql.md
+  - alert: CloudSQLDatabaseSuspended
+    expr: stackdriver_cloudsql_database_cloudsql_googleapis_com_database_instance_state{state="SUSPENDED"} == 1
+    for: 5m
+    labels:
+      pager: pagerduty
+      severity: s2
+      alert_type: cause
+    annotations:
+      title: CloudSQL database instance {{ $labels.database_id }} is suspended
+      description: The CloudSQL database instance {{ $labels.database_id }} appears to be suspended.
+      runbook: docs/cloud-sql/cloud-sql.md
+  - alert: CloudSQLDatabaseUnknownState
+    expr: stackdriver_cloudsql_database_cloudsql_googleapis_com_database_instance_state{state="UNKNOWN_STATE"} == 1
+    for: 5m
+    labels:
+      severity: s4
+      alert_type: cause
+    annotations:
+      title: CloudSQL database instance {{ $labels.database_id }} state unknown
+      description: The state of the CloudSQL database instance {{ $labels.database_id }} could not be retrieved.
+      runbook: docs/cloud-sql/cloud-sql.md

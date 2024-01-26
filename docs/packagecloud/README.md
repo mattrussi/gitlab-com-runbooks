@@ -23,6 +23,15 @@
 * [GPG Keys for Package Signing](../packaging/manage-package-signing-keys.md)
 <!-- END_MARKER -->
 
+## Metrics / Monitoring
+
+You can watch metrics in the [Package Cloud folder](https://dashboards.gitlab.net/dashboards/f/packagecloud/packagecloud) on dashboards.gitlab.net.  Specific dashboards of interest are:
+
+1. [Watching Rainbows / Resque Saturation](https://dashboards.gitlab.net/d/packagecloud-main/packagecloud3a-overview?orgId=1) in the Kubernetes Overiew section.
+2. [CPU Load per pod and pod counts in HPA](https://dashboards.gitlab.net/d/packagecloud-main/packagecloud3a-overview?orgId=1) in the Saturation Details section.
+
+When you run something like `/chatops run publish --security 16.6.2` you should see pipelines on dev.gitlab.org start and a corresponding load increase on Package cloud.  Timing of those commoands can then be watched from those dashboards.
+
 ## Support Requests
 
 We are entitled to product support from Packagecloud.  To open a new support request email: <support@packagecloud.io>
