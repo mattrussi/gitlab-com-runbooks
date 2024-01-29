@@ -71,7 +71,7 @@ Here is [the main Grafana page for CustomersDot](https://dashboards.gitlab.net/d
 
 Access to the CustomerDot DB and Rails console is via [Teleport](https://gitlab.com/gitlab-org/customers-gitlab-com/-/blob/main/doc/setup/teleport.md)
 
-SREs have SSH access to the CustomerDot VMS for emergency access to the database. Ensure all database changes outside of Teleport or application code are retroactively approved via a change request following the [Infrastructure change request workflow](https://handbook.gitlab.com/handbook/engineering/infrastructure/change-management/#change-request-workflows) 
+SREs have SSH access to the CustomerDot VMS for emergency access to the database. Ensure all database changes outside of Teleport or application code are retroactively approved via a change request following the [Infrastructure change request workflow](https://handbook.gitlab.com/handbook/engineering/infrastructure/change-management/#change-request-workflows)
 
 Once you have logged into the Staging or the Production VM, run one of these
 commands to open the database or the Rails console:
