@@ -38,6 +38,8 @@ local options = validateReferenceArchitectureOptions(import 'gitlab-metrics-opti
       import 'saturation-monitoring/node_schedstat_waiting.libsonnet',
       import 'saturation-monitoring/opensearch_cpu.libsonnet',
       import 'saturation-monitoring/opensearch_disk_space.libsonnet',
+      import 'saturation-monitoring/pg_btree_bloat.libsonnet',
+      import 'saturation-monitoring/pg_table_bloat.libsonnet',
       import 'saturation-monitoring/pg_txid_wraparound.libsonnet',
       import 'saturation-monitoring/single_node_cpu.libsonnet',
       import 'saturation-monitoring/puma_workers.libsonnet',

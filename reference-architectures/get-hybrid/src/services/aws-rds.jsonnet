@@ -5,6 +5,7 @@ local kubeLabelSelectors = metricsCatalog.kubeLabelSelectors;
 metricsCatalog.serviceDefinition({
   type: 'rds',
   tier: 'db',
+  tags: ['gitlab_monitor_bloat'],
 
   provisioning: {
     vms: false,
