@@ -23,6 +23,9 @@ determine how this is configured.
 To run a manual deploy, you will need a local secrets file with the filename
 exported in the `ALERTMANAGER_SECRETS_FILE` variable.
 
+For the production alertmanger, this content is stored in vault at [`
+ops-gitlab-net/gitlab-com/runbooks/ops/alertmanager`](https://vault.gitlab.net/ui/vault/secrets/ci/kv/ops-gitlab-net%2Fgitlab-com%2Frunbooks%2Fops%2Falertmanager/details?version=2).
+
 Then run:
 
 ```shell
