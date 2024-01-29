@@ -1,4 +1,4 @@
-local generateUtilizationRules(utilizationRules, environmentLabels, extraSelector={}) =
+local generateUtilizationRules(utilizationRules, environmentLabels, extraSelector={}, filename='utilization.yml') =
   local utilizationRuleNames = std.objectFields(utilizationRules);
   local rules = std.flatMap(
     function(key)
@@ -7,7 +7,7 @@ local generateUtilizationRules(utilizationRules, environmentLabels, extraSelecto
   );
 
   {
-    'utilization.yml':
+    [filename]:
       std.manifestYamlDoc({
         groups: std.map(function(group) group, [{
           // Recording rules for each saturation metric
