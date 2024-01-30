@@ -49,8 +49,10 @@ teams:
   oncall_schedule:    # Link to pagerduty oncall schedule
 
 - name: product_analytics
+  product_stage_group: product_analytics
   url: https://about.gitlab.com/handbook/engineering/development/analytics/product-analytics/
-  slack_channel: g_analyze_product_analytics
+  slack_channel: g_monitor_product_analytics
+  slack_alerts_channel: g_monitor_product_analytics_infra_alerts
 
 - name: release
   slack_channel: g_release
