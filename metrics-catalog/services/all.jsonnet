@@ -26,6 +26,7 @@
   import 'kas.jsonnet',
   import 'kube.jsonnet',
   import 'logging.jsonnet',
+  import 'mailgun.jsonnet',
   import 'mailroom.jsonnet',
   import 'memorystore.jsonnet',
   import 'monitoring.jsonnet',

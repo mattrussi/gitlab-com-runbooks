@@ -801,6 +801,23 @@ services:
       monitors:
         primary_grafana_dashboard: ai-gateway-main/ai-gateway-overview
 
+  - name: mailgun
+    tier: sv
+    friendly_name: Mailgun
+    label: mailgun
+    owner: reliability_general
+    technical:
+      logging:
+        - name:
+          permalink:
+      documents:
+        sre_guide:
+        developer_guide:
+    observability:
+      monitors:
+        grafana_folder: mailgun
+        primary_grafana_dashboard: mailgun-main/mailgun-overview
+
   - name: mailroom
     tier: sv
     friendly_name: Mailroom Incoming Mail Service
@@ -1242,6 +1259,7 @@ services:
       monitors:
         grafana_folder: monitoring
         primary_grafana_dashboard: monitoring-main/monitoring-overview
+
   - name: thanos
     tier: inf
     friendly_name: thanos
