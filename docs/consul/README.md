@@ -349,7 +349,7 @@ we're effectively saying only recreate the last pod (`...-consul-server-4`) but 
 
 The upgrade process is as follows:
 
-1. Bump `chart_version` in the [`bases/environments.yaml`](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/blob/037013a6ec2e8a89d2222163b95f9703042949b7/bases/environments.yaml#L373) file
+1. Bump `chart_version` in the [`bases/environments/*.yaml`](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/blob/master/bases/environments/gprd.yaml?ref_type=heads#L20) file(s)
 1. Create your MR, get it reviewed and merged
 1. Once Helm starts to apply the change, you should see the `...-consul-server-4` pod get recreated, but the rest will remain unchanged. No client pods will get rotated at this stage.
 1. Helm will hang waiting for all pods to be recreated, so this is where you need to take action.
@@ -363,26 +363,26 @@ The upgrade process is as follows:
 1. Confirm that the Consul cluster looks healthy:
 
     ```sh
-    kubectl --context gke_gitlab-production_us-east1_gprd-gitlab-gke -n consul get pods -o wide -l component=server`
+    kubectl --context gke_gitlab-production_us-east1_gprd-gitlab-gke -n consul get pods -o wide -l component=server
     ```
 
     The pod `consul-gl-consul-server-4` should only show minutes in the `AGE` column. All pods should be `Running`.
 1. Rotate 2 more pods:
 
-    ```
+    ```sh
     kubectl --context gke_gitlab-production_us-east1_gprd-gitlab-gke -n consul patch statefulset consul-gl-consul-server -p '{"spec":{"updateStrategy":{"rollingUpdate":{"partition":2}}}}'
     ```
 
 1. You should now see 2 more pods get recreated. Wait until the Consul cluster is healthy (should only take a few secs to a minute) and do the last 2 pods:
 
-    ```
-    kubectl -n consul patch statefulset consul-gl-consul-server -p '{"spec":{"updateStrategy":{"rollingUpdate":{"partition":0}}}}'
+    ```sh
+    kubectl --context gke_gitlab-production_us-east1_gprd-gitlab-gke -n consul patch statefulset consul-gl-consul-server -p '{"spec":{"updateStrategy":{"rollingUpdate":{"partition":0}}}}'
     ```
 
 1. You should now see the remaining 2 pods get recreated. You can now put the setting back to `4`:
 
-    ```
-    kubectl -n consul patch statefulset consul-gl-consul-server -p '{"spec":{"updateStrategy":{"rollingUpdate":{"partition":4}}}}'
+    ```sh
+    kubectl --context gke_gitlab-production_us-east1_gprd-gitlab-gke -n consul patch statefulset consul-gl-consul-server -p '{"spec":{"updateStrategy":{"rollingUpdate":{"partition":4}}}}'
     ```
 
 1. You should now see the Helm apply job complete successfully.
