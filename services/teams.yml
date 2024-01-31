@@ -439,6 +439,10 @@ teams:
   slack_error_budget_channel: g_govern_anti-abuse
   send_error_budget_weekly_to_slack: true
 
+- name: infrasec_team
+  url: https://handbook.gitlab.com/handbook/security/product-security/infrastructure-security/
+  slack_alerts_channel: infrasec-notifications
+
 # Marketing
 
 - name: developer_relations
