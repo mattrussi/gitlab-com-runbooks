@@ -237,6 +237,9 @@ workflow:
     - if: $CI_COMMIT_TAG
     # When triggered from another pipeline, create a pipeline
     - if: $CI_PIPELINE_SOURCE == "pipeline"
+    # Allow manually triggering pipelines
+    - if: $CI_PIPELINE_SOURCE == "web"
+    - if: $CI_PIPELINE_SOURCE == "api"
 
 ################
 # Default job, inherited in all other jobs
@@ -1248,7 +1251,7 @@ publish-periodic-queries:
 
 .mimir:
   variables:
-    MIMIR_URL: http://mimir-internal.ops-gitlab-gke.us-east1.gitlab-ops.gke.gitlab.net
+    MIMIR_ADDRESS: https://mimir-internal.ops.gke.gitlab.net
 
 validate-mimir-rules:
   stage: validate
@@ -1268,18 +1271,23 @@ validate-mimir-rules:
       done
 
 # Disable until work on jsonnet is completed.
-.deploy-mimir-rules:
+deploy-mimir-rules:
   stage: deploy
-  extends: .mimir
+  environment: ops
+  extends:
+    - .mimir
+    - .id-tokens
   secrets:
     MIMIR_API_USER:
-      vault: ops-gitlab-net/gitlab-com/runbooks/mimir/username@ci
+      vault: ops-gitlab-net/gitlab-com/runbooks/ops/mimir/username@ci
       file: false
     MIMIR_API_KEY:
-      vault: ops-gitlab-net/gitlab-com/runbooks/mimir/token@ci
+      vault: ops-gitlab-net/gitlab-com/runbooks/ops/mimir/token@ci
       file: false
   rules:
     - *ops-gitlab-net-only-rule
+    - if: $TASK_DEPLOY_MIMIR_RULES == "1"
+      when: always
     - <<: *if-main-branch-rule
       changes:
         paths:
@@ -1289,5 +1297,5 @@ validate-mimir-rules:
       for dir in $(find mimir-rules -mindepth 1 -maxdepth 1 -type d); do
         tenant=$(basename ${dir})
         printf "Deploying rules for tenant: ${tenant}\n"
-        mimirtool rules sync --rule-dirs="${dir} --id=${tenant}"
+        mimirtool rules sync --rule-dirs="${dir}" --id="${tenant}"
       done
