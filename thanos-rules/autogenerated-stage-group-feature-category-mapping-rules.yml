@@ -331,18 +331,6 @@ groups:
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
-      feature_category: ci-cd_visibility
-      product_stage: verify
-      stage_group: runner
-    expr: "1"
-  - record: gitlab:feature_category:stage_group:mapping
-    labels:
-      feature_category: runner_fleet
-      product_stage: verify
-      stage_group: runner
-    expr: "1"
-  - record: gitlab:feature_category:stage_group:mapping
-    labels:
       feature_category: fulfillment_admin_tooling
       product_stage: fulfillment
       stage_group: fulfillment_platform
