@@ -496,4 +496,60 @@
       'service_desk',
     ],
   },
+  gdk: {
+    name: 'GDK',
+    stage: 'engineering_productivity',
+    feature_categories: [
+
+    ],
+  },
+  engineering_productivity: {
+    name: 'Engineering Productivity',
+    stage: 'engineering_productivity',
+    feature_categories: [
+
+    ],
+  },
+  quality: {
+    name: 'Quality',
+    stage: 'unlisted_stage',
+    feature_categories: [
+
+    ],
+  },
+  contributor_success: {
+    name: 'Contributor Success',
+    stage: 'unlisted_stage',
+    feature_categories: [
+
+    ],
+  },
+  ux_paper_cuts: {
+    name: 'UX Paper Cuts',
+    stage: 'unlisted_stage',
+    feature_categories: [
+
+    ],
+  },
+  infrastructure: {
+    name: 'Infrastructure',
+    stage: 'unlisted_stage',
+    feature_categories: [
+
+    ],
+  },
+  technical_writing: {
+    name: 'Technical Writing',
+    stage: 'unlisted_stage',
+    feature_categories: [
+
+    ],
+  },
+  engineering_analytics: {
+    name: 'Engineering Analytics',
+    stage: 'unlisted_stage',
+    feature_categories: [
+
+    ],
+  },
 }

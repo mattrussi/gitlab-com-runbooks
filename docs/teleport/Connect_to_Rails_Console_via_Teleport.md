@@ -129,4 +129,4 @@ To request permission to connect to a service, you must use the `--request-roles
 tsh login --proxy=staging.teleport.gitlab.net --request-roles=rails-console-ro-gstg --request-reason="Issue-URL or explanation"
 ```
 
-Once approved, the server will replace your loally stored certificate with an updated one, and your newly valid roles will appear in the `tsh status` output.
+Once approved, the server will replace your locally stored certificate with an updated one, and your newly valid roles will appear in the `tsh status` output.

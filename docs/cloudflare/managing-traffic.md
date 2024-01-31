@@ -2,39 +2,32 @@
 
 ## General
 
-- **Temporary rules are subject to automatic expiration!** See [Automated expiration of temporary rules](#automated-expiration-of-temporary-rules) .
-- GitLab Pages and the GitLab registry are not yet fronted by Cloudflare, so these blocks would not affect them.
-- Automation mentioned in this documentation is *partially* created. (<https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/9711#note_323835098>)
-  - Automated expiration is implemented as part of the [Cloudflare Audit Log](https://ops.gitlab.net/gitlab-com/gl-infra/cloudflare-audit-log) , further [described below](#automated-rule-and-issue-maintenance)
-  - Chatops tooling to create a rule is not implemented
-- IP Blocks should not be a permanent solution. IP addresses get rotated on an ISP level, so we should strive to block them only as long as required to mitigate an attack or block abusive behaviour.
+Cloudflare settings are managed with Terraform in the [`config-mgmt`](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt) repo.
 
-## The goal of the [Firewall issue tracker](https://gitlab.com/gitlab-com/gl-infra/cloudflare-firewall)
+Any changes to Cloudflare settings **should** be made via an MR to the appropriate environment in `config-mgmt`. Any settings changes that are not committed to the source code **will be overwritten** next time the `terraform apply` pipeline runs.
 
-- Provide a searchable database of current and previous blocks and allowlists.
-- Provide a quick overview of what is currently allowlisted or blocklisted and why.
-- Reduce noise in the infrastructure and production trackers by separating it out.
+GitLab Pages and the GitLab registry are not yet fronted by Cloudflare, so these blocks would not affect them.
 
-## Automated Rule and Issue Maintenance
+### Creating new WAF rules
 
-The goal of the [Cloudflare Audit Log](https://ops.gitlab.net/gitlab-com/gl-infra/cloudflare-audit-log)
-is to run periodically to check the Cloudflare configuration against a `known good` version and
-verify the current firewall rules. This is necessary due to various defeciences
-in how the Cloudflare API handles priority which cause conflicts with how the
-terraform provider manages its state.
+#### via MR to Terraform
 
-The Cloudflare Audit Log is responsible for:
+- New WAF rules to block traffic (or add a challenge to traffic) should be added to the Custom Rules [ruleset](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/master/environments/gprd/cloudflare-custom-rules.tf) via an MR to `config-mgmt`
+- New rules to rate limit traffic should be added to the Rate Limit [ruleset](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/master/environments/gprd/cloudflare-rate-limits-waf-and-rules.tf#L41) via an MR to `config-mgmt`
+Note: take care to add these to the ruleset, and not as `cloudflare_rate_limit` resources. These are now [deprecated](https://developers.cloudflare.com/waf/reference/migration-guides/old-rate-limiting-deprecation) and will be removed by May 1st 2024
+- These MRs _must_ contain a link to the issue explaining why the change was made (probably an incident issue), for audit and tracking purposes
 
-- Verifying the [description format](#description-format-of-cloudflare-rules) of the current rules
-  and logging errors for invalid formats or missing issues.
-- Inspecting the rules and adding any missing `rule-filter:` or `bypass:` actions to the corresponding issue.
-- Evaluate temporary rules for automated expiration following the description of [automated expiration of temporary rules](#automated-expiration-of-temporary-rules).
+#### Manually
 
-For a complete flow chart of the processing see [cloudflare-audit-log-rule-processing.md](cloudflare-audit-log-rule-processing.md)
+- **If it is necessary to make changes via the Cloudflare UI** (for example, during an incident) this can still be done manually, however the changes **will be overwritten** the next time there is a `terraform apply`. As such, any new rules will need to be committed to Terraform after the incident (either by the EOC, or asking for help from Infrastructure).
+
+- Create the rule using the [Cloudflare UI](https://dash.cloudflare.com/852e9d53d0f8adbd9205389356f2303d/gitlab.com/firewall/firewall-rules) with a description explaining why the rule was created (ideally include an issue number). For further detail refer to the [Cloudflare documentation on managing rules.](https://developers.cloudflare.com/firewall/cf-dashboard/create-edit-delete-rules/).
+
+*Note:* For audit purposes, any manual changes in the UI must be documented in the associated incident or issue. Please note the Resource ID (you can find this in the URL when editing a rule) and add the `~Cloudflare UI Change` label.
 
 ## How do I Enable "I'm Under Attack Mode" in Cloudflare once I determine we are under a large scale attack?
 
-In the cloudflare UI, under the domain in question, click on the Page rules button up the top. Once you
+In the Cloudflare UI, under the domain in question, click on the Page rules button up the top. Once you
 see the list of page rules, scroll down to the bottom, where you should notice a page rule for
 `*gitlab.com/*` with security level "I'm Under Attack" set to "Off". Click the button to "On" to enable it.
 
@@ -47,7 +40,11 @@ is preferred as it will preserve API traffic from being affected.
 
 Blocks should be combined to limit the impact on customers sharing the same public IP as the abuser, whenever possible.
 
-Whatever it is. Create an issue [**in the Firewall tracker**](https://gitlab.com/gitlab-com/gl-infra/cloudflare-firewall/-/issues) first and link it to the relevant issues. This firewall tracker is used to keep track of existing rules.
+IP Blocks should not be a permanent solution. IP addresses get rotated on an ISP level, so we should strive to block them only as long as required to mitigate an attack or block abusive behaviour.
+
+Whatever it is. Create an MR to the [config-mgmt repo](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/master/environments/gprd/cloudflare-custom-rules.tf) first and link it to the relevant issues.
+
+Note: the [firewall issues tracker](https://gitlab.com/gitlab-com/gl-infra/cloudflare-firewall/-/issues) is now **deprecated**. We are keeping the repository for historical tracking purposes.
 
 ### Decision Matrix
 
@@ -97,176 +94,14 @@ Whatever it is. Create an issue [**in the Firewall tracker**](https://gitlab.com
   - Further measures:
     - Involve the abuse team to get the issue spam removed and potentially the user account abused to create those issues blocked.
 
-@TODO: More scenario examples
-
 What to consider repeated abuse?
 
 ### Geo-blocking
 
-For geo-political reasons outside our control, and to remain in compliance with applicable law, we must from time to time [block access to our services from specific geographical locations](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/master/modules/cloudflare-embargo-country-blocklist/main.tf#L2).
+For geo-political reasons outside our control, and to remain in compliance with applicable law, we must from time to time [block access to our services from specific geographical locations](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/master/environments/gprd/cloudflare-custom-rules.tf?ref_type=heads#L21).
 
 CloudFlare's firewall rules support doing this using the `ip.geoip` filter; we currently use `country` and `subdivision_1_iso_code` below that, although there are a few other options as well (see <https://developers.cloudflare.com/firewall/cf-firewall-language/fields>).  The implementation of this is apparently built on the MaxMind GeoIP database; in the event of questions about classification (the topic is tricky, shifting, and occasionally fraught) <https://www.maxmind.com/en/geoip2-precision-demo> can be used to confirm the classification from MaxMind, and in the event that it needs to be disputed, <https://support.maxmind.com/geoip-data-correction-request/> can be used to submit a correction.  However, unless we have first-hand positive knowledge regarding the location of the IP address we should usually leave that to the affected parties who can be expected to have access to any required proof.
 
-## Rule management
+### Removing rules
 
-Each block/allowlist in the Cloudflare firewall is to be accompanied by an issue in the [Firewall issue tracker](https://gitlab.com/gitlab-com/gl-infra/cloudflare-firewall).
-This includes rules added in Terraform for internal an customer allowlists.
-
-### Labels
-
-In order to keep the promise of a searchable database, we are using labels to categorize each rule. These labels will be applied by automation, except for manual actions such as `rule-origin` labels.
-
-Each issue should be labeled with with either of these labels:
-
-- `firewall-action::block`: The rule associated to the issue is blocking traffic
-  - Applied by automation for a newly created block.
-    - Might also be applied by an engineer to manually created issues
-  - This label must only be used while the block is active.
-  - While this label is applied the issue should not be closed, but may be for long-term rules.
-- `firewall-action::bypass`: The rule associated to the issue is bypassing traffic
-  - Applied by an engineer documenting a allowlist.
-  - This label must only be used while the allowlist is in place.
-  - While this label is applied the issue should not be closed, but may be for long-term rules.
-  - The following applicable labels have to be applied to indicate the type(s) of bypass.
-    - `bypass-action:hot`: The rule associated to the issue bypasses [Hotlinking Protection](https://support.cloudflare.com/hc/en-us/articles/200170026-What-does-enabling-Cloudflare-Hotlink-Protection-do-)
-    - `bypass-action:bic`: The rule associated to the issue bypasses the [Browser Integrity Check](https://support.cloudflare.com/hc/en-us/articles/200170086-Understanding-the-Cloudflare-Browser-Integrity-Check)
-    - `bypass-action:waf`: The rule associated to the issue bypasses managed WAF rules
-    - `bypass-action:rateLimit`: The rule associated to the issue bypasses Cloudflare Rate Limiting
-    - `bypass-action:uaBlock`: The rule associated to the issue bypasses User-agent blocking
-    - `bypass-action:zoneLockdown`: The rule associated to the issue bypasses a Zone Lockdown
-    - `bypass-action:securityLevel`: The rule associated to the issue bypasses Security Level (IP Reputation)
-- `firewall-action::expired`: The rule associated to the issue has expired
-  - Applied by automation for `temporary` rules as described in [automated expiration of temporary rules](#automated-expiration-of-temporary-rules)
-    - The minimum block time of 48h has passed
-    - Metrics indicate, the rule has had little to no traffic in the last 12h
-      - Little to no traffic = less than 7200 requests (10 requests/minute over 12h)
-    - The rule was removed from Cloudflare
-  - Issues with this label should also be closed
-  - Manually applied by an engineer, once a long-term rule has been sunset.
-- `firewall-action::other`: The rule associated to the issue is documented in the issue
-  - In other cases. Mostly reserved for manual actions on firewall rules not forseen in this document.
-  - The exact state and purpose of the rule has to be described in the issue.
-  - This will also disable automatic closing of the issue by automation. A rule might still get removed.
-
-In addition to the state, the type of block/allowlist should be documented by applying all appropriate type labels. In case of a rule created via automation, these will be applied automatically.
-
-- `rule-filter:ip`: The rule filters based on IPs or CIDRs
-- `rule-filter:uri`: The rule filters based on the URI
-- `rule-filter:user-agent`: The rule filters based on the user-agent
-- `rule-filter:other-identifier`: The rule filters based on another identifier
-- `rule-filter:external`: There is an (additional) component, not managed in Cloudflare rules
-  - A good example would be an additional block on the registry HAProxy to block traffic on the registry.
-
-Because there are multiple ways to create a rule, please also apply one of the following labels to specify the rule origin.
-
-- `rule-origin::terraform`: The rule was created via terraform. Please also note in the issue where to find the resource in question.
-- `rule-origin::chatops`: The rule was created via ChatOps.
-- `rule-origin::manual`: The rule was added manually.
-
-The longevity of a rule is to be indicated by either of these labels:
-
-- `rule-duration::long-term`: The rule is intended to stay active for a long time. Examples include allowlisting Customers or blocking repeated offenders.
-- `rule-duration::temporary`: The rule is intended to be short-lived. Its lifetime will in most cases be determined by automation.
-
-Add labels for the Cloudflare zones that the rule should be present in. This can be used
-to specify rules for creation in staging prior to production, or production only
-rules to respond to incidents.
-
-- `zone:gitlab-com`
-- `zone:staging-gitlab-com`
-- `zone:gitlab-net`
-
-### Description format of Cloudflare rules
-
-In order for automation to do its job, it is required to have a standardized format it can parse. This format is a compromise between machine readability and human readability.
-
-```
-#<firewall issue id>|<rfc-3339 date of rule creation>|temporary[=<minimum in hours>[,<maximum in hours>]]|long-term[|<description>]
-```
-
-- The firewall issue ID should be used to link any relevant production incidents or other issues to it.
-- The RFC3339 date can be retrieved via the GNU date util `date --rfc-3339=seconds --utc`. It should be UTC.
-- The longevity of a rule is to be indicated by either `temporary` or `long-term`.
-  - `temporary` rules are processed and **expired** by [automation](#automated-rule-and-issue-maintenance).
-  - See [automated expiration of temporary rules](#automated-expiration-of-temporary-rules) for a
-     complete description of how "minimum time in hours" and "maximum time in hours" are
-     applied.
-- A description may be provided to add further detail, but may be omitted.
-- When choosing the `Block` action, set the `response type` to the default: `Default Cloudflare WAF block page`.
-
-Examples:
-
-```
-#42|2020-04-16 11:37:15+00:00|long-term|Don't Panic
-#1337|2020-04-16 11:37:15+00:00|temporary
-#9001|2020-04-16 11:37:15+00:00|temporary=0,72|Minimum unchanged, expires after max 72 hours
-#40000|2020-04-16 11:37:15+00:00|temporary=168|Will last at least 1 week
-```
-
-### Creating a new rule
-
-#### ChatOps
-
-TBD.
-
-#### Manually
-
-The engineer should first create an issue in the firewall tracker, documenting the subject and reason for the rule. If possible link to other issues to add more context.
-
-The issue title should contain searchable information about the rule, such as `allowlist IP 1.2.3.4 for customer ACME Corp.` or `block uri /foo/bar/baz`.
-
-Context on what the rule does should be added via labels as discussed above. For `firewall-type` labels make sure to add info on the resource that is filtered. For example for an issue with `firewall-type:ip` include the IP in the description, for `firewall-type:external` another issue documenting that, etc.
-
-Depending on the lifetime of the rule the process is different:
-
-`temporary`: Create the rule using the [Cloudflare UI](https://dash.cloudflare.com/852e9d53d0f8adbd9205389356f2303d/gitlab.com/firewall/firewall-rules) keeping in mind the layout of the rule description. For further detail refer to the [Cloudflare documentation on managing rules.](https://developers.cloudflare.com/firewall/cf-dashboard/create-edit-delete-rules/).
-
-*Note:* For audit purposes, any manual changes in the UI must be documented in the associated incident or issue. Please note the ResourceID and add `~Cloudflare UI Change` label.
-
-`long-term`: Create the rule in Terraform. For customer allowlists, follow the [instructions of the terraform module](https://ops.gitlab.net/gitlab-com/gl-infra/terraform-modules/cf_whitelists#whitelist-configuration). In other cases, refer to the [documentation of the Terraform provider.](https://www.terraform.io/docs/providers/cloudflare/r/firewall_rule.html)
-
-- When using the terraform module, please apply the labels `bypass-action:waf` and `bypass-action:rateLimit` for customers and all `bypass-action` labels for internal bypasses.
-
-After the rule creation, comment the rule ID on the issue, as well as tagging the issue with the appropriate `rule-origin` label, as described above.
-
-### Sunsetting a rule
-
-#### Automated expiration of temporary rules
-
-The intent of the supplemental automation is to enable a "set it and forget it"
-mentality when in comes to temporary rules. It will ensure that constraints
-set upon creation are met and that the rule will be removed once traffic
-allows.
-
-Every time the Audit logs runs, it will fetch a list of active rules from
-Cloudflare and parse them according to the format above.
-
-Each `temporary` rule is processed and expired under the following conditions
-based on its configured minimum and maximum:
-
-A maximum time is optional. If a `maximum` lifetime has been specified and
-the maximum lifetime has expired, then the rule is considered `expired`.
-Note: No check based on processed requests is applied if a maximum lifetime
-is specified.
-
-A minimum time can be optionally specified. 48 hours is used as the minimum if it is
-omitted or 0. If the minimum lifetime has expired, then the automation checks
-the rule metrics for the previous 24h. If 0 requests have been processed by
-the rule in the last 24h, then the rule is `expired`.
-
-For any rule that is automatically `expired`:
-
-- The rule is removed from Cloudflare.
-- The issue is labelled `firewall-action::expired` and closed.
-
-For a complete flow chart of the processing see [cloudflare-audit-log-rule-processing.md](cloudflare-audit-log-rule-processing.md)
-
-#### Manually removing a role
-
-If automation is not working, or you need to remove a `long-term` rule, firstly take note of the issue ID of the role and open the issue.
-
-Next remove the role from Cloudflare. Refer to the issue labels to determine the origin. If the rule was created in Terraform refer to the issue on details where to find it. In other cases, the rule can be found in the Cloudflare Dashboard or the API.
-
-Once the rule is removed, mark the issue with `firewall-action::expired` and close the issue.
-
-*Note:* For audit purposes, any manual changes in the UI must be documented in the associated incident or issue. Please note the ResourceID and add `~Cloudflare UI Change` label.
+If a rule is intended to be temporary, please remove it (via MR to `config-mgmt`) when it is no longer necessary. The Foundations team currently has an [open issue](https://gitlab.com/gitlab-com/gl-infra/production-engineering/-/issues/24832) to create automation for rule expiry.

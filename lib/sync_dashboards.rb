@@ -64,7 +64,19 @@ module SyncDashboards
   def trim_dashboard_file(group)
     # Grafana's UID is generated based a dashboard's folder and file name.
     # Unfortunately, Grafana limits the max length to 40 characters. So, the
-    # remaining length should be a bit shorter.
-    group[0..(40 - self.class::DASHBOARDS_FOLDER.length - 2)]
+    # remaining length should be a bit shorter. For example:
+    # The product-engineering_productivity_error_budget dashboard name will
+    # be trimmed to product-engineering_product_error_budget.
+
+    # ignoring "dashboard.jsonnet" from the filename as this does not count
+    # towards the UID
+    filename_suffix = dashboard_extension.split(".").first
+
+    # 40 = Grafana's UID max length
+    # DASHBOARDS_FOLDER = either "product" or "stage-groups"
+    # filename_suffix = either "" or "_error_budget"
+    # -1 given the extra "/" char from UID:
+    #   "stage-groups/{group_name}" or "product/{group_name}_error_budget"
+    group[0...(40 - self.class::DASHBOARDS_FOLDER.length - filename_suffix.length - 1)]
   end
 end

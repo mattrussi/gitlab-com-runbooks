@@ -4,37 +4,37 @@ include:
 
   # variables needed for other tasks
   - project: gitlab-com/gl-infra/common-ci-tasks
-    ref: v2.4.2
+    ref: v2.5.0
     file: .gitlab-ci-other-versions.yml
 
   # automatically tag releases using semantic-releases, based on conventional commit messages
   - project: gitlab-com/gl-infra/common-ci-tasks
-    ref: v2.4.2
+    ref: v2.5.0
     file: semantic-release.yml
 
   # Checks that the `.tool-versions` file is synced with .gitlab-ci-asdf-versions.yml,
   # that all the plugins are declared in `./scripts/install-asdf-plugins.sh`
   # and that ASDF is generally working
   - project: gitlab-com/gl-infra/common-ci-tasks
-    ref: v2.4.2
+    ref: v2.5.0
     file: asdf-tool-versions.yml
 
   # Upgrades dependencies on a schedule
   # see https://gitlab.com/gitlab-com/gl-infra/common-ci-tasks/-/blob/main/renovate-bot.md
   - project: gitlab-com/gl-infra/common-ci-tasks
-    ref: v2.4.2
+    ref: v2.5.0
     file: renovate-bot.yml
 
   # validate .editorconfig
   # see https://gitlab.com/gitlab-com/gl-infra/common-ci-tasks/-/blob/main/editorconfig-check.md
   - project: gitlab-com/gl-infra/common-ci-tasks
-    ref: v2.4.2
+    ref: v2.5.0
     file: editorconfig-check.yml
 
   # validate YAML files
   # see https://gitlab.com/gitlab-com/gl-infra/common-ci-tasks/-/blob/main/yamllint.md
   - project: gitlab-com/gl-infra/common-ci-tasks
-    ref: v2.4.2
+    ref: v2.5.0
     file: yamllint.yml
 
   # Import the danger-review job
@@ -271,11 +271,11 @@ notify-mirror-source:
 ################
 
 .docker-image:
-  image: docker:25.0.0
+  image: docker:25.0.1
   tags:
     - gitlab-org-docker
   services:
-    - docker:25.0.0-dind
+    - docker:25.0.1-dind
   retry: 2
   variables:
     DOCKER_TLS_CERTDIR: ""
@@ -317,8 +317,9 @@ build-docker-image:
   script:
     - export ci_image_tag=${CI_COMMIT_TAG:-$CI_COMMIT_SHORT_SHA}
     - echo ${CI_JOB_TOKEN} | docker login --password-stdin -u $CI_REGISTRY_USER $CI_REGISTRY
-    - docker build -t ${IMAGE}:$ci_image_tag -t ${IMAGE}:latest ${DOCKER_BUILD_ARGS} .
+    - docker build -t ${IMAGE}:$ci_image_tag -t ${IMAGE}:${CI_DEFAULT_BRANCH} -t ${IMAGE}:latest ${DOCKER_BUILD_ARGS} .
     - docker push ${IMAGE}:latest
+    - docker push ${IMAGE}:${CI_DEFAULT_BRANCH}
     - docker push ${IMAGE}:$ci_image_tag
   rules:
     - *avoid-schedule-rule

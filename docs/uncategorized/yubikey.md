@@ -17,19 +17,28 @@ You'll be using the following tooling:
 
 **WARNING**: When setting a pin, make sure it is between 6 and 8 ASCII characters, longer pins may be silently truncated.
 
-1. Follow the instructions for [installing `yubikey-agent`](https://github.com/FiloSottile/yubikey-agent#installation). **But do not run the `setup` command for your yubikey yet.**
+1. Follow the instructions for [installing `yubikey-agent`](https://github.com/FiloSottile/yubikey-agent#installation). **But do not run the `setup` command for your yubikey. This is handled as part of the yubikey-reset.sh script below.**
 1. Follow the instructions for [installing `ykman`](https://docs.yubico.com/software/yubikey/tools/ykman/)
-1. Follow the instructions below for setting a "cached" touch policy.
-1. Follow the instructions to [use your ssh key for signing](https://docs.gitlab.com/ee/user/project/repository/ssh_signed_commits/#configure-git-to-sign-commits-with-your-ssh-key).
-   * [.com](https://gitlab.com/-/profile/keys)
-   * [ops](https://ops.gitlab.net/-/profile/keys)
-   * [dev](https://dev.gitlab.org/-/profile/keys)
+1. Follow the instructions below for setting a "cached" touch policy. These steps, and the script run, will create keys and certificates using ykman.
+1. Set up Git commit signing using the YubiKey's SSH key:
 
-* Add the Yubikey to your favorite 2FA services:
-  * GitLab
-  * Okta
-  * AWS
-  * etc
+   1. Export the YubiKey's public key to the file system
+
+      ```shell
+      ssh-add -L | grep YubiKey >~/.ssh/id_ecdsa_yubikey.pub
+      ```
+
+   1. [Configure Git to use your SSH key for signing](https://docs.gitlab.com/ee/user/project/repository/ssh_signed_commits/#configure-git-to-sign-commits-with-your-ssh-key), referencing the file created above.
+   1. Add the SSH key to your GitLab profile:
+      * [gitlab.com](https://gitlab.com/-/profile/keys)
+      * [ops.gitlab.net](https://ops.gitlab.net/-/profile/keys)
+      * [dev.gitlab.org](https://dev.gitlab.org/-/profile/keys)
+
+1. Enable 2FA with the Yubikey for your favorite services, e.g.:
+   * GitLab
+   * Okta
+   * AWS
+   * Google
 
 ### Setting a ["cached" touch policy](https://docs.yubico.com/yesdk/users-manual/application-piv/pin-touch-policies.html)
 

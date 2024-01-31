@@ -9,7 +9,7 @@ local railsCacheSelector = redisHelpers.storeSelector('RedisCacheStore');
 metricsCatalog.serviceDefinition(
   redisArchetype(
     type='redis-cluster-shared-state',
-    railsStorageSelector=redisHelpers.storageSelector({ oneOf: ['cluster_shared_state', 'shared_state'] }),
+    railsStorageSelector=redisHelpers.storageSelector('shared_state'),
     descriptiveName='Redis SharedState in Redis Cluster',
     redisCluster=true
   )

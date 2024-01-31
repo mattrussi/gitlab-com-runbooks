@@ -58,7 +58,6 @@ local kubeStateMetricTypeDescriptors = {
     keyLabel: 'pod',
     extraLabels: ['deployment'],
     metrics: [
-      'kube_pod_container_status_running',
       'kube_pod_container_resource_limits',
       'kube_pod_container_resource_requests',
 
@@ -306,22 +305,26 @@ local generateEnrichedLabelsForType(descriptorType, extraSelector, serviceSelect
 local kubeServices = std.filter(function(s) s.provisioning.kubernetes, metricsCatalog.services);
 
 {
+  kubeServices:: kubeServices,
   groupsWithFilter(filterFn, extraSelector={}):
     local filteredServices = std.filter(filterFn, kubeServices);
-    local serviceSelector = { type: { oneOf: std.map(function(s) s.type, filteredServices) } };
-    local selector = serviceSelector + extraSelector;
-    [
-      generateKubeSelectorRulesForService(service, extraSelector)
-      for service in filteredServices
-    ] + [{
-      name: 'kube-state-metrics-recording-rules: enriched label recording rules',
-      interval: '1m',
-      rules:
-        generateEnrichedLabelsForType('container', extraSelector, serviceSelector) +
-        generateEnrichedLabelsForType('pod', extraSelector, serviceSelector) +
-        generateEnrichedLabelsForType('hpa', extraSelector, serviceSelector) +
-        generateEnrichedLabelsForType('node', extraSelector, serviceSelector) +
-        generateEnrichedLabelsForType('ingress', extraSelector, serviceSelector) +
-        generateEnrichedLabelsForType('deployment', extraSelector, serviceSelector),
-    }],
+    if std.length(filteredServices) == 0
+    then []
+    else
+      local serviceSelector = { type: { oneOf: std.map(function(s) s.type, filteredServices) } };
+      local selector = serviceSelector + extraSelector;
+      [
+        generateKubeSelectorRulesForService(service, extraSelector)
+        for service in filteredServices
+      ] + [{
+        name: 'kube-state-metrics-recording-rules: enriched label recording rules',
+        interval: '1m',
+        rules:
+          generateEnrichedLabelsForType('container', extraSelector, serviceSelector) +
+          generateEnrichedLabelsForType('pod', extraSelector, serviceSelector) +
+          generateEnrichedLabelsForType('hpa', extraSelector, serviceSelector) +
+          generateEnrichedLabelsForType('node', extraSelector, serviceSelector) +
+          generateEnrichedLabelsForType('ingress', extraSelector, serviceSelector) +
+          generateEnrichedLabelsForType('deployment', extraSelector, serviceSelector),
+      }],
 }

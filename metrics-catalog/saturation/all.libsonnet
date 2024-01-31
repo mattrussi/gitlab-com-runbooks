@@ -24,6 +24,7 @@
   import 'saturation-monitoring/kube_container_cpu.libsonnet',
   import 'saturation-monitoring/kube_container_memory.libsonnet',
   import 'saturation-monitoring/kube_container_rss.libsonnet',
+  import 'saturation-monitoring/kube_container_throttling.libsonnet',
   import 'saturation-monitoring/kube_go_memory.libsonnet',
   import 'saturation-monitoring/kube_horizontalpodautoscaler_desired_replicas.libsonnet',
   import 'saturation-monitoring/kube_node_ips.libsonnet',

@@ -178,6 +178,28 @@ groups:
       )
   - record: gitlab_component_saturation:ratio
     labels:
+      component: kube_container_throttling
+      env: thanos
+      environment: thanos
+      stage: main
+      tier: inf
+    expr: |
+      quantile by(type, shard) (
+        0.99,
+        clamp_min(
+          clamp_max(
+            avg by (type, shard, pod, container)(
+              rate(container_cpu_cfs_throttled_periods_total:labeled{container!="", env="ops",type="thanos"}[5m])
+              /
+              rate(container_cpu_cfs_periods_total:labeled{container!="", env="ops",type="thanos"}[5m])
+            )
+            ,
+            1)
+        ,
+        0)
+      )
+  - record: gitlab_component_saturation:ratio
+    labels:
       component: kube_go_memory
       env: thanos
       environment: thanos
@@ -860,6 +882,67 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="kube_container_memory",monitor="global",type="thanos"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="kube_container_memory",monitor="global",type="thanos"}
+  - alert: component_saturation_slo_out_of_bounds
+    for: 10m
+    annotations:
+      title: The Kube container throttling resource of the {{ $labels.type }} service
+        ({{ $labels.stage }} stage) has a saturation exceeding SLO and is close to
+        its capacity limit.
+      description: |
+        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
+
+        Details of the Kube container throttling resource:
+
+        Kube container throttling
+
+        A container will be throttled if it reaches the configured cpu limit for the horizontal pod autoscaler. Or when other containers on the node are overutilizing the the CPU.
+
+        To get around this, consider increasing the limit for this workload, taking into consideration the requested resources.
+      grafana_dashboard_id: alerts-kube_container_throttling
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-kube_container_throttling?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "54512634"
+      grafana_variables: environment,type,stage
+      promql_query: |
+        quantile by(environment, tier, type, stage, shard, pod, container) (
+          0.99,
+          clamp_min(
+            clamp_max(
+              avg by (environment, tier, type, stage, shard, pod, container)(
+                rate(container_cpu_cfs_throttled_periods_total:labeled{container!="", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[5m])
+                /
+                rate(container_cpu_cfs_periods_total:labeled{container!="", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[5m])
+              )
+              ,
+              1)
+          ,
+          0)
+        )
+      promql_template_1: |
+        quantile by(environment, tier, type, stage, shard, pod, container) (
+          0.99,
+          clamp_min(
+            clamp_max(
+              avg by (environment, tier, type, stage, shard, pod, container)(
+                rate(container_cpu_cfs_throttled_periods_total:labeled{container!="", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[5m])
+                /
+                rate(container_cpu_cfs_periods_total:labeled{container!="", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[5m])
+              )
+              ,
+              1)
+          ,
+          0)
+        )
+      runbook: docs/{{ $labels.type }}/README.md
+    labels:
+      alert_type: cause
+      rules_domain: general
+      severity: s3
+    expr: |
+      gitlab_component_saturation:ratio{component="kube_container_throttling",monitor="global",type="thanos"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="kube_container_throttling",monitor="global",type="thanos"}
   - alert: component_saturation_slo_out_of_bounds
     for: 5m
     annotations:

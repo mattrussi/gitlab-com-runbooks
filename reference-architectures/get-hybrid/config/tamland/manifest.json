@@ -361,6 +361,44 @@
       },
       "title": "Disk Utilization Overall"
     },
+    "pg_btree_bloat": {
+      "appliesTo": [],
+      "capacityPlanning": {
+        "changepoints_count": 5,
+        "forecast_days": 90,
+        "historical_days": 365,
+        "strategy": "quantile95_1h"
+      },
+      "description": "This estimates the total bloat in Postgres Btree indexes, as a percentage of total index size.\n\nIMPORTANT: bloat estimates are rough and depending on table/index structure, can be off for individual indexes,\nin some cases significantly (10-50%).\n\nThe larger this measure, the more pages will unnecessarily be retrieved during index scans.\n",
+      "horizontallyScalable": false,
+      "raw_query": "sum by (fqdn) (last_over_time(gitlab_database_bloat_btree_bloat_size{%(selector)s}[1h]))\n/\nsum by (fqdn) (last_over_time(gitlab_database_bloat_btree_real_size{%(selector)s}[1h]))\n",
+      "severity": "s3",
+      "slos": {
+        "alertTriggerDuration": "5m",
+        "hard": 0.7,
+        "soft": 0.5
+      },
+      "title": "Postgres btree bloat"
+    },
+    "pg_table_bloat": {
+      "appliesTo": [],
+      "capacityPlanning": {
+        "changepoints_count": 25,
+        "forecast_days": 90,
+        "historical_days": 365,
+        "strategy": "quantile95_1h"
+      },
+      "description": "This measures the total bloat in Postgres Table pages, as a percentage of total size. This includes bloat in TOAST tables,\nand excludes extra space reserved due to fillfactor.\n",
+      "horizontallyScalable": false,
+      "raw_query": "sum by (fqdn) (avg_over_time(gitlab_database_bloat_table_bloat_size{%(selector)s}[58m]))\n/\nsum by (fqdn) (avg_over_time(gitlab_database_bloat_table_real_size{%(selector)s}[58m]))\n",
+      "severity": "s4",
+      "slos": {
+        "alertTriggerDuration": "5m",
+        "hard": 0.4,
+        "soft": 0.3
+      },
+      "title": "Postgres Table Bloat"
+    },
     "pg_xid_wraparound": {
       "appliesTo": [],
       "capacityPlanning": {
@@ -494,6 +532,14 @@
           "name": "opensearch_disk_space",
           "url": ""
         },
+        "pg_btree_bloat": {
+          "name": "pg_btree_bloat",
+          "url": ""
+        },
+        "pg_table_bloat": {
+          "name": "pg_table_bloat",
+          "url": ""
+        },
         "pg_xid_wraparound": {
           "name": "pg_xid_wraparound",
           "url": ""
@@ -574,6 +620,14 @@
         },
         "opensearch_disk_space": {
           "name": "opensearch_disk_space",
+          "url": ""
+        },
+        "pg_btree_bloat": {
+          "name": "pg_btree_bloat",
+          "url": ""
+        },
+        "pg_table_bloat": {
+          "name": "pg_table_bloat",
           "url": ""
         },
         "pg_xid_wraparound": {
@@ -658,6 +712,14 @@
           "name": "opensearch_disk_space",
           "url": ""
         },
+        "pg_btree_bloat": {
+          "name": "pg_btree_bloat",
+          "url": ""
+        },
+        "pg_table_bloat": {
+          "name": "pg_table_bloat",
+          "url": ""
+        },
         "pg_xid_wraparound": {
           "name": "pg_xid_wraparound",
           "url": ""
@@ -738,6 +800,14 @@
         },
         "opensearch_disk_space": {
           "name": "opensearch_disk_space",
+          "url": ""
+        },
+        "pg_btree_bloat": {
+          "name": "pg_btree_bloat",
+          "url": ""
+        },
+        "pg_table_bloat": {
+          "name": "pg_table_bloat",
           "url": ""
         },
         "pg_xid_wraparound": {
@@ -822,6 +892,14 @@
           "name": "opensearch_disk_space",
           "url": ""
         },
+        "pg_btree_bloat": {
+          "name": "pg_btree_bloat",
+          "url": ""
+        },
+        "pg_table_bloat": {
+          "name": "pg_table_bloat",
+          "url": ""
+        },
         "pg_xid_wraparound": {
           "name": "pg_xid_wraparound",
           "url": ""
@@ -902,6 +980,14 @@
         },
         "opensearch_disk_space": {
           "name": "opensearch_disk_space",
+          "url": ""
+        },
+        "pg_btree_bloat": {
+          "name": "pg_btree_bloat",
+          "url": ""
+        },
+        "pg_table_bloat": {
+          "name": "pg_table_bloat",
           "url": ""
         },
         "pg_xid_wraparound": {
@@ -986,6 +1072,14 @@
           "name": "opensearch_disk_space",
           "url": ""
         },
+        "pg_btree_bloat": {
+          "name": "pg_btree_bloat",
+          "url": ""
+        },
+        "pg_table_bloat": {
+          "name": "pg_table_bloat",
+          "url": ""
+        },
         "pg_xid_wraparound": {
           "name": "pg_xid_wraparound",
           "url": ""
@@ -1068,6 +1162,14 @@
           "name": "opensearch_disk_space",
           "url": ""
         },
+        "pg_btree_bloat": {
+          "name": "pg_btree_bloat",
+          "url": ""
+        },
+        "pg_table_bloat": {
+          "name": "pg_table_bloat",
+          "url": ""
+        },
         "pg_xid_wraparound": {
           "name": "pg_xid_wraparound",
           "url": ""
@@ -1148,6 +1250,14 @@
         },
         "opensearch_disk_space": {
           "name": "opensearch_disk_space",
+          "url": ""
+        },
+        "pg_btree_bloat": {
+          "name": "pg_btree_bloat",
+          "url": ""
+        },
+        "pg_table_bloat": {
+          "name": "pg_table_bloat",
           "url": ""
         },
         "pg_xid_wraparound": {
