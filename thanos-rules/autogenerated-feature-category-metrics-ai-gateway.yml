@@ -55,7 +55,7 @@ groups:
       type: ai-gateway
     expr: |
       sum by (env,environment) (
-        avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_request_latencies_bucket{le="2079.650567184067",response_code_class!~"4xx|5xx",type="ai-gateway"}[5m])
+        avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_request_latencies_bucket{le="4903.707252978515",response_code_class!~"4xx|5xx",type="ai-gateway"}[5m])
       )
   - record: gitlab:component:feature_category:execution:apdex:weight:score_5m
     labels:
@@ -108,11 +108,11 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(http_request_duration_seconds_bucket{le=~"2\\.5",status!~"4xx|5xx",type="ai-gateway"}[5m])
+          rate(http_request_duration_seconds_bucket{handler!~"/v2/code/completions|/v2/code/generations|/v2/completions",le=~"5|5\\.0",status!~"4xx|5xx",type="ai-gateway"}[5m])
         )
         +
         sum by (env,environment) (
-          rate(http_request_duration_seconds_bucket{le=~"10|10\\.0",status!~"4xx|5xx",type="ai-gateway"}[5m])
+          rate(http_request_duration_seconds_bucket{handler!~"/v2/code/completions|/v2/code/generations|/v2/completions",le=~"10|10\\.0",status!~"4xx|5xx",type="ai-gateway"}[5m])
         )
       )
       /
@@ -126,7 +126,7 @@ groups:
       type: ai-gateway
     expr: |
       sum by (env,environment) (
-        rate(http_request_duration_seconds_bucket{le="+Inf",status!~"4xx|5xx",type="ai-gateway"}[5m])
+        rate(http_request_duration_seconds_bucket{handler!~"/v2/code/completions|/v2/code/generations|/v2/completions",le="+Inf",status!~"4xx|5xx",type="ai-gateway"}[5m])
       )
   - record: gitlab:component:feature_category:execution:ops:rate_5m
     labels:
@@ -137,7 +137,7 @@ groups:
       type: ai-gateway
     expr: |
       sum by (env,environment) (
-        rate(http_request_duration_seconds_count{type="ai-gateway"}[5m])
+        rate(http_request_duration_seconds_count{handler!~"/v2/code/completions|/v2/code/generations|/v2/completions",type="ai-gateway"}[5m])
       )
   - record: gitlab:component:feature_category:execution:error:rate_5m
     labels:
@@ -149,13 +149,133 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(http_request_duration_seconds_count{status="5xx",type="ai-gateway"}[5m])
+          rate(http_request_duration_seconds_count{handler!~"/v2/code/completions|/v2/code/generations|/v2/completions",status="5xx",type="ai-gateway"}[5m])
         )
       )
       or
       (
         0 * group by(env,environment) (
           gitlab:component:feature_category:execution:ops:rate_5m{component="server",feature_category="code_suggestions",stage="main",tier="sv",type="ai-gateway"}
+        )
+      )
+  - record: gitlab:component:feature_category:execution:apdex:success:rate_5m
+    labels:
+      component: server_code_completions
+      feature_category: code_suggestions
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      (
+        sum by (env,environment) (
+          rate(http_request_duration_seconds_bucket{handler=~"/v2/code/completions|/v2/completions",le=~"1|1\\.0",status!~"4xx|5xx",type="ai-gateway"}[5m])
+        )
+        +
+        sum by (env,environment) (
+          rate(http_request_duration_seconds_bucket{handler=~"/v2/code/completions|/v2/completions",le=~"10|10\\.0",status!~"4xx|5xx",type="ai-gateway"}[5m])
+        )
+      )
+      /
+      2
+  - record: gitlab:component:feature_category:execution:apdex:weight:score_5m
+    labels:
+      component: server_code_completions
+      feature_category: code_suggestions
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment) (
+        rate(http_request_duration_seconds_bucket{handler=~"/v2/code/completions|/v2/completions",le="+Inf",status!~"4xx|5xx",type="ai-gateway"}[5m])
+      )
+  - record: gitlab:component:feature_category:execution:ops:rate_5m
+    labels:
+      component: server_code_completions
+      feature_category: code_suggestions
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment) (
+        rate(http_request_duration_seconds_count{handler=~"/v2/code/completions|/v2/completions",type="ai-gateway"}[5m])
+      )
+  - record: gitlab:component:feature_category:execution:error:rate_5m
+    labels:
+      component: server_code_completions
+      feature_category: code_suggestions
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      (
+        sum by (env,environment) (
+          rate(http_request_duration_seconds_count{handler=~"/v2/code/completions|/v2/completions",status="5xx",type="ai-gateway"}[5m])
+        )
+      )
+      or
+      (
+        0 * group by(env,environment) (
+          gitlab:component:feature_category:execution:ops:rate_5m{component="server_code_completions",feature_category="code_suggestions",stage="main",tier="sv",type="ai-gateway"}
+        )
+      )
+  - record: gitlab:component:feature_category:execution:apdex:success:rate_5m
+    labels:
+      component: server_code_generations
+      feature_category: code_suggestions
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      (
+        sum by (env,environment) (
+          rate(http_request_duration_seconds_bucket{handler="/v2/code/generations",le=~"5|5\\.0",status!~"4xx|5xx",type="ai-gateway"}[5m])
+        )
+        +
+        sum by (env,environment) (
+          rate(http_request_duration_seconds_bucket{handler="/v2/code/generations",le=~"10|10\\.0",status!~"4xx|5xx",type="ai-gateway"}[5m])
+        )
+      )
+      /
+      2
+  - record: gitlab:component:feature_category:execution:apdex:weight:score_5m
+    labels:
+      component: server_code_generations
+      feature_category: code_suggestions
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment) (
+        rate(http_request_duration_seconds_bucket{handler="/v2/code/generations",le="+Inf",status!~"4xx|5xx",type="ai-gateway"}[5m])
+      )
+  - record: gitlab:component:feature_category:execution:ops:rate_5m
+    labels:
+      component: server_code_generations
+      feature_category: code_suggestions
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment) (
+        rate(http_request_duration_seconds_count{handler="/v2/code/generations",type="ai-gateway"}[5m])
+      )
+  - record: gitlab:component:feature_category:execution:error:rate_5m
+    labels:
+      component: server_code_generations
+      feature_category: code_suggestions
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      (
+        sum by (env,environment) (
+          rate(http_request_duration_seconds_count{handler="/v2/code/generations",status="5xx",type="ai-gateway"}[5m])
+        )
+      )
+      or
+      (
+        0 * group by(env,environment) (
+          gitlab:component:feature_category:execution:ops:rate_5m{component="server_code_generations",feature_category="code_suggestions",stage="main",tier="sv",type="ai-gateway"}
         )
       )
   - record: gitlab:component:feature_category:execution:ops:rate_5m
@@ -242,7 +362,7 @@ groups:
       type: ai-gateway
     expr: |
       sum by (env,environment) (
-        avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_request_latencies_bucket{le="2079.650567184067",response_code_class!~"4xx|5xx",type="ai-gateway"}[30m])
+        avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_request_latencies_bucket{le="4903.707252978515",response_code_class!~"4xx|5xx",type="ai-gateway"}[30m])
       )
   - record: gitlab:component:feature_category:execution:apdex:weight:score_30m
     labels:
@@ -295,11 +415,11 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(http_request_duration_seconds_bucket{le=~"2\\.5",status!~"4xx|5xx",type="ai-gateway"}[30m])
+          rate(http_request_duration_seconds_bucket{handler!~"/v2/code/completions|/v2/code/generations|/v2/completions",le=~"5|5\\.0",status!~"4xx|5xx",type="ai-gateway"}[30m])
         )
         +
         sum by (env,environment) (
-          rate(http_request_duration_seconds_bucket{le=~"10|10\\.0",status!~"4xx|5xx",type="ai-gateway"}[30m])
+          rate(http_request_duration_seconds_bucket{handler!~"/v2/code/completions|/v2/code/generations|/v2/completions",le=~"10|10\\.0",status!~"4xx|5xx",type="ai-gateway"}[30m])
         )
       )
       /
@@ -313,7 +433,7 @@ groups:
       type: ai-gateway
     expr: |
       sum by (env,environment) (
-        rate(http_request_duration_seconds_bucket{le="+Inf",status!~"4xx|5xx",type="ai-gateway"}[30m])
+        rate(http_request_duration_seconds_bucket{handler!~"/v2/code/completions|/v2/code/generations|/v2/completions",le="+Inf",status!~"4xx|5xx",type="ai-gateway"}[30m])
       )
   - record: gitlab:component:feature_category:execution:ops:rate_30m
     labels:
@@ -324,7 +444,7 @@ groups:
       type: ai-gateway
     expr: |
       sum by (env,environment) (
-        rate(http_request_duration_seconds_count{type="ai-gateway"}[30m])
+        rate(http_request_duration_seconds_count{handler!~"/v2/code/completions|/v2/code/generations|/v2/completions",type="ai-gateway"}[30m])
       )
   - record: gitlab:component:feature_category:execution:error:rate_30m
     labels:
@@ -336,13 +456,133 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(http_request_duration_seconds_count{status="5xx",type="ai-gateway"}[30m])
+          rate(http_request_duration_seconds_count{handler!~"/v2/code/completions|/v2/code/generations|/v2/completions",status="5xx",type="ai-gateway"}[30m])
         )
       )
       or
       (
         0 * group by(env,environment) (
           gitlab:component:feature_category:execution:ops:rate_30m{component="server",feature_category="code_suggestions",stage="main",tier="sv",type="ai-gateway"}
+        )
+      )
+  - record: gitlab:component:feature_category:execution:apdex:success:rate_30m
+    labels:
+      component: server_code_completions
+      feature_category: code_suggestions
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      (
+        sum by (env,environment) (
+          rate(http_request_duration_seconds_bucket{handler=~"/v2/code/completions|/v2/completions",le=~"1|1\\.0",status!~"4xx|5xx",type="ai-gateway"}[30m])
+        )
+        +
+        sum by (env,environment) (
+          rate(http_request_duration_seconds_bucket{handler=~"/v2/code/completions|/v2/completions",le=~"10|10\\.0",status!~"4xx|5xx",type="ai-gateway"}[30m])
+        )
+      )
+      /
+      2
+  - record: gitlab:component:feature_category:execution:apdex:weight:score_30m
+    labels:
+      component: server_code_completions
+      feature_category: code_suggestions
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment) (
+        rate(http_request_duration_seconds_bucket{handler=~"/v2/code/completions|/v2/completions",le="+Inf",status!~"4xx|5xx",type="ai-gateway"}[30m])
+      )
+  - record: gitlab:component:feature_category:execution:ops:rate_30m
+    labels:
+      component: server_code_completions
+      feature_category: code_suggestions
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment) (
+        rate(http_request_duration_seconds_count{handler=~"/v2/code/completions|/v2/completions",type="ai-gateway"}[30m])
+      )
+  - record: gitlab:component:feature_category:execution:error:rate_30m
+    labels:
+      component: server_code_completions
+      feature_category: code_suggestions
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      (
+        sum by (env,environment) (
+          rate(http_request_duration_seconds_count{handler=~"/v2/code/completions|/v2/completions",status="5xx",type="ai-gateway"}[30m])
+        )
+      )
+      or
+      (
+        0 * group by(env,environment) (
+          gitlab:component:feature_category:execution:ops:rate_30m{component="server_code_completions",feature_category="code_suggestions",stage="main",tier="sv",type="ai-gateway"}
+        )
+      )
+  - record: gitlab:component:feature_category:execution:apdex:success:rate_30m
+    labels:
+      component: server_code_generations
+      feature_category: code_suggestions
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      (
+        sum by (env,environment) (
+          rate(http_request_duration_seconds_bucket{handler="/v2/code/generations",le=~"5|5\\.0",status!~"4xx|5xx",type="ai-gateway"}[30m])
+        )
+        +
+        sum by (env,environment) (
+          rate(http_request_duration_seconds_bucket{handler="/v2/code/generations",le=~"10|10\\.0",status!~"4xx|5xx",type="ai-gateway"}[30m])
+        )
+      )
+      /
+      2
+  - record: gitlab:component:feature_category:execution:apdex:weight:score_30m
+    labels:
+      component: server_code_generations
+      feature_category: code_suggestions
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment) (
+        rate(http_request_duration_seconds_bucket{handler="/v2/code/generations",le="+Inf",status!~"4xx|5xx",type="ai-gateway"}[30m])
+      )
+  - record: gitlab:component:feature_category:execution:ops:rate_30m
+    labels:
+      component: server_code_generations
+      feature_category: code_suggestions
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment) (
+        rate(http_request_duration_seconds_count{handler="/v2/code/generations",type="ai-gateway"}[30m])
+      )
+  - record: gitlab:component:feature_category:execution:error:rate_30m
+    labels:
+      component: server_code_generations
+      feature_category: code_suggestions
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      (
+        sum by (env,environment) (
+          rate(http_request_duration_seconds_count{handler="/v2/code/generations",status="5xx",type="ai-gateway"}[30m])
+        )
+      )
+      or
+      (
+        0 * group by(env,environment) (
+          gitlab:component:feature_category:execution:ops:rate_30m{component="server_code_generations",feature_category="code_suggestions",stage="main",tier="sv",type="ai-gateway"}
         )
       )
   - record: gitlab:component:feature_category:execution:ops:rate_30m
@@ -429,7 +669,7 @@ groups:
       type: ai-gateway
     expr: |
       sum by (env,environment) (
-        avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_request_latencies_bucket{le="2079.650567184067",response_code_class!~"4xx|5xx",type="ai-gateway"}[1h])
+        avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_request_latencies_bucket{le="4903.707252978515",response_code_class!~"4xx|5xx",type="ai-gateway"}[1h])
       )
   - record: gitlab:component:feature_category:execution:apdex:weight:score_1h
     labels:
@@ -482,11 +722,11 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(http_request_duration_seconds_bucket{le=~"2\\.5",status!~"4xx|5xx",type="ai-gateway"}[1h])
+          rate(http_request_duration_seconds_bucket{handler!~"/v2/code/completions|/v2/code/generations|/v2/completions",le=~"5|5\\.0",status!~"4xx|5xx",type="ai-gateway"}[1h])
         )
         +
         sum by (env,environment) (
-          rate(http_request_duration_seconds_bucket{le=~"10|10\\.0",status!~"4xx|5xx",type="ai-gateway"}[1h])
+          rate(http_request_duration_seconds_bucket{handler!~"/v2/code/completions|/v2/code/generations|/v2/completions",le=~"10|10\\.0",status!~"4xx|5xx",type="ai-gateway"}[1h])
         )
       )
       /
@@ -500,7 +740,7 @@ groups:
       type: ai-gateway
     expr: |
       sum by (env,environment) (
-        rate(http_request_duration_seconds_bucket{le="+Inf",status!~"4xx|5xx",type="ai-gateway"}[1h])
+        rate(http_request_duration_seconds_bucket{handler!~"/v2/code/completions|/v2/code/generations|/v2/completions",le="+Inf",status!~"4xx|5xx",type="ai-gateway"}[1h])
       )
   - record: gitlab:component:feature_category:execution:ops:rate_1h
     labels:
@@ -511,7 +751,7 @@ groups:
       type: ai-gateway
     expr: |
       sum by (env,environment) (
-        rate(http_request_duration_seconds_count{type="ai-gateway"}[1h])
+        rate(http_request_duration_seconds_count{handler!~"/v2/code/completions|/v2/code/generations|/v2/completions",type="ai-gateway"}[1h])
       )
   - record: gitlab:component:feature_category:execution:error:rate_1h
     labels:
@@ -523,13 +763,133 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(http_request_duration_seconds_count{status="5xx",type="ai-gateway"}[1h])
+          rate(http_request_duration_seconds_count{handler!~"/v2/code/completions|/v2/code/generations|/v2/completions",status="5xx",type="ai-gateway"}[1h])
         )
       )
       or
       (
         0 * group by(env,environment) (
           gitlab:component:feature_category:execution:ops:rate_1h{component="server",feature_category="code_suggestions",stage="main",tier="sv",type="ai-gateway"}
+        )
+      )
+  - record: gitlab:component:feature_category:execution:apdex:success:rate_1h
+    labels:
+      component: server_code_completions
+      feature_category: code_suggestions
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      (
+        sum by (env,environment) (
+          rate(http_request_duration_seconds_bucket{handler=~"/v2/code/completions|/v2/completions",le=~"1|1\\.0",status!~"4xx|5xx",type="ai-gateway"}[1h])
+        )
+        +
+        sum by (env,environment) (
+          rate(http_request_duration_seconds_bucket{handler=~"/v2/code/completions|/v2/completions",le=~"10|10\\.0",status!~"4xx|5xx",type="ai-gateway"}[1h])
+        )
+      )
+      /
+      2
+  - record: gitlab:component:feature_category:execution:apdex:weight:score_1h
+    labels:
+      component: server_code_completions
+      feature_category: code_suggestions
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment) (
+        rate(http_request_duration_seconds_bucket{handler=~"/v2/code/completions|/v2/completions",le="+Inf",status!~"4xx|5xx",type="ai-gateway"}[1h])
+      )
+  - record: gitlab:component:feature_category:execution:ops:rate_1h
+    labels:
+      component: server_code_completions
+      feature_category: code_suggestions
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment) (
+        rate(http_request_duration_seconds_count{handler=~"/v2/code/completions|/v2/completions",type="ai-gateway"}[1h])
+      )
+  - record: gitlab:component:feature_category:execution:error:rate_1h
+    labels:
+      component: server_code_completions
+      feature_category: code_suggestions
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      (
+        sum by (env,environment) (
+          rate(http_request_duration_seconds_count{handler=~"/v2/code/completions|/v2/completions",status="5xx",type="ai-gateway"}[1h])
+        )
+      )
+      or
+      (
+        0 * group by(env,environment) (
+          gitlab:component:feature_category:execution:ops:rate_1h{component="server_code_completions",feature_category="code_suggestions",stage="main",tier="sv",type="ai-gateway"}
+        )
+      )
+  - record: gitlab:component:feature_category:execution:apdex:success:rate_1h
+    labels:
+      component: server_code_generations
+      feature_category: code_suggestions
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      (
+        sum by (env,environment) (
+          rate(http_request_duration_seconds_bucket{handler="/v2/code/generations",le=~"5|5\\.0",status!~"4xx|5xx",type="ai-gateway"}[1h])
+        )
+        +
+        sum by (env,environment) (
+          rate(http_request_duration_seconds_bucket{handler="/v2/code/generations",le=~"10|10\\.0",status!~"4xx|5xx",type="ai-gateway"}[1h])
+        )
+      )
+      /
+      2
+  - record: gitlab:component:feature_category:execution:apdex:weight:score_1h
+    labels:
+      component: server_code_generations
+      feature_category: code_suggestions
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment) (
+        rate(http_request_duration_seconds_bucket{handler="/v2/code/generations",le="+Inf",status!~"4xx|5xx",type="ai-gateway"}[1h])
+      )
+  - record: gitlab:component:feature_category:execution:ops:rate_1h
+    labels:
+      component: server_code_generations
+      feature_category: code_suggestions
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment) (
+        rate(http_request_duration_seconds_count{handler="/v2/code/generations",type="ai-gateway"}[1h])
+      )
+  - record: gitlab:component:feature_category:execution:error:rate_1h
+    labels:
+      component: server_code_generations
+      feature_category: code_suggestions
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      (
+        sum by (env,environment) (
+          rate(http_request_duration_seconds_count{handler="/v2/code/generations",status="5xx",type="ai-gateway"}[1h])
+        )
+      )
+      or
+      (
+        0 * group by(env,environment) (
+          gitlab:component:feature_category:execution:ops:rate_1h{component="server_code_generations",feature_category="code_suggestions",stage="main",tier="sv",type="ai-gateway"}
         )
       )
   - record: gitlab:component:feature_category:execution:ops:rate_1h
@@ -616,7 +976,7 @@ groups:
       type: ai-gateway
     expr: |
       sum by (env,environment) (
-        avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_request_latencies_bucket{le="2079.650567184067",response_code_class!~"4xx|5xx",type="ai-gateway"}[6h])
+        avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_request_latencies_bucket{le="4903.707252978515",response_code_class!~"4xx|5xx",type="ai-gateway"}[6h])
       )
   - record: gitlab:component:feature_category:execution:apdex:weight:score_6h
     labels:
@@ -669,11 +1029,11 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(http_request_duration_seconds_bucket{le=~"2\\.5",status!~"4xx|5xx",type="ai-gateway"}[6h])
+          rate(http_request_duration_seconds_bucket{handler!~"/v2/code/completions|/v2/code/generations|/v2/completions",le=~"5|5\\.0",status!~"4xx|5xx",type="ai-gateway"}[6h])
         )
         +
         sum by (env,environment) (
-          rate(http_request_duration_seconds_bucket{le=~"10|10\\.0",status!~"4xx|5xx",type="ai-gateway"}[6h])
+          rate(http_request_duration_seconds_bucket{handler!~"/v2/code/completions|/v2/code/generations|/v2/completions",le=~"10|10\\.0",status!~"4xx|5xx",type="ai-gateway"}[6h])
         )
       )
       /
@@ -687,7 +1047,7 @@ groups:
       type: ai-gateway
     expr: |
       sum by (env,environment) (
-        rate(http_request_duration_seconds_bucket{le="+Inf",status!~"4xx|5xx",type="ai-gateway"}[6h])
+        rate(http_request_duration_seconds_bucket{handler!~"/v2/code/completions|/v2/code/generations|/v2/completions",le="+Inf",status!~"4xx|5xx",type="ai-gateway"}[6h])
       )
   - record: gitlab:component:feature_category:execution:ops:rate_6h
     labels:
@@ -698,7 +1058,7 @@ groups:
       type: ai-gateway
     expr: |
       sum by (env,environment) (
-        rate(http_request_duration_seconds_count{type="ai-gateway"}[6h])
+        rate(http_request_duration_seconds_count{handler!~"/v2/code/completions|/v2/code/generations|/v2/completions",type="ai-gateway"}[6h])
       )
   - record: gitlab:component:feature_category:execution:error:rate_6h
     labels:
@@ -710,13 +1070,133 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(http_request_duration_seconds_count{status="5xx",type="ai-gateway"}[6h])
+          rate(http_request_duration_seconds_count{handler!~"/v2/code/completions|/v2/code/generations|/v2/completions",status="5xx",type="ai-gateway"}[6h])
         )
       )
       or
       (
         0 * group by(env,environment) (
           gitlab:component:feature_category:execution:ops:rate_6h{component="server",feature_category="code_suggestions",stage="main",tier="sv",type="ai-gateway"}
+        )
+      )
+  - record: gitlab:component:feature_category:execution:apdex:success:rate_6h
+    labels:
+      component: server_code_completions
+      feature_category: code_suggestions
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      (
+        sum by (env,environment) (
+          rate(http_request_duration_seconds_bucket{handler=~"/v2/code/completions|/v2/completions",le=~"1|1\\.0",status!~"4xx|5xx",type="ai-gateway"}[6h])
+        )
+        +
+        sum by (env,environment) (
+          rate(http_request_duration_seconds_bucket{handler=~"/v2/code/completions|/v2/completions",le=~"10|10\\.0",status!~"4xx|5xx",type="ai-gateway"}[6h])
+        )
+      )
+      /
+      2
+  - record: gitlab:component:feature_category:execution:apdex:weight:score_6h
+    labels:
+      component: server_code_completions
+      feature_category: code_suggestions
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment) (
+        rate(http_request_duration_seconds_bucket{handler=~"/v2/code/completions|/v2/completions",le="+Inf",status!~"4xx|5xx",type="ai-gateway"}[6h])
+      )
+  - record: gitlab:component:feature_category:execution:ops:rate_6h
+    labels:
+      component: server_code_completions
+      feature_category: code_suggestions
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment) (
+        rate(http_request_duration_seconds_count{handler=~"/v2/code/completions|/v2/completions",type="ai-gateway"}[6h])
+      )
+  - record: gitlab:component:feature_category:execution:error:rate_6h
+    labels:
+      component: server_code_completions
+      feature_category: code_suggestions
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      (
+        sum by (env,environment) (
+          rate(http_request_duration_seconds_count{handler=~"/v2/code/completions|/v2/completions",status="5xx",type="ai-gateway"}[6h])
+        )
+      )
+      or
+      (
+        0 * group by(env,environment) (
+          gitlab:component:feature_category:execution:ops:rate_6h{component="server_code_completions",feature_category="code_suggestions",stage="main",tier="sv",type="ai-gateway"}
+        )
+      )
+  - record: gitlab:component:feature_category:execution:apdex:success:rate_6h
+    labels:
+      component: server_code_generations
+      feature_category: code_suggestions
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      (
+        sum by (env,environment) (
+          rate(http_request_duration_seconds_bucket{handler="/v2/code/generations",le=~"5|5\\.0",status!~"4xx|5xx",type="ai-gateway"}[6h])
+        )
+        +
+        sum by (env,environment) (
+          rate(http_request_duration_seconds_bucket{handler="/v2/code/generations",le=~"10|10\\.0",status!~"4xx|5xx",type="ai-gateway"}[6h])
+        )
+      )
+      /
+      2
+  - record: gitlab:component:feature_category:execution:apdex:weight:score_6h
+    labels:
+      component: server_code_generations
+      feature_category: code_suggestions
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment) (
+        rate(http_request_duration_seconds_bucket{handler="/v2/code/generations",le="+Inf",status!~"4xx|5xx",type="ai-gateway"}[6h])
+      )
+  - record: gitlab:component:feature_category:execution:ops:rate_6h
+    labels:
+      component: server_code_generations
+      feature_category: code_suggestions
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment) (
+        rate(http_request_duration_seconds_count{handler="/v2/code/generations",type="ai-gateway"}[6h])
+      )
+  - record: gitlab:component:feature_category:execution:error:rate_6h
+    labels:
+      component: server_code_generations
+      feature_category: code_suggestions
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      (
+        sum by (env,environment) (
+          rate(http_request_duration_seconds_count{handler="/v2/code/generations",status="5xx",type="ai-gateway"}[6h])
+        )
+      )
+      or
+      (
+        0 * group by(env,environment) (
+          gitlab:component:feature_category:execution:ops:rate_6h{component="server_code_generations",feature_category="code_suggestions",stage="main",tier="sv",type="ai-gateway"}
         )
       )
   - record: gitlab:component:feature_category:execution:ops:rate_6h
@@ -803,7 +1283,7 @@ groups:
       type: ai-gateway
     expr: |
       sum by (env,environment) (
-        avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_request_latencies_bucket{le="2079.650567184067",response_code_class!~"4xx|5xx",type="ai-gateway"}[3d])
+        avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_request_latencies_bucket{le="4903.707252978515",response_code_class!~"4xx|5xx",type="ai-gateway"}[3d])
       )
   - record: gitlab:component:feature_category:execution:apdex:weight:score_3d
     labels:
@@ -856,11 +1336,11 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(http_request_duration_seconds_bucket{le=~"2\\.5",status!~"4xx|5xx",type="ai-gateway"}[3d])
+          rate(http_request_duration_seconds_bucket{handler!~"/v2/code/completions|/v2/code/generations|/v2/completions",le=~"5|5\\.0",status!~"4xx|5xx",type="ai-gateway"}[3d])
         )
         +
         sum by (env,environment) (
-          rate(http_request_duration_seconds_bucket{le=~"10|10\\.0",status!~"4xx|5xx",type="ai-gateway"}[3d])
+          rate(http_request_duration_seconds_bucket{handler!~"/v2/code/completions|/v2/code/generations|/v2/completions",le=~"10|10\\.0",status!~"4xx|5xx",type="ai-gateway"}[3d])
         )
       )
       /
@@ -874,7 +1354,7 @@ groups:
       type: ai-gateway
     expr: |
       sum by (env,environment) (
-        rate(http_request_duration_seconds_bucket{le="+Inf",status!~"4xx|5xx",type="ai-gateway"}[3d])
+        rate(http_request_duration_seconds_bucket{handler!~"/v2/code/completions|/v2/code/generations|/v2/completions",le="+Inf",status!~"4xx|5xx",type="ai-gateway"}[3d])
       )
   - record: gitlab:component:feature_category:execution:ops:rate_3d
     labels:
@@ -885,7 +1365,7 @@ groups:
       type: ai-gateway
     expr: |
       sum by (env,environment) (
-        rate(http_request_duration_seconds_count{type="ai-gateway"}[3d])
+        rate(http_request_duration_seconds_count{handler!~"/v2/code/completions|/v2/code/generations|/v2/completions",type="ai-gateway"}[3d])
       )
   - record: gitlab:component:feature_category:execution:error:rate_3d
     labels:
@@ -897,13 +1377,133 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(http_request_duration_seconds_count{status="5xx",type="ai-gateway"}[3d])
+          rate(http_request_duration_seconds_count{handler!~"/v2/code/completions|/v2/code/generations|/v2/completions",status="5xx",type="ai-gateway"}[3d])
         )
       )
       or
       (
         0 * group by(env,environment) (
           gitlab:component:feature_category:execution:ops:rate_3d{component="server",feature_category="code_suggestions",stage="main",tier="sv",type="ai-gateway"}
+        )
+      )
+  - record: gitlab:component:feature_category:execution:apdex:success:rate_3d
+    labels:
+      component: server_code_completions
+      feature_category: code_suggestions
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      (
+        sum by (env,environment) (
+          rate(http_request_duration_seconds_bucket{handler=~"/v2/code/completions|/v2/completions",le=~"1|1\\.0",status!~"4xx|5xx",type="ai-gateway"}[3d])
+        )
+        +
+        sum by (env,environment) (
+          rate(http_request_duration_seconds_bucket{handler=~"/v2/code/completions|/v2/completions",le=~"10|10\\.0",status!~"4xx|5xx",type="ai-gateway"}[3d])
+        )
+      )
+      /
+      2
+  - record: gitlab:component:feature_category:execution:apdex:weight:score_3d
+    labels:
+      component: server_code_completions
+      feature_category: code_suggestions
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment) (
+        rate(http_request_duration_seconds_bucket{handler=~"/v2/code/completions|/v2/completions",le="+Inf",status!~"4xx|5xx",type="ai-gateway"}[3d])
+      )
+  - record: gitlab:component:feature_category:execution:ops:rate_3d
+    labels:
+      component: server_code_completions
+      feature_category: code_suggestions
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment) (
+        rate(http_request_duration_seconds_count{handler=~"/v2/code/completions|/v2/completions",type="ai-gateway"}[3d])
+      )
+  - record: gitlab:component:feature_category:execution:error:rate_3d
+    labels:
+      component: server_code_completions
+      feature_category: code_suggestions
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      (
+        sum by (env,environment) (
+          rate(http_request_duration_seconds_count{handler=~"/v2/code/completions|/v2/completions",status="5xx",type="ai-gateway"}[3d])
+        )
+      )
+      or
+      (
+        0 * group by(env,environment) (
+          gitlab:component:feature_category:execution:ops:rate_3d{component="server_code_completions",feature_category="code_suggestions",stage="main",tier="sv",type="ai-gateway"}
+        )
+      )
+  - record: gitlab:component:feature_category:execution:apdex:success:rate_3d
+    labels:
+      component: server_code_generations
+      feature_category: code_suggestions
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      (
+        sum by (env,environment) (
+          rate(http_request_duration_seconds_bucket{handler="/v2/code/generations",le=~"5|5\\.0",status!~"4xx|5xx",type="ai-gateway"}[3d])
+        )
+        +
+        sum by (env,environment) (
+          rate(http_request_duration_seconds_bucket{handler="/v2/code/generations",le=~"10|10\\.0",status!~"4xx|5xx",type="ai-gateway"}[3d])
+        )
+      )
+      /
+      2
+  - record: gitlab:component:feature_category:execution:apdex:weight:score_3d
+    labels:
+      component: server_code_generations
+      feature_category: code_suggestions
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment) (
+        rate(http_request_duration_seconds_bucket{handler="/v2/code/generations",le="+Inf",status!~"4xx|5xx",type="ai-gateway"}[3d])
+      )
+  - record: gitlab:component:feature_category:execution:ops:rate_3d
+    labels:
+      component: server_code_generations
+      feature_category: code_suggestions
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment) (
+        rate(http_request_duration_seconds_count{handler="/v2/code/generations",type="ai-gateway"}[3d])
+      )
+  - record: gitlab:component:feature_category:execution:error:rate_3d
+    labels:
+      component: server_code_generations
+      feature_category: code_suggestions
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      (
+        sum by (env,environment) (
+          rate(http_request_duration_seconds_count{handler="/v2/code/generations",status="5xx",type="ai-gateway"}[3d])
+        )
+      )
+      or
+      (
+        0 * group by(env,environment) (
+          gitlab:component:feature_category:execution:ops:rate_3d{component="server_code_generations",feature_category="code_suggestions",stage="main",tier="sv",type="ai-gateway"}
         )
       )
   - record: gitlab:component:feature_category:execution:ops:rate_3d
