@@ -8,9 +8,10 @@ local serviceDashboard = import 'gitlab-dashboards/service_dashboard.libsonnet';
 serviceDashboard.overview(
   'mailgun',
   startRow=1,
-  omitEnvironmentDropdown=true,
   showSystemDiagrams=false,
   showProvisioningDetails=false,
+  omitEnvironmentDropdown=true,
+  environmentSelectorHash={ env: "ops" },
 )
 .addPanel(
   row.new(title='Mailgun Metrics'),
@@ -25,7 +26,7 @@ serviceDashboard.overview(
   layout.grid([
     basic.timeseries(
       title='Mailgun Delivery Errors',
-      query='sum(rate(mailgun_delivery_errors_total[$__interval])) by (delivery_status_code)',
+      query='sum(rate(mailgun_delivery_errors_total[$__rate_interval])) by (delivery_status_code)',
       legend_show=false,
     ),
     basic.timeseries(
@@ -34,7 +35,7 @@ serviceDashboard.overview(
         histogram_quantile(
           0.95,
           sum by (le) (
-            rate(mailgun_delivery_time_seconds_bucket[$__interval])
+            rate(mailgun_delivery_time_seconds_bucket[$__rate_interval])
           )
         )
       |||,
@@ -44,9 +45,9 @@ serviceDashboard.overview(
     basic.timeseries(
       title='Average deliverytime',
       query=|||
-        rate(mailgun_delivery_time_seconds_sum[$__interval])
+        rate(mailgun_delivery_time_seconds_sum[$__rate_interval])
         /
-        rate(mailgun_delivery_time_seconds_count[$__interval])
+        rate(mailgun_delivery_time_seconds_count[$__rate_interval])
       |||,
       format='s',
       legend_show=false,
