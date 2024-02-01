@@ -49,7 +49,7 @@ Here are some examples of the dashboards generated for this reference architectu
 
 Saturation monitoring is handled differently to the service-level monitoring described above. Each monitored resource is represented as a finite resource with a current value between 0% (unutilized) and 100% (completely saturated). Each saturation resource has a threshold SLO over which it will alert.
 
-:warning: Some metrics below require the use of recording rules in order for these to work properly.
+:warning: Some metrics below require user-supplied recording rules for full functionality.
 
 <!-- MARKER:saturation: do not edit this section directly. -->
 ### Monitored Saturation Resources
