@@ -30,7 +30,7 @@ def fetch_type_dependencies(service, sli, query)
   parsed = JSON.parse(res.body)
   parsed['data']['result'].each do |r|
     emitting_service = r['metric']['type']
-    next if emitting_service == service
+    # next if emitting_service == service
 
     $service_dependencies_from_slis[emitting_service] ||= {}
     if !emitting_service
@@ -40,18 +40,18 @@ def fetch_type_dependencies(service, sli, query)
     $service_dependencies_from_slis[emitting_service][sli] << service
 
     $service_slis_with_emitted_by[service] ||= {}
-    $service_slis_with_emitted_by[service][sli] ||= {}
-    $service_slis_with_emitted_by[service][sli]['emitted_by'] ||= Set.new
-    $service_slis_with_emitted_by[service][sli]['emitted_by'] << emitting_service
+    $service_slis_with_emitted_by[service]['slis'] ||= {}
+    $service_slis_with_emitted_by[service]['slis'][sli] ||= {}
+    $service_slis_with_emitted_by[service]['slis'][sli]['emitted_by'] ||= Set.new
+    $service_slis_with_emitted_by[service]['slis'][sli]['emitted_by'] << emitting_service
+    $service_slis_with_emitted_by[service]['slis'][sli]['requestRate'] ||= $data[service]['slis'][sli]['requestRate']
   end
 end
 
-data = JSON.parse(source.string)
-# $service_slis_with_emitted_by = data.dup
+$data = JSON.parse(source.string)
 
-data.each do |service, value|
+$data.each do |service, value|
   value['slis'].each do |sli, sli_obj|
-    # request_rates_from_multiple_services = sli_obj['requestRate'].select { |rate| !rate['selector']['type'].is_a?(String) } # if type selector is a string, it's a single service
     sli_obj['requestRate'].each do |rate|
       raw_query = rate['raw']
       aggregate_by_type = "count by (type) (#{raw_query})"
@@ -68,18 +68,18 @@ $service_dependencies_from_slis.each do |service, slis|
   end
 end
 
-$service_slis_with_emitted_by.each do |service, slis|
-  slis.each do |sli, emitted_by|
-    $service_slis_with_emitted_by[service][sli] = emitted_by.to_a
+$service_slis_with_emitted_by.each do |service, _|
+  $service_slis_with_emitted_by[service]['slis'].each do |sli, obj|
+    $service_slis_with_emitted_by[service]['slis'][sli]['emitted_by'] = obj['emitted_by'].to_a
   end
 end
 
-puts '======== Service dependencies from SLIs ============'
-puts $service_dependencies_from_slis.to_json
-File.write("service_dependencies_from_slis.json", $service_dependencies_from_slis.to_json)
-puts '====================================='
+# puts '======== Service dependencies from SLIs ============'
+# puts $service_dependencies_from_slis.to_json
+# File.write("services/service_dependencies_from_slis.json", $service_dependencies_from_slis.to_json)
+# puts '====================================='
 puts '======== Service SLIs with emitted_by ============'
 puts $service_slis_with_emitted_by.to_json
-File.write("service_slis_with_emitted_by.json", $service_slis_with_emitted_by.to_json)
+File.write("services/service_slis_with_emitted_by.json", JSON.pretty_generate($service_slis_with_emitted_by))
 puts '====================================='
 puts 'Done'

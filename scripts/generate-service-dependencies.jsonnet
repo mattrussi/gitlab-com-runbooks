@@ -138,7 +138,7 @@ local singleRequestRate(sli, type) =
   );
 
 local generateRate(sli, type) =
-  // ignore combined SLI
+  // TODO: ignore combined SLI
   local result = if std.objectHas(sli, 'components') then
     []
   else if !std.objectHas(sli, type) then
