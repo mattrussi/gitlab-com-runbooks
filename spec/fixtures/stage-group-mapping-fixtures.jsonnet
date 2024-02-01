@@ -40,7 +40,7 @@
   },
   'this-is-really-long-long-long-long-long-long-stage': {
     name: 'This is a very long long long long long long stage',
-    stage: 'plan',
+    stage: 'this-is-really-long-long-long-long-long-long-stage',
     feature_categories: [
       'issue_tracking',
       'boards',

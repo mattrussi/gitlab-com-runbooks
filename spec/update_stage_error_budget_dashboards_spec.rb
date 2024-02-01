@@ -66,6 +66,9 @@ describe UpdateStageErrorBudgetDashboards do
       let(:plan_file) { "#{dashboard_dir}/plan_error_budget.dashboard.jsonnet" }
       let(:plan_template) { described_class.render_template('plan') }
 
+      let(:long_file) { "#{dashboard_dir}/this-is-really-long_error_budget.dashboard.jsonnet" }
+      let(:long_template) { described_class.render_template('this-is-really-long-long-long-long-long-long-stage') }
+
       before do
         File.write(mapping_path, groups_jsonnet)
 
@@ -89,6 +92,9 @@ describe UpdateStageErrorBudgetDashboards do
 
         expect(File.exist?(manage_file)).to be(true)
         expect(File.read(manage_file)).to eql(manage_template)
+
+        expect(File.exist?(long_file)).to be(true)
+        expect(File.read(long_file)).to eql(long_template)
       end
     end
   end
