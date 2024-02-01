@@ -34,7 +34,7 @@
       },
       "description": "The amount of available random access memory. This metric reports the value of the MemAvailable field of /proc/meminfo.\n\nA high saturation point indicates that we are low on available memory and Swap may be in use, lowering the performance of an RDS instance.\n\nAdditional details here: https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/rds-metrics.html#rds-cw-metrics-instance\n",
       "horizontallyScalable": false,
-      "raw_query": "1- (sum by (dbinstance_identifier) (aws_rds_freeable_memory_maximum)\n/\nrds_instance_ram_bytes\n",
+      "raw_query": "1- (sum by (dbinstance_identifier) (aws_rds_freeable_memory_maximum)\n/\nrds_instance_ram_bytes)\n",
       "severity": "s4",
       "slos": {
         "alertTriggerDuration": "30m",
@@ -55,7 +55,7 @@
       },
       "description": "The number of client network connections to the database instance.\n\nInstance Type: %s\n\nFurther details: https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/rds-metrics.html#rds-cw-metrics-instance\n",
       "horizontallyScalable": false,
-      "raw_query": "aws_rds_database_connections_maximum\n/\nrds_max_connections\n",
+      "raw_query": "aws_rds_database_connections_maximum\n/\nclamp_min(rds_instance_ram_bytes/9531392, 5000)\n",
       "severity": "s2",
       "slos": {
         "alertTriggerDuration": "5m",
