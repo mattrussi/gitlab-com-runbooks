@@ -21,13 +21,19 @@ local rdsMaxConnections = std.get(config.options, 'rdsMaxConnections', null);
     |||,
     resourceLabels: [],
 
+    // RDS Leverages a special function for determining the maximm allowed
+    // connections: `LEAST({DBInstanceClassMemory/9531392}, 5000)`
+    // Reference: https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Limits.html
+    // We leverage this as part of our query below.
+
     // Note that we are using a metric, `rds_max_connections` to capture the capacity of
     // connections allotted by an RDS instance.  This is to be defined by the
-    // customer as a prometheus recording rule.
+    // customer as a prometheus recording rule.  Note that the label `dbinstance_identifier` is
+    // required for this query to operate appropriately.
     query: |||
       aws_rds_database_connections_maximum
       /
-      rds_max_connections
+      clamp_min(rds_instance_ram_bytes/9531392, 5000)
     |||,
     slos: {
       soft: 0.90,

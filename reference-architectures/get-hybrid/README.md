@@ -51,6 +51,11 @@ Saturation monitoring is handled differently to the service-level monitoring des
 
 :warning: Some metrics below require user-supplied recording rules for full functionality.
 
+* `aws_rds_memory_saturation` - requires metric `rds_instance_ram_bytes`
+* `aws_rds_used_connections` - requires metric `rds_instance_ram_bytes`
+
+Note that these metrics may have other requirements, please see the metric definitions for further details.
+
 <!-- MARKER:saturation: do not edit this section directly. -->
 ### Monitored Saturation Resources
 

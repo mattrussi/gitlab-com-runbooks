@@ -30,11 +30,12 @@ local rdsInstanceRAMGB = std.get(config.options, 'rdsInstanceRAMGB', null);
 
     // Note that we are using a metric, `rds_instance_ram_bytes` to capture the amount of RAM
     // specified in bytes, available to us.  This is to be defined by the
-    // customer as a prometheus recording rule.
+    // customer as a prometheus recording rule.  Note that the label `dbinstance_identifier` is
+    // required for this query to operate appropriately.
     query: |||
       1- (sum by (dbinstance_identifier) (aws_rds_freeable_memory_maximum)
       /
-      rds_instance_ram_bytes
+      rds_instance_ram_bytes)
     |||,
     slos: {
       soft: 0.85,
