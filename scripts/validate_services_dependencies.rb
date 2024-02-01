@@ -37,11 +37,16 @@ def fetch_type_dependencies(service, sli, query)
     end
     $service_dependencies_from_slis[emitting_service][sli] ||= Set.new
     $service_dependencies_from_slis[emitting_service][sli] << service
+
+    $service_slis_with_emitted_by[service] ||= {}
+    $service_slis_with_emitted_by[service][sli] ||= {}
+    $service_slis_with_emitted_by[service][sli]['emitted_by'] ||= Set.new
+    $service_slis_with_emitted_by[service][sli]['emitted_by'] << emitting_service
   end
 end
 
 data = JSON.parse(source.string)
-$all_services = data.keys
+$service_slis_with_emitted_by = data.dup
 
 data.each do |service, value|
   value['slis'].each do |sli, sli_obj|
@@ -62,5 +67,10 @@ $service_dependencies_from_slis.each do |service, slis|
   end
 end
 
+puts '======== Service dependencies from SLIs ============'
 puts $service_dependencies_from_slis.to_json
+puts '====================================='
+puts '======== Service SLIs with emitted_by ============'
+puts $service_slis_with_emitted_by.to_json
+puts '====================================='
 puts 'Done'
