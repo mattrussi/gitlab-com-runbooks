@@ -125,7 +125,7 @@ metricsCatalog.serviceDefinition(
           histogram='http_request_duration_seconds_bucket',
           selector=baseSelector { status: { noneOf: ['4xx', '5xx'] }, handler: '/v2/code/generations' },
           satisfiedThreshold=5,
-          toleratedThreshold=10,
+          toleratedThreshold=25,
           metricsFormat='migrating'
         ),
 

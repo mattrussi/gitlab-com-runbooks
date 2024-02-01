@@ -232,7 +232,7 @@ groups:
         )
         +
         sum by (env,environment) (
-          rate(http_request_duration_seconds_bucket{handler="/v2/code/generations",le=~"10|10\\.0",status!~"4xx|5xx",type="ai-gateway"}[5m])
+          rate(http_request_duration_seconds_bucket{handler="/v2/code/generations",le=~"25|25\\.0",status!~"4xx|5xx",type="ai-gateway"}[5m])
         )
       )
       /
@@ -539,7 +539,7 @@ groups:
         )
         +
         sum by (env,environment) (
-          rate(http_request_duration_seconds_bucket{handler="/v2/code/generations",le=~"10|10\\.0",status!~"4xx|5xx",type="ai-gateway"}[30m])
+          rate(http_request_duration_seconds_bucket{handler="/v2/code/generations",le=~"25|25\\.0",status!~"4xx|5xx",type="ai-gateway"}[30m])
         )
       )
       /
@@ -846,7 +846,7 @@ groups:
         )
         +
         sum by (env,environment) (
-          rate(http_request_duration_seconds_bucket{handler="/v2/code/generations",le=~"10|10\\.0",status!~"4xx|5xx",type="ai-gateway"}[1h])
+          rate(http_request_duration_seconds_bucket{handler="/v2/code/generations",le=~"25|25\\.0",status!~"4xx|5xx",type="ai-gateway"}[1h])
         )
       )
       /
@@ -1153,7 +1153,7 @@ groups:
         )
         +
         sum by (env,environment) (
-          rate(http_request_duration_seconds_bucket{handler="/v2/code/generations",le=~"10|10\\.0",status!~"4xx|5xx",type="ai-gateway"}[6h])
+          rate(http_request_duration_seconds_bucket{handler="/v2/code/generations",le=~"25|25\\.0",status!~"4xx|5xx",type="ai-gateway"}[6h])
         )
       )
       /
@@ -1460,7 +1460,7 @@ groups:
         )
         +
         sum by (env,environment) (
-          rate(http_request_duration_seconds_bucket{handler="/v2/code/generations",le=~"10|10\\.0",status!~"4xx|5xx",type="ai-gateway"}[3d])
+          rate(http_request_duration_seconds_bucket{handler="/v2/code/generations",le=~"25|25\\.0",status!~"4xx|5xx",type="ai-gateway"}[3d])
         )
       )
       /
