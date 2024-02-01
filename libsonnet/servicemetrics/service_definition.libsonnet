@@ -68,7 +68,7 @@ local validateMonitoring(serviceDefinition) =
 
   monitoringValidator.assertValid(serviceDefinition);
 
-// Convience method, will wrap a raw definition in a serviceLevelIndicatorDefinition if needed
+// Convenience method, will wrap a raw definition in a serviceLevelIndicatorDefinition if needed
 local prepareComponent(definition) =
   if std.objectHasAll(definition, 'initServiceLevelIndicatorWithName') then
     // Already prepared

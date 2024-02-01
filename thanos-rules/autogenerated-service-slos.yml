@@ -996,6 +996,17 @@ groups:
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       tier: sv
+      type: mailgun
+    expr: "0.100000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      component: mail_delivery
+      tier: sv
+      type: mailgun
+    expr: "0.100000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      tier: sv
       type: mailroom
     expr: "0.000500"
   - record: slo:max:events:gitlab_service_errors:ratio
@@ -3589,6 +3600,15 @@ groups:
       service_aggregation: "yes"
       tier: inf
       type: logging
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: mail_delivery
+      global_aggregation: "no"
+      regional_aggregation: "no"
+      service_aggregation: "yes"
+      tier: sv
+      type: mailgun
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:
