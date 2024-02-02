@@ -113,7 +113,7 @@ local es_query = {
           to: [
             '#g_tenant-scale'
           ],
-          text: 'Database::MonitorLockedTablesWorker could not lock all tables. Logs: https://log.gprd.gitlab.net/app/r/s/ZJQrK. Please investigate why locking the reported tables failed.',
+          text: 'Database::MonitorLockedTablesWorker could not lock all tables. Logs: https://log.gprd.gitlab.net/app/r/s/508tx . Please investigate why locking the reported tables failed.',
         },
       },
     },
