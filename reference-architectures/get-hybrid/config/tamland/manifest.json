@@ -55,7 +55,7 @@
       },
       "description": "The number of client network connections to the database instance.\n\nInstance Type: %s\n\nFurther details: https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/rds-metrics.html#rds-cw-metrics-instance\n",
       "horizontallyScalable": false,
-      "raw_query": "aws_rds_database_connections_maximum\n/\nclamp_min(rds_instance_ram_bytes/9531392, 5000)\n",
+      "raw_query": "sum by (dbinstance_identifier) (aws_rds_database_connections_maximum)\n/\nclamp_min(rds_instance_ram_bytes/9531392, 5000)\n",
       "severity": "s2",
       "slos": {
         "alertTriggerDuration": "5m",

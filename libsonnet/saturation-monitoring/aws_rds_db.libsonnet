@@ -31,7 +31,7 @@ local rdsMaxConnections = std.get(config.options, 'rdsMaxConnections', null);
     // customer as a prometheus recording rule.  Note that the label `dbinstance_identifier` is
     // required for this query to operate appropriately.
     query: |||
-      aws_rds_database_connections_maximum
+      sum by (dbinstance_identifier) (aws_rds_database_connections_maximum)
       /
       clamp_min(rds_instance_ram_bytes/9531392, 5000)
     |||,
