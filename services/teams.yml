@@ -212,6 +212,7 @@ teams:
   product_stage_group: code_creation
   ignored_components:
   - graphql_query
+  - runway_ingress # TODO: Remove when fixed: https://gitlab.com/gitlab-com/gl-infra/platform/runway/team/-/issues/174
   slack_error_budget_channel: g_mlops-alerts
   send_error_budget_weekly_to_slack: true
 
