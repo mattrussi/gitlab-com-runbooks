@@ -62,8 +62,8 @@ metricsCatalog.serviceDefinition({
       },
 
       local prometheusAlertsSelector = {
-        job: 'prometheus',
-        type: 'monitoring',
+        job: { re: 'prometheus' },
+        type: { re: 'monitoring' },
       },
 
       requestRate: rateMetric(
@@ -103,7 +103,7 @@ metricsCatalog.serviceDefinition({
 
       local prometheusSelector = {
         job: { re: 'prometheus.*', ne: 'prometheus-metamon' },
-        type: 'monitoring',
+        type: { re: 'monitoring' },
       },
 
       apdex: histogramApdex(
@@ -132,7 +132,7 @@ metricsCatalog.serviceDefinition({
     },
 
     local prometheusSelector = {
-      type: 'monitoring',
+      type: { re: 'monitoring' },
       job: { nre: '^thanos.*' },
     },
 
@@ -188,9 +188,9 @@ metricsCatalog.serviceDefinition({
       |||,
 
       local grafanaSelector = {
-        job: 'grafana',
-        type: 'monitoring',
-        shard: 'default',
+        job: { re: 'grafana' },
+        type: { re: 'monitoring' },
+        shard: { re: 'default' },
       },
 
       apdex: histogramApdex(
@@ -224,9 +224,9 @@ metricsCatalog.serviceDefinition({
       |||,
 
       local grafanaSelector = {
-        job: 'grafana',
-        type: 'monitoring',
-        shard: 'default',
+        job: { re: 'grafana' },
+        type: { re: 'monitoring' },
+        shard: { re: 'default' },
       },
 
       requestRate: rateMetric(
@@ -257,9 +257,9 @@ metricsCatalog.serviceDefinition({
       |||,
 
       local grafanaSelector = {
-        job: 'grafana-image-renderer',
-        type: 'monitoring',
-        shard: 'default',
+        job: { re: 'grafana-image-renderer' },
+        type: { re: 'monitoring' },
+        shard: { re: 'default' },
       },
 
       apdex: histogramApdex(

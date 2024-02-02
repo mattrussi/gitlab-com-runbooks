@@ -7,7 +7,10 @@ local sliLibrary = import 'gitlab-slis/library.libsonnet';
 local serviceLevelIndicatorDefinition = import 'servicemetrics/service_level_indicator_definition.libsonnet';
 local kubeLabelSelectors = metricsCatalog.kubeLabelSelectors;
 
-local railsSelector = { job: 'gitlab-rails', type: 'ai-assisted' };
+local railsSelector = {
+  job: { re: 'gitlab-rails' },
+  type: { re: 'ai-assisted' },
+};
 
 metricsCatalog.serviceDefinition({
   type: 'ai-assisted',
@@ -54,7 +57,7 @@ metricsCatalog.serviceDefinition({
 
       local workhorseSelector = {
         job: { re: 'gitlab-workhorse-api|gitlab-workhorse' },
-        type: 'ai-assisted',
+        type: { re: 'ai-assisted' },
       },
       local healthCheckSelector = {
         route: { ne: ['^/-/health$', '^/-/(readiness|liveness)$'] },

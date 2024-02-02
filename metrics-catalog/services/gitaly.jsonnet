@@ -4,7 +4,10 @@ local rateMetric = metricsCatalog.rateMetric;
 local gitalyHelper = import 'service-archetypes/helpers/gitaly.libsonnet';
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 
-local baseSelector = { type: 'gitaly', job: 'gitaly' };
+local baseSelector = {
+  type: { re: 'gitaly' },
+  job: { re: 'gitaly' },
+};
 
 metricsCatalog.serviceDefinition({
   type: 'gitaly',

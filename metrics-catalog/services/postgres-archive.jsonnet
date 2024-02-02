@@ -3,7 +3,10 @@ local rateMetric = metricsCatalog.rateMetric;
 local combined = metricsCatalog.combined;
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 
-local selector = { type: 'postgres-archive', tier: 'db' };
+local selector = {
+  type: { re: 'postgres-archive' },
+  tier: { re: 'db' },
+};
 
 metricsCatalog.serviceDefinition({
   type: 'postgres-archive',

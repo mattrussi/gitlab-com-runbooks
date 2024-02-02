@@ -6,7 +6,7 @@ local haproxyComponents = import './lib/haproxy_components.libsonnet';
 local kubeLabelSelectors = metricsCatalog.kubeLabelSelectors;
 local dependOnApi = import 'inhibit-rules/depend_on_api.libsonnet';
 
-local baseSelector = { type: 'web-pages' };
+local baseSelector = { type: { re: 'web-pages' } };
 
 metricsCatalog.serviceDefinition({
   type: 'web-pages',

@@ -9,7 +9,7 @@ function(
   featureCategory='not_owned',
   redisCluster=false,
 )
-  local baseSelector = { type: type };
+  local baseSelector = { type: { re: type } };
   local formatConfig = {
     descriptiveName: descriptiveName,
   };

@@ -39,7 +39,7 @@ metricsCatalog.serviceDefinition({
       ],
     })
     +
-    sliLibrary.get('customers_dot_sidekiq_jobs').generateServiceLevelIndicator({ type: 'customersdot' }, {
+    sliLibrary.get('customers_dot_sidekiq_jobs').generateServiceLevelIndicator({ type: { re: 'customersdot' } }, {
       severity: 's3',
       serviceAggregation: false,
     }),

@@ -93,7 +93,7 @@ metricsCatalog.serviceDefinition({
         Async jobs performed by woodhouse.
       |||,
 
-      local selector = { job: 'woodhouse' },
+      local selector = { job: { re: 'woodhouse' } },
       apdex: histogramApdex(
         histogram='woodhouse_async_job_duration_seconds_bucket',
         selector=selector,
@@ -105,7 +105,7 @@ metricsCatalog.serviceDefinition({
       ),
       errorRate: rateMetric(
         counter='woodhouse_async_jobs_total',
-        selector=selector { status: 'error' },
+        selector=selector { status: { re: 'error' } },
       ),
       significantLabels: ['job_name'],
 

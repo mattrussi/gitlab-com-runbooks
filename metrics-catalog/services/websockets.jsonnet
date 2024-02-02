@@ -7,7 +7,10 @@ local kubeLabelSelectors = metricsCatalog.kubeLabelSelectors;
 local dependOnPatroni = import 'inhibit-rules/depend_on_patroni.libsonnet';
 local sliLibrary = import 'gitlab-slis/library.libsonnet';
 
-local railsSelector = { job: 'gitlab-rails', type: 'websockets' };
+local railsSelector = {
+  job: { re: 'gitlab-rails' },
+  type: { re: 'websockets' },
+};
 
 metricsCatalog.serviceDefinition({
   type: 'websockets',
@@ -66,7 +69,7 @@ metricsCatalog.serviceDefinition({
         main: { backends: ['websockets'], toolingLinks: [] },
         cny: { backends: ['canary_websockets'], toolingLinks: [] },
       },
-      selector={ type: 'frontend' },
+      selector={ type: { re: 'frontend' } },
       regional=false,
       dependsOn=dependOnPatroni.sqlComponents,
     ),
@@ -83,8 +86,8 @@ metricsCatalog.serviceDefinition({
       |||,
 
       local baseSelector = {
-        job: 'gitlab-workhorse',
-        type: 'websockets',
+        job: { re: 'gitlab-workhorse' },
+        type: { re: 'websockets' },
         route: [{ ne: '^/-/health$' }, { ne: '^/-/(readiness|liveness)$' }, { ne: '^/api/' }],
       },
 

@@ -47,7 +47,7 @@ metricsCatalog.serviceDefinition({
       userImpacting: true,
       featureCategory: 'deployment_management',
       local baseSelector = {
-        type: 'kas',
+        type: { re: 'kas' },
       },
 
       apdex: histogramApdex(

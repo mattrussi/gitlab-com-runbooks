@@ -5,7 +5,7 @@ local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 metricsCatalog.serviceDefinition(
   redisArchetype(
     type='redis-db-load-balancing',
-    railsStorageSelector={ storage: 'db_load_balancing' },
+    railsStorageSelector=redisHelpers.storageSelector('db_load_balancing'),
     descriptiveName='Redis DB load balancing'
   )
   {

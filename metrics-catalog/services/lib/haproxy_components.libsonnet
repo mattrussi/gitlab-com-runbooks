@@ -15,7 +15,7 @@ local singleHTTPComponent(stage, selector, definition, userImpacting) =
   local backends = definition.backends;
   local toolingLinks = definition.toolingLinks;
   local baseSelector = selector {
-    backend: if std.length(backends) == 1 then backends[0] else { re: std.join('|', backends) },
+    backend: { re: std.join('|', backends) },
   };
 
   metricsCatalog.serviceLevelIndicatorDefinition({
@@ -32,7 +32,7 @@ local singleHTTPComponent(stage, selector, definition, userImpacting) =
 
     errorRate: rateMetric(
       counter='haproxy_backend_http_responses_total',
-      selector=baseSelector { code: '5xx' }
+      selector=baseSelector { code: { re: '5xx' } }
     ),
 
     significantLabels: [],

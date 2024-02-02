@@ -60,7 +60,7 @@ metricsCatalog.serviceDefinition({
 
       requestRate: rateMetric(
         counter='gitlab_workhorse_object_storage_upload_requests',
-        selector={ le: '+Inf' },
+        selector={ le: { re: '\\+Inf' } },
       ),
 
       // Slightly misleading, but `gitlab_workhorse_object_storage_upload_requests`
@@ -74,6 +74,9 @@ metricsCatalog.serviceDefinition({
       significantLabels: ['type'],
     },
 
+    local requestStageSelector = {
+      request_stage: { re: 'httptrace.ClientTrace.GotFirstResponseByte' },
+    },
     pages_range_requests: {
       userImpacting: true,
       description: |||
@@ -82,13 +85,15 @@ metricsCatalog.serviceDefinition({
 
       apdex: histogramApdex(
         histogram='gitlab_pages_httprange_trace_duration_bucket',
-        selector={ request_stage: 'httptrace.ClientTrace.GotFirstResponseByte' },
+        selector=requestStageSelector,
         satisfiedThreshold=0.5
       ),
 
       requestRate: rateMetric(
         counter='gitlab_pages_httprange_trace_duration_bucket',
-        selector={ request_stage: 'httptrace.ClientTrace.GotFirstResponseByte', le: '+Inf' },
+        selector=requestStageSelector {
+          le: { re: '\\+Inf' },
+        },
       ),
 
       significantLabels: [],
@@ -102,13 +107,15 @@ metricsCatalog.serviceDefinition({
 
       apdex: histogramApdex(
         histogram='gitlab_pages_httprange_requests_duration_bucket',
-        selector={ request_stage: 'httptrace.ClientTrace.GotFirstResponseByte' },
+        selector=requestStageSelector,
         satisfiedThreshold=0.5
       ),
 
       requestRate: rateMetric(
         counter='gitlab_pages_httprange_requests_duration_bucket',
-        selector={ request_stage: 'httptrace.ClientTrace.GotFirstResponseByte', le: '+Inf' },
+        selector=requestStageSelector {
+          le: { re: '\\+Inf' },
+        },
       ),
 
       significantLabels: [],

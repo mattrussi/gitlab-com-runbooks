@@ -16,7 +16,7 @@ function(
   severity='s4',
   customToolingLinks=[]
 )
-  local baseSelector = { type: type };
+  local baseSelector = { type: { re: type } };
   {
     type: type,
     tier: 'sv',

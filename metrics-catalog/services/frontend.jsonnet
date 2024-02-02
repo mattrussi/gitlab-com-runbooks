@@ -3,7 +3,7 @@ local histogramApdex = metricsCatalog.histogramApdex;
 local rateMetric = metricsCatalog.rateMetric;
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 
-local baseSelector = { type: 'frontend' };
+local baseSelector = { type: { re: 'frontend' } };
 
 metricsCatalog.serviceDefinition({
   type: 'frontend',

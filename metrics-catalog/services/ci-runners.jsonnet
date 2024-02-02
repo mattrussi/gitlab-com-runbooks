@@ -29,7 +29,7 @@ metricsCatalog.serviceDefinition({
     loadbalancer: haproxyComponents.haproxyHTTPLoadBalancer(
       userImpacting=true,
       featureCategory='runner',
-      selector={ type: 'ci' },
+      selector={ type: { re: 'ci' } },
       stageMappings={
         main: { backends: ['https_git', 'api', 'ci_gateway_catch_all'], toolingLinks: [] },
       },
@@ -47,7 +47,7 @@ metricsCatalog.serviceDefinition({
       |||,
 
       local baseSelector = {
-        route: '^/api/v4/jobs/request\\\\z',
+        route: { re: '^/api/v4/jobs/request\\\\z' },
       },
 
       requestRate: rateMetric(
@@ -92,7 +92,7 @@ metricsCatalog.serviceDefinition({
 
       apdex: histogramApdex(
         histogram='job_queue_duration_seconds_bucket',
-        selector={ shared_runner: 'true', jobs_running_for_project: { re: '^(0|1|2|3|4)$' } },
+        selector={ shared_runner: { re: 'true' }, jobs_running_for_project: { re: '^(0|1|2|3|4)$' } },
         satisfiedThreshold=60,
       ),
 
@@ -201,7 +201,7 @@ metricsCatalog.serviceDefinition({
 
       requestRate: rateMetric(
         counter='gitlab_sli_sidekiq_execution_total',
-        selector={ worker: 'Ci::ArchiveTraceWorker' }
+        selector={ worker: { re: 'Ci::ArchiveTraceWorker' } }
       ),
 
       errorRate: rateMetric(

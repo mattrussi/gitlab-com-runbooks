@@ -8,7 +8,10 @@ local serviceLevelIndicatorDefinition = import 'servicemetrics/service_level_ind
 local kubeLabelSelectors = metricsCatalog.kubeLabelSelectors;
 local dependOnPatroni = import 'inhibit-rules/depend_on_patroni.libsonnet';
 
-local railsSelector = { job: 'gitlab-rails', type: 'internal-api' };
+local railsSelector = {
+  job: { re: 'gitlab-rails' },
+  type: { re: 'internal-api' },
+};
 
 metricsCatalog.serviceDefinition({
   type: 'internal-api',
@@ -77,7 +80,7 @@ metricsCatalog.serviceDefinition({
 
       local workhorseSelector = {
         job: { re: 'gitlab-workhorse-api|gitlab-workhorse' },
-        type: 'internal-api',
+        type: { re: 'internal-api' },
       },
       local healthCheckSelector = {
         route: { ne: ['^/-/health$', '^/-/(readiness|liveness)$'] },

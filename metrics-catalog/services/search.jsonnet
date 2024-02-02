@@ -37,7 +37,7 @@ metricsCatalog.serviceDefinition({
 
       requestRate: derivMetric(
         counter='elasticsearch_indices_search_query_total',
-        selector={ type: 'search' },
+        selector={ type: { re: 'search' } },
         clampMinZero=true,
       ),
 
@@ -57,7 +57,7 @@ metricsCatalog.serviceDefinition({
 
       requestRate: derivMetric(
         counter='elasticsearch_indices_indexing_index_total',
-        selector={ type: 'search' },
+        selector={ type: { re: 'search' } },
         clampMinZero=true,
       ),
 

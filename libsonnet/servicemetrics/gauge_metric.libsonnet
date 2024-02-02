@@ -12,6 +12,7 @@ local metricLabelsSelectorsMixin = (import './metrics-mixin.libsonnet').metricLa
     selector={},
     samplingInterval=1  // in seconds
   ):: validateMetric({
+    gauge: gauge,
     useRecordingRuleRegistry:: false,
     selector: selector,
 

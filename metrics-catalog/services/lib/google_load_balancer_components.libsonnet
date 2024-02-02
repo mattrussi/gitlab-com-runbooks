@@ -17,7 +17,10 @@ local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
     additionalToolingLinks=[],
     extra={},
   )::
-    local baseSelector = { url_map_name: loadBalancerName, project_id: projectId };
+    local baseSelector = {
+      url_map_name: { re: loadBalancerName },
+      project_id: { re: projectId },
+    };
 
     metricsCatalog.serviceLevelIndicatorDefinition(extra {
       userImpacting: userImpacting,
@@ -39,7 +42,7 @@ local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 
       errorRate: rateMetric(
         counter='stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count',
-        selector=baseSelector { response_code_class: '500' },
+        selector=baseSelector { response_code_class: { re: '500' } },
       ),
 
       significantLabels: ['proxy_continent', 'response_code'],

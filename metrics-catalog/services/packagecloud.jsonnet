@@ -75,8 +75,9 @@ metricsCatalog.serviceDefinition({
   serviceLevelIndicators: {
     loadbalancer: googleLoadBalancerComponents.googleLoadBalancer(
       userImpacting=sliCommon.userImpacting,
-      loadBalancerName={ re: 'k8s2-.+-packagecloud-packagecloud-.+' },
-      projectId={ re: 'gitlab-(ops|pre)' },
+      // loadBalancerName and projectId gets converted to `re` selector
+      loadBalancerName='k8s2-.+-packagecloud-packagecloud-.+',
+      projectId='gitlab-(ops|pre)',
       additionalToolingLinks=[
         toolingLinks.kibana(title='Packagecloud (prod)', index='packagecloud'),
         toolingLinks.googleLoadBalancer(instanceId='k8s2-um-4zodnh0s-packagecloud-packagecloud-xnkztiio', project='gitlab-ops', titleSuffix=' (prod)'),

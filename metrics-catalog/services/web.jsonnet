@@ -9,7 +9,10 @@ local kubeLabelSelectors = metricsCatalog.kubeLabelSelectors;
 local dependOnPatroni = import 'inhibit-rules/depend_on_patroni.libsonnet';
 local dependOnRedisSidekiq = import 'inhibit-rules/depend_on_redis_sidekiq.libsonnet';
 
-local railsSelector = { job: 'gitlab-rails', type: 'web' };
+local railsSelector = {
+  job: { re: 'gitlab-rails' },
+  type: { re: 'web' },
+};
 
 metricsCatalog.serviceDefinition({
   type: 'web',
@@ -90,12 +93,15 @@ metricsCatalog.serviceDefinition({
         main: { backends: ['web', 'main_web'], toolingLinks: [] },  // What to do with `429_slow_down`?
         cny: { backends: ['canary_web'], toolingLinks: [] },
       },
-      selector={ type: 'frontend' },
+      selector={ type: { re: 'frontend' } },
       regional=false,
       dependsOn=dependOnPatroni.sqlComponents + dependOnRedisSidekiq.railsClientComponents,
     ),
 
-    local workhorseWebSelector = { job: { re: 'gitlab-workhorse|gitlab-workhorse-web' }, type: 'web' },
+    local workhorseWebSelector = {
+      job: { re: 'gitlab-workhorse|gitlab-workhorse-web' },
+      type: { re: 'web' },
+    },
     workhorse: {
       serviceAggregation: false,
       userImpacting: true,

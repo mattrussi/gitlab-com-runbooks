@@ -1,7 +1,7 @@
-local registryHelpers = import 'service-archetypes/helpers/registry.libsonnet';
 local registryCustomRouteSLIs = import './lib/registry-custom-route-slis.libsonnet';
 local sliLibrary = import 'gitlab-slis/library.libsonnet';
 local gitalyHelper = import 'service-archetypes/helpers/gitaly.libsonnet';
+local registryHelpers = import 'service-archetypes/helpers/registry.libsonnet';
 local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 
@@ -10,7 +10,7 @@ local successCounterApdex = metricsCatalog.successCounterApdex;
 local rateMetric = metricsCatalog.rateMetric;
 local histogramApdex = metricsCatalog.histogramApdex;
 
-local baseSelector = { type: 'ops-gitlab-net' };
+local baseSelector = { type: { re: 'ops-gitlab-net' } };
 local customRouteSLIs = registryCustomRouteSLIs.customApdexRouteConfig;
 
 metricsCatalog.serviceDefinition({
@@ -250,7 +250,7 @@ metricsCatalog.serviceDefinition({
         Monitors Gitlab-sshd, using the connections bucket, and http requests bucket.
       |||,
 
-      local gitlabSshdBaseSelector = baseSelector { job: 'gitlab-shell' },
+      local gitlabSshdBaseSelector = baseSelector { job: { re: 'gitlab-shell' } },
 
       apdex: histogramApdex(
         histogram='gitlab_shell_sshd_session_established_duration_seconds_bucket',

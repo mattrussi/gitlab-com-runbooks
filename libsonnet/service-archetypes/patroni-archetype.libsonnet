@@ -55,8 +55,8 @@ function(
   ],
   serviceLevelIndicators: additionalServiceLevelIndicators {
     local baseSelector = {
-      type: type,
-      tier: 'db',
+      type: { re: type },
+      tier: { re: 'db' },
     },
 
     transactions_primary: {

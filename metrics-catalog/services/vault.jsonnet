@@ -57,8 +57,8 @@ metricsCatalog.serviceDefinition({
       trafficCessationAlertConfig: false,
 
       local selector = {
-        source_workload: 'istio-gateway',
-        destination_workload: 'vault',
+        source_workload: { re: 'istio-gateway' },
+        destination_workload: { re: 'vault' },
       },
 
       apdex: histogramApdex(
@@ -88,8 +88,8 @@ metricsCatalog.serviceDefinition({
       trafficCessationAlertConfig: false,
 
       local selector = {
-        source_workload: 'istio-internal-gateway',
-        destination_workload: 'vault',
+        source_workload: { re: 'istio-internal-gateway' },
+        destination_workload: { re: 'vault' },
       },
 
       apdex: histogramApdex(
@@ -124,7 +124,7 @@ metricsCatalog.serviceDefinition({
       |||,
 
       local vaultSelector = {
-        job: 'vault-active',
+        job: { re: 'vault-active' },
       },
 
       requestRate: rateMetric(
@@ -146,7 +146,7 @@ metricsCatalog.serviceDefinition({
       |||,
 
       local vaultSelector = {
-        job: 'vault-active',
+        job: { re: 'vault-active' },
       },
 
       requestRate: rateMetric(
@@ -173,7 +173,7 @@ metricsCatalog.serviceDefinition({
       |||,
 
       local vaultSelector = {
-        job: 'vault-active',
+        job: { re: 'vault-active' },
       },
 
       requestRate: rateMetric(

@@ -19,7 +19,10 @@ local histogramApdex = metricsCatalog.histogramApdex;
     team=null,
     additionalToolingLinks=[]
   )::
-    local baseSelector = { configuration_name: configurationName, project_id: projectId };
+    local baseSelector = {
+      configuration_name: { re: configurationName },
+      project_id: { re: projectId },
+    };
 
     metricsCatalog.serviceLevelIndicatorDefinition({
       userImpacting: userImpacting,
@@ -46,7 +49,7 @@ local histogramApdex = metricsCatalog.histogramApdex;
 
       errorRate: rateMetric(
         counter='stackdriver_cloud_run_revision_run_googleapis_com_request_count',
-        selector=baseSelector { response_code_class: '5xx' },
+        selector=baseSelector { response_code_class: { re: '5xx' } },
       ),
 
       significantLabels: ['response_code'],

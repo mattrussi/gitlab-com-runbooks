@@ -11,7 +11,10 @@ local dependOnPatroni = import 'inhibit-rules/depend_on_patroni.libsonnet';
 local dependOnRedisSidekiq = import 'inhibit-rules/depend_on_redis_sidekiq.libsonnet';
 
 local gitWorkhorseJobNameSelector = { job: { re: 'gitlab-workhorse|gitlab-workhorse-git' } };
-local railsSelector = { job: 'gitlab-rails', type: 'git' };
+local railsSelector = {
+  job: { re: 'gitlab-rails' },
+  type: { re: 'git' },
+};
 
 metricsCatalog.serviceDefinition({
   type: 'git',
@@ -97,7 +100,7 @@ metricsCatalog.serviceDefinition({
           toolingLinks.bigquery(title='Top http clients by number of requests, cny stage, 10m', savedQuery='805818759045:dea839bd669e41b5bc264c510294bb9f'),
         ] },  // What happens to cny websocket traffic?
       },
-      selector={ type: 'frontend' },
+      selector={ type: { re: 'frontend' } },
       // Load balancer is single region
       regional=false,
       dependsOn=dependOnPatroni.sqlComponents
@@ -115,7 +118,7 @@ metricsCatalog.serviceDefinition({
         },
         // No canary SSH for now
       },
-      selector={ type: 'frontend' },
+      selector={ type: { re: 'frontend' } },
       // Load balancer is single region
       regional=false,
       dependsOn=dependOnPatroni.sqlComponents
@@ -133,7 +136,7 @@ metricsCatalog.serviceDefinition({
       |||,
 
       local baseSelector = gitWorkhorseJobNameSelector {
-        type: 'git',
+        type: { re: 'git' },
         route: [{ ne: '^/-/health$' }, { ne: '^/-/(readiness|liveness)$' }, { ne: '^/api/' }, { ne: '\\\\A/api/v4/jobs/request\\\\z' }, { ne: '^/api/v4/jobs/request\\\\z' }],
       },
 
@@ -191,7 +194,7 @@ metricsCatalog.serviceDefinition({
       |||,
 
       local baseSelector = gitWorkhorseJobNameSelector {
-        type: 'internal-api',
+        type: { re: 'internal-api' },
         route: '^/api/',
       },
 
@@ -263,7 +266,7 @@ metricsCatalog.serviceDefinition({
       |||,
 
       local baseSelector = {
-        type: 'git',
+        type: { re: 'git' },
       },
 
       apdex: histogramApdex(

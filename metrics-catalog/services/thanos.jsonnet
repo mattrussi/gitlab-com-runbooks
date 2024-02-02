@@ -18,7 +18,10 @@ local staticLabels = {
   monitor: 'global',
 };
 
-local thanosServiceSelector = { type: 'thanos', namespace: 'thanos' };
+local thanosServiceSelector = {
+  type: { re: 'thanos' },
+  namespace: { re: 'thanos' },
+};
 
 metricsCatalog.serviceDefinition({
   type: 'thanos',
@@ -301,7 +304,7 @@ metricsCatalog.serviceDefinition({
     // This component represents rule evaluations in
     // Prometheus and thanos ruler
     local rulerSelector = thanosServiceSelector {
-      job: 'thanos-ruler',
+      job: { re: 'thanos-ruler' },
     },
     rule_evaluation: {
       staticLabels: staticLabels,

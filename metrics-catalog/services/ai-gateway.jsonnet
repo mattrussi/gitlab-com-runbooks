@@ -4,7 +4,7 @@ local rateMetric = metricsCatalog.rateMetric;
 local histogramApdex = metricsCatalog.histogramApdex;
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 
-local baseSelector = { type: 'ai-gateway' };
+local baseSelector = { type: { re: 'ai-gateway' } };
 
 metricsCatalog.serviceDefinition(
   // Default Runway SLIs
@@ -14,7 +14,7 @@ metricsCatalog.serviceDefinition(
     apdexScore=0.98,
     errorRatio=0.98,  // Temporary reduce until https://gitlab.com/gitlab-com/gl-infra/production/-/issues/17366 is fixed.
     featureCategory='code_suggestions',
-    apdexSatisfiedThreshold="4903.707252978515",
+    apdexSatisfiedThreshold='4903.707252978515',
     severity='s2',
     customToolingLinks=[
       toolingLinks.kibana(
@@ -189,7 +189,10 @@ metricsCatalog.serviceDefinition(
         ],
       },
       waf: {
-        local hostSelector = { zone: 'gitlab.com', host: { re: 'codesuggestions.gitlab.com.*' } },
+        local hostSelector = {
+          zone: { re: 'gitlab.com' },
+          host: { re: 'codesuggestions.gitlab.com.*' },
+        },
         severity: 's4',
         userImpacting: true,
         serviceAggregation: false,

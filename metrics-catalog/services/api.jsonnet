@@ -8,7 +8,10 @@ local serviceLevelIndicatorDefinition = import 'servicemetrics/service_level_ind
 local kubeLabelSelectors = metricsCatalog.kubeLabelSelectors;
 local dependOnPatroni = import 'inhibit-rules/depend_on_patroni.libsonnet';
 
-local railsSelector = { job: 'gitlab-rails', type: 'api' };
+local railsSelector = {
+  job: { re: 'gitlab-rails' },
+  type: { re: 'api' },
+};
 
 metricsCatalog.serviceDefinition({
   type: 'api',
@@ -91,7 +94,7 @@ metricsCatalog.serviceDefinition({
         },
         cny: { backends: ['canary_api'], toolingLinks: [] },
       },
-      selector={ type: 'frontend' },
+      selector={ type: { re: 'frontend' } },
       regional=false,
       dependsOn=dependOnPatroni.sqlComponents,
     ),
@@ -103,7 +106,7 @@ metricsCatalog.serviceDefinition({
         nginx for api
       |||,
 
-      local baseSelector = { type: 'api' },
+      local baseSelector = { type: { re: 'api' } },
 
       requestRate: rateMetric(
         counter='nginx_ingress_controller_requests:labeled',
@@ -139,7 +142,7 @@ metricsCatalog.serviceDefinition({
 
       local baseSelector = {
         job: { re: 'gitlab-workhorse-api|gitlab-workhorse' },
-        type: 'api',
+        type: { re: 'api' },
       },
 
       apdex: histogramApdex(

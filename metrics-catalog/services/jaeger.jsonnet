@@ -54,7 +54,7 @@ metricsCatalog.serviceDefinition({
 
       errorRate: rateMetric(
         counter='jaeger_query_requests_total',
-        selector={ result: 'err' },
+        selector={ result: { re: 'err' } },
       ),
 
       significantLabels: ['fqdn', 'pod'],

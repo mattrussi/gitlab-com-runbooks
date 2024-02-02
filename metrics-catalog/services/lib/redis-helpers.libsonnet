@@ -15,6 +15,6 @@ local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
       },
     },
 
-  storageSelector(storageName, selector=metricsConfig.baseSelector):: selector { storage: storageName },
-  storeSelector(storeName, selector=metricsConfig.baseSelector):: selector { store: storeName },
+  storageSelector(storageName, selector=metricsConfig.baseSelector):: selector { storage: { re: storageName } },
+  storeSelector(storeName, selector=metricsConfig.baseSelector):: selector { store: { re: storeName } },
 }

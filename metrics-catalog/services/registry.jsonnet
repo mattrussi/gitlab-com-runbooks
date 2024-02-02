@@ -22,7 +22,7 @@ local defaultRegistrySLIToolingLinks = [
 ];
 
 local registryBaseSelector = {
-  type: 'registry',
+  type: { re: 'registry' },
 };
 
 metricsCatalog.serviceDefinition(
@@ -93,7 +93,7 @@ metricsCatalog.serviceDefinition(
 
         apdex: histogramApdex(
           histogram='registry_database_query_duration_seconds_bucket',
-          selector={ type: 'registry' },
+          selector=registryBaseSelector,
           satisfiedThreshold=0.5,
           toleratedThreshold=1
         ),
@@ -117,7 +117,7 @@ metricsCatalog.serviceDefinition(
 
         apdex: histogramApdex(
           histogram='registry_gc_run_duration_seconds_bucket',
-          selector={ type: 'registry' },
+          selector=registryBaseSelector,
           satisfiedThreshold=0.5,
           toleratedThreshold=1
         ),

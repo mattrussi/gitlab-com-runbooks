@@ -29,7 +29,7 @@ metricsCatalog.serviceDefinition({
         processing the request.
       |||,
 
-      local zoneSelector = { zone: 'gitlab-static.net' },
+      local zoneSelector = { zone: { re: 'gitlab-static.net' } },
       requestRate: rateMetric(
         counter='cloudflare_zone_requests_total',
         selector=zoneSelector
@@ -54,7 +54,7 @@ metricsCatalog.serviceDefinition({
         Cloudflare Worker used by our VS Code-based Web IDE to pull assets from *.cdn.web-ide.gitlab-static.net.
       |||,
 
-      local workerSelector = { script_name: 'gitlab-web-ide-vscode-production' },
+      local workerSelector = { script_name: { re: 'gitlab-web-ide-vscode-production' } },
       requestRate: rateMetric(
         counter='cloudflare_worker_requests_count',
         selector=workerSelector

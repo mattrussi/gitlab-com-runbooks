@@ -4,7 +4,7 @@ local rateMetric = metricsCatalog.rateMetric;
 local redisArchetype = import 'service-archetypes/redis-archetype.libsonnet';
 local redisHelpers = import './lib/redis-helpers.libsonnet';
 local registryBaseSelector = {
-  type: 'registry',
+  type: { re: 'registry' },
 };
 
 metricsCatalog.serviceDefinition(

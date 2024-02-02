@@ -63,7 +63,7 @@ metricsCatalog.serviceDefinition({
         malicious traffic and is blocking it.
       |||,
 
-      local zoneSelector = { zone: 'gitlab.net' },
+      local zoneSelector = { zone: { re: 'gitlab.net' } },
 
       requestRate: rateMetric(
         counter='cloudflare_zone_requests_total',

@@ -45,7 +45,7 @@ metricsCatalog.serviceDefinition({
         nginx ingress
       |||,
 
-      local baseSelector = { app: 'nginx-ingress' },
+      local baseSelector = { app: { re: 'nginx-ingress' } },
 
       requestRate: rateMetric(
         counter='nginx_ingress_controller_requests:labeled',

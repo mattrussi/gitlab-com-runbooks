@@ -25,8 +25,8 @@ function(
 
     serviceLevelIndicators: {
       local baseSelector = {
-        type: type,
-        tier: 'db',
+        type: { re: type },
+        tier: { re: 'db' },
       },
       service: {
         userImpacting: true,

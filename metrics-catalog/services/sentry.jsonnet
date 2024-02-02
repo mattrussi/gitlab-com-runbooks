@@ -45,8 +45,8 @@ metricsCatalog.serviceDefinition({
       |||,
 
       local sentryQuerySelector = {
-        job: 'statsd_exporter',
-        type: 'sentry',
+        job: { re: 'statsd_exporter' },
+        type: { re: 'sentry' },
       },
 
       apdex: histogramApdex(
@@ -78,7 +78,11 @@ metricsCatalog.serviceDefinition({
         Errors represent transaction rollbacks.
       |||,
 
-      local baseSelector = { type: 'sentry', job: 'postgres', datname: 'sentry' },
+      local baseSelector = {
+        type: { re: 'sentry' },
+        job: { re: 'postgres' },
+        datname: { re: 'sentry' },
+      },
 
       requestRate: combined([
         rateMetric(

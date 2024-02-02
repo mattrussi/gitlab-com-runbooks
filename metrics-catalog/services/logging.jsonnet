@@ -4,7 +4,7 @@ local derivMetric = metricsCatalog.derivMetric;
 local googleLoadBalancerComponents = import './lib/google_load_balancer_components.libsonnet';
 local kubeLabelSelectors = metricsCatalog.kubeLabelSelectors;
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
-local baseSelector = { type: 'logging' };
+local baseSelector = { type: { re: 'logging' } };
 
 metricsCatalog.serviceDefinition(
   {
@@ -163,7 +163,7 @@ metricsCatalog.serviceDefinition(
         significantLabels: ['log', 'severity'],
       },
 
-      local monitoringTypeSelector = { type: 'monitoring' },
+      local monitoringTypeSelector = { type: { re: 'monitoring' } },
       pubsub_topics: {
         userImpacting: false,
         featureCategory: 'not_owned',

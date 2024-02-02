@@ -38,8 +38,8 @@ metricsCatalog.serviceDefinition({
       |||,
 
       local errortrackingSelector = {
-        team: 'observability',
-        job: 'default/traefik',
+        team: { re: 'observability' },
+        job: { re: 'default/traefik' },
         service: { re: '.*errortracking-api.*' },
       },
 

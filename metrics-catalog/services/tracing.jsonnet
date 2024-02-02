@@ -42,8 +42,8 @@ metricsCatalog.serviceDefinition({
       |||,
 
       local tracingCollectorSelector = {
-        team: 'observability',
-        job: 'default/traefik',
+        team: { re: 'observability' },
+        job: { re: 'default/traefik' },
         service: { re: 'tenant.*otel-collector-traces.*' },
       },
 

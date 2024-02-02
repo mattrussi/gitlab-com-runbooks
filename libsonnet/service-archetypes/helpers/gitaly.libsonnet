@@ -83,7 +83,7 @@ local grpcServiceApdex(baseSelector, satisfiedThreshold=0.5, toleratedThreshold=
   histogramApdex(
     histogram='grpc_server_handling_seconds_bucket',
     selector=baseSelector {
-      grpc_type: 'unary',
+      grpc_type: { re: 'unary' },
     },
     satisfiedThreshold=satisfiedThreshold,
     toleratedThreshold=toleratedThreshold
@@ -101,7 +101,7 @@ local gitalyGRPCErrorRate(baseSelector) =
     rateMetric(
       counter='gitaly_service_client_requests_total',
       selector=baseSelector {
-        grpc_code: 'DeadlineExceeded',
+        grpc_code: { re: 'DeadlineExceeded' },
         deadline_type: { ne: 'limited' },
       }
     ),

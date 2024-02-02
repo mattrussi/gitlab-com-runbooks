@@ -39,7 +39,7 @@ metricsCatalog.serviceDefinition({
         those operations in aggregate.
       |||,
 
-      local baseSelector = { job: 'praefect' },
+      local baseSelector = { job: { re: 'praefect' } },
       local mainApdexSelector = baseSelector {
         grpc_method: { noneOf: gitalyHelper.praefectApdexSlowMethods },
       },
@@ -82,7 +82,7 @@ metricsCatalog.serviceDefinition({
         Praefect replication operations. Latency represents the queuing delay before replication is carried out.
       |||,
 
-      local baseSelector = { job: 'praefect' },
+      local baseSelector = { job: { re: 'praefect' } },
       apdex: histogramApdex(
         histogram='gitaly_praefect_replication_delay_bucket',
         selector=baseSelector,
@@ -91,7 +91,7 @@ metricsCatalog.serviceDefinition({
 
       requestRate: rateMetric(
         counter='gitaly_praefect_replication_delay_bucket',
-        selector=baseSelector { le: '+Inf' }
+        selector=baseSelector { le: { re: '\\+Inf' } }
       ),
 
       significantLabels: ['fqdn', 'type'],
@@ -105,7 +105,7 @@ metricsCatalog.serviceDefinition({
       |||,
 
       local baseSelector = {
-        job: 'stackdriver',
+        job: { re: 'stackdriver' },
         database_id: { re: '.+:praefect-db-.+' },
         database: { re: 'praefect_(canary|production)' },
       },
@@ -123,7 +123,7 @@ metricsCatalog.serviceDefinition({
       errorRate: gaugeMetric(
         gauge='stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count',
         selector=baseSelector {
-          transaction_type: 'rollback',
+          transaction_type: { re: 'rollback' },
         }
       ),
 
