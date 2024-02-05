@@ -4,10 +4,10 @@ local labelTaxonomy = import 'label-taxonomy/label-taxonomy.libsonnet';
 local config = import './gitlab-metrics-config.libsonnet';
 
 local rdsMonitoring = std.get(config.options, 'rdsMonitoring', false);
-local rdsInstanceRAMGB = std.get(config.options, 'rdsInstanceRAMGB', null);
+local rdsInstanceRAMBytes = std.get(config.options, 'rdsInstanceRAMBytes', null);
 
 {
-  [if rdsMonitoring != null then 'aws_rds_memory_saturation']: resourceSaturationPoint({
+  [if rdsMonitoring && rdsInstanceRAMBytes != null then 'aws_rds_memory_saturation']: resourceSaturationPoint({
     title: 'Memory Availability for an RDS instance',
     severity: 's4',
     horizontallyScalable: false,
@@ -27,16 +27,17 @@ local rdsInstanceRAMGB = std.get(config.options, 'rdsInstanceRAMGB', null);
     // to leverage saturation in a more universal way.  Example
     // high saturation, say 99% would mean there's less than a few
     // MB of available RAM that is freeable.
-
-    // Note that we are using a metric, `rds_instance_ram_bytes` to capture the amount of RAM
-    // specified in bytes, available to us.  This is to be defined by the
-    // customer as a prometheus recording rule.  Note that the label `dbinstance_identifier` is
-    // required for this query to operate appropriately.
     query: |||
-      1- (sum by (dbinstance_identifier) (aws_rds_freeable_memory_maximum)
-      /
-      rds_instance_ram_bytes)
-    |||,
+      1- (
+        sum by (dbinstance_identifier) (aws_rds_freeable_memory_maximum)
+        /
+        %(rdsInstanceRAMBytes)s
+      )
+    ||| % {
+      // Note that this value can be an integer bytes value, or a
+      // PromQL expression, such as a recording rule
+      rdsInstanceRAMBytes: rdsInstanceRAMBytes,
+    },
     slos: {
       soft: 0.85,
       hard: 0.90,

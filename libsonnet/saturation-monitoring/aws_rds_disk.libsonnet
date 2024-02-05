@@ -7,7 +7,7 @@ local rdsMonitoring = std.get(config.options, 'rdsMonitoring', false);
 local rdsMaxAllocatedStorageGB = std.get(config.options, 'rdsMaxAllocatedStorageGB', null);
 
 {
-    [if rdsMonitoring && rdsMaxAllocatedStorageGB != null then 'aws_rds_disk_space']: resourceSaturationPoint({
+  [if rdsMonitoring && rdsMaxAllocatedStorageGB != null then 'aws_rds_disk_space']: resourceSaturationPoint({
     title: 'Disk Space Utilization per RDS Instance',
     severity: 's2',
     horizontallyScalable: true,
@@ -29,10 +29,12 @@ local rdsMaxAllocatedStorageGB = std.get(config.options, 'rdsMaxAllocatedStorage
     query: |||
       sum(pg_database_size_bytes)
       /
-      (%(rdsMaxAllocatedStorageGB)d * (1024 * 1024 * 1024))
+      (%(rdsMaxAllocatedStorageGB)s * (1024 * 1024 * 1024))
     |||,
     queryFormatConfig: {
-      rdsMaxAllocatedStorageGB: rdsMaxAllocatedStorageGB
+      // Note that this value can be an integer bytes value, or a
+      // PromQL expression, such as a recording rule
+      rdsMaxAllocatedStorageGB: rdsMaxAllocatedStorageGB,
     },
     slos: {
       soft: 0.95,

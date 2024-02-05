@@ -3,10 +3,10 @@ local resourceSaturationPoint = metricsCatalog.resourceSaturationPoint;
 local config = import './gitlab-metrics-config.libsonnet';
 
 local rdsMonitoring = std.get(config.options, 'rdsMonitoring', false);
-local rdsMaxConnections = std.get(config.options, 'rdsMaxConnections', null);
+local rdsInstanceRAMBytes = std.get(config.options, 'rdsInstanceRAMBytes', null);
 
 {
-  [if rdsMonitoring != null then 'aws_rds_used_connections']: resourceSaturationPoint({
+  [if rdsMonitoring && rdsInstanceRAMBytes != null then 'aws_rds_used_connections']: resourceSaturationPoint({
     title: 'AWS RDS Used Connections',
     severity: 's2',
     horizontallyScalable: false,
@@ -33,8 +33,13 @@ local rdsMaxConnections = std.get(config.options, 'rdsMaxConnections', null);
     query: |||
       sum by (dbinstance_identifier) (aws_rds_database_connections_maximum)
       /
-      clamp_min(rds_instance_ram_bytes/9531392, 5000)
+      clamp_min((%(rdsInstanceRAMBytes)s)/9531392, 5000)
     |||,
+    queryFormatConfig: {
+      // Note that this value can be an integer bytes value, or a
+      // PromQL expression, such as a recording rule
+      rdsInstanceRAMBytes: rdsInstanceRAMBytes,
+    },
     slos: {
       soft: 0.90,
       hard: 0.95,

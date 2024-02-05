@@ -22,48 +22,6 @@
     ]
   },
   "saturationPoints": {
-    "aws_rds_memory_saturation": {
-      "appliesTo": [
-        "rds"
-      ],
-      "capacityPlanning": {
-        "changepoints_count": 25,
-        "forecast_days": 90,
-        "historical_days": 365,
-        "strategy": "quantile95_1h"
-      },
-      "description": "The amount of available random access memory. This metric reports the value of the MemAvailable field of /proc/meminfo.\n\nA high saturation point indicates that we are low on available memory and Swap may be in use, lowering the performance of an RDS instance.\n\nAdditional details here: https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/rds-metrics.html#rds-cw-metrics-instance\n",
-      "horizontallyScalable": false,
-      "raw_query": "1- (sum by (dbinstance_identifier) (aws_rds_freeable_memory_maximum)\n/\nrds_instance_ram_bytes)\n",
-      "severity": "s4",
-      "slos": {
-        "alertTriggerDuration": "30m",
-        "hard": 0.9,
-        "soft": 0.85
-      },
-      "title": "Memory Availability for an RDS instance"
-    },
-    "aws_rds_used_connections": {
-      "appliesTo": [
-        "rds"
-      ],
-      "capacityPlanning": {
-        "changepoints_count": 25,
-        "forecast_days": 90,
-        "historical_days": 365,
-        "strategy": "quantile95_1h"
-      },
-      "description": "The number of client network connections to the database instance.\n\nInstance Type: %s\n\nFurther details: https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/rds-metrics.html#rds-cw-metrics-instance\n",
-      "horizontallyScalable": false,
-      "raw_query": "sum by (dbinstance_identifier) (aws_rds_database_connections_maximum)\n/\nclamp_min(rds_instance_ram_bytes/9531392, 5000)\n",
-      "severity": "s2",
-      "slos": {
-        "alertTriggerDuration": "5m",
-        "hard": 0.95,
-        "soft": 0.9
-      },
-      "title": "AWS RDS Used Connections"
-    },
     "cpu": {
       "appliesTo": [
         "gitaly",
@@ -514,14 +472,6 @@
         "url": ""
       },
       "resourceDashboard": {
-        "aws_rds_memory_saturation": {
-          "name": "aws_rds_memory_saturation",
-          "url": ""
-        },
-        "aws_rds_used_connections": {
-          "name": "aws_rds_used_connections",
-          "url": ""
-        },
         "cpu": {
           "name": "cpu",
           "url": ""
@@ -612,14 +562,6 @@
         "url": ""
       },
       "resourceDashboard": {
-        "aws_rds_memory_saturation": {
-          "name": "aws_rds_memory_saturation",
-          "url": ""
-        },
-        "aws_rds_used_connections": {
-          "name": "aws_rds_used_connections",
-          "url": ""
-        },
         "cpu": {
           "name": "cpu",
           "url": ""
@@ -710,14 +652,6 @@
         "url": ""
       },
       "resourceDashboard": {
-        "aws_rds_memory_saturation": {
-          "name": "aws_rds_memory_saturation",
-          "url": ""
-        },
-        "aws_rds_used_connections": {
-          "name": "aws_rds_used_connections",
-          "url": ""
-        },
         "cpu": {
           "name": "cpu",
           "url": ""
@@ -808,14 +742,6 @@
         "url": ""
       },
       "resourceDashboard": {
-        "aws_rds_memory_saturation": {
-          "name": "aws_rds_memory_saturation",
-          "url": ""
-        },
-        "aws_rds_used_connections": {
-          "name": "aws_rds_used_connections",
-          "url": ""
-        },
         "cpu": {
           "name": "cpu",
           "url": ""
@@ -906,112 +832,6 @@
         "url": ""
       },
       "resourceDashboard": {
-        "aws_rds_memory_saturation": {
-          "name": "aws_rds_memory_saturation",
-          "url": ""
-        },
-        "aws_rds_used_connections": {
-          "name": "aws_rds_used_connections",
-          "url": ""
-        },
-        "cpu": {
-          "name": "cpu",
-          "url": ""
-        },
-        "disk_inodes": {
-          "name": "disk_inodes",
-          "url": ""
-        },
-        "disk_space": {
-          "name": "disk_space",
-          "url": ""
-        },
-        "go_goroutines": {
-          "name": "go_goroutines",
-          "url": ""
-        },
-        "go_memory": {
-          "name": "go_memory",
-          "url": ""
-        },
-        "kube_container_cpu": {
-          "name": "kube_container_cpu",
-          "url": ""
-        },
-        "kube_container_cpu_limit": {
-          "name": "kube_container_cpu_limit",
-          "url": ""
-        },
-        "kube_container_memory": {
-          "name": "kube_container_memory",
-          "url": ""
-        },
-        "kube_container_rss": {
-          "name": "kube_container_rss",
-          "url": ""
-        },
-        "kube_pool_cpu": {
-          "name": "kube_pool_cpu",
-          "url": ""
-        },
-        "memory": {
-          "name": "memory",
-          "url": ""
-        },
-        "memory_redis_cache": {
-          "name": "memory_redis_cache",
-          "url": ""
-        },
-        "node_schedstat_waiting": {
-          "name": "node_schedstat_waiting",
-          "url": ""
-        },
-        "opensearch_cpu": {
-          "name": "opensearch_cpu",
-          "url": ""
-        },
-        "opensearch_disk_space": {
-          "name": "opensearch_disk_space",
-          "url": ""
-        },
-        "pg_btree_bloat": {
-          "name": "pg_btree_bloat",
-          "url": ""
-        },
-        "pg_table_bloat": {
-          "name": "pg_table_bloat",
-          "url": ""
-        },
-        "pg_xid_wraparound": {
-          "name": "pg_xid_wraparound",
-          "url": ""
-        },
-        "puma_workers": {
-          "name": "puma_workers",
-          "url": ""
-        },
-        "single_node_cpu": {
-          "name": "single_node_cpu",
-          "url": ""
-        }
-      }
-    },
-    "rds": {
-      "capacityPlanning": {},
-      "name": "rds",
-      "overviewDashboard": {
-        "name": "",
-        "url": ""
-      },
-      "resourceDashboard": {
-        "aws_rds_memory_saturation": {
-          "name": "aws_rds_memory_saturation",
-          "url": ""
-        },
-        "aws_rds_used_connections": {
-          "name": "aws_rds_used_connections",
-          "url": ""
-        },
         "cpu": {
           "name": "cpu",
           "url": ""
@@ -1102,14 +922,6 @@
         "url": ""
       },
       "resourceDashboard": {
-        "aws_rds_memory_saturation": {
-          "name": "aws_rds_memory_saturation",
-          "url": ""
-        },
-        "aws_rds_used_connections": {
-          "name": "aws_rds_used_connections",
-          "url": ""
-        },
         "cpu": {
           "name": "cpu",
           "url": ""
@@ -1200,14 +1012,6 @@
         "url": ""
       },
       "resourceDashboard": {
-        "aws_rds_memory_saturation": {
-          "name": "aws_rds_memory_saturation",
-          "url": ""
-        },
-        "aws_rds_used_connections": {
-          "name": "aws_rds_used_connections",
-          "url": ""
-        },
         "cpu": {
           "name": "cpu",
           "url": ""
@@ -1298,14 +1102,6 @@
         "url": ""
       },
       "resourceDashboard": {
-        "aws_rds_memory_saturation": {
-          "name": "aws_rds_memory_saturation",
-          "url": ""
-        },
-        "aws_rds_used_connections": {
-          "name": "aws_rds_used_connections",
-          "url": ""
-        },
         "cpu": {
           "name": "cpu",
           "url": ""
@@ -1396,14 +1192,6 @@
         "url": ""
       },
       "resourceDashboard": {
-        "aws_rds_memory_saturation": {
-          "name": "aws_rds_memory_saturation",
-          "url": ""
-        },
-        "aws_rds_used_connections": {
-          "name": "aws_rds_used_connections",
-          "url": ""
-        },
         "cpu": {
           "name": "cpu",
           "url": ""
