@@ -22,6 +22,7 @@
   import 'gitaly.jsonnet',
   import 'gitlab-static.jsonnet',
   import 'google-cloud-storage.jsonnet',
+  import 'istio.jsonnet',
   import 'jaeger.jsonnet',
   import 'kas.jsonnet',
   import 'kube.jsonnet',

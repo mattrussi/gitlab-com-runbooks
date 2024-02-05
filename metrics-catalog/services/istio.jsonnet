@@ -27,7 +27,7 @@ metricsCatalog.serviceDefinition({
     local kubeSelector = { namespace: 'istio-system' },
 
     labelSelectors: kubeLabelSelectors(
-      deploymentSelector='istiod',
+      deploymentSelector={app: 'istiod'},
     ),
   },
 

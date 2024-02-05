@@ -869,6 +869,40 @@ groups:
       tier: stor
       type: google-cloud-storage
     expr: "0.000100"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      tier: inf
+      type: istio
+    expr: "0.999000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      tier: inf
+      type: istio
+    expr: "0.001000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      component: istio_pilot
+      tier: inf
+      type: istio
+    expr: "0.999000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      component: istio_pilot
+      tier: inf
+      type: istio
+    expr: "0.001000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      component: istio_sidecar_injection
+      tier: inf
+      type: istio
+    expr: "0.999000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      component: istio_sidecar_injection
+      tier: inf
+      type: istio
+    expr: "0.001000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       tier: inf
@@ -3480,6 +3514,24 @@ groups:
       service_aggregation: "yes"
       tier: stor
       type: google-cloud-storage
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: istio_pilot
+      global_aggregation: "no"
+      regional_aggregation: "no"
+      service_aggregation: "yes"
+      tier: inf
+      type: istio
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: istio_sidecar_injection
+      global_aggregation: "no"
+      regional_aggregation: "no"
+      service_aggregation: "yes"
+      tier: inf
+      type: istio
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:
