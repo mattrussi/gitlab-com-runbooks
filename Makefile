@@ -141,6 +141,16 @@ validate-mimir-rules:
 		mimirtool rules check --rule-dirs="$${dir}"; \
 	done
 
+.PHONY: generate-mixins
+generate-mixins:
+	@for file in $$(find mimir-rules -name "mixin.libsonnet" ! -path "*/vendor/*"); do \
+		( \
+			cd $$(dirname $${file}); \
+			jb update; \
+			mixtool generate all --output-alerts "alerts.yaml" --output-rules "rules.yaml" --directory "dashboards" mixin.libsonnet \
+		) \
+    done
+
 # Ensure that you have Graphviz and Python installed
 # Instructions at https://diagrams.mingrammer.com/docs/getting-started/installation
 # then install `pip install diagrams`

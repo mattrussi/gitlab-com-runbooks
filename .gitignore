@@ -8,7 +8,7 @@
 /dashboards/generated
 /periodic-query-results
 /services/service_catalog.json
-/vendor
+vendor
 /node_modules
 alertmanager/alertmanager.yml
 alertmanager/k8s_alertmanager.yaml
