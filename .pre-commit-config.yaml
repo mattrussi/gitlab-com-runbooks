@@ -47,6 +47,6 @@ repos:
       - id: yamllint
         args: [-c=.yamllint.yaml]
   - repo: https://github.com/zricethezav/gitleaks
-    rev: v8.18.1  # renovate:managed
+    rev: v8.18.2  # renovate:managed
     hooks:
       - id: gitleaks
