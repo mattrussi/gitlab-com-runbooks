@@ -52,7 +52,7 @@ local combinedServiceLevelIndicatorDefinition(
 
         // Returns true if this component allows detailed breakdowns
         // this is not the case for combined component definitions
-        supportsDetails(): false,
+        supportsDetails():: false,
 
         // Combined SLIs should always use the thresholds specified on the service
         monitoringThresholds:

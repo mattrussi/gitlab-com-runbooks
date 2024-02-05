@@ -99,7 +99,7 @@ local serviceLevelIndicatorDefinition(sliName, serviceLevelIndicator) =
   serviceLevelIndicator {
     // Returns true if this serviceLevelIndicator allows detailed breakdowns
     // this is not the case for combined serviceLevelIndicator definitions
-    supportsDetails(): true,
+    supportsDetails():: true,
 
     hasApdexSLO():: std.objectHas(self, 'monitoringThresholds') &&
                     std.objectHas(self.monitoringThresholds, 'apdexScore'),
