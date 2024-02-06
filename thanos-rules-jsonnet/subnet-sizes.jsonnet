@@ -5,5 +5,5 @@ local presentThanosRuleGroup(ruleGroup) = ruleGroup { partial_response_strategy:
 {
   // We're only recording this for 'gprd' with a static label. No need to separate
   // across environments
-  'subnet-sizes-gprd.yml': std.manifestYamlDoc({ groups: std.map(presentThanosRuleGroup, subnetSizes) }),
+  'subnet-sizes-gprd.yml': std.manifestYamlDoc({ groups: std.map(presentThanosRuleGroup, subnetSizes.gprd) }),
 }

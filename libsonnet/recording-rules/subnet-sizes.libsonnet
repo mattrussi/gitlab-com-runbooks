@@ -45,15 +45,18 @@ local clusterSubnetMappingRules = [
   for clusterName in std.objectFields(clusterSubnetMapping)
 ];
 
-[
-  {
-    name: 'GCP Subnet size',
-    interval: '1m',
-    rules: subnetSizeRules,
-  },
-  {
-    name: 'Subnet Cluster mapping',
-    interval: '1m',
-    rules: clusterSubnetMappingRules,
-  },
-]
+// We're only recording this for 'gprd' with a static label.
+{
+  gprd: [
+    {
+      name: 'GCP Subnet size',
+      interval: '1m',
+      rules: subnetSizeRules,
+    },
+    {
+      name: 'Subnet Cluster mapping',
+      interval: '1m',
+      rules: clusterSubnetMappingRules,
+    },
+  ],
+}
