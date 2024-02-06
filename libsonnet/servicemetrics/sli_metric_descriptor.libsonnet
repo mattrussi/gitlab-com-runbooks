@@ -1,3 +1,5 @@
+local strings = import 'utils/strings.libsonnet';
+
 // input: array of hashes [ {metric: set(labels)} ]
 // output: merged labels in a hash { metric: set(labels) }
 local collectMetricNamesAndLabels(metricLabels) =
@@ -40,7 +42,7 @@ local normalizeSelectorExpression(exp) =
         local base = std.get(memo, 'oneOf', []);
         if keyword == 'eq' then
           memo {
-            oneOf: std.setUnion(base, [exp[keyword]]),
+            oneOf: std.setUnion(base, [strings.regexpEscape(exp[keyword])]),
           }
         else if keyword == 're' then
           memo {
@@ -70,7 +72,7 @@ local normalizeSelectorExpression(exp) =
       {}
     )
   else
-    { oneOf: [exp] };
+    { oneOf: [strings.regexpEscape(exp)] };
 
 local normalize(selector) =
   std.foldl(
