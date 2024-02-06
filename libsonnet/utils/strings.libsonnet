@@ -81,6 +81,25 @@ local toCamelCase(str, splitChars='-_') =
     )
   );
 
+// taken from https://cs.opensource.google/go/go/+/refs/tags/go1.21.6:src/regexp/regexp.go;l=720
+local regexMetaChars = std.set(['.', '+', '*', '?', '(', ')', '|', '[', ']', '{', '}', '^', '$']);
+// in SLI selectors cases we don't want to escape backslashes characters
+local regexpEscape(value, escapeBackslash=false) =
+  if std.isString(value) then
+    local chars = std.stringChars(value);
+    local escaped = std.foldl(
+      function(memo, c)
+        if std.member(regexMetaChars, c) || (escapeBackslash && c == '\\') then
+          memo + ['\\' + c]
+        else
+          memo + [c],
+      chars,
+      []
+    );
+    std.join('', escaped)
+  else
+    std.toString(value);
+
 {
   removeBlankLines(str):: removeBlankLines(str),
   chomp(str):: chomp(str),
@@ -106,4 +125,6 @@ local toCamelCase(str, splitChars='-_') =
   // this_is_a_string -> ThisIsAString
   // this-is_a_string -> ThisIsAString
   toCamelCase: toCamelCase,
+
+  regexpEscape:: regexpEscape,
 }

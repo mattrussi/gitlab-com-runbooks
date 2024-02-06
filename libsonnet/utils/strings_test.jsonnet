@@ -148,4 +148,44 @@ test.suite({
     expect: 'ThisIsAString',
   },
 
+  testRegexpEscapeEmpty: {
+    actual: strings.regexpEscape(''),
+    expect: '',
+  },
+  testRegexpEscapeNoEscape: {
+    actual: strings.regexpEscape('foobar'),
+    expect: 'foobar',
+  },
+  testRegexpEscape1: {
+    actual: strings.regexpEscape('\\abcd'),
+    expect: '\\abcd',
+  },
+  testRegexpEscapeBackSlashesFalse: {
+    actual: strings.regexpEscape('\\\\'),
+    expect: '\\\\',
+  },
+  testRegexpEscape2: {
+    actual: strings.regexpEscape('^/api/v4/jobs/request\\\\z'),
+    expect: '\\^/api/v4/jobs/request\\\\z',
+  },
+  testRegexpEscape3: {
+    actual: strings.regexpEscape('foo.bar+baz|hello^world$'),
+    expect: 'foo\\.bar\\+baz\\|hello\\^world\\$',
+  },
+  testRegexpEscapeAllMetaChars: {
+    actual: strings.regexpEscape('.+*?()|[]{}^$'),
+    expect: '\\.\\+\\*\\?\\(\\)\\|\\[\\]\\{\\}\\^\\$',
+  },
+  testRegexpEscapeBackSlashTrue: {
+    actual: strings.regexpEscape('\\', escapeBackslash=true),
+    expect: '\\\\',
+  },
+  testRegexpEscape2EscapeBackslash: {
+    actual: strings.regexpEscape('^/api/v4/jobs/request\\\\z', escapeBackslash=true),
+    expect: '\\^/api/v4/jobs/request\\\\\\\\z',
+  },
+  testRegexpEscapeNumber: {
+    actual: strings.regexpEscape(123),
+    expect: '123',
+  },
 })
