@@ -148,4 +148,56 @@ test.suite({
     expect: 'ThisIsAString',
   },
 
+  testEscapeStringRegexEmpty: {
+    actual: strings.escapeStringRegex(''),
+    expect: '',
+  },
+  testEscapeStringRegexNull: {
+    actual: strings.escapeStringRegex(null),
+    expect: '',
+  },
+  testEscapeStringRegexNoEscape: {
+    actual: strings.escapeStringRegex('foobar'),
+    expect: 'foobar',
+  },
+  testEscapeStringRegex1: {
+    actual: strings.escapeStringRegex('\\abcd'),
+    expect: '\\abcd',
+  },
+  testEscapeStringRegexBackSlashesFalse: {
+    actual: strings.escapeStringRegex('\\\\'),
+    expect: '\\\\',
+  },
+  testEscapeStringRegex2: {
+    actual: strings.escapeStringRegex('^/api/v4/jobs/request\\\\z'),
+    expect: '\\^/api/v4/jobs/request\\\\z',
+  },
+  testEscapeStringRegex3: {
+    actual: strings.escapeStringRegex('foo.bar+baz|hello^world$'),
+    expect: 'foo\\.bar\\+baz\\|hello\\^world\\$',
+  },
+  testEscapeStringRegexAllMetaChars: {
+    actual: strings.escapeStringRegex('.+*?()|[]{}^$'),
+    expect: '\\.\\+\\*\\?\\(\\)\\|\\[\\]\\{\\}\\^\\$',
+  },
+  testEscapeStringRegexNumber: {
+    actual: strings.escapeStringRegex(123),
+    expect: '123',
+  },
+  testEscapeBackslashEmpty: {
+    actual: strings.escapeBackslash(''),
+    expect: '',
+  },
+  testEscapeBackslash1: {
+    actual: strings.escapeBackslash('abcd'),
+    expect: 'abcd',
+  },
+  testEscapeBackslash2: {
+    actual: strings.escapeBackslash('\\'),
+    expect: '\\\\',
+  },
+  testEscapeBackslash3: {
+    actual: strings.escapeBackslash('\\^/api/v4/jobs/request\\\\z'),
+    expect: '\\\\^/api/v4/jobs/request\\\\\\\\z',
+  },
 })

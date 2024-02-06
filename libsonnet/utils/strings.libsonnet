@@ -81,6 +81,41 @@ local toCamelCase(str, splitChars='-_') =
     )
   );
 
+// taken from https://cs.opensource.google/go/go/+/refs/tags/go1.21.6:src/regexp/regexp.go;l=720
+// to escape backslash characters, call the escapeBackslash() function
+local regexMetaChars = std.set(['.', '+', '*', '?', '(', ')', '|', '[', ']', '{', '}', '^', '$']);
+local escapeStringRegex(value) =
+  if std.isString(value) then
+    local chars = std.stringChars(value);
+    local escaped = std.foldl(
+      function(memo, c)
+        if std.member(regexMetaChars, c) then
+          memo + ['\\' + c]
+        else
+          memo + [c],
+      chars,
+      []
+    );
+    std.join('', escaped)
+  else if value == null then
+    ''
+  else
+    std.toString(value);
+
+// to escape the `\\` character from escapeStringRegex for JSON/YAML representation
+local escapeBackslash(string) =
+  local chars = std.stringChars(string);
+  local escaped = std.foldl(
+    function(memo, c)
+      if c == '\\' then
+        memo + ['\\\\']
+      else
+        memo + [c],
+    chars,
+    []
+  );
+  std.join('', escaped);
+
 {
   removeBlankLines(str):: removeBlankLines(str),
   chomp(str):: chomp(str),
@@ -106,4 +141,7 @@ local toCamelCase(str, splitChars='-_') =
   // this_is_a_string -> ThisIsAString
   // this-is_a_string -> ThisIsAString
   toCamelCase: toCamelCase,
+
+  escapeStringRegex:: escapeStringRegex,
+  escapeBackslash:: escapeBackslash,
 }

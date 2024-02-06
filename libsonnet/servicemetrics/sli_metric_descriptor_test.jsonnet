@@ -189,13 +189,13 @@ test.suite({
     actual: sliMetricsDescriptor._normalizeSelectorExpression({ re: 'a|d|e|f', oneOf: ['a', 'b', 'c'] }),
     expect: { oneOf: ['a', 'b', 'c', 'd', 'e', 'f'] },
   },
-  testNormalizeSimpleInt: {
+  testNormalizeSimpleStr: {
     actual: sliMetricsDescriptor._normalize({ a: '1' }),
     expect: { a: { oneOf: ['1'] } },
   },
-  testNormalizeSimpleStr: {
+  testNormalizeSimpleInt: {
     actual: sliMetricsDescriptor._normalize({ a: 1 }),
-    expect: { a: { oneOf: [1] } },
+    expect: { a: { oneOf: ['1'] } },
   },
   testNormalizeObject1: {
     actual: sliMetricsDescriptor._normalize({ a: { eq: '1' } }),
@@ -616,5 +616,31 @@ test.suite({
         code: {},
       },
     },
+  ),
+
+  local testSliWithSelectorEscapedRegex = sliDefinition.serviceLevelIndicatorDefinition(testSliBase {
+    requestRate: rateMetric('some_total_count', selector={ route: '^foo', type: { re: '\\^blabla' } }),
+    errorRate: rateMetric('some_total_count', selector={ route: 'bar', type: { re: 'something.*' } }),
+  }).initServiceLevelIndicatorWithName('test_sli', {}),
+  testMetricNamesAndSelectorsEscapedRegex: testMetricsDescriptorSelectors(
+    testSliWithSelectorEscapedRegex,
+    expect={
+      some_total_count: {
+        route: { oneOf: ['\\\\^foo', 'bar'] },
+        type: { oneOf: ['\\^blabla', 'something.*'] },
+      },
+    }
+  ),
+  local testSliWithSelectorEscapedRegex2 = sliDefinition.serviceLevelIndicatorDefinition(testSliBase {
+    requestRate: rateMetric('some_total_count', selector={ route: { eq: '^foo' } }),
+    errorRate: rateMetric('some_total_count', selector={ route: 'bar' }),
+  }).initServiceLevelIndicatorWithName('test_sli', {}),
+  testMetricNamesAndSelectorsEscapedRegex2: testMetricsDescriptorSelectors(
+    testSliWithSelectorEscapedRegex2,
+    expect={
+      some_total_count: {
+        route: { oneOf: ['\\\\^foo', 'bar'] },
+      },
+    }
   ),
 })
