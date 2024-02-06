@@ -5,7 +5,7 @@ metricsCatalog.serviceDefinition(
   // Default Runway SLIs
   runwayArchetype(
     type='glgo',
-    team='reliability_general',
+    team='container_registry',
     apdexScore=0.98,
     errorRatio=0.98,
     apdexSatisfiedThreshold="1024"

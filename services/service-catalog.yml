@@ -2535,7 +2535,9 @@ services:
     tier: sv
     friendly_name: GitLab - Google Cloud
     label: Glgo
-    owner: reliability_general
+    teams:
+      - container_registry
+    owner: container_registry
     technical:
       project:
         - https://gitlab.com/gitlab-org/architecture/gitlab-gcp-integration/glgo
