@@ -626,7 +626,7 @@ test.suite({
     testSliWithSelectorEscapedRegex,
     expect={
       some_total_count: {
-        route: { oneOf: ['\\^foo', 'bar'] },
+        route: { oneOf: ['\\\\^foo', 'bar'] },
         type: { oneOf: ['\\^blabla', 'something.*'] },
       },
     }
@@ -639,7 +639,7 @@ test.suite({
     testSliWithSelectorEscapedRegex2,
     expect={
       some_total_count: {
-        route: { oneOf: ['\\^foo', 'bar'] },
+        route: { oneOf: ['\\\\^foo', 'bar'] },
       },
     }
   ),
