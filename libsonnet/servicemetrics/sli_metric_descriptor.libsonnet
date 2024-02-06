@@ -42,7 +42,10 @@ local normalizeSelectorExpression(exp) =
         local base = std.get(memo, 'oneOf', []);
         if keyword == 'eq' then
           memo {
-            oneOf: std.setUnion(base, [strings.regexpEscape(exp[keyword])]),
+            oneOf: std.setUnion(
+              base,
+              [strings.escapeBackslash(strings.escapeStringRegex(exp[keyword]))]
+            ),
           }
         else if keyword == 're' then
           memo {
@@ -72,7 +75,7 @@ local normalizeSelectorExpression(exp) =
       {}
     )
   else
-    { oneOf: [strings.regexpEscape(exp)] };
+    { oneOf: [strings.escapeBackslash(strings.escapeStringRegex(exp))] };
 
 local normalize(selector) =
   std.foldl(

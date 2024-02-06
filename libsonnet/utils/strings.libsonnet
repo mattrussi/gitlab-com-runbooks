@@ -82,17 +82,15 @@ local toCamelCase(str, splitChars='-_') =
   );
 
 // taken from https://cs.opensource.google/go/go/+/refs/tags/go1.21.6:src/regexp/regexp.go;l=720
+// to escape backslash characters, call the escapeBackslash() function
 local regexMetaChars = std.set(['.', '+', '*', '?', '(', ')', '|', '[', ']', '{', '}', '^', '$']);
-// in SLI selectors cases we don't want to escape backslashes characters
-local regexpEscape(value) =
+local escapeStringRegex(value) =
   if std.isString(value) then
     local chars = std.stringChars(value);
     local escaped = std.foldl(
       function(memo, c)
         if std.member(regexMetaChars, c) then
-          memo + ['\\\\' + c]  // 4 backslahes to escape 2 actual backslash chars
-        else if c == '\\' then
-          memo + ['\\' + c]  // escaping a backslash only need 1 backslach char
+          memo + ['\\' + c]
         else
           memo + [c],
       chars,
@@ -103,6 +101,20 @@ local regexpEscape(value) =
     ''
   else
     std.toString(value);
+
+// to escape the `\\` character from escapeStringRegex for JSON/YAML representation
+local escapeBackslash(string) =
+  local chars = std.stringChars(string);
+  local escaped = std.foldl(
+    function(memo, c)
+      if c == '\\' then
+        memo + ['\\\\']
+      else
+        memo + [c],
+    chars,
+    []
+  );
+  std.join('', escaped);
 
 {
   removeBlankLines(str):: removeBlankLines(str),
@@ -130,5 +142,6 @@ local regexpEscape(value) =
   // this-is_a_string -> ThisIsAString
   toCamelCase: toCamelCase,
 
-  regexpEscape:: regexpEscape,
+  escapeStringRegex:: escapeStringRegex,
+  escapeBackslash:: escapeBackslash,
 }
