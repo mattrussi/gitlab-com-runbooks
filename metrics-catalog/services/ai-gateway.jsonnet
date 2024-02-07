@@ -14,7 +14,7 @@ metricsCatalog.serviceDefinition(
     apdexScore=0.98,
     errorRatio=0.98,  // Temporary reduce until https://gitlab.com/gitlab-com/gl-infra/production/-/issues/17366 is fixed.
     featureCategory='code_suggestions',
-    apdexSatisfiedThreshold="4903.707252978515",
+    apdexSatisfiedThreshold='4903.707252978515',
     severity='s2',
     customToolingLinks=[
       toolingLinks.kibana(
@@ -29,7 +29,7 @@ metricsCatalog.serviceDefinition(
   {
     serviceLevelIndicators+: {
       server: {
-        severity: 's2',
+        severity: 's4',
         trafficCessationAlertConfig: false,
         userImpacting: true,
         serviceAggregation: false,
