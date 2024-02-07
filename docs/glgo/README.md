@@ -8,11 +8,11 @@
 
 * [Service Overview](https://dashboards.gitlab.net/d/glgo-main/glgo-overview)
 * **Alerts**: <https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22glgo%22%2C%20tier%3D%22sv%22%7D>
-* **Label**: gitlab-com/gl-infra/production~"Service::Glgo"
+* **Label**: gitlab-com/gl-infra/production~"Service::glgo"
 
 ## Logging
 
-* [Glgo](https://console.cloud.google.com/run/detail/us-east1/glgo/logs?project=gitlab-runway-production)
+* [glgo](https://console.cloud.google.com/run/detail/us-east1/glgo/logs?project=gitlab-runway-production)
 
 <!-- END_MARKER -->
 
