@@ -147,7 +147,10 @@ generate-mixins:
 		( \
 			cd $$(dirname $${file}); \
 			jb update; \
-			mixtool generate all --output-alerts "alerts.yaml" --output-rules "rules.yaml" --directory "dashboards" mixin.libsonnet \
+			jsonnet -J vendor -e '(import "mixin.libsonnet").prometheusRules' | gojsontoyaml > rules.yaml; \
+			jsonnet -J vendor -e '(import "mixin.libsonnet").prometheusAlerts' | gojsontoyaml > alerts.yaml; \
+			rm -rf dashboards && mkdir -p dashboards; \
+			jsonnet -J vendor -e '(import "mixin.libsonnet").grafanaDashboards' -m dashboards;  \
 		) \
     done
 
