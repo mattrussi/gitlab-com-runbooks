@@ -51,15 +51,15 @@ SRE oncall should:
 3. If the user doesn't already have a .json file, copy an existing .json file and create one named after the user's name.
 4. Edit the `<user>.json` file accordingly. See below for reference:
 
-| Field               | Description (Each value should be double-quoted)                                                                                                                                                                                                         |
-|---------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| id                  | UNIX login                                                                                                                                                                                                                                               |
-| comment             | Firstname Lastname                                                                                                                                                                                                                                       |
-| ops_gitlab_username | GitLab handle                                                                                                                                                                                                                                            |
-| ssh_keys            | SSH key(s) provided by the user in the issue OR  get it from <http://gitlab.com/user.keys>. This field  takes a list so a comma separated keys will also work. Ensure the keys have uniquen identifiers to prevent one from being overwritten.             |
+| Field               | Description (Each value should be double-quoted)                                                                                                                                                                                                        |
+|---------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| id                  | UNIX login                                                                                                                                                                                                                                              |
+| comment             | Firstname Lastname                                                                                                                                                                                                                                      |
+| ops_gitlab_username | GitLab handle                                                                                                                                                                                                                                           |
+| ssh_keys            | SSH key(s) provided by the user in the issue OR  get it from <http://gitlab.com/user.keys>. This field  takes a list so a comma separated keys will also work. Ensure the keys have uniquen identifiers to prevent one from being overwritten.           |
 | groups              | This field takes a list. Look at the "groups" listed  in above table and provide the groups separated by comma.  Example: staging access for db and rails console will be:   "groups": [    "gstg-bastion-only",     "db-console",     "rails-console" ] |
-| shell               | You can leave it as-is unless specifically requested  to change it.                                                                                                                                                                                      |
-| action              | You can leave it as-is unless specifically requested  to change it.
+| shell               | You can leave it as-is unless specifically requested  to change it. |
+| action              | You can leave it as-is unless specifically requested  to change it. |
 
 5. Send an MR for the change.
 6. Once change is merged, run: `git pull` so that your `master` branch syncs

@@ -10,14 +10,14 @@ PostgreSQL implements several kinds and layers of locks, and even SELECT stateme
 
 Below is a comparison of the most commonly used SQL commands that can run concurrently with each other on the same table:
 
-| Runs concurrently with | SELECT | INSERT UPDATE DELETE    | CREATE INDEX (CONC) VACUUM ANALYZE | CREATE INDEX | CREATE TRIGGER | ALTER TABLE DROP TABLE TRUNCATE VACUUM (FULL)|
-| --- | --- | --- | --- | --- | --- | --- |
-|SELECT| :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x:|
-| INSERT UPDATE DELETE | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x: | :x: | :x:|
-| CREATE INDEX (CONC) VACUUM ANALYZE | :heavy_check_mark: | :heavy_check_mark: | :x: | :x: | :x: | :x: |
-|CREATE INDEX | :heavy_check_mark: | :x: | :x: | :heavy_check_mark: | :x: | :x: |
-|CREATE TRIGGER | :heavy_check_mark: | :x: | :x: | :x: | :x: | :x: |
-ALTER TABLE DROP TABLE TRUNCATE VACUUM (FULL) | :x:    | :x: | :x: | :x: | :x: | :x: |
+| Runs concurrently with                        | SELECT | INSERT UPDATE DELETE    | CREATE INDEX (CONC) VACUUM ANALYZE | CREATE INDEX | CREATE TRIGGER | ALTER TABLE DROP TABLE TRUNCATE VACUUM (FULL)|
+|-----------------------------------------------| --- | --- | --- | --- | --- | --- |
+| SELECT                                        | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x:|
+| INSERT UPDATE DELETE                          | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x: | :x: | :x:|
+| CREATE INDEX (CONC) VACUUM ANALYZE            | :heavy_check_mark: | :heavy_check_mark: | :x: | :x: | :x: | :x: |
+| CREATE INDEX                                  | :heavy_check_mark: | :x: | :x: | :heavy_check_mark: | :x: | :x: |
+| CREATE TRIGGER                                | :heavy_check_mark: | :x: | :x: | :x: | :x: | :x: |
+| ALTER TABLE DROP TABLE TRUNCATE VACUUM (FULL) | :x:    | :x: | :x: | :x: | :x: | :x: |
 
 And here is a list of locks each statement implements at table and row level:
 
