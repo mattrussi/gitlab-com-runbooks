@@ -103,11 +103,5 @@ local options = validateReferenceArchitectureOptions(import 'gitlab-metrics-opti
   // our metrics system
   dbPlatform: 'rds',
 
-  // RDS Specific configurations
-  rdsInstanceRAMGB: null,
-  rdsMaxAllocatedStorageGB: null,
-  rdsMaxConnections: null,
-  rdsMonitoring: false,
-
   separateGlobalRecordingSelectors: {},
 }
