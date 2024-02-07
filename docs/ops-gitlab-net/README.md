@@ -16,6 +16,7 @@
 
 ## Troubleshooting Pointers
 
+* [../certificates/cloudflare.md](../certificates/cloudflare.md)
 * [../certificates/gcp.md](../certificates/gcp.md)
 * [Chef Tips and Tools](../config_management/chef-workflow.md)
 * [Rebuilding a kubernetes cluster](../kube/k8s-cluster-rebuild.md)
