@@ -8,7 +8,7 @@
       }
    ],
    "annotations": {
-      "list": [ ]
+      "list": []
    },
    "editable": true,
    "gnetId": null,
@@ -58,7 +58,7 @@
          "height": "100px",
          "panels": [
             {
-               "aliasColors": { },
+               "aliasColors": {},
                "bars": false,
                "dashLength": 10,
                "dashes": false,
@@ -77,13 +77,13 @@
                },
                "lines": true,
                "linewidth": 1,
-               "links": [ ],
+               "links": [],
                "nullPointMode": "null as zero",
                "percentage": false,
                "pointradius": 5,
                "points": false,
                "renderer": "flot",
-               "seriesOverrides": [ ],
+               "seriesOverrides": [],
                "spaceLength": 10,
                "span": 2,
                "stack": false,
@@ -111,7 +111,7 @@
                   "mode": "time",
                   "name": null,
                   "show": true,
-                  "values": [ ]
+                  "values": []
                },
                "yaxes": [
                   {
@@ -133,7 +133,7 @@
                ]
             },
             {
-               "aliasColors": { },
+               "aliasColors": {},
                "bars": false,
                "dashLength": 10,
                "dashes": false,
@@ -153,13 +153,13 @@
                },
                "lines": true,
                "linewidth": 1,
-               "links": [ ],
+               "links": [],
                "nullPointMode": "null as zero",
                "percentage": false,
                "pointradius": 5,
                "points": false,
                "renderer": "flot",
-               "seriesOverrides": [ ],
+               "seriesOverrides": [],
                "spaceLength": 10,
                "span": 2,
                "stack": false,
@@ -187,7 +187,7 @@
                   "mode": "time",
                   "name": null,
                   "show": true,
-                  "values": [ ]
+                  "values": []
                },
                "yaxes": [
                   {
@@ -209,7 +209,7 @@
                ]
             },
             {
-               "aliasColors": { },
+               "aliasColors": {},
                "bars": false,
                "dashLength": 10,
                "dashes": false,
@@ -229,13 +229,13 @@
                },
                "lines": true,
                "linewidth": 1,
-               "links": [ ],
+               "links": [],
                "nullPointMode": "null as zero",
                "percentage": false,
                "pointradius": 5,
                "points": false,
                "renderer": "flot",
-               "seriesOverrides": [ ],
+               "seriesOverrides": [],
                "spaceLength": 10,
                "span": 2,
                "stack": false,
@@ -263,7 +263,7 @@
                   "mode": "time",
                   "name": null,
                   "show": true,
-                  "values": [ ]
+                  "values": []
                },
                "yaxes": [
                   {
@@ -285,7 +285,7 @@
                ]
             },
             {
-               "aliasColors": { },
+               "aliasColors": {},
                "bars": false,
                "dashLength": 10,
                "dashes": false,
@@ -305,13 +305,13 @@
                },
                "lines": true,
                "linewidth": 1,
-               "links": [ ],
+               "links": [],
                "nullPointMode": "null as zero",
                "percentage": false,
                "pointradius": 5,
                "points": false,
                "renderer": "flot",
-               "seriesOverrides": [ ],
+               "seriesOverrides": [],
                "spaceLength": 10,
                "span": 2,
                "stack": false,
@@ -339,7 +339,7 @@
                   "mode": "time",
                   "name": null,
                   "show": true,
-                  "values": [ ]
+                  "values": []
                },
                "yaxes": [
                   {
@@ -361,7 +361,7 @@
                ]
             },
             {
-               "aliasColors": { },
+               "aliasColors": {},
                "bars": false,
                "dashLength": 10,
                "dashes": false,
@@ -380,13 +380,13 @@
                },
                "lines": true,
                "linewidth": 1,
-               "links": [ ],
+               "links": [],
                "nullPointMode": "null as zero",
                "percentage": false,
                "pointradius": 5,
                "points": false,
                "renderer": "flot",
-               "seriesOverrides": [ ],
+               "seriesOverrides": [],
                "spaceLength": 10,
                "span": 2,
                "stack": false,
@@ -414,7 +414,7 @@
                   "mode": "time",
                   "name": null,
                   "show": true,
-                  "values": [ ]
+                  "values": []
                },
                "yaxes": [
                   {
@@ -477,13 +477,13 @@
                },
                "lines": true,
                "linewidth": 0,
-               "links": [ ],
+               "links": [],
                "nullPointMode": "null as zero",
                "percentage": false,
                "pointradius": 5,
                "points": false,
                "renderer": "flot",
-               "seriesOverrides": [ ],
+               "seriesOverrides": [],
                "spaceLength": 10,
                "span": 4,
                "stack": true,
@@ -496,7 +496,7 @@
                      "refId": "A"
                   }
                ],
-               "thresholds": [ ],
+               "thresholds": [],
                "timeFrom": null,
                "timeShift": null,
                "title": "Requests / sec",
@@ -511,7 +511,7 @@
                   "mode": "time",
                   "name": null,
                   "show": true,
-                  "values": [ ]
+                  "values": []
                },
                "yaxes": [
                   {
@@ -533,7 +533,7 @@
                ]
             },
             {
-               "aliasColors": { },
+               "aliasColors": {},
                "bars": false,
                "dashLength": 10,
                "dashes": false,
@@ -551,13 +551,13 @@
                },
                "lines": true,
                "linewidth": 1,
-               "links": [ ],
+               "links": [],
                "nullPointMode": "null as zero",
                "percentage": false,
                "pointradius": 5,
                "points": false,
                "renderer": "flot",
-               "seriesOverrides": [ ],
+               "seriesOverrides": [],
                "spaceLength": 10,
                "span": 4,
                "stack": false,
@@ -582,7 +582,7 @@
                      "refId": "C"
                   }
                ],
-               "thresholds": [ ],
+               "thresholds": [],
                "timeFrom": null,
                "timeShift": null,
                "title": "Latency",
@@ -597,7 +597,7 @@
                   "mode": "time",
                   "name": null,
                   "show": true,
-                  "values": [ ]
+                  "values": []
                },
                "yaxes": [
                   {
@@ -636,14 +636,14 @@
                      },
                      "thresholds": {
                         "mode": "absolute",
-                        "steps": [ ]
+                        "steps": []
                      },
                      "unit": "s"
                   },
-                  "overrides": [ ]
+                  "overrides": []
                },
                "id": 9,
-               "links": [ ],
+               "links": [],
                "options": {
                   "legend": {
                      "displayMode": "hidden",
@@ -709,13 +709,13 @@
                },
                "lines": true,
                "linewidth": 0,
-               "links": [ ],
+               "links": [],
                "nullPointMode": "null as zero",
                "percentage": false,
                "pointradius": 5,
                "points": false,
                "renderer": "flot",
-               "seriesOverrides": [ ],
+               "seriesOverrides": [],
                "spaceLength": 10,
                "span": 4,
                "stack": true,
@@ -728,7 +728,7 @@
                      "refId": "A"
                   }
                ],
-               "thresholds": [ ],
+               "thresholds": [],
                "timeFrom": null,
                "timeShift": null,
                "title": "Requests / sec",
@@ -743,7 +743,7 @@
                   "mode": "time",
                   "name": null,
                   "show": true,
-                  "values": [ ]
+                  "values": []
                },
                "yaxes": [
                   {
@@ -765,7 +765,7 @@
                ]
             },
             {
-               "aliasColors": { },
+               "aliasColors": {},
                "bars": false,
                "dashLength": 10,
                "dashes": false,
@@ -783,13 +783,13 @@
                },
                "lines": true,
                "linewidth": 1,
-               "links": [ ],
+               "links": [],
                "nullPointMode": "null as zero",
                "percentage": false,
                "pointradius": 5,
                "points": false,
                "renderer": "flot",
-               "seriesOverrides": [ ],
+               "seriesOverrides": [],
                "spaceLength": 10,
                "span": 4,
                "stack": false,
@@ -814,7 +814,7 @@
                      "refId": "C"
                   }
                ],
-               "thresholds": [ ],
+               "thresholds": [],
                "timeFrom": null,
                "timeShift": null,
                "title": "Latency",
@@ -829,7 +829,7 @@
                   "mode": "time",
                   "name": null,
                   "show": true,
-                  "values": [ ]
+                  "values": []
                },
                "yaxes": [
                   {
@@ -868,14 +868,14 @@
                      },
                      "thresholds": {
                         "mode": "absolute",
-                        "steps": [ ]
+                        "steps": []
                      },
                      "unit": "s"
                   },
-                  "overrides": [ ]
+                  "overrides": []
                },
                "id": 12,
-               "links": [ ],
+               "links": [],
                "options": {
                   "legend": {
                      "displayMode": "hidden",
@@ -940,13 +940,13 @@
                },
                "lines": true,
                "linewidth": 0,
-               "links": [ ],
+               "links": [],
                "nullPointMode": "null as zero",
                "percentage": false,
                "pointradius": 5,
                "points": false,
                "renderer": "flot",
-               "seriesOverrides": [ ],
+               "seriesOverrides": [],
                "spaceLength": 10,
                "span": 6,
                "stack": true,
@@ -959,7 +959,7 @@
                      "refId": "A"
                   }
                ],
-               "thresholds": [ ],
+               "thresholds": [],
                "timeFrom": null,
                "timeShift": null,
                "title": "Requests / sec",
@@ -974,7 +974,7 @@
                   "mode": "time",
                   "name": null,
                   "show": true,
-                  "values": [ ]
+                  "values": []
                },
                "yaxes": [
                   {
@@ -996,7 +996,7 @@
                ]
             },
             {
-               "aliasColors": { },
+               "aliasColors": {},
                "bars": false,
                "dashLength": 10,
                "dashes": false,
@@ -1014,13 +1014,13 @@
                },
                "lines": true,
                "linewidth": 1,
-               "links": [ ],
+               "links": [],
                "nullPointMode": "null as zero",
                "percentage": false,
                "pointradius": 5,
                "points": false,
                "renderer": "flot",
-               "seriesOverrides": [ ],
+               "seriesOverrides": [],
                "spaceLength": 10,
                "span": 6,
                "stack": false,
@@ -1045,7 +1045,7 @@
                      "refId": "C"
                   }
                ],
-               "thresholds": [ ],
+               "thresholds": [],
                "timeFrom": null,
                "timeShift": null,
                "title": "Latency",
@@ -1060,7 +1060,7 @@
                   "mode": "time",
                   "name": null,
                   "show": true,
-                  "values": [ ]
+                  "values": []
                },
                "yaxes": [
                   {
@@ -1122,13 +1122,13 @@
                },
                "lines": true,
                "linewidth": 0,
-               "links": [ ],
+               "links": [],
                "nullPointMode": "null as zero",
                "percentage": false,
                "pointradius": 5,
                "points": false,
                "renderer": "flot",
-               "seriesOverrides": [ ],
+               "seriesOverrides": [],
                "spaceLength": 10,
                "span": 6,
                "stack": true,
@@ -1141,7 +1141,7 @@
                      "refId": "A"
                   }
                ],
-               "thresholds": [ ],
+               "thresholds": [],
                "timeFrom": null,
                "timeShift": null,
                "title": "Requests / sec",
@@ -1156,7 +1156,7 @@
                   "mode": "time",
                   "name": null,
                   "show": true,
-                  "values": [ ]
+                  "values": []
                },
                "yaxes": [
                   {
@@ -1178,7 +1178,7 @@
                ]
             },
             {
-               "aliasColors": { },
+               "aliasColors": {},
                "bars": false,
                "dashLength": 10,
                "dashes": false,
@@ -1196,13 +1196,13 @@
                },
                "lines": true,
                "linewidth": 1,
-               "links": [ ],
+               "links": [],
                "nullPointMode": "null as zero",
                "percentage": false,
                "pointradius": 5,
                "points": false,
                "renderer": "flot",
-               "seriesOverrides": [ ],
+               "seriesOverrides": [],
                "spaceLength": 10,
                "span": 6,
                "stack": false,
@@ -1227,7 +1227,7 @@
                      "refId": "C"
                   }
                ],
-               "thresholds": [ ],
+               "thresholds": [],
                "timeFrom": null,
                "timeShift": null,
                "title": "Latency",
@@ -1242,7 +1242,7 @@
                   "mode": "time",
                   "name": null,
                   "show": true,
-                  "values": [ ]
+                  "values": []
                },
                "yaxes": [
                   {
@@ -1304,13 +1304,13 @@
                },
                "lines": true,
                "linewidth": 0,
-               "links": [ ],
+               "links": [],
                "nullPointMode": "null as zero",
                "percentage": false,
                "pointradius": 5,
                "points": false,
                "renderer": "flot",
-               "seriesOverrides": [ ],
+               "seriesOverrides": [],
                "spaceLength": 10,
                "span": 6,
                "stack": true,
@@ -1323,7 +1323,7 @@
                      "refId": "A"
                   }
                ],
-               "thresholds": [ ],
+               "thresholds": [],
                "timeFrom": null,
                "timeShift": null,
                "title": "Requests / sec",
@@ -1338,7 +1338,7 @@
                   "mode": "time",
                   "name": null,
                   "show": true,
-                  "values": [ ]
+                  "values": []
                },
                "yaxes": [
                   {
@@ -1360,7 +1360,7 @@
                ]
             },
             {
-               "aliasColors": { },
+               "aliasColors": {},
                "bars": false,
                "dashLength": 10,
                "dashes": false,
@@ -1378,13 +1378,13 @@
                },
                "lines": true,
                "linewidth": 1,
-               "links": [ ],
+               "links": [],
                "nullPointMode": "null as zero",
                "percentage": false,
                "pointradius": 5,
                "points": false,
                "renderer": "flot",
-               "seriesOverrides": [ ],
+               "seriesOverrides": [],
                "spaceLength": 10,
                "span": 6,
                "stack": false,
@@ -1409,7 +1409,7 @@
                      "refId": "C"
                   }
                ],
-               "thresholds": [ ],
+               "thresholds": [],
                "timeFrom": null,
                "timeShift": null,
                "title": "Latency",
@@ -1424,7 +1424,7 @@
                   "mode": "time",
                   "name": null,
                   "show": true,
-                  "values": [ ]
+                  "values": []
                },
                "yaxes": [
                   {
@@ -1480,13 +1480,13 @@
                },
                "lines": true,
                "linewidth": 0,
-               "links": [ ],
+               "links": [],
                "nullPointMode": "null as zero",
                "percentage": false,
                "pointradius": 5,
                "points": false,
                "renderer": "flot",
-               "seriesOverrides": [ ],
+               "seriesOverrides": [],
                "spaceLength": 10,
                "span": 6,
                "stack": true,
@@ -1505,7 +1505,7 @@
                      "legendLink": null
                   }
                ],
-               "thresholds": [ ],
+               "thresholds": [],
                "timeFrom": null,
                "timeShift": null,
                "title": "Uploaded blocks / sec",
@@ -1520,7 +1520,7 @@
                   "mode": "time",
                   "name": null,
                   "show": true,
-                  "values": [ ]
+                  "values": []
                },
                "yaxes": [
                   {
@@ -1542,7 +1542,7 @@
                ]
             },
             {
-               "aliasColors": { },
+               "aliasColors": {},
                "bars": false,
                "dashLength": 10,
                "dashes": false,
@@ -1561,13 +1561,13 @@
                },
                "lines": true,
                "linewidth": 1,
-               "links": [ ],
+               "links": [],
                "nullPointMode": "null as zero",
                "percentage": false,
                "pointradius": 5,
                "points": false,
                "renderer": "flot",
-               "seriesOverrides": [ ],
+               "seriesOverrides": [],
                "spaceLength": 10,
                "span": 6,
                "stack": false,
@@ -1592,7 +1592,7 @@
                      "refId": "C"
                   }
                ],
-               "thresholds": [ ],
+               "thresholds": [],
                "timeFrom": null,
                "timeShift": null,
                "title": "Upload latency",
@@ -1607,7 +1607,7 @@
                   "mode": "time",
                   "name": null,
                   "show": true,
-                  "values": [ ]
+                  "values": []
                },
                "yaxes": [
                   {
@@ -1663,13 +1663,13 @@
                },
                "lines": true,
                "linewidth": 0,
-               "links": [ ],
+               "links": [],
                "nullPointMode": "null as zero",
                "percentage": false,
                "pointradius": 5,
                "points": false,
                "renderer": "flot",
-               "seriesOverrides": [ ],
+               "seriesOverrides": [],
                "spaceLength": 10,
                "span": 6,
                "stack": true,
@@ -1688,7 +1688,7 @@
                      "legendLink": null
                   }
                ],
-               "thresholds": [ ],
+               "thresholds": [],
                "timeFrom": null,
                "timeShift": null,
                "title": "Compactions / sec",
@@ -1703,7 +1703,7 @@
                   "mode": "time",
                   "name": null,
                   "show": true,
-                  "values": [ ]
+                  "values": []
                },
                "yaxes": [
                   {
@@ -1725,7 +1725,7 @@
                ]
             },
             {
-               "aliasColors": { },
+               "aliasColors": {},
                "bars": false,
                "dashLength": 10,
                "dashes": false,
@@ -1744,13 +1744,13 @@
                },
                "lines": true,
                "linewidth": 1,
-               "links": [ ],
+               "links": [],
                "nullPointMode": "null as zero",
                "percentage": false,
                "pointradius": 5,
                "points": false,
                "renderer": "flot",
-               "seriesOverrides": [ ],
+               "seriesOverrides": [],
                "spaceLength": 10,
                "span": 6,
                "stack": false,
@@ -1775,7 +1775,7 @@
                      "refId": "C"
                   }
                ],
-               "thresholds": [ ],
+               "thresholds": [],
                "timeFrom": null,
                "timeShift": null,
                "title": "Compactions latency",
@@ -1790,7 +1790,7 @@
                   "mode": "time",
                   "name": null,
                   "show": true,
-                  "values": [ ]
+                  "values": []
                },
                "yaxes": [
                   {
@@ -1846,13 +1846,13 @@
                },
                "lines": true,
                "linewidth": 0,
-               "links": [ ],
+               "links": [],
                "nullPointMode": "null as zero",
                "percentage": false,
                "pointradius": 5,
                "points": false,
                "renderer": "flot",
-               "seriesOverrides": [ ],
+               "seriesOverrides": [],
                "spaceLength": 10,
                "span": 3,
                "stack": true,
@@ -1871,7 +1871,7 @@
                      "legendLink": null
                   }
                ],
-               "thresholds": [ ],
+               "thresholds": [],
                "timeFrom": null,
                "timeShift": null,
                "title": "WAL truncations / sec",
@@ -1886,7 +1886,7 @@
                   "mode": "time",
                   "name": null,
                   "show": true,
-                  "values": [ ]
+                  "values": []
                },
                "yaxes": [
                   {
@@ -1930,13 +1930,13 @@
                },
                "lines": true,
                "linewidth": 0,
-               "links": [ ],
+               "links": [],
                "nullPointMode": "null as zero",
                "percentage": false,
                "pointradius": 5,
                "points": false,
                "renderer": "flot",
-               "seriesOverrides": [ ],
+               "seriesOverrides": [],
                "spaceLength": 10,
                "span": 3,
                "stack": true,
@@ -1955,7 +1955,7 @@
                      "legendLink": null
                   }
                ],
-               "thresholds": [ ],
+               "thresholds": [],
                "timeFrom": null,
                "timeShift": null,
                "title": "Checkpoints created / sec",
@@ -1970,7 +1970,7 @@
                   "mode": "time",
                   "name": null,
                   "show": true,
-                  "values": [ ]
+                  "values": []
                },
                "yaxes": [
                   {
@@ -2001,7 +2001,7 @@
                   }
                },
                "id": 25,
-               "links": [ ],
+               "links": [],
                "options": {
                   "legend": {
                      "showLegend": true
@@ -2045,13 +2045,13 @@
                },
                "lines": true,
                "linewidth": 0,
-               "links": [ ],
+               "links": [],
                "nullPointMode": "null as zero",
                "percentage": false,
                "pointradius": 5,
                "points": false,
                "renderer": "flot",
-               "seriesOverrides": [ ],
+               "seriesOverrides": [],
                "spaceLength": 10,
                "span": 3,
                "stack": true,
@@ -2070,7 +2070,7 @@
                      "legendLink": null
                   }
                ],
-               "thresholds": [ ],
+               "thresholds": [],
                "timeFrom": null,
                "timeShift": null,
                "title": "Corruptions / sec",
@@ -2085,7 +2085,7 @@
                   "mode": "time",
                   "name": null,
                   "show": true,
-                  "values": [ ]
+                  "values": []
                },
                "yaxes": [
                   {
@@ -2119,7 +2119,7 @@
          "height": "250px",
          "panels": [
             {
-               "aliasColors": { },
+               "aliasColors": {},
                "bars": false,
                "dashLength": 10,
                "dashes": false,
@@ -2138,13 +2138,13 @@
                },
                "lines": true,
                "linewidth": 1,
-               "links": [ ],
+               "links": [],
                "nullPointMode": "null as zero",
                "percentage": false,
                "pointradius": 5,
                "points": false,
                "renderer": "flot",
-               "seriesOverrides": [ ],
+               "seriesOverrides": [],
                "spaceLength": 10,
                "span": 3,
                "stack": false,
@@ -2157,7 +2157,7 @@
                      "legendLink": null
                   }
                ],
-               "thresholds": [ ],
+               "thresholds": [],
                "timeFrom": null,
                "timeShift": null,
                "title": "Distributor exemplars incoming rate",
@@ -2172,7 +2172,7 @@
                   "mode": "time",
                   "name": null,
                   "show": true,
-                  "values": [ ]
+                  "values": []
                },
                "yaxes": [
                   {
@@ -2194,7 +2194,7 @@
                ]
             },
             {
-               "aliasColors": { },
+               "aliasColors": {},
                "bars": false,
                "dashLength": 10,
                "dashes": false,
@@ -2213,13 +2213,13 @@
                },
                "lines": true,
                "linewidth": 1,
-               "links": [ ],
+               "links": [],
                "nullPointMode": "null as zero",
                "percentage": false,
                "pointradius": 5,
                "points": false,
                "renderer": "flot",
-               "seriesOverrides": [ ],
+               "seriesOverrides": [],
                "spaceLength": 10,
                "span": 3,
                "stack": false,
@@ -2232,7 +2232,7 @@
                      "legendLink": null
                   }
                ],
-               "thresholds": [ ],
+               "thresholds": [],
                "timeFrom": null,
                "timeShift": null,
                "title": "Distributor exemplars received rate",
@@ -2247,7 +2247,7 @@
                   "mode": "time",
                   "name": null,
                   "show": true,
-                  "values": [ ]
+                  "values": []
                },
                "yaxes": [
                   {
@@ -2269,7 +2269,7 @@
                ]
             },
             {
-               "aliasColors": { },
+               "aliasColors": {},
                "bars": false,
                "dashLength": 10,
                "dashes": false,
@@ -2288,13 +2288,13 @@
                },
                "lines": true,
                "linewidth": 1,
-               "links": [ ],
+               "links": [],
                "nullPointMode": "null as zero",
                "percentage": false,
                "pointradius": 5,
                "points": false,
                "renderer": "flot",
-               "seriesOverrides": [ ],
+               "seriesOverrides": [],
                "spaceLength": 10,
                "span": 3,
                "stack": false,
@@ -2307,7 +2307,7 @@
                      "legendLink": null
                   }
                ],
-               "thresholds": [ ],
+               "thresholds": [],
                "timeFrom": null,
                "timeShift": null,
                "title": "Ingester ingested exemplars rate",
@@ -2322,7 +2322,7 @@
                   "mode": "time",
                   "name": null,
                   "show": true,
-                  "values": [ ]
+                  "values": []
                },
                "yaxes": [
                   {
@@ -2344,7 +2344,7 @@
                ]
             },
             {
-               "aliasColors": { },
+               "aliasColors": {},
                "bars": false,
                "dashLength": 10,
                "dashes": false,
@@ -2363,13 +2363,13 @@
                },
                "lines": true,
                "linewidth": 1,
-               "links": [ ],
+               "links": [],
                "nullPointMode": "null as zero",
                "percentage": false,
                "pointradius": 5,
                "points": false,
                "renderer": "flot",
-               "seriesOverrides": [ ],
+               "seriesOverrides": [],
                "spaceLength": 10,
                "span": 3,
                "stack": false,
@@ -2382,7 +2382,7 @@
                      "legendLink": null
                   }
                ],
-               "thresholds": [ ],
+               "thresholds": [],
                "timeFrom": null,
                "timeShift": null,
                "title": "Ingester appended exemplars rate",
@@ -2397,7 +2397,7 @@
                   "mode": "time",
                   "name": null,
                   "show": true,
-                  "values": [ ]
+                  "values": []
                },
                "yaxes": [
                   {
@@ -2431,7 +2431,7 @@
          "height": "250px",
          "panels": [
             {
-               "aliasColors": { },
+               "aliasColors": {},
                "bars": false,
                "dashLength": 10,
                "dashes": false,
@@ -2449,13 +2449,13 @@
                },
                "lines": true,
                "linewidth": 1,
-               "links": [ ],
+               "links": [],
                "nullPointMode": "null as zero",
                "percentage": false,
                "pointradius": 5,
                "points": false,
                "renderer": "flot",
-               "seriesOverrides": [ ],
+               "seriesOverrides": [],
                "spaceLength": 10,
                "span": 6,
                "stack": false,
@@ -2468,7 +2468,7 @@
                      "legendLink": null
                   }
                ],
-               "thresholds": [ ],
+               "thresholds": [],
                "timeFrom": null,
                "timeShift": null,
                "title": "Rejected distributor requests",
@@ -2483,7 +2483,7 @@
                   "mode": "time",
                   "name": null,
                   "show": true,
-                  "values": [ ]
+                  "values": []
                },
                "yaxes": [
                   {
@@ -2505,7 +2505,7 @@
                ]
             },
             {
-               "aliasColors": { },
+               "aliasColors": {},
                "bars": false,
                "dashLength": 10,
                "dashes": false,
@@ -2523,13 +2523,13 @@
                },
                "lines": true,
                "linewidth": 1,
-               "links": [ ],
+               "links": [],
                "nullPointMode": "null as zero",
                "percentage": false,
                "pointradius": 5,
                "points": false,
                "renderer": "flot",
-               "seriesOverrides": [ ],
+               "seriesOverrides": [],
                "spaceLength": 10,
                "span": 6,
                "stack": false,
@@ -2542,7 +2542,7 @@
                      "legendLink": null
                   }
                ],
-               "thresholds": [ ],
+               "thresholds": [],
                "timeFrom": null,
                "timeShift": null,
                "title": "Rejected ingester requests",
@@ -2557,7 +2557,7 @@
                   "mode": "time",
                   "name": null,
                   "show": true,
-                  "values": [ ]
+                  "values": []
                },
                "yaxes": [
                   {
@@ -2602,7 +2602,7 @@
             "hide": 0,
             "label": "Data source",
             "name": "datasource",
-            "options": [ ],
+            "options": [],
             "query": "prometheus",
             "refresh": 1,
             "regex": "",
@@ -2621,13 +2621,13 @@
             "label": "cluster",
             "multi": true,
             "name": "cluster",
-            "options": [ ],
+            "options": [],
             "query": "label_values(cortex_build_info, cluster)",
             "refresh": 1,
             "regex": "",
             "sort": 1,
             "tagValuesQuery": "",
-            "tags": [ ],
+            "tags": [],
             "tagsQuery": "",
             "type": "query",
             "useTags": false
@@ -2645,13 +2645,13 @@
             "label": "namespace",
             "multi": true,
             "name": "namespace",
-            "options": [ ],
+            "options": [],
             "query": "label_values(cortex_build_info{cluster=~\"$cluster\"}, namespace)",
             "refresh": 1,
             "regex": "",
             "sort": 1,
             "tagValuesQuery": "",
-            "tags": [ ],
+            "tags": [],
             "tagsQuery": "",
             "type": "query",
             "useTags": false

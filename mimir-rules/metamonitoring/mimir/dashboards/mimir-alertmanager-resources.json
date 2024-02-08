@@ -8,7 +8,7 @@
       }
    ],
    "annotations": {
-      "list": [ ]
+      "list": []
    },
    "editable": true,
    "gnetId": null,
@@ -35,7 +35,7 @@
          "height": "250px",
          "panels": [
             {
-               "aliasColors": { },
+               "aliasColors": {},
                "bars": false,
                "dashLength": 10,
                "dashes": false,
@@ -53,7 +53,7 @@
                },
                "lines": true,
                "linewidth": 1,
-               "links": [ ],
+               "links": [],
                "nullPointMode": "null as zero",
                "percentage": false,
                "pointradius": 5,
@@ -99,7 +99,7 @@
                      "legendLink": null
                   }
                ],
-               "thresholds": [ ],
+               "thresholds": [],
                "timeFrom": null,
                "timeShift": null,
                "title": "CPU",
@@ -112,7 +112,7 @@
                   "mode": "time",
                   "name": null,
                   "show": true,
-                  "values": [ ]
+                  "values": []
                },
                "yaxes": [
                   {
@@ -134,7 +134,7 @@
                ]
             },
             {
-               "aliasColors": { },
+               "aliasColors": {},
                "bars": false,
                "dashLength": 10,
                "dashes": false,
@@ -152,7 +152,7 @@
                },
                "lines": true,
                "linewidth": 1,
-               "links": [ ],
+               "links": [],
                "nullPointMode": "null as zero",
                "percentage": false,
                "pointradius": 5,
@@ -198,7 +198,7 @@
                      "legendLink": null
                   }
                ],
-               "thresholds": [ ],
+               "thresholds": [],
                "timeFrom": null,
                "timeShift": null,
                "title": "Memory (workingset)",
@@ -211,7 +211,7 @@
                   "mode": "time",
                   "name": null,
                   "show": true,
-                  "values": [ ]
+                  "values": []
                },
                "yaxes": [
                   {
@@ -233,7 +233,7 @@
                ]
             },
             {
-               "aliasColors": { },
+               "aliasColors": {},
                "bars": false,
                "dashLength": 10,
                "dashes": false,
@@ -251,13 +251,13 @@
                },
                "lines": true,
                "linewidth": 1,
-               "links": [ ],
+               "links": [],
                "nullPointMode": "null as zero",
                "percentage": false,
                "pointradius": 5,
                "points": false,
                "renderer": "flot",
-               "seriesOverrides": [ ],
+               "seriesOverrides": [],
                "spaceLength": 10,
                "span": 4,
                "stack": false,
@@ -270,7 +270,7 @@
                      "legendLink": null
                   }
                ],
-               "thresholds": [ ],
+               "thresholds": [],
                "timeFrom": null,
                "timeShift": null,
                "title": "Memory (go heap inuse)",
@@ -283,7 +283,7 @@
                   "mode": "time",
                   "name": null,
                   "show": true,
-                  "values": [ ]
+                  "values": []
                },
                "yaxes": [
                   {
@@ -317,7 +317,7 @@
          "height": "250px",
          "panels": [
             {
-               "aliasColors": { },
+               "aliasColors": {},
                "bars": false,
                "dashLength": 10,
                "dashes": false,
@@ -335,13 +335,13 @@
                },
                "lines": true,
                "linewidth": 0,
-               "links": [ ],
+               "links": [],
                "nullPointMode": "null as zero",
                "percentage": false,
                "pointradius": 5,
                "points": false,
                "renderer": "flot",
-               "seriesOverrides": [ ],
+               "seriesOverrides": [],
                "spaceLength": 10,
                "span": 6,
                "stack": true,
@@ -354,7 +354,7 @@
                      "legendLink": null
                   }
                ],
-               "thresholds": [ ],
+               "thresholds": [],
                "timeFrom": null,
                "timeShift": null,
                "title": "Receive bandwidth",
@@ -369,7 +369,7 @@
                   "mode": "time",
                   "name": null,
                   "show": true,
-                  "values": [ ]
+                  "values": []
                },
                "yaxes": [
                   {
@@ -391,7 +391,7 @@
                ]
             },
             {
-               "aliasColors": { },
+               "aliasColors": {},
                "bars": false,
                "dashLength": 10,
                "dashes": false,
@@ -409,13 +409,13 @@
                },
                "lines": true,
                "linewidth": 0,
-               "links": [ ],
+               "links": [],
                "nullPointMode": "null as zero",
                "percentage": false,
                "pointradius": 5,
                "points": false,
                "renderer": "flot",
-               "seriesOverrides": [ ],
+               "seriesOverrides": [],
                "spaceLength": 10,
                "span": 6,
                "stack": true,
@@ -428,7 +428,7 @@
                      "legendLink": null
                   }
                ],
-               "thresholds": [ ],
+               "thresholds": [],
                "timeFrom": null,
                "timeShift": null,
                "title": "Transmit bandwidth",
@@ -443,7 +443,7 @@
                   "mode": "time",
                   "name": null,
                   "show": true,
-                  "values": [ ]
+                  "values": []
                },
                "yaxes": [
                   {
@@ -477,7 +477,7 @@
          "height": "250px",
          "panels": [
             {
-               "aliasColors": { },
+               "aliasColors": {},
                "bars": false,
                "dashLength": 10,
                "dashes": false,
@@ -495,13 +495,13 @@
                },
                "lines": true,
                "linewidth": 0,
-               "links": [ ],
+               "links": [],
                "nullPointMode": "null as zero",
                "percentage": false,
                "pointradius": 5,
                "points": false,
                "renderer": "flot",
-               "seriesOverrides": [ ],
+               "seriesOverrides": [],
                "spaceLength": 10,
                "span": 6,
                "stack": true,
@@ -514,7 +514,7 @@
                      "legendLink": null
                   }
                ],
-               "thresholds": [ ],
+               "thresholds": [],
                "timeFrom": null,
                "timeShift": null,
                "title": "Disk writes",
@@ -529,7 +529,7 @@
                   "mode": "time",
                   "name": null,
                   "show": true,
-                  "values": [ ]
+                  "values": []
                },
                "yaxes": [
                   {
@@ -551,7 +551,7 @@
                ]
             },
             {
-               "aliasColors": { },
+               "aliasColors": {},
                "bars": false,
                "dashLength": 10,
                "dashes": false,
@@ -569,13 +569,13 @@
                },
                "lines": true,
                "linewidth": 0,
-               "links": [ ],
+               "links": [],
                "nullPointMode": "null as zero",
                "percentage": false,
                "pointradius": 5,
                "points": false,
                "renderer": "flot",
-               "seriesOverrides": [ ],
+               "seriesOverrides": [],
                "spaceLength": 10,
                "span": 6,
                "stack": true,
@@ -588,7 +588,7 @@
                      "legendLink": null
                   }
                ],
-               "thresholds": [ ],
+               "thresholds": [],
                "timeFrom": null,
                "timeShift": null,
                "title": "Disk reads",
@@ -603,7 +603,7 @@
                   "mode": "time",
                   "name": null,
                   "show": true,
-                  "values": [ ]
+                  "values": []
                },
                "yaxes": [
                   {
@@ -637,7 +637,7 @@
          "height": "250px",
          "panels": [
             {
-               "aliasColors": { },
+               "aliasColors": {},
                "bars": false,
                "dashLength": 10,
                "dashes": false,
@@ -655,13 +655,13 @@
                },
                "lines": true,
                "linewidth": 1,
-               "links": [ ],
+               "links": [],
                "nullPointMode": "null as zero",
                "percentage": false,
                "pointradius": 5,
                "points": false,
                "renderer": "flot",
-               "seriesOverrides": [ ],
+               "seriesOverrides": [],
                "spaceLength": 10,
                "span": 12,
                "stack": false,
@@ -674,7 +674,7 @@
                      "legendLink": null
                   }
                ],
-               "thresholds": [ ],
+               "thresholds": [],
                "timeFrom": null,
                "timeShift": null,
                "title": "Disk space utilization",
@@ -689,7 +689,7 @@
                   "mode": "time",
                   "name": null,
                   "show": true,
-                  "values": [ ]
+                  "values": []
                },
                "yaxes": [
                   {
@@ -734,7 +734,7 @@
             "hide": 0,
             "label": "Data source",
             "name": "datasource",
-            "options": [ ],
+            "options": [],
             "query": "prometheus",
             "refresh": 1,
             "regex": "",
@@ -752,13 +752,13 @@
             "label": "cluster",
             "multi": false,
             "name": "cluster",
-            "options": [ ],
+            "options": [],
             "query": "label_values(cortex_build_info, cluster)",
             "refresh": 1,
             "regex": "",
             "sort": 1,
             "tagValuesQuery": "",
-            "tags": [ ],
+            "tags": [],
             "tagsQuery": "",
             "type": "query",
             "useTags": false
@@ -775,13 +775,13 @@
             "label": "namespace",
             "multi": false,
             "name": "namespace",
-            "options": [ ],
+            "options": [],
             "query": "label_values(cortex_build_info{cluster=~\"$cluster\"}, namespace)",
             "refresh": 1,
             "regex": "",
             "sort": 1,
             "tagValuesQuery": "",
-            "tags": [ ],
+            "tags": [],
             "tagsQuery": "",
             "type": "query",
             "useTags": false

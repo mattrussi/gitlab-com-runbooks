@@ -143,16 +143,7 @@ validate-mimir-rules:
 
 .PHONY: generate-mixins
 generate-mixins:
-	@for file in $$(find mimir-rules -name "mixin.libsonnet" ! -path "*/vendor/*"); do \
-		( \
-			cd $$(dirname $${file}); \
-			jb update; \
-			jsonnet -J vendor -e '(import "mixin.libsonnet").prometheusRules' | gojsontoyaml > rules.yaml; \
-			jsonnet -J vendor -e '(import "mixin.libsonnet").prometheusAlerts' | gojsontoyaml > alerts.yaml; \
-			rm -rf dashboards && mkdir -p dashboards; \
-			jsonnet -J vendor -e '(import "mixin.libsonnet").grafanaDashboards' -m dashboards;  \
-		) \
-    done
+	./scripts/generate-mixins.sh
 
 # Ensure that you have Graphviz and Python installed
 # Instructions at https://diagrams.mingrammer.com/docs/getting-started/installation
