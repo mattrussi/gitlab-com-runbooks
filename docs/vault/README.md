@@ -25,6 +25,7 @@
 
 * [../certificates/chef_hybrid.md](../certificates/chef_hybrid.md)
 * [../certificates/chef_vault.md](../certificates/chef_vault.md)
+* [../certificates/cloudflare.md](../certificates/cloudflare.md)
 * [../certificates/gcp.md](../certificates/gcp.md)
 * [../certificates/gkms.md](../certificates/gkms.md)
 * [Cloudflare for the on-call](../cloudflare/oncall.md)
