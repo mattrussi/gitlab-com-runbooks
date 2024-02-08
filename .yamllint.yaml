@@ -3,6 +3,7 @@ extends: default
 
 ignore: |
   vendor/
+  mimir-rules/
 
 rules:
   document-start: disable
