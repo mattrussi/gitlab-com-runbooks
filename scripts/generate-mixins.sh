@@ -8,7 +8,7 @@ mixtool is currently not available through asdf, please install using:
 
 \`go install github.com/monitoring-mixins/mixtool/cmd/mixtool@main\`
 
-For more information on mixins, consult the README.md
+For more information on mixins, consult the docs/monitoring/mixins.md readme in this repo.
 EOF
 fi
 

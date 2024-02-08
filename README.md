@@ -202,6 +202,7 @@ During an incident, we have [roles defined in the handbook](https://about.gitlab
 - [Working with Prometheus](monitoring/prometheus.md)
 - [Upgrade Prometheus and exporters](docs/monitoring/upgrades.md)
 - [Use mtail to capture metrics from logs](docs/uncategorized/mtail.md)
+- [Mixins](docs/monitoring/mixins.md)
 
 ### CI
 

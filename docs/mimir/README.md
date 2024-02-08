@@ -16,6 +16,7 @@
 ## Troubleshooting Pointers
 
 * [How to resize Persistent Volumes in Kubernetes](../kube/k8s-pvc-resize.md)
+* [Mixins](../monitoring/mixins.md)
 <!-- END_MARKER -->
 
 <!-- ## Summary -->

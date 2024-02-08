@@ -34,6 +34,7 @@
 * [Accessing a GKE Alertmanager](alerts_gke.md)
 * [Alerting](alerts_manual.md)
 * [An impatient SRE's guide to deleting alerts](deleting-alerts.md)
+* [Mixins](mixins.md)
 * [prometheus-failed-compactions.md](prometheus-failed-compactions.md)
 * [Prometheus pod crashlooping](prometheus-pod-crashlooping.md)
 * [Thanos Compact](thanos-compact.md)
