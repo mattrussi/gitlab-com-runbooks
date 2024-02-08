@@ -7,7 +7,7 @@ metricsCatalog.serviceDefinition(
     type='glgo',
     team='container_registry',
     apdexScore=0.98,
-    errorRatio=0.98,
+    errorRatio=0.999,
     apdexSatisfiedThreshold="1024"
   )
 )
