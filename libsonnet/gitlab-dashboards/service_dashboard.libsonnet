@@ -69,6 +69,7 @@ local overviewDashboard(
   environmentSelectorHash=defaultEnvironmentSelector,
   saturationEnvironmentSelectorHash=defaultEnvironmentSelector,
   omitEnvironmentDropdown=false,
+  includeStandardEnvironmentAnnotations=true,
 
   // Features
   showProvisioningDetails=true,
@@ -93,6 +94,7 @@ local overviewDashboard(
       title,
       uid=uid,
       tags=['gitlab', 'type:' + type, type, 'service overview'],
+      includeStandardEnvironmentAnnotations=includeStandardEnvironmentAnnotations,
       includeEnvironmentTemplate=!omitEnvironmentDropdown && std.objectHas(environmentStageSelectorHash, 'environment'),
     )
     .addPanels(
