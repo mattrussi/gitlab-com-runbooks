@@ -2530,3 +2530,25 @@ services:
       monitors:
         grafana_folder:
         primary_grafana_dashboard:
+
+  - name: glgo
+    tier: sv
+    friendly_name: Identity layer service for the Google Cloud integration
+    label: glgo
+    teams:
+      - container_registry
+    owner: container_registry
+    technical:
+      project:
+        - https://gitlab.com/gitlab-org/architecture/gitlab-gcp-integration/glgo
+      documents:
+        architecture: https://gitlab.com/gitlab-org/architecture/gitlab-gcp-integration/design-doc#high-level-architecture
+        service:
+          - https://gitlab.com/gitlab-org/architecture/gitlab-gcp-integration/glgo/-/blob/main/README.md
+        readiness_review:
+      logging:
+        - name: glgo
+          permalink: https://console.cloud.google.com/run/detail/us-east1/glgo/logs?project=gitlab-runway-production
+    observability:
+      monitors:
+        primary_grafana_dashboard: glgo-main/glgo-overview
