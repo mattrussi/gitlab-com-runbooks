@@ -18,7 +18,7 @@ basic.dashboard(
     basic.heatmap(
       title='Routing latency (success)',
       description='Time it takes kas to find a suitable reverse tunnel from an agent',
-      query='sum by (le) (rate(k8s_api_proxy_routing_duration_seconds_bucket{%s, status="success"}[$__rate_interval]))' % selectorString,
+      query='sum by (le) (rate(tunnel_routing_duration_seconds_bucket{%s, status="success"}[$__rate_interval]))' % selectorString,
       dataFormat='tsbuckets',
       color_cardColor='#00ff00',
       legendFormat='__auto',
@@ -26,7 +26,7 @@ basic.dashboard(
     basic.heatmap(
       title='Routing latency (request aborted)',
       description='Time it takes kas to find a suitable reverse tunnel from an agent',
-      query='sum by (le) (rate(k8s_api_proxy_routing_duration_seconds_bucket{%s, status="aborted"}[$__rate_interval]))' % selectorString,
+      query='sum by (le) (rate(tunnel_routing_duration_seconds_bucket{%s, status="aborted"}[$__rate_interval]))' % selectorString,
       dataFormat='tsbuckets',
       color_cardColor='#0000ff',
       legendFormat='__auto',
@@ -35,7 +35,7 @@ basic.dashboard(
       title='Routing request timed out',
       description='CI tunnel request routing took longer than 20s',
       query=|||
-        sum (increase(k8s_api_proxy_routing_timeout_total{%s}[$__rate_interval]))
+        sum (increase(tunnel_routing_timeout_total{%s}[$__rate_interval]))
       ||| % selectorString,
       yAxisLabel='requests',
       legend_show=false,
