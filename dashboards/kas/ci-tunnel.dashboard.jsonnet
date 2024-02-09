@@ -35,7 +35,7 @@ basic.dashboard(
       title='Routing request timed out',
       description='CI tunnel request routing took longer than 20s',
       query=|||
-        sum (increase(k8s_api_proxy_routing_timeout_total{%s}[$__rate_interval]))
+        sum (increase(tunnel_routing_timeout_total{%s}[$__rate_interval]))
       ||| % selectorString,
       yAxisLabel='requests',
       legend_show=false,
