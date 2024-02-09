@@ -104,6 +104,14 @@ teams:
   ignored_components:
   - graphql_query
 
+- name: runner_saas
+  product_stage_group: runner_saas
+  slack_alerts_channel: alerts-ci-cd
+  send_error_budget_weekly_to_slack: true
+  slack_error_budget_channel: ci-section
+  ignored_components:
+  - graphql_query
+
 # From https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/344
 - name: gitlab-pages
   slack_alerts_channel: gitlab-pages
