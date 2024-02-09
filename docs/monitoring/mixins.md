@@ -2,7 +2,7 @@
 
 Mixins are a way to bundle together grafana dashboards, prometheus alerts, and rules required for a specific service or piece of software.
 
-We have Gitab specific mixins that live in https://gitlab.com/gitlab-com/gl-infra/monitoring-mixins/-/tree/main.
+We have Gitab specific mixins that live in the [monitoring-mixins repo](https://gitlab.com/gitlab-com/gl-infra/monitoring-mixins/-/tree/main).
 
 These can be configed, and genereated within or `mimir-rules` directory using a `mixin.libsonnet` configuration file.
 
