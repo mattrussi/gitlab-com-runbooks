@@ -2,9 +2,7 @@
 
 Mixins are a way to bundle together grafana dashboards, prometheus alerts, and rules required for a specific service or piece of software.
 
-
 We have Gitab specific mixins that live in https://gitlab.com/gitlab-com/gl-infra/monitoring-mixins/-/tree/main.
-
 
 These can be configed, and genereated within or `mimir-rules` directory using a `mixin.libsonnet` configuration file.
 
@@ -12,12 +10,8 @@ These can be configed, and genereated within or `mimir-rules` directory using a 
 
 Generating Mimir mixins.
 
-
-We can create a `mixin.libsonnet` in the `mimir-rules/<tenant>/<service>/` directory.
-
-In this case we will use `mimir-rules/metamonitoring/mimir`, where `metamonitoring` is our mimir tenant, and `mimir` is the service we are generating the mixins for.
-
-
+We can create a `mixin.libsonnet` in the `mimir-rules/<tenant>/<service>/` directory.\
+In this case we will use `mimir-rules/metamonitoring/mimir`, where `metamonitoring` is our mimir tenant, and `mimir` is the service we are generating the mixins for.\
 First we can install the jsonnet dependency in our `mimir-rules/metamonitoring/mimir` service directory.
 
 ```bash
@@ -26,7 +20,6 @@ jb install gitlab.com/gitlab-com/gl-infra/monitoring-mixins.git/mixins/mimir@mai
 ```
 
 This grabs the `mimir` mixin jsonnet from the `mixins/` directory in the `gitlab.com/gitlab-com/gl-infra/monitoring-mixins.git` repository.
-
 
 We can then provide any configuration overrides we want to the mixin. The configuration options can be found in the `config.libsonnet` file provided with any mixin.
 
@@ -50,9 +43,6 @@ mimir {
 
 Finally we can run `make generate-mixins`.
 
-
-This will call `mixtool` to generate the templates for us based on the provided configuration.
-
-If you do not have `mixtool`, install it with `gitlab.com/gitlab-com/gl-infra/monitoring-mixins.git`.
-
+This will call `mixtool` to generate the templates for us based on the provided configuration.\
+If you do not have `mixtool`, install it with `gitlab.com/gitlab-com/gl-infra/monitoring-mixins.git`.\
 Currently the tool does not have any package we can install via `asdf`.
