@@ -14,6 +14,9 @@
 
 * []()
 
+## Troubleshooting Pointers
+
+* [How GitLab.com uses Mailgun](mailgun.md)
 <!-- END_MARKER -->
 
 <!-- ## Summary -->

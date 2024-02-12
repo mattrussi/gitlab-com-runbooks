@@ -52,6 +52,7 @@
 * [How to resize Persistent Volumes in Kubernetes](../kube/k8s-pvc-resize.md)
 * [Kubernetes](../kube/kubernetes.md)
 * [Scaling Elastic Cloud Clusters](../logging/scaling.md)
+* [How GitLab.com uses Mailgun](../mailgun/mailgun.md)
 * [Alertmanager Notification Failures](../monitoring/alertmanager-notification-failures.md)
 * [../monitoring/apdex-alerts-guide.md](../monitoring/apdex-alerts-guide.md)
 * [Thanos Query and Stores](../monitoring/thanos-query.md)
