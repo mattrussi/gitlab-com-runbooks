@@ -141,6 +141,10 @@ validate-mimir-rules:
 		mimirtool rules check --rule-dirs="$${dir}"; \
 	done
 
+.PHONY: generate-mixins
+generate-mixins:
+	./scripts/generate-mixins.sh
+
 # Ensure that you have Graphviz and Python installed
 # Instructions at https://diagrams.mingrammer.com/docs/getting-started/installation
 # then install `pip install diagrams`
