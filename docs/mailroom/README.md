@@ -16,6 +16,7 @@
 
 ## Troubleshooting Pointers
 
+* [How GitLab.com uses Mailgun](../mailgun/mailgun.md)
 * [Gitlab.com on Kubernetes](../onboarding/gitlab.com_on_k8s.md)
 * [Diagnosis with Kibana](../onboarding/kibana-diagnosis.md)
 * [A survival guide for SREs to working with Sidekiq at GitLab](../sidekiq/sidekiq-survival-guide-for-sres.md)

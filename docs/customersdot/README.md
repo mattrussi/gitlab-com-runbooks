@@ -18,6 +18,7 @@
 ## Troubleshooting Pointers
 
 * [CustomersDot main troubleshoot documentation](overview.md)
+* [How GitLab.com uses Mailgun](../mailgun/mailgun.md)
 * [../patroni/postgresql-backups-wale-walg.md](../patroni/postgresql-backups-wale-walg.md)
 <!-- END_MARKER -->
 

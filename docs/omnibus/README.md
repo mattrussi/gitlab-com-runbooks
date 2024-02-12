@@ -25,6 +25,7 @@
 * [Gitaly Queuing](../gitaly/gitaly-rate-limiting.md)
 * [Gitaly token rotation](../gitaly/gitaly-token-rotation.md)
 * [../gitlab-com-pkgs/overview.md](../gitlab-com-pkgs/overview.md)
+* [How GitLab.com uses Mailgun](../mailgun/mailgun.md)
 * [Gitlab.com on Kubernetes](../onboarding/gitlab.com_on_k8s.md)
 * [Packagecloud Infrastructure and Backups](../packagecloud/infrastructure.md)
 * [GPG Keys for Package Signing](../packaging/manage-package-signing-keys.md)
