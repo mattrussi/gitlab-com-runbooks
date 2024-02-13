@@ -19,6 +19,7 @@
 
 * [How to detect CI Abuse](../ci-runners/ci-abuse-handling.md)
 * [../ci-runners/ci_pending_builds.md](../ci-runners/ci_pending_builds.md)
+* [ClickHouse Cloud Failure Remediation, Backup & Restore Process](../clickhouse/backup-restore.md)
 * [CustomersDot main troubleshoot documentation](../customersdot/overview.md)
 * [design.gitlab.com Runbook](../design/design-gitlab-com.md)
 * [../elastic/advanced-search-in-gitlab.md](../elastic/advanced-search-in-gitlab.md)
