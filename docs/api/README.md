@@ -24,6 +24,7 @@
 * [../ci-runners/ci_graphs.md](../ci-runners/ci_graphs.md)
 * [../ci-runners/ci_pending_builds.md](../ci-runners/ci_pending_builds.md)
 * [CI runner manager report a high number of errors](../ci-runners/ci_runner_manager_errors.md)
+* [ClickHouse Cloud Failure Remediation, Backup & Restore Process](../clickhouse/backup-restore.md)
 * [Cloudflare Logs](../cloudflare/logging.md)
 * [Cloudflare: Managing Traffic](../cloudflare/managing-traffic.md)
 * [Service Locations](../cloudflare/services-locations.md)
