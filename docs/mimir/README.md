@@ -16,6 +16,7 @@
 ## Troubleshooting Pointers
 
 * [How to resize Persistent Volumes in Kubernetes](../kube/k8s-pvc-resize.md)
+* [Mimir Onboarding](onboarding.md)
 <!-- END_MARKER -->
 
 <!-- ## Summary -->
