@@ -4093,7 +4093,7 @@ groups:
 - interval: 1m
   name: GitLab Saturation Alerts
   rules:
-  - alert: component_saturation_slo_out_of_bounds
+  - alert: component_saturation_slo_out_of_bounds:cpu
     annotations:
       description: |+
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
@@ -4143,7 +4143,7 @@ groups:
       alert_type: cause
       rules_domain: general
       severity: s3
-  - alert: component_saturation_slo_out_of_bounds
+  - alert: component_saturation_slo_out_of_bounds:disk_inodes
     annotations:
       description: |+
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
@@ -4259,7 +4259,7 @@ groups:
       pager: pagerduty
       rules_domain: general
       severity: s2
-  - alert: component_saturation_slo_out_of_bounds
+  - alert: component_saturation_slo_out_of_bounds:disk_space
     annotations:
       description: |+
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
@@ -4363,7 +4363,7 @@ groups:
       pager: pagerduty
       rules_domain: general
       severity: s2
-  - alert: component_saturation_slo_out_of_bounds
+  - alert: component_saturation_slo_out_of_bounds:go_goroutines
     annotations:
       description: |+
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
@@ -4422,7 +4422,7 @@ groups:
       pager: pagerduty
       rules_domain: general
       severity: s2
-  - alert: component_saturation_slo_out_of_bounds
+  - alert: component_saturation_slo_out_of_bounds:go_memory
     annotations:
       description: |+
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
@@ -4480,7 +4480,7 @@ groups:
       alert_type: cause
       rules_domain: general
       severity: s4
-  - alert: component_saturation_slo_out_of_bounds
+  - alert: component_saturation_slo_out_of_bounds:kube_container_cpu_limit
     annotations:
       description: |+
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
@@ -4544,7 +4544,7 @@ groups:
       alert_type: cause
       rules_domain: general
       severity: s4
-  - alert: component_saturation_slo_out_of_bounds
+  - alert: component_saturation_slo_out_of_bounds:kube_container_memory
     annotations:
       description: |+
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
@@ -4594,7 +4594,7 @@ groups:
       alert_type: cause
       rules_domain: general
       severity: s4
-  - alert: component_saturation_slo_out_of_bounds
+  - alert: component_saturation_slo_out_of_bounds:kube_container_rss
     annotations:
       description: |+
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
@@ -4652,7 +4652,7 @@ groups:
       alert_type: cause
       rules_domain: general
       severity: s4
-  - alert: component_saturation_slo_out_of_bounds
+  - alert: component_saturation_slo_out_of_bounds:kube_pool_cpu
     annotations:
       description: |+
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
@@ -4704,7 +4704,7 @@ groups:
       alert_type: cause
       rules_domain: general
       severity: s3
-  - alert: component_saturation_slo_out_of_bounds
+  - alert: component_saturation_slo_out_of_bounds:memory
     annotations:
       description: |+
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
@@ -4750,7 +4750,7 @@ groups:
       alert_type: cause
       rules_domain: general
       severity: s4
-  - alert: component_saturation_slo_out_of_bounds
+  - alert: component_saturation_slo_out_of_bounds:node_schedstat_waiting
     annotations:
       description: |+
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
@@ -4800,7 +4800,7 @@ groups:
       alert_type: cause
       rules_domain: general
       severity: s4
-  - alert: component_saturation_slo_out_of_bounds
+  - alert: component_saturation_slo_out_of_bounds:puma_workers
     annotations:
       description: |+
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
@@ -4855,7 +4855,7 @@ groups:
       pager: pagerduty
       rules_domain: general
       severity: s2
-  - alert: component_saturation_slo_out_of_bounds
+  - alert: component_saturation_slo_out_of_bounds:single_node_cpu
     annotations:
       description: |+
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.

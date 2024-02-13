@@ -118,23 +118,31 @@ local generateSaturationMetadataRulesGroup(
   saturationResources,
   evaluation,
   thanosSelfMonitoring=false,
+  ignoreMetadata=false,  // flag to ignore the saturation metadata, in use by mimir impl. The thanos and prometheus impl. do not ignore them.
       ) =
   local knownEvaluation = assertEvaluationType(evaluation);
   local filtered = filterSaturationDefinitions(saturationResources, knownEvaluation, thanosSelfMonitoring);
   local sloThresholdRecordingRules = std.flatMap(function(key) saturationResources[key].getSLORecordingRuleDefinition(key), filtered);
   local saturationMetadataRecordingRules = std.map(function(key) saturationResources[key].getMetadataRecordingRuleDefinition(key), filtered);
 
-  prepareGroups([{
+  local maxSLOs = {
     // Recording rules defining the soft and hard SLO thresholds
     name: 'GitLab Component Saturation Max SLOs',
     interval: '5m',
     rules: sloThresholdRecordingRules,
-  }, {
-    // Metadata each of the saturation metrics
-    name: 'GitLab Component Saturation Metadata',
-    interval: '5m',
-    rules: saturationMetadataRecordingRules,
-  }], knownEvaluation);
+  };
+  // Drop this when migration to mimir is complete: https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/2834
+  local metadata =
+    if ignoreMetadata
+    then null
+    else {
+      // Metadata each of the saturation metrics
+      name: 'GitLab Component Saturation Metadata',
+      interval: '5m',
+      rules: saturationMetadataRecordingRules,
+    };
+
+  prepareGroups(std.prune([maxSLOs, metadata]), knownEvaluation);
 
 local generateSaturationRulesGroup(
   evaluation,  // 'prometheus', 'thanos' or 'both'
