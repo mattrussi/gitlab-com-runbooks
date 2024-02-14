@@ -103,7 +103,7 @@ local filterServicesForResource(definition, evaluation, thanosSelfMonitoring) =
           assert evaluation == 'thanos' : 'thanos-saturation needs to be globally evaluated in thanos, not %s' % [evaluation];
           type == 'thanos'
         else if evaluation == 'prometheus' then
-          !service.dangerouslyThanosEvaluated && !definition.dangerouslyThanosEvaluated
+          !(service.dangerouslyThanosEvaluated || service.type == 'mimir') && !definition.dangerouslyThanosEvaluated
         else if evaluation == 'thanos' then
           type != 'thanos' && (service.dangerouslyThanosEvaluated || definition.dangerouslyThanosEvaluated)
         else if evaluation == 'both' then

@@ -72,6 +72,8 @@ local groupsForService(service, selector) =
   else
     null;
 
+local filteredServices = std.filter(function(s) s.type != 'mimir', metricsCatalog.services);
+
 separateGlobalRecordingFiles(
   function(selector)
     std.foldl(
@@ -83,7 +85,7 @@ separateGlobalRecordingFiles(
           }
         else
           docs,
-      metricsCatalog.services,
+      filteredServices,
       {},
     )
 )
