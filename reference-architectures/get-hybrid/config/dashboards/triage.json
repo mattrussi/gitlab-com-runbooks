@@ -6542,7 +6542,7 @@
         "multi": false,
         "name": "environment",
         "options": [],
-        "query": "label_values(gitlab_service_ops:rate, environment)",
+        "query": "label_values(gitlab_service_ops:rate_1h, environment)",
         "refresh": 1,
         "regex": "",
         "sort": 1,

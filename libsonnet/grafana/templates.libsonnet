@@ -50,7 +50,7 @@ local library = import 'gitlab-slis/library.libsonnet';
     template.new(
       'environment',
       '$PROMETHEUS_DS',
-      'label_values(gitlab_service_ops:rate, environment)',
+      'label_values(gitlab_service_ops:rate_1h, environment)',
       current='gprd',
       refresh='load',
       sort=1,
@@ -91,7 +91,7 @@ local library = import 'gitlab-slis/library.libsonnet';
     template.new(
       'type',
       '$PROMETHEUS_DS',
-      'label_values(gitlab_service_ops:rate{environment="$environment"}, type)',
+      'label_values(gitlab_service_ops:rate_1h{environment="$environment"}, type)',
       current='web',
       refresh='load',
       sort=1,
@@ -127,7 +127,7 @@ local library = import 'gitlab-slis/library.libsonnet';
     template.new(
       'component',
       '$PROMETHEUS_DS',
-      'label_values(gitlab_component_ops:rate{environment="$environment", type="$type", stage="$stage"}, component)',
+      'label_values(gitlab_component_ops:rate_1h{environment="$environment", type="$type", stage="$stage"}, component)',
       current='',
       refresh='load',
       sort=1,
