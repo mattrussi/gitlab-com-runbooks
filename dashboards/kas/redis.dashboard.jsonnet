@@ -6,8 +6,6 @@ local selectors = import 'promql/selectors.libsonnet';
 local selector = { env: '$environment', stage: '$stage', type: 'kas' };
 local selectorString = selectors.serializeHash(selector);
 
-local envSelector = { env: '$environment', type: 'kas' };
-
 basic.dashboard(
   'Redis metrics',
   tags=[
@@ -88,5 +86,40 @@ basic.dashboard(
     ], startRow=1000),
     collapse=false,
     startRow=0
+  )
+)
+.addPanels(
+  layout.titleRowWithPanels(
+    'KAS Redis client metrics',
+    layout.grid([
+        basic.multiTimeseries(
+          title='Number of %(displayName)s agent hash keys GC\'ed' % {displayName: expiringHash['displayName']},
+          description='`%(name)s` - Expiring Hash: number of deleted keys during GC and ScanAndGC' % {name: expiringHash['name']},
+          queries=[
+            {
+              query: |||
+                  sum ( increase(redis_expiring_hash_api_scan_and_gc_deleted_keys_count_total{expiring_hash_name="%(name)s", %(selector)s}[$__rate_interval]) )
+              ||| % {name: expiringHash['name'], selector: selectorString},
+              legendFormat: 'ScanAndGC',
+            },
+            {
+              query: |||
+                  sum ( increase(redis_expiring_hash_gc_deleted_keys_count_total{expiring_hash_name="%(name)s", %(selector)s}[$__rate_interval]) )
+              ||| % {name: expiringHash['name'], selector: selectorString},
+              legendFormat: 'GC',
+            }
+          ],
+          legend_show=true,
+          linewidth=2,
+          stack=false,
+        ) for expiringHash in [
+          {name: 'tunnels_by_agent_id', displayName: 'tunnels_by_agent_id'},
+          {name: 'connected_agents', displayName: 'connected agents'},
+          {name: 'connections_by_agent_id', displayName: 'connections by agent id'},
+          {name: 'connections_by_project_id', displayName: 'connections by project id'}
+        ]
+    ], startRow=3000),
+    collapse=false,
+    startRow=2000
   )
 )
