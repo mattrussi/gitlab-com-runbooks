@@ -1,0 +1,14 @@
+groups:
+- name: analytics-stack.rules
+  rules:
+  - alert: VectorErrorsTooHigh
+    expr: stackdriver_k_8_s_container_logging_googleapis_com_user_vector_errors > 2
+    for: 5m
+    labels:
+      alert_type: symptom
+      severity: s4
+      team: product_analytics
+    annotations:
+      title: Vector errors
+      description: >
+        Too many vector errors in cluster {{ $labels.cluster }} have been occurring for the last 10 minutes.
