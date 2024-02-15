@@ -53,6 +53,9 @@ teams:
   url: https://about.gitlab.com/handbook/engineering/development/analytics/product-analytics/
   slack_channel: g_monitor_product_analytics
   slack_alerts_channel: g_monitor_product_analytics_infra_alerts
+  alerts:
+  - prod-1
+  - prd-278964
 
 - name: release
   slack_channel: g_release
