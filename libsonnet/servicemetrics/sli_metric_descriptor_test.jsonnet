@@ -10,6 +10,7 @@ local combined = metricsCatalog.combined;
 local rateMetric = metricsCatalog.rateMetric;
 local derivMetric = metricsCatalog.derivMetric;
 local gaugeMetric = metricsCatalog.gaugeMetric;
+local customRateQuery = metricsCatalog.customRateQuery;
 local combinedSli = import './combined_service_level_indicator_definition.libsonnet';
 
 test.suite({
@@ -502,6 +503,35 @@ test.suite({
   ),
   testMetricNamesAndSelectorsGaugeMetric: testMetricsDescriptorSelectors(
     testSliWithGaugeMetric,
+    expect={
+      some_total_count: {
+        type: { oneOf: ['foo'] },
+        job: { oneOf: ['bar'] },
+      },
+    },
+  ),
+
+  local testSliWithCustomRateQueryMetric = sliDefinition.serviceLevelIndicatorDefinition(testSliBase {
+    requestRate: customRateQuery(
+      query=|||
+        sum by (environment) (
+          avg_over_time(
+            %(metric)s{%(selector)s}[%(burnRate)s]
+            )
+          )
+      |||,
+      metric='some_total_count',
+      selector={ type: 'foo', job: 'bar' }
+    ),
+  }).initServiceLevelIndicatorWithName('test_sli', {}),
+  testMetricNamesAndLabelsCustomRateQueryMetric: testMetricsDescriptorAggregationLabels(
+    testSliWithCustomRateQueryMetric,
+    expect={
+      some_total_count: ['job', 'type'],
+    },
+  ),
+  testMetricNamesAndSelectorsCustomRateQueryMetric: testMetricsDescriptorSelectors(
+    testSliWithCustomRateQueryMetric,
     expect={
       some_total_count: {
         type: { oneOf: ['foo'] },

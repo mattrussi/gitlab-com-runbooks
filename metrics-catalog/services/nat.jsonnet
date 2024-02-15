@@ -16,6 +16,11 @@ metricsCatalog.serviceDefinition({
     kubernetes: false,
     vms: false,
   },
+  local baseSelector = {
+    metric_prefix: 'router.googleapis.com/nat',
+    ip_protocol: '6',
+    project_id: { oneOf: ['gitlab-staging-1', 'gitlab-production'] },
+  },
   serviceLevelIndicators: {
     sent_tcp_packets: {
       userImpacting: true,
@@ -29,22 +34,30 @@ metricsCatalog.serviceDefinition({
         High error rates could lead to network issues, including application errors, container fetch failures, etc.
       |||,
 
-      requestRate: customRateQuery(|||
-        sum by (environment) (
-          avg_over_time(
-            stackdriver_nat_gateway_router_googleapis_com_nat_sent_packets_count{metric_prefix="router.googleapis.com/nat",  ip_protocol="6", project_id=~"gitlab-staging-1|gitlab-production"}[%(burnRate)s]
+      requestRate: customRateQuery(
+        query=|||
+          sum by (environment) (
+            avg_over_time(
+              %(metric)s{%(selector)s}[%(burnRate)s]
+            )
           )
-        )
-      |||),
+        |||,
+        metric='stackdriver_nat_gateway_router_googleapis_com_nat_sent_packets_count',
+        selector=baseSelector
+      ),
 
       // The error rate counts the number of dropped sent TCP packets by the Cloud NAT gateway
-      errorRate: customRateQuery(|||
-        sum by (environment) (
-          avg_over_time(
-            stackdriver_nat_gateway_router_googleapis_com_nat_dropped_sent_packets_count{metric_prefix="router.googleapis.com/nat",  ip_protocol="6", project_id=~"gitlab-staging-1|gitlab-production"}[%(burnRate)s]
+      errorRate: customRateQuery(
+        query=|||
+          sum by (environment) (
+            avg_over_time(
+              %(metric)s{%(selector)s}[%(burnRate)s]
+            )
           )
-        )
-      |||),
+        |||,
+        metric='stackdriver_nat_gateway_router_googleapis_com_nat_dropped_sent_packets_count',
+        selector=baseSelector
+      ),
 
       significantLabels: [],
 
@@ -71,22 +84,30 @@ metricsCatalog.serviceDefinition({
         High error rates could lead to network issues, including application errors, container fetch failures, etc.
       |||,
 
-      requestRate: customRateQuery(|||
-        sum by (environment) (
-          avg_over_time(
-            stackdriver_nat_gateway_router_googleapis_com_nat_received_packets_count{metric_prefix="router.googleapis.com/nat",  ip_protocol="6", project_id=~"gitlab-staging-1|gitlab-production"}[%(burnRate)s]
+      requestRate: customRateQuery(
+        query=|||
+          sum by (environment) (
+            avg_over_time(
+              %(metric)s{%(selector)s}[%(burnRate)s]
+            )
           )
-        )
-      |||),
+        |||,
+        metric='stackdriver_nat_gateway_router_googleapis_com_nat_received_packets_count',
+        selector=baseSelector
+      ),
 
       // The error rate counts the number of dropped received TCP packets by the Cloud NAT gateway
-      errorRate: customRateQuery(|||
-        sum by (environment) (
-          avg_over_time(
-            stackdriver_nat_gateway_router_googleapis_com_nat_dropped_received_packets_count{metric_prefix="router.googleapis.com/nat",  ip_protocol="6", project_id=~"gitlab-staging-1|gitlab-production"}[%(burnRate)s]
+      errorRate: customRateQuery(
+        query=|||
+          sum by (environment) (
+            avg_over_time(
+              %(metric)s{%(selector)s}[%(burnRate)s]
+            )
           )
-        )
-      |||),
+        |||,
+        metric='stackdriver_nat_gateway_router_googleapis_com_nat_dropped_received_packets_count',
+        selector=baseSelector
+      ),
 
       significantLabels: [],
 

@@ -114,21 +114,29 @@ metricsCatalog.serviceDefinition({
 
       // Unfortunately Log-Based Metrics aren't counters, so we need to fill-in-the-gaps when
       // events don't occur. We use the `group by` term for these cases.
-      requestRate: customRateQuery(|||
-        sum by (%(aggregationLabels)s) (
-          avg_over_time(stackdriver_k_8_s_cluster_logging_googleapis_com_user_k_8_s_cluster_autoscaler_scaleup_decisions[%(burnRate)s])
-        )
-        or
-        0 * group by (%(aggregationLabels)s) (
-          avg_over_time(stackdriver_k_8_s_cluster_logging_googleapis_com_user_k_8_s_cluster_autoscaler_scaleup_decisions[6h])
-        )
-      |||),
+      requestRate: customRateQuery(
+        query=|||
+          sum by (%(aggregationLabels)s) (
+            avg_over_time(%(metric)s[%(burnRate)s])
+          )
+          or
+          0 * group by (%(aggregationLabels)s) (
+            avg_over_time(%(metric)s[6h])
+          )
+        |||,
+        metric='stackdriver_k_8_s_cluster_logging_googleapis_com_user_k_8_s_cluster_autoscaler_scaleup_decisions',
+        selector={}
+      ),
 
-      errorRate: customRateQuery(|||
-        sum by (%(aggregationLabels)s) (
-          avg_over_time(stackdriver_k_8_s_cluster_logging_googleapis_com_user_k_8_s_cluster_autoscaler_scaleup_errors[%(burnRate)s])
-        )
-      |||),
+      errorRate: customRateQuery(
+        query=|||
+          sum by (%(aggregationLabels)s) (
+            avg_over_time(%(metric)s[%(burnRate)s])
+          )
+        |||,
+        metric='stackdriver_k_8_s_cluster_logging_googleapis_com_user_k_8_s_cluster_autoscaler_scaleup_errors',
+        selector={}
+      ),
 
       significantLabels: ['cluster_name'],
 
