@@ -5,23 +5,33 @@ require 'yaml'
 require 'pathname'
 
 dir = Pathname.new(File.join(File.dirname(__FILE__), '..')).realpath
-rule_files = %w[rules thanos-rules].flat_map { |rule_dir| Dir.glob(File.join(dir, rule_dir, '*.yml')) }
+rule_files = %w[rules thanos-rules mimir-rules].flat_map { |rule_dir| Dir.glob(File.join(dir, rule_dir, '**', '*.yml')) }
 
 duplicates = {}
+empty_groups_per_file = {}
 
 rule_files.each do |file|
   rule_definitions = YAML.load_file(file)
+
   rule_names = rule_definitions['groups'].map { |definition| definition['name'] }
 
   duplicate_names = rule_names.find_all { |name| rule_names.count(name) > 1 }.uniq
   duplicates[file] = duplicate_names if duplicate_names.any?
+
+  empty_rule_groups = rule_definitions['groups'].select { |group| group['rules'].empty? }
+  empty_groups_per_file[file] = empty_rule_groups if empty_rule_groups.any?
 end
 
 msg = duplicates.map do |filename, duplicate_groups|
   "#{filename} contains duplicate definitions for #{duplicate_groups.inspect}"
-end.join("\n")
+end
 
-warn msg
+msg += empty_groups_per_file.map do |filename, empty_groups|
+  group_names = empty_groups.map { |g| g['name'] }
+  "#{filename} contains empty rule groups: #{group_names.inspect}"
+end
+
+warn msg.join("\n")
 
 if duplicates.any?
   exit 1
