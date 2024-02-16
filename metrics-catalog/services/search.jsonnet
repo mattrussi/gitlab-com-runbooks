@@ -71,5 +71,6 @@ metricsCatalog.serviceDefinition({
     serviceAggregation: false,  // Don't add this to the request rate of the service
     severity: 's3',  // Don't page SREs for this SLI
     shardLevelMonitoring: false,
+    emittedBy: ['ops-gitlab-net', 'sidekiq'],
   }),
 })

@@ -104,9 +104,9 @@ local mergeSelector(from, to) =
           }
         else
           memo { [label]: {} }
-      // if the label doesn't exist in both selectors, we drop the value for that label
+      // if the label doesn't exist in both selectors, we drop the selector for that label
       // otherwise we'll only record a subset of the series for the SLI
-      else memo { [label]: {} },
+      else memo,
     std.setUnion(std.objectFields(normalizedFrom), std.objectFields(normalizedTo)),
     {}
   );

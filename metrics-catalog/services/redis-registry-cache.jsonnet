@@ -41,6 +41,8 @@ metricsCatalog.serviceDefinition(
           selector=registryBaseSelector
         ),
 
+        emittedBy: ['registry'],
+
         significantLabels: ['instance', 'command'],
       },
     },

@@ -3,6 +3,7 @@ local patroniArchetype = import 'service-archetypes/patroni-archetype.libsonnet'
 local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local histogramApdex = metricsCatalog.histogramApdex;
 local rateMetric = metricsCatalog.rateMetric;
+local findServicesWithTag = (import 'servicemetrics/metrics-catalog.libsonnet').findServicesWithTag;
 
 function(
   type,
@@ -49,6 +50,8 @@ function(
           selector=railsBaseSelector { le: '+Inf', db_config_name: db_config_name },
         ),
 
+        emittedBy: findServicesWithTag(tag='rails'),
+
         significantLabels: ['feature_category'],
       },
 
@@ -73,6 +76,8 @@ function(
           counter='gitlab_sql_replica_duration_seconds_bucket',
           selector=railsBaseSelector { le: '+Inf', db_config_name: db_config_name + '_replica' },
         ),
+
+        emittedBy: findServicesWithTag(tag='rails'),
 
         significantLabels: ['feature_category'],
       },

@@ -70,6 +70,8 @@ metricsCatalog.serviceDefinition({
         selector=baseSelector { code: { re: '5..' } }
       ),
 
+      emittedBy: [],  // TODO: Add type label in the source metrics https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/2873
+
       significantLabels: ['scope', 'resources'],
 
       toolingLinks: [
