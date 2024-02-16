@@ -72,45 +72,48 @@ local rulesForServiceForBurnRate(serviceDefinition, burnRate, extraSelector) =
   ]);
   local allMetricsAndSelectors = getMetricsAndSelectors(serviceDefinition);
   local allMetrics = std.setUnion(std.objectFields(allMetricsAndLabels), std.objectFields(allMetricsAndSelectors));
-
-  {
-    name: 'SLI Aggregations: %s - %s burn-rate' % [serviceDefinition.type, burnRate],
-    interval: intervalForDuration.intervalForDuration(burnRate),
-    rules: std.map(
-      function(metricName)
-        local labels = allMetricsAndLabels[metricName];
-        local selector = selectorsUtil.merge(allMetricsAndSelectors[metricName], extraSelector);
-        generateRecordingRulesForMetric(
-          metricName,
-          labels,
-          selector,
-          burnRate,
-          serviceDefinition
-        ),
-      allMetrics,
-    ),
-  };
+  if std.length(allMetrics) > 0 then
+    {
+      name: 'SLI Aggregations: %s - %s burn-rate' % [serviceDefinition.type, burnRate],
+      interval: intervalForDuration.intervalForDuration(burnRate),
+      rules: std.map(
+        function(metricName)
+          local labels = allMetricsAndLabels[metricName];
+          local selector = selectorsUtil.merge(allMetricsAndSelectors[metricName], extraSelector);
+          generateRecordingRulesForMetric(
+            metricName,
+            labels,
+            selector,
+            burnRate,
+            serviceDefinition
+          ),
+        allMetrics,
+      ),
+    } else null;
 
 local rulesForService(serviceDefinition, extraSelector) =
-  [
+  std.prune([
     rulesForServiceForBurnRate(serviceDefinition, burnRate, extraSelector)
     for burnRate in aggregationSet.defaultSourceBurnRates
-  ];
+  ]);
 
 local outputPromYaml(groups) =
   std.manifestYamlDoc({
     groups: groups,
   });
 
-local fileForService(service, extraSelector={}) = {
-  'sli-aggregations':
-    outputPromYaml(
-      rulesForService(
-        service,
-        extraSelector
-      ),
-    ),
-};
+local fileForService(service, extraSelector={}) =
+  local ruleGroups = rulesForService(
+    service,
+    extraSelector
+  );
+  if std.length(ruleGroups) > 1 then
+    {
+      'sli-aggregations':
+        outputPromYaml(ruleGroups),
+    }
+  else
+    {};
 
 std.foldl(
   function(memo, service)
