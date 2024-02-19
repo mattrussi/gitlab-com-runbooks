@@ -413,8 +413,8 @@ teams:
 # Infrastructure Reliability
 
 - name: reliability_general
-  url: https://about.gitlab.com/handbook/engineering/infrastructure/team/reliability/general.html
-  manager: afappiano
+  url: https://handbook.gitlab.com/handbook/engineering/infrastructure/team/ops/
+  manager: kkyrala
   label: team::General
   slack_alerts_channel: g_infra_general_alerts
   send_slo_alerts_to_team_slack_channel: true
