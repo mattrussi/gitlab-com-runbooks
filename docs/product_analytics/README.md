@@ -6,13 +6,18 @@
 
 # Product_analytics Service
 
+* [Service Overview](https://dashboards.gitlab.net/d/https://dashboards.gitlab.net/d/da6cf9ea-d593-41ed-91c5-8536fd15c2fa/fe5b2275-5e92-58a0-a397-d2bdf8cd2e18)
 * **Alerts**: <https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22product_analytics%22%2C%20tier%3D%22sv%22%7D>
 * **Label**: gitlab-com/gl-infra/production~"Service::ProductAnalytics"
 
 ## Logging
 
-* []()
+* [GKE logs](https://cloudlogging.app.goo.gl/QWoCS2kDVF5LaTqG9)
 
+## Troubleshooting Pointers
+
+* [clickhouse-backup-restore.md](clickhouse-backup-restore.md)
+* [ssl-troubleshooting.md](ssl-troubleshooting.md)
 <!-- END_MARKER -->
 
 <!-- ## Summary -->

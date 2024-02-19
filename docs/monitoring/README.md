@@ -57,6 +57,7 @@
 * [../pgbouncer/patroni-consul-postgres-pgbouncer-interactions.md](../pgbouncer/patroni-consul-postgres-pgbouncer-interactions.md)
 * [Add a new PgBouncer instance](../pgbouncer/pgbouncer-add-instance.md)
 * [PgBouncer connection management and troubleshooting](../pgbouncer/pgbouncer-connections.md)
+* [../product_analytics/ssl-troubleshooting.md](../product_analytics/ssl-troubleshooting.md)
 * [Redis Cluster](../redis/redis-cluster.md)
 * [../redis/redis.md](../redis/redis.md)
 * [Container Registry database post-deployment migrations](../registry/db-post-deployment-migrations.md)
