@@ -9,7 +9,7 @@ Follow this runbook when a Product Analytics ClickHouse Cloud database is broken
 ## Check metrics
 
 1. Check the metrics of the failed instance. Can the issue be mitigated in the first instance by increasing the available memory?
-    * https://clickhouse.cloud/service/6ecb3dfd-fbc6-4889-b8b9-c667a2f5082a shows available metrics.
+    * The [Clickhouse metrics dashboard](https://clickhouse.cloud/service/6ecb3dfd-fbc6-4889-b8b9-c667a2f5082a) shows available metrics.
     * Speak to a ClickHouse Cloud administrator to attempt this. (@mwoolf, @dennis should cover most working hours - alternatively try in #f_clickhouse)
 
 ## Speak to ClickHouse Cloud support
@@ -22,7 +22,7 @@ Follow this runbook when a Product Analytics ClickHouse Cloud database is broken
 
 > Only ClickHouse Cloud administrators are permitted to do this.
 
-1. Create a new Admin API key - https://clickhouse.cloud/organizations/8a0d56e3-d8f0-4e70-80bf-a8bf6ee950bd/keys
+1. Create a new [Admin API key](https://clickhouse.cloud/organizations/8a0d56e3-d8f0-4e70-80bf-a8bf6ee950bd/keys)
     * Set an expiration of 1 hour.
 2. Use `cURL` to list all clusters - `curl "https://api.clickhouse.cloud/v1/organizations/8a0d56e3-d8f0-4e70-80bf-a8bf6ee950bd/services" \
    -u '{API KEY}:{API SECRET}'`
@@ -44,7 +44,7 @@ curl -X "POST" "https://api.clickhouse.cloud/v1/organizations/8a0d56e3-d8f0-4e70
 }'
 ```
 
-5. Enable a private connection to the instance using the self-serve information: https://clickhouse.com/docs/en/manage/security/gcp-private-service-connect#add-endpoint-id-to-services-allow-list
+5. Enable a private connection to the instance using the [self-serve information](https://clickhouse.com/docs/en/manage/security/gcp-private-service-connect#add-endpoint-id-to-services-allow-list).
 6. Update the secrets and connection strings in [Vault](https://vault.gitlab.net/) to connect to the new instance. `gitlab-com/gitlab-org/analytics-section/product-analytics/analytics-stack/prd-278964/analytics-stack`
 7. Redeploy the latest version of the analytics-stack.
 8. Check the following on the [main team dashboard](https://dashboards.gitlab.net/d/da6cf9ea-d593-41ed-91c5-8536fd15c2fa/fe5b2275-5e92-58a0-a397-d2bdf8cd2e18?orgId=1&refresh=5m):
