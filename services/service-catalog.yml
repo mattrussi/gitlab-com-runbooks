@@ -465,8 +465,6 @@ services:
           - https://gitlab.com/gitlab-org/analytics-section/product-analytics/analytics-stack/-/blob/main/README.md
           - https://gitlab.com/gitlab-org/analytics-section/product-analytics/devkit/-/blob/main/README.md
       dependencies:
-        - service: product_analytics
-        - service: analytics_configurator
         - service: api
         - service: web
         - service: git
