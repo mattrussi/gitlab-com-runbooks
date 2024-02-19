@@ -473,8 +473,8 @@ services:
         - service: clickhouse
     observability:
       monitors:
-        grafana_folder: https://dashboards.gitlab.net/dashboards/f/bd61e268-eb96-4ed0-be5d-205b3b254da8/product-analytics
-        primary_grafana_dashboard: https://dashboards.gitlab.net/d/da6cf9ea-d593-41ed-91c5-8536fd15c2fa/fe5b2275-5e92-58a0-a397-d2bdf8cd2e18
+        grafana_folder:
+        primary_grafana_dashboard: da6cf9ea-d593-41ed-91c5-8536fd15c2fa/product-analytics-service-health
 
   - name: search
     tier: inf
