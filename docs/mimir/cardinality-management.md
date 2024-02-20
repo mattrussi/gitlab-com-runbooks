@@ -1,6 +1,6 @@
 # Cardinality Management
 
-There is a couple of great articles from Grafana around Cardinality which are worth a read before starting:
+There are a couple of great articles from Grafana around Cardinality which are worth a read before starting:
 
 - [What is cardinality and why does it matter](https://grafana.com/blog/2022/02/15/what-are-cardinality-spikes-and-why-do-they-matter/)
 - [How to manage high cardinality metrics](https://grafana.com/blog/2022/10/20/how-to-manage-high-cardinality-metrics-in-prometheus-and-kubernetes/)
