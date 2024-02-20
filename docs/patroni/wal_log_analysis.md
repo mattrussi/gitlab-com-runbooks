@@ -4,6 +4,7 @@
 Analysis of write-ahead log of a PostgreSQL database cluster can be performed using the `pg_waldump` tool, however there are considerations on how to safely use `pg_waldump` with production data.
 
 Security Compliance guideline regarding WAL analysis:
+
 - **IMPORTANT: you should NEVER download WAL files into your personal workstation**
 - WAL data contain users transactions, hence might contain **red data**
 - Production **red data** should only be handled only within controled environments that follow Gitlab's Security Compliance
@@ -14,11 +15,11 @@ Security Compliance guideline regarding WAL analysis:
 
 This is the procedure to fetech WALs from a GPRD database into a postgres VM in the db-benchmarking environment
 
-### 1. Have wal-g installed on the VM by assigning the `gitlab_walg::default` recipie to the proper Chef role,
+### 1. Have wal-g installed on the VM by assigning the `gitlab_walg::default` recipie to the proper Chef role
 
 - Create the VM or run chef-client on the node to apply the recipie
 
-### 2. Once wal-g is installed, manually configure the GPRD the gcs settings and credentials on it:
+### 2. Once wal-g is installed, manually configure the GPRD the gcs settings and credentials on it
 
 - As `root` create a `/etc/wal-g.d/env-gprd` directory with the same content of `/etc/wal-g.d/env`
 
@@ -47,11 +48,11 @@ This is the procedure to fetech WALs from a GPRD database into a postgres VM in 
   chmod 770 /var/opt/gitlab/wal_restore
   ```
 
-### 3. Download/install the following script in the VM:
+### 3. Download/install the following script in the VM
 
-- https://gitlab.com/gitlab-com/gl-infra/db-migration/-/blob/master/bin/fetch_last_wals_from_gcs_into_dir.sh
-
-### 4. Run the `fetch_last_wals_from_gcs_into_dir.sh` script as gitlab-psql:
+- Download the [fetch_last_wals_from_gcs_into_dir.sh](https://gitlab.com/gitlab-com/gl-infra/db-migration/-/blob/master/bin/fetch_last_wals_from_gcs_into_dir.sh) script
+- Edit any variables in the script according with the environment you want to fetch WALs from
+- Run the `fetch_last_wals_from_gcs_into_dir.sh` script as `gitlab-psql` user
 
 ```
 sudo su - gitlab-psql
@@ -59,7 +60,7 @@ cd /var/opt/gitlab/wal_restore
 /usr/local/bin/fetch_last_wals_from_gcs_into_dir.sh
 ```
 
-### 5. Include the requestor user into the `gitlab-psql` group to grant access into the `/var/opt/gitlab/wal_restore` directory
+### 4. Include the requestor user into the `gitlab-psql` group to grant access into the `/var/opt/gitlab/wal_restore` directory
 
 ```
 usermod -a -G gitlab-psql <user>
@@ -67,10 +68,12 @@ usermod -a -G gitlab-psql <user>
 
 ## Using pg_waldump
 
-Documentation https://www.postgresql.org/docs/current/pgwaldump.html
+Check the documentation for [pg_waldump](https://www.postgresql.org/docs/current/pgwaldump.html)
 
 Example
 
 ```
 /usr/lib/postgresql/14/bin/pg_waldump -p /var/opt/gitlab/wal_restore <startseg>
 ```
+
+Where `<startseg>` is the segment name of the archived WAL, which is the file name of a file in `/var/opt/gitlab/wal_restore`
