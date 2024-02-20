@@ -4,8 +4,8 @@ local oidc = import 'oidc.libjsonnet';
   persistent: {
     'xpack.monitoring.history.duration': '40d',
     'xpack.security.authc.realms.oidc': {
-      google: {
-        order: 2,
+      'google': {
+        'order': 2,
         'rp.client_id': '96344303296-2emvujshc7s46tnqbvphbbvhu840ce9b.apps.googleusercontent.com',
         'rp.response_type': 'code',
         'rp.requested_scopes': ['openid', 'email'],
@@ -16,8 +16,8 @@ local oidc = import 'oidc.libjsonnet';
         'op.userinfo_endpoint': 'https://openidconnect.googleapis.com/v1/userinfo',
         'op.jwkset_path': 'https://www.googleapis.com/oauth2/v3/certs',
         'claims.principal': 'email',
-        'claim_patterns.principal': '^([^@]+)@gitlab\\.com$',
-      },
-    },
+        'claim_patterns.principal': "^([^@]+)@gitlab\\.com$",
+      }
+    }
   },
 }

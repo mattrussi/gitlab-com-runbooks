@@ -1,7 +1,7 @@
 local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
 
 {
-  generalGraphPanel(title, description=null, fill=0, decimals=2, legend_show=false, legend_min=true, legend_current=true)::
+  generalGraphPanel(title, description=null, fill=0, decimals=2, legend_show=false,legend_min=true,legend_current=true)::
     grafana.graphPanel.new(
       title,
       description=description,
@@ -59,7 +59,7 @@ local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libso
       show=false,
     ),
 
-  generalTextPanel(title, content='', transparent=null, description=null)::
+  generalTextPanel(title,content='',transparent=null,description=null)::
     grafana.text.new(
       title,
       span=null,

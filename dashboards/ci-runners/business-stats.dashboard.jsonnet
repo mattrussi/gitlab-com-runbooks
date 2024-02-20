@@ -1,6 +1,6 @@
 local dashboardHelpers = import 'stage-groups/verify-runner/dashboard_helpers.libsonnet';
-local jobGraphs = import 'stage-groups/verify-runner/job_graphs.libsonnet';
 local runnersManagerMatching = import 'stage-groups/verify-runner/runner_managers_matching.libsonnet';
+local jobGraphs = import 'stage-groups/verify-runner/job_graphs.libsonnet';
 local saturationGraphs = import 'stage-groups/verify-runner/saturation_graphs.libsonnet';
 
 dashboardHelpers.dashboard(

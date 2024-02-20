@@ -12,7 +12,7 @@ local nodeSelector = {
   cluster: '$cluster',
 };
 local nodeSelectorSerialized = selectors.serializeHash(nodeSelector);
-local etSelector = nodeSelector { namespace: 'default' };
+local etSelector = nodeSelector + { namespace: 'default' };
 local etSelectorSerialized = selectors.serializeHash(etSelector);
 
 local promQuery = import 'grafana/prom_query.libsonnet';
@@ -100,7 +100,7 @@ basic.dashboard(
 )
 .addPanel(
   row.new(title='Deployed version(s)'),
-  gridPos={ x: 0, y: 0, w: 24, h: 1 }
+  gridPos={x: 0, y: 0, w: 24, h: 1}
 )
 .addPanels(
   layout.grid([
@@ -131,7 +131,7 @@ basic.dashboard(
 )
 .addPanel(
   row.new(title='Deployment Info'),
-  gridPos={ x: 0, y: 100, w: 24, h: 1 }
+  gridPos={x: 0, y: 100, w: 24, h: 1}
 )
 .addPanels(
   layout.grid([
@@ -176,7 +176,7 @@ basic.dashboard(
 )
 .addPanel(
   row.new(title='CPU'),
-  gridPos={ x: 0, y: 200, w: 24, h: 1 }
+  gridPos={x: 0, y: 200, w: 24, h: 1}
 )
 .addPanels(
   layout.grid([
@@ -205,12 +205,12 @@ basic.dashboard(
     )
     .resetYaxes()
     .addYaxis(format='none', label='cores')
-    .addYaxis(format='short', min=0, max=1, show=false),
+    .addYaxis(format='short', min=0, max=1, show=false)
   ], cols=1, rowHeight=10, startRow=201)
 )
 .addPanel(
   row.new(title='Memory'),
-  gridPos={ x: 0, y: 300, w: 24, h: 1 }
+  gridPos={x: 0, y: 300, w: 24, h: 1}
 )
 .addPanels(
   layout.grid([
@@ -229,13 +229,13 @@ basic.dashboard(
 )
 .addPanel(
   row.new(title='Network'),
-  gridPos={ x: 0, y: 400, w: 24, h: 1 }
+  gridPos={x: 0, y: 400, w: 24, h: 1}
 )
 .addPanels(k8sPodsCommon.network(startRow=401))
 .addPanels(k8sPodsCommon.network(startRow=401))
 .addPanel(
   row.new(title='Requests'),
-  gridPos={ x: 0, y: 500, w: 24, h: 1 }
+  gridPos={x: 0, y: 500, w: 24, h: 1}
 )
 .addPanels(
   layout.grid([
@@ -303,7 +303,7 @@ basic.dashboard(
 )
 .addPanel(
   row.new(title='Project-specific telemetry'),
-  gridPos={ x: 0, y: 700, w: 24, h: 1 }
+  gridPos={x: 0, y: 700, w: 24, h: 1}
 )
 .addPanels(
   layout.grid([

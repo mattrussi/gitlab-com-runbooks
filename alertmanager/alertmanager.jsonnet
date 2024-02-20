@@ -342,15 +342,15 @@ local routingTree = Route(
   [
     /* Hackily Blackhole all mimir-related alerts on production for now */
     Route(
-      receiver='blackhole',
+      receiver="blackhole",
       matchers={
-        env: { re: 'gprd|mimir' },
-        ruler_cluster: 'mimir',
+        env: { re: "gprd|mimir" },
+        ruler_cluster: "mimir",
       },
       group_by=groupByType,
       continue=false,
       repeat_interval='3d',
-    ),
+    )
   ] + [
     /* issue alerts do continue */
     Route(

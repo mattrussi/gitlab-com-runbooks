@@ -15,7 +15,7 @@ local runner_saturation(shard, gduid='', slot_soft=0.90, slot_hard=0.95) =
       When this metric is saturated, new CI jobs will queue. When this occurs we should consider adding more runner managers,
       or scaling the runner managers vertically and increasing their maximum runner capacity.
     ||| % shard,
-    grafana_dashboard_uid: if gduid != '' then gduid else 'sat_%s_runners' % std.strReplace(shard, '-', '_'),
+    grafana_dashboard_uid: if gduid != '' then gduid else 'sat_%s_runners' % std.strReplace(shard, "-", "_"),
     resourceLabels: ['instance'],
     staticLabels: {
       type: 'ci-runners',
