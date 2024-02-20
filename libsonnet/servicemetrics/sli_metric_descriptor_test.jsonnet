@@ -116,13 +116,11 @@ test.suite({
     actual: collectMetricNamesAndSelectors(
       [
         { some_total: { backend: { oneOf: ['web'] } } },
-        {},
+        { some_total: { backend: {} } },
       ]
     ),
     expect: {
-      some_total: {
-        backend: { oneOf: ['web'] },
-      },
+      some_total: { backend: {} },
     },
   },
   testCollectMetricNamesAndSelectorsNestedSelector8: {

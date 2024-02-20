@@ -32,7 +32,7 @@ groups:
   - record: sli_aggregations:registry_http_request_duration_seconds_bucket:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,method,product_stage,queue,region,route,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(registry_http_request_duration_seconds_bucket{env="gprd",route=~"/v2/\\{name\\}/blobs/uploads/\\{uuid\\}|/v2/\\{name\\}/manifests/\\{reference\\}",type=~"registry"}[5m] offset 30s)
+        rate(registry_http_request_duration_seconds_bucket{env="gprd",type=~"registry"}[5m] offset 30s)
       )
   - record: sli_aggregations:registry_http_request_duration_seconds_count:rate_5m
     expr: |
@@ -95,7 +95,7 @@ groups:
   - record: sli_aggregations:registry_http_request_duration_seconds_bucket:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,method,product_stage,queue,region,route,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(registry_http_request_duration_seconds_bucket{env="gprd",route=~"/v2/\\{name\\}/blobs/uploads/\\{uuid\\}|/v2/\\{name\\}/manifests/\\{reference\\}",type=~"registry"}[30m] offset 30s)
+        rate(registry_http_request_duration_seconds_bucket{env="gprd",type=~"registry"}[30m] offset 30s)
       )
   - record: sli_aggregations:registry_http_request_duration_seconds_count:rate_30m
     expr: |
@@ -158,7 +158,7 @@ groups:
   - record: sli_aggregations:registry_http_request_duration_seconds_bucket:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,method,product_stage,queue,region,route,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(registry_http_request_duration_seconds_bucket{env="gprd",route=~"/v2/\\{name\\}/blobs/uploads/\\{uuid\\}|/v2/\\{name\\}/manifests/\\{reference\\}",type=~"registry"}[1h] offset 30s)
+        rate(registry_http_request_duration_seconds_bucket{env="gprd",type=~"registry"}[1h] offset 30s)
       )
   - record: sli_aggregations:registry_http_request_duration_seconds_count:rate_1h
     expr: |
