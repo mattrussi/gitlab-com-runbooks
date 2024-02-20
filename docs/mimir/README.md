@@ -58,7 +58,7 @@ Start with the [cardinality-management readme](./cardinality-management.md) to h
 
 We deploy in the [microservices mode](https://grafana.com/docs/mimir/latest/references/architecture/deployment-modes/#microservices-mode) via [helmfiles](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/tree/master/releases/mimir).
 
-There are [additional GCP components](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/blob/master/releases/mimir/values.yaml.gotmpl#L506) deployed via the helm chart using [config-connector](https://cloud.google.com/config-connector/docs/overview).
+There are [additional GCP components](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/blob/c2ad0ca4a1e4fe85476cfb8601a0f4fa4ee4f54c/releases/mimir/values.yaml.gotmpl#L465) deployed via the helm chart using [config-connector](https://cloud.google.com/config-connector/docs/overview).
 
 This includes storage buckets and IAM policies. These componets are deployed to the `gitlab-observability` GCP project, as this keeps the config connector permissions scoped and blast radius limited to the observability services.
 
