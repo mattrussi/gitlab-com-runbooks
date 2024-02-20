@@ -12,8 +12,7 @@ local staticLabelsForAggregation(serviceDefinition, sliDefinition, aggregationLa
   else baseLabels;
 
 // Generates apdex weight recording rules for a component definition
-
-local generateApdexRules(burnRate, aggregationSet, sliDefinition, recordingRuleStaticLabels, extraSourceSelector) =
+local generateApdexRules(burnRate, aggregationSet, sliDefinition, recordingRuleStaticLabels, extraSourceSelector, config) =
   local apdexSuccessRateRecordingRuleName = aggregationSet.getApdexSuccessRateMetricForBurnRate(burnRate);
   local apdexWeightRecordingRuleName = aggregationSet.getApdexWeightMetricForBurnRate(burnRate);
 
@@ -23,11 +22,12 @@ local generateApdexRules(burnRate, aggregationSet, sliDefinition, recordingRuleS
       aggregationSet=aggregationSet,
       recordingRuleStaticLabels=recordingRuleStaticLabels,
       selector=extraSourceSelector,
+      config=config,
     )
   else
     [];
 
-local generateRequestRateRules(burnRate, aggregationSet, sliDefinition, recordingRuleStaticLabels, extraSourceSelector) =
+local generateRequestRateRules(burnRate, aggregationSet, sliDefinition, recordingRuleStaticLabels, extraSourceSelector, config) =
   local requestRateRecordingRuleName = aggregationSet.getOpsRateMetricForBurnRate(burnRate);
   if requestRateRecordingRuleName != null then
     sliDefinition.generateRequestRateRecordingRules(
@@ -35,11 +35,12 @@ local generateRequestRateRules(burnRate, aggregationSet, sliDefinition, recordin
       aggregationSet=aggregationSet,
       recordingRuleStaticLabels=recordingRuleStaticLabels,
       selector=extraSourceSelector,
+      config=config,
     )
   else
     [];
 
-local generateErrorRateRules(burnRate, aggregationSet, sliDefinition, recordingRuleStaticLabels, extraSourceSelector) =
+local generateErrorRateRules(burnRate, aggregationSet, sliDefinition, recordingRuleStaticLabels, extraSourceSelector, config) =
   local errorRateRecordingRuleName = aggregationSet.getErrorRateMetricForBurnRate(burnRate);
   if errorRateRecordingRuleName != null then
     sliDefinition.generateErrorRateRecordingRules(
@@ -47,12 +48,13 @@ local generateErrorRateRules(burnRate, aggregationSet, sliDefinition, recordingR
       aggregationSet=aggregationSet,
       recordingRuleStaticLabels=recordingRuleStaticLabels,
       selector=extraSourceSelector,
+      config=config,
     )
   else
     [];
 
 // Generates the recording rules given a component definition
-local generateRecordingRulesForComponent(burnRate, aggregationSet, serviceDefinition, sliDefinition, extraSourceSelector) =
+local generateRecordingRulesForComponent(burnRate, aggregationSet, serviceDefinition, sliDefinition, extraSourceSelector, config) =
   local recordingRuleStaticLabels = staticLabelsForAggregation(serviceDefinition, sliDefinition, aggregationSet.labels);
 
   std.flatMap(
@@ -61,7 +63,8 @@ local generateRecordingRulesForComponent(burnRate, aggregationSet, serviceDefini
       aggregationSet=aggregationSet,
       sliDefinition=sliDefinition,
       recordingRuleStaticLabels=recordingRuleStaticLabels,
-      extraSourceSelector=extraSourceSelector
+      extraSourceSelector=extraSourceSelector,
+      config=config,
     ),
     [
       generateApdexRules,
@@ -77,10 +80,15 @@ local generateRecordingRulesForComponent(burnRate, aggregationSet, serviceDefini
     burnRate,
     aggregationSet,
     extraSourceSelector={},
+    config={},
   )::
     {
+      config: config,
       // Generates the recording rules given a service definition
       generateRecordingRulesForService(serviceDefinition, serviceLevelIndicators=serviceDefinition.listServiceLevelIndicators())::
+        // TODO: upscale longer burn rates from what is already recorded in the
+        // aggregation set.
+        // https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/2898
         std.flatMap(
           function(sliDefinition) generateRecordingRulesForComponent(
             burnRate=burnRate,
@@ -88,6 +96,7 @@ local generateRecordingRulesForComponent(burnRate, aggregationSet, serviceDefini
             serviceDefinition=serviceDefinition,
             sliDefinition=sliDefinition,
             extraSourceSelector=extraSourceSelector,
+            config=self.config,
           ),
           serviceLevelIndicators,
         ),

@@ -3,10 +3,11 @@ local generateApdexAttributionQuery = (import './lib/counter-apdex-attribution-q
 local aggregations = import 'promql/aggregations.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
 local strings = import 'utils/strings.libsonnet';
-local validateMetric = (import '../validation.libsonnet').validateMetric;
+local metric = import '../metric.libsonnet';
+local recordingRuleRegistry = import 'servicemetrics/recording-rule-registry.libsonnet';
 local metricLabelsSelectorsMixin = (import '../metrics-mixin.libsonnet').metricLabelsSelectorsMixin;
 
-local transformErrorRateToSuccessRate(errorRateMetric, operationRateMetric, selector, rangeInterval, aggregationLabels, useRecordingRuleRegistry, offset) =
+local transformErrorRateToSuccessRate(errorRateMetric, operationRateMetric, selector, rangeInterval, aggregationLabels, recordingRuleRegistry, offset) =
   |||
     %(operationRate)s - (
       %(errorRate)s or
@@ -17,7 +18,7 @@ local transformErrorRateToSuccessRate(errorRateMetric, operationRateMetric, sele
       operationRateMetric,
       selector,
       rangeInterval,
-      useRecordingRuleRegistry,
+      recordingRuleRegistry,
       aggregationFunction='sum',
       aggregationLabels=aggregationLabels,
       offset=offset,
@@ -26,7 +27,7 @@ local transformErrorRateToSuccessRate(errorRateMetric, operationRateMetric, sele
       operationRateMetric,
       selector,
       rangeInterval,
-      useRecordingRuleRegistry,
+      recordingRuleRegistry,
       aggregationFunction='sum',
       aggregationLabels=aggregationLabels,
       offset=offset,
@@ -36,7 +37,7 @@ local transformErrorRateToSuccessRate(errorRateMetric, operationRateMetric, sele
       errorRateMetric,
       selector,
       rangeInterval,
-      useRecordingRuleRegistry,
+      recordingRuleRegistry,
       aggregationFunction='sum',
       aggregationLabels=aggregationLabels,
       offset=offset,
@@ -48,11 +49,15 @@ local transformErrorRateToSuccessRate(errorRateMetric, operationRateMetric, sele
   // errorCounterApdex constructs an apdex score (ie, successes/total) from an error score (ie, errors/total).
   // This can be useful for latency metrics that count latencies that exceed threshold, instead of the more
   // common form of latencies that are within threshold.
-  errorCounterApdex(errorRateMetric, operationRateMetric, selector, useRecordingRuleRegistry=true):: validateMetric({
+  errorCounterApdex(errorRateMetric, operationRateMetric, selector, useRecordingRuleRegistry=true):: metric.new({
     errorRateMetric: errorRateMetric,
     operationRateMetric: operationRateMetric,
     selector: selector,
     useRecordingRuleRegistry:: useRecordingRuleRegistry,
+    recordingRuleRegistry::
+      if self.useRecordingRuleRegistry
+      then self.config.recordingRuleRegistry
+      else recordingRuleRegistry.nullRegistry,
 
     apdexSuccessRateQuery(aggregationLabels, selector, rangeInterval, withoutLabels=[], offset=null)::
       transformErrorRateToSuccessRate(
@@ -61,7 +66,7 @@ local transformErrorRateToSuccessRate(errorRateMetric, operationRateMetric, sele
         selectors.without(selectors.merge(self.selector, selector), withoutLabels),
         rangeInterval,
         aggregationLabels,
-        useRecordingRuleRegistry,
+        self.recordingRuleRegistry,
         offset,
       ),
     apdexWeightQuery(aggregationLabels, selector, rangeInterval, withoutLabels=[], offset=null)::
@@ -69,7 +74,7 @@ local transformErrorRateToSuccessRate(errorRateMetric, operationRateMetric, sele
         self.operationRateMetric,
         selectors.without(selectors.merge(self.selector, selector), withoutLabels),
         rangeInterval,
-        useRecordingRuleRegistry,
+        self.recordingRuleRegistry,
         aggregationLabels=aggregationLabels,
         aggregationFunction='sum',
         offset=offset
@@ -81,7 +86,7 @@ local transformErrorRateToSuccessRate(errorRateMetric, operationRateMetric, sele
         selectors.without(selectors.merge(self.selector, selector), withoutLabels),
         rangeInterval,
         [],
-        useRecordingRuleRegistry,
+        self.recordingRuleRegistry,
         offset,
       ),
 
@@ -90,7 +95,7 @@ local transformErrorRateToSuccessRate(errorRateMetric, operationRateMetric, sele
         self.operationRateMetric,
         selectors.without(selectors.merge(self.selector, selector), withoutLabels),
         rangeInterval,
-        useRecordingRuleRegistry,
+        self.recordingRuleRegistry,
         offset
       ),
 

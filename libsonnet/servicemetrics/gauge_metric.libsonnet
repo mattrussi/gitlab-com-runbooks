@@ -1,7 +1,7 @@
 local aggregations = import 'promql/aggregations.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
 local optionalOffset = import 'recording-rules/lib/optional-offset.libsonnet';
-local validateMetric = (import './validation.libsonnet').validateMetric;
+local metric = import 'servicemetrics/metric.libsonnet';
 local metricLabelsSelectorsMixin = (import './metrics-mixin.libsonnet').metricLabelsSelectorsMixin;
 
 {
@@ -11,7 +11,7 @@ local metricLabelsSelectorsMixin = (import './metrics-mixin.libsonnet').metricLa
     gauge,
     selector={},
     samplingInterval=1  // in seconds
-  ):: validateMetric({
+  ):: metric.new({
     useRecordingRuleRegistry:: false,
     selector: selector,
 

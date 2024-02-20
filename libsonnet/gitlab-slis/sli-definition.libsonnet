@@ -1,9 +1,8 @@
-local gitlabMetricsConfig = import 'gitlab-metrics-config.libsonnet';
 local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
+local recordingRuleRegistry = import 'servicemetrics/recording-rule-registry.libsonnet';
 local validator = import 'utils/validator.libsonnet';
 local rateMetric = metricsCatalog.rateMetric;
 local successCounterApdex = metricsCatalog.successCounterApdex;
-local recordingRuleRegistry = gitlabMetricsConfig.recordingRuleRegistry;
 local serviceLevelIndicatorDefinition = import 'servicemetrics/service_level_indicator_definition.libsonnet';
 local misc = import 'utils/misc.libsonnet';
 local stages = import 'service-catalog/stages.libsonnet';
@@ -50,6 +49,7 @@ local rateQueryFunction(sli, counter) =
     rateMetric(sli[counter], selector).aggregatedRateQuery(labels, selector, rangeInterval);
 
 local applyDefaults(definition) = {
+  config:: recordingRuleRegistry.defaultConfig,
   featureCategory: if std.member(definition.significantLabels, 'feature_category') then
     serviceLevelIndicatorDefinition.featureCategoryFromSourceMetrics,
   hasApdex():: std.member(definition.kinds, apdexKind),
@@ -95,7 +95,7 @@ local validateAndApplyDefaults(definition) =
 
     inRecordingRuleRegistry: misc.all(
       function(metricName)
-        recordingRuleRegistry.resolveRecordingRuleFor(metricName=metricName) != null,
+        self.config.recordingRuleRegistry.resolveRecordingRuleFor(metricName=metricName) != null,
       self.recordingRuleMetrics,
     ),
 
