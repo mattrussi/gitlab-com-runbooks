@@ -2,7 +2,7 @@
 
 Mimir is a multi-tenanted system.
 
-This helps us to create soft boundaries by tenant and introduceds a few key benefits:
+This helps us to create soft boundaries by tenant and introduces a few key benefits:
 
 - Improved visibility into metric ownership
 - Query boundaries and isolated workloads via [shuffle sharding](https://grafana.com/docs/mimir/latest/configure/configure-shuffle-sharding/#about-shuffle-sharding)
