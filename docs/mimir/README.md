@@ -31,12 +31,12 @@
 | Dashboards | [Mimir Overview](https://dashboards.gitlab.net/d/ffcd83628d7d4b5a03d1cafd159e6c9c/mimir-overview?orgId=1) |
 | Logs | [Elastci Cloud](https://nonprod-log.gitlab.net/app/r/s/h3UsR) |
 
-
 ## Runbooks
 
 We use a slightly refactored version of the [Grafana Monitoring Mixin](https://gitlab.com/gitlab-com/gl-infra/monitoring-mixins) for much of the operational monitoring.
 
 As such the Grafana Runbooks apply to our alerts as well, and are the best source of information for troubleshooting:
+
 * [Grafana Runbooks](https://grafana.com/docs/mimir/latest/manage/mimir-runbooks/)
 * [Grafana Dashboards](https://dashboards.gitlab.net/goto/NWm6gahIR?orgId=1)
 
@@ -52,7 +52,7 @@ Start with the [cardinality-management readme](./cardinality-management.md) to h
 
 <!-- ## Architecture -->
 
-## Architecture 
+## Architecture
 
 [Architecture Reference](https://grafana.com/docs/mimir/latest/references/architecture/).
 

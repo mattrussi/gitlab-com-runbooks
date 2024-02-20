@@ -15,7 +15,6 @@ This helps us to create soft boundaries by tenant and introduceds a few key bene
 | ------ | -------- | ----------------- |
 | us-east1 | mimir.ops-gitlab-gke.us-east1.gitlab-ops.gke.gitlab.net | mimir-internal.ops-gitlab-gke.us-east1.gitlab-ops.gke.gitlab.net |
 
-
 ## Creating a tenant
 
 Tenants are provisioned through [config-mgmt](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/tree/master/environments/observability-tenants).
