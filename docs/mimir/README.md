@@ -29,7 +29,7 @@
 | Tenant Configuration | [config-mgmt](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/tree/master/environments/observability-tenants) |
 | Runbooks | [Grafana Runbooks](https://grafana.com/docs/mimir/latest/manage/mimir-runbooks/) |
 | Dashboards | [Mimir Overview](https://dashboards.gitlab.net/d/ffcd83628d7d4b5a03d1cafd159e6c9c/mimir-overview?orgId=1) |
-| Logs | [Elastci Cloud](https://nonprod-log.gitlab.net/app/r/s/h3UsR) |
+| Logs | [Elastic Cloud](https://nonprod-log.gitlab.net/app/r/s/h3UsR) |
 
 ## Runbooks
 
