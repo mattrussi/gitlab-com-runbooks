@@ -46,7 +46,7 @@ See the [getting-started readme](./getting-started.md)
 
 ## Cardinality Management
 
-Metrics cardinality is the silent preformance killer in prometheus.
+Metrics cardinality is the silent performance killer in Prometheus.
 
 Start with the [cardinality-management readme](./cardinality-management.md) to help identify problem metrics.
 
