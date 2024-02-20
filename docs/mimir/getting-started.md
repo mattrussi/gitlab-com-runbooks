@@ -62,7 +62,7 @@ remoteWrite:
 Unfortunately prometheus doesn't support ENV var substitution in the config file, however if using via prometheus-operator it does support a Kubernetes secret reference.
 In the above example we point the auth to a secret named `remote-write-auth` and the respending object keys for both `username` and `password`.
 
-Here is a [example config](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/blob/master/releases/30-gitlab-monitoring/values-instances/ops-gitlab-rw.yaml.gotmpl#L16)
+Here is an [example config](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/blob/master/releases/30-gitlab-monitoring/values-instances/ops-gitlab-rw.yaml.gotmpl#L16)
 
 Note that the current usage of htpasswd/basicAuth will be replaced in a future iteration.
 
