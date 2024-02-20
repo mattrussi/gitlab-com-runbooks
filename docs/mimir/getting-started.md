@@ -29,7 +29,7 @@ The [Mimir - Tenants](https://dashboards.gitlab.net/goto/wxzEVa2IR?orgId=1) dash
 
 Additionally, there is a [Mimir - Overrides](https://dashboards.gitlab.net/goto/iCcUVahSg?orgId=1) dashboard which shows all of the configured default limits and any overrides applied to a given tenant.
 
-Bumping tenant limits is also done through `config-mgmt` and you can see an example [here](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/master/environments/observability-tenants/tenants/gitlab-gprd.yaml#L5) as well as an [example MR](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/merge_requests/7737).
+Bumping tenant limits is also done through `config-mgmt` and you can see an example [here](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/7a6669d31a8e17b833004f1d0e7b621f9c64e2de/environments/observability-tenants/tenants/gitlab-gprd.yaml#L5) as well as an [example MR](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/merge_requests/7737).
 
 A full list of tenant overrides is documented [here](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/master/environments/observability-tenants/tenants/gitlab-gprd.yaml#L5).
 
