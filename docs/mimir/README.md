@@ -11,7 +11,7 @@
 
 ## Logging
 
-* []()
+* [Elasticsearch](https://nonprod-log.gitlab.net/app/r/s/BLV6G)
 
 ## Troubleshooting Pointers
 
