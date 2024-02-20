@@ -13,7 +13,7 @@ groups:
       runbook: docs/config_management/chef-troubleshooting.md
       title: Chef client failed for more than 5hs
   - alert: ChefClientErrorCritical
-    expr: avg(chef_client_error) by (env) * 100 > 10
+    expr: avg(chef_client_error{env="gstg"}) * 100 > 10
     for: 1h
     labels:
       severity: s1
@@ -27,7 +27,7 @@ groups:
       runbook: docs/config_management/chef-troubleshooting.md
       title: Chef client failures have reached critical levels
   - alert: ChefClientStale
-    expr: (time() - chef_client_last_run_timestamp_seconds > 5 * 3600) and on (instance) (chef_client_enabled == 1)
+    expr: (time() - chef_client_last_run_timestamp_seconds{env="gstg"} > 5 * 3600) and on (instance) (chef_client_enabled == 1)
     labels:
       severity: s4
       alert_type: cause
@@ -37,7 +37,7 @@ groups:
       runbook: docs/config_management/chef-troubleshooting.md
       title: Chef client hasn't run for longer than expected
   - alert: ChefClientDisabled
-    expr: sum by (environment, type) (chef_client_enabled{type!~"sentry|ci-runners"} == 0)
+    expr: sum by (type) (chef_client_enabled{type!~"sentry|ci-runners", env="gstg"} == 0)
     for: 24h
     labels:
       severity: s4
