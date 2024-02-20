@@ -47,11 +47,11 @@ This is the procedure to fetech WALs from a GPRD database into a postgres VM in 
   chmod 770 /var/opt/gitlab/wal_restore
   ```
 
-## 3. Download/install the following script in the VM:
+### 3. Download/install the following script in the VM:
 
 - https://gitlab.com/gitlab-com/gl-infra/db-migration/-/blob/master/bin/fetch_last_wals_from_gcs_into_dir.sh
 
-## 4. Run the `fetch_last_wals_from_gcs_into_dir.sh` script as gitlab-psql:
+### 4. Run the `fetch_last_wals_from_gcs_into_dir.sh` script as gitlab-psql:
 
 ```
 sudo su - gitlab-psql
@@ -59,7 +59,7 @@ cd /var/opt/gitlab/wal_restore
 /usr/local/bin/fetch_last_wals_from_gcs_into_dir.sh
 ```
 
-## 5. Include the requestor user into the `gitlab-psql` group to grant access into the `/var/opt/gitlab/wal_restore` directory
+### 5. Include the requestor user into the `gitlab-psql` group to grant access into the `/var/opt/gitlab/wal_restore` directory
 
 ```
 usermod -a -G gitlab-psql <user>

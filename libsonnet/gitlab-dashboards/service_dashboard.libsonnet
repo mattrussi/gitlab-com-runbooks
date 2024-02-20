@@ -74,7 +74,7 @@ local overviewDashboard(
   showProvisioningDetails=true,
   showSystemDiagrams=true,
   expectMultipleSeries=false,
-) =
+      ) =
 
   local metricsCatalogServiceInfo = metricsCatalog.getService(type);
   local saturationComponents = metricsCatalogServiceInfo.applicableSaturationTypes();

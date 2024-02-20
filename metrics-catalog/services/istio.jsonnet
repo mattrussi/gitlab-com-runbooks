@@ -49,7 +49,7 @@ metricsCatalog.serviceDefinition({
 
       local selector = {
         job: 'pilot',
-        app: 'istiod'
+        app: 'istiod',
       },
 
       apdex: histogramApdex(
@@ -72,7 +72,7 @@ metricsCatalog.serviceDefinition({
       trafficCessationAlertConfig: false,
 
       local selector = {
-        job: 'pilot'
+        job: 'pilot',
       },
 
       requestRate: rateMetric(

@@ -1,6 +1,6 @@
 local panels = import './panels.libsonnet';
-local basic = import 'grafana/basic.libsonnet';
 local runnersManagerMatching = import './runner_managers_matching.libsonnet';
+local basic = import 'grafana/basic.libsonnet';
 
 local durationHistogram(partition=runnersManagerMatching.defaultPartition) = panels.heatmap(
   'Pending job queue duration histogram',

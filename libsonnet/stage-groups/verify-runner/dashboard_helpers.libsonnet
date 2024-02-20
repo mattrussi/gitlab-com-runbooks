@@ -44,7 +44,7 @@ local dashboard(
   time_from='now-3h/m',
   includeStandardEnvironmentAnnotations=true,
   includeRunnerManagerFilter=true
-  ) =
+      ) =
   local filters = if includeRunnerManagerFilter then commonFilters + [dashboardFilters.runnerManager] else commonFilters;
   basic.dashboard(
     title,

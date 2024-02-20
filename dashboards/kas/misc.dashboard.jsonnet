@@ -20,68 +20,56 @@ basic.dashboard(
   layout.titleRowWithPanels(
     'Rate limiter metrics',
     layout.grid([
-        basic.heatmap(
-          title='Rate limiter delay (allowed, agent_connection)',
-          description='Rate limiter delay for an allowed request',
-          query='sum by (le) (
-            rate(limiter_block_duration_seconds_bucket{%s, allowed="true", limiter_name="agent_connection"}[$__rate_interval])
-          )' % selectorString,
-          dataFormat='tsbuckets',
-          color_cardColor='#00ff00',
-          legendFormat='__auto',
-        ),
-        basic.heatmap(
-          title='Rate limiter delay (denied, agent_connection)',
-          description='Rate limiter delay for a denied request',
-          query='sum by (le) (
-            rate(limiter_block_duration_seconds_bucket{%s, allowed="false", limiter_name="agent_connection"}[$__rate_interval])
-          )' % selectorString,
-          dataFormat='tsbuckets',
-          color_cardColor='#ff0000',
-          legendFormat='__auto',
-        ),
+      basic.heatmap(
+        title='Rate limiter delay (allowed, agent_connection)',
+        description='Rate limiter delay for an allowed request',
+        query='sum by (le) (\n            rate(limiter_block_duration_seconds_bucket{%s, allowed="true", limiter_name="agent_connection"}[$__rate_interval])\n          )' % selectorString,
+        dataFormat='tsbuckets',
+        color_cardColor='#00ff00',
+        legendFormat='__auto',
+      ),
+      basic.heatmap(
+        title='Rate limiter delay (denied, agent_connection)',
+        description='Rate limiter delay for a denied request',
+        query='sum by (le) (\n            rate(limiter_block_duration_seconds_bucket{%s, allowed="false", limiter_name="agent_connection"}[$__rate_interval])\n          )' % selectorString,
+        dataFormat='tsbuckets',
+        color_cardColor='#ff0000',
+        legendFormat='__auto',
+      ),
 
-        basic.heatmap(
-          title='Rate limiter delay (allowed, gitaly_client_global)',
-          description='Rate limiter delay for an allowed request',
-          query='sum by (le) (
-            rate(limiter_block_duration_seconds_bucket{%s, allowed="true", limiter_name="gitaly_client_global"}[$__rate_interval])
-          )' % selectorString,
-          dataFormat='tsbuckets',
-          color_cardColor='#00ff00',
-          legendFormat='__auto',
-        ),
-        basic.heatmap(
-          title='Rate limiter delay (denied, gitaly_client_global)',
-          description='Rate limiter delay for a denied request',
-          query='sum by (le) (
-            rate(limiter_block_duration_seconds_bucket{%s, allowed="false", limiter_name="gitaly_client_global"}[$__rate_interval])
-          )' % selectorString,
-          dataFormat='tsbuckets',
-          color_cardColor='#ff0000',
-          legendFormat='__auto',
-        ),
+      basic.heatmap(
+        title='Rate limiter delay (allowed, gitaly_client_global)',
+        description='Rate limiter delay for an allowed request',
+        query='sum by (le) (\n            rate(limiter_block_duration_seconds_bucket{%s, allowed="true", limiter_name="gitaly_client_global"}[$__rate_interval])\n          )' % selectorString,
+        dataFormat='tsbuckets',
+        color_cardColor='#00ff00',
+        legendFormat='__auto',
+      ),
+      basic.heatmap(
+        title='Rate limiter delay (denied, gitaly_client_global)',
+        description='Rate limiter delay for a denied request',
+        query='sum by (le) (\n            rate(limiter_block_duration_seconds_bucket{%s, allowed="false", limiter_name="gitaly_client_global"}[$__rate_interval])\n          )' % selectorString,
+        dataFormat='tsbuckets',
+        color_cardColor='#ff0000',
+        legendFormat='__auto',
+      ),
 
-        basic.heatmap(
-          title='Rate limiter delay (allowed, gitlab_client)',
-          description='Rate limiter delay for an allowed request',
-          query='sum by (le) (
-            rate(limiter_block_duration_seconds_bucket{%s, allowed="true", limiter_name="gitlab_client"}[$__rate_interval])
-          )' % selectorString,
-          dataFormat='tsbuckets',
-          color_cardColor='#00ff00',
-          legendFormat='__auto',
-        ),
-        basic.heatmap(
-          title='Rate limiter delay (denied, gitlab_client)',
-          description='Rate limiter delay for a denied request',
-          query='sum by (le) (
-            rate(limiter_block_duration_seconds_bucket{%s, allowed="false", limiter_name="gitlab_client"}[$__rate_interval])
-          )' % selectorString,
-          dataFormat='tsbuckets',
-          color_cardColor='#ff0000',
-          legendFormat='__auto',
-        ),
+      basic.heatmap(
+        title='Rate limiter delay (allowed, gitlab_client)',
+        description='Rate limiter delay for an allowed request',
+        query='sum by (le) (\n            rate(limiter_block_duration_seconds_bucket{%s, allowed="true", limiter_name="gitlab_client"}[$__rate_interval])\n          )' % selectorString,
+        dataFormat='tsbuckets',
+        color_cardColor='#00ff00',
+        legendFormat='__auto',
+      ),
+      basic.heatmap(
+        title='Rate limiter delay (denied, gitlab_client)',
+        description='Rate limiter delay for a denied request',
+        query='sum by (le) (\n            rate(limiter_block_duration_seconds_bucket{%s, allowed="false", limiter_name="gitlab_client"}[$__rate_interval])\n          )' % selectorString,
+        dataFormat='tsbuckets',
+        color_cardColor='#ff0000',
+        legendFormat='__auto',
+      ),
 
     ], startRow=1000),
     collapse=false,
@@ -89,95 +77,95 @@ basic.dashboard(
   )
 )
 .addPanels(
-     layout.titleRowWithPanels(
+  layout.titleRowWithPanels(
     'gRPC metrics',
     layout.grid([
-        basic.timeseries(
-          title='OK gRPC calls/second',
-          description='OK gRPC calls',
-          query=|||
-            sum by (grpc_service, grpc_method) (
-              rate(grpc_server_handled_total{%s, grpc_code="OK"}[$__rate_interval])
-            )
-          ||| % selectorString,
-          legendFormat='{{grpc_service}}/{{grpc_method}}',
-          yAxisLabel='rps',
-          linewidth=1,
-        ),
-        basic.timeseries(
-          title='Not OK gRPC calls/second',
-          description='Not OK gRPC calls',
-          query=|||
-            sum by (grpc_service, grpc_method, grpc_code) (
-              rate(grpc_server_handled_total{%s, grpc_code!="OK"}[$__rate_interval])
-            )
-          ||| % selectorString,
-          legendFormat='{{grpc_service}}/{{grpc_method}} {{grpc_code}}',
-          yAxisLabel='rps',
-          linewidth=1,
-        ),
+      basic.timeseries(
+        title='OK gRPC calls/second',
+        description='OK gRPC calls',
+        query=|||
+          sum by (grpc_service, grpc_method) (
+            rate(grpc_server_handled_total{%s, grpc_code="OK"}[$__rate_interval])
+          )
+        ||| % selectorString,
+        legendFormat='{{grpc_service}}/{{grpc_method}}',
+        yAxisLabel='rps',
+        linewidth=1,
+      ),
+      basic.timeseries(
+        title='Not OK gRPC calls/second',
+        description='Not OK gRPC calls',
+        query=|||
+          sum by (grpc_service, grpc_method, grpc_code) (
+            rate(grpc_server_handled_total{%s, grpc_code!="OK"}[$__rate_interval])
+          )
+        ||| % selectorString,
+        legendFormat='{{grpc_service}}/{{grpc_method}} {{grpc_code}}',
+        yAxisLabel='rps',
+        linewidth=1,
+      ),
     ], startRow=3000),
     collapse=false,
     startRow=2000
-    )
+  )
 )
 .addPanels(
-     layout.titleRowWithPanels(
+  layout.titleRowWithPanels(
     'Performance',
     layout.grid([
-        basic.timeseries(
-          title='CPU throttling',
-          description='CPU throttling of kas',
-          query=|||
-            sum (rate(container_cpu_cfs_throttled_seconds_total{%s}[$__rate_interval]))
-          ||| % selectorString,
-          yAxisLabel='time',
-          legend_show=false,
-          linewidth=1,
-        ),
-        basic.timeseries(
-          title='Go GC',
-          description='',
-          query=|||
-            1000*go_gc_duration_seconds{%s,quantile="1"}
-          ||| % selectorString,
-          yAxisLabel='milliseconds',
-          legend_show=false,
-          linewidth=1,
-        ),
-        basic.timeseries(
-          title='Go goroutines',
-          description='',
-          query=|||
-            go_goroutines{%s}
-          ||| % selectorString,
-          yAxisLabel='',
-          legend_show=false,
-          linewidth=1,
-        ),
+      basic.timeseries(
+        title='CPU throttling',
+        description='CPU throttling of kas',
+        query=|||
+          sum (rate(container_cpu_cfs_throttled_seconds_total{%s}[$__rate_interval]))
+        ||| % selectorString,
+        yAxisLabel='time',
+        legend_show=false,
+        linewidth=1,
+      ),
+      basic.timeseries(
+        title='Go GC',
+        description='',
+        query=|||
+          1000*go_gc_duration_seconds{%s,quantile="1"}
+        ||| % selectorString,
+        yAxisLabel='milliseconds',
+        legend_show=false,
+        linewidth=1,
+      ),
+      basic.timeseries(
+        title='Go goroutines',
+        description='',
+        query=|||
+          go_goroutines{%s}
+        ||| % selectorString,
+        yAxisLabel='',
+        legend_show=false,
+        linewidth=1,
+      ),
     ], startRow=5000),
     collapse=false,
     startRow=4000
-    )
+  )
 )
 .addPanels(
-     layout.titleRowWithPanels(
+  layout.titleRowWithPanels(
     'Misc',
     layout.grid([
-        basic.timeseries(
-          title='Running version',
-          description='Running version of kas',
-          query=|||
-            count by (version, stage) (gitlab_build_info{%s})
-          ||| % envSelectorString,
-          yAxisLabel='pods',
-          legend_show=false,
-          linewidth=1,
-          stack=true,
-          fill=3,
-        ),
+      basic.timeseries(
+        title='Running version',
+        description='Running version of kas',
+        query=|||
+          count by (version, stage) (gitlab_build_info{%s})
+        ||| % envSelectorString,
+        yAxisLabel='pods',
+        legend_show=false,
+        linewidth=1,
+        stack=true,
+        fill=3,
+      ),
     ], startRow=7000),
     collapse=false,
     startRow=6000
-    )
+  )
 )

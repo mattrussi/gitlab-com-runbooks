@@ -96,15 +96,7 @@ basic.dashboard(
         title='',
         panelTitle='MTTP over selected time range',
         color='blue',
-        query='avg(
-                last_over_time(delivery_deployment_merge_request_lead_time_seconds{target_env="gprd", target_stage="main"}[$__range])
-                  unless
-                (
-                  last_over_time(
-                    delivery_deployment_merge_request_lead_time_seconds{target_env="gprd", target_stage="main"}[12h] offset $__range
-                  )
-                )
-              )',
+        query='avg(\n                last_over_time(delivery_deployment_merge_request_lead_time_seconds{target_env="gprd", target_stage="main"}[$__range])\n                  unless\n                (\n                  last_over_time(\n                    delivery_deployment_merge_request_lead_time_seconds{target_env="gprd", target_stage="main"}[12h] offset $__range\n                  )\n                )\n              )',
         legendFormat='__auto',
         colorMode='background',
         textMode='value',
@@ -120,22 +112,9 @@ basic.dashboard(
       basic.statPanel(
         title='',
         panelTitle='Adjusted MTTP over selected time range',
-        description='MTTP over selected time range when ignoring weekends. If the adjusted metric is not available, it
-                    will use the regular (unadjusted) metric. The adjusted metric is available from 7th Aug 2023 onwards.',
+        description='MTTP over selected time range when ignoring weekends. If the adjusted metric is not available, it\n                    will use the regular (unadjusted) metric. The adjusted metric is available from 7th Aug 2023 onwards.',
         color='blue',
-        query='avg(
-                (
-                  last_over_time(delivery_deployment_merge_request_adjusted_lead_time_seconds{target_env="gprd", target_stage="main"}[$__range])
-                    or
-                  last_over_time(delivery_deployment_merge_request_lead_time_seconds{target_env="gprd", target_stage="main"}[$__range])
-                )
-                  unless
-                (
-                  last_over_time(delivery_deployment_merge_request_adjusted_lead_time_seconds{target_env="gprd", target_stage="main"}[12h] offset $__range)
-                    or
-                  last_over_time(delivery_deployment_merge_request_lead_time_seconds{target_env="gprd", target_stage="main"}[12h] offset $__range)
-                )
-              )',
+        query='avg(\n                (\n                  last_over_time(delivery_deployment_merge_request_adjusted_lead_time_seconds{target_env="gprd", target_stage="main"}[$__range])\n                    or\n                  last_over_time(delivery_deployment_merge_request_lead_time_seconds{target_env="gprd", target_stage="main"}[$__range])\n                )\n                  unless\n                (\n                  last_over_time(delivery_deployment_merge_request_adjusted_lead_time_seconds{target_env="gprd", target_stage="main"}[12h] offset $__range)\n                    or\n                  last_over_time(delivery_deployment_merge_request_lead_time_seconds{target_env="gprd", target_stage="main"}[12h] offset $__range)\n                )\n              )',
         legendFormat='__auto',
         colorMode='background',
         textMode='value',
