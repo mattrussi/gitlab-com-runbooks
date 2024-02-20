@@ -22,12 +22,12 @@ groups:
   - record: sli_aggregations:http_request_duration_seconds_bucket:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,handler,le,method,product_stage,queue,region,shard,stage,stage_group,status,tier,type,urgency,worker) (
-        rate(http_request_duration_seconds_bucket{env="gprd",handler=~"/v2/code/completions|/v2/code/generations|/v2/completions",type=~"ai-gateway"}[5m] offset 30s)
+        rate(http_request_duration_seconds_bucket{env="gprd",type=~"ai-gateway"}[5m] offset 30s)
       )
   - record: sli_aggregations:http_request_duration_seconds_count:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,handler,method,product_stage,queue,region,shard,stage,stage_group,status,tier,type,urgency,worker) (
-        rate(http_request_duration_seconds_count{env="gprd",handler=~"/v2/code/completions|/v2/code/generations|/v2/completions",type=~"ai-gateway"}[5m] offset 30s)
+        rate(http_request_duration_seconds_count{env="gprd",type=~"ai-gateway"}[5m] offset 30s)
       )
   - record: sli_aggregations:stackdriver_cloud_run_revision_run_googleapis_com_request_count:rate_5m
     expr: |
@@ -60,12 +60,12 @@ groups:
   - record: sli_aggregations:http_request_duration_seconds_bucket:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,handler,le,method,product_stage,queue,region,shard,stage,stage_group,status,tier,type,urgency,worker) (
-        rate(http_request_duration_seconds_bucket{env="gprd",handler=~"/v2/code/completions|/v2/code/generations|/v2/completions",type=~"ai-gateway"}[30m] offset 30s)
+        rate(http_request_duration_seconds_bucket{env="gprd",type=~"ai-gateway"}[30m] offset 30s)
       )
   - record: sli_aggregations:http_request_duration_seconds_count:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,handler,method,product_stage,queue,region,shard,stage,stage_group,status,tier,type,urgency,worker) (
-        rate(http_request_duration_seconds_count{env="gprd",handler=~"/v2/code/completions|/v2/code/generations|/v2/completions",type=~"ai-gateway"}[30m] offset 30s)
+        rate(http_request_duration_seconds_count{env="gprd",type=~"ai-gateway"}[30m] offset 30s)
       )
   - record: sli_aggregations:stackdriver_cloud_run_revision_run_googleapis_com_request_count:rate_30m
     expr: |
@@ -98,12 +98,12 @@ groups:
   - record: sli_aggregations:http_request_duration_seconds_bucket:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,handler,le,method,product_stage,queue,region,shard,stage,stage_group,status,tier,type,urgency,worker) (
-        rate(http_request_duration_seconds_bucket{env="gprd",handler=~"/v2/code/completions|/v2/code/generations|/v2/completions",type=~"ai-gateway"}[1h] offset 30s)
+        rate(http_request_duration_seconds_bucket{env="gprd",type=~"ai-gateway"}[1h] offset 30s)
       )
   - record: sli_aggregations:http_request_duration_seconds_count:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,handler,method,product_stage,queue,region,shard,stage,stage_group,status,tier,type,urgency,worker) (
-        rate(http_request_duration_seconds_count{env="gprd",handler=~"/v2/code/completions|/v2/code/generations|/v2/completions",type=~"ai-gateway"}[1h] offset 30s)
+        rate(http_request_duration_seconds_count{env="gprd",type=~"ai-gateway"}[1h] offset 30s)
       )
   - record: sli_aggregations:stackdriver_cloud_run_revision_run_googleapis_com_request_count:rate_1h
     expr: |

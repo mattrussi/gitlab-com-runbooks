@@ -17,7 +17,7 @@ groups:
   - record: sli_aggregations:grpc_server_handling_seconds_bucket:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,grpc_method,grpc_type,job,le,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(grpc_server_handling_seconds_bucket{env="pre",grpc_method=~"VoteTransaction",grpc_type=~"unary",job=~"praefect",type=~"monitoring"}[5m] offset 30s)
+        rate(grpc_server_handling_seconds_bucket{env="pre",grpc_type=~"unary",job=~"praefect",type=~"monitoring"}[5m] offset 30s)
       )
   - record: sli_aggregations:stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count:rate_5m
     expr: |
@@ -40,7 +40,7 @@ groups:
   - record: sli_aggregations:grpc_server_handling_seconds_bucket:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,grpc_method,grpc_type,job,le,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(grpc_server_handling_seconds_bucket{env="pre",grpc_method=~"VoteTransaction",grpc_type=~"unary",job=~"praefect",type=~"monitoring"}[30m] offset 30s)
+        rate(grpc_server_handling_seconds_bucket{env="pre",grpc_type=~"unary",job=~"praefect",type=~"monitoring"}[30m] offset 30s)
       )
   - record: sli_aggregations:stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count:rate_30m
     expr: |
@@ -63,7 +63,7 @@ groups:
   - record: sli_aggregations:grpc_server_handling_seconds_bucket:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,grpc_method,grpc_type,job,le,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(grpc_server_handling_seconds_bucket{env="pre",grpc_method=~"VoteTransaction",grpc_type=~"unary",job=~"praefect",type=~"monitoring"}[1h] offset 30s)
+        rate(grpc_server_handling_seconds_bucket{env="pre",grpc_type=~"unary",job=~"praefect",type=~"monitoring"}[1h] offset 30s)
       )
   - record: sli_aggregations:stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count:rate_1h
     expr: |

@@ -92,14 +92,13 @@ local mergeSelector(from, to) =
   std.foldl(
     function(memo, label)
       if std.objectHas(normalizedFrom, label) && std.objectHas(normalizedTo, label) then
-        local value = std.setUnion(
-          std.get(normalizedFrom[label], 'oneOf', []),
-          std.get(normalizedTo[label], 'oneOf', []),
-        );
-        if std.length(value) > 0 then
+        local valuesFrom = std.get(normalizedFrom[label], 'oneOf', []);
+        local valuesTo = std.get(normalizedTo[label], 'oneOf', []);
+
+        if std.length(valuesFrom) > 0 && std.length(valuesTo) > 0 then
           memo {
             [label]: {
-              oneOf: value,
+              oneOf: std.setUnion(valuesFrom, valuesTo),
             },
           }
         else
