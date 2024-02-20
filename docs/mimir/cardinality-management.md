@@ -11,7 +11,7 @@ Following the second article which references Grafana Cloud, we have implemented
 
 ## Example
 
-Looking at the overview page we have selected the tennat `gitlab-gstg`.
+Looking at the overview page we have selected the tenant `gitlab-gstg`.
 
 From this view we have a few pieces of information:
 
