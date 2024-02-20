@@ -72,7 +72,7 @@ For the `url` setting see the [endpoints list](#endpoints).
 
 Unlike Thanos, Mimir does not have a query UI. Instead it relies on Grafana as its UI for querying.
 
-Within Grafana you can use the [Explore UI](https://grafana.com/docs/grafana/latest/explore/) to run queries.
+Within Grafana you can use the [Explore UI](https://dashboards.gitlab.net/explore) to run queries.
 
 Select the explore menu item from grafana:
 
