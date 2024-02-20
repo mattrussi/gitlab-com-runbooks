@@ -27,7 +27,7 @@ This helps us to centralise tenants across future observability backends, as wel
 
 The [Mimir - Tenants](https://dashboards.gitlab.net/goto/wxzEVa2IR?orgId=1) dashboard will show you tenant specific data, as well as active series and how close you are to limits.
 
-As well as this there is a [Mimir - Overrides](https://dashboards.gitlab.net/goto/iCcUVahSg?orgId=1) dashboard which shows all of the configured default limits and any overrides applied to a given tenant.
+Additionally, there is a [Mimir - Overrides](https://dashboards.gitlab.net/goto/iCcUVahSg?orgId=1) dashboard which shows all of the configured default limits and any overrides applied to a given tenant.
 
 Bumping tenant limits is also done through `config-mgmt` and you can see an example [here](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/master/environments/observability-tenants/tenants/gitlab-gprd.yaml#L5) as well as an [example MR](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/merge_requests/7737).
 
