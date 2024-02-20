@@ -74,7 +74,7 @@ There is some good capacity planning docs from Grafana [here](https://grafana.co
 
 These include some guidelines around sizing for various components in Mimir.
 
-Keep in mind that at GitLab we have some incredible high cardinality metrics, and while these numbers serve as good guidelines we often require more resources than recommended.
+Keep in mind that at GitLab we have some incredibly high cardinality metrics, and while these numbers serve as good guidelines we often require more resources than recommended.
 
 <!-- ## Availability -->
 
