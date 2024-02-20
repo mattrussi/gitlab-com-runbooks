@@ -33,7 +33,7 @@ Generate four passwords, `REPLICA_REDACTED`, `RAILS_REDACTED`, `EXPORTER_REDACTE
 for I in REPLICA_REDACTED RAILS_REDACTED EXPORTER_REDACTED CONSOLE_REDACTED; do echo $I; openssl rand -hex 32; done
 ```
 
-Update both `redis-cluster` and `redis-exporter` gkms vault secrets using this command in the [`chef-repo`](https://gitlab.com/gitlab-com/gl-infra/chef-repo/-/tree/master):
+Update both `redis-cluster` and `redis-exporter` gkms vault secrets using these commands in the [`chef-repo`](https://gitlab.com/gitlab-com/gl-infra/chef-repo/-/tree/master):
 
 ```
 ./bin/gkms-vault-edit redis-cluster <ENV>
