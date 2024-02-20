@@ -104,4 +104,6 @@ local options = validateReferenceArchitectureOptions(import 'gitlab-metrics-opti
   dbPlatform: 'rds',
 
   separateGlobalRecordingSelectors: {},
+
+  recordingRuleRegistry: import 'servicemetrics/recording-rule-registry/selective-registry.libsonnet',
 }

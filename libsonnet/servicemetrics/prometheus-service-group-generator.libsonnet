@@ -1,5 +1,7 @@
 local intervalForDuration = import './interval-for-duration.libsonnet';
-local recordingRuleRegistry = import './recording-rule-registry.libsonnet';
+local gitlabMetricsConfig = import 'gitlab-metrics-config.libsonnet';
+local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
+local recordingRuleRegistry = gitlabMetricsConfig.recordingRuleRegistry;
 local recordingRules = import 'recording-rules/recording-rules.libsonnet';
 
 local recordingRuleGroupsForServiceForBurnRate(serviceDefinition, componentAggregationSet, nodeAggregationSet, shardAggregationSet, burnRate) =

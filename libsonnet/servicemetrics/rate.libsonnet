@@ -1,6 +1,7 @@
+local gitlabMetricsConfig = import 'gitlab-metrics-config.libsonnet';
 local aggregations = import 'promql/aggregations.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
-local recordingRuleRegistry = import 'recording-rule-registry.libsonnet';  // TODO: fix circular dependency
+local recordingRuleRegistry = gitlabMetricsConfig.recordingRuleRegistry;
 local optionalOffset = import 'recording-rules/lib/optional-offset.libsonnet';
 local validateMetric = (import './validation.libsonnet').validateMetric;
 local metricLabelsSelectorsMixin = (import './metrics-mixin.libsonnet').metricLabelsSelectorsMixin;

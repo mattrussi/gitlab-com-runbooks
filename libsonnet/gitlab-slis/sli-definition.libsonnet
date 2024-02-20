@@ -1,8 +1,9 @@
+local gitlabMetricsConfig = import 'gitlab-metrics-config.libsonnet';
 local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local validator = import 'utils/validator.libsonnet';
 local rateMetric = metricsCatalog.rateMetric;
 local successCounterApdex = metricsCatalog.successCounterApdex;
-local recordingRuleRegistry = import 'servicemetrics/recording-rule-registry.libsonnet';
+local recordingRuleRegistry = gitlabMetricsConfig.recordingRuleRegistry;
 local serviceLevelIndicatorDefinition = import 'servicemetrics/service_level_indicator_definition.libsonnet';
 local misc = import 'utils/misc.libsonnet';
 local stages = import 'service-catalog/stages.libsonnet';
