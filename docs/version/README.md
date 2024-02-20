@@ -19,6 +19,7 @@
 * [../certificates/cloudflare.md](../certificates/cloudflare.md)
 * [../certificates/gkms.md](../certificates/gkms.md)
 * [../ci-runners/ci_pending_builds.md](../ci-runners/ci_pending_builds.md)
+* [ClickHouse Cloud Failure Remediation, Backup & Restore Process](../clickhouse/backup-restore.md)
 * [Cloudflare: Managing Traffic](../cloudflare/managing-traffic.md)
 * [Service Locations](../cloudflare/services-locations.md)
 * [Chef Guidelines](../config_management/chef-guidelines.md)

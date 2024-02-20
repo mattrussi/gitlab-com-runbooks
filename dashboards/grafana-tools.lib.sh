@@ -153,15 +153,15 @@ function jsonnet_compile() {
   local sha256sum_file="${REPO_DIR}/.cache/$cache_tier/$source_file.sha256sum"
   local cache_out_file="${REPO_DIR}/.cache/$cache_tier/$source_file.out"
 
-  if [[ "${GL_JSONNET_CACHE_SKIP:-}" != 'true' ]]; then
+  if [[ ${GL_JSONNET_CACHE_SKIP:-} != 'true' ]]; then
     mkdir -p "$(dirname "$sha256sum_file")" "$(dirname "$cache_out_file")"
 
-    if [[ -f "$cache_out_file" ]] && [[ -f "$sha256sum_file" ]] && sha256sum --check --status <"$sha256sum_file"; then
+    if [[ -f $cache_out_file ]] && [[ -f $sha256sum_file ]] && sha256sum --check --status <"$sha256sum_file"; then
       cat "$cache_out_file"
       return 0
     fi
 
-    if [[ "${GL_JSONNET_CACHE_DEBUG:-}" == 'true' ]]; then
+    if [[ ${GL_JSONNET_CACHE_DEBUG:-} == 'true' ]]; then
       echo >&2 "jsonnet_cache: miss: $source_file"
     fi
   fi
@@ -176,7 +176,7 @@ function jsonnet_compile() {
     return 1
   fi
 
-  if [[ "${GL_JSONNET_CACHE_SKIP:-}" != 'true' ]]; then
+  if [[ ${GL_JSONNET_CACHE_SKIP:-} != 'true' ]]; then
     echo "$out" >"$cache_out_file"
     jsonnet-deps -J . -J ../libsonnet -J ../metrics-catalog/ -J ../vendor -J ../services "$source_file" | xargs sha256sum >"$sha256sum_file"
     echo "$source_file" "${REPO_DIR}/.tool-versions" | xargs realpath | xargs sha256sum >>"$sha256sum_file"

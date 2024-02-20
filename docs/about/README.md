@@ -50,7 +50,7 @@
 * [StatefulSet Guidelines](../kube/sts-guidelines.md)
 * [Traffic Cessation Alerts](../metrics-catalog/traffic-cessation-alerts.md)
 * [Cardinality Management](../mimir/cardinality-management.md)
-* [Mimir Onboarding](../mimir/onboarding.md)
+* [Mimir Onboarding](../mimir/getting-started.md)
 * [Advisory Database Unresponsive Hosts/Outdated Repositories](../monitoring/advisory_db-unresponsive-hosts.md)
 * [Alerting](../monitoring/alerts_manual.md)
 * [../monitoring/apdex-alerts-guide.md](../monitoring/apdex-alerts-guide.md)

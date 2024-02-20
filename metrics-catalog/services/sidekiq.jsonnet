@@ -41,9 +41,6 @@ metricsCatalog.serviceDefinition({
           },
         },
         sidekiq_queueing: {
-          'urgent-other': {
-            apdexScore: 0.97,
-          },
           'urgent-authorized-projects': {
             apdexScore: 0.94,
           },
@@ -140,6 +137,9 @@ metricsCatalog.serviceDefinition({
     ],
     featureCategory: 'not_owned',
     trafficCessationAlertConfig: sidekiqHelpers.shardTrafficCessationAlertConfig,
+    monitoringThresholds+: {
+      apdexScore: 0.999,
+    },
   }) + sliLibrary.get('sidekiq_execution_with_external_dependency').generateServiceLevelIndicator(baseSelector { external_dependencies: { eq: 'yes' } }, {
     serviceAggregation: false,  // Don't add this to the request rate of the service
     shardLevelMonitoring: false,
@@ -165,6 +165,7 @@ metricsCatalog.serviceDefinition({
       ),
     ],
     trafficCessationAlertConfig: sidekiqHelpers.shardTrafficCessationAlertConfig,
+    emittedBy: ['ops-gitlab-net', 'sidekiq'],
   }),
 
   // Special per-worker recording rules

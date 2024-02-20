@@ -2730,7 +2730,7 @@ groups:
 - name: GitLab Saturation Alerts
   interval: 1m
   rules:
-  - alert: component_saturation_slo_out_of_bounds
+  - alert: component_saturation_slo_out_of_bounds:cgroup_memory
     for: 5m
     annotations:
       title: The Cgroup Memory Utilization per Node resource of the {{ $labels.type
@@ -2793,7 +2793,7 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="cgroup_memory"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="cgroup_memory"}
-  - alert: component_saturation_slo_out_of_bounds
+  - alert: component_saturation_slo_out_of_bounds:cloudsql_cpu
     for: 5m
     annotations:
       title: The CloudSQL CPU Utilization resource of the {{ $labels.type }} service
@@ -2842,7 +2842,7 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="cloudsql_cpu"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="cloudsql_cpu"}
-  - alert: component_saturation_slo_out_of_bounds
+  - alert: component_saturation_slo_out_of_bounds:cloudsql_disk
     for: 5m
     annotations:
       title: The CloudSQL Disk Utilization resource of the {{ $labels.type }} service
@@ -2891,7 +2891,7 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="cloudsql_disk"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="cloudsql_disk"}
-  - alert: component_saturation_slo_out_of_bounds
+  - alert: component_saturation_slo_out_of_bounds:cloudsql_memory
     for: 5m
     annotations:
       title: The CloudSQL Memory Utilization resource of the {{ $labels.type }} service
@@ -2940,7 +2940,7 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="cloudsql_memory"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="cloudsql_memory"}
-  - alert: component_saturation_slo_out_of_bounds
+  - alert: component_saturation_slo_out_of_bounds:cpu
     for: 5m
     annotations:
       title: The Average Service CPU Utilization resource of the {{ $labels.type }}
@@ -2991,7 +2991,7 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="cpu"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="cpu"}
-  - alert: component_saturation_slo_out_of_bounds
+  - alert: component_saturation_slo_out_of_bounds:disk_inodes
     for: 15m
     annotations:
       title: The Disk inode Utilization per Device per Node resource of the {{ $labels.type
@@ -3109,7 +3109,7 @@ groups:
       predict_linear(gitlab_component_saturation:ratio{component="disk_inodes"}[6h], 21600)
       > on (component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="disk_inodes"}
-  - alert: component_saturation_slo_out_of_bounds
+  - alert: component_saturation_slo_out_of_bounds:disk_space
     for: 15m
     annotations:
       title: The Disk Space Utilization per Device per Node resource of the {{ $labels.type
@@ -3215,7 +3215,7 @@ groups:
       predict_linear(gitlab_component_saturation:ratio{component="disk_space"}[6h], 21600)
       > on (component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="disk_space"}
-  - alert: component_saturation_slo_out_of_bounds
+  - alert: component_saturation_slo_out_of_bounds:disk_sustained_read_iops
     for: 25m
     annotations:
       title: The Disk Sustained Read IOPS Utilization per Node resource of the {{
@@ -3266,7 +3266,7 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="disk_sustained_read_iops"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="disk_sustained_read_iops"}
-  - alert: component_saturation_slo_out_of_bounds
+  - alert: component_saturation_slo_out_of_bounds:disk_sustained_read_throughput
     for: 25m
     annotations:
       title: The Disk Sustained Read Throughput Utilization per Node resource of the
@@ -3317,7 +3317,7 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="disk_sustained_read_throughput"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="disk_sustained_read_throughput"}
-  - alert: component_saturation_slo_out_of_bounds
+  - alert: component_saturation_slo_out_of_bounds:disk_sustained_write_iops
     for: 25m
     annotations:
       title: The Disk Sustained Write IOPS Utilization per Node resource of the {{
@@ -3372,7 +3372,7 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="disk_sustained_write_iops"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="disk_sustained_write_iops"}
-  - alert: component_saturation_slo_out_of_bounds
+  - alert: component_saturation_slo_out_of_bounds:disk_sustained_write_throughput
     for: 25m
     annotations:
       title: The Disk Sustained Write Throughput Utilization per Node resource of
@@ -3427,7 +3427,7 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="disk_sustained_write_throughput"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="disk_sustained_write_throughput"}
-  - alert: component_saturation_slo_out_of_bounds
+  - alert: component_saturation_slo_out_of_bounds:elastic_cpu
     for: 5m
     annotations:
       title: The Average CPU Utilization per Node resource of the {{ $labels.type
@@ -3480,7 +3480,7 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="elastic_cpu"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="elastic_cpu"}
-  - alert: component_saturation_slo_out_of_bounds
+  - alert: component_saturation_slo_out_of_bounds:elastic_disk_space
     for: 5m
     annotations:
       title: The Disk Utilization Overall resource of the {{ $labels.type }} service
@@ -3540,7 +3540,7 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="elastic_disk_space"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="elastic_disk_space"}
-  - alert: component_saturation_slo_out_of_bounds
+  - alert: component_saturation_slo_out_of_bounds:elastic_jvm_heap_memory
     for: 5m
     annotations:
       title: The JVM Heap Utilization per Node resource of the {{ $labels.type }}
@@ -3591,7 +3591,7 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="elastic_jvm_heap_memory"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="elastic_jvm_heap_memory"}
-  - alert: component_saturation_slo_out_of_bounds
+  - alert: component_saturation_slo_out_of_bounds:elastic_single_node_cpu
     for: 5m
     annotations:
       title: The Average CPU Utilization per Node resource of the {{ $labels.type
@@ -3640,7 +3640,7 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="elastic_single_node_cpu"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="elastic_single_node_cpu"}
-  - alert: component_saturation_slo_out_of_bounds
+  - alert: component_saturation_slo_out_of_bounds:elastic_single_node_disk_space
     for: 5m
     annotations:
       title: The Disk Utilization per Device per Node resource of the {{ $labels.type
@@ -3703,7 +3703,7 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="elastic_single_node_disk_space"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="elastic_single_node_disk_space"}
-  - alert: component_saturation_slo_out_of_bounds
+  - alert: component_saturation_slo_out_of_bounds:elastic_thread_pools
     for: 5m
     annotations:
       title: The Thread pool utilization resource of the {{ $labels.type }} service
@@ -3760,7 +3760,7 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="elastic_thread_pools"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="elastic_thread_pools"}
-  - alert: component_saturation_slo_out_of_bounds
+  - alert: component_saturation_slo_out_of_bounds:excluded_sidekiq_thread_contention
     for: 5m
     annotations:
       title: The Excluded Shards Sidekiq Ruby Thread Contention resource of the {{
@@ -3813,7 +3813,7 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="excluded_sidekiq_thread_contention"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="excluded_sidekiq_thread_contention"}
-  - alert: component_saturation_slo_out_of_bounds
+  - alert: component_saturation_slo_out_of_bounds:gcp_quota_limit
     for: 15m
     annotations:
       title: The GCP Quota utilization per environment resource of the {{ $labels.type
@@ -3873,7 +3873,7 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="gcp_quota_limit"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="gcp_quota_limit"}
-  - alert: component_saturation_slo_out_of_bounds
+  - alert: component_saturation_slo_out_of_bounds:gitaly_active_node_available_space
     for: 5m
     annotations:
       title: The Gitaly Active Node Available Space resource of the {{ $labels.type
@@ -3953,7 +3953,7 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="gitaly_active_node_available_space"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="gitaly_active_node_available_space"}
-  - alert: component_saturation_slo_out_of_bounds
+  - alert: component_saturation_slo_out_of_bounds:gitaly_total_disk_space
     for: 5m
     annotations:
       title: The Gitaly Total Disk Utilization resource of the {{ $labels.type }}
@@ -4020,7 +4020,7 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="gitaly_total_disk_space"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="gitaly_total_disk_space"}
-  - alert: component_saturation_slo_out_of_bounds
+  - alert: component_saturation_slo_out_of_bounds:kube_container_cpu_limit
     for: 15m
     annotations:
       title: The Kube Container CPU over-utilization resource of the {{ $labels.type
@@ -4085,7 +4085,7 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="kube_container_cpu_limit"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="kube_container_cpu_limit"}
-  - alert: component_saturation_slo_out_of_bounds
+  - alert: component_saturation_slo_out_of_bounds:kube_container_memory
     for: 15m
     annotations:
       title: The Kube Container Memory Utilization resource of the {{ $labels.type
@@ -4136,7 +4136,7 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="kube_container_memory"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="kube_container_memory"}
-  - alert: component_saturation_slo_out_of_bounds
+  - alert: component_saturation_slo_out_of_bounds:kube_container_rss
     for: 15m
     annotations:
       title: The Kube Container Memory Utilization (RSS) resource of the {{ $labels.type
@@ -4195,7 +4195,7 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="kube_container_rss"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="kube_container_rss"}
-  - alert: component_saturation_slo_out_of_bounds
+  - alert: component_saturation_slo_out_of_bounds:kube_container_throttling
     for: 10m
     annotations:
       title: The Kube container throttling resource of the {{ $labels.type }} service
@@ -4256,7 +4256,7 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="kube_container_throttling"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="kube_container_throttling"}
-  - alert: component_saturation_slo_out_of_bounds
+  - alert: component_saturation_slo_out_of_bounds:kube_horizontalpodautoscaler_desired_replicas
     for: 25m
     annotations:
       title: The Horizontal Pod Autoscaler Desired Replicas resource of the {{ $labels.type
@@ -4309,7 +4309,7 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="kube_horizontalpodautoscaler_desired_replicas"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="kube_horizontalpodautoscaler_desired_replicas"}
-  - alert: component_saturation_slo_out_of_bounds
+  - alert: component_saturation_slo_out_of_bounds:kube_persistent_volume_claim_disk_space
     for: 5m
     annotations:
       title: The Kube Persistent Volume Claim Space Utilisation resource of the {{
@@ -4361,7 +4361,7 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="kube_persistent_volume_claim_disk_space"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="kube_persistent_volume_claim_disk_space"}
-  - alert: component_saturation_slo_out_of_bounds
+  - alert: component_saturation_slo_out_of_bounds:kube_persistent_volume_claim_inodes
     for: 5m
     annotations:
       title: The Kube Persistent Volume Claim inode Utilisation resource of the {{
@@ -4413,7 +4413,7 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="kube_persistent_volume_claim_inodes"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="kube_persistent_volume_claim_inodes"}
-  - alert: component_saturation_slo_out_of_bounds
+  - alert: component_saturation_slo_out_of_bounds:kube_pool_cpu
     for: 5m
     annotations:
       title: The Average Node Pool CPU Utilization resource of the {{ $labels.type
@@ -4466,7 +4466,7 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="kube_pool_cpu"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="kube_pool_cpu"}
-  - alert: component_saturation_slo_out_of_bounds
+  - alert: component_saturation_slo_out_of_bounds:memory
     for: 5m
     annotations:
       title: The Memory Utilization per Node resource of the {{ $labels.type }} service
@@ -4513,7 +4513,7 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="memory"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="memory"}
-  - alert: component_saturation_slo_out_of_bounds
+  - alert: component_saturation_slo_out_of_bounds:memory_redis_cache
     for: 5m
     annotations:
       title: The Memory Utilization per Node resource of the {{ $labels.type }} service
@@ -4563,7 +4563,7 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="memory_redis_cache"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="memory_redis_cache"}
-  - alert: component_saturation_slo_out_of_bounds
+  - alert: component_saturation_slo_out_of_bounds:nat_gateway_port_allocation
     for: 5m
     annotations:
       title: The Cloud NAT Gateway Port Allocation resource of the {{ $labels.type
@@ -4651,7 +4651,7 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="nat_gateway_port_allocation"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="nat_gateway_port_allocation"}
-  - alert: component_saturation_slo_out_of_bounds
+  - alert: component_saturation_slo_out_of_bounds:nat_host_port_allocation
     for: 10m
     annotations:
       title: The Cloud NAT Host Port Allocation resource of the {{ $labels.type }}
@@ -4740,7 +4740,7 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="nat_host_port_allocation"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="nat_host_port_allocation"}
-  - alert: component_saturation_slo_out_of_bounds
+  - alert: component_saturation_slo_out_of_bounds:nf_conntrack_entries
     for: 5m
     annotations:
       title: The conntrack Entries per Node resource of the {{ $labels.type }} service
@@ -4793,7 +4793,7 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="nf_conntrack_entries"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="nf_conntrack_entries"}
-  - alert: component_saturation_slo_out_of_bounds
+  - alert: component_saturation_slo_out_of_bounds:node_schedstat_waiting
     for: 90m
     annotations:
       title: The Node Scheduler Waiting Time resource of the {{ $labels.type }} service
@@ -4844,7 +4844,7 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="node_schedstat_waiting"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="node_schedstat_waiting"}
-  - alert: component_saturation_slo_out_of_bounds
+  - alert: component_saturation_slo_out_of_bounds:open_fds
     for: 5m
     annotations:
       title: The Open file descriptor utilization per instance resource of the {{
@@ -4916,7 +4916,7 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="open_fds"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="open_fds"}
-  - alert: component_saturation_slo_out_of_bounds
+  - alert: component_saturation_slo_out_of_bounds:pg_active_db_connections_primary
     for: 5m
     annotations:
       title: The Active Primary DB Connection Utilization resource of the {{ $labels.type
@@ -4973,7 +4973,7 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="pg_active_db_connections_primary"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="pg_active_db_connections_primary"}
-  - alert: component_saturation_slo_out_of_bounds
+  - alert: component_saturation_slo_out_of_bounds:pg_active_db_connections_replica
     for: 5m
     annotations:
       title: The Active Secondary DB Connection Utilization resource of the {{ $labels.type
@@ -5030,7 +5030,7 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="pg_active_db_connections_replica"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="pg_active_db_connections_replica"}
-  - alert: component_saturation_slo_out_of_bounds
+  - alert: component_saturation_slo_out_of_bounds:pg_btree_bloat
     for: 5m
     annotations:
       title: The Postgres btree bloat resource of the {{ $labels.type }} service ({{
@@ -5085,7 +5085,7 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="pg_btree_bloat"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="pg_btree_bloat"}
-  - alert: component_saturation_slo_out_of_bounds
+  - alert: component_saturation_slo_out_of_bounds:pg_int4_id
     for: 5m
     annotations:
       title: The Postgres int4 ID capacity resource of the {{ $labels.type }} service
@@ -5141,7 +5141,7 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="pg_int4_id"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="pg_int4_id"}
-  - alert: component_saturation_slo_out_of_bounds
+  - alert: component_saturation_slo_out_of_bounds:pg_table_bloat
     for: 5m
     annotations:
       title: The Postgres Table Bloat resource of the {{ $labels.type }} service ({{
@@ -5192,7 +5192,7 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="pg_table_bloat"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="pg_table_bloat"}
-  - alert: component_saturation_slo_out_of_bounds
+  - alert: component_saturation_slo_out_of_bounds:pg_txid_vacuum_to_wraparound
     for: 5m
     annotations:
       title: The Total autovacuum time to TXID wraparound horizon resource of the
@@ -5286,7 +5286,7 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="pg_txid_vacuum_to_wraparound"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="pg_txid_vacuum_to_wraparound"}
-  - alert: component_saturation_slo_out_of_bounds
+  - alert: component_saturation_slo_out_of_bounds:pg_xid_wraparound
     for: 5m
     annotations:
       title: The Transaction ID Wraparound resource of the {{ $labels.type }} service
@@ -5372,7 +5372,7 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="pg_xid_wraparound"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="pg_xid_wraparound"}
-  - alert: component_saturation_slo_out_of_bounds
+  - alert: component_saturation_slo_out_of_bounds:pgbouncer_async_primary_pool
     for: 10m
     annotations:
       title: The Postgres Async (Sidekiq) primary Connection Pool Utilization per
@@ -5439,7 +5439,7 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="pgbouncer_async_primary_pool"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="pgbouncer_async_primary_pool"}
-  - alert: component_saturation_slo_out_of_bounds
+  - alert: component_saturation_slo_out_of_bounds:pgbouncer_async_replica_pool
     for: 10m
     annotations:
       title: The Postgres Async (Sidekiq) replica Connection Pool Utilization per
@@ -5506,7 +5506,7 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="pgbouncer_async_replica_pool"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="pgbouncer_async_replica_pool"}
-  - alert: component_saturation_slo_out_of_bounds
+  - alert: component_saturation_slo_out_of_bounds:pgbouncer_client_conn_primary
     for: 5m
     annotations:
       title: The PGBouncer Client Connections per Process (Primary) resource of the
@@ -5564,7 +5564,7 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="pgbouncer_client_conn_primary"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="pgbouncer_client_conn_primary"}
-  - alert: component_saturation_slo_out_of_bounds
+  - alert: component_saturation_slo_out_of_bounds:pgbouncer_client_conn_replicas
     for: 5m
     annotations:
       title: The PGBouncer Client Connections per Process (Replicas) resource of the
@@ -5622,7 +5622,7 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="pgbouncer_client_conn_replicas"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="pgbouncer_client_conn_replicas"}
-  - alert: component_saturation_slo_out_of_bounds
+  - alert: component_saturation_slo_out_of_bounds:pgbouncer_single_core
     for: 5m
     annotations:
       title: The PGBouncer Single Core per Node resource of the {{ $labels.type }}
@@ -5680,7 +5680,7 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="pgbouncer_single_core"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="pgbouncer_single_core"}
-  - alert: component_saturation_slo_out_of_bounds
+  - alert: component_saturation_slo_out_of_bounds:pgbouncer_sync_primary_pool
     for: 10m
     annotations:
       title: The Postgres Sync (Web/API/Git) primary Connection Pool Utilization per
@@ -5749,7 +5749,7 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="pgbouncer_sync_primary_pool"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="pgbouncer_sync_primary_pool"}
-  - alert: component_saturation_slo_out_of_bounds
+  - alert: component_saturation_slo_out_of_bounds:pgbouncer_sync_replica_pool
     for: 10m
     annotations:
       title: The Postgres Sync (Web/API/Git) replica Connection Pool Utilization per
@@ -5818,7 +5818,7 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="pgbouncer_sync_replica_pool"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="pgbouncer_sync_replica_pool"}
-  - alert: component_saturation_slo_out_of_bounds
+  - alert: component_saturation_slo_out_of_bounds:private_runners
     for: 5m
     annotations:
       title: The private Runner utilization resource of the {{ $labels.type }} service
@@ -5877,7 +5877,7 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="private_runners"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="private_runners"}
-  - alert: component_saturation_slo_out_of_bounds
+  - alert: component_saturation_slo_out_of_bounds:puma_workers
     for: 5m
     annotations:
       title: The Puma Worker Saturation resource of the {{ $labels.type }} service
@@ -5933,7 +5933,7 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="puma_workers"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="puma_workers"}
-  - alert: component_saturation_slo_out_of_bounds
+  - alert: component_saturation_slo_out_of_bounds:pvs_cloudrun_container_instances
     for: 5m
     annotations:
       title: The Cloud Run Container Instance Utilization resource of the {{ $labels.type
@@ -5996,7 +5996,7 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="pvs_cloudrun_container_instances"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="pvs_cloudrun_container_instances"}
-  - alert: component_saturation_slo_out_of_bounds
+  - alert: component_saturation_slo_out_of_bounds:rails_db_connection_pool
     for: 15m
     annotations:
       title: The Rails DB Connection Pool Utilization resource of the {{ $labels.type
@@ -6059,7 +6059,7 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="rails_db_connection_pool"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="rails_db_connection_pool"}
-  - alert: component_saturation_slo_out_of_bounds
+  - alert: component_saturation_slo_out_of_bounds:redis_clients
     for: 5m
     annotations:
       title: The Redis Client Utilization per Node resource of the {{ $labels.type
@@ -6114,7 +6114,7 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="redis_clients"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="redis_clients"}
-  - alert: component_saturation_slo_out_of_bounds
+  - alert: component_saturation_slo_out_of_bounds:redis_cluster_clients
     for: 5m
     annotations:
       title: The Redis Client Utilization per Node resource of the {{ $labels.type
@@ -6169,7 +6169,7 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="redis_cluster_clients"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="redis_cluster_clients"}
-  - alert: component_saturation_slo_out_of_bounds
+  - alert: component_saturation_slo_out_of_bounds:redis_cluster_memory
     for: 5m
     annotations:
       title: The Redis Memory Utilization per Node resource of the {{ $labels.type
@@ -6239,7 +6239,7 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="redis_cluster_memory"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="redis_cluster_memory"}
-  - alert: component_saturation_slo_out_of_bounds
+  - alert: component_saturation_slo_out_of_bounds:redis_cluster_primary_cpu
     for: 5m
     annotations:
       title: The Redis Primary CPU Utilization per Node resource of the {{ $labels.type
@@ -6297,7 +6297,7 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="redis_cluster_primary_cpu"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="redis_cluster_primary_cpu"}
-  - alert: component_saturation_slo_out_of_bounds
+  - alert: component_saturation_slo_out_of_bounds:redis_memory
     for: 5m
     annotations:
       title: The Redis Memory Utilization per Node resource of the {{ $labels.type
@@ -6367,7 +6367,7 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="redis_memory"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="redis_memory"}
-  - alert: component_saturation_slo_out_of_bounds
+  - alert: component_saturation_slo_out_of_bounds:redis_memory_cache
     for: 5m
     annotations:
       title: The Redis Memory Utilization of Max Memory resource of the {{ $labels.type
@@ -6433,7 +6433,7 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="redis_memory_cache"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="redis_memory_cache"}
-  - alert: component_saturation_slo_out_of_bounds
+  - alert: component_saturation_slo_out_of_bounds:redis_memory_sessions
     for: 5m
     annotations:
       title: The Redis Memory Utilization of Max Memory resource of the {{ $labels.type
@@ -6499,7 +6499,7 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="redis_memory_sessions"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="redis_memory_sessions"}
-  - alert: component_saturation_slo_out_of_bounds
+  - alert: component_saturation_slo_out_of_bounds:redis_memory_shared_state
     for: 5m
     annotations:
       title: The Redis Memory Utilization of Max Memory resource of the {{ $labels.type
@@ -6565,7 +6565,7 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="redis_memory_shared_state"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="redis_memory_shared_state"}
-  - alert: component_saturation_slo_out_of_bounds
+  - alert: component_saturation_slo_out_of_bounds:redis_memory_tracechunks
     for: 5m
     annotations:
       title: The Redis Memory Utilization per Node resource of the {{ $labels.type
@@ -6635,7 +6635,7 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="redis_memory_tracechunks"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="redis_memory_tracechunks"}
-  - alert: component_saturation_slo_out_of_bounds
+  - alert: component_saturation_slo_out_of_bounds:redis_primary_cpu
     for: 5m
     annotations:
       title: The Redis Primary CPU Utilization per Node resource of the {{ $labels.type
@@ -6693,7 +6693,7 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="redis_primary_cpu"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="redis_primary_cpu"}
-  - alert: component_saturation_slo_out_of_bounds
+  - alert: component_saturation_slo_out_of_bounds:redis_secondary_cpu
     for: 5m
     annotations:
       title: The Redis Secondary CPU Utilization per Node resource of the {{ $labels.type
@@ -6752,7 +6752,7 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="redis_secondary_cpu"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="redis_secondary_cpu"}
-  - alert: component_saturation_slo_out_of_bounds
+  - alert: component_saturation_slo_out_of_bounds:ruby_thread_contention
     for: 5m
     annotations:
       title: The Ruby Thread Contention resource of the {{ $labels.type }} service
@@ -6805,7 +6805,7 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="ruby_thread_contention"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="ruby_thread_contention"}
-  - alert: component_saturation_slo_out_of_bounds
+  - alert: component_saturation_slo_out_of_bounds:saas_linux_large_amd64_runners
     for: 5m
     annotations:
       title: The saas-linux-large-amd64 Runner utilization resource of the {{ $labels.type
@@ -6864,7 +6864,7 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="saas_linux_large_amd64_runners"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="saas_linux_large_amd64_runners"}
-  - alert: component_saturation_slo_out_of_bounds
+  - alert: component_saturation_slo_out_of_bounds:saas_linux_medium_amd64_gpu_standard_runners
     for: 5m
     annotations:
       title: The saas-linux-medium-amd64-gpu-standard Runner utilization resource
@@ -6923,7 +6923,7 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="saas_linux_medium_amd64_gpu_standard_runners"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="saas_linux_medium_amd64_gpu_standard_runners"}
-  - alert: component_saturation_slo_out_of_bounds
+  - alert: component_saturation_slo_out_of_bounds:saas_linux_medium_amd64_runners
     for: 5m
     annotations:
       title: The saas-linux-medium-amd64 Runner utilization resource of the {{ $labels.type
@@ -6982,7 +6982,7 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="saas_linux_medium_amd64_runners"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="saas_linux_medium_amd64_runners"}
-  - alert: component_saturation_slo_out_of_bounds
+  - alert: component_saturation_slo_out_of_bounds:saas_linux_small_amd64_runners
     for: 5m
     annotations:
       title: The saas-linux-small-amd64 Runner utilization resource of the {{ $labels.type
@@ -7041,7 +7041,7 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="saas_linux_small_amd64_runners"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="saas_linux_small_amd64_runners"}
-  - alert: component_saturation_slo_out_of_bounds
+  - alert: component_saturation_slo_out_of_bounds:saas_macos_medium_m1_runners
     for: 5m
     annotations:
       title: The saas-macos-medium-m1 Runner utilization resource of the {{ $labels.type
@@ -7100,7 +7100,7 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="saas_macos_medium_m1_runners"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="saas_macos_medium_m1_runners"}
-  - alert: component_saturation_slo_out_of_bounds
+  - alert: component_saturation_slo_out_of_bounds:saas_macos_staging_runners
     for: 5m
     annotations:
       title: The saas-macos-staging Runner utilization resource of the {{ $labels.type
@@ -7159,7 +7159,7 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="saas_macos_staging_runners"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="saas_macos_staging_runners"}
-  - alert: component_saturation_slo_out_of_bounds
+  - alert: component_saturation_slo_out_of_bounds:shard_cpu
     for: 5m
     annotations:
       title: The Average CPU Utilization per Shard resource of the {{ $labels.type
@@ -7210,7 +7210,7 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="shard_cpu"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="shard_cpu"}
-  - alert: component_saturation_slo_out_of_bounds
+  - alert: component_saturation_slo_out_of_bounds:shared_runners_gitlab
     for: 5m
     annotations:
       title: The shared-gitlab-org Runner utilization resource of the {{ $labels.type
@@ -7269,7 +7269,7 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="shared_runners_gitlab"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="shared_runners_gitlab"}
-  - alert: component_saturation_slo_out_of_bounds
+  - alert: component_saturation_slo_out_of_bounds:sidekiq_shard_workers
     for: 10m
     annotations:
       title: The Sidekiq Worker Utilization per shard resource of the {{ $labels.type
@@ -7332,7 +7332,7 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="sidekiq_shard_workers"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="sidekiq_shard_workers"}
-  - alert: component_saturation_slo_out_of_bounds
+  - alert: component_saturation_slo_out_of_bounds:sidekiq_thread_contention
     for: 5m
     annotations:
       title: The Sidekiq Ruby Thread Contention resource of the {{ $labels.type }}
@@ -7385,7 +7385,7 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="sidekiq_thread_contention"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="sidekiq_thread_contention"}
-  - alert: component_saturation_slo_out_of_bounds
+  - alert: component_saturation_slo_out_of_bounds:single_node_cpu
     for: 10m
     annotations:
       title: The Average CPU Utilization per Node resource of the {{ $labels.type
@@ -7434,7 +7434,7 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="single_node_cpu"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="single_node_cpu"}
-  - alert: component_saturation_slo_out_of_bounds
+  - alert: component_saturation_slo_out_of_bounds:windows_shared_runners
     for: 5m
     annotations:
       title: The windows-shared Runner utilization resource of the {{ $labels.type
@@ -7493,7 +7493,7 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="windows_shared_runners"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="windows_shared_runners"}
-  - alert: component_saturation_slo_out_of_bounds
+  - alert: component_saturation_slo_out_of_bounds:workhorse_image_scaling
     for: 15m
     annotations:
       title: The Workhorse Image Scaler Exhaustion per Node resource of the {{ $labels.type

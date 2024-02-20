@@ -30,6 +30,7 @@ local serviceLevelIndicatorDefaults = {
   severity: 's2',
   dependsOn: [],  // When an sli depends on another component, don't alert on this SLI if the downstream service is already firing. This is meant for hard dependencies managed by GitLab.
   shardLevelMonitoring: false,
+  emittedBy: [],  // Which services emit the metrics for this SLI, e.g. rails_redis_client SLI is emitted by web service
 };
 
 local validateHasField(object, field, message) =
@@ -57,7 +58,8 @@ local validateSeverity(object, message) =
     std.assertEqual(true, { __assert: message });
 
 local validateAndApplySLIDefaults(sliName, component, inheritedDefaults) =
-  local withDefaults = serviceLevelIndicatorDefaults +
+  local withDefaults = serviceLevelIndicatorDefaults
+                       { emittedBy: [inheritedDefaults.type] } +
                        inheritedDefaults +
                        component +
                        { dependencies: dependencies.new(withDefaults.type, sliName, withDefaults.dependsOn) };

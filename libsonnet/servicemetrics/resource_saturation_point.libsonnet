@@ -177,7 +177,9 @@ local generateSaturationAlerts(definition, componentName, selectorHash) =
   };
 
   [alerts.processAlertRule(commonAlertDefinition {
-    alert: 'component_saturation_slo_out_of_bounds',
+    alert: 'component_saturation_slo_out_of_bounds:%(component)s' % {
+      component: componentName,
+    },
     expr: |||
       gitlab_component_saturation:ratio{%(selector)s} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{%(selector)s}
@@ -358,6 +360,7 @@ local resourceSaturationPoint = function(options)
         expr: '%g' % [definition.slos.hard],
       }],
 
+    // Drop this function when migration to mimir is complete: https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/2834
     getMetadataRecordingRuleDefinition(componentName)::
       local definition = self;
 

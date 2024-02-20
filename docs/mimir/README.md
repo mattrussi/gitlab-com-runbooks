@@ -16,10 +16,22 @@
 ## Troubleshooting Pointers
 
 * [How to resize Persistent Volumes in Kubernetes](../kube/k8s-pvc-resize.md)
-* [Mimir Onboarding](onboarding.md)
+* [Mimir Onboarding](getting-started.md)
+* [Mixins](../monitoring/mixins.md)
 <!-- END_MARKER -->
 
 <!-- ## Summary -->
+## Quick Links
+
+| Reference  | Link  |
+|---|---|
+| Helm Deployment | [helmfiles](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/tree/master/releases/mimir) |
+| Tenant Configuration | [config-mgmt](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/tree/master/environments/observability-tenants) |
+| Runbooks | [Grafana Runbooks](https://grafana.com/docs/mimir/latest/manage/mimir-runbooks/) |
+| Dashboards | [Mimir Overview](https://dashboards.gitlab.net/d/ffcd83628d7d4b5a03d1cafd159e6c9c/mimir-overview?orgId=1) |
+| Logs | [Elastci Cloud](https://nonprod-log.gitlab.net/app/r/s/h3UsR) |
+
+
 ## Runbooks
 
 We use a slightly refactored version of the [Grafana Monitoring Mixin](https://gitlab.com/gitlab-com/gl-infra/monitoring-mixins) for much of the operational monitoring.
@@ -30,7 +42,7 @@ As such the Grafana Runbooks apply to our alerts as well, and are the best sourc
 
 ## Onboarding
 
-See the [onboarding readme](./onboarding.md)
+See the [getting-started readme](./getting-started.md)
 
 ## Cardinality Management
 

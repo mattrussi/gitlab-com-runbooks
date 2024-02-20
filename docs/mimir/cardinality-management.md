@@ -11,7 +11,7 @@ Following the second article which references Grafana Cloud, we have implemented
 
 ## Example
 
-Looking at the overview page we have selected the tennat `gitlab-gstg`.  
+Looking at the overview page we have selected the tennat `gitlab-gstg`.
 
 From this view we have a few pieces of information:
 
@@ -26,9 +26,9 @@ Lets pick the `gitlab_sql_duration_seconds_bucket` metric.
 
 ![cardinality-overview](./img/cardinality-overview.png)
 
-If we click on that series, it will take us to a [series drill down dashboard](https://dashboards.gitlab.net/goto/e_lh7ahIR?orgId=1).  
+If we click on that series, it will take us to a [series drill down dashboard](https://dashboards.gitlab.net/goto/e_lh7ahIR?orgId=1).
 
-This view drills into the series and shows us a tree map which shows the label names with the highest amount of unique values.  
+This view drills into the series and shows us a tree map which shows the label names with the highest amount of unique values.
 
 In this example we can see `endpoint_id` is the largest label consumer with `987` unique values.
 
