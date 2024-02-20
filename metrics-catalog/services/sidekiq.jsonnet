@@ -73,6 +73,7 @@ metricsCatalog.serviceDefinition({
     'redis-sidekiq': true,
     'redis-cluster-queues-meta': true,
     'redis-cluster-cache': true,
+    'redis-cluster-repo-cache': true,
     redis: true,
     patroni: true,
     pgbouncer: true,
