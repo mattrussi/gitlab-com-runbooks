@@ -44,7 +44,7 @@ The primary limits tenants will face are:
 After you have set up the tenant (or use an existing), you can setup your prometheus client to remote-write metrics
 Prometheus configuration is done via the [remote_write config](https://prometheus.io/docs/prometheus/latest/configuration/configuration/#remote_write).
 
-The following excample uses the [prometheus-operator](https://github.com/prometheus-operator/prometheus-operator) in kubernetes:
+The following example uses the [prometheus-operator](https://github.com/prometheus-operator/prometheus-operator) in kubernetes:
 
 ```yaml
 remoteWrite:
