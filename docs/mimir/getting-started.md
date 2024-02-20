@@ -84,4 +84,4 @@ Ensure you have selected the correct datasource for your tenant:
 
 Query away.
 
-For more information on using the explore ui, you can reference the [Grafana official docs](https://grafana.com/docs/grafana/latest/explore/).
+For more information on using the explore UI, you can reference the [Grafana official docs](https://grafana.com/docs/grafana/latest/explore/).
