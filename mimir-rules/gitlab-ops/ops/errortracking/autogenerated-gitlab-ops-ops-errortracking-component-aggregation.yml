@@ -7,6 +7,7 @@ groups:
   - record: gitlab_component_apdex:success:rate_5m
     labels:
       component: loadbalancer
+      monitor: global
       tier: sv
       type: errortracking
     expr: |
@@ -24,6 +25,7 @@ groups:
   - record: gitlab_component_apdex:weight:score_5m
     labels:
       component: loadbalancer
+      monitor: global
       tier: sv
       type: errortracking
     expr: |
@@ -33,6 +35,7 @@ groups:
   - record: gitlab_component_ops:rate_5m
     labels:
       component: loadbalancer
+      monitor: global
       tier: sv
       type: errortracking
     expr: |
@@ -42,6 +45,7 @@ groups:
   - record: gitlab_component_errors:rate_5m
     labels:
       component: loadbalancer
+      monitor: global
       tier: sv
       type: errortracking
     expr: |
@@ -53,7 +57,7 @@ groups:
       or
       (
         0 * group by(env,environment,stage) (
-          gitlab_component_ops:rate_5m{component="loadbalancer",env="ops",tier="sv",type="errortracking"}
+          gitlab_component_ops:rate_5m{component="loadbalancer",env="ops",monitor="global",tier="sv",type="errortracking"}
         )
       )
 - name: 'Global SLI Metrics: errortracking - Burn-Rate 30m'
@@ -62,6 +66,7 @@ groups:
   - record: gitlab_component_apdex:success:rate_30m
     labels:
       component: loadbalancer
+      monitor: global
       tier: sv
       type: errortracking
     expr: |
@@ -79,6 +84,7 @@ groups:
   - record: gitlab_component_apdex:weight:score_30m
     labels:
       component: loadbalancer
+      monitor: global
       tier: sv
       type: errortracking
     expr: |
@@ -88,6 +94,7 @@ groups:
   - record: gitlab_component_ops:rate_30m
     labels:
       component: loadbalancer
+      monitor: global
       tier: sv
       type: errortracking
     expr: |
@@ -97,6 +104,7 @@ groups:
   - record: gitlab_component_errors:rate_30m
     labels:
       component: loadbalancer
+      monitor: global
       tier: sv
       type: errortracking
     expr: |
@@ -108,7 +116,7 @@ groups:
       or
       (
         0 * group by(env,environment,stage) (
-          gitlab_component_ops:rate_30m{component="loadbalancer",env="ops",tier="sv",type="errortracking"}
+          gitlab_component_ops:rate_30m{component="loadbalancer",env="ops",monitor="global",tier="sv",type="errortracking"}
         )
       )
 - name: 'Global SLI Metrics: errortracking - Burn-Rate 1h'
@@ -117,6 +125,7 @@ groups:
   - record: gitlab_component_apdex:success:rate_1h
     labels:
       component: loadbalancer
+      monitor: global
       tier: sv
       type: errortracking
     expr: |
@@ -134,6 +143,7 @@ groups:
   - record: gitlab_component_apdex:weight:score_1h
     labels:
       component: loadbalancer
+      monitor: global
       tier: sv
       type: errortracking
     expr: |
@@ -143,6 +153,7 @@ groups:
   - record: gitlab_component_ops:rate_1h
     labels:
       component: loadbalancer
+      monitor: global
       tier: sv
       type: errortracking
     expr: |
@@ -152,6 +163,7 @@ groups:
   - record: gitlab_component_errors:rate_1h
     labels:
       component: loadbalancer
+      monitor: global
       tier: sv
       type: errortracking
     expr: |
@@ -163,6 +175,6 @@ groups:
       or
       (
         0 * group by(env,environment,stage) (
-          gitlab_component_ops:rate_1h{component="loadbalancer",env="ops",tier="sv",type="errortracking"}
+          gitlab_component_ops:rate_1h{component="loadbalancer",env="ops",monitor="global",tier="sv",type="errortracking"}
         )
       )

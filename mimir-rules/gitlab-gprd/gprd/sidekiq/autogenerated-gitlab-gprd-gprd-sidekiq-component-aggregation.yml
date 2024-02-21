@@ -7,6 +7,7 @@ groups:
   - record: gitlab_component_apdex:success:rate_5m
     labels:
       component: llm_completion
+      monitor: global
       tier: sv
       type: sidekiq
     expr: |
@@ -16,6 +17,7 @@ groups:
   - record: gitlab_component_apdex:weight:score_5m
     labels:
       component: llm_completion
+      monitor: global
       tier: sv
       type: sidekiq
     expr: |
@@ -25,6 +27,7 @@ groups:
   - record: gitlab_component_ops:rate_5m
     labels:
       component: llm_completion
+      monitor: global
       tier: sv
       type: sidekiq
     expr: |
@@ -34,6 +37,7 @@ groups:
   - record: gitlab_component_errors:rate_5m
     labels:
       component: llm_completion
+      monitor: global
       tier: sv
       type: sidekiq
     expr: |
@@ -45,12 +49,13 @@ groups:
       or
       (
         0 * group by(env,environment,stage) (
-          gitlab_component_ops:rate_5m{component="llm_completion",env="gprd",tier="sv",type="sidekiq"}
+          gitlab_component_ops:rate_5m{component="llm_completion",env="gprd",monitor="global",tier="sv",type="sidekiq"}
         )
       )
   - record: gitlab_component_apdex:success:rate_5m
     labels:
       component: sidekiq_execution
+      monitor: global
       tier: sv
       type: sidekiq
     expr: |
@@ -60,6 +65,7 @@ groups:
   - record: gitlab_component_apdex:weight:score_5m
     labels:
       component: sidekiq_execution
+      monitor: global
       tier: sv
       type: sidekiq
     expr: |
@@ -69,6 +75,7 @@ groups:
   - record: gitlab_component_ops:rate_5m
     labels:
       component: sidekiq_execution
+      monitor: global
       tier: sv
       type: sidekiq
     expr: |
@@ -78,6 +85,7 @@ groups:
   - record: gitlab_component_errors:rate_5m
     labels:
       component: sidekiq_execution
+      monitor: global
       tier: sv
       type: sidekiq
     expr: |
@@ -89,12 +97,13 @@ groups:
       or
       (
         0 * group by(env,environment,stage) (
-          gitlab_component_ops:rate_5m{component="sidekiq_execution",env="gprd",tier="sv",type="sidekiq"}
+          gitlab_component_ops:rate_5m{component="sidekiq_execution",env="gprd",monitor="global",tier="sv",type="sidekiq"}
         )
       )
   - record: gitlab_component_apdex:success:rate_5m
     labels:
       component: sidekiq_execution_with_external_dependency
+      monitor: global
       tier: sv
       type: sidekiq
     expr: |
@@ -104,6 +113,7 @@ groups:
   - record: gitlab_component_apdex:weight:score_5m
     labels:
       component: sidekiq_execution_with_external_dependency
+      monitor: global
       tier: sv
       type: sidekiq
     expr: |
@@ -113,6 +123,7 @@ groups:
   - record: gitlab_component_ops:rate_5m
     labels:
       component: sidekiq_execution_with_external_dependency
+      monitor: global
       tier: sv
       type: sidekiq
     expr: |
@@ -122,6 +133,7 @@ groups:
   - record: gitlab_component_errors:rate_5m
     labels:
       component: sidekiq_execution_with_external_dependency
+      monitor: global
       tier: sv
       type: sidekiq
     expr: |
@@ -133,12 +145,13 @@ groups:
       or
       (
         0 * group by(env,environment,stage) (
-          gitlab_component_ops:rate_5m{component="sidekiq_execution_with_external_dependency",env="gprd",tier="sv",type="sidekiq"}
+          gitlab_component_ops:rate_5m{component="sidekiq_execution_with_external_dependency",env="gprd",monitor="global",tier="sv",type="sidekiq"}
         )
       )
   - record: gitlab_component_apdex:success:rate_5m
     labels:
       component: sidekiq_queueing
+      monitor: global
       tier: sv
       type: sidekiq
     expr: |
@@ -148,6 +161,7 @@ groups:
   - record: gitlab_component_apdex:weight:score_5m
     labels:
       component: sidekiq_queueing
+      monitor: global
       tier: sv
       type: sidekiq
     expr: |
@@ -157,6 +171,7 @@ groups:
   - record: gitlab_component_ops:rate_5m
     labels:
       component: sidekiq_queueing
+      monitor: global
       tier: sv
       type: sidekiq
     expr: |
@@ -166,6 +181,7 @@ groups:
   - record: gitlab_component_apdex:success:rate_5m
     labels:
       component: sidekiq_queueing_with_external_dependency
+      monitor: global
       tier: sv
       type: sidekiq
     expr: |
@@ -175,6 +191,7 @@ groups:
   - record: gitlab_component_apdex:weight:score_5m
     labels:
       component: sidekiq_queueing_with_external_dependency
+      monitor: global
       tier: sv
       type: sidekiq
     expr: |
@@ -184,6 +201,7 @@ groups:
   - record: gitlab_component_ops:rate_5m
     labels:
       component: sidekiq_queueing_with_external_dependency
+      monitor: global
       tier: sv
       type: sidekiq
     expr: |
@@ -196,6 +214,7 @@ groups:
   - record: gitlab_component_apdex:success:rate_30m
     labels:
       component: llm_completion
+      monitor: global
       tier: sv
       type: sidekiq
     expr: |
@@ -205,6 +224,7 @@ groups:
   - record: gitlab_component_apdex:weight:score_30m
     labels:
       component: llm_completion
+      monitor: global
       tier: sv
       type: sidekiq
     expr: |
@@ -214,6 +234,7 @@ groups:
   - record: gitlab_component_ops:rate_30m
     labels:
       component: llm_completion
+      monitor: global
       tier: sv
       type: sidekiq
     expr: |
@@ -223,6 +244,7 @@ groups:
   - record: gitlab_component_errors:rate_30m
     labels:
       component: llm_completion
+      monitor: global
       tier: sv
       type: sidekiq
     expr: |
@@ -234,12 +256,13 @@ groups:
       or
       (
         0 * group by(env,environment,stage) (
-          gitlab_component_ops:rate_30m{component="llm_completion",env="gprd",tier="sv",type="sidekiq"}
+          gitlab_component_ops:rate_30m{component="llm_completion",env="gprd",monitor="global",tier="sv",type="sidekiq"}
         )
       )
   - record: gitlab_component_apdex:success:rate_30m
     labels:
       component: sidekiq_execution
+      monitor: global
       tier: sv
       type: sidekiq
     expr: |
@@ -249,6 +272,7 @@ groups:
   - record: gitlab_component_apdex:weight:score_30m
     labels:
       component: sidekiq_execution
+      monitor: global
       tier: sv
       type: sidekiq
     expr: |
@@ -258,6 +282,7 @@ groups:
   - record: gitlab_component_ops:rate_30m
     labels:
       component: sidekiq_execution
+      monitor: global
       tier: sv
       type: sidekiq
     expr: |
@@ -267,6 +292,7 @@ groups:
   - record: gitlab_component_errors:rate_30m
     labels:
       component: sidekiq_execution
+      monitor: global
       tier: sv
       type: sidekiq
     expr: |
@@ -278,12 +304,13 @@ groups:
       or
       (
         0 * group by(env,environment,stage) (
-          gitlab_component_ops:rate_30m{component="sidekiq_execution",env="gprd",tier="sv",type="sidekiq"}
+          gitlab_component_ops:rate_30m{component="sidekiq_execution",env="gprd",monitor="global",tier="sv",type="sidekiq"}
         )
       )
   - record: gitlab_component_apdex:success:rate_30m
     labels:
       component: sidekiq_execution_with_external_dependency
+      monitor: global
       tier: sv
       type: sidekiq
     expr: |
@@ -293,6 +320,7 @@ groups:
   - record: gitlab_component_apdex:weight:score_30m
     labels:
       component: sidekiq_execution_with_external_dependency
+      monitor: global
       tier: sv
       type: sidekiq
     expr: |
@@ -302,6 +330,7 @@ groups:
   - record: gitlab_component_ops:rate_30m
     labels:
       component: sidekiq_execution_with_external_dependency
+      monitor: global
       tier: sv
       type: sidekiq
     expr: |
@@ -311,6 +340,7 @@ groups:
   - record: gitlab_component_errors:rate_30m
     labels:
       component: sidekiq_execution_with_external_dependency
+      monitor: global
       tier: sv
       type: sidekiq
     expr: |
@@ -322,12 +352,13 @@ groups:
       or
       (
         0 * group by(env,environment,stage) (
-          gitlab_component_ops:rate_30m{component="sidekiq_execution_with_external_dependency",env="gprd",tier="sv",type="sidekiq"}
+          gitlab_component_ops:rate_30m{component="sidekiq_execution_with_external_dependency",env="gprd",monitor="global",tier="sv",type="sidekiq"}
         )
       )
   - record: gitlab_component_apdex:success:rate_30m
     labels:
       component: sidekiq_queueing
+      monitor: global
       tier: sv
       type: sidekiq
     expr: |
@@ -337,6 +368,7 @@ groups:
   - record: gitlab_component_apdex:weight:score_30m
     labels:
       component: sidekiq_queueing
+      monitor: global
       tier: sv
       type: sidekiq
     expr: |
@@ -346,6 +378,7 @@ groups:
   - record: gitlab_component_ops:rate_30m
     labels:
       component: sidekiq_queueing
+      monitor: global
       tier: sv
       type: sidekiq
     expr: |
@@ -355,6 +388,7 @@ groups:
   - record: gitlab_component_apdex:success:rate_30m
     labels:
       component: sidekiq_queueing_with_external_dependency
+      monitor: global
       tier: sv
       type: sidekiq
     expr: |
@@ -364,6 +398,7 @@ groups:
   - record: gitlab_component_apdex:weight:score_30m
     labels:
       component: sidekiq_queueing_with_external_dependency
+      monitor: global
       tier: sv
       type: sidekiq
     expr: |
@@ -373,6 +408,7 @@ groups:
   - record: gitlab_component_ops:rate_30m
     labels:
       component: sidekiq_queueing_with_external_dependency
+      monitor: global
       tier: sv
       type: sidekiq
     expr: |
@@ -385,6 +421,7 @@ groups:
   - record: gitlab_component_apdex:success:rate_1h
     labels:
       component: llm_completion
+      monitor: global
       tier: sv
       type: sidekiq
     expr: |
@@ -394,6 +431,7 @@ groups:
   - record: gitlab_component_apdex:weight:score_1h
     labels:
       component: llm_completion
+      monitor: global
       tier: sv
       type: sidekiq
     expr: |
@@ -403,6 +441,7 @@ groups:
   - record: gitlab_component_ops:rate_1h
     labels:
       component: llm_completion
+      monitor: global
       tier: sv
       type: sidekiq
     expr: |
@@ -412,6 +451,7 @@ groups:
   - record: gitlab_component_errors:rate_1h
     labels:
       component: llm_completion
+      monitor: global
       tier: sv
       type: sidekiq
     expr: |
@@ -423,12 +463,13 @@ groups:
       or
       (
         0 * group by(env,environment,stage) (
-          gitlab_component_ops:rate_1h{component="llm_completion",env="gprd",tier="sv",type="sidekiq"}
+          gitlab_component_ops:rate_1h{component="llm_completion",env="gprd",monitor="global",tier="sv",type="sidekiq"}
         )
       )
   - record: gitlab_component_apdex:success:rate_1h
     labels:
       component: sidekiq_execution
+      monitor: global
       tier: sv
       type: sidekiq
     expr: |
@@ -438,6 +479,7 @@ groups:
   - record: gitlab_component_apdex:weight:score_1h
     labels:
       component: sidekiq_execution
+      monitor: global
       tier: sv
       type: sidekiq
     expr: |
@@ -447,6 +489,7 @@ groups:
   - record: gitlab_component_ops:rate_1h
     labels:
       component: sidekiq_execution
+      monitor: global
       tier: sv
       type: sidekiq
     expr: |
@@ -456,6 +499,7 @@ groups:
   - record: gitlab_component_errors:rate_1h
     labels:
       component: sidekiq_execution
+      monitor: global
       tier: sv
       type: sidekiq
     expr: |
@@ -467,12 +511,13 @@ groups:
       or
       (
         0 * group by(env,environment,stage) (
-          gitlab_component_ops:rate_1h{component="sidekiq_execution",env="gprd",tier="sv",type="sidekiq"}
+          gitlab_component_ops:rate_1h{component="sidekiq_execution",env="gprd",monitor="global",tier="sv",type="sidekiq"}
         )
       )
   - record: gitlab_component_apdex:success:rate_1h
     labels:
       component: sidekiq_execution_with_external_dependency
+      monitor: global
       tier: sv
       type: sidekiq
     expr: |
@@ -482,6 +527,7 @@ groups:
   - record: gitlab_component_apdex:weight:score_1h
     labels:
       component: sidekiq_execution_with_external_dependency
+      monitor: global
       tier: sv
       type: sidekiq
     expr: |
@@ -491,6 +537,7 @@ groups:
   - record: gitlab_component_ops:rate_1h
     labels:
       component: sidekiq_execution_with_external_dependency
+      monitor: global
       tier: sv
       type: sidekiq
     expr: |
@@ -500,6 +547,7 @@ groups:
   - record: gitlab_component_errors:rate_1h
     labels:
       component: sidekiq_execution_with_external_dependency
+      monitor: global
       tier: sv
       type: sidekiq
     expr: |
@@ -511,12 +559,13 @@ groups:
       or
       (
         0 * group by(env,environment,stage) (
-          gitlab_component_ops:rate_1h{component="sidekiq_execution_with_external_dependency",env="gprd",tier="sv",type="sidekiq"}
+          gitlab_component_ops:rate_1h{component="sidekiq_execution_with_external_dependency",env="gprd",monitor="global",tier="sv",type="sidekiq"}
         )
       )
   - record: gitlab_component_apdex:success:rate_1h
     labels:
       component: sidekiq_queueing
+      monitor: global
       tier: sv
       type: sidekiq
     expr: |
@@ -526,6 +575,7 @@ groups:
   - record: gitlab_component_apdex:weight:score_1h
     labels:
       component: sidekiq_queueing
+      monitor: global
       tier: sv
       type: sidekiq
     expr: |
@@ -535,6 +585,7 @@ groups:
   - record: gitlab_component_ops:rate_1h
     labels:
       component: sidekiq_queueing
+      monitor: global
       tier: sv
       type: sidekiq
     expr: |
@@ -544,6 +595,7 @@ groups:
   - record: gitlab_component_apdex:success:rate_1h
     labels:
       component: sidekiq_queueing_with_external_dependency
+      monitor: global
       tier: sv
       type: sidekiq
     expr: |
@@ -553,6 +605,7 @@ groups:
   - record: gitlab_component_apdex:weight:score_1h
     labels:
       component: sidekiq_queueing_with_external_dependency
+      monitor: global
       tier: sv
       type: sidekiq
     expr: |
@@ -562,6 +615,7 @@ groups:
   - record: gitlab_component_ops:rate_1h
     labels:
       component: sidekiq_queueing_with_external_dependency
+      monitor: global
       tier: sv
       type: sidekiq
     expr: |

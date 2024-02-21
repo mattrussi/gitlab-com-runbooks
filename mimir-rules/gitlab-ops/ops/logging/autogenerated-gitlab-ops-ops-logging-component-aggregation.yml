@@ -7,6 +7,7 @@ groups:
   - record: gitlab_component_ops:rate_5m
     labels:
       component: elasticsearch_indexing_cluster
+      monitor: global
       stage: main
       tier: inf
       type: logging
@@ -17,6 +18,7 @@ groups:
   - record: gitlab_component_ops:rate_5m
     labels:
       component: elasticsearch_indexing_index
+      monitor: global
       stage: main
       tier: inf
       type: logging
@@ -27,6 +29,7 @@ groups:
   - record: gitlab_component_ops:rate_5m
     labels:
       component: elasticsearch_searching_cluster
+      monitor: global
       stage: main
       tier: inf
       type: logging
@@ -37,6 +40,7 @@ groups:
   - record: gitlab_component_ops:rate_5m
     labels:
       component: elasticsearch_searching_index
+      monitor: global
       stage: main
       tier: inf
       type: logging
@@ -47,6 +51,7 @@ groups:
   - record: gitlab_component_ops:rate_5m
     labels:
       component: fluentd_log_output
+      monitor: global
       stage: main
       tier: inf
       type: logging
@@ -57,6 +62,7 @@ groups:
   - record: gitlab_component_errors:rate_5m
     labels:
       component: fluentd_log_output
+      monitor: global
       stage: main
       tier: inf
       type: logging
@@ -69,12 +75,13 @@ groups:
       or
       (
         0 * group by(env,environment) (
-          gitlab_component_ops:rate_5m{component="fluentd_log_output",env="ops",stage="main",tier="inf",type="logging"}
+          gitlab_component_ops:rate_5m{component="fluentd_log_output",env="ops",monitor="global",stage="main",tier="inf",type="logging"}
         )
       )
   - record: gitlab_component_ops:rate_5m
     labels:
       component: kibana_googlelb
+      monitor: global
       stage: main
       tier: inf
       type: logging
@@ -85,6 +92,7 @@ groups:
   - record: gitlab_component_errors:rate_5m
     labels:
       component: kibana_googlelb
+      monitor: global
       stage: main
       tier: inf
       type: logging
@@ -97,12 +105,13 @@ groups:
       or
       (
         0 * group by(env,environment) (
-          gitlab_component_ops:rate_5m{component="kibana_googlelb",env="ops",stage="main",tier="inf",type="logging"}
+          gitlab_component_ops:rate_5m{component="kibana_googlelb",env="ops",monitor="global",stage="main",tier="inf",type="logging"}
         )
       )
   - record: gitlab_component_ops:rate_5m
     labels:
       component: pubsub_subscriptions
+      monitor: global
       stage: main
       tier: inf
       type: logging
@@ -113,6 +122,7 @@ groups:
   - record: gitlab_component_ops:rate_5m
     labels:
       component: pubsub_topics
+      monitor: global
       stage: main
       tier: inf
       type: logging
@@ -123,6 +133,7 @@ groups:
   - record: gitlab_component_ops:rate_5m
     labels:
       component: pubsubbeat
+      monitor: global
       stage: main
       tier: inf
       type: logging
@@ -133,6 +144,7 @@ groups:
   - record: gitlab_component_errors:rate_5m
     labels:
       component: pubsubbeat
+      monitor: global
       stage: main
       tier: inf
       type: logging
@@ -145,12 +157,13 @@ groups:
       or
       (
         0 * group by(env,environment) (
-          gitlab_component_ops:rate_5m{component="pubsubbeat",env="ops",stage="main",tier="inf",type="logging"}
+          gitlab_component_ops:rate_5m{component="pubsubbeat",env="ops",monitor="global",stage="main",tier="inf",type="logging"}
         )
       )
   - record: gitlab_component_ops:rate_5m
     labels:
       component: stackdriver
+      monitor: global
       stage: main
       tier: inf
       type: logging
@@ -164,6 +177,7 @@ groups:
   - record: gitlab_component_ops:rate_30m
     labels:
       component: elasticsearch_indexing_cluster
+      monitor: global
       stage: main
       tier: inf
       type: logging
@@ -174,6 +188,7 @@ groups:
   - record: gitlab_component_ops:rate_30m
     labels:
       component: elasticsearch_indexing_index
+      monitor: global
       stage: main
       tier: inf
       type: logging
@@ -184,6 +199,7 @@ groups:
   - record: gitlab_component_ops:rate_30m
     labels:
       component: elasticsearch_searching_cluster
+      monitor: global
       stage: main
       tier: inf
       type: logging
@@ -194,6 +210,7 @@ groups:
   - record: gitlab_component_ops:rate_30m
     labels:
       component: elasticsearch_searching_index
+      monitor: global
       stage: main
       tier: inf
       type: logging
@@ -204,6 +221,7 @@ groups:
   - record: gitlab_component_ops:rate_30m
     labels:
       component: fluentd_log_output
+      monitor: global
       stage: main
       tier: inf
       type: logging
@@ -214,6 +232,7 @@ groups:
   - record: gitlab_component_errors:rate_30m
     labels:
       component: fluentd_log_output
+      monitor: global
       stage: main
       tier: inf
       type: logging
@@ -226,12 +245,13 @@ groups:
       or
       (
         0 * group by(env,environment) (
-          gitlab_component_ops:rate_30m{component="fluentd_log_output",env="ops",stage="main",tier="inf",type="logging"}
+          gitlab_component_ops:rate_30m{component="fluentd_log_output",env="ops",monitor="global",stage="main",tier="inf",type="logging"}
         )
       )
   - record: gitlab_component_ops:rate_30m
     labels:
       component: kibana_googlelb
+      monitor: global
       stage: main
       tier: inf
       type: logging
@@ -242,6 +262,7 @@ groups:
   - record: gitlab_component_errors:rate_30m
     labels:
       component: kibana_googlelb
+      monitor: global
       stage: main
       tier: inf
       type: logging
@@ -254,12 +275,13 @@ groups:
       or
       (
         0 * group by(env,environment) (
-          gitlab_component_ops:rate_30m{component="kibana_googlelb",env="ops",stage="main",tier="inf",type="logging"}
+          gitlab_component_ops:rate_30m{component="kibana_googlelb",env="ops",monitor="global",stage="main",tier="inf",type="logging"}
         )
       )
   - record: gitlab_component_ops:rate_30m
     labels:
       component: pubsub_subscriptions
+      monitor: global
       stage: main
       tier: inf
       type: logging
@@ -270,6 +292,7 @@ groups:
   - record: gitlab_component_ops:rate_30m
     labels:
       component: pubsub_topics
+      monitor: global
       stage: main
       tier: inf
       type: logging
@@ -280,6 +303,7 @@ groups:
   - record: gitlab_component_ops:rate_30m
     labels:
       component: pubsubbeat
+      monitor: global
       stage: main
       tier: inf
       type: logging
@@ -290,6 +314,7 @@ groups:
   - record: gitlab_component_errors:rate_30m
     labels:
       component: pubsubbeat
+      monitor: global
       stage: main
       tier: inf
       type: logging
@@ -302,12 +327,13 @@ groups:
       or
       (
         0 * group by(env,environment) (
-          gitlab_component_ops:rate_30m{component="pubsubbeat",env="ops",stage="main",tier="inf",type="logging"}
+          gitlab_component_ops:rate_30m{component="pubsubbeat",env="ops",monitor="global",stage="main",tier="inf",type="logging"}
         )
       )
   - record: gitlab_component_ops:rate_30m
     labels:
       component: stackdriver
+      monitor: global
       stage: main
       tier: inf
       type: logging
@@ -321,6 +347,7 @@ groups:
   - record: gitlab_component_ops:rate_1h
     labels:
       component: elasticsearch_indexing_cluster
+      monitor: global
       stage: main
       tier: inf
       type: logging
@@ -331,6 +358,7 @@ groups:
   - record: gitlab_component_ops:rate_1h
     labels:
       component: elasticsearch_indexing_index
+      monitor: global
       stage: main
       tier: inf
       type: logging
@@ -341,6 +369,7 @@ groups:
   - record: gitlab_component_ops:rate_1h
     labels:
       component: elasticsearch_searching_cluster
+      monitor: global
       stage: main
       tier: inf
       type: logging
@@ -351,6 +380,7 @@ groups:
   - record: gitlab_component_ops:rate_1h
     labels:
       component: elasticsearch_searching_index
+      monitor: global
       stage: main
       tier: inf
       type: logging
@@ -361,6 +391,7 @@ groups:
   - record: gitlab_component_ops:rate_1h
     labels:
       component: fluentd_log_output
+      monitor: global
       stage: main
       tier: inf
       type: logging
@@ -371,6 +402,7 @@ groups:
   - record: gitlab_component_errors:rate_1h
     labels:
       component: fluentd_log_output
+      monitor: global
       stage: main
       tier: inf
       type: logging
@@ -383,12 +415,13 @@ groups:
       or
       (
         0 * group by(env,environment) (
-          gitlab_component_ops:rate_1h{component="fluentd_log_output",env="ops",stage="main",tier="inf",type="logging"}
+          gitlab_component_ops:rate_1h{component="fluentd_log_output",env="ops",monitor="global",stage="main",tier="inf",type="logging"}
         )
       )
   - record: gitlab_component_ops:rate_1h
     labels:
       component: kibana_googlelb
+      monitor: global
       stage: main
       tier: inf
       type: logging
@@ -399,6 +432,7 @@ groups:
   - record: gitlab_component_errors:rate_1h
     labels:
       component: kibana_googlelb
+      monitor: global
       stage: main
       tier: inf
       type: logging
@@ -411,12 +445,13 @@ groups:
       or
       (
         0 * group by(env,environment) (
-          gitlab_component_ops:rate_1h{component="kibana_googlelb",env="ops",stage="main",tier="inf",type="logging"}
+          gitlab_component_ops:rate_1h{component="kibana_googlelb",env="ops",monitor="global",stage="main",tier="inf",type="logging"}
         )
       )
   - record: gitlab_component_ops:rate_1h
     labels:
       component: pubsub_subscriptions
+      monitor: global
       stage: main
       tier: inf
       type: logging
@@ -427,6 +462,7 @@ groups:
   - record: gitlab_component_ops:rate_1h
     labels:
       component: pubsub_topics
+      monitor: global
       stage: main
       tier: inf
       type: logging
@@ -437,6 +473,7 @@ groups:
   - record: gitlab_component_ops:rate_1h
     labels:
       component: pubsubbeat
+      monitor: global
       stage: main
       tier: inf
       type: logging
@@ -447,6 +484,7 @@ groups:
   - record: gitlab_component_errors:rate_1h
     labels:
       component: pubsubbeat
+      monitor: global
       stage: main
       tier: inf
       type: logging
@@ -459,12 +497,13 @@ groups:
       or
       (
         0 * group by(env,environment) (
-          gitlab_component_ops:rate_1h{component="pubsubbeat",env="ops",stage="main",tier="inf",type="logging"}
+          gitlab_component_ops:rate_1h{component="pubsubbeat",env="ops",monitor="global",stage="main",tier="inf",type="logging"}
         )
       )
   - record: gitlab_component_ops:rate_1h
     labels:
       component: stackdriver
+      monitor: global
       stage: main
       tier: inf
       type: logging

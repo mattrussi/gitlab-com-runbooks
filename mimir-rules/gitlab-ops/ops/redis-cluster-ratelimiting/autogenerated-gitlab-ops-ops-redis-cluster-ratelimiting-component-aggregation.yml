@@ -7,6 +7,7 @@ groups:
   - record: gitlab_component_ops:rate_5m
     labels:
       component: primary_server
+      monitor: global
       stage: main
       tier: db
       type: redis-cluster-ratelimiting
@@ -17,6 +18,7 @@ groups:
   - record: gitlab_component_apdex:success:rate_5m
     labels:
       component: rails_redis_client
+      monitor: global
       stage: main
       tier: db
       type: redis-cluster-ratelimiting
@@ -35,6 +37,7 @@ groups:
   - record: gitlab_component_apdex:weight:score_5m
     labels:
       component: rails_redis_client
+      monitor: global
       stage: main
       tier: db
       type: redis-cluster-ratelimiting
@@ -45,6 +48,7 @@ groups:
   - record: gitlab_component_ops:rate_5m
     labels:
       component: rails_redis_client
+      monitor: global
       stage: main
       tier: db
       type: redis-cluster-ratelimiting
@@ -55,6 +59,7 @@ groups:
   - record: gitlab_component_errors:rate_5m
     labels:
       component: rails_redis_client
+      monitor: global
       stage: main
       tier: db
       type: redis-cluster-ratelimiting
@@ -67,12 +72,13 @@ groups:
       or
       (
         0 * group by(env,environment) (
-          gitlab_component_ops:rate_5m{component="rails_redis_client",env="ops",stage="main",tier="db",type="redis-cluster-ratelimiting"}
+          gitlab_component_ops:rate_5m{component="rails_redis_client",env="ops",monitor="global",stage="main",tier="db",type="redis-cluster-ratelimiting"}
         )
       )
   - record: gitlab_component_ops:rate_5m
     labels:
       component: secondary_servers
+      monitor: global
       stage: main
       tier: db
       type: redis-cluster-ratelimiting
@@ -86,6 +92,7 @@ groups:
   - record: gitlab_component_ops:rate_30m
     labels:
       component: primary_server
+      monitor: global
       stage: main
       tier: db
       type: redis-cluster-ratelimiting
@@ -96,6 +103,7 @@ groups:
   - record: gitlab_component_apdex:success:rate_30m
     labels:
       component: rails_redis_client
+      monitor: global
       stage: main
       tier: db
       type: redis-cluster-ratelimiting
@@ -114,6 +122,7 @@ groups:
   - record: gitlab_component_apdex:weight:score_30m
     labels:
       component: rails_redis_client
+      monitor: global
       stage: main
       tier: db
       type: redis-cluster-ratelimiting
@@ -124,6 +133,7 @@ groups:
   - record: gitlab_component_ops:rate_30m
     labels:
       component: rails_redis_client
+      monitor: global
       stage: main
       tier: db
       type: redis-cluster-ratelimiting
@@ -134,6 +144,7 @@ groups:
   - record: gitlab_component_errors:rate_30m
     labels:
       component: rails_redis_client
+      monitor: global
       stage: main
       tier: db
       type: redis-cluster-ratelimiting
@@ -146,12 +157,13 @@ groups:
       or
       (
         0 * group by(env,environment) (
-          gitlab_component_ops:rate_30m{component="rails_redis_client",env="ops",stage="main",tier="db",type="redis-cluster-ratelimiting"}
+          gitlab_component_ops:rate_30m{component="rails_redis_client",env="ops",monitor="global",stage="main",tier="db",type="redis-cluster-ratelimiting"}
         )
       )
   - record: gitlab_component_ops:rate_30m
     labels:
       component: secondary_servers
+      monitor: global
       stage: main
       tier: db
       type: redis-cluster-ratelimiting
@@ -165,6 +177,7 @@ groups:
   - record: gitlab_component_ops:rate_1h
     labels:
       component: primary_server
+      monitor: global
       stage: main
       tier: db
       type: redis-cluster-ratelimiting
@@ -175,6 +188,7 @@ groups:
   - record: gitlab_component_apdex:success:rate_1h
     labels:
       component: rails_redis_client
+      monitor: global
       stage: main
       tier: db
       type: redis-cluster-ratelimiting
@@ -193,6 +207,7 @@ groups:
   - record: gitlab_component_apdex:weight:score_1h
     labels:
       component: rails_redis_client
+      monitor: global
       stage: main
       tier: db
       type: redis-cluster-ratelimiting
@@ -203,6 +218,7 @@ groups:
   - record: gitlab_component_ops:rate_1h
     labels:
       component: rails_redis_client
+      monitor: global
       stage: main
       tier: db
       type: redis-cluster-ratelimiting
@@ -213,6 +229,7 @@ groups:
   - record: gitlab_component_errors:rate_1h
     labels:
       component: rails_redis_client
+      monitor: global
       stage: main
       tier: db
       type: redis-cluster-ratelimiting
@@ -225,12 +242,13 @@ groups:
       or
       (
         0 * group by(env,environment) (
-          gitlab_component_ops:rate_1h{component="rails_redis_client",env="ops",stage="main",tier="db",type="redis-cluster-ratelimiting"}
+          gitlab_component_ops:rate_1h{component="rails_redis_client",env="ops",monitor="global",stage="main",tier="db",type="redis-cluster-ratelimiting"}
         )
       )
   - record: gitlab_component_ops:rate_1h
     labels:
       component: secondary_servers
+      monitor: global
       stage: main
       tier: db
       type: redis-cluster-ratelimiting

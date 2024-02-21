@@ -1,13 +1,13 @@
 // Get the set of static labels for an aggregation
 // The feature category will be included if the aggregation needs it and the SLI has
 // a feature category
-local staticLabelsForAggregation(serviceDefinition, sliDefinition, aggregationLabels) =
+local staticLabelsForAggregation(serviceDefinition, sliDefinition, aggregationSet) =
   local baseLabels = {
     tier: serviceDefinition.tier,
     type: serviceDefinition.type,
     component: sliDefinition.name,
-  };
-  if sliDefinition.hasStaticFeatureCategory() && std.member(aggregationLabels, 'feature_category')
+  } + aggregationSet.recordingRuleStaticLabels;
+  if sliDefinition.hasStaticFeatureCategory() && std.member(aggregationSet.labels, 'feature_category')
   then baseLabels + sliDefinition.staticFeatureCategoryLabels()
   else baseLabels;
 
@@ -55,7 +55,7 @@ local generateErrorRateRules(burnRate, aggregationSet, sliDefinition, recordingR
 
 // Generates the recording rules given a component definition
 local generateRecordingRulesForComponent(burnRate, aggregationSet, serviceDefinition, sliDefinition, extraSourceSelector, config) =
-  local recordingRuleStaticLabels = staticLabelsForAggregation(serviceDefinition, sliDefinition, aggregationSet.labels);
+  local recordingRuleStaticLabels = staticLabelsForAggregation(serviceDefinition, sliDefinition, aggregationSet);
 
   std.flatMap(
     function(generator) generator(

@@ -7,6 +7,7 @@ groups:
   - record: gitlab_component_ops:rate_5m
     labels:
       component: received_tcp_packets
+      monitor: global
       stage: main
       tier: inf
       type: nat
@@ -21,6 +22,7 @@ groups:
   - record: gitlab_component_errors:rate_5m
     labels:
       component: received_tcp_packets
+      monitor: global
       stage: main
       tier: inf
       type: nat
@@ -37,12 +39,13 @@ groups:
       or
       (
         0 * group by(env,environment) (
-          gitlab_component_ops:rate_5m{component="received_tcp_packets",env="gprd",stage="main",tier="inf",type="nat"}
+          gitlab_component_ops:rate_5m{component="received_tcp_packets",env="gprd",monitor="global",stage="main",tier="inf",type="nat"}
         )
       )
   - record: gitlab_component_ops:rate_5m
     labels:
       component: sent_tcp_packets
+      monitor: global
       stage: main
       tier: inf
       type: nat
@@ -57,6 +60,7 @@ groups:
   - record: gitlab_component_errors:rate_5m
     labels:
       component: sent_tcp_packets
+      monitor: global
       stage: main
       tier: inf
       type: nat
@@ -73,7 +77,7 @@ groups:
       or
       (
         0 * group by(env,environment) (
-          gitlab_component_ops:rate_5m{component="sent_tcp_packets",env="gprd",stage="main",tier="inf",type="nat"}
+          gitlab_component_ops:rate_5m{component="sent_tcp_packets",env="gprd",monitor="global",stage="main",tier="inf",type="nat"}
         )
       )
 - name: 'Global SLI Metrics: nat - Burn-Rate 30m'
@@ -82,6 +86,7 @@ groups:
   - record: gitlab_component_ops:rate_30m
     labels:
       component: received_tcp_packets
+      monitor: global
       stage: main
       tier: inf
       type: nat
@@ -96,6 +101,7 @@ groups:
   - record: gitlab_component_errors:rate_30m
     labels:
       component: received_tcp_packets
+      monitor: global
       stage: main
       tier: inf
       type: nat
@@ -112,12 +118,13 @@ groups:
       or
       (
         0 * group by(env,environment) (
-          gitlab_component_ops:rate_30m{component="received_tcp_packets",env="gprd",stage="main",tier="inf",type="nat"}
+          gitlab_component_ops:rate_30m{component="received_tcp_packets",env="gprd",monitor="global",stage="main",tier="inf",type="nat"}
         )
       )
   - record: gitlab_component_ops:rate_30m
     labels:
       component: sent_tcp_packets
+      monitor: global
       stage: main
       tier: inf
       type: nat
@@ -132,6 +139,7 @@ groups:
   - record: gitlab_component_errors:rate_30m
     labels:
       component: sent_tcp_packets
+      monitor: global
       stage: main
       tier: inf
       type: nat
@@ -148,7 +156,7 @@ groups:
       or
       (
         0 * group by(env,environment) (
-          gitlab_component_ops:rate_30m{component="sent_tcp_packets",env="gprd",stage="main",tier="inf",type="nat"}
+          gitlab_component_ops:rate_30m{component="sent_tcp_packets",env="gprd",monitor="global",stage="main",tier="inf",type="nat"}
         )
       )
 - name: 'Global SLI Metrics: nat - Burn-Rate 1h'
@@ -157,6 +165,7 @@ groups:
   - record: gitlab_component_ops:rate_1h
     labels:
       component: received_tcp_packets
+      monitor: global
       stage: main
       tier: inf
       type: nat
@@ -171,6 +180,7 @@ groups:
   - record: gitlab_component_errors:rate_1h
     labels:
       component: received_tcp_packets
+      monitor: global
       stage: main
       tier: inf
       type: nat
@@ -187,12 +197,13 @@ groups:
       or
       (
         0 * group by(env,environment) (
-          gitlab_component_ops:rate_1h{component="received_tcp_packets",env="gprd",stage="main",tier="inf",type="nat"}
+          gitlab_component_ops:rate_1h{component="received_tcp_packets",env="gprd",monitor="global",stage="main",tier="inf",type="nat"}
         )
       )
   - record: gitlab_component_ops:rate_1h
     labels:
       component: sent_tcp_packets
+      monitor: global
       stage: main
       tier: inf
       type: nat
@@ -207,6 +218,7 @@ groups:
   - record: gitlab_component_errors:rate_1h
     labels:
       component: sent_tcp_packets
+      monitor: global
       stage: main
       tier: inf
       type: nat
@@ -223,6 +235,6 @@ groups:
       or
       (
         0 * group by(env,environment) (
-          gitlab_component_ops:rate_1h{component="sent_tcp_packets",env="gprd",stage="main",tier="inf",type="nat"}
+          gitlab_component_ops:rate_1h{component="sent_tcp_packets",env="gprd",monitor="global",stage="main",tier="inf",type="nat"}
         )
       )

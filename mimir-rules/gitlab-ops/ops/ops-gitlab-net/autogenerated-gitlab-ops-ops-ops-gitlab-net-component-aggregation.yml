@@ -7,6 +7,7 @@ groups:
   - record: gitlab_component_apdex:success:rate_5m
     labels:
       component: gitlab_sshd
+      monitor: global
       stage: main
       tier: sv
       type: ops-gitlab-net
@@ -25,6 +26,7 @@ groups:
   - record: gitlab_component_apdex:weight:score_5m
     labels:
       component: gitlab_sshd
+      monitor: global
       stage: main
       tier: sv
       type: ops-gitlab-net
@@ -35,6 +37,7 @@ groups:
   - record: gitlab_component_ops:rate_5m
     labels:
       component: gitlab_sshd
+      monitor: global
       stage: main
       tier: sv
       type: ops-gitlab-net
@@ -45,6 +48,7 @@ groups:
   - record: gitlab_component_errors:rate_5m
     labels:
       component: gitlab_sshd
+      monitor: global
       stage: main
       tier: sv
       type: ops-gitlab-net
@@ -57,12 +61,13 @@ groups:
       or
       (
         0 * group by(env,environment) (
-          gitlab_component_ops:rate_5m{component="gitlab_sshd",env="ops",stage="main",tier="sv",type="ops-gitlab-net"}
+          gitlab_component_ops:rate_5m{component="gitlab_sshd",env="ops",monitor="global",stage="main",tier="sv",type="ops-gitlab-net"}
         )
       )
   - record: gitlab_component_apdex:success:rate_5m
     labels:
       component: goserver
+      monitor: global
       stage: main
       tier: sv
       type: ops-gitlab-net
@@ -110,6 +115,7 @@ groups:
   - record: gitlab_component_apdex:weight:score_5m
     labels:
       component: goserver
+      monitor: global
       stage: main
       tier: sv
       type: ops-gitlab-net
@@ -133,6 +139,7 @@ groups:
   - record: gitlab_component_ops:rate_5m
     labels:
       component: goserver
+      monitor: global
       stage: main
       tier: sv
       type: ops-gitlab-net
@@ -143,6 +150,7 @@ groups:
   - record: gitlab_component_errors:rate_5m
     labels:
       component: goserver
+      monitor: global
       stage: main
       tier: sv
       type: ops-gitlab-net
@@ -157,12 +165,13 @@ groups:
       or
       (
         0 * group by(env,environment) (
-          gitlab_component_ops:rate_5m{component="goserver",env="ops",stage="main",tier="sv",type="ops-gitlab-net"}
+          gitlab_component_ops:rate_5m{component="goserver",env="ops",monitor="global",stage="main",tier="sv",type="ops-gitlab-net"}
         )
       )
   - record: gitlab_component_apdex:success:rate_5m
     labels:
       component: puma
+      monitor: global
       stage: main
       tier: sv
       type: ops-gitlab-net
@@ -173,6 +182,7 @@ groups:
   - record: gitlab_component_apdex:weight:score_5m
     labels:
       component: puma
+      monitor: global
       stage: main
       tier: sv
       type: ops-gitlab-net
@@ -183,6 +193,7 @@ groups:
   - record: gitlab_component_ops:rate_5m
     labels:
       component: puma
+      monitor: global
       stage: main
       tier: sv
       type: ops-gitlab-net
@@ -193,6 +204,7 @@ groups:
   - record: gitlab_component_errors:rate_5m
     labels:
       component: puma
+      monitor: global
       stage: main
       tier: sv
       type: ops-gitlab-net
@@ -205,12 +217,13 @@ groups:
       or
       (
         0 * group by(env,environment) (
-          gitlab_component_ops:rate_5m{component="puma",env="ops",stage="main",tier="sv",type="ops-gitlab-net"}
+          gitlab_component_ops:rate_5m{component="puma",env="ops",monitor="global",stage="main",tier="sv",type="ops-gitlab-net"}
         )
       )
   - record: gitlab_component_apdex:success:rate_5m
     labels:
       component: rails_sql
+      monitor: global
       stage: main
       tier: sv
       type: ops-gitlab-net
@@ -229,6 +242,7 @@ groups:
   - record: gitlab_component_apdex:weight:score_5m
     labels:
       component: rails_sql
+      monitor: global
       stage: main
       tier: sv
       type: ops-gitlab-net
@@ -239,6 +253,7 @@ groups:
   - record: gitlab_component_ops:rate_5m
     labels:
       component: rails_sql
+      monitor: global
       stage: main
       tier: sv
       type: ops-gitlab-net
@@ -249,6 +264,7 @@ groups:
   - record: gitlab_component_apdex:success:rate_5m
     labels:
       component: registry_server
+      monitor: global
       stage: main
       tier: sv
       type: ops-gitlab-net
@@ -267,6 +283,7 @@ groups:
   - record: gitlab_component_apdex:weight:score_5m
     labels:
       component: registry_server
+      monitor: global
       stage: main
       tier: sv
       type: ops-gitlab-net
@@ -277,6 +294,7 @@ groups:
   - record: gitlab_component_ops:rate_5m
     labels:
       component: registry_server
+      monitor: global
       stage: main
       tier: sv
       type: ops-gitlab-net
@@ -287,6 +305,7 @@ groups:
   - record: gitlab_component_errors:rate_5m
     labels:
       component: registry_server
+      monitor: global
       stage: main
       tier: sv
       type: ops-gitlab-net
@@ -299,12 +318,13 @@ groups:
       or
       (
         0 * group by(env,environment) (
-          gitlab_component_ops:rate_5m{component="registry_server",env="ops",stage="main",tier="sv",type="ops-gitlab-net"}
+          gitlab_component_ops:rate_5m{component="registry_server",env="ops",monitor="global",stage="main",tier="sv",type="ops-gitlab-net"}
         )
       )
   - record: gitlab_component_apdex:success:rate_5m
     labels:
       component: sidekiq_execution
+      monitor: global
       stage: main
       tier: sv
       type: ops-gitlab-net
@@ -315,6 +335,7 @@ groups:
   - record: gitlab_component_apdex:weight:score_5m
     labels:
       component: sidekiq_execution
+      monitor: global
       stage: main
       tier: sv
       type: ops-gitlab-net
@@ -325,6 +346,7 @@ groups:
   - record: gitlab_component_ops:rate_5m
     labels:
       component: sidekiq_execution
+      monitor: global
       stage: main
       tier: sv
       type: ops-gitlab-net
@@ -335,6 +357,7 @@ groups:
   - record: gitlab_component_errors:rate_5m
     labels:
       component: sidekiq_execution
+      monitor: global
       stage: main
       tier: sv
       type: ops-gitlab-net
@@ -347,12 +370,13 @@ groups:
       or
       (
         0 * group by(env,environment) (
-          gitlab_component_ops:rate_5m{component="sidekiq_execution",env="ops",stage="main",tier="sv",type="ops-gitlab-net"}
+          gitlab_component_ops:rate_5m{component="sidekiq_execution",env="ops",monitor="global",stage="main",tier="sv",type="ops-gitlab-net"}
         )
       )
   - record: gitlab_component_apdex:success:rate_5m
     labels:
       component: sidekiq_queueing
+      monitor: global
       stage: main
       tier: sv
       type: ops-gitlab-net
@@ -363,6 +387,7 @@ groups:
   - record: gitlab_component_apdex:weight:score_5m
     labels:
       component: sidekiq_queueing
+      monitor: global
       stage: main
       tier: sv
       type: ops-gitlab-net
@@ -373,6 +398,7 @@ groups:
   - record: gitlab_component_ops:rate_5m
     labels:
       component: sidekiq_queueing
+      monitor: global
       stage: main
       tier: sv
       type: ops-gitlab-net
@@ -383,6 +409,7 @@ groups:
   - record: gitlab_component_apdex:success:rate_5m
     labels:
       component: workhorse
+      monitor: global
       stage: main
       tier: sv
       type: ops-gitlab-net
@@ -401,6 +428,7 @@ groups:
   - record: gitlab_component_apdex:weight:score_5m
     labels:
       component: workhorse
+      monitor: global
       stage: main
       tier: sv
       type: ops-gitlab-net
@@ -411,6 +439,7 @@ groups:
   - record: gitlab_component_ops:rate_5m
     labels:
       component: workhorse
+      monitor: global
       stage: main
       tier: sv
       type: ops-gitlab-net
@@ -421,6 +450,7 @@ groups:
   - record: gitlab_component_errors:rate_5m
     labels:
       component: workhorse
+      monitor: global
       stage: main
       tier: sv
       type: ops-gitlab-net
@@ -433,7 +463,7 @@ groups:
       or
       (
         0 * group by(env,environment) (
-          gitlab_component_ops:rate_5m{component="workhorse",env="ops",stage="main",tier="sv",type="ops-gitlab-net"}
+          gitlab_component_ops:rate_5m{component="workhorse",env="ops",monitor="global",stage="main",tier="sv",type="ops-gitlab-net"}
         )
       )
 - name: 'Global SLI Metrics: ops-gitlab-net - Burn-Rate 30m'
@@ -442,6 +472,7 @@ groups:
   - record: gitlab_component_apdex:success:rate_30m
     labels:
       component: gitlab_sshd
+      monitor: global
       stage: main
       tier: sv
       type: ops-gitlab-net
@@ -460,6 +491,7 @@ groups:
   - record: gitlab_component_apdex:weight:score_30m
     labels:
       component: gitlab_sshd
+      monitor: global
       stage: main
       tier: sv
       type: ops-gitlab-net
@@ -470,6 +502,7 @@ groups:
   - record: gitlab_component_ops:rate_30m
     labels:
       component: gitlab_sshd
+      monitor: global
       stage: main
       tier: sv
       type: ops-gitlab-net
@@ -480,6 +513,7 @@ groups:
   - record: gitlab_component_errors:rate_30m
     labels:
       component: gitlab_sshd
+      monitor: global
       stage: main
       tier: sv
       type: ops-gitlab-net
@@ -492,12 +526,13 @@ groups:
       or
       (
         0 * group by(env,environment) (
-          gitlab_component_ops:rate_30m{component="gitlab_sshd",env="ops",stage="main",tier="sv",type="ops-gitlab-net"}
+          gitlab_component_ops:rate_30m{component="gitlab_sshd",env="ops",monitor="global",stage="main",tier="sv",type="ops-gitlab-net"}
         )
       )
   - record: gitlab_component_apdex:success:rate_30m
     labels:
       component: goserver
+      monitor: global
       stage: main
       tier: sv
       type: ops-gitlab-net
@@ -545,6 +580,7 @@ groups:
   - record: gitlab_component_apdex:weight:score_30m
     labels:
       component: goserver
+      monitor: global
       stage: main
       tier: sv
       type: ops-gitlab-net
@@ -568,6 +604,7 @@ groups:
   - record: gitlab_component_ops:rate_30m
     labels:
       component: goserver
+      monitor: global
       stage: main
       tier: sv
       type: ops-gitlab-net
@@ -578,6 +615,7 @@ groups:
   - record: gitlab_component_errors:rate_30m
     labels:
       component: goserver
+      monitor: global
       stage: main
       tier: sv
       type: ops-gitlab-net
@@ -592,12 +630,13 @@ groups:
       or
       (
         0 * group by(env,environment) (
-          gitlab_component_ops:rate_30m{component="goserver",env="ops",stage="main",tier="sv",type="ops-gitlab-net"}
+          gitlab_component_ops:rate_30m{component="goserver",env="ops",monitor="global",stage="main",tier="sv",type="ops-gitlab-net"}
         )
       )
   - record: gitlab_component_apdex:success:rate_30m
     labels:
       component: puma
+      monitor: global
       stage: main
       tier: sv
       type: ops-gitlab-net
@@ -608,6 +647,7 @@ groups:
   - record: gitlab_component_apdex:weight:score_30m
     labels:
       component: puma
+      monitor: global
       stage: main
       tier: sv
       type: ops-gitlab-net
@@ -618,6 +658,7 @@ groups:
   - record: gitlab_component_ops:rate_30m
     labels:
       component: puma
+      monitor: global
       stage: main
       tier: sv
       type: ops-gitlab-net
@@ -628,6 +669,7 @@ groups:
   - record: gitlab_component_errors:rate_30m
     labels:
       component: puma
+      monitor: global
       stage: main
       tier: sv
       type: ops-gitlab-net
@@ -640,12 +682,13 @@ groups:
       or
       (
         0 * group by(env,environment) (
-          gitlab_component_ops:rate_30m{component="puma",env="ops",stage="main",tier="sv",type="ops-gitlab-net"}
+          gitlab_component_ops:rate_30m{component="puma",env="ops",monitor="global",stage="main",tier="sv",type="ops-gitlab-net"}
         )
       )
   - record: gitlab_component_apdex:success:rate_30m
     labels:
       component: rails_sql
+      monitor: global
       stage: main
       tier: sv
       type: ops-gitlab-net
@@ -664,6 +707,7 @@ groups:
   - record: gitlab_component_apdex:weight:score_30m
     labels:
       component: rails_sql
+      monitor: global
       stage: main
       tier: sv
       type: ops-gitlab-net
@@ -674,6 +718,7 @@ groups:
   - record: gitlab_component_ops:rate_30m
     labels:
       component: rails_sql
+      monitor: global
       stage: main
       tier: sv
       type: ops-gitlab-net
@@ -684,6 +729,7 @@ groups:
   - record: gitlab_component_apdex:success:rate_30m
     labels:
       component: registry_server
+      monitor: global
       stage: main
       tier: sv
       type: ops-gitlab-net
@@ -702,6 +748,7 @@ groups:
   - record: gitlab_component_apdex:weight:score_30m
     labels:
       component: registry_server
+      monitor: global
       stage: main
       tier: sv
       type: ops-gitlab-net
@@ -712,6 +759,7 @@ groups:
   - record: gitlab_component_ops:rate_30m
     labels:
       component: registry_server
+      monitor: global
       stage: main
       tier: sv
       type: ops-gitlab-net
@@ -722,6 +770,7 @@ groups:
   - record: gitlab_component_errors:rate_30m
     labels:
       component: registry_server
+      monitor: global
       stage: main
       tier: sv
       type: ops-gitlab-net
@@ -734,12 +783,13 @@ groups:
       or
       (
         0 * group by(env,environment) (
-          gitlab_component_ops:rate_30m{component="registry_server",env="ops",stage="main",tier="sv",type="ops-gitlab-net"}
+          gitlab_component_ops:rate_30m{component="registry_server",env="ops",monitor="global",stage="main",tier="sv",type="ops-gitlab-net"}
         )
       )
   - record: gitlab_component_apdex:success:rate_30m
     labels:
       component: sidekiq_execution
+      monitor: global
       stage: main
       tier: sv
       type: ops-gitlab-net
@@ -750,6 +800,7 @@ groups:
   - record: gitlab_component_apdex:weight:score_30m
     labels:
       component: sidekiq_execution
+      monitor: global
       stage: main
       tier: sv
       type: ops-gitlab-net
@@ -760,6 +811,7 @@ groups:
   - record: gitlab_component_ops:rate_30m
     labels:
       component: sidekiq_execution
+      monitor: global
       stage: main
       tier: sv
       type: ops-gitlab-net
@@ -770,6 +822,7 @@ groups:
   - record: gitlab_component_errors:rate_30m
     labels:
       component: sidekiq_execution
+      monitor: global
       stage: main
       tier: sv
       type: ops-gitlab-net
@@ -782,12 +835,13 @@ groups:
       or
       (
         0 * group by(env,environment) (
-          gitlab_component_ops:rate_30m{component="sidekiq_execution",env="ops",stage="main",tier="sv",type="ops-gitlab-net"}
+          gitlab_component_ops:rate_30m{component="sidekiq_execution",env="ops",monitor="global",stage="main",tier="sv",type="ops-gitlab-net"}
         )
       )
   - record: gitlab_component_apdex:success:rate_30m
     labels:
       component: sidekiq_queueing
+      monitor: global
       stage: main
       tier: sv
       type: ops-gitlab-net
@@ -798,6 +852,7 @@ groups:
   - record: gitlab_component_apdex:weight:score_30m
     labels:
       component: sidekiq_queueing
+      monitor: global
       stage: main
       tier: sv
       type: ops-gitlab-net
@@ -808,6 +863,7 @@ groups:
   - record: gitlab_component_ops:rate_30m
     labels:
       component: sidekiq_queueing
+      monitor: global
       stage: main
       tier: sv
       type: ops-gitlab-net
@@ -818,6 +874,7 @@ groups:
   - record: gitlab_component_apdex:success:rate_30m
     labels:
       component: workhorse
+      monitor: global
       stage: main
       tier: sv
       type: ops-gitlab-net
@@ -836,6 +893,7 @@ groups:
   - record: gitlab_component_apdex:weight:score_30m
     labels:
       component: workhorse
+      monitor: global
       stage: main
       tier: sv
       type: ops-gitlab-net
@@ -846,6 +904,7 @@ groups:
   - record: gitlab_component_ops:rate_30m
     labels:
       component: workhorse
+      monitor: global
       stage: main
       tier: sv
       type: ops-gitlab-net
@@ -856,6 +915,7 @@ groups:
   - record: gitlab_component_errors:rate_30m
     labels:
       component: workhorse
+      monitor: global
       stage: main
       tier: sv
       type: ops-gitlab-net
@@ -868,7 +928,7 @@ groups:
       or
       (
         0 * group by(env,environment) (
-          gitlab_component_ops:rate_30m{component="workhorse",env="ops",stage="main",tier="sv",type="ops-gitlab-net"}
+          gitlab_component_ops:rate_30m{component="workhorse",env="ops",monitor="global",stage="main",tier="sv",type="ops-gitlab-net"}
         )
       )
 - name: 'Global SLI Metrics: ops-gitlab-net - Burn-Rate 1h'
@@ -877,6 +937,7 @@ groups:
   - record: gitlab_component_apdex:success:rate_1h
     labels:
       component: gitlab_sshd
+      monitor: global
       stage: main
       tier: sv
       type: ops-gitlab-net
@@ -895,6 +956,7 @@ groups:
   - record: gitlab_component_apdex:weight:score_1h
     labels:
       component: gitlab_sshd
+      monitor: global
       stage: main
       tier: sv
       type: ops-gitlab-net
@@ -905,6 +967,7 @@ groups:
   - record: gitlab_component_ops:rate_1h
     labels:
       component: gitlab_sshd
+      monitor: global
       stage: main
       tier: sv
       type: ops-gitlab-net
@@ -915,6 +978,7 @@ groups:
   - record: gitlab_component_errors:rate_1h
     labels:
       component: gitlab_sshd
+      monitor: global
       stage: main
       tier: sv
       type: ops-gitlab-net
@@ -927,12 +991,13 @@ groups:
       or
       (
         0 * group by(env,environment) (
-          gitlab_component_ops:rate_1h{component="gitlab_sshd",env="ops",stage="main",tier="sv",type="ops-gitlab-net"}
+          gitlab_component_ops:rate_1h{component="gitlab_sshd",env="ops",monitor="global",stage="main",tier="sv",type="ops-gitlab-net"}
         )
       )
   - record: gitlab_component_apdex:success:rate_1h
     labels:
       component: goserver
+      monitor: global
       stage: main
       tier: sv
       type: ops-gitlab-net
@@ -980,6 +1045,7 @@ groups:
   - record: gitlab_component_apdex:weight:score_1h
     labels:
       component: goserver
+      monitor: global
       stage: main
       tier: sv
       type: ops-gitlab-net
@@ -1003,6 +1069,7 @@ groups:
   - record: gitlab_component_ops:rate_1h
     labels:
       component: goserver
+      monitor: global
       stage: main
       tier: sv
       type: ops-gitlab-net
@@ -1013,6 +1080,7 @@ groups:
   - record: gitlab_component_errors:rate_1h
     labels:
       component: goserver
+      monitor: global
       stage: main
       tier: sv
       type: ops-gitlab-net
@@ -1027,12 +1095,13 @@ groups:
       or
       (
         0 * group by(env,environment) (
-          gitlab_component_ops:rate_1h{component="goserver",env="ops",stage="main",tier="sv",type="ops-gitlab-net"}
+          gitlab_component_ops:rate_1h{component="goserver",env="ops",monitor="global",stage="main",tier="sv",type="ops-gitlab-net"}
         )
       )
   - record: gitlab_component_apdex:success:rate_1h
     labels:
       component: puma
+      monitor: global
       stage: main
       tier: sv
       type: ops-gitlab-net
@@ -1043,6 +1112,7 @@ groups:
   - record: gitlab_component_apdex:weight:score_1h
     labels:
       component: puma
+      monitor: global
       stage: main
       tier: sv
       type: ops-gitlab-net
@@ -1053,6 +1123,7 @@ groups:
   - record: gitlab_component_ops:rate_1h
     labels:
       component: puma
+      monitor: global
       stage: main
       tier: sv
       type: ops-gitlab-net
@@ -1063,6 +1134,7 @@ groups:
   - record: gitlab_component_errors:rate_1h
     labels:
       component: puma
+      monitor: global
       stage: main
       tier: sv
       type: ops-gitlab-net
@@ -1075,12 +1147,13 @@ groups:
       or
       (
         0 * group by(env,environment) (
-          gitlab_component_ops:rate_1h{component="puma",env="ops",stage="main",tier="sv",type="ops-gitlab-net"}
+          gitlab_component_ops:rate_1h{component="puma",env="ops",monitor="global",stage="main",tier="sv",type="ops-gitlab-net"}
         )
       )
   - record: gitlab_component_apdex:success:rate_1h
     labels:
       component: rails_sql
+      monitor: global
       stage: main
       tier: sv
       type: ops-gitlab-net
@@ -1100,6 +1173,7 @@ groups:
   - record: gitlab_component_apdex:weight:score_1h
     labels:
       component: rails_sql
+      monitor: global
       stage: main
       tier: sv
       type: ops-gitlab-net
@@ -1111,6 +1185,7 @@ groups:
   - record: gitlab_component_ops:rate_1h
     labels:
       component: rails_sql
+      monitor: global
       stage: main
       tier: sv
       type: ops-gitlab-net
@@ -1122,6 +1197,7 @@ groups:
   - record: gitlab_component_apdex:success:rate_1h
     labels:
       component: registry_server
+      monitor: global
       stage: main
       tier: sv
       type: ops-gitlab-net
@@ -1140,6 +1216,7 @@ groups:
   - record: gitlab_component_apdex:weight:score_1h
     labels:
       component: registry_server
+      monitor: global
       stage: main
       tier: sv
       type: ops-gitlab-net
@@ -1150,6 +1227,7 @@ groups:
   - record: gitlab_component_ops:rate_1h
     labels:
       component: registry_server
+      monitor: global
       stage: main
       tier: sv
       type: ops-gitlab-net
@@ -1160,6 +1238,7 @@ groups:
   - record: gitlab_component_errors:rate_1h
     labels:
       component: registry_server
+      monitor: global
       stage: main
       tier: sv
       type: ops-gitlab-net
@@ -1172,12 +1251,13 @@ groups:
       or
       (
         0 * group by(env,environment) (
-          gitlab_component_ops:rate_1h{component="registry_server",env="ops",stage="main",tier="sv",type="ops-gitlab-net"}
+          gitlab_component_ops:rate_1h{component="registry_server",env="ops",monitor="global",stage="main",tier="sv",type="ops-gitlab-net"}
         )
       )
   - record: gitlab_component_apdex:success:rate_1h
     labels:
       component: sidekiq_execution
+      monitor: global
       stage: main
       tier: sv
       type: ops-gitlab-net
@@ -1188,6 +1268,7 @@ groups:
   - record: gitlab_component_apdex:weight:score_1h
     labels:
       component: sidekiq_execution
+      monitor: global
       stage: main
       tier: sv
       type: ops-gitlab-net
@@ -1198,6 +1279,7 @@ groups:
   - record: gitlab_component_ops:rate_1h
     labels:
       component: sidekiq_execution
+      monitor: global
       stage: main
       tier: sv
       type: ops-gitlab-net
@@ -1208,6 +1290,7 @@ groups:
   - record: gitlab_component_errors:rate_1h
     labels:
       component: sidekiq_execution
+      monitor: global
       stage: main
       tier: sv
       type: ops-gitlab-net
@@ -1220,12 +1303,13 @@ groups:
       or
       (
         0 * group by(env,environment) (
-          gitlab_component_ops:rate_1h{component="sidekiq_execution",env="ops",stage="main",tier="sv",type="ops-gitlab-net"}
+          gitlab_component_ops:rate_1h{component="sidekiq_execution",env="ops",monitor="global",stage="main",tier="sv",type="ops-gitlab-net"}
         )
       )
   - record: gitlab_component_apdex:success:rate_1h
     labels:
       component: sidekiq_queueing
+      monitor: global
       stage: main
       tier: sv
       type: ops-gitlab-net
@@ -1236,6 +1320,7 @@ groups:
   - record: gitlab_component_apdex:weight:score_1h
     labels:
       component: sidekiq_queueing
+      monitor: global
       stage: main
       tier: sv
       type: ops-gitlab-net
@@ -1246,6 +1331,7 @@ groups:
   - record: gitlab_component_ops:rate_1h
     labels:
       component: sidekiq_queueing
+      monitor: global
       stage: main
       tier: sv
       type: ops-gitlab-net
@@ -1256,6 +1342,7 @@ groups:
   - record: gitlab_component_apdex:success:rate_1h
     labels:
       component: workhorse
+      monitor: global
       stage: main
       tier: sv
       type: ops-gitlab-net
@@ -1274,6 +1361,7 @@ groups:
   - record: gitlab_component_apdex:weight:score_1h
     labels:
       component: workhorse
+      monitor: global
       stage: main
       tier: sv
       type: ops-gitlab-net
@@ -1284,6 +1372,7 @@ groups:
   - record: gitlab_component_ops:rate_1h
     labels:
       component: workhorse
+      monitor: global
       stage: main
       tier: sv
       type: ops-gitlab-net
@@ -1294,6 +1383,7 @@ groups:
   - record: gitlab_component_errors:rate_1h
     labels:
       component: workhorse
+      monitor: global
       stage: main
       tier: sv
       type: ops-gitlab-net
@@ -1306,6 +1396,6 @@ groups:
       or
       (
         0 * group by(env,environment) (
-          gitlab_component_ops:rate_1h{component="workhorse",env="ops",stage="main",tier="sv",type="ops-gitlab-net"}
+          gitlab_component_ops:rate_1h{component="workhorse",env="ops",monitor="global",stage="main",tier="sv",type="ops-gitlab-net"}
         )
       )

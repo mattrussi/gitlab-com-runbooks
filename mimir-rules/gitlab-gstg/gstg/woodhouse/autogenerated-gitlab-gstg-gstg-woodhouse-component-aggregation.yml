@@ -7,6 +7,7 @@ groups:
   - record: gitlab_component_apdex:success:rate_5m
     labels:
       component: async_jobs
+      monitor: global
       tier: sv
       type: woodhouse
     expr: |
@@ -16,6 +17,7 @@ groups:
   - record: gitlab_component_apdex:weight:score_5m
     labels:
       component: async_jobs
+      monitor: global
       tier: sv
       type: woodhouse
     expr: |
@@ -25,6 +27,7 @@ groups:
   - record: gitlab_component_ops:rate_5m
     labels:
       component: async_jobs
+      monitor: global
       tier: sv
       type: woodhouse
     expr: |
@@ -34,6 +37,7 @@ groups:
   - record: gitlab_component_errors:rate_5m
     labels:
       component: async_jobs
+      monitor: global
       tier: sv
       type: woodhouse
     expr: |
@@ -45,12 +49,13 @@ groups:
       or
       (
         0 * group by(env,environment,stage) (
-          gitlab_component_ops:rate_5m{component="async_jobs",env="gstg",tier="sv",type="woodhouse"}
+          gitlab_component_ops:rate_5m{component="async_jobs",env="gstg",monitor="global",tier="sv",type="woodhouse"}
         )
       )
   - record: gitlab_component_apdex:success:rate_5m
     labels:
       component: http
+      monitor: global
       tier: sv
       type: woodhouse
     expr: |
@@ -60,6 +65,7 @@ groups:
   - record: gitlab_component_apdex:weight:score_5m
     labels:
       component: http
+      monitor: global
       tier: sv
       type: woodhouse
     expr: |
@@ -69,6 +75,7 @@ groups:
   - record: gitlab_component_ops:rate_5m
     labels:
       component: http
+      monitor: global
       tier: sv
       type: woodhouse
     expr: |
@@ -78,6 +85,7 @@ groups:
   - record: gitlab_component_errors:rate_5m
     labels:
       component: http
+      monitor: global
       tier: sv
       type: woodhouse
     expr: |
@@ -89,7 +97,7 @@ groups:
       or
       (
         0 * group by(env,environment,stage) (
-          gitlab_component_ops:rate_5m{component="http",env="gstg",tier="sv",type="woodhouse"}
+          gitlab_component_ops:rate_5m{component="http",env="gstg",monitor="global",tier="sv",type="woodhouse"}
         )
       )
 - name: 'Global SLI Metrics: woodhouse - Burn-Rate 30m'
@@ -98,6 +106,7 @@ groups:
   - record: gitlab_component_apdex:success:rate_30m
     labels:
       component: async_jobs
+      monitor: global
       tier: sv
       type: woodhouse
     expr: |
@@ -107,6 +116,7 @@ groups:
   - record: gitlab_component_apdex:weight:score_30m
     labels:
       component: async_jobs
+      monitor: global
       tier: sv
       type: woodhouse
     expr: |
@@ -116,6 +126,7 @@ groups:
   - record: gitlab_component_ops:rate_30m
     labels:
       component: async_jobs
+      monitor: global
       tier: sv
       type: woodhouse
     expr: |
@@ -125,6 +136,7 @@ groups:
   - record: gitlab_component_errors:rate_30m
     labels:
       component: async_jobs
+      monitor: global
       tier: sv
       type: woodhouse
     expr: |
@@ -136,12 +148,13 @@ groups:
       or
       (
         0 * group by(env,environment,stage) (
-          gitlab_component_ops:rate_30m{component="async_jobs",env="gstg",tier="sv",type="woodhouse"}
+          gitlab_component_ops:rate_30m{component="async_jobs",env="gstg",monitor="global",tier="sv",type="woodhouse"}
         )
       )
   - record: gitlab_component_apdex:success:rate_30m
     labels:
       component: http
+      monitor: global
       tier: sv
       type: woodhouse
     expr: |
@@ -151,6 +164,7 @@ groups:
   - record: gitlab_component_apdex:weight:score_30m
     labels:
       component: http
+      monitor: global
       tier: sv
       type: woodhouse
     expr: |
@@ -160,6 +174,7 @@ groups:
   - record: gitlab_component_ops:rate_30m
     labels:
       component: http
+      monitor: global
       tier: sv
       type: woodhouse
     expr: |
@@ -169,6 +184,7 @@ groups:
   - record: gitlab_component_errors:rate_30m
     labels:
       component: http
+      monitor: global
       tier: sv
       type: woodhouse
     expr: |
@@ -180,7 +196,7 @@ groups:
       or
       (
         0 * group by(env,environment,stage) (
-          gitlab_component_ops:rate_30m{component="http",env="gstg",tier="sv",type="woodhouse"}
+          gitlab_component_ops:rate_30m{component="http",env="gstg",monitor="global",tier="sv",type="woodhouse"}
         )
       )
 - name: 'Global SLI Metrics: woodhouse - Burn-Rate 1h'
@@ -189,6 +205,7 @@ groups:
   - record: gitlab_component_apdex:success:rate_1h
     labels:
       component: async_jobs
+      monitor: global
       tier: sv
       type: woodhouse
     expr: |
@@ -198,6 +215,7 @@ groups:
   - record: gitlab_component_apdex:weight:score_1h
     labels:
       component: async_jobs
+      monitor: global
       tier: sv
       type: woodhouse
     expr: |
@@ -207,6 +225,7 @@ groups:
   - record: gitlab_component_ops:rate_1h
     labels:
       component: async_jobs
+      monitor: global
       tier: sv
       type: woodhouse
     expr: |
@@ -216,6 +235,7 @@ groups:
   - record: gitlab_component_errors:rate_1h
     labels:
       component: async_jobs
+      monitor: global
       tier: sv
       type: woodhouse
     expr: |
@@ -227,12 +247,13 @@ groups:
       or
       (
         0 * group by(env,environment,stage) (
-          gitlab_component_ops:rate_1h{component="async_jobs",env="gstg",tier="sv",type="woodhouse"}
+          gitlab_component_ops:rate_1h{component="async_jobs",env="gstg",monitor="global",tier="sv",type="woodhouse"}
         )
       )
   - record: gitlab_component_apdex:success:rate_1h
     labels:
       component: http
+      monitor: global
       tier: sv
       type: woodhouse
     expr: |
@@ -242,6 +263,7 @@ groups:
   - record: gitlab_component_apdex:weight:score_1h
     labels:
       component: http
+      monitor: global
       tier: sv
       type: woodhouse
     expr: |
@@ -251,6 +273,7 @@ groups:
   - record: gitlab_component_ops:rate_1h
     labels:
       component: http
+      monitor: global
       tier: sv
       type: woodhouse
     expr: |
@@ -260,6 +283,7 @@ groups:
   - record: gitlab_component_errors:rate_1h
     labels:
       component: http
+      monitor: global
       tier: sv
       type: woodhouse
     expr: |
@@ -271,6 +295,6 @@ groups:
       or
       (
         0 * group by(env,environment,stage) (
-          gitlab_component_ops:rate_1h{component="http",env="gstg",tier="sv",type="woodhouse"}
+          gitlab_component_ops:rate_1h{component="http",env="gstg",monitor="global",tier="sv",type="woodhouse"}
         )
       )

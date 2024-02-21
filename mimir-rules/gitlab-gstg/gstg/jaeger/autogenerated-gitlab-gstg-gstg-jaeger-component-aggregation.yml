@@ -7,6 +7,7 @@ groups:
   - record: gitlab_component_ops:rate_5m
     labels:
       component: jaeger_agent
+      monitor: global
       tier: inf
       type: jaeger
     expr: |
@@ -16,6 +17,7 @@ groups:
   - record: gitlab_component_errors:rate_5m
     labels:
       component: jaeger_agent
+      monitor: global
       tier: inf
       type: jaeger
     expr: |
@@ -27,12 +29,13 @@ groups:
       or
       (
         0 * group by(env,environment,stage) (
-          gitlab_component_ops:rate_5m{component="jaeger_agent",env="gstg",tier="inf",type="jaeger"}
+          gitlab_component_ops:rate_5m{component="jaeger_agent",env="gstg",monitor="global",tier="inf",type="jaeger"}
         )
       )
   - record: gitlab_component_apdex:success:rate_5m
     labels:
       component: jaeger_collector
+      monitor: global
       tier: inf
       type: jaeger
     expr: |
@@ -42,6 +45,7 @@ groups:
   - record: gitlab_component_apdex:weight:score_5m
     labels:
       component: jaeger_collector
+      monitor: global
       tier: inf
       type: jaeger
     expr: |
@@ -51,6 +55,7 @@ groups:
   - record: gitlab_component_ops:rate_5m
     labels:
       component: jaeger_collector
+      monitor: global
       tier: inf
       type: jaeger
     expr: |
@@ -60,6 +65,7 @@ groups:
   - record: gitlab_component_errors:rate_5m
     labels:
       component: jaeger_collector
+      monitor: global
       tier: inf
       type: jaeger
     expr: |
@@ -71,12 +77,13 @@ groups:
       or
       (
         0 * group by(env,environment,stage) (
-          gitlab_component_ops:rate_5m{component="jaeger_collector",env="gstg",tier="inf",type="jaeger"}
+          gitlab_component_ops:rate_5m{component="jaeger_collector",env="gstg",monitor="global",tier="inf",type="jaeger"}
         )
       )
   - record: gitlab_component_apdex:success:rate_5m
     labels:
       component: jaeger_query
+      monitor: global
       tier: inf
       type: jaeger
     expr: |
@@ -86,6 +93,7 @@ groups:
   - record: gitlab_component_apdex:weight:score_5m
     labels:
       component: jaeger_query
+      monitor: global
       tier: inf
       type: jaeger
     expr: |
@@ -95,6 +103,7 @@ groups:
   - record: gitlab_component_ops:rate_5m
     labels:
       component: jaeger_query
+      monitor: global
       tier: inf
       type: jaeger
     expr: |
@@ -104,6 +113,7 @@ groups:
   - record: gitlab_component_errors:rate_5m
     labels:
       component: jaeger_query
+      monitor: global
       tier: inf
       type: jaeger
     expr: |
@@ -115,7 +125,7 @@ groups:
       or
       (
         0 * group by(env,environment,stage) (
-          gitlab_component_ops:rate_5m{component="jaeger_query",env="gstg",tier="inf",type="jaeger"}
+          gitlab_component_ops:rate_5m{component="jaeger_query",env="gstg",monitor="global",tier="inf",type="jaeger"}
         )
       )
 - name: 'Global SLI Metrics: jaeger - Burn-Rate 30m'
@@ -124,6 +134,7 @@ groups:
   - record: gitlab_component_ops:rate_30m
     labels:
       component: jaeger_agent
+      monitor: global
       tier: inf
       type: jaeger
     expr: |
@@ -133,6 +144,7 @@ groups:
   - record: gitlab_component_errors:rate_30m
     labels:
       component: jaeger_agent
+      monitor: global
       tier: inf
       type: jaeger
     expr: |
@@ -144,12 +156,13 @@ groups:
       or
       (
         0 * group by(env,environment,stage) (
-          gitlab_component_ops:rate_30m{component="jaeger_agent",env="gstg",tier="inf",type="jaeger"}
+          gitlab_component_ops:rate_30m{component="jaeger_agent",env="gstg",monitor="global",tier="inf",type="jaeger"}
         )
       )
   - record: gitlab_component_apdex:success:rate_30m
     labels:
       component: jaeger_collector
+      monitor: global
       tier: inf
       type: jaeger
     expr: |
@@ -159,6 +172,7 @@ groups:
   - record: gitlab_component_apdex:weight:score_30m
     labels:
       component: jaeger_collector
+      monitor: global
       tier: inf
       type: jaeger
     expr: |
@@ -168,6 +182,7 @@ groups:
   - record: gitlab_component_ops:rate_30m
     labels:
       component: jaeger_collector
+      monitor: global
       tier: inf
       type: jaeger
     expr: |
@@ -177,6 +192,7 @@ groups:
   - record: gitlab_component_errors:rate_30m
     labels:
       component: jaeger_collector
+      monitor: global
       tier: inf
       type: jaeger
     expr: |
@@ -188,12 +204,13 @@ groups:
       or
       (
         0 * group by(env,environment,stage) (
-          gitlab_component_ops:rate_30m{component="jaeger_collector",env="gstg",tier="inf",type="jaeger"}
+          gitlab_component_ops:rate_30m{component="jaeger_collector",env="gstg",monitor="global",tier="inf",type="jaeger"}
         )
       )
   - record: gitlab_component_apdex:success:rate_30m
     labels:
       component: jaeger_query
+      monitor: global
       tier: inf
       type: jaeger
     expr: |
@@ -203,6 +220,7 @@ groups:
   - record: gitlab_component_apdex:weight:score_30m
     labels:
       component: jaeger_query
+      monitor: global
       tier: inf
       type: jaeger
     expr: |
@@ -212,6 +230,7 @@ groups:
   - record: gitlab_component_ops:rate_30m
     labels:
       component: jaeger_query
+      monitor: global
       tier: inf
       type: jaeger
     expr: |
@@ -221,6 +240,7 @@ groups:
   - record: gitlab_component_errors:rate_30m
     labels:
       component: jaeger_query
+      monitor: global
       tier: inf
       type: jaeger
     expr: |
@@ -232,7 +252,7 @@ groups:
       or
       (
         0 * group by(env,environment,stage) (
-          gitlab_component_ops:rate_30m{component="jaeger_query",env="gstg",tier="inf",type="jaeger"}
+          gitlab_component_ops:rate_30m{component="jaeger_query",env="gstg",monitor="global",tier="inf",type="jaeger"}
         )
       )
 - name: 'Global SLI Metrics: jaeger - Burn-Rate 1h'
@@ -241,6 +261,7 @@ groups:
   - record: gitlab_component_ops:rate_1h
     labels:
       component: jaeger_agent
+      monitor: global
       tier: inf
       type: jaeger
     expr: |
@@ -250,6 +271,7 @@ groups:
   - record: gitlab_component_errors:rate_1h
     labels:
       component: jaeger_agent
+      monitor: global
       tier: inf
       type: jaeger
     expr: |
@@ -261,12 +283,13 @@ groups:
       or
       (
         0 * group by(env,environment,stage) (
-          gitlab_component_ops:rate_1h{component="jaeger_agent",env="gstg",tier="inf",type="jaeger"}
+          gitlab_component_ops:rate_1h{component="jaeger_agent",env="gstg",monitor="global",tier="inf",type="jaeger"}
         )
       )
   - record: gitlab_component_apdex:success:rate_1h
     labels:
       component: jaeger_collector
+      monitor: global
       tier: inf
       type: jaeger
     expr: |
@@ -276,6 +299,7 @@ groups:
   - record: gitlab_component_apdex:weight:score_1h
     labels:
       component: jaeger_collector
+      monitor: global
       tier: inf
       type: jaeger
     expr: |
@@ -285,6 +309,7 @@ groups:
   - record: gitlab_component_ops:rate_1h
     labels:
       component: jaeger_collector
+      monitor: global
       tier: inf
       type: jaeger
     expr: |
@@ -294,6 +319,7 @@ groups:
   - record: gitlab_component_errors:rate_1h
     labels:
       component: jaeger_collector
+      monitor: global
       tier: inf
       type: jaeger
     expr: |
@@ -305,12 +331,13 @@ groups:
       or
       (
         0 * group by(env,environment,stage) (
-          gitlab_component_ops:rate_1h{component="jaeger_collector",env="gstg",tier="inf",type="jaeger"}
+          gitlab_component_ops:rate_1h{component="jaeger_collector",env="gstg",monitor="global",tier="inf",type="jaeger"}
         )
       )
   - record: gitlab_component_apdex:success:rate_1h
     labels:
       component: jaeger_query
+      monitor: global
       tier: inf
       type: jaeger
     expr: |
@@ -320,6 +347,7 @@ groups:
   - record: gitlab_component_apdex:weight:score_1h
     labels:
       component: jaeger_query
+      monitor: global
       tier: inf
       type: jaeger
     expr: |
@@ -329,6 +357,7 @@ groups:
   - record: gitlab_component_ops:rate_1h
     labels:
       component: jaeger_query
+      monitor: global
       tier: inf
       type: jaeger
     expr: |
@@ -338,6 +367,7 @@ groups:
   - record: gitlab_component_errors:rate_1h
     labels:
       component: jaeger_query
+      monitor: global
       tier: inf
       type: jaeger
     expr: |
@@ -349,6 +379,6 @@ groups:
       or
       (
         0 * group by(env,environment,stage) (
-          gitlab_component_ops:rate_1h{component="jaeger_query",env="gstg",tier="inf",type="jaeger"}
+          gitlab_component_ops:rate_1h{component="jaeger_query",env="gstg",monitor="global",tier="inf",type="jaeger"}
         )
       )

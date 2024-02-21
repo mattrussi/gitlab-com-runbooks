@@ -7,6 +7,7 @@ groups:
   - record: gitlab_component_apdex:success:rate_5m
     labels:
       component: global_search
+      monitor: global
       tier: sv
       type: api
     expr: |
@@ -16,6 +17,7 @@ groups:
   - record: gitlab_component_apdex:weight:score_5m
     labels:
       component: global_search
+      monitor: global
       tier: sv
       type: api
     expr: |
@@ -25,6 +27,7 @@ groups:
   - record: gitlab_component_ops:rate_5m
     labels:
       component: global_search
+      monitor: global
       tier: sv
       type: api
     expr: |
@@ -34,6 +37,7 @@ groups:
   - record: gitlab_component_apdex:success:rate_5m
     labels:
       component: graphql_query
+      monitor: global
       tier: sv
       type: api
     expr: |
@@ -43,6 +47,7 @@ groups:
   - record: gitlab_component_apdex:weight:score_5m
     labels:
       component: graphql_query
+      monitor: global
       tier: sv
       type: api
     expr: |
@@ -52,6 +57,7 @@ groups:
   - record: gitlab_component_ops:rate_5m
     labels:
       component: graphql_query
+      monitor: global
       tier: sv
       type: api
     expr: |
@@ -61,6 +67,7 @@ groups:
   - record: gitlab_component_ops:rate_5m
     labels:
       component: loadbalancer
+      monitor: global
       stage: cny
       tier: sv
       type: api
@@ -71,6 +78,7 @@ groups:
   - record: gitlab_component_ops:rate_5m
     labels:
       component: loadbalancer
+      monitor: global
       stage: main
       tier: sv
       type: api
@@ -81,6 +89,7 @@ groups:
   - record: gitlab_component_errors:rate_5m
     labels:
       component: loadbalancer
+      monitor: global
       stage: cny
       tier: sv
       type: api
@@ -93,12 +102,13 @@ groups:
       or
       (
         0 * group by(env,environment) (
-          gitlab_component_ops:rate_5m{component="loadbalancer",env="gprd",stage="cny",tier="sv",type="api"}
+          gitlab_component_ops:rate_5m{component="loadbalancer",env="gprd",monitor="global",stage="cny",tier="sv",type="api"}
         )
       )
   - record: gitlab_component_errors:rate_5m
     labels:
       component: loadbalancer
+      monitor: global
       stage: main
       tier: sv
       type: api
@@ -111,12 +121,13 @@ groups:
       or
       (
         0 * group by(env,environment) (
-          gitlab_component_ops:rate_5m{component="loadbalancer",env="gprd",stage="main",tier="sv",type="api"}
+          gitlab_component_ops:rate_5m{component="loadbalancer",env="gprd",monitor="global",stage="main",tier="sv",type="api"}
         )
       )
   - record: gitlab_component_ops:rate_5m
     labels:
       component: nginx_ingress
+      monitor: global
       tier: sv
       type: api
     expr: |
@@ -126,6 +137,7 @@ groups:
   - record: gitlab_component_errors:rate_5m
     labels:
       component: nginx_ingress
+      monitor: global
       tier: sv
       type: api
     expr: |
@@ -137,12 +149,13 @@ groups:
       or
       (
         0 * group by(env,environment,stage) (
-          gitlab_component_ops:rate_5m{component="nginx_ingress",env="gprd",tier="sv",type="api"}
+          gitlab_component_ops:rate_5m{component="nginx_ingress",env="gprd",monitor="global",tier="sv",type="api"}
         )
       )
   - record: gitlab_component_apdex:success:rate_5m
     labels:
       component: rails_request
+      monitor: global
       tier: sv
       type: api
     expr: |
@@ -152,6 +165,7 @@ groups:
   - record: gitlab_component_apdex:weight:score_5m
     labels:
       component: rails_request
+      monitor: global
       tier: sv
       type: api
     expr: |
@@ -161,6 +175,7 @@ groups:
   - record: gitlab_component_ops:rate_5m
     labels:
       component: rails_request
+      monitor: global
       tier: sv
       type: api
     expr: |
@@ -170,6 +185,7 @@ groups:
   - record: gitlab_component_errors:rate_5m
     labels:
       component: rails_request
+      monitor: global
       tier: sv
       type: api
     expr: |
@@ -181,12 +197,13 @@ groups:
       or
       (
         0 * group by(env,environment,stage) (
-          gitlab_component_ops:rate_5m{component="rails_request",env="gprd",tier="sv",type="api"}
+          gitlab_component_ops:rate_5m{component="rails_request",env="gprd",monitor="global",tier="sv",type="api"}
         )
       )
   - record: gitlab_component_apdex:success:rate_5m
     labels:
       component: workhorse
+      monitor: global
       tier: sv
       type: api
     expr: |
@@ -204,6 +221,7 @@ groups:
   - record: gitlab_component_apdex:weight:score_5m
     labels:
       component: workhorse
+      monitor: global
       tier: sv
       type: api
     expr: |
@@ -213,6 +231,7 @@ groups:
   - record: gitlab_component_ops:rate_5m
     labels:
       component: workhorse
+      monitor: global
       tier: sv
       type: api
     expr: |
@@ -222,6 +241,7 @@ groups:
   - record: gitlab_component_errors:rate_5m
     labels:
       component: workhorse
+      monitor: global
       tier: sv
       type: api
     expr: |
@@ -233,7 +253,7 @@ groups:
       or
       (
         0 * group by(env,environment,stage) (
-          gitlab_component_ops:rate_5m{component="workhorse",env="gprd",tier="sv",type="api"}
+          gitlab_component_ops:rate_5m{component="workhorse",env="gprd",monitor="global",tier="sv",type="api"}
         )
       )
 - name: 'Global SLI Metrics: api - Burn-Rate 30m'
@@ -242,6 +262,7 @@ groups:
   - record: gitlab_component_apdex:success:rate_30m
     labels:
       component: global_search
+      monitor: global
       tier: sv
       type: api
     expr: |
@@ -251,6 +272,7 @@ groups:
   - record: gitlab_component_apdex:weight:score_30m
     labels:
       component: global_search
+      monitor: global
       tier: sv
       type: api
     expr: |
@@ -260,6 +282,7 @@ groups:
   - record: gitlab_component_ops:rate_30m
     labels:
       component: global_search
+      monitor: global
       tier: sv
       type: api
     expr: |
@@ -269,6 +292,7 @@ groups:
   - record: gitlab_component_apdex:success:rate_30m
     labels:
       component: graphql_query
+      monitor: global
       tier: sv
       type: api
     expr: |
@@ -278,6 +302,7 @@ groups:
   - record: gitlab_component_apdex:weight:score_30m
     labels:
       component: graphql_query
+      monitor: global
       tier: sv
       type: api
     expr: |
@@ -287,6 +312,7 @@ groups:
   - record: gitlab_component_ops:rate_30m
     labels:
       component: graphql_query
+      monitor: global
       tier: sv
       type: api
     expr: |
@@ -296,6 +322,7 @@ groups:
   - record: gitlab_component_ops:rate_30m
     labels:
       component: loadbalancer
+      monitor: global
       stage: cny
       tier: sv
       type: api
@@ -306,6 +333,7 @@ groups:
   - record: gitlab_component_ops:rate_30m
     labels:
       component: loadbalancer
+      monitor: global
       stage: main
       tier: sv
       type: api
@@ -316,6 +344,7 @@ groups:
   - record: gitlab_component_errors:rate_30m
     labels:
       component: loadbalancer
+      monitor: global
       stage: cny
       tier: sv
       type: api
@@ -328,12 +357,13 @@ groups:
       or
       (
         0 * group by(env,environment) (
-          gitlab_component_ops:rate_30m{component="loadbalancer",env="gprd",stage="cny",tier="sv",type="api"}
+          gitlab_component_ops:rate_30m{component="loadbalancer",env="gprd",monitor="global",stage="cny",tier="sv",type="api"}
         )
       )
   - record: gitlab_component_errors:rate_30m
     labels:
       component: loadbalancer
+      monitor: global
       stage: main
       tier: sv
       type: api
@@ -346,12 +376,13 @@ groups:
       or
       (
         0 * group by(env,environment) (
-          gitlab_component_ops:rate_30m{component="loadbalancer",env="gprd",stage="main",tier="sv",type="api"}
+          gitlab_component_ops:rate_30m{component="loadbalancer",env="gprd",monitor="global",stage="main",tier="sv",type="api"}
         )
       )
   - record: gitlab_component_ops:rate_30m
     labels:
       component: nginx_ingress
+      monitor: global
       tier: sv
       type: api
     expr: |
@@ -361,6 +392,7 @@ groups:
   - record: gitlab_component_errors:rate_30m
     labels:
       component: nginx_ingress
+      monitor: global
       tier: sv
       type: api
     expr: |
@@ -372,12 +404,13 @@ groups:
       or
       (
         0 * group by(env,environment,stage) (
-          gitlab_component_ops:rate_30m{component="nginx_ingress",env="gprd",tier="sv",type="api"}
+          gitlab_component_ops:rate_30m{component="nginx_ingress",env="gprd",monitor="global",tier="sv",type="api"}
         )
       )
   - record: gitlab_component_apdex:success:rate_30m
     labels:
       component: rails_request
+      monitor: global
       tier: sv
       type: api
     expr: |
@@ -387,6 +420,7 @@ groups:
   - record: gitlab_component_apdex:weight:score_30m
     labels:
       component: rails_request
+      monitor: global
       tier: sv
       type: api
     expr: |
@@ -396,6 +430,7 @@ groups:
   - record: gitlab_component_ops:rate_30m
     labels:
       component: rails_request
+      monitor: global
       tier: sv
       type: api
     expr: |
@@ -405,6 +440,7 @@ groups:
   - record: gitlab_component_errors:rate_30m
     labels:
       component: rails_request
+      monitor: global
       tier: sv
       type: api
     expr: |
@@ -416,12 +452,13 @@ groups:
       or
       (
         0 * group by(env,environment,stage) (
-          gitlab_component_ops:rate_30m{component="rails_request",env="gprd",tier="sv",type="api"}
+          gitlab_component_ops:rate_30m{component="rails_request",env="gprd",monitor="global",tier="sv",type="api"}
         )
       )
   - record: gitlab_component_apdex:success:rate_30m
     labels:
       component: workhorse
+      monitor: global
       tier: sv
       type: api
     expr: |
@@ -439,6 +476,7 @@ groups:
   - record: gitlab_component_apdex:weight:score_30m
     labels:
       component: workhorse
+      monitor: global
       tier: sv
       type: api
     expr: |
@@ -448,6 +486,7 @@ groups:
   - record: gitlab_component_ops:rate_30m
     labels:
       component: workhorse
+      monitor: global
       tier: sv
       type: api
     expr: |
@@ -457,6 +496,7 @@ groups:
   - record: gitlab_component_errors:rate_30m
     labels:
       component: workhorse
+      monitor: global
       tier: sv
       type: api
     expr: |
@@ -468,7 +508,7 @@ groups:
       or
       (
         0 * group by(env,environment,stage) (
-          gitlab_component_ops:rate_30m{component="workhorse",env="gprd",tier="sv",type="api"}
+          gitlab_component_ops:rate_30m{component="workhorse",env="gprd",monitor="global",tier="sv",type="api"}
         )
       )
 - name: 'Global SLI Metrics: api - Burn-Rate 1h'
@@ -477,6 +517,7 @@ groups:
   - record: gitlab_component_apdex:success:rate_1h
     labels:
       component: global_search
+      monitor: global
       tier: sv
       type: api
     expr: |
@@ -486,6 +527,7 @@ groups:
   - record: gitlab_component_apdex:weight:score_1h
     labels:
       component: global_search
+      monitor: global
       tier: sv
       type: api
     expr: |
@@ -495,6 +537,7 @@ groups:
   - record: gitlab_component_ops:rate_1h
     labels:
       component: global_search
+      monitor: global
       tier: sv
       type: api
     expr: |
@@ -504,6 +547,7 @@ groups:
   - record: gitlab_component_apdex:success:rate_1h
     labels:
       component: graphql_query
+      monitor: global
       tier: sv
       type: api
     expr: |
@@ -513,6 +557,7 @@ groups:
   - record: gitlab_component_apdex:weight:score_1h
     labels:
       component: graphql_query
+      monitor: global
       tier: sv
       type: api
     expr: |
@@ -522,6 +567,7 @@ groups:
   - record: gitlab_component_ops:rate_1h
     labels:
       component: graphql_query
+      monitor: global
       tier: sv
       type: api
     expr: |
@@ -531,6 +577,7 @@ groups:
   - record: gitlab_component_ops:rate_1h
     labels:
       component: loadbalancer
+      monitor: global
       stage: cny
       tier: sv
       type: api
@@ -541,6 +588,7 @@ groups:
   - record: gitlab_component_ops:rate_1h
     labels:
       component: loadbalancer
+      monitor: global
       stage: main
       tier: sv
       type: api
@@ -551,6 +599,7 @@ groups:
   - record: gitlab_component_errors:rate_1h
     labels:
       component: loadbalancer
+      monitor: global
       stage: cny
       tier: sv
       type: api
@@ -563,12 +612,13 @@ groups:
       or
       (
         0 * group by(env,environment) (
-          gitlab_component_ops:rate_1h{component="loadbalancer",env="gprd",stage="cny",tier="sv",type="api"}
+          gitlab_component_ops:rate_1h{component="loadbalancer",env="gprd",monitor="global",stage="cny",tier="sv",type="api"}
         )
       )
   - record: gitlab_component_errors:rate_1h
     labels:
       component: loadbalancer
+      monitor: global
       stage: main
       tier: sv
       type: api
@@ -581,12 +631,13 @@ groups:
       or
       (
         0 * group by(env,environment) (
-          gitlab_component_ops:rate_1h{component="loadbalancer",env="gprd",stage="main",tier="sv",type="api"}
+          gitlab_component_ops:rate_1h{component="loadbalancer",env="gprd",monitor="global",stage="main",tier="sv",type="api"}
         )
       )
   - record: gitlab_component_ops:rate_1h
     labels:
       component: nginx_ingress
+      monitor: global
       tier: sv
       type: api
     expr: |
@@ -596,6 +647,7 @@ groups:
   - record: gitlab_component_errors:rate_1h
     labels:
       component: nginx_ingress
+      monitor: global
       tier: sv
       type: api
     expr: |
@@ -607,12 +659,13 @@ groups:
       or
       (
         0 * group by(env,environment,stage) (
-          gitlab_component_ops:rate_1h{component="nginx_ingress",env="gprd",tier="sv",type="api"}
+          gitlab_component_ops:rate_1h{component="nginx_ingress",env="gprd",monitor="global",tier="sv",type="api"}
         )
       )
   - record: gitlab_component_apdex:success:rate_1h
     labels:
       component: rails_request
+      monitor: global
       tier: sv
       type: api
     expr: |
@@ -622,6 +675,7 @@ groups:
   - record: gitlab_component_apdex:weight:score_1h
     labels:
       component: rails_request
+      monitor: global
       tier: sv
       type: api
     expr: |
@@ -631,6 +685,7 @@ groups:
   - record: gitlab_component_ops:rate_1h
     labels:
       component: rails_request
+      monitor: global
       tier: sv
       type: api
     expr: |
@@ -640,6 +695,7 @@ groups:
   - record: gitlab_component_errors:rate_1h
     labels:
       component: rails_request
+      monitor: global
       tier: sv
       type: api
     expr: |
@@ -651,12 +707,13 @@ groups:
       or
       (
         0 * group by(env,environment,stage) (
-          gitlab_component_ops:rate_1h{component="rails_request",env="gprd",tier="sv",type="api"}
+          gitlab_component_ops:rate_1h{component="rails_request",env="gprd",monitor="global",tier="sv",type="api"}
         )
       )
   - record: gitlab_component_apdex:success:rate_1h
     labels:
       component: workhorse
+      monitor: global
       tier: sv
       type: api
     expr: |
@@ -674,6 +731,7 @@ groups:
   - record: gitlab_component_apdex:weight:score_1h
     labels:
       component: workhorse
+      monitor: global
       tier: sv
       type: api
     expr: |
@@ -683,6 +741,7 @@ groups:
   - record: gitlab_component_ops:rate_1h
     labels:
       component: workhorse
+      monitor: global
       tier: sv
       type: api
     expr: |
@@ -692,6 +751,7 @@ groups:
   - record: gitlab_component_errors:rate_1h
     labels:
       component: workhorse
+      monitor: global
       tier: sv
       type: api
     expr: |
@@ -703,6 +763,6 @@ groups:
       or
       (
         0 * group by(env,environment,stage) (
-          gitlab_component_ops:rate_1h{component="workhorse",env="gprd",tier="sv",type="api"}
+          gitlab_component_ops:rate_1h{component="workhorse",env="gprd",monitor="global",tier="sv",type="api"}
         )
       )

@@ -7,6 +7,7 @@ groups:
   - record: gitlab_component_ops:rate_5m
     labels:
       component: pg_transactions
+      monitor: global
       tier: inf
       type: sentry
     expr: |
@@ -18,6 +19,7 @@ groups:
   - record: gitlab_component_errors:rate_5m
     labels:
       component: pg_transactions
+      monitor: global
       tier: inf
       type: sentry
     expr: |
@@ -29,12 +31,13 @@ groups:
       or
       (
         0 * group by(env,environment,stage) (
-          gitlab_component_ops:rate_5m{component="pg_transactions",env="ops",tier="inf",type="sentry"}
+          gitlab_component_ops:rate_5m{component="pg_transactions",env="ops",monitor="global",tier="inf",type="sentry"}
         )
       )
   - record: gitlab_component_apdex:success:rate_5m
     labels:
       component: sentry_events
+      monitor: global
       tier: inf
       type: sentry
     expr: |
@@ -44,6 +47,7 @@ groups:
   - record: gitlab_component_apdex:weight:score_5m
     labels:
       component: sentry_events
+      monitor: global
       tier: inf
       type: sentry
     expr: |
@@ -53,6 +57,7 @@ groups:
   - record: gitlab_component_ops:rate_5m
     labels:
       component: sentry_events
+      monitor: global
       tier: inf
       type: sentry
     expr: |
@@ -62,6 +67,7 @@ groups:
   - record: gitlab_component_errors:rate_5m
     labels:
       component: sentry_events
+      monitor: global
       tier: inf
       type: sentry
     expr: |
@@ -73,7 +79,7 @@ groups:
       or
       (
         0 * group by(env,environment,stage) (
-          gitlab_component_ops:rate_5m{component="sentry_events",env="ops",tier="inf",type="sentry"}
+          gitlab_component_ops:rate_5m{component="sentry_events",env="ops",monitor="global",tier="inf",type="sentry"}
         )
       )
 - name: 'Global SLI Metrics: sentry - Burn-Rate 30m'
@@ -82,6 +88,7 @@ groups:
   - record: gitlab_component_ops:rate_30m
     labels:
       component: pg_transactions
+      monitor: global
       tier: inf
       type: sentry
     expr: |
@@ -93,6 +100,7 @@ groups:
   - record: gitlab_component_errors:rate_30m
     labels:
       component: pg_transactions
+      monitor: global
       tier: inf
       type: sentry
     expr: |
@@ -104,12 +112,13 @@ groups:
       or
       (
         0 * group by(env,environment,stage) (
-          gitlab_component_ops:rate_30m{component="pg_transactions",env="ops",tier="inf",type="sentry"}
+          gitlab_component_ops:rate_30m{component="pg_transactions",env="ops",monitor="global",tier="inf",type="sentry"}
         )
       )
   - record: gitlab_component_apdex:success:rate_30m
     labels:
       component: sentry_events
+      monitor: global
       tier: inf
       type: sentry
     expr: |
@@ -119,6 +128,7 @@ groups:
   - record: gitlab_component_apdex:weight:score_30m
     labels:
       component: sentry_events
+      monitor: global
       tier: inf
       type: sentry
     expr: |
@@ -128,6 +138,7 @@ groups:
   - record: gitlab_component_ops:rate_30m
     labels:
       component: sentry_events
+      monitor: global
       tier: inf
       type: sentry
     expr: |
@@ -137,6 +148,7 @@ groups:
   - record: gitlab_component_errors:rate_30m
     labels:
       component: sentry_events
+      monitor: global
       tier: inf
       type: sentry
     expr: |
@@ -148,7 +160,7 @@ groups:
       or
       (
         0 * group by(env,environment,stage) (
-          gitlab_component_ops:rate_30m{component="sentry_events",env="ops",tier="inf",type="sentry"}
+          gitlab_component_ops:rate_30m{component="sentry_events",env="ops",monitor="global",tier="inf",type="sentry"}
         )
       )
 - name: 'Global SLI Metrics: sentry - Burn-Rate 1h'
@@ -157,6 +169,7 @@ groups:
   - record: gitlab_component_ops:rate_1h
     labels:
       component: pg_transactions
+      monitor: global
       tier: inf
       type: sentry
     expr: |
@@ -168,6 +181,7 @@ groups:
   - record: gitlab_component_errors:rate_1h
     labels:
       component: pg_transactions
+      monitor: global
       tier: inf
       type: sentry
     expr: |
@@ -179,12 +193,13 @@ groups:
       or
       (
         0 * group by(env,environment,stage) (
-          gitlab_component_ops:rate_1h{component="pg_transactions",env="ops",tier="inf",type="sentry"}
+          gitlab_component_ops:rate_1h{component="pg_transactions",env="ops",monitor="global",tier="inf",type="sentry"}
         )
       )
   - record: gitlab_component_apdex:success:rate_1h
     labels:
       component: sentry_events
+      monitor: global
       tier: inf
       type: sentry
     expr: |
@@ -194,6 +209,7 @@ groups:
   - record: gitlab_component_apdex:weight:score_1h
     labels:
       component: sentry_events
+      monitor: global
       tier: inf
       type: sentry
     expr: |
@@ -203,6 +219,7 @@ groups:
   - record: gitlab_component_ops:rate_1h
     labels:
       component: sentry_events
+      monitor: global
       tier: inf
       type: sentry
     expr: |
@@ -212,6 +229,7 @@ groups:
   - record: gitlab_component_errors:rate_1h
     labels:
       component: sentry_events
+      monitor: global
       tier: inf
       type: sentry
     expr: |
@@ -223,6 +241,6 @@ groups:
       or
       (
         0 * group by(env,environment,stage) (
-          gitlab_component_ops:rate_1h{component="sentry_events",env="ops",tier="inf",type="sentry"}
+          gitlab_component_ops:rate_1h{component="sentry_events",env="ops",monitor="global",tier="inf",type="sentry"}
         )
       )

@@ -7,6 +7,7 @@ groups:
   - record: gitlab_component_apdex:success:rate_5m
     labels:
       component: istio_internal_ingress
+      monitor: global
       stage: main
       tier: inf
       type: vault
@@ -17,6 +18,7 @@ groups:
   - record: gitlab_component_apdex:weight:score_5m
     labels:
       component: istio_internal_ingress
+      monitor: global
       stage: main
       tier: inf
       type: vault
@@ -27,6 +29,7 @@ groups:
   - record: gitlab_component_ops:rate_5m
     labels:
       component: istio_internal_ingress
+      monitor: global
       stage: main
       tier: inf
       type: vault
@@ -37,6 +40,7 @@ groups:
   - record: gitlab_component_errors:rate_5m
     labels:
       component: istio_internal_ingress
+      monitor: global
       stage: main
       tier: inf
       type: vault
@@ -49,12 +53,13 @@ groups:
       or
       (
         0 * group by(env,environment) (
-          gitlab_component_ops:rate_5m{component="istio_internal_ingress",env="ops",stage="main",tier="inf",type="vault"}
+          gitlab_component_ops:rate_5m{component="istio_internal_ingress",env="ops",monitor="global",stage="main",tier="inf",type="vault"}
         )
       )
   - record: gitlab_component_apdex:success:rate_5m
     labels:
       component: istio_public_ingress
+      monitor: global
       stage: main
       tier: inf
       type: vault
@@ -65,6 +70,7 @@ groups:
   - record: gitlab_component_apdex:weight:score_5m
     labels:
       component: istio_public_ingress
+      monitor: global
       stage: main
       tier: inf
       type: vault
@@ -75,6 +81,7 @@ groups:
   - record: gitlab_component_ops:rate_5m
     labels:
       component: istio_public_ingress
+      monitor: global
       stage: main
       tier: inf
       type: vault
@@ -85,6 +92,7 @@ groups:
   - record: gitlab_component_errors:rate_5m
     labels:
       component: istio_public_ingress
+      monitor: global
       stage: main
       tier: inf
       type: vault
@@ -97,12 +105,13 @@ groups:
       or
       (
         0 * group by(env,environment) (
-          gitlab_component_ops:rate_5m{component="istio_public_ingress",env="ops",stage="main",tier="inf",type="vault"}
+          gitlab_component_ops:rate_5m{component="istio_public_ingress",env="ops",monitor="global",stage="main",tier="inf",type="vault"}
         )
       )
   - record: gitlab_component_ops:rate_5m
     labels:
       component: vault
+      monitor: global
       stage: main
       tier: inf
       type: vault
@@ -113,6 +122,7 @@ groups:
   - record: gitlab_component_ops:rate_5m
     labels:
       component: vault_audit_log_request
+      monitor: global
       stage: main
       tier: inf
       type: vault
@@ -123,6 +133,7 @@ groups:
   - record: gitlab_component_errors:rate_5m
     labels:
       component: vault_audit_log_request
+      monitor: global
       stage: main
       tier: inf
       type: vault
@@ -135,12 +146,13 @@ groups:
       or
       (
         0 * group by(env,environment) (
-          gitlab_component_ops:rate_5m{component="vault_audit_log_request",env="ops",stage="main",tier="inf",type="vault"}
+          gitlab_component_ops:rate_5m{component="vault_audit_log_request",env="ops",monitor="global",stage="main",tier="inf",type="vault"}
         )
       )
   - record: gitlab_component_ops:rate_5m
     labels:
       component: vault_audit_log_response
+      monitor: global
       stage: main
       tier: inf
       type: vault
@@ -151,6 +163,7 @@ groups:
   - record: gitlab_component_errors:rate_5m
     labels:
       component: vault_audit_log_response
+      monitor: global
       stage: main
       tier: inf
       type: vault
@@ -163,12 +176,13 @@ groups:
       or
       (
         0 * group by(env,environment) (
-          gitlab_component_ops:rate_5m{component="vault_audit_log_response",env="ops",stage="main",tier="inf",type="vault"}
+          gitlab_component_ops:rate_5m{component="vault_audit_log_response",env="ops",monitor="global",stage="main",tier="inf",type="vault"}
         )
       )
   - record: gitlab_component_ops:rate_5m
     labels:
       component: vault_google_lb
+      monitor: global
       stage: main
       tier: inf
       type: vault
@@ -179,6 +193,7 @@ groups:
   - record: gitlab_component_errors:rate_5m
     labels:
       component: vault_google_lb
+      monitor: global
       stage: main
       tier: inf
       type: vault
@@ -191,7 +206,7 @@ groups:
       or
       (
         0 * group by(env,environment) (
-          gitlab_component_ops:rate_5m{component="vault_google_lb",env="ops",stage="main",tier="inf",type="vault"}
+          gitlab_component_ops:rate_5m{component="vault_google_lb",env="ops",monitor="global",stage="main",tier="inf",type="vault"}
         )
       )
 - name: 'Global SLI Metrics: vault - Burn-Rate 30m'
@@ -200,6 +215,7 @@ groups:
   - record: gitlab_component_apdex:success:rate_30m
     labels:
       component: istio_internal_ingress
+      monitor: global
       stage: main
       tier: inf
       type: vault
@@ -210,6 +226,7 @@ groups:
   - record: gitlab_component_apdex:weight:score_30m
     labels:
       component: istio_internal_ingress
+      monitor: global
       stage: main
       tier: inf
       type: vault
@@ -220,6 +237,7 @@ groups:
   - record: gitlab_component_ops:rate_30m
     labels:
       component: istio_internal_ingress
+      monitor: global
       stage: main
       tier: inf
       type: vault
@@ -230,6 +248,7 @@ groups:
   - record: gitlab_component_errors:rate_30m
     labels:
       component: istio_internal_ingress
+      monitor: global
       stage: main
       tier: inf
       type: vault
@@ -242,12 +261,13 @@ groups:
       or
       (
         0 * group by(env,environment) (
-          gitlab_component_ops:rate_30m{component="istio_internal_ingress",env="ops",stage="main",tier="inf",type="vault"}
+          gitlab_component_ops:rate_30m{component="istio_internal_ingress",env="ops",monitor="global",stage="main",tier="inf",type="vault"}
         )
       )
   - record: gitlab_component_apdex:success:rate_30m
     labels:
       component: istio_public_ingress
+      monitor: global
       stage: main
       tier: inf
       type: vault
@@ -258,6 +278,7 @@ groups:
   - record: gitlab_component_apdex:weight:score_30m
     labels:
       component: istio_public_ingress
+      monitor: global
       stage: main
       tier: inf
       type: vault
@@ -268,6 +289,7 @@ groups:
   - record: gitlab_component_ops:rate_30m
     labels:
       component: istio_public_ingress
+      monitor: global
       stage: main
       tier: inf
       type: vault
@@ -278,6 +300,7 @@ groups:
   - record: gitlab_component_errors:rate_30m
     labels:
       component: istio_public_ingress
+      monitor: global
       stage: main
       tier: inf
       type: vault
@@ -290,12 +313,13 @@ groups:
       or
       (
         0 * group by(env,environment) (
-          gitlab_component_ops:rate_30m{component="istio_public_ingress",env="ops",stage="main",tier="inf",type="vault"}
+          gitlab_component_ops:rate_30m{component="istio_public_ingress",env="ops",monitor="global",stage="main",tier="inf",type="vault"}
         )
       )
   - record: gitlab_component_ops:rate_30m
     labels:
       component: vault
+      monitor: global
       stage: main
       tier: inf
       type: vault
@@ -306,6 +330,7 @@ groups:
   - record: gitlab_component_ops:rate_30m
     labels:
       component: vault_audit_log_request
+      monitor: global
       stage: main
       tier: inf
       type: vault
@@ -316,6 +341,7 @@ groups:
   - record: gitlab_component_errors:rate_30m
     labels:
       component: vault_audit_log_request
+      monitor: global
       stage: main
       tier: inf
       type: vault
@@ -328,12 +354,13 @@ groups:
       or
       (
         0 * group by(env,environment) (
-          gitlab_component_ops:rate_30m{component="vault_audit_log_request",env="ops",stage="main",tier="inf",type="vault"}
+          gitlab_component_ops:rate_30m{component="vault_audit_log_request",env="ops",monitor="global",stage="main",tier="inf",type="vault"}
         )
       )
   - record: gitlab_component_ops:rate_30m
     labels:
       component: vault_audit_log_response
+      monitor: global
       stage: main
       tier: inf
       type: vault
@@ -344,6 +371,7 @@ groups:
   - record: gitlab_component_errors:rate_30m
     labels:
       component: vault_audit_log_response
+      monitor: global
       stage: main
       tier: inf
       type: vault
@@ -356,12 +384,13 @@ groups:
       or
       (
         0 * group by(env,environment) (
-          gitlab_component_ops:rate_30m{component="vault_audit_log_response",env="ops",stage="main",tier="inf",type="vault"}
+          gitlab_component_ops:rate_30m{component="vault_audit_log_response",env="ops",monitor="global",stage="main",tier="inf",type="vault"}
         )
       )
   - record: gitlab_component_ops:rate_30m
     labels:
       component: vault_google_lb
+      monitor: global
       stage: main
       tier: inf
       type: vault
@@ -372,6 +401,7 @@ groups:
   - record: gitlab_component_errors:rate_30m
     labels:
       component: vault_google_lb
+      monitor: global
       stage: main
       tier: inf
       type: vault
@@ -384,7 +414,7 @@ groups:
       or
       (
         0 * group by(env,environment) (
-          gitlab_component_ops:rate_30m{component="vault_google_lb",env="ops",stage="main",tier="inf",type="vault"}
+          gitlab_component_ops:rate_30m{component="vault_google_lb",env="ops",monitor="global",stage="main",tier="inf",type="vault"}
         )
       )
 - name: 'Global SLI Metrics: vault - Burn-Rate 1h'
@@ -393,6 +423,7 @@ groups:
   - record: gitlab_component_apdex:success:rate_1h
     labels:
       component: istio_internal_ingress
+      monitor: global
       stage: main
       tier: inf
       type: vault
@@ -403,6 +434,7 @@ groups:
   - record: gitlab_component_apdex:weight:score_1h
     labels:
       component: istio_internal_ingress
+      monitor: global
       stage: main
       tier: inf
       type: vault
@@ -413,6 +445,7 @@ groups:
   - record: gitlab_component_ops:rate_1h
     labels:
       component: istio_internal_ingress
+      monitor: global
       stage: main
       tier: inf
       type: vault
@@ -423,6 +456,7 @@ groups:
   - record: gitlab_component_errors:rate_1h
     labels:
       component: istio_internal_ingress
+      monitor: global
       stage: main
       tier: inf
       type: vault
@@ -435,12 +469,13 @@ groups:
       or
       (
         0 * group by(env,environment) (
-          gitlab_component_ops:rate_1h{component="istio_internal_ingress",env="ops",stage="main",tier="inf",type="vault"}
+          gitlab_component_ops:rate_1h{component="istio_internal_ingress",env="ops",monitor="global",stage="main",tier="inf",type="vault"}
         )
       )
   - record: gitlab_component_apdex:success:rate_1h
     labels:
       component: istio_public_ingress
+      monitor: global
       stage: main
       tier: inf
       type: vault
@@ -451,6 +486,7 @@ groups:
   - record: gitlab_component_apdex:weight:score_1h
     labels:
       component: istio_public_ingress
+      monitor: global
       stage: main
       tier: inf
       type: vault
@@ -461,6 +497,7 @@ groups:
   - record: gitlab_component_ops:rate_1h
     labels:
       component: istio_public_ingress
+      monitor: global
       stage: main
       tier: inf
       type: vault
@@ -471,6 +508,7 @@ groups:
   - record: gitlab_component_errors:rate_1h
     labels:
       component: istio_public_ingress
+      monitor: global
       stage: main
       tier: inf
       type: vault
@@ -483,12 +521,13 @@ groups:
       or
       (
         0 * group by(env,environment) (
-          gitlab_component_ops:rate_1h{component="istio_public_ingress",env="ops",stage="main",tier="inf",type="vault"}
+          gitlab_component_ops:rate_1h{component="istio_public_ingress",env="ops",monitor="global",stage="main",tier="inf",type="vault"}
         )
       )
   - record: gitlab_component_ops:rate_1h
     labels:
       component: vault
+      monitor: global
       stage: main
       tier: inf
       type: vault
@@ -499,6 +538,7 @@ groups:
   - record: gitlab_component_ops:rate_1h
     labels:
       component: vault_audit_log_request
+      monitor: global
       stage: main
       tier: inf
       type: vault
@@ -509,6 +549,7 @@ groups:
   - record: gitlab_component_errors:rate_1h
     labels:
       component: vault_audit_log_request
+      monitor: global
       stage: main
       tier: inf
       type: vault
@@ -521,12 +562,13 @@ groups:
       or
       (
         0 * group by(env,environment) (
-          gitlab_component_ops:rate_1h{component="vault_audit_log_request",env="ops",stage="main",tier="inf",type="vault"}
+          gitlab_component_ops:rate_1h{component="vault_audit_log_request",env="ops",monitor="global",stage="main",tier="inf",type="vault"}
         )
       )
   - record: gitlab_component_ops:rate_1h
     labels:
       component: vault_audit_log_response
+      monitor: global
       stage: main
       tier: inf
       type: vault
@@ -537,6 +579,7 @@ groups:
   - record: gitlab_component_errors:rate_1h
     labels:
       component: vault_audit_log_response
+      monitor: global
       stage: main
       tier: inf
       type: vault
@@ -549,12 +592,13 @@ groups:
       or
       (
         0 * group by(env,environment) (
-          gitlab_component_ops:rate_1h{component="vault_audit_log_response",env="ops",stage="main",tier="inf",type="vault"}
+          gitlab_component_ops:rate_1h{component="vault_audit_log_response",env="ops",monitor="global",stage="main",tier="inf",type="vault"}
         )
       )
   - record: gitlab_component_ops:rate_1h
     labels:
       component: vault_google_lb
+      monitor: global
       stage: main
       tier: inf
       type: vault
@@ -565,6 +609,7 @@ groups:
   - record: gitlab_component_errors:rate_1h
     labels:
       component: vault_google_lb
+      monitor: global
       stage: main
       tier: inf
       type: vault
@@ -577,6 +622,6 @@ groups:
       or
       (
         0 * group by(env,environment) (
-          gitlab_component_ops:rate_1h{component="vault_google_lb",env="ops",stage="main",tier="inf",type="vault"}
+          gitlab_component_ops:rate_1h{component="vault_google_lb",env="ops",monitor="global",stage="main",tier="inf",type="vault"}
         )
       )
