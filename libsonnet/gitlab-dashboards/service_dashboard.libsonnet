@@ -13,6 +13,7 @@ local selectors = import 'promql/selectors.libsonnet';
 local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
 local gitlabMetricsConfig = (import 'gitlab-metrics-config.libsonnet');
 local row = grafana.row;
+local commonAnnotations = import 'grafana/common_annotations.libsonnet';
 
 local defaultEnvironmentSelector = gitlabMetricsConfig.grafanaEnvironmentSelector;
 
@@ -96,6 +97,10 @@ local overviewDashboard(
       tags=['gitlab', 'type:' + type, type, 'service overview'],
       includeStandardEnvironmentAnnotations=includeStandardEnvironmentAnnotations,
       includeEnvironmentTemplate=!omitEnvironmentDropdown && std.objectHas(environmentStageSelectorHash, 'environment'),
+    )
+    .addAnnotationIf(
+      metricsCatalogServiceInfo.getProvisioning().runway,
+      commonAnnotations.deploymentsForRunway,
     )
     .addPanels(
       headlineMetricsRow(
