@@ -229,6 +229,10 @@ local validateTags(tags) =
       addTemplatesIf(condition, templates)::
         if condition then self.addTemplates(templates) else self,
 
+      // Conditionally add an annotation to a dashboard
+      addAnnotationIf(condition, annotation)::
+        if condition then self.addAnnotation(annotation) else self,
+
       trailer()::
         local dashboardWithTrailerPanel = self.addPanel(
           text.new(
