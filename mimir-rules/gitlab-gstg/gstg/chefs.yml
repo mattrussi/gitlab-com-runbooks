@@ -16,8 +16,7 @@ groups:
     expr: avg(chef_client_error{env="gstg"}) * 100 > 10
     for: 1h
     labels:
-      severity: s1
-      pager: pagerduty
+      severity: s4
       alert_type: cause
     annotations:
       description: >
