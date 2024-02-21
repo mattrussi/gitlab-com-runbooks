@@ -360,3 +360,161 @@ groups:
       sum by (env,environment,stage) (
         gitlab_component_apdex:weight:score_1h{component="emailsProcessed",env="gprd",monitor="global",tier="sv",type="mailroom"} offset 30s
       )
+- name: 'Global SLI Metrics: mailroom - Burn-Rate 6h'
+  interval: 2m
+  rules:
+  - record: gitlab_component_apdex:success:rate_6h
+    labels:
+      component: email_receiver
+      monitor: global
+      stage: main
+      tier: sv
+      type: mailroom
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="email_receiver",env="gprd",monitor="global",tier="sv",type="mailroom"}[6h] offset 30s)
+      )
+  - record: gitlab_component_apdex:weight:score_6h
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="email_receiver",env="gprd",monitor="global",tier="sv",type="mailroom"}[6h] offset 30s)
+      )
+  - record: gitlab_component_ops:rate_6h
+    labels:
+      component: email_receiver
+      monitor: global
+      stage: main
+      tier: sv
+      type: mailroom
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_ops:rate_1h{component="email_receiver",env="gprd",monitor="global",tier="sv",type="mailroom"}[6h] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_6h
+    labels:
+      component: email_receiver
+      monitor: global
+      stage: main
+      tier: sv
+      type: mailroom
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_errors:rate_1h{component="email_receiver",env="gprd",monitor="global",tier="sv",type="mailroom"}[6h] offset 30s)
+      )
+  - record: gitlab_component_apdex:success:rate_6h
+    labels:
+      component: emailsProcessed
+      monitor: global
+      stage: main
+      tier: sv
+      type: mailroom
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="emailsProcessed",env="gprd",monitor="global",tier="sv",type="mailroom"}[6h] offset 30s)
+      )
+  - record: gitlab_component_apdex:weight:score_6h
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="emailsProcessed",env="gprd",monitor="global",tier="sv",type="mailroom"}[6h] offset 30s)
+      )
+  - record: gitlab_component_ops:rate_6h
+    labels:
+      component: emailsProcessed
+      monitor: global
+      stage: main
+      tier: sv
+      type: mailroom
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_ops:rate_1h{component="emailsProcessed",env="gprd",monitor="global",tier="sv",type="mailroom"}[6h] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_6h
+    labels:
+      component: emailsProcessed
+      monitor: global
+      stage: main
+      tier: sv
+      type: mailroom
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_errors:rate_1h{component="emailsProcessed",env="gprd",monitor="global",tier="sv",type="mailroom"}[6h] offset 30s)
+      )
+- name: 'Global SLI Metrics: mailroom - Burn-Rate 3d'
+  interval: 2m
+  rules:
+  - record: gitlab_component_apdex:success:rate_3d
+    labels:
+      component: email_receiver
+      monitor: global
+      stage: main
+      tier: sv
+      type: mailroom
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="email_receiver",env="gprd",monitor="global",tier="sv",type="mailroom"}[3d] offset 30s)
+      )
+  - record: gitlab_component_apdex:weight:score_3d
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="email_receiver",env="gprd",monitor="global",tier="sv",type="mailroom"}[3d] offset 30s)
+      )
+  - record: gitlab_component_ops:rate_3d
+    labels:
+      component: email_receiver
+      monitor: global
+      stage: main
+      tier: sv
+      type: mailroom
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_ops:rate_1h{component="email_receiver",env="gprd",monitor="global",tier="sv",type="mailroom"}[3d] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_3d
+    labels:
+      component: email_receiver
+      monitor: global
+      stage: main
+      tier: sv
+      type: mailroom
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_errors:rate_1h{component="email_receiver",env="gprd",monitor="global",tier="sv",type="mailroom"}[3d] offset 30s)
+      )
+  - record: gitlab_component_apdex:success:rate_3d
+    labels:
+      component: emailsProcessed
+      monitor: global
+      stage: main
+      tier: sv
+      type: mailroom
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="emailsProcessed",env="gprd",monitor="global",tier="sv",type="mailroom"}[3d] offset 30s)
+      )
+  - record: gitlab_component_apdex:weight:score_3d
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="emailsProcessed",env="gprd",monitor="global",tier="sv",type="mailroom"}[3d] offset 30s)
+      )
+  - record: gitlab_component_ops:rate_3d
+    labels:
+      component: emailsProcessed
+      monitor: global
+      stage: main
+      tier: sv
+      type: mailroom
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_ops:rate_1h{component="emailsProcessed",env="gprd",monitor="global",tier="sv",type="mailroom"}[3d] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_3d
+    labels:
+      component: emailsProcessed
+      monitor: global
+      stage: main
+      tier: sv
+      type: mailroom
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_errors:rate_1h{component="emailsProcessed",env="gprd",monitor="global",tier="sv",type="mailroom"}[3d] offset 30s)
+      )

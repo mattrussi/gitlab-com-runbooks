@@ -508,3 +508,237 @@ groups:
       sum by (env,environment,stage) (
         gitlab_component_apdex:weight:score_1h{component="secondary_servers",env="gprd",monitor="global",tier="db",type="redis-cluster-chat-cache"} offset 30s
       )
+- name: 'Global SLI Metrics: redis-cluster-chat-cache - Burn-Rate 6h'
+  interval: 2m
+  rules:
+  - record: gitlab_component_apdex:success:rate_6h
+    labels:
+      component: primary_server
+      monitor: global
+      stage: main
+      tier: db
+      type: redis-cluster-chat-cache
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="primary_server",env="gprd",monitor="global",tier="db",type="redis-cluster-chat-cache"}[6h] offset 30s)
+      )
+  - record: gitlab_component_apdex:weight:score_6h
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="primary_server",env="gprd",monitor="global",tier="db",type="redis-cluster-chat-cache"}[6h] offset 30s)
+      )
+  - record: gitlab_component_ops:rate_6h
+    labels:
+      component: primary_server
+      monitor: global
+      stage: main
+      tier: db
+      type: redis-cluster-chat-cache
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_ops:rate_1h{component="primary_server",env="gprd",monitor="global",tier="db",type="redis-cluster-chat-cache"}[6h] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_6h
+    labels:
+      component: primary_server
+      monitor: global
+      stage: main
+      tier: db
+      type: redis-cluster-chat-cache
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_errors:rate_1h{component="primary_server",env="gprd",monitor="global",tier="db",type="redis-cluster-chat-cache"}[6h] offset 30s)
+      )
+  - record: gitlab_component_apdex:success:rate_6h
+    labels:
+      component: rails_redis_client
+      monitor: global
+      stage: main
+      tier: db
+      type: redis-cluster-chat-cache
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="rails_redis_client",env="gprd",monitor="global",tier="db",type="redis-cluster-chat-cache"}[6h] offset 30s)
+      )
+  - record: gitlab_component_apdex:weight:score_6h
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="rails_redis_client",env="gprd",monitor="global",tier="db",type="redis-cluster-chat-cache"}[6h] offset 30s)
+      )
+  - record: gitlab_component_ops:rate_6h
+    labels:
+      component: rails_redis_client
+      monitor: global
+      stage: main
+      tier: db
+      type: redis-cluster-chat-cache
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_ops:rate_1h{component="rails_redis_client",env="gprd",monitor="global",tier="db",type="redis-cluster-chat-cache"}[6h] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_6h
+    labels:
+      component: rails_redis_client
+      monitor: global
+      stage: main
+      tier: db
+      type: redis-cluster-chat-cache
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_errors:rate_1h{component="rails_redis_client",env="gprd",monitor="global",tier="db",type="redis-cluster-chat-cache"}[6h] offset 30s)
+      )
+  - record: gitlab_component_apdex:success:rate_6h
+    labels:
+      component: secondary_servers
+      monitor: global
+      stage: main
+      tier: db
+      type: redis-cluster-chat-cache
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="secondary_servers",env="gprd",monitor="global",tier="db",type="redis-cluster-chat-cache"}[6h] offset 30s)
+      )
+  - record: gitlab_component_apdex:weight:score_6h
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="secondary_servers",env="gprd",monitor="global",tier="db",type="redis-cluster-chat-cache"}[6h] offset 30s)
+      )
+  - record: gitlab_component_ops:rate_6h
+    labels:
+      component: secondary_servers
+      monitor: global
+      stage: main
+      tier: db
+      type: redis-cluster-chat-cache
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_ops:rate_1h{component="secondary_servers",env="gprd",monitor="global",tier="db",type="redis-cluster-chat-cache"}[6h] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_6h
+    labels:
+      component: secondary_servers
+      monitor: global
+      stage: main
+      tier: db
+      type: redis-cluster-chat-cache
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_errors:rate_1h{component="secondary_servers",env="gprd",monitor="global",tier="db",type="redis-cluster-chat-cache"}[6h] offset 30s)
+      )
+- name: 'Global SLI Metrics: redis-cluster-chat-cache - Burn-Rate 3d'
+  interval: 2m
+  rules:
+  - record: gitlab_component_apdex:success:rate_3d
+    labels:
+      component: primary_server
+      monitor: global
+      stage: main
+      tier: db
+      type: redis-cluster-chat-cache
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="primary_server",env="gprd",monitor="global",tier="db",type="redis-cluster-chat-cache"}[3d] offset 30s)
+      )
+  - record: gitlab_component_apdex:weight:score_3d
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="primary_server",env="gprd",monitor="global",tier="db",type="redis-cluster-chat-cache"}[3d] offset 30s)
+      )
+  - record: gitlab_component_ops:rate_3d
+    labels:
+      component: primary_server
+      monitor: global
+      stage: main
+      tier: db
+      type: redis-cluster-chat-cache
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_ops:rate_1h{component="primary_server",env="gprd",monitor="global",tier="db",type="redis-cluster-chat-cache"}[3d] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_3d
+    labels:
+      component: primary_server
+      monitor: global
+      stage: main
+      tier: db
+      type: redis-cluster-chat-cache
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_errors:rate_1h{component="primary_server",env="gprd",monitor="global",tier="db",type="redis-cluster-chat-cache"}[3d] offset 30s)
+      )
+  - record: gitlab_component_apdex:success:rate_3d
+    labels:
+      component: rails_redis_client
+      monitor: global
+      stage: main
+      tier: db
+      type: redis-cluster-chat-cache
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="rails_redis_client",env="gprd",monitor="global",tier="db",type="redis-cluster-chat-cache"}[3d] offset 30s)
+      )
+  - record: gitlab_component_apdex:weight:score_3d
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="rails_redis_client",env="gprd",monitor="global",tier="db",type="redis-cluster-chat-cache"}[3d] offset 30s)
+      )
+  - record: gitlab_component_ops:rate_3d
+    labels:
+      component: rails_redis_client
+      monitor: global
+      stage: main
+      tier: db
+      type: redis-cluster-chat-cache
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_ops:rate_1h{component="rails_redis_client",env="gprd",monitor="global",tier="db",type="redis-cluster-chat-cache"}[3d] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_3d
+    labels:
+      component: rails_redis_client
+      monitor: global
+      stage: main
+      tier: db
+      type: redis-cluster-chat-cache
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_errors:rate_1h{component="rails_redis_client",env="gprd",monitor="global",tier="db",type="redis-cluster-chat-cache"}[3d] offset 30s)
+      )
+  - record: gitlab_component_apdex:success:rate_3d
+    labels:
+      component: secondary_servers
+      monitor: global
+      stage: main
+      tier: db
+      type: redis-cluster-chat-cache
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="secondary_servers",env="gprd",monitor="global",tier="db",type="redis-cluster-chat-cache"}[3d] offset 30s)
+      )
+  - record: gitlab_component_apdex:weight:score_3d
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="secondary_servers",env="gprd",monitor="global",tier="db",type="redis-cluster-chat-cache"}[3d] offset 30s)
+      )
+  - record: gitlab_component_ops:rate_3d
+    labels:
+      component: secondary_servers
+      monitor: global
+      stage: main
+      tier: db
+      type: redis-cluster-chat-cache
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_ops:rate_1h{component="secondary_servers",env="gprd",monitor="global",tier="db",type="redis-cluster-chat-cache"}[3d] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_3d
+    labels:
+      component: secondary_servers
+      monitor: global
+      stage: main
+      tier: db
+      type: redis-cluster-chat-cache
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_errors:rate_1h{component="secondary_servers",env="gprd",monitor="global",tier="db",type="redis-cluster-chat-cache"}[3d] offset 30s)
+      )

@@ -1966,3 +1966,713 @@ groups:
       sum by (env,environment,stage) (
         gitlab_component_apdex:weight:score_1h{component="mimir_store_gateway",monitor="global",tier="inf",type="mimir"} offset 30s
       )
+- name: 'Global SLI Metrics: mimir - Burn-Rate 6h'
+  interval: 2m
+  rules:
+  - record: gitlab_component_apdex:success:rate_6h
+    labels:
+      component: mimir_compactor
+      env: ops
+      environment: ops
+      monitor: global
+      stage: main
+      tier: inf
+      type: mimir
+    expr: |
+      sum by () (
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="mimir_compactor",monitor="global",tier="inf",type="mimir"}[6h] offset 30s)
+      )
+  - record: gitlab_component_apdex:weight:score_6h
+    expr: |
+      sum by () (
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="mimir_compactor",monitor="global",tier="inf",type="mimir"}[6h] offset 30s)
+      )
+  - record: gitlab_component_ops:rate_6h
+    labels:
+      component: mimir_compactor
+      env: ops
+      environment: ops
+      monitor: global
+      stage: main
+      tier: inf
+      type: mimir
+    expr: |
+      sum by () (
+        avg_over_time(gitlab_component_ops:rate_1h{component="mimir_compactor",monitor="global",tier="inf",type="mimir"}[6h] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_6h
+    labels:
+      component: mimir_compactor
+      env: ops
+      environment: ops
+      monitor: global
+      stage: main
+      tier: inf
+      type: mimir
+    expr: |
+      sum by () (
+        avg_over_time(gitlab_component_errors:rate_1h{component="mimir_compactor",monitor="global",tier="inf",type="mimir"}[6h] offset 30s)
+      )
+  - record: gitlab_component_apdex:success:rate_6h
+    labels:
+      component: mimir_distributor
+      env: ops
+      environment: ops
+      monitor: global
+      stage: main
+      tier: inf
+      type: mimir
+    expr: |
+      sum by () (
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="mimir_distributor",monitor="global",tier="inf",type="mimir"}[6h] offset 30s)
+      )
+  - record: gitlab_component_apdex:weight:score_6h
+    expr: |
+      sum by () (
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="mimir_distributor",monitor="global",tier="inf",type="mimir"}[6h] offset 30s)
+      )
+  - record: gitlab_component_ops:rate_6h
+    labels:
+      component: mimir_distributor
+      env: ops
+      environment: ops
+      monitor: global
+      stage: main
+      tier: inf
+      type: mimir
+    expr: |
+      sum by () (
+        avg_over_time(gitlab_component_ops:rate_1h{component="mimir_distributor",monitor="global",tier="inf",type="mimir"}[6h] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_6h
+    labels:
+      component: mimir_distributor
+      env: ops
+      environment: ops
+      monitor: global
+      stage: main
+      tier: inf
+      type: mimir
+    expr: |
+      sum by () (
+        avg_over_time(gitlab_component_errors:rate_1h{component="mimir_distributor",monitor="global",tier="inf",type="mimir"}[6h] offset 30s)
+      )
+  - record: gitlab_component_apdex:success:rate_6h
+    labels:
+      component: mimir_ingester
+      env: ops
+      environment: ops
+      monitor: global
+      stage: main
+      tier: inf
+      type: mimir
+    expr: |
+      sum by () (
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="mimir_ingester",monitor="global",tier="inf",type="mimir"}[6h] offset 30s)
+      )
+  - record: gitlab_component_apdex:weight:score_6h
+    expr: |
+      sum by () (
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="mimir_ingester",monitor="global",tier="inf",type="mimir"}[6h] offset 30s)
+      )
+  - record: gitlab_component_ops:rate_6h
+    labels:
+      component: mimir_ingester
+      env: ops
+      environment: ops
+      monitor: global
+      stage: main
+      tier: inf
+      type: mimir
+    expr: |
+      sum by () (
+        avg_over_time(gitlab_component_ops:rate_1h{component="mimir_ingester",monitor="global",tier="inf",type="mimir"}[6h] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_6h
+    labels:
+      component: mimir_ingester
+      env: ops
+      environment: ops
+      monitor: global
+      stage: main
+      tier: inf
+      type: mimir
+    expr: |
+      sum by () (
+        avg_over_time(gitlab_component_errors:rate_1h{component="mimir_ingester",monitor="global",tier="inf",type="mimir"}[6h] offset 30s)
+      )
+  - record: gitlab_component_apdex:success:rate_6h
+    labels:
+      component: mimir_querier
+      env: ops
+      environment: ops
+      monitor: global
+      stage: main
+      tier: inf
+      type: mimir
+    expr: |
+      sum by () (
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="mimir_querier",monitor="global",tier="inf",type="mimir"}[6h] offset 30s)
+      )
+  - record: gitlab_component_apdex:weight:score_6h
+    expr: |
+      sum by () (
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="mimir_querier",monitor="global",tier="inf",type="mimir"}[6h] offset 30s)
+      )
+  - record: gitlab_component_ops:rate_6h
+    labels:
+      component: mimir_querier
+      env: ops
+      environment: ops
+      monitor: global
+      stage: main
+      tier: inf
+      type: mimir
+    expr: |
+      sum by () (
+        avg_over_time(gitlab_component_ops:rate_1h{component="mimir_querier",monitor="global",tier="inf",type="mimir"}[6h] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_6h
+    labels:
+      component: mimir_querier
+      env: ops
+      environment: ops
+      monitor: global
+      stage: main
+      tier: inf
+      type: mimir
+    expr: |
+      sum by () (
+        avg_over_time(gitlab_component_errors:rate_1h{component="mimir_querier",monitor="global",tier="inf",type="mimir"}[6h] offset 30s)
+      )
+  - record: gitlab_component_apdex:success:rate_6h
+    labels:
+      component: mimir_query_frontend
+      env: ops
+      environment: ops
+      monitor: global
+      stage: main
+      tier: inf
+      type: mimir
+    expr: |
+      sum by () (
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="mimir_query_frontend",monitor="global",tier="inf",type="mimir"}[6h] offset 30s)
+      )
+  - record: gitlab_component_apdex:weight:score_6h
+    expr: |
+      sum by () (
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="mimir_query_frontend",monitor="global",tier="inf",type="mimir"}[6h] offset 30s)
+      )
+  - record: gitlab_component_ops:rate_6h
+    labels:
+      component: mimir_query_frontend
+      env: ops
+      environment: ops
+      monitor: global
+      stage: main
+      tier: inf
+      type: mimir
+    expr: |
+      sum by () (
+        avg_over_time(gitlab_component_ops:rate_1h{component="mimir_query_frontend",monitor="global",tier="inf",type="mimir"}[6h] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_6h
+    labels:
+      component: mimir_query_frontend
+      env: ops
+      environment: ops
+      monitor: global
+      stage: main
+      tier: inf
+      type: mimir
+    expr: |
+      sum by () (
+        avg_over_time(gitlab_component_errors:rate_1h{component="mimir_query_frontend",monitor="global",tier="inf",type="mimir"}[6h] offset 30s)
+      )
+  - record: gitlab_component_apdex:success:rate_6h
+    labels:
+      component: mimir_query_scheduler
+      env: ops
+      environment: ops
+      monitor: global
+      stage: main
+      tier: inf
+      type: mimir
+    expr: |
+      sum by () (
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="mimir_query_scheduler",monitor="global",tier="inf",type="mimir"}[6h] offset 30s)
+      )
+  - record: gitlab_component_apdex:weight:score_6h
+    expr: |
+      sum by () (
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="mimir_query_scheduler",monitor="global",tier="inf",type="mimir"}[6h] offset 30s)
+      )
+  - record: gitlab_component_ops:rate_6h
+    labels:
+      component: mimir_query_scheduler
+      env: ops
+      environment: ops
+      monitor: global
+      stage: main
+      tier: inf
+      type: mimir
+    expr: |
+      sum by () (
+        avg_over_time(gitlab_component_ops:rate_1h{component="mimir_query_scheduler",monitor="global",tier="inf",type="mimir"}[6h] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_6h
+    labels:
+      component: mimir_query_scheduler
+      env: ops
+      environment: ops
+      monitor: global
+      stage: main
+      tier: inf
+      type: mimir
+    expr: |
+      sum by () (
+        avg_over_time(gitlab_component_errors:rate_1h{component="mimir_query_scheduler",monitor="global",tier="inf",type="mimir"}[6h] offset 30s)
+      )
+  - record: gitlab_component_apdex:success:rate_6h
+    labels:
+      component: mimir_ruler
+      env: ops
+      environment: ops
+      monitor: global
+      stage: main
+      tier: inf
+      type: mimir
+    expr: |
+      sum by () (
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="mimir_ruler",monitor="global",tier="inf",type="mimir"}[6h] offset 30s)
+      )
+  - record: gitlab_component_apdex:weight:score_6h
+    expr: |
+      sum by () (
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="mimir_ruler",monitor="global",tier="inf",type="mimir"}[6h] offset 30s)
+      )
+  - record: gitlab_component_ops:rate_6h
+    labels:
+      component: mimir_ruler
+      env: ops
+      environment: ops
+      monitor: global
+      stage: main
+      tier: inf
+      type: mimir
+    expr: |
+      sum by () (
+        avg_over_time(gitlab_component_ops:rate_1h{component="mimir_ruler",monitor="global",tier="inf",type="mimir"}[6h] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_6h
+    labels:
+      component: mimir_ruler
+      env: ops
+      environment: ops
+      monitor: global
+      stage: main
+      tier: inf
+      type: mimir
+    expr: |
+      sum by () (
+        avg_over_time(gitlab_component_errors:rate_1h{component="mimir_ruler",monitor="global",tier="inf",type="mimir"}[6h] offset 30s)
+      )
+  - record: gitlab_component_apdex:success:rate_6h
+    labels:
+      component: mimir_store_gateway
+      env: ops
+      environment: ops
+      monitor: global
+      stage: main
+      tier: inf
+      type: mimir
+    expr: |
+      sum by () (
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="mimir_store_gateway",monitor="global",tier="inf",type="mimir"}[6h] offset 30s)
+      )
+  - record: gitlab_component_apdex:weight:score_6h
+    expr: |
+      sum by () (
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="mimir_store_gateway",monitor="global",tier="inf",type="mimir"}[6h] offset 30s)
+      )
+  - record: gitlab_component_ops:rate_6h
+    labels:
+      component: mimir_store_gateway
+      env: ops
+      environment: ops
+      monitor: global
+      stage: main
+      tier: inf
+      type: mimir
+    expr: |
+      sum by () (
+        avg_over_time(gitlab_component_ops:rate_1h{component="mimir_store_gateway",monitor="global",tier="inf",type="mimir"}[6h] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_6h
+    labels:
+      component: mimir_store_gateway
+      env: ops
+      environment: ops
+      monitor: global
+      stage: main
+      tier: inf
+      type: mimir
+    expr: |
+      sum by () (
+        avg_over_time(gitlab_component_errors:rate_1h{component="mimir_store_gateway",monitor="global",tier="inf",type="mimir"}[6h] offset 30s)
+      )
+- name: 'Global SLI Metrics: mimir - Burn-Rate 3d'
+  interval: 2m
+  rules:
+  - record: gitlab_component_apdex:success:rate_3d
+    labels:
+      component: mimir_compactor
+      env: ops
+      environment: ops
+      monitor: global
+      stage: main
+      tier: inf
+      type: mimir
+    expr: |
+      sum by () (
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="mimir_compactor",monitor="global",tier="inf",type="mimir"}[3d] offset 30s)
+      )
+  - record: gitlab_component_apdex:weight:score_3d
+    expr: |
+      sum by () (
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="mimir_compactor",monitor="global",tier="inf",type="mimir"}[3d] offset 30s)
+      )
+  - record: gitlab_component_ops:rate_3d
+    labels:
+      component: mimir_compactor
+      env: ops
+      environment: ops
+      monitor: global
+      stage: main
+      tier: inf
+      type: mimir
+    expr: |
+      sum by () (
+        avg_over_time(gitlab_component_ops:rate_1h{component="mimir_compactor",monitor="global",tier="inf",type="mimir"}[3d] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_3d
+    labels:
+      component: mimir_compactor
+      env: ops
+      environment: ops
+      monitor: global
+      stage: main
+      tier: inf
+      type: mimir
+    expr: |
+      sum by () (
+        avg_over_time(gitlab_component_errors:rate_1h{component="mimir_compactor",monitor="global",tier="inf",type="mimir"}[3d] offset 30s)
+      )
+  - record: gitlab_component_apdex:success:rate_3d
+    labels:
+      component: mimir_distributor
+      env: ops
+      environment: ops
+      monitor: global
+      stage: main
+      tier: inf
+      type: mimir
+    expr: |
+      sum by () (
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="mimir_distributor",monitor="global",tier="inf",type="mimir"}[3d] offset 30s)
+      )
+  - record: gitlab_component_apdex:weight:score_3d
+    expr: |
+      sum by () (
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="mimir_distributor",monitor="global",tier="inf",type="mimir"}[3d] offset 30s)
+      )
+  - record: gitlab_component_ops:rate_3d
+    labels:
+      component: mimir_distributor
+      env: ops
+      environment: ops
+      monitor: global
+      stage: main
+      tier: inf
+      type: mimir
+    expr: |
+      sum by () (
+        avg_over_time(gitlab_component_ops:rate_1h{component="mimir_distributor",monitor="global",tier="inf",type="mimir"}[3d] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_3d
+    labels:
+      component: mimir_distributor
+      env: ops
+      environment: ops
+      monitor: global
+      stage: main
+      tier: inf
+      type: mimir
+    expr: |
+      sum by () (
+        avg_over_time(gitlab_component_errors:rate_1h{component="mimir_distributor",monitor="global",tier="inf",type="mimir"}[3d] offset 30s)
+      )
+  - record: gitlab_component_apdex:success:rate_3d
+    labels:
+      component: mimir_ingester
+      env: ops
+      environment: ops
+      monitor: global
+      stage: main
+      tier: inf
+      type: mimir
+    expr: |
+      sum by () (
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="mimir_ingester",monitor="global",tier="inf",type="mimir"}[3d] offset 30s)
+      )
+  - record: gitlab_component_apdex:weight:score_3d
+    expr: |
+      sum by () (
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="mimir_ingester",monitor="global",tier="inf",type="mimir"}[3d] offset 30s)
+      )
+  - record: gitlab_component_ops:rate_3d
+    labels:
+      component: mimir_ingester
+      env: ops
+      environment: ops
+      monitor: global
+      stage: main
+      tier: inf
+      type: mimir
+    expr: |
+      sum by () (
+        avg_over_time(gitlab_component_ops:rate_1h{component="mimir_ingester",monitor="global",tier="inf",type="mimir"}[3d] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_3d
+    labels:
+      component: mimir_ingester
+      env: ops
+      environment: ops
+      monitor: global
+      stage: main
+      tier: inf
+      type: mimir
+    expr: |
+      sum by () (
+        avg_over_time(gitlab_component_errors:rate_1h{component="mimir_ingester",monitor="global",tier="inf",type="mimir"}[3d] offset 30s)
+      )
+  - record: gitlab_component_apdex:success:rate_3d
+    labels:
+      component: mimir_querier
+      env: ops
+      environment: ops
+      monitor: global
+      stage: main
+      tier: inf
+      type: mimir
+    expr: |
+      sum by () (
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="mimir_querier",monitor="global",tier="inf",type="mimir"}[3d] offset 30s)
+      )
+  - record: gitlab_component_apdex:weight:score_3d
+    expr: |
+      sum by () (
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="mimir_querier",monitor="global",tier="inf",type="mimir"}[3d] offset 30s)
+      )
+  - record: gitlab_component_ops:rate_3d
+    labels:
+      component: mimir_querier
+      env: ops
+      environment: ops
+      monitor: global
+      stage: main
+      tier: inf
+      type: mimir
+    expr: |
+      sum by () (
+        avg_over_time(gitlab_component_ops:rate_1h{component="mimir_querier",monitor="global",tier="inf",type="mimir"}[3d] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_3d
+    labels:
+      component: mimir_querier
+      env: ops
+      environment: ops
+      monitor: global
+      stage: main
+      tier: inf
+      type: mimir
+    expr: |
+      sum by () (
+        avg_over_time(gitlab_component_errors:rate_1h{component="mimir_querier",monitor="global",tier="inf",type="mimir"}[3d] offset 30s)
+      )
+  - record: gitlab_component_apdex:success:rate_3d
+    labels:
+      component: mimir_query_frontend
+      env: ops
+      environment: ops
+      monitor: global
+      stage: main
+      tier: inf
+      type: mimir
+    expr: |
+      sum by () (
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="mimir_query_frontend",monitor="global",tier="inf",type="mimir"}[3d] offset 30s)
+      )
+  - record: gitlab_component_apdex:weight:score_3d
+    expr: |
+      sum by () (
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="mimir_query_frontend",monitor="global",tier="inf",type="mimir"}[3d] offset 30s)
+      )
+  - record: gitlab_component_ops:rate_3d
+    labels:
+      component: mimir_query_frontend
+      env: ops
+      environment: ops
+      monitor: global
+      stage: main
+      tier: inf
+      type: mimir
+    expr: |
+      sum by () (
+        avg_over_time(gitlab_component_ops:rate_1h{component="mimir_query_frontend",monitor="global",tier="inf",type="mimir"}[3d] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_3d
+    labels:
+      component: mimir_query_frontend
+      env: ops
+      environment: ops
+      monitor: global
+      stage: main
+      tier: inf
+      type: mimir
+    expr: |
+      sum by () (
+        avg_over_time(gitlab_component_errors:rate_1h{component="mimir_query_frontend",monitor="global",tier="inf",type="mimir"}[3d] offset 30s)
+      )
+  - record: gitlab_component_apdex:success:rate_3d
+    labels:
+      component: mimir_query_scheduler
+      env: ops
+      environment: ops
+      monitor: global
+      stage: main
+      tier: inf
+      type: mimir
+    expr: |
+      sum by () (
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="mimir_query_scheduler",monitor="global",tier="inf",type="mimir"}[3d] offset 30s)
+      )
+  - record: gitlab_component_apdex:weight:score_3d
+    expr: |
+      sum by () (
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="mimir_query_scheduler",monitor="global",tier="inf",type="mimir"}[3d] offset 30s)
+      )
+  - record: gitlab_component_ops:rate_3d
+    labels:
+      component: mimir_query_scheduler
+      env: ops
+      environment: ops
+      monitor: global
+      stage: main
+      tier: inf
+      type: mimir
+    expr: |
+      sum by () (
+        avg_over_time(gitlab_component_ops:rate_1h{component="mimir_query_scheduler",monitor="global",tier="inf",type="mimir"}[3d] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_3d
+    labels:
+      component: mimir_query_scheduler
+      env: ops
+      environment: ops
+      monitor: global
+      stage: main
+      tier: inf
+      type: mimir
+    expr: |
+      sum by () (
+        avg_over_time(gitlab_component_errors:rate_1h{component="mimir_query_scheduler",monitor="global",tier="inf",type="mimir"}[3d] offset 30s)
+      )
+  - record: gitlab_component_apdex:success:rate_3d
+    labels:
+      component: mimir_ruler
+      env: ops
+      environment: ops
+      monitor: global
+      stage: main
+      tier: inf
+      type: mimir
+    expr: |
+      sum by () (
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="mimir_ruler",monitor="global",tier="inf",type="mimir"}[3d] offset 30s)
+      )
+  - record: gitlab_component_apdex:weight:score_3d
+    expr: |
+      sum by () (
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="mimir_ruler",monitor="global",tier="inf",type="mimir"}[3d] offset 30s)
+      )
+  - record: gitlab_component_ops:rate_3d
+    labels:
+      component: mimir_ruler
+      env: ops
+      environment: ops
+      monitor: global
+      stage: main
+      tier: inf
+      type: mimir
+    expr: |
+      sum by () (
+        avg_over_time(gitlab_component_ops:rate_1h{component="mimir_ruler",monitor="global",tier="inf",type="mimir"}[3d] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_3d
+    labels:
+      component: mimir_ruler
+      env: ops
+      environment: ops
+      monitor: global
+      stage: main
+      tier: inf
+      type: mimir
+    expr: |
+      sum by () (
+        avg_over_time(gitlab_component_errors:rate_1h{component="mimir_ruler",monitor="global",tier="inf",type="mimir"}[3d] offset 30s)
+      )
+  - record: gitlab_component_apdex:success:rate_3d
+    labels:
+      component: mimir_store_gateway
+      env: ops
+      environment: ops
+      monitor: global
+      stage: main
+      tier: inf
+      type: mimir
+    expr: |
+      sum by () (
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="mimir_store_gateway",monitor="global",tier="inf",type="mimir"}[3d] offset 30s)
+      )
+  - record: gitlab_component_apdex:weight:score_3d
+    expr: |
+      sum by () (
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="mimir_store_gateway",monitor="global",tier="inf",type="mimir"}[3d] offset 30s)
+      )
+  - record: gitlab_component_ops:rate_3d
+    labels:
+      component: mimir_store_gateway
+      env: ops
+      environment: ops
+      monitor: global
+      stage: main
+      tier: inf
+      type: mimir
+    expr: |
+      sum by () (
+        avg_over_time(gitlab_component_ops:rate_1h{component="mimir_store_gateway",monitor="global",tier="inf",type="mimir"}[3d] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_3d
+    labels:
+      component: mimir_store_gateway
+      env: ops
+      environment: ops
+      monitor: global
+      stage: main
+      tier: inf
+      type: mimir
+    expr: |
+      sum by () (
+        avg_over_time(gitlab_component_errors:rate_1h{component="mimir_store_gateway",monitor="global",tier="inf",type="mimir"}[3d] offset 30s)
+      )

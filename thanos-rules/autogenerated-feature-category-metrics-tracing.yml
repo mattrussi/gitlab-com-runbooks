@@ -192,26 +192,13 @@ groups:
       tier: sv
       type: tracing
     expr: |
-      (
-        sum by (env,environment,stage) (
-          rate(traefik_service_request_duration_seconds_bucket{code!~"4xx|5xx",job="default/traefik",le="0.3",service=~"tenant.*otel-collector-traces.*",team="observability"}[6h])
-        )
-        +
-        sum by (env,environment,stage) (
-          rate(traefik_service_request_duration_seconds_bucket{code!~"4xx|5xx",job="default/traefik",le="5",service=~"tenant.*otel-collector-traces.*",team="observability"}[6h])
-        )
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab:component:feature_category:execution:apdex:success:rate_1h{component="ingress",feature_category="tracing",tier="sv",type="tracing"}[6h] offset 30s)
       )
-      /
-      2
   - record: gitlab:component:feature_category:execution:apdex:weight:score_6h
-    labels:
-      component: ingress
-      feature_category: tracing
-      tier: sv
-      type: tracing
     expr: |
       sum by (env,environment,stage) (
-        rate(traefik_service_request_duration_seconds_bucket{code!~"4xx|5xx",job="default/traefik",le="+Inf",service=~"tenant.*otel-collector-traces.*",team="observability"}[6h])
+        avg_over_time(gitlab:component:feature_category:execution:apdex:weight:score_1h{component="ingress",feature_category="tracing",tier="sv",type="tracing"}[6h] offset 30s)
       )
   - record: gitlab:component:feature_category:execution:ops:rate_6h
     labels:
@@ -221,7 +208,7 @@ groups:
       type: tracing
     expr: |
       sum by (env,environment,stage) (
-        rate(traefik_service_requests_total{job="default/traefik",service=~"tenant.*otel-collector-traces.*",team="observability"}[6h])
+        avg_over_time(gitlab:component:feature_category:execution:ops:rate_1h{component="ingress",feature_category="tracing",tier="sv",type="tracing"}[6h] offset 30s)
       )
   - record: gitlab:component:feature_category:execution:error:rate_6h
     labels:
@@ -230,16 +217,8 @@ groups:
       tier: sv
       type: tracing
     expr: |
-      (
-        sum by (env,environment,stage) (
-          rate(traefik_service_requests_total{code=~"^5.*",job="default/traefik",service=~"tenant.*otel-collector-traces.*",team="observability"}[6h])
-        )
-      )
-      or
-      (
-        0 * group by(env,environment,stage) (
-          gitlab:component:feature_category:execution:ops:rate_6h{component="ingress",feature_category="tracing",tier="sv",type="tracing"}
-        )
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab:component:feature_category:execution:error:rate_1h{component="ingress",feature_category="tracing",tier="sv",type="tracing"}[6h] offset 30s)
       )
 - name: 'Prometheus Intermediate Metrics per feature: tracing - burn-rate 3d'
   interval: 2m
@@ -252,26 +231,13 @@ groups:
       tier: sv
       type: tracing
     expr: |
-      (
-        sum by (env,environment,stage) (
-          rate(traefik_service_request_duration_seconds_bucket{code!~"4xx|5xx",job="default/traefik",le="0.3",service=~"tenant.*otel-collector-traces.*",team="observability"}[3d])
-        )
-        +
-        sum by (env,environment,stage) (
-          rate(traefik_service_request_duration_seconds_bucket{code!~"4xx|5xx",job="default/traefik",le="5",service=~"tenant.*otel-collector-traces.*",team="observability"}[3d])
-        )
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab:component:feature_category:execution:apdex:success:rate_1h{component="ingress",feature_category="tracing",tier="sv",type="tracing"}[3d] offset 30s)
       )
-      /
-      2
   - record: gitlab:component:feature_category:execution:apdex:weight:score_3d
-    labels:
-      component: ingress
-      feature_category: tracing
-      tier: sv
-      type: tracing
     expr: |
       sum by (env,environment,stage) (
-        rate(traefik_service_request_duration_seconds_bucket{code!~"4xx|5xx",job="default/traefik",le="+Inf",service=~"tenant.*otel-collector-traces.*",team="observability"}[3d])
+        avg_over_time(gitlab:component:feature_category:execution:apdex:weight:score_1h{component="ingress",feature_category="tracing",tier="sv",type="tracing"}[3d] offset 30s)
       )
   - record: gitlab:component:feature_category:execution:ops:rate_3d
     labels:
@@ -281,7 +247,7 @@ groups:
       type: tracing
     expr: |
       sum by (env,environment,stage) (
-        rate(traefik_service_requests_total{job="default/traefik",service=~"tenant.*otel-collector-traces.*",team="observability"}[3d])
+        avg_over_time(gitlab:component:feature_category:execution:ops:rate_1h{component="ingress",feature_category="tracing",tier="sv",type="tracing"}[3d] offset 30s)
       )
   - record: gitlab:component:feature_category:execution:error:rate_3d
     labels:
@@ -290,14 +256,6 @@ groups:
       tier: sv
       type: tracing
     expr: |
-      (
-        sum by (env,environment,stage) (
-          rate(traefik_service_requests_total{code=~"^5.*",job="default/traefik",service=~"tenant.*otel-collector-traces.*",team="observability"}[3d])
-        )
-      )
-      or
-      (
-        0 * group by(env,environment,stage) (
-          gitlab:component:feature_category:execution:ops:rate_3d{component="ingress",feature_category="tracing",tier="sv",type="tracing"}
-        )
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab:component:feature_category:execution:error:rate_1h{component="ingress",feature_category="tracing",tier="sv",type="tracing"}[3d] offset 30s)
       )
