@@ -38,7 +38,10 @@ local recordingRuleGroupsForServiceForBurnRate(serviceDefinition, componentAggre
       std.flatMap(
         function(r) r.generateRecordingRulesForService(serviceDefinition),
         rulesetGenerators
-      ) + shardLevelIndicatorsRules.generateRecordingRulesForService(serviceDefinition, shardLevelIndicators),
+      ) + if std.length(shardLevelIndicators) > 0 then
+        shardLevelIndicatorsRules.generateRecordingRulesForService(serviceDefinition, shardLevelIndicators)
+      else
+        [],
   };
 
 local featureCategoryRecordingRuleGroupsForService(serviceDefinition, aggregationSet, burnRate) =
@@ -56,7 +59,7 @@ local featureCategoryRecordingRuleGroupsForService(serviceDefinition, aggregatio
    * These are the first level aggregation, for normalizing source metrics
    * into a consistent format
    */
-  recordingRuleGroupsForService(serviceDefinition, componentAggregationSet, nodeAggregationSet, shardAggregationSet)::
+  recordingRuleGroupsForService(serviceDefinition, componentAggregationSet, nodeAggregationSet=null, shardAggregationSet=null)::
     local componentMappingRuleSetGenerator = recordingRules.componentMappingRuleSetGenerator();
 
     local burnRates = componentAggregationSet.getBurnRates();
