@@ -30,6 +30,7 @@
 * [GitLab.com on Kubernetes](../kube/k8s-new-cluster.md)
 * [How to resize Persistent Volumes in Kubernetes](../kube/k8s-pvc-resize.md)
 * [StatefulSet Guidelines](../kube/sts-guidelines.md)
+* [Mimir Onboarding](../mimir/getting-started.md)
 * [Alertmanager Notification Failures](../monitoring/alertmanager-notification-failures.md)
 * [Alerting](../monitoring/alerts_manual.md)
 * [../monitoring/apdex-alerts-guide.md](../monitoring/apdex-alerts-guide.md)

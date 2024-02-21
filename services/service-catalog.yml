@@ -2551,8 +2551,8 @@ services:
         service:
         security:
       logging:
-        - name:
-          permalink:
+        - name: Elasticsearch
+          permalink: https://nonprod-log.gitlab.net/app/r/s/BLV6G
     observability:
       monitors:
         grafana_folder:

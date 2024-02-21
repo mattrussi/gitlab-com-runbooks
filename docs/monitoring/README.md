@@ -31,6 +31,7 @@
 * [../kube/k8s-operations.md](../kube/k8s-operations.md)
 * [StatefulSet Guidelines](../kube/sts-guidelines.md)
 * [Service-Level Monitoring](../metrics-catalog/service-level-monitoring.md)
+* [Mimir Onboarding](../mimir/getting-started.md)
 * [Alertmanager Notification Failures](alertmanager-notification-failures.md)
 * [Accessing a GKE Alertmanager](alerts_gke.md)
 * [Alerting](alerts_manual.md)
