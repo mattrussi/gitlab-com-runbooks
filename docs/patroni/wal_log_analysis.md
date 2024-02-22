@@ -29,7 +29,7 @@ This is the procedure to fetech WALs from a GPRD database into a postgres VM in 
   ```
 
 - Edit `/etc/wal-g.d/env-gprd/WALG_GS_PREFIX` with the content from the GPRD environment (copy from a GPRD server)
-- Edit `/etc/wal-g.d/env/GOOGLE_APPLICATION_CREDENTIALS` to point to `/etc/wal-g.d/gcs-gprd.json`
+- Edit `/etc/wal-g.d/env-gprd/GOOGLE_APPLICATION_CREDENTIALS` to point to `/etc/wal-g.d/gcs-gprd.json`
 - Define the GPRD GCS credentials in the `/etc/wal-g.d/gcs-gprd.json` file (copy from a GPRD server)
 - Change ownwership of the new GPRD env and credential files (IMPORTANT, DON'T SKIP THIS STEP)
 
@@ -64,6 +64,13 @@ cd /var/opt/gitlab/wal_restore
 
 ```
 usermod -a -G gitlab-psql <user>
+```
+
+### 5. Clean the `gprd` credential files and GCS prefix file
+
+```
+truncate -s 0 /etc/wal-g.d/gcs-gprd.json
+truncate -s 0 /etc/wal-g.d/env-gprd/WALG_GS_PREFIX
 ```
 
 ## Using pg_waldump
