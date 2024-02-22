@@ -52,57 +52,6 @@ groups:
           gitlab:component:feature_category:execution:ops:rate_5m{component="grpc_requests",feature_category="deployment_management",tier="sv",type="kas"}
         )
       )
-- name: 'Prometheus Intermediate Metrics per feature: kas - burn-rate 30m'
-  interval: 2m
-  rules:
-  - record: gitlab:component:feature_category:execution:apdex:success:rate_30m
-    labels:
-      component: grpc_requests
-      feature_category: deployment_management
-      tier: sv
-      type: kas
-    expr: |
-      sum by (env,environment,stage) (
-        rate(tunnel_routing_duration_seconds_bucket{le="4.096",status=~"success",type="kas"}[30m] offset 30s)
-      )
-  - record: gitlab:component:feature_category:execution:apdex:weight:score_30m
-    labels:
-      component: grpc_requests
-      feature_category: deployment_management
-      tier: sv
-      type: kas
-    expr: |
-      sum by (env,environment,stage) (
-        rate(tunnel_routing_duration_seconds_bucket{le="+Inf",status=~"success",type="kas"}[30m] offset 30s)
-      )
-  - record: gitlab:component:feature_category:execution:ops:rate_30m
-    labels:
-      component: grpc_requests
-      feature_category: deployment_management
-      tier: sv
-      type: kas
-    expr: |
-      sum by (env,environment,stage) (
-        rate(grpc_server_handled_total{type="kas"}[30m] offset 30s)
-      )
-  - record: gitlab:component:feature_category:execution:error:rate_30m
-    labels:
-      component: grpc_requests
-      feature_category: deployment_management
-      tier: sv
-      type: kas
-    expr: |
-      (
-        sum by (env,environment,stage) (
-          rate(grpc_server_handled_total{grpc_code!~"^(OK|NotFound|PaymentRequired|FailedPrecondition|Unauthenticated|PermissionDenied|Canceled|DeadlineExceeded|ResourceExhausted)$",grpc_service!="gitlab.agent.kubernetes_api.rpc.KubernetesApi",type="kas"}[30m] offset 30s)
-        )
-      )
-      or
-      (
-        0 * group by(env,environment,stage) (
-          gitlab:component:feature_category:execution:ops:rate_30m{component="grpc_requests",feature_category="deployment_management",tier="sv",type="kas"}
-        )
-      )
 - name: 'Prometheus Intermediate Metrics per feature: kas - burn-rate 1h'
   interval: 1m
   rules:

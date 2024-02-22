@@ -34,39 +34,6 @@ groups:
           gitlab:component:feature_category:execution:ops:rate_5m{component="web_ide_worker",feature_category="web_ide",stage="main",tier="inf",type="gitlab-static"}
         )
       )
-- name: 'Prometheus Intermediate Metrics per feature: gitlab-static - burn-rate 30m'
-  interval: 2m
-  rules:
-  - record: gitlab:component:feature_category:execution:ops:rate_30m
-    labels:
-      component: web_ide_worker
-      feature_category: web_ide
-      stage: main
-      tier: inf
-      type: gitlab-static
-    expr: |
-      sum by (env,environment) (
-        rate(cloudflare_worker_requests_count{script_name="gitlab-web-ide-vscode-production"}[30m] offset 30s)
-      )
-  - record: gitlab:component:feature_category:execution:error:rate_30m
-    labels:
-      component: web_ide_worker
-      feature_category: web_ide
-      stage: main
-      tier: inf
-      type: gitlab-static
-    expr: |
-      (
-        sum by (env,environment) (
-          rate(cloudflare_worker_errors_count{script_name="gitlab-web-ide-vscode-production"}[30m] offset 30s)
-        )
-      )
-      or
-      (
-        0 * group by(env,environment) (
-          gitlab:component:feature_category:execution:ops:rate_30m{component="web_ide_worker",feature_category="web_ide",stage="main",tier="inf",type="gitlab-static"}
-        )
-      )
 - name: 'Prometheus Intermediate Metrics per feature: gitlab-static - burn-rate 1h'
   interval: 1m
   rules:

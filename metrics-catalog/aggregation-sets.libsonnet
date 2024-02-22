@@ -376,6 +376,11 @@ local aggregationSet = import 'servicemetrics/aggregation-set.libsonnet';
     intermediateSource: true,
     selector: { monitor: { ne: 'global' } },
     labels: ['env', 'environment', 'tier', 'type', 'stage', 'component', 'feature_category'],
+    // Error budgets currently do not support alerting: https://gitlab.com/groups/gitlab-com/gl-infra/-/epics/615
+    // We use the 1h burnRate for the error budget calculation and we use the 5m burn rate
+    // for displaying on dashboards.
+    // For now, only generate these burn rates so we don't have to evaluate the extra rules
+    supportedBurnRates: ['5m', '1h'],
     offset: '30s',
     metricFormats: {
       apdexSuccessRate: 'gitlab:component:feature_category:execution:apdex:success:rate_%s',
@@ -391,7 +396,8 @@ local aggregationSet = import 'servicemetrics/aggregation-set.libsonnet';
     intermediateSource: false,
     selector: { monitor: 'global' },
     labels: ['env', 'environment', 'tier', 'type', 'stage', 'component', 'feature_category'],
-    upscaleLongerBurnRates: true,
+    generateSLODashboards: false,
+    supportedBurnRates: ['5m', '1h'],
     metricFormats: {
       apdexSuccessRate: 'gitlab:component:feature_category:execution:apdex:success:rate_%s',
       apdexWeight: 'gitlab:component:feature_category:execution:apdex:weight:score_%s',
@@ -409,7 +415,7 @@ local aggregationSet = import 'servicemetrics/aggregation-set.libsonnet';
     selector: { monitor: 'global' },
     labels: ['env', 'environment', 'tier', 'type', 'stage', 'component', 'stage_group', 'product_stage'],
     generateSLODashboards: false,
-    upscaleLongerBurnRates: true,
+    supportedBurnRates: ['5m', '1h'],
     offset: '30s',
     joinSource: {
       metric: 'gitlab:feature_category:stage_group:mapping',
@@ -434,6 +440,7 @@ local aggregationSet = import 'servicemetrics/aggregation-set.libsonnet';
     selector: { monitor: 'global' },
     labels: ['env', 'environment', 'stage', 'stage_group', 'product_stage'],
     generateSLODashboards: false,
+    supportedBurnRates: ['5m', '1h'],
     offset: '30s',
     joinSource: {
       metric: 'gitlab:feature_category:stage_group:mapping',
