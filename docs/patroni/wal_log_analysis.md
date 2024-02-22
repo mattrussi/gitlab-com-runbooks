@@ -68,7 +68,7 @@ The script can take several hours to execute, because the list of WAL files with
 Most common issues are:
 
 - issues with the GCS authentication file, check the credentials file `/etc/wal-g.d/gcs-gprd.json` content and permission
-- issues with the GCS bucket file, check the bucket file `/etc/wal-g.d/env-gprd/WALG_GS_PREFIX` content and permission 
+- issues with the GCS bucket file, check the bucket file `/etc/wal-g.d/env-gprd/WALG_GS_PREFIX` content and permission
 
 After fixing, you don't need to list files again, as it's a very slow process. Check if the content of the `${RESTORE_DIR}/wal_list.download` file is populated and then just execute the 2nd part of the script to perform `wal-g wal-fetch`.
 
