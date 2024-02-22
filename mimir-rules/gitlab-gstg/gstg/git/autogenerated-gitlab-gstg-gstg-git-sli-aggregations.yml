@@ -42,12 +42,22 @@ groups:
   - record: sli_aggregations:gitlab_workhorse_http_request_duration_seconds_bucket:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,job,le,product_stage,queue,region,route,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(gitlab_workhorse_http_request_duration_seconds_bucket{env="gstg",job=~"gitlab-workhorse|gitlab-workhorse-git",type=~"git|internal-api"}[5m] offset 30s)
+        rate(gitlab_workhorse_http_request_duration_seconds_bucket{env="gstg",job=~"gitlab-workhorse|gitlab-workhorse-git",type=~"git"}[5m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_workhorse_http_request_duration_seconds_bucket:rate_5m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,job,le,product_stage,queue,region,route,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_workhorse_http_request_duration_seconds_bucket{env="gstg",job=~"gitlab-workhorse|gitlab-workhorse-git",type=~"internal-api"}[5m] offset 30s)
       )
   - record: sli_aggregations:gitlab_workhorse_http_requests_total:rate_5m
     expr: |
       sum by (code,component,env,environment,feature_category,fqdn,job,product_stage,queue,region,route,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(gitlab_workhorse_http_requests_total{env="gstg",job=~"gitlab-workhorse|gitlab-workhorse-git",type=~"git|internal-api"}[5m] offset 30s)
+        rate(gitlab_workhorse_http_requests_total{env="gstg",job=~"gitlab-workhorse|gitlab-workhorse-git",type=~"git"}[5m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_workhorse_http_requests_total:rate_5m
+    expr: |
+      sum by (code,component,env,environment,feature_category,fqdn,job,product_stage,queue,region,route,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_workhorse_http_requests_total{env="gstg",job=~"gitlab-workhorse|gitlab-workhorse-git",type=~"internal-api"}[5m] offset 30s)
       )
   - record: sli_aggregations:haproxy_backend_http_responses_total:rate_5m
     expr: |
@@ -57,17 +67,22 @@ groups:
   - record: sli_aggregations:haproxy_backend_sessions_total:rate_5m
     expr: |
       sum by (backend,component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(haproxy_backend_sessions_total{backend=~"altssh|ssh",env="gstg",type=~"ci|frontend"}[5m] offset 30s)
+        rate(haproxy_backend_sessions_total{backend=~"altssh|ssh",env="gstg",type=~"ci"}[5m] offset 30s)
+      )
+  - record: sli_aggregations:haproxy_backend_sessions_total:rate_5m
+    expr: |
+      sum by (backend,component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(haproxy_backend_sessions_total{backend=~"altssh|ssh",env="gstg",type=~"frontend"}[5m] offset 30s)
       )
   - record: sli_aggregations:haproxy_server_connection_errors_total:rate_5m
     expr: |
       sum by (backend,component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(haproxy_server_connection_errors_total{backend=~"altssh|ssh",env="gstg",type=~"git"}[5m] offset 30s)
+        rate(haproxy_server_connection_errors_total{backend=~"altssh|ssh",env="gstg",type=~"frontend"}[5m] offset 30s)
       )
   - record: sli_aggregations:haproxy_server_sessions_total:rate_5m
     expr: |
       sum by (backend,component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(haproxy_server_sessions_total{backend=~"altssh|ssh",env="gstg",type=~"git"}[5m] offset 30s)
+        rate(haproxy_server_sessions_total{backend=~"altssh|ssh",env="gstg",type=~"frontend"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: git - 30m burn-rate'
   interval: 2m
@@ -110,12 +125,22 @@ groups:
   - record: sli_aggregations:gitlab_workhorse_http_request_duration_seconds_bucket:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,job,le,product_stage,queue,region,route,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(gitlab_workhorse_http_request_duration_seconds_bucket{env="gstg",job=~"gitlab-workhorse|gitlab-workhorse-git",type=~"git|internal-api"}[30m] offset 30s)
+        rate(gitlab_workhorse_http_request_duration_seconds_bucket{env="gstg",job=~"gitlab-workhorse|gitlab-workhorse-git",type=~"git"}[30m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_workhorse_http_request_duration_seconds_bucket:rate_30m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,job,le,product_stage,queue,region,route,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_workhorse_http_request_duration_seconds_bucket{env="gstg",job=~"gitlab-workhorse|gitlab-workhorse-git",type=~"internal-api"}[30m] offset 30s)
       )
   - record: sli_aggregations:gitlab_workhorse_http_requests_total:rate_30m
     expr: |
       sum by (code,component,env,environment,feature_category,fqdn,job,product_stage,queue,region,route,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(gitlab_workhorse_http_requests_total{env="gstg",job=~"gitlab-workhorse|gitlab-workhorse-git",type=~"git|internal-api"}[30m] offset 30s)
+        rate(gitlab_workhorse_http_requests_total{env="gstg",job=~"gitlab-workhorse|gitlab-workhorse-git",type=~"git"}[30m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_workhorse_http_requests_total:rate_30m
+    expr: |
+      sum by (code,component,env,environment,feature_category,fqdn,job,product_stage,queue,region,route,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_workhorse_http_requests_total{env="gstg",job=~"gitlab-workhorse|gitlab-workhorse-git",type=~"internal-api"}[30m] offset 30s)
       )
   - record: sli_aggregations:haproxy_backend_http_responses_total:rate_30m
     expr: |
@@ -125,17 +150,22 @@ groups:
   - record: sli_aggregations:haproxy_backend_sessions_total:rate_30m
     expr: |
       sum by (backend,component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(haproxy_backend_sessions_total{backend=~"altssh|ssh",env="gstg",type=~"ci|frontend"}[30m] offset 30s)
+        rate(haproxy_backend_sessions_total{backend=~"altssh|ssh",env="gstg",type=~"ci"}[30m] offset 30s)
+      )
+  - record: sli_aggregations:haproxy_backend_sessions_total:rate_30m
+    expr: |
+      sum by (backend,component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(haproxy_backend_sessions_total{backend=~"altssh|ssh",env="gstg",type=~"frontend"}[30m] offset 30s)
       )
   - record: sli_aggregations:haproxy_server_connection_errors_total:rate_30m
     expr: |
       sum by (backend,component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(haproxy_server_connection_errors_total{backend=~"altssh|ssh",env="gstg",type=~"git"}[30m] offset 30s)
+        rate(haproxy_server_connection_errors_total{backend=~"altssh|ssh",env="gstg",type=~"frontend"}[30m] offset 30s)
       )
   - record: sli_aggregations:haproxy_server_sessions_total:rate_30m
     expr: |
       sum by (backend,component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(haproxy_server_sessions_total{backend=~"altssh|ssh",env="gstg",type=~"git"}[30m] offset 30s)
+        rate(haproxy_server_sessions_total{backend=~"altssh|ssh",env="gstg",type=~"frontend"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: git - 1h burn-rate'
   interval: 1m
@@ -178,12 +208,22 @@ groups:
   - record: sli_aggregations:gitlab_workhorse_http_request_duration_seconds_bucket:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,job,le,product_stage,queue,region,route,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(gitlab_workhorse_http_request_duration_seconds_bucket{env="gstg",job=~"gitlab-workhorse|gitlab-workhorse-git",type=~"git|internal-api"}[1h] offset 30s)
+        rate(gitlab_workhorse_http_request_duration_seconds_bucket{env="gstg",job=~"gitlab-workhorse|gitlab-workhorse-git",type=~"git"}[1h] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_workhorse_http_request_duration_seconds_bucket:rate_1h
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,job,le,product_stage,queue,region,route,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_workhorse_http_request_duration_seconds_bucket{env="gstg",job=~"gitlab-workhorse|gitlab-workhorse-git",type=~"internal-api"}[1h] offset 30s)
       )
   - record: sli_aggregations:gitlab_workhorse_http_requests_total:rate_1h
     expr: |
       sum by (code,component,env,environment,feature_category,fqdn,job,product_stage,queue,region,route,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(gitlab_workhorse_http_requests_total{env="gstg",job=~"gitlab-workhorse|gitlab-workhorse-git",type=~"git|internal-api"}[1h] offset 30s)
+        rate(gitlab_workhorse_http_requests_total{env="gstg",job=~"gitlab-workhorse|gitlab-workhorse-git",type=~"git"}[1h] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_workhorse_http_requests_total:rate_1h
+    expr: |
+      sum by (code,component,env,environment,feature_category,fqdn,job,product_stage,queue,region,route,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_workhorse_http_requests_total{env="gstg",job=~"gitlab-workhorse|gitlab-workhorse-git",type=~"internal-api"}[1h] offset 30s)
       )
   - record: sli_aggregations:haproxy_backend_http_responses_total:rate_1h
     expr: |
@@ -193,15 +233,20 @@ groups:
   - record: sli_aggregations:haproxy_backend_sessions_total:rate_1h
     expr: |
       sum by (backend,component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(haproxy_backend_sessions_total{backend=~"altssh|ssh",env="gstg",type=~"ci|frontend"}[1h] offset 30s)
+        rate(haproxy_backend_sessions_total{backend=~"altssh|ssh",env="gstg",type=~"ci"}[1h] offset 30s)
+      )
+  - record: sli_aggregations:haproxy_backend_sessions_total:rate_1h
+    expr: |
+      sum by (backend,component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(haproxy_backend_sessions_total{backend=~"altssh|ssh",env="gstg",type=~"frontend"}[1h] offset 30s)
       )
   - record: sli_aggregations:haproxy_server_connection_errors_total:rate_1h
     expr: |
       sum by (backend,component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(haproxy_server_connection_errors_total{backend=~"altssh|ssh",env="gstg",type=~"git"}[1h] offset 30s)
+        rate(haproxy_server_connection_errors_total{backend=~"altssh|ssh",env="gstg",type=~"frontend"}[1h] offset 30s)
       )
   - record: sli_aggregations:haproxy_server_sessions_total:rate_1h
     expr: |
       sum by (backend,component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(haproxy_server_sessions_total{backend=~"altssh|ssh",env="gstg",type=~"git"}[1h] offset 30s)
+        rate(haproxy_server_sessions_total{backend=~"altssh|ssh",env="gstg",type=~"frontend"}[1h] offset 30s)
       )

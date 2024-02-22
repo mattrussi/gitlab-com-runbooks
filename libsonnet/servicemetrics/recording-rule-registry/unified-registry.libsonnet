@@ -5,6 +5,7 @@ local sliMetricDescriptor = import 'servicemetrics/sli_metric_descriptor.libsonn
 local selectors = import 'promql/selectors.libsonnet';
 local aggregations = import 'promql/aggregations.libsonnet';
 local optionalOffset = import 'recording-rules/lib/optional-offset.libsonnet';
+local misc = import 'utils/misc.libsonnet';
 
 local aggregationSetLabels = std.set(
   std.flatMap(
@@ -27,8 +28,9 @@ local recordedMetricNamesAndLabelsByType =
       memo {
         [serviceDefinition.type]: sliMetricDescriptor.collectMetricNamesAndLabels(
           [
-            injectAggregationSetLabels(sliMetricDescriptor.sliMetricsDescriptor(sli).metricNamesAndAggregationLabels())
-            for sli in serviceDefinition.listServiceLevelIndicators()
+            injectAggregationSetLabels(
+              sliMetricDescriptor.sliMetricsDescriptor(serviceDefinition.listServiceLevelIndicators()).aggregationLabelsByMetric
+            ),
           ]
         ),
       },
@@ -36,49 +38,13 @@ local recordedMetricNamesAndLabelsByType =
     {}
   );
 
-local injectType(metricAndSelectorHash, typeArray) = std.foldl(
-  function(memo, metric)
-    memo {
-      [metric]+: { type: { oneOf: typeArray } },
-    },
-  std.objectFields(metricAndSelectorHash),
-  metricAndSelectorHash
-);
-
-local getMetricsAndSelectors(serviceDefinition) =
-  local slis = serviceDefinition.listServiceLevelIndicators();
-  local withEmittedBy = std.map(
-    function(sli)
-      local metricAndSelectors = sliMetricDescriptor.sliMetricsDescriptor(sli).metricNamesAndSelectors();
-      injectType(metricAndSelectors, sli.emittedBy),
-    std.filter(
-      function(sli) sli.emittedBy != [],
-      slis
-    )
-  );
-  local withoutEmittedBy = [
-    sliMetricDescriptor.sliMetricsDescriptor(sli).metricNamesAndSelectors()
-    for sli in slis
-    if sli.emittedBy == []
-  ];
-
-  sliMetricDescriptor.collectMetricNamesAndSelectors(withEmittedBy + withoutEmittedBy);
-
-
-local recordedMetricNamesAndSelectorsByType = std.foldl(
-  function(memo, serviceDefinition)
-    memo { [serviceDefinition.type]: getMetricsAndSelectors(serviceDefinition) },
-  monitoredServices,
-  {}
-);
-
 local recordingRuleExpressionFor(metricName, labels, selector, burnRate) =
   local query = 'rate(%(metricName)s{%(selector)s}[%(rangeInterval)s] offset 30s)' % {
     metricName: metricName,
     rangeInterval: burnRate,
     selector: selectors.serializeHash(selector),
   };
-  aggregations.aggregateOverQuery('sum', std.set(labels), query);
+  aggregations.aggregateOverQuery('sum', std.setUnion(labels, aggregationSetLabels), query);
 
 local recordingRuleNameFor(metricName, burnRate) =
   'sli_aggregations:%(metricName)s:rate_%(rangeInterval)s' % {
@@ -114,6 +80,42 @@ local resolveRecordingRuleFor(metricName, aggregationLabels, selector, rangeInte
     selector: selectors.serializeHash(selector),
   };
 
+local generateRecordingRules(sliDefinitions, burnRate, extraSelector) =
+  local descriptor = sliMetricDescriptor.sliMetricsDescriptor(sliDefinitions);
+  local aggregationLabelsByMetric = descriptor.aggregationLabelsByMetric;
+  local selectorsByMetric = descriptor.selectorsByMetric;
+  local emittingTypesByMetric = descriptor.emittingTypesByMetric;
+
+  std.flatMap(
+    function(metricName)
+      local selector = selectors.merge(
+        selectorsByMetric[metricName],
+        extraSelector
+      );
+
+      // type selector can come from selector defined in SLI and emittedBy
+      // so we combine them here
+      local typesSelector = std.setUnion(
+        // type from `selector` is always in the form of `oneOf` (if present)
+        // because it's already normalized in the descriptor
+        misc.dig(selector, ['type', 'oneOf']),
+        emittingTypesByMetric[metricName]
+      );
+
+      if std.length(typesSelector) > 0 then
+        std.map(
+          function(type)
+            local selectorPerType = selectors.merge(
+              selector,
+              { type: { oneOf: [type] } }
+            );
+            generateRecordingRulesForMetric(metricName, aggregationLabelsByMetric[metricName], selectorPerType, burnRate),
+          typesSelector
+        )
+      else
+        [generateRecordingRulesForMetric(metricName, aggregationLabelsByMetric[metricName], selector, burnRate)],
+    descriptor.allMetrics,
+  );
 
 {
   resolveRecordingRuleFor(
@@ -137,16 +139,11 @@ local resolveRecordingRuleFor(metricName, aggregationLabels, selector, rangeInte
         assert false : 'unsupported aggregation %s' % [aggregationFunction];
         null,
 
-  rulesForServiceForBurnRate(serviceType, burnRate, extraSelector)::
-    local metricsAndLabels = recordedMetricNamesAndLabelsByType[serviceType];
-    local metricsAndSelectors = recordedMetricNamesAndSelectorsByType[serviceType];
-    local allMetrics = std.setUnion(std.objectFields(metricsAndLabels), std.objectFields(metricsAndSelectors));
-    std.map(
-      function(metricName)
-        local labels = metricsAndLabels[metricName];
-        local selector = selectors.merge(metricsAndSelectors[metricName], extraSelector);
-        generateRecordingRulesForMetric(metricName, labels, selector, burnRate),
-      allMetrics
+  rulesForServiceForBurnRate(serviceDefinition, burnRate, extraSelector)::
+    generateRecordingRules(
+      serviceDefinition.listServiceLevelIndicators(),
+      burnRate,
+      extraSelector
     ),
 
   recordingRuleForMetricAtBurnRate(metricName, rangeInterval)::

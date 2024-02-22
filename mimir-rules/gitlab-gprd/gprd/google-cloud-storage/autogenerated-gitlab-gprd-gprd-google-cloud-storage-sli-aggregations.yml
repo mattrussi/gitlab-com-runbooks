@@ -32,12 +32,22 @@ groups:
   - record: sli_aggregations:registry_storage_action_seconds_bucket:rate_5m
     expr: |
       sum by (action,component,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(registry_storage_action_seconds_bucket{env="gprd",type=~"ops-gitlab-net|registry"}[5m] offset 30s)
+        rate(registry_storage_action_seconds_bucket{env="gprd",type=~"ops-gitlab-net"}[5m] offset 30s)
+      )
+  - record: sli_aggregations:registry_storage_action_seconds_bucket:rate_5m
+    expr: |
+      sum by (action,component,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(registry_storage_action_seconds_bucket{env="gprd",type=~"registry"}[5m] offset 30s)
       )
   - record: sli_aggregations:registry_storage_action_seconds_count:rate_5m
     expr: |
       sum by (action,component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(registry_storage_action_seconds_count{env="gprd",type=~"ops-gitlab-net|registry"}[5m] offset 30s)
+        rate(registry_storage_action_seconds_count{env="gprd",type=~"ops-gitlab-net"}[5m] offset 30s)
+      )
+  - record: sli_aggregations:registry_storage_action_seconds_count:rate_5m
+    expr: |
+      sum by (action,component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(registry_storage_action_seconds_count{env="gprd",type=~"registry"}[5m] offset 30s)
       )
   - record: sli_aggregations:stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count:rate_5m
     expr: |
@@ -75,12 +85,22 @@ groups:
   - record: sli_aggregations:registry_storage_action_seconds_bucket:rate_30m
     expr: |
       sum by (action,component,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(registry_storage_action_seconds_bucket{env="gprd",type=~"ops-gitlab-net|registry"}[30m] offset 30s)
+        rate(registry_storage_action_seconds_bucket{env="gprd",type=~"ops-gitlab-net"}[30m] offset 30s)
+      )
+  - record: sli_aggregations:registry_storage_action_seconds_bucket:rate_30m
+    expr: |
+      sum by (action,component,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(registry_storage_action_seconds_bucket{env="gprd",type=~"registry"}[30m] offset 30s)
       )
   - record: sli_aggregations:registry_storage_action_seconds_count:rate_30m
     expr: |
       sum by (action,component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(registry_storage_action_seconds_count{env="gprd",type=~"ops-gitlab-net|registry"}[30m] offset 30s)
+        rate(registry_storage_action_seconds_count{env="gprd",type=~"ops-gitlab-net"}[30m] offset 30s)
+      )
+  - record: sli_aggregations:registry_storage_action_seconds_count:rate_30m
+    expr: |
+      sum by (action,component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(registry_storage_action_seconds_count{env="gprd",type=~"registry"}[30m] offset 30s)
       )
   - record: sli_aggregations:stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count:rate_30m
     expr: |
@@ -118,12 +138,22 @@ groups:
   - record: sli_aggregations:registry_storage_action_seconds_bucket:rate_1h
     expr: |
       sum by (action,component,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(registry_storage_action_seconds_bucket{env="gprd",type=~"ops-gitlab-net|registry"}[1h] offset 30s)
+        rate(registry_storage_action_seconds_bucket{env="gprd",type=~"ops-gitlab-net"}[1h] offset 30s)
+      )
+  - record: sli_aggregations:registry_storage_action_seconds_bucket:rate_1h
+    expr: |
+      sum by (action,component,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(registry_storage_action_seconds_bucket{env="gprd",type=~"registry"}[1h] offset 30s)
       )
   - record: sli_aggregations:registry_storage_action_seconds_count:rate_1h
     expr: |
       sum by (action,component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(registry_storage_action_seconds_count{env="gprd",type=~"ops-gitlab-net|registry"}[1h] offset 30s)
+        rate(registry_storage_action_seconds_count{env="gprd",type=~"ops-gitlab-net"}[1h] offset 30s)
+      )
+  - record: sli_aggregations:registry_storage_action_seconds_count:rate_1h
+    expr: |
+      sum by (action,component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(registry_storage_action_seconds_count{env="gprd",type=~"registry"}[1h] offset 30s)
       )
   - record: sli_aggregations:stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count:rate_1h
     expr: |

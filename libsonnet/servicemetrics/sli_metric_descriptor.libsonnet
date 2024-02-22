@@ -201,14 +201,39 @@ local generateMetricNamesAndSelectors(sliDefinition) =
 
   collectMetricNamesAndSelectors(metricsAndSelectors);
 
+// Return a hash of { metric: ['list', 'of', 'types'] } from all defined metrics
+local generateMetricNamesAndEmittingTypes(sliDefinition) =
+  std.foldl(
+    function(memo, metric)
+      memo { [metric]: sliDefinition.emittedBy },
+    sliDefinition.metricNames,
+    {}
+  );
+
+local collectMetricNamesAndTypes(metricNamesAndTypes) =
+  local allMetricNames = std.set(std.flatMap(std.objectFields, metricNamesAndTypes));
+  std.foldl(
+    function(memo, metricName)
+      memo { [metricName]: std.set(std.flatMap(function(typesByName) std.get(typesByName, metricName, []), metricNamesAndTypes)) },
+    allMetricNames,
+    {}
+  );
+
 {
   collectMetricNamesAndLabels: collectMetricNamesAndLabels,
   collectMetricNamesAndSelectors: collectMetricNamesAndSelectors,
 
-  sliMetricsDescriptor(sliDefinition):: {
-    metricNamesAndAggregationLabels():: generateMetricNamesAndAggregationLabels(sliDefinition),
+  sliMetricsDescriptor(sliDefinitions):: {
+    aggregationLabelsByMetric:
+      collectMetricNamesAndLabels(std.map(generateMetricNamesAndAggregationLabels, sliDefinitions)),
 
-    metricNamesAndSelectors():: generateMetricNamesAndSelectors(sliDefinition),
+    selectorsByMetric:
+      collectMetricNamesAndSelectors(std.map(generateMetricNamesAndSelectors, sliDefinitions)),
+
+    emittingTypesByMetric:
+      collectMetricNamesAndTypes(std.map(generateMetricNamesAndEmittingTypes, sliDefinitions)),
+
+    allMetrics: std.set(std.objectFields(self.emittingTypesByMetric)),
   },
 
   // only for testing

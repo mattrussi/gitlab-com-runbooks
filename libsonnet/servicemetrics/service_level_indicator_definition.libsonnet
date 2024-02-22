@@ -156,6 +156,12 @@ local serviceLevelIndicatorDefinition(sliName, serviceLevelIndicator) =
       std.objectHas(serviceLevelIndicator, 'dashboardFeatureCategories') &&
       std.length(serviceLevelIndicator.dashboardFeatureCategories) > 0,
 
+    metricNames:
+      local opsRateMetrics = self.requestRate.metricNames;
+      local errorRateMetrics = if self.hasErrorRate() then self.errorRate.metricNames else [];
+      local apdexMetrics = if self.hasApdex() then self.apdex.metricNames else [];
+      opsRateMetrics + errorRateMetrics + apdexMetrics,
+
     // Generate recording rules for apdex
     generateApdexRecordingRules(burnRate, aggregationSet, recordingRuleStaticLabels, selector={}, config={})::
       if self.hasApdex() && !isUpscalingTarget(self, burnRate) then

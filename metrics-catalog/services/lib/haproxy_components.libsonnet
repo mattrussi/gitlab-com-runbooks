@@ -70,6 +70,8 @@ local singleL4Component(stage, selector, definition, userImpacting) =
 
     significantLabels: [],
 
+    emittedBy: [],
+
     toolingLinks: toolingLinks,
   });
 

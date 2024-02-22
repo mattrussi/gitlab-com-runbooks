@@ -5,7 +5,7 @@ local aggregationSet = import 'servicemetrics/aggregation-set.libsonnet';
 local unifiedRegistry = import 'servicemetrics/recording-rule-registry/unified-registry.libsonnet';
 
 local rulesForServiceForBurnRate(serviceDefinition, burnRate, extraSelector) =
-  local rules = unifiedRegistry.rulesForServiceForBurnRate(serviceDefinition.type, burnRate, extraSelector);
+  local rules = unifiedRegistry.rulesForServiceForBurnRate(serviceDefinition, burnRate, extraSelector);
   if std.length(rules) > 0 then
     {
       name: 'SLI Aggregations: %s - %s burn-rate' % [serviceDefinition.type, burnRate],
