@@ -61,7 +61,32 @@ cd /var/opt/gitlab/wal_restore
 /usr/local/bin/fetch_last_wals_from_gcs_into_dir.sh
 ```
 
-The list of WAL files with `gsutil ls -l` is a very-very-very slow process and can take hours to execute.
+The script can take several hours to execute, because the list of WAL files with `gsutil ls -l` is a very-very-very slow process.
+
+#### 3.1 If `fetch_last_wals_from_gcs_into_dir.sh` fails during wal-g execution
+
+Most common issues are:
+
+- issues with the GCS authentication file, check the credentials file `/etc/wal-g.d/gcs-gprd.json` content and permission
+- issues with the GCS bucket file, check the bucket file `/etc/wal-g.d/env-gprd/WALG_GS_PREFIX` content and permission 
+
+After fixing, you don't need to list files again, as it's a very slow process. Check if the content of the `${RESTORE_DIR}/wal_list.download` file is populated and then just execute the 2nd part of the script to perform `wal-g wal-fetch`.
+
+```
+WALG_ENV_DIR="/etc/wal-g.d/env-gprd"
+GCS_WAL_LOC="gs://gitlab-gprd-postgres-backup/pitr-walg-main-v14/wal_005"
+RESTORE_DIR="/var/opt/gitlab/wal_restore"
+WAL_LIST_DL_FILE="wal_list.download"
+WAL_COUNT="150"
+
+if [ $(wc -l < ${RESTORE_DIR}/${WAL_LIST_DL_FILE}) -gt 0 ]
+then
+  for WAL_FILE in $(cat ${RESTORE_DIR}/${WAL_LIST_DL_FILE})
+  do
+    /usr/bin/envdir $WALG_ENV_DIR /opt/wal-g/bin/wal-g wal-fetch $WAL_FILE $RESTORE_DIR/$WAL_FILE
+  done
+fi
+```
 
 ### 4. Include the requestor user into the `gitlab-psql` group to grant access into the `/var/opt/gitlab/wal_restore` directory
 
