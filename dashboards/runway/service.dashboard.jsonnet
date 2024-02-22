@@ -3,9 +3,10 @@ local basic = import 'grafana/basic.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
 local template = grafana.template;
+local commonAnnotations = import 'grafana/common_annotations.libsonnet';
 
 local formatConfig = {
-  selector: selectors.serializeHash({ job: 'runway-exporter', env: '$environment', type: '$service' }),
+  selector: selectors.serializeHash({ job: 'runway-exporter', env: '$environment', type: '$type' }),
 };
 
 basic.dashboard(
@@ -14,12 +15,14 @@ basic.dashboard(
   includeStandardEnvironmentAnnotations=false,
 )
 .addTemplate(template.new(
-  'service',
+  'type',
   '$PROMETHEUS_DS',
   'label_values(stackdriver_cloud_run_revision_run_googleapis_com_container_instance_count{job="runway-exporter", env="$environment"}, service_name)',
+  label='service',
   refresh='load',
   sort=1,
 ))
+.addAnnotation(commonAnnotations.deploymentsForRunway)
 .addPanels(
   layout.grid(
     [
