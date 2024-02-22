@@ -52,13 +52,16 @@ This is the procedure to fetech WALs from a GPRD database into a postgres VM in 
 
 - Download the [fetch_last_wals_from_gcs_into_dir.sh](https://gitlab.com/gitlab-com/gl-infra/db-migration/-/blob/master/bin/fetch_last_wals_from_gcs_into_dir.sh) script
 - Edit any variables in the script according with the environment you want to fetch WALs from
-- Run the `fetch_last_wals_from_gcs_into_dir.sh` script as `gitlab-psql` user
+- Run the `fetch_last_wals_from_gcs_into_dir.sh` script as `gitlab-psql` user in a TMUX session
 
 ```
+tmux
 sudo su - gitlab-psql
 cd /var/opt/gitlab/wal_restore
 /usr/local/bin/fetch_last_wals_from_gcs_into_dir.sh
 ```
+
+The list of WAL files with `gsutil ls -l` is a very-very-very slow process and can take hours to execute.
 
 ### 4. Include the requestor user into the `gitlab-psql` group to grant access into the `/var/opt/gitlab/wal_restore` directory
 
