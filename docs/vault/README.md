@@ -38,6 +38,7 @@
 * [../elastic/elastic-cloud.md](../elastic/elastic-cloud.md)
 * [HAProxy Management at GitLab](../frontend/haproxy.md)
 * [Gitaly token rotation](../gitaly/gitaly-token-rotation.md)
+* [`gitalyctl`](../gitaly/gitalyctl.md)
 * [CI Artifacts CDN](../google-cloud-storage/artifacts-cdn.md)
 * [Rebuilding a kubernetes cluster](../kube/k8s-cluster-rebuild.md)
 * [StatefulSet Guidelines](../kube/sts-guidelines.md)
