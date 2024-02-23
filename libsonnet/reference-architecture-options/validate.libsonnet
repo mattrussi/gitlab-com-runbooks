@@ -8,6 +8,7 @@ local defaults = {
   // NOTE: when updating this option set, please ensure that the
   // documentation regarding options is updated at
   // reference-architectures/README.md#options
+  elasticacheMonitoring: false,
   praefect: {
     // The reference architecture makes Praefect/Gitaly-Cluster optional
     // Override this to disable Praefect monitoring
@@ -17,6 +18,7 @@ local defaults = {
 };
 
 local referenceArchitectureOptionsValidator = validator.new({
+  elasticacheMonitoring: validator.boolean,
   praefect: {
     enable: validator.boolean,
   },
