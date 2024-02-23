@@ -9,6 +9,11 @@ local all =
     import 'sidekiq.jsonnet',
     import 'webservice.jsonnet',
   ] + (
+    if gitlabMetricsConfig.options.elasticacheMonitoring then
+      [import 'aws-elasticache.jsonnet']
+    else
+      []
+  ) + (
     if gitlabMetricsConfig.options.rdsMonitoring then
       [import 'aws-rds.jsonnet']
     else
