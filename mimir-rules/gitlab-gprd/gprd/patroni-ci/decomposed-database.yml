@@ -2,7 +2,7 @@ groups:
 - name: Mirrored CI tables consistency checks
   rules:
   - alert: Inconsistent CI mirrored tables records
-    expr: sum by (environment, source_table) (rate(consistency_checks{result="mismatch", env="gprd"}[1m]) > 100
+    expr: sum by (environment, source_table) (rate(consistency_checks{result="mismatch", env="gprd"}[1m])) > 100
     for: 1m
     labels:
       severity: s2
