@@ -23,6 +23,7 @@ local thanosServiceSelector = { type: 'thanos', namespace: 'thanos' };
 metricsCatalog.serviceDefinition({
   type: 'thanos',
   tier: 'inf',
+  tenants: ['gitlab-ops'],
 
   tags: ['golang', 'thanos'],
 

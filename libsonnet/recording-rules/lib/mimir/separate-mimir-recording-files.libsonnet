@@ -22,6 +22,17 @@ local namespaceFormat(tenant, env, serviceDefinition, baseName) =
     metricsConfig=(import 'gitlab-metrics-config.libsonnet'),
     pathFormat=defaultPathFormat(serviceDefinition),
   )::
+    local serviceTenants =
+      if serviceDefinition == null
+      then []
+      else std.get(serviceDefinition, 'tenants', []);
+    local tenants =
+      if std.length(serviceTenants) == 0
+      then std.objectFields(metricsConfig.separateMimirRecordingSelectors)
+      else std.filter(
+        function(tenant) std.member(serviceTenants, tenant),
+        std.objectFields(metricsConfig.separateMimirRecordingSelectors)
+      );
     std.foldl(
       function(memo, tenantName)
         memo + objects.transformKeys(
@@ -38,7 +49,7 @@ local namespaceFormat(tenant, env, serviceDefinition, baseName) =
             },
           filesForSeparateSelector(serviceDefinition, metricsConfig.separateMimirRecordingSelectors[tenantName].selector, extraArgs)
         ),
-      std.objectFields(metricsConfig.separateMimirRecordingSelectors),
+      tenants,
       {},
     ),
 }
