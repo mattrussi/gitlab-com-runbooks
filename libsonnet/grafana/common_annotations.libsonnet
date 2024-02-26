@@ -52,7 +52,7 @@ local annotation = grafana.annotation;
       'runway-deploy',
       '-- Grafana --',
       enable=true,
-      tags=['runway-deploy', '${type}', '${environment}'],
+      tags=['platform:runway', 'service:${type}', 'env:${environment}'],
       builtIn=1,
       iconColor='#fda324',
     ),
