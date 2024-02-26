@@ -32,7 +32,7 @@ local serviceDefaults = {
   skippedMaturityCriteria: {},
   dangerouslyThanosEvaluated: false,  // This is only used for thanos self-monitoring
   capacityPlanning: {},  // Consumed by Tamland
-  tenants: [],  // Mimir tenants. Empty by default means the service targets all tenants.
+  tenants: ['gitlab-gprd', 'gitlab-gstg', 'gitlab-ops', 'gitlab-pre'],  // Mimir tenants. Empty by default means the service targets all tenants.
 };
 
 local shardLevelMonitoringEnabled(serviceDefinition) =

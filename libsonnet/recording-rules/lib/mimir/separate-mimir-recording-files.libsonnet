@@ -24,7 +24,7 @@ local namespaceFormat(tenant, env, serviceDefinition, baseName) =
   )::
     local serviceTenants =
       if serviceDefinition == null
-      then []
+      then ['gitlab-gprd', 'gitlab-gstg', 'gitlab-ops', 'gitlab-pre']
       else std.get(serviceDefinition, 'tenants', []);
     local tenants =
       if std.length(serviceTenants) == 0

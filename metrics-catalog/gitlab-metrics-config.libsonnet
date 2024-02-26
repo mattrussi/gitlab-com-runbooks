@@ -93,6 +93,10 @@ local objects = import 'utils/objects.libsonnet';
       selector: { env: 'pre' },
       envName: 'pre',
     },
+    metamonitoring: {
+      selector: {},
+      envName: 'metamonitoring',
+    },
   },
 
   recordingRuleRegistry: import 'servicemetrics/recording-rule-registry/selective-registry.libsonnet',
