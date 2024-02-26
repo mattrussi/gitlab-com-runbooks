@@ -47,4 +47,13 @@ local annotation = grafana.annotation;
       builtIn=1,
       iconColor='#CA95E5',
     ),
+  deploymentsForRunway::
+    annotation.datasource(
+      'runway-deploy',
+      '-- Grafana --',
+      enable=true,
+      tags=['runway-deploy', '${type}', '${environment}'],
+      builtIn=1,
+      iconColor='#fda324',
+    ),
 }
