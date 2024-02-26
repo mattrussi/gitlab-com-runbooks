@@ -2,7 +2,7 @@ groups:
 - name: cloud_nat.rules
   rules:
   - alert: CloudNAT_HighErrorCount
-    expr: stackdriver_nat_gateway_logging_googleapis_com_user_nat_errors > 100
+    expr: stackdriver_nat_gateway_logging_googleapis_com_user_nat_errors{env="gstg"} > 100
     for: 5m
     labels:
       severity: s4
