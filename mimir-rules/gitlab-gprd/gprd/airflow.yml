@@ -2,7 +2,7 @@ groups:
 - name: airflow.rules
   rules:
   - alert: AirflowDown
-    expr: avg_over_time(probe_success{job="blackbox-data", instance="https://airflow.gitlabdata.com"}[10m]) * 100 < 75
+    expr: avg_over_time(probe_success{job="scrapeConfig/monitoring/prometheus-agent-blackbox", instance="https://airflow.gitlabdata.com"}[10m]) * 100 < 75
     labels:
       alert_type: symptom
       severity: s4
