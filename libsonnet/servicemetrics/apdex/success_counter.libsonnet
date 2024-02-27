@@ -1,10 +1,11 @@
 local resolveRateQuery = (import './lib/resolve-rate-query.libsonnet').resolveRateQuery;
 local aggregations = import 'promql/aggregations.libsonnet';
 local generateApdexAttributionQuery = (import './lib/counter-apdex-attribution-query.libsonnet').attributionQuery;
+local recordingRuleRegistry = import 'servicemetrics/recording-rule-registry.libsonnet';
 
 local selectors = import 'promql/selectors.libsonnet';
 local strings = import 'utils/strings.libsonnet';
-local validateMetric = (import '../validation.libsonnet').validateMetric;
+local metric = import '../metric.libsonnet';
 local metricLabelsSelectorsMixin = (import '../metrics-mixin.libsonnet').metricLabelsSelectorsMixin;
 
 local generateApdexRatio(successCounterApdex, aggregationLabels, additionalSelectors, rangeInterval, withoutLabels=[]) =
@@ -18,18 +19,22 @@ local generateApdexRatio(successCounterApdex, aggregationLabels, additionalSelec
   };
 
 {
-  successCounterApdex(successRateMetric, operationRateMetric, selector={}, useRecordingRuleRegistry=true):: validateMetric({
+  successCounterApdex(successRateMetric, operationRateMetric, selector={}, useRecordingRuleRegistry=true):: metric.new({
     successRateMetric: successRateMetric,
     operationRateMetric: operationRateMetric,
     selector: selector,
     useRecordingRuleRegistry:: useRecordingRuleRegistry,
+    recordingRuleRegistry::
+      if self.useRecordingRuleRegistry
+      then self.config.recordingRuleRegistry
+      else recordingRuleRegistry.nullRegistry,
 
     apdexSuccessRateQuery(aggregationLabels, selector, rangeInterval, withoutLabels=[], offset=null)::
       resolveRateQuery(
         self.successRateMetric,
         selectors.without(selectors.merge(self.selector, selector), withoutLabels),
         rangeInterval,
-        useRecordingRuleRegistry,
+        self.recordingRuleRegistry,
         offset,
         aggregationLabels=aggregationLabels,
         aggregationFunction='sum',
@@ -39,7 +44,7 @@ local generateApdexRatio(successCounterApdex, aggregationLabels, additionalSelec
         self.operationRateMetric,
         selectors.without(selectors.merge(self.selector, selector), withoutLabels),
         rangeInterval,
-        useRecordingRuleRegistry,
+        self.recordingRuleRegistry,
         offset,
         aggregationLabels=aggregationLabels,
         aggregationFunction='sum'
@@ -52,7 +57,7 @@ local generateApdexRatio(successCounterApdex, aggregationLabels, additionalSelec
         self.successRateMetric,
         selectors.without(selectors.merge(self.selector, selector), withoutLabels),
         rangeInterval,
-        useRecordingRuleRegistry,
+        self.recordingRuleRegistry,
       ),
 
     apdexDenominator(selector, rangeInterval, withoutLabels=[])::
@@ -60,7 +65,7 @@ local generateApdexRatio(successCounterApdex, aggregationLabels, additionalSelec
         self.operationRateMetric,
         selectors.without(selectors.merge(self.selector, selector), withoutLabels),
         rangeInterval,
-        useRecordingRuleRegistry,
+        self.recordingRuleRegistry,
       ),
 
     apdexAttribution(aggregationLabel, selector, rangeInterval, withoutLabels=[])::

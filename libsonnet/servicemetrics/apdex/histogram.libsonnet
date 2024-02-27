@@ -1,10 +1,8 @@
-local gitlabMetricsConfig = import 'gitlab-metrics-config.libsonnet';
-local recordingRuleRegistry = gitlabMetricsConfig.recordingRuleRegistry;
+local metric = import '../metric.libsonnet';
 local aggregations = import 'promql/aggregations.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
 local optionalOffset = import 'recording-rules/lib/optional-offset.libsonnet';
 local strings = import 'utils/strings.libsonnet';
-local validateMetric = (import '../validation.libsonnet').validateMetric;
 local metricLabelsSelectorsMixin = (import '../metrics-mixin.libsonnet').metricLabelsSelectorsMixin;
 
 // A general apdex query is:
@@ -26,7 +24,7 @@ local generateApdexComponentRateQuery(histogramApdex, additionalSelectors, range
   local selectorWithLe = selectors.merge(selector, leSelector);
   local selectorWithout = selectors.without(selectorWithLe, withoutLabels);
 
-  local resolvedRecordingRule = recordingRuleRegistry.resolveRecordingRuleFor(
+  local resolvedRecordingRule = histogramApdex.config.recordingRuleRegistry.resolveRecordingRuleFor(
     aggregationFunction=aggregationFunction,
     aggregationLabels=aggregationLabels,
     rangeVectorFunction=histogramApdex.rangeVectorFunction,
@@ -198,7 +196,7 @@ local generateApdexAttributionQuery(histogram, selector, rangeInterval, aggregat
     metricsFormat='prometheus',
     unit='s',
     useRecordingRuleRegistry=true
-  ):: validateMetric({
+  ):: metric.new({
     histogram: histogram,
     rangeVectorFunction: rangeVectorFunction,
     selector: selector,
