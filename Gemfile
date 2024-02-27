@@ -12,7 +12,6 @@ gem 'terminal-table', '~> 3.0'
 gem 'redis', '~> 5.0.0'
 gem 'redis-clustering'
 gem 'connection_pool', '~> 2.0'
-gem 'excon'
 
 group :development, :test do
   gem 'rake'
