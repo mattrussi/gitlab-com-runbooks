@@ -58,6 +58,7 @@ GEM
     drb (2.2.0)
       ruby2_keywords
     etc (1.4.3)
+    excon (0.109.0)
     faraday (2.9.0)
       faraday-net_http (>= 2.0, < 3.2)
     faraday-http-cache (2.5.0)
@@ -275,6 +276,7 @@ DEPENDENCIES
   connection_pool (~> 2.0)
   digest-crc
   etc
+  excon
   gitlab-dangerfiles (~> 4.0)
   gitlab-styles (~> 11.0)
   google-cloud-storage

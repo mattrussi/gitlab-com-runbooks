@@ -29,6 +29,8 @@ checks:
   - url: https://gitlab.com/gitlab-org/gitlab-ce/
     timeout_ms: 5000            # The timeout for this check
     notify_when_restored: true  # Send an alert when service is restored
+    check_type: http            # Set to "tcp" to use a TCP check type. Other values are ignored, and http checks are created.
+    check_port: 443             # Port to be used during TCP checks. Otherwise ignored.
     tags:                       # Any additional tags to add to the check
       - gitaly
       - database
