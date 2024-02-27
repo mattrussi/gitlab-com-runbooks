@@ -2,7 +2,6 @@
 
 groups:
 - name: vault.rules
-  partial_response_strategy: warn
   rules:
   - alert: NoActiveVaultInstance
     expr: up{job="vault-active", env="ops"} == 0
