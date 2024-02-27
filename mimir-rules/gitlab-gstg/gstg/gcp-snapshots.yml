@@ -1,6 +1,5 @@
 groups:
 - name: gcp-snapshots.rules
-  partial_response_strategy: warn
   rules:
   - alert: GCPScheduledSnapshotsDelayed
     expr: |
