@@ -12,7 +12,7 @@ serviceDashboard.overview(
       'runway-deploy',
       '-- Grafana --',
       iconColor='#fda324',
-      tags=['runway-deploy', '${environment}'],
+      tags=['platform:runway', 'env:${environment}'],
       builtIn=1,
     ),
 )

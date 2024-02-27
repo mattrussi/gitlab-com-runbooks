@@ -63,17 +63,26 @@ local alertDescriptors = [{
   minimumSamplesForTrafficCessation: minimumSamplesForTrafficCessation,
 }];
 
-local groupsForService(service, selector) = {
-  groups: serviceAlertsGenerator(service, alertDescriptors, groupExtras={ partial_response_strategy: 'warn' }, extraSelector=selector),
-};
+local groupsForService(service, selector) =
+  local groups = serviceAlertsGenerator(service, alertDescriptors, groupExtras={ partial_response_strategy: 'warn' }, extraSelector=selector);
+  if std.length(groups) > 0 then
+    {
+      groups: groups,
+    }
+  else
+    null;
 
 separateGlobalRecordingFiles(
   function(selector)
     std.foldl(
       function(docs, service)
-        docs {
-          ['service-level-alerts-%s' % [service.type]]: std.manifestYamlDoc(groupsForService(service, selector)),
-        },
+        local groups = groupsForService(service, selector);
+        if groups != null then
+          docs {
+            ['service-level-alerts-%s' % [service.type]]: std.manifestYamlDoc(groups),
+          }
+        else
+          docs,
       metricsCatalog.services,
       {},
     )

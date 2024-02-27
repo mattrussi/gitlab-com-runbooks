@@ -36,8 +36,9 @@ function main() {
   fi
 
   local source_file="${reference_architecture_src_dir}/generate.jsonnet"
-  local sha256sum_file="${REPO_DIR}/.cache/$source_file.sha256sum"
-  local cache_out_file="${REPO_DIR}/.cache/$source_file.out"
+  local args_hash="$(echo "$@" | sha256sum | awk '{ print $1 }')"
+  local sha256sum_file="${REPO_DIR}/.cache/$source_file.$args_hash.sha256sum"
+  local cache_out_file="${REPO_DIR}/.cache/$source_file.$args_hash.out"
 
   if [[ ${GL_JSONNET_CACHE_SKIP:-} != 'true' ]]; then
     mkdir -p "$(dirname "$sha256sum_file")" "$(dirname "$cache_out_file")"
