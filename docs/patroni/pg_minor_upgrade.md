@@ -53,7 +53,9 @@ Start PostgreSQL. Command: `sudo systemctl start patroni && sudo systemctl statu
 Update extensions, on the primary database node:
 
 ```shell
-`sudo gitlab-psql`
+sudo gitlab-psql
+```
+
 ```sql
 -- Get a list of installed and available versions of extensions in the current database:
 select
