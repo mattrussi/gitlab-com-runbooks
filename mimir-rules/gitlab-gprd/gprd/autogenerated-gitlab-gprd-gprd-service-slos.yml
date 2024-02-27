@@ -6,2533 +6,3072 @@ groups:
   rules:
   - record: slo:min:gitlab_service_apdex:ratio
     labels:
+      monitor: global
       tier: sv
       type: ai-assisted
     expr: "0.900000"
   - record: slo:max:gitlab_service_errors:ratio
     labels:
+      monitor: global
       tier: sv
       type: ai-assisted
     expr: "0.005000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
+      monitor: global
       tier: sv
       type: ai-assisted
     expr: "0.995000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
+      monitor: global
       tier: sv
       type: ai-assisted
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: rails_request
+      monitor: global
       tier: sv
       type: ai-assisted
     expr: "0.990000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: rails_request
+      monitor: global
       tier: sv
       type: ai-assisted
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: workhorse
+      monitor: global
       tier: sv
       type: ai-assisted
     expr: "0.995000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: workhorse
+      monitor: global
       tier: sv
       type: ai-assisted
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
+      monitor: global
       tier: sv
       type: ai-gateway
     expr: "0.980000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
+      monitor: global
       tier: sv
       type: ai-gateway
     expr: "0.020000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: inference
+      monitor: global
       tier: sv
       type: ai-gateway
     expr: "0.980000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: inference
+      monitor: global
       tier: sv
       type: ai-gateway
     expr: "0.020000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: runway_ingress
+      monitor: global
       tier: sv
       type: ai-gateway
     expr: "0.980000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: runway_ingress
+      monitor: global
       tier: sv
       type: ai-gateway
     expr: "0.020000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: server
+      monitor: global
       tier: sv
       type: ai-gateway
     expr: "0.980000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: server
+      monitor: global
       tier: sv
       type: ai-gateway
     expr: "0.020000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: server_code_completions
+      monitor: global
       tier: sv
       type: ai-gateway
     expr: "0.980000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: server_code_completions
+      monitor: global
       tier: sv
       type: ai-gateway
     expr: "0.020000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: server_code_generations
+      monitor: global
       tier: sv
       type: ai-gateway
     expr: "0.980000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: server_code_generations
+      monitor: global
       tier: sv
       type: ai-gateway
     expr: "0.020000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: waf
+      monitor: global
       tier: sv
       type: ai-gateway
     expr: "0.980000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: waf
+      monitor: global
       tier: sv
       type: ai-gateway
     expr: "0.020000"
   - record: slo:min:gitlab_service_apdex:ratio
     labels:
+      monitor: global
       tier: sv
       type: api
     expr: "0.900000"
   - record: slo:max:gitlab_service_errors:ratio
     labels:
+      monitor: global
       tier: sv
       type: api
     expr: "0.005000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
+      monitor: global
       tier: sv
       type: api
     expr: "0.995000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
+      monitor: global
       tier: sv
       type: api
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: global_search
+      monitor: global
       tier: sv
       type: api
     expr: "0.995000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: global_search
+      monitor: global
       tier: sv
       type: api
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: graphql_query
+      monitor: global
       tier: sv
       type: api
     expr: "0.995000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: graphql_query
+      monitor: global
       tier: sv
       type: api
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: loadbalancer
+      monitor: global
       tier: sv
       type: api
     expr: "0.995000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: loadbalancer
+      monitor: global
       tier: sv
       type: api
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: nginx_ingress
+      monitor: global
       tier: sv
       type: api
     expr: "0.995000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: nginx_ingress
+      monitor: global
       tier: sv
       type: api
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: rails_request
+      monitor: global
       tier: sv
       type: api
     expr: "0.990000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: rails_request
+      monitor: global
       tier: sv
       type: api
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: workhorse
+      monitor: global
       tier: sv
       type: api
     expr: "0.995000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: workhorse
+      monitor: global
       tier: sv
       type: api
     expr: "0.001000"
   - record: slo:min:deployment:gitlab_service_apdex:ratio
     labels:
+      monitor: global
       tier: sv
       type: api
     expr: "0.995000"
   - record: slo:max:deployment:gitlab_service_errors:ratio
     labels:
+      monitor: global
       tier: sv
       type: api
     expr: "0.001000"
   - record: slo:min:mtbf:gitlab_service_apdex:ratio
     labels:
+      monitor: global
       tier: sv
       type: api
     expr: "0.998500"
   - record: slo:max:mtbf:gitlab_service_errors:ratio
     labels:
+      monitor: global
       tier: sv
       type: api
     expr: "0.000200"
   - record: slo:min:gitlab_service_apdex:ratio
     labels:
+      monitor: global
       tier: sv
       type: internal-api
     expr: "0.900000"
   - record: slo:max:gitlab_service_errors:ratio
     labels:
+      monitor: global
       tier: sv
       type: internal-api
     expr: "0.005000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
+      monitor: global
       tier: sv
       type: internal-api
     expr: "0.995000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
+      monitor: global
       tier: sv
       type: internal-api
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: rails_request
+      monitor: global
       tier: sv
       type: internal-api
     expr: "0.990000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: rails_request
+      monitor: global
       tier: sv
       type: internal-api
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: workhorse
+      monitor: global
       tier: sv
       type: internal-api
     expr: "0.995000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: workhorse
+      monitor: global
       tier: sv
       type: internal-api
     expr: "0.001000"
   - record: slo:min:deployment:gitlab_service_apdex:ratio
     labels:
+      monitor: global
       tier: sv
       type: internal-api
     expr: "0.995000"
   - record: slo:max:deployment:gitlab_service_errors:ratio
     labels:
+      monitor: global
       tier: sv
       type: internal-api
     expr: "0.001000"
   - record: slo:min:mtbf:gitlab_service_apdex:ratio
     labels:
+      monitor: global
       tier: sv
       type: internal-api
     expr: "0.998500"
   - record: slo:max:mtbf:gitlab_service_errors:ratio
     labels:
+      monitor: global
       tier: sv
       type: internal-api
     expr: "0.000200"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
+      monitor: global
       tier: inf
       type: atlantis
     expr: "0.999000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
+      monitor: global
       tier: inf
       type: atlantis
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: atlantis_google_lb
+      monitor: global
       tier: inf
       type: atlantis
     expr: "0.999000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: atlantis_google_lb
+      monitor: global
       tier: inf
       type: atlantis
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
+      monitor: global
       tier: sv
       type: camoproxy
     expr: "0.999000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
+      monitor: global
       tier: sv
       type: camoproxy
     expr: "0.200000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: loadbalancer
+      monitor: global
       tier: sv
       type: camoproxy
     expr: "0.999000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: loadbalancer
+      monitor: global
       tier: sv
       type: camoproxy
     expr: "0.200000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: server
+      monitor: global
       tier: sv
       type: camoproxy
     expr: "0.999000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: server
+      monitor: global
       tier: sv
       type: camoproxy
     expr: "0.200000"
   - record: slo:min:gitlab_service_apdex:ratio
     labels:
+      monitor: global
       tier: runners
       type: ci-runners
     expr: "0.950000"
   - record: slo:max:gitlab_service_errors:ratio
     labels:
+      monitor: global
       tier: runners
       type: ci-runners
     expr: "0.050000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
+      monitor: global
       tier: runners
       type: ci-runners
     expr: "0.970000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
+      monitor: global
       tier: runners
       type: ci-runners
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: loadbalancer
+      monitor: global
       tier: runners
       type: ci-runners
     expr: "0.970000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: loadbalancer
+      monitor: global
       tier: runners
       type: ci-runners
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: polling
+      monitor: global
       tier: runners
       type: ci-runners
     expr: "0.970000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: polling
+      monitor: global
       tier: runners
       type: ci-runners
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: queuing_queries_duration
+      monitor: global
       tier: runners
       type: ci-runners
     expr: "0.999000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: queuing_queries_duration
+      monitor: global
       tier: runners
       type: ci-runners
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: saas_linux_runner_image_pull_failures
+      monitor: global
       tier: runners
       type: ci-runners
     expr: "0.970000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: saas_linux_runner_image_pull_failures
+      monitor: global
       tier: runners
       type: ci-runners
     expr: "0.010000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: saas_runner_queues
+      monitor: global
       tier: runners
       type: ci-runners
     expr: "0.970000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: saas_runner_queues
+      monitor: global
       tier: runners
       type: ci-runners
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: trace_archiving_ci_jobs
+      monitor: global
       tier: runners
       type: ci-runners
     expr: "0.970000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: trace_archiving_ci_jobs
+      monitor: global
       tier: runners
       type: ci-runners
     expr: "0.001000"
   - record: slo:min:mtbf:gitlab_service_apdex:ratio
     labels:
+      monitor: global
       tier: runners
       type: ci-runners
     expr: "0.985000"
   - record: slo:max:mtbf:gitlab_service_errors:ratio
     labels:
+      monitor: global
       tier: runners
       type: ci-runners
     expr: "0.000100"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
+      monitor: global
       tier: db
       type: cloud-sql
     expr: "0.995000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
+      monitor: global
       tier: db
       type: cloud-sql
     expr: "0.000100"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
+      monitor: global
       tier: sv
       type: consul
     expr: "0.999000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
+      monitor: global
       tier: sv
       type: consul
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: consul
+      monitor: global
       tier: sv
       type: consul
     expr: "0.999000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: consul
+      monitor: global
       tier: sv
       type: consul
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
+      monitor: global
       tier: sv
       type: customersdot
     expr: "0.900000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
+      monitor: global
       tier: sv
       type: customersdot
     expr: "0.050000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: customers_dot_requests
+      monitor: global
       tier: sv
       type: customersdot
     expr: "0.900000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: customers_dot_requests
+      monitor: global
       tier: sv
       type: customersdot
     expr: "0.050000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: customers_dot_sidekiq_jobs
+      monitor: global
       tier: sv
       type: customersdot
     expr: "0.900000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: customers_dot_sidekiq_jobs
+      monitor: global
       tier: sv
       type: customersdot
     expr: "0.050000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
+      monitor: global
       tier: sv
       type: errortracking
     expr: "0.995000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
+      monitor: global
       tier: sv
       type: errortracking
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: loadbalancer
+      monitor: global
       tier: sv
       type: errortracking
     expr: "0.995000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: loadbalancer
+      monitor: global
       tier: sv
       type: errortracking
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
+      monitor: global
       tier: sv
       type: external-dns
     expr: "0.999000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
+      monitor: global
       tier: sv
       type: external-dns
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
+      monitor: global
       tier: sv
       type: ext-pvs
     expr: "0.999000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
+      monitor: global
       tier: sv
       type: ext-pvs
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: runway_ingress
+      monitor: global
       tier: sv
       type: ext-pvs
     expr: "0.999000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: runway_ingress
+      monitor: global
       tier: sv
       type: ext-pvs
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
+      monitor: global
       tier: lb
       type: frontend
     expr: "0.999000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
+      monitor: global
       tier: lb
       type: frontend
     expr: "0.000100"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: cnyHttpsServices
+      monitor: global
       tier: lb
       type: frontend
     expr: "0.999000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: cnyHttpsServices
+      monitor: global
       tier: lb
       type: frontend
     expr: "0.000100"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: mainHttpsServices
+      monitor: global
       tier: lb
       type: frontend
     expr: "0.999000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: mainHttpsServices
+      monitor: global
       tier: lb
       type: frontend
     expr: "0.000100"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: sshServices
+      monitor: global
       tier: lb
       type: frontend
     expr: "0.990000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: sshServices
+      monitor: global
       tier: lb
       type: frontend
     expr: "0.001000"
   - record: slo:min:gitlab_service_apdex:ratio
     labels:
+      monitor: global
       tier: sv
       type: git
     expr: "0.900000"
   - record: slo:max:gitlab_service_errors:ratio
     labels:
+      monitor: global
       tier: sv
       type: git
     expr: "0.005000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
+      monitor: global
       tier: sv
       type: git
     expr: "0.998000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
+      monitor: global
       tier: sv
       type: git
     expr: "0.000100"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: gitlab_shell
+      monitor: global
       tier: sv
       type: git
     expr: "0.998000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: gitlab_shell
+      monitor: global
       tier: sv
       type: git
     expr: "0.000100"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: gitlab_sshd
+      monitor: global
       tier: sv
       type: git
     expr: "0.998000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: gitlab_sshd
+      monitor: global
       tier: sv
       type: git
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: loadbalancer
+      monitor: global
       tier: sv
       type: git
     expr: "0.998000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: loadbalancer
+      monitor: global
       tier: sv
       type: git
     expr: "0.000100"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: loadbalancer_ssh
+      monitor: global
       tier: sv
       type: git
     expr: "0.998000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: loadbalancer_ssh
+      monitor: global
       tier: sv
       type: git
     expr: "0.000100"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: rails_request
+      monitor: global
       tier: sv
       type: git
     expr: "0.997000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: rails_request
+      monitor: global
       tier: sv
       type: git
     expr: "0.000100"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: workhorse
+      monitor: global
       tier: sv
       type: git
     expr: "0.998000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: workhorse
+      monitor: global
       tier: sv
       type: git
     expr: "0.000100"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: workhorse_auth_api
+      monitor: global
       tier: sv
       type: git
     expr: "0.998000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: workhorse_auth_api
+      monitor: global
       tier: sv
       type: git
     expr: "0.000100"
   - record: slo:min:deployment:gitlab_service_apdex:ratio
     labels:
+      monitor: global
       tier: sv
       type: git
     expr: "0.999000"
   - record: slo:max:deployment:gitlab_service_errors:ratio
     labels:
+      monitor: global
       tier: sv
       type: git
     expr: "0.000500"
   - record: slo:min:mtbf:gitlab_service_apdex:ratio
     labels:
+      monitor: global
       tier: sv
       type: git
     expr: "0.999700"
   - record: slo:max:mtbf:gitlab_service_errors:ratio
     labels:
+      monitor: global
       tier: sv
       type: git
     expr: "0.000100"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
+      monitor: global
       tier: stor
       type: gitaly
     expr: "0.999000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
+      monitor: global
       tier: stor
       type: gitaly
     expr: "0.000500"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: goserver
+      monitor: global
       tier: stor
       type: gitaly
     expr: "0.999000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: goserver
+      monitor: global
       tier: stor
       type: gitaly
     expr: "0.000500"
   - record: slo:min:deployment:gitlab_service_apdex:ratio
     labels:
+      monitor: global
       tier: stor
       type: gitaly
     expr: "0.999000"
   - record: slo:max:deployment:gitlab_service_errors:ratio
     labels:
+      monitor: global
       tier: stor
       type: gitaly
     expr: "0.000500"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
+      monitor: global
+      tier: sv
+      type: glgo
+    expr: "0.980000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      monitor: global
+      tier: sv
+      type: glgo
+    expr: "0.001000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      component: runway_ingress
+      monitor: global
+      tier: sv
+      type: glgo
+    expr: "0.980000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      component: runway_ingress
+      monitor: global
+      tier: sv
+      type: glgo
+    expr: "0.001000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      monitor: global
       tier: stor
       type: google-cloud-storage
     expr: "0.997000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
+      monitor: global
       tier: stor
       type: google-cloud-storage
     expr: "0.000100"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: artifacts_cdn
+      monitor: global
       tier: stor
       type: google-cloud-storage
     expr: "0.997000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: artifacts_cdn
+      monitor: global
       tier: stor
       type: google-cloud-storage
     expr: "0.000100"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: pages_range_requests
+      monitor: global
       tier: stor
       type: google-cloud-storage
     expr: "0.997000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: pages_range_requests
+      monitor: global
       tier: stor
       type: google-cloud-storage
     expr: "0.000100"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: pages_request_duration
+      monitor: global
       tier: stor
       type: google-cloud-storage
     expr: "0.997000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: pages_request_duration
+      monitor: global
       tier: stor
       type: google-cloud-storage
     expr: "0.000100"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: pages_total_requests
+      monitor: global
       tier: stor
       type: google-cloud-storage
     expr: "0.997000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: pages_total_requests
+      monitor: global
       tier: stor
       type: google-cloud-storage
     expr: "0.000100"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: registry_storage
+      monitor: global
       tier: stor
       type: google-cloud-storage
     expr: "0.997000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: registry_storage
+      monitor: global
       tier: stor
       type: google-cloud-storage
     expr: "0.000100"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: workhorse_upload
+      monitor: global
       tier: stor
       type: google-cloud-storage
     expr: "0.997000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: workhorse_upload
+      monitor: global
       tier: stor
       type: google-cloud-storage
     expr: "0.000100"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
+      monitor: global
       tier: inf
       type: jaeger
     expr: "0.001000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: jaeger_agent
+      monitor: global
       tier: inf
       type: jaeger
     expr: "0.001000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: jaeger_collector
+      monitor: global
       tier: inf
       type: jaeger
     expr: "0.001000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: jaeger_query
+      monitor: global
       tier: inf
       type: jaeger
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
+      monitor: global
       tier: sv
       type: kas
     expr: "0.950000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
+      monitor: global
       tier: sv
       type: kas
     expr: "0.000500"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: grpc_requests
+      monitor: global
       tier: sv
       type: kas
     expr: "0.950000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: grpc_requests
+      monitor: global
       tier: sv
       type: kas
     expr: "0.000500"
   - record: slo:min:deployment:gitlab_service_apdex:ratio
     labels:
+      monitor: global
       tier: sv
       type: kas
     expr: "0.950000"
   - record: slo:max:deployment:gitlab_service_errors:ratio
     labels:
+      monitor: global
       tier: sv
       type: kas
     expr: "0.000500"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
+      monitor: global
       tier: inf
       type: kube
     expr: "0.999000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
+      monitor: global
       tier: inf
       type: kube
     expr: "0.000500"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: apiserver
+      monitor: global
       tier: inf
       type: kube
     expr: "0.999000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: apiserver
+      monitor: global
       tier: inf
       type: kube
     expr: "0.000500"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: cluster_scaleups
+      monitor: global
       tier: inf
       type: kube
     expr: "0.050000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
+      monitor: global
       tier: inf
       type: logging
     expr: "0.001000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: elasticsearch_indexing_cluster
+      monitor: global
       tier: inf
       type: logging
     expr: "0.001000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: elasticsearch_indexing_index
+      monitor: global
       tier: inf
       type: logging
     expr: "0.001000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: elasticsearch_searching_cluster
+      monitor: global
       tier: inf
       type: logging
     expr: "0.001000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: elasticsearch_searching_index
+      monitor: global
       tier: inf
       type: logging
     expr: "0.001000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: fluentd_log_output
+      monitor: global
       tier: inf
       type: logging
     expr: "0.001000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: kibana_googlelb
+      monitor: global
       tier: inf
       type: logging
     expr: "0.005000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: pubsub_subscriptions
+      monitor: global
       tier: inf
       type: logging
     expr: "0.001000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: pubsub_topics
+      monitor: global
       tier: inf
       type: logging
     expr: "0.001000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: pubsubbeat
+      monitor: global
       tier: inf
       type: logging
     expr: "0.001000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: stackdriver
+      monitor: global
       tier: inf
       type: logging
     expr: "0.001000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
+      monitor: global
       tier: sv
       type: mailgun
     expr: "0.100000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: mail_delivery
+      monitor: global
       tier: sv
       type: mailgun
     expr: "0.100000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
+      monitor: global
       tier: sv
       type: mailroom
     expr: "0.000500"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: email_receiver
+      monitor: global
       tier: sv
       type: mailroom
     expr: "0.300000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: emailsProcessed
+      monitor: global
       tier: sv
       type: mailroom
     expr: "0.000500"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
+      monitor: global
       tier: db
       type: memorystore
     expr: "0.995000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
+      monitor: global
       tier: db
       type: memorystore
     expr: "0.000100"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
+      monitor: global
       tier: inf
       type: monitoring
     expr: "0.999000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
+      monitor: global
       tier: inf
       type: monitoring
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: grafana
+      monitor: global
       tier: inf
       type: monitoring
     expr: "0.920000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: grafana
+      monitor: global
       tier: inf
       type: monitoring
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: grafana_datasources
+      monitor: global
       tier: inf
       type: monitoring
     expr: "0.999000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: grafana_datasources
+      monitor: global
       tier: inf
       type: monitoring
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: grafana_google_lb
+      monitor: global
       tier: inf
       type: monitoring
     expr: "0.999000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: grafana_google_lb
+      monitor: global
       tier: inf
       type: monitoring
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: grafana_image_renderer
+      monitor: global
       tier: inf
       type: monitoring
     expr: "0.920000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: grafana_image_renderer
+      monitor: global
       tier: inf
       type: monitoring
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: prometheus
+      monitor: global
       tier: inf
       type: monitoring
     expr: "0.999000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: prometheus
+      monitor: global
       tier: inf
       type: monitoring
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: prometheus_alert_sender
+      monitor: global
       tier: inf
       type: monitoring
     expr: "0.999000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: prometheus_alert_sender
+      monitor: global
       tier: inf
       type: monitoring
     expr: "0.005000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: rule_evaluation
+      monitor: global
       tier: inf
       type: monitoring
     expr: "0.999000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: rule_evaluation
+      monitor: global
       tier: inf
       type: monitoring
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
+      monitor: global
       tier: sv
       type: ops-gitlab-net
     expr: "0.998000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
+      monitor: global
       tier: sv
       type: ops-gitlab-net
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: gitlab_sshd
+      monitor: global
       tier: sv
       type: ops-gitlab-net
     expr: "0.998000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: gitlab_sshd
+      monitor: global
       tier: sv
       type: ops-gitlab-net
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: goserver
+      monitor: global
       tier: sv
       type: ops-gitlab-net
     expr: "0.998000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: goserver
+      monitor: global
       tier: sv
       type: ops-gitlab-net
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: puma
+      monitor: global
       tier: sv
       type: ops-gitlab-net
     expr: "0.998000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: puma
+      monitor: global
       tier: sv
       type: ops-gitlab-net
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: rails_sql
+      monitor: global
       tier: sv
       type: ops-gitlab-net
     expr: "0.998000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: rails_sql
+      monitor: global
       tier: sv
       type: ops-gitlab-net
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: registry_server
+      monitor: global
       tier: sv
       type: ops-gitlab-net
     expr: "0.998000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: registry_server
+      monitor: global
       tier: sv
       type: ops-gitlab-net
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: sidekiq_execution
+      monitor: global
       tier: sv
       type: ops-gitlab-net
     expr: "0.998000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: sidekiq_execution
+      monitor: global
       tier: sv
       type: ops-gitlab-net
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: sidekiq_queueing
+      monitor: global
       tier: sv
       type: ops-gitlab-net
     expr: "0.998000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: sidekiq_queueing
+      monitor: global
       tier: sv
       type: ops-gitlab-net
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: workhorse
+      monitor: global
       tier: sv
       type: ops-gitlab-net
     expr: "0.998000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: workhorse
+      monitor: global
       tier: sv
       type: ops-gitlab-net
     expr: "0.005000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
+      monitor: global
       tier: inf
       type: packagecloud
     expr: "0.001000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: cloudsql
+      monitor: global
       tier: inf
       type: packagecloud
     expr: "0.001000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: loadbalancer
+      monitor: global
       tier: inf
       type: packagecloud
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
+      monitor: global
       tier: db
       type: patroni
     expr: "0.999000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
+      monitor: global
       tier: db
       type: patroni
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: pgbouncer
+      monitor: global
       tier: db
       type: patroni
     expr: "0.999000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: pgbouncer
+      monitor: global
       tier: db
       type: patroni
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: rails_primary_sql
+      monitor: global
       tier: db
       type: patroni
     expr: "0.999000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: rails_primary_sql
+      monitor: global
       tier: db
       type: patroni
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: rails_replica_sql
+      monitor: global
       tier: db
       type: patroni
     expr: "0.999000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: rails_replica_sql
+      monitor: global
       tier: db
       type: patroni
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: transactions_primary
+      monitor: global
       tier: db
       type: patroni
     expr: "0.999000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: transactions_primary
+      monitor: global
       tier: db
       type: patroni
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: transactions_replica
+      monitor: global
       tier: db
       type: patroni
     expr: "0.999000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: transactions_replica
+      monitor: global
       tier: db
       type: patroni
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
+      monitor: global
       tier: db
       type: patroni-registry
     expr: "0.999000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
+      monitor: global
       tier: db
       type: patroni-registry
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: pgbouncer
+      monitor: global
       tier: db
       type: patroni-registry
     expr: "0.999000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: pgbouncer
+      monitor: global
       tier: db
       type: patroni-registry
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: transactions_primary
+      monitor: global
       tier: db
       type: patroni-registry
     expr: "0.999000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: transactions_primary
+      monitor: global
       tier: db
       type: patroni-registry
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: transactions_replica
+      monitor: global
       tier: db
       type: patroni-registry
     expr: "0.999000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: transactions_replica
+      monitor: global
       tier: db
       type: patroni-registry
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
+      monitor: global
       tier: db
       type: patroni-embedding
     expr: "0.999000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
+      monitor: global
       tier: db
       type: patroni-embedding
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: pgbouncer
+      monitor: global
       tier: db
       type: patroni-embedding
     expr: "0.999000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: pgbouncer
+      monitor: global
       tier: db
       type: patroni-embedding
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: transactions_primary
+      monitor: global
       tier: db
       type: patroni-embedding
     expr: "0.999000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: transactions_primary
+      monitor: global
       tier: db
       type: patroni-embedding
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: transactions_replica
+      monitor: global
       tier: db
       type: patroni-embedding
     expr: "0.999000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: transactions_replica
+      monitor: global
       tier: db
       type: patroni-embedding
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
+      monitor: global
       tier: db
       type: patroni-ci
     expr: "0.999000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
+      monitor: global
       tier: db
       type: patroni-ci
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: pgbouncer
+      monitor: global
       tier: db
       type: patroni-ci
     expr: "0.999000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: pgbouncer
+      monitor: global
       tier: db
       type: patroni-ci
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: rails_primary_sql
+      monitor: global
       tier: db
       type: patroni-ci
     expr: "0.999000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: rails_primary_sql
+      monitor: global
       tier: db
       type: patroni-ci
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: rails_replica_sql
+      monitor: global
       tier: db
       type: patroni-ci
     expr: "0.999000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: rails_replica_sql
+      monitor: global
       tier: db
       type: patroni-ci
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: transactions_primary
+      monitor: global
       tier: db
       type: patroni-ci
     expr: "0.999000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: transactions_primary
+      monitor: global
       tier: db
       type: patroni-ci
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: transactions_replica
+      monitor: global
       tier: db
       type: patroni-ci
     expr: "0.999000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: transactions_replica
+      monitor: global
       tier: db
       type: patroni-ci
     expr: "0.001000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
+      monitor: global
       tier: sv
       type: plantuml
     expr: "0.001000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: loadbalancer
+      monitor: global
       tier: sv
       type: plantuml
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
+      monitor: global
       tier: stor
       type: praefect
     expr: "0.995000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
+      monitor: global
       tier: stor
       type: praefect
     expr: "0.000500"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: praefect_cloudsql
+      monitor: global
       tier: stor
       type: praefect
     expr: "0.995000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: praefect_cloudsql
+      monitor: global
       tier: stor
       type: praefect
     expr: "0.000500"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: proxy
+      monitor: global
       tier: stor
       type: praefect
     expr: "0.995000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: proxy
+      monitor: global
       tier: stor
       type: praefect
     expr: "0.000500"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: replicator_queue
+      monitor: global
       tier: stor
       type: praefect
     expr: "0.995000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: replicator_queue
+      monitor: global
       tier: stor
       type: praefect
     expr: "0.000500"
   - record: slo:min:deployment:gitlab_service_apdex:ratio
     labels:
+      monitor: global
       tier: stor
       type: praefect
     expr: "0.995000"
   - record: slo:max:deployment:gitlab_service_errors:ratio
     labels:
+      monitor: global
       tier: stor
       type: praefect
     expr: "0.000500"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
+      monitor: global
       tier: sv
       type: pvs
     expr: "0.999000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
+      monitor: global
       tier: sv
       type: pvs
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: http
+      monitor: global
       tier: sv
       type: pvs
     expr: "0.999000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: http
+      monitor: global
       tier: sv
       type: pvs
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
+      monitor: global
       tier: db
       type: redis-cluster-cache
     expr: "0.999500"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
+      monitor: global
       tier: db
       type: redis-cluster-cache
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: primary_server
+      monitor: global
       tier: db
       type: redis-cluster-cache
     expr: "0.999500"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: primary_server
+      monitor: global
       tier: db
       type: redis-cluster-cache
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: rails_cache
+      monitor: global
       tier: db
       type: redis-cluster-cache
     expr: "0.999500"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: rails_cache
+      monitor: global
       tier: db
       type: redis-cluster-cache
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: rails_redis_client
+      monitor: global
       tier: db
       type: redis-cluster-cache
     expr: "0.999500"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: rails_redis_client
+      monitor: global
       tier: db
       type: redis-cluster-cache
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: secondary_servers
+      monitor: global
       tier: db
       type: redis-cluster-cache
     expr: "0.999500"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: secondary_servers
+      monitor: global
       tier: db
       type: redis-cluster-cache
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
+      monitor: global
       tier: db
       type: redis-cluster-feature-flag
     expr: "0.999500"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
+      monitor: global
       tier: db
       type: redis-cluster-feature-flag
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: primary_server
+      monitor: global
       tier: db
       type: redis-cluster-feature-flag
     expr: "0.999500"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: primary_server
+      monitor: global
       tier: db
       type: redis-cluster-feature-flag
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: rails_cache
+      monitor: global
       tier: db
       type: redis-cluster-feature-flag
     expr: "0.999500"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: rails_cache
+      monitor: global
       tier: db
       type: redis-cluster-feature-flag
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: rails_redis_client
+      monitor: global
       tier: db
       type: redis-cluster-feature-flag
     expr: "0.999500"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: rails_redis_client
+      monitor: global
       tier: db
       type: redis-cluster-feature-flag
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: secondary_servers
+      monitor: global
       tier: db
       type: redis-cluster-feature-flag
     expr: "0.999500"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: secondary_servers
+      monitor: global
       tier: db
       type: redis-cluster-feature-flag
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
+      monitor: global
       tier: db
       type: redis-cluster-shared-state
     expr: "0.999900"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
+      monitor: global
       tier: db
       type: redis-cluster-shared-state
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: primary_server
+      monitor: global
       tier: db
       type: redis-cluster-shared-state
     expr: "0.999900"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: primary_server
+      monitor: global
       tier: db
       type: redis-cluster-shared-state
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: rails_redis_client
+      monitor: global
       tier: db
       type: redis-cluster-shared-state
     expr: "0.999900"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: rails_redis_client
+      monitor: global
       tier: db
       type: redis-cluster-shared-state
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: secondary_servers
+      monitor: global
       tier: db
       type: redis-cluster-shared-state
     expr: "0.999900"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: secondary_servers
+      monitor: global
       tier: db
       type: redis-cluster-shared-state
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
+      monitor: global
       tier: db
       type: redis-cluster-queues-meta
     expr: "0.999900"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
+      monitor: global
       tier: db
       type: redis-cluster-queues-meta
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: primary_server
+      monitor: global
       tier: db
       type: redis-cluster-queues-meta
     expr: "0.999900"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: primary_server
+      monitor: global
       tier: db
       type: redis-cluster-queues-meta
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: rails_redis_client
+      monitor: global
       tier: db
       type: redis-cluster-queues-meta
     expr: "0.999900"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: rails_redis_client
+      monitor: global
       tier: db
       type: redis-cluster-queues-meta
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: secondary_servers
+      monitor: global
       tier: db
       type: redis-cluster-queues-meta
     expr: "0.999900"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: secondary_servers
+      monitor: global
       tier: db
       type: redis-cluster-queues-meta
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
+      monitor: global
+      tier: db
+      type: redis-cluster-repo-cache
+    expr: "0.999500"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      monitor: global
+      tier: db
+      type: redis-cluster-repo-cache
+    expr: "0.001000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      component: primary_server
+      monitor: global
+      tier: db
+      type: redis-cluster-repo-cache
+    expr: "0.999500"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      component: primary_server
+      monitor: global
+      tier: db
+      type: redis-cluster-repo-cache
+    expr: "0.001000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      component: rails_cache
+      monitor: global
+      tier: db
+      type: redis-cluster-repo-cache
+    expr: "0.999500"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      component: rails_cache
+      monitor: global
+      tier: db
+      type: redis-cluster-repo-cache
+    expr: "0.001000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      component: rails_redis_client
+      monitor: global
+      tier: db
+      type: redis-cluster-repo-cache
+    expr: "0.999500"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      component: rails_redis_client
+      monitor: global
+      tier: db
+      type: redis-cluster-repo-cache
+    expr: "0.001000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      component: secondary_servers
+      monitor: global
+      tier: db
+      type: redis-cluster-repo-cache
+    expr: "0.999500"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      component: secondary_servers
+      monitor: global
+      tier: db
+      type: redis-cluster-repo-cache
+    expr: "0.001000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      monitor: global
       tier: db
       type: redis-sidekiq
     expr: "0.999900"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
+      monitor: global
       tier: db
       type: redis-sidekiq
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: primary_server
+      monitor: global
       tier: db
       type: redis-sidekiq
     expr: "0.999900"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: primary_server
+      monitor: global
       tier: db
       type: redis-sidekiq
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: rails_redis_client
+      monitor: global
       tier: db
       type: redis-sidekiq
     expr: "0.999900"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: rails_redis_client
+      monitor: global
       tier: db
       type: redis-sidekiq
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: secondary_servers
+      monitor: global
       tier: db
       type: redis-sidekiq
     expr: "0.999900"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: secondary_servers
+      monitor: global
       tier: db
       type: redis-sidekiq
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
+      monitor: global
       tier: db
       type: redis-tracechunks
     expr: "0.999900"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
+      monitor: global
       tier: db
       type: redis-tracechunks
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: primary_server
+      monitor: global
       tier: db
       type: redis-tracechunks
     expr: "0.999900"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: primary_server
+      monitor: global
       tier: db
       type: redis-tracechunks
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: rails_redis_client
+      monitor: global
       tier: db
       type: redis-tracechunks
     expr: "0.999900"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: rails_redis_client
+      monitor: global
       tier: db
       type: redis-tracechunks
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: secondary_servers
+      monitor: global
       tier: db
       type: redis-tracechunks
     expr: "0.999900"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: secondary_servers
+      monitor: global
       tier: db
       type: redis-tracechunks
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
+      monitor: global
       tier: db
       type: redis-cluster-ratelimiting
     expr: "0.999500"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
+      monitor: global
       tier: db
       type: redis-cluster-ratelimiting
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: primary_server
+      monitor: global
       tier: db
       type: redis-cluster-ratelimiting
     expr: "0.999500"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: primary_server
+      monitor: global
       tier: db
       type: redis-cluster-ratelimiting
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: rails_redis_client
+      monitor: global
       tier: db
       type: redis-cluster-ratelimiting
     expr: "0.999500"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: rails_redis_client
+      monitor: global
       tier: db
       type: redis-cluster-ratelimiting
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: secondary_servers
+      monitor: global
       tier: db
       type: redis-cluster-ratelimiting
     expr: "0.999500"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: secondary_servers
+      monitor: global
       tier: db
       type: redis-cluster-ratelimiting
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
+      monitor: global
       tier: db
       type: redis-cluster-chat-cache
     expr: "0.999500"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
+      monitor: global
       tier: db
       type: redis-cluster-chat-cache
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: primary_server
+      monitor: global
       tier: db
       type: redis-cluster-chat-cache
     expr: "0.999500"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: primary_server
+      monitor: global
       tier: db
       type: redis-cluster-chat-cache
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: rails_redis_client
+      monitor: global
       tier: db
       type: redis-cluster-chat-cache
     expr: "0.999500"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: rails_redis_client
+      monitor: global
       tier: db
       type: redis-cluster-chat-cache
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: secondary_servers
+      monitor: global
       tier: db
       type: redis-cluster-chat-cache
     expr: "0.999500"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: secondary_servers
+      monitor: global
       tier: db
       type: redis-cluster-chat-cache
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
+      monitor: global
       tier: db
       type: redis-sessions
     expr: "0.999900"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
+      monitor: global
       tier: db
       type: redis-sessions
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: primary_server
+      monitor: global
       tier: db
       type: redis-sessions
     expr: "0.999900"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: primary_server
+      monitor: global
       tier: db
       type: redis-sessions
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: rails_redis_client
+      monitor: global
       tier: db
       type: redis-sessions
     expr: "0.999900"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: rails_redis_client
+      monitor: global
       tier: db
       type: redis-sessions
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: secondary_servers
+      monitor: global
       tier: db
       type: redis-sessions
     expr: "0.999900"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: secondary_servers
+      monitor: global
       tier: db
       type: redis-sessions
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
+      monitor: global
       tier: db
       type: redis-registry-cache
     expr: "0.999500"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
+      monitor: global
       tier: db
       type: redis-registry-cache
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: primary_server
+      monitor: global
       tier: db
       type: redis-registry-cache
     expr: "0.999500"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: primary_server
+      monitor: global
       tier: db
       type: redis-registry-cache
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: registry_redis_client
+      monitor: global
       tier: db
       type: redis-registry-cache
     expr: "0.999500"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: registry_redis_client
+      monitor: global
       tier: db
       type: redis-registry-cache
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: secondary_servers
+      monitor: global
       tier: db
       type: redis-registry-cache
     expr: "0.999500"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: secondary_servers
+      monitor: global
       tier: db
       type: redis-registry-cache
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
+      monitor: global
       tier: db
       type: redis-repository-cache
     expr: "0.999500"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
+      monitor: global
       tier: db
       type: redis-repository-cache
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: primary_server
+      monitor: global
       tier: db
       type: redis-repository-cache
     expr: "0.999500"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: primary_server
+      monitor: global
       tier: db
       type: redis-repository-cache
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: rails_cache
+      monitor: global
       tier: db
       type: redis-repository-cache
     expr: "0.999500"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: rails_cache
+      monitor: global
       tier: db
       type: redis-repository-cache
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: rails_redis_client
+      monitor: global
       tier: db
       type: redis-repository-cache
     expr: "0.999500"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: rails_redis_client
+      monitor: global
       tier: db
       type: redis-repository-cache
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: secondary_servers
+      monitor: global
       tier: db
       type: redis-repository-cache
     expr: "0.999500"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: secondary_servers
+      monitor: global
       tier: db
       type: redis-repository-cache
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
+      monitor: global
       tier: db
       type: redis-db-load-balancing
     expr: "0.999500"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
+      monitor: global
       tier: db
       type: redis-db-load-balancing
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: primary_server
+      monitor: global
       tier: db
       type: redis-db-load-balancing
     expr: "0.999500"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: primary_server
+      monitor: global
       tier: db
       type: redis-db-load-balancing
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: rails_redis_client
-      tier: db
-      type: redis-db-load-balancing
-    expr: "0.999500"
-  - record: slo:max:events:gitlab_service_errors:ratio
-    labels:
-      component: rails_redis_client
-      tier: db
-      type: redis-db-load-balancing
-    expr: "0.001000"
-  - record: slo:min:events:gitlab_service_apdex:ratio
-    labels:
-      component: secondary_servers
+      monitor: global
       tier: db
       type: redis-db-load-balancing
     expr: "0.999500"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
-      component: secondary_servers
+      component: rails_redis_client
+      monitor: global
       tier: db
       type: redis-db-load-balancing
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
+      component: secondary_servers
+      monitor: global
+      tier: db
+      type: redis-db-load-balancing
+    expr: "0.999500"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      component: secondary_servers
+      monitor: global
+      tier: db
+      type: redis-db-load-balancing
+    expr: "0.001000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      monitor: global
       tier: db
       type: redis-pubsub
     expr: "0.999900"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
+      monitor: global
       tier: db
       type: redis-pubsub
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: primary_server
+      monitor: global
       tier: db
       type: redis-pubsub
     expr: "0.999900"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: primary_server
+      monitor: global
       tier: db
       type: redis-pubsub
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: rails_redis_client
+      monitor: global
       tier: db
       type: redis-pubsub
     expr: "0.999900"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: rails_redis_client
+      monitor: global
       tier: db
       type: redis-pubsub
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: secondary_servers
+      monitor: global
       tier: db
       type: redis-pubsub
     expr: "0.999900"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: secondary_servers
+      monitor: global
       tier: db
       type: redis-pubsub
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
+      monitor: global
       tier: db
       type: redis
     expr: "0.999900"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
+      monitor: global
       tier: db
       type: redis
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: primary_server
+      monitor: global
       tier: db
       type: redis
     expr: "0.999900"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: primary_server
+      monitor: global
       tier: db
       type: redis
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: rails_redis_client
+      monitor: global
       tier: db
       type: redis
     expr: "0.999900"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: rails_redis_client
+      monitor: global
       tier: db
       type: redis
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: secondary_servers
+      monitor: global
       tier: db
       type: redis
     expr: "0.999900"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: secondary_servers
+      monitor: global
       tier: db
       type: redis
     expr: "0.001000"
   - record: slo:min:gitlab_service_apdex:ratio
     labels:
+      monitor: global
       tier: sv
       type: registry
     expr: "0.900000"
   - record: slo:max:gitlab_service_errors:ratio
     labels:
+      monitor: global
       tier: sv
       type: registry
     expr: "0.005000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
+      monitor: global
       tier: sv
       type: registry
     expr: "0.997000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
+      monitor: global
       tier: sv
       type: registry
     expr: "0.000100"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: database
+      monitor: global
       tier: sv
       type: registry
     expr: "0.997000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: database
+      monitor: global
       tier: sv
       type: registry
     expr: "0.000100"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: garbagecollector
+      monitor: global
       tier: sv
       type: registry
     expr: "0.997000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: garbagecollector
+      monitor: global
       tier: sv
       type: registry
     expr: "0.000100"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: loadbalancer
+      monitor: global
       tier: sv
       type: registry
     expr: "0.997000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: loadbalancer
+      monitor: global
       tier: sv
       type: registry
     expr: "0.000100"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: redis
+      monitor: global
       tier: sv
       type: registry
     expr: "0.997000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: redis
+      monitor: global
       tier: sv
       type: registry
     expr: "0.000100"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: registry_cdn
+      monitor: global
       tier: sv
       type: registry
     expr: "0.997000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: registry_cdn
+      monitor: global
       tier: sv
       type: registry
     expr: "0.000100"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: registry_server
+      monitor: global
       tier: sv
       type: registry
     expr: "0.997000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: registry_server
+      monitor: global
       tier: sv
       type: registry
     expr: "0.000100"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: server_route_blob_upload_uuid_deletes
+      monitor: global
       tier: sv
       type: registry
     expr: "0.997000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: server_route_blob_upload_uuid_deletes
+      monitor: global
       tier: sv
       type: registry
     expr: "0.000100"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: server_route_blob_upload_uuid_reads
+      monitor: global
       tier: sv
       type: registry
     expr: "0.997000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: server_route_blob_upload_uuid_reads
+      monitor: global
       tier: sv
       type: registry
     expr: "0.000100"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: server_route_blob_upload_uuid_writes
+      monitor: global
       tier: sv
       type: registry
     expr: "0.970000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: server_route_blob_upload_uuid_writes
+      monitor: global
       tier: sv
       type: registry
     expr: "0.000100"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: server_route_manifest_reads
+      monitor: global
       tier: sv
       type: registry
     expr: "0.999000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: server_route_manifest_reads
+      monitor: global
       tier: sv
       type: registry
     expr: "0.000100"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: server_route_manifest_writes
+      monitor: global
       tier: sv
       type: registry
     expr: "0.999000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: server_route_manifest_writes
+      monitor: global
       tier: sv
       type: registry
     expr: "0.000100"
   - record: slo:min:deployment:gitlab_service_apdex:ratio
     labels:
+      monitor: global
       tier: sv
       type: registry
     expr: "0.992900"
   - record: slo:max:deployment:gitlab_service_errors:ratio
     labels:
+      monitor: global
       tier: sv
       type: registry
     expr: "0.030000"
   - record: slo:min:mtbf:gitlab_service_apdex:ratio
     labels:
+      monitor: global
       tier: sv
       type: registry
     expr: "0.999500"
   - record: slo:max:mtbf:gitlab_service_errors:ratio
     labels:
+      monitor: global
       tier: sv
       type: registry
     expr: "0.000050"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
+      monitor: global
       tier: inf
       type: runway
     expr: "0.990000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
+      monitor: global
       tier: inf
       type: runway
     expr: "0.010000"
   - record: slo:min:deployment:gitlab_service_apdex:ratio
     labels:
+      monitor: global
       tier: inf
       type: search
     expr: "0.900000"
   - record: slo:max:deployment:gitlab_service_errors:ratio
     labels:
+      monitor: global
       tier: inf
       type: search
     expr: "0.100000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
+      monitor: global
       tier: inf
       type: sentry
     expr: "0.990000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
+      monitor: global
       tier: inf
       type: sentry
     expr: "0.010000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: pg_transactions
+      monitor: global
       tier: inf
       type: sentry
     expr: "0.990000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: pg_transactions
+      monitor: global
       tier: inf
       type: sentry
     expr: "0.010000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: sentry_events
+      monitor: global
       tier: inf
       type: sentry
     expr: "0.990000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: sentry_events
+      monitor: global
       tier: inf
       type: sentry
     expr: "0.010000"
   - record: slo:min:gitlab_service_apdex:ratio
     labels:
+      monitor: global
       tier: sv
       type: sidekiq
     expr: "0.900000"
   - record: slo:max:gitlab_service_errors:ratio
     labels:
+      monitor: global
       tier: sv
       type: sidekiq
     expr: "0.100000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
+      monitor: global
       tier: sv
       type: sidekiq
     expr: "0.995000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
+      monitor: global
       tier: sv
       type: sidekiq
     expr: "0.005000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: llm_completion
+      monitor: global
       tier: sv
       type: sidekiq
     expr: "0.995000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: llm_completion
+      monitor: global
       tier: sv
       type: sidekiq
     expr: "0.005000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: sidekiq_execution
+      monitor: global
       shard: ""
       tier: sv
       type: sidekiq
@@ -2540,6 +3079,7 @@ groups:
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: sidekiq_execution
+      monitor: global
       shard: urgent-authorized-projects
       tier: sv
       type: sidekiq
@@ -2547,6 +3087,7 @@ groups:
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: sidekiq_execution
+      monitor: global
       shard: urgent-cpu-bound
       tier: sv
       type: sidekiq
@@ -2554,6 +3095,7 @@ groups:
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: sidekiq_execution
+      monitor: global
       shard: urgent-other
       tier: sv
       type: sidekiq
@@ -2561,6 +3103,7 @@ groups:
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: sidekiq_execution
+      monitor: global
       shard: ""
       tier: sv
       type: sidekiq
@@ -2568,39 +3111,37 @@ groups:
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: sidekiq_execution_with_external_dependency
+      monitor: global
       tier: sv
       type: sidekiq
     expr: "0.995000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: sidekiq_execution_with_external_dependency
+      monitor: global
       tier: sv
       type: sidekiq
     expr: "0.100000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: sidekiq_queueing
+      monitor: global
       shard: ""
       tier: sv
       type: sidekiq
-    expr: "0.995000"
+    expr: "0.999000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: sidekiq_queueing
+      monitor: global
       shard: urgent-authorized-projects
       tier: sv
       type: sidekiq
     expr: "0.940000"
-  - record: slo:min:events:gitlab_service_apdex:ratio
-    labels:
-      component: sidekiq_queueing
-      shard: urgent-other
-      tier: sv
-      type: sidekiq
-    expr: "0.970000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: sidekiq_queueing
+      monitor: global
       shard: ""
       tier: sv
       type: sidekiq
@@ -2608,506 +3149,596 @@ groups:
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: sidekiq_queueing_with_external_dependency
+      monitor: global
       tier: sv
       type: sidekiq
     expr: "0.995000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: sidekiq_queueing_with_external_dependency
+      monitor: global
       tier: sv
       type: sidekiq
     expr: "0.005000"
   - record: slo:min:deployment:gitlab_service_apdex:ratio
     labels:
+      monitor: global
       tier: sv
       type: sidekiq
     expr: "0.995000"
   - record: slo:max:deployment:gitlab_service_errors:ratio
     labels:
+      monitor: global
       tier: sv
       type: sidekiq
     expr: "0.005000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
+      monitor: global
       tier: inf
       type: thanos
     expr: "0.999000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
+      monitor: global
       tier: inf
       type: thanos
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: rule_evaluation
+      monitor: global
       tier: inf
       type: thanos
     expr: "0.999000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: rule_evaluation
+      monitor: global
       tier: inf
       type: thanos
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: thanos_compactor
+      monitor: global
       tier: inf
       type: thanos
     expr: "0.999000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: thanos_compactor
+      monitor: global
       tier: inf
       type: thanos
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: thanos_memcached
+      monitor: global
       tier: inf
       type: thanos
     expr: "0.999000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: thanos_memcached
+      monitor: global
       tier: inf
       type: thanos
     expr: "0.050000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: thanos_query
+      monitor: global
       tier: inf
       type: thanos
     expr: "0.950000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: thanos_query
+      monitor: global
       tier: inf
       type: thanos
     expr: "0.050000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: thanos_query_frontend
+      monitor: global
       tier: inf
       type: thanos
     expr: "0.950000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: thanos_query_frontend
+      monitor: global
       tier: inf
       type: thanos
     expr: "0.050000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: thanos_rule_alert_sender
+      monitor: global
       tier: inf
       type: thanos
     expr: "0.999000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: thanos_rule_alert_sender
+      monitor: global
       tier: inf
       type: thanos
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: thanos_store
+      monitor: global
       tier: inf
       type: thanos
     expr: "0.950000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: thanos_store
+      monitor: global
       tier: inf
       type: thanos
     expr: "0.050000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
+      monitor: global
       tier: sv
       type: tracing
     expr: "0.995000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
+      monitor: global
       tier: sv
       type: tracing
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: ingress
+      monitor: global
       tier: sv
       type: tracing
     expr: "0.995000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: ingress
+      monitor: global
       tier: sv
       type: tracing
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
+      monitor: global
       tier: inf
       type: vault
     expr: "0.999000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
+      monitor: global
       tier: inf
       type: vault
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: istio_internal_ingress
+      monitor: global
       tier: inf
       type: vault
     expr: "0.999000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: istio_internal_ingress
+      monitor: global
       tier: inf
       type: vault
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: istio_public_ingress
+      monitor: global
       tier: inf
       type: vault
     expr: "0.999000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: istio_public_ingress
+      monitor: global
       tier: inf
       type: vault
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: vault
+      monitor: global
       tier: inf
       type: vault
     expr: "0.999000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: vault
+      monitor: global
       tier: inf
       type: vault
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: vault_audit_log_request
+      monitor: global
       tier: inf
       type: vault
     expr: "0.999000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: vault_audit_log_request
+      monitor: global
       tier: inf
       type: vault
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: vault_audit_log_response
+      monitor: global
       tier: inf
       type: vault
     expr: "0.999000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: vault_audit_log_response
+      monitor: global
       tier: inf
       type: vault
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: vault_google_lb
+      monitor: global
       tier: inf
       type: vault
     expr: "0.999000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: vault_google_lb
+      monitor: global
       tier: inf
       type: vault
     expr: "0.001000"
   - record: slo:min:gitlab_service_apdex:ratio
     labels:
+      monitor: global
       tier: sv
       type: web-pages
     expr: "0.950000"
   - record: slo:max:gitlab_service_errors:ratio
     labels:
+      monitor: global
       tier: sv
       type: web-pages
     expr: "0.050000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
+      monitor: global
       tier: sv
       type: web-pages
     expr: "0.995000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
+      monitor: global
       tier: sv
       type: web-pages
     expr: "0.000500"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: loadbalancer
+      monitor: global
       tier: sv
       type: web-pages
     expr: "0.995000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: loadbalancer
+      monitor: global
       tier: sv
       type: web-pages
     expr: "0.000500"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: loadbalancer_https
+      monitor: global
       tier: sv
       type: web-pages
     expr: "0.995000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: loadbalancer_https
+      monitor: global
       tier: sv
       type: web-pages
     expr: "0.000500"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: web_pages_server
+      monitor: global
       tier: sv
       type: web-pages
     expr: "0.995000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: web_pages_server
+      monitor: global
       tier: sv
       type: web-pages
     expr: "0.000500"
   - record: slo:min:deployment:gitlab_service_apdex:ratio
     labels:
+      monitor: global
       tier: sv
       type: web-pages
     expr: "0.995000"
   - record: slo:max:deployment:gitlab_service_errors:ratio
     labels:
+      monitor: global
       tier: sv
       type: web-pages
     expr: "0.000500"
   - record: slo:min:mtbf:gitlab_service_apdex:ratio
     labels:
+      monitor: global
       tier: sv
       type: web-pages
     expr: "0.999000"
   - record: slo:max:mtbf:gitlab_service_errors:ratio
     labels:
+      monitor: global
       tier: sv
       type: web-pages
     expr: "0.000100"
   - record: slo:min:gitlab_service_apdex:ratio
     labels:
+      monitor: global
       tier: sv
       type: web
     expr: "0.900000"
   - record: slo:max:gitlab_service_errors:ratio
     labels:
+      monitor: global
       tier: sv
       type: web
     expr: "0.005000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
+      monitor: global
       tier: sv
       type: web
     expr: "0.998000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
+      monitor: global
       tier: sv
       type: web
     expr: "0.000100"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: global_search
+      monitor: global
       tier: sv
       type: web
     expr: "0.998000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: global_search
+      monitor: global
       tier: sv
       type: web
     expr: "0.000100"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: imagescaler
+      monitor: global
       tier: sv
       type: web
     expr: "0.998000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: imagescaler
+      monitor: global
       tier: sv
       type: web
     expr: "0.000100"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: loadbalancer
+      monitor: global
       tier: sv
       type: web
     expr: "0.998000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: loadbalancer
+      monitor: global
       tier: sv
       type: web
     expr: "0.000100"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: rails_request
+      monitor: global
       tier: sv
       type: web
     expr: "0.998000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: rails_request
+      monitor: global
       tier: sv
       type: web
     expr: "0.000100"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: workhorse
+      monitor: global
       tier: sv
       type: web
     expr: "0.998000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: workhorse
+      monitor: global
       tier: sv
       type: web
     expr: "0.000100"
   - record: slo:min:deployment:gitlab_service_apdex:ratio
     labels:
+      monitor: global
       tier: sv
       type: web
     expr: "0.998000"
   - record: slo:max:deployment:gitlab_service_errors:ratio
     labels:
+      monitor: global
       tier: sv
       type: web
     expr: "0.000100"
   - record: slo:min:mtbf:gitlab_service_apdex:ratio
     labels:
+      monitor: global
       tier: sv
       type: web
     expr: "0.999300"
   - record: slo:max:mtbf:gitlab_service_errors:ratio
     labels:
+      monitor: global
       tier: sv
       type: web
     expr: "0.000050"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
+      monitor: global
       tier: sv
       type: websockets
     expr: "0.950000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
+      monitor: global
       tier: sv
       type: websockets
     expr: "0.000500"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: loadbalancer
+      monitor: global
       tier: sv
       type: websockets
     expr: "0.950000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: loadbalancer
+      monitor: global
       tier: sv
       type: websockets
     expr: "0.000500"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: rails_request
+      monitor: global
       tier: sv
       type: websockets
     expr: "0.950000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: rails_request
+      monitor: global
       tier: sv
       type: websockets
     expr: "0.000500"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: workhorse
+      monitor: global
       tier: sv
       type: websockets
     expr: "0.950000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: workhorse
+      monitor: global
       tier: sv
       type: websockets
     expr: "0.000500"
   - record: slo:min:deployment:gitlab_service_apdex:ratio
     labels:
+      monitor: global
       tier: sv
       type: websockets
     expr: "0.900000"
   - record: slo:max:deployment:gitlab_service_errors:ratio
     labels:
+      monitor: global
       tier: sv
       type: websockets
     expr: "0.000500"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
+      monitor: global
       tier: sv
       type: woodhouse
     expr: "0.999000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
+      monitor: global
       tier: sv
       type: woodhouse
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: async_jobs
+      monitor: global
       tier: sv
       type: woodhouse
     expr: "0.999000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: async_jobs
+      monitor: global
       tier: sv
       type: woodhouse
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: http
+      monitor: global
       tier: sv
       type: woodhouse
     expr: "0.999000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: http
+      monitor: global
       tier: sv
       type: woodhouse
     expr: "0.001000"
   - record: gitlab_service:mapping:disable_ops_rate_prediction
     labels:
+      monitor: global
       tier: inf
       type: kube
     expr: "1"
   - record: gitlab_service:mapping:disable_ops_rate_prediction
     labels:
+      monitor: global
       tier: inf
       type: monitoring
     expr: "1"
   - record: gitlab_service:mapping:disable_ops_rate_prediction
     labels:
+      monitor: global
       tier: inf
       type: search
     expr: "1"
   - record: gitlab_service:mapping:disable_ops_rate_prediction
     labels:
+      monitor: global
       tier: inf
       type: thanos
     expr: "1"
@@ -3115,6 +3746,7 @@ groups:
     labels:
       component: rails_request
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: sv
@@ -3124,6 +3756,7 @@ groups:
     labels:
       component: workhorse
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "no"
       tier: sv
@@ -3133,6 +3766,7 @@ groups:
     labels:
       component: global_search
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "yes"
       service_aggregation: "no"
       tier: sv
@@ -3142,6 +3776,7 @@ groups:
     labels:
       component: graphql_query
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "yes"
       service_aggregation: "no"
       tier: sv
@@ -3151,6 +3786,7 @@ groups:
     labels:
       component: loadbalancer
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "no"
       tier: sv
@@ -3160,6 +3796,7 @@ groups:
     labels:
       component: nginx_ingress
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "yes"
       service_aggregation: "no"
       tier: sv
@@ -3169,6 +3806,7 @@ groups:
     labels:
       component: rails_request
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "yes"
       service_aggregation: "yes"
       tier: sv
@@ -3178,6 +3816,7 @@ groups:
     labels:
       component: workhorse
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "yes"
       service_aggregation: "no"
       tier: sv
@@ -3187,6 +3826,7 @@ groups:
     labels:
       component: rails_request
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "yes"
       service_aggregation: "yes"
       tier: sv
@@ -3196,6 +3836,7 @@ groups:
     labels:
       component: workhorse
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "yes"
       service_aggregation: "no"
       tier: sv
@@ -3205,6 +3846,7 @@ groups:
     labels:
       component: atlantis_google_lb
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: inf
@@ -3214,6 +3856,7 @@ groups:
     labels:
       component: loadbalancer
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: sv
@@ -3223,6 +3866,7 @@ groups:
     labels:
       component: server
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: sv
@@ -3232,6 +3876,7 @@ groups:
     labels:
       component: loadbalancer
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "no"
       tier: runners
@@ -3241,6 +3886,7 @@ groups:
     labels:
       component: polling
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: runners
@@ -3250,6 +3896,7 @@ groups:
     labels:
       component: queuing_queries_duration
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: runners
@@ -3259,6 +3906,7 @@ groups:
     labels:
       component: saas_linux_runner_image_pull_failures
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "no"
       tier: runners
@@ -3268,6 +3916,7 @@ groups:
     labels:
       component: saas_runner_queues
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: runners
@@ -3277,6 +3926,7 @@ groups:
     labels:
       component: trace_archiving_ci_jobs
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: runners
@@ -3286,6 +3936,7 @@ groups:
     labels:
       component: consul
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "yes"
       service_aggregation: "yes"
       tier: sv
@@ -3295,6 +3946,7 @@ groups:
     labels:
       component: customers_dot_requests
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: sv
@@ -3304,6 +3956,7 @@ groups:
     labels:
       component: customers_dot_sidekiq_jobs
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "no"
       tier: sv
@@ -3313,6 +3966,7 @@ groups:
     labels:
       component: cnyHttpsServices
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: lb
@@ -3322,6 +3976,7 @@ groups:
     labels:
       component: mainHttpsServices
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: lb
@@ -3331,6 +3986,7 @@ groups:
     labels:
       component: sshServices
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: lb
@@ -3340,6 +3996,7 @@ groups:
     labels:
       component: gitlab_shell
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "yes"
       service_aggregation: "yes"
       tier: sv
@@ -3349,6 +4006,7 @@ groups:
     labels:
       component: gitlab_sshd
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "yes"
       service_aggregation: "yes"
       tier: sv
@@ -3358,6 +4016,7 @@ groups:
     labels:
       component: loadbalancer
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "no"
       tier: sv
@@ -3367,6 +4026,7 @@ groups:
     labels:
       component: loadbalancer_ssh
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "no"
       tier: sv
@@ -3376,6 +4036,7 @@ groups:
     labels:
       component: rails_request
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "yes"
       service_aggregation: "yes"
       tier: sv
@@ -3385,6 +4046,7 @@ groups:
     labels:
       component: workhorse
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "yes"
       service_aggregation: "no"
       tier: sv
@@ -3394,6 +4056,7 @@ groups:
     labels:
       component: workhorse_auth_api
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "yes"
       service_aggregation: "no"
       tier: sv
@@ -3403,6 +4066,7 @@ groups:
     labels:
       component: goserver
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: stor
@@ -3412,6 +4076,7 @@ groups:
     labels:
       component: gitlab_static_net_zone
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: inf
@@ -3421,6 +4086,7 @@ groups:
     labels:
       component: web_ide_worker
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: inf
@@ -3430,6 +4096,7 @@ groups:
     labels:
       component: artifacts_cdn
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: stor
@@ -3439,6 +4106,7 @@ groups:
     labels:
       component: pages_range_requests
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: stor
@@ -3448,6 +4116,7 @@ groups:
     labels:
       component: pages_request_duration
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: stor
@@ -3457,6 +4126,7 @@ groups:
     labels:
       component: pages_total_requests
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: stor
@@ -3466,6 +4136,7 @@ groups:
     labels:
       component: registry_storage
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: stor
@@ -3475,6 +4146,7 @@ groups:
     labels:
       component: workhorse_upload
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: stor
@@ -3484,6 +4156,7 @@ groups:
     labels:
       component: jaeger_agent
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: inf
@@ -3493,6 +4166,7 @@ groups:
     labels:
       component: jaeger_collector
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: inf
@@ -3502,6 +4176,7 @@ groups:
     labels:
       component: jaeger_query
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: inf
@@ -3511,6 +4186,7 @@ groups:
     labels:
       component: grpc_requests
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: sv
@@ -3520,6 +4196,7 @@ groups:
     labels:
       component: apiserver
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: inf
@@ -3529,6 +4206,7 @@ groups:
     labels:
       component: cluster_scaleups
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: inf
@@ -3538,6 +4216,7 @@ groups:
     labels:
       component: elasticsearch_indexing_cluster
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: inf
@@ -3547,6 +4226,7 @@ groups:
     labels:
       component: elasticsearch_indexing_index
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: inf
@@ -3556,6 +4236,7 @@ groups:
     labels:
       component: elasticsearch_searching_cluster
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: inf
@@ -3565,6 +4246,7 @@ groups:
     labels:
       component: elasticsearch_searching_index
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: inf
@@ -3574,6 +4256,7 @@ groups:
     labels:
       component: fluentd_log_output
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "no"
       tier: inf
@@ -3583,6 +4266,7 @@ groups:
     labels:
       component: kibana_googlelb
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: inf
@@ -3592,6 +4276,7 @@ groups:
     labels:
       component: pubsub_subscriptions
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: inf
@@ -3601,6 +4286,7 @@ groups:
     labels:
       component: pubsub_topics
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: inf
@@ -3610,6 +4296,7 @@ groups:
     labels:
       component: pubsubbeat
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "no"
       tier: inf
@@ -3619,6 +4306,7 @@ groups:
     labels:
       component: stackdriver
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: inf
@@ -3628,6 +4316,7 @@ groups:
     labels:
       component: mail_delivery
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: sv
@@ -3637,6 +4326,7 @@ groups:
     labels:
       component: email_receiver
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: sv
@@ -3646,6 +4336,7 @@ groups:
     labels:
       component: emailsProcessed
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: sv
@@ -3655,6 +4346,7 @@ groups:
     labels:
       component: grafana
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: inf
@@ -3664,6 +4356,7 @@ groups:
     labels:
       component: grafana_datasources
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: inf
@@ -3673,6 +4366,7 @@ groups:
     labels:
       component: grafana_google_lb
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: inf
@@ -3682,6 +4376,7 @@ groups:
     labels:
       component: grafana_image_renderer
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: inf
@@ -3691,6 +4386,7 @@ groups:
     labels:
       component: prometheus
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: inf
@@ -3700,6 +4396,7 @@ groups:
     labels:
       component: prometheus_alert_sender
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: inf
@@ -3709,6 +4406,7 @@ groups:
     labels:
       component: rule_evaluation
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: inf
@@ -3718,6 +4416,7 @@ groups:
     labels:
       component: received_tcp_packets
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: inf
@@ -3727,6 +4426,7 @@ groups:
     labels:
       component: sent_tcp_packets
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: inf
@@ -3736,6 +4436,7 @@ groups:
     labels:
       component: nginx_ingress
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "yes"
       service_aggregation: "yes"
       tier: sv
@@ -3745,6 +4446,7 @@ groups:
     labels:
       component: gitlab_sshd
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: sv
@@ -3754,6 +4456,7 @@ groups:
     labels:
       component: goserver
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: sv
@@ -3763,6 +4466,7 @@ groups:
     labels:
       component: puma
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: sv
@@ -3772,6 +4476,7 @@ groups:
     labels:
       component: rails_sql
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: sv
@@ -3781,6 +4486,7 @@ groups:
     labels:
       component: registry_server
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: sv
@@ -3790,6 +4496,7 @@ groups:
     labels:
       component: sidekiq_execution
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: sv
@@ -3799,6 +4506,7 @@ groups:
     labels:
       component: sidekiq_queueing
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: sv
@@ -3808,6 +4516,7 @@ groups:
     labels:
       component: workhorse
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: sv
@@ -3817,6 +4526,7 @@ groups:
     labels:
       component: cloudsql
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "no"
       tier: inf
@@ -3826,6 +4536,7 @@ groups:
     labels:
       component: loadbalancer
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: inf
@@ -3835,6 +4546,7 @@ groups:
     labels:
       component: pgbouncer
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: db
@@ -3844,6 +4556,7 @@ groups:
     labels:
       component: rails_primary_sql
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: db
@@ -3853,6 +4566,7 @@ groups:
     labels:
       component: rails_replica_sql
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: db
@@ -3862,6 +4576,7 @@ groups:
     labels:
       component: transactions_primary
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: db
@@ -3871,6 +4586,7 @@ groups:
     labels:
       component: transactions_replica
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: db
@@ -3880,6 +4596,7 @@ groups:
     labels:
       component: pgbouncer
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: db
@@ -3889,6 +4606,7 @@ groups:
     labels:
       component: transactions_primary
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: db
@@ -3898,6 +4616,7 @@ groups:
     labels:
       component: transactions_replica
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: db
@@ -3907,6 +4626,7 @@ groups:
     labels:
       component: pgbouncer
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: db
@@ -3916,6 +4636,7 @@ groups:
     labels:
       component: transactions_primary
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: db
@@ -3925,6 +4646,7 @@ groups:
     labels:
       component: transactions_replica
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: db
@@ -3934,6 +4656,7 @@ groups:
     labels:
       component: pgbouncer
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: db
@@ -3943,6 +4666,7 @@ groups:
     labels:
       component: rails_primary_sql
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: db
@@ -3952,6 +4676,7 @@ groups:
     labels:
       component: rails_replica_sql
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: db
@@ -3961,6 +4686,7 @@ groups:
     labels:
       component: transactions_primary
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: db
@@ -3970,6 +4696,7 @@ groups:
     labels:
       component: transactions_replica
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: db
@@ -3979,6 +4706,7 @@ groups:
     labels:
       component: transactions
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: db
@@ -3988,6 +4716,7 @@ groups:
     labels:
       component: service
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: db
@@ -3997,6 +4726,7 @@ groups:
     labels:
       component: service
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: db
@@ -4006,6 +4736,7 @@ groups:
     labels:
       component: service
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: db
@@ -4015,6 +4746,7 @@ groups:
     labels:
       component: service
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: db
@@ -4024,6 +4756,7 @@ groups:
     labels:
       component: loadbalancer
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: sv
@@ -4033,6 +4766,7 @@ groups:
     labels:
       component: praefect_cloudsql
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "no"
       tier: stor
@@ -4042,6 +4776,7 @@ groups:
     labels:
       component: proxy
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: stor
@@ -4051,6 +4786,7 @@ groups:
     labels:
       component: replicator_queue
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: stor
@@ -4060,6 +4796,7 @@ groups:
     labels:
       component: http
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: sv
@@ -4069,6 +4806,7 @@ groups:
     labels:
       component: primary_server
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "no"
       tier: db
@@ -4078,6 +4816,7 @@ groups:
     labels:
       component: rails_cache
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: db
@@ -4087,6 +4826,7 @@ groups:
     labels:
       component: rails_redis_client
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: db
@@ -4096,6 +4836,7 @@ groups:
     labels:
       component: secondary_servers
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "no"
       tier: db
@@ -4105,6 +4846,7 @@ groups:
     labels:
       component: primary_server
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "no"
       tier: db
@@ -4114,6 +4856,7 @@ groups:
     labels:
       component: rails_cache
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: db
@@ -4123,6 +4866,7 @@ groups:
     labels:
       component: rails_redis_client
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: db
@@ -4132,6 +4876,7 @@ groups:
     labels:
       component: secondary_servers
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "no"
       tier: db
@@ -4141,6 +4886,7 @@ groups:
     labels:
       component: primary_server
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "no"
       tier: db
@@ -4150,6 +4896,7 @@ groups:
     labels:
       component: rails_redis_client
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: db
@@ -4159,6 +4906,7 @@ groups:
     labels:
       component: secondary_servers
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "no"
       tier: db
@@ -4168,6 +4916,7 @@ groups:
     labels:
       component: primary_server
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "no"
       tier: db
@@ -4177,6 +4926,7 @@ groups:
     labels:
       component: rails_redis_client
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: db
@@ -4186,6 +4936,7 @@ groups:
     labels:
       component: secondary_servers
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "no"
       tier: db
@@ -4195,6 +4946,47 @@ groups:
     labels:
       component: primary_server
       global_aggregation: "no"
+      monitor: global
+      regional_aggregation: "no"
+      service_aggregation: "no"
+      tier: db
+      type: redis-cluster-repo-cache
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: rails_cache
+      global_aggregation: "no"
+      monitor: global
+      regional_aggregation: "no"
+      service_aggregation: "yes"
+      tier: db
+      type: redis-cluster-repo-cache
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: rails_redis_client
+      global_aggregation: "no"
+      monitor: global
+      regional_aggregation: "no"
+      service_aggregation: "yes"
+      tier: db
+      type: redis-cluster-repo-cache
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: secondary_servers
+      global_aggregation: "no"
+      monitor: global
+      regional_aggregation: "no"
+      service_aggregation: "no"
+      tier: db
+      type: redis-cluster-repo-cache
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: primary_server
+      global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "no"
       tier: db
@@ -4204,6 +4996,7 @@ groups:
     labels:
       component: rails_redis_client
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: db
@@ -4213,6 +5006,7 @@ groups:
     labels:
       component: secondary_servers
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "no"
       tier: db
@@ -4222,6 +5016,7 @@ groups:
     labels:
       component: primary_server
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "no"
       tier: db
@@ -4231,6 +5026,7 @@ groups:
     labels:
       component: rails_redis_client
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: db
@@ -4240,6 +5036,7 @@ groups:
     labels:
       component: secondary_servers
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "no"
       tier: db
@@ -4249,6 +5046,7 @@ groups:
     labels:
       component: primary_server
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "no"
       tier: db
@@ -4258,6 +5056,7 @@ groups:
     labels:
       component: rails_redis_client
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: db
@@ -4267,6 +5066,7 @@ groups:
     labels:
       component: secondary_servers
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "no"
       tier: db
@@ -4276,6 +5076,7 @@ groups:
     labels:
       component: primary_server
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "no"
       tier: db
@@ -4285,6 +5086,7 @@ groups:
     labels:
       component: rails_redis_client
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: db
@@ -4294,6 +5096,7 @@ groups:
     labels:
       component: secondary_servers
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "no"
       tier: db
@@ -4303,6 +5106,7 @@ groups:
     labels:
       component: primary_server
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "no"
       tier: db
@@ -4312,6 +5116,7 @@ groups:
     labels:
       component: rails_redis_client
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: db
@@ -4321,6 +5126,7 @@ groups:
     labels:
       component: secondary_servers
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "no"
       tier: db
@@ -4330,6 +5136,7 @@ groups:
     labels:
       component: primary_server
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "no"
       tier: db
@@ -4339,6 +5146,7 @@ groups:
     labels:
       component: registry_redis_client
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: db
@@ -4348,6 +5156,7 @@ groups:
     labels:
       component: secondary_servers
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "no"
       tier: db
@@ -4357,6 +5166,7 @@ groups:
     labels:
       component: primary_server
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "no"
       tier: db
@@ -4366,6 +5176,7 @@ groups:
     labels:
       component: rails_cache
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: db
@@ -4375,6 +5186,7 @@ groups:
     labels:
       component: rails_redis_client
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: db
@@ -4384,6 +5196,7 @@ groups:
     labels:
       component: secondary_servers
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "no"
       tier: db
@@ -4393,6 +5206,7 @@ groups:
     labels:
       component: primary_server
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "no"
       tier: db
@@ -4402,6 +5216,7 @@ groups:
     labels:
       component: rails_redis_client
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: db
@@ -4411,6 +5226,7 @@ groups:
     labels:
       component: secondary_servers
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "no"
       tier: db
@@ -4420,6 +5236,7 @@ groups:
     labels:
       component: primary_server
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "no"
       tier: db
@@ -4429,6 +5246,7 @@ groups:
     labels:
       component: rails_redis_client
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: db
@@ -4438,6 +5256,7 @@ groups:
     labels:
       component: secondary_servers
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "no"
       tier: db
@@ -4447,6 +5266,7 @@ groups:
     labels:
       component: primary_server
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "no"
       tier: db
@@ -4456,6 +5276,7 @@ groups:
     labels:
       component: rails_redis_client
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: db
@@ -4465,6 +5286,7 @@ groups:
     labels:
       component: secondary_servers
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "no"
       tier: db
@@ -4474,6 +5296,7 @@ groups:
     labels:
       component: database
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "yes"
       service_aggregation: "yes"
       tier: sv
@@ -4483,6 +5306,7 @@ groups:
     labels:
       component: garbagecollector
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "yes"
       service_aggregation: "no"
       tier: sv
@@ -4492,6 +5316,7 @@ groups:
     labels:
       component: loadbalancer
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "no"
       tier: sv
@@ -4501,6 +5326,7 @@ groups:
     labels:
       component: redis
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "yes"
       service_aggregation: "yes"
       tier: sv
@@ -4510,6 +5336,7 @@ groups:
     labels:
       component: registry_cdn
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "yes"
       service_aggregation: "yes"
       tier: sv
@@ -4519,6 +5346,7 @@ groups:
     labels:
       component: registry_server
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "yes"
       service_aggregation: "yes"
       tier: sv
@@ -4528,6 +5356,7 @@ groups:
     labels:
       component: server_route_blob_upload_uuid_deletes
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "yes"
       service_aggregation: "yes"
       tier: sv
@@ -4537,6 +5366,7 @@ groups:
     labels:
       component: server_route_blob_upload_uuid_reads
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "yes"
       service_aggregation: "yes"
       tier: sv
@@ -4546,6 +5376,7 @@ groups:
     labels:
       component: server_route_blob_upload_uuid_writes
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "yes"
       service_aggregation: "yes"
       tier: sv
@@ -4555,6 +5386,7 @@ groups:
     labels:
       component: server_route_manifest_reads
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "yes"
       service_aggregation: "yes"
       tier: sv
@@ -4564,6 +5396,7 @@ groups:
     labels:
       component: server_route_manifest_writes
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "yes"
       service_aggregation: "yes"
       tier: sv
@@ -4573,6 +5406,7 @@ groups:
     labels:
       component: elasticsearch_indexing
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: inf
@@ -4582,6 +5416,7 @@ groups:
     labels:
       component: elasticsearch_searching
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: inf
@@ -4591,6 +5426,7 @@ groups:
     labels:
       component: global_search_indexing
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "no"
       tier: inf
@@ -4600,6 +5436,7 @@ groups:
     labels:
       component: pg_transactions
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "no"
       tier: inf
@@ -4609,6 +5446,7 @@ groups:
     labels:
       component: sentry_events
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: inf
@@ -4618,6 +5456,7 @@ groups:
     labels:
       component: llm_completion
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "no"
       tier: sv
@@ -4627,6 +5466,7 @@ groups:
     labels:
       component: sidekiq_execution
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: sv
@@ -4636,6 +5476,7 @@ groups:
     labels:
       component: sidekiq_execution_with_external_dependency
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "no"
       tier: sv
@@ -4645,6 +5486,7 @@ groups:
     labels:
       component: sidekiq_queueing
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "no"
       tier: sv
@@ -4654,6 +5496,7 @@ groups:
     labels:
       component: sidekiq_queueing_with_external_dependency
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "no"
       tier: sv
@@ -4663,6 +5506,7 @@ groups:
     labels:
       component: istio_internal_ingress
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: inf
@@ -4672,6 +5516,7 @@ groups:
     labels:
       component: istio_public_ingress
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: inf
@@ -4681,6 +5526,7 @@ groups:
     labels:
       component: vault
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: inf
@@ -4690,6 +5536,7 @@ groups:
     labels:
       component: vault_audit_log_request
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: inf
@@ -4699,6 +5546,7 @@ groups:
     labels:
       component: vault_audit_log_response
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: inf
@@ -4708,6 +5556,7 @@ groups:
     labels:
       component: vault_google_lb
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: inf
@@ -4717,6 +5566,7 @@ groups:
     labels:
       component: gitlab_net_zone
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: lb
@@ -4726,6 +5576,7 @@ groups:
     labels:
       component: gitlab_zone
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: lb
@@ -4735,6 +5586,7 @@ groups:
     labels:
       component: loadbalancer
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "yes"
       service_aggregation: "no"
       tier: sv
@@ -4744,6 +5596,7 @@ groups:
     labels:
       component: loadbalancer_https
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "yes"
       service_aggregation: "no"
       tier: sv
@@ -4753,6 +5606,7 @@ groups:
     labels:
       component: web_pages_server
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "yes"
       service_aggregation: "yes"
       tier: sv
@@ -4762,6 +5616,7 @@ groups:
     labels:
       component: global_search
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "yes"
       service_aggregation: "no"
       tier: sv
@@ -4771,6 +5626,7 @@ groups:
     labels:
       component: imagescaler
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "yes"
       service_aggregation: "no"
       tier: sv
@@ -4780,6 +5636,7 @@ groups:
     labels:
       component: loadbalancer
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "no"
       tier: sv
@@ -4789,6 +5646,7 @@ groups:
     labels:
       component: rails_request
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "yes"
       service_aggregation: "yes"
       tier: sv
@@ -4798,6 +5656,7 @@ groups:
     labels:
       component: workhorse
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "yes"
       service_aggregation: "no"
       tier: sv
@@ -4807,6 +5666,7 @@ groups:
     labels:
       component: loadbalancer
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "no"
       tier: sv
@@ -4816,6 +5676,7 @@ groups:
     labels:
       component: rails_request
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "yes"
       service_aggregation: "yes"
       tier: sv
@@ -4825,6 +5686,7 @@ groups:
     labels:
       component: workhorse
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "yes"
       service_aggregation: "yes"
       tier: sv
@@ -4834,6 +5696,7 @@ groups:
     labels:
       component: async_jobs
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: sv
@@ -4843,6 +5706,7 @@ groups:
     labels:
       component: http
       global_aggregation: "no"
+      monitor: global
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: sv

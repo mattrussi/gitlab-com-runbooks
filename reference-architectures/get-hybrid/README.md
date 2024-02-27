@@ -49,6 +49,13 @@ Here are some examples of the dashboards generated for this reference architectu
 
 Saturation monitoring is handled differently to the service-level monitoring described above. Each monitored resource is represented as a finite resource with a current value between 0% (unutilized) and 100% (completely saturated). Each saturation resource has a threshold SLO over which it will alert.
 
+:warning: Some metrics below require user-supplied recording rules for full functionality.
+
+* `aws_rds_memory_saturation` - requires metric `rdsInstanceRAMBytes`
+* `aws_rds_used_connections` - requires metric `rdsInstanceRAMBytes`
+
+Note that these metrics may have other requirements, please see the metric definitions for further details.
+
 <!-- MARKER:saturation: do not edit this section directly. -->
 ### Monitored Saturation Resources
 

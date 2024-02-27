@@ -14,6 +14,9 @@
 
 * [stackdriver](https://console.cloud.google.com/logs)
 
+## Troubleshooting Pointers
+
+* [../uncategorized/subnet-allocations.md](../uncategorized/subnet-allocations.md)
 <!-- END_MARKER -->
 
 ## Summary

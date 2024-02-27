@@ -380,7 +380,9 @@
           },
         },
         job_id: {
-          type: 'float',
+          type: 'keyword',
+          store: true,
+          ignore_above: 256,
         },
         job_size_bytes: {
           type: 'long',
@@ -532,7 +534,9 @@
           },
         },
         project_id: {
-          type: 'float',
+          type: 'keyword',
+          store: true,
+          ignore_above: 256,
         },
         project_path: {
           type: 'text',

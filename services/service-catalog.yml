@@ -1488,6 +1488,33 @@ services:
       monitors:
         primary_grafana_dashboard: redis-cluster-chat-cache-main/redis-cluster-chat-cache-overview
 
+  - name: redis-cluster-repo-cache
+    tier: db
+    friendly_name: Redis Cluster Repo Cache
+    label: RedisClusterRepoCache
+    owner: scalability:practices
+    technical:
+      project:
+        - https://github.com/redis/redis
+      documents:
+        design:
+        architecture:
+        readiness_review:
+        sre_guide: https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/redis/redis-cluster.md
+        developer_guide: https://docs.gitlab.com/ee/development/redis.html#redis-guidelines
+        service:
+          - https://redis.io/documentation
+          - https://docs.gitlab.com/omnibus/settings/redis.html
+        security:
+      dependencies:
+        - service:
+      logging:
+        - name: system
+          permalink:
+    observability:
+      monitors:
+        primary_grafana_dashboard: redis-cluster-repo-cache-main/redis-cluster-repo-cache-overview
+
   - name: redis-repository-cache
     tier: db
     friendly_name: Redis Repository Cache
@@ -2524,9 +2551,31 @@ services:
         service:
         security:
       logging:
-        - name:
-          permalink:
+        - name: Elasticsearch
+          permalink: https://nonprod-log.gitlab.net/app/r/s/BLV6G
     observability:
       monitors:
         grafana_folder:
         primary_grafana_dashboard:
+
+  - name: glgo
+    tier: sv
+    friendly_name: Identity layer service for the Google Cloud integration
+    label: glgo
+    teams:
+      - container_registry
+    owner: container_registry
+    technical:
+      project:
+        - https://gitlab.com/gitlab-org/architecture/gitlab-gcp-integration/glgo
+      documents:
+        architecture: https://gitlab.com/gitlab-org/architecture/gitlab-gcp-integration/design-doc#high-level-architecture
+        service:
+          - https://gitlab.com/gitlab-org/architecture/gitlab-gcp-integration/glgo/-/blob/main/README.md
+        readiness_review:
+      logging:
+        - name: glgo
+          permalink: https://console.cloud.google.com/run/detail/us-east1/glgo/logs?project=gitlab-runway-production
+    observability:
+      monitors:
+        primary_grafana_dashboard: glgo-main/glgo-overview

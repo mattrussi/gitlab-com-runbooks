@@ -92,7 +92,9 @@
 
 <!-- ## Durability -->
 
-<!-- ## Security/Compliance -->
+## Security/Compliance
+
+* [WAL logs analysis](wal_log_analysis.md)
 
 <!-- ## Monitoring/Alerting -->
 

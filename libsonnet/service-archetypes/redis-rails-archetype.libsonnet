@@ -2,6 +2,7 @@ local redisArchetype = import 'service-archetypes/redis-archetype.libsonnet';
 local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local histogramApdex = metricsCatalog.histogramApdex;
 local rateMetric = metricsCatalog.rateMetric;
+local findServicesWithTag = (import 'servicemetrics/metrics-catalog.libsonnet').findServicesWithTag;
 
 function(
   type,
@@ -38,6 +39,8 @@ function(
           counter='gitlab_redis_client_exceptions_total',
           selector=railsStorageSelector,
         ),
+
+        emittedBy: findServicesWithTag(tag='rails'),
       },
     },
   }

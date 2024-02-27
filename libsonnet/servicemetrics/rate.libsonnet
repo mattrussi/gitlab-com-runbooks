@@ -1,8 +1,7 @@
+local metric = import './metric.libsonnet';
 local aggregations = import 'promql/aggregations.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
-local recordingRuleRegistry = import 'recording-rule-registry.libsonnet';  // TODO: fix circular dependency
 local optionalOffset = import 'recording-rules/lib/optional-offset.libsonnet';
-local validateMetric = (import './validation.libsonnet').validateMetric;
 local metricLabelsSelectorsMixin = (import './metrics-mixin.libsonnet').metricLabelsSelectorsMixin;
 
 local generateInstanceFilterQuery(instanceFilter) =
@@ -32,7 +31,7 @@ local generateRangeFunctionQuery(rate, rangeFunction, additionalSelectors, range
     selector={},
     instanceFilter='',
     useRecordingRuleRegistry=true,
-  ):: validateMetric({
+  ):: metric.new({
     counter: counter,
     selector: selector,
     instanceFilter: instanceFilter,
@@ -53,7 +52,7 @@ local generateRangeFunctionQuery(rate, rangeFunction, additionalSelectors, range
     aggregatedRateQuery(aggregationLabels, selector, rangeInterval, withoutLabels=[], offset=null)::
       local combinedSelector = selectors.without(selectors.merge(self.selector, selector), withoutLabels);
 
-      local resolvedRecordingRule = recordingRuleRegistry.resolveRecordingRuleFor(
+      local resolvedRecordingRule = self.config.recordingRuleRegistry.resolveRecordingRuleFor(
         aggregationFunction='sum',
         aggregationLabels=aggregationLabels,
         rangeVectorFunction='rate',
@@ -89,7 +88,7 @@ local generateRangeFunctionQuery(rate, rangeFunction, additionalSelectors, range
     selector='',
     instanceFilter='',
     clampMinZero=false,
-  ):: validateMetric({
+  ):: metric.new({
     counter: counter,
     selector: selector,
     instanceFilter: instanceFilter,

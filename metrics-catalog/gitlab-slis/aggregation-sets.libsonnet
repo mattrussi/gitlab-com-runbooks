@@ -1,6 +1,7 @@
+local gitlabMetricsConfig = import 'gitlab-metrics-config.libsonnet';
 local sliDefinition = import 'gitlab-slis/sli-definition.libsonnet';
 local aggregationSet = import 'servicemetrics/aggregation-set.libsonnet';
-local recordingRuleRegistry = import 'servicemetrics/recording-rule-registry.libsonnet';
+local recordingRuleRegistry = gitlabMetricsConfig.recordingRuleRegistry;
 
 local defaultLabels = ['environment', 'tier', 'type', 'stage'];
 local globalLabels = ['env'];

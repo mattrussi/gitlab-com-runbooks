@@ -87,7 +87,7 @@ test.suite({
           or
           (
             0 * group by(a,b) (
-              source_ops:rate_5m{hello="world"}
+              source_ops:rate_5m{hello="world",selector="is-present"}
             )
           )
         |||,

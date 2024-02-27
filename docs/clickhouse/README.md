@@ -15,6 +15,7 @@
 
 ## Troubleshooting Pointers
 
+* [ClickHouse Cloud Failure Remediation, Backup & Restore Process](backup-restore.md)
 * [ErrorTracking main troubleshooting document](../errortracking/overview.md)
 * [Managing Sentry in Kubernetes](../sentry/sentry.md)
 <!-- END_MARKER -->
@@ -24,6 +25,10 @@
 [ClickHouse Cloud](https://clickhouse.cloud) is a managed verion of [ClickHouse DB](https://github.com/ClickHouse/ClickHouse).  It is managed by [ClickHouse Inc.](https://clickhouse.com)
 
 We are adding ClickHouse Cloud databases to the GitLab.com staging and production environments.
+
+### Contact
+
+Any questions please reach out to the team in Slack via `#f_clickhouse` or tag `@gitlab-org/maintainers/clickhouse`
 
 ### Provisioners
 
@@ -61,6 +66,10 @@ GitLab.com Production Database has the following attributes:
 Name: gitlab-com-production
 Console URL: [https://clickhouse.cloud/service/ad02dd6a-1dde-4f8f-858d-37462fd06058](https://clickhouse.cloud/service/ad02dd6a-1dde-4f8f-858d-37462fd06058)
 
+### ClickHouse Cloud Backup & Restore
+
+Runbook for restoring a ClickHouse Cloud instance from a backup after failure of an instance. [[Link](clickhouse-cloud-backup-restore.md)]
+
 <!-- ## Architecture -->
 
 <!-- ## Performance -->
@@ -76,5 +85,7 @@ Console URL: [https://clickhouse.cloud/service/ad02dd6a-1dde-4f8f-858d-37462fd06
 ## Monitoring/Alerting
 
 Built in Monitoring Dashboards can be accessed via the [ClickHouse Cloud Console](https://clickhouse.cloud/services).  We are investigating how to integrate these metrics into GitLab's grafana and alerting setup.
+
+Dashboard for monitoring and alerting performance metrics, [here](https://dashboards.gitlab.net/d/thEkJB_Mz/clickhouse-cloud-dashboard)
 
 <!-- ## Links to further Documentation -->

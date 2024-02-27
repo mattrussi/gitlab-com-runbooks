@@ -195,4 +195,6 @@ local buildValidator(definition) =
           {}
         ),
     },
+
+  defaultSourceBurnRates: defaultSourceBurnRates,
 }

@@ -60,6 +60,8 @@ metricsCatalog.serviceDefinition({
         selector=baseSelector { code: { re: '5..' } },
       ),
 
+      emittedBy: ['api', 'ops-gitlab-net', 'web'],
+
       significantLabels: ['code'],
 
       toolingLinks: [
@@ -92,7 +94,7 @@ metricsCatalog.serviceDefinition({
 
       apdex: histogramApdex(
         histogram='job_queue_duration_seconds_bucket',
-        selector={ shared_runner: 'true', jobs_running_for_project: { re: '^(0|1|2|3|4)$' } },
+        selector={ shared_runner: 'true', jobs_running_for_project: { oneOf: ['^(0|1|2|3|4)$'] } },
         satisfiedThreshold=60,
       ),
 
@@ -179,6 +181,8 @@ metricsCatalog.serviceDefinition({
         counter='gitlab_ci_queue_retrieval_duration_seconds_count',
       ),
 
+      emittedBy: ['api'],
+
       monitoringThresholds+: {
         apdexScore: 0.999,
       },
@@ -207,6 +211,8 @@ metricsCatalog.serviceDefinition({
       errorRate: rateMetric(
         counter='job_trace_archive_failed_total',
       ),
+
+      emittedBy: ['ops-gitlab-net', 'sidekiq'],
 
       significantLabels: [],
 

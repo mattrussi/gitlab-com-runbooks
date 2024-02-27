@@ -25,10 +25,10 @@ groups:
     expr: |
       avg by (environment,tier,type,stage,shard) (
         sum by (environment,tier,type,stage,node) (
-          kube_pod_container_resource_requests{resource="cpu", unit="core", type=~"kube|redis-cluster-cache|redis-cluster-feature-flag|redis-cluster-shared-state|redis-cluster-queues-meta|redis-sidekiq|redis-tracechunks|redis-cluster-ratelimiting|redis-cluster-chat-cache|redis-sessions|redis-registry-cache|redis-repository-cache|redis-db-load-balancing|redis-pubsub|redis|vault"}
+          kube_pod_container_resource_requests{resource="cpu", unit="core", type=~"kube|redis-cluster-cache|redis-cluster-feature-flag|redis-cluster-shared-state|redis-cluster-queues-meta|redis-cluster-repo-cache|redis-sidekiq|redis-tracechunks|redis-cluster-ratelimiting|redis-cluster-chat-cache|redis-sessions|redis-registry-cache|redis-repository-cache|redis-db-load-balancing|redis-pubsub|redis|vault"}
         )
         / on (node) group_left(cluster,env,tier,type,stage,shard)
-        kube_node_status_allocatable:labeled{type=~"kube|redis-cluster-cache|redis-cluster-feature-flag|redis-cluster-shared-state|redis-cluster-queues-meta|redis-sidekiq|redis-tracechunks|redis-cluster-ratelimiting|redis-cluster-chat-cache|redis-sessions|redis-registry-cache|redis-repository-cache|redis-db-load-balancing|redis-pubsub|redis|vault",resource="cpu"}
+        kube_node_status_allocatable:labeled{type=~"kube|redis-cluster-cache|redis-cluster-feature-flag|redis-cluster-shared-state|redis-cluster-queues-meta|redis-cluster-repo-cache|redis-sidekiq|redis-tracechunks|redis-cluster-ratelimiting|redis-cluster-chat-cache|redis-sessions|redis-registry-cache|redis-repository-cache|redis-db-load-balancing|redis-pubsub|redis|vault",resource="cpu"}
       )
       * 100
   - record: gitlab_component_utilization:kube_node_memory_requests_percent:1h
@@ -41,10 +41,10 @@ groups:
     expr: |
       avg by (environment,tier,type,stage,shard) (
         sum by (environment,tier,type,stage,node) (
-          kube_pod_container_resource_requests{resource="memory", unit="byte", type=~"kube|redis-cluster-cache|redis-cluster-feature-flag|redis-cluster-shared-state|redis-cluster-queues-meta|redis-sidekiq|redis-tracechunks|redis-cluster-ratelimiting|redis-cluster-chat-cache|redis-sessions|redis-registry-cache|redis-repository-cache|redis-db-load-balancing|redis-pubsub|redis|vault"}
+          kube_pod_container_resource_requests{resource="memory", unit="byte", type=~"kube|redis-cluster-cache|redis-cluster-feature-flag|redis-cluster-shared-state|redis-cluster-queues-meta|redis-cluster-repo-cache|redis-sidekiq|redis-tracechunks|redis-cluster-ratelimiting|redis-cluster-chat-cache|redis-sessions|redis-registry-cache|redis-repository-cache|redis-db-load-balancing|redis-pubsub|redis|vault"}
         )
         / on (node) group_left(cluster,env,tier,type,stage,shard)
-        kube_node_status_allocatable:labeled{type=~"kube|redis-cluster-cache|redis-cluster-feature-flag|redis-cluster-shared-state|redis-cluster-queues-meta|redis-sidekiq|redis-tracechunks|redis-cluster-ratelimiting|redis-cluster-chat-cache|redis-sessions|redis-registry-cache|redis-repository-cache|redis-db-load-balancing|redis-pubsub|redis|vault",resource="memory"}
+        kube_node_status_allocatable:labeled{type=~"kube|redis-cluster-cache|redis-cluster-feature-flag|redis-cluster-shared-state|redis-cluster-queues-meta|redis-cluster-repo-cache|redis-sidekiq|redis-tracechunks|redis-cluster-ratelimiting|redis-cluster-chat-cache|redis-sessions|redis-registry-cache|redis-repository-cache|redis-db-load-balancing|redis-pubsub|redis|vault",resource="memory"}
       )
       * 100
   - record: gitlab_component_utilization:pg_table_size_bytes:topk:1h

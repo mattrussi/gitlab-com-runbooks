@@ -120,7 +120,7 @@ groups:
         clamp_min(
           clamp_max(
             count by (cluster, env, environment, label_pool, tier, type, stage, shard) (
-              kube_node_labels:labeled{env="gprd",type=~"kube|redis-cluster-cache|redis-cluster-feature-flag|redis-cluster-shared-state|redis-cluster-queues-meta|redis-sidekiq|redis-tracechunks|redis-cluster-ratelimiting|redis-cluster-chat-cache|redis-sessions|redis-registry-cache|redis-repository-cache|redis-db-load-balancing|redis-pubsub|redis|vault"}
+              kube_node_labels:labeled{env="gprd",type=~"kube|redis-cluster-cache|redis-cluster-feature-flag|redis-cluster-shared-state|redis-cluster-queues-meta|redis-cluster-repo-cache|redis-sidekiq|redis-tracechunks|redis-cluster-ratelimiting|redis-cluster-chat-cache|redis-sessions|redis-registry-cache|redis-repository-cache|redis-db-load-balancing|redis-pubsub|redis|vault"}
             )
             / on(cluster, env, environment, label_pool) group_left() (
               label_replace(
@@ -130,7 +130,7 @@ groups:
               * on(cluster, env, environment) group_left()
               count by (cluster, env, environment) (
                 group by (cluster, env, environment, label_topology_kubernetes_io_zone) (
-                  kube_node_labels:labeled{env="gprd",type=~"kube|redis-cluster-cache|redis-cluster-feature-flag|redis-cluster-shared-state|redis-cluster-queues-meta|redis-sidekiq|redis-tracechunks|redis-cluster-ratelimiting|redis-cluster-chat-cache|redis-sessions|redis-registry-cache|redis-repository-cache|redis-db-load-balancing|redis-pubsub|redis|vault"}
+                  kube_node_labels:labeled{env="gprd",type=~"kube|redis-cluster-cache|redis-cluster-feature-flag|redis-cluster-shared-state|redis-cluster-queues-meta|redis-cluster-repo-cache|redis-sidekiq|redis-tracechunks|redis-cluster-ratelimiting|redis-cluster-chat-cache|redis-sessions|redis-registry-cache|redis-repository-cache|redis-db-load-balancing|redis-pubsub|redis|vault"}
                 )
               )
             )
@@ -177,15 +177,15 @@ groups:
         clamp_min(
           clamp_max(
             (
-              process_open_fds{env="gprd",type=~"ai-gateway|errortracking|ext-pvs|tracing"}
+              process_open_fds{env="gprd",type=~"ai-gateway|errortracking|ext-pvs|glgo|tracing"}
               /
-              process_max_fds{env="gprd",type=~"ai-gateway|errortracking|ext-pvs|tracing"}
+              process_max_fds{env="gprd",type=~"ai-gateway|errortracking|ext-pvs|glgo|tracing"}
             )
             or
             (
-              ruby_file_descriptors{env="gprd",type=~"ai-gateway|errortracking|ext-pvs|tracing"}
+              ruby_file_descriptors{env="gprd",type=~"ai-gateway|errortracking|ext-pvs|glgo|tracing"}
               /
-              ruby_process_max_fds{env="gprd",type=~"ai-gateway|errortracking|ext-pvs|tracing"}
+              ruby_process_max_fds{env="gprd",type=~"ai-gateway|errortracking|ext-pvs|glgo|tracing"}
             )
             ,
             1)
@@ -268,7 +268,7 @@ groups:
             histogram_quantile(0.9999, sum by(le, env, environment, type, shard, revision_name)
               (
                 avg_over_time(
-                  stackdriver_cloud_run_revision_run_googleapis_com_container_cpu_utilizations_bucket{job="runway-exporter",env="gprd",type=~"ai-gateway|ext-pvs"}[30m]
+                  stackdriver_cloud_run_revision_run_googleapis_com_container_cpu_utilizations_bucket{job="runway-exporter",env="gprd",type=~"ai-gateway|ext-pvs|glgo"}[30m]
                 )
               )
             )
@@ -287,7 +287,7 @@ groups:
         clamp_min(
           clamp_max(
             sum by (env, environment, type, shard, revision_name) (
-              stackdriver_cloud_run_revision_run_googleapis_com_container_instance_count{job="runway-exporter",state="active",env="gprd",type=~"ai-gateway|ext-pvs"}
+              stackdriver_cloud_run_revision_run_googleapis_com_container_instance_count{job="runway-exporter",state="active",env="gprd",type=~"ai-gateway|ext-pvs|glgo"}
             )
             /
             100
@@ -308,7 +308,7 @@ groups:
             histogram_quantile(0.9999, sum by(le, env, environment, type, shard, revision_name)
               (
                 rate(
-                  stackdriver_cloud_run_revision_run_googleapis_com_container_max_request_concurrencies_bucket{job="runway-exporter",state="active",env="gprd",type=~"ai-gateway|ext-pvs"}[30m]
+                  stackdriver_cloud_run_revision_run_googleapis_com_container_max_request_concurrencies_bucket{job="runway-exporter",state="active",env="gprd",type=~"ai-gateway|ext-pvs|glgo"}[30m]
                 )
               )
             ) / 100
@@ -329,7 +329,7 @@ groups:
             histogram_quantile(0.9999, sum by(le, env, environment, type, shard, revision_name)
               (
                 avg_over_time(
-                  stackdriver_cloud_run_revision_run_googleapis_com_container_memory_utilizations_bucket{job="runway-exporter",env="gprd",type=~"ai-gateway|ext-pvs"}[30m]
+                  stackdriver_cloud_run_revision_run_googleapis_com_container_memory_utilizations_bucket{job="runway-exporter",env="gprd",type=~"ai-gateway|ext-pvs|glgo"}[30m]
                 )
               )
             )
@@ -356,7 +356,7 @@ groups:
   interval: 1m
   partial_response_strategy: warn
   rules:
-  - alert: component_saturation_slo_out_of_bounds
+  - alert: component_saturation_slo_out_of_bounds:gcp_quota_limit_s4
     for: 15m
     annotations:
       title: The GCP Quota utilization per environment resource of the {{ $labels.type
@@ -415,7 +415,7 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="gcp_quota_limit_s4",env="gprd",monitor="global"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="gcp_quota_limit_s4",env="gprd",monitor="global"}
-  - alert: component_saturation_slo_out_of_bounds
+  - alert: component_saturation_slo_out_of_bounds:gcp_quota_limit_vertex_ai
     for: 15m
     annotations:
       title: The GCP Quota utilization per environment resource of the {{ $labels.type
@@ -474,7 +474,7 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="gcp_quota_limit_vertex_ai",env="gprd",monitor="global"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="gcp_quota_limit_vertex_ai",env="gprd",monitor="global"}
-  - alert: component_saturation_slo_out_of_bounds
+  - alert: component_saturation_slo_out_of_bounds:go_goroutines
     for: 5m
     annotations:
       title: The Go goroutines Utilization per Node resource of the {{ $labels.type
@@ -534,7 +534,7 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="go_goroutines",env="gprd",monitor="global"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="go_goroutines",env="gprd",monitor="global"}
-  - alert: component_saturation_slo_out_of_bounds
+  - alert: component_saturation_slo_out_of_bounds:go_memory
     for: 5m
     annotations:
       title: The Go Memory Utilization per Node resource of the {{ $labels.type }}
@@ -593,7 +593,7 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="go_memory",env="gprd",monitor="global"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="go_memory",env="gprd",monitor="global"}
-  - alert: component_saturation_slo_out_of_bounds
+  - alert: component_saturation_slo_out_of_bounds:kube_go_memory
     for: 5m
     annotations:
       title: The Go Memory Utilization per Node resource of the {{ $labels.type }}
@@ -648,7 +648,7 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="kube_go_memory",env="gprd",monitor="global"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="kube_go_memory",env="gprd",monitor="global"}
-  - alert: component_saturation_slo_out_of_bounds
+  - alert: component_saturation_slo_out_of_bounds:kube_node_ips
     for: 5m
     annotations:
       title: The Node IP subnet saturation resource of the {{ $labels.type }} service
@@ -705,7 +705,7 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="kube_node_ips",env="gprd",monitor="global"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="kube_node_ips",env="gprd",monitor="global"}
-  - alert: component_saturation_slo_out_of_bounds
+  - alert: component_saturation_slo_out_of_bounds:kube_pool_max_nodes
     for: 5m
     annotations:
       title: The Kube Pool Max Node Limit resource of the {{ $labels.type }} service
@@ -782,7 +782,7 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="kube_pool_max_nodes",env="gprd",monitor="global"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="kube_pool_max_nodes",env="gprd",monitor="global"}
-  - alert: component_saturation_slo_out_of_bounds
+  - alert: component_saturation_slo_out_of_bounds:max_concurrent_inferences
     for: 5m
     annotations:
       title: The Maximum number of concurrent inferences to a large language model
@@ -841,7 +841,7 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="max_concurrent_inferences",env="gprd",monitor="global"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="max_concurrent_inferences",env="gprd",monitor="global"}
-  - alert: component_saturation_slo_out_of_bounds
+  - alert: component_saturation_slo_out_of_bounds:max_concurrent_inferences_per_engine
     for: 5m
     annotations:
       title: The Maximum number of concurrent inferences to a large language model
@@ -900,7 +900,7 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="max_concurrent_inferences_per_engine",env="gprd",monitor="global"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="max_concurrent_inferences_per_engine",env="gprd",monitor="global"}
-  - alert: component_saturation_slo_out_of_bounds
+  - alert: component_saturation_slo_out_of_bounds:open_fds
     for: 5m
     annotations:
       title: The Open file descriptor utilization per instance resource of the {{
@@ -972,7 +972,7 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="open_fds",env="gprd",monitor="global"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="open_fds",env="gprd",monitor="global"}
-  - alert: component_saturation_slo_out_of_bounds
+  - alert: component_saturation_slo_out_of_bounds:pg_primary_cpu
     for: 5m
     annotations:
       title: The Average CPU Utilization on Postgres Primary Instance resource of
@@ -1036,7 +1036,7 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="pg_primary_cpu",env="gprd",monitor="global"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="pg_primary_cpu",env="gprd",monitor="global"}
-  - alert: component_saturation_slo_out_of_bounds
+  - alert: component_saturation_slo_out_of_bounds:pg_vacuum_activity_v2
     for: 5m
     annotations:
       title: The Postgres Autovacuum Activity (non-sampled) resource of the {{ $labels.type
@@ -1105,7 +1105,7 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="pg_vacuum_activity_v2",env="gprd",monitor="global"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="pg_vacuum_activity_v2",env="gprd",monitor="global"}
-  - alert: component_saturation_slo_out_of_bounds
+  - alert: component_saturation_slo_out_of_bounds:pg_walsender_cpu
     for: 5m
     annotations:
       title: The Walsender CPU Saturation resource of the {{ $labels.type }} service
@@ -1174,7 +1174,7 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="pg_walsender_cpu",env="gprd",monitor="global"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="pg_walsender_cpu",env="gprd",monitor="global"}
-  - alert: component_saturation_slo_out_of_bounds
+  - alert: component_saturation_slo_out_of_bounds:runway_container_cpu_utilization
     for: 5m
     annotations:
       title: The Runway Container CPU Utilization resource of the {{ $labels.type
@@ -1235,7 +1235,7 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="runway_container_cpu_utilization",env="gprd",monitor="global"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="runway_container_cpu_utilization",env="gprd",monitor="global"}
-  - alert: component_saturation_slo_out_of_bounds
+  - alert: component_saturation_slo_out_of_bounds:runway_container_instance_utilization
     for: 5m
     annotations:
       title: The Runway Container Instance Utilization resource of the {{ $labels.type
@@ -1292,7 +1292,7 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="runway_container_instance_utilization",env="gprd",monitor="global"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="runway_container_instance_utilization",env="gprd",monitor="global"}
-  - alert: component_saturation_slo_out_of_bounds
+  - alert: component_saturation_slo_out_of_bounds:runway_container_max_concurrent_requests
     for: 5m
     annotations:
       title: The Runway Max Concurrent Requests resource of the {{ $labels.type }}
@@ -1353,7 +1353,7 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="runway_container_max_concurrent_requests",env="gprd",monitor="global"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="runway_container_max_concurrent_requests",env="gprd",monitor="global"}
-  - alert: component_saturation_slo_out_of_bounds
+  - alert: component_saturation_slo_out_of_bounds:runway_container_memory_utilization
     for: 5m
     annotations:
       title: The Runway Container Memory Utilization resource of the {{ $labels.type

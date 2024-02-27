@@ -23,6 +23,7 @@ local thanosServiceSelector = { type: 'thanos', namespace: 'thanos' };
 metricsCatalog.serviceDefinition({
   type: 'thanos',
   tier: 'inf',
+  tenants: ['gitlab-ops'],
 
   tags: ['golang', 'thanos'],
 
@@ -371,7 +372,7 @@ metricsCatalog.serviceDefinition({
       |||,
 
       local thanosMemcachedSelector = thanosServiceSelector {
-        job: { re: 'thanos-(labels|querier)-metrics|thanos-(.+)-(bucket|index)-metrics' },
+        job: { oneOf: ['thanos-(labels|querier)-metrics|thanos-(.+)-(bucket|index)-metrics'] },
         grpc_type: 'unary',
       },
 

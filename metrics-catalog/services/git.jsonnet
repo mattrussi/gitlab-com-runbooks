@@ -214,6 +214,8 @@ metricsCatalog.serviceDefinition({
         }
       ),
 
+      emittedBy: ['internal-api'],
+
       significantLabels: ['region'],
 
       toolingLinks: [
@@ -242,6 +244,8 @@ metricsCatalog.serviceDefinition({
         counter='haproxy_backend_sessions_total',
         selector={ backend: { oneOf: ['ssh', 'altssh'] } },
       ),
+
+      emittedBy: ['ci', 'frontend'],
 
       significantLabels: [],
 

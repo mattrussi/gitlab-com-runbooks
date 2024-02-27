@@ -25,8 +25,10 @@
 
 * [../certificates/chef_hybrid.md](../certificates/chef_hybrid.md)
 * [../certificates/chef_vault.md](../certificates/chef_vault.md)
+* [../certificates/cloudflare.md](../certificates/cloudflare.md)
 * [../certificates/gcp.md](../certificates/gcp.md)
 * [../certificates/gkms.md](../certificates/gkms.md)
+* [ClickHouse Cloud Failure Remediation, Backup & Restore Process](../clickhouse/backup-restore.md)
 * [Cloudflare for the on-call](../cloudflare/oncall.md)
 * [VM Build Process with Terraform and Chef](../config_management/chef-process-overview.md)
 * [Chef Vault Basics](../config_management/chef-vault.md)

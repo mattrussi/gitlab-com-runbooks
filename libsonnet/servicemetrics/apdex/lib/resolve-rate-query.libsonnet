@@ -1,10 +1,9 @@
-local recordingRuleRegistry = import '../../recording-rule-registry.libsonnet';
 local aggregations = import 'promql/aggregations.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
 local optionalOffset = import 'recording-rules/lib/optional-offset.libsonnet';
 
 {
-  resolveRateQuery(metricName, selector, rangeInterval, useRecordingRuleRegistry, offset, aggregationFunction=null, aggregationLabels=[])::
+  resolveRateQuery(metricName, selector, rangeInterval, recordingRuleRegistry, offset, aggregationFunction=null, aggregationLabels=[])::
     local recordedRate = recordingRuleRegistry.resolveRecordingRuleFor(
       aggregationFunction=aggregationFunction,
       aggregationLabels=aggregationLabels,
@@ -14,7 +13,7 @@ local optionalOffset = import 'recording-rules/lib/optional-offset.libsonnet';
       selector=selector,
       offset=offset
     );
-    if useRecordingRuleRegistry && recordedRate != null then
+    if recordedRate != null then
       recordedRate
     else
       local query = 'rate(%(metric)s{%(selector)s}[%(rangeInterval)s]%(optionalOffset)s)' % {

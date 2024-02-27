@@ -22,7 +22,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
-            rate(k8s_api_proxy_routing_duration_seconds_bucket{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",status=~"success",type="kas"}[5m])
+            rate(tunnel_routing_duration_seconds_bucket{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",status=~"success",type="kas"}[5m])
           )
         )
       runbook: docs/kas/README.md
@@ -71,7 +71,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
-            rate(k8s_api_proxy_routing_duration_seconds_bucket{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",status=~"success",type="kas"}[5m])
+            rate(tunnel_routing_duration_seconds_bucket{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",status=~"success",type="kas"}[5m])
           )
         )
       runbook: docs/kas/README.md

@@ -1,5 +1,7 @@
 local intervalForDuration = import './interval-for-duration.libsonnet';
-local recordingRuleRegistry = import './recording-rule-registry.libsonnet';
+local gitlabMetricsConfig = import 'gitlab-metrics-config.libsonnet';
+local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
+local recordingRuleRegistry = gitlabMetricsConfig.recordingRuleRegistry;
 local recordingRules = import 'recording-rules/recording-rules.libsonnet';
 
 local recordingRuleGroupsForServiceForBurnRate(serviceDefinition, componentAggregationSet, nodeAggregationSet, shardAggregationSet, burnRate) =
@@ -38,7 +40,10 @@ local recordingRuleGroupsForServiceForBurnRate(serviceDefinition, componentAggre
       std.flatMap(
         function(r) r.generateRecordingRulesForService(serviceDefinition),
         rulesetGenerators
-      ) + shardLevelIndicatorsRules.generateRecordingRulesForService(serviceDefinition, shardLevelIndicators),
+      ) + if std.length(shardLevelIndicators) > 0 then
+        shardLevelIndicatorsRules.generateRecordingRulesForService(serviceDefinition, shardLevelIndicators)
+      else
+        [],
   };
 
 local featureCategoryRecordingRuleGroupsForService(serviceDefinition, aggregationSet, burnRate) =
@@ -56,7 +61,7 @@ local featureCategoryRecordingRuleGroupsForService(serviceDefinition, aggregatio
    * These are the first level aggregation, for normalizing source metrics
    * into a consistent format
    */
-  recordingRuleGroupsForService(serviceDefinition, componentAggregationSet, nodeAggregationSet, shardAggregationSet)::
+  recordingRuleGroupsForService(serviceDefinition, componentAggregationSet, nodeAggregationSet=null, shardAggregationSet=null)::
     local componentMappingRuleSetGenerator = recordingRules.componentMappingRuleSetGenerator();
 
     local burnRates = componentAggregationSet.getBurnRates();

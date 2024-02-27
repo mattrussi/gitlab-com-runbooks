@@ -30,6 +30,7 @@ local serviceLevelIndicatorDefaults = {
   severity: 's2',
   dependsOn: [],  // When an sli depends on another component, don't alert on this SLI if the downstream service is already firing. This is meant for hard dependencies managed by GitLab.
   shardLevelMonitoring: false,
+  emittedBy: [],  // Which services emit the metrics for this SLI, e.g. rails_redis_client SLI is emitted by web service
 };
 
 local validateHasField(object, field, message) =
@@ -57,7 +58,8 @@ local validateSeverity(object, message) =
     std.assertEqual(true, { __assert: message });
 
 local validateAndApplySLIDefaults(sliName, component, inheritedDefaults) =
-  local withDefaults = serviceLevelIndicatorDefaults +
+  local withDefaults = serviceLevelIndicatorDefaults
+                       { emittedBy: [inheritedDefaults.type] } +
                        inheritedDefaults +
                        component +
                        { dependencies: dependencies.new(withDefaults.type, sliName, withDefaults.dependsOn) };
@@ -155,8 +157,9 @@ local serviceLevelIndicatorDefinition(sliName, serviceLevelIndicator) =
       std.length(serviceLevelIndicator.dashboardFeatureCategories) > 0,
 
     // Generate recording rules for apdex
-    generateApdexRecordingRules(burnRate, aggregationSet, recordingRuleStaticLabels, selector={})::
+    generateApdexRecordingRules(burnRate, aggregationSet, recordingRuleStaticLabels, selector={}, config={})::
       if self.hasApdex() && !isUpscalingTarget(self, burnRate) then
+        local apdexMetric = serviceLevelIndicator.apdex { config+: config };
         local upscaleLabels = getUpscaleLabels(self, burnRate);
         local allStaticLabels = recordingRuleStaticLabels + serviceLevelIndicator.staticLabels + upscaleLabels;
         local aggregationLabelsWithoutStaticLabels = filterStaticLabelsFromAggregationLabels(aggregationSet.labels, allStaticLabels);
@@ -165,14 +168,14 @@ local serviceLevelIndicatorDefinition(sliName, serviceLevelIndicator) =
         local apdexWeightRecordingRuleName = aggregationSet.getApdexWeightMetricForBurnRate(burnRate);
         local apdexRatesMetric = aggregationSet.getApdexRatesMetricForBurnRate(burnRate);
 
-        local apdexSuccessRateExpr = serviceLevelIndicator.apdex.apdexSuccessRateQuery(
+        local apdexSuccessRateExpr = apdexMetric.apdexSuccessRateQuery(
           aggregationLabels=aggregationLabelsWithoutStaticLabels,
           selector=selector,
           rangeInterval=burnRate,
           offset=aggregationSet.offset,
         );
 
-        local apdexWeightExpr = serviceLevelIndicator.apdex.apdexWeightQuery(
+        local apdexWeightExpr = apdexMetric.apdexWeightQuery(
           aggregationLabels=aggregationLabelsWithoutStaticLabels,
           selector=selector,
           rangeInterval=burnRate,
@@ -217,8 +220,9 @@ local serviceLevelIndicatorDefinition(sliName, serviceLevelIndicator) =
         [],
 
     // Generate recording rules for request rate
-    generateRequestRateRecordingRules(burnRate, aggregationSet, recordingRuleStaticLabels, selector={})::
+    generateRequestRateRecordingRules(burnRate, aggregationSet, recordingRuleStaticLabels, selector={}, config={})::
       if !isUpscalingTarget(self, burnRate) then
+        local requestRateMetric = serviceLevelIndicator.requestRate { config+: config };
         local upscaleLabels = getUpscaleLabels(self, burnRate);
         local requestRateRecordingRuleName = aggregationSet.getOpsRateMetricForBurnRate(burnRate, required=true);
         local allStaticLabels = recordingRuleStaticLabels + serviceLevelIndicator.staticLabels + upscaleLabels;
@@ -226,7 +230,7 @@ local serviceLevelIndicatorDefinition(sliName, serviceLevelIndicator) =
         [{
           record: requestRateRecordingRuleName,
           labels: allStaticLabels,
-          expr: serviceLevelIndicator.requestRate.aggregatedRateQuery(
+          expr: requestRateMetric.aggregatedRateQuery(
             aggregationLabels=filterStaticLabelsFromAggregationLabels(aggregationSet.labels, allStaticLabels),
             selector=selector,
             rangeInterval=burnRate,
@@ -237,22 +241,24 @@ local serviceLevelIndicatorDefinition(sliName, serviceLevelIndicator) =
         [],
 
     // Generate recording rules for error rate
-    generateErrorRateRecordingRules(burnRate, aggregationSet, recordingRuleStaticLabels, selector={})::
+    generateErrorRateRecordingRules(burnRate, aggregationSet, recordingRuleStaticLabels, selector={}, config={})::
       if self.hasErrorRate() && !isUpscalingTarget(self, burnRate) then
+        local errorRateMetric = serviceLevelIndicator.errorRate { config+: config };
+        local opsRateMetric = serviceLevelIndicator.requestRate { config+: config };
         local upscaleLabels = getUpscaleLabels(self, burnRate);
         local allStaticLabels = recordingRuleStaticLabels + serviceLevelIndicator.staticLabels + upscaleLabels;
         local requestRateRecordingRuleName = aggregationSet.getOpsRateMetricForBurnRate(burnRate, required=true);
         local errorRateRecordingRuleName = aggregationSet.getErrorRateMetricForBurnRate(burnRate, required=true);
         local filteredAggregationLabels = filterStaticLabelsFromAggregationLabels(aggregationSet.labels, allStaticLabels);
 
-        local errorRateExpr = serviceLevelIndicator.errorRate.aggregatedRateQuery(
+        local errorRateExpr = errorRateMetric.aggregatedRateQuery(
           aggregationLabels=filterStaticLabelsFromAggregationLabels(aggregationSet.labels, allStaticLabels),
           selector=selector,
           rangeInterval=burnRate,
           offset=aggregationSet.offset,
         );
 
-        local opsRateExpr = serviceLevelIndicator.requestRate.aggregatedRateQuery(
+        local opsRateExpr = opsRateMetric.aggregatedRateQuery(
           aggregationLabels=filterStaticLabelsFromAggregationLabels(aggregationSet.labels, allStaticLabels),
           selector=selector,
           rangeInterval=burnRate,
@@ -278,7 +284,7 @@ local serviceLevelIndicatorDefinition(sliName, serviceLevelIndicator) =
             expr: strings.indent(errorRateExpr, 2),
             filteredAggregationLabels: aggregations.serialize(filteredAggregationLabels),
             requestRateRecordingRuleName: requestRateRecordingRuleName,
-            allStaticLabels: selectors.serializeHash(allStaticLabels),
+            allStaticLabels: selectors.serializeHash(selectors.merge(selector, allStaticLabels)),
           },
         }]
         +

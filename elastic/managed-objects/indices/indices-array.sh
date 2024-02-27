@@ -16,6 +16,7 @@ export indices=(
   jaeger
   kas
   mailroom
+  mimir
   mlops
   monitoring
   observability

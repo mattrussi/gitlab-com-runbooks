@@ -51,7 +51,7 @@ metricsCatalog.serviceDefinition({
       },
 
       apdex: histogramApdex(
-        histogram='k8s_api_proxy_routing_duration_seconds_bucket',
+        histogram='tunnel_routing_duration_seconds_bucket',
         selector=baseSelector {
           // The `success` status contains durations up to 20s and
           // the `timeout` would contain everything above that.

@@ -66,6 +66,8 @@ metricsCatalog.serviceDefinition({
         toleratedThreshold='5'
       ),
 
+      emittedBy: [],  // TODO: Add type label in the source metrics https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/2873
+
       significantLabels: ['service'],
 
       toolingLinks: [

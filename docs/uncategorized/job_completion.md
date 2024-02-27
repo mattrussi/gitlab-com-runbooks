@@ -70,7 +70,7 @@ PROM
 | `MAX_AGE` | The SLO value for alerting, in seconds. |
 | `RESOURCE` | The resource identifier to include in alerts (e.g. `assign_weights`). Do not include data, that changes between invocations (such as pipeline or job IDs for example) |
 | `TIER` | The tier of the monitored service (e.g. `db`) |
-| `TYPE` | The tpye of the monitored service (e.g. `postgres`)
+| `TYPE` | The tpye of the monitored service (e.g. `postgres`) |
 
 ### Job metric per env or per node
 

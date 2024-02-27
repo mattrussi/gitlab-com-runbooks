@@ -59,6 +59,8 @@ metricsCatalog.serviceDefinition({
         }
       ),
 
+      emittedBy: ['api', 'web'],
+
       significantLabels: ['path', 'status'],
 
       toolingLinks: [

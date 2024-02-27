@@ -160,6 +160,8 @@ metricsCatalog.serviceDefinition(
           counter='stackdriver_gce_instance_logging_googleapis_com_log_entry_count',
         ),
 
+        emittedBy: ['monitoring'],
+
         significantLabels: ['log', 'severity'],
       },
 
@@ -175,6 +177,8 @@ metricsCatalog.serviceDefinition(
           counter='stackdriver_pubsub_topic_pubsub_googleapis_com_topic_byte_cost',
           selector=monitoringTypeSelector,
         ),
+
+        emittedBy: ['monitoring'],
 
         significantLabels: ['topic_id'],
 
@@ -194,6 +198,8 @@ metricsCatalog.serviceDefinition(
           counter='stackdriver_pubsub_subscription_pubsub_googleapis_com_subscription_byte_cost',
           selector=monitoringTypeSelector,
         ),
+
+        emittedBy: ['monitoring'],
 
         significantLabels: ['subscription_id'],
 
@@ -219,6 +225,8 @@ metricsCatalog.serviceDefinition(
           counter='fluentd_output_status_num_errors'
         ),
 
+        emittedBy: [],  // TODO: type label doesn't mean "service emitting this metric" https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/2873
+
         significantLabels: ['fqdn', 'pod', 'type'],
         serviceAggregation: false,
 
@@ -242,6 +250,8 @@ metricsCatalog.serviceDefinition(
         errorRate: rateMetric(
           counter='pubsubbeat_errors_total'
         ),
+
+        emittedBy: [],  // TODO: type label doesn't mean "service emitting this metric" https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/2873
 
         significantLabels: ['pod'],
         serviceAggregation: false,

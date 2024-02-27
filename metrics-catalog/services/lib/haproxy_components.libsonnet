@@ -37,6 +37,8 @@ local singleHTTPComponent(stage, selector, definition, userImpacting) =
 
     significantLabels: [],
 
+    emittedBy: [],  // this means ignoring type selector for sli_aggregations: recording rules
+
     toolingLinks: toolingLinks,
   });
 

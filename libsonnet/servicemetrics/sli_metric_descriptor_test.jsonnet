@@ -49,7 +49,7 @@ test.suite({
     ]),
     expect: {
       metric_foo: { type: { oneOf: ['foo'] }, job: { oneOf: ['bar', 'baz'] } },
-      metric_boo: { type: {}, job: {} },
+      metric_boo: {},
     },
   },
   testCollectMetricNamesAndSelectorsNestedSelector1: {
@@ -96,7 +96,6 @@ test.suite({
     expect: {
       some_total: {
         backend: { oneOf: ['abc', 'web'] },
-        code: {},
       },
     },
   },
@@ -110,7 +109,6 @@ test.suite({
     expect: {
       some_total: {
         backend: { oneOf: ['abc', 'web'] },
-        code: {},
       },
     },
   },
@@ -118,13 +116,11 @@ test.suite({
     actual: collectMetricNamesAndSelectors(
       [
         { some_total: { backend: { oneOf: ['web'] } } },
-        {},
+        { some_total: { backend: {} } },
       ]
     ),
     expect: {
-      some_total: {
-        backend: { oneOf: ['web'] },
-      },
+      some_total: { backend: {} },
     },
   },
   testCollectMetricNamesAndSelectorsNestedSelector8: {
@@ -135,9 +131,7 @@ test.suite({
       ]
     ),
     expect: {
-      some_total: {
-        backend: {},
-      },
+      some_total: {},
     },
   },
 
@@ -270,7 +264,6 @@ test.suite({
     ),
     expect: {
       backend: { oneOf: ['abc', 'web'] },
-      code: {},
     },
   },
   testMergeSelector7: {
@@ -280,7 +273,6 @@ test.suite({
     ),
     expect: {
       backend: { oneOf: ['abc', 'web'] },
-      code: {},
     },
   },
   testMergeSelector8: {
@@ -297,7 +289,7 @@ test.suite({
       { code: '500' },
       {},
     ),
-    expect: { code: {} },
+    expect: {},
   },
 
   local testSliBase = {
@@ -334,10 +326,7 @@ test.suite({
       some_histogram_metrics: {
         foo: { oneOf: ['bar'] },
       },
-      some_total_count: {
-        label_a: {},
-        label_b: {},
-      },
+      some_total_count: {},
 
     }
   ),
@@ -361,12 +350,7 @@ test.suite({
         foo: { oneOf: ['bar'] },
         baz: { oneOf: ['qux'] },
       },
-      some_total_count: {
-        foo: {},
-        baz: {},
-        label_a: {},
-        label_b: {},
-      },
+      some_total_count: {},
     }
   ),
 
@@ -389,12 +373,7 @@ test.suite({
         foo: { oneOf: ['bar'] },
         baz: { oneOf: ['qux'] },
       },
-      some_total_count: {
-        foo: {},
-        baz: {},
-        label_a: {},
-        label_b: {},
-      },
+      some_total_count: {},
     },
   ),
 
@@ -607,13 +586,10 @@ test.suite({
       some_total: {
         foo: { oneOf: ['bar'] },
         backend: { oneOf: ['abc', 'web'] },
-        type: {},
-        code: {},
       },
       some_other_total: {
         foo: { oneOf: ['bar'] },
         backend: { oneOf: ['abc'] },
-        code: {},
       },
     },
   ),

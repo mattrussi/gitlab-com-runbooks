@@ -1,0 +1,49 @@
+groups:
+- name: chef.rules
+  rules:
+  - alert: ChefClientError
+    expr: chef_client_error == 1
+    for: 5h
+    labels:
+      severity: s4
+      alert_type: cause
+    annotations:
+      description: Check failed chef executions on host {{ $labels.fqdn }}
+      grafana_dashboard_id: "000000231/chef-client"
+      runbook: docs/config_management/chef-troubleshooting.md
+      title: Chef client failed for more than 5hs
+  - alert: ChefClientErrorCritical
+    expr: avg(chef_client_error{env="gstg"}) * 100 > 10
+    for: 1h
+    labels:
+      severity: s4
+      alert_type: cause
+    annotations:
+      description: >
+        At least 10% of chef-runs are failing for the {{ $labels.env }} environment, this likely points to a configuration
+        error. Check the syslog of the failing hosts to see the reasons
+      grafana_dashboard_id: "000000231/chef-client"
+      runbook: docs/config_management/chef-troubleshooting.md
+      title: Chef client failures have reached critical levels
+  - alert: ChefClientStale
+    expr: (time() - chef_client_last_run_timestamp_seconds{env="gstg"} > 5 * 3600) and on (instance) (chef_client_enabled == 1)
+    labels:
+      severity: s4
+      alert_type: cause
+    annotations:
+      description: Last Chef run for {{ $labels.fqdn }} was over {{ $value | humanizeDuration }} ago
+      grafana_dashboard_id: "000000231/chef-client"
+      runbook: docs/config_management/chef-troubleshooting.md
+      title: Chef client hasn't run for longer than expected
+  - alert: ChefClientDisabled
+    expr: sum by (type) (chef_client_enabled{type!~"sentry|ci-runners", env="gstg"} == 0)
+    for: 24h
+    labels:
+      severity: s4
+      alert_type: cause
+      incident_project: gitlab.com/gitlab-com/gl-infra/production
+    annotations:
+      description: Last Chef run for type {{ $labels.type }} in env {{ $labels.environment }} was over {{ $value | humanizeDuration }} ago
+      grafana_dashboard_id: "000000231/chef-client"
+      runbook: docs/config_management/chef-troubleshooting.md
+      title: Chef client has been disabled for a long time for type {{ $labels.type }} in env {{ $labels.environment }}

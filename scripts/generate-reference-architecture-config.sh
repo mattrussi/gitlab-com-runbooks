@@ -36,13 +36,14 @@ function main() {
   fi
 
   local source_file="${reference_architecture_src_dir}/generate.jsonnet"
-  local sha256sum_file="${REPO_DIR}/.cache/$source_file.sha256sum"
-  local cache_out_file="${REPO_DIR}/.cache/$source_file.out"
+  local args_hash="$(echo "$@" | sha256sum | awk '{ print $1 }')"
+  local sha256sum_file="${REPO_DIR}/.cache/$source_file.$args_hash.sha256sum"
+  local cache_out_file="${REPO_DIR}/.cache/$source_file.$args_hash.out"
 
-  if [[ "${GL_JSONNET_CACHE_SKIP:-}" != 'true' ]]; then
+  if [[ ${GL_JSONNET_CACHE_SKIP:-} != 'true' ]]; then
     mkdir -p "$(dirname "$sha256sum_file")" "$(dirname "$cache_out_file")"
 
-    if [[ -f "$cache_out_file" ]] && [[ -f "$sha256sum_file" ]] && sha256sum --check --status <"$sha256sum_file"; then
+    if [[ -f $cache_out_file ]] && [[ -f $sha256sum_file ]] && sha256sum --check --status <"$sha256sum_file"; then
       for file in $(cat "$cache_out_file"); do
         mkdir -p "$(dirname "$file")"
         cp "${REPO_DIR}/.cache/$file" "$file"
@@ -51,7 +52,7 @@ function main() {
       return 0
     fi
 
-    if [[ "${GL_JSONNET_CACHE_DEBUG:-}" == 'true' ]]; then
+    if [[ ${GL_JSONNET_CACHE_DEBUG:-} == 'true' ]]; then
       echo >&2 "jsonnet_cache: miss: $source_file"
     fi
   fi
@@ -69,7 +70,7 @@ function main() {
   )"
   echo "$out"
 
-  if [[ "${GL_JSONNET_CACHE_SKIP:-}" != 'true' ]]; then
+  if [[ ${GL_JSONNET_CACHE_SKIP:-} != 'true' ]]; then
     echo "$out" >"$cache_out_file"
     for file in $out; do
       mkdir -p "$(dirname "${REPO_DIR}/.cache/$file")"

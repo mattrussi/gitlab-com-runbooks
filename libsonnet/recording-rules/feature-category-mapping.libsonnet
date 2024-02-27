@@ -23,14 +23,8 @@ local rules = std.flatMap(
   std.objectFields(stages.featureCategoryMap)
 );
 
-{
-  mappingYaml(extrasForGroup={}): {
-    'stage-group-feature-category-mapping-rules.yml': std.manifestYamlDoc({
-      groups: [{
-        name: 'Feature Category Stage group mapping',
-        rules: rules,
-        interval: '1m',
-      } + extrasForGroup],
-    }),
-  },
-}
+[{
+  name: 'Feature Category Stage group mapping',
+  rules: rules,
+  interval: '1m',
+}]

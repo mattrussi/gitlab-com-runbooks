@@ -21,6 +21,8 @@ local options = validateReferenceArchitectureOptions(import 'gitlab-metrics-opti
   // Hash of all saturation metric types that are monitored on gitlab.com
   saturationMonitoring:: objects.mergeAll(
     [
+      import 'saturation-monitoring/aws_elasticache_cpu.libsonnet',
+      import 'saturation-monitoring/aws_elasticache_memory.libsonnet',
       import 'saturation-monitoring/aws_rds_cpu.libsonnet',
       import 'saturation-monitoring/aws_rds_db.libsonnet',
       import 'saturation-monitoring/aws_rds_disk.libsonnet',
@@ -103,11 +105,7 @@ local options = validateReferenceArchitectureOptions(import 'gitlab-metrics-opti
   // our metrics system
   dbPlatform: 'rds',
 
-  // RDS Specific configurations
-  rdsInstanceRAMGB: null,
-  rdsMaxAllocatedStorageGB: null,
-  rdsMaxConnections: null,
-  rdsMonitoring: false,
-
   separateGlobalRecordingSelectors: {},
+
+  recordingRuleRegistry: import 'servicemetrics/recording-rule-registry/selective-registry.libsonnet',
 }

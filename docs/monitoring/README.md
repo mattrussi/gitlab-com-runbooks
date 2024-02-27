@@ -19,6 +19,7 @@
 
 * [How to detect CI Abuse](../ci-runners/ci-abuse-handling.md)
 * [../ci-runners/ci_pending_builds.md](../ci-runners/ci_pending_builds.md)
+* [ClickHouse Cloud Failure Remediation, Backup & Restore Process](../clickhouse/backup-restore.md)
 * [CustomersDot main troubleshoot documentation](../customersdot/overview.md)
 * [design.gitlab.com Runbook](../design/design-gitlab-com.md)
 * [../elastic/advanced-search-in-gitlab.md](../elastic/advanced-search-in-gitlab.md)
@@ -30,10 +31,12 @@
 * [../kube/k8s-operations.md](../kube/k8s-operations.md)
 * [StatefulSet Guidelines](../kube/sts-guidelines.md)
 * [Service-Level Monitoring](../metrics-catalog/service-level-monitoring.md)
+* [Mimir Onboarding](../mimir/getting-started.md)
 * [Alertmanager Notification Failures](alertmanager-notification-failures.md)
 * [Accessing a GKE Alertmanager](alerts_gke.md)
 * [Alerting](alerts_manual.md)
 * [An impatient SRE's guide to deleting alerts](deleting-alerts.md)
+* [Mixins](mixins.md)
 * [prometheus-failed-compactions.md](prometheus-failed-compactions.md)
 * [Prometheus pod crashlooping](prometheus-pod-crashlooping.md)
 * [Thanos Compact](thanos-compact.md)
@@ -97,8 +100,8 @@ implementation details.
 |---------|------------|---------|
 | ~"Service::Prometheus" | The multiple prometheus servers that we run. | [gl-infra/infrastructure](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues?scope=all&state=opened&label_name[]=Service%3A%3APrometheus) |
 | ~"Service::Thanos" | Anything related to [thanos](https://thanos.io/). | [gl-infra/infrastructure](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues?scope=all&state=opened&label_name[]=Service%3A%3AThanos) |
-| ~"Service::Grafana" | Anything related to <https://dashboards.gitlab.net/> | [gl-infra/infrastructure](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues?scope=all&state=opened&label_name[]=Service%3A%3AGrafana)
-| ~"Service::AlertManager" | Anything related to AlertManager | [gl-infra/infrastructure](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues?scope=all&state=opened&label_name[]=Service%3A%3AAlertManager)
+| ~"Service::Grafana" | Anything related to <https://dashboards.gitlab.net/> | [gl-infra/infrastructure](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues?scope=all&state=opened&label_name[]=Service%3A%3AGrafana) |
+| ~"Service::AlertManager" | Anything related to AlertManager | [gl-infra/infrastructure](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues?scope=all&state=opened&label_name[]=Service%3A%3AAlertManager) |
 | ~"Service::Monitoring-Other" | The service we provide to engineers, this covers metrics, labels and anything else that doesn't belong in the services above. | [gl-infra/infrastructure](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues?scope=all&state=opened&label_name[]=Service%3A%3AMonitoring-Other) |
 
 Some of the issues in the backlog also belong in epics part of the
