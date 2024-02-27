@@ -33,7 +33,7 @@ end
 
 warn msg.join("\n")
 
-if duplicates.any?
+if duplicates.any? || empty_groups_per_file.any?
   exit 1
 else
   exit 0

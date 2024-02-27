@@ -5523,9 +5523,6 @@ groups:
       topk by (cluster,deployment) (1, kube_deployment_labels:labeled{type=~"consul|gitlab-shell|registry|sidekiq|webservice"})
     record: kube_deployment_status_replicas:labeled
 - interval: 1m
-  name: 'Service Component Alerts: consul'
-  rules: []
-- interval: 1m
   name: 'Service Component Alerts: gitaly'
   rules:
   - alert: GitalyServiceGoserverApdexSLOViolation
