@@ -39,12 +39,13 @@ local aggregationsForService(service, selector, _extraArgs) =
     ['%s-aggregation' % set.id]: outputPromYaml(groupsForService(service, set, selector)),
   };
 
+local servicesWithSlis = std.filter(function(service) std.length(service.listServiceLevelIndicators()) > 0, monitoredServices);
 std.foldl(
   function(memo, service)
     memo + separateMimirRecordingFiles(
       aggregationsForService,
       service,
     ),
-  monitoredServices,
+  servicesWithSlis,
   {}
 )
