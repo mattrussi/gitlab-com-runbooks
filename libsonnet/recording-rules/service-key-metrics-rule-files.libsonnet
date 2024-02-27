@@ -38,7 +38,7 @@ local filesForServices(services, componentAggregationSet, nodeAggregationSet, fe
   std.foldl(
     function(memo, service)
       memo + filesForService(service, componentAggregationSet, nodeAggregationSet, featureCategoryAggregationSet, shardAggregationSet, groupExtras),
-    services,
+    std.filter(function(s) std.length(s.listServiceLevelIndicators()) > 0, services),
     {}
   );
 

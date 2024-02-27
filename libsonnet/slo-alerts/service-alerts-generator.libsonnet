@@ -190,8 +190,11 @@ local alertsForService(service, alertDescriptors, extraSelector) =
 
 
 function(service, alertDescriptors, groupExtras={}, extraSelector={})
-  [{
-    name: 'Service Component Alerts: %s' % [service.type],
-    interval: '1m',
-    rules: alertsForService(service, alertDescriptors, extraSelector),
-  } + groupExtras]
+  local alertRules = alertsForService(service, alertDescriptors, extraSelector);
+  if std.length(alertRules) > 0 then
+    [{
+      name: 'Service Component Alerts: %s' % [service.type],
+      interval: '1m',
+      rules: alertRules,
+    } + groupExtras]
+  else []
