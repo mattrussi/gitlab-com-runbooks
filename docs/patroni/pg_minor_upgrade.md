@@ -69,6 +69,7 @@ order by ae.name;
 
 -- Update 'OLD' extensions (example):
 ALTER EXTENSION pg_stat_statements UPDATE;
+```
 
 ### Post checks
 1. Check connectivity with the command: `gitlab-psql -c "select pg_is_in_recovery();"`
