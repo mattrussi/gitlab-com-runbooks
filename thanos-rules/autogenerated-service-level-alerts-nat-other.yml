@@ -26,7 +26,7 @@ groups:
         sum by (env,environment,tier,stage) (
           sum by (environment) (
             avg_over_time(
-              stackdriver_nat_gateway_router_googleapis_com_nat_received_packets_count{metric_prefix="router.googleapis.com/nat",  ip_protocol="6", project_id=~"gitlab-staging-1|gitlab-production"}[5m]
+              stackdriver_nat_gateway_router_googleapis_com_nat_received_packets_count{environment="{{ $labels.environment }}",ip_protocol="6",metric_prefix="router.googleapis.com/nat",project_id=~"gitlab-production|gitlab-staging-1",stage="{{ $labels.stage }}"}[5m]
             )
           )
         )
@@ -69,7 +69,7 @@ groups:
         sum by (env,environment,tier,stage) (
           sum by (environment) (
             avg_over_time(
-              stackdriver_nat_gateway_router_googleapis_com_nat_received_packets_count{metric_prefix="router.googleapis.com/nat",  ip_protocol="6", project_id=~"gitlab-staging-1|gitlab-production"}[5m]
+              stackdriver_nat_gateway_router_googleapis_com_nat_received_packets_count{environment="{{ $labels.environment }}",ip_protocol="6",metric_prefix="router.googleapis.com/nat",project_id=~"gitlab-production|gitlab-staging-1",stage="{{ $labels.stage }}"}[5m]
             )
           )
         )
@@ -110,7 +110,7 @@ groups:
         sum by (env,environment,tier,stage) (
           sum by (environment) (
             avg_over_time(
-              stackdriver_nat_gateway_router_googleapis_com_nat_sent_packets_count{metric_prefix="router.googleapis.com/nat",  ip_protocol="6", project_id=~"gitlab-staging-1|gitlab-production"}[5m]
+              stackdriver_nat_gateway_router_googleapis_com_nat_sent_packets_count{environment="{{ $labels.environment }}",ip_protocol="6",metric_prefix="router.googleapis.com/nat",project_id=~"gitlab-production|gitlab-staging-1",stage="{{ $labels.stage }}"}[5m]
             )
           )
         )
@@ -153,7 +153,7 @@ groups:
         sum by (env,environment,tier,stage) (
           sum by (environment) (
             avg_over_time(
-              stackdriver_nat_gateway_router_googleapis_com_nat_sent_packets_count{metric_prefix="router.googleapis.com/nat",  ip_protocol="6", project_id=~"gitlab-staging-1|gitlab-production"}[5m]
+              stackdriver_nat_gateway_router_googleapis_com_nat_sent_packets_count{environment="{{ $labels.environment }}",ip_protocol="6",metric_prefix="router.googleapis.com/nat",project_id=~"gitlab-production|gitlab-staging-1",stage="{{ $labels.stage }}"}[5m]
             )
           )
         )

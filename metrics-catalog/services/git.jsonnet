@@ -1,7 +1,6 @@
 local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local histogramApdex = metricsCatalog.histogramApdex;
 local rateMetric = metricsCatalog.rateMetric;
-local customRateQuery = metricsCatalog.customRateQuery;
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 local haproxyComponents = import './lib/haproxy_components.libsonnet';
 local sliLibrary = import 'gitlab-slis/library.libsonnet';
