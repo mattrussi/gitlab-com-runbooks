@@ -3,6 +3,8 @@ local separateMimirRecordingFiles = (import 'recording-rules/lib/mimir/separate-
 local utilizationMetrics = import 'servicemetrics/utilization-metrics.libsonnet';
 local utilizationRules = import 'servicemetrics/utilization_rules.libsonnet';
 local monitoredServices = (import 'gitlab-metrics-config.libsonnet').monitoredServices;
+local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
+
 
 local l = labelTaxonomy.labels;
 local environmentLabels = labelTaxonomy.labelTaxonomy(l.environmentThanos | l.tier | l.service | l.stage);
@@ -46,13 +48,12 @@ std.foldl(
     // https://gitlab.com/gitlab-com/runbooks/-/blob/fea00d14bed453dcd28981889a1be38e2358f365/metrics-catalog/utilization/cloudflare_data_transfer.libsonnet#L8.
     // However, cloudflare is not a service that can be found in our service catalog at this point in time:
     // https://gitlab.com/gitlab-com/runbooks/-/tree/fea00d14bed453dcd28981889a1be38e2358f365/metrics-catalog/services
-    local definitionsFound = std.filter(function(s) s.type == serviceName, monitoredServices);
+    local foundDefinition = metricsCatalog.getServiceOptional(serviceName);
     local fakeDefinition = { type: serviceName };
-    local serviceDefinition = if std.length(definitionsFound) > 1
-    then std.trace('More than one service definition found for ' + serviceName, fakeDefinition)
-    else if std.length(definitionsFound) == 0
-    then std.trace('No service definition found for ' + serviceName, fakeDefinition)
-    else definitionsFound[0];
+    local serviceDefinition = if foundDefinition == null then
+      std.trace('No service definition found for ' + serviceName, fakeDefinition)
+    else
+      foundDefinition;
     memo + separateMimirRecordingFiles(filesForSeparateSelector(metricsByService[serviceName]), serviceDefinition),
   std.objectFields(metricsByService),
   {}

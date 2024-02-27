@@ -99,8 +99,9 @@ local objects = import 'utils/objects.libsonnet';
     },
   },
 
-  defaultMimirTenants:
-    std.filter(function(tenant) tenant == 'gitlab-gprd' || tenant == 'gitlab-gstg', std.objectFields(self.separateMimirRecordingSelectors)),
+  defaultMimirTenants: ['gitlab-gprd', 'gitlab-gstg'],
+
+// TODO: change this to the `unified-registry.libsonnet when we've migrated all to mimir
 
   recordingRuleRegistry: import 'servicemetrics/recording-rule-registry/selective-registry.libsonnet',
 
