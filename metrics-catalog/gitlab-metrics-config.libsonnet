@@ -99,6 +99,9 @@ local objects = import 'utils/objects.libsonnet';
     },
   },
 
+  defaultMimirTenants:
+    std.filter(function(tenant) tenant == 'gitlab-gprd' || tenant == 'gitlab-gstg', std.objectFields(self.separateMimirRecordingSelectors)),
+
   recordingRuleRegistry: import 'servicemetrics/recording-rule-registry/selective-registry.libsonnet',
 
   // This selector is used in a handful of places where there are too many "type" labels

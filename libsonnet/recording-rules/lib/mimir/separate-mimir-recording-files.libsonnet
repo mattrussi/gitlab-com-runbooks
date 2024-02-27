@@ -1,5 +1,6 @@
 local misc = import 'utils/misc.libsonnet';
 local objects = import 'utils/objects.libsonnet';
+local defaultMimirTenants = (import 'gitlab-metrics-config.libsonnet').defaultMimirTenants;
 
 local defaultPathFormat(serviceDefinition) = if misc.isPresent(serviceDefinition) then
   '%(tenantName)s/%(envName)s/%(serviceName)s/%(baseName)s.yml'
@@ -24,15 +25,12 @@ local namespaceFormat(tenant, env, serviceDefinition, baseName) =
   )::
     local serviceTenants =
       if serviceDefinition == null
-      then ['gitlab-gprd', 'gitlab-gstg', 'gitlab-ops', 'gitlab-pre']
-      else std.get(serviceDefinition, 'tenants', []);
-    local tenants =
-      if std.length(serviceTenants) == 0
-      then std.objectFields(metricsConfig.separateMimirRecordingSelectors)
-      else std.filter(
-        function(tenant) std.member(serviceTenants, tenant),
-        std.objectFields(metricsConfig.separateMimirRecordingSelectors)
-      );
+      then defaultMimirTenants
+      else std.get(serviceDefinition, 'tenants', defaultMimirTenants);
+    local tenants = std.filter(
+      function(tenant) std.member(serviceTenants, tenant),
+      std.objectFields(metricsConfig.separateMimirRecordingSelectors)
+    );
     std.foldl(
       function(memo, tenantName)
         memo + objects.transformKeys(
