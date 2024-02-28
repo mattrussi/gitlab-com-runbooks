@@ -139,7 +139,7 @@ The steps to extend are as follows:
 * Confirm the key is imported and accessible with the private key:
 
   ```sh
-  gpg -k support@gitlab.com
+  gpg -k packages@gitlab.com
   ```
 
 * Edit the key interactively with `gpg`:
