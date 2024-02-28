@@ -93,9 +93,16 @@ local objects = import 'utils/objects.libsonnet';
       selector: { env: 'pre' },
       envName: 'pre',
     },
+    metamonitoring: {
+      selector: {},
+      envName: 'metamonitoring',
+    },
   },
 
-  // TODO: change this to the `unified-registry.libsonnet when we've migrated all to mimir
+  defaultMimirTenants: ['gitlab-gprd', 'gitlab-gstg'],
+
+// TODO: change this to the `unified-registry.libsonnet when we've migrated all to mimir
+
   recordingRuleRegistry: import 'servicemetrics/recording-rule-registry/selective-registry.libsonnet',
 
   // This selector is used in a handful of places where there are too many "type" labels

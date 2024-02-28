@@ -5,6 +5,7 @@ local serviceLevelIndicatorDefinition = import 'service_level_indicator_definiti
 local misc = import 'utils/misc.libsonnet';
 local objects = import 'utils/objects.libsonnet';
 local validator = import 'utils/validator.libsonnet';
+local defaultMimirTenants = (import 'gitlab-metrics-config.libsonnet').defaultMimirTenants;
 
 // For now we assume that services are provisioned on vms and not kubernetes
 local provisioningDefaults = { vms: true, kubernetes: false, runway: false };
@@ -32,7 +33,7 @@ local serviceDefaults = {
   skippedMaturityCriteria: {},
   dangerouslyThanosEvaluated: false,  // This is only used for thanos self-monitoring
   capacityPlanning: {},  // Consumed by Tamland
-  tenants: [],  // Mimir tenants. Empty by default means the service targets all tenants.
+  tenants: defaultMimirTenants,
 };
 
 local shardLevelMonitoringEnabled(serviceDefinition) =
