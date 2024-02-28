@@ -91,7 +91,7 @@ create the proper issue type with proper labels and description.
 [cf_allowlists]
 is a Terraform module that we've written to write WAF rules allowing customers'
 or GitLab service IPs to bypass Cloudflare and any block that it may cause. The
-allowlist is handled in the `allowlist.json` of the linked module. To add an IP
+allowlist is handled in the `allowlist.yaml` of the linked module. To add an IP
 to it, simply update the file with the required information. A sample entry is
 provided in the README of the module. Once the change is merged to master, you
 will need to run `terraform` on the `gstg` and `gprd` environments to apply the

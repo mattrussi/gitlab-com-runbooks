@@ -12,7 +12,7 @@ This alert has the following possible causes, in the first few minutes it is imp
 
 ### GCP Quotas causing scaling issues
 
-Look for quota-exceeded errors in logs to determine if we are hitting any GCP `gitlab-ci` project quotas that are causing scaling issues: <https://log.gprd.gitlab.net/goto/8f65b43718b6e95ccf5f6972e7ca1887>
+Look for quota-exceeded errors in logs to determine if we are hitting any GCP `gitlab-ci` project quotas that are causing scaling issues: <https://log.gprd.gitlab.net/app/r/s/OtI2W>
 
 Check the [Quotas Runbook](./providers/gcp/quotas.md) for more details.
 
