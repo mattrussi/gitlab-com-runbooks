@@ -2579,3 +2579,10 @@ services:
     observability:
       monitors:
         primary_grafana_dashboard: glgo-main/glgo-overview
+
+  - name: cloudflare
+    tier: inf
+    friendly_name: Cloudflare
+    label: cloudflare
+    teams:
+    owner:
