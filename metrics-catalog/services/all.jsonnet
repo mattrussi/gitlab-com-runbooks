@@ -30,6 +30,7 @@
   import 'mailgun.jsonnet',
   import 'mailroom.jsonnet',
   import 'memorystore.jsonnet',
+  import 'mimir.jsonnet',
   import 'monitoring.jsonnet',
   import 'nat.jsonnet',
   import 'nginx.jsonnet',

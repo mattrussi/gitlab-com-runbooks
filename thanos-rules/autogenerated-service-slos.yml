@@ -1080,6 +1080,112 @@ groups:
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       tier: inf
+      type: mimir
+    expr: "0.950000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      tier: inf
+      type: mimir
+    expr: "0.050000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      component: mimir_compactor
+      tier: inf
+      type: mimir
+    expr: "0.950000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      component: mimir_compactor
+      tier: inf
+      type: mimir
+    expr: "0.050000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      component: mimir_distributor
+      tier: inf
+      type: mimir
+    expr: "0.950000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      component: mimir_distributor
+      tier: inf
+      type: mimir
+    expr: "0.050000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      component: mimir_ingester
+      tier: inf
+      type: mimir
+    expr: "0.950000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      component: mimir_ingester
+      tier: inf
+      type: mimir
+    expr: "0.050000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      component: mimir_querier
+      tier: inf
+      type: mimir
+    expr: "0.950000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      component: mimir_querier
+      tier: inf
+      type: mimir
+    expr: "0.050000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      component: mimir_query_frontend
+      tier: inf
+      type: mimir
+    expr: "0.950000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      component: mimir_query_frontend
+      tier: inf
+      type: mimir
+    expr: "0.050000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      component: mimir_query_scheduler
+      tier: inf
+      type: mimir
+    expr: "0.950000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      component: mimir_query_scheduler
+      tier: inf
+      type: mimir
+    expr: "0.050000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      component: mimir_ruler
+      tier: inf
+      type: mimir
+    expr: "0.950000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      component: mimir_ruler
+      tier: inf
+      type: mimir
+    expr: "0.050000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      component: mimir_store_gateway
+      tier: inf
+      type: mimir
+    expr: "0.950000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      component: mimir_store_gateway
+      tier: inf
+      type: mimir
+    expr: "0.050000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      tier: inf
       type: monitoring
     expr: "0.999000"
   - record: slo:max:events:gitlab_service_errors:ratio
@@ -3173,6 +3279,11 @@ groups:
   - record: gitlab_service:mapping:disable_ops_rate_prediction
     labels:
       tier: inf
+      type: mimir
+    expr: "1"
+  - record: gitlab_service:mapping:disable_ops_rate_prediction
+    labels:
+      tier: inf
       type: monitoring
     expr: "1"
   - record: gitlab_service:mapping:disable_ops_rate_prediction
@@ -3724,6 +3835,78 @@ groups:
       service_aggregation: "yes"
       tier: sv
       type: mailroom
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: mimir_compactor
+      global_aggregation: "no"
+      regional_aggregation: "no"
+      service_aggregation: "yes"
+      tier: inf
+      type: mimir
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: mimir_distributor
+      global_aggregation: "no"
+      regional_aggregation: "no"
+      service_aggregation: "yes"
+      tier: inf
+      type: mimir
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: mimir_ingester
+      global_aggregation: "no"
+      regional_aggregation: "no"
+      service_aggregation: "yes"
+      tier: inf
+      type: mimir
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: mimir_querier
+      global_aggregation: "no"
+      regional_aggregation: "no"
+      service_aggregation: "yes"
+      tier: inf
+      type: mimir
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: mimir_query_frontend
+      global_aggregation: "no"
+      regional_aggregation: "no"
+      service_aggregation: "yes"
+      tier: inf
+      type: mimir
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: mimir_query_scheduler
+      global_aggregation: "no"
+      regional_aggregation: "no"
+      service_aggregation: "yes"
+      tier: inf
+      type: mimir
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: mimir_ruler
+      global_aggregation: "no"
+      regional_aggregation: "no"
+      service_aggregation: "yes"
+      tier: inf
+      type: mimir
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: mimir_store_gateway
+      global_aggregation: "no"
+      regional_aggregation: "no"
+      service_aggregation: "yes"
+      tier: inf
+      type: mimir
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:
