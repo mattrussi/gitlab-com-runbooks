@@ -8,7 +8,7 @@ local googleLoadBalancerComponents = import './lib/google_load_balancer_componen
 local kubeLabelSelectors = metricsCatalog.kubeLabelSelectors;
 local combined = metricsCatalog.combined;
 
-// Thanos operates across all stages and all environments,
+// Mimir operates across all stages and all environments,
 // so we use special labels to merge environments and stages...
 local staticLabels = {
   environment: 'ops',
