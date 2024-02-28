@@ -5,15 +5,15 @@ groups:
   interval: 5m
   rules:
   - record: gitlab_component_saturation:ratio_quantile95_1w
-    expr: quantile_over_time(0.95, gitlab_component_saturation:ratio{type="cloudflare"}[1w])
+    expr: quantile_over_time(0.95, gitlab_component_saturation:ratio{env="gprd",type="cloudflare"}[1w])
   - record: gitlab_component_saturation:ratio_quantile99_1w
-    expr: quantile_over_time(0.99, gitlab_component_saturation:ratio{type="cloudflare"}[1w])
+    expr: quantile_over_time(0.99, gitlab_component_saturation:ratio{env="gprd",type="cloudflare"}[1w])
   - record: gitlab_component_saturation:ratio_quantile95_1h
-    expr: quantile_over_time(0.95, gitlab_component_saturation:ratio{type="cloudflare"}[1h])
+    expr: quantile_over_time(0.95, gitlab_component_saturation:ratio{env="gprd",type="cloudflare"}[1h])
   - record: gitlab_component_saturation:ratio_quantile99_1h
-    expr: quantile_over_time(0.99, gitlab_component_saturation:ratio{type="cloudflare"}[1h])
+    expr: quantile_over_time(0.99, gitlab_component_saturation:ratio{env="gprd",type="cloudflare"}[1h])
   - record: gitlab_component_saturation:ratio_avg_1h
-    expr: avg_over_time(gitlab_component_saturation:ratio{type="cloudflare"}[1h])
+    expr: avg_over_time(gitlab_component_saturation:ratio{env="gprd",type="cloudflare"}[1h])
 - name: GitLab Saturation Alerts
   interval: 1m
   rules:
@@ -66,8 +66,8 @@ groups:
       rules_domain: general
       severity: s3
     expr: |
-      gitlab_component_saturation:ratio{component="cpu",type="cloudflare"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="cpu",type="cloudflare"}
+      gitlab_component_saturation:ratio{component="cpu",env="gprd",type="cloudflare"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="cpu",env="gprd",type="cloudflare"}
   - alert: component_saturation_slo_out_of_bounds:disk_inodes
     for: 15m
     annotations:
@@ -124,8 +124,8 @@ groups:
       rules_domain: general
       severity: s2
     expr: |
-      gitlab_component_saturation:ratio{component="disk_inodes",type="cloudflare"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="disk_inodes",type="cloudflare"}
+      gitlab_component_saturation:ratio{component="disk_inodes",env="gprd",type="cloudflare"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="disk_inodes",env="gprd",type="cloudflare"}
   - alert: ComponentResourceRunningOut_disk_inodes
     for: 15m
     annotations:
@@ -183,9 +183,9 @@ groups:
       rules_domain: general
       severity: s2
     expr: |
-      predict_linear(gitlab_component_saturation:ratio{component="disk_inodes",type="cloudflare"}[6h], 21600)
+      predict_linear(gitlab_component_saturation:ratio{component="disk_inodes",env="gprd",type="cloudflare"}[6h], 21600)
       > on (component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="disk_inodes",type="cloudflare"}
+      slo:max:hard:gitlab_component_saturation:ratio{component="disk_inodes",env="gprd",type="cloudflare"}
   - alert: component_saturation_slo_out_of_bounds:disk_space
     for: 15m
     annotations:
@@ -236,8 +236,8 @@ groups:
       rules_domain: general
       severity: s2
     expr: |
-      gitlab_component_saturation:ratio{component="disk_space",type="cloudflare"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="disk_space",type="cloudflare"}
+      gitlab_component_saturation:ratio{component="disk_space",env="gprd",type="cloudflare"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="disk_space",env="gprd",type="cloudflare"}
   - alert: ComponentResourceRunningOut_disk_space
     for: 15m
     annotations:
@@ -289,9 +289,9 @@ groups:
       rules_domain: general
       severity: s2
     expr: |
-      predict_linear(gitlab_component_saturation:ratio{component="disk_space",type="cloudflare"}[6h], 21600)
+      predict_linear(gitlab_component_saturation:ratio{component="disk_space",env="gprd",type="cloudflare"}[6h], 21600)
       > on (component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="disk_space",type="cloudflare"}
+      slo:max:hard:gitlab_component_saturation:ratio{component="disk_space",env="gprd",type="cloudflare"}
   - alert: component_saturation_slo_out_of_bounds:memory
     for: 5m
     annotations:
@@ -337,8 +337,8 @@ groups:
       rules_domain: general
       severity: s4
     expr: |
-      gitlab_component_saturation:ratio{component="memory",type="cloudflare"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="memory",type="cloudflare"}
+      gitlab_component_saturation:ratio{component="memory",env="gprd",type="cloudflare"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="memory",env="gprd",type="cloudflare"}
   - alert: component_saturation_slo_out_of_bounds:nf_conntrack_entries
     for: 5m
     annotations:
@@ -390,8 +390,8 @@ groups:
       rules_domain: general
       severity: s3
     expr: |
-      gitlab_component_saturation:ratio{component="nf_conntrack_entries",type="cloudflare"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="nf_conntrack_entries",type="cloudflare"}
+      gitlab_component_saturation:ratio{component="nf_conntrack_entries",env="gprd",type="cloudflare"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="nf_conntrack_entries",env="gprd",type="cloudflare"}
   - alert: component_saturation_slo_out_of_bounds:node_schedstat_waiting
     for: 90m
     annotations:
@@ -441,8 +441,8 @@ groups:
       rules_domain: general
       severity: s4
     expr: |
-      gitlab_component_saturation:ratio{component="node_schedstat_waiting",type="cloudflare"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="node_schedstat_waiting",type="cloudflare"}
+      gitlab_component_saturation:ratio{component="node_schedstat_waiting",env="gprd",type="cloudflare"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="node_schedstat_waiting",env="gprd",type="cloudflare"}
   - alert: component_saturation_slo_out_of_bounds:open_fds
     for: 5m
     annotations:
@@ -513,8 +513,8 @@ groups:
       rules_domain: general
       severity: s2
     expr: |
-      gitlab_component_saturation:ratio{component="open_fds",type="cloudflare"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="open_fds",type="cloudflare"}
+      gitlab_component_saturation:ratio{component="open_fds",env="gprd",type="cloudflare"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="open_fds",env="gprd",type="cloudflare"}
   - alert: component_saturation_slo_out_of_bounds:shard_cpu
     for: 5m
     annotations:
@@ -564,8 +564,8 @@ groups:
       rules_domain: general
       severity: s3
     expr: |
-      gitlab_component_saturation:ratio{component="shard_cpu",type="cloudflare"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="shard_cpu",type="cloudflare"}
+      gitlab_component_saturation:ratio{component="shard_cpu",env="gprd",type="cloudflare"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="shard_cpu",env="gprd",type="cloudflare"}
   - alert: component_saturation_slo_out_of_bounds:single_node_cpu
     for: 10m
     annotations:
@@ -613,5 +613,5 @@ groups:
       rules_domain: general
       severity: s4
     expr: |
-      gitlab_component_saturation:ratio{component="single_node_cpu",type="cloudflare"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="single_node_cpu",type="cloudflare"}
+      gitlab_component_saturation:ratio{component="single_node_cpu",env="gprd",type="cloudflare"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="single_node_cpu",env="gprd",type="cloudflare"}

@@ -12,7 +12,7 @@ groups:
         clamp_min(
           clamp_max(
             1 - avg by (env, environment, tier, type, stage, shard) (
-              rate(node_cpu_seconds_total{mode="idle", type="cloudflare"}[5m])
+              rate(node_cpu_seconds_total{mode="idle", env="gprd",type="cloudflare"}[5m])
             )
             ,
             1)
@@ -27,9 +27,9 @@ groups:
         clamp_min(
           clamp_max(
             1 - (
-              node_filesystem_files_free{fstype=~"(ext.|xfs)", type="cloudflare"}
+              node_filesystem_files_free{fstype=~"(ext.|xfs)", env="gprd",type="cloudflare"}
               /
-              node_filesystem_files{fstype=~"(ext.|xfs)", type="cloudflare"}
+              node_filesystem_files{fstype=~"(ext.|xfs)", env="gprd",type="cloudflare"}
             )
             ,
             1)
@@ -44,7 +44,7 @@ groups:
         clamp_min(
           clamp_max(
             (
-              1 - node_filesystem_avail_bytes{fstype=~"ext.|xfs", type="cloudflare"} / node_filesystem_size_bytes{fstype=~"ext.|xfs", type="cloudflare"}
+              1 - node_filesystem_avail_bytes{fstype=~"ext.|xfs", env="gprd",type="cloudflare"} / node_filesystem_size_bytes{fstype=~"ext.|xfs", env="gprd",type="cloudflare"}
             )
             ,
             1)
@@ -58,7 +58,7 @@ groups:
       max by(env, environment, tier, type, stage, shard) (
         clamp_min(
           clamp_max(
-            instance:node_memory_utilization:ratio{type="cloudflare"} or instance:node_memory_utilisation:ratio{type="cloudflare"}
+            instance:node_memory_utilization:ratio{env="gprd",type="cloudflare"} or instance:node_memory_utilisation:ratio{env="gprd",type="cloudflare"}
             ,
             1)
         ,
@@ -71,9 +71,9 @@ groups:
       max by(env, environment, tier, type, stage, shard) (
         clamp_min(
           clamp_max(
-            max_over_time(node_nf_conntrack_entries{type="cloudflare"}[1m])
+            max_over_time(node_nf_conntrack_entries{env="gprd",type="cloudflare"}[1m])
             /
-            node_nf_conntrack_entries_limit{type="cloudflare"}
+            node_nf_conntrack_entries_limit{env="gprd",type="cloudflare"}
             ,
             1)
         ,
@@ -86,7 +86,7 @@ groups:
       max by(env, environment, tier, type, stage, shard) (
         clamp_min(
           clamp_max(
-            avg without (cpu) (rate(node_schedstat_waiting_seconds_total{type="cloudflare"}[1h]))
+            avg without (cpu) (rate(node_schedstat_waiting_seconds_total{env="gprd",type="cloudflare"}[1h]))
             ,
             1)
         ,
@@ -100,15 +100,15 @@ groups:
         clamp_min(
           clamp_max(
             (
-              process_open_fds{type="cloudflare"}
+              process_open_fds{env="gprd",type="cloudflare"}
               /
-              process_max_fds{type="cloudflare"}
+              process_max_fds{env="gprd",type="cloudflare"}
             )
             or
             (
-              ruby_file_descriptors{type="cloudflare"}
+              ruby_file_descriptors{env="gprd",type="cloudflare"}
               /
-              ruby_process_max_fds{type="cloudflare"}
+              ruby_process_max_fds{env="gprd",type="cloudflare"}
             )
             ,
             1)
@@ -123,7 +123,7 @@ groups:
         clamp_min(
           clamp_max(
             1 - avg by (env, environment, tier, type, stage, shard, shard) (
-              rate(node_cpu_seconds_total{mode="idle", type="cloudflare"}[5m])
+              rate(node_cpu_seconds_total{mode="idle", env="gprd",type="cloudflare"}[5m])
             )
             ,
             1)
@@ -137,7 +137,7 @@ groups:
       max by(env, environment, tier, type, stage, shard) (
         clamp_min(
           clamp_max(
-            avg without(cpu, mode) (1 - rate(node_cpu_seconds_total{mode="idle", type="cloudflare"}[5m]))
+            avg without(cpu, mode) (1 - rate(node_cpu_seconds_total{mode="idle", env="gprd",type="cloudflare"}[5m]))
             ,
             1)
         ,

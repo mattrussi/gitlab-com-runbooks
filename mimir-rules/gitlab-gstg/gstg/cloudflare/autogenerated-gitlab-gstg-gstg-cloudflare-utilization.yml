@@ -13,5 +13,5 @@ groups:
       unit: bytes
     expr: |
       sum by (env,tier,type,stage) (
-        rate(cloudflare_zone_bandwidth_country{type="cloudflare"}[1d])
+        rate(cloudflare_zone_bandwidth_country{env="gstg",type="cloudflare"}[1d])
       )

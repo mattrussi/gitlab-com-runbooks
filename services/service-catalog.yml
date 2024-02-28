@@ -2553,8 +2553,25 @@ services:
           permalink:
 
   - name: cloudflare
-    tier: inf
-    friendly_name: Cloudflare
+    tier: lb
+    friendly_name: Cloudflare Web Application Firewall
     label: cloudflare
-    teams:
-    owner:
+    owner: reliability_foundations
+    technical:
+      project:
+      documents:
+        design:
+        architecture:
+        readiness_review: https://gitlab.com/gitlab-com/gl-infra/readiness/-/tree/master/cloudflare
+        sre_guide: https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/cloudflare
+        developer_guide:
+        service:
+        security:
+      dependencies:
+      logging:
+        - name:
+          permalink:
+    observability:
+      monitors:
+        primary_grafana_dashboard: 
+        sentry_slug:
