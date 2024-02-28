@@ -22,7 +22,7 @@ basic.dashboard(
   refresh='load',
   sort=1,
 ))
-.addAnnotation(commonAnnotations.deploymentsForRunway)
+.addAnnotation(commonAnnotations.deploymentsForRunway('${type}'))
 .addPanels(
   layout.grid(
     [
