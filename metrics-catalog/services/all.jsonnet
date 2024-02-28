@@ -12,6 +12,7 @@
   import 'camoproxy.jsonnet',
   import 'ci-runners.jsonnet',
   import 'cloud-sql.jsonnet',
+  import 'cloudflare.jsonnet',
   import 'consul.jsonnet',
   import 'customersdot.jsonnet',
   import 'errortracking.jsonnet',
