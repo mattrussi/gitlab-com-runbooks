@@ -2551,3 +2551,10 @@ services:
       logging:
         - name:
           permalink:
+
+  - name: cloudflare
+    tier: inf
+    friendly_name: Cloudflare
+    label: cloudflare
+    teams:
+    owner:
