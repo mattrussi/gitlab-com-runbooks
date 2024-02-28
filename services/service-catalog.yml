@@ -2573,5 +2573,5 @@ services:
           permalink:
     observability:
       monitors:
-        primary_grafana_dashboard: 
+        primary_grafana_dashboard:
         sentry_slug:
