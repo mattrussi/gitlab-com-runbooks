@@ -23,6 +23,7 @@ let
 in pkgs.mkShell {
   name     = "runbooks";
   packages = with pkgs; [
+    jq
     jsonnet-tool
     ruby_3_2
     go-jsonnet
