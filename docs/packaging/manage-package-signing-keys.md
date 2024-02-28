@@ -120,7 +120,7 @@ publishing, and in PackageCloud. This is completed simply via:
 
 Next, we'll to export the entire secret key:
 
-`gpg --export-secret-key <KEYID> > packages.gitlab.gpg`
+`gpg --armor --export-secret-keys <KEYID> > packages.gitlab.gpg`
 
 This key should be uploaded to the secure storage location.
 
@@ -149,7 +149,6 @@ The steps to extend are as follows:
   ```
 
 * Enter `expire`, follow prompts to expire by X years with `2y`
-* At this stage, you will be prompted to the key's passphrase.
 * Enter `key 1` to select the subkey
 * Enter `expire`, follow prompts to expire by X years with `2y`
 * Enter `save` to store the changes to the key and exit.
