@@ -5,7 +5,6 @@ local sliMetricDescriptor = import 'servicemetrics/sli_metric_descriptor.libsonn
 local selectors = import 'promql/selectors.libsonnet';
 local aggregations = import 'promql/aggregations.libsonnet';
 local optionalOffset = import 'recording-rules/lib/optional-offset.libsonnet';
-local misc = import 'utils/misc.libsonnet';
 
 local aggregationSetLabels = std.set(
   std.flatMap(
@@ -92,17 +91,9 @@ local generateRecordingRules(sliDefinitions, burnRate, extraSelector) =
         selectorsByMetric[metricName],
         extraSelector
       );
+      local emittingTypes = emittingTypesByMetric[metricName];
 
-      // type selector can come from selector defined in SLI and emittedBy
-      // so we combine them here
-      local typesSelector = std.setUnion(
-        // type from `selector` is always in the form of `oneOf` (if present)
-        // because it's already normalized in the descriptor
-        misc.dig(selector, ['type', 'oneOf']),
-        emittingTypesByMetric[metricName]
-      );
-
-      if std.length(typesSelector) > 0 then
+      if std.length(emittingTypes) > 0 then
         std.map(
           function(type)
             local selectorPerType = selectors.merge(
@@ -110,7 +101,7 @@ local generateRecordingRules(sliDefinitions, burnRate, extraSelector) =
               { type: { oneOf: [type] } }
             );
             generateRecordingRulesForMetric(metricName, aggregationLabelsByMetric[metricName], selectorPerType, burnRate),
-          typesSelector
+          emittingTypes
         )
       else
         [generateRecordingRulesForMetric(metricName, aggregationLabelsByMetric[metricName], selector, burnRate)],

@@ -35,9 +35,9 @@ local singleHTTPComponent(stage, selector, definition, userImpacting) =
       selector=baseSelector { code: '5xx' }
     ),
 
-    significantLabels: [],
+    emittedBy: [],
 
-    emittedBy: [],  // this means ignoring type selector for sli_aggregations: recording rules
+    significantLabels: [],
 
     toolingLinks: toolingLinks,
   });
@@ -68,9 +68,9 @@ local singleL4Component(stage, selector, definition, userImpacting) =
       selector=baseSelector
     ),
 
-    significantLabels: [],
-
     emittedBy: [],
+
+    significantLabels: [],
 
     toolingLinks: toolingLinks,
   });
