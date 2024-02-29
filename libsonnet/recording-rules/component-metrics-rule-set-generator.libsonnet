@@ -1,3 +1,5 @@
+local aggregationSetErrorRatioReflectedRuleSet = (import 'recording-rules/aggregation-set-reflected-ratio-rule-set.libsonnet').aggregationSetErrorRatioReflectedRuleSet;
+local aggregationSetApdexRatioReflectedRuleSet = (import 'recording-rules/aggregation-set-reflected-ratio-rule-set.libsonnet').aggregationSetApdexRatioReflectedRuleSet;
 // Get the set of static labels for an aggregation
 // The feature category will be included if the aggregation needs it and the SLI has
 // a feature category
@@ -53,6 +55,12 @@ local generateErrorRateRules(burnRate, aggregationSet, sliDefinition, recordingR
   else
     [];
 
+local generateErrorRatioRules(burnRate, aggregationSet, sliDefinition, recordingRuleStaticLabels, extraSourceSelector, config) =
+  aggregationSetErrorRatioReflectedRuleSet(aggregationSet, burnRate, extraSourceSelector, recordingRuleStaticLabels);
+
+local generateApdexRatioRules(burnRate, aggregationSet, sliDefinition, recordingRuleStaticLabels, extraSourceSelector, config) =
+  aggregationSetApdexRatioReflectedRuleSet(aggregationSet, burnRate, extraSourceSelector, recordingRuleStaticLabels);
+
 // Generates the recording rules given a component definition
 local generateRecordingRulesForComponent(burnRate, aggregationSet, serviceDefinition, sliDefinition, extraSourceSelector, config) =
   local recordingRuleStaticLabels = staticLabelsForAggregation(serviceDefinition, sliDefinition, aggregationSet);
@@ -70,6 +78,8 @@ local generateRecordingRulesForComponent(burnRate, aggregationSet, serviceDefini
       generateApdexRules,
       generateRequestRateRules,
       generateErrorRateRules,  // Error rates should always go after request rates as we have a fallback clause which relies on request rate existing
+      generateErrorRatioRules,
+      generateApdexRatioRules,
     ]
   );
 
