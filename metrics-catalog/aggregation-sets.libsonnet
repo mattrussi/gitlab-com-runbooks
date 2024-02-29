@@ -392,13 +392,12 @@ local aggregationSet = import 'servicemetrics/aggregation-set.libsonnet';
     selector: { monitor: 'global' },
     labels: ['env', 'environment', 'tier', 'type', 'stage', 'component', 'feature_category'],
     upscaleLongerBurnRates: true,
+    generateSLODashboards: false,
     metricFormats: {
       apdexSuccessRate: 'gitlab:component:feature_category:execution:apdex:success:rate_%s',
       apdexWeight: 'gitlab:component:feature_category:execution:apdex:weight:score_%s',
-      apdexRatio: 'gitlab:component:feature_category:execution:apdex:ratio_%s',
       opsRate: 'gitlab:component:feature_category:execution:ops:rate_%s',
       errorRate: 'gitlab:component:feature_category:execution:error:rate_%s',
-      errorRatio: 'gitlab:component:feature_category:execution:error:ratio_%s',
     },
   }),
 
