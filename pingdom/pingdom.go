@@ -29,6 +29,8 @@ type PingdomCheck struct {
 	Tags               []string `yaml:"tags"`
 	Integrations       []string `yaml:"integrations"`
 	NotifyWhenRestored bool     `yaml:"notify_when_restored"`
+	CheckType          string   `yaml:"check_type"`
+	CheckPort          int      `yaml:"check_port"`
 }
 
 // PingdomChecks represents the YAML config structure
@@ -123,6 +125,18 @@ func (c PingdomCheck) getCheck(config PingdomChecks, teamMap map[string]pingdom.
 	}
 	tagCSV := strings.Join(tags, ",")
 
+	if c.CheckType == "tcp" {
+		return &pingdom.TCPCheck{
+			Name:             c.name(),
+			Hostname:         hostname,
+			Resolution:       resolutionMinutes,
+			Tags:             tagCSV,
+			TeamIds:          teamIds,
+			IntegrationIds:   integrationIDs,
+			NotifyWhenBackup: c.NotifyWhenRestored,
+			Port:             c.CheckPort,
+		}
+	}
 	return &pingdom.HttpCheck{
 		Name:                  c.name(),
 		Hostname:              hostname,
@@ -135,6 +149,7 @@ func (c PingdomCheck) getCheck(config PingdomChecks, teamMap map[string]pingdom.
 		IntegrationIds:        integrationIDs,
 		NotifyWhenBackup:      c.NotifyWhenRestored,
 	}
+
 }
 
 func findChecksForRemoval(configMap map[string]PingdomCheck, deployedChecks map[string]pingdom.CheckResponse) []pingdom.CheckResponse {
@@ -179,7 +194,7 @@ type pingdomCheckUpdater interface {
 type dryRunUpdater struct{}
 
 func (c dryRunUpdater) insert(name string, check pingdom.Check) error {
-	log.Printf("dry-run: will create: %s", name)
+	log.Printf("dry-run: will create: %T: %s", check, name)
 	return nil
 }
 
@@ -247,6 +262,12 @@ func validateDefaults(defaults PingdomCheckDefaults) {
 func validateCheck(check PingdomCheck) {
 	if check.ResolutionMinutes != 0 {
 		validateResolutionMinutes(check.ResolutionMinutes, check.name())
+	}
+
+	if check.CheckType == "tcp" {
+		if check.CheckPort == 0 {
+			log.Fatalf("invalid value for `CheckPort` in %v. A value must be set when check_type is tcp", check.name())
+		}
 	}
 }
 
