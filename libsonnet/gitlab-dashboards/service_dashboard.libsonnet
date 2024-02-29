@@ -100,7 +100,7 @@ local overviewDashboard(
     )
     .addAnnotationIf(
       metricsCatalogServiceInfo.getProvisioning().runway,
-      commonAnnotations.deploymentsForRunway,
+      commonAnnotations.deploymentsForRunway(type),
     )
     .addPanels(
       headlineMetricsRow(
