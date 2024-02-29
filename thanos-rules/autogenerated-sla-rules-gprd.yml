@@ -14,6 +14,8 @@ groups:
         or
         min without(slo) (avg_over_time(slo_observation_status{env="gprd",monitor="global",type="git"}[5m])) * 5
         or
+        min without(slo) (avg_over_time(slo_observation_status{env="gprd",monitor="global",type="internal-api"}[5m])) * 5
+        or
         min without(slo) (avg_over_time(slo_observation_status{env="gprd",monitor="global",type="registry"}[5m])) * 1
         or
         min without(slo) (avg_over_time(slo_observation_status{env="gprd",monitor="global",type="web"}[5m])) * 5
@@ -26,6 +28,8 @@ groups:
         group without(slo) (avg_over_time(slo_observation_status{env="gprd",monitor="global",type="api"}[5m])) * 5
         or
         group without(slo) (avg_over_time(slo_observation_status{env="gprd",monitor="global",type="git"}[5m])) * 5
+        or
+        group without(slo) (avg_over_time(slo_observation_status{env="gprd",monitor="global",type="internal-api"}[5m])) * 5
         or
         group without(slo) (avg_over_time(slo_observation_status{env="gprd",monitor="global",type="registry"}[5m])) * 1
         or
@@ -52,6 +56,8 @@ groups:
         or
         min without(slo) (avg_over_time(slo_observation_status{env="gprd",monitor="global",type="git"}[5m])) * 5
         or
+        min without(slo) (avg_over_time(slo_observation_status{env="gprd",monitor="global",type="internal-api"}[5m])) * 5
+        or
         min without(slo) (avg_over_time(slo_observation_status{env="gprd",monitor="global",type="registry"}[5m])) * 1
         or
         min without(slo) (avg_over_time(slo_observation_status{env="gprd",monitor="global",type="sidekiq"}[5m])) * 1
@@ -66,6 +72,8 @@ groups:
         group without(slo) (avg_over_time(slo_observation_status{env="gprd",monitor="global",type="api"}[5m])) * 5
         or
         group without(slo) (avg_over_time(slo_observation_status{env="gprd",monitor="global",type="git"}[5m])) * 5
+        or
+        group without(slo) (avg_over_time(slo_observation_status{env="gprd",monitor="global",type="internal-api"}[5m])) * 5
         or
         group without(slo) (avg_over_time(slo_observation_status{env="gprd",monitor="global",type="registry"}[5m])) * 1
         or

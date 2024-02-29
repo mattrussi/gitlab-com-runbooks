@@ -2336,8 +2336,7 @@ services:
     owner: reliability_general
     business:
       SLA:
-        overall_sla_weighting: 0 # Treated as a primary service, but with a zero weight for now
-    # TODO: Reenable it as per: https://gitlab.com/gitlab-com/gl-infra/delivery/-/issues/2859
+        overall_sla_weighting: 5
     technical:
       project:
         - https://gitlab.com/gitlab-org/gitlab
