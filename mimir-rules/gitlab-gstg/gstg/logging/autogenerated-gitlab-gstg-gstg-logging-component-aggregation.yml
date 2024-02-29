@@ -15,6 +15,34 @@ groups:
       sum by (env,environment) (
         clamp_min(deriv(elasticsearch_indices_indexing_index_total{env="gstg",type="logging"}[5m] offset 30s), 0)
       )
+  - record: gitlab_component_errors:ratio_5m
+    labels:
+      component: elasticsearch_indexing_cluster
+      monitor: global
+      tier: inf
+      type: logging
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_5m{component="elasticsearch_indexing_cluster",env="gstg",monitor="global",tier="inf",type="logging"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_5m{component="elasticsearch_indexing_cluster",env="gstg",monitor="global",tier="inf",type="logging"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_5m
+    labels:
+      component: elasticsearch_indexing_cluster
+      monitor: global
+      tier: inf
+      type: logging
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_5m{component="elasticsearch_indexing_cluster",env="gstg",monitor="global",tier="inf",type="logging"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_5m{component="elasticsearch_indexing_cluster",env="gstg",monitor="global",tier="inf",type="logging"} offset 30s
+      )
   - record: gitlab_component_ops:rate_5m
     labels:
       component: elasticsearch_indexing_index
@@ -25,6 +53,34 @@ groups:
     expr: |
       sum by (env,environment) (
         clamp_min(deriv(elasticsearch_index_stats_indexing_index_total{env="gstg",type="logging"}[5m] offset 30s), 0)
+      )
+  - record: gitlab_component_errors:ratio_5m
+    labels:
+      component: elasticsearch_indexing_index
+      monitor: global
+      tier: inf
+      type: logging
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_5m{component="elasticsearch_indexing_index",env="gstg",monitor="global",tier="inf",type="logging"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_5m{component="elasticsearch_indexing_index",env="gstg",monitor="global",tier="inf",type="logging"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_5m
+    labels:
+      component: elasticsearch_indexing_index
+      monitor: global
+      tier: inf
+      type: logging
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_5m{component="elasticsearch_indexing_index",env="gstg",monitor="global",tier="inf",type="logging"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_5m{component="elasticsearch_indexing_index",env="gstg",monitor="global",tier="inf",type="logging"} offset 30s
       )
   - record: gitlab_component_ops:rate_5m
     labels:
@@ -37,6 +93,34 @@ groups:
       sum by (env,environment) (
         clamp_min(deriv(elasticsearch_indices_search_query_total{env="gstg",type="logging"}[5m] offset 30s), 0)
       )
+  - record: gitlab_component_errors:ratio_5m
+    labels:
+      component: elasticsearch_searching_cluster
+      monitor: global
+      tier: inf
+      type: logging
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_5m{component="elasticsearch_searching_cluster",env="gstg",monitor="global",tier="inf",type="logging"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_5m{component="elasticsearch_searching_cluster",env="gstg",monitor="global",tier="inf",type="logging"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_5m
+    labels:
+      component: elasticsearch_searching_cluster
+      monitor: global
+      tier: inf
+      type: logging
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_5m{component="elasticsearch_searching_cluster",env="gstg",monitor="global",tier="inf",type="logging"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_5m{component="elasticsearch_searching_cluster",env="gstg",monitor="global",tier="inf",type="logging"} offset 30s
+      )
   - record: gitlab_component_ops:rate_5m
     labels:
       component: elasticsearch_searching_index
@@ -47,6 +131,34 @@ groups:
     expr: |
       sum by (env,environment) (
         clamp_min(deriv(elasticsearch_index_stats_search_query_total{env="gstg",type="logging"}[5m] offset 30s), 0)
+      )
+  - record: gitlab_component_errors:ratio_5m
+    labels:
+      component: elasticsearch_searching_index
+      monitor: global
+      tier: inf
+      type: logging
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_5m{component="elasticsearch_searching_index",env="gstg",monitor="global",tier="inf",type="logging"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_5m{component="elasticsearch_searching_index",env="gstg",monitor="global",tier="inf",type="logging"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_5m
+    labels:
+      component: elasticsearch_searching_index
+      monitor: global
+      tier: inf
+      type: logging
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_5m{component="elasticsearch_searching_index",env="gstg",monitor="global",tier="inf",type="logging"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_5m{component="elasticsearch_searching_index",env="gstg",monitor="global",tier="inf",type="logging"} offset 30s
       )
   - record: gitlab_component_ops:rate_5m
     labels:
@@ -78,6 +190,34 @@ groups:
           gitlab_component_ops:rate_5m{component="fluentd_log_output",env="gstg",monitor="global",stage="main",tier="inf",type="logging"}
         )
       )
+  - record: gitlab_component_errors:ratio_5m
+    labels:
+      component: fluentd_log_output
+      monitor: global
+      tier: inf
+      type: logging
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_5m{component="fluentd_log_output",env="gstg",monitor="global",tier="inf",type="logging"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_5m{component="fluentd_log_output",env="gstg",monitor="global",tier="inf",type="logging"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_5m
+    labels:
+      component: fluentd_log_output
+      monitor: global
+      tier: inf
+      type: logging
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_5m{component="fluentd_log_output",env="gstg",monitor="global",tier="inf",type="logging"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_5m{component="fluentd_log_output",env="gstg",monitor="global",tier="inf",type="logging"} offset 30s
+      )
   - record: gitlab_component_ops:rate_5m
     labels:
       component: kibana_googlelb
@@ -108,6 +248,34 @@ groups:
           gitlab_component_ops:rate_5m{component="kibana_googlelb",env="gstg",monitor="global",stage="main",tier="inf",type="logging"}
         )
       )
+  - record: gitlab_component_errors:ratio_5m
+    labels:
+      component: kibana_googlelb
+      monitor: global
+      tier: inf
+      type: logging
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_5m{component="kibana_googlelb",env="gstg",monitor="global",tier="inf",type="logging"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_5m{component="kibana_googlelb",env="gstg",monitor="global",tier="inf",type="logging"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_5m
+    labels:
+      component: kibana_googlelb
+      monitor: global
+      tier: inf
+      type: logging
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_5m{component="kibana_googlelb",env="gstg",monitor="global",tier="inf",type="logging"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_5m{component="kibana_googlelb",env="gstg",monitor="global",tier="inf",type="logging"} offset 30s
+      )
   - record: gitlab_component_ops:rate_5m
     labels:
       component: pubsub_subscriptions
@@ -119,6 +287,34 @@ groups:
       sum by (env,environment) (
         sli_aggregations:stackdriver_pubsub_subscription_pubsub_googleapis_com_subscription_byte_cost:rate_5m{env="gstg",type="monitoring"} offset 30s
       )
+  - record: gitlab_component_errors:ratio_5m
+    labels:
+      component: pubsub_subscriptions
+      monitor: global
+      tier: inf
+      type: logging
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_5m{component="pubsub_subscriptions",env="gstg",monitor="global",tier="inf",type="logging"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_5m{component="pubsub_subscriptions",env="gstg",monitor="global",tier="inf",type="logging"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_5m
+    labels:
+      component: pubsub_subscriptions
+      monitor: global
+      tier: inf
+      type: logging
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_5m{component="pubsub_subscriptions",env="gstg",monitor="global",tier="inf",type="logging"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_5m{component="pubsub_subscriptions",env="gstg",monitor="global",tier="inf",type="logging"} offset 30s
+      )
   - record: gitlab_component_ops:rate_5m
     labels:
       component: pubsub_topics
@@ -129,6 +325,34 @@ groups:
     expr: |
       sum by (env,environment) (
         sli_aggregations:stackdriver_pubsub_topic_pubsub_googleapis_com_topic_byte_cost:rate_5m{env="gstg",type="monitoring"} offset 30s
+      )
+  - record: gitlab_component_errors:ratio_5m
+    labels:
+      component: pubsub_topics
+      monitor: global
+      tier: inf
+      type: logging
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_5m{component="pubsub_topics",env="gstg",monitor="global",tier="inf",type="logging"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_5m{component="pubsub_topics",env="gstg",monitor="global",tier="inf",type="logging"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_5m
+    labels:
+      component: pubsub_topics
+      monitor: global
+      tier: inf
+      type: logging
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_5m{component="pubsub_topics",env="gstg",monitor="global",tier="inf",type="logging"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_5m{component="pubsub_topics",env="gstg",monitor="global",tier="inf",type="logging"} offset 30s
       )
   - record: gitlab_component_ops:rate_5m
     labels:
@@ -160,6 +384,34 @@ groups:
           gitlab_component_ops:rate_5m{component="pubsubbeat",env="gstg",monitor="global",stage="main",tier="inf",type="logging"}
         )
       )
+  - record: gitlab_component_errors:ratio_5m
+    labels:
+      component: pubsubbeat
+      monitor: global
+      tier: inf
+      type: logging
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_5m{component="pubsubbeat",env="gstg",monitor="global",tier="inf",type="logging"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_5m{component="pubsubbeat",env="gstg",monitor="global",tier="inf",type="logging"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_5m
+    labels:
+      component: pubsubbeat
+      monitor: global
+      tier: inf
+      type: logging
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_5m{component="pubsubbeat",env="gstg",monitor="global",tier="inf",type="logging"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_5m{component="pubsubbeat",env="gstg",monitor="global",tier="inf",type="logging"} offset 30s
+      )
   - record: gitlab_component_ops:rate_5m
     labels:
       component: stackdriver
@@ -170,6 +422,34 @@ groups:
     expr: |
       sum by (env,environment) (
         sli_aggregations:stackdriver_gce_instance_logging_googleapis_com_log_entry_count:rate_5m{env="gstg"} offset 30s
+      )
+  - record: gitlab_component_errors:ratio_5m
+    labels:
+      component: stackdriver
+      monitor: global
+      tier: inf
+      type: logging
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_5m{component="stackdriver",env="gstg",monitor="global",tier="inf",type="logging"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_5m{component="stackdriver",env="gstg",monitor="global",tier="inf",type="logging"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_5m
+    labels:
+      component: stackdriver
+      monitor: global
+      tier: inf
+      type: logging
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_5m{component="stackdriver",env="gstg",monitor="global",tier="inf",type="logging"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_5m{component="stackdriver",env="gstg",monitor="global",tier="inf",type="logging"} offset 30s
       )
 - name: 'Global SLI Metrics: logging - Burn-Rate 30m'
   interval: 2m
@@ -185,6 +465,34 @@ groups:
       sum by (env,environment) (
         clamp_min(deriv(elasticsearch_indices_indexing_index_total{env="gstg",type="logging"}[30m] offset 30s), 0)
       )
+  - record: gitlab_component_errors:ratio_30m
+    labels:
+      component: elasticsearch_indexing_cluster
+      monitor: global
+      tier: inf
+      type: logging
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_30m{component="elasticsearch_indexing_cluster",env="gstg",monitor="global",tier="inf",type="logging"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_30m{component="elasticsearch_indexing_cluster",env="gstg",monitor="global",tier="inf",type="logging"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_30m
+    labels:
+      component: elasticsearch_indexing_cluster
+      monitor: global
+      tier: inf
+      type: logging
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_30m{component="elasticsearch_indexing_cluster",env="gstg",monitor="global",tier="inf",type="logging"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_30m{component="elasticsearch_indexing_cluster",env="gstg",monitor="global",tier="inf",type="logging"} offset 30s
+      )
   - record: gitlab_component_ops:rate_30m
     labels:
       component: elasticsearch_indexing_index
@@ -195,6 +503,34 @@ groups:
     expr: |
       sum by (env,environment) (
         clamp_min(deriv(elasticsearch_index_stats_indexing_index_total{env="gstg",type="logging"}[30m] offset 30s), 0)
+      )
+  - record: gitlab_component_errors:ratio_30m
+    labels:
+      component: elasticsearch_indexing_index
+      monitor: global
+      tier: inf
+      type: logging
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_30m{component="elasticsearch_indexing_index",env="gstg",monitor="global",tier="inf",type="logging"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_30m{component="elasticsearch_indexing_index",env="gstg",monitor="global",tier="inf",type="logging"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_30m
+    labels:
+      component: elasticsearch_indexing_index
+      monitor: global
+      tier: inf
+      type: logging
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_30m{component="elasticsearch_indexing_index",env="gstg",monitor="global",tier="inf",type="logging"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_30m{component="elasticsearch_indexing_index",env="gstg",monitor="global",tier="inf",type="logging"} offset 30s
       )
   - record: gitlab_component_ops:rate_30m
     labels:
@@ -207,6 +543,34 @@ groups:
       sum by (env,environment) (
         clamp_min(deriv(elasticsearch_indices_search_query_total{env="gstg",type="logging"}[30m] offset 30s), 0)
       )
+  - record: gitlab_component_errors:ratio_30m
+    labels:
+      component: elasticsearch_searching_cluster
+      monitor: global
+      tier: inf
+      type: logging
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_30m{component="elasticsearch_searching_cluster",env="gstg",monitor="global",tier="inf",type="logging"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_30m{component="elasticsearch_searching_cluster",env="gstg",monitor="global",tier="inf",type="logging"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_30m
+    labels:
+      component: elasticsearch_searching_cluster
+      monitor: global
+      tier: inf
+      type: logging
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_30m{component="elasticsearch_searching_cluster",env="gstg",monitor="global",tier="inf",type="logging"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_30m{component="elasticsearch_searching_cluster",env="gstg",monitor="global",tier="inf",type="logging"} offset 30s
+      )
   - record: gitlab_component_ops:rate_30m
     labels:
       component: elasticsearch_searching_index
@@ -217,6 +581,34 @@ groups:
     expr: |
       sum by (env,environment) (
         clamp_min(deriv(elasticsearch_index_stats_search_query_total{env="gstg",type="logging"}[30m] offset 30s), 0)
+      )
+  - record: gitlab_component_errors:ratio_30m
+    labels:
+      component: elasticsearch_searching_index
+      monitor: global
+      tier: inf
+      type: logging
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_30m{component="elasticsearch_searching_index",env="gstg",monitor="global",tier="inf",type="logging"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_30m{component="elasticsearch_searching_index",env="gstg",monitor="global",tier="inf",type="logging"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_30m
+    labels:
+      component: elasticsearch_searching_index
+      monitor: global
+      tier: inf
+      type: logging
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_30m{component="elasticsearch_searching_index",env="gstg",monitor="global",tier="inf",type="logging"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_30m{component="elasticsearch_searching_index",env="gstg",monitor="global",tier="inf",type="logging"} offset 30s
       )
   - record: gitlab_component_ops:rate_30m
     labels:
@@ -248,6 +640,34 @@ groups:
           gitlab_component_ops:rate_30m{component="fluentd_log_output",env="gstg",monitor="global",stage="main",tier="inf",type="logging"}
         )
       )
+  - record: gitlab_component_errors:ratio_30m
+    labels:
+      component: fluentd_log_output
+      monitor: global
+      tier: inf
+      type: logging
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_30m{component="fluentd_log_output",env="gstg",monitor="global",tier="inf",type="logging"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_30m{component="fluentd_log_output",env="gstg",monitor="global",tier="inf",type="logging"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_30m
+    labels:
+      component: fluentd_log_output
+      monitor: global
+      tier: inf
+      type: logging
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_30m{component="fluentd_log_output",env="gstg",monitor="global",tier="inf",type="logging"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_30m{component="fluentd_log_output",env="gstg",monitor="global",tier="inf",type="logging"} offset 30s
+      )
   - record: gitlab_component_ops:rate_30m
     labels:
       component: kibana_googlelb
@@ -278,6 +698,34 @@ groups:
           gitlab_component_ops:rate_30m{component="kibana_googlelb",env="gstg",monitor="global",stage="main",tier="inf",type="logging"}
         )
       )
+  - record: gitlab_component_errors:ratio_30m
+    labels:
+      component: kibana_googlelb
+      monitor: global
+      tier: inf
+      type: logging
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_30m{component="kibana_googlelb",env="gstg",monitor="global",tier="inf",type="logging"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_30m{component="kibana_googlelb",env="gstg",monitor="global",tier="inf",type="logging"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_30m
+    labels:
+      component: kibana_googlelb
+      monitor: global
+      tier: inf
+      type: logging
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_30m{component="kibana_googlelb",env="gstg",monitor="global",tier="inf",type="logging"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_30m{component="kibana_googlelb",env="gstg",monitor="global",tier="inf",type="logging"} offset 30s
+      )
   - record: gitlab_component_ops:rate_30m
     labels:
       component: pubsub_subscriptions
@@ -289,6 +737,34 @@ groups:
       sum by (env,environment) (
         sli_aggregations:stackdriver_pubsub_subscription_pubsub_googleapis_com_subscription_byte_cost:rate_30m{env="gstg",type="monitoring"} offset 30s
       )
+  - record: gitlab_component_errors:ratio_30m
+    labels:
+      component: pubsub_subscriptions
+      monitor: global
+      tier: inf
+      type: logging
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_30m{component="pubsub_subscriptions",env="gstg",monitor="global",tier="inf",type="logging"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_30m{component="pubsub_subscriptions",env="gstg",monitor="global",tier="inf",type="logging"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_30m
+    labels:
+      component: pubsub_subscriptions
+      monitor: global
+      tier: inf
+      type: logging
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_30m{component="pubsub_subscriptions",env="gstg",monitor="global",tier="inf",type="logging"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_30m{component="pubsub_subscriptions",env="gstg",monitor="global",tier="inf",type="logging"} offset 30s
+      )
   - record: gitlab_component_ops:rate_30m
     labels:
       component: pubsub_topics
@@ -299,6 +775,34 @@ groups:
     expr: |
       sum by (env,environment) (
         sli_aggregations:stackdriver_pubsub_topic_pubsub_googleapis_com_topic_byte_cost:rate_30m{env="gstg",type="monitoring"} offset 30s
+      )
+  - record: gitlab_component_errors:ratio_30m
+    labels:
+      component: pubsub_topics
+      monitor: global
+      tier: inf
+      type: logging
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_30m{component="pubsub_topics",env="gstg",monitor="global",tier="inf",type="logging"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_30m{component="pubsub_topics",env="gstg",monitor="global",tier="inf",type="logging"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_30m
+    labels:
+      component: pubsub_topics
+      monitor: global
+      tier: inf
+      type: logging
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_30m{component="pubsub_topics",env="gstg",monitor="global",tier="inf",type="logging"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_30m{component="pubsub_topics",env="gstg",monitor="global",tier="inf",type="logging"} offset 30s
       )
   - record: gitlab_component_ops:rate_30m
     labels:
@@ -330,6 +834,34 @@ groups:
           gitlab_component_ops:rate_30m{component="pubsubbeat",env="gstg",monitor="global",stage="main",tier="inf",type="logging"}
         )
       )
+  - record: gitlab_component_errors:ratio_30m
+    labels:
+      component: pubsubbeat
+      monitor: global
+      tier: inf
+      type: logging
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_30m{component="pubsubbeat",env="gstg",monitor="global",tier="inf",type="logging"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_30m{component="pubsubbeat",env="gstg",monitor="global",tier="inf",type="logging"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_30m
+    labels:
+      component: pubsubbeat
+      monitor: global
+      tier: inf
+      type: logging
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_30m{component="pubsubbeat",env="gstg",monitor="global",tier="inf",type="logging"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_30m{component="pubsubbeat",env="gstg",monitor="global",tier="inf",type="logging"} offset 30s
+      )
   - record: gitlab_component_ops:rate_30m
     labels:
       component: stackdriver
@@ -340,6 +872,34 @@ groups:
     expr: |
       sum by (env,environment) (
         sli_aggregations:stackdriver_gce_instance_logging_googleapis_com_log_entry_count:rate_30m{env="gstg"} offset 30s
+      )
+  - record: gitlab_component_errors:ratio_30m
+    labels:
+      component: stackdriver
+      monitor: global
+      tier: inf
+      type: logging
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_30m{component="stackdriver",env="gstg",monitor="global",tier="inf",type="logging"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_30m{component="stackdriver",env="gstg",monitor="global",tier="inf",type="logging"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_30m
+    labels:
+      component: stackdriver
+      monitor: global
+      tier: inf
+      type: logging
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_30m{component="stackdriver",env="gstg",monitor="global",tier="inf",type="logging"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_30m{component="stackdriver",env="gstg",monitor="global",tier="inf",type="logging"} offset 30s
       )
 - name: 'Global SLI Metrics: logging - Burn-Rate 1h'
   interval: 1m
@@ -355,6 +915,34 @@ groups:
       sum by (env,environment) (
         clamp_min(deriv(elasticsearch_indices_indexing_index_total{env="gstg",type="logging"}[1h] offset 30s), 0)
       )
+  - record: gitlab_component_errors:ratio_1h
+    labels:
+      component: elasticsearch_indexing_cluster
+      monitor: global
+      tier: inf
+      type: logging
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_1h{component="elasticsearch_indexing_cluster",env="gstg",monitor="global",tier="inf",type="logging"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_1h{component="elasticsearch_indexing_cluster",env="gstg",monitor="global",tier="inf",type="logging"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_1h
+    labels:
+      component: elasticsearch_indexing_cluster
+      monitor: global
+      tier: inf
+      type: logging
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_1h{component="elasticsearch_indexing_cluster",env="gstg",monitor="global",tier="inf",type="logging"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_1h{component="elasticsearch_indexing_cluster",env="gstg",monitor="global",tier="inf",type="logging"} offset 30s
+      )
   - record: gitlab_component_ops:rate_1h
     labels:
       component: elasticsearch_indexing_index
@@ -365,6 +953,34 @@ groups:
     expr: |
       sum by (env,environment) (
         clamp_min(deriv(elasticsearch_index_stats_indexing_index_total{env="gstg",type="logging"}[1h] offset 30s), 0)
+      )
+  - record: gitlab_component_errors:ratio_1h
+    labels:
+      component: elasticsearch_indexing_index
+      monitor: global
+      tier: inf
+      type: logging
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_1h{component="elasticsearch_indexing_index",env="gstg",monitor="global",tier="inf",type="logging"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_1h{component="elasticsearch_indexing_index",env="gstg",monitor="global",tier="inf",type="logging"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_1h
+    labels:
+      component: elasticsearch_indexing_index
+      monitor: global
+      tier: inf
+      type: logging
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_1h{component="elasticsearch_indexing_index",env="gstg",monitor="global",tier="inf",type="logging"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_1h{component="elasticsearch_indexing_index",env="gstg",monitor="global",tier="inf",type="logging"} offset 30s
       )
   - record: gitlab_component_ops:rate_1h
     labels:
@@ -377,6 +993,34 @@ groups:
       sum by (env,environment) (
         clamp_min(deriv(elasticsearch_indices_search_query_total{env="gstg",type="logging"}[1h] offset 30s), 0)
       )
+  - record: gitlab_component_errors:ratio_1h
+    labels:
+      component: elasticsearch_searching_cluster
+      monitor: global
+      tier: inf
+      type: logging
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_1h{component="elasticsearch_searching_cluster",env="gstg",monitor="global",tier="inf",type="logging"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_1h{component="elasticsearch_searching_cluster",env="gstg",monitor="global",tier="inf",type="logging"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_1h
+    labels:
+      component: elasticsearch_searching_cluster
+      monitor: global
+      tier: inf
+      type: logging
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_1h{component="elasticsearch_searching_cluster",env="gstg",monitor="global",tier="inf",type="logging"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_1h{component="elasticsearch_searching_cluster",env="gstg",monitor="global",tier="inf",type="logging"} offset 30s
+      )
   - record: gitlab_component_ops:rate_1h
     labels:
       component: elasticsearch_searching_index
@@ -387,6 +1031,34 @@ groups:
     expr: |
       sum by (env,environment) (
         clamp_min(deriv(elasticsearch_index_stats_search_query_total{env="gstg",type="logging"}[1h] offset 30s), 0)
+      )
+  - record: gitlab_component_errors:ratio_1h
+    labels:
+      component: elasticsearch_searching_index
+      monitor: global
+      tier: inf
+      type: logging
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_1h{component="elasticsearch_searching_index",env="gstg",monitor="global",tier="inf",type="logging"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_1h{component="elasticsearch_searching_index",env="gstg",monitor="global",tier="inf",type="logging"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_1h
+    labels:
+      component: elasticsearch_searching_index
+      monitor: global
+      tier: inf
+      type: logging
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_1h{component="elasticsearch_searching_index",env="gstg",monitor="global",tier="inf",type="logging"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_1h{component="elasticsearch_searching_index",env="gstg",monitor="global",tier="inf",type="logging"} offset 30s
       )
   - record: gitlab_component_ops:rate_1h
     labels:
@@ -418,6 +1090,34 @@ groups:
           gitlab_component_ops:rate_1h{component="fluentd_log_output",env="gstg",monitor="global",stage="main",tier="inf",type="logging"}
         )
       )
+  - record: gitlab_component_errors:ratio_1h
+    labels:
+      component: fluentd_log_output
+      monitor: global
+      tier: inf
+      type: logging
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_1h{component="fluentd_log_output",env="gstg",monitor="global",tier="inf",type="logging"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_1h{component="fluentd_log_output",env="gstg",monitor="global",tier="inf",type="logging"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_1h
+    labels:
+      component: fluentd_log_output
+      monitor: global
+      tier: inf
+      type: logging
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_1h{component="fluentd_log_output",env="gstg",monitor="global",tier="inf",type="logging"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_1h{component="fluentd_log_output",env="gstg",monitor="global",tier="inf",type="logging"} offset 30s
+      )
   - record: gitlab_component_ops:rate_1h
     labels:
       component: kibana_googlelb
@@ -448,6 +1148,34 @@ groups:
           gitlab_component_ops:rate_1h{component="kibana_googlelb",env="gstg",monitor="global",stage="main",tier="inf",type="logging"}
         )
       )
+  - record: gitlab_component_errors:ratio_1h
+    labels:
+      component: kibana_googlelb
+      monitor: global
+      tier: inf
+      type: logging
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_1h{component="kibana_googlelb",env="gstg",monitor="global",tier="inf",type="logging"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_1h{component="kibana_googlelb",env="gstg",monitor="global",tier="inf",type="logging"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_1h
+    labels:
+      component: kibana_googlelb
+      monitor: global
+      tier: inf
+      type: logging
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_1h{component="kibana_googlelb",env="gstg",monitor="global",tier="inf",type="logging"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_1h{component="kibana_googlelb",env="gstg",monitor="global",tier="inf",type="logging"} offset 30s
+      )
   - record: gitlab_component_ops:rate_1h
     labels:
       component: pubsub_subscriptions
@@ -459,6 +1187,34 @@ groups:
       sum by (env,environment) (
         sli_aggregations:stackdriver_pubsub_subscription_pubsub_googleapis_com_subscription_byte_cost:rate_1h{env="gstg",type="monitoring"} offset 30s
       )
+  - record: gitlab_component_errors:ratio_1h
+    labels:
+      component: pubsub_subscriptions
+      monitor: global
+      tier: inf
+      type: logging
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_1h{component="pubsub_subscriptions",env="gstg",monitor="global",tier="inf",type="logging"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_1h{component="pubsub_subscriptions",env="gstg",monitor="global",tier="inf",type="logging"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_1h
+    labels:
+      component: pubsub_subscriptions
+      monitor: global
+      tier: inf
+      type: logging
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_1h{component="pubsub_subscriptions",env="gstg",monitor="global",tier="inf",type="logging"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_1h{component="pubsub_subscriptions",env="gstg",monitor="global",tier="inf",type="logging"} offset 30s
+      )
   - record: gitlab_component_ops:rate_1h
     labels:
       component: pubsub_topics
@@ -469,6 +1225,34 @@ groups:
     expr: |
       sum by (env,environment) (
         sli_aggregations:stackdriver_pubsub_topic_pubsub_googleapis_com_topic_byte_cost:rate_1h{env="gstg",type="monitoring"} offset 30s
+      )
+  - record: gitlab_component_errors:ratio_1h
+    labels:
+      component: pubsub_topics
+      monitor: global
+      tier: inf
+      type: logging
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_1h{component="pubsub_topics",env="gstg",monitor="global",tier="inf",type="logging"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_1h{component="pubsub_topics",env="gstg",monitor="global",tier="inf",type="logging"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_1h
+    labels:
+      component: pubsub_topics
+      monitor: global
+      tier: inf
+      type: logging
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_1h{component="pubsub_topics",env="gstg",monitor="global",tier="inf",type="logging"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_1h{component="pubsub_topics",env="gstg",monitor="global",tier="inf",type="logging"} offset 30s
       )
   - record: gitlab_component_ops:rate_1h
     labels:
@@ -500,6 +1284,34 @@ groups:
           gitlab_component_ops:rate_1h{component="pubsubbeat",env="gstg",monitor="global",stage="main",tier="inf",type="logging"}
         )
       )
+  - record: gitlab_component_errors:ratio_1h
+    labels:
+      component: pubsubbeat
+      monitor: global
+      tier: inf
+      type: logging
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_1h{component="pubsubbeat",env="gstg",monitor="global",tier="inf",type="logging"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_1h{component="pubsubbeat",env="gstg",monitor="global",tier="inf",type="logging"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_1h
+    labels:
+      component: pubsubbeat
+      monitor: global
+      tier: inf
+      type: logging
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_1h{component="pubsubbeat",env="gstg",monitor="global",tier="inf",type="logging"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_1h{component="pubsubbeat",env="gstg",monitor="global",tier="inf",type="logging"} offset 30s
+      )
   - record: gitlab_component_ops:rate_1h
     labels:
       component: stackdriver
@@ -510,4 +1322,32 @@ groups:
     expr: |
       sum by (env,environment) (
         sli_aggregations:stackdriver_gce_instance_logging_googleapis_com_log_entry_count:rate_1h{env="gstg"} offset 30s
+      )
+  - record: gitlab_component_errors:ratio_1h
+    labels:
+      component: stackdriver
+      monitor: global
+      tier: inf
+      type: logging
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_1h{component="stackdriver",env="gstg",monitor="global",tier="inf",type="logging"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_1h{component="stackdriver",env="gstg",monitor="global",tier="inf",type="logging"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_1h
+    labels:
+      component: stackdriver
+      monitor: global
+      tier: inf
+      type: logging
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_1h{component="stackdriver",env="gstg",monitor="global",tier="inf",type="logging"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_1h{component="stackdriver",env="gstg",monitor="global",tier="inf",type="logging"} offset 30s
       )

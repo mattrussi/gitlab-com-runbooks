@@ -32,6 +32,34 @@ groups:
           gitlab_component_ops:rate_5m{component="consul",env="gstg",monitor="global",tier="sv",type="consul"}
         )
       )
+  - record: gitlab_component_errors:ratio_5m
+    labels:
+      component: consul
+      monitor: global
+      tier: sv
+      type: consul
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_5m{component="consul",env="gstg",monitor="global",tier="sv",type="consul"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_5m{component="consul",env="gstg",monitor="global",tier="sv",type="consul"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_5m
+    labels:
+      component: consul
+      monitor: global
+      tier: sv
+      type: consul
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_5m{component="consul",env="gstg",monitor="global",tier="sv",type="consul"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_5m{component="consul",env="gstg",monitor="global",tier="sv",type="consul"} offset 30s
+      )
 - name: 'Global SLI Metrics: consul - Burn-Rate 30m'
   interval: 2m
   rules:
@@ -63,6 +91,34 @@ groups:
           gitlab_component_ops:rate_30m{component="consul",env="gstg",monitor="global",tier="sv",type="consul"}
         )
       )
+  - record: gitlab_component_errors:ratio_30m
+    labels:
+      component: consul
+      monitor: global
+      tier: sv
+      type: consul
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_30m{component="consul",env="gstg",monitor="global",tier="sv",type="consul"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_30m{component="consul",env="gstg",monitor="global",tier="sv",type="consul"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_30m
+    labels:
+      component: consul
+      monitor: global
+      tier: sv
+      type: consul
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_30m{component="consul",env="gstg",monitor="global",tier="sv",type="consul"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_30m{component="consul",env="gstg",monitor="global",tier="sv",type="consul"} offset 30s
+      )
 - name: 'Global SLI Metrics: consul - Burn-Rate 1h'
   interval: 1m
   rules:
@@ -93,4 +149,32 @@ groups:
         0 * group by(env,environment,stage) (
           gitlab_component_ops:rate_1h{component="consul",env="gstg",monitor="global",tier="sv",type="consul"}
         )
+      )
+  - record: gitlab_component_errors:ratio_1h
+    labels:
+      component: consul
+      monitor: global
+      tier: sv
+      type: consul
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_1h{component="consul",env="gstg",monitor="global",tier="sv",type="consul"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_1h{component="consul",env="gstg",monitor="global",tier="sv",type="consul"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_1h
+    labels:
+      component: consul
+      monitor: global
+      tier: sv
+      type: consul
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_1h{component="consul",env="gstg",monitor="global",tier="sv",type="consul"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_1h{component="consul",env="gstg",monitor="global",tier="sv",type="consul"} offset 30s
       )

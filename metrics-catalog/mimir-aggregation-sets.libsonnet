@@ -29,8 +29,10 @@ local aggregationSet = (import 'servicemetrics/aggregation-set.libsonnet').Aggre
       // https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/2899
       apdexWeight: 'gitlab_component_apdex:weight:score_%s',
       apdexSuccessRate: 'gitlab_component_apdex:success:rate_%s',
+      apdexRatio: 'gitlab_component_apdex:ratio_%s',
       opsRate: 'gitlab_component_ops:rate_%s',
       errorRate: 'gitlab_component_errors:rate_%s',
+      errorRatio: 'gitlab_component_errors:ratio_%s',
     },
   }),
 }

@@ -34,6 +34,34 @@ groups:
           gitlab_component_ops:rate_5m{component="loadbalancer",env="gstg",monitor="global",stage="main",tier="sv",type="camoproxy"}
         )
       )
+  - record: gitlab_component_errors:ratio_5m
+    labels:
+      component: loadbalancer
+      monitor: global
+      tier: sv
+      type: camoproxy
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_5m{component="loadbalancer",env="gstg",monitor="global",tier="sv",type="camoproxy"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_5m{component="loadbalancer",env="gstg",monitor="global",tier="sv",type="camoproxy"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_5m
+    labels:
+      component: loadbalancer
+      monitor: global
+      tier: sv
+      type: camoproxy
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_5m{component="loadbalancer",env="gstg",monitor="global",tier="sv",type="camoproxy"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_5m{component="loadbalancer",env="gstg",monitor="global",tier="sv",type="camoproxy"} offset 30s
+      )
   - record: gitlab_component_apdex:success:rate_5m
     labels:
       component: server
@@ -86,6 +114,34 @@ groups:
           gitlab_component_ops:rate_5m{component="server",env="gstg",monitor="global",stage="main",tier="sv",type="camoproxy"}
         )
       )
+  - record: gitlab_component_errors:ratio_5m
+    labels:
+      component: server
+      monitor: global
+      tier: sv
+      type: camoproxy
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_5m{component="server",env="gstg",monitor="global",tier="sv",type="camoproxy"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_5m{component="server",env="gstg",monitor="global",tier="sv",type="camoproxy"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_5m
+    labels:
+      component: server
+      monitor: global
+      tier: sv
+      type: camoproxy
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_5m{component="server",env="gstg",monitor="global",tier="sv",type="camoproxy"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_5m{component="server",env="gstg",monitor="global",tier="sv",type="camoproxy"} offset 30s
+      )
 - name: 'Global SLI Metrics: camoproxy - Burn-Rate 30m'
   interval: 2m
   rules:
@@ -118,6 +174,34 @@ groups:
         0 * group by(env,environment) (
           gitlab_component_ops:rate_30m{component="loadbalancer",env="gstg",monitor="global",stage="main",tier="sv",type="camoproxy"}
         )
+      )
+  - record: gitlab_component_errors:ratio_30m
+    labels:
+      component: loadbalancer
+      monitor: global
+      tier: sv
+      type: camoproxy
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_30m{component="loadbalancer",env="gstg",monitor="global",tier="sv",type="camoproxy"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_30m{component="loadbalancer",env="gstg",monitor="global",tier="sv",type="camoproxy"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_30m
+    labels:
+      component: loadbalancer
+      monitor: global
+      tier: sv
+      type: camoproxy
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_30m{component="loadbalancer",env="gstg",monitor="global",tier="sv",type="camoproxy"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_30m{component="loadbalancer",env="gstg",monitor="global",tier="sv",type="camoproxy"} offset 30s
       )
   - record: gitlab_component_apdex:success:rate_30m
     labels:
@@ -171,6 +255,34 @@ groups:
           gitlab_component_ops:rate_30m{component="server",env="gstg",monitor="global",stage="main",tier="sv",type="camoproxy"}
         )
       )
+  - record: gitlab_component_errors:ratio_30m
+    labels:
+      component: server
+      monitor: global
+      tier: sv
+      type: camoproxy
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_30m{component="server",env="gstg",monitor="global",tier="sv",type="camoproxy"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_30m{component="server",env="gstg",monitor="global",tier="sv",type="camoproxy"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_30m
+    labels:
+      component: server
+      monitor: global
+      tier: sv
+      type: camoproxy
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_30m{component="server",env="gstg",monitor="global",tier="sv",type="camoproxy"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_30m{component="server",env="gstg",monitor="global",tier="sv",type="camoproxy"} offset 30s
+      )
 - name: 'Global SLI Metrics: camoproxy - Burn-Rate 1h'
   interval: 1m
   rules:
@@ -203,6 +315,34 @@ groups:
         0 * group by(env,environment) (
           gitlab_component_ops:rate_1h{component="loadbalancer",env="gstg",monitor="global",stage="main",tier="sv",type="camoproxy"}
         )
+      )
+  - record: gitlab_component_errors:ratio_1h
+    labels:
+      component: loadbalancer
+      monitor: global
+      tier: sv
+      type: camoproxy
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_1h{component="loadbalancer",env="gstg",monitor="global",tier="sv",type="camoproxy"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_1h{component="loadbalancer",env="gstg",monitor="global",tier="sv",type="camoproxy"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_1h
+    labels:
+      component: loadbalancer
+      monitor: global
+      tier: sv
+      type: camoproxy
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_1h{component="loadbalancer",env="gstg",monitor="global",tier="sv",type="camoproxy"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_1h{component="loadbalancer",env="gstg",monitor="global",tier="sv",type="camoproxy"} offset 30s
       )
   - record: gitlab_component_apdex:success:rate_1h
     labels:
@@ -259,4 +399,32 @@ groups:
         0 * group by(env,environment) (
           gitlab_component_ops:rate_1h{component="server",env="gstg",monitor="global",stage="main",tier="sv",type="camoproxy",upscale_source="yes"}
         )
+      )
+  - record: gitlab_component_errors:ratio_1h
+    labels:
+      component: server
+      monitor: global
+      tier: sv
+      type: camoproxy
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_1h{component="server",env="gstg",monitor="global",tier="sv",type="camoproxy"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_1h{component="server",env="gstg",monitor="global",tier="sv",type="camoproxy"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_1h
+    labels:
+      component: server
+      monitor: global
+      tier: sv
+      type: camoproxy
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_1h{component="server",env="gstg",monitor="global",tier="sv",type="camoproxy"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_1h{component="server",env="gstg",monitor="global",tier="sv",type="camoproxy"} offset 30s
       )
