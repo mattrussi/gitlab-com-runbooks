@@ -35,9 +35,9 @@ local singleHTTPComponent(stage, selector, definition, userImpacting) =
       selector=baseSelector { code: '5xx' }
     ),
 
-    significantLabels: [],
+    emittedBy: [],
 
-    emittedBy: [],  // this means ignoring type selector for sli_aggregations: recording rules
+    significantLabels: [],
 
     toolingLinks: toolingLinks,
   });
@@ -67,6 +67,8 @@ local singleL4Component(stage, selector, definition, userImpacting) =
       counter='haproxy_server_connection_errors_total',
       selector=baseSelector
     ),
+
+    emittedBy: [],
 
     significantLabels: [],
 

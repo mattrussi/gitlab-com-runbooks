@@ -7,27 +7,202 @@ groups:
   - record: sli_aggregations:gitlab_cache_operation_duration_seconds_bucket:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,store,tier,type,urgency,worker) (
-        rate(gitlab_cache_operation_duration_seconds_bucket{env="gstg",store=~"RedisRepositoryCache",type=~"ai-assisted|api|git|internal-api|ops-gitlab-net|sidekiq|web|websockets"}[5m] offset 30s)
+        rate(gitlab_cache_operation_duration_seconds_bucket{env="gstg",store=~"RedisRepositoryCache",type=~"ai-assisted"}[5m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_cache_operation_duration_seconds_bucket:rate_5m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,store,tier,type,urgency,worker) (
+        rate(gitlab_cache_operation_duration_seconds_bucket{env="gstg",store=~"RedisRepositoryCache",type=~"api"}[5m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_cache_operation_duration_seconds_bucket:rate_5m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,store,tier,type,urgency,worker) (
+        rate(gitlab_cache_operation_duration_seconds_bucket{env="gstg",store=~"RedisRepositoryCache",type=~"git"}[5m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_cache_operation_duration_seconds_bucket:rate_5m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,store,tier,type,urgency,worker) (
+        rate(gitlab_cache_operation_duration_seconds_bucket{env="gstg",store=~"RedisRepositoryCache",type=~"internal-api"}[5m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_cache_operation_duration_seconds_bucket:rate_5m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,store,tier,type,urgency,worker) (
+        rate(gitlab_cache_operation_duration_seconds_bucket{env="gstg",store=~"RedisRepositoryCache",type=~"ops-gitlab-net"}[5m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_cache_operation_duration_seconds_bucket:rate_5m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,store,tier,type,urgency,worker) (
+        rate(gitlab_cache_operation_duration_seconds_bucket{env="gstg",store=~"RedisRepositoryCache",type=~"sidekiq"}[5m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_cache_operation_duration_seconds_bucket:rate_5m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,store,tier,type,urgency,worker) (
+        rate(gitlab_cache_operation_duration_seconds_bucket{env="gstg",store=~"RedisRepositoryCache",type=~"web"}[5m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_cache_operation_duration_seconds_bucket:rate_5m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,store,tier,type,urgency,worker) (
+        rate(gitlab_cache_operation_duration_seconds_bucket{env="gstg",store=~"RedisRepositoryCache",type=~"websockets"}[5m] offset 30s)
       )
   - record: sli_aggregations:gitlab_cache_operation_duration_seconds_count:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,store,tier,type,urgency,worker) (
-        rate(gitlab_cache_operation_duration_seconds_count{env="gstg",store=~"RedisRepositoryCache",type=~"ai-assisted|api|git|internal-api|ops-gitlab-net|sidekiq|web|websockets"}[5m] offset 30s)
+        rate(gitlab_cache_operation_duration_seconds_count{env="gstg",store=~"RedisRepositoryCache",type=~"ai-assisted"}[5m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_cache_operation_duration_seconds_count:rate_5m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,store,tier,type,urgency,worker) (
+        rate(gitlab_cache_operation_duration_seconds_count{env="gstg",store=~"RedisRepositoryCache",type=~"api"}[5m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_cache_operation_duration_seconds_count:rate_5m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,store,tier,type,urgency,worker) (
+        rate(gitlab_cache_operation_duration_seconds_count{env="gstg",store=~"RedisRepositoryCache",type=~"git"}[5m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_cache_operation_duration_seconds_count:rate_5m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,store,tier,type,urgency,worker) (
+        rate(gitlab_cache_operation_duration_seconds_count{env="gstg",store=~"RedisRepositoryCache",type=~"internal-api"}[5m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_cache_operation_duration_seconds_count:rate_5m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,store,tier,type,urgency,worker) (
+        rate(gitlab_cache_operation_duration_seconds_count{env="gstg",store=~"RedisRepositoryCache",type=~"ops-gitlab-net"}[5m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_cache_operation_duration_seconds_count:rate_5m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,store,tier,type,urgency,worker) (
+        rate(gitlab_cache_operation_duration_seconds_count{env="gstg",store=~"RedisRepositoryCache",type=~"sidekiq"}[5m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_cache_operation_duration_seconds_count:rate_5m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,store,tier,type,urgency,worker) (
+        rate(gitlab_cache_operation_duration_seconds_count{env="gstg",store=~"RedisRepositoryCache",type=~"web"}[5m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_cache_operation_duration_seconds_count:rate_5m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,store,tier,type,urgency,worker) (
+        rate(gitlab_cache_operation_duration_seconds_count{env="gstg",store=~"RedisRepositoryCache",type=~"websockets"}[5m] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
-        rate(gitlab_redis_client_exceptions_total{env="gstg",storage=~"cluster_repository_cache",type=~"ai-assisted|api|git|internal-api|ops-gitlab-net|sidekiq|web|websockets"}[5m] offset 30s)
+        rate(gitlab_redis_client_exceptions_total{env="gstg",storage=~"cluster_repository_cache",type=~"ai-assisted"}[5m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_5m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+        rate(gitlab_redis_client_exceptions_total{env="gstg",storage=~"cluster_repository_cache",type=~"api"}[5m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_5m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+        rate(gitlab_redis_client_exceptions_total{env="gstg",storage=~"cluster_repository_cache",type=~"git"}[5m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_5m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+        rate(gitlab_redis_client_exceptions_total{env="gstg",storage=~"cluster_repository_cache",type=~"internal-api"}[5m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_5m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+        rate(gitlab_redis_client_exceptions_total{env="gstg",storage=~"cluster_repository_cache",type=~"ops-gitlab-net"}[5m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_5m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+        rate(gitlab_redis_client_exceptions_total{env="gstg",storage=~"cluster_repository_cache",type=~"sidekiq"}[5m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_5m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+        rate(gitlab_redis_client_exceptions_total{env="gstg",storage=~"cluster_repository_cache",type=~"web"}[5m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_5m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+        rate(gitlab_redis_client_exceptions_total{env="gstg",storage=~"cluster_repository_cache",type=~"websockets"}[5m] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{env="gstg",storage=~"cluster_repository_cache",type=~"ai-assisted|api|git|internal-api|ops-gitlab-net|sidekiq|web|websockets"}[5m] offset 30s)
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{env="gstg",storage=~"cluster_repository_cache",type=~"ai-assisted"}[5m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_5m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{env="gstg",storage=~"cluster_repository_cache",type=~"api"}[5m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_5m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{env="gstg",storage=~"cluster_repository_cache",type=~"git"}[5m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_5m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{env="gstg",storage=~"cluster_repository_cache",type=~"internal-api"}[5m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_5m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{env="gstg",storage=~"cluster_repository_cache",type=~"ops-gitlab-net"}[5m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_5m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{env="gstg",storage=~"cluster_repository_cache",type=~"sidekiq"}[5m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_5m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{env="gstg",storage=~"cluster_repository_cache",type=~"web"}[5m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_5m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{env="gstg",storage=~"cluster_repository_cache",type=~"websockets"}[5m] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
-        rate(gitlab_redis_client_requests_total{env="gstg",storage=~"cluster_repository_cache",type=~"ai-assisted|api|git|internal-api|ops-gitlab-net|sidekiq|web|websockets"}[5m] offset 30s)
+        rate(gitlab_redis_client_requests_total{env="gstg",storage=~"cluster_repository_cache",type=~"ai-assisted"}[5m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_redis_client_requests_total:rate_5m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+        rate(gitlab_redis_client_requests_total{env="gstg",storage=~"cluster_repository_cache",type=~"api"}[5m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_redis_client_requests_total:rate_5m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+        rate(gitlab_redis_client_requests_total{env="gstg",storage=~"cluster_repository_cache",type=~"git"}[5m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_redis_client_requests_total:rate_5m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+        rate(gitlab_redis_client_requests_total{env="gstg",storage=~"cluster_repository_cache",type=~"internal-api"}[5m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_redis_client_requests_total:rate_5m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+        rate(gitlab_redis_client_requests_total{env="gstg",storage=~"cluster_repository_cache",type=~"ops-gitlab-net"}[5m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_redis_client_requests_total:rate_5m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+        rate(gitlab_redis_client_requests_total{env="gstg",storage=~"cluster_repository_cache",type=~"sidekiq"}[5m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_redis_client_requests_total:rate_5m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+        rate(gitlab_redis_client_requests_total{env="gstg",storage=~"cluster_repository_cache",type=~"web"}[5m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_redis_client_requests_total:rate_5m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+        rate(gitlab_redis_client_requests_total{env="gstg",storage=~"cluster_repository_cache",type=~"websockets"}[5m] offset 30s)
       )
   - record: sli_aggregations:redis_commands_processed_total:rate_5m
     expr: |
@@ -40,27 +215,202 @@ groups:
   - record: sli_aggregations:gitlab_cache_operation_duration_seconds_bucket:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,store,tier,type,urgency,worker) (
-        rate(gitlab_cache_operation_duration_seconds_bucket{env="gstg",store=~"RedisRepositoryCache",type=~"ai-assisted|api|git|internal-api|ops-gitlab-net|sidekiq|web|websockets"}[30m] offset 30s)
+        rate(gitlab_cache_operation_duration_seconds_bucket{env="gstg",store=~"RedisRepositoryCache",type=~"ai-assisted"}[30m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_cache_operation_duration_seconds_bucket:rate_30m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,store,tier,type,urgency,worker) (
+        rate(gitlab_cache_operation_duration_seconds_bucket{env="gstg",store=~"RedisRepositoryCache",type=~"api"}[30m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_cache_operation_duration_seconds_bucket:rate_30m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,store,tier,type,urgency,worker) (
+        rate(gitlab_cache_operation_duration_seconds_bucket{env="gstg",store=~"RedisRepositoryCache",type=~"git"}[30m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_cache_operation_duration_seconds_bucket:rate_30m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,store,tier,type,urgency,worker) (
+        rate(gitlab_cache_operation_duration_seconds_bucket{env="gstg",store=~"RedisRepositoryCache",type=~"internal-api"}[30m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_cache_operation_duration_seconds_bucket:rate_30m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,store,tier,type,urgency,worker) (
+        rate(gitlab_cache_operation_duration_seconds_bucket{env="gstg",store=~"RedisRepositoryCache",type=~"ops-gitlab-net"}[30m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_cache_operation_duration_seconds_bucket:rate_30m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,store,tier,type,urgency,worker) (
+        rate(gitlab_cache_operation_duration_seconds_bucket{env="gstg",store=~"RedisRepositoryCache",type=~"sidekiq"}[30m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_cache_operation_duration_seconds_bucket:rate_30m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,store,tier,type,urgency,worker) (
+        rate(gitlab_cache_operation_duration_seconds_bucket{env="gstg",store=~"RedisRepositoryCache",type=~"web"}[30m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_cache_operation_duration_seconds_bucket:rate_30m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,store,tier,type,urgency,worker) (
+        rate(gitlab_cache_operation_duration_seconds_bucket{env="gstg",store=~"RedisRepositoryCache",type=~"websockets"}[30m] offset 30s)
       )
   - record: sli_aggregations:gitlab_cache_operation_duration_seconds_count:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,store,tier,type,urgency,worker) (
-        rate(gitlab_cache_operation_duration_seconds_count{env="gstg",store=~"RedisRepositoryCache",type=~"ai-assisted|api|git|internal-api|ops-gitlab-net|sidekiq|web|websockets"}[30m] offset 30s)
+        rate(gitlab_cache_operation_duration_seconds_count{env="gstg",store=~"RedisRepositoryCache",type=~"ai-assisted"}[30m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_cache_operation_duration_seconds_count:rate_30m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,store,tier,type,urgency,worker) (
+        rate(gitlab_cache_operation_duration_seconds_count{env="gstg",store=~"RedisRepositoryCache",type=~"api"}[30m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_cache_operation_duration_seconds_count:rate_30m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,store,tier,type,urgency,worker) (
+        rate(gitlab_cache_operation_duration_seconds_count{env="gstg",store=~"RedisRepositoryCache",type=~"git"}[30m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_cache_operation_duration_seconds_count:rate_30m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,store,tier,type,urgency,worker) (
+        rate(gitlab_cache_operation_duration_seconds_count{env="gstg",store=~"RedisRepositoryCache",type=~"internal-api"}[30m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_cache_operation_duration_seconds_count:rate_30m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,store,tier,type,urgency,worker) (
+        rate(gitlab_cache_operation_duration_seconds_count{env="gstg",store=~"RedisRepositoryCache",type=~"ops-gitlab-net"}[30m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_cache_operation_duration_seconds_count:rate_30m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,store,tier,type,urgency,worker) (
+        rate(gitlab_cache_operation_duration_seconds_count{env="gstg",store=~"RedisRepositoryCache",type=~"sidekiq"}[30m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_cache_operation_duration_seconds_count:rate_30m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,store,tier,type,urgency,worker) (
+        rate(gitlab_cache_operation_duration_seconds_count{env="gstg",store=~"RedisRepositoryCache",type=~"web"}[30m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_cache_operation_duration_seconds_count:rate_30m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,store,tier,type,urgency,worker) (
+        rate(gitlab_cache_operation_duration_seconds_count{env="gstg",store=~"RedisRepositoryCache",type=~"websockets"}[30m] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
-        rate(gitlab_redis_client_exceptions_total{env="gstg",storage=~"cluster_repository_cache",type=~"ai-assisted|api|git|internal-api|ops-gitlab-net|sidekiq|web|websockets"}[30m] offset 30s)
+        rate(gitlab_redis_client_exceptions_total{env="gstg",storage=~"cluster_repository_cache",type=~"ai-assisted"}[30m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_30m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+        rate(gitlab_redis_client_exceptions_total{env="gstg",storage=~"cluster_repository_cache",type=~"api"}[30m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_30m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+        rate(gitlab_redis_client_exceptions_total{env="gstg",storage=~"cluster_repository_cache",type=~"git"}[30m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_30m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+        rate(gitlab_redis_client_exceptions_total{env="gstg",storage=~"cluster_repository_cache",type=~"internal-api"}[30m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_30m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+        rate(gitlab_redis_client_exceptions_total{env="gstg",storage=~"cluster_repository_cache",type=~"ops-gitlab-net"}[30m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_30m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+        rate(gitlab_redis_client_exceptions_total{env="gstg",storage=~"cluster_repository_cache",type=~"sidekiq"}[30m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_30m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+        rate(gitlab_redis_client_exceptions_total{env="gstg",storage=~"cluster_repository_cache",type=~"web"}[30m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_30m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+        rate(gitlab_redis_client_exceptions_total{env="gstg",storage=~"cluster_repository_cache",type=~"websockets"}[30m] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{env="gstg",storage=~"cluster_repository_cache",type=~"ai-assisted|api|git|internal-api|ops-gitlab-net|sidekiq|web|websockets"}[30m] offset 30s)
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{env="gstg",storage=~"cluster_repository_cache",type=~"ai-assisted"}[30m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_30m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{env="gstg",storage=~"cluster_repository_cache",type=~"api"}[30m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_30m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{env="gstg",storage=~"cluster_repository_cache",type=~"git"}[30m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_30m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{env="gstg",storage=~"cluster_repository_cache",type=~"internal-api"}[30m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_30m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{env="gstg",storage=~"cluster_repository_cache",type=~"ops-gitlab-net"}[30m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_30m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{env="gstg",storage=~"cluster_repository_cache",type=~"sidekiq"}[30m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_30m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{env="gstg",storage=~"cluster_repository_cache",type=~"web"}[30m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_30m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{env="gstg",storage=~"cluster_repository_cache",type=~"websockets"}[30m] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
-        rate(gitlab_redis_client_requests_total{env="gstg",storage=~"cluster_repository_cache",type=~"ai-assisted|api|git|internal-api|ops-gitlab-net|sidekiq|web|websockets"}[30m] offset 30s)
+        rate(gitlab_redis_client_requests_total{env="gstg",storage=~"cluster_repository_cache",type=~"ai-assisted"}[30m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_redis_client_requests_total:rate_30m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+        rate(gitlab_redis_client_requests_total{env="gstg",storage=~"cluster_repository_cache",type=~"api"}[30m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_redis_client_requests_total:rate_30m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+        rate(gitlab_redis_client_requests_total{env="gstg",storage=~"cluster_repository_cache",type=~"git"}[30m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_redis_client_requests_total:rate_30m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+        rate(gitlab_redis_client_requests_total{env="gstg",storage=~"cluster_repository_cache",type=~"internal-api"}[30m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_redis_client_requests_total:rate_30m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+        rate(gitlab_redis_client_requests_total{env="gstg",storage=~"cluster_repository_cache",type=~"ops-gitlab-net"}[30m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_redis_client_requests_total:rate_30m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+        rate(gitlab_redis_client_requests_total{env="gstg",storage=~"cluster_repository_cache",type=~"sidekiq"}[30m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_redis_client_requests_total:rate_30m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+        rate(gitlab_redis_client_requests_total{env="gstg",storage=~"cluster_repository_cache",type=~"web"}[30m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_redis_client_requests_total:rate_30m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+        rate(gitlab_redis_client_requests_total{env="gstg",storage=~"cluster_repository_cache",type=~"websockets"}[30m] offset 30s)
       )
   - record: sli_aggregations:redis_commands_processed_total:rate_30m
     expr: |
@@ -73,27 +423,202 @@ groups:
   - record: sli_aggregations:gitlab_cache_operation_duration_seconds_bucket:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,store,tier,type,urgency,worker) (
-        rate(gitlab_cache_operation_duration_seconds_bucket{env="gstg",store=~"RedisRepositoryCache",type=~"ai-assisted|api|git|internal-api|ops-gitlab-net|sidekiq|web|websockets"}[1h] offset 30s)
+        rate(gitlab_cache_operation_duration_seconds_bucket{env="gstg",store=~"RedisRepositoryCache",type=~"ai-assisted"}[1h] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_cache_operation_duration_seconds_bucket:rate_1h
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,store,tier,type,urgency,worker) (
+        rate(gitlab_cache_operation_duration_seconds_bucket{env="gstg",store=~"RedisRepositoryCache",type=~"api"}[1h] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_cache_operation_duration_seconds_bucket:rate_1h
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,store,tier,type,urgency,worker) (
+        rate(gitlab_cache_operation_duration_seconds_bucket{env="gstg",store=~"RedisRepositoryCache",type=~"git"}[1h] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_cache_operation_duration_seconds_bucket:rate_1h
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,store,tier,type,urgency,worker) (
+        rate(gitlab_cache_operation_duration_seconds_bucket{env="gstg",store=~"RedisRepositoryCache",type=~"internal-api"}[1h] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_cache_operation_duration_seconds_bucket:rate_1h
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,store,tier,type,urgency,worker) (
+        rate(gitlab_cache_operation_duration_seconds_bucket{env="gstg",store=~"RedisRepositoryCache",type=~"ops-gitlab-net"}[1h] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_cache_operation_duration_seconds_bucket:rate_1h
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,store,tier,type,urgency,worker) (
+        rate(gitlab_cache_operation_duration_seconds_bucket{env="gstg",store=~"RedisRepositoryCache",type=~"sidekiq"}[1h] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_cache_operation_duration_seconds_bucket:rate_1h
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,store,tier,type,urgency,worker) (
+        rate(gitlab_cache_operation_duration_seconds_bucket{env="gstg",store=~"RedisRepositoryCache",type=~"web"}[1h] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_cache_operation_duration_seconds_bucket:rate_1h
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,store,tier,type,urgency,worker) (
+        rate(gitlab_cache_operation_duration_seconds_bucket{env="gstg",store=~"RedisRepositoryCache",type=~"websockets"}[1h] offset 30s)
       )
   - record: sli_aggregations:gitlab_cache_operation_duration_seconds_count:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,store,tier,type,urgency,worker) (
-        rate(gitlab_cache_operation_duration_seconds_count{env="gstg",store=~"RedisRepositoryCache",type=~"ai-assisted|api|git|internal-api|ops-gitlab-net|sidekiq|web|websockets"}[1h] offset 30s)
+        rate(gitlab_cache_operation_duration_seconds_count{env="gstg",store=~"RedisRepositoryCache",type=~"ai-assisted"}[1h] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_cache_operation_duration_seconds_count:rate_1h
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,store,tier,type,urgency,worker) (
+        rate(gitlab_cache_operation_duration_seconds_count{env="gstg",store=~"RedisRepositoryCache",type=~"api"}[1h] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_cache_operation_duration_seconds_count:rate_1h
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,store,tier,type,urgency,worker) (
+        rate(gitlab_cache_operation_duration_seconds_count{env="gstg",store=~"RedisRepositoryCache",type=~"git"}[1h] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_cache_operation_duration_seconds_count:rate_1h
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,store,tier,type,urgency,worker) (
+        rate(gitlab_cache_operation_duration_seconds_count{env="gstg",store=~"RedisRepositoryCache",type=~"internal-api"}[1h] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_cache_operation_duration_seconds_count:rate_1h
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,store,tier,type,urgency,worker) (
+        rate(gitlab_cache_operation_duration_seconds_count{env="gstg",store=~"RedisRepositoryCache",type=~"ops-gitlab-net"}[1h] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_cache_operation_duration_seconds_count:rate_1h
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,store,tier,type,urgency,worker) (
+        rate(gitlab_cache_operation_duration_seconds_count{env="gstg",store=~"RedisRepositoryCache",type=~"sidekiq"}[1h] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_cache_operation_duration_seconds_count:rate_1h
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,store,tier,type,urgency,worker) (
+        rate(gitlab_cache_operation_duration_seconds_count{env="gstg",store=~"RedisRepositoryCache",type=~"web"}[1h] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_cache_operation_duration_seconds_count:rate_1h
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,store,tier,type,urgency,worker) (
+        rate(gitlab_cache_operation_duration_seconds_count{env="gstg",store=~"RedisRepositoryCache",type=~"websockets"}[1h] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
-        rate(gitlab_redis_client_exceptions_total{env="gstg",storage=~"cluster_repository_cache",type=~"ai-assisted|api|git|internal-api|ops-gitlab-net|sidekiq|web|websockets"}[1h] offset 30s)
+        rate(gitlab_redis_client_exceptions_total{env="gstg",storage=~"cluster_repository_cache",type=~"ai-assisted"}[1h] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_1h
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+        rate(gitlab_redis_client_exceptions_total{env="gstg",storage=~"cluster_repository_cache",type=~"api"}[1h] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_1h
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+        rate(gitlab_redis_client_exceptions_total{env="gstg",storage=~"cluster_repository_cache",type=~"git"}[1h] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_1h
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+        rate(gitlab_redis_client_exceptions_total{env="gstg",storage=~"cluster_repository_cache",type=~"internal-api"}[1h] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_1h
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+        rate(gitlab_redis_client_exceptions_total{env="gstg",storage=~"cluster_repository_cache",type=~"ops-gitlab-net"}[1h] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_1h
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+        rate(gitlab_redis_client_exceptions_total{env="gstg",storage=~"cluster_repository_cache",type=~"sidekiq"}[1h] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_1h
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+        rate(gitlab_redis_client_exceptions_total{env="gstg",storage=~"cluster_repository_cache",type=~"web"}[1h] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_1h
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+        rate(gitlab_redis_client_exceptions_total{env="gstg",storage=~"cluster_repository_cache",type=~"websockets"}[1h] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{env="gstg",storage=~"cluster_repository_cache",type=~"ai-assisted|api|git|internal-api|ops-gitlab-net|sidekiq|web|websockets"}[1h] offset 30s)
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{env="gstg",storage=~"cluster_repository_cache",type=~"ai-assisted"}[1h] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_1h
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{env="gstg",storage=~"cluster_repository_cache",type=~"api"}[1h] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_1h
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{env="gstg",storage=~"cluster_repository_cache",type=~"git"}[1h] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_1h
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{env="gstg",storage=~"cluster_repository_cache",type=~"internal-api"}[1h] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_1h
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{env="gstg",storage=~"cluster_repository_cache",type=~"ops-gitlab-net"}[1h] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_1h
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{env="gstg",storage=~"cluster_repository_cache",type=~"sidekiq"}[1h] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_1h
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{env="gstg",storage=~"cluster_repository_cache",type=~"web"}[1h] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_1h
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{env="gstg",storage=~"cluster_repository_cache",type=~"websockets"}[1h] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
-        rate(gitlab_redis_client_requests_total{env="gstg",storage=~"cluster_repository_cache",type=~"ai-assisted|api|git|internal-api|ops-gitlab-net|sidekiq|web|websockets"}[1h] offset 30s)
+        rate(gitlab_redis_client_requests_total{env="gstg",storage=~"cluster_repository_cache",type=~"ai-assisted"}[1h] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_redis_client_requests_total:rate_1h
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+        rate(gitlab_redis_client_requests_total{env="gstg",storage=~"cluster_repository_cache",type=~"api"}[1h] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_redis_client_requests_total:rate_1h
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+        rate(gitlab_redis_client_requests_total{env="gstg",storage=~"cluster_repository_cache",type=~"git"}[1h] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_redis_client_requests_total:rate_1h
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+        rate(gitlab_redis_client_requests_total{env="gstg",storage=~"cluster_repository_cache",type=~"internal-api"}[1h] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_redis_client_requests_total:rate_1h
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+        rate(gitlab_redis_client_requests_total{env="gstg",storage=~"cluster_repository_cache",type=~"ops-gitlab-net"}[1h] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_redis_client_requests_total:rate_1h
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+        rate(gitlab_redis_client_requests_total{env="gstg",storage=~"cluster_repository_cache",type=~"sidekiq"}[1h] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_redis_client_requests_total:rate_1h
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+        rate(gitlab_redis_client_requests_total{env="gstg",storage=~"cluster_repository_cache",type=~"web"}[1h] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_redis_client_requests_total:rate_1h
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+        rate(gitlab_redis_client_requests_total{env="gstg",storage=~"cluster_repository_cache",type=~"websockets"}[1h] offset 30s)
       )
   - record: sli_aggregations:redis_commands_processed_total:rate_1h
     expr: |

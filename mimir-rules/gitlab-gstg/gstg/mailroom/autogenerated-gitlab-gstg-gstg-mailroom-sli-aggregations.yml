@@ -7,17 +7,32 @@ groups:
   - record: sli_aggregations:gitlab_sli_sidekiq_execution_error_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(gitlab_sli_sidekiq_execution_error_total{env="gstg",type=~"ops-gitlab-net|sidekiq",worker=~"EmailReceiverWorker|ServiceDeskEmailReceiverWorker"}[5m] offset 30s)
+        rate(gitlab_sli_sidekiq_execution_error_total{env="gstg",type=~"ops-gitlab-net",worker=~"EmailReceiverWorker|ServiceDeskEmailReceiverWorker"}[5m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_sli_sidekiq_execution_error_total:rate_5m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sli_sidekiq_execution_error_total{env="gstg",type=~"sidekiq",worker=~"EmailReceiverWorker|ServiceDeskEmailReceiverWorker"}[5m] offset 30s)
       )
   - record: sli_aggregations:gitlab_sli_sidekiq_execution_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(gitlab_sli_sidekiq_execution_total{env="gstg",type=~"ops-gitlab-net|sidekiq",worker=~"EmailReceiverWorker|ServiceDeskEmailReceiverWorker"}[5m] offset 30s)
+        rate(gitlab_sli_sidekiq_execution_total{env="gstg",type=~"ops-gitlab-net",worker=~"EmailReceiverWorker|ServiceDeskEmailReceiverWorker"}[5m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_sli_sidekiq_execution_total:rate_5m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sli_sidekiq_execution_total{env="gstg",type=~"sidekiq",worker=~"EmailReceiverWorker|ServiceDeskEmailReceiverWorker"}[5m] offset 30s)
       )
   - record: sli_aggregations:gitlab_transaction_event_email_receiver_error_total:rate_5m
     expr: |
       sum by (component,env,environment,error,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(gitlab_transaction_event_email_receiver_error_total{env="gstg",type=~"ops-gitlab-net|sidekiq"}[5m] offset 30s)
+        rate(gitlab_transaction_event_email_receiver_error_total{env="gstg",type=~"ops-gitlab-net"}[5m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_transaction_event_email_receiver_error_total:rate_5m
+    expr: |
+      sum by (component,env,environment,error,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_transaction_event_email_receiver_error_total{env="gstg",type=~"sidekiq"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: mailroom - 30m burn-rate'
   interval: 2m
@@ -25,17 +40,32 @@ groups:
   - record: sli_aggregations:gitlab_sli_sidekiq_execution_error_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(gitlab_sli_sidekiq_execution_error_total{env="gstg",type=~"ops-gitlab-net|sidekiq",worker=~"EmailReceiverWorker|ServiceDeskEmailReceiverWorker"}[30m] offset 30s)
+        rate(gitlab_sli_sidekiq_execution_error_total{env="gstg",type=~"ops-gitlab-net",worker=~"EmailReceiverWorker|ServiceDeskEmailReceiverWorker"}[30m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_sli_sidekiq_execution_error_total:rate_30m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sli_sidekiq_execution_error_total{env="gstg",type=~"sidekiq",worker=~"EmailReceiverWorker|ServiceDeskEmailReceiverWorker"}[30m] offset 30s)
       )
   - record: sli_aggregations:gitlab_sli_sidekiq_execution_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(gitlab_sli_sidekiq_execution_total{env="gstg",type=~"ops-gitlab-net|sidekiq",worker=~"EmailReceiverWorker|ServiceDeskEmailReceiverWorker"}[30m] offset 30s)
+        rate(gitlab_sli_sidekiq_execution_total{env="gstg",type=~"ops-gitlab-net",worker=~"EmailReceiverWorker|ServiceDeskEmailReceiverWorker"}[30m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_sli_sidekiq_execution_total:rate_30m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sli_sidekiq_execution_total{env="gstg",type=~"sidekiq",worker=~"EmailReceiverWorker|ServiceDeskEmailReceiverWorker"}[30m] offset 30s)
       )
   - record: sli_aggregations:gitlab_transaction_event_email_receiver_error_total:rate_30m
     expr: |
       sum by (component,env,environment,error,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(gitlab_transaction_event_email_receiver_error_total{env="gstg",type=~"ops-gitlab-net|sidekiq"}[30m] offset 30s)
+        rate(gitlab_transaction_event_email_receiver_error_total{env="gstg",type=~"ops-gitlab-net"}[30m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_transaction_event_email_receiver_error_total:rate_30m
+    expr: |
+      sum by (component,env,environment,error,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_transaction_event_email_receiver_error_total{env="gstg",type=~"sidekiq"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: mailroom - 1h burn-rate'
   interval: 1m
@@ -43,15 +73,30 @@ groups:
   - record: sli_aggregations:gitlab_sli_sidekiq_execution_error_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(gitlab_sli_sidekiq_execution_error_total{env="gstg",type=~"ops-gitlab-net|sidekiq",worker=~"EmailReceiverWorker|ServiceDeskEmailReceiverWorker"}[1h] offset 30s)
+        rate(gitlab_sli_sidekiq_execution_error_total{env="gstg",type=~"ops-gitlab-net",worker=~"EmailReceiverWorker|ServiceDeskEmailReceiverWorker"}[1h] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_sli_sidekiq_execution_error_total:rate_1h
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sli_sidekiq_execution_error_total{env="gstg",type=~"sidekiq",worker=~"EmailReceiverWorker|ServiceDeskEmailReceiverWorker"}[1h] offset 30s)
       )
   - record: sli_aggregations:gitlab_sli_sidekiq_execution_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(gitlab_sli_sidekiq_execution_total{env="gstg",type=~"ops-gitlab-net|sidekiq",worker=~"EmailReceiverWorker|ServiceDeskEmailReceiverWorker"}[1h] offset 30s)
+        rate(gitlab_sli_sidekiq_execution_total{env="gstg",type=~"ops-gitlab-net",worker=~"EmailReceiverWorker|ServiceDeskEmailReceiverWorker"}[1h] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_sli_sidekiq_execution_total:rate_1h
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sli_sidekiq_execution_total{env="gstg",type=~"sidekiq",worker=~"EmailReceiverWorker|ServiceDeskEmailReceiverWorker"}[1h] offset 30s)
       )
   - record: sli_aggregations:gitlab_transaction_event_email_receiver_error_total:rate_1h
     expr: |
       sum by (component,env,environment,error,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(gitlab_transaction_event_email_receiver_error_total{env="gstg",type=~"ops-gitlab-net|sidekiq"}[1h] offset 30s)
+        rate(gitlab_transaction_event_email_receiver_error_total{env="gstg",type=~"ops-gitlab-net"}[1h] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_transaction_event_email_receiver_error_total:rate_1h
+    expr: |
+      sum by (component,env,environment,error,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_transaction_event_email_receiver_error_total{env="gstg",type=~"sidekiq"}[1h] offset 30s)
       )

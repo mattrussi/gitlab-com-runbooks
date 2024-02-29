@@ -7,12 +7,82 @@ groups:
   - record: sli_aggregations:gitlab_sql_primary_duration_seconds_bucket:rate_5m
     expr: |
       sum by (component,db_config_name,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(gitlab_sql_primary_duration_seconds_bucket{db_config_name=~"main",env="gstg",type=~"ai-assisted|api|git|internal-api|ops-gitlab-net|sidekiq|web|websockets"}[5m] offset 30s)
+        rate(gitlab_sql_primary_duration_seconds_bucket{db_config_name=~"main",env="gstg",type=~"ai-assisted"}[5m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_sql_primary_duration_seconds_bucket:rate_5m
+    expr: |
+      sum by (component,db_config_name,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sql_primary_duration_seconds_bucket{db_config_name=~"main",env="gstg",type=~"api"}[5m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_sql_primary_duration_seconds_bucket:rate_5m
+    expr: |
+      sum by (component,db_config_name,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sql_primary_duration_seconds_bucket{db_config_name=~"main",env="gstg",type=~"git"}[5m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_sql_primary_duration_seconds_bucket:rate_5m
+    expr: |
+      sum by (component,db_config_name,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sql_primary_duration_seconds_bucket{db_config_name=~"main",env="gstg",type=~"internal-api"}[5m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_sql_primary_duration_seconds_bucket:rate_5m
+    expr: |
+      sum by (component,db_config_name,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sql_primary_duration_seconds_bucket{db_config_name=~"main",env="gstg",type=~"ops-gitlab-net"}[5m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_sql_primary_duration_seconds_bucket:rate_5m
+    expr: |
+      sum by (component,db_config_name,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sql_primary_duration_seconds_bucket{db_config_name=~"main",env="gstg",type=~"sidekiq"}[5m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_sql_primary_duration_seconds_bucket:rate_5m
+    expr: |
+      sum by (component,db_config_name,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sql_primary_duration_seconds_bucket{db_config_name=~"main",env="gstg",type=~"web"}[5m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_sql_primary_duration_seconds_bucket:rate_5m
+    expr: |
+      sum by (component,db_config_name,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sql_primary_duration_seconds_bucket{db_config_name=~"main",env="gstg",type=~"websockets"}[5m] offset 30s)
       )
   - record: sli_aggregations:gitlab_sql_replica_duration_seconds_bucket:rate_5m
     expr: |
       sum by (component,db_config_name,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(gitlab_sql_replica_duration_seconds_bucket{db_config_name=~"main_replica",env="gstg",type=~"ai-assisted|api|git|internal-api|ops-gitlab-net|sidekiq|web|websockets"}[5m] offset 30s)
+        rate(gitlab_sql_replica_duration_seconds_bucket{db_config_name=~"main_replica",env="gstg",type=~"ai-assisted"}[5m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_sql_replica_duration_seconds_bucket:rate_5m
+    expr: |
+      sum by (component,db_config_name,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sql_replica_duration_seconds_bucket{db_config_name=~"main_replica",env="gstg",type=~"api"}[5m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_sql_replica_duration_seconds_bucket:rate_5m
+    expr: |
+      sum by (component,db_config_name,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sql_replica_duration_seconds_bucket{db_config_name=~"main_replica",env="gstg",type=~"git"}[5m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_sql_replica_duration_seconds_bucket:rate_5m
+    expr: |
+      sum by (component,db_config_name,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sql_replica_duration_seconds_bucket{db_config_name=~"main_replica",env="gstg",type=~"internal-api"}[5m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_sql_replica_duration_seconds_bucket:rate_5m
+    expr: |
+      sum by (component,db_config_name,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sql_replica_duration_seconds_bucket{db_config_name=~"main_replica",env="gstg",type=~"ops-gitlab-net"}[5m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_sql_replica_duration_seconds_bucket:rate_5m
+    expr: |
+      sum by (component,db_config_name,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sql_replica_duration_seconds_bucket{db_config_name=~"main_replica",env="gstg",type=~"sidekiq"}[5m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_sql_replica_duration_seconds_bucket:rate_5m
+    expr: |
+      sum by (component,db_config_name,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sql_replica_duration_seconds_bucket{db_config_name=~"main_replica",env="gstg",type=~"web"}[5m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_sql_replica_duration_seconds_bucket:rate_5m
+    expr: |
+      sum by (component,db_config_name,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sql_replica_duration_seconds_bucket{db_config_name=~"main_replica",env="gstg",type=~"websockets"}[5m] offset 30s)
       )
   - record: sli_aggregations:pg_stat_database_xact_commit:rate_5m
     expr: |
@@ -45,12 +115,82 @@ groups:
   - record: sli_aggregations:gitlab_sql_primary_duration_seconds_bucket:rate_30m
     expr: |
       sum by (component,db_config_name,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(gitlab_sql_primary_duration_seconds_bucket{db_config_name=~"main",env="gstg",type=~"ai-assisted|api|git|internal-api|ops-gitlab-net|sidekiq|web|websockets"}[30m] offset 30s)
+        rate(gitlab_sql_primary_duration_seconds_bucket{db_config_name=~"main",env="gstg",type=~"ai-assisted"}[30m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_sql_primary_duration_seconds_bucket:rate_30m
+    expr: |
+      sum by (component,db_config_name,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sql_primary_duration_seconds_bucket{db_config_name=~"main",env="gstg",type=~"api"}[30m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_sql_primary_duration_seconds_bucket:rate_30m
+    expr: |
+      sum by (component,db_config_name,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sql_primary_duration_seconds_bucket{db_config_name=~"main",env="gstg",type=~"git"}[30m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_sql_primary_duration_seconds_bucket:rate_30m
+    expr: |
+      sum by (component,db_config_name,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sql_primary_duration_seconds_bucket{db_config_name=~"main",env="gstg",type=~"internal-api"}[30m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_sql_primary_duration_seconds_bucket:rate_30m
+    expr: |
+      sum by (component,db_config_name,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sql_primary_duration_seconds_bucket{db_config_name=~"main",env="gstg",type=~"ops-gitlab-net"}[30m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_sql_primary_duration_seconds_bucket:rate_30m
+    expr: |
+      sum by (component,db_config_name,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sql_primary_duration_seconds_bucket{db_config_name=~"main",env="gstg",type=~"sidekiq"}[30m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_sql_primary_duration_seconds_bucket:rate_30m
+    expr: |
+      sum by (component,db_config_name,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sql_primary_duration_seconds_bucket{db_config_name=~"main",env="gstg",type=~"web"}[30m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_sql_primary_duration_seconds_bucket:rate_30m
+    expr: |
+      sum by (component,db_config_name,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sql_primary_duration_seconds_bucket{db_config_name=~"main",env="gstg",type=~"websockets"}[30m] offset 30s)
       )
   - record: sli_aggregations:gitlab_sql_replica_duration_seconds_bucket:rate_30m
     expr: |
       sum by (component,db_config_name,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(gitlab_sql_replica_duration_seconds_bucket{db_config_name=~"main_replica",env="gstg",type=~"ai-assisted|api|git|internal-api|ops-gitlab-net|sidekiq|web|websockets"}[30m] offset 30s)
+        rate(gitlab_sql_replica_duration_seconds_bucket{db_config_name=~"main_replica",env="gstg",type=~"ai-assisted"}[30m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_sql_replica_duration_seconds_bucket:rate_30m
+    expr: |
+      sum by (component,db_config_name,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sql_replica_duration_seconds_bucket{db_config_name=~"main_replica",env="gstg",type=~"api"}[30m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_sql_replica_duration_seconds_bucket:rate_30m
+    expr: |
+      sum by (component,db_config_name,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sql_replica_duration_seconds_bucket{db_config_name=~"main_replica",env="gstg",type=~"git"}[30m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_sql_replica_duration_seconds_bucket:rate_30m
+    expr: |
+      sum by (component,db_config_name,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sql_replica_duration_seconds_bucket{db_config_name=~"main_replica",env="gstg",type=~"internal-api"}[30m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_sql_replica_duration_seconds_bucket:rate_30m
+    expr: |
+      sum by (component,db_config_name,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sql_replica_duration_seconds_bucket{db_config_name=~"main_replica",env="gstg",type=~"ops-gitlab-net"}[30m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_sql_replica_duration_seconds_bucket:rate_30m
+    expr: |
+      sum by (component,db_config_name,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sql_replica_duration_seconds_bucket{db_config_name=~"main_replica",env="gstg",type=~"sidekiq"}[30m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_sql_replica_duration_seconds_bucket:rate_30m
+    expr: |
+      sum by (component,db_config_name,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sql_replica_duration_seconds_bucket{db_config_name=~"main_replica",env="gstg",type=~"web"}[30m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_sql_replica_duration_seconds_bucket:rate_30m
+    expr: |
+      sum by (component,db_config_name,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sql_replica_duration_seconds_bucket{db_config_name=~"main_replica",env="gstg",type=~"websockets"}[30m] offset 30s)
       )
   - record: sli_aggregations:pg_stat_database_xact_commit:rate_30m
     expr: |
@@ -83,12 +223,82 @@ groups:
   - record: sli_aggregations:gitlab_sql_primary_duration_seconds_bucket:rate_1h
     expr: |
       sum by (component,db_config_name,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(gitlab_sql_primary_duration_seconds_bucket{db_config_name=~"main",env="gstg",type=~"ai-assisted|api|git|internal-api|ops-gitlab-net|sidekiq|web|websockets"}[1h] offset 30s)
+        rate(gitlab_sql_primary_duration_seconds_bucket{db_config_name=~"main",env="gstg",type=~"ai-assisted"}[1h] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_sql_primary_duration_seconds_bucket:rate_1h
+    expr: |
+      sum by (component,db_config_name,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sql_primary_duration_seconds_bucket{db_config_name=~"main",env="gstg",type=~"api"}[1h] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_sql_primary_duration_seconds_bucket:rate_1h
+    expr: |
+      sum by (component,db_config_name,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sql_primary_duration_seconds_bucket{db_config_name=~"main",env="gstg",type=~"git"}[1h] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_sql_primary_duration_seconds_bucket:rate_1h
+    expr: |
+      sum by (component,db_config_name,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sql_primary_duration_seconds_bucket{db_config_name=~"main",env="gstg",type=~"internal-api"}[1h] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_sql_primary_duration_seconds_bucket:rate_1h
+    expr: |
+      sum by (component,db_config_name,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sql_primary_duration_seconds_bucket{db_config_name=~"main",env="gstg",type=~"ops-gitlab-net"}[1h] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_sql_primary_duration_seconds_bucket:rate_1h
+    expr: |
+      sum by (component,db_config_name,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sql_primary_duration_seconds_bucket{db_config_name=~"main",env="gstg",type=~"sidekiq"}[1h] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_sql_primary_duration_seconds_bucket:rate_1h
+    expr: |
+      sum by (component,db_config_name,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sql_primary_duration_seconds_bucket{db_config_name=~"main",env="gstg",type=~"web"}[1h] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_sql_primary_duration_seconds_bucket:rate_1h
+    expr: |
+      sum by (component,db_config_name,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sql_primary_duration_seconds_bucket{db_config_name=~"main",env="gstg",type=~"websockets"}[1h] offset 30s)
       )
   - record: sli_aggregations:gitlab_sql_replica_duration_seconds_bucket:rate_1h
     expr: |
       sum by (component,db_config_name,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(gitlab_sql_replica_duration_seconds_bucket{db_config_name=~"main_replica",env="gstg",type=~"ai-assisted|api|git|internal-api|ops-gitlab-net|sidekiq|web|websockets"}[1h] offset 30s)
+        rate(gitlab_sql_replica_duration_seconds_bucket{db_config_name=~"main_replica",env="gstg",type=~"ai-assisted"}[1h] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_sql_replica_duration_seconds_bucket:rate_1h
+    expr: |
+      sum by (component,db_config_name,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sql_replica_duration_seconds_bucket{db_config_name=~"main_replica",env="gstg",type=~"api"}[1h] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_sql_replica_duration_seconds_bucket:rate_1h
+    expr: |
+      sum by (component,db_config_name,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sql_replica_duration_seconds_bucket{db_config_name=~"main_replica",env="gstg",type=~"git"}[1h] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_sql_replica_duration_seconds_bucket:rate_1h
+    expr: |
+      sum by (component,db_config_name,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sql_replica_duration_seconds_bucket{db_config_name=~"main_replica",env="gstg",type=~"internal-api"}[1h] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_sql_replica_duration_seconds_bucket:rate_1h
+    expr: |
+      sum by (component,db_config_name,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sql_replica_duration_seconds_bucket{db_config_name=~"main_replica",env="gstg",type=~"ops-gitlab-net"}[1h] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_sql_replica_duration_seconds_bucket:rate_1h
+    expr: |
+      sum by (component,db_config_name,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sql_replica_duration_seconds_bucket{db_config_name=~"main_replica",env="gstg",type=~"sidekiq"}[1h] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_sql_replica_duration_seconds_bucket:rate_1h
+    expr: |
+      sum by (component,db_config_name,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sql_replica_duration_seconds_bucket{db_config_name=~"main_replica",env="gstg",type=~"web"}[1h] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_sql_replica_duration_seconds_bucket:rate_1h
+    expr: |
+      sum by (component,db_config_name,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sql_replica_duration_seconds_bucket{db_config_name=~"main_replica",env="gstg",type=~"websockets"}[1h] offset 30s)
       )
   - record: sli_aggregations:pg_stat_database_xact_commit:rate_1h
     expr: |

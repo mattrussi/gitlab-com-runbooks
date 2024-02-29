@@ -157,9 +157,24 @@ test.suite({
   testGenerateServiceLevelIndicator: {
     actual: sliDefinition.new(sliWithBothKinds).generateServiceLevelIndicator({}).hello_sli,
     expectContains: {
-      requestRate: { counter: 'gitlab_sli_hello_sli_total', instanceFilter: '', selector: {} },
-      apdex: { operationRateMetric: 'gitlab_sli_hello_sli_apdex_total', selector: {}, successRateMetric: 'gitlab_sli_hello_sli_apdex_success_total' },
-      errorRate: { counter: 'gitlab_sli_hello_sli_error_total', instanceFilter: '', selector: {} },
+      requestRate: {
+        counter: 'gitlab_sli_hello_sli_total',
+        instanceFilter: '',
+        selector: {},
+        metricNames: ['gitlab_sli_hello_sli_total'],
+      },
+      apdex: {
+        operationRateMetric: 'gitlab_sli_hello_sli_apdex_total',
+        selector: {},
+        successRateMetric: 'gitlab_sli_hello_sli_apdex_success_total',
+        metricNames: ['gitlab_sli_hello_sli_apdex_success_total', 'gitlab_sli_hello_sli_apdex_total'],
+      },
+      errorRate: {
+        counter: 'gitlab_sli_hello_sli_error_total',
+        instanceFilter: '',
+        selector: {},
+        metricNames: ['gitlab_sli_hello_sli_error_total'],
+      },
     },
   },
 

@@ -297,31 +297,133 @@ test.suite({
     userImpacting: false,
   },
 
-  local testMetricsDescriptorAggregationLabels(sliDefinition, expect) = {
-    local descriptor = sliMetricsDescriptor.sliMetricsDescriptor(sliDefinition),
-    actual: descriptor.metricNamesAndAggregationLabels(),
+  local testMetricsDescriptorAggregationLabels(sliDefinitions, expect) = {
+    local descriptor = sliMetricsDescriptor.sliMetricsDescriptor(sliDefinitions),
+    actual: descriptor.aggregationLabelsByMetric,
     expect: expect,
   },
-  local testMetricsDescriptorSelectors(sliDefinition, expect) = {
-    local descriptor = sliMetricsDescriptor.sliMetricsDescriptor(sliDefinition),
-    actual: descriptor.metricNamesAndSelectors(),
+  local testMetricsDescriptorSelectors(sliDefinitions, expect) = {
+    local descriptor = sliMetricsDescriptor.sliMetricsDescriptor(sliDefinitions),
+    actual: descriptor.selectorsByMetric,
     expect: expect,
   },
 
-  local testSliWithSelectorHistogramApdex = sliDefinition.serviceLevelIndicatorDefinition(testSliBase {
-    apdex: histogramApdex('some_histogram_metrics', selector={ foo: 'bar' }),
-    requestRate: rateMetric('some_total_count', selector={ label_a: 'bar' }),
-    errorRate: rateMetric('some_total_count', selector={ label_b: 'foo' }),
-  }).initServiceLevelIndicatorWithName('test_sli', {}),
+  local testSLIs = {
+    sliWithSelectorHistogramApdex: sliDefinition.serviceLevelIndicatorDefinition(testSliBase {
+      apdex: histogramApdex('some_histogram_metrics', selector={ foo: 'bar' }),
+      requestRate: rateMetric('some_total_count', selector={ label_a: 'bar' }),
+      errorRate: rateMetric('some_total_count', selector={ label_b: 'foo' }),
+    }).initServiceLevelIndicatorWithName('sliWithSelectorHistogramApdex', { type: 'fake_service' }),
+    sliWithSelectorSuccessCounterApdex: sliDefinition.serviceLevelIndicatorDefinition(testSliBase {
+      apdex: successCounterApdex(successRateMetric='success_total_count', operationRateMetric='some_total_count', selector={ foo: 'bar', baz: 'qux' }),
+      requestRate: rateMetric('some_total_count', selector={ label_a: 'bar' }),
+      errorRate: rateMetric('some_total_count', selector={ label_b: 'foo' }),
+    }).initServiceLevelIndicatorWithName('sliWithSelectorErrorCounterApdex', { type: 'fake_service' }),
+    sliWithSelectorErrorCounterApdex: sliDefinition.serviceLevelIndicatorDefinition(testSliBase {
+      apdex: errorCounterApdex(errorRateMetric='error_total_count', operationRateMetric='some_total_count', selector={ foo: 'bar', baz: 'qux' }),
+      requestRate: rateMetric('some_total_count', selector={ label_a: 'bar' }),
+      errorRate: rateMetric('some_total_count', selector={ label_b: 'foo' }),
+    }).initServiceLevelIndicatorWithName('sliWithSelectorErrorCounterApdex', { type: 'fake_service' }),
+    sliWithSelectorRequestRateOnly: sliDefinition.serviceLevelIndicatorDefinition(testSliBase {
+      requestRate: rateMetric('some_total_count', selector={ label_a: 'bar', type: 'foo' }),
+    }).initServiceLevelIndicatorWithName('sliWithSelectorRequestRateOnly', { type: 'fake_service' }),
+    sliWithoutSelector: sliDefinition.serviceLevelIndicatorDefinition(testSliBase {
+      apdex: histogramApdex('some_histogram_metrics'),
+      requestRate: rateMetric('some_total_count'),
+      errorRate: rateMetric('some_total_count'),
+    }).initServiceLevelIndicatorWithName('sliWithoutSelector', { type: 'fake_service' }),
+    sliWithCombinedMetric: sliDefinition.serviceLevelIndicatorDefinition(testSliBase {
+      apdex: histogramApdex('some_histogram_metrics'),
+      requestRate: combined([
+        rateMetric(
+          counter='pg_stat_database_xact_commit',
+          selector={ type: 'patroni', tier: 'db' },
+          instanceFilter='(pg_replication_is_replica == 0)'
+        ),
+        rateMetric(
+          counter='pg_stat_database_xact_rollback',
+          selector={ type: 'patroni', tier: 'db', some_label: 'true' },
+          instanceFilter='(pg_replication_is_replica == 0)'
+        ),
+      ]),
+      errorRate: rateMetric('some_total_count'),
+    }).initServiceLevelIndicatorWithName('sliWithCombinedMetric', { type: 'fake_service' }),
+    sliWithDerivMetric: sliDefinition.serviceLevelIndicatorDefinition(testSliBase {
+      requestRate: derivMetric('some_total_count', { type: 'foo', job: 'bar' }),
+    }).initServiceLevelIndicatorWithName('sliWithDerivMetric', { type: 'fake_service' }),
+    sliWithGaugeMetric: sliDefinition.serviceLevelIndicatorDefinition(testSliBase {
+      requestRate: gaugeMetric('some_total_count', { type: 'foo', job: 'bar' }),
+    }).initServiceLevelIndicatorWithName('sliWithGaugeMetric', { type: 'fake_service' }),
+    sliWithMultipleSelectors: sliDefinition.serviceLevelIndicatorDefinition(testSliBase {
+      requestRate: rateMetric('some_total_count', { type: 'foo', job: { re: 'hello|world' } }),
+      errorRate: rateMetric('some_total_count', { type: 'bar', job: { eq: 'boo' } }),
+    }).initServiceLevelIndicatorWithName('sliWithMultipleSelectors', { type: 'fake_service' }),
+    sliWithSignificantLabels: sliDefinition.serviceLevelIndicatorDefinition(testSliBase {
+      requestRate: rateMetric('some_total_count', { type: 'foo', job: { re: 'hello|world' } }),
+      errorRate: rateMetric('some_total_count', { type: 'bar', job: { eq: 'boo' } }),
+      significantLabels: ['fizz', 'buzz'],
+    }).initServiceLevelIndicatorWithName('sliWithSignificantLabels', { type: 'fake_service' }),
+    combinedSli: combinedSli.combinedServiceLevelIndicatorDefinition(
+      userImpacting=false,
+      featureCategory='not_owned',
+      description='',
+      components=[
+        metricsCatalog.serviceLevelIndicatorDefinition({
+          userImpacting: false,
+          significantLabels: ['hello'],
+          requestRate: rateMetric(
+            counter='some_total',
+            selector={ foo: 'bar', backend: 'web' }
+          ),
+          errorRate: rateMetric(
+            counter='some_total',
+            selector={ foo: 'bar', backend: 'web', code: '5xx' }
+          ),
+        }),
+        metricsCatalog.serviceLevelIndicatorDefinition({
+          userImpacting: false,
+          significantLabels: ['world'],
+          requestRate: rateMetric(
+            counter='some_total',
+            selector={ foo: 'bar', backend: 'abc', type: 'baz' }
+          ),
+          errorRate: rateMetric(
+            counter='some_total',
+            selector={ foo: 'bar', backend: 'abc', type: 'baz', code: '5xx' }
+          ),
+        }),
+        metricsCatalog.serviceLevelIndicatorDefinition({
+          userImpacting: false,
+          significantLabels: [],
+          requestRate: rateMetric(
+            counter='some_other_total',
+            selector={ foo: 'bar', backend: 'abc' }
+          ),
+          errorRate: rateMetric(
+            counter='some_other_total',
+            selector={ foo: 'bar', backend: 'abc', code: '5xx' }
+          ),
+        }),
+      ],
+    ).initServiceLevelIndicatorWithName('combinedSli', { type: 'fake_service' }),
+    sliWithSelectorEscapedRegex: sliDefinition.serviceLevelIndicatorDefinition(testSliBase {
+      requestRate: rateMetric('some_total_count', selector={ route: '^foo', type: { re: '\\^blabla' } }),
+      errorRate: rateMetric('some_total_count', selector={ route: 'bar', type: { re: 'something.*' } }),
+    }).initServiceLevelIndicatorWithName('sliWithSelectorEscapedRegex', { type: 'fake_service' }),
+    sliWithSelectorEscapedRegex2: sliDefinition.serviceLevelIndicatorDefinition(testSliBase {
+      requestRate: rateMetric('some_total_count', selector={ route: { eq: '^foo' } }),
+      errorRate: rateMetric('some_total_count', selector={ route: 'bar' }),
+    }).initServiceLevelIndicatorWithName('sliWithSelectorEscapedRegex2', { type: 'fake_service' }),
+  },
   testMetricNamesAndLabelsHistogramApdex: testMetricsDescriptorAggregationLabels(
-    testSliWithSelectorHistogramApdex,
+    [testSLIs.sliWithSelectorHistogramApdex],
     expect={
       some_histogram_metrics: std.set(['foo', 'le']),
       some_total_count: std.set(['label_a', 'label_b']),
     }
   ),
   testMetricNamesAndSelectorsHistogramApdex: testMetricsDescriptorSelectors(
-    testSliWithSelectorHistogramApdex,
+    [testSLIs.sliWithSelectorHistogramApdex],
     expect={
       some_histogram_metrics: {
         foo: { oneOf: ['bar'] },
@@ -331,20 +433,15 @@ test.suite({
     }
   ),
 
-  local testSliWithSelectorSuccessCounterApdex = sliDefinition.serviceLevelIndicatorDefinition(testSliBase {
-    apdex: successCounterApdex(successRateMetric='success_total_count', operationRateMetric='some_total_count', selector={ foo: 'bar', baz: 'qux' }),
-    requestRate: rateMetric('some_total_count', selector={ label_a: 'bar' }),
-    errorRate: rateMetric('some_total_count', selector={ label_b: 'foo' }),
-  }).initServiceLevelIndicatorWithName('test_sli', {}),
   testMetricNamesAndLabelsSuccessCounterApdex: testMetricsDescriptorAggregationLabels(
-    testSliWithSelectorSuccessCounterApdex,
+    [testSLIs.sliWithSelectorSuccessCounterApdex],
     expect={
       success_total_count: std.set(['foo', 'baz']),
       some_total_count: std.set(['label_a', 'label_b', 'foo', 'baz']),
     }
   ),
   testMetricNamesAndSelectorsSuccessCounterApdex: testMetricsDescriptorSelectors(
-    testSliWithSelectorSuccessCounterApdex,
+    [testSLIs.sliWithSelectorSuccessCounterApdex],
     expect={
       success_total_count: {
         foo: { oneOf: ['bar'] },
@@ -354,20 +451,15 @@ test.suite({
     }
   ),
 
-  local testSliWithSelectorErrorCounterApdex = sliDefinition.serviceLevelIndicatorDefinition(testSliBase {
-    apdex: errorCounterApdex(errorRateMetric='error_total_count', operationRateMetric='some_total_count', selector={ foo: 'bar', baz: 'qux' }),
-    requestRate: rateMetric('some_total_count', selector={ label_a: 'bar' }),
-    errorRate: rateMetric('some_total_count', selector={ label_b: 'foo' }),
-  }).initServiceLevelIndicatorWithName('test_sli', {}),
   testMetricNamesAndLabelsErrorCounterApdex: testMetricsDescriptorAggregationLabels(
-    testSliWithSelectorErrorCounterApdex,
+    [testSLIs.sliWithSelectorErrorCounterApdex],
     expect={
       error_total_count: std.set(['foo', 'baz']),
       some_total_count: std.set(['label_a', 'label_b', 'foo', 'baz']),
     },
   ),
   testMetricNamesAndSelectorsErrorCounterApdex: testMetricsDescriptorSelectors(
-    testSliWithSelectorErrorCounterApdex,
+    [testSLIs.sliWithSelectorErrorCounterApdex],
     expect={
       error_total_count: {
         foo: { oneOf: ['bar'] },
@@ -377,17 +469,14 @@ test.suite({
     },
   ),
 
-  local testSliWithSelectorRequestRateOnly = sliDefinition.serviceLevelIndicatorDefinition(testSliBase {
-    requestRate: rateMetric('some_total_count', selector={ label_a: 'bar', type: 'foo' }),
-  }).initServiceLevelIndicatorWithName('test_sli', {}),
   testMetricNamesAndLabelsRequestRateOnly: testMetricsDescriptorAggregationLabels(
-    testSliWithSelectorRequestRateOnly,
+    [testSLIs.sliWithSelectorRequestRateOnly],
     expect={
       some_total_count: std.set(['label_a', 'type']),
     },
   ),
   testMetricNamesAndSelectorsRequestRateOnly: testMetricsDescriptorSelectors(
-    testSliWithSelectorRequestRateOnly,
+    [testSLIs.sliWithSelectorRequestRateOnly],
     expect={
       some_total_count: {
         label_a: { oneOf: ['bar'] },
@@ -396,44 +485,23 @@ test.suite({
     },
   ),
 
-  local testSliWithoutSelector = sliDefinition.serviceLevelIndicatorDefinition(testSliBase {
-    apdex: histogramApdex('some_histogram_metrics'),
-    requestRate: rateMetric('some_total_count'),
-    errorRate: rateMetric('some_total_count'),
-  }).initServiceLevelIndicatorWithName('test_sli', {}),
   testMetricNamesAndLabelsWithoutSelector: testMetricsDescriptorAggregationLabels(
-    testSliWithoutSelector,
+    [testSLIs.sliWithoutSelector],
     expect={
       some_histogram_metrics: ['le'],
       some_total_count: [],
     },
   ),
   testMetricNamesAndSelectorsWithoutSelector: testMetricsDescriptorSelectors(
-    testSliWithoutSelector,
+    [testSLIs.sliWithoutSelector],
     expect={
       some_histogram_metrics: {},
       some_total_count: {},
     },
   ),
 
-  local testSliWithCombinedMetric = sliDefinition.serviceLevelIndicatorDefinition(testSliBase {
-    apdex: histogramApdex('some_histogram_metrics'),
-    requestRate: combined([
-      rateMetric(
-        counter='pg_stat_database_xact_commit',
-        selector={ type: 'patroni', tier: 'db' },
-        instanceFilter='(pg_replication_is_replica == 0)'
-      ),
-      rateMetric(
-        counter='pg_stat_database_xact_rollback',
-        selector={ type: 'patroni', tier: 'db', some_label: 'true' },
-        instanceFilter='(pg_replication_is_replica == 0)'
-      ),
-    ]),
-    errorRate: rateMetric('some_total_count'),
-  }).initServiceLevelIndicatorWithName('test_sli', {}),
   testMetricNamesAndLabelsWithCombinedMetric: testMetricsDescriptorAggregationLabels(
-    testSliWithCombinedMetric,
+    [testSLIs.sliWithCombinedMetric],
     expect={
       some_histogram_metrics: ['le'],
       pg_stat_database_xact_commit: std.set(['type', 'tier']),
@@ -442,7 +510,7 @@ test.suite({
     },
   ),
   testMetricNamesAndSelectorsWithCombinedMetric: testMetricsDescriptorSelectors(
-    testSliWithCombinedMetric,
+    [testSLIs.sliWithCombinedMetric],
     expect={
       pg_stat_database_xact_commit: { tier: { oneOf: ['db'] }, type: { oneOf: ['patroni'] } },
       pg_stat_database_xact_rollback: { some_label: { oneOf: ['true'] }, tier: { oneOf: ['db'] }, type: { oneOf: ['patroni'] } },
@@ -451,17 +519,14 @@ test.suite({
     },
   ),
 
-  local testSliWithDerivMetric = sliDefinition.serviceLevelIndicatorDefinition(testSliBase {
-    requestRate: derivMetric('some_total_count', { type: 'foo', job: 'bar' }),
-  }).initServiceLevelIndicatorWithName('test_sli', {}),
   testMetricNamesAndLabelsDerivMetric: testMetricsDescriptorAggregationLabels(
-    testSliWithDerivMetric,
+    [testSLIs.sliWithDerivMetric],
     expect={
       some_total_count: ['job', 'type'],
     },
   ),
   testMetricNamesAndSelectorsDerivMetric: testMetricsDescriptorSelectors(
-    testSliWithDerivMetric,
+    [testSLIs.sliWithDerivMetric],
     expect={
       some_total_count: {
         type: { oneOf: ['foo'] },
@@ -470,17 +535,14 @@ test.suite({
     },
   ),
 
-  local testSliWithGaugeMetric = sliDefinition.serviceLevelIndicatorDefinition(testSliBase {
-    requestRate: gaugeMetric('some_total_count', { type: 'foo', job: 'bar' }),
-  }).initServiceLevelIndicatorWithName('test_sli', {}),
   testMetricNamesAndLabelsGaugeMetric: testMetricsDescriptorAggregationLabels(
-    testSliWithGaugeMetric,
+    [testSLIs.sliWithGaugeMetric],
     expect={
       some_total_count: ['job', 'type'],
     },
   ),
   testMetricNamesAndSelectorsGaugeMetric: testMetricsDescriptorSelectors(
-    testSliWithGaugeMetric,
+    [testSLIs.sliWithGaugeMetric],
     expect={
       some_total_count: {
         type: { oneOf: ['foo'] },
@@ -489,18 +551,14 @@ test.suite({
     },
   ),
 
-  local testSliWithMultipleSelectors = sliDefinition.serviceLevelIndicatorDefinition(testSliBase {
-    requestRate: rateMetric('some_total_count', { type: 'foo', job: { re: 'hello|world' } }),
-    errorRate: rateMetric('some_total_count', { type: 'bar', job: { eq: 'boo' } }),
-  }).initServiceLevelIndicatorWithName('test_sli', {}),
   testMetricNamesAndLabelsMultipleSelectors: testMetricsDescriptorAggregationLabels(
-    testSliWithMultipleSelectors,
+    [testSLIs.sliWithMultipleSelectors],
     expect={
       some_total_count: ['job', 'type'],
     },
   ),
   testMetricNamesAndSelectorsMultipleSelectors: testMetricsDescriptorSelectors(
-    testSliWithMultipleSelectors,
+    [testSLIs.sliWithMultipleSelectors],
     expect={
       some_total_count: {
         type: { oneOf: ['bar', 'foo'] },
@@ -509,19 +567,14 @@ test.suite({
     },
   ),
 
-  local testSliWithSignificantLabels = sliDefinition.serviceLevelIndicatorDefinition(testSliBase {
-    requestRate: rateMetric('some_total_count', { type: 'foo', job: { re: 'hello|world' } }),
-    errorRate: rateMetric('some_total_count', { type: 'bar', job: { eq: 'boo' } }),
-    significantLabels: ['fizz', 'buzz'],
-  }).initServiceLevelIndicatorWithName('test_sli', {}),
   testMetricNamesAndLabelsSignificantLabels: testMetricsDescriptorAggregationLabels(
-    testSliWithSignificantLabels,
+    [testSLIs.sliWithSignificantLabels],
     expect={
       some_total_count: std.set(['fizz', 'buzz', 'job', 'type']),
     }
   ),
   testMetricNamesAndSelectorsSignificantLabels: testMetricsDescriptorSelectors(
-    testSliWithSignificantLabels,
+    [testSLIs.sliWithSignificantLabels],
     expect={
       some_total_count: {
         type: { oneOf: ['bar', 'foo'] },
@@ -530,58 +583,15 @@ test.suite({
     },
   ),
 
-  local testCombinedSli = combinedSli.combinedServiceLevelIndicatorDefinition(
-    userImpacting=false,
-    featureCategory='not_owned',
-    description='',
-    components=[
-      metricsCatalog.serviceLevelIndicatorDefinition({
-        userImpacting: false,
-        significantLabels: ['hello'],
-        requestRate: rateMetric(
-          counter='some_total',
-          selector={ foo: 'bar', backend: 'web' }
-        ),
-        errorRate: rateMetric(
-          counter='some_total',
-          selector={ foo: 'bar', backend: 'web', code: '5xx' }
-        ),
-      }),
-      metricsCatalog.serviceLevelIndicatorDefinition({
-        userImpacting: false,
-        significantLabels: ['world'],
-        requestRate: rateMetric(
-          counter='some_total',
-          selector={ foo: 'bar', backend: 'abc', type: 'baz' }
-        ),
-        errorRate: rateMetric(
-          counter='some_total',
-          selector={ foo: 'bar', backend: 'abc', type: 'baz', code: '5xx' }
-        ),
-      }),
-      metricsCatalog.serviceLevelIndicatorDefinition({
-        userImpacting: false,
-        significantLabels: [],
-        requestRate: rateMetric(
-          counter='some_other_total',
-          selector={ foo: 'bar', backend: 'abc' }
-        ),
-        errorRate: rateMetric(
-          counter='some_other_total',
-          selector={ foo: 'bar', backend: 'abc', code: '5xx' }
-        ),
-      }),
-    ],
-  ).initServiceLevelIndicatorWithName('test_sli', {}),
   testMetricNamesAndLabelsCombinedSli: testMetricsDescriptorAggregationLabels(
-    testCombinedSli,
+    [testSLIs.combinedSli],
     expect={
       some_total: std.set(['foo', 'backend', 'code', 'type', 'hello', 'world']),
       some_other_total: std.set(['foo', 'backend', 'code', 'hello', 'world']),
     }
   ),
   testMetricNamesAndSelectorsCombinedSli: testMetricsDescriptorSelectors(
-    testCombinedSli,
+    [testSLIs.combinedSli],
     expect={
       some_total: {
         foo: { oneOf: ['bar'] },
@@ -594,12 +604,8 @@ test.suite({
     },
   ),
 
-  local testSliWithSelectorEscapedRegex = sliDefinition.serviceLevelIndicatorDefinition(testSliBase {
-    requestRate: rateMetric('some_total_count', selector={ route: '^foo', type: { re: '\\^blabla' } }),
-    errorRate: rateMetric('some_total_count', selector={ route: 'bar', type: { re: 'something.*' } }),
-  }).initServiceLevelIndicatorWithName('test_sli', {}),
   testMetricNamesAndSelectorsEscapedRegex: testMetricsDescriptorSelectors(
-    testSliWithSelectorEscapedRegex,
+    [testSLIs.sliWithSelectorEscapedRegex],
     expect={
       some_total_count: {
         route: { oneOf: ['\\\\^foo', 'bar'] },
@@ -607,16 +613,40 @@ test.suite({
       },
     }
   ),
-  local testSliWithSelectorEscapedRegex2 = sliDefinition.serviceLevelIndicatorDefinition(testSliBase {
-    requestRate: rateMetric('some_total_count', selector={ route: { eq: '^foo' } }),
-    errorRate: rateMetric('some_total_count', selector={ route: 'bar' }),
-  }).initServiceLevelIndicatorWithName('test_sli', {}),
   testMetricNamesAndSelectorsEscapedRegex2: testMetricsDescriptorSelectors(
-    testSliWithSelectorEscapedRegex2,
+    [testSLIs.sliWithSelectorEscapedRegex2],
     expect={
       some_total_count: {
         route: { oneOf: ['\\\\^foo', 'bar'] },
       },
     }
   ),
+
+  testDescriptorMultipleSLIs: {
+    actual: sliMetricsDescriptor.sliMetricsDescriptor(std.objectValues(testSLIs)),
+    expect: {
+      aggregationLabelsByMetric: {
+        error_total_count: ['baz', 'foo'],
+        pg_stat_database_xact_commit: ['tier', 'type'],
+        pg_stat_database_xact_rollback: ['some_label', 'tier', 'type'],
+        some_histogram_metrics: ['foo', 'le'],
+        some_other_total: ['backend', 'code', 'foo', 'hello', 'world'],
+        some_total: ['backend', 'code', 'foo', 'hello', 'type', 'world'],
+        some_total_count: ['baz', 'buzz', 'fizz', 'foo', 'job', 'label_a', 'label_b', 'route', 'type'],
+        success_total_count: ['baz', 'foo'],
+      },
+      allMetrics: ['error_total_count', 'pg_stat_database_xact_commit', 'pg_stat_database_xact_rollback', 'some_histogram_metrics', 'some_other_total', 'some_total', 'some_total_count', 'success_total_count'],
+      emittingTypesByMetric: { error_total_count: ['fake_service'], pg_stat_database_xact_commit: ['fake_service'], pg_stat_database_xact_rollback: ['fake_service'], some_histogram_metrics: ['fake_service'], some_other_total: ['fake_service'], some_total: ['fake_service'], some_total_count: ['fake_service'], success_total_count: ['fake_service'] },
+      selectorsByMetric: {
+        error_total_count: { baz: { oneOf: ['qux'] }, foo: { oneOf: ['bar'] } },
+        pg_stat_database_xact_commit: { tier: { oneOf: ['db'] }, type: { oneOf: ['patroni'] } },
+        pg_stat_database_xact_rollback: { some_label: { oneOf: ['true'] }, tier: { oneOf: ['db'] }, type: { oneOf: ['patroni'] } },
+        some_histogram_metrics: {},
+        some_other_total: { backend: { oneOf: ['abc'] }, foo: { oneOf: ['bar'] } },
+        some_total: { backend: { oneOf: ['abc', 'web'] }, foo: { oneOf: ['bar'] } },
+        some_total_count: {},
+        success_total_count: { baz: { oneOf: ['qux'] }, foo: { oneOf: ['bar'] } },
+      },
+    },
+  },
 })
