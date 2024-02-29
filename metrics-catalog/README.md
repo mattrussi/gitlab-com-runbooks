@@ -165,7 +165,6 @@ by a burn rate. The most commonly used ones are:
    1. `gitlab:component:feature_category:execution:apdex:ratio_[burnRate]`
    1. `gitlab:component:feature_category:execution:apdex:success:rate_[burnRate]`
    1. `gitlab:component:feature_category:execution:apdex:weight:score_[burnRate]`
-   1. `gitlab:component:feature_category:execution:error:ratio_[burnRate]`
    1. `gitlab:component:feature_category:execution:error:rate_[burnRate]`
    1. `gitlab:component:feature_category:execution:ops:rate_[burnRate]`
 
