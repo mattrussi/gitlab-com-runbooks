@@ -42,6 +42,7 @@
 * [Possible Breach of SSH MaxStartups](../frontend/ssh-maxstartups-breach.md)
 * [Purge Git data](../git/purge-git-data.md)
 * [../gitaly/git-high-cpu-and-memory-usage.md](../gitaly/git-high-cpu-and-memory-usage.md)
+* [`gitalyctl`](../gitaly/gitalyctl.md)
 * [Gitaly multi-project migration](../gitaly/multi-project-migration.md)
 * [GitLab Storage Re-balancing](../gitaly/storage-rebalancing.md)
 * [Web IDE Assets](../gitlab-static/web-ide-assets.md)
