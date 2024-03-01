@@ -10,19 +10,18 @@ local monthlyReleaseInfoTextPanel =
   basic.text(
     title='',
     content=|||
-      # Upcoming Monthly Release
+      # Active Monthly Release
 
-      The Delivery group releases a new package version for self-managed users on the third Thursday of every month.
+      GitLab releases a new self-managed release on the third Thursday of every month.
 
       This release is a semver versioned package containing changes from many successful deployments on GitLab.com.
 
-      The following panels contain information about the upcoming monthly release.
+      The following panels contain information about the active monthly release.
 
-      [Monthly release schedule](https://about.gitlab.com/releases/)
-
-      [Overview of the process](https://handbook.gitlab.com/handbook/engineering/deployments-and-releases/)
-
-      [How can I determine if my MR will make it into the monthly release](https://handbook.gitlab.com/handbook/engineering/releases/#how-can-i-determine-if-my-merge-request-will-make-it-into-the-monthly-release)
+      Links:
+      - [Monthly release schedule](https://about.gitlab.com/releases/)
+      - [Overview of the process](https://handbook.gitlab.com/handbook/engineering/deployments-and-releases/)
+      - [How can I determine if my MR will make it into the monthly release](https://handbook.gitlab.com/handbook/engineering/releases/#how-can-i-determine-if-my-merge-request-will-make-it-into-the-monthly-release)
 
       For inquiries about the monthly release, please ask in the [`#releases` slack channel](https://gitlab.enterprise.slack.com/archives/C0XM5UU6B).
     |||,
@@ -34,10 +33,10 @@ local monthlyReleaseStatusTextPanel =
     content=|||
       # Release Status
 
-      The right-most panel in the row below shows the current status of the upcoming monthly release.
+      The right-most panel in the row below shows the current status of the active monthly release.
       The following are the different statuses, and what each signify for engineers:
 
-      * Open: Engineers can create MRs, and any commit that reached production is expected to be released with the next monthly release.
+      * Open: Engineers can create MRs, and any commit that reached production is expected to be released with the active monthly release.
       * Announced: Guaranteed SHA has been announced in `#releases` slack channel. Signals that the RC tagging date is getting closer.
       * RC Tagged: The stable branch has been created, and the release candidate has been tagged. No more commits will be included in the release.
     |||,
@@ -47,7 +46,7 @@ local monthlyReleaseVersionStatPanel =
   basic.statPanel(
     title='',
     panelTitle='Release Version',
-    description='This is the current monthly release version that will be published on the next third Thursday of the month.',
+    description='This is the active monthly release version that will be published on the next third Thursday of the month.',
     query=monthlyReleaseStatusQuery,
     colorMode='thresholds',
     fields='/^version$/',
@@ -105,7 +104,7 @@ local monthlyReleaseDateStatPanel =
   basic.statPanel(
     title='',
     panelTitle='Release Date',
-    description='This is the release date for the next monthly release.',
+    description='This is the release date for the active monthly release.',
     query=monthlyReleaseStatusQuery,
     colorMode='thresholds',
     fields='/^release_date$/',
@@ -248,24 +247,23 @@ basic.dashboard(
   includeEnvironmentTemplate=false,
 )
 
-.addPanels(
-  [
-    row.new(title='Monthly Release Information') { gridPos: { x: 0, y: 0, w: 24, h: 1 } },
-  ] +
-  layout.grid(
-    [
-      monthlyReleaseInfoTextPanel,
-      monthlyReleaseStatusTextPanel,
-    ], cols=2, startRow=1
-  )
-  +
-  layout.grid(
-    [
-      monthlyReleaseVersionStatPanel,
-      monthlyReleaseDateStatPanel,
-      monthlyReleaseStatusStatPanel,
-    ], cols=3, startRow=2
-  )
+.addPanel(
+  row.new(title='Monthly Release Information'),
+  gridPos={ x: 0, y: 0, w: 24, h: 1 },
 )
-
+.addPanel(
+  monthlyReleaseInfoTextPanel, gridPos={ x: 0, y: 1, w: 16, h: 10 }
+)
+.addPanel(
+  monthlyReleaseStatusTextPanel, gridPos={ x: 16, y: 1, w: 8, h: 10 }
+)
+.addPanel(
+  monthlyReleaseVersionStatPanel, gridPos={ x: 0, y: 11, w: 8, h: 8 }
+)
+.addPanel(
+  monthlyReleaseDateStatPanel, gridPos={ x: 8, y: 11, w: 8, h: 8 }
+)
+.addPanel(
+  monthlyReleaseStatusStatPanel, gridPos={ x: 16, y: 11, w: 8, h: 8 }
+)
 .trailer()
