@@ -1823,7 +1823,7 @@ services:
       - manage
       - plan
     label: Sidekiq
-    owner: reliability_general
+    owner: scalability:practices
     business:
       SLA:
         overall_sla_weighting: 0 # Treated as a primary service, but with a zero weight for now
