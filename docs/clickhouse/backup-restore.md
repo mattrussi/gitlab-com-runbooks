@@ -54,5 +54,5 @@ Check the metrics of the failed instance. Can the issue be mitigated in the firs
 1. Enable a private connection to the instance using the self-serve information: `https://clickhouse.com/docs/en/manage/security/gcp-private-service-connect#add-endpoint-id-to-services-allow-list`
 1. Update the secrets and connection strings in [Vault](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-com/-/blob/0f51795585cd087b5db5d1b16f89a0dd875f8215/releases/gitlab-external-secrets/values/gprd.yaml.gotmpl#L392) to connect to the new instance. Then there is two places to update connection strings ([one](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-com/-/blob/0f51795585cd087b5db5d1b16f89a0dd875f8215/releases/gitlab/values/gprd.yaml.gotmpl?page=3#L2008) and [two](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/blob/4026c47f450610a280c534a34691b0daa54ec7dc/releases/30-gitlab-monitoring/gprd.yaml.gotmpl#L99))
 1. Redeploy the latest version of the stack.
-1. Check the following on the [main team dashboard](https://dashboards.gitlab.net/d/f42ee4d6-199b-4b6d-a129-138a42937866/clickhouse-cloud-test-dashboard?orgId=1):
+1. Check the following on the [main team dashboard](https://dashboards.gitlab.net/d/thEkJB_Mz/clickhouse-cloud-dashboard?orgId=1):
    * ClickHouse is still writing new data.
