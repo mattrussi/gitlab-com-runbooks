@@ -15,7 +15,7 @@ local runner_saturation(shard, gduid='', slot_soft=0.90, slot_hard=0.95) =
       When this metric is saturated, new CI jobs will queue. When this occurs we should consider adding more runner managers,
       or scaling the runner managers vertically and increasing their maximum runner capacity.
     ||| % shard,
-    grafana_dashboard_uid: if gduid != '' then gduid else 'sat_%s_runners' % std.strReplace(shard, "-", "_"),
+    grafana_dashboard_uid: if gduid != '' then gduid else 'sat_%s_runners' % std.strReplace(shard, '-', '_'),
     resourceLabels: ['instance'],
     staticLabels: {
       type: 'ci-runners',
@@ -45,6 +45,9 @@ local runner_saturation(shard, gduid='', slot_soft=0.90, slot_hard=0.95) =
   // also shared with the community contributors)
   private_runners: runner_saturation('private', slot_soft=0.85),
   shared_runners_gitlab: runner_saturation('shared-gitlab-org', gduid='sat_shared_runners_gitlab'),
+
+  // QA runners for e2e test pipelines in gprd for gitlab-org/gitlab
+  qa_runners: runner_saturation('qa-runners', gduid='sat_qa_runners'),
 
   // Customer facing SaaS runner fleet
   saas_linux_large_amd64_runners: runner_saturation('saas-linux-large-amd64', gduid='sat_r_saas_l_l_amd64'),

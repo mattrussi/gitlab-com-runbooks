@@ -931,6 +931,26 @@ groups:
       \       }\n      )\n      /\n      100\n      ,\n      1)\n  ,\n  0)\n)\n"
   - record: gitlab_component_saturation:ratio
     labels:
+      component: qa_runners
+      stage: main
+      tier: runners
+      type: ci-runners
+    expr: |
+      max by(environment, shard) (
+        clamp_min(
+          clamp_max(
+            sum without(executor_stage, exported_stage, state) (
+              max_over_time(gitlab_runner_jobs{job="runners-manager",shard="qa-runners"}[1m])
+            )
+            /
+            gitlab_runner_limit{job="runners-manager",shard="qa-runners"} > 0
+            ,
+            1)
+        ,
+        0)
+      )
+  - record: gitlab_component_saturation:ratio
+    labels:
       component: rails_db_connection_pool
     expr: |
       max by(environment, tier, type, stage, shard) (
@@ -1865,6 +1885,14 @@ groups:
     expr: "0.9"
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:
+      component: qa_runners
+    expr: "0.9"
+  - record: slo:max:hard:gitlab_component_saturation:ratio
+    labels:
+      component: qa_runners
+    expr: "0.95"
+  - record: slo:max:soft:gitlab_component_saturation:ratio
+    labels:
       component: rails_db_connection_pool
     expr: "0.9"
   - record: slo:max:hard:gitlab_component_saturation:ratio
@@ -2505,6 +2533,14 @@ groups:
       horiz_scaling: "yes"
       quantile: max
       severity: s3
+    expr: "1"
+  - record: gitlab_component_saturation_info
+    labels:
+      capacity_planning_strategy: quantile95_1h
+      component: qa_runners
+      horiz_scaling: "yes"
+      quantile: max
+      severity: s4
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
@@ -5996,6 +6032,65 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="pvs_cloudrun_container_instances"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="pvs_cloudrun_container_instances"}
+  - alert: component_saturation_slo_out_of_bounds:qa_runners
+    for: 5m
+    annotations:
+      title: The qa-runners Runner utilization resource of the {{ $labels.type }}
+        service ({{ $labels.stage }} stage) has a saturation exceeding SLO and is
+        close to its capacity limit.
+      description: |
+        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
+
+        Details of the qa-runners Runner utilization resource:
+
+        qa-runners runner utilization per instance.
+
+        Each runner manager has a maximum number of runners that it can coordinate at any single moment.
+
+        When this metric is saturated, new CI jobs will queue. When this occurs we should consider adding more runner managers, or scaling the runner managers vertically and increasing their maximum runner capacity.
+      grafana_dashboard_id: alerts-sat_qa_runners
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_qa_runners?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "714874967"
+      grafana_variables: environment,type,stage
+      promql_query: |
+        max by(environment, shard, instance) (
+          clamp_min(
+            clamp_max(
+              sum without(executor_stage, exported_stage, state) (
+                max_over_time(gitlab_runner_jobs{job="runners-manager",shard="qa-runners"}[1m])
+              )
+              /
+              gitlab_runner_limit{job="runners-manager",shard="qa-runners"} > 0
+              ,
+              1)
+          ,
+          0)
+        )
+      promql_template_1: |
+        max by(environment, shard, instance) (
+          clamp_min(
+            clamp_max(
+              sum without(executor_stage, exported_stage, state) (
+                max_over_time(gitlab_runner_jobs{job="runners-manager",shard="qa-runners"}[1m])
+              )
+              /
+              gitlab_runner_limit{job="runners-manager",shard="qa-runners"} > 0
+              ,
+              1)
+          ,
+          0)
+        )
+      runbook: docs/{{ $labels.type }}/README.md
+    labels:
+      alert_type: cause
+      rules_domain: general
+      severity: s4
+    expr: |
+      gitlab_component_saturation:ratio{component="qa_runners"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="qa_runners"}
   - alert: component_saturation_slo_out_of_bounds:rails_db_connection_pool
     for: 15m
     annotations:

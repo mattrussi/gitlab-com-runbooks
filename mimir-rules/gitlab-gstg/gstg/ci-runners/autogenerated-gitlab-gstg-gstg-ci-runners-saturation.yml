@@ -137,6 +137,26 @@ groups:
       )
   - record: gitlab_component_saturation:ratio
     labels:
+      component: qa_runners
+      stage: main
+      tier: runners
+      type: ci-runners
+    expr: |
+      max by(env, environment, shard) (
+        clamp_min(
+          clamp_max(
+            sum without(executor_stage, exported_stage, state) (
+              max_over_time(gitlab_runner_jobs{job="runners-manager",shard="qa-runners"}[1m])
+            )
+            /
+            gitlab_runner_limit{job="runners-manager",shard="qa-runners"} > 0
+            ,
+            1)
+        ,
+        0)
+      )
+  - record: gitlab_component_saturation:ratio
+    labels:
       component: saas_linux_large_amd64_runners
       stage: main
       tier: runners
