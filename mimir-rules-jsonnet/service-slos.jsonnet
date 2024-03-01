@@ -1,5 +1,6 @@
 local separateMimirRecordingFiles = (import 'recording-rules/lib/mimir/separate-mimir-recording-files.libsonnet').separateMimirRecordingFiles;
 local serviceSlosRules = import 'recording-rules/service-slos.libsonnet';
+local services = (import 'gitlab-metrics-config.libsonnet').monitoredServices;
 
 local outputPromYaml(groups) =
   std.manifestYamlDoc({
@@ -14,7 +15,7 @@ local rulesWithThanosRulerLabel = std.map(
       labels: originalLabels { monitor: 'global' },
     }
   ,
-  serviceSlosRules
+  serviceSlosRules.rules(services)
 );
 
 separateMimirRecordingFiles(

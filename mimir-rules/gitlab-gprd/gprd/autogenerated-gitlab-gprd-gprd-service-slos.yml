@@ -3894,6 +3894,66 @@ groups:
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:
+      component: inference
+      global_aggregation: "yes"
+      monitor: global
+      regional_aggregation: "no"
+      service_aggregation: "no"
+      tier: sv
+      type: ai-gateway
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: runway_ingress
+      global_aggregation: "yes"
+      monitor: global
+      regional_aggregation: "no"
+      service_aggregation: "yes"
+      tier: sv
+      type: ai-gateway
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: server
+      global_aggregation: "yes"
+      monitor: global
+      regional_aggregation: "no"
+      service_aggregation: "no"
+      tier: sv
+      type: ai-gateway
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: server_code_completions
+      global_aggregation: "yes"
+      monitor: global
+      regional_aggregation: "no"
+      service_aggregation: "no"
+      tier: sv
+      type: ai-gateway
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: server_code_generations
+      global_aggregation: "yes"
+      monitor: global
+      regional_aggregation: "no"
+      service_aggregation: "no"
+      tier: sv
+      type: ai-gateway
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: waf
+      global_aggregation: "yes"
+      monitor: global
+      regional_aggregation: "no"
+      service_aggregation: "no"
+      tier: sv
+      type: ai-gateway
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
       component: global_search
       global_aggregation: "no"
       monitor: global
@@ -4094,6 +4154,26 @@ groups:
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:
+      component: loadbalancer
+      global_aggregation: "yes"
+      monitor: global
+      regional_aggregation: "no"
+      service_aggregation: "yes"
+      tier: sv
+      type: errortracking
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: runway_ingress
+      global_aggregation: "yes"
+      monitor: global
+      regional_aggregation: "no"
+      service_aggregation: "yes"
+      tier: sv
+      type: ext-pvs
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
       component: cnyHttpsServices
       global_aggregation: "no"
       monitor: global
@@ -4221,6 +4301,16 @@ groups:
       service_aggregation: "yes"
       tier: inf
       type: gitlab-static
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: runway_ingress
+      global_aggregation: "yes"
+      monitor: global
+      regional_aggregation: "no"
+      service_aggregation: "yes"
+      tier: sv
+      type: glgo
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:
@@ -5711,6 +5801,86 @@ groups:
       service_aggregation: "no"
       tier: sv
       type: sidekiq
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: rule_evaluation
+      global_aggregation: "yes"
+      monitor: global
+      regional_aggregation: "no"
+      service_aggregation: "yes"
+      tier: inf
+      type: thanos
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: thanos_compactor
+      global_aggregation: "yes"
+      monitor: global
+      regional_aggregation: "no"
+      service_aggregation: "yes"
+      tier: inf
+      type: thanos
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: thanos_memcached
+      global_aggregation: "yes"
+      monitor: global
+      regional_aggregation: "no"
+      service_aggregation: "no"
+      tier: inf
+      type: thanos
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: thanos_query
+      global_aggregation: "yes"
+      monitor: global
+      regional_aggregation: "no"
+      service_aggregation: "yes"
+      tier: inf
+      type: thanos
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: thanos_query_frontend
+      global_aggregation: "yes"
+      monitor: global
+      regional_aggregation: "no"
+      service_aggregation: "yes"
+      tier: inf
+      type: thanos
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: thanos_rule_alert_sender
+      global_aggregation: "yes"
+      monitor: global
+      regional_aggregation: "no"
+      service_aggregation: "yes"
+      tier: inf
+      type: thanos
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: thanos_store
+      global_aggregation: "yes"
+      monitor: global
+      regional_aggregation: "no"
+      service_aggregation: "yes"
+      tier: inf
+      type: thanos
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: ingress
+      global_aggregation: "yes"
+      monitor: global
+      regional_aggregation: "no"
+      service_aggregation: "yes"
+      tier: sv
+      type: tracing
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:
