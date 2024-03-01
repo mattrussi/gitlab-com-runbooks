@@ -33,8 +33,9 @@ local monthlyReleaseStatusTextPanel =
     content=|||
       # Release Status
 
-      The right-most panel in the row below shows the current status of the active monthly release.
-      The following are the different statuses, and what each signify for engineers:
+      The panel below shows the current status of the active monthly release.
+
+      The following are what the statuses signify for engineers:
 
       * Open: Engineers can create MRs, and any commit that reached production is expected to be released with the active monthly release.
       * Announced: Guaranteed SHA has been announced in `#releases` slack channel. Signals that the RC tagging date is getting closer.
