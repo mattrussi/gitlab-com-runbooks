@@ -5,6 +5,8 @@ local sliMetricDescriptor = import 'servicemetrics/sli_metric_descriptor.libsonn
 local selectors = import 'promql/selectors.libsonnet';
 local aggregations = import 'promql/aggregations.libsonnet';
 local optionalOffset = import 'recording-rules/lib/optional-offset.libsonnet';
+local metricsConfig = import 'gitlab-metrics-config.libsonnet';
+local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
 
 local aggregationSetLabels = std.set(
   std.flatMap(
@@ -79,6 +81,36 @@ local resolveRecordingRuleFor(metricName, aggregationLabels, selector, rangeInte
     selector: selectors.serializeHash(selector),
   };
 
+
+local recordingRulesForClusters(clusters, metricName, aggregationLabels, selector, burnRate) =
+  if std.length(clusters) > 0 then
+    std.map(
+      function(cluster)
+        local selectorWithCluster = selectors.merge(selector, { cluster: cluster });
+        generateRecordingRulesForMetric(metricName, aggregationLabels, selectorWithCluster, burnRate),
+      clusters
+    )
+  else
+    [generateRecordingRulesForMetric(metricName, aggregationLabels, selector, burnRate)];
+
+local recordingRulesForTypes(types, metricName, aggregationLabels, selector, burnRate) =
+  std.flatMap(
+    function(type)
+      local serviceDefinition = metricsCatalog.getServiceOptional(type);
+      local isKubeProvisioned = serviceDefinition != null && serviceDefinition.provisioning.kubernetes;
+      local env = std.get(selector, 'env');
+      local clusters = if env != null && isKubeProvisioned then
+        std.get(metricsConfig.gkeClustersByEnvironment, env, default=[])
+      else
+        [];
+      local selectorPerType = selectors.merge(
+        selector,
+        { type: { oneOf: [type] } }
+      );
+      recordingRulesForClusters(clusters, metricName, aggregationLabels, selectorPerType, burnRate),
+    types
+  );
+
 local generateRecordingRules(sliDefinitions, burnRate, extraSelector) =
   local descriptor = sliMetricDescriptor.sliMetricsDescriptor(sliDefinitions);
   local aggregationLabelsByMetric = descriptor.aggregationLabelsByMetric;
@@ -92,19 +124,12 @@ local generateRecordingRules(sliDefinitions, burnRate, extraSelector) =
         extraSelector
       );
       local emittingTypes = emittingTypesByMetric[metricName];
+      local aggregationLabels = aggregationLabelsByMetric[metricName];
 
       if std.length(emittingTypes) > 0 then
-        std.map(
-          function(type)
-            local selectorPerType = selectors.merge(
-              selector,
-              { type: { oneOf: [type] } }
-            );
-            generateRecordingRulesForMetric(metricName, aggregationLabelsByMetric[metricName], selectorPerType, burnRate),
-          emittingTypes
-        )
+        recordingRulesForTypes(emittingTypes, metricName, aggregationLabels, selector, burnRate)
       else
-        [generateRecordingRulesForMetric(metricName, aggregationLabelsByMetric[metricName], selector, burnRate)],
+        [generateRecordingRulesForMetric(metricName, aggregationLabels, selector, burnRate)],
     descriptor.allMetrics,
   );
 

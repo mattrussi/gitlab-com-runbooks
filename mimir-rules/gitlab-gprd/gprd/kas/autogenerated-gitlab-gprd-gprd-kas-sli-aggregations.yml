@@ -7,12 +7,42 @@ groups:
   - record: sli_aggregations:grpc_server_handled_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,grpc_code,grpc_method,grpc_service,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(grpc_server_handled_total{env="gprd",type=~"kas"}[5m] offset 30s)
+        rate(grpc_server_handled_total{cluster="gprd-gitlab-gke",env="gprd",type=~"kas"}[5m] offset 30s)
+      )
+  - record: sli_aggregations:grpc_server_handled_total:rate_5m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,grpc_code,grpc_method,grpc_service,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(grpc_server_handled_total{cluster="gprd-us-east1-b",env="gprd",type=~"kas"}[5m] offset 30s)
+      )
+  - record: sli_aggregations:grpc_server_handled_total:rate_5m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,grpc_code,grpc_method,grpc_service,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(grpc_server_handled_total{cluster="gprd-us-east1-c",env="gprd",type=~"kas"}[5m] offset 30s)
+      )
+  - record: sli_aggregations:grpc_server_handled_total:rate_5m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,grpc_code,grpc_method,grpc_service,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(grpc_server_handled_total{cluster="gprd-us-east1-d",env="gprd",type=~"kas"}[5m] offset 30s)
       )
   - record: sli_aggregations:tunnel_routing_duration_seconds_bucket:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,grpc_method,le,product_stage,queue,region,shard,stage,stage_group,status,tier,type,urgency,worker) (
-        rate(tunnel_routing_duration_seconds_bucket{env="gprd",status=~"success",type=~"kas"}[5m] offset 30s)
+        rate(tunnel_routing_duration_seconds_bucket{cluster="gprd-gitlab-gke",env="gprd",status=~"success",type=~"kas"}[5m] offset 30s)
+      )
+  - record: sli_aggregations:tunnel_routing_duration_seconds_bucket:rate_5m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,grpc_method,le,product_stage,queue,region,shard,stage,stage_group,status,tier,type,urgency,worker) (
+        rate(tunnel_routing_duration_seconds_bucket{cluster="gprd-us-east1-b",env="gprd",status=~"success",type=~"kas"}[5m] offset 30s)
+      )
+  - record: sli_aggregations:tunnel_routing_duration_seconds_bucket:rate_5m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,grpc_method,le,product_stage,queue,region,shard,stage,stage_group,status,tier,type,urgency,worker) (
+        rate(tunnel_routing_duration_seconds_bucket{cluster="gprd-us-east1-c",env="gprd",status=~"success",type=~"kas"}[5m] offset 30s)
+      )
+  - record: sli_aggregations:tunnel_routing_duration_seconds_bucket:rate_5m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,grpc_method,le,product_stage,queue,region,shard,stage,stage_group,status,tier,type,urgency,worker) (
+        rate(tunnel_routing_duration_seconds_bucket{cluster="gprd-us-east1-d",env="gprd",status=~"success",type=~"kas"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: kas - 30m burn-rate'
   interval: 2m
@@ -20,12 +50,42 @@ groups:
   - record: sli_aggregations:grpc_server_handled_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,grpc_code,grpc_method,grpc_service,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(grpc_server_handled_total{env="gprd",type=~"kas"}[30m] offset 30s)
+        rate(grpc_server_handled_total{cluster="gprd-gitlab-gke",env="gprd",type=~"kas"}[30m] offset 30s)
+      )
+  - record: sli_aggregations:grpc_server_handled_total:rate_30m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,grpc_code,grpc_method,grpc_service,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(grpc_server_handled_total{cluster="gprd-us-east1-b",env="gprd",type=~"kas"}[30m] offset 30s)
+      )
+  - record: sli_aggregations:grpc_server_handled_total:rate_30m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,grpc_code,grpc_method,grpc_service,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(grpc_server_handled_total{cluster="gprd-us-east1-c",env="gprd",type=~"kas"}[30m] offset 30s)
+      )
+  - record: sli_aggregations:grpc_server_handled_total:rate_30m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,grpc_code,grpc_method,grpc_service,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(grpc_server_handled_total{cluster="gprd-us-east1-d",env="gprd",type=~"kas"}[30m] offset 30s)
       )
   - record: sli_aggregations:tunnel_routing_duration_seconds_bucket:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,grpc_method,le,product_stage,queue,region,shard,stage,stage_group,status,tier,type,urgency,worker) (
-        rate(tunnel_routing_duration_seconds_bucket{env="gprd",status=~"success",type=~"kas"}[30m] offset 30s)
+        rate(tunnel_routing_duration_seconds_bucket{cluster="gprd-gitlab-gke",env="gprd",status=~"success",type=~"kas"}[30m] offset 30s)
+      )
+  - record: sli_aggregations:tunnel_routing_duration_seconds_bucket:rate_30m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,grpc_method,le,product_stage,queue,region,shard,stage,stage_group,status,tier,type,urgency,worker) (
+        rate(tunnel_routing_duration_seconds_bucket{cluster="gprd-us-east1-b",env="gprd",status=~"success",type=~"kas"}[30m] offset 30s)
+      )
+  - record: sli_aggregations:tunnel_routing_duration_seconds_bucket:rate_30m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,grpc_method,le,product_stage,queue,region,shard,stage,stage_group,status,tier,type,urgency,worker) (
+        rate(tunnel_routing_duration_seconds_bucket{cluster="gprd-us-east1-c",env="gprd",status=~"success",type=~"kas"}[30m] offset 30s)
+      )
+  - record: sli_aggregations:tunnel_routing_duration_seconds_bucket:rate_30m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,grpc_method,le,product_stage,queue,region,shard,stage,stage_group,status,tier,type,urgency,worker) (
+        rate(tunnel_routing_duration_seconds_bucket{cluster="gprd-us-east1-d",env="gprd",status=~"success",type=~"kas"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: kas - 1h burn-rate'
   interval: 1m
@@ -33,10 +93,40 @@ groups:
   - record: sli_aggregations:grpc_server_handled_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,grpc_code,grpc_method,grpc_service,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(grpc_server_handled_total{env="gprd",type=~"kas"}[1h] offset 30s)
+        rate(grpc_server_handled_total{cluster="gprd-gitlab-gke",env="gprd",type=~"kas"}[1h] offset 30s)
+      )
+  - record: sli_aggregations:grpc_server_handled_total:rate_1h
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,grpc_code,grpc_method,grpc_service,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(grpc_server_handled_total{cluster="gprd-us-east1-b",env="gprd",type=~"kas"}[1h] offset 30s)
+      )
+  - record: sli_aggregations:grpc_server_handled_total:rate_1h
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,grpc_code,grpc_method,grpc_service,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(grpc_server_handled_total{cluster="gprd-us-east1-c",env="gprd",type=~"kas"}[1h] offset 30s)
+      )
+  - record: sli_aggregations:grpc_server_handled_total:rate_1h
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,grpc_code,grpc_method,grpc_service,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(grpc_server_handled_total{cluster="gprd-us-east1-d",env="gprd",type=~"kas"}[1h] offset 30s)
       )
   - record: sli_aggregations:tunnel_routing_duration_seconds_bucket:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,grpc_method,le,product_stage,queue,region,shard,stage,stage_group,status,tier,type,urgency,worker) (
-        rate(tunnel_routing_duration_seconds_bucket{env="gprd",status=~"success",type=~"kas"}[1h] offset 30s)
+        rate(tunnel_routing_duration_seconds_bucket{cluster="gprd-gitlab-gke",env="gprd",status=~"success",type=~"kas"}[1h] offset 30s)
+      )
+  - record: sli_aggregations:tunnel_routing_duration_seconds_bucket:rate_1h
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,grpc_method,le,product_stage,queue,region,shard,stage,stage_group,status,tier,type,urgency,worker) (
+        rate(tunnel_routing_duration_seconds_bucket{cluster="gprd-us-east1-b",env="gprd",status=~"success",type=~"kas"}[1h] offset 30s)
+      )
+  - record: sli_aggregations:tunnel_routing_duration_seconds_bucket:rate_1h
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,grpc_method,le,product_stage,queue,region,shard,stage,stage_group,status,tier,type,urgency,worker) (
+        rate(tunnel_routing_duration_seconds_bucket{cluster="gprd-us-east1-c",env="gprd",status=~"success",type=~"kas"}[1h] offset 30s)
+      )
+  - record: sli_aggregations:tunnel_routing_duration_seconds_bucket:rate_1h
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,grpc_method,le,product_stage,queue,region,shard,stage,stage_group,status,tier,type,urgency,worker) (
+        rate(tunnel_routing_duration_seconds_bucket{cluster="gprd-us-east1-d",env="gprd",status=~"success",type=~"kas"}[1h] offset 30s)
       )
