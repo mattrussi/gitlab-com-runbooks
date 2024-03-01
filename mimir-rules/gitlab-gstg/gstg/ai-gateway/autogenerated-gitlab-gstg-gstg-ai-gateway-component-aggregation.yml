@@ -54,7 +54,7 @@ groups:
       type: ai-gateway
     expr: |
       sum by (env,environment) (
-        avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_request_latencies_bucket{env="gstg",le="4903.707252978515",response_code_class!~"4xx|5xx",type="ai-gateway"}[5m] offset 30s)
+        avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_request_latencies_bucket{env="gstg",le="27264.20685613271",response_code_class!~"4xx|5xx",type="ai-gateway"}[5m] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_5m
     labels:
@@ -360,7 +360,7 @@ groups:
       type: ai-gateway
     expr: |
       sum by (env,environment) (
-        avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_request_latencies_bucket{env="gstg",le="4903.707252978515",response_code_class!~"4xx|5xx",type="ai-gateway"}[30m] offset 30s)
+        avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_request_latencies_bucket{env="gstg",le="27264.20685613271",response_code_class!~"4xx|5xx",type="ai-gateway"}[30m] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_30m
     labels:
@@ -666,7 +666,7 @@ groups:
       type: ai-gateway
     expr: |
       sum by (env,environment) (
-        avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_request_latencies_bucket{env="gstg",le="4903.707252978515",response_code_class!~"4xx|5xx",type="ai-gateway"}[1h] offset 30s)
+        avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_request_latencies_bucket{env="gstg",le="27264.20685613271",response_code_class!~"4xx|5xx",type="ai-gateway"}[1h] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_1h
     labels:

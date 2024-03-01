@@ -55,7 +55,7 @@ groups:
       type: ai-gateway
     expr: |
       sum by (env,environment) (
-        avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_request_latencies_bucket{le="4903.707252978515",response_code_class!~"4xx|5xx",type="ai-gateway"}[5m])
+        avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_request_latencies_bucket{le="27264.20685613271",response_code_class!~"4xx|5xx",type="ai-gateway"}[5m])
       )
   - record: gitlab:component:feature_category:execution:apdex:weight:score_5m
     labels:
@@ -362,7 +362,7 @@ groups:
       type: ai-gateway
     expr: |
       sum by (env,environment) (
-        avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_request_latencies_bucket{le="4903.707252978515",response_code_class!~"4xx|5xx",type="ai-gateway"}[30m])
+        avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_request_latencies_bucket{le="27264.20685613271",response_code_class!~"4xx|5xx",type="ai-gateway"}[30m])
       )
   - record: gitlab:component:feature_category:execution:apdex:weight:score_30m
     labels:
@@ -669,7 +669,7 @@ groups:
       type: ai-gateway
     expr: |
       sum by (env,environment) (
-        avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_request_latencies_bucket{le="4903.707252978515",response_code_class!~"4xx|5xx",type="ai-gateway"}[1h])
+        avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_request_latencies_bucket{le="27264.20685613271",response_code_class!~"4xx|5xx",type="ai-gateway"}[1h])
       )
   - record: gitlab:component:feature_category:execution:apdex:weight:score_1h
     labels:
@@ -976,7 +976,7 @@ groups:
       type: ai-gateway
     expr: |
       sum by (env,environment) (
-        avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_request_latencies_bucket{le="4903.707252978515",response_code_class!~"4xx|5xx",type="ai-gateway"}[6h])
+        avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_request_latencies_bucket{le="27264.20685613271",response_code_class!~"4xx|5xx",type="ai-gateway"}[6h])
       )
   - record: gitlab:component:feature_category:execution:apdex:weight:score_6h
     labels:
@@ -1283,7 +1283,7 @@ groups:
       type: ai-gateway
     expr: |
       sum by (env,environment) (
-        avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_request_latencies_bucket{le="4903.707252978515",response_code_class!~"4xx|5xx",type="ai-gateway"}[3d])
+        avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_request_latencies_bucket{le="27264.20685613271",response_code_class!~"4xx|5xx",type="ai-gateway"}[3d])
       )
   - record: gitlab:component:feature_category:execution:apdex:weight:score_3d
     labels:
