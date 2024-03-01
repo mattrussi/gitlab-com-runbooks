@@ -25,14 +25,14 @@ groups:
     expr: |
       sum by (type, env, tier, stage, cluster) (
         kube_pod_container_status_waiting_reason:labeled{
-          env="gstg",
+          env="gprd",type="websockets",
           reason!="ContainerCreating",
         }
       )
       > 0
       >= on(type, env, tier, stage, cluster) (
         topk by(type, env, tier, stage, cluster) (1,
-          kube_deployment_spec_strategy_rollingupdate_max_surge:labeled{env="gstg"}
+          kube_deployment_spec_strategy_rollingupdate_max_surge:labeled{env="gprd",type="websockets"}
         )
         * 0.5
       )
