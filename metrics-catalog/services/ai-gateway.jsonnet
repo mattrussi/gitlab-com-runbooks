@@ -14,7 +14,11 @@ metricsCatalog.serviceDefinition(
     apdexScore=0.98,
     errorRatio=0.98,  // Temporary reduce until https://gitlab.com/gitlab-com/gl-infra/production/-/issues/17366 is fixed.
     featureCategory='code_suggestions',
-    apdexSatisfiedThreshold='4903.707252978515',
+    // Runway is using stackdriver metrics, these metrics use many buckets in miliseconds
+    // To pick an available bucket, we need to look at the source metrics
+    // https://dashboards.gitlab.net/goto/GiFs0eTIR?orgId=1
+    // Pick a value that is larger than the server SLIs this encapsulates
+    apdexSatisfiedThreshold='27264.20685613271',
     severity='s2',
     customToolingLinks=[
       toolingLinks.kibana(
