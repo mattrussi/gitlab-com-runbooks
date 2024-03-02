@@ -1,7 +1,7 @@
 # For first-time installation, you'll need to install all plugins:
 # Use the script: ./scripts/install-asdf-plugins.sh
 # NOTE: please add new plugins to ./scripts/install-asdf-plugins.sh when adding items here
-amtool       0.26.0 # datasource=github-releases depName=prometheus/alertmanager
+amtool       0.27.0 # datasource=github-releases depName=prometheus/alertmanager
 go-jsonnet   0.20.0 # datasource=github-releases depName=google/go-jsonnet
 golang       1.22.0 # datasource=golang-version depName=go
 jb           0.5.1 # datasource=github-releases depName=jsonnet-bundler/jsonnet-bundler
