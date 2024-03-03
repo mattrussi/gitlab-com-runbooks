@@ -94,12 +94,12 @@ local upscaledRateExpression = |||
 |||;
 
 local generateApdexRulesUpscaled(burnRate, aggregationSet, sliDefinition, recordingRuleStaticLabels, extraSourceSelector) =
-  local apdexSuccessRateRuleName = aggregationSet.getApdexSuccessRateMetricForBurnRate(burnRate, required=true);
-  local apdexWeightRuleName = aggregationSet.getApdexWeightMetricForBurnRate(burnRate, required=true);
+  local apdexSuccessRateRuleName = aggregationSet.getApdexSuccessRateMetricForBurnRate(burnRate, required=false);
+  local apdexWeightRuleName = aggregationSet.getApdexWeightMetricForBurnRate(burnRate, required=false);
   local allStaticLabels = recordingRuleStaticLabels + sliDefinition.staticLabels;
 
-  [
-    {
+  local apdexSuccessRateRule = if apdexSuccessRateRuleName != null then
+    [{
       record: apdexSuccessRateRuleName,
       labels: allStaticLabels,
       expr: upscaledRateExpression % {
@@ -110,8 +110,11 @@ local generateApdexRulesUpscaled(burnRate, aggregationSet, sliDefinition, record
         ),
         burnRate: burnRate,
       },
-    },
-    {
+    }]
+  else [];
+
+  local apdexWeightRateRule = if apdexWeightRuleName != null then
+    [{
       record: apdexWeightRuleName,
       expr: upscaledRateExpression % {
         aggregationLabels: aggregations.serialize(filterLabelsFromLabelsHash(aggregationSet.labels, allStaticLabels)),
@@ -121,42 +124,50 @@ local generateApdexRulesUpscaled(burnRate, aggregationSet, sliDefinition, record
         ),
         burnRate: burnRate,
       },
-    },
-  ];
+    }]
+  else [];
+
+  apdexSuccessRateRule + apdexWeightRateRule;
 
 local generateRequestRateRulesUpscaled(burnRate, aggregationSet, sliDefinition, recordingRuleStaticLabels, extraSourceSelector) =
-  local recordingRuleName = aggregationSet.getOpsRateMetricForBurnRate(burnRate, required=true);
+  local recordingRuleName = aggregationSet.getOpsRateMetricForBurnRate(burnRate, required=false);
   local allStaticLabels = recordingRuleStaticLabels + sliDefinition.staticLabels;
 
-  [{
-    record: recordingRuleName,
-    labels: allStaticLabels,
-    expr: upscaledRateExpression % {
-      aggregationLabels: aggregations.serialize(filterLabelsFromLabelsHash(aggregationSet.labels, allStaticLabels)),
-      metricName: aggregationSet.getOpsRateMetricForBurnRate('1h', required=true),
-      sourceSelectorWithExtras: selectors.serializeHash(
-        selectors.merge(recordingRuleStaticLabels, extraSourceSelector),
-      ),
-      burnRate: burnRate,
-    },
-  }];
+  if recordingRuleName != null then
+    [{
+      record: recordingRuleName,
+      labels: allStaticLabels,
+      expr: upscaledRateExpression % {
+        aggregationLabels: aggregations.serialize(filterLabelsFromLabelsHash(aggregationSet.labels, allStaticLabels)),
+        metricName: aggregationSet.getOpsRateMetricForBurnRate('1h', required=true),
+        sourceSelectorWithExtras: selectors.serializeHash(
+          selectors.merge(recordingRuleStaticLabels, extraSourceSelector),
+        ),
+        burnRate: burnRate,
+      },
+    }]
+  else
+    [];
 
 local generateErrorRateRulesUpscaled(burnRate, aggregationSet, sliDefinition, recordingRuleStaticLabels, extraSourceSelector) =
-  local recordingRuleName = aggregationSet.getErrorRateMetricForBurnRate(burnRate, required=true);
+  local recordingRuleName = aggregationSet.getErrorRateMetricForBurnRate(burnRate, required=false);
   local allStaticLabels = recordingRuleStaticLabels + sliDefinition.staticLabels;
 
-  [{
-    record: recordingRuleName,
-    labels: allStaticLabels,
-    expr: upscaledRateExpression % {
-      aggregationLabels: aggregations.serialize(filterLabelsFromLabelsHash(aggregationSet.labels, allStaticLabels)),
-      metricName: aggregationSet.getErrorRateMetricForBurnRate('1h', required=true),
-      sourceSelectorWithExtras: selectors.serializeHash(
-        selectors.merge(recordingRuleStaticLabels, extraSourceSelector),
-      ),
-      burnRate: burnRate,
-    },
-  }];
+  if recordingRuleName != null then
+    [{
+      record: recordingRuleName,
+      labels: allStaticLabels,
+      expr: upscaledRateExpression % {
+        aggregationLabels: aggregations.serialize(filterLabelsFromLabelsHash(aggregationSet.labels, allStaticLabels)),
+        metricName: aggregationSet.getErrorRateMetricForBurnRate('1h', required=true),
+        sourceSelectorWithExtras: selectors.serializeHash(
+          selectors.merge(recordingRuleStaticLabels, extraSourceSelector),
+        ),
+        burnRate: burnRate,
+      },
+    }]
+  else
+    [];
 
 
 local generateUpscaledRecordingRulesForComponent(burnRate, aggregationSet, serviceDefinition, sliDefinition, extraSourceSelector) =
