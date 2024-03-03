@@ -2,6 +2,7 @@ local aggregations = import 'promql/aggregations.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
 local strings = import 'utils/strings.libsonnet';
 local validator = import 'utils/validator.libsonnet';
+local filterLabelsFromLabelsHash = (import 'promql/labels.libsonnet').filterLabelsFromLabelsHash;
 
 local definitionValidor = validator.new({
   rangeDuration: validator.string,
@@ -50,7 +51,7 @@ local utilizationMetric = function(options)
       else
         environmentLabels + s.resourceLabels;
 
-      local aggregationLabelsWithoutStaticLabels = std.filter(function(label) !std.objectHas(staticLabels, label), aggregationLabels);
+      local aggregationLabelsWithoutStaticLabels = filterLabelsFromLabelsHash(aggregationLabels, staticLabels);
 
       s.queryFormatConfig {
         rangeDuration: s.rangeDuration,

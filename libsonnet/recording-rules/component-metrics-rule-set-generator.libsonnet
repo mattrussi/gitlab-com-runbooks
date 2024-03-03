@@ -2,6 +2,7 @@ local aggregationSetErrorRatioReflectedRuleSet = (import 'recording-rules/aggreg
 local aggregationSetApdexRatioReflectedRuleSet = (import 'recording-rules/aggregation-set-reflected-ratio-rule-set.libsonnet').aggregationSetApdexRatioReflectedRuleSet;
 local aggregations = import 'promql/aggregations.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
+local filterLabelsFromLabelsHash = (import 'promql/labels.libsonnet').filterLabelsFromLabelsHash;
 
 // Get the set of static labels for an aggregation
 // The feature category will be included if the aggregation needs it and the SLI has
@@ -15,9 +16,6 @@ local staticLabelsForAggregation(serviceDefinition, sliDefinition, aggregationSe
   if sliDefinition.hasStaticFeatureCategory() && std.member(aggregationSet.labels, 'feature_category')
   then baseLabels + sliDefinition.staticFeatureCategoryLabels()
   else baseLabels;
-
-local filterStaticLabelsFromAggregationLabels(aggregationLabels, staticLabelsHash) =
-  std.filter(function(label) !std.objectHas(staticLabelsHash, label), aggregationLabels);
 
 // Generates apdex weight recording rules for a component definition
 local generateApdexRules(burnRate, aggregationSet, sliDefinition, recordingRuleStaticLabels, extraSourceSelector, config) =
@@ -105,7 +103,7 @@ local generateApdexRulesUpscaled(burnRate, aggregationSet, sliDefinition, record
       record: apdexSuccessRateRuleName,
       labels: allStaticLabels,
       expr: upscaledRateExpression % {
-        aggregationLabels: aggregations.serialize(filterStaticLabelsFromAggregationLabels(aggregationSet.labels, allStaticLabels)),
+        aggregationLabels: aggregations.serialize(filterLabelsFromLabelsHash(aggregationSet.labels, allStaticLabels)),
         metricName: aggregationSet.getApdexSuccessRateMetricForBurnRate('1h', required=true),
         sourceSelectorWithExtras: selectors.serializeHash(
           selectors.merge(recordingRuleStaticLabels, extraSourceSelector),
@@ -116,7 +114,7 @@ local generateApdexRulesUpscaled(burnRate, aggregationSet, sliDefinition, record
     {
       record: apdexWeightRuleName,
       expr: upscaledRateExpression % {
-        aggregationLabels: aggregations.serialize(filterStaticLabelsFromAggregationLabels(aggregationSet.labels, allStaticLabels)),
+        aggregationLabels: aggregations.serialize(filterLabelsFromLabelsHash(aggregationSet.labels, allStaticLabels)),
         metricName: aggregationSet.getApdexWeightMetricForBurnRate('1h', required=true),
         sourceSelectorWithExtras: selectors.serializeHash(
           selectors.merge(recordingRuleStaticLabels, extraSourceSelector),
@@ -134,7 +132,7 @@ local generateRequestRateRulesUpscaled(burnRate, aggregationSet, sliDefinition, 
     record: recordingRuleName,
     labels: allStaticLabels,
     expr: upscaledRateExpression % {
-      aggregationLabels: aggregations.serialize(filterStaticLabelsFromAggregationLabels(aggregationSet.labels, allStaticLabels)),
+      aggregationLabels: aggregations.serialize(filterLabelsFromLabelsHash(aggregationSet.labels, allStaticLabels)),
       metricName: aggregationSet.getOpsRateMetricForBurnRate('1h', required=true),
       sourceSelectorWithExtras: selectors.serializeHash(
         selectors.merge(recordingRuleStaticLabels, extraSourceSelector),
@@ -151,7 +149,7 @@ local generateErrorRateRulesUpscaled(burnRate, aggregationSet, sliDefinition, re
     record: recordingRuleName,
     labels: allStaticLabels,
     expr: upscaledRateExpression % {
-      aggregationLabels: aggregations.serialize(filterStaticLabelsFromAggregationLabels(aggregationSet.labels, allStaticLabels)),
+      aggregationLabels: aggregations.serialize(filterLabelsFromLabelsHash(aggregationSet.labels, allStaticLabels)),
       metricName: aggregationSet.getErrorRateMetricForBurnRate('1h', required=true),
       sourceSelectorWithExtras: selectors.serializeHash(
         selectors.merge(recordingRuleStaticLabels, extraSourceSelector),
