@@ -120,7 +120,7 @@ test.suite({
       ]
     ),
     expect: {
-      some_total: { backend: {} },
+      some_total: {},
     },
   },
   testCollectMetricNamesAndSelectorsNestedSelector8: {
@@ -209,7 +209,7 @@ test.suite({
   },
   testNormalizeObjectWithNegativeExp: {
     actual: sliMetricsDescriptor._normalize({ a: { ne: '1', nre: '2|3' } }),
-    expect: { a: {} },
+    expect: {},
   },
   testNormalizeObjectWithNegativeExp2: {
     actual: sliMetricsDescriptor._normalize({ a: { ne: '1', nre: '2|3', eq: '4', re: '1|2|5' } }),
@@ -280,14 +280,19 @@ test.suite({
       { backend: {} },
       { backend: {} },
     ),
-    expect: {
-      backend: {},
-    },
+    expect: {},
   },
   testMergeSelector9: {
     actual: sliMetricsDescriptor._mergeSelector(
       { code: '500' },
       {},
+    ),
+    expect: {},
+  },
+  testMergeSelector10: {
+    actual: sliMetricsDescriptor._mergeSelector(
+      { type: { ne: 'abcd' } },
+      { type: { ne: 'abcd' } },
     ),
     expect: {},
   },
@@ -325,7 +330,7 @@ test.suite({
       errorRate: rateMetric('some_total_count', selector={ label_b: 'foo' }),
     }).initServiceLevelIndicatorWithName('sliWithSelectorErrorCounterApdex', { type: 'fake_service' }),
     sliWithSelectorRequestRateOnly: sliDefinition.serviceLevelIndicatorDefinition(testSliBase {
-      requestRate: rateMetric('some_total_count', selector={ label_a: 'bar', type: 'foo' }),
+      requestRate: rateMetric('some_total_count', selector={ label_a: 'bar', type: 'fake_service' }),
     }).initServiceLevelIndicatorWithName('sliWithSelectorRequestRateOnly', { type: 'fake_service' }),
     sliWithoutSelector: sliDefinition.serviceLevelIndicatorDefinition(testSliBase {
       apdex: histogramApdex('some_histogram_metrics'),
@@ -337,30 +342,30 @@ test.suite({
       requestRate: combined([
         rateMetric(
           counter='pg_stat_database_xact_commit',
-          selector={ type: 'patroni', tier: 'db' },
+          selector={ type: 'fake_service', tier: 'db' },
           instanceFilter='(pg_replication_is_replica == 0)'
         ),
         rateMetric(
           counter='pg_stat_database_xact_rollback',
-          selector={ type: 'patroni', tier: 'db', some_label: 'true' },
+          selector={ type: 'fake_service', tier: 'db', some_label: 'true' },
           instanceFilter='(pg_replication_is_replica == 0)'
         ),
       ]),
       errorRate: rateMetric('some_total_count'),
     }).initServiceLevelIndicatorWithName('sliWithCombinedMetric', { type: 'fake_service' }),
     sliWithDerivMetric: sliDefinition.serviceLevelIndicatorDefinition(testSliBase {
-      requestRate: derivMetric('some_total_count', { type: 'foo', job: 'bar' }),
+      requestRate: derivMetric('some_total_count', { type: 'fake_service', job: 'bar' }),
     }).initServiceLevelIndicatorWithName('sliWithDerivMetric', { type: 'fake_service' }),
     sliWithGaugeMetric: sliDefinition.serviceLevelIndicatorDefinition(testSliBase {
-      requestRate: gaugeMetric('some_total_count', { type: 'foo', job: 'bar' }),
+      requestRate: gaugeMetric('some_total_count', { type: 'fake_service', job: 'bar' }),
     }).initServiceLevelIndicatorWithName('sliWithGaugeMetric', { type: 'fake_service' }),
     sliWithMultipleSelectors: sliDefinition.serviceLevelIndicatorDefinition(testSliBase {
-      requestRate: rateMetric('some_total_count', { type: 'foo', job: { re: 'hello|world' } }),
-      errorRate: rateMetric('some_total_count', { type: 'bar', job: { eq: 'boo' } }),
+      requestRate: rateMetric('some_total_count', { type: 'fake_service', job: { re: 'hello|world' } }),
+      errorRate: rateMetric('some_total_count', { type: 'fake_service', job: { eq: 'boo' } }),
     }).initServiceLevelIndicatorWithName('sliWithMultipleSelectors', { type: 'fake_service' }),
     sliWithSignificantLabels: sliDefinition.serviceLevelIndicatorDefinition(testSliBase {
-      requestRate: rateMetric('some_total_count', { type: 'foo', job: { re: 'hello|world' } }),
-      errorRate: rateMetric('some_total_count', { type: 'bar', job: { eq: 'boo' } }),
+      requestRate: rateMetric('some_total_count', { label: 'foo', job: { re: 'hello|world' } }),
+      errorRate: rateMetric('some_total_count', { label: 'bar', job: { eq: 'boo' } }),
       significantLabels: ['fizz', 'buzz'],
     }).initServiceLevelIndicatorWithName('sliWithSignificantLabels', { type: 'fake_service' }),
     combinedSli: combinedSli.combinedServiceLevelIndicatorDefinition(
@@ -385,11 +390,11 @@ test.suite({
           significantLabels: ['world'],
           requestRate: rateMetric(
             counter='some_total',
-            selector={ foo: 'bar', backend: 'abc', type: 'baz' }
+            selector={ foo: 'bar', backend: 'abc', type: 'fake_service' }
           ),
           errorRate: rateMetric(
             counter='some_total',
-            selector={ foo: 'bar', backend: 'abc', type: 'baz', code: '5xx' }
+            selector={ foo: 'bar', backend: 'abc', type: 'fake_service', code: '5xx' }
           ),
         }),
         metricsCatalog.serviceLevelIndicatorDefinition({
@@ -407,13 +412,29 @@ test.suite({
       ],
     ).initServiceLevelIndicatorWithName('combinedSli', { type: 'fake_service' }),
     sliWithSelectorEscapedRegex: sliDefinition.serviceLevelIndicatorDefinition(testSliBase {
-      requestRate: rateMetric('some_total_count', selector={ route: '^foo', type: { re: '\\^blabla' } }),
-      errorRate: rateMetric('some_total_count', selector={ route: 'bar', type: { re: 'something.*' } }),
+      requestRate: rateMetric('some_total_count', selector={ route: '^foo', job: { re: '\\^blabla' } }),
+      errorRate: rateMetric('some_total_count', selector={ route: 'bar', job: { re: 'something.*' } }),
     }).initServiceLevelIndicatorWithName('sliWithSelectorEscapedRegex', { type: 'fake_service' }),
     sliWithSelectorEscapedRegex2: sliDefinition.serviceLevelIndicatorDefinition(testSliBase {
       requestRate: rateMetric('some_total_count', selector={ route: { eq: '^foo' } }),
       errorRate: rateMetric('some_total_count', selector={ route: 'bar' }),
     }).initServiceLevelIndicatorWithName('sliWithSelectorEscapedRegex2', { type: 'fake_service' }),
+    sliWithNegativeSelectorsOnly: sliDefinition.serviceLevelIndicatorDefinition(testSliBase {
+      apdex: histogramApdex(
+        histogram='gitlab_cache_operation_duration_seconds_bucket',
+        selector={
+          type: { ne: 'ops-gitlab-net' },
+        },
+        satisfiedThreshold=0.1,
+        toleratedThreshold=0.25
+      ),
+      requestRate: rateMetric(
+        counter='gitlab_cache_operation_duration_seconds_count',
+        selector={
+          type: { ne: 'ops-gitlab-net' },
+        },
+      ),
+    }).initServiceLevelIndicatorWithName('sliTest', { type: 'fake_service' }),
   },
   testMetricNamesAndLabelsHistogramApdex: testMetricsDescriptorAggregationLabels(
     [testSLIs.sliWithSelectorHistogramApdex],
@@ -480,7 +501,7 @@ test.suite({
     expect={
       some_total_count: {
         label_a: { oneOf: ['bar'] },
-        type: { oneOf: ['foo'] },
+        type: { oneOf: ['fake_service'] },
       },
     },
   ),
@@ -512,8 +533,8 @@ test.suite({
   testMetricNamesAndSelectorsWithCombinedMetric: testMetricsDescriptorSelectors(
     [testSLIs.sliWithCombinedMetric],
     expect={
-      pg_stat_database_xact_commit: { tier: { oneOf: ['db'] }, type: { oneOf: ['patroni'] } },
-      pg_stat_database_xact_rollback: { some_label: { oneOf: ['true'] }, tier: { oneOf: ['db'] }, type: { oneOf: ['patroni'] } },
+      pg_stat_database_xact_commit: { tier: { oneOf: ['db'] }, type: { oneOf: ['fake_service'] } },
+      pg_stat_database_xact_rollback: { some_label: { oneOf: ['true'] }, tier: { oneOf: ['db'] }, type: { oneOf: ['fake_service'] } },
       some_histogram_metrics: {},
       some_total_count: {},
     },
@@ -529,7 +550,7 @@ test.suite({
     [testSLIs.sliWithDerivMetric],
     expect={
       some_total_count: {
-        type: { oneOf: ['foo'] },
+        type: { oneOf: ['fake_service'] },
         job: { oneOf: ['bar'] },
       },
     },
@@ -545,7 +566,7 @@ test.suite({
     [testSLIs.sliWithGaugeMetric],
     expect={
       some_total_count: {
-        type: { oneOf: ['foo'] },
+        type: { oneOf: ['fake_service'] },
         job: { oneOf: ['bar'] },
       },
     },
@@ -561,7 +582,7 @@ test.suite({
     [testSLIs.sliWithMultipleSelectors],
     expect={
       some_total_count: {
-        type: { oneOf: ['bar', 'foo'] },
+        type: { oneOf: ['fake_service'] },
         job: { oneOf: ['boo', 'hello', 'world'] },
       },
     },
@@ -570,14 +591,14 @@ test.suite({
   testMetricNamesAndLabelsSignificantLabels: testMetricsDescriptorAggregationLabels(
     [testSLIs.sliWithSignificantLabels],
     expect={
-      some_total_count: std.set(['fizz', 'buzz', 'job', 'type']),
+      some_total_count: std.set(['fizz', 'buzz', 'job', 'label']),
     }
   ),
   testMetricNamesAndSelectorsSignificantLabels: testMetricsDescriptorSelectors(
     [testSLIs.sliWithSignificantLabels],
     expect={
       some_total_count: {
-        type: { oneOf: ['bar', 'foo'] },
+        label: { oneOf: ['bar', 'foo'] },
         job: { oneOf: ['boo', 'hello', 'world'] },
       },
     },
@@ -609,7 +630,7 @@ test.suite({
     expect={
       some_total_count: {
         route: { oneOf: ['\\\\^foo', 'bar'] },
-        type: { oneOf: ['\\^blabla', 'something.*'] },
+        job: { oneOf: ['\\^blabla', 'something.*'] },
       },
     }
   ),
@@ -627,20 +648,46 @@ test.suite({
     expect: {
       aggregationLabelsByMetric: {
         error_total_count: ['baz', 'foo'],
+        gitlab_cache_operation_duration_seconds_bucket: ['le', 'type'],
+        gitlab_cache_operation_duration_seconds_count: ['type'],
         pg_stat_database_xact_commit: ['tier', 'type'],
         pg_stat_database_xact_rollback: ['some_label', 'tier', 'type'],
         some_histogram_metrics: ['foo', 'le'],
         some_other_total: ['backend', 'code', 'foo', 'hello', 'world'],
         some_total: ['backend', 'code', 'foo', 'hello', 'type', 'world'],
-        some_total_count: ['baz', 'buzz', 'fizz', 'foo', 'job', 'label_a', 'label_b', 'route', 'type'],
+        some_total_count: ['baz', 'buzz', 'fizz', 'foo', 'job', 'label', 'label_a', 'label_b', 'route', 'type'],
         success_total_count: ['baz', 'foo'],
       },
-      allMetrics: ['error_total_count', 'pg_stat_database_xact_commit', 'pg_stat_database_xact_rollback', 'some_histogram_metrics', 'some_other_total', 'some_total', 'some_total_count', 'success_total_count'],
-      emittingTypesByMetric: { error_total_count: ['fake_service'], pg_stat_database_xact_commit: ['fake_service'], pg_stat_database_xact_rollback: ['fake_service'], some_histogram_metrics: ['fake_service'], some_other_total: ['fake_service'], some_total: ['fake_service'], some_total_count: ['fake_service'], success_total_count: ['fake_service'] },
+      allMetrics: std.set([
+        'error_total_count',
+        'gitlab_cache_operation_duration_seconds_bucket',
+        'gitlab_cache_operation_duration_seconds_count',
+        'pg_stat_database_xact_commit',
+        'pg_stat_database_xact_rollback',
+        'some_histogram_metrics',
+        'some_other_total',
+        'some_total',
+        'some_total_count',
+        'success_total_count',
+      ]),
+      emittingTypesByMetric: {
+        error_total_count: ['fake_service'],
+        gitlab_cache_operation_duration_seconds_bucket: ['fake_service'],
+        gitlab_cache_operation_duration_seconds_count: ['fake_service'],
+        pg_stat_database_xact_commit: ['fake_service'],
+        pg_stat_database_xact_rollback: ['fake_service'],
+        some_histogram_metrics: ['fake_service'],
+        some_other_total: ['fake_service'],
+        some_total: ['fake_service'],
+        some_total_count: ['fake_service'],
+        success_total_count: ['fake_service'],
+      },
       selectorsByMetric: {
         error_total_count: { baz: { oneOf: ['qux'] }, foo: { oneOf: ['bar'] } },
-        pg_stat_database_xact_commit: { tier: { oneOf: ['db'] }, type: { oneOf: ['patroni'] } },
-        pg_stat_database_xact_rollback: { some_label: { oneOf: ['true'] }, tier: { oneOf: ['db'] }, type: { oneOf: ['patroni'] } },
+        gitlab_cache_operation_duration_seconds_bucket: {},
+        gitlab_cache_operation_duration_seconds_count: {},
+        pg_stat_database_xact_commit: { tier: { oneOf: ['db'] }, type: { oneOf: ['fake_service'] } },
+        pg_stat_database_xact_rollback: { some_label: { oneOf: ['true'] }, tier: { oneOf: ['db'] }, type: { oneOf: ['fake_service'] } },
         some_histogram_metrics: {},
         some_other_total: { backend: { oneOf: ['abc'] }, foo: { oneOf: ['bar'] } },
         some_total: { backend: { oneOf: ['abc', 'web'] }, foo: { oneOf: ['bar'] } },
@@ -649,4 +696,12 @@ test.suite({
       },
     },
   },
+
+  testSelectorsByMetricNegativeSelectorsOnly: testMetricsDescriptorSelectors(
+    [testSLIs.sliWithNegativeSelectorsOnly],
+    expect={
+      gitlab_cache_operation_duration_seconds_bucket: {},
+      gitlab_cache_operation_duration_seconds_count: {},
+    }
+  ),
 })

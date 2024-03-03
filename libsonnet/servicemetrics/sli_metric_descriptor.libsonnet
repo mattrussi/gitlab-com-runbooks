@@ -81,7 +81,10 @@ local normalize(selector) =
   std.foldl(
     function(memo, key)
       local value = selector[key];
-      memo { [key]: normalizeSelectorExpression(value) },
+      local normalized = normalizeSelectorExpression(value);
+      if normalized != {} then
+        memo { [key]: normalizeSelectorExpression(value) }
+      else memo,
     std.objectFields(selector),
     {}
   );
@@ -102,7 +105,7 @@ local mergeSelector(from, to) =
             },
           }
         else
-          memo { [label]: {} }
+          memo
       // if the label doesn't exist in both selectors, we drop the selector for that label
       // otherwise we'll only record a subset of the series for the SLI
       else memo,
