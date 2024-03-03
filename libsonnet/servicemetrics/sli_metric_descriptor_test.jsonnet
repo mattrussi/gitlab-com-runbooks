@@ -219,6 +219,18 @@ test.suite({
     actual: sliMetricsDescriptor._normalize({ a: [{ ne: '1' }, '2'] }),
     expect: { a: { oneOf: ['2'] } },
   },
+  testNormalizeArray: {
+    actual: sliMetricsDescriptor._normalize({ a: ['1', '2', '3'] }),
+    expect: { a: { oneOf: ['1', '2', '3'] } },
+  },
+  testNormalizeEqArray: {
+    actual: sliMetricsDescriptor._normalize({ a: { eq: ['1', '2', '3'] } }),
+    expect: { a: { oneOf: ['1', '2', '3'] } },
+  },
+  testNormalizeReArray: {
+    actual: sliMetricsDescriptor._normalize({ a: { re: ['1', '2', '3'] } }),
+    expect: { a: { oneOf: ['1', '2', '3'] } },
+  },
   testMergeSelector1: {
     actual: sliMetricsDescriptor._mergeSelector(
       { a: '1' },

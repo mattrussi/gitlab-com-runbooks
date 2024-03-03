@@ -29,31 +29,51 @@ local normalizeSelectorExpression(exp) =
   // for the recording rule registry and include these metrics in the aggregation to filter
   // them out in the recording rules for the aggregation set.
   // Examples:
-  // 'a'                => { oneOf: ['a'] }
-  // { eq: 'a' }        => { oneOf: ['a'] }
-  // { re: 'a|b' }      => { oneOf: ['a', 'b'] }
-  // { oneOf: ['a'] }   => { oneOf: ['a'] }
-  // { ne: 'a' }        => {}
-  // { nre: 'a' }       => {}
-  // { noneOf: ['a'] }  => {}
+  // 'a'                     => { oneOf: ['a'] }
+  // { eq: 'a' }             => { oneOf: ['a'] }
+  // { re: 'a|b' }           => { oneOf: ['a', 'b'] }
+  // { oneOf: ['a'] }        => { oneOf: ['a'] }
+  // { ne: 'a' }             => {}
+  // { nre: 'a' }            => {}
+  // { noneOf: ['a'] }       => {}
+  // ['a', 'b', 'c']         => { oneOf: ['a', 'b', 'c'] }
+  // { eq: ['a', 'b', 'c']}  => { oneOf: ['a', 'b', 'c'] }
+  // { re: ['a', 'b', 'c']}  => { oneOf: ['a', 'b', 'c'] }
   if std.isObject(exp) then
     std.foldl(
       function(memo, keyword)
-        local base = std.get(memo, 'oneOf', []);
+        local base = std.set(std.get(memo, 'oneOf', []));
+        local value = exp[keyword];
         if keyword == 'eq' then
-          memo {
-            oneOf: std.setUnion(
-              base,
-              [strings.escapeBackslash(strings.escapeStringRegex(exp[keyword]))]
-            ),
-          }
+          if !std.isArray(value) then
+            memo {
+              oneOf: std.setUnion(
+                base,
+                [strings.escapeBackslash(strings.escapeStringRegex(value))]
+              ),
+            }
+          else
+            memo {
+              oneOf: std.setUnion(
+                base,
+                std.set([strings.escapeBackslash(strings.escapeStringRegex(v)) for v in value])
+              ),
+            }
         else if keyword == 're' then
-          memo {
-            oneOf: std.setUnion(base, std.split(exp[keyword], '|')),
-          }
+          if !std.isArray(value) then
+            memo {
+              oneOf: std.setUnion(base, std.split(value, '|')),
+            }
+          else
+            memo {
+              oneOf: std.setUnion(
+                base,
+                std.set([strings.escapeBackslash(strings.escapeStringRegex(v)) for v in value])
+              ),
+            }
         else if keyword == 'oneOf' then
           memo {
-            oneOf: std.setUnion(base, exp[keyword]),
+            oneOf: std.setUnion(base, value),
           }
         else if std.member(['ne', 'nre', 'noneOf'], keyword) then memo
         else assert false : 'Unknown selector keyword: %s' % [keyword];
