@@ -3,6 +3,7 @@ local aggregationSetApdexRatioReflectedRuleSet = (import 'recording-rules/aggreg
 local aggregations = import 'promql/aggregations.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
 local filterLabelsFromLabelsHash = (import 'promql/labels.libsonnet').filterLabelsFromLabelsHash;
+local optionalOffset = import 'recording-rules/lib/optional-offset.libsonnet';
 
 // Get the set of static labels for an aggregation
 // The feature category will be included if the aggregation needs it and the SLI has
@@ -89,7 +90,7 @@ local generateRecordingRulesForComponent(burnRate, aggregationSet, serviceDefini
 
 local upscaledRateExpression = |||
   sum by (%(aggregationLabels)s) (
-    avg_over_time(%(metricName)s{%(sourceSelectorWithExtras)s}[%(burnRate)s] offset 30s)
+    avg_over_time(%(metricName)s{%(sourceSelectorWithExtras)s}[%(burnRate)s]%(optionalOffset)s)
   )
 |||;
 
@@ -109,6 +110,7 @@ local generateApdexRulesUpscaled(burnRate, aggregationSet, sliDefinition, record
           selectors.merge(recordingRuleStaticLabels, extraSourceSelector),
         ),
         burnRate: burnRate,
+        optionalOffset: optionalOffset(aggregationSet.offset),
       },
     }]
   else [];
@@ -123,6 +125,7 @@ local generateApdexRulesUpscaled(burnRate, aggregationSet, sliDefinition, record
           selectors.merge(recordingRuleStaticLabels, extraSourceSelector),
         ),
         burnRate: burnRate,
+        optionalOffset: optionalOffset(aggregationSet.offset),
       },
     }]
   else [];
@@ -144,6 +147,7 @@ local generateRequestRateRulesUpscaled(burnRate, aggregationSet, sliDefinition, 
           selectors.merge(recordingRuleStaticLabels, extraSourceSelector),
         ),
         burnRate: burnRate,
+        optionalOffset: optionalOffset(aggregationSet.offset),
       },
     }]
   else
@@ -164,6 +168,7 @@ local generateErrorRateRulesUpscaled(burnRate, aggregationSet, sliDefinition, re
           selectors.merge(recordingRuleStaticLabels, extraSourceSelector),
         ),
         burnRate: burnRate,
+        optionalOffset: optionalOffset(aggregationSet.offset),
       },
     }]
   else

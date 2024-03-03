@@ -935,12 +935,12 @@ groups:
       type: ai-gateway
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab:component:feature_category:execution:apdex:success:rate_1h{component="inference",feature_category="code_suggestions",tier="sv",type="ai-gateway"}[6h] offset 30s)
+        avg_over_time(gitlab:component:feature_category:execution:apdex:success:rate_1h{component="inference",feature_category="code_suggestions",tier="sv",type="ai-gateway"}[6h])
       )
   - record: gitlab:component:feature_category:execution:apdex:weight:score_6h
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab:component:feature_category:execution:apdex:weight:score_1h{component="inference",feature_category="code_suggestions",tier="sv",type="ai-gateway"}[6h] offset 30s)
+        avg_over_time(gitlab:component:feature_category:execution:apdex:weight:score_1h{component="inference",feature_category="code_suggestions",tier="sv",type="ai-gateway"}[6h])
       )
   - record: gitlab:component:feature_category:execution:ops:rate_6h
     labels:
@@ -951,7 +951,7 @@ groups:
       type: ai-gateway
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab:component:feature_category:execution:ops:rate_1h{component="inference",feature_category="code_suggestions",tier="sv",type="ai-gateway"}[6h] offset 30s)
+        avg_over_time(gitlab:component:feature_category:execution:ops:rate_1h{component="inference",feature_category="code_suggestions",tier="sv",type="ai-gateway"}[6h])
       )
   - record: gitlab:component:feature_category:execution:error:rate_6h
     labels:
@@ -962,7 +962,7 @@ groups:
       type: ai-gateway
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab:component:feature_category:execution:error:rate_1h{component="inference",feature_category="code_suggestions",tier="sv",type="ai-gateway"}[6h] offset 30s)
+        avg_over_time(gitlab:component:feature_category:execution:error:rate_1h{component="inference",feature_category="code_suggestions",tier="sv",type="ai-gateway"}[6h])
       )
   - record: gitlab:component:feature_category:execution:apdex:success:rate_6h
     labels:
@@ -973,12 +973,12 @@ groups:
       type: ai-gateway
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab:component:feature_category:execution:apdex:success:rate_1h{component="runway_ingress",feature_category="code_suggestions",tier="sv",type="ai-gateway"}[6h] offset 30s)
+        avg_over_time(gitlab:component:feature_category:execution:apdex:success:rate_1h{component="runway_ingress",feature_category="code_suggestions",tier="sv",type="ai-gateway"}[6h])
       )
   - record: gitlab:component:feature_category:execution:apdex:weight:score_6h
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab:component:feature_category:execution:apdex:weight:score_1h{component="runway_ingress",feature_category="code_suggestions",tier="sv",type="ai-gateway"}[6h] offset 30s)
+        avg_over_time(gitlab:component:feature_category:execution:apdex:weight:score_1h{component="runway_ingress",feature_category="code_suggestions",tier="sv",type="ai-gateway"}[6h])
       )
   - record: gitlab:component:feature_category:execution:ops:rate_6h
     labels:
@@ -989,7 +989,7 @@ groups:
       type: ai-gateway
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab:component:feature_category:execution:ops:rate_1h{component="runway_ingress",feature_category="code_suggestions",tier="sv",type="ai-gateway"}[6h] offset 30s)
+        avg_over_time(gitlab:component:feature_category:execution:ops:rate_1h{component="runway_ingress",feature_category="code_suggestions",tier="sv",type="ai-gateway"}[6h])
       )
   - record: gitlab:component:feature_category:execution:error:rate_6h
     labels:
@@ -1000,7 +1000,7 @@ groups:
       type: ai-gateway
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab:component:feature_category:execution:error:rate_1h{component="runway_ingress",feature_category="code_suggestions",tier="sv",type="ai-gateway"}[6h] offset 30s)
+        avg_over_time(gitlab:component:feature_category:execution:error:rate_1h{component="runway_ingress",feature_category="code_suggestions",tier="sv",type="ai-gateway"}[6h])
       )
   - record: gitlab:component:feature_category:execution:apdex:success:rate_6h
     labels:
@@ -1011,12 +1011,12 @@ groups:
       type: ai-gateway
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab:component:feature_category:execution:apdex:success:rate_1h{component="server",feature_category="code_suggestions",tier="sv",type="ai-gateway"}[6h] offset 30s)
+        avg_over_time(gitlab:component:feature_category:execution:apdex:success:rate_1h{component="server",feature_category="code_suggestions",tier="sv",type="ai-gateway"}[6h])
       )
   - record: gitlab:component:feature_category:execution:apdex:weight:score_6h
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab:component:feature_category:execution:apdex:weight:score_1h{component="server",feature_category="code_suggestions",tier="sv",type="ai-gateway"}[6h] offset 30s)
+        avg_over_time(gitlab:component:feature_category:execution:apdex:weight:score_1h{component="server",feature_category="code_suggestions",tier="sv",type="ai-gateway"}[6h])
       )
   - record: gitlab:component:feature_category:execution:ops:rate_6h
     labels:
@@ -1027,7 +1027,7 @@ groups:
       type: ai-gateway
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab:component:feature_category:execution:ops:rate_1h{component="server",feature_category="code_suggestions",tier="sv",type="ai-gateway"}[6h] offset 30s)
+        avg_over_time(gitlab:component:feature_category:execution:ops:rate_1h{component="server",feature_category="code_suggestions",tier="sv",type="ai-gateway"}[6h])
       )
   - record: gitlab:component:feature_category:execution:error:rate_6h
     labels:
@@ -1038,7 +1038,7 @@ groups:
       type: ai-gateway
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab:component:feature_category:execution:error:rate_1h{component="server",feature_category="code_suggestions",tier="sv",type="ai-gateway"}[6h] offset 30s)
+        avg_over_time(gitlab:component:feature_category:execution:error:rate_1h{component="server",feature_category="code_suggestions",tier="sv",type="ai-gateway"}[6h])
       )
   - record: gitlab:component:feature_category:execution:apdex:success:rate_6h
     labels:
@@ -1049,12 +1049,12 @@ groups:
       type: ai-gateway
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab:component:feature_category:execution:apdex:success:rate_1h{component="server_code_completions",feature_category="code_suggestions",tier="sv",type="ai-gateway"}[6h] offset 30s)
+        avg_over_time(gitlab:component:feature_category:execution:apdex:success:rate_1h{component="server_code_completions",feature_category="code_suggestions",tier="sv",type="ai-gateway"}[6h])
       )
   - record: gitlab:component:feature_category:execution:apdex:weight:score_6h
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab:component:feature_category:execution:apdex:weight:score_1h{component="server_code_completions",feature_category="code_suggestions",tier="sv",type="ai-gateway"}[6h] offset 30s)
+        avg_over_time(gitlab:component:feature_category:execution:apdex:weight:score_1h{component="server_code_completions",feature_category="code_suggestions",tier="sv",type="ai-gateway"}[6h])
       )
   - record: gitlab:component:feature_category:execution:ops:rate_6h
     labels:
@@ -1065,7 +1065,7 @@ groups:
       type: ai-gateway
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab:component:feature_category:execution:ops:rate_1h{component="server_code_completions",feature_category="code_suggestions",tier="sv",type="ai-gateway"}[6h] offset 30s)
+        avg_over_time(gitlab:component:feature_category:execution:ops:rate_1h{component="server_code_completions",feature_category="code_suggestions",tier="sv",type="ai-gateway"}[6h])
       )
   - record: gitlab:component:feature_category:execution:error:rate_6h
     labels:
@@ -1076,7 +1076,7 @@ groups:
       type: ai-gateway
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab:component:feature_category:execution:error:rate_1h{component="server_code_completions",feature_category="code_suggestions",tier="sv",type="ai-gateway"}[6h] offset 30s)
+        avg_over_time(gitlab:component:feature_category:execution:error:rate_1h{component="server_code_completions",feature_category="code_suggestions",tier="sv",type="ai-gateway"}[6h])
       )
   - record: gitlab:component:feature_category:execution:apdex:success:rate_6h
     labels:
@@ -1087,12 +1087,12 @@ groups:
       type: ai-gateway
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab:component:feature_category:execution:apdex:success:rate_1h{component="server_code_generations",feature_category="code_suggestions",tier="sv",type="ai-gateway"}[6h] offset 30s)
+        avg_over_time(gitlab:component:feature_category:execution:apdex:success:rate_1h{component="server_code_generations",feature_category="code_suggestions",tier="sv",type="ai-gateway"}[6h])
       )
   - record: gitlab:component:feature_category:execution:apdex:weight:score_6h
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab:component:feature_category:execution:apdex:weight:score_1h{component="server_code_generations",feature_category="code_suggestions",tier="sv",type="ai-gateway"}[6h] offset 30s)
+        avg_over_time(gitlab:component:feature_category:execution:apdex:weight:score_1h{component="server_code_generations",feature_category="code_suggestions",tier="sv",type="ai-gateway"}[6h])
       )
   - record: gitlab:component:feature_category:execution:ops:rate_6h
     labels:
@@ -1103,7 +1103,7 @@ groups:
       type: ai-gateway
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab:component:feature_category:execution:ops:rate_1h{component="server_code_generations",feature_category="code_suggestions",tier="sv",type="ai-gateway"}[6h] offset 30s)
+        avg_over_time(gitlab:component:feature_category:execution:ops:rate_1h{component="server_code_generations",feature_category="code_suggestions",tier="sv",type="ai-gateway"}[6h])
       )
   - record: gitlab:component:feature_category:execution:error:rate_6h
     labels:
@@ -1114,7 +1114,7 @@ groups:
       type: ai-gateway
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab:component:feature_category:execution:error:rate_1h{component="server_code_generations",feature_category="code_suggestions",tier="sv",type="ai-gateway"}[6h] offset 30s)
+        avg_over_time(gitlab:component:feature_category:execution:error:rate_1h{component="server_code_generations",feature_category="code_suggestions",tier="sv",type="ai-gateway"}[6h])
       )
   - record: gitlab:component:feature_category:execution:apdex:success:rate_6h
     labels:
@@ -1125,12 +1125,12 @@ groups:
       type: ai-gateway
     expr: |
       sum by (environment,stage) (
-        avg_over_time(gitlab:component:feature_category:execution:apdex:success:rate_1h{component="waf",feature_category="code_suggestions",tier="sv",type="ai-gateway"}[6h] offset 30s)
+        avg_over_time(gitlab:component:feature_category:execution:apdex:success:rate_1h{component="waf",feature_category="code_suggestions",tier="sv",type="ai-gateway"}[6h])
       )
   - record: gitlab:component:feature_category:execution:apdex:weight:score_6h
     expr: |
       sum by (environment,stage) (
-        avg_over_time(gitlab:component:feature_category:execution:apdex:weight:score_1h{component="waf",feature_category="code_suggestions",tier="sv",type="ai-gateway"}[6h] offset 30s)
+        avg_over_time(gitlab:component:feature_category:execution:apdex:weight:score_1h{component="waf",feature_category="code_suggestions",tier="sv",type="ai-gateway"}[6h])
       )
   - record: gitlab:component:feature_category:execution:ops:rate_6h
     labels:
@@ -1141,7 +1141,7 @@ groups:
       type: ai-gateway
     expr: |
       sum by (environment,stage) (
-        avg_over_time(gitlab:component:feature_category:execution:ops:rate_1h{component="waf",feature_category="code_suggestions",tier="sv",type="ai-gateway"}[6h] offset 30s)
+        avg_over_time(gitlab:component:feature_category:execution:ops:rate_1h{component="waf",feature_category="code_suggestions",tier="sv",type="ai-gateway"}[6h])
       )
   - record: gitlab:component:feature_category:execution:error:rate_6h
     labels:
@@ -1152,7 +1152,7 @@ groups:
       type: ai-gateway
     expr: |
       sum by (environment,stage) (
-        avg_over_time(gitlab:component:feature_category:execution:error:rate_1h{component="waf",feature_category="code_suggestions",tier="sv",type="ai-gateway"}[6h] offset 30s)
+        avg_over_time(gitlab:component:feature_category:execution:error:rate_1h{component="waf",feature_category="code_suggestions",tier="sv",type="ai-gateway"}[6h])
       )
 - name: 'Prometheus Intermediate Metrics per feature: ai-gateway - burn-rate 3d'
   interval: 2m
@@ -1167,12 +1167,12 @@ groups:
       type: ai-gateway
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab:component:feature_category:execution:apdex:success:rate_1h{component="inference",feature_category="code_suggestions",tier="sv",type="ai-gateway"}[3d] offset 30s)
+        avg_over_time(gitlab:component:feature_category:execution:apdex:success:rate_1h{component="inference",feature_category="code_suggestions",tier="sv",type="ai-gateway"}[3d])
       )
   - record: gitlab:component:feature_category:execution:apdex:weight:score_3d
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab:component:feature_category:execution:apdex:weight:score_1h{component="inference",feature_category="code_suggestions",tier="sv",type="ai-gateway"}[3d] offset 30s)
+        avg_over_time(gitlab:component:feature_category:execution:apdex:weight:score_1h{component="inference",feature_category="code_suggestions",tier="sv",type="ai-gateway"}[3d])
       )
   - record: gitlab:component:feature_category:execution:ops:rate_3d
     labels:
@@ -1183,7 +1183,7 @@ groups:
       type: ai-gateway
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab:component:feature_category:execution:ops:rate_1h{component="inference",feature_category="code_suggestions",tier="sv",type="ai-gateway"}[3d] offset 30s)
+        avg_over_time(gitlab:component:feature_category:execution:ops:rate_1h{component="inference",feature_category="code_suggestions",tier="sv",type="ai-gateway"}[3d])
       )
   - record: gitlab:component:feature_category:execution:error:rate_3d
     labels:
@@ -1194,7 +1194,7 @@ groups:
       type: ai-gateway
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab:component:feature_category:execution:error:rate_1h{component="inference",feature_category="code_suggestions",tier="sv",type="ai-gateway"}[3d] offset 30s)
+        avg_over_time(gitlab:component:feature_category:execution:error:rate_1h{component="inference",feature_category="code_suggestions",tier="sv",type="ai-gateway"}[3d])
       )
   - record: gitlab:component:feature_category:execution:apdex:success:rate_3d
     labels:
@@ -1205,12 +1205,12 @@ groups:
       type: ai-gateway
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab:component:feature_category:execution:apdex:success:rate_1h{component="runway_ingress",feature_category="code_suggestions",tier="sv",type="ai-gateway"}[3d] offset 30s)
+        avg_over_time(gitlab:component:feature_category:execution:apdex:success:rate_1h{component="runway_ingress",feature_category="code_suggestions",tier="sv",type="ai-gateway"}[3d])
       )
   - record: gitlab:component:feature_category:execution:apdex:weight:score_3d
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab:component:feature_category:execution:apdex:weight:score_1h{component="runway_ingress",feature_category="code_suggestions",tier="sv",type="ai-gateway"}[3d] offset 30s)
+        avg_over_time(gitlab:component:feature_category:execution:apdex:weight:score_1h{component="runway_ingress",feature_category="code_suggestions",tier="sv",type="ai-gateway"}[3d])
       )
   - record: gitlab:component:feature_category:execution:ops:rate_3d
     labels:
@@ -1221,7 +1221,7 @@ groups:
       type: ai-gateway
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab:component:feature_category:execution:ops:rate_1h{component="runway_ingress",feature_category="code_suggestions",tier="sv",type="ai-gateway"}[3d] offset 30s)
+        avg_over_time(gitlab:component:feature_category:execution:ops:rate_1h{component="runway_ingress",feature_category="code_suggestions",tier="sv",type="ai-gateway"}[3d])
       )
   - record: gitlab:component:feature_category:execution:error:rate_3d
     labels:
@@ -1232,7 +1232,7 @@ groups:
       type: ai-gateway
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab:component:feature_category:execution:error:rate_1h{component="runway_ingress",feature_category="code_suggestions",tier="sv",type="ai-gateway"}[3d] offset 30s)
+        avg_over_time(gitlab:component:feature_category:execution:error:rate_1h{component="runway_ingress",feature_category="code_suggestions",tier="sv",type="ai-gateway"}[3d])
       )
   - record: gitlab:component:feature_category:execution:apdex:success:rate_3d
     labels:
@@ -1243,12 +1243,12 @@ groups:
       type: ai-gateway
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab:component:feature_category:execution:apdex:success:rate_1h{component="server",feature_category="code_suggestions",tier="sv",type="ai-gateway"}[3d] offset 30s)
+        avg_over_time(gitlab:component:feature_category:execution:apdex:success:rate_1h{component="server",feature_category="code_suggestions",tier="sv",type="ai-gateway"}[3d])
       )
   - record: gitlab:component:feature_category:execution:apdex:weight:score_3d
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab:component:feature_category:execution:apdex:weight:score_1h{component="server",feature_category="code_suggestions",tier="sv",type="ai-gateway"}[3d] offset 30s)
+        avg_over_time(gitlab:component:feature_category:execution:apdex:weight:score_1h{component="server",feature_category="code_suggestions",tier="sv",type="ai-gateway"}[3d])
       )
   - record: gitlab:component:feature_category:execution:ops:rate_3d
     labels:
@@ -1259,7 +1259,7 @@ groups:
       type: ai-gateway
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab:component:feature_category:execution:ops:rate_1h{component="server",feature_category="code_suggestions",tier="sv",type="ai-gateway"}[3d] offset 30s)
+        avg_over_time(gitlab:component:feature_category:execution:ops:rate_1h{component="server",feature_category="code_suggestions",tier="sv",type="ai-gateway"}[3d])
       )
   - record: gitlab:component:feature_category:execution:error:rate_3d
     labels:
@@ -1270,7 +1270,7 @@ groups:
       type: ai-gateway
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab:component:feature_category:execution:error:rate_1h{component="server",feature_category="code_suggestions",tier="sv",type="ai-gateway"}[3d] offset 30s)
+        avg_over_time(gitlab:component:feature_category:execution:error:rate_1h{component="server",feature_category="code_suggestions",tier="sv",type="ai-gateway"}[3d])
       )
   - record: gitlab:component:feature_category:execution:apdex:success:rate_3d
     labels:
@@ -1281,12 +1281,12 @@ groups:
       type: ai-gateway
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab:component:feature_category:execution:apdex:success:rate_1h{component="server_code_completions",feature_category="code_suggestions",tier="sv",type="ai-gateway"}[3d] offset 30s)
+        avg_over_time(gitlab:component:feature_category:execution:apdex:success:rate_1h{component="server_code_completions",feature_category="code_suggestions",tier="sv",type="ai-gateway"}[3d])
       )
   - record: gitlab:component:feature_category:execution:apdex:weight:score_3d
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab:component:feature_category:execution:apdex:weight:score_1h{component="server_code_completions",feature_category="code_suggestions",tier="sv",type="ai-gateway"}[3d] offset 30s)
+        avg_over_time(gitlab:component:feature_category:execution:apdex:weight:score_1h{component="server_code_completions",feature_category="code_suggestions",tier="sv",type="ai-gateway"}[3d])
       )
   - record: gitlab:component:feature_category:execution:ops:rate_3d
     labels:
@@ -1297,7 +1297,7 @@ groups:
       type: ai-gateway
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab:component:feature_category:execution:ops:rate_1h{component="server_code_completions",feature_category="code_suggestions",tier="sv",type="ai-gateway"}[3d] offset 30s)
+        avg_over_time(gitlab:component:feature_category:execution:ops:rate_1h{component="server_code_completions",feature_category="code_suggestions",tier="sv",type="ai-gateway"}[3d])
       )
   - record: gitlab:component:feature_category:execution:error:rate_3d
     labels:
@@ -1308,7 +1308,7 @@ groups:
       type: ai-gateway
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab:component:feature_category:execution:error:rate_1h{component="server_code_completions",feature_category="code_suggestions",tier="sv",type="ai-gateway"}[3d] offset 30s)
+        avg_over_time(gitlab:component:feature_category:execution:error:rate_1h{component="server_code_completions",feature_category="code_suggestions",tier="sv",type="ai-gateway"}[3d])
       )
   - record: gitlab:component:feature_category:execution:apdex:success:rate_3d
     labels:
@@ -1319,12 +1319,12 @@ groups:
       type: ai-gateway
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab:component:feature_category:execution:apdex:success:rate_1h{component="server_code_generations",feature_category="code_suggestions",tier="sv",type="ai-gateway"}[3d] offset 30s)
+        avg_over_time(gitlab:component:feature_category:execution:apdex:success:rate_1h{component="server_code_generations",feature_category="code_suggestions",tier="sv",type="ai-gateway"}[3d])
       )
   - record: gitlab:component:feature_category:execution:apdex:weight:score_3d
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab:component:feature_category:execution:apdex:weight:score_1h{component="server_code_generations",feature_category="code_suggestions",tier="sv",type="ai-gateway"}[3d] offset 30s)
+        avg_over_time(gitlab:component:feature_category:execution:apdex:weight:score_1h{component="server_code_generations",feature_category="code_suggestions",tier="sv",type="ai-gateway"}[3d])
       )
   - record: gitlab:component:feature_category:execution:ops:rate_3d
     labels:
@@ -1335,7 +1335,7 @@ groups:
       type: ai-gateway
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab:component:feature_category:execution:ops:rate_1h{component="server_code_generations",feature_category="code_suggestions",tier="sv",type="ai-gateway"}[3d] offset 30s)
+        avg_over_time(gitlab:component:feature_category:execution:ops:rate_1h{component="server_code_generations",feature_category="code_suggestions",tier="sv",type="ai-gateway"}[3d])
       )
   - record: gitlab:component:feature_category:execution:error:rate_3d
     labels:
@@ -1346,7 +1346,7 @@ groups:
       type: ai-gateway
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab:component:feature_category:execution:error:rate_1h{component="server_code_generations",feature_category="code_suggestions",tier="sv",type="ai-gateway"}[3d] offset 30s)
+        avg_over_time(gitlab:component:feature_category:execution:error:rate_1h{component="server_code_generations",feature_category="code_suggestions",tier="sv",type="ai-gateway"}[3d])
       )
   - record: gitlab:component:feature_category:execution:apdex:success:rate_3d
     labels:
@@ -1357,12 +1357,12 @@ groups:
       type: ai-gateway
     expr: |
       sum by (environment,stage) (
-        avg_over_time(gitlab:component:feature_category:execution:apdex:success:rate_1h{component="waf",feature_category="code_suggestions",tier="sv",type="ai-gateway"}[3d] offset 30s)
+        avg_over_time(gitlab:component:feature_category:execution:apdex:success:rate_1h{component="waf",feature_category="code_suggestions",tier="sv",type="ai-gateway"}[3d])
       )
   - record: gitlab:component:feature_category:execution:apdex:weight:score_3d
     expr: |
       sum by (environment,stage) (
-        avg_over_time(gitlab:component:feature_category:execution:apdex:weight:score_1h{component="waf",feature_category="code_suggestions",tier="sv",type="ai-gateway"}[3d] offset 30s)
+        avg_over_time(gitlab:component:feature_category:execution:apdex:weight:score_1h{component="waf",feature_category="code_suggestions",tier="sv",type="ai-gateway"}[3d])
       )
   - record: gitlab:component:feature_category:execution:ops:rate_3d
     labels:
@@ -1373,7 +1373,7 @@ groups:
       type: ai-gateway
     expr: |
       sum by (environment,stage) (
-        avg_over_time(gitlab:component:feature_category:execution:ops:rate_1h{component="waf",feature_category="code_suggestions",tier="sv",type="ai-gateway"}[3d] offset 30s)
+        avg_over_time(gitlab:component:feature_category:execution:ops:rate_1h{component="waf",feature_category="code_suggestions",tier="sv",type="ai-gateway"}[3d])
       )
   - record: gitlab:component:feature_category:execution:error:rate_3d
     labels:
@@ -1384,5 +1384,5 @@ groups:
       type: ai-gateway
     expr: |
       sum by (environment,stage) (
-        avg_over_time(gitlab:component:feature_category:execution:error:rate_1h{component="waf",feature_category="code_suggestions",tier="sv",type="ai-gateway"}[3d] offset 30s)
+        avg_over_time(gitlab:component:feature_category:execution:error:rate_1h{component="waf",feature_category="code_suggestions",tier="sv",type="ai-gateway"}[3d])
       )
