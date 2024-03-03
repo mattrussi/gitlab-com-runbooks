@@ -92,25 +92,12 @@ local generateRecordingRules(sliDefinitions, burnRate, extraSelector) =
         extraSelector
       );
       local emittingTypes = emittingTypesByMetric[metricName];
-      local typeSelector = std.get(selector, 'type');
-
-      local validatedSelector = if typeSelector != null && typeSelector != {} then
-        local selectedTypes = if std.objectHas(typeSelector, 'oneOf') then std.set(typeSelector.oneOf) else [typeSelector];
-        assert std.set(emittingTypes) == std.set(selectedTypes) :
-               'metric %s is emitted by %s but is selected from %s. Ensure emittedBy and type selector has the same values.' % [
-          metricName,
-          emittingTypes,
-          selectedTypes,
-        ];
-        selector
-      else
-        selector;
 
       if std.length(emittingTypes) > 0 then
         std.map(
           function(type)
             local selectorPerType = selectors.merge(
-              validatedSelector,
+              selector,
               { type: { oneOf: [type] } }
             );
             generateRecordingRulesForMetric(metricName, aggregationLabelsByMetric[metricName], selectorPerType, burnRate),
