@@ -25,14 +25,14 @@ groups:
     expr: |
       sum by (type, env, tier, stage, cluster) (
         kube_pod_container_status_waiting_reason:labeled{
-          env="gprd",type="ops-gitlab-net",
+          env="ops",type="ops-gitlab-net",
           reason!="ContainerCreating",
         }
       )
       > 0
       >= on(type, env, tier, stage, cluster) (
         topk by(type, env, tier, stage, cluster) (1,
-          kube_deployment_spec_strategy_rollingupdate_max_surge:labeled{env="gprd",type="ops-gitlab-net"}
+          kube_deployment_spec_strategy_rollingupdate_max_surge:labeled{env="ops",type="ops-gitlab-net"}
         )
         * 0.5
       )
