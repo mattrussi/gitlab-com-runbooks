@@ -59,6 +59,7 @@
 * [Node Reboots](../uncategorized/node-reboots.md)
 * [OPS-GITLAB-NET Users and Access Tokens](../uncategorized/ops-gitlab-net-pat.md)
 * [Uploads](../uncategorized/uploads.md)
+* [../uncategorized/wiz-runtime-sensor.md](../uncategorized/wiz-runtime-sensor.md)
 * [Troubleshooting Hashicorp Vault](../vault/troubleshooting.md)
 <!-- END_MARKER -->
 

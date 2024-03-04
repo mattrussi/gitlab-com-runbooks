@@ -70,6 +70,7 @@
 * [../uncategorized/osquery.md](../uncategorized/osquery.md)
 * [Periodic Job Monitoring](../uncategorized/periodic_job_monitoring.md)
 * [../uncategorized/subnet-allocations.md](../uncategorized/subnet-allocations.md)
+* [../uncategorized/wiz-runtime-sensor.md](../uncategorized/wiz-runtime-sensor.md)
 * [version.gitlab.com Runbook](../version/version-gitlab-com.md)
 * [Diagnostic Reports](../web/diagnostic-reports.md)
 <!-- END_MARKER -->
