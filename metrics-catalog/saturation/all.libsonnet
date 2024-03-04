@@ -47,7 +47,7 @@
   import 'saturation-monitoring/pg_table_bloat.libsonnet',
   import 'saturation-monitoring/pg_txid_vacuum_to_wraparound.libsonnet',
   import 'saturation-monitoring/pg_txid_wraparound.libsonnet',
-  import 'saturation-monitoring/pg_vacuum_activity.libsonnet',
+  import 'saturation-monitoring/pg_vacuum_activity_v2.libsonnet',
   import 'saturation-monitoring/pg_walsender_cpu.libsonnet',
   import 'saturation-monitoring/pgbouncer_client_connections.libsonnet',
   import 'saturation-monitoring/pgbouncer_pools.libsonnet',
