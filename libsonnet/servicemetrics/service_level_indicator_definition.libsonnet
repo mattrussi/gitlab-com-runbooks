@@ -4,6 +4,7 @@ local transactionalRates = import 'recording-rules/transactional-rates/transacti
 local stages = import 'service-catalog/stages.libsonnet';
 local dependencies = import 'servicemetrics/dependencies_definition.libsonnet';
 local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
+local descriptor = import 'servicemetrics/sli_metric_descriptor.libsonnet';
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 local strings = import 'utils/strings.libsonnet';
 
@@ -96,9 +97,52 @@ local getUpscaleLabels(sli, burnRate) =
 local isUpscalingTarget(sli, burnRate) =
   sli.upscaleLongerBurnRates && burnRate == '6h';
 
+// validate type selector against emittedBy
+local validateTypeSelector(sliDefinition) =
+  local metricDescriptor = descriptor.sliMetricsDescriptor([sliDefinition]);
+  local selectorsByMetric = metricDescriptor.selectorsByMetric;
+  local emittingTypesByMetric = metricDescriptor.emittingTypesByMetric;
+
+  if selectorsByMetric != {} then
+    local v = std.foldl(
+      function(_, metricName)
+        local selector = selectorsByMetric[metricName];
+        local emittingTypes = emittingTypesByMetric[metricName];
+        local typeSelector = std.get(selector, 'type');
+
+        if typeSelector != null && std.length(emittingTypes) > 0 then
+          local selectedTypes = if std.objectHas(typeSelector, 'oneOf') then std.set(typeSelector.oneOf) else [typeSelector];
+          assert std.set(emittingTypes) == std.set(selectedTypes) :
+                 'Service %s SLI %s metric %s is emitted by %s but is selected from type %s. Ensure emittedBy and type selector has the same values.' % [
+            sliDefinition.type,
+            sliDefinition.name,
+            metricName,
+            emittingTypes,
+            selectedTypes,
+          ];
+          {}
+        else {},
+      std.objectFields(selectorsByMetric),
+      {},
+    );
+    sliDefinition + v  // hack to force validation to run. v is an empty object
+  else
+    sliDefinition;
+
+local postDefinitionValidators = [
+  validateTypeSelector,
+];
+
+local validatePostDefinition(sliDefinition) =
+  std.foldl(
+    function(_, validator) validator(sliDefinition),
+    postDefinitionValidators,
+    sliDefinition,
+  );
+
 // Definition of a service level indicator
 local serviceLevelIndicatorDefinition(sliName, serviceLevelIndicator) =
-  serviceLevelIndicator {
+  validatePostDefinition(serviceLevelIndicator {
     // Returns true if this serviceLevelIndicator allows detailed breakdowns
     // this is not the case for combined serviceLevelIndicator definitions
     supportsDetails(): true,
@@ -306,7 +350,7 @@ local serviceLevelIndicatorDefinition(sliName, serviceLevelIndicator) =
         )
       else
         [],
-  };
+  });
 
 {
   serviceLevelIndicatorDefinition(serviceLevelIndicator)::
