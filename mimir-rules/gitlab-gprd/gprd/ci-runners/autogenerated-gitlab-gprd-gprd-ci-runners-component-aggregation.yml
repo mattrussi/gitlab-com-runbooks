@@ -34,6 +34,34 @@ groups:
           gitlab_component_ops:rate_5m{component="loadbalancer",env="gprd",monitor="global",stage="main",tier="runners",type="ci-runners"}
         )
       )
+  - record: gitlab_component_errors:ratio_5m
+    labels:
+      component: loadbalancer
+      monitor: global
+      tier: runners
+      type: ci-runners
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_5m{component="loadbalancer",env="gprd",monitor="global",tier="runners",type="ci-runners"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_5m{component="loadbalancer",env="gprd",monitor="global",tier="runners",type="ci-runners"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_5m
+    labels:
+      component: loadbalancer
+      monitor: global
+      tier: runners
+      type: ci-runners
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_5m{component="loadbalancer",env="gprd",monitor="global",tier="runners",type="ci-runners"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_5m{component="loadbalancer",env="gprd",monitor="global",tier="runners",type="ci-runners"} offset 30s
+      )
   - record: gitlab_component_ops:rate_5m
     labels:
       component: polling
@@ -61,6 +89,34 @@ groups:
         0 * group by(env,environment,stage) (
           gitlab_component_ops:rate_5m{component="polling",env="gprd",monitor="global",tier="runners",type="ci-runners"}
         )
+      )
+  - record: gitlab_component_errors:ratio_5m
+    labels:
+      component: polling
+      monitor: global
+      tier: runners
+      type: ci-runners
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_5m{component="polling",env="gprd",monitor="global",tier="runners",type="ci-runners"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_5m{component="polling",env="gprd",monitor="global",tier="runners",type="ci-runners"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_5m
+    labels:
+      component: polling
+      monitor: global
+      tier: runners
+      type: ci-runners
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_5m{component="polling",env="gprd",monitor="global",tier="runners",type="ci-runners"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_5m{component="polling",env="gprd",monitor="global",tier="runners",type="ci-runners"} offset 30s
       )
   - record: gitlab_component_apdex:success:rate_5m
     labels:
@@ -92,6 +148,34 @@ groups:
       sum by (env,environment,stage) (
         sli_aggregations:gitlab_ci_queue_retrieval_duration_seconds_count:rate_5m{env="gprd"} offset 30s
       )
+  - record: gitlab_component_errors:ratio_5m
+    labels:
+      component: queuing_queries_duration
+      monitor: global
+      tier: runners
+      type: ci-runners
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_5m{component="queuing_queries_duration",env="gprd",monitor="global",tier="runners",type="ci-runners"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_5m{component="queuing_queries_duration",env="gprd",monitor="global",tier="runners",type="ci-runners"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_5m
+    labels:
+      component: queuing_queries_duration
+      monitor: global
+      tier: runners
+      type: ci-runners
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_5m{component="queuing_queries_duration",env="gprd",monitor="global",tier="runners",type="ci-runners"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_5m{component="queuing_queries_duration",env="gprd",monitor="global",tier="runners",type="ci-runners"} offset 30s
+      )
   - record: gitlab_component_ops:rate_5m
     labels:
       component: saas_linux_runner_image_pull_failures
@@ -119,6 +203,34 @@ groups:
         0 * group by(env,environment,stage) (
           gitlab_component_ops:rate_5m{component="saas_linux_runner_image_pull_failures",env="gprd",monitor="global",tier="runners",type="ci-runners"}
         )
+      )
+  - record: gitlab_component_errors:ratio_5m
+    labels:
+      component: saas_linux_runner_image_pull_failures
+      monitor: global
+      tier: runners
+      type: ci-runners
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_5m{component="saas_linux_runner_image_pull_failures",env="gprd",monitor="global",tier="runners",type="ci-runners"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_5m{component="saas_linux_runner_image_pull_failures",env="gprd",monitor="global",tier="runners",type="ci-runners"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_5m
+    labels:
+      component: saas_linux_runner_image_pull_failures
+      monitor: global
+      tier: runners
+      type: ci-runners
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_5m{component="saas_linux_runner_image_pull_failures",env="gprd",monitor="global",tier="runners",type="ci-runners"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_5m{component="saas_linux_runner_image_pull_failures",env="gprd",monitor="global",tier="runners",type="ci-runners"} offset 30s
       )
   - record: gitlab_component_apdex:success:rate_5m
     labels:
@@ -168,6 +280,34 @@ groups:
           gitlab_component_ops:rate_5m{component="saas_runner_queues",env="gprd",monitor="global",tier="runners",type="ci-runners"}
         )
       )
+  - record: gitlab_component_errors:ratio_5m
+    labels:
+      component: saas_runner_queues
+      monitor: global
+      tier: runners
+      type: ci-runners
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_5m{component="saas_runner_queues",env="gprd",monitor="global",tier="runners",type="ci-runners"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_5m{component="saas_runner_queues",env="gprd",monitor="global",tier="runners",type="ci-runners"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_5m
+    labels:
+      component: saas_runner_queues
+      monitor: global
+      tier: runners
+      type: ci-runners
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_5m{component="saas_runner_queues",env="gprd",monitor="global",tier="runners",type="ci-runners"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_5m{component="saas_runner_queues",env="gprd",monitor="global",tier="runners",type="ci-runners"} offset 30s
+      )
   - record: gitlab_component_ops:rate_5m
     labels:
       component: trace_archiving_ci_jobs
@@ -195,6 +335,34 @@ groups:
         0 * group by(env,environment,stage) (
           gitlab_component_ops:rate_5m{component="trace_archiving_ci_jobs",env="gprd",monitor="global",tier="runners",type="ci-runners"}
         )
+      )
+  - record: gitlab_component_errors:ratio_5m
+    labels:
+      component: trace_archiving_ci_jobs
+      monitor: global
+      tier: runners
+      type: ci-runners
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_5m{component="trace_archiving_ci_jobs",env="gprd",monitor="global",tier="runners",type="ci-runners"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_5m{component="trace_archiving_ci_jobs",env="gprd",monitor="global",tier="runners",type="ci-runners"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_5m
+    labels:
+      component: trace_archiving_ci_jobs
+      monitor: global
+      tier: runners
+      type: ci-runners
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_5m{component="trace_archiving_ci_jobs",env="gprd",monitor="global",tier="runners",type="ci-runners"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_5m{component="trace_archiving_ci_jobs",env="gprd",monitor="global",tier="runners",type="ci-runners"} offset 30s
       )
 - name: 'Global SLI Metrics: ci-runners - Burn-Rate 30m'
   interval: 2m
@@ -229,6 +397,34 @@ groups:
           gitlab_component_ops:rate_30m{component="loadbalancer",env="gprd",monitor="global",stage="main",tier="runners",type="ci-runners"}
         )
       )
+  - record: gitlab_component_errors:ratio_30m
+    labels:
+      component: loadbalancer
+      monitor: global
+      tier: runners
+      type: ci-runners
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_30m{component="loadbalancer",env="gprd",monitor="global",tier="runners",type="ci-runners"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_30m{component="loadbalancer",env="gprd",monitor="global",tier="runners",type="ci-runners"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_30m
+    labels:
+      component: loadbalancer
+      monitor: global
+      tier: runners
+      type: ci-runners
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_30m{component="loadbalancer",env="gprd",monitor="global",tier="runners",type="ci-runners"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_30m{component="loadbalancer",env="gprd",monitor="global",tier="runners",type="ci-runners"} offset 30s
+      )
   - record: gitlab_component_ops:rate_30m
     labels:
       component: polling
@@ -256,6 +452,34 @@ groups:
         0 * group by(env,environment,stage) (
           gitlab_component_ops:rate_30m{component="polling",env="gprd",monitor="global",tier="runners",type="ci-runners"}
         )
+      )
+  - record: gitlab_component_errors:ratio_30m
+    labels:
+      component: polling
+      monitor: global
+      tier: runners
+      type: ci-runners
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_30m{component="polling",env="gprd",monitor="global",tier="runners",type="ci-runners"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_30m{component="polling",env="gprd",monitor="global",tier="runners",type="ci-runners"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_30m
+    labels:
+      component: polling
+      monitor: global
+      tier: runners
+      type: ci-runners
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_30m{component="polling",env="gprd",monitor="global",tier="runners",type="ci-runners"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_30m{component="polling",env="gprd",monitor="global",tier="runners",type="ci-runners"} offset 30s
       )
   - record: gitlab_component_apdex:success:rate_30m
     labels:
@@ -287,6 +511,34 @@ groups:
       sum by (env,environment,stage) (
         sli_aggregations:gitlab_ci_queue_retrieval_duration_seconds_count:rate_30m{env="gprd"} offset 30s
       )
+  - record: gitlab_component_errors:ratio_30m
+    labels:
+      component: queuing_queries_duration
+      monitor: global
+      tier: runners
+      type: ci-runners
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_30m{component="queuing_queries_duration",env="gprd",monitor="global",tier="runners",type="ci-runners"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_30m{component="queuing_queries_duration",env="gprd",monitor="global",tier="runners",type="ci-runners"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_30m
+    labels:
+      component: queuing_queries_duration
+      monitor: global
+      tier: runners
+      type: ci-runners
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_30m{component="queuing_queries_duration",env="gprd",monitor="global",tier="runners",type="ci-runners"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_30m{component="queuing_queries_duration",env="gprd",monitor="global",tier="runners",type="ci-runners"} offset 30s
+      )
   - record: gitlab_component_ops:rate_30m
     labels:
       component: saas_linux_runner_image_pull_failures
@@ -314,6 +566,34 @@ groups:
         0 * group by(env,environment,stage) (
           gitlab_component_ops:rate_30m{component="saas_linux_runner_image_pull_failures",env="gprd",monitor="global",tier="runners",type="ci-runners"}
         )
+      )
+  - record: gitlab_component_errors:ratio_30m
+    labels:
+      component: saas_linux_runner_image_pull_failures
+      monitor: global
+      tier: runners
+      type: ci-runners
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_30m{component="saas_linux_runner_image_pull_failures",env="gprd",monitor="global",tier="runners",type="ci-runners"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_30m{component="saas_linux_runner_image_pull_failures",env="gprd",monitor="global",tier="runners",type="ci-runners"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_30m
+    labels:
+      component: saas_linux_runner_image_pull_failures
+      monitor: global
+      tier: runners
+      type: ci-runners
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_30m{component="saas_linux_runner_image_pull_failures",env="gprd",monitor="global",tier="runners",type="ci-runners"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_30m{component="saas_linux_runner_image_pull_failures",env="gprd",monitor="global",tier="runners",type="ci-runners"} offset 30s
       )
   - record: gitlab_component_apdex:success:rate_30m
     labels:
@@ -363,6 +643,34 @@ groups:
           gitlab_component_ops:rate_30m{component="saas_runner_queues",env="gprd",monitor="global",tier="runners",type="ci-runners"}
         )
       )
+  - record: gitlab_component_errors:ratio_30m
+    labels:
+      component: saas_runner_queues
+      monitor: global
+      tier: runners
+      type: ci-runners
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_30m{component="saas_runner_queues",env="gprd",monitor="global",tier="runners",type="ci-runners"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_30m{component="saas_runner_queues",env="gprd",monitor="global",tier="runners",type="ci-runners"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_30m
+    labels:
+      component: saas_runner_queues
+      monitor: global
+      tier: runners
+      type: ci-runners
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_30m{component="saas_runner_queues",env="gprd",monitor="global",tier="runners",type="ci-runners"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_30m{component="saas_runner_queues",env="gprd",monitor="global",tier="runners",type="ci-runners"} offset 30s
+      )
   - record: gitlab_component_ops:rate_30m
     labels:
       component: trace_archiving_ci_jobs
@@ -390,6 +698,34 @@ groups:
         0 * group by(env,environment,stage) (
           gitlab_component_ops:rate_30m{component="trace_archiving_ci_jobs",env="gprd",monitor="global",tier="runners",type="ci-runners"}
         )
+      )
+  - record: gitlab_component_errors:ratio_30m
+    labels:
+      component: trace_archiving_ci_jobs
+      monitor: global
+      tier: runners
+      type: ci-runners
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_30m{component="trace_archiving_ci_jobs",env="gprd",monitor="global",tier="runners",type="ci-runners"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_30m{component="trace_archiving_ci_jobs",env="gprd",monitor="global",tier="runners",type="ci-runners"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_30m
+    labels:
+      component: trace_archiving_ci_jobs
+      monitor: global
+      tier: runners
+      type: ci-runners
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_30m{component="trace_archiving_ci_jobs",env="gprd",monitor="global",tier="runners",type="ci-runners"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_30m{component="trace_archiving_ci_jobs",env="gprd",monitor="global",tier="runners",type="ci-runners"} offset 30s
       )
 - name: 'Global SLI Metrics: ci-runners - Burn-Rate 1h'
   interval: 1m
@@ -424,6 +760,34 @@ groups:
           gitlab_component_ops:rate_1h{component="loadbalancer",env="gprd",monitor="global",stage="main",tier="runners",type="ci-runners"}
         )
       )
+  - record: gitlab_component_errors:ratio_1h
+    labels:
+      component: loadbalancer
+      monitor: global
+      tier: runners
+      type: ci-runners
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_1h{component="loadbalancer",env="gprd",monitor="global",tier="runners",type="ci-runners"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_1h{component="loadbalancer",env="gprd",monitor="global",tier="runners",type="ci-runners"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_1h
+    labels:
+      component: loadbalancer
+      monitor: global
+      tier: runners
+      type: ci-runners
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_1h{component="loadbalancer",env="gprd",monitor="global",tier="runners",type="ci-runners"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_1h{component="loadbalancer",env="gprd",monitor="global",tier="runners",type="ci-runners"} offset 30s
+      )
   - record: gitlab_component_ops:rate_1h
     labels:
       component: polling
@@ -451,6 +815,34 @@ groups:
         0 * group by(env,environment,stage) (
           gitlab_component_ops:rate_1h{component="polling",env="gprd",monitor="global",tier="runners",type="ci-runners"}
         )
+      )
+  - record: gitlab_component_errors:ratio_1h
+    labels:
+      component: polling
+      monitor: global
+      tier: runners
+      type: ci-runners
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_1h{component="polling",env="gprd",monitor="global",tier="runners",type="ci-runners"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_1h{component="polling",env="gprd",monitor="global",tier="runners",type="ci-runners"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_1h
+    labels:
+      component: polling
+      monitor: global
+      tier: runners
+      type: ci-runners
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_1h{component="polling",env="gprd",monitor="global",tier="runners",type="ci-runners"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_1h{component="polling",env="gprd",monitor="global",tier="runners",type="ci-runners"} offset 30s
       )
   - record: gitlab_component_apdex:success:rate_1h
     labels:
@@ -482,6 +874,34 @@ groups:
       sum by (env,environment,stage) (
         sli_aggregations:gitlab_ci_queue_retrieval_duration_seconds_count:rate_1h{env="gprd"} offset 30s
       )
+  - record: gitlab_component_errors:ratio_1h
+    labels:
+      component: queuing_queries_duration
+      monitor: global
+      tier: runners
+      type: ci-runners
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_1h{component="queuing_queries_duration",env="gprd",monitor="global",tier="runners",type="ci-runners"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_1h{component="queuing_queries_duration",env="gprd",monitor="global",tier="runners",type="ci-runners"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_1h
+    labels:
+      component: queuing_queries_duration
+      monitor: global
+      tier: runners
+      type: ci-runners
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_1h{component="queuing_queries_duration",env="gprd",monitor="global",tier="runners",type="ci-runners"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_1h{component="queuing_queries_duration",env="gprd",monitor="global",tier="runners",type="ci-runners"} offset 30s
+      )
   - record: gitlab_component_ops:rate_1h
     labels:
       component: saas_linux_runner_image_pull_failures
@@ -509,6 +929,34 @@ groups:
         0 * group by(env,environment,stage) (
           gitlab_component_ops:rate_1h{component="saas_linux_runner_image_pull_failures",env="gprd",monitor="global",tier="runners",type="ci-runners"}
         )
+      )
+  - record: gitlab_component_errors:ratio_1h
+    labels:
+      component: saas_linux_runner_image_pull_failures
+      monitor: global
+      tier: runners
+      type: ci-runners
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_1h{component="saas_linux_runner_image_pull_failures",env="gprd",monitor="global",tier="runners",type="ci-runners"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_1h{component="saas_linux_runner_image_pull_failures",env="gprd",monitor="global",tier="runners",type="ci-runners"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_1h
+    labels:
+      component: saas_linux_runner_image_pull_failures
+      monitor: global
+      tier: runners
+      type: ci-runners
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_1h{component="saas_linux_runner_image_pull_failures",env="gprd",monitor="global",tier="runners",type="ci-runners"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_1h{component="saas_linux_runner_image_pull_failures",env="gprd",monitor="global",tier="runners",type="ci-runners"} offset 30s
       )
   - record: gitlab_component_apdex:success:rate_1h
     labels:
@@ -558,6 +1006,34 @@ groups:
           gitlab_component_ops:rate_1h{component="saas_runner_queues",env="gprd",monitor="global",tier="runners",type="ci-runners"}
         )
       )
+  - record: gitlab_component_errors:ratio_1h
+    labels:
+      component: saas_runner_queues
+      monitor: global
+      tier: runners
+      type: ci-runners
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_1h{component="saas_runner_queues",env="gprd",monitor="global",tier="runners",type="ci-runners"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_1h{component="saas_runner_queues",env="gprd",monitor="global",tier="runners",type="ci-runners"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_1h
+    labels:
+      component: saas_runner_queues
+      monitor: global
+      tier: runners
+      type: ci-runners
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_1h{component="saas_runner_queues",env="gprd",monitor="global",tier="runners",type="ci-runners"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_1h{component="saas_runner_queues",env="gprd",monitor="global",tier="runners",type="ci-runners"} offset 30s
+      )
   - record: gitlab_component_ops:rate_1h
     labels:
       component: trace_archiving_ci_jobs
@@ -585,4 +1061,32 @@ groups:
         0 * group by(env,environment,stage) (
           gitlab_component_ops:rate_1h{component="trace_archiving_ci_jobs",env="gprd",monitor="global",tier="runners",type="ci-runners"}
         )
+      )
+  - record: gitlab_component_errors:ratio_1h
+    labels:
+      component: trace_archiving_ci_jobs
+      monitor: global
+      tier: runners
+      type: ci-runners
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_1h{component="trace_archiving_ci_jobs",env="gprd",monitor="global",tier="runners",type="ci-runners"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_1h{component="trace_archiving_ci_jobs",env="gprd",monitor="global",tier="runners",type="ci-runners"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_1h
+    labels:
+      component: trace_archiving_ci_jobs
+      monitor: global
+      tier: runners
+      type: ci-runners
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_1h{component="trace_archiving_ci_jobs",env="gprd",monitor="global",tier="runners",type="ci-runners"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_1h{component="trace_archiving_ci_jobs",env="gprd",monitor="global",tier="runners",type="ci-runners"} offset 30s
       )

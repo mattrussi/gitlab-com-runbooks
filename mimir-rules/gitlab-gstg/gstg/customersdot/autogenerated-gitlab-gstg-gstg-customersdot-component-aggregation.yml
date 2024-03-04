@@ -52,6 +52,34 @@ groups:
           gitlab_component_ops:rate_5m{component="customers_dot_requests",env="gstg",monitor="global",tier="sv",type="customersdot"}
         )
       )
+  - record: gitlab_component_errors:ratio_5m
+    labels:
+      component: customers_dot_requests
+      monitor: global
+      tier: sv
+      type: customersdot
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_5m{component="customers_dot_requests",env="gstg",monitor="global",tier="sv",type="customersdot"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_5m{component="customers_dot_requests",env="gstg",monitor="global",tier="sv",type="customersdot"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_5m
+    labels:
+      component: customers_dot_requests
+      monitor: global
+      tier: sv
+      type: customersdot
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_5m{component="customers_dot_requests",env="gstg",monitor="global",tier="sv",type="customersdot"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_5m{component="customers_dot_requests",env="gstg",monitor="global",tier="sv",type="customersdot"} offset 30s
+      )
   - record: gitlab_component_apdex:success:rate_5m
     labels:
       component: customers_dot_sidekiq_jobs
@@ -99,6 +127,34 @@ groups:
         0 * group by(env,environment,stage) (
           gitlab_component_ops:rate_5m{component="customers_dot_sidekiq_jobs",env="gstg",monitor="global",tier="sv",type="customersdot"}
         )
+      )
+  - record: gitlab_component_errors:ratio_5m
+    labels:
+      component: customers_dot_sidekiq_jobs
+      monitor: global
+      tier: sv
+      type: customersdot
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_5m{component="customers_dot_sidekiq_jobs",env="gstg",monitor="global",tier="sv",type="customersdot"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_5m{component="customers_dot_sidekiq_jobs",env="gstg",monitor="global",tier="sv",type="customersdot"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_5m
+    labels:
+      component: customers_dot_sidekiq_jobs
+      monitor: global
+      tier: sv
+      type: customersdot
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_5m{component="customers_dot_sidekiq_jobs",env="gstg",monitor="global",tier="sv",type="customersdot"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_5m{component="customers_dot_sidekiq_jobs",env="gstg",monitor="global",tier="sv",type="customersdot"} offset 30s
       )
 - name: 'Global SLI Metrics: customersdot - Burn-Rate 30m'
   interval: 2m
@@ -151,6 +207,34 @@ groups:
           gitlab_component_ops:rate_30m{component="customers_dot_requests",env="gstg",monitor="global",tier="sv",type="customersdot"}
         )
       )
+  - record: gitlab_component_errors:ratio_30m
+    labels:
+      component: customers_dot_requests
+      monitor: global
+      tier: sv
+      type: customersdot
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_30m{component="customers_dot_requests",env="gstg",monitor="global",tier="sv",type="customersdot"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_30m{component="customers_dot_requests",env="gstg",monitor="global",tier="sv",type="customersdot"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_30m
+    labels:
+      component: customers_dot_requests
+      monitor: global
+      tier: sv
+      type: customersdot
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_30m{component="customers_dot_requests",env="gstg",monitor="global",tier="sv",type="customersdot"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_30m{component="customers_dot_requests",env="gstg",monitor="global",tier="sv",type="customersdot"} offset 30s
+      )
   - record: gitlab_component_apdex:success:rate_30m
     labels:
       component: customers_dot_sidekiq_jobs
@@ -198,6 +282,34 @@ groups:
         0 * group by(env,environment,stage) (
           gitlab_component_ops:rate_30m{component="customers_dot_sidekiq_jobs",env="gstg",monitor="global",tier="sv",type="customersdot"}
         )
+      )
+  - record: gitlab_component_errors:ratio_30m
+    labels:
+      component: customers_dot_sidekiq_jobs
+      monitor: global
+      tier: sv
+      type: customersdot
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_30m{component="customers_dot_sidekiq_jobs",env="gstg",monitor="global",tier="sv",type="customersdot"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_30m{component="customers_dot_sidekiq_jobs",env="gstg",monitor="global",tier="sv",type="customersdot"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_30m
+    labels:
+      component: customers_dot_sidekiq_jobs
+      monitor: global
+      tier: sv
+      type: customersdot
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_30m{component="customers_dot_sidekiq_jobs",env="gstg",monitor="global",tier="sv",type="customersdot"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_30m{component="customers_dot_sidekiq_jobs",env="gstg",monitor="global",tier="sv",type="customersdot"} offset 30s
       )
 - name: 'Global SLI Metrics: customersdot - Burn-Rate 1h'
   interval: 1m
@@ -250,6 +362,34 @@ groups:
           gitlab_component_ops:rate_1h{component="customers_dot_requests",env="gstg",monitor="global",tier="sv",type="customersdot"}
         )
       )
+  - record: gitlab_component_errors:ratio_1h
+    labels:
+      component: customers_dot_requests
+      monitor: global
+      tier: sv
+      type: customersdot
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_1h{component="customers_dot_requests",env="gstg",monitor="global",tier="sv",type="customersdot"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_1h{component="customers_dot_requests",env="gstg",monitor="global",tier="sv",type="customersdot"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_1h
+    labels:
+      component: customers_dot_requests
+      monitor: global
+      tier: sv
+      type: customersdot
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_1h{component="customers_dot_requests",env="gstg",monitor="global",tier="sv",type="customersdot"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_1h{component="customers_dot_requests",env="gstg",monitor="global",tier="sv",type="customersdot"} offset 30s
+      )
   - record: gitlab_component_apdex:success:rate_1h
     labels:
       component: customers_dot_sidekiq_jobs
@@ -297,4 +437,32 @@ groups:
         0 * group by(env,environment,stage) (
           gitlab_component_ops:rate_1h{component="customers_dot_sidekiq_jobs",env="gstg",monitor="global",tier="sv",type="customersdot"}
         )
+      )
+  - record: gitlab_component_errors:ratio_1h
+    labels:
+      component: customers_dot_sidekiq_jobs
+      monitor: global
+      tier: sv
+      type: customersdot
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_1h{component="customers_dot_sidekiq_jobs",env="gstg",monitor="global",tier="sv",type="customersdot"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_1h{component="customers_dot_sidekiq_jobs",env="gstg",monitor="global",tier="sv",type="customersdot"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_1h
+    labels:
+      component: customers_dot_sidekiq_jobs
+      monitor: global
+      tier: sv
+      type: customersdot
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_1h{component="customers_dot_sidekiq_jobs",env="gstg",monitor="global",tier="sv",type="customersdot"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_1h{component="customers_dot_sidekiq_jobs",env="gstg",monitor="global",tier="sv",type="customersdot"} offset 30s
       )

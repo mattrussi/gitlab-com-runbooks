@@ -64,6 +64,34 @@ groups:
           gitlab_component_ops:rate_5m{component="loadbalancer",env="gprd",monitor="global",stage="main",tier="sv",type="websockets"}
         )
       )
+  - record: gitlab_component_errors:ratio_5m
+    labels:
+      component: loadbalancer
+      monitor: global
+      tier: sv
+      type: websockets
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_5m{component="loadbalancer",env="gprd",monitor="global",tier="sv",type="websockets"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_5m{component="loadbalancer",env="gprd",monitor="global",tier="sv",type="websockets"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_5m
+    labels:
+      component: loadbalancer
+      monitor: global
+      tier: sv
+      type: websockets
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_5m{component="loadbalancer",env="gprd",monitor="global",tier="sv",type="websockets"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_5m{component="loadbalancer",env="gprd",monitor="global",tier="sv",type="websockets"} offset 30s
+      )
   - record: gitlab_component_apdex:success:rate_5m
     labels:
       component: rails_request
@@ -112,6 +140,34 @@ groups:
           gitlab_component_ops:rate_5m{component="rails_request",env="gprd",monitor="global",tier="sv",type="websockets"}
         )
       )
+  - record: gitlab_component_errors:ratio_5m
+    labels:
+      component: rails_request
+      monitor: global
+      tier: sv
+      type: websockets
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_5m{component="rails_request",env="gprd",monitor="global",tier="sv",type="websockets"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_5m{component="rails_request",env="gprd",monitor="global",tier="sv",type="websockets"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_5m
+    labels:
+      component: rails_request
+      monitor: global
+      tier: sv
+      type: websockets
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_5m{component="rails_request",env="gprd",monitor="global",tier="sv",type="websockets"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_5m{component="rails_request",env="gprd",monitor="global",tier="sv",type="websockets"} offset 30s
+      )
   - record: gitlab_component_ops:rate_5m
     labels:
       component: workhorse
@@ -139,6 +195,34 @@ groups:
         0 * group by(env,environment,stage) (
           gitlab_component_ops:rate_5m{component="workhorse",env="gprd",monitor="global",tier="sv",type="websockets"}
         )
+      )
+  - record: gitlab_component_errors:ratio_5m
+    labels:
+      component: workhorse
+      monitor: global
+      tier: sv
+      type: websockets
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_5m{component="workhorse",env="gprd",monitor="global",tier="sv",type="websockets"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_5m{component="workhorse",env="gprd",monitor="global",tier="sv",type="websockets"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_5m
+    labels:
+      component: workhorse
+      monitor: global
+      tier: sv
+      type: websockets
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_5m{component="workhorse",env="gprd",monitor="global",tier="sv",type="websockets"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_5m{component="workhorse",env="gprd",monitor="global",tier="sv",type="websockets"} offset 30s
       )
 - name: 'Global SLI Metrics: websockets - Burn-Rate 30m'
   interval: 2m
@@ -203,6 +287,34 @@ groups:
           gitlab_component_ops:rate_30m{component="loadbalancer",env="gprd",monitor="global",stage="main",tier="sv",type="websockets"}
         )
       )
+  - record: gitlab_component_errors:ratio_30m
+    labels:
+      component: loadbalancer
+      monitor: global
+      tier: sv
+      type: websockets
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_30m{component="loadbalancer",env="gprd",monitor="global",tier="sv",type="websockets"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_30m{component="loadbalancer",env="gprd",monitor="global",tier="sv",type="websockets"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_30m
+    labels:
+      component: loadbalancer
+      monitor: global
+      tier: sv
+      type: websockets
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_30m{component="loadbalancer",env="gprd",monitor="global",tier="sv",type="websockets"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_30m{component="loadbalancer",env="gprd",monitor="global",tier="sv",type="websockets"} offset 30s
+      )
   - record: gitlab_component_apdex:success:rate_30m
     labels:
       component: rails_request
@@ -251,6 +363,34 @@ groups:
           gitlab_component_ops:rate_30m{component="rails_request",env="gprd",monitor="global",tier="sv",type="websockets"}
         )
       )
+  - record: gitlab_component_errors:ratio_30m
+    labels:
+      component: rails_request
+      monitor: global
+      tier: sv
+      type: websockets
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_30m{component="rails_request",env="gprd",monitor="global",tier="sv",type="websockets"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_30m{component="rails_request",env="gprd",monitor="global",tier="sv",type="websockets"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_30m
+    labels:
+      component: rails_request
+      monitor: global
+      tier: sv
+      type: websockets
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_30m{component="rails_request",env="gprd",monitor="global",tier="sv",type="websockets"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_30m{component="rails_request",env="gprd",monitor="global",tier="sv",type="websockets"} offset 30s
+      )
   - record: gitlab_component_ops:rate_30m
     labels:
       component: workhorse
@@ -278,6 +418,34 @@ groups:
         0 * group by(env,environment,stage) (
           gitlab_component_ops:rate_30m{component="workhorse",env="gprd",monitor="global",tier="sv",type="websockets"}
         )
+      )
+  - record: gitlab_component_errors:ratio_30m
+    labels:
+      component: workhorse
+      monitor: global
+      tier: sv
+      type: websockets
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_30m{component="workhorse",env="gprd",monitor="global",tier="sv",type="websockets"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_30m{component="workhorse",env="gprd",monitor="global",tier="sv",type="websockets"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_30m
+    labels:
+      component: workhorse
+      monitor: global
+      tier: sv
+      type: websockets
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_30m{component="workhorse",env="gprd",monitor="global",tier="sv",type="websockets"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_30m{component="workhorse",env="gprd",monitor="global",tier="sv",type="websockets"} offset 30s
       )
 - name: 'Global SLI Metrics: websockets - Burn-Rate 1h'
   interval: 1m
@@ -342,6 +510,34 @@ groups:
           gitlab_component_ops:rate_1h{component="loadbalancer",env="gprd",monitor="global",stage="main",tier="sv",type="websockets"}
         )
       )
+  - record: gitlab_component_errors:ratio_1h
+    labels:
+      component: loadbalancer
+      monitor: global
+      tier: sv
+      type: websockets
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_1h{component="loadbalancer",env="gprd",monitor="global",tier="sv",type="websockets"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_1h{component="loadbalancer",env="gprd",monitor="global",tier="sv",type="websockets"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_1h
+    labels:
+      component: loadbalancer
+      monitor: global
+      tier: sv
+      type: websockets
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_1h{component="loadbalancer",env="gprd",monitor="global",tier="sv",type="websockets"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_1h{component="loadbalancer",env="gprd",monitor="global",tier="sv",type="websockets"} offset 30s
+      )
   - record: gitlab_component_apdex:success:rate_1h
     labels:
       component: rails_request
@@ -390,6 +586,34 @@ groups:
           gitlab_component_ops:rate_1h{component="rails_request",env="gprd",monitor="global",tier="sv",type="websockets"}
         )
       )
+  - record: gitlab_component_errors:ratio_1h
+    labels:
+      component: rails_request
+      monitor: global
+      tier: sv
+      type: websockets
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_1h{component="rails_request",env="gprd",monitor="global",tier="sv",type="websockets"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_1h{component="rails_request",env="gprd",monitor="global",tier="sv",type="websockets"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_1h
+    labels:
+      component: rails_request
+      monitor: global
+      tier: sv
+      type: websockets
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_1h{component="rails_request",env="gprd",monitor="global",tier="sv",type="websockets"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_1h{component="rails_request",env="gprd",monitor="global",tier="sv",type="websockets"} offset 30s
+      )
   - record: gitlab_component_ops:rate_1h
     labels:
       component: workhorse
@@ -417,4 +641,32 @@ groups:
         0 * group by(env,environment,stage) (
           gitlab_component_ops:rate_1h{component="workhorse",env="gprd",monitor="global",tier="sv",type="websockets"}
         )
+      )
+  - record: gitlab_component_errors:ratio_1h
+    labels:
+      component: workhorse
+      monitor: global
+      tier: sv
+      type: websockets
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_1h{component="workhorse",env="gprd",monitor="global",tier="sv",type="websockets"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_1h{component="workhorse",env="gprd",monitor="global",tier="sv",type="websockets"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_1h
+    labels:
+      component: workhorse
+      monitor: global
+      tier: sv
+      type: websockets
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_1h{component="workhorse",env="gprd",monitor="global",tier="sv",type="websockets"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_1h{component="workhorse",env="gprd",monitor="global",tier="sv",type="websockets"} offset 30s
       )

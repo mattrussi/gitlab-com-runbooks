@@ -15,6 +15,34 @@ groups:
       sum by (env,environment) (
         sli_aggregations:haproxy_backend_sessions_total:rate_5m{backend=~"altssh|ssh",env="gstg"} offset 30s
       )
+  - record: gitlab_component_errors:ratio_5m
+    labels:
+      component: gitlab_shell
+      monitor: global
+      tier: sv
+      type: git
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_5m{component="gitlab_shell",env="gstg",monitor="global",tier="sv",type="git"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_5m{component="gitlab_shell",env="gstg",monitor="global",tier="sv",type="git"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_5m
+    labels:
+      component: gitlab_shell
+      monitor: global
+      tier: sv
+      type: git
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_5m{component="gitlab_shell",env="gstg",monitor="global",tier="sv",type="git"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_5m{component="gitlab_shell",env="gstg",monitor="global",tier="sv",type="git"} offset 30s
+      )
   - record: gitlab_component_apdex:success:rate_5m
     labels:
       component: gitlab_sshd
@@ -70,6 +98,34 @@ groups:
         0 * group by(env,environment,stage) (
           gitlab_component_ops:rate_5m{component="gitlab_sshd",env="gstg",monitor="global",tier="sv",type="git"}
         )
+      )
+  - record: gitlab_component_errors:ratio_5m
+    labels:
+      component: gitlab_sshd
+      monitor: global
+      tier: sv
+      type: git
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_5m{component="gitlab_sshd",env="gstg",monitor="global",tier="sv",type="git"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_5m{component="gitlab_sshd",env="gstg",monitor="global",tier="sv",type="git"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_5m
+    labels:
+      component: gitlab_sshd
+      monitor: global
+      tier: sv
+      type: git
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_5m{component="gitlab_sshd",env="gstg",monitor="global",tier="sv",type="git"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_5m{component="gitlab_sshd",env="gstg",monitor="global",tier="sv",type="git"} offset 30s
       )
   - record: gitlab_component_ops:rate_5m
     labels:
@@ -131,6 +187,34 @@ groups:
           gitlab_component_ops:rate_5m{component="loadbalancer",env="gstg",monitor="global",stage="main",tier="sv",type="git"}
         )
       )
+  - record: gitlab_component_errors:ratio_5m
+    labels:
+      component: loadbalancer
+      monitor: global
+      tier: sv
+      type: git
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_5m{component="loadbalancer",env="gstg",monitor="global",tier="sv",type="git"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_5m{component="loadbalancer",env="gstg",monitor="global",tier="sv",type="git"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_5m
+    labels:
+      component: loadbalancer
+      monitor: global
+      tier: sv
+      type: git
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_5m{component="loadbalancer",env="gstg",monitor="global",tier="sv",type="git"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_5m{component="loadbalancer",env="gstg",monitor="global",tier="sv",type="git"} offset 30s
+      )
   - record: gitlab_component_ops:rate_5m
     labels:
       component: loadbalancer_ssh
@@ -160,6 +244,34 @@ groups:
         0 * group by(env,environment) (
           gitlab_component_ops:rate_5m{component="loadbalancer_ssh",env="gstg",monitor="global",stage="main",tier="sv",type="git"}
         )
+      )
+  - record: gitlab_component_errors:ratio_5m
+    labels:
+      component: loadbalancer_ssh
+      monitor: global
+      tier: sv
+      type: git
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_5m{component="loadbalancer_ssh",env="gstg",monitor="global",tier="sv",type="git"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_5m{component="loadbalancer_ssh",env="gstg",monitor="global",tier="sv",type="git"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_5m
+    labels:
+      component: loadbalancer_ssh
+      monitor: global
+      tier: sv
+      type: git
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_5m{component="loadbalancer_ssh",env="gstg",monitor="global",tier="sv",type="git"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_5m{component="loadbalancer_ssh",env="gstg",monitor="global",tier="sv",type="git"} offset 30s
       )
   - record: gitlab_component_apdex:success:rate_5m
     labels:
@@ -208,6 +320,34 @@ groups:
         0 * group by(env,environment,stage) (
           gitlab_component_ops:rate_5m{component="rails_request",env="gstg",monitor="global",tier="sv",type="git"}
         )
+      )
+  - record: gitlab_component_errors:ratio_5m
+    labels:
+      component: rails_request
+      monitor: global
+      tier: sv
+      type: git
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_5m{component="rails_request",env="gstg",monitor="global",tier="sv",type="git"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_5m{component="rails_request",env="gstg",monitor="global",tier="sv",type="git"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_5m
+    labels:
+      component: rails_request
+      monitor: global
+      tier: sv
+      type: git
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_5m{component="rails_request",env="gstg",monitor="global",tier="sv",type="git"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_5m{component="rails_request",env="gstg",monitor="global",tier="sv",type="git"} offset 30s
       )
   - record: gitlab_component_apdex:success:rate_5m
     labels:
@@ -265,6 +405,34 @@ groups:
           gitlab_component_ops:rate_5m{component="workhorse",env="gstg",monitor="global",tier="sv",type="git"}
         )
       )
+  - record: gitlab_component_errors:ratio_5m
+    labels:
+      component: workhorse
+      monitor: global
+      tier: sv
+      type: git
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_5m{component="workhorse",env="gstg",monitor="global",tier="sv",type="git"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_5m{component="workhorse",env="gstg",monitor="global",tier="sv",type="git"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_5m
+    labels:
+      component: workhorse
+      monitor: global
+      tier: sv
+      type: git
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_5m{component="workhorse",env="gstg",monitor="global",tier="sv",type="git"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_5m{component="workhorse",env="gstg",monitor="global",tier="sv",type="git"} offset 30s
+      )
   - record: gitlab_component_apdex:success:rate_5m
     labels:
       component: workhorse_auth_api
@@ -313,6 +481,34 @@ groups:
           gitlab_component_ops:rate_5m{component="workhorse_auth_api",env="gstg",monitor="global",tier="sv",type="git"}
         )
       )
+  - record: gitlab_component_errors:ratio_5m
+    labels:
+      component: workhorse_auth_api
+      monitor: global
+      tier: sv
+      type: git
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_5m{component="workhorse_auth_api",env="gstg",monitor="global",tier="sv",type="git"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_5m{component="workhorse_auth_api",env="gstg",monitor="global",tier="sv",type="git"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_5m
+    labels:
+      component: workhorse_auth_api
+      monitor: global
+      tier: sv
+      type: git
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_5m{component="workhorse_auth_api",env="gstg",monitor="global",tier="sv",type="git"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_5m{component="workhorse_auth_api",env="gstg",monitor="global",tier="sv",type="git"} offset 30s
+      )
 - name: 'Global SLI Metrics: git - Burn-Rate 30m'
   interval: 2m
   rules:
@@ -326,6 +522,34 @@ groups:
     expr: |
       sum by (env,environment) (
         sli_aggregations:haproxy_backend_sessions_total:rate_30m{backend=~"altssh|ssh",env="gstg"} offset 30s
+      )
+  - record: gitlab_component_errors:ratio_30m
+    labels:
+      component: gitlab_shell
+      monitor: global
+      tier: sv
+      type: git
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_30m{component="gitlab_shell",env="gstg",monitor="global",tier="sv",type="git"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_30m{component="gitlab_shell",env="gstg",monitor="global",tier="sv",type="git"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_30m
+    labels:
+      component: gitlab_shell
+      monitor: global
+      tier: sv
+      type: git
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_30m{component="gitlab_shell",env="gstg",monitor="global",tier="sv",type="git"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_30m{component="gitlab_shell",env="gstg",monitor="global",tier="sv",type="git"} offset 30s
       )
   - record: gitlab_component_apdex:success:rate_30m
     labels:
@@ -382,6 +606,34 @@ groups:
         0 * group by(env,environment,stage) (
           gitlab_component_ops:rate_30m{component="gitlab_sshd",env="gstg",monitor="global",tier="sv",type="git"}
         )
+      )
+  - record: gitlab_component_errors:ratio_30m
+    labels:
+      component: gitlab_sshd
+      monitor: global
+      tier: sv
+      type: git
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_30m{component="gitlab_sshd",env="gstg",monitor="global",tier="sv",type="git"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_30m{component="gitlab_sshd",env="gstg",monitor="global",tier="sv",type="git"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_30m
+    labels:
+      component: gitlab_sshd
+      monitor: global
+      tier: sv
+      type: git
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_30m{component="gitlab_sshd",env="gstg",monitor="global",tier="sv",type="git"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_30m{component="gitlab_sshd",env="gstg",monitor="global",tier="sv",type="git"} offset 30s
       )
   - record: gitlab_component_ops:rate_30m
     labels:
@@ -443,6 +695,34 @@ groups:
           gitlab_component_ops:rate_30m{component="loadbalancer",env="gstg",monitor="global",stage="main",tier="sv",type="git"}
         )
       )
+  - record: gitlab_component_errors:ratio_30m
+    labels:
+      component: loadbalancer
+      monitor: global
+      tier: sv
+      type: git
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_30m{component="loadbalancer",env="gstg",monitor="global",tier="sv",type="git"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_30m{component="loadbalancer",env="gstg",monitor="global",tier="sv",type="git"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_30m
+    labels:
+      component: loadbalancer
+      monitor: global
+      tier: sv
+      type: git
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_30m{component="loadbalancer",env="gstg",monitor="global",tier="sv",type="git"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_30m{component="loadbalancer",env="gstg",monitor="global",tier="sv",type="git"} offset 30s
+      )
   - record: gitlab_component_ops:rate_30m
     labels:
       component: loadbalancer_ssh
@@ -472,6 +752,34 @@ groups:
         0 * group by(env,environment) (
           gitlab_component_ops:rate_30m{component="loadbalancer_ssh",env="gstg",monitor="global",stage="main",tier="sv",type="git"}
         )
+      )
+  - record: gitlab_component_errors:ratio_30m
+    labels:
+      component: loadbalancer_ssh
+      monitor: global
+      tier: sv
+      type: git
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_30m{component="loadbalancer_ssh",env="gstg",monitor="global",tier="sv",type="git"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_30m{component="loadbalancer_ssh",env="gstg",monitor="global",tier="sv",type="git"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_30m
+    labels:
+      component: loadbalancer_ssh
+      monitor: global
+      tier: sv
+      type: git
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_30m{component="loadbalancer_ssh",env="gstg",monitor="global",tier="sv",type="git"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_30m{component="loadbalancer_ssh",env="gstg",monitor="global",tier="sv",type="git"} offset 30s
       )
   - record: gitlab_component_apdex:success:rate_30m
     labels:
@@ -520,6 +828,34 @@ groups:
         0 * group by(env,environment,stage) (
           gitlab_component_ops:rate_30m{component="rails_request",env="gstg",monitor="global",tier="sv",type="git"}
         )
+      )
+  - record: gitlab_component_errors:ratio_30m
+    labels:
+      component: rails_request
+      monitor: global
+      tier: sv
+      type: git
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_30m{component="rails_request",env="gstg",monitor="global",tier="sv",type="git"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_30m{component="rails_request",env="gstg",monitor="global",tier="sv",type="git"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_30m
+    labels:
+      component: rails_request
+      monitor: global
+      tier: sv
+      type: git
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_30m{component="rails_request",env="gstg",monitor="global",tier="sv",type="git"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_30m{component="rails_request",env="gstg",monitor="global",tier="sv",type="git"} offset 30s
       )
   - record: gitlab_component_apdex:success:rate_30m
     labels:
@@ -577,6 +913,34 @@ groups:
           gitlab_component_ops:rate_30m{component="workhorse",env="gstg",monitor="global",tier="sv",type="git"}
         )
       )
+  - record: gitlab_component_errors:ratio_30m
+    labels:
+      component: workhorse
+      monitor: global
+      tier: sv
+      type: git
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_30m{component="workhorse",env="gstg",monitor="global",tier="sv",type="git"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_30m{component="workhorse",env="gstg",monitor="global",tier="sv",type="git"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_30m
+    labels:
+      component: workhorse
+      monitor: global
+      tier: sv
+      type: git
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_30m{component="workhorse",env="gstg",monitor="global",tier="sv",type="git"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_30m{component="workhorse",env="gstg",monitor="global",tier="sv",type="git"} offset 30s
+      )
   - record: gitlab_component_apdex:success:rate_30m
     labels:
       component: workhorse_auth_api
@@ -625,6 +989,34 @@ groups:
           gitlab_component_ops:rate_30m{component="workhorse_auth_api",env="gstg",monitor="global",tier="sv",type="git"}
         )
       )
+  - record: gitlab_component_errors:ratio_30m
+    labels:
+      component: workhorse_auth_api
+      monitor: global
+      tier: sv
+      type: git
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_30m{component="workhorse_auth_api",env="gstg",monitor="global",tier="sv",type="git"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_30m{component="workhorse_auth_api",env="gstg",monitor="global",tier="sv",type="git"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_30m
+    labels:
+      component: workhorse_auth_api
+      monitor: global
+      tier: sv
+      type: git
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_30m{component="workhorse_auth_api",env="gstg",monitor="global",tier="sv",type="git"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_30m{component="workhorse_auth_api",env="gstg",monitor="global",tier="sv",type="git"} offset 30s
+      )
 - name: 'Global SLI Metrics: git - Burn-Rate 1h'
   interval: 1m
   rules:
@@ -638,6 +1030,34 @@ groups:
     expr: |
       sum by (env,environment) (
         sli_aggregations:haproxy_backend_sessions_total:rate_1h{backend=~"altssh|ssh",env="gstg"} offset 30s
+      )
+  - record: gitlab_component_errors:ratio_1h
+    labels:
+      component: gitlab_shell
+      monitor: global
+      tier: sv
+      type: git
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_1h{component="gitlab_shell",env="gstg",monitor="global",tier="sv",type="git"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_1h{component="gitlab_shell",env="gstg",monitor="global",tier="sv",type="git"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_1h
+    labels:
+      component: gitlab_shell
+      monitor: global
+      tier: sv
+      type: git
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_1h{component="gitlab_shell",env="gstg",monitor="global",tier="sv",type="git"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_1h{component="gitlab_shell",env="gstg",monitor="global",tier="sv",type="git"} offset 30s
       )
   - record: gitlab_component_apdex:success:rate_1h
     labels:
@@ -694,6 +1114,34 @@ groups:
         0 * group by(env,environment,stage) (
           gitlab_component_ops:rate_1h{component="gitlab_sshd",env="gstg",monitor="global",tier="sv",type="git"}
         )
+      )
+  - record: gitlab_component_errors:ratio_1h
+    labels:
+      component: gitlab_sshd
+      monitor: global
+      tier: sv
+      type: git
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_1h{component="gitlab_sshd",env="gstg",monitor="global",tier="sv",type="git"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_1h{component="gitlab_sshd",env="gstg",monitor="global",tier="sv",type="git"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_1h
+    labels:
+      component: gitlab_sshd
+      monitor: global
+      tier: sv
+      type: git
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_1h{component="gitlab_sshd",env="gstg",monitor="global",tier="sv",type="git"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_1h{component="gitlab_sshd",env="gstg",monitor="global",tier="sv",type="git"} offset 30s
       )
   - record: gitlab_component_ops:rate_1h
     labels:
@@ -755,6 +1203,34 @@ groups:
           gitlab_component_ops:rate_1h{component="loadbalancer",env="gstg",monitor="global",stage="main",tier="sv",type="git"}
         )
       )
+  - record: gitlab_component_errors:ratio_1h
+    labels:
+      component: loadbalancer
+      monitor: global
+      tier: sv
+      type: git
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_1h{component="loadbalancer",env="gstg",monitor="global",tier="sv",type="git"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_1h{component="loadbalancer",env="gstg",monitor="global",tier="sv",type="git"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_1h
+    labels:
+      component: loadbalancer
+      monitor: global
+      tier: sv
+      type: git
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_1h{component="loadbalancer",env="gstg",monitor="global",tier="sv",type="git"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_1h{component="loadbalancer",env="gstg",monitor="global",tier="sv",type="git"} offset 30s
+      )
   - record: gitlab_component_ops:rate_1h
     labels:
       component: loadbalancer_ssh
@@ -784,6 +1260,34 @@ groups:
         0 * group by(env,environment) (
           gitlab_component_ops:rate_1h{component="loadbalancer_ssh",env="gstg",monitor="global",stage="main",tier="sv",type="git"}
         )
+      )
+  - record: gitlab_component_errors:ratio_1h
+    labels:
+      component: loadbalancer_ssh
+      monitor: global
+      tier: sv
+      type: git
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_1h{component="loadbalancer_ssh",env="gstg",monitor="global",tier="sv",type="git"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_1h{component="loadbalancer_ssh",env="gstg",monitor="global",tier="sv",type="git"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_1h
+    labels:
+      component: loadbalancer_ssh
+      monitor: global
+      tier: sv
+      type: git
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_1h{component="loadbalancer_ssh",env="gstg",monitor="global",tier="sv",type="git"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_1h{component="loadbalancer_ssh",env="gstg",monitor="global",tier="sv",type="git"} offset 30s
       )
   - record: gitlab_component_apdex:success:rate_1h
     labels:
@@ -832,6 +1336,34 @@ groups:
         0 * group by(env,environment,stage) (
           gitlab_component_ops:rate_1h{component="rails_request",env="gstg",monitor="global",tier="sv",type="git"}
         )
+      )
+  - record: gitlab_component_errors:ratio_1h
+    labels:
+      component: rails_request
+      monitor: global
+      tier: sv
+      type: git
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_1h{component="rails_request",env="gstg",monitor="global",tier="sv",type="git"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_1h{component="rails_request",env="gstg",monitor="global",tier="sv",type="git"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_1h
+    labels:
+      component: rails_request
+      monitor: global
+      tier: sv
+      type: git
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_1h{component="rails_request",env="gstg",monitor="global",tier="sv",type="git"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_1h{component="rails_request",env="gstg",monitor="global",tier="sv",type="git"} offset 30s
       )
   - record: gitlab_component_apdex:success:rate_1h
     labels:
@@ -889,6 +1421,34 @@ groups:
           gitlab_component_ops:rate_1h{component="workhorse",env="gstg",monitor="global",tier="sv",type="git"}
         )
       )
+  - record: gitlab_component_errors:ratio_1h
+    labels:
+      component: workhorse
+      monitor: global
+      tier: sv
+      type: git
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_1h{component="workhorse",env="gstg",monitor="global",tier="sv",type="git"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_1h{component="workhorse",env="gstg",monitor="global",tier="sv",type="git"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_1h
+    labels:
+      component: workhorse
+      monitor: global
+      tier: sv
+      type: git
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_1h{component="workhorse",env="gstg",monitor="global",tier="sv",type="git"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_1h{component="workhorse",env="gstg",monitor="global",tier="sv",type="git"} offset 30s
+      )
   - record: gitlab_component_apdex:success:rate_1h
     labels:
       component: workhorse_auth_api
@@ -936,4 +1496,32 @@ groups:
         0 * group by(env,environment,stage) (
           gitlab_component_ops:rate_1h{component="workhorse_auth_api",env="gstg",monitor="global",tier="sv",type="git"}
         )
+      )
+  - record: gitlab_component_errors:ratio_1h
+    labels:
+      component: workhorse_auth_api
+      monitor: global
+      tier: sv
+      type: git
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_1h{component="workhorse_auth_api",env="gstg",monitor="global",tier="sv",type="git"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_1h{component="workhorse_auth_api",env="gstg",monitor="global",tier="sv",type="git"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_1h
+    labels:
+      component: workhorse_auth_api
+      monitor: global
+      tier: sv
+      type: git
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_1h{component="workhorse_auth_api",env="gstg",monitor="global",tier="sv",type="git"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_1h{component="workhorse_auth_api",env="gstg",monitor="global",tier="sv",type="git"} offset 30s
       )
