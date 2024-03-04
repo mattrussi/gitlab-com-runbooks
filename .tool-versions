@@ -17,5 +17,5 @@ shfmt        3.8.0 # datasource=github-releases depName=mvdan/sh
 terraform    1.7.4 # datasource=github-releases depName=hashicorp/terraform
 thanos       0.34.1 # datasource=github-releases depName=thanos-io/thanos
 vault        1.15.6 # datasource=github-releases depName=hashicorp/vault
-yq           4.41.1 # datasource=github-releases depName=mikefarah/yq
+yq           4.42.1 # datasource=github-releases depName=mikefarah/yq
 mimirtool    2.11.0
