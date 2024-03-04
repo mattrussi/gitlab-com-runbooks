@@ -399,6 +399,25 @@
       },
       "title": "Postgres Table Bloat"
     },
+    "pg_vacuum_activity": {
+      "appliesTo": [],
+      "capacityPlanning": {
+        "changepoints_count": 25,
+        "forecast_days": 90,
+        "historical_days": 365,
+        "strategy": "quantile95_1h"
+      },
+      "description": "This measures the total saturation of autovacuum workers, as a percentage of total autovacuum capacity.\n",
+      "horizontallyScalable": true,
+      "raw_query": "pg_stat_activity_autovacuum_active{%(selector)s}\n/\npg_settings_autovacuum_max_workers{%(selector)s}\n",
+      "severity": "s3",
+      "slos": {
+        "alertTriggerDuration": "5m",
+        "hard": 0.9,
+        "soft": 0.6
+      },
+      "title": "Postgres Autovacuum Activity"
+    },
     "pg_xid_wraparound": {
       "appliesTo": [],
       "capacityPlanning": {
@@ -540,6 +559,10 @@
           "name": "pg_table_bloat",
           "url": ""
         },
+        "pg_vacuum_activity": {
+          "name": "pg_vacuum_activity",
+          "url": ""
+        },
         "pg_xid_wraparound": {
           "name": "pg_xid_wraparound",
           "url": ""
@@ -628,6 +651,10 @@
         },
         "pg_table_bloat": {
           "name": "pg_table_bloat",
+          "url": ""
+        },
+        "pg_vacuum_activity": {
+          "name": "pg_vacuum_activity",
           "url": ""
         },
         "pg_xid_wraparound": {
@@ -720,6 +747,10 @@
           "name": "pg_table_bloat",
           "url": ""
         },
+        "pg_vacuum_activity": {
+          "name": "pg_vacuum_activity",
+          "url": ""
+        },
         "pg_xid_wraparound": {
           "name": "pg_xid_wraparound",
           "url": ""
@@ -808,6 +839,10 @@
         },
         "pg_table_bloat": {
           "name": "pg_table_bloat",
+          "url": ""
+        },
+        "pg_vacuum_activity": {
+          "name": "pg_vacuum_activity",
           "url": ""
         },
         "pg_xid_wraparound": {
@@ -900,6 +935,10 @@
           "name": "pg_table_bloat",
           "url": ""
         },
+        "pg_vacuum_activity": {
+          "name": "pg_vacuum_activity",
+          "url": ""
+        },
         "pg_xid_wraparound": {
           "name": "pg_xid_wraparound",
           "url": ""
@@ -988,6 +1027,10 @@
         },
         "pg_table_bloat": {
           "name": "pg_table_bloat",
+          "url": ""
+        },
+        "pg_vacuum_activity": {
+          "name": "pg_vacuum_activity",
           "url": ""
         },
         "pg_xid_wraparound": {
@@ -1080,6 +1123,10 @@
           "name": "pg_table_bloat",
           "url": ""
         },
+        "pg_vacuum_activity": {
+          "name": "pg_vacuum_activity",
+          "url": ""
+        },
         "pg_xid_wraparound": {
           "name": "pg_xid_wraparound",
           "url": ""
@@ -1170,6 +1217,10 @@
           "name": "pg_table_bloat",
           "url": ""
         },
+        "pg_vacuum_activity": {
+          "name": "pg_vacuum_activity",
+          "url": ""
+        },
         "pg_xid_wraparound": {
           "name": "pg_xid_wraparound",
           "url": ""
@@ -1258,6 +1309,10 @@
         },
         "pg_table_bloat": {
           "name": "pg_table_bloat",
+          "url": ""
+        },
+        "pg_vacuum_activity": {
+          "name": "pg_vacuum_activity",
           "url": ""
         },
         "pg_xid_wraparound": {
