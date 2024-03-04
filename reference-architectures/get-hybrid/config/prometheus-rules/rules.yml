@@ -72,6 +72,32 @@ groups:
       tier: stor
       type: gitaly
     record: gitlab_component_errors:rate_5m
+  - expr: |
+      sum by () (
+        gitlab_component_errors:rate_5m{component="goserver",tier="stor",type="gitaly"}
+      )
+      /
+      sum by () (
+        gitlab_component_ops:rate_5m{component="goserver",tier="stor",type="gitaly"}
+      )
+    labels:
+      component: goserver
+      tier: stor
+      type: gitaly
+    record: gitlab_component_errors:ratio_5m
+  - expr: |
+      sum by () (
+        gitlab_component_apdex:success:rate_5m{component="goserver",tier="stor",type="gitaly"}
+      )
+      /
+      sum by () (
+        gitlab_component_apdex:weight:score_5m{component="goserver",tier="stor",type="gitaly"}
+      )
+    labels:
+      component: goserver
+      tier: stor
+      type: gitaly
+    record: gitlab_component_apdex:ratio_5m
 - interval: 2m
   name: 'Component-Level SLIs: gitaly - 30m burn-rate'
   rules:
@@ -129,6 +155,32 @@ groups:
       tier: stor
       type: gitaly
     record: gitlab_component_errors:rate_30m
+  - expr: |
+      sum by () (
+        gitlab_component_errors:rate_30m{component="goserver",tier="stor",type="gitaly"}
+      )
+      /
+      sum by () (
+        gitlab_component_ops:rate_30m{component="goserver",tier="stor",type="gitaly"}
+      )
+    labels:
+      component: goserver
+      tier: stor
+      type: gitaly
+    record: gitlab_component_errors:ratio_30m
+  - expr: |
+      sum by () (
+        gitlab_component_apdex:success:rate_30m{component="goserver",tier="stor",type="gitaly"}
+      )
+      /
+      sum by () (
+        gitlab_component_apdex:weight:score_30m{component="goserver",tier="stor",type="gitaly"}
+      )
+    labels:
+      component: goserver
+      tier: stor
+      type: gitaly
+    record: gitlab_component_apdex:ratio_30m
 - interval: 1m
   name: 'Component-Level SLIs: gitaly - 1h burn-rate'
   rules:
@@ -186,6 +238,32 @@ groups:
       tier: stor
       type: gitaly
     record: gitlab_component_errors:rate_1h
+  - expr: |
+      sum by () (
+        gitlab_component_errors:rate_1h{component="goserver",tier="stor",type="gitaly"}
+      )
+      /
+      sum by () (
+        gitlab_component_ops:rate_1h{component="goserver",tier="stor",type="gitaly"}
+      )
+    labels:
+      component: goserver
+      tier: stor
+      type: gitaly
+    record: gitlab_component_errors:ratio_1h
+  - expr: |
+      sum by () (
+        gitlab_component_apdex:success:rate_1h{component="goserver",tier="stor",type="gitaly"}
+      )
+      /
+      sum by () (
+        gitlab_component_apdex:weight:score_1h{component="goserver",tier="stor",type="gitaly"}
+      )
+    labels:
+      component: goserver
+      tier: stor
+      type: gitaly
+    record: gitlab_component_apdex:ratio_1h
 - interval: 2m
   name: 'Component-Level SLIs: gitaly - 6h burn-rate'
   rules:
@@ -243,6 +321,32 @@ groups:
       tier: stor
       type: gitaly
     record: gitlab_component_errors:rate_6h
+  - expr: |
+      sum by () (
+        gitlab_component_errors:rate_6h{component="goserver",tier="stor",type="gitaly"}
+      )
+      /
+      sum by () (
+        gitlab_component_ops:rate_6h{component="goserver",tier="stor",type="gitaly"}
+      )
+    labels:
+      component: goserver
+      tier: stor
+      type: gitaly
+    record: gitlab_component_errors:ratio_6h
+  - expr: |
+      sum by () (
+        gitlab_component_apdex:success:rate_6h{component="goserver",tier="stor",type="gitaly"}
+      )
+      /
+      sum by () (
+        gitlab_component_apdex:weight:score_6h{component="goserver",tier="stor",type="gitaly"}
+      )
+    labels:
+      component: goserver
+      tier: stor
+      type: gitaly
+    record: gitlab_component_apdex:ratio_6h
 - interval: 1m
   name: 'Component mapping: gitaly'
   rules:
@@ -309,6 +413,32 @@ groups:
       tier: sv
       type: gitlab-shell
     record: gitlab_component_errors:rate_5m
+  - expr: |
+      sum by () (
+        gitlab_component_errors:rate_5m{component="grpc_requests",tier="sv",type="gitlab-shell"}
+      )
+      /
+      sum by () (
+        gitlab_component_ops:rate_5m{component="grpc_requests",tier="sv",type="gitlab-shell"}
+      )
+    labels:
+      component: grpc_requests
+      tier: sv
+      type: gitlab-shell
+    record: gitlab_component_errors:ratio_5m
+  - expr: |
+      sum by () (
+        gitlab_component_apdex:success:rate_5m{component="grpc_requests",tier="sv",type="gitlab-shell"}
+      )
+      /
+      sum by () (
+        gitlab_component_apdex:weight:score_5m{component="grpc_requests",tier="sv",type="gitlab-shell"}
+      )
+    labels:
+      component: grpc_requests
+      tier: sv
+      type: gitlab-shell
+    record: gitlab_component_apdex:ratio_5m
 - interval: 2m
   name: 'Component-Level SLIs: gitlab-shell - 30m burn-rate'
   rules:
@@ -364,6 +494,32 @@ groups:
       tier: sv
       type: gitlab-shell
     record: gitlab_component_errors:rate_30m
+  - expr: |
+      sum by () (
+        gitlab_component_errors:rate_30m{component="grpc_requests",tier="sv",type="gitlab-shell"}
+      )
+      /
+      sum by () (
+        gitlab_component_ops:rate_30m{component="grpc_requests",tier="sv",type="gitlab-shell"}
+      )
+    labels:
+      component: grpc_requests
+      tier: sv
+      type: gitlab-shell
+    record: gitlab_component_errors:ratio_30m
+  - expr: |
+      sum by () (
+        gitlab_component_apdex:success:rate_30m{component="grpc_requests",tier="sv",type="gitlab-shell"}
+      )
+      /
+      sum by () (
+        gitlab_component_apdex:weight:score_30m{component="grpc_requests",tier="sv",type="gitlab-shell"}
+      )
+    labels:
+      component: grpc_requests
+      tier: sv
+      type: gitlab-shell
+    record: gitlab_component_apdex:ratio_30m
 - interval: 1m
   name: 'Component-Level SLIs: gitlab-shell - 1h burn-rate'
   rules:
@@ -419,6 +575,32 @@ groups:
       tier: sv
       type: gitlab-shell
     record: gitlab_component_errors:rate_1h
+  - expr: |
+      sum by () (
+        gitlab_component_errors:rate_1h{component="grpc_requests",tier="sv",type="gitlab-shell"}
+      )
+      /
+      sum by () (
+        gitlab_component_ops:rate_1h{component="grpc_requests",tier="sv",type="gitlab-shell"}
+      )
+    labels:
+      component: grpc_requests
+      tier: sv
+      type: gitlab-shell
+    record: gitlab_component_errors:ratio_1h
+  - expr: |
+      sum by () (
+        gitlab_component_apdex:success:rate_1h{component="grpc_requests",tier="sv",type="gitlab-shell"}
+      )
+      /
+      sum by () (
+        gitlab_component_apdex:weight:score_1h{component="grpc_requests",tier="sv",type="gitlab-shell"}
+      )
+    labels:
+      component: grpc_requests
+      tier: sv
+      type: gitlab-shell
+    record: gitlab_component_apdex:ratio_1h
 - interval: 2m
   name: 'Component-Level SLIs: gitlab-shell - 6h burn-rate'
   rules:
@@ -474,6 +656,32 @@ groups:
       tier: sv
       type: gitlab-shell
     record: gitlab_component_errors:rate_6h
+  - expr: |
+      sum by () (
+        gitlab_component_errors:rate_6h{component="grpc_requests",tier="sv",type="gitlab-shell"}
+      )
+      /
+      sum by () (
+        gitlab_component_ops:rate_6h{component="grpc_requests",tier="sv",type="gitlab-shell"}
+      )
+    labels:
+      component: grpc_requests
+      tier: sv
+      type: gitlab-shell
+    record: gitlab_component_errors:ratio_6h
+  - expr: |
+      sum by () (
+        gitlab_component_apdex:success:rate_6h{component="grpc_requests",tier="sv",type="gitlab-shell"}
+      )
+      /
+      sum by () (
+        gitlab_component_apdex:weight:score_6h{component="grpc_requests",tier="sv",type="gitlab-shell"}
+      )
+    labels:
+      component: grpc_requests
+      tier: sv
+      type: gitlab-shell
+    record: gitlab_component_apdex:ratio_6h
 - interval: 1m
   name: 'Component mapping: gitlab-shell'
   rules:
@@ -542,6 +750,32 @@ groups:
     record: gitlab_component_errors:rate_5m
   - expr: |
       sum by () (
+        gitlab_component_errors:rate_5m{component="proxy",tier="stor",type="praefect"}
+      )
+      /
+      sum by () (
+        gitlab_component_ops:rate_5m{component="proxy",tier="stor",type="praefect"}
+      )
+    labels:
+      component: proxy
+      tier: stor
+      type: praefect
+    record: gitlab_component_errors:ratio_5m
+  - expr: |
+      sum by () (
+        gitlab_component_apdex:success:rate_5m{component="proxy",tier="stor",type="praefect"}
+      )
+      /
+      sum by () (
+        gitlab_component_apdex:weight:score_5m{component="proxy",tier="stor",type="praefect"}
+      )
+    labels:
+      component: proxy
+      tier: stor
+      type: praefect
+    record: gitlab_component_apdex:ratio_5m
+  - expr: |
+      sum by () (
         rate(gitaly_praefect_replication_delay_bucket{le="300"}[5m])
       )
     labels:
@@ -567,6 +801,32 @@ groups:
       tier: stor
       type: praefect
     record: gitlab_component_ops:rate_5m
+  - expr: |
+      sum by () (
+        gitlab_component_errors:rate_5m{component="replicator_queue",tier="stor",type="praefect"}
+      )
+      /
+      sum by () (
+        gitlab_component_ops:rate_5m{component="replicator_queue",tier="stor",type="praefect"}
+      )
+    labels:
+      component: replicator_queue
+      tier: stor
+      type: praefect
+    record: gitlab_component_errors:ratio_5m
+  - expr: |
+      sum by () (
+        gitlab_component_apdex:success:rate_5m{component="replicator_queue",tier="stor",type="praefect"}
+      )
+      /
+      sum by () (
+        gitlab_component_apdex:weight:score_5m{component="replicator_queue",tier="stor",type="praefect"}
+      )
+    labels:
+      component: replicator_queue
+      tier: stor
+      type: praefect
+    record: gitlab_component_apdex:ratio_5m
 - interval: 2m
   name: 'Component-Level SLIs: praefect - 30m burn-rate'
   rules:
@@ -624,6 +884,32 @@ groups:
     record: gitlab_component_errors:rate_30m
   - expr: |
       sum by () (
+        gitlab_component_errors:rate_30m{component="proxy",tier="stor",type="praefect"}
+      )
+      /
+      sum by () (
+        gitlab_component_ops:rate_30m{component="proxy",tier="stor",type="praefect"}
+      )
+    labels:
+      component: proxy
+      tier: stor
+      type: praefect
+    record: gitlab_component_errors:ratio_30m
+  - expr: |
+      sum by () (
+        gitlab_component_apdex:success:rate_30m{component="proxy",tier="stor",type="praefect"}
+      )
+      /
+      sum by () (
+        gitlab_component_apdex:weight:score_30m{component="proxy",tier="stor",type="praefect"}
+      )
+    labels:
+      component: proxy
+      tier: stor
+      type: praefect
+    record: gitlab_component_apdex:ratio_30m
+  - expr: |
+      sum by () (
         rate(gitaly_praefect_replication_delay_bucket{le="300"}[30m])
       )
     labels:
@@ -649,6 +935,32 @@ groups:
       tier: stor
       type: praefect
     record: gitlab_component_ops:rate_30m
+  - expr: |
+      sum by () (
+        gitlab_component_errors:rate_30m{component="replicator_queue",tier="stor",type="praefect"}
+      )
+      /
+      sum by () (
+        gitlab_component_ops:rate_30m{component="replicator_queue",tier="stor",type="praefect"}
+      )
+    labels:
+      component: replicator_queue
+      tier: stor
+      type: praefect
+    record: gitlab_component_errors:ratio_30m
+  - expr: |
+      sum by () (
+        gitlab_component_apdex:success:rate_30m{component="replicator_queue",tier="stor",type="praefect"}
+      )
+      /
+      sum by () (
+        gitlab_component_apdex:weight:score_30m{component="replicator_queue",tier="stor",type="praefect"}
+      )
+    labels:
+      component: replicator_queue
+      tier: stor
+      type: praefect
+    record: gitlab_component_apdex:ratio_30m
 - interval: 1m
   name: 'Component-Level SLIs: praefect - 1h burn-rate'
   rules:
@@ -706,6 +1018,32 @@ groups:
     record: gitlab_component_errors:rate_1h
   - expr: |
       sum by () (
+        gitlab_component_errors:rate_1h{component="proxy",tier="stor",type="praefect"}
+      )
+      /
+      sum by () (
+        gitlab_component_ops:rate_1h{component="proxy",tier="stor",type="praefect"}
+      )
+    labels:
+      component: proxy
+      tier: stor
+      type: praefect
+    record: gitlab_component_errors:ratio_1h
+  - expr: |
+      sum by () (
+        gitlab_component_apdex:success:rate_1h{component="proxy",tier="stor",type="praefect"}
+      )
+      /
+      sum by () (
+        gitlab_component_apdex:weight:score_1h{component="proxy",tier="stor",type="praefect"}
+      )
+    labels:
+      component: proxy
+      tier: stor
+      type: praefect
+    record: gitlab_component_apdex:ratio_1h
+  - expr: |
+      sum by () (
         rate(gitaly_praefect_replication_delay_bucket{le="300"}[1h])
       )
     labels:
@@ -731,6 +1069,32 @@ groups:
       tier: stor
       type: praefect
     record: gitlab_component_ops:rate_1h
+  - expr: |
+      sum by () (
+        gitlab_component_errors:rate_1h{component="replicator_queue",tier="stor",type="praefect"}
+      )
+      /
+      sum by () (
+        gitlab_component_ops:rate_1h{component="replicator_queue",tier="stor",type="praefect"}
+      )
+    labels:
+      component: replicator_queue
+      tier: stor
+      type: praefect
+    record: gitlab_component_errors:ratio_1h
+  - expr: |
+      sum by () (
+        gitlab_component_apdex:success:rate_1h{component="replicator_queue",tier="stor",type="praefect"}
+      )
+      /
+      sum by () (
+        gitlab_component_apdex:weight:score_1h{component="replicator_queue",tier="stor",type="praefect"}
+      )
+    labels:
+      component: replicator_queue
+      tier: stor
+      type: praefect
+    record: gitlab_component_apdex:ratio_1h
 - interval: 2m
   name: 'Component-Level SLIs: praefect - 6h burn-rate'
   rules:
@@ -788,6 +1152,32 @@ groups:
     record: gitlab_component_errors:rate_6h
   - expr: |
       sum by () (
+        gitlab_component_errors:rate_6h{component="proxy",tier="stor",type="praefect"}
+      )
+      /
+      sum by () (
+        gitlab_component_ops:rate_6h{component="proxy",tier="stor",type="praefect"}
+      )
+    labels:
+      component: proxy
+      tier: stor
+      type: praefect
+    record: gitlab_component_errors:ratio_6h
+  - expr: |
+      sum by () (
+        gitlab_component_apdex:success:rate_6h{component="proxy",tier="stor",type="praefect"}
+      )
+      /
+      sum by () (
+        gitlab_component_apdex:weight:score_6h{component="proxy",tier="stor",type="praefect"}
+      )
+    labels:
+      component: proxy
+      tier: stor
+      type: praefect
+    record: gitlab_component_apdex:ratio_6h
+  - expr: |
+      sum by () (
         rate(gitaly_praefect_replication_delay_bucket{le="300"}[6h])
       )
     labels:
@@ -813,6 +1203,32 @@ groups:
       tier: stor
       type: praefect
     record: gitlab_component_ops:rate_6h
+  - expr: |
+      sum by () (
+        gitlab_component_errors:rate_6h{component="replicator_queue",tier="stor",type="praefect"}
+      )
+      /
+      sum by () (
+        gitlab_component_ops:rate_6h{component="replicator_queue",tier="stor",type="praefect"}
+      )
+    labels:
+      component: replicator_queue
+      tier: stor
+      type: praefect
+    record: gitlab_component_errors:ratio_6h
+  - expr: |
+      sum by () (
+        gitlab_component_apdex:success:rate_6h{component="replicator_queue",tier="stor",type="praefect"}
+      )
+      /
+      sum by () (
+        gitlab_component_apdex:weight:score_6h{component="replicator_queue",tier="stor",type="praefect"}
+      )
+    labels:
+      component: replicator_queue
+      tier: stor
+      type: praefect
+    record: gitlab_component_apdex:ratio_6h
 - interval: 1m
   name: 'Component mapping: praefect'
   rules:
@@ -888,6 +1304,32 @@ groups:
       type: registry
     record: gitlab_component_errors:rate_5m
   - expr: |
+      sum by () (
+        gitlab_component_errors:rate_5m{component="server",tier="sv",type="registry"}
+      )
+      /
+      sum by () (
+        gitlab_component_ops:rate_5m{component="server",tier="sv",type="registry"}
+      )
+    labels:
+      component: server
+      tier: sv
+      type: registry
+    record: gitlab_component_errors:ratio_5m
+  - expr: |
+      sum by () (
+        gitlab_component_apdex:success:rate_5m{component="server",tier="sv",type="registry"}
+      )
+      /
+      sum by () (
+        gitlab_component_apdex:weight:score_5m{component="server",tier="sv",type="registry"}
+      )
+    labels:
+      component: server
+      tier: sv
+      type: registry
+    record: gitlab_component_apdex:ratio_5m
+  - expr: |
       (
         sum by () (
           rate(registry_http_request_duration_seconds_bucket{le="0.5",method=~"delete",route="/v2/{name}/blobs/{digest}"}[5m])
@@ -922,6 +1364,32 @@ groups:
       tier: sv
       type: registry
     record: gitlab_component_ops:rate_5m
+  - expr: |
+      sum by () (
+        gitlab_component_errors:rate_5m{component="server_route_blob_digest_deletes",tier="sv",type="registry"}
+      )
+      /
+      sum by () (
+        gitlab_component_ops:rate_5m{component="server_route_blob_digest_deletes",tier="sv",type="registry"}
+      )
+    labels:
+      component: server_route_blob_digest_deletes
+      tier: sv
+      type: registry
+    record: gitlab_component_errors:ratio_5m
+  - expr: |
+      sum by () (
+        gitlab_component_apdex:success:rate_5m{component="server_route_blob_digest_deletes",tier="sv",type="registry"}
+      )
+      /
+      sum by () (
+        gitlab_component_apdex:weight:score_5m{component="server_route_blob_digest_deletes",tier="sv",type="registry"}
+      )
+    labels:
+      component: server_route_blob_digest_deletes
+      tier: sv
+      type: registry
+    record: gitlab_component_apdex:ratio_5m
   - expr: |
       (
         sum by () (
@@ -958,6 +1426,32 @@ groups:
       type: registry
     record: gitlab_component_ops:rate_5m
   - expr: |
+      sum by () (
+        gitlab_component_errors:rate_5m{component="server_route_blob_digest_reads",tier="sv",type="registry"}
+      )
+      /
+      sum by () (
+        gitlab_component_ops:rate_5m{component="server_route_blob_digest_reads",tier="sv",type="registry"}
+      )
+    labels:
+      component: server_route_blob_digest_reads
+      tier: sv
+      type: registry
+    record: gitlab_component_errors:ratio_5m
+  - expr: |
+      sum by () (
+        gitlab_component_apdex:success:rate_5m{component="server_route_blob_digest_reads",tier="sv",type="registry"}
+      )
+      /
+      sum by () (
+        gitlab_component_apdex:weight:score_5m{component="server_route_blob_digest_reads",tier="sv",type="registry"}
+      )
+    labels:
+      component: server_route_blob_digest_reads
+      tier: sv
+      type: registry
+    record: gitlab_component_apdex:ratio_5m
+  - expr: |
       (
         sum by () (
           rate(registry_http_request_duration_seconds_bucket{le="2.5",method=~"patch|post|put",route="/v2/{name}/blobs/{digest}"}[5m])
@@ -992,6 +1486,32 @@ groups:
       tier: sv
       type: registry
     record: gitlab_component_ops:rate_5m
+  - expr: |
+      sum by () (
+        gitlab_component_errors:rate_5m{component="server_route_blob_digest_writes",tier="sv",type="registry"}
+      )
+      /
+      sum by () (
+        gitlab_component_ops:rate_5m{component="server_route_blob_digest_writes",tier="sv",type="registry"}
+      )
+    labels:
+      component: server_route_blob_digest_writes
+      tier: sv
+      type: registry
+    record: gitlab_component_errors:ratio_5m
+  - expr: |
+      sum by () (
+        gitlab_component_apdex:success:rate_5m{component="server_route_blob_digest_writes",tier="sv",type="registry"}
+      )
+      /
+      sum by () (
+        gitlab_component_apdex:weight:score_5m{component="server_route_blob_digest_writes",tier="sv",type="registry"}
+      )
+    labels:
+      component: server_route_blob_digest_writes
+      tier: sv
+      type: registry
+    record: gitlab_component_apdex:ratio_5m
   - expr: |
       (
         sum by () (
@@ -1028,6 +1548,32 @@ groups:
       type: registry
     record: gitlab_component_ops:rate_5m
   - expr: |
+      sum by () (
+        gitlab_component_errors:rate_5m{component="server_route_blob_upload_uuid_deletes",tier="sv",type="registry"}
+      )
+      /
+      sum by () (
+        gitlab_component_ops:rate_5m{component="server_route_blob_upload_uuid_deletes",tier="sv",type="registry"}
+      )
+    labels:
+      component: server_route_blob_upload_uuid_deletes
+      tier: sv
+      type: registry
+    record: gitlab_component_errors:ratio_5m
+  - expr: |
+      sum by () (
+        gitlab_component_apdex:success:rate_5m{component="server_route_blob_upload_uuid_deletes",tier="sv",type="registry"}
+      )
+      /
+      sum by () (
+        gitlab_component_apdex:weight:score_5m{component="server_route_blob_upload_uuid_deletes",tier="sv",type="registry"}
+      )
+    labels:
+      component: server_route_blob_upload_uuid_deletes
+      tier: sv
+      type: registry
+    record: gitlab_component_apdex:ratio_5m
+  - expr: |
       (
         sum by () (
           rate(registry_http_request_duration_seconds_bucket{le="1",method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}"}[5m])
@@ -1063,6 +1609,32 @@ groups:
       type: registry
     record: gitlab_component_ops:rate_5m
   - expr: |
+      sum by () (
+        gitlab_component_errors:rate_5m{component="server_route_blob_upload_uuid_reads",tier="sv",type="registry"}
+      )
+      /
+      sum by () (
+        gitlab_component_ops:rate_5m{component="server_route_blob_upload_uuid_reads",tier="sv",type="registry"}
+      )
+    labels:
+      component: server_route_blob_upload_uuid_reads
+      tier: sv
+      type: registry
+    record: gitlab_component_errors:ratio_5m
+  - expr: |
+      sum by () (
+        gitlab_component_apdex:success:rate_5m{component="server_route_blob_upload_uuid_reads",tier="sv",type="registry"}
+      )
+      /
+      sum by () (
+        gitlab_component_apdex:weight:score_5m{component="server_route_blob_upload_uuid_reads",tier="sv",type="registry"}
+      )
+    labels:
+      component: server_route_blob_upload_uuid_reads
+      tier: sv
+      type: registry
+    record: gitlab_component_apdex:ratio_5m
+  - expr: |
       (
         sum by () (
           rate(registry_http_request_duration_seconds_bucket{le="25",method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}"}[5m])
@@ -1097,6 +1669,32 @@ groups:
       tier: sv
       type: registry
     record: gitlab_component_ops:rate_5m
+  - expr: |
+      sum by () (
+        gitlab_component_errors:rate_5m{component="server_route_blob_upload_uuid_writes",tier="sv",type="registry"}
+      )
+      /
+      sum by () (
+        gitlab_component_ops:rate_5m{component="server_route_blob_upload_uuid_writes",tier="sv",type="registry"}
+      )
+    labels:
+      component: server_route_blob_upload_uuid_writes
+      tier: sv
+      type: registry
+    record: gitlab_component_errors:ratio_5m
+  - expr: |
+      sum by () (
+        gitlab_component_apdex:success:rate_5m{component="server_route_blob_upload_uuid_writes",tier="sv",type="registry"}
+      )
+      /
+      sum by () (
+        gitlab_component_apdex:weight:score_5m{component="server_route_blob_upload_uuid_writes",tier="sv",type="registry"}
+      )
+    labels:
+      component: server_route_blob_upload_uuid_writes
+      tier: sv
+      type: registry
+    record: gitlab_component_apdex:ratio_5m
 - interval: 2m
   name: 'Component-Level SLIs: registry - 30m burn-rate'
   rules:
@@ -1153,6 +1751,32 @@ groups:
       type: registry
     record: gitlab_component_errors:rate_30m
   - expr: |
+      sum by () (
+        gitlab_component_errors:rate_30m{component="server",tier="sv",type="registry"}
+      )
+      /
+      sum by () (
+        gitlab_component_ops:rate_30m{component="server",tier="sv",type="registry"}
+      )
+    labels:
+      component: server
+      tier: sv
+      type: registry
+    record: gitlab_component_errors:ratio_30m
+  - expr: |
+      sum by () (
+        gitlab_component_apdex:success:rate_30m{component="server",tier="sv",type="registry"}
+      )
+      /
+      sum by () (
+        gitlab_component_apdex:weight:score_30m{component="server",tier="sv",type="registry"}
+      )
+    labels:
+      component: server
+      tier: sv
+      type: registry
+    record: gitlab_component_apdex:ratio_30m
+  - expr: |
       (
         sum by () (
           rate(registry_http_request_duration_seconds_bucket{le="0.5",method=~"delete",route="/v2/{name}/blobs/{digest}"}[30m])
@@ -1187,6 +1811,32 @@ groups:
       tier: sv
       type: registry
     record: gitlab_component_ops:rate_30m
+  - expr: |
+      sum by () (
+        gitlab_component_errors:rate_30m{component="server_route_blob_digest_deletes",tier="sv",type="registry"}
+      )
+      /
+      sum by () (
+        gitlab_component_ops:rate_30m{component="server_route_blob_digest_deletes",tier="sv",type="registry"}
+      )
+    labels:
+      component: server_route_blob_digest_deletes
+      tier: sv
+      type: registry
+    record: gitlab_component_errors:ratio_30m
+  - expr: |
+      sum by () (
+        gitlab_component_apdex:success:rate_30m{component="server_route_blob_digest_deletes",tier="sv",type="registry"}
+      )
+      /
+      sum by () (
+        gitlab_component_apdex:weight:score_30m{component="server_route_blob_digest_deletes",tier="sv",type="registry"}
+      )
+    labels:
+      component: server_route_blob_digest_deletes
+      tier: sv
+      type: registry
+    record: gitlab_component_apdex:ratio_30m
   - expr: |
       (
         sum by () (
@@ -1223,6 +1873,32 @@ groups:
       type: registry
     record: gitlab_component_ops:rate_30m
   - expr: |
+      sum by () (
+        gitlab_component_errors:rate_30m{component="server_route_blob_digest_reads",tier="sv",type="registry"}
+      )
+      /
+      sum by () (
+        gitlab_component_ops:rate_30m{component="server_route_blob_digest_reads",tier="sv",type="registry"}
+      )
+    labels:
+      component: server_route_blob_digest_reads
+      tier: sv
+      type: registry
+    record: gitlab_component_errors:ratio_30m
+  - expr: |
+      sum by () (
+        gitlab_component_apdex:success:rate_30m{component="server_route_blob_digest_reads",tier="sv",type="registry"}
+      )
+      /
+      sum by () (
+        gitlab_component_apdex:weight:score_30m{component="server_route_blob_digest_reads",tier="sv",type="registry"}
+      )
+    labels:
+      component: server_route_blob_digest_reads
+      tier: sv
+      type: registry
+    record: gitlab_component_apdex:ratio_30m
+  - expr: |
       (
         sum by () (
           rate(registry_http_request_duration_seconds_bucket{le="2.5",method=~"patch|post|put",route="/v2/{name}/blobs/{digest}"}[30m])
@@ -1257,6 +1933,32 @@ groups:
       tier: sv
       type: registry
     record: gitlab_component_ops:rate_30m
+  - expr: |
+      sum by () (
+        gitlab_component_errors:rate_30m{component="server_route_blob_digest_writes",tier="sv",type="registry"}
+      )
+      /
+      sum by () (
+        gitlab_component_ops:rate_30m{component="server_route_blob_digest_writes",tier="sv",type="registry"}
+      )
+    labels:
+      component: server_route_blob_digest_writes
+      tier: sv
+      type: registry
+    record: gitlab_component_errors:ratio_30m
+  - expr: |
+      sum by () (
+        gitlab_component_apdex:success:rate_30m{component="server_route_blob_digest_writes",tier="sv",type="registry"}
+      )
+      /
+      sum by () (
+        gitlab_component_apdex:weight:score_30m{component="server_route_blob_digest_writes",tier="sv",type="registry"}
+      )
+    labels:
+      component: server_route_blob_digest_writes
+      tier: sv
+      type: registry
+    record: gitlab_component_apdex:ratio_30m
   - expr: |
       (
         sum by () (
@@ -1293,6 +1995,32 @@ groups:
       type: registry
     record: gitlab_component_ops:rate_30m
   - expr: |
+      sum by () (
+        gitlab_component_errors:rate_30m{component="server_route_blob_upload_uuid_deletes",tier="sv",type="registry"}
+      )
+      /
+      sum by () (
+        gitlab_component_ops:rate_30m{component="server_route_blob_upload_uuid_deletes",tier="sv",type="registry"}
+      )
+    labels:
+      component: server_route_blob_upload_uuid_deletes
+      tier: sv
+      type: registry
+    record: gitlab_component_errors:ratio_30m
+  - expr: |
+      sum by () (
+        gitlab_component_apdex:success:rate_30m{component="server_route_blob_upload_uuid_deletes",tier="sv",type="registry"}
+      )
+      /
+      sum by () (
+        gitlab_component_apdex:weight:score_30m{component="server_route_blob_upload_uuid_deletes",tier="sv",type="registry"}
+      )
+    labels:
+      component: server_route_blob_upload_uuid_deletes
+      tier: sv
+      type: registry
+    record: gitlab_component_apdex:ratio_30m
+  - expr: |
       (
         sum by () (
           rate(registry_http_request_duration_seconds_bucket{le="1",method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}"}[30m])
@@ -1328,6 +2056,32 @@ groups:
       type: registry
     record: gitlab_component_ops:rate_30m
   - expr: |
+      sum by () (
+        gitlab_component_errors:rate_30m{component="server_route_blob_upload_uuid_reads",tier="sv",type="registry"}
+      )
+      /
+      sum by () (
+        gitlab_component_ops:rate_30m{component="server_route_blob_upload_uuid_reads",tier="sv",type="registry"}
+      )
+    labels:
+      component: server_route_blob_upload_uuid_reads
+      tier: sv
+      type: registry
+    record: gitlab_component_errors:ratio_30m
+  - expr: |
+      sum by () (
+        gitlab_component_apdex:success:rate_30m{component="server_route_blob_upload_uuid_reads",tier="sv",type="registry"}
+      )
+      /
+      sum by () (
+        gitlab_component_apdex:weight:score_30m{component="server_route_blob_upload_uuid_reads",tier="sv",type="registry"}
+      )
+    labels:
+      component: server_route_blob_upload_uuid_reads
+      tier: sv
+      type: registry
+    record: gitlab_component_apdex:ratio_30m
+  - expr: |
       (
         sum by () (
           rate(registry_http_request_duration_seconds_bucket{le="25",method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}"}[30m])
@@ -1362,6 +2116,32 @@ groups:
       tier: sv
       type: registry
     record: gitlab_component_ops:rate_30m
+  - expr: |
+      sum by () (
+        gitlab_component_errors:rate_30m{component="server_route_blob_upload_uuid_writes",tier="sv",type="registry"}
+      )
+      /
+      sum by () (
+        gitlab_component_ops:rate_30m{component="server_route_blob_upload_uuid_writes",tier="sv",type="registry"}
+      )
+    labels:
+      component: server_route_blob_upload_uuid_writes
+      tier: sv
+      type: registry
+    record: gitlab_component_errors:ratio_30m
+  - expr: |
+      sum by () (
+        gitlab_component_apdex:success:rate_30m{component="server_route_blob_upload_uuid_writes",tier="sv",type="registry"}
+      )
+      /
+      sum by () (
+        gitlab_component_apdex:weight:score_30m{component="server_route_blob_upload_uuid_writes",tier="sv",type="registry"}
+      )
+    labels:
+      component: server_route_blob_upload_uuid_writes
+      tier: sv
+      type: registry
+    record: gitlab_component_apdex:ratio_30m
 - interval: 1m
   name: 'Component-Level SLIs: registry - 1h burn-rate'
   rules:
@@ -1418,6 +2198,32 @@ groups:
       type: registry
     record: gitlab_component_errors:rate_1h
   - expr: |
+      sum by () (
+        gitlab_component_errors:rate_1h{component="server",tier="sv",type="registry"}
+      )
+      /
+      sum by () (
+        gitlab_component_ops:rate_1h{component="server",tier="sv",type="registry"}
+      )
+    labels:
+      component: server
+      tier: sv
+      type: registry
+    record: gitlab_component_errors:ratio_1h
+  - expr: |
+      sum by () (
+        gitlab_component_apdex:success:rate_1h{component="server",tier="sv",type="registry"}
+      )
+      /
+      sum by () (
+        gitlab_component_apdex:weight:score_1h{component="server",tier="sv",type="registry"}
+      )
+    labels:
+      component: server
+      tier: sv
+      type: registry
+    record: gitlab_component_apdex:ratio_1h
+  - expr: |
       (
         sum by () (
           rate(registry_http_request_duration_seconds_bucket{le="0.5",method=~"delete",route="/v2/{name}/blobs/{digest}"}[1h])
@@ -1452,6 +2258,32 @@ groups:
       tier: sv
       type: registry
     record: gitlab_component_ops:rate_1h
+  - expr: |
+      sum by () (
+        gitlab_component_errors:rate_1h{component="server_route_blob_digest_deletes",tier="sv",type="registry"}
+      )
+      /
+      sum by () (
+        gitlab_component_ops:rate_1h{component="server_route_blob_digest_deletes",tier="sv",type="registry"}
+      )
+    labels:
+      component: server_route_blob_digest_deletes
+      tier: sv
+      type: registry
+    record: gitlab_component_errors:ratio_1h
+  - expr: |
+      sum by () (
+        gitlab_component_apdex:success:rate_1h{component="server_route_blob_digest_deletes",tier="sv",type="registry"}
+      )
+      /
+      sum by () (
+        gitlab_component_apdex:weight:score_1h{component="server_route_blob_digest_deletes",tier="sv",type="registry"}
+      )
+    labels:
+      component: server_route_blob_digest_deletes
+      tier: sv
+      type: registry
+    record: gitlab_component_apdex:ratio_1h
   - expr: |
       (
         sum by () (
@@ -1488,6 +2320,32 @@ groups:
       type: registry
     record: gitlab_component_ops:rate_1h
   - expr: |
+      sum by () (
+        gitlab_component_errors:rate_1h{component="server_route_blob_digest_reads",tier="sv",type="registry"}
+      )
+      /
+      sum by () (
+        gitlab_component_ops:rate_1h{component="server_route_blob_digest_reads",tier="sv",type="registry"}
+      )
+    labels:
+      component: server_route_blob_digest_reads
+      tier: sv
+      type: registry
+    record: gitlab_component_errors:ratio_1h
+  - expr: |
+      sum by () (
+        gitlab_component_apdex:success:rate_1h{component="server_route_blob_digest_reads",tier="sv",type="registry"}
+      )
+      /
+      sum by () (
+        gitlab_component_apdex:weight:score_1h{component="server_route_blob_digest_reads",tier="sv",type="registry"}
+      )
+    labels:
+      component: server_route_blob_digest_reads
+      tier: sv
+      type: registry
+    record: gitlab_component_apdex:ratio_1h
+  - expr: |
       (
         sum by () (
           rate(registry_http_request_duration_seconds_bucket{le="2.5",method=~"patch|post|put",route="/v2/{name}/blobs/{digest}"}[1h])
@@ -1522,6 +2380,32 @@ groups:
       tier: sv
       type: registry
     record: gitlab_component_ops:rate_1h
+  - expr: |
+      sum by () (
+        gitlab_component_errors:rate_1h{component="server_route_blob_digest_writes",tier="sv",type="registry"}
+      )
+      /
+      sum by () (
+        gitlab_component_ops:rate_1h{component="server_route_blob_digest_writes",tier="sv",type="registry"}
+      )
+    labels:
+      component: server_route_blob_digest_writes
+      tier: sv
+      type: registry
+    record: gitlab_component_errors:ratio_1h
+  - expr: |
+      sum by () (
+        gitlab_component_apdex:success:rate_1h{component="server_route_blob_digest_writes",tier="sv",type="registry"}
+      )
+      /
+      sum by () (
+        gitlab_component_apdex:weight:score_1h{component="server_route_blob_digest_writes",tier="sv",type="registry"}
+      )
+    labels:
+      component: server_route_blob_digest_writes
+      tier: sv
+      type: registry
+    record: gitlab_component_apdex:ratio_1h
   - expr: |
       (
         sum by () (
@@ -1558,6 +2442,32 @@ groups:
       type: registry
     record: gitlab_component_ops:rate_1h
   - expr: |
+      sum by () (
+        gitlab_component_errors:rate_1h{component="server_route_blob_upload_uuid_deletes",tier="sv",type="registry"}
+      )
+      /
+      sum by () (
+        gitlab_component_ops:rate_1h{component="server_route_blob_upload_uuid_deletes",tier="sv",type="registry"}
+      )
+    labels:
+      component: server_route_blob_upload_uuid_deletes
+      tier: sv
+      type: registry
+    record: gitlab_component_errors:ratio_1h
+  - expr: |
+      sum by () (
+        gitlab_component_apdex:success:rate_1h{component="server_route_blob_upload_uuid_deletes",tier="sv",type="registry"}
+      )
+      /
+      sum by () (
+        gitlab_component_apdex:weight:score_1h{component="server_route_blob_upload_uuid_deletes",tier="sv",type="registry"}
+      )
+    labels:
+      component: server_route_blob_upload_uuid_deletes
+      tier: sv
+      type: registry
+    record: gitlab_component_apdex:ratio_1h
+  - expr: |
       (
         sum by () (
           rate(registry_http_request_duration_seconds_bucket{le="1",method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}"}[1h])
@@ -1593,6 +2503,32 @@ groups:
       type: registry
     record: gitlab_component_ops:rate_1h
   - expr: |
+      sum by () (
+        gitlab_component_errors:rate_1h{component="server_route_blob_upload_uuid_reads",tier="sv",type="registry"}
+      )
+      /
+      sum by () (
+        gitlab_component_ops:rate_1h{component="server_route_blob_upload_uuid_reads",tier="sv",type="registry"}
+      )
+    labels:
+      component: server_route_blob_upload_uuid_reads
+      tier: sv
+      type: registry
+    record: gitlab_component_errors:ratio_1h
+  - expr: |
+      sum by () (
+        gitlab_component_apdex:success:rate_1h{component="server_route_blob_upload_uuid_reads",tier="sv",type="registry"}
+      )
+      /
+      sum by () (
+        gitlab_component_apdex:weight:score_1h{component="server_route_blob_upload_uuid_reads",tier="sv",type="registry"}
+      )
+    labels:
+      component: server_route_blob_upload_uuid_reads
+      tier: sv
+      type: registry
+    record: gitlab_component_apdex:ratio_1h
+  - expr: |
       (
         sum by () (
           rate(registry_http_request_duration_seconds_bucket{le="25",method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}"}[1h])
@@ -1627,6 +2563,32 @@ groups:
       tier: sv
       type: registry
     record: gitlab_component_ops:rate_1h
+  - expr: |
+      sum by () (
+        gitlab_component_errors:rate_1h{component="server_route_blob_upload_uuid_writes",tier="sv",type="registry"}
+      )
+      /
+      sum by () (
+        gitlab_component_ops:rate_1h{component="server_route_blob_upload_uuid_writes",tier="sv",type="registry"}
+      )
+    labels:
+      component: server_route_blob_upload_uuid_writes
+      tier: sv
+      type: registry
+    record: gitlab_component_errors:ratio_1h
+  - expr: |
+      sum by () (
+        gitlab_component_apdex:success:rate_1h{component="server_route_blob_upload_uuid_writes",tier="sv",type="registry"}
+      )
+      /
+      sum by () (
+        gitlab_component_apdex:weight:score_1h{component="server_route_blob_upload_uuid_writes",tier="sv",type="registry"}
+      )
+    labels:
+      component: server_route_blob_upload_uuid_writes
+      tier: sv
+      type: registry
+    record: gitlab_component_apdex:ratio_1h
 - interval: 2m
   name: 'Component-Level SLIs: registry - 6h burn-rate'
   rules:
@@ -1683,6 +2645,32 @@ groups:
       type: registry
     record: gitlab_component_errors:rate_6h
   - expr: |
+      sum by () (
+        gitlab_component_errors:rate_6h{component="server",tier="sv",type="registry"}
+      )
+      /
+      sum by () (
+        gitlab_component_ops:rate_6h{component="server",tier="sv",type="registry"}
+      )
+    labels:
+      component: server
+      tier: sv
+      type: registry
+    record: gitlab_component_errors:ratio_6h
+  - expr: |
+      sum by () (
+        gitlab_component_apdex:success:rate_6h{component="server",tier="sv",type="registry"}
+      )
+      /
+      sum by () (
+        gitlab_component_apdex:weight:score_6h{component="server",tier="sv",type="registry"}
+      )
+    labels:
+      component: server
+      tier: sv
+      type: registry
+    record: gitlab_component_apdex:ratio_6h
+  - expr: |
       (
         sum by () (
           rate(registry_http_request_duration_seconds_bucket{le="0.5",method=~"delete",route="/v2/{name}/blobs/{digest}"}[6h])
@@ -1717,6 +2705,32 @@ groups:
       tier: sv
       type: registry
     record: gitlab_component_ops:rate_6h
+  - expr: |
+      sum by () (
+        gitlab_component_errors:rate_6h{component="server_route_blob_digest_deletes",tier="sv",type="registry"}
+      )
+      /
+      sum by () (
+        gitlab_component_ops:rate_6h{component="server_route_blob_digest_deletes",tier="sv",type="registry"}
+      )
+    labels:
+      component: server_route_blob_digest_deletes
+      tier: sv
+      type: registry
+    record: gitlab_component_errors:ratio_6h
+  - expr: |
+      sum by () (
+        gitlab_component_apdex:success:rate_6h{component="server_route_blob_digest_deletes",tier="sv",type="registry"}
+      )
+      /
+      sum by () (
+        gitlab_component_apdex:weight:score_6h{component="server_route_blob_digest_deletes",tier="sv",type="registry"}
+      )
+    labels:
+      component: server_route_blob_digest_deletes
+      tier: sv
+      type: registry
+    record: gitlab_component_apdex:ratio_6h
   - expr: |
       (
         sum by () (
@@ -1753,6 +2767,32 @@ groups:
       type: registry
     record: gitlab_component_ops:rate_6h
   - expr: |
+      sum by () (
+        gitlab_component_errors:rate_6h{component="server_route_blob_digest_reads",tier="sv",type="registry"}
+      )
+      /
+      sum by () (
+        gitlab_component_ops:rate_6h{component="server_route_blob_digest_reads",tier="sv",type="registry"}
+      )
+    labels:
+      component: server_route_blob_digest_reads
+      tier: sv
+      type: registry
+    record: gitlab_component_errors:ratio_6h
+  - expr: |
+      sum by () (
+        gitlab_component_apdex:success:rate_6h{component="server_route_blob_digest_reads",tier="sv",type="registry"}
+      )
+      /
+      sum by () (
+        gitlab_component_apdex:weight:score_6h{component="server_route_blob_digest_reads",tier="sv",type="registry"}
+      )
+    labels:
+      component: server_route_blob_digest_reads
+      tier: sv
+      type: registry
+    record: gitlab_component_apdex:ratio_6h
+  - expr: |
       (
         sum by () (
           rate(registry_http_request_duration_seconds_bucket{le="2.5",method=~"patch|post|put",route="/v2/{name}/blobs/{digest}"}[6h])
@@ -1787,6 +2827,32 @@ groups:
       tier: sv
       type: registry
     record: gitlab_component_ops:rate_6h
+  - expr: |
+      sum by () (
+        gitlab_component_errors:rate_6h{component="server_route_blob_digest_writes",tier="sv",type="registry"}
+      )
+      /
+      sum by () (
+        gitlab_component_ops:rate_6h{component="server_route_blob_digest_writes",tier="sv",type="registry"}
+      )
+    labels:
+      component: server_route_blob_digest_writes
+      tier: sv
+      type: registry
+    record: gitlab_component_errors:ratio_6h
+  - expr: |
+      sum by () (
+        gitlab_component_apdex:success:rate_6h{component="server_route_blob_digest_writes",tier="sv",type="registry"}
+      )
+      /
+      sum by () (
+        gitlab_component_apdex:weight:score_6h{component="server_route_blob_digest_writes",tier="sv",type="registry"}
+      )
+    labels:
+      component: server_route_blob_digest_writes
+      tier: sv
+      type: registry
+    record: gitlab_component_apdex:ratio_6h
   - expr: |
       (
         sum by () (
@@ -1823,6 +2889,32 @@ groups:
       type: registry
     record: gitlab_component_ops:rate_6h
   - expr: |
+      sum by () (
+        gitlab_component_errors:rate_6h{component="server_route_blob_upload_uuid_deletes",tier="sv",type="registry"}
+      )
+      /
+      sum by () (
+        gitlab_component_ops:rate_6h{component="server_route_blob_upload_uuid_deletes",tier="sv",type="registry"}
+      )
+    labels:
+      component: server_route_blob_upload_uuid_deletes
+      tier: sv
+      type: registry
+    record: gitlab_component_errors:ratio_6h
+  - expr: |
+      sum by () (
+        gitlab_component_apdex:success:rate_6h{component="server_route_blob_upload_uuid_deletes",tier="sv",type="registry"}
+      )
+      /
+      sum by () (
+        gitlab_component_apdex:weight:score_6h{component="server_route_blob_upload_uuid_deletes",tier="sv",type="registry"}
+      )
+    labels:
+      component: server_route_blob_upload_uuid_deletes
+      tier: sv
+      type: registry
+    record: gitlab_component_apdex:ratio_6h
+  - expr: |
       (
         sum by () (
           rate(registry_http_request_duration_seconds_bucket{le="1",method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}"}[6h])
@@ -1858,6 +2950,32 @@ groups:
       type: registry
     record: gitlab_component_ops:rate_6h
   - expr: |
+      sum by () (
+        gitlab_component_errors:rate_6h{component="server_route_blob_upload_uuid_reads",tier="sv",type="registry"}
+      )
+      /
+      sum by () (
+        gitlab_component_ops:rate_6h{component="server_route_blob_upload_uuid_reads",tier="sv",type="registry"}
+      )
+    labels:
+      component: server_route_blob_upload_uuid_reads
+      tier: sv
+      type: registry
+    record: gitlab_component_errors:ratio_6h
+  - expr: |
+      sum by () (
+        gitlab_component_apdex:success:rate_6h{component="server_route_blob_upload_uuid_reads",tier="sv",type="registry"}
+      )
+      /
+      sum by () (
+        gitlab_component_apdex:weight:score_6h{component="server_route_blob_upload_uuid_reads",tier="sv",type="registry"}
+      )
+    labels:
+      component: server_route_blob_upload_uuid_reads
+      tier: sv
+      type: registry
+    record: gitlab_component_apdex:ratio_6h
+  - expr: |
       (
         sum by () (
           rate(registry_http_request_duration_seconds_bucket{le="25",method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}"}[6h])
@@ -1892,6 +3010,32 @@ groups:
       tier: sv
       type: registry
     record: gitlab_component_ops:rate_6h
+  - expr: |
+      sum by () (
+        gitlab_component_errors:rate_6h{component="server_route_blob_upload_uuid_writes",tier="sv",type="registry"}
+      )
+      /
+      sum by () (
+        gitlab_component_ops:rate_6h{component="server_route_blob_upload_uuid_writes",tier="sv",type="registry"}
+      )
+    labels:
+      component: server_route_blob_upload_uuid_writes
+      tier: sv
+      type: registry
+    record: gitlab_component_errors:ratio_6h
+  - expr: |
+      sum by () (
+        gitlab_component_apdex:success:rate_6h{component="server_route_blob_upload_uuid_writes",tier="sv",type="registry"}
+      )
+      /
+      sum by () (
+        gitlab_component_apdex:weight:score_6h{component="server_route_blob_upload_uuid_writes",tier="sv",type="registry"}
+      )
+    labels:
+      component: server_route_blob_upload_uuid_writes
+      tier: sv
+      type: registry
+    record: gitlab_component_apdex:ratio_6h
 - interval: 1m
   name: 'Component mapping: registry'
   rules:
@@ -1995,6 +3139,32 @@ groups:
       tier: sv
       type: sidekiq
     record: gitlab_component_errors:rate_5m
+  - expr: |
+      sum by () (
+        gitlab_component_errors:rate_5m{component="email_receiver",tier="sv",type="sidekiq"}
+      )
+      /
+      sum by () (
+        gitlab_component_ops:rate_5m{component="email_receiver",tier="sv",type="sidekiq"}
+      )
+    labels:
+      component: email_receiver
+      tier: sv
+      type: sidekiq
+    record: gitlab_component_errors:ratio_5m
+  - expr: |
+      sum by () (
+        gitlab_component_apdex:success:rate_5m{component="email_receiver",tier="sv",type="sidekiq"}
+      )
+      /
+      sum by () (
+        gitlab_component_apdex:weight:score_5m{component="email_receiver",tier="sv",type="sidekiq"}
+      )
+    labels:
+      component: email_receiver
+      tier: sv
+      type: sidekiq
+    record: gitlab_component_apdex:ratio_5m
   - expr: |
       sum by () (
         label_replace(sum by () (
@@ -2105,6 +3275,32 @@ groups:
       tier: sv
       type: sidekiq
     record: gitlab_component_errors:rate_5m
+  - expr: |
+      sum by () (
+        gitlab_component_errors:rate_5m{component="shard_catchall",tier="sv",type="sidekiq"}
+      )
+      /
+      sum by () (
+        gitlab_component_ops:rate_5m{component="shard_catchall",tier="sv",type="sidekiq"}
+      )
+    labels:
+      component: shard_catchall
+      tier: sv
+      type: sidekiq
+    record: gitlab_component_errors:ratio_5m
+  - expr: |
+      sum by () (
+        gitlab_component_apdex:success:rate_5m{component="shard_catchall",tier="sv",type="sidekiq"}
+      )
+      /
+      sum by () (
+        gitlab_component_apdex:weight:score_5m{component="shard_catchall",tier="sv",type="sidekiq"}
+      )
+    labels:
+      component: shard_catchall
+      tier: sv
+      type: sidekiq
+    record: gitlab_component_apdex:ratio_5m
 - interval: 2m
   name: 'Component-Level SLIs: sidekiq - 30m burn-rate'
   rules:
@@ -2149,6 +3345,32 @@ groups:
       tier: sv
       type: sidekiq
     record: gitlab_component_errors:rate_30m
+  - expr: |
+      sum by () (
+        gitlab_component_errors:rate_30m{component="email_receiver",tier="sv",type="sidekiq"}
+      )
+      /
+      sum by () (
+        gitlab_component_ops:rate_30m{component="email_receiver",tier="sv",type="sidekiq"}
+      )
+    labels:
+      component: email_receiver
+      tier: sv
+      type: sidekiq
+    record: gitlab_component_errors:ratio_30m
+  - expr: |
+      sum by () (
+        gitlab_component_apdex:success:rate_30m{component="email_receiver",tier="sv",type="sidekiq"}
+      )
+      /
+      sum by () (
+        gitlab_component_apdex:weight:score_30m{component="email_receiver",tier="sv",type="sidekiq"}
+      )
+    labels:
+      component: email_receiver
+      tier: sv
+      type: sidekiq
+    record: gitlab_component_apdex:ratio_30m
   - expr: |
       sum by () (
         label_replace(sum by () (
@@ -2259,6 +3481,32 @@ groups:
       tier: sv
       type: sidekiq
     record: gitlab_component_errors:rate_30m
+  - expr: |
+      sum by () (
+        gitlab_component_errors:rate_30m{component="shard_catchall",tier="sv",type="sidekiq"}
+      )
+      /
+      sum by () (
+        gitlab_component_ops:rate_30m{component="shard_catchall",tier="sv",type="sidekiq"}
+      )
+    labels:
+      component: shard_catchall
+      tier: sv
+      type: sidekiq
+    record: gitlab_component_errors:ratio_30m
+  - expr: |
+      sum by () (
+        gitlab_component_apdex:success:rate_30m{component="shard_catchall",tier="sv",type="sidekiq"}
+      )
+      /
+      sum by () (
+        gitlab_component_apdex:weight:score_30m{component="shard_catchall",tier="sv",type="sidekiq"}
+      )
+    labels:
+      component: shard_catchall
+      tier: sv
+      type: sidekiq
+    record: gitlab_component_apdex:ratio_30m
 - interval: 1m
   name: 'Component-Level SLIs: sidekiq - 1h burn-rate'
   rules:
@@ -2303,6 +3551,32 @@ groups:
       tier: sv
       type: sidekiq
     record: gitlab_component_errors:rate_1h
+  - expr: |
+      sum by () (
+        gitlab_component_errors:rate_1h{component="email_receiver",tier="sv",type="sidekiq"}
+      )
+      /
+      sum by () (
+        gitlab_component_ops:rate_1h{component="email_receiver",tier="sv",type="sidekiq"}
+      )
+    labels:
+      component: email_receiver
+      tier: sv
+      type: sidekiq
+    record: gitlab_component_errors:ratio_1h
+  - expr: |
+      sum by () (
+        gitlab_component_apdex:success:rate_1h{component="email_receiver",tier="sv",type="sidekiq"}
+      )
+      /
+      sum by () (
+        gitlab_component_apdex:weight:score_1h{component="email_receiver",tier="sv",type="sidekiq"}
+      )
+    labels:
+      component: email_receiver
+      tier: sv
+      type: sidekiq
+    record: gitlab_component_apdex:ratio_1h
   - expr: |
       sum by () (
         label_replace(sum by () (
@@ -2417,6 +3691,32 @@ groups:
       type: sidekiq
       upscale_source: "yes"
     record: gitlab_component_errors:rate_1h
+  - expr: |
+      sum by () (
+        gitlab_component_errors:rate_1h{component="shard_catchall",tier="sv",type="sidekiq"}
+      )
+      /
+      sum by () (
+        gitlab_component_ops:rate_1h{component="shard_catchall",tier="sv",type="sidekiq"}
+      )
+    labels:
+      component: shard_catchall
+      tier: sv
+      type: sidekiq
+    record: gitlab_component_errors:ratio_1h
+  - expr: |
+      sum by () (
+        gitlab_component_apdex:success:rate_1h{component="shard_catchall",tier="sv",type="sidekiq"}
+      )
+      /
+      sum by () (
+        gitlab_component_apdex:weight:score_1h{component="shard_catchall",tier="sv",type="sidekiq"}
+      )
+    labels:
+      component: shard_catchall
+      tier: sv
+      type: sidekiq
+    record: gitlab_component_apdex:ratio_1h
 - interval: 2m
   name: 'Component-Level SLIs: sidekiq - 6h burn-rate'
   rules:
@@ -2446,6 +3746,58 @@ groups:
       tier: sv
       type: sidekiq
     record: gitlab_component_errors:rate_6h
+  - expr: |
+      sum by () (
+        gitlab_component_errors:rate_6h{component="email_receiver",tier="sv",type="sidekiq"}
+      )
+      /
+      sum by () (
+        gitlab_component_ops:rate_6h{component="email_receiver",tier="sv",type="sidekiq"}
+      )
+    labels:
+      component: email_receiver
+      tier: sv
+      type: sidekiq
+    record: gitlab_component_errors:ratio_6h
+  - expr: |
+      sum by () (
+        gitlab_component_apdex:success:rate_6h{component="email_receiver",tier="sv",type="sidekiq"}
+      )
+      /
+      sum by () (
+        gitlab_component_apdex:weight:score_6h{component="email_receiver",tier="sv",type="sidekiq"}
+      )
+    labels:
+      component: email_receiver
+      tier: sv
+      type: sidekiq
+    record: gitlab_component_apdex:ratio_6h
+  - expr: |
+      sum by () (
+        gitlab_component_errors:rate_6h{component="shard_catchall",tier="sv",type="sidekiq"}
+      )
+      /
+      sum by () (
+        gitlab_component_ops:rate_6h{component="shard_catchall",tier="sv",type="sidekiq"}
+      )
+    labels:
+      component: shard_catchall
+      tier: sv
+      type: sidekiq
+    record: gitlab_component_errors:ratio_6h
+  - expr: |
+      sum by () (
+        gitlab_component_apdex:success:rate_6h{component="shard_catchall",tier="sv",type="sidekiq"}
+      )
+      /
+      sum by () (
+        gitlab_component_apdex:weight:score_6h{component="shard_catchall",tier="sv",type="sidekiq"}
+      )
+    labels:
+      component: shard_catchall
+      tier: sv
+      type: sidekiq
+    record: gitlab_component_apdex:ratio_6h
 - interval: 1m
   name: 'Component mapping: sidekiq'
   rules:
@@ -2513,6 +3865,32 @@ groups:
       type: webservice
     record: gitlab_component_errors:rate_5m
   - expr: |
+      sum by () (
+        gitlab_component_errors:rate_5m{component="puma",tier="sv",type="webservice"}
+      )
+      /
+      sum by () (
+        gitlab_component_ops:rate_5m{component="puma",tier="sv",type="webservice"}
+      )
+    labels:
+      component: puma
+      tier: sv
+      type: webservice
+    record: gitlab_component_errors:ratio_5m
+  - expr: |
+      sum by () (
+        gitlab_component_apdex:success:rate_5m{component="puma",tier="sv",type="webservice"}
+      )
+      /
+      sum by () (
+        gitlab_component_apdex:weight:score_5m{component="puma",tier="sv",type="webservice"}
+      )
+    labels:
+      component: puma
+      tier: sv
+      type: webservice
+    record: gitlab_component_apdex:ratio_5m
+  - expr: |
       (
         sum by () (
           rate(gitlab_workhorse_http_request_duration_seconds_bucket{le="1",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/([^/]+/){1,}[^/]+/uploads\\z",route!="^/([^/]+/){1,}[^/]+\\.git/git-receive-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/git-upload-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/info/refs\\z",route!="^/([^/]+/){1,}[^/]+\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\z",route!="^/-/cable\\z",route!~"^\\^/api/.*"}[5m])
@@ -2566,6 +3944,32 @@ groups:
     record: gitlab_component_errors:rate_5m
   - expr: |
       sum by () (
+        gitlab_component_errors:rate_5m{component="workhorse",tier="sv",type="webservice"}
+      )
+      /
+      sum by () (
+        gitlab_component_ops:rate_5m{component="workhorse",tier="sv",type="webservice"}
+      )
+    labels:
+      component: workhorse
+      tier: sv
+      type: webservice
+    record: gitlab_component_errors:ratio_5m
+  - expr: |
+      sum by () (
+        gitlab_component_apdex:success:rate_5m{component="workhorse",tier="sv",type="webservice"}
+      )
+      /
+      sum by () (
+        gitlab_component_apdex:weight:score_5m{component="workhorse",tier="sv",type="webservice"}
+      )
+    labels:
+      component: workhorse
+      tier: sv
+      type: webservice
+    record: gitlab_component_apdex:ratio_5m
+  - expr: |
+      sum by () (
         rate(gitlab_workhorse_http_request_duration_seconds_bucket{le="10",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route=~"^\\^/api/.*"}[5m])
       )
     labels:
@@ -2608,6 +4012,32 @@ groups:
       tier: sv
       type: webservice
     record: gitlab_component_errors:rate_5m
+  - expr: |
+      sum by () (
+        gitlab_component_errors:rate_5m{component="workhorse_api",tier="sv",type="webservice"}
+      )
+      /
+      sum by () (
+        gitlab_component_ops:rate_5m{component="workhorse_api",tier="sv",type="webservice"}
+      )
+    labels:
+      component: workhorse_api
+      tier: sv
+      type: webservice
+    record: gitlab_component_errors:ratio_5m
+  - expr: |
+      sum by () (
+        gitlab_component_apdex:success:rate_5m{component="workhorse_api",tier="sv",type="webservice"}
+      )
+      /
+      sum by () (
+        gitlab_component_apdex:weight:score_5m{component="workhorse_api",tier="sv",type="webservice"}
+      )
+    labels:
+      component: workhorse_api
+      tier: sv
+      type: webservice
+    record: gitlab_component_apdex:ratio_5m
 - interval: 2m
   name: 'Component-Level SLIs: webservice - 30m burn-rate'
   rules:
@@ -2655,6 +4085,32 @@ groups:
       tier: sv
       type: webservice
     record: gitlab_component_errors:rate_30m
+  - expr: |
+      sum by () (
+        gitlab_component_errors:rate_30m{component="puma",tier="sv",type="webservice"}
+      )
+      /
+      sum by () (
+        gitlab_component_ops:rate_30m{component="puma",tier="sv",type="webservice"}
+      )
+    labels:
+      component: puma
+      tier: sv
+      type: webservice
+    record: gitlab_component_errors:ratio_30m
+  - expr: |
+      sum by () (
+        gitlab_component_apdex:success:rate_30m{component="puma",tier="sv",type="webservice"}
+      )
+      /
+      sum by () (
+        gitlab_component_apdex:weight:score_30m{component="puma",tier="sv",type="webservice"}
+      )
+    labels:
+      component: puma
+      tier: sv
+      type: webservice
+    record: gitlab_component_apdex:ratio_30m
   - expr: |
       (
         sum by () (
@@ -2709,6 +4165,32 @@ groups:
     record: gitlab_component_errors:rate_30m
   - expr: |
       sum by () (
+        gitlab_component_errors:rate_30m{component="workhorse",tier="sv",type="webservice"}
+      )
+      /
+      sum by () (
+        gitlab_component_ops:rate_30m{component="workhorse",tier="sv",type="webservice"}
+      )
+    labels:
+      component: workhorse
+      tier: sv
+      type: webservice
+    record: gitlab_component_errors:ratio_30m
+  - expr: |
+      sum by () (
+        gitlab_component_apdex:success:rate_30m{component="workhorse",tier="sv",type="webservice"}
+      )
+      /
+      sum by () (
+        gitlab_component_apdex:weight:score_30m{component="workhorse",tier="sv",type="webservice"}
+      )
+    labels:
+      component: workhorse
+      tier: sv
+      type: webservice
+    record: gitlab_component_apdex:ratio_30m
+  - expr: |
+      sum by () (
         rate(gitlab_workhorse_http_request_duration_seconds_bucket{le="10",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route=~"^\\^/api/.*"}[30m])
       )
     labels:
@@ -2751,6 +4233,32 @@ groups:
       tier: sv
       type: webservice
     record: gitlab_component_errors:rate_30m
+  - expr: |
+      sum by () (
+        gitlab_component_errors:rate_30m{component="workhorse_api",tier="sv",type="webservice"}
+      )
+      /
+      sum by () (
+        gitlab_component_ops:rate_30m{component="workhorse_api",tier="sv",type="webservice"}
+      )
+    labels:
+      component: workhorse_api
+      tier: sv
+      type: webservice
+    record: gitlab_component_errors:ratio_30m
+  - expr: |
+      sum by () (
+        gitlab_component_apdex:success:rate_30m{component="workhorse_api",tier="sv",type="webservice"}
+      )
+      /
+      sum by () (
+        gitlab_component_apdex:weight:score_30m{component="workhorse_api",tier="sv",type="webservice"}
+      )
+    labels:
+      component: workhorse_api
+      tier: sv
+      type: webservice
+    record: gitlab_component_apdex:ratio_30m
 - interval: 1m
   name: 'Component-Level SLIs: webservice - 1h burn-rate'
   rules:
@@ -2798,6 +4306,32 @@ groups:
       tier: sv
       type: webservice
     record: gitlab_component_errors:rate_1h
+  - expr: |
+      sum by () (
+        gitlab_component_errors:rate_1h{component="puma",tier="sv",type="webservice"}
+      )
+      /
+      sum by () (
+        gitlab_component_ops:rate_1h{component="puma",tier="sv",type="webservice"}
+      )
+    labels:
+      component: puma
+      tier: sv
+      type: webservice
+    record: gitlab_component_errors:ratio_1h
+  - expr: |
+      sum by () (
+        gitlab_component_apdex:success:rate_1h{component="puma",tier="sv",type="webservice"}
+      )
+      /
+      sum by () (
+        gitlab_component_apdex:weight:score_1h{component="puma",tier="sv",type="webservice"}
+      )
+    labels:
+      component: puma
+      tier: sv
+      type: webservice
+    record: gitlab_component_apdex:ratio_1h
   - expr: |
       (
         sum by () (
@@ -2852,6 +4386,32 @@ groups:
     record: gitlab_component_errors:rate_1h
   - expr: |
       sum by () (
+        gitlab_component_errors:rate_1h{component="workhorse",tier="sv",type="webservice"}
+      )
+      /
+      sum by () (
+        gitlab_component_ops:rate_1h{component="workhorse",tier="sv",type="webservice"}
+      )
+    labels:
+      component: workhorse
+      tier: sv
+      type: webservice
+    record: gitlab_component_errors:ratio_1h
+  - expr: |
+      sum by () (
+        gitlab_component_apdex:success:rate_1h{component="workhorse",tier="sv",type="webservice"}
+      )
+      /
+      sum by () (
+        gitlab_component_apdex:weight:score_1h{component="workhorse",tier="sv",type="webservice"}
+      )
+    labels:
+      component: workhorse
+      tier: sv
+      type: webservice
+    record: gitlab_component_apdex:ratio_1h
+  - expr: |
+      sum by () (
         rate(gitlab_workhorse_http_request_duration_seconds_bucket{le="10",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route=~"^\\^/api/.*"}[1h])
       )
     labels:
@@ -2894,6 +4454,32 @@ groups:
       tier: sv
       type: webservice
     record: gitlab_component_errors:rate_1h
+  - expr: |
+      sum by () (
+        gitlab_component_errors:rate_1h{component="workhorse_api",tier="sv",type="webservice"}
+      )
+      /
+      sum by () (
+        gitlab_component_ops:rate_1h{component="workhorse_api",tier="sv",type="webservice"}
+      )
+    labels:
+      component: workhorse_api
+      tier: sv
+      type: webservice
+    record: gitlab_component_errors:ratio_1h
+  - expr: |
+      sum by () (
+        gitlab_component_apdex:success:rate_1h{component="workhorse_api",tier="sv",type="webservice"}
+      )
+      /
+      sum by () (
+        gitlab_component_apdex:weight:score_1h{component="workhorse_api",tier="sv",type="webservice"}
+      )
+    labels:
+      component: workhorse_api
+      tier: sv
+      type: webservice
+    record: gitlab_component_apdex:ratio_1h
 - interval: 2m
   name: 'Component-Level SLIs: webservice - 6h burn-rate'
   rules:
@@ -2941,6 +4527,32 @@ groups:
       tier: sv
       type: webservice
     record: gitlab_component_errors:rate_6h
+  - expr: |
+      sum by () (
+        gitlab_component_errors:rate_6h{component="puma",tier="sv",type="webservice"}
+      )
+      /
+      sum by () (
+        gitlab_component_ops:rate_6h{component="puma",tier="sv",type="webservice"}
+      )
+    labels:
+      component: puma
+      tier: sv
+      type: webservice
+    record: gitlab_component_errors:ratio_6h
+  - expr: |
+      sum by () (
+        gitlab_component_apdex:success:rate_6h{component="puma",tier="sv",type="webservice"}
+      )
+      /
+      sum by () (
+        gitlab_component_apdex:weight:score_6h{component="puma",tier="sv",type="webservice"}
+      )
+    labels:
+      component: puma
+      tier: sv
+      type: webservice
+    record: gitlab_component_apdex:ratio_6h
   - expr: |
       (
         sum by () (
@@ -2995,6 +4607,32 @@ groups:
     record: gitlab_component_errors:rate_6h
   - expr: |
       sum by () (
+        gitlab_component_errors:rate_6h{component="workhorse",tier="sv",type="webservice"}
+      )
+      /
+      sum by () (
+        gitlab_component_ops:rate_6h{component="workhorse",tier="sv",type="webservice"}
+      )
+    labels:
+      component: workhorse
+      tier: sv
+      type: webservice
+    record: gitlab_component_errors:ratio_6h
+  - expr: |
+      sum by () (
+        gitlab_component_apdex:success:rate_6h{component="workhorse",tier="sv",type="webservice"}
+      )
+      /
+      sum by () (
+        gitlab_component_apdex:weight:score_6h{component="workhorse",tier="sv",type="webservice"}
+      )
+    labels:
+      component: workhorse
+      tier: sv
+      type: webservice
+    record: gitlab_component_apdex:ratio_6h
+  - expr: |
+      sum by () (
         rate(gitlab_workhorse_http_request_duration_seconds_bucket{le="10",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route=~"^\\^/api/.*"}[6h])
       )
     labels:
@@ -3037,6 +4675,32 @@ groups:
       tier: sv
       type: webservice
     record: gitlab_component_errors:rate_6h
+  - expr: |
+      sum by () (
+        gitlab_component_errors:rate_6h{component="workhorse_api",tier="sv",type="webservice"}
+      )
+      /
+      sum by () (
+        gitlab_component_ops:rate_6h{component="workhorse_api",tier="sv",type="webservice"}
+      )
+    labels:
+      component: workhorse_api
+      tier: sv
+      type: webservice
+    record: gitlab_component_errors:ratio_6h
+  - expr: |
+      sum by () (
+        gitlab_component_apdex:success:rate_6h{component="workhorse_api",tier="sv",type="webservice"}
+      )
+      /
+      sum by () (
+        gitlab_component_apdex:weight:score_6h{component="workhorse_api",tier="sv",type="webservice"}
+      )
+    labels:
+      component: workhorse_api
+      tier: sv
+      type: webservice
+    record: gitlab_component_apdex:ratio_6h
 - interval: 1m
   name: 'Component mapping: webservice'
   rules:
@@ -3288,84 +4952,6 @@ groups:
         )
       )
     record: gitlab_service_apdex:ratio_6h
-- interval: 1m
-  name: Global Component SLI Metrics (fast burn)
-  rules:
-  - expr: |
-      sum by (type,component) (
-        gitlab_component_errors:rate_5m{}
-      )
-      /
-      sum by (type,component) (
-        gitlab_component_ops:rate_5m{}
-      )
-    record: gitlab_component_errors:ratio_5m
-  - expr: |
-      sum by (type,component) (
-        gitlab_component_apdex:success:rate_5m{}
-      )
-      /
-      sum by (type,component) (
-        gitlab_component_apdex:weight:score_5m{}
-      )
-    record: gitlab_component_apdex:ratio_5m
-  - expr: |
-      sum by (type,component) (
-        gitlab_component_errors:rate_1h{}
-      )
-      /
-      sum by (type,component) (
-        gitlab_component_ops:rate_1h{}
-      )
-    record: gitlab_component_errors:ratio_1h
-  - expr: |
-      sum by (type,component) (
-        gitlab_component_apdex:success:rate_1h{}
-      )
-      /
-      sum by (type,component) (
-        gitlab_component_apdex:weight:score_1h{}
-      )
-    record: gitlab_component_apdex:ratio_1h
-- interval: 2m
-  name: Global Component SLI Metrics (slow burn)
-  rules:
-  - expr: |
-      sum by (type,component) (
-        gitlab_component_errors:rate_30m{}
-      )
-      /
-      sum by (type,component) (
-        gitlab_component_ops:rate_30m{}
-      )
-    record: gitlab_component_errors:ratio_30m
-  - expr: |
-      sum by (type,component) (
-        gitlab_component_apdex:success:rate_30m{}
-      )
-      /
-      sum by (type,component) (
-        gitlab_component_apdex:weight:score_30m{}
-      )
-    record: gitlab_component_apdex:ratio_30m
-  - expr: |
-      sum by (type,component) (
-        gitlab_component_errors:rate_6h{}
-      )
-      /
-      sum by (type,component) (
-        gitlab_component_ops:rate_6h{}
-      )
-    record: gitlab_component_errors:ratio_6h
-  - expr: |
-      sum by (type,component) (
-        gitlab_component_apdex:success:rate_6h{}
-      )
-      /
-      sum by (type,component) (
-        gitlab_component_apdex:weight:score_6h{}
-      )
-    record: gitlab_component_apdex:ratio_6h
 - interval: 5m
   name: Autogenerated Service SLOs
   rules:

@@ -25,11 +25,6 @@ local serviceSLISGroups =
   aggregationSetTransformer.generateRecordingRuleGroups(
     sourceAggregationSet=aggregationSets.componentSLIs,
     targetAggregationSet=aggregationSets.serviceSLIs
-  )
-  +
-  // Generate ratio SLIs for component-level metrics
-  aggregationSetTransformer.generateReflectedRecordingRuleGroups(
-    aggregationSet=aggregationSets.componentSLIs,
   );
 
 local serviceSLOsGroups =
