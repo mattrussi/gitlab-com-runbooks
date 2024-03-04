@@ -83,12 +83,12 @@ kubectl get pods -n wiz -l "app.kubernetes.io/name=wiz-sensor"
 
 Below is the expected output:
 
-NAME               READY   STATUS    RESTARTS        AGE  
-wiz-sensor-2gqv2   1/1     Running   181 (12m ago)   24d  
-wiz-sensor-989vj   1/1     Running   179 (11m ago)   24d  
-wiz-sensor-kv22v   1/1     Running   178 (16m ago)   24d  
-wiz-sensor-r8bw8   1/1     Running   177 (11m ago)   24d  
-wiz-sensor-rw27j   1/1     Running   182 (12m ago)   24d  
+NAME               READY   STATUS    RESTARTS        AGE
+wiz-sensor-2gqv2   1/1     Running   181 (12m ago)   24d
+wiz-sensor-989vj   1/1     Running   179 (11m ago)   24d
+wiz-sensor-kv22v   1/1     Running   178 (16m ago)   24d
+wiz-sensor-r8bw8   1/1     Running   177 (11m ago)   24d
+wiz-sensor-rw27j   1/1     Running   182 (12m ago)   24d
 wiz-sensor-wccbk   1/1     Running   180 (12m ago)   24d
 
 Inspect the output:
@@ -463,7 +463,7 @@ kubectl -n wiz logs daemonsets/wiz-sensor | grep ERROR | jq  '.fields.message' |
 If you wish to view the detailed errors messages , use the following command:
 
 ```shell
-kubectl -n wiz logs daemonsets/wiz-sensor | grep ERROR | jq '.fields.e' | sort -u 
+kubectl -n wiz logs daemonsets/wiz-sensor | grep ERROR | jq '.fields.e' | sort -u
 ```
 
 ### Adjust logging verbosity
