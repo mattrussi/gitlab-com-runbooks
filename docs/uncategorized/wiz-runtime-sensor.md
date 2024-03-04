@@ -6,9 +6,9 @@
 
 # Monitoring/Alerting
 
-The most likely issue deriving from the Wiz Rutime Sensor rollout might be related to an eventual performance penalty on the underlying kubernetes cluster nodes. 
+The most likely issue deriving from the Wiz Rutime Sensor rollout might be related to an eventual performance penalty on the underlying kubernetes cluster nodes.
 
-However it should not create much performance implications as we have configured the limits which are very resource convervative. We have the CPU and Memory limits configured and those can be viewed [here](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/blob/master/releases/wiz-sensor/values.yaml.gotmpl?ref_type=heads#L13) 
+However it should not create much performance implications as we have configured the limits which are very resource convervative. We have the CPU and Memory limits configured and those can be viewed [here](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/blob/master/releases/wiz-sensor/values.yaml.gotmpl?ref_type=heads#L13).
 
 In addition, an [alert for OOM kills](https://gitlab.com/gitlab-com/runbooks/-/blob/master/rules/wiz-runtime-sensor.yml) for Wiz Sensor containers which would help us understand if the resource consumption is more and if the sensor are getting OOM killed.
 
@@ -16,7 +16,7 @@ In addition, an [alert for OOM kills](https://gitlab.com/gitlab-com/runbooks/-/b
 
 ## Deploy Wiz Runtime Sensor
 
-All of our workload deployments are taken care of from the [GitLab helm repo](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles)](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles).
+All of our workload deployments are taken care of from the [GitLab helm repo](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles)].
 
 To deploy it for different environments we need to only add the values to the environments files ({$env}.yaml) located [here](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/tree/master/bases/environments)
 
@@ -48,6 +48,7 @@ To remove/disable the sensor we need to follow the below steps.
       installed: false
       chart_version: x.x.x.x
     ```
+
 # Troubleshooting
 
 <!--Import from Wiz Doc Starts here -->
@@ -151,6 +152,7 @@ kubectl run networkcheck --image=curlimages/curl -it --rm --restart=Never --over
 
 Below is the expected output when there is working communication with "wizio.azurecr.io":
 
+```output
 HTTP/1.1 401 Unauthorized
 Server: openresty
 Date: Sun, 09 Apr 2023 14:29:48 GMT
@@ -165,6 +167,7 @@ Docker-Distribution-Api-Version: registry/2.0
 Strict-Transport-Security: max-age=31536000; includeSubDomains
 Www-Authenticate: Bearer realm="https://wizio.azurecr.io/oauth2/token",service="wizio.azurecr.io"
 ...
+```
 
 Inspect the output:
 
@@ -175,7 +178,7 @@ Inspect the output:
 
 The correct credentials were used to pull the container image
 
-### Verify you installed the Runtime Sensor using the correct credentials to pull the container image:
+### Verify you installed the Runtime Sensor using the correct credentials to pull the container image
 
     Retrieve the values you used for imagePullSecret.username and imagePullSecret.password, in either the helm install command or the YAML file.
     Refer to get the Runtime Sensor image pull key from wiz to obtain the correct values that should be used for imagePullSecret.username and imagePullSecret.password.
@@ -190,6 +193,7 @@ The correct credentials were used to pull the container image
 If some of the pods are in an error state, that could indicate that their corresponding node lacks the required resources needed to run the Sensor pod. These cases are usually resolved once the nodes have enough resources and there is no need for intervention.
 
     Run the following command to locate Sensor pods that are not running:
+
  ```shell
  kubectl get pods --field-selector=status.phase!=Running -n wiz
  ```
@@ -245,6 +249,7 @@ What you should do
 
 Often the validation fails due to incorrect proxy settings. To fix the settings, you need to update the fields listed below in your Runtime Sensor helm chart. Refer to Runtime Sensor configurable variables to learn how.
 
+```output
 daemonset.httpProxyUrl
 daemonset.httpProxyUsername
 daemonset.httpProxyPassword
@@ -254,6 +259,7 @@ Invalid service account type (status code 400)
 Displayed error
 
 {... ,"fields":{"message":"comm error","e":"https://auth.app.wiz.io/oauth/token: status code 400"}}
+```
 
 This error indicates the Runtime Sensor service account type is not configured properly in the Runtime Sensor helm chart.
 
@@ -269,7 +275,9 @@ What you should do
 Invalid credentials (status code 401)
 Displayed error
 
+```output
 {... ,"fields":{"message":"comm error","e":"https://auth.app.wiz.io/oauth/token: status code 401"}}
+```
 
 This error indicates the credentials to the Wiz Portal are not configured properly in the Runtime Sensor helm chart.
 What you should do
@@ -326,23 +334,29 @@ Assuming this error persists:
     Check your DNS settings.
     Verify that the namespace where you deployed the Runtime Sensor has "DNS enabled". You can check the DNS resolution using a curl command:
 
+```shell
 kubectl run -n wiz networkcheck --image=curlimages/curl -it --rm --restart=Never --overrides='{"apiVersion": "v1", "spec": {"hostNetwork": true}}' -- curl -I https://wizio.azurecr.io/v2/
+```
 
 If there is a DNS problem, you will get this error code from curl:
 
+```output
 curl: (6) Could not resolve host: localhost
 curl: (6) Could not resolve host: wizio.azurecr.io
+```
 
 Once the DNS issue is resolved, the Sensor should recover from the error.
 Connection reset by peer error
 
-The following error message might indicate that there is a firewall blocking the communication to https://auth.app.wiz.io:
+The following error message might indicate that there is a firewall blocking the communication to `https://auth.app.wiz.io`:
 
-https://auth.app.wiz.io/oauth/token: Connection Failed: tls connection init failed: Connection reset by peer (os error 104)
+`https://auth.app.wiz.io/oauth/token`: Connection Failed: tls connection init failed: Connection reset by peer (os error 104)
 
 Use the curl command in order to verify that the connection is blocked:
 
+```shell
 kubectl run -n wiz networkcheck --image=curlimages/curl -it --rm --restart=Never --overrides='{"apiVersion": "v1", "spec": {"hostNetwork": true}}' -- curl -I https://auth.app.wiz.io/oauth/token
+```
 
 Once the firewall (or any other network component that is blocking the connection) is configured to allow it, the Runtime Sensor should recover from the error.
 The Runtime Sensor is installed on an unsupported platform
@@ -356,6 +370,7 @@ To verify if this is the case,
 ```shell
 kubectl logs -n wiz <pod name> | grep "sensor engine failed to start"
 ```
+
 And search for this error message:
 
 kernel version smaller than minimum 266752
@@ -375,9 +390,9 @@ What you should do
 
 Check the node architecture using the following command:
 
-    ```shell
-	kubectl describe nodes <node name> | grep Architecture
-    ```
+```shell
+kubectl describe nodes <node name> | grep Architecture
+```
 
 The output should be one of the supported architectures, amd64 or arm64. If the architecture is supported and yet you still encounter this error, it could indicate that the Sensor image does not match the underlying architecture.
 
@@ -386,14 +401,17 @@ Learn how to read Runtime Sensor logs
 
 Each Sensor pod stores only a minimal amount of logs on the local disk, consisting mainly of error messages, and sometimes also success messages. Each message is formatted in JSON and contains the variables, such as:
 
+    ```output
     timestamp–Time of the log message.
     binary_ver–Sensor version number.
     defs_ver–Definitions file version.
     message–The log message.
     level–The log level. By default, local Sensor logs include only messages where level=ERROR and a small amount of informational logs where level=INFO.
+    ```
 
 Below is an example error log message:
 
+```output
 {
   "timestamp": "2023-06-15T09:43:52.126652379+00:00",
   "level": "ERROR",
@@ -432,6 +450,7 @@ Below is an example error log message:
     "e": "https://auth.app.wiz.io/oauth/token: status code 401"
   }
 }
+```
 
 ### Retrieve log messages
 
@@ -545,6 +564,7 @@ tar -czvf k8s_outputs.tar.gz k8s_outputs
 rm -rf k8s_outputs
 
 ```
+
 Save the script into a file named: `sensor-support.sh`
 
 Grant permission for the file to be executed by running the following command:
