@@ -92,7 +92,7 @@ local monthlyReleaseVersionStatPanel =
         id: 'reduce',
         options: {
           reducers: [
-            'last',
+            'first',
           ],
           includeTimeField: false,
           mode: 'reduceFields',
@@ -150,7 +150,7 @@ local monthlyReleaseDateStatPanel =
         id: 'reduce',
         options: {
           reducers: [
-            'last',
+            'first',
           ],
           includeTimeField: false,
           mode: 'reduceFields',
@@ -229,7 +229,7 @@ local monthlyReleaseStatusStatPanel =
         id: 'reduce',
         options: {
           reducers: [
-            'last',
+            'first',
           ],
           includeTimeField: false,
           mode: 'reduceFields',
