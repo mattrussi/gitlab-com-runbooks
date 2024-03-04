@@ -1,0 +1,47 @@
+groups:
+  - name: container.rules
+    rules:
+      - alert: HighThrottleRate gprd-gitlab-gke
+        annotations:
+          title: Container being throttled
+          description: '{{ $labels.container }} in {{ $labels.pod }} is being throttled over a rate of 1 second over the course of the last 30 minutes'
+          runbook: docs/kube/kubernetes.md#highthrottlerate
+        expr: |-
+          rate(container_cpu_cfs_throttled_seconds_total{env="gprd", cluster="gprd-gitlab-gke"}[1m]) > 1
+        for: 30m
+        labels:
+          severity: s4
+          alert_type: cause
+      - alert: HighThrottleRate gprd-us-east1-b
+        annotations:
+          title: Container being throttled
+          description: '{{ $labels.container }} in {{ $labels.pod }} is being throttled over a rate of 1 second over the course of the last 30 minutes'
+          runbook: docs/kube/kubernetes.md#highthrottlerate
+        expr: |-
+          rate(container_cpu_cfs_throttled_seconds_total{env="gprd", cluster="gprd-us-east1-b"}[1m]) > 1
+        for: 30m
+        labels:
+          severity: s4
+          alert_type: cause
+      - alert: HighThrottleRate gprd-us-east1-c
+        annotations:
+          title: Container being throttled
+          description: '{{ $labels.container }} in {{ $labels.pod }} is being throttled over a rate of 1 second over the course of the last 30 minutes'
+          runbook: docs/kube/kubernetes.md#highthrottlerate
+        expr: |-
+          rate(container_cpu_cfs_throttled_seconds_total{env="gprd", cluster="gprd-us-east1-c"}[1m]) > 1
+        for: 30m
+        labels:
+          severity: s4
+          alert_type: cause
+      - alert: HighThrottleRate gprd-us-east1-d
+        annotations:
+          title: Container being throttled
+          description: '{{ $labels.container }} in {{ $labels.pod }} is being throttled over a rate of 1 second over the course of the last 30 minutes'
+          runbook: docs/kube/kubernetes.md#highthrottlerate
+        expr: |-
+          rate(container_cpu_cfs_throttled_seconds_total{env="gprd", cluster="gprd-us-east1-d"}[1m]) > 1
+        for: 30m
+        labels:
+          severity: s4
+          alert_type: cause
