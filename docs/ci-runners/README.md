@@ -72,6 +72,18 @@ As the name suggests, these are runners that spawn Windows machines. They are cu
 beta. They are housed in the `gitlab-ci-windows` project. For further info please see the
 [windows CI README](./cicd/windows/README.md). For network information see [gitlab-ci-windows networking](#gitlab-ci-windows-project).
 
+## Runner Deployments
+
+### blue-green-deployment
+
+Each of the gitlab.com SaaS runners shards have two running clusters, consisting of a set of runner-manager VMs available at all time, we refer to them as blue and green. This is meant to speed up the release of [GitLab Runner](https://gitlab.com/gitlab-org/gitlab-runner) by shifting traffic
+between two identical environments that are running different versions of the application. For further info please see the [blue-green README](./release-cycle/blue_green_deployment.md).
+
+Currently the deployment supports the following architectures:
+
+1. [Linux Architecture](./linux/README.md)
+1. [Mac Architecture](./macos/README.md)
+
 ## Cost Factors
 
 Each runner has an associated `cost factor` that determines how many minutes are deducted from the customers account
