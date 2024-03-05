@@ -756,6 +756,34 @@ groups:
       sum by (env,environment) (
         avg_over_time(gitlab_component_errors:rate_1h{component="primary_server",env="gprd",monitor="global",tier="db",type="redis-cluster-repo-cache"}[6h] offset 30s)
       )
+  - record: gitlab_component_errors:ratio_6h
+    labels:
+      component: primary_server
+      monitor: global
+      tier: db
+      type: redis-cluster-repo-cache
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_6h{component="primary_server",env="gprd",monitor="global",tier="db",type="redis-cluster-repo-cache"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_6h{component="primary_server",env="gprd",monitor="global",tier="db",type="redis-cluster-repo-cache"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_6h
+    labels:
+      component: primary_server
+      monitor: global
+      tier: db
+      type: redis-cluster-repo-cache
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_6h{component="primary_server",env="gprd",monitor="global",tier="db",type="redis-cluster-repo-cache"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_6h{component="primary_server",env="gprd",monitor="global",tier="db",type="redis-cluster-repo-cache"} offset 30s
+      )
   - record: gitlab_component_apdex:success:rate_6h
     labels:
       component: rails_cache
@@ -793,6 +821,34 @@ groups:
     expr: |
       sum by (env,environment) (
         avg_over_time(gitlab_component_errors:rate_1h{component="rails_cache",env="gprd",monitor="global",tier="db",type="redis-cluster-repo-cache"}[6h] offset 30s)
+      )
+  - record: gitlab_component_errors:ratio_6h
+    labels:
+      component: rails_cache
+      monitor: global
+      tier: db
+      type: redis-cluster-repo-cache
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_6h{component="rails_cache",env="gprd",monitor="global",tier="db",type="redis-cluster-repo-cache"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_6h{component="rails_cache",env="gprd",monitor="global",tier="db",type="redis-cluster-repo-cache"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_6h
+    labels:
+      component: rails_cache
+      monitor: global
+      tier: db
+      type: redis-cluster-repo-cache
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_6h{component="rails_cache",env="gprd",monitor="global",tier="db",type="redis-cluster-repo-cache"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_6h{component="rails_cache",env="gprd",monitor="global",tier="db",type="redis-cluster-repo-cache"} offset 30s
       )
   - record: gitlab_component_apdex:success:rate_6h
     labels:
@@ -832,6 +888,34 @@ groups:
       sum by (env,environment) (
         avg_over_time(gitlab_component_errors:rate_1h{component="rails_redis_client",env="gprd",monitor="global",tier="db",type="redis-cluster-repo-cache"}[6h] offset 30s)
       )
+  - record: gitlab_component_errors:ratio_6h
+    labels:
+      component: rails_redis_client
+      monitor: global
+      tier: db
+      type: redis-cluster-repo-cache
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_6h{component="rails_redis_client",env="gprd",monitor="global",tier="db",type="redis-cluster-repo-cache"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_6h{component="rails_redis_client",env="gprd",monitor="global",tier="db",type="redis-cluster-repo-cache"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_6h
+    labels:
+      component: rails_redis_client
+      monitor: global
+      tier: db
+      type: redis-cluster-repo-cache
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_6h{component="rails_redis_client",env="gprd",monitor="global",tier="db",type="redis-cluster-repo-cache"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_6h{component="rails_redis_client",env="gprd",monitor="global",tier="db",type="redis-cluster-repo-cache"} offset 30s
+      )
   - record: gitlab_component_apdex:success:rate_6h
     labels:
       component: secondary_servers
@@ -869,6 +953,34 @@ groups:
     expr: |
       sum by (env,environment) (
         avg_over_time(gitlab_component_errors:rate_1h{component="secondary_servers",env="gprd",monitor="global",tier="db",type="redis-cluster-repo-cache"}[6h] offset 30s)
+      )
+  - record: gitlab_component_errors:ratio_6h
+    labels:
+      component: secondary_servers
+      monitor: global
+      tier: db
+      type: redis-cluster-repo-cache
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_6h{component="secondary_servers",env="gprd",monitor="global",tier="db",type="redis-cluster-repo-cache"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_6h{component="secondary_servers",env="gprd",monitor="global",tier="db",type="redis-cluster-repo-cache"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_6h
+    labels:
+      component: secondary_servers
+      monitor: global
+      tier: db
+      type: redis-cluster-repo-cache
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_6h{component="secondary_servers",env="gprd",monitor="global",tier="db",type="redis-cluster-repo-cache"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_6h{component="secondary_servers",env="gprd",monitor="global",tier="db",type="redis-cluster-repo-cache"} offset 30s
       )
 - name: 'Global SLI Metrics: redis-cluster-repo-cache - Burn-Rate 3d'
   interval: 2m
@@ -911,6 +1023,34 @@ groups:
       sum by (env,environment) (
         avg_over_time(gitlab_component_errors:rate_1h{component="primary_server",env="gprd",monitor="global",tier="db",type="redis-cluster-repo-cache"}[3d] offset 30s)
       )
+  - record: gitlab_component_errors:ratio_3d
+    labels:
+      component: primary_server
+      monitor: global
+      tier: db
+      type: redis-cluster-repo-cache
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_3d{component="primary_server",env="gprd",monitor="global",tier="db",type="redis-cluster-repo-cache"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_3d{component="primary_server",env="gprd",monitor="global",tier="db",type="redis-cluster-repo-cache"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_3d
+    labels:
+      component: primary_server
+      monitor: global
+      tier: db
+      type: redis-cluster-repo-cache
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_3d{component="primary_server",env="gprd",monitor="global",tier="db",type="redis-cluster-repo-cache"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_3d{component="primary_server",env="gprd",monitor="global",tier="db",type="redis-cluster-repo-cache"} offset 30s
+      )
   - record: gitlab_component_apdex:success:rate_3d
     labels:
       component: rails_cache
@@ -948,6 +1088,34 @@ groups:
     expr: |
       sum by (env,environment) (
         avg_over_time(gitlab_component_errors:rate_1h{component="rails_cache",env="gprd",monitor="global",tier="db",type="redis-cluster-repo-cache"}[3d] offset 30s)
+      )
+  - record: gitlab_component_errors:ratio_3d
+    labels:
+      component: rails_cache
+      monitor: global
+      tier: db
+      type: redis-cluster-repo-cache
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_3d{component="rails_cache",env="gprd",monitor="global",tier="db",type="redis-cluster-repo-cache"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_3d{component="rails_cache",env="gprd",monitor="global",tier="db",type="redis-cluster-repo-cache"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_3d
+    labels:
+      component: rails_cache
+      monitor: global
+      tier: db
+      type: redis-cluster-repo-cache
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_3d{component="rails_cache",env="gprd",monitor="global",tier="db",type="redis-cluster-repo-cache"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_3d{component="rails_cache",env="gprd",monitor="global",tier="db",type="redis-cluster-repo-cache"} offset 30s
       )
   - record: gitlab_component_apdex:success:rate_3d
     labels:
@@ -987,6 +1155,34 @@ groups:
       sum by (env,environment) (
         avg_over_time(gitlab_component_errors:rate_1h{component="rails_redis_client",env="gprd",monitor="global",tier="db",type="redis-cluster-repo-cache"}[3d] offset 30s)
       )
+  - record: gitlab_component_errors:ratio_3d
+    labels:
+      component: rails_redis_client
+      monitor: global
+      tier: db
+      type: redis-cluster-repo-cache
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_3d{component="rails_redis_client",env="gprd",monitor="global",tier="db",type="redis-cluster-repo-cache"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_3d{component="rails_redis_client",env="gprd",monitor="global",tier="db",type="redis-cluster-repo-cache"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_3d
+    labels:
+      component: rails_redis_client
+      monitor: global
+      tier: db
+      type: redis-cluster-repo-cache
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_3d{component="rails_redis_client",env="gprd",monitor="global",tier="db",type="redis-cluster-repo-cache"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_3d{component="rails_redis_client",env="gprd",monitor="global",tier="db",type="redis-cluster-repo-cache"} offset 30s
+      )
   - record: gitlab_component_apdex:success:rate_3d
     labels:
       component: secondary_servers
@@ -1024,4 +1220,32 @@ groups:
     expr: |
       sum by (env,environment) (
         avg_over_time(gitlab_component_errors:rate_1h{component="secondary_servers",env="gprd",monitor="global",tier="db",type="redis-cluster-repo-cache"}[3d] offset 30s)
+      )
+  - record: gitlab_component_errors:ratio_3d
+    labels:
+      component: secondary_servers
+      monitor: global
+      tier: db
+      type: redis-cluster-repo-cache
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_3d{component="secondary_servers",env="gprd",monitor="global",tier="db",type="redis-cluster-repo-cache"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_3d{component="secondary_servers",env="gprd",monitor="global",tier="db",type="redis-cluster-repo-cache"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_3d
+    labels:
+      component: secondary_servers
+      monitor: global
+      tier: db
+      type: redis-cluster-repo-cache
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_3d{component="secondary_servers",env="gprd",monitor="global",tier="db",type="redis-cluster-repo-cache"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_3d{component="secondary_servers",env="gprd",monitor="global",tier="db",type="redis-cluster-repo-cache"} offset 30s
       )

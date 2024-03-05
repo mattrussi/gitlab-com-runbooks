@@ -1515,6 +1515,34 @@ groups:
       sum by (env,environment,stage) (
         avg_over_time(gitlab_component_errors:rate_1h{component="grafana",env="gprd",monitor="global",tier="inf",type="monitoring"}[6h] offset 30s)
       )
+  - record: gitlab_component_errors:ratio_6h
+    labels:
+      component: grafana
+      monitor: global
+      tier: inf
+      type: monitoring
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_6h{component="grafana",env="gprd",monitor="global",tier="inf",type="monitoring"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_6h{component="grafana",env="gprd",monitor="global",tier="inf",type="monitoring"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_6h
+    labels:
+      component: grafana
+      monitor: global
+      tier: inf
+      type: monitoring
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_6h{component="grafana",env="gprd",monitor="global",tier="inf",type="monitoring"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_6h{component="grafana",env="gprd",monitor="global",tier="inf",type="monitoring"} offset 30s
+      )
   - record: gitlab_component_apdex:success:rate_6h
     labels:
       component: grafana_datasources
@@ -1549,6 +1577,34 @@ groups:
     expr: |
       sum by (env,environment,stage) (
         avg_over_time(gitlab_component_errors:rate_1h{component="grafana_datasources",env="gprd",monitor="global",tier="inf",type="monitoring"}[6h] offset 30s)
+      )
+  - record: gitlab_component_errors:ratio_6h
+    labels:
+      component: grafana_datasources
+      monitor: global
+      tier: inf
+      type: monitoring
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_6h{component="grafana_datasources",env="gprd",monitor="global",tier="inf",type="monitoring"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_6h{component="grafana_datasources",env="gprd",monitor="global",tier="inf",type="monitoring"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_6h
+    labels:
+      component: grafana_datasources
+      monitor: global
+      tier: inf
+      type: monitoring
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_6h{component="grafana_datasources",env="gprd",monitor="global",tier="inf",type="monitoring"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_6h{component="grafana_datasources",env="gprd",monitor="global",tier="inf",type="monitoring"} offset 30s
       )
   - record: gitlab_component_apdex:success:rate_6h
     labels:
@@ -1588,6 +1644,34 @@ groups:
       sum by (env,environment) (
         avg_over_time(gitlab_component_errors:rate_1h{component="grafana_google_lb",env="gprd",monitor="global",tier="inf",type="monitoring"}[6h] offset 30s)
       )
+  - record: gitlab_component_errors:ratio_6h
+    labels:
+      component: grafana_google_lb
+      monitor: global
+      tier: inf
+      type: monitoring
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_6h{component="grafana_google_lb",env="gprd",monitor="global",tier="inf",type="monitoring"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_6h{component="grafana_google_lb",env="gprd",monitor="global",tier="inf",type="monitoring"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_6h
+    labels:
+      component: grafana_google_lb
+      monitor: global
+      tier: inf
+      type: monitoring
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_6h{component="grafana_google_lb",env="gprd",monitor="global",tier="inf",type="monitoring"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_6h{component="grafana_google_lb",env="gprd",monitor="global",tier="inf",type="monitoring"} offset 30s
+      )
   - record: gitlab_component_apdex:success:rate_6h
     labels:
       component: grafana_image_renderer
@@ -1622,6 +1706,34 @@ groups:
     expr: |
       sum by (env,environment,stage) (
         avg_over_time(gitlab_component_errors:rate_1h{component="grafana_image_renderer",env="gprd",monitor="global",tier="inf",type="monitoring"}[6h] offset 30s)
+      )
+  - record: gitlab_component_errors:ratio_6h
+    labels:
+      component: grafana_image_renderer
+      monitor: global
+      tier: inf
+      type: monitoring
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_6h{component="grafana_image_renderer",env="gprd",monitor="global",tier="inf",type="monitoring"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_6h{component="grafana_image_renderer",env="gprd",monitor="global",tier="inf",type="monitoring"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_6h
+    labels:
+      component: grafana_image_renderer
+      monitor: global
+      tier: inf
+      type: monitoring
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_6h{component="grafana_image_renderer",env="gprd",monitor="global",tier="inf",type="monitoring"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_6h{component="grafana_image_renderer",env="gprd",monitor="global",tier="inf",type="monitoring"} offset 30s
       )
   - record: gitlab_component_apdex:success:rate_6h
     labels:
@@ -1658,6 +1770,34 @@ groups:
       sum by (env,environment,stage) (
         avg_over_time(gitlab_component_errors:rate_1h{component="prometheus",env="gprd",monitor="global",tier="inf",type="monitoring"}[6h] offset 30s)
       )
+  - record: gitlab_component_errors:ratio_6h
+    labels:
+      component: prometheus
+      monitor: global
+      tier: inf
+      type: monitoring
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_6h{component="prometheus",env="gprd",monitor="global",tier="inf",type="monitoring"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_6h{component="prometheus",env="gprd",monitor="global",tier="inf",type="monitoring"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_6h
+    labels:
+      component: prometheus
+      monitor: global
+      tier: inf
+      type: monitoring
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_6h{component="prometheus",env="gprd",monitor="global",tier="inf",type="monitoring"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_6h{component="prometheus",env="gprd",monitor="global",tier="inf",type="monitoring"} offset 30s
+      )
   - record: gitlab_component_apdex:success:rate_6h
     labels:
       component: prometheus_alert_sender
@@ -1693,6 +1833,34 @@ groups:
       sum by (env,environment,stage) (
         avg_over_time(gitlab_component_errors:rate_1h{component="prometheus_alert_sender",env="gprd",monitor="global",tier="inf",type="monitoring"}[6h] offset 30s)
       )
+  - record: gitlab_component_errors:ratio_6h
+    labels:
+      component: prometheus_alert_sender
+      monitor: global
+      tier: inf
+      type: monitoring
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_6h{component="prometheus_alert_sender",env="gprd",monitor="global",tier="inf",type="monitoring"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_6h{component="prometheus_alert_sender",env="gprd",monitor="global",tier="inf",type="monitoring"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_6h
+    labels:
+      component: prometheus_alert_sender
+      monitor: global
+      tier: inf
+      type: monitoring
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_6h{component="prometheus_alert_sender",env="gprd",monitor="global",tier="inf",type="monitoring"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_6h{component="prometheus_alert_sender",env="gprd",monitor="global",tier="inf",type="monitoring"} offset 30s
+      )
   - record: gitlab_component_apdex:success:rate_6h
     labels:
       component: rule_evaluation
@@ -1727,6 +1895,34 @@ groups:
     expr: |
       sum by (env,environment,stage) (
         avg_over_time(gitlab_component_errors:rate_1h{component="rule_evaluation",env="gprd",monitor="global",tier="inf",type="monitoring"}[6h] offset 30s)
+      )
+  - record: gitlab_component_errors:ratio_6h
+    labels:
+      component: rule_evaluation
+      monitor: global
+      tier: inf
+      type: monitoring
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_6h{component="rule_evaluation",env="gprd",monitor="global",tier="inf",type="monitoring"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_6h{component="rule_evaluation",env="gprd",monitor="global",tier="inf",type="monitoring"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_6h
+    labels:
+      component: rule_evaluation
+      monitor: global
+      tier: inf
+      type: monitoring
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_6h{component="rule_evaluation",env="gprd",monitor="global",tier="inf",type="monitoring"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_6h{component="rule_evaluation",env="gprd",monitor="global",tier="inf",type="monitoring"} offset 30s
       )
 - name: 'Global SLI Metrics: monitoring - Burn-Rate 3d'
   interval: 2m
@@ -1766,6 +1962,34 @@ groups:
       sum by (env,environment,stage) (
         avg_over_time(gitlab_component_errors:rate_1h{component="grafana",env="gprd",monitor="global",tier="inf",type="monitoring"}[3d] offset 30s)
       )
+  - record: gitlab_component_errors:ratio_3d
+    labels:
+      component: grafana
+      monitor: global
+      tier: inf
+      type: monitoring
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_3d{component="grafana",env="gprd",monitor="global",tier="inf",type="monitoring"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_3d{component="grafana",env="gprd",monitor="global",tier="inf",type="monitoring"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_3d
+    labels:
+      component: grafana
+      monitor: global
+      tier: inf
+      type: monitoring
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_3d{component="grafana",env="gprd",monitor="global",tier="inf",type="monitoring"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_3d{component="grafana",env="gprd",monitor="global",tier="inf",type="monitoring"} offset 30s
+      )
   - record: gitlab_component_apdex:success:rate_3d
     labels:
       component: grafana_datasources
@@ -1800,6 +2024,34 @@ groups:
     expr: |
       sum by (env,environment,stage) (
         avg_over_time(gitlab_component_errors:rate_1h{component="grafana_datasources",env="gprd",monitor="global",tier="inf",type="monitoring"}[3d] offset 30s)
+      )
+  - record: gitlab_component_errors:ratio_3d
+    labels:
+      component: grafana_datasources
+      monitor: global
+      tier: inf
+      type: monitoring
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_3d{component="grafana_datasources",env="gprd",monitor="global",tier="inf",type="monitoring"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_3d{component="grafana_datasources",env="gprd",monitor="global",tier="inf",type="monitoring"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_3d
+    labels:
+      component: grafana_datasources
+      monitor: global
+      tier: inf
+      type: monitoring
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_3d{component="grafana_datasources",env="gprd",monitor="global",tier="inf",type="monitoring"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_3d{component="grafana_datasources",env="gprd",monitor="global",tier="inf",type="monitoring"} offset 30s
       )
   - record: gitlab_component_apdex:success:rate_3d
     labels:
@@ -1839,6 +2091,34 @@ groups:
       sum by (env,environment) (
         avg_over_time(gitlab_component_errors:rate_1h{component="grafana_google_lb",env="gprd",monitor="global",tier="inf",type="monitoring"}[3d] offset 30s)
       )
+  - record: gitlab_component_errors:ratio_3d
+    labels:
+      component: grafana_google_lb
+      monitor: global
+      tier: inf
+      type: monitoring
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_3d{component="grafana_google_lb",env="gprd",monitor="global",tier="inf",type="monitoring"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_3d{component="grafana_google_lb",env="gprd",monitor="global",tier="inf",type="monitoring"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_3d
+    labels:
+      component: grafana_google_lb
+      monitor: global
+      tier: inf
+      type: monitoring
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_3d{component="grafana_google_lb",env="gprd",monitor="global",tier="inf",type="monitoring"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_3d{component="grafana_google_lb",env="gprd",monitor="global",tier="inf",type="monitoring"} offset 30s
+      )
   - record: gitlab_component_apdex:success:rate_3d
     labels:
       component: grafana_image_renderer
@@ -1873,6 +2153,34 @@ groups:
     expr: |
       sum by (env,environment,stage) (
         avg_over_time(gitlab_component_errors:rate_1h{component="grafana_image_renderer",env="gprd",monitor="global",tier="inf",type="monitoring"}[3d] offset 30s)
+      )
+  - record: gitlab_component_errors:ratio_3d
+    labels:
+      component: grafana_image_renderer
+      monitor: global
+      tier: inf
+      type: monitoring
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_3d{component="grafana_image_renderer",env="gprd",monitor="global",tier="inf",type="monitoring"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_3d{component="grafana_image_renderer",env="gprd",monitor="global",tier="inf",type="monitoring"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_3d
+    labels:
+      component: grafana_image_renderer
+      monitor: global
+      tier: inf
+      type: monitoring
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_3d{component="grafana_image_renderer",env="gprd",monitor="global",tier="inf",type="monitoring"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_3d{component="grafana_image_renderer",env="gprd",monitor="global",tier="inf",type="monitoring"} offset 30s
       )
   - record: gitlab_component_apdex:success:rate_3d
     labels:
@@ -1909,6 +2217,34 @@ groups:
       sum by (env,environment,stage) (
         avg_over_time(gitlab_component_errors:rate_1h{component="prometheus",env="gprd",monitor="global",tier="inf",type="monitoring"}[3d] offset 30s)
       )
+  - record: gitlab_component_errors:ratio_3d
+    labels:
+      component: prometheus
+      monitor: global
+      tier: inf
+      type: monitoring
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_3d{component="prometheus",env="gprd",monitor="global",tier="inf",type="monitoring"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_3d{component="prometheus",env="gprd",monitor="global",tier="inf",type="monitoring"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_3d
+    labels:
+      component: prometheus
+      monitor: global
+      tier: inf
+      type: monitoring
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_3d{component="prometheus",env="gprd",monitor="global",tier="inf",type="monitoring"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_3d{component="prometheus",env="gprd",monitor="global",tier="inf",type="monitoring"} offset 30s
+      )
   - record: gitlab_component_apdex:success:rate_3d
     labels:
       component: prometheus_alert_sender
@@ -1944,6 +2280,34 @@ groups:
       sum by (env,environment,stage) (
         avg_over_time(gitlab_component_errors:rate_1h{component="prometheus_alert_sender",env="gprd",monitor="global",tier="inf",type="monitoring"}[3d] offset 30s)
       )
+  - record: gitlab_component_errors:ratio_3d
+    labels:
+      component: prometheus_alert_sender
+      monitor: global
+      tier: inf
+      type: monitoring
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_3d{component="prometheus_alert_sender",env="gprd",monitor="global",tier="inf",type="monitoring"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_3d{component="prometheus_alert_sender",env="gprd",monitor="global",tier="inf",type="monitoring"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_3d
+    labels:
+      component: prometheus_alert_sender
+      monitor: global
+      tier: inf
+      type: monitoring
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_3d{component="prometheus_alert_sender",env="gprd",monitor="global",tier="inf",type="monitoring"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_3d{component="prometheus_alert_sender",env="gprd",monitor="global",tier="inf",type="monitoring"} offset 30s
+      )
   - record: gitlab_component_apdex:success:rate_3d
     labels:
       component: rule_evaluation
@@ -1978,4 +2342,32 @@ groups:
     expr: |
       sum by (env,environment,stage) (
         avg_over_time(gitlab_component_errors:rate_1h{component="rule_evaluation",env="gprd",monitor="global",tier="inf",type="monitoring"}[3d] offset 30s)
+      )
+  - record: gitlab_component_errors:ratio_3d
+    labels:
+      component: rule_evaluation
+      monitor: global
+      tier: inf
+      type: monitoring
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_3d{component="rule_evaluation",env="gprd",monitor="global",tier="inf",type="monitoring"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_3d{component="rule_evaluation",env="gprd",monitor="global",tier="inf",type="monitoring"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_3d
+    labels:
+      component: rule_evaluation
+      monitor: global
+      tier: inf
+      type: monitoring
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_3d{component="rule_evaluation",env="gprd",monitor="global",tier="inf",type="monitoring"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_3d{component="rule_evaluation",env="gprd",monitor="global",tier="inf",type="monitoring"} offset 30s
       )

@@ -94,7 +94,7 @@ local upscaledRateExpression = |||
   )
 |||;
 
-local generateApdexRulesUpscaled(burnRate, aggregationSet, sliDefinition, recordingRuleStaticLabels, extraSourceSelector) =
+local generateApdexRulesUpscaled(burnRate, aggregationSet, sliDefinition, recordingRuleStaticLabels, extraSourceSelector, config) =
   local apdexSuccessRateRuleName = aggregationSet.getApdexSuccessRateMetricForBurnRate(burnRate, required=false);
   local apdexWeightRuleName = aggregationSet.getApdexWeightMetricForBurnRate(burnRate, required=false);
   local allStaticLabels = recordingRuleStaticLabels + sliDefinition.staticLabels;
@@ -132,7 +132,7 @@ local generateApdexRulesUpscaled(burnRate, aggregationSet, sliDefinition, record
 
   apdexSuccessRateRule + apdexWeightRateRule;
 
-local generateRequestRateRulesUpscaled(burnRate, aggregationSet, sliDefinition, recordingRuleStaticLabels, extraSourceSelector) =
+local generateRequestRateRulesUpscaled(burnRate, aggregationSet, sliDefinition, recordingRuleStaticLabels, extraSourceSelector, config) =
   local recordingRuleName = aggregationSet.getOpsRateMetricForBurnRate(burnRate, required=false);
   local allStaticLabels = recordingRuleStaticLabels + sliDefinition.staticLabels;
 
@@ -153,7 +153,7 @@ local generateRequestRateRulesUpscaled(burnRate, aggregationSet, sliDefinition, 
   else
     [];
 
-local generateErrorRateRulesUpscaled(burnRate, aggregationSet, sliDefinition, recordingRuleStaticLabels, extraSourceSelector) =
+local generateErrorRateRulesUpscaled(burnRate, aggregationSet, sliDefinition, recordingRuleStaticLabels, extraSourceSelector, config) =
   local recordingRuleName = aggregationSet.getErrorRateMetricForBurnRate(burnRate, required=false);
   local allStaticLabels = recordingRuleStaticLabels + sliDefinition.staticLabels;
 
@@ -175,7 +175,7 @@ local generateErrorRateRulesUpscaled(burnRate, aggregationSet, sliDefinition, re
     [];
 
 
-local generateUpscaledRecordingRulesForComponent(burnRate, aggregationSet, serviceDefinition, sliDefinition, extraSourceSelector) =
+local generateUpscaledRecordingRulesForComponent(burnRate, aggregationSet, serviceDefinition, sliDefinition, extraSourceSelector, config) =
   local recordingRuleStaticLabels = staticLabelsForAggregation(serviceDefinition, sliDefinition, aggregationSet);
 
   std.flatMap(
@@ -184,12 +184,15 @@ local generateUpscaledRecordingRulesForComponent(burnRate, aggregationSet, servi
       aggregationSet=aggregationSet,
       sliDefinition=sliDefinition,
       recordingRuleStaticLabels=recordingRuleStaticLabels,
-      extraSourceSelector=extraSourceSelector
+      extraSourceSelector=extraSourceSelector,
+      config=config,
     ),
     [
       generateApdexRulesUpscaled,
       generateRequestRateRulesUpscaled,
       generateErrorRateRulesUpscaled,
+      generateErrorRatioRules,
+      generateApdexRatioRules,
     ]
   );
 
@@ -215,6 +218,7 @@ local generateUpscaledRecordingRulesForComponent(burnRate, aggregationSet, servi
               serviceDefinition=serviceDefinition,
               sliDefinition=sliDefinition,
               extraSourceSelector=extraSourceSelector,
+              config=self.config,
             ),
             serviceLevelIndicators,
           ) else

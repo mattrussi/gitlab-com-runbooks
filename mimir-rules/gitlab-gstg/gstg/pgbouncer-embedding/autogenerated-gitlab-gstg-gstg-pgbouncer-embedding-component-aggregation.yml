@@ -231,6 +231,34 @@ groups:
       sum by (env,environment) (
         avg_over_time(gitlab_component_errors:rate_1h{component="service",env="gstg",monitor="global",tier="db",type="pgbouncer-embedding"}[6h] offset 30s)
       )
+  - record: gitlab_component_errors:ratio_6h
+    labels:
+      component: service
+      monitor: global
+      tier: db
+      type: pgbouncer-embedding
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_6h{component="service",env="gstg",monitor="global",tier="db",type="pgbouncer-embedding"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_6h{component="service",env="gstg",monitor="global",tier="db",type="pgbouncer-embedding"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_6h
+    labels:
+      component: service
+      monitor: global
+      tier: db
+      type: pgbouncer-embedding
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_6h{component="service",env="gstg",monitor="global",tier="db",type="pgbouncer-embedding"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_6h{component="service",env="gstg",monitor="global",tier="db",type="pgbouncer-embedding"} offset 30s
+      )
 - name: 'Global SLI Metrics: pgbouncer-embedding - Burn-Rate 3d'
   interval: 2m
   rules:
@@ -271,4 +299,32 @@ groups:
     expr: |
       sum by (env,environment) (
         avg_over_time(gitlab_component_errors:rate_1h{component="service",env="gstg",monitor="global",tier="db",type="pgbouncer-embedding"}[3d] offset 30s)
+      )
+  - record: gitlab_component_errors:ratio_3d
+    labels:
+      component: service
+      monitor: global
+      tier: db
+      type: pgbouncer-embedding
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_3d{component="service",env="gstg",monitor="global",tier="db",type="pgbouncer-embedding"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_3d{component="service",env="gstg",monitor="global",tier="db",type="pgbouncer-embedding"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_3d
+    labels:
+      component: service
+      monitor: global
+      tier: db
+      type: pgbouncer-embedding
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_3d{component="service",env="gstg",monitor="global",tier="db",type="pgbouncer-embedding"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_3d{component="service",env="gstg",monitor="global",tier="db",type="pgbouncer-embedding"} offset 30s
       )

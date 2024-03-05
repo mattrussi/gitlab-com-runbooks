@@ -1170,6 +1170,34 @@ groups:
       sum by (env,environment) (
         avg_over_time(gitlab_component_errors:rate_1h{component="istio_internal_ingress",env="gstg",monitor="global",tier="inf",type="vault"}[6h] offset 30s)
       )
+  - record: gitlab_component_errors:ratio_6h
+    labels:
+      component: istio_internal_ingress
+      monitor: global
+      tier: inf
+      type: vault
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_6h{component="istio_internal_ingress",env="gstg",monitor="global",tier="inf",type="vault"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_6h{component="istio_internal_ingress",env="gstg",monitor="global",tier="inf",type="vault"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_6h
+    labels:
+      component: istio_internal_ingress
+      monitor: global
+      tier: inf
+      type: vault
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_6h{component="istio_internal_ingress",env="gstg",monitor="global",tier="inf",type="vault"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_6h{component="istio_internal_ingress",env="gstg",monitor="global",tier="inf",type="vault"} offset 30s
+      )
   - record: gitlab_component_apdex:success:rate_6h
     labels:
       component: istio_public_ingress
@@ -1207,6 +1235,34 @@ groups:
     expr: |
       sum by (env,environment) (
         avg_over_time(gitlab_component_errors:rate_1h{component="istio_public_ingress",env="gstg",monitor="global",tier="inf",type="vault"}[6h] offset 30s)
+      )
+  - record: gitlab_component_errors:ratio_6h
+    labels:
+      component: istio_public_ingress
+      monitor: global
+      tier: inf
+      type: vault
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_6h{component="istio_public_ingress",env="gstg",monitor="global",tier="inf",type="vault"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_6h{component="istio_public_ingress",env="gstg",monitor="global",tier="inf",type="vault"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_6h
+    labels:
+      component: istio_public_ingress
+      monitor: global
+      tier: inf
+      type: vault
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_6h{component="istio_public_ingress",env="gstg",monitor="global",tier="inf",type="vault"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_6h{component="istio_public_ingress",env="gstg",monitor="global",tier="inf",type="vault"} offset 30s
       )
   - record: gitlab_component_apdex:success:rate_6h
     labels:
@@ -1246,6 +1302,34 @@ groups:
       sum by (env,environment) (
         avg_over_time(gitlab_component_errors:rate_1h{component="vault",env="gstg",monitor="global",tier="inf",type="vault"}[6h] offset 30s)
       )
+  - record: gitlab_component_errors:ratio_6h
+    labels:
+      component: vault
+      monitor: global
+      tier: inf
+      type: vault
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_6h{component="vault",env="gstg",monitor="global",tier="inf",type="vault"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_6h{component="vault",env="gstg",monitor="global",tier="inf",type="vault"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_6h
+    labels:
+      component: vault
+      monitor: global
+      tier: inf
+      type: vault
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_6h{component="vault",env="gstg",monitor="global",tier="inf",type="vault"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_6h{component="vault",env="gstg",monitor="global",tier="inf",type="vault"} offset 30s
+      )
   - record: gitlab_component_apdex:success:rate_6h
     labels:
       component: vault_audit_log_request
@@ -1283,6 +1367,34 @@ groups:
     expr: |
       sum by (env,environment) (
         avg_over_time(gitlab_component_errors:rate_1h{component="vault_audit_log_request",env="gstg",monitor="global",tier="inf",type="vault"}[6h] offset 30s)
+      )
+  - record: gitlab_component_errors:ratio_6h
+    labels:
+      component: vault_audit_log_request
+      monitor: global
+      tier: inf
+      type: vault
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_6h{component="vault_audit_log_request",env="gstg",monitor="global",tier="inf",type="vault"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_6h{component="vault_audit_log_request",env="gstg",monitor="global",tier="inf",type="vault"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_6h
+    labels:
+      component: vault_audit_log_request
+      monitor: global
+      tier: inf
+      type: vault
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_6h{component="vault_audit_log_request",env="gstg",monitor="global",tier="inf",type="vault"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_6h{component="vault_audit_log_request",env="gstg",monitor="global",tier="inf",type="vault"} offset 30s
       )
   - record: gitlab_component_apdex:success:rate_6h
     labels:
@@ -1322,6 +1434,34 @@ groups:
       sum by (env,environment) (
         avg_over_time(gitlab_component_errors:rate_1h{component="vault_audit_log_response",env="gstg",monitor="global",tier="inf",type="vault"}[6h] offset 30s)
       )
+  - record: gitlab_component_errors:ratio_6h
+    labels:
+      component: vault_audit_log_response
+      monitor: global
+      tier: inf
+      type: vault
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_6h{component="vault_audit_log_response",env="gstg",monitor="global",tier="inf",type="vault"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_6h{component="vault_audit_log_response",env="gstg",monitor="global",tier="inf",type="vault"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_6h
+    labels:
+      component: vault_audit_log_response
+      monitor: global
+      tier: inf
+      type: vault
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_6h{component="vault_audit_log_response",env="gstg",monitor="global",tier="inf",type="vault"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_6h{component="vault_audit_log_response",env="gstg",monitor="global",tier="inf",type="vault"} offset 30s
+      )
   - record: gitlab_component_apdex:success:rate_6h
     labels:
       component: vault_google_lb
@@ -1359,6 +1499,34 @@ groups:
     expr: |
       sum by (env,environment) (
         avg_over_time(gitlab_component_errors:rate_1h{component="vault_google_lb",env="gstg",monitor="global",tier="inf",type="vault"}[6h] offset 30s)
+      )
+  - record: gitlab_component_errors:ratio_6h
+    labels:
+      component: vault_google_lb
+      monitor: global
+      tier: inf
+      type: vault
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_6h{component="vault_google_lb",env="gstg",monitor="global",tier="inf",type="vault"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_6h{component="vault_google_lb",env="gstg",monitor="global",tier="inf",type="vault"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_6h
+    labels:
+      component: vault_google_lb
+      monitor: global
+      tier: inf
+      type: vault
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_6h{component="vault_google_lb",env="gstg",monitor="global",tier="inf",type="vault"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_6h{component="vault_google_lb",env="gstg",monitor="global",tier="inf",type="vault"} offset 30s
       )
 - name: 'Global SLI Metrics: vault - Burn-Rate 3d'
   interval: 2m
@@ -1401,6 +1569,34 @@ groups:
       sum by (env,environment) (
         avg_over_time(gitlab_component_errors:rate_1h{component="istio_internal_ingress",env="gstg",monitor="global",tier="inf",type="vault"}[3d] offset 30s)
       )
+  - record: gitlab_component_errors:ratio_3d
+    labels:
+      component: istio_internal_ingress
+      monitor: global
+      tier: inf
+      type: vault
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_3d{component="istio_internal_ingress",env="gstg",monitor="global",tier="inf",type="vault"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_3d{component="istio_internal_ingress",env="gstg",monitor="global",tier="inf",type="vault"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_3d
+    labels:
+      component: istio_internal_ingress
+      monitor: global
+      tier: inf
+      type: vault
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_3d{component="istio_internal_ingress",env="gstg",monitor="global",tier="inf",type="vault"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_3d{component="istio_internal_ingress",env="gstg",monitor="global",tier="inf",type="vault"} offset 30s
+      )
   - record: gitlab_component_apdex:success:rate_3d
     labels:
       component: istio_public_ingress
@@ -1438,6 +1634,34 @@ groups:
     expr: |
       sum by (env,environment) (
         avg_over_time(gitlab_component_errors:rate_1h{component="istio_public_ingress",env="gstg",monitor="global",tier="inf",type="vault"}[3d] offset 30s)
+      )
+  - record: gitlab_component_errors:ratio_3d
+    labels:
+      component: istio_public_ingress
+      monitor: global
+      tier: inf
+      type: vault
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_3d{component="istio_public_ingress",env="gstg",monitor="global",tier="inf",type="vault"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_3d{component="istio_public_ingress",env="gstg",monitor="global",tier="inf",type="vault"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_3d
+    labels:
+      component: istio_public_ingress
+      monitor: global
+      tier: inf
+      type: vault
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_3d{component="istio_public_ingress",env="gstg",monitor="global",tier="inf",type="vault"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_3d{component="istio_public_ingress",env="gstg",monitor="global",tier="inf",type="vault"} offset 30s
       )
   - record: gitlab_component_apdex:success:rate_3d
     labels:
@@ -1477,6 +1701,34 @@ groups:
       sum by (env,environment) (
         avg_over_time(gitlab_component_errors:rate_1h{component="vault",env="gstg",monitor="global",tier="inf",type="vault"}[3d] offset 30s)
       )
+  - record: gitlab_component_errors:ratio_3d
+    labels:
+      component: vault
+      monitor: global
+      tier: inf
+      type: vault
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_3d{component="vault",env="gstg",monitor="global",tier="inf",type="vault"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_3d{component="vault",env="gstg",monitor="global",tier="inf",type="vault"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_3d
+    labels:
+      component: vault
+      monitor: global
+      tier: inf
+      type: vault
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_3d{component="vault",env="gstg",monitor="global",tier="inf",type="vault"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_3d{component="vault",env="gstg",monitor="global",tier="inf",type="vault"} offset 30s
+      )
   - record: gitlab_component_apdex:success:rate_3d
     labels:
       component: vault_audit_log_request
@@ -1514,6 +1766,34 @@ groups:
     expr: |
       sum by (env,environment) (
         avg_over_time(gitlab_component_errors:rate_1h{component="vault_audit_log_request",env="gstg",monitor="global",tier="inf",type="vault"}[3d] offset 30s)
+      )
+  - record: gitlab_component_errors:ratio_3d
+    labels:
+      component: vault_audit_log_request
+      monitor: global
+      tier: inf
+      type: vault
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_3d{component="vault_audit_log_request",env="gstg",monitor="global",tier="inf",type="vault"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_3d{component="vault_audit_log_request",env="gstg",monitor="global",tier="inf",type="vault"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_3d
+    labels:
+      component: vault_audit_log_request
+      monitor: global
+      tier: inf
+      type: vault
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_3d{component="vault_audit_log_request",env="gstg",monitor="global",tier="inf",type="vault"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_3d{component="vault_audit_log_request",env="gstg",monitor="global",tier="inf",type="vault"} offset 30s
       )
   - record: gitlab_component_apdex:success:rate_3d
     labels:
@@ -1553,6 +1833,34 @@ groups:
       sum by (env,environment) (
         avg_over_time(gitlab_component_errors:rate_1h{component="vault_audit_log_response",env="gstg",monitor="global",tier="inf",type="vault"}[3d] offset 30s)
       )
+  - record: gitlab_component_errors:ratio_3d
+    labels:
+      component: vault_audit_log_response
+      monitor: global
+      tier: inf
+      type: vault
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_3d{component="vault_audit_log_response",env="gstg",monitor="global",tier="inf",type="vault"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_3d{component="vault_audit_log_response",env="gstg",monitor="global",tier="inf",type="vault"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_3d
+    labels:
+      component: vault_audit_log_response
+      monitor: global
+      tier: inf
+      type: vault
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_3d{component="vault_audit_log_response",env="gstg",monitor="global",tier="inf",type="vault"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_3d{component="vault_audit_log_response",env="gstg",monitor="global",tier="inf",type="vault"} offset 30s
+      )
   - record: gitlab_component_apdex:success:rate_3d
     labels:
       component: vault_google_lb
@@ -1590,4 +1898,32 @@ groups:
     expr: |
       sum by (env,environment) (
         avg_over_time(gitlab_component_errors:rate_1h{component="vault_google_lb",env="gstg",monitor="global",tier="inf",type="vault"}[3d] offset 30s)
+      )
+  - record: gitlab_component_errors:ratio_3d
+    labels:
+      component: vault_google_lb
+      monitor: global
+      tier: inf
+      type: vault
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_3d{component="vault_google_lb",env="gstg",monitor="global",tier="inf",type="vault"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_3d{component="vault_google_lb",env="gstg",monitor="global",tier="inf",type="vault"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_3d
+    labels:
+      component: vault_google_lb
+      monitor: global
+      tier: inf
+      type: vault
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_3d{component="vault_google_lb",env="gstg",monitor="global",tier="inf",type="vault"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_3d{component="vault_google_lb",env="gstg",monitor="global",tier="inf",type="vault"} offset 30s
       )

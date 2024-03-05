@@ -528,6 +528,34 @@ groups:
       sum by (env,environment,stage) (
         avg_over_time(gitlab_component_errors:rate_1h{component="rails_request",env="gprd",monitor="global",tier="sv",type="ai-assisted"}[6h] offset 30s)
       )
+  - record: gitlab_component_errors:ratio_6h
+    labels:
+      component: rails_request
+      monitor: global
+      tier: sv
+      type: ai-assisted
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_6h{component="rails_request",env="gprd",monitor="global",tier="sv",type="ai-assisted"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_6h{component="rails_request",env="gprd",monitor="global",tier="sv",type="ai-assisted"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_6h
+    labels:
+      component: rails_request
+      monitor: global
+      tier: sv
+      type: ai-assisted
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_6h{component="rails_request",env="gprd",monitor="global",tier="sv",type="ai-assisted"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_6h{component="rails_request",env="gprd",monitor="global",tier="sv",type="ai-assisted"} offset 30s
+      )
   - record: gitlab_component_apdex:success:rate_6h
     labels:
       component: workhorse
@@ -562,6 +590,34 @@ groups:
     expr: |
       sum by (env,environment,stage) (
         avg_over_time(gitlab_component_errors:rate_1h{component="workhorse",env="gprd",monitor="global",tier="sv",type="ai-assisted"}[6h] offset 30s)
+      )
+  - record: gitlab_component_errors:ratio_6h
+    labels:
+      component: workhorse
+      monitor: global
+      tier: sv
+      type: ai-assisted
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_6h{component="workhorse",env="gprd",monitor="global",tier="sv",type="ai-assisted"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_6h{component="workhorse",env="gprd",monitor="global",tier="sv",type="ai-assisted"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_6h
+    labels:
+      component: workhorse
+      monitor: global
+      tier: sv
+      type: ai-assisted
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_6h{component="workhorse",env="gprd",monitor="global",tier="sv",type="ai-assisted"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_6h{component="workhorse",env="gprd",monitor="global",tier="sv",type="ai-assisted"} offset 30s
       )
 - name: 'Global SLI Metrics: ai-assisted - Burn-Rate 3d'
   interval: 2m
@@ -601,6 +657,34 @@ groups:
       sum by (env,environment,stage) (
         avg_over_time(gitlab_component_errors:rate_1h{component="rails_request",env="gprd",monitor="global",tier="sv",type="ai-assisted"}[3d] offset 30s)
       )
+  - record: gitlab_component_errors:ratio_3d
+    labels:
+      component: rails_request
+      monitor: global
+      tier: sv
+      type: ai-assisted
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_3d{component="rails_request",env="gprd",monitor="global",tier="sv",type="ai-assisted"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_3d{component="rails_request",env="gprd",monitor="global",tier="sv",type="ai-assisted"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_3d
+    labels:
+      component: rails_request
+      monitor: global
+      tier: sv
+      type: ai-assisted
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_3d{component="rails_request",env="gprd",monitor="global",tier="sv",type="ai-assisted"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_3d{component="rails_request",env="gprd",monitor="global",tier="sv",type="ai-assisted"} offset 30s
+      )
   - record: gitlab_component_apdex:success:rate_3d
     labels:
       component: workhorse
@@ -635,4 +719,32 @@ groups:
     expr: |
       sum by (env,environment,stage) (
         avg_over_time(gitlab_component_errors:rate_1h{component="workhorse",env="gprd",monitor="global",tier="sv",type="ai-assisted"}[3d] offset 30s)
+      )
+  - record: gitlab_component_errors:ratio_3d
+    labels:
+      component: workhorse
+      monitor: global
+      tier: sv
+      type: ai-assisted
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_3d{component="workhorse",env="gprd",monitor="global",tier="sv",type="ai-assisted"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_3d{component="workhorse",env="gprd",monitor="global",tier="sv",type="ai-assisted"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_3d
+    labels:
+      component: workhorse
+      monitor: global
+      tier: sv
+      type: ai-assisted
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_3d{component="workhorse",env="gprd",monitor="global",tier="sv",type="ai-assisted"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_3d{component="workhorse",env="gprd",monitor="global",tier="sv",type="ai-assisted"} offset 30s
       )

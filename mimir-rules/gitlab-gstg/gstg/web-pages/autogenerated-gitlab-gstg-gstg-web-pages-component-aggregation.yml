@@ -624,6 +624,34 @@ groups:
       sum by (env,environment,stage) (
         avg_over_time(gitlab_component_errors:rate_1h{component="loadbalancer",env="gstg",monitor="global",tier="sv",type="web-pages"}[6h] offset 30s)
       )
+  - record: gitlab_component_errors:ratio_6h
+    labels:
+      component: loadbalancer
+      monitor: global
+      tier: sv
+      type: web-pages
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_6h{component="loadbalancer",env="gstg",monitor="global",tier="sv",type="web-pages"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_6h{component="loadbalancer",env="gstg",monitor="global",tier="sv",type="web-pages"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_6h
+    labels:
+      component: loadbalancer
+      monitor: global
+      tier: sv
+      type: web-pages
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_6h{component="loadbalancer",env="gstg",monitor="global",tier="sv",type="web-pages"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_6h{component="loadbalancer",env="gstg",monitor="global",tier="sv",type="web-pages"} offset 30s
+      )
   - record: gitlab_component_apdex:success:rate_6h
     labels:
       component: loadbalancer_https
@@ -659,6 +687,34 @@ groups:
       sum by (env,environment,stage) (
         avg_over_time(gitlab_component_errors:rate_1h{component="loadbalancer_https",env="gstg",monitor="global",tier="sv",type="web-pages"}[6h] offset 30s)
       )
+  - record: gitlab_component_errors:ratio_6h
+    labels:
+      component: loadbalancer_https
+      monitor: global
+      tier: sv
+      type: web-pages
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_6h{component="loadbalancer_https",env="gstg",monitor="global",tier="sv",type="web-pages"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_6h{component="loadbalancer_https",env="gstg",monitor="global",tier="sv",type="web-pages"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_6h
+    labels:
+      component: loadbalancer_https
+      monitor: global
+      tier: sv
+      type: web-pages
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_6h{component="loadbalancer_https",env="gstg",monitor="global",tier="sv",type="web-pages"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_6h{component="loadbalancer_https",env="gstg",monitor="global",tier="sv",type="web-pages"} offset 30s
+      )
   - record: gitlab_component_apdex:success:rate_6h
     labels:
       component: web_pages_server
@@ -693,6 +749,34 @@ groups:
     expr: |
       sum by (env,environment,stage) (
         avg_over_time(gitlab_component_errors:rate_1h{component="web_pages_server",env="gstg",monitor="global",tier="sv",type="web-pages"}[6h] offset 30s)
+      )
+  - record: gitlab_component_errors:ratio_6h
+    labels:
+      component: web_pages_server
+      monitor: global
+      tier: sv
+      type: web-pages
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_6h{component="web_pages_server",env="gstg",monitor="global",tier="sv",type="web-pages"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_6h{component="web_pages_server",env="gstg",monitor="global",tier="sv",type="web-pages"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_6h
+    labels:
+      component: web_pages_server
+      monitor: global
+      tier: sv
+      type: web-pages
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_6h{component="web_pages_server",env="gstg",monitor="global",tier="sv",type="web-pages"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_6h{component="web_pages_server",env="gstg",monitor="global",tier="sv",type="web-pages"} offset 30s
       )
 - name: 'Global SLI Metrics: web-pages - Burn-Rate 3d'
   interval: 2m
@@ -732,6 +816,34 @@ groups:
       sum by (env,environment,stage) (
         avg_over_time(gitlab_component_errors:rate_1h{component="loadbalancer",env="gstg",monitor="global",tier="sv",type="web-pages"}[3d] offset 30s)
       )
+  - record: gitlab_component_errors:ratio_3d
+    labels:
+      component: loadbalancer
+      monitor: global
+      tier: sv
+      type: web-pages
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_3d{component="loadbalancer",env="gstg",monitor="global",tier="sv",type="web-pages"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_3d{component="loadbalancer",env="gstg",monitor="global",tier="sv",type="web-pages"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_3d
+    labels:
+      component: loadbalancer
+      monitor: global
+      tier: sv
+      type: web-pages
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_3d{component="loadbalancer",env="gstg",monitor="global",tier="sv",type="web-pages"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_3d{component="loadbalancer",env="gstg",monitor="global",tier="sv",type="web-pages"} offset 30s
+      )
   - record: gitlab_component_apdex:success:rate_3d
     labels:
       component: loadbalancer_https
@@ -767,6 +879,34 @@ groups:
       sum by (env,environment,stage) (
         avg_over_time(gitlab_component_errors:rate_1h{component="loadbalancer_https",env="gstg",monitor="global",tier="sv",type="web-pages"}[3d] offset 30s)
       )
+  - record: gitlab_component_errors:ratio_3d
+    labels:
+      component: loadbalancer_https
+      monitor: global
+      tier: sv
+      type: web-pages
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_3d{component="loadbalancer_https",env="gstg",monitor="global",tier="sv",type="web-pages"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_3d{component="loadbalancer_https",env="gstg",monitor="global",tier="sv",type="web-pages"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_3d
+    labels:
+      component: loadbalancer_https
+      monitor: global
+      tier: sv
+      type: web-pages
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_3d{component="loadbalancer_https",env="gstg",monitor="global",tier="sv",type="web-pages"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_3d{component="loadbalancer_https",env="gstg",monitor="global",tier="sv",type="web-pages"} offset 30s
+      )
   - record: gitlab_component_apdex:success:rate_3d
     labels:
       component: web_pages_server
@@ -801,4 +941,32 @@ groups:
     expr: |
       sum by (env,environment,stage) (
         avg_over_time(gitlab_component_errors:rate_1h{component="web_pages_server",env="gstg",monitor="global",tier="sv",type="web-pages"}[3d] offset 30s)
+      )
+  - record: gitlab_component_errors:ratio_3d
+    labels:
+      component: web_pages_server
+      monitor: global
+      tier: sv
+      type: web-pages
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_3d{component="web_pages_server",env="gstg",monitor="global",tier="sv",type="web-pages"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_3d{component="web_pages_server",env="gstg",monitor="global",tier="sv",type="web-pages"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_3d
+    labels:
+      component: web_pages_server
+      monitor: global
+      tier: sv
+      type: web-pages
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_3d{component="web_pages_server",env="gstg",monitor="global",tier="sv",type="web-pages"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_3d{component="web_pages_server",env="gstg",monitor="global",tier="sv",type="web-pages"} offset 30s
       )

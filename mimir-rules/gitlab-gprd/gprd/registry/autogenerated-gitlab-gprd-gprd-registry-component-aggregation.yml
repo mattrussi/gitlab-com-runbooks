@@ -2430,6 +2430,34 @@ groups:
       sum by (env,environment,stage) (
         avg_over_time(gitlab_component_errors:rate_1h{component="database",env="gprd",monitor="global",tier="sv",type="registry"}[6h] offset 30s)
       )
+  - record: gitlab_component_errors:ratio_6h
+    labels:
+      component: database
+      monitor: global
+      tier: sv
+      type: registry
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_6h{component="database",env="gprd",monitor="global",tier="sv",type="registry"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_6h{component="database",env="gprd",monitor="global",tier="sv",type="registry"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_6h
+    labels:
+      component: database
+      monitor: global
+      tier: sv
+      type: registry
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_6h{component="database",env="gprd",monitor="global",tier="sv",type="registry"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_6h{component="database",env="gprd",monitor="global",tier="sv",type="registry"} offset 30s
+      )
   - record: gitlab_component_apdex:success:rate_6h
     labels:
       component: garbagecollector
@@ -2464,6 +2492,34 @@ groups:
     expr: |
       sum by (env,environment,stage) (
         avg_over_time(gitlab_component_errors:rate_1h{component="garbagecollector",env="gprd",monitor="global",tier="sv",type="registry"}[6h] offset 30s)
+      )
+  - record: gitlab_component_errors:ratio_6h
+    labels:
+      component: garbagecollector
+      monitor: global
+      tier: sv
+      type: registry
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_6h{component="garbagecollector",env="gprd",monitor="global",tier="sv",type="registry"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_6h{component="garbagecollector",env="gprd",monitor="global",tier="sv",type="registry"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_6h
+    labels:
+      component: garbagecollector
+      monitor: global
+      tier: sv
+      type: registry
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_6h{component="garbagecollector",env="gprd",monitor="global",tier="sv",type="registry"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_6h{component="garbagecollector",env="gprd",monitor="global",tier="sv",type="registry"} offset 30s
       )
   - record: gitlab_component_apdex:success:rate_6h
     labels:
@@ -2500,6 +2556,34 @@ groups:
       sum by (env,environment,stage) (
         avg_over_time(gitlab_component_errors:rate_1h{component="loadbalancer",env="gprd",monitor="global",tier="sv",type="registry"}[6h] offset 30s)
       )
+  - record: gitlab_component_errors:ratio_6h
+    labels:
+      component: loadbalancer
+      monitor: global
+      tier: sv
+      type: registry
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_6h{component="loadbalancer",env="gprd",monitor="global",tier="sv",type="registry"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_6h{component="loadbalancer",env="gprd",monitor="global",tier="sv",type="registry"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_6h
+    labels:
+      component: loadbalancer
+      monitor: global
+      tier: sv
+      type: registry
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_6h{component="loadbalancer",env="gprd",monitor="global",tier="sv",type="registry"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_6h{component="loadbalancer",env="gprd",monitor="global",tier="sv",type="registry"} offset 30s
+      )
   - record: gitlab_component_apdex:success:rate_6h
     labels:
       component: redis
@@ -2534,6 +2618,34 @@ groups:
     expr: |
       sum by (env,environment,stage) (
         avg_over_time(gitlab_component_errors:rate_1h{component="redis",env="gprd",monitor="global",tier="sv",type="registry"}[6h] offset 30s)
+      )
+  - record: gitlab_component_errors:ratio_6h
+    labels:
+      component: redis
+      monitor: global
+      tier: sv
+      type: registry
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_6h{component="redis",env="gprd",monitor="global",tier="sv",type="registry"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_6h{component="redis",env="gprd",monitor="global",tier="sv",type="registry"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_6h
+    labels:
+      component: redis
+      monitor: global
+      tier: sv
+      type: registry
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_6h{component="redis",env="gprd",monitor="global",tier="sv",type="registry"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_6h{component="redis",env="gprd",monitor="global",tier="sv",type="registry"} offset 30s
       )
   - record: gitlab_component_apdex:success:rate_6h
     labels:
@@ -2573,6 +2685,34 @@ groups:
       sum by (env,environment) (
         avg_over_time(gitlab_component_errors:rate_1h{component="registry_cdn",env="gprd",monitor="global",tier="sv",type="registry"}[6h] offset 30s)
       )
+  - record: gitlab_component_errors:ratio_6h
+    labels:
+      component: registry_cdn
+      monitor: global
+      tier: sv
+      type: registry
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_6h{component="registry_cdn",env="gprd",monitor="global",tier="sv",type="registry"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_6h{component="registry_cdn",env="gprd",monitor="global",tier="sv",type="registry"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_6h
+    labels:
+      component: registry_cdn
+      monitor: global
+      tier: sv
+      type: registry
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_6h{component="registry_cdn",env="gprd",monitor="global",tier="sv",type="registry"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_6h{component="registry_cdn",env="gprd",monitor="global",tier="sv",type="registry"} offset 30s
+      )
   - record: gitlab_component_apdex:success:rate_6h
     labels:
       component: registry_server
@@ -2607,6 +2747,34 @@ groups:
     expr: |
       sum by (env,environment,stage) (
         avg_over_time(gitlab_component_errors:rate_1h{component="registry_server",env="gprd",monitor="global",tier="sv",type="registry"}[6h] offset 30s)
+      )
+  - record: gitlab_component_errors:ratio_6h
+    labels:
+      component: registry_server
+      monitor: global
+      tier: sv
+      type: registry
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_6h{component="registry_server",env="gprd",monitor="global",tier="sv",type="registry"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_6h{component="registry_server",env="gprd",monitor="global",tier="sv",type="registry"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_6h
+    labels:
+      component: registry_server
+      monitor: global
+      tier: sv
+      type: registry
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_6h{component="registry_server",env="gprd",monitor="global",tier="sv",type="registry"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_6h{component="registry_server",env="gprd",monitor="global",tier="sv",type="registry"} offset 30s
       )
   - record: gitlab_component_apdex:success:rate_6h
     labels:
@@ -2643,6 +2811,34 @@ groups:
       sum by (env,environment,stage) (
         avg_over_time(gitlab_component_errors:rate_1h{component="server_route_blob_upload_uuid_deletes",env="gprd",monitor="global",tier="sv",type="registry"}[6h] offset 30s)
       )
+  - record: gitlab_component_errors:ratio_6h
+    labels:
+      component: server_route_blob_upload_uuid_deletes
+      monitor: global
+      tier: sv
+      type: registry
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_6h{component="server_route_blob_upload_uuid_deletes",env="gprd",monitor="global",tier="sv",type="registry"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_6h{component="server_route_blob_upload_uuid_deletes",env="gprd",monitor="global",tier="sv",type="registry"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_6h
+    labels:
+      component: server_route_blob_upload_uuid_deletes
+      monitor: global
+      tier: sv
+      type: registry
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_6h{component="server_route_blob_upload_uuid_deletes",env="gprd",monitor="global",tier="sv",type="registry"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_6h{component="server_route_blob_upload_uuid_deletes",env="gprd",monitor="global",tier="sv",type="registry"} offset 30s
+      )
   - record: gitlab_component_apdex:success:rate_6h
     labels:
       component: server_route_blob_upload_uuid_reads
@@ -2677,6 +2873,34 @@ groups:
     expr: |
       sum by (env,environment,stage) (
         avg_over_time(gitlab_component_errors:rate_1h{component="server_route_blob_upload_uuid_reads",env="gprd",monitor="global",tier="sv",type="registry"}[6h] offset 30s)
+      )
+  - record: gitlab_component_errors:ratio_6h
+    labels:
+      component: server_route_blob_upload_uuid_reads
+      monitor: global
+      tier: sv
+      type: registry
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_6h{component="server_route_blob_upload_uuid_reads",env="gprd",monitor="global",tier="sv",type="registry"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_6h{component="server_route_blob_upload_uuid_reads",env="gprd",monitor="global",tier="sv",type="registry"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_6h
+    labels:
+      component: server_route_blob_upload_uuid_reads
+      monitor: global
+      tier: sv
+      type: registry
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_6h{component="server_route_blob_upload_uuid_reads",env="gprd",monitor="global",tier="sv",type="registry"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_6h{component="server_route_blob_upload_uuid_reads",env="gprd",monitor="global",tier="sv",type="registry"} offset 30s
       )
   - record: gitlab_component_apdex:success:rate_6h
     labels:
@@ -2713,6 +2937,34 @@ groups:
       sum by (env,environment,stage) (
         avg_over_time(gitlab_component_errors:rate_1h{component="server_route_blob_upload_uuid_writes",env="gprd",monitor="global",tier="sv",type="registry"}[6h] offset 30s)
       )
+  - record: gitlab_component_errors:ratio_6h
+    labels:
+      component: server_route_blob_upload_uuid_writes
+      monitor: global
+      tier: sv
+      type: registry
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_6h{component="server_route_blob_upload_uuid_writes",env="gprd",monitor="global",tier="sv",type="registry"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_6h{component="server_route_blob_upload_uuid_writes",env="gprd",monitor="global",tier="sv",type="registry"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_6h
+    labels:
+      component: server_route_blob_upload_uuid_writes
+      monitor: global
+      tier: sv
+      type: registry
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_6h{component="server_route_blob_upload_uuid_writes",env="gprd",monitor="global",tier="sv",type="registry"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_6h{component="server_route_blob_upload_uuid_writes",env="gprd",monitor="global",tier="sv",type="registry"} offset 30s
+      )
   - record: gitlab_component_apdex:success:rate_6h
     labels:
       component: server_route_manifest_reads
@@ -2748,6 +3000,34 @@ groups:
       sum by (env,environment,stage) (
         avg_over_time(gitlab_component_errors:rate_1h{component="server_route_manifest_reads",env="gprd",monitor="global",tier="sv",type="registry"}[6h] offset 30s)
       )
+  - record: gitlab_component_errors:ratio_6h
+    labels:
+      component: server_route_manifest_reads
+      monitor: global
+      tier: sv
+      type: registry
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_6h{component="server_route_manifest_reads",env="gprd",monitor="global",tier="sv",type="registry"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_6h{component="server_route_manifest_reads",env="gprd",monitor="global",tier="sv",type="registry"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_6h
+    labels:
+      component: server_route_manifest_reads
+      monitor: global
+      tier: sv
+      type: registry
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_6h{component="server_route_manifest_reads",env="gprd",monitor="global",tier="sv",type="registry"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_6h{component="server_route_manifest_reads",env="gprd",monitor="global",tier="sv",type="registry"} offset 30s
+      )
   - record: gitlab_component_apdex:success:rate_6h
     labels:
       component: server_route_manifest_writes
@@ -2782,6 +3062,34 @@ groups:
     expr: |
       sum by (env,environment,stage) (
         avg_over_time(gitlab_component_errors:rate_1h{component="server_route_manifest_writes",env="gprd",monitor="global",tier="sv",type="registry"}[6h] offset 30s)
+      )
+  - record: gitlab_component_errors:ratio_6h
+    labels:
+      component: server_route_manifest_writes
+      monitor: global
+      tier: sv
+      type: registry
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_6h{component="server_route_manifest_writes",env="gprd",monitor="global",tier="sv",type="registry"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_6h{component="server_route_manifest_writes",env="gprd",monitor="global",tier="sv",type="registry"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_6h
+    labels:
+      component: server_route_manifest_writes
+      monitor: global
+      tier: sv
+      type: registry
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_6h{component="server_route_manifest_writes",env="gprd",monitor="global",tier="sv",type="registry"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_6h{component="server_route_manifest_writes",env="gprd",monitor="global",tier="sv",type="registry"} offset 30s
       )
 - name: 'Global SLI Metrics: registry - Burn-Rate 3d'
   interval: 2m
@@ -2821,6 +3129,34 @@ groups:
       sum by (env,environment,stage) (
         avg_over_time(gitlab_component_errors:rate_1h{component="database",env="gprd",monitor="global",tier="sv",type="registry"}[3d] offset 30s)
       )
+  - record: gitlab_component_errors:ratio_3d
+    labels:
+      component: database
+      monitor: global
+      tier: sv
+      type: registry
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_3d{component="database",env="gprd",monitor="global",tier="sv",type="registry"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_3d{component="database",env="gprd",monitor="global",tier="sv",type="registry"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_3d
+    labels:
+      component: database
+      monitor: global
+      tier: sv
+      type: registry
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_3d{component="database",env="gprd",monitor="global",tier="sv",type="registry"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_3d{component="database",env="gprd",monitor="global",tier="sv",type="registry"} offset 30s
+      )
   - record: gitlab_component_apdex:success:rate_3d
     labels:
       component: garbagecollector
@@ -2855,6 +3191,34 @@ groups:
     expr: |
       sum by (env,environment,stage) (
         avg_over_time(gitlab_component_errors:rate_1h{component="garbagecollector",env="gprd",monitor="global",tier="sv",type="registry"}[3d] offset 30s)
+      )
+  - record: gitlab_component_errors:ratio_3d
+    labels:
+      component: garbagecollector
+      monitor: global
+      tier: sv
+      type: registry
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_3d{component="garbagecollector",env="gprd",monitor="global",tier="sv",type="registry"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_3d{component="garbagecollector",env="gprd",monitor="global",tier="sv",type="registry"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_3d
+    labels:
+      component: garbagecollector
+      monitor: global
+      tier: sv
+      type: registry
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_3d{component="garbagecollector",env="gprd",monitor="global",tier="sv",type="registry"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_3d{component="garbagecollector",env="gprd",monitor="global",tier="sv",type="registry"} offset 30s
       )
   - record: gitlab_component_apdex:success:rate_3d
     labels:
@@ -2891,6 +3255,34 @@ groups:
       sum by (env,environment,stage) (
         avg_over_time(gitlab_component_errors:rate_1h{component="loadbalancer",env="gprd",monitor="global",tier="sv",type="registry"}[3d] offset 30s)
       )
+  - record: gitlab_component_errors:ratio_3d
+    labels:
+      component: loadbalancer
+      monitor: global
+      tier: sv
+      type: registry
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_3d{component="loadbalancer",env="gprd",monitor="global",tier="sv",type="registry"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_3d{component="loadbalancer",env="gprd",monitor="global",tier="sv",type="registry"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_3d
+    labels:
+      component: loadbalancer
+      monitor: global
+      tier: sv
+      type: registry
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_3d{component="loadbalancer",env="gprd",monitor="global",tier="sv",type="registry"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_3d{component="loadbalancer",env="gprd",monitor="global",tier="sv",type="registry"} offset 30s
+      )
   - record: gitlab_component_apdex:success:rate_3d
     labels:
       component: redis
@@ -2925,6 +3317,34 @@ groups:
     expr: |
       sum by (env,environment,stage) (
         avg_over_time(gitlab_component_errors:rate_1h{component="redis",env="gprd",monitor="global",tier="sv",type="registry"}[3d] offset 30s)
+      )
+  - record: gitlab_component_errors:ratio_3d
+    labels:
+      component: redis
+      monitor: global
+      tier: sv
+      type: registry
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_3d{component="redis",env="gprd",monitor="global",tier="sv",type="registry"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_3d{component="redis",env="gprd",monitor="global",tier="sv",type="registry"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_3d
+    labels:
+      component: redis
+      monitor: global
+      tier: sv
+      type: registry
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_3d{component="redis",env="gprd",monitor="global",tier="sv",type="registry"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_3d{component="redis",env="gprd",monitor="global",tier="sv",type="registry"} offset 30s
       )
   - record: gitlab_component_apdex:success:rate_3d
     labels:
@@ -2964,6 +3384,34 @@ groups:
       sum by (env,environment) (
         avg_over_time(gitlab_component_errors:rate_1h{component="registry_cdn",env="gprd",monitor="global",tier="sv",type="registry"}[3d] offset 30s)
       )
+  - record: gitlab_component_errors:ratio_3d
+    labels:
+      component: registry_cdn
+      monitor: global
+      tier: sv
+      type: registry
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_3d{component="registry_cdn",env="gprd",monitor="global",tier="sv",type="registry"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_3d{component="registry_cdn",env="gprd",monitor="global",tier="sv",type="registry"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_3d
+    labels:
+      component: registry_cdn
+      monitor: global
+      tier: sv
+      type: registry
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_3d{component="registry_cdn",env="gprd",monitor="global",tier="sv",type="registry"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_3d{component="registry_cdn",env="gprd",monitor="global",tier="sv",type="registry"} offset 30s
+      )
   - record: gitlab_component_apdex:success:rate_3d
     labels:
       component: registry_server
@@ -2998,6 +3446,34 @@ groups:
     expr: |
       sum by (env,environment,stage) (
         avg_over_time(gitlab_component_errors:rate_1h{component="registry_server",env="gprd",monitor="global",tier="sv",type="registry"}[3d] offset 30s)
+      )
+  - record: gitlab_component_errors:ratio_3d
+    labels:
+      component: registry_server
+      monitor: global
+      tier: sv
+      type: registry
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_3d{component="registry_server",env="gprd",monitor="global",tier="sv",type="registry"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_3d{component="registry_server",env="gprd",monitor="global",tier="sv",type="registry"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_3d
+    labels:
+      component: registry_server
+      monitor: global
+      tier: sv
+      type: registry
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_3d{component="registry_server",env="gprd",monitor="global",tier="sv",type="registry"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_3d{component="registry_server",env="gprd",monitor="global",tier="sv",type="registry"} offset 30s
       )
   - record: gitlab_component_apdex:success:rate_3d
     labels:
@@ -3034,6 +3510,34 @@ groups:
       sum by (env,environment,stage) (
         avg_over_time(gitlab_component_errors:rate_1h{component="server_route_blob_upload_uuid_deletes",env="gprd",monitor="global",tier="sv",type="registry"}[3d] offset 30s)
       )
+  - record: gitlab_component_errors:ratio_3d
+    labels:
+      component: server_route_blob_upload_uuid_deletes
+      monitor: global
+      tier: sv
+      type: registry
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_3d{component="server_route_blob_upload_uuid_deletes",env="gprd",monitor="global",tier="sv",type="registry"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_3d{component="server_route_blob_upload_uuid_deletes",env="gprd",monitor="global",tier="sv",type="registry"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_3d
+    labels:
+      component: server_route_blob_upload_uuid_deletes
+      monitor: global
+      tier: sv
+      type: registry
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_3d{component="server_route_blob_upload_uuid_deletes",env="gprd",monitor="global",tier="sv",type="registry"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_3d{component="server_route_blob_upload_uuid_deletes",env="gprd",monitor="global",tier="sv",type="registry"} offset 30s
+      )
   - record: gitlab_component_apdex:success:rate_3d
     labels:
       component: server_route_blob_upload_uuid_reads
@@ -3068,6 +3572,34 @@ groups:
     expr: |
       sum by (env,environment,stage) (
         avg_over_time(gitlab_component_errors:rate_1h{component="server_route_blob_upload_uuid_reads",env="gprd",monitor="global",tier="sv",type="registry"}[3d] offset 30s)
+      )
+  - record: gitlab_component_errors:ratio_3d
+    labels:
+      component: server_route_blob_upload_uuid_reads
+      monitor: global
+      tier: sv
+      type: registry
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_3d{component="server_route_blob_upload_uuid_reads",env="gprd",monitor="global",tier="sv",type="registry"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_3d{component="server_route_blob_upload_uuid_reads",env="gprd",monitor="global",tier="sv",type="registry"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_3d
+    labels:
+      component: server_route_blob_upload_uuid_reads
+      monitor: global
+      tier: sv
+      type: registry
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_3d{component="server_route_blob_upload_uuid_reads",env="gprd",monitor="global",tier="sv",type="registry"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_3d{component="server_route_blob_upload_uuid_reads",env="gprd",monitor="global",tier="sv",type="registry"} offset 30s
       )
   - record: gitlab_component_apdex:success:rate_3d
     labels:
@@ -3104,6 +3636,34 @@ groups:
       sum by (env,environment,stage) (
         avg_over_time(gitlab_component_errors:rate_1h{component="server_route_blob_upload_uuid_writes",env="gprd",monitor="global",tier="sv",type="registry"}[3d] offset 30s)
       )
+  - record: gitlab_component_errors:ratio_3d
+    labels:
+      component: server_route_blob_upload_uuid_writes
+      monitor: global
+      tier: sv
+      type: registry
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_3d{component="server_route_blob_upload_uuid_writes",env="gprd",monitor="global",tier="sv",type="registry"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_3d{component="server_route_blob_upload_uuid_writes",env="gprd",monitor="global",tier="sv",type="registry"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_3d
+    labels:
+      component: server_route_blob_upload_uuid_writes
+      monitor: global
+      tier: sv
+      type: registry
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_3d{component="server_route_blob_upload_uuid_writes",env="gprd",monitor="global",tier="sv",type="registry"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_3d{component="server_route_blob_upload_uuid_writes",env="gprd",monitor="global",tier="sv",type="registry"} offset 30s
+      )
   - record: gitlab_component_apdex:success:rate_3d
     labels:
       component: server_route_manifest_reads
@@ -3139,6 +3699,34 @@ groups:
       sum by (env,environment,stage) (
         avg_over_time(gitlab_component_errors:rate_1h{component="server_route_manifest_reads",env="gprd",monitor="global",tier="sv",type="registry"}[3d] offset 30s)
       )
+  - record: gitlab_component_errors:ratio_3d
+    labels:
+      component: server_route_manifest_reads
+      monitor: global
+      tier: sv
+      type: registry
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_3d{component="server_route_manifest_reads",env="gprd",monitor="global",tier="sv",type="registry"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_3d{component="server_route_manifest_reads",env="gprd",monitor="global",tier="sv",type="registry"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_3d
+    labels:
+      component: server_route_manifest_reads
+      monitor: global
+      tier: sv
+      type: registry
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_3d{component="server_route_manifest_reads",env="gprd",monitor="global",tier="sv",type="registry"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_3d{component="server_route_manifest_reads",env="gprd",monitor="global",tier="sv",type="registry"} offset 30s
+      )
   - record: gitlab_component_apdex:success:rate_3d
     labels:
       component: server_route_manifest_writes
@@ -3173,4 +3761,32 @@ groups:
     expr: |
       sum by (env,environment,stage) (
         avg_over_time(gitlab_component_errors:rate_1h{component="server_route_manifest_writes",env="gprd",monitor="global",tier="sv",type="registry"}[3d] offset 30s)
+      )
+  - record: gitlab_component_errors:ratio_3d
+    labels:
+      component: server_route_manifest_writes
+      monitor: global
+      tier: sv
+      type: registry
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_3d{component="server_route_manifest_writes",env="gprd",monitor="global",tier="sv",type="registry"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_3d{component="server_route_manifest_writes",env="gprd",monitor="global",tier="sv",type="registry"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_3d
+    labels:
+      component: server_route_manifest_writes
+      monitor: global
+      tier: sv
+      type: registry
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_3d{component="server_route_manifest_writes",env="gprd",monitor="global",tier="sv",type="registry"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_3d{component="server_route_manifest_writes",env="gprd",monitor="global",tier="sv",type="registry"} offset 30s
       )

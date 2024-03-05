@@ -291,6 +291,34 @@ groups:
       sum by (env,environment) (
         avg_over_time(gitlab_component_errors:rate_1h{component="mail_delivery",env="gstg",monitor="global",tier="sv",type="mailgun"}[6h] offset 30s)
       )
+  - record: gitlab_component_errors:ratio_6h
+    labels:
+      component: mail_delivery
+      monitor: global
+      tier: sv
+      type: mailgun
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_6h{component="mail_delivery",env="gstg",monitor="global",tier="sv",type="mailgun"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_6h{component="mail_delivery",env="gstg",monitor="global",tier="sv",type="mailgun"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_6h
+    labels:
+      component: mail_delivery
+      monitor: global
+      tier: sv
+      type: mailgun
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_6h{component="mail_delivery",env="gstg",monitor="global",tier="sv",type="mailgun"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_6h{component="mail_delivery",env="gstg",monitor="global",tier="sv",type="mailgun"} offset 30s
+      )
 - name: 'Global SLI Metrics: mailgun - Burn-Rate 3d'
   interval: 2m
   rules:
@@ -331,4 +359,32 @@ groups:
     expr: |
       sum by (env,environment) (
         avg_over_time(gitlab_component_errors:rate_1h{component="mail_delivery",env="gstg",monitor="global",tier="sv",type="mailgun"}[3d] offset 30s)
+      )
+  - record: gitlab_component_errors:ratio_3d
+    labels:
+      component: mail_delivery
+      monitor: global
+      tier: sv
+      type: mailgun
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_3d{component="mail_delivery",env="gstg",monitor="global",tier="sv",type="mailgun"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_3d{component="mail_delivery",env="gstg",monitor="global",tier="sv",type="mailgun"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_3d
+    labels:
+      component: mail_delivery
+      monitor: global
+      tier: sv
+      type: mailgun
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_3d{component="mail_delivery",env="gstg",monitor="global",tier="sv",type="mailgun"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_3d{component="mail_delivery",env="gstg",monitor="global",tier="sv",type="mailgun"} offset 30s
       )
