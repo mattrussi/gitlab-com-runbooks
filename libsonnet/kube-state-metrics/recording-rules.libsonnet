@@ -3,6 +3,7 @@ local aggregations = import 'promql/aggregations.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
 local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
 local strings = import 'utils/strings.libsonnet';
+local filterLabelsFromLabelsHash = (import 'promql/labels.libsonnet').filterLabelsFromLabelsHash;
 
 // These are common labels used in join expressions for kube-state-metrics
 local commonJoinOnLabels =
@@ -226,7 +227,7 @@ local generateRelabelingExpression(descriptor, kubernetesLabelSelector, staticLa
   local dynamicLabels = labelTaxonomy.labelTaxonomy(labelTaxonomy.labels.stage | labelTaxonomy.labels.shard) + descriptor.extraLabels;
 
   // Remove any static labels that may appear in the set of dynamic labels too
-  local dynamicLabelsFiltered = std.filter(function(l) !std.objectHas(staticLabels, l), dynamicLabels);
+  local dynamicLabelsFiltered = filterLabelsFromLabelsHash(dynamicLabels, staticLabels);
 
   local relabels = std.foldl(
     function(memo, label)

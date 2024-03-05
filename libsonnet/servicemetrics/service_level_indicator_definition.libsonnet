@@ -7,6 +7,7 @@ local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
 local descriptor = import 'servicemetrics/sli_metric_descriptor.libsonnet';
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 local strings = import 'utils/strings.libsonnet';
+local filterLabelsFromLabelsHash = (import 'promql/labels.libsonnet').filterLabelsFromLabelsHash;
 
 local featureCategoryFromSourceMetrics = 'featureCategoryFromSourceMetrics';
 
@@ -81,10 +82,6 @@ local validateAndApplySLIDefaults(sliName, component, inheritedDefaults) =
   {
     name: sliName,
   };
-
-// Given an array of labels to aggregate by, filters out those that exist in the staticLabels hash
-local filterStaticLabelsFromAggregationLabels(aggregationLabels, staticLabelsHash) =
-  std.filter(function(label) !std.objectHas(staticLabelsHash, label), aggregationLabels);
 
 // Currently, we use 1h metrics for upscaling source
 local getUpscaleLabels(sli, burnRate) =
@@ -212,7 +209,7 @@ local serviceLevelIndicatorDefinition(sliName, serviceLevelIndicator) =
         local apdexMetric = serviceLevelIndicator.apdex { config+: config };
         local upscaleLabels = getUpscaleLabels(self, burnRate);
         local allStaticLabels = recordingRuleStaticLabels + serviceLevelIndicator.staticLabels + upscaleLabels;
-        local aggregationLabelsWithoutStaticLabels = filterStaticLabelsFromAggregationLabels(aggregationSet.labels, allStaticLabels);
+        local aggregationLabelsWithoutStaticLabels = filterLabelsFromLabelsHash(aggregationSet.labels, allStaticLabels);
 
         local apdexSuccessRateRecordingRuleName = aggregationSet.getApdexSuccessRateMetricForBurnRate(burnRate);
         local apdexWeightRecordingRuleName = aggregationSet.getApdexWeightMetricForBurnRate(burnRate);
@@ -281,7 +278,7 @@ local serviceLevelIndicatorDefinition(sliName, serviceLevelIndicator) =
           record: requestRateRecordingRuleName,
           labels: allStaticLabels,
           expr: requestRateMetric.aggregatedRateQuery(
-            aggregationLabels=filterStaticLabelsFromAggregationLabels(aggregationSet.labels, allStaticLabels),
+            aggregationLabels=filterLabelsFromLabelsHash(aggregationSet.labels, allStaticLabels),
             selector=selector,
             rangeInterval=burnRate,
             offset=aggregationSet.offset,
@@ -299,17 +296,17 @@ local serviceLevelIndicatorDefinition(sliName, serviceLevelIndicator) =
         local allStaticLabels = recordingRuleStaticLabels + serviceLevelIndicator.staticLabels + upscaleLabels;
         local requestRateRecordingRuleName = aggregationSet.getOpsRateMetricForBurnRate(burnRate, required=true);
         local errorRateRecordingRuleName = aggregationSet.getErrorRateMetricForBurnRate(burnRate, required=true);
-        local filteredAggregationLabels = filterStaticLabelsFromAggregationLabels(aggregationSet.labels, allStaticLabels);
+        local filteredAggregationLabels = filterLabelsFromLabelsHash(aggregationSet.labels, allStaticLabels);
 
         local errorRateExpr = errorRateMetric.aggregatedRateQuery(
-          aggregationLabels=filterStaticLabelsFromAggregationLabels(aggregationSet.labels, allStaticLabels),
+          aggregationLabels=filterLabelsFromLabelsHash(aggregationSet.labels, allStaticLabels),
           selector=selector,
           rangeInterval=burnRate,
           offset=aggregationSet.offset,
         );
 
         local opsRateExpr = opsRateMetric.aggregatedRateQuery(
-          aggregationLabels=filterStaticLabelsFromAggregationLabels(aggregationSet.labels, allStaticLabels),
+          aggregationLabels=filterLabelsFromLabelsHash(aggregationSet.labels, allStaticLabels),
           selector=selector,
           rangeInterval=burnRate,
           offset=aggregationSet.offset,

@@ -16,4 +16,8 @@ local strings = import 'utils/strings.libsonnet';
       labelName: labelName,
       labelValue: labelValue,
     },
+
+  // Given an array of labels, filters out those that exist in the labelsHash
+  filterLabelsFromLabelsHash(labels, labelsHash)::
+    std.filter(function(label) !std.objectHas(labelsHash, label), labels),
 }

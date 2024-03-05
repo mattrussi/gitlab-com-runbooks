@@ -1753,3 +1753,1017 @@ groups:
       sum by (env,environment,stage) (
         gitlab_component_apdex:weight:score_1h{component="thanos_store",env="ops",monitor="global",tier="inf",type="thanos"} offset 30s
       )
+- name: 'Global SLI Metrics: thanos - Burn-Rate 6h'
+  interval: 2m
+  rules:
+  - record: gitlab_component_apdex:success:rate_6h
+    labels:
+      component: rule_evaluation
+      env: thanos
+      environment: thanos
+      monitor: global
+      stage: main
+      tier: inf
+      type: thanos
+    expr: |
+      sum by () (
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="rule_evaluation",env="ops",monitor="global",tier="inf",type="thanos"}[6h] offset 30s)
+      )
+  - record: gitlab_component_apdex:weight:score_6h
+    expr: |
+      sum by () (
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="rule_evaluation",env="ops",monitor="global",tier="inf",type="thanos"}[6h] offset 30s)
+      )
+  - record: gitlab_component_ops:rate_6h
+    labels:
+      component: rule_evaluation
+      env: thanos
+      environment: thanos
+      monitor: global
+      stage: main
+      tier: inf
+      type: thanos
+    expr: |
+      sum by () (
+        avg_over_time(gitlab_component_ops:rate_1h{component="rule_evaluation",env="ops",monitor="global",tier="inf",type="thanos"}[6h] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_6h
+    labels:
+      component: rule_evaluation
+      env: thanos
+      environment: thanos
+      monitor: global
+      stage: main
+      tier: inf
+      type: thanos
+    expr: |
+      sum by () (
+        avg_over_time(gitlab_component_errors:rate_1h{component="rule_evaluation",env="ops",monitor="global",tier="inf",type="thanos"}[6h] offset 30s)
+      )
+  - record: gitlab_component_errors:ratio_6h
+    labels:
+      component: rule_evaluation
+      monitor: global
+      tier: inf
+      type: thanos
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_6h{component="rule_evaluation",env="ops",monitor="global",tier="inf",type="thanos"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_6h{component="rule_evaluation",env="ops",monitor="global",tier="inf",type="thanos"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_6h
+    labels:
+      component: rule_evaluation
+      monitor: global
+      tier: inf
+      type: thanos
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_6h{component="rule_evaluation",env="ops",monitor="global",tier="inf",type="thanos"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_6h{component="rule_evaluation",env="ops",monitor="global",tier="inf",type="thanos"} offset 30s
+      )
+  - record: gitlab_component_apdex:success:rate_6h
+    labels:
+      component: thanos_compactor
+      env: thanos
+      environment: thanos
+      monitor: global
+      stage: main
+      tier: inf
+      type: thanos
+    expr: |
+      sum by () (
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="thanos_compactor",env="ops",monitor="global",tier="inf",type="thanos"}[6h] offset 30s)
+      )
+  - record: gitlab_component_apdex:weight:score_6h
+    expr: |
+      sum by () (
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="thanos_compactor",env="ops",monitor="global",tier="inf",type="thanos"}[6h] offset 30s)
+      )
+  - record: gitlab_component_ops:rate_6h
+    labels:
+      component: thanos_compactor
+      env: thanos
+      environment: thanos
+      monitor: global
+      stage: main
+      tier: inf
+      type: thanos
+    expr: |
+      sum by () (
+        avg_over_time(gitlab_component_ops:rate_1h{component="thanos_compactor",env="ops",monitor="global",tier="inf",type="thanos"}[6h] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_6h
+    labels:
+      component: thanos_compactor
+      env: thanos
+      environment: thanos
+      monitor: global
+      stage: main
+      tier: inf
+      type: thanos
+    expr: |
+      sum by () (
+        avg_over_time(gitlab_component_errors:rate_1h{component="thanos_compactor",env="ops",monitor="global",tier="inf",type="thanos"}[6h] offset 30s)
+      )
+  - record: gitlab_component_errors:ratio_6h
+    labels:
+      component: thanos_compactor
+      monitor: global
+      tier: inf
+      type: thanos
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_6h{component="thanos_compactor",env="ops",monitor="global",tier="inf",type="thanos"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_6h{component="thanos_compactor",env="ops",monitor="global",tier="inf",type="thanos"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_6h
+    labels:
+      component: thanos_compactor
+      monitor: global
+      tier: inf
+      type: thanos
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_6h{component="thanos_compactor",env="ops",monitor="global",tier="inf",type="thanos"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_6h{component="thanos_compactor",env="ops",monitor="global",tier="inf",type="thanos"} offset 30s
+      )
+  - record: gitlab_component_apdex:success:rate_6h
+    labels:
+      component: thanos_memcached
+      env: thanos
+      environment: thanos
+      monitor: global
+      stage: main
+      tier: inf
+      type: thanos
+    expr: |
+      sum by () (
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="thanos_memcached",env="ops",monitor="global",tier="inf",type="thanos"}[6h] offset 30s)
+      )
+  - record: gitlab_component_apdex:weight:score_6h
+    expr: |
+      sum by () (
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="thanos_memcached",env="ops",monitor="global",tier="inf",type="thanos"}[6h] offset 30s)
+      )
+  - record: gitlab_component_ops:rate_6h
+    labels:
+      component: thanos_memcached
+      env: thanos
+      environment: thanos
+      monitor: global
+      stage: main
+      tier: inf
+      type: thanos
+    expr: |
+      sum by () (
+        avg_over_time(gitlab_component_ops:rate_1h{component="thanos_memcached",env="ops",monitor="global",tier="inf",type="thanos"}[6h] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_6h
+    labels:
+      component: thanos_memcached
+      env: thanos
+      environment: thanos
+      monitor: global
+      stage: main
+      tier: inf
+      type: thanos
+    expr: |
+      sum by () (
+        avg_over_time(gitlab_component_errors:rate_1h{component="thanos_memcached",env="ops",monitor="global",tier="inf",type="thanos"}[6h] offset 30s)
+      )
+  - record: gitlab_component_errors:ratio_6h
+    labels:
+      component: thanos_memcached
+      monitor: global
+      tier: inf
+      type: thanos
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_6h{component="thanos_memcached",env="ops",monitor="global",tier="inf",type="thanos"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_6h{component="thanos_memcached",env="ops",monitor="global",tier="inf",type="thanos"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_6h
+    labels:
+      component: thanos_memcached
+      monitor: global
+      tier: inf
+      type: thanos
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_6h{component="thanos_memcached",env="ops",monitor="global",tier="inf",type="thanos"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_6h{component="thanos_memcached",env="ops",monitor="global",tier="inf",type="thanos"} offset 30s
+      )
+  - record: gitlab_component_apdex:success:rate_6h
+    labels:
+      component: thanos_query
+      env: thanos
+      environment: thanos
+      monitor: global
+      stage: main
+      tier: inf
+      type: thanos
+    expr: |
+      sum by () (
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="thanos_query",env="ops",monitor="global",tier="inf",type="thanos"}[6h] offset 30s)
+      )
+  - record: gitlab_component_apdex:weight:score_6h
+    expr: |
+      sum by () (
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="thanos_query",env="ops",monitor="global",tier="inf",type="thanos"}[6h] offset 30s)
+      )
+  - record: gitlab_component_ops:rate_6h
+    labels:
+      component: thanos_query
+      env: thanos
+      environment: thanos
+      monitor: global
+      stage: main
+      tier: inf
+      type: thanos
+    expr: |
+      sum by () (
+        avg_over_time(gitlab_component_ops:rate_1h{component="thanos_query",env="ops",monitor="global",tier="inf",type="thanos"}[6h] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_6h
+    labels:
+      component: thanos_query
+      env: thanos
+      environment: thanos
+      monitor: global
+      stage: main
+      tier: inf
+      type: thanos
+    expr: |
+      sum by () (
+        avg_over_time(gitlab_component_errors:rate_1h{component="thanos_query",env="ops",monitor="global",tier="inf",type="thanos"}[6h] offset 30s)
+      )
+  - record: gitlab_component_errors:ratio_6h
+    labels:
+      component: thanos_query
+      monitor: global
+      tier: inf
+      type: thanos
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_6h{component="thanos_query",env="ops",monitor="global",tier="inf",type="thanos"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_6h{component="thanos_query",env="ops",monitor="global",tier="inf",type="thanos"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_6h
+    labels:
+      component: thanos_query
+      monitor: global
+      tier: inf
+      type: thanos
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_6h{component="thanos_query",env="ops",monitor="global",tier="inf",type="thanos"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_6h{component="thanos_query",env="ops",monitor="global",tier="inf",type="thanos"} offset 30s
+      )
+  - record: gitlab_component_apdex:success:rate_6h
+    labels:
+      component: thanos_query_frontend
+      env: thanos
+      environment: thanos
+      monitor: global
+      stage: main
+      tier: inf
+      type: thanos
+    expr: |
+      sum by () (
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="thanos_query_frontend",env="ops",monitor="global",tier="inf",type="thanos"}[6h] offset 30s)
+      )
+  - record: gitlab_component_apdex:weight:score_6h
+    expr: |
+      sum by () (
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="thanos_query_frontend",env="ops",monitor="global",tier="inf",type="thanos"}[6h] offset 30s)
+      )
+  - record: gitlab_component_ops:rate_6h
+    labels:
+      component: thanos_query_frontend
+      env: thanos
+      environment: thanos
+      monitor: global
+      stage: main
+      tier: inf
+      type: thanos
+    expr: |
+      sum by () (
+        avg_over_time(gitlab_component_ops:rate_1h{component="thanos_query_frontend",env="ops",monitor="global",tier="inf",type="thanos"}[6h] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_6h
+    labels:
+      component: thanos_query_frontend
+      env: thanos
+      environment: thanos
+      monitor: global
+      stage: main
+      tier: inf
+      type: thanos
+    expr: |
+      sum by () (
+        avg_over_time(gitlab_component_errors:rate_1h{component="thanos_query_frontend",env="ops",monitor="global",tier="inf",type="thanos"}[6h] offset 30s)
+      )
+  - record: gitlab_component_errors:ratio_6h
+    labels:
+      component: thanos_query_frontend
+      monitor: global
+      tier: inf
+      type: thanos
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_6h{component="thanos_query_frontend",env="ops",monitor="global",tier="inf",type="thanos"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_6h{component="thanos_query_frontend",env="ops",monitor="global",tier="inf",type="thanos"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_6h
+    labels:
+      component: thanos_query_frontend
+      monitor: global
+      tier: inf
+      type: thanos
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_6h{component="thanos_query_frontend",env="ops",monitor="global",tier="inf",type="thanos"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_6h{component="thanos_query_frontend",env="ops",monitor="global",tier="inf",type="thanos"} offset 30s
+      )
+  - record: gitlab_component_apdex:success:rate_6h
+    labels:
+      component: thanos_rule_alert_sender
+      env: thanos
+      environment: thanos
+      monitor: global
+      stage: main
+      tier: inf
+      type: thanos
+    expr: |
+      sum by () (
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="thanos_rule_alert_sender",env="ops",monitor="global",tier="inf",type="thanos"}[6h] offset 30s)
+      )
+  - record: gitlab_component_apdex:weight:score_6h
+    expr: |
+      sum by () (
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="thanos_rule_alert_sender",env="ops",monitor="global",tier="inf",type="thanos"}[6h] offset 30s)
+      )
+  - record: gitlab_component_ops:rate_6h
+    labels:
+      component: thanos_rule_alert_sender
+      env: thanos
+      environment: thanos
+      monitor: global
+      stage: main
+      tier: inf
+      type: thanos
+    expr: |
+      sum by () (
+        avg_over_time(gitlab_component_ops:rate_1h{component="thanos_rule_alert_sender",env="ops",monitor="global",tier="inf",type="thanos"}[6h] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_6h
+    labels:
+      component: thanos_rule_alert_sender
+      env: thanos
+      environment: thanos
+      monitor: global
+      stage: main
+      tier: inf
+      type: thanos
+    expr: |
+      sum by () (
+        avg_over_time(gitlab_component_errors:rate_1h{component="thanos_rule_alert_sender",env="ops",monitor="global",tier="inf",type="thanos"}[6h] offset 30s)
+      )
+  - record: gitlab_component_errors:ratio_6h
+    labels:
+      component: thanos_rule_alert_sender
+      monitor: global
+      tier: inf
+      type: thanos
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_6h{component="thanos_rule_alert_sender",env="ops",monitor="global",tier="inf",type="thanos"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_6h{component="thanos_rule_alert_sender",env="ops",monitor="global",tier="inf",type="thanos"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_6h
+    labels:
+      component: thanos_rule_alert_sender
+      monitor: global
+      tier: inf
+      type: thanos
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_6h{component="thanos_rule_alert_sender",env="ops",monitor="global",tier="inf",type="thanos"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_6h{component="thanos_rule_alert_sender",env="ops",monitor="global",tier="inf",type="thanos"} offset 30s
+      )
+  - record: gitlab_component_apdex:success:rate_6h
+    labels:
+      component: thanos_store
+      env: thanos
+      environment: thanos
+      monitor: global
+      stage: main
+      tier: inf
+      type: thanos
+    expr: |
+      sum by () (
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="thanos_store",env="ops",monitor="global",tier="inf",type="thanos"}[6h] offset 30s)
+      )
+  - record: gitlab_component_apdex:weight:score_6h
+    expr: |
+      sum by () (
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="thanos_store",env="ops",monitor="global",tier="inf",type="thanos"}[6h] offset 30s)
+      )
+  - record: gitlab_component_ops:rate_6h
+    labels:
+      component: thanos_store
+      env: thanos
+      environment: thanos
+      monitor: global
+      stage: main
+      tier: inf
+      type: thanos
+    expr: |
+      sum by () (
+        avg_over_time(gitlab_component_ops:rate_1h{component="thanos_store",env="ops",monitor="global",tier="inf",type="thanos"}[6h] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_6h
+    labels:
+      component: thanos_store
+      env: thanos
+      environment: thanos
+      monitor: global
+      stage: main
+      tier: inf
+      type: thanos
+    expr: |
+      sum by () (
+        avg_over_time(gitlab_component_errors:rate_1h{component="thanos_store",env="ops",monitor="global",tier="inf",type="thanos"}[6h] offset 30s)
+      )
+  - record: gitlab_component_errors:ratio_6h
+    labels:
+      component: thanos_store
+      monitor: global
+      tier: inf
+      type: thanos
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_6h{component="thanos_store",env="ops",monitor="global",tier="inf",type="thanos"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_6h{component="thanos_store",env="ops",monitor="global",tier="inf",type="thanos"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_6h
+    labels:
+      component: thanos_store
+      monitor: global
+      tier: inf
+      type: thanos
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_6h{component="thanos_store",env="ops",monitor="global",tier="inf",type="thanos"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_6h{component="thanos_store",env="ops",monitor="global",tier="inf",type="thanos"} offset 30s
+      )
+- name: 'Global SLI Metrics: thanos - Burn-Rate 3d'
+  interval: 2m
+  rules:
+  - record: gitlab_component_apdex:success:rate_3d
+    labels:
+      component: rule_evaluation
+      env: thanos
+      environment: thanos
+      monitor: global
+      stage: main
+      tier: inf
+      type: thanos
+    expr: |
+      sum by () (
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="rule_evaluation",env="ops",monitor="global",tier="inf",type="thanos"}[3d] offset 30s)
+      )
+  - record: gitlab_component_apdex:weight:score_3d
+    expr: |
+      sum by () (
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="rule_evaluation",env="ops",monitor="global",tier="inf",type="thanos"}[3d] offset 30s)
+      )
+  - record: gitlab_component_ops:rate_3d
+    labels:
+      component: rule_evaluation
+      env: thanos
+      environment: thanos
+      monitor: global
+      stage: main
+      tier: inf
+      type: thanos
+    expr: |
+      sum by () (
+        avg_over_time(gitlab_component_ops:rate_1h{component="rule_evaluation",env="ops",monitor="global",tier="inf",type="thanos"}[3d] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_3d
+    labels:
+      component: rule_evaluation
+      env: thanos
+      environment: thanos
+      monitor: global
+      stage: main
+      tier: inf
+      type: thanos
+    expr: |
+      sum by () (
+        avg_over_time(gitlab_component_errors:rate_1h{component="rule_evaluation",env="ops",monitor="global",tier="inf",type="thanos"}[3d] offset 30s)
+      )
+  - record: gitlab_component_errors:ratio_3d
+    labels:
+      component: rule_evaluation
+      monitor: global
+      tier: inf
+      type: thanos
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_3d{component="rule_evaluation",env="ops",monitor="global",tier="inf",type="thanos"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_3d{component="rule_evaluation",env="ops",monitor="global",tier="inf",type="thanos"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_3d
+    labels:
+      component: rule_evaluation
+      monitor: global
+      tier: inf
+      type: thanos
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_3d{component="rule_evaluation",env="ops",monitor="global",tier="inf",type="thanos"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_3d{component="rule_evaluation",env="ops",monitor="global",tier="inf",type="thanos"} offset 30s
+      )
+  - record: gitlab_component_apdex:success:rate_3d
+    labels:
+      component: thanos_compactor
+      env: thanos
+      environment: thanos
+      monitor: global
+      stage: main
+      tier: inf
+      type: thanos
+    expr: |
+      sum by () (
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="thanos_compactor",env="ops",monitor="global",tier="inf",type="thanos"}[3d] offset 30s)
+      )
+  - record: gitlab_component_apdex:weight:score_3d
+    expr: |
+      sum by () (
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="thanos_compactor",env="ops",monitor="global",tier="inf",type="thanos"}[3d] offset 30s)
+      )
+  - record: gitlab_component_ops:rate_3d
+    labels:
+      component: thanos_compactor
+      env: thanos
+      environment: thanos
+      monitor: global
+      stage: main
+      tier: inf
+      type: thanos
+    expr: |
+      sum by () (
+        avg_over_time(gitlab_component_ops:rate_1h{component="thanos_compactor",env="ops",monitor="global",tier="inf",type="thanos"}[3d] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_3d
+    labels:
+      component: thanos_compactor
+      env: thanos
+      environment: thanos
+      monitor: global
+      stage: main
+      tier: inf
+      type: thanos
+    expr: |
+      sum by () (
+        avg_over_time(gitlab_component_errors:rate_1h{component="thanos_compactor",env="ops",monitor="global",tier="inf",type="thanos"}[3d] offset 30s)
+      )
+  - record: gitlab_component_errors:ratio_3d
+    labels:
+      component: thanos_compactor
+      monitor: global
+      tier: inf
+      type: thanos
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_3d{component="thanos_compactor",env="ops",monitor="global",tier="inf",type="thanos"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_3d{component="thanos_compactor",env="ops",monitor="global",tier="inf",type="thanos"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_3d
+    labels:
+      component: thanos_compactor
+      monitor: global
+      tier: inf
+      type: thanos
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_3d{component="thanos_compactor",env="ops",monitor="global",tier="inf",type="thanos"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_3d{component="thanos_compactor",env="ops",monitor="global",tier="inf",type="thanos"} offset 30s
+      )
+  - record: gitlab_component_apdex:success:rate_3d
+    labels:
+      component: thanos_memcached
+      env: thanos
+      environment: thanos
+      monitor: global
+      stage: main
+      tier: inf
+      type: thanos
+    expr: |
+      sum by () (
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="thanos_memcached",env="ops",monitor="global",tier="inf",type="thanos"}[3d] offset 30s)
+      )
+  - record: gitlab_component_apdex:weight:score_3d
+    expr: |
+      sum by () (
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="thanos_memcached",env="ops",monitor="global",tier="inf",type="thanos"}[3d] offset 30s)
+      )
+  - record: gitlab_component_ops:rate_3d
+    labels:
+      component: thanos_memcached
+      env: thanos
+      environment: thanos
+      monitor: global
+      stage: main
+      tier: inf
+      type: thanos
+    expr: |
+      sum by () (
+        avg_over_time(gitlab_component_ops:rate_1h{component="thanos_memcached",env="ops",monitor="global",tier="inf",type="thanos"}[3d] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_3d
+    labels:
+      component: thanos_memcached
+      env: thanos
+      environment: thanos
+      monitor: global
+      stage: main
+      tier: inf
+      type: thanos
+    expr: |
+      sum by () (
+        avg_over_time(gitlab_component_errors:rate_1h{component="thanos_memcached",env="ops",monitor="global",tier="inf",type="thanos"}[3d] offset 30s)
+      )
+  - record: gitlab_component_errors:ratio_3d
+    labels:
+      component: thanos_memcached
+      monitor: global
+      tier: inf
+      type: thanos
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_3d{component="thanos_memcached",env="ops",monitor="global",tier="inf",type="thanos"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_3d{component="thanos_memcached",env="ops",monitor="global",tier="inf",type="thanos"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_3d
+    labels:
+      component: thanos_memcached
+      monitor: global
+      tier: inf
+      type: thanos
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_3d{component="thanos_memcached",env="ops",monitor="global",tier="inf",type="thanos"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_3d{component="thanos_memcached",env="ops",monitor="global",tier="inf",type="thanos"} offset 30s
+      )
+  - record: gitlab_component_apdex:success:rate_3d
+    labels:
+      component: thanos_query
+      env: thanos
+      environment: thanos
+      monitor: global
+      stage: main
+      tier: inf
+      type: thanos
+    expr: |
+      sum by () (
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="thanos_query",env="ops",monitor="global",tier="inf",type="thanos"}[3d] offset 30s)
+      )
+  - record: gitlab_component_apdex:weight:score_3d
+    expr: |
+      sum by () (
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="thanos_query",env="ops",monitor="global",tier="inf",type="thanos"}[3d] offset 30s)
+      )
+  - record: gitlab_component_ops:rate_3d
+    labels:
+      component: thanos_query
+      env: thanos
+      environment: thanos
+      monitor: global
+      stage: main
+      tier: inf
+      type: thanos
+    expr: |
+      sum by () (
+        avg_over_time(gitlab_component_ops:rate_1h{component="thanos_query",env="ops",monitor="global",tier="inf",type="thanos"}[3d] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_3d
+    labels:
+      component: thanos_query
+      env: thanos
+      environment: thanos
+      monitor: global
+      stage: main
+      tier: inf
+      type: thanos
+    expr: |
+      sum by () (
+        avg_over_time(gitlab_component_errors:rate_1h{component="thanos_query",env="ops",monitor="global",tier="inf",type="thanos"}[3d] offset 30s)
+      )
+  - record: gitlab_component_errors:ratio_3d
+    labels:
+      component: thanos_query
+      monitor: global
+      tier: inf
+      type: thanos
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_3d{component="thanos_query",env="ops",monitor="global",tier="inf",type="thanos"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_3d{component="thanos_query",env="ops",monitor="global",tier="inf",type="thanos"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_3d
+    labels:
+      component: thanos_query
+      monitor: global
+      tier: inf
+      type: thanos
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_3d{component="thanos_query",env="ops",monitor="global",tier="inf",type="thanos"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_3d{component="thanos_query",env="ops",monitor="global",tier="inf",type="thanos"} offset 30s
+      )
+  - record: gitlab_component_apdex:success:rate_3d
+    labels:
+      component: thanos_query_frontend
+      env: thanos
+      environment: thanos
+      monitor: global
+      stage: main
+      tier: inf
+      type: thanos
+    expr: |
+      sum by () (
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="thanos_query_frontend",env="ops",monitor="global",tier="inf",type="thanos"}[3d] offset 30s)
+      )
+  - record: gitlab_component_apdex:weight:score_3d
+    expr: |
+      sum by () (
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="thanos_query_frontend",env="ops",monitor="global",tier="inf",type="thanos"}[3d] offset 30s)
+      )
+  - record: gitlab_component_ops:rate_3d
+    labels:
+      component: thanos_query_frontend
+      env: thanos
+      environment: thanos
+      monitor: global
+      stage: main
+      tier: inf
+      type: thanos
+    expr: |
+      sum by () (
+        avg_over_time(gitlab_component_ops:rate_1h{component="thanos_query_frontend",env="ops",monitor="global",tier="inf",type="thanos"}[3d] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_3d
+    labels:
+      component: thanos_query_frontend
+      env: thanos
+      environment: thanos
+      monitor: global
+      stage: main
+      tier: inf
+      type: thanos
+    expr: |
+      sum by () (
+        avg_over_time(gitlab_component_errors:rate_1h{component="thanos_query_frontend",env="ops",monitor="global",tier="inf",type="thanos"}[3d] offset 30s)
+      )
+  - record: gitlab_component_errors:ratio_3d
+    labels:
+      component: thanos_query_frontend
+      monitor: global
+      tier: inf
+      type: thanos
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_3d{component="thanos_query_frontend",env="ops",monitor="global",tier="inf",type="thanos"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_3d{component="thanos_query_frontend",env="ops",monitor="global",tier="inf",type="thanos"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_3d
+    labels:
+      component: thanos_query_frontend
+      monitor: global
+      tier: inf
+      type: thanos
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_3d{component="thanos_query_frontend",env="ops",monitor="global",tier="inf",type="thanos"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_3d{component="thanos_query_frontend",env="ops",monitor="global",tier="inf",type="thanos"} offset 30s
+      )
+  - record: gitlab_component_apdex:success:rate_3d
+    labels:
+      component: thanos_rule_alert_sender
+      env: thanos
+      environment: thanos
+      monitor: global
+      stage: main
+      tier: inf
+      type: thanos
+    expr: |
+      sum by () (
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="thanos_rule_alert_sender",env="ops",monitor="global",tier="inf",type="thanos"}[3d] offset 30s)
+      )
+  - record: gitlab_component_apdex:weight:score_3d
+    expr: |
+      sum by () (
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="thanos_rule_alert_sender",env="ops",monitor="global",tier="inf",type="thanos"}[3d] offset 30s)
+      )
+  - record: gitlab_component_ops:rate_3d
+    labels:
+      component: thanos_rule_alert_sender
+      env: thanos
+      environment: thanos
+      monitor: global
+      stage: main
+      tier: inf
+      type: thanos
+    expr: |
+      sum by () (
+        avg_over_time(gitlab_component_ops:rate_1h{component="thanos_rule_alert_sender",env="ops",monitor="global",tier="inf",type="thanos"}[3d] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_3d
+    labels:
+      component: thanos_rule_alert_sender
+      env: thanos
+      environment: thanos
+      monitor: global
+      stage: main
+      tier: inf
+      type: thanos
+    expr: |
+      sum by () (
+        avg_over_time(gitlab_component_errors:rate_1h{component="thanos_rule_alert_sender",env="ops",monitor="global",tier="inf",type="thanos"}[3d] offset 30s)
+      )
+  - record: gitlab_component_errors:ratio_3d
+    labels:
+      component: thanos_rule_alert_sender
+      monitor: global
+      tier: inf
+      type: thanos
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_3d{component="thanos_rule_alert_sender",env="ops",monitor="global",tier="inf",type="thanos"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_3d{component="thanos_rule_alert_sender",env="ops",monitor="global",tier="inf",type="thanos"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_3d
+    labels:
+      component: thanos_rule_alert_sender
+      monitor: global
+      tier: inf
+      type: thanos
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_3d{component="thanos_rule_alert_sender",env="ops",monitor="global",tier="inf",type="thanos"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_3d{component="thanos_rule_alert_sender",env="ops",monitor="global",tier="inf",type="thanos"} offset 30s
+      )
+  - record: gitlab_component_apdex:success:rate_3d
+    labels:
+      component: thanos_store
+      env: thanos
+      environment: thanos
+      monitor: global
+      stage: main
+      tier: inf
+      type: thanos
+    expr: |
+      sum by () (
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="thanos_store",env="ops",monitor="global",tier="inf",type="thanos"}[3d] offset 30s)
+      )
+  - record: gitlab_component_apdex:weight:score_3d
+    expr: |
+      sum by () (
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="thanos_store",env="ops",monitor="global",tier="inf",type="thanos"}[3d] offset 30s)
+      )
+  - record: gitlab_component_ops:rate_3d
+    labels:
+      component: thanos_store
+      env: thanos
+      environment: thanos
+      monitor: global
+      stage: main
+      tier: inf
+      type: thanos
+    expr: |
+      sum by () (
+        avg_over_time(gitlab_component_ops:rate_1h{component="thanos_store",env="ops",monitor="global",tier="inf",type="thanos"}[3d] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_3d
+    labels:
+      component: thanos_store
+      env: thanos
+      environment: thanos
+      monitor: global
+      stage: main
+      tier: inf
+      type: thanos
+    expr: |
+      sum by () (
+        avg_over_time(gitlab_component_errors:rate_1h{component="thanos_store",env="ops",monitor="global",tier="inf",type="thanos"}[3d] offset 30s)
+      )
+  - record: gitlab_component_errors:ratio_3d
+    labels:
+      component: thanos_store
+      monitor: global
+      tier: inf
+      type: thanos
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_3d{component="thanos_store",env="ops",monitor="global",tier="inf",type="thanos"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_3d{component="thanos_store",env="ops",monitor="global",tier="inf",type="thanos"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_3d
+    labels:
+      component: thanos_store
+      monitor: global
+      tier: inf
+      type: thanos
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_3d{component="thanos_store",env="ops",monitor="global",tier="inf",type="thanos"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_3d{component="thanos_store",env="ops",monitor="global",tier="inf",type="thanos"} offset 30s
+      )

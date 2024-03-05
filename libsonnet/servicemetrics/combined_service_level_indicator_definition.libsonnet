@@ -42,6 +42,7 @@ local combinedServiceLevelIndicatorDefinition(
         dependencies: dependencies.new(inheritedDefaults.type, componentName, dependsOn),
         components: componentsInitialised,
         emittedBy: std.set(std.flatMap(function(component) component.emittedBy, componentsInitialised)),
+        staticLabels: staticLabels,
 
         serviceAggregation: serviceAggregation,
 
