@@ -206,6 +206,10 @@ Most of the configuration is handled by two Chef cookbooks specific for GitLab R
   a wrapper made around the first one. Contains some stuff specific for GitLab.com infrastructure configuration, like
   support for our chef vault, specific administration management script, Runner's systemd configuration adjustment etc.
 
+## Architecture
+
+Linux CI Runners Architecture can be found in [architecture.md](./architecture.md)
+
 ## Administrator prerequisites
 
 To manage CI Runners fleet configuration you need to:

@@ -23,7 +23,7 @@ The ChatOps commands logic lives in the [Deployer repo](https://gitlab.com/gitla
 
     `/runner run start private green`
 
-2. **Drain the Blue Environment (After Green is Deployed):** This command initiates the process of draining the runners and deleting the machines in the blue environment. This operation may take some time to complete.
+2. **Drain the Blue Environment (After Green is Deployed):** This command initiates the process of draining the runners and deleting the machines in the blue environment. This operation may take several hours up to a full day to complete.
 
     `/runner run stop private blue`
 

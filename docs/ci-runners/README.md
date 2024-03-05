@@ -76,7 +76,7 @@ beta. They are housed in the `gitlab-ci-windows` project. For further info pleas
 
 ### blue-green-deployment
 
-Each of the SaaS offerings have two running clusters, consisting of a set of runner-manager VMs available at all time, we refer to them as blue and green. This is meant to speed up the release of [GitLab Runner](https://gitlab.com/gitlab-org/gitlab-runner) by shifting traffic
+Each of the gitlab.com SaaS runners shards have two running clusters, consisting of a set of runner-manager VMs available at all time, we refer to them as blue and green. This is meant to speed up the release of [GitLab Runner](https://gitlab.com/gitlab-org/gitlab-runner) by shifting traffic
 between two identical environments that are running different versions of the application. For further info please see the [blue-green README](./release-cycle/blue_green_deployment.md).
 
 Currently the deployment supports the following architectures:
