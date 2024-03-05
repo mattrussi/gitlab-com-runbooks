@@ -88,6 +88,7 @@
 * [Postgres Replicas](../postgres-dr-delayed/postgres-dr-replicas.md)
 * [Praefect Database User Password Rotation](../praefect/praefect-password-rotation.md)
 * [Praefect has unavailable repositories](../praefect/praefect-unavailable-repo.md)
+* [../product_analytics/ssl-troubleshooting.md](../product_analytics/ssl-troubleshooting.md)
 * [Redis Cluster](../redis/redis-cluster.md)
 * [../redis/redis-functional-partitioning.md](../redis/redis-functional-partitioning.md)
 * [A survival guide for SREs to working with Redis at GitLab](../redis/redis-survival-guide-for-sres.md)

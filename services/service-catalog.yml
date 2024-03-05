@@ -448,16 +448,33 @@ services:
     friendly_name: Product Analytics
     teams:
       - Product Analytics
+      - Analytics instrumentation
     label: ProductAnalytics
     owner: product_analytics
     technical:
       logging:
-        - name:
-          permalink:
+        - name: GKE logs
+          permalink: https://cloudlogging.app.goo.gl/QWoCS2kDVF5LaTqG9
       project:
         - https://gitlab.com/gitlab-org/analytics-section/product-analytics
       documents:
         readiness_review: https://gitlab.com/gitlab-com/gl-infra/readiness/-/merge_requests/187
+        developer_guide: https://gitlab.com/gitlab-org/gitlab-development-kit/-/blob/main/doc/howto/product_analytics.md
+        service:
+          - https://gitlab.com/gitlab-org/analytics-section/analytics-configurator/-/blob/main/README.md
+          - https://gitlab.com/gitlab-org/analytics-section/product-analytics/analytics-stack/-/blob/main/README.md
+          - https://gitlab.com/gitlab-org/analytics-section/product-analytics/devkit/-/blob/main/README.md
+      dependencies:
+        - service: api
+        - service: web
+        - service: git
+        - service: postgres
+        - service: redis
+        - service: clickhouse
+    observability:
+      monitors:
+        grafana_folder:
+        primary_grafana_dashboard: da6cf9ea-d593-41ed-91c5-8536fd15c2fa/product-analytics-service-health
 
   - name: search
     tier: inf

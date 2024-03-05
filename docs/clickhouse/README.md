@@ -17,6 +17,8 @@
 
 * [ClickHouse Cloud Failure Remediation, Backup & Restore Process](backup-restore.md)
 * [ErrorTracking main troubleshooting document](../errortracking/overview.md)
+* [../product_analytics/clickhouse-backup-restore.md](../product_analytics/clickhouse-backup-restore.md)
+* [../product_analytics/ssl-troubleshooting.md](../product_analytics/ssl-troubleshooting.md)
 * [Managing Sentry in Kubernetes](../sentry/sentry.md)
 <!-- END_MARKER -->
 
