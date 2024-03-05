@@ -8,6 +8,8 @@ local defaultGlobalBurnRates = defaultSourceBurnRates + ['6h', '3d'];
 local upscaledBurnRates = ['6h', '3d'];
 
 local definitionDefaults = {
+  sourceAggregationSet: null,
+
   aggregationFilter: null,
 
   upscaleLongerBurnRates: false,
