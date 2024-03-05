@@ -7,17 +7,62 @@ groups:
   - record: sli_aggregations:gitlab_pages_http_requests_total:rate_5m
     expr: |
       sum by (code,component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(gitlab_pages_http_requests_total{code=~"5..",env="gprd",type=~"web-pages"}[5m] offset 30s)
+        rate(gitlab_pages_http_requests_total{cluster="gprd-gitlab-gke",code=~"5..",env="gprd",type=~"web-pages"}[5m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_pages_http_requests_total:rate_5m
+    expr: |
+      sum by (code,component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_pages_http_requests_total{cluster="gprd-us-east1-b",code=~"5..",env="gprd",type=~"web-pages"}[5m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_pages_http_requests_total:rate_5m
+    expr: |
+      sum by (code,component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_pages_http_requests_total{cluster="gprd-us-east1-c",code=~"5..",env="gprd",type=~"web-pages"}[5m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_pages_http_requests_total:rate_5m
+    expr: |
+      sum by (code,component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_pages_http_requests_total{cluster="gprd-us-east1-d",code=~"5..",env="gprd",type=~"web-pages"}[5m] offset 30s)
       )
   - record: sli_aggregations:gitlab_pages_http_time_to_write_header_seconds_bucket:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(gitlab_pages_http_time_to_write_header_seconds_bucket{env="gprd",type=~"web-pages"}[5m] offset 30s)
+        rate(gitlab_pages_http_time_to_write_header_seconds_bucket{cluster="gprd-gitlab-gke",env="gprd",type=~"web-pages"}[5m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_pages_http_time_to_write_header_seconds_bucket:rate_5m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_pages_http_time_to_write_header_seconds_bucket{cluster="gprd-us-east1-b",env="gprd",type=~"web-pages"}[5m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_pages_http_time_to_write_header_seconds_bucket:rate_5m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_pages_http_time_to_write_header_seconds_bucket{cluster="gprd-us-east1-c",env="gprd",type=~"web-pages"}[5m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_pages_http_time_to_write_header_seconds_bucket:rate_5m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_pages_http_time_to_write_header_seconds_bucket{cluster="gprd-us-east1-d",env="gprd",type=~"web-pages"}[5m] offset 30s)
       )
   - record: sli_aggregations:gitlab_pages_http_time_to_write_header_seconds_count:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(gitlab_pages_http_time_to_write_header_seconds_count{env="gprd",type=~"web-pages"}[5m] offset 30s)
+        rate(gitlab_pages_http_time_to_write_header_seconds_count{cluster="gprd-gitlab-gke",env="gprd",type=~"web-pages"}[5m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_pages_http_time_to_write_header_seconds_count:rate_5m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_pages_http_time_to_write_header_seconds_count{cluster="gprd-us-east1-b",env="gprd",type=~"web-pages"}[5m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_pages_http_time_to_write_header_seconds_count:rate_5m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_pages_http_time_to_write_header_seconds_count{cluster="gprd-us-east1-c",env="gprd",type=~"web-pages"}[5m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_pages_http_time_to_write_header_seconds_count:rate_5m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_pages_http_time_to_write_header_seconds_count{cluster="gprd-us-east1-d",env="gprd",type=~"web-pages"}[5m] offset 30s)
       )
   - record: sli_aggregations:haproxy_backend_http_responses_total:rate_5m
     expr: |
@@ -40,17 +85,62 @@ groups:
   - record: sli_aggregations:gitlab_pages_http_requests_total:rate_30m
     expr: |
       sum by (code,component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(gitlab_pages_http_requests_total{code=~"5..",env="gprd",type=~"web-pages"}[30m] offset 30s)
+        rate(gitlab_pages_http_requests_total{cluster="gprd-gitlab-gke",code=~"5..",env="gprd",type=~"web-pages"}[30m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_pages_http_requests_total:rate_30m
+    expr: |
+      sum by (code,component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_pages_http_requests_total{cluster="gprd-us-east1-b",code=~"5..",env="gprd",type=~"web-pages"}[30m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_pages_http_requests_total:rate_30m
+    expr: |
+      sum by (code,component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_pages_http_requests_total{cluster="gprd-us-east1-c",code=~"5..",env="gprd",type=~"web-pages"}[30m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_pages_http_requests_total:rate_30m
+    expr: |
+      sum by (code,component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_pages_http_requests_total{cluster="gprd-us-east1-d",code=~"5..",env="gprd",type=~"web-pages"}[30m] offset 30s)
       )
   - record: sli_aggregations:gitlab_pages_http_time_to_write_header_seconds_bucket:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(gitlab_pages_http_time_to_write_header_seconds_bucket{env="gprd",type=~"web-pages"}[30m] offset 30s)
+        rate(gitlab_pages_http_time_to_write_header_seconds_bucket{cluster="gprd-gitlab-gke",env="gprd",type=~"web-pages"}[30m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_pages_http_time_to_write_header_seconds_bucket:rate_30m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_pages_http_time_to_write_header_seconds_bucket{cluster="gprd-us-east1-b",env="gprd",type=~"web-pages"}[30m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_pages_http_time_to_write_header_seconds_bucket:rate_30m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_pages_http_time_to_write_header_seconds_bucket{cluster="gprd-us-east1-c",env="gprd",type=~"web-pages"}[30m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_pages_http_time_to_write_header_seconds_bucket:rate_30m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_pages_http_time_to_write_header_seconds_bucket{cluster="gprd-us-east1-d",env="gprd",type=~"web-pages"}[30m] offset 30s)
       )
   - record: sli_aggregations:gitlab_pages_http_time_to_write_header_seconds_count:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(gitlab_pages_http_time_to_write_header_seconds_count{env="gprd",type=~"web-pages"}[30m] offset 30s)
+        rate(gitlab_pages_http_time_to_write_header_seconds_count{cluster="gprd-gitlab-gke",env="gprd",type=~"web-pages"}[30m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_pages_http_time_to_write_header_seconds_count:rate_30m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_pages_http_time_to_write_header_seconds_count{cluster="gprd-us-east1-b",env="gprd",type=~"web-pages"}[30m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_pages_http_time_to_write_header_seconds_count:rate_30m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_pages_http_time_to_write_header_seconds_count{cluster="gprd-us-east1-c",env="gprd",type=~"web-pages"}[30m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_pages_http_time_to_write_header_seconds_count:rate_30m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_pages_http_time_to_write_header_seconds_count{cluster="gprd-us-east1-d",env="gprd",type=~"web-pages"}[30m] offset 30s)
       )
   - record: sli_aggregations:haproxy_backend_http_responses_total:rate_30m
     expr: |
@@ -73,17 +163,62 @@ groups:
   - record: sli_aggregations:gitlab_pages_http_requests_total:rate_1h
     expr: |
       sum by (code,component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(gitlab_pages_http_requests_total{code=~"5..",env="gprd",type=~"web-pages"}[1h] offset 30s)
+        rate(gitlab_pages_http_requests_total{cluster="gprd-gitlab-gke",code=~"5..",env="gprd",type=~"web-pages"}[1h] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_pages_http_requests_total:rate_1h
+    expr: |
+      sum by (code,component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_pages_http_requests_total{cluster="gprd-us-east1-b",code=~"5..",env="gprd",type=~"web-pages"}[1h] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_pages_http_requests_total:rate_1h
+    expr: |
+      sum by (code,component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_pages_http_requests_total{cluster="gprd-us-east1-c",code=~"5..",env="gprd",type=~"web-pages"}[1h] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_pages_http_requests_total:rate_1h
+    expr: |
+      sum by (code,component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_pages_http_requests_total{cluster="gprd-us-east1-d",code=~"5..",env="gprd",type=~"web-pages"}[1h] offset 30s)
       )
   - record: sli_aggregations:gitlab_pages_http_time_to_write_header_seconds_bucket:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(gitlab_pages_http_time_to_write_header_seconds_bucket{env="gprd",type=~"web-pages"}[1h] offset 30s)
+        rate(gitlab_pages_http_time_to_write_header_seconds_bucket{cluster="gprd-gitlab-gke",env="gprd",type=~"web-pages"}[1h] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_pages_http_time_to_write_header_seconds_bucket:rate_1h
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_pages_http_time_to_write_header_seconds_bucket{cluster="gprd-us-east1-b",env="gprd",type=~"web-pages"}[1h] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_pages_http_time_to_write_header_seconds_bucket:rate_1h
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_pages_http_time_to_write_header_seconds_bucket{cluster="gprd-us-east1-c",env="gprd",type=~"web-pages"}[1h] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_pages_http_time_to_write_header_seconds_bucket:rate_1h
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_pages_http_time_to_write_header_seconds_bucket{cluster="gprd-us-east1-d",env="gprd",type=~"web-pages"}[1h] offset 30s)
       )
   - record: sli_aggregations:gitlab_pages_http_time_to_write_header_seconds_count:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(gitlab_pages_http_time_to_write_header_seconds_count{env="gprd",type=~"web-pages"}[1h] offset 30s)
+        rate(gitlab_pages_http_time_to_write_header_seconds_count{cluster="gprd-gitlab-gke",env="gprd",type=~"web-pages"}[1h] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_pages_http_time_to_write_header_seconds_count:rate_1h
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_pages_http_time_to_write_header_seconds_count{cluster="gprd-us-east1-b",env="gprd",type=~"web-pages"}[1h] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_pages_http_time_to_write_header_seconds_count:rate_1h
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_pages_http_time_to_write_header_seconds_count{cluster="gprd-us-east1-c",env="gprd",type=~"web-pages"}[1h] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_pages_http_time_to_write_header_seconds_count:rate_1h
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_pages_http_time_to_write_header_seconds_count{cluster="gprd-us-east1-d",env="gprd",type=~"web-pages"}[1h] offset 30s)
       )
   - record: sli_aggregations:haproxy_backend_http_responses_total:rate_1h
     expr: |

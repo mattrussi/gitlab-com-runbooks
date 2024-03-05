@@ -17,22 +17,82 @@ groups:
   - record: sli_aggregations:gitlab_sli_global_search_indexing_apdex_success_total:rate_5m
     expr: |
       sum by (component,document_type,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(gitlab_sli_global_search_indexing_apdex_success_total{env="gprd",type=~"ops-gitlab-net"}[5m] offset 30s)
+        rate(gitlab_sli_global_search_indexing_apdex_success_total{cluster="gprd-gitlab-gke",env="gprd",type=~"ops-gitlab-net"}[5m] offset 30s)
       )
   - record: sli_aggregations:gitlab_sli_global_search_indexing_apdex_success_total:rate_5m
     expr: |
       sum by (component,document_type,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(gitlab_sli_global_search_indexing_apdex_success_total{env="gprd",type=~"sidekiq"}[5m] offset 30s)
+        rate(gitlab_sli_global_search_indexing_apdex_success_total{cluster="gprd-us-east1-b",env="gprd",type=~"ops-gitlab-net"}[5m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_sli_global_search_indexing_apdex_success_total:rate_5m
+    expr: |
+      sum by (component,document_type,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sli_global_search_indexing_apdex_success_total{cluster="gprd-us-east1-c",env="gprd",type=~"ops-gitlab-net"}[5m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_sli_global_search_indexing_apdex_success_total:rate_5m
+    expr: |
+      sum by (component,document_type,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sli_global_search_indexing_apdex_success_total{cluster="gprd-us-east1-d",env="gprd",type=~"ops-gitlab-net"}[5m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_sli_global_search_indexing_apdex_success_total:rate_5m
+    expr: |
+      sum by (component,document_type,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sli_global_search_indexing_apdex_success_total{cluster="gprd-gitlab-gke",env="gprd",type=~"sidekiq"}[5m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_sli_global_search_indexing_apdex_success_total:rate_5m
+    expr: |
+      sum by (component,document_type,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sli_global_search_indexing_apdex_success_total{cluster="gprd-us-east1-b",env="gprd",type=~"sidekiq"}[5m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_sli_global_search_indexing_apdex_success_total:rate_5m
+    expr: |
+      sum by (component,document_type,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sli_global_search_indexing_apdex_success_total{cluster="gprd-us-east1-c",env="gprd",type=~"sidekiq"}[5m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_sli_global_search_indexing_apdex_success_total:rate_5m
+    expr: |
+      sum by (component,document_type,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sli_global_search_indexing_apdex_success_total{cluster="gprd-us-east1-d",env="gprd",type=~"sidekiq"}[5m] offset 30s)
       )
   - record: sli_aggregations:gitlab_sli_global_search_indexing_apdex_total:rate_5m
     expr: |
       sum by (component,document_type,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(gitlab_sli_global_search_indexing_apdex_total{env="gprd",type=~"ops-gitlab-net"}[5m] offset 30s)
+        rate(gitlab_sli_global_search_indexing_apdex_total{cluster="gprd-gitlab-gke",env="gprd",type=~"ops-gitlab-net"}[5m] offset 30s)
       )
   - record: sli_aggregations:gitlab_sli_global_search_indexing_apdex_total:rate_5m
     expr: |
       sum by (component,document_type,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(gitlab_sli_global_search_indexing_apdex_total{env="gprd",type=~"sidekiq"}[5m] offset 30s)
+        rate(gitlab_sli_global_search_indexing_apdex_total{cluster="gprd-us-east1-b",env="gprd",type=~"ops-gitlab-net"}[5m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_sli_global_search_indexing_apdex_total:rate_5m
+    expr: |
+      sum by (component,document_type,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sli_global_search_indexing_apdex_total{cluster="gprd-us-east1-c",env="gprd",type=~"ops-gitlab-net"}[5m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_sli_global_search_indexing_apdex_total:rate_5m
+    expr: |
+      sum by (component,document_type,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sli_global_search_indexing_apdex_total{cluster="gprd-us-east1-d",env="gprd",type=~"ops-gitlab-net"}[5m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_sli_global_search_indexing_apdex_total:rate_5m
+    expr: |
+      sum by (component,document_type,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sli_global_search_indexing_apdex_total{cluster="gprd-gitlab-gke",env="gprd",type=~"sidekiq"}[5m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_sli_global_search_indexing_apdex_total:rate_5m
+    expr: |
+      sum by (component,document_type,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sli_global_search_indexing_apdex_total{cluster="gprd-us-east1-b",env="gprd",type=~"sidekiq"}[5m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_sli_global_search_indexing_apdex_total:rate_5m
+    expr: |
+      sum by (component,document_type,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sli_global_search_indexing_apdex_total{cluster="gprd-us-east1-c",env="gprd",type=~"sidekiq"}[5m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_sli_global_search_indexing_apdex_total:rate_5m
+    expr: |
+      sum by (component,document_type,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sli_global_search_indexing_apdex_total{cluster="gprd-us-east1-d",env="gprd",type=~"sidekiq"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: search - 30m burn-rate'
   interval: 2m
@@ -50,22 +110,82 @@ groups:
   - record: sli_aggregations:gitlab_sli_global_search_indexing_apdex_success_total:rate_30m
     expr: |
       sum by (component,document_type,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(gitlab_sli_global_search_indexing_apdex_success_total{env="gprd",type=~"ops-gitlab-net"}[30m] offset 30s)
+        rate(gitlab_sli_global_search_indexing_apdex_success_total{cluster="gprd-gitlab-gke",env="gprd",type=~"ops-gitlab-net"}[30m] offset 30s)
       )
   - record: sli_aggregations:gitlab_sli_global_search_indexing_apdex_success_total:rate_30m
     expr: |
       sum by (component,document_type,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(gitlab_sli_global_search_indexing_apdex_success_total{env="gprd",type=~"sidekiq"}[30m] offset 30s)
+        rate(gitlab_sli_global_search_indexing_apdex_success_total{cluster="gprd-us-east1-b",env="gprd",type=~"ops-gitlab-net"}[30m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_sli_global_search_indexing_apdex_success_total:rate_30m
+    expr: |
+      sum by (component,document_type,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sli_global_search_indexing_apdex_success_total{cluster="gprd-us-east1-c",env="gprd",type=~"ops-gitlab-net"}[30m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_sli_global_search_indexing_apdex_success_total:rate_30m
+    expr: |
+      sum by (component,document_type,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sli_global_search_indexing_apdex_success_total{cluster="gprd-us-east1-d",env="gprd",type=~"ops-gitlab-net"}[30m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_sli_global_search_indexing_apdex_success_total:rate_30m
+    expr: |
+      sum by (component,document_type,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sli_global_search_indexing_apdex_success_total{cluster="gprd-gitlab-gke",env="gprd",type=~"sidekiq"}[30m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_sli_global_search_indexing_apdex_success_total:rate_30m
+    expr: |
+      sum by (component,document_type,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sli_global_search_indexing_apdex_success_total{cluster="gprd-us-east1-b",env="gprd",type=~"sidekiq"}[30m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_sli_global_search_indexing_apdex_success_total:rate_30m
+    expr: |
+      sum by (component,document_type,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sli_global_search_indexing_apdex_success_total{cluster="gprd-us-east1-c",env="gprd",type=~"sidekiq"}[30m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_sli_global_search_indexing_apdex_success_total:rate_30m
+    expr: |
+      sum by (component,document_type,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sli_global_search_indexing_apdex_success_total{cluster="gprd-us-east1-d",env="gprd",type=~"sidekiq"}[30m] offset 30s)
       )
   - record: sli_aggregations:gitlab_sli_global_search_indexing_apdex_total:rate_30m
     expr: |
       sum by (component,document_type,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(gitlab_sli_global_search_indexing_apdex_total{env="gprd",type=~"ops-gitlab-net"}[30m] offset 30s)
+        rate(gitlab_sli_global_search_indexing_apdex_total{cluster="gprd-gitlab-gke",env="gprd",type=~"ops-gitlab-net"}[30m] offset 30s)
       )
   - record: sli_aggregations:gitlab_sli_global_search_indexing_apdex_total:rate_30m
     expr: |
       sum by (component,document_type,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(gitlab_sli_global_search_indexing_apdex_total{env="gprd",type=~"sidekiq"}[30m] offset 30s)
+        rate(gitlab_sli_global_search_indexing_apdex_total{cluster="gprd-us-east1-b",env="gprd",type=~"ops-gitlab-net"}[30m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_sli_global_search_indexing_apdex_total:rate_30m
+    expr: |
+      sum by (component,document_type,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sli_global_search_indexing_apdex_total{cluster="gprd-us-east1-c",env="gprd",type=~"ops-gitlab-net"}[30m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_sli_global_search_indexing_apdex_total:rate_30m
+    expr: |
+      sum by (component,document_type,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sli_global_search_indexing_apdex_total{cluster="gprd-us-east1-d",env="gprd",type=~"ops-gitlab-net"}[30m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_sli_global_search_indexing_apdex_total:rate_30m
+    expr: |
+      sum by (component,document_type,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sli_global_search_indexing_apdex_total{cluster="gprd-gitlab-gke",env="gprd",type=~"sidekiq"}[30m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_sli_global_search_indexing_apdex_total:rate_30m
+    expr: |
+      sum by (component,document_type,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sli_global_search_indexing_apdex_total{cluster="gprd-us-east1-b",env="gprd",type=~"sidekiq"}[30m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_sli_global_search_indexing_apdex_total:rate_30m
+    expr: |
+      sum by (component,document_type,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sli_global_search_indexing_apdex_total{cluster="gprd-us-east1-c",env="gprd",type=~"sidekiq"}[30m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_sli_global_search_indexing_apdex_total:rate_30m
+    expr: |
+      sum by (component,document_type,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sli_global_search_indexing_apdex_total{cluster="gprd-us-east1-d",env="gprd",type=~"sidekiq"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: search - 1h burn-rate'
   interval: 1m
@@ -83,20 +203,80 @@ groups:
   - record: sli_aggregations:gitlab_sli_global_search_indexing_apdex_success_total:rate_1h
     expr: |
       sum by (component,document_type,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(gitlab_sli_global_search_indexing_apdex_success_total{env="gprd",type=~"ops-gitlab-net"}[1h] offset 30s)
+        rate(gitlab_sli_global_search_indexing_apdex_success_total{cluster="gprd-gitlab-gke",env="gprd",type=~"ops-gitlab-net"}[1h] offset 30s)
       )
   - record: sli_aggregations:gitlab_sli_global_search_indexing_apdex_success_total:rate_1h
     expr: |
       sum by (component,document_type,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(gitlab_sli_global_search_indexing_apdex_success_total{env="gprd",type=~"sidekiq"}[1h] offset 30s)
+        rate(gitlab_sli_global_search_indexing_apdex_success_total{cluster="gprd-us-east1-b",env="gprd",type=~"ops-gitlab-net"}[1h] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_sli_global_search_indexing_apdex_success_total:rate_1h
+    expr: |
+      sum by (component,document_type,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sli_global_search_indexing_apdex_success_total{cluster="gprd-us-east1-c",env="gprd",type=~"ops-gitlab-net"}[1h] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_sli_global_search_indexing_apdex_success_total:rate_1h
+    expr: |
+      sum by (component,document_type,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sli_global_search_indexing_apdex_success_total{cluster="gprd-us-east1-d",env="gprd",type=~"ops-gitlab-net"}[1h] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_sli_global_search_indexing_apdex_success_total:rate_1h
+    expr: |
+      sum by (component,document_type,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sli_global_search_indexing_apdex_success_total{cluster="gprd-gitlab-gke",env="gprd",type=~"sidekiq"}[1h] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_sli_global_search_indexing_apdex_success_total:rate_1h
+    expr: |
+      sum by (component,document_type,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sli_global_search_indexing_apdex_success_total{cluster="gprd-us-east1-b",env="gprd",type=~"sidekiq"}[1h] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_sli_global_search_indexing_apdex_success_total:rate_1h
+    expr: |
+      sum by (component,document_type,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sli_global_search_indexing_apdex_success_total{cluster="gprd-us-east1-c",env="gprd",type=~"sidekiq"}[1h] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_sli_global_search_indexing_apdex_success_total:rate_1h
+    expr: |
+      sum by (component,document_type,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sli_global_search_indexing_apdex_success_total{cluster="gprd-us-east1-d",env="gprd",type=~"sidekiq"}[1h] offset 30s)
       )
   - record: sli_aggregations:gitlab_sli_global_search_indexing_apdex_total:rate_1h
     expr: |
       sum by (component,document_type,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(gitlab_sli_global_search_indexing_apdex_total{env="gprd",type=~"ops-gitlab-net"}[1h] offset 30s)
+        rate(gitlab_sli_global_search_indexing_apdex_total{cluster="gprd-gitlab-gke",env="gprd",type=~"ops-gitlab-net"}[1h] offset 30s)
       )
   - record: sli_aggregations:gitlab_sli_global_search_indexing_apdex_total:rate_1h
     expr: |
       sum by (component,document_type,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(gitlab_sli_global_search_indexing_apdex_total{env="gprd",type=~"sidekiq"}[1h] offset 30s)
+        rate(gitlab_sli_global_search_indexing_apdex_total{cluster="gprd-us-east1-b",env="gprd",type=~"ops-gitlab-net"}[1h] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_sli_global_search_indexing_apdex_total:rate_1h
+    expr: |
+      sum by (component,document_type,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sli_global_search_indexing_apdex_total{cluster="gprd-us-east1-c",env="gprd",type=~"ops-gitlab-net"}[1h] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_sli_global_search_indexing_apdex_total:rate_1h
+    expr: |
+      sum by (component,document_type,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sli_global_search_indexing_apdex_total{cluster="gprd-us-east1-d",env="gprd",type=~"ops-gitlab-net"}[1h] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_sli_global_search_indexing_apdex_total:rate_1h
+    expr: |
+      sum by (component,document_type,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sli_global_search_indexing_apdex_total{cluster="gprd-gitlab-gke",env="gprd",type=~"sidekiq"}[1h] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_sli_global_search_indexing_apdex_total:rate_1h
+    expr: |
+      sum by (component,document_type,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sli_global_search_indexing_apdex_total{cluster="gprd-us-east1-b",env="gprd",type=~"sidekiq"}[1h] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_sli_global_search_indexing_apdex_total:rate_1h
+    expr: |
+      sum by (component,document_type,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sli_global_search_indexing_apdex_total{cluster="gprd-us-east1-c",env="gprd",type=~"sidekiq"}[1h] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_sli_global_search_indexing_apdex_total:rate_1h
+    expr: |
+      sum by (component,document_type,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sli_global_search_indexing_apdex_total{cluster="gprd-us-east1-d",env="gprd",type=~"sidekiq"}[1h] offset 30s)
       )
