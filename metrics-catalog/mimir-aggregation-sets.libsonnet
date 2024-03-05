@@ -49,4 +49,19 @@ local mimirAggregetionSetDefaults = {
     },
     aggregationFilter: 'service',
   }),
+
+  aggregationsFromSource::
+    std.filter(
+      function(aggregationSet)
+        aggregationSet.sourceAggregationSet == null,
+      std.objectValues(self)
+    ),
+
+  transformedAggregations::
+    std.filter(
+      function(aggregationSet)
+        aggregationSet.sourceAggregationSet != null,
+      std.objectValues(self)
+    ),
+
 }
