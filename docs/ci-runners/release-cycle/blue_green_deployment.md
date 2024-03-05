@@ -27,7 +27,7 @@ The ChatOps commands logic lives in the [Deployer repo](https://gitlab.com/gitla
 
     `/runner run stop private blue`
 
-A list of all the the available commands can be found in [Deployer repo](https://gitlab.com/gitlab-com/gl-infra/ci-runners/deployer)
+A list of all the the available commands can be found in [Deployer repo](https://gitlab.com/gitlab-com/gl-infra/ci-runners/deployer/-/blob/main/.gitlab-ci.yml?ref_type=heads#L102-115)
 
 ## Support and Queries
 
