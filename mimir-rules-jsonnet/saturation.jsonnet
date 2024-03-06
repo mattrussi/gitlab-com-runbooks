@@ -55,13 +55,10 @@ local filesForSeparateSelector(service, selector, _extraArgs) =
 
 std.foldl(
   function(memo, serviceName)
-    local fakeDefinition = { type: serviceName };
-    local foundDefinition = metricsCatalog.getServiceOptional(serviceName);
-    local serviceDefinition = if foundDefinition == null then
-      std.trace('No service definition found for ' + serviceName, fakeDefinition)
-    else
-      foundDefinition;
-    memo + separateMimirRecordingFiles(filesForSeparateSelector, serviceDefinition),
+    local serviceDefinition = metricsCatalog.getServiceOptional(serviceName);
+    if serviceDefinition.skipSaturationRules
+    then memo
+    else memo + separateMimirRecordingFiles(filesForSeparateSelector, serviceDefinition),
   std.objectFields(resourcesByService),
   {}
 )

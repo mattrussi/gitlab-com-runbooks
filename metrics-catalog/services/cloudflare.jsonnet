@@ -12,4 +12,5 @@ metricsCatalog.serviceDefinition({
     'Service exists in the dependency graph': 'This is a mock service definition to deal with cloudflare utilization metrics',
     'Developer guides exist in developer documentation': 'This is a mock service defnition to deal with cloudflare utilization metrics',
   },
+  skipSaturationRules: true,
 })

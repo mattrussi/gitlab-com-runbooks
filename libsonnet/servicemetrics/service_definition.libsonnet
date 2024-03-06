@@ -13,6 +13,7 @@ local serviceDefaults = {
   tags: [],
   serviceIsStageless: false,  // Set to true for services that don't use stage labels
   autogenerateRecordingRules: true,
+  skipSaturationRules: false,
   disableOpsRatePrediction: false,
   nodeLevelMonitoring: false,  // By default we do not use node-level monitoring
   monitoring: {
