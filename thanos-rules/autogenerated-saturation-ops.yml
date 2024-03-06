@@ -439,7 +439,7 @@ groups:
       grafana_panel_id: "1515902021"
       grafana_variables: environment,type,stage
       promql_query: |
-        max by(environment, tier, type, stage, shard, base_model) (
+        max by(environment, tier, type, stage, shard, base_model, region) (
           clamp_min(
             clamp_max(
               (
@@ -453,7 +453,7 @@ groups:
           0)
         )
       promql_template_1: |
-        max by(environment, tier, type, stage, shard, base_model) (
+        max by(environment, tier, type, stage, shard, base_model, region) (
           clamp_min(
             clamp_max(
               (
