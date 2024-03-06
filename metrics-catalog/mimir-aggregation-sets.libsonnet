@@ -1,23 +1,26 @@
 local aggregationSet = (import 'servicemetrics/aggregation-set.libsonnet').AggregationSet;
 
+local mimirAggregetionSetDefaults = {
+  intermediateSource: false,
+  selector: { monitor: 'global' },
+  generateSLODashboards: false,
+  offset: '30s',
+  recordingRuleStaticLabels: {
+    // This is to ensure compatibility with the current thanos aggregations.
+    // This makes sure that the dashboards would pick these up.
+    // When we don't have thanos aggregations anymore, we can remove the selector
+    // and static labels from these aggregation sets
+    // https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/2902
+    monitor: 'global',
+  },
+};
+
 {
-  componentSLIs: aggregationSet({
+  componentSLIs: aggregationSet(mimirAggregetionSetDefaults {
     id: 'component',
     name: 'Global SLI Metrics',
-    intermediateSource: false,
-    selector: { monitor: 'global' },
     labels: ['env', 'environment', 'tier', 'type', 'stage', 'component'],
     upscaleLongerBurnRates: true,
-    generateSLODashboards: false,
-    offset: '30s',
-    recordingRuleStaticLabels: {
-      // This is to ensure compatibility with the current thanos aggregations.
-      // This makes sure that the dashboards would pick these up.
-      // When we don't have thanos aggregations anymore, we can remove the selector
-      // and static labels from these aggregation sets
-      // https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/2902
-      monitor: 'global',
-    },
     metricFormats: {
       // Recording ratios from source metrics (here SLI-aggregations) is not yet
       // supported in the `componentMetricsRuleSetGenerator`. We'll need to add support for those
@@ -31,13 +34,10 @@ local aggregationSet = (import 'servicemetrics/aggregation-set.libsonnet').Aggre
     },
   }),
 
-  serviceSLIs: aggregationSet({
+  serviceSLIs: aggregationSet(mimirAggregetionSetDefaults {
     id: 'service',
     name: 'Global Service-Aggregated Metrics',
-    intermediateSource: false,  // Used in dashboards and alerts
-    selector: { monitor: 'global' },  // Thanos Ruler
     labels: ['env', 'environment', 'tier', 'type', 'stage'],
-    offset: '30s',
     sourceAggregationSet: $.componentSLIs,
     metricFormats: {
       apdexSuccessRate: 'gitlab_service_apdex:success:rate_%s',
