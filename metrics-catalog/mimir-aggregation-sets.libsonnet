@@ -50,6 +50,23 @@ local mimirAggregetionSetDefaults = {
     aggregationFilter: 'service',
   }),
 
+  nodeComponentSLIs: aggregationSet(mimirAggregetionSetDefaults {
+    id: 'component_node',
+    name: 'Global Node-Aggregated SLI Metrics',
+    intermediateSource: false,
+    labels: ['env', 'environment', 'tier', 'type', 'stage', 'shard', 'fqdn', 'component'],
+    upscaleLongerBurnRates: true,
+    slisForService(serviceDefinition): if serviceDefinition.monitoring.node.enabled then serviceDefinition.listServiceLevelIndicators() else [],
+    metricFormats: {
+      apdexSuccessRate: 'gitlab_component_node_apdex:success:rate_%s',
+      apdexWeight: 'gitlab_component_node_apdex:weight:score_%s',
+      apdexRatio: 'gitlab_component_node_apdex:ratio_%s',
+      opsRate: 'gitlab_component_node_ops:rate_%s',
+      errorRate: 'gitlab_component_node_errors:rate_%s',
+      errorRatio: 'gitlab_component_node_errors:ratio_%s',
+    },
+  }),
+
   aggregationsFromSource::
     std.filter(
       function(aggregationSet)
