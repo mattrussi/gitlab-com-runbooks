@@ -60,6 +60,20 @@ groups:
     expr: "0.020000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
+      component: server_chat
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: "0.980000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      component: server_chat
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: "0.020000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
       component: server_code_completions
       monitor: global
       tier: sv
@@ -82,6 +96,20 @@ groups:
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: server_code_generations
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: "0.020000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      component: server_x_ray
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: "0.980000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      component: server_x_ray
       monitor: global
       tier: sv
       type: ai-gateway
@@ -132,6 +160,16 @@ groups:
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:
+      component: server_chat
+      global_aggregation: "yes"
+      monitor: global
+      regional_aggregation: "no"
+      service_aggregation: "no"
+      tier: sv
+      type: ai-gateway
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
       component: server_code_completions
       global_aggregation: "yes"
       monitor: global
@@ -143,6 +181,16 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: server_code_generations
+      global_aggregation: "yes"
+      monitor: global
+      regional_aggregation: "no"
+      service_aggregation: "no"
+      tier: sv
+      type: ai-gateway
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: server_x_ray
       global_aggregation: "yes"
       monitor: global
       regional_aggregation: "no"

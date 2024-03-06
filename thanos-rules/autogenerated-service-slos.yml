@@ -97,6 +97,18 @@ groups:
     expr: "0.020000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
+      component: server_chat
+      tier: sv
+      type: ai-gateway
+    expr: "0.980000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      component: server_chat
+      tier: sv
+      type: ai-gateway
+    expr: "0.020000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
       component: server_code_completions
       tier: sv
       type: ai-gateway
@@ -116,6 +128,18 @@ groups:
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: server_code_generations
+      tier: sv
+      type: ai-gateway
+    expr: "0.020000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      component: server_x_ray
+      tier: sv
+      type: ai-gateway
+    expr: "0.980000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      component: server_x_ray
       tier: sv
       type: ai-gateway
     expr: "0.020000"
