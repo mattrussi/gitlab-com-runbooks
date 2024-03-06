@@ -1,17 +1,84 @@
-## Purpose of the service
+# Purpose of the service
 
-CI Runners are used by customers to run CI jobs for any project hosted on GitLab.com.
+CI Runners are used by customers to run CI/CD jobs for any project hosted on GitLab.com.
 
-Because this allows even free accounts to execute arbitrary code for up to 2000 wallclock minutes per month,
-it is ripe for abuse.
+Because this allows even free accounts to execute arbitrary code (under the limit defined by
+pipeline minutes attached to their subscription plans) it is ripe for abuse.
 
 Quick reference links:
 
-* [CI dashboard](https://dashboards.gitlab.net/d/000000159/ci)
-* [CI architecture summary](https://about.gitlab.com/handbook/engineering/infrastructure/production-architecture/ci-architecture.html)
+* [CI Runners dashboard](https://dashboards.gitlab.net/d/ci-runners-main/ci-runners3a-overview)
 * [CI Runner docs](https://docs.gitlab.com/runner/)
 * [CI Runner project source code, including curated links to the docs in README.md](https://gitlab.com/gitlab-org/gitlab-runner)
-* [Related runbooks](https://gitlab.com/gitlab-com/runbooks/blob/master/troubleshooting/cicd/)
+
+On the CI Runners dashboard, just after the dashboard variable selectors, you can find few groups
+of links. One of them is named `ci-runners Detail`. This one links to all dashboards we manage
+for `ci-runners` service through [this configuration](../../dashboards/ci-runners).
+
+All of these dashboards have the `ci-runners:` prefix in the name.
+
+You can see that few dashboards have also an additional common part - `Incident Support:`. These
+dashboards are created to support incident handling, based on our experience and knowledge about
+what are the most important metrics and their correlations.
+
+### Incident Support dashboards
+
+Each `ci-runners: Incident Support` dashboard is built in the similar way:
+
+1. There are common variables controlling the dashboard data:
+
+    - `PROMETHEUS_DS` - we don't change that and leave as `Global`
+    - `environment` - we don't change that and leave as `gprd`
+    - `stage` - we don't change that and leave as `main`
+    - `type` - we don't change that and leave as `shard`
+    - `shard` - **with this we control which shard we want to preview**. Multiple choices can be made at once.
+    - `runner_manager` - **with this we control which specific runner managers we want to preview**.
+        Multiple choices can be made at once. The list is limited basing on what's the current `shard` selection
+        and which runner managers for a given shard were observed at the configured time frame.
+
+1. There are three common annotations that can be shown/hidden:
+
+    - `deploy`
+    - `canary-deploy`
+    - `fature-flags`
+
+    All three are related to GitLab.com stack deployments and FF management. For now there is nothing
+    specific to the `ci-runners` service. However, sometimes the GitLab.com deployment or FF change
+    may affect runners, so it may be useful to toggle these.
+
+1. Two link groups:
+
+    - `ci-runners Detail` - linking all `ci-runners` related dashboards, excluding the one that is currently opened
+    - `ci-runners Incident Dashboards` - linking all `ci-runners: Incident Support` dashboards, excluding
+       the one that is currently opened.
+
+1. First two rows are the same. They provide the metrics showing service overview, like:
+
+    - first row:
+        - apdex score,
+        - error ratio,
+        - requests per seconds number
+        - saturation summary
+    - second row:
+        - summary of jobs currently running on our runners (partitioned by shards)
+        - number of jobs started on the runners at a given time (partitioned by shards)
+        - histogram of job queue durations, which is the root data for our apdex score
+        - estimate (calculated at job assigning to runner time) of the size of queues, partitioned by runner type
+        - notes field (with some suggestions and instructions specific for each dashboard)
+
+1. Everything starting with the third row is specific for the context of the dashboard.
+
+    Similarly, all dashboard variables after the `runner_manager` one are specific for the dashboard and
+    panels available in it.
+
+List of Incident Support dashboards:
+
+- `autoscaling` - provides metrics related to Docker Machine executor based autoscaling (Linux Runners)
+- `autoscaling-new` - provides metrics related to Taskscaler/Fleeting based autoscaling (macOS Runners for now)
+- `database` - provides metrics related to GitLab.com database that may influence `ci-runners`
+- `gitlab-application` - provides metrics related to GitLab.com stack (Rails and Workhorse; including API) that
+    may influence `ci-runners`
+- `runner-manager` - provides metrics taken directly from GitLab Runner
 
 ## Common Alert: The `ci-runners` service (`main` stage) has a apdex score (latency) below SLO
 
@@ -21,10 +88,12 @@ this can delay the start of other jobs, possibly causing the above alert.
 We aim for pending jobs to be started promptly, so a scheduling delay can cause PagerDuty to alert the
 on-call engineer about SLO violation.
 
+More detailed description is in the [CI Apdex violating SLO document](ci-apdex-violating-slo.md).
+
 Quick reference:
 
 * [Example PagerDuty alert](https://gitlab.pagerduty.com/incidents/PVDAS6I)
-* [Apdex formula (search for `type: ci-runners`)](https://gitlab.com/gitlab-com/runbooks/blob/master/rules/service_apdex.yml)
+* [Apdex formula (search for `apdex`)](https://gitlab.com/gitlab-com/runbooks/blob/master/metrics-catalog/services/ci-runners.jsonnet)
 * [list of users in the queue](https://log.gprd.gitlab.net/goto/4109739640f8b21b278ca5060012fbf7)
 * [list of jobs per project](https://log.gprd.gitlab.net/goto/63f83c2a163fb0b29edc33b19773db25)
 
@@ -34,46 +103,72 @@ The following are some known ways for this alert to be triggered.
 
 The most common known pattern of abuse is cryptocurrency mining.
 
-Because we limit wallclock minutes, not CPU minutes, miners are motivated to spawn numerous concurrent jobs, to make the most of their wallclock minutes.
+Because we limit wallclock minutes, not CPU minutes, miners are motivated to spawn numerous
+concurrent jobs, to make the most of their wallclock minutes.
 
-Miners often create numerous accounts on GitLab.com, each having its own namespace, project, and CI pipeline.  Typically these projects have nearly identical `.gitlab-ci.yml` files, with only superficial differences.  Often these files will maximize parallelism, by defining many jobs that can run concurrently and possibly also specifying that each of those jobs should individually be run in parallel.
+Miners often create numerous accounts on GitLab.com, each having its own namespace, project,
+and CI pipeline. Typically, these projects have nearly identical `.gitlab-ci.yml` files, with
+only superficial differences.  Often these files will maximize parallelism, by defining many
+jobs that can run concurrently and possibly also specifying that each of those jobs should
+individually be run in parallel.
 
 ### Surge of Scheduled Pipelines
 
-When creating a scheduled pipeline in the GitLab UI there are some handy defaults. Unfortunately, they result in a lot of users scheduling pipelines to trigger at the same time on the same day, week, or month.
+When creating a scheduled pipeline in the GitLab UI there are some handy defaults. Unfortunately,
+they result in a lot of users scheduling pipelines to trigger at the same time on the same day,
+week, or month.
 
-The biggest spike is caused at 04:00 UTC. This spike is increased on Sundays (for jobs scheduled to be weekly) and on the first of the month (for jobs scheduled monthly). If the first of the month is also a Sunday this is additive and the spike will be even larger.
+The biggest spike is caused at 04:00 UTC. This spike is increased on Sundays (for jobs scheduled
+to be weekly) and on the first of the month (for jobs scheduled monthly). If the first of the month
+is also a Sunday this is additive and the spike will be even larger.
 
-In the case of a scheduled pipeline surge triggering the alert, it should resolve within ~15 minutes. If it doesn't it likely indicates there's more than just the one cause of the alert (e.g. there is a scheduled pipeline surge **and** abusive behavior in the system)
+In the case of a scheduled pipeline surge triggering the alert, it should resolve within ~15 minutes.
+If it doesn't it likely indicates there's more than just the one cause of the alert (e.g. there is a
+scheduled pipeline surge **and** abusive behavior in the system)
 
-### GitLab.com usage has outgrown it's surge capacity
+### GitLab.com usage has outgrown its surge capacity
 
-Each runner manager tries to maintain a [pool of idle virtual machines](https://ops.gitlab.net/gitlab-cookbooks/chef-repo/-/blob/master/roles/gitlab-runner-srm-gce.json#L19)
-to assign to new jobs. This allows jobs to start as soon as they're assigned without waiting for the VM spin-up time. However, if the idle pool is exhausted and new jobs keep coming in, the new jobs will have to wait for availble VMs.
+Each runner manager tries to maintain a pool of idle virtual machines to assign to new jobs.
+This allows jobs to start as soon as they're assigned without waiting for the VM spin-up time.
+However, if the idle pool is exhausted and new jobs keep coming in, the new jobs will have to
+wait for available VMs.
 
-This scenario actually describes the above two scenarios as well, however because the idle count is a hard coded value per runner manager, over time it will need to be updated as usage on GitLab.com grows.
+This scenario actually describes the above two scenarios as well, however because the idle count
+is a hard coded value per runner manager, over time it will need to be updated as usage on GitLab.com grows.
+
+We've slightly improved that by introducing the `idle_scale_factor` which allows the number of idle
+instances to follow the current usage. But for big, instantaneous spikes that is most probably
+not enough.
 
 #### How to identify active abusive accounts?
 
-To find miners running numerous concurrent jobs from one or more accounts (a.k.a. namespaces), use the following dashboard panels to find any namespaces with numerous (say, 800-1000) jobs in either the `Pending` or `Running` state.  Adjust the dashboard's timespan to include at least a few hours prior to your alert about the SLO violation for jobs being promptly started.
+To find miners running numerous concurrent jobs from one or more accounts (a.k.a. namespaces),
+use the following dashboard panels to find any namespaces with numerous (say, 800-1000) jobs in
+either the `Pending` or `Running` state.  Adjust the dashboard's timespan to include at least a
+few hours prior to your alert about the SLO violation for jobs being promptly started.
 
 * ["CI Runners Service" -> "CI" -> "Jobs queue" -> "Running jobs on shared-runners"](https://dashboards.gitlab.net/d/000000159/ci?orgId=1&panelId=60&fullscreen&from=now-3h&to=now)
 * ["CI Runners Service" -> "CI" -> "Jobs queue" -> "Pending jobs with shared-runners enabled"](https://dashboards.gitlab.net/d/000000159/ci?orgId=1&panelId=33&fullscreen&from=now-3h&to=now)
 
-These namespace ids are all that the abuse-team needs to block the accounts and cancel the running or pending jobs, so if the situation is dire, skip ahead to the "Mitigation" step.
+These namespace ids are all that the abuse-team needs to block the accounts and cancel the running
+or pending jobs, so if the situation is dire, skip ahead to the "Mitigation" step.
 
 Caveats:
 
-* Normally the namespace called "namespace" can be ignored.  It is an "everything else" bucket for the many small namespaces that did not rank in the top-N that get individually tallied.  Usually you can ignore it, but if it has an outrageously high count of jobs, that might indicate there are numerous namespaces being collectively aggressive in scheduling jobs (which would warrant further research).
+* Normally the namespace called "namespace" can be ignored.  It is an "everything else" bucket for
+  the many small namespaces that did not rank in the top-N that get individually tallied. Usually
+  you can ignore it, but if it has an outrageously high count of jobs, that might indicate there
+  are numerous namespaces being collectively aggressive in scheduling jobs (which would warrant further research).
 * Namespace 9970 is the `gitlab-org` namespace and is expected to routinely have heavy CI activity.
 
 #### Investigation
 
-To translate these namespace ids into namespace names and URLs, you can (a) run `/chatops run namespace <id>`, (b) query the Rails console, or (c) query the Postgres database directly.
+To translate these namespace ids into namespace names and URLs, you can (a) run `/chatops run namespace <id>`,
+(b) query the Rails console, or (c) query the Postgres database directly.
 
 ##### Option A: ChatOps command
 
-The easiest way is to use this ChatOps command in Slack to lookup the namespace name:
+The easiest way is to use this ChatOps command in Slack to look up the namespace name:
 
 ```
 /chatops run namespace <namespace_id>
@@ -127,17 +222,27 @@ Put your namespace ids into the array at the start of this iterator expression:
 
 ##### Review the namespaces via the GitLab web UI
 
-To view the namespace (and its projects), you will probably need to authenticate to GitLab.com using your admin account (e.g. `msmiley+admin@gitlab.com`) rather than your normal account, since abusive projects tend to be marked as private.
+To view the namespace (and its projects), you will probably need to authenticate to GitLab.com using your
+admin account (e.g. `msmiley+admin@gitlab.com`) rather than your normal account, since abusive projects
+tend to be marked as private.
 
-Often (but not always), both the namespace and the project are disposable, having minimal setup and content, apart from the `.gitlab-ci.yml` file that defines the pipeline jobs.  For reference, here is an [example namespace](https://gitlab.com/zabuzhkofaina), its one [project](https://gitlab.com/zabuzhkofaina/zabuzhkofaina), and its [`.gitlab-ci.yml` file](https://gitlab.com/zabuzhkofaina/zabuzhkofaina/blob/master/.gitlab-ci.yml).
+Often (but not always), both the namespace and the project are disposable, having minimal setup and content,
+apart from the `.gitlab-ci.yml` file that defines the pipeline jobs. For reference, here is an
+[example namespace](https://gitlab.com/zabuzhkofaina), its one [project](https://gitlab.com/zabuzhkofaina/zabuzhkofaina),
+and its [`.gitlab-ci.yml` file](https://gitlab.com/zabuzhkofaina/zabuzhkofaina/blob/master/.gitlab-ci.yml).
 
-In your browser, view the namespace and its project(s).  Determine if the namespace or project looks suspicious.  Does the namespace and project have minimal setup?  Were they freshly created very recently and lack activity apart from initial setup?  Is the project empty apart from the `.gitlab-ci.yml` file that defines the pipeline jobs?
+In your browser, view the namespace and its project(s). Determine if the namespace or project looks
+suspicious.  Does the namespace and project have minimal setup?  Were they freshly created very
+recently and lack activity apart from initial setup?  Is the project empty apart from the
+`.gitlab-ci.yml` file that defines the pipeline jobs?
 
-View the `.gitlab-ci.yml` file.  Does its job definition look like a miner?  Does it download an executable, possibly a separate configuration file, and then run numerous long-running jobs?
+View the `.gitlab-ci.yml` file.  Does its job definition look like a miner?  Does it download an
+executable, possibly a separate configuration file, and then run numerous long-running jobs?
 
 #### Mitigation
 
-Contact the Abuse Team via Slack (`@abuse-team`), and ask them to run `Scrubber` for the namespace ids you identified above as abusive.
+Contact the Abuse Team via Slack (`@abuse-team`), and ask them to run `Scrubber` for the
+namespace ids you identified above as abusive.
 
 Quick reference:
 

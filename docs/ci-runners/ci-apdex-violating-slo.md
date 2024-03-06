@@ -2,17 +2,23 @@
 
 To Check the overall health of the runners:
 
-- Check the [CI-Runners standard SLI dashboard](https://dashboards.gitlab.net/d/ci-runners-main/ci-runners-overview?orgId=1&from=now-6h%2Fm&to=now%2Fm&var-PROMETHEUS_DS=Global&var-environment=gprd&var-stage=main) to check the impact of degradation
-  - Note that job queue charts are inaccurate in the following ways that are tracked in <https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/12850> and <https://gitlab.com/gitlab-org/gitlab/-/merge_requests/19517>:
-    - it's outdated, because gitlab_exporter is pointed at the archive replica (which is lagging behind)
-    - it's incomplete, because most of the times the Postgres queries for pulling this data are timing out
-- [Job queue duration histogram percentiles](https://dashboards.gitlab.net/d/000000159/ci?viewPanel=89&orgId=1&from=now-6h&to=now) may also point to a degradation, note that these are only for jobs that have been picked up by a runner.
+- Check the [CI-Runners standard SLI dashboard](https://dashboards.gitlab.net/d/ci-runners-main/ci-runners-overview?orgId=1&from=now-6h%2Fm&to=now%2Fm&var-PROMETHEUS_DS=Global&var-environment=gprd&var-stage=main)
+    to check the impact of degradation
+- [Job queue duration histogram](https://dashboards.gitlab.net/d/ci-runners-incident-autoscaling/ci-runners3a-incident-support3a-autoscaling?from=now-12h&to=now&var-PROMETHEUS_DS=PA258B30F88C30650&var-environment=gprd&var-stage=main&orgId=1&viewPanel=11)
+    may also point to a degradation, note that these are only for jobs that have been picked up by a runner.
 
-This alert has the following possible causes, in the first few minutes it is important to determine the high-level cause before investigating further, the following are the common three causes of this alert:
+This alert has the following possible causes, in the first few minutes it is important to determine the high-level
+cause before investigating further, the following are the common three causes of this alert.
+
+### Review of the service
+
+Check the [ci-runners: Incident Support](service-ci-runners.md#incident-support-dashboards) dashboards
+to get the overview of what's happening in the system
 
 ### GCP Quotas causing scaling issues
 
-Look for quota-exceeded errors in logs to determine if we are hitting any GCP `gitlab-ci` project quotas that are causing scaling issues: <https://log.gprd.gitlab.net/goto/8f65b43718b6e95ccf5f6972e7ca1887>
+Look for quota-exceeded errors in logs to determine if we are hitting any GCP `gitlab-ci` project quotas
+that are causing scaling issues: <https://log.gprd.gitlab.net/goto/8f65b43718b6e95ccf5f6972e7ca1887>
 
 Check the [Quotas Runbook](./providers/gcp/quotas.md) for more details.
 

@@ -21,69 +21,49 @@
 * [Rails SQL Apdex alerts](../patroni/rails-sql-apdex-slow.md)
 <!-- END_MARKER -->
 
-# CI Runner Overview
+## Runner Shards
 
-We have several different kind of runners. Below is a brief overview of each.
-They all have acronyms as well, which are indicated next to each name.
+We maintain several shards of runners, for three different platforms: Linux, Windows and macOS.
 
-* [Logging](#logging)
-* [Troubleshooting Pointers](#troubleshooting-pointers)
-* [Configuration management for the Linux based Runners fleet](linux/README.md)
-* [Runner Descriptions](#runner-descriptions)
-  * [shared-runners-manager (SRM)](#shared-runners-manager-srm)
-  * [gitlab-shared-runners-manager (GSRM)](#gitlab-shared-runners-manager-gsrm)
-  * [private-runners-manager (PRM)](#private-runners-manager-prm)
-  * [gitlab-docker-shared-runners-manager (GDSRM)](#gitlab-docker-shared-runners-manager-gdsrm)
-  * [windows-shared-runners-manager (WSRM)](#windows-shared-runners-manager-wsrm)
-* [Cost Factors](#cost-factors)
-* [Network Info](#network-info)
-* [Monitoring](#monitoring)
-* [Production Change Lock (PCL)](#production-change-lock-pcl)
+Except of Windows runners, naming of shards follows the same pattern:
 
-## Runner Descriptions
+```text
+saas-{platform}-{size}-{architecture}-{additional}
+```
 
-### shared-runners-manager (SRM)
+For example:
 
-These are the main runners our customers use. They are housed in the `gitlab-ci` project.
-Each machine is used for one build and then rebuilt. See [`gitlab-ci` network](#gitlab-ci-project)
-for subnet information.
+- `saas-linux-small-amd64` - runners for Linux platform, `small` size, using the x86_64/amd64 architecture.
+- `saas-macos-medium-m1` - runners for macOS platforms, `medium` size, using the M1 architecture.
 
-### gitlab-shared-runners-manager (GSRM)
+The size references the "size" of resources provided for job execution, which basically means
+using "smaller" or "bigger" instance type from the types available in the chosen cloud provider.
 
-These runners are used for GitLab application tests. They can be used by customer forks of the
-GitLab application. These are also housed in the `gitlab-ci` project. See [`gitlab-ci` network](#gitlab-ci-project)
-for subnet information.
+We don't have any strict mapping of what `small`, `medium` or other sizes should use. The rule
+is that within the platform, shard sizes should reference differences in the instances capabilities,
+for example `saas-linux-2xlarge` should be more powerful than `saas-linux-large`, and this one more
+powerful than `saas-linux-medium`. The specification of instances is a detail that may be changed
+in time, but preserving the relative difference between shard sizes.
 
-### private-runners-manager (PRM)
+For Windows, as for now, we have only one shard named `windows-shared`. This is going to change once
+we will start transition from the existing Windows autoscaling mechanism to our new autoscaling
+build with Taskscaler and Fleeting.
 
-These runners are added to the `gitlab-com` and `gitlab-org` groups for internal GitLab use
-only. They are also added to the ops instance as shared runners for the same purpose. They
-have privileged mode on. See [`gitlab-ci` network](#gitlab-ci-project) for subnet information.
+### Special runner shards
 
-### gitlab-docker-shared-runners-manager (GDSRM)
+We have two shards that are special:
 
-These are the newest runners we have. They are used for all of our open source projects under
-the `gitlab-org` group. They are also referred to as `org-ci` runners. These are housed in the
-`gitlab-org-ci` project. For further info please see the [org-ci README](./cicd/org-ci/README.md).
+1. `private` - these are runners available only to GitLab Inc. Each runner has several configurations
+    registered as group runners in few of our top-level groups on GitLab.com (`gitlab-org`, `gitlab-com`
+    and `charts`) or as instance runners on some of our private instances (dev.gitlab.org, staging.gitlab.com
+    and ops.gitlab.net).
 
-### windows-shared-runners-manager (WSRM)
+    Despite the runners being `private` and in one case registered on staging.gitlab.com, this is a production
+    service!
 
-As the name suggests, these are runners that spawn Windows machines. They are currently in
-beta. They are housed in the `gitlab-ci-windows` project. For further info please see the
-[windows CI README](./cicd/windows/README.md). For network information see [gitlab-ci-windows networking](#gitlab-ci-windows-project).
-
-## Cost Factors
-
-Each runner has an associated `cost factor` that determines how many minutes are deducted from the customers account
-per minute used. For example, if a cost factor was 2.0, the customer would use 2 minutes for each minute a CI job
-runs. Below is a table that details the cost factor for each runner type.
-
-| Runner Type                                 | Public Project Factor | Private Project Factor |
-| ------------------------------------------- | --------------------- | ---------------------- |
-| shared-runners-manager (srm)                | 0.0                   | 1.0                    |
-| gitlab-shared-runners-manager (gsrm)        | 0.0                   | 1.0                    |
-| windows-runners-manager (wsrm)              | 0.0                   | 1.0                    |
-| gitlab-docker-shared-runners-manager (gsrm) | 0.0                   | 1.0                    |
+1. `shared-gitlab-org` - these are instance runners on GitLab.com - so available to everyone - but their
+    main purpose is to provide CI/CD power for `gitlab-org/*` community forks. We have, however, no way
+    to block any other usage, so we sometimes can find there some other workloads.
 
 ## Network Info
 
