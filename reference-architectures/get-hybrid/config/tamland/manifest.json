@@ -306,7 +306,7 @@
         "changepoints_count": 25,
         "forecast_days": 90,
         "historical_days": 365,
-        "strategy": "quantile95_1h"
+        "strategy": "exclude"
       },
       "description": "Measures the amount of scheduler waiting time that processes are waiting\nto be scheduled, according to [`CPU Scheduling Metrics`](https://www.robustperception.io/cpu-scheduling-metrics-from-the-node-exporter).\n\nA high value indicates that a node has more processes to be run than CPU time available\nto handle them, and may lead to degraded responsiveness and performance from the application.\n\nAdditionally, it may indicate that the fleet is under-provisioned.\n",
       "horizontallyScalable": true,

@@ -7,6 +7,11 @@ local resourceSaturationPoint = (import 'servicemetrics/resource_saturation_poin
     appliesTo: metricsCatalog.findVMProvisionedServices(first='patroni'),
     severity: 's4',
     horizontallyScalable: true,
+    capacityPlanning: {
+      // Disabled because this saturation point is a lagging indicator only
+      // See further: https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/2889
+      strategy: 'exclude',
+    },
     description: |||
       Measures the amount of scheduler waiting time that processes are waiting
       to be scheduled, according to [`CPU Scheduling Metrics`](https://www.robustperception.io/cpu-scheduling-metrics-from-the-node-exporter).
