@@ -14,7 +14,7 @@ local resourceSaturationPoint = (import 'servicemetrics/resource_saturation_poin
       For scaling, refer to https://cloud.google.com/run/docs/configuring/services/cpu.
     |||,
     grafana_dashboard_uid: 'sat_runway_container_cpu',
-    resourceLabels: ['revision_name'],
+    resourceLabels: ['revision_name', 'region'],
     burnRatePeriod: '30m',
     staticLabels: {
       tier: 'inf',
@@ -45,7 +45,7 @@ local resourceSaturationPoint = (import 'servicemetrics/resource_saturation_poin
       For scaling, refer to https://cloud.google.com/run/docs/configuring/services/memory-limits.
     |||,
     grafana_dashboard_uid: 'sat_runway_container_memory',
-    resourceLabels: ['revision_name'],
+    resourceLabels: ['revision_name', 'region'],
     burnRatePeriod: '30m',
     staticLabels: {
       tier: 'inf',
@@ -76,7 +76,7 @@ local resourceSaturationPoint = (import 'servicemetrics/resource_saturation_poin
       For scaling, refer to https://cloud.google.com/run/docs/configuring/max-instances.
     |||,
     grafana_dashboard_uid: 'sat_runway_container_instance',
-    resourceLabels: ['revision_name'],
+    resourceLabels: ['revision_name', 'region'],
     burnRatePeriod: '30m',
     staticLabels: {
       tier: 'inf',
@@ -108,7 +108,7 @@ local resourceSaturationPoint = (import 'servicemetrics/resource_saturation_poin
       For scaling, refer to https://cloud.google.com/run/docs/configuring/concurrency.
     |||,
     grafana_dashboard_uid: 'sat_runway_container_max_con_reqs',
-    resourceLabels: ['revision_name'],
+    resourceLabels: ['revision_name', 'region'],
     burnRatePeriod: '30m',
     staticLabels: {
       tier: 'inf',
