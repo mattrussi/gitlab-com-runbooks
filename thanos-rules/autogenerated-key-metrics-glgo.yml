@@ -269,7 +269,7 @@ groups:
     labels:
       component: runway_ingress
       global_aggregation: "yes"
-      regional_aggregation: "no"
+      regional_aggregation: "yes"
       service_aggregation: "yes"
       tier: sv
       type: glgo

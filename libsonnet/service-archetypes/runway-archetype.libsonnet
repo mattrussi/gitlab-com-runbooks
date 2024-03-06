@@ -36,6 +36,8 @@ function(
     serviceIsStageless: true,
     dangerouslyThanosEvaluated: true,
 
+    regional: true,  // Defaults to us-east1
+
     serviceLevelIndicators: {
       runway_ingress: {
         description: |||
@@ -62,7 +64,7 @@ function(
           samplingInterval=60,
         ),
 
-        significantLabels: ['revision_name', 'response_code'],
+        significantLabels: ['revision_name', 'response_code', 'region'],
 
         userImpacting: userImpacting,
 

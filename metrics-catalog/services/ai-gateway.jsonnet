@@ -81,7 +81,7 @@ metricsCatalog.serviceDefinition(
           useRecordingRuleRegistry=false,
         ),
 
-        significantLabels: ['status', 'handler', 'method'],
+        significantLabels: ['status', 'handler', 'method', 'region'],
 
         toolingLinks: [
           toolingLinks.kibana(
@@ -123,7 +123,7 @@ metricsCatalog.serviceDefinition(
           useRecordingRuleRegistry=false,
         ),
 
-        significantLabels: ['status', 'handler', 'method'],
+        significantLabels: ['status', 'handler', 'method', 'region'],
 
         toolingLinks: [
           toolingLinks.kibana(
