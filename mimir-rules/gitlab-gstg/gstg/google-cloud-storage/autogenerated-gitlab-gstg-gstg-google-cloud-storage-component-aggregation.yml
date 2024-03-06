@@ -1063,6 +1063,12 @@ groups:
         avg_over_time(gitlab_component_apdex:success:rate_1h{component="artifacts_cdn",env="gstg",monitor="global",tier="stor",type="google-cloud-storage"}[6h] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_6h
+    labels:
+      component: artifacts_cdn
+      monitor: global
+      stage: main
+      tier: stor
+      type: google-cloud-storage
     expr: |
       sum by (env,environment) (
         avg_over_time(gitlab_component_apdex:weight:score_1h{component="artifacts_cdn",env="gstg",monitor="global",tier="stor",type="google-cloud-storage"}[6h] offset 30s)
@@ -1128,6 +1134,11 @@ groups:
         avg_over_time(gitlab_component_apdex:success:rate_1h{component="pages_range_requests",env="gstg",monitor="global",tier="stor",type="google-cloud-storage"}[6h] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_6h
+    labels:
+      component: pages_range_requests
+      monitor: global
+      tier: stor
+      type: google-cloud-storage
     expr: |
       sum by (env,environment,stage) (
         avg_over_time(gitlab_component_apdex:weight:score_1h{component="pages_range_requests",env="gstg",monitor="global",tier="stor",type="google-cloud-storage"}[6h] offset 30s)
@@ -1191,6 +1202,11 @@ groups:
         avg_over_time(gitlab_component_apdex:success:rate_1h{component="pages_request_duration",env="gstg",monitor="global",tier="stor",type="google-cloud-storage"}[6h] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_6h
+    labels:
+      component: pages_request_duration
+      monitor: global
+      tier: stor
+      type: google-cloud-storage
     expr: |
       sum by (env,environment,stage) (
         avg_over_time(gitlab_component_apdex:weight:score_1h{component="pages_request_duration",env="gstg",monitor="global",tier="stor",type="google-cloud-storage"}[6h] offset 30s)
@@ -1254,6 +1270,11 @@ groups:
         avg_over_time(gitlab_component_apdex:success:rate_1h{component="pages_total_requests",env="gstg",monitor="global",tier="stor",type="google-cloud-storage"}[6h] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_6h
+    labels:
+      component: pages_total_requests
+      monitor: global
+      tier: stor
+      type: google-cloud-storage
     expr: |
       sum by (env,environment,stage) (
         avg_over_time(gitlab_component_apdex:weight:score_1h{component="pages_total_requests",env="gstg",monitor="global",tier="stor",type="google-cloud-storage"}[6h] offset 30s)
@@ -1317,6 +1338,11 @@ groups:
         avg_over_time(gitlab_component_apdex:success:rate_1h{component="registry_storage",env="gstg",monitor="global",tier="stor",type="google-cloud-storage"}[6h] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_6h
+    labels:
+      component: registry_storage
+      monitor: global
+      tier: stor
+      type: google-cloud-storage
     expr: |
       sum by (env,environment,stage) (
         avg_over_time(gitlab_component_apdex:weight:score_1h{component="registry_storage",env="gstg",monitor="global",tier="stor",type="google-cloud-storage"}[6h] offset 30s)
@@ -1380,6 +1406,11 @@ groups:
         avg_over_time(gitlab_component_apdex:success:rate_1h{component="workhorse_upload",env="gstg",monitor="global",tier="stor",type="google-cloud-storage"}[6h] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_6h
+    labels:
+      component: workhorse_upload
+      monitor: global
+      tier: stor
+      type: google-cloud-storage
     expr: |
       sum by (env,environment,stage) (
         avg_over_time(gitlab_component_apdex:weight:score_1h{component="workhorse_upload",env="gstg",monitor="global",tier="stor",type="google-cloud-storage"}[6h] offset 30s)
@@ -1447,6 +1478,12 @@ groups:
         avg_over_time(gitlab_component_apdex:success:rate_1h{component="artifacts_cdn",env="gstg",monitor="global",tier="stor",type="google-cloud-storage"}[3d] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_3d
+    labels:
+      component: artifacts_cdn
+      monitor: global
+      stage: main
+      tier: stor
+      type: google-cloud-storage
     expr: |
       sum by (env,environment) (
         avg_over_time(gitlab_component_apdex:weight:score_1h{component="artifacts_cdn",env="gstg",monitor="global",tier="stor",type="google-cloud-storage"}[3d] offset 30s)
@@ -1512,6 +1549,11 @@ groups:
         avg_over_time(gitlab_component_apdex:success:rate_1h{component="pages_range_requests",env="gstg",monitor="global",tier="stor",type="google-cloud-storage"}[3d] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_3d
+    labels:
+      component: pages_range_requests
+      monitor: global
+      tier: stor
+      type: google-cloud-storage
     expr: |
       sum by (env,environment,stage) (
         avg_over_time(gitlab_component_apdex:weight:score_1h{component="pages_range_requests",env="gstg",monitor="global",tier="stor",type="google-cloud-storage"}[3d] offset 30s)
@@ -1575,6 +1617,11 @@ groups:
         avg_over_time(gitlab_component_apdex:success:rate_1h{component="pages_request_duration",env="gstg",monitor="global",tier="stor",type="google-cloud-storage"}[3d] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_3d
+    labels:
+      component: pages_request_duration
+      monitor: global
+      tier: stor
+      type: google-cloud-storage
     expr: |
       sum by (env,environment,stage) (
         avg_over_time(gitlab_component_apdex:weight:score_1h{component="pages_request_duration",env="gstg",monitor="global",tier="stor",type="google-cloud-storage"}[3d] offset 30s)
@@ -1638,6 +1685,11 @@ groups:
         avg_over_time(gitlab_component_apdex:success:rate_1h{component="pages_total_requests",env="gstg",monitor="global",tier="stor",type="google-cloud-storage"}[3d] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_3d
+    labels:
+      component: pages_total_requests
+      monitor: global
+      tier: stor
+      type: google-cloud-storage
     expr: |
       sum by (env,environment,stage) (
         avg_over_time(gitlab_component_apdex:weight:score_1h{component="pages_total_requests",env="gstg",monitor="global",tier="stor",type="google-cloud-storage"}[3d] offset 30s)
@@ -1701,6 +1753,11 @@ groups:
         avg_over_time(gitlab_component_apdex:success:rate_1h{component="registry_storage",env="gstg",monitor="global",tier="stor",type="google-cloud-storage"}[3d] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_3d
+    labels:
+      component: registry_storage
+      monitor: global
+      tier: stor
+      type: google-cloud-storage
     expr: |
       sum by (env,environment,stage) (
         avg_over_time(gitlab_component_apdex:weight:score_1h{component="registry_storage",env="gstg",monitor="global",tier="stor",type="google-cloud-storage"}[3d] offset 30s)
@@ -1764,6 +1821,11 @@ groups:
         avg_over_time(gitlab_component_apdex:success:rate_1h{component="workhorse_upload",env="gstg",monitor="global",tier="stor",type="google-cloud-storage"}[3d] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_3d
+    labels:
+      component: workhorse_upload
+      monitor: global
+      tier: stor
+      type: google-cloud-storage
     expr: |
       sum by (env,environment,stage) (
         avg_over_time(gitlab_component_apdex:weight:score_1h{component="workhorse_upload",env="gstg",monitor="global",tier="stor",type="google-cloud-storage"}[3d] offset 30s)

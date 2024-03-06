@@ -1104,6 +1104,11 @@ groups:
         avg_over_time(gitlab_component_apdex:success:rate_1h{component="loadbalancer",env="gprd",monitor="global",tier="runners",type="ci-runners"}[6h] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_6h
+    labels:
+      component: loadbalancer
+      monitor: global
+      tier: runners
+      type: ci-runners
     expr: |
       sum by (env,environment,stage) (
         avg_over_time(gitlab_component_apdex:weight:score_1h{component="loadbalancer",env="gprd",monitor="global",tier="runners",type="ci-runners"}[6h] offset 30s)
@@ -1167,6 +1172,11 @@ groups:
         avg_over_time(gitlab_component_apdex:success:rate_1h{component="polling",env="gprd",monitor="global",tier="runners",type="ci-runners"}[6h] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_6h
+    labels:
+      component: polling
+      monitor: global
+      tier: runners
+      type: ci-runners
     expr: |
       sum by (env,environment,stage) (
         avg_over_time(gitlab_component_apdex:weight:score_1h{component="polling",env="gprd",monitor="global",tier="runners",type="ci-runners"}[6h] offset 30s)
@@ -1230,6 +1240,11 @@ groups:
         avg_over_time(gitlab_component_apdex:success:rate_1h{component="queuing_queries_duration",env="gprd",monitor="global",tier="runners",type="ci-runners"}[6h] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_6h
+    labels:
+      component: queuing_queries_duration
+      monitor: global
+      tier: runners
+      type: ci-runners
     expr: |
       sum by (env,environment,stage) (
         avg_over_time(gitlab_component_apdex:weight:score_1h{component="queuing_queries_duration",env="gprd",monitor="global",tier="runners",type="ci-runners"}[6h] offset 30s)
@@ -1293,6 +1308,11 @@ groups:
         avg_over_time(gitlab_component_apdex:success:rate_1h{component="saas_linux_runner_image_pull_failures",env="gprd",monitor="global",tier="runners",type="ci-runners"}[6h] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_6h
+    labels:
+      component: saas_linux_runner_image_pull_failures
+      monitor: global
+      tier: runners
+      type: ci-runners
     expr: |
       sum by (env,environment,stage) (
         avg_over_time(gitlab_component_apdex:weight:score_1h{component="saas_linux_runner_image_pull_failures",env="gprd",monitor="global",tier="runners",type="ci-runners"}[6h] offset 30s)
@@ -1356,6 +1376,11 @@ groups:
         avg_over_time(gitlab_component_apdex:success:rate_1h{component="saas_runner_queues",env="gprd",monitor="global",tier="runners",type="ci-runners"}[6h] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_6h
+    labels:
+      component: saas_runner_queues
+      monitor: global
+      tier: runners
+      type: ci-runners
     expr: |
       sum by (env,environment,stage) (
         avg_over_time(gitlab_component_apdex:weight:score_1h{component="saas_runner_queues",env="gprd",monitor="global",tier="runners",type="ci-runners"}[6h] offset 30s)
@@ -1419,6 +1444,11 @@ groups:
         avg_over_time(gitlab_component_apdex:success:rate_1h{component="trace_archiving_ci_jobs",env="gprd",monitor="global",tier="runners",type="ci-runners"}[6h] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_6h
+    labels:
+      component: trace_archiving_ci_jobs
+      monitor: global
+      tier: runners
+      type: ci-runners
     expr: |
       sum by (env,environment,stage) (
         avg_over_time(gitlab_component_apdex:weight:score_1h{component="trace_archiving_ci_jobs",env="gprd",monitor="global",tier="runners",type="ci-runners"}[6h] offset 30s)
@@ -1485,6 +1515,11 @@ groups:
         avg_over_time(gitlab_component_apdex:success:rate_1h{component="loadbalancer",env="gprd",monitor="global",tier="runners",type="ci-runners"}[3d] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_3d
+    labels:
+      component: loadbalancer
+      monitor: global
+      tier: runners
+      type: ci-runners
     expr: |
       sum by (env,environment,stage) (
         avg_over_time(gitlab_component_apdex:weight:score_1h{component="loadbalancer",env="gprd",monitor="global",tier="runners",type="ci-runners"}[3d] offset 30s)
@@ -1548,6 +1583,11 @@ groups:
         avg_over_time(gitlab_component_apdex:success:rate_1h{component="polling",env="gprd",monitor="global",tier="runners",type="ci-runners"}[3d] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_3d
+    labels:
+      component: polling
+      monitor: global
+      tier: runners
+      type: ci-runners
     expr: |
       sum by (env,environment,stage) (
         avg_over_time(gitlab_component_apdex:weight:score_1h{component="polling",env="gprd",monitor="global",tier="runners",type="ci-runners"}[3d] offset 30s)
@@ -1611,6 +1651,11 @@ groups:
         avg_over_time(gitlab_component_apdex:success:rate_1h{component="queuing_queries_duration",env="gprd",monitor="global",tier="runners",type="ci-runners"}[3d] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_3d
+    labels:
+      component: queuing_queries_duration
+      monitor: global
+      tier: runners
+      type: ci-runners
     expr: |
       sum by (env,environment,stage) (
         avg_over_time(gitlab_component_apdex:weight:score_1h{component="queuing_queries_duration",env="gprd",monitor="global",tier="runners",type="ci-runners"}[3d] offset 30s)
@@ -1674,6 +1719,11 @@ groups:
         avg_over_time(gitlab_component_apdex:success:rate_1h{component="saas_linux_runner_image_pull_failures",env="gprd",monitor="global",tier="runners",type="ci-runners"}[3d] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_3d
+    labels:
+      component: saas_linux_runner_image_pull_failures
+      monitor: global
+      tier: runners
+      type: ci-runners
     expr: |
       sum by (env,environment,stage) (
         avg_over_time(gitlab_component_apdex:weight:score_1h{component="saas_linux_runner_image_pull_failures",env="gprd",monitor="global",tier="runners",type="ci-runners"}[3d] offset 30s)
@@ -1737,6 +1787,11 @@ groups:
         avg_over_time(gitlab_component_apdex:success:rate_1h{component="saas_runner_queues",env="gprd",monitor="global",tier="runners",type="ci-runners"}[3d] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_3d
+    labels:
+      component: saas_runner_queues
+      monitor: global
+      tier: runners
+      type: ci-runners
     expr: |
       sum by (env,environment,stage) (
         avg_over_time(gitlab_component_apdex:weight:score_1h{component="saas_runner_queues",env="gprd",monitor="global",tier="runners",type="ci-runners"}[3d] offset 30s)
@@ -1800,6 +1855,11 @@ groups:
         avg_over_time(gitlab_component_apdex:success:rate_1h{component="trace_archiving_ci_jobs",env="gprd",monitor="global",tier="runners",type="ci-runners"}[3d] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_3d
+    labels:
+      component: trace_archiving_ci_jobs
+      monitor: global
+      tier: runners
+      type: ci-runners
     expr: |
       sum by (env,environment,stage) (
         avg_over_time(gitlab_component_apdex:weight:score_1h{component="trace_archiving_ci_jobs",env="gprd",monitor="global",tier="runners",type="ci-runners"}[3d] offset 30s)

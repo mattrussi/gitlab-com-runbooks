@@ -1966,6 +1966,12 @@ groups:
         avg_over_time(gitlab_component_apdex:success:rate_1h{component="inference",env="gprd",monitor="global",tier="sv",type="ai-gateway"}[6h] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_6h
+    labels:
+      component: inference
+      monitor: global
+      stage: main
+      tier: sv
+      type: ai-gateway
     expr: |
       sum by (env,environment) (
         avg_over_time(gitlab_component_apdex:weight:score_1h{component="inference",env="gprd",monitor="global",tier="sv",type="ai-gateway"}[6h] offset 30s)
@@ -2032,6 +2038,12 @@ groups:
         avg_over_time(gitlab_component_apdex:success:rate_1h{component="runway_ingress",env="gprd",monitor="global",tier="sv",type="ai-gateway"}[6h] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_6h
+    labels:
+      component: runway_ingress
+      monitor: global
+      stage: main
+      tier: sv
+      type: ai-gateway
     expr: |
       sum by (env,environment) (
         avg_over_time(gitlab_component_apdex:weight:score_1h{component="runway_ingress",env="gprd",monitor="global",tier="sv",type="ai-gateway"}[6h] offset 30s)
@@ -2098,6 +2110,12 @@ groups:
         avg_over_time(gitlab_component_apdex:success:rate_1h{component="server",env="gprd",monitor="global",tier="sv",type="ai-gateway"}[6h] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_6h
+    labels:
+      component: server
+      monitor: global
+      stage: main
+      tier: sv
+      type: ai-gateway
     expr: |
       sum by (env,environment) (
         avg_over_time(gitlab_component_apdex:weight:score_1h{component="server",env="gprd",monitor="global",tier="sv",type="ai-gateway"}[6h] offset 30s)
@@ -2164,6 +2182,12 @@ groups:
         avg_over_time(gitlab_component_apdex:success:rate_1h{component="server_chat",env="gprd",monitor="global",tier="sv",type="ai-gateway"}[6h] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_6h
+    labels:
+      component: server_chat
+      monitor: global
+      stage: main
+      tier: sv
+      type: ai-gateway
     expr: |
       sum by (env,environment) (
         avg_over_time(gitlab_component_apdex:weight:score_1h{component="server_chat",env="gprd",monitor="global",tier="sv",type="ai-gateway"}[6h] offset 30s)
@@ -2230,6 +2254,12 @@ groups:
         avg_over_time(gitlab_component_apdex:success:rate_1h{component="server_code_completions",env="gprd",monitor="global",tier="sv",type="ai-gateway"}[6h] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_6h
+    labels:
+      component: server_code_completions
+      monitor: global
+      stage: main
+      tier: sv
+      type: ai-gateway
     expr: |
       sum by (env,environment) (
         avg_over_time(gitlab_component_apdex:weight:score_1h{component="server_code_completions",env="gprd",monitor="global",tier="sv",type="ai-gateway"}[6h] offset 30s)
@@ -2296,6 +2326,12 @@ groups:
         avg_over_time(gitlab_component_apdex:success:rate_1h{component="server_code_generations",env="gprd",monitor="global",tier="sv",type="ai-gateway"}[6h] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_6h
+    labels:
+      component: server_code_generations
+      monitor: global
+      stage: main
+      tier: sv
+      type: ai-gateway
     expr: |
       sum by (env,environment) (
         avg_over_time(gitlab_component_apdex:weight:score_1h{component="server_code_generations",env="gprd",monitor="global",tier="sv",type="ai-gateway"}[6h] offset 30s)
@@ -2362,6 +2398,12 @@ groups:
         avg_over_time(gitlab_component_apdex:success:rate_1h{component="server_x_ray",env="gprd",monitor="global",tier="sv",type="ai-gateway"}[6h] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_6h
+    labels:
+      component: server_x_ray
+      monitor: global
+      stage: main
+      tier: sv
+      type: ai-gateway
     expr: |
       sum by (env,environment) (
         avg_over_time(gitlab_component_apdex:weight:score_1h{component="server_x_ray",env="gprd",monitor="global",tier="sv",type="ai-gateway"}[6h] offset 30s)
@@ -2428,6 +2470,12 @@ groups:
         avg_over_time(gitlab_component_apdex:success:rate_1h{component="waf",env="gprd",monitor="global",tier="sv",type="ai-gateway"}[6h] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_6h
+    labels:
+      component: waf
+      env: ops
+      monitor: global
+      tier: sv
+      type: ai-gateway
     expr: |
       sum by (environment,stage) (
         avg_over_time(gitlab_component_apdex:weight:score_1h{component="waf",env="gprd",monitor="global",tier="sv",type="ai-gateway"}[6h] offset 30s)
@@ -2497,6 +2545,12 @@ groups:
         avg_over_time(gitlab_component_apdex:success:rate_1h{component="inference",env="gprd",monitor="global",tier="sv",type="ai-gateway"}[3d] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_3d
+    labels:
+      component: inference
+      monitor: global
+      stage: main
+      tier: sv
+      type: ai-gateway
     expr: |
       sum by (env,environment) (
         avg_over_time(gitlab_component_apdex:weight:score_1h{component="inference",env="gprd",monitor="global",tier="sv",type="ai-gateway"}[3d] offset 30s)
@@ -2563,6 +2617,12 @@ groups:
         avg_over_time(gitlab_component_apdex:success:rate_1h{component="runway_ingress",env="gprd",monitor="global",tier="sv",type="ai-gateway"}[3d] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_3d
+    labels:
+      component: runway_ingress
+      monitor: global
+      stage: main
+      tier: sv
+      type: ai-gateway
     expr: |
       sum by (env,environment) (
         avg_over_time(gitlab_component_apdex:weight:score_1h{component="runway_ingress",env="gprd",monitor="global",tier="sv",type="ai-gateway"}[3d] offset 30s)
@@ -2629,6 +2689,12 @@ groups:
         avg_over_time(gitlab_component_apdex:success:rate_1h{component="server",env="gprd",monitor="global",tier="sv",type="ai-gateway"}[3d] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_3d
+    labels:
+      component: server
+      monitor: global
+      stage: main
+      tier: sv
+      type: ai-gateway
     expr: |
       sum by (env,environment) (
         avg_over_time(gitlab_component_apdex:weight:score_1h{component="server",env="gprd",monitor="global",tier="sv",type="ai-gateway"}[3d] offset 30s)
@@ -2695,6 +2761,12 @@ groups:
         avg_over_time(gitlab_component_apdex:success:rate_1h{component="server_chat",env="gprd",monitor="global",tier="sv",type="ai-gateway"}[3d] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_3d
+    labels:
+      component: server_chat
+      monitor: global
+      stage: main
+      tier: sv
+      type: ai-gateway
     expr: |
       sum by (env,environment) (
         avg_over_time(gitlab_component_apdex:weight:score_1h{component="server_chat",env="gprd",monitor="global",tier="sv",type="ai-gateway"}[3d] offset 30s)
@@ -2761,6 +2833,12 @@ groups:
         avg_over_time(gitlab_component_apdex:success:rate_1h{component="server_code_completions",env="gprd",monitor="global",tier="sv",type="ai-gateway"}[3d] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_3d
+    labels:
+      component: server_code_completions
+      monitor: global
+      stage: main
+      tier: sv
+      type: ai-gateway
     expr: |
       sum by (env,environment) (
         avg_over_time(gitlab_component_apdex:weight:score_1h{component="server_code_completions",env="gprd",monitor="global",tier="sv",type="ai-gateway"}[3d] offset 30s)
@@ -2827,6 +2905,12 @@ groups:
         avg_over_time(gitlab_component_apdex:success:rate_1h{component="server_code_generations",env="gprd",monitor="global",tier="sv",type="ai-gateway"}[3d] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_3d
+    labels:
+      component: server_code_generations
+      monitor: global
+      stage: main
+      tier: sv
+      type: ai-gateway
     expr: |
       sum by (env,environment) (
         avg_over_time(gitlab_component_apdex:weight:score_1h{component="server_code_generations",env="gprd",monitor="global",tier="sv",type="ai-gateway"}[3d] offset 30s)
@@ -2893,6 +2977,12 @@ groups:
         avg_over_time(gitlab_component_apdex:success:rate_1h{component="server_x_ray",env="gprd",monitor="global",tier="sv",type="ai-gateway"}[3d] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_3d
+    labels:
+      component: server_x_ray
+      monitor: global
+      stage: main
+      tier: sv
+      type: ai-gateway
     expr: |
       sum by (env,environment) (
         avg_over_time(gitlab_component_apdex:weight:score_1h{component="server_x_ray",env="gprd",monitor="global",tier="sv",type="ai-gateway"}[3d] offset 30s)
@@ -2959,6 +3049,12 @@ groups:
         avg_over_time(gitlab_component_apdex:success:rate_1h{component="waf",env="gprd",monitor="global",tier="sv",type="ai-gateway"}[3d] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_3d
+    labels:
+      component: waf
+      env: ops
+      monitor: global
+      tier: sv
+      type: ai-gateway
     expr: |
       sum by (environment,stage) (
         avg_over_time(gitlab_component_apdex:weight:score_1h{component="waf",env="gprd",monitor="global",tier="sv",type="ai-gateway"}[3d] offset 30s)

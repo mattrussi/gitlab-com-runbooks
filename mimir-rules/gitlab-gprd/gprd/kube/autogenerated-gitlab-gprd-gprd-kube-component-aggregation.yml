@@ -463,6 +463,12 @@ groups:
         avg_over_time(gitlab_component_apdex:success:rate_1h{component="apiserver",env="gprd",monitor="global",tier="inf",type="kube"}[6h] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_6h
+    labels:
+      component: apiserver
+      monitor: global
+      stage: main
+      tier: inf
+      type: kube
     expr: |
       sum by (env,environment) (
         avg_over_time(gitlab_component_apdex:weight:score_1h{component="apiserver",env="gprd",monitor="global",tier="inf",type="kube"}[6h] offset 30s)
@@ -529,6 +535,12 @@ groups:
         avg_over_time(gitlab_component_apdex:success:rate_1h{component="cluster_scaleups",env="gprd",monitor="global",tier="inf",type="kube"}[6h] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_6h
+    labels:
+      component: cluster_scaleups
+      monitor: global
+      stage: main
+      tier: inf
+      type: kube
     expr: |
       sum by (env,environment) (
         avg_over_time(gitlab_component_apdex:weight:score_1h{component="cluster_scaleups",env="gprd",monitor="global",tier="inf",type="kube"}[6h] offset 30s)
@@ -598,6 +610,12 @@ groups:
         avg_over_time(gitlab_component_apdex:success:rate_1h{component="apiserver",env="gprd",monitor="global",tier="inf",type="kube"}[3d] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_3d
+    labels:
+      component: apiserver
+      monitor: global
+      stage: main
+      tier: inf
+      type: kube
     expr: |
       sum by (env,environment) (
         avg_over_time(gitlab_component_apdex:weight:score_1h{component="apiserver",env="gprd",monitor="global",tier="inf",type="kube"}[3d] offset 30s)
@@ -664,6 +682,12 @@ groups:
         avg_over_time(gitlab_component_apdex:success:rate_1h{component="cluster_scaleups",env="gprd",monitor="global",tier="inf",type="kube"}[3d] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_3d
+    labels:
+      component: cluster_scaleups
+      monitor: global
+      stage: main
+      tier: inf
+      type: kube
     expr: |
       sum by (env,environment) (
         avg_over_time(gitlab_component_apdex:weight:score_1h{component="cluster_scaleups",env="gprd",monitor="global",tier="inf",type="kube"}[3d] offset 30s)

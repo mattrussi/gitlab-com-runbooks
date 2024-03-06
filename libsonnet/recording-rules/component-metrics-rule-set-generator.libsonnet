@@ -118,6 +118,7 @@ local generateApdexRulesUpscaled(burnRate, aggregationSet, sliDefinition, record
   local apdexWeightRateRule = if apdexWeightRuleName != null then
     [{
       record: apdexWeightRuleName,
+      labels: allStaticLabels,
       expr: upscaledRateExpression % {
         aggregationLabels: aggregations.serialize(filterLabelsFromLabelsHash(aggregationSet.labels, allStaticLabels)),
         metricName: aggregationSet.getApdexWeightMetricForBurnRate('1h', required=true),

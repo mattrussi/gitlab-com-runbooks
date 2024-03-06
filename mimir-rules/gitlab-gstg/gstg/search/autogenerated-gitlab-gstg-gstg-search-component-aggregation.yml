@@ -426,6 +426,11 @@ groups:
         avg_over_time(gitlab_component_apdex:success:rate_1h{component="elasticsearch_indexing",env="gstg",monitor="global",tier="inf",type="search"}[6h] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_6h
+    labels:
+      component: elasticsearch_indexing
+      monitor: global
+      tier: inf
+      type: search
     expr: |
       sum by (env,environment,stage) (
         avg_over_time(gitlab_component_apdex:weight:score_1h{component="elasticsearch_indexing",env="gstg",monitor="global",tier="inf",type="search"}[6h] offset 30s)
@@ -489,6 +494,11 @@ groups:
         avg_over_time(gitlab_component_apdex:success:rate_1h{component="elasticsearch_searching",env="gstg",monitor="global",tier="inf",type="search"}[6h] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_6h
+    labels:
+      component: elasticsearch_searching
+      monitor: global
+      tier: inf
+      type: search
     expr: |
       sum by (env,environment,stage) (
         avg_over_time(gitlab_component_apdex:weight:score_1h{component="elasticsearch_searching",env="gstg",monitor="global",tier="inf",type="search"}[6h] offset 30s)
@@ -552,6 +562,11 @@ groups:
         avg_over_time(gitlab_component_apdex:success:rate_1h{component="global_search_indexing",env="gstg",monitor="global",tier="inf",type="search"}[6h] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_6h
+    labels:
+      component: global_search_indexing
+      monitor: global
+      tier: inf
+      type: search
     expr: |
       sum by (env,environment,stage) (
         avg_over_time(gitlab_component_apdex:weight:score_1h{component="global_search_indexing",env="gstg",monitor="global",tier="inf",type="search"}[6h] offset 30s)
@@ -618,6 +633,11 @@ groups:
         avg_over_time(gitlab_component_apdex:success:rate_1h{component="elasticsearch_indexing",env="gstg",monitor="global",tier="inf",type="search"}[3d] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_3d
+    labels:
+      component: elasticsearch_indexing
+      monitor: global
+      tier: inf
+      type: search
     expr: |
       sum by (env,environment,stage) (
         avg_over_time(gitlab_component_apdex:weight:score_1h{component="elasticsearch_indexing",env="gstg",monitor="global",tier="inf",type="search"}[3d] offset 30s)
@@ -681,6 +701,11 @@ groups:
         avg_over_time(gitlab_component_apdex:success:rate_1h{component="elasticsearch_searching",env="gstg",monitor="global",tier="inf",type="search"}[3d] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_3d
+    labels:
+      component: elasticsearch_searching
+      monitor: global
+      tier: inf
+      type: search
     expr: |
       sum by (env,environment,stage) (
         avg_over_time(gitlab_component_apdex:weight:score_1h{component="elasticsearch_searching",env="gstg",monitor="global",tier="inf",type="search"}[3d] offset 30s)
@@ -744,6 +769,11 @@ groups:
         avg_over_time(gitlab_component_apdex:success:rate_1h{component="global_search_indexing",env="gstg",monitor="global",tier="inf",type="search"}[3d] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_3d
+    labels:
+      component: global_search_indexing
+      monitor: global
+      tier: inf
+      type: search
     expr: |
       sum by (env,environment,stage) (
         avg_over_time(gitlab_component_apdex:weight:score_1h{component="global_search_indexing",env="gstg",monitor="global",tier="inf",type="search"}[3d] offset 30s)

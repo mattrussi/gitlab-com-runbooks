@@ -205,6 +205,12 @@ groups:
         avg_over_time(gitlab_component_apdex:success:rate_1h{component="service",env="gprd",monitor="global",tier="db",type="pgbouncer-embedding"}[6h] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_6h
+    labels:
+      component: service
+      monitor: global
+      stage: main
+      tier: db
+      type: pgbouncer-embedding
     expr: |
       sum by (env,environment) (
         avg_over_time(gitlab_component_apdex:weight:score_1h{component="service",env="gprd",monitor="global",tier="db",type="pgbouncer-embedding"}[6h] offset 30s)
@@ -274,6 +280,12 @@ groups:
         avg_over_time(gitlab_component_apdex:success:rate_1h{component="service",env="gprd",monitor="global",tier="db",type="pgbouncer-embedding"}[3d] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_3d
+    labels:
+      component: service
+      monitor: global
+      stage: main
+      tier: db
+      type: pgbouncer-embedding
     expr: |
       sum by (env,environment) (
         avg_over_time(gitlab_component_apdex:weight:score_1h{component="service",env="gprd",monitor="global",tier="db",type="pgbouncer-embedding"}[3d] offset 30s)
