@@ -196,6 +196,11 @@ groups:
         avg_over_time(gitlab:component:feature_category:execution:apdex:success:rate_1h{component="ingress",feature_category="tracing",tier="sv",type="tracing"}[6h])
       )
   - record: gitlab:component:feature_category:execution:apdex:weight:score_6h
+    labels:
+      component: ingress
+      feature_category: tracing
+      tier: sv
+      type: tracing
     expr: |
       sum by (env,environment,stage) (
         avg_over_time(gitlab:component:feature_category:execution:apdex:weight:score_1h{component="ingress",feature_category="tracing",tier="sv",type="tracing"}[6h])
@@ -235,6 +240,11 @@ groups:
         avg_over_time(gitlab:component:feature_category:execution:apdex:success:rate_1h{component="ingress",feature_category="tracing",tier="sv",type="tracing"}[3d])
       )
   - record: gitlab:component:feature_category:execution:apdex:weight:score_3d
+    labels:
+      component: ingress
+      feature_category: tracing
+      tier: sv
+      type: tracing
     expr: |
       sum by (env,environment,stage) (
         avg_over_time(gitlab:component:feature_category:execution:apdex:weight:score_1h{component="ingress",feature_category="tracing",tier="sv",type="tracing"}[3d])

@@ -696,6 +696,11 @@ groups:
         avg_over_time(gitlab_component_apdex:success:rate_1h{component="praefect_cloudsql",env="gprd",monitor="global",tier="stor",type="praefect"}[6h] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_6h
+    labels:
+      component: praefect_cloudsql
+      monitor: global
+      tier: stor
+      type: praefect
     expr: |
       sum by (env,environment,stage) (
         avg_over_time(gitlab_component_apdex:weight:score_1h{component="praefect_cloudsql",env="gprd",monitor="global",tier="stor",type="praefect"}[6h] offset 30s)
@@ -759,6 +764,11 @@ groups:
         avg_over_time(gitlab_component_apdex:success:rate_1h{component="proxy",env="gprd",monitor="global",tier="stor",type="praefect"}[6h] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_6h
+    labels:
+      component: proxy
+      monitor: global
+      tier: stor
+      type: praefect
     expr: |
       sum by (env,environment,stage) (
         avg_over_time(gitlab_component_apdex:weight:score_1h{component="proxy",env="gprd",monitor="global",tier="stor",type="praefect"}[6h] offset 30s)
@@ -822,6 +832,11 @@ groups:
         avg_over_time(gitlab_component_apdex:success:rate_1h{component="replicator_queue",env="gprd",monitor="global",tier="stor",type="praefect"}[6h] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_6h
+    labels:
+      component: replicator_queue
+      monitor: global
+      tier: stor
+      type: praefect
     expr: |
       sum by (env,environment,stage) (
         avg_over_time(gitlab_component_apdex:weight:score_1h{component="replicator_queue",env="gprd",monitor="global",tier="stor",type="praefect"}[6h] offset 30s)
@@ -888,6 +903,11 @@ groups:
         avg_over_time(gitlab_component_apdex:success:rate_1h{component="praefect_cloudsql",env="gprd",monitor="global",tier="stor",type="praefect"}[3d] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_3d
+    labels:
+      component: praefect_cloudsql
+      monitor: global
+      tier: stor
+      type: praefect
     expr: |
       sum by (env,environment,stage) (
         avg_over_time(gitlab_component_apdex:weight:score_1h{component="praefect_cloudsql",env="gprd",monitor="global",tier="stor",type="praefect"}[3d] offset 30s)
@@ -951,6 +971,11 @@ groups:
         avg_over_time(gitlab_component_apdex:success:rate_1h{component="proxy",env="gprd",monitor="global",tier="stor",type="praefect"}[3d] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_3d
+    labels:
+      component: proxy
+      monitor: global
+      tier: stor
+      type: praefect
     expr: |
       sum by (env,environment,stage) (
         avg_over_time(gitlab_component_apdex:weight:score_1h{component="proxy",env="gprd",monitor="global",tier="stor",type="praefect"}[3d] offset 30s)
@@ -1014,6 +1039,11 @@ groups:
         avg_over_time(gitlab_component_apdex:success:rate_1h{component="replicator_queue",env="gprd",monitor="global",tier="stor",type="praefect"}[3d] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_3d
+    labels:
+      component: replicator_queue
+      monitor: global
+      tier: stor
+      type: praefect
     expr: |
       sum by (env,environment,stage) (
         avg_over_time(gitlab_component_apdex:weight:score_1h{component="replicator_queue",env="gprd",monitor="global",tier="stor",type="praefect"}[3d] offset 30s)

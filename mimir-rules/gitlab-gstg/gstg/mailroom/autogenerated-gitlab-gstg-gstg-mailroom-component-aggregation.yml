@@ -375,6 +375,12 @@ groups:
         avg_over_time(gitlab_component_apdex:success:rate_1h{component="email_receiver",env="gstg",monitor="global",tier="sv",type="mailroom"}[6h] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_6h
+    labels:
+      component: email_receiver
+      monitor: global
+      stage: main
+      tier: sv
+      type: mailroom
     expr: |
       sum by (env,environment) (
         avg_over_time(gitlab_component_apdex:weight:score_1h{component="email_receiver",env="gstg",monitor="global",tier="sv",type="mailroom"}[6h] offset 30s)
@@ -441,6 +447,12 @@ groups:
         avg_over_time(gitlab_component_apdex:success:rate_1h{component="emailsProcessed",env="gstg",monitor="global",tier="sv",type="mailroom"}[6h] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_6h
+    labels:
+      component: emailsProcessed
+      monitor: global
+      stage: main
+      tier: sv
+      type: mailroom
     expr: |
       sum by (env,environment) (
         avg_over_time(gitlab_component_apdex:weight:score_1h{component="emailsProcessed",env="gstg",monitor="global",tier="sv",type="mailroom"}[6h] offset 30s)
@@ -510,6 +522,12 @@ groups:
         avg_over_time(gitlab_component_apdex:success:rate_1h{component="email_receiver",env="gstg",monitor="global",tier="sv",type="mailroom"}[3d] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_3d
+    labels:
+      component: email_receiver
+      monitor: global
+      stage: main
+      tier: sv
+      type: mailroom
     expr: |
       sum by (env,environment) (
         avg_over_time(gitlab_component_apdex:weight:score_1h{component="email_receiver",env="gstg",monitor="global",tier="sv",type="mailroom"}[3d] offset 30s)
@@ -576,6 +594,12 @@ groups:
         avg_over_time(gitlab_component_apdex:success:rate_1h{component="emailsProcessed",env="gstg",monitor="global",tier="sv",type="mailroom"}[3d] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_3d
+    labels:
+      component: emailsProcessed
+      monitor: global
+      stage: main
+      tier: sv
+      type: mailroom
     expr: |
       sum by (env,environment) (
         avg_over_time(gitlab_component_apdex:weight:score_1h{component="emailsProcessed",env="gstg",monitor="global",tier="sv",type="mailroom"}[3d] offset 30s)

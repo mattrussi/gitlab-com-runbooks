@@ -1770,6 +1770,14 @@ groups:
         avg_over_time(gitlab_component_apdex:success:rate_1h{component="rule_evaluation",env="ops",monitor="global",tier="inf",type="thanos"}[6h] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_6h
+    labels:
+      component: rule_evaluation
+      env: thanos
+      environment: thanos
+      monitor: global
+      stage: main
+      tier: inf
+      type: thanos
     expr: |
       sum by () (
         avg_over_time(gitlab_component_apdex:weight:score_1h{component="rule_evaluation",env="ops",monitor="global",tier="inf",type="thanos"}[6h] offset 30s)
@@ -1842,6 +1850,14 @@ groups:
         avg_over_time(gitlab_component_apdex:success:rate_1h{component="thanos_compactor",env="ops",monitor="global",tier="inf",type="thanos"}[6h] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_6h
+    labels:
+      component: thanos_compactor
+      env: thanos
+      environment: thanos
+      monitor: global
+      stage: main
+      tier: inf
+      type: thanos
     expr: |
       sum by () (
         avg_over_time(gitlab_component_apdex:weight:score_1h{component="thanos_compactor",env="ops",monitor="global",tier="inf",type="thanos"}[6h] offset 30s)
@@ -1914,6 +1930,14 @@ groups:
         avg_over_time(gitlab_component_apdex:success:rate_1h{component="thanos_memcached",env="ops",monitor="global",tier="inf",type="thanos"}[6h] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_6h
+    labels:
+      component: thanos_memcached
+      env: thanos
+      environment: thanos
+      monitor: global
+      stage: main
+      tier: inf
+      type: thanos
     expr: |
       sum by () (
         avg_over_time(gitlab_component_apdex:weight:score_1h{component="thanos_memcached",env="ops",monitor="global",tier="inf",type="thanos"}[6h] offset 30s)
@@ -1986,6 +2010,14 @@ groups:
         avg_over_time(gitlab_component_apdex:success:rate_1h{component="thanos_query",env="ops",monitor="global",tier="inf",type="thanos"}[6h] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_6h
+    labels:
+      component: thanos_query
+      env: thanos
+      environment: thanos
+      monitor: global
+      stage: main
+      tier: inf
+      type: thanos
     expr: |
       sum by () (
         avg_over_time(gitlab_component_apdex:weight:score_1h{component="thanos_query",env="ops",monitor="global",tier="inf",type="thanos"}[6h] offset 30s)
@@ -2058,6 +2090,14 @@ groups:
         avg_over_time(gitlab_component_apdex:success:rate_1h{component="thanos_query_frontend",env="ops",monitor="global",tier="inf",type="thanos"}[6h] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_6h
+    labels:
+      component: thanos_query_frontend
+      env: thanos
+      environment: thanos
+      monitor: global
+      stage: main
+      tier: inf
+      type: thanos
     expr: |
       sum by () (
         avg_over_time(gitlab_component_apdex:weight:score_1h{component="thanos_query_frontend",env="ops",monitor="global",tier="inf",type="thanos"}[6h] offset 30s)
@@ -2130,6 +2170,14 @@ groups:
         avg_over_time(gitlab_component_apdex:success:rate_1h{component="thanos_rule_alert_sender",env="ops",monitor="global",tier="inf",type="thanos"}[6h] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_6h
+    labels:
+      component: thanos_rule_alert_sender
+      env: thanos
+      environment: thanos
+      monitor: global
+      stage: main
+      tier: inf
+      type: thanos
     expr: |
       sum by () (
         avg_over_time(gitlab_component_apdex:weight:score_1h{component="thanos_rule_alert_sender",env="ops",monitor="global",tier="inf",type="thanos"}[6h] offset 30s)
@@ -2202,6 +2250,14 @@ groups:
         avg_over_time(gitlab_component_apdex:success:rate_1h{component="thanos_store",env="ops",monitor="global",tier="inf",type="thanos"}[6h] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_6h
+    labels:
+      component: thanos_store
+      env: thanos
+      environment: thanos
+      monitor: global
+      stage: main
+      tier: inf
+      type: thanos
     expr: |
       sum by () (
         avg_over_time(gitlab_component_apdex:weight:score_1h{component="thanos_store",env="ops",monitor="global",tier="inf",type="thanos"}[6h] offset 30s)
@@ -2277,6 +2333,14 @@ groups:
         avg_over_time(gitlab_component_apdex:success:rate_1h{component="rule_evaluation",env="ops",monitor="global",tier="inf",type="thanos"}[3d] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_3d
+    labels:
+      component: rule_evaluation
+      env: thanos
+      environment: thanos
+      monitor: global
+      stage: main
+      tier: inf
+      type: thanos
     expr: |
       sum by () (
         avg_over_time(gitlab_component_apdex:weight:score_1h{component="rule_evaluation",env="ops",monitor="global",tier="inf",type="thanos"}[3d] offset 30s)
@@ -2349,6 +2413,14 @@ groups:
         avg_over_time(gitlab_component_apdex:success:rate_1h{component="thanos_compactor",env="ops",monitor="global",tier="inf",type="thanos"}[3d] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_3d
+    labels:
+      component: thanos_compactor
+      env: thanos
+      environment: thanos
+      monitor: global
+      stage: main
+      tier: inf
+      type: thanos
     expr: |
       sum by () (
         avg_over_time(gitlab_component_apdex:weight:score_1h{component="thanos_compactor",env="ops",monitor="global",tier="inf",type="thanos"}[3d] offset 30s)
@@ -2421,6 +2493,14 @@ groups:
         avg_over_time(gitlab_component_apdex:success:rate_1h{component="thanos_memcached",env="ops",monitor="global",tier="inf",type="thanos"}[3d] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_3d
+    labels:
+      component: thanos_memcached
+      env: thanos
+      environment: thanos
+      monitor: global
+      stage: main
+      tier: inf
+      type: thanos
     expr: |
       sum by () (
         avg_over_time(gitlab_component_apdex:weight:score_1h{component="thanos_memcached",env="ops",monitor="global",tier="inf",type="thanos"}[3d] offset 30s)
@@ -2493,6 +2573,14 @@ groups:
         avg_over_time(gitlab_component_apdex:success:rate_1h{component="thanos_query",env="ops",monitor="global",tier="inf",type="thanos"}[3d] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_3d
+    labels:
+      component: thanos_query
+      env: thanos
+      environment: thanos
+      monitor: global
+      stage: main
+      tier: inf
+      type: thanos
     expr: |
       sum by () (
         avg_over_time(gitlab_component_apdex:weight:score_1h{component="thanos_query",env="ops",monitor="global",tier="inf",type="thanos"}[3d] offset 30s)
@@ -2565,6 +2653,14 @@ groups:
         avg_over_time(gitlab_component_apdex:success:rate_1h{component="thanos_query_frontend",env="ops",monitor="global",tier="inf",type="thanos"}[3d] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_3d
+    labels:
+      component: thanos_query_frontend
+      env: thanos
+      environment: thanos
+      monitor: global
+      stage: main
+      tier: inf
+      type: thanos
     expr: |
       sum by () (
         avg_over_time(gitlab_component_apdex:weight:score_1h{component="thanos_query_frontend",env="ops",monitor="global",tier="inf",type="thanos"}[3d] offset 30s)
@@ -2637,6 +2733,14 @@ groups:
         avg_over_time(gitlab_component_apdex:success:rate_1h{component="thanos_rule_alert_sender",env="ops",monitor="global",tier="inf",type="thanos"}[3d] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_3d
+    labels:
+      component: thanos_rule_alert_sender
+      env: thanos
+      environment: thanos
+      monitor: global
+      stage: main
+      tier: inf
+      type: thanos
     expr: |
       sum by () (
         avg_over_time(gitlab_component_apdex:weight:score_1h{component="thanos_rule_alert_sender",env="ops",monitor="global",tier="inf",type="thanos"}[3d] offset 30s)
@@ -2709,6 +2813,14 @@ groups:
         avg_over_time(gitlab_component_apdex:success:rate_1h{component="thanos_store",env="ops",monitor="global",tier="inf",type="thanos"}[3d] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_3d
+    labels:
+      component: thanos_store
+      env: thanos
+      environment: thanos
+      monitor: global
+      stage: main
+      tier: inf
+      type: thanos
     expr: |
       sum by () (
         avg_over_time(gitlab_component_apdex:weight:score_1h{component="thanos_store",env="ops",monitor="global",tier="inf",type="thanos"}[3d] offset 30s)

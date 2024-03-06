@@ -480,6 +480,11 @@ groups:
         avg_over_time(gitlab_component_apdex:success:rate_1h{component="customers_dot_requests",env="gprd",monitor="global",tier="sv",type="customersdot"}[6h] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_6h
+    labels:
+      component: customers_dot_requests
+      monitor: global
+      tier: sv
+      type: customersdot
     expr: |
       sum by (env,environment,stage) (
         avg_over_time(gitlab_component_apdex:weight:score_1h{component="customers_dot_requests",env="gprd",monitor="global",tier="sv",type="customersdot"}[6h] offset 30s)
@@ -543,6 +548,11 @@ groups:
         avg_over_time(gitlab_component_apdex:success:rate_1h{component="customers_dot_sidekiq_jobs",env="gprd",monitor="global",tier="sv",type="customersdot"}[6h] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_6h
+    labels:
+      component: customers_dot_sidekiq_jobs
+      monitor: global
+      tier: sv
+      type: customersdot
     expr: |
       sum by (env,environment,stage) (
         avg_over_time(gitlab_component_apdex:weight:score_1h{component="customers_dot_sidekiq_jobs",env="gprd",monitor="global",tier="sv",type="customersdot"}[6h] offset 30s)
@@ -609,6 +619,11 @@ groups:
         avg_over_time(gitlab_component_apdex:success:rate_1h{component="customers_dot_requests",env="gprd",monitor="global",tier="sv",type="customersdot"}[3d] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_3d
+    labels:
+      component: customers_dot_requests
+      monitor: global
+      tier: sv
+      type: customersdot
     expr: |
       sum by (env,environment,stage) (
         avg_over_time(gitlab_component_apdex:weight:score_1h{component="customers_dot_requests",env="gprd",monitor="global",tier="sv",type="customersdot"}[3d] offset 30s)
@@ -672,6 +687,11 @@ groups:
         avg_over_time(gitlab_component_apdex:success:rate_1h{component="customers_dot_sidekiq_jobs",env="gprd",monitor="global",tier="sv",type="customersdot"}[3d] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_3d
+    labels:
+      component: customers_dot_sidekiq_jobs
+      monitor: global
+      tier: sv
+      type: customersdot
     expr: |
       sum by (env,environment,stage) (
         avg_over_time(gitlab_component_apdex:weight:score_1h{component="customers_dot_sidekiq_jobs",env="gprd",monitor="global",tier="sv",type="customersdot"}[3d] offset 30s)

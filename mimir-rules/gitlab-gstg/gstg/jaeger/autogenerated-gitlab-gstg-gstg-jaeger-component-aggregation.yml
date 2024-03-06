@@ -648,6 +648,11 @@ groups:
         avg_over_time(gitlab_component_apdex:success:rate_1h{component="jaeger_agent",env="gstg",monitor="global",tier="inf",type="jaeger"}[6h] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_6h
+    labels:
+      component: jaeger_agent
+      monitor: global
+      tier: inf
+      type: jaeger
     expr: |
       sum by (env,environment,stage) (
         avg_over_time(gitlab_component_apdex:weight:score_1h{component="jaeger_agent",env="gstg",monitor="global",tier="inf",type="jaeger"}[6h] offset 30s)
@@ -711,6 +716,11 @@ groups:
         avg_over_time(gitlab_component_apdex:success:rate_1h{component="jaeger_collector",env="gstg",monitor="global",tier="inf",type="jaeger"}[6h] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_6h
+    labels:
+      component: jaeger_collector
+      monitor: global
+      tier: inf
+      type: jaeger
     expr: |
       sum by (env,environment,stage) (
         avg_over_time(gitlab_component_apdex:weight:score_1h{component="jaeger_collector",env="gstg",monitor="global",tier="inf",type="jaeger"}[6h] offset 30s)
@@ -774,6 +784,11 @@ groups:
         avg_over_time(gitlab_component_apdex:success:rate_1h{component="jaeger_query",env="gstg",monitor="global",tier="inf",type="jaeger"}[6h] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_6h
+    labels:
+      component: jaeger_query
+      monitor: global
+      tier: inf
+      type: jaeger
     expr: |
       sum by (env,environment,stage) (
         avg_over_time(gitlab_component_apdex:weight:score_1h{component="jaeger_query",env="gstg",monitor="global",tier="inf",type="jaeger"}[6h] offset 30s)
@@ -840,6 +855,11 @@ groups:
         avg_over_time(gitlab_component_apdex:success:rate_1h{component="jaeger_agent",env="gstg",monitor="global",tier="inf",type="jaeger"}[3d] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_3d
+    labels:
+      component: jaeger_agent
+      monitor: global
+      tier: inf
+      type: jaeger
     expr: |
       sum by (env,environment,stage) (
         avg_over_time(gitlab_component_apdex:weight:score_1h{component="jaeger_agent",env="gstg",monitor="global",tier="inf",type="jaeger"}[3d] offset 30s)
@@ -903,6 +923,11 @@ groups:
         avg_over_time(gitlab_component_apdex:success:rate_1h{component="jaeger_collector",env="gstg",monitor="global",tier="inf",type="jaeger"}[3d] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_3d
+    labels:
+      component: jaeger_collector
+      monitor: global
+      tier: inf
+      type: jaeger
     expr: |
       sum by (env,environment,stage) (
         avg_over_time(gitlab_component_apdex:weight:score_1h{component="jaeger_collector",env="gstg",monitor="global",tier="inf",type="jaeger"}[3d] offset 30s)
@@ -966,6 +991,11 @@ groups:
         avg_over_time(gitlab_component_apdex:success:rate_1h{component="jaeger_query",env="gstg",monitor="global",tier="inf",type="jaeger"}[3d] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_3d
+    labels:
+      component: jaeger_query
+      monitor: global
+      tier: inf
+      type: jaeger
     expr: |
       sum by (env,environment,stage) (
         avg_over_time(gitlab_component_apdex:weight:score_1h{component="jaeger_query",env="gstg",monitor="global",tier="inf",type="jaeger"}[3d] offset 30s)

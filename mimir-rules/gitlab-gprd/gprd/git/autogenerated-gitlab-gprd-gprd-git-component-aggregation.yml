@@ -1540,6 +1540,12 @@ groups:
         avg_over_time(gitlab_component_apdex:success:rate_1h{component="gitlab_shell",env="gprd",monitor="global",tier="sv",type="git"}[6h] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_6h
+    labels:
+      component: gitlab_shell
+      monitor: global
+      stage: main
+      tier: sv
+      type: git
     expr: |
       sum by (env,environment) (
         avg_over_time(gitlab_component_apdex:weight:score_1h{component="gitlab_shell",env="gprd",monitor="global",tier="sv",type="git"}[6h] offset 30s)
@@ -1605,6 +1611,11 @@ groups:
         avg_over_time(gitlab_component_apdex:success:rate_1h{component="gitlab_sshd",env="gprd",monitor="global",tier="sv",type="git"}[6h] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_6h
+    labels:
+      component: gitlab_sshd
+      monitor: global
+      tier: sv
+      type: git
     expr: |
       sum by (env,environment,stage) (
         avg_over_time(gitlab_component_apdex:weight:score_1h{component="gitlab_sshd",env="gprd",monitor="global",tier="sv",type="git"}[6h] offset 30s)
@@ -1668,6 +1679,11 @@ groups:
         avg_over_time(gitlab_component_apdex:success:rate_1h{component="loadbalancer",env="gprd",monitor="global",tier="sv",type="git"}[6h] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_6h
+    labels:
+      component: loadbalancer
+      monitor: global
+      tier: sv
+      type: git
     expr: |
       sum by (env,environment,stage) (
         avg_over_time(gitlab_component_apdex:weight:score_1h{component="loadbalancer",env="gprd",monitor="global",tier="sv",type="git"}[6h] offset 30s)
@@ -1731,6 +1747,11 @@ groups:
         avg_over_time(gitlab_component_apdex:success:rate_1h{component="loadbalancer_ssh",env="gprd",monitor="global",tier="sv",type="git"}[6h] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_6h
+    labels:
+      component: loadbalancer_ssh
+      monitor: global
+      tier: sv
+      type: git
     expr: |
       sum by (env,environment,stage) (
         avg_over_time(gitlab_component_apdex:weight:score_1h{component="loadbalancer_ssh",env="gprd",monitor="global",tier="sv",type="git"}[6h] offset 30s)
@@ -1794,6 +1815,11 @@ groups:
         avg_over_time(gitlab_component_apdex:success:rate_1h{component="rails_request",env="gprd",monitor="global",tier="sv",type="git"}[6h] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_6h
+    labels:
+      component: rails_request
+      monitor: global
+      tier: sv
+      type: git
     expr: |
       sum by (env,environment,stage) (
         avg_over_time(gitlab_component_apdex:weight:score_1h{component="rails_request",env="gprd",monitor="global",tier="sv",type="git"}[6h] offset 30s)
@@ -1857,6 +1883,11 @@ groups:
         avg_over_time(gitlab_component_apdex:success:rate_1h{component="workhorse",env="gprd",monitor="global",tier="sv",type="git"}[6h] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_6h
+    labels:
+      component: workhorse
+      monitor: global
+      tier: sv
+      type: git
     expr: |
       sum by (env,environment,stage) (
         avg_over_time(gitlab_component_apdex:weight:score_1h{component="workhorse",env="gprd",monitor="global",tier="sv",type="git"}[6h] offset 30s)
@@ -1920,6 +1951,11 @@ groups:
         avg_over_time(gitlab_component_apdex:success:rate_1h{component="workhorse_auth_api",env="gprd",monitor="global",tier="sv",type="git"}[6h] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_6h
+    labels:
+      component: workhorse_auth_api
+      monitor: global
+      tier: sv
+      type: git
     expr: |
       sum by (env,environment,stage) (
         avg_over_time(gitlab_component_apdex:weight:score_1h{component="workhorse_auth_api",env="gprd",monitor="global",tier="sv",type="git"}[6h] offset 30s)
@@ -1987,6 +2023,12 @@ groups:
         avg_over_time(gitlab_component_apdex:success:rate_1h{component="gitlab_shell",env="gprd",monitor="global",tier="sv",type="git"}[3d] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_3d
+    labels:
+      component: gitlab_shell
+      monitor: global
+      stage: main
+      tier: sv
+      type: git
     expr: |
       sum by (env,environment) (
         avg_over_time(gitlab_component_apdex:weight:score_1h{component="gitlab_shell",env="gprd",monitor="global",tier="sv",type="git"}[3d] offset 30s)
@@ -2052,6 +2094,11 @@ groups:
         avg_over_time(gitlab_component_apdex:success:rate_1h{component="gitlab_sshd",env="gprd",monitor="global",tier="sv",type="git"}[3d] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_3d
+    labels:
+      component: gitlab_sshd
+      monitor: global
+      tier: sv
+      type: git
     expr: |
       sum by (env,environment,stage) (
         avg_over_time(gitlab_component_apdex:weight:score_1h{component="gitlab_sshd",env="gprd",monitor="global",tier="sv",type="git"}[3d] offset 30s)
@@ -2115,6 +2162,11 @@ groups:
         avg_over_time(gitlab_component_apdex:success:rate_1h{component="loadbalancer",env="gprd",monitor="global",tier="sv",type="git"}[3d] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_3d
+    labels:
+      component: loadbalancer
+      monitor: global
+      tier: sv
+      type: git
     expr: |
       sum by (env,environment,stage) (
         avg_over_time(gitlab_component_apdex:weight:score_1h{component="loadbalancer",env="gprd",monitor="global",tier="sv",type="git"}[3d] offset 30s)
@@ -2178,6 +2230,11 @@ groups:
         avg_over_time(gitlab_component_apdex:success:rate_1h{component="loadbalancer_ssh",env="gprd",monitor="global",tier="sv",type="git"}[3d] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_3d
+    labels:
+      component: loadbalancer_ssh
+      monitor: global
+      tier: sv
+      type: git
     expr: |
       sum by (env,environment,stage) (
         avg_over_time(gitlab_component_apdex:weight:score_1h{component="loadbalancer_ssh",env="gprd",monitor="global",tier="sv",type="git"}[3d] offset 30s)
@@ -2241,6 +2298,11 @@ groups:
         avg_over_time(gitlab_component_apdex:success:rate_1h{component="rails_request",env="gprd",monitor="global",tier="sv",type="git"}[3d] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_3d
+    labels:
+      component: rails_request
+      monitor: global
+      tier: sv
+      type: git
     expr: |
       sum by (env,environment,stage) (
         avg_over_time(gitlab_component_apdex:weight:score_1h{component="rails_request",env="gprd",monitor="global",tier="sv",type="git"}[3d] offset 30s)
@@ -2304,6 +2366,11 @@ groups:
         avg_over_time(gitlab_component_apdex:success:rate_1h{component="workhorse",env="gprd",monitor="global",tier="sv",type="git"}[3d] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_3d
+    labels:
+      component: workhorse
+      monitor: global
+      tier: sv
+      type: git
     expr: |
       sum by (env,environment,stage) (
         avg_over_time(gitlab_component_apdex:weight:score_1h{component="workhorse",env="gprd",monitor="global",tier="sv",type="git"}[3d] offset 30s)
@@ -2367,6 +2434,11 @@ groups:
         avg_over_time(gitlab_component_apdex:success:rate_1h{component="workhorse_auth_api",env="gprd",monitor="global",tier="sv",type="git"}[3d] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_3d
+    labels:
+      component: workhorse_auth_api
+      monitor: global
+      tier: sv
+      type: git
     expr: |
       sum by (env,environment,stage) (
         avg_over_time(gitlab_component_apdex:weight:score_1h{component="workhorse_auth_api",env="gprd",monitor="global",tier="sv",type="git"}[3d] offset 30s)
