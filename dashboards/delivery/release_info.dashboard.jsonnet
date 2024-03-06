@@ -38,7 +38,7 @@ local monthlyReleaseStatusTextPanel =
       The following are what the statuses signify for engineers:
 
       * Open: Engineers can create MRs, and any commit that reached production is expected to be released with the active monthly release.
-      * Announced: Guaranteed SHA has been announced in `#releases` slack channel. Signals that the RC tagging date is getting closer.
+      * Announced: Guaranteed SHA has been announced in `#releases` slack channel. Signals that the RC tagging date is getting closer. Further commits are not guaranteed to be included.
       * RC Tagged: The stable branch has been created, and the release candidate has been tagged. No more commits will be included in the release.
     |||,
   );
