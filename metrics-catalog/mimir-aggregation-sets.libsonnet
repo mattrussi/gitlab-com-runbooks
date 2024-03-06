@@ -39,6 +39,9 @@ local aggregationSet = (import 'servicemetrics/aggregation-set.libsonnet').Aggre
     labels: ['env', 'environment', 'tier', 'type', 'stage'],
     offset: '30s',
     sourceAggregationSet: $.componentSLIs,
+    recordingRuleStaticLabels: {
+      monitor: 'global',
+    },
     metricFormats: {
       apdexSuccessRate: 'gitlab_service_apdex:success:rate_%s',
       apdexWeight: 'gitlab_service_apdex:weight:score_%s',
