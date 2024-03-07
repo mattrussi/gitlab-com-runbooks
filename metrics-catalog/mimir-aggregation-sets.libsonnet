@@ -22,9 +22,6 @@ local mimirAggregetionSetDefaults = {
     labels: ['env', 'environment', 'tier', 'type', 'stage', 'component'],
     upscaleLongerBurnRates: true,
     metricFormats: {
-      // Recording ratios from source metrics (here SLI-aggregations) is not yet
-      // supported in the `componentMetricsRuleSetGenerator`. We'll need to add support for those
-      // https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/2899
       apdexWeight: 'gitlab_component_apdex:weight:score_%s',
       apdexSuccessRate: 'gitlab_component_apdex:success:rate_%s',
       apdexRatio: 'gitlab_component_apdex:ratio_%s',
@@ -67,6 +64,22 @@ local mimirAggregetionSetDefaults = {
     },
   }),
 
+  regionalComponentSLIs: aggregationSet(mimirAggregetionSetDefaults {
+    id: 'regional_component',
+    name: 'Regional SLI Metrics',
+    labels: ['env', 'environment', 'tier', 'type', 'stage', 'region', 'component'],
+    slisForService(serviceDefinition): std.filter(function(sli) sli.regional, serviceDefinition.listServiceLevelIndicators()),
+    upscaleLongerBurnRates: true,
+    metricFormats: {
+      apdexSuccessRate: 'gitlab_regional_sli_apdex:success:rate_%s',
+      apdexWeight: 'gitlab_regional_sli_apdex:weight:score_%s',
+      apdexRatio: 'gitlab_regional_sli_apdex:ratio_%s',
+      opsRate: 'gitlab_regional_sli_ops:rate_%s',
+      errorRate: 'gitlab_regional_sli_errors:rate_%s',
+      errorRatio: 'gitlab_regional_sli_errors:ratio_%s',
+    },
+  }),
+
   aggregationsFromSource::
     std.filter(
       function(aggregationSet)
@@ -80,5 +93,4 @@ local mimirAggregetionSetDefaults = {
         aggregationSet.sourceAggregationSet != null,
       std.objectValues(self)
     ),
-
 }
