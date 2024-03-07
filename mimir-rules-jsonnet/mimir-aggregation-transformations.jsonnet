@@ -6,12 +6,6 @@ local aggregationSetTransformer = import 'servicemetrics/aggregation-set-transfo
 local outputPromYaml(groups) =
   std.manifestYamlDoc({ groups: groups });
 
-local transformedAggregationSets =
-  std.filter(
-    function(aggregationSet)
-      aggregationSet.sourceAggregationSet != null,
-    std.objectValues(aggregationSets)
-  );
 local servicesWithSlis = std.filter(function(service) std.length(service.listServiceLevelIndicators()) > 0, monitoredServices);
 
 local transformRuleGroups(aggregationSet, extraSourceSelector, service) =
@@ -29,7 +23,7 @@ local aggregationsForService(service, selector, _extraArgs) =
       memo {
         ['transformed-%s-aggregation' % [aggregationSet.id]]: outputPromYaml(transformRuleGroups(aggregationSet, selector, service)),
       },
-    transformedAggregationSets,
+    aggregationSets.transformedAggregations,
     {}
   );
 

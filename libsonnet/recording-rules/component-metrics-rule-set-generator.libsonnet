@@ -209,7 +209,10 @@ local generateUpscaledRecordingRulesForComponent(burnRate, aggregationSet, servi
     {
       config: config,
       // Generates the recording rules given a service definition
-      generateRecordingRulesForService(serviceDefinition, serviceLevelIndicators=serviceDefinition.listServiceLevelIndicators())::
+      generateRecordingRulesForService(
+        serviceDefinition,
+        serviceLevelIndicators=aggregationSet.slisForService(serviceDefinition)
+      )::
 
         if aggregationSet.upscaleBurnRate(burnRate) then
           std.flatMap(

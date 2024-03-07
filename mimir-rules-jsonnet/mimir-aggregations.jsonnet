@@ -37,10 +37,17 @@ local groupsForService(service, aggregationSet, extraSelector) =
   );
 
 local aggregationsForService(service, selector, _extraArgs) =
-  local set = aggregationSets.componentSLIs;
-  {
-    ['%s-aggregation' % set.id]: outputPromYaml(std.prune(groupsForService(service, set, selector))),
-  };
+  std.foldl(
+    function(memo, set)
+      local groups = std.prune(groupsForService(service, set, selector));
+      if std.length(groups) > 0 then
+        memo {
+          ['%s-aggregation' % set.id]: outputPromYaml(groups),
+        }
+      else memo,
+    aggregationSets.aggregationsFromSource,
+    {}
+  );
 
 local servicesWithSlis = std.filter(function(service) std.length(service.listServiceLevelIndicators()) > 0, monitoredServices);
 std.foldl(
