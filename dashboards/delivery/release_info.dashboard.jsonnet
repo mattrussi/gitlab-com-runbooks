@@ -164,11 +164,12 @@ local monthlyReleaseStatusStatPanel =
     title='',
     panelTitle='Current Release Status',
     description='Current status of the monthly release. More information about the statuses in the text panel above.',
-    query=monthlyReleaseStatusQuery,
+    query='delivery_release_monthly_status',
     colorMode='value',
     format='table',
     graphMode='area',
     instant=false,
+    noValue='Open',
     mappings=[
       {
         id: 0,
@@ -190,7 +191,7 @@ local monthlyReleaseStatusStatPanel =
       },
     ],
     color=[
-      { color: 'green', value: 1 },
+      { color: 'green', value: null },
       { color: 'yellow', value: 2 },
       { color: 'red', value: 3 },
     ],
@@ -211,6 +212,12 @@ local monthlyReleaseStatusStatPanel =
               aggregations: [],
               operation: 'groupby',
             },
+            Time: {
+              aggregations: [
+                'last',
+              ],
+              operation: 'aggregate',
+            },
           },
         },
       },
@@ -220,7 +227,8 @@ local monthlyReleaseStatusStatPanel =
           fields: {},
           sort: [
             {
-              field: 'version',
+              field: 'Time (last)',
+              desc: true,
             },
           ],
         },
@@ -242,7 +250,7 @@ basic.dashboard(
   'Release Information',
   tags=['release'],
   editable=true,
-  time_from='now-3d',
+  time_from='now-7d',
   time_to='now',
   includeStandardEnvironmentAnnotations=false,
   includeEnvironmentTemplate=false,
