@@ -98,6 +98,10 @@ local combinedServiceLevelIndicatorDefinition(
 
         shardLevelMonitoring: false,
 
+        opsRateMetrics: std.set(std.flatMap(function(s) s.opsRateMetrics, componentsInitialised)),
+        errorRateMetrics: std.set(std.flatMap(function(s) s.errorRateMetrics, componentsInitialised)),
+        apdexMetrics: std.set(std.flatMap(function(s) s.apdexMetrics, componentsInitialised)),
+
         metricNames:
           std.set(std.flatMap(
             function(c)

@@ -197,11 +197,11 @@ local serviceLevelIndicatorDefinition(sliName, serviceLevelIndicator) =
       std.objectHas(serviceLevelIndicator, 'dashboardFeatureCategories') &&
       std.length(serviceLevelIndicator.dashboardFeatureCategories) > 0,
 
+    opsRateMetrics: self.requestRate.metricNames,
+    errorRateMetrics: if self.hasErrorRate() then self.errorRate.metricNames else [],
+    apdexMetrics: if self.hasApdex() then self.apdex.metricNames else [],
     metricNames:
-      local opsRateMetrics = self.requestRate.metricNames;
-      local errorRateMetrics = if self.hasErrorRate() then self.errorRate.metricNames else [];
-      local apdexMetrics = if self.hasApdex() then self.apdex.metricNames else [];
-      opsRateMetrics + errorRateMetrics + apdexMetrics,
+      std.set(self.opsRateMetrics + self.errorRateMetrics + self.apdexMetrics),
 
     // Generate recording rules for apdex
     generateApdexRecordingRules(burnRate, aggregationSet, recordingRuleStaticLabels, selector={}, config={})::

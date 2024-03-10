@@ -4,20 +4,12 @@ local separateMimirRecordingFiles = (import 'recording-rules/lib/mimir/separate-
 local aggregationSet = import 'servicemetrics/aggregation-set.libsonnet';
 local unifiedRegistry = import 'servicemetrics/recording-rule-registry/unified-registry.libsonnet';
 
-local rulesForServiceForBurnRate(serviceDefinition, burnRate, extraSelector) =
-  local rules = unifiedRegistry.rulesForServiceForBurnRate(serviceDefinition, burnRate, extraSelector);
-  if std.length(rules) > 0 then
-    {
-      name: 'SLI Aggregations: %s - %s burn-rate' % [serviceDefinition.type, burnRate],
-      interval: intervalForDuration.intervalForDuration(burnRate),
-      rules: rules,
-    } else null;
-
 local rulesForService(serviceDefinition, extraSelector) =
-  std.prune([
-    rulesForServiceForBurnRate(serviceDefinition, burnRate, extraSelector)
-    for burnRate in aggregationSet.defaultSourceBurnRates
-  ]);
+  std.flatMap(
+    function(burnRate)
+      unifiedRegistry.ruleGroupsForServiceForBurnRate(serviceDefinition, burnRate, extraSelector),
+    aggregationSet.defaultSourceBurnRates
+  );
 
 local outputPromYaml(groups) =
   std.manifestYamlDoc({
@@ -29,7 +21,7 @@ local fileForService(service, extraSelector={}) =
     service,
     extraSelector
   );
-  if std.length(ruleGroups) > 1 then
+  if std.length(std.prune(ruleGroups)) > 1 then
     {
       'sli-aggregations':
         outputPromYaml(ruleGroups),
