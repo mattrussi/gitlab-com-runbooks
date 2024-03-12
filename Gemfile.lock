@@ -71,7 +71,7 @@ GEM
     gitlab (4.19.0)
       httparty (~> 0.20)
       terminal-table (>= 1.5.1)
-    gitlab-dangerfiles (4.6.0)
+    gitlab-dangerfiles (4.7.0)
       danger (>= 9.3.0)
       danger-gitlab (>= 8.0.0)
       rake (~> 13.0)
