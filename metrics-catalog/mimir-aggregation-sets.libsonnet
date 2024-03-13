@@ -101,6 +101,21 @@ local mimirAggregetionSetDefaults = {
     },
   }),
 
+  featureCategorySLIs: aggregationSet(mimirAggregetionSetDefaults {
+    id: 'feature_category',
+    name: 'Feature Category Metrics',
+    labels: ['env', 'environment', 'tier', 'type', 'stage', 'component', 'feature_category'],
+    slisForService(serviceDefinition): std.filter(function(indicator) indicator.hasFeatureCategory(), serviceDefinition.listServiceLevelIndicators()),
+    upscaleLongerBurnRates: true,
+    generateSLODashboards: false,
+    metricFormats: {
+      apdexSuccessRate: 'gitlab:component:feature_category:execution:apdex:success:rate_%s',
+      apdexWeight: 'gitlab:component:feature_category:execution:apdex:weight:score_%s',
+      opsRate: 'gitlab:component:feature_category:execution:ops:rate_%s',
+      errorRate: 'gitlab:component:feature_category:execution:error:rate_%s',
+    },
+  }),
+
   aggregationsFromSource::
     std.filter(
       function(aggregationSet)
