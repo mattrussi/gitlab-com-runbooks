@@ -50,7 +50,6 @@ local mimirAggregetionSetDefaults = {
   nodeComponentSLIs: aggregationSet(mimirAggregetionSetDefaults {
     id: 'component_node',
     name: 'Global Node-Aggregated SLI Metrics',
-    intermediateSource: false,
     labels: ['env', 'environment', 'tier', 'type', 'stage', 'shard', 'fqdn', 'component'],
     upscaleLongerBurnRates: true,
     slisForService(serviceDefinition): if serviceDefinition.monitoring.node.enabled then serviceDefinition.listServiceLevelIndicators() else [],
@@ -77,6 +76,28 @@ local mimirAggregetionSetDefaults = {
       opsRate: 'gitlab_regional_sli_ops:rate_%s',
       errorRate: 'gitlab_regional_sli_errors:rate_%s',
       errorRatio: 'gitlab_regional_sli_errors:ratio_%s',
+    },
+  }),
+
+  shardComponentSLIs: aggregationSet(mimirAggregetionSetDefaults {
+    id: 'component_shard',
+    name: 'Global Shard-Aggregated SLI Metrics',
+    selector: { monitor: 'global' },
+    labels: ['env', 'environment', 'tier', 'type', 'stage', 'shard', 'component'],
+    upscaleLongerBurnRates: true,
+    slisForService(serviceDefinition):
+      std.filter(
+        function(sli)
+          sli.shardLevelMonitoring,
+        serviceDefinition.listServiceLevelIndicators()
+      ),
+    metricFormats: {
+      apdexSuccessRate: 'gitlab_component_shard_apdex:success:rate_%s',
+      apdexWeight: 'gitlab_component_shard_apdex:weight:score_%s',
+      apdexRatio: 'gitlab_component_shard_apdex:ratio_%s',
+      opsRate: 'gitlab_component_shard_ops:rate_%s',
+      errorRate: 'gitlab_component_shard_errors:rate_%s',
+      errorRatio: 'gitlab_component_shard_errors:ratio_%s',
     },
   }),
 
