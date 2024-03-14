@@ -366,10 +366,10 @@ test.suite({
       errorRate: rateMetric('some_total_count'),
     }).initServiceLevelIndicatorWithName('sliWithCombinedMetric', { type: 'fake_service' }),
     sliWithDerivMetric: sliDefinition.serviceLevelIndicatorDefinition(testSliBase {
-      requestRate: derivMetric('some_total_count', { type: 'fake_service', job: 'bar' }),
+      requestRate: derivMetric('some_deriv_count', { type: 'fake_service', job: 'bar' }),
     }).initServiceLevelIndicatorWithName('sliWithDerivMetric', { type: 'fake_service' }),
     sliWithGaugeMetric: sliDefinition.serviceLevelIndicatorDefinition(testSliBase {
-      requestRate: gaugeMetric('some_total_count', { type: 'fake_service', job: 'bar' }),
+      requestRate: gaugeMetric('some_gauge', { type: 'fake_service', job: 'bar' }),
     }).initServiceLevelIndicatorWithName('sliWithGaugeMetric', { type: 'fake_service' }),
     sliWithMultipleSelectors: sliDefinition.serviceLevelIndicatorDefinition(testSliBase {
       requestRate: rateMetric('some_total_count', { type: 'fake_service', job: { re: 'hello|world' } }),
@@ -555,13 +555,13 @@ test.suite({
   testMetricNamesAndLabelsDerivMetric: testMetricsDescriptorAggregationLabels(
     [testSLIs.sliWithDerivMetric],
     expect={
-      some_total_count: ['job', 'type'],
+      some_deriv_count: ['job', 'type'],
     },
   ),
   testMetricNamesAndSelectorsDerivMetric: testMetricsDescriptorSelectors(
     [testSLIs.sliWithDerivMetric],
     expect={
-      some_total_count: {
+      some_deriv_count: {
         type: { oneOf: ['fake_service'] },
         job: { oneOf: ['bar'] },
       },
@@ -571,13 +571,13 @@ test.suite({
   testMetricNamesAndLabelsGaugeMetric: testMetricsDescriptorAggregationLabels(
     [testSLIs.sliWithGaugeMetric],
     expect={
-      some_total_count: ['job', 'type'],
+      some_gauge: ['job', 'type'],
     },
   ),
   testMetricNamesAndSelectorsGaugeMetric: testMetricsDescriptorSelectors(
     [testSLIs.sliWithGaugeMetric],
     expect={
-      some_total_count: {
+      some_gauge: {
         type: { oneOf: ['fake_service'] },
         job: { oneOf: ['bar'] },
       },
@@ -664,30 +664,42 @@ test.suite({
         gitlab_cache_operation_duration_seconds_count: ['type'],
         pg_stat_database_xact_commit: ['tier', 'type'],
         pg_stat_database_xact_rollback: ['some_label', 'tier', 'type'],
+        some_deriv_count: ['job', 'type'],
+        some_gauge: ['job', 'type'],
         some_histogram_metrics: ['foo', 'le'],
         some_other_total: ['backend', 'code', 'foo', 'hello', 'world'],
         some_total: ['backend', 'code', 'foo', 'hello', 'type', 'world'],
         some_total_count: ['baz', 'buzz', 'fizz', 'foo', 'job', 'label', 'label_a', 'label_b', 'route', 'type'],
         success_total_count: ['baz', 'foo'],
       },
-      allMetrics: std.set([
-        'error_total_count',
-        'gitlab_cache_operation_duration_seconds_bucket',
-        'gitlab_cache_operation_duration_seconds_count',
-        'pg_stat_database_xact_commit',
-        'pg_stat_database_xact_rollback',
-        'some_histogram_metrics',
-        'some_other_total',
-        'some_total',
-        'some_total_count',
-        'success_total_count',
-      ]),
+      allMetricGroups: {
+        'combinedSli-ops': ['some_other_total', 'some_total'],
+        'sliTest-apdex': ['gitlab_cache_operation_duration_seconds_bucket'],
+        'sliTest-ops': ['gitlab_cache_operation_duration_seconds_count'],
+        'sliWithCombinedMetric-apdex': ['some_histogram_metrics'],
+        'sliWithCombinedMetric-ops': ['pg_stat_database_xact_commit', 'pg_stat_database_xact_rollback', 'some_total_count'],
+        'sliWithDerivMetric-ops': ['some_deriv_count'],
+        'sliWithGaugeMetric-ops': ['some_gauge'],
+        'sliWithSelectorErrorCounterApdex-apdex': ['error_total_count', 'success_total_count'],
+        // Not in this list because they are already part of the group through other SLIs
+        // sliWithSelectorHistogramApdex: ['some_histogram_metrics', 'some_total_count'] same as `sliWithCombinedMetric-apdex` + `sliWithCombinedMetric-ops`
+        // sliWithSelectorSuccessCounterApdex: ['success_total_count', 'some_total_count'] same as `sliWithSelectorErrorCounterApdex-apdex` + `sliWithCombinedMetric-ops`
+        // sliWithSelectorRequestRateOnly: ['some_total_count'] in `sliWithCombinedMetric-ops`
+        // sliWithoutSelector: ['some_histogram_metrics', 'some_total_count']
+        // sliWithMultipleSelectors: ['some_total_count']
+        // sliWithSignificantLabels: ['some_total_count']
+        // sliWithSelectorEscapedRegex: ['some_total_count']
+        // sliWithSelectorEscapedRegex2: ['some_total_count']
+        // sliWithNegativeSelectorsOnly: ['gitlab_cache_operation_duration_seconds_bucket']
+      },
       emittingTypesByMetric: {
         error_total_count: ['fake_service'],
         gitlab_cache_operation_duration_seconds_bucket: ['fake_service'],
         gitlab_cache_operation_duration_seconds_count: ['fake_service'],
         pg_stat_database_xact_commit: ['fake_service'],
         pg_stat_database_xact_rollback: ['fake_service'],
+        some_deriv_count: ['fake_service'],
+        some_gauge: ['fake_service'],
         some_histogram_metrics: ['fake_service'],
         some_other_total: ['fake_service'],
         some_total: ['fake_service'],
@@ -700,6 +712,8 @@ test.suite({
         gitlab_cache_operation_duration_seconds_count: {},
         pg_stat_database_xact_commit: { tier: { oneOf: ['db'] }, type: { oneOf: ['fake_service'] } },
         pg_stat_database_xact_rollback: { some_label: { oneOf: ['true'] }, tier: { oneOf: ['db'] }, type: { oneOf: ['fake_service'] } },
+        some_deriv_count: { job: { oneOf: ['bar'] }, type: { oneOf: ['fake_service'] } },
+        some_gauge: { job: { oneOf: ['bar'] }, type: { oneOf: ['fake_service'] } },
         some_histogram_metrics: {},
         some_other_total: { backend: { oneOf: ['abc'] }, foo: { oneOf: ['bar'] } },
         some_total: { backend: { oneOf: ['abc', 'web'] }, foo: { oneOf: ['bar'] } },

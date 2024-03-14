@@ -1,3 +1,4 @@
+local intervalForDuration = import 'servicemetrics/interval-for-duration.libsonnet';
 local monitoredServices = (import 'gitlab-metrics-config.libsonnet').monitoredServices;
 local aggregationSets = (import 'gitlab-metrics-config.libsonnet').aggregationSets;
 local aggregationSet = import 'servicemetrics/aggregation-set.libsonnet';
@@ -111,12 +112,10 @@ local recordingRulesForTypes(types, metricName, aggregationLabels, selector, bur
     types
   );
 
-local generateRecordingRules(sliDefinitions, burnRate, extraSelector) =
-  local descriptor = sliMetricDescriptor.sliMetricsDescriptor(sliDefinitions);
+local rulesForMetrics(metrics, descriptor, burnRate, extraSelector) =
   local aggregationLabelsByMetric = descriptor.aggregationLabelsByMetric;
   local selectorsByMetric = descriptor.selectorsByMetric;
   local emittingTypesByMetric = descriptor.emittingTypesByMetric;
-
   std.flatMap(
     function(metricName)
       local selector = selectors.merge(
@@ -130,7 +129,20 @@ local generateRecordingRules(sliDefinitions, burnRate, extraSelector) =
         recordingRulesForTypes(emittingTypes, metricName, aggregationLabels, selector, burnRate)
       else
         [generateRecordingRulesForMetric(metricName, aggregationLabels, selector, burnRate)],
-    descriptor.allMetrics,
+    metrics
+  );
+
+local generateRecordingRuleGroups(serviceDefinition, burnRate, extraSelector) =
+  local descriptor = sliMetricDescriptor.sliMetricsDescriptor(serviceDefinition.listServiceLevelIndicators());
+
+  std.map(
+    function(metricGroupName)
+      {
+        name: 'SLI Aggregations: %s - %s - %s burn-rate' % [serviceDefinition.type, metricGroupName, burnRate],
+        interval: intervalForDuration.intervalForDuration(burnRate),
+        rules: rulesForMetrics(descriptor.allMetricGroups[metricGroupName], descriptor, burnRate, extraSelector),
+      },
+    std.objectFields(descriptor.allMetricGroups),
   );
 
 {
@@ -155,9 +167,9 @@ local generateRecordingRules(sliDefinitions, burnRate, extraSelector) =
         assert false : 'unsupported aggregation %s' % [aggregationFunction];
         null,
 
-  rulesForServiceForBurnRate(serviceDefinition, burnRate, extraSelector)::
-    generateRecordingRules(
-      serviceDefinition.listServiceLevelIndicators(),
+  ruleGroupsForServiceForBurnRate(serviceDefinition, burnRate, extraSelector)::
+    generateRecordingRuleGroups(
+      serviceDefinition,
       burnRate,
       extraSelector
     ),

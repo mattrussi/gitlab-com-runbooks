@@ -1,3 +1,4 @@
+local misc = import 'utils/misc.libsonnet';
 local strings = import 'utils/strings.libsonnet';
 
 // input: array of hashes [ {metric: set(labels)} ]
@@ -256,7 +257,19 @@ local collectMetricNamesAndTypes(metricNamesAndTypes) =
     emittingTypesByMetric:
       collectMetricNamesAndTypes(std.map(generateMetricNamesAndEmittingTypes, sliDefinitions)),
 
-    allMetrics: std.set(std.objectFields(self.emittingTypesByMetric)),
+    allMetricGroups: std.foldl(
+      function(memo, sli)
+        local seenMetricNames = std.set(std.flattenArrays(std.objectValues(memo)));
+        local opsMetrics = std.setDiff(std.set(sli.opsRateMetrics + sli.errorRateMetrics), seenMetricNames);
+        local apdexMetrics = std.setDiff(
+          std.set(std.setDiff(sli.apdexMetrics, opsMetrics)),
+          seenMetricNames
+        );
+        memo {
+          [if std.length(opsMetrics) > 0 then '%s-ops' % [sli.name]]+: opsMetrics,
+          [if std.length(apdexMetrics) > 0 then '%s-apdex' % [sli.name]]+: apdexMetrics,
+        }, sliDefinitions, {}
+    ),
   },
 
   // only for testing
