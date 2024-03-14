@@ -116,6 +116,53 @@ local mimirAggregetionSetDefaults = {
     },
   }),
 
+  serviceComponentStageGroupSLIs: aggregationSet(mimirAggregetionSetDefaults {
+    id: 'service_component_stage_groups',
+    name: 'Stage Group Service-And-Component-Aggregated Metrics',
+    labels: ['env', 'environment', 'tier', 'type', 'stage', 'component', 'stage_group', 'product_stage'],
+    generateSLODashboards: false,
+    upscaleLongerBurnRates: false,
+    sourceAggregationSet: $.featureCategorySLIs,
+    joinSource: {
+      metric: 'gitlab:feature_category:stage_group:mapping',
+      selector: { monitor: 'global' },
+      on: ['feature_category'],
+      labels: ['stage_group', 'product_stage'],
+    },
+    metricFormats: {
+      apdexSuccessRate: 'gitlab:component:stage_group:execution:apdex:success:rate_%s',
+      apdexWeight: 'gitlab:component:stage_group:execution:apdex:weight:score_%s',
+      apdexRatio: 'gitlab:component:stage_group:execution:apdex:ratio_%s',
+      opsRate: 'gitlab:component:stage_group:execution:ops:rate_%s',
+      errorRate: 'gitlab:component:stage_group:execution:error:rate_%s',
+      errorRatio: 'gitlab:component:stage_group:execution:error:ratio_%s',
+    },
+  }),
+
+  stageGroupSLIs: aggregationSet(mimirAggregetionSetDefaults {
+    id: 'stage_groups',
+    name: 'Stage Group Metrics',
+    labels: ['env', 'environment', 'stage', 'stage_group', 'product_stage'],
+    generateSLODashboards: false,
+    upscaleLongerBurnRates: false,
+    offset: '30s',
+    sourceAggregationSet: $.featureCategorySLIs,
+    joinSource: {
+      metric: 'gitlab:feature_category:stage_group:mapping',
+      selector: { monitor: 'global' },
+      on: ['feature_category'],
+      labels: ['stage_group', 'product_stage'],
+    },
+    metricFormats: {
+      apdexSuccessRate: 'gitlab:stage_group:execution:apdex:success:rate_%s',
+      apdexWeight: 'gitlab:stage_group:execution:apdex:weight:score_%s',
+      apdexRatio: 'gitlab:stage_group:execution:apdex:ratio_%s',
+      opsRate: 'gitlab:stage_group:execution:ops:rate_%s',
+      errorRate: 'gitlab:stage_group:execution:error:rate_%s',
+      errorRatio: 'gitlab:stage_group:execution:error:ratio_%s',
+    },
+  }),
+
   aggregationsFromSource::
     std.filter(
       function(aggregationSet)
