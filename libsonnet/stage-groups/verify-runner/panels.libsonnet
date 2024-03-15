@@ -12,9 +12,11 @@ local heatmap(
   color_colorScheme='Oranges',  // used when color_mode='spectrum' is set
   color_exponent=0.5,
   legend_show=false,
+  description="",
       ) =
   heatmapPanel.new(
     title=title,
+    description=description,
     datasource='$PROMETHEUS_DS',
     legend_show=legend_show,
     yAxis_format='s',

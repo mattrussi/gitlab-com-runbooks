@@ -68,7 +68,9 @@ dashboardIncident.incidentDashboard(
 )
 .addGrid(
   panels=[
-    ciBuildsQueueGraphs.bigQueryDuration(percentiles=[50, 90, 95, 99]),
+    databaseGraphs.bigQueryDuration("instance_type"),
+    databaseGraphs.bigQueryDuration("group_type"),
+    databaseGraphs.bigQueryDuration("project_type"),
   ],
   startRow=4000,
   rowHeight=8,
