@@ -20,6 +20,7 @@ dashboardHelpers.dashboard(
   panels=[
     jobGraphs.running(['instance'], runnersManagerMatching.byShard),
     jobGraphs.failures(['instance'], runnersManagerMatching.byShard),
+    jobQueueGraphs.durationHistogram(),
     jobQueueGraphs.pendingSize,
     deploymentDetails.notes,
   ],

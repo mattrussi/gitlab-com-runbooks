@@ -24,11 +24,8 @@ local pendingSize =
     fill=0,
     stack=false,
     query=|||
-      histogram_quantile(
-        0.99,
-        sum by (le, runner_type) (
-          increase(gitlab_ci_queue_size_total_bucket{environment=~"$environment", stage=~"$stage"}[$__rate_interval])
-        )
+      max by(runner_type) (
+        gitlab_ci_current_queue_size{environment=~"$environment", stage=~"$stage"}
       )
     |||,
   );
