@@ -7,7 +7,7 @@ local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
     severity: 's3',
     horizontallyScalable: true,  // We can add more vacuum workers, but at a resource utilization cost
 
-    appliesTo: metricsCatalog.findServicesWithTag(tag='rds'),
+    appliesTo: metricsCatalog.findServicesWithTag(tag='postgres_vacuum_monitoring'),
 
     description: |||
       This measures the total saturation of autovacuum workers, as a percentage of total autovacuum capacity.
