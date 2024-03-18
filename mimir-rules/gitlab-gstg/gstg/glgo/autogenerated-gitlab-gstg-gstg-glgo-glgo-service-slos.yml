@@ -35,7 +35,7 @@ groups:
       component: runway_ingress
       global_aggregation: "yes"
       monitor: global
-      regional_aggregation: "yes"
+      regional_aggregation: "no"
       service_aggregation: "yes"
       tier: sv
       type: glgo

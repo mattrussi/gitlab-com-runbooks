@@ -38,6 +38,7 @@ metricsCatalog.serviceDefinition(
     // Pick a value that is larger than the server SLIs this encapsulates
     apdexSatisfiedThreshold='32989.690295920576',
     severity='s2',
+    regional=true,
     customToolingLinks=[
       toolingLinks.kibana(
         title='MLOps',

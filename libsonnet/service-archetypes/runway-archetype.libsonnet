@@ -14,7 +14,8 @@ function(
   userImpacting=true,
   trafficCessationAlertConfig=true,
   severity='s4',
-  customToolingLinks=[]
+  customToolingLinks=[],
+  regional=false
 )
   local baseSelector = { type: type };
   {
@@ -36,7 +37,9 @@ function(
     serviceIsStageless: true,
     dangerouslyThanosEvaluated: true,
 
-    regional: true,  // Defaults to us-east1
+    // Set true for multi-region deployments
+    // https://gitlab-com.gitlab.io/gl-infra/platform/runway/runwayctl/manifest.schema.html#spec_regions
+    regional: regional,
 
     serviceLevelIndicators: {
       runway_ingress: {
