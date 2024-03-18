@@ -42,6 +42,7 @@
 * [Kubernetes-Agent Basic Troubleshooting](../kas/kubernetes-agent-basic-troubleshooting.md)
 * [../kube/k8s-oncall-setup.md](../kube/k8s-oncall-setup.md)
 * [Scaling Elastic Cloud Clusters](../logging/scaling.md)
+* [Mailgun Events](../mailgun/mailgunevents.md)
 * [Alertmanager Notification Failures](../monitoring/alertmanager-notification-failures.md)
 * [../monitoring/apdex-alerts-guide.md](../monitoring/apdex-alerts-guide.md)
 * [../monitoring/common-tasks.md](../monitoring/common-tasks.md)

@@ -55,6 +55,7 @@
 * [Kubernetes](../kube/kubernetes.md)
 * [Scaling Elastic Cloud Clusters](../logging/scaling.md)
 * [How GitLab.com uses Mailgun](../mailgun/mailgun.md)
+* [Mailgun Events](../mailgun/mailgunevents.md)
 * [Alertmanager Notification Failures](../monitoring/alertmanager-notification-failures.md)
 * [../monitoring/apdex-alerts-guide.md](../monitoring/apdex-alerts-guide.md)
 * [Thanos Query and Stores](../monitoring/thanos-query.md)
