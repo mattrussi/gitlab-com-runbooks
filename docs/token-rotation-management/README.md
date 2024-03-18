@@ -4,20 +4,13 @@
 
 [[_TOC_]]
 
-# Mailgun Service
+# Token-rotation-management Service
 
-* [Service Overview](https://dashboards.gitlab.net/d/mailgun-main/mailgun-overview)
-* **Alerts**: <https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22mailgun%22%2C%20tier%3D%22sv%22%7D>
-* **Label**: gitlab-com/gl-infra/production~"Service::mailgun"
+* **Alerts**: <https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22token-rotation-management%22%2C%20tier%3D%22inf%22%7D>
+* **Label**: gitlab-com/gl-infra/production~"Service::TokenRotationManagement"
 
 ## Logging
 
-* []()
-
-## Troubleshooting Pointers
-
-* [How GitLab.com uses Mailgun](mailgun.md)
-* [Mailgun Events](mailgunevents.md)
 <!-- END_MARKER -->
 
 <!-- ## Summary -->
