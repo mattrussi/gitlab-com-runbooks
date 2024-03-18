@@ -21,7 +21,7 @@ local fileForService(service, extraSelector={}) =
     service,
     extraSelector
   );
-  if std.length(std.prune(ruleGroups)) > 1 then
+  if std.length(std.prune(ruleGroups)) > 0 then
     {
       'sli-aggregations':
         outputPromYaml(ruleGroups),
