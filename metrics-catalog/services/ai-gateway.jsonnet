@@ -166,7 +166,7 @@ metricsCatalog.serviceDefinition(
           useRecordingRuleRegistry=false,
         ),
 
-        significantLabels: ['status', 'handler', 'method'],
+        significantLabels: ['status', 'handler', 'method', 'region'],
 
         toolingLinks: [
           toolingLinks.kibana(
@@ -208,7 +208,7 @@ metricsCatalog.serviceDefinition(
           useRecordingRuleRegistry=false,
         ),
 
-        significantLabels: ['status', 'handler', 'method'],
+        significantLabels: ['status', 'handler', 'method', 'region'],
 
         toolingLinks: [
           toolingLinks.kibana(
@@ -250,7 +250,7 @@ metricsCatalog.serviceDefinition(
           useRecordingRuleRegistry=false,
         ),
 
-        significantLabels: ['status', 'handler', 'method'],
+        significantLabels: ['status', 'handler', 'method', 'region'],
 
         toolingLinks: [
           toolingLinks.kibana(
@@ -286,7 +286,7 @@ metricsCatalog.serviceDefinition(
           selector=baseSelector,
         ),
 
-        significantLabels: ['model_engine', 'model_name'],
+        significantLabels: ['model_engine', 'model_name', 'region'],
 
         toolingLinks: [
           toolingLinks.kibana(
