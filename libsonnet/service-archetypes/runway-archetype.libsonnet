@@ -2,6 +2,7 @@ local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local histogramApdex = metricsCatalog.histogramApdex;
 local gaugeMetric = metricsCatalog.gaugeMetric;
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
+local runwayHelper = import 'service-archetypes/helpers/runway.libsonnet';
 
 // Default SLIs/SLOs for Runway services
 function(
@@ -67,7 +68,7 @@ function(
           samplingInterval=60,
         ),
 
-        significantLabels: ['revision_name', 'response_code', 'region'],
+        significantLabels: ['revision_name', 'response_code'] + runwayHelper.commonLabels,
 
         userImpacting: userImpacting,
 
