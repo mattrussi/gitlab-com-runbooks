@@ -54,9 +54,9 @@ Deployment of this service to staging and production are handled by Runway. See 
 
 The service responds to requests from .com at the `/validate` endpoint. As per the [spec](https://docs.gitlab.com/ee/administration/external_pipeline_validation.html#usage), it replies with the following status codes:
 
-- `200`: will cause .com to accept pipeline
-- `406`: will cause .com to reject pipeline
-- `500`: will cause .com to accept pipeline and log event
+* `200`: will cause .com to accept pipeline
+* `406`: will cause .com to reject pipeline
+* `500`: will cause .com to accept pipeline and log event
 
 The service supports a read-only mode (enabled by setting the `PIPELINE_VALIDATION_MODE` environment variable to `read-only`). In this mode, the service will perform its usual logic and logging, but always return status code `200`, effectively becoming merely an observer.
 
@@ -91,15 +91,15 @@ The PVS logs are likely more immediately useful as they show *why* the job was r
 
 Useful attributes emitted to the PVS logs:
 
-- `correlation_id`
-- `mode` active or passive
-- `failure_reason` reason for the failure if applicable
-- `msg` additional details about the failure if applicable
-- `rejection_hint` an indicator of the specific rule failure if applicable
-- `status_code` status code returned to as part of the request (200, 406, or 500)
-- `user_id` id of the user who created the pipeline
-- `validation_status` pass or fail
-- `validation_input` the full CI script input that triggered a validation failure
+* `correlation_id`
+* `mode` active or passive
+* `failure_reason` reason for the failure if applicable
+* `msg` additional details about the failure if applicable
+* `rejection_hint` an indicator of the specific rule failure if applicable
+* `status_code` status code returned to as part of the request (200, 406, or 500)
+* `user_id` id of the user who created the pipeline
+* `validation_status` pass or fail
+* `validation_input` the full CI script input that triggered a validation failure
 
 An example of logging that happens per request on the `/validate` endpoint:
 
@@ -151,9 +151,9 @@ This feature is configured in GitLab using either environment variables or appli
 
 The settings are:
 
-- external_pipeline_validation_service_url
-- external_pipeline_validation_service_token
-- external_pipeline_validation_service_timeout
+* external_pipeline_validation_service_url
+* external_pipeline_validation_service_token
+* external_pipeline_validation_service_timeout
 
 The presence of a configured URL is sufficient for GitLab to start making the checks; therefore when (re-)enabling, ensure you have set the token (and probably timeout) first before setting the URL.
 
