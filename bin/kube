@@ -66,6 +66,7 @@ use_cluster() {
   proxy_set=$(jq -r .[\""${cluster}\""].ssh_proxy "${CLUSTERS_JSON}")
   proxy_url="$(kubectl config view -o jsonpath="{.clusters[?(@.name == \"${context}\")].cluster.proxy-url}")"
   if [ -z "$proxy_url" ] && [ "${proxy_set}" != "null" ]; then
+    # shellcheck disable=SC2016
     echo >&2 'glsh: proxy-url not set in $KUBECONFIG, run glsh kube setup'
     exit 1
   fi
@@ -119,7 +120,7 @@ check_command "jq" "https://stedolan.github.io/jq/download/"
 check_command "kubectl" "https://kubernetes.io/docs/tasks/tools/"
 check_command "kubectx" "https://github.com/ahmetb/kubectx#installation"
 
-if (("$(kubectl version --client -o json | jq -r '.clientVersion.minor')" < "24")); then
+if (("$(kubectl version --client -o json | jq -r '.clientVersion.minor | match("\\d+").string')" < "24")); then
   echo >&2 "glsh: kubectl 1.24 or higher is required"
   exit 1
 fi
