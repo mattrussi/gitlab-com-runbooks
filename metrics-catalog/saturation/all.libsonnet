@@ -53,7 +53,6 @@
   import 'saturation-monitoring/pgbouncer_pools.libsonnet',
   import 'saturation-monitoring/pgbouncer_single_core.libsonnet',
   import 'saturation-monitoring/puma_workers.libsonnet',
-  import 'saturation-monitoring/pvs_cloudrun_container_instances.libsonnet',
   import 'saturation-monitoring/rails_db_connection_pool.libsonnet',
   import 'saturation-monitoring/redis_clients.libsonnet',
   import 'saturation-monitoring/redis_memory.libsonnet',

@@ -58,7 +58,7 @@ metricsCatalog.serviceDefinition({
     patroni: true,
     pgbouncer: true,
     praefect: true,
-    pvs: true,
+    'ext-pvs': true,
     search: true,
     consul: true,
     'google-cloud-storage': true,

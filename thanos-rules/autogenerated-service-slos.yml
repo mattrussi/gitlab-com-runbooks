@@ -1725,28 +1725,6 @@ groups:
     expr: "0.000500"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
-      tier: sv
-      type: pvs
-    expr: "0.999000"
-  - record: slo:max:events:gitlab_service_errors:ratio
-    labels:
-      tier: sv
-      type: pvs
-    expr: "0.001000"
-  - record: slo:min:events:gitlab_service_apdex:ratio
-    labels:
-      component: http
-      tier: sv
-      type: pvs
-    expr: "0.999000"
-  - record: slo:max:events:gitlab_service_errors:ratio
-    labels:
-      component: http
-      tier: sv
-      type: pvs
-    expr: "0.001000"
-  - record: slo:min:events:gitlab_service_apdex:ratio
-    labels:
       tier: db
       type: redis-cluster-cache
     expr: "0.999500"
@@ -4336,15 +4314,6 @@ groups:
       service_aggregation: "yes"
       tier: stor
       type: praefect
-    expr: "1"
-  - record: gitlab_component_service:mapping
-    labels:
-      component: http
-      global_aggregation: "no"
-      regional_aggregation: "no"
-      service_aggregation: "yes"
-      tier: sv
-      type: pvs
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:

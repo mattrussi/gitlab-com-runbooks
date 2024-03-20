@@ -433,9 +433,9 @@ generateTests([
   // t4cc0re pointed out that this alert did not page
   // so we added a test case
   {
-    name: 'PVS alerts',
+    name: 'Ext PVS alerts',
     labels: {
-      alertname: 'PvsServiceHttpApdexSLOViolation',
+      alertname: 'ExtPvsServiceRunwayIngressApdexSLOViolation',
       aggregation: 'component',
       alert_class: 'slo_violation',
       alert_type: 'symptom',
@@ -452,7 +452,7 @@ generateTests([
       stage: 'main',
       team: 'pipeline_validation',
       tier: 'sv',
-      type: 'pvs',
+      type: 'ext-pvs',
       user_impacting: 'yes',
       window: '6h',
     },
