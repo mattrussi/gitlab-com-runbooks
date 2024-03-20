@@ -43,7 +43,7 @@ production endpoint below:
 These endpoints are only accessible **internally** and **unidirectionally** _from_ their respective GitLab environments.
 
 For example: the production PVS service is only accessible _from_ the `gprd` VPC in the `gitlab-production` project but
-communication the opposite direction is not permitted (i.e., you cannot connect to `gitlab-production` _from_ the
+communication from the opposite direction is not permitted (i.e., you cannot connect to `gitlab-production` _from_ the
 production PVS service).
 
 ### Deployments
