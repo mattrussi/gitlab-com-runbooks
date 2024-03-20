@@ -3,6 +3,7 @@ local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local rateMetric = metricsCatalog.rateMetric;
 local histogramApdex = metricsCatalog.histogramApdex;
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
+local runwayHelper = import 'service-archetypes/helpers/runway.libsonnet';
 
 local baseSelector = { type: 'ai-gateway' };
 local serverSelector = baseSelector {
@@ -23,6 +24,13 @@ local serverCodeCompletionsSelector = baseSelector {
 local serverCodeGenerationsSelector = baseSelector { handler: '/v2/code/generations' };
 local serverChatSelector = baseSelector { handler: '/v1/chat/agent' };
 local serverXRaySelector = baseSelector { handler: '/v1/x-ray/libraries' };
+// Labels set by
+// https://pypi.org/project/prometheus-fastapi-instrumentator
+local commonServerLabels = [
+  'status',
+  'handler',
+  'method',
+] + runwayHelper.commonLabels;
 
 metricsCatalog.serviceDefinition(
   // Default Runway SLIs
@@ -38,6 +46,7 @@ metricsCatalog.serviceDefinition(
     // Pick a value that is larger than the server SLIs this encapsulates
     apdexSatisfiedThreshold='32989.690295920576',
     severity='s2',
+    regional=true,
     customToolingLinks=[
       toolingLinks.kibana(
         title='MLOps',
@@ -81,7 +90,7 @@ metricsCatalog.serviceDefinition(
           useRecordingRuleRegistry=false,
         ),
 
-        significantLabels: ['status', 'handler', 'method'],
+        significantLabels: commonServerLabels,
 
         toolingLinks: [
           toolingLinks.kibana(
@@ -123,7 +132,7 @@ metricsCatalog.serviceDefinition(
           useRecordingRuleRegistry=false,
         ),
 
-        significantLabels: ['status', 'handler', 'method'],
+        significantLabels: commonServerLabels,
 
         toolingLinks: [
           toolingLinks.kibana(
@@ -165,7 +174,7 @@ metricsCatalog.serviceDefinition(
           useRecordingRuleRegistry=false,
         ),
 
-        significantLabels: ['status', 'handler', 'method'],
+        significantLabels: commonServerLabels,
 
         toolingLinks: [
           toolingLinks.kibana(
@@ -207,7 +216,7 @@ metricsCatalog.serviceDefinition(
           useRecordingRuleRegistry=false,
         ),
 
-        significantLabels: ['status', 'handler', 'method'],
+        significantLabels: commonServerLabels,
 
         toolingLinks: [
           toolingLinks.kibana(
@@ -249,7 +258,7 @@ metricsCatalog.serviceDefinition(
           useRecordingRuleRegistry=false,
         ),
 
-        significantLabels: ['status', 'handler', 'method'],
+        significantLabels: commonServerLabels,
 
         toolingLinks: [
           toolingLinks.kibana(
@@ -285,7 +294,7 @@ metricsCatalog.serviceDefinition(
           selector=baseSelector,
         ),
 
-        significantLabels: ['model_engine', 'model_name'],
+        significantLabels: ['model_engine', 'model_name'] + runwayHelper.commonLabels,
 
         toolingLinks: [
           toolingLinks.kibana(
