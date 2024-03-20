@@ -149,7 +149,6 @@ local mimirAggregetionSetDefaults = {
     sourceAggregationSet: $.featureCategorySLIs,
     joinSource: {
       metric: 'gitlab:feature_category:stage_group:mapping',
-      selector: { monitor: 'global' },
       on: ['feature_category'],
       labels: ['stage_group', 'product_stage'],
     },
