@@ -68,7 +68,7 @@ The service supports a read-only mode (enabled by setting the `PIPELINE_VALIDATI
 
 ## Alerts
 
-Currently there are no alerts in place for this service. Once we are able to establish metrics for baseline activity we intend to setup alerts around the rate at which pipelines are being blocked and alert when that metric goes out of range. We may also uncover better metrics for alerting as we use the service more.
+Runway provides alerts for Apdex and Error Rate SLO violations: <https://runway-docs-4jdf82.runway.gitlab.net/reference/observability/#alerts>
 
 ## Logging
 
