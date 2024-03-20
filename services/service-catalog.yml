@@ -769,33 +769,6 @@ services:
         grafana_folder: SRXyrrSmk
         primary_grafana_dashboard: praefect-main/praefect-overview
 
-  - name: pvs
-    tier: inf
-    friendly_name: Pipeline Validation Service
-    teams:
-      - trust_and_safety
-    label: PVS
-    owner: trust_and_safety
-    technical:
-      project:
-        - https://gitlab.com/gitlab-com/gl-security/security-operations/trust-and-safety/pipeline-validation-service
-      documents:
-        design:
-        architecture:
-        readiness_review: https://gitlab.com/gitlab-com/gl-infra/readiness/-/issues/17
-        sre_guide: https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/pvs
-        developer_guide: https://docs.gitlab.com/ee/administration/external_pipeline_validation.html
-        service:
-        security:
-      dependencies:
-      logging:
-        - name: stackdriver
-          permalink: https://cloudlogging.app.goo.gl/mLPtczm9LrLekYcw5
-    observability:
-      monitors:
-        grafana_folder: pvs
-        primary_grafana_dashboard: pvs-main/pvs-overview
-
   - name: ai-gateway
     tier: sv
     friendly_name: AI Gateway

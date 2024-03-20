@@ -107,7 +107,7 @@ local saturationPoints = {
       page('search-service.md', 'Search', 'search'),
       page('sidekiq.md', 'Sidekiq', 'sidekiq'),
       page('other.md', 'Other services', 'errortracking|atlantis|tracing'),
-      page('saturation.md', 'Other Utilization and Saturation Forecasting', 'camoproxy|cloud-sql|consul|frontend|google-cloud-storage|jaeger|kas|mailroom|nat|nginx|plantuml|pvs|registry|sentry|vault|web-pages|woodhouse|ops-gitlab-net|memorystore|packagecloud'),
+      page('saturation.md', 'Other Utilization and Saturation Forecasting', 'camoproxy|cloud-sql|consul|ext-pvs|frontend|google-cloud-storage|jaeger|kas|mailroom|nat|nginx|plantuml|registry|sentry|vault|web-pages|woodhouse|ops-gitlab-net|memorystore|packagecloud'),
     ],
   },
 }
