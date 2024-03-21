@@ -10,7 +10,7 @@ local railsCacheSelector = redisHelpers.storeSelector('RedisRepositoryCache');
 metricsCatalog.serviceDefinition(
   redisArchetype(
     type='redis-cluster-repo-cache',  // name is shortened due to CloudDNS 255 char limits
-    railsStorageSelector=redisHelpers.storageSelector('cluster_repository_cache'),  // TODO switch to repository_cache after application-side clean up
+    railsStorageSelector=redisHelpers.storageSelector({ oneOf: ['cluster_repository_cache', 'repository_cache'] }),  // TODO switch to repository_cache after application-side clean up
     descriptiveName='Redis Repository Cache in Redis Cluster',
     redisCluster=true
   )
