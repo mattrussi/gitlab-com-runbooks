@@ -74,6 +74,12 @@ local monthlyReleaseVersionStatPanel =
               aggregations: [],
               operation: 'groupby',
             },
+            Time: {
+              aggregations: [
+                'min',
+              ],
+              operation: 'aggregate',
+            },
           },
         },
       },
@@ -83,7 +89,8 @@ local monthlyReleaseVersionStatPanel =
           fields: {},
           sort: [
             {
-              field: 'version',
+              field: 'Time (min)',
+              desc: true,
             },
           ],
         },
@@ -132,6 +139,12 @@ local monthlyReleaseDateStatPanel =
               aggregations: [],
               operation: 'groupby',
             },
+            Time: {
+              aggregations: [
+                'min',
+              ],
+              operation: 'aggregate',
+            },
           },
         },
       },
@@ -141,7 +154,8 @@ local monthlyReleaseDateStatPanel =
           fields: {},
           sort: [
             {
-              field: 'version',
+              field: 'Time (min)',
+              desc: true,
             },
           ],
         },
@@ -166,6 +180,7 @@ local monthlyReleaseStatusStatPanel =
     description='Current status of the monthly release. More information about the statuses in the text panel above.',
     query='delivery_release_monthly_status',
     colorMode='value',
+    fields='/^Value$/',
     format='table',
     graphMode='area',
     instant=false,
@@ -214,7 +229,7 @@ local monthlyReleaseStatusStatPanel =
             },
             Time: {
               aggregations: [
-                'last',
+                'min',
               ],
               operation: 'aggregate',
             },
@@ -227,7 +242,7 @@ local monthlyReleaseStatusStatPanel =
           fields: {},
           sort: [
             {
-              field: 'Time (last)',
+              field: 'Time (min)',
               desc: true,
             },
           ],
