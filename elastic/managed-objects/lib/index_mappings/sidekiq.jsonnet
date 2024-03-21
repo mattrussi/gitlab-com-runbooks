@@ -180,6 +180,15 @@
         db_main_txn_duration_s: {
           type: 'float',
         },
+        db_txn_max_duration_s: {
+          type: 'float',
+        },
+        db_ci_txn_max_duration_s: {
+          type: 'float',
+        },
+        db_main_txn_max_duration_s: {
+          type: 'float',
+        },
         dead: {
           type: 'boolean',
         },
