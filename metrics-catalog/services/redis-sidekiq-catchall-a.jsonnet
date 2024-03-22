@@ -4,7 +4,9 @@ local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 
 metricsCatalog.serviceDefinition(
   redisArchetype(
-    type='redis-sidekiq',
+    type='redis-sidekiq-catchall-a',
+    // this should match the `queues_shard_xxx` pattern in
+    // https://gitlab.com/gitlab-org/gitlab/-/blob/f4595d2f5d32911ec4aab4ee0d11821873c0e3c5/lib/gitlab/redis/queues.rb#L64
     railsStorageSelector=redisHelpers.storageSelector('queues_shard_catchall_a'),
     descriptiveName='Redis Sidekiq Catchall shard A'
   )
