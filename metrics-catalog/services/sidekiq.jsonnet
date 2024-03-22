@@ -71,6 +71,7 @@ metricsCatalog.serviceDefinition({
     gitaly: true,
     'redis-tracechunks': true,
     'redis-sidekiq': true,
+    'redis-sidekiq-catchall-a': true,
     'redis-cluster-queues-meta': true,
     'redis-cluster-cache': true,
     'redis-cluster-repo-cache': true,

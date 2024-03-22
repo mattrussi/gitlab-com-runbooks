@@ -53,6 +53,7 @@
   import 'redis-cluster-queues-meta.jsonnet',
   import 'redis-cluster-repo-cache.jsonnet',
   import 'redis-sidekiq.jsonnet',
+  import 'redis-sidekiq-catchall-a.jsonnet',
   import 'redis-tracechunks.jsonnet',
   import 'redis-cluster-ratelimiting.jsonnet',
   import 'redis-cluster-chat-cache.jsonnet',

@@ -1586,6 +1586,33 @@ services:
       monitors:
         primary_grafana_dashboard: redis-sidekiq-main/redis-sidekiq-overview
 
+  - name: redis-sidekiq-catchall-a
+    tier: db
+    friendly_name: Redis Sidekiq Catchall A
+    label: RedisSidekiqCatchallA
+    owner: scalability:practices
+    technical:
+      project:
+        - https://github.com/antirez/redis/
+      documents:
+        design:
+        architecture:
+        readiness_review:
+        sre_guide: https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/redis-sidekiq
+        developer_guide: https://docs.gitlab.com/ee/development/redis.html#redis-guidelines
+        service:
+          - https://redis.io/documentation
+          - https://docs.gitlab.com/omnibus/settings/redis.html
+        security:
+      dependencies:
+        - service:
+      logging:
+        - name: system
+          permalink:
+    observability:
+      monitors:
+        primary_grafana_dashboard: redis-sidekiq-catchall-a-main/redis-sidekiq-catchall-a-overview
+
   - name: redis-cluster-queues-meta
     tier: db
     friendly_name: Redis Cluster Queues Meta
