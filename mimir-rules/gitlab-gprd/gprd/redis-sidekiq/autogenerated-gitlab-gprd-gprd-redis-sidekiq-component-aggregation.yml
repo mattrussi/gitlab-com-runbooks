@@ -53,11 +53,11 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_5m{env="gprd",le="0.5",storage="queues",type!="ops-gitlab-net"}
+          sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_5m{env="gprd",le="0.5",storage="queues_shard_catchall_a",type!="ops-gitlab-net"}
         )
         +
         sum by (env,environment) (
-          sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_5m{env="gprd",le="0.75",storage="queues",type!="ops-gitlab-net"}
+          sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_5m{env="gprd",le="0.75",storage="queues_shard_catchall_a",type!="ops-gitlab-net"}
         )
       )
       /
@@ -71,7 +71,7 @@ groups:
       type: redis-sidekiq
     expr: |
       sum by (env,environment) (
-        sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_5m{env="gprd",le="+Inf",storage="queues",type!="ops-gitlab-net"}
+        sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_5m{env="gprd",le="+Inf",storage="queues_shard_catchall_a",type!="ops-gitlab-net"}
       )
   - record: gitlab_component_ops:rate_5m
     labels:
@@ -82,7 +82,7 @@ groups:
       type: redis-sidekiq
     expr: |
       sum by (env,environment) (
-        sli_aggregations:gitlab_redis_client_requests_total:rate_5m{env="gprd",storage="queues",type!="ops-gitlab-net"} offset 30s
+        sli_aggregations:gitlab_redis_client_requests_total:rate_5m{env="gprd",storage="queues_shard_catchall_a",type!="ops-gitlab-net"} offset 30s
       )
   - record: gitlab_component_errors:rate_5m
     labels:
@@ -94,7 +94,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          sli_aggregations:gitlab_redis_client_exceptions_total:rate_5m{env="gprd",storage="queues",type!="ops-gitlab-net"} offset 30s
+          sli_aggregations:gitlab_redis_client_exceptions_total:rate_5m{env="gprd",storage="queues_shard_catchall_a",type!="ops-gitlab-net"} offset 30s
         )
       )
       or
@@ -222,11 +222,11 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_30m{env="gprd",le="0.5",storage="queues",type!="ops-gitlab-net"}
+          sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_30m{env="gprd",le="0.5",storage="queues_shard_catchall_a",type!="ops-gitlab-net"}
         )
         +
         sum by (env,environment) (
-          sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_30m{env="gprd",le="0.75",storage="queues",type!="ops-gitlab-net"}
+          sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_30m{env="gprd",le="0.75",storage="queues_shard_catchall_a",type!="ops-gitlab-net"}
         )
       )
       /
@@ -240,7 +240,7 @@ groups:
       type: redis-sidekiq
     expr: |
       sum by (env,environment) (
-        sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_30m{env="gprd",le="+Inf",storage="queues",type!="ops-gitlab-net"}
+        sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_30m{env="gprd",le="+Inf",storage="queues_shard_catchall_a",type!="ops-gitlab-net"}
       )
   - record: gitlab_component_ops:rate_30m
     labels:
@@ -251,7 +251,7 @@ groups:
       type: redis-sidekiq
     expr: |
       sum by (env,environment) (
-        sli_aggregations:gitlab_redis_client_requests_total:rate_30m{env="gprd",storage="queues",type!="ops-gitlab-net"} offset 30s
+        sli_aggregations:gitlab_redis_client_requests_total:rate_30m{env="gprd",storage="queues_shard_catchall_a",type!="ops-gitlab-net"} offset 30s
       )
   - record: gitlab_component_errors:rate_30m
     labels:
@@ -263,7 +263,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          sli_aggregations:gitlab_redis_client_exceptions_total:rate_30m{env="gprd",storage="queues",type!="ops-gitlab-net"} offset 30s
+          sli_aggregations:gitlab_redis_client_exceptions_total:rate_30m{env="gprd",storage="queues_shard_catchall_a",type!="ops-gitlab-net"} offset 30s
         )
       )
       or
@@ -391,11 +391,11 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_1h{env="gprd",le="0.5",storage="queues",type!="ops-gitlab-net"}
+          sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_1h{env="gprd",le="0.5",storage="queues_shard_catchall_a",type!="ops-gitlab-net"}
         )
         +
         sum by (env,environment) (
-          sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_1h{env="gprd",le="0.75",storage="queues",type!="ops-gitlab-net"}
+          sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_1h{env="gprd",le="0.75",storage="queues_shard_catchall_a",type!="ops-gitlab-net"}
         )
       )
       /
@@ -409,7 +409,7 @@ groups:
       type: redis-sidekiq
     expr: |
       sum by (env,environment) (
-        sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_1h{env="gprd",le="+Inf",storage="queues",type!="ops-gitlab-net"}
+        sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_1h{env="gprd",le="+Inf",storage="queues_shard_catchall_a",type!="ops-gitlab-net"}
       )
   - record: gitlab_component_ops:rate_1h
     labels:
@@ -420,7 +420,7 @@ groups:
       type: redis-sidekiq
     expr: |
       sum by (env,environment) (
-        sli_aggregations:gitlab_redis_client_requests_total:rate_1h{env="gprd",storage="queues",type!="ops-gitlab-net"} offset 30s
+        sli_aggregations:gitlab_redis_client_requests_total:rate_1h{env="gprd",storage="queues_shard_catchall_a",type!="ops-gitlab-net"} offset 30s
       )
   - record: gitlab_component_errors:rate_1h
     labels:
@@ -432,7 +432,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          sli_aggregations:gitlab_redis_client_exceptions_total:rate_1h{env="gprd",storage="queues",type!="ops-gitlab-net"} offset 30s
+          sli_aggregations:gitlab_redis_client_exceptions_total:rate_1h{env="gprd",storage="queues_shard_catchall_a",type!="ops-gitlab-net"} offset 30s
         )
       )
       or
