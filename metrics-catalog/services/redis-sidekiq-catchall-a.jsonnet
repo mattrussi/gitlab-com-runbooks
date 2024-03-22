@@ -10,7 +10,17 @@ metricsCatalog.serviceDefinition(
   )
   {
     serviceLevelIndicators+: {
+      primary_server+: {
+        userImpacting: true,
+        severity: 's4',
+      },
+      secondary_servers+: {
+        userImpacting: true,
+        severity: 's4',
+      },
       rails_redis_client+: {
+        userImpacting: true,
+        severity: 's4',
         description: |||
           Aggregation of all Redis operations issued to the Redis Sidekiq service from the Rails codebase.
 

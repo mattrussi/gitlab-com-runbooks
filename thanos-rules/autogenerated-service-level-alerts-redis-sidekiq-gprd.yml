@@ -30,9 +30,8 @@ groups:
       alert_class: traffic_cessation
       alert_type: cause
       feature_category: not_owned
-      pager: pagerduty
       rules_domain: general
-      severity: s2
+      severity: s4
       sli_type: ops
       slo_alert: "no"
       user_impacting: "yes"
@@ -67,9 +66,8 @@ groups:
       alert_class: traffic_cessation
       alert_type: cause
       feature_category: not_owned
-      pager: pagerduty
       rules_domain: general
-      severity: s2
+      severity: s4
       sli_type: ops
       slo_alert: "no"
       user_impacting: "yes"
@@ -109,9 +107,8 @@ groups:
       alert_class: slo_violation
       alert_type: symptom
       feature_category: not_owned
-      pager: pagerduty
       rules_domain: general
-      severity: s2
+      severity: s4
       sli_type: apdex
       slo_alert: "yes"
       user_impacting: "yes"
@@ -164,9 +161,8 @@ groups:
       alert_class: slo_violation
       alert_type: symptom
       feature_category: not_owned
-      pager: pagerduty
       rules_domain: general
-      severity: s2
+      severity: s4
       sli_type: apdex
       slo_alert: "yes"
       user_impacting: "yes"
@@ -216,9 +212,8 @@ groups:
       alert_class: slo_violation
       alert_type: symptom
       feature_category: not_owned
-      pager: pagerduty
       rules_domain: general
-      severity: s2
+      severity: s4
       sli_type: error
       slo_alert: "yes"
       user_impacting: "yes"
@@ -268,9 +263,8 @@ groups:
       alert_class: slo_violation
       alert_type: symptom
       feature_category: not_owned
-      pager: pagerduty
       rules_domain: general
-      severity: s2
+      severity: s4
       sli_type: error
       slo_alert: "yes"
       user_impacting: "yes"
@@ -320,9 +314,8 @@ groups:
       alert_class: traffic_cessation
       alert_type: cause
       feature_category: not_owned
-      pager: pagerduty
       rules_domain: general
-      severity: s2
+      severity: s4
       sli_type: ops
       slo_alert: "no"
       user_impacting: "yes"
@@ -361,9 +354,8 @@ groups:
       alert_class: traffic_cessation
       alert_type: cause
       feature_category: not_owned
-      pager: pagerduty
       rules_domain: general
-      severity: s2
+      severity: s4
       sli_type: ops
       slo_alert: "no"
       user_impacting: "yes"
@@ -396,9 +388,8 @@ groups:
       alert_class: traffic_cessation
       alert_type: cause
       feature_category: not_owned
-      pager: pagerduty
       rules_domain: general
-      severity: s2
+      severity: s4
       sli_type: ops
       slo_alert: "no"
       user_impacting: "yes"
@@ -433,9 +424,8 @@ groups:
       alert_class: traffic_cessation
       alert_type: cause
       feature_category: not_owned
-      pager: pagerduty
       rules_domain: general
-      severity: s2
+      severity: s4
       sli_type: ops
       slo_alert: "no"
       user_impacting: "yes"
