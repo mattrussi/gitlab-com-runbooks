@@ -79,6 +79,32 @@ local mimirAggregetionSetDefaults = {
     },
   }),
 
+  regionalServiceSLIs: aggregationSet(mimirAggregetionSetDefaults {
+    id: 'service_regional',
+    name: 'Global Service-Regional-Aggregated Metrics',
+    labels: ['env', 'environment', 'tier', 'type', 'stage', 'region'],
+    sourceAggregationSet: $.regionalComponentSLIs,
+    metricFormats: {
+      apdexRatio: 'gitlab_service_regional_apdex:ratio_%s',
+      opsRate: 'gitlab_service_regional_ops:rate_%s',
+      errorRate: 'gitlab_service_regional_errors:rate_%s',
+      errorRatio: 'gitlab_service_regional_errors:ratio_%s',
+    },
+    burnRates: {
+      '6h': {
+        apdexRatio: 'gitlab_service_regional_apdex:ratio_6h',
+        opsRate: 'gitlab_service_regional_ops:rate_6h',
+        errorRatio: 'gitlab_service_regional_errors:ratio_6h',
+      },
+      '3d': {
+        apdexRatio: 'gitlab_service_regional_apdex:ratio_3d',
+        opsRate: 'gitlab_service_regional_ops:rate_3d',
+        errorRatio: 'gitlab_service_regional_errors:ratio_3d',
+      },
+    },
+    aggregationFilter: 'service',
+  }),
+
   shardComponentSLIs: aggregationSet(mimirAggregetionSetDefaults {
     id: 'component_shard',
     name: 'Global Shard-Aggregated SLI Metrics',
