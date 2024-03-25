@@ -4,7 +4,7 @@
 
 [[_TOC_]]
 
-# Omnibus Service
+# GitLab Omnibus Package Service
 
 * [Service Overview](https://dashboards.gitlab.net/d/gitlab-omnibus-versions)
 * **Alerts**: <https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22omnibus%22%2C%20tier%3D%22inf%22%7D>

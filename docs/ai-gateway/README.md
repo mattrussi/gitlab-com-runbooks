@@ -4,7 +4,7 @@
 
 [[_TOC_]]
 
-# Ai-gateway Service
+# AI Gateway Service
 
 * [Service Overview](https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview)
 * **Alerts**: <https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22ai-gateway%22%2C%20tier%3D%22sv%22%7D>

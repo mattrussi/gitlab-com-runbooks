@@ -4,7 +4,7 @@
 
 [[_TOC_]]
 
-# Product_analytics Service
+# Product Analytics Service
 
 * [Service Overview](https://dashboards.gitlab.net/d/da6cf9ea-d593-41ed-91c5-8536fd15c2fa/product-analytics-service-health)
 * **Alerts**: <https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22product_analytics%22%2C%20tier%3D%22sv%22%7D>

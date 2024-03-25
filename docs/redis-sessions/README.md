@@ -4,7 +4,7 @@
 
 [[_TOC_]]
 
-# Redis-sessions Service
+# Redis Sessions Service
 
 * [Service Overview](https://dashboards.gitlab.net/d/redis-sessions-main/redis-sessions-overview)
 * **Alerts**: <https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22redis-sessions%22%2C%20tier%3D%22db%22%7D>

@@ -56,7 +56,7 @@ def generate_header(service, tier)
 
 [[_TOC_]]
 
-# <%= service["name"].capitalize %> Service
+# <%= service["friendly_name"] %><%= service["friendly_name"].downcase.include?("service") ? "" : " Service" %>
 
 <% if service&.dig("observability", "monitors", "primary_grafana_dashboard") -%>
 * [Service Overview](https://dashboards.gitlab.net/d/<%=service["observability"]["monitors"]["primary_grafana_dashboard"]%>)

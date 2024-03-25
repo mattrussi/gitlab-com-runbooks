@@ -4,7 +4,7 @@
 
 [[_TOC_]]
 
-# Pgbouncer-registry Service
+# Registry PGBouncer Primary Database Pool Service
 
 * [Service Overview](https://dashboards.gitlab.net/d/pgbouncer-main/pgbouncer-overview)
 * **Alerts**: <https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22pgbouncer-registry%22%2C%20tier%3D%22db%22%7D>

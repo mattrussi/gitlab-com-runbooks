@@ -4,7 +4,7 @@
 
 [[_TOC_]]
 
-# Tracing Service
+# Distributed Tracing Service
 
 * [Service Overview](https://dashboards.gitlab.net/d/observability-tracing/observability3a-tracing)
 * **Alerts**: <https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22tracing%22%2C%20tier%3D%22sv%22%7D>
