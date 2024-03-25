@@ -4,7 +4,7 @@
 
 [[_TOC_]]
 
-# Runway Service
+# Runway Platform Service
 
 * [Service Overview](https://dashboards.gitlab.net/d/runway-main/runway-overview)
 * **Alerts**: <https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22runway%22%2C%20tier%3D%22inf%22%7D>

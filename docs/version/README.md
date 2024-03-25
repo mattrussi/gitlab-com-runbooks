@@ -4,7 +4,7 @@
 
 [[_TOC_]]
 
-# Version Service
+# version.gitlab.com Service
 
 * **Alerts**: <https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22version%22%2C%20tier%3D%22sv%22%7D>
 * **Label**: gitlab-com/gl-infra/production~"Service::Version"

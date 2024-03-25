@@ -4,7 +4,7 @@
 
 [[_TOC_]]
 
-# Glgo Service
+# Identity layer service for the Google Cloud integration
 
 * [Service Overview](https://dashboards.gitlab.net/d/glgo-main/glgo-overview)
 * **Alerts**: <https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22glgo%22%2C%20tier%3D%22sv%22%7D>

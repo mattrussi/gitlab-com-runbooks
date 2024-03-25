@@ -4,7 +4,7 @@
 
 [[_TOC_]]
 
-# Ai-assisted Service
+# AI-Assisted Service
 
 * [Service Overview](https://dashboards.gitlab.net/d/ai-assisted/ai-assisted)
 * **Alerts**: <https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22ai-assisted%22%2C%20tier%3D%22sv%22%7D>

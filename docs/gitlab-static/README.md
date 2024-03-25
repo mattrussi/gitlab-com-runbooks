@@ -4,7 +4,7 @@
 
 [[_TOC_]]
 
-# Gitlab-static Service
+# gitlab-static.net zone hosted on Cloudflare Service
 
 * [Service Overview](https://dashboards.gitlab.net/d/gitlab-static-main)
 * **Alerts**: <https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22gitlab-static%22%2C%20tier%3D%22inf%22%7D>

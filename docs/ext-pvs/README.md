@@ -4,7 +4,7 @@
 
 [[_TOC_]]
 
-# Ext-pvs Service
+# External Pipeline Validation Service
 
 * [Service Overview](https://dashboards.gitlab.net/d/ext-pvs-main/ext-pvs-overview)
 * **Alerts**: <https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22ext-pvs%22%2C%20tier%3D%22inf%22%7D>

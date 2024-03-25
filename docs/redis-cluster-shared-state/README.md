@@ -4,7 +4,7 @@
 
 [[_TOC_]]
 
-# Redis-cluster-shared-state Service
+# Redis Cluster SharedState Service
 
 * [Service Overview](https://dashboards.gitlab.net/d/redis-cluster-shared-state-main/redis-cluster-shared-state-overview)
 * **Alerts**: <https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22redis-cluster-shared-state%22%2C%20tier%3D%22db%22%7D>
