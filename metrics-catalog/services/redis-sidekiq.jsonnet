@@ -9,6 +9,7 @@ metricsCatalog.serviceDefinition(
     descriptiveName='Redis Sidekiq'
   )
   {
+    monitoring: { shard: { enabled: true } },
     serviceLevelIndicators+: {
       rails_redis_client+: {
         description: |||
