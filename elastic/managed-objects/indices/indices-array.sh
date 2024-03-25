@@ -26,7 +26,6 @@ export indices=(
   praefect
   pubsubbeat
   puma
-  pvs
   rails
   redis
   registry
