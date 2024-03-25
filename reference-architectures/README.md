@@ -17,7 +17,8 @@ The epic tracking this effort is here: <https://gitlab.com/groups/gitlab-com/-/e
 ## How to use
 
 From your chosen reference-architecture sub-directory, deploy:
-* `config/prometheus-rules/rules.yml` into your Prometheus
+* `config/prometheus-rules/*.yml` into your Prometheus
+  * Multiple files exist here to prevent scenarios where the Prometheus Operator is unable to create ConfigMaps if files become too large in size.
 * `config/dashboards/*.json` to Grafana
 
 Details of how to deploy will vary by your chosen configuration management tooling which is beyond the scope of this documentation.
@@ -79,7 +80,7 @@ runbooks/scripts/generate-reference-architecture-config.sh \
     overrides/
 ```
 
-- Step 7: install the recording rules from `output/prometheus-rules/rules.yml` into your [Prometheus configuration](https://prometheus.io/docs/prometheus/latest/configuration/recording_rules/). Depending on the deployment, this can be done with the [Kube Prometheus Stack](https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-prometheus-stack) helm chart, local file deployment or another means.
+- Step 7: install the recording rules from `output/prometheus-rules/*.yml` into your [Prometheus configuration](https://prometheus.io/docs/prometheus/latest/configuration/recording_rules/). Depending on the deployment, this can be done with the [Kube Prometheus Stack](https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-prometheus-stack) helm chart, local file deployment or another means.
 
 - Step 8: install the Grafana dashboards from `output/dashboards/*.json` into your Grafana instance. The means of deployment will depend on the local configuration.
 
