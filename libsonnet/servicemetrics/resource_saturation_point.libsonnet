@@ -6,6 +6,7 @@ local stableIds = import 'stable-ids/stable-ids.libsonnet';
 local durationParser = import 'utils/duration-parser.libsonnet';
 local strings = import 'utils/strings.libsonnet';
 local validator = import 'utils/validator.libsonnet';
+local filterLabelsFromLabelsHash = (import 'promql/labels.libsonnet').filterLabelsFromLabelsHash;
 
 // The severity labels that we allow on resources
 local severities = std.set(['s1', 's2', 's3', 's4']);
@@ -235,8 +236,8 @@ local resourceSaturationPoint = function(options)
       local environmentLabelsLocal = (if self.dangerouslyThanosEvaluated == true then labelTaxonomy.labelTaxonomy(labelTaxonomy.labels.environmentThanos) else []) + environmentLabels;
       local queryAggregationLabels = environmentLabelsLocal + self.resourceLabels;
       local allMaxAggregationLabels = environmentLabelsLocal + maxAggregationLabels;
-      local queryAggregationLabelsExcludingStaticLabels = std.filter(function(label) !std.objectHas(staticLabels, label), queryAggregationLabels);
-      local maxAggregationLabelsExcludingStaticLabels = std.filter(function(label) !std.objectHas(staticLabels, label), allMaxAggregationLabels);
+      local queryAggregationLabelsExcludingStaticLabels = filterLabelsFromLabelsHash(queryAggregationLabels, staticLabels);
+      local maxAggregationLabelsExcludingStaticLabels = filterLabelsFromLabelsHash(allMaxAggregationLabels, staticLabels);
       local queryFormatConfig = self.queryFormatConfig;
 
       local preaggregation = self.query % queryFormatConfig {

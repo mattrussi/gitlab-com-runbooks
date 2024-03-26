@@ -601,15 +601,15 @@ groups:
         clamp_min(
           clamp_max(
             (
-              process_open_fds{type=~"ai-assisted|api|internal-api|atlantis|camoproxy|ci-runners|consul|customersdot|external-dns|frontend|git|gitaly|google-cloud-storage|jaeger|kas|logging|mailgun|mailroom|memorystore|monitoring|nginx|ops-gitlab-net|packagecloud|patroni|patroni-registry|patroni-embedding|patroni-ci|postgres-archive|pgbouncer|pgbouncer-registry|pgbouncer-embedding|pgbouncer-ci|plantuml|praefect|pvs|redis-cluster-cache|redis-cluster-feature-flag|redis-cluster-shared-state|redis-cluster-queues-meta|redis-cluster-repo-cache|redis-sidekiq|redis-tracechunks|redis-cluster-ratelimiting|redis-cluster-chat-cache|redis-sessions|redis-registry-cache|redis-repository-cache|redis-db-load-balancing|redis-pubsub|redis|registry|runway|search|sentry|sidekiq|vault|web-pages|web|websockets|woodhouse"}
+              process_open_fds{type=~"ai-assisted|api|internal-api|atlantis|camoproxy|ci-runners|consul|customersdot|external-dns|frontend|git|gitaly|google-cloud-storage|jaeger|kas|logging|mailgun|mailroom|memorystore|monitoring|nginx|ops-gitlab-net|packagecloud|patroni|patroni-registry|patroni-embedding|patroni-ci|postgres-archive|pgbouncer|pgbouncer-registry|pgbouncer-embedding|pgbouncer-ci|plantuml|praefect|redis-cluster-cache|redis-cluster-feature-flag|redis-cluster-shared-state|redis-cluster-queues-meta|redis-cluster-repo-cache|redis-sidekiq|redis-tracechunks|redis-cluster-ratelimiting|redis-cluster-chat-cache|redis-sessions|redis-registry-cache|redis-repository-cache|redis-db-load-balancing|redis-pubsub|redis|registry|runway|search|sentry|sidekiq|vault|web-pages|web|websockets|woodhouse"}
               /
-              process_max_fds{type=~"ai-assisted|api|internal-api|atlantis|camoproxy|ci-runners|consul|customersdot|external-dns|frontend|git|gitaly|google-cloud-storage|jaeger|kas|logging|mailgun|mailroom|memorystore|monitoring|nginx|ops-gitlab-net|packagecloud|patroni|patroni-registry|patroni-embedding|patroni-ci|postgres-archive|pgbouncer|pgbouncer-registry|pgbouncer-embedding|pgbouncer-ci|plantuml|praefect|pvs|redis-cluster-cache|redis-cluster-feature-flag|redis-cluster-shared-state|redis-cluster-queues-meta|redis-cluster-repo-cache|redis-sidekiq|redis-tracechunks|redis-cluster-ratelimiting|redis-cluster-chat-cache|redis-sessions|redis-registry-cache|redis-repository-cache|redis-db-load-balancing|redis-pubsub|redis|registry|runway|search|sentry|sidekiq|vault|web-pages|web|websockets|woodhouse"}
+              process_max_fds{type=~"ai-assisted|api|internal-api|atlantis|camoproxy|ci-runners|consul|customersdot|external-dns|frontend|git|gitaly|google-cloud-storage|jaeger|kas|logging|mailgun|mailroom|memorystore|monitoring|nginx|ops-gitlab-net|packagecloud|patroni|patroni-registry|patroni-embedding|patroni-ci|postgres-archive|pgbouncer|pgbouncer-registry|pgbouncer-embedding|pgbouncer-ci|plantuml|praefect|redis-cluster-cache|redis-cluster-feature-flag|redis-cluster-shared-state|redis-cluster-queues-meta|redis-cluster-repo-cache|redis-sidekiq|redis-tracechunks|redis-cluster-ratelimiting|redis-cluster-chat-cache|redis-sessions|redis-registry-cache|redis-repository-cache|redis-db-load-balancing|redis-pubsub|redis|registry|runway|search|sentry|sidekiq|vault|web-pages|web|websockets|woodhouse"}
             )
             or
             (
-              ruby_file_descriptors{type=~"ai-assisted|api|internal-api|atlantis|camoproxy|ci-runners|consul|customersdot|external-dns|frontend|git|gitaly|google-cloud-storage|jaeger|kas|logging|mailgun|mailroom|memorystore|monitoring|nginx|ops-gitlab-net|packagecloud|patroni|patroni-registry|patroni-embedding|patroni-ci|postgres-archive|pgbouncer|pgbouncer-registry|pgbouncer-embedding|pgbouncer-ci|plantuml|praefect|pvs|redis-cluster-cache|redis-cluster-feature-flag|redis-cluster-shared-state|redis-cluster-queues-meta|redis-cluster-repo-cache|redis-sidekiq|redis-tracechunks|redis-cluster-ratelimiting|redis-cluster-chat-cache|redis-sessions|redis-registry-cache|redis-repository-cache|redis-db-load-balancing|redis-pubsub|redis|registry|runway|search|sentry|sidekiq|vault|web-pages|web|websockets|woodhouse"}
+              ruby_file_descriptors{type=~"ai-assisted|api|internal-api|atlantis|camoproxy|ci-runners|consul|customersdot|external-dns|frontend|git|gitaly|google-cloud-storage|jaeger|kas|logging|mailgun|mailroom|memorystore|monitoring|nginx|ops-gitlab-net|packagecloud|patroni|patroni-registry|patroni-embedding|patroni-ci|postgres-archive|pgbouncer|pgbouncer-registry|pgbouncer-embedding|pgbouncer-ci|plantuml|praefect|redis-cluster-cache|redis-cluster-feature-flag|redis-cluster-shared-state|redis-cluster-queues-meta|redis-cluster-repo-cache|redis-sidekiq|redis-tracechunks|redis-cluster-ratelimiting|redis-cluster-chat-cache|redis-sessions|redis-registry-cache|redis-repository-cache|redis-db-load-balancing|redis-pubsub|redis|registry|runway|search|sentry|sidekiq|vault|web-pages|web|websockets|woodhouse"}
               /
-              ruby_process_max_fds{type=~"ai-assisted|api|internal-api|atlantis|camoproxy|ci-runners|consul|customersdot|external-dns|frontend|git|gitaly|google-cloud-storage|jaeger|kas|logging|mailgun|mailroom|memorystore|monitoring|nginx|ops-gitlab-net|packagecloud|patroni|patroni-registry|patroni-embedding|patroni-ci|postgres-archive|pgbouncer|pgbouncer-registry|pgbouncer-embedding|pgbouncer-ci|plantuml|praefect|pvs|redis-cluster-cache|redis-cluster-feature-flag|redis-cluster-shared-state|redis-cluster-queues-meta|redis-cluster-repo-cache|redis-sidekiq|redis-tracechunks|redis-cluster-ratelimiting|redis-cluster-chat-cache|redis-sessions|redis-registry-cache|redis-repository-cache|redis-db-load-balancing|redis-pubsub|redis|registry|runway|search|sentry|sidekiq|vault|web-pages|web|websockets|woodhouse"}
+              ruby_process_max_fds{type=~"ai-assisted|api|internal-api|atlantis|camoproxy|ci-runners|consul|customersdot|external-dns|frontend|git|gitaly|google-cloud-storage|jaeger|kas|logging|mailgun|mailroom|memorystore|monitoring|nginx|ops-gitlab-net|packagecloud|patroni|patroni-registry|patroni-embedding|patroni-ci|postgres-archive|pgbouncer|pgbouncer-registry|pgbouncer-embedding|pgbouncer-ci|plantuml|praefect|redis-cluster-cache|redis-cluster-feature-flag|redis-cluster-shared-state|redis-cluster-queues-meta|redis-cluster-repo-cache|redis-sidekiq|redis-tracechunks|redis-cluster-ratelimiting|redis-cluster-chat-cache|redis-sessions|redis-registry-cache|redis-repository-cache|redis-db-load-balancing|redis-pubsub|redis|registry|runway|search|sentry|sidekiq|vault|web-pages|web|websockets|woodhouse"}
             )
             ,
             1)
@@ -919,16 +919,6 @@ groups:
         ,
         0)
       )
-  - record: gitlab_component_saturation:ratio
-    labels:
-      component: pvs_cloudrun_container_instances
-      stage: main
-      tier: inf
-      type: pvs
-    expr: "max by(environment, shard) (\n  clamp_min(\n    clamp_max(\n      sum by
-      (environment, shard, state) (\n        stackdriver_cloud_run_revision_run_googleapis_com_container_instance_count{\n
-      \         configuration_name=\"pipeline-validation-service\",\n          \n
-      \       }\n      )\n      /\n      100\n      ,\n      1)\n  ,\n  0)\n)\n"
   - record: gitlab_component_saturation:ratio
     labels:
       component: rails_db_connection_pool
@@ -1857,14 +1847,6 @@ groups:
     expr: "0.9"
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:
-      component: pvs_cloudrun_container_instances
-    expr: "0.8"
-  - record: slo:max:hard:gitlab_component_saturation:ratio
-    labels:
-      component: pvs_cloudrun_container_instances
-    expr: "0.9"
-  - record: slo:max:soft:gitlab_component_saturation:ratio
-    labels:
       component: rails_db_connection_pool
     expr: "0.9"
   - record: slo:max:hard:gitlab_component_saturation:ratio
@@ -2356,7 +2338,7 @@ groups:
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
-      capacity_planning_strategy: quantile95_1h
+      capacity_planning_strategy: exclude
       component: node_schedstat_waiting
       horiz_scaling: "yes"
       quantile: max
@@ -2497,14 +2479,6 @@ groups:
       horiz_scaling: "yes"
       quantile: max
       severity: s2
-    expr: "1"
-  - record: gitlab_component_saturation_info
-    labels:
-      capacity_planning_strategy: quantile95_1h
-      component: pvs_cloudrun_container_instances
-      horiz_scaling: "yes"
-      quantile: max
-      severity: s3
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
@@ -5933,69 +5907,6 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="puma_workers"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="puma_workers"}
-  - alert: component_saturation_slo_out_of_bounds:pvs_cloudrun_container_instances
-    for: 5m
-    annotations:
-      title: The Cloud Run Container Instance Utilization resource of the {{ $labels.type
-        }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
-        is close to its capacity limit.
-      description: |
-        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
-
-        Details of the Cloud Run Container Instance Utilization resource:
-
-        Cloud Run is configured with a maximum number of container instances. When this is saturated, Google Cloud Run will no longer scale up.
-
-        More information available at https://cloud.google.com/run/docs/configuring/max-instances.
-      grafana_dashboard_id: alerts-sat_pvs_cloudrun_ctr_instances
-      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_pvs_cloudrun_ctr_instances?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
-        }}
-      grafana_min_zoom_hours: "6"
-      grafana_panel_id: "754592114"
-      grafana_variables: environment,type,stage
-      promql_query: |
-        max by(environment, shard, state) (
-          clamp_min(
-            clamp_max(
-              sum by (environment, shard, state) (
-                stackdriver_cloud_run_revision_run_googleapis_com_container_instance_count{
-                  configuration_name="pipeline-validation-service",
-                  environment="{{ $labels.environment }}"
-                }
-              )
-              /
-              100
-              ,
-              1)
-          ,
-          0)
-        )
-      promql_template_1: |
-        max by(environment, shard, state) (
-          clamp_min(
-            clamp_max(
-              sum by (environment, shard, state) (
-                stackdriver_cloud_run_revision_run_googleapis_com_container_instance_count{
-                  configuration_name="pipeline-validation-service",
-                  environment="{{ $labels.environment }}"
-                }
-              )
-              /
-              100
-              ,
-              1)
-          ,
-          0)
-        )
-      runbook: docs/{{ $labels.type }}/README.md
-    labels:
-      alert_type: cause
-      rules_domain: general
-      severity: s3
-    expr: |
-      gitlab_component_saturation:ratio{component="pvs_cloudrun_container_instances"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="pvs_cloudrun_container_instances"}
   - alert: component_saturation_slo_out_of_bounds:rails_db_connection_pool
     for: 15m
     annotations:

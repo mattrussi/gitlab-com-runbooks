@@ -4,7 +4,7 @@
 
 [[_TOC_]]
 
-# Blackbox Service
+# Blackbox Exporters Service
 
 * **Alerts**: <https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22blackbox%22%2C%20tier%3D%22inf%22%7D>
 * **Label**: gitlab-com/gl-infra/production~"Service::Blackbox"

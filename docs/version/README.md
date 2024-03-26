@@ -4,7 +4,7 @@
 
 [[_TOC_]]
 
-# Version Service
+# version.gitlab.com Service
 
 * **Alerts**: <https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22version%22%2C%20tier%3D%22sv%22%7D>
 * **Label**: gitlab-com/gl-infra/production~"Service::Version"
@@ -61,6 +61,7 @@
 * [../pgbouncer/patroni-consul-postgres-pgbouncer-interactions.md](../pgbouncer/patroni-consul-postgres-pgbouncer-interactions.md)
 * [Postgres Replicas](../postgres-dr-delayed/postgres-dr-replicas.md)
 * [Praefect has unavailable repositories](../praefect/praefect-unavailable-repo.md)
+* [../product_analytics/clickhouse-backup-restore.md](../product_analytics/clickhouse-backup-restore.md)
 * [Removing cache entries from Redis](../redis-cluster-cache/remove-cache-entries.md)
 * [Provisioning Redis Cluster](../redis/provisioning-redis-cluster.md)
 * [Redis-Sidekiq catchall workloads reduction](../redis/redis-sidekiq-catchall-workloads-reduction.md)

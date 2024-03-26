@@ -12,3 +12,14 @@ groups:
       title: Vector errors
       description: >
         Too many vector errors in cluster {{ $labels.cluster }} have been occurring for the last 10 minutes.
+  - alert: SSLErrorsTooHigh
+    expr: stackdriver_k_8_s_container_logging_googleapis_com_user_ssl_errors > 2
+    for: 5m
+    labels:
+      alert_type: symptom
+      severity: s4
+      team: product_analytics
+    annotations:
+      title: SSL errors
+      description: >
+        Too many SSL errors in cluster {{ $labels.cluster }} have been occurring for the last 10 minutes.

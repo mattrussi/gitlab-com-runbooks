@@ -34,6 +34,34 @@ groups:
       sum by (env,environment,stage) (
         sli_aggregations:gitlab_sli_global_search_apdex_total:rate_5m{env="gprd",job="gitlab-rails",type="api"} offset 30s
       )
+  - record: gitlab_component_errors:ratio_5m
+    labels:
+      component: global_search
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_5m{component="global_search",env="gprd",monitor="global",tier="sv",type="api"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_5m{component="global_search",env="gprd",monitor="global",tier="sv",type="api"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_5m
+    labels:
+      component: global_search
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_5m{component="global_search",env="gprd",monitor="global",tier="sv",type="api"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_5m{component="global_search",env="gprd",monitor="global",tier="sv",type="api"} offset 30s
+      )
   - record: gitlab_component_apdex:success:rate_5m
     labels:
       component: graphql_query
@@ -63,6 +91,34 @@ groups:
     expr: |
       sum by (env,environment,stage) (
         sli_aggregations:gitlab_sli_graphql_query_apdex_total:rate_5m{env="gprd",job="gitlab-rails",type="api"} offset 30s
+      )
+  - record: gitlab_component_errors:ratio_5m
+    labels:
+      component: graphql_query
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_5m{component="graphql_query",env="gprd",monitor="global",tier="sv",type="api"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_5m{component="graphql_query",env="gprd",monitor="global",tier="sv",type="api"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_5m
+    labels:
+      component: graphql_query
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_5m{component="graphql_query",env="gprd",monitor="global",tier="sv",type="api"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_5m{component="graphql_query",env="gprd",monitor="global",tier="sv",type="api"} offset 30s
       )
   - record: gitlab_component_ops:rate_5m
     labels:
@@ -124,6 +180,34 @@ groups:
           gitlab_component_ops:rate_5m{component="loadbalancer",env="gprd",monitor="global",stage="main",tier="sv",type="api"}
         )
       )
+  - record: gitlab_component_errors:ratio_5m
+    labels:
+      component: loadbalancer
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_5m{component="loadbalancer",env="gprd",monitor="global",tier="sv",type="api"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_5m{component="loadbalancer",env="gprd",monitor="global",tier="sv",type="api"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_5m
+    labels:
+      component: loadbalancer
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_5m{component="loadbalancer",env="gprd",monitor="global",tier="sv",type="api"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_5m{component="loadbalancer",env="gprd",monitor="global",tier="sv",type="api"} offset 30s
+      )
   - record: gitlab_component_ops:rate_5m
     labels:
       component: nginx_ingress
@@ -151,6 +235,34 @@ groups:
         0 * group by(env,environment,stage) (
           gitlab_component_ops:rate_5m{component="nginx_ingress",env="gprd",monitor="global",tier="sv",type="api"}
         )
+      )
+  - record: gitlab_component_errors:ratio_5m
+    labels:
+      component: nginx_ingress
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_5m{component="nginx_ingress",env="gprd",monitor="global",tier="sv",type="api"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_5m{component="nginx_ingress",env="gprd",monitor="global",tier="sv",type="api"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_5m
+    labels:
+      component: nginx_ingress
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_5m{component="nginx_ingress",env="gprd",monitor="global",tier="sv",type="api"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_5m{component="nginx_ingress",env="gprd",monitor="global",tier="sv",type="api"} offset 30s
       )
   - record: gitlab_component_apdex:success:rate_5m
     labels:
@@ -199,6 +311,34 @@ groups:
         0 * group by(env,environment,stage) (
           gitlab_component_ops:rate_5m{component="rails_request",env="gprd",monitor="global",tier="sv",type="api"}
         )
+      )
+  - record: gitlab_component_errors:ratio_5m
+    labels:
+      component: rails_request
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_5m{component="rails_request",env="gprd",monitor="global",tier="sv",type="api"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_5m{component="rails_request",env="gprd",monitor="global",tier="sv",type="api"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_5m
+    labels:
+      component: rails_request
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_5m{component="rails_request",env="gprd",monitor="global",tier="sv",type="api"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_5m{component="rails_request",env="gprd",monitor="global",tier="sv",type="api"} offset 30s
       )
   - record: gitlab_component_apdex:success:rate_5m
     labels:
@@ -256,6 +396,34 @@ groups:
           gitlab_component_ops:rate_5m{component="workhorse",env="gprd",monitor="global",tier="sv",type="api"}
         )
       )
+  - record: gitlab_component_errors:ratio_5m
+    labels:
+      component: workhorse
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_5m{component="workhorse",env="gprd",monitor="global",tier="sv",type="api"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_5m{component="workhorse",env="gprd",monitor="global",tier="sv",type="api"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_5m
+    labels:
+      component: workhorse
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_5m{component="workhorse",env="gprd",monitor="global",tier="sv",type="api"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_5m{component="workhorse",env="gprd",monitor="global",tier="sv",type="api"} offset 30s
+      )
 - name: 'Global SLI Metrics: api - Burn-Rate 30m'
   interval: 2m
   rules:
@@ -289,6 +457,34 @@ groups:
       sum by (env,environment,stage) (
         sli_aggregations:gitlab_sli_global_search_apdex_total:rate_30m{env="gprd",job="gitlab-rails",type="api"} offset 30s
       )
+  - record: gitlab_component_errors:ratio_30m
+    labels:
+      component: global_search
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_30m{component="global_search",env="gprd",monitor="global",tier="sv",type="api"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_30m{component="global_search",env="gprd",monitor="global",tier="sv",type="api"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_30m
+    labels:
+      component: global_search
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_30m{component="global_search",env="gprd",monitor="global",tier="sv",type="api"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_30m{component="global_search",env="gprd",monitor="global",tier="sv",type="api"} offset 30s
+      )
   - record: gitlab_component_apdex:success:rate_30m
     labels:
       component: graphql_query
@@ -318,6 +514,34 @@ groups:
     expr: |
       sum by (env,environment,stage) (
         sli_aggregations:gitlab_sli_graphql_query_apdex_total:rate_30m{env="gprd",job="gitlab-rails",type="api"} offset 30s
+      )
+  - record: gitlab_component_errors:ratio_30m
+    labels:
+      component: graphql_query
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_30m{component="graphql_query",env="gprd",monitor="global",tier="sv",type="api"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_30m{component="graphql_query",env="gprd",monitor="global",tier="sv",type="api"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_30m
+    labels:
+      component: graphql_query
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_30m{component="graphql_query",env="gprd",monitor="global",tier="sv",type="api"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_30m{component="graphql_query",env="gprd",monitor="global",tier="sv",type="api"} offset 30s
       )
   - record: gitlab_component_ops:rate_30m
     labels:
@@ -379,6 +603,34 @@ groups:
           gitlab_component_ops:rate_30m{component="loadbalancer",env="gprd",monitor="global",stage="main",tier="sv",type="api"}
         )
       )
+  - record: gitlab_component_errors:ratio_30m
+    labels:
+      component: loadbalancer
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_30m{component="loadbalancer",env="gprd",monitor="global",tier="sv",type="api"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_30m{component="loadbalancer",env="gprd",monitor="global",tier="sv",type="api"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_30m
+    labels:
+      component: loadbalancer
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_30m{component="loadbalancer",env="gprd",monitor="global",tier="sv",type="api"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_30m{component="loadbalancer",env="gprd",monitor="global",tier="sv",type="api"} offset 30s
+      )
   - record: gitlab_component_ops:rate_30m
     labels:
       component: nginx_ingress
@@ -406,6 +658,34 @@ groups:
         0 * group by(env,environment,stage) (
           gitlab_component_ops:rate_30m{component="nginx_ingress",env="gprd",monitor="global",tier="sv",type="api"}
         )
+      )
+  - record: gitlab_component_errors:ratio_30m
+    labels:
+      component: nginx_ingress
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_30m{component="nginx_ingress",env="gprd",monitor="global",tier="sv",type="api"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_30m{component="nginx_ingress",env="gprd",monitor="global",tier="sv",type="api"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_30m
+    labels:
+      component: nginx_ingress
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_30m{component="nginx_ingress",env="gprd",monitor="global",tier="sv",type="api"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_30m{component="nginx_ingress",env="gprd",monitor="global",tier="sv",type="api"} offset 30s
       )
   - record: gitlab_component_apdex:success:rate_30m
     labels:
@@ -454,6 +734,34 @@ groups:
         0 * group by(env,environment,stage) (
           gitlab_component_ops:rate_30m{component="rails_request",env="gprd",monitor="global",tier="sv",type="api"}
         )
+      )
+  - record: gitlab_component_errors:ratio_30m
+    labels:
+      component: rails_request
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_30m{component="rails_request",env="gprd",monitor="global",tier="sv",type="api"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_30m{component="rails_request",env="gprd",monitor="global",tier="sv",type="api"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_30m
+    labels:
+      component: rails_request
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_30m{component="rails_request",env="gprd",monitor="global",tier="sv",type="api"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_30m{component="rails_request",env="gprd",monitor="global",tier="sv",type="api"} offset 30s
       )
   - record: gitlab_component_apdex:success:rate_30m
     labels:
@@ -511,6 +819,34 @@ groups:
           gitlab_component_ops:rate_30m{component="workhorse",env="gprd",monitor="global",tier="sv",type="api"}
         )
       )
+  - record: gitlab_component_errors:ratio_30m
+    labels:
+      component: workhorse
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_30m{component="workhorse",env="gprd",monitor="global",tier="sv",type="api"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_30m{component="workhorse",env="gprd",monitor="global",tier="sv",type="api"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_30m
+    labels:
+      component: workhorse
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_30m{component="workhorse",env="gprd",monitor="global",tier="sv",type="api"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_30m{component="workhorse",env="gprd",monitor="global",tier="sv",type="api"} offset 30s
+      )
 - name: 'Global SLI Metrics: api - Burn-Rate 1h'
   interval: 1m
   rules:
@@ -544,6 +880,34 @@ groups:
       sum by (env,environment,stage) (
         sli_aggregations:gitlab_sli_global_search_apdex_total:rate_1h{env="gprd",job="gitlab-rails",type="api"} offset 30s
       )
+  - record: gitlab_component_errors:ratio_1h
+    labels:
+      component: global_search
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_1h{component="global_search",env="gprd",monitor="global",tier="sv",type="api"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_1h{component="global_search",env="gprd",monitor="global",tier="sv",type="api"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_1h
+    labels:
+      component: global_search
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_1h{component="global_search",env="gprd",monitor="global",tier="sv",type="api"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_1h{component="global_search",env="gprd",monitor="global",tier="sv",type="api"} offset 30s
+      )
   - record: gitlab_component_apdex:success:rate_1h
     labels:
       component: graphql_query
@@ -573,6 +937,34 @@ groups:
     expr: |
       sum by (env,environment,stage) (
         sli_aggregations:gitlab_sli_graphql_query_apdex_total:rate_1h{env="gprd",job="gitlab-rails",type="api"} offset 30s
+      )
+  - record: gitlab_component_errors:ratio_1h
+    labels:
+      component: graphql_query
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_1h{component="graphql_query",env="gprd",monitor="global",tier="sv",type="api"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_1h{component="graphql_query",env="gprd",monitor="global",tier="sv",type="api"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_1h
+    labels:
+      component: graphql_query
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_1h{component="graphql_query",env="gprd",monitor="global",tier="sv",type="api"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_1h{component="graphql_query",env="gprd",monitor="global",tier="sv",type="api"} offset 30s
       )
   - record: gitlab_component_ops:rate_1h
     labels:
@@ -634,6 +1026,34 @@ groups:
           gitlab_component_ops:rate_1h{component="loadbalancer",env="gprd",monitor="global",stage="main",tier="sv",type="api"}
         )
       )
+  - record: gitlab_component_errors:ratio_1h
+    labels:
+      component: loadbalancer
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_1h{component="loadbalancer",env="gprd",monitor="global",tier="sv",type="api"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_1h{component="loadbalancer",env="gprd",monitor="global",tier="sv",type="api"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_1h
+    labels:
+      component: loadbalancer
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_1h{component="loadbalancer",env="gprd",monitor="global",tier="sv",type="api"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_1h{component="loadbalancer",env="gprd",monitor="global",tier="sv",type="api"} offset 30s
+      )
   - record: gitlab_component_ops:rate_1h
     labels:
       component: nginx_ingress
@@ -661,6 +1081,34 @@ groups:
         0 * group by(env,environment,stage) (
           gitlab_component_ops:rate_1h{component="nginx_ingress",env="gprd",monitor="global",tier="sv",type="api"}
         )
+      )
+  - record: gitlab_component_errors:ratio_1h
+    labels:
+      component: nginx_ingress
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_1h{component="nginx_ingress",env="gprd",monitor="global",tier="sv",type="api"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_1h{component="nginx_ingress",env="gprd",monitor="global",tier="sv",type="api"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_1h
+    labels:
+      component: nginx_ingress
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_1h{component="nginx_ingress",env="gprd",monitor="global",tier="sv",type="api"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_1h{component="nginx_ingress",env="gprd",monitor="global",tier="sv",type="api"} offset 30s
       )
   - record: gitlab_component_apdex:success:rate_1h
     labels:
@@ -709,6 +1157,34 @@ groups:
         0 * group by(env,environment,stage) (
           gitlab_component_ops:rate_1h{component="rails_request",env="gprd",monitor="global",tier="sv",type="api"}
         )
+      )
+  - record: gitlab_component_errors:ratio_1h
+    labels:
+      component: rails_request
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_1h{component="rails_request",env="gprd",monitor="global",tier="sv",type="api"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_1h{component="rails_request",env="gprd",monitor="global",tier="sv",type="api"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_1h
+    labels:
+      component: rails_request
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_1h{component="rails_request",env="gprd",monitor="global",tier="sv",type="api"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_1h{component="rails_request",env="gprd",monitor="global",tier="sv",type="api"} offset 30s
       )
   - record: gitlab_component_apdex:success:rate_1h
     labels:
@@ -765,4 +1241,854 @@ groups:
         0 * group by(env,environment,stage) (
           gitlab_component_ops:rate_1h{component="workhorse",env="gprd",monitor="global",tier="sv",type="api"}
         )
+      )
+  - record: gitlab_component_errors:ratio_1h
+    labels:
+      component: workhorse
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_1h{component="workhorse",env="gprd",monitor="global",tier="sv",type="api"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_1h{component="workhorse",env="gprd",monitor="global",tier="sv",type="api"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_1h
+    labels:
+      component: workhorse
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_1h{component="workhorse",env="gprd",monitor="global",tier="sv",type="api"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_1h{component="workhorse",env="gprd",monitor="global",tier="sv",type="api"} offset 30s
+      )
+- name: 'Global SLI Metrics: api - Burn-Rate 6h'
+  interval: 2m
+  rules:
+  - record: gitlab_component_apdex:success:rate_6h
+    labels:
+      component: global_search
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="global_search",env="gprd",monitor="global",tier="sv",type="api"}[6h] offset 30s)
+      )
+  - record: gitlab_component_apdex:weight:score_6h
+    labels:
+      component: global_search
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="global_search",env="gprd",monitor="global",tier="sv",type="api"}[6h] offset 30s)
+      )
+  - record: gitlab_component_ops:rate_6h
+    labels:
+      component: global_search
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_ops:rate_1h{component="global_search",env="gprd",monitor="global",tier="sv",type="api"}[6h] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_6h
+    labels:
+      component: global_search
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_errors:rate_1h{component="global_search",env="gprd",monitor="global",tier="sv",type="api"}[6h] offset 30s)
+      )
+  - record: gitlab_component_errors:ratio_6h
+    labels:
+      component: global_search
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_6h{component="global_search",env="gprd",monitor="global",tier="sv",type="api"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_6h{component="global_search",env="gprd",monitor="global",tier="sv",type="api"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_6h
+    labels:
+      component: global_search
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_6h{component="global_search",env="gprd",monitor="global",tier="sv",type="api"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_6h{component="global_search",env="gprd",monitor="global",tier="sv",type="api"} offset 30s
+      )
+  - record: gitlab_component_apdex:success:rate_6h
+    labels:
+      component: graphql_query
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="graphql_query",env="gprd",monitor="global",tier="sv",type="api"}[6h] offset 30s)
+      )
+  - record: gitlab_component_apdex:weight:score_6h
+    labels:
+      component: graphql_query
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="graphql_query",env="gprd",monitor="global",tier="sv",type="api"}[6h] offset 30s)
+      )
+  - record: gitlab_component_ops:rate_6h
+    labels:
+      component: graphql_query
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_ops:rate_1h{component="graphql_query",env="gprd",monitor="global",tier="sv",type="api"}[6h] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_6h
+    labels:
+      component: graphql_query
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_errors:rate_1h{component="graphql_query",env="gprd",monitor="global",tier="sv",type="api"}[6h] offset 30s)
+      )
+  - record: gitlab_component_errors:ratio_6h
+    labels:
+      component: graphql_query
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_6h{component="graphql_query",env="gprd",monitor="global",tier="sv",type="api"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_6h{component="graphql_query",env="gprd",monitor="global",tier="sv",type="api"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_6h
+    labels:
+      component: graphql_query
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_6h{component="graphql_query",env="gprd",monitor="global",tier="sv",type="api"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_6h{component="graphql_query",env="gprd",monitor="global",tier="sv",type="api"} offset 30s
+      )
+  - record: gitlab_component_apdex:success:rate_6h
+    labels:
+      component: loadbalancer
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="loadbalancer",env="gprd",monitor="global",tier="sv",type="api"}[6h] offset 30s)
+      )
+  - record: gitlab_component_apdex:weight:score_6h
+    labels:
+      component: loadbalancer
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="loadbalancer",env="gprd",monitor="global",tier="sv",type="api"}[6h] offset 30s)
+      )
+  - record: gitlab_component_ops:rate_6h
+    labels:
+      component: loadbalancer
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_ops:rate_1h{component="loadbalancer",env="gprd",monitor="global",tier="sv",type="api"}[6h] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_6h
+    labels:
+      component: loadbalancer
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_errors:rate_1h{component="loadbalancer",env="gprd",monitor="global",tier="sv",type="api"}[6h] offset 30s)
+      )
+  - record: gitlab_component_errors:ratio_6h
+    labels:
+      component: loadbalancer
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_6h{component="loadbalancer",env="gprd",monitor="global",tier="sv",type="api"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_6h{component="loadbalancer",env="gprd",monitor="global",tier="sv",type="api"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_6h
+    labels:
+      component: loadbalancer
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_6h{component="loadbalancer",env="gprd",monitor="global",tier="sv",type="api"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_6h{component="loadbalancer",env="gprd",monitor="global",tier="sv",type="api"} offset 30s
+      )
+  - record: gitlab_component_apdex:success:rate_6h
+    labels:
+      component: nginx_ingress
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="nginx_ingress",env="gprd",monitor="global",tier="sv",type="api"}[6h] offset 30s)
+      )
+  - record: gitlab_component_apdex:weight:score_6h
+    labels:
+      component: nginx_ingress
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="nginx_ingress",env="gprd",monitor="global",tier="sv",type="api"}[6h] offset 30s)
+      )
+  - record: gitlab_component_ops:rate_6h
+    labels:
+      component: nginx_ingress
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_ops:rate_1h{component="nginx_ingress",env="gprd",monitor="global",tier="sv",type="api"}[6h] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_6h
+    labels:
+      component: nginx_ingress
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_errors:rate_1h{component="nginx_ingress",env="gprd",monitor="global",tier="sv",type="api"}[6h] offset 30s)
+      )
+  - record: gitlab_component_errors:ratio_6h
+    labels:
+      component: nginx_ingress
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_6h{component="nginx_ingress",env="gprd",monitor="global",tier="sv",type="api"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_6h{component="nginx_ingress",env="gprd",monitor="global",tier="sv",type="api"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_6h
+    labels:
+      component: nginx_ingress
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_6h{component="nginx_ingress",env="gprd",monitor="global",tier="sv",type="api"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_6h{component="nginx_ingress",env="gprd",monitor="global",tier="sv",type="api"} offset 30s
+      )
+  - record: gitlab_component_apdex:success:rate_6h
+    labels:
+      component: rails_request
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="rails_request",env="gprd",monitor="global",tier="sv",type="api"}[6h] offset 30s)
+      )
+  - record: gitlab_component_apdex:weight:score_6h
+    labels:
+      component: rails_request
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="rails_request",env="gprd",monitor="global",tier="sv",type="api"}[6h] offset 30s)
+      )
+  - record: gitlab_component_ops:rate_6h
+    labels:
+      component: rails_request
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_ops:rate_1h{component="rails_request",env="gprd",monitor="global",tier="sv",type="api"}[6h] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_6h
+    labels:
+      component: rails_request
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_errors:rate_1h{component="rails_request",env="gprd",monitor="global",tier="sv",type="api"}[6h] offset 30s)
+      )
+  - record: gitlab_component_errors:ratio_6h
+    labels:
+      component: rails_request
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_6h{component="rails_request",env="gprd",monitor="global",tier="sv",type="api"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_6h{component="rails_request",env="gprd",monitor="global",tier="sv",type="api"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_6h
+    labels:
+      component: rails_request
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_6h{component="rails_request",env="gprd",monitor="global",tier="sv",type="api"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_6h{component="rails_request",env="gprd",monitor="global",tier="sv",type="api"} offset 30s
+      )
+  - record: gitlab_component_apdex:success:rate_6h
+    labels:
+      component: workhorse
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="workhorse",env="gprd",monitor="global",tier="sv",type="api"}[6h] offset 30s)
+      )
+  - record: gitlab_component_apdex:weight:score_6h
+    labels:
+      component: workhorse
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="workhorse",env="gprd",monitor="global",tier="sv",type="api"}[6h] offset 30s)
+      )
+  - record: gitlab_component_ops:rate_6h
+    labels:
+      component: workhorse
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_ops:rate_1h{component="workhorse",env="gprd",monitor="global",tier="sv",type="api"}[6h] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_6h
+    labels:
+      component: workhorse
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_errors:rate_1h{component="workhorse",env="gprd",monitor="global",tier="sv",type="api"}[6h] offset 30s)
+      )
+  - record: gitlab_component_errors:ratio_6h
+    labels:
+      component: workhorse
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_6h{component="workhorse",env="gprd",monitor="global",tier="sv",type="api"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_6h{component="workhorse",env="gprd",monitor="global",tier="sv",type="api"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_6h
+    labels:
+      component: workhorse
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_6h{component="workhorse",env="gprd",monitor="global",tier="sv",type="api"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_6h{component="workhorse",env="gprd",monitor="global",tier="sv",type="api"} offset 30s
+      )
+- name: 'Global SLI Metrics: api - Burn-Rate 3d'
+  interval: 2m
+  rules:
+  - record: gitlab_component_apdex:success:rate_3d
+    labels:
+      component: global_search
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="global_search",env="gprd",monitor="global",tier="sv",type="api"}[3d] offset 30s)
+      )
+  - record: gitlab_component_apdex:weight:score_3d
+    labels:
+      component: global_search
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="global_search",env="gprd",monitor="global",tier="sv",type="api"}[3d] offset 30s)
+      )
+  - record: gitlab_component_ops:rate_3d
+    labels:
+      component: global_search
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_ops:rate_1h{component="global_search",env="gprd",monitor="global",tier="sv",type="api"}[3d] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_3d
+    labels:
+      component: global_search
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_errors:rate_1h{component="global_search",env="gprd",monitor="global",tier="sv",type="api"}[3d] offset 30s)
+      )
+  - record: gitlab_component_errors:ratio_3d
+    labels:
+      component: global_search
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_3d{component="global_search",env="gprd",monitor="global",tier="sv",type="api"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_3d{component="global_search",env="gprd",monitor="global",tier="sv",type="api"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_3d
+    labels:
+      component: global_search
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_3d{component="global_search",env="gprd",monitor="global",tier="sv",type="api"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_3d{component="global_search",env="gprd",monitor="global",tier="sv",type="api"} offset 30s
+      )
+  - record: gitlab_component_apdex:success:rate_3d
+    labels:
+      component: graphql_query
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="graphql_query",env="gprd",monitor="global",tier="sv",type="api"}[3d] offset 30s)
+      )
+  - record: gitlab_component_apdex:weight:score_3d
+    labels:
+      component: graphql_query
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="graphql_query",env="gprd",monitor="global",tier="sv",type="api"}[3d] offset 30s)
+      )
+  - record: gitlab_component_ops:rate_3d
+    labels:
+      component: graphql_query
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_ops:rate_1h{component="graphql_query",env="gprd",monitor="global",tier="sv",type="api"}[3d] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_3d
+    labels:
+      component: graphql_query
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_errors:rate_1h{component="graphql_query",env="gprd",monitor="global",tier="sv",type="api"}[3d] offset 30s)
+      )
+  - record: gitlab_component_errors:ratio_3d
+    labels:
+      component: graphql_query
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_3d{component="graphql_query",env="gprd",monitor="global",tier="sv",type="api"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_3d{component="graphql_query",env="gprd",monitor="global",tier="sv",type="api"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_3d
+    labels:
+      component: graphql_query
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_3d{component="graphql_query",env="gprd",monitor="global",tier="sv",type="api"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_3d{component="graphql_query",env="gprd",monitor="global",tier="sv",type="api"} offset 30s
+      )
+  - record: gitlab_component_apdex:success:rate_3d
+    labels:
+      component: loadbalancer
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="loadbalancer",env="gprd",monitor="global",tier="sv",type="api"}[3d] offset 30s)
+      )
+  - record: gitlab_component_apdex:weight:score_3d
+    labels:
+      component: loadbalancer
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="loadbalancer",env="gprd",monitor="global",tier="sv",type="api"}[3d] offset 30s)
+      )
+  - record: gitlab_component_ops:rate_3d
+    labels:
+      component: loadbalancer
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_ops:rate_1h{component="loadbalancer",env="gprd",monitor="global",tier="sv",type="api"}[3d] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_3d
+    labels:
+      component: loadbalancer
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_errors:rate_1h{component="loadbalancer",env="gprd",monitor="global",tier="sv",type="api"}[3d] offset 30s)
+      )
+  - record: gitlab_component_errors:ratio_3d
+    labels:
+      component: loadbalancer
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_3d{component="loadbalancer",env="gprd",monitor="global",tier="sv",type="api"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_3d{component="loadbalancer",env="gprd",monitor="global",tier="sv",type="api"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_3d
+    labels:
+      component: loadbalancer
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_3d{component="loadbalancer",env="gprd",monitor="global",tier="sv",type="api"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_3d{component="loadbalancer",env="gprd",monitor="global",tier="sv",type="api"} offset 30s
+      )
+  - record: gitlab_component_apdex:success:rate_3d
+    labels:
+      component: nginx_ingress
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="nginx_ingress",env="gprd",monitor="global",tier="sv",type="api"}[3d] offset 30s)
+      )
+  - record: gitlab_component_apdex:weight:score_3d
+    labels:
+      component: nginx_ingress
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="nginx_ingress",env="gprd",monitor="global",tier="sv",type="api"}[3d] offset 30s)
+      )
+  - record: gitlab_component_ops:rate_3d
+    labels:
+      component: nginx_ingress
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_ops:rate_1h{component="nginx_ingress",env="gprd",monitor="global",tier="sv",type="api"}[3d] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_3d
+    labels:
+      component: nginx_ingress
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_errors:rate_1h{component="nginx_ingress",env="gprd",monitor="global",tier="sv",type="api"}[3d] offset 30s)
+      )
+  - record: gitlab_component_errors:ratio_3d
+    labels:
+      component: nginx_ingress
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_3d{component="nginx_ingress",env="gprd",monitor="global",tier="sv",type="api"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_3d{component="nginx_ingress",env="gprd",monitor="global",tier="sv",type="api"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_3d
+    labels:
+      component: nginx_ingress
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_3d{component="nginx_ingress",env="gprd",monitor="global",tier="sv",type="api"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_3d{component="nginx_ingress",env="gprd",monitor="global",tier="sv",type="api"} offset 30s
+      )
+  - record: gitlab_component_apdex:success:rate_3d
+    labels:
+      component: rails_request
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="rails_request",env="gprd",monitor="global",tier="sv",type="api"}[3d] offset 30s)
+      )
+  - record: gitlab_component_apdex:weight:score_3d
+    labels:
+      component: rails_request
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="rails_request",env="gprd",monitor="global",tier="sv",type="api"}[3d] offset 30s)
+      )
+  - record: gitlab_component_ops:rate_3d
+    labels:
+      component: rails_request
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_ops:rate_1h{component="rails_request",env="gprd",monitor="global",tier="sv",type="api"}[3d] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_3d
+    labels:
+      component: rails_request
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_errors:rate_1h{component="rails_request",env="gprd",monitor="global",tier="sv",type="api"}[3d] offset 30s)
+      )
+  - record: gitlab_component_errors:ratio_3d
+    labels:
+      component: rails_request
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_3d{component="rails_request",env="gprd",monitor="global",tier="sv",type="api"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_3d{component="rails_request",env="gprd",monitor="global",tier="sv",type="api"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_3d
+    labels:
+      component: rails_request
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_3d{component="rails_request",env="gprd",monitor="global",tier="sv",type="api"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_3d{component="rails_request",env="gprd",monitor="global",tier="sv",type="api"} offset 30s
+      )
+  - record: gitlab_component_apdex:success:rate_3d
+    labels:
+      component: workhorse
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="workhorse",env="gprd",monitor="global",tier="sv",type="api"}[3d] offset 30s)
+      )
+  - record: gitlab_component_apdex:weight:score_3d
+    labels:
+      component: workhorse
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="workhorse",env="gprd",monitor="global",tier="sv",type="api"}[3d] offset 30s)
+      )
+  - record: gitlab_component_ops:rate_3d
+    labels:
+      component: workhorse
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_ops:rate_1h{component="workhorse",env="gprd",monitor="global",tier="sv",type="api"}[3d] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_3d
+    labels:
+      component: workhorse
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_errors:rate_1h{component="workhorse",env="gprd",monitor="global",tier="sv",type="api"}[3d] offset 30s)
+      )
+  - record: gitlab_component_errors:ratio_3d
+    labels:
+      component: workhorse
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_3d{component="workhorse",env="gprd",monitor="global",tier="sv",type="api"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_3d{component="workhorse",env="gprd",monitor="global",tier="sv",type="api"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_3d
+    labels:
+      component: workhorse
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_3d{component="workhorse",env="gprd",monitor="global",tier="sv",type="api"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_3d{component="workhorse",env="gprd",monitor="global",tier="sv",type="api"} offset 30s
       )

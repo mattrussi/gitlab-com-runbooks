@@ -448,16 +448,33 @@ services:
     friendly_name: Product Analytics
     teams:
       - Product Analytics
+      - Analytics instrumentation
     label: ProductAnalytics
     owner: product_analytics
     technical:
       logging:
-        - name:
-          permalink:
+        - name: GKE logs
+          permalink: https://cloudlogging.app.goo.gl/QWoCS2kDVF5LaTqG9
       project:
         - https://gitlab.com/gitlab-org/analytics-section/product-analytics
       documents:
         readiness_review: https://gitlab.com/gitlab-com/gl-infra/readiness/-/merge_requests/187
+        developer_guide: https://gitlab.com/gitlab-org/gitlab-development-kit/-/blob/main/doc/howto/product_analytics.md
+        service:
+          - https://gitlab.com/gitlab-org/analytics-section/analytics-configurator/-/blob/main/README.md
+          - https://gitlab.com/gitlab-org/analytics-section/product-analytics/analytics-stack/-/blob/main/README.md
+          - https://gitlab.com/gitlab-org/analytics-section/product-analytics/devkit/-/blob/main/README.md
+      dependencies:
+        - service: api
+        - service: web
+        - service: git
+        - service: postgres
+        - service: redis
+        - service: clickhouse
+    observability:
+      monitors:
+        grafana_folder:
+        primary_grafana_dashboard: da6cf9ea-d593-41ed-91c5-8536fd15c2fa/product-analytics-service-health
 
   - name: search
     tier: inf
@@ -751,33 +768,6 @@ services:
         sentry_slug: gitlab/praefect-production
         grafana_folder: SRXyrrSmk
         primary_grafana_dashboard: praefect-main/praefect-overview
-
-  - name: pvs
-    tier: inf
-    friendly_name: Pipeline Validation Service
-    teams:
-      - trust_and_safety
-    label: PVS
-    owner: trust_and_safety
-    technical:
-      project:
-        - https://gitlab.com/gitlab-com/gl-security/security-operations/trust-and-safety/pipeline-validation-service
-      documents:
-        design:
-        architecture:
-        readiness_review: https://gitlab.com/gitlab-com/gl-infra/readiness/-/issues/17
-        sre_guide: https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/pvs
-        developer_guide: https://docs.gitlab.com/ee/administration/external_pipeline_validation.html
-        service:
-        security:
-      dependencies:
-      logging:
-        - name: stackdriver
-          permalink: https://cloudlogging.app.goo.gl/mLPtczm9LrLekYcw5
-    observability:
-      monitors:
-        grafana_folder: pvs
-        primary_grafana_dashboard: pvs-main/pvs-overview
 
   - name: ai-gateway
     tier: sv

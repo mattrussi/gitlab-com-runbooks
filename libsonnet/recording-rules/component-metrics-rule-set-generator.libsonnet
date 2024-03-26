@@ -1,5 +1,10 @@
 local aggregationSetErrorRatioReflectedRuleSet = (import 'recording-rules/aggregation-set-reflected-ratio-rule-set.libsonnet').aggregationSetErrorRatioReflectedRuleSet;
 local aggregationSetApdexRatioReflectedRuleSet = (import 'recording-rules/aggregation-set-reflected-ratio-rule-set.libsonnet').aggregationSetApdexRatioReflectedRuleSet;
+local aggregations = import 'promql/aggregations.libsonnet';
+local selectors = import 'promql/selectors.libsonnet';
+local filterLabelsFromLabelsHash = (import 'promql/labels.libsonnet').filterLabelsFromLabelsHash;
+local optionalOffset = import 'recording-rules/lib/optional-offset.libsonnet';
+
 // Get the set of static labels for an aggregation
 // The feature category will be included if the aggregation needs it and the SLI has
 // a feature category
@@ -83,6 +88,115 @@ local generateRecordingRulesForComponent(burnRate, aggregationSet, serviceDefini
     ]
   );
 
+local upscaledRateExpression = |||
+  sum by (%(aggregationLabels)s) (
+    avg_over_time(%(metricName)s{%(sourceSelectorWithExtras)s}[%(burnRate)s]%(optionalOffset)s)
+  )
+|||;
+
+local generateApdexRulesUpscaled(burnRate, aggregationSet, sliDefinition, recordingRuleStaticLabels, extraSourceSelector, config) =
+  local apdexSuccessRateRuleName = aggregationSet.getApdexSuccessRateMetricForBurnRate(burnRate, required=false);
+  local apdexWeightRuleName = aggregationSet.getApdexWeightMetricForBurnRate(burnRate, required=false);
+  local allStaticLabels = recordingRuleStaticLabels + sliDefinition.staticLabels;
+
+  local apdexSuccessRateRule = if apdexSuccessRateRuleName != null then
+    [{
+      record: apdexSuccessRateRuleName,
+      labels: allStaticLabels,
+      expr: upscaledRateExpression % {
+        aggregationLabels: aggregations.serialize(filterLabelsFromLabelsHash(aggregationSet.labels, allStaticLabels)),
+        metricName: aggregationSet.getApdexSuccessRateMetricForBurnRate('1h', required=true),
+        sourceSelectorWithExtras: selectors.serializeHash(
+          selectors.merge(recordingRuleStaticLabels, extraSourceSelector),
+        ),
+        burnRate: burnRate,
+        optionalOffset: optionalOffset(aggregationSet.offset),
+      },
+    }]
+  else [];
+
+  local apdexWeightRateRule = if apdexWeightRuleName != null then
+    [{
+      record: apdexWeightRuleName,
+      labels: allStaticLabels,
+      expr: upscaledRateExpression % {
+        aggregationLabels: aggregations.serialize(filterLabelsFromLabelsHash(aggregationSet.labels, allStaticLabels)),
+        metricName: aggregationSet.getApdexWeightMetricForBurnRate('1h', required=true),
+        sourceSelectorWithExtras: selectors.serializeHash(
+          selectors.merge(recordingRuleStaticLabels, extraSourceSelector),
+        ),
+        burnRate: burnRate,
+        optionalOffset: optionalOffset(aggregationSet.offset),
+      },
+    }]
+  else [];
+
+  apdexSuccessRateRule + apdexWeightRateRule;
+
+local generateRequestRateRulesUpscaled(burnRate, aggregationSet, sliDefinition, recordingRuleStaticLabels, extraSourceSelector, config) =
+  local recordingRuleName = aggregationSet.getOpsRateMetricForBurnRate(burnRate, required=false);
+  local allStaticLabels = recordingRuleStaticLabels + sliDefinition.staticLabels;
+
+  if recordingRuleName != null then
+    [{
+      record: recordingRuleName,
+      labels: allStaticLabels,
+      expr: upscaledRateExpression % {
+        aggregationLabels: aggregations.serialize(filterLabelsFromLabelsHash(aggregationSet.labels, allStaticLabels)),
+        metricName: aggregationSet.getOpsRateMetricForBurnRate('1h', required=true),
+        sourceSelectorWithExtras: selectors.serializeHash(
+          selectors.merge(recordingRuleStaticLabels, extraSourceSelector),
+        ),
+        burnRate: burnRate,
+        optionalOffset: optionalOffset(aggregationSet.offset),
+      },
+    }]
+  else
+    [];
+
+local generateErrorRateRulesUpscaled(burnRate, aggregationSet, sliDefinition, recordingRuleStaticLabels, extraSourceSelector, config) =
+  local recordingRuleName = aggregationSet.getErrorRateMetricForBurnRate(burnRate, required=false);
+  local allStaticLabels = recordingRuleStaticLabels + sliDefinition.staticLabels;
+
+  if recordingRuleName != null then
+    [{
+      record: recordingRuleName,
+      labels: allStaticLabels,
+      expr: upscaledRateExpression % {
+        aggregationLabels: aggregations.serialize(filterLabelsFromLabelsHash(aggregationSet.labels, allStaticLabels)),
+        metricName: aggregationSet.getErrorRateMetricForBurnRate('1h', required=true),
+        sourceSelectorWithExtras: selectors.serializeHash(
+          selectors.merge(recordingRuleStaticLabels, extraSourceSelector),
+        ),
+        burnRate: burnRate,
+        optionalOffset: optionalOffset(aggregationSet.offset),
+      },
+    }]
+  else
+    [];
+
+
+local generateUpscaledRecordingRulesForComponent(burnRate, aggregationSet, serviceDefinition, sliDefinition, extraSourceSelector, config) =
+  local recordingRuleStaticLabels = staticLabelsForAggregation(serviceDefinition, sliDefinition, aggregationSet);
+
+  std.flatMap(
+    function(generator) generator(
+      burnRate=burnRate,
+      aggregationSet=aggregationSet,
+      sliDefinition=sliDefinition,
+      recordingRuleStaticLabels=recordingRuleStaticLabels,
+      extraSourceSelector=extraSourceSelector,
+      config=config,
+    ),
+    [
+      generateApdexRulesUpscaled,
+      generateRequestRateRulesUpscaled,
+      generateErrorRateRulesUpscaled,
+      generateErrorRatioRules,
+      generateApdexRatioRules,
+    ]
+  );
+
 {
   // This component metrics ruleset applies the key metrics recording rules for
   // each component in the metrics catalog
@@ -95,21 +209,34 @@ local generateRecordingRulesForComponent(burnRate, aggregationSet, serviceDefini
     {
       config: config,
       // Generates the recording rules given a service definition
-      generateRecordingRulesForService(serviceDefinition, serviceLevelIndicators=serviceDefinition.listServiceLevelIndicators())::
-        // TODO: upscale longer burn rates from what is already recorded in the
-        // aggregation set.
-        // https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/2898
-        std.flatMap(
-          function(sliDefinition) generateRecordingRulesForComponent(
-            burnRate=burnRate,
-            aggregationSet=aggregationSet,
-            serviceDefinition=serviceDefinition,
-            sliDefinition=sliDefinition,
-            extraSourceSelector=extraSourceSelector,
-            config=self.config,
+      generateRecordingRulesForService(
+        serviceDefinition,
+        serviceLevelIndicators=aggregationSet.slisForService(serviceDefinition)
+      )::
+
+        if aggregationSet.upscaleBurnRate(burnRate) then
+          std.flatMap(
+            function(sliDefinition) generateUpscaledRecordingRulesForComponent(
+              burnRate=burnRate,
+              aggregationSet=aggregationSet,
+              serviceDefinition=serviceDefinition,
+              sliDefinition=sliDefinition,
+              extraSourceSelector=extraSourceSelector,
+              config=self.config,
+            ),
+            serviceLevelIndicators,
+          ) else
+          std.flatMap(
+            function(sliDefinition) generateRecordingRulesForComponent(
+              burnRate=burnRate,
+              aggregationSet=aggregationSet,
+              serviceDefinition=serviceDefinition,
+              sliDefinition=sliDefinition,
+              extraSourceSelector=extraSourceSelector,
+              config=self.config,
+            ),
+            serviceLevelIndicators,
           ),
-          serviceLevelIndicators,
-        ),
     },
 
 }

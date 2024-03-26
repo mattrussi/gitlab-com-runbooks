@@ -4,7 +4,7 @@
 
 [[_TOC_]]
 
-# Postgres-dr-delayed Service
+# Postgres DR Delayed Replica Service
 
 * [Service Overview](https://dashboards.gitlab.net/d/000000144/postgresql-overview)
 * **Alerts**: <https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22postgres-dr-delayed%22%2C%20tier%3D%22db%22%7D>

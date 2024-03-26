@@ -2,6 +2,7 @@ local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local histogramApdex = metricsCatalog.histogramApdex;
 local gaugeMetric = metricsCatalog.gaugeMetric;
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
+local runwayHelper = import 'service-archetypes/helpers/runway.libsonnet';
 
 // Default SLIs/SLOs for Runway services
 function(
@@ -14,7 +15,8 @@ function(
   userImpacting=true,
   trafficCessationAlertConfig=true,
   severity='s4',
-  customToolingLinks=[]
+  customToolingLinks=[],
+  regional=false
 )
   local baseSelector = { type: type };
   {
@@ -35,6 +37,10 @@ function(
     // Runway splits traffic between multiple revisions for canary deployments
     serviceIsStageless: true,
     dangerouslyThanosEvaluated: true,
+
+    // Set true for multi-region deployments
+    // https://gitlab-com.gitlab.io/gl-infra/platform/runway/runwayctl/manifest.schema.html#spec_regions
+    regional: regional,
 
     serviceLevelIndicators: {
       runway_ingress: {
@@ -62,7 +68,7 @@ function(
           samplingInterval=60,
         ),
 
-        significantLabels: ['revision_name', 'response_code'],
+        significantLabels: ['revision_name', 'response_code'] + runwayHelper.commonLabels,
 
         userImpacting: userImpacting,
 

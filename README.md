@@ -160,7 +160,7 @@ During an incident, we have [roles defined in the handbook](https://about.gitlab
 
 ### CI
 
-- [Large number of CI pending builds](troubleshooting/ci_pending_builds.md)
+- [Large number of CI pending builds](docs/ci-runners/ci_pending_builds.md)
 - [The CI runner manager report a high number of errors](troubleshooting/ci_runner_manager_errors.md)
 
 ### Geo

@@ -42,7 +42,7 @@ local selectors = import 'promql/selectors.libsonnet';
 
   gcp_quota_limit_vertex_ai: resourceSaturationPoint(self.gcp_quota_limit_s4 {
     grafana_dashboard_uid: 'sat_gcp_quota_limit_vertex_ai',
-    resourceLabels: ['base_model'],
+    resourceLabels: ['base_model', 'region'],
     burnRatePeriod: '5m',
     query: |||
       (

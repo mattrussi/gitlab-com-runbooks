@@ -68,7 +68,6 @@
     "https://dashboards.gitlab.net/d/alerts-sat_pgbouncer_async_pool_replica/alerts-pgbouncer_async_replica_pool-saturation-detail",
     "https://dashboards.gitlab.net/d/alerts-sat_pgbouncer_single_core/alerts-pgbouncer_single_core-saturation-detail",
     "https://dashboards.gitlab.net/d/alerts-sat_private_runners/alerts-private_runners-saturation-detail",
-    "https://dashboards.gitlab.net/d/alerts-sat_pvs_cloudrun_ctr_instances/alerts-pvs_cloudrun_container_instances-saturation-detail",
     "https://dashboards.gitlab.net/d/alerts-sat_rails_db_connection_pool/alerts-rails_db_connection_pool-saturation-detail",
     "https://dashboards.gitlab.net/d/alerts-sat_redis_clients/alerts-redis_clients-saturation-detail",
     "https://dashboards.gitlab.net/d/alerts-sat_redis_memory/alerts-redis_memory-saturation-detail",

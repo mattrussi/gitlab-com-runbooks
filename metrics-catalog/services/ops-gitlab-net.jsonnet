@@ -1,7 +1,7 @@
-local registryHelpers = import 'service-archetypes/helpers/registry.libsonnet';
 local registryCustomRouteSLIs = import './lib/registry-custom-route-slis.libsonnet';
 local sliLibrary = import 'gitlab-slis/library.libsonnet';
 local gitalyHelper = import 'service-archetypes/helpers/gitaly.libsonnet';
+local registryHelpers = import 'service-archetypes/helpers/registry.libsonnet';
 local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 
@@ -17,6 +17,8 @@ metricsCatalog.serviceDefinition({
   type: 'ops-gitlab-net',
   tier: 'sv',
   serviceIsStageless: true,
+
+  tenants: ['gitlab-ops'],
 
   tags: ['golang', 'rails', 'cloud-sql'],
 

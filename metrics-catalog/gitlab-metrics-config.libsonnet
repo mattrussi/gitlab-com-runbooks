@@ -99,9 +99,18 @@ local objects = import 'utils/objects.libsonnet';
     },
   },
 
+  gkeClustersByEnvironment: {
+    gprd: [
+      'gprd-gitlab-gke',
+      'gprd-us-east1-b',
+      'gprd-us-east1-c',
+      'gprd-us-east1-d',
+    ],
+  },
+
   defaultMimirTenants: ['gitlab-gprd', 'gitlab-gstg'],
 
-// TODO: change this to the `unified-registry.libsonnet when we've migrated all to mimir
+  // TODO: change this to the `unified-registry.libsonnet when we've migrated all to mimir
 
   recordingRuleRegistry: import 'servicemetrics/recording-rule-registry/selective-registry.libsonnet',
 

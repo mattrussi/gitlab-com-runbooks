@@ -97,6 +97,18 @@ groups:
     expr: "0.020000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
+      component: server_chat
+      tier: sv
+      type: ai-gateway
+    expr: "0.980000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      component: server_chat
+      tier: sv
+      type: ai-gateway
+    expr: "0.020000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
       component: server_code_completions
       tier: sv
       type: ai-gateway
@@ -116,6 +128,18 @@ groups:
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: server_code_generations
+      tier: sv
+      type: ai-gateway
+    expr: "0.020000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      component: server_x_ray
+      tier: sv
+      type: ai-gateway
+    expr: "0.980000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      component: server_x_ray
       tier: sv
       type: ai-gateway
     expr: "0.020000"
@@ -1699,28 +1723,6 @@ groups:
       tier: stor
       type: praefect
     expr: "0.000500"
-  - record: slo:min:events:gitlab_service_apdex:ratio
-    labels:
-      tier: sv
-      type: pvs
-    expr: "0.999000"
-  - record: slo:max:events:gitlab_service_errors:ratio
-    labels:
-      tier: sv
-      type: pvs
-    expr: "0.001000"
-  - record: slo:min:events:gitlab_service_apdex:ratio
-    labels:
-      component: http
-      tier: sv
-      type: pvs
-    expr: "0.999000"
-  - record: slo:max:events:gitlab_service_errors:ratio
-    labels:
-      component: http
-      tier: sv
-      type: pvs
-    expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       tier: db
@@ -4312,15 +4314,6 @@ groups:
       service_aggregation: "yes"
       tier: stor
       type: praefect
-    expr: "1"
-  - record: gitlab_component_service:mapping
-    labels:
-      component: http
-      global_aggregation: "no"
-      regional_aggregation: "no"
-      service_aggregation: "yes"
-      tier: sv
-      type: pvs
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:

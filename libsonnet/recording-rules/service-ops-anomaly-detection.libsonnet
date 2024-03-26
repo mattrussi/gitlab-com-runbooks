@@ -3,9 +3,6 @@ local selectors = import 'promql/selectors.libsonnet';
 local weeklyOperationRules(aggregationSet, extraSelector) =
   local opsRateMetric = aggregationSet.getOpsRateMetricForBurnRate('5m', required=true);
   local selector = aggregationSet.selector + extraSelector;
-  // TODO: When we migrate these to Mimir, these probably need to retain the `env`
-  // selector from the aggregation set.
-  // Discussion in https://gitlab.com/groups/gitlab-com/gl-infra/-/epics/1107#note_1727503031
   local selectorWithoutEnv = selectors.without(selector, ['env']);
   [
     {

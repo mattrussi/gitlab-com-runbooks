@@ -4,7 +4,7 @@
 
 [[_TOC_]]
 
-# Console Service
+# Console Access Service
 
 * **Alerts**: <https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22console%22%2C%20tier%3D%22sv%22%7D>
 * **Label**: gitlab-com/gl-infra/production~"Service::Console"
@@ -59,6 +59,7 @@
 * [Kubernetes](../kube/kubernetes.md)
 * [../logging/logging_gcs_archive_bigquery.md](../logging/logging_gcs_archive_bigquery.md)
 * [Scaling Elastic Cloud Clusters](../logging/scaling.md)
+* [Mailgun Events](../mailgun/mailgunevents.md)
 * [Alertmanager Notification Failures](../monitoring/alertmanager-notification-failures.md)
 * [Accessing a GKE Alertmanager](../monitoring/alerts_gke.md)
 * [Filesystem errors are reported in LOG files](../monitoring/filesystem_alerts.md)

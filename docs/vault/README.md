@@ -11,7 +11,7 @@
 
 [[_TOC_]]
 
-# Vault Service
+# Hashicorp Vault for Infrastructure Service
 
 * [Service Overview](https://dashboards.gitlab.net/d/vault-main/vault-overview)
 * **Alerts**: <https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22vault%22%2C%20tier%3D%22inf%22%7D>
@@ -50,6 +50,7 @@
 * [Rotating Rails' PostgreSQL password](../patroni/rotating-rails-postgresql-password.md)
 * [Add and remove file storages to praefect](../praefect/praefect-file-storages.md)
 * [Praefect Database User Password Rotation](../praefect/praefect-password-rotation.md)
+* [../product_analytics/clickhouse-backup-restore.md](../product_analytics/clickhouse-backup-restore.md)
 * [Provisioning Redis Cluster](../redis/provisioning-redis-cluster.md)
 * [../redis/redis-functional-partitioning.md](../redis/redis-functional-partitioning.md)
 * [Container Registry CDN](../registry/cdn.md)

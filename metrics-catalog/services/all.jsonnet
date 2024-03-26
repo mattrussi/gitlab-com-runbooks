@@ -47,7 +47,6 @@
   import 'pgbouncer-ci.jsonnet',
   import 'plantuml.jsonnet',
   import 'praefect.jsonnet',
-  import 'pvs.jsonnet',
   import 'redis-cluster-cache.jsonnet',
   import 'redis-cluster-feature-flag.jsonnet',
   import 'redis-cluster-shared-state.jsonnet',

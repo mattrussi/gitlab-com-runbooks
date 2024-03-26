@@ -14,11 +14,11 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          sli_aggregations:code_suggestions_inference_request_duration_seconds_bucket:rate_5m{env="gprd",le=~"5|5\\.0",type="ai-gateway"}
+          sli_aggregations:code_suggestions_inference_request_duration_seconds_bucket:rate_5m{env="gprd",le=~"30|30\\.0",type="ai-gateway"}
         )
         +
         sum by (env,environment) (
-          sli_aggregations:code_suggestions_inference_request_duration_seconds_bucket:rate_5m{env="gprd",le=~"10|10\\.0",type="ai-gateway"}
+          sli_aggregations:code_suggestions_inference_request_duration_seconds_bucket:rate_5m{env="gprd",le=~"40|40\\.0",type="ai-gateway"}
         )
       )
       /
@@ -45,6 +45,34 @@ groups:
       sum by (env,environment) (
         sli_aggregations:code_suggestions_inference_requests_total:rate_5m{env="gprd",type="ai-gateway"} offset 30s
       )
+  - record: gitlab_component_errors:ratio_5m
+    labels:
+      component: inference
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_5m{component="inference",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_5m{component="inference",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_5m
+    labels:
+      component: inference
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_5m{component="inference",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_5m{component="inference",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
   - record: gitlab_component_apdex:success:rate_5m
     labels:
       component: runway_ingress
@@ -54,7 +82,7 @@ groups:
       type: ai-gateway
     expr: |
       sum by (env,environment) (
-        avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_request_latencies_bucket{env="gprd",le="27264.20685613271",response_code_class!~"4xx|5xx",type="ai-gateway"}[5m] offset 30s)
+        avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_request_latencies_bucket{env="gprd",le="32989.690295920576",response_code_class!~"4xx|5xx",type="ai-gateway"}[5m] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_5m
     labels:
@@ -97,6 +125,34 @@ groups:
           gitlab_component_ops:rate_5m{component="runway_ingress",env="gprd",monitor="global",stage="main",tier="sv",type="ai-gateway"}
         )
       )
+  - record: gitlab_component_errors:ratio_5m
+    labels:
+      component: runway_ingress
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_5m{component="runway_ingress",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_5m{component="runway_ingress",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_5m
+    labels:
+      component: runway_ingress
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_5m{component="runway_ingress",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_5m{component="runway_ingress",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
   - record: gitlab_component_apdex:success:rate_5m
     labels:
       component: server
@@ -107,11 +163,11 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          sli_aggregations:http_request_duration_seconds_bucket:rate_5m{env="gprd",handler!~"/v2/code/completions|/v2/code/generations|/v2/completions",le=~"5|5\\.0",status!~"4xx|5xx",type="ai-gateway"}
+          sli_aggregations:http_request_duration_seconds_bucket:rate_5m{env="gprd",handler!~"/v1/chat/agent|/v1/x-ray/libraries|/v2/code/completions|/v2/code/generations|/v2/completions",le=~"5|5\\.0",status!~"4xx|5xx",type="ai-gateway"}
         )
         +
         sum by (env,environment) (
-          sli_aggregations:http_request_duration_seconds_bucket:rate_5m{env="gprd",handler!~"/v2/code/completions|/v2/code/generations|/v2/completions",le=~"10|10\\.0",status!~"4xx|5xx",type="ai-gateway"}
+          sli_aggregations:http_request_duration_seconds_bucket:rate_5m{env="gprd",handler!~"/v1/chat/agent|/v1/x-ray/libraries|/v2/code/completions|/v2/code/generations|/v2/completions",le=~"10|10\\.0",status!~"4xx|5xx",type="ai-gateway"}
         )
       )
       /
@@ -125,7 +181,7 @@ groups:
       type: ai-gateway
     expr: |
       sum by (env,environment) (
-        sli_aggregations:http_request_duration_seconds_bucket:rate_5m{env="gprd",handler!~"/v2/code/completions|/v2/code/generations|/v2/completions",le="+Inf",status!~"4xx|5xx",type="ai-gateway"}
+        sli_aggregations:http_request_duration_seconds_bucket:rate_5m{env="gprd",handler!~"/v1/chat/agent|/v1/x-ray/libraries|/v2/code/completions|/v2/code/generations|/v2/completions",le="+Inf",status!~"4xx|5xx",type="ai-gateway"}
       )
   - record: gitlab_component_ops:rate_5m
     labels:
@@ -136,7 +192,7 @@ groups:
       type: ai-gateway
     expr: |
       sum by (env,environment) (
-        rate(http_request_duration_seconds_count{env="gprd",handler!~"/v2/code/completions|/v2/code/generations|/v2/completions",type="ai-gateway"}[5m] offset 30s)
+        rate(http_request_duration_seconds_count{env="gprd",handler!~"/v1/chat/agent|/v1/x-ray/libraries|/v2/code/completions|/v2/code/generations|/v2/completions",type="ai-gateway"}[5m] offset 30s)
       )
   - record: gitlab_component_errors:rate_5m
     labels:
@@ -148,7 +204,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(http_request_duration_seconds_count{env="gprd",handler!~"/v2/code/completions|/v2/code/generations|/v2/completions",status="5xx",type="ai-gateway"}[5m] offset 30s)
+          rate(http_request_duration_seconds_count{env="gprd",handler!~"/v1/chat/agent|/v1/x-ray/libraries|/v2/code/completions|/v2/code/generations|/v2/completions",status="5xx",type="ai-gateway"}[5m] offset 30s)
         )
       )
       or
@@ -156,6 +212,122 @@ groups:
         0 * group by(env,environment) (
           gitlab_component_ops:rate_5m{component="server",env="gprd",monitor="global",stage="main",tier="sv",type="ai-gateway"}
         )
+      )
+  - record: gitlab_component_errors:ratio_5m
+    labels:
+      component: server
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_5m{component="server",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_5m{component="server",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_5m
+    labels:
+      component: server
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_5m{component="server",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_5m{component="server",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+  - record: gitlab_component_apdex:success:rate_5m
+    labels:
+      component: server_chat
+      monitor: global
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      (
+        sum by (env,environment) (
+          sli_aggregations:http_request_duration_seconds_bucket:rate_5m{env="gprd",handler="/v1/chat/agent",le=~"30|30\\.0",status!~"4xx|5xx",type="ai-gateway"}
+        )
+        +
+        sum by (env,environment) (
+          sli_aggregations:http_request_duration_seconds_bucket:rate_5m{env="gprd",handler="/v1/chat/agent",le=~"40|40\\.0",status!~"4xx|5xx",type="ai-gateway"}
+        )
+      )
+      /
+      2
+  - record: gitlab_component_apdex:weight:score_5m
+    labels:
+      component: server_chat
+      monitor: global
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment) (
+        sli_aggregations:http_request_duration_seconds_bucket:rate_5m{env="gprd",handler="/v1/chat/agent",le="+Inf",status!~"4xx|5xx",type="ai-gateway"}
+      )
+  - record: gitlab_component_ops:rate_5m
+    labels:
+      component: server_chat
+      monitor: global
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment) (
+        rate(http_request_duration_seconds_count{env="gprd",handler="/v1/chat/agent",type="ai-gateway"}[5m] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_5m
+    labels:
+      component: server_chat
+      monitor: global
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      (
+        sum by (env,environment) (
+          rate(http_request_duration_seconds_count{env="gprd",handler="/v1/chat/agent",status="5xx",type="ai-gateway"}[5m] offset 30s)
+        )
+      )
+      or
+      (
+        0 * group by(env,environment) (
+          gitlab_component_ops:rate_5m{component="server_chat",env="gprd",monitor="global",stage="main",tier="sv",type="ai-gateway"}
+        )
+      )
+  - record: gitlab_component_errors:ratio_5m
+    labels:
+      component: server_chat
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_5m{component="server_chat",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_5m{component="server_chat",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_5m
+    labels:
+      component: server_chat
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_5m{component="server_chat",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_5m{component="server_chat",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
       )
   - record: gitlab_component_apdex:success:rate_5m
     labels:
@@ -217,6 +389,34 @@ groups:
           gitlab_component_ops:rate_5m{component="server_code_completions",env="gprd",monitor="global",stage="main",tier="sv",type="ai-gateway"}
         )
       )
+  - record: gitlab_component_errors:ratio_5m
+    labels:
+      component: server_code_completions
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_5m{component="server_code_completions",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_5m{component="server_code_completions",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_5m
+    labels:
+      component: server_code_completions
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_5m{component="server_code_completions",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_5m{component="server_code_completions",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
   - record: gitlab_component_apdex:success:rate_5m
     labels:
       component: server_code_generations
@@ -227,11 +427,11 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          sli_aggregations:http_request_duration_seconds_bucket:rate_5m{env="gprd",handler="/v2/code/generations",le=~"5|5\\.0",status!~"4xx|5xx",type="ai-gateway"}
+          sli_aggregations:http_request_duration_seconds_bucket:rate_5m{env="gprd",handler="/v2/code/generations",le=~"20|20\\.0",status!~"4xx|5xx",type="ai-gateway"}
         )
         +
         sum by (env,environment) (
-          sli_aggregations:http_request_duration_seconds_bucket:rate_5m{env="gprd",handler="/v2/code/generations",le=~"25|25\\.0",status!~"4xx|5xx",type="ai-gateway"}
+          sli_aggregations:http_request_duration_seconds_bucket:rate_5m{env="gprd",handler="/v2/code/generations",le=~"30|30\\.0",status!~"4xx|5xx",type="ai-gateway"}
         )
       )
       /
@@ -277,6 +477,122 @@ groups:
           gitlab_component_ops:rate_5m{component="server_code_generations",env="gprd",monitor="global",stage="main",tier="sv",type="ai-gateway"}
         )
       )
+  - record: gitlab_component_errors:ratio_5m
+    labels:
+      component: server_code_generations
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_5m{component="server_code_generations",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_5m{component="server_code_generations",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_5m
+    labels:
+      component: server_code_generations
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_5m{component="server_code_generations",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_5m{component="server_code_generations",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+  - record: gitlab_component_apdex:success:rate_5m
+    labels:
+      component: server_x_ray
+      monitor: global
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      (
+        sum by (env,environment) (
+          sli_aggregations:http_request_duration_seconds_bucket:rate_5m{env="gprd",handler="/v1/x-ray/libraries",le=~"30|30\\.0",status!~"4xx|5xx",type="ai-gateway"}
+        )
+        +
+        sum by (env,environment) (
+          sli_aggregations:http_request_duration_seconds_bucket:rate_5m{env="gprd",handler="/v1/x-ray/libraries",le=~"40|40\\.0",status!~"4xx|5xx",type="ai-gateway"}
+        )
+      )
+      /
+      2
+  - record: gitlab_component_apdex:weight:score_5m
+    labels:
+      component: server_x_ray
+      monitor: global
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment) (
+        sli_aggregations:http_request_duration_seconds_bucket:rate_5m{env="gprd",handler="/v1/x-ray/libraries",le="+Inf",status!~"4xx|5xx",type="ai-gateway"}
+      )
+  - record: gitlab_component_ops:rate_5m
+    labels:
+      component: server_x_ray
+      monitor: global
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment) (
+        rate(http_request_duration_seconds_count{env="gprd",handler="/v1/x-ray/libraries",type="ai-gateway"}[5m] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_5m
+    labels:
+      component: server_x_ray
+      monitor: global
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      (
+        sum by (env,environment) (
+          rate(http_request_duration_seconds_count{env="gprd",handler="/v1/x-ray/libraries",status="5xx",type="ai-gateway"}[5m] offset 30s)
+        )
+      )
+      or
+      (
+        0 * group by(env,environment) (
+          gitlab_component_ops:rate_5m{component="server_x_ray",env="gprd",monitor="global",stage="main",tier="sv",type="ai-gateway"}
+        )
+      )
+  - record: gitlab_component_errors:ratio_5m
+    labels:
+      component: server_x_ray
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_5m{component="server_x_ray",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_5m{component="server_x_ray",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_5m
+    labels:
+      component: server_x_ray
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_5m{component="server_x_ray",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_5m{component="server_x_ray",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
   - record: gitlab_component_ops:rate_5m
     labels:
       component: waf
@@ -307,6 +623,34 @@ groups:
           gitlab_component_ops:rate_5m{component="waf",env="ops",monitor="global",tier="sv",type="ai-gateway"}
         )
       )
+  - record: gitlab_component_errors:ratio_5m
+    labels:
+      component: waf
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_5m{component="waf",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_5m{component="waf",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_5m
+    labels:
+      component: waf
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_5m{component="waf",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_5m{component="waf",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
 - name: 'Global SLI Metrics: ai-gateway - Burn-Rate 30m'
   interval: 2m
   rules:
@@ -320,11 +664,11 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          sli_aggregations:code_suggestions_inference_request_duration_seconds_bucket:rate_30m{env="gprd",le=~"5|5\\.0",type="ai-gateway"}
+          sli_aggregations:code_suggestions_inference_request_duration_seconds_bucket:rate_30m{env="gprd",le=~"30|30\\.0",type="ai-gateway"}
         )
         +
         sum by (env,environment) (
-          sli_aggregations:code_suggestions_inference_request_duration_seconds_bucket:rate_30m{env="gprd",le=~"10|10\\.0",type="ai-gateway"}
+          sli_aggregations:code_suggestions_inference_request_duration_seconds_bucket:rate_30m{env="gprd",le=~"40|40\\.0",type="ai-gateway"}
         )
       )
       /
@@ -351,6 +695,34 @@ groups:
       sum by (env,environment) (
         sli_aggregations:code_suggestions_inference_requests_total:rate_30m{env="gprd",type="ai-gateway"} offset 30s
       )
+  - record: gitlab_component_errors:ratio_30m
+    labels:
+      component: inference
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_30m{component="inference",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_30m{component="inference",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_30m
+    labels:
+      component: inference
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_30m{component="inference",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_30m{component="inference",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
   - record: gitlab_component_apdex:success:rate_30m
     labels:
       component: runway_ingress
@@ -360,7 +732,7 @@ groups:
       type: ai-gateway
     expr: |
       sum by (env,environment) (
-        avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_request_latencies_bucket{env="gprd",le="27264.20685613271",response_code_class!~"4xx|5xx",type="ai-gateway"}[30m] offset 30s)
+        avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_request_latencies_bucket{env="gprd",le="32989.690295920576",response_code_class!~"4xx|5xx",type="ai-gateway"}[30m] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_30m
     labels:
@@ -403,6 +775,34 @@ groups:
           gitlab_component_ops:rate_30m{component="runway_ingress",env="gprd",monitor="global",stage="main",tier="sv",type="ai-gateway"}
         )
       )
+  - record: gitlab_component_errors:ratio_30m
+    labels:
+      component: runway_ingress
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_30m{component="runway_ingress",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_30m{component="runway_ingress",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_30m
+    labels:
+      component: runway_ingress
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_30m{component="runway_ingress",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_30m{component="runway_ingress",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
   - record: gitlab_component_apdex:success:rate_30m
     labels:
       component: server
@@ -413,11 +813,11 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          sli_aggregations:http_request_duration_seconds_bucket:rate_30m{env="gprd",handler!~"/v2/code/completions|/v2/code/generations|/v2/completions",le=~"5|5\\.0",status!~"4xx|5xx",type="ai-gateway"}
+          sli_aggregations:http_request_duration_seconds_bucket:rate_30m{env="gprd",handler!~"/v1/chat/agent|/v1/x-ray/libraries|/v2/code/completions|/v2/code/generations|/v2/completions",le=~"5|5\\.0",status!~"4xx|5xx",type="ai-gateway"}
         )
         +
         sum by (env,environment) (
-          sli_aggregations:http_request_duration_seconds_bucket:rate_30m{env="gprd",handler!~"/v2/code/completions|/v2/code/generations|/v2/completions",le=~"10|10\\.0",status!~"4xx|5xx",type="ai-gateway"}
+          sli_aggregations:http_request_duration_seconds_bucket:rate_30m{env="gprd",handler!~"/v1/chat/agent|/v1/x-ray/libraries|/v2/code/completions|/v2/code/generations|/v2/completions",le=~"10|10\\.0",status!~"4xx|5xx",type="ai-gateway"}
         )
       )
       /
@@ -431,7 +831,7 @@ groups:
       type: ai-gateway
     expr: |
       sum by (env,environment) (
-        sli_aggregations:http_request_duration_seconds_bucket:rate_30m{env="gprd",handler!~"/v2/code/completions|/v2/code/generations|/v2/completions",le="+Inf",status!~"4xx|5xx",type="ai-gateway"}
+        sli_aggregations:http_request_duration_seconds_bucket:rate_30m{env="gprd",handler!~"/v1/chat/agent|/v1/x-ray/libraries|/v2/code/completions|/v2/code/generations|/v2/completions",le="+Inf",status!~"4xx|5xx",type="ai-gateway"}
       )
   - record: gitlab_component_ops:rate_30m
     labels:
@@ -442,7 +842,7 @@ groups:
       type: ai-gateway
     expr: |
       sum by (env,environment) (
-        rate(http_request_duration_seconds_count{env="gprd",handler!~"/v2/code/completions|/v2/code/generations|/v2/completions",type="ai-gateway"}[30m] offset 30s)
+        rate(http_request_duration_seconds_count{env="gprd",handler!~"/v1/chat/agent|/v1/x-ray/libraries|/v2/code/completions|/v2/code/generations|/v2/completions",type="ai-gateway"}[30m] offset 30s)
       )
   - record: gitlab_component_errors:rate_30m
     labels:
@@ -454,7 +854,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(http_request_duration_seconds_count{env="gprd",handler!~"/v2/code/completions|/v2/code/generations|/v2/completions",status="5xx",type="ai-gateway"}[30m] offset 30s)
+          rate(http_request_duration_seconds_count{env="gprd",handler!~"/v1/chat/agent|/v1/x-ray/libraries|/v2/code/completions|/v2/code/generations|/v2/completions",status="5xx",type="ai-gateway"}[30m] offset 30s)
         )
       )
       or
@@ -462,6 +862,122 @@ groups:
         0 * group by(env,environment) (
           gitlab_component_ops:rate_30m{component="server",env="gprd",monitor="global",stage="main",tier="sv",type="ai-gateway"}
         )
+      )
+  - record: gitlab_component_errors:ratio_30m
+    labels:
+      component: server
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_30m{component="server",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_30m{component="server",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_30m
+    labels:
+      component: server
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_30m{component="server",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_30m{component="server",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+  - record: gitlab_component_apdex:success:rate_30m
+    labels:
+      component: server_chat
+      monitor: global
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      (
+        sum by (env,environment) (
+          sli_aggregations:http_request_duration_seconds_bucket:rate_30m{env="gprd",handler="/v1/chat/agent",le=~"30|30\\.0",status!~"4xx|5xx",type="ai-gateway"}
+        )
+        +
+        sum by (env,environment) (
+          sli_aggregations:http_request_duration_seconds_bucket:rate_30m{env="gprd",handler="/v1/chat/agent",le=~"40|40\\.0",status!~"4xx|5xx",type="ai-gateway"}
+        )
+      )
+      /
+      2
+  - record: gitlab_component_apdex:weight:score_30m
+    labels:
+      component: server_chat
+      monitor: global
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment) (
+        sli_aggregations:http_request_duration_seconds_bucket:rate_30m{env="gprd",handler="/v1/chat/agent",le="+Inf",status!~"4xx|5xx",type="ai-gateway"}
+      )
+  - record: gitlab_component_ops:rate_30m
+    labels:
+      component: server_chat
+      monitor: global
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment) (
+        rate(http_request_duration_seconds_count{env="gprd",handler="/v1/chat/agent",type="ai-gateway"}[30m] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_30m
+    labels:
+      component: server_chat
+      monitor: global
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      (
+        sum by (env,environment) (
+          rate(http_request_duration_seconds_count{env="gprd",handler="/v1/chat/agent",status="5xx",type="ai-gateway"}[30m] offset 30s)
+        )
+      )
+      or
+      (
+        0 * group by(env,environment) (
+          gitlab_component_ops:rate_30m{component="server_chat",env="gprd",monitor="global",stage="main",tier="sv",type="ai-gateway"}
+        )
+      )
+  - record: gitlab_component_errors:ratio_30m
+    labels:
+      component: server_chat
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_30m{component="server_chat",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_30m{component="server_chat",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_30m
+    labels:
+      component: server_chat
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_30m{component="server_chat",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_30m{component="server_chat",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
       )
   - record: gitlab_component_apdex:success:rate_30m
     labels:
@@ -523,6 +1039,34 @@ groups:
           gitlab_component_ops:rate_30m{component="server_code_completions",env="gprd",monitor="global",stage="main",tier="sv",type="ai-gateway"}
         )
       )
+  - record: gitlab_component_errors:ratio_30m
+    labels:
+      component: server_code_completions
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_30m{component="server_code_completions",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_30m{component="server_code_completions",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_30m
+    labels:
+      component: server_code_completions
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_30m{component="server_code_completions",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_30m{component="server_code_completions",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
   - record: gitlab_component_apdex:success:rate_30m
     labels:
       component: server_code_generations
@@ -533,11 +1077,11 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          sli_aggregations:http_request_duration_seconds_bucket:rate_30m{env="gprd",handler="/v2/code/generations",le=~"5|5\\.0",status!~"4xx|5xx",type="ai-gateway"}
+          sli_aggregations:http_request_duration_seconds_bucket:rate_30m{env="gprd",handler="/v2/code/generations",le=~"20|20\\.0",status!~"4xx|5xx",type="ai-gateway"}
         )
         +
         sum by (env,environment) (
-          sli_aggregations:http_request_duration_seconds_bucket:rate_30m{env="gprd",handler="/v2/code/generations",le=~"25|25\\.0",status!~"4xx|5xx",type="ai-gateway"}
+          sli_aggregations:http_request_duration_seconds_bucket:rate_30m{env="gprd",handler="/v2/code/generations",le=~"30|30\\.0",status!~"4xx|5xx",type="ai-gateway"}
         )
       )
       /
@@ -583,6 +1127,122 @@ groups:
           gitlab_component_ops:rate_30m{component="server_code_generations",env="gprd",monitor="global",stage="main",tier="sv",type="ai-gateway"}
         )
       )
+  - record: gitlab_component_errors:ratio_30m
+    labels:
+      component: server_code_generations
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_30m{component="server_code_generations",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_30m{component="server_code_generations",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_30m
+    labels:
+      component: server_code_generations
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_30m{component="server_code_generations",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_30m{component="server_code_generations",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+  - record: gitlab_component_apdex:success:rate_30m
+    labels:
+      component: server_x_ray
+      monitor: global
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      (
+        sum by (env,environment) (
+          sli_aggregations:http_request_duration_seconds_bucket:rate_30m{env="gprd",handler="/v1/x-ray/libraries",le=~"30|30\\.0",status!~"4xx|5xx",type="ai-gateway"}
+        )
+        +
+        sum by (env,environment) (
+          sli_aggregations:http_request_duration_seconds_bucket:rate_30m{env="gprd",handler="/v1/x-ray/libraries",le=~"40|40\\.0",status!~"4xx|5xx",type="ai-gateway"}
+        )
+      )
+      /
+      2
+  - record: gitlab_component_apdex:weight:score_30m
+    labels:
+      component: server_x_ray
+      monitor: global
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment) (
+        sli_aggregations:http_request_duration_seconds_bucket:rate_30m{env="gprd",handler="/v1/x-ray/libraries",le="+Inf",status!~"4xx|5xx",type="ai-gateway"}
+      )
+  - record: gitlab_component_ops:rate_30m
+    labels:
+      component: server_x_ray
+      monitor: global
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment) (
+        rate(http_request_duration_seconds_count{env="gprd",handler="/v1/x-ray/libraries",type="ai-gateway"}[30m] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_30m
+    labels:
+      component: server_x_ray
+      monitor: global
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      (
+        sum by (env,environment) (
+          rate(http_request_duration_seconds_count{env="gprd",handler="/v1/x-ray/libraries",status="5xx",type="ai-gateway"}[30m] offset 30s)
+        )
+      )
+      or
+      (
+        0 * group by(env,environment) (
+          gitlab_component_ops:rate_30m{component="server_x_ray",env="gprd",monitor="global",stage="main",tier="sv",type="ai-gateway"}
+        )
+      )
+  - record: gitlab_component_errors:ratio_30m
+    labels:
+      component: server_x_ray
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_30m{component="server_x_ray",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_30m{component="server_x_ray",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_30m
+    labels:
+      component: server_x_ray
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_30m{component="server_x_ray",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_30m{component="server_x_ray",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
   - record: gitlab_component_ops:rate_30m
     labels:
       component: waf
@@ -613,6 +1273,34 @@ groups:
           gitlab_component_ops:rate_30m{component="waf",env="ops",monitor="global",tier="sv",type="ai-gateway"}
         )
       )
+  - record: gitlab_component_errors:ratio_30m
+    labels:
+      component: waf
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_30m{component="waf",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_30m{component="waf",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_30m
+    labels:
+      component: waf
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_30m{component="waf",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_30m{component="waf",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
 - name: 'Global SLI Metrics: ai-gateway - Burn-Rate 1h'
   interval: 1m
   rules:
@@ -626,11 +1314,11 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          sli_aggregations:code_suggestions_inference_request_duration_seconds_bucket:rate_1h{env="gprd",le=~"5|5\\.0",type="ai-gateway"}
+          sli_aggregations:code_suggestions_inference_request_duration_seconds_bucket:rate_1h{env="gprd",le=~"30|30\\.0",type="ai-gateway"}
         )
         +
         sum by (env,environment) (
-          sli_aggregations:code_suggestions_inference_request_duration_seconds_bucket:rate_1h{env="gprd",le=~"10|10\\.0",type="ai-gateway"}
+          sli_aggregations:code_suggestions_inference_request_duration_seconds_bucket:rate_1h{env="gprd",le=~"40|40\\.0",type="ai-gateway"}
         )
       )
       /
@@ -657,6 +1345,34 @@ groups:
       sum by (env,environment) (
         sli_aggregations:code_suggestions_inference_requests_total:rate_1h{env="gprd",type="ai-gateway"} offset 30s
       )
+  - record: gitlab_component_errors:ratio_1h
+    labels:
+      component: inference
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_1h{component="inference",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_1h{component="inference",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_1h
+    labels:
+      component: inference
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_1h{component="inference",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_1h{component="inference",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
   - record: gitlab_component_apdex:success:rate_1h
     labels:
       component: runway_ingress
@@ -666,7 +1382,7 @@ groups:
       type: ai-gateway
     expr: |
       sum by (env,environment) (
-        avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_request_latencies_bucket{env="gprd",le="27264.20685613271",response_code_class!~"4xx|5xx",type="ai-gateway"}[1h] offset 30s)
+        avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_request_latencies_bucket{env="gprd",le="32989.690295920576",response_code_class!~"4xx|5xx",type="ai-gateway"}[1h] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_1h
     labels:
@@ -709,6 +1425,34 @@ groups:
           gitlab_component_ops:rate_1h{component="runway_ingress",env="gprd",monitor="global",stage="main",tier="sv",type="ai-gateway"}
         )
       )
+  - record: gitlab_component_errors:ratio_1h
+    labels:
+      component: runway_ingress
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_1h{component="runway_ingress",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_1h{component="runway_ingress",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_1h
+    labels:
+      component: runway_ingress
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_1h{component="runway_ingress",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_1h{component="runway_ingress",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
   - record: gitlab_component_apdex:success:rate_1h
     labels:
       component: server
@@ -719,11 +1463,11 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          sli_aggregations:http_request_duration_seconds_bucket:rate_1h{env="gprd",handler!~"/v2/code/completions|/v2/code/generations|/v2/completions",le=~"5|5\\.0",status!~"4xx|5xx",type="ai-gateway"}
+          sli_aggregations:http_request_duration_seconds_bucket:rate_1h{env="gprd",handler!~"/v1/chat/agent|/v1/x-ray/libraries|/v2/code/completions|/v2/code/generations|/v2/completions",le=~"5|5\\.0",status!~"4xx|5xx",type="ai-gateway"}
         )
         +
         sum by (env,environment) (
-          sli_aggregations:http_request_duration_seconds_bucket:rate_1h{env="gprd",handler!~"/v2/code/completions|/v2/code/generations|/v2/completions",le=~"10|10\\.0",status!~"4xx|5xx",type="ai-gateway"}
+          sli_aggregations:http_request_duration_seconds_bucket:rate_1h{env="gprd",handler!~"/v1/chat/agent|/v1/x-ray/libraries|/v2/code/completions|/v2/code/generations|/v2/completions",le=~"10|10\\.0",status!~"4xx|5xx",type="ai-gateway"}
         )
       )
       /
@@ -737,7 +1481,7 @@ groups:
       type: ai-gateway
     expr: |
       sum by (env,environment) (
-        sli_aggregations:http_request_duration_seconds_bucket:rate_1h{env="gprd",handler!~"/v2/code/completions|/v2/code/generations|/v2/completions",le="+Inf",status!~"4xx|5xx",type="ai-gateway"}
+        sli_aggregations:http_request_duration_seconds_bucket:rate_1h{env="gprd",handler!~"/v1/chat/agent|/v1/x-ray/libraries|/v2/code/completions|/v2/code/generations|/v2/completions",le="+Inf",status!~"4xx|5xx",type="ai-gateway"}
       )
   - record: gitlab_component_ops:rate_1h
     labels:
@@ -748,7 +1492,7 @@ groups:
       type: ai-gateway
     expr: |
       sum by (env,environment) (
-        rate(http_request_duration_seconds_count{env="gprd",handler!~"/v2/code/completions|/v2/code/generations|/v2/completions",type="ai-gateway"}[1h] offset 30s)
+        rate(http_request_duration_seconds_count{env="gprd",handler!~"/v1/chat/agent|/v1/x-ray/libraries|/v2/code/completions|/v2/code/generations|/v2/completions",type="ai-gateway"}[1h] offset 30s)
       )
   - record: gitlab_component_errors:rate_1h
     labels:
@@ -760,7 +1504,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(http_request_duration_seconds_count{env="gprd",handler!~"/v2/code/completions|/v2/code/generations|/v2/completions",status="5xx",type="ai-gateway"}[1h] offset 30s)
+          rate(http_request_duration_seconds_count{env="gprd",handler!~"/v1/chat/agent|/v1/x-ray/libraries|/v2/code/completions|/v2/code/generations|/v2/completions",status="5xx",type="ai-gateway"}[1h] offset 30s)
         )
       )
       or
@@ -768,6 +1512,122 @@ groups:
         0 * group by(env,environment) (
           gitlab_component_ops:rate_1h{component="server",env="gprd",monitor="global",stage="main",tier="sv",type="ai-gateway"}
         )
+      )
+  - record: gitlab_component_errors:ratio_1h
+    labels:
+      component: server
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_1h{component="server",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_1h{component="server",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_1h
+    labels:
+      component: server
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_1h{component="server",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_1h{component="server",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+  - record: gitlab_component_apdex:success:rate_1h
+    labels:
+      component: server_chat
+      monitor: global
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      (
+        sum by (env,environment) (
+          sli_aggregations:http_request_duration_seconds_bucket:rate_1h{env="gprd",handler="/v1/chat/agent",le=~"30|30\\.0",status!~"4xx|5xx",type="ai-gateway"}
+        )
+        +
+        sum by (env,environment) (
+          sli_aggregations:http_request_duration_seconds_bucket:rate_1h{env="gprd",handler="/v1/chat/agent",le=~"40|40\\.0",status!~"4xx|5xx",type="ai-gateway"}
+        )
+      )
+      /
+      2
+  - record: gitlab_component_apdex:weight:score_1h
+    labels:
+      component: server_chat
+      monitor: global
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment) (
+        sli_aggregations:http_request_duration_seconds_bucket:rate_1h{env="gprd",handler="/v1/chat/agent",le="+Inf",status!~"4xx|5xx",type="ai-gateway"}
+      )
+  - record: gitlab_component_ops:rate_1h
+    labels:
+      component: server_chat
+      monitor: global
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment) (
+        rate(http_request_duration_seconds_count{env="gprd",handler="/v1/chat/agent",type="ai-gateway"}[1h] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_1h
+    labels:
+      component: server_chat
+      monitor: global
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      (
+        sum by (env,environment) (
+          rate(http_request_duration_seconds_count{env="gprd",handler="/v1/chat/agent",status="5xx",type="ai-gateway"}[1h] offset 30s)
+        )
+      )
+      or
+      (
+        0 * group by(env,environment) (
+          gitlab_component_ops:rate_1h{component="server_chat",env="gprd",monitor="global",stage="main",tier="sv",type="ai-gateway"}
+        )
+      )
+  - record: gitlab_component_errors:ratio_1h
+    labels:
+      component: server_chat
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_1h{component="server_chat",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_1h{component="server_chat",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_1h
+    labels:
+      component: server_chat
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_1h{component="server_chat",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_1h{component="server_chat",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
       )
   - record: gitlab_component_apdex:success:rate_1h
     labels:
@@ -829,6 +1689,34 @@ groups:
           gitlab_component_ops:rate_1h{component="server_code_completions",env="gprd",monitor="global",stage="main",tier="sv",type="ai-gateway"}
         )
       )
+  - record: gitlab_component_errors:ratio_1h
+    labels:
+      component: server_code_completions
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_1h{component="server_code_completions",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_1h{component="server_code_completions",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_1h
+    labels:
+      component: server_code_completions
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_1h{component="server_code_completions",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_1h{component="server_code_completions",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
   - record: gitlab_component_apdex:success:rate_1h
     labels:
       component: server_code_generations
@@ -839,11 +1727,11 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          sli_aggregations:http_request_duration_seconds_bucket:rate_1h{env="gprd",handler="/v2/code/generations",le=~"5|5\\.0",status!~"4xx|5xx",type="ai-gateway"}
+          sli_aggregations:http_request_duration_seconds_bucket:rate_1h{env="gprd",handler="/v2/code/generations",le=~"20|20\\.0",status!~"4xx|5xx",type="ai-gateway"}
         )
         +
         sum by (env,environment) (
-          sli_aggregations:http_request_duration_seconds_bucket:rate_1h{env="gprd",handler="/v2/code/generations",le=~"25|25\\.0",status!~"4xx|5xx",type="ai-gateway"}
+          sli_aggregations:http_request_duration_seconds_bucket:rate_1h{env="gprd",handler="/v2/code/generations",le=~"30|30\\.0",status!~"4xx|5xx",type="ai-gateway"}
         )
       )
       /
@@ -889,6 +1777,122 @@ groups:
           gitlab_component_ops:rate_1h{component="server_code_generations",env="gprd",monitor="global",stage="main",tier="sv",type="ai-gateway"}
         )
       )
+  - record: gitlab_component_errors:ratio_1h
+    labels:
+      component: server_code_generations
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_1h{component="server_code_generations",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_1h{component="server_code_generations",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_1h
+    labels:
+      component: server_code_generations
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_1h{component="server_code_generations",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_1h{component="server_code_generations",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+  - record: gitlab_component_apdex:success:rate_1h
+    labels:
+      component: server_x_ray
+      monitor: global
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      (
+        sum by (env,environment) (
+          sli_aggregations:http_request_duration_seconds_bucket:rate_1h{env="gprd",handler="/v1/x-ray/libraries",le=~"30|30\\.0",status!~"4xx|5xx",type="ai-gateway"}
+        )
+        +
+        sum by (env,environment) (
+          sli_aggregations:http_request_duration_seconds_bucket:rate_1h{env="gprd",handler="/v1/x-ray/libraries",le=~"40|40\\.0",status!~"4xx|5xx",type="ai-gateway"}
+        )
+      )
+      /
+      2
+  - record: gitlab_component_apdex:weight:score_1h
+    labels:
+      component: server_x_ray
+      monitor: global
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment) (
+        sli_aggregations:http_request_duration_seconds_bucket:rate_1h{env="gprd",handler="/v1/x-ray/libraries",le="+Inf",status!~"4xx|5xx",type="ai-gateway"}
+      )
+  - record: gitlab_component_ops:rate_1h
+    labels:
+      component: server_x_ray
+      monitor: global
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment) (
+        rate(http_request_duration_seconds_count{env="gprd",handler="/v1/x-ray/libraries",type="ai-gateway"}[1h] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_1h
+    labels:
+      component: server_x_ray
+      monitor: global
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      (
+        sum by (env,environment) (
+          rate(http_request_duration_seconds_count{env="gprd",handler="/v1/x-ray/libraries",status="5xx",type="ai-gateway"}[1h] offset 30s)
+        )
+      )
+      or
+      (
+        0 * group by(env,environment) (
+          gitlab_component_ops:rate_1h{component="server_x_ray",env="gprd",monitor="global",stage="main",tier="sv",type="ai-gateway"}
+        )
+      )
+  - record: gitlab_component_errors:ratio_1h
+    labels:
+      component: server_x_ray
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_1h{component="server_x_ray",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_1h{component="server_x_ray",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_1h
+    labels:
+      component: server_x_ray
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_1h{component="server_x_ray",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_1h{component="server_x_ray",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
   - record: gitlab_component_ops:rate_1h
     labels:
       component: waf
@@ -918,4 +1922,1190 @@ groups:
         0 * group by(environment,stage) (
           gitlab_component_ops:rate_1h{component="waf",env="ops",monitor="global",tier="sv",type="ai-gateway"}
         )
+      )
+  - record: gitlab_component_errors:ratio_1h
+    labels:
+      component: waf
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_1h{component="waf",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_1h{component="waf",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_1h
+    labels:
+      component: waf
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_1h{component="waf",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_1h{component="waf",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+- name: 'Global SLI Metrics: ai-gateway - Burn-Rate 6h'
+  interval: 2m
+  rules:
+  - record: gitlab_component_apdex:success:rate_6h
+    labels:
+      component: inference
+      monitor: global
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="inference",env="gprd",monitor="global",tier="sv",type="ai-gateway"}[6h] offset 30s)
+      )
+  - record: gitlab_component_apdex:weight:score_6h
+    labels:
+      component: inference
+      monitor: global
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="inference",env="gprd",monitor="global",tier="sv",type="ai-gateway"}[6h] offset 30s)
+      )
+  - record: gitlab_component_ops:rate_6h
+    labels:
+      component: inference
+      monitor: global
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_ops:rate_1h{component="inference",env="gprd",monitor="global",tier="sv",type="ai-gateway"}[6h] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_6h
+    labels:
+      component: inference
+      monitor: global
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_errors:rate_1h{component="inference",env="gprd",monitor="global",tier="sv",type="ai-gateway"}[6h] offset 30s)
+      )
+  - record: gitlab_component_errors:ratio_6h
+    labels:
+      component: inference
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_6h{component="inference",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_6h{component="inference",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_6h
+    labels:
+      component: inference
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_6h{component="inference",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_6h{component="inference",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+  - record: gitlab_component_apdex:success:rate_6h
+    labels:
+      component: runway_ingress
+      monitor: global
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="runway_ingress",env="gprd",monitor="global",tier="sv",type="ai-gateway"}[6h] offset 30s)
+      )
+  - record: gitlab_component_apdex:weight:score_6h
+    labels:
+      component: runway_ingress
+      monitor: global
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="runway_ingress",env="gprd",monitor="global",tier="sv",type="ai-gateway"}[6h] offset 30s)
+      )
+  - record: gitlab_component_ops:rate_6h
+    labels:
+      component: runway_ingress
+      monitor: global
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_ops:rate_1h{component="runway_ingress",env="gprd",monitor="global",tier="sv",type="ai-gateway"}[6h] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_6h
+    labels:
+      component: runway_ingress
+      monitor: global
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_errors:rate_1h{component="runway_ingress",env="gprd",monitor="global",tier="sv",type="ai-gateway"}[6h] offset 30s)
+      )
+  - record: gitlab_component_errors:ratio_6h
+    labels:
+      component: runway_ingress
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_6h{component="runway_ingress",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_6h{component="runway_ingress",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_6h
+    labels:
+      component: runway_ingress
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_6h{component="runway_ingress",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_6h{component="runway_ingress",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+  - record: gitlab_component_apdex:success:rate_6h
+    labels:
+      component: server
+      monitor: global
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="server",env="gprd",monitor="global",tier="sv",type="ai-gateway"}[6h] offset 30s)
+      )
+  - record: gitlab_component_apdex:weight:score_6h
+    labels:
+      component: server
+      monitor: global
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="server",env="gprd",monitor="global",tier="sv",type="ai-gateway"}[6h] offset 30s)
+      )
+  - record: gitlab_component_ops:rate_6h
+    labels:
+      component: server
+      monitor: global
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_ops:rate_1h{component="server",env="gprd",monitor="global",tier="sv",type="ai-gateway"}[6h] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_6h
+    labels:
+      component: server
+      monitor: global
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_errors:rate_1h{component="server",env="gprd",monitor="global",tier="sv",type="ai-gateway"}[6h] offset 30s)
+      )
+  - record: gitlab_component_errors:ratio_6h
+    labels:
+      component: server
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_6h{component="server",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_6h{component="server",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_6h
+    labels:
+      component: server
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_6h{component="server",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_6h{component="server",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+  - record: gitlab_component_apdex:success:rate_6h
+    labels:
+      component: server_chat
+      monitor: global
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="server_chat",env="gprd",monitor="global",tier="sv",type="ai-gateway"}[6h] offset 30s)
+      )
+  - record: gitlab_component_apdex:weight:score_6h
+    labels:
+      component: server_chat
+      monitor: global
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="server_chat",env="gprd",monitor="global",tier="sv",type="ai-gateway"}[6h] offset 30s)
+      )
+  - record: gitlab_component_ops:rate_6h
+    labels:
+      component: server_chat
+      monitor: global
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_ops:rate_1h{component="server_chat",env="gprd",monitor="global",tier="sv",type="ai-gateway"}[6h] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_6h
+    labels:
+      component: server_chat
+      monitor: global
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_errors:rate_1h{component="server_chat",env="gprd",monitor="global",tier="sv",type="ai-gateway"}[6h] offset 30s)
+      )
+  - record: gitlab_component_errors:ratio_6h
+    labels:
+      component: server_chat
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_6h{component="server_chat",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_6h{component="server_chat",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_6h
+    labels:
+      component: server_chat
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_6h{component="server_chat",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_6h{component="server_chat",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+  - record: gitlab_component_apdex:success:rate_6h
+    labels:
+      component: server_code_completions
+      monitor: global
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="server_code_completions",env="gprd",monitor="global",tier="sv",type="ai-gateway"}[6h] offset 30s)
+      )
+  - record: gitlab_component_apdex:weight:score_6h
+    labels:
+      component: server_code_completions
+      monitor: global
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="server_code_completions",env="gprd",monitor="global",tier="sv",type="ai-gateway"}[6h] offset 30s)
+      )
+  - record: gitlab_component_ops:rate_6h
+    labels:
+      component: server_code_completions
+      monitor: global
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_ops:rate_1h{component="server_code_completions",env="gprd",monitor="global",tier="sv",type="ai-gateway"}[6h] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_6h
+    labels:
+      component: server_code_completions
+      monitor: global
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_errors:rate_1h{component="server_code_completions",env="gprd",monitor="global",tier="sv",type="ai-gateway"}[6h] offset 30s)
+      )
+  - record: gitlab_component_errors:ratio_6h
+    labels:
+      component: server_code_completions
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_6h{component="server_code_completions",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_6h{component="server_code_completions",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_6h
+    labels:
+      component: server_code_completions
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_6h{component="server_code_completions",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_6h{component="server_code_completions",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+  - record: gitlab_component_apdex:success:rate_6h
+    labels:
+      component: server_code_generations
+      monitor: global
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="server_code_generations",env="gprd",monitor="global",tier="sv",type="ai-gateway"}[6h] offset 30s)
+      )
+  - record: gitlab_component_apdex:weight:score_6h
+    labels:
+      component: server_code_generations
+      monitor: global
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="server_code_generations",env="gprd",monitor="global",tier="sv",type="ai-gateway"}[6h] offset 30s)
+      )
+  - record: gitlab_component_ops:rate_6h
+    labels:
+      component: server_code_generations
+      monitor: global
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_ops:rate_1h{component="server_code_generations",env="gprd",monitor="global",tier="sv",type="ai-gateway"}[6h] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_6h
+    labels:
+      component: server_code_generations
+      monitor: global
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_errors:rate_1h{component="server_code_generations",env="gprd",monitor="global",tier="sv",type="ai-gateway"}[6h] offset 30s)
+      )
+  - record: gitlab_component_errors:ratio_6h
+    labels:
+      component: server_code_generations
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_6h{component="server_code_generations",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_6h{component="server_code_generations",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_6h
+    labels:
+      component: server_code_generations
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_6h{component="server_code_generations",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_6h{component="server_code_generations",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+  - record: gitlab_component_apdex:success:rate_6h
+    labels:
+      component: server_x_ray
+      monitor: global
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="server_x_ray",env="gprd",monitor="global",tier="sv",type="ai-gateway"}[6h] offset 30s)
+      )
+  - record: gitlab_component_apdex:weight:score_6h
+    labels:
+      component: server_x_ray
+      monitor: global
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="server_x_ray",env="gprd",monitor="global",tier="sv",type="ai-gateway"}[6h] offset 30s)
+      )
+  - record: gitlab_component_ops:rate_6h
+    labels:
+      component: server_x_ray
+      monitor: global
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_ops:rate_1h{component="server_x_ray",env="gprd",monitor="global",tier="sv",type="ai-gateway"}[6h] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_6h
+    labels:
+      component: server_x_ray
+      monitor: global
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_errors:rate_1h{component="server_x_ray",env="gprd",monitor="global",tier="sv",type="ai-gateway"}[6h] offset 30s)
+      )
+  - record: gitlab_component_errors:ratio_6h
+    labels:
+      component: server_x_ray
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_6h{component="server_x_ray",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_6h{component="server_x_ray",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_6h
+    labels:
+      component: server_x_ray
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_6h{component="server_x_ray",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_6h{component="server_x_ray",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+  - record: gitlab_component_apdex:success:rate_6h
+    labels:
+      component: waf
+      env: ops
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (environment,stage) (
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="waf",env="gprd",monitor="global",tier="sv",type="ai-gateway"}[6h] offset 30s)
+      )
+  - record: gitlab_component_apdex:weight:score_6h
+    labels:
+      component: waf
+      env: ops
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (environment,stage) (
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="waf",env="gprd",monitor="global",tier="sv",type="ai-gateway"}[6h] offset 30s)
+      )
+  - record: gitlab_component_ops:rate_6h
+    labels:
+      component: waf
+      env: ops
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (environment,stage) (
+        avg_over_time(gitlab_component_ops:rate_1h{component="waf",env="gprd",monitor="global",tier="sv",type="ai-gateway"}[6h] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_6h
+    labels:
+      component: waf
+      env: ops
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (environment,stage) (
+        avg_over_time(gitlab_component_errors:rate_1h{component="waf",env="gprd",monitor="global",tier="sv",type="ai-gateway"}[6h] offset 30s)
+      )
+  - record: gitlab_component_errors:ratio_6h
+    labels:
+      component: waf
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_6h{component="waf",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_6h{component="waf",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_6h
+    labels:
+      component: waf
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_6h{component="waf",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_6h{component="waf",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+- name: 'Global SLI Metrics: ai-gateway - Burn-Rate 3d'
+  interval: 2m
+  rules:
+  - record: gitlab_component_apdex:success:rate_3d
+    labels:
+      component: inference
+      monitor: global
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="inference",env="gprd",monitor="global",tier="sv",type="ai-gateway"}[3d] offset 30s)
+      )
+  - record: gitlab_component_apdex:weight:score_3d
+    labels:
+      component: inference
+      monitor: global
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="inference",env="gprd",monitor="global",tier="sv",type="ai-gateway"}[3d] offset 30s)
+      )
+  - record: gitlab_component_ops:rate_3d
+    labels:
+      component: inference
+      monitor: global
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_ops:rate_1h{component="inference",env="gprd",monitor="global",tier="sv",type="ai-gateway"}[3d] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_3d
+    labels:
+      component: inference
+      monitor: global
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_errors:rate_1h{component="inference",env="gprd",monitor="global",tier="sv",type="ai-gateway"}[3d] offset 30s)
+      )
+  - record: gitlab_component_errors:ratio_3d
+    labels:
+      component: inference
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_3d{component="inference",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_3d{component="inference",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_3d
+    labels:
+      component: inference
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_3d{component="inference",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_3d{component="inference",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+  - record: gitlab_component_apdex:success:rate_3d
+    labels:
+      component: runway_ingress
+      monitor: global
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="runway_ingress",env="gprd",monitor="global",tier="sv",type="ai-gateway"}[3d] offset 30s)
+      )
+  - record: gitlab_component_apdex:weight:score_3d
+    labels:
+      component: runway_ingress
+      monitor: global
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="runway_ingress",env="gprd",monitor="global",tier="sv",type="ai-gateway"}[3d] offset 30s)
+      )
+  - record: gitlab_component_ops:rate_3d
+    labels:
+      component: runway_ingress
+      monitor: global
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_ops:rate_1h{component="runway_ingress",env="gprd",monitor="global",tier="sv",type="ai-gateway"}[3d] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_3d
+    labels:
+      component: runway_ingress
+      monitor: global
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_errors:rate_1h{component="runway_ingress",env="gprd",monitor="global",tier="sv",type="ai-gateway"}[3d] offset 30s)
+      )
+  - record: gitlab_component_errors:ratio_3d
+    labels:
+      component: runway_ingress
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_3d{component="runway_ingress",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_3d{component="runway_ingress",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_3d
+    labels:
+      component: runway_ingress
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_3d{component="runway_ingress",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_3d{component="runway_ingress",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+  - record: gitlab_component_apdex:success:rate_3d
+    labels:
+      component: server
+      monitor: global
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="server",env="gprd",monitor="global",tier="sv",type="ai-gateway"}[3d] offset 30s)
+      )
+  - record: gitlab_component_apdex:weight:score_3d
+    labels:
+      component: server
+      monitor: global
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="server",env="gprd",monitor="global",tier="sv",type="ai-gateway"}[3d] offset 30s)
+      )
+  - record: gitlab_component_ops:rate_3d
+    labels:
+      component: server
+      monitor: global
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_ops:rate_1h{component="server",env="gprd",monitor="global",tier="sv",type="ai-gateway"}[3d] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_3d
+    labels:
+      component: server
+      monitor: global
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_errors:rate_1h{component="server",env="gprd",monitor="global",tier="sv",type="ai-gateway"}[3d] offset 30s)
+      )
+  - record: gitlab_component_errors:ratio_3d
+    labels:
+      component: server
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_3d{component="server",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_3d{component="server",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_3d
+    labels:
+      component: server
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_3d{component="server",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_3d{component="server",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+  - record: gitlab_component_apdex:success:rate_3d
+    labels:
+      component: server_chat
+      monitor: global
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="server_chat",env="gprd",monitor="global",tier="sv",type="ai-gateway"}[3d] offset 30s)
+      )
+  - record: gitlab_component_apdex:weight:score_3d
+    labels:
+      component: server_chat
+      monitor: global
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="server_chat",env="gprd",monitor="global",tier="sv",type="ai-gateway"}[3d] offset 30s)
+      )
+  - record: gitlab_component_ops:rate_3d
+    labels:
+      component: server_chat
+      monitor: global
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_ops:rate_1h{component="server_chat",env="gprd",monitor="global",tier="sv",type="ai-gateway"}[3d] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_3d
+    labels:
+      component: server_chat
+      monitor: global
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_errors:rate_1h{component="server_chat",env="gprd",monitor="global",tier="sv",type="ai-gateway"}[3d] offset 30s)
+      )
+  - record: gitlab_component_errors:ratio_3d
+    labels:
+      component: server_chat
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_3d{component="server_chat",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_3d{component="server_chat",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_3d
+    labels:
+      component: server_chat
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_3d{component="server_chat",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_3d{component="server_chat",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+  - record: gitlab_component_apdex:success:rate_3d
+    labels:
+      component: server_code_completions
+      monitor: global
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="server_code_completions",env="gprd",monitor="global",tier="sv",type="ai-gateway"}[3d] offset 30s)
+      )
+  - record: gitlab_component_apdex:weight:score_3d
+    labels:
+      component: server_code_completions
+      monitor: global
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="server_code_completions",env="gprd",monitor="global",tier="sv",type="ai-gateway"}[3d] offset 30s)
+      )
+  - record: gitlab_component_ops:rate_3d
+    labels:
+      component: server_code_completions
+      monitor: global
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_ops:rate_1h{component="server_code_completions",env="gprd",monitor="global",tier="sv",type="ai-gateway"}[3d] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_3d
+    labels:
+      component: server_code_completions
+      monitor: global
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_errors:rate_1h{component="server_code_completions",env="gprd",monitor="global",tier="sv",type="ai-gateway"}[3d] offset 30s)
+      )
+  - record: gitlab_component_errors:ratio_3d
+    labels:
+      component: server_code_completions
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_3d{component="server_code_completions",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_3d{component="server_code_completions",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_3d
+    labels:
+      component: server_code_completions
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_3d{component="server_code_completions",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_3d{component="server_code_completions",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+  - record: gitlab_component_apdex:success:rate_3d
+    labels:
+      component: server_code_generations
+      monitor: global
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="server_code_generations",env="gprd",monitor="global",tier="sv",type="ai-gateway"}[3d] offset 30s)
+      )
+  - record: gitlab_component_apdex:weight:score_3d
+    labels:
+      component: server_code_generations
+      monitor: global
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="server_code_generations",env="gprd",monitor="global",tier="sv",type="ai-gateway"}[3d] offset 30s)
+      )
+  - record: gitlab_component_ops:rate_3d
+    labels:
+      component: server_code_generations
+      monitor: global
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_ops:rate_1h{component="server_code_generations",env="gprd",monitor="global",tier="sv",type="ai-gateway"}[3d] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_3d
+    labels:
+      component: server_code_generations
+      monitor: global
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_errors:rate_1h{component="server_code_generations",env="gprd",monitor="global",tier="sv",type="ai-gateway"}[3d] offset 30s)
+      )
+  - record: gitlab_component_errors:ratio_3d
+    labels:
+      component: server_code_generations
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_3d{component="server_code_generations",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_3d{component="server_code_generations",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_3d
+    labels:
+      component: server_code_generations
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_3d{component="server_code_generations",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_3d{component="server_code_generations",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+  - record: gitlab_component_apdex:success:rate_3d
+    labels:
+      component: server_x_ray
+      monitor: global
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="server_x_ray",env="gprd",monitor="global",tier="sv",type="ai-gateway"}[3d] offset 30s)
+      )
+  - record: gitlab_component_apdex:weight:score_3d
+    labels:
+      component: server_x_ray
+      monitor: global
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="server_x_ray",env="gprd",monitor="global",tier="sv",type="ai-gateway"}[3d] offset 30s)
+      )
+  - record: gitlab_component_ops:rate_3d
+    labels:
+      component: server_x_ray
+      monitor: global
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_ops:rate_1h{component="server_x_ray",env="gprd",monitor="global",tier="sv",type="ai-gateway"}[3d] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_3d
+    labels:
+      component: server_x_ray
+      monitor: global
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_errors:rate_1h{component="server_x_ray",env="gprd",monitor="global",tier="sv",type="ai-gateway"}[3d] offset 30s)
+      )
+  - record: gitlab_component_errors:ratio_3d
+    labels:
+      component: server_x_ray
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_3d{component="server_x_ray",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_3d{component="server_x_ray",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_3d
+    labels:
+      component: server_x_ray
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_3d{component="server_x_ray",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_3d{component="server_x_ray",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+  - record: gitlab_component_apdex:success:rate_3d
+    labels:
+      component: waf
+      env: ops
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (environment,stage) (
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="waf",env="gprd",monitor="global",tier="sv",type="ai-gateway"}[3d] offset 30s)
+      )
+  - record: gitlab_component_apdex:weight:score_3d
+    labels:
+      component: waf
+      env: ops
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (environment,stage) (
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="waf",env="gprd",monitor="global",tier="sv",type="ai-gateway"}[3d] offset 30s)
+      )
+  - record: gitlab_component_ops:rate_3d
+    labels:
+      component: waf
+      env: ops
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (environment,stage) (
+        avg_over_time(gitlab_component_ops:rate_1h{component="waf",env="gprd",monitor="global",tier="sv",type="ai-gateway"}[3d] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_3d
+    labels:
+      component: waf
+      env: ops
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (environment,stage) (
+        avg_over_time(gitlab_component_errors:rate_1h{component="waf",env="gprd",monitor="global",tier="sv",type="ai-gateway"}[3d] offset 30s)
+      )
+  - record: gitlab_component_errors:ratio_3d
+    labels:
+      component: waf
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_3d{component="waf",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_3d{component="waf",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_3d
+    labels:
+      component: waf
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_3d{component="waf",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_3d{component="waf",env="gprd",monitor="global",tier="sv",type="ai-gateway"} offset 30s
       )
