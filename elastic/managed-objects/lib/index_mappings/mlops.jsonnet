@@ -63,7 +63,8 @@
               },
             },
             remoteIp: {
-              type: 'text',
+              type: 'ip',
+              store: true,
               fields: {
                 keyword: {
                   type: 'keyword',
@@ -81,13 +82,7 @@
               },
             },
             requestSize: {
-              type: 'text',
-              fields: {
-                keyword: {
-                  type: 'keyword',
-                  ignore_above: 256,
-                },
-              },
+              type: 'long',
             },
             requestUrl: {
               type: 'text',
@@ -99,16 +94,11 @@
               },
             },
             responseSize: {
-              type: 'text',
-              fields: {
-                keyword: {
-                  type: 'keyword',
-                  ignore_above: 256,
-                },
-              },
+              type: 'long',
             },
             serverIp: {
-              type: 'text',
+              type: 'ip',
+              store: true,
               fields: {
                 keyword: {
                   type: 'keyword',
@@ -169,7 +159,8 @@
               type: 'boolean',
             },
             client_ip: {
-              type: 'text',
+              type: 'ip',
+              store: true,
               fields: {
                 keyword: {
                   type: 'keyword',
