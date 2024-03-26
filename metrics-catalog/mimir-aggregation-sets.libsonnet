@@ -63,6 +63,35 @@ local mimirAggregetionSetDefaults = {
     },
   }),
 
+  nodeServiceSLIs: aggregationSet(mimirAggregetionSetDefaults {
+    id: 'service_node',
+    name: 'Global Service-Node-Aggregated Metrics',
+    selector: { monitor: 'global' },  // Thanos Ruler
+    labels: ['env', 'environment', 'tier', 'type', 'stage', 'shard', 'fqdn'],
+    sourceAggregationSet: $.nodeComponentSLIs,
+    enabledForService(serviceDefinition): serviceDefinition.monitoring.node.enabled,
+    metricFormats: {
+      apdexRatio: 'gitlab_service_node_apdex:ratio_%s',
+      opsRate: 'gitlab_service_node_ops:rate_%s',
+      errorRate: 'gitlab_service_node_errors:rate_%s',
+      errorRatio: 'gitlab_service_node_errors:ratio_%s',
+    },
+    burnRates: {
+      '6h': {
+        apdexRatio: 'gitlab_service_node_apdex:ratio_6h',
+        opsRate: 'gitlab_service_node_ops:rate_6h',
+        errorRatio: 'gitlab_service_node_errors:ratio_6h',
+      },
+      '3d': {
+        apdexRatio: 'gitlab_service_node_apdex:ratio_3d',
+        opsRate: 'gitlab_service_node_ops:rate_3d',
+        errorRatio: 'gitlab_service_node_errors:ratio_3d',
+      },
+    },
+    // Only include components (SLIs) with service_aggregation="yes"
+    aggregationFilter: 'service',
+  }),
+
   regionalComponentSLIs: aggregationSet(mimirAggregetionSetDefaults {
     id: 'regional_component',
     name: 'Regional SLI Metrics',

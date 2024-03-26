@@ -197,6 +197,11 @@ local generateUpscaledRecordingRulesForComponent(burnRate, aggregationSet, servi
     ]
   );
 
+local defaultSLIsForAggregationAndService(service, aggregationSet) =
+  if aggregationSet.enabledForService(service) then
+    aggregationSet.slisForService(service)
+  else
+    [];
 {
   // This component metrics ruleset applies the key metrics recording rules for
   // each component in the metrics catalog
@@ -211,7 +216,7 @@ local generateUpscaledRecordingRulesForComponent(burnRate, aggregationSet, servi
       // Generates the recording rules given a service definition
       generateRecordingRulesForService(
         serviceDefinition,
-        serviceLevelIndicators=aggregationSet.slisForService(serviceDefinition)
+        serviceLevelIndicators=defaultSLIsForAggregationAndService(serviceDefinition, aggregationSet),
       )::
 
         if aggregationSet.upscaleBurnRate(burnRate) then
