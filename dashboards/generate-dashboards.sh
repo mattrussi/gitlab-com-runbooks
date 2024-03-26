@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 # vim: ai:ts=2:sw=2:expandtab
 
+set -x
+
 set -euo pipefail
 # Also fail when subshells fail
 shopt -s inherit_errexit || true # Not all bash shells have this
