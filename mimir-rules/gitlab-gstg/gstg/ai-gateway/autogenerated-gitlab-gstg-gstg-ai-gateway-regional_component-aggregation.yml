@@ -18,7 +18,7 @@ groups:
         )
         +
         sum by (env,environment,region) (
-          sli_aggregations:code_suggestions_inference_request_duration_seconds_bucket:rate_5m{env="gstg",le=~"40|40\\.0",type="ai-gateway"}
+          sli_aggregations:code_suggestions_inference_request_duration_seconds_bucket:rate_5m{env="gstg",le=~"60|60\\.0",type="ai-gateway"}
         )
       )
       /
@@ -255,7 +255,7 @@ groups:
         )
         +
         sum by (env,environment,region) (
-          sli_aggregations:http_request_duration_seconds_bucket:rate_5m{env="gstg",handler="/v1/chat/agent",le=~"40|40\\.0",status!~"4xx|5xx",type="ai-gateway"}
+          sli_aggregations:http_request_duration_seconds_bucket:rate_5m{env="gstg",handler="/v1/chat/agent",le=~"60|60\\.0",status!~"4xx|5xx",type="ai-gateway"}
         )
       )
       /
@@ -425,17 +425,9 @@ groups:
       tier: sv
       type: ai-gateway
     expr: |
-      (
-        sum by (env,environment,region) (
-          sli_aggregations:http_request_duration_seconds_bucket:rate_5m{env="gstg",handler="/v2/code/generations",le=~"20|20\\.0",status!~"4xx|5xx",type="ai-gateway"}
-        )
-        +
-        sum by (env,environment,region) (
-          sli_aggregations:http_request_duration_seconds_bucket:rate_5m{env="gstg",handler="/v2/code/generations",le=~"30|30\\.0",status!~"4xx|5xx",type="ai-gateway"}
-        )
+      sum by (env,environment,region) (
+        sli_aggregations:http_request_duration_seconds_bucket:rate_5m{env="gstg",handler="/v2/code/generations",le=~"30|30\\.0",status!~"4xx|5xx",type="ai-gateway"}
       )
-      /
-      2
   - record: gitlab_regional_sli_apdex:weight:score_5m
     labels:
       component: server_code_generations
@@ -519,7 +511,7 @@ groups:
         )
         +
         sum by (env,environment,region) (
-          sli_aggregations:http_request_duration_seconds_bucket:rate_5m{env="gstg",handler="/v1/x-ray/libraries",le=~"40|40\\.0",status!~"4xx|5xx",type="ai-gateway"}
+          sli_aggregations:http_request_duration_seconds_bucket:rate_5m{env="gstg",handler="/v1/x-ray/libraries",le=~"60|60\\.0",status!~"4xx|5xx",type="ai-gateway"}
         )
       )
       /
@@ -668,7 +660,7 @@ groups:
         )
         +
         sum by (env,environment,region) (
-          sli_aggregations:code_suggestions_inference_request_duration_seconds_bucket:rate_30m{env="gstg",le=~"40|40\\.0",type="ai-gateway"}
+          sli_aggregations:code_suggestions_inference_request_duration_seconds_bucket:rate_30m{env="gstg",le=~"60|60\\.0",type="ai-gateway"}
         )
       )
       /
@@ -905,7 +897,7 @@ groups:
         )
         +
         sum by (env,environment,region) (
-          sli_aggregations:http_request_duration_seconds_bucket:rate_30m{env="gstg",handler="/v1/chat/agent",le=~"40|40\\.0",status!~"4xx|5xx",type="ai-gateway"}
+          sli_aggregations:http_request_duration_seconds_bucket:rate_30m{env="gstg",handler="/v1/chat/agent",le=~"60|60\\.0",status!~"4xx|5xx",type="ai-gateway"}
         )
       )
       /
@@ -1075,17 +1067,9 @@ groups:
       tier: sv
       type: ai-gateway
     expr: |
-      (
-        sum by (env,environment,region) (
-          sli_aggregations:http_request_duration_seconds_bucket:rate_30m{env="gstg",handler="/v2/code/generations",le=~"20|20\\.0",status!~"4xx|5xx",type="ai-gateway"}
-        )
-        +
-        sum by (env,environment,region) (
-          sli_aggregations:http_request_duration_seconds_bucket:rate_30m{env="gstg",handler="/v2/code/generations",le=~"30|30\\.0",status!~"4xx|5xx",type="ai-gateway"}
-        )
+      sum by (env,environment,region) (
+        sli_aggregations:http_request_duration_seconds_bucket:rate_30m{env="gstg",handler="/v2/code/generations",le=~"30|30\\.0",status!~"4xx|5xx",type="ai-gateway"}
       )
-      /
-      2
   - record: gitlab_regional_sli_apdex:weight:score_30m
     labels:
       component: server_code_generations
@@ -1169,7 +1153,7 @@ groups:
         )
         +
         sum by (env,environment,region) (
-          sli_aggregations:http_request_duration_seconds_bucket:rate_30m{env="gstg",handler="/v1/x-ray/libraries",le=~"40|40\\.0",status!~"4xx|5xx",type="ai-gateway"}
+          sli_aggregations:http_request_duration_seconds_bucket:rate_30m{env="gstg",handler="/v1/x-ray/libraries",le=~"60|60\\.0",status!~"4xx|5xx",type="ai-gateway"}
         )
       )
       /
@@ -1318,7 +1302,7 @@ groups:
         )
         +
         sum by (env,environment,region) (
-          sli_aggregations:code_suggestions_inference_request_duration_seconds_bucket:rate_1h{env="gstg",le=~"40|40\\.0",type="ai-gateway"}
+          sli_aggregations:code_suggestions_inference_request_duration_seconds_bucket:rate_1h{env="gstg",le=~"60|60\\.0",type="ai-gateway"}
         )
       )
       /
@@ -1555,7 +1539,7 @@ groups:
         )
         +
         sum by (env,environment,region) (
-          sli_aggregations:http_request_duration_seconds_bucket:rate_1h{env="gstg",handler="/v1/chat/agent",le=~"40|40\\.0",status!~"4xx|5xx",type="ai-gateway"}
+          sli_aggregations:http_request_duration_seconds_bucket:rate_1h{env="gstg",handler="/v1/chat/agent",le=~"60|60\\.0",status!~"4xx|5xx",type="ai-gateway"}
         )
       )
       /
@@ -1725,17 +1709,9 @@ groups:
       tier: sv
       type: ai-gateway
     expr: |
-      (
-        sum by (env,environment,region) (
-          sli_aggregations:http_request_duration_seconds_bucket:rate_1h{env="gstg",handler="/v2/code/generations",le=~"20|20\\.0",status!~"4xx|5xx",type="ai-gateway"}
-        )
-        +
-        sum by (env,environment,region) (
-          sli_aggregations:http_request_duration_seconds_bucket:rate_1h{env="gstg",handler="/v2/code/generations",le=~"30|30\\.0",status!~"4xx|5xx",type="ai-gateway"}
-        )
+      sum by (env,environment,region) (
+        sli_aggregations:http_request_duration_seconds_bucket:rate_1h{env="gstg",handler="/v2/code/generations",le=~"30|30\\.0",status!~"4xx|5xx",type="ai-gateway"}
       )
-      /
-      2
   - record: gitlab_regional_sli_apdex:weight:score_1h
     labels:
       component: server_code_generations
@@ -1819,7 +1795,7 @@ groups:
         )
         +
         sum by (env,environment,region) (
-          sli_aggregations:http_request_duration_seconds_bucket:rate_1h{env="gstg",handler="/v1/x-ray/libraries",le=~"40|40\\.0",status!~"4xx|5xx",type="ai-gateway"}
+          sli_aggregations:http_request_duration_seconds_bucket:rate_1h{env="gstg",handler="/v1/x-ray/libraries",le=~"60|60\\.0",status!~"4xx|5xx",type="ai-gateway"}
         )
       )
       /
