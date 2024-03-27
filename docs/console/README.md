@@ -131,6 +131,7 @@
 * [Shared Configurations](../uncategorized/shared-configurations.md)
 * [GitLab staging environment](../uncategorized/staging-environment.md)
 * [Uploads](../uncategorized/uploads.md)
+* [../uncategorized/wiz-runtime-sensor.md](../uncategorized/wiz-runtime-sensor.md)
 * [Workers under heavy load because of being used as a CDN](../uncategorized/workers-high-load.md)
 * [Troubleshooting Hashicorp Vault](../vault/troubleshooting.md)
 * [Vault Secrets Management](../vault/vault.md)

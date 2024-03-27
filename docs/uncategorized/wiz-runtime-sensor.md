@@ -153,7 +153,7 @@ kubectl run networkcheck --image=curlimages/curl -it --rm --restart=Never --over
 
 Below is the expected output when there is working communication with "wizio.azurecr.io":
 
-```output
+```console
 HTTP/1.1 401 Unauthorized
 Server: openresty
 Date: Sun, 09 Apr 2023 14:29:48 GMT
@@ -201,9 +201,11 @@ If some of the pods are in an error state, that could indicate that their corres
 
 The output should return the Sensor pod names. For example:
 
+```console
 NAME               READY   STATUS   RESTARTS   AGE
 wiz-sensor-99fx4   0/1     Error    0          9m29s
 wiz-sensor-v96pp   0/1     Error    0          9m29s
+```
 
 Run the following command to get all Kubernetes events related to the Sensor pod. Replace <pod-name> with a pod name from the output of the previous command:
 
@@ -213,7 +215,7 @@ kubectl get events -n wiz | grep <pod-name>
 
 The output should indicate the reason for the error. For example, line 6 of the following output indicates that the Sensor pod is not running since the node does not have enough free memory:
 
-    ```
+    ```console
     6m58s       Normal    Scheduled          pod/wiz-sensor-zx2xk   Successfully assigned wiz/wiz-sensor-zx2xk to ip-192-168-3-61.ec2.internal
     6m57s       Normal    Pulling            pod/wiz-sensor-zx2xk   Pulling image "wizio.azurecr.io/sensor:preview"
     6m57s       Normal    Pulled             pod/wiz-sensor-zx2xk   Successfully pulled image "wizio.azurecr.io/sensor:preview" in 138.135823ms
@@ -250,7 +252,7 @@ What you should do
 
 Often the validation fails due to incorrect proxy settings. To fix the settings, you need to update the fields listed below in your Runtime Sensor helm chart. Refer to Runtime Sensor configurable variables to learn how.
 
-```output
+```console
 daemonset.httpProxyUrl
 daemonset.httpProxyUsername
 daemonset.httpProxyPassword
@@ -276,7 +278,7 @@ What you should do
 Invalid credentials (status code 401)
 Displayed error
 
-```output
+```console
 {... ,"fields":{"message":"comm error","e":"https://auth.app.wiz.io/oauth/token: status code 401"}}
 ```
 
@@ -341,7 +343,7 @@ kubectl run -n wiz networkcheck --image=curlimages/curl -it --rm --restart=Never
 
 If there is a DNS problem, you will get this error code from curl:
 
-```output
+```console
 curl: (6) Could not resolve host: localhost
 curl: (6) Could not resolve host: wizio.azurecr.io
 ```
@@ -412,7 +414,7 @@ Each Sensor pod stores only a minimal amount of logs on the local disk, consisti
 
 Below is an example error log message:
 
-```output
+```console
 {
   "timestamp": "2023-06-15T09:43:52.126652379+00:00",
   "level": "ERROR",
