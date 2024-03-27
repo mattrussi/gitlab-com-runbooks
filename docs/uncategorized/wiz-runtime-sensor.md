@@ -68,12 +68,13 @@ Below is the expected output:
 ```console
 NAME         DESIRED   CURRENT   READY   UP-TO-DATE   AVAILABLE   NODE SELECTOR   AGE
 wiz-sensor   6         6         6       6            6           <none>          24d
+```
 
 Inspect the output:
 - If your output is as expected, continue to the other scenarios listed on this page to locate your problem.
 - If you do not see a similar output, it could indicate something went wrong with the Runtime Sensor installation. Refer back to the installation guide to verify proper installation, and to perform a sanity check.
 
-### Check the Runtime Sensor status
+## Check the Runtime Sensor status
 
 Run the following command to check the status of all the Runtime Sensors in your cluster:
 
@@ -91,32 +92,37 @@ wiz-sensor-kv22v   1/1     Running   178 (16m ago)   24d
 wiz-sensor-r8bw8   1/1     Running   177 (11m ago)   24d
 wiz-sensor-rw27j   1/1     Running   182 (12m ago)   24d
 wiz-sensor-wccbk   1/1     Running   180 (12m ago)   24d
+```
 
 Inspect the output:
 
-    If a Runtime Sensor pod is in Pending status, then the underlying node does not have enough resources to run the pod (see resource consumption for all details). Once some node resources are free, the Sensor pod status should automatically change to Running.
-    If one or more Runtime Sensor pods are neither in Running nor Pending status, refer to the Runtime Sensor is not running troubleshooting procedure below.
+- If a Runtime Sensor pod is in Pending status, then the underlying node does not have enough resources to run the pod (see resource consumption for all details). Once some node resources are free, the Sensor pod status should automatically change to Running.
+    
+- If one or more Runtime Sensor pods are neither in Running nor Pending status, refer to the Runtime Sensor is not running troubleshooting procedure below.
 
-### Check the Runtime Sensor version
+## Check the Runtime Sensor version
 
 You can retrieve the version number directly from a specific running Runtime Sensor pod:
 
-    Use the following kubectl command. Replace <pod name> with the name of the running Runtime Sensor pod. This command will execute the Runtime Sensor binary within the pod and display its version:
+Use the following kubectl command. Replace <pod name> with the name of the running Runtime Sensor pod. This command will execute the Runtime Sensor binary within the pod and display its version:
 
 ```shell
 kubectl exec -it -n wiz <pod name> -- /usr/src/app/wiz-sensor version
 ```
 
-    Review the output. You can see the Runtime Sensor version, including the build number and the build time. You can also see the version of the Runtime Sensor definitions file, which contains the detection rules and configurations used by the Runtime Sensor:
+Review the output. You can see the Runtime Sensor version, including the build number and the build time. You can also see the version of the Runtime Sensor definitions file, which contains the detection rules and configurations used by the Runtime Sensor:
 
+```console
 2023-05-18T06:34:31.679826Z  INFO client version: 0.9.1869 (CMT_cafa988 2023-04-24T18:56:49+03:00)
 2023-05-18T06:34:31.679855Z  INFO server version: 0.9.1869 (CMT_cafa988 2023-04-24T18:56:49+03:00) (definitions: 1.0.609)
+```
 
-    Identify what is the latest Sensor version from the Sensor Release Notes. If you are running an older version, consider upgrading it.
+Identify what is the latest Sensor version from the Sensor Release Notes. If you are running an older version, consider upgrading it.
 
-### The Runtime Sensor is not running
+## The Runtime Sensor is not running
 
 When a Runtime Sensor pod is not in Running status, it could indicate that the Runtime Sensor image was not pulled successfully.
+
 Verify the Runtime Sensor container image was pulled successfully
 
 If the Runtime Sensor pod status is ImagePullBackOff or ErrImagePull, it may mean Kubernetes could not pull the Runtime Sensor container image from wizio.azurecr.io.
@@ -129,6 +135,7 @@ kubectl -n wiz describe pods -l "app.kubernetes.io/name=wiz-sensor"
 
 Below is the expected output for a successful Runtime Sensor installation:
 
+```console
 Events:
   Type    Reason   Age                  From     Message
   ----    ------   ----                 ----     -------
@@ -137,13 +144,14 @@ Events:
   Normal  Created  36m (x181 over 24d)  kubelet  Created container wiz-sensor
   Normal  Started  36m (x181 over 24d)  kubelet  Started container wiz-sensor
   Normal  Pulled   36m                  kubelet  Successfully pulled image "wizio.azurecr.io/sensor:preview" in 103.217499ms
+```
 
 Inspect the output and search for any errors in the Message column. If you detect errors related to pulling the image, such as ImagePullBackOff or ErrImagePull, check the following:
 
-    There is outbound connectivity to "wizio.azurecr.io"
-    The correct credentials were used to pull the container image
+- There is outbound connectivity to "wizio.azurecr.io"
+- The correct credentials were used to pull the container image
 
-### There is outbound connectivity to "wizio.azurecr.io"
+## There is outbound connectivity to "wizio.azurecr.io"
 
 Run the following command that downloads a popular curl container image:
 
@@ -172,32 +180,39 @@ Www-Authenticate: Bearer realm="https://wizio.azurecr.io/oauth2/token",service="
 
 Inspect the output:
 
-    If your output is as expected, continue to verify the correct credentials were used to pull the container image.
-    If your output differs from the expected output (for example, you see a Connection refused error), then your cluster does not have outbound connectivity to "wizio.azurecr.io". To resolve this:
-        Check any network configurations that might block outbound connections (e.g., firewall rules, proxy configurations, Kubernetes network policies) and allow the connectivity to "wizio.azurecr.io".
-        Re-install the Runtime Sensor.
+- If your output is as expected, continue to verify the correct credentials were used to pull the container image.
+
+- If your output differs from the expected output (for example, you see a Connection refused error), then your cluster does not have outbound connectivity to "wizio.azurecr.io". To resolve this:
+
+  - Check any network configurations that might block outbound connections (e.g., firewall rules, proxy configurations, Kubernetes network policies) and allow the connectivity to "wizio.azurecr.io".
+  
+  - Re-install the Runtime Sensor.
 
 The correct credentials were used to pull the container image
 
-### Verify you installed the Runtime Sensor using the correct credentials to pull the container image
+## Verify you installed the Runtime Sensor using the correct credentials to pull the container image
 
-    Retrieve the values you used for imagePullSecret.username and imagePullSecret.password, in either the helm install command or the YAML file.
-    Refer to get the Runtime Sensor image pull key from wiz to obtain the correct values that should be used for imagePullSecret.username and imagePullSecret.password.
-    Compare the set of values, and:
-        If the credentials used in the installation are not identical to the ones you retrieved from the Wiz portal:
-            Update the values in your helm install command or yaml file.
-            Re-install the Runtime Sensor using the new values.
-        If the credentials are identical but your pods are not in Running or Pending status, please contact support as explained below.
+- Retrieve the values you used for imagePullSecret.username and imagePullSecret.password, in either the helm install command or the YAML file.
 
-### Verify the Kubernetes nodes have enough resources to run the Runtime Sensor
+- Refer to get the Runtime Sensor image pull key from wiz to obtain the correct values that should be used for imagePullSecret.username and imagePullSecret.password.
+    
+Compare the set of values, 
+
+- If the credentials used in the installation are not identical to the ones you retrieved from the Wiz portal:
+  - Update the values in your helm install command or yaml file.
+  - Re-install the Runtime Sensor using the new values.
+        
+- If the credentials are identical but your pods are not in Running or Pending status, please contact support.
+
+## Verify the Kubernetes nodes have enough resources to run the Runtime Sensor
 
 If some of the pods are in an error state, that could indicate that their corresponding node lacks the required resources needed to run the Sensor pod. These cases are usually resolved once the nodes have enough resources and there is no need for intervention.
 
-    Run the following command to locate Sensor pods that are not running:
+Run the following command to locate Sensor pods that are not running:
 
- ```shell
- kubectl get pods --field-selector=status.phase!=Running -n wiz
- ```
+```shell
+kubectl get pods --field-selector=status.phase!=Running -n wiz
+```
 
 The output should return the Sensor pod names. For example:
 
@@ -225,7 +240,7 @@ The output should indicate the reason for the error. For example, line 6 of the 
     6m46s       Normal    Killing            pod/wiz-sensor-zx2xk   Stopping container wiz-sensor
     ```
 
-### The Runtime Sensor does not appear on the Deployments page
+## The Runtime Sensor does not appear on the Deployments page
 
 When you verify the Runtime Sensor pod is running but it does not appear on the Settings > Deployments > Sensor page in the Wiz portal, it indicates there is a communication error between the Sensor and your Wiz tenant.
 
@@ -237,18 +252,22 @@ kubectl -n wiz logs $(kubectl get pods -n wiz -l "app.kubernetes.io/name=wiz-sen
 
 According to the output, proceed to one of the following use cases:
 
-    Invalid TLS/SSL certificate
-    Invalid service account type (status code 400)
-    Invalid credentials (status code 401)
-    Service Account token is not mounted
+- Invalid TLS/SSL certificate
+- Invalid service account type (status code 400)
+- Invalid credentials (status code 401)
+- Service Account token is not mounted
 
-Invalid TLS/SSL certificate
+### Invalid TLS/SSL certificate
+
 Displayed error
 
+```console
 {... , invalid peer certificate contents: invalid peer certificate: UnknownIssuer"}}
+```
 
 This error indicates the Runtime Sensor cannot validate the TLS certificate of the remote server.
-What you should do
+
+**What you should do ?**
 
 Often the validation fails due to incorrect proxy settings. To fix the settings, you need to update the fields listed below in your Runtime Sensor helm chart. Refer to Runtime Sensor configurable variables to learn how.
 
@@ -257,25 +276,27 @@ daemonset.httpProxyUrl
 daemonset.httpProxyUsername
 daemonset.httpProxyPassword
 daemonset.httpProxyCaCert
+```
 
-Invalid service account type (status code 400)
+### Invalid service account type (status code 400)
+
 Displayed error
 
+```console
 {... ,"fields":{"message":"comm error","e":"https://auth.app.wiz.io/oauth/token: status code 400"}}
 ```
 
 This error indicates the Runtime Sensor service account type is not configured properly in the Runtime Sensor helm chart.
 
-    📘
+For security reasons, the Runtime Sensor uses a special service account type, which is incompatible with the regular (GraphQL) service accounts.
 
-    For security reasons, the Runtime Sensor uses a special service account type, which is incompatible with the regular (GraphQL) service accounts.
+**What you should do?**
 
-What you should do
+Set the proper service account type wizApiToken.clientId and wizApiToken.clientToken helm chart values. Refer to Create a service account for the Runtime Sensor to learn how.
+Re-install the Runtime Sensor using the new values.
 
-    Set the proper service account type wizApiToken.clientId and wizApiToken.clientToken helm chart values. Refer to Create a service account for the Runtime Sensor to learn how.
-    Re-install the Runtime Sensor using the new values.
+### Invalid credentials (status code 401)
 
-Invalid credentials (status code 401)
 Displayed error
 
 ```console
@@ -283,59 +304,65 @@ Displayed error
 ```
 
 This error indicates the credentials to the Wiz Portal are not configured properly in the Runtime Sensor helm chart.
-What you should do
 
-    Run the following command to query your Kubernetes cluster which credentials were used for the Runtime Sensor installation, specifically wizApiToken.clientId and wizApiToken.clientToken (and in rare cases also wizApiToken.clientEndpoint):
+**What you should do?**
 
-        📘
+Run the following command to query your Kubernetes cluster which credentials were used for the Runtime Sensor installation, specifically wizApiToken.clientId and wizApiToken.clientToken (and in rare cases also wizApiToken.clientEndpoint):
 
-        The following kubectl commands apply to the built-in Kubernetes Secrets objects. If you are using another external secret management tool, learn how to troubleshoot authentication errors using Sensor logs in order to reveal the actual secret content.
+The following kubectl commands apply to the built-in Kubernetes Secrets objects. If you are using another external secret management tool, learn how to troubleshoot authentication errors using Sensor logs in order to reveal the actual secret content.
 
 ```shell
 kubectl -n wiz get secrets wiz-sensor-apikey -o jsonpath="{.data}" | jq -r '.clientId | @base64d'
 kubectl -n wiz get secrets wiz-sensor-apikey -o jsonpath="{.data}" | jq -r '.clientSecret | @base64d'
 ```
 
-    Refer to create a service account for the Runtime Sensor to obtain the correct values that should be used.
-    Compare the set of values, and
-        If you used different values, update them and Re-install the Runtime Sensor using the new values.
-        If you used the correct values, contact support as explained below.
+Refer to create a service account for the Runtime Sensor to obtain the correct values that should be used.
+
+Compare the set of values
+
+If you used different values, update them and Re-install the Runtime Sensor using the new values.
+
+If you used the correct values, contact support as explained below.
 
 ### Service Account token is not mounted
 
 Displayed error
 
+```console
 "message": "sensor engine failed to start",
     "e": "init kube version\n\nCaused by:\n    0: reading cluster env\n    1: failed to read the default namespace: No such file or directory (os error 2)\n    2: No such file or directory (os error 2)",
+```
 
 This error indicates that service account token mounting is disabled.
-What you should do
 
-    Check the service account used.
+**What you should do?**
+
+Check the service account used.
 
 ```shell
 kubectl get ds -n wiz wiz-sensor -o json | jq . | grep serviceAccount
 ```
 
-    Check if service account token mount is disabled.
+Check if service account token mount is disabled.
 
 ```shell
 kubectl get sa -n wiz <insert-service-account> -o yaml
 ```
 
-    If you see automountServiceAccountToken=false, service account token mount is disabled. It should be set to true or removed.
+If you see automountServiceAccountToken=false, service account token mount is disabled. It should be set to true or removed.
 
-### Communication-related errors
+## Communication-related errors
 
 If there are temporary connectivity problems, the Runtime Sensor uses a retry mechanism to resolve this. Let's look for example at a DNS resolution error.
-DNS resolution error
+
+### DNS resolution error
 
 Assuming this error persists:
 
 "dns error: failed to lookup address information: Temporary failure in name resolution"
 
-    Check your DNS settings.
-    Verify that the namespace where you deployed the Runtime Sensor has "DNS enabled". You can check the DNS resolution using a curl command:
+- Check your DNS settings.
+- Verify that the namespace where you deployed the Runtime Sensor has "DNS enabled". You can check the DNS resolution using a curl command:
 
 ```shell
 kubectl run -n wiz networkcheck --image=curlimages/curl -it --rm --restart=Never --overrides='{"apiVersion": "v1", "spec": {"hostNetwork": true}}' -- curl -I https://wizio.azurecr.io/v2/
@@ -349,7 +376,8 @@ curl: (6) Could not resolve host: wizio.azurecr.io
 ```
 
 Once the DNS issue is resolved, the Sensor should recover from the error.
-Connection reset by peer error
+
+### Connection reset by peer error
 
 The following error message might indicate that there is a firewall blocking the communication to `https://auth.app.wiz.io`:
 
@@ -362,34 +390,34 @@ kubectl run -n wiz networkcheck --image=curlimages/curl -it --rm --restart=Never
 ```
 
 Once the firewall (or any other network component that is blocking the connection) is configured to allow it, the Runtime Sensor should recover from the error.
-The Runtime Sensor is installed on an unsupported platform
+
+The Runtime Sensor is installed on an unsupported platform.
 
 If the Runtime Sensor is installed on an unsupported platform, such as an incompatible kernel version, the Runtime Sensor pod will run but the Sensor binary will fail to execute.
 
 To verify if this is the case,
 
-    Search the logs using the following command:
+Search the logs using the following command:
 
 ```shell
 kubectl logs -n wiz <pod name> | grep "sensor engine failed to start"
 ```
 
-And search for this error message:
-
-kernel version smaller than minimum 266752
-
-    Search for the following error message:
+Search for the following error message:
 
 kernel version smaller than minimum 266752
 
 In this case, check the Supported Architectures and Platforms documentation to ensure that your platform is supported. If your platform is listed as supported, reach out to our support team using the instructions provided below.
-Verify the node architecture is supported
+
+### Verify the node architecture is supported
+
 Displayed error
 
 exec ./wiz-sensor: exec format error
 
 This error means that the Sensor is running on a non-supported architecture, or that the Sensor image does not match the node architecture.
-What you should do
+
+**What you should do?**
 
 Check the node architecture using the following command:
 
@@ -400,17 +428,18 @@ kubectl describe nodes <node name> | grep Architecture
 The output should be one of the supported architectures, amd64 or arm64. If the architecture is supported and yet you still encounter this error, it could indicate that the Sensor image does not match the underlying architecture.
 
 Generally, when you use Docker to pull the Sensor image, it will detect the underlying host architecture and fetch the correct image from the Wiz registry. If you are mirroring the image to an internal repository, we recommend using tools like skopeo.
+
 Learn how to read Runtime Sensor logs
 
 Each Sensor pod stores only a minimal amount of logs on the local disk, consisting mainly of error messages, and sometimes also success messages. Each message is formatted in JSON and contains the variables, such as:
 
-    ```output
-    timestamp–Time of the log message.
-    binary_ver–Sensor version number.
-    defs_ver–Definitions file version.
-    message–The log message.
-    level–The log level. By default, local Sensor logs include only messages where level=ERROR and a small amount of informational logs where level=INFO.
-    ```
+```console
+timestamp–Time of the log message.
+binary_ver–Sensor version number.
+defs_ver–Definitions file version.
+message–The log message.
+level–The log level. By default, local Sensor logs include only messages where level=ERROR and a small amount of informational logs where level=INFO.
+```
 
 Below is an example error log message:
 
@@ -455,7 +484,7 @@ Below is an example error log message:
 }
 ```
 
-### Retrieve log messages
+## Retrieve log messages
 
 To obtain a summarized version of all log messages generated by the Sensor pods, where each error is displayed only once per cluster, execute the following command:
 
@@ -469,50 +498,55 @@ If you wish to view the detailed errors messages , use the following command:
 kubectl -n wiz logs daemonsets/wiz-sensor | grep ERROR | jq '.fields.e' | sort -u
 ```
 
-### Adjust logging verbosity
+## Adjust logging verbosity
 
-    🚧
+### Increasing verbosity risks
 
-    Increasing verbosity risks
+Before increasing the log verbosity, keep in mind that:
 
-    Before increasing the log verbosity, keep in mind that:
+This is not recommended for production environments as it could lead to the generation of large debugging volumes / trace logs, which could impact performance and increase resource consumption.
 
-        This is not recommended for production environments as it could lead to the generation of large debugging volumes / trace logs, which could impact performance and increase resource consumption.
-        This poses a security risk as increasing the verbosity level could expose sensitive information within your logs (such as clear text secrets).
+This poses a security risk as increasing the verbosity level could expose sensitive information within your logs (such as clear text secrets).
 
 To adjust the verbosity level of the Sensor logs,
 
-    Set the logLevel configurable variable in the Helm chart to do one of the following:
-        Increase the overall verbosity level–Add: --set logLevel=info.
-        Increase the verbosity level of a specific Sensor component–For example, to set the maximum verbosity for all messages related to Sensor authentication, set logLevel to info,sensor::comm::auth=trace.
-        (Recommended for production environments) Use the default verbosity level–Omit the logLevel variable altogether.
+Set the logLevel configurable variable in the Helm chart to do one of the following:
+        
+Increase the overall verbosity level–Add: --set logLevel=info.
+        
+Increase the verbosity level of a specific Sensor component–For example, to set the maximum verbosity for all messages related to Sensor authentication, set logLevel to info,sensor::comm::auth=trace.
+(Recommended for production environments) Use the default verbosity level–Omit the logLevel variable altogether.
 
-    Deploy the Runtime Sensor.
+Deploy the Runtime Sensor.
 
-### Troubleshoot authentication errors using Sensor logs
+## Troubleshoot authentication errors using Sensor logs
 
 Follow the steps below to increase the verbosity level of the Sensor, which will result in the output of the credentials of the Wiz service account it is using to communicate with the Wiz backend.
 
-    If you already have a running Sensor with authentication errors, uninstall it.
-    Reinstall the Sensor and provide the following configurable variable to the helm install command: --set logLevel="info\,sensor::comm::auth=trace"
-    Upon startup, the Sensor logs will contain the secret. Use the following command to search for the log message with the credentials: kubectl logs -n wiz <POD NAME> | grep "user credentials".
-    The credentials for the Wiz service account username and password are printed in plain text.
-    Once the troubleshooting is complete, reinstall the Sensor. This time, remove the logLevel configurable variable to set the verbosity of the Sensor back to its default level.
+If you already have a running Sensor with authentication errors, uninstall it.
 
-### Restart the Runtime Sensor
+Reinstall the Sensor and provide the following configurable variable to the helm install command: --set logLevel="info\,sensor::comm::auth=trace"
+
+Upon startup, the Sensor logs will contain the secret. Use the following command to search for the log message with the credentials: kubectl logs -n wiz <POD NAME> | grep "user credentials".
+
+The credentials for the Wiz service account username and password are printed in plain text.
+    
+Once the troubleshooting is complete, reinstall the Sensor. This time, remove the logLevel configurable variable to set the verbosity of the Sensor back to its default level.
+
+## Restart the Runtime Sensor
 
 To restart all running Sensor pods, run the following command:
 
-kubectl rollout restart -n wiz ds/wiz-sensor
+`kubectl rollout restart -n wiz ds/wiz-sensor`
 
 Contact support
 
-If none of the scenarios above match your case, please contact us:
+If none of the scenarios above match your case, please contact support:
 
-    Create a support package for the Runtime Sensor
-    Contact Wiz support and include the support package.
+Create a support package for the Runtime Sensor
+Contact Wiz support and include the support package.
 
-### Create a support package for the Runtime Sensor
+## Create a support package for the Runtime Sensor
 
 The following script executes various troubleshooting commands and saves the output to an archive named k8s_outputs.tar.gz. Please attach this file when contacting Wiz support.
 
