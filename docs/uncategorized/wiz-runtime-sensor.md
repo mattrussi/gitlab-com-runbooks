@@ -16,7 +16,7 @@ In addition, an [alert for OOM kills](https://gitlab.com/gitlab-com/runbooks/-/b
 
 ## Deploy Wiz Runtime Sensor
 
-All of our workload deployments are taken care of from the [GitLab helm repo](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles)].
+All of our workload deployments are taken care of from the [GitLab helm repo](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles).
 
 To deploy it for different environments we need to only add the values to the environments files ({$env}.yaml) located [here](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/tree/master/bases/environments)
 
@@ -65,13 +65,13 @@ kubectl get ds -n wiz
 
 Below is the expected output:
 
+```console
 NAME         DESIRED   CURRENT   READY   UP-TO-DATE   AVAILABLE   NODE SELECTOR   AGE
 wiz-sensor   6         6         6       6            6           <none>          24d
 
 Inspect the output:
-
-    If your output is as expected, continue to the other scenarios listed on this page to locate your problem.
-    If you do not see a similar output, it could indicate something went wrong with the Runtime Sensor installation. Refer back to the installation guide to verify proper installation, and to perform a sanity check.
+- If your output is as expected, continue to the other scenarios listed on this page to locate your problem.
+- If you do not see a similar output, it could indicate something went wrong with the Runtime Sensor installation. Refer back to the installation guide to verify proper installation, and to perform a sanity check.
 
 ### Check the Runtime Sensor status
 
@@ -83,6 +83,7 @@ kubectl get pods -n wiz -l "app.kubernetes.io/name=wiz-sensor"
 
 Below is the expected output:
 
+```console
 NAME               READY   STATUS    RESTARTS        AGE
 wiz-sensor-2gqv2   1/1     Running   181 (12m ago)   24d
 wiz-sensor-989vj   1/1     Running   179 (11m ago)   24d
