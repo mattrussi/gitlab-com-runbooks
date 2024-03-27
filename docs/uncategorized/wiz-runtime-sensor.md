@@ -97,7 +97,7 @@ wiz-sensor-wccbk   1/1     Running   180 (12m ago)   24d
 Inspect the output:
 
 - If a Runtime Sensor pod is in Pending status, then the underlying node does not have enough resources to run the pod (see resource consumption for all details). Once some node resources are free, the Sensor pod status should automatically change to Running.
-    
+
 - If one or more Runtime Sensor pods are neither in Running nor Pending status, refer to the Runtime Sensor is not running troubleshooting procedure below.
 
 ## Check the Runtime Sensor version
@@ -184,9 +184,9 @@ Inspect the output:
 
 - If your output differs from the expected output (for example, you see a Connection refused error), then your cluster does not have outbound connectivity to "wizio.azurecr.io". To resolve this:
 
-  - Check any network configurations that might block outbound connections (e.g., firewall rules, proxy configurations, Kubernetes network policies) and allow the connectivity to "wizio.azurecr.io".
-  
-  - Re-install the Runtime Sensor.
+- Check any network configurations that might block outbound connections (e.g., firewall rules, proxy configurations, Kubernetes network policies) and allow the connectivity to "wizio.azurecr.io".
+
+- Re-install the Runtime Sensor.
 
 The correct credentials were used to pull the container image
 
@@ -195,13 +195,13 @@ The correct credentials were used to pull the container image
 - Retrieve the values you used for imagePullSecret.username and imagePullSecret.password, in either the helm install command or the YAML file.
 
 - Refer to get the Runtime Sensor image pull key from wiz to obtain the correct values that should be used for imagePullSecret.username and imagePullSecret.password.
-    
-Compare the set of values, 
+
+Compare the set of values.
 
 - If the credentials used in the installation are not identical to the ones you retrieved from the Wiz portal:
   - Update the values in your helm install command or yaml file.
   - Re-install the Runtime Sensor using the new values.
-        
+
 - If the credentials are identical but your pods are not in Running or Pending status, please contact support.
 
 ## Verify the Kubernetes nodes have enough resources to run the Runtime Sensor
@@ -511,9 +511,9 @@ This poses a security risk as increasing the verbosity level could expose sensit
 To adjust the verbosity level of the Sensor logs,
 
 Set the logLevel configurable variable in the Helm chart to do one of the following:
-        
+
 Increase the overall verbosity level–Add: --set logLevel=info.
-        
+
 Increase the verbosity level of a specific Sensor component–For example, to set the maximum verbosity for all messages related to Sensor authentication, set logLevel to info,sensor::comm::auth=trace.
 (Recommended for production environments) Use the default verbosity level–Omit the logLevel variable altogether.
 
@@ -530,7 +530,7 @@ Reinstall the Sensor and provide the following configurable variable to the helm
 Upon startup, the Sensor logs will contain the secret. Use the following command to search for the log message with the credentials: kubectl logs -n wiz <POD NAME> | grep "user credentials".
 
 The credentials for the Wiz service account username and password are printed in plain text.
-    
+
 Once the troubleshooting is complete, reinstall the Sensor. This time, remove the logLevel configurable variable to set the verbosity of the Sensor back to its default level.
 
 ## Restart the Runtime Sensor
