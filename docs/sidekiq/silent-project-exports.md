@@ -1,35 +1,28 @@
-From time to time, for legal reasons, we are required to export projects without the owner being aware.  Requests for this will come through Legal, and will have suitable looking authorizations (e.g. subpeonas)
+# Exporting projects silently
+
+From time to time, for legal reasons, we are required to export projects without the owner being aware.  Requests for this will come through Legal, and will have suitable looking authorizations (e.g. subpeonas).
 
 While it is possible for an admin to create an export and it won't *email* the owner, it will be visible in the UI while the export exists, and the owner might notice this and infer something is going on.
 
-To avoid this we can do it by hand with some effort.
+To avoid this we can do it via the API with some effort. Adjust as necessary if there is only one (or a subset) of projects necessary. Take care around *large* repositories, or large project exports as well.
 
-* Open a session to the rails console with ```ssh gprd-rails-console```
-* Find the user (we should have been given the name as part of the request): ```u = User.find_by(username: 'USERNAME')```
-* List their projects, assuming we want all of them:
+## Python script method
 
-```
-u.projects.each do |p|
-  puts "#{p.path}: #{p.repository_storage} #{p.repository.path_to_repo}"
-end
-```
+1. Download [this script](https://gitlab.com/-/snippets/3615502) into a directory. Using your preferred Python environment management method (e.g. `virtualenv`), install the following dependencies: `pip install requests google.cloud.storage`.
+1. Create an access token for your admin account on GitLab.com with `api` permissions, and set it to the `GITLAB_TOKEN` env var.
+1. Create a throwaway GCS bucket, preferably in a sandbox GCP project.
+1. Create a temporary service account and key.
+   - This would need the `signBlob` permission and permissions to upload to the bucket. If in doubt, just give the service account admin permissions to the bucket.
+1. Download the key and assign it to the `GOOGLE_APPLICATION_CREDENTIALS` env var: `export GOOGLE_APPLICATION_CREDENTIALS=$(cat key.json)`
+1. Run ./export_projects_gcs.py --gitlab-group-id <group/namespace_id> --bucket-name <gcs_bucket_name>
+   - You may need to make minor modifications to the script if you're targeting a specific user instead of a group (e.g. by using `https://gitlab.com/api/v4/users/{user_id}/projects?page={page}&per_page={per_page}` as the URL).
+1. Copy exports from GCS to where SIRT needs these (often they provide a Drive folder).
+1. Cleanup
+   - [ ] Admin access token
+   - [ ] GCS bucket
+   - [ ] Service account
+   - [ ] Projects (if you downloaded them locally for transfer)
 
-* Keep note of the and storage node, you'll need that soon.
-* Export the projects:
+## Go script method
 
-```
-u.projects.each do |p|
-  pts = Gitlab::ImportExport::ProjectTreeSaver.new(project: p, current_user: u, shared: p.import_export_shared)
-  pts.save
-  dir = "#{u.username}/#{p.path}"
-  puts "mkdir -p #{dir}; cp #{pts.full_path} #{dir}/project.json"
-end
-```
-
-* This will output a bunch of commands (mkdir + cp) to copy the generated project.json files to your homedir.  In a root shell on the console server (console-01-sv-gprd), run them.
-* Copy the directory from your homedir (it will be the username) to the appropriate target location.
-* You don't need the console anymore, but you will need the output of the first loop.
-* For each identifed file-server, ssh to it and copy the identified repository, and the wiki.git variant (same hashed path, but .wiki.git replaces .git)
-* Copy these to the target location as well, preferably into the same directory structure as was created for the project.json
-
-Adjust as necessary if there is only one (or a subset) of projects necessary.  Take care around *large* repositories, or large project exports as well.
+See [this repo](https://ops.gitlab.net/gl-infra/auto-project-export).
