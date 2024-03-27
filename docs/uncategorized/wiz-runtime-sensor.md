@@ -71,6 +71,7 @@ wiz-sensor   6         6         6       6            6           <none>        
 ```
 
 Inspect the output:
+
 - If your output is as expected, continue to the other scenarios listed on this page to locate your problem.
 - If you do not see a similar output, it could indicate something went wrong with the Runtime Sensor installation. Refer back to the installation guide to verify proper installation, and to perform a sanity check.
 
@@ -622,5 +623,5 @@ The output is saved to a file named k8s_outputs.tar.gz. Attach it when contactin
 
 # Links to further Documentation
 
-* [Wiz Helm Chart](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/tree/master/releases/wiz-sensor)
-* [Internal Handbook Page](https://internal.gitlab.com/handbook/security/infrastructure_security/tooling/wiz-sensor/)
+- [Wiz Helm Chart](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/tree/master/releases/wiz-sensor)
+- [Internal Handbook Page](https://internal.gitlab.com/handbook/security/infrastructure_security/tooling/wiz-sensor/)
