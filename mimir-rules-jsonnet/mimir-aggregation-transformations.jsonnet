@@ -9,20 +9,24 @@ local outputPromYaml(groups) =
 local servicesWithSlis = std.filter(function(service) std.length(service.listServiceLevelIndicators()) > 0, monitoredServices);
 
 local transformRuleGroups(aggregationSet, extraSourceSelector, service) =
-  local sourceSelector = extraSourceSelector { type: service.type };
-  local source = aggregationSet.sourceAggregationSet { selector+: sourceSelector };
-  aggregationSetTransformer.generateRecordingRuleGroups(
-    sourceAggregationSet=source,
-    targetAggregationSet=aggregationSet,
-    extrasForGroup={}
-  );
+  if aggregationSet.enabledForService(service) then
+    local sourceSelector = extraSourceSelector { type: service.type };
+    local source = aggregationSet.sourceAggregationSet { selector+: sourceSelector };
+    aggregationSetTransformer.generateRecordingRuleGroups(
+      sourceAggregationSet=source,
+      targetAggregationSet=aggregationSet,
+      extrasForGroup={}
+    ) else [];
 
 local aggregationsForService(service, selector, _extraArgs) =
   std.foldl(
     function(memo, aggregationSet)
-      memo {
-        ['transformed-%s-aggregation' % [aggregationSet.id]]: outputPromYaml(transformRuleGroups(aggregationSet, selector, service)),
-      },
+      local groups = transformRuleGroups(aggregationSet, selector, service);
+      if std.length(groups) > 0 then
+        memo {
+          ['transformed-%s-aggregation' % [aggregationSet.id]]: outputPromYaml(groups),
+        }
+      else memo,
     aggregationSets.transformedAggregations,
     {}
   );

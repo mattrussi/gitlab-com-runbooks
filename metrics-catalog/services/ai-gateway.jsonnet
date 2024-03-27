@@ -157,8 +157,7 @@ metricsCatalog.serviceDefinition(
         apdex: histogramApdex(
           histogram='http_request_duration_seconds_bucket',
           selector=serverCodeGenerationsSelector { status: { noneOf: ['4xx', '5xx'] } },
-          satisfiedThreshold=20,
-          toleratedThreshold=30,
+          satisfiedThreshold=30,
           metricsFormat='migrating'
         ),
 
@@ -200,7 +199,7 @@ metricsCatalog.serviceDefinition(
           histogram='http_request_duration_seconds_bucket',
           selector=serverChatSelector { status: { noneOf: ['4xx', '5xx'] } },
           satisfiedThreshold=30,
-          toleratedThreshold=40,
+          toleratedThreshold=60,
           metricsFormat='migrating'
         ),
 
@@ -242,7 +241,7 @@ metricsCatalog.serviceDefinition(
           histogram='http_request_duration_seconds_bucket',
           selector=serverXRaySelector { status: { noneOf: ['4xx', '5xx'] } },
           satisfiedThreshold=30,
-          toleratedThreshold=40,
+          toleratedThreshold=60,
           metricsFormat='migrating'
         ),
 
@@ -285,7 +284,7 @@ metricsCatalog.serviceDefinition(
           histogram='code_suggestions_inference_request_duration_seconds_bucket',
           selector=baseSelector,
           satisfiedThreshold=30,
-          toleratedThreshold=40,
+          toleratedThreshold=60,
           metricsFormat='migrating',
         ),
 

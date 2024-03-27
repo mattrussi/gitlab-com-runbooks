@@ -18,7 +18,7 @@ groups:
         )
         +
         sum by (env,environment) (
-          rate(code_suggestions_inference_request_duration_seconds_bucket{le=~"40|40\\.0",type="ai-gateway"}[1m] offset 30s)
+          rate(code_suggestions_inference_request_duration_seconds_bucket{le=~"60|60\\.0",type="ai-gateway"}[1m] offset 30s)
         )
       )
       /
@@ -160,7 +160,7 @@ groups:
         )
         +
         sum by (env,environment) (
-          rate(http_request_duration_seconds_bucket{handler="/v1/chat/agent",le=~"40|40\\.0",status!~"4xx|5xx",type="ai-gateway"}[1m] offset 30s)
+          rate(http_request_duration_seconds_bucket{handler="/v1/chat/agent",le=~"60|60\\.0",status!~"4xx|5xx",type="ai-gateway"}[1m] offset 30s)
         )
       )
       /
@@ -266,17 +266,9 @@ groups:
       tier: sv
       type: ai-gateway
     expr: |
-      (
-        sum by (env,environment) (
-          rate(http_request_duration_seconds_bucket{handler="/v2/code/generations",le=~"20|20\\.0",status!~"4xx|5xx",type="ai-gateway"}[1m] offset 30s)
-        )
-        +
-        sum by (env,environment) (
-          rate(http_request_duration_seconds_bucket{handler="/v2/code/generations",le=~"30|30\\.0",status!~"4xx|5xx",type="ai-gateway"}[1m] offset 30s)
-        )
+      sum by (env,environment) (
+        rate(http_request_duration_seconds_bucket{handler="/v2/code/generations",le=~"30|30\\.0",status!~"4xx|5xx",type="ai-gateway"}[1m] offset 30s)
       )
-      /
-      2
   - record: gitlab_component_apdex:weight:score
     labels:
       component: server_code_generations
@@ -328,7 +320,7 @@ groups:
         )
         +
         sum by (env,environment) (
-          rate(http_request_duration_seconds_bucket{handler="/v1/x-ray/libraries",le=~"40|40\\.0",status!~"4xx|5xx",type="ai-gateway"}[1m] offset 30s)
+          rate(http_request_duration_seconds_bucket{handler="/v1/x-ray/libraries",le=~"60|60\\.0",status!~"4xx|5xx",type="ai-gateway"}[1m] offset 30s)
         )
       )
       /
@@ -416,7 +408,7 @@ groups:
         )
         +
         sum by (env,environment) (
-          rate(code_suggestions_inference_request_duration_seconds_bucket{le=~"40|40\\.0",type="ai-gateway"}[5m] offset 30s)
+          rate(code_suggestions_inference_request_duration_seconds_bucket{le=~"60|60\\.0",type="ai-gateway"}[5m] offset 30s)
         )
       )
       /
@@ -558,7 +550,7 @@ groups:
         )
         +
         sum by (env,environment) (
-          rate(http_request_duration_seconds_bucket{handler="/v1/chat/agent",le=~"40|40\\.0",status!~"4xx|5xx",type="ai-gateway"}[5m] offset 30s)
+          rate(http_request_duration_seconds_bucket{handler="/v1/chat/agent",le=~"60|60\\.0",status!~"4xx|5xx",type="ai-gateway"}[5m] offset 30s)
         )
       )
       /
@@ -664,17 +656,9 @@ groups:
       tier: sv
       type: ai-gateway
     expr: |
-      (
-        sum by (env,environment) (
-          rate(http_request_duration_seconds_bucket{handler="/v2/code/generations",le=~"20|20\\.0",status!~"4xx|5xx",type="ai-gateway"}[5m] offset 30s)
-        )
-        +
-        sum by (env,environment) (
-          rate(http_request_duration_seconds_bucket{handler="/v2/code/generations",le=~"30|30\\.0",status!~"4xx|5xx",type="ai-gateway"}[5m] offset 30s)
-        )
+      sum by (env,environment) (
+        rate(http_request_duration_seconds_bucket{handler="/v2/code/generations",le=~"30|30\\.0",status!~"4xx|5xx",type="ai-gateway"}[5m] offset 30s)
       )
-      /
-      2
   - record: gitlab_component_apdex:weight:score_5m
     labels:
       component: server_code_generations
@@ -726,7 +710,7 @@ groups:
         )
         +
         sum by (env,environment) (
-          rate(http_request_duration_seconds_bucket{handler="/v1/x-ray/libraries",le=~"40|40\\.0",status!~"4xx|5xx",type="ai-gateway"}[5m] offset 30s)
+          rate(http_request_duration_seconds_bucket{handler="/v1/x-ray/libraries",le=~"60|60\\.0",status!~"4xx|5xx",type="ai-gateway"}[5m] offset 30s)
         )
       )
       /
@@ -814,7 +798,7 @@ groups:
         )
         +
         sum by (env,environment) (
-          rate(code_suggestions_inference_request_duration_seconds_bucket{le=~"40|40\\.0",type="ai-gateway"}[30m] offset 30s)
+          rate(code_suggestions_inference_request_duration_seconds_bucket{le=~"60|60\\.0",type="ai-gateway"}[30m] offset 30s)
         )
       )
       /
@@ -956,7 +940,7 @@ groups:
         )
         +
         sum by (env,environment) (
-          rate(http_request_duration_seconds_bucket{handler="/v1/chat/agent",le=~"40|40\\.0",status!~"4xx|5xx",type="ai-gateway"}[30m] offset 30s)
+          rate(http_request_duration_seconds_bucket{handler="/v1/chat/agent",le=~"60|60\\.0",status!~"4xx|5xx",type="ai-gateway"}[30m] offset 30s)
         )
       )
       /
@@ -1062,17 +1046,9 @@ groups:
       tier: sv
       type: ai-gateway
     expr: |
-      (
-        sum by (env,environment) (
-          rate(http_request_duration_seconds_bucket{handler="/v2/code/generations",le=~"20|20\\.0",status!~"4xx|5xx",type="ai-gateway"}[30m] offset 30s)
-        )
-        +
-        sum by (env,environment) (
-          rate(http_request_duration_seconds_bucket{handler="/v2/code/generations",le=~"30|30\\.0",status!~"4xx|5xx",type="ai-gateway"}[30m] offset 30s)
-        )
+      sum by (env,environment) (
+        rate(http_request_duration_seconds_bucket{handler="/v2/code/generations",le=~"30|30\\.0",status!~"4xx|5xx",type="ai-gateway"}[30m] offset 30s)
       )
-      /
-      2
   - record: gitlab_component_apdex:weight:score_30m
     labels:
       component: server_code_generations
@@ -1124,7 +1100,7 @@ groups:
         )
         +
         sum by (env,environment) (
-          rate(http_request_duration_seconds_bucket{handler="/v1/x-ray/libraries",le=~"40|40\\.0",status!~"4xx|5xx",type="ai-gateway"}[30m] offset 30s)
+          rate(http_request_duration_seconds_bucket{handler="/v1/x-ray/libraries",le=~"60|60\\.0",status!~"4xx|5xx",type="ai-gateway"}[30m] offset 30s)
         )
       )
       /
@@ -1212,7 +1188,7 @@ groups:
         )
         +
         sum by (env,environment) (
-          rate(code_suggestions_inference_request_duration_seconds_bucket{le=~"40|40\\.0",type="ai-gateway"}[1h] offset 30s)
+          rate(code_suggestions_inference_request_duration_seconds_bucket{le=~"60|60\\.0",type="ai-gateway"}[1h] offset 30s)
         )
       )
       /
@@ -1354,7 +1330,7 @@ groups:
         )
         +
         sum by (env,environment) (
-          rate(http_request_duration_seconds_bucket{handler="/v1/chat/agent",le=~"40|40\\.0",status!~"4xx|5xx",type="ai-gateway"}[1h] offset 30s)
+          rate(http_request_duration_seconds_bucket{handler="/v1/chat/agent",le=~"60|60\\.0",status!~"4xx|5xx",type="ai-gateway"}[1h] offset 30s)
         )
       )
       /
@@ -1460,17 +1436,9 @@ groups:
       tier: sv
       type: ai-gateway
     expr: |
-      (
-        sum by (env,environment) (
-          rate(http_request_duration_seconds_bucket{handler="/v2/code/generations",le=~"20|20\\.0",status!~"4xx|5xx",type="ai-gateway"}[1h] offset 30s)
-        )
-        +
-        sum by (env,environment) (
-          rate(http_request_duration_seconds_bucket{handler="/v2/code/generations",le=~"30|30\\.0",status!~"4xx|5xx",type="ai-gateway"}[1h] offset 30s)
-        )
+      sum by (env,environment) (
+        rate(http_request_duration_seconds_bucket{handler="/v2/code/generations",le=~"30|30\\.0",status!~"4xx|5xx",type="ai-gateway"}[1h] offset 30s)
       )
-      /
-      2
   - record: gitlab_component_apdex:weight:score_1h
     labels:
       component: server_code_generations
@@ -1522,7 +1490,7 @@ groups:
         )
         +
         sum by (env,environment) (
-          rate(http_request_duration_seconds_bucket{handler="/v1/x-ray/libraries",le=~"40|40\\.0",status!~"4xx|5xx",type="ai-gateway"}[1h] offset 30s)
+          rate(http_request_duration_seconds_bucket{handler="/v1/x-ray/libraries",le=~"60|60\\.0",status!~"4xx|5xx",type="ai-gateway"}[1h] offset 30s)
         )
       )
       /
@@ -1610,7 +1578,7 @@ groups:
         )
         +
         sum by (env,environment) (
-          rate(code_suggestions_inference_request_duration_seconds_bucket{le=~"40|40\\.0",type="ai-gateway"}[6h] offset 30s)
+          rate(code_suggestions_inference_request_duration_seconds_bucket{le=~"60|60\\.0",type="ai-gateway"}[6h] offset 30s)
         )
       )
       /
@@ -1752,7 +1720,7 @@ groups:
         )
         +
         sum by (env,environment) (
-          rate(http_request_duration_seconds_bucket{handler="/v1/chat/agent",le=~"40|40\\.0",status!~"4xx|5xx",type="ai-gateway"}[6h] offset 30s)
+          rate(http_request_duration_seconds_bucket{handler="/v1/chat/agent",le=~"60|60\\.0",status!~"4xx|5xx",type="ai-gateway"}[6h] offset 30s)
         )
       )
       /
@@ -1858,17 +1826,9 @@ groups:
       tier: sv
       type: ai-gateway
     expr: |
-      (
-        sum by (env,environment) (
-          rate(http_request_duration_seconds_bucket{handler="/v2/code/generations",le=~"20|20\\.0",status!~"4xx|5xx",type="ai-gateway"}[6h] offset 30s)
-        )
-        +
-        sum by (env,environment) (
-          rate(http_request_duration_seconds_bucket{handler="/v2/code/generations",le=~"30|30\\.0",status!~"4xx|5xx",type="ai-gateway"}[6h] offset 30s)
-        )
+      sum by (env,environment) (
+        rate(http_request_duration_seconds_bucket{handler="/v2/code/generations",le=~"30|30\\.0",status!~"4xx|5xx",type="ai-gateway"}[6h] offset 30s)
       )
-      /
-      2
   - record: gitlab_component_apdex:weight:score_6h
     labels:
       component: server_code_generations
@@ -1920,7 +1880,7 @@ groups:
         )
         +
         sum by (env,environment) (
-          rate(http_request_duration_seconds_bucket{handler="/v1/x-ray/libraries",le=~"40|40\\.0",status!~"4xx|5xx",type="ai-gateway"}[6h] offset 30s)
+          rate(http_request_duration_seconds_bucket{handler="/v1/x-ray/libraries",le=~"60|60\\.0",status!~"4xx|5xx",type="ai-gateway"}[6h] offset 30s)
         )
       )
       /

@@ -15,7 +15,7 @@ local definitionDefaults = {
     else
       assert false : 'A second level AggregationSet should not aggregate SLIs directly';
       [],
-
+  enabledForService(service): true,
   aggregationFilter: null,
 
   upscaleLongerBurnRates: false,

@@ -82,6 +82,7 @@
 * [Managing Sentry in Kubernetes](../sentry/sentry.md)
 * [[`SidekiqQueueTooLarge`](../../rules/sidekiq-queues.yml)](../sidekiq/large-sidekiq-queue.md)
 * [A survival guide for SREs to working with Sidekiq at GitLab](../sidekiq/sidekiq-survival-guide-for-sres.md)
+* [Exporting projects silently](../sidekiq/silent-project-exports.md)
 * [../spamcheck/index.md](../spamcheck/index.md)
 * [GET Monitoring Setup](../staging-ref/get-monitoring-setup.md)
 * [Thanos Architecture Overview](../thanos/architecture.md)

@@ -103,7 +103,6 @@
 * [A survival guide for SREs to working with Sidekiq at GitLab](../sidekiq/sidekiq-survival-guide-for-sres.md)
 * [../sidekiq/sidekiq_error_rate_high.md](../sidekiq/sidekiq_error_rate_high.md)
 * [../sidekiq/sidekiq_stats_no_longer_showing.md](../sidekiq/sidekiq_stats_no_longer_showing.md)
-* [../sidekiq/silent-project-exports.md](../sidekiq/silent-project-exports.md)
 * [../spamcheck/index.md](../spamcheck/index.md)
 * [How to connect to a Database console using Teleport](../teleport/Connect_to_Database_Console_via_Teleport.md)
 * [How to connect to a Rails Console using Teleport](../teleport/Connect_to_Rails_Console_via_Teleport.md)
