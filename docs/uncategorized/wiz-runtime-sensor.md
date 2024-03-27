@@ -126,7 +126,7 @@ When a Runtime Sensor pod is not in Running status, it could indicate that the R
 
 Verify the Runtime Sensor container image was pulled successfully
 
-If the Runtime Sensor pod status is ImagePullBackOff or ErrImagePull, it may mean Kubernetes could not pull the Runtime Sensor container image from wizio.azurecr.io.
+If the Runtime Sensor pod status is `ImagePullBackOff` or `ErrImagePull`, it may mean Kubernetes could not pull the Runtime Sensor container image from `wizio.azurecr.io`.
 
 Run the following command to list all pods in the cluster and their statuses:
 
@@ -147,7 +147,7 @@ Events:
   Normal  Pulled   36m                  kubelet  Successfully pulled image "wizio.azurecr.io/sensor:preview" in 103.217499ms
 ```
 
-Inspect the output and search for any errors in the Message column. If you detect errors related to pulling the image, such as ImagePullBackOff or ErrImagePull, check the following:
+Inspect the output and search for any errors in the Message column. If you detect errors related to pulling the image, such as `ImagePullBackOff` or `ErrImagePull`, check the following:
 
 - There is outbound connectivity to "wizio.azurecr.io"
 - The correct credentials were used to pull the container image
@@ -231,15 +231,15 @@ kubectl get events -n wiz | grep <pod-name>
 
 The output should indicate the reason for the error. For example, line 6 of the following output indicates that the Sensor pod is not running since the node does not have enough free memory:
 
-    ```console
-    6m58s       Normal    Scheduled          pod/wiz-sensor-zx2xk   Successfully assigned wiz/wiz-sensor-zx2xk to ip-192-168-3-61.ec2.internal
-    6m57s       Normal    Pulling            pod/wiz-sensor-zx2xk   Pulling image "wizio.azurecr.io/sensor:preview"
-    6m57s       Normal    Pulled             pod/wiz-sensor-zx2xk   Successfully pulled image "wizio.azurecr.io/sensor:preview" in 138.135823ms
-    6m57s       Normal    Created            pod/wiz-sensor-zx2xk   Created container wiz-sensor
-    6m57s       Normal    Started            pod/wiz-sensor-zx2xk   Started container wiz-sensor
-    6m46s       Warning   Evicted            pod/wiz-sensor-zx2xk   The node was low on resource: memory. Container wiz-sensor was using 80404Ki, which exceeds its request of 50Mi.
-    6m46s       Normal    Killing            pod/wiz-sensor-zx2xk   Stopping container wiz-sensor
-    ```
+```console
+6m58s       Normal    Scheduled          pod/wiz-sensor-zx2xk   Successfully assigned wiz/wiz-sensor-zx2xk to ip-192-168-3-61.ec2.internal
+6m57s       Normal    Pulling            pod/wiz-sensor-zx2xk   Pulling image "wizio.azurecr.io/sensor:preview"
+6m57s       Normal    Pulled             pod/wiz-sensor-zx2xk   Successfully pulled image "wizio.azurecr.io/sensor:preview" in 138.135823ms
+6m57s       Normal    Created            pod/wiz-sensor-zx2xk   Created container wiz-sensor
+6m57s       Normal    Started            pod/wiz-sensor-zx2xk   Started container wiz-sensor
+6m46s       Warning   Evicted            pod/wiz-sensor-zx2xk   The node was low on resource: memory. Container wiz-sensor was using 80404Ki, which exceeds its request of 50Mi.
+6m46s       Normal    Killing            pod/wiz-sensor-zx2xk   Stopping container wiz-sensor
+```
 
 ## The Runtime Sensor does not appear on the Deployments page
 
