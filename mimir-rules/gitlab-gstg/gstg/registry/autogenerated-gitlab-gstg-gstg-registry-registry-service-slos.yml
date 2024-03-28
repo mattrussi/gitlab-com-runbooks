@@ -174,7 +174,7 @@ groups:
       monitor: global
       tier: sv
       type: registry
-    expr: "0.999000"
+    expr: "0.995000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: server_route_manifest_writes
