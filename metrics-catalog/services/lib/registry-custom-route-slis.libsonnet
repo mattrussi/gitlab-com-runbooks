@@ -29,7 +29,7 @@ local customRouteSLIs = [
       can only be deleted by digest.
     |||,
     monitoringThresholds+: {
-      apdexScore: 0.999,
+      apdexScore: 0.995,
     },
     satisfiedThreshold: 1,
     toleratedThreshold: 2.5,
