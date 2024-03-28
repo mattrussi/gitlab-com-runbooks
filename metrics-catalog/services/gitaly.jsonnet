@@ -4,7 +4,10 @@ local rateMetric = metricsCatalog.rateMetric;
 local gitalyHelper = import 'service-archetypes/helpers/gitaly.libsonnet';
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 
-local baseSelector = { type: 'gitaly', job: 'gitaly' };
+// `gitaly` is used in our old Prometheus scrapeconfig, while prometheus-operator
+// uses `scrapeConfig/monitoring/prometheus-agent-gitaly`. We can remove the `gitaly`
+// one once we've fully transitioned to Mimir.
+local baseSelector = { type: 'gitaly', job: { oneOf: ['gitaly', 'scrapeConfig/monitoring/prometheus-agent-gitaly'] } };
 
 metricsCatalog.serviceDefinition({
   type: 'gitaly',
