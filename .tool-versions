@@ -8,7 +8,7 @@ jb           0.5.1 # datasource=github-releases depName=jsonnet-bundler/jsonnet-
 jsonnet-tool 1.14.2 # datasource=gitlab-releases depName=gitlab-com/gl-infra/jsonnet-tool
 kubeconform  0.6.4 # datasource=github-releases depName=yannh/kubeconform
 nodejs       20.12.0 # datasource=node depName=nodejs/node
-pre-commit   3.6.2 # datasource=github-releases depName=pre-commit/pre-commit
+pre-commit   3.7.0 # datasource=github-releases depName=pre-commit/pre-commit
 promtool     2.51.1 # datasource=github-releases depName=prometheus/prometheus
 python       system
 ruby         3.3.0 # datasource=ruby-version depName=ruby/ruby
