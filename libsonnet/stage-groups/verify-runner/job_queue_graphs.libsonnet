@@ -30,7 +30,49 @@ local pendingSize =
     |||,
   );
 
+local acceptableQueuingDurationExceeded(partition=runnersManagerMatching.byShard) =
+  basic.timeseries(
+    title='Acceptable job queuing duration exceeded',
+    legendFormat='{{shard}}',
+    format='short',
+    linewidth=2,
+    fill=0,
+    stack=false,
+    query=runnersManagerMatching.formatQuery(|||
+      sum by (shard) (
+        increase(
+          gitlab_runner_acceptable_job_queuing_duration_exceeded_total{environment=~"$environment", stage=~"$stage", %(runnerManagersMatcher)s}[$__rate_interval]
+        )
+      )
+    |||, partition),
+  );
+
+local queuingFailureRate(partition=runnersManagerMatching.byShard) =
+  basic.timeseries(
+    title='Jobs queuing failure rate',
+    legendFormat='{{shard}}',
+    format='percentunit',
+    linewidth=2,
+    fill=0,
+    stack=false,
+    query=runnersManagerMatching.formatQuery(|||
+      sum by (shard) (
+        rate(
+          gitlab_runner_acceptable_job_queuing_duration_exceeded_total{environment=~"$environment", stage=~"$stage", %(runnerManagersMatcher)s}[$__rate_interval]
+        )
+      )
+      /
+      sum by (shard) (
+        rate(
+          gitlab_runner_jobs_total{environment=~"$environment", stage=~"$stage", %(runnerManagersMatcher)s}[$__rate_interval]
+        )
+      )
+    |||, partition),
+  );
+
 {
   durationHistogram:: durationHistogram,
   pendingSize:: pendingSize,
+  acceptableQueuingDurationExceeded:: acceptableQueuingDurationExceeded,
+  queuingFailureRate:: queuingFailureRate,
 }
