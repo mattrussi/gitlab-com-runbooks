@@ -2002,36 +2002,42 @@ groups:
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: primary_server
+      shard: ""
       tier: db
       type: redis-sidekiq
     expr: "0.999900"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: primary_server
+      shard: ""
       tier: db
       type: redis-sidekiq
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: rails_redis_client
+      shard: ""
       tier: db
       type: redis-sidekiq
     expr: "0.999900"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: rails_redis_client
+      shard: ""
       tier: db
       type: redis-sidekiq
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: secondary_servers
+      shard: ""
       tier: db
       type: redis-sidekiq
     expr: "0.999900"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: secondary_servers
+      shard: ""
       tier: db
       type: redis-sidekiq
     expr: "0.001000"
