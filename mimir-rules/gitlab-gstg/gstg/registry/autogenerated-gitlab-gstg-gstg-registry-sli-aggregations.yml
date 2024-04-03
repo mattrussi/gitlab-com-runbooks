@@ -62,7 +62,8 @@ groups:
       sum by (command,component,env,environment,feature_category,fqdn,instance,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
         rate(registry_redis_single_errors_count{env="gstg",type=~"registry"}[5m] offset 30s)
       )
-- name: 'SLI Aggregations: registry - registry_cdn-ops - 5m burn-rate'
+- name: 'SLI Aggregations: registry - registry_cdn-ops - 5m burn-rate - emitted by
+    monitoring'
   interval: 1m
   rules:
   - record: sli_aggregations:stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count:rate_5m
@@ -156,7 +157,8 @@ groups:
       sum by (command,component,env,environment,feature_category,fqdn,instance,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
         rate(registry_redis_single_errors_count{env="gstg",type=~"registry"}[30m] offset 30s)
       )
-- name: 'SLI Aggregations: registry - registry_cdn-ops - 30m burn-rate'
+- name: 'SLI Aggregations: registry - registry_cdn-ops - 30m burn-rate - emitted by
+    monitoring'
   interval: 2m
   rules:
   - record: sli_aggregations:stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count:rate_30m
@@ -250,7 +252,8 @@ groups:
       sum by (command,component,env,environment,feature_category,fqdn,instance,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
         rate(registry_redis_single_errors_count{env="gstg",type=~"registry"}[1h] offset 30s)
       )
-- name: 'SLI Aggregations: registry - registry_cdn-ops - 1h burn-rate'
+- name: 'SLI Aggregations: registry - registry_cdn-ops - 1h burn-rate - emitted by
+    monitoring'
   interval: 1m
   rules:
   - record: sli_aggregations:stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count:rate_1h

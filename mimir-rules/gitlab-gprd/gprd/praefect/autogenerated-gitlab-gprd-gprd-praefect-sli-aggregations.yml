@@ -9,7 +9,8 @@ groups:
       sum by (component,database,database_id,env,environment,feature_category,fqdn,job,product_stage,queue,region,shard,stage,stage_group,tier,transaction_type,type,urgency,worker) (
         rate(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count{database=~"praefect_(canary|production)",database_id=~".+:praefect-db-.+",env="gprd",job=~"stackdriver",type=~"praefect"}[5m] offset 30s)
       )
-- name: 'SLI Aggregations: praefect - proxy-apdex - 5m burn-rate'
+- name: 'SLI Aggregations: praefect - proxy-apdex - 5m burn-rate - emitted by monitoring
+    - gprd-gitlab-gke'
   interval: 1m
   rules:
   - record: sli_aggregations:grpc_server_handling_seconds_bucket:rate_5m
@@ -17,22 +18,35 @@ groups:
       sum by (component,env,environment,feature_category,fqdn,grpc_method,grpc_type,job,le,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
         rate(grpc_server_handling_seconds_bucket{cluster="gprd-gitlab-gke",env="gprd",grpc_type=~"unary",job=~"praefect",type=~"monitoring"}[5m] offset 30s)
       )
+- name: 'SLI Aggregations: praefect - proxy-apdex - 5m burn-rate - emitted by monitoring
+    - gprd-us-east1-b'
+  interval: 1m
+  rules:
   - record: sli_aggregations:grpc_server_handling_seconds_bucket:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,grpc_method,grpc_type,job,le,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
         rate(grpc_server_handling_seconds_bucket{cluster="gprd-us-east1-b",env="gprd",grpc_type=~"unary",job=~"praefect",type=~"monitoring"}[5m] offset 30s)
       )
+- name: 'SLI Aggregations: praefect - proxy-apdex - 5m burn-rate - emitted by monitoring
+    - gprd-us-east1-c'
+  interval: 1m
+  rules:
   - record: sli_aggregations:grpc_server_handling_seconds_bucket:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,grpc_method,grpc_type,job,le,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
         rate(grpc_server_handling_seconds_bucket{cluster="gprd-us-east1-c",env="gprd",grpc_type=~"unary",job=~"praefect",type=~"monitoring"}[5m] offset 30s)
       )
+- name: 'SLI Aggregations: praefect - proxy-apdex - 5m burn-rate - emitted by monitoring
+    - gprd-us-east1-d'
+  interval: 1m
+  rules:
   - record: sli_aggregations:grpc_server_handling_seconds_bucket:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,grpc_method,grpc_type,job,le,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
         rate(grpc_server_handling_seconds_bucket{cluster="gprd-us-east1-d",env="gprd",grpc_type=~"unary",job=~"praefect",type=~"monitoring"}[5m] offset 30s)
       )
-- name: 'SLI Aggregations: praefect - proxy-ops - 5m burn-rate'
+- name: 'SLI Aggregations: praefect - proxy-ops - 5m burn-rate - emitted by monitoring
+    - gprd-gitlab-gke'
   interval: 1m
   rules:
   - record: sli_aggregations:gitaly_service_client_requests_total:rate_5m
@@ -40,16 +54,28 @@ groups:
       sum by (component,deadline_type,env,environment,feature_category,fqdn,grpc_code,job,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
         rate(gitaly_service_client_requests_total{cluster="gprd-gitlab-gke",env="gprd",job=~"praefect",type=~"monitoring"}[5m] offset 30s)
       )
+- name: 'SLI Aggregations: praefect - proxy-ops - 5m burn-rate - emitted by monitoring
+    - gprd-us-east1-b'
+  interval: 1m
+  rules:
   - record: sli_aggregations:gitaly_service_client_requests_total:rate_5m
     expr: |
       sum by (component,deadline_type,env,environment,feature_category,fqdn,grpc_code,job,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
         rate(gitaly_service_client_requests_total{cluster="gprd-us-east1-b",env="gprd",job=~"praefect",type=~"monitoring"}[5m] offset 30s)
       )
+- name: 'SLI Aggregations: praefect - proxy-ops - 5m burn-rate - emitted by monitoring
+    - gprd-us-east1-c'
+  interval: 1m
+  rules:
   - record: sli_aggregations:gitaly_service_client_requests_total:rate_5m
     expr: |
       sum by (component,deadline_type,env,environment,feature_category,fqdn,grpc_code,job,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
         rate(gitaly_service_client_requests_total{cluster="gprd-us-east1-c",env="gprd",job=~"praefect",type=~"monitoring"}[5m] offset 30s)
       )
+- name: 'SLI Aggregations: praefect - proxy-ops - 5m burn-rate - emitted by monitoring
+    - gprd-us-east1-d'
+  interval: 1m
+  rules:
   - record: sli_aggregations:gitaly_service_client_requests_total:rate_5m
     expr: |
       sum by (component,deadline_type,env,environment,feature_category,fqdn,grpc_code,job,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
@@ -71,7 +97,8 @@ groups:
       sum by (component,database,database_id,env,environment,feature_category,fqdn,job,product_stage,queue,region,shard,stage,stage_group,tier,transaction_type,type,urgency,worker) (
         rate(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count{database=~"praefect_(canary|production)",database_id=~".+:praefect-db-.+",env="gprd",job=~"stackdriver",type=~"praefect"}[30m] offset 30s)
       )
-- name: 'SLI Aggregations: praefect - proxy-apdex - 30m burn-rate'
+- name: 'SLI Aggregations: praefect - proxy-apdex - 30m burn-rate - emitted by monitoring
+    - gprd-gitlab-gke'
   interval: 2m
   rules:
   - record: sli_aggregations:grpc_server_handling_seconds_bucket:rate_30m
@@ -79,22 +106,35 @@ groups:
       sum by (component,env,environment,feature_category,fqdn,grpc_method,grpc_type,job,le,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
         rate(grpc_server_handling_seconds_bucket{cluster="gprd-gitlab-gke",env="gprd",grpc_type=~"unary",job=~"praefect",type=~"monitoring"}[30m] offset 30s)
       )
+- name: 'SLI Aggregations: praefect - proxy-apdex - 30m burn-rate - emitted by monitoring
+    - gprd-us-east1-b'
+  interval: 2m
+  rules:
   - record: sli_aggregations:grpc_server_handling_seconds_bucket:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,grpc_method,grpc_type,job,le,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
         rate(grpc_server_handling_seconds_bucket{cluster="gprd-us-east1-b",env="gprd",grpc_type=~"unary",job=~"praefect",type=~"monitoring"}[30m] offset 30s)
       )
+- name: 'SLI Aggregations: praefect - proxy-apdex - 30m burn-rate - emitted by monitoring
+    - gprd-us-east1-c'
+  interval: 2m
+  rules:
   - record: sli_aggregations:grpc_server_handling_seconds_bucket:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,grpc_method,grpc_type,job,le,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
         rate(grpc_server_handling_seconds_bucket{cluster="gprd-us-east1-c",env="gprd",grpc_type=~"unary",job=~"praefect",type=~"monitoring"}[30m] offset 30s)
       )
+- name: 'SLI Aggregations: praefect - proxy-apdex - 30m burn-rate - emitted by monitoring
+    - gprd-us-east1-d'
+  interval: 2m
+  rules:
   - record: sli_aggregations:grpc_server_handling_seconds_bucket:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,grpc_method,grpc_type,job,le,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
         rate(grpc_server_handling_seconds_bucket{cluster="gprd-us-east1-d",env="gprd",grpc_type=~"unary",job=~"praefect",type=~"monitoring"}[30m] offset 30s)
       )
-- name: 'SLI Aggregations: praefect - proxy-ops - 30m burn-rate'
+- name: 'SLI Aggregations: praefect - proxy-ops - 30m burn-rate - emitted by monitoring
+    - gprd-gitlab-gke'
   interval: 2m
   rules:
   - record: sli_aggregations:gitaly_service_client_requests_total:rate_30m
@@ -102,16 +142,28 @@ groups:
       sum by (component,deadline_type,env,environment,feature_category,fqdn,grpc_code,job,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
         rate(gitaly_service_client_requests_total{cluster="gprd-gitlab-gke",env="gprd",job=~"praefect",type=~"monitoring"}[30m] offset 30s)
       )
+- name: 'SLI Aggregations: praefect - proxy-ops - 30m burn-rate - emitted by monitoring
+    - gprd-us-east1-b'
+  interval: 2m
+  rules:
   - record: sli_aggregations:gitaly_service_client_requests_total:rate_30m
     expr: |
       sum by (component,deadline_type,env,environment,feature_category,fqdn,grpc_code,job,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
         rate(gitaly_service_client_requests_total{cluster="gprd-us-east1-b",env="gprd",job=~"praefect",type=~"monitoring"}[30m] offset 30s)
       )
+- name: 'SLI Aggregations: praefect - proxy-ops - 30m burn-rate - emitted by monitoring
+    - gprd-us-east1-c'
+  interval: 2m
+  rules:
   - record: sli_aggregations:gitaly_service_client_requests_total:rate_30m
     expr: |
       sum by (component,deadline_type,env,environment,feature_category,fqdn,grpc_code,job,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
         rate(gitaly_service_client_requests_total{cluster="gprd-us-east1-c",env="gprd",job=~"praefect",type=~"monitoring"}[30m] offset 30s)
       )
+- name: 'SLI Aggregations: praefect - proxy-ops - 30m burn-rate - emitted by monitoring
+    - gprd-us-east1-d'
+  interval: 2m
+  rules:
   - record: sli_aggregations:gitaly_service_client_requests_total:rate_30m
     expr: |
       sum by (component,deadline_type,env,environment,feature_category,fqdn,grpc_code,job,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
@@ -133,7 +185,8 @@ groups:
       sum by (component,database,database_id,env,environment,feature_category,fqdn,job,product_stage,queue,region,shard,stage,stage_group,tier,transaction_type,type,urgency,worker) (
         rate(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count{database=~"praefect_(canary|production)",database_id=~".+:praefect-db-.+",env="gprd",job=~"stackdriver",type=~"praefect"}[1h] offset 30s)
       )
-- name: 'SLI Aggregations: praefect - proxy-apdex - 1h burn-rate'
+- name: 'SLI Aggregations: praefect - proxy-apdex - 1h burn-rate - emitted by monitoring
+    - gprd-gitlab-gke'
   interval: 1m
   rules:
   - record: sli_aggregations:grpc_server_handling_seconds_bucket:rate_1h
@@ -141,22 +194,35 @@ groups:
       sum by (component,env,environment,feature_category,fqdn,grpc_method,grpc_type,job,le,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
         rate(grpc_server_handling_seconds_bucket{cluster="gprd-gitlab-gke",env="gprd",grpc_type=~"unary",job=~"praefect",type=~"monitoring"}[1h] offset 30s)
       )
+- name: 'SLI Aggregations: praefect - proxy-apdex - 1h burn-rate - emitted by monitoring
+    - gprd-us-east1-b'
+  interval: 1m
+  rules:
   - record: sli_aggregations:grpc_server_handling_seconds_bucket:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,grpc_method,grpc_type,job,le,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
         rate(grpc_server_handling_seconds_bucket{cluster="gprd-us-east1-b",env="gprd",grpc_type=~"unary",job=~"praefect",type=~"monitoring"}[1h] offset 30s)
       )
+- name: 'SLI Aggregations: praefect - proxy-apdex - 1h burn-rate - emitted by monitoring
+    - gprd-us-east1-c'
+  interval: 1m
+  rules:
   - record: sli_aggregations:grpc_server_handling_seconds_bucket:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,grpc_method,grpc_type,job,le,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
         rate(grpc_server_handling_seconds_bucket{cluster="gprd-us-east1-c",env="gprd",grpc_type=~"unary",job=~"praefect",type=~"monitoring"}[1h] offset 30s)
       )
+- name: 'SLI Aggregations: praefect - proxy-apdex - 1h burn-rate - emitted by monitoring
+    - gprd-us-east1-d'
+  interval: 1m
+  rules:
   - record: sli_aggregations:grpc_server_handling_seconds_bucket:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,grpc_method,grpc_type,job,le,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
         rate(grpc_server_handling_seconds_bucket{cluster="gprd-us-east1-d",env="gprd",grpc_type=~"unary",job=~"praefect",type=~"monitoring"}[1h] offset 30s)
       )
-- name: 'SLI Aggregations: praefect - proxy-ops - 1h burn-rate'
+- name: 'SLI Aggregations: praefect - proxy-ops - 1h burn-rate - emitted by monitoring
+    - gprd-gitlab-gke'
   interval: 1m
   rules:
   - record: sli_aggregations:gitaly_service_client_requests_total:rate_1h
@@ -164,16 +230,28 @@ groups:
       sum by (component,deadline_type,env,environment,feature_category,fqdn,grpc_code,job,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
         rate(gitaly_service_client_requests_total{cluster="gprd-gitlab-gke",env="gprd",job=~"praefect",type=~"monitoring"}[1h] offset 30s)
       )
+- name: 'SLI Aggregations: praefect - proxy-ops - 1h burn-rate - emitted by monitoring
+    - gprd-us-east1-b'
+  interval: 1m
+  rules:
   - record: sli_aggregations:gitaly_service_client_requests_total:rate_1h
     expr: |
       sum by (component,deadline_type,env,environment,feature_category,fqdn,grpc_code,job,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
         rate(gitaly_service_client_requests_total{cluster="gprd-us-east1-b",env="gprd",job=~"praefect",type=~"monitoring"}[1h] offset 30s)
       )
+- name: 'SLI Aggregations: praefect - proxy-ops - 1h burn-rate - emitted by monitoring
+    - gprd-us-east1-c'
+  interval: 1m
+  rules:
   - record: sli_aggregations:gitaly_service_client_requests_total:rate_1h
     expr: |
       sum by (component,deadline_type,env,environment,feature_category,fqdn,grpc_code,job,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
         rate(gitaly_service_client_requests_total{cluster="gprd-us-east1-c",env="gprd",job=~"praefect",type=~"monitoring"}[1h] offset 30s)
       )
+- name: 'SLI Aggregations: praefect - proxy-ops - 1h burn-rate - emitted by monitoring
+    - gprd-us-east1-d'
+  interval: 1m
+  rules:
   - record: sli_aggregations:gitaly_service_client_requests_total:rate_1h
     expr: |
       sum by (component,deadline_type,env,environment,feature_category,fqdn,grpc_code,job,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (

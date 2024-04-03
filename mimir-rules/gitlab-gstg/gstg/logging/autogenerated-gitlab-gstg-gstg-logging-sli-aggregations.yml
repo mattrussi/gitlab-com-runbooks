@@ -46,7 +46,8 @@ groups:
       sum by (component,env,environment,feature_category,fqdn,pod,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
         rate(fluentd_output_status_write_count{env="gstg"}[5m] offset 30s)
       )
-- name: 'SLI Aggregations: logging - kibana_googlelb-ops - 5m burn-rate'
+- name: 'SLI Aggregations: logging - kibana_googlelb-ops - 5m burn-rate - emitted
+    by monitoring'
   interval: 1m
   rules:
   - record: sli_aggregations:stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count:rate_5m
@@ -54,7 +55,8 @@ groups:
       sum by (component,env,environment,feature_category,fqdn,product_stage,project_id,proxy_continent,queue,region,response_code,response_code_class,shard,stage,stage_group,tier,type,urgency,url_map_name,worker) (
         rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{env="gstg",project_id=~"gitlab-ops",type=~"monitoring",url_map_name=~"ops-prod-proxy"}[5m] offset 30s)
       )
-- name: 'SLI Aggregations: logging - pubsub_subscriptions-ops - 5m burn-rate'
+- name: 'SLI Aggregations: logging - pubsub_subscriptions-ops - 5m burn-rate - emitted
+    by monitoring'
   interval: 1m
   rules:
   - record: sli_aggregations:stackdriver_pubsub_subscription_pubsub_googleapis_com_subscription_byte_cost:rate_5m
@@ -62,7 +64,8 @@ groups:
       sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,subscription_id,tier,type,urgency,worker) (
         rate(stackdriver_pubsub_subscription_pubsub_googleapis_com_subscription_byte_cost{env="gstg",type=~"monitoring"}[5m] offset 30s)
       )
-- name: 'SLI Aggregations: logging - pubsub_topics-ops - 5m burn-rate'
+- name: 'SLI Aggregations: logging - pubsub_topics-ops - 5m burn-rate - emitted by
+    monitoring'
   interval: 1m
   rules:
   - record: sli_aggregations:stackdriver_pubsub_topic_pubsub_googleapis_com_topic_byte_cost:rate_5m
@@ -83,7 +86,7 @@ groups:
       sum by (component,env,environment,feature_category,fqdn,pod,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
         rate(pubsubbeat_libbeat_output_events{env="gstg"}[5m] offset 30s)
       )
-- name: 'SLI Aggregations: logging - stackdriver-ops - 5m burn-rate'
+- name: 'SLI Aggregations: logging - stackdriver-ops - 5m burn-rate - emitted by monitoring'
   interval: 1m
   rules:
   - record: sli_aggregations:stackdriver_gce_instance_logging_googleapis_com_log_entry_count:rate_5m
@@ -136,7 +139,8 @@ groups:
       sum by (component,env,environment,feature_category,fqdn,pod,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
         rate(fluentd_output_status_write_count{env="gstg"}[30m] offset 30s)
       )
-- name: 'SLI Aggregations: logging - kibana_googlelb-ops - 30m burn-rate'
+- name: 'SLI Aggregations: logging - kibana_googlelb-ops - 30m burn-rate - emitted
+    by monitoring'
   interval: 2m
   rules:
   - record: sli_aggregations:stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count:rate_30m
@@ -144,7 +148,8 @@ groups:
       sum by (component,env,environment,feature_category,fqdn,product_stage,project_id,proxy_continent,queue,region,response_code,response_code_class,shard,stage,stage_group,tier,type,urgency,url_map_name,worker) (
         rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{env="gstg",project_id=~"gitlab-ops",type=~"monitoring",url_map_name=~"ops-prod-proxy"}[30m] offset 30s)
       )
-- name: 'SLI Aggregations: logging - pubsub_subscriptions-ops - 30m burn-rate'
+- name: 'SLI Aggregations: logging - pubsub_subscriptions-ops - 30m burn-rate - emitted
+    by monitoring'
   interval: 2m
   rules:
   - record: sli_aggregations:stackdriver_pubsub_subscription_pubsub_googleapis_com_subscription_byte_cost:rate_30m
@@ -152,7 +157,8 @@ groups:
       sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,subscription_id,tier,type,urgency,worker) (
         rate(stackdriver_pubsub_subscription_pubsub_googleapis_com_subscription_byte_cost{env="gstg",type=~"monitoring"}[30m] offset 30s)
       )
-- name: 'SLI Aggregations: logging - pubsub_topics-ops - 30m burn-rate'
+- name: 'SLI Aggregations: logging - pubsub_topics-ops - 30m burn-rate - emitted by
+    monitoring'
   interval: 2m
   rules:
   - record: sli_aggregations:stackdriver_pubsub_topic_pubsub_googleapis_com_topic_byte_cost:rate_30m
@@ -173,7 +179,8 @@ groups:
       sum by (component,env,environment,feature_category,fqdn,pod,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
         rate(pubsubbeat_libbeat_output_events{env="gstg"}[30m] offset 30s)
       )
-- name: 'SLI Aggregations: logging - stackdriver-ops - 30m burn-rate'
+- name: 'SLI Aggregations: logging - stackdriver-ops - 30m burn-rate - emitted by
+    monitoring'
   interval: 2m
   rules:
   - record: sli_aggregations:stackdriver_gce_instance_logging_googleapis_com_log_entry_count:rate_30m
@@ -226,7 +233,8 @@ groups:
       sum by (component,env,environment,feature_category,fqdn,pod,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
         rate(fluentd_output_status_write_count{env="gstg"}[1h] offset 30s)
       )
-- name: 'SLI Aggregations: logging - kibana_googlelb-ops - 1h burn-rate'
+- name: 'SLI Aggregations: logging - kibana_googlelb-ops - 1h burn-rate - emitted
+    by monitoring'
   interval: 1m
   rules:
   - record: sli_aggregations:stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count:rate_1h
@@ -234,7 +242,8 @@ groups:
       sum by (component,env,environment,feature_category,fqdn,product_stage,project_id,proxy_continent,queue,region,response_code,response_code_class,shard,stage,stage_group,tier,type,urgency,url_map_name,worker) (
         rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{env="gstg",project_id=~"gitlab-ops",type=~"monitoring",url_map_name=~"ops-prod-proxy"}[1h] offset 30s)
       )
-- name: 'SLI Aggregations: logging - pubsub_subscriptions-ops - 1h burn-rate'
+- name: 'SLI Aggregations: logging - pubsub_subscriptions-ops - 1h burn-rate - emitted
+    by monitoring'
   interval: 1m
   rules:
   - record: sli_aggregations:stackdriver_pubsub_subscription_pubsub_googleapis_com_subscription_byte_cost:rate_1h
@@ -242,7 +251,8 @@ groups:
       sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,subscription_id,tier,type,urgency,worker) (
         rate(stackdriver_pubsub_subscription_pubsub_googleapis_com_subscription_byte_cost{env="gstg",type=~"monitoring"}[1h] offset 30s)
       )
-- name: 'SLI Aggregations: logging - pubsub_topics-ops - 1h burn-rate'
+- name: 'SLI Aggregations: logging - pubsub_topics-ops - 1h burn-rate - emitted by
+    monitoring'
   interval: 1m
   rules:
   - record: sli_aggregations:stackdriver_pubsub_topic_pubsub_googleapis_com_topic_byte_cost:rate_1h
@@ -263,7 +273,7 @@ groups:
       sum by (component,env,environment,feature_category,fqdn,pod,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
         rate(pubsubbeat_libbeat_output_events{env="gstg"}[1h] offset 30s)
       )
-- name: 'SLI Aggregations: logging - stackdriver-ops - 1h burn-rate'
+- name: 'SLI Aggregations: logging - stackdriver-ops - 1h burn-rate - emitted by monitoring'
   interval: 1m
   rules:
   - record: sli_aggregations:stackdriver_gce_instance_logging_googleapis_com_log_entry_count:rate_1h
