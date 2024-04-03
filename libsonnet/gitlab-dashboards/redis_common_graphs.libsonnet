@@ -10,12 +10,12 @@ local templates = import 'grafana/templates.libsonnet';
 local processExporter = import 'gitlab-dashboards/process_exporter.libsonnet';
 
 {
-  clientPanels(serviceType, startRow, cluster=false)::
+  clientPanels(serviceType, startRow, cluster=false, sharded=false)::
     local formatConfig = {
       selector: selectors.serializeHash({
         environment: '$environment',
         type: serviceType,
-        [if cluster then 'shard']: { re: '$shard' },
+        [if (cluster || sharded) then 'shard']: { re: '$shard' },
       }),
     };
 
@@ -58,7 +58,7 @@ local processExporter = import 'gitlab-dashboards/process_exporter.libsonnet';
     ),
 
 
-  workload(serviceType, startRow, cluster=false)::
+  workload(serviceType, startRow, cluster=false, sharded=false)::
     local formatConfig = {
       serviceType: serviceType,
       primarySelectorSnippet: 'and on (pod, fqdn) redis_instance_info{role="master", environment="$environment"}',
@@ -66,7 +66,7 @@ local processExporter = import 'gitlab-dashboards/process_exporter.libsonnet';
       selector: selectors.serializeHash({
         environment: '$environment',
         type: serviceType,
-        [if cluster then 'shard']: { re: '$shard' },
+        [if (cluster || sharded) then 'shard']: { re: '$shard' },
       }),
     };
     local panels = layout.grid([
@@ -262,12 +262,12 @@ local processExporter = import 'gitlab-dashboards/process_exporter.libsonnet';
       panels=panels,
     ),
 
-  data(serviceType, startRow, hitRatio=false, cluster=false)::
+  data(serviceType, startRow, hitRatio=false, cluster=false, sharded=false)::
     local formatConfig = {
       selector: selectors.serializeHash({
         environment: '$environment',
         type: serviceType,
-        [if cluster then 'shard']: { re: '$shard' },
+        [if (cluster || sharded) then 'shard']: { re: '$shard' },
       }),
     };
     local charts = [
@@ -398,12 +398,12 @@ local processExporter = import 'gitlab-dashboards/process_exporter.libsonnet';
       panels=layout.grid(charts, cols=2, rowHeight=10, startRow=startRow + 1),
     ),
 
-  replication(serviceType, startRow, cluster=false)::
+  replication(serviceType, startRow, cluster=false, sharded=false)::
     local formatConfig = {
       selector: selectors.serializeHash({
         environment: '$environment',
         type: serviceType,
-        [if cluster then 'shard']: { re: '$shard' },
+        [if (cluster || sharded) then 'shard']: { re: '$shard' },
       }),
     };
     local panels = layout.grid([
@@ -535,20 +535,25 @@ local processExporter = import 'gitlab-dashboards/process_exporter.libsonnet';
     ),
 
 
-  redisDashboard(service, cluster=false, hitRatio=false)::
+  redisDashboard(service, cluster=false, hitRatio=false, sharded=false)::
     local dashboard =
       serviceDashboard.overview(service)
-      .addPanels(self.clientPanels(serviceType=service, startRow=1000, cluster=cluster))
-      .addPanels(self.workload(serviceType=service, startRow=2000, cluster=cluster))
-      .addPanels(self.data(serviceType=service, startRow=3000, hitRatio=hitRatio, cluster=cluster))
-      .addPanels(self.replication(serviceType=service, startRow=4000, cluster=cluster));
+      .addPanels(self.clientPanels(serviceType=service, startRow=1000, cluster=cluster, sharded=sharded))
+      .addPanels(self.workload(serviceType=service, startRow=2000, cluster=cluster, sharded=sharded))
+      .addPanels(self.data(serviceType=service, startRow=3000, hitRatio=hitRatio, cluster=cluster, sharded=sharded))
+      .addPanels(self.replication(serviceType=service, startRow=4000, cluster=cluster, sharded=sharded));
+
+    local templatedDashboard = if sharded then
+      dashboard.addTemplate(templates.redisShard)
+    else if cluster then
+      dashboard.addTemplate(templates.redisClusterShard)
+    else
+      dashboard;
 
     if cluster then
-      dashboard
-      .addTemplate(templates.shard)
-      .addPanels(self.cluster(serviceType=service, startRow=5000))
+      templatedDashboard.addPanels(self.cluster(serviceType=service, startRow=5000))
     else
-      dashboard
+      templatedDashboard
       .addPanels(
         layout.titleRowWithPanels(
           title='Sentinel Processes',
@@ -561,6 +566,7 @@ local processExporter = import 'gitlab-dashboards/process_exporter.libsonnet';
               groupname: { re: 'redis-sentinel.*' },
               type: service,
               stage: '$stage',
+              [if sharded then 'shard']: { re: '$shard' },
             },
             startRow=5000
           ),
