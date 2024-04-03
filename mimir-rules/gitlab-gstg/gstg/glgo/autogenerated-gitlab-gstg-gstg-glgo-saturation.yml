@@ -8,7 +8,7 @@ groups:
     labels:
       component: open_fds
     expr: |
-      max by(env, environment, tier, type, stage, shard) (
+      max by(env, environment, tier, type, stage, shard, job, instance) (
         clamp_min(
           clamp_max(
             (
@@ -33,7 +33,7 @@ groups:
       stage: main
       tier: inf
     expr: |
-      max by(env, environment, type, shard) (
+      max by(env, environment, type, shard, revision_name, region) (
         clamp_min(
           clamp_max(
             histogram_quantile(0.9999, sum by(le, env, environment, type, shard, revision_name, region, location)
@@ -54,7 +54,7 @@ groups:
       stage: main
       tier: inf
     expr: |
-      max by(env, environment, type, shard) (
+      max by(env, environment, type, shard, revision_name, region) (
         clamp_min(
           clamp_max(
             sum by (env, environment, type, shard, revision_name, region, location) (
@@ -73,7 +73,7 @@ groups:
       stage: main
       tier: inf
     expr: |
-      max by(env, environment, type, shard) (
+      max by(env, environment, type, shard, revision_name, region) (
         clamp_min(
           clamp_max(
             histogram_quantile(0.9999, sum by(le, env, environment, type, shard, revision_name, region, location)
@@ -94,7 +94,7 @@ groups:
       stage: main
       tier: inf
     expr: |
-      max by(env, environment, type, shard) (
+      max by(env, environment, type, shard, revision_name, region) (
         clamp_min(
           clamp_max(
             histogram_quantile(0.9999, sum by(le, env, environment, type, shard, revision_name, region)

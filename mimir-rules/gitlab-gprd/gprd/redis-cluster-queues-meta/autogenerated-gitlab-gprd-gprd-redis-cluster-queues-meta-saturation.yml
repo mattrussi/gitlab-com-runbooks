@@ -23,7 +23,7 @@ groups:
     labels:
       component: disk_inodes
     expr: |
-      max by(env, environment, tier, type, stage, shard) (
+      max by(env, environment, tier, type, stage, shard, fqdn, device) (
         clamp_min(
           clamp_max(
             1 - (
@@ -40,7 +40,7 @@ groups:
     labels:
       component: disk_space
     expr: |
-      max by(env, environment, tier, type, stage, shard) (
+      max by(env, environment, tier, type, stage, shard, fqdn, device) (
         clamp_min(
           clamp_max(
             (
@@ -55,7 +55,7 @@ groups:
     labels:
       component: kube_container_cpu
     expr: |
-      quantile by(env, environment, tier, type, stage, shard) (
+      quantile by(env, environment, tier, type, stage, shard, pod, container) (
         0.99,
         clamp_min(
           clamp_max(
@@ -75,7 +75,7 @@ groups:
     labels:
       component: kube_container_cpu_limit
     expr: |
-      max by(env, environment, tier, type, stage, shard) (
+      max by(env, environment, tier, type, stage, shard, pod, container) (
         clamp_min(
           clamp_max(
             sum by (env, environment, tier, type, stage, shard, pod, container) (
@@ -111,7 +111,7 @@ groups:
     labels:
       component: kube_container_throttling
     expr: |
-      quantile by(env, environment, tier, type, stage, shard) (
+      quantile by(env, environment, tier, type, stage, shard, pod, container) (
         0.99,
         clamp_min(
           clamp_max(
@@ -129,7 +129,7 @@ groups:
     labels:
       component: kube_horizontalpodautoscaler_desired_replicas
     expr: |
-      max by(env, environment, tier, type, stage, shard) (
+      max by(env, environment, tier, type, stage, shard, horizontalpodautoscaler, shard) (
         clamp_min(
           clamp_max(
             kube_horizontalpodautoscaler_status_desired_replicas:labeled{env="gprd",type="redis-cluster-queues-meta", shard!~"database-throttled|elasticsearch|gitaly-throttled|urgent-authorized-projects|urgent-other", namespace!~"pubsubbeat"}
@@ -159,7 +159,7 @@ groups:
     labels:
       component: kube_pool_max_nodes
     expr: |
-      max by(env, environment, tier, type, stage, shard) (
+      max by(env, environment, tier, type, stage, shard, cluster, label_pool, shard) (
         clamp_min(
           clamp_max(
             count by (cluster, env, environment, label_pool, tier, type, stage, shard) (
@@ -186,7 +186,7 @@ groups:
     labels:
       component: memory
     expr: |
-      max by(env, environment, tier, type, stage, shard) (
+      max by(env, environment, tier, type, stage, shard, fqdn) (
         clamp_min(
           clamp_max(
             instance:node_memory_utilization:ratio{env="gprd",type="redis-cluster-queues-meta"} or instance:node_memory_utilisation:ratio{env="gprd",type="redis-cluster-queues-meta"}
@@ -199,7 +199,7 @@ groups:
     labels:
       component: nf_conntrack_entries
     expr: |
-      max by(env, environment, tier, type, stage, shard) (
+      max by(env, environment, tier, type, stage, shard, fqdn, instance) (
         clamp_min(
           clamp_max(
             max_over_time(node_nf_conntrack_entries{env="gprd",type="redis-cluster-queues-meta"}[1m])
@@ -214,7 +214,7 @@ groups:
     labels:
       component: node_schedstat_waiting
     expr: |
-      max by(env, environment, tier, type, stage, shard) (
+      max by(env, environment, tier, type, stage, shard, fqdn, shard) (
         clamp_min(
           clamp_max(
             avg without (cpu) (rate(node_schedstat_waiting_seconds_total{env="gprd",type="redis-cluster-queues-meta"}[1h]))
@@ -227,7 +227,7 @@ groups:
     labels:
       component: open_fds
     expr: |
-      max by(env, environment, tier, type, stage, shard) (
+      max by(env, environment, tier, type, stage, shard, job, instance) (
         clamp_min(
           clamp_max(
             (
@@ -250,7 +250,7 @@ groups:
     labels:
       component: redis_cluster_clients
     expr: |
-      max by(env, environment, tier, type, stage, shard) (
+      max by(env, environment, tier, type, stage, shard, fqdn, instance, shard) (
         clamp_min(
           clamp_max(
             max_over_time(redis_connected_clients{env="gprd",type="redis-cluster-queues-meta"}[1m])
@@ -265,7 +265,7 @@ groups:
     labels:
       component: redis_cluster_memory
     expr: |
-      max by(env, environment, tier, type, stage, shard) (
+      max by(env, environment, tier, type, stage, shard, fqdn, instance, shard) (
         clamp_min(
           clamp_max(
             max by (env, environment, tier, type, stage, shard, fqdn, instance, shard) (
@@ -286,7 +286,7 @@ groups:
     labels:
       component: redis_cluster_primary_cpu
     expr: |
-      max by(env, environment, tier, type, stage, shard) (
+      max by(env, environment, tier, type, stage, shard, fqdn, instance, shard) (
         clamp_min(
           clamp_max(
             sum by (env, environment, tier, type, stage, shard, fqdn, instance, shard) (
@@ -303,7 +303,7 @@ groups:
     labels:
       component: redis_secondary_cpu
     expr: |
-      max by(env, environment, tier, type, stage, shard) (
+      max by(env, environment, tier, type, stage, shard, fqdn, instance, shard) (
         clamp_min(
           clamp_max(
             (
@@ -321,7 +321,7 @@ groups:
     labels:
       component: shard_cpu
     expr: |
-      max by(env, environment, tier, type, stage, shard) (
+      max by(env, environment, tier, type, stage, shard, shard) (
         clamp_min(
           clamp_max(
             1 - avg by (env, environment, tier, type, stage, shard, shard) (
@@ -336,7 +336,7 @@ groups:
     labels:
       component: single_node_cpu
     expr: |
-      max by(env, environment, tier, type, stage, shard) (
+      max by(env, environment, tier, type, stage, shard, fqdn) (
         clamp_min(
           clamp_max(
             avg without(cpu, mode) (1 - rate(node_cpu_seconds_total{mode="idle", env="gprd",type="redis-cluster-queues-meta"}[5m]))

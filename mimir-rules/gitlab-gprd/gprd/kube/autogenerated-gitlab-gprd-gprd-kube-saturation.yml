@@ -8,7 +8,7 @@ groups:
     labels:
       component: kube_container_cpu
     expr: |
-      quantile by(env, environment, tier, type, stage, shard) (
+      quantile by(env, environment, tier, type, stage, shard, pod, container) (
         0.99,
         clamp_min(
           clamp_max(
@@ -28,7 +28,7 @@ groups:
     labels:
       component: kube_container_cpu_limit
     expr: |
-      max by(env, environment, tier, type, stage, shard) (
+      max by(env, environment, tier, type, stage, shard, pod, container) (
         clamp_min(
           clamp_max(
             sum by (env, environment, tier, type, stage, shard, pod, container) (
@@ -64,7 +64,7 @@ groups:
     labels:
       component: kube_container_throttling
     expr: |
-      quantile by(env, environment, tier, type, stage, shard) (
+      quantile by(env, environment, tier, type, stage, shard, pod, container) (
         0.99,
         clamp_min(
           clamp_max(
@@ -82,7 +82,7 @@ groups:
     labels:
       component: kube_horizontalpodautoscaler_desired_replicas
     expr: |
-      max by(env, environment, tier, type, stage, shard) (
+      max by(env, environment, tier, type, stage, shard, horizontalpodautoscaler, shard) (
         clamp_min(
           clamp_max(
             kube_horizontalpodautoscaler_status_desired_replicas:labeled{env="gprd",type="kube", shard!~"database-throttled|elasticsearch|gitaly-throttled|urgent-authorized-projects|urgent-other", namespace!~"pubsubbeat"}
@@ -100,7 +100,7 @@ groups:
       tier: inf
       type: kube
     expr: |
-      max by(env, environment, shard) (
+      max by(env, environment, shard, cluster) (
         clamp_min(
           clamp_max(
             sum(:kube_pod_info_node_count:{env="gprd",type="kube"}) by (env, environment, shard, cluster)
@@ -120,7 +120,7 @@ groups:
       tier: inf
       type: kube
     expr: |
-      max by(env, environment, shard) (
+      max by(env, environment, shard, cluster, namespace, persistentvolumeclaim) (
         clamp_min(
           clamp_max(
             kubelet_volume_stats_used_bytes
@@ -138,7 +138,7 @@ groups:
       tier: inf
       type: kube
     expr: |
-      max by(env, environment, shard) (
+      max by(env, environment, shard, persistentvolumeclaim) (
         clamp_min(
           clamp_max(
             kubelet_volume_stats_inodes_used
@@ -168,7 +168,7 @@ groups:
     labels:
       component: kube_pool_max_nodes
     expr: |
-      max by(env, environment, tier, type, stage, shard) (
+      max by(env, environment, tier, type, stage, shard, cluster, label_pool, shard) (
         clamp_min(
           clamp_max(
             count by (cluster, env, environment, label_pool, tier, type, stage, shard) (

@@ -19,7 +19,7 @@ groups:
       component: cpu
     record: gitlab_component_saturation:ratio
   - expr: |
-      max by(type) (
+      max by(type, fqdn, device) (
         clamp_min(
           clamp_max(
             1 - (
@@ -36,7 +36,7 @@ groups:
       component: disk_inodes
     record: gitlab_component_saturation:ratio
   - expr: |
-      max by(type) (
+      max by(type, node, device) (
         clamp_min(
           clamp_max(
             (
@@ -51,7 +51,7 @@ groups:
       component: disk_space
     record: gitlab_component_saturation:ratio
   - expr: |
-      max by(type) (
+      max by(type, fqdn) (
         clamp_min(
           clamp_max(
             sum by (type, fqdn) (
@@ -68,7 +68,7 @@ groups:
       component: go_goroutines
     record: gitlab_component_saturation:ratio
   - expr: |
-      max by(type) (
+      max by(type, fqdn) (
         clamp_min(
           clamp_max(
             max by (type, fqdn) (
@@ -87,7 +87,7 @@ groups:
       component: go_memory
     record: gitlab_component_saturation:ratio
   - expr: |
-      quantile by(type) (
+      quantile by(type, pod, container) (
         0.99,
         clamp_min(
           clamp_max(
@@ -107,7 +107,7 @@ groups:
       component: kube_container_cpu
     record: gitlab_component_saturation:ratio
   - expr: |
-      max by(type) (
+      max by(type, pod, container) (
         clamp_min(
           clamp_max(
             sum by (type, pod, container) (
@@ -173,7 +173,7 @@ groups:
       component: kube_pool_cpu
     record: gitlab_component_saturation:ratio
   - expr: |
-      max by(type) (
+      max by(type, node) (
         clamp_min(
           clamp_max(
             instance:node_memory_utilization:ratio{type=~"gitaly|consul|praefect"} or instance:node_memory_utilisation:ratio{type=~"gitaly|consul|praefect"}
@@ -186,7 +186,7 @@ groups:
       component: memory
     record: gitlab_component_saturation:ratio
   - expr: |
-      max by(type) (
+      max by(type, fqdn, shard) (
         clamp_min(
           clamp_max(
             avg without (cpu) (rate(node_schedstat_waiting_seconds_total{type=~"consul|gitaly|praefect"}[1h]))
@@ -214,7 +214,7 @@ groups:
       component: puma_workers
     record: gitlab_component_saturation:ratio
   - expr: |
-      max by(type) (
+      max by(type, node) (
         clamp_min(
           clamp_max(
             avg without(cpu, mode) (1 - rate(node_cpu_seconds_total{mode="idle", type=~"gitaly|consul|praefect"}[5m]))

@@ -23,7 +23,7 @@ groups:
     labels:
       component: elastic_disk_space
     expr: |
-      max by(env, environment, tier, type, stage, shard) (
+      max by(env, environment, tier, type, stage, shard, host) (
         clamp_min(
           clamp_max(
             sum by (env, environment, tier, type, stage, shard, host) (
@@ -42,7 +42,7 @@ groups:
     labels:
       component: elastic_jvm_heap_memory
     expr: |
-      max by(env, environment, tier, type, stage, shard) (
+      max by(env, environment, tier, type, stage, shard, name) (
         clamp_min(
           clamp_max(
             elasticsearch_jvm_memory_used_bytes{area="heap", env="gprd",type="logging"}
@@ -57,7 +57,7 @@ groups:
     labels:
       component: elastic_single_node_cpu
     expr: |
-      max by(env, environment, tier, type, stage, shard) (
+      max by(env, environment, tier, type, stage, shard, name) (
         clamp_min(
           clamp_max(
             avg_over_time(elasticsearch_process_cpu_percent{env="gprd",type="logging"}[5m]) / 100
@@ -70,7 +70,7 @@ groups:
     labels:
       component: elastic_single_node_disk_space
     expr: |
-      max by(env, environment, tier, type, stage, shard) (
+      max by(env, environment, tier, type, stage, shard, name) (
         clamp_min(
           clamp_max(
             (
@@ -91,7 +91,7 @@ groups:
     labels:
       component: elastic_thread_pools
     expr: |
-      max by(env, environment, tier, type, stage, shard) (
+      max by(env, environment, tier, type, stage, shard, name, exported_type) (
         clamp_min(
           clamp_max(
             (
@@ -108,7 +108,7 @@ groups:
     labels:
       component: kube_container_cpu
     expr: |
-      quantile by(env, environment, tier, type, stage, shard) (
+      quantile by(env, environment, tier, type, stage, shard, pod, container) (
         0.99,
         clamp_min(
           clamp_max(
@@ -128,7 +128,7 @@ groups:
     labels:
       component: kube_container_cpu_limit
     expr: |
-      max by(env, environment, tier, type, stage, shard) (
+      max by(env, environment, tier, type, stage, shard, pod, container) (
         clamp_min(
           clamp_max(
             sum by (env, environment, tier, type, stage, shard, pod, container) (
@@ -164,7 +164,7 @@ groups:
     labels:
       component: kube_container_throttling
     expr: |
-      quantile by(env, environment, tier, type, stage, shard) (
+      quantile by(env, environment, tier, type, stage, shard, pod, container) (
         0.99,
         clamp_min(
           clamp_max(
@@ -182,7 +182,7 @@ groups:
     labels:
       component: kube_horizontalpodautoscaler_desired_replicas
     expr: |
-      max by(env, environment, tier, type, stage, shard) (
+      max by(env, environment, tier, type, stage, shard, horizontalpodautoscaler, shard) (
         clamp_min(
           clamp_max(
             kube_horizontalpodautoscaler_status_desired_replicas:labeled{env="gprd",type="logging", shard!~"database-throttled|elasticsearch|gitaly-throttled|urgent-authorized-projects|urgent-other", namespace!~"pubsubbeat"}
@@ -197,7 +197,7 @@ groups:
     labels:
       component: open_fds
     expr: |
-      max by(env, environment, tier, type, stage, shard) (
+      max by(env, environment, tier, type, stage, shard, job, instance) (
         clamp_min(
           clamp_max(
             (

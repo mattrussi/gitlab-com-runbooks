@@ -312,7 +312,7 @@ local resourceSaturationPoint = function(options)
         // For example, we might want to filter for labels in the source metrics that
         // are overridden by static labels in the recording.
         local selectorHash = typeSelector + extraSelector;
-        local query = definition.getQuery(selectorHash, definition.getBurnRatePeriod(), extraStaticLabels=staticLabels);
+        local query = definition.getQuery(selectorHash, definition.getBurnRatePeriod(), maxAggregationLabels=definition.resourceLabels, extraStaticLabels=staticLabels);
 
         {
           record: 'gitlab_component_saturation:ratio',
