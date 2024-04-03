@@ -39,6 +39,38 @@ The primary limits tenants will face are:
 - `max_global_series_per_user` -  Maximum in-memory series allowed in an ingester
 - `max_label_names_per_series` - Maximum label names per sent series
 
+## Accessing metrics through the Mimir API
+
+Mimir provides an HTTP endpoint which exposes a [Prometheus query API](https://prometheus.io/docs/prometheus/latest/querying/api/).
+
+In order to access the API programmatically, the following steps are necessary:
+
+1. Specify a tenant scope through `X-Scope-OrgID` header. For example use `X-ScopeOrgID: gitlab-gprd` for production metrics.
+2. Use HTTP basic auth to authenticate, see vault [`k8s/shared/observability/tenants/runbooks`](https://vault.gitlab.net/ui/vault/secrets/k8s/kv/shared%2Fobservability%2Ftenants%2Frunbooks/details) for secrets.
+3. The API is exposed through `https://mimir-internal.ops.gke.gitlab.net/prometheus`, which is also available through port-forwarding.
+
+For team members without cluster-level network access, consider using below socks-proxy based solution:
+
+```
+ssh -D "18202" "lb-bastion.gstg.gitlab.com" 'echo "Connected! Press Enter to disconnect."; read disconnect' >&2
+```
+
+Full example with authentication and using above proxy:
+
+```
+username=$(vault kv get -field=username -mount="k8s" "shared/observability/tenants/runbooks")
+password=$(vault kv get -field=password -mount="k8s" "shared/observability/tenants/runbooks")
+
+curl \
+  -x socks5://localhost:18202 \
+  --user ${username}:${password} \
+  -H "X-Scope-OrgID: gitlab-gstg" \
+  https://mimir-internal.ops.gke.gitlab.net/prometheus/api/v1/query\?query\=up
+```
+
+Please exercise caution when specifying more than one tenant in `X-Scope-OrgID: tenant1|tenant2|...`.
+This drastically increases the data scope for a given query and hence the load on the system.
+
 ## Sending Metrics To Mimir
 
 After you have set up the tenant (or use an existing), you can setup your prometheus client to remote-write metrics
