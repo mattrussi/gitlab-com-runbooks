@@ -82,66 +82,77 @@ local resolveRecordingRuleFor(metricName, aggregationLabels, selector, rangeInte
     selector: selectors.serializeHash(selector),
   };
 
-
-local recordingRulesForClusters(clusters, metricName, aggregationLabels, selector, burnRate) =
-  if std.length(clusters) > 0 then
-    std.map(
-      function(cluster)
-        local selectorWithCluster = selectors.merge(selector, { cluster: cluster });
-        generateRecordingRulesForMetric(metricName, aggregationLabels, selectorWithCluster, burnRate),
-      clusters
-    )
-  else
-    [generateRecordingRulesForMetric(metricName, aggregationLabels, selector, burnRate)];
-
-local recordingRulesForTypes(types, metricName, aggregationLabels, selector, burnRate) =
-  std.flatMap(
-    function(type)
-      local serviceDefinition = metricsCatalog.getServiceOptional(type);
-      local isKubeProvisioned = serviceDefinition != null && serviceDefinition.provisioning.kubernetes;
-      local env = std.get(selector, 'env');
-      local clusters = if env != null && isKubeProvisioned then
-        std.get(metricsConfig.gkeClustersByEnvironment, env, default=[])
-      else
-        [];
-      local selectorPerType = selectors.merge(
-        selector,
-        { type: { oneOf: [type] } }
-      );
-      recordingRulesForClusters(clusters, metricName, aggregationLabels, selectorPerType, burnRate),
-    types
-  );
-
-local rulesForMetrics(metrics, descriptor, burnRate, extraSelector) =
-  local aggregationLabelsByMetric = descriptor.aggregationLabelsByMetric;
-  local selectorsByMetric = descriptor.selectorsByMetric;
-  local emittingTypesByMetric = descriptor.emittingTypesByMetric;
-  std.flatMap(
+local generateRuleGroupForMetrics(metrics, metricGroupName, serviceDefinition, emittingType, descriptor, extraSelector, burnRate, cluster=null) =
+  local rules = std.map(
     function(metricName)
+      local aggregationLabels = descriptor.aggregationLabelsByMetric[metricName];
+      local selectorsByMetric = descriptor.selectorsByMetric;
       local selector = selectors.merge(
         selectorsByMetric[metricName],
         extraSelector
       );
-      local emittingTypes = emittingTypesByMetric[metricName];
-      local aggregationLabels = aggregationLabelsByMetric[metricName];
-
-      if std.length(emittingTypes) > 0 then
-        recordingRulesForTypes(emittingTypes, metricName, aggregationLabels, selector, burnRate)
-      else
-        [generateRecordingRulesForMetric(metricName, aggregationLabels, selector, burnRate)],
+      generateRecordingRulesForMetric(metricName, aggregationLabels, selector, burnRate),
     metrics
   );
+  {
+    name: 'SLI Aggregations: %(serviceName)s - %(metricGroupName)s - %(burnRate)s burn-rate%(emittedBy)s%(clusterOptional)s' % {
+      serviceName: serviceDefinition.type,
+      metricGroupName: metricGroupName,
+      burnRate: burnRate,
+      emittedBy: if emittingType != null && emittingType != serviceDefinition.type then ' - emitted by %s' % emittingType else '',
+      clusterOptional: if cluster != null then ' - %s' % cluster else '',
+    },
+    interval: intervalForDuration.intervalForDuration(burnRate),
+    rules: rules,
+  };
+
+local ruleGroupsForClustersForMetrics(clusters, descriptor, serviceDefinition, emittingType, metricGroupName, metrics, extraSelector, burnRate) =
+  if std.length(clusters) > 0 then
+    std.map(
+      function(cluster)
+        local extraSelectorWithCluster = selectors.merge(extraSelector, { cluster: cluster });
+        generateRuleGroupForMetrics(metrics, metricGroupName, serviceDefinition, emittingType, descriptor, extraSelectorWithCluster, burnRate, cluster),
+      clusters,
+    )
+  else
+    [generateRuleGroupForMetrics(metrics, metricGroupName, serviceDefinition, emittingType, descriptor, extraSelector, burnRate)];
+
+local ruleGroupsForTypesForMetrics(emittingTypes, descriptor, serviceDefinition, metricGroupName, metrics, burnRate, extraSelector) =
+  std.flatMap(
+    function(emittingType)
+      local emittingServiceDefinition = metricsCatalog.getServiceOptional(emittingType);
+      local isKubeProvisioned = emittingServiceDefinition != null && emittingServiceDefinition.provisioning.kubernetes;
+      local env = std.get(extraSelector, 'env');
+      local clusters = if env != null && isKubeProvisioned then
+        std.get(metricsConfig.gkeClustersByEnvironment, env, default=[])
+      else
+        [];
+      local extraSelectorWithType = selectors.merge(
+        extraSelector,
+        { type: { oneOf: [emittingType] } }
+      );
+      ruleGroupsForClustersForMetrics(
+        clusters, descriptor, serviceDefinition, emittingType, metricGroupName, metrics, extraSelectorWithType, burnRate
+      ),
+    emittingTypes
+  );
+
+local ruleGroupsForMetrics(metrics, descriptor, metricGroupName, serviceDefinition, descriptor, burnRate, extraSelector) =
+  local emittingTypesByMetric = descriptor.emittingTypesByMetric;
+  local metric = metrics[0];
+  local emittingTypes = emittingTypesByMetric[metric];
+
+  if std.length(emittingTypes) > 0 then
+    ruleGroupsForTypesForMetrics(emittingTypes, descriptor, serviceDefinition, metricGroupName, metrics, burnRate, extraSelector)
+  else
+    [generateRuleGroupForMetrics(metrics, metricGroupName, serviceDefinition, null, descriptor, extraSelector, burnRate)];
 
 local generateRecordingRuleGroups(serviceDefinition, burnRate, extraSelector) =
   local descriptor = sliMetricDescriptor.sliMetricsDescriptor(serviceDefinition.listServiceLevelIndicators());
 
-  std.map(
+  std.flatMap(
     function(metricGroupName)
-      {
-        name: 'SLI Aggregations: %s - %s - %s burn-rate' % [serviceDefinition.type, metricGroupName, burnRate],
-        interval: intervalForDuration.intervalForDuration(burnRate),
-        rules: rulesForMetrics(descriptor.allMetricGroups[metricGroupName], descriptor, burnRate, extraSelector),
-      },
+      ruleGroupsForMetrics(descriptor.allMetricGroups[metricGroupName], descriptor, metricGroupName, serviceDefinition, descriptor, burnRate, extraSelector),
     std.objectFields(descriptor.allMetricGroups),
   );
 

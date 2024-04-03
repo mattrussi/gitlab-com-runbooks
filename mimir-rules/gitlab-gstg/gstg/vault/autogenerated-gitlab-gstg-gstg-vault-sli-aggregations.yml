@@ -51,7 +51,8 @@ groups:
       sum by (component,env,environment,feature_category,fqdn,job,pod,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
         rate(vault_audit_log_response_failure{env="gstg",job=~"vault-active"}[5m] offset 30s)
       )
-- name: 'SLI Aggregations: vault - vault_google_lb-ops - 5m burn-rate'
+- name: 'SLI Aggregations: vault - vault_google_lb-ops - 5m burn-rate - emitted by
+    monitoring'
   interval: 1m
   rules:
   - record: sli_aggregations:stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count:rate_5m
@@ -109,7 +110,8 @@ groups:
       sum by (component,env,environment,feature_category,fqdn,job,pod,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
         rate(vault_audit_log_response_failure{env="gstg",job=~"vault-active"}[30m] offset 30s)
       )
-- name: 'SLI Aggregations: vault - vault_google_lb-ops - 30m burn-rate'
+- name: 'SLI Aggregations: vault - vault_google_lb-ops - 30m burn-rate - emitted by
+    monitoring'
   interval: 2m
   rules:
   - record: sli_aggregations:stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count:rate_30m
@@ -167,7 +169,8 @@ groups:
       sum by (component,env,environment,feature_category,fqdn,job,pod,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
         rate(vault_audit_log_response_failure{env="gstg",job=~"vault-active"}[1h] offset 30s)
       )
-- name: 'SLI Aggregations: vault - vault_google_lb-ops - 1h burn-rate'
+- name: 'SLI Aggregations: vault - vault_google_lb-ops - 1h burn-rate - emitted by
+    monitoring'
   interval: 1m
   rules:
   - record: sli_aggregations:stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count:rate_1h

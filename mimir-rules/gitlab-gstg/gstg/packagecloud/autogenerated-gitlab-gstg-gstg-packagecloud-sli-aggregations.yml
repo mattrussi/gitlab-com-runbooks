@@ -9,7 +9,8 @@ groups:
       sum by (component,database_id,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
         rate(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_mysql_queries{database_id=~".+:packagecloud-.+",env="gstg",type=~"packagecloud"}[5m] offset 30s)
       )
-- name: 'SLI Aggregations: packagecloud - loadbalancer-ops - 5m burn-rate'
+- name: 'SLI Aggregations: packagecloud - loadbalancer-ops - 5m burn-rate - emitted
+    by monitoring'
   interval: 1m
   rules:
   - record: sli_aggregations:stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count:rate_5m
@@ -25,7 +26,8 @@ groups:
       sum by (component,database_id,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
         rate(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_mysql_queries{database_id=~".+:packagecloud-.+",env="gstg",type=~"packagecloud"}[30m] offset 30s)
       )
-- name: 'SLI Aggregations: packagecloud - loadbalancer-ops - 30m burn-rate'
+- name: 'SLI Aggregations: packagecloud - loadbalancer-ops - 30m burn-rate - emitted
+    by monitoring'
   interval: 2m
   rules:
   - record: sli_aggregations:stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count:rate_30m
@@ -41,7 +43,8 @@ groups:
       sum by (component,database_id,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
         rate(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_mysql_queries{database_id=~".+:packagecloud-.+",env="gstg",type=~"packagecloud"}[1h] offset 30s)
       )
-- name: 'SLI Aggregations: packagecloud - loadbalancer-ops - 1h burn-rate'
+- name: 'SLI Aggregations: packagecloud - loadbalancer-ops - 1h burn-rate - emitted
+    by monitoring'
   interval: 1m
   rules:
   - record: sli_aggregations:stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count:rate_1h

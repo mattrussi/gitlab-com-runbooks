@@ -10,7 +10,7 @@ groups:
         rate(redis_commands_processed_total{env="gstg",type=~"redis-registry-cache"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: redis-registry-cache - registry_redis_client-apdex - 5m
-    burn-rate'
+    burn-rate - emitted by registry'
   interval: 1m
   rules:
   - record: sli_aggregations:registry_redis_single_commands_bucket:rate_5m
@@ -18,7 +18,8 @@ groups:
       sum by (command,component,env,environment,feature_category,fqdn,instance,le,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
         rate(registry_redis_single_commands_bucket{env="gstg",type=~"registry"}[5m] offset 30s)
       )
-- name: 'SLI Aggregations: redis-registry-cache - registry_redis_client-ops - 5m burn-rate'
+- name: 'SLI Aggregations: redis-registry-cache - registry_redis_client-ops - 5m burn-rate
+    - emitted by registry'
   interval: 1m
   rules:
   - record: sli_aggregations:registry_redis_single_commands_count:rate_5m
@@ -40,7 +41,7 @@ groups:
         rate(redis_commands_processed_total{env="gstg",type=~"redis-registry-cache"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: redis-registry-cache - registry_redis_client-apdex - 30m
-    burn-rate'
+    burn-rate - emitted by registry'
   interval: 2m
   rules:
   - record: sli_aggregations:registry_redis_single_commands_bucket:rate_30m
@@ -49,7 +50,7 @@ groups:
         rate(registry_redis_single_commands_bucket{env="gstg",type=~"registry"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: redis-registry-cache - registry_redis_client-ops - 30m
-    burn-rate'
+    burn-rate - emitted by registry'
   interval: 2m
   rules:
   - record: sli_aggregations:registry_redis_single_commands_count:rate_30m
@@ -71,7 +72,7 @@ groups:
         rate(redis_commands_processed_total{env="gstg",type=~"redis-registry-cache"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: redis-registry-cache - registry_redis_client-apdex - 1h
-    burn-rate'
+    burn-rate - emitted by registry'
   interval: 1m
   rules:
   - record: sli_aggregations:registry_redis_single_commands_bucket:rate_1h
@@ -79,7 +80,8 @@ groups:
       sum by (command,component,env,environment,feature_category,fqdn,instance,le,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
         rate(registry_redis_single_commands_bucket{env="gstg",type=~"registry"}[1h] offset 30s)
       )
-- name: 'SLI Aggregations: redis-registry-cache - registry_redis_client-ops - 1h burn-rate'
+- name: 'SLI Aggregations: redis-registry-cache - registry_redis_client-ops - 1h burn-rate
+    - emitted by registry'
   interval: 1m
   rules:
   - record: sli_aggregations:registry_redis_single_commands_count:rate_1h
