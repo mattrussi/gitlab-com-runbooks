@@ -58,7 +58,6 @@
   import 'redis-cluster-chat-cache.jsonnet',
   import 'redis-sessions.jsonnet',
   import 'redis-registry-cache.jsonnet',
-  import 'redis-repository-cache.jsonnet',
   import 'redis-db-load-balancing.jsonnet',
   import 'redis-pubsub.jsonnet',
   import 'redis.jsonnet',
