@@ -94,3 +94,6 @@ gitlab-ops project for network peering.
 | `10.253.0.0`    | `10.253.255.255`   | `10.253.0.0/16`  | N/A                            | **Ops GCP US-Central1**
 | `10.254.0.0`    | `10.254.255.255`   | `10.254.0.0/16`  | N/A                            | Legacy Azure
 | `10.255.0.0`    | `10.255.255.255`   | `10.255.0.0/16`  | db-benchmarking                | **DB Benchmarking GCP**
+| `10.110.0.0`    | `10.110.3.255`     | `10.110.0.0/22`  | gitlab-analysis-staging | [Data team](https://handbook.gitlab.com/handbook/business-technology/data-team/)
+| `10.108.0.0`    | `10.111.255.255`   | `10.111.0.0/14`  | gitlab-analysis-staging | [Data team](https://handbook.gitlab.com/handbook/business-technology/data-team/)
+| `10.112.0.0`    | `10.112.15.255`    | `10.112.0.0/20`  | gitlab-analysis-staging | [Data team](https://handbook.gitlab.com/handbook/business-technology/data-team/)
