@@ -64,7 +64,7 @@ password=$(vault kv get -field=password -mount="k8s" "shared/observability/tenan
 curl \
   -x socks5://localhost:18202 \
   --user ${username}:${password} \
-  -H "X-Scope-OrgID: gitlab-gprd" \
+  -H "X-Scope-OrgID: gitlab-gstg" \
   https://mimir-internal.ops.gke.gitlab.net/prometheus/api/v1/query\?query\=up
 ```
 
