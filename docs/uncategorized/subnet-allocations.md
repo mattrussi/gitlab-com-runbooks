@@ -56,6 +56,9 @@ gitlab-ops project for network peering.
 | `10.48.0.0`     | `10.63.255.255`    | `10.48.0.0/12`   | N/A                            | Legacy Azure
 | `10.64.0.0`     | `10.95.255.255`    | `10.64.0.0/11`   | gitlab-production              | GKE pods
 | `10.96.0.0`     | `10.127.255.255`   | `10.96.0.0/11`   | gitlab-staging                 | GKE pods
+| `10.108.0.0`    | `10.111.255.255`   | `10.111.0.0/14`  | gitlab-analysis-staging | [Data team](https://handbook.gitlab.com/handbook/business-technology/data-team/)
+| `10.110.0.0`    | `10.110.3.255`     | `10.110.0.0/22`  | gitlab-analysis-staging | [Data team](https://handbook.gitlab.com/handbook/business-technology/data-team/)
+| `10.112.0.0`    | `10.112.15.255`    | `10.112.0.0/20`  | gitlab-analysis-staging | [Data team](https://handbook.gitlab.com/handbook/business-technology/data-team/)
 | `10.128.0.0`    | `10.159.255.255`   | `10.128.0.0/11`  | gitlab-pre                     | GKE pods
 | `10.160.0.0`    | `10.163.255.255`   | `10.160.0.0/14`  | gitlab-analysis                | GKE pods
 | `10.164.0.0`    | `10.167.255.255`   | `10.164.0.0/14`  | gitlab-analysis                | GKE pods
@@ -94,6 +97,3 @@ gitlab-ops project for network peering.
 | `10.253.0.0`    | `10.253.255.255`   | `10.253.0.0/16`  | N/A                            | **Ops GCP US-Central1**
 | `10.254.0.0`    | `10.254.255.255`   | `10.254.0.0/16`  | N/A                            | Legacy Azure
 | `10.255.0.0`    | `10.255.255.255`   | `10.255.0.0/16`  | db-benchmarking                | **DB Benchmarking GCP**
-| `10.110.0.0`    | `10.110.3.255`     | `10.110.0.0/22`  | gitlab-analysis-staging | [Data team](https://handbook.gitlab.com/handbook/business-technology/data-team/)
-| `10.108.0.0`    | `10.111.255.255`   | `10.111.0.0/14`  | gitlab-analysis-staging | [Data team](https://handbook.gitlab.com/handbook/business-technology/data-team/)
-| `10.112.0.0`    | `10.112.15.255`    | `10.112.0.0/20`  | gitlab-analysis-staging | [Data team](https://handbook.gitlab.com/handbook/business-technology/data-team/)
