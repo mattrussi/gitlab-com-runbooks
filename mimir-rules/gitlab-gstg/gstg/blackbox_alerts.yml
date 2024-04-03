@@ -42,3 +42,4 @@ groups:
       runbook: docs/frontend/ssl_cert.md
       expires: In {{ $value | humanizeDuration }}
       title: SSL certificate for {{ $labels.instance }} expires soon
+

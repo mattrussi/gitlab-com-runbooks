@@ -87,3 +87,4 @@ groups:
       description: blackbox probe availability {{ $labels.instance }} is less than {{ $value | printf "%.2f" }}% for the last 1 hour.
       runbook: docs/blackbox/README.md
       title: Blackbox probes for {{ $labels.instance }} are failing.
+
