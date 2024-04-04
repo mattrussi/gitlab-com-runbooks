@@ -20,3 +20,4 @@ groups:
             sum by (image, env) (
               group by (image, cluster, env) (kube_pod_container_info{env=~"gstg", cluster=~".*-us-east1-.*", container_id!="", namespace=~"gitlab"})
             )
+
