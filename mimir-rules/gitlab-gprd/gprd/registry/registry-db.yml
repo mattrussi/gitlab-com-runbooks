@@ -4,9 +4,9 @@ groups:
   - alert: ContainerRegistryDBConnPoolSaturationTooHigh
     expr: >
       avg (
-        sum by (pod) (go_sql_dbstats_connections_open{app="registry"})
+        sum by (pod) (go_sql_dbstats_connections_open{app="registry", env="gprd"})
         /
-        sum by (pod) (go_sql_dbstats_connections_max_open{app="registry"})
+        sum by (pod) (go_sql_dbstats_connections_max_open{app="registry, env="gprd"})
       ) > 70
     for: 30m
     labels:
