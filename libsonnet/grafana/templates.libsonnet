@@ -105,11 +105,23 @@ local library = import 'gitlab-slis/library.libsonnet';
       refresh='load',
       sort=1,
     ),
-  shard::
+  redisClusterShard::
     template.new(
       'shard',
       '$PROMETHEUS_DS',
       'label_values(gitlab:redis_cluster_nodes:count{environment="$environment"}, shard)',
+      current='.*',
+      refresh='load',
+      sort=1,
+      multi=true,
+      includeAll=true,
+      allValues='.*',
+    ),
+  redisShard::
+    template.new(
+      'shard',
+      '$PROMETHEUS_DS',
+      'label_values(gitlab_component_saturation:ratio{component="redis_clients", environment="$environment"}, shard)',
       current='.*',
       refresh='load',
       sort=1,
