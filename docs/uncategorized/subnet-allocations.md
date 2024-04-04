@@ -56,9 +56,6 @@ gitlab-ops project for network peering.
 | `10.48.0.0`     | `10.63.255.255`    | `10.48.0.0/12`   | N/A                            | Legacy Azure
 | `10.64.0.0`     | `10.95.255.255`    | `10.64.0.0/11`   | gitlab-production              | GKE pods
 | `10.96.0.0`     | `10.127.255.255`   | `10.96.0.0/11`   | gitlab-staging                 | GKE pods
-| `10.108.0.0`    | `10.111.255.255`   | `10.111.0.0/14`  | gitlab-analysis-staging | [Data team](https://handbook.gitlab.com/handbook/business-technology/data-team/)
-| `10.110.0.0`    | `10.110.3.255`     | `10.110.0.0/22`  | gitlab-analysis-staging | [Data team](https://handbook.gitlab.com/handbook/business-technology/data-team/)
-| `10.112.0.0`    | `10.112.15.255`    | `10.112.0.0/20`  | gitlab-analysis-staging | [Data team](https://handbook.gitlab.com/handbook/business-technology/data-team/)
 | `10.128.0.0`    | `10.159.255.255`   | `10.128.0.0/11`  | gitlab-pre                     | GKE pods
 | `10.160.0.0`    | `10.163.255.255`   | `10.160.0.0/14`  | gitlab-analysis                | GKE pods
 | `10.164.0.0`    | `10.167.255.255`   | `10.164.0.0/14`  | gitlab-analysis                | GKE pods
@@ -66,7 +63,7 @@ gitlab-ops project for network peering.
 | `10.176.0.0`    | `10.176.255.255`   | `10.176.0.0/16`  | gitlab-staging-db              | **Repeatable db provisioning**
 | `10.177.0.0`    | `10.177.255.255`   | `10.177.0.0/16`  | gitlab-production-db           | **Repeatable db provisioning**
 | `10.178.0.0`    | `10.178.255.255`   | `10.178.0.0/16`  | gitlab-sandbox-db              | **Repeatable db provisioning**
-| `10.181.0.0`    | `10.181.255.255`   | `10.181.0.0/16`  | N/A                            | AVAILABLE GCP
+| `10.181.0.0`    | `10.181.255.255`   | `10.181.0.0/16`  | gitlab-analysis-staging        | Analysis Staging GCP
 | `10.182.0.0`    | `10.182.255.255`   | `10.182.0.0/16`  | gitlab-ops                     | Ops us-central1 GKE pods
 | `10.183.0.0`    | `10.183.255.255`   | `10.183.0.0/16`  | gitlab-qa-runners-2            | RESERVED
 | `10.184.0.0`    | `10.191.255.255`   | `10.184.0.0/13`  | N/A                            | AVAILABLE GCP
