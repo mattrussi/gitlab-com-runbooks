@@ -55,12 +55,12 @@ be discussed with the [Infrastructure Foundations SRE team](https://gitlab.slack
 
 While we have historically had some customers on the list for longer periods, these are considered legacy cases.
 
-We need special handling for various partners and other scenarios.  To permit this we have lists of IP addresses (still
-termed `allowlist` in the config, but we will change that one day) that are permitted to bypass the haproxy rate limit.
+We need special handling for various partners and other scenarios (e.g. excluding GitLab's internal services).
+To permit this we have lists of IP addresses, termed `allowlist` that are permitted to bypass the haproxy rate limit.
 
 There are two types:
 
-1. Internal: Full bypass, including some other protections.  Basically only the likes of CI runners.
+1. Internal: Full bypass, including some other protections. Basically only the likes of CI runners.
 Managed in [chef](https://gitlab.com/gitlab-com/gl-infra/chef-repo/-/blob/62302c2219550f83b4427ceec2e303952c6ce333/roles/gprd-base-haproxy-main-config.json#L313).
 
 1. Other API: Two lists which are functionally equivalent (believed to be a refactoring that never got completed),
@@ -97,10 +97,10 @@ sort-of-temporary measure, to allow us to enable the RackAttack rate-limiting wi
 use-case before doing so.  Ideally we will remove this eventually, once the bypass list is smaller (or gone), or we've
 ensured that our known users are below the new limits.
 
-There are a few other special cases that also set X-GitLab-RateLimit-Bypass; this may change over time, but at this time
+There are a few other special cases that also set `X-GitLab-RateLimit-Bypass`; this may change over time, but at this time
 includes git-over-https, `/jwt/auth`, various package registries (e.g. maven, nuget, composer compatibility APIs), and
-requests with ?go_get=1.  The full list, which should include links to the justification issue for each exception, is in
-<https://gitlab.com/gitlab-cookbooks/gitlab-haproxy/blob/master/templates/default/haproxy-frontend.cfg.erb>.
+requests with `?go_get=1`. The full list, which should include links to the justification issue for each exception,
+is [here](https://gitlab.com/gitlab-cookbooks/gitlab-haproxy/-/blob/master/templates/default/frontends/https.erb#L49).
 
 Speaking of the package registries in particular, these have a much higher limit.  See
 <https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/11748> for a full discussion of this, but in short, the
@@ -108,17 +108,15 @@ endpoints are fairly cheap to process *and* are often hit fairly hard by deploym
 support that.  It's not out of the question that the architecture of this may change in future. The others are a bit
 more special-case (and a bit less interesting) and the justifications won't be repeated here.
 
-For the avoidance of doubt: we set X-GitLab-RateLimit-Bypass to 0 by default; any value for this in the client request
+For the avoidance of doubt: we set `X-GitLab-RateLimit-Bypass` to `0` by default; any value for this in the client request
 is overwritten.
 
 See also related docs in [../frontend](../frontend/) for other information on blocking and HAProxy config.
 
-Graphs for HAProxy can be found at the [HAProxy dashboard](https://dashboards.gitlab.net/d/haproxy/haproxy)
-and you can look for 429 rates to get an idea on what is being rate limited at this level,
-though note that some may also be coming from the application.
+Graphs for HAProxy can be found at the [HAProxy dashboard](https://dashboards.gitlab.net/d/haproxy/haproxy).
 
-In the long run, these may be replaced by either rate limits in GitLab (below) or
-[Cloudflare](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/9709), or a combination of both.
+GitLab.com rate limits are additionally implemented through our edge network provider, Cloudflare.
+Please see [this](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/master/environments/gprd/cloudflare-rate-limits-waf-and-rules.tf).
 
 ### Application (RackAttack)
 
