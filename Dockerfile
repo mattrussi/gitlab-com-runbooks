@@ -11,7 +11,7 @@ ARG GL_ASDF_THANOS_VERSION
 ARG GL_ASDF_VAULT_VERSION
 ARG GL_ASDF_YQ_VERSION
 # renovate: datasource=github-releases depName=grafana/mimir
-ARG MIMIRTOOL_VERSION=2.11.0
+ARG MIMIRTOOL_VERSION=2.12.0
 
 # Referenced container images
 FROM docker.io/mikefarah/yq:${GL_ASDF_YQ_VERSION} as yq
