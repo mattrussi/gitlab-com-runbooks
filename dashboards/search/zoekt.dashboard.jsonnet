@@ -63,7 +63,7 @@ local diskUtilization() =
     legendFormat='{{persistentvolumeclaim}}',
     decimals='2',
     query=|||
-      sum(kubelet_volume_stats_used_bytes{env="$environment", persistentvolumeclaim=~"zoekt-index-gitlab-gitlab-zoekt.*"}
+      100*sum(kubelet_volume_stats_used_bytes{env="$environment", persistentvolumeclaim=~"zoekt-index-gitlab-gitlab-zoekt.*"}
       / kubelet_volume_stats_capacity_bytes{env="$environment", persistentvolumeclaim=~"zoekt-index-gitlab-gitlab-zoekt.*"}) by (persistentvolumeclaim)
 
     |||,
