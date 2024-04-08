@@ -4,6 +4,11 @@ groups:
 - name: 'Component-Level SLIs: sidekiq - 1m burn-rate'
   interval: 1m
   rules:
+  - record: sli_aggregations:sidekiq_enqueued_jobs_total_rate1m
+    expr: |
+      sum by (environment,feature_category,queue,shard,stage,tier,type,urgency,worker) (
+        rate(sidekiq_enqueued_jobs_total[1m] offset 30s)
+      )
   - record: sli_aggregations:gitlab_sli_sidekiq_execution_apdex_total_rate1m
     expr: |
       sum by (environment,external_dependencies,feature_category,queue,shard,stage,tier,type,urgency,worker) (
@@ -41,7 +46,7 @@ groups:
       type: sidekiq
     expr: |
       sum by (env,environment,stage) (
-        rate(sidekiq_enqueued_jobs_total{}[1m] offset 30s)
+        sli_aggregations:sidekiq_enqueued_jobs_total_rate1m{} offset 30s
       )
   - record: gitlab_component_apdex:success:rate
     labels:
@@ -232,6 +237,11 @@ groups:
 - name: 'Component-Level SLIs: sidekiq - 5m burn-rate'
   interval: 1m
   rules:
+  - record: sli_aggregations:sidekiq_enqueued_jobs_total_rate5m
+    expr: |
+      sum by (environment,feature_category,queue,shard,stage,tier,type,urgency,worker) (
+        rate(sidekiq_enqueued_jobs_total[5m] offset 30s)
+      )
   - record: sli_aggregations:gitlab_sli_sidekiq_execution_apdex_total_rate5m
     expr: |
       sum by (environment,external_dependencies,feature_category,queue,shard,stage,tier,type,urgency,worker) (
@@ -269,7 +279,7 @@ groups:
       type: sidekiq
     expr: |
       sum by (env,environment,stage) (
-        rate(sidekiq_enqueued_jobs_total{}[5m] offset 30s)
+        sli_aggregations:sidekiq_enqueued_jobs_total_rate5m{} offset 30s
       )
   - record: gitlab_component_apdex:success:rate_5m
     labels:
@@ -460,7 +470,7 @@ groups:
   - record: gitlab_background_jobs:queue:ops:rate_5m
     expr: |
       sum by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (
-        rate(sidekiq_enqueued_jobs_total{}[5m])
+        sli_aggregations:sidekiq_enqueued_jobs_total_rate5m{}
       )
   - record: gitlab_component_shard_apdex:success:rate_5m
     labels:
@@ -536,6 +546,11 @@ groups:
 - name: 'Component-Level SLIs: sidekiq - 30m burn-rate'
   interval: 2m
   rules:
+  - record: sli_aggregations:sidekiq_enqueued_jobs_total_rate30m
+    expr: |
+      sum by (environment,feature_category,queue,shard,stage,tier,type,urgency,worker) (
+        rate(sidekiq_enqueued_jobs_total[30m] offset 30s)
+      )
   - record: sli_aggregations:gitlab_sli_sidekiq_execution_apdex_total_rate30m
     expr: |
       sum by (environment,external_dependencies,feature_category,queue,shard,stage,tier,type,urgency,worker) (
@@ -573,7 +588,7 @@ groups:
       type: sidekiq
     expr: |
       sum by (env,environment,stage) (
-        rate(sidekiq_enqueued_jobs_total{}[30m] offset 30s)
+        sli_aggregations:sidekiq_enqueued_jobs_total_rate30m{} offset 30s
       )
   - record: gitlab_component_apdex:success:rate_30m
     labels:
@@ -764,7 +779,7 @@ groups:
   - record: gitlab_background_jobs:queue:ops:rate_30m
     expr: |
       sum by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (
-        rate(sidekiq_enqueued_jobs_total{}[30m])
+        sli_aggregations:sidekiq_enqueued_jobs_total_rate30m{}
       )
   - record: gitlab_component_shard_apdex:success:rate_30m
     labels:
@@ -840,6 +855,11 @@ groups:
 - name: 'Component-Level SLIs: sidekiq - 1h burn-rate'
   interval: 1m
   rules:
+  - record: sli_aggregations:sidekiq_enqueued_jobs_total_rate1h
+    expr: |
+      sum by (environment,feature_category,queue,shard,stage,tier,type,urgency,worker) (
+        rate(sidekiq_enqueued_jobs_total[1h] offset 30s)
+      )
   - record: sli_aggregations:gitlab_sli_sidekiq_execution_apdex_total_rate1h
     expr: |
       sum by (environment,external_dependencies,feature_category,queue,shard,stage,tier,type,urgency,worker) (
@@ -877,7 +897,7 @@ groups:
       type: sidekiq
     expr: |
       sum by (env,environment,stage) (
-        rate(sidekiq_enqueued_jobs_total{}[1h] offset 30s)
+        sli_aggregations:sidekiq_enqueued_jobs_total_rate1h{} offset 30s
       )
   - record: gitlab_component_apdex:success:rate_1h
     labels:
@@ -1068,7 +1088,7 @@ groups:
   - record: gitlab_background_jobs:queue:ops:rate_1h
     expr: |
       sum by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (
-        rate(sidekiq_enqueued_jobs_total{}[1h])
+        sli_aggregations:sidekiq_enqueued_jobs_total_rate1h{}
       )
   - record: gitlab_component_shard_apdex:success:rate_1h
     labels:
@@ -1144,6 +1164,11 @@ groups:
 - name: 'Component-Level SLIs: sidekiq - 6h burn-rate'
   interval: 2m
   rules:
+  - record: sli_aggregations:sidekiq_enqueued_jobs_total_rate6h
+    expr: |
+      sum by (environment,feature_category,queue,shard,stage,tier,type,urgency,worker) (
+        rate(sidekiq_enqueued_jobs_total[6h] offset 30s)
+      )
   - record: sli_aggregations:gitlab_sli_sidekiq_execution_apdex_total_rate6h
     expr: |
       sum by (environment,external_dependencies,feature_category,queue,shard,stage,tier,type,urgency,worker) (
@@ -1181,7 +1206,7 @@ groups:
       type: sidekiq
     expr: |
       sum by (env,environment,stage) (
-        rate(sidekiq_enqueued_jobs_total{}[6h] offset 30s)
+        sli_aggregations:sidekiq_enqueued_jobs_total_rate6h{} offset 30s
       )
   - record: gitlab_component_apdex:success:rate_6h
     labels:

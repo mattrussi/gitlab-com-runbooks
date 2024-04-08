@@ -92,7 +92,9 @@ metricsCatalog.serviceDefinition({
   // cardinality. The metrics catalog will generate recording rules with
   // the appropriate aggregations based on this set.
   // Use sparingly, and don't overuse.
-  recordingRuleMetrics: (
+  recordingRuleMetrics: [
+    'sidekiq_enqueued_jobs_total',
+  ] + (
     sliLibrary.get('sidekiq_execution').recordingRuleMetrics
     + sliLibrary.get('sidekiq_queueing').recordingRuleMetrics
   ),
@@ -132,7 +134,7 @@ metricsCatalog.serviceDefinition({
       ),
 
       emittedBy: findServicesWithTag(tag='rails'),
-      significantLabels: [],
+      significantLabels: ['queue', 'feature_category', 'urgency', 'worker'],
     },
   } + sliLibrary.get('sidekiq_execution').generateServiceLevelIndicator(baseSelector { external_dependencies: { ne: 'yes' } }, {
     // TODO: For now, only sidekiq execution is considered towards service aggregation

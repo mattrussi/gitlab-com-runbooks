@@ -65,13 +65,13 @@ groups:
     expr: |
       (
         sum by (environment, queue, feature_category, worker) (
-          gitlab_background_jobs:queue:ops:rate_1h{env!~"gprd|ops",urgency="throttled"}
+          sli_aggregations:sidekiq_enqueued_jobs_total_rate1h{env!~"gprd|ops",urgency="throttled"}
         ) > 0
       )
       unless
       (
         sum by (environment, queue, feature_category, worker) (
-          sli_aggregations:gitlab_sli_sidekiq_execution_apdex_success_total_rate1h{env!~"gprd|ops",urgency="throttled"}
+          sli_aggregations:gitlab_sli_sidekiq_execution_total_rate_rate1h{env!~"gprd|ops",urgency="throttled"}
         ) > 0
       )
   - alert: SidekiqQueueNoLongerBeingProcessed
@@ -98,9 +98,9 @@ groups:
       tier: sv
       type: sidekiq
     expr: |
-      (sum by(environment, queue) (gitlab_background_jobs:queue:ops:rate_6h{env!~"gprd|ops"})> 0.001)
+      (sum by(environment, queue) (sli_aggregations:sidekiq_enqueued_jobs_total_rate6h{env!~"gprd|ops"})> 0.001)
       unless
-      (sum by(environment, queue) (sli_aggregations:gitlab_sli_sidekiq_execution_apdex_success_total_rate6h{env!~"gprd|ops"}) > 0)
+      (sum by(environment, queue) (sli_aggregations:gitlab_sli_sidekiq_execution_total_rate_rate6h{env!~"gprd|ops"}) > 0)
   - alert: SidekiqWorkerNoLongerBeingProcessed
     for: 20m
     annotations:
@@ -125,9 +125,9 @@ groups:
       tier: sv
       type: sidekiq
     expr: |
-      (sum by(environment, worker) (gitlab_background_jobs:queue:ops:rate_6h{env!~"gprd|ops"})> 0.001)
+      (sum by(environment, worker) (sli_aggregations:sidekiq_enqueued_jobs_total_rate6h{env!~"gprd|ops"})> 0.001)
       unless
-      (sum by(environment, worker) (sli_aggregations:gitlab_sli_sidekiq_execution_apdex_success_total_rate6h{env!~"gprd|ops"})  > 0)
+      (sum by(environment, worker) (sli_aggregations:gitlab_sli_sidekiq_execution_total_rate_rate6h{env!~"gprd|ops"})  > 0)
   - alert: SidekiqJobsSkippedTooLong
     for: 3h
     annotations:
@@ -197,7 +197,7 @@ groups:
       and on (env, environment, tier, type, stage, shard, queue, feature_category, urgency, worker)
       (
         sum by (env, environment, tier, type, stage, shard, queue, feature_category, urgency, worker) (
-          sli_aggregations:gitlab_sli_sidekiq_execution_total_rate6h{env!~"gprd|ops"}
+          sli_aggregations:gitlab_sli_sidekiq_execution_total_rate_rate6h{env!~"gprd|ops"}
         ) >= 0.055555555555555552
       )
   - alert: SidekiqServiceWorkerExecutionErrorSLOViolation
