@@ -28,9 +28,9 @@ groups:
 
         Details of the GCP Quota utilization per environment resource:
 
-        GCP Quota utilization / limit ratio
+        GCP Quota utilization / limit ratio for all vertex AI models except code-gecko.
 
-        Saturation on a quota may cause problems with creating infrastructure resources on GCP.
+        Saturation on the quota may cause problems with the requests.
 
         To fix, we can request a quota increase for the specific resource to the GCP support team.
       grafana_dashboard_id: alerts-sat_gcp_quota_limit_vertex_ai
@@ -45,9 +45,9 @@ groups:
           clamp_min(
             clamp_max(
               (
-                sum without (method) (stackdriver_aiplatform_googleapis_com_location_aiplatform_googleapis_com_quota_online_prediction_requests_per_base_model_usage{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"})
+                sum without (method) (stackdriver_aiplatform_googleapis_com_location_aiplatform_googleapis_com_quota_online_prediction_requests_per_base_model_usage{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}",base_model!="code-gecko"})
               /
-                stackdriver_aiplatform_googleapis_com_location_aiplatform_googleapis_com_quota_online_prediction_requests_per_base_model_limit{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
+                stackdriver_aiplatform_googleapis_com_location_aiplatform_googleapis_com_quota_online_prediction_requests_per_base_model_limit{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}",base_model!="code-gecko"}
               ) > 0
               ,
               1)
@@ -59,9 +59,9 @@ groups:
           clamp_min(
             clamp_max(
               (
-                sum without (method) (stackdriver_aiplatform_googleapis_com_location_aiplatform_googleapis_com_quota_online_prediction_requests_per_base_model_usage{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"})
+                sum without (method) (stackdriver_aiplatform_googleapis_com_location_aiplatform_googleapis_com_quota_online_prediction_requests_per_base_model_usage{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}",base_model!="code-gecko"})
               /
-                stackdriver_aiplatform_googleapis_com_location_aiplatform_googleapis_com_quota_online_prediction_requests_per_base_model_limit{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
+                stackdriver_aiplatform_googleapis_com_location_aiplatform_googleapis_com_quota_online_prediction_requests_per_base_model_limit{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}",base_model!="code-gecko"}
               ) > 0
               ,
               1)
@@ -76,6 +76,65 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="gcp_quota_limit_vertex_ai",env="gstg",type="ai-gateway"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="gcp_quota_limit_vertex_ai",env="gstg",type="ai-gateway"}
+  - alert: component_saturation_slo_out_of_bounds:gcp_quota_limit_vertex_ai_code_gecko
+    for: 15m
+    annotations:
+      title: The GCP Quota utilization per environment resource of the {{ $labels.type
+        }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
+        is close to its capacity limit.
+      description: |
+        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
+
+        Details of the GCP Quota utilization per environment resource:
+
+        GCP Quota utilization / limit ratio for Vertex AI for code-gecko model (used by code completion part of Code Suggestions)
+
+        Saturation on the quota may cause problems with code completion requests.
+
+        To fix, we can request a quota increase for the specific resource to the GCP support team.
+      grafana_dashboard_id: alerts-sat_vertex_ai_code_gecko_quota
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_vertex_ai_code_gecko_quota?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3658506870"
+      grafana_variables: environment,type,stage
+      promql_query: |
+        max by(environment, tier, type, stage, shard, base_model, region, location) (
+          clamp_min(
+            clamp_max(
+              (
+                sum without (method) (stackdriver_aiplatform_googleapis_com_location_aiplatform_googleapis_com_quota_online_prediction_requests_per_base_model_usage{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}",base_model="code-gecko"})
+              /
+                stackdriver_aiplatform_googleapis_com_location_aiplatform_googleapis_com_quota_online_prediction_requests_per_base_model_limit{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}",base_model="code-gecko"}
+              ) > 0
+              ,
+              1)
+          ,
+          0)
+        )
+      promql_template_1: |
+        max by(environment, tier, type, stage, shard, base_model, region, location) (
+          clamp_min(
+            clamp_max(
+              (
+                sum without (method) (stackdriver_aiplatform_googleapis_com_location_aiplatform_googleapis_com_quota_online_prediction_requests_per_base_model_usage{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}",base_model="code-gecko"})
+              /
+                stackdriver_aiplatform_googleapis_com_location_aiplatform_googleapis_com_quota_online_prediction_requests_per_base_model_limit{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}",base_model="code-gecko"}
+              ) > 0
+              ,
+              1)
+          ,
+          0)
+        )
+      runbook: docs/{{ $labels.type }}/README.md
+    labels:
+      alert_type: cause
+      rules_domain: general
+      severity: s4
+    expr: |
+      gitlab_component_saturation:ratio{component="gcp_quota_limit_vertex_ai_code_gecko",env="gstg",type="ai-gateway"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="gcp_quota_limit_vertex_ai_code_gecko",env="gstg",type="ai-gateway"}
   - alert: component_saturation_slo_out_of_bounds:max_concurrent_inferences
     for: 5m
     annotations:

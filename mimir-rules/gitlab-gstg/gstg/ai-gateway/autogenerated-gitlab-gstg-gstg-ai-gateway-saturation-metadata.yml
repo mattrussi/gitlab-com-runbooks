@@ -14,6 +14,14 @@ groups:
     expr: "0.9"
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:
+      component: gcp_quota_limit_vertex_ai_code_gecko
+    expr: "0.85"
+  - record: slo:max:hard:gitlab_component_saturation:ratio
+    labels:
+      component: gcp_quota_limit_vertex_ai_code_gecko
+    expr: "0.9"
+  - record: slo:max:soft:gitlab_component_saturation:ratio
+    labels:
       component: max_concurrent_inferences
     expr: "0.6"
   - record: slo:max:hard:gitlab_component_saturation:ratio
