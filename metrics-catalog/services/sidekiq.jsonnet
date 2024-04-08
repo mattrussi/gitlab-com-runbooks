@@ -7,6 +7,7 @@ local combined = metricsCatalog.combined;
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 local kubeLabelSelectors = metricsCatalog.kubeLabelSelectors;
 local sliLibrary = import 'gitlab-slis/library.libsonnet';
+local findServicesWithTag = (import 'servicemetrics/metrics-catalog.libsonnet').findServicesWithTag;
 
 // Some workers have known performance issues that surpass our thresholds.
 // Each worker should have a link to an issue to fix the performance issues.
@@ -117,7 +118,23 @@ metricsCatalog.serviceDefinition({
     sidekiqHelpers.shards.listAll(),
     {},
   ),
-  serviceLevelIndicators: sliLibrary.get('sidekiq_execution').generateServiceLevelIndicator(baseSelector { external_dependencies: { ne: 'yes' } }, {
+  serviceLevelIndicators: {
+    enqueued_jobs: {
+      serviceAggregation: false,  // Don't add this to the request rate of the service
+      shardLevelMonitoring: false,
+      userImpacting: true,
+      description: |||
+        The number of jobs enqueued by Sidekiq clients (api, web, sidekiq, etc).
+      |||,
+
+      requestRate: rateMetric(
+        counter='sidekiq_enqueued_jobs_total',
+      ),
+
+      emittedBy: findServicesWithTag(tag='rails'),
+      significantLabels: [],
+    },
+  } + sliLibrary.get('sidekiq_execution').generateServiceLevelIndicator(baseSelector { external_dependencies: { ne: 'yes' } }, {
     // TODO: For now, only sidekiq execution is considered towards service aggregation
     // which means queueing is not part of the service aggregation & SLA.
     // Future plan is to be able to specify either apdex, errors, or ops to be included in service aggregaiton.
