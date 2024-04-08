@@ -3034,7 +3034,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (le) (
-            rate(gitlab_workhorse_http_request_duration_seconds_bucket{route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/([^/]+/){1,}[^/]+/uploads\\z",route!="^/([^/]+/){1,}[^/]+\\.git/git-receive-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/git-upload-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/info/refs\\z",route!="^/([^/]+/){1,}[^/]+\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\z",route!="^/-/cable\\z",route!~"^\\^/api/.*"}[5m])
+            rate(gitlab_workhorse_http_request_duration_seconds_bucket{route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/([^/]+/){1,}[^/]+/uploads\\z",route!="^/.+\\.git/git-receive-pack\\z",route!="^/.+\\.git/git-upload-pack\\z",route!="^/.+\\.git/info/refs\\z",route!="^/.+\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\z",route!="^/-/cable\\z",route!~"^\\^/api/.*"}[5m])
           )
         )
       runbook: docs/webservice/README.md
@@ -3084,7 +3084,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (le) (
-            rate(gitlab_workhorse_http_request_duration_seconds_bucket{route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/([^/]+/){1,}[^/]+/uploads\\z",route!="^/([^/]+/){1,}[^/]+\\.git/git-receive-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/git-upload-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/info/refs\\z",route!="^/([^/]+/){1,}[^/]+\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\z",route!="^/-/cable\\z",route!~"^\\^/api/.*"}[5m])
+            rate(gitlab_workhorse_http_request_duration_seconds_bucket{route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/([^/]+/){1,}[^/]+/uploads\\z",route!="^/.+\\.git/git-receive-pack\\z",route!="^/.+\\.git/git-upload-pack\\z",route!="^/.+\\.git/info/refs\\z",route!="^/.+\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\z",route!="^/-/cable\\z",route!~"^\\^/api/.*"}[5m])
           )
         )
       runbook: docs/webservice/README.md
