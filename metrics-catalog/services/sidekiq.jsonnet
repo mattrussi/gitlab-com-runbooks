@@ -2,7 +2,6 @@ local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local histogramApdex = metricsCatalog.histogramApdex;
 local rateMetric = metricsCatalog.rateMetric;
 local sidekiqHelpers = import './lib/sidekiq-helpers.libsonnet';
-local perWorkerRecordingRules = (import './lib/sidekiq-per-worker-recording-rules.libsonnet').perWorkerRecordingRules;
 local combined = metricsCatalog.combined;
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 local kubeLabelSelectors = metricsCatalog.kubeLabelSelectors;
@@ -190,9 +189,6 @@ metricsCatalog.serviceDefinition({
 
   // Special per-worker recording rules
   extraRecordingRulesPerBurnRate: [
-    // Adds per-work queuing/execution apdex, plus error rates etc
-    // across multiple burn rates
-    perWorkerRecordingRules,
   ],
   capacityPlanning: {
     components: [
