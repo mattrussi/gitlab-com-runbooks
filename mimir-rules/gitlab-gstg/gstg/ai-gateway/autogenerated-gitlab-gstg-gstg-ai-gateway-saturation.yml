@@ -6,23 +6,6 @@ groups:
   rules:
   - record: gitlab_component_saturation:ratio
     labels:
-      component: gcp_quota_limit_s4
-    expr: |
-      max by(env, environment, tier, type, stage, shard) (
-        clamp_min(
-          clamp_max(
-            (
-              gcp_quota_usage{env="gstg",type="ai-gateway"}
-            /
-              gcp_quota_limit{env="gstg",type="ai-gateway"}
-            ) > 0
-            ,
-            1)
-        ,
-        0)
-      )
-  - record: gitlab_component_saturation:ratio
-    labels:
       component: gcp_quota_limit_vertex_ai
     expr: |
       max by(env, environment, tier, type, stage, shard) (
