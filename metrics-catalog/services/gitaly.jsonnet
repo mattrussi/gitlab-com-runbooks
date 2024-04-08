@@ -145,7 +145,7 @@ metricsCatalog.serviceDefinition({
           ignore_outliers: [
             {
               start: '2021-01-01',
-              end: '2024-01-25',
+              end: '2024-03-10',
             },
           ],
         },
