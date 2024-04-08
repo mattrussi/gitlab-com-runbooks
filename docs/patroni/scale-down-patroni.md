@@ -119,7 +119,7 @@ This will also stop Postgres and thus terminate all remaining db connections if 
    1. You can determine the current primary by running `gitlab-patronictl list` on any Patroni node in the cluster
    1. It should have `{}` for options, meaning that it's just a regular replica.
    1. It's OK to take nodes from the middle as our terraform module is designed to handle gaps in the numbering.
-1. Remove the `nodes` entry for the relevant node in the relavent cluster in [terraform](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/master/environments/gstg/main.tf#L917).
+1. Remove the `nodes` entry for the relevant node in the relavent cluster in [terraform](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/main/environments/gstg/main.tf#L917).
 1. `tf plan` to make sure the plan output looks what you expect
 1. File an MR, get it reviewed/merged then monitor the `ops.gitlab.net` pipeline to review the plan and apply it (apply job will be in blocked state).
 1. Wait until the node gets removed and torn down. (Validate it in GCP)

@@ -471,7 +471,7 @@ The External Secrets operator provides 2 Kubernetes objects:
 
 The SecretStore uses a dedicated Service Account so that regular workloads are not able to access Vault by themselves, and it is scoped to the namespace it is deployed into.
 
-Before using the operator, a role has to be created in Vault for the namespace the secrets will be provisioned into. This is done in [`environments/vault-production/kubernetes.tf`](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/master/environments/vault-production/kubernetes.tf):
+Before using the operator, a role has to be created in Vault for the namespace the secrets will be provisioned into. This is done in [`environments/vault-production/kubernetes.tf`](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/main/environments/vault-production/kubernetes.tf):
 
 ```terraform
 locals {
@@ -950,7 +950,7 @@ Examples:
 #### Authorizing a GCP Project and Cookbooks
 
 We use the [GCP authentication method](https://developer.hashicorp.com/vault/docs/auth/gcp) for GCE instances to authenticate to Vault.
-To enable instances on a GCP Project to access Vault, add the project and roles for each cookbook, to the `chef_environments` locals at the [Chef Vault Configuration on Terraform](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/master/environments/vault-production/chef.tf)
+To enable instances on a GCP Project to access Vault, add the project and roles for each cookbook, to the `chef_environments` locals at the [Chef Vault Configuration on Terraform](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/main/environments/vault-production/chef.tf)
 
 Example of Vault Config for allowing Chef access:
 
@@ -1122,7 +1122,7 @@ resource "google_service_account_iam_member" "my-service-account-vault" {
 
 ##### 2. Add GCP roles in Vault
 
-In the [`vault-production` environment](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/tree/master/environments/vault-production), add your roleset / static account / impersonated account to the variable `gcp_projects` in `gcp_projects.tf`:
+In the [`vault-production` environment](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/tree/main/environments/vault-production), add your roleset / static account / impersonated account to the variable `gcp_projects` in `gcp_projects.tf`:
 
 ```terraform
   gcp_projects = {
@@ -1303,7 +1303,7 @@ See [Kubernetes Authentication secrets](administration.md#kubernetes-authenticat
 
 ##### 2. Add Kubernetes roles in Vault
 
-In the [`vault-production` environment](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/tree/master/environments/vault-production), add your role to the variable `kubernetes_clusters.<cluster>.secrets_roles` in `kubernetes.tf`:
+In the [`vault-production` environment](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/tree/main/environments/vault-production), add your role to the variable `kubernetes_clusters.<cluster>.secrets_roles` in `kubernetes.tf`:
 
 ```terraform
   kubernetes_clusters = {

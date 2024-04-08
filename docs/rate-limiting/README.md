@@ -14,7 +14,7 @@ answer.  Please consider strongly reading the relevant context before using thos
 Not the actual numbers, but links to where to find the current active values:
 
 1. CloudFlare: <https://dash.cloudflare.com/852e9d53d0f8adbd9205389356f2303d/gitlab.com/security/waf/rate-limiting-rules>
-   * Source at <https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/master/environments/gprd/cloudflare-rate-limits-waf-and-rules.tf>
+   * Source at <https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/main/environments/gprd/cloudflare-rate-limits-waf-and-rules.tf>
 1. RackAttack: <https://gitlab.com/admin/application_settings/network> (admin access only)
    * In `User and IP Rate Limits`, and also `Protected Paths`
    * Published (manually) at <https://docs.gitlab.com/ee/user/gitlab_com/#gitlabcom-specific-rate-limits>
@@ -33,7 +33,7 @@ to rate-limiting are:
 * Page Rules - URL pattern matches, controlling CloudFlare's DDoS interventions and caching (e.g. bypasses, security
 levels etc).  These may kick in various CloudFlare level rate-limits, in response to traffic, based on the chosen
 settings per rule.
-* Rate Limiting - Configured by Terraform [here](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/master/environments/gprd/cloudflare-rate-limits-waf-and-rules.tf).  These cover a wide range of cases, from global limits (per IP/session)
+* Rate Limiting - Configured by Terraform [here](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/main/environments/gprd/cloudflare-rate-limits-waf-and-rules.tf).  These cover a wide range of cases, from global limits (per IP/session)
 to specific endpoints that prevent denial of service (DoS) events either due to application concerns (bugs/scaling constraints)
 or sheer volume of traffic.
 The rules can use `session` (cookies) and `tokens` (headers) as counters for the rates, to avoid IP scope false positives
@@ -116,7 +116,7 @@ See also related docs in [../frontend](../frontend/) for other information on bl
 Graphs for HAProxy can be found at the [HAProxy dashboard](https://dashboards.gitlab.net/d/haproxy/haproxy).
 
 GitLab.com rate limits are additionally implemented through our edge network provider, Cloudflare.
-Please see [this](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/master/environments/gprd/cloudflare-rate-limits-waf-and-rules.tf).
+Please see [this](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/main/environments/gprd/cloudflare-rate-limits-waf-and-rules.tf).
 
 ### Application (RackAttack)
 

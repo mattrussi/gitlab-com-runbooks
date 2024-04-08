@@ -2,7 +2,7 @@
 
 ## Adding a GitLab instance to Vault
 
-In order to enable authentication to Vault from CI for a GitLab instance, add it to the `jwt_auth_backends` map in [`environments/vault-production/vault_config.tf`](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/master/environments/vault-production/vault_config.tf):
+In order to enable authentication to Vault from CI for a GitLab instance, add it to the `jwt_auth_backends` map in [`environments/vault-production/vault_config.tf`](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/main/environments/vault-production/vault_config.tf):
 
 ```terraform
 module "vault-config" {
@@ -80,7 +80,7 @@ JWT_TOKEN="$(kubectl --namespace vault-k8s-secrets get secret vault-k8s-secrets-
 vault kv put ci/ops-gitlab-net/gitlab-com/gl-infra/config-mgmt/vault-production/kubernetes/pre-gitlab-gke host="${KUBERNETES_HOST}" ca_cert="${CA_CERT}" service_account_jwt="${JWT_TOKEN}"
 ```
 
-Finally, add the cluster in [`environments/vault-production/kubernetes.tf`](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/master/environments/vault-production/kubernetes.tf):
+Finally, add the cluster in [`environments/vault-production/kubernetes.tf`](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/main/environments/vault-production/kubernetes.tf):
 
 ```terraform
 locals {

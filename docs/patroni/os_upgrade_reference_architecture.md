@@ -45,7 +45,7 @@ Once the upgrade is executed, we will have the following deployment:
 
 ### Terraform definitions for the Reference Architecture
 
-* [db-benchmarking](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/master/environments/db-benchmarking/main.tf#L975-1239).
+* [db-benchmarking](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/main/environments/db-benchmarking/main.tf#L975-1239).
 
 ### Deploying the infrastructre via Terraform
 

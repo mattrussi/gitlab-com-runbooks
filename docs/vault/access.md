@@ -18,7 +18,7 @@ To obtain access to Vault for your team:
 
 3. Add your Okta group to the [Vault configuration in the `config-mgmt` project](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/) (ask a member of the Infrastructure team for help if you don't have access to this project or aren't familiar with Terraform):
 
-   * Add your team to the user groups in [`groups.tf`](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/master/environments/vault-production/groups.tf):
+   * Add your team to the user groups in [`groups.tf`](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/main/environments/vault-production/groups.tf):
 
      ```terraform
      locals {
@@ -36,7 +36,7 @@ To obtain access to Vault for your team:
      }
      ```
 
-   * Define which secret path(s) your team needs access to in [`secret_policies.tf`](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/master/environments/vault-production/secrets_policies.tf), for example:
+   * Define which secret path(s) your team needs access to in [`secret_policies.tf`](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/main/environments/vault-production/secrets_policies.tf), for example:
 
      ```terraform
      locals {
