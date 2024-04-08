@@ -14,6 +14,7 @@ local issueSearch = import 'gitlab-dashboards/issue_search.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 local sidekiq = import 'sidekiq.libsonnet';
+local recordingRuleRegistry = (import 'gitlab-metrics-config.libsonnet').recordingRuleRegistry;
 
 local selector = {
   environment: '$environment',
@@ -38,7 +39,11 @@ local recordingRuleRateQuery(recordingRule, selector, aggregator) =
 local enqueueCountTimeseries(title, aggregators, legendFormat) =
   basic.timeseries(
     title=title,
-    query=recordingRuleRateQuery('gitlab_background_jobs:queue:ops:rate_5m', 'environment="$environment", queue=~"$queue", monitor="global"', aggregators),
+    query=recordingRuleRateQuery(
+      recordingRuleRegistry.recordingRuleNameFor('sidekiq_enqueued_jobs_total', '5m'),
+      'environment="$environment", queue=~"$queue", monitor="global"',
+      aggregators
+    ),
     legendFormat=legendFormat,
   );
 
@@ -59,14 +64,11 @@ local errorRateTimeseries(title, aggregators, legendFormat) =
 local avgResourceUsageTimeSeries(title, metricName) =
   basic.timeseries(
     title=title,
-    // TODO: Remove %(metricName)s_count metric once they're no longer emitted in https://gitlab.com/gitlab-org/gitlab/-/merge_requests/131001
     query=|||
       sum by (queue) (rate(%(metricName)s_sum{%(selector)s}[$__interval]))
       /
       sum by (queue) (
         rate(sidekiq_jobs_completion_count{%(selector)s}[$__interval])
-        or
-        rate(%(metricName)s_count{%(selector)s}[$__interval])
       )
     ||| % {
       selector: selectors.serializeHash(selector),
