@@ -265,7 +265,7 @@ basic.dashboard(
   'Release Information',
   tags=['release'],
   editable=true,
-  time_from='now-7d',
+  time_from='now-22d',
   time_to='now',
   includeStandardEnvironmentAnnotations=false,
   includeEnvironmentTemplate=false,
