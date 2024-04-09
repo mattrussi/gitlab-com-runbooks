@@ -2,7 +2,7 @@ groups:
 - name: Praefect misc alerts
   rules:
   - alert: UnavailableRepositories
-    expr: max without (fqdn, instance) (gitaly_praefect_unavailable_repositories) > 0
+    expr: max without (fqdn, instance) (gitaly_praefect_unavailable_repositories{env="gprd"}) > 0
     for: 15m
     labels:
       team: gitaly
