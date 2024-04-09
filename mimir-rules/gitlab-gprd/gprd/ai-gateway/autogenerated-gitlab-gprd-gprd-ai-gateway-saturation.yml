@@ -12,9 +12,26 @@ groups:
         clamp_min(
           clamp_max(
             (
-              sum without (method) (stackdriver_aiplatform_googleapis_com_location_aiplatform_googleapis_com_quota_online_prediction_requests_per_base_model_usage{env="gprd",type="ai-gateway"})
+              sum without (method) (stackdriver_aiplatform_googleapis_com_location_aiplatform_googleapis_com_quota_online_prediction_requests_per_base_model_usage{env="gprd",type="ai-gateway",base_model!="code-gecko"})
             /
-              stackdriver_aiplatform_googleapis_com_location_aiplatform_googleapis_com_quota_online_prediction_requests_per_base_model_limit{env="gprd",type="ai-gateway"}
+              stackdriver_aiplatform_googleapis_com_location_aiplatform_googleapis_com_quota_online_prediction_requests_per_base_model_limit{env="gprd",type="ai-gateway",base_model!="code-gecko"}
+            ) > 0
+            ,
+            1)
+        ,
+        0)
+      )
+  - record: gitlab_component_saturation:ratio
+    labels:
+      component: gcp_quota_limit_vertex_ai_code_gecko
+    expr: |
+      max by(env, environment, tier, type, stage, shard) (
+        clamp_min(
+          clamp_max(
+            (
+              sum without (method) (stackdriver_aiplatform_googleapis_com_location_aiplatform_googleapis_com_quota_online_prediction_requests_per_base_model_usage{env="gprd",type="ai-gateway",base_model="code-gecko"})
+            /
+              stackdriver_aiplatform_googleapis_com_location_aiplatform_googleapis_com_quota_online_prediction_requests_per_base_model_limit{env="gprd",type="ai-gateway",base_model="code-gecko"}
             ) > 0
             ,
             1)
