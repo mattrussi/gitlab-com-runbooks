@@ -127,8 +127,8 @@ groups:
       promql_template_1: |
         histogram_quantile(
           0.950000,
-          sum by (env,environment,tier,stage,region,le) (
-            rate(code_suggestions_inference_request_duration_seconds_bucket{environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="ai-gateway"}[5m])
+          sum by (env,environment,tier,stage,region,location,le) (
+            rate(code_suggestions_inference_request_duration_seconds_bucket{environment="{{ $labels.environment }}",location="{{ $labels.location }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="ai-gateway"}[5m])
           )
         )
       runbook: docs/ai-gateway/README.md
@@ -156,9 +156,9 @@ groups:
           < (1 - 14.4 * 0.020000)
         )
       )
-      and on(env,environment,tier,type,stage,region,component)
+      and on(env,environment,tier,type,stage,region,location,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="inference",env="ops",monitor="global",type="ai-gateway"}) >= 1
+        sum by(env,environment,tier,type,stage,region,location,component) (gitlab_regional_sli_ops:rate_1h{component="inference",env="ops",monitor="global",type="ai-gateway"}) >= 1
       )
   - alert: AiGatewayServiceInferenceApdexSLOViolationRegional
     for: 2m
@@ -180,8 +180,8 @@ groups:
       promql_template_1: |
         histogram_quantile(
           0.950000,
-          sum by (env,environment,tier,stage,region,le) (
-            rate(code_suggestions_inference_request_duration_seconds_bucket{environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="ai-gateway"}[5m])
+          sum by (env,environment,tier,stage,region,location,le) (
+            rate(code_suggestions_inference_request_duration_seconds_bucket{environment="{{ $labels.environment }}",location="{{ $labels.location }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="ai-gateway"}[5m])
           )
         )
       runbook: docs/ai-gateway/README.md
@@ -209,9 +209,9 @@ groups:
           < (1 - 6 * 0.020000)
         )
       )
-      and on(env,environment,tier,type,stage,region,component)
+      and on(env,environment,tier,type,stage,region,location,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="inference",env="ops",monitor="global",type="ai-gateway"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,region,location,component) (gitlab_regional_sli_ops:rate_6h{component="inference",env="ops",monitor="global",type="ai-gateway"}) >= 0.16667
       )
   - alert: AiGatewayServiceRunwayIngressApdexSLOViolation
     for: 2m
@@ -335,8 +335,8 @@ groups:
       promql_template_1: |
         histogram_quantile(
           0.950000,
-          sum by (env,environment,tier,stage,region,le) (
-            avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_request_latencies_bucket{environment="{{ $labels.environment }}",region="{{ $labels.region }}",response_code_class!~"4xx|5xx",stage="{{ $labels.stage }}",type="ai-gateway"}[5m])
+          sum by (env,environment,tier,stage,region,location,le) (
+            avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_request_latencies_bucket{environment="{{ $labels.environment }}",location="{{ $labels.location }}",region="{{ $labels.region }}",response_code_class!~"4xx|5xx",stage="{{ $labels.stage }}",type="ai-gateway"}[5m])
           )
         )
       runbook: docs/ai-gateway/README.md
@@ -364,9 +364,9 @@ groups:
           < (1 - 14.4 * 0.020000)
         )
       )
-      and on(env,environment,tier,type,stage,region,component)
+      and on(env,environment,tier,type,stage,region,location,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="runway_ingress",env="ops",monitor="global",type="ai-gateway"}) >= 1
+        sum by(env,environment,tier,type,stage,region,location,component) (gitlab_regional_sli_ops:rate_1h{component="runway_ingress",env="ops",monitor="global",type="ai-gateway"}) >= 1
       )
   - alert: AiGatewayServiceRunwayIngressApdexSLOViolationRegional
     for: 2m
@@ -388,8 +388,8 @@ groups:
       promql_template_1: |
         histogram_quantile(
           0.950000,
-          sum by (env,environment,tier,stage,region,le) (
-            avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_request_latencies_bucket{environment="{{ $labels.environment }}",region="{{ $labels.region }}",response_code_class!~"4xx|5xx",stage="{{ $labels.stage }}",type="ai-gateway"}[5m])
+          sum by (env,environment,tier,stage,region,location,le) (
+            avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_request_latencies_bucket{environment="{{ $labels.environment }}",location="{{ $labels.location }}",region="{{ $labels.region }}",response_code_class!~"4xx|5xx",stage="{{ $labels.stage }}",type="ai-gateway"}[5m])
           )
         )
       runbook: docs/ai-gateway/README.md
@@ -417,9 +417,9 @@ groups:
           < (1 - 6 * 0.020000)
         )
       )
-      and on(env,environment,tier,type,stage,region,component)
+      and on(env,environment,tier,type,stage,region,location,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="runway_ingress",env="ops",monitor="global",type="ai-gateway"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,region,location,component) (gitlab_regional_sli_ops:rate_6h{component="runway_ingress",env="ops",monitor="global",type="ai-gateway"}) >= 0.16667
       )
   - alert: AiGatewayServiceRunwayIngressErrorSLOViolation
     for: 2m
@@ -535,8 +535,8 @@ groups:
       grafana_panel_id: "3451331792"
       grafana_variables: environment,stage
       promql_template_1: |
-        sum by (env,environment,tier,stage,region) (
-          avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_request_count{environment="{{ $labels.environment }}",region="{{ $labels.region }}",response_code_class="5xx",stage="{{ $labels.stage }}",type="ai-gateway"}[5m]) / 60
+        sum by (env,environment,tier,stage,region,location) (
+          avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_request_count{environment="{{ $labels.environment }}",location="{{ $labels.location }}",region="{{ $labels.region }}",response_code_class="5xx",stage="{{ $labels.stage }}",type="ai-gateway"}[5m]) / 60
         )
       runbook: docs/ai-gateway/README.md
     labels:
@@ -563,9 +563,9 @@ groups:
           > (14.4 * 0.020000)
         )
       )
-      and on(env,environment,tier,type,stage,region,component)
+      and on(env,environment,tier,type,stage,region,location,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="runway_ingress",env="ops",monitor="global",type="ai-gateway"}) >= 1
+        sum by(env,environment,tier,type,stage,region,location,component) (gitlab_regional_sli_ops:rate_1h{component="runway_ingress",env="ops",monitor="global",type="ai-gateway"}) >= 1
       )
   - alert: AiGatewayServiceRunwayIngressErrorSLOViolationRegional
     for: 2m
@@ -585,8 +585,8 @@ groups:
       grafana_panel_id: "3451331792"
       grafana_variables: environment,stage
       promql_template_1: |
-        sum by (env,environment,tier,stage,region) (
-          avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_request_count{environment="{{ $labels.environment }}",region="{{ $labels.region }}",response_code_class="5xx",stage="{{ $labels.stage }}",type="ai-gateway"}[5m]) / 60
+        sum by (env,environment,tier,stage,region,location) (
+          avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_request_count{environment="{{ $labels.environment }}",location="{{ $labels.location }}",region="{{ $labels.region }}",response_code_class="5xx",stage="{{ $labels.stage }}",type="ai-gateway"}[5m]) / 60
         )
       runbook: docs/ai-gateway/README.md
     labels:
@@ -613,9 +613,9 @@ groups:
           > (6 * 0.020000)
         )
       )
-      and on(env,environment,tier,type,stage,region,component)
+      and on(env,environment,tier,type,stage,region,location,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="runway_ingress",env="ops",monitor="global",type="ai-gateway"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,region,location,component) (gitlab_regional_sli_ops:rate_6h{component="runway_ingress",env="ops",monitor="global",type="ai-gateway"}) >= 0.16667
       )
   - alert: AiGatewayServiceRunwayIngressTrafficCessation
     for: 5m
@@ -707,8 +707,8 @@ groups:
       grafana_panel_id: "1866380853"
       grafana_variables: environment,stage
       promql_template_1: |
-        sum by (env,environment,tier,stage,region) (
-          avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_request_count{environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="ai-gateway"}[5m]) / 60
+        sum by (env,environment,tier,stage,region,location) (
+          avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_request_count{environment="{{ $labels.environment }}",location="{{ $labels.location }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="ai-gateway"}[5m]) / 60
         )
       runbook: docs/ai-gateway/README.md
     labels:
@@ -746,8 +746,8 @@ groups:
       grafana_panel_id: "1866380853"
       grafana_variables: environment,stage
       promql_template_1: |
-        sum by (env,environment,tier,stage,region) (
-          avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_request_count{environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="ai-gateway"}[5m]) / 60
+        sum by (env,environment,tier,stage,region,location) (
+          avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_request_count{environment="{{ $labels.environment }}",location="{{ $labels.location }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="ai-gateway"}[5m]) / 60
         )
       runbook: docs/ai-gateway/README.md
     labels:
@@ -885,8 +885,8 @@ groups:
       promql_template_1: |
         histogram_quantile(
           0.950000,
-          sum by (env,environment,tier,stage,region,le) (
-            rate(http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",handler!~"/v1/chat/agent|/v1/x-ray/libraries|/v2/code/completions|/v2/code/generations|/v2/completions",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status!~"4xx|5xx",type="ai-gateway"}[5m])
+          sum by (env,environment,tier,stage,region,location,le) (
+            rate(http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",handler!~"/v1/chat/agent|/v1/x-ray/libraries|/v2/code/completions|/v2/code/generations|/v2/completions",location="{{ $labels.location }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status!~"4xx|5xx",type="ai-gateway"}[5m])
           )
         )
       runbook: docs/ai-gateway/README.md
@@ -913,9 +913,9 @@ groups:
           < (1 - 14.4 * 0.020000)
         )
       )
-      and on(env,environment,tier,type,stage,region,component)
+      and on(env,environment,tier,type,stage,region,location,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="server",env="ops",monitor="global",type="ai-gateway"}) >= 1
+        sum by(env,environment,tier,type,stage,region,location,component) (gitlab_regional_sli_ops:rate_1h{component="server",env="ops",monitor="global",type="ai-gateway"}) >= 1
       )
   - alert: AiGatewayServiceServerApdexSLOViolationRegional
     for: 2m
@@ -937,8 +937,8 @@ groups:
       promql_template_1: |
         histogram_quantile(
           0.950000,
-          sum by (env,environment,tier,stage,region,le) (
-            rate(http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",handler!~"/v1/chat/agent|/v1/x-ray/libraries|/v2/code/completions|/v2/code/generations|/v2/completions",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status!~"4xx|5xx",type="ai-gateway"}[5m])
+          sum by (env,environment,tier,stage,region,location,le) (
+            rate(http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",handler!~"/v1/chat/agent|/v1/x-ray/libraries|/v2/code/completions|/v2/code/generations|/v2/completions",location="{{ $labels.location }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status!~"4xx|5xx",type="ai-gateway"}[5m])
           )
         )
       runbook: docs/ai-gateway/README.md
@@ -965,9 +965,9 @@ groups:
           < (1 - 6 * 0.020000)
         )
       )
-      and on(env,environment,tier,type,stage,region,component)
+      and on(env,environment,tier,type,stage,region,location,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="server",env="ops",monitor="global",type="ai-gateway"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,region,location,component) (gitlab_regional_sli_ops:rate_6h{component="server",env="ops",monitor="global",type="ai-gateway"}) >= 0.16667
       )
   - alert: AiGatewayServiceServerErrorSLOViolation
     for: 2m
@@ -1081,8 +1081,8 @@ groups:
       grafana_panel_id: "1631973137"
       grafana_variables: environment,stage
       promql_template_1: |
-        sum by (env,environment,tier,stage,region) (
-          rate(http_request_duration_seconds_count{environment="{{ $labels.environment }}",handler!~"/v1/chat/agent|/v1/x-ray/libraries|/v2/code/completions|/v2/code/generations|/v2/completions",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status="5xx",type="ai-gateway"}[5m])
+        sum by (env,environment,tier,stage,region,location) (
+          rate(http_request_duration_seconds_count{environment="{{ $labels.environment }}",handler!~"/v1/chat/agent|/v1/x-ray/libraries|/v2/code/completions|/v2/code/generations|/v2/completions",location="{{ $labels.location }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status="5xx",type="ai-gateway"}[5m])
         )
       runbook: docs/ai-gateway/README.md
     labels:
@@ -1108,9 +1108,9 @@ groups:
           > (14.4 * 0.020000)
         )
       )
-      and on(env,environment,tier,type,stage,region,component)
+      and on(env,environment,tier,type,stage,region,location,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="server",env="ops",monitor="global",type="ai-gateway"}) >= 1
+        sum by(env,environment,tier,type,stage,region,location,component) (gitlab_regional_sli_ops:rate_1h{component="server",env="ops",monitor="global",type="ai-gateway"}) >= 1
       )
   - alert: AiGatewayServiceServerErrorSLOViolationRegional
     for: 2m
@@ -1130,8 +1130,8 @@ groups:
       grafana_panel_id: "1631973137"
       grafana_variables: environment,stage
       promql_template_1: |
-        sum by (env,environment,tier,stage,region) (
-          rate(http_request_duration_seconds_count{environment="{{ $labels.environment }}",handler!~"/v1/chat/agent|/v1/x-ray/libraries|/v2/code/completions|/v2/code/generations|/v2/completions",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status="5xx",type="ai-gateway"}[5m])
+        sum by (env,environment,tier,stage,region,location) (
+          rate(http_request_duration_seconds_count{environment="{{ $labels.environment }}",handler!~"/v1/chat/agent|/v1/x-ray/libraries|/v2/code/completions|/v2/code/generations|/v2/completions",location="{{ $labels.location }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status="5xx",type="ai-gateway"}[5m])
         )
       runbook: docs/ai-gateway/README.md
     labels:
@@ -1157,9 +1157,9 @@ groups:
           > (6 * 0.020000)
         )
       )
-      and on(env,environment,tier,type,stage,region,component)
+      and on(env,environment,tier,type,stage,region,location,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="server",env="ops",monitor="global",type="ai-gateway"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,region,location,component) (gitlab_regional_sli_ops:rate_6h{component="server",env="ops",monitor="global",type="ai-gateway"}) >= 0.16667
       )
   - alert: AiGatewayServiceServerChatApdexSLOViolation
     for: 2m
@@ -1283,8 +1283,8 @@ groups:
       promql_template_1: |
         histogram_quantile(
           0.950000,
-          sum by (env,environment,tier,stage,region,le) (
-            rate(http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",handler="/v1/chat/agent",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status!~"4xx|5xx",type="ai-gateway"}[5m])
+          sum by (env,environment,tier,stage,region,location,le) (
+            rate(http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",handler="/v1/chat/agent",location="{{ $labels.location }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status!~"4xx|5xx",type="ai-gateway"}[5m])
           )
         )
       runbook: docs/ai-gateway/README.md
@@ -1312,9 +1312,9 @@ groups:
           < (1 - 14.4 * 0.020000)
         )
       )
-      and on(env,environment,tier,type,stage,region,component)
+      and on(env,environment,tier,type,stage,region,location,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="server_chat",env="ops",monitor="global",type="ai-gateway"}) >= 1
+        sum by(env,environment,tier,type,stage,region,location,component) (gitlab_regional_sli_ops:rate_1h{component="server_chat",env="ops",monitor="global",type="ai-gateway"}) >= 1
       )
   - alert: AiGatewayServiceServerChatApdexSLOViolationRegional
     for: 2m
@@ -1336,8 +1336,8 @@ groups:
       promql_template_1: |
         histogram_quantile(
           0.950000,
-          sum by (env,environment,tier,stage,region,le) (
-            rate(http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",handler="/v1/chat/agent",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status!~"4xx|5xx",type="ai-gateway"}[5m])
+          sum by (env,environment,tier,stage,region,location,le) (
+            rate(http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",handler="/v1/chat/agent",location="{{ $labels.location }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status!~"4xx|5xx",type="ai-gateway"}[5m])
           )
         )
       runbook: docs/ai-gateway/README.md
@@ -1365,9 +1365,9 @@ groups:
           < (1 - 6 * 0.020000)
         )
       )
-      and on(env,environment,tier,type,stage,region,component)
+      and on(env,environment,tier,type,stage,region,location,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="server_chat",env="ops",monitor="global",type="ai-gateway"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,region,location,component) (gitlab_regional_sli_ops:rate_6h{component="server_chat",env="ops",monitor="global",type="ai-gateway"}) >= 0.16667
       )
   - alert: AiGatewayServiceServerChatErrorSLOViolation
     for: 2m
@@ -1483,8 +1483,8 @@ groups:
       grafana_panel_id: "1462095494"
       grafana_variables: environment,stage
       promql_template_1: |
-        sum by (env,environment,tier,stage,region) (
-          rate(http_request_duration_seconds_count{environment="{{ $labels.environment }}",handler="/v1/chat/agent",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status="5xx",type="ai-gateway"}[5m])
+        sum by (env,environment,tier,stage,region,location) (
+          rate(http_request_duration_seconds_count{environment="{{ $labels.environment }}",handler="/v1/chat/agent",location="{{ $labels.location }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status="5xx",type="ai-gateway"}[5m])
         )
       runbook: docs/ai-gateway/README.md
     labels:
@@ -1511,9 +1511,9 @@ groups:
           > (14.4 * 0.020000)
         )
       )
-      and on(env,environment,tier,type,stage,region,component)
+      and on(env,environment,tier,type,stage,region,location,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="server_chat",env="ops",monitor="global",type="ai-gateway"}) >= 1
+        sum by(env,environment,tier,type,stage,region,location,component) (gitlab_regional_sli_ops:rate_1h{component="server_chat",env="ops",monitor="global",type="ai-gateway"}) >= 1
       )
   - alert: AiGatewayServiceServerChatErrorSLOViolationRegional
     for: 2m
@@ -1533,8 +1533,8 @@ groups:
       grafana_panel_id: "1462095494"
       grafana_variables: environment,stage
       promql_template_1: |
-        sum by (env,environment,tier,stage,region) (
-          rate(http_request_duration_seconds_count{environment="{{ $labels.environment }}",handler="/v1/chat/agent",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status="5xx",type="ai-gateway"}[5m])
+        sum by (env,environment,tier,stage,region,location) (
+          rate(http_request_duration_seconds_count{environment="{{ $labels.environment }}",handler="/v1/chat/agent",location="{{ $labels.location }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status="5xx",type="ai-gateway"}[5m])
         )
       runbook: docs/ai-gateway/README.md
     labels:
@@ -1561,9 +1561,9 @@ groups:
           > (6 * 0.020000)
         )
       )
-      and on(env,environment,tier,type,stage,region,component)
+      and on(env,environment,tier,type,stage,region,location,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="server_chat",env="ops",monitor="global",type="ai-gateway"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,region,location,component) (gitlab_regional_sli_ops:rate_6h{component="server_chat",env="ops",monitor="global",type="ai-gateway"}) >= 0.16667
       )
   - alert: AiGatewayServiceServerCodeCompletionsApdexSLOViolation
     for: 2m
@@ -1687,8 +1687,8 @@ groups:
       promql_template_1: |
         histogram_quantile(
           0.950000,
-          sum by (env,environment,tier,stage,region,le) (
-            rate(http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",handler=~"/v2/code/completions|/v2/completions",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status!~"4xx|5xx",type="ai-gateway"}[5m])
+          sum by (env,environment,tier,stage,region,location,le) (
+            rate(http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",handler=~"/v2/code/completions|/v2/completions",location="{{ $labels.location }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status!~"4xx|5xx",type="ai-gateway"}[5m])
           )
         )
       runbook: docs/ai-gateway/README.md
@@ -1716,9 +1716,9 @@ groups:
           < (1 - 14.4 * 0.020000)
         )
       )
-      and on(env,environment,tier,type,stage,region,component)
+      and on(env,environment,tier,type,stage,region,location,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="server_code_completions",env="ops",monitor="global",type="ai-gateway"}) >= 1
+        sum by(env,environment,tier,type,stage,region,location,component) (gitlab_regional_sli_ops:rate_1h{component="server_code_completions",env="ops",monitor="global",type="ai-gateway"}) >= 1
       )
   - alert: AiGatewayServiceServerCodeCompletionsApdexSLOViolationRegional
     for: 2m
@@ -1740,8 +1740,8 @@ groups:
       promql_template_1: |
         histogram_quantile(
           0.950000,
-          sum by (env,environment,tier,stage,region,le) (
-            rate(http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",handler=~"/v2/code/completions|/v2/completions",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status!~"4xx|5xx",type="ai-gateway"}[5m])
+          sum by (env,environment,tier,stage,region,location,le) (
+            rate(http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",handler=~"/v2/code/completions|/v2/completions",location="{{ $labels.location }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status!~"4xx|5xx",type="ai-gateway"}[5m])
           )
         )
       runbook: docs/ai-gateway/README.md
@@ -1769,9 +1769,9 @@ groups:
           < (1 - 6 * 0.020000)
         )
       )
-      and on(env,environment,tier,type,stage,region,component)
+      and on(env,environment,tier,type,stage,region,location,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="server_code_completions",env="ops",monitor="global",type="ai-gateway"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,region,location,component) (gitlab_regional_sli_ops:rate_6h{component="server_code_completions",env="ops",monitor="global",type="ai-gateway"}) >= 0.16667
       )
   - alert: AiGatewayServiceServerCodeCompletionsErrorSLOViolation
     for: 2m
@@ -1887,8 +1887,8 @@ groups:
       grafana_panel_id: "2484607007"
       grafana_variables: environment,stage
       promql_template_1: |
-        sum by (env,environment,tier,stage,region) (
-          rate(http_request_duration_seconds_count{environment="{{ $labels.environment }}",handler=~"/v2/code/completions|/v2/completions",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status="5xx",type="ai-gateway"}[5m])
+        sum by (env,environment,tier,stage,region,location) (
+          rate(http_request_duration_seconds_count{environment="{{ $labels.environment }}",handler=~"/v2/code/completions|/v2/completions",location="{{ $labels.location }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status="5xx",type="ai-gateway"}[5m])
         )
       runbook: docs/ai-gateway/README.md
     labels:
@@ -1915,9 +1915,9 @@ groups:
           > (14.4 * 0.020000)
         )
       )
-      and on(env,environment,tier,type,stage,region,component)
+      and on(env,environment,tier,type,stage,region,location,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="server_code_completions",env="ops",monitor="global",type="ai-gateway"}) >= 1
+        sum by(env,environment,tier,type,stage,region,location,component) (gitlab_regional_sli_ops:rate_1h{component="server_code_completions",env="ops",monitor="global",type="ai-gateway"}) >= 1
       )
   - alert: AiGatewayServiceServerCodeCompletionsErrorSLOViolationRegional
     for: 2m
@@ -1937,8 +1937,8 @@ groups:
       grafana_panel_id: "2484607007"
       grafana_variables: environment,stage
       promql_template_1: |
-        sum by (env,environment,tier,stage,region) (
-          rate(http_request_duration_seconds_count{environment="{{ $labels.environment }}",handler=~"/v2/code/completions|/v2/completions",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status="5xx",type="ai-gateway"}[5m])
+        sum by (env,environment,tier,stage,region,location) (
+          rate(http_request_duration_seconds_count{environment="{{ $labels.environment }}",handler=~"/v2/code/completions|/v2/completions",location="{{ $labels.location }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status="5xx",type="ai-gateway"}[5m])
         )
       runbook: docs/ai-gateway/README.md
     labels:
@@ -1965,9 +1965,9 @@ groups:
           > (6 * 0.020000)
         )
       )
-      and on(env,environment,tier,type,stage,region,component)
+      and on(env,environment,tier,type,stage,region,location,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="server_code_completions",env="ops",monitor="global",type="ai-gateway"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,region,location,component) (gitlab_regional_sli_ops:rate_6h{component="server_code_completions",env="ops",monitor="global",type="ai-gateway"}) >= 0.16667
       )
   - alert: AiGatewayServiceServerCodeGenerationsApdexSLOViolation
     for: 2m
@@ -2091,8 +2091,8 @@ groups:
       promql_template_1: |
         histogram_quantile(
           0.950000,
-          sum by (env,environment,tier,stage,region,le) (
-            rate(http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",handler="/v2/code/generations",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status!~"4xx|5xx",type="ai-gateway"}[5m])
+          sum by (env,environment,tier,stage,region,location,le) (
+            rate(http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",handler="/v2/code/generations",location="{{ $labels.location }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status!~"4xx|5xx",type="ai-gateway"}[5m])
           )
         )
       runbook: docs/ai-gateway/README.md
@@ -2120,9 +2120,9 @@ groups:
           < (1 - 14.4 * 0.020000)
         )
       )
-      and on(env,environment,tier,type,stage,region,component)
+      and on(env,environment,tier,type,stage,region,location,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="server_code_generations",env="ops",monitor="global",type="ai-gateway"}) >= 1
+        sum by(env,environment,tier,type,stage,region,location,component) (gitlab_regional_sli_ops:rate_1h{component="server_code_generations",env="ops",monitor="global",type="ai-gateway"}) >= 1
       )
   - alert: AiGatewayServiceServerCodeGenerationsApdexSLOViolationRegional
     for: 2m
@@ -2144,8 +2144,8 @@ groups:
       promql_template_1: |
         histogram_quantile(
           0.950000,
-          sum by (env,environment,tier,stage,region,le) (
-            rate(http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",handler="/v2/code/generations",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status!~"4xx|5xx",type="ai-gateway"}[5m])
+          sum by (env,environment,tier,stage,region,location,le) (
+            rate(http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",handler="/v2/code/generations",location="{{ $labels.location }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status!~"4xx|5xx",type="ai-gateway"}[5m])
           )
         )
       runbook: docs/ai-gateway/README.md
@@ -2173,9 +2173,9 @@ groups:
           < (1 - 6 * 0.020000)
         )
       )
-      and on(env,environment,tier,type,stage,region,component)
+      and on(env,environment,tier,type,stage,region,location,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="server_code_generations",env="ops",monitor="global",type="ai-gateway"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,region,location,component) (gitlab_regional_sli_ops:rate_6h{component="server_code_generations",env="ops",monitor="global",type="ai-gateway"}) >= 0.16667
       )
   - alert: AiGatewayServiceServerCodeGenerationsErrorSLOViolation
     for: 2m
@@ -2291,8 +2291,8 @@ groups:
       grafana_panel_id: "2564361589"
       grafana_variables: environment,stage
       promql_template_1: |
-        sum by (env,environment,tier,stage,region) (
-          rate(http_request_duration_seconds_count{environment="{{ $labels.environment }}",handler="/v2/code/generations",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status="5xx",type="ai-gateway"}[5m])
+        sum by (env,environment,tier,stage,region,location) (
+          rate(http_request_duration_seconds_count{environment="{{ $labels.environment }}",handler="/v2/code/generations",location="{{ $labels.location }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status="5xx",type="ai-gateway"}[5m])
         )
       runbook: docs/ai-gateway/README.md
     labels:
@@ -2319,9 +2319,9 @@ groups:
           > (14.4 * 0.020000)
         )
       )
-      and on(env,environment,tier,type,stage,region,component)
+      and on(env,environment,tier,type,stage,region,location,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="server_code_generations",env="ops",monitor="global",type="ai-gateway"}) >= 1
+        sum by(env,environment,tier,type,stage,region,location,component) (gitlab_regional_sli_ops:rate_1h{component="server_code_generations",env="ops",monitor="global",type="ai-gateway"}) >= 1
       )
   - alert: AiGatewayServiceServerCodeGenerationsErrorSLOViolationRegional
     for: 2m
@@ -2341,8 +2341,8 @@ groups:
       grafana_panel_id: "2564361589"
       grafana_variables: environment,stage
       promql_template_1: |
-        sum by (env,environment,tier,stage,region) (
-          rate(http_request_duration_seconds_count{environment="{{ $labels.environment }}",handler="/v2/code/generations",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status="5xx",type="ai-gateway"}[5m])
+        sum by (env,environment,tier,stage,region,location) (
+          rate(http_request_duration_seconds_count{environment="{{ $labels.environment }}",handler="/v2/code/generations",location="{{ $labels.location }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status="5xx",type="ai-gateway"}[5m])
         )
       runbook: docs/ai-gateway/README.md
     labels:
@@ -2369,9 +2369,9 @@ groups:
           > (6 * 0.020000)
         )
       )
-      and on(env,environment,tier,type,stage,region,component)
+      and on(env,environment,tier,type,stage,region,location,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="server_code_generations",env="ops",monitor="global",type="ai-gateway"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,region,location,component) (gitlab_regional_sli_ops:rate_6h{component="server_code_generations",env="ops",monitor="global",type="ai-gateway"}) >= 0.16667
       )
   - alert: AiGatewayServiceServerXRayApdexSLOViolation
     for: 2m
@@ -2493,8 +2493,8 @@ groups:
       promql_template_1: |
         histogram_quantile(
           0.950000,
-          sum by (env,environment,tier,stage,region,le) (
-            rate(http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",handler="/v1/x-ray/libraries",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status!~"4xx|5xx",type="ai-gateway"}[5m])
+          sum by (env,environment,tier,stage,region,location,le) (
+            rate(http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",handler="/v1/x-ray/libraries",location="{{ $labels.location }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status!~"4xx|5xx",type="ai-gateway"}[5m])
           )
         )
       runbook: docs/ai-gateway/README.md
@@ -2521,9 +2521,9 @@ groups:
           < (1 - 14.4 * 0.020000)
         )
       )
-      and on(env,environment,tier,type,stage,region,component)
+      and on(env,environment,tier,type,stage,region,location,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="server_x_ray",env="ops",monitor="global",type="ai-gateway"}) >= 1
+        sum by(env,environment,tier,type,stage,region,location,component) (gitlab_regional_sli_ops:rate_1h{component="server_x_ray",env="ops",monitor="global",type="ai-gateway"}) >= 1
       )
   - alert: AiGatewayServiceServerXRayApdexSLOViolationRegional
     for: 2m
@@ -2545,8 +2545,8 @@ groups:
       promql_template_1: |
         histogram_quantile(
           0.950000,
-          sum by (env,environment,tier,stage,region,le) (
-            rate(http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",handler="/v1/x-ray/libraries",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status!~"4xx|5xx",type="ai-gateway"}[5m])
+          sum by (env,environment,tier,stage,region,location,le) (
+            rate(http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",handler="/v1/x-ray/libraries",location="{{ $labels.location }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status!~"4xx|5xx",type="ai-gateway"}[5m])
           )
         )
       runbook: docs/ai-gateway/README.md
@@ -2573,9 +2573,9 @@ groups:
           < (1 - 6 * 0.020000)
         )
       )
-      and on(env,environment,tier,type,stage,region,component)
+      and on(env,environment,tier,type,stage,region,location,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="server_x_ray",env="ops",monitor="global",type="ai-gateway"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,region,location,component) (gitlab_regional_sli_ops:rate_6h{component="server_x_ray",env="ops",monitor="global",type="ai-gateway"}) >= 0.16667
       )
   - alert: AiGatewayServiceServerXRayErrorSLOViolation
     for: 2m
@@ -2689,8 +2689,8 @@ groups:
       grafana_panel_id: "2737483849"
       grafana_variables: environment,stage
       promql_template_1: |
-        sum by (env,environment,tier,stage,region) (
-          rate(http_request_duration_seconds_count{environment="{{ $labels.environment }}",handler="/v1/x-ray/libraries",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status="5xx",type="ai-gateway"}[5m])
+        sum by (env,environment,tier,stage,region,location) (
+          rate(http_request_duration_seconds_count{environment="{{ $labels.environment }}",handler="/v1/x-ray/libraries",location="{{ $labels.location }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status="5xx",type="ai-gateway"}[5m])
         )
       runbook: docs/ai-gateway/README.md
     labels:
@@ -2716,9 +2716,9 @@ groups:
           > (14.4 * 0.020000)
         )
       )
-      and on(env,environment,tier,type,stage,region,component)
+      and on(env,environment,tier,type,stage,region,location,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="server_x_ray",env="ops",monitor="global",type="ai-gateway"}) >= 1
+        sum by(env,environment,tier,type,stage,region,location,component) (gitlab_regional_sli_ops:rate_1h{component="server_x_ray",env="ops",monitor="global",type="ai-gateway"}) >= 1
       )
   - alert: AiGatewayServiceServerXRayErrorSLOViolationRegional
     for: 2m
@@ -2738,8 +2738,8 @@ groups:
       grafana_panel_id: "2737483849"
       grafana_variables: environment,stage
       promql_template_1: |
-        sum by (env,environment,tier,stage,region) (
-          rate(http_request_duration_seconds_count{environment="{{ $labels.environment }}",handler="/v1/x-ray/libraries",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status="5xx",type="ai-gateway"}[5m])
+        sum by (env,environment,tier,stage,region,location) (
+          rate(http_request_duration_seconds_count{environment="{{ $labels.environment }}",handler="/v1/x-ray/libraries",location="{{ $labels.location }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status="5xx",type="ai-gateway"}[5m])
         )
       runbook: docs/ai-gateway/README.md
     labels:
@@ -2765,9 +2765,9 @@ groups:
           > (6 * 0.020000)
         )
       )
-      and on(env,environment,tier,type,stage,region,component)
+      and on(env,environment,tier,type,stage,region,location,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="server_x_ray",env="ops",monitor="global",type="ai-gateway"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,region,location,component) (gitlab_regional_sli_ops:rate_6h{component="server_x_ray",env="ops",monitor="global",type="ai-gateway"}) >= 0.16667
       )
   - alert: AiGatewayServiceWafErrorSLOViolation
     for: 2m
@@ -2881,8 +2881,8 @@ groups:
       grafana_panel_id: "1626131899"
       grafana_variables: environment,stage
       promql_template_1: |
-        sum by (env,environment,tier,stage,region) (
-          rate(cloudflare_zone_requests_status_country_host{environment="{{ $labels.environment }}",host=~"codesuggestions.gitlab.com.*",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status=~"^5.*",zone="gitlab.com"}[5m])
+        sum by (env,environment,tier,stage,region,location) (
+          rate(cloudflare_zone_requests_status_country_host{environment="{{ $labels.environment }}",host=~"codesuggestions.gitlab.com.*",location="{{ $labels.location }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status=~"^5.*",zone="gitlab.com"}[5m])
         )
       runbook: docs/ai-gateway/README.md
     labels:
@@ -2908,9 +2908,9 @@ groups:
           > (14.4 * 0.020000)
         )
       )
-      and on(env,environment,tier,type,stage,region,component)
+      and on(env,environment,tier,type,stage,region,location,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="waf",env="ops",monitor="global",type="ai-gateway"}) >= 1
+        sum by(env,environment,tier,type,stage,region,location,component) (gitlab_regional_sli_ops:rate_1h{component="waf",env="ops",monitor="global",type="ai-gateway"}) >= 1
       )
   - alert: AiGatewayServiceWafErrorSLOViolationRegional
     for: 2m
@@ -2930,8 +2930,8 @@ groups:
       grafana_panel_id: "1626131899"
       grafana_variables: environment,stage
       promql_template_1: |
-        sum by (env,environment,tier,stage,region) (
-          rate(cloudflare_zone_requests_status_country_host{environment="{{ $labels.environment }}",host=~"codesuggestions.gitlab.com.*",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status=~"^5.*",zone="gitlab.com"}[5m])
+        sum by (env,environment,tier,stage,region,location) (
+          rate(cloudflare_zone_requests_status_country_host{environment="{{ $labels.environment }}",host=~"codesuggestions.gitlab.com.*",location="{{ $labels.location }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status=~"^5.*",zone="gitlab.com"}[5m])
         )
       runbook: docs/ai-gateway/README.md
     labels:
@@ -2957,9 +2957,9 @@ groups:
           > (6 * 0.020000)
         )
       )
-      and on(env,environment,tier,type,stage,region,component)
+      and on(env,environment,tier,type,stage,region,location,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="waf",env="ops",monitor="global",type="ai-gateway"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,region,location,component) (gitlab_regional_sli_ops:rate_6h{component="waf",env="ops",monitor="global",type="ai-gateway"}) >= 0.16667
       )
   - alert: AiGatewayServiceWafTrafficCessation
     for: 5m
@@ -3049,8 +3049,8 @@ groups:
       grafana_panel_id: "225787872"
       grafana_variables: environment,stage
       promql_template_1: |
-        sum by (env,environment,tier,stage,region) (
-          rate(cloudflare_zone_requests_status_country_host{environment="{{ $labels.environment }}",host=~"codesuggestions.gitlab.com.*",region="{{ $labels.region }}",stage="{{ $labels.stage }}",zone="gitlab.com"}[5m])
+        sum by (env,environment,tier,stage,region,location) (
+          rate(cloudflare_zone_requests_status_country_host{environment="{{ $labels.environment }}",host=~"codesuggestions.gitlab.com.*",location="{{ $labels.location }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",zone="gitlab.com"}[5m])
         )
       runbook: docs/ai-gateway/README.md
     labels:
@@ -3087,8 +3087,8 @@ groups:
       grafana_panel_id: "225787872"
       grafana_variables: environment,stage
       promql_template_1: |
-        sum by (env,environment,tier,stage,region) (
-          rate(cloudflare_zone_requests_status_country_host{environment="{{ $labels.environment }}",host=~"codesuggestions.gitlab.com.*",region="{{ $labels.region }}",stage="{{ $labels.stage }}",zone="gitlab.com"}[5m])
+        sum by (env,environment,tier,stage,region,location) (
+          rate(cloudflare_zone_requests_status_country_host{environment="{{ $labels.environment }}",host=~"codesuggestions.gitlab.com.*",location="{{ $labels.location }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",zone="gitlab.com"}[5m])
         )
       runbook: docs/ai-gateway/README.md
     labels:

@@ -141,9 +141,9 @@ groups:
           < (1 - 14.4 * 0.010000)
         )
       )
-      and on(env,environment,tier,type,stage,region,component)
+      and on(env,environment,tier,type,stage,region,location,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="rails_request",env="ops",monitor="global",type="internal-api"}) >= 1
+        sum by(env,environment,tier,type,stage,region,location,component) (gitlab_regional_sli_ops:rate_1h{component="rails_request",env="ops",monitor="global",type="internal-api"}) >= 1
       )
   - alert: InternalApiServiceRailsRequestApdexSLOViolationRegional
     for: 2m
@@ -189,9 +189,9 @@ groups:
           < (1 - 6 * 0.010000)
         )
       )
-      and on(env,environment,tier,type,stage,region,component)
+      and on(env,environment,tier,type,stage,region,location,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="rails_request",env="ops",monitor="global",type="internal-api"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,region,location,component) (gitlab_regional_sli_ops:rate_6h{component="rails_request",env="ops",monitor="global",type="internal-api"}) >= 0.16667
       )
   - alert: InternalApiServiceRailsRequestErrorSLOViolation
     for: 2m
@@ -313,8 +313,8 @@ groups:
       grafana_panel_id: "387946920"
       grafana_variables: environment,stage
       promql_template_1: |
-        sum by (env,environment,tier,stage,region) (
-          rate(gitlab_sli_rails_request_error_total{environment="{{ $labels.environment }}",job="gitlab-rails",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="internal-api"}[5m])
+        sum by (env,environment,tier,stage,region,location) (
+          rate(gitlab_sli_rails_request_error_total{environment="{{ $labels.environment }}",job="gitlab-rails",location="{{ $labels.location }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="internal-api"}[5m])
         )
       runbook: docs/internal-api/README.md
     labels:
@@ -341,9 +341,9 @@ groups:
           > (14.4 * 0.001000)
         )
       )
-      and on(env,environment,tier,type,stage,region,component)
+      and on(env,environment,tier,type,stage,region,location,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="rails_request",env="ops",monitor="global",type="internal-api"}) >= 1
+        sum by(env,environment,tier,type,stage,region,location,component) (gitlab_regional_sli_ops:rate_1h{component="rails_request",env="ops",monitor="global",type="internal-api"}) >= 1
       )
   - alert: InternalApiServiceRailsRequestErrorSLOViolationRegional
     for: 2m
@@ -365,8 +365,8 @@ groups:
       grafana_panel_id: "387946920"
       grafana_variables: environment,stage
       promql_template_1: |
-        sum by (env,environment,tier,stage,region) (
-          rate(gitlab_sli_rails_request_error_total{environment="{{ $labels.environment }}",job="gitlab-rails",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="internal-api"}[5m])
+        sum by (env,environment,tier,stage,region,location) (
+          rate(gitlab_sli_rails_request_error_total{environment="{{ $labels.environment }}",job="gitlab-rails",location="{{ $labels.location }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="internal-api"}[5m])
         )
       runbook: docs/internal-api/README.md
     labels:
@@ -393,9 +393,9 @@ groups:
           > (6 * 0.001000)
         )
       )
-      and on(env,environment,tier,type,stage,region,component)
+      and on(env,environment,tier,type,stage,region,location,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="rails_request",env="ops",monitor="global",type="internal-api"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,region,location,component) (gitlab_regional_sli_ops:rate_6h{component="rails_request",env="ops",monitor="global",type="internal-api"}) >= 0.16667
       )
   - alert: InternalApiServiceRailsRequestTrafficCessation
     for: 5m
@@ -493,8 +493,8 @@ groups:
       grafana_panel_id: "538903447"
       grafana_variables: environment,stage
       promql_template_1: |
-        sum by (env,environment,tier,stage,region) (
-          rate(gitlab_sli_rails_request_total{environment="{{ $labels.environment }}",job="gitlab-rails",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="internal-api"}[5m])
+        sum by (env,environment,tier,stage,region,location) (
+          rate(gitlab_sli_rails_request_total{environment="{{ $labels.environment }}",job="gitlab-rails",location="{{ $labels.location }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="internal-api"}[5m])
         )
       runbook: docs/internal-api/README.md
     labels:
@@ -534,8 +534,8 @@ groups:
       grafana_panel_id: "538903447"
       grafana_variables: environment,stage
       promql_template_1: |
-        sum by (env,environment,tier,stage,region) (
-          rate(gitlab_sli_rails_request_total{environment="{{ $labels.environment }}",job="gitlab-rails",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="internal-api"}[5m])
+        sum by (env,environment,tier,stage,region,location) (
+          rate(gitlab_sli_rails_request_total{environment="{{ $labels.environment }}",job="gitlab-rails",location="{{ $labels.location }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="internal-api"}[5m])
         )
       runbook: docs/internal-api/README.md
     labels:
@@ -675,8 +675,8 @@ groups:
       promql_template_1: |
         histogram_quantile(
           0.950000,
-          sum by (env,environment,tier,stage,region,le) (
-            rate(gitlab_workhorse_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",job=~"gitlab-workhorse-api|gitlab-workhorse",region="{{ $labels.region }}",route!="^/-/health$",route!="^/-/(readiness|liveness)$",stage="{{ $labels.stage }}",type="internal-api"}[5m])
+          sum by (env,environment,tier,stage,region,location,le) (
+            rate(gitlab_workhorse_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",job=~"gitlab-workhorse-api|gitlab-workhorse",location="{{ $labels.location }}",region="{{ $labels.region }}",route!="^/-/health$",route!="^/-/(readiness|liveness)$",stage="{{ $labels.stage }}",type="internal-api"}[5m])
           )
         )
       runbook: docs/internal-api/README.md
@@ -704,9 +704,9 @@ groups:
           < (1 - 14.4 * 0.005000)
         )
       )
-      and on(env,environment,tier,type,stage,region,component)
+      and on(env,environment,tier,type,stage,region,location,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="workhorse",env="ops",monitor="global",type="internal-api"}) >= 1
+        sum by(env,environment,tier,type,stage,region,location,component) (gitlab_regional_sli_ops:rate_1h{component="workhorse",env="ops",monitor="global",type="internal-api"}) >= 1
       )
   - alert: InternalApiServiceWorkhorseApdexSLOViolationRegional
     for: 2m
@@ -728,8 +728,8 @@ groups:
       promql_template_1: |
         histogram_quantile(
           0.950000,
-          sum by (env,environment,tier,stage,region,le) (
-            rate(gitlab_workhorse_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",job=~"gitlab-workhorse-api|gitlab-workhorse",region="{{ $labels.region }}",route!="^/-/health$",route!="^/-/(readiness|liveness)$",stage="{{ $labels.stage }}",type="internal-api"}[5m])
+          sum by (env,environment,tier,stage,region,location,le) (
+            rate(gitlab_workhorse_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",job=~"gitlab-workhorse-api|gitlab-workhorse",location="{{ $labels.location }}",region="{{ $labels.region }}",route!="^/-/health$",route!="^/-/(readiness|liveness)$",stage="{{ $labels.stage }}",type="internal-api"}[5m])
           )
         )
       runbook: docs/internal-api/README.md
@@ -757,9 +757,9 @@ groups:
           < (1 - 6 * 0.005000)
         )
       )
-      and on(env,environment,tier,type,stage,region,component)
+      and on(env,environment,tier,type,stage,region,location,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="workhorse",env="ops",monitor="global",type="internal-api"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,region,location,component) (gitlab_regional_sli_ops:rate_6h{component="workhorse",env="ops",monitor="global",type="internal-api"}) >= 0.16667
       )
   - alert: InternalApiServiceWorkhorseErrorSLOViolation
     for: 2m
@@ -875,8 +875,8 @@ groups:
       grafana_panel_id: "2047984749"
       grafana_variables: environment,stage
       promql_template_1: |
-        sum by (env,environment,tier,stage,region) (
-          rate(gitlab_workhorse_http_requests_total{code=~"^5.*",environment="{{ $labels.environment }}",job=~"gitlab-workhorse-api|gitlab-workhorse",region="{{ $labels.region }}",route!="^/-/health$",route!="^/-/(readiness|liveness)$",stage="{{ $labels.stage }}",type="internal-api"}[5m])
+        sum by (env,environment,tier,stage,region,location) (
+          rate(gitlab_workhorse_http_requests_total{code=~"^5.*",environment="{{ $labels.environment }}",job=~"gitlab-workhorse-api|gitlab-workhorse",location="{{ $labels.location }}",region="{{ $labels.region }}",route!="^/-/health$",route!="^/-/(readiness|liveness)$",stage="{{ $labels.stage }}",type="internal-api"}[5m])
         )
       runbook: docs/internal-api/README.md
     labels:
@@ -903,9 +903,9 @@ groups:
           > (14.4 * 0.001000)
         )
       )
-      and on(env,environment,tier,type,stage,region,component)
+      and on(env,environment,tier,type,stage,region,location,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="workhorse",env="ops",monitor="global",type="internal-api"}) >= 1
+        sum by(env,environment,tier,type,stage,region,location,component) (gitlab_regional_sli_ops:rate_1h{component="workhorse",env="ops",monitor="global",type="internal-api"}) >= 1
       )
   - alert: InternalApiServiceWorkhorseErrorSLOViolationRegional
     for: 2m
@@ -925,8 +925,8 @@ groups:
       grafana_panel_id: "2047984749"
       grafana_variables: environment,stage
       promql_template_1: |
-        sum by (env,environment,tier,stage,region) (
-          rate(gitlab_workhorse_http_requests_total{code=~"^5.*",environment="{{ $labels.environment }}",job=~"gitlab-workhorse-api|gitlab-workhorse",region="{{ $labels.region }}",route!="^/-/health$",route!="^/-/(readiness|liveness)$",stage="{{ $labels.stage }}",type="internal-api"}[5m])
+        sum by (env,environment,tier,stage,region,location) (
+          rate(gitlab_workhorse_http_requests_total{code=~"^5.*",environment="{{ $labels.environment }}",job=~"gitlab-workhorse-api|gitlab-workhorse",location="{{ $labels.location }}",region="{{ $labels.region }}",route!="^/-/health$",route!="^/-/(readiness|liveness)$",stage="{{ $labels.stage }}",type="internal-api"}[5m])
         )
       runbook: docs/internal-api/README.md
     labels:
@@ -953,9 +953,9 @@ groups:
           > (6 * 0.001000)
         )
       )
-      and on(env,environment,tier,type,stage,region,component)
+      and on(env,environment,tier,type,stage,region,location,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="workhorse",env="ops",monitor="global",type="internal-api"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,region,location,component) (gitlab_regional_sli_ops:rate_6h{component="workhorse",env="ops",monitor="global",type="internal-api"}) >= 0.16667
       )
   - alert: InternalApiServiceWorkhorseTrafficCessation
     for: 5m
@@ -1047,8 +1047,8 @@ groups:
       grafana_panel_id: "831392945"
       grafana_variables: environment,stage
       promql_template_1: |
-        sum by (env,environment,tier,stage,region) (
-          rate(gitlab_workhorse_http_requests_total{environment="{{ $labels.environment }}",job=~"gitlab-workhorse-api|gitlab-workhorse",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="internal-api"}[5m])
+        sum by (env,environment,tier,stage,region,location) (
+          rate(gitlab_workhorse_http_requests_total{environment="{{ $labels.environment }}",job=~"gitlab-workhorse-api|gitlab-workhorse",location="{{ $labels.location }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="internal-api"}[5m])
         )
       runbook: docs/internal-api/README.md
     labels:
@@ -1086,8 +1086,8 @@ groups:
       grafana_panel_id: "831392945"
       grafana_variables: environment,stage
       promql_template_1: |
-        sum by (env,environment,tier,stage,region) (
-          rate(gitlab_workhorse_http_requests_total{environment="{{ $labels.environment }}",job=~"gitlab-workhorse-api|gitlab-workhorse",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="internal-api"}[5m])
+        sum by (env,environment,tier,stage,region,location) (
+          rate(gitlab_workhorse_http_requests_total{environment="{{ $labels.environment }}",job=~"gitlab-workhorse-api|gitlab-workhorse",location="{{ $labels.location }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="internal-api"}[5m])
         )
       runbook: docs/internal-api/README.md
     labels:

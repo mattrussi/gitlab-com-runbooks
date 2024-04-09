@@ -135,9 +135,9 @@ groups:
           > (14.4 * 0.000500)
         )
       )
-      and on(env,environment,tier,type,stage,region,component)
+      and on(env,environment,tier,type,stage,region,location,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="loadbalancer",env!~"gprd|ops",monitor="global",type="web-pages"}) >= 1
+        sum by(env,environment,tier,type,stage,region,location,component) (gitlab_regional_sli_ops:rate_1h{component="loadbalancer",env!~"gprd|ops",monitor="global",type="web-pages"}) >= 1
       )
   - alert: WebPagesServiceLoadbalancerErrorSLOViolationRegional
     for: 2m
@@ -181,9 +181,9 @@ groups:
           > (6 * 0.000500)
         )
       )
-      and on(env,environment,tier,type,stage,region,component)
+      and on(env,environment,tier,type,stage,region,location,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="loadbalancer",env!~"gprd|ops",monitor="global",type="web-pages"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,region,location,component) (gitlab_regional_sli_ops:rate_6h{component="loadbalancer",env!~"gprd|ops",monitor="global",type="web-pages"}) >= 0.16667
       )
   - alert: WebPagesServiceLoadbalancerTrafficCessation
     for: 5m
@@ -447,9 +447,9 @@ groups:
           > (14.4 * 0.000500)
         )
       )
-      and on(env,environment,tier,type,stage,region,component)
+      and on(env,environment,tier,type,stage,region,location,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="loadbalancer_https",env!~"gprd|ops",monitor="global",type="web-pages"}) >= 1
+        sum by(env,environment,tier,type,stage,region,location,component) (gitlab_regional_sli_ops:rate_1h{component="loadbalancer_https",env!~"gprd|ops",monitor="global",type="web-pages"}) >= 1
       )
   - alert: WebPagesServiceLoadbalancerHttpsErrorSLOViolationRegional
     for: 2m
@@ -493,9 +493,9 @@ groups:
           > (6 * 0.000500)
         )
       )
-      and on(env,environment,tier,type,stage,region,component)
+      and on(env,environment,tier,type,stage,region,location,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="loadbalancer_https",env!~"gprd|ops",monitor="global",type="web-pages"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,region,location,component) (gitlab_regional_sli_ops:rate_6h{component="loadbalancer_https",env!~"gprd|ops",monitor="global",type="web-pages"}) >= 0.16667
       )
   - alert: WebPagesServiceLoadbalancerHttpsTrafficCessation
     for: 5m
@@ -751,8 +751,8 @@ groups:
       promql_template_1: |
         histogram_quantile(
           0.950000,
-          sum by (env,environment,tier,stage,region,le) (
-            rate(gitlab_pages_http_time_to_write_header_seconds_bucket{environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="web-pages"}[5m])
+          sum by (env,environment,tier,stage,region,location,le) (
+            rate(gitlab_pages_http_time_to_write_header_seconds_bucket{environment="{{ $labels.environment }}",location="{{ $labels.location }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="web-pages"}[5m])
           )
         )
       runbook: docs/web-pages/README.md
@@ -780,9 +780,9 @@ groups:
           < (1 - 14.4 * 0.005000)
         )
       )
-      and on(env,environment,tier,type,stage,region,component)
+      and on(env,environment,tier,type,stage,region,location,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="web_pages_server",env!~"gprd|ops",monitor="global",type="web-pages"}) >= 1
+        sum by(env,environment,tier,type,stage,region,location,component) (gitlab_regional_sli_ops:rate_1h{component="web_pages_server",env!~"gprd|ops",monitor="global",type="web-pages"}) >= 1
       )
   - alert: WebPagesServiceWebPagesServerApdexSLOViolationRegional
     for: 2m
@@ -804,8 +804,8 @@ groups:
       promql_template_1: |
         histogram_quantile(
           0.950000,
-          sum by (env,environment,tier,stage,region,le) (
-            rate(gitlab_pages_http_time_to_write_header_seconds_bucket{environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="web-pages"}[5m])
+          sum by (env,environment,tier,stage,region,location,le) (
+            rate(gitlab_pages_http_time_to_write_header_seconds_bucket{environment="{{ $labels.environment }}",location="{{ $labels.location }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="web-pages"}[5m])
           )
         )
       runbook: docs/web-pages/README.md
@@ -833,9 +833,9 @@ groups:
           < (1 - 6 * 0.005000)
         )
       )
-      and on(env,environment,tier,type,stage,region,component)
+      and on(env,environment,tier,type,stage,region,location,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="web_pages_server",env!~"gprd|ops",monitor="global",type="web-pages"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,region,location,component) (gitlab_regional_sli_ops:rate_6h{component="web_pages_server",env!~"gprd|ops",monitor="global",type="web-pages"}) >= 0.16667
       )
   - alert: WebPagesServiceWebPagesServerErrorSLOViolation
     for: 2m
@@ -951,8 +951,8 @@ groups:
       grafana_panel_id: "3548056209"
       grafana_variables: environment,stage
       promql_template_1: |
-        sum by (env,environment,tier,stage,region) (
-          rate(gitlab_pages_http_requests_total{code=~"5..",environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}"}[5m])
+        sum by (env,environment,tier,stage,region,location) (
+          rate(gitlab_pages_http_requests_total{code=~"5..",environment="{{ $labels.environment }}",location="{{ $labels.location }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}"}[5m])
         )
       runbook: docs/web-pages/README.md
     labels:
@@ -979,9 +979,9 @@ groups:
           > (14.4 * 0.000500)
         )
       )
-      and on(env,environment,tier,type,stage,region,component)
+      and on(env,environment,tier,type,stage,region,location,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="web_pages_server",env!~"gprd|ops",monitor="global",type="web-pages"}) >= 1
+        sum by(env,environment,tier,type,stage,region,location,component) (gitlab_regional_sli_ops:rate_1h{component="web_pages_server",env!~"gprd|ops",monitor="global",type="web-pages"}) >= 1
       )
   - alert: WebPagesServiceWebPagesServerErrorSLOViolationRegional
     for: 2m
@@ -1001,8 +1001,8 @@ groups:
       grafana_panel_id: "3548056209"
       grafana_variables: environment,stage
       promql_template_1: |
-        sum by (env,environment,tier,stage,region) (
-          rate(gitlab_pages_http_requests_total{code=~"5..",environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}"}[5m])
+        sum by (env,environment,tier,stage,region,location) (
+          rate(gitlab_pages_http_requests_total{code=~"5..",environment="{{ $labels.environment }}",location="{{ $labels.location }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}"}[5m])
         )
       runbook: docs/web-pages/README.md
     labels:
@@ -1029,9 +1029,9 @@ groups:
           > (6 * 0.000500)
         )
       )
-      and on(env,environment,tier,type,stage,region,component)
+      and on(env,environment,tier,type,stage,region,location,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="web_pages_server",env!~"gprd|ops",monitor="global",type="web-pages"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,region,location,component) (gitlab_regional_sli_ops:rate_6h{component="web_pages_server",env!~"gprd|ops",monitor="global",type="web-pages"}) >= 0.16667
       )
   - alert: WebPagesServiceWebPagesServerTrafficCessation
     for: 5m
@@ -1123,8 +1123,8 @@ groups:
       grafana_panel_id: "3767940412"
       grafana_variables: environment,stage
       promql_template_1: |
-        sum by (env,environment,tier,stage,region) (
-          rate(gitlab_pages_http_time_to_write_header_seconds_count{environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="web-pages"}[5m])
+        sum by (env,environment,tier,stage,region,location) (
+          rate(gitlab_pages_http_time_to_write_header_seconds_count{environment="{{ $labels.environment }}",location="{{ $labels.location }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="web-pages"}[5m])
         )
       runbook: docs/web-pages/README.md
     labels:
@@ -1162,8 +1162,8 @@ groups:
       grafana_panel_id: "3767940412"
       grafana_variables: environment,stage
       promql_template_1: |
-        sum by (env,environment,tier,stage,region) (
-          rate(gitlab_pages_http_time_to_write_header_seconds_count{environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="web-pages"}[5m])
+        sum by (env,environment,tier,stage,region,location) (
+          rate(gitlab_pages_http_time_to_write_header_seconds_count{environment="{{ $labels.environment }}",location="{{ $labels.location }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="web-pages"}[5m])
         )
       runbook: docs/web-pages/README.md
     labels:
