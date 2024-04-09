@@ -65,8 +65,16 @@ local serviceWeights = {
 
 local weightableQuery(aggregation, service, rangeInterval) =
   local serviceWeightTemplate = '$%s' % [templateServiceName(service)];
+  // TODO: `slo_observation_status` only exists in Thanos
+  // whereas `slo:observation_status` only exists in Mimir. The or expression allows
+  // us to show the graph from both data sources. Remove the slo_observation_status expression
+  // once we have migrated to Mimir.
   |||
-    %(aggregation)s without (slo) (avg_over_time(slo_observation_status{%(selector)s}[%(rangeInterval)s])) * %(weight)s
+    %(aggregation)s without (slo) (
+      avg_over_time(slo_observation_status{%(selector)s}[%(rangeInterval)s])
+      or
+      avg_over_time(slo:observation_status{%(selector)s}[%(rangeInterval)s])
+    ) * %(weight)s
   ||| % {
     aggregation: aggregation,
     selector: selectors.serializeHash(defaultSelector { type: service }),
@@ -102,7 +110,7 @@ local adjustableWeightQuery(rangeInterval) =
 // https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/9689
 // Better fix proposed in https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/326
 // This is encoded in the `defaultSelector`
-local serviceAvailabilityQuery(selectorHash, metricName, rangeInterval) =
+local serviceAvailabilityQuery(selectorHash, metricName, fallbackMetricName, rangeInterval) =
   local defaultSelector = {
     env: { re: 'ops|$environment' },
     environment: '$environment',
@@ -110,16 +118,27 @@ local serviceAvailabilityQuery(selectorHash, metricName, rangeInterval) =
     monitor: { re: 'global|' },
   };
 
+  // TODO: fallbackMetricName is used because `slo_observation_status` only exists in Thanos
+  // whereas `slo:observation_status` only exists in Mimir. The fallbackMetricName allows us
+  // to show the dashboard in both Thanos and Mimir. Remove the fallbackMetricName once
+  // we have migrated to Mimir.
   |||
     min(
       clamp_max(
-        avg_over_time(%(metricName)s{%(selector)s}[%(rangeInterval)s]),
+        avg_over_time(
+          %(metricName)s{%(selector)s}[%(rangeInterval)s]
+        )
+        or
+        avg_over_time(
+          %(fallbackMetricName)s{%(selector)s}[%(rangeInterval)s]
+        ),
         1
       )
     )
   ||| % {
     selector: selectors.serializeHash(defaultSelector + selectorHash),
     metricName: metricName,
+    fallbackMetricName: fallbackMetricName,
     rangeInterval: rangeInterval,
   };
 
@@ -127,7 +146,7 @@ local serviceAvailabilityQuery(selectorHash, metricName, rangeInterval) =
 // https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/9689
 // Better fix proposed in https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/326
 // This is encoded in the `defaultSelector`
-local serviceAvailabilityMillisecondsQuery(selectorHash, metricName) =
+local serviceAvailabilityMillisecondsQuery(selectorHash, metricName, fallbackMetricName=null) =
   local defaultSelector = {
     env: { re: 'ops|$environment' },
     environment: '$environment',
@@ -135,12 +154,20 @@ local serviceAvailabilityMillisecondsQuery(selectorHash, metricName) =
     monitor: { re: 'global|' },
   };
 
+  // TODO: fallbackMetricName is used because `slo_observation_status` only exists in Thanos
+  // whereas `slo:observation_status` only exists in Mimir. The fallbackMetricName allows us
+  // to show the dashboard in both Thanos and Mimir. Remove the fallbackMetricName once
+  // we have migrated to Mimir.
   |||
     (
       1 -
       min(
         clamp_max(
-          avg_over_time(%(metricName)s{%(selector)s}[$__range]),
+          avg_over_time(
+            %(metricName)s{%(selector)s}[$__range]
+          )
+          %(backupExpression)s
+          ,
           1
         )
       )
@@ -148,6 +175,13 @@ local serviceAvailabilityMillisecondsQuery(selectorHash, metricName) =
   ||| % {
     selector: selectors.serializeHash(defaultSelector + selectorHash),
     metricName: metricName,
+    backupExpression: if fallbackMetricName != null then |||
+      or
+      avg_over_time(%(fallbackMetricName)s{%(selector)s}[$__range])
+    ||| % {
+      fallbackMetricName: fallbackMetricName,
+      selector: selectors.serializeHash(defaultSelector + selectorHash),
+    } else '',
   };
 
 local serviceRow(service) =
@@ -155,7 +189,7 @@ local serviceRow(service) =
   [
     basic.slaStats(
       title='',
-      query=serviceAvailabilityQuery({ type: service.name }, 'slo_observation_status', '$__range'),
+      query=serviceAvailabilityQuery({ type: service.name }, 'slo_observation_status', 'slo:observation_status', '$__range'),
       legendFormat='{{ type }}',
       displayName=service.friendly_name,
       links=links,
@@ -163,7 +197,7 @@ local serviceRow(service) =
     ),
     basic.slaStats(
       title='',
-      query=serviceAvailabilityMillisecondsQuery({ type: service.name }, 'slo_observation_status'),
+      query=serviceAvailabilityMillisecondsQuery({ type: service.name }, 'slo_observation_status', 'slo:observation_status'),
       legendFormat='{{ type }}',
       displayName='Budget Spent',
       links=links,
@@ -175,7 +209,7 @@ local serviceRow(service) =
     ),
     grafanaCalHeatmap.heatmapCalendarPanel(
       '',
-      query=serviceAvailabilityQuery({ type: service.name }, 'slo_observation_status', '1d'),
+      query=serviceAvailabilityQuery({ type: service.name }, 'slo_observation_status', 'slo:observation_status', '1d'),
       legendFormat='',
       datasource='$PROMETHEUS_DS',
       intervalFactor=1,
@@ -184,7 +218,7 @@ local serviceRow(service) =
       title='%s: SLA Trends ' % [service.friendly_name],
       description='Rolling average SLO adherence for primary services. Higher is better.',
       yAxisLabel='SLA',
-      query=serviceAvailabilityQuery({ type: service.name }, 'slo_observation_status', '$__interval'),
+      query=serviceAvailabilityQuery({ type: service.name }, 'slo_observation_status', 'slo:observation_status', '$__interval'),
       legendFormat='{{ type }}',
       intervalFactor=1,
       legend_show=false
