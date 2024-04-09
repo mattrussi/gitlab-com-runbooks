@@ -3,8 +3,8 @@ groups:
     rules:
       - alert: gitlab_search_initial_indexing_queue_backing_up
         expr: >
-          avg by (environment, stage) (
-            global_search_bulk_cron_initial_queue_size
+          avg by (environment,stage) (
+            global_search_bulk_cron_initial_queue_size{env="gstg"}
           ) > 50000
         for: 15m
         labels:
@@ -25,7 +25,7 @@ groups:
       - alert: gitlab_search_incremental_indexing_queue_backing_up
         expr: >
           avg by (environment, stage) (
-            global_search_bulk_cron_queue_size
+            global_search_bulk_cron_queue_size{env="gstg"}
           ) > 50000
         for: 15m
         labels:
