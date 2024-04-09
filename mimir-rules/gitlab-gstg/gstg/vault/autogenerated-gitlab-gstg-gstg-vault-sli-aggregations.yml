@@ -6,7 +6,7 @@ groups:
   rules:
   - record: sli_aggregations:istio_request_duration_milliseconds_bucket:rate_5m
     expr: |
-      sum by (component,destination_service,destination_workload,env,environment,feature_category,fqdn,le,product_stage,queue,region,response_code,shard,source_workload,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,destination_service,destination_workload,env,environment,feature_category,fqdn,le,product_stage,region,response_code,shard,source_workload,stage,stage_group,tier,type) (
         rate(istio_request_duration_milliseconds_bucket{destination_workload=~"vault",env="gstg",source_workload=~"istio-gateway|istio-internal-gateway"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: vault - istio_internal_ingress-ops - 5m burn-rate'
@@ -14,7 +14,7 @@ groups:
   rules:
   - record: sli_aggregations:istio_requests_total:rate_5m
     expr: |
-      sum by (component,destination_service,destination_workload,env,environment,feature_category,fqdn,product_stage,queue,region,response_code,shard,source_workload,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,destination_service,destination_workload,env,environment,feature_category,fqdn,product_stage,region,response_code,shard,source_workload,stage,stage_group,tier,type) (
         rate(istio_requests_total{destination_workload=~"vault",env="gstg",source_workload=~"istio-gateway|istio-internal-gateway"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: vault - vault-ops - 5m burn-rate'
@@ -22,7 +22,7 @@ groups:
   rules:
   - record: sli_aggregations:vault_core_handle_request_count:rate_5m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,job,pod,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,job,pod,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(vault_core_handle_request_count{env="gstg",job=~"vault-active"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: vault - vault_audit_log_request-ops - 5m burn-rate'
@@ -30,12 +30,12 @@ groups:
   rules:
   - record: sli_aggregations:vault_audit_log_request_count:rate_5m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,job,pod,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,job,pod,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(vault_audit_log_request_count{env="gstg",job=~"vault-active"}[5m] offset 30s)
       )
   - record: sli_aggregations:vault_audit_log_request_failure:rate_5m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,job,pod,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,job,pod,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(vault_audit_log_request_failure{env="gstg",job=~"vault-active"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: vault - vault_audit_log_response-ops - 5m burn-rate'
@@ -43,12 +43,12 @@ groups:
   rules:
   - record: sli_aggregations:vault_audit_log_response_count:rate_5m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,job,pod,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,job,pod,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(vault_audit_log_response_count{env="gstg",job=~"vault-active"}[5m] offset 30s)
       )
   - record: sli_aggregations:vault_audit_log_response_failure:rate_5m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,job,pod,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,job,pod,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(vault_audit_log_response_failure{env="gstg",job=~"vault-active"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: vault - vault_google_lb-ops - 5m burn-rate - emitted by
@@ -57,7 +57,7 @@ groups:
   rules:
   - record: sli_aggregations:stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count:rate_5m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,project_id,proxy_continent,queue,region,response_code,response_code_class,shard,stage,stage_group,tier,type,urgency,url_map_name,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,project_id,proxy_continent,region,response_code,response_code_class,shard,stage,stage_group,tier,type,url_map_name) (
         rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{env="gstg",project_id=~"gitlab-ops",type=~"monitoring",url_map_name=~"k8s2-um-4zodnh0s-vault-vault-g7tjn6qu"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: vault - istio_internal_ingress-apdex - 30m burn-rate'
@@ -65,7 +65,7 @@ groups:
   rules:
   - record: sli_aggregations:istio_request_duration_milliseconds_bucket:rate_30m
     expr: |
-      sum by (component,destination_service,destination_workload,env,environment,feature_category,fqdn,le,product_stage,queue,region,response_code,shard,source_workload,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,destination_service,destination_workload,env,environment,feature_category,fqdn,le,product_stage,region,response_code,shard,source_workload,stage,stage_group,tier,type) (
         rate(istio_request_duration_milliseconds_bucket{destination_workload=~"vault",env="gstg",source_workload=~"istio-gateway|istio-internal-gateway"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: vault - istio_internal_ingress-ops - 30m burn-rate'
@@ -73,7 +73,7 @@ groups:
   rules:
   - record: sli_aggregations:istio_requests_total:rate_30m
     expr: |
-      sum by (component,destination_service,destination_workload,env,environment,feature_category,fqdn,product_stage,queue,region,response_code,shard,source_workload,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,destination_service,destination_workload,env,environment,feature_category,fqdn,product_stage,region,response_code,shard,source_workload,stage,stage_group,tier,type) (
         rate(istio_requests_total{destination_workload=~"vault",env="gstg",source_workload=~"istio-gateway|istio-internal-gateway"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: vault - vault-ops - 30m burn-rate'
@@ -81,7 +81,7 @@ groups:
   rules:
   - record: sli_aggregations:vault_core_handle_request_count:rate_30m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,job,pod,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,job,pod,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(vault_core_handle_request_count{env="gstg",job=~"vault-active"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: vault - vault_audit_log_request-ops - 30m burn-rate'
@@ -89,12 +89,12 @@ groups:
   rules:
   - record: sli_aggregations:vault_audit_log_request_count:rate_30m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,job,pod,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,job,pod,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(vault_audit_log_request_count{env="gstg",job=~"vault-active"}[30m] offset 30s)
       )
   - record: sli_aggregations:vault_audit_log_request_failure:rate_30m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,job,pod,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,job,pod,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(vault_audit_log_request_failure{env="gstg",job=~"vault-active"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: vault - vault_audit_log_response-ops - 30m burn-rate'
@@ -102,12 +102,12 @@ groups:
   rules:
   - record: sli_aggregations:vault_audit_log_response_count:rate_30m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,job,pod,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,job,pod,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(vault_audit_log_response_count{env="gstg",job=~"vault-active"}[30m] offset 30s)
       )
   - record: sli_aggregations:vault_audit_log_response_failure:rate_30m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,job,pod,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,job,pod,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(vault_audit_log_response_failure{env="gstg",job=~"vault-active"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: vault - vault_google_lb-ops - 30m burn-rate - emitted by
@@ -116,7 +116,7 @@ groups:
   rules:
   - record: sli_aggregations:stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count:rate_30m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,project_id,proxy_continent,queue,region,response_code,response_code_class,shard,stage,stage_group,tier,type,urgency,url_map_name,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,project_id,proxy_continent,region,response_code,response_code_class,shard,stage,stage_group,tier,type,url_map_name) (
         rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{env="gstg",project_id=~"gitlab-ops",type=~"monitoring",url_map_name=~"k8s2-um-4zodnh0s-vault-vault-g7tjn6qu"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: vault - istio_internal_ingress-apdex - 1h burn-rate'
@@ -124,7 +124,7 @@ groups:
   rules:
   - record: sli_aggregations:istio_request_duration_milliseconds_bucket:rate_1h
     expr: |
-      sum by (component,destination_service,destination_workload,env,environment,feature_category,fqdn,le,product_stage,queue,region,response_code,shard,source_workload,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,destination_service,destination_workload,env,environment,feature_category,fqdn,le,product_stage,region,response_code,shard,source_workload,stage,stage_group,tier,type) (
         rate(istio_request_duration_milliseconds_bucket{destination_workload=~"vault",env="gstg",source_workload=~"istio-gateway|istio-internal-gateway"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: vault - istio_internal_ingress-ops - 1h burn-rate'
@@ -132,7 +132,7 @@ groups:
   rules:
   - record: sli_aggregations:istio_requests_total:rate_1h
     expr: |
-      sum by (component,destination_service,destination_workload,env,environment,feature_category,fqdn,product_stage,queue,region,response_code,shard,source_workload,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,destination_service,destination_workload,env,environment,feature_category,fqdn,product_stage,region,response_code,shard,source_workload,stage,stage_group,tier,type) (
         rate(istio_requests_total{destination_workload=~"vault",env="gstg",source_workload=~"istio-gateway|istio-internal-gateway"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: vault - vault-ops - 1h burn-rate'
@@ -140,7 +140,7 @@ groups:
   rules:
   - record: sli_aggregations:vault_core_handle_request_count:rate_1h
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,job,pod,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,job,pod,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(vault_core_handle_request_count{env="gstg",job=~"vault-active"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: vault - vault_audit_log_request-ops - 1h burn-rate'
@@ -148,12 +148,12 @@ groups:
   rules:
   - record: sli_aggregations:vault_audit_log_request_count:rate_1h
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,job,pod,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,job,pod,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(vault_audit_log_request_count{env="gstg",job=~"vault-active"}[1h] offset 30s)
       )
   - record: sli_aggregations:vault_audit_log_request_failure:rate_1h
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,job,pod,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,job,pod,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(vault_audit_log_request_failure{env="gstg",job=~"vault-active"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: vault - vault_audit_log_response-ops - 1h burn-rate'
@@ -161,12 +161,12 @@ groups:
   rules:
   - record: sli_aggregations:vault_audit_log_response_count:rate_1h
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,job,pod,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,job,pod,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(vault_audit_log_response_count{env="gstg",job=~"vault-active"}[1h] offset 30s)
       )
   - record: sli_aggregations:vault_audit_log_response_failure:rate_1h
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,job,pod,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,job,pod,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(vault_audit_log_response_failure{env="gstg",job=~"vault-active"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: vault - vault_google_lb-ops - 1h burn-rate - emitted by
@@ -175,6 +175,6 @@ groups:
   rules:
   - record: sli_aggregations:stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count:rate_1h
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,project_id,proxy_continent,queue,region,response_code,response_code_class,shard,stage,stage_group,tier,type,urgency,url_map_name,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,project_id,proxy_continent,region,response_code,response_code_class,shard,stage,stage_group,tier,type,url_map_name) (
         rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{env="gstg",project_id=~"gitlab-ops",type=~"monitoring",url_map_name=~"k8s2-um-4zodnh0s-vault-vault-g7tjn6qu"}[1h] offset 30s)
       )

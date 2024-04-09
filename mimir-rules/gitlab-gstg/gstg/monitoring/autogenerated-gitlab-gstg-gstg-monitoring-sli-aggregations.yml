@@ -6,7 +6,7 @@ groups:
   rules:
   - record: sli_aggregations:grafana_http_request_duration_seconds_bucket:rate_5m
     expr: |
-      sum by (code,component,env,environment,feature_category,fqdn,job,le,pod,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (code,component,env,environment,feature_category,fqdn,job,le,pod,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(grafana_http_request_duration_seconds_bucket{env="gstg",job=~"grafana",shard=~"default",type=~"monitoring"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: monitoring - grafana_datasources-ops - 5m burn-rate'
@@ -14,7 +14,7 @@ groups:
   rules:
   - record: sli_aggregations:grafana_datasource_request_total:rate_5m
     expr: |
-      sum by (code,component,datasource,env,environment,feature_category,fqdn,job,pod,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (code,component,datasource,env,environment,feature_category,fqdn,job,pod,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(grafana_datasource_request_total{env="gstg",job=~"grafana",shard=~"default",type=~"monitoring"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: monitoring - grafana_google_lb-ops - 5m burn-rate'
@@ -22,7 +22,7 @@ groups:
   rules:
   - record: sli_aggregations:stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count:rate_5m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,project_id,proxy_continent,queue,region,response_code,response_code_class,shard,stage,stage_group,tier,type,urgency,url_map_name,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,project_id,proxy_continent,region,response_code,response_code_class,shard,stage,stage_group,tier,type,url_map_name) (
         rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{env="gstg",project_id=~"gitlab-ops",type=~"monitoring",url_map_name=~"k8s2-um-4zodnh0s-grafana-grafana-cfagrqyu"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: monitoring - grafana_image_renderer-ops - 5m burn-rate'
@@ -30,7 +30,7 @@ groups:
   rules:
   - record: sli_aggregations:grafana_image_renderer_service_http_request_duration_seconds_bucket:rate_5m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,job,le,pod,product_stage,queue,region,shard,stage,stage_group,status_code,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,job,le,pod,product_stage,region,shard,stage,stage_group,status_code,tier,type) (
         rate(grafana_image_renderer_service_http_request_duration_seconds_bucket{env="gstg",job=~"grafana-image-renderer",shard=~"default",type=~"monitoring"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: monitoring - prometheus-apdex - 5m burn-rate'
@@ -38,7 +38,7 @@ groups:
   rules:
   - record: sli_aggregations:prometheus_http_request_duration_seconds_bucket:rate_5m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,handler,job,le,pod,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,handler,job,le,pod,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(prometheus_http_request_duration_seconds_bucket{env="gstg",job=~"prometheus.*",type=~"monitoring"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: monitoring - prometheus-ops - 5m burn-rate'
@@ -46,7 +46,7 @@ groups:
   rules:
   - record: sli_aggregations:prometheus_http_requests_total:rate_5m
     expr: |
-      sum by (code,component,env,environment,feature_category,fqdn,handler,job,pod,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (code,component,env,environment,feature_category,fqdn,handler,job,pod,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(prometheus_http_requests_total{env="gstg",job=~"prometheus.*",type=~"monitoring"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: monitoring - prometheus_alert_sender-ops - 5m burn-rate'
@@ -54,12 +54,12 @@ groups:
   rules:
   - record: sli_aggregations:prometheus_notifications_errors_total:rate_5m
     expr: |
-      sum by (alertmanager,component,env,environment,feature_category,fqdn,job,pod,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (alertmanager,component,env,environment,feature_category,fqdn,job,pod,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(prometheus_notifications_errors_total{env="gstg",job=~"prometheus",type=~"monitoring"}[5m] offset 30s)
       )
   - record: sli_aggregations:prometheus_notifications_sent_total:rate_5m
     expr: |
-      sum by (alertmanager,component,env,environment,feature_category,fqdn,job,pod,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (alertmanager,component,env,environment,feature_category,fqdn,job,pod,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(prometheus_notifications_sent_total{env="gstg",job=~"prometheus",type=~"monitoring"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: monitoring - rule_evaluation-apdex - 5m burn-rate'
@@ -67,12 +67,12 @@ groups:
   rules:
   - record: sli_aggregations:prometheus_rule_group_iterations_missed_total:rate_5m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,job,pod,product_stage,queue,region,rule_group,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,job,pod,product_stage,region,rule_group,shard,stage,stage_group,tier,type) (
         rate(prometheus_rule_group_iterations_missed_total{env="gstg",type=~"monitoring"}[5m] offset 30s)
       )
   - record: sli_aggregations:prometheus_rule_group_iterations_total:rate_5m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,job,pod,product_stage,queue,region,rule_group,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,job,pod,product_stage,region,rule_group,shard,stage,stage_group,tier,type) (
         rate(prometheus_rule_group_iterations_total{env="gstg",type=~"monitoring"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: monitoring - rule_evaluation-ops - 5m burn-rate'
@@ -80,12 +80,12 @@ groups:
   rules:
   - record: sli_aggregations:prometheus_rule_evaluation_failures_total:rate_5m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,job,pod,product_stage,queue,region,rule_group,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,job,pod,product_stage,region,rule_group,shard,stage,stage_group,tier,type) (
         rate(prometheus_rule_evaluation_failures_total{env="gstg",type=~"monitoring"}[5m] offset 30s)
       )
   - record: sli_aggregations:prometheus_rule_evaluations_total:rate_5m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,job,pod,product_stage,queue,region,rule_group,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,job,pod,product_stage,region,rule_group,shard,stage,stage_group,tier,type) (
         rate(prometheus_rule_evaluations_total{env="gstg",type=~"monitoring"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: monitoring - grafana-ops - 30m burn-rate'
@@ -93,7 +93,7 @@ groups:
   rules:
   - record: sli_aggregations:grafana_http_request_duration_seconds_bucket:rate_30m
     expr: |
-      sum by (code,component,env,environment,feature_category,fqdn,job,le,pod,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (code,component,env,environment,feature_category,fqdn,job,le,pod,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(grafana_http_request_duration_seconds_bucket{env="gstg",job=~"grafana",shard=~"default",type=~"monitoring"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: monitoring - grafana_datasources-ops - 30m burn-rate'
@@ -101,7 +101,7 @@ groups:
   rules:
   - record: sli_aggregations:grafana_datasource_request_total:rate_30m
     expr: |
-      sum by (code,component,datasource,env,environment,feature_category,fqdn,job,pod,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (code,component,datasource,env,environment,feature_category,fqdn,job,pod,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(grafana_datasource_request_total{env="gstg",job=~"grafana",shard=~"default",type=~"monitoring"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: monitoring - grafana_google_lb-ops - 30m burn-rate'
@@ -109,7 +109,7 @@ groups:
   rules:
   - record: sli_aggregations:stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count:rate_30m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,project_id,proxy_continent,queue,region,response_code,response_code_class,shard,stage,stage_group,tier,type,urgency,url_map_name,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,project_id,proxy_continent,region,response_code,response_code_class,shard,stage,stage_group,tier,type,url_map_name) (
         rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{env="gstg",project_id=~"gitlab-ops",type=~"monitoring",url_map_name=~"k8s2-um-4zodnh0s-grafana-grafana-cfagrqyu"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: monitoring - grafana_image_renderer-ops - 30m burn-rate'
@@ -117,7 +117,7 @@ groups:
   rules:
   - record: sli_aggregations:grafana_image_renderer_service_http_request_duration_seconds_bucket:rate_30m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,job,le,pod,product_stage,queue,region,shard,stage,stage_group,status_code,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,job,le,pod,product_stage,region,shard,stage,stage_group,status_code,tier,type) (
         rate(grafana_image_renderer_service_http_request_duration_seconds_bucket{env="gstg",job=~"grafana-image-renderer",shard=~"default",type=~"monitoring"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: monitoring - prometheus-apdex - 30m burn-rate'
@@ -125,7 +125,7 @@ groups:
   rules:
   - record: sli_aggregations:prometheus_http_request_duration_seconds_bucket:rate_30m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,handler,job,le,pod,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,handler,job,le,pod,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(prometheus_http_request_duration_seconds_bucket{env="gstg",job=~"prometheus.*",type=~"monitoring"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: monitoring - prometheus-ops - 30m burn-rate'
@@ -133,7 +133,7 @@ groups:
   rules:
   - record: sli_aggregations:prometheus_http_requests_total:rate_30m
     expr: |
-      sum by (code,component,env,environment,feature_category,fqdn,handler,job,pod,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (code,component,env,environment,feature_category,fqdn,handler,job,pod,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(prometheus_http_requests_total{env="gstg",job=~"prometheus.*",type=~"monitoring"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: monitoring - prometheus_alert_sender-ops - 30m burn-rate'
@@ -141,12 +141,12 @@ groups:
   rules:
   - record: sli_aggregations:prometheus_notifications_errors_total:rate_30m
     expr: |
-      sum by (alertmanager,component,env,environment,feature_category,fqdn,job,pod,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (alertmanager,component,env,environment,feature_category,fqdn,job,pod,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(prometheus_notifications_errors_total{env="gstg",job=~"prometheus",type=~"monitoring"}[30m] offset 30s)
       )
   - record: sli_aggregations:prometheus_notifications_sent_total:rate_30m
     expr: |
-      sum by (alertmanager,component,env,environment,feature_category,fqdn,job,pod,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (alertmanager,component,env,environment,feature_category,fqdn,job,pod,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(prometheus_notifications_sent_total{env="gstg",job=~"prometheus",type=~"monitoring"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: monitoring - rule_evaluation-apdex - 30m burn-rate'
@@ -154,12 +154,12 @@ groups:
   rules:
   - record: sli_aggregations:prometheus_rule_group_iterations_missed_total:rate_30m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,job,pod,product_stage,queue,region,rule_group,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,job,pod,product_stage,region,rule_group,shard,stage,stage_group,tier,type) (
         rate(prometheus_rule_group_iterations_missed_total{env="gstg",type=~"monitoring"}[30m] offset 30s)
       )
   - record: sli_aggregations:prometheus_rule_group_iterations_total:rate_30m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,job,pod,product_stage,queue,region,rule_group,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,job,pod,product_stage,region,rule_group,shard,stage,stage_group,tier,type) (
         rate(prometheus_rule_group_iterations_total{env="gstg",type=~"monitoring"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: monitoring - rule_evaluation-ops - 30m burn-rate'
@@ -167,12 +167,12 @@ groups:
   rules:
   - record: sli_aggregations:prometheus_rule_evaluation_failures_total:rate_30m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,job,pod,product_stage,queue,region,rule_group,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,job,pod,product_stage,region,rule_group,shard,stage,stage_group,tier,type) (
         rate(prometheus_rule_evaluation_failures_total{env="gstg",type=~"monitoring"}[30m] offset 30s)
       )
   - record: sli_aggregations:prometheus_rule_evaluations_total:rate_30m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,job,pod,product_stage,queue,region,rule_group,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,job,pod,product_stage,region,rule_group,shard,stage,stage_group,tier,type) (
         rate(prometheus_rule_evaluations_total{env="gstg",type=~"monitoring"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: monitoring - grafana-ops - 1h burn-rate'
@@ -180,7 +180,7 @@ groups:
   rules:
   - record: sli_aggregations:grafana_http_request_duration_seconds_bucket:rate_1h
     expr: |
-      sum by (code,component,env,environment,feature_category,fqdn,job,le,pod,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (code,component,env,environment,feature_category,fqdn,job,le,pod,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(grafana_http_request_duration_seconds_bucket{env="gstg",job=~"grafana",shard=~"default",type=~"monitoring"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: monitoring - grafana_datasources-ops - 1h burn-rate'
@@ -188,7 +188,7 @@ groups:
   rules:
   - record: sli_aggregations:grafana_datasource_request_total:rate_1h
     expr: |
-      sum by (code,component,datasource,env,environment,feature_category,fqdn,job,pod,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (code,component,datasource,env,environment,feature_category,fqdn,job,pod,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(grafana_datasource_request_total{env="gstg",job=~"grafana",shard=~"default",type=~"monitoring"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: monitoring - grafana_google_lb-ops - 1h burn-rate'
@@ -196,7 +196,7 @@ groups:
   rules:
   - record: sli_aggregations:stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count:rate_1h
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,project_id,proxy_continent,queue,region,response_code,response_code_class,shard,stage,stage_group,tier,type,urgency,url_map_name,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,project_id,proxy_continent,region,response_code,response_code_class,shard,stage,stage_group,tier,type,url_map_name) (
         rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{env="gstg",project_id=~"gitlab-ops",type=~"monitoring",url_map_name=~"k8s2-um-4zodnh0s-grafana-grafana-cfagrqyu"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: monitoring - grafana_image_renderer-ops - 1h burn-rate'
@@ -204,7 +204,7 @@ groups:
   rules:
   - record: sli_aggregations:grafana_image_renderer_service_http_request_duration_seconds_bucket:rate_1h
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,job,le,pod,product_stage,queue,region,shard,stage,stage_group,status_code,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,job,le,pod,product_stage,region,shard,stage,stage_group,status_code,tier,type) (
         rate(grafana_image_renderer_service_http_request_duration_seconds_bucket{env="gstg",job=~"grafana-image-renderer",shard=~"default",type=~"monitoring"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: monitoring - prometheus-apdex - 1h burn-rate'
@@ -212,7 +212,7 @@ groups:
   rules:
   - record: sli_aggregations:prometheus_http_request_duration_seconds_bucket:rate_1h
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,handler,job,le,pod,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,handler,job,le,pod,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(prometheus_http_request_duration_seconds_bucket{env="gstg",job=~"prometheus.*",type=~"monitoring"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: monitoring - prometheus-ops - 1h burn-rate'
@@ -220,7 +220,7 @@ groups:
   rules:
   - record: sli_aggregations:prometheus_http_requests_total:rate_1h
     expr: |
-      sum by (code,component,env,environment,feature_category,fqdn,handler,job,pod,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (code,component,env,environment,feature_category,fqdn,handler,job,pod,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(prometheus_http_requests_total{env="gstg",job=~"prometheus.*",type=~"monitoring"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: monitoring - prometheus_alert_sender-ops - 1h burn-rate'
@@ -228,12 +228,12 @@ groups:
   rules:
   - record: sli_aggregations:prometheus_notifications_errors_total:rate_1h
     expr: |
-      sum by (alertmanager,component,env,environment,feature_category,fqdn,job,pod,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (alertmanager,component,env,environment,feature_category,fqdn,job,pod,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(prometheus_notifications_errors_total{env="gstg",job=~"prometheus",type=~"monitoring"}[1h] offset 30s)
       )
   - record: sli_aggregations:prometheus_notifications_sent_total:rate_1h
     expr: |
-      sum by (alertmanager,component,env,environment,feature_category,fqdn,job,pod,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (alertmanager,component,env,environment,feature_category,fqdn,job,pod,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(prometheus_notifications_sent_total{env="gstg",job=~"prometheus",type=~"monitoring"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: monitoring - rule_evaluation-apdex - 1h burn-rate'
@@ -241,12 +241,12 @@ groups:
   rules:
   - record: sli_aggregations:prometheus_rule_group_iterations_missed_total:rate_1h
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,job,pod,product_stage,queue,region,rule_group,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,job,pod,product_stage,region,rule_group,shard,stage,stage_group,tier,type) (
         rate(prometheus_rule_group_iterations_missed_total{env="gstg",type=~"monitoring"}[1h] offset 30s)
       )
   - record: sli_aggregations:prometheus_rule_group_iterations_total:rate_1h
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,job,pod,product_stage,queue,region,rule_group,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,job,pod,product_stage,region,rule_group,shard,stage,stage_group,tier,type) (
         rate(prometheus_rule_group_iterations_total{env="gstg",type=~"monitoring"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: monitoring - rule_evaluation-ops - 1h burn-rate'
@@ -254,11 +254,11 @@ groups:
   rules:
   - record: sli_aggregations:prometheus_rule_evaluation_failures_total:rate_1h
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,job,pod,product_stage,queue,region,rule_group,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,job,pod,product_stage,region,rule_group,shard,stage,stage_group,tier,type) (
         rate(prometheus_rule_evaluation_failures_total{env="gstg",type=~"monitoring"}[1h] offset 30s)
       )
   - record: sli_aggregations:prometheus_rule_evaluations_total:rate_1h
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,job,pod,product_stage,queue,region,rule_group,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,job,pod,product_stage,region,rule_group,shard,stage,stage_group,tier,type) (
         rate(prometheus_rule_evaluations_total{env="gstg",type=~"monitoring"}[1h] offset 30s)
       )

@@ -7,7 +7,7 @@ groups:
   rules:
   - record: sli_aggregations:nginx_ingress_controller_requests:labeled:rate_5m
     expr: |
-      sum by (app,component,env,environment,feature_category,fqdn,path,product_stage,queue,region,shard,stage,stage_group,status,tier,type,urgency,worker) (
+      sum by (app,component,env,environment,feature_category,fqdn,path,product_stage,region,shard,stage,stage_group,status,tier,type) (
         rate(nginx_ingress_controller_requests:labeled{app=~"nginx-ingress",cluster="gprd-gitlab-gke",env="gprd",type=~"api"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: nginx - nginx_ingress-ops - 5m burn-rate - emitted by api
@@ -16,7 +16,7 @@ groups:
   rules:
   - record: sli_aggregations:nginx_ingress_controller_requests:labeled:rate_5m
     expr: |
-      sum by (app,component,env,environment,feature_category,fqdn,path,product_stage,queue,region,shard,stage,stage_group,status,tier,type,urgency,worker) (
+      sum by (app,component,env,environment,feature_category,fqdn,path,product_stage,region,shard,stage,stage_group,status,tier,type) (
         rate(nginx_ingress_controller_requests:labeled{app=~"nginx-ingress",cluster="gprd-us-east1-b",env="gprd",type=~"api"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: nginx - nginx_ingress-ops - 5m burn-rate - emitted by api
@@ -25,7 +25,7 @@ groups:
   rules:
   - record: sli_aggregations:nginx_ingress_controller_requests:labeled:rate_5m
     expr: |
-      sum by (app,component,env,environment,feature_category,fqdn,path,product_stage,queue,region,shard,stage,stage_group,status,tier,type,urgency,worker) (
+      sum by (app,component,env,environment,feature_category,fqdn,path,product_stage,region,shard,stage,stage_group,status,tier,type) (
         rate(nginx_ingress_controller_requests:labeled{app=~"nginx-ingress",cluster="gprd-us-east1-c",env="gprd",type=~"api"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: nginx - nginx_ingress-ops - 5m burn-rate - emitted by api
@@ -34,7 +34,7 @@ groups:
   rules:
   - record: sli_aggregations:nginx_ingress_controller_requests:labeled:rate_5m
     expr: |
-      sum by (app,component,env,environment,feature_category,fqdn,path,product_stage,queue,region,shard,stage,stage_group,status,tier,type,urgency,worker) (
+      sum by (app,component,env,environment,feature_category,fqdn,path,product_stage,region,shard,stage,stage_group,status,tier,type) (
         rate(nginx_ingress_controller_requests:labeled{app=~"nginx-ingress",cluster="gprd-us-east1-d",env="gprd",type=~"api"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: nginx - nginx_ingress-ops - 5m burn-rate - emitted by web
@@ -43,7 +43,7 @@ groups:
   rules:
   - record: sli_aggregations:nginx_ingress_controller_requests:labeled:rate_5m
     expr: |
-      sum by (app,component,env,environment,feature_category,fqdn,path,product_stage,queue,region,shard,stage,stage_group,status,tier,type,urgency,worker) (
+      sum by (app,component,env,environment,feature_category,fqdn,path,product_stage,region,shard,stage,stage_group,status,tier,type) (
         rate(nginx_ingress_controller_requests:labeled{app=~"nginx-ingress",cluster="gprd-gitlab-gke",env="gprd",type=~"web"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: nginx - nginx_ingress-ops - 5m burn-rate - emitted by web
@@ -52,7 +52,7 @@ groups:
   rules:
   - record: sli_aggregations:nginx_ingress_controller_requests:labeled:rate_5m
     expr: |
-      sum by (app,component,env,environment,feature_category,fqdn,path,product_stage,queue,region,shard,stage,stage_group,status,tier,type,urgency,worker) (
+      sum by (app,component,env,environment,feature_category,fqdn,path,product_stage,region,shard,stage,stage_group,status,tier,type) (
         rate(nginx_ingress_controller_requests:labeled{app=~"nginx-ingress",cluster="gprd-us-east1-b",env="gprd",type=~"web"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: nginx - nginx_ingress-ops - 5m burn-rate - emitted by web
@@ -61,7 +61,7 @@ groups:
   rules:
   - record: sli_aggregations:nginx_ingress_controller_requests:labeled:rate_5m
     expr: |
-      sum by (app,component,env,environment,feature_category,fqdn,path,product_stage,queue,region,shard,stage,stage_group,status,tier,type,urgency,worker) (
+      sum by (app,component,env,environment,feature_category,fqdn,path,product_stage,region,shard,stage,stage_group,status,tier,type) (
         rate(nginx_ingress_controller_requests:labeled{app=~"nginx-ingress",cluster="gprd-us-east1-c",env="gprd",type=~"web"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: nginx - nginx_ingress-ops - 5m burn-rate - emitted by web
@@ -70,7 +70,7 @@ groups:
   rules:
   - record: sli_aggregations:nginx_ingress_controller_requests:labeled:rate_5m
     expr: |
-      sum by (app,component,env,environment,feature_category,fqdn,path,product_stage,queue,region,shard,stage,stage_group,status,tier,type,urgency,worker) (
+      sum by (app,component,env,environment,feature_category,fqdn,path,product_stage,region,shard,stage,stage_group,status,tier,type) (
         rate(nginx_ingress_controller_requests:labeled{app=~"nginx-ingress",cluster="gprd-us-east1-d",env="gprd",type=~"web"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: nginx - nginx_ingress-ops - 30m burn-rate - emitted by
@@ -79,7 +79,7 @@ groups:
   rules:
   - record: sli_aggregations:nginx_ingress_controller_requests:labeled:rate_30m
     expr: |
-      sum by (app,component,env,environment,feature_category,fqdn,path,product_stage,queue,region,shard,stage,stage_group,status,tier,type,urgency,worker) (
+      sum by (app,component,env,environment,feature_category,fqdn,path,product_stage,region,shard,stage,stage_group,status,tier,type) (
         rate(nginx_ingress_controller_requests:labeled{app=~"nginx-ingress",cluster="gprd-gitlab-gke",env="gprd",type=~"api"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: nginx - nginx_ingress-ops - 30m burn-rate - emitted by
@@ -88,7 +88,7 @@ groups:
   rules:
   - record: sli_aggregations:nginx_ingress_controller_requests:labeled:rate_30m
     expr: |
-      sum by (app,component,env,environment,feature_category,fqdn,path,product_stage,queue,region,shard,stage,stage_group,status,tier,type,urgency,worker) (
+      sum by (app,component,env,environment,feature_category,fqdn,path,product_stage,region,shard,stage,stage_group,status,tier,type) (
         rate(nginx_ingress_controller_requests:labeled{app=~"nginx-ingress",cluster="gprd-us-east1-b",env="gprd",type=~"api"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: nginx - nginx_ingress-ops - 30m burn-rate - emitted by
@@ -97,7 +97,7 @@ groups:
   rules:
   - record: sli_aggregations:nginx_ingress_controller_requests:labeled:rate_30m
     expr: |
-      sum by (app,component,env,environment,feature_category,fqdn,path,product_stage,queue,region,shard,stage,stage_group,status,tier,type,urgency,worker) (
+      sum by (app,component,env,environment,feature_category,fqdn,path,product_stage,region,shard,stage,stage_group,status,tier,type) (
         rate(nginx_ingress_controller_requests:labeled{app=~"nginx-ingress",cluster="gprd-us-east1-c",env="gprd",type=~"api"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: nginx - nginx_ingress-ops - 30m burn-rate - emitted by
@@ -106,7 +106,7 @@ groups:
   rules:
   - record: sli_aggregations:nginx_ingress_controller_requests:labeled:rate_30m
     expr: |
-      sum by (app,component,env,environment,feature_category,fqdn,path,product_stage,queue,region,shard,stage,stage_group,status,tier,type,urgency,worker) (
+      sum by (app,component,env,environment,feature_category,fqdn,path,product_stage,region,shard,stage,stage_group,status,tier,type) (
         rate(nginx_ingress_controller_requests:labeled{app=~"nginx-ingress",cluster="gprd-us-east1-d",env="gprd",type=~"api"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: nginx - nginx_ingress-ops - 30m burn-rate - emitted by
@@ -115,7 +115,7 @@ groups:
   rules:
   - record: sli_aggregations:nginx_ingress_controller_requests:labeled:rate_30m
     expr: |
-      sum by (app,component,env,environment,feature_category,fqdn,path,product_stage,queue,region,shard,stage,stage_group,status,tier,type,urgency,worker) (
+      sum by (app,component,env,environment,feature_category,fqdn,path,product_stage,region,shard,stage,stage_group,status,tier,type) (
         rate(nginx_ingress_controller_requests:labeled{app=~"nginx-ingress",cluster="gprd-gitlab-gke",env="gprd",type=~"web"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: nginx - nginx_ingress-ops - 30m burn-rate - emitted by
@@ -124,7 +124,7 @@ groups:
   rules:
   - record: sli_aggregations:nginx_ingress_controller_requests:labeled:rate_30m
     expr: |
-      sum by (app,component,env,environment,feature_category,fqdn,path,product_stage,queue,region,shard,stage,stage_group,status,tier,type,urgency,worker) (
+      sum by (app,component,env,environment,feature_category,fqdn,path,product_stage,region,shard,stage,stage_group,status,tier,type) (
         rate(nginx_ingress_controller_requests:labeled{app=~"nginx-ingress",cluster="gprd-us-east1-b",env="gprd",type=~"web"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: nginx - nginx_ingress-ops - 30m burn-rate - emitted by
@@ -133,7 +133,7 @@ groups:
   rules:
   - record: sli_aggregations:nginx_ingress_controller_requests:labeled:rate_30m
     expr: |
-      sum by (app,component,env,environment,feature_category,fqdn,path,product_stage,queue,region,shard,stage,stage_group,status,tier,type,urgency,worker) (
+      sum by (app,component,env,environment,feature_category,fqdn,path,product_stage,region,shard,stage,stage_group,status,tier,type) (
         rate(nginx_ingress_controller_requests:labeled{app=~"nginx-ingress",cluster="gprd-us-east1-c",env="gprd",type=~"web"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: nginx - nginx_ingress-ops - 30m burn-rate - emitted by
@@ -142,7 +142,7 @@ groups:
   rules:
   - record: sli_aggregations:nginx_ingress_controller_requests:labeled:rate_30m
     expr: |
-      sum by (app,component,env,environment,feature_category,fqdn,path,product_stage,queue,region,shard,stage,stage_group,status,tier,type,urgency,worker) (
+      sum by (app,component,env,environment,feature_category,fqdn,path,product_stage,region,shard,stage,stage_group,status,tier,type) (
         rate(nginx_ingress_controller_requests:labeled{app=~"nginx-ingress",cluster="gprd-us-east1-d",env="gprd",type=~"web"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: nginx - nginx_ingress-ops - 1h burn-rate - emitted by api
@@ -151,7 +151,7 @@ groups:
   rules:
   - record: sli_aggregations:nginx_ingress_controller_requests:labeled:rate_1h
     expr: |
-      sum by (app,component,env,environment,feature_category,fqdn,path,product_stage,queue,region,shard,stage,stage_group,status,tier,type,urgency,worker) (
+      sum by (app,component,env,environment,feature_category,fqdn,path,product_stage,region,shard,stage,stage_group,status,tier,type) (
         rate(nginx_ingress_controller_requests:labeled{app=~"nginx-ingress",cluster="gprd-gitlab-gke",env="gprd",type=~"api"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: nginx - nginx_ingress-ops - 1h burn-rate - emitted by api
@@ -160,7 +160,7 @@ groups:
   rules:
   - record: sli_aggregations:nginx_ingress_controller_requests:labeled:rate_1h
     expr: |
-      sum by (app,component,env,environment,feature_category,fqdn,path,product_stage,queue,region,shard,stage,stage_group,status,tier,type,urgency,worker) (
+      sum by (app,component,env,environment,feature_category,fqdn,path,product_stage,region,shard,stage,stage_group,status,tier,type) (
         rate(nginx_ingress_controller_requests:labeled{app=~"nginx-ingress",cluster="gprd-us-east1-b",env="gprd",type=~"api"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: nginx - nginx_ingress-ops - 1h burn-rate - emitted by api
@@ -169,7 +169,7 @@ groups:
   rules:
   - record: sli_aggregations:nginx_ingress_controller_requests:labeled:rate_1h
     expr: |
-      sum by (app,component,env,environment,feature_category,fqdn,path,product_stage,queue,region,shard,stage,stage_group,status,tier,type,urgency,worker) (
+      sum by (app,component,env,environment,feature_category,fqdn,path,product_stage,region,shard,stage,stage_group,status,tier,type) (
         rate(nginx_ingress_controller_requests:labeled{app=~"nginx-ingress",cluster="gprd-us-east1-c",env="gprd",type=~"api"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: nginx - nginx_ingress-ops - 1h burn-rate - emitted by api
@@ -178,7 +178,7 @@ groups:
   rules:
   - record: sli_aggregations:nginx_ingress_controller_requests:labeled:rate_1h
     expr: |
-      sum by (app,component,env,environment,feature_category,fqdn,path,product_stage,queue,region,shard,stage,stage_group,status,tier,type,urgency,worker) (
+      sum by (app,component,env,environment,feature_category,fqdn,path,product_stage,region,shard,stage,stage_group,status,tier,type) (
         rate(nginx_ingress_controller_requests:labeled{app=~"nginx-ingress",cluster="gprd-us-east1-d",env="gprd",type=~"api"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: nginx - nginx_ingress-ops - 1h burn-rate - emitted by web
@@ -187,7 +187,7 @@ groups:
   rules:
   - record: sli_aggregations:nginx_ingress_controller_requests:labeled:rate_1h
     expr: |
-      sum by (app,component,env,environment,feature_category,fqdn,path,product_stage,queue,region,shard,stage,stage_group,status,tier,type,urgency,worker) (
+      sum by (app,component,env,environment,feature_category,fqdn,path,product_stage,region,shard,stage,stage_group,status,tier,type) (
         rate(nginx_ingress_controller_requests:labeled{app=~"nginx-ingress",cluster="gprd-gitlab-gke",env="gprd",type=~"web"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: nginx - nginx_ingress-ops - 1h burn-rate - emitted by web
@@ -196,7 +196,7 @@ groups:
   rules:
   - record: sli_aggregations:nginx_ingress_controller_requests:labeled:rate_1h
     expr: |
-      sum by (app,component,env,environment,feature_category,fqdn,path,product_stage,queue,region,shard,stage,stage_group,status,tier,type,urgency,worker) (
+      sum by (app,component,env,environment,feature_category,fqdn,path,product_stage,region,shard,stage,stage_group,status,tier,type) (
         rate(nginx_ingress_controller_requests:labeled{app=~"nginx-ingress",cluster="gprd-us-east1-b",env="gprd",type=~"web"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: nginx - nginx_ingress-ops - 1h burn-rate - emitted by web
@@ -205,7 +205,7 @@ groups:
   rules:
   - record: sli_aggregations:nginx_ingress_controller_requests:labeled:rate_1h
     expr: |
-      sum by (app,component,env,environment,feature_category,fqdn,path,product_stage,queue,region,shard,stage,stage_group,status,tier,type,urgency,worker) (
+      sum by (app,component,env,environment,feature_category,fqdn,path,product_stage,region,shard,stage,stage_group,status,tier,type) (
         rate(nginx_ingress_controller_requests:labeled{app=~"nginx-ingress",cluster="gprd-us-east1-c",env="gprd",type=~"web"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: nginx - nginx_ingress-ops - 1h burn-rate - emitted by web
@@ -214,6 +214,6 @@ groups:
   rules:
   - record: sli_aggregations:nginx_ingress_controller_requests:labeled:rate_1h
     expr: |
-      sum by (app,component,env,environment,feature_category,fqdn,path,product_stage,queue,region,shard,stage,stage_group,status,tier,type,urgency,worker) (
+      sum by (app,component,env,environment,feature_category,fqdn,path,product_stage,region,shard,stage,stage_group,status,tier,type) (
         rate(nginx_ingress_controller_requests:labeled{app=~"nginx-ingress",cluster="gprd-us-east1-d",env="gprd",type=~"web"}[1h] offset 30s)
       )

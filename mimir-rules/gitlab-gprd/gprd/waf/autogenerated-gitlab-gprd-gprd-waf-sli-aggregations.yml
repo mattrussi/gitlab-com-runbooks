@@ -6,12 +6,12 @@ groups:
   rules:
   - record: sli_aggregations:cloudflare_zone_requests_status:rate_5m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,status,tier,type,urgency,worker,zone) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,status,tier,type,zone) (
         rate(cloudflare_zone_requests_status{env="gprd",status=~"5..",type=~"waf",zone=~"gitlab.com|gitlab\\.net|staging.gitlab.com"}[5m] offset 30s)
       )
   - record: sli_aggregations:cloudflare_zone_requests_total:rate_5m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker,zone) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type,zone) (
         rate(cloudflare_zone_requests_total{env="gprd",type=~"waf",zone=~"gitlab.com|gitlab\\.net|staging.gitlab.com"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: waf - gitlab_net_zone-ops - 30m burn-rate'
@@ -19,12 +19,12 @@ groups:
   rules:
   - record: sli_aggregations:cloudflare_zone_requests_status:rate_30m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,status,tier,type,urgency,worker,zone) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,status,tier,type,zone) (
         rate(cloudflare_zone_requests_status{env="gprd",status=~"5..",type=~"waf",zone=~"gitlab.com|gitlab\\.net|staging.gitlab.com"}[30m] offset 30s)
       )
   - record: sli_aggregations:cloudflare_zone_requests_total:rate_30m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker,zone) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type,zone) (
         rate(cloudflare_zone_requests_total{env="gprd",type=~"waf",zone=~"gitlab.com|gitlab\\.net|staging.gitlab.com"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: waf - gitlab_net_zone-ops - 1h burn-rate'
@@ -32,11 +32,11 @@ groups:
   rules:
   - record: sli_aggregations:cloudflare_zone_requests_status:rate_1h
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,status,tier,type,urgency,worker,zone) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,status,tier,type,zone) (
         rate(cloudflare_zone_requests_status{env="gprd",status=~"5..",type=~"waf",zone=~"gitlab.com|gitlab\\.net|staging.gitlab.com"}[1h] offset 30s)
       )
   - record: sli_aggregations:cloudflare_zone_requests_total:rate_1h
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker,zone) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type,zone) (
         rate(cloudflare_zone_requests_total{env="gprd",type=~"waf",zone=~"gitlab.com|gitlab\\.net|staging.gitlab.com"}[1h] offset 30s)
       )

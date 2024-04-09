@@ -6,12 +6,12 @@ groups:
   rules:
   - record: sli_aggregations:pg_stat_database_xact_commit:rate_5m
     expr: |
-      sum by (component,datname,env,environment,feature_category,fqdn,job,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,datname,env,environment,feature_category,fqdn,job,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(pg_stat_database_xact_commit{datname=~"sentry",env="gstg",job=~"postgres",type=~"sentry"}[5m] offset 30s)
       )
   - record: sli_aggregations:pg_stat_database_xact_rollback:rate_5m
     expr: |
-      sum by (component,datname,env,environment,feature_category,fqdn,job,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,datname,env,environment,feature_category,fqdn,job,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(pg_stat_database_xact_rollback{datname=~"sentry",env="gstg",job=~"postgres",type=~"sentry"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: sentry - sentry_events-apdex - 5m burn-rate'
@@ -19,7 +19,7 @@ groups:
   rules:
   - record: sli_aggregations:sentry_events_latency_seconds_bucket:rate_5m
     expr: |
-      sum by (api_version,component,env,environment,feature_category,fqdn,job,le,product_stage,queue,region,shard,stage,stage_group,status,tier,type,urgency,worker) (
+      sum by (api_version,component,env,environment,feature_category,fqdn,job,le,product_stage,region,shard,stage,stage_group,status,tier,type) (
         rate(sentry_events_latency_seconds_bucket{env="gstg",job=~"statsd_exporter",type=~"sentry"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: sentry - sentry_events-ops - 5m burn-rate'
@@ -27,7 +27,7 @@ groups:
   rules:
   - record: sli_aggregations:sentry_client_api_responses_total:rate_5m
     expr: |
-      sum by (api_version,component,env,environment,feature_category,fqdn,job,product_stage,queue,region,shard,stage,stage_group,status,tier,type,urgency,worker) (
+      sum by (api_version,component,env,environment,feature_category,fqdn,job,product_stage,region,shard,stage,stage_group,status,tier,type) (
         rate(sentry_client_api_responses_total{env="gstg",job=~"statsd_exporter",type=~"sentry"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: sentry - pg_transactions-ops - 30m burn-rate'
@@ -35,12 +35,12 @@ groups:
   rules:
   - record: sli_aggregations:pg_stat_database_xact_commit:rate_30m
     expr: |
-      sum by (component,datname,env,environment,feature_category,fqdn,job,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,datname,env,environment,feature_category,fqdn,job,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(pg_stat_database_xact_commit{datname=~"sentry",env="gstg",job=~"postgres",type=~"sentry"}[30m] offset 30s)
       )
   - record: sli_aggregations:pg_stat_database_xact_rollback:rate_30m
     expr: |
-      sum by (component,datname,env,environment,feature_category,fqdn,job,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,datname,env,environment,feature_category,fqdn,job,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(pg_stat_database_xact_rollback{datname=~"sentry",env="gstg",job=~"postgres",type=~"sentry"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: sentry - sentry_events-apdex - 30m burn-rate'
@@ -48,7 +48,7 @@ groups:
   rules:
   - record: sli_aggregations:sentry_events_latency_seconds_bucket:rate_30m
     expr: |
-      sum by (api_version,component,env,environment,feature_category,fqdn,job,le,product_stage,queue,region,shard,stage,stage_group,status,tier,type,urgency,worker) (
+      sum by (api_version,component,env,environment,feature_category,fqdn,job,le,product_stage,region,shard,stage,stage_group,status,tier,type) (
         rate(sentry_events_latency_seconds_bucket{env="gstg",job=~"statsd_exporter",type=~"sentry"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: sentry - sentry_events-ops - 30m burn-rate'
@@ -56,7 +56,7 @@ groups:
   rules:
   - record: sli_aggregations:sentry_client_api_responses_total:rate_30m
     expr: |
-      sum by (api_version,component,env,environment,feature_category,fqdn,job,product_stage,queue,region,shard,stage,stage_group,status,tier,type,urgency,worker) (
+      sum by (api_version,component,env,environment,feature_category,fqdn,job,product_stage,region,shard,stage,stage_group,status,tier,type) (
         rate(sentry_client_api_responses_total{env="gstg",job=~"statsd_exporter",type=~"sentry"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: sentry - pg_transactions-ops - 1h burn-rate'
@@ -64,12 +64,12 @@ groups:
   rules:
   - record: sli_aggregations:pg_stat_database_xact_commit:rate_1h
     expr: |
-      sum by (component,datname,env,environment,feature_category,fqdn,job,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,datname,env,environment,feature_category,fqdn,job,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(pg_stat_database_xact_commit{datname=~"sentry",env="gstg",job=~"postgres",type=~"sentry"}[1h] offset 30s)
       )
   - record: sli_aggregations:pg_stat_database_xact_rollback:rate_1h
     expr: |
-      sum by (component,datname,env,environment,feature_category,fqdn,job,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,datname,env,environment,feature_category,fqdn,job,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(pg_stat_database_xact_rollback{datname=~"sentry",env="gstg",job=~"postgres",type=~"sentry"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: sentry - sentry_events-apdex - 1h burn-rate'
@@ -77,7 +77,7 @@ groups:
   rules:
   - record: sli_aggregations:sentry_events_latency_seconds_bucket:rate_1h
     expr: |
-      sum by (api_version,component,env,environment,feature_category,fqdn,job,le,product_stage,queue,region,shard,stage,stage_group,status,tier,type,urgency,worker) (
+      sum by (api_version,component,env,environment,feature_category,fqdn,job,le,product_stage,region,shard,stage,stage_group,status,tier,type) (
         rate(sentry_events_latency_seconds_bucket{env="gstg",job=~"statsd_exporter",type=~"sentry"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: sentry - sentry_events-ops - 1h burn-rate'
@@ -85,6 +85,6 @@ groups:
   rules:
   - record: sli_aggregations:sentry_client_api_responses_total:rate_1h
     expr: |
-      sum by (api_version,component,env,environment,feature_category,fqdn,job,product_stage,queue,region,shard,stage,stage_group,status,tier,type,urgency,worker) (
+      sum by (api_version,component,env,environment,feature_category,fqdn,job,product_stage,region,shard,stage,stage_group,status,tier,type) (
         rate(sentry_client_api_responses_total{env="gstg",job=~"statsd_exporter",type=~"sentry"}[1h] offset 30s)
       )

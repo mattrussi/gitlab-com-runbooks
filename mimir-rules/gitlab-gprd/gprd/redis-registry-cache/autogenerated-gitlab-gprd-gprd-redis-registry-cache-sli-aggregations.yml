@@ -7,7 +7,7 @@ groups:
   rules:
   - record: sli_aggregations:redis_commands_processed_total:rate_5m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,instance,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,instance,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(redis_commands_processed_total{cluster="gprd-gitlab-gke",env="gprd",type=~"redis-registry-cache"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: redis-registry-cache - primary_server-ops - 5m burn-rate
@@ -16,7 +16,7 @@ groups:
   rules:
   - record: sli_aggregations:redis_commands_processed_total:rate_5m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,instance,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,instance,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(redis_commands_processed_total{cluster="gprd-us-east1-b",env="gprd",type=~"redis-registry-cache"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: redis-registry-cache - primary_server-ops - 5m burn-rate
@@ -25,7 +25,7 @@ groups:
   rules:
   - record: sli_aggregations:redis_commands_processed_total:rate_5m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,instance,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,instance,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(redis_commands_processed_total{cluster="gprd-us-east1-c",env="gprd",type=~"redis-registry-cache"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: redis-registry-cache - primary_server-ops - 5m burn-rate
@@ -34,7 +34,7 @@ groups:
   rules:
   - record: sli_aggregations:redis_commands_processed_total:rate_5m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,instance,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,instance,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(redis_commands_processed_total{cluster="gprd-us-east1-d",env="gprd",type=~"redis-registry-cache"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: redis-registry-cache - registry_redis_client-apdex - 5m
@@ -43,7 +43,7 @@ groups:
   rules:
   - record: sli_aggregations:registry_redis_single_commands_bucket:rate_5m
     expr: |
-      sum by (command,component,env,environment,feature_category,fqdn,instance,le,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (command,component,env,environment,feature_category,fqdn,instance,le,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(registry_redis_single_commands_bucket{cluster="gprd-gitlab-gke",env="gprd",type=~"registry"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: redis-registry-cache - registry_redis_client-apdex - 5m
@@ -52,7 +52,7 @@ groups:
   rules:
   - record: sli_aggregations:registry_redis_single_commands_bucket:rate_5m
     expr: |
-      sum by (command,component,env,environment,feature_category,fqdn,instance,le,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (command,component,env,environment,feature_category,fqdn,instance,le,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(registry_redis_single_commands_bucket{cluster="gprd-us-east1-b",env="gprd",type=~"registry"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: redis-registry-cache - registry_redis_client-apdex - 5m
@@ -61,7 +61,7 @@ groups:
   rules:
   - record: sli_aggregations:registry_redis_single_commands_bucket:rate_5m
     expr: |
-      sum by (command,component,env,environment,feature_category,fqdn,instance,le,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (command,component,env,environment,feature_category,fqdn,instance,le,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(registry_redis_single_commands_bucket{cluster="gprd-us-east1-c",env="gprd",type=~"registry"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: redis-registry-cache - registry_redis_client-apdex - 5m
@@ -70,7 +70,7 @@ groups:
   rules:
   - record: sli_aggregations:registry_redis_single_commands_bucket:rate_5m
     expr: |
-      sum by (command,component,env,environment,feature_category,fqdn,instance,le,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (command,component,env,environment,feature_category,fqdn,instance,le,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(registry_redis_single_commands_bucket{cluster="gprd-us-east1-d",env="gprd",type=~"registry"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: redis-registry-cache - registry_redis_client-ops - 5m burn-rate
@@ -79,12 +79,12 @@ groups:
   rules:
   - record: sli_aggregations:registry_redis_single_commands_count:rate_5m
     expr: |
-      sum by (command,component,env,environment,feature_category,fqdn,instance,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (command,component,env,environment,feature_category,fqdn,instance,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(registry_redis_single_commands_count{cluster="gprd-gitlab-gke",env="gprd",type=~"registry"}[5m] offset 30s)
       )
   - record: sli_aggregations:registry_redis_single_errors_count:rate_5m
     expr: |
-      sum by (command,component,env,environment,feature_category,fqdn,instance,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (command,component,env,environment,feature_category,fqdn,instance,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(registry_redis_single_errors_count{cluster="gprd-gitlab-gke",env="gprd",type=~"registry"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: redis-registry-cache - registry_redis_client-ops - 5m burn-rate
@@ -93,12 +93,12 @@ groups:
   rules:
   - record: sli_aggregations:registry_redis_single_commands_count:rate_5m
     expr: |
-      sum by (command,component,env,environment,feature_category,fqdn,instance,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (command,component,env,environment,feature_category,fqdn,instance,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(registry_redis_single_commands_count{cluster="gprd-us-east1-b",env="gprd",type=~"registry"}[5m] offset 30s)
       )
   - record: sli_aggregations:registry_redis_single_errors_count:rate_5m
     expr: |
-      sum by (command,component,env,environment,feature_category,fqdn,instance,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (command,component,env,environment,feature_category,fqdn,instance,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(registry_redis_single_errors_count{cluster="gprd-us-east1-b",env="gprd",type=~"registry"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: redis-registry-cache - registry_redis_client-ops - 5m burn-rate
@@ -107,12 +107,12 @@ groups:
   rules:
   - record: sli_aggregations:registry_redis_single_commands_count:rate_5m
     expr: |
-      sum by (command,component,env,environment,feature_category,fqdn,instance,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (command,component,env,environment,feature_category,fqdn,instance,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(registry_redis_single_commands_count{cluster="gprd-us-east1-c",env="gprd",type=~"registry"}[5m] offset 30s)
       )
   - record: sli_aggregations:registry_redis_single_errors_count:rate_5m
     expr: |
-      sum by (command,component,env,environment,feature_category,fqdn,instance,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (command,component,env,environment,feature_category,fqdn,instance,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(registry_redis_single_errors_count{cluster="gprd-us-east1-c",env="gprd",type=~"registry"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: redis-registry-cache - registry_redis_client-ops - 5m burn-rate
@@ -121,12 +121,12 @@ groups:
   rules:
   - record: sli_aggregations:registry_redis_single_commands_count:rate_5m
     expr: |
-      sum by (command,component,env,environment,feature_category,fqdn,instance,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (command,component,env,environment,feature_category,fqdn,instance,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(registry_redis_single_commands_count{cluster="gprd-us-east1-d",env="gprd",type=~"registry"}[5m] offset 30s)
       )
   - record: sli_aggregations:registry_redis_single_errors_count:rate_5m
     expr: |
-      sum by (command,component,env,environment,feature_category,fqdn,instance,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (command,component,env,environment,feature_category,fqdn,instance,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(registry_redis_single_errors_count{cluster="gprd-us-east1-d",env="gprd",type=~"registry"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: redis-registry-cache - primary_server-ops - 30m burn-rate
@@ -135,7 +135,7 @@ groups:
   rules:
   - record: sli_aggregations:redis_commands_processed_total:rate_30m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,instance,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,instance,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(redis_commands_processed_total{cluster="gprd-gitlab-gke",env="gprd",type=~"redis-registry-cache"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: redis-registry-cache - primary_server-ops - 30m burn-rate
@@ -144,7 +144,7 @@ groups:
   rules:
   - record: sli_aggregations:redis_commands_processed_total:rate_30m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,instance,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,instance,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(redis_commands_processed_total{cluster="gprd-us-east1-b",env="gprd",type=~"redis-registry-cache"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: redis-registry-cache - primary_server-ops - 30m burn-rate
@@ -153,7 +153,7 @@ groups:
   rules:
   - record: sli_aggregations:redis_commands_processed_total:rate_30m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,instance,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,instance,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(redis_commands_processed_total{cluster="gprd-us-east1-c",env="gprd",type=~"redis-registry-cache"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: redis-registry-cache - primary_server-ops - 30m burn-rate
@@ -162,7 +162,7 @@ groups:
   rules:
   - record: sli_aggregations:redis_commands_processed_total:rate_30m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,instance,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,instance,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(redis_commands_processed_total{cluster="gprd-us-east1-d",env="gprd",type=~"redis-registry-cache"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: redis-registry-cache - registry_redis_client-apdex - 30m
@@ -171,7 +171,7 @@ groups:
   rules:
   - record: sli_aggregations:registry_redis_single_commands_bucket:rate_30m
     expr: |
-      sum by (command,component,env,environment,feature_category,fqdn,instance,le,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (command,component,env,environment,feature_category,fqdn,instance,le,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(registry_redis_single_commands_bucket{cluster="gprd-gitlab-gke",env="gprd",type=~"registry"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: redis-registry-cache - registry_redis_client-apdex - 30m
@@ -180,7 +180,7 @@ groups:
   rules:
   - record: sli_aggregations:registry_redis_single_commands_bucket:rate_30m
     expr: |
-      sum by (command,component,env,environment,feature_category,fqdn,instance,le,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (command,component,env,environment,feature_category,fqdn,instance,le,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(registry_redis_single_commands_bucket{cluster="gprd-us-east1-b",env="gprd",type=~"registry"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: redis-registry-cache - registry_redis_client-apdex - 30m
@@ -189,7 +189,7 @@ groups:
   rules:
   - record: sli_aggregations:registry_redis_single_commands_bucket:rate_30m
     expr: |
-      sum by (command,component,env,environment,feature_category,fqdn,instance,le,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (command,component,env,environment,feature_category,fqdn,instance,le,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(registry_redis_single_commands_bucket{cluster="gprd-us-east1-c",env="gprd",type=~"registry"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: redis-registry-cache - registry_redis_client-apdex - 30m
@@ -198,7 +198,7 @@ groups:
   rules:
   - record: sli_aggregations:registry_redis_single_commands_bucket:rate_30m
     expr: |
-      sum by (command,component,env,environment,feature_category,fqdn,instance,le,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (command,component,env,environment,feature_category,fqdn,instance,le,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(registry_redis_single_commands_bucket{cluster="gprd-us-east1-d",env="gprd",type=~"registry"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: redis-registry-cache - registry_redis_client-ops - 30m
@@ -207,12 +207,12 @@ groups:
   rules:
   - record: sli_aggregations:registry_redis_single_commands_count:rate_30m
     expr: |
-      sum by (command,component,env,environment,feature_category,fqdn,instance,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (command,component,env,environment,feature_category,fqdn,instance,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(registry_redis_single_commands_count{cluster="gprd-gitlab-gke",env="gprd",type=~"registry"}[30m] offset 30s)
       )
   - record: sli_aggregations:registry_redis_single_errors_count:rate_30m
     expr: |
-      sum by (command,component,env,environment,feature_category,fqdn,instance,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (command,component,env,environment,feature_category,fqdn,instance,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(registry_redis_single_errors_count{cluster="gprd-gitlab-gke",env="gprd",type=~"registry"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: redis-registry-cache - registry_redis_client-ops - 30m
@@ -221,12 +221,12 @@ groups:
   rules:
   - record: sli_aggregations:registry_redis_single_commands_count:rate_30m
     expr: |
-      sum by (command,component,env,environment,feature_category,fqdn,instance,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (command,component,env,environment,feature_category,fqdn,instance,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(registry_redis_single_commands_count{cluster="gprd-us-east1-b",env="gprd",type=~"registry"}[30m] offset 30s)
       )
   - record: sli_aggregations:registry_redis_single_errors_count:rate_30m
     expr: |
-      sum by (command,component,env,environment,feature_category,fqdn,instance,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (command,component,env,environment,feature_category,fqdn,instance,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(registry_redis_single_errors_count{cluster="gprd-us-east1-b",env="gprd",type=~"registry"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: redis-registry-cache - registry_redis_client-ops - 30m
@@ -235,12 +235,12 @@ groups:
   rules:
   - record: sli_aggregations:registry_redis_single_commands_count:rate_30m
     expr: |
-      sum by (command,component,env,environment,feature_category,fqdn,instance,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (command,component,env,environment,feature_category,fqdn,instance,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(registry_redis_single_commands_count{cluster="gprd-us-east1-c",env="gprd",type=~"registry"}[30m] offset 30s)
       )
   - record: sli_aggregations:registry_redis_single_errors_count:rate_30m
     expr: |
-      sum by (command,component,env,environment,feature_category,fqdn,instance,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (command,component,env,environment,feature_category,fqdn,instance,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(registry_redis_single_errors_count{cluster="gprd-us-east1-c",env="gprd",type=~"registry"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: redis-registry-cache - registry_redis_client-ops - 30m
@@ -249,12 +249,12 @@ groups:
   rules:
   - record: sli_aggregations:registry_redis_single_commands_count:rate_30m
     expr: |
-      sum by (command,component,env,environment,feature_category,fqdn,instance,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (command,component,env,environment,feature_category,fqdn,instance,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(registry_redis_single_commands_count{cluster="gprd-us-east1-d",env="gprd",type=~"registry"}[30m] offset 30s)
       )
   - record: sli_aggregations:registry_redis_single_errors_count:rate_30m
     expr: |
-      sum by (command,component,env,environment,feature_category,fqdn,instance,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (command,component,env,environment,feature_category,fqdn,instance,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(registry_redis_single_errors_count{cluster="gprd-us-east1-d",env="gprd",type=~"registry"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: redis-registry-cache - primary_server-ops - 1h burn-rate
@@ -263,7 +263,7 @@ groups:
   rules:
   - record: sli_aggregations:redis_commands_processed_total:rate_1h
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,instance,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,instance,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(redis_commands_processed_total{cluster="gprd-gitlab-gke",env="gprd",type=~"redis-registry-cache"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: redis-registry-cache - primary_server-ops - 1h burn-rate
@@ -272,7 +272,7 @@ groups:
   rules:
   - record: sli_aggregations:redis_commands_processed_total:rate_1h
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,instance,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,instance,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(redis_commands_processed_total{cluster="gprd-us-east1-b",env="gprd",type=~"redis-registry-cache"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: redis-registry-cache - primary_server-ops - 1h burn-rate
@@ -281,7 +281,7 @@ groups:
   rules:
   - record: sli_aggregations:redis_commands_processed_total:rate_1h
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,instance,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,instance,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(redis_commands_processed_total{cluster="gprd-us-east1-c",env="gprd",type=~"redis-registry-cache"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: redis-registry-cache - primary_server-ops - 1h burn-rate
@@ -290,7 +290,7 @@ groups:
   rules:
   - record: sli_aggregations:redis_commands_processed_total:rate_1h
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,instance,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,instance,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(redis_commands_processed_total{cluster="gprd-us-east1-d",env="gprd",type=~"redis-registry-cache"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: redis-registry-cache - registry_redis_client-apdex - 1h
@@ -299,7 +299,7 @@ groups:
   rules:
   - record: sli_aggregations:registry_redis_single_commands_bucket:rate_1h
     expr: |
-      sum by (command,component,env,environment,feature_category,fqdn,instance,le,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (command,component,env,environment,feature_category,fqdn,instance,le,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(registry_redis_single_commands_bucket{cluster="gprd-gitlab-gke",env="gprd",type=~"registry"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: redis-registry-cache - registry_redis_client-apdex - 1h
@@ -308,7 +308,7 @@ groups:
   rules:
   - record: sli_aggregations:registry_redis_single_commands_bucket:rate_1h
     expr: |
-      sum by (command,component,env,environment,feature_category,fqdn,instance,le,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (command,component,env,environment,feature_category,fqdn,instance,le,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(registry_redis_single_commands_bucket{cluster="gprd-us-east1-b",env="gprd",type=~"registry"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: redis-registry-cache - registry_redis_client-apdex - 1h
@@ -317,7 +317,7 @@ groups:
   rules:
   - record: sli_aggregations:registry_redis_single_commands_bucket:rate_1h
     expr: |
-      sum by (command,component,env,environment,feature_category,fqdn,instance,le,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (command,component,env,environment,feature_category,fqdn,instance,le,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(registry_redis_single_commands_bucket{cluster="gprd-us-east1-c",env="gprd",type=~"registry"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: redis-registry-cache - registry_redis_client-apdex - 1h
@@ -326,7 +326,7 @@ groups:
   rules:
   - record: sli_aggregations:registry_redis_single_commands_bucket:rate_1h
     expr: |
-      sum by (command,component,env,environment,feature_category,fqdn,instance,le,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (command,component,env,environment,feature_category,fqdn,instance,le,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(registry_redis_single_commands_bucket{cluster="gprd-us-east1-d",env="gprd",type=~"registry"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: redis-registry-cache - registry_redis_client-ops - 1h burn-rate
@@ -335,12 +335,12 @@ groups:
   rules:
   - record: sli_aggregations:registry_redis_single_commands_count:rate_1h
     expr: |
-      sum by (command,component,env,environment,feature_category,fqdn,instance,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (command,component,env,environment,feature_category,fqdn,instance,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(registry_redis_single_commands_count{cluster="gprd-gitlab-gke",env="gprd",type=~"registry"}[1h] offset 30s)
       )
   - record: sli_aggregations:registry_redis_single_errors_count:rate_1h
     expr: |
-      sum by (command,component,env,environment,feature_category,fqdn,instance,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (command,component,env,environment,feature_category,fqdn,instance,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(registry_redis_single_errors_count{cluster="gprd-gitlab-gke",env="gprd",type=~"registry"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: redis-registry-cache - registry_redis_client-ops - 1h burn-rate
@@ -349,12 +349,12 @@ groups:
   rules:
   - record: sli_aggregations:registry_redis_single_commands_count:rate_1h
     expr: |
-      sum by (command,component,env,environment,feature_category,fqdn,instance,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (command,component,env,environment,feature_category,fqdn,instance,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(registry_redis_single_commands_count{cluster="gprd-us-east1-b",env="gprd",type=~"registry"}[1h] offset 30s)
       )
   - record: sli_aggregations:registry_redis_single_errors_count:rate_1h
     expr: |
-      sum by (command,component,env,environment,feature_category,fqdn,instance,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (command,component,env,environment,feature_category,fqdn,instance,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(registry_redis_single_errors_count{cluster="gprd-us-east1-b",env="gprd",type=~"registry"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: redis-registry-cache - registry_redis_client-ops - 1h burn-rate
@@ -363,12 +363,12 @@ groups:
   rules:
   - record: sli_aggregations:registry_redis_single_commands_count:rate_1h
     expr: |
-      sum by (command,component,env,environment,feature_category,fqdn,instance,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (command,component,env,environment,feature_category,fqdn,instance,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(registry_redis_single_commands_count{cluster="gprd-us-east1-c",env="gprd",type=~"registry"}[1h] offset 30s)
       )
   - record: sli_aggregations:registry_redis_single_errors_count:rate_1h
     expr: |
-      sum by (command,component,env,environment,feature_category,fqdn,instance,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (command,component,env,environment,feature_category,fqdn,instance,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(registry_redis_single_errors_count{cluster="gprd-us-east1-c",env="gprd",type=~"registry"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: redis-registry-cache - registry_redis_client-ops - 1h burn-rate
@@ -377,11 +377,11 @@ groups:
   rules:
   - record: sli_aggregations:registry_redis_single_commands_count:rate_1h
     expr: |
-      sum by (command,component,env,environment,feature_category,fqdn,instance,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (command,component,env,environment,feature_category,fqdn,instance,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(registry_redis_single_commands_count{cluster="gprd-us-east1-d",env="gprd",type=~"registry"}[1h] offset 30s)
       )
   - record: sli_aggregations:registry_redis_single_errors_count:rate_1h
     expr: |
-      sum by (command,component,env,environment,feature_category,fqdn,instance,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (command,component,env,environment,feature_category,fqdn,instance,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(registry_redis_single_errors_count{cluster="gprd-us-east1-d",env="gprd",type=~"registry"}[1h] offset 30s)
       )
