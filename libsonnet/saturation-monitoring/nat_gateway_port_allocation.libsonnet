@@ -39,9 +39,9 @@ local resourceSaturationPoint = metricsCatalog.resourceSaturationPoint;
       // We have no queriable source for this, so for now we must manually update this count
       // whenever we add IPs to the NAT gateway via Terraform:
       // * For gprd: Sum of "imported_ip_count" and "secondary_imported_ip_count".
-      //   https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/master/environments/gprd/main.tf#L111-148
+      //   https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/main/environments/gprd/main.tf#L111-148
       // * For gstg: Just copy "nat_ip_count".
-      //   https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/master/environments/gstg/main.tf#L94-122
+      //   https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/main/environments/gstg/main.tf#L94-122
       gprd_nat_ip_count: 48,
       gstg_nat_ip_count: 16,
     },

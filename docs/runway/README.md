@@ -146,7 +146,7 @@ Runway secrets are stored in Vault and integrated with [Secret Manager](https://
 * [Runway Provisioner](https://gitlab.com/gitlab-com/gl-infra/platform/runway/provisioner)
 * [Runway Reconciler](https://gitlab.com/gitlab-com/gl-infra/platform/runway/runwayctl)
 * [Runway CI Tasks](https://gitlab.com/gitlab-com/gl-infra/platform/runway/ci-tasks)
-* [Runway GCP Projects](https://gitlab.com/gitlab-com/gl-infra/config-mgmt/-/tree/master/environments/runway-production)
+* [Runway GCP Projects](https://gitlab.com/gitlab-com/gl-infra/config-mgmt/-/tree/main/environments/runway-production)
 
 ## Links to further Documentation
 
