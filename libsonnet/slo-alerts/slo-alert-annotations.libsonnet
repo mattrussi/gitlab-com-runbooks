@@ -2,6 +2,7 @@
  * This libsonnet will generate common annotations for SLO alerts
  */
 local labelTaxonomy = import 'label-taxonomy/label-taxonomy.libsonnet';
+local recordingRuleRegistry = import 'servicemetrics/recording-rule-registry.libsonnet';
 local stableIds = import 'stable-ids/stable-ids.libsonnet';
 
 // These are labels which will always get ignored when generating the selectors
@@ -38,21 +39,26 @@ local promQueryForSelector(serviceType, sli, aggregationSet, metricName) =
   if !sli.supportsDetails() then
     null
   else
+    // TODO: Use recordingRuleRegistry.unifiedRegistry after we have migrated to Mimir
+    local config = { recordingRuleRegistry: recordingRuleRegistry.nullRegistry };
     if sli.hasHistogramApdex() && metricName == 'apdex' then
-      sli.apdex.percentileLatencyQuery(
+      local apdexMetric = sli.apdex { config+: config };
+      apdexMetric.percentileLatencyQuery(
         percentile=0.95,
         aggregationLabels=aggregationLabels,
         selector=selector,
         rangeInterval='5m',
       )
     else if sli.hasErrorRate() && metricName == 'error' then
-      sli.errorRate.aggregatedRateQuery(
+      local errorRateMetric = sli.errorRate { config+: config };
+      errorRateMetric.aggregatedRateQuery(
         aggregationLabels=aggregationLabels,
         selector=selector,
         rangeInterval='5m',
       )
     else if metricName == 'ops' then
-      sli.requestRate.aggregatedRateQuery(
+      local requestRateMetric = sli.requestRate { config+: config };
+      requestRateMetric.aggregatedRateQuery(
         aggregationLabels=aggregationLabels,
         selector=selector,
         rangeInterval='5m',

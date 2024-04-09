@@ -713,7 +713,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          sli_aggregations:http_requests_total_rate5m{code=~"^5.*",environment="{{ $labels.environment }}",job="thanos-query",namespace="thanos",stage="{{ $labels.stage }}",type="thanos"}
+          rate(http_requests_total{code=~"^5.*",environment="{{ $labels.environment }}",job="thanos-query",namespace="thanos",stage="{{ $labels.stage }}",type="thanos"}[5m])
         )
       runbook: docs/thanos/README.md
     labels:
@@ -761,7 +761,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          sli_aggregations:http_requests_total_rate5m{code=~"^5.*",environment="{{ $labels.environment }}",job="thanos-query",namespace="thanos",stage="{{ $labels.stage }}",type="thanos"}
+          rate(http_requests_total{code=~"^5.*",environment="{{ $labels.environment }}",job="thanos-query",namespace="thanos",stage="{{ $labels.stage }}",type="thanos"}[5m])
         )
       runbook: docs/thanos/README.md
     labels:
@@ -809,7 +809,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          sli_aggregations:http_requests_total_rate5m{environment="{{ $labels.environment }}",job="thanos-query",namespace="thanos",stage="{{ $labels.stage }}",type="thanos"}
+          rate(http_requests_total{environment="{{ $labels.environment }}",job="thanos-query",namespace="thanos",stage="{{ $labels.stage }}",type="thanos"}[5m])
         )
       runbook: docs/thanos/README.md
     labels:
@@ -846,7 +846,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          sli_aggregations:http_requests_total_rate5m{environment="{{ $labels.environment }}",job="thanos-query",namespace="thanos",stage="{{ $labels.stage }}",type="thanos"}
+          rate(http_requests_total{environment="{{ $labels.environment }}",job="thanos-query",namespace="thanos",stage="{{ $labels.stage }}",type="thanos"}[5m])
         )
       runbook: docs/thanos/README.md
     labels:
@@ -983,7 +983,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          sli_aggregations:http_requests_total_rate5m{code=~"^5.*",environment="{{ $labels.environment }}",job="thanos-query-frontend",namespace="thanos",stage="{{ $labels.stage }}",type="thanos"}
+          rate(http_requests_total{code=~"^5.*",environment="{{ $labels.environment }}",job="thanos-query-frontend",namespace="thanos",stage="{{ $labels.stage }}",type="thanos"}[5m])
         )
       runbook: docs/thanos/README.md
     labels:
@@ -1031,7 +1031,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          sli_aggregations:http_requests_total_rate5m{code=~"^5.*",environment="{{ $labels.environment }}",job="thanos-query-frontend",namespace="thanos",stage="{{ $labels.stage }}",type="thanos"}
+          rate(http_requests_total{code=~"^5.*",environment="{{ $labels.environment }}",job="thanos-query-frontend",namespace="thanos",stage="{{ $labels.stage }}",type="thanos"}[5m])
         )
       runbook: docs/thanos/README.md
     labels:
@@ -1079,7 +1079,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          sli_aggregations:http_requests_total_rate5m{environment="{{ $labels.environment }}",job="thanos-query-frontend",namespace="thanos",stage="{{ $labels.stage }}",type="thanos"}
+          rate(http_requests_total{environment="{{ $labels.environment }}",job="thanos-query-frontend",namespace="thanos",stage="{{ $labels.stage }}",type="thanos"}[5m])
         )
       runbook: docs/thanos/README.md
     labels:
@@ -1116,7 +1116,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          sli_aggregations:http_requests_total_rate5m{environment="{{ $labels.environment }}",job="thanos-query-frontend",namespace="thanos",stage="{{ $labels.stage }}",type="thanos"}
+          rate(http_requests_total{environment="{{ $labels.environment }}",job="thanos-query-frontend",namespace="thanos",stage="{{ $labels.stage }}",type="thanos"}[5m])
         )
       runbook: docs/thanos/README.md
     labels:

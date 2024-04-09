@@ -203,7 +203,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
-            sli_aggregations:gitlab_sql_primary_duration_seconds_bucket_rate5m{db_config_name="main",environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type!="sidekiq",type!="ops-gitlab-net"}
+            rate(gitlab_sql_primary_duration_seconds_bucket{db_config_name="main",environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type!="sidekiq",type!="ops-gitlab-net"}[5m])
           )
         )
       runbook: docs/patroni/README.md
@@ -254,7 +254,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
-            sli_aggregations:gitlab_sql_primary_duration_seconds_bucket_rate5m{db_config_name="main",environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type!="sidekiq",type!="ops-gitlab-net"}
+            rate(gitlab_sql_primary_duration_seconds_bucket{db_config_name="main",environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type!="sidekiq",type!="ops-gitlab-net"}[5m])
           )
         )
       runbook: docs/patroni/README.md
@@ -303,7 +303,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          sli_aggregations:gitlab_sql_primary_duration_seconds_bucket_rate5m{db_config_name="main",environment="{{ $labels.environment }}",le="+Inf",stage="{{ $labels.stage }}",type!="sidekiq",type!="ops-gitlab-net"}
+          rate(gitlab_sql_primary_duration_seconds_bucket{db_config_name="main",environment="{{ $labels.environment }}",le="+Inf",stage="{{ $labels.stage }}",type!="sidekiq",type!="ops-gitlab-net"}[5m])
         )
       runbook: docs/patroni/README.md
     labels:
@@ -340,7 +340,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          sli_aggregations:gitlab_sql_primary_duration_seconds_bucket_rate5m{db_config_name="main",environment="{{ $labels.environment }}",le="+Inf",stage="{{ $labels.stage }}",type!="sidekiq",type!="ops-gitlab-net"}
+          rate(gitlab_sql_primary_duration_seconds_bucket{db_config_name="main",environment="{{ $labels.environment }}",le="+Inf",stage="{{ $labels.stage }}",type!="sidekiq",type!="ops-gitlab-net"}[5m])
         )
       runbook: docs/patroni/README.md
     labels:
@@ -377,7 +377,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
-            sli_aggregations:gitlab_sql_replica_duration_seconds_bucket_rate5m{db_config_name="main_replica",environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type!="sidekiq",type!="ops-gitlab-net"}
+            rate(gitlab_sql_replica_duration_seconds_bucket{db_config_name="main_replica",environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type!="sidekiq",type!="ops-gitlab-net"}[5m])
           )
         )
       runbook: docs/patroni/README.md
@@ -428,7 +428,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
-            sli_aggregations:gitlab_sql_replica_duration_seconds_bucket_rate5m{db_config_name="main_replica",environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type!="sidekiq",type!="ops-gitlab-net"}
+            rate(gitlab_sql_replica_duration_seconds_bucket{db_config_name="main_replica",environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type!="sidekiq",type!="ops-gitlab-net"}[5m])
           )
         )
       runbook: docs/patroni/README.md
@@ -477,7 +477,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          sli_aggregations:gitlab_sql_replica_duration_seconds_bucket_rate5m{db_config_name="main_replica",environment="{{ $labels.environment }}",le="+Inf",stage="{{ $labels.stage }}",type!="sidekiq",type!="ops-gitlab-net"}
+          rate(gitlab_sql_replica_duration_seconds_bucket{db_config_name="main_replica",environment="{{ $labels.environment }}",le="+Inf",stage="{{ $labels.stage }}",type!="sidekiq",type!="ops-gitlab-net"}[5m])
         )
       runbook: docs/patroni/README.md
     labels:
@@ -514,7 +514,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          sli_aggregations:gitlab_sql_replica_duration_seconds_bucket_rate5m{db_config_name="main_replica",environment="{{ $labels.environment }}",le="+Inf",stage="{{ $labels.stage }}",type!="sidekiq",type!="ops-gitlab-net"}
+          rate(gitlab_sql_replica_duration_seconds_bucket{db_config_name="main_replica",environment="{{ $labels.environment }}",le="+Inf",stage="{{ $labels.stage }}",type!="sidekiq",type!="ops-gitlab-net"}[5m])
         )
       runbook: docs/patroni/README.md
     labels:
