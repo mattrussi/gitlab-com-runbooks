@@ -36,7 +36,10 @@ local selectors = import 'promql/selectors.libsonnet';
     severity: 's4',
     appliesTo: ['ai-gateway'],
     grafana_dashboard_uid: 'sat_gcp_quota_limit_vertex_ai',
-    resourceLabels: ['base_model', 'region'],
+    // TODO: remove this location label, it is used in Thanos environments where
+    // the `region` label is overridden as an external label advertised by prometheus
+    // https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/3398
+    resourceLabels: ['base_model', 'region', 'location'],
     burnRatePeriod: '5m',
     query: |||
       (
