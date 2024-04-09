@@ -2,7 +2,7 @@ groups:
   - name: patroni.yml
     rules:
       - alert: PatroniErrors
-        expr: rate(patroni_errors_total[1m]) > 1
+        expr: rate(patroni_errors_total{env="gstg"}[1m]) > 1
         for: 5m
         labels:
           pager: pagerduty
@@ -13,7 +13,7 @@ groups:
           title: Patroni is logging errors
           runbook: docs/patroni/patroni-management.md
       - alert: PatroniIsDown
-        expr: namedprocess_namegroup_num_procs{groupname="patroni"} == 0
+        expr: namedprocess_namegroup_num_procs{groupname="patroni", env="gstg"} == 0
         for: 5m
         labels:
           pager: pagerduty
@@ -24,7 +24,7 @@ groups:
           title: Patroni is down
           runbook: docs/patroni/patroni-management.md
       - alert: PatroniXminAgeTooLarge
-        expr: pg_txid_xmin_age > 500000
+        expr: pg_txid_xmin_age{env="gstg"} > 500000
         for: 45m
         labels:
           severity: s3
@@ -35,7 +35,7 @@ groups:
           title: Long-running transactions detected on Patroni
           runbook: docs/patroni/pg_xid_xmin_age_alert.md
       - alert: PatroniConsulMultipleMaster
-        expr: sum by (env, service_id, service_name) (consul_catalog_service_node_healthy{service_name=~'patroni|patroni-.*', service_id=~".+-master"}) > 1
+        expr: sum by (env, service_id, service_name) (consul_catalog_service_node_healthy{service_name=~'patroni|patroni-.*', service_id=~".+-master", env="gstg"}) > 1
         for: 1m
         labels:
           severity: s1
@@ -47,7 +47,7 @@ groups:
           title: Patroni Consul service has more than one master registered.
           runbook: docs/patroni/patroni-management.md
       - alert: PostgresSplitBrain
-        expr: count by(env, type, job) (pg_replication_is_replica{type!=""} == 0) > 1
+        expr: count by(env, type, job) (pg_replication_is_replica{type!="", env="gstg"} == 0) > 1
         for: 1m
         labels:
           severity: s1
