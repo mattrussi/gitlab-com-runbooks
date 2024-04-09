@@ -358,22 +358,13 @@ groups:
       product_stage: fulfillment
       stage_group: provision
     expr: "1"
-- name: 'Stage group Ignored components: fulfillment - Purchase'
+- name: 'Stage group Ignored components: monitor - Respond'
   interval: 1m
   rules:
   - record: gitlab:ignored_component:stage_group
     labels:
       component: graphql_query
-      product_stage: fulfillment
-      stage_group: purchase
-    expr: "1"
-- name: 'Stage group Ignored components: service_management - Respond'
-  interval: 1m
-  rules:
-  - record: gitlab:ignored_component:stage_group
-    labels:
-      component: graphql_query
-      product_stage: service_management
+      product_stage: monitor
       stage_group: respond
     expr: "1"
 - name: 'Stage group Ignored components: verify - Runner'
