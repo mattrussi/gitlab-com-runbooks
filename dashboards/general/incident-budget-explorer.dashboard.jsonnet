@@ -50,7 +50,7 @@ local keyServiceSorter(service) =
 // https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/9689
 // Better fix proposed in https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/326
 // This is encoded in the `defaultSelector`
-local serviceAvailabilityQuery(selectorHash, metricName, rangeInterval) =
+local serviceAvailabilityQuery(selectorHash, metricName, rangeInterval, fallbackMetricName=null) =
   local defaultSelector = {
     env: { re: 'ops|$environment' },
     environment: '$environment',
@@ -58,16 +58,30 @@ local serviceAvailabilityQuery(selectorHash, metricName, rangeInterval) =
     monitor: { re: 'global|' },
   };
 
+  // TODO: fallbackMetricName is used because `slo_observation_status` only exists in Thanos
+  // whereas `slo:observation_status` only exists in Mimir. The fallbackMetricName allows us
+  // to show the dashboard in both Thanos and Mimir. Remove the fallbackMetricName once
+  // we have migrated to Mimir.
   |||
     avg(
       clamp_max(
-        avg_over_time(%(metricName)s{%(selector)s}[%(rangeInterval)s]),
+        avg_over_time(%(metricName)s{%(selector)s}[%(rangeInterval)s])
+        %(backupExpression)s
+        ,
         1
       )
     )
   ||| % {
     selector: selectors.serializeHash(defaultSelector + selectorHash),
     metricName: metricName,
+    backupExpression: if fallbackMetricName != null then |||
+      or
+      avg_over_time(%(fallbackMetricName)s{%(selector)s}[%(rangeInterval)s])
+    ||| % {
+      fallbackMetricName: fallbackMetricName,
+      selector: selectors.serializeHash(defaultSelector + selectorHash),
+      rangeInterval: rangeInterval,
+    } else '',
     rangeInterval: rangeInterval,
   };
 
@@ -79,7 +93,7 @@ local serviceRow(service) =
       query=|||
         (1 - %(budgetExpression)s) * ($__range_ms / (86400000 * 30.5)) * 100 * 100
       ||| % {
-        budgetExpression: serviceAvailabilityQuery({ type: service.name }, 'slo_observation_status', '$__range'),
+        budgetExpression: serviceAvailabilityQuery({ type: service.name }, 'slo_observation_status', '$__range', 'slo:observation_status'),
       },
       legendFormat=service.friendly_name + ': Availability Basis Points Spent',
       displayName=service.friendly_name,
@@ -100,7 +114,7 @@ local serviceRow(service) =
       title='%s: Availability ' % [service.friendly_name],
       description='Rolling average SLO adherence for primary services. Higher is better.',
       yAxisLabel='SLA',
-      query=serviceAvailabilityQuery({ type: service.name }, 'slo_observation_status', '$__interval'),
+      query=serviceAvailabilityQuery({ type: service.name }, 'slo_observation_status', '$__interval', 'slo:observation_status'),
       legendFormat='{{ type }}',
       interval='1m',
       legend_show=false
