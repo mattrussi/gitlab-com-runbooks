@@ -69,4 +69,3 @@ groups:
         is invalid and was therefore not reloaded.
       runbook: docs/monitoring/prometheus-invalid-config.md
       title: '{{$labels.job}} has an invalid config'
-
