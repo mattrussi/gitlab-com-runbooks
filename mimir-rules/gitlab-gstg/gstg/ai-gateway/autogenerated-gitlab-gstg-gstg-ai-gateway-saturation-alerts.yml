@@ -41,7 +41,7 @@ groups:
       grafana_panel_id: "1515902021"
       grafana_variables: environment,type,stage
       promql_query: |
-        max by(environment, tier, type, stage, shard, base_model, region) (
+        max by(environment, tier, type, stage, shard, base_model, region, location) (
           clamp_min(
             clamp_max(
               (
@@ -55,7 +55,7 @@ groups:
           0)
         )
       promql_template_1: |
-        max by(environment, tier, type, stage, shard, base_model, region) (
+        max by(environment, tier, type, stage, shard, base_model, region, location) (
           clamp_min(
             clamp_max(
               (
@@ -288,10 +288,10 @@ groups:
       grafana_panel_id: "1050857443"
       grafana_variables: environment,type,stage
       promql_query: |
-        max by(environment, type, shard, revision_name, region) (
+        max by(environment, type, shard, revision_name, region, location) (
           clamp_min(
             clamp_max(
-              histogram_quantile(0.9999, sum by(le, environment, type, shard, revision_name, region)
+              histogram_quantile(0.9999, sum by(le, environment, type, shard, revision_name, region, location)
                 (
                   avg_over_time(
                     stackdriver_cloud_run_revision_run_googleapis_com_container_cpu_utilizations_bucket{job="runway-exporter",environment="{{ $labels.environment }}",type="{{ $labels.type }}"}[30m]
@@ -304,10 +304,10 @@ groups:
           0)
         )
       promql_template_1: |
-        max by(environment, type, shard, revision_name, region) (
+        max by(environment, type, shard, revision_name, region, location) (
           clamp_min(
             clamp_max(
-              histogram_quantile(0.9999, sum by(le, environment, type, shard, revision_name, region)
+              histogram_quantile(0.9999, sum by(le, environment, type, shard, revision_name, region, location)
                 (
                   avg_over_time(
                     stackdriver_cloud_run_revision_run_googleapis_com_container_cpu_utilizations_bucket{job="runway-exporter",environment="{{ $labels.environment }}",type="{{ $labels.type }}"}[30m]
@@ -349,10 +349,10 @@ groups:
       grafana_panel_id: "1738137433"
       grafana_variables: environment,type,stage
       promql_query: |
-        max by(environment, type, shard, revision_name, region) (
+        max by(environment, type, shard, revision_name, region, location) (
           clamp_min(
             clamp_max(
-              sum by (environment, type, shard, revision_name, region) (
+              sum by (environment, type, shard, revision_name, region, location) (
                 stackdriver_cloud_run_revision_run_googleapis_com_container_instance_count{job="runway-exporter",state="active",environment="{{ $labels.environment }}",type="{{ $labels.type }}"}
               )
               /
@@ -363,10 +363,10 @@ groups:
           0)
         )
       promql_template_1: |
-        max by(environment, type, shard, revision_name, region) (
+        max by(environment, type, shard, revision_name, region, location) (
           clamp_min(
             clamp_max(
-              sum by (environment, type, shard, revision_name, region) (
+              sum by (environment, type, shard, revision_name, region, location) (
                 stackdriver_cloud_run_revision_run_googleapis_com_container_instance_count{job="runway-exporter",state="active",environment="{{ $labels.environment }}",type="{{ $labels.type }}"}
               )
               /
@@ -406,10 +406,10 @@ groups:
       grafana_panel_id: "4285373877"
       grafana_variables: environment,type,stage
       promql_query: |
-        max by(environment, type, shard, revision_name, region) (
+        max by(environment, type, shard, revision_name, region, location) (
           clamp_min(
             clamp_max(
-              histogram_quantile(0.9999, sum by(le, environment, type, shard, revision_name, region)
+              histogram_quantile(0.9999, sum by(le, environment, type, shard, revision_name, region, location)
                 (
                   rate(
                     stackdriver_cloud_run_revision_run_googleapis_com_container_max_request_concurrencies_bucket{job="runway-exporter",state="active",environment="{{ $labels.environment }}",type="{{ $labels.type }}"}[30m]
@@ -422,10 +422,10 @@ groups:
           0)
         )
       promql_template_1: |
-        max by(environment, type, shard, revision_name, region) (
+        max by(environment, type, shard, revision_name, region, location) (
           clamp_min(
             clamp_max(
-              histogram_quantile(0.9999, sum by(le, environment, type, shard, revision_name, region)
+              histogram_quantile(0.9999, sum by(le, environment, type, shard, revision_name, region, location)
                 (
                   rate(
                     stackdriver_cloud_run_revision_run_googleapis_com_container_max_request_concurrencies_bucket{job="runway-exporter",state="active",environment="{{ $labels.environment }}",type="{{ $labels.type }}"}[30m]
