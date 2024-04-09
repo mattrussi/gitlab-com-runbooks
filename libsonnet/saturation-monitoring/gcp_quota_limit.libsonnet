@@ -32,15 +32,9 @@ local selectors = import 'promql/selectors.libsonnet';
     },
   }),
 
-  // Code suggestions is currently not yet production ready. Remove this once it
-  // is https://gitlab.com/gitlab-com/gl-infra/readiness/-/merge_requests/161
-  gcp_quota_limit_s4: resourceSaturationPoint(self.gcp_quota_limit {
+  gcp_quota_limit_vertex_ai: resourceSaturationPoint(self.gcp_quota_limit {
     severity: 's4',
     appliesTo: ['ai-gateway'],
-    grafana_dashboard_uid: 'gcp_quota_limit_s4',
-  }),
-
-  gcp_quota_limit_vertex_ai: resourceSaturationPoint(self.gcp_quota_limit_s4 {
     grafana_dashboard_uid: 'sat_gcp_quota_limit_vertex_ai',
     resourceLabels: ['base_model', 'region'],
     burnRatePeriod: '5m',
