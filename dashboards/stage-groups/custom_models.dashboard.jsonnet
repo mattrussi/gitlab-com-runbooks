@@ -2,5 +2,5 @@
 // Please feel free to customize this file.
 local stageGroupDashboards = import './stage-group-dashboards.libsonnet';
 
-stageGroupDashboards.dashboard('purchase', displayEmptyGuidance=true)
+stageGroupDashboards.dashboard('custom_models')
 .stageGroupDashboardTrailer()

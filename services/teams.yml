@@ -338,10 +338,6 @@ teams:
   product_stage_group: project_management
   ignored_components:
   - graphql_query
-- name: purchase
-  product_stage_group: purchase
-  ignored_components:
-  - graphql_query
 - name: tenant_scale
   product_stage_group: tenant_scale
   ignored_components:
