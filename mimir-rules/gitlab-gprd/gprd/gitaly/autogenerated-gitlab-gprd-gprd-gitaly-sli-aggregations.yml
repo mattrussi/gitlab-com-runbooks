@@ -6,7 +6,7 @@ groups:
   rules:
   - record: sli_aggregations:grpc_server_handling_seconds_bucket:rate_5m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,grpc_method,grpc_service,grpc_type,job,le,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,grpc_method,grpc_service,grpc_type,job,le,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(grpc_server_handling_seconds_bucket{env="gprd",grpc_type=~"unary",job=~"gitaly|scrapeConfig/monitoring/prometheus-agent-gitaly",type=~"gitaly"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: gitaly - goserver-ops - 5m burn-rate'
@@ -14,7 +14,7 @@ groups:
   rules:
   - record: sli_aggregations:gitaly_service_client_requests_total:rate_5m
     expr: |
-      sum by (component,deadline_type,env,environment,feature_category,fqdn,grpc_code,job,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,deadline_type,env,environment,feature_category,fqdn,grpc_code,job,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(gitaly_service_client_requests_total{env="gprd",job=~"gitaly|scrapeConfig/monitoring/prometheus-agent-gitaly",type=~"gitaly"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: gitaly - goserver-apdex - 30m burn-rate'
@@ -22,7 +22,7 @@ groups:
   rules:
   - record: sli_aggregations:grpc_server_handling_seconds_bucket:rate_30m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,grpc_method,grpc_service,grpc_type,job,le,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,grpc_method,grpc_service,grpc_type,job,le,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(grpc_server_handling_seconds_bucket{env="gprd",grpc_type=~"unary",job=~"gitaly|scrapeConfig/monitoring/prometheus-agent-gitaly",type=~"gitaly"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: gitaly - goserver-ops - 30m burn-rate'
@@ -30,7 +30,7 @@ groups:
   rules:
   - record: sli_aggregations:gitaly_service_client_requests_total:rate_30m
     expr: |
-      sum by (component,deadline_type,env,environment,feature_category,fqdn,grpc_code,job,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,deadline_type,env,environment,feature_category,fqdn,grpc_code,job,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(gitaly_service_client_requests_total{env="gprd",job=~"gitaly|scrapeConfig/monitoring/prometheus-agent-gitaly",type=~"gitaly"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: gitaly - goserver-apdex - 1h burn-rate'
@@ -38,7 +38,7 @@ groups:
   rules:
   - record: sli_aggregations:grpc_server_handling_seconds_bucket:rate_1h
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,grpc_method,grpc_service,grpc_type,job,le,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,grpc_method,grpc_service,grpc_type,job,le,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(grpc_server_handling_seconds_bucket{env="gprd",grpc_type=~"unary",job=~"gitaly|scrapeConfig/monitoring/prometheus-agent-gitaly",type=~"gitaly"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: gitaly - goserver-ops - 1h burn-rate'
@@ -46,6 +46,6 @@ groups:
   rules:
   - record: sli_aggregations:gitaly_service_client_requests_total:rate_1h
     expr: |
-      sum by (component,deadline_type,env,environment,feature_category,fqdn,grpc_code,job,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,deadline_type,env,environment,feature_category,fqdn,grpc_code,job,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(gitaly_service_client_requests_total{env="gprd",job=~"gitaly|scrapeConfig/monitoring/prometheus-agent-gitaly",type=~"gitaly"}[1h] offset 30s)
       )

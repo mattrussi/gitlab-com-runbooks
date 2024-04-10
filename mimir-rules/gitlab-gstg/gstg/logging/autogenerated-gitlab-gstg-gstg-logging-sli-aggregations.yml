@@ -6,7 +6,7 @@ groups:
   rules:
   - record: sli_aggregations:elasticsearch_indices_indexing_index_total:rate_5m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,name,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,name,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(elasticsearch_indices_indexing_index_total{env="gstg",type=~"logging"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: logging - elasticsearch_indexing_index-ops - 5m burn-rate'
@@ -14,7 +14,7 @@ groups:
   rules:
   - record: sli_aggregations:elasticsearch_index_stats_indexing_index_total:rate_5m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,index,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,index,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(elasticsearch_index_stats_indexing_index_total{env="gstg",type=~"logging"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: logging - elasticsearch_searching_cluster-ops - 5m burn-rate'
@@ -22,7 +22,7 @@ groups:
   rules:
   - record: sli_aggregations:elasticsearch_indices_search_query_total:rate_5m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,name,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,name,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(elasticsearch_indices_search_query_total{env="gstg",type=~"logging"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: logging - elasticsearch_searching_index-ops - 5m burn-rate'
@@ -30,7 +30,7 @@ groups:
   rules:
   - record: sli_aggregations:elasticsearch_index_stats_search_query_total:rate_5m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,index,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,index,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(elasticsearch_index_stats_search_query_total{env="gstg",type=~"logging"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: logging - fluentd_log_output-ops - 5m burn-rate'
@@ -38,12 +38,12 @@ groups:
   rules:
   - record: sli_aggregations:fluentd_output_status_num_errors:rate_5m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,pod,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,pod,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(fluentd_output_status_num_errors{env="gstg"}[5m] offset 30s)
       )
   - record: sli_aggregations:fluentd_output_status_write_count:rate_5m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,pod,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,pod,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(fluentd_output_status_write_count{env="gstg"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: logging - kibana_googlelb-ops - 5m burn-rate - emitted
@@ -52,7 +52,7 @@ groups:
   rules:
   - record: sli_aggregations:stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count:rate_5m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,project_id,proxy_continent,queue,region,response_code,response_code_class,shard,stage,stage_group,tier,type,urgency,url_map_name,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,project_id,proxy_continent,region,response_code,response_code_class,shard,stage,stage_group,tier,type,url_map_name) (
         rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{env="gstg",project_id=~"gitlab-ops",type=~"monitoring",url_map_name=~"ops-prod-proxy"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: logging - pubsub_subscriptions-ops - 5m burn-rate - emitted
@@ -61,7 +61,7 @@ groups:
   rules:
   - record: sli_aggregations:stackdriver_pubsub_subscription_pubsub_googleapis_com_subscription_byte_cost:rate_5m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,subscription_id,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,subscription_id,tier,type) (
         rate(stackdriver_pubsub_subscription_pubsub_googleapis_com_subscription_byte_cost{env="gstg",type=~"monitoring"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: logging - pubsub_topics-ops - 5m burn-rate - emitted by
@@ -70,7 +70,7 @@ groups:
   rules:
   - record: sli_aggregations:stackdriver_pubsub_topic_pubsub_googleapis_com_topic_byte_cost:rate_5m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,topic_id,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,topic_id,type) (
         rate(stackdriver_pubsub_topic_pubsub_googleapis_com_topic_byte_cost{env="gstg",type=~"monitoring"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: logging - pubsubbeat-ops - 5m burn-rate'
@@ -78,12 +78,12 @@ groups:
   rules:
   - record: sli_aggregations:pubsubbeat_errors_total:rate_5m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,pod,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,pod,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(pubsubbeat_errors_total{env="gstg"}[5m] offset 30s)
       )
   - record: sli_aggregations:pubsubbeat_libbeat_output_events:rate_5m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,pod,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,pod,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(pubsubbeat_libbeat_output_events{env="gstg"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: logging - stackdriver-ops - 5m burn-rate - emitted by monitoring'
@@ -91,7 +91,7 @@ groups:
   rules:
   - record: sli_aggregations:stackdriver_gce_instance_logging_googleapis_com_log_entry_count:rate_5m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,log,product_stage,queue,region,severity,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,log,product_stage,region,severity,shard,stage,stage_group,tier,type) (
         rate(stackdriver_gce_instance_logging_googleapis_com_log_entry_count{env="gstg",type=~"monitoring"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: logging - elasticsearch_indexing_cluster-ops - 30m burn-rate'
@@ -99,7 +99,7 @@ groups:
   rules:
   - record: sli_aggregations:elasticsearch_indices_indexing_index_total:rate_30m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,name,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,name,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(elasticsearch_indices_indexing_index_total{env="gstg",type=~"logging"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: logging - elasticsearch_indexing_index-ops - 30m burn-rate'
@@ -107,7 +107,7 @@ groups:
   rules:
   - record: sli_aggregations:elasticsearch_index_stats_indexing_index_total:rate_30m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,index,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,index,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(elasticsearch_index_stats_indexing_index_total{env="gstg",type=~"logging"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: logging - elasticsearch_searching_cluster-ops - 30m burn-rate'
@@ -115,7 +115,7 @@ groups:
   rules:
   - record: sli_aggregations:elasticsearch_indices_search_query_total:rate_30m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,name,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,name,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(elasticsearch_indices_search_query_total{env="gstg",type=~"logging"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: logging - elasticsearch_searching_index-ops - 30m burn-rate'
@@ -123,7 +123,7 @@ groups:
   rules:
   - record: sli_aggregations:elasticsearch_index_stats_search_query_total:rate_30m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,index,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,index,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(elasticsearch_index_stats_search_query_total{env="gstg",type=~"logging"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: logging - fluentd_log_output-ops - 30m burn-rate'
@@ -131,12 +131,12 @@ groups:
   rules:
   - record: sli_aggregations:fluentd_output_status_num_errors:rate_30m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,pod,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,pod,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(fluentd_output_status_num_errors{env="gstg"}[30m] offset 30s)
       )
   - record: sli_aggregations:fluentd_output_status_write_count:rate_30m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,pod,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,pod,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(fluentd_output_status_write_count{env="gstg"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: logging - kibana_googlelb-ops - 30m burn-rate - emitted
@@ -145,7 +145,7 @@ groups:
   rules:
   - record: sli_aggregations:stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count:rate_30m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,project_id,proxy_continent,queue,region,response_code,response_code_class,shard,stage,stage_group,tier,type,urgency,url_map_name,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,project_id,proxy_continent,region,response_code,response_code_class,shard,stage,stage_group,tier,type,url_map_name) (
         rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{env="gstg",project_id=~"gitlab-ops",type=~"monitoring",url_map_name=~"ops-prod-proxy"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: logging - pubsub_subscriptions-ops - 30m burn-rate - emitted
@@ -154,7 +154,7 @@ groups:
   rules:
   - record: sli_aggregations:stackdriver_pubsub_subscription_pubsub_googleapis_com_subscription_byte_cost:rate_30m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,subscription_id,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,subscription_id,tier,type) (
         rate(stackdriver_pubsub_subscription_pubsub_googleapis_com_subscription_byte_cost{env="gstg",type=~"monitoring"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: logging - pubsub_topics-ops - 30m burn-rate - emitted by
@@ -163,7 +163,7 @@ groups:
   rules:
   - record: sli_aggregations:stackdriver_pubsub_topic_pubsub_googleapis_com_topic_byte_cost:rate_30m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,topic_id,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,topic_id,type) (
         rate(stackdriver_pubsub_topic_pubsub_googleapis_com_topic_byte_cost{env="gstg",type=~"monitoring"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: logging - pubsubbeat-ops - 30m burn-rate'
@@ -171,12 +171,12 @@ groups:
   rules:
   - record: sli_aggregations:pubsubbeat_errors_total:rate_30m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,pod,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,pod,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(pubsubbeat_errors_total{env="gstg"}[30m] offset 30s)
       )
   - record: sli_aggregations:pubsubbeat_libbeat_output_events:rate_30m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,pod,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,pod,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(pubsubbeat_libbeat_output_events{env="gstg"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: logging - stackdriver-ops - 30m burn-rate - emitted by
@@ -185,7 +185,7 @@ groups:
   rules:
   - record: sli_aggregations:stackdriver_gce_instance_logging_googleapis_com_log_entry_count:rate_30m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,log,product_stage,queue,region,severity,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,log,product_stage,region,severity,shard,stage,stage_group,tier,type) (
         rate(stackdriver_gce_instance_logging_googleapis_com_log_entry_count{env="gstg",type=~"monitoring"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: logging - elasticsearch_indexing_cluster-ops - 1h burn-rate'
@@ -193,7 +193,7 @@ groups:
   rules:
   - record: sli_aggregations:elasticsearch_indices_indexing_index_total:rate_1h
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,name,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,name,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(elasticsearch_indices_indexing_index_total{env="gstg",type=~"logging"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: logging - elasticsearch_indexing_index-ops - 1h burn-rate'
@@ -201,7 +201,7 @@ groups:
   rules:
   - record: sli_aggregations:elasticsearch_index_stats_indexing_index_total:rate_1h
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,index,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,index,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(elasticsearch_index_stats_indexing_index_total{env="gstg",type=~"logging"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: logging - elasticsearch_searching_cluster-ops - 1h burn-rate'
@@ -209,7 +209,7 @@ groups:
   rules:
   - record: sli_aggregations:elasticsearch_indices_search_query_total:rate_1h
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,name,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,name,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(elasticsearch_indices_search_query_total{env="gstg",type=~"logging"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: logging - elasticsearch_searching_index-ops - 1h burn-rate'
@@ -217,7 +217,7 @@ groups:
   rules:
   - record: sli_aggregations:elasticsearch_index_stats_search_query_total:rate_1h
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,index,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,index,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(elasticsearch_index_stats_search_query_total{env="gstg",type=~"logging"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: logging - fluentd_log_output-ops - 1h burn-rate'
@@ -225,12 +225,12 @@ groups:
   rules:
   - record: sli_aggregations:fluentd_output_status_num_errors:rate_1h
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,pod,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,pod,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(fluentd_output_status_num_errors{env="gstg"}[1h] offset 30s)
       )
   - record: sli_aggregations:fluentd_output_status_write_count:rate_1h
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,pod,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,pod,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(fluentd_output_status_write_count{env="gstg"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: logging - kibana_googlelb-ops - 1h burn-rate - emitted
@@ -239,7 +239,7 @@ groups:
   rules:
   - record: sli_aggregations:stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count:rate_1h
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,project_id,proxy_continent,queue,region,response_code,response_code_class,shard,stage,stage_group,tier,type,urgency,url_map_name,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,project_id,proxy_continent,region,response_code,response_code_class,shard,stage,stage_group,tier,type,url_map_name) (
         rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{env="gstg",project_id=~"gitlab-ops",type=~"monitoring",url_map_name=~"ops-prod-proxy"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: logging - pubsub_subscriptions-ops - 1h burn-rate - emitted
@@ -248,7 +248,7 @@ groups:
   rules:
   - record: sli_aggregations:stackdriver_pubsub_subscription_pubsub_googleapis_com_subscription_byte_cost:rate_1h
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,subscription_id,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,subscription_id,tier,type) (
         rate(stackdriver_pubsub_subscription_pubsub_googleapis_com_subscription_byte_cost{env="gstg",type=~"monitoring"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: logging - pubsub_topics-ops - 1h burn-rate - emitted by
@@ -257,7 +257,7 @@ groups:
   rules:
   - record: sli_aggregations:stackdriver_pubsub_topic_pubsub_googleapis_com_topic_byte_cost:rate_1h
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,topic_id,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,topic_id,type) (
         rate(stackdriver_pubsub_topic_pubsub_googleapis_com_topic_byte_cost{env="gstg",type=~"monitoring"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: logging - pubsubbeat-ops - 1h burn-rate'
@@ -265,12 +265,12 @@ groups:
   rules:
   - record: sli_aggregations:pubsubbeat_errors_total:rate_1h
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,pod,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,pod,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(pubsubbeat_errors_total{env="gstg"}[1h] offset 30s)
       )
   - record: sli_aggregations:pubsubbeat_libbeat_output_events:rate_1h
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,pod,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,pod,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(pubsubbeat_libbeat_output_events{env="gstg"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: logging - stackdriver-ops - 1h burn-rate - emitted by monitoring'
@@ -278,6 +278,6 @@ groups:
   rules:
   - record: sli_aggregations:stackdriver_gce_instance_logging_googleapis_com_log_entry_count:rate_1h
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,log,product_stage,queue,region,severity,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,log,product_stage,region,severity,shard,stage,stage_group,tier,type) (
         rate(stackdriver_gce_instance_logging_googleapis_com_log_entry_count{env="gstg",type=~"monitoring"}[1h] offset 30s)
       )

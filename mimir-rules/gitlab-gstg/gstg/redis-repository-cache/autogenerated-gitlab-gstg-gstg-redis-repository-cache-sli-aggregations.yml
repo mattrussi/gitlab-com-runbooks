@@ -6,7 +6,7 @@ groups:
   rules:
   - record: sli_aggregations:redis_commands_processed_total:rate_5m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,instance,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,instance,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(redis_commands_processed_total{env="gstg",type=~"redis-repository-cache"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: redis-repository-cache - rails_cache-apdex - 5m burn-rate'
@@ -14,7 +14,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_cache_operation_duration_seconds_bucket:rate_5m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,store,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,store,tier,type) (
         rate(gitlab_cache_operation_duration_seconds_bucket{env="gstg",store=~"RedisRepositoryCache",type=~"redis-repository-cache"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: redis-repository-cache - rails_cache-ops - 5m burn-rate'
@@ -22,7 +22,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_cache_operation_duration_seconds_count:rate_5m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,store,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,store,tier,type) (
         rate(gitlab_cache_operation_duration_seconds_count{env="gstg",store=~"RedisRepositoryCache",type=~"redis-repository-cache"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: redis-repository-cache - rails_redis_client-apdex - 5m
@@ -31,7 +31,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_5m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
         rate(gitlab_redis_client_requests_duration_seconds_bucket{env="gstg",storage=~"repository_cache",type=~"ai-assisted"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: redis-repository-cache - rails_redis_client-apdex - 5m
@@ -40,7 +40,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_5m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
         rate(gitlab_redis_client_requests_duration_seconds_bucket{env="gstg",storage=~"repository_cache",type=~"api"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: redis-repository-cache - rails_redis_client-apdex - 5m
@@ -49,7 +49,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_5m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
         rate(gitlab_redis_client_requests_duration_seconds_bucket{env="gstg",storage=~"repository_cache",type=~"git"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: redis-repository-cache - rails_redis_client-apdex - 5m
@@ -58,7 +58,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_5m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
         rate(gitlab_redis_client_requests_duration_seconds_bucket{env="gstg",storage=~"repository_cache",type=~"internal-api"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: redis-repository-cache - rails_redis_client-apdex - 5m
@@ -67,7 +67,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_5m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
         rate(gitlab_redis_client_requests_duration_seconds_bucket{env="gstg",storage=~"repository_cache",type=~"ops-gitlab-net"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: redis-repository-cache - rails_redis_client-apdex - 5m
@@ -76,7 +76,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_5m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
         rate(gitlab_redis_client_requests_duration_seconds_bucket{env="gstg",storage=~"repository_cache",type=~"sidekiq"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: redis-repository-cache - rails_redis_client-apdex - 5m
@@ -85,7 +85,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_5m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
         rate(gitlab_redis_client_requests_duration_seconds_bucket{env="gstg",storage=~"repository_cache",type=~"web"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: redis-repository-cache - rails_redis_client-apdex - 5m
@@ -94,7 +94,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_5m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
         rate(gitlab_redis_client_requests_duration_seconds_bucket{env="gstg",storage=~"repository_cache",type=~"websockets"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: redis-repository-cache - rails_redis_client-ops - 5m burn-rate
@@ -103,12 +103,12 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_5m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
         rate(gitlab_redis_client_exceptions_total{env="gstg",storage=~"repository_cache",type=~"ai-assisted"}[5m] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_5m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
         rate(gitlab_redis_client_requests_total{env="gstg",storage=~"repository_cache",type=~"ai-assisted"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: redis-repository-cache - rails_redis_client-ops - 5m burn-rate
@@ -117,12 +117,12 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_5m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
         rate(gitlab_redis_client_exceptions_total{env="gstg",storage=~"repository_cache",type=~"api"}[5m] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_5m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
         rate(gitlab_redis_client_requests_total{env="gstg",storage=~"repository_cache",type=~"api"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: redis-repository-cache - rails_redis_client-ops - 5m burn-rate
@@ -131,12 +131,12 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_5m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
         rate(gitlab_redis_client_exceptions_total{env="gstg",storage=~"repository_cache",type=~"git"}[5m] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_5m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
         rate(gitlab_redis_client_requests_total{env="gstg",storage=~"repository_cache",type=~"git"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: redis-repository-cache - rails_redis_client-ops - 5m burn-rate
@@ -145,12 +145,12 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_5m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
         rate(gitlab_redis_client_exceptions_total{env="gstg",storage=~"repository_cache",type=~"internal-api"}[5m] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_5m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
         rate(gitlab_redis_client_requests_total{env="gstg",storage=~"repository_cache",type=~"internal-api"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: redis-repository-cache - rails_redis_client-ops - 5m burn-rate
@@ -159,12 +159,12 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_5m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
         rate(gitlab_redis_client_exceptions_total{env="gstg",storage=~"repository_cache",type=~"ops-gitlab-net"}[5m] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_5m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
         rate(gitlab_redis_client_requests_total{env="gstg",storage=~"repository_cache",type=~"ops-gitlab-net"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: redis-repository-cache - rails_redis_client-ops - 5m burn-rate
@@ -173,12 +173,12 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_5m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
         rate(gitlab_redis_client_exceptions_total{env="gstg",storage=~"repository_cache",type=~"sidekiq"}[5m] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_5m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
         rate(gitlab_redis_client_requests_total{env="gstg",storage=~"repository_cache",type=~"sidekiq"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: redis-repository-cache - rails_redis_client-ops - 5m burn-rate
@@ -187,12 +187,12 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_5m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
         rate(gitlab_redis_client_exceptions_total{env="gstg",storage=~"repository_cache",type=~"web"}[5m] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_5m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
         rate(gitlab_redis_client_requests_total{env="gstg",storage=~"repository_cache",type=~"web"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: redis-repository-cache - rails_redis_client-ops - 5m burn-rate
@@ -201,12 +201,12 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_5m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
         rate(gitlab_redis_client_exceptions_total{env="gstg",storage=~"repository_cache",type=~"websockets"}[5m] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_5m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
         rate(gitlab_redis_client_requests_total{env="gstg",storage=~"repository_cache",type=~"websockets"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: redis-repository-cache - primary_server-ops - 30m burn-rate'
@@ -214,7 +214,7 @@ groups:
   rules:
   - record: sli_aggregations:redis_commands_processed_total:rate_30m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,instance,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,instance,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(redis_commands_processed_total{env="gstg",type=~"redis-repository-cache"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: redis-repository-cache - rails_cache-apdex - 30m burn-rate'
@@ -222,7 +222,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_cache_operation_duration_seconds_bucket:rate_30m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,store,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,store,tier,type) (
         rate(gitlab_cache_operation_duration_seconds_bucket{env="gstg",store=~"RedisRepositoryCache",type=~"redis-repository-cache"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: redis-repository-cache - rails_cache-ops - 30m burn-rate'
@@ -230,7 +230,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_cache_operation_duration_seconds_count:rate_30m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,store,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,store,tier,type) (
         rate(gitlab_cache_operation_duration_seconds_count{env="gstg",store=~"RedisRepositoryCache",type=~"redis-repository-cache"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: redis-repository-cache - rails_redis_client-apdex - 30m
@@ -239,7 +239,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_30m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
         rate(gitlab_redis_client_requests_duration_seconds_bucket{env="gstg",storage=~"repository_cache",type=~"ai-assisted"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: redis-repository-cache - rails_redis_client-apdex - 30m
@@ -248,7 +248,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_30m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
         rate(gitlab_redis_client_requests_duration_seconds_bucket{env="gstg",storage=~"repository_cache",type=~"api"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: redis-repository-cache - rails_redis_client-apdex - 30m
@@ -257,7 +257,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_30m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
         rate(gitlab_redis_client_requests_duration_seconds_bucket{env="gstg",storage=~"repository_cache",type=~"git"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: redis-repository-cache - rails_redis_client-apdex - 30m
@@ -266,7 +266,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_30m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
         rate(gitlab_redis_client_requests_duration_seconds_bucket{env="gstg",storage=~"repository_cache",type=~"internal-api"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: redis-repository-cache - rails_redis_client-apdex - 30m
@@ -275,7 +275,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_30m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
         rate(gitlab_redis_client_requests_duration_seconds_bucket{env="gstg",storage=~"repository_cache",type=~"ops-gitlab-net"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: redis-repository-cache - rails_redis_client-apdex - 30m
@@ -284,7 +284,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_30m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
         rate(gitlab_redis_client_requests_duration_seconds_bucket{env="gstg",storage=~"repository_cache",type=~"sidekiq"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: redis-repository-cache - rails_redis_client-apdex - 30m
@@ -293,7 +293,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_30m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
         rate(gitlab_redis_client_requests_duration_seconds_bucket{env="gstg",storage=~"repository_cache",type=~"web"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: redis-repository-cache - rails_redis_client-apdex - 30m
@@ -302,7 +302,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_30m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
         rate(gitlab_redis_client_requests_duration_seconds_bucket{env="gstg",storage=~"repository_cache",type=~"websockets"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: redis-repository-cache - rails_redis_client-ops - 30m burn-rate
@@ -311,12 +311,12 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_30m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
         rate(gitlab_redis_client_exceptions_total{env="gstg",storage=~"repository_cache",type=~"ai-assisted"}[30m] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_30m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
         rate(gitlab_redis_client_requests_total{env="gstg",storage=~"repository_cache",type=~"ai-assisted"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: redis-repository-cache - rails_redis_client-ops - 30m burn-rate
@@ -325,12 +325,12 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_30m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
         rate(gitlab_redis_client_exceptions_total{env="gstg",storage=~"repository_cache",type=~"api"}[30m] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_30m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
         rate(gitlab_redis_client_requests_total{env="gstg",storage=~"repository_cache",type=~"api"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: redis-repository-cache - rails_redis_client-ops - 30m burn-rate
@@ -339,12 +339,12 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_30m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
         rate(gitlab_redis_client_exceptions_total{env="gstg",storage=~"repository_cache",type=~"git"}[30m] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_30m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
         rate(gitlab_redis_client_requests_total{env="gstg",storage=~"repository_cache",type=~"git"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: redis-repository-cache - rails_redis_client-ops - 30m burn-rate
@@ -353,12 +353,12 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_30m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
         rate(gitlab_redis_client_exceptions_total{env="gstg",storage=~"repository_cache",type=~"internal-api"}[30m] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_30m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
         rate(gitlab_redis_client_requests_total{env="gstg",storage=~"repository_cache",type=~"internal-api"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: redis-repository-cache - rails_redis_client-ops - 30m burn-rate
@@ -367,12 +367,12 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_30m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
         rate(gitlab_redis_client_exceptions_total{env="gstg",storage=~"repository_cache",type=~"ops-gitlab-net"}[30m] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_30m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
         rate(gitlab_redis_client_requests_total{env="gstg",storage=~"repository_cache",type=~"ops-gitlab-net"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: redis-repository-cache - rails_redis_client-ops - 30m burn-rate
@@ -381,12 +381,12 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_30m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
         rate(gitlab_redis_client_exceptions_total{env="gstg",storage=~"repository_cache",type=~"sidekiq"}[30m] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_30m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
         rate(gitlab_redis_client_requests_total{env="gstg",storage=~"repository_cache",type=~"sidekiq"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: redis-repository-cache - rails_redis_client-ops - 30m burn-rate
@@ -395,12 +395,12 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_30m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
         rate(gitlab_redis_client_exceptions_total{env="gstg",storage=~"repository_cache",type=~"web"}[30m] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_30m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
         rate(gitlab_redis_client_requests_total{env="gstg",storage=~"repository_cache",type=~"web"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: redis-repository-cache - rails_redis_client-ops - 30m burn-rate
@@ -409,12 +409,12 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_30m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
         rate(gitlab_redis_client_exceptions_total{env="gstg",storage=~"repository_cache",type=~"websockets"}[30m] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_30m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
         rate(gitlab_redis_client_requests_total{env="gstg",storage=~"repository_cache",type=~"websockets"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: redis-repository-cache - primary_server-ops - 1h burn-rate'
@@ -422,7 +422,7 @@ groups:
   rules:
   - record: sli_aggregations:redis_commands_processed_total:rate_1h
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,instance,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,instance,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(redis_commands_processed_total{env="gstg",type=~"redis-repository-cache"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: redis-repository-cache - rails_cache-apdex - 1h burn-rate'
@@ -430,7 +430,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_cache_operation_duration_seconds_bucket:rate_1h
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,store,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,store,tier,type) (
         rate(gitlab_cache_operation_duration_seconds_bucket{env="gstg",store=~"RedisRepositoryCache",type=~"redis-repository-cache"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: redis-repository-cache - rails_cache-ops - 1h burn-rate'
@@ -438,7 +438,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_cache_operation_duration_seconds_count:rate_1h
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,store,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,store,tier,type) (
         rate(gitlab_cache_operation_duration_seconds_count{env="gstg",store=~"RedisRepositoryCache",type=~"redis-repository-cache"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: redis-repository-cache - rails_redis_client-apdex - 1h
@@ -447,7 +447,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_1h
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
         rate(gitlab_redis_client_requests_duration_seconds_bucket{env="gstg",storage=~"repository_cache",type=~"ai-assisted"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: redis-repository-cache - rails_redis_client-apdex - 1h
@@ -456,7 +456,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_1h
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
         rate(gitlab_redis_client_requests_duration_seconds_bucket{env="gstg",storage=~"repository_cache",type=~"api"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: redis-repository-cache - rails_redis_client-apdex - 1h
@@ -465,7 +465,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_1h
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
         rate(gitlab_redis_client_requests_duration_seconds_bucket{env="gstg",storage=~"repository_cache",type=~"git"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: redis-repository-cache - rails_redis_client-apdex - 1h
@@ -474,7 +474,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_1h
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
         rate(gitlab_redis_client_requests_duration_seconds_bucket{env="gstg",storage=~"repository_cache",type=~"internal-api"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: redis-repository-cache - rails_redis_client-apdex - 1h
@@ -483,7 +483,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_1h
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
         rate(gitlab_redis_client_requests_duration_seconds_bucket{env="gstg",storage=~"repository_cache",type=~"ops-gitlab-net"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: redis-repository-cache - rails_redis_client-apdex - 1h
@@ -492,7 +492,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_1h
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
         rate(gitlab_redis_client_requests_duration_seconds_bucket{env="gstg",storage=~"repository_cache",type=~"sidekiq"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: redis-repository-cache - rails_redis_client-apdex - 1h
@@ -501,7 +501,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_1h
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
         rate(gitlab_redis_client_requests_duration_seconds_bucket{env="gstg",storage=~"repository_cache",type=~"web"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: redis-repository-cache - rails_redis_client-apdex - 1h
@@ -510,7 +510,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_1h
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,le,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
         rate(gitlab_redis_client_requests_duration_seconds_bucket{env="gstg",storage=~"repository_cache",type=~"websockets"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: redis-repository-cache - rails_redis_client-ops - 1h burn-rate
@@ -519,12 +519,12 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_1h
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
         rate(gitlab_redis_client_exceptions_total{env="gstg",storage=~"repository_cache",type=~"ai-assisted"}[1h] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_1h
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
         rate(gitlab_redis_client_requests_total{env="gstg",storage=~"repository_cache",type=~"ai-assisted"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: redis-repository-cache - rails_redis_client-ops - 1h burn-rate
@@ -533,12 +533,12 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_1h
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
         rate(gitlab_redis_client_exceptions_total{env="gstg",storage=~"repository_cache",type=~"api"}[1h] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_1h
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
         rate(gitlab_redis_client_requests_total{env="gstg",storage=~"repository_cache",type=~"api"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: redis-repository-cache - rails_redis_client-ops - 1h burn-rate
@@ -547,12 +547,12 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_1h
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
         rate(gitlab_redis_client_exceptions_total{env="gstg",storage=~"repository_cache",type=~"git"}[1h] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_1h
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
         rate(gitlab_redis_client_requests_total{env="gstg",storage=~"repository_cache",type=~"git"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: redis-repository-cache - rails_redis_client-ops - 1h burn-rate
@@ -561,12 +561,12 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_1h
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
         rate(gitlab_redis_client_exceptions_total{env="gstg",storage=~"repository_cache",type=~"internal-api"}[1h] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_1h
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
         rate(gitlab_redis_client_requests_total{env="gstg",storage=~"repository_cache",type=~"internal-api"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: redis-repository-cache - rails_redis_client-ops - 1h burn-rate
@@ -575,12 +575,12 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_1h
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
         rate(gitlab_redis_client_exceptions_total{env="gstg",storage=~"repository_cache",type=~"ops-gitlab-net"}[1h] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_1h
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
         rate(gitlab_redis_client_requests_total{env="gstg",storage=~"repository_cache",type=~"ops-gitlab-net"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: redis-repository-cache - rails_redis_client-ops - 1h burn-rate
@@ -589,12 +589,12 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_1h
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
         rate(gitlab_redis_client_exceptions_total{env="gstg",storage=~"repository_cache",type=~"sidekiq"}[1h] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_1h
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
         rate(gitlab_redis_client_requests_total{env="gstg",storage=~"repository_cache",type=~"sidekiq"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: redis-repository-cache - rails_redis_client-ops - 1h burn-rate
@@ -603,12 +603,12 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_1h
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
         rate(gitlab_redis_client_exceptions_total{env="gstg",storage=~"repository_cache",type=~"web"}[1h] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_1h
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
         rate(gitlab_redis_client_requests_total{env="gstg",storage=~"repository_cache",type=~"web"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: redis-repository-cache - rails_redis_client-ops - 1h burn-rate
@@ -617,11 +617,11 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_1h
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
         rate(gitlab_redis_client_exceptions_total{env="gstg",storage=~"repository_cache",type=~"websockets"}[1h] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_1h
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,storage,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
         rate(gitlab_redis_client_requests_total{env="gstg",storage=~"repository_cache",type=~"websockets"}[1h] offset 30s)
       )

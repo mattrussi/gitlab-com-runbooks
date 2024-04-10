@@ -1,6 +1,11 @@
 local intervalForDuration = import 'servicemetrics/interval-for-duration.libsonnet';
 local monitoredServices = (import 'gitlab-metrics-config.libsonnet').monitoredServices;
-local aggregationSets = (import 'gitlab-metrics-config.libsonnet').aggregationSets;
+// TODO: When mimir becomes the default, and these aggregation sets are configured in
+// the config as default, switch to using those aggregation sets instead of hardcoding
+// to the mimir ones.
+// local aggregationSets = (import 'gitlab-metrics-config.libsonnet').aggregationSets;
+local aggregationSets = import 'mimir-aggregation-sets.libsonnet';
+
 local aggregationSet = import 'servicemetrics/aggregation-set.libsonnet';
 local sliMetricDescriptor = import 'servicemetrics/sli_metric_descriptor.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
