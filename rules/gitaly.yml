@@ -79,40 +79,6 @@ groups:
 
 - name: Gitaly misc alerts
   rules:
-  - alert: GitalyFileServerDown
-    expr: up{job="gitaly",tier="stor",type="gitaly"} == 0
-    for: 15m
-    labels:
-      team: gitaly
-      pager: pagerduty
-      severity: s1
-      alert_type: cause
-    annotations:
-      description: Gitaly has been marked as down for the past minute on {{$labels.instance}}.
-        Check Gitaly logs and restart the process if necessary
-      runbook: docs/gitaly/gitaly-down.md
-      title: Gitaly is down on {{ $labels.fqdn }}
-  - alert: GitalyVersionMismatch
-    expr: >
-      count by (environment, stage) (
-        count by (environment, stage, version) (
-          gitlab_build_info{tier="stor",type="gitaly"}
-        )
-      ) > 1
-    for: 60m
-    labels:
-      team: gitaly
-      pager: pagerduty
-      severity: s1
-      alert_type: cause
-    annotations:
-      description: Two or more different version of Gitaly are running in stage {{ $labels.stage }}
-        During a deployment, two distinct versions of Gitaly may be running
-        alongside one another, but this should not be the case for more than 60m.
-        Visit https://dashboards.gitlab.net/dashboard/db/gitaly-version-tracker?orgId=1
-        for details of versions deployed across the fleet.
-      runbook: docs/version/gitaly-version-mismatch.md
-      title: 'Multiple versions of Gitaly have been running alongside one another'
   - alert: GCPScheduledSnapshotMissingForGitaly
     expr: |
       count(up{type="gitaly", job="gitaly", env="gprd", shard!="praefect"} == 1) > count(present_over_time(stackdriver_gce_disk_logging_googleapis_com_user_scheduled_snapshots{env="gprd", disk_name=~"(file|gitaly)-.*-stor-gprd-data$"}[2h]))
