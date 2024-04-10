@@ -128,15 +128,7 @@ A simple pipeline is executed at the project [windows-srm-deadman-test](https://
 
 If a shared runners manager is [shown offline](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/9186):
 
-- If necessary, [download and install ScaleFT, AKA:- sft](https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/ci-runners/cicd/windows/connecting.md#required-software)
-  - [`macOS`](https://help.okta.com/en/prod/Content/Topics/Adv_Server_Access/docs/sft-osx.htm)
-  - [`debian/ubuntu`](https://help.okta.com/en/prod/Content/Topics/Adv_Server_Access/docs/sft-ubuntu.htm)
-- Connect to the windows runner manager by invoking this command from a terminal shell session on your workstation:
-
-  ```
-  sft rdp --via lb-bastion.windows-ci.gitlab.com windows-shared-runners-manager-1
-  ```
-
+- Connect to the windows runner manager by following the commands in the [connecting to a Windows machine doc](./connecting.md).
 - Click Start Menu > Click Windows PowerShell > Right-click on Windows PowerShell sub-menu > Click Start as Administrator)
 - On the command-line in the PowerShell window invoke:
 
