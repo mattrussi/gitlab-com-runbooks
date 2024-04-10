@@ -53,3 +53,4 @@ groups:
           sum without (fqdn, instance, zone) (
             irate(haproxy_frontend_request_errors_total{env="pre"}[1m])
           )
+

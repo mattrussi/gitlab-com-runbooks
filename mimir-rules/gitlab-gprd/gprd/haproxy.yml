@@ -56,27 +56,27 @@ groups:
       - record: backend_code:haproxy_server_http_responses_total:rate5m
         expr: >
           sum without (fqdn, instance, server, zone) (
-            rate(haproxy_server_http_responses_total{env="gprd}[5m])
+            rate(haproxy_server_http_responses_total{env="gprd"}[5m])
           )
       - record: frontend_code:haproxy_frontend_http_responses_total:irate1m
         expr: >
           sum without (fqdn, instance, zone) (
-            irate(haproxy_frontend_http_responses_total{env="gprd}[1m])
+            irate(haproxy_frontend_http_responses_total{env="gprd"}[1m])
           )
       - record: job_frontend:haproxy_frontend_bytes_in_total:irate1m
         expr: >
           sum without (fqdn, instance, zone) (
-            irate(haproxy_frontend_bytes_in_total{env="gprd}[1m])
+            irate(haproxy_frontend_bytes_in_total{env="gprd"}[1m])
           )
       - record: job_frontend:haproxy_frontend_bytes_out_total:irate1m
         expr: >
           sum without (fqdn, instance, zone) (
-            irate(haproxy_frontend_bytes_out_total{env="gprd}[1m])
+            irate(haproxy_frontend_bytes_out_total{env="gprd"}[1m])
           )
       - record: job_backend:haproxy_backend_response_errors_total:irate1m
         expr: >
           sum without (fqdn, instance, zone) (
-            irate(haproxy_backend_response_errors_total{env="gprd}[1m])
+            irate(haproxy_backend_response_errors_total{env="gprd"}[1m])
           )
       - record: job_frontend:haproxy_frontend_request_errors_total:irate1m
         expr: >
