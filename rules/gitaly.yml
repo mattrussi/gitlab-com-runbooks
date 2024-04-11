@@ -79,6 +79,19 @@ groups:
 
 - name: Gitaly misc alerts
   rules:
+  - alert: GitalyFileServerDown
+    expr: up{job="gitaly",tier="stor",type="gitaly"} == 0
+    for: 15m
+    labels:
+      team: gitaly
+      pager: pagerduty
+      severity: s1
+      alert_type: cause
+    annotations:
+      description: Gitaly has been marked as down for the past minute on {{$labels.instance}}.
+        Check Gitaly logs and restart the process if necessary
+      runbook: docs/gitaly/gitaly-down.md
+      title: Gitaly is down on {{ $labels.fqdn }}
   - alert: GCPScheduledSnapshotMissingForGitaly
     expr: |
       count(up{type="gitaly", job="gitaly", env="gprd", shard!="praefect"} == 1) > count(present_over_time(stackdriver_gce_disk_logging_googleapis_com_user_scheduled_snapshots{env="gprd", disk_name=~"(file|gitaly)-.*-stor-gprd-data$"}[2h]))
