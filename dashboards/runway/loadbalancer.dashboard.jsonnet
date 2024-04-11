@@ -16,7 +16,7 @@ basic.dashboard(
 .addTemplate(template.new(
   'loadbalancer',
   '$PROMETHEUS_DS',
-  'label_values(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{job="runway-exporter", env="$environment"}, url_map_name)',
+  'label_values(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_backend_request_count{job="runway-exporter", env="$environment"}, url_map_name)',
   refresh='load',
   sort=1,
 ))
