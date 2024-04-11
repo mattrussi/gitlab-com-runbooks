@@ -90,7 +90,7 @@
 * [../uncategorized/namespace-restore.md](../uncategorized/namespace-restore.md)
 * [Ruby profiling](../uncategorized/ruby-profiling.md)
 * [Shared Configurations](../uncategorized/shared-configurations.md)
-* [Terraform Broken Master](../uncategorized/terraform-broken-master.md)
+* [Terraform Broken Main](../uncategorized/terraform-broken-main.md)
 * [How to upload a file to Google Cloud Storage from any system without a credentials configuration](../uncategorized/upload-file-to-gcs-using-signed-url.md)
 * [Workers under heavy load because of being used as a CDN](../uncategorized/workers-high-load.md)
 * [Configuring and Using the Yubikey](../uncategorized/yubikey.md)

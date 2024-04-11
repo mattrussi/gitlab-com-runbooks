@@ -85,7 +85,7 @@ inside of that project will not be discussed as that is implementation specific.
           gs://gitlab-<ENV>-chef-bootstrap/validation.enc`
 1. You may now proceed to creating instances in your new project
     * The project will be in a directory named the same as `<ENV>` at this path:
-      <https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/tree/master/environments>
+      <https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/tree/main/environments>
     * You'll also want the necessary chef-roles to go along with this
       environment, which will be placed at this path:
       `https://ops.gitlab.net/gitlab-cookbooks/chef-repo/-/tree/master/roles`

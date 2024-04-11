@@ -6,12 +6,12 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_sli_rails_request_apdex_success_total:rate_5m
     expr: |
-      sum by (component,endpoint_id,env,environment,feature_category,fqdn,job,product_stage,queue,region,request_urgency,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,endpoint_id,env,environment,feature_category,fqdn,job,product_stage,region,request_urgency,shard,stage,stage_group,tier,type) (
         rate(gitlab_sli_rails_request_apdex_success_total{env="gstg",job=~"gitlab-rails",type=~"ai-assisted"}[5m] offset 30s)
       )
   - record: sli_aggregations:gitlab_sli_rails_request_apdex_total:rate_5m
     expr: |
-      sum by (component,endpoint_id,env,environment,feature_category,fqdn,job,product_stage,queue,region,request_urgency,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,endpoint_id,env,environment,feature_category,fqdn,job,product_stage,region,request_urgency,shard,stage,stage_group,tier,type) (
         rate(gitlab_sli_rails_request_apdex_total{env="gstg",job=~"gitlab-rails",type=~"ai-assisted"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: ai-assisted - rails_request-ops - 5m burn-rate'
@@ -19,12 +19,12 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_sli_rails_request_error_total:rate_5m
     expr: |
-      sum by (component,endpoint_id,env,environment,feature_category,fqdn,job,product_stage,queue,region,request_urgency,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,endpoint_id,env,environment,feature_category,fqdn,job,product_stage,region,request_urgency,shard,stage,stage_group,tier,type) (
         rate(gitlab_sli_rails_request_error_total{env="gstg",job=~"gitlab-rails",type=~"ai-assisted"}[5m] offset 30s)
       )
   - record: sli_aggregations:gitlab_sli_rails_request_total:rate_5m
     expr: |
-      sum by (component,endpoint_id,env,environment,feature_category,fqdn,job,product_stage,queue,region,request_urgency,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,endpoint_id,env,environment,feature_category,fqdn,job,product_stage,region,request_urgency,shard,stage,stage_group,tier,type) (
         rate(gitlab_sli_rails_request_total{env="gstg",job=~"gitlab-rails",type=~"ai-assisted"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: ai-assisted - workhorse-apdex - 5m burn-rate'
@@ -32,7 +32,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_workhorse_http_request_duration_seconds_bucket:rate_5m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,job,le,method,product_stage,queue,region,route,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,job,le,method,product_stage,region,route,shard,stage,stage_group,tier,type) (
         rate(gitlab_workhorse_http_request_duration_seconds_bucket{env="gstg",job=~"gitlab-workhorse|gitlab-workhorse-api",type=~"ai-assisted"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: ai-assisted - workhorse-ops - 5m burn-rate'
@@ -40,7 +40,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_workhorse_http_requests_total:rate_5m
     expr: |
-      sum by (code,component,env,environment,feature_category,fqdn,job,method,product_stage,queue,region,route,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (code,component,env,environment,feature_category,fqdn,job,method,product_stage,region,route,shard,stage,stage_group,tier,type) (
         rate(gitlab_workhorse_http_requests_total{env="gstg",job=~"gitlab-workhorse|gitlab-workhorse-api",type=~"ai-assisted"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: ai-assisted - rails_request-apdex - 30m burn-rate'
@@ -48,12 +48,12 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_sli_rails_request_apdex_success_total:rate_30m
     expr: |
-      sum by (component,endpoint_id,env,environment,feature_category,fqdn,job,product_stage,queue,region,request_urgency,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,endpoint_id,env,environment,feature_category,fqdn,job,product_stage,region,request_urgency,shard,stage,stage_group,tier,type) (
         rate(gitlab_sli_rails_request_apdex_success_total{env="gstg",job=~"gitlab-rails",type=~"ai-assisted"}[30m] offset 30s)
       )
   - record: sli_aggregations:gitlab_sli_rails_request_apdex_total:rate_30m
     expr: |
-      sum by (component,endpoint_id,env,environment,feature_category,fqdn,job,product_stage,queue,region,request_urgency,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,endpoint_id,env,environment,feature_category,fqdn,job,product_stage,region,request_urgency,shard,stage,stage_group,tier,type) (
         rate(gitlab_sli_rails_request_apdex_total{env="gstg",job=~"gitlab-rails",type=~"ai-assisted"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: ai-assisted - rails_request-ops - 30m burn-rate'
@@ -61,12 +61,12 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_sli_rails_request_error_total:rate_30m
     expr: |
-      sum by (component,endpoint_id,env,environment,feature_category,fqdn,job,product_stage,queue,region,request_urgency,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,endpoint_id,env,environment,feature_category,fqdn,job,product_stage,region,request_urgency,shard,stage,stage_group,tier,type) (
         rate(gitlab_sli_rails_request_error_total{env="gstg",job=~"gitlab-rails",type=~"ai-assisted"}[30m] offset 30s)
       )
   - record: sli_aggregations:gitlab_sli_rails_request_total:rate_30m
     expr: |
-      sum by (component,endpoint_id,env,environment,feature_category,fqdn,job,product_stage,queue,region,request_urgency,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,endpoint_id,env,environment,feature_category,fqdn,job,product_stage,region,request_urgency,shard,stage,stage_group,tier,type) (
         rate(gitlab_sli_rails_request_total{env="gstg",job=~"gitlab-rails",type=~"ai-assisted"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: ai-assisted - workhorse-apdex - 30m burn-rate'
@@ -74,7 +74,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_workhorse_http_request_duration_seconds_bucket:rate_30m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,job,le,method,product_stage,queue,region,route,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,job,le,method,product_stage,region,route,shard,stage,stage_group,tier,type) (
         rate(gitlab_workhorse_http_request_duration_seconds_bucket{env="gstg",job=~"gitlab-workhorse|gitlab-workhorse-api",type=~"ai-assisted"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: ai-assisted - workhorse-ops - 30m burn-rate'
@@ -82,7 +82,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_workhorse_http_requests_total:rate_30m
     expr: |
-      sum by (code,component,env,environment,feature_category,fqdn,job,method,product_stage,queue,region,route,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (code,component,env,environment,feature_category,fqdn,job,method,product_stage,region,route,shard,stage,stage_group,tier,type) (
         rate(gitlab_workhorse_http_requests_total{env="gstg",job=~"gitlab-workhorse|gitlab-workhorse-api",type=~"ai-assisted"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: ai-assisted - rails_request-apdex - 1h burn-rate'
@@ -90,12 +90,12 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_sli_rails_request_apdex_success_total:rate_1h
     expr: |
-      sum by (component,endpoint_id,env,environment,feature_category,fqdn,job,product_stage,queue,region,request_urgency,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,endpoint_id,env,environment,feature_category,fqdn,job,product_stage,region,request_urgency,shard,stage,stage_group,tier,type) (
         rate(gitlab_sli_rails_request_apdex_success_total{env="gstg",job=~"gitlab-rails",type=~"ai-assisted"}[1h] offset 30s)
       )
   - record: sli_aggregations:gitlab_sli_rails_request_apdex_total:rate_1h
     expr: |
-      sum by (component,endpoint_id,env,environment,feature_category,fqdn,job,product_stage,queue,region,request_urgency,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,endpoint_id,env,environment,feature_category,fqdn,job,product_stage,region,request_urgency,shard,stage,stage_group,tier,type) (
         rate(gitlab_sli_rails_request_apdex_total{env="gstg",job=~"gitlab-rails",type=~"ai-assisted"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: ai-assisted - rails_request-ops - 1h burn-rate'
@@ -103,12 +103,12 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_sli_rails_request_error_total:rate_1h
     expr: |
-      sum by (component,endpoint_id,env,environment,feature_category,fqdn,job,product_stage,queue,region,request_urgency,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,endpoint_id,env,environment,feature_category,fqdn,job,product_stage,region,request_urgency,shard,stage,stage_group,tier,type) (
         rate(gitlab_sli_rails_request_error_total{env="gstg",job=~"gitlab-rails",type=~"ai-assisted"}[1h] offset 30s)
       )
   - record: sli_aggregations:gitlab_sli_rails_request_total:rate_1h
     expr: |
-      sum by (component,endpoint_id,env,environment,feature_category,fqdn,job,product_stage,queue,region,request_urgency,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,endpoint_id,env,environment,feature_category,fqdn,job,product_stage,region,request_urgency,shard,stage,stage_group,tier,type) (
         rate(gitlab_sli_rails_request_total{env="gstg",job=~"gitlab-rails",type=~"ai-assisted"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: ai-assisted - workhorse-apdex - 1h burn-rate'
@@ -116,7 +116,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_workhorse_http_request_duration_seconds_bucket:rate_1h
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,job,le,method,product_stage,queue,region,route,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,job,le,method,product_stage,region,route,shard,stage,stage_group,tier,type) (
         rate(gitlab_workhorse_http_request_duration_seconds_bucket{env="gstg",job=~"gitlab-workhorse|gitlab-workhorse-api",type=~"ai-assisted"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: ai-assisted - workhorse-ops - 1h burn-rate'
@@ -124,6 +124,6 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_workhorse_http_requests_total:rate_1h
     expr: |
-      sum by (code,component,env,environment,feature_category,fqdn,job,method,product_stage,queue,region,route,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (code,component,env,environment,feature_category,fqdn,job,method,product_stage,region,route,shard,stage,stage_group,tier,type) (
         rate(gitlab_workhorse_http_requests_total{env="gstg",job=~"gitlab-workhorse|gitlab-workhorse-api",type=~"ai-assisted"}[1h] offset 30s)
       )

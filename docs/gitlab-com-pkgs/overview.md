@@ -13,7 +13,7 @@ There are two buckets used internally for storing Omnibus packages, `gitlab-com-
 
 ### Configuration
 
-Configuration of the bucket is done in Terraform in the [`gitlab-com-pkgs`](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/tree/master/environments/gitlab-com-pkgs) environment.
+Configuration of the bucket is done in Terraform in the [`gitlab-com-pkgs`](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/tree/main/environments/gitlab-com-pkgs) environment.
 
 There is one service account `gitlab-com-pkgs-rw@gitlab-com-pkgs.iam.gserviceaccount.com` that has a key set as a CI variable `GITLAB_COM_PKGS_SA_FILE` in the omnibus-gitlab pipeline [CI variables on dev.gitlab.org](https://dev.gitlab.org/gitlab/omnibus-gitlab/-/settings/ci_cd).
 

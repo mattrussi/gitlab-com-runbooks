@@ -6,19 +6,19 @@ groups:
   rules:
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:
-      component: gcp_quota_limit_s4
+      component: gcp_quota_limit_vertex_ai
     expr: "0.85"
   - record: slo:max:hard:gitlab_component_saturation:ratio
     labels:
-      component: gcp_quota_limit_s4
+      component: gcp_quota_limit_vertex_ai
     expr: "0.9"
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:
-      component: gcp_quota_limit_vertex_ai
+      component: gcp_quota_limit_vertex_ai_code_gecko
     expr: "0.85"
   - record: slo:max:hard:gitlab_component_saturation:ratio
     labels:
-      component: gcp_quota_limit_vertex_ai
+      component: gcp_quota_limit_vertex_ai_code_gecko
     expr: "0.9"
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:

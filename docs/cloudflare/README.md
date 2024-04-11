@@ -23,7 +23,7 @@ Cloudflare provides a web application firewall (WAF), domain name system
 Cloudflare dashboard authentication uses Okta SSO, once a `@gitlab.com` email is typed in, the password field will fade out and the `Log in` button will switch to `Log in with SSO`.
 From there you will be redirected to GitLab's Okta instance for authentication.
 
-Roles along with IdP configuration is managed by Terraform in the `cloudflare` environment in [`config-mgmt`](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/tree/master/environments/cloudflare?ref_type=heads).
+Roles along with IdP configuration is managed by Terraform in the `cloudflare` environment in [`config-mgmt`](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/tree/main/environments/cloudflare?ref_type=heads).
 
 Okta app membership is managed in the Google [`okta-cloudflare-users` group](https://groups.google.com/a/gitlab.com/g/okta-cloudflare-users/members).
 

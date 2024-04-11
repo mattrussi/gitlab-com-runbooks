@@ -7,12 +7,12 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_sli_llm_completion_apdex_success_total:rate_5m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,service_class,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,service_class,shard,stage,stage_group,tier,type) (
         rate(gitlab_sli_llm_completion_apdex_success_total{env="gstg",type=~"ops-gitlab-net"}[5m] offset 30s)
       )
   - record: sli_aggregations:gitlab_sli_llm_completion_apdex_total:rate_5m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,service_class,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,service_class,shard,stage,stage_group,tier,type) (
         rate(gitlab_sli_llm_completion_apdex_total{env="gstg",type=~"ops-gitlab-net"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: sidekiq - llm_completion-apdex - 5m burn-rate'
@@ -20,12 +20,12 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_sli_llm_completion_apdex_success_total:rate_5m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,service_class,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,service_class,shard,stage,stage_group,tier,type) (
         rate(gitlab_sli_llm_completion_apdex_success_total{env="gstg",type=~"sidekiq"}[5m] offset 30s)
       )
   - record: sli_aggregations:gitlab_sli_llm_completion_apdex_total:rate_5m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,service_class,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,service_class,shard,stage,stage_group,tier,type) (
         rate(gitlab_sli_llm_completion_apdex_total{env="gstg",type=~"sidekiq"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: sidekiq - llm_completion-ops - 5m burn-rate - emitted by
@@ -34,12 +34,12 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_sli_llm_completion_error_total:rate_5m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,service_class,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,service_class,shard,stage,stage_group,tier,type) (
         rate(gitlab_sli_llm_completion_error_total{env="gstg",type=~"ops-gitlab-net"}[5m] offset 30s)
       )
   - record: sli_aggregations:gitlab_sli_llm_completion_total:rate_5m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,service_class,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,service_class,shard,stage,stage_group,tier,type) (
         rate(gitlab_sli_llm_completion_total{env="gstg",type=~"ops-gitlab-net"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: sidekiq - llm_completion-ops - 5m burn-rate'
@@ -47,12 +47,12 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_sli_llm_completion_error_total:rate_5m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,service_class,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,service_class,shard,stage,stage_group,tier,type) (
         rate(gitlab_sli_llm_completion_error_total{env="gstg",type=~"sidekiq"}[5m] offset 30s)
       )
   - record: sli_aggregations:gitlab_sli_llm_completion_total:rate_5m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,service_class,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,service_class,shard,stage,stage_group,tier,type) (
         rate(gitlab_sli_llm_completion_total{env="gstg",type=~"sidekiq"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: sidekiq - sidekiq_execution-apdex - 5m burn-rate'
@@ -103,12 +103,12 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_sli_llm_completion_apdex_success_total:rate_30m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,service_class,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,service_class,shard,stage,stage_group,tier,type) (
         rate(gitlab_sli_llm_completion_apdex_success_total{env="gstg",type=~"ops-gitlab-net"}[30m] offset 30s)
       )
   - record: sli_aggregations:gitlab_sli_llm_completion_apdex_total:rate_30m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,service_class,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,service_class,shard,stage,stage_group,tier,type) (
         rate(gitlab_sli_llm_completion_apdex_total{env="gstg",type=~"ops-gitlab-net"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: sidekiq - llm_completion-apdex - 30m burn-rate'
@@ -116,12 +116,12 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_sli_llm_completion_apdex_success_total:rate_30m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,service_class,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,service_class,shard,stage,stage_group,tier,type) (
         rate(gitlab_sli_llm_completion_apdex_success_total{env="gstg",type=~"sidekiq"}[30m] offset 30s)
       )
   - record: sli_aggregations:gitlab_sli_llm_completion_apdex_total:rate_30m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,service_class,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,service_class,shard,stage,stage_group,tier,type) (
         rate(gitlab_sli_llm_completion_apdex_total{env="gstg",type=~"sidekiq"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: sidekiq - llm_completion-ops - 30m burn-rate - emitted
@@ -130,12 +130,12 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_sli_llm_completion_error_total:rate_30m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,service_class,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,service_class,shard,stage,stage_group,tier,type) (
         rate(gitlab_sli_llm_completion_error_total{env="gstg",type=~"ops-gitlab-net"}[30m] offset 30s)
       )
   - record: sli_aggregations:gitlab_sli_llm_completion_total:rate_30m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,service_class,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,service_class,shard,stage,stage_group,tier,type) (
         rate(gitlab_sli_llm_completion_total{env="gstg",type=~"ops-gitlab-net"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: sidekiq - llm_completion-ops - 30m burn-rate'
@@ -143,12 +143,12 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_sli_llm_completion_error_total:rate_30m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,service_class,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,service_class,shard,stage,stage_group,tier,type) (
         rate(gitlab_sli_llm_completion_error_total{env="gstg",type=~"sidekiq"}[30m] offset 30s)
       )
   - record: sli_aggregations:gitlab_sli_llm_completion_total:rate_30m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,service_class,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,service_class,shard,stage,stage_group,tier,type) (
         rate(gitlab_sli_llm_completion_total{env="gstg",type=~"sidekiq"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: sidekiq - sidekiq_execution-apdex - 30m burn-rate'
@@ -199,12 +199,12 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_sli_llm_completion_apdex_success_total:rate_1h
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,service_class,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,service_class,shard,stage,stage_group,tier,type) (
         rate(gitlab_sli_llm_completion_apdex_success_total{env="gstg",type=~"ops-gitlab-net"}[1h] offset 30s)
       )
   - record: sli_aggregations:gitlab_sli_llm_completion_apdex_total:rate_1h
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,service_class,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,service_class,shard,stage,stage_group,tier,type) (
         rate(gitlab_sli_llm_completion_apdex_total{env="gstg",type=~"ops-gitlab-net"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: sidekiq - llm_completion-apdex - 1h burn-rate'
@@ -212,12 +212,12 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_sli_llm_completion_apdex_success_total:rate_1h
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,service_class,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,service_class,shard,stage,stage_group,tier,type) (
         rate(gitlab_sli_llm_completion_apdex_success_total{env="gstg",type=~"sidekiq"}[1h] offset 30s)
       )
   - record: sli_aggregations:gitlab_sli_llm_completion_apdex_total:rate_1h
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,service_class,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,service_class,shard,stage,stage_group,tier,type) (
         rate(gitlab_sli_llm_completion_apdex_total{env="gstg",type=~"sidekiq"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: sidekiq - llm_completion-ops - 1h burn-rate - emitted by
@@ -226,12 +226,12 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_sli_llm_completion_error_total:rate_1h
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,service_class,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,service_class,shard,stage,stage_group,tier,type) (
         rate(gitlab_sli_llm_completion_error_total{env="gstg",type=~"ops-gitlab-net"}[1h] offset 30s)
       )
   - record: sli_aggregations:gitlab_sli_llm_completion_total:rate_1h
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,service_class,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,service_class,shard,stage,stage_group,tier,type) (
         rate(gitlab_sli_llm_completion_total{env="gstg",type=~"ops-gitlab-net"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: sidekiq - llm_completion-ops - 1h burn-rate'
@@ -239,12 +239,12 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_sli_llm_completion_error_total:rate_1h
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,service_class,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,service_class,shard,stage,stage_group,tier,type) (
         rate(gitlab_sli_llm_completion_error_total{env="gstg",type=~"sidekiq"}[1h] offset 30s)
       )
   - record: sli_aggregations:gitlab_sli_llm_completion_total:rate_1h
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,service_class,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,service_class,shard,stage,stage_group,tier,type) (
         rate(gitlab_sli_llm_completion_total{env="gstg",type=~"sidekiq"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: sidekiq - sidekiq_execution-apdex - 1h burn-rate'

@@ -6,17 +6,17 @@ groups:
   rules:
   - record: sli_aggregations:pgbouncer_pooler_errors_total:rate_5m
     expr: |
-      sum by (component,env,environment,error,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,error,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(pgbouncer_pooler_errors_total{env="gstg",tier=~"db",type=~"pgbouncer-embedding"}[5m] offset 30s)
       )
   - record: sli_aggregations:pgbouncer_stats_queries_pooled_total:rate_5m
     expr: |
-      sum by (component,env,environment,error,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,error,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(pgbouncer_stats_queries_pooled_total{env="gstg",tier=~"db",type=~"pgbouncer-embedding"}[5m] offset 30s)
       )
   - record: sli_aggregations:pgbouncer_stats_sql_transactions_pooled_total:rate_5m
     expr: |
-      sum by (component,env,environment,error,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,error,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(pgbouncer_stats_sql_transactions_pooled_total{env="gstg",tier=~"db",type=~"pgbouncer-embedding"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: pgbouncer-embedding - service-ops - 30m burn-rate'
@@ -24,17 +24,17 @@ groups:
   rules:
   - record: sli_aggregations:pgbouncer_pooler_errors_total:rate_30m
     expr: |
-      sum by (component,env,environment,error,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,error,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(pgbouncer_pooler_errors_total{env="gstg",tier=~"db",type=~"pgbouncer-embedding"}[30m] offset 30s)
       )
   - record: sli_aggregations:pgbouncer_stats_queries_pooled_total:rate_30m
     expr: |
-      sum by (component,env,environment,error,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,error,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(pgbouncer_stats_queries_pooled_total{env="gstg",tier=~"db",type=~"pgbouncer-embedding"}[30m] offset 30s)
       )
   - record: sli_aggregations:pgbouncer_stats_sql_transactions_pooled_total:rate_30m
     expr: |
-      sum by (component,env,environment,error,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,error,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(pgbouncer_stats_sql_transactions_pooled_total{env="gstg",tier=~"db",type=~"pgbouncer-embedding"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: pgbouncer-embedding - service-ops - 1h burn-rate'
@@ -42,16 +42,16 @@ groups:
   rules:
   - record: sli_aggregations:pgbouncer_pooler_errors_total:rate_1h
     expr: |
-      sum by (component,env,environment,error,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,error,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(pgbouncer_pooler_errors_total{env="gstg",tier=~"db",type=~"pgbouncer-embedding"}[1h] offset 30s)
       )
   - record: sli_aggregations:pgbouncer_stats_queries_pooled_total:rate_1h
     expr: |
-      sum by (component,env,environment,error,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,error,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(pgbouncer_stats_queries_pooled_total{env="gstg",tier=~"db",type=~"pgbouncer-embedding"}[1h] offset 30s)
       )
   - record: sli_aggregations:pgbouncer_stats_sql_transactions_pooled_total:rate_1h
     expr: |
-      sum by (component,env,environment,error,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,error,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(pgbouncer_stats_sql_transactions_pooled_total{env="gstg",tier=~"db",type=~"pgbouncer-embedding"}[1h] offset 30s)
       )

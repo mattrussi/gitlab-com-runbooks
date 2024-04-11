@@ -10,10 +10,10 @@ This run book covers administration of the Teleport service from an infrastructu
 
 Access is configured at:
 
-- Staging [teleport-staging in `config-mgmt`](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/tree/master/environments/teleport-staging)
-- Production [teleport-production in `config-mgmt`](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/tree/master/environments/teleport-staging)
+- Staging [teleport-staging in `config-mgmt`](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/tree/main/environments/teleport-staging)
+- Production [teleport-production in `config-mgmt`](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/tree/main/environments/teleport-staging)
 
-Associations between Okta groups and Teleport roles are fairly straightforward, and can be edited in the [groups.tf](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/master/environments/teleport-production/groups.tf) file.
+Associations between Okta groups and Teleport roles are fairly straightforward, and can be edited in the [groups.tf](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/main/environments/teleport-production/groups.tf) file.
 
 Modifications to role permissions and settings are made in the `roles-*.tf` files.
 
@@ -329,9 +329,9 @@ You can update/modify this image [here](https://gitlab.com/gitlab-com/gl-infra/o
 
 We use [Workload Identity](https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity)
 for authenticating to Google Cloud. The *Workload Identity* is configured
-[here](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/master/modules/teleport-cluster/service-account.tf)
+[here](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/main/modules/teleport-cluster/service-account.tf)
 and the required *Roles* are configured
-[here](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/master/modules/teleport-project/pubsub.tf).
+[here](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/main/modules/teleport-project/pubsub.tf).
 
 ## Updating Enterprise License
 

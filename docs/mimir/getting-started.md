@@ -17,9 +17,9 @@ This helps us to create soft boundaries by tenant and introduces a few key benef
 
 ## Creating a tenant
 
-Tenants are provisioned through [config-mgmt](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/tree/master/environments/observability-tenants).
+Tenants are provisioned through [config-mgmt](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/tree/main/environments/observability-tenants).
 
-Check the [README](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/tree/master/environments/observability-tenants#create-tenant) for creating a new tenant.
+Check the [README](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/tree/main/environments/observability-tenants#create-tenant) for creating a new tenant.
 
 This helps us to centralise tenants across future observability backends, as well as provide a way to review limit increases or changes.
 

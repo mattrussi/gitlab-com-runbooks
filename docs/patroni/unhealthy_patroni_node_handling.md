@@ -33,7 +33,7 @@ Let's build a mental model of what all are at play before you remove a random no
 - Some of the replica nodes are taking read requests and processing them, but one ore more could be facing issues
 - The fact that we have a cluster, it means the cluster might decide to promote any replica to primary (can be the target replica node you are trying to remove)
 - There is chef-client running regularly to enforce consistency
-- The cluster size is Terraform'd and defined in its respective [environment repository](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/tree/master/environments)
+- The cluster size is Terraform'd and defined in its respective [environment repository](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/tree/main/environments)
 
 What this means is that we need to be aware of and think of:
 

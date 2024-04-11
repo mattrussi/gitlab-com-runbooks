@@ -6,7 +6,7 @@ groups:
   rules:
   - record: sli_aggregations:haproxy_backend_http_responses_total:rate_5m
     expr: |
-      sum by (backend,code,component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (backend,code,component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(haproxy_backend_http_responses_total{backend=~"api|ci_gateway_catch_all|https_git",env="gprd",type=~"ci"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: ci-runners - polling-ops - 5m burn-rate - emitted by api
@@ -15,7 +15,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_workhorse_http_requests_total:rate_5m
     expr: |
-      sum by (code,component,env,environment,feature_category,fqdn,product_stage,queue,region,route,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (code,component,env,environment,feature_category,fqdn,product_stage,region,route,shard,stage,stage_group,tier,type) (
         rate(gitlab_workhorse_http_requests_total{cluster="gprd-gitlab-gke",env="gprd",route=~"\\^/api/v4/jobs/request\\\\z",type=~"api"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: ci-runners - polling-ops - 5m burn-rate - emitted by api
@@ -24,7 +24,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_workhorse_http_requests_total:rate_5m
     expr: |
-      sum by (code,component,env,environment,feature_category,fqdn,product_stage,queue,region,route,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (code,component,env,environment,feature_category,fqdn,product_stage,region,route,shard,stage,stage_group,tier,type) (
         rate(gitlab_workhorse_http_requests_total{cluster="gprd-us-east1-b",env="gprd",route=~"\\^/api/v4/jobs/request\\\\z",type=~"api"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: ci-runners - polling-ops - 5m burn-rate - emitted by api
@@ -33,7 +33,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_workhorse_http_requests_total:rate_5m
     expr: |
-      sum by (code,component,env,environment,feature_category,fqdn,product_stage,queue,region,route,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (code,component,env,environment,feature_category,fqdn,product_stage,region,route,shard,stage,stage_group,tier,type) (
         rate(gitlab_workhorse_http_requests_total{cluster="gprd-us-east1-c",env="gprd",route=~"\\^/api/v4/jobs/request\\\\z",type=~"api"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: ci-runners - polling-ops - 5m burn-rate - emitted by api
@@ -42,7 +42,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_workhorse_http_requests_total:rate_5m
     expr: |
-      sum by (code,component,env,environment,feature_category,fqdn,product_stage,queue,region,route,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (code,component,env,environment,feature_category,fqdn,product_stage,region,route,shard,stage,stage_group,tier,type) (
         rate(gitlab_workhorse_http_requests_total{cluster="gprd-us-east1-d",env="gprd",route=~"\\^/api/v4/jobs/request\\\\z",type=~"api"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: ci-runners - polling-ops - 5m burn-rate - emitted by ops-gitlab-net
@@ -51,7 +51,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_workhorse_http_requests_total:rate_5m
     expr: |
-      sum by (code,component,env,environment,feature_category,fqdn,product_stage,queue,region,route,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (code,component,env,environment,feature_category,fqdn,product_stage,region,route,shard,stage,stage_group,tier,type) (
         rate(gitlab_workhorse_http_requests_total{cluster="gprd-gitlab-gke",env="gprd",route=~"\\^/api/v4/jobs/request\\\\z",type=~"ops-gitlab-net"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: ci-runners - polling-ops - 5m burn-rate - emitted by ops-gitlab-net
@@ -60,7 +60,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_workhorse_http_requests_total:rate_5m
     expr: |
-      sum by (code,component,env,environment,feature_category,fqdn,product_stage,queue,region,route,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (code,component,env,environment,feature_category,fqdn,product_stage,region,route,shard,stage,stage_group,tier,type) (
         rate(gitlab_workhorse_http_requests_total{cluster="gprd-us-east1-b",env="gprd",route=~"\\^/api/v4/jobs/request\\\\z",type=~"ops-gitlab-net"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: ci-runners - polling-ops - 5m burn-rate - emitted by ops-gitlab-net
@@ -69,7 +69,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_workhorse_http_requests_total:rate_5m
     expr: |
-      sum by (code,component,env,environment,feature_category,fqdn,product_stage,queue,region,route,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (code,component,env,environment,feature_category,fqdn,product_stage,region,route,shard,stage,stage_group,tier,type) (
         rate(gitlab_workhorse_http_requests_total{cluster="gprd-us-east1-c",env="gprd",route=~"\\^/api/v4/jobs/request\\\\z",type=~"ops-gitlab-net"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: ci-runners - polling-ops - 5m burn-rate - emitted by ops-gitlab-net
@@ -78,7 +78,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_workhorse_http_requests_total:rate_5m
     expr: |
-      sum by (code,component,env,environment,feature_category,fqdn,product_stage,queue,region,route,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (code,component,env,environment,feature_category,fqdn,product_stage,region,route,shard,stage,stage_group,tier,type) (
         rate(gitlab_workhorse_http_requests_total{cluster="gprd-us-east1-d",env="gprd",route=~"\\^/api/v4/jobs/request\\\\z",type=~"ops-gitlab-net"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: ci-runners - polling-ops - 5m burn-rate - emitted by web
@@ -87,7 +87,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_workhorse_http_requests_total:rate_5m
     expr: |
-      sum by (code,component,env,environment,feature_category,fqdn,product_stage,queue,region,route,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (code,component,env,environment,feature_category,fqdn,product_stage,region,route,shard,stage,stage_group,tier,type) (
         rate(gitlab_workhorse_http_requests_total{cluster="gprd-gitlab-gke",env="gprd",route=~"\\^/api/v4/jobs/request\\\\z",type=~"web"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: ci-runners - polling-ops - 5m burn-rate - emitted by web
@@ -96,7 +96,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_workhorse_http_requests_total:rate_5m
     expr: |
-      sum by (code,component,env,environment,feature_category,fqdn,product_stage,queue,region,route,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (code,component,env,environment,feature_category,fqdn,product_stage,region,route,shard,stage,stage_group,tier,type) (
         rate(gitlab_workhorse_http_requests_total{cluster="gprd-us-east1-b",env="gprd",route=~"\\^/api/v4/jobs/request\\\\z",type=~"web"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: ci-runners - polling-ops - 5m burn-rate - emitted by web
@@ -105,7 +105,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_workhorse_http_requests_total:rate_5m
     expr: |
-      sum by (code,component,env,environment,feature_category,fqdn,product_stage,queue,region,route,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (code,component,env,environment,feature_category,fqdn,product_stage,region,route,shard,stage,stage_group,tier,type) (
         rate(gitlab_workhorse_http_requests_total{cluster="gprd-us-east1-c",env="gprd",route=~"\\^/api/v4/jobs/request\\\\z",type=~"web"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: ci-runners - polling-ops - 5m burn-rate - emitted by web
@@ -114,7 +114,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_workhorse_http_requests_total:rate_5m
     expr: |
-      sum by (code,component,env,environment,feature_category,fqdn,product_stage,queue,region,route,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (code,component,env,environment,feature_category,fqdn,product_stage,region,route,shard,stage,stage_group,tier,type) (
         rate(gitlab_workhorse_http_requests_total{cluster="gprd-us-east1-d",env="gprd",route=~"\\^/api/v4/jobs/request\\\\z",type=~"web"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: ci-runners - queuing_queries_duration-apdex - 5m burn-rate
@@ -123,7 +123,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_ci_queue_retrieval_duration_seconds_bucket:rate_5m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,le,product_stage,queue,region,runner_type,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,runner_type,shard,stage,stage_group,tier,type) (
         rate(gitlab_ci_queue_retrieval_duration_seconds_bucket{cluster="gprd-gitlab-gke",env="gprd",type=~"api"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: ci-runners - queuing_queries_duration-apdex - 5m burn-rate
@@ -132,7 +132,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_ci_queue_retrieval_duration_seconds_bucket:rate_5m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,le,product_stage,queue,region,runner_type,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,runner_type,shard,stage,stage_group,tier,type) (
         rate(gitlab_ci_queue_retrieval_duration_seconds_bucket{cluster="gprd-us-east1-b",env="gprd",type=~"api"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: ci-runners - queuing_queries_duration-apdex - 5m burn-rate
@@ -141,7 +141,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_ci_queue_retrieval_duration_seconds_bucket:rate_5m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,le,product_stage,queue,region,runner_type,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,runner_type,shard,stage,stage_group,tier,type) (
         rate(gitlab_ci_queue_retrieval_duration_seconds_bucket{cluster="gprd-us-east1-c",env="gprd",type=~"api"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: ci-runners - queuing_queries_duration-apdex - 5m burn-rate
@@ -150,7 +150,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_ci_queue_retrieval_duration_seconds_bucket:rate_5m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,le,product_stage,queue,region,runner_type,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,runner_type,shard,stage,stage_group,tier,type) (
         rate(gitlab_ci_queue_retrieval_duration_seconds_bucket{cluster="gprd-us-east1-d",env="gprd",type=~"api"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: ci-runners - queuing_queries_duration-ops - 5m burn-rate
@@ -159,7 +159,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_ci_queue_retrieval_duration_seconds_count:rate_5m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,runner_type,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,runner_type,shard,stage,stage_group,tier,type) (
         rate(gitlab_ci_queue_retrieval_duration_seconds_count{cluster="gprd-gitlab-gke",env="gprd",type=~"api"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: ci-runners - queuing_queries_duration-ops - 5m burn-rate
@@ -168,7 +168,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_ci_queue_retrieval_duration_seconds_count:rate_5m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,runner_type,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,runner_type,shard,stage,stage_group,tier,type) (
         rate(gitlab_ci_queue_retrieval_duration_seconds_count{cluster="gprd-us-east1-b",env="gprd",type=~"api"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: ci-runners - queuing_queries_duration-ops - 5m burn-rate
@@ -177,7 +177,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_ci_queue_retrieval_duration_seconds_count:rate_5m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,runner_type,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,runner_type,shard,stage,stage_group,tier,type) (
         rate(gitlab_ci_queue_retrieval_duration_seconds_count{cluster="gprd-us-east1-c",env="gprd",type=~"api"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: ci-runners - queuing_queries_duration-ops - 5m burn-rate
@@ -186,7 +186,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_ci_queue_retrieval_duration_seconds_count:rate_5m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,runner_type,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,runner_type,shard,stage,stage_group,tier,type) (
         rate(gitlab_ci_queue_retrieval_duration_seconds_count{cluster="gprd-us-east1-d",env="gprd",type=~"api"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: ci-runners - saas_linux_runner_image_pull_failures-ops
@@ -195,12 +195,12 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_runner_failed_jobs_total:rate_5m
     expr: |
-      sum by (component,env,environment,failure_reason,feature_category,fqdn,job,jobs_running_for_project,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,failure_reason,feature_category,fqdn,job,jobs_running_for_project,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(gitlab_runner_failed_jobs_total{env="gprd",failure_reason=~"image_pull_failure|runner_system_failure",job=~"runners-manager",shard=~"private|saas-.*|saas-linux-.*|shared-gitlab-org|windows-shared",type=~"ci-runners"}[5m] offset 30s)
       )
   - record: sli_aggregations:gitlab_runner_jobs_total:rate_5m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,job,jobs_running_for_project,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,job,jobs_running_for_project,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(gitlab_runner_jobs_total{env="gprd",job=~"runners-manager",shard=~"private|saas-.*|saas-linux-.*|shared-gitlab-org|windows-shared",type=~"ci-runners"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: ci-runners - saas_runner_queues-apdex - 5m burn-rate'
@@ -208,7 +208,7 @@ groups:
   rules:
   - record: sli_aggregations:job_queue_duration_seconds_bucket:rate_5m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,jobs_running_for_project,le,product_stage,queue,region,shard,shared_runner,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,jobs_running_for_project,le,product_stage,region,shard,shared_runner,stage,stage_group,tier,type) (
         rate(job_queue_duration_seconds_bucket{env="gprd",jobs_running_for_project=~"^(0|1|2|3|4)$",shared_runner=~"true",type=~"ci-runners"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: ci-runners - trace_archiving_ci_jobs-ops - 5m burn-rate
@@ -217,12 +217,12 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_sli_sidekiq_execution_total:rate_5m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type,worker) (
         rate(gitlab_sli_sidekiq_execution_total{cluster="gprd-gitlab-gke",env="gprd",type=~"ops-gitlab-net",worker=~"Ci::ArchiveTraceWorker"}[5m] offset 30s)
       )
   - record: sli_aggregations:job_trace_archive_failed_total:rate_5m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(job_trace_archive_failed_total{cluster="gprd-gitlab-gke",env="gprd",type=~"ops-gitlab-net"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: ci-runners - trace_archiving_ci_jobs-ops - 5m burn-rate
@@ -231,12 +231,12 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_sli_sidekiq_execution_total:rate_5m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type,worker) (
         rate(gitlab_sli_sidekiq_execution_total{cluster="gprd-us-east1-b",env="gprd",type=~"ops-gitlab-net",worker=~"Ci::ArchiveTraceWorker"}[5m] offset 30s)
       )
   - record: sli_aggregations:job_trace_archive_failed_total:rate_5m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(job_trace_archive_failed_total{cluster="gprd-us-east1-b",env="gprd",type=~"ops-gitlab-net"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: ci-runners - trace_archiving_ci_jobs-ops - 5m burn-rate
@@ -245,12 +245,12 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_sli_sidekiq_execution_total:rate_5m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type,worker) (
         rate(gitlab_sli_sidekiq_execution_total{cluster="gprd-us-east1-c",env="gprd",type=~"ops-gitlab-net",worker=~"Ci::ArchiveTraceWorker"}[5m] offset 30s)
       )
   - record: sli_aggregations:job_trace_archive_failed_total:rate_5m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(job_trace_archive_failed_total{cluster="gprd-us-east1-c",env="gprd",type=~"ops-gitlab-net"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: ci-runners - trace_archiving_ci_jobs-ops - 5m burn-rate
@@ -259,12 +259,12 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_sli_sidekiq_execution_total:rate_5m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type,worker) (
         rate(gitlab_sli_sidekiq_execution_total{cluster="gprd-us-east1-d",env="gprd",type=~"ops-gitlab-net",worker=~"Ci::ArchiveTraceWorker"}[5m] offset 30s)
       )
   - record: sli_aggregations:job_trace_archive_failed_total:rate_5m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(job_trace_archive_failed_total{cluster="gprd-us-east1-d",env="gprd",type=~"ops-gitlab-net"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: ci-runners - trace_archiving_ci_jobs-ops - 5m burn-rate
@@ -273,12 +273,12 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_sli_sidekiq_execution_total:rate_5m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type,worker) (
         rate(gitlab_sli_sidekiq_execution_total{cluster="gprd-gitlab-gke",env="gprd",type=~"sidekiq",worker=~"Ci::ArchiveTraceWorker"}[5m] offset 30s)
       )
   - record: sli_aggregations:job_trace_archive_failed_total:rate_5m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(job_trace_archive_failed_total{cluster="gprd-gitlab-gke",env="gprd",type=~"sidekiq"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: ci-runners - trace_archiving_ci_jobs-ops - 5m burn-rate
@@ -287,12 +287,12 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_sli_sidekiq_execution_total:rate_5m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type,worker) (
         rate(gitlab_sli_sidekiq_execution_total{cluster="gprd-us-east1-b",env="gprd",type=~"sidekiq",worker=~"Ci::ArchiveTraceWorker"}[5m] offset 30s)
       )
   - record: sli_aggregations:job_trace_archive_failed_total:rate_5m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(job_trace_archive_failed_total{cluster="gprd-us-east1-b",env="gprd",type=~"sidekiq"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: ci-runners - trace_archiving_ci_jobs-ops - 5m burn-rate
@@ -301,12 +301,12 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_sli_sidekiq_execution_total:rate_5m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type,worker) (
         rate(gitlab_sli_sidekiq_execution_total{cluster="gprd-us-east1-c",env="gprd",type=~"sidekiq",worker=~"Ci::ArchiveTraceWorker"}[5m] offset 30s)
       )
   - record: sli_aggregations:job_trace_archive_failed_total:rate_5m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(job_trace_archive_failed_total{cluster="gprd-us-east1-c",env="gprd",type=~"sidekiq"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: ci-runners - trace_archiving_ci_jobs-ops - 5m burn-rate
@@ -315,12 +315,12 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_sli_sidekiq_execution_total:rate_5m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type,worker) (
         rate(gitlab_sli_sidekiq_execution_total{cluster="gprd-us-east1-d",env="gprd",type=~"sidekiq",worker=~"Ci::ArchiveTraceWorker"}[5m] offset 30s)
       )
   - record: sli_aggregations:job_trace_archive_failed_total:rate_5m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(job_trace_archive_failed_total{cluster="gprd-us-east1-d",env="gprd",type=~"sidekiq"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: ci-runners - loadbalancer-ops - 30m burn-rate'
@@ -328,7 +328,7 @@ groups:
   rules:
   - record: sli_aggregations:haproxy_backend_http_responses_total:rate_30m
     expr: |
-      sum by (backend,code,component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (backend,code,component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(haproxy_backend_http_responses_total{backend=~"api|ci_gateway_catch_all|https_git",env="gprd",type=~"ci"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: ci-runners - polling-ops - 30m burn-rate - emitted by api
@@ -337,7 +337,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_workhorse_http_requests_total:rate_30m
     expr: |
-      sum by (code,component,env,environment,feature_category,fqdn,product_stage,queue,region,route,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (code,component,env,environment,feature_category,fqdn,product_stage,region,route,shard,stage,stage_group,tier,type) (
         rate(gitlab_workhorse_http_requests_total{cluster="gprd-gitlab-gke",env="gprd",route=~"\\^/api/v4/jobs/request\\\\z",type=~"api"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: ci-runners - polling-ops - 30m burn-rate - emitted by api
@@ -346,7 +346,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_workhorse_http_requests_total:rate_30m
     expr: |
-      sum by (code,component,env,environment,feature_category,fqdn,product_stage,queue,region,route,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (code,component,env,environment,feature_category,fqdn,product_stage,region,route,shard,stage,stage_group,tier,type) (
         rate(gitlab_workhorse_http_requests_total{cluster="gprd-us-east1-b",env="gprd",route=~"\\^/api/v4/jobs/request\\\\z",type=~"api"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: ci-runners - polling-ops - 30m burn-rate - emitted by api
@@ -355,7 +355,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_workhorse_http_requests_total:rate_30m
     expr: |
-      sum by (code,component,env,environment,feature_category,fqdn,product_stage,queue,region,route,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (code,component,env,environment,feature_category,fqdn,product_stage,region,route,shard,stage,stage_group,tier,type) (
         rate(gitlab_workhorse_http_requests_total{cluster="gprd-us-east1-c",env="gprd",route=~"\\^/api/v4/jobs/request\\\\z",type=~"api"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: ci-runners - polling-ops - 30m burn-rate - emitted by api
@@ -364,7 +364,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_workhorse_http_requests_total:rate_30m
     expr: |
-      sum by (code,component,env,environment,feature_category,fqdn,product_stage,queue,region,route,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (code,component,env,environment,feature_category,fqdn,product_stage,region,route,shard,stage,stage_group,tier,type) (
         rate(gitlab_workhorse_http_requests_total{cluster="gprd-us-east1-d",env="gprd",route=~"\\^/api/v4/jobs/request\\\\z",type=~"api"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: ci-runners - polling-ops - 30m burn-rate - emitted by ops-gitlab-net
@@ -373,7 +373,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_workhorse_http_requests_total:rate_30m
     expr: |
-      sum by (code,component,env,environment,feature_category,fqdn,product_stage,queue,region,route,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (code,component,env,environment,feature_category,fqdn,product_stage,region,route,shard,stage,stage_group,tier,type) (
         rate(gitlab_workhorse_http_requests_total{cluster="gprd-gitlab-gke",env="gprd",route=~"\\^/api/v4/jobs/request\\\\z",type=~"ops-gitlab-net"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: ci-runners - polling-ops - 30m burn-rate - emitted by ops-gitlab-net
@@ -382,7 +382,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_workhorse_http_requests_total:rate_30m
     expr: |
-      sum by (code,component,env,environment,feature_category,fqdn,product_stage,queue,region,route,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (code,component,env,environment,feature_category,fqdn,product_stage,region,route,shard,stage,stage_group,tier,type) (
         rate(gitlab_workhorse_http_requests_total{cluster="gprd-us-east1-b",env="gprd",route=~"\\^/api/v4/jobs/request\\\\z",type=~"ops-gitlab-net"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: ci-runners - polling-ops - 30m burn-rate - emitted by ops-gitlab-net
@@ -391,7 +391,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_workhorse_http_requests_total:rate_30m
     expr: |
-      sum by (code,component,env,environment,feature_category,fqdn,product_stage,queue,region,route,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (code,component,env,environment,feature_category,fqdn,product_stage,region,route,shard,stage,stage_group,tier,type) (
         rate(gitlab_workhorse_http_requests_total{cluster="gprd-us-east1-c",env="gprd",route=~"\\^/api/v4/jobs/request\\\\z",type=~"ops-gitlab-net"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: ci-runners - polling-ops - 30m burn-rate - emitted by ops-gitlab-net
@@ -400,7 +400,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_workhorse_http_requests_total:rate_30m
     expr: |
-      sum by (code,component,env,environment,feature_category,fqdn,product_stage,queue,region,route,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (code,component,env,environment,feature_category,fqdn,product_stage,region,route,shard,stage,stage_group,tier,type) (
         rate(gitlab_workhorse_http_requests_total{cluster="gprd-us-east1-d",env="gprd",route=~"\\^/api/v4/jobs/request\\\\z",type=~"ops-gitlab-net"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: ci-runners - polling-ops - 30m burn-rate - emitted by web
@@ -409,7 +409,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_workhorse_http_requests_total:rate_30m
     expr: |
-      sum by (code,component,env,environment,feature_category,fqdn,product_stage,queue,region,route,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (code,component,env,environment,feature_category,fqdn,product_stage,region,route,shard,stage,stage_group,tier,type) (
         rate(gitlab_workhorse_http_requests_total{cluster="gprd-gitlab-gke",env="gprd",route=~"\\^/api/v4/jobs/request\\\\z",type=~"web"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: ci-runners - polling-ops - 30m burn-rate - emitted by web
@@ -418,7 +418,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_workhorse_http_requests_total:rate_30m
     expr: |
-      sum by (code,component,env,environment,feature_category,fqdn,product_stage,queue,region,route,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (code,component,env,environment,feature_category,fqdn,product_stage,region,route,shard,stage,stage_group,tier,type) (
         rate(gitlab_workhorse_http_requests_total{cluster="gprd-us-east1-b",env="gprd",route=~"\\^/api/v4/jobs/request\\\\z",type=~"web"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: ci-runners - polling-ops - 30m burn-rate - emitted by web
@@ -427,7 +427,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_workhorse_http_requests_total:rate_30m
     expr: |
-      sum by (code,component,env,environment,feature_category,fqdn,product_stage,queue,region,route,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (code,component,env,environment,feature_category,fqdn,product_stage,region,route,shard,stage,stage_group,tier,type) (
         rate(gitlab_workhorse_http_requests_total{cluster="gprd-us-east1-c",env="gprd",route=~"\\^/api/v4/jobs/request\\\\z",type=~"web"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: ci-runners - polling-ops - 30m burn-rate - emitted by web
@@ -436,7 +436,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_workhorse_http_requests_total:rate_30m
     expr: |
-      sum by (code,component,env,environment,feature_category,fqdn,product_stage,queue,region,route,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (code,component,env,environment,feature_category,fqdn,product_stage,region,route,shard,stage,stage_group,tier,type) (
         rate(gitlab_workhorse_http_requests_total{cluster="gprd-us-east1-d",env="gprd",route=~"\\^/api/v4/jobs/request\\\\z",type=~"web"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: ci-runners - queuing_queries_duration-apdex - 30m burn-rate
@@ -445,7 +445,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_ci_queue_retrieval_duration_seconds_bucket:rate_30m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,le,product_stage,queue,region,runner_type,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,runner_type,shard,stage,stage_group,tier,type) (
         rate(gitlab_ci_queue_retrieval_duration_seconds_bucket{cluster="gprd-gitlab-gke",env="gprd",type=~"api"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: ci-runners - queuing_queries_duration-apdex - 30m burn-rate
@@ -454,7 +454,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_ci_queue_retrieval_duration_seconds_bucket:rate_30m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,le,product_stage,queue,region,runner_type,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,runner_type,shard,stage,stage_group,tier,type) (
         rate(gitlab_ci_queue_retrieval_duration_seconds_bucket{cluster="gprd-us-east1-b",env="gprd",type=~"api"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: ci-runners - queuing_queries_duration-apdex - 30m burn-rate
@@ -463,7 +463,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_ci_queue_retrieval_duration_seconds_bucket:rate_30m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,le,product_stage,queue,region,runner_type,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,runner_type,shard,stage,stage_group,tier,type) (
         rate(gitlab_ci_queue_retrieval_duration_seconds_bucket{cluster="gprd-us-east1-c",env="gprd",type=~"api"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: ci-runners - queuing_queries_duration-apdex - 30m burn-rate
@@ -472,7 +472,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_ci_queue_retrieval_duration_seconds_bucket:rate_30m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,le,product_stage,queue,region,runner_type,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,runner_type,shard,stage,stage_group,tier,type) (
         rate(gitlab_ci_queue_retrieval_duration_seconds_bucket{cluster="gprd-us-east1-d",env="gprd",type=~"api"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: ci-runners - queuing_queries_duration-ops - 30m burn-rate
@@ -481,7 +481,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_ci_queue_retrieval_duration_seconds_count:rate_30m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,runner_type,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,runner_type,shard,stage,stage_group,tier,type) (
         rate(gitlab_ci_queue_retrieval_duration_seconds_count{cluster="gprd-gitlab-gke",env="gprd",type=~"api"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: ci-runners - queuing_queries_duration-ops - 30m burn-rate
@@ -490,7 +490,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_ci_queue_retrieval_duration_seconds_count:rate_30m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,runner_type,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,runner_type,shard,stage,stage_group,tier,type) (
         rate(gitlab_ci_queue_retrieval_duration_seconds_count{cluster="gprd-us-east1-b",env="gprd",type=~"api"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: ci-runners - queuing_queries_duration-ops - 30m burn-rate
@@ -499,7 +499,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_ci_queue_retrieval_duration_seconds_count:rate_30m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,runner_type,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,runner_type,shard,stage,stage_group,tier,type) (
         rate(gitlab_ci_queue_retrieval_duration_seconds_count{cluster="gprd-us-east1-c",env="gprd",type=~"api"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: ci-runners - queuing_queries_duration-ops - 30m burn-rate
@@ -508,7 +508,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_ci_queue_retrieval_duration_seconds_count:rate_30m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,runner_type,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,runner_type,shard,stage,stage_group,tier,type) (
         rate(gitlab_ci_queue_retrieval_duration_seconds_count{cluster="gprd-us-east1-d",env="gprd",type=~"api"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: ci-runners - saas_linux_runner_image_pull_failures-ops
@@ -517,12 +517,12 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_runner_failed_jobs_total:rate_30m
     expr: |
-      sum by (component,env,environment,failure_reason,feature_category,fqdn,job,jobs_running_for_project,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,failure_reason,feature_category,fqdn,job,jobs_running_for_project,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(gitlab_runner_failed_jobs_total{env="gprd",failure_reason=~"image_pull_failure|runner_system_failure",job=~"runners-manager",shard=~"private|saas-.*|saas-linux-.*|shared-gitlab-org|windows-shared",type=~"ci-runners"}[30m] offset 30s)
       )
   - record: sli_aggregations:gitlab_runner_jobs_total:rate_30m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,job,jobs_running_for_project,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,job,jobs_running_for_project,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(gitlab_runner_jobs_total{env="gprd",job=~"runners-manager",shard=~"private|saas-.*|saas-linux-.*|shared-gitlab-org|windows-shared",type=~"ci-runners"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: ci-runners - saas_runner_queues-apdex - 30m burn-rate'
@@ -530,7 +530,7 @@ groups:
   rules:
   - record: sli_aggregations:job_queue_duration_seconds_bucket:rate_30m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,jobs_running_for_project,le,product_stage,queue,region,shard,shared_runner,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,jobs_running_for_project,le,product_stage,region,shard,shared_runner,stage,stage_group,tier,type) (
         rate(job_queue_duration_seconds_bucket{env="gprd",jobs_running_for_project=~"^(0|1|2|3|4)$",shared_runner=~"true",type=~"ci-runners"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: ci-runners - trace_archiving_ci_jobs-ops - 30m burn-rate
@@ -539,12 +539,12 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_sli_sidekiq_execution_total:rate_30m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type,worker) (
         rate(gitlab_sli_sidekiq_execution_total{cluster="gprd-gitlab-gke",env="gprd",type=~"ops-gitlab-net",worker=~"Ci::ArchiveTraceWorker"}[30m] offset 30s)
       )
   - record: sli_aggregations:job_trace_archive_failed_total:rate_30m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(job_trace_archive_failed_total{cluster="gprd-gitlab-gke",env="gprd",type=~"ops-gitlab-net"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: ci-runners - trace_archiving_ci_jobs-ops - 30m burn-rate
@@ -553,12 +553,12 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_sli_sidekiq_execution_total:rate_30m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type,worker) (
         rate(gitlab_sli_sidekiq_execution_total{cluster="gprd-us-east1-b",env="gprd",type=~"ops-gitlab-net",worker=~"Ci::ArchiveTraceWorker"}[30m] offset 30s)
       )
   - record: sli_aggregations:job_trace_archive_failed_total:rate_30m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(job_trace_archive_failed_total{cluster="gprd-us-east1-b",env="gprd",type=~"ops-gitlab-net"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: ci-runners - trace_archiving_ci_jobs-ops - 30m burn-rate
@@ -567,12 +567,12 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_sli_sidekiq_execution_total:rate_30m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type,worker) (
         rate(gitlab_sli_sidekiq_execution_total{cluster="gprd-us-east1-c",env="gprd",type=~"ops-gitlab-net",worker=~"Ci::ArchiveTraceWorker"}[30m] offset 30s)
       )
   - record: sli_aggregations:job_trace_archive_failed_total:rate_30m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(job_trace_archive_failed_total{cluster="gprd-us-east1-c",env="gprd",type=~"ops-gitlab-net"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: ci-runners - trace_archiving_ci_jobs-ops - 30m burn-rate
@@ -581,12 +581,12 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_sli_sidekiq_execution_total:rate_30m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type,worker) (
         rate(gitlab_sli_sidekiq_execution_total{cluster="gprd-us-east1-d",env="gprd",type=~"ops-gitlab-net",worker=~"Ci::ArchiveTraceWorker"}[30m] offset 30s)
       )
   - record: sli_aggregations:job_trace_archive_failed_total:rate_30m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(job_trace_archive_failed_total{cluster="gprd-us-east1-d",env="gprd",type=~"ops-gitlab-net"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: ci-runners - trace_archiving_ci_jobs-ops - 30m burn-rate
@@ -595,12 +595,12 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_sli_sidekiq_execution_total:rate_30m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type,worker) (
         rate(gitlab_sli_sidekiq_execution_total{cluster="gprd-gitlab-gke",env="gprd",type=~"sidekiq",worker=~"Ci::ArchiveTraceWorker"}[30m] offset 30s)
       )
   - record: sli_aggregations:job_trace_archive_failed_total:rate_30m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(job_trace_archive_failed_total{cluster="gprd-gitlab-gke",env="gprd",type=~"sidekiq"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: ci-runners - trace_archiving_ci_jobs-ops - 30m burn-rate
@@ -609,12 +609,12 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_sli_sidekiq_execution_total:rate_30m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type,worker) (
         rate(gitlab_sli_sidekiq_execution_total{cluster="gprd-us-east1-b",env="gprd",type=~"sidekiq",worker=~"Ci::ArchiveTraceWorker"}[30m] offset 30s)
       )
   - record: sli_aggregations:job_trace_archive_failed_total:rate_30m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(job_trace_archive_failed_total{cluster="gprd-us-east1-b",env="gprd",type=~"sidekiq"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: ci-runners - trace_archiving_ci_jobs-ops - 30m burn-rate
@@ -623,12 +623,12 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_sli_sidekiq_execution_total:rate_30m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type,worker) (
         rate(gitlab_sli_sidekiq_execution_total{cluster="gprd-us-east1-c",env="gprd",type=~"sidekiq",worker=~"Ci::ArchiveTraceWorker"}[30m] offset 30s)
       )
   - record: sli_aggregations:job_trace_archive_failed_total:rate_30m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(job_trace_archive_failed_total{cluster="gprd-us-east1-c",env="gprd",type=~"sidekiq"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: ci-runners - trace_archiving_ci_jobs-ops - 30m burn-rate
@@ -637,12 +637,12 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_sli_sidekiq_execution_total:rate_30m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type,worker) (
         rate(gitlab_sli_sidekiq_execution_total{cluster="gprd-us-east1-d",env="gprd",type=~"sidekiq",worker=~"Ci::ArchiveTraceWorker"}[30m] offset 30s)
       )
   - record: sli_aggregations:job_trace_archive_failed_total:rate_30m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(job_trace_archive_failed_total{cluster="gprd-us-east1-d",env="gprd",type=~"sidekiq"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: ci-runners - loadbalancer-ops - 1h burn-rate'
@@ -650,7 +650,7 @@ groups:
   rules:
   - record: sli_aggregations:haproxy_backend_http_responses_total:rate_1h
     expr: |
-      sum by (backend,code,component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (backend,code,component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(haproxy_backend_http_responses_total{backend=~"api|ci_gateway_catch_all|https_git",env="gprd",type=~"ci"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: ci-runners - polling-ops - 1h burn-rate - emitted by api
@@ -659,7 +659,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_workhorse_http_requests_total:rate_1h
     expr: |
-      sum by (code,component,env,environment,feature_category,fqdn,product_stage,queue,region,route,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (code,component,env,environment,feature_category,fqdn,product_stage,region,route,shard,stage,stage_group,tier,type) (
         rate(gitlab_workhorse_http_requests_total{cluster="gprd-gitlab-gke",env="gprd",route=~"\\^/api/v4/jobs/request\\\\z",type=~"api"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: ci-runners - polling-ops - 1h burn-rate - emitted by api
@@ -668,7 +668,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_workhorse_http_requests_total:rate_1h
     expr: |
-      sum by (code,component,env,environment,feature_category,fqdn,product_stage,queue,region,route,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (code,component,env,environment,feature_category,fqdn,product_stage,region,route,shard,stage,stage_group,tier,type) (
         rate(gitlab_workhorse_http_requests_total{cluster="gprd-us-east1-b",env="gprd",route=~"\\^/api/v4/jobs/request\\\\z",type=~"api"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: ci-runners - polling-ops - 1h burn-rate - emitted by api
@@ -677,7 +677,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_workhorse_http_requests_total:rate_1h
     expr: |
-      sum by (code,component,env,environment,feature_category,fqdn,product_stage,queue,region,route,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (code,component,env,environment,feature_category,fqdn,product_stage,region,route,shard,stage,stage_group,tier,type) (
         rate(gitlab_workhorse_http_requests_total{cluster="gprd-us-east1-c",env="gprd",route=~"\\^/api/v4/jobs/request\\\\z",type=~"api"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: ci-runners - polling-ops - 1h burn-rate - emitted by api
@@ -686,7 +686,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_workhorse_http_requests_total:rate_1h
     expr: |
-      sum by (code,component,env,environment,feature_category,fqdn,product_stage,queue,region,route,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (code,component,env,environment,feature_category,fqdn,product_stage,region,route,shard,stage,stage_group,tier,type) (
         rate(gitlab_workhorse_http_requests_total{cluster="gprd-us-east1-d",env="gprd",route=~"\\^/api/v4/jobs/request\\\\z",type=~"api"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: ci-runners - polling-ops - 1h burn-rate - emitted by ops-gitlab-net
@@ -695,7 +695,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_workhorse_http_requests_total:rate_1h
     expr: |
-      sum by (code,component,env,environment,feature_category,fqdn,product_stage,queue,region,route,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (code,component,env,environment,feature_category,fqdn,product_stage,region,route,shard,stage,stage_group,tier,type) (
         rate(gitlab_workhorse_http_requests_total{cluster="gprd-gitlab-gke",env="gprd",route=~"\\^/api/v4/jobs/request\\\\z",type=~"ops-gitlab-net"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: ci-runners - polling-ops - 1h burn-rate - emitted by ops-gitlab-net
@@ -704,7 +704,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_workhorse_http_requests_total:rate_1h
     expr: |
-      sum by (code,component,env,environment,feature_category,fqdn,product_stage,queue,region,route,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (code,component,env,environment,feature_category,fqdn,product_stage,region,route,shard,stage,stage_group,tier,type) (
         rate(gitlab_workhorse_http_requests_total{cluster="gprd-us-east1-b",env="gprd",route=~"\\^/api/v4/jobs/request\\\\z",type=~"ops-gitlab-net"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: ci-runners - polling-ops - 1h burn-rate - emitted by ops-gitlab-net
@@ -713,7 +713,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_workhorse_http_requests_total:rate_1h
     expr: |
-      sum by (code,component,env,environment,feature_category,fqdn,product_stage,queue,region,route,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (code,component,env,environment,feature_category,fqdn,product_stage,region,route,shard,stage,stage_group,tier,type) (
         rate(gitlab_workhorse_http_requests_total{cluster="gprd-us-east1-c",env="gprd",route=~"\\^/api/v4/jobs/request\\\\z",type=~"ops-gitlab-net"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: ci-runners - polling-ops - 1h burn-rate - emitted by ops-gitlab-net
@@ -722,7 +722,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_workhorse_http_requests_total:rate_1h
     expr: |
-      sum by (code,component,env,environment,feature_category,fqdn,product_stage,queue,region,route,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (code,component,env,environment,feature_category,fqdn,product_stage,region,route,shard,stage,stage_group,tier,type) (
         rate(gitlab_workhorse_http_requests_total{cluster="gprd-us-east1-d",env="gprd",route=~"\\^/api/v4/jobs/request\\\\z",type=~"ops-gitlab-net"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: ci-runners - polling-ops - 1h burn-rate - emitted by web
@@ -731,7 +731,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_workhorse_http_requests_total:rate_1h
     expr: |
-      sum by (code,component,env,environment,feature_category,fqdn,product_stage,queue,region,route,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (code,component,env,environment,feature_category,fqdn,product_stage,region,route,shard,stage,stage_group,tier,type) (
         rate(gitlab_workhorse_http_requests_total{cluster="gprd-gitlab-gke",env="gprd",route=~"\\^/api/v4/jobs/request\\\\z",type=~"web"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: ci-runners - polling-ops - 1h burn-rate - emitted by web
@@ -740,7 +740,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_workhorse_http_requests_total:rate_1h
     expr: |
-      sum by (code,component,env,environment,feature_category,fqdn,product_stage,queue,region,route,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (code,component,env,environment,feature_category,fqdn,product_stage,region,route,shard,stage,stage_group,tier,type) (
         rate(gitlab_workhorse_http_requests_total{cluster="gprd-us-east1-b",env="gprd",route=~"\\^/api/v4/jobs/request\\\\z",type=~"web"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: ci-runners - polling-ops - 1h burn-rate - emitted by web
@@ -749,7 +749,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_workhorse_http_requests_total:rate_1h
     expr: |
-      sum by (code,component,env,environment,feature_category,fqdn,product_stage,queue,region,route,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (code,component,env,environment,feature_category,fqdn,product_stage,region,route,shard,stage,stage_group,tier,type) (
         rate(gitlab_workhorse_http_requests_total{cluster="gprd-us-east1-c",env="gprd",route=~"\\^/api/v4/jobs/request\\\\z",type=~"web"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: ci-runners - polling-ops - 1h burn-rate - emitted by web
@@ -758,7 +758,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_workhorse_http_requests_total:rate_1h
     expr: |
-      sum by (code,component,env,environment,feature_category,fqdn,product_stage,queue,region,route,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (code,component,env,environment,feature_category,fqdn,product_stage,region,route,shard,stage,stage_group,tier,type) (
         rate(gitlab_workhorse_http_requests_total{cluster="gprd-us-east1-d",env="gprd",route=~"\\^/api/v4/jobs/request\\\\z",type=~"web"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: ci-runners - queuing_queries_duration-apdex - 1h burn-rate
@@ -767,7 +767,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_ci_queue_retrieval_duration_seconds_bucket:rate_1h
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,le,product_stage,queue,region,runner_type,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,runner_type,shard,stage,stage_group,tier,type) (
         rate(gitlab_ci_queue_retrieval_duration_seconds_bucket{cluster="gprd-gitlab-gke",env="gprd",type=~"api"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: ci-runners - queuing_queries_duration-apdex - 1h burn-rate
@@ -776,7 +776,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_ci_queue_retrieval_duration_seconds_bucket:rate_1h
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,le,product_stage,queue,region,runner_type,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,runner_type,shard,stage,stage_group,tier,type) (
         rate(gitlab_ci_queue_retrieval_duration_seconds_bucket{cluster="gprd-us-east1-b",env="gprd",type=~"api"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: ci-runners - queuing_queries_duration-apdex - 1h burn-rate
@@ -785,7 +785,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_ci_queue_retrieval_duration_seconds_bucket:rate_1h
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,le,product_stage,queue,region,runner_type,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,runner_type,shard,stage,stage_group,tier,type) (
         rate(gitlab_ci_queue_retrieval_duration_seconds_bucket{cluster="gprd-us-east1-c",env="gprd",type=~"api"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: ci-runners - queuing_queries_duration-apdex - 1h burn-rate
@@ -794,7 +794,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_ci_queue_retrieval_duration_seconds_bucket:rate_1h
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,le,product_stage,queue,region,runner_type,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,runner_type,shard,stage,stage_group,tier,type) (
         rate(gitlab_ci_queue_retrieval_duration_seconds_bucket{cluster="gprd-us-east1-d",env="gprd",type=~"api"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: ci-runners - queuing_queries_duration-ops - 1h burn-rate
@@ -803,7 +803,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_ci_queue_retrieval_duration_seconds_count:rate_1h
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,runner_type,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,runner_type,shard,stage,stage_group,tier,type) (
         rate(gitlab_ci_queue_retrieval_duration_seconds_count{cluster="gprd-gitlab-gke",env="gprd",type=~"api"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: ci-runners - queuing_queries_duration-ops - 1h burn-rate
@@ -812,7 +812,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_ci_queue_retrieval_duration_seconds_count:rate_1h
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,runner_type,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,runner_type,shard,stage,stage_group,tier,type) (
         rate(gitlab_ci_queue_retrieval_duration_seconds_count{cluster="gprd-us-east1-b",env="gprd",type=~"api"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: ci-runners - queuing_queries_duration-ops - 1h burn-rate
@@ -821,7 +821,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_ci_queue_retrieval_duration_seconds_count:rate_1h
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,runner_type,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,runner_type,shard,stage,stage_group,tier,type) (
         rate(gitlab_ci_queue_retrieval_duration_seconds_count{cluster="gprd-us-east1-c",env="gprd",type=~"api"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: ci-runners - queuing_queries_duration-ops - 1h burn-rate
@@ -830,7 +830,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_ci_queue_retrieval_duration_seconds_count:rate_1h
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,runner_type,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,runner_type,shard,stage,stage_group,tier,type) (
         rate(gitlab_ci_queue_retrieval_duration_seconds_count{cluster="gprd-us-east1-d",env="gprd",type=~"api"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: ci-runners - saas_linux_runner_image_pull_failures-ops
@@ -839,12 +839,12 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_runner_failed_jobs_total:rate_1h
     expr: |
-      sum by (component,env,environment,failure_reason,feature_category,fqdn,job,jobs_running_for_project,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,failure_reason,feature_category,fqdn,job,jobs_running_for_project,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(gitlab_runner_failed_jobs_total{env="gprd",failure_reason=~"image_pull_failure|runner_system_failure",job=~"runners-manager",shard=~"private|saas-.*|saas-linux-.*|shared-gitlab-org|windows-shared",type=~"ci-runners"}[1h] offset 30s)
       )
   - record: sli_aggregations:gitlab_runner_jobs_total:rate_1h
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,job,jobs_running_for_project,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,job,jobs_running_for_project,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(gitlab_runner_jobs_total{env="gprd",job=~"runners-manager",shard=~"private|saas-.*|saas-linux-.*|shared-gitlab-org|windows-shared",type=~"ci-runners"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: ci-runners - saas_runner_queues-apdex - 1h burn-rate'
@@ -852,7 +852,7 @@ groups:
   rules:
   - record: sli_aggregations:job_queue_duration_seconds_bucket:rate_1h
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,jobs_running_for_project,le,product_stage,queue,region,shard,shared_runner,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,jobs_running_for_project,le,product_stage,region,shard,shared_runner,stage,stage_group,tier,type) (
         rate(job_queue_duration_seconds_bucket{env="gprd",jobs_running_for_project=~"^(0|1|2|3|4)$",shared_runner=~"true",type=~"ci-runners"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: ci-runners - trace_archiving_ci_jobs-ops - 1h burn-rate
@@ -861,12 +861,12 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_sli_sidekiq_execution_total:rate_1h
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type,worker) (
         rate(gitlab_sli_sidekiq_execution_total{cluster="gprd-gitlab-gke",env="gprd",type=~"ops-gitlab-net",worker=~"Ci::ArchiveTraceWorker"}[1h] offset 30s)
       )
   - record: sli_aggregations:job_trace_archive_failed_total:rate_1h
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(job_trace_archive_failed_total{cluster="gprd-gitlab-gke",env="gprd",type=~"ops-gitlab-net"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: ci-runners - trace_archiving_ci_jobs-ops - 1h burn-rate
@@ -875,12 +875,12 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_sli_sidekiq_execution_total:rate_1h
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type,worker) (
         rate(gitlab_sli_sidekiq_execution_total{cluster="gprd-us-east1-b",env="gprd",type=~"ops-gitlab-net",worker=~"Ci::ArchiveTraceWorker"}[1h] offset 30s)
       )
   - record: sli_aggregations:job_trace_archive_failed_total:rate_1h
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(job_trace_archive_failed_total{cluster="gprd-us-east1-b",env="gprd",type=~"ops-gitlab-net"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: ci-runners - trace_archiving_ci_jobs-ops - 1h burn-rate
@@ -889,12 +889,12 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_sli_sidekiq_execution_total:rate_1h
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type,worker) (
         rate(gitlab_sli_sidekiq_execution_total{cluster="gprd-us-east1-c",env="gprd",type=~"ops-gitlab-net",worker=~"Ci::ArchiveTraceWorker"}[1h] offset 30s)
       )
   - record: sli_aggregations:job_trace_archive_failed_total:rate_1h
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(job_trace_archive_failed_total{cluster="gprd-us-east1-c",env="gprd",type=~"ops-gitlab-net"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: ci-runners - trace_archiving_ci_jobs-ops - 1h burn-rate
@@ -903,12 +903,12 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_sli_sidekiq_execution_total:rate_1h
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type,worker) (
         rate(gitlab_sli_sidekiq_execution_total{cluster="gprd-us-east1-d",env="gprd",type=~"ops-gitlab-net",worker=~"Ci::ArchiveTraceWorker"}[1h] offset 30s)
       )
   - record: sli_aggregations:job_trace_archive_failed_total:rate_1h
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(job_trace_archive_failed_total{cluster="gprd-us-east1-d",env="gprd",type=~"ops-gitlab-net"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: ci-runners - trace_archiving_ci_jobs-ops - 1h burn-rate
@@ -917,12 +917,12 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_sli_sidekiq_execution_total:rate_1h
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type,worker) (
         rate(gitlab_sli_sidekiq_execution_total{cluster="gprd-gitlab-gke",env="gprd",type=~"sidekiq",worker=~"Ci::ArchiveTraceWorker"}[1h] offset 30s)
       )
   - record: sli_aggregations:job_trace_archive_failed_total:rate_1h
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(job_trace_archive_failed_total{cluster="gprd-gitlab-gke",env="gprd",type=~"sidekiq"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: ci-runners - trace_archiving_ci_jobs-ops - 1h burn-rate
@@ -931,12 +931,12 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_sli_sidekiq_execution_total:rate_1h
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type,worker) (
         rate(gitlab_sli_sidekiq_execution_total{cluster="gprd-us-east1-b",env="gprd",type=~"sidekiq",worker=~"Ci::ArchiveTraceWorker"}[1h] offset 30s)
       )
   - record: sli_aggregations:job_trace_archive_failed_total:rate_1h
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(job_trace_archive_failed_total{cluster="gprd-us-east1-b",env="gprd",type=~"sidekiq"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: ci-runners - trace_archiving_ci_jobs-ops - 1h burn-rate
@@ -945,12 +945,12 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_sli_sidekiq_execution_total:rate_1h
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type,worker) (
         rate(gitlab_sli_sidekiq_execution_total{cluster="gprd-us-east1-c",env="gprd",type=~"sidekiq",worker=~"Ci::ArchiveTraceWorker"}[1h] offset 30s)
       )
   - record: sli_aggregations:job_trace_archive_failed_total:rate_1h
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(job_trace_archive_failed_total{cluster="gprd-us-east1-c",env="gprd",type=~"sidekiq"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: ci-runners - trace_archiving_ci_jobs-ops - 1h burn-rate
@@ -959,11 +959,11 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_sli_sidekiq_execution_total:rate_1h
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type,worker) (
         rate(gitlab_sli_sidekiq_execution_total{cluster="gprd-us-east1-d",env="gprd",type=~"sidekiq",worker=~"Ci::ArchiveTraceWorker"}[1h] offset 30s)
       )
   - record: sli_aggregations:job_trace_archive_failed_total:rate_1h
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(job_trace_archive_failed_total{cluster="gprd-us-east1-d",env="gprd",type=~"sidekiq"}[1h] offset 30s)
       )

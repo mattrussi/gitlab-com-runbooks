@@ -6,7 +6,7 @@ groups:
   rules:
   - record: sli_aggregations:stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count:rate_5m
     expr: |
-      sum by (component,database,database_id,env,environment,feature_category,fqdn,job,product_stage,queue,region,shard,stage,stage_group,tier,transaction_type,type,urgency,worker) (
+      sum by (component,database,database_id,env,environment,feature_category,fqdn,job,product_stage,region,shard,stage,stage_group,tier,transaction_type,type) (
         rate(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count{database=~"praefect_(canary|production)",database_id=~".+:praefect-db-.+",env="gstg",job=~"stackdriver",type=~"praefect"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: praefect - proxy-apdex - 5m burn-rate - emitted by monitoring'
@@ -14,7 +14,7 @@ groups:
   rules:
   - record: sli_aggregations:grpc_server_handling_seconds_bucket:rate_5m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,grpc_method,grpc_type,job,le,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,grpc_method,grpc_type,job,le,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(grpc_server_handling_seconds_bucket{env="gstg",grpc_type=~"unary",job=~"praefect",type=~"monitoring"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: praefect - proxy-ops - 5m burn-rate - emitted by monitoring'
@@ -22,7 +22,7 @@ groups:
   rules:
   - record: sli_aggregations:gitaly_service_client_requests_total:rate_5m
     expr: |
-      sum by (component,deadline_type,env,environment,feature_category,fqdn,grpc_code,job,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,deadline_type,env,environment,feature_category,fqdn,grpc_code,job,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(gitaly_service_client_requests_total{env="gstg",job=~"praefect",type=~"monitoring"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: praefect - replicator_queue-ops - 5m burn-rate'
@@ -30,7 +30,7 @@ groups:
   rules:
   - record: sli_aggregations:gitaly_praefect_replication_delay_bucket:rate_5m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,job,le,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,job,le,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(gitaly_praefect_replication_delay_bucket{env="gstg",job=~"praefect"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: praefect - praefect_cloudsql-ops - 30m burn-rate'
@@ -38,7 +38,7 @@ groups:
   rules:
   - record: sli_aggregations:stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count:rate_30m
     expr: |
-      sum by (component,database,database_id,env,environment,feature_category,fqdn,job,product_stage,queue,region,shard,stage,stage_group,tier,transaction_type,type,urgency,worker) (
+      sum by (component,database,database_id,env,environment,feature_category,fqdn,job,product_stage,region,shard,stage,stage_group,tier,transaction_type,type) (
         rate(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count{database=~"praefect_(canary|production)",database_id=~".+:praefect-db-.+",env="gstg",job=~"stackdriver",type=~"praefect"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: praefect - proxy-apdex - 30m burn-rate - emitted by monitoring'
@@ -46,7 +46,7 @@ groups:
   rules:
   - record: sli_aggregations:grpc_server_handling_seconds_bucket:rate_30m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,grpc_method,grpc_type,job,le,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,grpc_method,grpc_type,job,le,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(grpc_server_handling_seconds_bucket{env="gstg",grpc_type=~"unary",job=~"praefect",type=~"monitoring"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: praefect - proxy-ops - 30m burn-rate - emitted by monitoring'
@@ -54,7 +54,7 @@ groups:
   rules:
   - record: sli_aggregations:gitaly_service_client_requests_total:rate_30m
     expr: |
-      sum by (component,deadline_type,env,environment,feature_category,fqdn,grpc_code,job,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,deadline_type,env,environment,feature_category,fqdn,grpc_code,job,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(gitaly_service_client_requests_total{env="gstg",job=~"praefect",type=~"monitoring"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: praefect - replicator_queue-ops - 30m burn-rate'
@@ -62,7 +62,7 @@ groups:
   rules:
   - record: sli_aggregations:gitaly_praefect_replication_delay_bucket:rate_30m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,job,le,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,job,le,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(gitaly_praefect_replication_delay_bucket{env="gstg",job=~"praefect"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: praefect - praefect_cloudsql-ops - 1h burn-rate'
@@ -70,7 +70,7 @@ groups:
   rules:
   - record: sli_aggregations:stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count:rate_1h
     expr: |
-      sum by (component,database,database_id,env,environment,feature_category,fqdn,job,product_stage,queue,region,shard,stage,stage_group,tier,transaction_type,type,urgency,worker) (
+      sum by (component,database,database_id,env,environment,feature_category,fqdn,job,product_stage,region,shard,stage,stage_group,tier,transaction_type,type) (
         rate(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count{database=~"praefect_(canary|production)",database_id=~".+:praefect-db-.+",env="gstg",job=~"stackdriver",type=~"praefect"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: praefect - proxy-apdex - 1h burn-rate - emitted by monitoring'
@@ -78,7 +78,7 @@ groups:
   rules:
   - record: sli_aggregations:grpc_server_handling_seconds_bucket:rate_1h
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,grpc_method,grpc_type,job,le,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,grpc_method,grpc_type,job,le,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(grpc_server_handling_seconds_bucket{env="gstg",grpc_type=~"unary",job=~"praefect",type=~"monitoring"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: praefect - proxy-ops - 1h burn-rate - emitted by monitoring'
@@ -86,7 +86,7 @@ groups:
   rules:
   - record: sli_aggregations:gitaly_service_client_requests_total:rate_1h
     expr: |
-      sum by (component,deadline_type,env,environment,feature_category,fqdn,grpc_code,job,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,deadline_type,env,environment,feature_category,fqdn,grpc_code,job,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(gitaly_service_client_requests_total{env="gstg",job=~"praefect",type=~"monitoring"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: praefect - replicator_queue-ops - 1h burn-rate'
@@ -94,6 +94,6 @@ groups:
   rules:
   - record: sli_aggregations:gitaly_praefect_replication_delay_bucket:rate_1h
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,job,le,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
+      sum by (component,env,environment,feature_category,fqdn,job,le,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(gitaly_praefect_replication_delay_bucket{env="gstg",job=~"praefect"}[1h] offset 30s)
       )

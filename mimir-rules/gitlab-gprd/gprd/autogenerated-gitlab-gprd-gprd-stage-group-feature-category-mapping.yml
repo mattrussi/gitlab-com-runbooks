@@ -30,6 +30,12 @@ groups:
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
+      feature_category: ai_agents
+      product_stage: modelops
+      stage_group: mlops
+    expr: "1"
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
       feature_category: ai_evaluation
       product_stage: ai-powered
       stage_group: ai_model_validation
@@ -122,7 +128,7 @@ groups:
     labels:
       feature_category: code_quality
       product_stage: secure
-      stage_group: static_analysis
+      stage_group: secret_detection
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -189,6 +195,12 @@ groups:
       feature_category: continuous_integration
       product_stage: verify
       stage_group: pipeline_execution
+    expr: "1"
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
+      feature_category: custom_models
+      product_stage: ai-powered
+      stage_group: custom_models
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -390,6 +402,18 @@ groups:
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
+      feature_category: hosted_runners
+      product_stage: verify
+      stage_group: hosted_runners
+    expr: "1"
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
+      feature_category: runner_saas
+      product_stage: verify
+      stage_group: hosted_runners
+    expr: "1"
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
       feature_category: importers
       product_stage: manage
       stage_group: import_and_integrate
@@ -397,7 +421,7 @@ groups:
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: incident_management
-      product_stage: service_management
+      product_stage: monitor
       stage_group: respond
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
@@ -499,7 +523,7 @@ groups:
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: on_call_schedule_management
-      product_stage: service_management
+      product_stage: monitor
       stage_group: respond
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
@@ -566,7 +590,7 @@ groups:
     labels:
       feature_category: purchase
       product_stage: fulfillment
-      stage_group: purchase
+      stage_group: subscription_management
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -624,12 +648,6 @@ groups:
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
-      feature_category: runner_saas
-      product_stage: verify
-      stage_group: runner_saas
-    expr: "1"
-  - record: gitlab:feature_category:stage_group:mapping
-    labels:
       feature_category: saas_provisioning
       product_stage: fulfillment
       stage_group: provision
@@ -650,13 +668,13 @@ groups:
     labels:
       feature_category: seat_cost_management
       product_stage: fulfillment
-      stage_group: purchase
+      stage_group: utilization
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: secret_detection
       product_stage: secure
-      stage_group: static_analysis
+      stage_group: secret_detection
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -673,7 +691,7 @@ groups:
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: service_desk
-      product_stage: service_management
+      product_stage: monitor
       stage_group: respond
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping

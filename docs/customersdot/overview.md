@@ -112,8 +112,8 @@ If there's a need to restart services, please refer to this
 Terraform is used to provision the virtual infrastructure for staging and
 production:
 
-* [Staging](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/tree/master/environments/stgsub)
-* [Production](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/tree/master/environments/prdsub)
+* [Staging](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/tree/main/environments/stgsub)
+* [Production](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/tree/main/environments/prdsub)
 
 Chef is used essentially to bootstrap user access for users and Ansible.
 
