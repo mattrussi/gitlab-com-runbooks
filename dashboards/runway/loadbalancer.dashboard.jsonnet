@@ -24,8 +24,8 @@ basic.dashboard(
   layout.grid(
     [
       basic.timeseries(
-        title='Runway Load Balancer Request Count',
-        description='Number of requests served by backends of external HTTP(S) load balancer.',
+        title='Request rate',
+        description='Rate of requests served by backends of external HTTP(S) load balancer.',
         yAxisLabel='Requests per Second',
         query=|||
           sum by (response_code_class) (
@@ -38,7 +38,7 @@ basic.dashboard(
         intervalFactor=2,
       ),
       basic.latencyTimeseries(
-        title='Runway Load Balancer Latency',
+        title='Request latency',
         description='Distribution of the latency calculated from when the request was sent by the proxy to the backend, in milliseconds.',
         yAxisLabel='Duration',
         query=|||
