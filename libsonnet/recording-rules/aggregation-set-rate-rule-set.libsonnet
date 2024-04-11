@@ -1,28 +1,21 @@
 local aggregations = import 'promql/aggregations.libsonnet';
-local selectors = import 'promql/selectors.libsonnet';
-local aggregationFilterExpr = import 'recording-rules/lib/aggregation-filter-expr.libsonnet';
-local optionalOffset = import 'recording-rules/lib/optional-offset.libsonnet';
+local aggregationSetRateExpression = import 'recording-rules/aggregation-set-rate-expression.libsonnet';
 local upscaling = import 'recording-rules/lib/upscaling.libsonnet';
 local strings = import 'utils/strings.libsonnet';
 
 local getDirectRateExpression(sourceAggregationSet, targetAggregationSet, burnRate, visitor) =
   local sourceMetricName = visitor.metricName(sourceAggregationSet, burnRate, required=false);
   local targetAggregationLabels = aggregations.serialize(targetAggregationSet.labels);
-  local sourceSelector = selectors.serializeHash(sourceAggregationSet.selector);
-
+  local rateExpr = aggregationSetRateExpression(sourceAggregationSet, targetAggregationSet, burnRate, sourceMetricName);
   if sourceMetricName != null then
     |||
       sum by (%(targetAggregationLabels)s) (
-        (%(sourceMetricName)s{%(sourceSelector)s}%(optionalOffset)s >= 0)%(aggregationFilterExpr)s
+        %(rateExpr)s
       )
     ||| % {
-      sourceMetricName: sourceMetricName,
       targetAggregationLabels: targetAggregationLabels,
-      sourceSelector: sourceSelector,
-      aggregationFilterExpr: aggregationFilterExpr(targetAggregationSet),
-      optionalOffset: optionalOffset(targetAggregationSet.offset),
-    }
-  else null;
+      rateExpr: rateExpr,
+    };
 
 local errorRateVisitor = {
   metricName(aggregationSet, burnRate, required=false)::
