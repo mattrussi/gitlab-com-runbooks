@@ -1,42 +1,6 @@
 groups:
 - name: gitlab-com-ci.rules
   rules:
-  - record: quota_region:quota_usage:ratio
-    expr: |
-      max by (quota, region) (
-        gcp_exporter_region_quota_usage{project="gitlab-ci-155816"}
-        /
-        gcp_exporter_region_quota_limit{project="gitlab-ci-155816"}
-      )
-
-  - alert: CICDGCPQuotaExceedingSoon
-    expr: predict_linear(quota_region:quota_usage:ratio[6h], 3600) >= 1.0
-    for: 5m
-    labels:
-      team: runner
-      severity: s4
-      alert_type: cause
-    annotations:
-      title: 'GCP Quota usage may exceed capacity'
-      description: |
-        Quota usage of {{ $labels.quota }} in {{ $labels.region }} is going to exceed capacity soon.
-        Quota limit breach is coming!
-        See https://dashboards.gitlab.net/dashboard/db/ci-autoscaling-providers
-
-  - alert: CICDGCPQuotaCriticalUsage
-    expr: quota_region:quota_usage:ratio * 100 > 95
-    for: 5m
-    labels:
-      team: runner
-      severity: s3
-      alert_type: cause
-    annotations:
-      title: 'GCP Quota usage of is near limit'
-      description: |
-        Quota usage of {{ $labels.quota }} in {{ $labels.region }} is at the level of {{ $value }} for more than 5 minutes.
-        It's less than 5% to reach quota limits!
-        See https://dashboards.gitlab.net/dashboard/db/ci-autoscaling-providers
-
   - alert: CICDWorkhorseQueuingUnderperformant
     expr: |
       histogram_quantile(
@@ -76,23 +40,6 @@ groups:
         https://new-sentry.gitlab.net/organizations/gitlab/issues/?project=3&query=ArchiveTraceWorker, and
         https://new-sentry.gitlab.net/organizations/gitlab/issues/?project=3&query=ArchiveTracesCronWorker to find out more details
       runbook: docs/ci-runners/ci_too_many_archiving_trace_failures.md
-
-  - alert: CICDSidekiqQueuesTooBig
-    expr: |
-      sum by (environment, tier, type, stage, shard, worker) (
-        ci_sidekiq_jobs_inflight:rate_5m
-      ) > 100
-    for: 15m
-    labels:
-      team: runner
-      severity: s3
-      alert_type: cause
-    annotations:
-      title: 'Sidekiq queues for CI/CD are growing: {{$value}}'
-      description: |
-        Sidekiq queues for CI/CD are growing and are over 100 for
-        more than last 15 minutes.
-        Please check https://dashboards.gitlab.net/d/ci-runners-incident-gitlab-application/ci-runners-incident-support-gitlab-application?viewPanel=20&orgId=1&from=now-3h&to=now
 
   - alert: CICDJobsStuckInDockerPull
     expr: |
