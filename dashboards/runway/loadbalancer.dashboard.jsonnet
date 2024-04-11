@@ -30,7 +30,7 @@ basic.dashboard(
         query=|||
           sum by (response_code_class) (
             rate(
-              stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_backend_request_count{%(selector)s}[$__interval]
+              stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_backend_request_count{%(selector)s}[$__rate_interval]
             )
           )
         ||| % formatConfig,
@@ -45,7 +45,7 @@ basic.dashboard(
           histogram_quantile(
             0.99,
             sum by (revision_name, le) (
-              rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_backend_latencies_bucket{%(selector)s}[$__interval])
+              rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_backend_latencies_bucket{%(selector)s}[$__rate_interval])
             )
           )
         ||| % formatConfig,
