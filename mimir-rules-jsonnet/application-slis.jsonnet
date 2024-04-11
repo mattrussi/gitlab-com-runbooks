@@ -34,14 +34,13 @@ std.foldl(
     local serviceApplicationSliDefinitions = std.map(function(name) applicationSlis.get(name), serviceApplicationSliNames);
     memo + separateMimirRecordingFiles(
       function(service, selector, _extraArgs)
+        local groups = std.flatMap(
+          function(sli)
+            groupsForApplicationSli(sli, selector { type: service.type }),
+          serviceApplicationSliDefinitions
+        );
         {
-          'aggregated-application-sli-metrics': outputPromYaml(
-            std.flatMap(
-              function(sli)
-                groupsForApplicationSli(sli, selector { type: service.type }),
-              serviceApplicationSliDefinitions
-            )
-          ),
+          [if std.length(groups) > 0 then 'aggregated-application-sli-metrics']: outputPromYaml(groups),
         },
       serviceDefinition=serviceDefinition,
     )
