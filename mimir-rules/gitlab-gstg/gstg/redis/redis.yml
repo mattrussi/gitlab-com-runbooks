@@ -45,3 +45,4 @@ groups:
       sum by (environment, redirection_type) (
         rate(gitlab_redis_client_redirections_total{storage="cluster_rate_limiting", env="gstg"}[1m])
       )
+
