@@ -49,3 +49,4 @@ groups:
       )
   - record: job:pg_stat_statements_seconds_total:rate1m
     expr: sum without (queryid) (queryid:pg_stat_statements_seconds_total:rate1m{env="gprd"})
+
