@@ -119,3 +119,4 @@ groups:
   rules:
   - record: instance:up:count
     expr: count(up{job="node",type!="", env="gstg"} == 1) WITHOUT (instance, fqdn)
+
