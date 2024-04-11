@@ -5,6 +5,9 @@ local templates = import 'grafana/templates.libsonnet';
 local singleMetricRow = import 'key-metric-panels/single-metric-row.libsonnet';
 local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
 
+// TODO: remove the `location` label from the legends when we don't need it
+// anymore after migrating to mimir.
+// https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/3398
 local dashboardForService(serviceType, serviceSLIsAggregationSet, componentSLIsAggregationSet) =
   local metricsCatalogServiceInfo = metricsCatalog.getService(serviceType);
   local formatConfig = { serviceType: serviceType };
@@ -17,7 +20,7 @@ local dashboardForService(serviceType, serviceSLIsAggregationSet, componentSLIsA
       selectorHash=selectorHash,
       titlePrefix='Regional Service Aggregated ',
       stableIdPrefix='service-regional-%(serviceType)s' % formatConfig,
-      legendFormatPrefix='{{ region }}',
+      legendFormatPrefix='{{ region }} {{ location }}',
       showApdex=metricsCatalogServiceInfo.hasApdex(),
       showErrorRatio=metricsCatalogServiceInfo.hasErrorRate(),
       showOpsRate=true,
@@ -39,7 +42,7 @@ local dashboardForService(serviceType, serviceSLIsAggregationSet, componentSLIsA
       serviceType=serviceType,
       selectorHash=selectorHash,
       startRow=1000,
-      legendFormatPrefix='{{ region }}',
+      legendFormatPrefix='{{ region }} {{ location }}',
       expectMultipleSeries=true
     )
   )
