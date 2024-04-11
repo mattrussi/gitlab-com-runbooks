@@ -14,7 +14,7 @@ groups:
       max by(env, environment, shard) (
         clamp_min(
           clamp_max(
-            avg_over_time(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_cpu_utilization{env="gstg",type="cloud-sql"}[5m])
+            avg_over_time(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_cpu_utilization{env="pre",type="cloud-sql"}[5m])
             ,
             1)
         ,
@@ -30,7 +30,7 @@ groups:
       max by(env, environment, shard) (
         clamp_min(
           clamp_max(
-            avg_over_time(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_disk_utilization{env="gstg",type="cloud-sql"}[5m])
+            avg_over_time(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_disk_utilization{env="pre",type="cloud-sql"}[5m])
             ,
             1)
         ,
@@ -46,7 +46,7 @@ groups:
       max by(env, environment, shard) (
         clamp_min(
           clamp_max(
-            avg_over_time(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_memory_utilization{env="gstg",type="cloud-sql"}[5m])
+            avg_over_time(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_memory_utilization{env="pre",type="cloud-sql"}[5m])
             ,
             1)
         ,

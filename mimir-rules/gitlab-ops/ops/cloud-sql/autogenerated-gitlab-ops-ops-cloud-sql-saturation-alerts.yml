@@ -5,15 +5,15 @@ groups:
   interval: 5m
   rules:
   - record: gitlab_component_saturation:ratio_quantile95_1w
-    expr: quantile_over_time(0.95, gitlab_component_saturation:ratio{env="gstg",type="cloud-sql"}[1w])
+    expr: quantile_over_time(0.95, gitlab_component_saturation:ratio{env="ops",type="cloud-sql"}[1w])
   - record: gitlab_component_saturation:ratio_quantile99_1w
-    expr: quantile_over_time(0.99, gitlab_component_saturation:ratio{env="gstg",type="cloud-sql"}[1w])
+    expr: quantile_over_time(0.99, gitlab_component_saturation:ratio{env="ops",type="cloud-sql"}[1w])
   - record: gitlab_component_saturation:ratio_quantile95_1h
-    expr: quantile_over_time(0.95, gitlab_component_saturation:ratio{env="gstg",type="cloud-sql"}[1h])
+    expr: quantile_over_time(0.95, gitlab_component_saturation:ratio{env="ops",type="cloud-sql"}[1h])
   - record: gitlab_component_saturation:ratio_quantile99_1h
-    expr: quantile_over_time(0.99, gitlab_component_saturation:ratio{env="gstg",type="cloud-sql"}[1h])
+    expr: quantile_over_time(0.99, gitlab_component_saturation:ratio{env="ops",type="cloud-sql"}[1h])
   - record: gitlab_component_saturation:ratio_avg_1h
-    expr: avg_over_time(gitlab_component_saturation:ratio{env="gstg",type="cloud-sql"}[1h])
+    expr: avg_over_time(gitlab_component_saturation:ratio{env="ops",type="cloud-sql"}[1h])
 - name: GitLab Saturation Alerts
   interval: 1m
   rules:
@@ -64,8 +64,8 @@ groups:
       rules_domain: general
       severity: s4
     expr: |
-      gitlab_component_saturation:ratio{component="cloudsql_cpu",env="gstg",type="cloud-sql"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="cloudsql_cpu",env="gstg",type="cloud-sql"}
+      gitlab_component_saturation:ratio{component="cloudsql_cpu",env="ops",type="cloud-sql"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="cloudsql_cpu",env="ops",type="cloud-sql"}
   - alert: component_saturation_slo_out_of_bounds:cloudsql_disk
     for: 5m
     annotations:
@@ -113,8 +113,8 @@ groups:
       rules_domain: general
       severity: s4
     expr: |
-      gitlab_component_saturation:ratio{component="cloudsql_disk",env="gstg",type="cloud-sql"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="cloudsql_disk",env="gstg",type="cloud-sql"}
+      gitlab_component_saturation:ratio{component="cloudsql_disk",env="ops",type="cloud-sql"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="cloudsql_disk",env="ops",type="cloud-sql"}
   - alert: component_saturation_slo_out_of_bounds:cloudsql_memory
     for: 5m
     annotations:
@@ -162,5 +162,5 @@ groups:
       rules_domain: general
       severity: s4
     expr: |
-      gitlab_component_saturation:ratio{component="cloudsql_memory",env="gstg",type="cloud-sql"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="cloudsql_memory",env="gstg",type="cloud-sql"}
+      gitlab_component_saturation:ratio{component="cloudsql_memory",env="ops",type="cloud-sql"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="cloudsql_memory",env="ops",type="cloud-sql"}
