@@ -1,7 +1,6 @@
 groups:
   - name: redundancy.rules
     rules:
-
       - alert: FeLoadBalancerLossOfRedundancy
         expr: avg(up{tier="lb",job="scrapeConfig/monitoring/prometheus-agent-haproxy", env="gprd"} * 100) by (type, environment) < 80
         for: 5m
