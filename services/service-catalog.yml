@@ -1505,33 +1505,6 @@ services:
       monitors:
         primary_grafana_dashboard: redis-cluster-repo-cache-main/redis-cluster-repo-cache-overview
 
-  - name: redis-repository-cache
-    tier: db
-    friendly_name: Redis Repository Cache
-    label: RedisRepositoryCache
-    owner: scalability:practices
-    technical:
-      project:
-        - https://github.com/redis/redis
-      documents:
-        design:
-        architecture:
-        readiness_review:
-        sre_guide: https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/redis-cache
-        developer_guide: https://docs.gitlab.com/ee/development/redis.html#redis-guidelines
-        service:
-          - https://redis.io/documentation
-          - https://docs.gitlab.com/omnibus/settings/redis.html
-        security:
-      dependencies:
-        - service:
-      logging:
-        - name: system
-          permalink: https://log.gprd.gitlab.net/goto/3f634380-9547-11ed-9f43-e3784d7fe3ca
-    observability:
-      monitors:
-        primary_grafana_dashboard: redis-repository-cache-main/redis-repository-cache-overview
-
   - name: redis-sessions
     tier: db
     friendly_name: Redis Sessions
