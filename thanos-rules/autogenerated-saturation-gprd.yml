@@ -9,7 +9,7 @@ groups:
     labels:
       component: gcp_quota_limit_vertex_ai
     expr: |
-      max by(env, environment, tier, type, stage, shard, project, metric, quotaregion) (
+      max by(env, environment, tier, type, stage, shard) (
         clamp_min(
           clamp_max(
             (
@@ -26,7 +26,7 @@ groups:
     labels:
       component: gcp_quota_limit_vertex_ai_code_gecko
     expr: |
-      max by(env, environment, tier, type, stage, shard, base_model, region) (
+      max by(env, environment, tier, type, stage, shard) (
         clamp_min(
           clamp_max(
             (
@@ -43,7 +43,7 @@ groups:
     labels:
       component: go_goroutines
     expr: |
-      max by(env, environment, tier, type, stage, shard, fqdn) (
+      max by(env, environment, tier, type, stage, shard) (
         clamp_min(
           clamp_max(
             sum by (env, environment, tier, type, stage, shard, fqdn) (
@@ -60,7 +60,7 @@ groups:
     labels:
       component: go_memory
     expr: |
-      max by(env, environment, tier, type, stage, shard, fqdn) (
+      max by(env, environment, tier, type, stage, shard) (
         clamp_min(
           clamp_max(
             max by (env, environment, tier, type, stage, shard, fqdn) (
@@ -79,7 +79,7 @@ groups:
     labels:
       component: kube_go_memory
     expr: |
-      max by(env, environment, tier, type, stage, shard, cluster, pod) (
+      max by(env, environment, tier, type, stage, shard) (
         clamp_min(
           clamp_max(
             go_memstats_alloc_bytes{env="gprd",type=~"ai-assisted|api|atlantis|git|internal-api|kas|monitoring|ops-gitlab-net|registry|vault|web|web-pages|websockets"}
@@ -99,7 +99,7 @@ groups:
       tier: inf
       type: kube
     expr: |
-      max by(env, environment, shard, cluster) (
+      max by(env, environment, shard) (
         clamp_min(
           clamp_max(
             sum(:kube_pod_info_node_count:{env="gprd"}) by (env, environment, shard, cluster)
@@ -116,7 +116,7 @@ groups:
     labels:
       component: kube_pool_max_nodes
     expr: |
-      max by(env, environment, tier, type, stage, shard, cluster, label_pool, shard) (
+      max by(env, environment, tier, type, stage, shard) (
         clamp_min(
           clamp_max(
             count by (cluster, env, environment, label_pool, tier, type, stage, shard) (
@@ -158,7 +158,7 @@ groups:
     labels:
       component: max_concurrent_inferences_per_engine
     expr: |
-      max by(env, environment, tier, type, stage, shard, model_engine) (
+      max by(env, environment, tier, type, stage, shard) (
         clamp_min(
           clamp_max(
             sum by (env, environment, tier, type, stage, shard, model_engine)(max_over_time(model_inferences_in_flight{env="gprd",type="ai-gateway"}[10m]))
@@ -173,7 +173,7 @@ groups:
     labels:
       component: open_fds
     expr: |
-      max by(env, environment, tier, type, stage, shard, job, instance) (
+      max by(env, environment, tier, type, stage, shard) (
         clamp_min(
           clamp_max(
             (
@@ -196,7 +196,7 @@ groups:
     labels:
       component: pg_primary_cpu
     expr: |
-      max by(env, environment, tier, type, stage, shard, fqdn) (
+      max by(env, environment, tier, type, stage, shard) (
         clamp_min(
           clamp_max(
             avg without(cpu, mode) (
@@ -262,7 +262,7 @@ groups:
       stage: main
       tier: inf
     expr: |
-      max by(env, environment, type, shard, revision_name, region) (
+      max by(env, environment, type, shard) (
         clamp_min(
           clamp_max(
             histogram_quantile(0.9999, sum by(le, env, environment, type, shard, revision_name, region, location)
@@ -283,7 +283,7 @@ groups:
       stage: main
       tier: inf
     expr: |
-      max by(env, environment, type, shard, revision_name, region) (
+      max by(env, environment, type, shard) (
         clamp_min(
           clamp_max(
             sum by (env, environment, type, shard, revision_name, region, location) (
@@ -302,7 +302,7 @@ groups:
       stage: main
       tier: inf
     expr: |
-      max by(env, environment, type, shard, revision_name, region) (
+      max by(env, environment, type, shard) (
         clamp_min(
           clamp_max(
             histogram_quantile(0.9999, sum by(le, env, environment, type, shard, revision_name, region, location)
@@ -323,7 +323,7 @@ groups:
       stage: main
       tier: inf
     expr: |
-      max by(env, environment, type, shard, revision_name, region) (
+      max by(env, environment, type, shard) (
         clamp_min(
           clamp_max(
             histogram_quantile(0.9999, sum by(le, env, environment, type, shard, revision_name, region)

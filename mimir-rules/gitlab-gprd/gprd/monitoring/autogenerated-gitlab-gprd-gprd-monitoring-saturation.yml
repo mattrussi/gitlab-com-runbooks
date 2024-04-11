@@ -11,7 +11,7 @@ groups:
       tier: inf
       type: monitoring
     expr: |
-      max by(env, environment, shard, database_id) (
+      max by(env, environment, shard) (
         clamp_min(
           clamp_max(
             avg_over_time(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_cpu_utilization{env="gprd",type="monitoring"}[5m])
@@ -27,7 +27,7 @@ groups:
       tier: inf
       type: monitoring
     expr: |
-      max by(env, environment, shard, database_id) (
+      max by(env, environment, shard) (
         clamp_min(
           clamp_max(
             avg_over_time(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_disk_utilization{env="gprd",type="monitoring"}[5m])
@@ -43,7 +43,7 @@ groups:
       tier: inf
       type: monitoring
     expr: |
-      max by(env, environment, shard, database_id) (
+      max by(env, environment, shard) (
         clamp_min(
           clamp_max(
             avg_over_time(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_memory_utilization{env="gprd",type="monitoring"}[5m])
@@ -71,7 +71,7 @@ groups:
     labels:
       component: disk_inodes
     expr: |
-      max by(env, environment, tier, type, stage, shard, fqdn, device) (
+      max by(env, environment, tier, type, stage, shard) (
         clamp_min(
           clamp_max(
             1 - (
@@ -88,7 +88,7 @@ groups:
     labels:
       component: disk_space
     expr: |
-      max by(env, environment, tier, type, stage, shard, fqdn, device) (
+      max by(env, environment, tier, type, stage, shard) (
         clamp_min(
           clamp_max(
             (
@@ -103,7 +103,7 @@ groups:
     labels:
       component: gcp_quota_limit
     expr: |
-      max by(env, environment, tier, type, stage, shard, project, metric, quotaregion) (
+      max by(env, environment, tier, type, stage, shard) (
         clamp_min(
           clamp_max(
             (
@@ -120,7 +120,7 @@ groups:
     labels:
       component: go_goroutines
     expr: |
-      max by(env, environment, tier, type, stage, shard, fqdn) (
+      max by(env, environment, tier, type, stage, shard) (
         clamp_min(
           clamp_max(
             sum by (env, environment, tier, type, stage, shard, fqdn) (
@@ -137,7 +137,7 @@ groups:
     labels:
       component: go_memory
     expr: |
-      max by(env, environment, tier, type, stage, shard, fqdn) (
+      max by(env, environment, tier, type, stage, shard) (
         clamp_min(
           clamp_max(
             max by (env, environment, tier, type, stage, shard, fqdn) (
@@ -156,7 +156,7 @@ groups:
     labels:
       component: kube_container_cpu
     expr: |
-      quantile by(env, environment, tier, type, stage, shard, pod, container) (
+      quantile by(env, environment, tier, type, stage, shard) (
         0.99,
         clamp_min(
           clamp_max(
@@ -176,7 +176,7 @@ groups:
     labels:
       component: kube_container_cpu_limit
     expr: |
-      max by(env, environment, tier, type, stage, shard, pod, container) (
+      max by(env, environment, tier, type, stage, shard) (
         clamp_min(
           clamp_max(
             sum by (env, environment, tier, type, stage, shard, pod, container) (
@@ -212,7 +212,7 @@ groups:
     labels:
       component: kube_container_throttling
     expr: |
-      quantile by(env, environment, tier, type, stage, shard, pod, container) (
+      quantile by(env, environment, tier, type, stage, shard) (
         0.99,
         clamp_min(
           clamp_max(
@@ -230,7 +230,7 @@ groups:
     labels:
       component: kube_go_memory
     expr: |
-      max by(env, environment, tier, type, stage, shard, cluster, pod) (
+      max by(env, environment, tier, type, stage, shard) (
         clamp_min(
           clamp_max(
             go_memstats_alloc_bytes{env="gprd",type="monitoring"}
@@ -247,7 +247,7 @@ groups:
     labels:
       component: kube_horizontalpodautoscaler_desired_replicas
     expr: |
-      max by(env, environment, tier, type, stage, shard, horizontalpodautoscaler, shard) (
+      max by(env, environment, tier, type, stage, shard) (
         clamp_min(
           clamp_max(
             kube_horizontalpodautoscaler_status_desired_replicas:labeled{env="gprd",type="monitoring", shard!~"database-throttled|elasticsearch|gitaly-throttled|urgent-authorized-projects|urgent-other", namespace!~"pubsubbeat"}
@@ -262,7 +262,7 @@ groups:
     labels:
       component: memory
     expr: |
-      max by(env, environment, tier, type, stage, shard, fqdn) (
+      max by(env, environment, tier, type, stage, shard) (
         clamp_min(
           clamp_max(
             instance:node_memory_utilization:ratio{env="gprd",type="monitoring"} or instance:node_memory_utilisation:ratio{env="gprd",type="monitoring"}
@@ -275,7 +275,7 @@ groups:
     labels:
       component: nf_conntrack_entries
     expr: |
-      max by(env, environment, tier, type, stage, shard, fqdn, instance) (
+      max by(env, environment, tier, type, stage, shard) (
         clamp_min(
           clamp_max(
             max_over_time(node_nf_conntrack_entries{env="gprd",type="monitoring"}[1m])
@@ -290,7 +290,7 @@ groups:
     labels:
       component: node_schedstat_waiting
     expr: |
-      max by(env, environment, tier, type, stage, shard, fqdn, shard) (
+      max by(env, environment, tier, type, stage, shard) (
         clamp_min(
           clamp_max(
             avg without (cpu) (rate(node_schedstat_waiting_seconds_total{env="gprd",type="monitoring"}[1h]))
@@ -303,7 +303,7 @@ groups:
     labels:
       component: open_fds
     expr: |
-      max by(env, environment, tier, type, stage, shard, job, instance) (
+      max by(env, environment, tier, type, stage, shard) (
         clamp_min(
           clamp_max(
             (
@@ -326,7 +326,7 @@ groups:
     labels:
       component: shard_cpu
     expr: |
-      max by(env, environment, tier, type, stage, shard, shard) (
+      max by(env, environment, tier, type, stage, shard) (
         clamp_min(
           clamp_max(
             1 - avg by (env, environment, tier, type, stage, shard, shard) (
@@ -341,7 +341,7 @@ groups:
     labels:
       component: single_node_cpu
     expr: |
-      max by(env, environment, tier, type, stage, shard, fqdn) (
+      max by(env, environment, tier, type, stage, shard) (
         clamp_min(
           clamp_max(
             avg without(cpu, mode) (1 - rate(node_cpu_seconds_total{mode="idle", env="gprd",type="monitoring"}[5m]))

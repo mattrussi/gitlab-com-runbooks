@@ -8,7 +8,7 @@ groups:
     labels:
       component: kube_container_cpu
     expr: |
-      quantile by(env, environment, tier, type, stage, shard, pod, container) (
+      quantile by(env, environment, tier, type, stage, shard) (
         0.99,
         clamp_min(
           clamp_max(
@@ -28,7 +28,7 @@ groups:
     labels:
       component: kube_container_cpu_limit
     expr: |
-      max by(env, environment, tier, type, stage, shard, pod, container) (
+      max by(env, environment, tier, type, stage, shard) (
         clamp_min(
           clamp_max(
             sum by (env, environment, tier, type, stage, shard, pod, container) (
@@ -64,7 +64,7 @@ groups:
     labels:
       component: kube_container_throttling
     expr: |
-      quantile by(env, environment, tier, type, stage, shard, pod, container) (
+      quantile by(env, environment, tier, type, stage, shard) (
         0.99,
         clamp_min(
           clamp_max(
@@ -82,7 +82,7 @@ groups:
     labels:
       component: kube_go_memory
     expr: |
-      max by(env, environment, tier, type, stage, shard, cluster, pod) (
+      max by(env, environment, tier, type, stage, shard) (
         clamp_min(
           clamp_max(
             go_memstats_alloc_bytes{env="gprd",type="ai-assisted"}
@@ -99,7 +99,7 @@ groups:
     labels:
       component: kube_horizontalpodautoscaler_desired_replicas
     expr: |
-      max by(env, environment, tier, type, stage, shard, horizontalpodautoscaler, shard) (
+      max by(env, environment, tier, type, stage, shard) (
         clamp_min(
           clamp_max(
             kube_horizontalpodautoscaler_status_desired_replicas:labeled{env="gprd",type="ai-assisted", shard!~"database-throttled|elasticsearch|gitaly-throttled|urgent-authorized-projects|urgent-other", namespace!~"pubsubbeat"}
@@ -114,7 +114,7 @@ groups:
     labels:
       component: open_fds
     expr: |
-      max by(env, environment, tier, type, stage, shard, job, instance) (
+      max by(env, environment, tier, type, stage, shard) (
         clamp_min(
           clamp_max(
             (
@@ -152,7 +152,7 @@ groups:
     labels:
       component: ruby_thread_contention
     expr: |
-      quantile by(env, environment, tier, type, stage, shard, fqdn, pod) (
+      quantile by(env, environment, tier, type, stage, shard) (
         0.99,
         clamp_min(
           clamp_max(

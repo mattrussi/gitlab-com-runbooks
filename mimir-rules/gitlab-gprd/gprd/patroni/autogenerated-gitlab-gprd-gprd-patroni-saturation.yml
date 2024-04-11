@@ -23,7 +23,7 @@ groups:
     labels:
       component: disk_inodes
     expr: |
-      max by(env, environment, tier, type, stage, shard, fqdn, device) (
+      max by(env, environment, tier, type, stage, shard) (
         clamp_min(
           clamp_max(
             1 - (
@@ -40,7 +40,7 @@ groups:
     labels:
       component: disk_space
     expr: |
-      max by(env, environment, tier, type, stage, shard, fqdn, device) (
+      max by(env, environment, tier, type, stage, shard) (
         clamp_min(
           clamp_max(
             (
@@ -55,7 +55,7 @@ groups:
     labels:
       component: disk_sustained_read_iops
     expr: |
-      max by(env, environment, tier, type, stage, shard, fqdn, device) (
+      max by(env, environment, tier, type, stage, shard) (
         clamp_min(
           clamp_max(
             rate(node_disk_reads_completed_total{device!="sda", env="gprd",type="patroni"}[20m])
@@ -70,7 +70,7 @@ groups:
     labels:
       component: disk_sustained_read_throughput
     expr: |
-      max by(env, environment, tier, type, stage, shard, fqdn, device) (
+      max by(env, environment, tier, type, stage, shard) (
         clamp_min(
           clamp_max(
             rate(node_disk_read_bytes_total{device!="sda", env="gprd",type="patroni"}[20m])
@@ -85,7 +85,7 @@ groups:
     labels:
       component: disk_sustained_write_iops
     expr: |
-      max by(env, environment, tier, type, stage, shard, fqdn, device) (
+      max by(env, environment, tier, type, stage, shard) (
         clamp_min(
           clamp_max(
             rate(node_disk_writes_completed_total{device!="sda", env="gprd",type="patroni"}[20m])
@@ -100,7 +100,7 @@ groups:
     labels:
       component: disk_sustained_write_throughput
     expr: |
-      max by(env, environment, tier, type, stage, shard, fqdn, device) (
+      max by(env, environment, tier, type, stage, shard) (
         clamp_min(
           clamp_max(
             rate(node_disk_written_bytes_total{device!="sda", env="gprd",type="patroni"}[20m])
@@ -115,7 +115,7 @@ groups:
     labels:
       component: memory
     expr: |
-      max by(env, environment, tier, type, stage, shard, fqdn) (
+      max by(env, environment, tier, type, stage, shard) (
         clamp_min(
           clamp_max(
             instance:node_memory_utilization:ratio{env="gprd",type="patroni"} or instance:node_memory_utilisation:ratio{env="gprd",type="patroni"}
@@ -128,7 +128,7 @@ groups:
     labels:
       component: nf_conntrack_entries
     expr: |
-      max by(env, environment, tier, type, stage, shard, fqdn, instance) (
+      max by(env, environment, tier, type, stage, shard) (
         clamp_min(
           clamp_max(
             max_over_time(node_nf_conntrack_entries{env="gprd",type="patroni"}[1m])
@@ -143,7 +143,7 @@ groups:
     labels:
       component: node_schedstat_waiting
     expr: |
-      max by(env, environment, tier, type, stage, shard, fqdn, shard) (
+      max by(env, environment, tier, type, stage, shard) (
         clamp_min(
           clamp_max(
             avg without (cpu) (rate(node_schedstat_waiting_seconds_total{env="gprd",type="patroni"}[1h]))
@@ -156,7 +156,7 @@ groups:
     labels:
       component: open_fds
     expr: |
-      max by(env, environment, tier, type, stage, shard, job, instance) (
+      max by(env, environment, tier, type, stage, shard) (
         clamp_min(
           clamp_max(
             (
@@ -179,7 +179,7 @@ groups:
     labels:
       component: pg_active_db_connections_primary
     expr: |
-      max by(env, environment, tier, type, stage, shard, fqdn) (
+      max by(env, environment, tier, type, stage, shard) (
         clamp_min(
           clamp_max(
             sum without (state) (
@@ -196,7 +196,7 @@ groups:
     labels:
       component: pg_active_db_connections_replica
     expr: |
-      max by(env, environment, tier, type, stage, shard, fqdn) (
+      max by(env, environment, tier, type, stage, shard) (
         clamp_min(
           clamp_max(
             sum without (state) (
@@ -213,7 +213,7 @@ groups:
     labels:
       component: pg_btree_bloat
     expr: |
-      max by(env, environment, tier, type, stage, shard, fqdn) (
+      max by(env, environment, tier, type, stage, shard) (
         clamp_min(
           clamp_max(
             sum by (env, environment, tier, type, stage, shard, fqdn) (last_over_time(gitlab_database_bloat_btree_bloat_size{env="gprd",type="patroni"}[1h]))
@@ -228,7 +228,7 @@ groups:
     labels:
       component: pg_int4_id
     expr: |
-      max by(env, environment, tier, type, stage, shard, column_name) (
+      max by(env, environment, tier, type, stage, shard) (
         clamp_min(
           clamp_max(
             max by (env, environment, tier, type, stage, shard, column_name) (
@@ -243,7 +243,7 @@ groups:
     labels:
       component: pg_primary_cpu
     expr: |
-      max by(env, environment, tier, type, stage, shard, fqdn) (
+      max by(env, environment, tier, type, stage, shard) (
         clamp_min(
           clamp_max(
             avg without(cpu, mode) (
@@ -264,7 +264,7 @@ groups:
     labels:
       component: pg_table_bloat
     expr: |
-      max by(env, environment, tier, type, stage, shard, fqdn) (
+      max by(env, environment, tier, type, stage, shard) (
         clamp_min(
           clamp_max(
             sum by (env, environment, tier, type, stage, shard, fqdn) (avg_over_time(gitlab_database_bloat_table_bloat_size{env="gprd",type="patroni"}[58m]))
@@ -354,7 +354,7 @@ groups:
     labels:
       component: pg_xid_wraparound
     expr: |
-      max by(env, environment, tier, type, stage, shard, datname) (
+      max by(env, environment, tier, type, stage, shard) (
         clamp_min(
           clamp_max(
             (
@@ -376,7 +376,7 @@ groups:
     labels:
       component: pgbouncer_async_replica_pool
     expr: |
-      max by(env, environment, tier, type, stage, shard, fqdn, instance) (
+      max by(env, environment, tier, type, stage, shard) (
         clamp_min(
           clamp_max(
             (
@@ -398,7 +398,7 @@ groups:
     labels:
       component: pgbouncer_client_conn_replicas
     expr: |
-      max by(env, environment, tier, type, stage, shard, fqdn) (
+      max by(env, environment, tier, type, stage, shard) (
         clamp_min(
           clamp_max(
             max_over_time(pgbouncer_used_clients{env="gprd",type="patroni"}[5m])
@@ -413,7 +413,7 @@ groups:
     labels:
       component: pgbouncer_single_core
     expr: |
-      max by(env, environment, tier, type, stage, shard, fqdn, groupname) (
+      max by(env, environment, tier, type, stage, shard) (
         clamp_min(
           clamp_max(
             sum without(cpu, mode) (
@@ -430,7 +430,7 @@ groups:
     labels:
       component: pgbouncer_sync_replica_pool
     expr: |
-      max by(env, environment, tier, type, stage, shard, fqdn, instance) (
+      max by(env, environment, tier, type, stage, shard) (
         clamp_min(
           clamp_max(
             (
@@ -452,7 +452,7 @@ groups:
     labels:
       component: shard_cpu
     expr: |
-      max by(env, environment, tier, type, stage, shard, shard) (
+      max by(env, environment, tier, type, stage, shard) (
         clamp_min(
           clamp_max(
             1 - avg by (env, environment, tier, type, stage, shard, shard) (
@@ -467,7 +467,7 @@ groups:
     labels:
       component: single_node_cpu
     expr: |
-      max by(env, environment, tier, type, stage, shard, fqdn) (
+      max by(env, environment, tier, type, stage, shard) (
         clamp_min(
           clamp_max(
             avg without(cpu, mode) (1 - rate(node_cpu_seconds_total{mode="idle", env="gprd",type="patroni"}[5m]))
