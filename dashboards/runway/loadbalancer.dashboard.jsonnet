@@ -5,7 +5,12 @@ local selectors = import 'promql/selectors.libsonnet';
 local template = grafana.template;
 
 local formatConfig = {
-  selector: selectors.serializeHash({ job: 'runway-exporter', env: '$environment', url_map_name: '$loadbalancer' }),
+  selector: selectors.serializeHash({
+    job: 'runway-exporter',
+    env: '$environment',
+    url_map_name: '$loadbalancer',
+    region: { re: '$region' },
+  }),
 };
 
 basic.dashboard(
@@ -19,6 +24,15 @@ basic.dashboard(
   'label_values(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_backend_request_count{job="runway-exporter", env="$environment"}, url_map_name)',
   refresh='load',
   sort=1,
+))
+.addTemplate(template.new(
+  'region',
+  '$PROMETHEUS_DS',
+  'label_values(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_backend_request_count{job="runway-exporter", env="$environment", url_map_name="$loadbalancer"}, region)',
+  refresh='load',
+  sort=1,
+  includeAll=true,
+  allValues='.+',
 ))
 .addPanels(
   layout.grid(
