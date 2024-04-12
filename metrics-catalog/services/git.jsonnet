@@ -16,6 +16,7 @@ local railsSelector = { job: 'gitlab-rails', type: 'git' };
 metricsCatalog.serviceDefinition({
   type: 'git',
   tier: 'sv',
+  tenants: [ 'gitlab-gprd', 'gitlab-gstg', 'gitlab-pre' ],
 
   tags: ['golang', 'rails', 'puma'],
 
