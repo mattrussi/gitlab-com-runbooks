@@ -24,13 +24,6 @@ local serverCodeCompletionsSelector = baseSelector {
 local serverCodeGenerationsSelector = baseSelector { handler: '/v2/code/generations' };
 local serverChatSelector = baseSelector { handler: '/v1/chat/agent' };
 local serverXRaySelector = baseSelector { handler: '/v1/x-ray/libraries' };
-// Labels set by
-// https://pypi.org/project/prometheus-fastapi-instrumentator
-local commonServerLabels = [
-  'status',
-  'handler',
-  'method',
-] + runwayHelper.commonLabels;
 
 metricsCatalog.serviceDefinition(
   // Default Runway SLIs
@@ -58,6 +51,15 @@ metricsCatalog.serviceDefinition(
   )
   // Custom AI Gateway SLIs
   {
+    // Labels set by
+    // https://pypi.org/project/prometheus-fastapi-instrumentator
+    local runwayLabels = runwayHelper.labels(self),
+    local commonServerLabels = [
+      'status',
+      'handler',
+      'method',
+    ] + runwayLabels,
+
     serviceLevelIndicators+: {
       server: {
         severity: 's4',
@@ -293,7 +295,7 @@ metricsCatalog.serviceDefinition(
           selector=baseSelector,
         ),
 
-        significantLabels: ['model_engine', 'model_name'] + runwayHelper.commonLabels,
+        significantLabels: ['model_engine', 'model_name'] + runwayLabels,
 
         toolingLinks: [
           toolingLinks.kibana(
