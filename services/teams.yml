@@ -353,10 +353,8 @@ teams:
 - name: pipeline_security
   product_stage_group: pipeline_security
   slack_channel: g_pipeline-security
-  slack_alerts_channel: g_pipeline-security
-  slack_error_budget_channel:
-  - ci-section
-  - g_pipeline-security
+  slack_alerts_channel: g_pipeline-security_alerts
+  slack_error_budget_channel: ci-section
   send_error_budget_weekly_to_slack: true
   ignored_components:
   - graphql_query
