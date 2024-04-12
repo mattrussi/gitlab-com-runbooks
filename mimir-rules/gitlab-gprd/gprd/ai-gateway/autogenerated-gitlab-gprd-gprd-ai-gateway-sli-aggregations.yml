@@ -22,7 +22,7 @@ groups:
   rules:
   - record: sli_aggregations:stackdriver_cloud_run_revision_run_googleapis_com_request_latencies_bucket:rate_5m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,response_code,response_code_class,revision_name,shard,stage,stage_group,tier,type) (
+      sum by (component,env,environment,feature_category,fqdn,le,location,product_stage,region,response_code,response_code_class,revision_name,shard,stage,stage_group,tier,type) (
         rate(stackdriver_cloud_run_revision_run_googleapis_com_request_latencies_bucket{env="gprd",type=~"ai-gateway"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: ai-gateway - runway_ingress-ops - 5m burn-rate'
@@ -30,7 +30,7 @@ groups:
   rules:
   - record: sli_aggregations:stackdriver_cloud_run_revision_run_googleapis_com_request_count:rate_5m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,region,response_code,response_code_class,revision_name,shard,stage,stage_group,tier,type) (
+      sum by (component,env,environment,feature_category,fqdn,location,product_stage,region,response_code,response_code_class,revision_name,shard,stage,stage_group,tier,type) (
         rate(stackdriver_cloud_run_revision_run_googleapis_com_request_count{env="gprd",type=~"ai-gateway"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: ai-gateway - server-apdex - 5m burn-rate'
@@ -78,7 +78,7 @@ groups:
   rules:
   - record: sli_aggregations:stackdriver_cloud_run_revision_run_googleapis_com_request_latencies_bucket:rate_30m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,response_code,response_code_class,revision_name,shard,stage,stage_group,tier,type) (
+      sum by (component,env,environment,feature_category,fqdn,le,location,product_stage,region,response_code,response_code_class,revision_name,shard,stage,stage_group,tier,type) (
         rate(stackdriver_cloud_run_revision_run_googleapis_com_request_latencies_bucket{env="gprd",type=~"ai-gateway"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: ai-gateway - runway_ingress-ops - 30m burn-rate'
@@ -86,7 +86,7 @@ groups:
   rules:
   - record: sli_aggregations:stackdriver_cloud_run_revision_run_googleapis_com_request_count:rate_30m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,region,response_code,response_code_class,revision_name,shard,stage,stage_group,tier,type) (
+      sum by (component,env,environment,feature_category,fqdn,location,product_stage,region,response_code,response_code_class,revision_name,shard,stage,stage_group,tier,type) (
         rate(stackdriver_cloud_run_revision_run_googleapis_com_request_count{env="gprd",type=~"ai-gateway"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: ai-gateway - server-apdex - 30m burn-rate'
@@ -134,7 +134,7 @@ groups:
   rules:
   - record: sli_aggregations:stackdriver_cloud_run_revision_run_googleapis_com_request_latencies_bucket:rate_1h
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,response_code,response_code_class,revision_name,shard,stage,stage_group,tier,type) (
+      sum by (component,env,environment,feature_category,fqdn,le,location,product_stage,region,response_code,response_code_class,revision_name,shard,stage,stage_group,tier,type) (
         rate(stackdriver_cloud_run_revision_run_googleapis_com_request_latencies_bucket{env="gprd",type=~"ai-gateway"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: ai-gateway - runway_ingress-ops - 1h burn-rate'
@@ -142,7 +142,7 @@ groups:
   rules:
   - record: sli_aggregations:stackdriver_cloud_run_revision_run_googleapis_com_request_count:rate_1h
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,region,response_code,response_code_class,revision_name,shard,stage,stage_group,tier,type) (
+      sum by (component,env,environment,feature_category,fqdn,location,product_stage,region,response_code,response_code_class,revision_name,shard,stage,stage_group,tier,type) (
         rate(stackdriver_cloud_run_revision_run_googleapis_com_request_count{env="gprd",type=~"ai-gateway"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: ai-gateway - server-apdex - 1h burn-rate'

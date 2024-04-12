@@ -68,7 +68,15 @@ function(
           samplingInterval=60,
         ),
 
-        significantLabels: ['revision_name', 'response_code'] + runwayHelper.commonLabels,
+        significantLabels:
+          ['revision_name', 'response_code']
+          + runwayHelper.labels(self)
+          // In thanos the regional label on source metrics coming from stackdriver-exporter
+          // is not respected. To work around this we use the `location` label.
+          // We can remove this once we switch to mimir.
+          // https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/3398
+          + if regional then ['location'] else [],
+
 
         userImpacting: userImpacting,
 
