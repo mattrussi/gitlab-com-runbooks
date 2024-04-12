@@ -3,6 +3,7 @@ local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 metricsCatalog.serviceDefinition({
   type: 'external-dns',
   tier: 'sv',
+  tenants: [ 'gitlab-gprd', 'gitlab-gstg', 'gitlab-ops', 'gitlab-pre' ],
 
   monitoringThresholds: {
     apdexScore: 0.999,
