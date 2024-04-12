@@ -8,6 +8,7 @@ local dependOnRedisSidekiq = import 'inhibit-rules/depend_on_redis_sidekiq.libso
 metricsCatalog.serviceDefinition({
   type: 'ci-runners',
   tier: 'runners',
+  tenants: [ 'gitlab-gprd', 'gitlab-gstg', 'gitlab-ops', 'gitlab-pre' ],
   contractualThresholds: {
     apdexRatio: 0.95,
     errorRatio: 0.05,
