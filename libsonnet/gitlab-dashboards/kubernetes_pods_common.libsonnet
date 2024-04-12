@@ -231,21 +231,21 @@ local env_cluster_ns = 'env=~"$environment", cluster="$cluster", namespace="$nam
       )
       .addTarget(
         promQuery.target(
-          'sum(label_replace(node_namespace_pod_container:container_cpu_usage_seconds_total:sum_rate{env=~"$environment"}, "pod", "$1", "pod", "(.*)") * on(namespace,pod) group_left(workload) mixin_pod_workload{' + env_cluster_ns + ', workload=~"^$' + deploymentKind + '.*"}) by (pod)',
+          'sum(label_replace(node_namespace_pod_container:container_cpu_usage_seconds_total:sum_rate{env=~"$environment"}, "pod", "$1", "pod", "(.*)") * on(namespace,pod) group_left(workload) (mixin_pod_workload{' + env_cluster_ns + ', workload=~"^$' + deploymentKind + '.*"} or mixin_pod:workload{' + env_cluster_ns + ', workload=~"^$' + deploymentKind + '.*"} ) by (pod)',
           format='table',
           instant=true,
         )
       )
       .addTarget(
         promQuery.target(
-          'sum(kube_pod_container_resource_requests{resource="cpu", unit="core", env=~"$environment"} * on(namespace,pod) group_left(workload) mixin_pod_workload{' + env_cluster_ns + ', workload=~"^$' + deploymentKind + '.*"}) by (pod)',
+          'sum(kube_pod_container_resource_requests{resource="cpu", unit="core", env=~"$environment"} * on(namespace,pod) group_left(workload) (mixin_pod_workload{' + env_cluster_ns + ', workload=~"^$' + deploymentKind + '.*"} or (mixin_pod:workload{' + env_cluster_ns + ', workload=~"^$' + deploymentKind + '.*"} ) by (pod)',
           format='table',
           instant=true,
         )
       )
       .addTarget(
         promQuery.target(
-          'sum(label_replace(namespace_pod_container:container_cpu_usage_seconds_total:sum_rate{env=~"$environment"}, "pod", "$1", "pod", "(.*)") * on(pod) group_left(workload) mixin_pod_workload{' + env_cluster_ns + ', workload=~"^$' + deploymentKind + '.*"}) by (pod) / sum(kube_pod_container_resource_requests{resource="cpu", unit="core", env=~"$environment"} * on(pod) group_left(workload) mixin_pod_workload{' + env_cluster_ns + ', workload=~"^$' + deploymentKind + '.*"}) by (pod)',
+          'sum(label_replace(namespace_pod_container:container_cpu_usage_seconds_total:sum_rate{env=~"$environment"}, "pod", "$1", "pod", "(.*)") * on(pod) group_left(workload) (mixin_pod_workload{' + env_cluster_ns + ', workload=~"^$' + deploymentKind + '.*"} or mixin_pod:workload{' + env_cluster_ns + ', workload=~"^$' + deploymentKind + '.*"}) by (pod) / sum(kube_pod_container_resource_requests{resource="cpu", unit="core", env=~"$environment"} * on(pod) group_left(workload) (mixin_pod_workload{' + env_cluster_ns + ', workload=~"^$' + deploymentKind + '.*"} or mixin_pod:workload{' + env_cluster_ns + ', workload=~"^$' + deploymentKind + '.*"}) by (pod)',
           format='table',
           instant=true,
         )
