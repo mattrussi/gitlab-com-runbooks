@@ -112,17 +112,3 @@ groups:
           runbook: docs/frontend/haproxy.md
           title: HAProxy process high CPU usage on {{ $labels.fqdn }}
 
-# This alert doesn't work in production presently see https://gitlab.com/gitlab-com/runbooks/-/merge_requests/7107#note_1858305598
-#      - alert: HAProxyServerDown
-#        expr: avg without (fqdn,instance, zone) (avg_over_time(haproxy_server_status{state="UP", env="gprd"}[10m])) <= 0.5
-#        labels:
-#          pager: pagerduty
-#          severity: s2
-#          alert_type: cause
-#        annotations:
-#          runbook: docs/frontend/haproxy.md#server-down
-#          title: HAProxy failing backend server
-#          description: |
-#            More than half of the HAProxy instances think backend
-#            server={{ $labels.server }} backend={{ $labels.backend }} is down for the last 10 minutes.
-#            The server may not be reachable or have failing health checks.

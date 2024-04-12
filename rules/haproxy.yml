@@ -128,16 +128,3 @@ groups:
             Normally on reload old HAProxy processes with active connections should only remain active for 5 minutes.
             See the runbook for how to remove the extraneous processes.
 
-      - alert: HAProxyServerDown
-        expr: avg without (fqdn,instance) (avg_over_time(haproxy_server_status{state="UP", env="gprd"}[10m])) <= 0.5
-        labels:
-          pager: pagerduty
-          severity: s2
-          alert_type: cause
-        annotations:
-          runbook: docs/frontend/haproxy.md#server-down
-          title: HAProxy failing backend server
-          description: |
-            More than half of the HAProxy instances think backend
-            server={{ $labels.server }} backend={{ $labels.backend }} is down for the last 10 minutes.
-            The server may not be reachable or have failing health checks.
