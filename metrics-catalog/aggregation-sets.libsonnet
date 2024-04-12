@@ -300,7 +300,7 @@ local aggregationSet = import 'servicemetrics/aggregation-set.libsonnet';
     name: 'Global Service-Regional-Aggregated Metrics',
     intermediateSource: false,  // Used in dashboards and alerts
     selector: { monitor: 'global' },  // Thanos Ruler
-    labels: ['env', 'environment', 'tier', 'type', 'stage', 'region', 'location'],
+    labels: ['env', 'environment', 'tier', 'type', 'stage', 'region'],
     metricFormats: {
       apdexRatio: 'gitlab_service_regional_apdex:ratio_%s',
       opsRate: 'gitlab_service_regional_ops:rate_%s',
