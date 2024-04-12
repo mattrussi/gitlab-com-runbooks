@@ -45,7 +45,7 @@ local sidekiqAlerts(registry, extraSelector) =
       ||| % {
         selector: selectors.serializeHash({ urgency: { eq: 'throttled' } } + extraSelector),
         enqueueRate: registry.recordingRuleNameFor('sidekiq_enqueued_jobs_total', '1h'),
-        executionRate: registry.recordingRuleNameFor('gitlab_sli_sidekiq_execution_total_rate', '1h'),
+        executionRate: registry.recordingRuleNameFor('gitlab_sli_sidekiq_execution_total', '1h'),
       },
       'for': '30m',
       labels: {
@@ -81,7 +81,7 @@ local sidekiqAlerts(registry, extraSelector) =
       ||| % {
         selector: selectors.serializeHash(extraSelector),
         enqueueRate: registry.recordingRuleNameFor('sidekiq_enqueued_jobs_total', '6h'),
-        executionRate: registry.recordingRuleNameFor('gitlab_sli_sidekiq_execution_total_rate', '6h'),
+        executionRate: registry.recordingRuleNameFor('gitlab_sli_sidekiq_execution_total', '6h'),
       },
       'for': '20m',
       labels: {
@@ -100,7 +100,9 @@ local sidekiqAlerts(registry, extraSelector) =
         grafana_panel_id: stableIds.hashStableId('request-rate'),
         grafana_variables: 'environment,stage,queue',
         grafana_min_zoom_hours: '6',
-        promql_template_1: 'sli_aggregations:gitlab_sli_sidekiq_execution_apdex_success_total_rate6h{environment="$environment", queue="$queue"}',
+        promql_template_1: '%(executionRate6h)s{environment="$environment", queue="$queue"}' % {
+          executionRate6h: registry.recordingRuleNameFor('gitlab_sli_sidekiq_execution_total', '6h'),
+        },
       },
     },
     {
@@ -112,7 +114,7 @@ local sidekiqAlerts(registry, extraSelector) =
       ||| % {
         selector: selectors.serializeHash(extraSelector),
         enqueueRate: registry.recordingRuleNameFor('sidekiq_enqueued_jobs_total', '6h'),
-        executionRate: registry.recordingRuleNameFor('gitlab_sli_sidekiq_execution_total_rate', '6h'),
+        executionRate: registry.recordingRuleNameFor('gitlab_sli_sidekiq_execution_total', '6h'),
       },
       'for': '20m',
       labels: {
@@ -131,7 +133,9 @@ local sidekiqAlerts(registry, extraSelector) =
         grafana_panel_id: stableIds.hashStableId('request-rate'),
         grafana_variables: 'environment,stage,worker',
         grafana_min_zoom_hours: '6',
-        promql_template_1: 'sli_aggregations:gitlab_sli_sidekiq_execution_apdex_success_total_rate6h{environment="$environment", worker="$worker"}',
+        promql_template_1: '%(executionRate6h)s{environment="$environment", worker="$worker"}' % {
+          executionRate6h: registry.recordingRuleNameFor('gitlab_sli_sidekiq_execution_total', '6h'),
+        },
       },
     },
     {
@@ -194,7 +198,7 @@ local sidekiqAlerts(registry, extraSelector) =
         apdexTotalRate6h: registry.recordingRuleNameFor('gitlab_sli_sidekiq_execution_apdex_total', '6h'),
         apdexSuccessRate30m: registry.recordingRuleNameFor('gitlab_sli_sidekiq_execution_apdex_success_total', '30m'),
         apdexTotalRate30m: registry.recordingRuleNameFor('gitlab_sli_sidekiq_execution_apdex_total', '30m'),
-        opsRate6h: registry.recordingRuleNameFor('gitlab_sli_sidekiq_execution_total_rate', '6h'),
+        opsRate6h: registry.recordingRuleNameFor('gitlab_sli_sidekiq_execution_total', '6h'),
         selector: selectors.serializeHash(extraSelector),
         minimumOpRate: minimumOpRate.calculateFromSamplesForDuration('6h', minimumSamplesForMonitoringApdex),
         apdexThreshold: fixedApdexThreshold,
@@ -229,28 +233,28 @@ local sidekiqAlerts(registry, extraSelector) =
       expr: |||
         (
           (
-            sli_aggregations:gitlab_sli_sidekiq_execution_error_total_rate6h{%(selector)s}
+            %(errorRate6h)s{%(selector)s}
             /
-            sli_aggregations:gitlab_sli_sidekiq_execution_total_rate6h{%(selector)s}
+            %(opsRate6h)s{%(selector)s}
           ) > %(errorThreshold)s
           and
           (
-            sli_aggregations:gitlab_sli_sidekiq_execution_error_total_rate30m{%(selector)s}
+            %(errorRate30m)s{%(selector)s}
             /
-            sli_aggregations:gitlab_sli_sidekiq_execution_total_rate30m{%(selector)s}
+            %(opsRate30m)s{%(selector)s}
           ) > %(errorThreshold)s
         )
         and on (env, environment, tier, type, stage, shard, queue, feature_category, urgency, worker)
         (
           sum by (env, environment, tier, type, stage, shard, queue, feature_category, urgency, worker) (
-            sli_aggregations:gitlab_sli_sidekiq_execution_total_rate6h{%(selector)s}
+            %(opsRate6h)s{%(selector)s}
           ) >= %(minimumOpRate)s
         )
       ||| % {
         errorRate6h: registry.recordingRuleNameFor('gitlab_sli_sidekiq_execution_error_total', '6h'),
-        opsRate6h: registry.recordingRuleNameFor('gitlab_sli_sidekiq_execution_total_rate', '6h'),
+        opsRate6h: registry.recordingRuleNameFor('gitlab_sli_sidekiq_execution_total', '6h'),
         errorRate30m: registry.recordingRuleNameFor('gitlab_sli_sidekiq_execution_error_total', '30m'),
-        opsRate30m: registry.recordingRuleNameFor('gitlab_sli_sidekiq_execution_total_rate', '30m'),
+        opsRate30m: registry.recordingRuleNameFor('gitlab_sli_sidekiq_execution_total', '30m'),
         selector: selectors.serializeHash(extraSelector),
         minimumOpRate: minimumOpRate.calculateFromSamplesForDuration('6h', minimumSamplesForMonitoringErrors),
         errorThreshold: fixedErrorRateThreshold,

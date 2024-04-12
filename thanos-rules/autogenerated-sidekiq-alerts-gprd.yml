@@ -38,7 +38,7 @@ groups:
       unless
       (
         sum by (environment, queue, feature_category, worker) (
-          sli_aggregations:gitlab_sli_sidekiq_execution_total_rate_rate1h{env="gprd",urgency="throttled"}
+          sli_aggregations:gitlab_sli_sidekiq_execution_total_rate1h{env="gprd",urgency="throttled"}
         ) > 0
       )
   - alert: SidekiqQueueNoLongerBeingProcessed
@@ -54,7 +54,7 @@ groups:
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3168042924"
       grafana_variables: environment,stage,queue
-      promql_template_1: sli_aggregations:gitlab_sli_sidekiq_execution_apdex_success_total_rate6h{environment="$environment",
+      promql_template_1: sli_aggregations:gitlab_sli_sidekiq_execution_total_rate6h{environment="$environment",
         queue="$queue"}
       runbook: docs/sidekiq/sidekiq-queue-not-being-processed.md
     labels:
@@ -67,7 +67,7 @@ groups:
     expr: |
       (sum by(environment, queue) (sli_aggregations:sidekiq_enqueued_jobs_total_rate6h{env="gprd"})> 0.001)
       unless
-      (sum by(environment, queue) (sli_aggregations:gitlab_sli_sidekiq_execution_total_rate_rate6h{env="gprd"}) > 0)
+      (sum by(environment, queue) (sli_aggregations:gitlab_sli_sidekiq_execution_total_rate6h{env="gprd"}) > 0)
   - alert: SidekiqWorkerNoLongerBeingProcessed
     for: 20m
     annotations:
@@ -81,7 +81,7 @@ groups:
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3168042924"
       grafana_variables: environment,stage,worker
-      promql_template_1: sli_aggregations:gitlab_sli_sidekiq_execution_apdex_success_total_rate6h{environment="$environment",
+      promql_template_1: sli_aggregations:gitlab_sli_sidekiq_execution_total_rate6h{environment="$environment",
         worker="$worker"}
       runbook: docs/sidekiq/sidekiq-queue-not-being-processed.md
     labels:
@@ -94,7 +94,7 @@ groups:
     expr: |
       (sum by(environment, worker) (sli_aggregations:sidekiq_enqueued_jobs_total_rate6h{env="gprd"})> 0.001)
       unless
-      (sum by(environment, worker) (sli_aggregations:gitlab_sli_sidekiq_execution_total_rate_rate6h{env="gprd"})  > 0)
+      (sum by(environment, worker) (sli_aggregations:gitlab_sli_sidekiq_execution_total_rate6h{env="gprd"})  > 0)
   - alert: SidekiqJobsSkippedTooLong
     for: 3h
     annotations:
@@ -164,7 +164,7 @@ groups:
       and on (env, environment, tier, type, stage, shard, queue, feature_category, urgency, worker)
       (
         sum by (env, environment, tier, type, stage, shard, queue, feature_category, urgency, worker) (
-          sli_aggregations:gitlab_sli_sidekiq_execution_total_rate_rate6h{env="gprd"}
+          sli_aggregations:gitlab_sli_sidekiq_execution_total_rate6h{env="gprd"}
         ) >= 0.055555555555555552
       )
   - alert: SidekiqServiceWorkerExecutionErrorSLOViolation
