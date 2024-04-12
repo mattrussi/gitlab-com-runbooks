@@ -7,6 +7,7 @@ local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 metricsCatalog.serviceDefinition({
   type: 'camoproxy',
   tier: 'sv',
+  tenants: [ 'gitlab-gprd', 'gitlab-gstg', 'gitlab-pre' ],
   monitoringThresholds: {
     apdexScore: 0.999,
     errorRatio: 0.8,
