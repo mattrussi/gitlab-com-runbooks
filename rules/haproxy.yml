@@ -127,4 +127,3 @@ groups:
             These processes can interfere with state changes and may cause issues with deployments.
             Normally on reload old HAProxy processes with active connections should only remain active for 5 minutes.
             See the runbook for how to remove the extraneous processes.
-
