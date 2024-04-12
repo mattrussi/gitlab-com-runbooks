@@ -242,7 +242,8 @@ In order to ensure we remain highly available, this operation should only be app
 This process is automated via a script in the `runbooks` repository:
 
 ```
-scripts/redis-reconfigure.sh gstg redis-cache
+scripts/omnibus-redis-reconfigure.sh gstg redis-cache # if the instance is using omnibus-gitlab
+scripts/redis-reconfigure.sh gstg redis-cache # if the instance is using the gitlab-redis cookbook
 ```
 
 For Redis Cluster, the reconfiguration process is similar. But due to the varied cluster topologies, fetch the list of node FQDNs by run the following `knife` command in [chef-repo](https://gitlab.com/gitlab-com/gl-infra/chef-repo/):

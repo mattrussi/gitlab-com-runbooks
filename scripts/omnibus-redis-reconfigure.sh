@@ -6,9 +6,9 @@
 set -euo pipefail
 
 if [[ $# -lt 2 ]]; then
-  echo >&2 "usage: redis-reconfigure.sh env cluster [bootstrap]"
+  echo >&2 "usage: omnibus-redis-reconfigure.sh env cluster [bootstrap]"
   echo >&2 ""
-  echo >&2 "  e.g. redis-reconfigure.sh gstg redis-cache"
+  echo >&2 "  e.g. omnibus-redis-reconfigure.sh gstg redis-cache"
   echo >&2 ""
   exit 65
 fi
@@ -38,8 +38,13 @@ gprd)
   ;;
 esac
 
-export redis_cli='sudo gitlab-redis-cli'
-export sentinel="${gitlab_redis_cluster}-01-db-${gitlab_env}.c.${gitlab_project}.internal"
+export redis_cli='REDISCLI_AUTH="$(sudo grep ^requirepass /var/opt/gitlab/redis/redis.conf|cut -d" " -f2|tr -d \")" /opt/gitlab/embedded/bin/redis-cli'
+
+if [[ $gitlab_redis_cluster == "redis-cache" ]]; then
+  export sentinel="${gitlab_redis_cluster}-sentinel-01-db-${gitlab_env}.c.${gitlab_project}.internal"
+else
+  export sentinel="${gitlab_redis_cluster}-01-db-${gitlab_env}.c.${gitlab_project}.internal"
+fi
 
 wait_for_input() {
   declare input
@@ -67,7 +72,7 @@ failover_if_master() {
   if [[ $role == "master" ]]; then
     echo failing over
     wait_for_input
-    ssh "$sentinel" "/opt/redis/redis-cli -p 26379 sentinel failover mymaster"
+    ssh "$sentinel" "/opt/gitlab/embedded/bin/redis-cli -p 26379 sentinel failover ${gitlab_env}-${gitlab_redis_cluster}"
   fi
 
   # wait for master to step down and sync (expect "slave" [sic] and "connected")
@@ -81,7 +86,7 @@ failover_if_master() {
   done
 
   # wait for sentinel to ack the master change
-  while [[ "$(ssh "$sentinel" "/opt/redis/redis-cli -p 26379 --raw sentinel master mymaster" | grep -A1 ^ip$ | tail -n +2 | awk '{ print substr($0, length($0)-1) }')" == "$i" ]]; do
+  while [[ "$(ssh "$sentinel" "/opt/gitlab/embedded/bin/redis-cli -p 26379 --raw sentinel master ${gitlab_env}-${gitlab_redis_cluster}" | grep -A1 ^ip$ | tail -n +2 | awk '{ print substr($0, length($0)-1) }')" == "$i" ]]; do
     echo waiting for sentinel
     sleep 1
   done
@@ -93,7 +98,7 @@ check_sentinel_quorum() {
   # check sentinel quorum
   echo sentinel ckquorum
 
-  quorum=$(ssh "$sentinel" "/opt/redis/redis-cli -p 26379 sentinel ckquorum mymaster")
+  quorum=$(ssh "$sentinel" "/opt/gitlab/embedded/bin/redis-cli -p 26379 sentinel ckquorum ${gitlab_env}-${gitlab_redis_cluster}")
   echo $quorum
 
   if [[ $quorum != "OK 3 usable Sentinels. Quorum and failover authorization can be reached" ]]; then
@@ -106,6 +111,19 @@ run_chef_client() {
   echo chef-client
   wait_for_input
   ssh "$fqdn" "sudo chef-client"
+}
+
+gitlab_ctl_reconfigure() {
+  # this _will_ restart processes
+  echo gitlab-ctl reconfigure
+  wait_for_input
+  ssh "$fqdn" "sudo gitlab-ctl reconfigure"
+}
+
+gitlab_ctl_restart_sentinel() {
+  echo gitlab-ctl restart sentinel
+  wait_for_input
+  ssh "$fqdn" "sudo gitlab-ctl restart sentinel"
 }
 
 reconfigure() {
@@ -139,6 +157,8 @@ reconfigure() {
   echo config set save
   ssh "$fqdn" "$redis_cli config set save ''"
 
+  gitlab_ctl_reconfigure
+
   # wait for master to step down and sync (expect "slave" [sic] and "connected")
   while ! [[ "$(ssh "$fqdn" "$redis_cli role" | head -n1)" == "slave" ]]; do
     echo waiting for stepdown
@@ -165,6 +185,23 @@ reconfigure() {
   echo "< reconfigure $fqdn"
 }
 
+reconfigure_sentinel() {
+  export i=$1
+  export fqdn="${gitlab_redis_cluster}-sentinel-$i-db-${gitlab_env}.c.${gitlab_project}.internal"
+
+  check_sentinel_quorum
+
+  run_chef_client
+
+  gitlab_ctl_reconfigure
+
+  gitlab_ctl_restart_sentinel
+
+  check_sentinel_quorum
+
+  echo "< reconfigure $fqdn"
+}
+
 bootstrap() {
   export i=$1
   export fqdn="${gitlab_redis_cluster}-$i-db-${gitlab_env}.c.${gitlab_project}.internal"
@@ -183,6 +220,8 @@ bootstrap() {
 
   run_chef_client
 
+  gitlab_ctl_reconfigure
+
   if [ $i != 01 ]; then
     echo "> setting $fqdn as replica of $primary"
     ssh $fqdn "$redis_cli replicaof $primary 6379"
@@ -194,9 +233,14 @@ for i in 01 02 03; do
 
   if [[ $bootstrap == "yes" ]]; then
     bootstrap $i
-    failover_if_master $i
   else
+    failover_if_master $i
     reconfigure $i
+
+    if [[ $gitlab_redis_cluster == "redis-cache" ]]; then
+      reconfigure_sentinel $i
+    fi
+
   fi
 
   echo

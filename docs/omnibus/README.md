@@ -38,6 +38,7 @@
 * [Provisioning Redis Cluster](../redis/provisioning-redis-cluster.md)
 * [../redis/redis-functional-partitioning.md](../redis/redis-functional-partitioning.md)
 * [Redis RDB Snapshots](../redis/redis-rdb-snapshots.md)
+* [A survival guide for SREs to working with Redis at GitLab](../redis/redis-survival-guide-for-sres.md)
 * [../redis/redis.md](../redis/redis.md)
 * [Container Registry CDN](../registry/cdn.md)
 * [A survival guide for SREs to working with Sidekiq at GitLab](../sidekiq/sidekiq-survival-guide-for-sres.md)
