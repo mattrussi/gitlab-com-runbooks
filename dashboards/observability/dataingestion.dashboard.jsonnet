@@ -110,7 +110,7 @@ basic.dashboard(
     basic.timeseries(
       title='Top 10 by namespace',
       query=|||
-        topk(10, sum(analytics_events_total_count{}) by (feature_name, namespace_id))
+        topk(10, sum(analytics_events_total_count{env="$environment"}) by (feature_name, namespace_id))
       |||,
       yAxisLabel='count',
       fill=5,
@@ -120,7 +120,7 @@ basic.dashboard(
     basic.timeseries(
       title='Top 10 by project',
       query=|||
-        topk(10, sum(analytics_events_total_count{}) by (feature_name, project_id))
+        topk(10, sum(analytics_events_total_count{env="$environment"}) by (feature_name, project_id))
       |||,
       yAxisLabel='count',
       fill=5,
