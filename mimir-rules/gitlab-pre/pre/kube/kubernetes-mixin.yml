@@ -70,7 +70,7 @@
     "record": "mixin_pod:workload"
 - "name": "node.rules"
   "rules":
-  - "expr": | 
+  - "expr": |
       sum(min(kube_pod_info{env="pre"}) by (node))
     "record": ":kube_pod_info_node_count:"
   - "expr": |
