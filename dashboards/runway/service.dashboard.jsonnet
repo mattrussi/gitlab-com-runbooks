@@ -13,7 +13,7 @@ local commonAnnotations = import 'grafana/common_annotations.libsonnet';
 // https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/3398
 
 local formatConfig = {
-  selector: selectors.serializeHash({ job: 'runway-exporter', env: '$environment', type: '$type' }),
+  selector: selectors.serializeHash({ job: 'runway-exporter', env: '$environment', type: '$type', location: '$region' }),
 };
 
 basic.dashboard(
@@ -28,6 +28,15 @@ basic.dashboard(
   label='service',
   refresh='load',
   sort=1,
+))
+.addTemplate(template.new(
+  'region',
+  '$PROMETHEUS_DS',
+  'label_values(stackdriver_cloud_run_revision_run_googleapis_com_container_instance_count{job="runway-exporter", env="$environment", type="$type"}, location)',
+  refresh='load',
+  sort=1,
+  includeAll=true,
+  allValues='.+',
 ))
 .addAnnotation(commonAnnotations.deploymentsForRunway('${type}'))
 .addPanels(
