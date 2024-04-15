@@ -36,7 +36,6 @@ metricsCatalog.serviceDefinition({
     redis: true,
     patroni: true,
     pgbouncer: true,
-    praefect: true,
     consul: true,
   },
   provisioning: {

@@ -1669,62 +1669,6 @@ groups:
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
-      tier: stor
-      type: praefect
-    expr: "0.995000"
-  - record: slo:max:events:gitlab_service_errors:ratio
-    labels:
-      tier: stor
-      type: praefect
-    expr: "0.000500"
-  - record: slo:min:events:gitlab_service_apdex:ratio
-    labels:
-      component: praefect_cloudsql
-      tier: stor
-      type: praefect
-    expr: "0.995000"
-  - record: slo:max:events:gitlab_service_errors:ratio
-    labels:
-      component: praefect_cloudsql
-      tier: stor
-      type: praefect
-    expr: "0.000500"
-  - record: slo:min:events:gitlab_service_apdex:ratio
-    labels:
-      component: proxy
-      tier: stor
-      type: praefect
-    expr: "0.995000"
-  - record: slo:max:events:gitlab_service_errors:ratio
-    labels:
-      component: proxy
-      tier: stor
-      type: praefect
-    expr: "0.000500"
-  - record: slo:min:events:gitlab_service_apdex:ratio
-    labels:
-      component: replicator_queue
-      tier: stor
-      type: praefect
-    expr: "0.995000"
-  - record: slo:max:events:gitlab_service_errors:ratio
-    labels:
-      component: replicator_queue
-      tier: stor
-      type: praefect
-    expr: "0.000500"
-  - record: slo:min:deployment:gitlab_service_apdex:ratio
-    labels:
-      tier: stor
-      type: praefect
-    expr: "0.995000"
-  - record: slo:max:deployment:gitlab_service_errors:ratio
-    labels:
-      tier: stor
-      type: praefect
-    expr: "0.000500"
-  - record: slo:min:events:gitlab_service_apdex:ratio
-    labels:
       tier: db
       type: redis-cluster-cache
     expr: "0.999500"
@@ -4247,33 +4191,6 @@ groups:
       service_aggregation: "yes"
       tier: sv
       type: plantuml
-    expr: "1"
-  - record: gitlab_component_service:mapping
-    labels:
-      component: praefect_cloudsql
-      global_aggregation: "no"
-      regional_aggregation: "no"
-      service_aggregation: "no"
-      tier: stor
-      type: praefect
-    expr: "1"
-  - record: gitlab_component_service:mapping
-    labels:
-      component: proxy
-      global_aggregation: "no"
-      regional_aggregation: "no"
-      service_aggregation: "yes"
-      tier: stor
-      type: praefect
-    expr: "1"
-  - record: gitlab_component_service:mapping
-    labels:
-      component: replicator_queue
-      global_aggregation: "no"
-      regional_aggregation: "no"
-      service_aggregation: "yes"
-      tier: stor
-      type: praefect
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:

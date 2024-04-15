@@ -49,8 +49,6 @@
 * [GPG Keys for Package Signing](../packaging/manage-package-signing-keys.md)
 * [Credential rotation](../patroni/postgresql-role-credential-rotation.md)
 * [Rotating Rails' PostgreSQL password](../patroni/rotating-rails-postgresql-password.md)
-* [Add and remove file storages to praefect](../praefect/praefect-file-storages.md)
-* [Praefect Database User Password Rotation](../praefect/praefect-password-rotation.md)
 * [../product_analytics/clickhouse-backup-restore.md](../product_analytics/clickhouse-backup-restore.md)
 * [Provisioning Redis Cluster](../redis/provisioning-redis-cluster.md)
 * [../redis/redis-functional-partitioning.md](../redis/redis-functional-partitioning.md)

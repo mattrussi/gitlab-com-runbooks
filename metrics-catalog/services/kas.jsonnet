@@ -6,7 +6,7 @@ local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 metricsCatalog.serviceDefinition({
   type: 'kas',
   tier: 'sv',
-  tenants: [ 'gitlab-gprd', 'gitlab-gstg', 'gitlab-pre' ],
+  tenants: ['gitlab-gprd', 'gitlab-gstg', 'gitlab-pre'],
 
   tags: ['golang'],
 
@@ -28,7 +28,6 @@ metricsCatalog.serviceDefinition({
     api: true,
     gitaly: true,
     kas: true,
-    praefect: true,
     redis: true,
   },
   provisioning: {

@@ -27,7 +27,6 @@
 * [Diagnosis with Kibana](../onboarding/kibana-diagnosis.md)
 * [../patroni/pg_collect_query_data.md](../patroni/pg_collect_query_data.md)
 * [../patroni/postgresql-backups-wale-walg.md](../patroni/postgresql-backups-wale-walg.md)
-* [Praefect error rate is too high](../praefect/praefect-error-rate.md)
 * [PubSub Queuing Rate Increasing](pubsub-queing.md)
 * [A survival guide for SREs to working with Redis at GitLab](../redis/redis-survival-guide-for-sres.md)
 * [A survival guide for SREs to working with Sidekiq at GitLab](../sidekiq/sidekiq-survival-guide-for-sres.md)

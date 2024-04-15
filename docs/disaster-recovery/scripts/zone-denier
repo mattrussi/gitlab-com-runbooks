@@ -185,7 +185,6 @@ main() {
       "deploy-"
       "fe-"
       "gitaly-"
-      "praefect-"
       "prometheus-"
       "sd-exporter-"
       "thanos-compact-"

@@ -8,10 +8,6 @@ shell. As with all manual database access, this should be kept to a minimum,
 and frequently-requested information should be exposed as Prometheus metrics if
 possible.
 
-# Praefect Database
-
-See [here](../praefect/praefect-database.md) for troubleshooting the Praefect Cloud SQL database.
-
 # General case
 
 ## Logs

@@ -54,10 +54,6 @@ local gitalyApdexSlowMethods = [
   'WriteRef',
 ];
 
-local praefectApdexSlowMethods = [
-  'VoteTransaction',  // https://gitlab.com/gitlab-org/gitaly/-/issues/4456
-];
-
 // This is a list of GRPC codes that should not be included in
 // our error rate SLIs as they are either not errors or result
 // from client side events that we should not be alerted on
@@ -111,7 +107,6 @@ local gitalyGRPCErrorRate(baseSelector) =
 {
   gitalyApdexIgnoredMethods:: gitalyApdexIgnoredMethods,
   gitalyApdexSlowMethods:: gitalyApdexSlowMethods,
-  praefectApdexSlowMethods:: praefectApdexSlowMethods,
 
   grpcServiceApdex:: grpcServiceApdex,
   gitalyGRPCErrorRate:: gitalyGRPCErrorRate,

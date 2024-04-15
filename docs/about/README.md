@@ -86,8 +86,6 @@
 * [../pgbouncer/patroni-consul-postgres-pgbouncer-interactions.md](../pgbouncer/patroni-consul-postgres-pgbouncer-interactions.md)
 * [../pgbouncer/service-pgbouncer.md](../pgbouncer/service-pgbouncer.md)
 * [Postgres Replicas](../postgres-dr-delayed/postgres-dr-replicas.md)
-* [Praefect Database User Password Rotation](../praefect/praefect-password-rotation.md)
-* [Praefect has unavailable repositories](../praefect/praefect-unavailable-repo.md)
 * [../product_analytics/ssl-troubleshooting.md](../product_analytics/ssl-troubleshooting.md)
 * [Redis Cluster](../redis/redis-cluster.md)
 * [../redis/redis-functional-partitioning.md](../redis/redis-functional-partitioning.md)

@@ -739,36 +739,6 @@ services:
         primary_grafana_dashboard:
         sentry_slug:
 
-  - name: praefect
-    tier: stor
-    friendly_name: Praefect
-    teams:
-      - gitaly
-    label: Praefect
-    owner: gitaly
-    technical:
-      project:
-        - https://gitlab.com/gitlab-org/gitaly
-      documents:
-        design: https://gitlab.com/gitlab-org/gitaly/blob/master/doc/design_ha.md
-        architecture: https://about.gitlab.com/handbook/engineering/infrastructure/production-architecture/#service-architecture
-        sre_guide: https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/praefect
-        developer_guide: https://docs.gitlab.com/ee/development/gitaly.html#gitaly-developers-guide
-        readiness_review:
-        service:
-          - https://gitlab.com/gitlab-org/gitaly/blob/master/README.md
-        security:
-      dependencies:
-        - service: gitaly
-      logging:
-        - name: system
-          permalink: https://log.gprd.gitlab.net/goto/769b1e96dc189470332cd7005dd6f878
-    observability:
-      monitors:
-        sentry_slug: gitlab/praefect-production
-        grafana_folder: SRXyrrSmk
-        primary_grafana_dashboard: praefect-main/praefect-overview
-
   - name: ai-gateway
     tier: sv
     friendly_name: AI Gateway
