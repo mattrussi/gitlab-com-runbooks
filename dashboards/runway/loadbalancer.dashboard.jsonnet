@@ -28,7 +28,7 @@ basic.dashboard(
 .addTemplate(template.new(
   'region',
   '$PROMETHEUS_DS',
-  'label_values(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_backend_request_count{job="runway-exporter", env="$environment", url_map_name="$loadbalancer"}, region)',
+  'label_values(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_backend_request_count{job="runway-exporter", env="$environment", url_map_name="$loadbalancer"}, backend_scope)',
   refresh='load',
   sort=1,
   includeAll=true,
@@ -42,13 +42,13 @@ basic.dashboard(
         description='Rate of requests served by backends of external HTTP(S) load balancer.',
         yAxisLabel='Requests per Second',
         query=|||
-          sum by (response_code_class) (
+          sum by (response_code_class, backend_scope) (
             rate(
               stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_backend_request_count{%(selector)s}[$__rate_interval]
             )
           )
         ||| % formatConfig,
-        legendFormat='{{response_code_class}}',
+        legendFormat='{{response_code_class}} {{backend_scope}}',
         intervalFactor=2,
       ),
       basic.latencyTimeseries(
@@ -58,13 +58,13 @@ basic.dashboard(
         query=|||
           histogram_quantile(
             0.99,
-            sum by (revision_name, le) (
+            sum by (revision_name, le, backend_scope) (
               rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_backend_latencies_bucket{%(selector)s}[$__rate_interval])
             )
           )
         ||| % formatConfig,
         format='ms',
-        legendFormat='p99 {{revision_name}}',
+        legendFormat='p99 {{revision_name}} {{backend_scope}}',
         intervalFactor=2,
       ),
     ]
