@@ -12,6 +12,7 @@ local baseSelector = { type: 'gitaly', job: { oneOf: ['gitaly', 'scrapeConfig/mo
 metricsCatalog.serviceDefinition({
   type: 'gitaly',
   tier: 'stor',
+  tenants: [ 'gitlab-gprd', 'gitlab-gstg', 'gitlab-pre' ],
 
   // disk_performance_monitoring requires disk utilisation metrics are currently reporting correctly for
   // HDD volumes, see https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/10248
