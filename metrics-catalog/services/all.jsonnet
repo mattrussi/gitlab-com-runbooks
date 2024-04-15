@@ -24,6 +24,7 @@
   import 'glgo.jsonnet',
   import 'google-cloud-storage.jsonnet',
   import 'internal-api.jsonnet',
+  import 'istio.jsonnet',
   import 'jaeger.jsonnet',
   import 'kas.jsonnet',
   import 'kube.jsonnet',
