@@ -26,8 +26,7 @@ There are two ways to use to Teleport to connect to a Rails console:
 
 ### Installing tsh
 
-Official packages for [macOS](https://goteleport.com/docs/installation/#macos) and [Linux](https://goteleport.com/docs/installation/#linux)
-can be found at Teleport's website.
+Use the [official docs](https://goteleport.com/docs/connect-your-client/tsh/#installing-tsh) to install `tsh`.
 
 #### Accessing the Rails console via Teleport
 
