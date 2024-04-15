@@ -7,40 +7,40 @@ groups:
   - record: application_sli_aggregation:rails_request:error:rate_5m
     expr: |
       sum by (env,environment,tier,type,stage,endpoint_id,feature_category,request_urgency) (
-        (sli_aggregations:gitlab_sli_rails_request_error_total_rate5m{env="gprd",monitor!="global",type="api"} >= 0)
+        (sli_aggregations:gitlab_sli_rails_request_error_total:rate_5m{env="gprd",monitor!="global",type="api"} >= 0)
       )
   - record: application_sli_aggregation:rails_request:ops:rate_5m
     expr: |
       sum by (env,environment,tier,type,stage,endpoint_id,feature_category,request_urgency) (
-        (sli_aggregations:gitlab_sli_rails_request_total_rate5m{env="gprd",monitor!="global",type="api"} >= 0)
+        (sli_aggregations:gitlab_sli_rails_request_total:rate_5m{env="gprd",monitor!="global",type="api"} >= 0)
       )
   - record: application_sli_aggregation:rails_request:apdex:weight:score_5m
     expr: |
       sum by (env,environment,tier,type,stage,endpoint_id,feature_category,request_urgency) (
-        (sli_aggregations:gitlab_sli_rails_request_apdex_total_rate5m{env="gprd",monitor!="global",type="api"} >= 0)
+        (sli_aggregations:gitlab_sli_rails_request_apdex_total:rate_5m{env="gprd",monitor!="global",type="api"} >= 0)
       )
   - record: application_sli_aggregation:rails_request:apdex:success:rate_5m
     expr: |
       sum by (env,environment,tier,type,stage,endpoint_id,feature_category,request_urgency) (
-        (sli_aggregations:gitlab_sli_rails_request_apdex_success_total_rate5m{env="gprd",monitor!="global",type="api"} >= 0)
+        (sli_aggregations:gitlab_sli_rails_request_apdex_success_total:rate_5m{env="gprd",monitor!="global",type="api"} >= 0)
       )
   - record: application_sli_aggregation:rails_request:error:rate_1h
     expr: |
       sum by (env,environment,tier,type,stage,endpoint_id,feature_category,request_urgency) (
-        (sli_aggregations:gitlab_sli_rails_request_error_total_rate1h{env="gprd",monitor!="global",type="api"} >= 0)
+        (sli_aggregations:gitlab_sli_rails_request_error_total:rate_1h{env="gprd",monitor!="global",type="api"} >= 0)
       )
   - record: application_sli_aggregation:rails_request:ops:rate_1h
     expr: |
       sum by (env,environment,tier,type,stage,endpoint_id,feature_category,request_urgency) (
-        (sli_aggregations:gitlab_sli_rails_request_total_rate1h{env="gprd",monitor!="global",type="api"} >= 0)
+        (sli_aggregations:gitlab_sli_rails_request_total:rate_1h{env="gprd",monitor!="global",type="api"} >= 0)
       )
   - record: application_sli_aggregation:rails_request:apdex:weight:score_1h
     expr: |
       sum by (env,environment,tier,type,stage,endpoint_id,feature_category,request_urgency) (
-        (sli_aggregations:gitlab_sli_rails_request_apdex_total_rate1h{env="gprd",monitor!="global",type="api"} >= 0)
+        (sli_aggregations:gitlab_sli_rails_request_apdex_total:rate_1h{env="gprd",monitor!="global",type="api"} >= 0)
       )
   - record: application_sli_aggregation:rails_request:apdex:success:rate_1h
     expr: |
       sum by (env,environment,tier,type,stage,endpoint_id,feature_category,request_urgency) (
-        (sli_aggregations:gitlab_sli_rails_request_apdex_success_total_rate1h{env="gprd",monitor!="global",type="api"} >= 0)
+        (sli_aggregations:gitlab_sli_rails_request_apdex_success_total:rate_1h{env="gprd",monitor!="global",type="api"} >= 0)
       )

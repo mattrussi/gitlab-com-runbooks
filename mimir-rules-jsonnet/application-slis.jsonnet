@@ -3,6 +3,7 @@ local applicationSlis = (import 'gitlab-slis/library.libsonnet');
 local applicationSliAggregations = import 'gitlab-slis/aggregation-sets.libsonnet';
 local aggregationSetTransformer = import 'servicemetrics/aggregation-set-transformer.libsonnet';
 local monitoredServices = (import 'gitlab-metrics-config.libsonnet').monitoredServices;
+local recordingRuleRegistry = import 'servicemetrics/recording-rule-registry.libsonnet';
 
 local transformRuleGroups(sourceAggregationSet, targetAggregationSet, extraSourceSelector, extrasForGroup={}) =
   aggregationSetTransformer.generateRecordingRuleGroups(
@@ -12,8 +13,8 @@ local transformRuleGroups(sourceAggregationSet, targetAggregationSet, extraSourc
   );
 
 local groupsForApplicationSli(sli, extraSelector) =
-  local targetAggregationSet = applicationSliAggregations.targetAggregationSet(sli);
-  local sourceAggregationSet = applicationSliAggregations.sourceAggregationSet(sli);
+  local targetAggregationSet = applicationSliAggregations.targetAggregationSet(sli, recordingRuleRegistry=recordingRuleRegistry.unifiedRegistry);
+  local sourceAggregationSet = applicationSliAggregations.sourceAggregationSet(sli, recordingRuleRegistry=recordingRuleRegistry.unifiedRegistry);
   transformRuleGroups(sourceAggregationSet, targetAggregationSet, extraSelector);
 
 local outputPromYaml(groups) =

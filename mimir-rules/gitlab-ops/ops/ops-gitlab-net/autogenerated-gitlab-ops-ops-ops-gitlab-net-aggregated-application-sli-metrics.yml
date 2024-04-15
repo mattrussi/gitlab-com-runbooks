@@ -7,42 +7,42 @@ groups:
   - record: application_sli_aggregation:sidekiq_execution:error:rate_5m
     expr: |
       sum by (env,environment,tier,type,stage,worker,feature_category,urgency,external_dependencies,queue) (
-        (sli_aggregations:gitlab_sli_sidekiq_execution_error_total_rate5m{env="ops",monitor!="global",type="ops-gitlab-net"} >= 0)
+        (sli_aggregations:gitlab_sli_sidekiq_execution_error_total:rate_5m{env="ops",monitor!="global",type="ops-gitlab-net"} >= 0)
       )
   - record: application_sli_aggregation:sidekiq_execution:ops:rate_5m
     expr: |
       sum by (env,environment,tier,type,stage,worker,feature_category,urgency,external_dependencies,queue) (
-        (sli_aggregations:gitlab_sli_sidekiq_execution_total_rate5m{env="ops",monitor!="global",type="ops-gitlab-net"} >= 0)
+        (sli_aggregations:gitlab_sli_sidekiq_execution_total:rate_5m{env="ops",monitor!="global",type="ops-gitlab-net"} >= 0)
       )
   - record: application_sli_aggregation:sidekiq_execution:apdex:weight:score_5m
     expr: |
       sum by (env,environment,tier,type,stage,worker,feature_category,urgency,external_dependencies,queue) (
-        (sli_aggregations:gitlab_sli_sidekiq_execution_apdex_total_rate5m{env="ops",monitor!="global",type="ops-gitlab-net"} >= 0)
+        (sli_aggregations:gitlab_sli_sidekiq_execution_apdex_total:rate_5m{env="ops",monitor!="global",type="ops-gitlab-net"} >= 0)
       )
   - record: application_sli_aggregation:sidekiq_execution:apdex:success:rate_5m
     expr: |
       sum by (env,environment,tier,type,stage,worker,feature_category,urgency,external_dependencies,queue) (
-        (sli_aggregations:gitlab_sli_sidekiq_execution_apdex_success_total_rate5m{env="ops",monitor!="global",type="ops-gitlab-net"} >= 0)
+        (sli_aggregations:gitlab_sli_sidekiq_execution_apdex_success_total:rate_5m{env="ops",monitor!="global",type="ops-gitlab-net"} >= 0)
       )
   - record: application_sli_aggregation:sidekiq_execution:error:rate_1h
     expr: |
       sum by (env,environment,tier,type,stage,worker,feature_category,urgency,external_dependencies,queue) (
-        (sli_aggregations:gitlab_sli_sidekiq_execution_error_total_rate1h{env="ops",monitor!="global",type="ops-gitlab-net"} >= 0)
+        (sli_aggregations:gitlab_sli_sidekiq_execution_error_total:rate_1h{env="ops",monitor!="global",type="ops-gitlab-net"} >= 0)
       )
   - record: application_sli_aggregation:sidekiq_execution:ops:rate_1h
     expr: |
       sum by (env,environment,tier,type,stage,worker,feature_category,urgency,external_dependencies,queue) (
-        (sli_aggregations:gitlab_sli_sidekiq_execution_total_rate1h{env="ops",monitor!="global",type="ops-gitlab-net"} >= 0)
+        (sli_aggregations:gitlab_sli_sidekiq_execution_total:rate_1h{env="ops",monitor!="global",type="ops-gitlab-net"} >= 0)
       )
   - record: application_sli_aggregation:sidekiq_execution:apdex:weight:score_1h
     expr: |
       sum by (env,environment,tier,type,stage,worker,feature_category,urgency,external_dependencies,queue) (
-        (sli_aggregations:gitlab_sli_sidekiq_execution_apdex_total_rate1h{env="ops",monitor!="global",type="ops-gitlab-net"} >= 0)
+        (sli_aggregations:gitlab_sli_sidekiq_execution_apdex_total:rate_1h{env="ops",monitor!="global",type="ops-gitlab-net"} >= 0)
       )
   - record: application_sli_aggregation:sidekiq_execution:apdex:success:rate_1h
     expr: |
       sum by (env,environment,tier,type,stage,worker,feature_category,urgency,external_dependencies,queue) (
-        (sli_aggregations:gitlab_sli_sidekiq_execution_apdex_success_total_rate1h{env="ops",monitor!="global",type="ops-gitlab-net"} >= 0)
+        (sli_aggregations:gitlab_sli_sidekiq_execution_apdex_success_total:rate_1h{env="ops",monitor!="global",type="ops-gitlab-net"} >= 0)
       )
 - name: 'Application Defined SLI Global metrics: sidekiq_queueing (fast burn)'
   interval: 1m
@@ -50,20 +50,20 @@ groups:
   - record: application_sli_aggregation:sidekiq_queueing:apdex:weight:score_5m
     expr: |
       sum by (env,environment,tier,type,stage,worker,feature_category,urgency,external_dependencies,queue) (
-        (sli_aggregations:gitlab_sli_sidekiq_queueing_apdex_total_rate5m{env="ops",monitor!="global",type="ops-gitlab-net"} >= 0)
+        (sli_aggregations:gitlab_sli_sidekiq_queueing_apdex_total:rate_5m{env="ops",monitor!="global",type="ops-gitlab-net"} >= 0)
       )
   - record: application_sli_aggregation:sidekiq_queueing:apdex:success:rate_5m
     expr: |
       sum by (env,environment,tier,type,stage,worker,feature_category,urgency,external_dependencies,queue) (
-        (sli_aggregations:gitlab_sli_sidekiq_queueing_apdex_success_total_rate5m{env="ops",monitor!="global",type="ops-gitlab-net"} >= 0)
+        (sli_aggregations:gitlab_sli_sidekiq_queueing_apdex_success_total:rate_5m{env="ops",monitor!="global",type="ops-gitlab-net"} >= 0)
       )
   - record: application_sli_aggregation:sidekiq_queueing:apdex:weight:score_1h
     expr: |
       sum by (env,environment,tier,type,stage,worker,feature_category,urgency,external_dependencies,queue) (
-        (sli_aggregations:gitlab_sli_sidekiq_queueing_apdex_total_rate1h{env="ops",monitor!="global",type="ops-gitlab-net"} >= 0)
+        (sli_aggregations:gitlab_sli_sidekiq_queueing_apdex_total:rate_1h{env="ops",monitor!="global",type="ops-gitlab-net"} >= 0)
       )
   - record: application_sli_aggregation:sidekiq_queueing:apdex:success:rate_1h
     expr: |
       sum by (env,environment,tier,type,stage,worker,feature_category,urgency,external_dependencies,queue) (
-        (sli_aggregations:gitlab_sli_sidekiq_queueing_apdex_success_total_rate1h{env="ops",monitor!="global",type="ops-gitlab-net"} >= 0)
+        (sli_aggregations:gitlab_sli_sidekiq_queueing_apdex_success_total:rate_1h{env="ops",monitor!="global",type="ops-gitlab-net"} >= 0)
       )
