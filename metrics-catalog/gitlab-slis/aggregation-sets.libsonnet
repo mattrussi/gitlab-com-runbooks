@@ -1,34 +1,34 @@
 local gitlabMetricsConfig = import 'gitlab-metrics-config.libsonnet';
 local sliDefinition = import 'gitlab-slis/sli-definition.libsonnet';
 local aggregationSet = import 'servicemetrics/aggregation-set.libsonnet';
-local recordingRuleRegistry = gitlabMetricsConfig.recordingRuleRegistry;
+local defaultRecordingRuleRegistry = gitlabMetricsConfig.recordingRuleRegistry;
 
 local defaultLabels = ['environment', 'tier', 'type', 'stage'];
 local globalLabels = ['env'];
 local supportedBurnRates = ['5m', '1h'];
 
-local resolvedRecording(metric, labels, burnRate) =
+local resolvedRecording(metric, labels, burnRate, recordingRuleRegistry) =
   assert recordingRuleRegistry.resolveRecordingRuleFor(
     metricName=metric, aggregationLabels=labels, rangeInterval=burnRate
   ) != null : 'No previous recording found for %s and burn rate %s' % [metric, burnRate];
   recordingRuleRegistry.recordingRuleNameFor(metric, burnRate);
 
-local recordedBurnRatesForSLI(sli) =
+local recordedBurnRatesForSLI(sli, recordingRuleRegistry) =
   std.foldl(
     function(memo, burnRate)
       local apdex =
         if sli.hasApdex() then
           {
-            apdexSuccessRate: resolvedRecording(sli.apdexSuccessCounterName, sli.significantLabels, burnRate),
-            apdexWeight: resolvedRecording(sli.apdexTotalCounterName, sli.significantLabels, burnRate),
+            apdexSuccessRate: resolvedRecording(sli.apdexSuccessCounterName, sli.significantLabels, burnRate, recordingRuleRegistry),
+            apdexWeight: resolvedRecording(sli.apdexTotalCounterName, sli.significantLabels, burnRate, recordingRuleRegistry),
           }
         else {};
 
       local errorRate =
         if sli.hasErrorRate() then
           {
-            errorRate: resolvedRecording(sli.errorCounterName, sli.significantLabels, burnRate),
-            opsRate: resolvedRecording(sli.errorTotalCounterName, sli.significantLabels, burnRate),
+            errorRate: resolvedRecording(sli.errorCounterName, sli.significantLabels, burnRate, recordingRuleRegistry),
+            opsRate: resolvedRecording(sli.errorTotalCounterName, sli.significantLabels, burnRate, recordingRuleRegistry),
           }
         else {};
 
@@ -56,7 +56,7 @@ local aggregationFormats(sli) =
   else
     {};
 
-local sourceAggregationSet(sli) =
+local sourceAggregationSet(sli, recordingRuleRegistry) =
   aggregationSet.AggregationSet(
     {
       id: 'source_application_sli_%s' % sli.name,
@@ -68,12 +68,12 @@ local sourceAggregationSet(sli) =
     }
     +
     if sli.inRecordingRuleRegistry then
-      { burnRates: recordedBurnRatesForSLI(sli) }
+      { burnRates: recordedBurnRatesForSLI(sli, recordingRuleRegistry) }
     else
       { metricFormats: aggregationFormats(sli) }
   );
 
-local targetAggregationSet(sli) =
+local targetAggregationSet(sli, _recordingRuleRegistry) =
   aggregationSet.AggregationSet({
     id: 'global_application_sli_%s' % sli.name,
     name: 'Application Defined SLI Global metrics: %s' % sli.name,
@@ -89,6 +89,6 @@ local targetAggregationSet(sli) =
   });
 
 {
-  sourceAggregationSet(sli):: sourceAggregationSet(sli),
-  targetAggregationSet(sli):: targetAggregationSet(sli),
+  sourceAggregationSet(sli, recordingRuleRegistry=defaultRecordingRuleRegistry):: sourceAggregationSet(sli, recordingRuleRegistry),
+  targetAggregationSet(sli, recordingRuleRegistry=defaultRecordingRuleRegistry):: targetAggregationSet(sli, recordingRuleRegistry),
 }
