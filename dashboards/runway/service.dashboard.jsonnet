@@ -13,7 +13,7 @@ local commonAnnotations = import 'grafana/common_annotations.libsonnet';
 // https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/3398
 
 local formatConfig = {
-  selector: selectors.serializeHash({ job: 'runway-exporter', env: '$environment', type: '$type', location: '$region' }),
+  selector: selectors.serializeHash({ job: 'runway-exporter', env: '$environment', type: '$type', location: { re: '$region' } }),
 };
 
 basic.dashboard(
@@ -36,7 +36,7 @@ basic.dashboard(
   refresh='load',
   sort=1,
   includeAll=true,
-  allValues='.+',
+  allValues='.*',
 ))
 .addAnnotation(commonAnnotations.deploymentsForRunway('${type}'))
 .addPanels(
