@@ -2657,6 +2657,18 @@ groups:
     expr: "0.005000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
+      component: enqueued_jobs
+      tier: sv
+      type: sidekiq
+    expr: "0.995000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      component: enqueued_jobs
+      tier: sv
+      type: sidekiq
+    expr: "0.005000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
       component: llm_completion
       tier: sv
       type: sidekiq
@@ -4811,6 +4823,15 @@ groups:
       service_aggregation: "yes"
       tier: inf
       type: sentry
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: enqueued_jobs
+      global_aggregation: "no"
+      regional_aggregation: "no"
+      service_aggregation: "no"
+      tier: sv
+      type: sidekiq
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:
