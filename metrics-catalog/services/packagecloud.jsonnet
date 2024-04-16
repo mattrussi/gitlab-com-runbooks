@@ -7,6 +7,7 @@ local gaugeMetric = metricsCatalog.gaugeMetric;
 metricsCatalog.serviceDefinition({
   type: 'packagecloud',
   tier: 'inf',
+  tenants: [ 'gitlab-ops', 'gitlab-pre' ],
 
   tags: ['cloud-sql'],
 
