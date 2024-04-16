@@ -5,6 +5,8 @@ local aggregationSetTransformer = import 'servicemetrics/aggregation-set-transfo
 local monitoredServices = (import 'gitlab-metrics-config.libsonnet').monitoredServices;
 local recordingRuleRegistry = import 'servicemetrics/recording-rule-registry.libsonnet';
 
+local thanosCompatibilityLabels = { monitor: 'global' };
+
 local transformRuleGroups(sourceAggregationSet, targetAggregationSet, extraSourceSelector, extrasForGroup={}) =
   aggregationSetTransformer.generateRecordingRuleGroups(
     sourceAggregationSet=sourceAggregationSet { selector+: extraSourceSelector },
@@ -13,7 +15,7 @@ local transformRuleGroups(sourceAggregationSet, targetAggregationSet, extraSourc
   );
 
 local groupsForApplicationSli(sli, extraSelector) =
-  local targetAggregationSet = applicationSliAggregations.targetAggregationSet(sli, recordingRuleRegistry=recordingRuleRegistry.unifiedRegistry);
+  local targetAggregationSet = applicationSliAggregations.targetAggregationSet(sli, extraStaticLabels=thanosCompatibilityLabels);
   local sourceAggregationSet = applicationSliAggregations.sourceAggregationSet(sli, recordingRuleRegistry=recordingRuleRegistry.unifiedRegistry);
   transformRuleGroups(sourceAggregationSet, targetAggregationSet, extraSelector);
 
@@ -43,7 +45,7 @@ std.foldl(
         {
           [if std.length(groups) > 0 then 'aggregated-application-sli-metrics']: outputPromYaml(groups),
         },
-      serviceDefinition=serviceDefinition,
+      serviceDefinition=serviceDefinition
     )
   ,
   monitoredServices,

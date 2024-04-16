@@ -73,7 +73,7 @@ local sourceAggregationSet(sli, recordingRuleRegistry) =
       { metricFormats: aggregationFormats(sli) }
   );
 
-local targetAggregationSet(sli, _recordingRuleRegistry) =
+local targetAggregationSet(sli, extraStaticLabels) =
   aggregationSet.AggregationSet({
     id: 'global_application_sli_%s' % sli.name,
     name: 'Application Defined SLI Global metrics: %s' % sli.name,
@@ -85,10 +85,10 @@ local targetAggregationSet(sli, _recordingRuleRegistry) =
     selector: { monitor: 'global' },
     supportedBurnRates: ['5m', '1h'],
     metricFormats: aggregationFormats(sli),
-    recordingRuleStaticLabels: sli.recordingRuleStaticLabels,
+    recordingRuleStaticLabels: sli.recordingRuleStaticLabels + extraStaticLabels,
   });
 
 {
   sourceAggregationSet(sli, recordingRuleRegistry=defaultRecordingRuleRegistry):: sourceAggregationSet(sli, recordingRuleRegistry),
-  targetAggregationSet(sli, recordingRuleRegistry=defaultRecordingRuleRegistry):: targetAggregationSet(sli, recordingRuleRegistry),
+  targetAggregationSet(sli, extraStaticLabels={}):: targetAggregationSet(sli, extraStaticLabels),
 }
