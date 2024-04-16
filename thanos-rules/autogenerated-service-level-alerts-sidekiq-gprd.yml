@@ -22,7 +22,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          sli_aggregations:sidekiq_enqueued_jobs_total_rate5m{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}
+          rate(sidekiq_enqueued_jobs_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
         )
       runbook: docs/sidekiq/README.md
     labels:
@@ -59,7 +59,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          sli_aggregations:sidekiq_enqueued_jobs_total_rate5m{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}
+          rate(sidekiq_enqueued_jobs_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
         )
       runbook: docs/sidekiq/README.md
     labels:
