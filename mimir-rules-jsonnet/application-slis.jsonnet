@@ -4,6 +4,7 @@ local applicationSliAggregations = import 'gitlab-slis/aggregation-sets.libsonne
 local aggregationSetTransformer = import 'servicemetrics/aggregation-set-transformer.libsonnet';
 local monitoredServices = (import 'gitlab-metrics-config.libsonnet').monitoredServices;
 local recordingRuleRegistry = import 'servicemetrics/recording-rule-registry.libsonnet';
+local mimirAggregationSets = import 'mimir-aggregation-sets.libsonnet';
 
 local thanosCompatibilityLabels = { monitor: 'global' };
 
@@ -15,7 +16,8 @@ local transformRuleGroups(sourceAggregationSet, targetAggregationSet, extraSourc
   );
 
 local groupsForApplicationSli(sli, extraSelector) =
-  local targetAggregationSet = applicationSliAggregations.targetAggregationSet(sli, extraStaticLabels=thanosCompatibilityLabels);
+  // local targetAggregationSet = applicationSliAggregations.targetAggregationSet(sli, extraStaticLabels=thanosCompatibilityLabels);
+  local targetAggregationSet = applicationSliAggregations.targetAggregationSet(sli, extraStaticLabels=mimirAggregationSets.applicationSLIs.recordingRuleStaticLabels);
   local sourceAggregationSet = applicationSliAggregations.sourceAggregationSet(sli, recordingRuleRegistry=recordingRuleRegistry.unifiedRegistry);
   transformRuleGroups(sourceAggregationSet, targetAggregationSet, extraSelector);
 
@@ -32,15 +34,13 @@ local outputPromYaml(groups) =
 // real need to duplicate them.
 std.foldl(
   function(memo, serviceDefinition)
-    local serviceSliNames = std.objectFields(serviceDefinition.serviceLevelIndicators);
-    local serviceApplicationSliNames = std.setInter(serviceSliNames, applicationSlis.names);
-    local serviceApplicationSliDefinitions = std.map(function(name) applicationSlis.get(name), serviceApplicationSliNames);
+    local slis = mimirAggregationSets.applicationSLIs.slisForService(serviceDefinition);
     memo + separateMimirRecordingFiles(
       function(service, selector, _extraArgs)
         local groups = std.flatMap(
           function(sli)
-            groupsForApplicationSli(sli, selector { type: service.type }),
-          serviceApplicationSliDefinitions
+            groupsForApplicationSli(applicationSlis.get(sli.name), selector { type: service.type }),
+          slis
         );
         {
           [if std.length(groups) > 0 then 'aggregated-application-sli-metrics']: outputPromYaml(groups),

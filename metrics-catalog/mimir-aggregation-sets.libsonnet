@@ -1,4 +1,5 @@
 local aggregationSet = (import 'servicemetrics/aggregation-set.libsonnet').AggregationSet;
+local sliLibrary = (import 'gitlab-slis/library.libsonnet');
 
 local mimirAggregetionSetDefaults = {
   intermediateSource: false,
@@ -214,6 +215,18 @@ local mimirAggregetionSetDefaults = {
       errorRate: 'gitlab:stage_group:execution:error:rate_%s',
       errorRatio: 'gitlab:stage_group:execution:error:ratio_%s',
     },
+  }),
+
+  applicationSLIs: aggregationSet(mimirAggregetionSetDefaults {
+    id: 'application',
+    name: 'Application Defined SLI Global metrics',
+    labels: ['env', 'environment', 'tier', 'type', 'stage', 'worker', 'feature_category', 'urgency', 'external_dependencies', 'queue'],
+    recordingRuleStaticLabels: { monitor: 'global' },
+    slisForService(serviceDefinition): std.filter(
+      function(sli)
+        std.member(sliLibrary.names, sli.name),
+      serviceDefinition.listServiceLevelIndicators()
+    ),
   }),
 
   aggregationsFromSource::
