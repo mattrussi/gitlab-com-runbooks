@@ -7,7 +7,7 @@ separateMimirRecordingFiles(
       'sla-rules': std.manifestYamlDoc(
         rules.slaRules(
           selector,
-          sloObservationStatusMetric='slo_observation_status',
+          sloObservationStatusMetric='slo:observation_status',
         )
       ),
     } + {
