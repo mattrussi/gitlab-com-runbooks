@@ -312,21 +312,21 @@ sum(kube_pod_container_resource_requests{resource="cpu", unit="core", env=~"$env
       )
       .addTarget(
         promQuery.target(
-          'sum(label_replace(container_memory_usage_bytes{env=~"$environment", container!=""}, "pod", "$1", "pod", "(.*)") * on(pod) group_left(workload) mixin_pod_workload{' + env_cluster_ns + ', workload=~"^$' + deploymentKind + '.*"}) by (pod)',
+          'sum(label_replace(container_memory_usage_bytes{env=~"$environment", container!=""}, "pod", "$1", "pod", "(.*)") * on(pod) group_left(workload) (mixin_pod_workload{' + env_cluster_ns + ', workload=~"^$' + deploymentKind + '.*"} or mixin_pod:workload{' + env_cluster_ns + ', workload=~"^$' + deploymentKind + '.*"})) by (pod)',
           format='table',
           instant=true,
         )
       )
       .addTarget(
         promQuery.target(
-          'sum(kube_pod_container_resource_requests{resource="memory", unit="byte", env=~"$environment"} * on(pod) group_left(workload) mixin_pod_workload{' + env_cluster_ns + ', workload=~"^$' + deploymentKind + '.*"}) by (pod)',
+          'sum(kube_pod_container_resource_requests{resource="memory", unit="byte", env=~"$environment"} * on(pod) group_left(workload) (mixin_pod_workload{' + env_cluster_ns + ', workload=~"^$' + deploymentKind + '.*"} or mixin_pod:workload{' + env_cluster_ns + ', workload=~"^$' + deploymentKind + '.*"})) by (pod)',
           format='table',
           instant=true,
         )
       )
       .addTarget(
         promQuery.target(
-          'sum(label_replace(container_memory_usage_bytes{env=~"$environment", container!=""}, "pod", "$1", "pod", "(.*)") * on(pod) group_left(workload) mixin_pod_workload{' + env_cluster_ns + ', workload=~"^$' + deploymentKind + '.*"}) by (pod) /sum(kube_pod_container_resource_requests{resource="memory", unit="byte", env=~"$environment"} * on(pod) group_left(workload) mixin_pod_workload{' + env_cluster_ns + ', workload=~"^$' + deploymentKind + '.*"}) by (pod)',
+          'sum(label_replace(container_memory_usage_bytes{env=~"$environment", container!=""}, "pod", "$1", "pod", "(.*)") * on(pod) group_left(workload) (mixin_pod_workload{' + env_cluster_ns + ', workload=~"^$' + deploymentKind + '.*"} or mixin_pod:workload{' + env_cluster_ns + ', workload=~"^$' + deploymentKind + '.*"}) by (pod) /sum(kube_pod_container_resource_requests{resource="memory", unit="byte", env=~"$environment"} * on(pod) group_left(workload) (mixin_pod_workload{' + env_cluster_ns + ', workload=~"^$' + deploymentKind + '.*"} or mixin_pod:workload{' + env_cluster_ns + ', workload=~"^$' + deploymentKind + '.*"}) by (pod)',
           format='table',
           instant=true,
         )
