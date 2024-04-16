@@ -1,0 +1,18 @@
+groups:
+- name: Sidekiq Queues
+  rules:
+  - alert: SidekiqQueueTooLarge
+    expr: >
+      max by (environment, name) (
+        sidekiq_queue_size{env="gprd"}
+      ) > 50000
+    for: 30m
+    labels:
+      severity: s1
+      pager: pagerduty
+      alert_type: cause
+    annotations:
+      description: There have been over 50k Sidekiq jobs in the {{ $labels.name }} queued for the last 30 minutes.
+      runbook: docs/sidekiq/large-sidekiq-queue.md
+      grafana_dashboard_id: sidekiq-main/sidekiq-overview
+      title: Large amount of Sidekiq Queued jobs
