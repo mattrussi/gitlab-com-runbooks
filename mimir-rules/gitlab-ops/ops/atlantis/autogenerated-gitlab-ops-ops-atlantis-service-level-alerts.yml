@@ -37,18 +37,18 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_1h{component="atlantis_google_lb",env="gprd",monitor="global",type="atlantis"}
+          gitlab_component_errors:ratio_1h{component="atlantis_google_lb",env="ops",monitor="global",type="atlantis"}
           > (14.4 * 0.001000)
         )
         and
         (
-          gitlab_component_errors:ratio_5m{component="atlantis_google_lb",env="gprd",monitor="global",type="atlantis"}
+          gitlab_component_errors:ratio_5m{component="atlantis_google_lb",env="ops",monitor="global",type="atlantis"}
           > (14.4 * 0.001000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="atlantis_google_lb",env="gprd",monitor="global",type="atlantis"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="atlantis_google_lb",env="ops",monitor="global",type="atlantis"}) >= 1
       )
   - alert: AtlantisServiceAtlantisGoogleLbErrorSLOViolation
     for: 2m
@@ -83,16 +83,16 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_6h{component="atlantis_google_lb",env="gprd",monitor="global",type="atlantis"}
+          gitlab_component_errors:ratio_6h{component="atlantis_google_lb",env="ops",monitor="global",type="atlantis"}
           > (6 * 0.001000)
         )
         and
         (
-          gitlab_component_errors:ratio_30m{component="atlantis_google_lb",env="gprd",monitor="global",type="atlantis"}
+          gitlab_component_errors:ratio_30m{component="atlantis_google_lb",env="ops",monitor="global",type="atlantis"}
           > (6 * 0.001000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="atlantis_google_lb",env="gprd",monitor="global",type="atlantis"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="atlantis_google_lb",env="ops",monitor="global",type="atlantis"}) >= 0.16667
       )
