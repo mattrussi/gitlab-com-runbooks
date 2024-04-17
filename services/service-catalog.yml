@@ -2547,3 +2547,7 @@ services:
     friendly_name: Token rotation management
     label: TokenRotationManagement
     owner: security_operations
+    technical:
+      logging:
+        - name:
+          permalink:
