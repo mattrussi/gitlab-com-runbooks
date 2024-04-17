@@ -37,9 +37,9 @@ groups:
       team: reliability_general
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_30m{component="cloudsql",env="gprd",monitor="global",stage="main",type="packagecloud"} == 0
+      gitlab_component_ops:rate_30m{component="cloudsql",env="ops",monitor="global",stage="main",type="packagecloud"} == 0
       and
-      gitlab_component_ops:rate_30m{component="cloudsql",env="gprd",monitor="global",stage="main",type="packagecloud"} offset 1h >= 0.16666666666666666
+      gitlab_component_ops:rate_30m{component="cloudsql",env="ops",monitor="global",stage="main",type="packagecloud"} offset 1h >= 0.16666666666666666
   - alert: PackagecloudServiceCloudsqlTrafficAbsent
     for: 30m
     annotations:
@@ -75,9 +75,9 @@ groups:
       team: reliability_general
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_5m{component="cloudsql",env="gprd",monitor="global",stage="main",type="packagecloud"} offset 1h
+      gitlab_component_ops:rate_5m{component="cloudsql",env="ops",monitor="global",stage="main",type="packagecloud"} offset 1h
       unless
-      gitlab_component_ops:rate_5m{component="cloudsql",env="gprd",monitor="global",stage="main",type="packagecloud"}
+      gitlab_component_ops:rate_5m{component="cloudsql",env="ops",monitor="global",stage="main",type="packagecloud"}
   - alert: PackagecloudServiceLoadbalancerErrorSLOViolation
     for: 2m
     annotations:
@@ -112,18 +112,18 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_1h{component="loadbalancer",env="gprd",monitor="global",type="packagecloud"}
+          gitlab_component_errors:ratio_1h{component="loadbalancer",env="ops",monitor="global",type="packagecloud"}
           > (14.4 * 0.001000)
         )
         and
         (
-          gitlab_component_errors:ratio_5m{component="loadbalancer",env="gprd",monitor="global",type="packagecloud"}
+          gitlab_component_errors:ratio_5m{component="loadbalancer",env="ops",monitor="global",type="packagecloud"}
           > (14.4 * 0.001000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="loadbalancer",env="gprd",monitor="global",type="packagecloud"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="loadbalancer",env="ops",monitor="global",type="packagecloud"}) >= 1
       )
   - alert: PackagecloudServiceLoadbalancerErrorSLOViolation
     for: 2m
@@ -159,18 +159,18 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_6h{component="loadbalancer",env="gprd",monitor="global",type="packagecloud"}
+          gitlab_component_errors:ratio_6h{component="loadbalancer",env="ops",monitor="global",type="packagecloud"}
           > (6 * 0.001000)
         )
         and
         (
-          gitlab_component_errors:ratio_30m{component="loadbalancer",env="gprd",monitor="global",type="packagecloud"}
+          gitlab_component_errors:ratio_30m{component="loadbalancer",env="ops",monitor="global",type="packagecloud"}
           > (6 * 0.001000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="loadbalancer",env="gprd",monitor="global",type="packagecloud"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="loadbalancer",env="ops",monitor="global",type="packagecloud"}) >= 0.16667
       )
   - alert: PackagecloudServiceLoadbalancerTrafficCessation
     for: 5m
@@ -203,9 +203,9 @@ groups:
       team: reliability_general
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_30m{component="loadbalancer",env="gprd",monitor="global",stage="main",type="packagecloud"} == 0
+      gitlab_component_ops:rate_30m{component="loadbalancer",env="ops",monitor="global",stage="main",type="packagecloud"} == 0
       and
-      gitlab_component_ops:rate_30m{component="loadbalancer",env="gprd",monitor="global",stage="main",type="packagecloud"} offset 1h >= 0.16666666666666666
+      gitlab_component_ops:rate_30m{component="loadbalancer",env="ops",monitor="global",stage="main",type="packagecloud"} offset 1h >= 0.16666666666666666
   - alert: PackagecloudServiceLoadbalancerTrafficAbsent
     for: 30m
     annotations:
@@ -239,6 +239,6 @@ groups:
       team: reliability_general
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_5m{component="loadbalancer",env="gprd",monitor="global",stage="main",type="packagecloud"} offset 1h
+      gitlab_component_ops:rate_5m{component="loadbalancer",env="ops",monitor="global",stage="main",type="packagecloud"} offset 1h
       unless
-      gitlab_component_ops:rate_5m{component="loadbalancer",env="gprd",monitor="global",stage="main",type="packagecloud"}
+      gitlab_component_ops:rate_5m{component="loadbalancer",env="ops",monitor="global",stage="main",type="packagecloud"}

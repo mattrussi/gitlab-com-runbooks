@@ -5,15 +5,15 @@ groups:
   interval: 5m
   rules:
   - record: gitlab_component_saturation:ratio_quantile95_1w
-    expr: quantile_over_time(0.95, gitlab_component_saturation:ratio{env="gstg",type="packagecloud"}[1w])
+    expr: quantile_over_time(0.95, gitlab_component_saturation:ratio{env="pre",type="packagecloud"}[1w])
   - record: gitlab_component_saturation:ratio_quantile99_1w
-    expr: quantile_over_time(0.99, gitlab_component_saturation:ratio{env="gstg",type="packagecloud"}[1w])
+    expr: quantile_over_time(0.99, gitlab_component_saturation:ratio{env="pre",type="packagecloud"}[1w])
   - record: gitlab_component_saturation:ratio_quantile95_1h
-    expr: quantile_over_time(0.95, gitlab_component_saturation:ratio{env="gstg",type="packagecloud"}[1h])
+    expr: quantile_over_time(0.95, gitlab_component_saturation:ratio{env="pre",type="packagecloud"}[1h])
   - record: gitlab_component_saturation:ratio_quantile99_1h
-    expr: quantile_over_time(0.99, gitlab_component_saturation:ratio{env="gstg",type="packagecloud"}[1h])
+    expr: quantile_over_time(0.99, gitlab_component_saturation:ratio{env="pre",type="packagecloud"}[1h])
   - record: gitlab_component_saturation:ratio_avg_1h
-    expr: avg_over_time(gitlab_component_saturation:ratio{env="gstg",type="packagecloud"}[1h])
+    expr: avg_over_time(gitlab_component_saturation:ratio{env="pre",type="packagecloud"}[1h])
 - name: GitLab Saturation Alerts
   interval: 1m
   rules:
@@ -64,8 +64,8 @@ groups:
       rules_domain: general
       severity: s4
     expr: |
-      gitlab_component_saturation:ratio{component="cloudsql_cpu",env="gstg",type="packagecloud"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="cloudsql_cpu",env="gstg",type="packagecloud"}
+      gitlab_component_saturation:ratio{component="cloudsql_cpu",env="pre",type="packagecloud"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="cloudsql_cpu",env="pre",type="packagecloud"}
   - alert: component_saturation_slo_out_of_bounds:cloudsql_disk
     for: 5m
     annotations:
@@ -113,8 +113,8 @@ groups:
       rules_domain: general
       severity: s4
     expr: |
-      gitlab_component_saturation:ratio{component="cloudsql_disk",env="gstg",type="packagecloud"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="cloudsql_disk",env="gstg",type="packagecloud"}
+      gitlab_component_saturation:ratio{component="cloudsql_disk",env="pre",type="packagecloud"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="cloudsql_disk",env="pre",type="packagecloud"}
   - alert: component_saturation_slo_out_of_bounds:cloudsql_memory
     for: 5m
     annotations:
@@ -162,8 +162,8 @@ groups:
       rules_domain: general
       severity: s4
     expr: |
-      gitlab_component_saturation:ratio{component="cloudsql_memory",env="gstg",type="packagecloud"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="cloudsql_memory",env="gstg",type="packagecloud"}
+      gitlab_component_saturation:ratio{component="cloudsql_memory",env="pre",type="packagecloud"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="cloudsql_memory",env="pre",type="packagecloud"}
   - alert: component_saturation_slo_out_of_bounds:kube_container_cpu_limit
     for: 15m
     annotations:
@@ -227,8 +227,8 @@ groups:
       rules_domain: general
       severity: s4
     expr: |
-      gitlab_component_saturation:ratio{component="kube_container_cpu_limit",env="gstg",type="packagecloud"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="kube_container_cpu_limit",env="gstg",type="packagecloud"}
+      gitlab_component_saturation:ratio{component="kube_container_cpu_limit",env="pre",type="packagecloud"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="kube_container_cpu_limit",env="pre",type="packagecloud"}
   - alert: component_saturation_slo_out_of_bounds:kube_container_memory
     for: 15m
     annotations:
@@ -278,8 +278,8 @@ groups:
       rules_domain: general
       severity: s4
     expr: |
-      gitlab_component_saturation:ratio{component="kube_container_memory",env="gstg",type="packagecloud"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="kube_container_memory",env="gstg",type="packagecloud"}
+      gitlab_component_saturation:ratio{component="kube_container_memory",env="pre",type="packagecloud"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="kube_container_memory",env="pre",type="packagecloud"}
   - alert: component_saturation_slo_out_of_bounds:kube_container_throttling
     for: 10m
     annotations:
@@ -339,8 +339,8 @@ groups:
       rules_domain: general
       severity: s3
     expr: |
-      gitlab_component_saturation:ratio{component="kube_container_throttling",env="gstg",type="packagecloud"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="kube_container_throttling",env="gstg",type="packagecloud"}
+      gitlab_component_saturation:ratio{component="kube_container_throttling",env="pre",type="packagecloud"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="kube_container_throttling",env="pre",type="packagecloud"}
   - alert: component_saturation_slo_out_of_bounds:kube_horizontalpodautoscaler_desired_replicas
     for: 25m
     annotations:
@@ -392,8 +392,8 @@ groups:
       rules_domain: general
       severity: s3
     expr: |
-      gitlab_component_saturation:ratio{component="kube_horizontalpodautoscaler_desired_replicas",env="gstg",type="packagecloud"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="kube_horizontalpodautoscaler_desired_replicas",env="gstg",type="packagecloud"}
+      gitlab_component_saturation:ratio{component="kube_horizontalpodautoscaler_desired_replicas",env="pre",type="packagecloud"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="kube_horizontalpodautoscaler_desired_replicas",env="pre",type="packagecloud"}
   - alert: component_saturation_slo_out_of_bounds:open_fds
     for: 5m
     annotations:
@@ -464,5 +464,5 @@ groups:
       rules_domain: general
       severity: s2
     expr: |
-      gitlab_component_saturation:ratio{component="open_fds",env="gstg",type="packagecloud"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="open_fds",env="gstg",type="packagecloud"}
+      gitlab_component_saturation:ratio{component="open_fds",env="pre",type="packagecloud"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="open_fds",env="pre",type="packagecloud"}

@@ -14,7 +14,7 @@ groups:
       max by(env, environment, shard) (
         clamp_min(
           clamp_max(
-            avg_over_time(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_cpu_utilization{env="gprd",type="packagecloud"}[5m])
+            avg_over_time(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_cpu_utilization{env="pre",type="packagecloud"}[5m])
             ,
             1)
         ,
@@ -30,7 +30,7 @@ groups:
       max by(env, environment, shard) (
         clamp_min(
           clamp_max(
-            avg_over_time(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_disk_utilization{env="gprd",type="packagecloud"}[5m])
+            avg_over_time(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_disk_utilization{env="pre",type="packagecloud"}[5m])
             ,
             1)
         ,
@@ -46,7 +46,7 @@ groups:
       max by(env, environment, shard) (
         clamp_min(
           clamp_max(
-            avg_over_time(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_memory_utilization{env="gprd",type="packagecloud"}[5m])
+            avg_over_time(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_memory_utilization{env="pre",type="packagecloud"}[5m])
             ,
             1)
         ,
@@ -61,11 +61,11 @@ groups:
         clamp_min(
           clamp_max(
             sum by (env, environment, tier, type, stage, shard, pod, container) (
-              rate(container_cpu_usage_seconds_total:labeled{container!="", container!="POD", env="gprd",type="packagecloud"}[1h])
+              rate(container_cpu_usage_seconds_total:labeled{container!="", container!="POD", env="pre",type="packagecloud"}[1h])
             )
             /
             sum by(env, environment, tier, type, stage, shard, pod, container) (
-              kube_pod_container_resource_requests:labeled{container!="", container!="POD", resource="cpu", env="gprd",type="packagecloud"}
+              kube_pod_container_resource_requests:labeled{container!="", container!="POD", resource="cpu", env="pre",type="packagecloud"}
             )
             ,
             1)
@@ -80,13 +80,13 @@ groups:
         clamp_min(
           clamp_max(
             sum by (env, environment, tier, type, stage, shard, pod, container) (
-              rate(container_cpu_usage_seconds_total:labeled{container!="", container!="POD", env="gprd",type="packagecloud"}[5m])
+              rate(container_cpu_usage_seconds_total:labeled{container!="", container!="POD", env="pre",type="packagecloud"}[5m])
             )
             /
             sum by(env, environment, tier, type, stage, shard, pod, container) (
-              container_spec_cpu_quota:labeled{container!="", container!="POD", env="gprd",type="packagecloud"}
+              container_spec_cpu_quota:labeled{container!="", container!="POD", env="pre",type="packagecloud"}
               /
-              container_spec_cpu_period:labeled{container!="", container!="POD", env="gprd",type="packagecloud"}
+              container_spec_cpu_period:labeled{container!="", container!="POD", env="pre",type="packagecloud"}
             )
             ,
             1)
@@ -100,9 +100,9 @@ groups:
       max by(env, environment, tier, type, stage, shard) (
         clamp_min(
           clamp_max(
-            container_memory_working_set_bytes:labeled{container!="", container!="POD", env="gprd",type="packagecloud"}
+            container_memory_working_set_bytes:labeled{container!="", container!="POD", env="pre",type="packagecloud"}
             /
-            (container_spec_memory_limit_bytes:labeled{container!="", container!="POD", env="gprd",type="packagecloud"} > 0)
+            (container_spec_memory_limit_bytes:labeled{container!="", container!="POD", env="pre",type="packagecloud"} > 0)
             ,
             1)
         ,
@@ -117,9 +117,9 @@ groups:
         clamp_min(
           clamp_max(
             avg by (env, environment, tier, type, stage, shard, pod, container)(
-              rate(container_cpu_cfs_throttled_periods_total:labeled{container!="", env="gprd",type="packagecloud"}[5m])
+              rate(container_cpu_cfs_throttled_periods_total:labeled{container!="", env="pre",type="packagecloud"}[5m])
               /
-              rate(container_cpu_cfs_periods_total:labeled{container!="", env="gprd",type="packagecloud"}[5m])
+              rate(container_cpu_cfs_periods_total:labeled{container!="", env="pre",type="packagecloud"}[5m])
             )
             ,
             1)
@@ -133,9 +133,9 @@ groups:
       max by(env, environment, tier, type, stage, shard) (
         clamp_min(
           clamp_max(
-            kube_horizontalpodautoscaler_status_desired_replicas:labeled{env="gprd",type="packagecloud", shard!~"database-throttled|elasticsearch|gitaly-throttled|urgent-authorized-projects|urgent-other", namespace!~"pubsubbeat"}
+            kube_horizontalpodautoscaler_status_desired_replicas:labeled{env="pre",type="packagecloud", shard!~"database-throttled|elasticsearch|gitaly-throttled|urgent-authorized-projects|urgent-other", namespace!~"pubsubbeat"}
             /
-            kube_horizontalpodautoscaler_spec_max_replicas:labeled{env="gprd",type="packagecloud", shard!~"database-throttled|elasticsearch|gitaly-throttled|urgent-authorized-projects|urgent-other", namespace!~"pubsubbeat"}
+            kube_horizontalpodautoscaler_spec_max_replicas:labeled{env="pre",type="packagecloud", shard!~"database-throttled|elasticsearch|gitaly-throttled|urgent-authorized-projects|urgent-other", namespace!~"pubsubbeat"}
             ,
             1)
         ,
@@ -149,15 +149,15 @@ groups:
         clamp_min(
           clamp_max(
             (
-              process_open_fds{env="gprd",type="packagecloud"}
+              process_open_fds{env="pre",type="packagecloud"}
               /
-              process_max_fds{env="gprd",type="packagecloud"}
+              process_max_fds{env="pre",type="packagecloud"}
             )
             or
             (
-              ruby_file_descriptors{env="gprd",type="packagecloud"}
+              ruby_file_descriptors{env="pre",type="packagecloud"}
               /
-              ruby_process_max_fds{env="gprd",type="packagecloud"}
+              ruby_process_max_fds{env="pre",type="packagecloud"}
             )
             ,
             1)
