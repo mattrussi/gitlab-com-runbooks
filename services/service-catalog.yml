@@ -2548,6 +2548,4 @@ services:
     label: TokenRotationManagement
     owner: security_operations
     technical:
-      logging:
-        - name:
-          permalink:
+      logging: []
