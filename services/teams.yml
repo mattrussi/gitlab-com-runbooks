@@ -443,6 +443,9 @@ teams:
   url: https://handbook.gitlab.com/handbook/security/product-security/infrastructure-security/
   slack_alerts_channel: infrasec-notifications
 
+- name: security_operations
+  url: https://handbook.gitlab.com/handbook/security/security-operations
+
 # Marketing
 
 - name: developer_relations
