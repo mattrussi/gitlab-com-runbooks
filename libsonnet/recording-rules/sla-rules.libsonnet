@@ -53,6 +53,7 @@ local getWeightQuery(weights, interval, selector, sloObservationStatusMetric) =
 local ruleGroup(version, selector, sloObservationStatusMetric) =
   local labels = {
     sla_type: version,
+    monitor: 'global',
   };
   local interval = weightedIntervalVersions[version];
   local serviceWeights = keyServiceWeightsMapping[version];
