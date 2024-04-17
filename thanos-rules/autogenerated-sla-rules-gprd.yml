@@ -7,6 +7,7 @@ groups:
   rules:
   - record: sla:gitlab:score
     labels:
+      monitor: global
       sla_type: weighted_v2.1
     expr: |
       sum by (environment, env, stage) (
@@ -22,6 +23,7 @@ groups:
       )
   - record: sla:gitlab:weights
     labels:
+      monitor: global
       sla_type: weighted_v2.1
     expr: |
       sum by (environment, env, stage) (
@@ -37,6 +39,7 @@ groups:
       )
   - record: sla:gitlab:ratio
     labels:
+      monitor: global
       sla_type: weighted_v2.1
     expr: |
       clamp_max(
@@ -49,6 +52,7 @@ groups:
   rules:
   - record: sla:gitlab:score
     labels:
+      monitor: global
       sla_type: weighted_v3
     expr: |
       sum by (environment, env, stage) (
@@ -66,6 +70,7 @@ groups:
       )
   - record: sla:gitlab:weights
     labels:
+      monitor: global
       sla_type: weighted_v3
     expr: |
       sum by (environment, env, stage) (
@@ -83,6 +88,7 @@ groups:
       )
   - record: sla:gitlab:ratio
     labels:
+      monitor: global
       sla_type: weighted_v3
     expr: |
       clamp_max(
