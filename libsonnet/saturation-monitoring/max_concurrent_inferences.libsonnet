@@ -30,6 +30,9 @@ local selectors = import 'promql/selectors.libsonnet';
     |||,
     grafana_dashboard_uid: 'max_concurrent_inferences',
     resourceLabels: ['model_engine', 'model_name'],
+    // temporary flag to expand resource labels as the max aggregation labels
+    // to retain saturation data across multiple labels.
+    useResourceLabelsAsMaxAggregationLabels: true,
     query: |||
       sum by (%(aggregationLabels)s)(max_over_time(model_inferences_in_flight{%(selector)s}[%(rangeInterval)s]))
       /

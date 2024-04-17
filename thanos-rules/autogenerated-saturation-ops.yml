@@ -143,7 +143,7 @@ groups:
     labels:
       component: max_concurrent_inferences
     expr: |
-      max by(env, environment, tier, type, stage, shard) (
+      max by(env, environment, tier, type, stage, shard, model_engine, model_name) (
         clamp_min(
           clamp_max(
             sum by (env, environment, tier, type, stage, shard, model_engine, model_name)(max_over_time(model_inferences_in_flight{env="ops",type="ai-gateway"}[10m]))
