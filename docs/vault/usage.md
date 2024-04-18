@@ -368,8 +368,8 @@ resource "google_some_service" "foo" {
 
 **Note**: Due to how access permissions work, the secret must be in a containing folder for the Terraform environment, for example:
 
-* ❌ Invalid: `name  = "ops-gitlab-net/gitlab-com/gl-infra/my-project/some-env"
-* ✅ OK: `name  = "ops-gitlab-net/gitlab-com/gl-infra/my-project/some-env/some-secret"
+* ❌ Invalid: `name  = "ops-gitlab-net/gitlab-com/gl-infra/my-project/some-env"`
+* ✅ OK: `name  = "ops-gitlab-net/gitlab-com/gl-infra/my-project/some-env/some-secret"`
 
 Terraform can also write a secret to Vault using the `vault_kv_secret_v2` resource:
 
