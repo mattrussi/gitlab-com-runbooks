@@ -24,11 +24,11 @@ groups:
     expr: irate(redis_connections_received_total{env="gprd"}[1m])
   - record: gitlab:redis_disconnected_slaves
     expr: >
-      count without (fqdn, instance, job) (redis_connected_slaves{env="gprd"}) -
-      sum without (fqdn, instance, job) (redis_connected_slaves{env="gprd"}) -
+      count without (fqdn, instance, job, zone) (redis_connected_slaves{env="gprd"}) -
+      sum without (fqdn, instance, job, zone) (redis_connected_slaves{env="gprd"}) -
       1
   - record: gitlab:redis_cluster_nodes:count
-    expr: count without (fqdn,instance) (up{job="gitlab-redis", env="gprd"})
+    expr: count without (fqdn,instance, zone) (up{job="scrapeConfig/monitoring/prometheus-agent-redis", env="gprd"})
   - record: gitlab:redis_master
     expr: redis_connected_slaves{env="gprd"} > 1
   - record: instance:redis_cpu_usage:rate1m
