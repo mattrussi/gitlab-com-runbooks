@@ -22,6 +22,7 @@ local baseSelector = { type: 'sidekiq' } + ignoredWorkers;
 metricsCatalog.serviceDefinition({
   type: 'sidekiq',
   tier: 'sv',
+  tenants: [ 'gitlab-gprd', 'gitlab-gstg', 'gitlab-pre' ],
   tags: ['rails'],
 
   // overrides monitoringThresholds for specific shards and SLIs
