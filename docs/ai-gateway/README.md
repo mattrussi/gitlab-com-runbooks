@@ -172,6 +172,8 @@ To request a quota alteration:
 * Input the desired quota limit for each service and submit the request.
 * Existing/previous requests can be viewed [here](https://console.cloud.google.com/iam-admin/quotas/qirs?referrer=search&project=unreview-poc-390200e5&pageState=(%22allQuotasTable%22:(%22f%22:%22%255B%257B_22k_22_3A_22_22_2C_22t_22_3A10_2C_22v_22_3A_22_5C_22base_model_5C_22_22%257D%255D%22)))
 
+If you do not have access to the GCP console, please file an access request asking for the `Quota Administrator` role on the `ai-assisted-legacy-prd` project.
+
 <!-- ## Availability -->
 
 <!-- ## Durability -->
