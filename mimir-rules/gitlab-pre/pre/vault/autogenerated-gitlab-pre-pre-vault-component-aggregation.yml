@@ -13,7 +13,7 @@ groups:
       type: vault
     expr: |
       sum by (env,environment) (
-        sli_aggregations:istio_request_duration_milliseconds_bucket:rate_5m{destination_workload="vault",env="gprd",le="1000",source_workload="istio-internal-gateway"}
+        sli_aggregations:istio_request_duration_milliseconds_bucket:rate_5m{destination_workload="vault",env="pre",le="1000",source_workload="istio-internal-gateway"}
       )
   - record: gitlab_component_apdex:weight:score_5m
     labels:
@@ -24,7 +24,7 @@ groups:
       type: vault
     expr: |
       sum by (env,environment) (
-        sli_aggregations:istio_request_duration_milliseconds_bucket:rate_5m{destination_workload="vault",env="gprd",le="+Inf",source_workload="istio-internal-gateway"}
+        sli_aggregations:istio_request_duration_milliseconds_bucket:rate_5m{destination_workload="vault",env="pre",le="+Inf",source_workload="istio-internal-gateway"}
       )
   - record: gitlab_component_ops:rate_5m
     labels:
@@ -35,7 +35,7 @@ groups:
       type: vault
     expr: |
       sum by (env,environment) (
-        sli_aggregations:istio_requests_total:rate_5m{destination_workload="vault",env="gprd",source_workload="istio-internal-gateway"} offset 30s
+        sli_aggregations:istio_requests_total:rate_5m{destination_workload="vault",env="pre",source_workload="istio-internal-gateway"} offset 30s
       )
   - record: gitlab_component_errors:rate_5m
     labels:
@@ -47,13 +47,13 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          sli_aggregations:istio_requests_total:rate_5m{destination_workload="vault",env="gprd",response_code=~"^5.*",source_workload="istio-internal-gateway"} offset 30s
+          sli_aggregations:istio_requests_total:rate_5m{destination_workload="vault",env="pre",response_code=~"^5.*",source_workload="istio-internal-gateway"} offset 30s
         )
       )
       or
       (
         0 * group by(env,environment) (
-          gitlab_component_ops:rate_5m{component="istio_internal_ingress",env="gprd",monitor="global",stage="main",tier="inf",type="vault"}
+          gitlab_component_ops:rate_5m{component="istio_internal_ingress",env="pre",monitor="global",stage="main",tier="inf",type="vault"}
         )
       )
   - record: gitlab_component_errors:ratio_5m
@@ -64,11 +64,11 @@ groups:
       type: vault
     expr: |
       sum by (env,environment,stage) (
-        gitlab_component_errors:rate_5m{component="istio_internal_ingress",env="gprd",monitor="global",tier="inf",type="vault"} offset 30s
+        gitlab_component_errors:rate_5m{component="istio_internal_ingress",env="pre",monitor="global",tier="inf",type="vault"} offset 30s
       )
       /
       sum by (env,environment,stage) (
-        gitlab_component_ops:rate_5m{component="istio_internal_ingress",env="gprd",monitor="global",tier="inf",type="vault"} offset 30s
+        gitlab_component_ops:rate_5m{component="istio_internal_ingress",env="pre",monitor="global",tier="inf",type="vault"} offset 30s
       )
   - record: gitlab_component_apdex:ratio_5m
     labels:
@@ -78,11 +78,11 @@ groups:
       type: vault
     expr: |
       sum by (env,environment,stage) (
-        gitlab_component_apdex:success:rate_5m{component="istio_internal_ingress",env="gprd",monitor="global",tier="inf",type="vault"} offset 30s
+        gitlab_component_apdex:success:rate_5m{component="istio_internal_ingress",env="pre",monitor="global",tier="inf",type="vault"} offset 30s
       )
       /
       sum by (env,environment,stage) (
-        gitlab_component_apdex:weight:score_5m{component="istio_internal_ingress",env="gprd",monitor="global",tier="inf",type="vault"} offset 30s
+        gitlab_component_apdex:weight:score_5m{component="istio_internal_ingress",env="pre",monitor="global",tier="inf",type="vault"} offset 30s
       )
   - record: gitlab_component_apdex:success:rate_5m
     labels:
@@ -93,7 +93,7 @@ groups:
       type: vault
     expr: |
       sum by (env,environment) (
-        sli_aggregations:istio_request_duration_milliseconds_bucket:rate_5m{destination_workload="vault",env="gprd",le="1000",source_workload="istio-gateway"}
+        sli_aggregations:istio_request_duration_milliseconds_bucket:rate_5m{destination_workload="vault",env="pre",le="1000",source_workload="istio-gateway"}
       )
   - record: gitlab_component_apdex:weight:score_5m
     labels:
@@ -104,7 +104,7 @@ groups:
       type: vault
     expr: |
       sum by (env,environment) (
-        sli_aggregations:istio_request_duration_milliseconds_bucket:rate_5m{destination_workload="vault",env="gprd",le="+Inf",source_workload="istio-gateway"}
+        sli_aggregations:istio_request_duration_milliseconds_bucket:rate_5m{destination_workload="vault",env="pre",le="+Inf",source_workload="istio-gateway"}
       )
   - record: gitlab_component_ops:rate_5m
     labels:
@@ -115,7 +115,7 @@ groups:
       type: vault
     expr: |
       sum by (env,environment) (
-        sli_aggregations:istio_requests_total:rate_5m{destination_workload="vault",env="gprd",source_workload="istio-gateway"} offset 30s
+        sli_aggregations:istio_requests_total:rate_5m{destination_workload="vault",env="pre",source_workload="istio-gateway"} offset 30s
       )
   - record: gitlab_component_errors:rate_5m
     labels:
@@ -127,13 +127,13 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          sli_aggregations:istio_requests_total:rate_5m{destination_workload="vault",env="gprd",response_code=~"^5.*",source_workload="istio-gateway"} offset 30s
+          sli_aggregations:istio_requests_total:rate_5m{destination_workload="vault",env="pre",response_code=~"^5.*",source_workload="istio-gateway"} offset 30s
         )
       )
       or
       (
         0 * group by(env,environment) (
-          gitlab_component_ops:rate_5m{component="istio_public_ingress",env="gprd",monitor="global",stage="main",tier="inf",type="vault"}
+          gitlab_component_ops:rate_5m{component="istio_public_ingress",env="pre",monitor="global",stage="main",tier="inf",type="vault"}
         )
       )
   - record: gitlab_component_errors:ratio_5m
@@ -144,11 +144,11 @@ groups:
       type: vault
     expr: |
       sum by (env,environment,stage) (
-        gitlab_component_errors:rate_5m{component="istio_public_ingress",env="gprd",monitor="global",tier="inf",type="vault"} offset 30s
+        gitlab_component_errors:rate_5m{component="istio_public_ingress",env="pre",monitor="global",tier="inf",type="vault"} offset 30s
       )
       /
       sum by (env,environment,stage) (
-        gitlab_component_ops:rate_5m{component="istio_public_ingress",env="gprd",monitor="global",tier="inf",type="vault"} offset 30s
+        gitlab_component_ops:rate_5m{component="istio_public_ingress",env="pre",monitor="global",tier="inf",type="vault"} offset 30s
       )
   - record: gitlab_component_apdex:ratio_5m
     labels:
@@ -158,11 +158,11 @@ groups:
       type: vault
     expr: |
       sum by (env,environment,stage) (
-        gitlab_component_apdex:success:rate_5m{component="istio_public_ingress",env="gprd",monitor="global",tier="inf",type="vault"} offset 30s
+        gitlab_component_apdex:success:rate_5m{component="istio_public_ingress",env="pre",monitor="global",tier="inf",type="vault"} offset 30s
       )
       /
       sum by (env,environment,stage) (
-        gitlab_component_apdex:weight:score_5m{component="istio_public_ingress",env="gprd",monitor="global",tier="inf",type="vault"} offset 30s
+        gitlab_component_apdex:weight:score_5m{component="istio_public_ingress",env="pre",monitor="global",tier="inf",type="vault"} offset 30s
       )
   - record: gitlab_component_ops:rate_5m
     labels:
@@ -173,7 +173,7 @@ groups:
       type: vault
     expr: |
       sum by (env,environment) (
-        sli_aggregations:vault_core_handle_request_count:rate_5m{env="gprd",job="vault-active"} offset 30s
+        sli_aggregations:vault_core_handle_request_count:rate_5m{env="pre",job="vault-active"} offset 30s
       )
   - record: gitlab_component_errors:ratio_5m
     labels:
@@ -183,11 +183,11 @@ groups:
       type: vault
     expr: |
       sum by (env,environment,stage) (
-        gitlab_component_errors:rate_5m{component="vault",env="gprd",monitor="global",tier="inf",type="vault"} offset 30s
+        gitlab_component_errors:rate_5m{component="vault",env="pre",monitor="global",tier="inf",type="vault"} offset 30s
       )
       /
       sum by (env,environment,stage) (
-        gitlab_component_ops:rate_5m{component="vault",env="gprd",monitor="global",tier="inf",type="vault"} offset 30s
+        gitlab_component_ops:rate_5m{component="vault",env="pre",monitor="global",tier="inf",type="vault"} offset 30s
       )
   - record: gitlab_component_apdex:ratio_5m
     labels:
@@ -197,11 +197,11 @@ groups:
       type: vault
     expr: |
       sum by (env,environment,stage) (
-        gitlab_component_apdex:success:rate_5m{component="vault",env="gprd",monitor="global",tier="inf",type="vault"} offset 30s
+        gitlab_component_apdex:success:rate_5m{component="vault",env="pre",monitor="global",tier="inf",type="vault"} offset 30s
       )
       /
       sum by (env,environment,stage) (
-        gitlab_component_apdex:weight:score_5m{component="vault",env="gprd",monitor="global",tier="inf",type="vault"} offset 30s
+        gitlab_component_apdex:weight:score_5m{component="vault",env="pre",monitor="global",tier="inf",type="vault"} offset 30s
       )
   - record: gitlab_component_ops:rate_5m
     labels:
@@ -212,7 +212,7 @@ groups:
       type: vault
     expr: |
       sum by (env,environment) (
-        sli_aggregations:vault_audit_log_request_count:rate_5m{env="gprd",job="vault-active"} offset 30s
+        sli_aggregations:vault_audit_log_request_count:rate_5m{env="pre",job="vault-active"} offset 30s
       )
   - record: gitlab_component_errors:rate_5m
     labels:
@@ -224,13 +224,13 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          sli_aggregations:vault_audit_log_request_failure:rate_5m{env="gprd",job="vault-active"} offset 30s
+          sli_aggregations:vault_audit_log_request_failure:rate_5m{env="pre",job="vault-active"} offset 30s
         )
       )
       or
       (
         0 * group by(env,environment) (
-          gitlab_component_ops:rate_5m{component="vault_audit_log_request",env="gprd",monitor="global",stage="main",tier="inf",type="vault"}
+          gitlab_component_ops:rate_5m{component="vault_audit_log_request",env="pre",monitor="global",stage="main",tier="inf",type="vault"}
         )
       )
   - record: gitlab_component_errors:ratio_5m
@@ -241,11 +241,11 @@ groups:
       type: vault
     expr: |
       sum by (env,environment,stage) (
-        gitlab_component_errors:rate_5m{component="vault_audit_log_request",env="gprd",monitor="global",tier="inf",type="vault"} offset 30s
+        gitlab_component_errors:rate_5m{component="vault_audit_log_request",env="pre",monitor="global",tier="inf",type="vault"} offset 30s
       )
       /
       sum by (env,environment,stage) (
-        gitlab_component_ops:rate_5m{component="vault_audit_log_request",env="gprd",monitor="global",tier="inf",type="vault"} offset 30s
+        gitlab_component_ops:rate_5m{component="vault_audit_log_request",env="pre",monitor="global",tier="inf",type="vault"} offset 30s
       )
   - record: gitlab_component_apdex:ratio_5m
     labels:
@@ -255,11 +255,11 @@ groups:
       type: vault
     expr: |
       sum by (env,environment,stage) (
-        gitlab_component_apdex:success:rate_5m{component="vault_audit_log_request",env="gprd",monitor="global",tier="inf",type="vault"} offset 30s
+        gitlab_component_apdex:success:rate_5m{component="vault_audit_log_request",env="pre",monitor="global",tier="inf",type="vault"} offset 30s
       )
       /
       sum by (env,environment,stage) (
-        gitlab_component_apdex:weight:score_5m{component="vault_audit_log_request",env="gprd",monitor="global",tier="inf",type="vault"} offset 30s
+        gitlab_component_apdex:weight:score_5m{component="vault_audit_log_request",env="pre",monitor="global",tier="inf",type="vault"} offset 30s
       )
   - record: gitlab_component_ops:rate_5m
     labels:
@@ -270,7 +270,7 @@ groups:
       type: vault
     expr: |
       sum by (env,environment) (
-        sli_aggregations:vault_audit_log_response_count:rate_5m{env="gprd",job="vault-active"} offset 30s
+        sli_aggregations:vault_audit_log_response_count:rate_5m{env="pre",job="vault-active"} offset 30s
       )
   - record: gitlab_component_errors:rate_5m
     labels:
@@ -282,13 +282,13 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          sli_aggregations:vault_audit_log_response_failure:rate_5m{env="gprd",job="vault-active"} offset 30s
+          sli_aggregations:vault_audit_log_response_failure:rate_5m{env="pre",job="vault-active"} offset 30s
         )
       )
       or
       (
         0 * group by(env,environment) (
-          gitlab_component_ops:rate_5m{component="vault_audit_log_response",env="gprd",monitor="global",stage="main",tier="inf",type="vault"}
+          gitlab_component_ops:rate_5m{component="vault_audit_log_response",env="pre",monitor="global",stage="main",tier="inf",type="vault"}
         )
       )
   - record: gitlab_component_errors:ratio_5m
@@ -299,11 +299,11 @@ groups:
       type: vault
     expr: |
       sum by (env,environment,stage) (
-        gitlab_component_errors:rate_5m{component="vault_audit_log_response",env="gprd",monitor="global",tier="inf",type="vault"} offset 30s
+        gitlab_component_errors:rate_5m{component="vault_audit_log_response",env="pre",monitor="global",tier="inf",type="vault"} offset 30s
       )
       /
       sum by (env,environment,stage) (
-        gitlab_component_ops:rate_5m{component="vault_audit_log_response",env="gprd",monitor="global",tier="inf",type="vault"} offset 30s
+        gitlab_component_ops:rate_5m{component="vault_audit_log_response",env="pre",monitor="global",tier="inf",type="vault"} offset 30s
       )
   - record: gitlab_component_apdex:ratio_5m
     labels:
@@ -313,11 +313,11 @@ groups:
       type: vault
     expr: |
       sum by (env,environment,stage) (
-        gitlab_component_apdex:success:rate_5m{component="vault_audit_log_response",env="gprd",monitor="global",tier="inf",type="vault"} offset 30s
+        gitlab_component_apdex:success:rate_5m{component="vault_audit_log_response",env="pre",monitor="global",tier="inf",type="vault"} offset 30s
       )
       /
       sum by (env,environment,stage) (
-        gitlab_component_apdex:weight:score_5m{component="vault_audit_log_response",env="gprd",monitor="global",tier="inf",type="vault"} offset 30s
+        gitlab_component_apdex:weight:score_5m{component="vault_audit_log_response",env="pre",monitor="global",tier="inf",type="vault"} offset 30s
       )
   - record: gitlab_component_ops:rate_5m
     labels:
@@ -328,7 +328,7 @@ groups:
       type: vault
     expr: |
       sum by (env,environment) (
-        sli_aggregations:stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count:rate_5m{env="gprd",project_id="gitlab-ops",url_map_name="k8s2-um-4zodnh0s-vault-vault-g7tjn6qu"} offset 30s
+        sli_aggregations:stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count:rate_5m{env="pre",project_id="gitlab-ops",url_map_name="k8s2-um-4zodnh0s-vault-vault-g7tjn6qu"} offset 30s
       )
   - record: gitlab_component_errors:rate_5m
     labels:
@@ -340,13 +340,13 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          sli_aggregations:stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count:rate_5m{env="gprd",project_id="gitlab-ops",response_code_class="500",url_map_name="k8s2-um-4zodnh0s-vault-vault-g7tjn6qu"} offset 30s
+          sli_aggregations:stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count:rate_5m{env="pre",project_id="gitlab-ops",response_code_class="500",url_map_name="k8s2-um-4zodnh0s-vault-vault-g7tjn6qu"} offset 30s
         )
       )
       or
       (
         0 * group by(env,environment) (
-          gitlab_component_ops:rate_5m{component="vault_google_lb",env="gprd",monitor="global",stage="main",tier="inf",type="vault"}
+          gitlab_component_ops:rate_5m{component="vault_google_lb",env="pre",monitor="global",stage="main",tier="inf",type="vault"}
         )
       )
   - record: gitlab_component_errors:ratio_5m
@@ -357,11 +357,11 @@ groups:
       type: vault
     expr: |
       sum by (env,environment,stage) (
-        gitlab_component_errors:rate_5m{component="vault_google_lb",env="gprd",monitor="global",tier="inf",type="vault"} offset 30s
+        gitlab_component_errors:rate_5m{component="vault_google_lb",env="pre",monitor="global",tier="inf",type="vault"} offset 30s
       )
       /
       sum by (env,environment,stage) (
-        gitlab_component_ops:rate_5m{component="vault_google_lb",env="gprd",monitor="global",tier="inf",type="vault"} offset 30s
+        gitlab_component_ops:rate_5m{component="vault_google_lb",env="pre",monitor="global",tier="inf",type="vault"} offset 30s
       )
   - record: gitlab_component_apdex:ratio_5m
     labels:
@@ -371,11 +371,11 @@ groups:
       type: vault
     expr: |
       sum by (env,environment,stage) (
-        gitlab_component_apdex:success:rate_5m{component="vault_google_lb",env="gprd",monitor="global",tier="inf",type="vault"} offset 30s
+        gitlab_component_apdex:success:rate_5m{component="vault_google_lb",env="pre",monitor="global",tier="inf",type="vault"} offset 30s
       )
       /
       sum by (env,environment,stage) (
-        gitlab_component_apdex:weight:score_5m{component="vault_google_lb",env="gprd",monitor="global",tier="inf",type="vault"} offset 30s
+        gitlab_component_apdex:weight:score_5m{component="vault_google_lb",env="pre",monitor="global",tier="inf",type="vault"} offset 30s
       )
 - name: 'Global SLI Metrics: vault - Burn-Rate 30m'
   interval: 2m
@@ -389,7 +389,7 @@ groups:
       type: vault
     expr: |
       sum by (env,environment) (
-        sli_aggregations:istio_request_duration_milliseconds_bucket:rate_30m{destination_workload="vault",env="gprd",le="1000",source_workload="istio-internal-gateway"}
+        sli_aggregations:istio_request_duration_milliseconds_bucket:rate_30m{destination_workload="vault",env="pre",le="1000",source_workload="istio-internal-gateway"}
       )
   - record: gitlab_component_apdex:weight:score_30m
     labels:
@@ -400,7 +400,7 @@ groups:
       type: vault
     expr: |
       sum by (env,environment) (
-        sli_aggregations:istio_request_duration_milliseconds_bucket:rate_30m{destination_workload="vault",env="gprd",le="+Inf",source_workload="istio-internal-gateway"}
+        sli_aggregations:istio_request_duration_milliseconds_bucket:rate_30m{destination_workload="vault",env="pre",le="+Inf",source_workload="istio-internal-gateway"}
       )
   - record: gitlab_component_ops:rate_30m
     labels:
@@ -411,7 +411,7 @@ groups:
       type: vault
     expr: |
       sum by (env,environment) (
-        sli_aggregations:istio_requests_total:rate_30m{destination_workload="vault",env="gprd",source_workload="istio-internal-gateway"} offset 30s
+        sli_aggregations:istio_requests_total:rate_30m{destination_workload="vault",env="pre",source_workload="istio-internal-gateway"} offset 30s
       )
   - record: gitlab_component_errors:rate_30m
     labels:
@@ -423,13 +423,13 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          sli_aggregations:istio_requests_total:rate_30m{destination_workload="vault",env="gprd",response_code=~"^5.*",source_workload="istio-internal-gateway"} offset 30s
+          sli_aggregations:istio_requests_total:rate_30m{destination_workload="vault",env="pre",response_code=~"^5.*",source_workload="istio-internal-gateway"} offset 30s
         )
       )
       or
       (
         0 * group by(env,environment) (
-          gitlab_component_ops:rate_30m{component="istio_internal_ingress",env="gprd",monitor="global",stage="main",tier="inf",type="vault"}
+          gitlab_component_ops:rate_30m{component="istio_internal_ingress",env="pre",monitor="global",stage="main",tier="inf",type="vault"}
         )
       )
   - record: gitlab_component_errors:ratio_30m
@@ -440,11 +440,11 @@ groups:
       type: vault
     expr: |
       sum by (env,environment,stage) (
-        gitlab_component_errors:rate_30m{component="istio_internal_ingress",env="gprd",monitor="global",tier="inf",type="vault"} offset 30s
+        gitlab_component_errors:rate_30m{component="istio_internal_ingress",env="pre",monitor="global",tier="inf",type="vault"} offset 30s
       )
       /
       sum by (env,environment,stage) (
-        gitlab_component_ops:rate_30m{component="istio_internal_ingress",env="gprd",monitor="global",tier="inf",type="vault"} offset 30s
+        gitlab_component_ops:rate_30m{component="istio_internal_ingress",env="pre",monitor="global",tier="inf",type="vault"} offset 30s
       )
   - record: gitlab_component_apdex:ratio_30m
     labels:
@@ -454,11 +454,11 @@ groups:
       type: vault
     expr: |
       sum by (env,environment,stage) (
-        gitlab_component_apdex:success:rate_30m{component="istio_internal_ingress",env="gprd",monitor="global",tier="inf",type="vault"} offset 30s
+        gitlab_component_apdex:success:rate_30m{component="istio_internal_ingress",env="pre",monitor="global",tier="inf",type="vault"} offset 30s
       )
       /
       sum by (env,environment,stage) (
-        gitlab_component_apdex:weight:score_30m{component="istio_internal_ingress",env="gprd",monitor="global",tier="inf",type="vault"} offset 30s
+        gitlab_component_apdex:weight:score_30m{component="istio_internal_ingress",env="pre",monitor="global",tier="inf",type="vault"} offset 30s
       )
   - record: gitlab_component_apdex:success:rate_30m
     labels:
@@ -469,7 +469,7 @@ groups:
       type: vault
     expr: |
       sum by (env,environment) (
-        sli_aggregations:istio_request_duration_milliseconds_bucket:rate_30m{destination_workload="vault",env="gprd",le="1000",source_workload="istio-gateway"}
+        sli_aggregations:istio_request_duration_milliseconds_bucket:rate_30m{destination_workload="vault",env="pre",le="1000",source_workload="istio-gateway"}
       )
   - record: gitlab_component_apdex:weight:score_30m
     labels:
@@ -480,7 +480,7 @@ groups:
       type: vault
     expr: |
       sum by (env,environment) (
-        sli_aggregations:istio_request_duration_milliseconds_bucket:rate_30m{destination_workload="vault",env="gprd",le="+Inf",source_workload="istio-gateway"}
+        sli_aggregations:istio_request_duration_milliseconds_bucket:rate_30m{destination_workload="vault",env="pre",le="+Inf",source_workload="istio-gateway"}
       )
   - record: gitlab_component_ops:rate_30m
     labels:
@@ -491,7 +491,7 @@ groups:
       type: vault
     expr: |
       sum by (env,environment) (
-        sli_aggregations:istio_requests_total:rate_30m{destination_workload="vault",env="gprd",source_workload="istio-gateway"} offset 30s
+        sli_aggregations:istio_requests_total:rate_30m{destination_workload="vault",env="pre",source_workload="istio-gateway"} offset 30s
       )
   - record: gitlab_component_errors:rate_30m
     labels:
@@ -503,13 +503,13 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          sli_aggregations:istio_requests_total:rate_30m{destination_workload="vault",env="gprd",response_code=~"^5.*",source_workload="istio-gateway"} offset 30s
+          sli_aggregations:istio_requests_total:rate_30m{destination_workload="vault",env="pre",response_code=~"^5.*",source_workload="istio-gateway"} offset 30s
         )
       )
       or
       (
         0 * group by(env,environment) (
-          gitlab_component_ops:rate_30m{component="istio_public_ingress",env="gprd",monitor="global",stage="main",tier="inf",type="vault"}
+          gitlab_component_ops:rate_30m{component="istio_public_ingress",env="pre",monitor="global",stage="main",tier="inf",type="vault"}
         )
       )
   - record: gitlab_component_errors:ratio_30m
@@ -520,11 +520,11 @@ groups:
       type: vault
     expr: |
       sum by (env,environment,stage) (
-        gitlab_component_errors:rate_30m{component="istio_public_ingress",env="gprd",monitor="global",tier="inf",type="vault"} offset 30s
+        gitlab_component_errors:rate_30m{component="istio_public_ingress",env="pre",monitor="global",tier="inf",type="vault"} offset 30s
       )
       /
       sum by (env,environment,stage) (
-        gitlab_component_ops:rate_30m{component="istio_public_ingress",env="gprd",monitor="global",tier="inf",type="vault"} offset 30s
+        gitlab_component_ops:rate_30m{component="istio_public_ingress",env="pre",monitor="global",tier="inf",type="vault"} offset 30s
       )
   - record: gitlab_component_apdex:ratio_30m
     labels:
@@ -534,11 +534,11 @@ groups:
       type: vault
     expr: |
       sum by (env,environment,stage) (
-        gitlab_component_apdex:success:rate_30m{component="istio_public_ingress",env="gprd",monitor="global",tier="inf",type="vault"} offset 30s
+        gitlab_component_apdex:success:rate_30m{component="istio_public_ingress",env="pre",monitor="global",tier="inf",type="vault"} offset 30s
       )
       /
       sum by (env,environment,stage) (
-        gitlab_component_apdex:weight:score_30m{component="istio_public_ingress",env="gprd",monitor="global",tier="inf",type="vault"} offset 30s
+        gitlab_component_apdex:weight:score_30m{component="istio_public_ingress",env="pre",monitor="global",tier="inf",type="vault"} offset 30s
       )
   - record: gitlab_component_ops:rate_30m
     labels:
@@ -549,7 +549,7 @@ groups:
       type: vault
     expr: |
       sum by (env,environment) (
-        sli_aggregations:vault_core_handle_request_count:rate_30m{env="gprd",job="vault-active"} offset 30s
+        sli_aggregations:vault_core_handle_request_count:rate_30m{env="pre",job="vault-active"} offset 30s
       )
   - record: gitlab_component_errors:ratio_30m
     labels:
@@ -559,11 +559,11 @@ groups:
       type: vault
     expr: |
       sum by (env,environment,stage) (
-        gitlab_component_errors:rate_30m{component="vault",env="gprd",monitor="global",tier="inf",type="vault"} offset 30s
+        gitlab_component_errors:rate_30m{component="vault",env="pre",monitor="global",tier="inf",type="vault"} offset 30s
       )
       /
       sum by (env,environment,stage) (
-        gitlab_component_ops:rate_30m{component="vault",env="gprd",monitor="global",tier="inf",type="vault"} offset 30s
+        gitlab_component_ops:rate_30m{component="vault",env="pre",monitor="global",tier="inf",type="vault"} offset 30s
       )
   - record: gitlab_component_apdex:ratio_30m
     labels:
@@ -573,11 +573,11 @@ groups:
       type: vault
     expr: |
       sum by (env,environment,stage) (
-        gitlab_component_apdex:success:rate_30m{component="vault",env="gprd",monitor="global",tier="inf",type="vault"} offset 30s
+        gitlab_component_apdex:success:rate_30m{component="vault",env="pre",monitor="global",tier="inf",type="vault"} offset 30s
       )
       /
       sum by (env,environment,stage) (
-        gitlab_component_apdex:weight:score_30m{component="vault",env="gprd",monitor="global",tier="inf",type="vault"} offset 30s
+        gitlab_component_apdex:weight:score_30m{component="vault",env="pre",monitor="global",tier="inf",type="vault"} offset 30s
       )
   - record: gitlab_component_ops:rate_30m
     labels:
@@ -588,7 +588,7 @@ groups:
       type: vault
     expr: |
       sum by (env,environment) (
-        sli_aggregations:vault_audit_log_request_count:rate_30m{env="gprd",job="vault-active"} offset 30s
+        sli_aggregations:vault_audit_log_request_count:rate_30m{env="pre",job="vault-active"} offset 30s
       )
   - record: gitlab_component_errors:rate_30m
     labels:
@@ -600,13 +600,13 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          sli_aggregations:vault_audit_log_request_failure:rate_30m{env="gprd",job="vault-active"} offset 30s
+          sli_aggregations:vault_audit_log_request_failure:rate_30m{env="pre",job="vault-active"} offset 30s
         )
       )
       or
       (
         0 * group by(env,environment) (
-          gitlab_component_ops:rate_30m{component="vault_audit_log_request",env="gprd",monitor="global",stage="main",tier="inf",type="vault"}
+          gitlab_component_ops:rate_30m{component="vault_audit_log_request",env="pre",monitor="global",stage="main",tier="inf",type="vault"}
         )
       )
   - record: gitlab_component_errors:ratio_30m
@@ -617,11 +617,11 @@ groups:
       type: vault
     expr: |
       sum by (env,environment,stage) (
-        gitlab_component_errors:rate_30m{component="vault_audit_log_request",env="gprd",monitor="global",tier="inf",type="vault"} offset 30s
+        gitlab_component_errors:rate_30m{component="vault_audit_log_request",env="pre",monitor="global",tier="inf",type="vault"} offset 30s
       )
       /
       sum by (env,environment,stage) (
-        gitlab_component_ops:rate_30m{component="vault_audit_log_request",env="gprd",monitor="global",tier="inf",type="vault"} offset 30s
+        gitlab_component_ops:rate_30m{component="vault_audit_log_request",env="pre",monitor="global",tier="inf",type="vault"} offset 30s
       )
   - record: gitlab_component_apdex:ratio_30m
     labels:
@@ -631,11 +631,11 @@ groups:
       type: vault
     expr: |
       sum by (env,environment,stage) (
-        gitlab_component_apdex:success:rate_30m{component="vault_audit_log_request",env="gprd",monitor="global",tier="inf",type="vault"} offset 30s
+        gitlab_component_apdex:success:rate_30m{component="vault_audit_log_request",env="pre",monitor="global",tier="inf",type="vault"} offset 30s
       )
       /
       sum by (env,environment,stage) (
-        gitlab_component_apdex:weight:score_30m{component="vault_audit_log_request",env="gprd",monitor="global",tier="inf",type="vault"} offset 30s
+        gitlab_component_apdex:weight:score_30m{component="vault_audit_log_request",env="pre",monitor="global",tier="inf",type="vault"} offset 30s
       )
   - record: gitlab_component_ops:rate_30m
     labels:
@@ -646,7 +646,7 @@ groups:
       type: vault
     expr: |
       sum by (env,environment) (
-        sli_aggregations:vault_audit_log_response_count:rate_30m{env="gprd",job="vault-active"} offset 30s
+        sli_aggregations:vault_audit_log_response_count:rate_30m{env="pre",job="vault-active"} offset 30s
       )
   - record: gitlab_component_errors:rate_30m
     labels:
@@ -658,13 +658,13 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          sli_aggregations:vault_audit_log_response_failure:rate_30m{env="gprd",job="vault-active"} offset 30s
+          sli_aggregations:vault_audit_log_response_failure:rate_30m{env="pre",job="vault-active"} offset 30s
         )
       )
       or
       (
         0 * group by(env,environment) (
-          gitlab_component_ops:rate_30m{component="vault_audit_log_response",env="gprd",monitor="global",stage="main",tier="inf",type="vault"}
+          gitlab_component_ops:rate_30m{component="vault_audit_log_response",env="pre",monitor="global",stage="main",tier="inf",type="vault"}
         )
       )
   - record: gitlab_component_errors:ratio_30m
@@ -675,11 +675,11 @@ groups:
       type: vault
     expr: |
       sum by (env,environment,stage) (
-        gitlab_component_errors:rate_30m{component="vault_audit_log_response",env="gprd",monitor="global",tier="inf",type="vault"} offset 30s
+        gitlab_component_errors:rate_30m{component="vault_audit_log_response",env="pre",monitor="global",tier="inf",type="vault"} offset 30s
       )
       /
       sum by (env,environment,stage) (
-        gitlab_component_ops:rate_30m{component="vault_audit_log_response",env="gprd",monitor="global",tier="inf",type="vault"} offset 30s
+        gitlab_component_ops:rate_30m{component="vault_audit_log_response",env="pre",monitor="global",tier="inf",type="vault"} offset 30s
       )
   - record: gitlab_component_apdex:ratio_30m
     labels:
@@ -689,11 +689,11 @@ groups:
       type: vault
     expr: |
       sum by (env,environment,stage) (
-        gitlab_component_apdex:success:rate_30m{component="vault_audit_log_response",env="gprd",monitor="global",tier="inf",type="vault"} offset 30s
+        gitlab_component_apdex:success:rate_30m{component="vault_audit_log_response",env="pre",monitor="global",tier="inf",type="vault"} offset 30s
       )
       /
       sum by (env,environment,stage) (
-        gitlab_component_apdex:weight:score_30m{component="vault_audit_log_response",env="gprd",monitor="global",tier="inf",type="vault"} offset 30s
+        gitlab_component_apdex:weight:score_30m{component="vault_audit_log_response",env="pre",monitor="global",tier="inf",type="vault"} offset 30s
       )
   - record: gitlab_component_ops:rate_30m
     labels:
@@ -704,7 +704,7 @@ groups:
       type: vault
     expr: |
       sum by (env,environment) (
-        sli_aggregations:stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count:rate_30m{env="gprd",project_id="gitlab-ops",url_map_name="k8s2-um-4zodnh0s-vault-vault-g7tjn6qu"} offset 30s
+        sli_aggregations:stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count:rate_30m{env="pre",project_id="gitlab-ops",url_map_name="k8s2-um-4zodnh0s-vault-vault-g7tjn6qu"} offset 30s
       )
   - record: gitlab_component_errors:rate_30m
     labels:
@@ -716,13 +716,13 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          sli_aggregations:stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count:rate_30m{env="gprd",project_id="gitlab-ops",response_code_class="500",url_map_name="k8s2-um-4zodnh0s-vault-vault-g7tjn6qu"} offset 30s
+          sli_aggregations:stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count:rate_30m{env="pre",project_id="gitlab-ops",response_code_class="500",url_map_name="k8s2-um-4zodnh0s-vault-vault-g7tjn6qu"} offset 30s
         )
       )
       or
       (
         0 * group by(env,environment) (
-          gitlab_component_ops:rate_30m{component="vault_google_lb",env="gprd",monitor="global",stage="main",tier="inf",type="vault"}
+          gitlab_component_ops:rate_30m{component="vault_google_lb",env="pre",monitor="global",stage="main",tier="inf",type="vault"}
         )
       )
   - record: gitlab_component_errors:ratio_30m
@@ -733,11 +733,11 @@ groups:
       type: vault
     expr: |
       sum by (env,environment,stage) (
-        gitlab_component_errors:rate_30m{component="vault_google_lb",env="gprd",monitor="global",tier="inf",type="vault"} offset 30s
+        gitlab_component_errors:rate_30m{component="vault_google_lb",env="pre",monitor="global",tier="inf",type="vault"} offset 30s
       )
       /
       sum by (env,environment,stage) (
-        gitlab_component_ops:rate_30m{component="vault_google_lb",env="gprd",monitor="global",tier="inf",type="vault"} offset 30s
+        gitlab_component_ops:rate_30m{component="vault_google_lb",env="pre",monitor="global",tier="inf",type="vault"} offset 30s
       )
   - record: gitlab_component_apdex:ratio_30m
     labels:
@@ -747,11 +747,11 @@ groups:
       type: vault
     expr: |
       sum by (env,environment,stage) (
-        gitlab_component_apdex:success:rate_30m{component="vault_google_lb",env="gprd",monitor="global",tier="inf",type="vault"} offset 30s
+        gitlab_component_apdex:success:rate_30m{component="vault_google_lb",env="pre",monitor="global",tier="inf",type="vault"} offset 30s
       )
       /
       sum by (env,environment,stage) (
-        gitlab_component_apdex:weight:score_30m{component="vault_google_lb",env="gprd",monitor="global",tier="inf",type="vault"} offset 30s
+        gitlab_component_apdex:weight:score_30m{component="vault_google_lb",env="pre",monitor="global",tier="inf",type="vault"} offset 30s
       )
 - name: 'Global SLI Metrics: vault - Burn-Rate 1h'
   interval: 1m
@@ -765,7 +765,7 @@ groups:
       type: vault
     expr: |
       sum by (env,environment) (
-        sli_aggregations:istio_request_duration_milliseconds_bucket:rate_1h{destination_workload="vault",env="gprd",le="1000",source_workload="istio-internal-gateway"}
+        sli_aggregations:istio_request_duration_milliseconds_bucket:rate_1h{destination_workload="vault",env="pre",le="1000",source_workload="istio-internal-gateway"}
       )
   - record: gitlab_component_apdex:weight:score_1h
     labels:
@@ -776,7 +776,7 @@ groups:
       type: vault
     expr: |
       sum by (env,environment) (
-        sli_aggregations:istio_request_duration_milliseconds_bucket:rate_1h{destination_workload="vault",env="gprd",le="+Inf",source_workload="istio-internal-gateway"}
+        sli_aggregations:istio_request_duration_milliseconds_bucket:rate_1h{destination_workload="vault",env="pre",le="+Inf",source_workload="istio-internal-gateway"}
       )
   - record: gitlab_component_ops:rate_1h
     labels:
@@ -787,7 +787,7 @@ groups:
       type: vault
     expr: |
       sum by (env,environment) (
-        sli_aggregations:istio_requests_total:rate_1h{destination_workload="vault",env="gprd",source_workload="istio-internal-gateway"} offset 30s
+        sli_aggregations:istio_requests_total:rate_1h{destination_workload="vault",env="pre",source_workload="istio-internal-gateway"} offset 30s
       )
   - record: gitlab_component_errors:rate_1h
     labels:
@@ -799,13 +799,13 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          sli_aggregations:istio_requests_total:rate_1h{destination_workload="vault",env="gprd",response_code=~"^5.*",source_workload="istio-internal-gateway"} offset 30s
+          sli_aggregations:istio_requests_total:rate_1h{destination_workload="vault",env="pre",response_code=~"^5.*",source_workload="istio-internal-gateway"} offset 30s
         )
       )
       or
       (
         0 * group by(env,environment) (
-          gitlab_component_ops:rate_1h{component="istio_internal_ingress",env="gprd",monitor="global",stage="main",tier="inf",type="vault"}
+          gitlab_component_ops:rate_1h{component="istio_internal_ingress",env="pre",monitor="global",stage="main",tier="inf",type="vault"}
         )
       )
   - record: gitlab_component_errors:ratio_1h
@@ -816,11 +816,11 @@ groups:
       type: vault
     expr: |
       sum by (env,environment,stage) (
-        gitlab_component_errors:rate_1h{component="istio_internal_ingress",env="gprd",monitor="global",tier="inf",type="vault"} offset 30s
+        gitlab_component_errors:rate_1h{component="istio_internal_ingress",env="pre",monitor="global",tier="inf",type="vault"} offset 30s
       )
       /
       sum by (env,environment,stage) (
-        gitlab_component_ops:rate_1h{component="istio_internal_ingress",env="gprd",monitor="global",tier="inf",type="vault"} offset 30s
+        gitlab_component_ops:rate_1h{component="istio_internal_ingress",env="pre",monitor="global",tier="inf",type="vault"} offset 30s
       )
   - record: gitlab_component_apdex:ratio_1h
     labels:
@@ -830,11 +830,11 @@ groups:
       type: vault
     expr: |
       sum by (env,environment,stage) (
-        gitlab_component_apdex:success:rate_1h{component="istio_internal_ingress",env="gprd",monitor="global",tier="inf",type="vault"} offset 30s
+        gitlab_component_apdex:success:rate_1h{component="istio_internal_ingress",env="pre",monitor="global",tier="inf",type="vault"} offset 30s
       )
       /
       sum by (env,environment,stage) (
-        gitlab_component_apdex:weight:score_1h{component="istio_internal_ingress",env="gprd",monitor="global",tier="inf",type="vault"} offset 30s
+        gitlab_component_apdex:weight:score_1h{component="istio_internal_ingress",env="pre",monitor="global",tier="inf",type="vault"} offset 30s
       )
   - record: gitlab_component_apdex:success:rate_1h
     labels:
@@ -845,7 +845,7 @@ groups:
       type: vault
     expr: |
       sum by (env,environment) (
-        sli_aggregations:istio_request_duration_milliseconds_bucket:rate_1h{destination_workload="vault",env="gprd",le="1000",source_workload="istio-gateway"}
+        sli_aggregations:istio_request_duration_milliseconds_bucket:rate_1h{destination_workload="vault",env="pre",le="1000",source_workload="istio-gateway"}
       )
   - record: gitlab_component_apdex:weight:score_1h
     labels:
@@ -856,7 +856,7 @@ groups:
       type: vault
     expr: |
       sum by (env,environment) (
-        sli_aggregations:istio_request_duration_milliseconds_bucket:rate_1h{destination_workload="vault",env="gprd",le="+Inf",source_workload="istio-gateway"}
+        sli_aggregations:istio_request_duration_milliseconds_bucket:rate_1h{destination_workload="vault",env="pre",le="+Inf",source_workload="istio-gateway"}
       )
   - record: gitlab_component_ops:rate_1h
     labels:
@@ -867,7 +867,7 @@ groups:
       type: vault
     expr: |
       sum by (env,environment) (
-        sli_aggregations:istio_requests_total:rate_1h{destination_workload="vault",env="gprd",source_workload="istio-gateway"} offset 30s
+        sli_aggregations:istio_requests_total:rate_1h{destination_workload="vault",env="pre",source_workload="istio-gateway"} offset 30s
       )
   - record: gitlab_component_errors:rate_1h
     labels:
@@ -879,13 +879,13 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          sli_aggregations:istio_requests_total:rate_1h{destination_workload="vault",env="gprd",response_code=~"^5.*",source_workload="istio-gateway"} offset 30s
+          sli_aggregations:istio_requests_total:rate_1h{destination_workload="vault",env="pre",response_code=~"^5.*",source_workload="istio-gateway"} offset 30s
         )
       )
       or
       (
         0 * group by(env,environment) (
-          gitlab_component_ops:rate_1h{component="istio_public_ingress",env="gprd",monitor="global",stage="main",tier="inf",type="vault"}
+          gitlab_component_ops:rate_1h{component="istio_public_ingress",env="pre",monitor="global",stage="main",tier="inf",type="vault"}
         )
       )
   - record: gitlab_component_errors:ratio_1h
@@ -896,11 +896,11 @@ groups:
       type: vault
     expr: |
       sum by (env,environment,stage) (
-        gitlab_component_errors:rate_1h{component="istio_public_ingress",env="gprd",monitor="global",tier="inf",type="vault"} offset 30s
+        gitlab_component_errors:rate_1h{component="istio_public_ingress",env="pre",monitor="global",tier="inf",type="vault"} offset 30s
       )
       /
       sum by (env,environment,stage) (
-        gitlab_component_ops:rate_1h{component="istio_public_ingress",env="gprd",monitor="global",tier="inf",type="vault"} offset 30s
+        gitlab_component_ops:rate_1h{component="istio_public_ingress",env="pre",monitor="global",tier="inf",type="vault"} offset 30s
       )
   - record: gitlab_component_apdex:ratio_1h
     labels:
@@ -910,11 +910,11 @@ groups:
       type: vault
     expr: |
       sum by (env,environment,stage) (
-        gitlab_component_apdex:success:rate_1h{component="istio_public_ingress",env="gprd",monitor="global",tier="inf",type="vault"} offset 30s
+        gitlab_component_apdex:success:rate_1h{component="istio_public_ingress",env="pre",monitor="global",tier="inf",type="vault"} offset 30s
       )
       /
       sum by (env,environment,stage) (
-        gitlab_component_apdex:weight:score_1h{component="istio_public_ingress",env="gprd",monitor="global",tier="inf",type="vault"} offset 30s
+        gitlab_component_apdex:weight:score_1h{component="istio_public_ingress",env="pre",monitor="global",tier="inf",type="vault"} offset 30s
       )
   - record: gitlab_component_ops:rate_1h
     labels:
@@ -925,7 +925,7 @@ groups:
       type: vault
     expr: |
       sum by (env,environment) (
-        sli_aggregations:vault_core_handle_request_count:rate_1h{env="gprd",job="vault-active"} offset 30s
+        sli_aggregations:vault_core_handle_request_count:rate_1h{env="pre",job="vault-active"} offset 30s
       )
   - record: gitlab_component_errors:ratio_1h
     labels:
@@ -935,11 +935,11 @@ groups:
       type: vault
     expr: |
       sum by (env,environment,stage) (
-        gitlab_component_errors:rate_1h{component="vault",env="gprd",monitor="global",tier="inf",type="vault"} offset 30s
+        gitlab_component_errors:rate_1h{component="vault",env="pre",monitor="global",tier="inf",type="vault"} offset 30s
       )
       /
       sum by (env,environment,stage) (
-        gitlab_component_ops:rate_1h{component="vault",env="gprd",monitor="global",tier="inf",type="vault"} offset 30s
+        gitlab_component_ops:rate_1h{component="vault",env="pre",monitor="global",tier="inf",type="vault"} offset 30s
       )
   - record: gitlab_component_apdex:ratio_1h
     labels:
@@ -949,11 +949,11 @@ groups:
       type: vault
     expr: |
       sum by (env,environment,stage) (
-        gitlab_component_apdex:success:rate_1h{component="vault",env="gprd",monitor="global",tier="inf",type="vault"} offset 30s
+        gitlab_component_apdex:success:rate_1h{component="vault",env="pre",monitor="global",tier="inf",type="vault"} offset 30s
       )
       /
       sum by (env,environment,stage) (
-        gitlab_component_apdex:weight:score_1h{component="vault",env="gprd",monitor="global",tier="inf",type="vault"} offset 30s
+        gitlab_component_apdex:weight:score_1h{component="vault",env="pre",monitor="global",tier="inf",type="vault"} offset 30s
       )
   - record: gitlab_component_ops:rate_1h
     labels:
@@ -964,7 +964,7 @@ groups:
       type: vault
     expr: |
       sum by (env,environment) (
-        sli_aggregations:vault_audit_log_request_count:rate_1h{env="gprd",job="vault-active"} offset 30s
+        sli_aggregations:vault_audit_log_request_count:rate_1h{env="pre",job="vault-active"} offset 30s
       )
   - record: gitlab_component_errors:rate_1h
     labels:
@@ -976,13 +976,13 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          sli_aggregations:vault_audit_log_request_failure:rate_1h{env="gprd",job="vault-active"} offset 30s
+          sli_aggregations:vault_audit_log_request_failure:rate_1h{env="pre",job="vault-active"} offset 30s
         )
       )
       or
       (
         0 * group by(env,environment) (
-          gitlab_component_ops:rate_1h{component="vault_audit_log_request",env="gprd",monitor="global",stage="main",tier="inf",type="vault"}
+          gitlab_component_ops:rate_1h{component="vault_audit_log_request",env="pre",monitor="global",stage="main",tier="inf",type="vault"}
         )
       )
   - record: gitlab_component_errors:ratio_1h
@@ -993,11 +993,11 @@ groups:
       type: vault
     expr: |
       sum by (env,environment,stage) (
-        gitlab_component_errors:rate_1h{component="vault_audit_log_request",env="gprd",monitor="global",tier="inf",type="vault"} offset 30s
+        gitlab_component_errors:rate_1h{component="vault_audit_log_request",env="pre",monitor="global",tier="inf",type="vault"} offset 30s
       )
       /
       sum by (env,environment,stage) (
-        gitlab_component_ops:rate_1h{component="vault_audit_log_request",env="gprd",monitor="global",tier="inf",type="vault"} offset 30s
+        gitlab_component_ops:rate_1h{component="vault_audit_log_request",env="pre",monitor="global",tier="inf",type="vault"} offset 30s
       )
   - record: gitlab_component_apdex:ratio_1h
     labels:
@@ -1007,11 +1007,11 @@ groups:
       type: vault
     expr: |
       sum by (env,environment,stage) (
-        gitlab_component_apdex:success:rate_1h{component="vault_audit_log_request",env="gprd",monitor="global",tier="inf",type="vault"} offset 30s
+        gitlab_component_apdex:success:rate_1h{component="vault_audit_log_request",env="pre",monitor="global",tier="inf",type="vault"} offset 30s
       )
       /
       sum by (env,environment,stage) (
-        gitlab_component_apdex:weight:score_1h{component="vault_audit_log_request",env="gprd",monitor="global",tier="inf",type="vault"} offset 30s
+        gitlab_component_apdex:weight:score_1h{component="vault_audit_log_request",env="pre",monitor="global",tier="inf",type="vault"} offset 30s
       )
   - record: gitlab_component_ops:rate_1h
     labels:
@@ -1022,7 +1022,7 @@ groups:
       type: vault
     expr: |
       sum by (env,environment) (
-        sli_aggregations:vault_audit_log_response_count:rate_1h{env="gprd",job="vault-active"} offset 30s
+        sli_aggregations:vault_audit_log_response_count:rate_1h{env="pre",job="vault-active"} offset 30s
       )
   - record: gitlab_component_errors:rate_1h
     labels:
@@ -1034,13 +1034,13 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          sli_aggregations:vault_audit_log_response_failure:rate_1h{env="gprd",job="vault-active"} offset 30s
+          sli_aggregations:vault_audit_log_response_failure:rate_1h{env="pre",job="vault-active"} offset 30s
         )
       )
       or
       (
         0 * group by(env,environment) (
-          gitlab_component_ops:rate_1h{component="vault_audit_log_response",env="gprd",monitor="global",stage="main",tier="inf",type="vault"}
+          gitlab_component_ops:rate_1h{component="vault_audit_log_response",env="pre",monitor="global",stage="main",tier="inf",type="vault"}
         )
       )
   - record: gitlab_component_errors:ratio_1h
@@ -1051,11 +1051,11 @@ groups:
       type: vault
     expr: |
       sum by (env,environment,stage) (
-        gitlab_component_errors:rate_1h{component="vault_audit_log_response",env="gprd",monitor="global",tier="inf",type="vault"} offset 30s
+        gitlab_component_errors:rate_1h{component="vault_audit_log_response",env="pre",monitor="global",tier="inf",type="vault"} offset 30s
       )
       /
       sum by (env,environment,stage) (
-        gitlab_component_ops:rate_1h{component="vault_audit_log_response",env="gprd",monitor="global",tier="inf",type="vault"} offset 30s
+        gitlab_component_ops:rate_1h{component="vault_audit_log_response",env="pre",monitor="global",tier="inf",type="vault"} offset 30s
       )
   - record: gitlab_component_apdex:ratio_1h
     labels:
@@ -1065,11 +1065,11 @@ groups:
       type: vault
     expr: |
       sum by (env,environment,stage) (
-        gitlab_component_apdex:success:rate_1h{component="vault_audit_log_response",env="gprd",monitor="global",tier="inf",type="vault"} offset 30s
+        gitlab_component_apdex:success:rate_1h{component="vault_audit_log_response",env="pre",monitor="global",tier="inf",type="vault"} offset 30s
       )
       /
       sum by (env,environment,stage) (
-        gitlab_component_apdex:weight:score_1h{component="vault_audit_log_response",env="gprd",monitor="global",tier="inf",type="vault"} offset 30s
+        gitlab_component_apdex:weight:score_1h{component="vault_audit_log_response",env="pre",monitor="global",tier="inf",type="vault"} offset 30s
       )
   - record: gitlab_component_ops:rate_1h
     labels:
@@ -1080,7 +1080,7 @@ groups:
       type: vault
     expr: |
       sum by (env,environment) (
-        sli_aggregations:stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count:rate_1h{env="gprd",project_id="gitlab-ops",url_map_name="k8s2-um-4zodnh0s-vault-vault-g7tjn6qu"} offset 30s
+        sli_aggregations:stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count:rate_1h{env="pre",project_id="gitlab-ops",url_map_name="k8s2-um-4zodnh0s-vault-vault-g7tjn6qu"} offset 30s
       )
   - record: gitlab_component_errors:rate_1h
     labels:
@@ -1092,13 +1092,13 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          sli_aggregations:stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count:rate_1h{env="gprd",project_id="gitlab-ops",response_code_class="500",url_map_name="k8s2-um-4zodnh0s-vault-vault-g7tjn6qu"} offset 30s
+          sli_aggregations:stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count:rate_1h{env="pre",project_id="gitlab-ops",response_code_class="500",url_map_name="k8s2-um-4zodnh0s-vault-vault-g7tjn6qu"} offset 30s
         )
       )
       or
       (
         0 * group by(env,environment) (
-          gitlab_component_ops:rate_1h{component="vault_google_lb",env="gprd",monitor="global",stage="main",tier="inf",type="vault"}
+          gitlab_component_ops:rate_1h{component="vault_google_lb",env="pre",monitor="global",stage="main",tier="inf",type="vault"}
         )
       )
   - record: gitlab_component_errors:ratio_1h
@@ -1109,11 +1109,11 @@ groups:
       type: vault
     expr: |
       sum by (env,environment,stage) (
-        gitlab_component_errors:rate_1h{component="vault_google_lb",env="gprd",monitor="global",tier="inf",type="vault"} offset 30s
+        gitlab_component_errors:rate_1h{component="vault_google_lb",env="pre",monitor="global",tier="inf",type="vault"} offset 30s
       )
       /
       sum by (env,environment,stage) (
-        gitlab_component_ops:rate_1h{component="vault_google_lb",env="gprd",monitor="global",tier="inf",type="vault"} offset 30s
+        gitlab_component_ops:rate_1h{component="vault_google_lb",env="pre",monitor="global",tier="inf",type="vault"} offset 30s
       )
   - record: gitlab_component_apdex:ratio_1h
     labels:
@@ -1123,11 +1123,11 @@ groups:
       type: vault
     expr: |
       sum by (env,environment,stage) (
-        gitlab_component_apdex:success:rate_1h{component="vault_google_lb",env="gprd",monitor="global",tier="inf",type="vault"} offset 30s
+        gitlab_component_apdex:success:rate_1h{component="vault_google_lb",env="pre",monitor="global",tier="inf",type="vault"} offset 30s
       )
       /
       sum by (env,environment,stage) (
-        gitlab_component_apdex:weight:score_1h{component="vault_google_lb",env="gprd",monitor="global",tier="inf",type="vault"} offset 30s
+        gitlab_component_apdex:weight:score_1h{component="vault_google_lb",env="pre",monitor="global",tier="inf",type="vault"} offset 30s
       )
 - name: 'Global SLI Metrics: vault - Burn-Rate 6h'
   interval: 2m
@@ -1141,7 +1141,7 @@ groups:
       type: vault
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab_component_apdex:success:rate_1h{component="istio_internal_ingress",env="gprd",monitor="global",tier="inf",type="vault"}[6h] offset 30s)
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="istio_internal_ingress",env="pre",monitor="global",tier="inf",type="vault"}[6h] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_6h
     labels:
@@ -1152,7 +1152,7 @@ groups:
       type: vault
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab_component_apdex:weight:score_1h{component="istio_internal_ingress",env="gprd",monitor="global",tier="inf",type="vault"}[6h] offset 30s)
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="istio_internal_ingress",env="pre",monitor="global",tier="inf",type="vault"}[6h] offset 30s)
       )
   - record: gitlab_component_ops:rate_6h
     labels:
@@ -1163,7 +1163,7 @@ groups:
       type: vault
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab_component_ops:rate_1h{component="istio_internal_ingress",env="gprd",monitor="global",tier="inf",type="vault"}[6h] offset 30s)
+        avg_over_time(gitlab_component_ops:rate_1h{component="istio_internal_ingress",env="pre",monitor="global",tier="inf",type="vault"}[6h] offset 30s)
       )
   - record: gitlab_component_errors:rate_6h
     labels:
@@ -1174,7 +1174,7 @@ groups:
       type: vault
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab_component_errors:rate_1h{component="istio_internal_ingress",env="gprd",monitor="global",tier="inf",type="vault"}[6h] offset 30s)
+        avg_over_time(gitlab_component_errors:rate_1h{component="istio_internal_ingress",env="pre",monitor="global",tier="inf",type="vault"}[6h] offset 30s)
       )
   - record: gitlab_component_errors:ratio_6h
     labels:
@@ -1184,11 +1184,11 @@ groups:
       type: vault
     expr: |
       sum by (env,environment,stage) (
-        gitlab_component_errors:rate_6h{component="istio_internal_ingress",env="gprd",monitor="global",tier="inf",type="vault"} offset 30s
+        gitlab_component_errors:rate_6h{component="istio_internal_ingress",env="pre",monitor="global",tier="inf",type="vault"} offset 30s
       )
       /
       sum by (env,environment,stage) (
-        gitlab_component_ops:rate_6h{component="istio_internal_ingress",env="gprd",monitor="global",tier="inf",type="vault"} offset 30s
+        gitlab_component_ops:rate_6h{component="istio_internal_ingress",env="pre",monitor="global",tier="inf",type="vault"} offset 30s
       )
   - record: gitlab_component_apdex:ratio_6h
     labels:
@@ -1198,11 +1198,11 @@ groups:
       type: vault
     expr: |
       sum by (env,environment,stage) (
-        gitlab_component_apdex:success:rate_6h{component="istio_internal_ingress",env="gprd",monitor="global",tier="inf",type="vault"} offset 30s
+        gitlab_component_apdex:success:rate_6h{component="istio_internal_ingress",env="pre",monitor="global",tier="inf",type="vault"} offset 30s
       )
       /
       sum by (env,environment,stage) (
-        gitlab_component_apdex:weight:score_6h{component="istio_internal_ingress",env="gprd",monitor="global",tier="inf",type="vault"} offset 30s
+        gitlab_component_apdex:weight:score_6h{component="istio_internal_ingress",env="pre",monitor="global",tier="inf",type="vault"} offset 30s
       )
   - record: gitlab_component_apdex:success:rate_6h
     labels:
@@ -1213,7 +1213,7 @@ groups:
       type: vault
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab_component_apdex:success:rate_1h{component="istio_public_ingress",env="gprd",monitor="global",tier="inf",type="vault"}[6h] offset 30s)
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="istio_public_ingress",env="pre",monitor="global",tier="inf",type="vault"}[6h] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_6h
     labels:
@@ -1224,7 +1224,7 @@ groups:
       type: vault
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab_component_apdex:weight:score_1h{component="istio_public_ingress",env="gprd",monitor="global",tier="inf",type="vault"}[6h] offset 30s)
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="istio_public_ingress",env="pre",monitor="global",tier="inf",type="vault"}[6h] offset 30s)
       )
   - record: gitlab_component_ops:rate_6h
     labels:
@@ -1235,7 +1235,7 @@ groups:
       type: vault
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab_component_ops:rate_1h{component="istio_public_ingress",env="gprd",monitor="global",tier="inf",type="vault"}[6h] offset 30s)
+        avg_over_time(gitlab_component_ops:rate_1h{component="istio_public_ingress",env="pre",monitor="global",tier="inf",type="vault"}[6h] offset 30s)
       )
   - record: gitlab_component_errors:rate_6h
     labels:
@@ -1246,7 +1246,7 @@ groups:
       type: vault
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab_component_errors:rate_1h{component="istio_public_ingress",env="gprd",monitor="global",tier="inf",type="vault"}[6h] offset 30s)
+        avg_over_time(gitlab_component_errors:rate_1h{component="istio_public_ingress",env="pre",monitor="global",tier="inf",type="vault"}[6h] offset 30s)
       )
   - record: gitlab_component_errors:ratio_6h
     labels:
@@ -1256,11 +1256,11 @@ groups:
       type: vault
     expr: |
       sum by (env,environment,stage) (
-        gitlab_component_errors:rate_6h{component="istio_public_ingress",env="gprd",monitor="global",tier="inf",type="vault"} offset 30s
+        gitlab_component_errors:rate_6h{component="istio_public_ingress",env="pre",monitor="global",tier="inf",type="vault"} offset 30s
       )
       /
       sum by (env,environment,stage) (
-        gitlab_component_ops:rate_6h{component="istio_public_ingress",env="gprd",monitor="global",tier="inf",type="vault"} offset 30s
+        gitlab_component_ops:rate_6h{component="istio_public_ingress",env="pre",monitor="global",tier="inf",type="vault"} offset 30s
       )
   - record: gitlab_component_apdex:ratio_6h
     labels:
@@ -1270,11 +1270,11 @@ groups:
       type: vault
     expr: |
       sum by (env,environment,stage) (
-        gitlab_component_apdex:success:rate_6h{component="istio_public_ingress",env="gprd",monitor="global",tier="inf",type="vault"} offset 30s
+        gitlab_component_apdex:success:rate_6h{component="istio_public_ingress",env="pre",monitor="global",tier="inf",type="vault"} offset 30s
       )
       /
       sum by (env,environment,stage) (
-        gitlab_component_apdex:weight:score_6h{component="istio_public_ingress",env="gprd",monitor="global",tier="inf",type="vault"} offset 30s
+        gitlab_component_apdex:weight:score_6h{component="istio_public_ingress",env="pre",monitor="global",tier="inf",type="vault"} offset 30s
       )
   - record: gitlab_component_apdex:success:rate_6h
     labels:
@@ -1285,7 +1285,7 @@ groups:
       type: vault
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab_component_apdex:success:rate_1h{component="vault",env="gprd",monitor="global",tier="inf",type="vault"}[6h] offset 30s)
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="vault",env="pre",monitor="global",tier="inf",type="vault"}[6h] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_6h
     labels:
@@ -1296,7 +1296,7 @@ groups:
       type: vault
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab_component_apdex:weight:score_1h{component="vault",env="gprd",monitor="global",tier="inf",type="vault"}[6h] offset 30s)
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="vault",env="pre",monitor="global",tier="inf",type="vault"}[6h] offset 30s)
       )
   - record: gitlab_component_ops:rate_6h
     labels:
@@ -1307,7 +1307,7 @@ groups:
       type: vault
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab_component_ops:rate_1h{component="vault",env="gprd",monitor="global",tier="inf",type="vault"}[6h] offset 30s)
+        avg_over_time(gitlab_component_ops:rate_1h{component="vault",env="pre",monitor="global",tier="inf",type="vault"}[6h] offset 30s)
       )
   - record: gitlab_component_errors:rate_6h
     labels:
@@ -1318,7 +1318,7 @@ groups:
       type: vault
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab_component_errors:rate_1h{component="vault",env="gprd",monitor="global",tier="inf",type="vault"}[6h] offset 30s)
+        avg_over_time(gitlab_component_errors:rate_1h{component="vault",env="pre",monitor="global",tier="inf",type="vault"}[6h] offset 30s)
       )
   - record: gitlab_component_errors:ratio_6h
     labels:
@@ -1328,11 +1328,11 @@ groups:
       type: vault
     expr: |
       sum by (env,environment,stage) (
-        gitlab_component_errors:rate_6h{component="vault",env="gprd",monitor="global",tier="inf",type="vault"} offset 30s
+        gitlab_component_errors:rate_6h{component="vault",env="pre",monitor="global",tier="inf",type="vault"} offset 30s
       )
       /
       sum by (env,environment,stage) (
-        gitlab_component_ops:rate_6h{component="vault",env="gprd",monitor="global",tier="inf",type="vault"} offset 30s
+        gitlab_component_ops:rate_6h{component="vault",env="pre",monitor="global",tier="inf",type="vault"} offset 30s
       )
   - record: gitlab_component_apdex:ratio_6h
     labels:
@@ -1342,11 +1342,11 @@ groups:
       type: vault
     expr: |
       sum by (env,environment,stage) (
-        gitlab_component_apdex:success:rate_6h{component="vault",env="gprd",monitor="global",tier="inf",type="vault"} offset 30s
+        gitlab_component_apdex:success:rate_6h{component="vault",env="pre",monitor="global",tier="inf",type="vault"} offset 30s
       )
       /
       sum by (env,environment,stage) (
-        gitlab_component_apdex:weight:score_6h{component="vault",env="gprd",monitor="global",tier="inf",type="vault"} offset 30s
+        gitlab_component_apdex:weight:score_6h{component="vault",env="pre",monitor="global",tier="inf",type="vault"} offset 30s
       )
   - record: gitlab_component_apdex:success:rate_6h
     labels:
@@ -1357,7 +1357,7 @@ groups:
       type: vault
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab_component_apdex:success:rate_1h{component="vault_audit_log_request",env="gprd",monitor="global",tier="inf",type="vault"}[6h] offset 30s)
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="vault_audit_log_request",env="pre",monitor="global",tier="inf",type="vault"}[6h] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_6h
     labels:
@@ -1368,7 +1368,7 @@ groups:
       type: vault
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab_component_apdex:weight:score_1h{component="vault_audit_log_request",env="gprd",monitor="global",tier="inf",type="vault"}[6h] offset 30s)
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="vault_audit_log_request",env="pre",monitor="global",tier="inf",type="vault"}[6h] offset 30s)
       )
   - record: gitlab_component_ops:rate_6h
     labels:
@@ -1379,7 +1379,7 @@ groups:
       type: vault
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab_component_ops:rate_1h{component="vault_audit_log_request",env="gprd",monitor="global",tier="inf",type="vault"}[6h] offset 30s)
+        avg_over_time(gitlab_component_ops:rate_1h{component="vault_audit_log_request",env="pre",monitor="global",tier="inf",type="vault"}[6h] offset 30s)
       )
   - record: gitlab_component_errors:rate_6h
     labels:
@@ -1390,7 +1390,7 @@ groups:
       type: vault
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab_component_errors:rate_1h{component="vault_audit_log_request",env="gprd",monitor="global",tier="inf",type="vault"}[6h] offset 30s)
+        avg_over_time(gitlab_component_errors:rate_1h{component="vault_audit_log_request",env="pre",monitor="global",tier="inf",type="vault"}[6h] offset 30s)
       )
   - record: gitlab_component_errors:ratio_6h
     labels:
@@ -1400,11 +1400,11 @@ groups:
       type: vault
     expr: |
       sum by (env,environment,stage) (
-        gitlab_component_errors:rate_6h{component="vault_audit_log_request",env="gprd",monitor="global",tier="inf",type="vault"} offset 30s
+        gitlab_component_errors:rate_6h{component="vault_audit_log_request",env="pre",monitor="global",tier="inf",type="vault"} offset 30s
       )
       /
       sum by (env,environment,stage) (
-        gitlab_component_ops:rate_6h{component="vault_audit_log_request",env="gprd",monitor="global",tier="inf",type="vault"} offset 30s
+        gitlab_component_ops:rate_6h{component="vault_audit_log_request",env="pre",monitor="global",tier="inf",type="vault"} offset 30s
       )
   - record: gitlab_component_apdex:ratio_6h
     labels:
@@ -1414,11 +1414,11 @@ groups:
       type: vault
     expr: |
       sum by (env,environment,stage) (
-        gitlab_component_apdex:success:rate_6h{component="vault_audit_log_request",env="gprd",monitor="global",tier="inf",type="vault"} offset 30s
+        gitlab_component_apdex:success:rate_6h{component="vault_audit_log_request",env="pre",monitor="global",tier="inf",type="vault"} offset 30s
       )
       /
       sum by (env,environment,stage) (
-        gitlab_component_apdex:weight:score_6h{component="vault_audit_log_request",env="gprd",monitor="global",tier="inf",type="vault"} offset 30s
+        gitlab_component_apdex:weight:score_6h{component="vault_audit_log_request",env="pre",monitor="global",tier="inf",type="vault"} offset 30s
       )
   - record: gitlab_component_apdex:success:rate_6h
     labels:
@@ -1429,7 +1429,7 @@ groups:
       type: vault
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab_component_apdex:success:rate_1h{component="vault_audit_log_response",env="gprd",monitor="global",tier="inf",type="vault"}[6h] offset 30s)
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="vault_audit_log_response",env="pre",monitor="global",tier="inf",type="vault"}[6h] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_6h
     labels:
@@ -1440,7 +1440,7 @@ groups:
       type: vault
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab_component_apdex:weight:score_1h{component="vault_audit_log_response",env="gprd",monitor="global",tier="inf",type="vault"}[6h] offset 30s)
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="vault_audit_log_response",env="pre",monitor="global",tier="inf",type="vault"}[6h] offset 30s)
       )
   - record: gitlab_component_ops:rate_6h
     labels:
@@ -1451,7 +1451,7 @@ groups:
       type: vault
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab_component_ops:rate_1h{component="vault_audit_log_response",env="gprd",monitor="global",tier="inf",type="vault"}[6h] offset 30s)
+        avg_over_time(gitlab_component_ops:rate_1h{component="vault_audit_log_response",env="pre",monitor="global",tier="inf",type="vault"}[6h] offset 30s)
       )
   - record: gitlab_component_errors:rate_6h
     labels:
@@ -1462,7 +1462,7 @@ groups:
       type: vault
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab_component_errors:rate_1h{component="vault_audit_log_response",env="gprd",monitor="global",tier="inf",type="vault"}[6h] offset 30s)
+        avg_over_time(gitlab_component_errors:rate_1h{component="vault_audit_log_response",env="pre",monitor="global",tier="inf",type="vault"}[6h] offset 30s)
       )
   - record: gitlab_component_errors:ratio_6h
     labels:
@@ -1472,11 +1472,11 @@ groups:
       type: vault
     expr: |
       sum by (env,environment,stage) (
-        gitlab_component_errors:rate_6h{component="vault_audit_log_response",env="gprd",monitor="global",tier="inf",type="vault"} offset 30s
+        gitlab_component_errors:rate_6h{component="vault_audit_log_response",env="pre",monitor="global",tier="inf",type="vault"} offset 30s
       )
       /
       sum by (env,environment,stage) (
-        gitlab_component_ops:rate_6h{component="vault_audit_log_response",env="gprd",monitor="global",tier="inf",type="vault"} offset 30s
+        gitlab_component_ops:rate_6h{component="vault_audit_log_response",env="pre",monitor="global",tier="inf",type="vault"} offset 30s
       )
   - record: gitlab_component_apdex:ratio_6h
     labels:
@@ -1486,11 +1486,11 @@ groups:
       type: vault
     expr: |
       sum by (env,environment,stage) (
-        gitlab_component_apdex:success:rate_6h{component="vault_audit_log_response",env="gprd",monitor="global",tier="inf",type="vault"} offset 30s
+        gitlab_component_apdex:success:rate_6h{component="vault_audit_log_response",env="pre",monitor="global",tier="inf",type="vault"} offset 30s
       )
       /
       sum by (env,environment,stage) (
-        gitlab_component_apdex:weight:score_6h{component="vault_audit_log_response",env="gprd",monitor="global",tier="inf",type="vault"} offset 30s
+        gitlab_component_apdex:weight:score_6h{component="vault_audit_log_response",env="pre",monitor="global",tier="inf",type="vault"} offset 30s
       )
   - record: gitlab_component_apdex:success:rate_6h
     labels:
@@ -1501,7 +1501,7 @@ groups:
       type: vault
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab_component_apdex:success:rate_1h{component="vault_google_lb",env="gprd",monitor="global",tier="inf",type="vault"}[6h] offset 30s)
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="vault_google_lb",env="pre",monitor="global",tier="inf",type="vault"}[6h] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_6h
     labels:
@@ -1512,7 +1512,7 @@ groups:
       type: vault
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab_component_apdex:weight:score_1h{component="vault_google_lb",env="gprd",monitor="global",tier="inf",type="vault"}[6h] offset 30s)
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="vault_google_lb",env="pre",monitor="global",tier="inf",type="vault"}[6h] offset 30s)
       )
   - record: gitlab_component_ops:rate_6h
     labels:
@@ -1523,7 +1523,7 @@ groups:
       type: vault
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab_component_ops:rate_1h{component="vault_google_lb",env="gprd",monitor="global",tier="inf",type="vault"}[6h] offset 30s)
+        avg_over_time(gitlab_component_ops:rate_1h{component="vault_google_lb",env="pre",monitor="global",tier="inf",type="vault"}[6h] offset 30s)
       )
   - record: gitlab_component_errors:rate_6h
     labels:
@@ -1534,7 +1534,7 @@ groups:
       type: vault
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab_component_errors:rate_1h{component="vault_google_lb",env="gprd",monitor="global",tier="inf",type="vault"}[6h] offset 30s)
+        avg_over_time(gitlab_component_errors:rate_1h{component="vault_google_lb",env="pre",monitor="global",tier="inf",type="vault"}[6h] offset 30s)
       )
   - record: gitlab_component_errors:ratio_6h
     labels:
@@ -1544,11 +1544,11 @@ groups:
       type: vault
     expr: |
       sum by (env,environment,stage) (
-        gitlab_component_errors:rate_6h{component="vault_google_lb",env="gprd",monitor="global",tier="inf",type="vault"} offset 30s
+        gitlab_component_errors:rate_6h{component="vault_google_lb",env="pre",monitor="global",tier="inf",type="vault"} offset 30s
       )
       /
       sum by (env,environment,stage) (
-        gitlab_component_ops:rate_6h{component="vault_google_lb",env="gprd",monitor="global",tier="inf",type="vault"} offset 30s
+        gitlab_component_ops:rate_6h{component="vault_google_lb",env="pre",monitor="global",tier="inf",type="vault"} offset 30s
       )
   - record: gitlab_component_apdex:ratio_6h
     labels:
@@ -1558,11 +1558,11 @@ groups:
       type: vault
     expr: |
       sum by (env,environment,stage) (
-        gitlab_component_apdex:success:rate_6h{component="vault_google_lb",env="gprd",monitor="global",tier="inf",type="vault"} offset 30s
+        gitlab_component_apdex:success:rate_6h{component="vault_google_lb",env="pre",monitor="global",tier="inf",type="vault"} offset 30s
       )
       /
       sum by (env,environment,stage) (
-        gitlab_component_apdex:weight:score_6h{component="vault_google_lb",env="gprd",monitor="global",tier="inf",type="vault"} offset 30s
+        gitlab_component_apdex:weight:score_6h{component="vault_google_lb",env="pre",monitor="global",tier="inf",type="vault"} offset 30s
       )
 - name: 'Global SLI Metrics: vault - Burn-Rate 3d'
   interval: 2m
@@ -1576,7 +1576,7 @@ groups:
       type: vault
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab_component_apdex:success:rate_1h{component="istio_internal_ingress",env="gprd",monitor="global",tier="inf",type="vault"}[3d] offset 30s)
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="istio_internal_ingress",env="pre",monitor="global",tier="inf",type="vault"}[3d] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_3d
     labels:
@@ -1587,7 +1587,7 @@ groups:
       type: vault
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab_component_apdex:weight:score_1h{component="istio_internal_ingress",env="gprd",monitor="global",tier="inf",type="vault"}[3d] offset 30s)
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="istio_internal_ingress",env="pre",monitor="global",tier="inf",type="vault"}[3d] offset 30s)
       )
   - record: gitlab_component_ops:rate_3d
     labels:
@@ -1598,7 +1598,7 @@ groups:
       type: vault
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab_component_ops:rate_1h{component="istio_internal_ingress",env="gprd",monitor="global",tier="inf",type="vault"}[3d] offset 30s)
+        avg_over_time(gitlab_component_ops:rate_1h{component="istio_internal_ingress",env="pre",monitor="global",tier="inf",type="vault"}[3d] offset 30s)
       )
   - record: gitlab_component_errors:rate_3d
     labels:
@@ -1609,7 +1609,7 @@ groups:
       type: vault
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab_component_errors:rate_1h{component="istio_internal_ingress",env="gprd",monitor="global",tier="inf",type="vault"}[3d] offset 30s)
+        avg_over_time(gitlab_component_errors:rate_1h{component="istio_internal_ingress",env="pre",monitor="global",tier="inf",type="vault"}[3d] offset 30s)
       )
   - record: gitlab_component_errors:ratio_3d
     labels:
@@ -1619,11 +1619,11 @@ groups:
       type: vault
     expr: |
       sum by (env,environment,stage) (
-        gitlab_component_errors:rate_3d{component="istio_internal_ingress",env="gprd",monitor="global",tier="inf",type="vault"} offset 30s
+        gitlab_component_errors:rate_3d{component="istio_internal_ingress",env="pre",monitor="global",tier="inf",type="vault"} offset 30s
       )
       /
       sum by (env,environment,stage) (
-        gitlab_component_ops:rate_3d{component="istio_internal_ingress",env="gprd",monitor="global",tier="inf",type="vault"} offset 30s
+        gitlab_component_ops:rate_3d{component="istio_internal_ingress",env="pre",monitor="global",tier="inf",type="vault"} offset 30s
       )
   - record: gitlab_component_apdex:ratio_3d
     labels:
@@ -1633,11 +1633,11 @@ groups:
       type: vault
     expr: |
       sum by (env,environment,stage) (
-        gitlab_component_apdex:success:rate_3d{component="istio_internal_ingress",env="gprd",monitor="global",tier="inf",type="vault"} offset 30s
+        gitlab_component_apdex:success:rate_3d{component="istio_internal_ingress",env="pre",monitor="global",tier="inf",type="vault"} offset 30s
       )
       /
       sum by (env,environment,stage) (
-        gitlab_component_apdex:weight:score_3d{component="istio_internal_ingress",env="gprd",monitor="global",tier="inf",type="vault"} offset 30s
+        gitlab_component_apdex:weight:score_3d{component="istio_internal_ingress",env="pre",monitor="global",tier="inf",type="vault"} offset 30s
       )
   - record: gitlab_component_apdex:success:rate_3d
     labels:
@@ -1648,7 +1648,7 @@ groups:
       type: vault
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab_component_apdex:success:rate_1h{component="istio_public_ingress",env="gprd",monitor="global",tier="inf",type="vault"}[3d] offset 30s)
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="istio_public_ingress",env="pre",monitor="global",tier="inf",type="vault"}[3d] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_3d
     labels:
@@ -1659,7 +1659,7 @@ groups:
       type: vault
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab_component_apdex:weight:score_1h{component="istio_public_ingress",env="gprd",monitor="global",tier="inf",type="vault"}[3d] offset 30s)
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="istio_public_ingress",env="pre",monitor="global",tier="inf",type="vault"}[3d] offset 30s)
       )
   - record: gitlab_component_ops:rate_3d
     labels:
@@ -1670,7 +1670,7 @@ groups:
       type: vault
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab_component_ops:rate_1h{component="istio_public_ingress",env="gprd",monitor="global",tier="inf",type="vault"}[3d] offset 30s)
+        avg_over_time(gitlab_component_ops:rate_1h{component="istio_public_ingress",env="pre",monitor="global",tier="inf",type="vault"}[3d] offset 30s)
       )
   - record: gitlab_component_errors:rate_3d
     labels:
@@ -1681,7 +1681,7 @@ groups:
       type: vault
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab_component_errors:rate_1h{component="istio_public_ingress",env="gprd",monitor="global",tier="inf",type="vault"}[3d] offset 30s)
+        avg_over_time(gitlab_component_errors:rate_1h{component="istio_public_ingress",env="pre",monitor="global",tier="inf",type="vault"}[3d] offset 30s)
       )
   - record: gitlab_component_errors:ratio_3d
     labels:
@@ -1691,11 +1691,11 @@ groups:
       type: vault
     expr: |
       sum by (env,environment,stage) (
-        gitlab_component_errors:rate_3d{component="istio_public_ingress",env="gprd",monitor="global",tier="inf",type="vault"} offset 30s
+        gitlab_component_errors:rate_3d{component="istio_public_ingress",env="pre",monitor="global",tier="inf",type="vault"} offset 30s
       )
       /
       sum by (env,environment,stage) (
-        gitlab_component_ops:rate_3d{component="istio_public_ingress",env="gprd",monitor="global",tier="inf",type="vault"} offset 30s
+        gitlab_component_ops:rate_3d{component="istio_public_ingress",env="pre",monitor="global",tier="inf",type="vault"} offset 30s
       )
   - record: gitlab_component_apdex:ratio_3d
     labels:
@@ -1705,11 +1705,11 @@ groups:
       type: vault
     expr: |
       sum by (env,environment,stage) (
-        gitlab_component_apdex:success:rate_3d{component="istio_public_ingress",env="gprd",monitor="global",tier="inf",type="vault"} offset 30s
+        gitlab_component_apdex:success:rate_3d{component="istio_public_ingress",env="pre",monitor="global",tier="inf",type="vault"} offset 30s
       )
       /
       sum by (env,environment,stage) (
-        gitlab_component_apdex:weight:score_3d{component="istio_public_ingress",env="gprd",monitor="global",tier="inf",type="vault"} offset 30s
+        gitlab_component_apdex:weight:score_3d{component="istio_public_ingress",env="pre",monitor="global",tier="inf",type="vault"} offset 30s
       )
   - record: gitlab_component_apdex:success:rate_3d
     labels:
@@ -1720,7 +1720,7 @@ groups:
       type: vault
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab_component_apdex:success:rate_1h{component="vault",env="gprd",monitor="global",tier="inf",type="vault"}[3d] offset 30s)
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="vault",env="pre",monitor="global",tier="inf",type="vault"}[3d] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_3d
     labels:
@@ -1731,7 +1731,7 @@ groups:
       type: vault
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab_component_apdex:weight:score_1h{component="vault",env="gprd",monitor="global",tier="inf",type="vault"}[3d] offset 30s)
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="vault",env="pre",monitor="global",tier="inf",type="vault"}[3d] offset 30s)
       )
   - record: gitlab_component_ops:rate_3d
     labels:
@@ -1742,7 +1742,7 @@ groups:
       type: vault
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab_component_ops:rate_1h{component="vault",env="gprd",monitor="global",tier="inf",type="vault"}[3d] offset 30s)
+        avg_over_time(gitlab_component_ops:rate_1h{component="vault",env="pre",monitor="global",tier="inf",type="vault"}[3d] offset 30s)
       )
   - record: gitlab_component_errors:rate_3d
     labels:
@@ -1753,7 +1753,7 @@ groups:
       type: vault
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab_component_errors:rate_1h{component="vault",env="gprd",monitor="global",tier="inf",type="vault"}[3d] offset 30s)
+        avg_over_time(gitlab_component_errors:rate_1h{component="vault",env="pre",monitor="global",tier="inf",type="vault"}[3d] offset 30s)
       )
   - record: gitlab_component_errors:ratio_3d
     labels:
@@ -1763,11 +1763,11 @@ groups:
       type: vault
     expr: |
       sum by (env,environment,stage) (
-        gitlab_component_errors:rate_3d{component="vault",env="gprd",monitor="global",tier="inf",type="vault"} offset 30s
+        gitlab_component_errors:rate_3d{component="vault",env="pre",monitor="global",tier="inf",type="vault"} offset 30s
       )
       /
       sum by (env,environment,stage) (
-        gitlab_component_ops:rate_3d{component="vault",env="gprd",monitor="global",tier="inf",type="vault"} offset 30s
+        gitlab_component_ops:rate_3d{component="vault",env="pre",monitor="global",tier="inf",type="vault"} offset 30s
       )
   - record: gitlab_component_apdex:ratio_3d
     labels:
@@ -1777,11 +1777,11 @@ groups:
       type: vault
     expr: |
       sum by (env,environment,stage) (
-        gitlab_component_apdex:success:rate_3d{component="vault",env="gprd",monitor="global",tier="inf",type="vault"} offset 30s
+        gitlab_component_apdex:success:rate_3d{component="vault",env="pre",monitor="global",tier="inf",type="vault"} offset 30s
       )
       /
       sum by (env,environment,stage) (
-        gitlab_component_apdex:weight:score_3d{component="vault",env="gprd",monitor="global",tier="inf",type="vault"} offset 30s
+        gitlab_component_apdex:weight:score_3d{component="vault",env="pre",monitor="global",tier="inf",type="vault"} offset 30s
       )
   - record: gitlab_component_apdex:success:rate_3d
     labels:
@@ -1792,7 +1792,7 @@ groups:
       type: vault
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab_component_apdex:success:rate_1h{component="vault_audit_log_request",env="gprd",monitor="global",tier="inf",type="vault"}[3d] offset 30s)
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="vault_audit_log_request",env="pre",monitor="global",tier="inf",type="vault"}[3d] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_3d
     labels:
@@ -1803,7 +1803,7 @@ groups:
       type: vault
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab_component_apdex:weight:score_1h{component="vault_audit_log_request",env="gprd",monitor="global",tier="inf",type="vault"}[3d] offset 30s)
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="vault_audit_log_request",env="pre",monitor="global",tier="inf",type="vault"}[3d] offset 30s)
       )
   - record: gitlab_component_ops:rate_3d
     labels:
@@ -1814,7 +1814,7 @@ groups:
       type: vault
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab_component_ops:rate_1h{component="vault_audit_log_request",env="gprd",monitor="global",tier="inf",type="vault"}[3d] offset 30s)
+        avg_over_time(gitlab_component_ops:rate_1h{component="vault_audit_log_request",env="pre",monitor="global",tier="inf",type="vault"}[3d] offset 30s)
       )
   - record: gitlab_component_errors:rate_3d
     labels:
@@ -1825,7 +1825,7 @@ groups:
       type: vault
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab_component_errors:rate_1h{component="vault_audit_log_request",env="gprd",monitor="global",tier="inf",type="vault"}[3d] offset 30s)
+        avg_over_time(gitlab_component_errors:rate_1h{component="vault_audit_log_request",env="pre",monitor="global",tier="inf",type="vault"}[3d] offset 30s)
       )
   - record: gitlab_component_errors:ratio_3d
     labels:
@@ -1835,11 +1835,11 @@ groups:
       type: vault
     expr: |
       sum by (env,environment,stage) (
-        gitlab_component_errors:rate_3d{component="vault_audit_log_request",env="gprd",monitor="global",tier="inf",type="vault"} offset 30s
+        gitlab_component_errors:rate_3d{component="vault_audit_log_request",env="pre",monitor="global",tier="inf",type="vault"} offset 30s
       )
       /
       sum by (env,environment,stage) (
-        gitlab_component_ops:rate_3d{component="vault_audit_log_request",env="gprd",monitor="global",tier="inf",type="vault"} offset 30s
+        gitlab_component_ops:rate_3d{component="vault_audit_log_request",env="pre",monitor="global",tier="inf",type="vault"} offset 30s
       )
   - record: gitlab_component_apdex:ratio_3d
     labels:
@@ -1849,11 +1849,11 @@ groups:
       type: vault
     expr: |
       sum by (env,environment,stage) (
-        gitlab_component_apdex:success:rate_3d{component="vault_audit_log_request",env="gprd",monitor="global",tier="inf",type="vault"} offset 30s
+        gitlab_component_apdex:success:rate_3d{component="vault_audit_log_request",env="pre",monitor="global",tier="inf",type="vault"} offset 30s
       )
       /
       sum by (env,environment,stage) (
-        gitlab_component_apdex:weight:score_3d{component="vault_audit_log_request",env="gprd",monitor="global",tier="inf",type="vault"} offset 30s
+        gitlab_component_apdex:weight:score_3d{component="vault_audit_log_request",env="pre",monitor="global",tier="inf",type="vault"} offset 30s
       )
   - record: gitlab_component_apdex:success:rate_3d
     labels:
@@ -1864,7 +1864,7 @@ groups:
       type: vault
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab_component_apdex:success:rate_1h{component="vault_audit_log_response",env="gprd",monitor="global",tier="inf",type="vault"}[3d] offset 30s)
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="vault_audit_log_response",env="pre",monitor="global",tier="inf",type="vault"}[3d] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_3d
     labels:
@@ -1875,7 +1875,7 @@ groups:
       type: vault
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab_component_apdex:weight:score_1h{component="vault_audit_log_response",env="gprd",monitor="global",tier="inf",type="vault"}[3d] offset 30s)
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="vault_audit_log_response",env="pre",monitor="global",tier="inf",type="vault"}[3d] offset 30s)
       )
   - record: gitlab_component_ops:rate_3d
     labels:
@@ -1886,7 +1886,7 @@ groups:
       type: vault
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab_component_ops:rate_1h{component="vault_audit_log_response",env="gprd",monitor="global",tier="inf",type="vault"}[3d] offset 30s)
+        avg_over_time(gitlab_component_ops:rate_1h{component="vault_audit_log_response",env="pre",monitor="global",tier="inf",type="vault"}[3d] offset 30s)
       )
   - record: gitlab_component_errors:rate_3d
     labels:
@@ -1897,7 +1897,7 @@ groups:
       type: vault
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab_component_errors:rate_1h{component="vault_audit_log_response",env="gprd",monitor="global",tier="inf",type="vault"}[3d] offset 30s)
+        avg_over_time(gitlab_component_errors:rate_1h{component="vault_audit_log_response",env="pre",monitor="global",tier="inf",type="vault"}[3d] offset 30s)
       )
   - record: gitlab_component_errors:ratio_3d
     labels:
@@ -1907,11 +1907,11 @@ groups:
       type: vault
     expr: |
       sum by (env,environment,stage) (
-        gitlab_component_errors:rate_3d{component="vault_audit_log_response",env="gprd",monitor="global",tier="inf",type="vault"} offset 30s
+        gitlab_component_errors:rate_3d{component="vault_audit_log_response",env="pre",monitor="global",tier="inf",type="vault"} offset 30s
       )
       /
       sum by (env,environment,stage) (
-        gitlab_component_ops:rate_3d{component="vault_audit_log_response",env="gprd",monitor="global",tier="inf",type="vault"} offset 30s
+        gitlab_component_ops:rate_3d{component="vault_audit_log_response",env="pre",monitor="global",tier="inf",type="vault"} offset 30s
       )
   - record: gitlab_component_apdex:ratio_3d
     labels:
@@ -1921,11 +1921,11 @@ groups:
       type: vault
     expr: |
       sum by (env,environment,stage) (
-        gitlab_component_apdex:success:rate_3d{component="vault_audit_log_response",env="gprd",monitor="global",tier="inf",type="vault"} offset 30s
+        gitlab_component_apdex:success:rate_3d{component="vault_audit_log_response",env="pre",monitor="global",tier="inf",type="vault"} offset 30s
       )
       /
       sum by (env,environment,stage) (
-        gitlab_component_apdex:weight:score_3d{component="vault_audit_log_response",env="gprd",monitor="global",tier="inf",type="vault"} offset 30s
+        gitlab_component_apdex:weight:score_3d{component="vault_audit_log_response",env="pre",monitor="global",tier="inf",type="vault"} offset 30s
       )
   - record: gitlab_component_apdex:success:rate_3d
     labels:
@@ -1936,7 +1936,7 @@ groups:
       type: vault
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab_component_apdex:success:rate_1h{component="vault_google_lb",env="gprd",monitor="global",tier="inf",type="vault"}[3d] offset 30s)
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="vault_google_lb",env="pre",monitor="global",tier="inf",type="vault"}[3d] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_3d
     labels:
@@ -1947,7 +1947,7 @@ groups:
       type: vault
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab_component_apdex:weight:score_1h{component="vault_google_lb",env="gprd",monitor="global",tier="inf",type="vault"}[3d] offset 30s)
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="vault_google_lb",env="pre",monitor="global",tier="inf",type="vault"}[3d] offset 30s)
       )
   - record: gitlab_component_ops:rate_3d
     labels:
@@ -1958,7 +1958,7 @@ groups:
       type: vault
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab_component_ops:rate_1h{component="vault_google_lb",env="gprd",monitor="global",tier="inf",type="vault"}[3d] offset 30s)
+        avg_over_time(gitlab_component_ops:rate_1h{component="vault_google_lb",env="pre",monitor="global",tier="inf",type="vault"}[3d] offset 30s)
       )
   - record: gitlab_component_errors:rate_3d
     labels:
@@ -1969,7 +1969,7 @@ groups:
       type: vault
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab_component_errors:rate_1h{component="vault_google_lb",env="gprd",monitor="global",tier="inf",type="vault"}[3d] offset 30s)
+        avg_over_time(gitlab_component_errors:rate_1h{component="vault_google_lb",env="pre",monitor="global",tier="inf",type="vault"}[3d] offset 30s)
       )
   - record: gitlab_component_errors:ratio_3d
     labels:
@@ -1979,11 +1979,11 @@ groups:
       type: vault
     expr: |
       sum by (env,environment,stage) (
-        gitlab_component_errors:rate_3d{component="vault_google_lb",env="gprd",monitor="global",tier="inf",type="vault"} offset 30s
+        gitlab_component_errors:rate_3d{component="vault_google_lb",env="pre",monitor="global",tier="inf",type="vault"} offset 30s
       )
       /
       sum by (env,environment,stage) (
-        gitlab_component_ops:rate_3d{component="vault_google_lb",env="gprd",monitor="global",tier="inf",type="vault"} offset 30s
+        gitlab_component_ops:rate_3d{component="vault_google_lb",env="pre",monitor="global",tier="inf",type="vault"} offset 30s
       )
   - record: gitlab_component_apdex:ratio_3d
     labels:
@@ -1993,9 +1993,9 @@ groups:
       type: vault
     expr: |
       sum by (env,environment,stage) (
-        gitlab_component_apdex:success:rate_3d{component="vault_google_lb",env="gprd",monitor="global",tier="inf",type="vault"} offset 30s
+        gitlab_component_apdex:success:rate_3d{component="vault_google_lb",env="pre",monitor="global",tier="inf",type="vault"} offset 30s
       )
       /
       sum by (env,environment,stage) (
-        gitlab_component_apdex:weight:score_3d{component="vault_google_lb",env="gprd",monitor="global",tier="inf",type="vault"} offset 30s
+        gitlab_component_apdex:weight:score_3d{component="vault_google_lb",env="pre",monitor="global",tier="inf",type="vault"} offset 30s
       )

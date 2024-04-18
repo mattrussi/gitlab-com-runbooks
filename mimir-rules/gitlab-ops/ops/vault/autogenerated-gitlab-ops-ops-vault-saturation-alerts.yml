@@ -5,15 +5,15 @@ groups:
   interval: 5m
   rules:
   - record: gitlab_component_saturation:ratio_quantile95_1w
-    expr: quantile_over_time(0.95, gitlab_component_saturation:ratio{env="gprd",type="vault"}[1w])
+    expr: quantile_over_time(0.95, gitlab_component_saturation:ratio{env="ops",type="vault"}[1w])
   - record: gitlab_component_saturation:ratio_quantile99_1w
-    expr: quantile_over_time(0.99, gitlab_component_saturation:ratio{env="gprd",type="vault"}[1w])
+    expr: quantile_over_time(0.99, gitlab_component_saturation:ratio{env="ops",type="vault"}[1w])
   - record: gitlab_component_saturation:ratio_quantile95_1h
-    expr: quantile_over_time(0.95, gitlab_component_saturation:ratio{env="gprd",type="vault"}[1h])
+    expr: quantile_over_time(0.95, gitlab_component_saturation:ratio{env="ops",type="vault"}[1h])
   - record: gitlab_component_saturation:ratio_quantile99_1h
-    expr: quantile_over_time(0.99, gitlab_component_saturation:ratio{env="gprd",type="vault"}[1h])
+    expr: quantile_over_time(0.99, gitlab_component_saturation:ratio{env="ops",type="vault"}[1h])
   - record: gitlab_component_saturation:ratio_avg_1h
-    expr: avg_over_time(gitlab_component_saturation:ratio{env="gprd",type="vault"}[1h])
+    expr: avg_over_time(gitlab_component_saturation:ratio{env="ops",type="vault"}[1h])
 - name: GitLab Saturation Alerts
   interval: 1m
   rules:
@@ -80,8 +80,8 @@ groups:
       rules_domain: general
       severity: s4
     expr: |
-      gitlab_component_saturation:ratio{component="kube_container_cpu_limit",env="gprd",type="vault"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="kube_container_cpu_limit",env="gprd",type="vault"}
+      gitlab_component_saturation:ratio{component="kube_container_cpu_limit",env="ops",type="vault"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="kube_container_cpu_limit",env="ops",type="vault"}
   - alert: component_saturation_slo_out_of_bounds:kube_container_memory
     for: 15m
     annotations:
@@ -131,8 +131,8 @@ groups:
       rules_domain: general
       severity: s4
     expr: |
-      gitlab_component_saturation:ratio{component="kube_container_memory",env="gprd",type="vault"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="kube_container_memory",env="gprd",type="vault"}
+      gitlab_component_saturation:ratio{component="kube_container_memory",env="ops",type="vault"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="kube_container_memory",env="ops",type="vault"}
   - alert: component_saturation_slo_out_of_bounds:kube_container_throttling
     for: 10m
     annotations:
@@ -192,8 +192,8 @@ groups:
       rules_domain: general
       severity: s3
     expr: |
-      gitlab_component_saturation:ratio{component="kube_container_throttling",env="gprd",type="vault"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="kube_container_throttling",env="gprd",type="vault"}
+      gitlab_component_saturation:ratio{component="kube_container_throttling",env="ops",type="vault"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="kube_container_throttling",env="ops",type="vault"}
   - alert: component_saturation_slo_out_of_bounds:kube_go_memory
     for: 5m
     annotations:
@@ -247,8 +247,8 @@ groups:
       rules_domain: general
       severity: s4
     expr: |
-      gitlab_component_saturation:ratio{component="kube_go_memory",env="gprd",type="vault"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="kube_go_memory",env="gprd",type="vault"}
+      gitlab_component_saturation:ratio{component="kube_go_memory",env="ops",type="vault"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="kube_go_memory",env="ops",type="vault"}
   - alert: component_saturation_slo_out_of_bounds:kube_horizontalpodautoscaler_desired_replicas
     for: 25m
     annotations:
@@ -300,8 +300,8 @@ groups:
       rules_domain: general
       severity: s3
     expr: |
-      gitlab_component_saturation:ratio{component="kube_horizontalpodautoscaler_desired_replicas",env="gprd",type="vault"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="kube_horizontalpodautoscaler_desired_replicas",env="gprd",type="vault"}
+      gitlab_component_saturation:ratio{component="kube_horizontalpodautoscaler_desired_replicas",env="ops",type="vault"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="kube_horizontalpodautoscaler_desired_replicas",env="ops",type="vault"}
   - alert: component_saturation_slo_out_of_bounds:kube_pool_cpu
     for: 5m
     annotations:
@@ -353,8 +353,8 @@ groups:
       rules_domain: general
       severity: s3
     expr: |
-      gitlab_component_saturation:ratio{component="kube_pool_cpu",env="gprd",type="vault"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="kube_pool_cpu",env="gprd",type="vault"}
+      gitlab_component_saturation:ratio{component="kube_pool_cpu",env="ops",type="vault"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="kube_pool_cpu",env="ops",type="vault"}
   - alert: component_saturation_slo_out_of_bounds:kube_pool_max_nodes
     for: 5m
     annotations:
@@ -430,8 +430,8 @@ groups:
       rules_domain: general
       severity: s3
     expr: |
-      gitlab_component_saturation:ratio{component="kube_pool_max_nodes",env="gprd",type="vault"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="kube_pool_max_nodes",env="gprd",type="vault"}
+      gitlab_component_saturation:ratio{component="kube_pool_max_nodes",env="ops",type="vault"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="kube_pool_max_nodes",env="ops",type="vault"}
   - alert: component_saturation_slo_out_of_bounds:open_fds
     for: 5m
     annotations:
@@ -502,5 +502,5 @@ groups:
       rules_domain: general
       severity: s2
     expr: |
-      gitlab_component_saturation:ratio{component="open_fds",env="gprd",type="vault"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="open_fds",env="gprd",type="vault"}
+      gitlab_component_saturation:ratio{component="open_fds",env="ops",type="vault"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="open_fds",env="ops",type="vault"}

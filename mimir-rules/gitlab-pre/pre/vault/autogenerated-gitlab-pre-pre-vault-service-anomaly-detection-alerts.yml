@@ -31,8 +31,8 @@ groups:
     expr: |
       (
           (
-            (gitlab_service_ops:rate{env="gprd",monitor="global",type="vault"} -  gitlab_service_ops:rate:prediction{env="gprd",monitor="global",type="vault"}) /
-          gitlab_service_ops:rate:stddev_over_time_1w{env="gprd",monitor="global",type="vault"}
+            (gitlab_service_ops:rate{env="pre",monitor="global",type="vault"} -  gitlab_service_ops:rate:prediction{env="pre",monitor="global",type="vault"}) /
+          gitlab_service_ops:rate:stddev_over_time_1w{env="pre",monitor="global",type="vault"}
         )
         >
         3
@@ -67,8 +67,8 @@ groups:
     expr: |
       (
           (
-            (gitlab_service_ops:rate{env="gprd",monitor="global",type="vault"} -  gitlab_service_ops:rate:prediction{env="gprd",monitor="global",type="vault"}) /
-          gitlab_service_ops:rate:stddev_over_time_1w{env="gprd",monitor="global",type="vault"}
+            (gitlab_service_ops:rate{env="pre",monitor="global",type="vault"} -  gitlab_service_ops:rate:prediction{env="pre",monitor="global",type="vault"}) /
+          gitlab_service_ops:rate:stddev_over_time_1w{env="pre",monitor="global",type="vault"}
         )
         <
         -3
