@@ -12,7 +12,7 @@ groups:
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: lb
-      type: waf
+      type: cloudflare
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:
@@ -22,5 +22,5 @@ groups:
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: lb
-      type: waf
+      type: cloudflare
     expr: "1"

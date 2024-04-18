@@ -3375,6 +3375,24 @@ groups:
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:
+      component: gitlab_net_zone
+      global_aggregation: "no"
+      regional_aggregation: "no"
+      service_aggregation: "yes"
+      tier: lb
+      type: cloudflare
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: gitlab_zone
+      global_aggregation: "no"
+      regional_aggregation: "no"
+      service_aggregation: "yes"
+      tier: lb
+      type: cloudflare
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
       component: consul
       global_aggregation: "no"
       regional_aggregation: "yes"
@@ -4848,24 +4866,6 @@ groups:
       service_aggregation: "yes"
       tier: inf
       type: vault
-    expr: "1"
-  - record: gitlab_component_service:mapping
-    labels:
-      component: gitlab_net_zone
-      global_aggregation: "no"
-      regional_aggregation: "no"
-      service_aggregation: "yes"
-      tier: lb
-      type: waf
-    expr: "1"
-  - record: gitlab_component_service:mapping
-    labels:
-      component: gitlab_zone
-      global_aggregation: "no"
-      regional_aggregation: "no"
-      service_aggregation: "yes"
-      tier: lb
-      type: waf
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:

@@ -2,7 +2,7 @@ local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local rateMetric = metricsCatalog.rateMetric;
 
 metricsCatalog.serviceDefinition({
-  type: 'waf',
+  type: 'cloudflare',
   tier: 'lb',
   monitoringThresholds: {
     // Error SLO disabled as monitoring data is unreliable.
