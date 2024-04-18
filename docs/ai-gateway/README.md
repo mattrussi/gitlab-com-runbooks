@@ -25,6 +25,11 @@ instance they are using: self-managed, dedicated or GitLab.com.
 
 The AI Gateway was formerly known as Model Gateway and Code Suggestions.
 
+## Operational Roles and Responsibilities
+
+1. Regional deployment management - The AI-Gateway team is responsible for selecting, provisioning and de-provisioning regional deployments. Selection and provisioning can be self-served. Currently deprovisioning should be requested by contacting the Runway team.
+2. Quota Saturation Monitoring and Response - The AI-Gateway team is responsible for monitoring the saturation warnings and responding to the warnings when raised. 
+
 ## Architecture
 
 See the AI Gateway architecture blueprint at <https://docs.gitlab.com/ee/architecture/blueprints/ai_gateway/>
@@ -113,6 +118,16 @@ For more details, refer to [Runway runbook](../runway/README.md).
 
 * [Production](https://gitlab.com/gitlab-com/gl-infra/platform/runway/deployments/ai-gateway/-/environments/15709878)
 * [Staging](https://gitlab.com/gitlab-com/gl-infra/platform/runway/deployments/ai-gateway/-/environments/15709877)
+
+## Regions
+
+* [Runway Multi-Region Documentation](https://runway-docs-4jdf82.runway.gitlab.net/guides/multi-region/#regional-service)
+
+When the decision is made to provision a new region, the following steps should be taken:
+
+1. Request a quota increase in the new region
+1. Follow the Runway documentation to set up the new region
+1. Notify the testing team that a new region has been set up so that they can run the necessary tests
 
 ## Performance
 
