@@ -32,7 +32,6 @@ correspond to which service.
 - `pubsub-monitoring-inf-gprd-*` Prometheus & Thanos meta monitoring
 - `pubsub-pages-inf-gprd*` Logs for Gitlab-Pages
 - `pubsub-postgres-inf-gprd-*` Patroni hosts
-- `pubsub-praefect-inf-gprd-*` Gitaly's HA - Praefect is currently used in a very small subset of Gitaly repos in gitlab.com
 - `pubsub-pubsubbeat-inf-gprd-*` meta log of logging pipeline
 - `pubsub-puma-inf-gprd*` rails webservice logging (not requests)
 - `pubsub-pvs-inf-gprd*` Pipeline Validation Service

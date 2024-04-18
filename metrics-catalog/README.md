@@ -37,7 +37,6 @@ metricsCatalog.serviceDefinition({
   },
   serviceDependencies: {    // A map of (downstream) services on which this service depends
     gitaly: true,
-    praefect: true,
   },
   regional: true,           // If the service is spread over multiple regions and should be monitored as such
   serviceLevelIndicators: { // A map of SLIs for this service. The name is defined by the key

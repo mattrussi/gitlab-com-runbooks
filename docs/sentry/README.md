@@ -25,7 +25,6 @@
 * [../patroni/postgres.md](../patroni/postgres.md)
 * [../patroni/postgresql-backups-wale-walg.md](../patroni/postgresql-backups-wale-walg.md)
 * [Rotating Rails' PostgreSQL password](../patroni/rotating-rails-postgresql-password.md)
-* [Praefect is down](../praefect/praefect-startup.md)
 * [Database Connection Pool Saturation](../registry/app-db-conn-pool-saturation.md)
 * [High Number of Overdue Online GC Tasks](../registry/online-gc-high-overdue-tasks.md)
 * [Sentry general tasks](sentry-general.md)

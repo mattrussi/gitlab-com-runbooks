@@ -45,7 +45,7 @@ local selectors = import 'promql/selectors.libsonnet';
     |||,
     queryFormatConfig: {
       gitalyDiskSelector: selectors.serializeHash({
-        shard: { oneOf: ['default', 'praefect'] },
+        shard: { oneOf: ['default'] },
         mountpoint: '/var/opt/gitlab',
         fqdn: { re: 'gitaly-.*-stor-.*' },
       }),

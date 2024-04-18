@@ -6,7 +6,7 @@ local resourceSaturationPoint = metricsCatalog.resourceSaturationPoint;
     title: 'Cgroup Memory Utilization per Node',
     severity: 's4',
     horizontallyScalable: true,
-    appliesTo: ['gitaly', 'praefect'],
+    appliesTo: ['gitaly'],
     description: |||
       Cgroup memory utilization per node.
 

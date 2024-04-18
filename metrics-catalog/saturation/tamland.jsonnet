@@ -97,7 +97,7 @@ local saturationPoints = {
       page('api-git-web.md', 'API, Git, and Web', 'api|git|internal-api|web|websockets'),
       page('ci-runners.md', 'CI Runners', 'ci-runners'),
       page('customersdot.md', 'Customersdot', 'customersdot'),
-      page('gitaly.md', 'Gitaly', 'gitaly|praefect'),
+      page('gitaly.md', 'Gitaly', 'gitaly'),
       page('kube.md', 'Kubernetes', 'kube|external-dns'),
       page('monitoring-logging.md', 'Monitoring and Logging', 'monitoring|logging|thanos'),
       page('patroni.md', 'Postgres (Patroni and PgBouncer)', 'patroni.*|pgbouncer.*|postgres.*'),

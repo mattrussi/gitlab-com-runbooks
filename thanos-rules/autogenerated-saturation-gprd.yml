@@ -47,7 +47,7 @@ groups:
         clamp_min(
           clamp_max(
             sum by (env, environment, tier, type, stage, shard, fqdn) (
-              go_goroutines{env="gprd",type=~"gitaly|monitoring|praefect|registry|web-pages"}
+              go_goroutines{env="gprd",type=~"gitaly|monitoring|registry|web-pages"}
             )
             /
             250000
@@ -64,11 +64,11 @@ groups:
         clamp_min(
           clamp_max(
             max by (env, environment, tier, type, stage, shard, fqdn) (
-              go_memstats_alloc_bytes{env="gprd",type=~"gitaly|monitoring|praefect|registry|web-pages"}
+              go_memstats_alloc_bytes{env="gprd",type=~"gitaly|monitoring|registry|web-pages"}
             )
             /
             sum by (env, environment, tier, type, stage, shard, fqdn) (
-              node_memory_MemTotal_bytes{env="gprd",type=~"gitaly|monitoring|praefect|registry|web-pages"}
+              node_memory_MemTotal_bytes{env="gprd",type=~"gitaly|monitoring|registry|web-pages"}
             )
             ,
             1)

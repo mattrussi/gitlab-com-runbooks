@@ -77,7 +77,6 @@ metricsCatalog.serviceDefinition({
     redis: true,
     patroni: true,
     pgbouncer: true,
-    praefect: true,
     'ext-pvs': true,
     search: true,
     consul: true,

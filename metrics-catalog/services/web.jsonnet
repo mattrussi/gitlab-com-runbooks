@@ -56,7 +56,6 @@ metricsCatalog.serviceDefinition({
     redis: true,
     patroni: true,
     pgbouncer: true,
-    praefect: true,
     'ext-pvs': true,
     search: true,
     consul: true,
@@ -121,10 +120,10 @@ metricsCatalog.serviceDefinition({
               '^/([^/]+/){1,}[^/]+\\\\.git/git-upload-pack\\\\z',
               '^/([^/]+/){1,}[^/]+\\\\.git/info/refs\\\\z',
               '^/([^/]+/){1,}[^/]+\\\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\\\z',
-              '^/.+\\\\.git/git-receive-pack\\\\z', # ^/.+\.git/git-receive-pack\z
-              '^/.+\\\\.git/git-upload-pack\\\\z', # ^/.+\.git/git-upload-pack\z
-              '^/.+\\\\.git/info/refs\\\\z', # ^/.+\.git/info/refs\z
-              '^/.+\\\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\\\z', # /.+\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\z
+              '^/.+\\\\.git/git-receive-pack\\\\z',  // ^/.+\.git/git-receive-pack\z
+              '^/.+\\\\.git/git-upload-pack\\\\z',  // ^/.+\.git/git-upload-pack\z
+              '^/.+\\\\.git/info/refs\\\\z',  // ^/.+\.git/info/refs\z
+              '^/.+\\\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\\\z',  // /.+\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\z
             ],
           },
         },
