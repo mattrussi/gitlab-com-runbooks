@@ -8,6 +8,7 @@ local selector = { type: 'postgres-archive', tier: 'db' };
 metricsCatalog.serviceDefinition({
   type: 'postgres-archive',
   tier: 'db',
+  tenants: [ 'gitlab-gprd' ],
 
   serviceDependencies: {
     patroni: true,
