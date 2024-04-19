@@ -338,7 +338,7 @@ metricsCatalog.serviceDefinition(
 
         toolingLinks: [
           toolingLinks.cloudflare(host='codesuggestions.gitlab.com'),
-          toolingLinks.grafana(title='WAF Overview', dashboardUid='waf-main/waf-overview'),
+          toolingLinks.grafana(title='CloudFlare Overview', dashboardUid='cloudflare-main/cloudflare-overview'),
         ],
       },
     },

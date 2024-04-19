@@ -267,70 +267,6 @@ groups:
       tier: sv
       type: api
     expr: "0.000200"
-  - record: slo:min:gitlab_service_apdex:ratio
-    labels:
-      tier: sv
-      type: internal-api
-    expr: "0.900000"
-  - record: slo:max:gitlab_service_errors:ratio
-    labels:
-      tier: sv
-      type: internal-api
-    expr: "0.005000"
-  - record: slo:min:events:gitlab_service_apdex:ratio
-    labels:
-      tier: sv
-      type: internal-api
-    expr: "0.995000"
-  - record: slo:max:events:gitlab_service_errors:ratio
-    labels:
-      tier: sv
-      type: internal-api
-    expr: "0.001000"
-  - record: slo:min:events:gitlab_service_apdex:ratio
-    labels:
-      component: rails_request
-      tier: sv
-      type: internal-api
-    expr: "0.990000"
-  - record: slo:max:events:gitlab_service_errors:ratio
-    labels:
-      component: rails_request
-      tier: sv
-      type: internal-api
-    expr: "0.001000"
-  - record: slo:min:events:gitlab_service_apdex:ratio
-    labels:
-      component: workhorse
-      tier: sv
-      type: internal-api
-    expr: "0.995000"
-  - record: slo:max:events:gitlab_service_errors:ratio
-    labels:
-      component: workhorse
-      tier: sv
-      type: internal-api
-    expr: "0.001000"
-  - record: slo:min:deployment:gitlab_service_apdex:ratio
-    labels:
-      tier: sv
-      type: internal-api
-    expr: "0.995000"
-  - record: slo:max:deployment:gitlab_service_errors:ratio
-    labels:
-      tier: sv
-      type: internal-api
-    expr: "0.001000"
-  - record: slo:min:mtbf:gitlab_service_apdex:ratio
-    labels:
-      tier: sv
-      type: internal-api
-    expr: "0.998500"
-  - record: slo:max:mtbf:gitlab_service_errors:ratio
-    labels:
-      tier: sv
-      type: internal-api
-    expr: "0.000200"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       tier: inf
@@ -580,16 +516,6 @@ groups:
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       tier: sv
-      type: external-dns
-    expr: "0.999000"
-  - record: slo:max:events:gitlab_service_errors:ratio
-    labels:
-      tier: sv
-      type: external-dns
-    expr: "0.001000"
-  - record: slo:min:events:gitlab_service_apdex:ratio
-    labels:
-      tier: sv
       type: ext-pvs
     expr: "0.999000"
   - record: slo:max:events:gitlab_service_errors:ratio
@@ -608,6 +534,16 @@ groups:
       component: runway_ingress
       tier: sv
       type: ext-pvs
+    expr: "0.001000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      tier: sv
+      type: external-dns
+    expr: "0.999000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      tier: sv
+      type: external-dns
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
@@ -915,6 +851,70 @@ groups:
       tier: stor
       type: google-cloud-storage
     expr: "0.000100"
+  - record: slo:min:gitlab_service_apdex:ratio
+    labels:
+      tier: sv
+      type: internal-api
+    expr: "0.900000"
+  - record: slo:max:gitlab_service_errors:ratio
+    labels:
+      tier: sv
+      type: internal-api
+    expr: "0.005000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      tier: sv
+      type: internal-api
+    expr: "0.995000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      tier: sv
+      type: internal-api
+    expr: "0.001000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      component: rails_request
+      tier: sv
+      type: internal-api
+    expr: "0.990000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      component: rails_request
+      tier: sv
+      type: internal-api
+    expr: "0.001000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      component: workhorse
+      tier: sv
+      type: internal-api
+    expr: "0.995000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      component: workhorse
+      tier: sv
+      type: internal-api
+    expr: "0.001000"
+  - record: slo:min:deployment:gitlab_service_apdex:ratio
+    labels:
+      tier: sv
+      type: internal-api
+    expr: "0.995000"
+  - record: slo:max:deployment:gitlab_service_errors:ratio
+    labels:
+      tier: sv
+      type: internal-api
+    expr: "0.001000"
+  - record: slo:min:mtbf:gitlab_service_apdex:ratio
+    labels:
+      tier: sv
+      type: internal-api
+    expr: "0.998500"
+  - record: slo:max:mtbf:gitlab_service_errors:ratio
+    labels:
+      tier: sv
+      type: internal-api
+    expr: "0.000200"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       tier: inf
@@ -1427,168 +1427,6 @@ groups:
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       tier: db
-      type: patroni
-    expr: "0.999000"
-  - record: slo:max:events:gitlab_service_errors:ratio
-    labels:
-      tier: db
-      type: patroni
-    expr: "0.001000"
-  - record: slo:min:events:gitlab_service_apdex:ratio
-    labels:
-      component: pgbouncer
-      tier: db
-      type: patroni
-    expr: "0.999000"
-  - record: slo:max:events:gitlab_service_errors:ratio
-    labels:
-      component: pgbouncer
-      tier: db
-      type: patroni
-    expr: "0.001000"
-  - record: slo:min:events:gitlab_service_apdex:ratio
-    labels:
-      component: rails_primary_sql
-      tier: db
-      type: patroni
-    expr: "0.999000"
-  - record: slo:max:events:gitlab_service_errors:ratio
-    labels:
-      component: rails_primary_sql
-      tier: db
-      type: patroni
-    expr: "0.001000"
-  - record: slo:min:events:gitlab_service_apdex:ratio
-    labels:
-      component: rails_replica_sql
-      tier: db
-      type: patroni
-    expr: "0.999000"
-  - record: slo:max:events:gitlab_service_errors:ratio
-    labels:
-      component: rails_replica_sql
-      tier: db
-      type: patroni
-    expr: "0.001000"
-  - record: slo:min:events:gitlab_service_apdex:ratio
-    labels:
-      component: transactions_primary
-      tier: db
-      type: patroni
-    expr: "0.999000"
-  - record: slo:max:events:gitlab_service_errors:ratio
-    labels:
-      component: transactions_primary
-      tier: db
-      type: patroni
-    expr: "0.001000"
-  - record: slo:min:events:gitlab_service_apdex:ratio
-    labels:
-      component: transactions_replica
-      tier: db
-      type: patroni
-    expr: "0.999000"
-  - record: slo:max:events:gitlab_service_errors:ratio
-    labels:
-      component: transactions_replica
-      tier: db
-      type: patroni
-    expr: "0.001000"
-  - record: slo:min:events:gitlab_service_apdex:ratio
-    labels:
-      tier: db
-      type: patroni-registry
-    expr: "0.999000"
-  - record: slo:max:events:gitlab_service_errors:ratio
-    labels:
-      tier: db
-      type: patroni-registry
-    expr: "0.001000"
-  - record: slo:min:events:gitlab_service_apdex:ratio
-    labels:
-      component: pgbouncer
-      tier: db
-      type: patroni-registry
-    expr: "0.999000"
-  - record: slo:max:events:gitlab_service_errors:ratio
-    labels:
-      component: pgbouncer
-      tier: db
-      type: patroni-registry
-    expr: "0.001000"
-  - record: slo:min:events:gitlab_service_apdex:ratio
-    labels:
-      component: transactions_primary
-      tier: db
-      type: patroni-registry
-    expr: "0.999000"
-  - record: slo:max:events:gitlab_service_errors:ratio
-    labels:
-      component: transactions_primary
-      tier: db
-      type: patroni-registry
-    expr: "0.001000"
-  - record: slo:min:events:gitlab_service_apdex:ratio
-    labels:
-      component: transactions_replica
-      tier: db
-      type: patroni-registry
-    expr: "0.999000"
-  - record: slo:max:events:gitlab_service_errors:ratio
-    labels:
-      component: transactions_replica
-      tier: db
-      type: patroni-registry
-    expr: "0.001000"
-  - record: slo:min:events:gitlab_service_apdex:ratio
-    labels:
-      tier: db
-      type: patroni-embedding
-    expr: "0.999000"
-  - record: slo:max:events:gitlab_service_errors:ratio
-    labels:
-      tier: db
-      type: patroni-embedding
-    expr: "0.001000"
-  - record: slo:min:events:gitlab_service_apdex:ratio
-    labels:
-      component: pgbouncer
-      tier: db
-      type: patroni-embedding
-    expr: "0.999000"
-  - record: slo:max:events:gitlab_service_errors:ratio
-    labels:
-      component: pgbouncer
-      tier: db
-      type: patroni-embedding
-    expr: "0.001000"
-  - record: slo:min:events:gitlab_service_apdex:ratio
-    labels:
-      component: transactions_primary
-      tier: db
-      type: patroni-embedding
-    expr: "0.999000"
-  - record: slo:max:events:gitlab_service_errors:ratio
-    labels:
-      component: transactions_primary
-      tier: db
-      type: patroni-embedding
-    expr: "0.001000"
-  - record: slo:min:events:gitlab_service_apdex:ratio
-    labels:
-      component: transactions_replica
-      tier: db
-      type: patroni-embedding
-    expr: "0.999000"
-  - record: slo:max:events:gitlab_service_errors:ratio
-    labels:
-      component: transactions_replica
-      tier: db
-      type: patroni-embedding
-    expr: "0.001000"
-  - record: slo:min:events:gitlab_service_apdex:ratio
-    labels:
-      tier: db
       type: patroni-ci
     expr: "0.999000"
   - record: slo:max:events:gitlab_service_errors:ratio
@@ -1655,6 +1493,168 @@ groups:
       component: transactions_replica
       tier: db
       type: patroni-ci
+    expr: "0.001000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      tier: db
+      type: patroni-embedding
+    expr: "0.999000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      tier: db
+      type: patroni-embedding
+    expr: "0.001000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      component: pgbouncer
+      tier: db
+      type: patroni-embedding
+    expr: "0.999000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      component: pgbouncer
+      tier: db
+      type: patroni-embedding
+    expr: "0.001000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      component: transactions_primary
+      tier: db
+      type: patroni-embedding
+    expr: "0.999000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      component: transactions_primary
+      tier: db
+      type: patroni-embedding
+    expr: "0.001000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      component: transactions_replica
+      tier: db
+      type: patroni-embedding
+    expr: "0.999000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      component: transactions_replica
+      tier: db
+      type: patroni-embedding
+    expr: "0.001000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      tier: db
+      type: patroni-registry
+    expr: "0.999000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      tier: db
+      type: patroni-registry
+    expr: "0.001000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      component: pgbouncer
+      tier: db
+      type: patroni-registry
+    expr: "0.999000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      component: pgbouncer
+      tier: db
+      type: patroni-registry
+    expr: "0.001000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      component: transactions_primary
+      tier: db
+      type: patroni-registry
+    expr: "0.999000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      component: transactions_primary
+      tier: db
+      type: patroni-registry
+    expr: "0.001000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      component: transactions_replica
+      tier: db
+      type: patroni-registry
+    expr: "0.999000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      component: transactions_replica
+      tier: db
+      type: patroni-registry
+    expr: "0.001000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      tier: db
+      type: patroni
+    expr: "0.999000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      tier: db
+      type: patroni
+    expr: "0.001000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      component: pgbouncer
+      tier: db
+      type: patroni
+    expr: "0.999000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      component: pgbouncer
+      tier: db
+      type: patroni
+    expr: "0.001000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      component: rails_primary_sql
+      tier: db
+      type: patroni
+    expr: "0.999000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      component: rails_primary_sql
+      tier: db
+      type: patroni
+    expr: "0.001000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      component: rails_replica_sql
+      tier: db
+      type: patroni
+    expr: "0.999000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      component: rails_replica_sql
+      tier: db
+      type: patroni
+    expr: "0.001000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      component: transactions_primary
+      tier: db
+      type: patroni
+    expr: "0.999000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      component: transactions_primary
+      tier: db
+      type: patroni
+    expr: "0.001000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      component: transactions_replica
+      tier: db
+      type: patroni
+    expr: "0.999000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      component: transactions_replica
+      tier: db
+      type: patroni
     expr: "0.001000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
@@ -1728,6 +1728,52 @@ groups:
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       tier: db
+      type: redis-cluster-chat-cache
+    expr: "0.999500"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      tier: db
+      type: redis-cluster-chat-cache
+    expr: "0.001000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      component: primary_server
+      tier: db
+      type: redis-cluster-chat-cache
+    expr: "0.999500"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      component: primary_server
+      tier: db
+      type: redis-cluster-chat-cache
+    expr: "0.001000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      component: rails_redis_client
+      tier: db
+      type: redis-cluster-chat-cache
+    expr: "0.999500"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      component: rails_redis_client
+      tier: db
+      type: redis-cluster-chat-cache
+    expr: "0.001000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      component: secondary_servers
+      tier: db
+      type: redis-cluster-chat-cache
+    expr: "0.999500"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      component: secondary_servers
+      tier: db
+      type: redis-cluster-chat-cache
+    expr: "0.001000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      tier: db
       type: redis-cluster-feature-flag
     expr: "0.999500"
   - record: slo:max:events:gitlab_service_errors:ratio
@@ -1786,52 +1832,6 @@ groups:
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       tier: db
-      type: redis-cluster-shared-state
-    expr: "0.999900"
-  - record: slo:max:events:gitlab_service_errors:ratio
-    labels:
-      tier: db
-      type: redis-cluster-shared-state
-    expr: "0.001000"
-  - record: slo:min:events:gitlab_service_apdex:ratio
-    labels:
-      component: primary_server
-      tier: db
-      type: redis-cluster-shared-state
-    expr: "0.999900"
-  - record: slo:max:events:gitlab_service_errors:ratio
-    labels:
-      component: primary_server
-      tier: db
-      type: redis-cluster-shared-state
-    expr: "0.001000"
-  - record: slo:min:events:gitlab_service_apdex:ratio
-    labels:
-      component: rails_redis_client
-      tier: db
-      type: redis-cluster-shared-state
-    expr: "0.999900"
-  - record: slo:max:events:gitlab_service_errors:ratio
-    labels:
-      component: rails_redis_client
-      tier: db
-      type: redis-cluster-shared-state
-    expr: "0.001000"
-  - record: slo:min:events:gitlab_service_apdex:ratio
-    labels:
-      component: secondary_servers
-      tier: db
-      type: redis-cluster-shared-state
-    expr: "0.999900"
-  - record: slo:max:events:gitlab_service_errors:ratio
-    labels:
-      component: secondary_servers
-      tier: db
-      type: redis-cluster-shared-state
-    expr: "0.001000"
-  - record: slo:min:events:gitlab_service_apdex:ratio
-    labels:
-      tier: db
       type: redis-cluster-queues-meta
     expr: "0.999900"
   - record: slo:max:events:gitlab_service_errors:ratio
@@ -1874,6 +1874,52 @@ groups:
       component: secondary_servers
       tier: db
       type: redis-cluster-queues-meta
+    expr: "0.001000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      tier: db
+      type: redis-cluster-ratelimiting
+    expr: "0.999500"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      tier: db
+      type: redis-cluster-ratelimiting
+    expr: "0.001000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      component: primary_server
+      tier: db
+      type: redis-cluster-ratelimiting
+    expr: "0.999500"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      component: primary_server
+      tier: db
+      type: redis-cluster-ratelimiting
+    expr: "0.001000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      component: rails_redis_client
+      tier: db
+      type: redis-cluster-ratelimiting
+    expr: "0.999500"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      component: rails_redis_client
+      tier: db
+      type: redis-cluster-ratelimiting
+    expr: "0.001000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      component: secondary_servers
+      tier: db
+      type: redis-cluster-ratelimiting
+    expr: "0.999500"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      component: secondary_servers
+      tier: db
+      type: redis-cluster-ratelimiting
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
@@ -1936,238 +1982,140 @@ groups:
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       tier: db
-      type: redis-sidekiq
+      type: redis-cluster-shared-state
     expr: "0.999900"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       tier: db
-      type: redis-sidekiq
-    expr: "0.001000"
-  - record: slo:min:events:gitlab_service_apdex:ratio
-    labels:
-      component: primary_server
-      shard: ""
-      tier: db
-      type: redis-sidekiq
-    expr: "0.999900"
-  - record: slo:max:events:gitlab_service_errors:ratio
-    labels:
-      component: primary_server
-      shard: ""
-      tier: db
-      type: redis-sidekiq
-    expr: "0.001000"
-  - record: slo:min:events:gitlab_service_apdex:ratio
-    labels:
-      component: rails_redis_client
-      shard: ""
-      tier: db
-      type: redis-sidekiq
-    expr: "0.999900"
-  - record: slo:max:events:gitlab_service_errors:ratio
-    labels:
-      component: rails_redis_client
-      shard: ""
-      tier: db
-      type: redis-sidekiq
-    expr: "0.001000"
-  - record: slo:min:events:gitlab_service_apdex:ratio
-    labels:
-      component: secondary_servers
-      shard: ""
-      tier: db
-      type: redis-sidekiq
-    expr: "0.999900"
-  - record: slo:max:events:gitlab_service_errors:ratio
-    labels:
-      component: secondary_servers
-      shard: ""
-      tier: db
-      type: redis-sidekiq
-    expr: "0.001000"
-  - record: slo:min:events:gitlab_service_apdex:ratio
-    labels:
-      tier: db
-      type: redis-tracechunks
-    expr: "0.999900"
-  - record: slo:max:events:gitlab_service_errors:ratio
-    labels:
-      tier: db
-      type: redis-tracechunks
+      type: redis-cluster-shared-state
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: primary_server
       tier: db
-      type: redis-tracechunks
+      type: redis-cluster-shared-state
     expr: "0.999900"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: primary_server
       tier: db
-      type: redis-tracechunks
+      type: redis-cluster-shared-state
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: rails_redis_client
       tier: db
-      type: redis-tracechunks
+      type: redis-cluster-shared-state
     expr: "0.999900"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: rails_redis_client
       tier: db
-      type: redis-tracechunks
+      type: redis-cluster-shared-state
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: secondary_servers
       tier: db
-      type: redis-tracechunks
+      type: redis-cluster-shared-state
     expr: "0.999900"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: secondary_servers
       tier: db
-      type: redis-tracechunks
+      type: redis-cluster-shared-state
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       tier: db
-      type: redis-cluster-ratelimiting
+      type: redis-db-load-balancing
     expr: "0.999500"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       tier: db
-      type: redis-cluster-ratelimiting
+      type: redis-db-load-balancing
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: primary_server
       tier: db
-      type: redis-cluster-ratelimiting
+      type: redis-db-load-balancing
     expr: "0.999500"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: primary_server
       tier: db
-      type: redis-cluster-ratelimiting
+      type: redis-db-load-balancing
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: rails_redis_client
       tier: db
-      type: redis-cluster-ratelimiting
+      type: redis-db-load-balancing
     expr: "0.999500"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: rails_redis_client
       tier: db
-      type: redis-cluster-ratelimiting
+      type: redis-db-load-balancing
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: secondary_servers
       tier: db
-      type: redis-cluster-ratelimiting
+      type: redis-db-load-balancing
     expr: "0.999500"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: secondary_servers
       tier: db
-      type: redis-cluster-ratelimiting
+      type: redis-db-load-balancing
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       tier: db
-      type: redis-cluster-chat-cache
-    expr: "0.999500"
+      type: redis-pubsub
+    expr: "0.999900"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       tier: db
-      type: redis-cluster-chat-cache
+      type: redis-pubsub
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: primary_server
       tier: db
-      type: redis-cluster-chat-cache
-    expr: "0.999500"
-  - record: slo:max:events:gitlab_service_errors:ratio
-    labels:
-      component: primary_server
-      tier: db
-      type: redis-cluster-chat-cache
-    expr: "0.001000"
-  - record: slo:min:events:gitlab_service_apdex:ratio
-    labels:
-      component: rails_redis_client
-      tier: db
-      type: redis-cluster-chat-cache
-    expr: "0.999500"
-  - record: slo:max:events:gitlab_service_errors:ratio
-    labels:
-      component: rails_redis_client
-      tier: db
-      type: redis-cluster-chat-cache
-    expr: "0.001000"
-  - record: slo:min:events:gitlab_service_apdex:ratio
-    labels:
-      component: secondary_servers
-      tier: db
-      type: redis-cluster-chat-cache
-    expr: "0.999500"
-  - record: slo:max:events:gitlab_service_errors:ratio
-    labels:
-      component: secondary_servers
-      tier: db
-      type: redis-cluster-chat-cache
-    expr: "0.001000"
-  - record: slo:min:events:gitlab_service_apdex:ratio
-    labels:
-      tier: db
-      type: redis-sessions
-    expr: "0.999900"
-  - record: slo:max:events:gitlab_service_errors:ratio
-    labels:
-      tier: db
-      type: redis-sessions
-    expr: "0.001000"
-  - record: slo:min:events:gitlab_service_apdex:ratio
-    labels:
-      component: primary_server
-      tier: db
-      type: redis-sessions
+      type: redis-pubsub
     expr: "0.999900"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: primary_server
       tier: db
-      type: redis-sessions
+      type: redis-pubsub
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: rails_redis_client
       tier: db
-      type: redis-sessions
+      type: redis-pubsub
     expr: "0.999900"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: rails_redis_client
       tier: db
-      type: redis-sessions
+      type: redis-pubsub
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: secondary_servers
       tier: db
-      type: redis-sessions
+      type: redis-pubsub
     expr: "0.999900"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: secondary_servers
       tier: db
-      type: redis-sessions
+      type: redis-pubsub
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
@@ -2218,94 +2166,146 @@ groups:
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       tier: db
-      type: redis-db-load-balancing
-    expr: "0.999500"
+      type: redis-sessions
+    expr: "0.999900"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       tier: db
-      type: redis-db-load-balancing
+      type: redis-sessions
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: primary_server
       tier: db
-      type: redis-db-load-balancing
-    expr: "0.999500"
-  - record: slo:max:events:gitlab_service_errors:ratio
-    labels:
-      component: primary_server
-      tier: db
-      type: redis-db-load-balancing
-    expr: "0.001000"
-  - record: slo:min:events:gitlab_service_apdex:ratio
-    labels:
-      component: rails_redis_client
-      tier: db
-      type: redis-db-load-balancing
-    expr: "0.999500"
-  - record: slo:max:events:gitlab_service_errors:ratio
-    labels:
-      component: rails_redis_client
-      tier: db
-      type: redis-db-load-balancing
-    expr: "0.001000"
-  - record: slo:min:events:gitlab_service_apdex:ratio
-    labels:
-      component: secondary_servers
-      tier: db
-      type: redis-db-load-balancing
-    expr: "0.999500"
-  - record: slo:max:events:gitlab_service_errors:ratio
-    labels:
-      component: secondary_servers
-      tier: db
-      type: redis-db-load-balancing
-    expr: "0.001000"
-  - record: slo:min:events:gitlab_service_apdex:ratio
-    labels:
-      tier: db
-      type: redis-pubsub
-    expr: "0.999900"
-  - record: slo:max:events:gitlab_service_errors:ratio
-    labels:
-      tier: db
-      type: redis-pubsub
-    expr: "0.001000"
-  - record: slo:min:events:gitlab_service_apdex:ratio
-    labels:
-      component: primary_server
-      tier: db
-      type: redis-pubsub
+      type: redis-sessions
     expr: "0.999900"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: primary_server
       tier: db
-      type: redis-pubsub
+      type: redis-sessions
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: rails_redis_client
       tier: db
-      type: redis-pubsub
+      type: redis-sessions
     expr: "0.999900"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: rails_redis_client
       tier: db
-      type: redis-pubsub
+      type: redis-sessions
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: secondary_servers
       tier: db
-      type: redis-pubsub
+      type: redis-sessions
     expr: "0.999900"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: secondary_servers
       tier: db
-      type: redis-pubsub
+      type: redis-sessions
+    expr: "0.001000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      tier: db
+      type: redis-sidekiq
+    expr: "0.999900"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      tier: db
+      type: redis-sidekiq
+    expr: "0.001000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      component: primary_server
+      shard: ""
+      tier: db
+      type: redis-sidekiq
+    expr: "0.999900"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      component: primary_server
+      shard: ""
+      tier: db
+      type: redis-sidekiq
+    expr: "0.001000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      component: rails_redis_client
+      shard: ""
+      tier: db
+      type: redis-sidekiq
+    expr: "0.999900"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      component: rails_redis_client
+      shard: ""
+      tier: db
+      type: redis-sidekiq
+    expr: "0.001000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      component: secondary_servers
+      shard: ""
+      tier: db
+      type: redis-sidekiq
+    expr: "0.999900"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      component: secondary_servers
+      shard: ""
+      tier: db
+      type: redis-sidekiq
+    expr: "0.001000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      tier: db
+      type: redis-tracechunks
+    expr: "0.999900"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      tier: db
+      type: redis-tracechunks
+    expr: "0.001000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      component: primary_server
+      tier: db
+      type: redis-tracechunks
+    expr: "0.999900"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      component: primary_server
+      tier: db
+      type: redis-tracechunks
+    expr: "0.001000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      component: rails_redis_client
+      tier: db
+      type: redis-tracechunks
+    expr: "0.999900"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      component: rails_redis_client
+      tier: db
+      type: redis-tracechunks
+    expr: "0.001000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      component: secondary_servers
+      tier: db
+      type: redis-tracechunks
+    expr: "0.999900"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      component: secondary_servers
+      tier: db
+      type: redis-tracechunks
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
@@ -3276,24 +3276,6 @@ groups:
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:
-      component: rails_request
-      global_aggregation: "no"
-      regional_aggregation: "yes"
-      service_aggregation: "yes"
-      tier: sv
-      type: internal-api
-    expr: "1"
-  - record: gitlab_component_service:mapping
-    labels:
-      component: workhorse
-      global_aggregation: "no"
-      regional_aggregation: "yes"
-      service_aggregation: "no"
-      tier: sv
-      type: internal-api
-    expr: "1"
-  - record: gitlab_component_service:mapping
-    labels:
       component: atlantis_google_lb
       global_aggregation: "no"
       regional_aggregation: "no"
@@ -3372,6 +3354,24 @@ groups:
       service_aggregation: "yes"
       tier: runners
       type: ci-runners
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: gitlab_net_zone
+      global_aggregation: "no"
+      regional_aggregation: "no"
+      service_aggregation: "yes"
+      tier: lb
+      type: cloudflare
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: gitlab_zone
+      global_aggregation: "no"
+      regional_aggregation: "no"
+      service_aggregation: "yes"
+      tier: lb
+      type: cloudflare
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:
@@ -3570,6 +3570,24 @@ groups:
       service_aggregation: "yes"
       tier: stor
       type: google-cloud-storage
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: rails_request
+      global_aggregation: "no"
+      regional_aggregation: "yes"
+      service_aggregation: "yes"
+      tier: sv
+      type: internal-api
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: workhorse
+      global_aggregation: "no"
+      regional_aggregation: "yes"
+      service_aggregation: "no"
+      tier: sv
+      type: internal-api
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:
@@ -4001,105 +4019,6 @@ groups:
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: db
-      type: patroni
-    expr: "1"
-  - record: gitlab_component_service:mapping
-    labels:
-      component: rails_primary_sql
-      global_aggregation: "no"
-      regional_aggregation: "no"
-      service_aggregation: "yes"
-      tier: db
-      type: patroni
-    expr: "1"
-  - record: gitlab_component_service:mapping
-    labels:
-      component: rails_replica_sql
-      global_aggregation: "no"
-      regional_aggregation: "no"
-      service_aggregation: "yes"
-      tier: db
-      type: patroni
-    expr: "1"
-  - record: gitlab_component_service:mapping
-    labels:
-      component: transactions_primary
-      global_aggregation: "no"
-      regional_aggregation: "no"
-      service_aggregation: "yes"
-      tier: db
-      type: patroni
-    expr: "1"
-  - record: gitlab_component_service:mapping
-    labels:
-      component: transactions_replica
-      global_aggregation: "no"
-      regional_aggregation: "no"
-      service_aggregation: "yes"
-      tier: db
-      type: patroni
-    expr: "1"
-  - record: gitlab_component_service:mapping
-    labels:
-      component: pgbouncer
-      global_aggregation: "no"
-      regional_aggregation: "no"
-      service_aggregation: "yes"
-      tier: db
-      type: patroni-registry
-    expr: "1"
-  - record: gitlab_component_service:mapping
-    labels:
-      component: transactions_primary
-      global_aggregation: "no"
-      regional_aggregation: "no"
-      service_aggregation: "yes"
-      tier: db
-      type: patroni-registry
-    expr: "1"
-  - record: gitlab_component_service:mapping
-    labels:
-      component: transactions_replica
-      global_aggregation: "no"
-      regional_aggregation: "no"
-      service_aggregation: "yes"
-      tier: db
-      type: patroni-registry
-    expr: "1"
-  - record: gitlab_component_service:mapping
-    labels:
-      component: pgbouncer
-      global_aggregation: "no"
-      regional_aggregation: "no"
-      service_aggregation: "yes"
-      tier: db
-      type: patroni-embedding
-    expr: "1"
-  - record: gitlab_component_service:mapping
-    labels:
-      component: transactions_primary
-      global_aggregation: "no"
-      regional_aggregation: "no"
-      service_aggregation: "yes"
-      tier: db
-      type: patroni-embedding
-    expr: "1"
-  - record: gitlab_component_service:mapping
-    labels:
-      component: transactions_replica
-      global_aggregation: "no"
-      regional_aggregation: "no"
-      service_aggregation: "yes"
-      tier: db
-      type: patroni-embedding
-    expr: "1"
-  - record: gitlab_component_service:mapping
-    labels:
-      component: pgbouncer
-      global_aggregation: "no"
-      regional_aggregation: "no"
-      service_aggregation: "yes"
-      tier: db
       type: patroni-ci
     expr: "1"
   - record: gitlab_component_service:mapping
@@ -4140,12 +4059,102 @@ groups:
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:
-      component: transactions
+      component: pgbouncer
       global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: db
-      type: postgres-archive
+      type: patroni-embedding
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: transactions_primary
+      global_aggregation: "no"
+      regional_aggregation: "no"
+      service_aggregation: "yes"
+      tier: db
+      type: patroni-embedding
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: transactions_replica
+      global_aggregation: "no"
+      regional_aggregation: "no"
+      service_aggregation: "yes"
+      tier: db
+      type: patroni-embedding
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: pgbouncer
+      global_aggregation: "no"
+      regional_aggregation: "no"
+      service_aggregation: "yes"
+      tier: db
+      type: patroni-registry
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: transactions_primary
+      global_aggregation: "no"
+      regional_aggregation: "no"
+      service_aggregation: "yes"
+      tier: db
+      type: patroni-registry
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: transactions_replica
+      global_aggregation: "no"
+      regional_aggregation: "no"
+      service_aggregation: "yes"
+      tier: db
+      type: patroni-registry
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: pgbouncer
+      global_aggregation: "no"
+      regional_aggregation: "no"
+      service_aggregation: "yes"
+      tier: db
+      type: patroni
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: rails_primary_sql
+      global_aggregation: "no"
+      regional_aggregation: "no"
+      service_aggregation: "yes"
+      tier: db
+      type: patroni
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: rails_replica_sql
+      global_aggregation: "no"
+      regional_aggregation: "no"
+      service_aggregation: "yes"
+      tier: db
+      type: patroni
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: transactions_primary
+      global_aggregation: "no"
+      regional_aggregation: "no"
+      service_aggregation: "yes"
+      tier: db
+      type: patroni
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: transactions_replica
+      global_aggregation: "no"
+      regional_aggregation: "no"
+      service_aggregation: "yes"
+      tier: db
+      type: patroni
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:
@@ -4154,16 +4163,7 @@ groups:
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: db
-      type: pgbouncer
-    expr: "1"
-  - record: gitlab_component_service:mapping
-    labels:
-      component: service
-      global_aggregation: "no"
-      regional_aggregation: "no"
-      service_aggregation: "yes"
-      tier: db
-      type: pgbouncer-registry
+      type: pgbouncer-ci
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:
@@ -4181,7 +4181,16 @@ groups:
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: db
-      type: pgbouncer-ci
+      type: pgbouncer-registry
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: service
+      global_aggregation: "no"
+      regional_aggregation: "no"
+      service_aggregation: "yes"
+      tier: db
+      type: pgbouncer
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:
@@ -4194,6 +4203,15 @@ groups:
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:
+      component: transactions
+      global_aggregation: "no"
+      regional_aggregation: "no"
+      service_aggregation: "yes"
+      tier: db
+      type: postgres-archive
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
       component: primary_server
       global_aggregation: "no"
       regional_aggregation: "no"
@@ -4235,6 +4253,33 @@ groups:
       regional_aggregation: "no"
       service_aggregation: "no"
       tier: db
+      type: redis-cluster-chat-cache
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: rails_redis_client
+      global_aggregation: "no"
+      regional_aggregation: "no"
+      service_aggregation: "yes"
+      tier: db
+      type: redis-cluster-chat-cache
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: secondary_servers
+      global_aggregation: "no"
+      regional_aggregation: "no"
+      service_aggregation: "no"
+      tier: db
+      type: redis-cluster-chat-cache
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: primary_server
+      global_aggregation: "no"
+      regional_aggregation: "no"
+      service_aggregation: "no"
+      tier: db
       type: redis-cluster-feature-flag
     expr: "1"
   - record: gitlab_component_service:mapping
@@ -4271,7 +4316,7 @@ groups:
       regional_aggregation: "no"
       service_aggregation: "no"
       tier: db
-      type: redis-cluster-shared-state
+      type: redis-cluster-queues-meta
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:
@@ -4280,7 +4325,7 @@ groups:
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: db
-      type: redis-cluster-shared-state
+      type: redis-cluster-queues-meta
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:
@@ -4289,7 +4334,7 @@ groups:
       regional_aggregation: "no"
       service_aggregation: "no"
       tier: db
-      type: redis-cluster-shared-state
+      type: redis-cluster-queues-meta
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:
@@ -4298,7 +4343,7 @@ groups:
       regional_aggregation: "no"
       service_aggregation: "no"
       tier: db
-      type: redis-cluster-queues-meta
+      type: redis-cluster-ratelimiting
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:
@@ -4307,7 +4352,7 @@ groups:
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: db
-      type: redis-cluster-queues-meta
+      type: redis-cluster-ratelimiting
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:
@@ -4316,7 +4361,7 @@ groups:
       regional_aggregation: "no"
       service_aggregation: "no"
       tier: db
-      type: redis-cluster-queues-meta
+      type: redis-cluster-ratelimiting
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:
@@ -4361,7 +4406,7 @@ groups:
       regional_aggregation: "no"
       service_aggregation: "no"
       tier: db
-      type: redis-sidekiq
+      type: redis-cluster-shared-state
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:
@@ -4370,7 +4415,7 @@ groups:
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: db
-      type: redis-sidekiq
+      type: redis-cluster-shared-state
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:
@@ -4379,7 +4424,7 @@ groups:
       regional_aggregation: "no"
       service_aggregation: "no"
       tier: db
-      type: redis-sidekiq
+      type: redis-cluster-shared-state
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:
@@ -4388,7 +4433,7 @@ groups:
       regional_aggregation: "no"
       service_aggregation: "no"
       tier: db
-      type: redis-tracechunks
+      type: redis-db-load-balancing
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:
@@ -4397,7 +4442,7 @@ groups:
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: db
-      type: redis-tracechunks
+      type: redis-db-load-balancing
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:
@@ -4406,7 +4451,7 @@ groups:
       regional_aggregation: "no"
       service_aggregation: "no"
       tier: db
-      type: redis-tracechunks
+      type: redis-db-load-balancing
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:
@@ -4415,7 +4460,7 @@ groups:
       regional_aggregation: "no"
       service_aggregation: "no"
       tier: db
-      type: redis-cluster-ratelimiting
+      type: redis-pubsub
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:
@@ -4424,7 +4469,7 @@ groups:
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: db
-      type: redis-cluster-ratelimiting
+      type: redis-pubsub
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:
@@ -4433,61 +4478,7 @@ groups:
       regional_aggregation: "no"
       service_aggregation: "no"
       tier: db
-      type: redis-cluster-ratelimiting
-    expr: "1"
-  - record: gitlab_component_service:mapping
-    labels:
-      component: primary_server
-      global_aggregation: "no"
-      regional_aggregation: "no"
-      service_aggregation: "no"
-      tier: db
-      type: redis-cluster-chat-cache
-    expr: "1"
-  - record: gitlab_component_service:mapping
-    labels:
-      component: rails_redis_client
-      global_aggregation: "no"
-      regional_aggregation: "no"
-      service_aggregation: "yes"
-      tier: db
-      type: redis-cluster-chat-cache
-    expr: "1"
-  - record: gitlab_component_service:mapping
-    labels:
-      component: secondary_servers
-      global_aggregation: "no"
-      regional_aggregation: "no"
-      service_aggregation: "no"
-      tier: db
-      type: redis-cluster-chat-cache
-    expr: "1"
-  - record: gitlab_component_service:mapping
-    labels:
-      component: primary_server
-      global_aggregation: "no"
-      regional_aggregation: "no"
-      service_aggregation: "no"
-      tier: db
-      type: redis-sessions
-    expr: "1"
-  - record: gitlab_component_service:mapping
-    labels:
-      component: rails_redis_client
-      global_aggregation: "no"
-      regional_aggregation: "no"
-      service_aggregation: "yes"
-      tier: db
-      type: redis-sessions
-    expr: "1"
-  - record: gitlab_component_service:mapping
-    labels:
-      component: secondary_servers
-      global_aggregation: "no"
-      regional_aggregation: "no"
-      service_aggregation: "no"
-      tier: db
-      type: redis-sessions
+      type: redis-pubsub
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:
@@ -4523,7 +4514,7 @@ groups:
       regional_aggregation: "no"
       service_aggregation: "no"
       tier: db
-      type: redis-db-load-balancing
+      type: redis-sessions
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:
@@ -4532,7 +4523,7 @@ groups:
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: db
-      type: redis-db-load-balancing
+      type: redis-sessions
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:
@@ -4541,7 +4532,7 @@ groups:
       regional_aggregation: "no"
       service_aggregation: "no"
       tier: db
-      type: redis-db-load-balancing
+      type: redis-sessions
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:
@@ -4550,7 +4541,7 @@ groups:
       regional_aggregation: "no"
       service_aggregation: "no"
       tier: db
-      type: redis-pubsub
+      type: redis-sidekiq
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:
@@ -4559,7 +4550,7 @@ groups:
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: db
-      type: redis-pubsub
+      type: redis-sidekiq
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:
@@ -4568,7 +4559,34 @@ groups:
       regional_aggregation: "no"
       service_aggregation: "no"
       tier: db
-      type: redis-pubsub
+      type: redis-sidekiq
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: primary_server
+      global_aggregation: "no"
+      regional_aggregation: "no"
+      service_aggregation: "no"
+      tier: db
+      type: redis-tracechunks
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: rails_redis_client
+      global_aggregation: "no"
+      regional_aggregation: "no"
+      service_aggregation: "yes"
+      tier: db
+      type: redis-tracechunks
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: secondary_servers
+      global_aggregation: "no"
+      regional_aggregation: "no"
+      service_aggregation: "no"
+      tier: db
+      type: redis-tracechunks
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:
@@ -4848,24 +4866,6 @@ groups:
       service_aggregation: "yes"
       tier: inf
       type: vault
-    expr: "1"
-  - record: gitlab_component_service:mapping
-    labels:
-      component: gitlab_net_zone
-      global_aggregation: "no"
-      regional_aggregation: "no"
-      service_aggregation: "yes"
-      tier: lb
-      type: waf
-    expr: "1"
-  - record: gitlab_component_service:mapping
-    labels:
-      component: gitlab_zone
-      global_aggregation: "no"
-      regional_aggregation: "no"
-      service_aggregation: "yes"
-      tier: lb
-      type: waf
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:
