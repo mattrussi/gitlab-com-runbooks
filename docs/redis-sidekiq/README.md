@@ -21,6 +21,7 @@
 * [A survival guide for SREs to working with Redis at GitLab](../redis/redis-survival-guide-for-sres.md)
 * [../redis/redis.md](../redis/redis.md)
 * [Sidekiq queue migration](../sidekiq/queue-migration.md)
+* [../sidekiq/sharding.md](../sidekiq/sharding.md)
 * [A survival guide for SREs to working with Sidekiq at GitLab](../sidekiq/sidekiq-survival-guide-for-sres.md)
 <!-- END_MARKER -->
 
