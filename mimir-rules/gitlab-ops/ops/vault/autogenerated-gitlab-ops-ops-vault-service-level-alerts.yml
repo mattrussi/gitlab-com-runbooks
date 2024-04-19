@@ -40,18 +40,18 @@ groups:
     expr: |
       (
         (
-          gitlab_component_apdex:ratio_1h{component="istio_internal_ingress",env="gprd",monitor="global",type="vault"}
+          gitlab_component_apdex:ratio_1h{component="istio_internal_ingress",env="ops",monitor="global",type="vault"}
           < (1 - 14.4 * 0.001000)
         )
         and
         (
-          gitlab_component_apdex:ratio_5m{component="istio_internal_ingress",env="gprd",monitor="global",type="vault"}
+          gitlab_component_apdex:ratio_5m{component="istio_internal_ingress",env="ops",monitor="global",type="vault"}
           < (1 - 14.4 * 0.001000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="istio_internal_ingress",env="gprd",monitor="global",type="vault"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="istio_internal_ingress",env="ops",monitor="global",type="vault"}) >= 1
       )
   - alert: VaultServiceIstioInternalIngressApdexSLOViolation
     for: 2m
@@ -89,18 +89,18 @@ groups:
     expr: |
       (
         (
-          gitlab_component_apdex:ratio_6h{component="istio_internal_ingress",env="gprd",monitor="global",type="vault"}
+          gitlab_component_apdex:ratio_6h{component="istio_internal_ingress",env="ops",monitor="global",type="vault"}
           < (1 - 6 * 0.001000)
         )
         and
         (
-          gitlab_component_apdex:ratio_30m{component="istio_internal_ingress",env="gprd",monitor="global",type="vault"}
+          gitlab_component_apdex:ratio_30m{component="istio_internal_ingress",env="ops",monitor="global",type="vault"}
           < (1 - 6 * 0.001000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="istio_internal_ingress",env="gprd",monitor="global",type="vault"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="istio_internal_ingress",env="ops",monitor="global",type="vault"}) >= 0.16667
       )
   - alert: VaultServiceIstioInternalIngressErrorSLOViolation
     for: 2m
@@ -135,18 +135,18 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_1h{component="istio_internal_ingress",env="gprd",monitor="global",type="vault"}
+          gitlab_component_errors:ratio_1h{component="istio_internal_ingress",env="ops",monitor="global",type="vault"}
           > (14.4 * 0.001000)
         )
         and
         (
-          gitlab_component_errors:ratio_5m{component="istio_internal_ingress",env="gprd",monitor="global",type="vault"}
+          gitlab_component_errors:ratio_5m{component="istio_internal_ingress",env="ops",monitor="global",type="vault"}
           > (14.4 * 0.001000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="istio_internal_ingress",env="gprd",monitor="global",type="vault"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="istio_internal_ingress",env="ops",monitor="global",type="vault"}) >= 1
       )
   - alert: VaultServiceIstioInternalIngressErrorSLOViolation
     for: 2m
@@ -181,18 +181,18 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_6h{component="istio_internal_ingress",env="gprd",monitor="global",type="vault"}
+          gitlab_component_errors:ratio_6h{component="istio_internal_ingress",env="ops",monitor="global",type="vault"}
           > (6 * 0.001000)
         )
         and
         (
-          gitlab_component_errors:ratio_30m{component="istio_internal_ingress",env="gprd",monitor="global",type="vault"}
+          gitlab_component_errors:ratio_30m{component="istio_internal_ingress",env="ops",monitor="global",type="vault"}
           > (6 * 0.001000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="istio_internal_ingress",env="gprd",monitor="global",type="vault"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="istio_internal_ingress",env="ops",monitor="global",type="vault"}) >= 0.16667
       )
   - alert: VaultServiceIstioPublicIngressApdexSLOViolation
     for: 2m
@@ -230,18 +230,18 @@ groups:
     expr: |
       (
         (
-          gitlab_component_apdex:ratio_1h{component="istio_public_ingress",env="gprd",monitor="global",type="vault"}
+          gitlab_component_apdex:ratio_1h{component="istio_public_ingress",env="ops",monitor="global",type="vault"}
           < (1 - 14.4 * 0.001000)
         )
         and
         (
-          gitlab_component_apdex:ratio_5m{component="istio_public_ingress",env="gprd",monitor="global",type="vault"}
+          gitlab_component_apdex:ratio_5m{component="istio_public_ingress",env="ops",monitor="global",type="vault"}
           < (1 - 14.4 * 0.001000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="istio_public_ingress",env="gprd",monitor="global",type="vault"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="istio_public_ingress",env="ops",monitor="global",type="vault"}) >= 1
       )
   - alert: VaultServiceIstioPublicIngressApdexSLOViolation
     for: 2m
@@ -279,18 +279,18 @@ groups:
     expr: |
       (
         (
-          gitlab_component_apdex:ratio_6h{component="istio_public_ingress",env="gprd",monitor="global",type="vault"}
+          gitlab_component_apdex:ratio_6h{component="istio_public_ingress",env="ops",monitor="global",type="vault"}
           < (1 - 6 * 0.001000)
         )
         and
         (
-          gitlab_component_apdex:ratio_30m{component="istio_public_ingress",env="gprd",monitor="global",type="vault"}
+          gitlab_component_apdex:ratio_30m{component="istio_public_ingress",env="ops",monitor="global",type="vault"}
           < (1 - 6 * 0.001000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="istio_public_ingress",env="gprd",monitor="global",type="vault"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="istio_public_ingress",env="ops",monitor="global",type="vault"}) >= 0.16667
       )
   - alert: VaultServiceIstioPublicIngressErrorSLOViolation
     for: 2m
@@ -325,18 +325,18 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_1h{component="istio_public_ingress",env="gprd",monitor="global",type="vault"}
+          gitlab_component_errors:ratio_1h{component="istio_public_ingress",env="ops",monitor="global",type="vault"}
           > (14.4 * 0.001000)
         )
         and
         (
-          gitlab_component_errors:ratio_5m{component="istio_public_ingress",env="gprd",monitor="global",type="vault"}
+          gitlab_component_errors:ratio_5m{component="istio_public_ingress",env="ops",monitor="global",type="vault"}
           > (14.4 * 0.001000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="istio_public_ingress",env="gprd",monitor="global",type="vault"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="istio_public_ingress",env="ops",monitor="global",type="vault"}) >= 1
       )
   - alert: VaultServiceIstioPublicIngressErrorSLOViolation
     for: 2m
@@ -371,18 +371,18 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_6h{component="istio_public_ingress",env="gprd",monitor="global",type="vault"}
+          gitlab_component_errors:ratio_6h{component="istio_public_ingress",env="ops",monitor="global",type="vault"}
           > (6 * 0.001000)
         )
         and
         (
-          gitlab_component_errors:ratio_30m{component="istio_public_ingress",env="gprd",monitor="global",type="vault"}
+          gitlab_component_errors:ratio_30m{component="istio_public_ingress",env="ops",monitor="global",type="vault"}
           > (6 * 0.001000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="istio_public_ingress",env="gprd",monitor="global",type="vault"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="istio_public_ingress",env="ops",monitor="global",type="vault"}) >= 0.16667
       )
   - alert: VaultServiceVaultAuditLogRequestErrorSLOViolation
     for: 2m
@@ -419,18 +419,18 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_1h{component="vault_audit_log_request",env="gprd",monitor="global",type="vault"}
+          gitlab_component_errors:ratio_1h{component="vault_audit_log_request",env="ops",monitor="global",type="vault"}
           > (14.4 * 0.001000)
         )
         and
         (
-          gitlab_component_errors:ratio_5m{component="vault_audit_log_request",env="gprd",monitor="global",type="vault"}
+          gitlab_component_errors:ratio_5m{component="vault_audit_log_request",env="ops",monitor="global",type="vault"}
           > (14.4 * 0.001000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="vault_audit_log_request",env="gprd",monitor="global",type="vault"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="vault_audit_log_request",env="ops",monitor="global",type="vault"}) >= 1
       )
   - alert: VaultServiceVaultAuditLogRequestErrorSLOViolation
     for: 2m
@@ -467,18 +467,18 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_6h{component="vault_audit_log_request",env="gprd",monitor="global",type="vault"}
+          gitlab_component_errors:ratio_6h{component="vault_audit_log_request",env="ops",monitor="global",type="vault"}
           > (6 * 0.001000)
         )
         and
         (
-          gitlab_component_errors:ratio_30m{component="vault_audit_log_request",env="gprd",monitor="global",type="vault"}
+          gitlab_component_errors:ratio_30m{component="vault_audit_log_request",env="ops",monitor="global",type="vault"}
           > (6 * 0.001000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="vault_audit_log_request",env="gprd",monitor="global",type="vault"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="vault_audit_log_request",env="ops",monitor="global",type="vault"}) >= 0.16667
       )
   - alert: VaultServiceVaultAuditLogResponseErrorSLOViolation
     for: 2m
@@ -515,18 +515,18 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_1h{component="vault_audit_log_response",env="gprd",monitor="global",type="vault"}
+          gitlab_component_errors:ratio_1h{component="vault_audit_log_response",env="ops",monitor="global",type="vault"}
           > (14.4 * 0.001000)
         )
         and
         (
-          gitlab_component_errors:ratio_5m{component="vault_audit_log_response",env="gprd",monitor="global",type="vault"}
+          gitlab_component_errors:ratio_5m{component="vault_audit_log_response",env="ops",monitor="global",type="vault"}
           > (14.4 * 0.001000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="vault_audit_log_response",env="gprd",monitor="global",type="vault"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="vault_audit_log_response",env="ops",monitor="global",type="vault"}) >= 1
       )
   - alert: VaultServiceVaultAuditLogResponseErrorSLOViolation
     for: 2m
@@ -563,18 +563,18 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_6h{component="vault_audit_log_response",env="gprd",monitor="global",type="vault"}
+          gitlab_component_errors:ratio_6h{component="vault_audit_log_response",env="ops",monitor="global",type="vault"}
           > (6 * 0.001000)
         )
         and
         (
-          gitlab_component_errors:ratio_30m{component="vault_audit_log_response",env="gprd",monitor="global",type="vault"}
+          gitlab_component_errors:ratio_30m{component="vault_audit_log_response",env="ops",monitor="global",type="vault"}
           > (6 * 0.001000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="vault_audit_log_response",env="gprd",monitor="global",type="vault"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="vault_audit_log_response",env="ops",monitor="global",type="vault"}) >= 0.16667
       )
   - alert: VaultServiceVaultGoogleLbErrorSLOViolation
     for: 2m
@@ -609,18 +609,18 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_1h{component="vault_google_lb",env="gprd",monitor="global",type="vault"}
+          gitlab_component_errors:ratio_1h{component="vault_google_lb",env="ops",monitor="global",type="vault"}
           > (14.4 * 0.001000)
         )
         and
         (
-          gitlab_component_errors:ratio_5m{component="vault_google_lb",env="gprd",monitor="global",type="vault"}
+          gitlab_component_errors:ratio_5m{component="vault_google_lb",env="ops",monitor="global",type="vault"}
           > (14.4 * 0.001000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="vault_google_lb",env="gprd",monitor="global",type="vault"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="vault_google_lb",env="ops",monitor="global",type="vault"}) >= 1
       )
   - alert: VaultServiceVaultGoogleLbErrorSLOViolation
     for: 2m
@@ -655,16 +655,16 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_6h{component="vault_google_lb",env="gprd",monitor="global",type="vault"}
+          gitlab_component_errors:ratio_6h{component="vault_google_lb",env="ops",monitor="global",type="vault"}
           > (6 * 0.001000)
         )
         and
         (
-          gitlab_component_errors:ratio_30m{component="vault_google_lb",env="gprd",monitor="global",type="vault"}
+          gitlab_component_errors:ratio_30m{component="vault_google_lb",env="ops",monitor="global",type="vault"}
           > (6 * 0.001000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="vault_google_lb",env="gprd",monitor="global",type="vault"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="vault_google_lb",env="ops",monitor="global",type="vault"}) >= 0.16667
       )
