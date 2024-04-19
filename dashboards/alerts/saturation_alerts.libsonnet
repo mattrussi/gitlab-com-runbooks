@@ -29,7 +29,7 @@ local selector = { env: '$environment', type: '$type', stage: '$stage' };
       template.new(
         'type',
         '$PROMETHEUS_DS',
-        'label_values(gitlab_service_ops:rate{environment="$environment"}, type)',
+        'label_values(gitlab_service_ops:rate_1h{environment="$environment"}, type)',
         current=defaultType,
         refresh='load',
         sort=1,
