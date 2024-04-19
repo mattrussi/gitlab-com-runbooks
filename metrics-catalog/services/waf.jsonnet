@@ -4,6 +4,7 @@ local rateMetric = metricsCatalog.rateMetric;
 metricsCatalog.serviceDefinition({
   type: 'waf',
   tier: 'lb',
+  tenants: [ 'gitlab-gprd', 'gitlab-gstg', 'gitlab-pre' ],
   monitoringThresholds: {
     // Error SLO disabled as monitoring data is unreliable.
     // See: https://gitlab.com/gitlab-com/gl-infra/production/-/issues/5465
