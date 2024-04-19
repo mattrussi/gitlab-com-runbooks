@@ -1956,10 +1956,10 @@ services:
         primary_grafana_dashboard: USVj3qHmk/logging
         sentry_slug:
 
-  - name: waf
+  - name: cloudflare
     tier: lb
     friendly_name: Cloudflare Web Application Firewall
-    label: WAF
+    label: cloudflare
     owner: reliability_foundations
     technical:
       project:
@@ -1967,7 +1967,7 @@ services:
         design:
         architecture:
         readiness_review: https://gitlab.com/gitlab-com/gl-infra/readiness/-/tree/master/cloudflare
-        sre_guide: https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/waf
+        sre_guide: https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/cloudflare
         developer_guide:
         service:
         security:
@@ -1977,7 +1977,7 @@ services:
           permalink:
     observability:
       monitors:
-        primary_grafana_dashboard: waf-main
+        primary_grafana_dashboard: cloudflare-main
         sentry_slug:
 
   - name: vault
