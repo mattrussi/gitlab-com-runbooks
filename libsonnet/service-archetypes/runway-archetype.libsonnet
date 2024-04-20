@@ -3,8 +3,9 @@ local histogramApdex = metricsCatalog.histogramApdex;
 local gaugeMetric = metricsCatalog.gaugeMetric;
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 local runwayHelper = import 'service-archetypes/helpers/runway.libsonnet';
+local googleLoadBalancerComponents = import 'services/lib/google_load_balancer_components.libsonnet';
 
-// Default SLIs/SLOs for Runway services
+// Default Runway SLIs
 function(
   type,
   team,
@@ -16,7 +17,8 @@ function(
   trafficCessationAlertConfig=true,
   severity='s4',
   customToolingLinks=[],
-  regional=false
+  regional=false,
+  externalLoadBalancer=true
 )
   local baseSelector = { type: type };
   {
@@ -96,6 +98,22 @@ function(
           ),
         ] + customToolingLinks,
       },
+
+      [if externalLoadBalancer then 'runway_lb']: googleLoadBalancerComponents.googleLoadBalancer(
+        userImpacting=userImpacting,
+        trafficCessationAlertConfig=trafficCessationAlertConfig,
+        team=team,
+        featureCategory=featureCategory,
+        loadBalancerName='%(type)s-url-map' % type,
+        projectId='gitlab-runway-production',
+        emittedBy=[],
+        selector={ job: 'runway-exporter', url_map_name: '%(type)s-url-map' % type },
+        extra={
+          description: |||
+            External load balancer serving global HTTP requests for the Runway service.
+          |||,
+        },
+      ),
     },
 
     skippedMaturityCriteria: {
