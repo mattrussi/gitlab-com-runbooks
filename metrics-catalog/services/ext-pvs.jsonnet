@@ -1,8 +1,5 @@
 local runwayArchetype = import 'service-archetypes/runway-archetype.libsonnet';
 local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
-local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
-
-local baseSelector = { type: 'ext-pvs' };
 
 metricsCatalog.serviceDefinition(
   // Default Runway SLIs
