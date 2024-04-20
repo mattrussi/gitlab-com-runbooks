@@ -15,9 +15,15 @@ local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
     team=null,
     trafficCessationAlertConfig=true,
     additionalToolingLinks=[],
+    emittedBy=['monitoring'],
+    selector=null,
     extra={},
   )::
-    local baseSelector = { url_map_name: loadBalancerName, project_id: projectId };
+    local baseSelector =
+      if selector != null then
+        selector
+      else
+        { url_map_name: loadBalancerName, project_id: projectId };
 
     metricsCatalog.serviceLevelIndicatorDefinition(extra {
       userImpacting: userImpacting,
@@ -42,7 +48,7 @@ local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
         selector=baseSelector { response_code_class: '500' },
       ),
 
-      emittedBy: ['monitoring'],
+      emittedBy: emittedBy,
 
       significantLabels: ['proxy_continent', 'response_code'],
 
