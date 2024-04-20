@@ -765,6 +765,350 @@ groups:
       gitlab_regional_sli_ops:rate_5m{component="runway_ingress",env="ops",monitor="global",stage="main",type="ai-gateway"} offset 1h
       unless
       gitlab_regional_sli_ops:rate_5m{component="runway_ingress",env="ops",monitor="global",stage="main",type="ai-gateway"}
+  - alert: AiGatewayServiceRunwayLbErrorSLOViolation
+    for: 2m
+    annotations:
+      title: The runway_lb SLI of the ai-gateway service (`{{ $labels.stage }}` stage)
+        has an error rate violating SLO
+      description: |
+        External load balancer serving global HTTP requests for the Runway service.
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "812057818"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{environment="{{ $labels.environment }}",job="runway-exporter",response_code_class="500",stage="{{ $labels.stage }}",url_map_name="ai-gateway-url-map"}[5m])
+        )
+      runbook: docs/ai-gateway/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: code_suggestions
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: error
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 1h
+    expr: |
+      (
+        (
+          gitlab_component_errors:ratio_1h{component="runway_lb",env="ops",monitor="global",type="ai-gateway"}
+          > (14.4 * 0.020000)
+        )
+        and
+        (
+          gitlab_component_errors:ratio_5m{component="runway_lb",env="ops",monitor="global",type="ai-gateway"}
+          > (14.4 * 0.020000)
+        )
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="runway_lb",env="ops",monitor="global",type="ai-gateway"}) >= 1
+      )
+  - alert: AiGatewayServiceRunwayLbErrorSLOViolation
+    for: 2m
+    annotations:
+      title: The runway_lb SLI of the ai-gateway service (`{{ $labels.stage }}` stage)
+        has an error rate violating SLO
+      description: |
+        External load balancer serving global HTTP requests for the Runway service.
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "812057818"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{environment="{{ $labels.environment }}",job="runway-exporter",response_code_class="500",stage="{{ $labels.stage }}",url_map_name="ai-gateway-url-map"}[5m])
+        )
+      runbook: docs/ai-gateway/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: code_suggestions
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: error
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+    expr: |
+      (
+        (
+          gitlab_component_errors:ratio_6h{component="runway_lb",env="ops",monitor="global",type="ai-gateway"}
+          > (6 * 0.020000)
+        )
+        and
+        (
+          gitlab_component_errors:ratio_30m{component="runway_lb",env="ops",monitor="global",type="ai-gateway"}
+          > (6 * 0.020000)
+        )
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="runway_lb",env="ops",monitor="global",type="ai-gateway"}) >= 0.16667
+      )
+  - alert: AiGatewayServiceRunwayLbErrorSLOViolationRegional
+    for: 2m
+    annotations:
+      title: The runway_lb SLI of the ai-gateway service in region `{{ $labels.region
+        }}` has an error rate violating SLO
+      description: |
+        External load balancer serving global HTTP requests for the Runway service.
+
+        Note that this alert is specific to the `{{ $labels.region }}` region.
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "812057818"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage,region,location) (
+          rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{environment="{{ $labels.environment }}",job="runway-exporter",location="{{ $labels.location }}",region="{{ $labels.region }}",response_code_class="500",stage="{{ $labels.stage }}",url_map_name="ai-gateway-url-map"}[5m])
+        )
+      runbook: docs/ai-gateway/README.md
+    labels:
+      aggregation: regional_component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: code_suggestions
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: error
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 1h
+    expr: |
+      (
+        (
+          gitlab_regional_sli_errors:ratio_1h{component="runway_lb",env="ops",monitor="global",type="ai-gateway"}
+          > (14.4 * 0.020000)
+        )
+        and
+        (
+          gitlab_regional_sli_errors:ratio_5m{component="runway_lb",env="ops",monitor="global",type="ai-gateway"}
+          > (14.4 * 0.020000)
+        )
+      )
+      and on(env,environment,tier,type,stage,region,location,component)
+      (
+        sum by(env,environment,tier,type,stage,region,location,component) (gitlab_regional_sli_ops:rate_1h{component="runway_lb",env="ops",monitor="global",type="ai-gateway"}) >= 1
+      )
+  - alert: AiGatewayServiceRunwayLbErrorSLOViolationRegional
+    for: 2m
+    annotations:
+      title: The runway_lb SLI of the ai-gateway service in region `{{ $labels.region
+        }}` has an error rate violating SLO
+      description: |
+        External load balancer serving global HTTP requests for the Runway service.
+
+        Note that this alert is specific to the `{{ $labels.region }}` region.
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "812057818"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage,region,location) (
+          rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{environment="{{ $labels.environment }}",job="runway-exporter",location="{{ $labels.location }}",region="{{ $labels.region }}",response_code_class="500",stage="{{ $labels.stage }}",url_map_name="ai-gateway-url-map"}[5m])
+        )
+      runbook: docs/ai-gateway/README.md
+    labels:
+      aggregation: regional_component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: code_suggestions
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: error
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+    expr: |
+      (
+        (
+          gitlab_regional_sli_errors:ratio_6h{component="runway_lb",env="ops",monitor="global",type="ai-gateway"}
+          > (6 * 0.020000)
+        )
+        and
+        (
+          gitlab_regional_sli_errors:ratio_30m{component="runway_lb",env="ops",monitor="global",type="ai-gateway"}
+          > (6 * 0.020000)
+        )
+      )
+      and on(env,environment,tier,type,stage,region,location,component)
+      (
+        sum by(env,environment,tier,type,stage,region,location,component) (gitlab_regional_sli_ops:rate_6h{component="runway_lb",env="ops",monitor="global",type="ai-gateway"}) >= 0.16667
+      )
+  - alert: AiGatewayServiceRunwayLbTrafficCessation
+    for: 5m
+    annotations:
+      title: The runway_lb SLI of the ai-gateway service (`{{ $labels.stage }}` stage)
+        has not received any traffic in the past 30m
+      description: |
+        External load balancer serving global HTTP requests for the Runway service.
+
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
+      grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "1782139780"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{environment="{{ $labels.environment }}",job="runway-exporter",stage="{{ $labels.stage }}",url_map_name="ai-gateway-url-map"}[5m])
+        )
+      runbook: docs/ai-gateway/README.md
+    labels:
+      aggregation: component
+      alert_class: traffic_cessation
+      alert_type: cause
+      feature_category: code_suggestions
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: ops
+      slo_alert: "no"
+      user_impacting: "yes"
+    expr: |
+      gitlab_component_ops:rate_30m{component="runway_lb",env="ops",monitor="global",stage="main",type="ai-gateway"} == 0
+      and
+      gitlab_component_ops:rate_30m{component="runway_lb",env="ops",monitor="global",stage="main",type="ai-gateway"} offset 1h >= 0.16666666666666666
+  - alert: AiGatewayServiceRunwayLbTrafficAbsent
+    for: 30m
+    annotations:
+      title: The runway_lb SLI of the ai-gateway service (`{{ $labels.stage }}` stage)
+        has not reported any traffic in the past 30m
+      description: |
+        External load balancer serving global HTTP requests for the Runway service.
+
+        This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
+
+        This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
+      grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "1782139780"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{environment="{{ $labels.environment }}",job="runway-exporter",stage="{{ $labels.stage }}",url_map_name="ai-gateway-url-map"}[5m])
+        )
+      runbook: docs/ai-gateway/README.md
+    labels:
+      aggregation: component
+      alert_class: traffic_cessation
+      alert_type: cause
+      feature_category: code_suggestions
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: ops
+      slo_alert: "no"
+      user_impacting: "yes"
+    expr: |
+      gitlab_component_ops:rate_5m{component="runway_lb",env="ops",monitor="global",stage="main",type="ai-gateway"} offset 1h
+      unless
+      gitlab_component_ops:rate_5m{component="runway_lb",env="ops",monitor="global",stage="main",type="ai-gateway"}
+  - alert: AiGatewayServiceRunwayLbTrafficCessationRegional
+    for: 5m
+    annotations:
+      title: The runway_lb SLI of the ai-gateway service in region `{{ $labels.region
+        }}` has not received any traffic in the past 30m
+      description: |
+        External load balancer serving global HTTP requests for the Runway service.
+
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
+
+        Note that this alert is specific to the `{{ $labels.region }}` region.
+      grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "1782139780"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage,region,location) (
+          rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{environment="{{ $labels.environment }}",job="runway-exporter",location="{{ $labels.location }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",url_map_name="ai-gateway-url-map"}[5m])
+        )
+      runbook: docs/ai-gateway/README.md
+    labels:
+      aggregation: regional_component
+      alert_class: traffic_cessation
+      alert_type: cause
+      feature_category: code_suggestions
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: ops
+      slo_alert: "no"
+      user_impacting: "yes"
+    expr: |
+      gitlab_regional_sli_ops:rate_30m{component="runway_lb",env="ops",monitor="global",stage="main",type="ai-gateway"} == 0
+      and
+      gitlab_regional_sli_ops:rate_30m{component="runway_lb",env="ops",monitor="global",stage="main",type="ai-gateway"} offset 1h >= 0.16666666666666666
+  - alert: AiGatewayServiceRunwayLbTrafficAbsentRegional
+    for: 30m
+    annotations:
+      title: The runway_lb SLI of the ai-gateway service in region `{{ $labels.region
+        }}` has not reported any traffic in the past 30m
+      description: |
+        External load balancer serving global HTTP requests for the Runway service.
+
+        This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
+
+        This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
+
+        Note that this alert is specific to the `{{ $labels.region }}` region.
+      grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "1782139780"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage,region,location) (
+          rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{environment="{{ $labels.environment }}",job="runway-exporter",location="{{ $labels.location }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",url_map_name="ai-gateway-url-map"}[5m])
+        )
+      runbook: docs/ai-gateway/README.md
+    labels:
+      aggregation: regional_component
+      alert_class: traffic_cessation
+      alert_type: cause
+      feature_category: code_suggestions
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: ops
+      slo_alert: "no"
+      user_impacting: "yes"
+    expr: |
+      gitlab_regional_sli_ops:rate_5m{component="runway_lb",env="ops",monitor="global",stage="main",type="ai-gateway"} offset 1h
+      unless
+      gitlab_regional_sli_ops:rate_5m{component="runway_lb",env="ops",monitor="global",stage="main",type="ai-gateway"}
   - alert: AiGatewayServiceServerApdexSLOViolation
     for: 2m
     annotations:
