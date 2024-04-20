@@ -10,6 +10,7 @@ metricsCatalog.serviceDefinition(
     errorRatio=0.999,
     apdexSatisfiedThreshold='4052.650622296292',
     trafficCessationAlertConfig=false,
+    externalLoadBalancer=false,
     customToolingLinks=[],
   )
 )
