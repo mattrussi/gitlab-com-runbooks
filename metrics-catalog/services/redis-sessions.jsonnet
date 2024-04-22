@@ -9,6 +9,7 @@ metricsCatalog.serviceDefinition(
     descriptiveName='Redis Sessions',
   )
   {
+    tenants: [ 'gitlab-gprd', 'gitlab-gstg', 'gitlab-pre' ],
     serviceLevelIndicators+: {
       rails_redis_client+: {
         description: |||
