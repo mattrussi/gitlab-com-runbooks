@@ -10,6 +10,7 @@ metricsCatalog.serviceDefinition(
     featureCategory='continuous_integration',
   )
   {
+    tenants: [ 'gitlab-gprd', 'gitlab-gstg', 'gitlab-pre' ],
     serviceLevelIndicators+: {
       rails_redis_client+: {
         description: |||
