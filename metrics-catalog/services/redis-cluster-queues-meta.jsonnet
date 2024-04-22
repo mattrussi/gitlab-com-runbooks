@@ -10,6 +10,7 @@ metricsCatalog.serviceDefinition(
     redisCluster=true
   )
   {
+    tenants: [ 'gitlab-gprd', 'gitlab-gstg', 'gitlab-pre' ],
     // disable alerts until we are receiving production traffic
     serviceLevelIndicators+: {
       rails_redis_client+: {
