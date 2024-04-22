@@ -10,6 +10,9 @@ metricsCatalog.serviceDefinition(
     railsStorageSelector=redisHelpers.storageSelector('buffered_counter'),
     descriptiveName='Persistent Redis',
   )
+  {
+    tenants: [ 'gitlab-gprd', 'gitlab-gstg', 'gitlab-pre' ],
+  }
   + redisHelpers.gitlabcomObservabilityToolingForRedis('redis')
   + {
     capacityPlanning: {
