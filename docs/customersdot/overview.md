@@ -20,6 +20,24 @@ The production and staging environments reside in Google Cloud projects.
 For remote access to the VMs, refer to
 [these instructions](https://gitlab.com/gitlab-org/customers-gitlab-com/-/blob/staging/doc/testing/staging.md#ssh-config)
 
+##### Break-glass procedure for SSH access
+
+SSH connectivity is normally established through Teleport. In the event that Teleport is unavailable, SREs can connect using SSH to the VMs through the [Identity-Aware Proxy](https://cloud.google.com/iap/docs/using-tcp-forwarding) (IAP). For this to work, you need to file an MR to add the necessary firewall rule:
+
+* [Staging](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/846107df82d30b78cb8c36c1410ad766dde9b15f/environments/stgsub/variables.tf#L212)
+* [Production](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/846107df82d30b78cb8c36c1410ad766dde9b15f/environments/prdsub/variables.tf#L225)
+
+**NOTE:** Ensure you revert the MR once you're back to using Teleport.
+
+Once the firewall rule has been added, you should be able to do the following:
+
+```sh
+gcloud --project <PROJECT_ID> compute ssh <USERNAME>@<VM_NAME> --tunnel-through-iap
+
+# Example:
+gcloud --project gitlab-subscriptions-staging compute ssh gservat@customers-01-inf-stgsub --tunnel-through-iap
+```
+
 #### CDN
 
 Both staging and production services are proxied through Cloudflare. Refer to
@@ -71,7 +89,7 @@ Here is [the main Grafana page for CustomersDot](https://dashboards.gitlab.net/d
 
 Access to the CustomerDot DB and Rails console is via [Teleport](https://gitlab.com/gitlab-org/customers-gitlab-com/-/blob/main/doc/setup/teleport.md)
 
-SREs have SSH access to the CustomerDot VMS for emergency access to the database. Ensure all database changes outside of Teleport or application code are retroactively approved via a change request following the [Infrastructure change request workflow](https://handbook.gitlab.com/handbook/engineering/infrastructure/change-management/#change-request-workflows)
+SREs have SSH access to the CustomerDot VMs for emergency access to the database. Ensure all database changes outside of Teleport or application code are retroactively approved via a change request following the [Infrastructure change request workflow](https://handbook.gitlab.com/handbook/engineering/infrastructure/change-management/#change-request-workflows)
 
 Once you have logged into the Staging or the Production VM, run one of these
 commands to open the database or the Rails console:
@@ -86,7 +104,7 @@ These scripts can be found in `/usr/local/bin/`.
 #### Application provisioning
 
 The provisioning of the CustomersDot application stack is done through the
-[CustomersDot Ansible project](https://gitlab.com/gitlab-com/gl-infra/customersdot-ansible).
+[CustomersDot Ansible project](https://gitlab.com/gitlab-com/gl-infra/customersdot-ansible). For staging and production, provisioning works through Teleport to reach the VMs. For `stgsub-ref`, it is still direct SSH access through the bastion.
 
 To provision CustomersDot in staging and production manually, please refer to [this documentation](https://gitlab.com/gitlab-com/gl-infra/customersdot-ansible/-/blob/master/doc/readme.md#manual-provisioning).
 
@@ -106,6 +124,8 @@ Alerts related to deployments are sent to the `#s_fulfillment_status` Slack chan
 
 If there's a need to restart services, please refer to this
 [restart documentation](https://gitlab.com/gitlab-org/customers-gitlab-com#restart-some-services).
+
+Similar to application provisioning, deployments in staging and production environments work through Teleport (not direct SSH). For `stgsub-ref`, it is still direct SSH via bastion.
 
 ### Change Management
 
