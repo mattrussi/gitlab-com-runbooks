@@ -1,0 +1,21 @@
+groups:
+- name: group-saml-login.rules
+  rules:
+  - alert: GroupSamplControllerErrors
+    expr: |
+      sum by (env,environment,stage) (
+        sli_aggregations:gitlab_sli_rails_request_error_total_rate1m{job="gitlab-rails", endpoint_id="Groups::OmniauthCallbacksController#group_saml", type= "web"} offset 30s
+        ) >= 0.01
+    for: 5m
+    labels:
+      severity: s2
+      alert_type: cause
+      team: manage
+      pager: pagerduty
+    annotations:
+      title: '1% of Group SAML login requests fail with 500 error'
+      description: |
+        The probably causes could be recently introduced application or database query changes.
+
+        This should be considered as service degradation and the reason should be investigated.
+      runbook: docs/frontend/high-error-rate.md
