@@ -1,7 +1,8 @@
 local separateMimirRecordingFiles = (import 'recording-rules/lib/mimir/separate-mimir-recording-files.libsonnet').separateMimirRecordingFiles;
 local saturationResources = import 'servicemetrics/saturation-resources.libsonnet';
 local saturationRules = import 'servicemetrics/saturation_rules.libsonnet';
-local monitoredServices = (import 'gitlab-metrics-config.libsonnet').monitoredServices;
+local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
+local monitoredServices = metricsCatalog.services;
 
 local metricsAndServices = [
   [saturationMetric, service]
@@ -55,13 +56,7 @@ local filesForSeparateSelector(service, selector, _extraArgs) =
 
 std.foldl(
   function(memo, serviceName)
-    local definitionsFound = std.filter(function(s) s.type == serviceName, monitoredServices);
-    local fakeDefinition = { type: serviceName };
-    local serviceDefinition = if std.length(definitionsFound) > 1
-    then std.trace('More than one service definition found for ' + serviceName, fakeDefinition)
-    else if std.length(definitionsFound) == 0
-    then std.trace('No service definition found for ' + serviceName, fakeDefinition)
-    else definitionsFound[0];
+    local serviceDefinition = metricsCatalog.getService(serviceName);
     memo + separateMimirRecordingFiles(filesForSeparateSelector, serviceDefinition),
   std.objectFields(resourcesByService),
   {}
