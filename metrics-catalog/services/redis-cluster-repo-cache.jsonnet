@@ -20,21 +20,8 @@ metricsCatalog.serviceDefinition(
       apdexScore: 0.9995,
     },
     serviceLevelIndicators+: {
-      rails_redis_client+: {
-        userImpacting: true,
-        severity: 's4',
-      },
-      primary_server+: {
-        userImpacting: true,
-        severity: 's4',
-      },
-      secondary_servers+: {
-        userImpacting: true,
-        severity: 's4',
-      },
       rails_cache: {
         userImpacting: true,
-        severity: 's4',
         featureCategory: 'not_owned',
         description: |||
           Rails ActiveSupport Cache operations against the Redis Cache
