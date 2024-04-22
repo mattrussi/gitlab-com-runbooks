@@ -13,6 +13,7 @@ metricsCatalog.serviceDefinition(
     redisCluster=true
   )
   {
+    tenants: [ 'gitlab-gprd', 'gitlab-gstg', 'gitlab-pre' ],
     monitoringThresholds+: {
       apdexScore: 0.9995,
     },
