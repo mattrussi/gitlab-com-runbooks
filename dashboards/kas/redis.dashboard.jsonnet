@@ -92,31 +92,20 @@ basic.dashboard(
   layout.titleRowWithPanels(
     'KAS Redis client metrics',
     layout.grid([
-        basic.multiTimeseries(
+        basic.timeseries(
           title='Number of %(displayName)s agent hash keys GC\'ed' % {displayName: expiringHash['displayName']},
-          description='`%(name)s` - Expiring Hash: number of deleted keys during GC and ScanAndGC' % {name: expiringHash['name']},
-          queries=[
-            {
-              query: |||
-                  sum ( increase(redis_expiring_hash_api_scan_and_gc_deleted_keys_count_total{expiring_hash_name="%(name)s", %(selector)s}[$__rate_interval]) )
-              ||| % {name: expiringHash['name'], selector: selectorString},
-              legendFormat: 'ScanAndGC',
-            },
-            {
-              query: |||
-                  sum ( increase(redis_expiring_hash_gc_deleted_keys_count_total{expiring_hash_name="%(name)s", %(selector)s}[$__rate_interval]) )
-              ||| % {name: expiringHash['name'], selector: selectorString},
-              legendFormat: 'GC',
-            }
-          ],
-          legend_show=true,
+          description='`%(name)s` - Expiring Hash: number of deleted keys during GC' % {name: expiringHash['name']},
+          query=|||
+              sum ( increase(redis_expiring_hash_api_gc_deleted_keys_count_total{expiring_hash_name="%(name)s", %(selector)s}[$__rate_interval]) )
+          ||| % {name: expiringHash['name'], selector: selectorString},
+          legend_show=false,
+          intervalFactor=2,
           linewidth=2,
-          stack=false,
         ) for expiringHash in [
-          {name: 'tunnels_by_agent_id', displayName: 'tunnels_by_agent_id'},
-          {name: 'connected_agents', displayName: 'connected agents'},
-          {name: 'connections_by_agent_id', displayName: 'connections by agent id'},
-          {name: 'connections_by_project_id', displayName: 'connections by project id'}
+           {name: 'tunnels_by_agent_id', displayName: 'tunnels_by_agent_id'},
+           {name: 'connected_agents', displayName: 'connected agents'},
+           {name: 'connections_by_agent_id', displayName: 'connections by agent id'},
+           {name: 'connections_by_project_id', displayName: 'connections by project id'}
         ]
     ], startRow=3000),
     collapse=false,
