@@ -5,6 +5,78 @@ groups:
   interval: 1m
   partial_response_strategy: warn
   rules:
+  - alert: SidekiqServiceEnqueuedJobsTrafficCessation
+    for: 5m
+    annotations:
+      title: The enqueued_jobs SLI of the sidekiq service (`{{ $labels.stage }}` stage)
+        has not received any traffic in the past 30m
+      description: |
+        The number of jobs enqueued by Sidekiq clients (api, web, sidekiq, etc).
+
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
+      grafana_dashboard_id: sidekiq-main/sidekiq-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "459286986"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(sidekiq_enqueued_jobs_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+        )
+      runbook: docs/sidekiq/README.md
+    labels:
+      aggregation: component
+      alert_class: traffic_cessation
+      alert_type: cause
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: ops
+      slo_alert: "no"
+      user_impacting: "yes"
+    expr: |
+      gitlab_component_ops:rate_30m{component="enqueued_jobs",env!~"gprd|ops",monitor="global",stage="main",type="sidekiq"} == 0
+      and
+      gitlab_component_ops:rate_30m{component="enqueued_jobs",env!~"gprd|ops",monitor="global",stage="main",type="sidekiq"} offset 1h >= 0.16666666666666666
+  - alert: SidekiqServiceEnqueuedJobsTrafficAbsent
+    for: 30m
+    annotations:
+      title: The enqueued_jobs SLI of the sidekiq service (`{{ $labels.stage }}` stage)
+        has not reported any traffic in the past 30m
+      description: |
+        The number of jobs enqueued by Sidekiq clients (api, web, sidekiq, etc).
+
+        This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
+
+        This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
+      grafana_dashboard_id: sidekiq-main/sidekiq-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "459286986"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(sidekiq_enqueued_jobs_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+        )
+      runbook: docs/sidekiq/README.md
+    labels:
+      aggregation: component
+      alert_class: traffic_cessation
+      alert_type: cause
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: ops
+      slo_alert: "no"
+      user_impacting: "yes"
+    expr: |
+      gitlab_component_ops:rate_5m{component="enqueued_jobs",env!~"gprd|ops",monitor="global",stage="main",type="sidekiq"} offset 1h
+      unless
+      gitlab_component_ops:rate_5m{component="enqueued_jobs",env!~"gprd|ops",monitor="global",stage="main",type="sidekiq"}
   - alert: SidekiqServiceLlmCompletionApdexSLOViolation
     for: 2m
     annotations:
@@ -717,7 +789,7 @@ groups:
       grafana_variables: environment,stage,shard
       promql_template_1: |
         sum by (env,environment,tier,stage,shard) (
-          sli_aggregations:gitlab_sli_sidekiq_execution_error_total_rate5m{environment="{{ $labels.environment }}",external_dependencies!="yes",shard="{{ $labels.shard }}",stage="{{ $labels.stage }}",type="sidekiq",worker!="ProjectExportWorker"}
+          rate(gitlab_sli_sidekiq_execution_error_total{environment="{{ $labels.environment }}",external_dependencies!="yes",shard="{{ $labels.shard }}",stage="{{ $labels.stage }}",type="sidekiq",worker!="ProjectExportWorker"}[5m])
         )
       runbook: docs/sidekiq/README.md
     labels:
@@ -770,7 +842,7 @@ groups:
       grafana_variables: environment,stage,shard
       promql_template_1: |
         sum by (env,environment,tier,stage,shard) (
-          sli_aggregations:gitlab_sli_sidekiq_execution_error_total_rate5m{environment="{{ $labels.environment }}",external_dependencies!="yes",shard="{{ $labels.shard }}",stage="{{ $labels.stage }}",type="sidekiq",worker!="ProjectExportWorker"}
+          rate(gitlab_sli_sidekiq_execution_error_total{environment="{{ $labels.environment }}",external_dependencies!="yes",shard="{{ $labels.shard }}",stage="{{ $labels.stage }}",type="sidekiq",worker!="ProjectExportWorker"}[5m])
         )
       runbook: docs/sidekiq/README.md
     labels:
@@ -823,7 +895,7 @@ groups:
       grafana_variables: environment,stage,shard
       promql_template_1: |
         sum by (env,environment,tier,stage,shard) (
-          sli_aggregations:gitlab_sli_sidekiq_execution_total_rate5m{environment="{{ $labels.environment }}",external_dependencies!="yes",shard="{{ $labels.shard }}",stage="{{ $labels.stage }}",type="sidekiq",worker!="ProjectExportWorker"}
+          rate(gitlab_sli_sidekiq_execution_total{environment="{{ $labels.environment }}",external_dependencies!="yes",shard="{{ $labels.shard }}",stage="{{ $labels.stage }}",type="sidekiq",worker!="ProjectExportWorker"}[5m])
         )
       runbook: docs/sidekiq/README.md
     labels:
@@ -865,7 +937,7 @@ groups:
       grafana_variables: environment,stage,shard
       promql_template_1: |
         sum by (env,environment,tier,stage,shard) (
-          sli_aggregations:gitlab_sli_sidekiq_execution_total_rate5m{environment="{{ $labels.environment }}",external_dependencies!="yes",shard="{{ $labels.shard }}",stage="{{ $labels.stage }}",type="sidekiq",worker!="ProjectExportWorker"}
+          rate(gitlab_sli_sidekiq_execution_total{environment="{{ $labels.environment }}",external_dependencies!="yes",shard="{{ $labels.shard }}",stage="{{ $labels.stage }}",type="sidekiq",worker!="ProjectExportWorker"}[5m])
         )
       runbook: docs/sidekiq/README.md
     labels:
@@ -992,7 +1064,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          sli_aggregations:gitlab_sli_sidekiq_execution_error_total_rate5m{environment="{{ $labels.environment }}",external_dependencies="yes",stage="{{ $labels.stage }}",type="sidekiq",worker!="ProjectExportWorker"}
+          rate(gitlab_sli_sidekiq_execution_error_total{environment="{{ $labels.environment }}",external_dependencies="yes",stage="{{ $labels.stage }}",type="sidekiq",worker!="ProjectExportWorker"}[5m])
         )
       runbook: docs/sidekiq/README.md
     labels:
@@ -1041,7 +1113,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          sli_aggregations:gitlab_sli_sidekiq_execution_error_total_rate5m{environment="{{ $labels.environment }}",external_dependencies="yes",stage="{{ $labels.stage }}",type="sidekiq",worker!="ProjectExportWorker"}
+          rate(gitlab_sli_sidekiq_execution_error_total{environment="{{ $labels.environment }}",external_dependencies="yes",stage="{{ $labels.stage }}",type="sidekiq",worker!="ProjectExportWorker"}[5m])
         )
       runbook: docs/sidekiq/README.md
     labels:
@@ -1090,7 +1162,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          sli_aggregations:gitlab_sli_sidekiq_execution_total_rate5m{environment="{{ $labels.environment }}",external_dependencies="yes",stage="{{ $labels.stage }}",type="sidekiq",worker!="ProjectExportWorker"}
+          rate(gitlab_sli_sidekiq_execution_total{environment="{{ $labels.environment }}",external_dependencies="yes",stage="{{ $labels.stage }}",type="sidekiq",worker!="ProjectExportWorker"}[5m])
         )
       runbook: docs/sidekiq/README.md
     labels:
@@ -1128,7 +1200,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          sli_aggregations:gitlab_sli_sidekiq_execution_total_rate5m{environment="{{ $labels.environment }}",external_dependencies="yes",stage="{{ $labels.stage }}",type="sidekiq",worker!="ProjectExportWorker"}
+          rate(gitlab_sli_sidekiq_execution_total{environment="{{ $labels.environment }}",external_dependencies="yes",stage="{{ $labels.stage }}",type="sidekiq",worker!="ProjectExportWorker"}[5m])
         )
       runbook: docs/sidekiq/README.md
     labels:
@@ -1363,7 +1435,7 @@ groups:
       grafana_variables: environment,stage,shard
       promql_template_1: |
         sum by (env,environment,tier,stage,shard) (
-          sli_aggregations:gitlab_sli_sidekiq_queueing_apdex_total_rate5m{environment="{{ $labels.environment }}",external_dependencies!="yes",shard="{{ $labels.shard }}",stage="{{ $labels.stage }}",type="sidekiq",worker!="ProjectExportWorker"}
+          rate(gitlab_sli_sidekiq_queueing_apdex_total{environment="{{ $labels.environment }}",external_dependencies!="yes",shard="{{ $labels.shard }}",stage="{{ $labels.stage }}",type="sidekiq",worker!="ProjectExportWorker"}[5m])
         )
       runbook: docs/sidekiq/README.md
     labels:
@@ -1405,7 +1477,7 @@ groups:
       grafana_variables: environment,stage,shard
       promql_template_1: |
         sum by (env,environment,tier,stage,shard) (
-          sli_aggregations:gitlab_sli_sidekiq_queueing_apdex_total_rate5m{environment="{{ $labels.environment }}",external_dependencies!="yes",shard="{{ $labels.shard }}",stage="{{ $labels.stage }}",type="sidekiq",worker!="ProjectExportWorker"}
+          rate(gitlab_sli_sidekiq_queueing_apdex_total{environment="{{ $labels.environment }}",external_dependencies!="yes",shard="{{ $labels.shard }}",stage="{{ $labels.stage }}",type="sidekiq",worker!="ProjectExportWorker"}[5m])
         )
       runbook: docs/sidekiq/README.md
     labels:
@@ -1532,7 +1604,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          sli_aggregations:gitlab_sli_sidekiq_queueing_apdex_total_rate5m{environment="{{ $labels.environment }}",external_dependencies="yes",stage="{{ $labels.stage }}",type="sidekiq",worker!="ProjectExportWorker"}
+          rate(gitlab_sli_sidekiq_queueing_apdex_total{environment="{{ $labels.environment }}",external_dependencies="yes",stage="{{ $labels.stage }}",type="sidekiq",worker!="ProjectExportWorker"}[5m])
         )
       runbook: docs/sidekiq/README.md
     labels:
@@ -1570,7 +1642,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          sli_aggregations:gitlab_sli_sidekiq_queueing_apdex_total_rate5m{environment="{{ $labels.environment }}",external_dependencies="yes",stage="{{ $labels.stage }}",type="sidekiq",worker!="ProjectExportWorker"}
+          rate(gitlab_sli_sidekiq_queueing_apdex_total{environment="{{ $labels.environment }}",external_dependencies="yes",stage="{{ $labels.stage }}",type="sidekiq",worker!="ProjectExportWorker"}[5m])
         )
       runbook: docs/sidekiq/README.md
     labels:

@@ -6,6 +6,7 @@ local kubeLabelSelectors = metricsCatalog.kubeLabelSelectors;
 metricsCatalog.serviceDefinition({
   type: 'nginx',
   tier: 'sv',
+  tenants: [ 'gitlab-gprd', 'gitlab-gstg', 'gitlab-pre' ],
   monitoringThresholds: {
     // apdexScore: 0.995,
     // errorRatio: 0.999,

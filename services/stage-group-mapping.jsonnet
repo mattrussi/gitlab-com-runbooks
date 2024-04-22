@@ -118,11 +118,11 @@
       'fleet_visibility',
     ],
   },
-  runner_saas: {
-    name: 'Runner SaaS',
+  hosted_runners: {
+    name: 'Hosted Runners',
     stage: 'verify',
     feature_categories: [
-      'runner_saas',
+      'hosted_runners',
     ],
   },
   pipeline_security: {
@@ -155,6 +155,12 @@
     stage: 'secure',
     feature_categories: [
       'static_application_security_testing',
+    ],
+  },
+  secret_detection: {
+    name: 'Secret Detection',
+    stage: 'secure',
+    feature_categories: [
       'secret_detection',
       'code_quality',
     ],
@@ -271,12 +277,13 @@
       'error_tracking',
     ],
   },
-  purchase: {
-    name: 'Purchase',
-    stage: 'fulfillment',
+  respond: {
+    name: 'Respond',
+    stage: 'monitor',
     feature_categories: [
-      'purchase',
-      'seat_cost_management',
+      'incident_management',
+      'on_call_schedule_management',
+      'service_desk',
     ],
   },
   provision: {
@@ -293,6 +300,7 @@
     stage: 'fulfillment',
     feature_categories: [
       'consumables_cost_management',
+      'seat_cost_management',
     ],
   },
   fulfillment_platform: {
@@ -308,6 +316,7 @@
     name: 'Subscription Management',
     stage: 'fulfillment',
     feature_categories: [
+      'purchase',
       'subscription_management',
     ],
   },
@@ -442,6 +451,7 @@
     stage: 'modelops',
     feature_categories: [
       'mlops',
+      'ai_agents',
     ],
   },
   dataops: {
@@ -473,6 +483,13 @@
       'ai_research',
     ],
   },
+  custom_models: {
+    name: 'Custom Models',
+    stage: 'ai-powered',
+    feature_categories: [
+      'custom_models',
+    ],
+  },
   mobile_devops: {
     name: 'Mobile DevOps',
     stage: 'mobile',
@@ -485,15 +502,6 @@
     stage: '5-min-app',
     feature_categories: [
       'five_minute_production_app',
-    ],
-  },
-  respond: {
-    name: 'Respond',
-    stage: 'service_management',
-    feature_categories: [
-      'incident_management',
-      'on_call_schedule_management',
-      'service_desk',
     ],
   },
   gdk: {

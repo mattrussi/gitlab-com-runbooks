@@ -4,7 +4,7 @@
 
 [[_TOC_]]
 
-# Zoekt Service
+# Global Code Search Service
 
 * **Alerts**: <https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22zoekt%22%2C%20tier%3D%22inf%22%7D>
 * **Label**: gitlab-com/gl-infra/production~"Service::Zoekt"
@@ -28,14 +28,34 @@ number of customers as part of this [epic](https://gitlab.com/groups/gitlab-org/
 
 #### Enabling/Disabling Zoekt search
 
-You can prevent Gitlab from using Zoekt integration for searching, but leave the indexing integration itself enabled. An example of when this is useful is during an incident where users are experiencing slow searches or Zoekt is unresponsive.
+You can prevent Gitlab from using Zoekt integration for searching with the [`search_code_with_zoekt`](https://gitlab.com/gitlab-org/gitlab/blob/master/ee/config/feature_flags/development/search_code_with_zoekt.yml) feature flag, but leave the indexing integration itself enabled.
+An example of when this is useful is during an incident where users are experiencing slow searches or Zoekt is unresponsive.
 
-* [`search_code_with_zoekt`](https://gitlab.com/gitlab-org/gitlab/blob/master/ee/config/feature_flags/development/search_code_with_zoekt.yml)
+```
+  /chatops run feature set search_code_with_zoekt false --production
+```
 
-#### Removing namespaces from the zoekt node
+#### Reallocating namespaces from one Zoekt node to another
 
-If Zoekt search FF is disabled, but you still see that some nodes misbehave (OOM for example),
-you can evict some of the namespaces from the node:
+Zoekt has a `reallocation` task that runs on a [defined schedule for GitLab.com](https://gitlab.com/gitlab-org/gitlab/-/blob/master/ee/app/services/search/zoekt/scheduling_service.rb#L64). It detects nodes
+which are over the watermark limit for disk utilization and removes namespaces until the node
+is back under the watermark lower limit. Those namespaces have Zoekt search disabled and are removed
+from the node. The `reallocation` task is responsible for removing namespaces. The `dot_com_rollout`
+handles adding namespaces to nodes with capacity.
+
+If Zoekt search FF is disabled, but you still see that some nodes misbehave (OOM or disk usage too high
+for example), you can run the reallocation task manually to evict some of the namespaces from the node:
+
+1. Execute the script in rails console
+
+   ```ruby
+   ::Search::Zoekt::SchedulingService.execute(:reallocation)
+   ```
+
+#### Removing a namespace from the zoekt node manually
+
+If the reallocation task does not relieve pressure on the node,
+you can remove a namespace from Zoekt manually as a last resort.
 
 1. Execute the script in rails console
 
@@ -43,35 +63,55 @@ you can evict some of the namespaces from the node:
    # Find the offending node (gitlab-gitlab-zoekt-1 in this example)
    node = Search::Zoekt::Node.where("metadata @> ?", { name: 'gitlab-gitlab-zoekt-1' }.to_json).order(:last_seen_at).last
 
-   # Load indexed namespaces
-   node.indexed_namespaces.map{ |n| n.attributes.slice('id', 'namespace_id', 'search') }
-   ```
+   # Find the namespaces and repository sizes on the node
+   sizes = {}
+   node.indices.each_batch do |batch|
+      scope = Namespace.includes(:root_storage_statistics).by_parent(nil).id_in(batch.select(:namespace_id))
 
-1. Pick the largest ones (you can use `/chatops run namespace find <NAMESPACE_ID>` to get the namespace size)
-1. Destroy these `Zoekt::IndexedNamespace` records
+      scope.each do |group|
+         sizes[group.id] = group.root_storage_statistics&.repository_size || 0
+      end
+   end
+   sorted = sizes.to_a.sort_by { |_k, v| v }
 
-   ```
-   zoekt_indexed_namespace_ids = [1000072, 1000073]
-   node.indexed_namespaces.where(id: zoekt_indexed_namespace_ids).destroy_all
+   # Find the largest namespace
+   namespace_id = sorted.last[0]
+   namespace = Namespace.find(namespace_id)
+
+   # Disable Zoekt search for the namespace
+   zoekt_enabled_namespaces = ::Search::Zoekt::EnabledNamespace.for_root_namespace_id(namespace.id)
+   zoekt_enabled_namespaces.update!(search: false)
+
+   # Destroy the `::Search::Zoekt::Index` record for the namespace
+   zoekt_indices = ::Search::Zoekt::Index.for_root_namespace_id(namespace.id)
+   zoekt_indices.destroy_all
    ```
 
 1. Post namespace_ids on the incident issue as a private comment so that we can add these back later
 
+#### When to add a Zoekt node
+
+Increase the number of [Zoekt replicas](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-com/-/blob/cda7e4434d3836592b08e16bad8a35705af9f72c/releases/gitlab/values/gprd.yaml.gotmpl#L5) (nodes) by 10% of total capacity if all Zoekt nodes are above 65% of disk utilization. For example, if there are 16 nodes, add 1.6 (2 nodes).
+
 #### Pausing Zoekt indexing
 
-Zoekt indexing can be paused. The [jobs are stored in a separate `ZSET`](https://docs.gitlab.com/ee/development/sidekiq/worker_attributes.html#job-pause-control) and re-enqueued when indexing is unpaused. An example
+Zoekt indexing can be paused with the [`zoekt_pause_indexing`](https://gitlab.com/gitlab-org/gitlab/-/blob/181c48dda21c9f92b5eda3b25b21069fa09b4e73/config/feature_flags/ops/zoekt_pause_indexing.yml) feature flag. The [jobs are stored in a separate `ZSET`](https://docs.gitlab.com/ee/development/sidekiq/worker_attributes.html#job-pause-control) and re-enqueued when indexing is unpaused. An example
 of when this is useful is during an incident when there are a large number of indexing Sidekiq jobs failing.
 
-* [`zoekt_pause_indexing`](https://gitlab.com/gitlab-org/gitlab/blob/master/ee/config/feature_flags/ops/zoekt_pause_indexing.yml)
+```
+  /chatops run feature set zoekt_pause_indexing true --production
+```
 
 #### Disabling Zoekt indexing
 
-Zoekt indexing can be completely disabled. Pausing indexing is the preferred method to halt Zoekt indexing.
+Zoekt indexing can be completely disabled with the [`index_code_with_zoekt`](https://gitlab.com/gitlab-org/gitlab/blob/master/ee/config/feature_flags/development/index_code_with_zoekt.yml) feature flag. Pausing indexing is the preferred method to halt Zoekt indexing.
 
 WARNING:
 Indexed data will be stale after indexing is re-enabled. Reindexing from scratch may be necessary to ensure up to date search results.
 
-* [`index_code_with_zoekt`](https://gitlab.com/gitlab-org/gitlab/blob/master/ee/config/feature_flags/development/index_code_with_zoekt.yml)
+```
+  /chatops run feature set index_code_with_zoekt false --production
+```
 
 #### Shards management
 

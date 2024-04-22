@@ -4,7 +4,7 @@
 
 [[_TOC_]]
 
-# Search Service
+# Global Search Service
 
 * **Alerts**: <https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22search%22%2C%20tier%3D%22inf%22%7D>
 * **Label**: gitlab-com/gl-infra/production~"Service::Elasticsearch"
@@ -45,7 +45,6 @@
 * [Credential rotation](../patroni/postgresql-role-credential-rotation.md)
 * [Rails SQL Apdex alerts](../patroni/rails-sql-apdex-slow.md)
 * [Handling Unhealthy Patroni Replica](../patroni/unhealthy_patroni_node_handling.md)
-* [Praefect error rate is too high](../praefect/praefect-error-rate.md)
 * [A survival guide for SREs to working with Redis at GitLab](../redis/redis-survival-guide-for-sres.md)
 * [A survival guide for SREs to working with Sidekiq at GitLab](../sidekiq/sidekiq-survival-guide-for-sres.md)
 * [../sidekiq/sidekiq_error_rate_high.md](../sidekiq/sidekiq_error_rate_high.md)
@@ -59,6 +58,7 @@
 * [Node Reboots](../uncategorized/node-reboots.md)
 * [OPS-GITLAB-NET Users and Access Tokens](../uncategorized/ops-gitlab-net-pat.md)
 * [Uploads](../uncategorized/uploads.md)
+* [../uncategorized/wiz-runtime-sensor.md](../uncategorized/wiz-runtime-sensor.md)
 * [Troubleshooting Hashicorp Vault](../vault/troubleshooting.md)
 <!-- END_MARKER -->
 

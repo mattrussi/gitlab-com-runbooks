@@ -20,24 +20,34 @@ local generatorsForService(aggregationSet, burnRate, extraSelector) = [
 local groupsForService(service, aggregationSet, extraSelector) =
   std.map(
     function(burnRate)
-      {
-        name: '%s: %s - Burn-Rate %s' % [aggregationSet.name, service.type, burnRate],
-        interval: intervalForDuration.intervalForDuration(burnRate),
-        rules: std.flatMap(
-          function(generator)
-            generator.generateRecordingRulesForService(service),
-          generatorsForService(aggregationSet, burnRate, extraSelector)
-        ),
-      },
+      local rules = std.flatMap(
+        function(generator)
+          generator.generateRecordingRulesForService(service),
+        generatorsForService(aggregationSet, burnRate, extraSelector)
+      );
+
+      if std.length(rules) > 0 then
+        {
+          name: '%s: %s - Burn-Rate %s' % [aggregationSet.name, service.type, burnRate],
+          interval: intervalForDuration.intervalForDuration(burnRate),
+          rules: rules,
+        }
+      else {},
     aggregationSet.getBurnRates(),
   );
 
-
 local aggregationsForService(service, selector, _extraArgs) =
-  local set = aggregationSets.componentSLIs;
-  {
-    ['%s-aggregation' % set.id]: outputPromYaml(groupsForService(service, set, selector)),
-  };
+  std.foldl(
+    function(memo, set)
+      local groups = std.prune(groupsForService(service, set, selector));
+      if std.length(groups) > 0 then
+        memo {
+          ['%s-aggregation' % set.id]: outputPromYaml(groups),
+        }
+      else memo,
+    aggregationSets.aggregationsFromSource,
+    {}
+  );
 
 local servicesWithSlis = std.filter(function(service) std.length(service.listServiceLevelIndicators()) > 0, monitoredServices);
 std.foldl(

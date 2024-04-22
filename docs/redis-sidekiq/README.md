@@ -4,7 +4,7 @@
 
 [[_TOC_]]
 
-# Redis-sidekiq Service
+# Redis Sidekiq Service
 
 * [Service Overview](https://dashboards.gitlab.net/d/redis-sidekiq-main/redis-sidekiq-overview)
 * **Alerts**: <https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22redis-sidekiq%22%2C%20tier%3D%22db%22%7D>

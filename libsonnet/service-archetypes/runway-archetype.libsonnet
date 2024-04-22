@@ -2,6 +2,7 @@ local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local histogramApdex = metricsCatalog.histogramApdex;
 local gaugeMetric = metricsCatalog.gaugeMetric;
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
+local runwayHelper = import 'service-archetypes/helpers/runway.libsonnet';
 
 // Default SLIs/SLOs for Runway services
 function(
@@ -14,7 +15,8 @@ function(
   userImpacting=true,
   trafficCessationAlertConfig=true,
   severity='s4',
-  customToolingLinks=[]
+  customToolingLinks=[],
+  regional=false
 )
   local baseSelector = { type: type };
   {
@@ -35,6 +37,10 @@ function(
     // Runway splits traffic between multiple revisions for canary deployments
     serviceIsStageless: true,
     dangerouslyThanosEvaluated: true,
+
+    // Set true for multi-region deployments
+    // https://gitlab-com.gitlab.io/gl-infra/platform/runway/runwayctl/manifest.schema.html#spec_regions
+    regional: regional,
 
     serviceLevelIndicators: {
       runway_ingress: {
@@ -62,7 +68,15 @@ function(
           samplingInterval=60,
         ),
 
-        significantLabels: ['revision_name', 'response_code'],
+        significantLabels:
+          ['revision_name', 'response_code']
+          + runwayHelper.labels(self)
+          // In thanos the regional label on source metrics coming from stackdriver-exporter
+          // is not respected. To work around this we use the `location` label.
+          // We can remove this once we switch to mimir.
+          // https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/3398
+          + if regional then ['location'] else [],
+
 
         userImpacting: userImpacting,
 

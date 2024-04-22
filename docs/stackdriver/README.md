@@ -4,7 +4,7 @@
 
 [[_TOC_]]
 
-# Stackdriver Service
+# Stackdriver Metrics Service
 
 * [Service Overview](https://dashboards.gitlab.net/d/USVj3qHmk/logging)
 * **Alerts**: <https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22stackdriver%22%2C%20tier%3D%22inf%22%7D>

@@ -7,7 +7,7 @@ This Registry is used as a reliable alternative to the Registry registry.gitlab.
 
 ### Configuration
 
-Configuration of the Artifact Registry is done in Terraform in the [`gitlab-com-artifact-registry`](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/tree/master/environments/gitlab-com-artifact-registry) environment.
+Configuration of the Artifact Registry is done in Terraform in the [`gitlab-com-artifact-registry`](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/tree/main/environments/gitlab-com-artifact-registry) environment.
 
 There is one service account `artifact-registry-rw@gitlab-com-artifact-registry.iam.gserviceaccount.com` that has a key set as a CI variable `ARTIFACT_REGISTRY_SA_FILE` in the CNG pipeline [CI variables on dev.gitlab.org](https://dev.gitlab.org/gitlab/charts/components/images/-/settings/ci_cd).
 

@@ -25,20 +25,14 @@ groups:
     expr: |
       sum by (type, env, tier, stage, cluster) (
         kube_pod_container_status_waiting_reason:labeled{
-          stage!="",
-          tier!="",
-          type!="",
+          stage!="",tier!="",type!="",
           reason!="ContainerCreating",
         }
       )
       > 0
       >= on(type, env, tier, stage, cluster) (
         topk by(type, env, tier, stage, cluster) (1,
-          kube_deployment_spec_strategy_rollingupdate_max_surge:labeled{
-            stage!="",
-            tier!="",
-            type!=""
-          }
+          kube_deployment_spec_strategy_rollingupdate_max_surge:labeled{stage!="",tier!="",type!=""}
         )
         * 0.5
       )

@@ -25,11 +25,6 @@ local serviceSLISGroups =
   aggregationSetTransformer.generateRecordingRuleGroups(
     sourceAggregationSet=aggregationSets.componentSLIs,
     targetAggregationSet=aggregationSets.serviceSLIs
-  )
-  +
-  // Generate ratio SLIs for component-level metrics
-  aggregationSetTransformer.generateReflectedRecordingRuleGroups(
-    aggregationSet=aggregationSets.componentSLIs,
   );
 
 local serviceSLOsGroups =
@@ -67,20 +62,44 @@ local saturationAuxGroup = saturationRules.generateSaturationAuxRulesGroup(
 );
 
 {
-  'prometheus-rules/rules.yml': {
+  'prometheus-rules/service-rules.yml': {
     groups:
       std.flatMap(
         function(service)
           groupsForService(service),
         services
-      ) +
-      serviceSLISGroups +
-      serviceSLOsGroups +
-      saturationGroup +
-      saturationMetadataGroup +
-      saturationAuxGroup +
-      kubeStateMetricsGroups +
-      sloAlertingRulesGroup +
-      availabilityRateRuleGroups,
+      )
+  },
+  'prometheus-rules/sli-rules.yml': {
+    groups:
+      serviceSLISGroups
+  },
+  'prometheus-rules/slo-rules.yml': {
+    groups:
+      serviceSLOsGroups
+  },
+  'prometheus-rules/saturation-rules.yml': {
+    groups:
+      saturationGroup
+  },
+  'prometheus-rules/metadata-rules.yml': {
+    groups:
+      saturationMetadataGroup
+  },
+  'prometheus-rules/auxiliary-rules.yml': {
+    groups:
+      saturationAuxGroup
+  },
+  'prometheus-rules/kube-state-rules.yml': {
+    groups:
+      kubeStateMetricsGroups
+  },
+  'prometheus-rules/slo-alert-rules.yml': {
+    groups:
+      sloAlertingRulesGroup
+  },
+  'prometheus-rules/availability-rules.yml': {
+    groups:
+      availabilityRateRuleGroups
   },
 }

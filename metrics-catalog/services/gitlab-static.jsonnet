@@ -5,6 +5,7 @@ local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 metricsCatalog.serviceDefinition({
   type: 'gitlab-static',
   tier: 'inf',
+  tenants: [ 'gitlab-gprd', 'gitlab-gstg', 'gitlab-ops', 'gitlab-pre' ],
   monitoringThresholds: {},
   serviceDependencies: {},
   provisioning: {

@@ -4,7 +4,7 @@
 
 [[_TOC_]]
 
-# Packagecloud Service
+# PackageCloud (packages.gitlab.com) Service
 
 * [Service Overview](https://dashboards.gitlab.net/d/packagecloud-main/packagecloud-overview)
 * **Alerts**: <https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22packagecloud%22%2C%20tier%3D%22inf%22%7D>

@@ -17,18 +17,6 @@ local generateRecordingRules(sourceAggregationSet, targetAggregationSet, burnRat
     burnRates
   );
 
-local generateReflectedRecordingRules(aggregationSet, burnRates) =
-  std.flatMap(
-    function(burnRate)
-      // Error Ratio
-      recordingRules.aggregationSetErrorRatioReflectedRuleSet(aggregationSet=aggregationSet, burnRate=burnRate)
-      +
-      // Apdex Score and Apdex Weight and Apdex SuccessRate
-      recordingRules.aggregationSetApdexRatioReflectedRuleSet(aggregationSet=aggregationSet, burnRate=burnRate),
-    burnRates
-  );
-
-
 local groupForSetAndType(aggregationSet, burnType) =
   {
     name: '%s (%s burn)' % [aggregationSet.name, burnType],
@@ -45,27 +33,9 @@ local generateRecordingRuleGroups(sourceAggregationSet, targetAggregationSet, ex
     std.objectFields(burnRatesByType)
   );
 
-local generateReflectedRecordingRuleGroups(aggregationSet, extrasForGroup={}) =
-  local burnRatesByType = aggregationSet.getBurnRatesByType();
-  std.map(
-    function(burnType)
-      groupForSetAndType(aggregationSet, burnType) {
-        rules: generateReflectedRecordingRules(aggregationSet, burnRatesByType[burnType]),
-      } + extrasForGroup,
-    std.objectFields(burnRatesByType)
-  );
-
 {
   /**
    * Generates a set of recording rules to aggregate from a source aggregation set to a target aggregation set
    */
   generateRecordingRuleGroups:: generateRecordingRuleGroups,
-
-  /**
-   * When using Prometheus without Thanos, some recording rules are generated from the same
-   * aggregation set -- specifically error ratios and apdex ratios. These recording rules
-   * should not be used in two-tier aggregation sets.
-   */
-  generateReflectedRecordingRuleGroups:: generateReflectedRecordingRuleGroups,
-
 }

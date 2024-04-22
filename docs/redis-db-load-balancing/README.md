@@ -4,7 +4,7 @@
 
 [[_TOC_]]
 
-# Redis-db-load-balancing Service
+# Redis Database Load Balancing Service
 
 * [Service Overview](https://dashboards.gitlab.net/d/redis-db-load-balancing-main/redis-db-load-balancing-overview)
 * **Alerts**: <https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22redis-db-load-balancing%22%2C%20tier%3D%22db%22%7D>

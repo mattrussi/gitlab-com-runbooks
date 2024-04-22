@@ -4,7 +4,7 @@
 
 [[_TOC_]]
 
-# Registry Service
+# Container Registry Service
 
 * [Service Overview](https://dashboards.gitlab.net/d/registry-main/registry-overview)
 * **Alerts**: <https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22registry%22%2C%20tier%3D%22sv%22%7D>
@@ -40,6 +40,7 @@
 * [High Number of Overdue Online GC Tasks](online-gc-high-overdue-tasks.md)
 * [How to connect to a Database console using Teleport](../teleport/Connect_to_Database_Console_via_Teleport.md)
 * [Deleting a project manually](../uncategorized/delete-projects-manually.md)
+* [../uncategorized/wiz-runtime-sensor.md](../uncategorized/wiz-runtime-sensor.md)
 * [How to Use Vault for Secrets Management in Infrastructure](../vault/usage.md)
 * [Vault Secrets Management](../vault/vault.md)
 <!-- END_MARKER -->

@@ -4,7 +4,7 @@
 
 [[_TOC_]]
 
-# Api Service
+# GitLab API Service
 
 * [Service Overview](https://dashboards.gitlab.net/d/api-main/api-overview)
 * **Alerts**: <https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22api%22%2C%20tier%3D%22sv%22%7D>
@@ -25,6 +25,7 @@
 * [../ci-runners/ci_pending_builds.md](../ci-runners/ci_pending_builds.md)
 * [CI runner manager report a high number of errors](../ci-runners/ci_runner_manager_errors.md)
 * [ClickHouse Cloud Failure Remediation, Backup & Restore Process](../clickhouse/backup-restore.md)
+* [Cloudflare](../cloudflare/intro.md)
 * [Cloudflare Logs](../cloudflare/logging.md)
 * [Cloudflare: Managing Traffic](../cloudflare/managing-traffic.md)
 * [Service Locations](../cloudflare/services-locations.md)
@@ -42,6 +43,7 @@
 * [Possible Breach of SSH MaxStartups](../frontend/ssh-maxstartups-breach.md)
 * [Purge Git data](../git/purge-git-data.md)
 * [../gitaly/git-high-cpu-and-memory-usage.md](../gitaly/git-high-cpu-and-memory-usage.md)
+* [`gitalyctl`](../gitaly/gitalyctl.md)
 * [Gitaly multi-project migration](../gitaly/multi-project-migration.md)
 * [GitLab Storage Re-balancing](../gitaly/storage-rebalancing.md)
 * [Web IDE Assets](../gitlab-static/web-ide-assets.md)
@@ -54,6 +56,8 @@
 * [Kubernetes](../kube/kubernetes.md)
 * [Scaling Elastic Cloud Clusters](../logging/scaling.md)
 * [How GitLab.com uses Mailgun](../mailgun/mailgun.md)
+* [Mailgun Events](../mailgun/mailgunevents.md)
+* [Mimir Onboarding](../mimir/getting-started.md)
 * [Alertmanager Notification Failures](../monitoring/alertmanager-notification-failures.md)
 * [../monitoring/apdex-alerts-guide.md](../monitoring/apdex-alerts-guide.md)
 * [Thanos Query and Stores](../monitoring/thanos-query.md)
@@ -71,6 +75,7 @@
 * [../pgbouncer/patroni-consul-postgres-pgbouncer-interactions.md](../pgbouncer/patroni-consul-postgres-pgbouncer-interactions.md)
 * [PgBouncer connection management and troubleshooting](../pgbouncer/pgbouncer-connections.md)
 * [Sidekiq or Web/API is using most of its PgBouncer connections](../pgbouncer/pgbouncer-saturation.md)
+* [../product_analytics/clickhouse-backup-restore.md](../product_analytics/clickhouse-backup-restore.md)
 * [Removing cache entries from Redis](../redis-cluster-cache/remove-cache-entries.md)
 * [A survival guide for SREs to working with Redis at GitLab](../redis/redis-survival-guide-for-sres.md)
 * [Database Connection Pool Saturation](../registry/app-db-conn-pool-saturation.md)
@@ -79,6 +84,7 @@
 * [Managing Sentry in Kubernetes](../sentry/sentry.md)
 * [[`SidekiqQueueTooLarge`](../../rules/sidekiq-queues.yml)](../sidekiq/large-sidekiq-queue.md)
 * [A survival guide for SREs to working with Sidekiq at GitLab](../sidekiq/sidekiq-survival-guide-for-sres.md)
+* [Exporting projects silently](../sidekiq/silent-project-exports.md)
 * [../spamcheck/index.md](../spamcheck/index.md)
 * [GET Monitoring Setup](../staging-ref/get-monitoring-setup.md)
 * [Thanos Architecture Overview](../thanos/architecture.md)
@@ -93,6 +99,7 @@
 * [Ruby profiling](../uncategorized/ruby-profiling.md)
 * [Shared Configurations](../uncategorized/shared-configurations.md)
 * [Application Database Queries](../uncategorized/tracing-app-db-queries.md)
+* [../uncategorized/wiz-runtime-sensor.md](../uncategorized/wiz-runtime-sensor.md)
 * [How to Use Vault for Secrets Management in Infrastructure](../vault/usage.md)
 * [Vault Secrets Management](../vault/vault.md)
 * [Static repository objects caching](../web/static-repository-objects-caching.md)

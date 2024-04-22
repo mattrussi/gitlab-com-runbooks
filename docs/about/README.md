@@ -4,7 +4,7 @@
 
 [[_TOC_]]
 
-# About Service
+# about.gitlab.com Service
 
 * **Alerts**: <https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22about%22%2C%20tier%3D%22sv%22%7D>
 * **Label**: gitlab-com/gl-infra/production~"Service::About"
@@ -24,6 +24,7 @@
 * [../ci-runners/ci_graphs.md](../ci-runners/ci_graphs.md)
 * [../ci-runners/service-ci-runners.md](../ci-runners/service-ci-runners.md)
 * [Cloudflare Audit Log Rule Processing](../cloudflare/cloudflare-audit-log-rule-processing.md)
+* [Cloudflare](../cloudflare/intro.md)
 * [Cloudflare: Managing Traffic](../cloudflare/managing-traffic.md)
 * [Service Locations](../cloudflare/services-locations.md)
 * [Chef Guidelines](../config_management/chef-guidelines.md)
@@ -86,8 +87,7 @@
 * [../pgbouncer/patroni-consul-postgres-pgbouncer-interactions.md](../pgbouncer/patroni-consul-postgres-pgbouncer-interactions.md)
 * [../pgbouncer/service-pgbouncer.md](../pgbouncer/service-pgbouncer.md)
 * [Postgres Replicas](../postgres-dr-delayed/postgres-dr-replicas.md)
-* [Praefect Database User Password Rotation](../praefect/praefect-password-rotation.md)
-* [Praefect has unavailable repositories](../praefect/praefect-unavailable-repo.md)
+* [../product_analytics/ssl-troubleshooting.md](../product_analytics/ssl-troubleshooting.md)
 * [Redis Cluster](../redis/redis-cluster.md)
 * [../redis/redis-functional-partitioning.md](../redis/redis-functional-partitioning.md)
 * [A survival guide for SREs to working with Redis at GitLab](../redis/redis-survival-guide-for-sres.md)

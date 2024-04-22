@@ -125,68 +125,6 @@ groups:
           "shard", "$0", "label_shard", ".*"
         )
       )
-- name: 'kube-state-metrics-recording-rules: internal-api'
-  interval: 1m
-  rules:
-  - record: kube_pod_labels:labeled
-    labels:
-      tier: sv
-      type: internal-api
-    expr: |
-      group without(label_stage,label_shard,label_deployment) (
-        label_replace(
-          label_replace(
-            label_replace(
-              topk by(environment,cluster,pod) (1, kube_pod_labels{label_type="internal-api"}),
-              "stage", "$0", "label_stage", ".*"
-            ),
-            "shard", "$0", "label_shard", ".*"
-          ),
-          "deployment", "$0", "label_deployment", ".*"
-        )
-      )
-  - record: kube_horizontalpodautoscaler_labels:labeled
-    labels:
-      tier: sv
-      type: internal-api
-    expr: |
-      group without(label_stage,label_shard) (
-        label_replace(
-          label_replace(
-            topk by(environment,cluster,horizontalpodautoscaler) (1, kube_horizontalpodautoscaler_labels{label_type="internal-api"}),
-            "stage", "$0", "label_stage", ".*"
-          ),
-          "shard", "$0", "label_shard", ".*"
-        )
-      )
-  - record: kube_ingress_labels:labeled
-    labels:
-      tier: sv
-      type: internal-api
-    expr: |
-      group without(label_stage,label_shard) (
-        label_replace(
-          label_replace(
-            topk by(environment,cluster,ingress) (1, kube_ingress_labels{label_type="internal-api"}),
-            "stage", "$0", "label_stage", ".*"
-          ),
-          "shard", "$0", "label_shard", ".*"
-        )
-      )
-  - record: kube_deployment_labels:labeled
-    labels:
-      tier: sv
-      type: internal-api
-    expr: |
-      group without(label_stage,label_shard) (
-        label_replace(
-          label_replace(
-            topk by(environment,cluster,deployment) (1, kube_deployment_labels{label_type="internal-api"}),
-            "stage", "$0", "label_stage", ".*"
-          ),
-          "shard", "$0", "label_shard", ".*"
-        )
-      )
 - name: 'kube-state-metrics-recording-rules: atlantis'
   interval: 1m
   rules:
@@ -436,6 +374,68 @@ groups:
         label_replace(
           label_replace(
             topk by(environment,cluster,deployment) (1, kube_deployment_labels{label_type="git"}),
+            "stage", "$0", "label_stage", ".*"
+          ),
+          "shard", "$0", "label_shard", ".*"
+        )
+      )
+- name: 'kube-state-metrics-recording-rules: internal-api'
+  interval: 1m
+  rules:
+  - record: kube_pod_labels:labeled
+    labels:
+      tier: sv
+      type: internal-api
+    expr: |
+      group without(label_stage,label_shard,label_deployment) (
+        label_replace(
+          label_replace(
+            label_replace(
+              topk by(environment,cluster,pod) (1, kube_pod_labels{label_type="internal-api"}),
+              "stage", "$0", "label_stage", ".*"
+            ),
+            "shard", "$0", "label_shard", ".*"
+          ),
+          "deployment", "$0", "label_deployment", ".*"
+        )
+      )
+  - record: kube_horizontalpodautoscaler_labels:labeled
+    labels:
+      tier: sv
+      type: internal-api
+    expr: |
+      group without(label_stage,label_shard) (
+        label_replace(
+          label_replace(
+            topk by(environment,cluster,horizontalpodautoscaler) (1, kube_horizontalpodautoscaler_labels{label_type="internal-api"}),
+            "stage", "$0", "label_stage", ".*"
+          ),
+          "shard", "$0", "label_shard", ".*"
+        )
+      )
+  - record: kube_ingress_labels:labeled
+    labels:
+      tier: sv
+      type: internal-api
+    expr: |
+      group without(label_stage,label_shard) (
+        label_replace(
+          label_replace(
+            topk by(environment,cluster,ingress) (1, kube_ingress_labels{label_type="internal-api"}),
+            "stage", "$0", "label_stage", ".*"
+          ),
+          "shard", "$0", "label_shard", ".*"
+        )
+      )
+  - record: kube_deployment_labels:labeled
+    labels:
+      tier: sv
+      type: internal-api
+    expr: |
+      group without(label_stage,label_shard) (
+        label_replace(
+          label_replace(
+            topk by(environment,cluster,deployment) (1, kube_deployment_labels{label_type="internal-api"}),
             "stage", "$0", "label_stage", ".*"
           ),
           "shard", "$0", "label_shard", ".*"
@@ -970,6 +970,68 @@ groups:
           "shard", "$0", "label_shard", ".*"
         )
       )
+- name: 'kube-state-metrics-recording-rules: redis-cluster-chat-cache'
+  interval: 1m
+  rules:
+  - record: kube_pod_labels:labeled
+    labels:
+      tier: db
+      type: redis-cluster-chat-cache
+    expr: |
+      group without(label_stage,label_shard,label_deployment) (
+        label_replace(
+          label_replace(
+            label_replace(
+              topk by(environment,cluster,pod) (1, kube_pod_labels{label_type="redis-cluster-chat-cache"}),
+              "stage", "$0", "label_stage", ".*"
+            ),
+            "shard", "$0", "label_shard", ".*"
+          ),
+          "deployment", "$0", "label_deployment", ".*"
+        )
+      )
+  - record: kube_horizontalpodautoscaler_labels:labeled
+    labels:
+      tier: db
+      type: redis-cluster-chat-cache
+    expr: |
+      group without(label_stage,label_shard) (
+        label_replace(
+          label_replace(
+            topk by(environment,cluster,horizontalpodautoscaler) (1, kube_horizontalpodautoscaler_labels{label_type="redis-cluster-chat-cache"}),
+            "stage", "$0", "label_stage", ".*"
+          ),
+          "shard", "$0", "label_shard", ".*"
+        )
+      )
+  - record: kube_node_labels:labeled
+    labels:
+      tier: db
+      type: redis-cluster-chat-cache
+    expr: |
+      group without(label_stage,label_shard) (
+        label_replace(
+          label_replace(
+            topk by(environment,cluster,node) (1, kube_node_labels{label_type="redis-cluster-chat-cache"}),
+            "stage", "$0", "label_stage", ".*"
+          ),
+          "shard", "$0", "label_shard", ".*"
+        )
+      )
+  - record: kube_deployment_labels:labeled
+    labels:
+      tier: db
+      type: redis-cluster-chat-cache
+    expr: |
+      group without(label_stage,label_shard) (
+        label_replace(
+          label_replace(
+            topk by(environment,cluster,deployment) (1, kube_deployment_labels{label_type="redis-cluster-chat-cache"}),
+            "stage", "$0", "label_stage", ".*"
+          ),
+          "shard", "$0", "label_shard", ".*"
+        )
+      )
 - name: 'kube-state-metrics-recording-rules: redis-cluster-feature-flag'
   interval: 1m
   rules:
@@ -1027,68 +1089,6 @@ groups:
         label_replace(
           label_replace(
             topk by(environment,cluster,deployment) (1, kube_deployment_labels{label_type="redis-cluster-feature-flag"}),
-            "stage", "$0", "label_stage", ".*"
-          ),
-          "shard", "$0", "label_shard", ".*"
-        )
-      )
-- name: 'kube-state-metrics-recording-rules: redis-cluster-shared-state'
-  interval: 1m
-  rules:
-  - record: kube_pod_labels:labeled
-    labels:
-      tier: db
-      type: redis-cluster-shared-state
-    expr: |
-      group without(label_stage,label_shard,label_deployment) (
-        label_replace(
-          label_replace(
-            label_replace(
-              topk by(environment,cluster,pod) (1, kube_pod_labels{label_type="redis-cluster-shared-state"}),
-              "stage", "$0", "label_stage", ".*"
-            ),
-            "shard", "$0", "label_shard", ".*"
-          ),
-          "deployment", "$0", "label_deployment", ".*"
-        )
-      )
-  - record: kube_horizontalpodautoscaler_labels:labeled
-    labels:
-      tier: db
-      type: redis-cluster-shared-state
-    expr: |
-      group without(label_stage,label_shard) (
-        label_replace(
-          label_replace(
-            topk by(environment,cluster,horizontalpodautoscaler) (1, kube_horizontalpodautoscaler_labels{label_type="redis-cluster-shared-state"}),
-            "stage", "$0", "label_stage", ".*"
-          ),
-          "shard", "$0", "label_shard", ".*"
-        )
-      )
-  - record: kube_node_labels:labeled
-    labels:
-      tier: db
-      type: redis-cluster-shared-state
-    expr: |
-      group without(label_stage,label_shard) (
-        label_replace(
-          label_replace(
-            topk by(environment,cluster,node) (1, kube_node_labels{label_type="redis-cluster-shared-state"}),
-            "stage", "$0", "label_stage", ".*"
-          ),
-          "shard", "$0", "label_shard", ".*"
-        )
-      )
-  - record: kube_deployment_labels:labeled
-    labels:
-      tier: db
-      type: redis-cluster-shared-state
-    expr: |
-      group without(label_stage,label_shard) (
-        label_replace(
-          label_replace(
-            topk by(environment,cluster,deployment) (1, kube_deployment_labels{label_type="redis-cluster-shared-state"}),
             "stage", "$0", "label_stage", ".*"
           ),
           "shard", "$0", "label_shard", ".*"
@@ -1156,192 +1156,6 @@ groups:
           "shard", "$0", "label_shard", ".*"
         )
       )
-- name: 'kube-state-metrics-recording-rules: redis-cluster-repo-cache'
-  interval: 1m
-  rules:
-  - record: kube_pod_labels:labeled
-    labels:
-      tier: db
-      type: redis-cluster-repo-cache
-    expr: |
-      group without(label_stage,label_shard,label_deployment) (
-        label_replace(
-          label_replace(
-            label_replace(
-              topk by(environment,cluster,pod) (1, kube_pod_labels{label_type="redis-cluster-repo-cache"}),
-              "stage", "$0", "label_stage", ".*"
-            ),
-            "shard", "$0", "label_shard", ".*"
-          ),
-          "deployment", "$0", "label_deployment", ".*"
-        )
-      )
-  - record: kube_horizontalpodautoscaler_labels:labeled
-    labels:
-      tier: db
-      type: redis-cluster-repo-cache
-    expr: |
-      group without(label_stage,label_shard) (
-        label_replace(
-          label_replace(
-            topk by(environment,cluster,horizontalpodautoscaler) (1, kube_horizontalpodautoscaler_labels{label_type="redis-cluster-repo-cache"}),
-            "stage", "$0", "label_stage", ".*"
-          ),
-          "shard", "$0", "label_shard", ".*"
-        )
-      )
-  - record: kube_node_labels:labeled
-    labels:
-      tier: db
-      type: redis-cluster-repo-cache
-    expr: |
-      group without(label_stage,label_shard) (
-        label_replace(
-          label_replace(
-            topk by(environment,cluster,node) (1, kube_node_labels{label_type="redis-cluster-repo-cache"}),
-            "stage", "$0", "label_stage", ".*"
-          ),
-          "shard", "$0", "label_shard", ".*"
-        )
-      )
-  - record: kube_deployment_labels:labeled
-    labels:
-      tier: db
-      type: redis-cluster-repo-cache
-    expr: |
-      group without(label_stage,label_shard) (
-        label_replace(
-          label_replace(
-            topk by(environment,cluster,deployment) (1, kube_deployment_labels{label_type="redis-cluster-repo-cache"}),
-            "stage", "$0", "label_stage", ".*"
-          ),
-          "shard", "$0", "label_shard", ".*"
-        )
-      )
-- name: 'kube-state-metrics-recording-rules: redis-sidekiq'
-  interval: 1m
-  rules:
-  - record: kube_pod_labels:labeled
-    labels:
-      tier: db
-      type: redis-sidekiq
-    expr: |
-      group without(label_stage,label_shard,label_deployment) (
-        label_replace(
-          label_replace(
-            label_replace(
-              topk by(environment,cluster,pod) (1, kube_pod_labels{label_type="redis-sidekiq"}),
-              "stage", "$0", "label_stage", ".*"
-            ),
-            "shard", "$0", "label_shard", ".*"
-          ),
-          "deployment", "$0", "label_deployment", ".*"
-        )
-      )
-  - record: kube_horizontalpodautoscaler_labels:labeled
-    labels:
-      tier: db
-      type: redis-sidekiq
-    expr: |
-      group without(label_stage,label_shard) (
-        label_replace(
-          label_replace(
-            topk by(environment,cluster,horizontalpodautoscaler) (1, kube_horizontalpodautoscaler_labels{label_type="redis-sidekiq"}),
-            "stage", "$0", "label_stage", ".*"
-          ),
-          "shard", "$0", "label_shard", ".*"
-        )
-      )
-  - record: kube_node_labels:labeled
-    labels:
-      tier: db
-      type: redis-sidekiq
-    expr: |
-      group without(label_stage,label_shard) (
-        label_replace(
-          label_replace(
-            topk by(environment,cluster,node) (1, kube_node_labels{label_type="redis-sidekiq"}),
-            "stage", "$0", "label_stage", ".*"
-          ),
-          "shard", "$0", "label_shard", ".*"
-        )
-      )
-  - record: kube_deployment_labels:labeled
-    labels:
-      tier: db
-      type: redis-sidekiq
-    expr: |
-      group without(label_stage,label_shard) (
-        label_replace(
-          label_replace(
-            topk by(environment,cluster,deployment) (1, kube_deployment_labels{label_type="redis-sidekiq"}),
-            "stage", "$0", "label_stage", ".*"
-          ),
-          "shard", "$0", "label_shard", ".*"
-        )
-      )
-- name: 'kube-state-metrics-recording-rules: redis-tracechunks'
-  interval: 1m
-  rules:
-  - record: kube_pod_labels:labeled
-    labels:
-      tier: db
-      type: redis-tracechunks
-    expr: |
-      group without(label_stage,label_shard,label_deployment) (
-        label_replace(
-          label_replace(
-            label_replace(
-              topk by(environment,cluster,pod) (1, kube_pod_labels{label_type="redis-tracechunks"}),
-              "stage", "$0", "label_stage", ".*"
-            ),
-            "shard", "$0", "label_shard", ".*"
-          ),
-          "deployment", "$0", "label_deployment", ".*"
-        )
-      )
-  - record: kube_horizontalpodautoscaler_labels:labeled
-    labels:
-      tier: db
-      type: redis-tracechunks
-    expr: |
-      group without(label_stage,label_shard) (
-        label_replace(
-          label_replace(
-            topk by(environment,cluster,horizontalpodautoscaler) (1, kube_horizontalpodautoscaler_labels{label_type="redis-tracechunks"}),
-            "stage", "$0", "label_stage", ".*"
-          ),
-          "shard", "$0", "label_shard", ".*"
-        )
-      )
-  - record: kube_node_labels:labeled
-    labels:
-      tier: db
-      type: redis-tracechunks
-    expr: |
-      group without(label_stage,label_shard) (
-        label_replace(
-          label_replace(
-            topk by(environment,cluster,node) (1, kube_node_labels{label_type="redis-tracechunks"}),
-            "stage", "$0", "label_stage", ".*"
-          ),
-          "shard", "$0", "label_shard", ".*"
-        )
-      )
-  - record: kube_deployment_labels:labeled
-    labels:
-      tier: db
-      type: redis-tracechunks
-    expr: |
-      group without(label_stage,label_shard) (
-        label_replace(
-          label_replace(
-            topk by(environment,cluster,deployment) (1, kube_deployment_labels{label_type="redis-tracechunks"}),
-            "stage", "$0", "label_stage", ".*"
-          ),
-          "shard", "$0", "label_shard", ".*"
-        )
-      )
 - name: 'kube-state-metrics-recording-rules: redis-cluster-ratelimiting'
   interval: 1m
   rules:
@@ -1404,19 +1218,19 @@ groups:
           "shard", "$0", "label_shard", ".*"
         )
       )
-- name: 'kube-state-metrics-recording-rules: redis-cluster-chat-cache'
+- name: 'kube-state-metrics-recording-rules: redis-cluster-repo-cache'
   interval: 1m
   rules:
   - record: kube_pod_labels:labeled
     labels:
       tier: db
-      type: redis-cluster-chat-cache
+      type: redis-cluster-repo-cache
     expr: |
       group without(label_stage,label_shard,label_deployment) (
         label_replace(
           label_replace(
             label_replace(
-              topk by(environment,cluster,pod) (1, kube_pod_labels{label_type="redis-cluster-chat-cache"}),
+              topk by(environment,cluster,pod) (1, kube_pod_labels{label_type="redis-cluster-repo-cache"}),
               "stage", "$0", "label_stage", ".*"
             ),
             "shard", "$0", "label_shard", ".*"
@@ -1427,12 +1241,12 @@ groups:
   - record: kube_horizontalpodautoscaler_labels:labeled
     labels:
       tier: db
-      type: redis-cluster-chat-cache
+      type: redis-cluster-repo-cache
     expr: |
       group without(label_stage,label_shard) (
         label_replace(
           label_replace(
-            topk by(environment,cluster,horizontalpodautoscaler) (1, kube_horizontalpodautoscaler_labels{label_type="redis-cluster-chat-cache"}),
+            topk by(environment,cluster,horizontalpodautoscaler) (1, kube_horizontalpodautoscaler_labels{label_type="redis-cluster-repo-cache"}),
             "stage", "$0", "label_stage", ".*"
           ),
           "shard", "$0", "label_shard", ".*"
@@ -1441,12 +1255,12 @@ groups:
   - record: kube_node_labels:labeled
     labels:
       tier: db
-      type: redis-cluster-chat-cache
+      type: redis-cluster-repo-cache
     expr: |
       group without(label_stage,label_shard) (
         label_replace(
           label_replace(
-            topk by(environment,cluster,node) (1, kube_node_labels{label_type="redis-cluster-chat-cache"}),
+            topk by(environment,cluster,node) (1, kube_node_labels{label_type="redis-cluster-repo-cache"}),
             "stage", "$0", "label_stage", ".*"
           ),
           "shard", "$0", "label_shard", ".*"
@@ -1455,30 +1269,30 @@ groups:
   - record: kube_deployment_labels:labeled
     labels:
       tier: db
-      type: redis-cluster-chat-cache
+      type: redis-cluster-repo-cache
     expr: |
       group without(label_stage,label_shard) (
         label_replace(
           label_replace(
-            topk by(environment,cluster,deployment) (1, kube_deployment_labels{label_type="redis-cluster-chat-cache"}),
+            topk by(environment,cluster,deployment) (1, kube_deployment_labels{label_type="redis-cluster-repo-cache"}),
             "stage", "$0", "label_stage", ".*"
           ),
           "shard", "$0", "label_shard", ".*"
         )
       )
-- name: 'kube-state-metrics-recording-rules: redis-sessions'
+- name: 'kube-state-metrics-recording-rules: redis-cluster-shared-state'
   interval: 1m
   rules:
   - record: kube_pod_labels:labeled
     labels:
       tier: db
-      type: redis-sessions
+      type: redis-cluster-shared-state
     expr: |
       group without(label_stage,label_shard,label_deployment) (
         label_replace(
           label_replace(
             label_replace(
-              topk by(environment,cluster,pod) (1, kube_pod_labels{label_type="redis-sessions"}),
+              topk by(environment,cluster,pod) (1, kube_pod_labels{label_type="redis-cluster-shared-state"}),
               "stage", "$0", "label_stage", ".*"
             ),
             "shard", "$0", "label_shard", ".*"
@@ -1489,12 +1303,12 @@ groups:
   - record: kube_horizontalpodautoscaler_labels:labeled
     labels:
       tier: db
-      type: redis-sessions
+      type: redis-cluster-shared-state
     expr: |
       group without(label_stage,label_shard) (
         label_replace(
           label_replace(
-            topk by(environment,cluster,horizontalpodautoscaler) (1, kube_horizontalpodautoscaler_labels{label_type="redis-sessions"}),
+            topk by(environment,cluster,horizontalpodautoscaler) (1, kube_horizontalpodautoscaler_labels{label_type="redis-cluster-shared-state"}),
             "stage", "$0", "label_stage", ".*"
           ),
           "shard", "$0", "label_shard", ".*"
@@ -1503,12 +1317,12 @@ groups:
   - record: kube_node_labels:labeled
     labels:
       tier: db
-      type: redis-sessions
+      type: redis-cluster-shared-state
     expr: |
       group without(label_stage,label_shard) (
         label_replace(
           label_replace(
-            topk by(environment,cluster,node) (1, kube_node_labels{label_type="redis-sessions"}),
+            topk by(environment,cluster,node) (1, kube_node_labels{label_type="redis-cluster-shared-state"}),
             "stage", "$0", "label_stage", ".*"
           ),
           "shard", "$0", "label_shard", ".*"
@@ -1517,136 +1331,12 @@ groups:
   - record: kube_deployment_labels:labeled
     labels:
       tier: db
-      type: redis-sessions
+      type: redis-cluster-shared-state
     expr: |
       group without(label_stage,label_shard) (
         label_replace(
           label_replace(
-            topk by(environment,cluster,deployment) (1, kube_deployment_labels{label_type="redis-sessions"}),
-            "stage", "$0", "label_stage", ".*"
-          ),
-          "shard", "$0", "label_shard", ".*"
-        )
-      )
-- name: 'kube-state-metrics-recording-rules: redis-registry-cache'
-  interval: 1m
-  rules:
-  - record: kube_pod_labels:labeled
-    labels:
-      tier: db
-      type: redis-registry-cache
-    expr: |
-      group without(label_stage,label_shard,label_deployment) (
-        label_replace(
-          label_replace(
-            label_replace(
-              topk by(environment,cluster,pod) (1, kube_pod_labels{label_type="redis-registry-cache"}),
-              "stage", "$0", "label_stage", ".*"
-            ),
-            "shard", "$0", "label_shard", ".*"
-          ),
-          "deployment", "$0", "label_deployment", ".*"
-        )
-      )
-  - record: kube_horizontalpodautoscaler_labels:labeled
-    labels:
-      tier: db
-      type: redis-registry-cache
-    expr: |
-      group without(label_stage,label_shard) (
-        label_replace(
-          label_replace(
-            topk by(environment,cluster,horizontalpodautoscaler) (1, kube_horizontalpodautoscaler_labels{label_type="redis-registry-cache"}),
-            "stage", "$0", "label_stage", ".*"
-          ),
-          "shard", "$0", "label_shard", ".*"
-        )
-      )
-  - record: kube_node_labels:labeled
-    labels:
-      tier: db
-      type: redis-registry-cache
-    expr: |
-      group without(label_stage,label_shard) (
-        label_replace(
-          label_replace(
-            topk by(environment,cluster,node) (1, kube_node_labels{label_type="redis-registry-cache"}),
-            "stage", "$0", "label_stage", ".*"
-          ),
-          "shard", "$0", "label_shard", ".*"
-        )
-      )
-  - record: kube_deployment_labels:labeled
-    labels:
-      tier: db
-      type: redis-registry-cache
-    expr: |
-      group without(label_stage,label_shard) (
-        label_replace(
-          label_replace(
-            topk by(environment,cluster,deployment) (1, kube_deployment_labels{label_type="redis-registry-cache"}),
-            "stage", "$0", "label_stage", ".*"
-          ),
-          "shard", "$0", "label_shard", ".*"
-        )
-      )
-- name: 'kube-state-metrics-recording-rules: redis-repository-cache'
-  interval: 1m
-  rules:
-  - record: kube_pod_labels:labeled
-    labels:
-      tier: db
-      type: redis-repository-cache
-    expr: |
-      group without(label_stage,label_shard,label_deployment) (
-        label_replace(
-          label_replace(
-            label_replace(
-              topk by(environment,cluster,pod) (1, kube_pod_labels{label_type="redis-repository-cache"}),
-              "stage", "$0", "label_stage", ".*"
-            ),
-            "shard", "$0", "label_shard", ".*"
-          ),
-          "deployment", "$0", "label_deployment", ".*"
-        )
-      )
-  - record: kube_horizontalpodautoscaler_labels:labeled
-    labels:
-      tier: db
-      type: redis-repository-cache
-    expr: |
-      group without(label_stage,label_shard) (
-        label_replace(
-          label_replace(
-            topk by(environment,cluster,horizontalpodautoscaler) (1, kube_horizontalpodautoscaler_labels{label_type="redis-repository-cache"}),
-            "stage", "$0", "label_stage", ".*"
-          ),
-          "shard", "$0", "label_shard", ".*"
-        )
-      )
-  - record: kube_node_labels:labeled
-    labels:
-      tier: db
-      type: redis-repository-cache
-    expr: |
-      group without(label_stage,label_shard) (
-        label_replace(
-          label_replace(
-            topk by(environment,cluster,node) (1, kube_node_labels{label_type="redis-repository-cache"}),
-            "stage", "$0", "label_stage", ".*"
-          ),
-          "shard", "$0", "label_shard", ".*"
-        )
-      )
-  - record: kube_deployment_labels:labeled
-    labels:
-      tier: db
-      type: redis-repository-cache
-    expr: |
-      group without(label_stage,label_shard) (
-        label_replace(
-          label_replace(
-            topk by(environment,cluster,deployment) (1, kube_deployment_labels{label_type="redis-repository-cache"}),
+            topk by(environment,cluster,deployment) (1, kube_deployment_labels{label_type="redis-cluster-shared-state"}),
             "stage", "$0", "label_stage", ".*"
           ),
           "shard", "$0", "label_shard", ".*"
@@ -1771,6 +1461,254 @@ groups:
         label_replace(
           label_replace(
             topk by(environment,cluster,deployment) (1, kube_deployment_labels{label_type="redis-pubsub"}),
+            "stage", "$0", "label_stage", ".*"
+          ),
+          "shard", "$0", "label_shard", ".*"
+        )
+      )
+- name: 'kube-state-metrics-recording-rules: redis-registry-cache'
+  interval: 1m
+  rules:
+  - record: kube_pod_labels:labeled
+    labels:
+      tier: db
+      type: redis-registry-cache
+    expr: |
+      group without(label_stage,label_shard,label_deployment) (
+        label_replace(
+          label_replace(
+            label_replace(
+              topk by(environment,cluster,pod) (1, kube_pod_labels{label_type="redis-registry-cache"}),
+              "stage", "$0", "label_stage", ".*"
+            ),
+            "shard", "$0", "label_shard", ".*"
+          ),
+          "deployment", "$0", "label_deployment", ".*"
+        )
+      )
+  - record: kube_horizontalpodautoscaler_labels:labeled
+    labels:
+      tier: db
+      type: redis-registry-cache
+    expr: |
+      group without(label_stage,label_shard) (
+        label_replace(
+          label_replace(
+            topk by(environment,cluster,horizontalpodautoscaler) (1, kube_horizontalpodautoscaler_labels{label_type="redis-registry-cache"}),
+            "stage", "$0", "label_stage", ".*"
+          ),
+          "shard", "$0", "label_shard", ".*"
+        )
+      )
+  - record: kube_node_labels:labeled
+    labels:
+      tier: db
+      type: redis-registry-cache
+    expr: |
+      group without(label_stage,label_shard) (
+        label_replace(
+          label_replace(
+            topk by(environment,cluster,node) (1, kube_node_labels{label_type="redis-registry-cache"}),
+            "stage", "$0", "label_stage", ".*"
+          ),
+          "shard", "$0", "label_shard", ".*"
+        )
+      )
+  - record: kube_deployment_labels:labeled
+    labels:
+      tier: db
+      type: redis-registry-cache
+    expr: |
+      group without(label_stage,label_shard) (
+        label_replace(
+          label_replace(
+            topk by(environment,cluster,deployment) (1, kube_deployment_labels{label_type="redis-registry-cache"}),
+            "stage", "$0", "label_stage", ".*"
+          ),
+          "shard", "$0", "label_shard", ".*"
+        )
+      )
+- name: 'kube-state-metrics-recording-rules: redis-sessions'
+  interval: 1m
+  rules:
+  - record: kube_pod_labels:labeled
+    labels:
+      tier: db
+      type: redis-sessions
+    expr: |
+      group without(label_stage,label_shard,label_deployment) (
+        label_replace(
+          label_replace(
+            label_replace(
+              topk by(environment,cluster,pod) (1, kube_pod_labels{label_type="redis-sessions"}),
+              "stage", "$0", "label_stage", ".*"
+            ),
+            "shard", "$0", "label_shard", ".*"
+          ),
+          "deployment", "$0", "label_deployment", ".*"
+        )
+      )
+  - record: kube_horizontalpodautoscaler_labels:labeled
+    labels:
+      tier: db
+      type: redis-sessions
+    expr: |
+      group without(label_stage,label_shard) (
+        label_replace(
+          label_replace(
+            topk by(environment,cluster,horizontalpodautoscaler) (1, kube_horizontalpodautoscaler_labels{label_type="redis-sessions"}),
+            "stage", "$0", "label_stage", ".*"
+          ),
+          "shard", "$0", "label_shard", ".*"
+        )
+      )
+  - record: kube_node_labels:labeled
+    labels:
+      tier: db
+      type: redis-sessions
+    expr: |
+      group without(label_stage,label_shard) (
+        label_replace(
+          label_replace(
+            topk by(environment,cluster,node) (1, kube_node_labels{label_type="redis-sessions"}),
+            "stage", "$0", "label_stage", ".*"
+          ),
+          "shard", "$0", "label_shard", ".*"
+        )
+      )
+  - record: kube_deployment_labels:labeled
+    labels:
+      tier: db
+      type: redis-sessions
+    expr: |
+      group without(label_stage,label_shard) (
+        label_replace(
+          label_replace(
+            topk by(environment,cluster,deployment) (1, kube_deployment_labels{label_type="redis-sessions"}),
+            "stage", "$0", "label_stage", ".*"
+          ),
+          "shard", "$0", "label_shard", ".*"
+        )
+      )
+- name: 'kube-state-metrics-recording-rules: redis-sidekiq'
+  interval: 1m
+  rules:
+  - record: kube_pod_labels:labeled
+    labels:
+      tier: db
+      type: redis-sidekiq
+    expr: |
+      group without(label_stage,label_shard,label_deployment) (
+        label_replace(
+          label_replace(
+            label_replace(
+              topk by(environment,cluster,pod) (1, kube_pod_labels{label_type="redis-sidekiq"}),
+              "stage", "$0", "label_stage", ".*"
+            ),
+            "shard", "$0", "label_shard", ".*"
+          ),
+          "deployment", "$0", "label_deployment", ".*"
+        )
+      )
+  - record: kube_horizontalpodautoscaler_labels:labeled
+    labels:
+      tier: db
+      type: redis-sidekiq
+    expr: |
+      group without(label_stage,label_shard) (
+        label_replace(
+          label_replace(
+            topk by(environment,cluster,horizontalpodautoscaler) (1, kube_horizontalpodautoscaler_labels{label_type="redis-sidekiq"}),
+            "stage", "$0", "label_stage", ".*"
+          ),
+          "shard", "$0", "label_shard", ".*"
+        )
+      )
+  - record: kube_node_labels:labeled
+    labels:
+      tier: db
+      type: redis-sidekiq
+    expr: |
+      group without(label_stage,label_shard) (
+        label_replace(
+          label_replace(
+            topk by(environment,cluster,node) (1, kube_node_labels{label_type="redis-sidekiq"}),
+            "stage", "$0", "label_stage", ".*"
+          ),
+          "shard", "$0", "label_shard", ".*"
+        )
+      )
+  - record: kube_deployment_labels:labeled
+    labels:
+      tier: db
+      type: redis-sidekiq
+    expr: |
+      group without(label_stage,label_shard) (
+        label_replace(
+          label_replace(
+            topk by(environment,cluster,deployment) (1, kube_deployment_labels{label_type="redis-sidekiq"}),
+            "stage", "$0", "label_stage", ".*"
+          ),
+          "shard", "$0", "label_shard", ".*"
+        )
+      )
+- name: 'kube-state-metrics-recording-rules: redis-tracechunks'
+  interval: 1m
+  rules:
+  - record: kube_pod_labels:labeled
+    labels:
+      tier: db
+      type: redis-tracechunks
+    expr: |
+      group without(label_stage,label_shard,label_deployment) (
+        label_replace(
+          label_replace(
+            label_replace(
+              topk by(environment,cluster,pod) (1, kube_pod_labels{label_type="redis-tracechunks"}),
+              "stage", "$0", "label_stage", ".*"
+            ),
+            "shard", "$0", "label_shard", ".*"
+          ),
+          "deployment", "$0", "label_deployment", ".*"
+        )
+      )
+  - record: kube_horizontalpodautoscaler_labels:labeled
+    labels:
+      tier: db
+      type: redis-tracechunks
+    expr: |
+      group without(label_stage,label_shard) (
+        label_replace(
+          label_replace(
+            topk by(environment,cluster,horizontalpodautoscaler) (1, kube_horizontalpodautoscaler_labels{label_type="redis-tracechunks"}),
+            "stage", "$0", "label_stage", ".*"
+          ),
+          "shard", "$0", "label_shard", ".*"
+        )
+      )
+  - record: kube_node_labels:labeled
+    labels:
+      tier: db
+      type: redis-tracechunks
+    expr: |
+      group without(label_stage,label_shard) (
+        label_replace(
+          label_replace(
+            topk by(environment,cluster,node) (1, kube_node_labels{label_type="redis-tracechunks"}),
+            "stage", "$0", "label_stage", ".*"
+          ),
+          "shard", "$0", "label_shard", ".*"
+        )
+      )
+  - record: kube_deployment_labels:labeled
+    labels:
+      tier: db
+      type: redis-tracechunks
+    expr: |
+      group without(label_stage,label_shard) (
+        label_replace(
+          label_replace(
+            topk by(environment,cluster,deployment) (1, kube_deployment_labels{label_type="redis-tracechunks"}),
             "stage", "$0", "label_stage", ".*"
           ),
           "shard", "$0", "label_shard", ".*"
@@ -2224,484 +2162,484 @@ groups:
       container_start_time_seconds{metrics_path="/metrics/cadvisor"}
       *
       on(environment,cluster,pod) group_left(tier,type,stage,shard,deployment)
-      topk by (environment,cluster,pod) (1, kube_pod_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-repository-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
+      topk by (environment,cluster,pod) (1, kube_pod_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
   - record: container_cpu_cfs_periods_total:labeled
     expr: |
       container_cpu_cfs_periods_total{metrics_path="/metrics/cadvisor"}
       *
       on(environment,cluster,pod) group_left(tier,type,stage,shard,deployment)
-      topk by (environment,cluster,pod) (1, kube_pod_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-repository-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
+      topk by (environment,cluster,pod) (1, kube_pod_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
   - record: container_cpu_cfs_throttled_periods_total:labeled
     expr: |
       container_cpu_cfs_throttled_periods_total{metrics_path="/metrics/cadvisor"}
       *
       on(environment,cluster,pod) group_left(tier,type,stage,shard,deployment)
-      topk by (environment,cluster,pod) (1, kube_pod_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-repository-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
+      topk by (environment,cluster,pod) (1, kube_pod_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
   - record: container_cpu_cfs_throttled_seconds_total:labeled
     expr: |
       container_cpu_cfs_throttled_seconds_total{metrics_path="/metrics/cadvisor"}
       *
       on(environment,cluster,pod) group_left(tier,type,stage,shard,deployment)
-      topk by (environment,cluster,pod) (1, kube_pod_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-repository-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
+      topk by (environment,cluster,pod) (1, kube_pod_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
   - record: container_cpu_usage_seconds_total:labeled
     expr: |
       container_cpu_usage_seconds_total{metrics_path="/metrics/cadvisor"}
       *
       on(environment,cluster,pod) group_left(tier,type,stage,shard,deployment)
-      topk by (environment,cluster,pod) (1, kube_pod_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-repository-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
+      topk by (environment,cluster,pod) (1, kube_pod_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
   - record: container_memory_cache:labeled
     expr: |
       container_memory_cache{metrics_path="/metrics/cadvisor"}
       *
       on(environment,cluster,pod) group_left(tier,type,stage,shard,deployment)
-      topk by (environment,cluster,pod) (1, kube_pod_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-repository-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
+      topk by (environment,cluster,pod) (1, kube_pod_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
   - record: container_memory_rss:labeled
     expr: |
       container_memory_rss{metrics_path="/metrics/cadvisor"}
       *
       on(environment,cluster,pod) group_left(tier,type,stage,shard,deployment)
-      topk by (environment,cluster,pod) (1, kube_pod_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-repository-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
+      topk by (environment,cluster,pod) (1, kube_pod_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
   - record: container_memory_swap:labeled
     expr: |
       container_memory_swap{metrics_path="/metrics/cadvisor"}
       *
       on(environment,cluster,pod) group_left(tier,type,stage,shard,deployment)
-      topk by (environment,cluster,pod) (1, kube_pod_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-repository-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
+      topk by (environment,cluster,pod) (1, kube_pod_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
   - record: container_memory_usage_bytes:labeled
     expr: |
       container_memory_usage_bytes{metrics_path="/metrics/cadvisor"}
       *
       on(environment,cluster,pod) group_left(tier,type,stage,shard,deployment)
-      topk by (environment,cluster,pod) (1, kube_pod_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-repository-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
+      topk by (environment,cluster,pod) (1, kube_pod_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
   - record: container_memory_working_set_bytes:labeled
     expr: |
       container_memory_working_set_bytes{metrics_path="/metrics/cadvisor"}
       *
       on(environment,cluster,pod) group_left(tier,type,stage,shard,deployment)
-      topk by (environment,cluster,pod) (1, kube_pod_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-repository-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
+      topk by (environment,cluster,pod) (1, kube_pod_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
   - record: container_network_receive_bytes_total:labeled
     expr: |
       container_network_receive_bytes_total{metrics_path="/metrics/cadvisor"}
       *
       on(environment,cluster,pod) group_left(tier,type,stage,shard,deployment)
-      topk by (environment,cluster,pod) (1, kube_pod_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-repository-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
+      topk by (environment,cluster,pod) (1, kube_pod_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
   - record: container_network_transmit_bytes_total:labeled
     expr: |
       container_network_transmit_bytes_total{metrics_path="/metrics/cadvisor"}
       *
       on(environment,cluster,pod) group_left(tier,type,stage,shard,deployment)
-      topk by (environment,cluster,pod) (1, kube_pod_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-repository-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
+      topk by (environment,cluster,pod) (1, kube_pod_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
   - record: container_spec_cpu_period:labeled
     expr: |
       container_spec_cpu_period{metrics_path="/metrics/cadvisor"}
       *
       on(environment,cluster,pod) group_left(tier,type,stage,shard,deployment)
-      topk by (environment,cluster,pod) (1, kube_pod_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-repository-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
+      topk by (environment,cluster,pod) (1, kube_pod_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
   - record: container_spec_cpu_quota:labeled
     expr: |
       container_spec_cpu_quota{metrics_path="/metrics/cadvisor"}
       *
       on(environment,cluster,pod) group_left(tier,type,stage,shard,deployment)
-      topk by (environment,cluster,pod) (1, kube_pod_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-repository-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
+      topk by (environment,cluster,pod) (1, kube_pod_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
   - record: container_spec_cpu_shares:labeled
     expr: |
       container_spec_cpu_shares{metrics_path="/metrics/cadvisor"}
       *
       on(environment,cluster,pod) group_left(tier,type,stage,shard,deployment)
-      topk by (environment,cluster,pod) (1, kube_pod_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-repository-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
+      topk by (environment,cluster,pod) (1, kube_pod_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
   - record: container_spec_memory_limit_bytes:labeled
     expr: |
       container_spec_memory_limit_bytes{metrics_path="/metrics/cadvisor"}
       *
       on(environment,cluster,pod) group_left(tier,type,stage,shard,deployment)
-      topk by (environment,cluster,pod) (1, kube_pod_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-repository-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
+      topk by (environment,cluster,pod) (1, kube_pod_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
   - record: kube_pod_container_resource_limits:labeled
     expr: |
       kube_pod_container_resource_limits
       *
       on(environment,cluster,pod) group_left(tier,type,stage,shard,deployment)
-      topk by (environment,cluster,pod) (1, kube_pod_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-repository-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
+      topk by (environment,cluster,pod) (1, kube_pod_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
   - record: kube_pod_container_resource_requests:labeled
     expr: |
       kube_pod_container_resource_requests
       *
       on(environment,cluster,pod) group_left(tier,type,stage,shard,deployment)
-      topk by (environment,cluster,pod) (1, kube_pod_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-repository-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
+      topk by (environment,cluster,pod) (1, kube_pod_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
   - record: kube_pod_container_status_last_terminated_reason:labeled
     expr: |
       kube_pod_container_status_last_terminated_reason
       *
       on(environment,cluster,pod) group_left(tier,type,stage,shard,deployment)
-      topk by (environment,cluster,pod) (1, kube_pod_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-repository-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
+      topk by (environment,cluster,pod) (1, kube_pod_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
   - record: kube_pod_container_status_ready:labeled
     expr: |
       kube_pod_container_status_ready
       *
       on(environment,cluster,pod) group_left(tier,type,stage,shard,deployment)
-      topk by (environment,cluster,pod) (1, kube_pod_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-repository-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
+      topk by (environment,cluster,pod) (1, kube_pod_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
   - record: kube_pod_container_status_restarts_total:labeled
     expr: |
       kube_pod_container_status_restarts_total
       *
       on(environment,cluster,pod) group_left(tier,type,stage,shard,deployment)
-      topk by (environment,cluster,pod) (1, kube_pod_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-repository-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
+      topk by (environment,cluster,pod) (1, kube_pod_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
   - record: kube_pod_container_status_running:labeled
     expr: |
       kube_pod_container_status_running
       *
       on(environment,cluster,pod) group_left(tier,type,stage,shard,deployment)
-      topk by (environment,cluster,pod) (1, kube_pod_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-repository-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
+      topk by (environment,cluster,pod) (1, kube_pod_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
   - record: kube_pod_container_status_terminated:labeled
     expr: |
       kube_pod_container_status_terminated
       *
       on(environment,cluster,pod) group_left(tier,type,stage,shard,deployment)
-      topk by (environment,cluster,pod) (1, kube_pod_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-repository-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
+      topk by (environment,cluster,pod) (1, kube_pod_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
   - record: kube_pod_container_status_terminated_reason:labeled
     expr: |
       kube_pod_container_status_terminated_reason
       *
       on(environment,cluster,pod) group_left(tier,type,stage,shard,deployment)
-      topk by (environment,cluster,pod) (1, kube_pod_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-repository-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
+      topk by (environment,cluster,pod) (1, kube_pod_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
   - record: kube_pod_container_status_waiting:labeled
     expr: |
       kube_pod_container_status_waiting
       *
       on(environment,cluster,pod) group_left(tier,type,stage,shard,deployment)
-      topk by (environment,cluster,pod) (1, kube_pod_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-repository-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
+      topk by (environment,cluster,pod) (1, kube_pod_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
   - record: kube_pod_container_status_waiting_reason:labeled
     expr: |
       kube_pod_container_status_waiting_reason
       *
       on(environment,cluster,pod) group_left(tier,type,stage,shard,deployment)
-      topk by (environment,cluster,pod) (1, kube_pod_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-repository-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
+      topk by (environment,cluster,pod) (1, kube_pod_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
   - record: kube_horizontalpodautoscaler_spec_target_metric:labeled
     expr: |
       kube_horizontalpodautoscaler_spec_target_metric
       *
       on(environment,cluster,horizontalpodautoscaler) group_left(tier,type,stage,shard)
-      topk by (environment,cluster,horizontalpodautoscaler) (1, kube_horizontalpodautoscaler_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-repository-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
+      topk by (environment,cluster,horizontalpodautoscaler) (1, kube_horizontalpodautoscaler_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
   - record: kube_horizontalpodautoscaler_status_condition:labeled
     expr: |
       kube_horizontalpodautoscaler_status_condition
       *
       on(environment,cluster,horizontalpodautoscaler) group_left(tier,type,stage,shard)
-      topk by (environment,cluster,horizontalpodautoscaler) (1, kube_horizontalpodautoscaler_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-repository-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
+      topk by (environment,cluster,horizontalpodautoscaler) (1, kube_horizontalpodautoscaler_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
   - record: kube_horizontalpodautoscaler_status_current_replicas:labeled
     expr: |
       kube_horizontalpodautoscaler_status_current_replicas
       *
       on(environment,cluster,horizontalpodautoscaler) group_left(tier,type,stage,shard)
-      topk by (environment,cluster,horizontalpodautoscaler) (1, kube_horizontalpodautoscaler_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-repository-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
+      topk by (environment,cluster,horizontalpodautoscaler) (1, kube_horizontalpodautoscaler_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
   - record: kube_horizontalpodautoscaler_status_desired_replicas:labeled
     expr: |
       kube_horizontalpodautoscaler_status_desired_replicas
       *
       on(environment,cluster,horizontalpodautoscaler) group_left(tier,type,stage,shard)
-      topk by (environment,cluster,horizontalpodautoscaler) (1, kube_horizontalpodautoscaler_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-repository-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
+      topk by (environment,cluster,horizontalpodautoscaler) (1, kube_horizontalpodautoscaler_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
   - record: kube_horizontalpodautoscaler_metadata_generation:labeled
     expr: |
       kube_horizontalpodautoscaler_metadata_generation
       *
       on(environment,cluster,horizontalpodautoscaler) group_left(tier,type,stage,shard)
-      topk by (environment,cluster,horizontalpodautoscaler) (1, kube_horizontalpodautoscaler_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-repository-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
+      topk by (environment,cluster,horizontalpodautoscaler) (1, kube_horizontalpodautoscaler_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
   - record: kube_horizontalpodautoscaler_spec_max_replicas:labeled
     expr: |
       kube_horizontalpodautoscaler_spec_max_replicas
       *
       on(environment,cluster,horizontalpodautoscaler) group_left(tier,type,stage,shard)
-      topk by (environment,cluster,horizontalpodautoscaler) (1, kube_horizontalpodautoscaler_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-repository-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
+      topk by (environment,cluster,horizontalpodautoscaler) (1, kube_horizontalpodautoscaler_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
   - record: kube_horizontalpodautoscaler_spec_min_replicas:labeled
     expr: |
       kube_horizontalpodautoscaler_spec_min_replicas
       *
       on(environment,cluster,horizontalpodautoscaler) group_left(tier,type,stage,shard)
-      topk by (environment,cluster,horizontalpodautoscaler) (1, kube_horizontalpodautoscaler_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-repository-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
+      topk by (environment,cluster,horizontalpodautoscaler) (1, kube_horizontalpodautoscaler_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
   - record: kube_node_status_capacity:labeled
     expr: |
       kube_node_status_capacity
       *
       on(environment,cluster,node) group_left(tier,type,stage,shard)
-      topk by (environment,cluster,node) (1, kube_node_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-repository-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
+      topk by (environment,cluster,node) (1, kube_node_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
   - record: kube_node_status_allocatable:labeled
     expr: |
       kube_node_status_allocatable
       *
       on(environment,cluster,node) group_left(tier,type,stage,shard)
-      topk by (environment,cluster,node) (1, kube_node_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-repository-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
+      topk by (environment,cluster,node) (1, kube_node_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
   - record: kube_node_status_condition:labeled
     expr: |
       kube_node_status_condition
       *
       on(environment,cluster,node) group_left(tier,type,stage,shard)
-      topk by (environment,cluster,node) (1, kube_node_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-repository-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
+      topk by (environment,cluster,node) (1, kube_node_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
   - record: node_schedstat_waiting_seconds_total:labeled
     expr: |
       node_schedstat_waiting_seconds_total
       *
       on(environment,cluster,node) group_left(tier,type,stage,shard)
-      topk by (environment,cluster,node) (1, kube_node_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-repository-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
+      topk by (environment,cluster,node) (1, kube_node_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
   - record: node_cpu_seconds_total:labeled
     expr: |
       node_cpu_seconds_total
       *
       on(environment,cluster,node) group_left(tier,type,stage,shard)
-      topk by (environment,cluster,node) (1, kube_node_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-repository-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
+      topk by (environment,cluster,node) (1, kube_node_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
   - record: node_network_transmit_bytes_total:labeled
     expr: |
       node_network_transmit_bytes_total
       *
       on(environment,cluster,node) group_left(tier,type,stage,shard)
-      topk by (environment,cluster,node) (1, kube_node_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-repository-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
+      topk by (environment,cluster,node) (1, kube_node_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
   - record: node_network_receive_bytes_total:labeled
     expr: |
       node_network_receive_bytes_total
       *
       on(environment,cluster,node) group_left(tier,type,stage,shard)
-      topk by (environment,cluster,node) (1, kube_node_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-repository-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
+      topk by (environment,cluster,node) (1, kube_node_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
   - record: node_disk_reads_completed_total:labeled
     expr: |
       node_disk_reads_completed_total
       *
       on(environment,cluster,node) group_left(tier,type,stage,shard)
-      topk by (environment,cluster,node) (1, kube_node_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-repository-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
+      topk by (environment,cluster,node) (1, kube_node_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
   - record: node_disk_writes_completed_total:labeled
     expr: |
       node_disk_writes_completed_total
       *
       on(environment,cluster,node) group_left(tier,type,stage,shard)
-      topk by (environment,cluster,node) (1, kube_node_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-repository-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
+      topk by (environment,cluster,node) (1, kube_node_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
   - record: node_disk_read_bytes_total:labeled
     expr: |
       node_disk_read_bytes_total
       *
       on(environment,cluster,node) group_left(tier,type,stage,shard)
-      topk by (environment,cluster,node) (1, kube_node_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-repository-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
+      topk by (environment,cluster,node) (1, kube_node_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
   - record: node_disk_written_bytes_total:labeled
     expr: |
       node_disk_written_bytes_total
       *
       on(environment,cluster,node) group_left(tier,type,stage,shard)
-      topk by (environment,cluster,node) (1, kube_node_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-repository-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
+      topk by (environment,cluster,node) (1, kube_node_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
   - record: node_disk_read_time_seconds_total:labeled
     expr: |
       node_disk_read_time_seconds_total
       *
       on(environment,cluster,node) group_left(tier,type,stage,shard)
-      topk by (environment,cluster,node) (1, kube_node_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-repository-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
+      topk by (environment,cluster,node) (1, kube_node_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
   - record: node_disk_write_time_seconds_total:labeled
     expr: |
       node_disk_write_time_seconds_total
       *
       on(environment,cluster,node) group_left(tier,type,stage,shard)
-      topk by (environment,cluster,node) (1, kube_node_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-repository-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
+      topk by (environment,cluster,node) (1, kube_node_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
   - record: node_load1:labeled
     expr: |
       node_load1
       *
       on(environment,cluster,node) group_left(tier,type,stage,shard)
-      topk by (environment,cluster,node) (1, kube_node_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-repository-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
+      topk by (environment,cluster,node) (1, kube_node_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
   - record: node_load5:labeled
     expr: |
       node_load5
       *
       on(environment,cluster,node) group_left(tier,type,stage,shard)
-      topk by (environment,cluster,node) (1, kube_node_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-repository-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
+      topk by (environment,cluster,node) (1, kube_node_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
   - record: node_load15:labeled
     expr: |
       node_load15
       *
       on(environment,cluster,node) group_left(tier,type,stage,shard)
-      topk by (environment,cluster,node) (1, kube_node_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-repository-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
+      topk by (environment,cluster,node) (1, kube_node_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
   - record: node_vmstat_oom_kill:labeled
     expr: |
       node_vmstat_oom_kill
       *
       on(environment,cluster,node) group_left(tier,type,stage,shard)
-      topk by (environment,cluster,node) (1, kube_node_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-repository-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
+      topk by (environment,cluster,node) (1, kube_node_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
   - record: nginx_ingress_controller_bytes_sent_count:labeled
     expr: |
       nginx_ingress_controller_bytes_sent_count
       *
       on(environment,cluster,ingress) group_left(tier,type,stage,shard)
-      topk by (environment,cluster,ingress) (1, kube_ingress_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-repository-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
+      topk by (environment,cluster,ingress) (1, kube_ingress_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
   - record: nginx_ingress_controller_request_duration_seconds_bucket:labeled
     expr: |
       nginx_ingress_controller_request_duration_seconds_bucket
       *
       on(environment,cluster,ingress) group_left(tier,type,stage,shard)
-      topk by (environment,cluster,ingress) (1, kube_ingress_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-repository-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
+      topk by (environment,cluster,ingress) (1, kube_ingress_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
   - record: nginx_ingress_controller_request_duration_seconds_sum:labeled
     expr: |
       nginx_ingress_controller_request_duration_seconds_sum
       *
       on(environment,cluster,ingress) group_left(tier,type,stage,shard)
-      topk by (environment,cluster,ingress) (1, kube_ingress_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-repository-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
+      topk by (environment,cluster,ingress) (1, kube_ingress_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
   - record: nginx_ingress_controller_response_size_count:labeled
     expr: |
       nginx_ingress_controller_response_size_count
       *
       on(environment,cluster,ingress) group_left(tier,type,stage,shard)
-      topk by (environment,cluster,ingress) (1, kube_ingress_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-repository-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
+      topk by (environment,cluster,ingress) (1, kube_ingress_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
   - record: nginx_ingress_controller_ingress_upstream_latency_seconds:labeled
     expr: |
       nginx_ingress_controller_ingress_upstream_latency_seconds
       *
       on(environment,cluster,ingress) group_left(tier,type,stage,shard)
-      topk by (environment,cluster,ingress) (1, kube_ingress_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-repository-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
+      topk by (environment,cluster,ingress) (1, kube_ingress_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
   - record: nginx_ingress_controller_ingress_upstream_latency_seconds_count:labeled
     expr: |
       nginx_ingress_controller_ingress_upstream_latency_seconds_count
       *
       on(environment,cluster,ingress) group_left(tier,type,stage,shard)
-      topk by (environment,cluster,ingress) (1, kube_ingress_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-repository-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
+      topk by (environment,cluster,ingress) (1, kube_ingress_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
   - record: nginx_ingress_controller_ingress_upstream_latency_seconds_sum:labeled
     expr: |
       nginx_ingress_controller_ingress_upstream_latency_seconds_sum
       *
       on(environment,cluster,ingress) group_left(tier,type,stage,shard)
-      topk by (environment,cluster,ingress) (1, kube_ingress_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-repository-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
+      topk by (environment,cluster,ingress) (1, kube_ingress_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
   - record: nginx_ingress_controller_request_duration_seconds_count:labeled
     expr: |
       nginx_ingress_controller_request_duration_seconds_count
       *
       on(environment,cluster,ingress) group_left(tier,type,stage,shard)
-      topk by (environment,cluster,ingress) (1, kube_ingress_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-repository-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
+      topk by (environment,cluster,ingress) (1, kube_ingress_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
   - record: nginx_ingress_controller_request_size_bucket:labeled
     expr: |
       nginx_ingress_controller_request_size_bucket
       *
       on(environment,cluster,ingress) group_left(tier,type,stage,shard)
-      topk by (environment,cluster,ingress) (1, kube_ingress_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-repository-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
+      topk by (environment,cluster,ingress) (1, kube_ingress_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
   - record: nginx_ingress_controller_response_duration_seconds_bucket:labeled
     expr: |
       nginx_ingress_controller_response_duration_seconds_bucket
       *
       on(environment,cluster,ingress) group_left(tier,type,stage,shard)
-      topk by (environment,cluster,ingress) (1, kube_ingress_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-repository-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
+      topk by (environment,cluster,ingress) (1, kube_ingress_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
   - record: nginx_ingress_controller_bytes_sent_bucket:labeled
     expr: |
       nginx_ingress_controller_bytes_sent_bucket
       *
       on(environment,cluster,ingress) group_left(tier,type,stage,shard)
-      topk by (environment,cluster,ingress) (1, kube_ingress_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-repository-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
+      topk by (environment,cluster,ingress) (1, kube_ingress_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
   - record: nginx_ingress_controller_bytes_sent_sum:labeled
     expr: |
       nginx_ingress_controller_bytes_sent_sum
       *
       on(environment,cluster,ingress) group_left(tier,type,stage,shard)
-      topk by (environment,cluster,ingress) (1, kube_ingress_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-repository-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
+      topk by (environment,cluster,ingress) (1, kube_ingress_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
   - record: nginx_ingress_controller_request_size_count:labeled
     expr: |
       nginx_ingress_controller_request_size_count
       *
       on(environment,cluster,ingress) group_left(tier,type,stage,shard)
-      topk by (environment,cluster,ingress) (1, kube_ingress_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-repository-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
+      topk by (environment,cluster,ingress) (1, kube_ingress_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
   - record: nginx_ingress_controller_response_duration_seconds_sum:labeled
     expr: |
       nginx_ingress_controller_response_duration_seconds_sum
       *
       on(environment,cluster,ingress) group_left(tier,type,stage,shard)
-      topk by (environment,cluster,ingress) (1, kube_ingress_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-repository-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
+      topk by (environment,cluster,ingress) (1, kube_ingress_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
   - record: nginx_ingress_controller_request_size_sum:labeled
     expr: |
       nginx_ingress_controller_request_size_sum
       *
       on(environment,cluster,ingress) group_left(tier,type,stage,shard)
-      topk by (environment,cluster,ingress) (1, kube_ingress_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-repository-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
+      topk by (environment,cluster,ingress) (1, kube_ingress_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
   - record: nginx_ingress_controller_requests:labeled
     expr: |
       nginx_ingress_controller_requests
       *
       on(environment,cluster,ingress) group_left(tier,type,stage,shard)
-      topk by (environment,cluster,ingress) (1, kube_ingress_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-repository-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
+      topk by (environment,cluster,ingress) (1, kube_ingress_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
   - record: nginx_ingress_controller_response_duration_seconds_count:labeled
     expr: |
       nginx_ingress_controller_response_duration_seconds_count
       *
       on(environment,cluster,ingress) group_left(tier,type,stage,shard)
-      topk by (environment,cluster,ingress) (1, kube_ingress_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-repository-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
+      topk by (environment,cluster,ingress) (1, kube_ingress_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
   - record: nginx_ingress_controller_response_size_bucket:labeled
     expr: |
       nginx_ingress_controller_response_size_bucket
       *
       on(environment,cluster,ingress) group_left(tier,type,stage,shard)
-      topk by (environment,cluster,ingress) (1, kube_ingress_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-repository-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
+      topk by (environment,cluster,ingress) (1, kube_ingress_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
   - record: nginx_ingress_controller_response_size_sum:labeled
     expr: |
       nginx_ingress_controller_response_size_sum
       *
       on(environment,cluster,ingress) group_left(tier,type,stage,shard)
-      topk by (environment,cluster,ingress) (1, kube_ingress_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-repository-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
+      topk by (environment,cluster,ingress) (1, kube_ingress_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
   - record: kube_deployment_status_replicas_unavailable:labeled
     expr: |
       kube_deployment_status_replicas_unavailable
       *
       on(environment,cluster,deployment) group_left(tier,type,stage,shard)
-      topk by (environment,cluster,deployment) (1, kube_deployment_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-repository-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
+      topk by (environment,cluster,deployment) (1, kube_deployment_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
   - record: kube_deployment_status_replicas_updated:labeled
     expr: |
       kube_deployment_status_replicas_updated
       *
       on(environment,cluster,deployment) group_left(tier,type,stage,shard)
-      topk by (environment,cluster,deployment) (1, kube_deployment_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-repository-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
+      topk by (environment,cluster,deployment) (1, kube_deployment_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
   - record: kube_deployment_spec_paused:labeled
     expr: |
       kube_deployment_spec_paused
       *
       on(environment,cluster,deployment) group_left(tier,type,stage,shard)
-      topk by (environment,cluster,deployment) (1, kube_deployment_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-repository-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
+      topk by (environment,cluster,deployment) (1, kube_deployment_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
   - record: kube_deployment_spec_replicas:labeled
     expr: |
       kube_deployment_spec_replicas
       *
       on(environment,cluster,deployment) group_left(tier,type,stage,shard)
-      topk by (environment,cluster,deployment) (1, kube_deployment_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-repository-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
+      topk by (environment,cluster,deployment) (1, kube_deployment_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
   - record: kube_deployment_spec_strategy_rollingupdate_max_surge:labeled
     expr: |
       kube_deployment_spec_strategy_rollingupdate_max_surge
       *
       on(environment,cluster,deployment) group_left(tier,type,stage,shard)
-      topk by (environment,cluster,deployment) (1, kube_deployment_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-repository-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
+      topk by (environment,cluster,deployment) (1, kube_deployment_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
   - record: kube_deployment_spec_strategy_rollingupdate_max_unavailable:labeled
     expr: |
       kube_deployment_spec_strategy_rollingupdate_max_unavailable
       *
       on(environment,cluster,deployment) group_left(tier,type,stage,shard)
-      topk by (environment,cluster,deployment) (1, kube_deployment_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-repository-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
+      topk by (environment,cluster,deployment) (1, kube_deployment_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
   - record: kube_deployment_status_condition:labeled
     expr: |
       kube_deployment_status_condition
       *
       on(environment,cluster,deployment) group_left(tier,type,stage,shard)
-      topk by (environment,cluster,deployment) (1, kube_deployment_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-repository-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
+      topk by (environment,cluster,deployment) (1, kube_deployment_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
   - record: kube_deployment_status_replicas_available:labeled
     expr: |
       kube_deployment_status_replicas_available
       *
       on(environment,cluster,deployment) group_left(tier,type,stage,shard)
-      topk by (environment,cluster,deployment) (1, kube_deployment_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-repository-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
+      topk by (environment,cluster,deployment) (1, kube_deployment_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
   - record: kube_deployment_created:labeled
     expr: |
       kube_deployment_created
       *
       on(environment,cluster,deployment) group_left(tier,type,stage,shard)
-      topk by (environment,cluster,deployment) (1, kube_deployment_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-repository-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
+      topk by (environment,cluster,deployment) (1, kube_deployment_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
   - record: kube_deployment_metadata_generation:labeled
     expr: |
       kube_deployment_metadata_generation
       *
       on(environment,cluster,deployment) group_left(tier,type,stage,shard)
-      topk by (environment,cluster,deployment) (1, kube_deployment_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-repository-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
+      topk by (environment,cluster,deployment) (1, kube_deployment_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
   - record: kube_deployment_status_observed_generation:labeled
     expr: |
       kube_deployment_status_observed_generation
       *
       on(environment,cluster,deployment) group_left(tier,type,stage,shard)
-      topk by (environment,cluster,deployment) (1, kube_deployment_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-repository-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
+      topk by (environment,cluster,deployment) (1, kube_deployment_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
   - record: kube_deployment_status_replicas:labeled
     expr: |
       kube_deployment_status_replicas
       *
       on(environment,cluster,deployment) group_left(tier,type,stage,shard)
-      topk by (environment,cluster,deployment) (1, kube_deployment_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-repository-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})
+      topk by (environment,cluster,deployment) (1, kube_deployment_labels:labeled{type=~"ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis-tracechunks|registry|sidekiq|vault|web|web-pages|websockets|woodhouse"})

@@ -12,6 +12,7 @@ local railsSelector = { job: 'gitlab-rails', type: 'websockets' };
 metricsCatalog.serviceDefinition({
   type: 'websockets',
   tier: 'sv',
+  tenants: [ 'gitlab-gprd', 'gitlab-gstg', 'gitlab-pre' ],
 
   tags: ['golang', 'rails', 'puma'],
 
@@ -36,7 +37,6 @@ metricsCatalog.serviceDefinition({
     redis: true,
     patroni: true,
     pgbouncer: true,
-    praefect: true,
     consul: true,
   },
   provisioning: {

@@ -7,6 +7,7 @@ groups:
   rules:
   - record: sla:gitlab:score
     labels:
+      monitor: global
       sla_type: weighted_v2.1
     expr: |
       sum by (environment, env, stage) (
@@ -14,12 +15,15 @@ groups:
         or
         min without(slo) (avg_over_time(slo_observation_status{env="ops",monitor="global",type="git"}[5m])) * 5
         or
+        min without(slo) (avg_over_time(slo_observation_status{env="ops",monitor="global",type="internal-api"}[5m])) * 5
+        or
         min without(slo) (avg_over_time(slo_observation_status{env="ops",monitor="global",type="registry"}[5m])) * 1
         or
         min without(slo) (avg_over_time(slo_observation_status{env="ops",monitor="global",type="web"}[5m])) * 5
       )
   - record: sla:gitlab:weights
     labels:
+      monitor: global
       sla_type: weighted_v2.1
     expr: |
       sum by (environment, env, stage) (
@@ -27,12 +31,15 @@ groups:
         or
         group without(slo) (avg_over_time(slo_observation_status{env="ops",monitor="global",type="git"}[5m])) * 5
         or
+        group without(slo) (avg_over_time(slo_observation_status{env="ops",monitor="global",type="internal-api"}[5m])) * 5
+        or
         group without(slo) (avg_over_time(slo_observation_status{env="ops",monitor="global",type="registry"}[5m])) * 1
         or
         group without(slo) (avg_over_time(slo_observation_status{env="ops",monitor="global",type="web"}[5m])) * 5
       )
   - record: sla:gitlab:ratio
     labels:
+      monitor: global
       sla_type: weighted_v2.1
     expr: |
       clamp_max(
@@ -45,12 +52,15 @@ groups:
   rules:
   - record: sla:gitlab:score
     labels:
+      monitor: global
       sla_type: weighted_v3
     expr: |
       sum by (environment, env, stage) (
         min without(slo) (avg_over_time(slo_observation_status{env="ops",monitor="global",type="api"}[5m])) * 5
         or
         min without(slo) (avg_over_time(slo_observation_status{env="ops",monitor="global",type="git"}[5m])) * 5
+        or
+        min without(slo) (avg_over_time(slo_observation_status{env="ops",monitor="global",type="internal-api"}[5m])) * 5
         or
         min without(slo) (avg_over_time(slo_observation_status{env="ops",monitor="global",type="registry"}[5m])) * 1
         or
@@ -60,12 +70,15 @@ groups:
       )
   - record: sla:gitlab:weights
     labels:
+      monitor: global
       sla_type: weighted_v3
     expr: |
       sum by (environment, env, stage) (
         group without(slo) (avg_over_time(slo_observation_status{env="ops",monitor="global",type="api"}[5m])) * 5
         or
         group without(slo) (avg_over_time(slo_observation_status{env="ops",monitor="global",type="git"}[5m])) * 5
+        or
+        group without(slo) (avg_over_time(slo_observation_status{env="ops",monitor="global",type="internal-api"}[5m])) * 5
         or
         group without(slo) (avg_over_time(slo_observation_status{env="ops",monitor="global",type="registry"}[5m])) * 1
         or
@@ -75,6 +88,7 @@ groups:
       )
   - record: sla:gitlab:ratio
     labels:
+      monitor: global
       sla_type: weighted_v3
     expr: |
       clamp_max(

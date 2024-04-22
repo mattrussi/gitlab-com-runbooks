@@ -280,6 +280,24 @@ checks:
       - Community Relations
 
   #######################################
+  # Kas is using a TCP check instead of http because it uses websockets
+  # See: https://gitlab.com/gitlab-com/gl-infra/production-engineering/-/issues/14911
+  #######################################
+  - url: https://kas.gitlab.com/
+    timeout_ms: 3000
+    resolution_minutes: 5
+    notify_when_restored: true
+    check_type: tcp
+    check_port: 443
+    tags:
+      - kas
+      - sla
+    teams:
+      - Infrastructure
+    integrations:
+      - pagerduty
+
+  #######################################
   # People Group Engineering Projects
   #######################################
   - url: https://comp-calculator.gitlab.net/users/sign_in

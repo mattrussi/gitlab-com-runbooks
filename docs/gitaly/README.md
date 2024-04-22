@@ -55,9 +55,6 @@
 * [Session: Application architecture](../onboarding/architecture.md)
 * [Gitlab.com on Kubernetes](../onboarding/gitlab.com_on_k8s.md)
 * [Diagnosis with Kibana](../onboarding/kibana-diagnosis.md)
-* [Bypass Praefect](../praefect/praefect-bypass.md)
-* [Praefect error rate is too high](../praefect/praefect-error-rate.md)
-* [Add and remove file storages to praefect](../praefect/praefect-file-storages.md)
 * [A survival guide for SREs to working with Redis at GitLab](../redis/redis-survival-guide-for-sres.md)
 * [[`SidekiqQueueTooLarge`](../../rules/sidekiq-queues.yml)](../sidekiq/large-sidekiq-queue.md)
 * [Life of a Git Request](../tutorials/overview_life_of_a_git_request.md)
@@ -84,10 +81,8 @@ graph TD
     gprd-base-stor-gitaly-common-->gprd-base-stor-gitaly-cny
     gprd-base-stor-gitaly-common-->gprd-base-stor-gitaly
     gprd-base-stor-gitaly-->gprd-base-stor-gitaly-hdd
-    gprd-base-stor-gitaly-->gprd-base-stor-gitaly-praefect
     gprd-base-stor-gitaly-->gprd-base-stor-gitaly-marquee
 
-    gprd-base-stor-praefect
 ```
 
 * `gprd-base-stor-gitaly-common`: The base configuration which is common for all Gitaly shards and stages.
@@ -95,8 +90,6 @@ graph TD
 * `gprd-base-stor-gitaly`: Any extra configuration we might want to add for Gitaly `shard=default, stage=main`.
 * `gprd-base-stor-gitaly-hdd`: Any extra configuration we might want to add for Gitaly `shard=hdd, stage=main`.
 * `gprd-base-stor-gitaly-marquee`: Any extra configuration we might want to add for Gitaly `shard=marquee, stage=main`.
-* `gprd-base-stor-gitaly-praefect`: Any extra configuration we might want to add for Gitaly `shard=praefect, stage=main`.
-* `gprd-base-stor-praefect`: Configuration for the praefect servers.
 
 #### `gstg`
 
@@ -104,20 +97,12 @@ graph TD
 graph TD
     gstg-base-stor-gitaly-->gstg-base-stor-gitaly-cny
     gstg-base-stor-gitaly-->gstg-base-stor-gitaly-hdd
-    gstg-base-stor-gitaly-->gstg-base-stor-gitaly-praefect
-    gstg-base-stor-gitaly-->gstg-base-stor-gitaly-praefect-cny
 
-    gstg-base-stor-praefect
-    gstg-base-stor-praefect-cny
 ```
 
 * `gstg-base-stor-gitaly`: The base configuration which is common for all Gitaly shards and stages.
 * `gstg-base-stor-gitaly-cny`: Any extra configuration we might want to add for Gitaly `shard=default, stage=cny`.
 * `gstg-base-stor-gitaly-hdd`: Any extra configuration we might want to add for Gitaly `shard=main, stage=main`.
-* `gstg-base-stor-gitaly-praefect`: Any extra configuration we might want to add for Gitaly `shard=praefect, stage=main`.
-* `gstg-base-stor-gitaly-praefect-cny`: Any extra configuration we might want to add for Gitaly `shard=praefect, stage=cny`.
-* `gstg-base-stor-praefect`: Configuration for the praefect server for `stage=main`.
-* `gstg-base-stor-praefect-cny`: Any extra configuration we might want to add for Gitaly `shard=default, stage=cny`.
 
 <!-- ## Performance -->
 

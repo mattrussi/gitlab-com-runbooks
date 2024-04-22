@@ -4,7 +4,7 @@
 
 [[_TOC_]]
 
-# Redis Service
+# Persistent Redis Service
 
 * [Service Overview](https://dashboards.gitlab.net/d/redis-main/redis-overview)
 * **Alerts**: <https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22redis%22%2C%20tier%3D%22db%22%7D>

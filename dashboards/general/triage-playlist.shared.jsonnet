@@ -28,7 +28,6 @@ local playlistDefinitions = {
     title: 'Storage',
     services: [
       'gitaly',
-      'praefect',
     ],
   },
   database: {

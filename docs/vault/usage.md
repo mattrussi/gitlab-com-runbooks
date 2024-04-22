@@ -353,7 +353,9 @@ my_terraform_job:
       aud: https://vault.gitlab.net
 ```
 
-Then a secret can be fetched using the [`vault_kv_secret_v2` data source](https://registry.terraform.io/providers/hashicorp/vault/latest/docs/data-sources/kv_secret_v2), and its content can be retrieved from the [`data`](https://registry.terraform.io/providers/hashicorp/vault/latest/docs/data-sources/kv_secret_v2#data) attribute:
+Then a secret can be fetched using the [`vault_kv_secret_v2` data source](https://registry.terraform.io/providers/hashicorp/vault/latest/docs/data-sources/kv_secret_v2), and its content can be retrieved from the [`data`](https://registry.terraform.io/providers/hashicorp/vault/latest/docs/data-sources/kv_secret_v2#data) attribute.
+
+For example, for the secret path `${var.vault_secrets_path}/some-secret` and a secret key named `token`:
 
 ```terraform
 data "vault_kv_secret_v2" "some-secret" {
@@ -365,6 +367,11 @@ resource "google_some_service" "foo" {
   token = data.vault_kv_secret_v2.some-secret.data.token
 }
 ```
+
+**Note**: Due to how access permissions work, the secret must be in a containing folder for the Terraform environment, for example:
+
+* ❌ Invalid: `name  = "ops-gitlab-net/gitlab-com/gl-infra/my-project/some-env"`
+* ✅ OK: `name  = "ops-gitlab-net/gitlab-com/gl-infra/my-project/some-env/some-secret"`
 
 Terraform can also write a secret to Vault using the `vault_kv_secret_v2` resource:
 
@@ -471,7 +478,7 @@ The External Secrets operator provides 2 Kubernetes objects:
 
 The SecretStore uses a dedicated Service Account so that regular workloads are not able to access Vault by themselves, and it is scoped to the namespace it is deployed into.
 
-Before using the operator, a role has to be created in Vault for the namespace the secrets will be provisioned into. This is done in [`environments/vault-production/kubernetes.tf`](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/master/environments/vault-production/kubernetes.tf):
+Before using the operator, a role has to be created in Vault for the namespace the secrets will be provisioned into. This is done in [`environments/vault-production/kubernetes.tf`](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/main/environments/vault-production/kubernetes.tf):
 
 ```terraform
 locals {
@@ -950,7 +957,7 @@ Examples:
 #### Authorizing a GCP Project and Cookbooks
 
 We use the [GCP authentication method](https://developer.hashicorp.com/vault/docs/auth/gcp) for GCE instances to authenticate to Vault.
-To enable instances on a GCP Project to access Vault, add the project and roles for each cookbook, to the `chef_environments` locals at the [Chef Vault Configuration on Terraform](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/master/environments/vault-production/chef.tf)
+To enable instances on a GCP Project to access Vault, add the project and roles for each cookbook, to the `chef_environments` locals at the [Chef Vault Configuration on Terraform](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/main/environments/vault-production/chef.tf)
 
 Example of Vault Config for allowing Chef access:
 
@@ -1122,7 +1129,7 @@ resource "google_service_account_iam_member" "my-service-account-vault" {
 
 ##### 2. Add GCP roles in Vault
 
-In the [`vault-production` environment](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/tree/master/environments/vault-production), add your roleset / static account / impersonated account to the variable `gcp_projects` in `gcp_projects.tf`:
+In the [`vault-production` environment](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/tree/main/environments/vault-production), add your roleset / static account / impersonated account to the variable `gcp_projects` in `gcp_projects.tf`:
 
 ```terraform
   gcp_projects = {
@@ -1303,7 +1310,7 @@ See [Kubernetes Authentication secrets](administration.md#kubernetes-authenticat
 
 ##### 2. Add Kubernetes roles in Vault
 
-In the [`vault-production` environment](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/tree/master/environments/vault-production), add your role to the variable `kubernetes_clusters.<cluster>.secrets_roles` in `kubernetes.tf`:
+In the [`vault-production` environment](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/tree/main/environments/vault-production), add your role to the variable `kubernetes_clusters.<cluster>.secrets_roles` in `kubernetes.tf`:
 
 ```terraform
   kubernetes_clusters = {

@@ -58,6 +58,7 @@
 * [../pgbouncer/patroni-consul-postgres-pgbouncer-interactions.md](../pgbouncer/patroni-consul-postgres-pgbouncer-interactions.md)
 * [Add a new PgBouncer instance](../pgbouncer/pgbouncer-add-instance.md)
 * [PgBouncer connection management and troubleshooting](../pgbouncer/pgbouncer-connections.md)
+* [../product_analytics/ssl-troubleshooting.md](../product_analytics/ssl-troubleshooting.md)
 * [Redis Cluster](../redis/redis-cluster.md)
 * [../redis/redis.md](../redis/redis.md)
 * [Container Registry database post-deployment migrations](../registry/db-post-deployment-migrations.md)
@@ -70,6 +71,7 @@
 * [../uncategorized/osquery.md](../uncategorized/osquery.md)
 * [Periodic Job Monitoring](../uncategorized/periodic_job_monitoring.md)
 * [../uncategorized/subnet-allocations.md](../uncategorized/subnet-allocations.md)
+* [../uncategorized/wiz-runtime-sensor.md](../uncategorized/wiz-runtime-sensor.md)
 * [version.gitlab.com Runbook](../version/version-gitlab-com.md)
 * [Diagnostic Reports](../web/diagnostic-reports.md)
 <!-- END_MARKER -->

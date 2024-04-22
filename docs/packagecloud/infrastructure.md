@@ -22,14 +22,14 @@ The current architecture looks like this:
 
 See [#24245](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/24245) for more context.
 
-[Memory Store and CloudSQL config in Terraform](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/master/environments/ops/packagecloud.tf)
+[Memory Store and CloudSQL config in Terraform](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/main/environments/ops/packagecloud.tf)
 
 ## Environments
 
 | Environment | URL                             | GKE Cluster    | CloudFlare | Terraform                                                                                             |
 |-------------|---------------------------------|----------------|:----------:|-------------------------------------------------------------------------------------------------------|
-| pre         | <https://packages.pre.gke.gitlab.net> | pre-gitlab-gke |     ❌     | <https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/master/environments/pre/packagecloud.tf> |
-| ops         | <https://packages.gitlab.com>     | ops-gitlab-gke |     ✅     | <https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/master/environments/ops/packagecloud.tf> |
+| pre         | <https://packages.pre.gke.gitlab.net> | pre-gitlab-gke |     ❌     | <https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/main/environments/pre/packagecloud.tf> |
+| ops         | <https://packages.gitlab.com>     | ops-gitlab-gke |     ✅     | <https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/main/environments/ops/packagecloud.tf> |
 
 ## How does Packagecloud work?
 

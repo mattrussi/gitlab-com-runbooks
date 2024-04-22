@@ -39,7 +39,7 @@ Linux install instructions are [also available on the Teleport site](https://got
 3. Log in to the database with the appropriate database user
 4. Connect the database console
 
-The access will be temporary (`12h` max) and can be approved by any SRE or Reliability Manager.  The `@sre-oncall` can help if it's urgent, but if you can wait it is considerate to spread the load out by asking the wider SRE team in `#infrastructure-lounge`. Access can be extended before or after expiration using the same process.
+The access will be temporary (`12h` max) and can be approved by any SRE or Reliability Manager.  The `@sre-oncall` can help if it's urgent, but if you can wait it is considerate to spread the load out by asking the wider SRE team in `#teleport-requests`. Access can be extended before or after expiration using the same process.
 
 There are two Teleport cluster/servers:
 
@@ -164,7 +164,7 @@ If the command is stopped or times out, but the request is approved, you don't n
 tsh login --request-id=<request-id>
 ```
 
-The request ID is shown in the output of `tsh login` when making the initial request, and can also be found attached to your request notification in `#infrastructure-lounge`.
+The request ID is shown in the output of `tsh login` when making the initial request, and can also be found attached to your request notification in `#teleport-requests`.
 
 4. Login to the database
 
@@ -236,22 +236,22 @@ If the command is stopped or times out, but the request is approved, you don't n
 tsh login --request-id=<request-id>
 ```
 
-The request ID is shown in the output of `tsh login` when making the initial request, and can also be found attached to your request notification in `#infrastructure-lounge`.
+The request ID is shown in the output of `tsh login` when making the initial request, and can also be found attached to your request notification in `#teleport-requests`.
 
 > Note: These examples assume you are requesting read-only access. For read-write, simply `--request-roles=database-rw-gstg` rather than `--request-roles=database-ro-gstg`. Please default to read-only though, since we will have stricter requirements for approving read-write access.
 
 #### Access approval
 
-Approvers will get your request via an automated notification in the `#infrastructure-lounge` Slack channel.  If you have additional context,
+Approvers will get your request via an automated notification in the `#teleport-requests` Slack channel.  If you have additional context,
 or need to expedite an approval, please comment as a thread under that message.  If the request is urgent, you can ping `@sre-oncall`, but
 to spread out the workload please try to allow some time for others to review first if possible. If the approval request **doesn't show up** in
-`#infrastructure-lounge` feel free to ask someone in that channel to take a look at your request, and provide the request ID.
+`#teleport-requests` feel free to ask someone in that channel to take a look at your request, and provide the request ID.
 
 Approvers will review the issue URL in the request and if database access seems like a reasonable step to address that issue, they will approve it.
 
 ## Support
 
-If you have any issues using Teleport, or this approval process, please ask the **Reliability team** (SREs and/or managers) in the [#production](https://gitlab.slack.com/archives/C101F3796) or [#infrastructure-lounge](https://gitlab.slack.com/archives/CB3LSMEJV) Slack channels.
+If you have any issues using Teleport, or this approval process, please ask the **Reliability team** (SREs and/or managers) in the [#production](https://gitlab.slack.com/archives/C101F3796) or [#teleport-requests](https://gitlab.enterprise.slack.com/archives/C06Q2JK3YPM) Slack channels.
 
 > Note: If you need more time, you can renew your role access approval before or after expiration using the same method as the initial request
 

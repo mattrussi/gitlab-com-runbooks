@@ -4,7 +4,7 @@
 
 [[_TOC_]]
 
-# Mimir Service
+# Grafana Mimir Service
 
 * **Alerts**: <https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22mimir%22%2C%20tier%3D%22inf%22%7D>
 * **Label**: gitlab-com/gl-infra/production~"Service::Mimir"
@@ -26,7 +26,7 @@
 | Reference  | Link  |
 |---|---|
 | Helm Deployment | [helmfiles](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/tree/master/releases/mimir) |
-| Tenant Configuration | [config-mgmt](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/tree/master/environments/observability-tenants) |
+| Tenant Configuration | [config-mgmt](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/tree/main/environments/observability-tenants) |
 | Runbooks | [Grafana Runbooks](https://grafana.com/docs/mimir/latest/manage/mimir-runbooks/) |
 | Dashboards | [Mimir Overview](https://dashboards.gitlab.net/d/ffcd83628d7d4b5a03d1cafd159e6c9c/mimir-overview?orgId=1) |
 | Logs | [Elastic Cloud](https://nonprod-log.gitlab.net/app/r/s/h3UsR) |

@@ -14,6 +14,7 @@ local railsSelector = { job: 'gitlab-rails', type: 'web' };
 metricsCatalog.serviceDefinition({
   type: 'web',
   tier: 'sv',
+  tenants: [ 'gitlab-gprd', 'gitlab-gstg', 'gitlab-pre' ],
 
   tags: ['golang', 'rails', 'puma'],
 
@@ -50,15 +51,13 @@ metricsCatalog.serviceDefinition({
     'redis-cluster-queues-meta': true,
     'redis-cluster-repo-cache': true,
     'redis-sidekiq': true,
-    'redis-repository-cache': true,
     'redis-sessions': true,
     'redis-db-load-balancing': true,
     'redis-pubsub': true,
     redis: true,
     patroni: true,
     pgbouncer: true,
-    praefect: true,
-    pvs: true,
+    'ext-pvs': true,
     search: true,
     consul: true,
     'google-cloud-storage': true,
@@ -122,6 +121,10 @@ metricsCatalog.serviceDefinition({
               '^/([^/]+/){1,}[^/]+\\\\.git/git-upload-pack\\\\z',
               '^/([^/]+/){1,}[^/]+\\\\.git/info/refs\\\\z',
               '^/([^/]+/){1,}[^/]+\\\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\\\z',
+              '^/.+\\\\.git/git-receive-pack\\\\z',  // ^/.+\.git/git-receive-pack\z
+              '^/.+\\\\.git/git-upload-pack\\\\z',  // ^/.+\.git/git-upload-pack\z
+              '^/.+\\\\.git/info/refs\\\\z',  // ^/.+\.git/info/refs\z
+              '^/.+\\\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\\\z',  // /.+\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\z
             ],
           },
         },

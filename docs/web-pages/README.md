@@ -4,7 +4,7 @@
 
 [[_TOC_]]
 
-# Web-pages Service
+# GitLab Pages Service
 
 * [Service Overview](https://dashboards.gitlab.net/d/web-pages-main/web-pages-overview)
 * **Alerts**: <https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22web-pages%22%2C%20tier%3D%22sv%22%7D>

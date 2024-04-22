@@ -132,9 +132,9 @@ groups:
           < (1 - 14.4 * 0.002000)
         )
       )
-      and on(env,environment,tier,type,stage,region,component)
+      and on(env,environment,tier,type,stage,region,location,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="global_search",env="ops",monitor="global",type="web"}) >= 1
+        sum by(env,environment,tier,type,stage,region,location,component) (gitlab_regional_sli_ops:rate_1h{component="global_search",env="ops",monitor="global",type="web"}) >= 1
       )
   - alert: WebServiceGlobalSearchApdexSLOViolationRegional
     for: 2m
@@ -177,9 +177,9 @@ groups:
           < (1 - 6 * 0.002000)
         )
       )
-      and on(env,environment,tier,type,stage,region,component)
+      and on(env,environment,tier,type,stage,region,location,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="global_search",env="ops",monitor="global",type="web"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,region,location,component) (gitlab_regional_sli_ops:rate_6h{component="global_search",env="ops",monitor="global",type="web"}) >= 0.16667
       )
   - alert: WebServiceGlobalSearchTrafficCessation
     for: 5m
@@ -198,7 +198,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          sli_aggregations:gitlab_sli_global_search_apdex_total_rate5m{environment="{{ $labels.environment }}",job="gitlab-rails",stage="{{ $labels.stage }}",type="web"}
+          rate(gitlab_sli_global_search_apdex_total{environment="{{ $labels.environment }}",job="gitlab-rails",stage="{{ $labels.stage }}",type="web"}[5m])
         )
       runbook: docs/web/README.md
     labels:
@@ -234,7 +234,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          sli_aggregations:gitlab_sli_global_search_apdex_total_rate5m{environment="{{ $labels.environment }}",job="gitlab-rails",stage="{{ $labels.stage }}",type="web"}
+          rate(gitlab_sli_global_search_apdex_total{environment="{{ $labels.environment }}",job="gitlab-rails",stage="{{ $labels.stage }}",type="web"}[5m])
         )
       runbook: docs/web/README.md
     labels:
@@ -269,8 +269,8 @@ groups:
       grafana_panel_id: "3070581511"
       grafana_variables: environment,stage
       promql_template_1: |
-        sum by (env,environment,tier,stage,region) (
-          rate(gitlab_sli_global_search_apdex_total{environment="{{ $labels.environment }}",job="gitlab-rails",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="web"}[5m])
+        sum by (env,environment,tier,stage,region,location) (
+          rate(gitlab_sli_global_search_apdex_total{environment="{{ $labels.environment }}",job="gitlab-rails",location="{{ $labels.location }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="web"}[5m])
         )
       runbook: docs/web/README.md
     labels:
@@ -307,8 +307,8 @@ groups:
       grafana_panel_id: "3070581511"
       grafana_variables: environment,stage
       promql_template_1: |
-        sum by (env,environment,tier,stage,region) (
-          rate(gitlab_sli_global_search_apdex_total{environment="{{ $labels.environment }}",job="gitlab-rails",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="web"}[5m])
+        sum by (env,environment,tier,stage,region,location) (
+          rate(gitlab_sli_global_search_apdex_total{environment="{{ $labels.environment }}",job="gitlab-rails",location="{{ $labels.location }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="web"}[5m])
         )
       runbook: docs/web/README.md
     labels:
@@ -447,8 +447,8 @@ groups:
       promql_template_1: |
         histogram_quantile(
           0.950000,
-          sum by (env,environment,tier,stage,region,le) (
-            rate(gitlab_workhorse_image_resize_duration_seconds_bucket{environment="{{ $labels.environment }}",job=~"gitlab-workhorse|gitlab-workhorse-web",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="web"}[5m])
+          sum by (env,environment,tier,stage,region,location,le) (
+            rate(gitlab_workhorse_image_resize_duration_seconds_bucket{environment="{{ $labels.environment }}",job=~"gitlab-workhorse|gitlab-workhorse-web",location="{{ $labels.location }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="web"}[5m])
           )
         )
       runbook: docs/web/README.md
@@ -476,9 +476,9 @@ groups:
           < (1 - 14.4 * 0.002000)
         )
       )
-      and on(env,environment,tier,type,stage,region,component)
+      and on(env,environment,tier,type,stage,region,location,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="imagescaler",env="ops",monitor="global",type="web"}) >= 1
+        sum by(env,environment,tier,type,stage,region,location,component) (gitlab_regional_sli_ops:rate_1h{component="imagescaler",env="ops",monitor="global",type="web"}) >= 1
       )
   - alert: WebServiceImagescalerApdexSLOViolationRegional
     for: 2m
@@ -500,8 +500,8 @@ groups:
       promql_template_1: |
         histogram_quantile(
           0.950000,
-          sum by (env,environment,tier,stage,region,le) (
-            rate(gitlab_workhorse_image_resize_duration_seconds_bucket{environment="{{ $labels.environment }}",job=~"gitlab-workhorse|gitlab-workhorse-web",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="web"}[5m])
+          sum by (env,environment,tier,stage,region,location,le) (
+            rate(gitlab_workhorse_image_resize_duration_seconds_bucket{environment="{{ $labels.environment }}",job=~"gitlab-workhorse|gitlab-workhorse-web",location="{{ $labels.location }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="web"}[5m])
           )
         )
       runbook: docs/web/README.md
@@ -529,9 +529,9 @@ groups:
           < (1 - 6 * 0.002000)
         )
       )
-      and on(env,environment,tier,type,stage,region,component)
+      and on(env,environment,tier,type,stage,region,location,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="imagescaler",env="ops",monitor="global",type="web"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,region,location,component) (gitlab_regional_sli_ops:rate_6h{component="imagescaler",env="ops",monitor="global",type="web"}) >= 0.16667
       )
   - alert: WebServiceImagescalerTrafficCessation
     for: 5m
@@ -623,8 +623,8 @@ groups:
       grafana_panel_id: "2371921356"
       grafana_variables: environment,stage
       promql_template_1: |
-        sum by (env,environment,tier,stage,region) (
-          rate(gitlab_workhorse_image_resize_requests_total{environment="{{ $labels.environment }}",job=~"gitlab-workhorse|gitlab-workhorse-web",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="web"}[5m])
+        sum by (env,environment,tier,stage,region,location) (
+          rate(gitlab_workhorse_image_resize_requests_total{environment="{{ $labels.environment }}",job=~"gitlab-workhorse|gitlab-workhorse-web",location="{{ $labels.location }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="web"}[5m])
         )
       runbook: docs/web/README.md
     labels:
@@ -662,8 +662,8 @@ groups:
       grafana_panel_id: "2371921356"
       grafana_variables: environment,stage
       promql_template_1: |
-        sum by (env,environment,tier,stage,region) (
-          rate(gitlab_workhorse_image_resize_requests_total{environment="{{ $labels.environment }}",job=~"gitlab-workhorse|gitlab-workhorse-web",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="web"}[5m])
+        sum by (env,environment,tier,stage,region,location) (
+          rate(gitlab_workhorse_image_resize_requests_total{environment="{{ $labels.environment }}",job=~"gitlab-workhorse|gitlab-workhorse-web",location="{{ $labels.location }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="web"}[5m])
         )
       runbook: docs/web/README.md
     labels:
@@ -811,9 +811,9 @@ groups:
           > (14.4 * 0.000100)
         )
       )
-      and on(env,environment,tier,type,stage,region,component)
+      and on(env,environment,tier,type,stage,region,location,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="loadbalancer",env="ops",monitor="global",type="web"}) >= 1
+        sum by(env,environment,tier,type,stage,region,location,component) (gitlab_regional_sli_ops:rate_1h{component="loadbalancer",env="ops",monitor="global",type="web"}) >= 1
       )
   - alert: WebServiceLoadbalancerErrorSLOViolationRegional
     for: 2m
@@ -857,9 +857,9 @@ groups:
           > (6 * 0.000100)
         )
       )
-      and on(env,environment,tier,type,stage,region,component)
+      and on(env,environment,tier,type,stage,region,location,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="loadbalancer",env="ops",monitor="global",type="web"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,region,location,component) (gitlab_regional_sli_ops:rate_6h{component="loadbalancer",env="ops",monitor="global",type="web"}) >= 0.16667
       )
   - alert: WebServiceLoadbalancerTrafficCessation
     for: 5m
@@ -1129,9 +1129,9 @@ groups:
           < (1 - 14.4 * 0.002000)
         )
       )
-      and on(env,environment,tier,type,stage,region,component)
+      and on(env,environment,tier,type,stage,region,location,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="rails_request",env="ops",monitor="global",type="web"}) >= 1
+        sum by(env,environment,tier,type,stage,region,location,component) (gitlab_regional_sli_ops:rate_1h{component="rails_request",env="ops",monitor="global",type="web"}) >= 1
       )
   - alert: WebServiceRailsRequestApdexSLOViolationRegional
     for: 2m
@@ -1177,9 +1177,9 @@ groups:
           < (1 - 6 * 0.002000)
         )
       )
-      and on(env,environment,tier,type,stage,region,component)
+      and on(env,environment,tier,type,stage,region,location,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="rails_request",env="ops",monitor="global",type="web"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,region,location,component) (gitlab_regional_sli_ops:rate_6h{component="rails_request",env="ops",monitor="global",type="web"}) >= 0.16667
       )
   - alert: WebServiceRailsRequestErrorSLOViolation
     for: 2m
@@ -1200,7 +1200,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          sli_aggregations:gitlab_sli_rails_request_error_total_rate5m{environment="{{ $labels.environment }}",job="gitlab-rails",stage="{{ $labels.stage }}",type="web"}
+          rate(gitlab_sli_rails_request_error_total{environment="{{ $labels.environment }}",job="gitlab-rails",stage="{{ $labels.stage }}",type="web"}[5m])
         )
       runbook: docs/web/README.md
     labels:
@@ -1250,7 +1250,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          sli_aggregations:gitlab_sli_rails_request_error_total_rate5m{environment="{{ $labels.environment }}",job="gitlab-rails",stage="{{ $labels.stage }}",type="web"}
+          rate(gitlab_sli_rails_request_error_total{environment="{{ $labels.environment }}",job="gitlab-rails",stage="{{ $labels.stage }}",type="web"}[5m])
         )
       runbook: docs/web/README.md
     labels:
@@ -1301,8 +1301,8 @@ groups:
       grafana_panel_id: "387946920"
       grafana_variables: environment,stage
       promql_template_1: |
-        sum by (env,environment,tier,stage,region) (
-          rate(gitlab_sli_rails_request_error_total{environment="{{ $labels.environment }}",job="gitlab-rails",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="web"}[5m])
+        sum by (env,environment,tier,stage,region,location) (
+          rate(gitlab_sli_rails_request_error_total{environment="{{ $labels.environment }}",job="gitlab-rails",location="{{ $labels.location }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="web"}[5m])
         )
       runbook: docs/web/README.md
     labels:
@@ -1329,9 +1329,9 @@ groups:
           > (14.4 * 0.000100)
         )
       )
-      and on(env,environment,tier,type,stage,region,component)
+      and on(env,environment,tier,type,stage,region,location,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="rails_request",env="ops",monitor="global",type="web"}) >= 1
+        sum by(env,environment,tier,type,stage,region,location,component) (gitlab_regional_sli_ops:rate_1h{component="rails_request",env="ops",monitor="global",type="web"}) >= 1
       )
   - alert: WebServiceRailsRequestErrorSLOViolationRegional
     for: 2m
@@ -1353,8 +1353,8 @@ groups:
       grafana_panel_id: "387946920"
       grafana_variables: environment,stage
       promql_template_1: |
-        sum by (env,environment,tier,stage,region) (
-          rate(gitlab_sli_rails_request_error_total{environment="{{ $labels.environment }}",job="gitlab-rails",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="web"}[5m])
+        sum by (env,environment,tier,stage,region,location) (
+          rate(gitlab_sli_rails_request_error_total{environment="{{ $labels.environment }}",job="gitlab-rails",location="{{ $labels.location }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="web"}[5m])
         )
       runbook: docs/web/README.md
     labels:
@@ -1381,9 +1381,9 @@ groups:
           > (6 * 0.000100)
         )
       )
-      and on(env,environment,tier,type,stage,region,component)
+      and on(env,environment,tier,type,stage,region,location,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="rails_request",env="ops",monitor="global",type="web"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,region,location,component) (gitlab_regional_sli_ops:rate_6h{component="rails_request",env="ops",monitor="global",type="web"}) >= 0.16667
       )
   - alert: WebServiceRailsRequestTrafficCessation
     for: 5m
@@ -1404,7 +1404,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          sli_aggregations:gitlab_sli_rails_request_total_rate5m{environment="{{ $labels.environment }}",job="gitlab-rails",stage="{{ $labels.stage }}",type="web"}
+          rate(gitlab_sli_rails_request_total{environment="{{ $labels.environment }}",job="gitlab-rails",stage="{{ $labels.stage }}",type="web"}[5m])
         )
       runbook: docs/web/README.md
     labels:
@@ -1443,7 +1443,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          sli_aggregations:gitlab_sli_rails_request_total_rate5m{environment="{{ $labels.environment }}",job="gitlab-rails",stage="{{ $labels.stage }}",type="web"}
+          rate(gitlab_sli_rails_request_total{environment="{{ $labels.environment }}",job="gitlab-rails",stage="{{ $labels.stage }}",type="web"}[5m])
         )
       runbook: docs/web/README.md
     labels:
@@ -1481,8 +1481,8 @@ groups:
       grafana_panel_id: "538903447"
       grafana_variables: environment,stage
       promql_template_1: |
-        sum by (env,environment,tier,stage,region) (
-          rate(gitlab_sli_rails_request_total{environment="{{ $labels.environment }}",job="gitlab-rails",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="web"}[5m])
+        sum by (env,environment,tier,stage,region,location) (
+          rate(gitlab_sli_rails_request_total{environment="{{ $labels.environment }}",job="gitlab-rails",location="{{ $labels.location }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="web"}[5m])
         )
       runbook: docs/web/README.md
     labels:
@@ -1522,8 +1522,8 @@ groups:
       grafana_panel_id: "538903447"
       grafana_variables: environment,stage
       promql_template_1: |
-        sum by (env,environment,tier,stage,region) (
-          rate(gitlab_sli_rails_request_total{environment="{{ $labels.environment }}",job="gitlab-rails",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="web"}[5m])
+        sum by (env,environment,tier,stage,region,location) (
+          rate(gitlab_sli_rails_request_total{environment="{{ $labels.environment }}",job="gitlab-rails",location="{{ $labels.location }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="web"}[5m])
         )
       runbook: docs/web/README.md
     labels:
@@ -1560,7 +1560,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
-            rate(gitlab_workhorse_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",job=~"gitlab-workhorse|gitlab-workhorse-web",route!="^/([^/]+/){1,}[^/]+/uploads\\z",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/([^/]+/){1,}[^/]+\\.git/git-receive-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/git-upload-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/info/refs\\z",route!="^/([^/]+/){1,}[^/]+\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\z",stage="{{ $labels.stage }}",type="web"}[5m])
+            rate(gitlab_workhorse_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",job=~"gitlab-workhorse|gitlab-workhorse-web",route!="^/([^/]+/){1,}[^/]+/uploads\\z",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/([^/]+/){1,}[^/]+\\.git/git-receive-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/git-upload-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/info/refs\\z",route!="^/([^/]+/){1,}[^/]+\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\z",route!="^/.+\\.git/git-receive-pack\\z",route!="^/.+\\.git/git-upload-pack\\z",route!="^/.+\\.git/info/refs\\z",route!="^/.+\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\z",stage="{{ $labels.stage }}",type="web"}[5m])
           )
         )
       runbook: docs/web/README.md
@@ -1611,7 +1611,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
-            rate(gitlab_workhorse_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",job=~"gitlab-workhorse|gitlab-workhorse-web",route!="^/([^/]+/){1,}[^/]+/uploads\\z",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/([^/]+/){1,}[^/]+\\.git/git-receive-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/git-upload-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/info/refs\\z",route!="^/([^/]+/){1,}[^/]+\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\z",stage="{{ $labels.stage }}",type="web"}[5m])
+            rate(gitlab_workhorse_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",job=~"gitlab-workhorse|gitlab-workhorse-web",route!="^/([^/]+/){1,}[^/]+/uploads\\z",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/([^/]+/){1,}[^/]+\\.git/git-receive-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/git-upload-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/info/refs\\z",route!="^/([^/]+/){1,}[^/]+\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\z",route!="^/.+\\.git/git-receive-pack\\z",route!="^/.+\\.git/git-upload-pack\\z",route!="^/.+\\.git/info/refs\\z",route!="^/.+\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\z",stage="{{ $labels.stage }}",type="web"}[5m])
           )
         )
       runbook: docs/web/README.md
@@ -1663,8 +1663,8 @@ groups:
       promql_template_1: |
         histogram_quantile(
           0.950000,
-          sum by (env,environment,tier,stage,region,le) (
-            rate(gitlab_workhorse_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",job=~"gitlab-workhorse|gitlab-workhorse-web",region="{{ $labels.region }}",route!="^/([^/]+/){1,}[^/]+/uploads\\z",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/([^/]+/){1,}[^/]+\\.git/git-receive-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/git-upload-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/info/refs\\z",route!="^/([^/]+/){1,}[^/]+\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\z",stage="{{ $labels.stage }}",type="web"}[5m])
+          sum by (env,environment,tier,stage,region,location,le) (
+            rate(gitlab_workhorse_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",job=~"gitlab-workhorse|gitlab-workhorse-web",location="{{ $labels.location }}",region="{{ $labels.region }}",route!="^/([^/]+/){1,}[^/]+/uploads\\z",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/([^/]+/){1,}[^/]+\\.git/git-receive-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/git-upload-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/info/refs\\z",route!="^/([^/]+/){1,}[^/]+\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\z",route!="^/.+\\.git/git-receive-pack\\z",route!="^/.+\\.git/git-upload-pack\\z",route!="^/.+\\.git/info/refs\\z",route!="^/.+\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\z",stage="{{ $labels.stage }}",type="web"}[5m])
           )
         )
       runbook: docs/web/README.md
@@ -1692,9 +1692,9 @@ groups:
           < (1 - 14.4 * 0.002000)
         )
       )
-      and on(env,environment,tier,type,stage,region,component)
+      and on(env,environment,tier,type,stage,region,location,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="workhorse",env="ops",monitor="global",type="web"}) >= 1
+        sum by(env,environment,tier,type,stage,region,location,component) (gitlab_regional_sli_ops:rate_1h{component="workhorse",env="ops",monitor="global",type="web"}) >= 1
       )
   - alert: WebServiceWorkhorseApdexSLOViolationRegional
     for: 2m
@@ -1716,8 +1716,8 @@ groups:
       promql_template_1: |
         histogram_quantile(
           0.950000,
-          sum by (env,environment,tier,stage,region,le) (
-            rate(gitlab_workhorse_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",job=~"gitlab-workhorse|gitlab-workhorse-web",region="{{ $labels.region }}",route!="^/([^/]+/){1,}[^/]+/uploads\\z",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/([^/]+/){1,}[^/]+\\.git/git-receive-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/git-upload-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/info/refs\\z",route!="^/([^/]+/){1,}[^/]+\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\z",stage="{{ $labels.stage }}",type="web"}[5m])
+          sum by (env,environment,tier,stage,region,location,le) (
+            rate(gitlab_workhorse_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",job=~"gitlab-workhorse|gitlab-workhorse-web",location="{{ $labels.location }}",region="{{ $labels.region }}",route!="^/([^/]+/){1,}[^/]+/uploads\\z",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/([^/]+/){1,}[^/]+\\.git/git-receive-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/git-upload-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/info/refs\\z",route!="^/([^/]+/){1,}[^/]+\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\z",route!="^/.+\\.git/git-receive-pack\\z",route!="^/.+\\.git/git-upload-pack\\z",route!="^/.+\\.git/info/refs\\z",route!="^/.+\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\z",stage="{{ $labels.stage }}",type="web"}[5m])
           )
         )
       runbook: docs/web/README.md
@@ -1745,9 +1745,9 @@ groups:
           < (1 - 6 * 0.002000)
         )
       )
-      and on(env,environment,tier,type,stage,region,component)
+      and on(env,environment,tier,type,stage,region,location,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="workhorse",env="ops",monitor="global",type="web"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,region,location,component) (gitlab_regional_sli_ops:rate_6h{component="workhorse",env="ops",monitor="global",type="web"}) >= 0.16667
       )
   - alert: WebServiceWorkhorseErrorSLOViolation
     for: 2m
@@ -1863,8 +1863,8 @@ groups:
       grafana_panel_id: "2047984749"
       grafana_variables: environment,stage
       promql_template_1: |
-        sum by (env,environment,tier,stage,region) (
-          rate(gitlab_workhorse_http_requests_total{code=~"^5.*",environment="{{ $labels.environment }}",job=~"gitlab-workhorse|gitlab-workhorse-web",region="{{ $labels.region }}",route!="^/-/health$",route!="^/-/(readiness|liveness)$",stage="{{ $labels.stage }}",type="web"}[5m])
+        sum by (env,environment,tier,stage,region,location) (
+          rate(gitlab_workhorse_http_requests_total{code=~"^5.*",environment="{{ $labels.environment }}",job=~"gitlab-workhorse|gitlab-workhorse-web",location="{{ $labels.location }}",region="{{ $labels.region }}",route!="^/-/health$",route!="^/-/(readiness|liveness)$",stage="{{ $labels.stage }}",type="web"}[5m])
         )
       runbook: docs/web/README.md
     labels:
@@ -1891,9 +1891,9 @@ groups:
           > (14.4 * 0.000100)
         )
       )
-      and on(env,environment,tier,type,stage,region,component)
+      and on(env,environment,tier,type,stage,region,location,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="workhorse",env="ops",monitor="global",type="web"}) >= 1
+        sum by(env,environment,tier,type,stage,region,location,component) (gitlab_regional_sli_ops:rate_1h{component="workhorse",env="ops",monitor="global",type="web"}) >= 1
       )
   - alert: WebServiceWorkhorseErrorSLOViolationRegional
     for: 2m
@@ -1913,8 +1913,8 @@ groups:
       grafana_panel_id: "2047984749"
       grafana_variables: environment,stage
       promql_template_1: |
-        sum by (env,environment,tier,stage,region) (
-          rate(gitlab_workhorse_http_requests_total{code=~"^5.*",environment="{{ $labels.environment }}",job=~"gitlab-workhorse|gitlab-workhorse-web",region="{{ $labels.region }}",route!="^/-/health$",route!="^/-/(readiness|liveness)$",stage="{{ $labels.stage }}",type="web"}[5m])
+        sum by (env,environment,tier,stage,region,location) (
+          rate(gitlab_workhorse_http_requests_total{code=~"^5.*",environment="{{ $labels.environment }}",job=~"gitlab-workhorse|gitlab-workhorse-web",location="{{ $labels.location }}",region="{{ $labels.region }}",route!="^/-/health$",route!="^/-/(readiness|liveness)$",stage="{{ $labels.stage }}",type="web"}[5m])
         )
       runbook: docs/web/README.md
     labels:
@@ -1941,9 +1941,9 @@ groups:
           > (6 * 0.000100)
         )
       )
-      and on(env,environment,tier,type,stage,region,component)
+      and on(env,environment,tier,type,stage,region,location,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="workhorse",env="ops",monitor="global",type="web"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,region,location,component) (gitlab_regional_sli_ops:rate_6h{component="workhorse",env="ops",monitor="global",type="web"}) >= 0.16667
       )
   - alert: WebServiceWorkhorseTrafficCessation
     for: 5m
@@ -2035,8 +2035,8 @@ groups:
       grafana_panel_id: "831392945"
       grafana_variables: environment,stage
       promql_template_1: |
-        sum by (env,environment,tier,stage,region) (
-          rate(gitlab_workhorse_http_requests_total{environment="{{ $labels.environment }}",job=~"gitlab-workhorse|gitlab-workhorse-web",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="web"}[5m])
+        sum by (env,environment,tier,stage,region,location) (
+          rate(gitlab_workhorse_http_requests_total{environment="{{ $labels.environment }}",job=~"gitlab-workhorse|gitlab-workhorse-web",location="{{ $labels.location }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="web"}[5m])
         )
       runbook: docs/web/README.md
     labels:
@@ -2074,8 +2074,8 @@ groups:
       grafana_panel_id: "831392945"
       grafana_variables: environment,stage
       promql_template_1: |
-        sum by (env,environment,tier,stage,region) (
-          rate(gitlab_workhorse_http_requests_total{environment="{{ $labels.environment }}",job=~"gitlab-workhorse|gitlab-workhorse-web",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="web"}[5m])
+        sum by (env,environment,tier,stage,region,location) (
+          rate(gitlab_workhorse_http_requests_total{environment="{{ $labels.environment }}",job=~"gitlab-workhorse|gitlab-workhorse-web",location="{{ $labels.location }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="web"}[5m])
         )
       runbook: docs/web/README.md
     labels:

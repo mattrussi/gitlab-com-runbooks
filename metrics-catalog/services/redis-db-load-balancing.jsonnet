@@ -9,6 +9,7 @@ metricsCatalog.serviceDefinition(
     descriptiveName='Redis DB load balancing'
   )
   {
+    tenants: [ 'gitlab-gprd', 'gitlab-gstg', 'gitlab-ops', 'gitlab-pre' ],
     monitoringThresholds+: {
       apdexScore: 0.9995,
     },

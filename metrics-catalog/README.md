@@ -37,7 +37,6 @@ metricsCatalog.serviceDefinition({
   },
   serviceDependencies: {    // A map of (downstream) services on which this service depends
     gitaly: true,
-    praefect: true,
   },
   regional: true,           // If the service is spread over multiple regions and should be monitored as such
   serviceLevelIndicators: { // A map of SLIs for this service. The name is defined by the key
@@ -165,7 +164,6 @@ by a burn rate. The most commonly used ones are:
    1. `gitlab:component:feature_category:execution:apdex:ratio_[burnRate]`
    1. `gitlab:component:feature_category:execution:apdex:success:rate_[burnRate]`
    1. `gitlab:component:feature_category:execution:apdex:weight:score_[burnRate]`
-   1. `gitlab:component:feature_category:execution:error:ratio_[burnRate]`
    1. `gitlab:component:feature_category:execution:error:rate_[burnRate]`
    1. `gitlab:component:feature_category:execution:ops:rate_[burnRate]`
 

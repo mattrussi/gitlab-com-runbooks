@@ -5,7 +5,7 @@ local filesForServices = (import 'recording-rules/service-key-metrics-rule-files
 /**
  * The source SLI recording rules are each kept in their own files, generated from this
  */
-local prometheusEvaluatedServices = std.filter(function(service) !service.dangerouslyThanosEvaluated, services);
+local prometheusEvaluatedServices = std.filter(function(service) !service.dangerouslyThanosEvaluated && service.type != 'mimir', services);
 
 filesForServices(
   services=prometheusEvaluatedServices,

@@ -16,6 +16,7 @@ local railsSelector = { job: 'gitlab-rails', type: 'git' };
 metricsCatalog.serviceDefinition({
   type: 'git',
   tier: 'sv',
+  tenants: ['gitlab-gprd', 'gitlab-gstg', 'gitlab-pre'],
 
   tags: ['golang', 'rails', 'puma'],
 
@@ -52,8 +53,7 @@ metricsCatalog.serviceDefinition({
     redis: true,
     patroni: true,
     pgbouncer: true,
-    praefect: true,
-    pvs: true,
+    'ext-pvs': true,
     consul: true,
     'google-cloud-storage': true,
   },

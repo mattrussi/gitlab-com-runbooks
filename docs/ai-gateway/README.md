@@ -4,7 +4,7 @@
 
 [[_TOC_]]
 
-# Ai-gateway Service
+# AI Gateway Service
 
 * [Service Overview](https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview)
 * **Alerts**: <https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22ai-gateway%22%2C%20tier%3D%22sv%22%7D>
@@ -137,7 +137,7 @@ It is also possible to directly edit the tunables for the `ai-gateway` service v
 
 ### Capacity Planning
 
-AI Gateway uses [capacity planning](https://about.gitlab.com/handbook/engineering/infrastructure/capacity-planning/) provided by Runway for long-term forecasting of saturation resources. To view forecasts, refer to [Tamland page](https://gitlab-com.gitlab.io/gl-infra/tamland/runway.html#ai-gateway-service-runway_container_memory_utilization-resource-saturation).
+AI Gateway uses [capacity planning](https://about.gitlab.com/handbook/engineering/infrastructure/capacity-planning/) provided by Runway for long-term forecasting of saturation resources. To view forecasts, refer to [Tamland page](https://gitlab-com.gitlab.io/gl-infra/capacity-planning-trackers/gitlab-com/service_groups/ai-gateway/).
 
 ### GCP quotas usage
 

@@ -22,6 +22,7 @@ metricsCatalog.serviceDefinition(
     ],
   )
   {
+    tenants: [ 'gitlab-gprd', 'gitlab-gstg', 'gitlab-pre' ],
     skippedMaturityCriteria: {
       'Developer guides exist in developer documentation': 'patroni is an infrastructure component, developers do not interact with it',
     },

@@ -3,18 +3,19 @@
 Users that have been provisioned can access Cloudflare directly at
 `https://dash.cloudflare.com`.
 
-## Baseline Entitlements and Provisioning
+## Instructions for Access Provisioners
 
-CloudFlare Administrator Access is a baseline entitlement for SRE.
+**IT:**
 
-Instructions for Access Provisioners (requires Super Administrator privileges):
+1. Add the user to the `okta-cloudflare-users` Google group.
+1. Ping `@gitlab-org/production-engineering/foundations` to privision the Cloudflare role
 
-1. Log in to the dashboard at <https://dash.cloudflare.com>.
-2. Navigate to the "GitLab" account.
-3. Select the "Members" tab.
-4. Select the permission level. Be user to unselect "Administrator" when selecting
-   "Administrator Read Only", it is not automatically unselected.
-5. Enter the team members emails and click "Invite".
+**Foundations**
+
+1. Open a merge request adding the user to <https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/main/environments/cloudflare/users.tf>
+   1. Assign the role based on the access request or baseline entitlements (SREs receive Administrator acess as baseline).
+1. The user will automatically receive an invite once the change is applied.
+   1. If the user does not accept the invite before expiration, a state drift will occur and the change will need to be applied again.
 
 # Configuraion
 

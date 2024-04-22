@@ -8,6 +8,7 @@ local baseSelector = { type: 'frontend' };
 metricsCatalog.serviceDefinition({
   type: 'frontend',
   tier: 'lb',
+  tenants: [ 'gitlab-gprd', 'gitlab-gstg', 'gitlab-pre' ],
   tags: ['haproxy', 'gateway'],
   monitoringThresholds: {
     apdexScore: 0.999,

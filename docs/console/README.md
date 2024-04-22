@@ -4,7 +4,7 @@
 
 [[_TOC_]]
 
-# Console Service
+# Console Access Service
 
 * **Alerts**: <https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22console%22%2C%20tier%3D%22sv%22%7D>
 * **Label**: gitlab-com/gl-infra/production~"Service::Console"
@@ -21,6 +21,7 @@
 * [../bastions/ops-bastions.md](../bastions/ops-bastions.md)
 * [../bastions/pre-bastions.md](../bastions/pre-bastions.md)
 * [Set up bastions for Release managers](../bastions/rm-bastion-access.md)
+* [AWS Managed Certificates](../certificates/aws.md)
 * [../certificates/chef_hybrid.md](../certificates/chef_hybrid.md)
 * [../certificates/chef_vault.md](../certificates/chef_vault.md)
 * [../certificates/cloudflare.md](../certificates/cloudflare.md)
@@ -59,6 +60,7 @@
 * [Kubernetes](../kube/kubernetes.md)
 * [../logging/logging_gcs_archive_bigquery.md](../logging/logging_gcs_archive_bigquery.md)
 * [Scaling Elastic Cloud Clusters](../logging/scaling.md)
+* [Mailgun Events](../mailgun/mailgunevents.md)
 * [Alertmanager Notification Failures](../monitoring/alertmanager-notification-failures.md)
 * [Accessing a GKE Alertmanager](../monitoring/alerts_gke.md)
 * [Filesystem errors are reported in LOG files](../monitoring/filesystem_alerts.md)
@@ -87,8 +89,6 @@
 * [PgBouncer connection management and troubleshooting](../pgbouncer/pgbouncer-connections.md)
 * [Removing a PgBouncer instance](../pgbouncer/pgbouncer-remove-instance.md)
 * [Sidekiq or Web/API is using most of its PgBouncer connections](../pgbouncer/pgbouncer-saturation.md)
-* [Praefect Database](../praefect/praefect-database.md)
-* [Praefect Database User Password Rotation](../praefect/praefect-password-rotation.md)
 * [Removing cache entries from Redis](../redis-cluster-cache/remove-cache-entries.md)
 * [Clearing sessions for anonymous users](../redis/clear_anonymous_sessions.md)
 * [Provisioning Redis Cluster](../redis/provisioning-redis-cluster.md)
@@ -102,7 +102,6 @@
 * [A survival guide for SREs to working with Sidekiq at GitLab](../sidekiq/sidekiq-survival-guide-for-sres.md)
 * [../sidekiq/sidekiq_error_rate_high.md](../sidekiq/sidekiq_error_rate_high.md)
 * [../sidekiq/sidekiq_stats_no_longer_showing.md](../sidekiq/sidekiq_stats_no_longer_showing.md)
-* [../sidekiq/silent-project-exports.md](../sidekiq/silent-project-exports.md)
 * [../spamcheck/index.md](../spamcheck/index.md)
 * [How to connect to a Database console using Teleport](../teleport/Connect_to_Database_Console_via_Teleport.md)
 * [How to connect to a Rails Console using Teleport](../teleport/Connect_to_Rails_Console_via_Teleport.md)
@@ -130,6 +129,7 @@
 * [Shared Configurations](../uncategorized/shared-configurations.md)
 * [GitLab staging environment](../uncategorized/staging-environment.md)
 * [Uploads](../uncategorized/uploads.md)
+* [../uncategorized/wiz-runtime-sensor.md](../uncategorized/wiz-runtime-sensor.md)
 * [Workers under heavy load because of being used as a CDN](../uncategorized/workers-high-load.md)
 * [Troubleshooting Hashicorp Vault](../vault/troubleshooting.md)
 * [Vault Secrets Management](../vault/vault.md)

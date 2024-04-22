@@ -115,7 +115,7 @@ groups:
       title: 'Multiple versions of Gitaly have been running alongside one another'
   - alert: GCPScheduledSnapshotMissingForGitaly
     expr: |
-      count(up{type="gitaly", job="gitaly", env="gprd", shard!="praefect"} == 1) > count(present_over_time(stackdriver_gce_disk_logging_googleapis_com_user_scheduled_snapshots{env="gprd", disk_name=~"(file|gitaly)-.*-stor-gprd-data$"}[2h]))
+      count(up{type="gitaly", job="gitaly", env="gprd"} == 1) > count(present_over_time(stackdriver_gce_disk_logging_googleapis_com_user_scheduled_snapshots{env="gprd", disk_name=~"(file|gitaly)-.*-stor-gprd-data$"}[2h]))
     for: 1h
     labels:
       severity: s2

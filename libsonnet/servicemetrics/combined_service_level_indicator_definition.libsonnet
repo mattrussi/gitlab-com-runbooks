@@ -42,6 +42,7 @@ local combinedServiceLevelIndicatorDefinition(
         dependencies: dependencies.new(inheritedDefaults.type, componentName, dependsOn),
         components: componentsInitialised,
         emittedBy: std.set(std.flatMap(function(component) component.emittedBy, componentsInitialised)),
+        staticLabels: staticLabels,
 
         serviceAggregation: serviceAggregation,
 
@@ -96,6 +97,18 @@ local combinedServiceLevelIndicatorDefinition(
           std.set(std.flatMap(function(c) c.significantLabels, componentsInitialised)),
 
         shardLevelMonitoring: false,
+
+        opsRateMetrics: std.set(std.flatMap(function(s) s.opsRateMetrics, componentsInitialised)),
+        errorRateMetrics: std.set(std.flatMap(function(s) s.errorRateMetrics, componentsInitialised)),
+        apdexMetrics: std.set(std.flatMap(function(s) s.apdexMetrics, componentsInitialised)),
+
+        metricNames:
+          std.set(std.flatMap(
+            function(c)
+              c.metricNames,
+            componentsInitialised
+          )),
+
       },
   };
 

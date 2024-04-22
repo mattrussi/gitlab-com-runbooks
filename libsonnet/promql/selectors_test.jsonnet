@@ -106,6 +106,10 @@ test.suite({
     actual: selectors.merge({ a: 1 }, { b: '2' }),
     expect: { a: 1, b: '2' },
   },
+  testMergeAll: {
+    actual: selectors.mergeAll([{ a: 1 }, { b: '2' }, { c: 'three', a: 'one' }]),
+    expect: { a: 'one', b: '2', c: 'three' },
+  },
   testWithout: {
     actual: selectors.without({ a: 1, b: 2 }, ['b']),
     expect: { a: 1 },

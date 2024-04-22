@@ -13,6 +13,7 @@ local railsSelector = { job: 'gitlab-rails', type: 'internal-api' };
 metricsCatalog.serviceDefinition({
   type: 'internal-api',
   tier: 'sv',
+  tenants: [ 'gitlab-gprd', 'gitlab-gstg', 'gitlab-pre' ],
 
   tags: ['golang', 'rails', 'puma'],
 
@@ -46,7 +47,6 @@ metricsCatalog.serviceDefinition({
     redis: true,
     patroni: true,
     pgbouncer: true,
-    praefect: true,
     consul: true,
   },
   provisioning: {

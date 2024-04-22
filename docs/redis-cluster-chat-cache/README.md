@@ -4,7 +4,7 @@
 
 [[_TOC_]]
 
-# Redis-cluster-chat-cache Service
+# Redis Cluster Chat Cache Service
 
 * [Service Overview](https://dashboards.gitlab.net/d/redis-cluster-chat-cache-main/redis-cluster-chat-cache-overview)
 * **Alerts**: <https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22redis-cluster-chat-cache%22%2C%20tier%3D%22db%22%7D>

@@ -448,16 +448,33 @@ services:
     friendly_name: Product Analytics
     teams:
       - Product Analytics
+      - Analytics instrumentation
     label: ProductAnalytics
     owner: product_analytics
     technical:
       logging:
-        - name:
-          permalink:
+        - name: GKE logs
+          permalink: https://cloudlogging.app.goo.gl/QWoCS2kDVF5LaTqG9
       project:
         - https://gitlab.com/gitlab-org/analytics-section/product-analytics
       documents:
         readiness_review: https://gitlab.com/gitlab-com/gl-infra/readiness/-/merge_requests/187
+        developer_guide: https://gitlab.com/gitlab-org/gitlab-development-kit/-/blob/main/doc/howto/product_analytics.md
+        service:
+          - https://gitlab.com/gitlab-org/analytics-section/analytics-configurator/-/blob/main/README.md
+          - https://gitlab.com/gitlab-org/analytics-section/product-analytics/analytics-stack/-/blob/main/README.md
+          - https://gitlab.com/gitlab-org/analytics-section/product-analytics/devkit/-/blob/main/README.md
+      dependencies:
+        - service: api
+        - service: web
+        - service: git
+        - service: postgres
+        - service: redis
+        - service: clickhouse
+    observability:
+      monitors:
+        grafana_folder:
+        primary_grafana_dashboard: da6cf9ea-d593-41ed-91c5-8536fd15c2fa/product-analytics-service-health
 
   - name: search
     tier: inf
@@ -721,63 +738,6 @@ services:
       monitors:
         primary_grafana_dashboard:
         sentry_slug:
-
-  - name: praefect
-    tier: stor
-    friendly_name: Praefect
-    teams:
-      - gitaly
-    label: Praefect
-    owner: gitaly
-    technical:
-      project:
-        - https://gitlab.com/gitlab-org/gitaly
-      documents:
-        design: https://gitlab.com/gitlab-org/gitaly/blob/master/doc/design_ha.md
-        architecture: https://about.gitlab.com/handbook/engineering/infrastructure/production-architecture/#service-architecture
-        sre_guide: https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/praefect
-        developer_guide: https://docs.gitlab.com/ee/development/gitaly.html#gitaly-developers-guide
-        readiness_review:
-        service:
-          - https://gitlab.com/gitlab-org/gitaly/blob/master/README.md
-        security:
-      dependencies:
-        - service: gitaly
-      logging:
-        - name: system
-          permalink: https://log.gprd.gitlab.net/goto/769b1e96dc189470332cd7005dd6f878
-    observability:
-      monitors:
-        sentry_slug: gitlab/praefect-production
-        grafana_folder: SRXyrrSmk
-        primary_grafana_dashboard: praefect-main/praefect-overview
-
-  - name: pvs
-    tier: inf
-    friendly_name: Pipeline Validation Service
-    teams:
-      - trust_and_safety
-    label: PVS
-    owner: trust_and_safety
-    technical:
-      project:
-        - https://gitlab.com/gitlab-com/gl-security/security-operations/trust-and-safety/pipeline-validation-service
-      documents:
-        design:
-        architecture:
-        readiness_review: https://gitlab.com/gitlab-com/gl-infra/readiness/-/issues/17
-        sre_guide: https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/pvs
-        developer_guide: https://docs.gitlab.com/ee/administration/external_pipeline_validation.html
-        service:
-        security:
-      dependencies:
-      logging:
-        - name: stackdriver
-          permalink: https://cloudlogging.app.goo.gl/mLPtczm9LrLekYcw5
-    observability:
-      monitors:
-        grafana_folder: pvs
-        primary_grafana_dashboard: pvs-main/pvs-overview
 
   - name: ai-gateway
     tier: sv
@@ -1515,33 +1475,6 @@ services:
       monitors:
         primary_grafana_dashboard: redis-cluster-repo-cache-main/redis-cluster-repo-cache-overview
 
-  - name: redis-repository-cache
-    tier: db
-    friendly_name: Redis Repository Cache
-    label: RedisRepositoryCache
-    owner: scalability:practices
-    technical:
-      project:
-        - https://github.com/redis/redis
-      documents:
-        design:
-        architecture:
-        readiness_review:
-        sre_guide: https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/redis-cache
-        developer_guide: https://docs.gitlab.com/ee/development/redis.html#redis-guidelines
-        service:
-          - https://redis.io/documentation
-          - https://docs.gitlab.com/omnibus/settings/redis.html
-        security:
-      dependencies:
-        - service:
-      logging:
-        - name: system
-          permalink: https://log.gprd.gitlab.net/goto/3f634380-9547-11ed-9f43-e3784d7fe3ca
-    observability:
-      monitors:
-        primary_grafana_dashboard: redis-repository-cache-main/redis-repository-cache-overview
-
   - name: redis-sessions
     tier: db
     friendly_name: Redis Sessions
@@ -1823,7 +1756,7 @@ services:
       - manage
       - plan
     label: Sidekiq
-    owner: reliability_general
+    owner: scalability:practices
     business:
       SLA:
         overall_sla_weighting: 0 # Treated as a primary service, but with a zero weight for now
@@ -2023,10 +1956,10 @@ services:
         primary_grafana_dashboard: USVj3qHmk/logging
         sentry_slug:
 
-  - name: waf
+  - name: cloudflare
     tier: lb
     friendly_name: Cloudflare Web Application Firewall
-    label: WAF
+    label: cloudflare
     owner: reliability_foundations
     technical:
       project:
@@ -2034,7 +1967,7 @@ services:
         design:
         architecture:
         readiness_review: https://gitlab.com/gitlab-com/gl-infra/readiness/-/tree/master/cloudflare
-        sre_guide: https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/waf
+        sre_guide: https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/cloudflare
         developer_guide:
         service:
         security:
@@ -2044,7 +1977,7 @@ services:
           permalink:
     observability:
       monitors:
-        primary_grafana_dashboard: waf-main
+        primary_grafana_dashboard: cloudflare-main
         sentry_slug:
 
   - name: vault
@@ -2336,8 +2269,7 @@ services:
     owner: reliability_general
     business:
       SLA:
-        overall_sla_weighting: 0 # Treated as a primary service, but with a zero weight for now
-    # TODO: Reenable it as per: https://gitlab.com/gitlab-com/gl-infra/delivery/-/issues/2859
+        overall_sla_weighting: 5
     technical:
       project:
         - https://gitlab.com/gitlab-org/gitlab
@@ -2579,3 +2511,13 @@ services:
     observability:
       monitors:
         primary_grafana_dashboard: glgo-main/glgo-overview
+
+  - name: token-rotation-management
+    tier: inf
+    friendly_name: Token rotation management
+    label: TokenRotationManagement
+    owner: security_operations
+    technical:
+      logging:
+        - name:
+          permalink:

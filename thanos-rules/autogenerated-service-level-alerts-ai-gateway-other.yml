@@ -107,6 +107,112 @@ groups:
       (
         sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="inference",env!~"gprd|ops",monitor="global",type="ai-gateway"}) >= 0.16667
       )
+  - alert: AiGatewayServiceInferenceApdexSLOViolationRegional
+    for: 2m
+    annotations:
+      title: The inference SLI of the ai-gateway service in region `{{ $labels.region
+        }}` has an apdex violating SLO
+      description: |
+        Vertex AI API model inference requests for AI Gateway.
+
+        Note that this alert is specific to the `{{ $labels.region }}` region.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "4259195235"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,region,location,le) (
+            rate(code_suggestions_inference_request_duration_seconds_bucket{environment="{{ $labels.environment }}",location="{{ $labels.location }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="ai-gateway"}[5m])
+          )
+        )
+      runbook: docs/ai-gateway/README.md
+    labels:
+      aggregation: regional_component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: code_suggestions
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 1h
+    expr: |
+      (
+        (
+          gitlab_regional_sli_apdex:ratio_1h{component="inference",env!~"gprd|ops",monitor="global",type="ai-gateway"}
+          < (1 - 14.4 * 0.020000)
+        )
+        and
+        (
+          gitlab_regional_sli_apdex:ratio_5m{component="inference",env!~"gprd|ops",monitor="global",type="ai-gateway"}
+          < (1 - 14.4 * 0.020000)
+        )
+      )
+      and on(env,environment,tier,type,stage,region,location,component)
+      (
+        sum by(env,environment,tier,type,stage,region,location,component) (gitlab_regional_sli_ops:rate_1h{component="inference",env!~"gprd|ops",monitor="global",type="ai-gateway"}) >= 1
+      )
+  - alert: AiGatewayServiceInferenceApdexSLOViolationRegional
+    for: 2m
+    annotations:
+      title: The inference SLI of the ai-gateway service in region `{{ $labels.region
+        }}` has an apdex violating SLO
+      description: |
+        Vertex AI API model inference requests for AI Gateway.
+
+        Note that this alert is specific to the `{{ $labels.region }}` region.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "4259195235"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,region,location,le) (
+            rate(code_suggestions_inference_request_duration_seconds_bucket{environment="{{ $labels.environment }}",location="{{ $labels.location }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="ai-gateway"}[5m])
+          )
+        )
+      runbook: docs/ai-gateway/README.md
+    labels:
+      aggregation: regional_component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: code_suggestions
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+    expr: |
+      (
+        (
+          gitlab_regional_sli_apdex:ratio_6h{component="inference",env!~"gprd|ops",monitor="global",type="ai-gateway"}
+          < (1 - 6 * 0.020000)
+        )
+        and
+        (
+          gitlab_regional_sli_apdex:ratio_30m{component="inference",env!~"gprd|ops",monitor="global",type="ai-gateway"}
+          < (1 - 6 * 0.020000)
+        )
+      )
+      and on(env,environment,tier,type,stage,region,location,component)
+      (
+        sum by(env,environment,tier,type,stage,region,location,component) (gitlab_regional_sli_ops:rate_6h{component="inference",env!~"gprd|ops",monitor="global",type="ai-gateway"}) >= 0.16667
+      )
   - alert: AiGatewayServiceRunwayIngressApdexSLOViolation
     for: 2m
     annotations:
@@ -209,6 +315,112 @@ groups:
       (
         sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="runway_ingress",env!~"gprd|ops",monitor="global",type="ai-gateway"}) >= 0.16667
       )
+  - alert: AiGatewayServiceRunwayIngressApdexSLOViolationRegional
+    for: 2m
+    annotations:
+      title: The runway_ingress SLI of the ai-gateway service in region `{{ $labels.region
+        }}` has an apdex violating SLO
+      description: |
+        Application load balancer serving ingress HTTP requests for the Runway service.
+
+        Note that this alert is specific to the `{{ $labels.region }}` region.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3996186971"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,region,location,le) (
+            avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_request_latencies_bucket{environment="{{ $labels.environment }}",location="{{ $labels.location }}",region="{{ $labels.region }}",response_code_class!~"4xx|5xx",stage="{{ $labels.stage }}",type="ai-gateway"}[5m])
+          )
+        )
+      runbook: docs/ai-gateway/README.md
+    labels:
+      aggregation: regional_component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: code_suggestions
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 1h
+    expr: |
+      (
+        (
+          gitlab_regional_sli_apdex:ratio_1h{component="runway_ingress",env!~"gprd|ops",monitor="global",type="ai-gateway"}
+          < (1 - 14.4 * 0.020000)
+        )
+        and
+        (
+          gitlab_regional_sli_apdex:ratio_5m{component="runway_ingress",env!~"gprd|ops",monitor="global",type="ai-gateway"}
+          < (1 - 14.4 * 0.020000)
+        )
+      )
+      and on(env,environment,tier,type,stage,region,location,component)
+      (
+        sum by(env,environment,tier,type,stage,region,location,component) (gitlab_regional_sli_ops:rate_1h{component="runway_ingress",env!~"gprd|ops",monitor="global",type="ai-gateway"}) >= 1
+      )
+  - alert: AiGatewayServiceRunwayIngressApdexSLOViolationRegional
+    for: 2m
+    annotations:
+      title: The runway_ingress SLI of the ai-gateway service in region `{{ $labels.region
+        }}` has an apdex violating SLO
+      description: |
+        Application load balancer serving ingress HTTP requests for the Runway service.
+
+        Note that this alert is specific to the `{{ $labels.region }}` region.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3996186971"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,region,location,le) (
+            avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_request_latencies_bucket{environment="{{ $labels.environment }}",location="{{ $labels.location }}",region="{{ $labels.region }}",response_code_class!~"4xx|5xx",stage="{{ $labels.stage }}",type="ai-gateway"}[5m])
+          )
+        )
+      runbook: docs/ai-gateway/README.md
+    labels:
+      aggregation: regional_component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: code_suggestions
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+    expr: |
+      (
+        (
+          gitlab_regional_sli_apdex:ratio_6h{component="runway_ingress",env!~"gprd|ops",monitor="global",type="ai-gateway"}
+          < (1 - 6 * 0.020000)
+        )
+        and
+        (
+          gitlab_regional_sli_apdex:ratio_30m{component="runway_ingress",env!~"gprd|ops",monitor="global",type="ai-gateway"}
+          < (1 - 6 * 0.020000)
+        )
+      )
+      and on(env,environment,tier,type,stage,region,location,component)
+      (
+        sum by(env,environment,tier,type,stage,region,location,component) (gitlab_regional_sli_ops:rate_6h{component="runway_ingress",env!~"gprd|ops",monitor="global",type="ai-gateway"}) >= 0.16667
+      )
   - alert: AiGatewayServiceRunwayIngressErrorSLOViolation
     for: 2m
     annotations:
@@ -305,6 +517,106 @@ groups:
       (
         sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="runway_ingress",env!~"gprd|ops",monitor="global",type="ai-gateway"}) >= 0.16667
       )
+  - alert: AiGatewayServiceRunwayIngressErrorSLOViolationRegional
+    for: 2m
+    annotations:
+      title: The runway_ingress SLI of the ai-gateway service in region `{{ $labels.region
+        }}` has an error rate violating SLO
+      description: |
+        Application load balancer serving ingress HTTP requests for the Runway service.
+
+        Note that this alert is specific to the `{{ $labels.region }}` region.
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3451331792"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage,region,location) (
+          avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_request_count{environment="{{ $labels.environment }}",location="{{ $labels.location }}",region="{{ $labels.region }}",response_code_class="5xx",stage="{{ $labels.stage }}",type="ai-gateway"}[5m]) / 60
+        )
+      runbook: docs/ai-gateway/README.md
+    labels:
+      aggregation: regional_component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: code_suggestions
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: error
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 1h
+    expr: |
+      (
+        (
+          gitlab_regional_sli_errors:ratio_1h{component="runway_ingress",env!~"gprd|ops",monitor="global",type="ai-gateway"}
+          > (14.4 * 0.020000)
+        )
+        and
+        (
+          gitlab_regional_sli_errors:ratio_5m{component="runway_ingress",env!~"gprd|ops",monitor="global",type="ai-gateway"}
+          > (14.4 * 0.020000)
+        )
+      )
+      and on(env,environment,tier,type,stage,region,location,component)
+      (
+        sum by(env,environment,tier,type,stage,region,location,component) (gitlab_regional_sli_ops:rate_1h{component="runway_ingress",env!~"gprd|ops",monitor="global",type="ai-gateway"}) >= 1
+      )
+  - alert: AiGatewayServiceRunwayIngressErrorSLOViolationRegional
+    for: 2m
+    annotations:
+      title: The runway_ingress SLI of the ai-gateway service in region `{{ $labels.region
+        }}` has an error rate violating SLO
+      description: |
+        Application load balancer serving ingress HTTP requests for the Runway service.
+
+        Note that this alert is specific to the `{{ $labels.region }}` region.
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3451331792"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage,region,location) (
+          avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_request_count{environment="{{ $labels.environment }}",location="{{ $labels.location }}",region="{{ $labels.region }}",response_code_class="5xx",stage="{{ $labels.stage }}",type="ai-gateway"}[5m]) / 60
+        )
+      runbook: docs/ai-gateway/README.md
+    labels:
+      aggregation: regional_component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: code_suggestions
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: error
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+    expr: |
+      (
+        (
+          gitlab_regional_sli_errors:ratio_6h{component="runway_ingress",env!~"gprd|ops",monitor="global",type="ai-gateway"}
+          > (6 * 0.020000)
+        )
+        and
+        (
+          gitlab_regional_sli_errors:ratio_30m{component="runway_ingress",env!~"gprd|ops",monitor="global",type="ai-gateway"}
+          > (6 * 0.020000)
+        )
+      )
+      and on(env,environment,tier,type,stage,region,location,component)
+      (
+        sum by(env,environment,tier,type,stage,region,location,component) (gitlab_regional_sli_ops:rate_6h{component="runway_ingress",env!~"gprd|ops",monitor="global",type="ai-gateway"}) >= 0.16667
+      )
   - alert: AiGatewayServiceRunwayIngressTrafficCessation
     for: 5m
     annotations:
@@ -377,6 +689,82 @@ groups:
       gitlab_component_ops:rate_5m{component="runway_ingress",env!~"gprd|ops",monitor="global",stage="main",type="ai-gateway"} offset 1h
       unless
       gitlab_component_ops:rate_5m{component="runway_ingress",env!~"gprd|ops",monitor="global",stage="main",type="ai-gateway"}
+  - alert: AiGatewayServiceRunwayIngressTrafficCessationRegional
+    for: 5m
+    annotations:
+      title: The runway_ingress SLI of the ai-gateway service in region `{{ $labels.region
+        }}` has not received any traffic in the past 30m
+      description: |
+        Application load balancer serving ingress HTTP requests for the Runway service.
+
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
+
+        Note that this alert is specific to the `{{ $labels.region }}` region.
+      grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "1866380853"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage,region,location) (
+          avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_request_count{environment="{{ $labels.environment }}",location="{{ $labels.location }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="ai-gateway"}[5m]) / 60
+        )
+      runbook: docs/ai-gateway/README.md
+    labels:
+      aggregation: regional_component
+      alert_class: traffic_cessation
+      alert_type: cause
+      feature_category: code_suggestions
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: ops
+      slo_alert: "no"
+      user_impacting: "yes"
+    expr: |
+      gitlab_regional_sli_ops:rate_30m{component="runway_ingress",env!~"gprd|ops",monitor="global",stage="main",type="ai-gateway"} == 0
+      and
+      gitlab_regional_sli_ops:rate_30m{component="runway_ingress",env!~"gprd|ops",monitor="global",stage="main",type="ai-gateway"} offset 1h >= 0.16666666666666666
+  - alert: AiGatewayServiceRunwayIngressTrafficAbsentRegional
+    for: 30m
+    annotations:
+      title: The runway_ingress SLI of the ai-gateway service in region `{{ $labels.region
+        }}` has not reported any traffic in the past 30m
+      description: |
+        Application load balancer serving ingress HTTP requests for the Runway service.
+
+        This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
+
+        This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
+
+        Note that this alert is specific to the `{{ $labels.region }}` region.
+      grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "1866380853"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage,region,location) (
+          avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_request_count{environment="{{ $labels.environment }}",location="{{ $labels.location }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="ai-gateway"}[5m]) / 60
+        )
+      runbook: docs/ai-gateway/README.md
+    labels:
+      aggregation: regional_component
+      alert_class: traffic_cessation
+      alert_type: cause
+      feature_category: code_suggestions
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: ops
+      slo_alert: "no"
+      user_impacting: "yes"
+    expr: |
+      gitlab_regional_sli_ops:rate_5m{component="runway_ingress",env!~"gprd|ops",monitor="global",stage="main",type="ai-gateway"} offset 1h
+      unless
+      gitlab_regional_sli_ops:rate_5m{component="runway_ingress",env!~"gprd|ops",monitor="global",stage="main",type="ai-gateway"}
   - alert: AiGatewayServiceServerApdexSLOViolation
     for: 2m
     annotations:
@@ -396,7 +784,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
-            rate(http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",handler!~"/v2/code/completions|/v2/code/generations|/v2/completions",stage="{{ $labels.stage }}",status!~"4xx|5xx",type="ai-gateway"}[5m])
+            rate(http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",handler!~"/v1/chat/agent|/v1/x-ray/libraries|/v2/code/completions|/v2/code/generations|/v2/completions",stage="{{ $labels.stage }}",status!~"4xx|5xx",type="ai-gateway"}[5m])
           )
         )
       runbook: docs/ai-gateway/README.md
@@ -446,7 +834,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
-            rate(http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",handler!~"/v2/code/completions|/v2/code/generations|/v2/completions",stage="{{ $labels.stage }}",status!~"4xx|5xx",type="ai-gateway"}[5m])
+            rate(http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",handler!~"/v1/chat/agent|/v1/x-ray/libraries|/v2/code/completions|/v2/code/generations|/v2/completions",stage="{{ $labels.stage }}",status!~"4xx|5xx",type="ai-gateway"}[5m])
           )
         )
       runbook: docs/ai-gateway/README.md
@@ -477,6 +865,110 @@ groups:
       (
         sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="server",env!~"gprd|ops",monitor="global",type="ai-gateway"}) >= 0.16667
       )
+  - alert: AiGatewayServiceServerApdexSLOViolationRegional
+    for: 2m
+    annotations:
+      title: The server SLI of the ai-gateway service in region `{{ $labels.region
+        }}` has an apdex violating SLO
+      description: |
+        FastAPI server for AI Gateway.
+
+        Note that this alert is specific to the `{{ $labels.region }}` region.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2863319079"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,region,location,le) (
+            rate(http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",handler!~"/v1/chat/agent|/v1/x-ray/libraries|/v2/code/completions|/v2/code/generations|/v2/completions",location="{{ $labels.location }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status!~"4xx|5xx",type="ai-gateway"}[5m])
+          )
+        )
+      runbook: docs/ai-gateway/README.md
+    labels:
+      aggregation: regional_component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: code_suggestions
+      rules_domain: general
+      severity: s4
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 1h
+    expr: |
+      (
+        (
+          gitlab_regional_sli_apdex:ratio_1h{component="server",env!~"gprd|ops",monitor="global",type="ai-gateway"}
+          < (1 - 14.4 * 0.020000)
+        )
+        and
+        (
+          gitlab_regional_sli_apdex:ratio_5m{component="server",env!~"gprd|ops",monitor="global",type="ai-gateway"}
+          < (1 - 14.4 * 0.020000)
+        )
+      )
+      and on(env,environment,tier,type,stage,region,location,component)
+      (
+        sum by(env,environment,tier,type,stage,region,location,component) (gitlab_regional_sli_ops:rate_1h{component="server",env!~"gprd|ops",monitor="global",type="ai-gateway"}) >= 1
+      )
+  - alert: AiGatewayServiceServerApdexSLOViolationRegional
+    for: 2m
+    annotations:
+      title: The server SLI of the ai-gateway service in region `{{ $labels.region
+        }}` has an apdex violating SLO
+      description: |
+        FastAPI server for AI Gateway.
+
+        Note that this alert is specific to the `{{ $labels.region }}` region.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2863319079"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,region,location,le) (
+            rate(http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",handler!~"/v1/chat/agent|/v1/x-ray/libraries|/v2/code/completions|/v2/code/generations|/v2/completions",location="{{ $labels.location }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status!~"4xx|5xx",type="ai-gateway"}[5m])
+          )
+        )
+      runbook: docs/ai-gateway/README.md
+    labels:
+      aggregation: regional_component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: code_suggestions
+      rules_domain: general
+      severity: s4
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+    expr: |
+      (
+        (
+          gitlab_regional_sli_apdex:ratio_6h{component="server",env!~"gprd|ops",monitor="global",type="ai-gateway"}
+          < (1 - 6 * 0.020000)
+        )
+        and
+        (
+          gitlab_regional_sli_apdex:ratio_30m{component="server",env!~"gprd|ops",monitor="global",type="ai-gateway"}
+          < (1 - 6 * 0.020000)
+        )
+      )
+      and on(env,environment,tier,type,stage,region,location,component)
+      (
+        sum by(env,environment,tier,type,stage,region,location,component) (gitlab_regional_sli_ops:rate_6h{component="server",env!~"gprd|ops",monitor="global",type="ai-gateway"}) >= 0.16667
+      )
   - alert: AiGatewayServiceServerErrorSLOViolation
     for: 2m
     annotations:
@@ -494,7 +986,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(http_request_duration_seconds_count{environment="{{ $labels.environment }}",handler!~"/v2/code/completions|/v2/code/generations|/v2/completions",stage="{{ $labels.stage }}",status="5xx",type="ai-gateway"}[5m])
+          rate(http_request_duration_seconds_count{environment="{{ $labels.environment }}",handler!~"/v1/chat/agent|/v1/x-ray/libraries|/v2/code/completions|/v2/code/generations|/v2/completions",stage="{{ $labels.stage }}",status="5xx",type="ai-gateway"}[5m])
         )
       runbook: docs/ai-gateway/README.md
     labels:
@@ -541,7 +1033,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(http_request_duration_seconds_count{environment="{{ $labels.environment }}",handler!~"/v2/code/completions|/v2/code/generations|/v2/completions",stage="{{ $labels.stage }}",status="5xx",type="ai-gateway"}[5m])
+          rate(http_request_duration_seconds_count{environment="{{ $labels.environment }}",handler!~"/v1/chat/agent|/v1/x-ray/libraries|/v2/code/completions|/v2/code/generations|/v2/completions",stage="{{ $labels.stage }}",status="5xx",type="ai-gateway"}[5m])
         )
       runbook: docs/ai-gateway/README.md
     labels:
@@ -570,6 +1062,508 @@ groups:
       and on(env,environment,tier,type,stage,component)
       (
         sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="server",env!~"gprd|ops",monitor="global",type="ai-gateway"}) >= 0.16667
+      )
+  - alert: AiGatewayServiceServerErrorSLOViolationRegional
+    for: 2m
+    annotations:
+      title: The server SLI of the ai-gateway service in region `{{ $labels.region
+        }}` has an error rate violating SLO
+      description: |
+        FastAPI server for AI Gateway.
+
+        Note that this alert is specific to the `{{ $labels.region }}` region.
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "1631973137"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage,region,location) (
+          rate(http_request_duration_seconds_count{environment="{{ $labels.environment }}",handler!~"/v1/chat/agent|/v1/x-ray/libraries|/v2/code/completions|/v2/code/generations|/v2/completions",location="{{ $labels.location }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status="5xx",type="ai-gateway"}[5m])
+        )
+      runbook: docs/ai-gateway/README.md
+    labels:
+      aggregation: regional_component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: code_suggestions
+      rules_domain: general
+      severity: s4
+      sli_type: error
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 1h
+    expr: |
+      (
+        (
+          gitlab_regional_sli_errors:ratio_1h{component="server",env!~"gprd|ops",monitor="global",type="ai-gateway"}
+          > (14.4 * 0.020000)
+        )
+        and
+        (
+          gitlab_regional_sli_errors:ratio_5m{component="server",env!~"gprd|ops",monitor="global",type="ai-gateway"}
+          > (14.4 * 0.020000)
+        )
+      )
+      and on(env,environment,tier,type,stage,region,location,component)
+      (
+        sum by(env,environment,tier,type,stage,region,location,component) (gitlab_regional_sli_ops:rate_1h{component="server",env!~"gprd|ops",monitor="global",type="ai-gateway"}) >= 1
+      )
+  - alert: AiGatewayServiceServerErrorSLOViolationRegional
+    for: 2m
+    annotations:
+      title: The server SLI of the ai-gateway service in region `{{ $labels.region
+        }}` has an error rate violating SLO
+      description: |
+        FastAPI server for AI Gateway.
+
+        Note that this alert is specific to the `{{ $labels.region }}` region.
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "1631973137"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage,region,location) (
+          rate(http_request_duration_seconds_count{environment="{{ $labels.environment }}",handler!~"/v1/chat/agent|/v1/x-ray/libraries|/v2/code/completions|/v2/code/generations|/v2/completions",location="{{ $labels.location }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status="5xx",type="ai-gateway"}[5m])
+        )
+      runbook: docs/ai-gateway/README.md
+    labels:
+      aggregation: regional_component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: code_suggestions
+      rules_domain: general
+      severity: s4
+      sli_type: error
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+    expr: |
+      (
+        (
+          gitlab_regional_sli_errors:ratio_6h{component="server",env!~"gprd|ops",monitor="global",type="ai-gateway"}
+          > (6 * 0.020000)
+        )
+        and
+        (
+          gitlab_regional_sli_errors:ratio_30m{component="server",env!~"gprd|ops",monitor="global",type="ai-gateway"}
+          > (6 * 0.020000)
+        )
+      )
+      and on(env,environment,tier,type,stage,region,location,component)
+      (
+        sum by(env,environment,tier,type,stage,region,location,component) (gitlab_regional_sli_ops:rate_6h{component="server",env!~"gprd|ops",monitor="global",type="ai-gateway"}) >= 0.16667
+      )
+  - alert: AiGatewayServiceServerChatApdexSLOViolation
+    for: 2m
+    annotations:
+      title: The server_chat SLI of the ai-gateway service (`{{ $labels.stage }}`
+        stage) has an apdex violating SLO
+      description: |
+        FastAPI server for AI Gateway - chat.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3566889786"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,le) (
+            rate(http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",handler="/v1/chat/agent",stage="{{ $labels.stage }}",status!~"4xx|5xx",type="ai-gateway"}[5m])
+          )
+        )
+      runbook: docs/ai-gateway/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: duo_chat
+      rules_domain: general
+      severity: s4
+      sli_type: apdex
+      slo_alert: "yes"
+      team: ai_framework
+      user_impacting: "yes"
+      window: 1h
+    expr: |
+      (
+        (
+          gitlab_component_apdex:ratio_1h{component="server_chat",env!~"gprd|ops",monitor="global",type="ai-gateway"}
+          < (1 - 14.4 * 0.020000)
+        )
+        and
+        (
+          gitlab_component_apdex:ratio_5m{component="server_chat",env!~"gprd|ops",monitor="global",type="ai-gateway"}
+          < (1 - 14.4 * 0.020000)
+        )
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="server_chat",env!~"gprd|ops",monitor="global",type="ai-gateway"}) >= 1
+      )
+  - alert: AiGatewayServiceServerChatApdexSLOViolation
+    for: 2m
+    annotations:
+      title: The server_chat SLI of the ai-gateway service (`{{ $labels.stage }}`
+        stage) has an apdex violating SLO
+      description: |
+        FastAPI server for AI Gateway - chat.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3566889786"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,le) (
+            rate(http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",handler="/v1/chat/agent",stage="{{ $labels.stage }}",status!~"4xx|5xx",type="ai-gateway"}[5m])
+          )
+        )
+      runbook: docs/ai-gateway/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: duo_chat
+      rules_domain: general
+      severity: s4
+      sli_type: apdex
+      slo_alert: "yes"
+      team: ai_framework
+      user_impacting: "yes"
+      window: 6h
+    expr: |
+      (
+        (
+          gitlab_component_apdex:ratio_6h{component="server_chat",env!~"gprd|ops",monitor="global",type="ai-gateway"}
+          < (1 - 6 * 0.020000)
+        )
+        and
+        (
+          gitlab_component_apdex:ratio_30m{component="server_chat",env!~"gprd|ops",monitor="global",type="ai-gateway"}
+          < (1 - 6 * 0.020000)
+        )
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="server_chat",env!~"gprd|ops",monitor="global",type="ai-gateway"}) >= 0.16667
+      )
+  - alert: AiGatewayServiceServerChatApdexSLOViolationRegional
+    for: 2m
+    annotations:
+      title: The server_chat SLI of the ai-gateway service in region `{{ $labels.region
+        }}` has an apdex violating SLO
+      description: |
+        FastAPI server for AI Gateway - chat.
+
+        Note that this alert is specific to the `{{ $labels.region }}` region.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3566889786"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,region,location,le) (
+            rate(http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",handler="/v1/chat/agent",location="{{ $labels.location }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status!~"4xx|5xx",type="ai-gateway"}[5m])
+          )
+        )
+      runbook: docs/ai-gateway/README.md
+    labels:
+      aggregation: regional_component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: duo_chat
+      rules_domain: general
+      severity: s4
+      sli_type: apdex
+      slo_alert: "yes"
+      team: ai_framework
+      user_impacting: "yes"
+      window: 1h
+    expr: |
+      (
+        (
+          gitlab_regional_sli_apdex:ratio_1h{component="server_chat",env!~"gprd|ops",monitor="global",type="ai-gateway"}
+          < (1 - 14.4 * 0.020000)
+        )
+        and
+        (
+          gitlab_regional_sli_apdex:ratio_5m{component="server_chat",env!~"gprd|ops",monitor="global",type="ai-gateway"}
+          < (1 - 14.4 * 0.020000)
+        )
+      )
+      and on(env,environment,tier,type,stage,region,location,component)
+      (
+        sum by(env,environment,tier,type,stage,region,location,component) (gitlab_regional_sli_ops:rate_1h{component="server_chat",env!~"gprd|ops",monitor="global",type="ai-gateway"}) >= 1
+      )
+  - alert: AiGatewayServiceServerChatApdexSLOViolationRegional
+    for: 2m
+    annotations:
+      title: The server_chat SLI of the ai-gateway service in region `{{ $labels.region
+        }}` has an apdex violating SLO
+      description: |
+        FastAPI server for AI Gateway - chat.
+
+        Note that this alert is specific to the `{{ $labels.region }}` region.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3566889786"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,region,location,le) (
+            rate(http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",handler="/v1/chat/agent",location="{{ $labels.location }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status!~"4xx|5xx",type="ai-gateway"}[5m])
+          )
+        )
+      runbook: docs/ai-gateway/README.md
+    labels:
+      aggregation: regional_component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: duo_chat
+      rules_domain: general
+      severity: s4
+      sli_type: apdex
+      slo_alert: "yes"
+      team: ai_framework
+      user_impacting: "yes"
+      window: 6h
+    expr: |
+      (
+        (
+          gitlab_regional_sli_apdex:ratio_6h{component="server_chat",env!~"gprd|ops",monitor="global",type="ai-gateway"}
+          < (1 - 6 * 0.020000)
+        )
+        and
+        (
+          gitlab_regional_sli_apdex:ratio_30m{component="server_chat",env!~"gprd|ops",monitor="global",type="ai-gateway"}
+          < (1 - 6 * 0.020000)
+        )
+      )
+      and on(env,environment,tier,type,stage,region,location,component)
+      (
+        sum by(env,environment,tier,type,stage,region,location,component) (gitlab_regional_sli_ops:rate_6h{component="server_chat",env!~"gprd|ops",monitor="global",type="ai-gateway"}) >= 0.16667
+      )
+  - alert: AiGatewayServiceServerChatErrorSLOViolation
+    for: 2m
+    annotations:
+      title: The server_chat SLI of the ai-gateway service (`{{ $labels.stage }}`
+        stage) has an error rate violating SLO
+      description: |
+        FastAPI server for AI Gateway - chat.
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "1462095494"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(http_request_duration_seconds_count{environment="{{ $labels.environment }}",handler="/v1/chat/agent",stage="{{ $labels.stage }}",status="5xx",type="ai-gateway"}[5m])
+        )
+      runbook: docs/ai-gateway/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: duo_chat
+      rules_domain: general
+      severity: s4
+      sli_type: error
+      slo_alert: "yes"
+      team: ai_framework
+      user_impacting: "yes"
+      window: 1h
+    expr: |
+      (
+        (
+          gitlab_component_errors:ratio_1h{component="server_chat",env!~"gprd|ops",monitor="global",type="ai-gateway"}
+          > (14.4 * 0.020000)
+        )
+        and
+        (
+          gitlab_component_errors:ratio_5m{component="server_chat",env!~"gprd|ops",monitor="global",type="ai-gateway"}
+          > (14.4 * 0.020000)
+        )
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="server_chat",env!~"gprd|ops",monitor="global",type="ai-gateway"}) >= 1
+      )
+  - alert: AiGatewayServiceServerChatErrorSLOViolation
+    for: 2m
+    annotations:
+      title: The server_chat SLI of the ai-gateway service (`{{ $labels.stage }}`
+        stage) has an error rate violating SLO
+      description: |
+        FastAPI server for AI Gateway - chat.
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "1462095494"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(http_request_duration_seconds_count{environment="{{ $labels.environment }}",handler="/v1/chat/agent",stage="{{ $labels.stage }}",status="5xx",type="ai-gateway"}[5m])
+        )
+      runbook: docs/ai-gateway/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: duo_chat
+      rules_domain: general
+      severity: s4
+      sli_type: error
+      slo_alert: "yes"
+      team: ai_framework
+      user_impacting: "yes"
+      window: 6h
+    expr: |
+      (
+        (
+          gitlab_component_errors:ratio_6h{component="server_chat",env!~"gprd|ops",monitor="global",type="ai-gateway"}
+          > (6 * 0.020000)
+        )
+        and
+        (
+          gitlab_component_errors:ratio_30m{component="server_chat",env!~"gprd|ops",monitor="global",type="ai-gateway"}
+          > (6 * 0.020000)
+        )
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="server_chat",env!~"gprd|ops",monitor="global",type="ai-gateway"}) >= 0.16667
+      )
+  - alert: AiGatewayServiceServerChatErrorSLOViolationRegional
+    for: 2m
+    annotations:
+      title: The server_chat SLI of the ai-gateway service in region `{{ $labels.region
+        }}` has an error rate violating SLO
+      description: |
+        FastAPI server for AI Gateway - chat.
+
+        Note that this alert is specific to the `{{ $labels.region }}` region.
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "1462095494"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage,region,location) (
+          rate(http_request_duration_seconds_count{environment="{{ $labels.environment }}",handler="/v1/chat/agent",location="{{ $labels.location }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status="5xx",type="ai-gateway"}[5m])
+        )
+      runbook: docs/ai-gateway/README.md
+    labels:
+      aggregation: regional_component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: duo_chat
+      rules_domain: general
+      severity: s4
+      sli_type: error
+      slo_alert: "yes"
+      team: ai_framework
+      user_impacting: "yes"
+      window: 1h
+    expr: |
+      (
+        (
+          gitlab_regional_sli_errors:ratio_1h{component="server_chat",env!~"gprd|ops",monitor="global",type="ai-gateway"}
+          > (14.4 * 0.020000)
+        )
+        and
+        (
+          gitlab_regional_sli_errors:ratio_5m{component="server_chat",env!~"gprd|ops",monitor="global",type="ai-gateway"}
+          > (14.4 * 0.020000)
+        )
+      )
+      and on(env,environment,tier,type,stage,region,location,component)
+      (
+        sum by(env,environment,tier,type,stage,region,location,component) (gitlab_regional_sli_ops:rate_1h{component="server_chat",env!~"gprd|ops",monitor="global",type="ai-gateway"}) >= 1
+      )
+  - alert: AiGatewayServiceServerChatErrorSLOViolationRegional
+    for: 2m
+    annotations:
+      title: The server_chat SLI of the ai-gateway service in region `{{ $labels.region
+        }}` has an error rate violating SLO
+      description: |
+        FastAPI server for AI Gateway - chat.
+
+        Note that this alert is specific to the `{{ $labels.region }}` region.
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "1462095494"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage,region,location) (
+          rate(http_request_duration_seconds_count{environment="{{ $labels.environment }}",handler="/v1/chat/agent",location="{{ $labels.location }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status="5xx",type="ai-gateway"}[5m])
+        )
+      runbook: docs/ai-gateway/README.md
+    labels:
+      aggregation: regional_component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: duo_chat
+      rules_domain: general
+      severity: s4
+      sli_type: error
+      slo_alert: "yes"
+      team: ai_framework
+      user_impacting: "yes"
+      window: 6h
+    expr: |
+      (
+        (
+          gitlab_regional_sli_errors:ratio_6h{component="server_chat",env!~"gprd|ops",monitor="global",type="ai-gateway"}
+          > (6 * 0.020000)
+        )
+        and
+        (
+          gitlab_regional_sli_errors:ratio_30m{component="server_chat",env!~"gprd|ops",monitor="global",type="ai-gateway"}
+          > (6 * 0.020000)
+        )
+      )
+      and on(env,environment,tier,type,stage,region,location,component)
+      (
+        sum by(env,environment,tier,type,stage,region,location,component) (gitlab_regional_sli_ops:rate_6h{component="server_chat",env!~"gprd|ops",monitor="global",type="ai-gateway"}) >= 0.16667
       )
   - alert: AiGatewayServiceServerCodeCompletionsApdexSLOViolation
     for: 2m
@@ -673,6 +1667,112 @@ groups:
       (
         sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="server_code_completions",env!~"gprd|ops",monitor="global",type="ai-gateway"}) >= 0.16667
       )
+  - alert: AiGatewayServiceServerCodeCompletionsApdexSLOViolationRegional
+    for: 2m
+    annotations:
+      title: The server_code_completions SLI of the ai-gateway service in region `{{
+        $labels.region }}` has an apdex violating SLO
+      description: |
+        FastAPI server for AI Gateway - code completions.
+
+        Note that this alert is specific to the `{{ $labels.region }}` region.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "792111394"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,region,location,le) (
+            rate(http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",handler=~"/v2/code/completions|/v2/completions",location="{{ $labels.location }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status!~"4xx|5xx",type="ai-gateway"}[5m])
+          )
+        )
+      runbook: docs/ai-gateway/README.md
+    labels:
+      aggregation: regional_component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: code_suggestions
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 1h
+    expr: |
+      (
+        (
+          gitlab_regional_sli_apdex:ratio_1h{component="server_code_completions",env!~"gprd|ops",monitor="global",type="ai-gateway"}
+          < (1 - 14.4 * 0.020000)
+        )
+        and
+        (
+          gitlab_regional_sli_apdex:ratio_5m{component="server_code_completions",env!~"gprd|ops",monitor="global",type="ai-gateway"}
+          < (1 - 14.4 * 0.020000)
+        )
+      )
+      and on(env,environment,tier,type,stage,region,location,component)
+      (
+        sum by(env,environment,tier,type,stage,region,location,component) (gitlab_regional_sli_ops:rate_1h{component="server_code_completions",env!~"gprd|ops",monitor="global",type="ai-gateway"}) >= 1
+      )
+  - alert: AiGatewayServiceServerCodeCompletionsApdexSLOViolationRegional
+    for: 2m
+    annotations:
+      title: The server_code_completions SLI of the ai-gateway service in region `{{
+        $labels.region }}` has an apdex violating SLO
+      description: |
+        FastAPI server for AI Gateway - code completions.
+
+        Note that this alert is specific to the `{{ $labels.region }}` region.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "792111394"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,region,location,le) (
+            rate(http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",handler=~"/v2/code/completions|/v2/completions",location="{{ $labels.location }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status!~"4xx|5xx",type="ai-gateway"}[5m])
+          )
+        )
+      runbook: docs/ai-gateway/README.md
+    labels:
+      aggregation: regional_component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: code_suggestions
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+    expr: |
+      (
+        (
+          gitlab_regional_sli_apdex:ratio_6h{component="server_code_completions",env!~"gprd|ops",monitor="global",type="ai-gateway"}
+          < (1 - 6 * 0.020000)
+        )
+        and
+        (
+          gitlab_regional_sli_apdex:ratio_30m{component="server_code_completions",env!~"gprd|ops",monitor="global",type="ai-gateway"}
+          < (1 - 6 * 0.020000)
+        )
+      )
+      and on(env,environment,tier,type,stage,region,location,component)
+      (
+        sum by(env,environment,tier,type,stage,region,location,component) (gitlab_regional_sli_ops:rate_6h{component="server_code_completions",env!~"gprd|ops",monitor="global",type="ai-gateway"}) >= 0.16667
+      )
   - alert: AiGatewayServiceServerCodeCompletionsErrorSLOViolation
     for: 2m
     annotations:
@@ -769,78 +1869,106 @@ groups:
       (
         sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="server_code_completions",env!~"gprd|ops",monitor="global",type="ai-gateway"}) >= 0.16667
       )
-  - alert: AiGatewayServiceServerCodeCompletionsTrafficCessation
-    for: 5m
+  - alert: AiGatewayServiceServerCodeCompletionsErrorSLOViolationRegional
+    for: 2m
     annotations:
-      title: The server_code_completions SLI of the ai-gateway service (`{{ $labels.stage
-        }}` stage) has not received any traffic in the past 30m
+      title: The server_code_completions SLI of the ai-gateway service in region `{{
+        $labels.region }}` has an error rate violating SLO
       description: |
         FastAPI server for AI Gateway - code completions.
 
-        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
+        Note that this alert is specific to the `{{ $labels.region }}` region.
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
-      grafana_panel_id: "791409793"
+      grafana_panel_id: "2484607007"
       grafana_variables: environment,stage
       promql_template_1: |
-        sum by (env,environment,tier,stage) (
-          rate(http_request_duration_seconds_count{environment="{{ $labels.environment }}",handler=~"/v2/code/completions|/v2/completions",stage="{{ $labels.stage }}",type="ai-gateway"}[5m])
+        sum by (env,environment,tier,stage,region,location) (
+          rate(http_request_duration_seconds_count{environment="{{ $labels.environment }}",handler=~"/v2/code/completions|/v2/completions",location="{{ $labels.location }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status="5xx",type="ai-gateway"}[5m])
         )
       runbook: docs/ai-gateway/README.md
     labels:
-      aggregation: component
-      alert_class: traffic_cessation
-      alert_type: cause
+      aggregation: regional_component
+      alert_class: slo_violation
+      alert_type: symptom
       feature_category: code_suggestions
       pager: pagerduty
       rules_domain: general
       severity: s2
-      sli_type: ops
-      slo_alert: "no"
+      sli_type: error
+      slo_alert: "yes"
       user_impacting: "yes"
+      window: 1h
     expr: |
-      gitlab_component_ops:rate_30m{component="server_code_completions",env!~"gprd|ops",monitor="global",stage="main",type="ai-gateway"} == 0
-      and
-      gitlab_component_ops:rate_30m{component="server_code_completions",env!~"gprd|ops",monitor="global",stage="main",type="ai-gateway"} offset 1h >= 0.16666666666666666
-  - alert: AiGatewayServiceServerCodeCompletionsTrafficAbsent
-    for: 30m
+      (
+        (
+          gitlab_regional_sli_errors:ratio_1h{component="server_code_completions",env!~"gprd|ops",monitor="global",type="ai-gateway"}
+          > (14.4 * 0.020000)
+        )
+        and
+        (
+          gitlab_regional_sli_errors:ratio_5m{component="server_code_completions",env!~"gprd|ops",monitor="global",type="ai-gateway"}
+          > (14.4 * 0.020000)
+        )
+      )
+      and on(env,environment,tier,type,stage,region,location,component)
+      (
+        sum by(env,environment,tier,type,stage,region,location,component) (gitlab_regional_sli_ops:rate_1h{component="server_code_completions",env!~"gprd|ops",monitor="global",type="ai-gateway"}) >= 1
+      )
+  - alert: AiGatewayServiceServerCodeCompletionsErrorSLOViolationRegional
+    for: 2m
     annotations:
-      title: The server_code_completions SLI of the ai-gateway service (`{{ $labels.stage
-        }}` stage) has not reported any traffic in the past 30m
+      title: The server_code_completions SLI of the ai-gateway service in region `{{
+        $labels.region }}` has an error rate violating SLO
       description: |
         FastAPI server for AI Gateway - code completions.
 
-        This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
+        Note that this alert is specific to the `{{ $labels.region }}` region.
 
-        This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
+        Currently the error-rate is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
-      grafana_panel_id: "791409793"
+      grafana_panel_id: "2484607007"
       grafana_variables: environment,stage
       promql_template_1: |
-        sum by (env,environment,tier,stage) (
-          rate(http_request_duration_seconds_count{environment="{{ $labels.environment }}",handler=~"/v2/code/completions|/v2/completions",stage="{{ $labels.stage }}",type="ai-gateway"}[5m])
+        sum by (env,environment,tier,stage,region,location) (
+          rate(http_request_duration_seconds_count{environment="{{ $labels.environment }}",handler=~"/v2/code/completions|/v2/completions",location="{{ $labels.location }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status="5xx",type="ai-gateway"}[5m])
         )
       runbook: docs/ai-gateway/README.md
     labels:
-      aggregation: component
-      alert_class: traffic_cessation
-      alert_type: cause
+      aggregation: regional_component
+      alert_class: slo_violation
+      alert_type: symptom
       feature_category: code_suggestions
       pager: pagerduty
       rules_domain: general
       severity: s2
-      sli_type: ops
-      slo_alert: "no"
+      sli_type: error
+      slo_alert: "yes"
       user_impacting: "yes"
+      window: 6h
     expr: |
-      gitlab_component_ops:rate_5m{component="server_code_completions",env!~"gprd|ops",monitor="global",stage="main",type="ai-gateway"} offset 1h
-      unless
-      gitlab_component_ops:rate_5m{component="server_code_completions",env!~"gprd|ops",monitor="global",stage="main",type="ai-gateway"}
+      (
+        (
+          gitlab_regional_sli_errors:ratio_6h{component="server_code_completions",env!~"gprd|ops",monitor="global",type="ai-gateway"}
+          > (6 * 0.020000)
+        )
+        and
+        (
+          gitlab_regional_sli_errors:ratio_30m{component="server_code_completions",env!~"gprd|ops",monitor="global",type="ai-gateway"}
+          > (6 * 0.020000)
+        )
+      )
+      and on(env,environment,tier,type,stage,region,location,component)
+      (
+        sum by(env,environment,tier,type,stage,region,location,component) (gitlab_regional_sli_ops:rate_6h{component="server_code_completions",env!~"gprd|ops",monitor="global",type="ai-gateway"}) >= 0.16667
+      )
   - alert: AiGatewayServiceServerCodeGenerationsApdexSLOViolation
     for: 2m
     annotations:
@@ -943,6 +2071,112 @@ groups:
       (
         sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="server_code_generations",env!~"gprd|ops",monitor="global",type="ai-gateway"}) >= 0.16667
       )
+  - alert: AiGatewayServiceServerCodeGenerationsApdexSLOViolationRegional
+    for: 2m
+    annotations:
+      title: The server_code_generations SLI of the ai-gateway service in region `{{
+        $labels.region }}` has an apdex violating SLO
+      description: |
+        FastAPI server for AI Gateway - code generations.
+
+        Note that this alert is specific to the `{{ $labels.region }}` region.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "886296197"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,region,location,le) (
+            rate(http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",handler="/v2/code/generations",location="{{ $labels.location }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status!~"4xx|5xx",type="ai-gateway"}[5m])
+          )
+        )
+      runbook: docs/ai-gateway/README.md
+    labels:
+      aggregation: regional_component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: code_suggestions
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 1h
+    expr: |
+      (
+        (
+          gitlab_regional_sli_apdex:ratio_1h{component="server_code_generations",env!~"gprd|ops",monitor="global",type="ai-gateway"}
+          < (1 - 14.4 * 0.020000)
+        )
+        and
+        (
+          gitlab_regional_sli_apdex:ratio_5m{component="server_code_generations",env!~"gprd|ops",monitor="global",type="ai-gateway"}
+          < (1 - 14.4 * 0.020000)
+        )
+      )
+      and on(env,environment,tier,type,stage,region,location,component)
+      (
+        sum by(env,environment,tier,type,stage,region,location,component) (gitlab_regional_sli_ops:rate_1h{component="server_code_generations",env!~"gprd|ops",monitor="global",type="ai-gateway"}) >= 1
+      )
+  - alert: AiGatewayServiceServerCodeGenerationsApdexSLOViolationRegional
+    for: 2m
+    annotations:
+      title: The server_code_generations SLI of the ai-gateway service in region `{{
+        $labels.region }}` has an apdex violating SLO
+      description: |
+        FastAPI server for AI Gateway - code generations.
+
+        Note that this alert is specific to the `{{ $labels.region }}` region.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "886296197"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,region,location,le) (
+            rate(http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",handler="/v2/code/generations",location="{{ $labels.location }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status!~"4xx|5xx",type="ai-gateway"}[5m])
+          )
+        )
+      runbook: docs/ai-gateway/README.md
+    labels:
+      aggregation: regional_component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: code_suggestions
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+    expr: |
+      (
+        (
+          gitlab_regional_sli_apdex:ratio_6h{component="server_code_generations",env!~"gprd|ops",monitor="global",type="ai-gateway"}
+          < (1 - 6 * 0.020000)
+        )
+        and
+        (
+          gitlab_regional_sli_apdex:ratio_30m{component="server_code_generations",env!~"gprd|ops",monitor="global",type="ai-gateway"}
+          < (1 - 6 * 0.020000)
+        )
+      )
+      and on(env,environment,tier,type,stage,region,location,component)
+      (
+        sum by(env,environment,tier,type,stage,region,location,component) (gitlab_regional_sli_ops:rate_6h{component="server_code_generations",env!~"gprd|ops",monitor="global",type="ai-gateway"}) >= 0.16667
+      )
   - alert: AiGatewayServiceServerCodeGenerationsErrorSLOViolation
     for: 2m
     annotations:
@@ -1039,78 +2273,502 @@ groups:
       (
         sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="server_code_generations",env!~"gprd|ops",monitor="global",type="ai-gateway"}) >= 0.16667
       )
-  - alert: AiGatewayServiceServerCodeGenerationsTrafficCessation
-    for: 5m
+  - alert: AiGatewayServiceServerCodeGenerationsErrorSLOViolationRegional
+    for: 2m
     annotations:
-      title: The server_code_generations SLI of the ai-gateway service (`{{ $labels.stage
-        }}` stage) has not received any traffic in the past 30m
+      title: The server_code_generations SLI of the ai-gateway service in region `{{
+        $labels.region }}` has an error rate violating SLO
       description: |
         FastAPI server for AI Gateway - code generations.
 
-        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
+        Note that this alert is specific to the `{{ $labels.region }}` region.
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
-      grafana_panel_id: "3577613156"
+      grafana_panel_id: "2564361589"
       grafana_variables: environment,stage
       promql_template_1: |
-        sum by (env,environment,tier,stage) (
-          rate(http_request_duration_seconds_count{environment="{{ $labels.environment }}",handler="/v2/code/generations",stage="{{ $labels.stage }}",type="ai-gateway"}[5m])
+        sum by (env,environment,tier,stage,region,location) (
+          rate(http_request_duration_seconds_count{environment="{{ $labels.environment }}",handler="/v2/code/generations",location="{{ $labels.location }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status="5xx",type="ai-gateway"}[5m])
         )
       runbook: docs/ai-gateway/README.md
     labels:
-      aggregation: component
-      alert_class: traffic_cessation
-      alert_type: cause
+      aggregation: regional_component
+      alert_class: slo_violation
+      alert_type: symptom
       feature_category: code_suggestions
       pager: pagerduty
       rules_domain: general
       severity: s2
-      sli_type: ops
-      slo_alert: "no"
+      sli_type: error
+      slo_alert: "yes"
       user_impacting: "yes"
+      window: 1h
     expr: |
-      gitlab_component_ops:rate_30m{component="server_code_generations",env!~"gprd|ops",monitor="global",stage="main",type="ai-gateway"} == 0
-      and
-      gitlab_component_ops:rate_30m{component="server_code_generations",env!~"gprd|ops",monitor="global",stage="main",type="ai-gateway"} offset 1h >= 0.16666666666666666
-  - alert: AiGatewayServiceServerCodeGenerationsTrafficAbsent
-    for: 30m
+      (
+        (
+          gitlab_regional_sli_errors:ratio_1h{component="server_code_generations",env!~"gprd|ops",monitor="global",type="ai-gateway"}
+          > (14.4 * 0.020000)
+        )
+        and
+        (
+          gitlab_regional_sli_errors:ratio_5m{component="server_code_generations",env!~"gprd|ops",monitor="global",type="ai-gateway"}
+          > (14.4 * 0.020000)
+        )
+      )
+      and on(env,environment,tier,type,stage,region,location,component)
+      (
+        sum by(env,environment,tier,type,stage,region,location,component) (gitlab_regional_sli_ops:rate_1h{component="server_code_generations",env!~"gprd|ops",monitor="global",type="ai-gateway"}) >= 1
+      )
+  - alert: AiGatewayServiceServerCodeGenerationsErrorSLOViolationRegional
+    for: 2m
     annotations:
-      title: The server_code_generations SLI of the ai-gateway service (`{{ $labels.stage
-        }}` stage) has not reported any traffic in the past 30m
+      title: The server_code_generations SLI of the ai-gateway service in region `{{
+        $labels.region }}` has an error rate violating SLO
       description: |
         FastAPI server for AI Gateway - code generations.
 
-        This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
+        Note that this alert is specific to the `{{ $labels.region }}` region.
 
-        This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
+        Currently the error-rate is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
-      grafana_panel_id: "3577613156"
+      grafana_panel_id: "2564361589"
       grafana_variables: environment,stage
       promql_template_1: |
-        sum by (env,environment,tier,stage) (
-          rate(http_request_duration_seconds_count{environment="{{ $labels.environment }}",handler="/v2/code/generations",stage="{{ $labels.stage }}",type="ai-gateway"}[5m])
+        sum by (env,environment,tier,stage,region,location) (
+          rate(http_request_duration_seconds_count{environment="{{ $labels.environment }}",handler="/v2/code/generations",location="{{ $labels.location }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status="5xx",type="ai-gateway"}[5m])
         )
       runbook: docs/ai-gateway/README.md
     labels:
-      aggregation: component
-      alert_class: traffic_cessation
-      alert_type: cause
+      aggregation: regional_component
+      alert_class: slo_violation
+      alert_type: symptom
       feature_category: code_suggestions
       pager: pagerduty
       rules_domain: general
       severity: s2
-      sli_type: ops
-      slo_alert: "no"
+      sli_type: error
+      slo_alert: "yes"
       user_impacting: "yes"
+      window: 6h
     expr: |
-      gitlab_component_ops:rate_5m{component="server_code_generations",env!~"gprd|ops",monitor="global",stage="main",type="ai-gateway"} offset 1h
-      unless
-      gitlab_component_ops:rate_5m{component="server_code_generations",env!~"gprd|ops",monitor="global",stage="main",type="ai-gateway"}
+      (
+        (
+          gitlab_regional_sli_errors:ratio_6h{component="server_code_generations",env!~"gprd|ops",monitor="global",type="ai-gateway"}
+          > (6 * 0.020000)
+        )
+        and
+        (
+          gitlab_regional_sli_errors:ratio_30m{component="server_code_generations",env!~"gprd|ops",monitor="global",type="ai-gateway"}
+          > (6 * 0.020000)
+        )
+      )
+      and on(env,environment,tier,type,stage,region,location,component)
+      (
+        sum by(env,environment,tier,type,stage,region,location,component) (gitlab_regional_sli_ops:rate_6h{component="server_code_generations",env!~"gprd|ops",monitor="global",type="ai-gateway"}) >= 0.16667
+      )
+  - alert: AiGatewayServiceServerXRayApdexSLOViolation
+    for: 2m
+    annotations:
+      title: The server_x_ray SLI of the ai-gateway service (`{{ $labels.stage }}`
+        stage) has an apdex violating SLO
+      description: |
+        FastAPI server for AI Gateway - X-Ray.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "532989566"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,le) (
+            rate(http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",handler="/v1/x-ray/libraries",stage="{{ $labels.stage }}",status!~"4xx|5xx",type="ai-gateway"}[5m])
+          )
+        )
+      runbook: docs/ai-gateway/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: code_suggestions
+      rules_domain: general
+      severity: s4
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 1h
+    expr: |
+      (
+        (
+          gitlab_component_apdex:ratio_1h{component="server_x_ray",env!~"gprd|ops",monitor="global",type="ai-gateway"}
+          < (1 - 14.4 * 0.020000)
+        )
+        and
+        (
+          gitlab_component_apdex:ratio_5m{component="server_x_ray",env!~"gprd|ops",monitor="global",type="ai-gateway"}
+          < (1 - 14.4 * 0.020000)
+        )
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="server_x_ray",env!~"gprd|ops",monitor="global",type="ai-gateway"}) >= 1
+      )
+  - alert: AiGatewayServiceServerXRayApdexSLOViolation
+    for: 2m
+    annotations:
+      title: The server_x_ray SLI of the ai-gateway service (`{{ $labels.stage }}`
+        stage) has an apdex violating SLO
+      description: |
+        FastAPI server for AI Gateway - X-Ray.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "532989566"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,le) (
+            rate(http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",handler="/v1/x-ray/libraries",stage="{{ $labels.stage }}",status!~"4xx|5xx",type="ai-gateway"}[5m])
+          )
+        )
+      runbook: docs/ai-gateway/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: code_suggestions
+      rules_domain: general
+      severity: s4
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+    expr: |
+      (
+        (
+          gitlab_component_apdex:ratio_6h{component="server_x_ray",env!~"gprd|ops",monitor="global",type="ai-gateway"}
+          < (1 - 6 * 0.020000)
+        )
+        and
+        (
+          gitlab_component_apdex:ratio_30m{component="server_x_ray",env!~"gprd|ops",monitor="global",type="ai-gateway"}
+          < (1 - 6 * 0.020000)
+        )
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="server_x_ray",env!~"gprd|ops",monitor="global",type="ai-gateway"}) >= 0.16667
+      )
+  - alert: AiGatewayServiceServerXRayApdexSLOViolationRegional
+    for: 2m
+    annotations:
+      title: The server_x_ray SLI of the ai-gateway service in region `{{ $labels.region
+        }}` has an apdex violating SLO
+      description: |
+        FastAPI server for AI Gateway - X-Ray.
+
+        Note that this alert is specific to the `{{ $labels.region }}` region.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "532989566"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,region,location,le) (
+            rate(http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",handler="/v1/x-ray/libraries",location="{{ $labels.location }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status!~"4xx|5xx",type="ai-gateway"}[5m])
+          )
+        )
+      runbook: docs/ai-gateway/README.md
+    labels:
+      aggregation: regional_component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: code_suggestions
+      rules_domain: general
+      severity: s4
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 1h
+    expr: |
+      (
+        (
+          gitlab_regional_sli_apdex:ratio_1h{component="server_x_ray",env!~"gprd|ops",monitor="global",type="ai-gateway"}
+          < (1 - 14.4 * 0.020000)
+        )
+        and
+        (
+          gitlab_regional_sli_apdex:ratio_5m{component="server_x_ray",env!~"gprd|ops",monitor="global",type="ai-gateway"}
+          < (1 - 14.4 * 0.020000)
+        )
+      )
+      and on(env,environment,tier,type,stage,region,location,component)
+      (
+        sum by(env,environment,tier,type,stage,region,location,component) (gitlab_regional_sli_ops:rate_1h{component="server_x_ray",env!~"gprd|ops",monitor="global",type="ai-gateway"}) >= 1
+      )
+  - alert: AiGatewayServiceServerXRayApdexSLOViolationRegional
+    for: 2m
+    annotations:
+      title: The server_x_ray SLI of the ai-gateway service in region `{{ $labels.region
+        }}` has an apdex violating SLO
+      description: |
+        FastAPI server for AI Gateway - X-Ray.
+
+        Note that this alert is specific to the `{{ $labels.region }}` region.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "532989566"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,region,location,le) (
+            rate(http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",handler="/v1/x-ray/libraries",location="{{ $labels.location }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status!~"4xx|5xx",type="ai-gateway"}[5m])
+          )
+        )
+      runbook: docs/ai-gateway/README.md
+    labels:
+      aggregation: regional_component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: code_suggestions
+      rules_domain: general
+      severity: s4
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+    expr: |
+      (
+        (
+          gitlab_regional_sli_apdex:ratio_6h{component="server_x_ray",env!~"gprd|ops",monitor="global",type="ai-gateway"}
+          < (1 - 6 * 0.020000)
+        )
+        and
+        (
+          gitlab_regional_sli_apdex:ratio_30m{component="server_x_ray",env!~"gprd|ops",monitor="global",type="ai-gateway"}
+          < (1 - 6 * 0.020000)
+        )
+      )
+      and on(env,environment,tier,type,stage,region,location,component)
+      (
+        sum by(env,environment,tier,type,stage,region,location,component) (gitlab_regional_sli_ops:rate_6h{component="server_x_ray",env!~"gprd|ops",monitor="global",type="ai-gateway"}) >= 0.16667
+      )
+  - alert: AiGatewayServiceServerXRayErrorSLOViolation
+    for: 2m
+    annotations:
+      title: The server_x_ray SLI of the ai-gateway service (`{{ $labels.stage }}`
+        stage) has an error rate violating SLO
+      description: |
+        FastAPI server for AI Gateway - X-Ray.
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2737483849"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(http_request_duration_seconds_count{environment="{{ $labels.environment }}",handler="/v1/x-ray/libraries",stage="{{ $labels.stage }}",status="5xx",type="ai-gateway"}[5m])
+        )
+      runbook: docs/ai-gateway/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: code_suggestions
+      rules_domain: general
+      severity: s4
+      sli_type: error
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 1h
+    expr: |
+      (
+        (
+          gitlab_component_errors:ratio_1h{component="server_x_ray",env!~"gprd|ops",monitor="global",type="ai-gateway"}
+          > (14.4 * 0.020000)
+        )
+        and
+        (
+          gitlab_component_errors:ratio_5m{component="server_x_ray",env!~"gprd|ops",monitor="global",type="ai-gateway"}
+          > (14.4 * 0.020000)
+        )
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="server_x_ray",env!~"gprd|ops",monitor="global",type="ai-gateway"}) >= 1
+      )
+  - alert: AiGatewayServiceServerXRayErrorSLOViolation
+    for: 2m
+    annotations:
+      title: The server_x_ray SLI of the ai-gateway service (`{{ $labels.stage }}`
+        stage) has an error rate violating SLO
+      description: |
+        FastAPI server for AI Gateway - X-Ray.
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2737483849"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(http_request_duration_seconds_count{environment="{{ $labels.environment }}",handler="/v1/x-ray/libraries",stage="{{ $labels.stage }}",status="5xx",type="ai-gateway"}[5m])
+        )
+      runbook: docs/ai-gateway/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: code_suggestions
+      rules_domain: general
+      severity: s4
+      sli_type: error
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+    expr: |
+      (
+        (
+          gitlab_component_errors:ratio_6h{component="server_x_ray",env!~"gprd|ops",monitor="global",type="ai-gateway"}
+          > (6 * 0.020000)
+        )
+        and
+        (
+          gitlab_component_errors:ratio_30m{component="server_x_ray",env!~"gprd|ops",monitor="global",type="ai-gateway"}
+          > (6 * 0.020000)
+        )
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="server_x_ray",env!~"gprd|ops",monitor="global",type="ai-gateway"}) >= 0.16667
+      )
+  - alert: AiGatewayServiceServerXRayErrorSLOViolationRegional
+    for: 2m
+    annotations:
+      title: The server_x_ray SLI of the ai-gateway service in region `{{ $labels.region
+        }}` has an error rate violating SLO
+      description: |
+        FastAPI server for AI Gateway - X-Ray.
+
+        Note that this alert is specific to the `{{ $labels.region }}` region.
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2737483849"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage,region,location) (
+          rate(http_request_duration_seconds_count{environment="{{ $labels.environment }}",handler="/v1/x-ray/libraries",location="{{ $labels.location }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status="5xx",type="ai-gateway"}[5m])
+        )
+      runbook: docs/ai-gateway/README.md
+    labels:
+      aggregation: regional_component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: code_suggestions
+      rules_domain: general
+      severity: s4
+      sli_type: error
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 1h
+    expr: |
+      (
+        (
+          gitlab_regional_sli_errors:ratio_1h{component="server_x_ray",env!~"gprd|ops",monitor="global",type="ai-gateway"}
+          > (14.4 * 0.020000)
+        )
+        and
+        (
+          gitlab_regional_sli_errors:ratio_5m{component="server_x_ray",env!~"gprd|ops",monitor="global",type="ai-gateway"}
+          > (14.4 * 0.020000)
+        )
+      )
+      and on(env,environment,tier,type,stage,region,location,component)
+      (
+        sum by(env,environment,tier,type,stage,region,location,component) (gitlab_regional_sli_ops:rate_1h{component="server_x_ray",env!~"gprd|ops",monitor="global",type="ai-gateway"}) >= 1
+      )
+  - alert: AiGatewayServiceServerXRayErrorSLOViolationRegional
+    for: 2m
+    annotations:
+      title: The server_x_ray SLI of the ai-gateway service in region `{{ $labels.region
+        }}` has an error rate violating SLO
+      description: |
+        FastAPI server for AI Gateway - X-Ray.
+
+        Note that this alert is specific to the `{{ $labels.region }}` region.
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2737483849"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage,region,location) (
+          rate(http_request_duration_seconds_count{environment="{{ $labels.environment }}",handler="/v1/x-ray/libraries",location="{{ $labels.location }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status="5xx",type="ai-gateway"}[5m])
+        )
+      runbook: docs/ai-gateway/README.md
+    labels:
+      aggregation: regional_component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: code_suggestions
+      rules_domain: general
+      severity: s4
+      sli_type: error
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+    expr: |
+      (
+        (
+          gitlab_regional_sli_errors:ratio_6h{component="server_x_ray",env!~"gprd|ops",monitor="global",type="ai-gateway"}
+          > (6 * 0.020000)
+        )
+        and
+        (
+          gitlab_regional_sli_errors:ratio_30m{component="server_x_ray",env!~"gprd|ops",monitor="global",type="ai-gateway"}
+          > (6 * 0.020000)
+        )
+      )
+      and on(env,environment,tier,type,stage,region,location,component)
+      (
+        sum by(env,environment,tier,type,stage,region,location,component) (gitlab_regional_sli_ops:rate_6h{component="server_x_ray",env!~"gprd|ops",monitor="global",type="ai-gateway"}) >= 0.16667
+      )
   - alert: AiGatewayServiceWafErrorSLOViolation
     for: 2m
     annotations:
@@ -1205,6 +2863,104 @@ groups:
       (
         sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="waf",env!~"gprd|ops",monitor="global",type="ai-gateway"}) >= 0.16667
       )
+  - alert: AiGatewayServiceWafErrorSLOViolationRegional
+    for: 2m
+    annotations:
+      title: The waf SLI of the ai-gateway service in region `{{ $labels.region }}`
+        has an error rate violating SLO
+      description: |
+        Cloudflare WAF and rate limit rules for codesuggestions.gitlab.com host.
+
+        Note that this alert is specific to the `{{ $labels.region }}` region.
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "1626131899"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage,region,location) (
+          rate(cloudflare_zone_requests_status_country_host{environment="{{ $labels.environment }}",host=~"codesuggestions.gitlab.com.*",location="{{ $labels.location }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status=~"^5.*",zone="gitlab.com"}[5m])
+        )
+      runbook: docs/ai-gateway/README.md
+    labels:
+      aggregation: regional_component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: code_suggestions
+      rules_domain: general
+      severity: s4
+      sli_type: error
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 1h
+    expr: |
+      (
+        (
+          gitlab_regional_sli_errors:ratio_1h{component="waf",env!~"gprd|ops",monitor="global",type="ai-gateway"}
+          > (14.4 * 0.020000)
+        )
+        and
+        (
+          gitlab_regional_sli_errors:ratio_5m{component="waf",env!~"gprd|ops",monitor="global",type="ai-gateway"}
+          > (14.4 * 0.020000)
+        )
+      )
+      and on(env,environment,tier,type,stage,region,location,component)
+      (
+        sum by(env,environment,tier,type,stage,region,location,component) (gitlab_regional_sli_ops:rate_1h{component="waf",env!~"gprd|ops",monitor="global",type="ai-gateway"}) >= 1
+      )
+  - alert: AiGatewayServiceWafErrorSLOViolationRegional
+    for: 2m
+    annotations:
+      title: The waf SLI of the ai-gateway service in region `{{ $labels.region }}`
+        has an error rate violating SLO
+      description: |
+        Cloudflare WAF and rate limit rules for codesuggestions.gitlab.com host.
+
+        Note that this alert is specific to the `{{ $labels.region }}` region.
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "1626131899"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage,region,location) (
+          rate(cloudflare_zone_requests_status_country_host{environment="{{ $labels.environment }}",host=~"codesuggestions.gitlab.com.*",location="{{ $labels.location }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status=~"^5.*",zone="gitlab.com"}[5m])
+        )
+      runbook: docs/ai-gateway/README.md
+    labels:
+      aggregation: regional_component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: code_suggestions
+      rules_domain: general
+      severity: s4
+      sli_type: error
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+    expr: |
+      (
+        (
+          gitlab_regional_sli_errors:ratio_6h{component="waf",env!~"gprd|ops",monitor="global",type="ai-gateway"}
+          > (6 * 0.020000)
+        )
+        and
+        (
+          gitlab_regional_sli_errors:ratio_30m{component="waf",env!~"gprd|ops",monitor="global",type="ai-gateway"}
+          > (6 * 0.020000)
+        )
+      )
+      and on(env,environment,tier,type,stage,region,location,component)
+      (
+        sum by(env,environment,tier,type,stage,region,location,component) (gitlab_regional_sli_ops:rate_6h{component="waf",env!~"gprd|ops",monitor="global",type="ai-gateway"}) >= 0.16667
+      )
   - alert: AiGatewayServiceWafTrafficCessation
     for: 5m
     annotations:
@@ -1275,3 +3031,77 @@ groups:
       gitlab_component_ops:rate_5m{component="waf",env!~"gprd|ops",monitor="global",stage="main",type="ai-gateway"} offset 1h
       unless
       gitlab_component_ops:rate_5m{component="waf",env!~"gprd|ops",monitor="global",stage="main",type="ai-gateway"}
+  - alert: AiGatewayServiceWafTrafficCessationRegional
+    for: 5m
+    annotations:
+      title: The waf SLI of the ai-gateway service in region `{{ $labels.region }}`
+        has not received any traffic in the past 30m
+      description: |
+        Cloudflare WAF and rate limit rules for codesuggestions.gitlab.com host.
+
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
+
+        Note that this alert is specific to the `{{ $labels.region }}` region.
+      grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "225787872"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage,region,location) (
+          rate(cloudflare_zone_requests_status_country_host{environment="{{ $labels.environment }}",host=~"codesuggestions.gitlab.com.*",location="{{ $labels.location }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",zone="gitlab.com"}[5m])
+        )
+      runbook: docs/ai-gateway/README.md
+    labels:
+      aggregation: regional_component
+      alert_class: traffic_cessation
+      alert_type: cause
+      feature_category: code_suggestions
+      rules_domain: general
+      severity: s4
+      sli_type: ops
+      slo_alert: "no"
+      user_impacting: "yes"
+    expr: |
+      gitlab_regional_sli_ops:rate_30m{component="waf",env!~"gprd|ops",monitor="global",stage="main",type="ai-gateway"} == 0
+      and
+      gitlab_regional_sli_ops:rate_30m{component="waf",env!~"gprd|ops",monitor="global",stage="main",type="ai-gateway"} offset 1h >= 0.16666666666666666
+  - alert: AiGatewayServiceWafTrafficAbsentRegional
+    for: 30m
+    annotations:
+      title: The waf SLI of the ai-gateway service in region `{{ $labels.region }}`
+        has not reported any traffic in the past 30m
+      description: |
+        Cloudflare WAF and rate limit rules for codesuggestions.gitlab.com host.
+
+        This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
+
+        This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
+
+        Note that this alert is specific to the `{{ $labels.region }}` region.
+      grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "225787872"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage,region,location) (
+          rate(cloudflare_zone_requests_status_country_host{environment="{{ $labels.environment }}",host=~"codesuggestions.gitlab.com.*",location="{{ $labels.location }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",zone="gitlab.com"}[5m])
+        )
+      runbook: docs/ai-gateway/README.md
+    labels:
+      aggregation: regional_component
+      alert_class: traffic_cessation
+      alert_type: cause
+      feature_category: code_suggestions
+      rules_domain: general
+      severity: s4
+      sli_type: ops
+      slo_alert: "no"
+      user_impacting: "yes"
+    expr: |
+      gitlab_regional_sli_ops:rate_5m{component="waf",env!~"gprd|ops",monitor="global",stage="main",type="ai-gateway"} offset 1h
+      unless
+      gitlab_regional_sli_ops:rate_5m{component="waf",env!~"gprd|ops",monitor="global",stage="main",type="ai-gateway"}

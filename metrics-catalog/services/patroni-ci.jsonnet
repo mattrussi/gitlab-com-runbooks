@@ -27,6 +27,7 @@ metricsCatalog.serviceDefinition(
     ],
   )
   {
+    tenants: [ 'gitlab-gprd', 'gitlab-gstg', 'gitlab-pre' ],
     serviceLevelIndicators+: {
       rails_replica_sql+: {
         apdex: histogramApdex(
@@ -73,6 +74,29 @@ metricsCatalog.serviceDefinition(
               {
                 start: '2021-01-01',
                 end: '2023-06-20',
+              },
+            ],
+          },
+        },
+        {
+          name: 'pg_primary_cpu',
+          events: [
+            {
+              date: '2023-02-19',
+              name: 'LWLock contention',
+              references: [
+                {
+                  title: 'LWLock contention',
+                  ref: 'https://gitlab.com/gitlab-com/gl-infra/capacity-planning-trackers/gitlab-com/-/issues/1668#note_1801803894',
+                },
+              ],
+            },
+          ],
+          parameters: {
+            ignore_outliers: [
+              {
+                start: '2024-02-19',
+                end: '2024-02-21',
               },
             ],
           },

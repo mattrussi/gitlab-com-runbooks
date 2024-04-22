@@ -64,6 +64,34 @@ groups:
           gitlab_component_ops:rate_5m{component="gitlab_sshd",env="ops",monitor="global",stage="main",tier="sv",type="ops-gitlab-net"}
         )
       )
+  - record: gitlab_component_errors:ratio_5m
+    labels:
+      component: gitlab_sshd
+      monitor: global
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_5m{component="gitlab_sshd",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_5m{component="gitlab_sshd",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_5m
+    labels:
+      component: gitlab_sshd
+      monitor: global
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_5m{component="gitlab_sshd",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_5m{component="gitlab_sshd",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
   - record: gitlab_component_apdex:success:rate_5m
     labels:
       component: goserver
@@ -168,6 +196,34 @@ groups:
           gitlab_component_ops:rate_5m{component="goserver",env="ops",monitor="global",stage="main",tier="sv",type="ops-gitlab-net"}
         )
       )
+  - record: gitlab_component_errors:ratio_5m
+    labels:
+      component: goserver
+      monitor: global
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_5m{component="goserver",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_5m{component="goserver",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_5m
+    labels:
+      component: goserver
+      monitor: global
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_5m{component="goserver",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_5m{component="goserver",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
   - record: gitlab_component_apdex:success:rate_5m
     labels:
       component: puma
@@ -220,6 +276,34 @@ groups:
           gitlab_component_ops:rate_5m{component="puma",env="ops",monitor="global",stage="main",tier="sv",type="ops-gitlab-net"}
         )
       )
+  - record: gitlab_component_errors:ratio_5m
+    labels:
+      component: puma
+      monitor: global
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_5m{component="puma",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_5m{component="puma",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_5m
+    labels:
+      component: puma
+      monitor: global
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_5m{component="puma",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_5m{component="puma",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
   - record: gitlab_component_apdex:success:rate_5m
     labels:
       component: rails_sql
@@ -260,6 +344,34 @@ groups:
     expr: |
       sum by (env,environment) (
         sli_aggregations:gitlab_sql_primary_duration_seconds_bucket:rate_5m{env="ops",job!="sidekiq",le="+Inf",type="ops-gitlab-net"} offset 30s
+      )
+  - record: gitlab_component_errors:ratio_5m
+    labels:
+      component: rails_sql
+      monitor: global
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_5m{component="rails_sql",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_5m{component="rails_sql",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_5m
+    labels:
+      component: rails_sql
+      monitor: global
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_5m{component="rails_sql",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_5m{component="rails_sql",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
       )
   - record: gitlab_component_apdex:success:rate_5m
     labels:
@@ -321,6 +433,34 @@ groups:
           gitlab_component_ops:rate_5m{component="registry_server",env="ops",monitor="global",stage="main",tier="sv",type="ops-gitlab-net"}
         )
       )
+  - record: gitlab_component_errors:ratio_5m
+    labels:
+      component: registry_server
+      monitor: global
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_5m{component="registry_server",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_5m{component="registry_server",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_5m
+    labels:
+      component: registry_server
+      monitor: global
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_5m{component="registry_server",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_5m{component="registry_server",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
   - record: gitlab_component_apdex:success:rate_5m
     labels:
       component: sidekiq_execution
@@ -373,6 +513,34 @@ groups:
           gitlab_component_ops:rate_5m{component="sidekiq_execution",env="ops",monitor="global",stage="main",tier="sv",type="ops-gitlab-net"}
         )
       )
+  - record: gitlab_component_errors:ratio_5m
+    labels:
+      component: sidekiq_execution
+      monitor: global
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_5m{component="sidekiq_execution",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_5m{component="sidekiq_execution",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_5m
+    labels:
+      component: sidekiq_execution
+      monitor: global
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_5m{component="sidekiq_execution",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_5m{component="sidekiq_execution",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
   - record: gitlab_component_apdex:success:rate_5m
     labels:
       component: sidekiq_queueing
@@ -405,6 +573,34 @@ groups:
     expr: |
       sum by (env,environment) (
         sli_aggregations:gitlab_sli_sidekiq_queueing_apdex_total:rate_5m{env="ops",type="ops-gitlab-net"} offset 30s
+      )
+  - record: gitlab_component_errors:ratio_5m
+    labels:
+      component: sidekiq_queueing
+      monitor: global
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_5m{component="sidekiq_queueing",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_5m{component="sidekiq_queueing",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_5m
+    labels:
+      component: sidekiq_queueing
+      monitor: global
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_5m{component="sidekiq_queueing",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_5m{component="sidekiq_queueing",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
       )
   - record: gitlab_component_apdex:success:rate_5m
     labels:
@@ -465,6 +661,34 @@ groups:
         0 * group by(env,environment) (
           gitlab_component_ops:rate_5m{component="workhorse",env="ops",monitor="global",stage="main",tier="sv",type="ops-gitlab-net"}
         )
+      )
+  - record: gitlab_component_errors:ratio_5m
+    labels:
+      component: workhorse
+      monitor: global
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_5m{component="workhorse",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_5m{component="workhorse",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_5m
+    labels:
+      component: workhorse
+      monitor: global
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_5m{component="workhorse",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_5m{component="workhorse",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
       )
 - name: 'Global SLI Metrics: ops-gitlab-net - Burn-Rate 30m'
   interval: 2m
@@ -528,6 +752,34 @@ groups:
         0 * group by(env,environment) (
           gitlab_component_ops:rate_30m{component="gitlab_sshd",env="ops",monitor="global",stage="main",tier="sv",type="ops-gitlab-net"}
         )
+      )
+  - record: gitlab_component_errors:ratio_30m
+    labels:
+      component: gitlab_sshd
+      monitor: global
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_30m{component="gitlab_sshd",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_30m{component="gitlab_sshd",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_30m
+    labels:
+      component: gitlab_sshd
+      monitor: global
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_30m{component="gitlab_sshd",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_30m{component="gitlab_sshd",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
       )
   - record: gitlab_component_apdex:success:rate_30m
     labels:
@@ -633,6 +885,34 @@ groups:
           gitlab_component_ops:rate_30m{component="goserver",env="ops",monitor="global",stage="main",tier="sv",type="ops-gitlab-net"}
         )
       )
+  - record: gitlab_component_errors:ratio_30m
+    labels:
+      component: goserver
+      monitor: global
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_30m{component="goserver",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_30m{component="goserver",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_30m
+    labels:
+      component: goserver
+      monitor: global
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_30m{component="goserver",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_30m{component="goserver",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
   - record: gitlab_component_apdex:success:rate_30m
     labels:
       component: puma
@@ -685,6 +965,34 @@ groups:
           gitlab_component_ops:rate_30m{component="puma",env="ops",monitor="global",stage="main",tier="sv",type="ops-gitlab-net"}
         )
       )
+  - record: gitlab_component_errors:ratio_30m
+    labels:
+      component: puma
+      monitor: global
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_30m{component="puma",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_30m{component="puma",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_30m
+    labels:
+      component: puma
+      monitor: global
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_30m{component="puma",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_30m{component="puma",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
   - record: gitlab_component_apdex:success:rate_30m
     labels:
       component: rails_sql
@@ -725,6 +1033,34 @@ groups:
     expr: |
       sum by (env,environment) (
         sli_aggregations:gitlab_sql_primary_duration_seconds_bucket:rate_30m{env="ops",job!="sidekiq",le="+Inf",type="ops-gitlab-net"} offset 30s
+      )
+  - record: gitlab_component_errors:ratio_30m
+    labels:
+      component: rails_sql
+      monitor: global
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_30m{component="rails_sql",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_30m{component="rails_sql",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_30m
+    labels:
+      component: rails_sql
+      monitor: global
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_30m{component="rails_sql",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_30m{component="rails_sql",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
       )
   - record: gitlab_component_apdex:success:rate_30m
     labels:
@@ -786,6 +1122,34 @@ groups:
           gitlab_component_ops:rate_30m{component="registry_server",env="ops",monitor="global",stage="main",tier="sv",type="ops-gitlab-net"}
         )
       )
+  - record: gitlab_component_errors:ratio_30m
+    labels:
+      component: registry_server
+      monitor: global
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_30m{component="registry_server",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_30m{component="registry_server",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_30m
+    labels:
+      component: registry_server
+      monitor: global
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_30m{component="registry_server",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_30m{component="registry_server",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
   - record: gitlab_component_apdex:success:rate_30m
     labels:
       component: sidekiq_execution
@@ -838,6 +1202,34 @@ groups:
           gitlab_component_ops:rate_30m{component="sidekiq_execution",env="ops",monitor="global",stage="main",tier="sv",type="ops-gitlab-net"}
         )
       )
+  - record: gitlab_component_errors:ratio_30m
+    labels:
+      component: sidekiq_execution
+      monitor: global
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_30m{component="sidekiq_execution",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_30m{component="sidekiq_execution",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_30m
+    labels:
+      component: sidekiq_execution
+      monitor: global
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_30m{component="sidekiq_execution",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_30m{component="sidekiq_execution",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
   - record: gitlab_component_apdex:success:rate_30m
     labels:
       component: sidekiq_queueing
@@ -870,6 +1262,34 @@ groups:
     expr: |
       sum by (env,environment) (
         sli_aggregations:gitlab_sli_sidekiq_queueing_apdex_total:rate_30m{env="ops",type="ops-gitlab-net"} offset 30s
+      )
+  - record: gitlab_component_errors:ratio_30m
+    labels:
+      component: sidekiq_queueing
+      monitor: global
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_30m{component="sidekiq_queueing",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_30m{component="sidekiq_queueing",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_30m
+    labels:
+      component: sidekiq_queueing
+      monitor: global
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_30m{component="sidekiq_queueing",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_30m{component="sidekiq_queueing",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
       )
   - record: gitlab_component_apdex:success:rate_30m
     labels:
@@ -930,6 +1350,34 @@ groups:
         0 * group by(env,environment) (
           gitlab_component_ops:rate_30m{component="workhorse",env="ops",monitor="global",stage="main",tier="sv",type="ops-gitlab-net"}
         )
+      )
+  - record: gitlab_component_errors:ratio_30m
+    labels:
+      component: workhorse
+      monitor: global
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_30m{component="workhorse",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_30m{component="workhorse",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_30m
+    labels:
+      component: workhorse
+      monitor: global
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_30m{component="workhorse",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_30m{component="workhorse",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
       )
 - name: 'Global SLI Metrics: ops-gitlab-net - Burn-Rate 1h'
   interval: 1m
@@ -993,6 +1441,34 @@ groups:
         0 * group by(env,environment) (
           gitlab_component_ops:rate_1h{component="gitlab_sshd",env="ops",monitor="global",stage="main",tier="sv",type="ops-gitlab-net"}
         )
+      )
+  - record: gitlab_component_errors:ratio_1h
+    labels:
+      component: gitlab_sshd
+      monitor: global
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_1h{component="gitlab_sshd",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_1h{component="gitlab_sshd",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_1h
+    labels:
+      component: gitlab_sshd
+      monitor: global
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_1h{component="gitlab_sshd",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_1h{component="gitlab_sshd",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
       )
   - record: gitlab_component_apdex:success:rate_1h
     labels:
@@ -1098,6 +1574,34 @@ groups:
           gitlab_component_ops:rate_1h{component="goserver",env="ops",monitor="global",stage="main",tier="sv",type="ops-gitlab-net"}
         )
       )
+  - record: gitlab_component_errors:ratio_1h
+    labels:
+      component: goserver
+      monitor: global
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_1h{component="goserver",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_1h{component="goserver",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_1h
+    labels:
+      component: goserver
+      monitor: global
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_1h{component="goserver",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_1h{component="goserver",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
   - record: gitlab_component_apdex:success:rate_1h
     labels:
       component: puma
@@ -1150,6 +1654,34 @@ groups:
           gitlab_component_ops:rate_1h{component="puma",env="ops",monitor="global",stage="main",tier="sv",type="ops-gitlab-net"}
         )
       )
+  - record: gitlab_component_errors:ratio_1h
+    labels:
+      component: puma
+      monitor: global
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_1h{component="puma",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_1h{component="puma",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_1h
+    labels:
+      component: puma
+      monitor: global
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_1h{component="puma",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_1h{component="puma",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
   - record: gitlab_component_apdex:success:rate_1h
     labels:
       component: rails_sql
@@ -1193,6 +1725,34 @@ groups:
     expr: |
       sum by (env,environment) (
         sli_aggregations:gitlab_sql_primary_duration_seconds_bucket:rate_1h{env="ops",job!="sidekiq",le="+Inf",type="ops-gitlab-net"} offset 30s
+      )
+  - record: gitlab_component_errors:ratio_1h
+    labels:
+      component: rails_sql
+      monitor: global
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_1h{component="rails_sql",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_1h{component="rails_sql",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_1h
+    labels:
+      component: rails_sql
+      monitor: global
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_1h{component="rails_sql",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_1h{component="rails_sql",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
       )
   - record: gitlab_component_apdex:success:rate_1h
     labels:
@@ -1254,6 +1814,34 @@ groups:
           gitlab_component_ops:rate_1h{component="registry_server",env="ops",monitor="global",stage="main",tier="sv",type="ops-gitlab-net"}
         )
       )
+  - record: gitlab_component_errors:ratio_1h
+    labels:
+      component: registry_server
+      monitor: global
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_1h{component="registry_server",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_1h{component="registry_server",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_1h
+    labels:
+      component: registry_server
+      monitor: global
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_1h{component="registry_server",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_1h{component="registry_server",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
   - record: gitlab_component_apdex:success:rate_1h
     labels:
       component: sidekiq_execution
@@ -1306,6 +1894,34 @@ groups:
           gitlab_component_ops:rate_1h{component="sidekiq_execution",env="ops",monitor="global",stage="main",tier="sv",type="ops-gitlab-net"}
         )
       )
+  - record: gitlab_component_errors:ratio_1h
+    labels:
+      component: sidekiq_execution
+      monitor: global
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_1h{component="sidekiq_execution",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_1h{component="sidekiq_execution",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_1h
+    labels:
+      component: sidekiq_execution
+      monitor: global
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_1h{component="sidekiq_execution",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_1h{component="sidekiq_execution",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
   - record: gitlab_component_apdex:success:rate_1h
     labels:
       component: sidekiq_queueing
@@ -1338,6 +1954,34 @@ groups:
     expr: |
       sum by (env,environment) (
         sli_aggregations:gitlab_sli_sidekiq_queueing_apdex_total:rate_1h{env="ops",type="ops-gitlab-net"} offset 30s
+      )
+  - record: gitlab_component_errors:ratio_1h
+    labels:
+      component: sidekiq_queueing
+      monitor: global
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_1h{component="sidekiq_queueing",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_1h{component="sidekiq_queueing",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_1h
+    labels:
+      component: sidekiq_queueing
+      monitor: global
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_1h{component="sidekiq_queueing",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_1h{component="sidekiq_queueing",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
       )
   - record: gitlab_component_apdex:success:rate_1h
     labels:
@@ -1398,4 +2042,1190 @@ groups:
         0 * group by(env,environment) (
           gitlab_component_ops:rate_1h{component="workhorse",env="ops",monitor="global",stage="main",tier="sv",type="ops-gitlab-net"}
         )
+      )
+  - record: gitlab_component_errors:ratio_1h
+    labels:
+      component: workhorse
+      monitor: global
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_1h{component="workhorse",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_1h{component="workhorse",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_1h
+    labels:
+      component: workhorse
+      monitor: global
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_1h{component="workhorse",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_1h{component="workhorse",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+- name: 'Global SLI Metrics: ops-gitlab-net - Burn-Rate 6h'
+  interval: 2m
+  rules:
+  - record: gitlab_component_apdex:success:rate_6h
+    labels:
+      component: gitlab_sshd
+      monitor: global
+      stage: main
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="gitlab_sshd",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"}[6h] offset 30s)
+      )
+  - record: gitlab_component_apdex:weight:score_6h
+    labels:
+      component: gitlab_sshd
+      monitor: global
+      stage: main
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="gitlab_sshd",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"}[6h] offset 30s)
+      )
+  - record: gitlab_component_ops:rate_6h
+    labels:
+      component: gitlab_sshd
+      monitor: global
+      stage: main
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_ops:rate_1h{component="gitlab_sshd",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"}[6h] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_6h
+    labels:
+      component: gitlab_sshd
+      monitor: global
+      stage: main
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_errors:rate_1h{component="gitlab_sshd",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"}[6h] offset 30s)
+      )
+  - record: gitlab_component_errors:ratio_6h
+    labels:
+      component: gitlab_sshd
+      monitor: global
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_6h{component="gitlab_sshd",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_6h{component="gitlab_sshd",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_6h
+    labels:
+      component: gitlab_sshd
+      monitor: global
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_6h{component="gitlab_sshd",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_6h{component="gitlab_sshd",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+  - record: gitlab_component_apdex:success:rate_6h
+    labels:
+      component: goserver
+      monitor: global
+      stage: main
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="goserver",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"}[6h] offset 30s)
+      )
+  - record: gitlab_component_apdex:weight:score_6h
+    labels:
+      component: goserver
+      monitor: global
+      stage: main
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="goserver",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"}[6h] offset 30s)
+      )
+  - record: gitlab_component_ops:rate_6h
+    labels:
+      component: goserver
+      monitor: global
+      stage: main
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_ops:rate_1h{component="goserver",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"}[6h] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_6h
+    labels:
+      component: goserver
+      monitor: global
+      stage: main
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_errors:rate_1h{component="goserver",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"}[6h] offset 30s)
+      )
+  - record: gitlab_component_errors:ratio_6h
+    labels:
+      component: goserver
+      monitor: global
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_6h{component="goserver",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_6h{component="goserver",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_6h
+    labels:
+      component: goserver
+      monitor: global
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_6h{component="goserver",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_6h{component="goserver",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+  - record: gitlab_component_apdex:success:rate_6h
+    labels:
+      component: puma
+      monitor: global
+      stage: main
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="puma",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"}[6h] offset 30s)
+      )
+  - record: gitlab_component_apdex:weight:score_6h
+    labels:
+      component: puma
+      monitor: global
+      stage: main
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="puma",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"}[6h] offset 30s)
+      )
+  - record: gitlab_component_ops:rate_6h
+    labels:
+      component: puma
+      monitor: global
+      stage: main
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_ops:rate_1h{component="puma",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"}[6h] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_6h
+    labels:
+      component: puma
+      monitor: global
+      stage: main
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_errors:rate_1h{component="puma",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"}[6h] offset 30s)
+      )
+  - record: gitlab_component_errors:ratio_6h
+    labels:
+      component: puma
+      monitor: global
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_6h{component="puma",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_6h{component="puma",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_6h
+    labels:
+      component: puma
+      monitor: global
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_6h{component="puma",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_6h{component="puma",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+  - record: gitlab_component_apdex:success:rate_6h
+    labels:
+      component: rails_sql
+      monitor: global
+      stage: main
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="rails_sql",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"}[6h] offset 30s)
+      )
+  - record: gitlab_component_apdex:weight:score_6h
+    labels:
+      component: rails_sql
+      monitor: global
+      stage: main
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="rails_sql",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"}[6h] offset 30s)
+      )
+  - record: gitlab_component_ops:rate_6h
+    labels:
+      component: rails_sql
+      monitor: global
+      stage: main
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_ops:rate_1h{component="rails_sql",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"}[6h] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_6h
+    labels:
+      component: rails_sql
+      monitor: global
+      stage: main
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_errors:rate_1h{component="rails_sql",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"}[6h] offset 30s)
+      )
+  - record: gitlab_component_errors:ratio_6h
+    labels:
+      component: rails_sql
+      monitor: global
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_6h{component="rails_sql",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_6h{component="rails_sql",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_6h
+    labels:
+      component: rails_sql
+      monitor: global
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_6h{component="rails_sql",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_6h{component="rails_sql",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+  - record: gitlab_component_apdex:success:rate_6h
+    labels:
+      component: registry_server
+      monitor: global
+      stage: main
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="registry_server",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"}[6h] offset 30s)
+      )
+  - record: gitlab_component_apdex:weight:score_6h
+    labels:
+      component: registry_server
+      monitor: global
+      stage: main
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="registry_server",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"}[6h] offset 30s)
+      )
+  - record: gitlab_component_ops:rate_6h
+    labels:
+      component: registry_server
+      monitor: global
+      stage: main
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_ops:rate_1h{component="registry_server",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"}[6h] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_6h
+    labels:
+      component: registry_server
+      monitor: global
+      stage: main
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_errors:rate_1h{component="registry_server",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"}[6h] offset 30s)
+      )
+  - record: gitlab_component_errors:ratio_6h
+    labels:
+      component: registry_server
+      monitor: global
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_6h{component="registry_server",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_6h{component="registry_server",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_6h
+    labels:
+      component: registry_server
+      monitor: global
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_6h{component="registry_server",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_6h{component="registry_server",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+  - record: gitlab_component_apdex:success:rate_6h
+    labels:
+      component: sidekiq_execution
+      monitor: global
+      stage: main
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="sidekiq_execution",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"}[6h] offset 30s)
+      )
+  - record: gitlab_component_apdex:weight:score_6h
+    labels:
+      component: sidekiq_execution
+      monitor: global
+      stage: main
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="sidekiq_execution",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"}[6h] offset 30s)
+      )
+  - record: gitlab_component_ops:rate_6h
+    labels:
+      component: sidekiq_execution
+      monitor: global
+      stage: main
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_ops:rate_1h{component="sidekiq_execution",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"}[6h] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_6h
+    labels:
+      component: sidekiq_execution
+      monitor: global
+      stage: main
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_errors:rate_1h{component="sidekiq_execution",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"}[6h] offset 30s)
+      )
+  - record: gitlab_component_errors:ratio_6h
+    labels:
+      component: sidekiq_execution
+      monitor: global
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_6h{component="sidekiq_execution",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_6h{component="sidekiq_execution",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_6h
+    labels:
+      component: sidekiq_execution
+      monitor: global
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_6h{component="sidekiq_execution",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_6h{component="sidekiq_execution",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+  - record: gitlab_component_apdex:success:rate_6h
+    labels:
+      component: sidekiq_queueing
+      monitor: global
+      stage: main
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="sidekiq_queueing",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"}[6h] offset 30s)
+      )
+  - record: gitlab_component_apdex:weight:score_6h
+    labels:
+      component: sidekiq_queueing
+      monitor: global
+      stage: main
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="sidekiq_queueing",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"}[6h] offset 30s)
+      )
+  - record: gitlab_component_ops:rate_6h
+    labels:
+      component: sidekiq_queueing
+      monitor: global
+      stage: main
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_ops:rate_1h{component="sidekiq_queueing",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"}[6h] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_6h
+    labels:
+      component: sidekiq_queueing
+      monitor: global
+      stage: main
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_errors:rate_1h{component="sidekiq_queueing",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"}[6h] offset 30s)
+      )
+  - record: gitlab_component_errors:ratio_6h
+    labels:
+      component: sidekiq_queueing
+      monitor: global
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_6h{component="sidekiq_queueing",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_6h{component="sidekiq_queueing",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_6h
+    labels:
+      component: sidekiq_queueing
+      monitor: global
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_6h{component="sidekiq_queueing",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_6h{component="sidekiq_queueing",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+  - record: gitlab_component_apdex:success:rate_6h
+    labels:
+      component: workhorse
+      monitor: global
+      stage: main
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="workhorse",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"}[6h] offset 30s)
+      )
+  - record: gitlab_component_apdex:weight:score_6h
+    labels:
+      component: workhorse
+      monitor: global
+      stage: main
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="workhorse",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"}[6h] offset 30s)
+      )
+  - record: gitlab_component_ops:rate_6h
+    labels:
+      component: workhorse
+      monitor: global
+      stage: main
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_ops:rate_1h{component="workhorse",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"}[6h] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_6h
+    labels:
+      component: workhorse
+      monitor: global
+      stage: main
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_errors:rate_1h{component="workhorse",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"}[6h] offset 30s)
+      )
+  - record: gitlab_component_errors:ratio_6h
+    labels:
+      component: workhorse
+      monitor: global
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_6h{component="workhorse",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_6h{component="workhorse",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_6h
+    labels:
+      component: workhorse
+      monitor: global
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_6h{component="workhorse",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_6h{component="workhorse",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+- name: 'Global SLI Metrics: ops-gitlab-net - Burn-Rate 3d'
+  interval: 2m
+  rules:
+  - record: gitlab_component_apdex:success:rate_3d
+    labels:
+      component: gitlab_sshd
+      monitor: global
+      stage: main
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="gitlab_sshd",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"}[3d] offset 30s)
+      )
+  - record: gitlab_component_apdex:weight:score_3d
+    labels:
+      component: gitlab_sshd
+      monitor: global
+      stage: main
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="gitlab_sshd",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"}[3d] offset 30s)
+      )
+  - record: gitlab_component_ops:rate_3d
+    labels:
+      component: gitlab_sshd
+      monitor: global
+      stage: main
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_ops:rate_1h{component="gitlab_sshd",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"}[3d] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_3d
+    labels:
+      component: gitlab_sshd
+      monitor: global
+      stage: main
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_errors:rate_1h{component="gitlab_sshd",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"}[3d] offset 30s)
+      )
+  - record: gitlab_component_errors:ratio_3d
+    labels:
+      component: gitlab_sshd
+      monitor: global
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_3d{component="gitlab_sshd",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_3d{component="gitlab_sshd",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_3d
+    labels:
+      component: gitlab_sshd
+      monitor: global
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_3d{component="gitlab_sshd",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_3d{component="gitlab_sshd",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+  - record: gitlab_component_apdex:success:rate_3d
+    labels:
+      component: goserver
+      monitor: global
+      stage: main
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="goserver",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"}[3d] offset 30s)
+      )
+  - record: gitlab_component_apdex:weight:score_3d
+    labels:
+      component: goserver
+      monitor: global
+      stage: main
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="goserver",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"}[3d] offset 30s)
+      )
+  - record: gitlab_component_ops:rate_3d
+    labels:
+      component: goserver
+      monitor: global
+      stage: main
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_ops:rate_1h{component="goserver",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"}[3d] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_3d
+    labels:
+      component: goserver
+      monitor: global
+      stage: main
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_errors:rate_1h{component="goserver",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"}[3d] offset 30s)
+      )
+  - record: gitlab_component_errors:ratio_3d
+    labels:
+      component: goserver
+      monitor: global
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_3d{component="goserver",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_3d{component="goserver",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_3d
+    labels:
+      component: goserver
+      monitor: global
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_3d{component="goserver",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_3d{component="goserver",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+  - record: gitlab_component_apdex:success:rate_3d
+    labels:
+      component: puma
+      monitor: global
+      stage: main
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="puma",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"}[3d] offset 30s)
+      )
+  - record: gitlab_component_apdex:weight:score_3d
+    labels:
+      component: puma
+      monitor: global
+      stage: main
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="puma",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"}[3d] offset 30s)
+      )
+  - record: gitlab_component_ops:rate_3d
+    labels:
+      component: puma
+      monitor: global
+      stage: main
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_ops:rate_1h{component="puma",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"}[3d] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_3d
+    labels:
+      component: puma
+      monitor: global
+      stage: main
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_errors:rate_1h{component="puma",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"}[3d] offset 30s)
+      )
+  - record: gitlab_component_errors:ratio_3d
+    labels:
+      component: puma
+      monitor: global
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_3d{component="puma",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_3d{component="puma",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_3d
+    labels:
+      component: puma
+      monitor: global
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_3d{component="puma",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_3d{component="puma",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+  - record: gitlab_component_apdex:success:rate_3d
+    labels:
+      component: rails_sql
+      monitor: global
+      stage: main
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="rails_sql",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"}[3d] offset 30s)
+      )
+  - record: gitlab_component_apdex:weight:score_3d
+    labels:
+      component: rails_sql
+      monitor: global
+      stage: main
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="rails_sql",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"}[3d] offset 30s)
+      )
+  - record: gitlab_component_ops:rate_3d
+    labels:
+      component: rails_sql
+      monitor: global
+      stage: main
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_ops:rate_1h{component="rails_sql",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"}[3d] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_3d
+    labels:
+      component: rails_sql
+      monitor: global
+      stage: main
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_errors:rate_1h{component="rails_sql",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"}[3d] offset 30s)
+      )
+  - record: gitlab_component_errors:ratio_3d
+    labels:
+      component: rails_sql
+      monitor: global
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_3d{component="rails_sql",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_3d{component="rails_sql",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_3d
+    labels:
+      component: rails_sql
+      monitor: global
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_3d{component="rails_sql",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_3d{component="rails_sql",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+  - record: gitlab_component_apdex:success:rate_3d
+    labels:
+      component: registry_server
+      monitor: global
+      stage: main
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="registry_server",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"}[3d] offset 30s)
+      )
+  - record: gitlab_component_apdex:weight:score_3d
+    labels:
+      component: registry_server
+      monitor: global
+      stage: main
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="registry_server",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"}[3d] offset 30s)
+      )
+  - record: gitlab_component_ops:rate_3d
+    labels:
+      component: registry_server
+      monitor: global
+      stage: main
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_ops:rate_1h{component="registry_server",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"}[3d] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_3d
+    labels:
+      component: registry_server
+      monitor: global
+      stage: main
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_errors:rate_1h{component="registry_server",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"}[3d] offset 30s)
+      )
+  - record: gitlab_component_errors:ratio_3d
+    labels:
+      component: registry_server
+      monitor: global
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_3d{component="registry_server",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_3d{component="registry_server",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_3d
+    labels:
+      component: registry_server
+      monitor: global
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_3d{component="registry_server",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_3d{component="registry_server",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+  - record: gitlab_component_apdex:success:rate_3d
+    labels:
+      component: sidekiq_execution
+      monitor: global
+      stage: main
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="sidekiq_execution",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"}[3d] offset 30s)
+      )
+  - record: gitlab_component_apdex:weight:score_3d
+    labels:
+      component: sidekiq_execution
+      monitor: global
+      stage: main
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="sidekiq_execution",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"}[3d] offset 30s)
+      )
+  - record: gitlab_component_ops:rate_3d
+    labels:
+      component: sidekiq_execution
+      monitor: global
+      stage: main
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_ops:rate_1h{component="sidekiq_execution",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"}[3d] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_3d
+    labels:
+      component: sidekiq_execution
+      monitor: global
+      stage: main
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_errors:rate_1h{component="sidekiq_execution",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"}[3d] offset 30s)
+      )
+  - record: gitlab_component_errors:ratio_3d
+    labels:
+      component: sidekiq_execution
+      monitor: global
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_3d{component="sidekiq_execution",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_3d{component="sidekiq_execution",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_3d
+    labels:
+      component: sidekiq_execution
+      monitor: global
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_3d{component="sidekiq_execution",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_3d{component="sidekiq_execution",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+  - record: gitlab_component_apdex:success:rate_3d
+    labels:
+      component: sidekiq_queueing
+      monitor: global
+      stage: main
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="sidekiq_queueing",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"}[3d] offset 30s)
+      )
+  - record: gitlab_component_apdex:weight:score_3d
+    labels:
+      component: sidekiq_queueing
+      monitor: global
+      stage: main
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="sidekiq_queueing",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"}[3d] offset 30s)
+      )
+  - record: gitlab_component_ops:rate_3d
+    labels:
+      component: sidekiq_queueing
+      monitor: global
+      stage: main
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_ops:rate_1h{component="sidekiq_queueing",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"}[3d] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_3d
+    labels:
+      component: sidekiq_queueing
+      monitor: global
+      stage: main
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_errors:rate_1h{component="sidekiq_queueing",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"}[3d] offset 30s)
+      )
+  - record: gitlab_component_errors:ratio_3d
+    labels:
+      component: sidekiq_queueing
+      monitor: global
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_3d{component="sidekiq_queueing",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_3d{component="sidekiq_queueing",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_3d
+    labels:
+      component: sidekiq_queueing
+      monitor: global
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_3d{component="sidekiq_queueing",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_3d{component="sidekiq_queueing",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+  - record: gitlab_component_apdex:success:rate_3d
+    labels:
+      component: workhorse
+      monitor: global
+      stage: main
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="workhorse",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"}[3d] offset 30s)
+      )
+  - record: gitlab_component_apdex:weight:score_3d
+    labels:
+      component: workhorse
+      monitor: global
+      stage: main
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="workhorse",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"}[3d] offset 30s)
+      )
+  - record: gitlab_component_ops:rate_3d
+    labels:
+      component: workhorse
+      monitor: global
+      stage: main
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_ops:rate_1h{component="workhorse",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"}[3d] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_3d
+    labels:
+      component: workhorse
+      monitor: global
+      stage: main
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment) (
+        avg_over_time(gitlab_component_errors:rate_1h{component="workhorse",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"}[3d] offset 30s)
+      )
+  - record: gitlab_component_errors:ratio_3d
+    labels:
+      component: workhorse
+      monitor: global
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_3d{component="workhorse",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_3d{component="workhorse",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_3d
+    labels:
+      component: workhorse
+      monitor: global
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_3d{component="workhorse",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_3d{component="workhorse",env="ops",monitor="global",tier="sv",type="ops-gitlab-net"} offset 30s
       )

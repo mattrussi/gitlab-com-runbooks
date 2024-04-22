@@ -2,11 +2,11 @@ local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local histogramApdex = metricsCatalog.histogramApdex;
 local rateMetric = metricsCatalog.rateMetric;
 local sidekiqHelpers = import './lib/sidekiq-helpers.libsonnet';
-local perWorkerRecordingRules = (import './lib/sidekiq-per-worker-recording-rules.libsonnet').perWorkerRecordingRules;
 local combined = metricsCatalog.combined;
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 local kubeLabelSelectors = metricsCatalog.kubeLabelSelectors;
 local sliLibrary = import 'gitlab-slis/library.libsonnet';
+local findServicesWithTag = (import 'servicemetrics/metrics-catalog.libsonnet').findServicesWithTag;
 
 // Some workers have known performance issues that surpass our thresholds.
 // Each worker should have a link to an issue to fix the performance issues.
@@ -22,6 +22,7 @@ local baseSelector = { type: 'sidekiq' } + ignoredWorkers;
 metricsCatalog.serviceDefinition({
   type: 'sidekiq',
   tier: 'sv',
+  tenants: [ 'gitlab-gprd', 'gitlab-gstg', 'gitlab-pre' ],
   tags: ['rails'],
 
   // overrides monitoringThresholds for specific shards and SLIs
@@ -77,8 +78,7 @@ metricsCatalog.serviceDefinition({
     redis: true,
     patroni: true,
     pgbouncer: true,
-    praefect: true,
-    pvs: true,
+    'ext-pvs': true,
     search: true,
     consul: true,
     'google-cloud-storage': true,
@@ -91,7 +91,9 @@ metricsCatalog.serviceDefinition({
   // cardinality. The metrics catalog will generate recording rules with
   // the appropriate aggregations based on this set.
   // Use sparingly, and don't overuse.
-  recordingRuleMetrics: (
+  recordingRuleMetrics: [
+    'sidekiq_enqueued_jobs_total',
+  ] + (
     sliLibrary.get('sidekiq_execution').recordingRuleMetrics
     + sliLibrary.get('sidekiq_queueing').recordingRuleMetrics
   ),
@@ -117,7 +119,23 @@ metricsCatalog.serviceDefinition({
     sidekiqHelpers.shards.listAll(),
     {},
   ),
-  serviceLevelIndicators: sliLibrary.get('sidekiq_execution').generateServiceLevelIndicator(baseSelector { external_dependencies: { ne: 'yes' } }, {
+  serviceLevelIndicators: {
+    enqueued_jobs: {
+      serviceAggregation: false,  // Don't add this to the request rate of the service
+      shardLevelMonitoring: false,
+      userImpacting: true,
+      description: |||
+        The number of jobs enqueued by Sidekiq clients (api, web, sidekiq, etc).
+      |||,
+
+      requestRate: rateMetric(
+        counter='sidekiq_enqueued_jobs_total',
+      ),
+
+      emittedBy: findServicesWithTag(tag='rails'),
+      significantLabels: ['queue', 'feature_category', 'urgency', 'worker'],
+    },
+  } + sliLibrary.get('sidekiq_execution').generateServiceLevelIndicator(baseSelector { external_dependencies: { ne: 'yes' } }, {
     // TODO: For now, only sidekiq execution is considered towards service aggregation
     // which means queueing is not part of the service aggregation & SLA.
     // Future plan is to be able to specify either apdex, errors, or ops to be included in service aggregaiton.
@@ -171,9 +189,6 @@ metricsCatalog.serviceDefinition({
 
   // Special per-worker recording rules
   extraRecordingRulesPerBurnRate: [
-    // Adds per-work queuing/execution apdex, plus error rates etc
-    // across multiple burn rates
-    perWorkerRecordingRules,
   ],
   capacityPlanning: {
     components: [

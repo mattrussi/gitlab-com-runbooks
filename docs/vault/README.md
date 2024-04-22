@@ -11,7 +11,7 @@
 
 [[_TOC_]]
 
-# Vault Service
+# Hashicorp Vault for Infrastructure Service
 
 * [Service Overview](https://dashboards.gitlab.net/d/vault-main/vault-overview)
 * **Alerts**: <https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22vault%22%2C%20tier%3D%22inf%22%7D>
@@ -38,17 +38,18 @@
 * [../elastic/elastic-cloud.md](../elastic/elastic-cloud.md)
 * [HAProxy Management at GitLab](../frontend/haproxy.md)
 * [Gitaly token rotation](../gitaly/gitaly-token-rotation.md)
+* [`gitalyctl`](../gitaly/gitalyctl.md)
 * [CI Artifacts CDN](../google-cloud-storage/artifacts-cdn.md)
 * [Rebuilding a kubernetes cluster](../kube/k8s-cluster-rebuild.md)
 * [StatefulSet Guidelines](../kube/sts-guidelines.md)
+* [Mimir Onboarding](../mimir/getting-started.md)
 * [Prometheus Dead Man's Snitch](../monitoring/prometheus-snitch.md)
 * [Thanos Receive](../monitoring/thanos-receive.md)
 * [GPG Keys for Repository Metadata Signing](../packagecloud/manage-repository-metadata-signing-keys.md)
 * [GPG Keys for Package Signing](../packaging/manage-package-signing-keys.md)
 * [Credential rotation](../patroni/postgresql-role-credential-rotation.md)
 * [Rotating Rails' PostgreSQL password](../patroni/rotating-rails-postgresql-password.md)
-* [Add and remove file storages to praefect](../praefect/praefect-file-storages.md)
-* [Praefect Database User Password Rotation](../praefect/praefect-password-rotation.md)
+* [../product_analytics/clickhouse-backup-restore.md](../product_analytics/clickhouse-backup-restore.md)
 * [Provisioning Redis Cluster](../redis/provisioning-redis-cluster.md)
 * [../redis/redis-functional-partitioning.md](../redis/redis-functional-partitioning.md)
 * [Container Registry CDN](../registry/cdn.md)

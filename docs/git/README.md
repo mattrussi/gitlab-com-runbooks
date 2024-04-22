@@ -4,7 +4,7 @@
 
 [[_TOC_]]
 
-# Git Service
+# Git Access Service
 
 * [Service Overview](https://dashboards.gitlab.net/d/git-main/git-overview)
 * **Alerts**: <https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22git%22%2C%20tier%3D%22sv%22%7D>
@@ -73,13 +73,9 @@
 * [Diagnosing long running transactions](../patroni/postgres-long-running-transaction.md)
 * [How to provision the benchmark environment](../patroni/provisioning_bench_env.md)
 * [PgBouncer connection management and troubleshooting](../pgbouncer/pgbouncer-connections.md)
-* [Bypass Praefect](../praefect/praefect-bypass.md)
-* [Praefect replication is lagging or has stopped](../praefect/praefect-replication.md)
-* [Praefect has unavailable repositories](../praefect/praefect-unavailable-repo.md)
 * [Redis-Sidekiq catchall workloads reduction](../redis/redis-sidekiq-catchall-workloads-reduction.md)
 * [A survival guide for SREs to working with Redis at GitLab](../redis/redis-survival-guide-for-sres.md)
 * [../redis/redis.md](../redis/redis.md)
-* [../sidekiq/silent-project-exports.md](../sidekiq/silent-project-exports.md)
 * [How to use flamegraphs for performance profiling](../tutorials/how_to_use_flamegraphs_for_perf_profiling.md)
 * [Life of a Git Request](../tutorials/overview_life_of_a_git_request.md)
 * [Life of a Web Request](../tutorials/overview_life_of_a_web_request.md)
@@ -91,7 +87,7 @@
 * [../uncategorized/namespace-restore.md](../uncategorized/namespace-restore.md)
 * [Ruby profiling](../uncategorized/ruby-profiling.md)
 * [Shared Configurations](../uncategorized/shared-configurations.md)
-* [Terraform Broken Master](../uncategorized/terraform-broken-master.md)
+* [Terraform Broken Main](../uncategorized/terraform-broken-main.md)
 * [How to upload a file to Google Cloud Storage from any system without a credentials configuration](../uncategorized/upload-file-to-gcs-using-signed-url.md)
 * [Workers under heavy load because of being used as a CDN](../uncategorized/workers-high-load.md)
 * [Configuring and Using the Yubikey](../uncategorized/yubikey.md)

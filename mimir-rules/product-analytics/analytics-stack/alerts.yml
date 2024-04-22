@@ -11,4 +11,26 @@ groups:
     annotations:
       title: Vector errors
       description: >
-        Too many vector errors in cluster {{ $labels.cluster }} have been occurring for the last 10 minutes.
+        Too many vector errors in cluster {{ $labels.cluster }} have been occurring for the last 5 minutes.
+  - alert: SSLErrorsTooHigh
+    expr: stackdriver_k_8_s_container_logging_googleapis_com_user_ssl_errors > 2
+    for: 5m
+    labels:
+      alert_type: symptom
+      severity: s4
+      team: product_analytics
+    annotations:
+      title: SSL errors
+      description: >
+        Too many SSL errors in cluster {{ $labels.cluster }} have been occurring for the last 5 minutes.
+  - alert: KafkaConsumerGroupLagTooHigh
+    expr: sum(kafka_consumergroup_lag) by (consumergroup, topic) > 10000
+    for: 5m
+    labels:
+      alert_type: symptom
+      severity: s4
+      team: product_analytics
+    annotations:
+      title: Kafka consumer group lag
+      description: >
+        Kafka consumer group lag in cluster {{ $labels.cluster }} for consumer group {{ $labels.consumergroup }} and topic {{ $labels.topic }} is too high the last 5 minutes.

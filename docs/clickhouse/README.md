@@ -4,7 +4,7 @@
 
 [[_TOC_]]
 
-# Clickhouse Service
+# ClickHouse Cloud Service
 
 * **Alerts**: <https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22clickhouse%22%2C%20tier%3D%22inf%22%7D>
 * **Label**: gitlab-com/gl-infra/production~"Service::Service::ClickHouseCloud"
@@ -17,6 +17,8 @@
 
 * [ClickHouse Cloud Failure Remediation, Backup & Restore Process](backup-restore.md)
 * [ErrorTracking main troubleshooting document](../errortracking/overview.md)
+* [../product_analytics/clickhouse-backup-restore.md](../product_analytics/clickhouse-backup-restore.md)
+* [../product_analytics/ssl-troubleshooting.md](../product_analytics/ssl-troubleshooting.md)
 * [Managing Sentry in Kubernetes](../sentry/sentry.md)
 <!-- END_MARKER -->
 

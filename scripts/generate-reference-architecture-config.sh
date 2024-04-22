@@ -58,6 +58,7 @@ function main() {
   fi
 
   out="$(
+    set +u
     jsonnet-tool render \
       --multi "$dest_dir" \
       -J "${REPO_DIR}/libsonnet/" \
@@ -67,6 +68,7 @@ function main() {
       "${paths[@]}" \
       "${params[@]}" \
       "$source_file"
+    set -u
   )"
   echo "$out"
 
@@ -76,6 +78,7 @@ function main() {
       mkdir -p "$(dirname "${REPO_DIR}/.cache/$file")"
       cp "$file" "${REPO_DIR}/.cache/$file"
     done
+    set +u
     jsonnet-deps \
       -J "${REPO_DIR}/metrics-catalog/" \
       -J "${REPO_DIR}/dashboards/" \
@@ -85,6 +88,7 @@ function main() {
       -J "${REPO_DIR}/vendor/" \
       "${paths[@]}" \
       "$source_file" | xargs sha256sum >"$sha256sum_file"
+    set -u
     echo "$source_file" "${REPO_DIR}/.tool-versions" | xargs realpath | xargs sha256sum >>"$sha256sum_file"
   fi
 }

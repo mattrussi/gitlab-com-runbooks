@@ -662,7 +662,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          sli_aggregations:http_requests_total_rate5m{environment="{{ $labels.environment }}",job="gitlab-rails",stage="{{ $labels.stage }}",status=~"5..",type="ops-gitlab-net"}
+          rate(http_requests_total{environment="{{ $labels.environment }}",job="gitlab-rails",stage="{{ $labels.stage }}",status=~"5..",type="ops-gitlab-net"}[5m])
         )
       runbook: docs/ops-gitlab-net/README.md
     labels:
@@ -710,7 +710,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          sli_aggregations:http_requests_total_rate5m{environment="{{ $labels.environment }}",job="gitlab-rails",stage="{{ $labels.stage }}",status=~"5..",type="ops-gitlab-net"}
+          rate(http_requests_total{environment="{{ $labels.environment }}",job="gitlab-rails",stage="{{ $labels.stage }}",status=~"5..",type="ops-gitlab-net"}[5m])
         )
       runbook: docs/ops-gitlab-net/README.md
     labels:
@@ -758,7 +758,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          sli_aggregations:http_requests_total_rate5m{environment="{{ $labels.environment }}",job="gitlab-rails",stage="{{ $labels.stage }}",type="ops-gitlab-net"}
+          rate(http_requests_total{environment="{{ $labels.environment }}",job="gitlab-rails",stage="{{ $labels.stage }}",type="ops-gitlab-net"}[5m])
         )
       runbook: docs/ops-gitlab-net/README.md
     labels:
@@ -795,7 +795,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          sli_aggregations:http_requests_total_rate5m{environment="{{ $labels.environment }}",job="gitlab-rails",stage="{{ $labels.stage }}",type="ops-gitlab-net"}
+          rate(http_requests_total{environment="{{ $labels.environment }}",job="gitlab-rails",stage="{{ $labels.stage }}",type="ops-gitlab-net"}[5m])
         )
       runbook: docs/ops-gitlab-net/README.md
     labels:
@@ -832,7 +832,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
-            sli_aggregations:gitlab_sql_primary_duration_seconds_bucket_rate5m{environment="{{ $labels.environment }}",job!="sidekiq",stage="{{ $labels.stage }}",type="ops-gitlab-net"}
+            rate(gitlab_sql_primary_duration_seconds_bucket{environment="{{ $labels.environment }}",job!="sidekiq",stage="{{ $labels.stage }}",type="ops-gitlab-net"}[5m])
           )
         )
       runbook: docs/ops-gitlab-net/README.md
@@ -883,7 +883,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
-            sli_aggregations:gitlab_sql_primary_duration_seconds_bucket_rate5m{environment="{{ $labels.environment }}",job!="sidekiq",stage="{{ $labels.stage }}",type="ops-gitlab-net"}
+            rate(gitlab_sql_primary_duration_seconds_bucket{environment="{{ $labels.environment }}",job!="sidekiq",stage="{{ $labels.stage }}",type="ops-gitlab-net"}[5m])
           )
         )
       runbook: docs/ops-gitlab-net/README.md
@@ -932,7 +932,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          sli_aggregations:gitlab_sql_primary_duration_seconds_bucket_rate5m{environment="{{ $labels.environment }}",job!="sidekiq",le="+Inf",stage="{{ $labels.stage }}",type="ops-gitlab-net"}
+          rate(gitlab_sql_primary_duration_seconds_bucket{environment="{{ $labels.environment }}",job!="sidekiq",le="+Inf",stage="{{ $labels.stage }}",type="ops-gitlab-net"}[5m])
         )
       runbook: docs/ops-gitlab-net/README.md
     labels:
@@ -969,7 +969,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          sli_aggregations:gitlab_sql_primary_duration_seconds_bucket_rate5m{environment="{{ $labels.environment }}",job!="sidekiq",le="+Inf",stage="{{ $labels.stage }}",type="ops-gitlab-net"}
+          rate(gitlab_sql_primary_duration_seconds_bucket{environment="{{ $labels.environment }}",job!="sidekiq",le="+Inf",stage="{{ $labels.stage }}",type="ops-gitlab-net"}[5m])
         )
       runbook: docs/ops-gitlab-net/README.md
     labels:
@@ -1368,7 +1368,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          sli_aggregations:gitlab_sli_sidekiq_execution_error_total_rate5m{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="ops-gitlab-net"}
+          rate(gitlab_sli_sidekiq_execution_error_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="ops-gitlab-net"}[5m])
         )
       runbook: docs/ops-gitlab-net/README.md
     labels:
@@ -1418,7 +1418,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          sli_aggregations:gitlab_sli_sidekiq_execution_error_total_rate5m{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="ops-gitlab-net"}
+          rate(gitlab_sli_sidekiq_execution_error_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="ops-gitlab-net"}[5m])
         )
       runbook: docs/ops-gitlab-net/README.md
     labels:
@@ -1468,7 +1468,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          sli_aggregations:gitlab_sli_sidekiq_execution_total_rate5m{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="ops-gitlab-net"}
+          rate(gitlab_sli_sidekiq_execution_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="ops-gitlab-net"}[5m])
         )
       runbook: docs/ops-gitlab-net/README.md
     labels:
@@ -1507,7 +1507,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          sli_aggregations:gitlab_sli_sidekiq_execution_total_rate5m{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="ops-gitlab-net"}
+          rate(gitlab_sli_sidekiq_execution_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="ops-gitlab-net"}[5m])
         )
       runbook: docs/ops-gitlab-net/README.md
     labels:
@@ -1636,7 +1636,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          sli_aggregations:gitlab_sli_sidekiq_queueing_apdex_total_rate5m{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="ops-gitlab-net"}
+          rate(gitlab_sli_sidekiq_queueing_apdex_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="ops-gitlab-net"}[5m])
         )
       runbook: docs/ops-gitlab-net/README.md
     labels:
@@ -1675,7 +1675,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          sli_aggregations:gitlab_sli_sidekiq_queueing_apdex_total_rate5m{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="ops-gitlab-net"}
+          rate(gitlab_sli_sidekiq_queueing_apdex_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="ops-gitlab-net"}[5m])
         )
       runbook: docs/ops-gitlab-net/README.md
     labels:

@@ -75,7 +75,7 @@ local aggregationSet = import 'servicemetrics/aggregation-set.libsonnet';
     name: 'Regional SLI Metrics',
     intermediateSource: false,  // Used in dashboards and alerts
     selector: { monitor: 'global' },  // Thanos Ruler
-    labels: ['env', 'environment', 'tier', 'type', 'stage', 'region', 'component'],
+    labels: ['env', 'environment', 'tier', 'type', 'stage', 'region', 'location', 'component'],
     metricFormats: {
       apdexRatio: 'gitlab_regional_sli_apdex:ratio_%s',
       opsRate: 'gitlab_regional_sli_ops:rate_%s',
@@ -323,53 +323,6 @@ local aggregationSet = import 'servicemetrics/aggregation-set.libsonnet';
     aggregationFilter: 'regional',
   }),
 
-
-  /* Note that queue SLIs do not have error rates */
-  sidekiqWorkerQueueSourceSLIs: aggregationSet.AggregationSet({
-    id: 'sidekiq_queue',
-    name: 'Sidekiq queue source metrics per worker source aggregation',
-    intermediateSource: true,
-    selector: { monitor: { ne: 'global' } },
-    labels: [
-      'environment',
-      'tier',
-      'type',
-      'stage',
-      'shard',
-      'queue',
-      'feature_category',
-      'urgency',
-      'worker',
-    ],
-    metricFormats: {
-      opsRate: 'gitlab_background_jobs:queue:ops:rate_%s',
-    },
-  }),
-
-  /* Note that queue SLIs do not have error rates */
-  sidekiqWorkerQueueSLIs: aggregationSet.AggregationSet({
-    id: 'sidekiq_queue',
-    name: 'Sidekiq queue source metrics per worker',
-    intermediateSource: false,
-    generateSLODashboards: false,  // No need to generate SLO analysis dashboards
-    selector: { monitor: 'global' },
-    labels: [
-      'env',
-      'environment',
-      'tier',
-      'type',
-      'stage',
-      'shard',
-      'queue',
-      'feature_category',
-      'urgency',
-      'worker',
-    ],
-    metricFormats: {
-      opsRate: 'gitlab_background_jobs:queue:ops:rate_%s',
-    },
-  }),
-
   featureCategorySourceSLIs: aggregationSet.AggregationSet({
     id: 'source_feature_category',
     name: 'Prometheus Source Feature Category Metrics',
@@ -392,13 +345,12 @@ local aggregationSet = import 'servicemetrics/aggregation-set.libsonnet';
     selector: { monitor: 'global' },
     labels: ['env', 'environment', 'tier', 'type', 'stage', 'component', 'feature_category'],
     upscaleLongerBurnRates: true,
+    generateSLODashboards: false,
     metricFormats: {
       apdexSuccessRate: 'gitlab:component:feature_category:execution:apdex:success:rate_%s',
       apdexWeight: 'gitlab:component:feature_category:execution:apdex:weight:score_%s',
-      apdexRatio: 'gitlab:component:feature_category:execution:apdex:ratio_%s',
       opsRate: 'gitlab:component:feature_category:execution:ops:rate_%s',
       errorRate: 'gitlab:component:feature_category:execution:error:rate_%s',
-      errorRatio: 'gitlab:component:feature_category:execution:error:ratio_%s',
     },
   }),
 

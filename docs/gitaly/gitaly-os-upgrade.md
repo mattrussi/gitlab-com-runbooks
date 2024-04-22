@@ -65,7 +65,7 @@ bin/rebuild gprd 7 --check
 ## Planning an upgrade
 
 - Update the base packer image to match your expected OS base version
-  <https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/blob/master/packer/gitaly.pkr.hcl#L3>
+  <https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/main/packer/gitaly.pkr.hcl#L3>
 - Update the inventories for the target environments in the `gitaly-os-upgrade`
   project. It is recommended that your first batches are small and contain a
   representative sample of different types of nodes, to detect possible failures

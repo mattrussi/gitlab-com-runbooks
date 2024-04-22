@@ -8,6 +8,14 @@ local defaultGlobalBurnRates = defaultSourceBurnRates + ['6h', '3d'];
 local upscaledBurnRates = ['6h', '3d'];
 
 local definitionDefaults = {
+  sourceAggregationSet: null,
+  slisForService(service):
+    if self.sourceAggregationSet == null
+    then service.listServiceLevelIndicators()
+    else
+      assert false : 'A second level AggregationSet should not aggregate SLIs directly';
+      [],
+  enabledForService(service): true,
   aggregationFilter: null,
 
   upscaleLongerBurnRates: false,

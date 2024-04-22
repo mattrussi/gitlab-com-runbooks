@@ -4,7 +4,7 @@
 
 [[_TOC_]]
 
-# Thanos Service
+# thanos Service
 
 * [Service Overview](https://dashboards.gitlab.net/d/thanos-main/thanos-overview)
 * **Alerts**: <https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22thanos%22%2C%20tier%3D%22inf%22%7D>
@@ -58,7 +58,6 @@
 * [Rails SQL Apdex alerts](../patroni/rails-sql-apdex-slow.md)
 * [Handling Unhealthy Patroni Replica](../patroni/unhealthy_patroni_node_handling.md)
 * [Postgres Replicas](../postgres-dr-delayed/postgres-dr-replicas.md)
-* [Praefect replication is lagging or has stopped](../praefect/praefect-replication.md)
 * [../redis/redis-functional-partitioning.md](../redis/redis-functional-partitioning.md)
 * [A survival guide for SREs to working with Redis at GitLab](../redis/redis-survival-guide-for-sres.md)
 * [../redis/redis.md](../redis/redis.md)

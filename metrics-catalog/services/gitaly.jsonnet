@@ -4,11 +4,15 @@ local rateMetric = metricsCatalog.rateMetric;
 local gitalyHelper = import 'service-archetypes/helpers/gitaly.libsonnet';
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 
-local baseSelector = { type: 'gitaly', job: 'gitaly' };
+// `gitaly` is used in our old Prometheus scrapeconfig, while prometheus-operator
+// uses `scrapeConfig/monitoring/prometheus-agent-gitaly`. We can remove the `gitaly`
+// one once we've fully transitioned to Mimir.
+local baseSelector = { type: 'gitaly', job: { oneOf: ['gitaly', 'scrapeConfig/monitoring/prometheus-agent-gitaly'] } };
 
 metricsCatalog.serviceDefinition({
   type: 'gitaly',
   tier: 'stor',
+  tenants: [ 'gitlab-gprd', 'gitlab-gstg', 'gitlab-pre' ],
 
   // disk_performance_monitoring requires disk utilisation metrics are currently reporting correctly for
   // HDD volumes, see https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/10248
@@ -142,7 +146,7 @@ metricsCatalog.serviceDefinition({
           ignore_outliers: [
             {
               start: '2021-01-01',
-              end: '2024-01-25',
+              end: '2024-03-10',
             },
           ],
         },

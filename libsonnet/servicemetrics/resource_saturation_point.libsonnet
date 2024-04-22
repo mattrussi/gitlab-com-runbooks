@@ -6,6 +6,7 @@ local stableIds = import 'stable-ids/stable-ids.libsonnet';
 local durationParser = import 'utils/duration-parser.libsonnet';
 local strings = import 'utils/strings.libsonnet';
 local validator = import 'utils/validator.libsonnet';
+local filterLabelsFromLabelsHash = (import 'promql/labels.libsonnet').filterLabelsFromLabelsHash;
 
 // The severity labels that we allow on resources
 local severities = std.set(['s1', 's2', 's3', 's4']);
@@ -65,6 +66,7 @@ local definitionValidor = validator.new({
     soft: sloValidator,
     hard: sloValidator,
   },
+  useResourceLabelsAsMaxAggregationLabels: validator.boolean,
 });
 
 local simpleDefaults = {
@@ -73,6 +75,7 @@ local simpleDefaults = {
   dangerouslyThanosEvaluated: false,
   quantileAggregation: 'max',
   linear_prediction_saturation_alert: null,  // No linear interpolation by default
+  useResourceLabelsAsMaxAggregationLabels: false,
 };
 
 local nestedDefaults = {
@@ -103,7 +106,7 @@ local filterServicesForResource(definition, evaluation, thanosSelfMonitoring) =
           assert evaluation == 'thanos' : 'thanos-saturation needs to be globally evaluated in thanos, not %s' % [evaluation];
           type == 'thanos'
         else if evaluation == 'prometheus' then
-          !service.dangerouslyThanosEvaluated && !definition.dangerouslyThanosEvaluated
+          !(service.dangerouslyThanosEvaluated || service.type == 'mimir') && !definition.dangerouslyThanosEvaluated
         else if evaluation == 'thanos' then
           type != 'thanos' && (service.dangerouslyThanosEvaluated || definition.dangerouslyThanosEvaluated)
         else if evaluation == 'both' then
@@ -235,8 +238,8 @@ local resourceSaturationPoint = function(options)
       local environmentLabelsLocal = (if self.dangerouslyThanosEvaluated == true then labelTaxonomy.labelTaxonomy(labelTaxonomy.labels.environmentThanos) else []) + environmentLabels;
       local queryAggregationLabels = environmentLabelsLocal + self.resourceLabels;
       local allMaxAggregationLabels = environmentLabelsLocal + maxAggregationLabels;
-      local queryAggregationLabelsExcludingStaticLabels = std.filter(function(label) !std.objectHas(staticLabels, label), queryAggregationLabels);
-      local maxAggregationLabelsExcludingStaticLabels = std.filter(function(label) !std.objectHas(staticLabels, label), allMaxAggregationLabels);
+      local queryAggregationLabelsExcludingStaticLabels = filterLabelsFromLabelsHash(queryAggregationLabels, staticLabels);
+      local maxAggregationLabelsExcludingStaticLabels = filterLabelsFromLabelsHash(allMaxAggregationLabels, staticLabels);
       local queryFormatConfig = self.queryFormatConfig;
 
       local preaggregation = self.query % queryFormatConfig {
@@ -311,7 +314,12 @@ local resourceSaturationPoint = function(options)
         // For example, we might want to filter for labels in the source metrics that
         // are overridden by static labels in the recording.
         local selectorHash = typeSelector + extraSelector;
-        local query = definition.getQuery(selectorHash, definition.getBurnRatePeriod(), extraStaticLabels=staticLabels);
+        local query = definition.getQuery(
+          selectorHash,
+          definition.getBurnRatePeriod(),
+          maxAggregationLabels=if definition.useResourceLabelsAsMaxAggregationLabels then definition.resourceLabels else [],
+          extraStaticLabels=staticLabels
+        );
 
         {
           record: 'gitlab_component_saturation:ratio',

@@ -1,20 +1,18 @@
-# [Cloudflare](https://cloudflare.com)
+<!-- MARKER: do not edit this section directly. Edit services/service-catalog.yml then run scripts/generate-docs -->
 
-Cloudflare provides a web application firewall (WAF), domain name system
-(DNS), and content delivery network (CDN) for the following zones:
+**Table of Contents**
 
-- gitlab.com
-- staging.gitlab.com
-- gitlab.net
+[[_TOC_]]
 
----
+# Cloudflare Web Application Firewall Service
 
-- [Cloudflare Statuspage](https://www.cloudflarestatus.com/)
-- [Run a traceroute from the Cloudflare network](https://ops.gitlab.net/gitlab-com/gl-infra/cloudflare-traceroute)
+* [Service Overview](https://dashboards.gitlab.net/d/cloudflare-main)
+* **Alerts**: <https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22cloudflare%22%2C%20tier%3D%22lb%22%7D>
+* **Label**: gitlab-com/gl-infra/production~"Service::cloudflare"
 
-## [On-Call Reference](oncall.md)
+## Logging
 
-## [False Positive Triage Process](troubleshooting.md#false-positive-triage-process)
+* []()
 
 ## [Change Workflow](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/10993)
 
@@ -147,6 +145,33 @@ much more detail.
 - For the zones listed above, Cloudflare is the DNS resolver.
 - [DNS in Terraform](https://ops.gitlab.net/gitlab-com/gitlab-com-infrastructure/-/tree/master/environments/dns) is used to manage Cloudflare DNS entries.
 
+* [../certificates/cloudflare.md](../certificates/cloudflare.md)
+* [Cloudflare Audit Log Rule Processing](cloudflare-audit-log-rule-processing.md)
+* [Cloudflare](intro.md)
+* [Cloudflare Logs](logging.md)
+* [Cloudflare: Managing Traffic](managing-traffic.md)
+* [Cloudflare for the on-call](oncall.md)
+* [Service Locations](services-locations.md)
+* [CloudFlare Troubleshooting](troubleshooting.md)
+* [Accessing and Using CloudFlare](vendor.md)
+* [contributors.gitlab.com](../contributors/contributors-dashboard.md)
+* [CustomersDot main troubleshoot documentation](../customersdot/overview.md)
+* [Blocking individual IPs and Net Blocks on HA Proxy](../frontend/ban-netblocks-on-haproxy.md)
+* [Blocking and Disabling Things in HAProxy](../frontend/block-things-in-haproxy.md)
+* [HAProxy Management at GitLab](../frontend/haproxy.md)
+* [Web IDE Assets](../gitlab-static/web-ide-assets.md)
+* [Kubernetes-Agent Basic Troubleshooting](../kas/kubernetes-agent-basic-troubleshooting.md)
+* [Upgrading Monitoring Components](../monitoring/upgrades.md)
+* [Session: Application architecture](../onboarding/architecture.md)
+* [Packagecloud Infrastructure and Backups](../packagecloud/infrastructure.md)
+* [../pgbouncer/patroni-consul-postgres-pgbouncer-interactions.md](../pgbouncer/patroni-consul-postgres-pgbouncer-interactions.md)
+* [Life of a Git Request](../tutorials/overview_life_of_a_git_request.md)
+* [Life of a Web Request](../tutorials/overview_life_of_a_web_request.md)
+* [about.gitlab.com](../uncategorized/about-gitlab-com.md)
+* [Manage DNS entries](../uncategorized/manage-dns-entries.md)
+* [Static repository objects caching](../web/static-repository-objects-caching.md)
+* [Custom Websocket Alerts](../websockets/slow-broken-upgrades.md)
+<!-- END_MARKER -->
 <!-- ## Summary -->
 
 <!-- ## Architecture -->

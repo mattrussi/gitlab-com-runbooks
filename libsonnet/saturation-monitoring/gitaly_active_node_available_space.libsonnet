@@ -32,10 +32,10 @@ local selectors = import 'promql/selectors.libsonnet';
         sum by (%(aggregationLabels)s) (
           (
             node_filesystem_avail_bytes{%(selector)s, %(gitalyDiskSelector)s} -
-            (node_filesystem_size_bytes{%(selector)s, %(gitalyDiskSelector)s} * 0.25)
+            (node_filesystem_size_bytes{%(selector)s, %(gitalyDiskSelector)s} * 0.20)
           )
           and
-          (instance:node_filesystem_avail:ratio{%(selector)s, %(gitalyDiskSelector)s} > 0.25)
+          (instance:node_filesystem_avail:ratio{%(selector)s, %(gitalyDiskSelector)s} > 0.20)
         )
         /
         sum by (%(aggregationLabels)s)(
@@ -45,7 +45,7 @@ local selectors = import 'promql/selectors.libsonnet';
     |||,
     queryFormatConfig: {
       gitalyDiskSelector: selectors.serializeHash({
-        shard: { oneOf: ['default', 'praefect'] },
+        shard: { oneOf: ['default'] },
         mountpoint: '/var/opt/gitlab',
         fqdn: { re: 'gitaly-.*-stor-.*' },
       }),

@@ -8,6 +8,7 @@ local kubeLabelSelectors = metricsCatalog.kubeLabelSelectors;
 metricsCatalog.serviceDefinition({
   type: 'kube',
   tier: 'inf',
+  tenants: [ 'gitlab-gprd', 'gitlab-gstg', 'gitlab-ops', 'gitlab-pre' ],
   serviceIsStageless: true,  // kube does not have a cny stage
   monitoringThresholds: {
     apdexScore: 0.999,

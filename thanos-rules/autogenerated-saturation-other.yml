@@ -7,15 +7,15 @@ groups:
   rules:
   - record: gitlab_component_saturation:ratio
     labels:
-      component: gcp_quota_limit_s4
+      component: gcp_quota_limit_vertex_ai
     expr: |
       max by(env, environment, tier, type, stage, shard) (
         clamp_min(
           clamp_max(
             (
-              gcp_quota_usage{env!~"gprd|ops",type="ai-gateway"}
+              sum without (method) (stackdriver_aiplatform_googleapis_com_location_aiplatform_googleapis_com_quota_online_prediction_requests_per_base_model_usage{env!~"gprd|ops",type="ai-gateway",base_model!="code-gecko"})
             /
-              gcp_quota_limit{env!~"gprd|ops",type="ai-gateway"}
+              stackdriver_aiplatform_googleapis_com_location_aiplatform_googleapis_com_quota_online_prediction_requests_per_base_model_limit{env!~"gprd|ops",type="ai-gateway",base_model!="code-gecko"}
             ) > 0
             ,
             1)
@@ -24,15 +24,15 @@ groups:
       )
   - record: gitlab_component_saturation:ratio
     labels:
-      component: gcp_quota_limit_vertex_ai
+      component: gcp_quota_limit_vertex_ai_code_gecko
     expr: |
       max by(env, environment, tier, type, stage, shard) (
         clamp_min(
           clamp_max(
             (
-              sum without (method) (stackdriver_aiplatform_googleapis_com_location_aiplatform_googleapis_com_quota_online_prediction_requests_per_base_model_usage{env!~"gprd|ops",type="ai-gateway"})
+              sum without (method) (stackdriver_aiplatform_googleapis_com_location_aiplatform_googleapis_com_quota_online_prediction_requests_per_base_model_usage{env!~"gprd|ops",type="ai-gateway",base_model="code-gecko"})
             /
-              stackdriver_aiplatform_googleapis_com_location_aiplatform_googleapis_com_quota_online_prediction_requests_per_base_model_limit{env!~"gprd|ops",type="ai-gateway"}
+              stackdriver_aiplatform_googleapis_com_location_aiplatform_googleapis_com_quota_online_prediction_requests_per_base_model_limit{env!~"gprd|ops",type="ai-gateway",base_model="code-gecko"}
             ) > 0
             ,
             1)
@@ -47,7 +47,7 @@ groups:
         clamp_min(
           clamp_max(
             sum by (env, environment, tier, type, stage, shard, fqdn) (
-              go_goroutines{env!~"gprd|ops",type=~"gitaly|monitoring|praefect|registry|web-pages"}
+              go_goroutines{env!~"gprd|ops",type=~"gitaly|monitoring|registry|web-pages"}
             )
             /
             250000
@@ -64,11 +64,11 @@ groups:
         clamp_min(
           clamp_max(
             max by (env, environment, tier, type, stage, shard, fqdn) (
-              go_memstats_alloc_bytes{env!~"gprd|ops",type=~"gitaly|monitoring|praefect|registry|web-pages"}
+              go_memstats_alloc_bytes{env!~"gprd|ops",type=~"gitaly|monitoring|registry|web-pages"}
             )
             /
             sum by (env, environment, tier, type, stage, shard, fqdn) (
-              node_memory_MemTotal_bytes{env!~"gprd|ops",type=~"gitaly|monitoring|praefect|registry|web-pages"}
+              node_memory_MemTotal_bytes{env!~"gprd|ops",type=~"gitaly|monitoring|registry|web-pages"}
             )
             ,
             1)
@@ -120,7 +120,7 @@ groups:
         clamp_min(
           clamp_max(
             count by (cluster, env, environment, label_pool, tier, type, stage, shard) (
-              kube_node_labels:labeled{env!~"gprd|ops",type=~"kube|redis-cluster-cache|redis-cluster-feature-flag|redis-cluster-shared-state|redis-cluster-queues-meta|redis-cluster-repo-cache|redis-sidekiq|redis-tracechunks|redis-cluster-ratelimiting|redis-cluster-chat-cache|redis-sessions|redis-registry-cache|redis-repository-cache|redis-db-load-balancing|redis-pubsub|redis|vault"}
+              kube_node_labels:labeled{env!~"gprd|ops",type=~"kube|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis-tracechunks|redis|vault"}
             )
             / on(cluster, env, environment, label_pool) group_left() (
               label_replace(
@@ -130,7 +130,7 @@ groups:
               * on(cluster, env, environment) group_left()
               count by (cluster, env, environment) (
                 group by (cluster, env, environment, label_topology_kubernetes_io_zone) (
-                  kube_node_labels:labeled{env!~"gprd|ops",type=~"kube|redis-cluster-cache|redis-cluster-feature-flag|redis-cluster-shared-state|redis-cluster-queues-meta|redis-cluster-repo-cache|redis-sidekiq|redis-tracechunks|redis-cluster-ratelimiting|redis-cluster-chat-cache|redis-sessions|redis-registry-cache|redis-repository-cache|redis-db-load-balancing|redis-pubsub|redis|vault"}
+                  kube_node_labels:labeled{env!~"gprd|ops",type=~"kube|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis-tracechunks|redis|vault"}
                 )
               )
             )
@@ -143,7 +143,7 @@ groups:
     labels:
       component: max_concurrent_inferences
     expr: |
-      max by(env, environment, tier, type, stage, shard) (
+      max by(env, environment, tier, type, stage, shard, model_engine, model_name) (
         clamp_min(
           clamp_max(
             sum by (env, environment, tier, type, stage, shard, model_engine, model_name)(max_over_time(model_inferences_in_flight{env!~"gprd|ops",type="ai-gateway"}[10m]))
@@ -203,9 +203,9 @@ groups:
               1
               -
               (
-                rate(node_cpu_seconds_total{mode="idle", env!~"gprd|ops",type=~"patroni|patroni-registry|patroni-embedding|patroni-ci|postgres-archive|sentry"}[5m])
+                rate(node_cpu_seconds_total{mode="idle", env!~"gprd|ops",type=~"patroni-ci|patroni-embedding|patroni-registry|patroni|postgres-archive|sentry"}[5m])
                 and on(fqdn)
-                pg_replication_is_replica{env!~"gprd|ops",type=~"patroni|patroni-registry|patroni-embedding|patroni-ci|postgres-archive|sentry"} == 0
+                pg_replication_is_replica{env!~"gprd|ops",type=~"patroni-ci|patroni-embedding|patroni-registry|patroni|postgres-archive|sentry"} == 0
               )
             )
             ,
@@ -221,13 +221,13 @@ groups:
         clamp_min(
           clamp_max(
             sum by (env, environment, tier, type, stage, shard) (
-              rate(fluentd_pg_auto_vacuum_elapsed_seconds_total{env!~"gprd|ops",type=~"patroni|patroni-registry|patroni-embedding|patroni-ci"}[1d])
-              and on (fqdn) (pg_replication_is_replica{env!~"gprd|ops",type=~"patroni|patroni-registry|patroni-embedding|patroni-ci"} == 0)
+              rate(fluentd_pg_auto_vacuum_elapsed_seconds_total{env!~"gprd|ops",type=~"patroni-ci|patroni-embedding|patroni-registry|patroni"}[1d])
+              and on (fqdn) (pg_replication_is_replica{env!~"gprd|ops",type=~"patroni-ci|patroni-embedding|patroni-registry|patroni"} == 0)
             )
             /
             avg by (env, environment, tier, type, stage, shard) (
-              pg_settings_autovacuum_max_workers{env!~"gprd|ops",type=~"patroni|patroni-registry|patroni-embedding|patroni-ci"}
-              and on (instance, job) (pg_replication_is_replica{env!~"gprd|ops",type=~"patroni|patroni-registry|patroni-embedding|patroni-ci"} == 0)
+              pg_settings_autovacuum_max_workers{env!~"gprd|ops",type=~"patroni-ci|patroni-embedding|patroni-registry|patroni"}
+              and on (instance, job) (pg_replication_is_replica{env!~"gprd|ops",type=~"patroni-ci|patroni-embedding|patroni-registry|patroni"} == 0)
             )
             ,
             1)
@@ -243,12 +243,12 @@ groups:
           clamp_max(
             sum by (env, environment, tier, type, stage, shard) (
               sum by(env, environment, tier, type, stage, shard, fqdn) (
-                rate(namedprocess_namegroup_cpu_seconds_total{env!~"gprd|ops",type=~"patroni|patroni-registry|patroni-embedding|patroni-ci", groupname=~"pg.worker.walsender|pg.worker.walwriter|wal-g"}[5m])
-                and on (fqdn) (pg_replication_is_replica{env!~"gprd|ops",type=~"patroni|patroni-registry|patroni-embedding|patroni-ci"} == 0)
+                rate(namedprocess_namegroup_cpu_seconds_total{env!~"gprd|ops",type=~"patroni-ci|patroni-embedding|patroni-registry|patroni", groupname=~"pg.worker.walsender|pg.worker.walwriter|wal-g"}[5m])
+                and on (fqdn) (pg_replication_is_replica{env!~"gprd|ops",type=~"patroni-ci|patroni-embedding|patroni-registry|patroni"} == 0)
               )
               /
               count by (env, environment, tier, type, stage, shard, fqdn) (
-                node_cpu_seconds_total{env!~"gprd|ops",type=~"patroni|patroni-registry|patroni-embedding|patroni-ci", mode="idle"} and on(fqdn) (pg_replication_is_replica{env!~"gprd|ops",type=~"patroni|patroni-registry|patroni-embedding|patroni-ci"} == 0)
+                node_cpu_seconds_total{env!~"gprd|ops",type=~"patroni-ci|patroni-embedding|patroni-registry|patroni", mode="idle"} and on(fqdn) (pg_replication_is_replica{env!~"gprd|ops",type=~"patroni-ci|patroni-embedding|patroni-registry|patroni"} == 0)
               )
             )
             ,
@@ -265,7 +265,7 @@ groups:
       max by(env, environment, type, shard) (
         clamp_min(
           clamp_max(
-            histogram_quantile(0.9999, sum by(le, env, environment, type, shard, revision_name)
+            histogram_quantile(0.9999, sum by(le, env, environment, type, shard, revision_name, region, location)
               (
                 avg_over_time(
                   stackdriver_cloud_run_revision_run_googleapis_com_container_cpu_utilizations_bucket{job="runway-exporter",env!~"gprd|ops",type=~"ai-gateway|ext-pvs|glgo"}[30m]
@@ -286,7 +286,7 @@ groups:
       max by(env, environment, type, shard) (
         clamp_min(
           clamp_max(
-            sum by (env, environment, type, shard, revision_name) (
+            sum by (env, environment, type, shard, revision_name, region, location) (
               stackdriver_cloud_run_revision_run_googleapis_com_container_instance_count{job="runway-exporter",state="active",env!~"gprd|ops",type=~"ai-gateway|ext-pvs|glgo"}
             )
             /
@@ -305,7 +305,7 @@ groups:
       max by(env, environment, type, shard) (
         clamp_min(
           clamp_max(
-            histogram_quantile(0.9999, sum by(le, env, environment, type, shard, revision_name)
+            histogram_quantile(0.9999, sum by(le, env, environment, type, shard, revision_name, region, location)
               (
                 rate(
                   stackdriver_cloud_run_revision_run_googleapis_com_container_max_request_concurrencies_bucket{job="runway-exporter",state="active",env!~"gprd|ops",type=~"ai-gateway|ext-pvs|glgo"}[30m]
@@ -326,7 +326,7 @@ groups:
       max by(env, environment, type, shard) (
         clamp_min(
           clamp_max(
-            histogram_quantile(0.9999, sum by(le, env, environment, type, shard, revision_name)
+            histogram_quantile(0.9999, sum by(le, env, environment, type, shard, revision_name, region)
               (
                 avg_over_time(
                   stackdriver_cloud_run_revision_run_googleapis_com_container_memory_utilizations_bucket{job="runway-exporter",env!~"gprd|ops",type=~"ai-gateway|ext-pvs|glgo"}[30m]
@@ -356,65 +356,6 @@ groups:
   interval: 1m
   partial_response_strategy: warn
   rules:
-  - alert: component_saturation_slo_out_of_bounds:gcp_quota_limit_s4
-    for: 15m
-    annotations:
-      title: The GCP Quota utilization per environment resource of the {{ $labels.type
-        }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
-        is close to its capacity limit.
-      description: |
-        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
-
-        Details of the GCP Quota utilization per environment resource:
-
-        GCP Quota utilization / limit ratio
-
-        Saturation on a quota may cause problems with creating infrastructure resources on GCP.
-
-        To fix, we can request a quota increase for the specific resource to the GCP support team.
-      grafana_dashboard_id: alerts-gcp_quota_limit_s4
-      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-gcp_quota_limit_s4?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
-        }}
-      grafana_min_zoom_hours: "6"
-      grafana_panel_id: "2689014013"
-      grafana_variables: environment,type,stage
-      promql_query: |
-        max by(environment, tier, type, stage, shard, project, metric, quotaregion) (
-          clamp_min(
-            clamp_max(
-              (
-                gcp_quota_usage{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
-              /
-                gcp_quota_limit{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
-              ) > 0
-              ,
-              1)
-          ,
-          0)
-        )
-      promql_template_1: |
-        max by(environment, tier, type, stage, shard, project, metric, quotaregion) (
-          clamp_min(
-            clamp_max(
-              (
-                gcp_quota_usage{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
-              /
-                gcp_quota_limit{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
-              ) > 0
-              ,
-              1)
-          ,
-          0)
-        )
-      runbook: docs/{{ $labels.type }}/README.md
-    labels:
-      alert_type: cause
-      rules_domain: general
-      severity: s4
-    expr: |
-      gitlab_component_saturation:ratio{component="gcp_quota_limit_s4",env!~"gprd|ops",monitor="global"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="gcp_quota_limit_s4",env!~"gprd|ops",monitor="global"}
   - alert: component_saturation_slo_out_of_bounds:gcp_quota_limit_vertex_ai
     for: 15m
     annotations:
@@ -426,9 +367,9 @@ groups:
 
         Details of the GCP Quota utilization per environment resource:
 
-        GCP Quota utilization / limit ratio
+        GCP Quota utilization / limit ratio for all vertex AI models except code-gecko.
 
-        Saturation on a quota may cause problems with creating infrastructure resources on GCP.
+        Saturation on the quota may cause problems with the requests.
 
         To fix, we can request a quota increase for the specific resource to the GCP support team.
       grafana_dashboard_id: alerts-sat_gcp_quota_limit_vertex_ai
@@ -439,13 +380,13 @@ groups:
       grafana_panel_id: "1515902021"
       grafana_variables: environment,type,stage
       promql_query: |
-        max by(environment, tier, type, stage, shard, base_model) (
+        max by(environment, tier, type, stage, shard, base_model, region, location) (
           clamp_min(
             clamp_max(
               (
-                sum without (method) (stackdriver_aiplatform_googleapis_com_location_aiplatform_googleapis_com_quota_online_prediction_requests_per_base_model_usage{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"})
+                sum without (method) (stackdriver_aiplatform_googleapis_com_location_aiplatform_googleapis_com_quota_online_prediction_requests_per_base_model_usage{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}",base_model!="code-gecko"})
               /
-                stackdriver_aiplatform_googleapis_com_location_aiplatform_googleapis_com_quota_online_prediction_requests_per_base_model_limit{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
+                stackdriver_aiplatform_googleapis_com_location_aiplatform_googleapis_com_quota_online_prediction_requests_per_base_model_limit{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}",base_model!="code-gecko"}
               ) > 0
               ,
               1)
@@ -453,13 +394,13 @@ groups:
           0)
         )
       promql_template_1: |
-        max by(environment, tier, type, stage, shard, base_model) (
+        max by(environment, tier, type, stage, shard, base_model, region, location) (
           clamp_min(
             clamp_max(
               (
-                sum without (method) (stackdriver_aiplatform_googleapis_com_location_aiplatform_googleapis_com_quota_online_prediction_requests_per_base_model_usage{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"})
+                sum without (method) (stackdriver_aiplatform_googleapis_com_location_aiplatform_googleapis_com_quota_online_prediction_requests_per_base_model_usage{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}",base_model!="code-gecko"})
               /
-                stackdriver_aiplatform_googleapis_com_location_aiplatform_googleapis_com_quota_online_prediction_requests_per_base_model_limit{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
+                stackdriver_aiplatform_googleapis_com_location_aiplatform_googleapis_com_quota_online_prediction_requests_per_base_model_limit{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}",base_model!="code-gecko"}
               ) > 0
               ,
               1)
@@ -474,6 +415,65 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="gcp_quota_limit_vertex_ai",env!~"gprd|ops",monitor="global"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="gcp_quota_limit_vertex_ai",env!~"gprd|ops",monitor="global"}
+  - alert: component_saturation_slo_out_of_bounds:gcp_quota_limit_vertex_ai_code_gecko
+    for: 15m
+    annotations:
+      title: The GCP Quota utilization per environment resource of the {{ $labels.type
+        }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
+        is close to its capacity limit.
+      description: |
+        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
+
+        Details of the GCP Quota utilization per environment resource:
+
+        GCP Quota utilization / limit ratio for Vertex AI for code-gecko model (used by code completion part of Code Suggestions)
+
+        Saturation on the quota may cause problems with code completion requests.
+
+        To fix, we can request a quota increase for the specific resource to the GCP support team.
+      grafana_dashboard_id: alerts-sat_vertex_ai_code_gecko_quota
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_vertex_ai_code_gecko_quota?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3658506870"
+      grafana_variables: environment,type,stage
+      promql_query: |
+        max by(environment, tier, type, stage, shard, base_model, region, location) (
+          clamp_min(
+            clamp_max(
+              (
+                sum without (method) (stackdriver_aiplatform_googleapis_com_location_aiplatform_googleapis_com_quota_online_prediction_requests_per_base_model_usage{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}",base_model="code-gecko"})
+              /
+                stackdriver_aiplatform_googleapis_com_location_aiplatform_googleapis_com_quota_online_prediction_requests_per_base_model_limit{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}",base_model="code-gecko"}
+              ) > 0
+              ,
+              1)
+          ,
+          0)
+        )
+      promql_template_1: |
+        max by(environment, tier, type, stage, shard, base_model, region, location) (
+          clamp_min(
+            clamp_max(
+              (
+                sum without (method) (stackdriver_aiplatform_googleapis_com_location_aiplatform_googleapis_com_quota_online_prediction_requests_per_base_model_usage{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}",base_model="code-gecko"})
+              /
+                stackdriver_aiplatform_googleapis_com_location_aiplatform_googleapis_com_quota_online_prediction_requests_per_base_model_limit{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}",base_model="code-gecko"}
+              ) > 0
+              ,
+              1)
+          ,
+          0)
+        )
+      runbook: docs/{{ $labels.type }}/README.md
+    labels:
+      alert_type: cause
+      rules_domain: general
+      severity: s4
+    expr: |
+      gitlab_component_saturation:ratio{component="gcp_quota_limit_vertex_ai_code_gecko",env!~"gprd|ops",monitor="global"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="gcp_quota_limit_vertex_ai_code_gecko",env!~"gprd|ops",monitor="global"}
   - alert: component_saturation_slo_out_of_bounds:go_goroutines
     for: 5m
     annotations:
@@ -1196,10 +1196,10 @@ groups:
       grafana_panel_id: "1050857443"
       grafana_variables: environment,type,stage
       promql_query: |
-        max by(environment, type, shard, revision_name) (
+        max by(environment, type, shard, revision_name, region, location) (
           clamp_min(
             clamp_max(
-              histogram_quantile(0.9999, sum by(le, environment, type, shard, revision_name)
+              histogram_quantile(0.9999, sum by(le, environment, type, shard, revision_name, region, location)
                 (
                   avg_over_time(
                     stackdriver_cloud_run_revision_run_googleapis_com_container_cpu_utilizations_bucket{job="runway-exporter",environment="{{ $labels.environment }}",type="{{ $labels.type }}"}[30m]
@@ -1212,10 +1212,10 @@ groups:
           0)
         )
       promql_template_1: |
-        max by(environment, type, shard, revision_name) (
+        max by(environment, type, shard, revision_name, region, location) (
           clamp_min(
             clamp_max(
-              histogram_quantile(0.9999, sum by(le, environment, type, shard, revision_name)
+              histogram_quantile(0.9999, sum by(le, environment, type, shard, revision_name, region, location)
                 (
                   avg_over_time(
                     stackdriver_cloud_run_revision_run_googleapis_com_container_cpu_utilizations_bucket{job="runway-exporter",environment="{{ $labels.environment }}",type="{{ $labels.type }}"}[30m]
@@ -1257,10 +1257,10 @@ groups:
       grafana_panel_id: "1738137433"
       grafana_variables: environment,type,stage
       promql_query: |
-        max by(environment, type, shard, revision_name) (
+        max by(environment, type, shard, revision_name, region, location) (
           clamp_min(
             clamp_max(
-              sum by (environment, type, shard, revision_name) (
+              sum by (environment, type, shard, revision_name, region, location) (
                 stackdriver_cloud_run_revision_run_googleapis_com_container_instance_count{job="runway-exporter",state="active",environment="{{ $labels.environment }}",type="{{ $labels.type }}"}
               )
               /
@@ -1271,10 +1271,10 @@ groups:
           0)
         )
       promql_template_1: |
-        max by(environment, type, shard, revision_name) (
+        max by(environment, type, shard, revision_name, region, location) (
           clamp_min(
             clamp_max(
-              sum by (environment, type, shard, revision_name) (
+              sum by (environment, type, shard, revision_name, region, location) (
                 stackdriver_cloud_run_revision_run_googleapis_com_container_instance_count{job="runway-exporter",state="active",environment="{{ $labels.environment }}",type="{{ $labels.type }}"}
               )
               /
@@ -1314,10 +1314,10 @@ groups:
       grafana_panel_id: "4285373877"
       grafana_variables: environment,type,stage
       promql_query: |
-        max by(environment, type, shard, revision_name) (
+        max by(environment, type, shard, revision_name, region, location) (
           clamp_min(
             clamp_max(
-              histogram_quantile(0.9999, sum by(le, environment, type, shard, revision_name)
+              histogram_quantile(0.9999, sum by(le, environment, type, shard, revision_name, region, location)
                 (
                   rate(
                     stackdriver_cloud_run_revision_run_googleapis_com_container_max_request_concurrencies_bucket{job="runway-exporter",state="active",environment="{{ $labels.environment }}",type="{{ $labels.type }}"}[30m]
@@ -1330,10 +1330,10 @@ groups:
           0)
         )
       promql_template_1: |
-        max by(environment, type, shard, revision_name) (
+        max by(environment, type, shard, revision_name, region, location) (
           clamp_min(
             clamp_max(
-              histogram_quantile(0.9999, sum by(le, environment, type, shard, revision_name)
+              histogram_quantile(0.9999, sum by(le, environment, type, shard, revision_name, region, location)
                 (
                   rate(
                     stackdriver_cloud_run_revision_run_googleapis_com_container_max_request_concurrencies_bucket{job="runway-exporter",state="active",environment="{{ $labels.environment }}",type="{{ $labels.type }}"}[30m]
@@ -1375,10 +1375,10 @@ groups:
       grafana_panel_id: "377718254"
       grafana_variables: environment,type,stage
       promql_query: |
-        max by(environment, type, shard, revision_name) (
+        max by(environment, type, shard, revision_name, region) (
           clamp_min(
             clamp_max(
-              histogram_quantile(0.9999, sum by(le, environment, type, shard, revision_name)
+              histogram_quantile(0.9999, sum by(le, environment, type, shard, revision_name, region)
                 (
                   avg_over_time(
                     stackdriver_cloud_run_revision_run_googleapis_com_container_memory_utilizations_bucket{job="runway-exporter",environment="{{ $labels.environment }}",type="{{ $labels.type }}"}[30m]
@@ -1391,10 +1391,10 @@ groups:
           0)
         )
       promql_template_1: |
-        max by(environment, type, shard, revision_name) (
+        max by(environment, type, shard, revision_name, region) (
           clamp_min(
             clamp_max(
-              histogram_quantile(0.9999, sum by(le, environment, type, shard, revision_name)
+              histogram_quantile(0.9999, sum by(le, environment, type, shard, revision_name, region)
                 (
                   avg_over_time(
                     stackdriver_cloud_run_revision_run_googleapis_com_container_memory_utilizations_bucket{job="runway-exporter",environment="{{ $labels.environment }}",type="{{ $labels.type }}"}[30m]

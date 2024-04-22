@@ -159,6 +159,82 @@ groups:
       sum by (env,environment) (
         rate(redis_commands_processed_total{type="redis-sidekiq"}[5m] offset 30s) and on (instance) redis_instance_info{role="slave"}
       )
+  - record: gitlab_component_shard_ops:rate_5m
+    labels:
+      component: primary_server
+      stage: main
+      tier: db
+      type: redis-sidekiq
+    expr: |
+      sum by (environment,shard) (
+        rate(redis_commands_processed_total{type="redis-sidekiq"}[5m]) and on (instance) redis_instance_info{role="master"}
+      )
+  - record: gitlab_component_shard_apdex:success:rate_5m
+    labels:
+      component: rails_redis_client
+      stage: main
+      tier: db
+      type: redis-sidekiq
+    expr: |
+      (
+        sum by (environment,shard) (
+          rate(gitlab_redis_client_requests_duration_seconds_bucket{le="0.5",storage="queues",type!="ops-gitlab-net"}[5m])
+        )
+        +
+        sum by (environment,shard) (
+          rate(gitlab_redis_client_requests_duration_seconds_bucket{le="0.75",storage="queues",type!="ops-gitlab-net"}[5m])
+        )
+      )
+      /
+      2
+  - record: gitlab_component_shard_apdex:weight:score_5m
+    labels:
+      component: rails_redis_client
+      stage: main
+      tier: db
+      type: redis-sidekiq
+    expr: |
+      sum by (environment,shard) (
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{le="+Inf",storage="queues",type!="ops-gitlab-net"}[5m])
+      )
+  - record: gitlab_component_shard_ops:rate_5m
+    labels:
+      component: rails_redis_client
+      stage: main
+      tier: db
+      type: redis-sidekiq
+    expr: |
+      sum by (environment,shard) (
+        rate(gitlab_redis_client_requests_total{storage="queues",type!="ops-gitlab-net"}[5m])
+      )
+  - record: gitlab_component_shard_errors:rate_5m
+    labels:
+      component: rails_redis_client
+      stage: main
+      tier: db
+      type: redis-sidekiq
+    expr: |
+      (
+        sum by (environment,shard) (
+          rate(gitlab_redis_client_exceptions_total{storage="queues",type!="ops-gitlab-net"}[5m])
+        )
+      )
+      or
+      (
+        0 * group by(environment,shard) (
+          gitlab_component_shard_ops:rate_5m{component="rails_redis_client",stage="main",tier="db",type="redis-sidekiq"}
+        )
+      )
+  - record: gitlab_component_shard_ops:rate_5m
+    labels:
+      component: secondary_servers
+      stage: main
+      tier: db
+      type: redis-sidekiq
+    expr: |
+      sum by (environment,shard) (
+        rate(redis_commands_processed_total{type="redis-sidekiq"}[5m]) and on (instance) redis_instance_info{role="slave"}
+      )
 - name: 'Component-Level SLIs: redis-sidekiq - 30m burn-rate'
   interval: 2m
   rules:
@@ -238,6 +314,82 @@ groups:
       sum by (env,environment) (
         rate(redis_commands_processed_total{type="redis-sidekiq"}[30m] offset 30s) and on (instance) redis_instance_info{role="slave"}
       )
+  - record: gitlab_component_shard_ops:rate_30m
+    labels:
+      component: primary_server
+      stage: main
+      tier: db
+      type: redis-sidekiq
+    expr: |
+      sum by (environment,shard) (
+        rate(redis_commands_processed_total{type="redis-sidekiq"}[30m]) and on (instance) redis_instance_info{role="master"}
+      )
+  - record: gitlab_component_shard_apdex:success:rate_30m
+    labels:
+      component: rails_redis_client
+      stage: main
+      tier: db
+      type: redis-sidekiq
+    expr: |
+      (
+        sum by (environment,shard) (
+          rate(gitlab_redis_client_requests_duration_seconds_bucket{le="0.5",storage="queues",type!="ops-gitlab-net"}[30m])
+        )
+        +
+        sum by (environment,shard) (
+          rate(gitlab_redis_client_requests_duration_seconds_bucket{le="0.75",storage="queues",type!="ops-gitlab-net"}[30m])
+        )
+      )
+      /
+      2
+  - record: gitlab_component_shard_apdex:weight:score_30m
+    labels:
+      component: rails_redis_client
+      stage: main
+      tier: db
+      type: redis-sidekiq
+    expr: |
+      sum by (environment,shard) (
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{le="+Inf",storage="queues",type!="ops-gitlab-net"}[30m])
+      )
+  - record: gitlab_component_shard_ops:rate_30m
+    labels:
+      component: rails_redis_client
+      stage: main
+      tier: db
+      type: redis-sidekiq
+    expr: |
+      sum by (environment,shard) (
+        rate(gitlab_redis_client_requests_total{storage="queues",type!="ops-gitlab-net"}[30m])
+      )
+  - record: gitlab_component_shard_errors:rate_30m
+    labels:
+      component: rails_redis_client
+      stage: main
+      tier: db
+      type: redis-sidekiq
+    expr: |
+      (
+        sum by (environment,shard) (
+          rate(gitlab_redis_client_exceptions_total{storage="queues",type!="ops-gitlab-net"}[30m])
+        )
+      )
+      or
+      (
+        0 * group by(environment,shard) (
+          gitlab_component_shard_ops:rate_30m{component="rails_redis_client",stage="main",tier="db",type="redis-sidekiq"}
+        )
+      )
+  - record: gitlab_component_shard_ops:rate_30m
+    labels:
+      component: secondary_servers
+      stage: main
+      tier: db
+      type: redis-sidekiq
+    expr: |
+      sum by (environment,shard) (
+        rate(redis_commands_processed_total{type="redis-sidekiq"}[30m]) and on (instance) redis_instance_info{role="slave"}
+      )
 - name: 'Component-Level SLIs: redis-sidekiq - 1h burn-rate'
   interval: 1m
   rules:
@@ -316,6 +468,82 @@ groups:
     expr: |
       sum by (env,environment) (
         rate(redis_commands_processed_total{type="redis-sidekiq"}[1h] offset 30s) and on (instance) redis_instance_info{role="slave"}
+      )
+  - record: gitlab_component_shard_ops:rate_1h
+    labels:
+      component: primary_server
+      stage: main
+      tier: db
+      type: redis-sidekiq
+    expr: |
+      sum by (environment,shard) (
+        rate(redis_commands_processed_total{type="redis-sidekiq"}[1h]) and on (instance) redis_instance_info{role="master"}
+      )
+  - record: gitlab_component_shard_apdex:success:rate_1h
+    labels:
+      component: rails_redis_client
+      stage: main
+      tier: db
+      type: redis-sidekiq
+    expr: |
+      (
+        sum by (environment,shard) (
+          rate(gitlab_redis_client_requests_duration_seconds_bucket{le="0.5",storage="queues",type!="ops-gitlab-net"}[1h])
+        )
+        +
+        sum by (environment,shard) (
+          rate(gitlab_redis_client_requests_duration_seconds_bucket{le="0.75",storage="queues",type!="ops-gitlab-net"}[1h])
+        )
+      )
+      /
+      2
+  - record: gitlab_component_shard_apdex:weight:score_1h
+    labels:
+      component: rails_redis_client
+      stage: main
+      tier: db
+      type: redis-sidekiq
+    expr: |
+      sum by (environment,shard) (
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{le="+Inf",storage="queues",type!="ops-gitlab-net"}[1h])
+      )
+  - record: gitlab_component_shard_ops:rate_1h
+    labels:
+      component: rails_redis_client
+      stage: main
+      tier: db
+      type: redis-sidekiq
+    expr: |
+      sum by (environment,shard) (
+        rate(gitlab_redis_client_requests_total{storage="queues",type!="ops-gitlab-net"}[1h])
+      )
+  - record: gitlab_component_shard_errors:rate_1h
+    labels:
+      component: rails_redis_client
+      stage: main
+      tier: db
+      type: redis-sidekiq
+    expr: |
+      (
+        sum by (environment,shard) (
+          rate(gitlab_redis_client_exceptions_total{storage="queues",type!="ops-gitlab-net"}[1h])
+        )
+      )
+      or
+      (
+        0 * group by(environment,shard) (
+          gitlab_component_shard_ops:rate_1h{component="rails_redis_client",stage="main",tier="db",type="redis-sidekiq"}
+        )
+      )
+  - record: gitlab_component_shard_ops:rate_1h
+    labels:
+      component: secondary_servers
+      stage: main
+      tier: db
+      type: redis-sidekiq
+    expr: |
+      sum by (environment,shard) (
+        rate(redis_commands_processed_total{type="redis-sidekiq"}[1h]) and on (instance) redis_instance_info{role="slave"}
       )
 - name: 'Component-Level SLIs: redis-sidekiq - 6h burn-rate'
   interval: 2m

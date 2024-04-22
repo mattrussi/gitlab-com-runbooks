@@ -4,6 +4,44 @@ groups:
 - name: 'Global SLI Metrics: sidekiq - Burn-Rate 5m'
   interval: 1m
   rules:
+  - record: gitlab_component_ops:rate_5m
+    labels:
+      component: enqueued_jobs
+      monitor: global
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        sli_aggregations:sidekiq_enqueued_jobs_total:rate_5m{env="pre"} offset 30s
+      )
+  - record: gitlab_component_errors:ratio_5m
+    labels:
+      component: enqueued_jobs
+      monitor: global
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_5m{component="enqueued_jobs",env="pre",monitor="global",tier="sv",type="sidekiq"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_5m{component="enqueued_jobs",env="pre",monitor="global",tier="sv",type="sidekiq"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_5m
+    labels:
+      component: enqueued_jobs
+      monitor: global
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_5m{component="enqueued_jobs",env="pre",monitor="global",tier="sv",type="sidekiq"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_5m{component="enqueued_jobs",env="pre",monitor="global",tier="sv",type="sidekiq"} offset 30s
+      )
   - record: gitlab_component_apdex:success:rate_5m
     labels:
       component: llm_completion
@@ -51,6 +89,34 @@ groups:
         0 * group by(env,environment,stage) (
           gitlab_component_ops:rate_5m{component="llm_completion",env="pre",monitor="global",tier="sv",type="sidekiq"}
         )
+      )
+  - record: gitlab_component_errors:ratio_5m
+    labels:
+      component: llm_completion
+      monitor: global
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_5m{component="llm_completion",env="pre",monitor="global",tier="sv",type="sidekiq"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_5m{component="llm_completion",env="pre",monitor="global",tier="sv",type="sidekiq"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_5m
+    labels:
+      component: llm_completion
+      monitor: global
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_5m{component="llm_completion",env="pre",monitor="global",tier="sv",type="sidekiq"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_5m{component="llm_completion",env="pre",monitor="global",tier="sv",type="sidekiq"} offset 30s
       )
   - record: gitlab_component_apdex:success:rate_5m
     labels:
@@ -100,6 +166,34 @@ groups:
           gitlab_component_ops:rate_5m{component="sidekiq_execution",env="pre",monitor="global",tier="sv",type="sidekiq"}
         )
       )
+  - record: gitlab_component_errors:ratio_5m
+    labels:
+      component: sidekiq_execution
+      monitor: global
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_5m{component="sidekiq_execution",env="pre",monitor="global",tier="sv",type="sidekiq"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_5m{component="sidekiq_execution",env="pre",monitor="global",tier="sv",type="sidekiq"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_5m
+    labels:
+      component: sidekiq_execution
+      monitor: global
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_5m{component="sidekiq_execution",env="pre",monitor="global",tier="sv",type="sidekiq"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_5m{component="sidekiq_execution",env="pre",monitor="global",tier="sv",type="sidekiq"} offset 30s
+      )
   - record: gitlab_component_apdex:success:rate_5m
     labels:
       component: sidekiq_execution_with_external_dependency
@@ -148,6 +242,34 @@ groups:
           gitlab_component_ops:rate_5m{component="sidekiq_execution_with_external_dependency",env="pre",monitor="global",tier="sv",type="sidekiq"}
         )
       )
+  - record: gitlab_component_errors:ratio_5m
+    labels:
+      component: sidekiq_execution_with_external_dependency
+      monitor: global
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_5m{component="sidekiq_execution_with_external_dependency",env="pre",monitor="global",tier="sv",type="sidekiq"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_5m{component="sidekiq_execution_with_external_dependency",env="pre",monitor="global",tier="sv",type="sidekiq"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_5m
+    labels:
+      component: sidekiq_execution_with_external_dependency
+      monitor: global
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_5m{component="sidekiq_execution_with_external_dependency",env="pre",monitor="global",tier="sv",type="sidekiq"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_5m{component="sidekiq_execution_with_external_dependency",env="pre",monitor="global",tier="sv",type="sidekiq"} offset 30s
+      )
   - record: gitlab_component_apdex:success:rate_5m
     labels:
       component: sidekiq_queueing
@@ -177,6 +299,34 @@ groups:
     expr: |
       sum by (env,environment,stage) (
         sli_aggregations:gitlab_sli_sidekiq_queueing_apdex_total:rate_5m{env="pre",external_dependencies!="yes",type="sidekiq",worker!="ProjectExportWorker"} offset 30s
+      )
+  - record: gitlab_component_errors:ratio_5m
+    labels:
+      component: sidekiq_queueing
+      monitor: global
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_5m{component="sidekiq_queueing",env="pre",monitor="global",tier="sv",type="sidekiq"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_5m{component="sidekiq_queueing",env="pre",monitor="global",tier="sv",type="sidekiq"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_5m
+    labels:
+      component: sidekiq_queueing
+      monitor: global
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_5m{component="sidekiq_queueing",env="pre",monitor="global",tier="sv",type="sidekiq"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_5m{component="sidekiq_queueing",env="pre",monitor="global",tier="sv",type="sidekiq"} offset 30s
       )
   - record: gitlab_component_apdex:success:rate_5m
     labels:
@@ -208,9 +358,75 @@ groups:
       sum by (env,environment,stage) (
         sli_aggregations:gitlab_sli_sidekiq_queueing_apdex_total:rate_5m{env="pre",external_dependencies="yes",type="sidekiq",worker!="ProjectExportWorker"} offset 30s
       )
+  - record: gitlab_component_errors:ratio_5m
+    labels:
+      component: sidekiq_queueing_with_external_dependency
+      monitor: global
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_5m{component="sidekiq_queueing_with_external_dependency",env="pre",monitor="global",tier="sv",type="sidekiq"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_5m{component="sidekiq_queueing_with_external_dependency",env="pre",monitor="global",tier="sv",type="sidekiq"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_5m
+    labels:
+      component: sidekiq_queueing_with_external_dependency
+      monitor: global
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_5m{component="sidekiq_queueing_with_external_dependency",env="pre",monitor="global",tier="sv",type="sidekiq"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_5m{component="sidekiq_queueing_with_external_dependency",env="pre",monitor="global",tier="sv",type="sidekiq"} offset 30s
+      )
 - name: 'Global SLI Metrics: sidekiq - Burn-Rate 30m'
   interval: 2m
   rules:
+  - record: gitlab_component_ops:rate_30m
+    labels:
+      component: enqueued_jobs
+      monitor: global
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        sli_aggregations:sidekiq_enqueued_jobs_total:rate_30m{env="pre"} offset 30s
+      )
+  - record: gitlab_component_errors:ratio_30m
+    labels:
+      component: enqueued_jobs
+      monitor: global
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_30m{component="enqueued_jobs",env="pre",monitor="global",tier="sv",type="sidekiq"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_30m{component="enqueued_jobs",env="pre",monitor="global",tier="sv",type="sidekiq"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_30m
+    labels:
+      component: enqueued_jobs
+      monitor: global
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_30m{component="enqueued_jobs",env="pre",monitor="global",tier="sv",type="sidekiq"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_30m{component="enqueued_jobs",env="pre",monitor="global",tier="sv",type="sidekiq"} offset 30s
+      )
   - record: gitlab_component_apdex:success:rate_30m
     labels:
       component: llm_completion
@@ -258,6 +474,34 @@ groups:
         0 * group by(env,environment,stage) (
           gitlab_component_ops:rate_30m{component="llm_completion",env="pre",monitor="global",tier="sv",type="sidekiq"}
         )
+      )
+  - record: gitlab_component_errors:ratio_30m
+    labels:
+      component: llm_completion
+      monitor: global
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_30m{component="llm_completion",env="pre",monitor="global",tier="sv",type="sidekiq"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_30m{component="llm_completion",env="pre",monitor="global",tier="sv",type="sidekiq"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_30m
+    labels:
+      component: llm_completion
+      monitor: global
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_30m{component="llm_completion",env="pre",monitor="global",tier="sv",type="sidekiq"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_30m{component="llm_completion",env="pre",monitor="global",tier="sv",type="sidekiq"} offset 30s
       )
   - record: gitlab_component_apdex:success:rate_30m
     labels:
@@ -307,6 +551,34 @@ groups:
           gitlab_component_ops:rate_30m{component="sidekiq_execution",env="pre",monitor="global",tier="sv",type="sidekiq"}
         )
       )
+  - record: gitlab_component_errors:ratio_30m
+    labels:
+      component: sidekiq_execution
+      monitor: global
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_30m{component="sidekiq_execution",env="pre",monitor="global",tier="sv",type="sidekiq"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_30m{component="sidekiq_execution",env="pre",monitor="global",tier="sv",type="sidekiq"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_30m
+    labels:
+      component: sidekiq_execution
+      monitor: global
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_30m{component="sidekiq_execution",env="pre",monitor="global",tier="sv",type="sidekiq"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_30m{component="sidekiq_execution",env="pre",monitor="global",tier="sv",type="sidekiq"} offset 30s
+      )
   - record: gitlab_component_apdex:success:rate_30m
     labels:
       component: sidekiq_execution_with_external_dependency
@@ -355,6 +627,34 @@ groups:
           gitlab_component_ops:rate_30m{component="sidekiq_execution_with_external_dependency",env="pre",monitor="global",tier="sv",type="sidekiq"}
         )
       )
+  - record: gitlab_component_errors:ratio_30m
+    labels:
+      component: sidekiq_execution_with_external_dependency
+      monitor: global
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_30m{component="sidekiq_execution_with_external_dependency",env="pre",monitor="global",tier="sv",type="sidekiq"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_30m{component="sidekiq_execution_with_external_dependency",env="pre",monitor="global",tier="sv",type="sidekiq"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_30m
+    labels:
+      component: sidekiq_execution_with_external_dependency
+      monitor: global
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_30m{component="sidekiq_execution_with_external_dependency",env="pre",monitor="global",tier="sv",type="sidekiq"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_30m{component="sidekiq_execution_with_external_dependency",env="pre",monitor="global",tier="sv",type="sidekiq"} offset 30s
+      )
   - record: gitlab_component_apdex:success:rate_30m
     labels:
       component: sidekiq_queueing
@@ -384,6 +684,34 @@ groups:
     expr: |
       sum by (env,environment,stage) (
         sli_aggregations:gitlab_sli_sidekiq_queueing_apdex_total:rate_30m{env="pre",external_dependencies!="yes",type="sidekiq",worker!="ProjectExportWorker"} offset 30s
+      )
+  - record: gitlab_component_errors:ratio_30m
+    labels:
+      component: sidekiq_queueing
+      monitor: global
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_30m{component="sidekiq_queueing",env="pre",monitor="global",tier="sv",type="sidekiq"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_30m{component="sidekiq_queueing",env="pre",monitor="global",tier="sv",type="sidekiq"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_30m
+    labels:
+      component: sidekiq_queueing
+      monitor: global
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_30m{component="sidekiq_queueing",env="pre",monitor="global",tier="sv",type="sidekiq"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_30m{component="sidekiq_queueing",env="pre",monitor="global",tier="sv",type="sidekiq"} offset 30s
       )
   - record: gitlab_component_apdex:success:rate_30m
     labels:
@@ -415,9 +743,75 @@ groups:
       sum by (env,environment,stage) (
         sli_aggregations:gitlab_sli_sidekiq_queueing_apdex_total:rate_30m{env="pre",external_dependencies="yes",type="sidekiq",worker!="ProjectExportWorker"} offset 30s
       )
+  - record: gitlab_component_errors:ratio_30m
+    labels:
+      component: sidekiq_queueing_with_external_dependency
+      monitor: global
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_30m{component="sidekiq_queueing_with_external_dependency",env="pre",monitor="global",tier="sv",type="sidekiq"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_30m{component="sidekiq_queueing_with_external_dependency",env="pre",monitor="global",tier="sv",type="sidekiq"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_30m
+    labels:
+      component: sidekiq_queueing_with_external_dependency
+      monitor: global
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_30m{component="sidekiq_queueing_with_external_dependency",env="pre",monitor="global",tier="sv",type="sidekiq"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_30m{component="sidekiq_queueing_with_external_dependency",env="pre",monitor="global",tier="sv",type="sidekiq"} offset 30s
+      )
 - name: 'Global SLI Metrics: sidekiq - Burn-Rate 1h'
   interval: 1m
   rules:
+  - record: gitlab_component_ops:rate_1h
+    labels:
+      component: enqueued_jobs
+      monitor: global
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        sli_aggregations:sidekiq_enqueued_jobs_total:rate_1h{env="pre"} offset 30s
+      )
+  - record: gitlab_component_errors:ratio_1h
+    labels:
+      component: enqueued_jobs
+      monitor: global
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_1h{component="enqueued_jobs",env="pre",monitor="global",tier="sv",type="sidekiq"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_1h{component="enqueued_jobs",env="pre",monitor="global",tier="sv",type="sidekiq"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_1h
+    labels:
+      component: enqueued_jobs
+      monitor: global
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_1h{component="enqueued_jobs",env="pre",monitor="global",tier="sv",type="sidekiq"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_1h{component="enqueued_jobs",env="pre",monitor="global",tier="sv",type="sidekiq"} offset 30s
+      )
   - record: gitlab_component_apdex:success:rate_1h
     labels:
       component: llm_completion
@@ -465,6 +859,34 @@ groups:
         0 * group by(env,environment,stage) (
           gitlab_component_ops:rate_1h{component="llm_completion",env="pre",monitor="global",tier="sv",type="sidekiq"}
         )
+      )
+  - record: gitlab_component_errors:ratio_1h
+    labels:
+      component: llm_completion
+      monitor: global
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_1h{component="llm_completion",env="pre",monitor="global",tier="sv",type="sidekiq"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_1h{component="llm_completion",env="pre",monitor="global",tier="sv",type="sidekiq"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_1h
+    labels:
+      component: llm_completion
+      monitor: global
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_1h{component="llm_completion",env="pre",monitor="global",tier="sv",type="sidekiq"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_1h{component="llm_completion",env="pre",monitor="global",tier="sv",type="sidekiq"} offset 30s
       )
   - record: gitlab_component_apdex:success:rate_1h
     labels:
@@ -514,6 +936,34 @@ groups:
           gitlab_component_ops:rate_1h{component="sidekiq_execution",env="pre",monitor="global",tier="sv",type="sidekiq"}
         )
       )
+  - record: gitlab_component_errors:ratio_1h
+    labels:
+      component: sidekiq_execution
+      monitor: global
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_1h{component="sidekiq_execution",env="pre",monitor="global",tier="sv",type="sidekiq"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_1h{component="sidekiq_execution",env="pre",monitor="global",tier="sv",type="sidekiq"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_1h
+    labels:
+      component: sidekiq_execution
+      monitor: global
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_1h{component="sidekiq_execution",env="pre",monitor="global",tier="sv",type="sidekiq"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_1h{component="sidekiq_execution",env="pre",monitor="global",tier="sv",type="sidekiq"} offset 30s
+      )
   - record: gitlab_component_apdex:success:rate_1h
     labels:
       component: sidekiq_execution_with_external_dependency
@@ -562,6 +1012,34 @@ groups:
           gitlab_component_ops:rate_1h{component="sidekiq_execution_with_external_dependency",env="pre",monitor="global",tier="sv",type="sidekiq"}
         )
       )
+  - record: gitlab_component_errors:ratio_1h
+    labels:
+      component: sidekiq_execution_with_external_dependency
+      monitor: global
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_1h{component="sidekiq_execution_with_external_dependency",env="pre",monitor="global",tier="sv",type="sidekiq"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_1h{component="sidekiq_execution_with_external_dependency",env="pre",monitor="global",tier="sv",type="sidekiq"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_1h
+    labels:
+      component: sidekiq_execution_with_external_dependency
+      monitor: global
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_1h{component="sidekiq_execution_with_external_dependency",env="pre",monitor="global",tier="sv",type="sidekiq"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_1h{component="sidekiq_execution_with_external_dependency",env="pre",monitor="global",tier="sv",type="sidekiq"} offset 30s
+      )
   - record: gitlab_component_apdex:success:rate_1h
     labels:
       component: sidekiq_queueing
@@ -592,6 +1070,34 @@ groups:
       sum by (env,environment,stage) (
         sli_aggregations:gitlab_sli_sidekiq_queueing_apdex_total:rate_1h{env="pre",external_dependencies!="yes",type="sidekiq",worker!="ProjectExportWorker"} offset 30s
       )
+  - record: gitlab_component_errors:ratio_1h
+    labels:
+      component: sidekiq_queueing
+      monitor: global
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_1h{component="sidekiq_queueing",env="pre",monitor="global",tier="sv",type="sidekiq"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_1h{component="sidekiq_queueing",env="pre",monitor="global",tier="sv",type="sidekiq"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_1h
+    labels:
+      component: sidekiq_queueing
+      monitor: global
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_1h{component="sidekiq_queueing",env="pre",monitor="global",tier="sv",type="sidekiq"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_1h{component="sidekiq_queueing",env="pre",monitor="global",tier="sv",type="sidekiq"} offset 30s
+      )
   - record: gitlab_component_apdex:success:rate_1h
     labels:
       component: sidekiq_queueing_with_external_dependency
@@ -621,4 +1127,854 @@ groups:
     expr: |
       sum by (env,environment,stage) (
         sli_aggregations:gitlab_sli_sidekiq_queueing_apdex_total:rate_1h{env="pre",external_dependencies="yes",type="sidekiq",worker!="ProjectExportWorker"} offset 30s
+      )
+  - record: gitlab_component_errors:ratio_1h
+    labels:
+      component: sidekiq_queueing_with_external_dependency
+      monitor: global
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_1h{component="sidekiq_queueing_with_external_dependency",env="pre",monitor="global",tier="sv",type="sidekiq"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_1h{component="sidekiq_queueing_with_external_dependency",env="pre",monitor="global",tier="sv",type="sidekiq"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_1h
+    labels:
+      component: sidekiq_queueing_with_external_dependency
+      monitor: global
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_1h{component="sidekiq_queueing_with_external_dependency",env="pre",monitor="global",tier="sv",type="sidekiq"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_1h{component="sidekiq_queueing_with_external_dependency",env="pre",monitor="global",tier="sv",type="sidekiq"} offset 30s
+      )
+- name: 'Global SLI Metrics: sidekiq - Burn-Rate 6h'
+  interval: 2m
+  rules:
+  - record: gitlab_component_apdex:success:rate_6h
+    labels:
+      component: enqueued_jobs
+      monitor: global
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="enqueued_jobs",env="pre",monitor="global",tier="sv",type="sidekiq"}[6h] offset 30s)
+      )
+  - record: gitlab_component_apdex:weight:score_6h
+    labels:
+      component: enqueued_jobs
+      monitor: global
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="enqueued_jobs",env="pre",monitor="global",tier="sv",type="sidekiq"}[6h] offset 30s)
+      )
+  - record: gitlab_component_ops:rate_6h
+    labels:
+      component: enqueued_jobs
+      monitor: global
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_ops:rate_1h{component="enqueued_jobs",env="pre",monitor="global",tier="sv",type="sidekiq"}[6h] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_6h
+    labels:
+      component: enqueued_jobs
+      monitor: global
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_errors:rate_1h{component="enqueued_jobs",env="pre",monitor="global",tier="sv",type="sidekiq"}[6h] offset 30s)
+      )
+  - record: gitlab_component_errors:ratio_6h
+    labels:
+      component: enqueued_jobs
+      monitor: global
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_6h{component="enqueued_jobs",env="pre",monitor="global",tier="sv",type="sidekiq"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_6h{component="enqueued_jobs",env="pre",monitor="global",tier="sv",type="sidekiq"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_6h
+    labels:
+      component: enqueued_jobs
+      monitor: global
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_6h{component="enqueued_jobs",env="pre",monitor="global",tier="sv",type="sidekiq"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_6h{component="enqueued_jobs",env="pre",monitor="global",tier="sv",type="sidekiq"} offset 30s
+      )
+  - record: gitlab_component_apdex:success:rate_6h
+    labels:
+      component: llm_completion
+      monitor: global
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="llm_completion",env="pre",monitor="global",tier="sv",type="sidekiq"}[6h] offset 30s)
+      )
+  - record: gitlab_component_apdex:weight:score_6h
+    labels:
+      component: llm_completion
+      monitor: global
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="llm_completion",env="pre",monitor="global",tier="sv",type="sidekiq"}[6h] offset 30s)
+      )
+  - record: gitlab_component_ops:rate_6h
+    labels:
+      component: llm_completion
+      monitor: global
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_ops:rate_1h{component="llm_completion",env="pre",monitor="global",tier="sv",type="sidekiq"}[6h] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_6h
+    labels:
+      component: llm_completion
+      monitor: global
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_errors:rate_1h{component="llm_completion",env="pre",monitor="global",tier="sv",type="sidekiq"}[6h] offset 30s)
+      )
+  - record: gitlab_component_errors:ratio_6h
+    labels:
+      component: llm_completion
+      monitor: global
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_6h{component="llm_completion",env="pre",monitor="global",tier="sv",type="sidekiq"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_6h{component="llm_completion",env="pre",monitor="global",tier="sv",type="sidekiq"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_6h
+    labels:
+      component: llm_completion
+      monitor: global
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_6h{component="llm_completion",env="pre",monitor="global",tier="sv",type="sidekiq"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_6h{component="llm_completion",env="pre",monitor="global",tier="sv",type="sidekiq"} offset 30s
+      )
+  - record: gitlab_component_apdex:success:rate_6h
+    labels:
+      component: sidekiq_execution
+      monitor: global
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="sidekiq_execution",env="pre",monitor="global",tier="sv",type="sidekiq"}[6h] offset 30s)
+      )
+  - record: gitlab_component_apdex:weight:score_6h
+    labels:
+      component: sidekiq_execution
+      monitor: global
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="sidekiq_execution",env="pre",monitor="global",tier="sv",type="sidekiq"}[6h] offset 30s)
+      )
+  - record: gitlab_component_ops:rate_6h
+    labels:
+      component: sidekiq_execution
+      monitor: global
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_ops:rate_1h{component="sidekiq_execution",env="pre",monitor="global",tier="sv",type="sidekiq"}[6h] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_6h
+    labels:
+      component: sidekiq_execution
+      monitor: global
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_errors:rate_1h{component="sidekiq_execution",env="pre",monitor="global",tier="sv",type="sidekiq"}[6h] offset 30s)
+      )
+  - record: gitlab_component_errors:ratio_6h
+    labels:
+      component: sidekiq_execution
+      monitor: global
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_6h{component="sidekiq_execution",env="pre",monitor="global",tier="sv",type="sidekiq"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_6h{component="sidekiq_execution",env="pre",monitor="global",tier="sv",type="sidekiq"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_6h
+    labels:
+      component: sidekiq_execution
+      monitor: global
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_6h{component="sidekiq_execution",env="pre",monitor="global",tier="sv",type="sidekiq"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_6h{component="sidekiq_execution",env="pre",monitor="global",tier="sv",type="sidekiq"} offset 30s
+      )
+  - record: gitlab_component_apdex:success:rate_6h
+    labels:
+      component: sidekiq_execution_with_external_dependency
+      monitor: global
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="sidekiq_execution_with_external_dependency",env="pre",monitor="global",tier="sv",type="sidekiq"}[6h] offset 30s)
+      )
+  - record: gitlab_component_apdex:weight:score_6h
+    labels:
+      component: sidekiq_execution_with_external_dependency
+      monitor: global
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="sidekiq_execution_with_external_dependency",env="pre",monitor="global",tier="sv",type="sidekiq"}[6h] offset 30s)
+      )
+  - record: gitlab_component_ops:rate_6h
+    labels:
+      component: sidekiq_execution_with_external_dependency
+      monitor: global
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_ops:rate_1h{component="sidekiq_execution_with_external_dependency",env="pre",monitor="global",tier="sv",type="sidekiq"}[6h] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_6h
+    labels:
+      component: sidekiq_execution_with_external_dependency
+      monitor: global
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_errors:rate_1h{component="sidekiq_execution_with_external_dependency",env="pre",monitor="global",tier="sv",type="sidekiq"}[6h] offset 30s)
+      )
+  - record: gitlab_component_errors:ratio_6h
+    labels:
+      component: sidekiq_execution_with_external_dependency
+      monitor: global
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_6h{component="sidekiq_execution_with_external_dependency",env="pre",monitor="global",tier="sv",type="sidekiq"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_6h{component="sidekiq_execution_with_external_dependency",env="pre",monitor="global",tier="sv",type="sidekiq"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_6h
+    labels:
+      component: sidekiq_execution_with_external_dependency
+      monitor: global
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_6h{component="sidekiq_execution_with_external_dependency",env="pre",monitor="global",tier="sv",type="sidekiq"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_6h{component="sidekiq_execution_with_external_dependency",env="pre",monitor="global",tier="sv",type="sidekiq"} offset 30s
+      )
+  - record: gitlab_component_apdex:success:rate_6h
+    labels:
+      component: sidekiq_queueing
+      monitor: global
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="sidekiq_queueing",env="pre",monitor="global",tier="sv",type="sidekiq"}[6h] offset 30s)
+      )
+  - record: gitlab_component_apdex:weight:score_6h
+    labels:
+      component: sidekiq_queueing
+      monitor: global
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="sidekiq_queueing",env="pre",monitor="global",tier="sv",type="sidekiq"}[6h] offset 30s)
+      )
+  - record: gitlab_component_ops:rate_6h
+    labels:
+      component: sidekiq_queueing
+      monitor: global
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_ops:rate_1h{component="sidekiq_queueing",env="pre",monitor="global",tier="sv",type="sidekiq"}[6h] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_6h
+    labels:
+      component: sidekiq_queueing
+      monitor: global
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_errors:rate_1h{component="sidekiq_queueing",env="pre",monitor="global",tier="sv",type="sidekiq"}[6h] offset 30s)
+      )
+  - record: gitlab_component_errors:ratio_6h
+    labels:
+      component: sidekiq_queueing
+      monitor: global
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_6h{component="sidekiq_queueing",env="pre",monitor="global",tier="sv",type="sidekiq"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_6h{component="sidekiq_queueing",env="pre",monitor="global",tier="sv",type="sidekiq"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_6h
+    labels:
+      component: sidekiq_queueing
+      monitor: global
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_6h{component="sidekiq_queueing",env="pre",monitor="global",tier="sv",type="sidekiq"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_6h{component="sidekiq_queueing",env="pre",monitor="global",tier="sv",type="sidekiq"} offset 30s
+      )
+  - record: gitlab_component_apdex:success:rate_6h
+    labels:
+      component: sidekiq_queueing_with_external_dependency
+      monitor: global
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="sidekiq_queueing_with_external_dependency",env="pre",monitor="global",tier="sv",type="sidekiq"}[6h] offset 30s)
+      )
+  - record: gitlab_component_apdex:weight:score_6h
+    labels:
+      component: sidekiq_queueing_with_external_dependency
+      monitor: global
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="sidekiq_queueing_with_external_dependency",env="pre",monitor="global",tier="sv",type="sidekiq"}[6h] offset 30s)
+      )
+  - record: gitlab_component_ops:rate_6h
+    labels:
+      component: sidekiq_queueing_with_external_dependency
+      monitor: global
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_ops:rate_1h{component="sidekiq_queueing_with_external_dependency",env="pre",monitor="global",tier="sv",type="sidekiq"}[6h] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_6h
+    labels:
+      component: sidekiq_queueing_with_external_dependency
+      monitor: global
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_errors:rate_1h{component="sidekiq_queueing_with_external_dependency",env="pre",monitor="global",tier="sv",type="sidekiq"}[6h] offset 30s)
+      )
+  - record: gitlab_component_errors:ratio_6h
+    labels:
+      component: sidekiq_queueing_with_external_dependency
+      monitor: global
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_6h{component="sidekiq_queueing_with_external_dependency",env="pre",monitor="global",tier="sv",type="sidekiq"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_6h{component="sidekiq_queueing_with_external_dependency",env="pre",monitor="global",tier="sv",type="sidekiq"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_6h
+    labels:
+      component: sidekiq_queueing_with_external_dependency
+      monitor: global
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_6h{component="sidekiq_queueing_with_external_dependency",env="pre",monitor="global",tier="sv",type="sidekiq"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_6h{component="sidekiq_queueing_with_external_dependency",env="pre",monitor="global",tier="sv",type="sidekiq"} offset 30s
+      )
+- name: 'Global SLI Metrics: sidekiq - Burn-Rate 3d'
+  interval: 2m
+  rules:
+  - record: gitlab_component_apdex:success:rate_3d
+    labels:
+      component: enqueued_jobs
+      monitor: global
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="enqueued_jobs",env="pre",monitor="global",tier="sv",type="sidekiq"}[3d] offset 30s)
+      )
+  - record: gitlab_component_apdex:weight:score_3d
+    labels:
+      component: enqueued_jobs
+      monitor: global
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="enqueued_jobs",env="pre",monitor="global",tier="sv",type="sidekiq"}[3d] offset 30s)
+      )
+  - record: gitlab_component_ops:rate_3d
+    labels:
+      component: enqueued_jobs
+      monitor: global
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_ops:rate_1h{component="enqueued_jobs",env="pre",monitor="global",tier="sv",type="sidekiq"}[3d] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_3d
+    labels:
+      component: enqueued_jobs
+      monitor: global
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_errors:rate_1h{component="enqueued_jobs",env="pre",monitor="global",tier="sv",type="sidekiq"}[3d] offset 30s)
+      )
+  - record: gitlab_component_errors:ratio_3d
+    labels:
+      component: enqueued_jobs
+      monitor: global
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_3d{component="enqueued_jobs",env="pre",monitor="global",tier="sv",type="sidekiq"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_3d{component="enqueued_jobs",env="pre",monitor="global",tier="sv",type="sidekiq"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_3d
+    labels:
+      component: enqueued_jobs
+      monitor: global
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_3d{component="enqueued_jobs",env="pre",monitor="global",tier="sv",type="sidekiq"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_3d{component="enqueued_jobs",env="pre",monitor="global",tier="sv",type="sidekiq"} offset 30s
+      )
+  - record: gitlab_component_apdex:success:rate_3d
+    labels:
+      component: llm_completion
+      monitor: global
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="llm_completion",env="pre",monitor="global",tier="sv",type="sidekiq"}[3d] offset 30s)
+      )
+  - record: gitlab_component_apdex:weight:score_3d
+    labels:
+      component: llm_completion
+      monitor: global
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="llm_completion",env="pre",monitor="global",tier="sv",type="sidekiq"}[3d] offset 30s)
+      )
+  - record: gitlab_component_ops:rate_3d
+    labels:
+      component: llm_completion
+      monitor: global
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_ops:rate_1h{component="llm_completion",env="pre",monitor="global",tier="sv",type="sidekiq"}[3d] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_3d
+    labels:
+      component: llm_completion
+      monitor: global
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_errors:rate_1h{component="llm_completion",env="pre",monitor="global",tier="sv",type="sidekiq"}[3d] offset 30s)
+      )
+  - record: gitlab_component_errors:ratio_3d
+    labels:
+      component: llm_completion
+      monitor: global
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_3d{component="llm_completion",env="pre",monitor="global",tier="sv",type="sidekiq"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_3d{component="llm_completion",env="pre",monitor="global",tier="sv",type="sidekiq"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_3d
+    labels:
+      component: llm_completion
+      monitor: global
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_3d{component="llm_completion",env="pre",monitor="global",tier="sv",type="sidekiq"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_3d{component="llm_completion",env="pre",monitor="global",tier="sv",type="sidekiq"} offset 30s
+      )
+  - record: gitlab_component_apdex:success:rate_3d
+    labels:
+      component: sidekiq_execution
+      monitor: global
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="sidekiq_execution",env="pre",monitor="global",tier="sv",type="sidekiq"}[3d] offset 30s)
+      )
+  - record: gitlab_component_apdex:weight:score_3d
+    labels:
+      component: sidekiq_execution
+      monitor: global
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="sidekiq_execution",env="pre",monitor="global",tier="sv",type="sidekiq"}[3d] offset 30s)
+      )
+  - record: gitlab_component_ops:rate_3d
+    labels:
+      component: sidekiq_execution
+      monitor: global
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_ops:rate_1h{component="sidekiq_execution",env="pre",monitor="global",tier="sv",type="sidekiq"}[3d] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_3d
+    labels:
+      component: sidekiq_execution
+      monitor: global
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_errors:rate_1h{component="sidekiq_execution",env="pre",monitor="global",tier="sv",type="sidekiq"}[3d] offset 30s)
+      )
+  - record: gitlab_component_errors:ratio_3d
+    labels:
+      component: sidekiq_execution
+      monitor: global
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_3d{component="sidekiq_execution",env="pre",monitor="global",tier="sv",type="sidekiq"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_3d{component="sidekiq_execution",env="pre",monitor="global",tier="sv",type="sidekiq"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_3d
+    labels:
+      component: sidekiq_execution
+      monitor: global
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_3d{component="sidekiq_execution",env="pre",monitor="global",tier="sv",type="sidekiq"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_3d{component="sidekiq_execution",env="pre",monitor="global",tier="sv",type="sidekiq"} offset 30s
+      )
+  - record: gitlab_component_apdex:success:rate_3d
+    labels:
+      component: sidekiq_execution_with_external_dependency
+      monitor: global
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="sidekiq_execution_with_external_dependency",env="pre",monitor="global",tier="sv",type="sidekiq"}[3d] offset 30s)
+      )
+  - record: gitlab_component_apdex:weight:score_3d
+    labels:
+      component: sidekiq_execution_with_external_dependency
+      monitor: global
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="sidekiq_execution_with_external_dependency",env="pre",monitor="global",tier="sv",type="sidekiq"}[3d] offset 30s)
+      )
+  - record: gitlab_component_ops:rate_3d
+    labels:
+      component: sidekiq_execution_with_external_dependency
+      monitor: global
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_ops:rate_1h{component="sidekiq_execution_with_external_dependency",env="pre",monitor="global",tier="sv",type="sidekiq"}[3d] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_3d
+    labels:
+      component: sidekiq_execution_with_external_dependency
+      monitor: global
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_errors:rate_1h{component="sidekiq_execution_with_external_dependency",env="pre",monitor="global",tier="sv",type="sidekiq"}[3d] offset 30s)
+      )
+  - record: gitlab_component_errors:ratio_3d
+    labels:
+      component: sidekiq_execution_with_external_dependency
+      monitor: global
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_3d{component="sidekiq_execution_with_external_dependency",env="pre",monitor="global",tier="sv",type="sidekiq"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_3d{component="sidekiq_execution_with_external_dependency",env="pre",monitor="global",tier="sv",type="sidekiq"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_3d
+    labels:
+      component: sidekiq_execution_with_external_dependency
+      monitor: global
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_3d{component="sidekiq_execution_with_external_dependency",env="pre",monitor="global",tier="sv",type="sidekiq"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_3d{component="sidekiq_execution_with_external_dependency",env="pre",monitor="global",tier="sv",type="sidekiq"} offset 30s
+      )
+  - record: gitlab_component_apdex:success:rate_3d
+    labels:
+      component: sidekiq_queueing
+      monitor: global
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="sidekiq_queueing",env="pre",monitor="global",tier="sv",type="sidekiq"}[3d] offset 30s)
+      )
+  - record: gitlab_component_apdex:weight:score_3d
+    labels:
+      component: sidekiq_queueing
+      monitor: global
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="sidekiq_queueing",env="pre",monitor="global",tier="sv",type="sidekiq"}[3d] offset 30s)
+      )
+  - record: gitlab_component_ops:rate_3d
+    labels:
+      component: sidekiq_queueing
+      monitor: global
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_ops:rate_1h{component="sidekiq_queueing",env="pre",monitor="global",tier="sv",type="sidekiq"}[3d] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_3d
+    labels:
+      component: sidekiq_queueing
+      monitor: global
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_errors:rate_1h{component="sidekiq_queueing",env="pre",monitor="global",tier="sv",type="sidekiq"}[3d] offset 30s)
+      )
+  - record: gitlab_component_errors:ratio_3d
+    labels:
+      component: sidekiq_queueing
+      monitor: global
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_3d{component="sidekiq_queueing",env="pre",monitor="global",tier="sv",type="sidekiq"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_3d{component="sidekiq_queueing",env="pre",monitor="global",tier="sv",type="sidekiq"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_3d
+    labels:
+      component: sidekiq_queueing
+      monitor: global
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_3d{component="sidekiq_queueing",env="pre",monitor="global",tier="sv",type="sidekiq"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_3d{component="sidekiq_queueing",env="pre",monitor="global",tier="sv",type="sidekiq"} offset 30s
+      )
+  - record: gitlab_component_apdex:success:rate_3d
+    labels:
+      component: sidekiq_queueing_with_external_dependency
+      monitor: global
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="sidekiq_queueing_with_external_dependency",env="pre",monitor="global",tier="sv",type="sidekiq"}[3d] offset 30s)
+      )
+  - record: gitlab_component_apdex:weight:score_3d
+    labels:
+      component: sidekiq_queueing_with_external_dependency
+      monitor: global
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="sidekiq_queueing_with_external_dependency",env="pre",monitor="global",tier="sv",type="sidekiq"}[3d] offset 30s)
+      )
+  - record: gitlab_component_ops:rate_3d
+    labels:
+      component: sidekiq_queueing_with_external_dependency
+      monitor: global
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_ops:rate_1h{component="sidekiq_queueing_with_external_dependency",env="pre",monitor="global",tier="sv",type="sidekiq"}[3d] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_3d
+    labels:
+      component: sidekiq_queueing_with_external_dependency
+      monitor: global
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_errors:rate_1h{component="sidekiq_queueing_with_external_dependency",env="pre",monitor="global",tier="sv",type="sidekiq"}[3d] offset 30s)
+      )
+  - record: gitlab_component_errors:ratio_3d
+    labels:
+      component: sidekiq_queueing_with_external_dependency
+      monitor: global
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_3d{component="sidekiq_queueing_with_external_dependency",env="pre",monitor="global",tier="sv",type="sidekiq"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_3d{component="sidekiq_queueing_with_external_dependency",env="pre",monitor="global",tier="sv",type="sidekiq"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_3d
+    labels:
+      component: sidekiq_queueing_with_external_dependency
+      monitor: global
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_3d{component="sidekiq_queueing_with_external_dependency",env="pre",monitor="global",tier="sv",type="sidekiq"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_3d{component="sidekiq_queueing_with_external_dependency",env="pre",monitor="global",tier="sv",type="sidekiq"} offset 30s
       )

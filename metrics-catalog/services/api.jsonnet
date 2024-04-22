@@ -13,6 +13,7 @@ local railsSelector = { job: 'gitlab-rails', type: 'api' };
 metricsCatalog.serviceDefinition({
   type: 'api',
   tier: 'sv',
+  tenants: ['gitlab-gprd', 'gitlab-gstg', 'gitlab-pre'],
 
   tags: ['golang', 'rails', 'puma'],
 
@@ -51,14 +52,12 @@ metricsCatalog.serviceDefinition({
     'redis-cluster-repo-cache': true,
     'redis-tracechunks': true,
     'redis-sidekiq': true,
-    'redis-repository-cache': true,
     'redis-sessions': true,
     'redis-pubsub': true,
     redis: true,
     patroni: true,
     pgbouncer: true,
-    praefect: true,
-    pvs: true,
+    'ext-pvs': true,
     search: true,
     consul: true,
     'google-cloud-storage': true,

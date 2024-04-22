@@ -338,10 +338,6 @@ teams:
   product_stage_group: project_management
   ignored_components:
   - graphql_query
-- name: purchase
-  product_stage_group: purchase
-  ignored_components:
-  - graphql_query
 - name: tenant_scale
   product_stage_group: tenant_scale
   ignored_components:
@@ -357,10 +353,8 @@ teams:
 - name: pipeline_security
   product_stage_group: pipeline_security
   slack_channel: g_pipeline-security
-  slack_alerts_channel: g_pipeline-security
-  slack_error_budget_channel:
-  - ci-section
-  - g_pipeline-security
+  slack_alerts_channel: g_pipeline-security_alerts
+  slack_error_budget_channel: ci-section
   send_error_budget_weekly_to_slack: true
   ignored_components:
   - graphql_query
@@ -422,8 +416,8 @@ teams:
   - ops
 
 - name: reliability_foundations
-  url: https://about.gitlab.com/handbook/engineering/infrastructure/team/reliability/foundations.html
-  manager: amoter
+  url: https://handbook.gitlab.com/handbook/engineering/infrastructure/team/foundations/
+  manager: sabrams
   label: team::Foundations
   slack_alerts_channel: g_infra_foundations_alerts
   send_slo_alerts_to_team_slack_channel: true
@@ -448,6 +442,9 @@ teams:
 - name: infrasec_team
   url: https://handbook.gitlab.com/handbook/security/product-security/infrastructure-security/
   slack_alerts_channel: infrasec-notifications
+
+- name: security_operations
+  url: https://handbook.gitlab.com/handbook/security/security-operations
 
 # Marketing
 

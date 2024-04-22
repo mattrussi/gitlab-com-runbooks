@@ -113,6 +113,13 @@ local indexDefaults = {
     requestsNotSupported: true,
   },
 
+  mimir: indexDefaults {
+    timestamp: 'json.time',
+    indexPattern: '69713556-cfad-4fcd-a7f6-7e1ac0f90313',
+    defaultColumns: ['json.message', 'json.err'],
+    kibanaEndpoint: 'https://nonprod-log.gitlab.net/app/kibana',
+  },
+
   mlops: indexDefaults {
     timestamp: '@timestamp',
     indexPattern: '8cd9c4c0-f0a7-11ed-a017-0d32180b1390',
@@ -211,15 +218,6 @@ local indexDefaults = {
       // recorded as "pubsubbeat" instead.
       type: function(_type) 'pubsubbeat',
     },
-  },
-
-  pvs: indexDefaults {
-    timestamp: 'json.timestamp',
-    indexPattern: '4858f3a0-a312-11eb-966b-2361593353f9',
-    defaultColumns: ['json.jsonPayload.mode', 'json.jsonPayload.validation_status', 'json.jsonPayload.project_id', 'json.jsonPayload.correation_id', 'json.jsonPayload.msg'],
-    defaultSeriesSplitField: 'json.jsonPayload.validation_status.keyword',
-    failureFilter: statusCode('json.jsonPayload.status_code'),
-    defaultLatencyField: 'json.jsonPayload.duration_ms',
   },
 
   rails: indexDefaults {

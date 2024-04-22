@@ -119,8 +119,8 @@ groups:
       grafana_panel_id: "862567575"
       grafana_variables: environment,stage
       promql_template_1: |
-        sum by (env,environment,tier,stage,region) (
-          rate(consul_client_rpc_failed{environment="{{ $labels.environment }}",job="consul-gl-consul-ui",region="{{ $labels.region }}",stage="{{ $labels.stage }}"}[5m])
+        sum by (env,environment,tier,stage,region,location) (
+          rate(consul_client_rpc_failed{environment="{{ $labels.environment }}",job="consul-gl-consul-ui",location="{{ $labels.location }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}"}[5m])
         )
       runbook: docs/consul/README.md
     labels:
@@ -147,9 +147,9 @@ groups:
           > (14.4 * 0.001000)
         )
       )
-      and on(env,environment,tier,type,stage,region,component)
+      and on(env,environment,tier,type,stage,region,location,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="consul",env="ops",monitor="global",type="consul"}) >= 1
+        sum by(env,environment,tier,type,stage,region,location,component) (gitlab_regional_sli_ops:rate_1h{component="consul",env="ops",monitor="global",type="consul"}) >= 1
       )
   - alert: ConsulServiceConsulErrorSLOViolationRegional
     for: 2m
@@ -169,8 +169,8 @@ groups:
       grafana_panel_id: "862567575"
       grafana_variables: environment,stage
       promql_template_1: |
-        sum by (env,environment,tier,stage,region) (
-          rate(consul_client_rpc_failed{environment="{{ $labels.environment }}",job="consul-gl-consul-ui",region="{{ $labels.region }}",stage="{{ $labels.stage }}"}[5m])
+        sum by (env,environment,tier,stage,region,location) (
+          rate(consul_client_rpc_failed{environment="{{ $labels.environment }}",job="consul-gl-consul-ui",location="{{ $labels.location }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}"}[5m])
         )
       runbook: docs/consul/README.md
     labels:
@@ -197,9 +197,9 @@ groups:
           > (6 * 0.001000)
         )
       )
-      and on(env,environment,tier,type,stage,region,component)
+      and on(env,environment,tier,type,stage,region,location,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="consul",env="ops",monitor="global",type="consul"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,region,location,component) (gitlab_regional_sli_ops:rate_6h{component="consul",env="ops",monitor="global",type="consul"}) >= 0.16667
       )
   - alert: ConsulServiceConsulTrafficCessation
     for: 5m
@@ -291,8 +291,8 @@ groups:
       grafana_panel_id: "4242308695"
       grafana_variables: environment,stage
       promql_template_1: |
-        sum by (env,environment,tier,stage,region) (
-          rate(consul_client_rpc{environment="{{ $labels.environment }}",job="consul-gl-consul-ui",region="{{ $labels.region }}",stage="{{ $labels.stage }}"}[5m])
+        sum by (env,environment,tier,stage,region,location) (
+          rate(consul_client_rpc{environment="{{ $labels.environment }}",job="consul-gl-consul-ui",location="{{ $labels.location }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}"}[5m])
         )
       runbook: docs/consul/README.md
     labels:
@@ -330,8 +330,8 @@ groups:
       grafana_panel_id: "4242308695"
       grafana_variables: environment,stage
       promql_template_1: |
-        sum by (env,environment,tier,stage,region) (
-          rate(consul_client_rpc{environment="{{ $labels.environment }}",job="consul-gl-consul-ui",region="{{ $labels.region }}",stage="{{ $labels.stage }}"}[5m])
+        sum by (env,environment,tier,stage,region,location) (
+          rate(consul_client_rpc{environment="{{ $labels.environment }}",job="consul-gl-consul-ui",location="{{ $labels.location }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}"}[5m])
         )
       runbook: docs/consul/README.md
     labels:

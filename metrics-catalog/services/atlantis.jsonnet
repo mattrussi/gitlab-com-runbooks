@@ -4,6 +4,7 @@ local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 metricsCatalog.serviceDefinition({
   type: 'atlantis',
   tier: 'inf',
+  tenants: [ 'gitlab-ops' ],
 
   tags: ['golang'],
 

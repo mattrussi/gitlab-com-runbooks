@@ -4,7 +4,7 @@
 
 [[_TOC_]]
 
-# Omnibus Service
+# GitLab Omnibus Package Service
 
 * [Service Overview](https://dashboards.gitlab.net/d/gitlab-omnibus-versions)
 * **Alerts**: <https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22omnibus%22%2C%20tier%3D%22inf%22%7D>
@@ -34,9 +34,6 @@
 * [GitLab application-side reindexing](../patroni/postgres-automatic-reindexing.md)
 * [Rotating Rails' PostgreSQL password](../patroni/rotating-rails-postgresql-password.md)
 * [Postgres Replicas](../postgres-dr-delayed/postgres-dr-replicas.md)
-* [Bypass Praefect](../praefect/praefect-bypass.md)
-* [Add and remove file storages to praefect](../praefect/praefect-file-storages.md)
-* [Praefect Database User Password Rotation](../praefect/praefect-password-rotation.md)
 * [Blocking individual IPs using Redis and Rack Attack](../redis/ban-an-IP-with-redis.md)
 * [Provisioning Redis Cluster](../redis/provisioning-redis-cluster.md)
 * [../redis/redis-functional-partitioning.md](../redis/redis-functional-partitioning.md)

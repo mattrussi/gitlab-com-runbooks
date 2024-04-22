@@ -91,6 +91,15 @@ local serializeHashItem(label, value) =
     else
       a + b,
 
+  mergeAll(selectors)::
+    std.foldl(
+      function(memo, selector)
+        self.merge(memo, selector),
+      selectors,
+      {}
+    ),
+
+
   // serializeHash converts a selector hash object into a prometheus selector query
   // The selector has is a hash with the form { "label_name": <value> }
   // Simple values represent the prometheus equality operator.

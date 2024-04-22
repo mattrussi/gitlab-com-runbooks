@@ -127,8 +127,8 @@ groups:
       promql_template_1: |
         histogram_quantile(
           0.950000,
-          sum by (env,environment,tier,stage,region,le) (
-            rate(registry_database_query_duration_seconds_bucket{environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="registry"}[5m])
+          sum by (env,environment,tier,stage,region,location,le) (
+            rate(registry_database_query_duration_seconds_bucket{environment="{{ $labels.environment }}",location="{{ $labels.location }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="registry"}[5m])
           )
         )
       runbook: docs/registry/README.md
@@ -156,9 +156,9 @@ groups:
           < (1 - 14.4 * 0.003000)
         )
       )
-      and on(env,environment,tier,type,stage,region,component)
+      and on(env,environment,tier,type,stage,region,location,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="database",env!~"gprd|ops",monitor="global",type="registry"}) >= 1
+        sum by(env,environment,tier,type,stage,region,location,component) (gitlab_regional_sli_ops:rate_1h{component="database",env!~"gprd|ops",monitor="global",type="registry"}) >= 1
       )
   - alert: RegistryServiceDatabaseApdexSLOViolationRegional
     for: 2m
@@ -180,8 +180,8 @@ groups:
       promql_template_1: |
         histogram_quantile(
           0.950000,
-          sum by (env,environment,tier,stage,region,le) (
-            rate(registry_database_query_duration_seconds_bucket{environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="registry"}[5m])
+          sum by (env,environment,tier,stage,region,location,le) (
+            rate(registry_database_query_duration_seconds_bucket{environment="{{ $labels.environment }}",location="{{ $labels.location }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="registry"}[5m])
           )
         )
       runbook: docs/registry/README.md
@@ -209,9 +209,9 @@ groups:
           < (1 - 6 * 0.003000)
         )
       )
-      and on(env,environment,tier,type,stage,region,component)
+      and on(env,environment,tier,type,stage,region,location,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="database",env!~"gprd|ops",monitor="global",type="registry"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,region,location,component) (gitlab_regional_sli_ops:rate_6h{component="database",env!~"gprd|ops",monitor="global",type="registry"}) >= 0.16667
       )
   - alert: RegistryServiceDatabaseTrafficCessation
     for: 5m
@@ -303,8 +303,8 @@ groups:
       grafana_panel_id: "2984148133"
       grafana_variables: environment,stage
       promql_template_1: |
-        sum by (env,environment,tier,stage,region) (
-          rate(registry_database_queries_total{environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="registry"}[5m])
+        sum by (env,environment,tier,stage,region,location) (
+          rate(registry_database_queries_total{environment="{{ $labels.environment }}",location="{{ $labels.location }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="registry"}[5m])
         )
       runbook: docs/registry/README.md
     labels:
@@ -342,8 +342,8 @@ groups:
       grafana_panel_id: "2984148133"
       grafana_variables: environment,stage
       promql_template_1: |
-        sum by (env,environment,tier,stage,region) (
-          rate(registry_database_queries_total{environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="registry"}[5m])
+        sum by (env,environment,tier,stage,region,location) (
+          rate(registry_database_queries_total{environment="{{ $labels.environment }}",location="{{ $labels.location }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="registry"}[5m])
         )
       runbook: docs/registry/README.md
     labels:
@@ -481,8 +481,8 @@ groups:
       promql_template_1: |
         histogram_quantile(
           0.950000,
-          sum by (env,environment,tier,stage,region,le) (
-            rate(registry_gc_run_duration_seconds_bucket{environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="registry"}[5m])
+          sum by (env,environment,tier,stage,region,location,le) (
+            rate(registry_gc_run_duration_seconds_bucket{environment="{{ $labels.environment }}",location="{{ $labels.location }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="registry"}[5m])
           )
         )
       runbook: docs/registry/README.md
@@ -509,9 +509,9 @@ groups:
           < (1 - 14.4 * 0.003000)
         )
       )
-      and on(env,environment,tier,type,stage,region,component)
+      and on(env,environment,tier,type,stage,region,location,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="garbagecollector",env!~"gprd|ops",monitor="global",type="registry"}) >= 1
+        sum by(env,environment,tier,type,stage,region,location,component) (gitlab_regional_sli_ops:rate_1h{component="garbagecollector",env!~"gprd|ops",monitor="global",type="registry"}) >= 1
       )
   - alert: RegistryServiceGarbagecollectorApdexSLOViolationRegional
     for: 2m
@@ -533,8 +533,8 @@ groups:
       promql_template_1: |
         histogram_quantile(
           0.950000,
-          sum by (env,environment,tier,stage,region,le) (
-            rate(registry_gc_run_duration_seconds_bucket{environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="registry"}[5m])
+          sum by (env,environment,tier,stage,region,location,le) (
+            rate(registry_gc_run_duration_seconds_bucket{environment="{{ $labels.environment }}",location="{{ $labels.location }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="registry"}[5m])
           )
         )
       runbook: docs/registry/README.md
@@ -561,9 +561,9 @@ groups:
           < (1 - 6 * 0.003000)
         )
       )
-      and on(env,environment,tier,type,stage,region,component)
+      and on(env,environment,tier,type,stage,region,location,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="garbagecollector",env!~"gprd|ops",monitor="global",type="registry"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,region,location,component) (gitlab_regional_sli_ops:rate_6h{component="garbagecollector",env!~"gprd|ops",monitor="global",type="registry"}) >= 0.16667
       )
   - alert: RegistryServiceGarbagecollectorErrorSLOViolation
     for: 2m
@@ -677,8 +677,8 @@ groups:
       grafana_panel_id: "175676838"
       grafana_variables: environment,stage
       promql_template_1: |
-        sum by (env,environment,tier,stage,region) (
-          rate(registry_gc_runs_total{environment="{{ $labels.environment }}",error="true",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="registry"}[5m])
+        sum by (env,environment,tier,stage,region,location) (
+          rate(registry_gc_runs_total{environment="{{ $labels.environment }}",error="true",location="{{ $labels.location }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="registry"}[5m])
         )
       runbook: docs/registry/README.md
     labels:
@@ -704,9 +704,9 @@ groups:
           > (14.4 * 0.000100)
         )
       )
-      and on(env,environment,tier,type,stage,region,component)
+      and on(env,environment,tier,type,stage,region,location,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="garbagecollector",env!~"gprd|ops",monitor="global",type="registry"}) >= 1
+        sum by(env,environment,tier,type,stage,region,location,component) (gitlab_regional_sli_ops:rate_1h{component="garbagecollector",env!~"gprd|ops",monitor="global",type="registry"}) >= 1
       )
   - alert: RegistryServiceGarbagecollectorErrorSLOViolationRegional
     for: 2m
@@ -726,8 +726,8 @@ groups:
       grafana_panel_id: "175676838"
       grafana_variables: environment,stage
       promql_template_1: |
-        sum by (env,environment,tier,stage,region) (
-          rate(registry_gc_runs_total{environment="{{ $labels.environment }}",error="true",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="registry"}[5m])
+        sum by (env,environment,tier,stage,region,location) (
+          rate(registry_gc_runs_total{environment="{{ $labels.environment }}",error="true",location="{{ $labels.location }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="registry"}[5m])
         )
       runbook: docs/registry/README.md
     labels:
@@ -753,9 +753,9 @@ groups:
           > (6 * 0.000100)
         )
       )
-      and on(env,environment,tier,type,stage,region,component)
+      and on(env,environment,tier,type,stage,region,location,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="garbagecollector",env!~"gprd|ops",monitor="global",type="registry"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,region,location,component) (gitlab_regional_sli_ops:rate_6h{component="garbagecollector",env!~"gprd|ops",monitor="global",type="registry"}) >= 0.16667
       )
   - alert: RegistryServiceGarbagecollectorTrafficCessation
     for: 5m
@@ -845,8 +845,8 @@ groups:
       grafana_panel_id: "3281014584"
       grafana_variables: environment,stage
       promql_template_1: |
-        sum by (env,environment,tier,stage,region) (
-          rate(registry_gc_runs_total{environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="registry"}[5m])
+        sum by (env,environment,tier,stage,region,location) (
+          rate(registry_gc_runs_total{environment="{{ $labels.environment }}",location="{{ $labels.location }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="registry"}[5m])
         )
       runbook: docs/registry/README.md
     labels:
@@ -883,8 +883,8 @@ groups:
       grafana_panel_id: "3281014584"
       grafana_variables: environment,stage
       promql_template_1: |
-        sum by (env,environment,tier,stage,region) (
-          rate(registry_gc_runs_total{environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="registry"}[5m])
+        sum by (env,environment,tier,stage,region,location) (
+          rate(registry_gc_runs_total{environment="{{ $labels.environment }}",location="{{ $labels.location }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="registry"}[5m])
         )
       runbook: docs/registry/README.md
     labels:
@@ -1031,9 +1031,9 @@ groups:
           > (14.4 * 0.000100)
         )
       )
-      and on(env,environment,tier,type,stage,region,component)
+      and on(env,environment,tier,type,stage,region,location,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="loadbalancer",env!~"gprd|ops",monitor="global",type="registry"}) >= 1
+        sum by(env,environment,tier,type,stage,region,location,component) (gitlab_regional_sli_ops:rate_1h{component="loadbalancer",env!~"gprd|ops",monitor="global",type="registry"}) >= 1
       )
   - alert: RegistryServiceLoadbalancerErrorSLOViolationRegional
     for: 2m
@@ -1077,9 +1077,9 @@ groups:
           > (6 * 0.000100)
         )
       )
-      and on(env,environment,tier,type,stage,region,component)
+      and on(env,environment,tier,type,stage,region,location,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="loadbalancer",env!~"gprd|ops",monitor="global",type="registry"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,region,location,component) (gitlab_regional_sli_ops:rate_6h{component="loadbalancer",env!~"gprd|ops",monitor="global",type="registry"}) >= 0.16667
       )
   - alert: RegistryServiceLoadbalancerTrafficCessation
     for: 5m
@@ -1335,8 +1335,8 @@ groups:
       promql_template_1: |
         histogram_quantile(
           0.950000,
-          sum by (env,environment,tier,stage,region,le) (
-            rate(registry_redis_single_commands_bucket{environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="registry"}[5m])
+          sum by (env,environment,tier,stage,region,location,le) (
+            rate(registry_redis_single_commands_bucket{environment="{{ $labels.environment }}",location="{{ $labels.location }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="registry"}[5m])
           )
         )
       runbook: docs/registry/README.md
@@ -1364,9 +1364,9 @@ groups:
           < (1 - 14.4 * 0.003000)
         )
       )
-      and on(env,environment,tier,type,stage,region,component)
+      and on(env,environment,tier,type,stage,region,location,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="redis",env!~"gprd|ops",monitor="global",type="registry"}) >= 1
+        sum by(env,environment,tier,type,stage,region,location,component) (gitlab_regional_sli_ops:rate_1h{component="redis",env!~"gprd|ops",monitor="global",type="registry"}) >= 1
       )
   - alert: RegistryServiceRedisApdexSLOViolationRegional
     for: 2m
@@ -1388,8 +1388,8 @@ groups:
       promql_template_1: |
         histogram_quantile(
           0.950000,
-          sum by (env,environment,tier,stage,region,le) (
-            rate(registry_redis_single_commands_bucket{environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="registry"}[5m])
+          sum by (env,environment,tier,stage,region,location,le) (
+            rate(registry_redis_single_commands_bucket{environment="{{ $labels.environment }}",location="{{ $labels.location }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="registry"}[5m])
           )
         )
       runbook: docs/registry/README.md
@@ -1417,9 +1417,9 @@ groups:
           < (1 - 6 * 0.003000)
         )
       )
-      and on(env,environment,tier,type,stage,region,component)
+      and on(env,environment,tier,type,stage,region,location,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="redis",env!~"gprd|ops",monitor="global",type="registry"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,region,location,component) (gitlab_regional_sli_ops:rate_6h{component="redis",env!~"gprd|ops",monitor="global",type="registry"}) >= 0.16667
       )
   - alert: RegistryServiceRedisErrorSLOViolation
     for: 2m
@@ -1535,8 +1535,8 @@ groups:
       grafana_panel_id: "4246863748"
       grafana_variables: environment,stage
       promql_template_1: |
-        sum by (env,environment,tier,stage,region) (
-          rate(registry_redis_single_errors_count{environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="registry"}[5m])
+        sum by (env,environment,tier,stage,region,location) (
+          rate(registry_redis_single_errors_count{environment="{{ $labels.environment }}",location="{{ $labels.location }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="registry"}[5m])
         )
       runbook: docs/registry/README.md
     labels:
@@ -1563,9 +1563,9 @@ groups:
           > (14.4 * 0.000100)
         )
       )
-      and on(env,environment,tier,type,stage,region,component)
+      and on(env,environment,tier,type,stage,region,location,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="redis",env!~"gprd|ops",monitor="global",type="registry"}) >= 1
+        sum by(env,environment,tier,type,stage,region,location,component) (gitlab_regional_sli_ops:rate_1h{component="redis",env!~"gprd|ops",monitor="global",type="registry"}) >= 1
       )
   - alert: RegistryServiceRedisErrorSLOViolationRegional
     for: 2m
@@ -1585,8 +1585,8 @@ groups:
       grafana_panel_id: "4246863748"
       grafana_variables: environment,stage
       promql_template_1: |
-        sum by (env,environment,tier,stage,region) (
-          rate(registry_redis_single_errors_count{environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="registry"}[5m])
+        sum by (env,environment,tier,stage,region,location) (
+          rate(registry_redis_single_errors_count{environment="{{ $labels.environment }}",location="{{ $labels.location }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="registry"}[5m])
         )
       runbook: docs/registry/README.md
     labels:
@@ -1613,9 +1613,9 @@ groups:
           > (6 * 0.000100)
         )
       )
-      and on(env,environment,tier,type,stage,region,component)
+      and on(env,environment,tier,type,stage,region,location,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="redis",env!~"gprd|ops",monitor="global",type="registry"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,region,location,component) (gitlab_regional_sli_ops:rate_6h{component="redis",env!~"gprd|ops",monitor="global",type="registry"}) >= 0.16667
       )
   - alert: RegistryServiceRedisTrafficCessation
     for: 5m
@@ -1707,8 +1707,8 @@ groups:
       grafana_panel_id: "3565255509"
       grafana_variables: environment,stage
       promql_template_1: |
-        sum by (env,environment,tier,stage,region) (
-          rate(registry_redis_single_commands_count{environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="registry"}[5m])
+        sum by (env,environment,tier,stage,region,location) (
+          rate(registry_redis_single_commands_count{environment="{{ $labels.environment }}",location="{{ $labels.location }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="registry"}[5m])
         )
       runbook: docs/registry/README.md
     labels:
@@ -1746,8 +1746,8 @@ groups:
       grafana_panel_id: "3565255509"
       grafana_variables: environment,stage
       promql_template_1: |
-        sum by (env,environment,tier,stage,region) (
-          rate(registry_redis_single_commands_count{environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="registry"}[5m])
+        sum by (env,environment,tier,stage,region,location) (
+          rate(registry_redis_single_commands_count{environment="{{ $labels.environment }}",location="{{ $labels.location }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="registry"}[5m])
         )
       runbook: docs/registry/README.md
     labels:
@@ -1873,8 +1873,8 @@ groups:
       grafana_panel_id: "3572060850"
       grafana_variables: environment,stage
       promql_template_1: |
-        sum by (env,environment,tier,stage,region) (
-          rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{environment="{{ $labels.environment }}",project_id="gitlab-production",region="{{ $labels.region }}",response_code_class="500",stage="{{ $labels.stage }}",url_map_name="gprd-registry-cdn"}[5m])
+        sum by (env,environment,tier,stage,region,location) (
+          rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{environment="{{ $labels.environment }}",location="{{ $labels.location }}",project_id="gitlab-production",region="{{ $labels.region }}",response_code_class="500",stage="{{ $labels.stage }}",url_map_name="gprd-registry-cdn"}[5m])
         )
       runbook: docs/registry/README.md
     labels:
@@ -1901,9 +1901,9 @@ groups:
           > (14.4 * 0.000100)
         )
       )
-      and on(env,environment,tier,type,stage,region,component)
+      and on(env,environment,tier,type,stage,region,location,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="registry_cdn",env!~"gprd|ops",monitor="global",type="registry"}) >= 1
+        sum by(env,environment,tier,type,stage,region,location,component) (gitlab_regional_sli_ops:rate_1h{component="registry_cdn",env!~"gprd|ops",monitor="global",type="registry"}) >= 1
       )
   - alert: RegistryServiceRegistryCdnErrorSLOViolationRegional
     for: 2m
@@ -1921,8 +1921,8 @@ groups:
       grafana_panel_id: "3572060850"
       grafana_variables: environment,stage
       promql_template_1: |
-        sum by (env,environment,tier,stage,region) (
-          rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{environment="{{ $labels.environment }}",project_id="gitlab-production",region="{{ $labels.region }}",response_code_class="500",stage="{{ $labels.stage }}",url_map_name="gprd-registry-cdn"}[5m])
+        sum by (env,environment,tier,stage,region,location) (
+          rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{environment="{{ $labels.environment }}",location="{{ $labels.location }}",project_id="gitlab-production",region="{{ $labels.region }}",response_code_class="500",stage="{{ $labels.stage }}",url_map_name="gprd-registry-cdn"}[5m])
         )
       runbook: docs/registry/README.md
     labels:
@@ -1949,9 +1949,9 @@ groups:
           > (6 * 0.000100)
         )
       )
-      and on(env,environment,tier,type,stage,region,component)
+      and on(env,environment,tier,type,stage,region,location,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="registry_cdn",env!~"gprd|ops",monitor="global",type="registry"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,region,location,component) (gitlab_regional_sli_ops:rate_6h{component="registry_cdn",env!~"gprd|ops",monitor="global",type="registry"}) >= 0.16667
       )
   - alert: RegistryServiceRegistryCdnTrafficCessation
     for: 5m
@@ -2037,8 +2037,8 @@ groups:
       grafana_panel_id: "2908753047"
       grafana_variables: environment,stage
       promql_template_1: |
-        sum by (env,environment,tier,stage,region) (
-          rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{environment="{{ $labels.environment }}",project_id="gitlab-production",region="{{ $labels.region }}",stage="{{ $labels.stage }}",url_map_name="gprd-registry-cdn"}[5m])
+        sum by (env,environment,tier,stage,region,location) (
+          rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{environment="{{ $labels.environment }}",location="{{ $labels.location }}",project_id="gitlab-production",region="{{ $labels.region }}",stage="{{ $labels.stage }}",url_map_name="gprd-registry-cdn"}[5m])
         )
       runbook: docs/registry/README.md
     labels:
@@ -2074,8 +2074,8 @@ groups:
       grafana_panel_id: "2908753047"
       grafana_variables: environment,stage
       promql_template_1: |
-        sum by (env,environment,tier,stage,region) (
-          rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{environment="{{ $labels.environment }}",project_id="gitlab-production",region="{{ $labels.region }}",stage="{{ $labels.stage }}",url_map_name="gprd-registry-cdn"}[5m])
+        sum by (env,environment,tier,stage,region,location) (
+          rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{environment="{{ $labels.environment }}",location="{{ $labels.location }}",project_id="gitlab-production",region="{{ $labels.region }}",stage="{{ $labels.stage }}",url_map_name="gprd-registry-cdn"}[5m])
         )
       runbook: docs/registry/README.md
     labels:
@@ -2215,8 +2215,8 @@ groups:
       promql_template_1: |
         histogram_quantile(
           0.950000,
-          sum by (env,environment,tier,stage,region,le) (
-            rate(registry_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",region="{{ $labels.region }}",route!~"/v2/{name}/blobs/uploads/{uuid}|/v2/{name}/manifests/{reference}",stage="{{ $labels.stage }}",type="registry"}[5m])
+          sum by (env,environment,tier,stage,region,location,le) (
+            rate(registry_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",location="{{ $labels.location }}",region="{{ $labels.region }}",route!~"/v2/{name}/blobs/uploads/{uuid}|/v2/{name}/manifests/{reference}",stage="{{ $labels.stage }}",type="registry"}[5m])
           )
         )
       runbook: docs/registry/README.md
@@ -2244,9 +2244,9 @@ groups:
           < (1 - 14.4 * 0.003000)
         )
       )
-      and on(env,environment,tier,type,stage,region,component)
+      and on(env,environment,tier,type,stage,region,location,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="registry_server",env!~"gprd|ops",monitor="global",type="registry"}) >= 1
+        sum by(env,environment,tier,type,stage,region,location,component) (gitlab_regional_sli_ops:rate_1h{component="registry_server",env!~"gprd|ops",monitor="global",type="registry"}) >= 1
       )
   - alert: RegistryServiceRegistryServerApdexSLOViolationRegional
     for: 2m
@@ -2268,8 +2268,8 @@ groups:
       promql_template_1: |
         histogram_quantile(
           0.950000,
-          sum by (env,environment,tier,stage,region,le) (
-            rate(registry_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",region="{{ $labels.region }}",route!~"/v2/{name}/blobs/uploads/{uuid}|/v2/{name}/manifests/{reference}",stage="{{ $labels.stage }}",type="registry"}[5m])
+          sum by (env,environment,tier,stage,region,location,le) (
+            rate(registry_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",location="{{ $labels.location }}",region="{{ $labels.region }}",route!~"/v2/{name}/blobs/uploads/{uuid}|/v2/{name}/manifests/{reference}",stage="{{ $labels.stage }}",type="registry"}[5m])
           )
         )
       runbook: docs/registry/README.md
@@ -2297,9 +2297,9 @@ groups:
           < (1 - 6 * 0.003000)
         )
       )
-      and on(env,environment,tier,type,stage,region,component)
+      and on(env,environment,tier,type,stage,region,location,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="registry_server",env!~"gprd|ops",monitor="global",type="registry"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,region,location,component) (gitlab_regional_sli_ops:rate_6h{component="registry_server",env!~"gprd|ops",monitor="global",type="registry"}) >= 0.16667
       )
   - alert: RegistryServiceRegistryServerErrorSLOViolation
     for: 2m
@@ -2415,8 +2415,8 @@ groups:
       grafana_panel_id: "1063087290"
       grafana_variables: environment,stage
       promql_template_1: |
-        sum by (env,environment,tier,stage,region) (
-          rate(registry_http_requests_total{code=~"5..",environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="registry"}[5m])
+        sum by (env,environment,tier,stage,region,location) (
+          rate(registry_http_requests_total{code=~"5..",environment="{{ $labels.environment }}",location="{{ $labels.location }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="registry"}[5m])
         )
       runbook: docs/registry/README.md
     labels:
@@ -2443,9 +2443,9 @@ groups:
           > (14.4 * 0.000100)
         )
       )
-      and on(env,environment,tier,type,stage,region,component)
+      and on(env,environment,tier,type,stage,region,location,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="registry_server",env!~"gprd|ops",monitor="global",type="registry"}) >= 1
+        sum by(env,environment,tier,type,stage,region,location,component) (gitlab_regional_sli_ops:rate_1h{component="registry_server",env!~"gprd|ops",monitor="global",type="registry"}) >= 1
       )
   - alert: RegistryServiceRegistryServerErrorSLOViolationRegional
     for: 2m
@@ -2465,8 +2465,8 @@ groups:
       grafana_panel_id: "1063087290"
       grafana_variables: environment,stage
       promql_template_1: |
-        sum by (env,environment,tier,stage,region) (
-          rate(registry_http_requests_total{code=~"5..",environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="registry"}[5m])
+        sum by (env,environment,tier,stage,region,location) (
+          rate(registry_http_requests_total{code=~"5..",environment="{{ $labels.environment }}",location="{{ $labels.location }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="registry"}[5m])
         )
       runbook: docs/registry/README.md
     labels:
@@ -2493,9 +2493,9 @@ groups:
           > (6 * 0.000100)
         )
       )
-      and on(env,environment,tier,type,stage,region,component)
+      and on(env,environment,tier,type,stage,region,location,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="registry_server",env!~"gprd|ops",monitor="global",type="registry"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,region,location,component) (gitlab_regional_sli_ops:rate_6h{component="registry_server",env!~"gprd|ops",monitor="global",type="registry"}) >= 0.16667
       )
   - alert: RegistryServiceRegistryServerTrafficCessation
     for: 5m
@@ -2587,8 +2587,8 @@ groups:
       grafana_panel_id: "1064354686"
       grafana_variables: environment,stage
       promql_template_1: |
-        sum by (env,environment,tier,stage,region) (
-          rate(registry_http_requests_total{environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="registry"}[5m])
+        sum by (env,environment,tier,stage,region,location) (
+          rate(registry_http_requests_total{environment="{{ $labels.environment }}",location="{{ $labels.location }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="registry"}[5m])
         )
       runbook: docs/registry/README.md
     labels:
@@ -2626,8 +2626,8 @@ groups:
       grafana_panel_id: "1064354686"
       grafana_variables: environment,stage
       promql_template_1: |
-        sum by (env,environment,tier,stage,region) (
-          rate(registry_http_requests_total{environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="registry"}[5m])
+        sum by (env,environment,tier,stage,region,location) (
+          rate(registry_http_requests_total{environment="{{ $labels.environment }}",location="{{ $labels.location }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="registry"}[5m])
         )
       runbook: docs/registry/README.md
     labels:
@@ -2773,8 +2773,8 @@ groups:
       promql_template_1: |
         histogram_quantile(
           0.950000,
-          sum by (env,environment,tier,stage,region,le) (
-            rate(registry_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",method=~"delete",region="{{ $labels.region }}",route="/v2/{name}/blobs/uploads/{uuid}",stage="{{ $labels.stage }}",type="registry"}[5m])
+          sum by (env,environment,tier,stage,region,location,le) (
+            rate(registry_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",location="{{ $labels.location }}",method=~"delete",region="{{ $labels.region }}",route="/v2/{name}/blobs/uploads/{uuid}",stage="{{ $labels.stage }}",type="registry"}[5m])
           )
         )
       runbook: docs/registry/README.md
@@ -2802,9 +2802,9 @@ groups:
           < (1 - 14.4 * 0.003000)
         )
       )
-      and on(env,environment,tier,type,stage,region,component)
+      and on(env,environment,tier,type,stage,region,location,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="server_route_blob_upload_uuid_deletes",env!~"gprd|ops",monitor="global",type="registry"}) >= 1
+        sum by(env,environment,tier,type,stage,region,location,component) (gitlab_regional_sli_ops:rate_1h{component="server_route_blob_upload_uuid_deletes",env!~"gprd|ops",monitor="global",type="registry"}) >= 1
       )
   - alert: RegistryServiceServerRouteBlobUploadUuidDeletesApdexSLOViolationRegional
     for: 2m
@@ -2828,8 +2828,8 @@ groups:
       promql_template_1: |
         histogram_quantile(
           0.950000,
-          sum by (env,environment,tier,stage,region,le) (
-            rate(registry_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",method=~"delete",region="{{ $labels.region }}",route="/v2/{name}/blobs/uploads/{uuid}",stage="{{ $labels.stage }}",type="registry"}[5m])
+          sum by (env,environment,tier,stage,region,location,le) (
+            rate(registry_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",location="{{ $labels.location }}",method=~"delete",region="{{ $labels.region }}",route="/v2/{name}/blobs/uploads/{uuid}",stage="{{ $labels.stage }}",type="registry"}[5m])
           )
         )
       runbook: docs/registry/README.md
@@ -2857,9 +2857,9 @@ groups:
           < (1 - 6 * 0.003000)
         )
       )
-      and on(env,environment,tier,type,stage,region,component)
+      and on(env,environment,tier,type,stage,region,location,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="server_route_blob_upload_uuid_deletes",env!~"gprd|ops",monitor="global",type="registry"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,region,location,component) (gitlab_regional_sli_ops:rate_6h{component="server_route_blob_upload_uuid_deletes",env!~"gprd|ops",monitor="global",type="registry"}) >= 0.16667
       )
   - alert: RegistryServiceServerRouteBlobUploadUuidDeletesTrafficCessation
     for: 5m
@@ -2958,8 +2958,8 @@ groups:
       grafana_panel_id: "714276442"
       grafana_variables: environment,stage
       promql_template_1: |
-        sum by (env,environment,tier,stage,region) (
-          rate(registry_http_request_duration_seconds_count{environment="{{ $labels.environment }}",method=~"delete",region="{{ $labels.region }}",route="/v2/{name}/blobs/uploads/{uuid}",stage="{{ $labels.stage }}",type="registry"}[5m])
+        sum by (env,environment,tier,stage,region,location) (
+          rate(registry_http_request_duration_seconds_count{environment="{{ $labels.environment }}",location="{{ $labels.location }}",method=~"delete",region="{{ $labels.region }}",route="/v2/{name}/blobs/uploads/{uuid}",stage="{{ $labels.stage }}",type="registry"}[5m])
         )
       runbook: docs/registry/README.md
     labels:
@@ -3000,8 +3000,8 @@ groups:
       grafana_panel_id: "714276442"
       grafana_variables: environment,stage
       promql_template_1: |
-        sum by (env,environment,tier,stage,region) (
-          rate(registry_http_request_duration_seconds_count{environment="{{ $labels.environment }}",method=~"delete",region="{{ $labels.region }}",route="/v2/{name}/blobs/uploads/{uuid}",stage="{{ $labels.stage }}",type="registry"}[5m])
+        sum by (env,environment,tier,stage,region,location) (
+          rate(registry_http_request_duration_seconds_count{environment="{{ $labels.environment }}",location="{{ $labels.location }}",method=~"delete",region="{{ $labels.region }}",route="/v2/{name}/blobs/uploads/{uuid}",stage="{{ $labels.stage }}",type="registry"}[5m])
         )
       runbook: docs/registry/README.md
     labels:
@@ -3153,8 +3153,8 @@ groups:
       promql_template_1: |
         histogram_quantile(
           0.950000,
-          sum by (env,environment,tier,stage,region,le) (
-            rate(registry_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",method=~"get|head",region="{{ $labels.region }}",route="/v2/{name}/blobs/uploads/{uuid}",stage="{{ $labels.stage }}",type="registry"}[5m])
+          sum by (env,environment,tier,stage,region,location,le) (
+            rate(registry_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",location="{{ $labels.location }}",method=~"get|head",region="{{ $labels.region }}",route="/v2/{name}/blobs/uploads/{uuid}",stage="{{ $labels.stage }}",type="registry"}[5m])
           )
         )
       runbook: docs/registry/README.md
@@ -3182,9 +3182,9 @@ groups:
           < (1 - 14.4 * 0.003000)
         )
       )
-      and on(env,environment,tier,type,stage,region,component)
+      and on(env,environment,tier,type,stage,region,location,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="server_route_blob_upload_uuid_reads",env!~"gprd|ops",monitor="global",type="registry"}) >= 1
+        sum by(env,environment,tier,type,stage,region,location,component) (gitlab_regional_sli_ops:rate_1h{component="server_route_blob_upload_uuid_reads",env!~"gprd|ops",monitor="global",type="registry"}) >= 1
       )
   - alert: RegistryServiceServerRouteBlobUploadUuidReadsApdexSLOViolationRegional
     for: 2m
@@ -3210,8 +3210,8 @@ groups:
       promql_template_1: |
         histogram_quantile(
           0.950000,
-          sum by (env,environment,tier,stage,region,le) (
-            rate(registry_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",method=~"get|head",region="{{ $labels.region }}",route="/v2/{name}/blobs/uploads/{uuid}",stage="{{ $labels.stage }}",type="registry"}[5m])
+          sum by (env,environment,tier,stage,region,location,le) (
+            rate(registry_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",location="{{ $labels.location }}",method=~"get|head",region="{{ $labels.region }}",route="/v2/{name}/blobs/uploads/{uuid}",stage="{{ $labels.stage }}",type="registry"}[5m])
           )
         )
       runbook: docs/registry/README.md
@@ -3239,9 +3239,9 @@ groups:
           < (1 - 6 * 0.003000)
         )
       )
-      and on(env,environment,tier,type,stage,region,component)
+      and on(env,environment,tier,type,stage,region,location,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="server_route_blob_upload_uuid_reads",env!~"gprd|ops",monitor="global",type="registry"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,region,location,component) (gitlab_regional_sli_ops:rate_6h{component="server_route_blob_upload_uuid_reads",env!~"gprd|ops",monitor="global",type="registry"}) >= 0.16667
       )
   - alert: RegistryServiceServerRouteBlobUploadUuidWritesApdexSLOViolation
     for: 2m
@@ -3377,8 +3377,8 @@ groups:
       promql_template_1: |
         histogram_quantile(
           0.950000,
-          sum by (env,environment,tier,stage,region,le) (
-            rate(registry_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",method=~"put|patch|post",region="{{ $labels.region }}",route="/v2/{name}/blobs/uploads/{uuid}",stage="{{ $labels.stage }}",type="registry"}[5m])
+          sum by (env,environment,tier,stage,region,location,le) (
+            rate(registry_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",location="{{ $labels.location }}",method=~"put|patch|post",region="{{ $labels.region }}",route="/v2/{name}/blobs/uploads/{uuid}",stage="{{ $labels.stage }}",type="registry"}[5m])
           )
         )
       runbook: docs/registry/README.md
@@ -3406,9 +3406,9 @@ groups:
           < (1 - 14.4 * 0.030000)
         )
       )
-      and on(env,environment,tier,type,stage,region,component)
+      and on(env,environment,tier,type,stage,region,location,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="server_route_blob_upload_uuid_writes",env!~"gprd|ops",monitor="global",type="registry"}) >= 1
+        sum by(env,environment,tier,type,stage,region,location,component) (gitlab_regional_sli_ops:rate_1h{component="server_route_blob_upload_uuid_writes",env!~"gprd|ops",monitor="global",type="registry"}) >= 1
       )
   - alert: RegistryServiceServerRouteBlobUploadUuidWritesApdexSLOViolationRegional
     for: 2m
@@ -3434,8 +3434,8 @@ groups:
       promql_template_1: |
         histogram_quantile(
           0.950000,
-          sum by (env,environment,tier,stage,region,le) (
-            rate(registry_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",method=~"put|patch|post",region="{{ $labels.region }}",route="/v2/{name}/blobs/uploads/{uuid}",stage="{{ $labels.stage }}",type="registry"}[5m])
+          sum by (env,environment,tier,stage,region,location,le) (
+            rate(registry_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",location="{{ $labels.location }}",method=~"put|patch|post",region="{{ $labels.region }}",route="/v2/{name}/blobs/uploads/{uuid}",stage="{{ $labels.stage }}",type="registry"}[5m])
           )
         )
       runbook: docs/registry/README.md
@@ -3463,9 +3463,9 @@ groups:
           < (1 - 6 * 0.030000)
         )
       )
-      and on(env,environment,tier,type,stage,region,component)
+      and on(env,environment,tier,type,stage,region,location,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="server_route_blob_upload_uuid_writes",env!~"gprd|ops",monitor="global",type="registry"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,region,location,component) (gitlab_regional_sli_ops:rate_6h{component="server_route_blob_upload_uuid_writes",env!~"gprd|ops",monitor="global",type="registry"}) >= 0.16667
       )
   - alert: RegistryServiceServerRouteBlobUploadUuidWritesTrafficCessation
     for: 5m
@@ -3570,8 +3570,8 @@ groups:
       grafana_panel_id: "3946104260"
       grafana_variables: environment,stage
       promql_template_1: |
-        sum by (env,environment,tier,stage,region) (
-          rate(registry_http_request_duration_seconds_count{environment="{{ $labels.environment }}",method=~"put|patch|post",region="{{ $labels.region }}",route="/v2/{name}/blobs/uploads/{uuid}",stage="{{ $labels.stage }}",type="registry"}[5m])
+        sum by (env,environment,tier,stage,region,location) (
+          rate(registry_http_request_duration_seconds_count{environment="{{ $labels.environment }}",location="{{ $labels.location }}",method=~"put|patch|post",region="{{ $labels.region }}",route="/v2/{name}/blobs/uploads/{uuid}",stage="{{ $labels.stage }}",type="registry"}[5m])
         )
       runbook: docs/registry/README.md
     labels:
@@ -3614,8 +3614,8 @@ groups:
       grafana_panel_id: "3946104260"
       grafana_variables: environment,stage
       promql_template_1: |
-        sum by (env,environment,tier,stage,region) (
-          rate(registry_http_request_duration_seconds_count{environment="{{ $labels.environment }}",method=~"put|patch|post",region="{{ $labels.region }}",route="/v2/{name}/blobs/uploads/{uuid}",stage="{{ $labels.stage }}",type="registry"}[5m])
+        sum by (env,environment,tier,stage,region,location) (
+          rate(registry_http_request_duration_seconds_count{environment="{{ $labels.environment }}",location="{{ $labels.location }}",method=~"put|patch|post",region="{{ $labels.region }}",route="/v2/{name}/blobs/uploads/{uuid}",stage="{{ $labels.stage }}",type="registry"}[5m])
         )
       runbook: docs/registry/README.md
     labels:
@@ -3755,8 +3755,8 @@ groups:
       promql_template_1: |
         histogram_quantile(
           0.950000,
-          sum by (env,environment,tier,stage,region,le) (
-            rate(registry_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",method=~"get|head",region="{{ $labels.region }}",route="/v2/{name}/manifests/{reference}",stage="{{ $labels.stage }}",type="registry"}[5m])
+          sum by (env,environment,tier,stage,region,location,le) (
+            rate(registry_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",location="{{ $labels.location }}",method=~"get|head",region="{{ $labels.region }}",route="/v2/{name}/manifests/{reference}",stage="{{ $labels.stage }}",type="registry"}[5m])
           )
         )
       runbook: docs/registry/README.md
@@ -3784,9 +3784,9 @@ groups:
           < (1 - 14.4 * 0.001000)
         )
       )
-      and on(env,environment,tier,type,stage,region,component)
+      and on(env,environment,tier,type,stage,region,location,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="server_route_manifest_reads",env!~"gprd|ops",monitor="global",type="registry"}) >= 1
+        sum by(env,environment,tier,type,stage,region,location,component) (gitlab_regional_sli_ops:rate_1h{component="server_route_manifest_reads",env!~"gprd|ops",monitor="global",type="registry"}) >= 1
       )
   - alert: RegistryServiceServerRouteManifestReadsApdexSLOViolationRegional
     for: 2m
@@ -3808,8 +3808,8 @@ groups:
       promql_template_1: |
         histogram_quantile(
           0.950000,
-          sum by (env,environment,tier,stage,region,le) (
-            rate(registry_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",method=~"get|head",region="{{ $labels.region }}",route="/v2/{name}/manifests/{reference}",stage="{{ $labels.stage }}",type="registry"}[5m])
+          sum by (env,environment,tier,stage,region,location,le) (
+            rate(registry_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",location="{{ $labels.location }}",method=~"get|head",region="{{ $labels.region }}",route="/v2/{name}/manifests/{reference}",stage="{{ $labels.stage }}",type="registry"}[5m])
           )
         )
       runbook: docs/registry/README.md
@@ -3837,9 +3837,9 @@ groups:
           < (1 - 6 * 0.001000)
         )
       )
-      and on(env,environment,tier,type,stage,region,component)
+      and on(env,environment,tier,type,stage,region,location,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="server_route_manifest_reads",env!~"gprd|ops",monitor="global",type="registry"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,region,location,component) (gitlab_regional_sli_ops:rate_6h{component="server_route_manifest_reads",env!~"gprd|ops",monitor="global",type="registry"}) >= 0.16667
       )
   - alert: RegistryServiceServerRouteManifestReadsTrafficCessation
     for: 5m
@@ -3931,8 +3931,8 @@ groups:
       grafana_panel_id: "3999566506"
       grafana_variables: environment,stage
       promql_template_1: |
-        sum by (env,environment,tier,stage,region) (
-          rate(registry_http_request_duration_seconds_count{environment="{{ $labels.environment }}",method=~"get|head",region="{{ $labels.region }}",route="/v2/{name}/manifests/{reference}",stage="{{ $labels.stage }}",type="registry"}[5m])
+        sum by (env,environment,tier,stage,region,location) (
+          rate(registry_http_request_duration_seconds_count{environment="{{ $labels.environment }}",location="{{ $labels.location }}",method=~"get|head",region="{{ $labels.region }}",route="/v2/{name}/manifests/{reference}",stage="{{ $labels.stage }}",type="registry"}[5m])
         )
       runbook: docs/registry/README.md
     labels:
@@ -3970,8 +3970,8 @@ groups:
       grafana_panel_id: "3999566506"
       grafana_variables: environment,stage
       promql_template_1: |
-        sum by (env,environment,tier,stage,region) (
-          rate(registry_http_request_duration_seconds_count{environment="{{ $labels.environment }}",method=~"get|head",region="{{ $labels.region }}",route="/v2/{name}/manifests/{reference}",stage="{{ $labels.stage }}",type="registry"}[5m])
+        sum by (env,environment,tier,stage,region,location) (
+          rate(registry_http_request_duration_seconds_count{environment="{{ $labels.environment }}",location="{{ $labels.location }}",method=~"get|head",region="{{ $labels.region }}",route="/v2/{name}/manifests/{reference}",stage="{{ $labels.stage }}",type="registry"}[5m])
         )
       runbook: docs/registry/README.md
     labels:
@@ -4032,12 +4032,12 @@ groups:
       (
         (
           gitlab_component_apdex:ratio_1h{component="server_route_manifest_writes",env!~"gprd|ops",monitor="global",type="registry"}
-          < (1 - 14.4 * 0.001000)
+          < (1 - 14.4 * 0.005000)
         )
         and
         (
           gitlab_component_apdex:ratio_5m{component="server_route_manifest_writes",env!~"gprd|ops",monitor="global",type="registry"}
-          < (1 - 14.4 * 0.001000)
+          < (1 - 14.4 * 0.005000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -4087,12 +4087,12 @@ groups:
       (
         (
           gitlab_component_apdex:ratio_6h{component="server_route_manifest_writes",env!~"gprd|ops",monitor="global",type="registry"}
-          < (1 - 6 * 0.001000)
+          < (1 - 6 * 0.005000)
         )
         and
         (
           gitlab_component_apdex:ratio_30m{component="server_route_manifest_writes",env!~"gprd|ops",monitor="global",type="registry"}
-          < (1 - 6 * 0.001000)
+          < (1 - 6 * 0.005000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -4123,8 +4123,8 @@ groups:
       promql_template_1: |
         histogram_quantile(
           0.950000,
-          sum by (env,environment,tier,stage,region,le) (
-            rate(registry_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",method=~"put|delete|post|patch",region="{{ $labels.region }}",route="/v2/{name}/manifests/{reference}",stage="{{ $labels.stage }}",type="registry"}[5m])
+          sum by (env,environment,tier,stage,region,location,le) (
+            rate(registry_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",location="{{ $labels.location }}",method=~"put|delete|post|patch",region="{{ $labels.region }}",route="/v2/{name}/manifests/{reference}",stage="{{ $labels.stage }}",type="registry"}[5m])
           )
         )
       runbook: docs/registry/README.md
@@ -4144,17 +4144,17 @@ groups:
       (
         (
           gitlab_regional_sli_apdex:ratio_1h{component="server_route_manifest_writes",env!~"gprd|ops",monitor="global",type="registry"}
-          < (1 - 14.4 * 0.001000)
+          < (1 - 14.4 * 0.005000)
         )
         and
         (
           gitlab_regional_sli_apdex:ratio_5m{component="server_route_manifest_writes",env!~"gprd|ops",monitor="global",type="registry"}
-          < (1 - 14.4 * 0.001000)
+          < (1 - 14.4 * 0.005000)
         )
       )
-      and on(env,environment,tier,type,stage,region,component)
+      and on(env,environment,tier,type,stage,region,location,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="server_route_manifest_writes",env!~"gprd|ops",monitor="global",type="registry"}) >= 1
+        sum by(env,environment,tier,type,stage,region,location,component) (gitlab_regional_sli_ops:rate_1h{component="server_route_manifest_writes",env!~"gprd|ops",monitor="global",type="registry"}) >= 1
       )
   - alert: RegistryServiceServerRouteManifestWritesApdexSLOViolationRegional
     for: 2m
@@ -4180,8 +4180,8 @@ groups:
       promql_template_1: |
         histogram_quantile(
           0.950000,
-          sum by (env,environment,tier,stage,region,le) (
-            rate(registry_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",method=~"put|delete|post|patch",region="{{ $labels.region }}",route="/v2/{name}/manifests/{reference}",stage="{{ $labels.stage }}",type="registry"}[5m])
+          sum by (env,environment,tier,stage,region,location,le) (
+            rate(registry_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",location="{{ $labels.location }}",method=~"put|delete|post|patch",region="{{ $labels.region }}",route="/v2/{name}/manifests/{reference}",stage="{{ $labels.stage }}",type="registry"}[5m])
           )
         )
       runbook: docs/registry/README.md
@@ -4201,17 +4201,17 @@ groups:
       (
         (
           gitlab_regional_sli_apdex:ratio_6h{component="server_route_manifest_writes",env!~"gprd|ops",monitor="global",type="registry"}
-          < (1 - 6 * 0.001000)
+          < (1 - 6 * 0.005000)
         )
         and
         (
           gitlab_regional_sli_apdex:ratio_30m{component="server_route_manifest_writes",env!~"gprd|ops",monitor="global",type="registry"}
-          < (1 - 6 * 0.001000)
+          < (1 - 6 * 0.005000)
         )
       )
-      and on(env,environment,tier,type,stage,region,component)
+      and on(env,environment,tier,type,stage,region,location,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="server_route_manifest_writes",env!~"gprd|ops",monitor="global",type="registry"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,region,location,component) (gitlab_regional_sli_ops:rate_6h{component="server_route_manifest_writes",env!~"gprd|ops",monitor="global",type="registry"}) >= 0.16667
       )
   - alert: RegistryServiceServerRouteManifestWritesTrafficCessation
     for: 5m
@@ -4315,8 +4315,8 @@ groups:
       grafana_panel_id: "1199706222"
       grafana_variables: environment,stage
       promql_template_1: |
-        sum by (env,environment,tier,stage,region) (
-          rate(registry_http_request_duration_seconds_count{environment="{{ $labels.environment }}",method=~"put|delete|post|patch",region="{{ $labels.region }}",route="/v2/{name}/manifests/{reference}",stage="{{ $labels.stage }}",type="registry"}[5m])
+        sum by (env,environment,tier,stage,region,location) (
+          rate(registry_http_request_duration_seconds_count{environment="{{ $labels.environment }}",location="{{ $labels.location }}",method=~"put|delete|post|patch",region="{{ $labels.region }}",route="/v2/{name}/manifests/{reference}",stage="{{ $labels.stage }}",type="registry"}[5m])
         )
       runbook: docs/registry/README.md
     labels:
@@ -4358,8 +4358,8 @@ groups:
       grafana_panel_id: "1199706222"
       grafana_variables: environment,stage
       promql_template_1: |
-        sum by (env,environment,tier,stage,region) (
-          rate(registry_http_request_duration_seconds_count{environment="{{ $labels.environment }}",method=~"put|delete|post|patch",region="{{ $labels.region }}",route="/v2/{name}/manifests/{reference}",stage="{{ $labels.stage }}",type="registry"}[5m])
+        sum by (env,environment,tier,stage,region,location) (
+          rate(registry_http_request_duration_seconds_count{environment="{{ $labels.environment }}",location="{{ $labels.location }}",method=~"put|delete|post|patch",region="{{ $labels.region }}",route="/v2/{name}/manifests/{reference}",stage="{{ $labels.stage }}",type="registry"}[5m])
         )
       runbook: docs/registry/README.md
     labels:

@@ -6,6 +6,7 @@ local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 metricsCatalog.serviceDefinition({
   type: 'kas',
   tier: 'sv',
+  tenants: ['gitlab-gprd', 'gitlab-gstg', 'gitlab-pre'],
 
   tags: ['golang'],
 
@@ -27,7 +28,6 @@ metricsCatalog.serviceDefinition({
     api: true,
     gitaly: true,
     kas: true,
-    praefect: true,
     redis: true,
   },
   provisioning: {
@@ -86,5 +86,34 @@ metricsCatalog.serviceDefinition({
         toolingLinks.kibana(title='Kubernetes Agent Server', index='kas', type='kas'),
       ],
     },
+  },
+} + {
+  capacityPlanning+: {
+    components: [
+      {
+        name: 'kube_container_memory',
+        parameters: {
+          ignore_outliers: [
+            {
+              // https://gitlab.com/gitlab-com/gl-infra/production/-/issues/17753
+              start: '2024-03-08',
+              end: '2024-03-25',
+            },
+          ],
+        },
+      },
+      {
+        name: 'kube_go_memory',
+        parameters: {
+          ignore_outliers: [
+            {
+              // https://gitlab.com/gitlab-com/gl-infra/production/-/issues/17753
+              start: '2024-03-08',
+              end: '2024-03-25',
+            },
+          ],
+        },
+      },
+    ],
   },
 })

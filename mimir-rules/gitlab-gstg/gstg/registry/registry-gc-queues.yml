@@ -1,0 +1,33 @@
+groups:
+- name: Container Registry Online GC Queues
+  rules:
+  - alert: ContainerRegistryGCOverdueBlobQueueTooLarge
+    expr: >
+      avg (
+        gitlab_database_rows{query_name="registry_gc_blob_review_queue_overdue", env="gstg"}
+      ) > 50000
+    for: 60m
+    labels:
+      severity: s3
+      alert_type: symptom
+      team: container_registry
+    annotations:
+      title: 'The number of overdue Container Registry online GC blob tasks is too high'
+      description: 'There have been over 50k overdue blob tasks queued in env {{ $labels.environment }} {{ $labels.stage }} stage for the last 60 minutes.'
+      grafana_dashboard_id: registry-gc/registry-garbage-collection-detail
+      runbook: docs/registry/online-gc-high-overdue-tasks.md
+  - alert: ContainerRegistryGCOverdueManifestQueueTooLarge
+    expr: >
+      avg (
+        gitlab_database_rows{query_name="registry_gc_manifest_review_queue_overdue", env="gstg"}
+      ) > 10000
+    for: 60m
+    labels:
+      severity: s3
+      alert_type: symptom
+      team: container_registry
+    annotations:
+      title: 'The number of overdue Container Registry online GC manifest tasks is too high'
+      description: 'There have been over 10k overdue manifest tasks queued in env {{ $labels.environment }} {{ $labels.stage }} stage for the last 60 minutes.'
+      grafana_dashboard_id: registry-gc/registry-garbage-collection-detail
+      runbook: docs/registry/online-gc-high-overdue-tasks.md

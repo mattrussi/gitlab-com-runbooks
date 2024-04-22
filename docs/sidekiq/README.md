@@ -4,7 +4,7 @@
 
 [[_TOC_]]
 
-# Sidekiq Service
+# Sidekiq Background Jobs Service
 
 * [Service Overview](https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview)
 * **Alerts**: <https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22sidekiq%22%2C%20tier%3D%22sv%22%7D>

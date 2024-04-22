@@ -13,6 +13,7 @@ dashboardHelpers.dashboard(
   includeRunnerManagerFilter=false,
 )
 .addTemplate(dashboardFilters.runnerJobFailureReason)
+.addTemplate(dashboardFilters.projectJobsRunning)
 .addOverviewPanels()
 .addGrid(
   startRow=2000,
@@ -20,6 +21,7 @@ dashboardHelpers.dashboard(
   panels=[
     jobGraphs.running(['instance'], runnersManagerMatching.byShard),
     jobGraphs.failures(['instance'], runnersManagerMatching.byShard),
+    jobQueueGraphs.durationHistogram(partition=runnersManagerMatching.byShard),
     jobQueueGraphs.pendingSize,
     deploymentDetails.notes,
   ],

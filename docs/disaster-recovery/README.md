@@ -142,7 +142,7 @@ One of the Redis clusters, "Registry Cache" is is Kubernetes. To remove the fail
 
 ### Test environment
 
-For testing recovery of snapshots the [`dr-testing`](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/tree/master/environments/dr-testing) environment can be used, this environment holds examples of different recovery types including Gitaly snapshot recovery.
+For testing recovery of snapshots the [`dr-testing`](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/tree/main/environments/dr-testing) environment can be used, this environment holds examples of different recovery types including Gitaly snapshot recovery.
 
 ### Denying network traffic to an availability zone
 

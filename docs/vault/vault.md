@@ -90,16 +90,16 @@ Snapshot backups are saved [across multiple regions in the United States](https:
 
 #### Resources and Configuration
 
-* Infrastructure resources (IAM, KMS, etc) are managed through Terraform via 2 modules [vault](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/master/modules/vault) (resources deployed in the projects `gitlab-pre` and `gitlab-ops`) and [vault-config](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/master/modules/vault-config) (more sensitive resources deployed in a separate dedicated project) located in the `config-mgmt` repository.
+* Infrastructure resources (IAM, KMS, etc) are managed through Terraform via 2 modules [vault](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/main/modules/vault) (resources deployed in the projects `gitlab-pre` and `gitlab-ops`) and [vault-config](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/main/modules/vault-config) (more sensitive resources deployed in a separate dedicated project) located in the `config-mgmt` repository.
   * `pre` environment Vault configuration:
-    * <https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/master/environments/pre/vault.tf>
-    * <https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/master/environments/vault-staging/gcp.tf>
+    * <https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/main/environments/pre/vault.tf>
+    * <https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/main/environments/vault-staging/gcp.tf>
   * `ops` environment Vault configuration:
-    * <https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/master/environments/ops/vault.tf>
-    * <https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/master/environments/vault-production/gcp.tf>
+    * <https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/main/environments/ops/vault.tf>
+    * <https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/main/environments/vault-production/gcp.tf>
 * To maintain consistency across deployments Vault configurations are maintained through the [Terraform provider](https://registry.terraform.io/providers/hashicorp/vault/latest/docs) and located in the `config-mgmt` repository:
-  * [staging configuration](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/master/environments/vault-staging)
-  * [production configuration](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/master/environments/vault-production)
+  * [staging configuration](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/main/environments/vault-staging)
+  * [production configuration](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/main/environments/vault-production)
 
 ### Authentication
 
@@ -123,7 +123,7 @@ Vault data is encrypted at all times. When Vault is started, it is always starte
 
 To [unseal](https://developer.hashicorp.com/vault/docs/concepts/seal) Vault, a root key is needed to decrypt the Vault data encryption key.
 
-To ensure that the root key is never known or leaked, we have configured auto-unseal using [`GCP KMS`](https://developer.hashicorp.com/vault/docs/configuration/seal/gcpckms) which lets us leverage GCP KMS to encrypt and decrypt the root key. Only the KMS key is able to decrypt the root key in our configuration. There is no other method possible to decrypt the root key. The Terraform configuration can [be found here](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/master/modules/vault-project/kms.tf).
+To ensure that the root key is never known or leaked, we have configured auto-unseal using [`GCP KMS`](https://developer.hashicorp.com/vault/docs/configuration/seal/gcpckms) which lets us leverage GCP KMS to encrypt and decrypt the root key. Only the KMS key is able to decrypt the root key in our configuration. There is no other method possible to decrypt the root key. The Terraform configuration can [be found here](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/main/modules/vault-project/kms.tf).
 
 ```mermaid
 graph TD
