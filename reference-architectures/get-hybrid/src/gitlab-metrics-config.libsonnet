@@ -21,6 +21,7 @@ local options = validateReferenceArchitectureOptions(import 'gitlab-metrics-opti
   // Hash of all saturation metric types that are monitored on gitlab.com
   saturationMonitoring:: objects.mergeAll(
     [
+      import 'saturation-monitoring/aws_elasticache_clients.libsonnet',
       import 'saturation-monitoring/aws_elasticache_cpu.libsonnet',
       import 'saturation-monitoring/aws_elasticache_memory.libsonnet',
       import 'saturation-monitoring/aws_rds_cpu.libsonnet',
@@ -109,4 +110,12 @@ local options = validateReferenceArchitectureOptions(import 'gitlab-metrics-opti
   separateGlobalRecordingSelectors: {},
 
   recordingRuleRegistry: import 'servicemetrics/recording-rule-registry/selective-registry.libsonnet',
+
+  // Used only by `redis-helpers.libsonnet`
+  // We're not attempting to filter here since we do not segregate our Redis instances
+  // the same way that .com does, thus, null this out to avoid filtering entirely
+  baseSelector::
+    {
+      type:: null,
+    },
 }

@@ -2,7 +2,6 @@ local registryArchetype = import 'service-archetypes/registry-archetype.libsonne
 local registryCustomRouteSLIs = import './lib/registry-custom-route-slis.libsonnet';
 local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local rateMetric = metricsCatalog.rateMetric;
-local gitalyHelper = import 'service-archetypes/helpers/gitaly.libsonnet';
 local kubeLabelSelectors = metricsCatalog.kubeLabelSelectors;
 local kubeResourceName='gitlab-registry';
 
