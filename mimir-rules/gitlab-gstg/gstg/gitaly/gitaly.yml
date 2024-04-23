@@ -4,7 +4,7 @@ groups:
   rules:
   - record: gitaly_grpc:grpc_server_handled_total:rate1m
     expr: >
-      sum without (fqdn,instance) (
+      sum without (fqdn,instance,ansible_deploy_name,zone,cluster) (
         rate(grpc_server_handled_total{job="scrapeConfig/monitoring/prometheus-agent-gitaly", env="gstg"}[1m])
       )
   - record: gitaly:grpc_server_handled_total:rate1m
@@ -30,7 +30,7 @@ groups:
       )
   - record: gitaly:grpc_server_handling_seconds_bucket:rate1m
     expr: >
-      sum without (fqdn, instance) (
+      sum without (fqdn, instance, ansible_deploy_name,zone,cluster) (
         gitaly_instance:grpc_server_handling_seconds_bucket:rate1m{env="gstg"}
       )
   - record: gitaly:grpc_server_handling_seconds:p95
@@ -52,7 +52,7 @@ groups:
   rules:
   - record: gitaly_instance_grpc_method_code:grpc_server_handled_total:irate1m
     expr: >
-      sum without (fqdn, instance, grpc_service, grpc_type) (
+      sum without (fqdn, instance, ansible_deploy_name, zone, cluster, grpc_service, grpc_type) (
         irate(grpc_server_handled_total{job="scrapeConfig/monitoring/prometheus-agent-gitaly",env="gstg"}[1m])
       )
 
@@ -61,7 +61,7 @@ groups:
   rules:
   - record: gitaly:grpc_server_handling_seconds:avg5m
     expr: >
-       avg without (fqdn, instance, grpc_service, grpc_type) (
+       avg without (fqdn, instance, ansible_deploy_name, zone, cluster, grpc_service, grpc_type) (
          rate(grpc_server_handling_seconds_sum{job="scrapeConfig/monitoring/prometheus-agent-gitaly",env="gstg"}[5m])
            /
          rate(grpc_server_handling_seconds_count{job="scrapeConfig/monitoring/prometheus-agent-gitaly",env="gstg"}[5m]) > 0
