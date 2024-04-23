@@ -15,6 +15,7 @@ local rules = std.flatMap(
             feature_category: category,
             stage_group: stageGroup.key,
             product_stage: stageGroup.stage,
+            monitor: 'global',
           },
           expr: '1',
         },
