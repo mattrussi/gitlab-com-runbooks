@@ -116,8 +116,8 @@ For more details, refer to [Runway runbook](../runway/README.md).
 
 ## Services and Accounts
 
-The Cloud Run service accounts, which are managed by Runway, have the `aiplatform.user` role, granting it 277 permissions, only one of which is used (aiplatform.endpoints.predict).
-This IAM membership was not created manually. It is managed via the `gl-infra/config-mgmt` repository, using Terraform. 
+The Cloud Run service accounts, which are managed by Runway, have the `aiplatform.user` role, granting them the `aiplatform.endpoints.predict` permission. Other permissions granted by this role are unused.
+This IAM membership is managed via the `gl-infra/config-mgmt` repository, using Terraform. 
 The configuration is at: https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/main/environments/ai-assisted-legacy-prd/service_accounts.tf?ref_type=heads#L10
 
 Caveat: Terraform's management of IAM memberships is not authoritative. In other words, there are IAM memberships in `unreview-poc-390200e5` that are not managed by Terraform.
