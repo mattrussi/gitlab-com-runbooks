@@ -31,6 +31,7 @@ Ensure you are scraping the metrics from all required sub-systems, using the cor
 | gitaly | - | `gitaly` consul service | `gitaly` | - |
 | gitlab-shell | - | Re-uses praefect metrics | - | This is a weak proxy until gitlab-shell has more accessible metrics (see [runbooks#88](https://gitlab.com/gitlab-com/runbooks/-/issues/88) |
 | praefect | - | `praefect` consul service | `praefect` | - |
+| redis    | We provide client-side metrics emitted by any `rails` endpoint, webservice/sidekiq | - | - |
 | registry | - | In kubernetes, the 'registry-prometheus' port | scrape job must be named `praefect` | - |
 | sidekiq | - | /metrics  | - | - |
 | webservice (rails) | /-/metrics ; in kubernetes, on the `http-webservice` port  | `gitlab-rails` | - |
@@ -90,6 +91,7 @@ The following configuration options are available in `gitlab-metrics-options.lib
 
 | **Option**        | **Type** | **Default** | **Description** |
 | ----------------- | -------- | ----------- | --------------- |
+| `elasticacheMonitoring` | Boolean | `false` | Set to `true` to enable AWS Elasticache monitoring. |
 | `praefect.enable` | Boolean  | `true`      | Set to `false` to disable Praefect monitoring. This is usually done when Praefect/Gitaly Cluster is disabled in GitLab Environment Toolkit with `praefect_node_count = 0` |
 | `services`        | Array    | empty       | Import any customized service monitoring. For examples see [`reference-architectures/get-hybrid/src/services/`](reference-architectures/get-hybrid/src/services/)  |
 | `saturationMonitoring`        | Array    | empty       | Import any customized saturation monitoring. For examples see [`reference-architectures/get-hybrid/src/services/`](reference-architectures/get-hybrid/src/services/)  |

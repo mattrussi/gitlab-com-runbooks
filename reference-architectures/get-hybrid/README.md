@@ -31,6 +31,9 @@ Here are some examples of the dashboards generated for this reference architectu
 | `gitlab-shell` | `grpc_requests` | A proxy measurement of the number of GRPC SSH service requests made to Gitaly and Praefect.  Since we are unable to measure gitlab-shell directly at present, this is the best substitute we can provide.  | ✅ SLO: 99.9% | ✅ SLO: 99.9% | ✅ |
 | `praefect` | `proxy` | All Gitaly operations pass through the Praefect proxy on the way to a Gitaly instance. This SLI monitors those operations in aggregate.  | ✅ SLO: 99.5% | ✅ SLO: 99.95% | ✅ |
 | `praefect` | `replicator_queue` | Praefect replication operations. Latency represents the queuing delay before replication is carried out.  | ✅ SLO: 99.5% | - | ✅ |
+| `redis` | `primary_server` | Operations on the Redis primary for Redis instance.  | - | - | ✅ |
+| `redis` | `rails_redis_client` | Aggregation of all Redis operations issued from the Rails codebase through `Gitlab::Redis::Wrapper` subclasses.  | ✅ SLO: 99.95% | ✅ SLO: 99.9% | ✅ |
+| `redis` | `redis` |  | ✅ SLO: 99.95% | - | ✅ |
 | `registry` | `server` | Aggregation of all registry HTTP requests.  | ✅ SLO: 99.7% | ✅ SLO: 99.99% | ✅ |
 | `registry` | `server_route_blob_digest_deletes` | Delete requests for the blob digest endpoints on the registry.  Used to delete blobs identified by name and digest.  | ✅ SLO: 99.9% | - | ✅ |
 | `registry` | `server_route_blob_digest_reads` | All read-requests (GET or HEAD) for the blob endpoints on the registry.  GET is used to pull a layer gated by the name of repository and uniquely identified by the digest in the registry.  HEAD is used to check the existence of a layer.  | ✅ SLO: 98% | - | ✅ |

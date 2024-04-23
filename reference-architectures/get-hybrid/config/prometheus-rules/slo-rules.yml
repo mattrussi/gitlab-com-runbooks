@@ -81,6 +81,52 @@ groups:
       tier: stor
       type: praefect
     record: slo:max:events:gitlab_service_errors:ratio
+  - expr: "0.999500"
+    labels:
+      tier: db
+      type: redis
+    record: slo:min:events:gitlab_service_apdex:ratio
+  - expr: "0.001000"
+    labels:
+      tier: db
+      type: redis
+    record: slo:max:events:gitlab_service_errors:ratio
+  - expr: "0.999500"
+    labels:
+      component: primary_server
+      tier: db
+      type: redis
+    record: slo:min:events:gitlab_service_apdex:ratio
+  - expr: "0.001000"
+    labels:
+      component: primary_server
+      tier: db
+      type: redis
+    record: slo:max:events:gitlab_service_errors:ratio
+  - expr: "0.999500"
+    labels:
+      component: rails_redis_client
+      tier: db
+      type: redis
+    record: slo:min:events:gitlab_service_apdex:ratio
+  - expr: "0.001000"
+    labels:
+      component: rails_redis_client
+      tier: db
+      type: redis
+    record: slo:max:events:gitlab_service_errors:ratio
+  - expr: "0.999500"
+    labels:
+      component: redis
+      tier: db
+      type: redis
+    record: slo:min:events:gitlab_service_apdex:ratio
+  - expr: "0.001000"
+    labels:
+      component: redis
+      tier: db
+      type: redis
+    record: slo:max:events:gitlab_service_errors:ratio
   - expr: "0.997000"
     labels:
       tier: sv
