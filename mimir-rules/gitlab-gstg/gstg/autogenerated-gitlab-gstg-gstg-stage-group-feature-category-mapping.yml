@@ -7,798 +7,931 @@ groups:
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: acquisition
+      monitor: global
       product_stage: growth
       stage_group: acquisition
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: activation
+      monitor: global
       product_stage: growth
       stage_group: activation
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: advisory_database
+      monitor: global
       product_stage: secure
       stage_group: vulnerability_research
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: ai_abstraction_layer
+      monitor: global
       product_stage: ai-powered
       stage_group: ai_framework
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: ai_agents
+      monitor: global
       product_stage: modelops
       stage_group: mlops
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: ai_evaluation
+      monitor: global
       product_stage: ai-powered
       stage_group: ai_model_validation
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: ai_research
+      monitor: global
       product_stage: ai-powered
       stage_group: ai_model_validation
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: api
+      monitor: global
       product_stage: manage
       stage_group: import_and_integrate
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: api_security
+      monitor: global
       product_stage: secure
       stage_group: dynamic_analysis
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: application_instrumentation
+      monitor: global
       product_stage: monitor
       stage_group: analytics_instrumentation
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: attack_emulation
+      monitor: global
       product_stage: secure
       stage_group: dynamic_analysis
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: audit_events
+      monitor: global
       product_stage: govern
       stage_group: compliance
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: auto_devops
+      monitor: global
       product_stage: deploy
       stage_group: environments
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: backup_restore
+      monitor: global
       product_stage: systems
       stage_group: geo
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: build
+      monitor: global
       product_stage: systems
       stage_group: distribution_build
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: build_artifacts
+      monitor: global
       product_stage: verify
       stage_group: pipeline_security
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: capacity_planning
+      monitor: global
       product_stage: platforms
       stage_group: scalability
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: cell
+      monitor: global
       product_stage: data_stores
       stage_group: tenant_scale
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: cloud_connector
+      monitor: global
       product_stage: systems
       stage_group: cloud_connector
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: cloud_native_installation
+      monitor: global
       product_stage: systems
       stage_group: distribution_deploy
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: code_quality
+      monitor: global
       product_stage: secure
       stage_group: secret_detection
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: code_review_workflow
+      monitor: global
       product_stage: create
       stage_group: code_review
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: code_search
+      monitor: global
       product_stage: data_stores
       stage_group: global_search
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: code_suggestions
+      monitor: global
       product_stage: create
       stage_group: code_creation
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: code_testing
+      monitor: global
       product_stage: verify
       stage_group: pipeline_execution
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: commerce_integrations
+      monitor: global
       product_stage: fulfillment
       stage_group: provision
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: compliance_management
+      monitor: global
       product_stage: govern
       stage_group: compliance
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: consumables_cost_management
+      monitor: global
       product_stage: fulfillment
       stage_group: utilization
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: container_registry
+      monitor: global
       product_stage: package
       stage_group: container_registry
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: container_scanning
+      monitor: global
       product_stage: secure
       stage_group: composition_analysis
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: continuous_delivery
+      monitor: global
       product_stage: deploy
       stage_group: environments
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: continuous_integration
+      monitor: global
       product_stage: verify
       stage_group: pipeline_execution
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: custom_models
+      monitor: global
       product_stage: ai-powered
       stage_group: custom_models
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: customersdot_application
+      monitor: global
       product_stage: fulfillment
       stage_group: fulfillment_platform
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: database
+      monitor: global
       product_stage: data_stores
       stage_group: database
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: dataops
+      monitor: global
       product_stage: modelops
       stage_group: dataops
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: dedicated
+      monitor: global
       product_stage: platforms
       stage_group: dedicated
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: delivery
+      monitor: global
       product_stage: platforms
       stage_group: delivery
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: dependency_firewall
+      monitor: global
       product_stage: package
       stage_group: container_registry
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: dependency_management
+      monitor: global
       product_stage: govern
       stage_group: threat_insights
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: dependency_proxy
+      monitor: global
       product_stage: package
       stage_group: container_registry
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: deployment_management
+      monitor: global
       product_stage: deploy
       stage_group: environments
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: design_management
+      monitor: global
       product_stage: plan
       stage_group: product_planning
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: design_system
+      monitor: global
       product_stage: manage
       stage_group: foundations
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: devops_reports
+      monitor: global
       product_stage: plan
       stage_group: optimize
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: disaster_recovery
+      monitor: global
       product_stage: systems
       stage_group: geo
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: dora_metrics
+      monitor: global
       product_stage: plan
       stage_group: optimize
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: duo_chat
+      monitor: global
       product_stage: ai-powered
       stage_group: duo_chat
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: dynamic_application_security_testing
+      monitor: global
       product_stage: secure
       stage_group: dynamic_analysis
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: editor_extensions
+      monitor: global
       product_stage: create
       stage_group: editor_extensions
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: environment_management
+      monitor: global
       product_stage: deploy
       stage_group: environments
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: error_budgets
+      monitor: global
       product_stage: platforms
       stage_group: scalability
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: error_tracking
+      monitor: global
       product_stage: monitor
       stage_group: observability
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: feature_flags
+      monitor: global
       product_stage: deploy
       stage_group: environments
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: five_minute_production_app
+      monitor: global
       product_stage: 5-min-app
       stage_group: 5-min-app
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: fleet_visibility
+      monitor: global
       product_stage: verify
       stage_group: runner
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: fulfillment_admin_tooling
+      monitor: global
       product_stage: fulfillment
       stage_group: fulfillment_platform
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: fulfillment_infrastructure
+      monitor: global
       product_stage: fulfillment
       stage_group: fulfillment_platform
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: fuzz_testing
+      monitor: global
       product_stage: secure
       stage_group: dynamic_analysis
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: geo_replication
+      monitor: global
       product_stage: systems
       stage_group: geo
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: gitaly
+      monitor: global
       product_stage: systems
       stage_group: gitaly
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: gitlab_cli
+      monitor: global
       product_stage: create
       stage_group: code_review
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: gitlab_docs
+      monitor: global
       product_stage: manage
       stage_group: foundations
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: global_search
+      monitor: global
       product_stage: data_stores
       stage_group: global_search
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: groups_and_projects
+      monitor: global
       product_stage: data_stores
       stage_group: tenant_scale
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: helm_chart_registry
+      monitor: global
       product_stage: package
       stage_group: package_registry
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: hosted_runners
+      monitor: global
       product_stage: verify
       stage_group: hosted_runners
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: runner_saas
+      monitor: global
       product_stage: verify
       stage_group: hosted_runners
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: importers
+      monitor: global
       product_stage: manage
       stage_group: import_and_integrate
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: incident_management
+      monitor: global
       product_stage: monitor
       stage_group: respond
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: infrastructure_as_code
+      monitor: global
       product_stage: deploy
       stage_group: environments
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: infrastructure_cost_data
+      monitor: global
       product_stage: platforms
       stage_group: scalability
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: insider_threat
+      monitor: global
       product_stage: govern
       stage_group: anti-abuse
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: instance_resiliency
+      monitor: global
       product_stage: govern
       stage_group: anti-abuse
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: integrations
+      monitor: global
       product_stage: manage
       stage_group: import_and_integrate
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: internationalization
+      monitor: global
       product_stage: manage
       stage_group: import_and_integrate
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: logging
+      monitor: global
       product_stage: monitor
       stage_group: observability
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: measurement_and_locking
+      monitor: global
       product_stage: growth
       stage_group: acquisition
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: merge_trains
+      monitor: global
       product_stage: verify
       stage_group: pipeline_execution
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: metrics
+      monitor: global
       product_stage: monitor
       stage_group: observability
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: mlops
+      monitor: global
       product_stage: modelops
       stage_group: mlops
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: mobile_devops
+      monitor: global
       product_stage: mobile
       stage_group: mobile_devops
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: navigation
+      monitor: global
       product_stage: manage
       stage_group: foundations
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: not_owned
+      monitor: global
       product_stage: not_owned
       stage_group: not_owned
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: okr_management
+      monitor: global
       product_stage: plan
       stage_group: product_planning
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: omnibus_package
+      monitor: global
       product_stage: systems
       stage_group: distribution_deploy
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: on_call_schedule_management
+      monitor: global
       product_stage: monitor
       stage_group: respond
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: onboarding
+      monitor: global
       product_stage: growth
       stage_group: acquisition
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: organization
+      monitor: global
       product_stage: data_stores
       stage_group: tenant_scale
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: package_registry
+      monitor: global
       product_stage: package
       stage_group: package_registry
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: pages
+      monitor: global
       product_stage: plan
       stage_group: knowledge
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: permissions
+      monitor: global
       product_stage: govern
       stage_group: authorization
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: pipeline_composition
+      monitor: global
       product_stage: verify
       stage_group: pipeline_authoring
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: portfolio_management
+      monitor: global
       product_stage: plan
       stage_group: product_planning
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: product_analytics_data_management
+      monitor: global
       product_stage: monitor
       stage_group: product_analytics
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: product_analytics_visualization
+      monitor: global
       product_stage: monitor
       stage_group: product_analytics
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: pubsec_services
+      monitor: global
       product_stage: platforms
       stage_group: pubsec_services
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: purchase
+      monitor: global
       product_stage: fulfillment
       stage_group: subscription_management
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: quality_management
+      monitor: global
       product_stage: plan
       stage_group: product_planning
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: rate_limiting
+      monitor: global
       product_stage: platforms
       stage_group: scalability
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: redis
+      monitor: global
       product_stage: platforms
       stage_group: scalability
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: release_evidence
+      monitor: global
       product_stage: govern
       stage_group: compliance
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: release_orchestration
+      monitor: global
       product_stage: deploy
       stage_group: environments
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: remote_development
+      monitor: global
       product_stage: create
       stage_group: ide
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: requirements_management
+      monitor: global
       product_stage: plan
       stage_group: product_planning
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: review_apps
+      monitor: global
       product_stage: verify
       stage_group: pipeline_execution
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: runner
+      monitor: global
       product_stage: verify
       stage_group: runner
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: saas_provisioning
+      monitor: global
       product_stage: fulfillment
       stage_group: provision
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: sbom
+      monitor: global
       product_stage: govern
       stage_group: threat_insights
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: scalability
+      monitor: global
       product_stage: platforms
       stage_group: scalability
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: seat_cost_management
+      monitor: global
       product_stage: fulfillment
       stage_group: utilization
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: secret_detection
+      monitor: global
       product_stage: secure
       stage_group: secret_detection
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: secrets_management
+      monitor: global
       product_stage: verify
       stage_group: pipeline_security
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: security_policy_management
+      monitor: global
       product_stage: govern
       stage_group: security_policies
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: service_desk
+      monitor: global
       product_stage: monitor
       stage_group: respond
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: service_ping
+      monitor: global
       product_stage: monitor
       stage_group: analytics_instrumentation
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: sm_provisioning
+      monitor: global
       product_stage: fulfillment
       stage_group: provision
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: software_composition_analysis
+      monitor: global
       product_stage: secure
       stage_group: composition_analysis
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: source_code_management
+      monitor: global
       product_stage: create
       stage_group: source_code
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: static_application_security_testing
+      monitor: global
       product_stage: secure
       stage_group: static_analysis
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: subscription_management
+      monitor: global
       product_stage: fulfillment
       stage_group: subscription_management
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: switchboard
+      monitor: global
       product_stage: platforms
       stage_group: switchboard
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: system_access
+      monitor: global
       product_stage: govern
       stage_group: authentication
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: team_planning
+      monitor: global
       product_stage: plan
       stage_group: project_management
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: tracing
+      monitor: global
       product_stage: monitor
       stage_group: observability
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: unknown
+      monitor: global
       product_stage: not_owned
       stage_group: not_owned
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: user_management
+      monitor: global
       product_stage: govern
       stage_group: authentication
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: user_profile
+      monitor: global
       product_stage: data_stores
       stage_group: tenant_scale
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: value_stream_management
+      monitor: global
       product_stage: plan
       stage_group: optimize
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: vulnerability_management
+      monitor: global
       product_stage: govern
       stage_group: threat_insights
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: web_ide
+      monitor: global
       product_stage: create
       stage_group: ide
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: webhooks
+      monitor: global
       product_stage: manage
       stage_group: import_and_integrate
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: wiki
+      monitor: global
       product_stage: plan
       stage_group: knowledge
     expr: "1"
