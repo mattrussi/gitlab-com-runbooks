@@ -114,6 +114,15 @@ For more details, refer to [Runway runbook](../runway/README.md).
 * [Production](https://gitlab.com/gitlab-com/gl-infra/platform/runway/deployments/ai-gateway/-/environments/15709878)
 * [Staging](https://gitlab.com/gitlab-com/gl-infra/platform/runway/deployments/ai-gateway/-/environments/15709877)
 
+## Services and Accounts
+
+The Cloud Run service accounts are managed by Runway and have `aiplatform.user` role set, granting the service accounts the `aiplatform.endpoints.predict` permission. Other permissions granted by this role are unused. To set [additional roles](https://gitlab-com.gitlab.io/gl-infra/platform/runway/provisioner/inventory.schema.html#inventory_items_additional_roles), update `ai-gateway` entry in Runway [provisioner](https://gitlab.com/gitlab-com/gl-infra/platform/runway/provisioner/-/blob/main/inventory.json?ref_type=heads).
+This IAM membership is managed via the `gl-infra/config-mgmt` repository, using Terraform.
+
+* [Service Account Configuration](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/main/environments/ai-assisted-legacy-prd/service_accounts.tf?ref_type=heads#L10)
+
+Caveat: Terraform's management of IAM memberships is not authoritative. In other words, there are IAM memberships in `unreview-poc-390200e5` that are not managed by Terraform.
+
 ## Performance
 
 AI Gateway includes the following SLIs/SLOs:
