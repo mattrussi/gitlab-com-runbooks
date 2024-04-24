@@ -18,6 +18,20 @@ groups:
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
+      component: client_database_transaction
+      monitor: global
+      tier: db
+      type: patroni-ci
+    expr: "0.990000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      component: client_database_transaction
+      monitor: global
+      tier: db
+      type: patroni-ci
+    expr: "0.001000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
       component: pgbouncer
       monitor: global
       tier: db
@@ -86,6 +100,16 @@ groups:
       tier: db
       type: patroni-ci
     expr: "0.001000"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: client_database_transaction
+      global_aggregation: "no"
+      monitor: global
+      regional_aggregation: "no"
+      service_aggregation: "no"
+      tier: db
+      type: patroni-ci
+    expr: "1"
   - record: gitlab_component_service:mapping
     labels:
       component: pgbouncer
