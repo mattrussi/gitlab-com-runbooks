@@ -364,8 +364,13 @@ groups:
         0.99,
         clamp_min(
           clamp_max(
-            sum by (environment, tier, type, stage, shard, pod, container) (
-              rate(container_cpu_usage_seconds_total:labeled{container!="", container!="POD", type=~"web|ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|istio|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis-tracechunks|redis|registry|sidekiq|vault|web-pages|websockets|woodhouse"}[1h])
+            (
+              sum by (environment, tier, type, stage, shard, pod, container) (
+                rate(container_cpu_usage_seconds_total:labeled{container!="", container!="POD", type=~"web|ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|istio|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis-tracechunks|redis|registry|sidekiq|vault|web-pages|websockets|woodhouse"}[1h])
+              )
+              unless on(environment, tier, type, stage, shard, pod, container) (
+                container_spec_cpu_quota:labeled{container!="", container!="POD", type=~"web|ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|istio|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis-tracechunks|redis|registry|sidekiq|vault|web-pages|websockets|woodhouse"}
+              )
             )
             /
             sum by(environment, tier, type, stage, shard, pod, container) (

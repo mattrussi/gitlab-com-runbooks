@@ -25,6 +25,8 @@ local commonMemory = {
       is much lower, then we could be underutilizing a host.
 
       This saturation point is only used for capacity planning.
+      Containers that have a quota specified are excluded here and can be monitored using
+      the `kube_container_throttling` saturation component.
       The burst utilization of a CPU is monitored and alerted upon using the
       `kube_container_cpu_limit` saturation point.
     |||,
@@ -34,8 +36,13 @@ local commonMemory = {
     capacityPlanning: { strategy: 'quantile99_1h' },
     alerting: { enabled: false },
     query: |||
-      sum by (%(aggregationLabels)s) (
-        rate(container_cpu_usage_seconds_total:labeled{container!="", container!="POD", %(selector)s}[%(rangeInterval)s])
+      (
+        sum by (%(aggregationLabels)s) (
+          rate(container_cpu_usage_seconds_total:labeled{container!="", container!="POD", %(selector)s}[%(rangeInterval)s])
+        )
+        unless on(%(aggregationLabels)s) (
+          container_spec_cpu_quota:labeled{container!="", container!="POD", %(selector)s}
+        )
       )
       /
       sum by(%(aggregationLabels)s) (

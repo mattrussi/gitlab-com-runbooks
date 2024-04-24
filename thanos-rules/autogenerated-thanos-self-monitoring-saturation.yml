@@ -120,8 +120,13 @@ groups:
         0.99,
         clamp_min(
           clamp_max(
-            sum by (type, shard, pod, container) (
-              rate(container_cpu_usage_seconds_total:labeled{container!="", container!="POD", env="ops",type="thanos"}[1h])
+            (
+              sum by (type, shard, pod, container) (
+                rate(container_cpu_usage_seconds_total:labeled{container!="", container!="POD", env="ops",type="thanos"}[1h])
+              )
+              unless on(type, shard, pod, container) (
+                container_spec_cpu_quota:labeled{container!="", container!="POD", env="ops",type="thanos"}
+              )
             )
             /
             sum by(type, shard, pod, container) (
