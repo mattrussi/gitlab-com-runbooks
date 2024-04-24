@@ -91,8 +91,13 @@ groups:
         0.99,
         clamp_min(
           clamp_max(
-            sum by (type, pod, container) (
-              rate(container_cpu_usage_seconds_total:labeled{container!="", container!="POD", type=~"consul|gitlab-shell|registry|sidekiq|webservice"}[1h])
+            (
+              sum by (type, pod, container) (
+                rate(container_cpu_usage_seconds_total:labeled{container!="", container!="POD", type=~"consul|gitlab-shell|registry|sidekiq|webservice"}[1h])
+              )
+              unless on(type, pod, container) (
+                container_spec_cpu_quota:labeled{container!="", container!="POD", type=~"consul|gitlab-shell|registry|sidekiq|webservice"}
+              )
             )
             /
             sum by(type, pod, container) (
