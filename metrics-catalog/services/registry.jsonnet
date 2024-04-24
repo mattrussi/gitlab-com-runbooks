@@ -173,6 +173,9 @@ metricsCatalog.serviceDefinition(
       },
     },
   )
+  {
+    tenants: [ 'gitlab-gprd', 'gitlab-gstg', 'gitlab-pre' ],
+  }
   +
   {
     capacityPlanning: {

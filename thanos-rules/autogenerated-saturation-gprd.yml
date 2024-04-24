@@ -82,10 +82,10 @@ groups:
       max by(env, environment, tier, type, stage, shard) (
         clamp_min(
           clamp_max(
-            go_memstats_alloc_bytes{env="gprd",type=~"ai-assisted|api|atlantis|git|internal-api|kas|monitoring|ops-gitlab-net|registry|vault|web|web-pages|websockets"}
+            go_memstats_alloc_bytes{env="gprd",type=~"ai-assisted|api|atlantis|git|internal-api|istio|kas|monitoring|ops-gitlab-net|registry|vault|web|web-pages|websockets"}
             / on(env, environment, tier, type, stage, shard, cluster, pod) group_left()
             topk by(env, environment, tier, type, stage, shard, cluster, pod) (1,
-              container_spec_memory_limit_bytes:labeled{container=~"gitlab-pages|gitlab-workhorse|kas|registry|thanos-store",env="gprd",type=~"ai-assisted|api|atlantis|git|internal-api|kas|monitoring|ops-gitlab-net|registry|vault|web|web-pages|websockets"}
+              container_spec_memory_limit_bytes:labeled{container=~"gitlab-pages|gitlab-workhorse|kas|registry|thanos-store",env="gprd",type=~"ai-assisted|api|atlantis|git|internal-api|istio|kas|monitoring|ops-gitlab-net|registry|vault|web|web-pages|websockets"}
             )
             ,
             1)
@@ -120,7 +120,7 @@ groups:
         clamp_min(
           clamp_max(
             count by (cluster, env, environment, label_pool, tier, type, stage, shard) (
-              kube_node_labels:labeled{env="gprd",type=~"kube|redis-cluster-cache|redis-cluster-feature-flag|redis-cluster-shared-state|redis-cluster-queues-meta|redis-cluster-repo-cache|redis-sidekiq|redis-tracechunks|redis-cluster-ratelimiting|redis-cluster-chat-cache|redis-sessions|redis-registry-cache|redis-db-load-balancing|redis-pubsub|redis|vault"}
+              kube_node_labels:labeled{env="gprd",type=~"kube|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis-tracechunks|redis|vault"}
             )
             / on(cluster, env, environment, label_pool) group_left() (
               label_replace(
@@ -130,7 +130,7 @@ groups:
               * on(cluster, env, environment) group_left()
               count by (cluster, env, environment) (
                 group by (cluster, env, environment, label_topology_kubernetes_io_zone) (
-                  kube_node_labels:labeled{env="gprd",type=~"kube|redis-cluster-cache|redis-cluster-feature-flag|redis-cluster-shared-state|redis-cluster-queues-meta|redis-cluster-repo-cache|redis-sidekiq|redis-tracechunks|redis-cluster-ratelimiting|redis-cluster-chat-cache|redis-sessions|redis-registry-cache|redis-db-load-balancing|redis-pubsub|redis|vault"}
+                  kube_node_labels:labeled{env="gprd",type=~"kube|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis-tracechunks|redis|vault"}
                 )
               )
             )
@@ -203,9 +203,9 @@ groups:
               1
               -
               (
-                rate(node_cpu_seconds_total{mode="idle", env="gprd",type=~"patroni|patroni-registry|patroni-embedding|patroni-ci|postgres-archive|sentry"}[5m])
+                rate(node_cpu_seconds_total{mode="idle", env="gprd",type=~"patroni-ci|patroni-embedding|patroni-registry|patroni|postgres-archive|sentry"}[5m])
                 and on(fqdn)
-                pg_replication_is_replica{env="gprd",type=~"patroni|patroni-registry|patroni-embedding|patroni-ci|postgres-archive|sentry"} == 0
+                pg_replication_is_replica{env="gprd",type=~"patroni-ci|patroni-embedding|patroni-registry|patroni|postgres-archive|sentry"} == 0
               )
             )
             ,
@@ -221,13 +221,13 @@ groups:
         clamp_min(
           clamp_max(
             sum by (env, environment, tier, type, stage, shard) (
-              rate(fluentd_pg_auto_vacuum_elapsed_seconds_total{env="gprd",type=~"patroni|patroni-registry|patroni-embedding|patroni-ci"}[1d])
-              and on (fqdn) (pg_replication_is_replica{env="gprd",type=~"patroni|patroni-registry|patroni-embedding|patroni-ci"} == 0)
+              rate(fluentd_pg_auto_vacuum_elapsed_seconds_total{env="gprd",type=~"patroni-ci|patroni-embedding|patroni-registry|patroni"}[1d])
+              and on (fqdn) (pg_replication_is_replica{env="gprd",type=~"patroni-ci|patroni-embedding|patroni-registry|patroni"} == 0)
             )
             /
             avg by (env, environment, tier, type, stage, shard) (
-              pg_settings_autovacuum_max_workers{env="gprd",type=~"patroni|patroni-registry|patroni-embedding|patroni-ci"}
-              and on (instance, job) (pg_replication_is_replica{env="gprd",type=~"patroni|patroni-registry|patroni-embedding|patroni-ci"} == 0)
+              pg_settings_autovacuum_max_workers{env="gprd",type=~"patroni-ci|patroni-embedding|patroni-registry|patroni"}
+              and on (instance, job) (pg_replication_is_replica{env="gprd",type=~"patroni-ci|patroni-embedding|patroni-registry|patroni"} == 0)
             )
             ,
             1)
@@ -243,12 +243,12 @@ groups:
           clamp_max(
             sum by (env, environment, tier, type, stage, shard) (
               sum by(env, environment, tier, type, stage, shard, fqdn) (
-                rate(namedprocess_namegroup_cpu_seconds_total{env="gprd",type=~"patroni|patroni-registry|patroni-embedding|patroni-ci", groupname=~"pg.worker.walsender|pg.worker.walwriter|wal-g"}[5m])
-                and on (fqdn) (pg_replication_is_replica{env="gprd",type=~"patroni|patroni-registry|patroni-embedding|patroni-ci"} == 0)
+                rate(namedprocess_namegroup_cpu_seconds_total{env="gprd",type=~"patroni-ci|patroni-embedding|patroni-registry|patroni", groupname=~"pg.worker.walsender|pg.worker.walwriter|wal-g"}[5m])
+                and on (fqdn) (pg_replication_is_replica{env="gprd",type=~"patroni-ci|patroni-embedding|patroni-registry|patroni"} == 0)
               )
               /
               count by (env, environment, tier, type, stage, shard, fqdn) (
-                node_cpu_seconds_total{env="gprd",type=~"patroni|patroni-registry|patroni-embedding|patroni-ci", mode="idle"} and on(fqdn) (pg_replication_is_replica{env="gprd",type=~"patroni|patroni-registry|patroni-embedding|patroni-ci"} == 0)
+                node_cpu_seconds_total{env="gprd",type=~"patroni-ci|patroni-embedding|patroni-registry|patroni", mode="idle"} and on(fqdn) (pg_replication_is_replica{env="gprd",type=~"patroni-ci|patroni-embedding|patroni-registry|patroni"} == 0)
               )
             )
             ,

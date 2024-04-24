@@ -9,6 +9,7 @@ metricsCatalog.serviceDefinition(
     descriptiveName='Redis Sidekiq'
   )
   {
+    tenants: [ 'gitlab-gprd', 'gitlab-gstg', 'gitlab-pre' ],
     monitoring: { shard: { enabled: true } },
     serviceLevelIndicators+: {
       rails_redis_client+: {

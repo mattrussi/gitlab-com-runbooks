@@ -79,7 +79,7 @@ groups:
         clamp_min(
           clamp_max(
             1 - avg by (environment, tier, type, stage, shard) (
-              rate(node_cpu_seconds_total{mode="idle", type=~"gitaly|ci-runners|consul|customersdot|frontend|jaeger|monitoring|patroni|patroni-registry|patroni-embedding|patroni-ci|postgres-archive|pgbouncer|pgbouncer-registry|pgbouncer-embedding|pgbouncer-ci|redis-cluster-cache|redis-cluster-feature-flag|redis-cluster-shared-state|redis-cluster-queues-meta|redis-cluster-repo-cache|redis-sidekiq|redis-tracechunks|redis-cluster-ratelimiting|redis-cluster-chat-cache|redis-sessions|redis-registry-cache|redis-db-load-balancing|redis-pubsub|redis|registry|sentry|web-pages"}[5m])
+              rate(node_cpu_seconds_total{mode="idle", type=~"gitaly|ci-runners|consul|customersdot|frontend|jaeger|monitoring|patroni-ci|patroni-embedding|patroni-registry|patroni|pgbouncer-ci|pgbouncer-embedding|pgbouncer-registry|pgbouncer|postgres-archive|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis-tracechunks|redis|registry|sentry|web-pages"}[5m])
             )
             ,
             1)
@@ -94,9 +94,9 @@ groups:
         clamp_min(
           clamp_max(
             1 - (
-              node_filesystem_files_free{fstype=~"(ext.|xfs)", type=~"gitaly|ci-runners|consul|customersdot|frontend|jaeger|monitoring|patroni|patroni-registry|patroni-embedding|patroni-ci|postgres-archive|pgbouncer|pgbouncer-registry|pgbouncer-embedding|pgbouncer-ci|redis-cluster-cache|redis-cluster-feature-flag|redis-cluster-shared-state|redis-cluster-queues-meta|redis-cluster-repo-cache|redis-sidekiq|redis-tracechunks|redis-cluster-ratelimiting|redis-cluster-chat-cache|redis-sessions|redis-registry-cache|redis-db-load-balancing|redis-pubsub|redis|registry|sentry|web-pages"}
+              node_filesystem_files_free{fstype=~"(ext.|xfs)", type=~"gitaly|ci-runners|consul|customersdot|frontend|jaeger|monitoring|patroni-ci|patroni-embedding|patroni-registry|patroni|pgbouncer-ci|pgbouncer-embedding|pgbouncer-registry|pgbouncer|postgres-archive|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis-tracechunks|redis|registry|sentry|web-pages"}
               /
-              node_filesystem_files{fstype=~"(ext.|xfs)", type=~"gitaly|ci-runners|consul|customersdot|frontend|jaeger|monitoring|patroni|patroni-registry|patroni-embedding|patroni-ci|postgres-archive|pgbouncer|pgbouncer-registry|pgbouncer-embedding|pgbouncer-ci|redis-cluster-cache|redis-cluster-feature-flag|redis-cluster-shared-state|redis-cluster-queues-meta|redis-cluster-repo-cache|redis-sidekiq|redis-tracechunks|redis-cluster-ratelimiting|redis-cluster-chat-cache|redis-sessions|redis-registry-cache|redis-db-load-balancing|redis-pubsub|redis|registry|sentry|web-pages"}
+              node_filesystem_files{fstype=~"(ext.|xfs)", type=~"gitaly|ci-runners|consul|customersdot|frontend|jaeger|monitoring|patroni-ci|patroni-embedding|patroni-registry|patroni|pgbouncer-ci|pgbouncer-embedding|pgbouncer-registry|pgbouncer|postgres-archive|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis-tracechunks|redis|registry|sentry|web-pages"}
             )
             ,
             1)
@@ -111,7 +111,7 @@ groups:
         clamp_min(
           clamp_max(
             (
-              1 - node_filesystem_avail_bytes{fstype=~"ext.|xfs", type=~"gitaly|ci-runners|consul|customersdot|frontend|jaeger|monitoring|patroni|patroni-registry|patroni-embedding|patroni-ci|postgres-archive|pgbouncer|pgbouncer-registry|pgbouncer-embedding|pgbouncer-ci|redis-cluster-cache|redis-cluster-feature-flag|redis-cluster-shared-state|redis-cluster-queues-meta|redis-cluster-repo-cache|redis-sidekiq|redis-tracechunks|redis-cluster-ratelimiting|redis-cluster-chat-cache|redis-sessions|redis-registry-cache|redis-db-load-balancing|redis-pubsub|redis|registry|sentry|web-pages"} / node_filesystem_size_bytes{fstype=~"ext.|xfs", type=~"gitaly|ci-runners|consul|customersdot|frontend|jaeger|monitoring|patroni|patroni-registry|patroni-embedding|patroni-ci|postgres-archive|pgbouncer|pgbouncer-registry|pgbouncer-embedding|pgbouncer-ci|redis-cluster-cache|redis-cluster-feature-flag|redis-cluster-shared-state|redis-cluster-queues-meta|redis-cluster-repo-cache|redis-sidekiq|redis-tracechunks|redis-cluster-ratelimiting|redis-cluster-chat-cache|redis-sessions|redis-registry-cache|redis-db-load-balancing|redis-pubsub|redis|registry|sentry|web-pages"}
+              1 - node_filesystem_avail_bytes{fstype=~"ext.|xfs", type=~"gitaly|ci-runners|consul|customersdot|frontend|jaeger|monitoring|patroni-ci|patroni-embedding|patroni-registry|patroni|pgbouncer-ci|pgbouncer-embedding|pgbouncer-registry|pgbouncer|postgres-archive|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis-tracechunks|redis|registry|sentry|web-pages"} / node_filesystem_size_bytes{fstype=~"ext.|xfs", type=~"gitaly|ci-runners|consul|customersdot|frontend|jaeger|monitoring|patroni-ci|patroni-embedding|patroni-registry|patroni|pgbouncer-ci|pgbouncer-embedding|pgbouncer-registry|pgbouncer|postgres-archive|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis-tracechunks|redis|registry|sentry|web-pages"}
             )
             ,
             1)
@@ -125,9 +125,9 @@ groups:
       max by(environment, tier, type, stage, shard) (
         clamp_min(
           clamp_max(
-            rate(node_disk_reads_completed_total{device!="sda", type=~"gitaly|patroni|patroni-ci"}[20m])
+            rate(node_disk_reads_completed_total{device!="sda", type=~"gitaly|patroni-ci|patroni"}[20m])
             /
-            node_disk_max_read_iops{device!="sda", type=~"gitaly|patroni|patroni-ci"}
+            node_disk_max_read_iops{device!="sda", type=~"gitaly|patroni-ci|patroni"}
             ,
             1)
         ,
@@ -140,9 +140,9 @@ groups:
       max by(environment, tier, type, stage, shard) (
         clamp_min(
           clamp_max(
-            rate(node_disk_read_bytes_total{device!="sda", type=~"gitaly|patroni|patroni-ci"}[20m])
+            rate(node_disk_read_bytes_total{device!="sda", type=~"gitaly|patroni-ci|patroni"}[20m])
             /
-            node_disk_max_read_bytes_seconds{device!="sda", type=~"gitaly|patroni|patroni-ci"}
+            node_disk_max_read_bytes_seconds{device!="sda", type=~"gitaly|patroni-ci|patroni"}
             ,
             1)
         ,
@@ -155,9 +155,9 @@ groups:
       max by(environment, tier, type, stage, shard) (
         clamp_min(
           clamp_max(
-            rate(node_disk_writes_completed_total{device!="sda", type=~"gitaly|patroni|patroni-ci"}[20m])
+            rate(node_disk_writes_completed_total{device!="sda", type=~"gitaly|patroni-ci|patroni"}[20m])
             /
-            node_disk_max_write_iops{device!="sda", type=~"gitaly|patroni|patroni-ci"}
+            node_disk_max_write_iops{device!="sda", type=~"gitaly|patroni-ci|patroni"}
             ,
             1)
         ,
@@ -170,9 +170,9 @@ groups:
       max by(environment, tier, type, stage, shard) (
         clamp_min(
           clamp_max(
-            rate(node_disk_written_bytes_total{device!="sda", type=~"gitaly|patroni|patroni-ci"}[20m])
+            rate(node_disk_written_bytes_total{device!="sda", type=~"gitaly|patroni-ci|patroni"}[20m])
             /
-            node_disk_max_write_bytes_seconds{device!="sda", type=~"gitaly|patroni|patroni-ci"}
+            node_disk_max_write_bytes_seconds{device!="sda", type=~"gitaly|patroni-ci|patroni"}
             ,
             1)
         ,
@@ -364,12 +364,17 @@ groups:
         0.99,
         clamp_min(
           clamp_max(
-            sum by (environment, tier, type, stage, shard, pod, container) (
-              rate(container_cpu_usage_seconds_total:labeled{container!="", container!="POD", type=~"web|ai-assisted|api|internal-api|atlantis|camoproxy|consul|external-dns|git|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis-cluster-cache|redis-cluster-feature-flag|redis-cluster-shared-state|redis-cluster-queues-meta|redis-cluster-repo-cache|redis-sidekiq|redis-tracechunks|redis-cluster-ratelimiting|redis-cluster-chat-cache|redis-sessions|redis-registry-cache|redis-db-load-balancing|redis-pubsub|redis|registry|sidekiq|vault|web-pages|websockets|woodhouse"}[1h])
+            (
+              sum by (environment, tier, type, stage, shard, pod, container) (
+                rate(container_cpu_usage_seconds_total:labeled{container!="", container!="POD", type=~"web|ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|istio|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis-tracechunks|redis|registry|sidekiq|vault|web-pages|websockets|woodhouse"}[1h])
+              )
+              unless on(environment, tier, type, stage, shard, pod, container) (
+                container_spec_cpu_quota:labeled{container!="", container!="POD", type=~"web|ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|istio|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis-tracechunks|redis|registry|sidekiq|vault|web-pages|websockets|woodhouse"}
+              )
             )
             /
             sum by(environment, tier, type, stage, shard, pod, container) (
-              kube_pod_container_resource_requests:labeled{container!="", container!="POD", resource="cpu", type=~"web|ai-assisted|api|internal-api|atlantis|camoproxy|consul|external-dns|git|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis-cluster-cache|redis-cluster-feature-flag|redis-cluster-shared-state|redis-cluster-queues-meta|redis-cluster-repo-cache|redis-sidekiq|redis-tracechunks|redis-cluster-ratelimiting|redis-cluster-chat-cache|redis-sessions|redis-registry-cache|redis-db-load-balancing|redis-pubsub|redis|registry|sidekiq|vault|web-pages|websockets|woodhouse"}
+              kube_pod_container_resource_requests:labeled{container!="", container!="POD", resource="cpu", type=~"web|ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|istio|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis-tracechunks|redis|registry|sidekiq|vault|web-pages|websockets|woodhouse"}
             )
             ,
             1)
@@ -384,13 +389,13 @@ groups:
         clamp_min(
           clamp_max(
             sum by (environment, tier, type, stage, shard, pod, container) (
-              rate(container_cpu_usage_seconds_total:labeled{container!="", container!="POD", type=~"web|ai-assisted|api|internal-api|atlantis|camoproxy|consul|external-dns|git|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis-cluster-cache|redis-cluster-feature-flag|redis-cluster-shared-state|redis-cluster-queues-meta|redis-cluster-repo-cache|redis-sidekiq|redis-tracechunks|redis-cluster-ratelimiting|redis-cluster-chat-cache|redis-sessions|redis-registry-cache|redis-db-load-balancing|redis-pubsub|redis|registry|sidekiq|vault|web-pages|websockets|woodhouse"}[5m])
+              rate(container_cpu_usage_seconds_total:labeled{container!="", container!="POD", type=~"web|ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|istio|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis-tracechunks|redis|registry|sidekiq|vault|web-pages|websockets|woodhouse"}[5m])
             )
             /
             sum by(environment, tier, type, stage, shard, pod, container) (
-              container_spec_cpu_quota:labeled{container!="", container!="POD", type=~"web|ai-assisted|api|internal-api|atlantis|camoproxy|consul|external-dns|git|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis-cluster-cache|redis-cluster-feature-flag|redis-cluster-shared-state|redis-cluster-queues-meta|redis-cluster-repo-cache|redis-sidekiq|redis-tracechunks|redis-cluster-ratelimiting|redis-cluster-chat-cache|redis-sessions|redis-registry-cache|redis-db-load-balancing|redis-pubsub|redis|registry|sidekiq|vault|web-pages|websockets|woodhouse"}
+              container_spec_cpu_quota:labeled{container!="", container!="POD", type=~"web|ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|istio|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis-tracechunks|redis|registry|sidekiq|vault|web-pages|websockets|woodhouse"}
               /
-              container_spec_cpu_period:labeled{container!="", container!="POD", type=~"web|ai-assisted|api|internal-api|atlantis|camoproxy|consul|external-dns|git|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis-cluster-cache|redis-cluster-feature-flag|redis-cluster-shared-state|redis-cluster-queues-meta|redis-cluster-repo-cache|redis-sidekiq|redis-tracechunks|redis-cluster-ratelimiting|redis-cluster-chat-cache|redis-sessions|redis-registry-cache|redis-db-load-balancing|redis-pubsub|redis|registry|sidekiq|vault|web-pages|websockets|woodhouse"}
+              container_spec_cpu_period:labeled{container!="", container!="POD", type=~"web|ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|istio|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis-tracechunks|redis|registry|sidekiq|vault|web-pages|websockets|woodhouse"}
             )
             ,
             1)
@@ -404,9 +409,9 @@ groups:
       max by(environment, tier, type, stage, shard) (
         clamp_min(
           clamp_max(
-            container_memory_working_set_bytes:labeled{container!="", container!="POD", type=~"atlantis|camoproxy|consul|external-dns|kas|kube|logging|mailroom|monitoring|nginx|packagecloud|plantuml|redis-cluster-cache|redis-cluster-feature-flag|redis-cluster-shared-state|redis-cluster-queues-meta|redis-cluster-repo-cache|redis-sidekiq|redis-tracechunks|redis-cluster-ratelimiting|redis-cluster-chat-cache|redis-sessions|redis-registry-cache|redis-db-load-balancing|redis-pubsub|redis|registry|vault|web-pages|woodhouse"}
+            container_memory_working_set_bytes:labeled{container!="", container!="POD", type=~"atlantis|camoproxy|consul|external-dns|istio|kas|kube|logging|mailroom|monitoring|nginx|packagecloud|plantuml|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis-tracechunks|redis|registry|vault|web-pages|woodhouse"}
             /
-            (container_spec_memory_limit_bytes:labeled{container!="", container!="POD", type=~"atlantis|camoproxy|consul|external-dns|kas|kube|logging|mailroom|monitoring|nginx|packagecloud|plantuml|redis-cluster-cache|redis-cluster-feature-flag|redis-cluster-shared-state|redis-cluster-queues-meta|redis-cluster-repo-cache|redis-sidekiq|redis-tracechunks|redis-cluster-ratelimiting|redis-cluster-chat-cache|redis-sessions|redis-registry-cache|redis-db-load-balancing|redis-pubsub|redis|registry|vault|web-pages|woodhouse"} > 0)
+            (container_spec_memory_limit_bytes:labeled{container!="", container!="POD", type=~"atlantis|camoproxy|consul|external-dns|istio|kas|kube|logging|mailroom|monitoring|nginx|packagecloud|plantuml|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis-tracechunks|redis|registry|vault|web-pages|woodhouse"} > 0)
             ,
             1)
         ,
@@ -419,9 +424,9 @@ groups:
       max by(environment, tier, type, stage, shard) (
         clamp_min(
           clamp_max(
-            container_memory_rss:labeled{container!="", container!="POD", type=~"ai-assisted|api|internal-api|git|ops-gitlab-net|sidekiq|web|websockets"}
+            container_memory_rss:labeled{container!="", container!="POD", type=~"ai-assisted|api|git|internal-api|ops-gitlab-net|sidekiq|web|websockets"}
             /
-            (container_spec_memory_limit_bytes:labeled{container!="", container!="POD", type=~"ai-assisted|api|internal-api|git|ops-gitlab-net|sidekiq|web|websockets"} > 0)
+            (container_spec_memory_limit_bytes:labeled{container!="", container!="POD", type=~"ai-assisted|api|git|internal-api|ops-gitlab-net|sidekiq|web|websockets"} > 0)
             ,
             1)
         ,
@@ -436,9 +441,9 @@ groups:
         clamp_min(
           clamp_max(
             avg by (environment, tier, type, stage, shard, pod, container)(
-              rate(container_cpu_cfs_throttled_periods_total:labeled{container!="", type=~"web|ai-assisted|api|internal-api|atlantis|camoproxy|consul|external-dns|git|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis-cluster-cache|redis-cluster-feature-flag|redis-cluster-shared-state|redis-cluster-queues-meta|redis-cluster-repo-cache|redis-sidekiq|redis-tracechunks|redis-cluster-ratelimiting|redis-cluster-chat-cache|redis-sessions|redis-registry-cache|redis-db-load-balancing|redis-pubsub|redis|registry|sidekiq|vault|web-pages|websockets|woodhouse"}[5m])
+              rate(container_cpu_cfs_throttled_periods_total:labeled{container!="", type=~"web|ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|istio|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis-tracechunks|redis|registry|sidekiq|vault|web-pages|websockets|woodhouse"}[5m])
               /
-              rate(container_cpu_cfs_periods_total:labeled{container!="", type=~"web|ai-assisted|api|internal-api|atlantis|camoproxy|consul|external-dns|git|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis-cluster-cache|redis-cluster-feature-flag|redis-cluster-shared-state|redis-cluster-queues-meta|redis-cluster-repo-cache|redis-sidekiq|redis-tracechunks|redis-cluster-ratelimiting|redis-cluster-chat-cache|redis-sessions|redis-registry-cache|redis-db-load-balancing|redis-pubsub|redis|registry|sidekiq|vault|web-pages|websockets|woodhouse"}[5m])
+              rate(container_cpu_cfs_periods_total:labeled{container!="", type=~"web|ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|istio|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis-tracechunks|redis|registry|sidekiq|vault|web-pages|websockets|woodhouse"}[5m])
             )
             ,
             1)
@@ -452,9 +457,9 @@ groups:
       max by(environment, tier, type, stage, shard) (
         clamp_min(
           clamp_max(
-            kube_horizontalpodautoscaler_status_desired_replicas:labeled{type=~"web|ai-assisted|api|internal-api|atlantis|camoproxy|consul|external-dns|git|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis-cluster-cache|redis-cluster-feature-flag|redis-cluster-shared-state|redis-cluster-queues-meta|redis-cluster-repo-cache|redis-sidekiq|redis-tracechunks|redis-cluster-ratelimiting|redis-cluster-chat-cache|redis-sessions|redis-registry-cache|redis-db-load-balancing|redis-pubsub|redis|registry|sidekiq|vault|web-pages|websockets|woodhouse", shard!~"database-throttled|elasticsearch|gitaly-throttled|urgent-authorized-projects|urgent-other", namespace!~"pubsubbeat"}
+            kube_horizontalpodautoscaler_status_desired_replicas:labeled{type=~"web|ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|istio|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis-tracechunks|redis|registry|sidekiq|vault|web-pages|websockets|woodhouse", shard!~"database-throttled|elasticsearch|gitaly-throttled|urgent-authorized-projects|urgent-other", namespace!~"pubsubbeat"}
             /
-            kube_horizontalpodautoscaler_spec_max_replicas:labeled{type=~"web|ai-assisted|api|internal-api|atlantis|camoproxy|consul|external-dns|git|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis-cluster-cache|redis-cluster-feature-flag|redis-cluster-shared-state|redis-cluster-queues-meta|redis-cluster-repo-cache|redis-sidekiq|redis-tracechunks|redis-cluster-ratelimiting|redis-cluster-chat-cache|redis-sessions|redis-registry-cache|redis-db-load-balancing|redis-pubsub|redis|registry|sidekiq|vault|web-pages|websockets|woodhouse", shard!~"database-throttled|elasticsearch|gitaly-throttled|urgent-authorized-projects|urgent-other", namespace!~"pubsubbeat"}
+            kube_horizontalpodautoscaler_spec_max_replicas:labeled{type=~"web|ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|istio|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis-tracechunks|redis|registry|sidekiq|vault|web-pages|websockets|woodhouse", shard!~"database-throttled|elasticsearch|gitaly-throttled|urgent-authorized-projects|urgent-other", namespace!~"pubsubbeat"}
             ,
             1)
         ,
@@ -504,7 +509,7 @@ groups:
         clamp_min(
           clamp_max(
             1 - avg by (environment, tier, type, stage, shard) (
-              rate(node_cpu_seconds_total:labeled{mode="idle", type=~"kube|redis-cluster-cache|redis-cluster-feature-flag|redis-cluster-shared-state|redis-cluster-queues-meta|redis-cluster-repo-cache|redis-sidekiq|redis-tracechunks|redis-cluster-ratelimiting|redis-cluster-chat-cache|redis-sessions|redis-registry-cache|redis-db-load-balancing|redis-pubsub|redis|vault"}[5m])
+              rate(node_cpu_seconds_total:labeled{mode="idle", type=~"kube|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis-tracechunks|redis|vault"}[5m])
             )
             ,
             1)
@@ -518,7 +523,7 @@ groups:
       max by(environment, tier, type, stage, shard) (
         clamp_min(
           clamp_max(
-            instance:node_memory_utilization:ratio{type=~"gitaly|ci-runners|consul|customersdot|frontend|jaeger|monitoring|patroni|patroni-registry|patroni-embedding|patroni-ci|postgres-archive|pgbouncer|pgbouncer-registry|pgbouncer-embedding|pgbouncer-ci|redis-cluster-feature-flag|redis-cluster-shared-state|redis-cluster-queues-meta|redis-cluster-repo-cache|redis-sidekiq|redis-tracechunks|redis-cluster-ratelimiting|redis-cluster-chat-cache|redis-sessions|redis-registry-cache|redis-db-load-balancing|redis-pubsub|redis|registry|sentry|web-pages"} or instance:node_memory_utilisation:ratio{type=~"gitaly|ci-runners|consul|customersdot|frontend|jaeger|monitoring|patroni|patroni-registry|patroni-embedding|patroni-ci|postgres-archive|pgbouncer|pgbouncer-registry|pgbouncer-embedding|pgbouncer-ci|redis-cluster-feature-flag|redis-cluster-shared-state|redis-cluster-queues-meta|redis-cluster-repo-cache|redis-sidekiq|redis-tracechunks|redis-cluster-ratelimiting|redis-cluster-chat-cache|redis-sessions|redis-registry-cache|redis-db-load-balancing|redis-pubsub|redis|registry|sentry|web-pages"}
+            instance:node_memory_utilization:ratio{type=~"gitaly|ci-runners|consul|customersdot|frontend|jaeger|monitoring|patroni-ci|patroni-embedding|patroni-registry|patroni|pgbouncer-ci|pgbouncer-embedding|pgbouncer-registry|pgbouncer|postgres-archive|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis-tracechunks|redis|registry|sentry|web-pages"} or instance:node_memory_utilisation:ratio{type=~"gitaly|ci-runners|consul|customersdot|frontend|jaeger|monitoring|patroni-ci|patroni-embedding|patroni-registry|patroni|pgbouncer-ci|pgbouncer-embedding|pgbouncer-registry|pgbouncer|postgres-archive|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis-tracechunks|redis|registry|sentry|web-pages"}
             ,
             1)
         ,
@@ -572,9 +577,9 @@ groups:
       max by(environment, tier, type, stage, shard) (
         clamp_min(
           clamp_max(
-            max_over_time(node_nf_conntrack_entries{type=~"patroni|ci-runners|consul|customersdot|frontend|gitaly|jaeger|monitoring|patroni-registry|patroni-embedding|patroni-ci|postgres-archive|pgbouncer|pgbouncer-registry|pgbouncer-embedding|pgbouncer-ci|redis-cluster-cache|redis-cluster-feature-flag|redis-cluster-shared-state|redis-cluster-queues-meta|redis-cluster-repo-cache|redis-sidekiq|redis-tracechunks|redis-cluster-ratelimiting|redis-cluster-chat-cache|redis-sessions|redis-registry-cache|redis-db-load-balancing|redis-pubsub|redis|registry|sentry|web-pages"}[1m])
+            max_over_time(node_nf_conntrack_entries{type=~"patroni|ci-runners|consul|customersdot|frontend|gitaly|jaeger|monitoring|patroni-ci|patroni-embedding|patroni-registry|pgbouncer-ci|pgbouncer-embedding|pgbouncer-registry|pgbouncer|postgres-archive|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis-tracechunks|redis|registry|sentry|web-pages"}[1m])
             /
-            node_nf_conntrack_entries_limit{type=~"patroni|ci-runners|consul|customersdot|frontend|gitaly|jaeger|monitoring|patroni-registry|patroni-embedding|patroni-ci|postgres-archive|pgbouncer|pgbouncer-registry|pgbouncer-embedding|pgbouncer-ci|redis-cluster-cache|redis-cluster-feature-flag|redis-cluster-shared-state|redis-cluster-queues-meta|redis-cluster-repo-cache|redis-sidekiq|redis-tracechunks|redis-cluster-ratelimiting|redis-cluster-chat-cache|redis-sessions|redis-registry-cache|redis-db-load-balancing|redis-pubsub|redis|registry|sentry|web-pages"}
+            node_nf_conntrack_entries_limit{type=~"patroni|ci-runners|consul|customersdot|frontend|gitaly|jaeger|monitoring|patroni-ci|patroni-embedding|patroni-registry|pgbouncer-ci|pgbouncer-embedding|pgbouncer-registry|pgbouncer|postgres-archive|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis-tracechunks|redis|registry|sentry|web-pages"}
             ,
             1)
         ,
@@ -587,7 +592,7 @@ groups:
       max by(environment, tier, type, stage, shard) (
         clamp_min(
           clamp_max(
-            avg without (cpu) (rate(node_schedstat_waiting_seconds_total{type=~"patroni|ci-runners|consul|customersdot|frontend|gitaly|jaeger|monitoring|patroni-registry|patroni-embedding|patroni-ci|postgres-archive|pgbouncer|pgbouncer-registry|pgbouncer-embedding|pgbouncer-ci|redis-cluster-cache|redis-cluster-feature-flag|redis-cluster-shared-state|redis-cluster-queues-meta|redis-cluster-repo-cache|redis-sidekiq|redis-tracechunks|redis-cluster-ratelimiting|redis-cluster-chat-cache|redis-sessions|redis-registry-cache|redis-db-load-balancing|redis-pubsub|redis|registry|sentry|web-pages"}[1h]))
+            avg without (cpu) (rate(node_schedstat_waiting_seconds_total{type=~"patroni|ci-runners|consul|customersdot|frontend|gitaly|jaeger|monitoring|patroni-ci|patroni-embedding|patroni-registry|pgbouncer-ci|pgbouncer-embedding|pgbouncer-registry|pgbouncer|postgres-archive|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis-tracechunks|redis|registry|sentry|web-pages"}[1h]))
             ,
             1)
         ,
@@ -601,15 +606,15 @@ groups:
         clamp_min(
           clamp_max(
             (
-              process_open_fds{type=~"ai-assisted|api|internal-api|atlantis|camoproxy|ci-runners|consul|customersdot|external-dns|frontend|git|gitaly|google-cloud-storage|jaeger|kas|logging|mailgun|mailroom|memorystore|monitoring|nginx|ops-gitlab-net|packagecloud|patroni|patroni-registry|patroni-embedding|patroni-ci|postgres-archive|pgbouncer|pgbouncer-registry|pgbouncer-embedding|pgbouncer-ci|plantuml|redis-cluster-cache|redis-cluster-feature-flag|redis-cluster-shared-state|redis-cluster-queues-meta|redis-cluster-repo-cache|redis-sidekiq|redis-tracechunks|redis-cluster-ratelimiting|redis-cluster-chat-cache|redis-sessions|redis-registry-cache|redis-db-load-balancing|redis-pubsub|redis|registry|runway|search|sentry|sidekiq|vault|web-pages|web|websockets|woodhouse"}
+              process_open_fds{type=~"ai-assisted|api|atlantis|camoproxy|ci-runners|cloudflare|consul|customersdot|external-dns|frontend|git|gitaly|google-cloud-storage|internal-api|istio|jaeger|kas|logging|mailgun|mailroom|memorystore|monitoring|nginx|ops-gitlab-net|packagecloud|patroni-ci|patroni-embedding|patroni-registry|patroni|pgbouncer-ci|pgbouncer-embedding|pgbouncer-registry|pgbouncer|plantuml|postgres-archive|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis-tracechunks|redis|registry|runway|search|sentry|sidekiq|vault|web-pages|web|websockets|woodhouse"}
               /
-              process_max_fds{type=~"ai-assisted|api|internal-api|atlantis|camoproxy|ci-runners|consul|customersdot|external-dns|frontend|git|gitaly|google-cloud-storage|jaeger|kas|logging|mailgun|mailroom|memorystore|monitoring|nginx|ops-gitlab-net|packagecloud|patroni|patroni-registry|patroni-embedding|patroni-ci|postgres-archive|pgbouncer|pgbouncer-registry|pgbouncer-embedding|pgbouncer-ci|plantuml|redis-cluster-cache|redis-cluster-feature-flag|redis-cluster-shared-state|redis-cluster-queues-meta|redis-cluster-repo-cache|redis-sidekiq|redis-tracechunks|redis-cluster-ratelimiting|redis-cluster-chat-cache|redis-sessions|redis-registry-cache|redis-db-load-balancing|redis-pubsub|redis|registry|runway|search|sentry|sidekiq|vault|web-pages|web|websockets|woodhouse"}
+              process_max_fds{type=~"ai-assisted|api|atlantis|camoproxy|ci-runners|cloudflare|consul|customersdot|external-dns|frontend|git|gitaly|google-cloud-storage|internal-api|istio|jaeger|kas|logging|mailgun|mailroom|memorystore|monitoring|nginx|ops-gitlab-net|packagecloud|patroni-ci|patroni-embedding|patroni-registry|patroni|pgbouncer-ci|pgbouncer-embedding|pgbouncer-registry|pgbouncer|plantuml|postgres-archive|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis-tracechunks|redis|registry|runway|search|sentry|sidekiq|vault|web-pages|web|websockets|woodhouse"}
             )
             or
             (
-              ruby_file_descriptors{type=~"ai-assisted|api|internal-api|atlantis|camoproxy|ci-runners|consul|customersdot|external-dns|frontend|git|gitaly|google-cloud-storage|jaeger|kas|logging|mailgun|mailroom|memorystore|monitoring|nginx|ops-gitlab-net|packagecloud|patroni|patroni-registry|patroni-embedding|patroni-ci|postgres-archive|pgbouncer|pgbouncer-registry|pgbouncer-embedding|pgbouncer-ci|plantuml|redis-cluster-cache|redis-cluster-feature-flag|redis-cluster-shared-state|redis-cluster-queues-meta|redis-cluster-repo-cache|redis-sidekiq|redis-tracechunks|redis-cluster-ratelimiting|redis-cluster-chat-cache|redis-sessions|redis-registry-cache|redis-db-load-balancing|redis-pubsub|redis|registry|runway|search|sentry|sidekiq|vault|web-pages|web|websockets|woodhouse"}
+              ruby_file_descriptors{type=~"ai-assisted|api|atlantis|camoproxy|ci-runners|cloudflare|consul|customersdot|external-dns|frontend|git|gitaly|google-cloud-storage|internal-api|istio|jaeger|kas|logging|mailgun|mailroom|memorystore|monitoring|nginx|ops-gitlab-net|packagecloud|patroni-ci|patroni-embedding|patroni-registry|patroni|pgbouncer-ci|pgbouncer-embedding|pgbouncer-registry|pgbouncer|plantuml|postgres-archive|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis-tracechunks|redis|registry|runway|search|sentry|sidekiq|vault|web-pages|web|websockets|woodhouse"}
               /
-              ruby_process_max_fds{type=~"ai-assisted|api|internal-api|atlantis|camoproxy|ci-runners|consul|customersdot|external-dns|frontend|git|gitaly|google-cloud-storage|jaeger|kas|logging|mailgun|mailroom|memorystore|monitoring|nginx|ops-gitlab-net|packagecloud|patroni|patroni-registry|patroni-embedding|patroni-ci|postgres-archive|pgbouncer|pgbouncer-registry|pgbouncer-embedding|pgbouncer-ci|plantuml|redis-cluster-cache|redis-cluster-feature-flag|redis-cluster-shared-state|redis-cluster-queues-meta|redis-cluster-repo-cache|redis-sidekiq|redis-tracechunks|redis-cluster-ratelimiting|redis-cluster-chat-cache|redis-sessions|redis-registry-cache|redis-db-load-balancing|redis-pubsub|redis|registry|runway|search|sentry|sidekiq|vault|web-pages|web|websockets|woodhouse"}
+              ruby_process_max_fds{type=~"ai-assisted|api|atlantis|camoproxy|ci-runners|cloudflare|consul|customersdot|external-dns|frontend|git|gitaly|google-cloud-storage|internal-api|istio|jaeger|kas|logging|mailgun|mailroom|memorystore|monitoring|nginx|ops-gitlab-net|packagecloud|patroni-ci|patroni-embedding|patroni-registry|patroni|pgbouncer-ci|pgbouncer-embedding|pgbouncer-registry|pgbouncer|plantuml|postgres-archive|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis-tracechunks|redis|registry|runway|search|sentry|sidekiq|vault|web-pages|web|websockets|woodhouse"}
             )
             ,
             1)
@@ -624,10 +629,10 @@ groups:
         clamp_min(
           clamp_max(
             sum without (state) (
-              pg_stat_activity_count{datname=~"gitlabhq_production|gitlabhq_registry", state!="idle", type=~"patroni|patroni-registry|patroni-embedding|patroni-ci"} unless on(instance) (pg_replication_is_replica == 1)
+              pg_stat_activity_count{datname=~"gitlabhq_production|gitlabhq_registry", state!="idle", type=~"patroni-ci|patroni-embedding|patroni-registry|patroni"} unless on(instance) (pg_replication_is_replica == 1)
             )
             / on (environment, tier, type, stage, shard, fqdn)
-            pg_settings_max_connections{type=~"patroni|patroni-registry|patroni-embedding|patroni-ci"}
+            pg_settings_max_connections{type=~"patroni-ci|patroni-embedding|patroni-registry|patroni"}
             ,
             1)
         ,
@@ -641,10 +646,10 @@ groups:
         clamp_min(
           clamp_max(
             sum without (state) (
-              pg_stat_activity_count{datname=~"gitlabhq_production|gitlabhq_registry", state!="idle", type=~"patroni|patroni-registry|patroni-embedding|patroni-ci|postgres-archive"} and on(instance) (pg_replication_is_replica == 1)
+              pg_stat_activity_count{datname=~"gitlabhq_production|gitlabhq_registry", state!="idle", type=~"patroni-ci|patroni-embedding|patroni-registry|patroni|postgres-archive"} and on(instance) (pg_replication_is_replica == 1)
             )
             / on (environment, tier, type, stage, shard, fqdn)
-            pg_settings_max_connections{type=~"patroni|patroni-registry|patroni-embedding|patroni-ci|postgres-archive"}
+            pg_settings_max_connections{type=~"patroni-ci|patroni-embedding|patroni-registry|patroni|postgres-archive"}
             ,
             1)
         ,
@@ -657,9 +662,9 @@ groups:
       max by(environment, tier, type, stage, shard) (
         clamp_min(
           clamp_max(
-            sum by (environment, tier, type, stage, shard, fqdn) (last_over_time(gitlab_database_bloat_btree_bloat_size{type=~"patroni|patroni-registry|patroni-embedding|patroni-ci|postgres-archive"}[1h]))
+            sum by (environment, tier, type, stage, shard, fqdn) (last_over_time(gitlab_database_bloat_btree_bloat_size{type=~"patroni-ci|patroni-embedding|patroni-registry|patroni|postgres-archive"}[1h]))
             /
-            sum by (environment, tier, type, stage, shard, fqdn) (last_over_time(gitlab_database_bloat_btree_real_size{type=~"patroni|patroni-registry|patroni-embedding|patroni-ci|postgres-archive"}[1h]))
+            sum by (environment, tier, type, stage, shard, fqdn) (last_over_time(gitlab_database_bloat_btree_real_size{type=~"patroni-ci|patroni-embedding|patroni-registry|patroni|postgres-archive"}[1h]))
             ,
             1)
         ,
@@ -687,9 +692,9 @@ groups:
       max by(environment, tier, type, stage, shard) (
         clamp_min(
           clamp_max(
-            sum by (environment, tier, type, stage, shard, fqdn) (avg_over_time(gitlab_database_bloat_table_bloat_size{type=~"patroni|patroni-registry|patroni-embedding|patroni-ci|postgres-archive"}[58m]))
+            sum by (environment, tier, type, stage, shard, fqdn) (avg_over_time(gitlab_database_bloat_table_bloat_size{type=~"patroni-ci|patroni-embedding|patroni-registry|patroni|postgres-archive"}[58m]))
             /
-            sum by (environment, tier, type, stage, shard, fqdn) (avg_over_time(gitlab_database_bloat_table_real_size{type=~"patroni|patroni-registry|patroni-embedding|patroni-ci|postgres-archive"}[58m]))
+            sum by (environment, tier, type, stage, shard, fqdn) (avg_over_time(gitlab_database_bloat_table_real_size{type=~"patroni-ci|patroni-embedding|patroni-registry|patroni|postgres-archive"}[58m]))
             ,
             1)
         ,
@@ -704,7 +709,7 @@ groups:
           clamp_max(
             (
               sum by (environment, tier, type, stage, shard) (
-                increase(fluentd_pg_auto_vacuum_elapsed_seconds_total{type=~"patroni|patroni-registry|patroni-embedding|patroni-ci"}[1d])
+                increase(fluentd_pg_auto_vacuum_elapsed_seconds_total{type=~"patroni-ci|patroni-embedding|patroni-registry|patroni"}[1d])
               )
               / on(environment, type) group_left() (
                 pg_settings_autovacuum_max_workers and
@@ -717,7 +722,7 @@ groups:
               /
               (
                 avg by (environment, tier, type, stage, shard) (
-                  deriv(pg_txid_current{type=~"patroni|patroni-registry|patroni-embedding|patroni-ci"}[1d]) and
+                  deriv(pg_txid_current{type=~"patroni-ci|patroni-embedding|patroni-registry|patroni"}[1d]) and
                   on (instance) pg_replication_is_replica == 0
                 )
               )
@@ -736,11 +741,11 @@ groups:
           clamp_max(
             (
               max without (series) (
-                label_replace(pg_database_wraparound_age_datfrozenxid{type=~"patroni|patroni-registry|patroni-embedding|patroni-ci|sentry"}, "series", "datfrozenxid", "", "")
+                label_replace(pg_database_wraparound_age_datfrozenxid{type=~"patroni-ci|patroni-embedding|patroni-registry|patroni|sentry"}, "series", "datfrozenxid", "", "")
                 or
-                label_replace(pg_database_wraparound_age_datminmxid{type=~"patroni|patroni-registry|patroni-embedding|patroni-ci|sentry"}, "series", "datminmxid", "", "")
+                label_replace(pg_database_wraparound_age_datminmxid{type=~"patroni-ci|patroni-embedding|patroni-registry|patroni|sentry"}, "series", "datminmxid", "", "")
               )
-              and on (instance, job) (pg_replication_is_replica{type=~"patroni|patroni-registry|patroni-embedding|patroni-ci|sentry"} == 0)
+              and on (instance, job) (pg_replication_is_replica{type=~"patroni-ci|patroni-embedding|patroni-registry|patroni|sentry"} == 0)
             )
             /
             (2^31 - 3000000)
@@ -757,14 +762,14 @@ groups:
         clamp_min(
           clamp_max(
             (
-              avg_over_time(pgbouncer_pools_server_active_connections{user="gitlab", database="gitlabhq_production_sidekiq", type=~"pgbouncer|pgbouncer-ci"}[5m]) +
-              avg_over_time(pgbouncer_pools_server_testing_connections{user="gitlab", database="gitlabhq_production_sidekiq", type=~"pgbouncer|pgbouncer-ci"}[5m]) +
-              avg_over_time(pgbouncer_pools_server_used_connections{user="gitlab", database="gitlabhq_production_sidekiq", type=~"pgbouncer|pgbouncer-ci"}[5m]) +
-              avg_over_time(pgbouncer_pools_server_login_connections{user="gitlab", database="gitlabhq_production_sidekiq", type=~"pgbouncer|pgbouncer-ci"}[5m])
+              avg_over_time(pgbouncer_pools_server_active_connections{user="gitlab", database="gitlabhq_production_sidekiq", type=~"pgbouncer-ci|pgbouncer"}[5m]) +
+              avg_over_time(pgbouncer_pools_server_testing_connections{user="gitlab", database="gitlabhq_production_sidekiq", type=~"pgbouncer-ci|pgbouncer"}[5m]) +
+              avg_over_time(pgbouncer_pools_server_used_connections{user="gitlab", database="gitlabhq_production_sidekiq", type=~"pgbouncer-ci|pgbouncer"}[5m]) +
+              avg_over_time(pgbouncer_pools_server_login_connections{user="gitlab", database="gitlabhq_production_sidekiq", type=~"pgbouncer-ci|pgbouncer"}[5m])
             )
             / on(environment, tier, type, stage, shard, fqdn, instance) group_left()
             sum by (environment, tier, type, stage, shard, fqdn, instance) (
-              avg_over_time(pgbouncer_databases_pool_size{name="gitlabhq_production_sidekiq", type=~"pgbouncer|pgbouncer-ci"}[5m])
+              avg_over_time(pgbouncer_databases_pool_size{name="gitlabhq_production_sidekiq", type=~"pgbouncer-ci|pgbouncer"}[5m])
             )
             ,
             1)
@@ -779,14 +784,14 @@ groups:
         clamp_min(
           clamp_max(
             (
-              avg_over_time(pgbouncer_pools_server_active_connections{user="gitlab", database="gitlabhq_production_sidekiq", type=~"patroni|patroni-ci"}[5m]) +
-              avg_over_time(pgbouncer_pools_server_testing_connections{user="gitlab", database="gitlabhq_production_sidekiq", type=~"patroni|patroni-ci"}[5m]) +
-              avg_over_time(pgbouncer_pools_server_used_connections{user="gitlab", database="gitlabhq_production_sidekiq", type=~"patroni|patroni-ci"}[5m]) +
-              avg_over_time(pgbouncer_pools_server_login_connections{user="gitlab", database="gitlabhq_production_sidekiq", type=~"patroni|patroni-ci"}[5m])
+              avg_over_time(pgbouncer_pools_server_active_connections{user="gitlab", database="gitlabhq_production_sidekiq", type=~"patroni-ci|patroni"}[5m]) +
+              avg_over_time(pgbouncer_pools_server_testing_connections{user="gitlab", database="gitlabhq_production_sidekiq", type=~"patroni-ci|patroni"}[5m]) +
+              avg_over_time(pgbouncer_pools_server_used_connections{user="gitlab", database="gitlabhq_production_sidekiq", type=~"patroni-ci|patroni"}[5m]) +
+              avg_over_time(pgbouncer_pools_server_login_connections{user="gitlab", database="gitlabhq_production_sidekiq", type=~"patroni-ci|patroni"}[5m])
             )
             / on(environment, tier, type, stage, shard, fqdn, instance) group_left()
             sum by (environment, tier, type, stage, shard, fqdn, instance) (
-              avg_over_time(pgbouncer_databases_pool_size{name="gitlabhq_production_sidekiq", type=~"patroni|patroni-ci"}[5m])
+              avg_over_time(pgbouncer_databases_pool_size{name="gitlabhq_production_sidekiq", type=~"patroni-ci|patroni"}[5m])
             )
             ,
             1)
@@ -848,14 +853,14 @@ groups:
         clamp_min(
           clamp_max(
             (
-              avg_over_time(pgbouncer_pools_server_active_connections{user=~"gitlab|gitlab-registry", database=~"gitlabhq_registry|gitlabhq_production", type=~"pgbouncer|pgbouncer-registry|pgbouncer-embedding|pgbouncer-ci"}[5m]) +
-              avg_over_time(pgbouncer_pools_server_testing_connections{user=~"gitlab|gitlab-registry", database=~"gitlabhq_registry|gitlabhq_production", type=~"pgbouncer|pgbouncer-registry|pgbouncer-embedding|pgbouncer-ci"}[5m]) +
-              avg_over_time(pgbouncer_pools_server_used_connections{user=~"gitlab|gitlab-registry", database=~"gitlabhq_registry|gitlabhq_production", type=~"pgbouncer|pgbouncer-registry|pgbouncer-embedding|pgbouncer-ci"}[5m]) +
-              avg_over_time(pgbouncer_pools_server_login_connections{user=~"gitlab|gitlab-registry", database=~"gitlabhq_registry|gitlabhq_production", type=~"pgbouncer|pgbouncer-registry|pgbouncer-embedding|pgbouncer-ci"}[5m])
+              avg_over_time(pgbouncer_pools_server_active_connections{user=~"gitlab|gitlab-registry", database=~"gitlabhq_registry|gitlabhq_production", type=~"pgbouncer-ci|pgbouncer-embedding|pgbouncer-registry|pgbouncer"}[5m]) +
+              avg_over_time(pgbouncer_pools_server_testing_connections{user=~"gitlab|gitlab-registry", database=~"gitlabhq_registry|gitlabhq_production", type=~"pgbouncer-ci|pgbouncer-embedding|pgbouncer-registry|pgbouncer"}[5m]) +
+              avg_over_time(pgbouncer_pools_server_used_connections{user=~"gitlab|gitlab-registry", database=~"gitlabhq_registry|gitlabhq_production", type=~"pgbouncer-ci|pgbouncer-embedding|pgbouncer-registry|pgbouncer"}[5m]) +
+              avg_over_time(pgbouncer_pools_server_login_connections{user=~"gitlab|gitlab-registry", database=~"gitlabhq_registry|gitlabhq_production", type=~"pgbouncer-ci|pgbouncer-embedding|pgbouncer-registry|pgbouncer"}[5m])
             )
             / on(environment, tier, type, stage, shard, fqdn, instance) group_left()
             sum by (environment, tier, type, stage, shard, fqdn, instance) (
-              avg_over_time(pgbouncer_databases_pool_size{name=~"gitlabhq_registry|gitlabhq_production", type=~"pgbouncer|pgbouncer-registry|pgbouncer-embedding|pgbouncer-ci"}[5m])
+              avg_over_time(pgbouncer_databases_pool_size{name=~"gitlabhq_registry|gitlabhq_production", type=~"pgbouncer-ci|pgbouncer-embedding|pgbouncer-registry|pgbouncer"}[5m])
             )
             ,
             1)
@@ -870,14 +875,14 @@ groups:
         clamp_min(
           clamp_max(
             (
-              avg_over_time(pgbouncer_pools_server_active_connections{user=~"gitlab|gitlab-registry", database=~"gitlabhq_registry|gitlabhq_production", type=~"patroni|patroni-registry|patroni-embedding|patroni-ci"}[5m]) +
-              avg_over_time(pgbouncer_pools_server_testing_connections{user=~"gitlab|gitlab-registry", database=~"gitlabhq_registry|gitlabhq_production", type=~"patroni|patroni-registry|patroni-embedding|patroni-ci"}[5m]) +
-              avg_over_time(pgbouncer_pools_server_used_connections{user=~"gitlab|gitlab-registry", database=~"gitlabhq_registry|gitlabhq_production", type=~"patroni|patroni-registry|patroni-embedding|patroni-ci"}[5m]) +
-              avg_over_time(pgbouncer_pools_server_login_connections{user=~"gitlab|gitlab-registry", database=~"gitlabhq_registry|gitlabhq_production", type=~"patroni|patroni-registry|patroni-embedding|patroni-ci"}[5m])
+              avg_over_time(pgbouncer_pools_server_active_connections{user=~"gitlab|gitlab-registry", database=~"gitlabhq_registry|gitlabhq_production", type=~"patroni-ci|patroni-embedding|patroni-registry|patroni"}[5m]) +
+              avg_over_time(pgbouncer_pools_server_testing_connections{user=~"gitlab|gitlab-registry", database=~"gitlabhq_registry|gitlabhq_production", type=~"patroni-ci|patroni-embedding|patroni-registry|patroni"}[5m]) +
+              avg_over_time(pgbouncer_pools_server_used_connections{user=~"gitlab|gitlab-registry", database=~"gitlabhq_registry|gitlabhq_production", type=~"patroni-ci|patroni-embedding|patroni-registry|patroni"}[5m]) +
+              avg_over_time(pgbouncer_pools_server_login_connections{user=~"gitlab|gitlab-registry", database=~"gitlabhq_registry|gitlabhq_production", type=~"patroni-ci|patroni-embedding|patroni-registry|patroni"}[5m])
             )
             / on(environment, tier, type, stage, shard, fqdn, instance) group_left()
             sum by (environment, tier, type, stage, shard, fqdn, instance) (
-              avg_over_time(pgbouncer_databases_pool_size{name=~"gitlabhq_registry|gitlabhq_production", type=~"patroni|patroni-registry|patroni-embedding|patroni-ci"}[5m])
+              avg_over_time(pgbouncer_databases_pool_size{name=~"gitlabhq_registry|gitlabhq_production", type=~"patroni-ci|patroni-embedding|patroni-registry|patroni"}[5m])
             )
             ,
             1)
@@ -911,9 +916,9 @@ groups:
       max by(environment, tier, type, stage, shard) (
         clamp_min(
           clamp_max(
-            sum by(environment, tier, type, stage, shard) (avg_over_time(sum without (pid,worker) (puma_active_connections{type=~"ai-assisted|api|internal-api|git|web|websockets"})[1m:]))
+            sum by(environment, tier, type, stage, shard) (avg_over_time(sum without (pid,worker) (puma_active_connections{type=~"ai-assisted|api|git|internal-api|web|websockets"})[1m:]))
             /
-            sum by(environment, tier, type, stage, shard) (sum without (pid,worker) (puma_max_threads{pid="puma_master", type=~"ai-assisted|api|internal-api|git|web|websockets"}))
+            sum by(environment, tier, type, stage, shard) (sum without (pid,worker) (puma_max_threads{pid="puma_master", type=~"ai-assisted|api|git|internal-api|web|websockets"}))
             ,
             1)
         ,
@@ -945,9 +950,9 @@ groups:
       max by(environment, tier, type, stage, shard) (
         clamp_min(
           clamp_max(
-            max_over_time(redis_connected_clients{type=~"redis-sidekiq|redis-tracechunks|redis-sessions|redis-registry-cache|redis-db-load-balancing|redis-pubsub|redis"}[1m])
+            max_over_time(redis_connected_clients{type=~"redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis-tracechunks|redis"}[1m])
             /
-            redis_config_maxclients{type=~"redis-sidekiq|redis-tracechunks|redis-sessions|redis-registry-cache|redis-db-load-balancing|redis-pubsub|redis"}
+            redis_config_maxclients{type=~"redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis-tracechunks|redis"}
             ,
             1)
         ,
@@ -960,9 +965,9 @@ groups:
       max by(environment, tier, type, stage, shard) (
         clamp_min(
           clamp_max(
-            max_over_time(redis_connected_clients{type=~"redis-cluster-cache|redis-cluster-feature-flag|redis-cluster-shared-state|redis-cluster-queues-meta|redis-cluster-repo-cache|redis-cluster-ratelimiting|redis-cluster-chat-cache"}[1m])
+            max_over_time(redis_connected_clients{type=~"redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state"}[1m])
             /
-            redis_config_maxclients{type=~"redis-cluster-cache|redis-cluster-feature-flag|redis-cluster-shared-state|redis-cluster-queues-meta|redis-cluster-repo-cache|redis-cluster-ratelimiting|redis-cluster-chat-cache"}
+            redis_config_maxclients{type=~"redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state"}
             ,
             1)
         ,
@@ -976,13 +981,13 @@ groups:
         clamp_min(
           clamp_max(
             max by (environment, tier, type, stage, shard, fqdn, instance, shard) (
-              label_replace(redis_memory_used_rss_bytes{type=~"redis-cluster-cache|redis-cluster-feature-flag|redis-cluster-shared-state|redis-cluster-queues-meta|redis-cluster-repo-cache|redis-cluster-ratelimiting|redis-cluster-chat-cache"}, "memtype", "rss","","")
+              label_replace(redis_memory_used_rss_bytes{type=~"redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state"}, "memtype", "rss","","")
               or
-              label_replace(redis_memory_used_bytes{type=~"redis-cluster-cache|redis-cluster-feature-flag|redis-cluster-shared-state|redis-cluster-queues-meta|redis-cluster-repo-cache|redis-cluster-ratelimiting|redis-cluster-chat-cache"}, "memtype", "used","","")
+              label_replace(redis_memory_used_bytes{type=~"redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state"}, "memtype", "used","","")
             )
             /
             avg by (environment, tier, type, stage, shard, fqdn, instance, shard) (
-              node_memory_MemTotal_bytes{type=~"redis-cluster-cache|redis-cluster-feature-flag|redis-cluster-shared-state|redis-cluster-queues-meta|redis-cluster-repo-cache|redis-cluster-ratelimiting|redis-cluster-chat-cache"}
+              node_memory_MemTotal_bytes{type=~"redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state"}
             )
             ,
             1)
@@ -998,7 +1003,7 @@ groups:
           clamp_max(
             sum by (environment, tier, type, stage, shard, fqdn, instance, shard) (
               rate(
-                namedprocess_namegroup_thread_cpu_seconds_total{type=~"redis-cluster-cache|redis-cluster-feature-flag|redis-cluster-shared-state|redis-cluster-queues-meta|redis-cluster-repo-cache|redis-cluster-ratelimiting|redis-cluster-chat-cache", groupname="redis-server", threadname="redis-server"}[5m])
+                namedprocess_namegroup_thread_cpu_seconds_total{type=~"redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state", groupname="redis-server", threadname="redis-server"}[5m])
             )
             and on (fqdn) redis_instance_info{role="master"}
             ,
@@ -1014,13 +1019,13 @@ groups:
         clamp_min(
           clamp_max(
             max by (environment, tier, type, stage, shard, fqdn, instance, shard) (
-              label_replace(redis_memory_used_rss_bytes{type=~"redis-sidekiq|redis-sessions|redis-registry-cache|redis-db-load-balancing|redis-pubsub|redis"}, "memtype", "rss","","")
+              label_replace(redis_memory_used_rss_bytes{type=~"redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis"}, "memtype", "rss","","")
               or
-              label_replace(redis_memory_used_bytes{type=~"redis-sidekiq|redis-sessions|redis-registry-cache|redis-db-load-balancing|redis-pubsub|redis"}, "memtype", "used","","")
+              label_replace(redis_memory_used_bytes{type=~"redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis"}, "memtype", "used","","")
             )
             /
             avg by (environment, tier, type, stage, shard, fqdn, instance, shard) (
-              node_memory_MemTotal_bytes{type=~"redis-sidekiq|redis-sessions|redis-registry-cache|redis-db-load-balancing|redis-pubsub|redis"}
+              node_memory_MemTotal_bytes{type=~"redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis"}
             )
             ,
             1)
@@ -1120,7 +1125,7 @@ groups:
           clamp_max(
             sum by (environment, tier, type, stage, shard, fqdn, instance, shard) (
               rate(
-                namedprocess_namegroup_thread_cpu_seconds_total{type=~"redis-sidekiq|redis-tracechunks|redis-sessions|redis-registry-cache|redis-db-load-balancing|redis-pubsub|redis", groupname="redis-server", threadname="redis-server"}[5m])
+                namedprocess_namegroup_thread_cpu_seconds_total{type=~"redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis-tracechunks|redis", groupname="redis-server", threadname="redis-server"}[5m])
             )
             and on (fqdn) redis_instance_info{role="master"}
             ,
@@ -1136,9 +1141,9 @@ groups:
         clamp_min(
           clamp_max(
             (
-              rate(redis_cpu_user_seconds_total{type=~"redis-cluster-cache|redis-cluster-feature-flag|redis-cluster-shared-state|redis-cluster-queues-meta|redis-cluster-repo-cache|redis-sidekiq|redis-tracechunks|redis-cluster-ratelimiting|redis-cluster-chat-cache|redis-sessions|redis-registry-cache|redis-db-load-balancing|redis-pubsub|redis"}[5m])
+              rate(redis_cpu_user_seconds_total{type=~"redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis-tracechunks|redis"}[5m])
               +
-              rate(redis_cpu_sys_seconds_total{type=~"redis-cluster-cache|redis-cluster-feature-flag|redis-cluster-shared-state|redis-cluster-queues-meta|redis-cluster-repo-cache|redis-sidekiq|redis-tracechunks|redis-cluster-ratelimiting|redis-cluster-chat-cache|redis-sessions|redis-registry-cache|redis-db-load-balancing|redis-pubsub|redis"}[5m])
+              rate(redis_cpu_sys_seconds_total{type=~"redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis-tracechunks|redis"}[5m])
             )
             and on (instance) redis_instance_info{role!="master"}
             ,
@@ -1154,7 +1159,7 @@ groups:
         0.99,
         clamp_min(
           clamp_max(
-            rate(ruby_process_cpu_seconds_total{type=~"ai-assisted|api|internal-api|git|ops-gitlab-net|web|websockets"}[1h])
+            rate(ruby_process_cpu_seconds_total{type=~"ai-assisted|api|git|internal-api|ops-gitlab-net|web|websockets"}[1h])
             ,
             1)
         ,
@@ -1288,7 +1293,7 @@ groups:
         clamp_min(
           clamp_max(
             1 - avg by (environment, tier, type, stage, shard, shard) (
-              rate(node_cpu_seconds_total{mode="idle", type=~"gitaly|ci-runners|consul|customersdot|frontend|jaeger|monitoring|patroni|patroni-registry|patroni-embedding|patroni-ci|postgres-archive|pgbouncer|pgbouncer-registry|pgbouncer-embedding|pgbouncer-ci|redis-cluster-cache|redis-cluster-feature-flag|redis-cluster-shared-state|redis-cluster-queues-meta|redis-cluster-repo-cache|redis-sidekiq|redis-tracechunks|redis-cluster-ratelimiting|redis-cluster-chat-cache|redis-sessions|redis-registry-cache|redis-db-load-balancing|redis-pubsub|redis|registry|sentry|web-pages"}[5m])
+              rate(node_cpu_seconds_total{mode="idle", type=~"gitaly|ci-runners|consul|customersdot|frontend|jaeger|monitoring|patroni-ci|patroni-embedding|patroni-registry|patroni|pgbouncer-ci|pgbouncer-embedding|pgbouncer-registry|pgbouncer|postgres-archive|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis-tracechunks|redis|registry|sentry|web-pages"}[5m])
             )
             ,
             1)
@@ -1355,7 +1360,7 @@ groups:
       max by(environment, tier, type, stage, shard) (
         clamp_min(
           clamp_max(
-            avg without(cpu, mode) (1 - rate(node_cpu_seconds_total{mode="idle", type=~"gitaly|ci-runners|consul|customersdot|frontend|jaeger|monitoring|patroni|patroni-registry|patroni-embedding|patroni-ci|postgres-archive|pgbouncer|pgbouncer-registry|pgbouncer-embedding|pgbouncer-ci|redis-cluster-cache|redis-cluster-feature-flag|redis-cluster-shared-state|redis-cluster-queues-meta|redis-cluster-repo-cache|redis-sidekiq|redis-tracechunks|redis-cluster-ratelimiting|redis-cluster-chat-cache|redis-sessions|redis-registry-cache|redis-db-load-balancing|redis-pubsub|redis|registry|sentry|web-pages"}[5m]))
+            avg without(cpu, mode) (1 - rate(node_cpu_seconds_total{mode="idle", type=~"gitaly|ci-runners|consul|customersdot|frontend|jaeger|monitoring|patroni-ci|patroni-embedding|patroni-registry|patroni|pgbouncer-ci|pgbouncer-embedding|pgbouncer-registry|pgbouncer|postgres-archive|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis-tracechunks|redis|registry|sentry|web-pages"}[5m]))
             ,
             1)
         ,

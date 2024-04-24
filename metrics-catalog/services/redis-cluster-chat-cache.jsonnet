@@ -13,21 +13,6 @@ metricsCatalog.serviceDefinition(
     monitoringThresholds+: {
       apdexScore: 0.9995,
     },
-    // disable alerts until we are receiving production traffic
-    serviceLevelIndicators+: {
-      rails_redis_client+: {
-        userImpacting: true,
-        severity: 's4',
-      },
-      primary_server+: {
-        userImpacting: true,
-        severity: 's4',
-      },
-      secondary_servers+: {
-        userImpacting: true,
-        severity: 's4',
-      },
-    },
   }
   + redisHelpers.gitlabcomObservabilityToolingForRedis('redis-cluster-chat-cache')
 )

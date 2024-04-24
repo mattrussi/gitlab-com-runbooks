@@ -20,6 +20,7 @@
 
 * [Deadtuples affecting query performance](../ci-runners/CiRunnersServiceQueuingQueriesDurationApdexSLOViolation.md)
 * [../ci-runners/service-ci-runners.md](../ci-runners/service-ci-runners.md)
+* [Cloudflare](../cloudflare/intro.md)
 * [Cloudflare: Managing Traffic](../cloudflare/managing-traffic.md)
 * [Cloudflare for the on-call](../cloudflare/oncall.md)
 * [Service Locations](../cloudflare/services-locations.md)

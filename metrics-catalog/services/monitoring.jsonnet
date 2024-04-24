@@ -10,6 +10,7 @@ local kubeLabelSelectors = metricsCatalog.kubeLabelSelectors;
 metricsCatalog.serviceDefinition({
   type: 'monitoring',
   tier: 'inf',
+  tenants: [ 'gitlab-gprd', 'gitlab-gstg', 'gitlab-ops', 'gitlab-pre' ],
 
   tags: ['cloud-sql', 'golang', 'grafana', 'prometheus'],
 

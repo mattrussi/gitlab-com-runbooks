@@ -8,6 +8,7 @@ local rateMetric = metricsCatalog.rateMetric;
 metricsCatalog.serviceDefinition({
   type: 'istio',
   tier: 'inf',
+  tenants: [ 'gitlab-gstg', 'gitlab-ops', 'gitlab-pre' ],
 
   tags: ['golang'],
 
@@ -17,7 +18,6 @@ metricsCatalog.serviceDefinition({
     apdexScore: 0.999,
     errorRatio: 0.999,
   },
-
   provisioning: {
     kubernetes: true,
     vms: false,
@@ -27,7 +27,7 @@ metricsCatalog.serviceDefinition({
     local kubeSelector = { namespace: 'istio-system' },
 
     labelSelectors: kubeLabelSelectors(
-      deploymentSelector='istiod',
+      deploymentSelector={ app: 'istiod' },
     ),
   },
 
@@ -89,5 +89,7 @@ metricsCatalog.serviceDefinition({
   },
   skippedMaturityCriteria: {
     'Developer guides exist in developer documentation': 'Istio is an infrastructure component, developers do not interact with it',
+    'Service exists in the dependency graph': 'This service does not interfact directly with any other services',
+    'Structured logs available in Kibana': 'Istio service is not deployed in production'
   },
 })

@@ -8,5 +8,8 @@ metricsCatalog.serviceDefinition(
     railsStorageSelector=redisHelpers.storageSelector({ oneOf: ['workhorse', 'action_cable'] }),
     descriptiveName='Redis that handles predominantly pub/sub operations',
   )
+  {
+    tenants: [ 'gitlab-gprd', 'gitlab-gstg', 'gitlab-pre' ]
+  }
   + redisHelpers.gitlabcomObservabilityToolingForRedis('redis-pubsub')
 )

@@ -14,6 +14,46 @@ groups:
       sum by (db_config_name,environment,feature_category,le,shard,stage,tier,type) (
         rate(gitlab_sql_replica_duration_seconds_bucket[1m] offset 30s)
       )
+  - record: sli_aggregations:gitlab_sli_db_transaction_apdex_total_rate1m
+    expr: |
+      sum by (db_config_name,environment,external_dependencies,feature_category,shard,stage,tier,type,urgency,worker) (
+        rate(gitlab_sli_db_transaction_apdex_total[1m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_sli_db_transaction_apdex_success_total_rate1m
+    expr: |
+      sum by (db_config_name,environment,external_dependencies,feature_category,shard,stage,tier,type,urgency,worker) (
+        rate(gitlab_sli_db_transaction_apdex_success_total[1m] offset 30s)
+      )
+  - record: gitlab_component_apdex:success:rate
+    labels:
+      component: client_database_transaction
+      stage: main
+      tier: db
+      type: patroni
+    expr: |
+      sum by (env,environment) (
+        sli_aggregations:gitlab_sli_db_transaction_apdex_success_total_rate1m{db_config_name="main"} offset 30s
+      )
+  - record: gitlab_component_apdex:weight:score
+    labels:
+      component: client_database_transaction
+      stage: main
+      tier: db
+      type: patroni
+    expr: |
+      sum by (env,environment) (
+        sli_aggregations:gitlab_sli_db_transaction_apdex_total_rate1m{db_config_name="main"} offset 30s
+      )
+  - record: gitlab_component_ops:rate
+    labels:
+      component: client_database_transaction
+      stage: main
+      tier: db
+      type: patroni
+    expr: |
+      sum by (env,environment) (
+        sli_aggregations:gitlab_sli_db_transaction_apdex_total_rate1m{db_config_name="main"} offset 30s
+      )
   - record: gitlab_component_ops:rate
     labels:
       component: pgbouncer
@@ -192,6 +232,46 @@ groups:
     expr: |
       sum by (db_config_name,environment,feature_category,le,shard,stage,tier,type) (
         rate(gitlab_sql_replica_duration_seconds_bucket[5m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_sli_db_transaction_apdex_total_rate5m
+    expr: |
+      sum by (db_config_name,environment,external_dependencies,feature_category,shard,stage,tier,type,urgency,worker) (
+        rate(gitlab_sli_db_transaction_apdex_total[5m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_sli_db_transaction_apdex_success_total_rate5m
+    expr: |
+      sum by (db_config_name,environment,external_dependencies,feature_category,shard,stage,tier,type,urgency,worker) (
+        rate(gitlab_sli_db_transaction_apdex_success_total[5m] offset 30s)
+      )
+  - record: gitlab_component_apdex:success:rate_5m
+    labels:
+      component: client_database_transaction
+      stage: main
+      tier: db
+      type: patroni
+    expr: |
+      sum by (env,environment) (
+        sli_aggregations:gitlab_sli_db_transaction_apdex_success_total_rate5m{db_config_name="main"} offset 30s
+      )
+  - record: gitlab_component_apdex:weight:score_5m
+    labels:
+      component: client_database_transaction
+      stage: main
+      tier: db
+      type: patroni
+    expr: |
+      sum by (env,environment) (
+        sli_aggregations:gitlab_sli_db_transaction_apdex_total_rate5m{db_config_name="main"} offset 30s
+      )
+  - record: gitlab_component_ops:rate_5m
+    labels:
+      component: client_database_transaction
+      stage: main
+      tier: db
+      type: patroni
+    expr: |
+      sum by (env,environment) (
+        sli_aggregations:gitlab_sli_db_transaction_apdex_total_rate5m{db_config_name="main"} offset 30s
       )
   - record: gitlab_component_ops:rate_5m
     labels:
@@ -372,6 +452,46 @@ groups:
       sum by (db_config_name,environment,feature_category,le,shard,stage,tier,type) (
         rate(gitlab_sql_replica_duration_seconds_bucket[30m] offset 30s)
       )
+  - record: sli_aggregations:gitlab_sli_db_transaction_apdex_total_rate30m
+    expr: |
+      sum by (db_config_name,environment,external_dependencies,feature_category,shard,stage,tier,type,urgency,worker) (
+        rate(gitlab_sli_db_transaction_apdex_total[30m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_sli_db_transaction_apdex_success_total_rate30m
+    expr: |
+      sum by (db_config_name,environment,external_dependencies,feature_category,shard,stage,tier,type,urgency,worker) (
+        rate(gitlab_sli_db_transaction_apdex_success_total[30m] offset 30s)
+      )
+  - record: gitlab_component_apdex:success:rate_30m
+    labels:
+      component: client_database_transaction
+      stage: main
+      tier: db
+      type: patroni
+    expr: |
+      sum by (env,environment) (
+        sli_aggregations:gitlab_sli_db_transaction_apdex_success_total_rate30m{db_config_name="main"} offset 30s
+      )
+  - record: gitlab_component_apdex:weight:score_30m
+    labels:
+      component: client_database_transaction
+      stage: main
+      tier: db
+      type: patroni
+    expr: |
+      sum by (env,environment) (
+        sli_aggregations:gitlab_sli_db_transaction_apdex_total_rate30m{db_config_name="main"} offset 30s
+      )
+  - record: gitlab_component_ops:rate_30m
+    labels:
+      component: client_database_transaction
+      stage: main
+      tier: db
+      type: patroni
+    expr: |
+      sum by (env,environment) (
+        sli_aggregations:gitlab_sli_db_transaction_apdex_total_rate30m{db_config_name="main"} offset 30s
+      )
   - record: gitlab_component_ops:rate_30m
     labels:
       component: pgbouncer
@@ -551,6 +671,46 @@ groups:
       sum by (db_config_name,environment,feature_category,le,shard,stage,tier,type) (
         rate(gitlab_sql_replica_duration_seconds_bucket[1h] offset 30s)
       )
+  - record: sli_aggregations:gitlab_sli_db_transaction_apdex_total_rate1h
+    expr: |
+      sum by (db_config_name,environment,external_dependencies,feature_category,shard,stage,tier,type,urgency,worker) (
+        rate(gitlab_sli_db_transaction_apdex_total[1h] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_sli_db_transaction_apdex_success_total_rate1h
+    expr: |
+      sum by (db_config_name,environment,external_dependencies,feature_category,shard,stage,tier,type,urgency,worker) (
+        rate(gitlab_sli_db_transaction_apdex_success_total[1h] offset 30s)
+      )
+  - record: gitlab_component_apdex:success:rate_1h
+    labels:
+      component: client_database_transaction
+      stage: main
+      tier: db
+      type: patroni
+    expr: |
+      sum by (env,environment) (
+        sli_aggregations:gitlab_sli_db_transaction_apdex_success_total_rate1h{db_config_name="main"} offset 30s
+      )
+  - record: gitlab_component_apdex:weight:score_1h
+    labels:
+      component: client_database_transaction
+      stage: main
+      tier: db
+      type: patroni
+    expr: |
+      sum by (env,environment) (
+        sli_aggregations:gitlab_sli_db_transaction_apdex_total_rate1h{db_config_name="main"} offset 30s
+      )
+  - record: gitlab_component_ops:rate_1h
+    labels:
+      component: client_database_transaction
+      stage: main
+      tier: db
+      type: patroni
+    expr: |
+      sum by (env,environment) (
+        sli_aggregations:gitlab_sli_db_transaction_apdex_total_rate1h{db_config_name="main"} offset 30s
+      )
   - record: gitlab_component_ops:rate_1h
     labels:
       component: pgbouncer
@@ -726,6 +886,46 @@ groups:
 - name: 'Component-Level SLIs: patroni - 6h burn-rate'
   interval: 2m
   rules:
+  - record: sli_aggregations:gitlab_sli_db_transaction_apdex_total_rate6h
+    expr: |
+      sum by (db_config_name,environment,external_dependencies,feature_category,shard,stage,tier,type,urgency,worker) (
+        rate(gitlab_sli_db_transaction_apdex_total[6h] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_sli_db_transaction_apdex_success_total_rate6h
+    expr: |
+      sum by (db_config_name,environment,external_dependencies,feature_category,shard,stage,tier,type,urgency,worker) (
+        rate(gitlab_sli_db_transaction_apdex_success_total[6h] offset 30s)
+      )
+  - record: gitlab_component_apdex:success:rate_6h
+    labels:
+      component: client_database_transaction
+      stage: main
+      tier: db
+      type: patroni
+    expr: |
+      sum by (env,environment) (
+        sli_aggregations:gitlab_sli_db_transaction_apdex_success_total_rate6h{db_config_name="main"} offset 30s
+      )
+  - record: gitlab_component_apdex:weight:score_6h
+    labels:
+      component: client_database_transaction
+      stage: main
+      tier: db
+      type: patroni
+    expr: |
+      sum by (env,environment) (
+        sli_aggregations:gitlab_sli_db_transaction_apdex_total_rate6h{db_config_name="main"} offset 30s
+      )
+  - record: gitlab_component_ops:rate_6h
+    labels:
+      component: client_database_transaction
+      stage: main
+      tier: db
+      type: patroni
+    expr: |
+      sum by (env,environment) (
+        sli_aggregations:gitlab_sli_db_transaction_apdex_total_rate6h{db_config_name="main"} offset 30s
+      )
   - record: gitlab_component_ops:rate_6h
     labels:
       component: pgbouncer
@@ -819,6 +1019,15 @@ groups:
 - name: 'Component mapping: patroni'
   interval: 1m
   rules:
+  - record: gitlab_component_service:mapping
+    labels:
+      component: client_database_transaction
+      global_aggregation: "no"
+      regional_aggregation: "no"
+      service_aggregation: "no"
+      tier: db
+      type: patroni
+    expr: "1"
   - record: gitlab_component_service:mapping
     labels:
       component: pgbouncer

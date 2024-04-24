@@ -12,8 +12,13 @@ groups:
         0.99,
         clamp_min(
           clamp_max(
-            sum by (env, environment, tier, type, stage, shard, pod, container) (
-              rate(container_cpu_usage_seconds_total:labeled{container!="", container!="POD", env="gprd",type="kube"}[1h])
+            (
+              sum by (env, environment, tier, type, stage, shard, pod, container) (
+                rate(container_cpu_usage_seconds_total:labeled{container!="", container!="POD", env="gprd",type="kube"}[1h])
+              )
+              unless on(env, environment, tier, type, stage, shard, pod, container) (
+                container_spec_cpu_quota:labeled{container!="", container!="POD", env="gprd",type="kube"}
+              )
             )
             /
             sum by(env, environment, tier, type, stage, shard, pod, container) (

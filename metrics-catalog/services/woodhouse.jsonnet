@@ -22,6 +22,7 @@ local woodhouseLogs = [
 metricsCatalog.serviceDefinition({
   type: 'woodhouse',
   tier: 'sv',
+  tenants: [ 'gitlab-gprd', 'gitlab-gstg', 'gitlab-pre' ],
   monitoringThresholds: {
     apdexScore: 0.999,
     errorRatio: 0.999,

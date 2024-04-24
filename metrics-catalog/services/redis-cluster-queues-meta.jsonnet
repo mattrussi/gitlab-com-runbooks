@@ -10,21 +10,7 @@ metricsCatalog.serviceDefinition(
     redisCluster=true
   )
   {
-    // disable alerts until we are receiving production traffic
-    serviceLevelIndicators+: {
-      rails_redis_client+: {
-        userImpacting: true,
-        severity: 's4',
-      },
-      primary_server+: {
-        userImpacting: true,
-        severity: 's4',
-      },
-      secondary_servers+: {
-        userImpacting: true,
-        severity: 's4',
-      },
-    },
+    tenants: ['gitlab-gprd', 'gitlab-gstg', 'gitlab-pre'],
   }
   + redisHelpers.gitlabcomObservabilityToolingForRedis('redis-cluster-queues-meta')
 )
