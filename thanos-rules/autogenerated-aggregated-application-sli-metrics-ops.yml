@@ -472,3 +472,36 @@ groups:
       sum by (env,environment,tier,type,stage,service_class) (
         (application_sli_aggregation:llm_completion:apdex:success:rate_1h{env="ops",monitor!="global"} >= 0)
       )
+- name: 'Application Defined SLI Global metrics: client_database_transaction (fast
+    burn)'
+  interval: 1m
+  partial_response_strategy: warn
+  rules:
+  - record: application_sli_aggregation:client_database_transaction:apdex:weight:score_5m
+    labels:
+      feature_category: not_owned
+    expr: |
+      sum by (env,environment,tier,type,stage,worker,urgency,external_dependencies,db_config_name) (
+        (application_sli_aggregation:client_database_transaction:apdex:weight:score_5m{env="ops",monitor!="global"} >= 0)
+      )
+  - record: application_sli_aggregation:client_database_transaction:apdex:success:rate_5m
+    labels:
+      feature_category: not_owned
+    expr: |
+      sum by (env,environment,tier,type,stage,worker,urgency,external_dependencies,db_config_name) (
+        (application_sli_aggregation:client_database_transaction:apdex:success:rate_5m{env="ops",monitor!="global"} >= 0)
+      )
+  - record: application_sli_aggregation:client_database_transaction:apdex:weight:score_1h
+    labels:
+      feature_category: not_owned
+    expr: |
+      sum by (env,environment,tier,type,stage,worker,urgency,external_dependencies,db_config_name) (
+        (application_sli_aggregation:client_database_transaction:apdex:weight:score_1h{env="ops",monitor!="global"} >= 0)
+      )
+  - record: application_sli_aggregation:client_database_transaction:apdex:success:rate_1h
+    labels:
+      feature_category: not_owned
+    expr: |
+      sum by (env,environment,tier,type,stage,worker,urgency,external_dependencies,db_config_name) (
+        (application_sli_aggregation:client_database_transaction:apdex:success:rate_1h{env="ops",monitor!="global"} >= 0)
+      )

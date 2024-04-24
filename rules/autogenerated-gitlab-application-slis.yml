@@ -196,3 +196,26 @@ groups:
       sum by (environment,feature_category,service_class,stage,tier,type) (
         rate(gitlab_sli_llm_completion_error_total{monitor!="global"}[1h])
       )
+- name: 'Application Defined SLI Rules: client_database_transaction'
+  interval: 1m
+  rules:
+  - record: application_sli_aggregation:client_database_transaction:apdex:weight:score_5m
+    expr: |
+      sum by (db_config_name,environment,external_dependencies,feature_category,stage,tier,type,urgency,worker) (
+        rate(gitlab_sli_db_transaction_apdex_total{monitor!="global"}[5m])
+      )
+  - record: application_sli_aggregation:client_database_transaction:apdex:success:rate_5m
+    expr: |
+      sum by (db_config_name,environment,external_dependencies,feature_category,stage,tier,type,urgency,worker) (
+        rate(gitlab_sli_db_transaction_apdex_success_total{monitor!="global"}[5m])
+      )
+  - record: application_sli_aggregation:client_database_transaction:apdex:weight:score_1h
+    expr: |
+      sum by (db_config_name,environment,external_dependencies,feature_category,stage,tier,type,urgency,worker) (
+        rate(gitlab_sli_db_transaction_apdex_total{monitor!="global"}[1h])
+      )
+  - record: application_sli_aggregation:client_database_transaction:apdex:success:rate_1h
+    expr: |
+      sum by (db_config_name,environment,external_dependencies,feature_category,stage,tier,type,urgency,worker) (
+        rate(gitlab_sli_db_transaction_apdex_success_total{monitor!="global"}[1h])
+      )

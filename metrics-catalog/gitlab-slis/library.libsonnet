@@ -156,6 +156,19 @@ local list = [
       These operations do not go through the API gateway yet, but will in the future.
     |||,
   }),
+  sliDefinition.new({
+    name: 'client_database_transaction',
+    counterName: 'db_transaction',
+    significantLabels: ['worker', 'feature_category', 'urgency', 'external_dependencies', 'db_config_name'],
+    featureCategory: 'not_owned',
+    kinds: [sliDefinition.apdexKind],
+    description: |||
+      This tracks the largest database transaction duration from the client's perspective.
+
+      A success means that every database transaction within a Sidekiq job is below the threshold duration. A failure would mean
+      at least one database transaction within the Sidekiq job has exceeded the threshold duration.
+    |||,
+  }),
 ];
 
 local definitionsByName = std.foldl(
