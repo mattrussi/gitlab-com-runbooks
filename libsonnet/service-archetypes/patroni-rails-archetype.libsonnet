@@ -4,6 +4,7 @@ local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local histogramApdex = metricsCatalog.histogramApdex;
 local rateMetric = metricsCatalog.rateMetric;
 local findServicesWithTag = (import 'servicemetrics/metrics-catalog.libsonnet').findServicesWithTag;
+local sliLibrary = import 'gitlab-slis/library.libsonnet';
 
 function(
   type,
@@ -15,6 +16,7 @@ function(
   patroniArchetype(type, extraTags, additionalServiceLevelIndicators, serviceDependencies)
   {
     local db_config_name = if type == 'patroni' then 'main' else std.lstripChars(type, 'patroni-'),
+    recordingRuleMetrics+: sliLibrary.get('client_database_transaction').recordingRuleMetrics,
     serviceLevelIndicators+: {
       // Sidekiq has a distinct usage profile; this is used to select 'the others' which
       // are more interactive and thus require lower thresholds
@@ -81,5 +83,13 @@ function(
 
         significantLabels: ['feature_category'],
       },
-    },
+    } + sliLibrary.get('client_database_transaction').generateServiceLevelIndicator({ db_config_name: db_config_name }, {
+      serviceAggregation: false,
+      userImpacting: false,
+      severity: 's4',
+      monitoringThresholds+: {
+        apdexScore: 0.99,
+      },
+      emittedBy: findServicesWithTag(tag='rails'),
+    }),
   }
