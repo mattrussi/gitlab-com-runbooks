@@ -107,7 +107,7 @@ function(
         loadBalancerName='%(type)s-url-map' % type,
         projectId='gitlab-runway-production',
         emittedBy=[],
-        selector={ job: 'runway-exporter', url_map_name: '%(type)s-url-map' % type },
+        baseSelector={ job: 'runway-exporter', url_map_name: '%(type)s-url-map' % type },
         extra={
           description: |||
             External load balancer serving global HTTP requests for the Runway service.
