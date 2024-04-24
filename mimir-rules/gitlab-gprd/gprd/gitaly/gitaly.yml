@@ -96,7 +96,7 @@ groups:
     expr: >
       count by (environment, stage) (
         count by (environment, stage, version) (
-          gitlab_build_info{tier="stor",type="gitaly",env="gprd"}
+          gitlab_build_info{tier="stor",type="gitaly",env="gprd", fqdn!=""}
         )
       ) > 1
     for: 60m
