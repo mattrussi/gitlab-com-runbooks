@@ -7,12 +7,12 @@ groups:
   - record: sli_aggregations:jaeger_agent_reporter_spans_failures_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,instance,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(jaeger_agent_reporter_spans_failures_total{env="gprd"}[5m] offset 30s)
+        rate(jaeger_agent_reporter_spans_failures_total{env="gprd"}[5m] offset 1m)
       )
   - record: sli_aggregations:jaeger_agent_reporter_spans_submitted_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,instance,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(jaeger_agent_reporter_spans_submitted_total{env="gprd"}[5m] offset 30s)
+        rate(jaeger_agent_reporter_spans_submitted_total{env="gprd"}[5m] offset 1m)
       )
 - name: 'SLI Aggregations: jaeger - jaeger_collector-apdex - 5m burn-rate'
   interval: 1m
@@ -20,7 +20,7 @@ groups:
   - record: sli_aggregations:jaeger_collector_save_latency_bucket:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,pod,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(jaeger_collector_save_latency_bucket{env="gprd",type=~"jaeger"}[5m] offset 30s)
+        rate(jaeger_collector_save_latency_bucket{env="gprd",type=~"jaeger"}[5m] offset 1m)
       )
 - name: 'SLI Aggregations: jaeger - jaeger_collector-ops - 5m burn-rate'
   interval: 1m
@@ -28,12 +28,12 @@ groups:
   - record: sli_aggregations:jaeger_collector_spans_dropped_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,pod,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(jaeger_collector_spans_dropped_total{env="gprd",type=~"jaeger"}[5m] offset 30s)
+        rate(jaeger_collector_spans_dropped_total{env="gprd",type=~"jaeger"}[5m] offset 1m)
       )
   - record: sli_aggregations:jaeger_collector_spans_received_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,pod,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(jaeger_collector_spans_received_total{env="gprd",type=~"jaeger"}[5m] offset 30s)
+        rate(jaeger_collector_spans_received_total{env="gprd",type=~"jaeger"}[5m] offset 1m)
       )
 - name: 'SLI Aggregations: jaeger - jaeger_query-apdex - 5m burn-rate'
   interval: 1m
@@ -41,7 +41,7 @@ groups:
   - record: sli_aggregations:jaeger_query_latency_bucket:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,pod,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(jaeger_query_latency_bucket{env="gprd"}[5m] offset 30s)
+        rate(jaeger_query_latency_bucket{env="gprd"}[5m] offset 1m)
       )
 - name: 'SLI Aggregations: jaeger - jaeger_query-ops - 5m burn-rate'
   interval: 1m
@@ -49,7 +49,7 @@ groups:
   - record: sli_aggregations:jaeger_query_requests_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,pod,product_stage,region,result,shard,stage,stage_group,tier,type) (
-        rate(jaeger_query_requests_total{env="gprd"}[5m] offset 30s)
+        rate(jaeger_query_requests_total{env="gprd"}[5m] offset 1m)
       )
 - name: 'SLI Aggregations: jaeger - jaeger_agent-ops - 30m burn-rate'
   interval: 2m
@@ -57,12 +57,12 @@ groups:
   - record: sli_aggregations:jaeger_agent_reporter_spans_failures_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,instance,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(jaeger_agent_reporter_spans_failures_total{env="gprd"}[30m] offset 30s)
+        rate(jaeger_agent_reporter_spans_failures_total{env="gprd"}[30m] offset 1m)
       )
   - record: sli_aggregations:jaeger_agent_reporter_spans_submitted_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,instance,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(jaeger_agent_reporter_spans_submitted_total{env="gprd"}[30m] offset 30s)
+        rate(jaeger_agent_reporter_spans_submitted_total{env="gprd"}[30m] offset 1m)
       )
 - name: 'SLI Aggregations: jaeger - jaeger_collector-apdex - 30m burn-rate'
   interval: 2m
@@ -70,7 +70,7 @@ groups:
   - record: sli_aggregations:jaeger_collector_save_latency_bucket:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,pod,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(jaeger_collector_save_latency_bucket{env="gprd",type=~"jaeger"}[30m] offset 30s)
+        rate(jaeger_collector_save_latency_bucket{env="gprd",type=~"jaeger"}[30m] offset 1m)
       )
 - name: 'SLI Aggregations: jaeger - jaeger_collector-ops - 30m burn-rate'
   interval: 2m
@@ -78,12 +78,12 @@ groups:
   - record: sli_aggregations:jaeger_collector_spans_dropped_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,pod,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(jaeger_collector_spans_dropped_total{env="gprd",type=~"jaeger"}[30m] offset 30s)
+        rate(jaeger_collector_spans_dropped_total{env="gprd",type=~"jaeger"}[30m] offset 1m)
       )
   - record: sli_aggregations:jaeger_collector_spans_received_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,pod,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(jaeger_collector_spans_received_total{env="gprd",type=~"jaeger"}[30m] offset 30s)
+        rate(jaeger_collector_spans_received_total{env="gprd",type=~"jaeger"}[30m] offset 1m)
       )
 - name: 'SLI Aggregations: jaeger - jaeger_query-apdex - 30m burn-rate'
   interval: 2m
@@ -91,7 +91,7 @@ groups:
   - record: sli_aggregations:jaeger_query_latency_bucket:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,pod,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(jaeger_query_latency_bucket{env="gprd"}[30m] offset 30s)
+        rate(jaeger_query_latency_bucket{env="gprd"}[30m] offset 1m)
       )
 - name: 'SLI Aggregations: jaeger - jaeger_query-ops - 30m burn-rate'
   interval: 2m
@@ -99,7 +99,7 @@ groups:
   - record: sli_aggregations:jaeger_query_requests_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,pod,product_stage,region,result,shard,stage,stage_group,tier,type) (
-        rate(jaeger_query_requests_total{env="gprd"}[30m] offset 30s)
+        rate(jaeger_query_requests_total{env="gprd"}[30m] offset 1m)
       )
 - name: 'SLI Aggregations: jaeger - jaeger_agent-ops - 1h burn-rate'
   interval: 1m
@@ -107,12 +107,12 @@ groups:
   - record: sli_aggregations:jaeger_agent_reporter_spans_failures_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,instance,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(jaeger_agent_reporter_spans_failures_total{env="gprd"}[1h] offset 30s)
+        rate(jaeger_agent_reporter_spans_failures_total{env="gprd"}[1h] offset 1m)
       )
   - record: sli_aggregations:jaeger_agent_reporter_spans_submitted_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,instance,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(jaeger_agent_reporter_spans_submitted_total{env="gprd"}[1h] offset 30s)
+        rate(jaeger_agent_reporter_spans_submitted_total{env="gprd"}[1h] offset 1m)
       )
 - name: 'SLI Aggregations: jaeger - jaeger_collector-apdex - 1h burn-rate'
   interval: 1m
@@ -120,7 +120,7 @@ groups:
   - record: sli_aggregations:jaeger_collector_save_latency_bucket:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,pod,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(jaeger_collector_save_latency_bucket{env="gprd",type=~"jaeger"}[1h] offset 30s)
+        rate(jaeger_collector_save_latency_bucket{env="gprd",type=~"jaeger"}[1h] offset 1m)
       )
 - name: 'SLI Aggregations: jaeger - jaeger_collector-ops - 1h burn-rate'
   interval: 1m
@@ -128,12 +128,12 @@ groups:
   - record: sli_aggregations:jaeger_collector_spans_dropped_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,pod,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(jaeger_collector_spans_dropped_total{env="gprd",type=~"jaeger"}[1h] offset 30s)
+        rate(jaeger_collector_spans_dropped_total{env="gprd",type=~"jaeger"}[1h] offset 1m)
       )
   - record: sli_aggregations:jaeger_collector_spans_received_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,pod,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(jaeger_collector_spans_received_total{env="gprd",type=~"jaeger"}[1h] offset 30s)
+        rate(jaeger_collector_spans_received_total{env="gprd",type=~"jaeger"}[1h] offset 1m)
       )
 - name: 'SLI Aggregations: jaeger - jaeger_query-apdex - 1h burn-rate'
   interval: 1m
@@ -141,7 +141,7 @@ groups:
   - record: sli_aggregations:jaeger_query_latency_bucket:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,pod,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(jaeger_query_latency_bucket{env="gprd"}[1h] offset 30s)
+        rate(jaeger_query_latency_bucket{env="gprd"}[1h] offset 1m)
       )
 - name: 'SLI Aggregations: jaeger - jaeger_query-ops - 1h burn-rate'
   interval: 1m
@@ -149,5 +149,5 @@ groups:
   - record: sli_aggregations:jaeger_query_requests_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,pod,product_stage,region,result,shard,stage,stage_group,tier,type) (
-        rate(jaeger_query_requests_total{env="gprd"}[1h] offset 30s)
+        rate(jaeger_query_requests_total{env="gprd"}[1h] offset 1m)
       )

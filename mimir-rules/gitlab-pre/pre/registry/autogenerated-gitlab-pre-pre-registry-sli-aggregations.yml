@@ -7,7 +7,7 @@ groups:
   - record: sli_aggregations:registry_database_query_duration_seconds_bucket:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,name,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(registry_database_query_duration_seconds_bucket{env="pre",type=~"registry"}[5m] offset 30s)
+        rate(registry_database_query_duration_seconds_bucket{env="pre",type=~"registry"}[5m] offset 1m)
       )
 - name: 'SLI Aggregations: registry - database-ops - 5m burn-rate'
   interval: 1m
@@ -15,7 +15,7 @@ groups:
   - record: sli_aggregations:registry_database_queries_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,name,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(registry_database_queries_total{env="pre",type=~"registry"}[5m] offset 30s)
+        rate(registry_database_queries_total{env="pre",type=~"registry"}[5m] offset 1m)
       )
 - name: 'SLI Aggregations: registry - garbagecollector-apdex - 5m burn-rate'
   interval: 1m
@@ -23,7 +23,7 @@ groups:
   - record: sli_aggregations:registry_gc_run_duration_seconds_bucket:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,tier,type,worker) (
-        rate(registry_gc_run_duration_seconds_bucket{env="pre",type=~"registry"}[5m] offset 30s)
+        rate(registry_gc_run_duration_seconds_bucket{env="pre",type=~"registry"}[5m] offset 1m)
       )
 - name: 'SLI Aggregations: registry - garbagecollector-ops - 5m burn-rate'
   interval: 1m
@@ -31,7 +31,7 @@ groups:
   - record: sli_aggregations:registry_gc_runs_total:rate_5m
     expr: |
       sum by (component,env,environment,error,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type,worker) (
-        rate(registry_gc_runs_total{env="pre",type=~"registry"}[5m] offset 30s)
+        rate(registry_gc_runs_total{env="pre",type=~"registry"}[5m] offset 1m)
       )
 - name: 'SLI Aggregations: registry - loadbalancer-ops - 5m burn-rate'
   interval: 1m
@@ -39,7 +39,7 @@ groups:
   - record: sli_aggregations:haproxy_backend_http_responses_total:rate_5m
     expr: |
       sum by (backend,code,component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(haproxy_backend_http_responses_total{backend=~"canary_registry|registry",env="pre",type=~"registry"}[5m] offset 30s)
+        rate(haproxy_backend_http_responses_total{backend=~"canary_registry|registry",env="pre",type=~"registry"}[5m] offset 1m)
       )
 - name: 'SLI Aggregations: registry - redis-apdex - 5m burn-rate'
   interval: 1m
@@ -47,7 +47,7 @@ groups:
   - record: sli_aggregations:registry_redis_single_commands_bucket:rate_5m
     expr: |
       sum by (command,component,env,environment,feature_category,fqdn,instance,le,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(registry_redis_single_commands_bucket{env="pre",type=~"registry"}[5m] offset 30s)
+        rate(registry_redis_single_commands_bucket{env="pre",type=~"registry"}[5m] offset 1m)
       )
 - name: 'SLI Aggregations: registry - redis-ops - 5m burn-rate'
   interval: 1m
@@ -55,12 +55,12 @@ groups:
   - record: sli_aggregations:registry_redis_single_commands_count:rate_5m
     expr: |
       sum by (command,component,env,environment,feature_category,fqdn,instance,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(registry_redis_single_commands_count{env="pre",type=~"registry"}[5m] offset 30s)
+        rate(registry_redis_single_commands_count{env="pre",type=~"registry"}[5m] offset 1m)
       )
   - record: sli_aggregations:registry_redis_single_errors_count:rate_5m
     expr: |
       sum by (command,component,env,environment,feature_category,fqdn,instance,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(registry_redis_single_errors_count{env="pre",type=~"registry"}[5m] offset 30s)
+        rate(registry_redis_single_errors_count{env="pre",type=~"registry"}[5m] offset 1m)
       )
 - name: 'SLI Aggregations: registry - registry_cdn-ops - 5m burn-rate - emitted by
     monitoring'
@@ -69,7 +69,7 @@ groups:
   - record: sli_aggregations:stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,project_id,proxy_continent,region,response_code,response_code_class,shard,stage,stage_group,tier,type,url_map_name) (
-        rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{env="pre",project_id=~"gitlab-production",type=~"monitoring",url_map_name=~"gprd-registry-cdn"}[5m] offset 30s)
+        rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{env="pre",project_id=~"gitlab-production",type=~"monitoring",url_map_name=~"gprd-registry-cdn"}[5m] offset 1m)
       )
 - name: 'SLI Aggregations: registry - registry_server-apdex - 5m burn-rate'
   interval: 1m
@@ -77,7 +77,7 @@ groups:
   - record: sli_aggregations:registry_http_request_duration_seconds_bucket:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,method,product_stage,region,route,shard,stage,stage_group,tier,type) (
-        rate(registry_http_request_duration_seconds_bucket{env="pre",type=~"registry"}[5m] offset 30s)
+        rate(registry_http_request_duration_seconds_bucket{env="pre",type=~"registry"}[5m] offset 1m)
       )
 - name: 'SLI Aggregations: registry - registry_server-ops - 5m burn-rate'
   interval: 1m
@@ -85,7 +85,7 @@ groups:
   - record: sli_aggregations:registry_http_requests_total:rate_5m
     expr: |
       sum by (code,component,env,environment,feature_category,fqdn,method,product_stage,region,route,shard,stage,stage_group,tier,type) (
-        rate(registry_http_requests_total{env="pre",type=~"registry"}[5m] offset 30s)
+        rate(registry_http_requests_total{env="pre",type=~"registry"}[5m] offset 1m)
       )
 - name: 'SLI Aggregations: registry - server_route_blob_upload_uuid_deletes-ops -
     5m burn-rate'
@@ -94,7 +94,7 @@ groups:
   - record: sli_aggregations:registry_http_request_duration_seconds_count:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,method,product_stage,region,route,shard,stage,stage_group,tier,type) (
-        rate(registry_http_request_duration_seconds_count{env="pre",method=~"delete|get|head|patch|post|put",route=~"/v2/\\{name\\}/blobs/uploads/\\{uuid\\}|/v2/\\{name\\}/manifests/\\{reference\\}",type=~"registry"}[5m] offset 30s)
+        rate(registry_http_request_duration_seconds_count{env="pre",method=~"delete|get|head|patch|post|put",route=~"/v2/\\{name\\}/blobs/uploads/\\{uuid\\}|/v2/\\{name\\}/manifests/\\{reference\\}",type=~"registry"}[5m] offset 1m)
       )
 - name: 'SLI Aggregations: registry - database-apdex - 30m burn-rate'
   interval: 2m
@@ -102,7 +102,7 @@ groups:
   - record: sli_aggregations:registry_database_query_duration_seconds_bucket:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,name,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(registry_database_query_duration_seconds_bucket{env="pre",type=~"registry"}[30m] offset 30s)
+        rate(registry_database_query_duration_seconds_bucket{env="pre",type=~"registry"}[30m] offset 1m)
       )
 - name: 'SLI Aggregations: registry - database-ops - 30m burn-rate'
   interval: 2m
@@ -110,7 +110,7 @@ groups:
   - record: sli_aggregations:registry_database_queries_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,name,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(registry_database_queries_total{env="pre",type=~"registry"}[30m] offset 30s)
+        rate(registry_database_queries_total{env="pre",type=~"registry"}[30m] offset 1m)
       )
 - name: 'SLI Aggregations: registry - garbagecollector-apdex - 30m burn-rate'
   interval: 2m
@@ -118,7 +118,7 @@ groups:
   - record: sli_aggregations:registry_gc_run_duration_seconds_bucket:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,tier,type,worker) (
-        rate(registry_gc_run_duration_seconds_bucket{env="pre",type=~"registry"}[30m] offset 30s)
+        rate(registry_gc_run_duration_seconds_bucket{env="pre",type=~"registry"}[30m] offset 1m)
       )
 - name: 'SLI Aggregations: registry - garbagecollector-ops - 30m burn-rate'
   interval: 2m
@@ -126,7 +126,7 @@ groups:
   - record: sli_aggregations:registry_gc_runs_total:rate_30m
     expr: |
       sum by (component,env,environment,error,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type,worker) (
-        rate(registry_gc_runs_total{env="pre",type=~"registry"}[30m] offset 30s)
+        rate(registry_gc_runs_total{env="pre",type=~"registry"}[30m] offset 1m)
       )
 - name: 'SLI Aggregations: registry - loadbalancer-ops - 30m burn-rate'
   interval: 2m
@@ -134,7 +134,7 @@ groups:
   - record: sli_aggregations:haproxy_backend_http_responses_total:rate_30m
     expr: |
       sum by (backend,code,component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(haproxy_backend_http_responses_total{backend=~"canary_registry|registry",env="pre",type=~"registry"}[30m] offset 30s)
+        rate(haproxy_backend_http_responses_total{backend=~"canary_registry|registry",env="pre",type=~"registry"}[30m] offset 1m)
       )
 - name: 'SLI Aggregations: registry - redis-apdex - 30m burn-rate'
   interval: 2m
@@ -142,7 +142,7 @@ groups:
   - record: sli_aggregations:registry_redis_single_commands_bucket:rate_30m
     expr: |
       sum by (command,component,env,environment,feature_category,fqdn,instance,le,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(registry_redis_single_commands_bucket{env="pre",type=~"registry"}[30m] offset 30s)
+        rate(registry_redis_single_commands_bucket{env="pre",type=~"registry"}[30m] offset 1m)
       )
 - name: 'SLI Aggregations: registry - redis-ops - 30m burn-rate'
   interval: 2m
@@ -150,12 +150,12 @@ groups:
   - record: sli_aggregations:registry_redis_single_commands_count:rate_30m
     expr: |
       sum by (command,component,env,environment,feature_category,fqdn,instance,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(registry_redis_single_commands_count{env="pre",type=~"registry"}[30m] offset 30s)
+        rate(registry_redis_single_commands_count{env="pre",type=~"registry"}[30m] offset 1m)
       )
   - record: sli_aggregations:registry_redis_single_errors_count:rate_30m
     expr: |
       sum by (command,component,env,environment,feature_category,fqdn,instance,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(registry_redis_single_errors_count{env="pre",type=~"registry"}[30m] offset 30s)
+        rate(registry_redis_single_errors_count{env="pre",type=~"registry"}[30m] offset 1m)
       )
 - name: 'SLI Aggregations: registry - registry_cdn-ops - 30m burn-rate - emitted by
     monitoring'
@@ -164,7 +164,7 @@ groups:
   - record: sli_aggregations:stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,project_id,proxy_continent,region,response_code,response_code_class,shard,stage,stage_group,tier,type,url_map_name) (
-        rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{env="pre",project_id=~"gitlab-production",type=~"monitoring",url_map_name=~"gprd-registry-cdn"}[30m] offset 30s)
+        rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{env="pre",project_id=~"gitlab-production",type=~"monitoring",url_map_name=~"gprd-registry-cdn"}[30m] offset 1m)
       )
 - name: 'SLI Aggregations: registry - registry_server-apdex - 30m burn-rate'
   interval: 2m
@@ -172,7 +172,7 @@ groups:
   - record: sli_aggregations:registry_http_request_duration_seconds_bucket:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,method,product_stage,region,route,shard,stage,stage_group,tier,type) (
-        rate(registry_http_request_duration_seconds_bucket{env="pre",type=~"registry"}[30m] offset 30s)
+        rate(registry_http_request_duration_seconds_bucket{env="pre",type=~"registry"}[30m] offset 1m)
       )
 - name: 'SLI Aggregations: registry - registry_server-ops - 30m burn-rate'
   interval: 2m
@@ -180,7 +180,7 @@ groups:
   - record: sli_aggregations:registry_http_requests_total:rate_30m
     expr: |
       sum by (code,component,env,environment,feature_category,fqdn,method,product_stage,region,route,shard,stage,stage_group,tier,type) (
-        rate(registry_http_requests_total{env="pre",type=~"registry"}[30m] offset 30s)
+        rate(registry_http_requests_total{env="pre",type=~"registry"}[30m] offset 1m)
       )
 - name: 'SLI Aggregations: registry - server_route_blob_upload_uuid_deletes-ops -
     30m burn-rate'
@@ -189,7 +189,7 @@ groups:
   - record: sli_aggregations:registry_http_request_duration_seconds_count:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,method,product_stage,region,route,shard,stage,stage_group,tier,type) (
-        rate(registry_http_request_duration_seconds_count{env="pre",method=~"delete|get|head|patch|post|put",route=~"/v2/\\{name\\}/blobs/uploads/\\{uuid\\}|/v2/\\{name\\}/manifests/\\{reference\\}",type=~"registry"}[30m] offset 30s)
+        rate(registry_http_request_duration_seconds_count{env="pre",method=~"delete|get|head|patch|post|put",route=~"/v2/\\{name\\}/blobs/uploads/\\{uuid\\}|/v2/\\{name\\}/manifests/\\{reference\\}",type=~"registry"}[30m] offset 1m)
       )
 - name: 'SLI Aggregations: registry - database-apdex - 1h burn-rate'
   interval: 1m
@@ -197,7 +197,7 @@ groups:
   - record: sli_aggregations:registry_database_query_duration_seconds_bucket:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,name,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(registry_database_query_duration_seconds_bucket{env="pre",type=~"registry"}[1h] offset 30s)
+        rate(registry_database_query_duration_seconds_bucket{env="pre",type=~"registry"}[1h] offset 1m)
       )
 - name: 'SLI Aggregations: registry - database-ops - 1h burn-rate'
   interval: 1m
@@ -205,7 +205,7 @@ groups:
   - record: sli_aggregations:registry_database_queries_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,name,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(registry_database_queries_total{env="pre",type=~"registry"}[1h] offset 30s)
+        rate(registry_database_queries_total{env="pre",type=~"registry"}[1h] offset 1m)
       )
 - name: 'SLI Aggregations: registry - garbagecollector-apdex - 1h burn-rate'
   interval: 1m
@@ -213,7 +213,7 @@ groups:
   - record: sli_aggregations:registry_gc_run_duration_seconds_bucket:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,tier,type,worker) (
-        rate(registry_gc_run_duration_seconds_bucket{env="pre",type=~"registry"}[1h] offset 30s)
+        rate(registry_gc_run_duration_seconds_bucket{env="pre",type=~"registry"}[1h] offset 1m)
       )
 - name: 'SLI Aggregations: registry - garbagecollector-ops - 1h burn-rate'
   interval: 1m
@@ -221,7 +221,7 @@ groups:
   - record: sli_aggregations:registry_gc_runs_total:rate_1h
     expr: |
       sum by (component,env,environment,error,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type,worker) (
-        rate(registry_gc_runs_total{env="pre",type=~"registry"}[1h] offset 30s)
+        rate(registry_gc_runs_total{env="pre",type=~"registry"}[1h] offset 1m)
       )
 - name: 'SLI Aggregations: registry - loadbalancer-ops - 1h burn-rate'
   interval: 1m
@@ -229,7 +229,7 @@ groups:
   - record: sli_aggregations:haproxy_backend_http_responses_total:rate_1h
     expr: |
       sum by (backend,code,component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(haproxy_backend_http_responses_total{backend=~"canary_registry|registry",env="pre",type=~"registry"}[1h] offset 30s)
+        rate(haproxy_backend_http_responses_total{backend=~"canary_registry|registry",env="pre",type=~"registry"}[1h] offset 1m)
       )
 - name: 'SLI Aggregations: registry - redis-apdex - 1h burn-rate'
   interval: 1m
@@ -237,7 +237,7 @@ groups:
   - record: sli_aggregations:registry_redis_single_commands_bucket:rate_1h
     expr: |
       sum by (command,component,env,environment,feature_category,fqdn,instance,le,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(registry_redis_single_commands_bucket{env="pre",type=~"registry"}[1h] offset 30s)
+        rate(registry_redis_single_commands_bucket{env="pre",type=~"registry"}[1h] offset 1m)
       )
 - name: 'SLI Aggregations: registry - redis-ops - 1h burn-rate'
   interval: 1m
@@ -245,12 +245,12 @@ groups:
   - record: sli_aggregations:registry_redis_single_commands_count:rate_1h
     expr: |
       sum by (command,component,env,environment,feature_category,fqdn,instance,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(registry_redis_single_commands_count{env="pre",type=~"registry"}[1h] offset 30s)
+        rate(registry_redis_single_commands_count{env="pre",type=~"registry"}[1h] offset 1m)
       )
   - record: sli_aggregations:registry_redis_single_errors_count:rate_1h
     expr: |
       sum by (command,component,env,environment,feature_category,fqdn,instance,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(registry_redis_single_errors_count{env="pre",type=~"registry"}[1h] offset 30s)
+        rate(registry_redis_single_errors_count{env="pre",type=~"registry"}[1h] offset 1m)
       )
 - name: 'SLI Aggregations: registry - registry_cdn-ops - 1h burn-rate - emitted by
     monitoring'
@@ -259,7 +259,7 @@ groups:
   - record: sli_aggregations:stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,project_id,proxy_continent,region,response_code,response_code_class,shard,stage,stage_group,tier,type,url_map_name) (
-        rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{env="pre",project_id=~"gitlab-production",type=~"monitoring",url_map_name=~"gprd-registry-cdn"}[1h] offset 30s)
+        rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{env="pre",project_id=~"gitlab-production",type=~"monitoring",url_map_name=~"gprd-registry-cdn"}[1h] offset 1m)
       )
 - name: 'SLI Aggregations: registry - registry_server-apdex - 1h burn-rate'
   interval: 1m
@@ -267,7 +267,7 @@ groups:
   - record: sli_aggregations:registry_http_request_duration_seconds_bucket:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,method,product_stage,region,route,shard,stage,stage_group,tier,type) (
-        rate(registry_http_request_duration_seconds_bucket{env="pre",type=~"registry"}[1h] offset 30s)
+        rate(registry_http_request_duration_seconds_bucket{env="pre",type=~"registry"}[1h] offset 1m)
       )
 - name: 'SLI Aggregations: registry - registry_server-ops - 1h burn-rate'
   interval: 1m
@@ -275,7 +275,7 @@ groups:
   - record: sli_aggregations:registry_http_requests_total:rate_1h
     expr: |
       sum by (code,component,env,environment,feature_category,fqdn,method,product_stage,region,route,shard,stage,stage_group,tier,type) (
-        rate(registry_http_requests_total{env="pre",type=~"registry"}[1h] offset 30s)
+        rate(registry_http_requests_total{env="pre",type=~"registry"}[1h] offset 1m)
       )
 - name: 'SLI Aggregations: registry - server_route_blob_upload_uuid_deletes-ops -
     1h burn-rate'
@@ -284,5 +284,5 @@ groups:
   - record: sli_aggregations:registry_http_request_duration_seconds_count:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,method,product_stage,region,route,shard,stage,stage_group,tier,type) (
-        rate(registry_http_request_duration_seconds_count{env="pre",method=~"delete|get|head|patch|post|put",route=~"/v2/\\{name\\}/blobs/uploads/\\{uuid\\}|/v2/\\{name\\}/manifests/\\{reference\\}",type=~"registry"}[1h] offset 30s)
+        rate(registry_http_request_duration_seconds_count{env="pre",method=~"delete|get|head|patch|post|put",route=~"/v2/\\{name\\}/blobs/uploads/\\{uuid\\}|/v2/\\{name\\}/manifests/\\{reference\\}",type=~"registry"}[1h] offset 1m)
       )

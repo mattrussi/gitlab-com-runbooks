@@ -7,12 +7,12 @@ groups:
   - record: sli_aggregations:consul_client_rpc:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,job,pod,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(consul_client_rpc{env="gprd",job=~"consul-gl-consul-ui"}[5m] offset 30s)
+        rate(consul_client_rpc{env="gprd",job=~"consul-gl-consul-ui"}[5m] offset 1m)
       )
   - record: sli_aggregations:consul_client_rpc_failed:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,job,pod,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(consul_client_rpc_failed{env="gprd",job=~"consul-gl-consul-ui"}[5m] offset 30s)
+        rate(consul_client_rpc_failed{env="gprd",job=~"consul-gl-consul-ui"}[5m] offset 1m)
       )
 - name: 'SLI Aggregations: consul - consul-ops - 30m burn-rate'
   interval: 2m
@@ -20,12 +20,12 @@ groups:
   - record: sli_aggregations:consul_client_rpc:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,job,pod,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(consul_client_rpc{env="gprd",job=~"consul-gl-consul-ui"}[30m] offset 30s)
+        rate(consul_client_rpc{env="gprd",job=~"consul-gl-consul-ui"}[30m] offset 1m)
       )
   - record: sli_aggregations:consul_client_rpc_failed:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,job,pod,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(consul_client_rpc_failed{env="gprd",job=~"consul-gl-consul-ui"}[30m] offset 30s)
+        rate(consul_client_rpc_failed{env="gprd",job=~"consul-gl-consul-ui"}[30m] offset 1m)
       )
 - name: 'SLI Aggregations: consul - consul-ops - 1h burn-rate'
   interval: 1m
@@ -33,10 +33,10 @@ groups:
   - record: sli_aggregations:consul_client_rpc:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,job,pod,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(consul_client_rpc{env="gprd",job=~"consul-gl-consul-ui"}[1h] offset 30s)
+        rate(consul_client_rpc{env="gprd",job=~"consul-gl-consul-ui"}[1h] offset 1m)
       )
   - record: sli_aggregations:consul_client_rpc_failed:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,job,pod,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(consul_client_rpc_failed{env="gprd",job=~"consul-gl-consul-ui"}[1h] offset 30s)
+        rate(consul_client_rpc_failed{env="gprd",job=~"consul-gl-consul-ui"}[1h] offset 1m)
       )
