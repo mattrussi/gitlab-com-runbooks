@@ -1497,7 +1497,7 @@ groups:
       component: client_database_transaction
       tier: db
       type: patroni-ci
-    expr: "0.990000"
+    expr: "0.995000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: client_database_transaction
@@ -1671,7 +1671,7 @@ groups:
       component: client_database_transaction
       tier: db
       type: patroni
-    expr: "0.990000"
+    expr: "0.995000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: client_database_transaction

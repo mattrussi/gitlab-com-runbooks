@@ -88,7 +88,7 @@ function(
       userImpacting: false,
       severity: 's4',
       monitoringThresholds+: {
-        apdexScore: 0.99,
+        apdexScore: 0.995,
       },
       emittedBy: findServicesWithTag(tag='rails'),
     }),
