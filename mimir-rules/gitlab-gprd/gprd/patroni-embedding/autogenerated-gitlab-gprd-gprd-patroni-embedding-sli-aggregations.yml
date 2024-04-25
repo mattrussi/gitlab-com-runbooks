@@ -7,17 +7,17 @@ groups:
   - record: sli_aggregations:pgbouncer_pooler_errors_total:rate_5m
     expr: |
       sum by (component,env,environment,error,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(pgbouncer_pooler_errors_total{env="gprd",tier=~"db",type=~"patroni-embedding"}[5m] offset 1m)
+        rate(pgbouncer_pooler_errors_total{env="gprd",tier=~"db",type=~"patroni-embedding"}[5m])
       )
   - record: sli_aggregations:pgbouncer_stats_queries_pooled_total:rate_5m
     expr: |
       sum by (component,env,environment,error,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(pgbouncer_stats_queries_pooled_total{env="gprd",tier=~"db",type=~"patroni-embedding"}[5m] offset 1m)
+        rate(pgbouncer_stats_queries_pooled_total{env="gprd",tier=~"db",type=~"patroni-embedding"}[5m])
       )
   - record: sli_aggregations:pgbouncer_stats_sql_transactions_pooled_total:rate_5m
     expr: |
       sum by (component,env,environment,error,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(pgbouncer_stats_sql_transactions_pooled_total{env="gprd",tier=~"db",type=~"patroni-embedding"}[5m] offset 1m)
+        rate(pgbouncer_stats_sql_transactions_pooled_total{env="gprd",tier=~"db",type=~"patroni-embedding"}[5m])
       )
 - name: 'SLI Aggregations: patroni-embedding - transactions_primary-ops - 5m burn-rate'
   interval: 1m
@@ -25,12 +25,12 @@ groups:
   - record: sli_aggregations:pg_stat_database_xact_commit:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(pg_stat_database_xact_commit{env="gprd",tier=~"db",type=~"patroni-embedding"}[5m] offset 1m)
+        rate(pg_stat_database_xact_commit{env="gprd",tier=~"db",type=~"patroni-embedding"}[5m])
       )
   - record: sli_aggregations:pg_stat_database_xact_rollback:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(pg_stat_database_xact_rollback{env="gprd",tier=~"db",type=~"patroni-embedding"}[5m] offset 1m)
+        rate(pg_stat_database_xact_rollback{env="gprd",tier=~"db",type=~"patroni-embedding"}[5m])
       )
 - name: 'SLI Aggregations: patroni-embedding - pgbouncer-ops - 30m burn-rate'
   interval: 2m
@@ -38,17 +38,17 @@ groups:
   - record: sli_aggregations:pgbouncer_pooler_errors_total:rate_30m
     expr: |
       sum by (component,env,environment,error,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(pgbouncer_pooler_errors_total{env="gprd",tier=~"db",type=~"patroni-embedding"}[30m] offset 1m)
+        rate(pgbouncer_pooler_errors_total{env="gprd",tier=~"db",type=~"patroni-embedding"}[30m])
       )
   - record: sli_aggregations:pgbouncer_stats_queries_pooled_total:rate_30m
     expr: |
       sum by (component,env,environment,error,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(pgbouncer_stats_queries_pooled_total{env="gprd",tier=~"db",type=~"patroni-embedding"}[30m] offset 1m)
+        rate(pgbouncer_stats_queries_pooled_total{env="gprd",tier=~"db",type=~"patroni-embedding"}[30m])
       )
   - record: sli_aggregations:pgbouncer_stats_sql_transactions_pooled_total:rate_30m
     expr: |
       sum by (component,env,environment,error,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(pgbouncer_stats_sql_transactions_pooled_total{env="gprd",tier=~"db",type=~"patroni-embedding"}[30m] offset 1m)
+        rate(pgbouncer_stats_sql_transactions_pooled_total{env="gprd",tier=~"db",type=~"patroni-embedding"}[30m])
       )
 - name: 'SLI Aggregations: patroni-embedding - transactions_primary-ops - 30m burn-rate'
   interval: 2m
@@ -56,12 +56,12 @@ groups:
   - record: sli_aggregations:pg_stat_database_xact_commit:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(pg_stat_database_xact_commit{env="gprd",tier=~"db",type=~"patroni-embedding"}[30m] offset 1m)
+        rate(pg_stat_database_xact_commit{env="gprd",tier=~"db",type=~"patroni-embedding"}[30m])
       )
   - record: sli_aggregations:pg_stat_database_xact_rollback:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(pg_stat_database_xact_rollback{env="gprd",tier=~"db",type=~"patroni-embedding"}[30m] offset 1m)
+        rate(pg_stat_database_xact_rollback{env="gprd",tier=~"db",type=~"patroni-embedding"}[30m])
       )
 - name: 'SLI Aggregations: patroni-embedding - pgbouncer-ops - 1h burn-rate'
   interval: 1m
@@ -69,17 +69,17 @@ groups:
   - record: sli_aggregations:pgbouncer_pooler_errors_total:rate_1h
     expr: |
       sum by (component,env,environment,error,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(pgbouncer_pooler_errors_total{env="gprd",tier=~"db",type=~"patroni-embedding"}[1h] offset 1m)
+        rate(pgbouncer_pooler_errors_total{env="gprd",tier=~"db",type=~"patroni-embedding"}[1h])
       )
   - record: sli_aggregations:pgbouncer_stats_queries_pooled_total:rate_1h
     expr: |
       sum by (component,env,environment,error,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(pgbouncer_stats_queries_pooled_total{env="gprd",tier=~"db",type=~"patroni-embedding"}[1h] offset 1m)
+        rate(pgbouncer_stats_queries_pooled_total{env="gprd",tier=~"db",type=~"patroni-embedding"}[1h])
       )
   - record: sli_aggregations:pgbouncer_stats_sql_transactions_pooled_total:rate_1h
     expr: |
       sum by (component,env,environment,error,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(pgbouncer_stats_sql_transactions_pooled_total{env="gprd",tier=~"db",type=~"patroni-embedding"}[1h] offset 1m)
+        rate(pgbouncer_stats_sql_transactions_pooled_total{env="gprd",tier=~"db",type=~"patroni-embedding"}[1h])
       )
 - name: 'SLI Aggregations: patroni-embedding - transactions_primary-ops - 1h burn-rate'
   interval: 1m
@@ -87,10 +87,10 @@ groups:
   - record: sli_aggregations:pg_stat_database_xact_commit:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(pg_stat_database_xact_commit{env="gprd",tier=~"db",type=~"patroni-embedding"}[1h] offset 1m)
+        rate(pg_stat_database_xact_commit{env="gprd",tier=~"db",type=~"patroni-embedding"}[1h])
       )
   - record: sli_aggregations:pg_stat_database_xact_rollback:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(pg_stat_database_xact_rollback{env="gprd",tier=~"db",type=~"patroni-embedding"}[1h] offset 1m)
+        rate(pg_stat_database_xact_rollback{env="gprd",tier=~"db",type=~"patroni-embedding"}[1h])
       )

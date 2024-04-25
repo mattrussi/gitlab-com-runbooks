@@ -7,7 +7,7 @@ groups:
   - record: sli_aggregations:nginx_ingress_controller_requests:labeled:rate_5m
     expr: |
       sum by (app,component,env,environment,feature_category,fqdn,path,product_stage,region,shard,stage,stage_group,status,tier,type) (
-        rate(nginx_ingress_controller_requests:labeled{app=~"nginx-ingress",env="pre",type=~"api"}[5m] offset 1m)
+        rate(nginx_ingress_controller_requests:labeled{app=~"nginx-ingress",env="pre",type=~"api"}[5m])
       )
 - name: 'SLI Aggregations: nginx - nginx_ingress-ops - 5m burn-rate - emitted by web'
   interval: 1m
@@ -15,7 +15,7 @@ groups:
   - record: sli_aggregations:nginx_ingress_controller_requests:labeled:rate_5m
     expr: |
       sum by (app,component,env,environment,feature_category,fqdn,path,product_stage,region,shard,stage,stage_group,status,tier,type) (
-        rate(nginx_ingress_controller_requests:labeled{app=~"nginx-ingress",env="pre",type=~"web"}[5m] offset 1m)
+        rate(nginx_ingress_controller_requests:labeled{app=~"nginx-ingress",env="pre",type=~"web"}[5m])
       )
 - name: 'SLI Aggregations: nginx - nginx_ingress-ops - 30m burn-rate - emitted by
     api'
@@ -24,7 +24,7 @@ groups:
   - record: sli_aggregations:nginx_ingress_controller_requests:labeled:rate_30m
     expr: |
       sum by (app,component,env,environment,feature_category,fqdn,path,product_stage,region,shard,stage,stage_group,status,tier,type) (
-        rate(nginx_ingress_controller_requests:labeled{app=~"nginx-ingress",env="pre",type=~"api"}[30m] offset 1m)
+        rate(nginx_ingress_controller_requests:labeled{app=~"nginx-ingress",env="pre",type=~"api"}[30m])
       )
 - name: 'SLI Aggregations: nginx - nginx_ingress-ops - 30m burn-rate - emitted by
     web'
@@ -33,7 +33,7 @@ groups:
   - record: sli_aggregations:nginx_ingress_controller_requests:labeled:rate_30m
     expr: |
       sum by (app,component,env,environment,feature_category,fqdn,path,product_stage,region,shard,stage,stage_group,status,tier,type) (
-        rate(nginx_ingress_controller_requests:labeled{app=~"nginx-ingress",env="pre",type=~"web"}[30m] offset 1m)
+        rate(nginx_ingress_controller_requests:labeled{app=~"nginx-ingress",env="pre",type=~"web"}[30m])
       )
 - name: 'SLI Aggregations: nginx - nginx_ingress-ops - 1h burn-rate - emitted by api'
   interval: 1m
@@ -41,7 +41,7 @@ groups:
   - record: sli_aggregations:nginx_ingress_controller_requests:labeled:rate_1h
     expr: |
       sum by (app,component,env,environment,feature_category,fqdn,path,product_stage,region,shard,stage,stage_group,status,tier,type) (
-        rate(nginx_ingress_controller_requests:labeled{app=~"nginx-ingress",env="pre",type=~"api"}[1h] offset 1m)
+        rate(nginx_ingress_controller_requests:labeled{app=~"nginx-ingress",env="pre",type=~"api"}[1h])
       )
 - name: 'SLI Aggregations: nginx - nginx_ingress-ops - 1h burn-rate - emitted by web'
   interval: 1m
@@ -49,5 +49,5 @@ groups:
   - record: sli_aggregations:nginx_ingress_controller_requests:labeled:rate_1h
     expr: |
       sum by (app,component,env,environment,feature_category,fqdn,path,product_stage,region,shard,stage,stage_group,status,tier,type) (
-        rate(nginx_ingress_controller_requests:labeled{app=~"nginx-ingress",env="pre",type=~"web"}[1h] offset 1m)
+        rate(nginx_ingress_controller_requests:labeled{app=~"nginx-ingress",env="pre",type=~"web"}[1h])
       )

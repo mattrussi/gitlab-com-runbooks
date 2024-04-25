@@ -7,7 +7,7 @@ groups:
   - record: sli_aggregations:woodhouse_async_job_duration_seconds_bucket:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,job,job_name,le,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(woodhouse_async_job_duration_seconds_bucket{cluster="gprd-gitlab-gke",env="gprd",job=~"woodhouse",type=~"woodhouse"}[5m] offset 1m)
+        rate(woodhouse_async_job_duration_seconds_bucket{cluster="gprd-gitlab-gke",env="gprd",job=~"woodhouse",type=~"woodhouse"}[5m])
       )
 - name: 'SLI Aggregations: woodhouse - async_jobs-apdex - 5m burn-rate - gprd-us-east1-b'
   interval: 1m
@@ -15,7 +15,7 @@ groups:
   - record: sli_aggregations:woodhouse_async_job_duration_seconds_bucket:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,job,job_name,le,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(woodhouse_async_job_duration_seconds_bucket{cluster="gprd-us-east1-b",env="gprd",job=~"woodhouse",type=~"woodhouse"}[5m] offset 1m)
+        rate(woodhouse_async_job_duration_seconds_bucket{cluster="gprd-us-east1-b",env="gprd",job=~"woodhouse",type=~"woodhouse"}[5m])
       )
 - name: 'SLI Aggregations: woodhouse - async_jobs-apdex - 5m burn-rate - gprd-us-east1-c'
   interval: 1m
@@ -23,7 +23,7 @@ groups:
   - record: sli_aggregations:woodhouse_async_job_duration_seconds_bucket:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,job,job_name,le,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(woodhouse_async_job_duration_seconds_bucket{cluster="gprd-us-east1-c",env="gprd",job=~"woodhouse",type=~"woodhouse"}[5m] offset 1m)
+        rate(woodhouse_async_job_duration_seconds_bucket{cluster="gprd-us-east1-c",env="gprd",job=~"woodhouse",type=~"woodhouse"}[5m])
       )
 - name: 'SLI Aggregations: woodhouse - async_jobs-apdex - 5m burn-rate - gprd-us-east1-d'
   interval: 1m
@@ -31,7 +31,7 @@ groups:
   - record: sli_aggregations:woodhouse_async_job_duration_seconds_bucket:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,job,job_name,le,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(woodhouse_async_job_duration_seconds_bucket{cluster="gprd-us-east1-d",env="gprd",job=~"woodhouse",type=~"woodhouse"}[5m] offset 1m)
+        rate(woodhouse_async_job_duration_seconds_bucket{cluster="gprd-us-east1-d",env="gprd",job=~"woodhouse",type=~"woodhouse"}[5m])
       )
 - name: 'SLI Aggregations: woodhouse - async_jobs-ops - 5m burn-rate - gprd-gitlab-gke'
   interval: 1m
@@ -39,7 +39,7 @@ groups:
   - record: sli_aggregations:woodhouse_async_jobs_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,job,job_name,product_stage,region,shard,stage,stage_group,status,tier,type) (
-        rate(woodhouse_async_jobs_total{cluster="gprd-gitlab-gke",env="gprd",job=~"woodhouse",type=~"woodhouse"}[5m] offset 1m)
+        rate(woodhouse_async_jobs_total{cluster="gprd-gitlab-gke",env="gprd",job=~"woodhouse",type=~"woodhouse"}[5m])
       )
 - name: 'SLI Aggregations: woodhouse - async_jobs-ops - 5m burn-rate - gprd-us-east1-b'
   interval: 1m
@@ -47,7 +47,7 @@ groups:
   - record: sli_aggregations:woodhouse_async_jobs_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,job,job_name,product_stage,region,shard,stage,stage_group,status,tier,type) (
-        rate(woodhouse_async_jobs_total{cluster="gprd-us-east1-b",env="gprd",job=~"woodhouse",type=~"woodhouse"}[5m] offset 1m)
+        rate(woodhouse_async_jobs_total{cluster="gprd-us-east1-b",env="gprd",job=~"woodhouse",type=~"woodhouse"}[5m])
       )
 - name: 'SLI Aggregations: woodhouse - async_jobs-ops - 5m burn-rate - gprd-us-east1-c'
   interval: 1m
@@ -55,7 +55,7 @@ groups:
   - record: sli_aggregations:woodhouse_async_jobs_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,job,job_name,product_stage,region,shard,stage,stage_group,status,tier,type) (
-        rate(woodhouse_async_jobs_total{cluster="gprd-us-east1-c",env="gprd",job=~"woodhouse",type=~"woodhouse"}[5m] offset 1m)
+        rate(woodhouse_async_jobs_total{cluster="gprd-us-east1-c",env="gprd",job=~"woodhouse",type=~"woodhouse"}[5m])
       )
 - name: 'SLI Aggregations: woodhouse - async_jobs-ops - 5m burn-rate - gprd-us-east1-d'
   interval: 1m
@@ -63,7 +63,7 @@ groups:
   - record: sli_aggregations:woodhouse_async_jobs_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,job,job_name,product_stage,region,shard,stage,stage_group,status,tier,type) (
-        rate(woodhouse_async_jobs_total{cluster="gprd-us-east1-d",env="gprd",job=~"woodhouse",type=~"woodhouse"}[5m] offset 1m)
+        rate(woodhouse_async_jobs_total{cluster="gprd-us-east1-d",env="gprd",job=~"woodhouse",type=~"woodhouse"}[5m])
       )
 - name: 'SLI Aggregations: woodhouse - http-apdex - 5m burn-rate - gprd-gitlab-gke'
   interval: 1m
@@ -71,7 +71,7 @@ groups:
   - record: sli_aggregations:woodhouse_http_request_duration_seconds_bucket:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,job,le,product_stage,region,route,shard,stage,stage_group,tier,type) (
-        rate(woodhouse_http_request_duration_seconds_bucket{cluster="gprd-gitlab-gke",env="gprd",job=~"woodhouse",type=~"woodhouse"}[5m] offset 1m)
+        rate(woodhouse_http_request_duration_seconds_bucket{cluster="gprd-gitlab-gke",env="gprd",job=~"woodhouse",type=~"woodhouse"}[5m])
       )
 - name: 'SLI Aggregations: woodhouse - http-apdex - 5m burn-rate - gprd-us-east1-b'
   interval: 1m
@@ -79,7 +79,7 @@ groups:
   - record: sli_aggregations:woodhouse_http_request_duration_seconds_bucket:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,job,le,product_stage,region,route,shard,stage,stage_group,tier,type) (
-        rate(woodhouse_http_request_duration_seconds_bucket{cluster="gprd-us-east1-b",env="gprd",job=~"woodhouse",type=~"woodhouse"}[5m] offset 1m)
+        rate(woodhouse_http_request_duration_seconds_bucket{cluster="gprd-us-east1-b",env="gprd",job=~"woodhouse",type=~"woodhouse"}[5m])
       )
 - name: 'SLI Aggregations: woodhouse - http-apdex - 5m burn-rate - gprd-us-east1-c'
   interval: 1m
@@ -87,7 +87,7 @@ groups:
   - record: sli_aggregations:woodhouse_http_request_duration_seconds_bucket:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,job,le,product_stage,region,route,shard,stage,stage_group,tier,type) (
-        rate(woodhouse_http_request_duration_seconds_bucket{cluster="gprd-us-east1-c",env="gprd",job=~"woodhouse",type=~"woodhouse"}[5m] offset 1m)
+        rate(woodhouse_http_request_duration_seconds_bucket{cluster="gprd-us-east1-c",env="gprd",job=~"woodhouse",type=~"woodhouse"}[5m])
       )
 - name: 'SLI Aggregations: woodhouse - http-apdex - 5m burn-rate - gprd-us-east1-d'
   interval: 1m
@@ -95,7 +95,7 @@ groups:
   - record: sli_aggregations:woodhouse_http_request_duration_seconds_bucket:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,job,le,product_stage,region,route,shard,stage,stage_group,tier,type) (
-        rate(woodhouse_http_request_duration_seconds_bucket{cluster="gprd-us-east1-d",env="gprd",job=~"woodhouse",type=~"woodhouse"}[5m] offset 1m)
+        rate(woodhouse_http_request_duration_seconds_bucket{cluster="gprd-us-east1-d",env="gprd",job=~"woodhouse",type=~"woodhouse"}[5m])
       )
 - name: 'SLI Aggregations: woodhouse - http-ops - 5m burn-rate - gprd-gitlab-gke'
   interval: 1m
@@ -103,12 +103,12 @@ groups:
   - record: sli_aggregations:woodhouse_http_requests_errors_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,job,product_stage,region,route,shard,stage,stage_group,tier,type) (
-        rate(woodhouse_http_requests_errors_total{cluster="gprd-gitlab-gke",env="gprd",job=~"woodhouse",type=~"woodhouse"}[5m] offset 1m)
+        rate(woodhouse_http_requests_errors_total{cluster="gprd-gitlab-gke",env="gprd",job=~"woodhouse",type=~"woodhouse"}[5m])
       )
   - record: sli_aggregations:woodhouse_http_requests_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,job,product_stage,region,route,shard,stage,stage_group,tier,type) (
-        rate(woodhouse_http_requests_total{cluster="gprd-gitlab-gke",env="gprd",job=~"woodhouse",type=~"woodhouse"}[5m] offset 1m)
+        rate(woodhouse_http_requests_total{cluster="gprd-gitlab-gke",env="gprd",job=~"woodhouse",type=~"woodhouse"}[5m])
       )
 - name: 'SLI Aggregations: woodhouse - http-ops - 5m burn-rate - gprd-us-east1-b'
   interval: 1m
@@ -116,12 +116,12 @@ groups:
   - record: sli_aggregations:woodhouse_http_requests_errors_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,job,product_stage,region,route,shard,stage,stage_group,tier,type) (
-        rate(woodhouse_http_requests_errors_total{cluster="gprd-us-east1-b",env="gprd",job=~"woodhouse",type=~"woodhouse"}[5m] offset 1m)
+        rate(woodhouse_http_requests_errors_total{cluster="gprd-us-east1-b",env="gprd",job=~"woodhouse",type=~"woodhouse"}[5m])
       )
   - record: sli_aggregations:woodhouse_http_requests_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,job,product_stage,region,route,shard,stage,stage_group,tier,type) (
-        rate(woodhouse_http_requests_total{cluster="gprd-us-east1-b",env="gprd",job=~"woodhouse",type=~"woodhouse"}[5m] offset 1m)
+        rate(woodhouse_http_requests_total{cluster="gprd-us-east1-b",env="gprd",job=~"woodhouse",type=~"woodhouse"}[5m])
       )
 - name: 'SLI Aggregations: woodhouse - http-ops - 5m burn-rate - gprd-us-east1-c'
   interval: 1m
@@ -129,12 +129,12 @@ groups:
   - record: sli_aggregations:woodhouse_http_requests_errors_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,job,product_stage,region,route,shard,stage,stage_group,tier,type) (
-        rate(woodhouse_http_requests_errors_total{cluster="gprd-us-east1-c",env="gprd",job=~"woodhouse",type=~"woodhouse"}[5m] offset 1m)
+        rate(woodhouse_http_requests_errors_total{cluster="gprd-us-east1-c",env="gprd",job=~"woodhouse",type=~"woodhouse"}[5m])
       )
   - record: sli_aggregations:woodhouse_http_requests_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,job,product_stage,region,route,shard,stage,stage_group,tier,type) (
-        rate(woodhouse_http_requests_total{cluster="gprd-us-east1-c",env="gprd",job=~"woodhouse",type=~"woodhouse"}[5m] offset 1m)
+        rate(woodhouse_http_requests_total{cluster="gprd-us-east1-c",env="gprd",job=~"woodhouse",type=~"woodhouse"}[5m])
       )
 - name: 'SLI Aggregations: woodhouse - http-ops - 5m burn-rate - gprd-us-east1-d'
   interval: 1m
@@ -142,12 +142,12 @@ groups:
   - record: sli_aggregations:woodhouse_http_requests_errors_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,job,product_stage,region,route,shard,stage,stage_group,tier,type) (
-        rate(woodhouse_http_requests_errors_total{cluster="gprd-us-east1-d",env="gprd",job=~"woodhouse",type=~"woodhouse"}[5m] offset 1m)
+        rate(woodhouse_http_requests_errors_total{cluster="gprd-us-east1-d",env="gprd",job=~"woodhouse",type=~"woodhouse"}[5m])
       )
   - record: sli_aggregations:woodhouse_http_requests_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,job,product_stage,region,route,shard,stage,stage_group,tier,type) (
-        rate(woodhouse_http_requests_total{cluster="gprd-us-east1-d",env="gprd",job=~"woodhouse",type=~"woodhouse"}[5m] offset 1m)
+        rate(woodhouse_http_requests_total{cluster="gprd-us-east1-d",env="gprd",job=~"woodhouse",type=~"woodhouse"}[5m])
       )
 - name: 'SLI Aggregations: woodhouse - async_jobs-apdex - 30m burn-rate - gprd-gitlab-gke'
   interval: 2m
@@ -155,7 +155,7 @@ groups:
   - record: sli_aggregations:woodhouse_async_job_duration_seconds_bucket:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,job,job_name,le,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(woodhouse_async_job_duration_seconds_bucket{cluster="gprd-gitlab-gke",env="gprd",job=~"woodhouse",type=~"woodhouse"}[30m] offset 1m)
+        rate(woodhouse_async_job_duration_seconds_bucket{cluster="gprd-gitlab-gke",env="gprd",job=~"woodhouse",type=~"woodhouse"}[30m])
       )
 - name: 'SLI Aggregations: woodhouse - async_jobs-apdex - 30m burn-rate - gprd-us-east1-b'
   interval: 2m
@@ -163,7 +163,7 @@ groups:
   - record: sli_aggregations:woodhouse_async_job_duration_seconds_bucket:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,job,job_name,le,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(woodhouse_async_job_duration_seconds_bucket{cluster="gprd-us-east1-b",env="gprd",job=~"woodhouse",type=~"woodhouse"}[30m] offset 1m)
+        rate(woodhouse_async_job_duration_seconds_bucket{cluster="gprd-us-east1-b",env="gprd",job=~"woodhouse",type=~"woodhouse"}[30m])
       )
 - name: 'SLI Aggregations: woodhouse - async_jobs-apdex - 30m burn-rate - gprd-us-east1-c'
   interval: 2m
@@ -171,7 +171,7 @@ groups:
   - record: sli_aggregations:woodhouse_async_job_duration_seconds_bucket:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,job,job_name,le,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(woodhouse_async_job_duration_seconds_bucket{cluster="gprd-us-east1-c",env="gprd",job=~"woodhouse",type=~"woodhouse"}[30m] offset 1m)
+        rate(woodhouse_async_job_duration_seconds_bucket{cluster="gprd-us-east1-c",env="gprd",job=~"woodhouse",type=~"woodhouse"}[30m])
       )
 - name: 'SLI Aggregations: woodhouse - async_jobs-apdex - 30m burn-rate - gprd-us-east1-d'
   interval: 2m
@@ -179,7 +179,7 @@ groups:
   - record: sli_aggregations:woodhouse_async_job_duration_seconds_bucket:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,job,job_name,le,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(woodhouse_async_job_duration_seconds_bucket{cluster="gprd-us-east1-d",env="gprd",job=~"woodhouse",type=~"woodhouse"}[30m] offset 1m)
+        rate(woodhouse_async_job_duration_seconds_bucket{cluster="gprd-us-east1-d",env="gprd",job=~"woodhouse",type=~"woodhouse"}[30m])
       )
 - name: 'SLI Aggregations: woodhouse - async_jobs-ops - 30m burn-rate - gprd-gitlab-gke'
   interval: 2m
@@ -187,7 +187,7 @@ groups:
   - record: sli_aggregations:woodhouse_async_jobs_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,job,job_name,product_stage,region,shard,stage,stage_group,status,tier,type) (
-        rate(woodhouse_async_jobs_total{cluster="gprd-gitlab-gke",env="gprd",job=~"woodhouse",type=~"woodhouse"}[30m] offset 1m)
+        rate(woodhouse_async_jobs_total{cluster="gprd-gitlab-gke",env="gprd",job=~"woodhouse",type=~"woodhouse"}[30m])
       )
 - name: 'SLI Aggregations: woodhouse - async_jobs-ops - 30m burn-rate - gprd-us-east1-b'
   interval: 2m
@@ -195,7 +195,7 @@ groups:
   - record: sli_aggregations:woodhouse_async_jobs_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,job,job_name,product_stage,region,shard,stage,stage_group,status,tier,type) (
-        rate(woodhouse_async_jobs_total{cluster="gprd-us-east1-b",env="gprd",job=~"woodhouse",type=~"woodhouse"}[30m] offset 1m)
+        rate(woodhouse_async_jobs_total{cluster="gprd-us-east1-b",env="gprd",job=~"woodhouse",type=~"woodhouse"}[30m])
       )
 - name: 'SLI Aggregations: woodhouse - async_jobs-ops - 30m burn-rate - gprd-us-east1-c'
   interval: 2m
@@ -203,7 +203,7 @@ groups:
   - record: sli_aggregations:woodhouse_async_jobs_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,job,job_name,product_stage,region,shard,stage,stage_group,status,tier,type) (
-        rate(woodhouse_async_jobs_total{cluster="gprd-us-east1-c",env="gprd",job=~"woodhouse",type=~"woodhouse"}[30m] offset 1m)
+        rate(woodhouse_async_jobs_total{cluster="gprd-us-east1-c",env="gprd",job=~"woodhouse",type=~"woodhouse"}[30m])
       )
 - name: 'SLI Aggregations: woodhouse - async_jobs-ops - 30m burn-rate - gprd-us-east1-d'
   interval: 2m
@@ -211,7 +211,7 @@ groups:
   - record: sli_aggregations:woodhouse_async_jobs_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,job,job_name,product_stage,region,shard,stage,stage_group,status,tier,type) (
-        rate(woodhouse_async_jobs_total{cluster="gprd-us-east1-d",env="gprd",job=~"woodhouse",type=~"woodhouse"}[30m] offset 1m)
+        rate(woodhouse_async_jobs_total{cluster="gprd-us-east1-d",env="gprd",job=~"woodhouse",type=~"woodhouse"}[30m])
       )
 - name: 'SLI Aggregations: woodhouse - http-apdex - 30m burn-rate - gprd-gitlab-gke'
   interval: 2m
@@ -219,7 +219,7 @@ groups:
   - record: sli_aggregations:woodhouse_http_request_duration_seconds_bucket:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,job,le,product_stage,region,route,shard,stage,stage_group,tier,type) (
-        rate(woodhouse_http_request_duration_seconds_bucket{cluster="gprd-gitlab-gke",env="gprd",job=~"woodhouse",type=~"woodhouse"}[30m] offset 1m)
+        rate(woodhouse_http_request_duration_seconds_bucket{cluster="gprd-gitlab-gke",env="gprd",job=~"woodhouse",type=~"woodhouse"}[30m])
       )
 - name: 'SLI Aggregations: woodhouse - http-apdex - 30m burn-rate - gprd-us-east1-b'
   interval: 2m
@@ -227,7 +227,7 @@ groups:
   - record: sli_aggregations:woodhouse_http_request_duration_seconds_bucket:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,job,le,product_stage,region,route,shard,stage,stage_group,tier,type) (
-        rate(woodhouse_http_request_duration_seconds_bucket{cluster="gprd-us-east1-b",env="gprd",job=~"woodhouse",type=~"woodhouse"}[30m] offset 1m)
+        rate(woodhouse_http_request_duration_seconds_bucket{cluster="gprd-us-east1-b",env="gprd",job=~"woodhouse",type=~"woodhouse"}[30m])
       )
 - name: 'SLI Aggregations: woodhouse - http-apdex - 30m burn-rate - gprd-us-east1-c'
   interval: 2m
@@ -235,7 +235,7 @@ groups:
   - record: sli_aggregations:woodhouse_http_request_duration_seconds_bucket:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,job,le,product_stage,region,route,shard,stage,stage_group,tier,type) (
-        rate(woodhouse_http_request_duration_seconds_bucket{cluster="gprd-us-east1-c",env="gprd",job=~"woodhouse",type=~"woodhouse"}[30m] offset 1m)
+        rate(woodhouse_http_request_duration_seconds_bucket{cluster="gprd-us-east1-c",env="gprd",job=~"woodhouse",type=~"woodhouse"}[30m])
       )
 - name: 'SLI Aggregations: woodhouse - http-apdex - 30m burn-rate - gprd-us-east1-d'
   interval: 2m
@@ -243,7 +243,7 @@ groups:
   - record: sli_aggregations:woodhouse_http_request_duration_seconds_bucket:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,job,le,product_stage,region,route,shard,stage,stage_group,tier,type) (
-        rate(woodhouse_http_request_duration_seconds_bucket{cluster="gprd-us-east1-d",env="gprd",job=~"woodhouse",type=~"woodhouse"}[30m] offset 1m)
+        rate(woodhouse_http_request_duration_seconds_bucket{cluster="gprd-us-east1-d",env="gprd",job=~"woodhouse",type=~"woodhouse"}[30m])
       )
 - name: 'SLI Aggregations: woodhouse - http-ops - 30m burn-rate - gprd-gitlab-gke'
   interval: 2m
@@ -251,12 +251,12 @@ groups:
   - record: sli_aggregations:woodhouse_http_requests_errors_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,job,product_stage,region,route,shard,stage,stage_group,tier,type) (
-        rate(woodhouse_http_requests_errors_total{cluster="gprd-gitlab-gke",env="gprd",job=~"woodhouse",type=~"woodhouse"}[30m] offset 1m)
+        rate(woodhouse_http_requests_errors_total{cluster="gprd-gitlab-gke",env="gprd",job=~"woodhouse",type=~"woodhouse"}[30m])
       )
   - record: sli_aggregations:woodhouse_http_requests_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,job,product_stage,region,route,shard,stage,stage_group,tier,type) (
-        rate(woodhouse_http_requests_total{cluster="gprd-gitlab-gke",env="gprd",job=~"woodhouse",type=~"woodhouse"}[30m] offset 1m)
+        rate(woodhouse_http_requests_total{cluster="gprd-gitlab-gke",env="gprd",job=~"woodhouse",type=~"woodhouse"}[30m])
       )
 - name: 'SLI Aggregations: woodhouse - http-ops - 30m burn-rate - gprd-us-east1-b'
   interval: 2m
@@ -264,12 +264,12 @@ groups:
   - record: sli_aggregations:woodhouse_http_requests_errors_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,job,product_stage,region,route,shard,stage,stage_group,tier,type) (
-        rate(woodhouse_http_requests_errors_total{cluster="gprd-us-east1-b",env="gprd",job=~"woodhouse",type=~"woodhouse"}[30m] offset 1m)
+        rate(woodhouse_http_requests_errors_total{cluster="gprd-us-east1-b",env="gprd",job=~"woodhouse",type=~"woodhouse"}[30m])
       )
   - record: sli_aggregations:woodhouse_http_requests_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,job,product_stage,region,route,shard,stage,stage_group,tier,type) (
-        rate(woodhouse_http_requests_total{cluster="gprd-us-east1-b",env="gprd",job=~"woodhouse",type=~"woodhouse"}[30m] offset 1m)
+        rate(woodhouse_http_requests_total{cluster="gprd-us-east1-b",env="gprd",job=~"woodhouse",type=~"woodhouse"}[30m])
       )
 - name: 'SLI Aggregations: woodhouse - http-ops - 30m burn-rate - gprd-us-east1-c'
   interval: 2m
@@ -277,12 +277,12 @@ groups:
   - record: sli_aggregations:woodhouse_http_requests_errors_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,job,product_stage,region,route,shard,stage,stage_group,tier,type) (
-        rate(woodhouse_http_requests_errors_total{cluster="gprd-us-east1-c",env="gprd",job=~"woodhouse",type=~"woodhouse"}[30m] offset 1m)
+        rate(woodhouse_http_requests_errors_total{cluster="gprd-us-east1-c",env="gprd",job=~"woodhouse",type=~"woodhouse"}[30m])
       )
   - record: sli_aggregations:woodhouse_http_requests_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,job,product_stage,region,route,shard,stage,stage_group,tier,type) (
-        rate(woodhouse_http_requests_total{cluster="gprd-us-east1-c",env="gprd",job=~"woodhouse",type=~"woodhouse"}[30m] offset 1m)
+        rate(woodhouse_http_requests_total{cluster="gprd-us-east1-c",env="gprd",job=~"woodhouse",type=~"woodhouse"}[30m])
       )
 - name: 'SLI Aggregations: woodhouse - http-ops - 30m burn-rate - gprd-us-east1-d'
   interval: 2m
@@ -290,12 +290,12 @@ groups:
   - record: sli_aggregations:woodhouse_http_requests_errors_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,job,product_stage,region,route,shard,stage,stage_group,tier,type) (
-        rate(woodhouse_http_requests_errors_total{cluster="gprd-us-east1-d",env="gprd",job=~"woodhouse",type=~"woodhouse"}[30m] offset 1m)
+        rate(woodhouse_http_requests_errors_total{cluster="gprd-us-east1-d",env="gprd",job=~"woodhouse",type=~"woodhouse"}[30m])
       )
   - record: sli_aggregations:woodhouse_http_requests_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,job,product_stage,region,route,shard,stage,stage_group,tier,type) (
-        rate(woodhouse_http_requests_total{cluster="gprd-us-east1-d",env="gprd",job=~"woodhouse",type=~"woodhouse"}[30m] offset 1m)
+        rate(woodhouse_http_requests_total{cluster="gprd-us-east1-d",env="gprd",job=~"woodhouse",type=~"woodhouse"}[30m])
       )
 - name: 'SLI Aggregations: woodhouse - async_jobs-apdex - 1h burn-rate - gprd-gitlab-gke'
   interval: 1m
@@ -303,7 +303,7 @@ groups:
   - record: sli_aggregations:woodhouse_async_job_duration_seconds_bucket:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,job,job_name,le,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(woodhouse_async_job_duration_seconds_bucket{cluster="gprd-gitlab-gke",env="gprd",job=~"woodhouse",type=~"woodhouse"}[1h] offset 1m)
+        rate(woodhouse_async_job_duration_seconds_bucket{cluster="gprd-gitlab-gke",env="gprd",job=~"woodhouse",type=~"woodhouse"}[1h])
       )
 - name: 'SLI Aggregations: woodhouse - async_jobs-apdex - 1h burn-rate - gprd-us-east1-b'
   interval: 1m
@@ -311,7 +311,7 @@ groups:
   - record: sli_aggregations:woodhouse_async_job_duration_seconds_bucket:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,job,job_name,le,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(woodhouse_async_job_duration_seconds_bucket{cluster="gprd-us-east1-b",env="gprd",job=~"woodhouse",type=~"woodhouse"}[1h] offset 1m)
+        rate(woodhouse_async_job_duration_seconds_bucket{cluster="gprd-us-east1-b",env="gprd",job=~"woodhouse",type=~"woodhouse"}[1h])
       )
 - name: 'SLI Aggregations: woodhouse - async_jobs-apdex - 1h burn-rate - gprd-us-east1-c'
   interval: 1m
@@ -319,7 +319,7 @@ groups:
   - record: sli_aggregations:woodhouse_async_job_duration_seconds_bucket:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,job,job_name,le,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(woodhouse_async_job_duration_seconds_bucket{cluster="gprd-us-east1-c",env="gprd",job=~"woodhouse",type=~"woodhouse"}[1h] offset 1m)
+        rate(woodhouse_async_job_duration_seconds_bucket{cluster="gprd-us-east1-c",env="gprd",job=~"woodhouse",type=~"woodhouse"}[1h])
       )
 - name: 'SLI Aggregations: woodhouse - async_jobs-apdex - 1h burn-rate - gprd-us-east1-d'
   interval: 1m
@@ -327,7 +327,7 @@ groups:
   - record: sli_aggregations:woodhouse_async_job_duration_seconds_bucket:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,job,job_name,le,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(woodhouse_async_job_duration_seconds_bucket{cluster="gprd-us-east1-d",env="gprd",job=~"woodhouse",type=~"woodhouse"}[1h] offset 1m)
+        rate(woodhouse_async_job_duration_seconds_bucket{cluster="gprd-us-east1-d",env="gprd",job=~"woodhouse",type=~"woodhouse"}[1h])
       )
 - name: 'SLI Aggregations: woodhouse - async_jobs-ops - 1h burn-rate - gprd-gitlab-gke'
   interval: 1m
@@ -335,7 +335,7 @@ groups:
   - record: sli_aggregations:woodhouse_async_jobs_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,job,job_name,product_stage,region,shard,stage,stage_group,status,tier,type) (
-        rate(woodhouse_async_jobs_total{cluster="gprd-gitlab-gke",env="gprd",job=~"woodhouse",type=~"woodhouse"}[1h] offset 1m)
+        rate(woodhouse_async_jobs_total{cluster="gprd-gitlab-gke",env="gprd",job=~"woodhouse",type=~"woodhouse"}[1h])
       )
 - name: 'SLI Aggregations: woodhouse - async_jobs-ops - 1h burn-rate - gprd-us-east1-b'
   interval: 1m
@@ -343,7 +343,7 @@ groups:
   - record: sli_aggregations:woodhouse_async_jobs_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,job,job_name,product_stage,region,shard,stage,stage_group,status,tier,type) (
-        rate(woodhouse_async_jobs_total{cluster="gprd-us-east1-b",env="gprd",job=~"woodhouse",type=~"woodhouse"}[1h] offset 1m)
+        rate(woodhouse_async_jobs_total{cluster="gprd-us-east1-b",env="gprd",job=~"woodhouse",type=~"woodhouse"}[1h])
       )
 - name: 'SLI Aggregations: woodhouse - async_jobs-ops - 1h burn-rate - gprd-us-east1-c'
   interval: 1m
@@ -351,7 +351,7 @@ groups:
   - record: sli_aggregations:woodhouse_async_jobs_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,job,job_name,product_stage,region,shard,stage,stage_group,status,tier,type) (
-        rate(woodhouse_async_jobs_total{cluster="gprd-us-east1-c",env="gprd",job=~"woodhouse",type=~"woodhouse"}[1h] offset 1m)
+        rate(woodhouse_async_jobs_total{cluster="gprd-us-east1-c",env="gprd",job=~"woodhouse",type=~"woodhouse"}[1h])
       )
 - name: 'SLI Aggregations: woodhouse - async_jobs-ops - 1h burn-rate - gprd-us-east1-d'
   interval: 1m
@@ -359,7 +359,7 @@ groups:
   - record: sli_aggregations:woodhouse_async_jobs_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,job,job_name,product_stage,region,shard,stage,stage_group,status,tier,type) (
-        rate(woodhouse_async_jobs_total{cluster="gprd-us-east1-d",env="gprd",job=~"woodhouse",type=~"woodhouse"}[1h] offset 1m)
+        rate(woodhouse_async_jobs_total{cluster="gprd-us-east1-d",env="gprd",job=~"woodhouse",type=~"woodhouse"}[1h])
       )
 - name: 'SLI Aggregations: woodhouse - http-apdex - 1h burn-rate - gprd-gitlab-gke'
   interval: 1m
@@ -367,7 +367,7 @@ groups:
   - record: sli_aggregations:woodhouse_http_request_duration_seconds_bucket:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,job,le,product_stage,region,route,shard,stage,stage_group,tier,type) (
-        rate(woodhouse_http_request_duration_seconds_bucket{cluster="gprd-gitlab-gke",env="gprd",job=~"woodhouse",type=~"woodhouse"}[1h] offset 1m)
+        rate(woodhouse_http_request_duration_seconds_bucket{cluster="gprd-gitlab-gke",env="gprd",job=~"woodhouse",type=~"woodhouse"}[1h])
       )
 - name: 'SLI Aggregations: woodhouse - http-apdex - 1h burn-rate - gprd-us-east1-b'
   interval: 1m
@@ -375,7 +375,7 @@ groups:
   - record: sli_aggregations:woodhouse_http_request_duration_seconds_bucket:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,job,le,product_stage,region,route,shard,stage,stage_group,tier,type) (
-        rate(woodhouse_http_request_duration_seconds_bucket{cluster="gprd-us-east1-b",env="gprd",job=~"woodhouse",type=~"woodhouse"}[1h] offset 1m)
+        rate(woodhouse_http_request_duration_seconds_bucket{cluster="gprd-us-east1-b",env="gprd",job=~"woodhouse",type=~"woodhouse"}[1h])
       )
 - name: 'SLI Aggregations: woodhouse - http-apdex - 1h burn-rate - gprd-us-east1-c'
   interval: 1m
@@ -383,7 +383,7 @@ groups:
   - record: sli_aggregations:woodhouse_http_request_duration_seconds_bucket:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,job,le,product_stage,region,route,shard,stage,stage_group,tier,type) (
-        rate(woodhouse_http_request_duration_seconds_bucket{cluster="gprd-us-east1-c",env="gprd",job=~"woodhouse",type=~"woodhouse"}[1h] offset 1m)
+        rate(woodhouse_http_request_duration_seconds_bucket{cluster="gprd-us-east1-c",env="gprd",job=~"woodhouse",type=~"woodhouse"}[1h])
       )
 - name: 'SLI Aggregations: woodhouse - http-apdex - 1h burn-rate - gprd-us-east1-d'
   interval: 1m
@@ -391,7 +391,7 @@ groups:
   - record: sli_aggregations:woodhouse_http_request_duration_seconds_bucket:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,job,le,product_stage,region,route,shard,stage,stage_group,tier,type) (
-        rate(woodhouse_http_request_duration_seconds_bucket{cluster="gprd-us-east1-d",env="gprd",job=~"woodhouse",type=~"woodhouse"}[1h] offset 1m)
+        rate(woodhouse_http_request_duration_seconds_bucket{cluster="gprd-us-east1-d",env="gprd",job=~"woodhouse",type=~"woodhouse"}[1h])
       )
 - name: 'SLI Aggregations: woodhouse - http-ops - 1h burn-rate - gprd-gitlab-gke'
   interval: 1m
@@ -399,12 +399,12 @@ groups:
   - record: sli_aggregations:woodhouse_http_requests_errors_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,job,product_stage,region,route,shard,stage,stage_group,tier,type) (
-        rate(woodhouse_http_requests_errors_total{cluster="gprd-gitlab-gke",env="gprd",job=~"woodhouse",type=~"woodhouse"}[1h] offset 1m)
+        rate(woodhouse_http_requests_errors_total{cluster="gprd-gitlab-gke",env="gprd",job=~"woodhouse",type=~"woodhouse"}[1h])
       )
   - record: sli_aggregations:woodhouse_http_requests_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,job,product_stage,region,route,shard,stage,stage_group,tier,type) (
-        rate(woodhouse_http_requests_total{cluster="gprd-gitlab-gke",env="gprd",job=~"woodhouse",type=~"woodhouse"}[1h] offset 1m)
+        rate(woodhouse_http_requests_total{cluster="gprd-gitlab-gke",env="gprd",job=~"woodhouse",type=~"woodhouse"}[1h])
       )
 - name: 'SLI Aggregations: woodhouse - http-ops - 1h burn-rate - gprd-us-east1-b'
   interval: 1m
@@ -412,12 +412,12 @@ groups:
   - record: sli_aggregations:woodhouse_http_requests_errors_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,job,product_stage,region,route,shard,stage,stage_group,tier,type) (
-        rate(woodhouse_http_requests_errors_total{cluster="gprd-us-east1-b",env="gprd",job=~"woodhouse",type=~"woodhouse"}[1h] offset 1m)
+        rate(woodhouse_http_requests_errors_total{cluster="gprd-us-east1-b",env="gprd",job=~"woodhouse",type=~"woodhouse"}[1h])
       )
   - record: sli_aggregations:woodhouse_http_requests_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,job,product_stage,region,route,shard,stage,stage_group,tier,type) (
-        rate(woodhouse_http_requests_total{cluster="gprd-us-east1-b",env="gprd",job=~"woodhouse",type=~"woodhouse"}[1h] offset 1m)
+        rate(woodhouse_http_requests_total{cluster="gprd-us-east1-b",env="gprd",job=~"woodhouse",type=~"woodhouse"}[1h])
       )
 - name: 'SLI Aggregations: woodhouse - http-ops - 1h burn-rate - gprd-us-east1-c'
   interval: 1m
@@ -425,12 +425,12 @@ groups:
   - record: sli_aggregations:woodhouse_http_requests_errors_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,job,product_stage,region,route,shard,stage,stage_group,tier,type) (
-        rate(woodhouse_http_requests_errors_total{cluster="gprd-us-east1-c",env="gprd",job=~"woodhouse",type=~"woodhouse"}[1h] offset 1m)
+        rate(woodhouse_http_requests_errors_total{cluster="gprd-us-east1-c",env="gprd",job=~"woodhouse",type=~"woodhouse"}[1h])
       )
   - record: sli_aggregations:woodhouse_http_requests_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,job,product_stage,region,route,shard,stage,stage_group,tier,type) (
-        rate(woodhouse_http_requests_total{cluster="gprd-us-east1-c",env="gprd",job=~"woodhouse",type=~"woodhouse"}[1h] offset 1m)
+        rate(woodhouse_http_requests_total{cluster="gprd-us-east1-c",env="gprd",job=~"woodhouse",type=~"woodhouse"}[1h])
       )
 - name: 'SLI Aggregations: woodhouse - http-ops - 1h burn-rate - gprd-us-east1-d'
   interval: 1m
@@ -438,10 +438,10 @@ groups:
   - record: sli_aggregations:woodhouse_http_requests_errors_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,job,product_stage,region,route,shard,stage,stage_group,tier,type) (
-        rate(woodhouse_http_requests_errors_total{cluster="gprd-us-east1-d",env="gprd",job=~"woodhouse",type=~"woodhouse"}[1h] offset 1m)
+        rate(woodhouse_http_requests_errors_total{cluster="gprd-us-east1-d",env="gprd",job=~"woodhouse",type=~"woodhouse"}[1h])
       )
   - record: sli_aggregations:woodhouse_http_requests_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,job,product_stage,region,route,shard,stage,stage_group,tier,type) (
-        rate(woodhouse_http_requests_total{cluster="gprd-us-east1-d",env="gprd",job=~"woodhouse",type=~"woodhouse"}[1h] offset 1m)
+        rate(woodhouse_http_requests_total{cluster="gprd-us-east1-d",env="gprd",job=~"woodhouse",type=~"woodhouse"}[1h])
       )

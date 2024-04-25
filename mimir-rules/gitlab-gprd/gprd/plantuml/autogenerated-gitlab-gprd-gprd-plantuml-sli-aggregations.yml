@@ -8,7 +8,7 @@ groups:
   - record: sli_aggregations:stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,project_id,proxy_continent,region,response_code,response_code_class,shard,stage,stage_group,tier,type,url_map_name) (
-        rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{cluster="gprd-gitlab-gke",env="gprd",project_id=~"gitlab-production",type=~"monitoring",url_map_name=~"k8s-um-plantuml-plantuml--58df01f69d082883"}[5m] offset 1m)
+        rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{cluster="gprd-gitlab-gke",env="gprd",project_id=~"gitlab-production",type=~"monitoring",url_map_name=~"k8s-um-plantuml-plantuml--58df01f69d082883"}[5m])
       )
 - name: 'SLI Aggregations: plantuml - loadbalancer-ops - 5m burn-rate - emitted by
     monitoring - gprd-us-east1-b'
@@ -17,7 +17,7 @@ groups:
   - record: sli_aggregations:stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,project_id,proxy_continent,region,response_code,response_code_class,shard,stage,stage_group,tier,type,url_map_name) (
-        rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{cluster="gprd-us-east1-b",env="gprd",project_id=~"gitlab-production",type=~"monitoring",url_map_name=~"k8s-um-plantuml-plantuml--58df01f69d082883"}[5m] offset 1m)
+        rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{cluster="gprd-us-east1-b",env="gprd",project_id=~"gitlab-production",type=~"monitoring",url_map_name=~"k8s-um-plantuml-plantuml--58df01f69d082883"}[5m])
       )
 - name: 'SLI Aggregations: plantuml - loadbalancer-ops - 5m burn-rate - emitted by
     monitoring - gprd-us-east1-c'
@@ -26,7 +26,7 @@ groups:
   - record: sli_aggregations:stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,project_id,proxy_continent,region,response_code,response_code_class,shard,stage,stage_group,tier,type,url_map_name) (
-        rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{cluster="gprd-us-east1-c",env="gprd",project_id=~"gitlab-production",type=~"monitoring",url_map_name=~"k8s-um-plantuml-plantuml--58df01f69d082883"}[5m] offset 1m)
+        rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{cluster="gprd-us-east1-c",env="gprd",project_id=~"gitlab-production",type=~"monitoring",url_map_name=~"k8s-um-plantuml-plantuml--58df01f69d082883"}[5m])
       )
 - name: 'SLI Aggregations: plantuml - loadbalancer-ops - 5m burn-rate - emitted by
     monitoring - gprd-us-east1-d'
@@ -35,7 +35,7 @@ groups:
   - record: sli_aggregations:stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,project_id,proxy_continent,region,response_code,response_code_class,shard,stage,stage_group,tier,type,url_map_name) (
-        rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{cluster="gprd-us-east1-d",env="gprd",project_id=~"gitlab-production",type=~"monitoring",url_map_name=~"k8s-um-plantuml-plantuml--58df01f69d082883"}[5m] offset 1m)
+        rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{cluster="gprd-us-east1-d",env="gprd",project_id=~"gitlab-production",type=~"monitoring",url_map_name=~"k8s-um-plantuml-plantuml--58df01f69d082883"}[5m])
       )
 - name: 'SLI Aggregations: plantuml - loadbalancer-ops - 30m burn-rate - emitted by
     monitoring - gprd-gitlab-gke'
@@ -44,7 +44,7 @@ groups:
   - record: sli_aggregations:stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,project_id,proxy_continent,region,response_code,response_code_class,shard,stage,stage_group,tier,type,url_map_name) (
-        rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{cluster="gprd-gitlab-gke",env="gprd",project_id=~"gitlab-production",type=~"monitoring",url_map_name=~"k8s-um-plantuml-plantuml--58df01f69d082883"}[30m] offset 1m)
+        rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{cluster="gprd-gitlab-gke",env="gprd",project_id=~"gitlab-production",type=~"monitoring",url_map_name=~"k8s-um-plantuml-plantuml--58df01f69d082883"}[30m])
       )
 - name: 'SLI Aggregations: plantuml - loadbalancer-ops - 30m burn-rate - emitted by
     monitoring - gprd-us-east1-b'
@@ -53,7 +53,7 @@ groups:
   - record: sli_aggregations:stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,project_id,proxy_continent,region,response_code,response_code_class,shard,stage,stage_group,tier,type,url_map_name) (
-        rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{cluster="gprd-us-east1-b",env="gprd",project_id=~"gitlab-production",type=~"monitoring",url_map_name=~"k8s-um-plantuml-plantuml--58df01f69d082883"}[30m] offset 1m)
+        rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{cluster="gprd-us-east1-b",env="gprd",project_id=~"gitlab-production",type=~"monitoring",url_map_name=~"k8s-um-plantuml-plantuml--58df01f69d082883"}[30m])
       )
 - name: 'SLI Aggregations: plantuml - loadbalancer-ops - 30m burn-rate - emitted by
     monitoring - gprd-us-east1-c'
@@ -62,7 +62,7 @@ groups:
   - record: sli_aggregations:stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,project_id,proxy_continent,region,response_code,response_code_class,shard,stage,stage_group,tier,type,url_map_name) (
-        rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{cluster="gprd-us-east1-c",env="gprd",project_id=~"gitlab-production",type=~"monitoring",url_map_name=~"k8s-um-plantuml-plantuml--58df01f69d082883"}[30m] offset 1m)
+        rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{cluster="gprd-us-east1-c",env="gprd",project_id=~"gitlab-production",type=~"monitoring",url_map_name=~"k8s-um-plantuml-plantuml--58df01f69d082883"}[30m])
       )
 - name: 'SLI Aggregations: plantuml - loadbalancer-ops - 30m burn-rate - emitted by
     monitoring - gprd-us-east1-d'
@@ -71,7 +71,7 @@ groups:
   - record: sli_aggregations:stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,project_id,proxy_continent,region,response_code,response_code_class,shard,stage,stage_group,tier,type,url_map_name) (
-        rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{cluster="gprd-us-east1-d",env="gprd",project_id=~"gitlab-production",type=~"monitoring",url_map_name=~"k8s-um-plantuml-plantuml--58df01f69d082883"}[30m] offset 1m)
+        rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{cluster="gprd-us-east1-d",env="gprd",project_id=~"gitlab-production",type=~"monitoring",url_map_name=~"k8s-um-plantuml-plantuml--58df01f69d082883"}[30m])
       )
 - name: 'SLI Aggregations: plantuml - loadbalancer-ops - 1h burn-rate - emitted by
     monitoring - gprd-gitlab-gke'
@@ -80,7 +80,7 @@ groups:
   - record: sli_aggregations:stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,project_id,proxy_continent,region,response_code,response_code_class,shard,stage,stage_group,tier,type,url_map_name) (
-        rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{cluster="gprd-gitlab-gke",env="gprd",project_id=~"gitlab-production",type=~"monitoring",url_map_name=~"k8s-um-plantuml-plantuml--58df01f69d082883"}[1h] offset 1m)
+        rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{cluster="gprd-gitlab-gke",env="gprd",project_id=~"gitlab-production",type=~"monitoring",url_map_name=~"k8s-um-plantuml-plantuml--58df01f69d082883"}[1h])
       )
 - name: 'SLI Aggregations: plantuml - loadbalancer-ops - 1h burn-rate - emitted by
     monitoring - gprd-us-east1-b'
@@ -89,7 +89,7 @@ groups:
   - record: sli_aggregations:stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,project_id,proxy_continent,region,response_code,response_code_class,shard,stage,stage_group,tier,type,url_map_name) (
-        rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{cluster="gprd-us-east1-b",env="gprd",project_id=~"gitlab-production",type=~"monitoring",url_map_name=~"k8s-um-plantuml-plantuml--58df01f69d082883"}[1h] offset 1m)
+        rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{cluster="gprd-us-east1-b",env="gprd",project_id=~"gitlab-production",type=~"monitoring",url_map_name=~"k8s-um-plantuml-plantuml--58df01f69d082883"}[1h])
       )
 - name: 'SLI Aggregations: plantuml - loadbalancer-ops - 1h burn-rate - emitted by
     monitoring - gprd-us-east1-c'
@@ -98,7 +98,7 @@ groups:
   - record: sli_aggregations:stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,project_id,proxy_continent,region,response_code,response_code_class,shard,stage,stage_group,tier,type,url_map_name) (
-        rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{cluster="gprd-us-east1-c",env="gprd",project_id=~"gitlab-production",type=~"monitoring",url_map_name=~"k8s-um-plantuml-plantuml--58df01f69d082883"}[1h] offset 1m)
+        rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{cluster="gprd-us-east1-c",env="gprd",project_id=~"gitlab-production",type=~"monitoring",url_map_name=~"k8s-um-plantuml-plantuml--58df01f69d082883"}[1h])
       )
 - name: 'SLI Aggregations: plantuml - loadbalancer-ops - 1h burn-rate - emitted by
     monitoring - gprd-us-east1-d'
@@ -107,5 +107,5 @@ groups:
   - record: sli_aggregations:stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,project_id,proxy_continent,region,response_code,response_code_class,shard,stage,stage_group,tier,type,url_map_name) (
-        rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{cluster="gprd-us-east1-d",env="gprd",project_id=~"gitlab-production",type=~"monitoring",url_map_name=~"k8s-um-plantuml-plantuml--58df01f69d082883"}[1h] offset 1m)
+        rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{cluster="gprd-us-east1-d",env="gprd",project_id=~"gitlab-production",type=~"monitoring",url_map_name=~"k8s-um-plantuml-plantuml--58df01f69d082883"}[1h])
       )
