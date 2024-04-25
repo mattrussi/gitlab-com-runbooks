@@ -22,7 +22,7 @@ groups:
       monitor: global
       tier: db
       type: patroni-ci
-    expr: "0.990000"
+    expr: "0.995000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: client_database_transaction
