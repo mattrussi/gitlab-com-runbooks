@@ -7,12 +7,12 @@ groups:
   - record: sli_aggregations:gitlab_sli_rails_request_apdex_success_total:rate_5m
     expr: |
       sum by (component,endpoint_id,env,environment,feature_category,fqdn,job,product_stage,region,request_urgency,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_rails_request_apdex_success_total{env="pre",job=~"gitlab-rails",type=~"internal-api"}[5m] offset 1m)
+        rate(gitlab_sli_rails_request_apdex_success_total{env="pre",job=~"gitlab-rails",type=~"internal-api"}[5m])
       )
   - record: sli_aggregations:gitlab_sli_rails_request_apdex_total:rate_5m
     expr: |
       sum by (component,endpoint_id,env,environment,feature_category,fqdn,job,product_stage,region,request_urgency,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_rails_request_apdex_total{env="pre",job=~"gitlab-rails",type=~"internal-api"}[5m] offset 1m)
+        rate(gitlab_sli_rails_request_apdex_total{env="pre",job=~"gitlab-rails",type=~"internal-api"}[5m])
       )
 - name: 'SLI Aggregations: internal-api - rails_request-ops - 5m burn-rate'
   interval: 1m
@@ -20,12 +20,12 @@ groups:
   - record: sli_aggregations:gitlab_sli_rails_request_error_total:rate_5m
     expr: |
       sum by (component,endpoint_id,env,environment,feature_category,fqdn,job,product_stage,region,request_urgency,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_rails_request_error_total{env="pre",job=~"gitlab-rails",type=~"internal-api"}[5m] offset 1m)
+        rate(gitlab_sli_rails_request_error_total{env="pre",job=~"gitlab-rails",type=~"internal-api"}[5m])
       )
   - record: sli_aggregations:gitlab_sli_rails_request_total:rate_5m
     expr: |
       sum by (component,endpoint_id,env,environment,feature_category,fqdn,job,product_stage,region,request_urgency,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_rails_request_total{env="pre",job=~"gitlab-rails",type=~"internal-api"}[5m] offset 1m)
+        rate(gitlab_sli_rails_request_total{env="pre",job=~"gitlab-rails",type=~"internal-api"}[5m])
       )
 - name: 'SLI Aggregations: internal-api - workhorse-apdex - 5m burn-rate'
   interval: 1m
@@ -33,7 +33,7 @@ groups:
   - record: sli_aggregations:gitlab_workhorse_http_request_duration_seconds_bucket:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,job,le,method,product_stage,region,route,shard,stage,stage_group,tier,type) (
-        rate(gitlab_workhorse_http_request_duration_seconds_bucket{env="pre",job=~"gitlab-workhorse|gitlab-workhorse-api",type=~"internal-api"}[5m] offset 1m)
+        rate(gitlab_workhorse_http_request_duration_seconds_bucket{env="pre",job=~"gitlab-workhorse|gitlab-workhorse-api",type=~"internal-api"}[5m])
       )
 - name: 'SLI Aggregations: internal-api - workhorse-ops - 5m burn-rate'
   interval: 1m
@@ -41,7 +41,7 @@ groups:
   - record: sli_aggregations:gitlab_workhorse_http_requests_total:rate_5m
     expr: |
       sum by (code,component,env,environment,feature_category,fqdn,job,method,product_stage,region,route,shard,stage,stage_group,tier,type) (
-        rate(gitlab_workhorse_http_requests_total{env="pre",job=~"gitlab-workhorse|gitlab-workhorse-api",type=~"internal-api"}[5m] offset 1m)
+        rate(gitlab_workhorse_http_requests_total{env="pre",job=~"gitlab-workhorse|gitlab-workhorse-api",type=~"internal-api"}[5m])
       )
 - name: 'SLI Aggregations: internal-api - rails_request-apdex - 30m burn-rate'
   interval: 2m
@@ -49,12 +49,12 @@ groups:
   - record: sli_aggregations:gitlab_sli_rails_request_apdex_success_total:rate_30m
     expr: |
       sum by (component,endpoint_id,env,environment,feature_category,fqdn,job,product_stage,region,request_urgency,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_rails_request_apdex_success_total{env="pre",job=~"gitlab-rails",type=~"internal-api"}[30m] offset 1m)
+        rate(gitlab_sli_rails_request_apdex_success_total{env="pre",job=~"gitlab-rails",type=~"internal-api"}[30m])
       )
   - record: sli_aggregations:gitlab_sli_rails_request_apdex_total:rate_30m
     expr: |
       sum by (component,endpoint_id,env,environment,feature_category,fqdn,job,product_stage,region,request_urgency,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_rails_request_apdex_total{env="pre",job=~"gitlab-rails",type=~"internal-api"}[30m] offset 1m)
+        rate(gitlab_sli_rails_request_apdex_total{env="pre",job=~"gitlab-rails",type=~"internal-api"}[30m])
       )
 - name: 'SLI Aggregations: internal-api - rails_request-ops - 30m burn-rate'
   interval: 2m
@@ -62,12 +62,12 @@ groups:
   - record: sli_aggregations:gitlab_sli_rails_request_error_total:rate_30m
     expr: |
       sum by (component,endpoint_id,env,environment,feature_category,fqdn,job,product_stage,region,request_urgency,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_rails_request_error_total{env="pre",job=~"gitlab-rails",type=~"internal-api"}[30m] offset 1m)
+        rate(gitlab_sli_rails_request_error_total{env="pre",job=~"gitlab-rails",type=~"internal-api"}[30m])
       )
   - record: sli_aggregations:gitlab_sli_rails_request_total:rate_30m
     expr: |
       sum by (component,endpoint_id,env,environment,feature_category,fqdn,job,product_stage,region,request_urgency,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_rails_request_total{env="pre",job=~"gitlab-rails",type=~"internal-api"}[30m] offset 1m)
+        rate(gitlab_sli_rails_request_total{env="pre",job=~"gitlab-rails",type=~"internal-api"}[30m])
       )
 - name: 'SLI Aggregations: internal-api - workhorse-apdex - 30m burn-rate'
   interval: 2m
@@ -75,7 +75,7 @@ groups:
   - record: sli_aggregations:gitlab_workhorse_http_request_duration_seconds_bucket:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,job,le,method,product_stage,region,route,shard,stage,stage_group,tier,type) (
-        rate(gitlab_workhorse_http_request_duration_seconds_bucket{env="pre",job=~"gitlab-workhorse|gitlab-workhorse-api",type=~"internal-api"}[30m] offset 1m)
+        rate(gitlab_workhorse_http_request_duration_seconds_bucket{env="pre",job=~"gitlab-workhorse|gitlab-workhorse-api",type=~"internal-api"}[30m])
       )
 - name: 'SLI Aggregations: internal-api - workhorse-ops - 30m burn-rate'
   interval: 2m
@@ -83,7 +83,7 @@ groups:
   - record: sli_aggregations:gitlab_workhorse_http_requests_total:rate_30m
     expr: |
       sum by (code,component,env,environment,feature_category,fqdn,job,method,product_stage,region,route,shard,stage,stage_group,tier,type) (
-        rate(gitlab_workhorse_http_requests_total{env="pre",job=~"gitlab-workhorse|gitlab-workhorse-api",type=~"internal-api"}[30m] offset 1m)
+        rate(gitlab_workhorse_http_requests_total{env="pre",job=~"gitlab-workhorse|gitlab-workhorse-api",type=~"internal-api"}[30m])
       )
 - name: 'SLI Aggregations: internal-api - rails_request-apdex - 1h burn-rate'
   interval: 1m
@@ -91,12 +91,12 @@ groups:
   - record: sli_aggregations:gitlab_sli_rails_request_apdex_success_total:rate_1h
     expr: |
       sum by (component,endpoint_id,env,environment,feature_category,fqdn,job,product_stage,region,request_urgency,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_rails_request_apdex_success_total{env="pre",job=~"gitlab-rails",type=~"internal-api"}[1h] offset 1m)
+        rate(gitlab_sli_rails_request_apdex_success_total{env="pre",job=~"gitlab-rails",type=~"internal-api"}[1h])
       )
   - record: sli_aggregations:gitlab_sli_rails_request_apdex_total:rate_1h
     expr: |
       sum by (component,endpoint_id,env,environment,feature_category,fqdn,job,product_stage,region,request_urgency,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_rails_request_apdex_total{env="pre",job=~"gitlab-rails",type=~"internal-api"}[1h] offset 1m)
+        rate(gitlab_sli_rails_request_apdex_total{env="pre",job=~"gitlab-rails",type=~"internal-api"}[1h])
       )
 - name: 'SLI Aggregations: internal-api - rails_request-ops - 1h burn-rate'
   interval: 1m
@@ -104,12 +104,12 @@ groups:
   - record: sli_aggregations:gitlab_sli_rails_request_error_total:rate_1h
     expr: |
       sum by (component,endpoint_id,env,environment,feature_category,fqdn,job,product_stage,region,request_urgency,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_rails_request_error_total{env="pre",job=~"gitlab-rails",type=~"internal-api"}[1h] offset 1m)
+        rate(gitlab_sli_rails_request_error_total{env="pre",job=~"gitlab-rails",type=~"internal-api"}[1h])
       )
   - record: sli_aggregations:gitlab_sli_rails_request_total:rate_1h
     expr: |
       sum by (component,endpoint_id,env,environment,feature_category,fqdn,job,product_stage,region,request_urgency,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_rails_request_total{env="pre",job=~"gitlab-rails",type=~"internal-api"}[1h] offset 1m)
+        rate(gitlab_sli_rails_request_total{env="pre",job=~"gitlab-rails",type=~"internal-api"}[1h])
       )
 - name: 'SLI Aggregations: internal-api - workhorse-apdex - 1h burn-rate'
   interval: 1m
@@ -117,7 +117,7 @@ groups:
   - record: sli_aggregations:gitlab_workhorse_http_request_duration_seconds_bucket:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,job,le,method,product_stage,region,route,shard,stage,stage_group,tier,type) (
-        rate(gitlab_workhorse_http_request_duration_seconds_bucket{env="pre",job=~"gitlab-workhorse|gitlab-workhorse-api",type=~"internal-api"}[1h] offset 1m)
+        rate(gitlab_workhorse_http_request_duration_seconds_bucket{env="pre",job=~"gitlab-workhorse|gitlab-workhorse-api",type=~"internal-api"}[1h])
       )
 - name: 'SLI Aggregations: internal-api - workhorse-ops - 1h burn-rate'
   interval: 1m
@@ -125,5 +125,5 @@ groups:
   - record: sli_aggregations:gitlab_workhorse_http_requests_total:rate_1h
     expr: |
       sum by (code,component,env,environment,feature_category,fqdn,job,method,product_stage,region,route,shard,stage,stage_group,tier,type) (
-        rate(gitlab_workhorse_http_requests_total{env="pre",job=~"gitlab-workhorse|gitlab-workhorse-api",type=~"internal-api"}[1h] offset 1m)
+        rate(gitlab_workhorse_http_requests_total{env="pre",job=~"gitlab-workhorse|gitlab-workhorse-api",type=~"internal-api"}[1h])
       )
