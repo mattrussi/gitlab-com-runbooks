@@ -46,6 +46,20 @@ groups:
     expr: "0.020000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
+      component: runway_lb
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: "0.980000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      component: runway_lb
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: "0.020000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
       component: server
       monitor: global
       tier: sv
@@ -141,6 +155,16 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: runway_ingress
+      global_aggregation: "yes"
+      monitor: global
+      regional_aggregation: "yes"
+      service_aggregation: "yes"
+      tier: sv
+      type: ai-gateway
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: runway_lb
       global_aggregation: "yes"
       monitor: global
       regional_aggregation: "yes"

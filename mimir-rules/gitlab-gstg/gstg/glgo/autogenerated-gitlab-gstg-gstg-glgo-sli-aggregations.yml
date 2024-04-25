@@ -17,6 +17,14 @@ groups:
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,response_code,response_code_class,revision_name,shard,stage,stage_group,tier,type) (
         rate(stackdriver_cloud_run_revision_run_googleapis_com_request_count{env="gstg",type=~"glgo"}[5m] offset 30s)
       )
+- name: 'SLI Aggregations: glgo - runway_lb-ops - 5m burn-rate'
+  interval: 1m
+  rules:
+  - record: sli_aggregations:stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count:rate_5m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,job,product_stage,proxy_continent,region,response_code,response_code_class,shard,stage,stage_group,tier,type,url_map_name) (
+        rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{env="gstg",job=~"runway-exporter",url_map_name=~"glgo-url-map"}[5m] offset 30s)
+      )
 - name: 'SLI Aggregations: glgo - runway_ingress-apdex - 30m burn-rate'
   interval: 2m
   rules:
@@ -33,6 +41,14 @@ groups:
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,response_code,response_code_class,revision_name,shard,stage,stage_group,tier,type) (
         rate(stackdriver_cloud_run_revision_run_googleapis_com_request_count{env="gstg",type=~"glgo"}[30m] offset 30s)
       )
+- name: 'SLI Aggregations: glgo - runway_lb-ops - 30m burn-rate'
+  interval: 2m
+  rules:
+  - record: sli_aggregations:stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count:rate_30m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,job,product_stage,proxy_continent,region,response_code,response_code_class,shard,stage,stage_group,tier,type,url_map_name) (
+        rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{env="gstg",job=~"runway-exporter",url_map_name=~"glgo-url-map"}[30m] offset 30s)
+      )
 - name: 'SLI Aggregations: glgo - runway_ingress-apdex - 1h burn-rate'
   interval: 1m
   rules:
@@ -48,4 +64,12 @@ groups:
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,response_code,response_code_class,revision_name,shard,stage,stage_group,tier,type) (
         rate(stackdriver_cloud_run_revision_run_googleapis_com_request_count{env="gstg",type=~"glgo"}[1h] offset 30s)
+      )
+- name: 'SLI Aggregations: glgo - runway_lb-ops - 1h burn-rate'
+  interval: 1m
+  rules:
+  - record: sli_aggregations:stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count:rate_1h
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,job,product_stage,proxy_continent,region,response_code,response_code_class,shard,stage,stage_group,tier,type,url_map_name) (
+        rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{env="gstg",job=~"runway-exporter",url_map_name=~"glgo-url-map"}[1h] offset 30s)
       )
