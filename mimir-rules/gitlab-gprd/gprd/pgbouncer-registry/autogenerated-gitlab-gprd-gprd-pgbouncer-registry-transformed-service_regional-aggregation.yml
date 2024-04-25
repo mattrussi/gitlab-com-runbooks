@@ -160,7 +160,7 @@ groups:
         sum by (env,environment,tier,type,stage,region) (
           sum_over_time(gitlab_regional_sli_ops:rate_1h{env="gprd",monitor="global",type="pgbouncer-registry",upscale_source="yes"}[6h] offset 30s) and on(component, type) (gitlab_component_service:mapping{monitor="global",service_aggregation="yes"})
           and
-          gitlab_regional_sli_errors:rate_1h{env="gprd",monitor="global",type="pgbouncer-registry",upscale_source="yes"} >= 0
+          (gitlab_regional_sli_errors:rate_1h{env="gprd",monitor="global",type="pgbouncer-registry",upscale_source="yes"} offset 30s >= 0) and on(component, type) (gitlab_component_service:mapping{monitor="global",service_aggregation="yes"})
         )
       )
   - record: gitlab_service_regional_apdex:ratio_6h
@@ -204,7 +204,7 @@ groups:
       sum by (env,environment,tier,type,stage,region) (
         sum_over_time(gitlab_regional_sli_ops:rate_1h{env="gprd",monitor="global",type="pgbouncer-registry"}[3d] offset 30s) and on(component, type) (gitlab_component_service:mapping{monitor="global",service_aggregation="yes"})
         and
-        gitlab_regional_sli_errors:rate_1h{env="gprd",monitor="global",type="pgbouncer-registry"} >= 0
+        (gitlab_regional_sli_errors:rate_1h{env="gprd",monitor="global",type="pgbouncer-registry"} offset 30s >= 0) and on(component, type) (gitlab_component_service:mapping{monitor="global",service_aggregation="yes"})
       )
   - record: gitlab_service_regional_apdex:ratio_3d
     labels:

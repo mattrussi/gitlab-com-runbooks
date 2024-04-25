@@ -148,7 +148,7 @@ groups:
       sum by (env,environment,tier,type,stage,component,stage_group,product_stage) (
         sum_over_time(gitlab:component:stage_group:execution:ops:rate_1h{monitor="global"}[6h] offset 30s)
         and
-        gitlab:component:stage_group:execution:error:rate_1h{monitor="global"} >= 0
+        (gitlab:component:stage_group:execution:error:rate_1h{monitor="global"} offset 30s >= 0)
       )
   - record: gitlab:component:stage_group:execution:apdex:weight:score_6h
     expr: |
@@ -188,7 +188,7 @@ groups:
       sum by (env,environment,tier,type,stage,component,stage_group,product_stage) (
         sum_over_time(gitlab:component:stage_group:execution:ops:rate_1h{monitor="global"}[3d] offset 30s)
         and
-        gitlab:component:stage_group:execution:error:rate_1h{monitor="global"} >= 0
+        (gitlab:component:stage_group:execution:error:rate_1h{monitor="global"} offset 30s >= 0)
       )
   - record: gitlab:component:stage_group:execution:apdex:weight:score_3d
     expr: |

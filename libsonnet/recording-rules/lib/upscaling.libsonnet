@@ -55,10 +55,12 @@ local upscaledRatioExpression(
   local accountForMissingNumeratorExpr = |||
 
     and
-    %(numeratorMetricName)s{%(sourceSelectorWithExtras)s} >= 0
+    (%(numeratorMetricName)s{%(sourceSelectorWithExtras)s}%(optionalOffset)s >= 0)%(aggregationFilterExpr)s
   ||| % {
     numeratorMetricName: numeratorMetricName,
     sourceSelectorWithExtras: selectors.serializeHash(sourceSelectorWithExtras),
+    optionalOffset: optionalOffset(targetAggregationSet.offset),
+    aggregationFilterExpr: aggregationFilterExpr(targetAggregationSet),
   };
 
   upscaleRatioPromExpression % {

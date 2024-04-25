@@ -217,7 +217,7 @@ groups:
         sum by (env,environment,tier,type,stage,component,stage_group,product_stage) (
           sum_over_time(gitlab:component:feature_category:execution:ops:rate_1h{env="gprd",monitor="global",type="logging",upscale_source="yes"}[6h] offset 30s) * on(feature_category) group_left(product_stage,stage_group) (group by (feature_category,product_stage,stage_group) (gitlab:feature_category:stage_group:mapping{}))
           and
-          gitlab:component:feature_category:execution:error:rate_1h{env="gprd",monitor="global",type="logging",upscale_source="yes"} >= 0
+          (gitlab:component:feature_category:execution:error:rate_1h{env="gprd",monitor="global",type="logging",upscale_source="yes"} offset 30s >= 0) * on(feature_category) group_left(product_stage,stage_group) (group by (feature_category,product_stage,stage_group) (gitlab:feature_category:stage_group:mapping{}))
         )
       )
   - record: gitlab:component:stage_group:execution:apdex:weight:score_6h
@@ -298,7 +298,7 @@ groups:
       sum by (env,environment,tier,type,stage,component,stage_group,product_stage) (
         sum_over_time(gitlab:component:feature_category:execution:ops:rate_1h{env="gprd",monitor="global",type="logging"}[3d] offset 30s) * on(feature_category) group_left(product_stage,stage_group) (group by (feature_category,product_stage,stage_group) (gitlab:feature_category:stage_group:mapping{}))
         and
-        gitlab:component:feature_category:execution:error:rate_1h{env="gprd",monitor="global",type="logging"} >= 0
+        (gitlab:component:feature_category:execution:error:rate_1h{env="gprd",monitor="global",type="logging"} offset 30s >= 0) * on(feature_category) group_left(product_stage,stage_group) (group by (feature_category,product_stage,stage_group) (gitlab:feature_category:stage_group:mapping{}))
       )
   - record: gitlab:component:stage_group:execution:apdex:weight:score_3d
     labels:

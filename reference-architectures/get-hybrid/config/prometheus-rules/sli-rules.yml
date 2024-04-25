@@ -173,7 +173,7 @@ groups:
         sum by (type) (
           sum_over_time(gitlab_component_ops:rate_1h{upscale_source="yes"}[6h]) and on(component, type) (gitlab_component_service:mapping{service_aggregation="yes"})
           and
-          gitlab_component_errors:rate_1h{upscale_source="yes"} >= 0
+          (gitlab_component_errors:rate_1h{upscale_source="yes"} >= 0) and on(component, type) (gitlab_component_service:mapping{service_aggregation="yes"})
         )
       )
     record: gitlab_service_errors:ratio_6h
