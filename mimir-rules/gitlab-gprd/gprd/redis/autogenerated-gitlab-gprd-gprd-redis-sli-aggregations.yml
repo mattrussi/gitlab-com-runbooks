@@ -7,7 +7,7 @@ groups:
   - record: sli_aggregations:redis_commands_processed_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,instance,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(redis_commands_processed_total{cluster="gprd-gitlab-gke",env="gprd",type=~"redis"}[5m] offset 1m)
+        rate(redis_commands_processed_total{cluster="gprd-gitlab-gke",env="gprd",type=~"redis"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - primary_server-ops - 5m burn-rate - gprd-us-east1-b'
   interval: 1m
@@ -15,7 +15,7 @@ groups:
   - record: sli_aggregations:redis_commands_processed_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,instance,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(redis_commands_processed_total{cluster="gprd-us-east1-b",env="gprd",type=~"redis"}[5m] offset 1m)
+        rate(redis_commands_processed_total{cluster="gprd-us-east1-b",env="gprd",type=~"redis"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - primary_server-ops - 5m burn-rate - gprd-us-east1-c'
   interval: 1m
@@ -23,7 +23,7 @@ groups:
   - record: sli_aggregations:redis_commands_processed_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,instance,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(redis_commands_processed_total{cluster="gprd-us-east1-c",env="gprd",type=~"redis"}[5m] offset 1m)
+        rate(redis_commands_processed_total{cluster="gprd-us-east1-c",env="gprd",type=~"redis"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - primary_server-ops - 5m burn-rate - gprd-us-east1-d'
   interval: 1m
@@ -31,7 +31,7 @@ groups:
   - record: sli_aggregations:redis_commands_processed_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,instance,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(redis_commands_processed_total{cluster="gprd-us-east1-d",env="gprd",type=~"redis"}[5m] offset 1m)
+        rate(redis_commands_processed_total{cluster="gprd-us-east1-d",env="gprd",type=~"redis"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-apdex - 5m burn-rate - emitted
     by ai-assisted - gprd-gitlab-gke'
@@ -40,7 +40,7 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"ai-assisted"}[5m] offset 1m)
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"ai-assisted"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-apdex - 5m burn-rate - emitted
     by ai-assisted - gprd-us-east1-b'
@@ -49,7 +49,7 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"ai-assisted"}[5m] offset 1m)
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"ai-assisted"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-apdex - 5m burn-rate - emitted
     by ai-assisted - gprd-us-east1-c'
@@ -58,7 +58,7 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"ai-assisted"}[5m] offset 1m)
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"ai-assisted"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-apdex - 5m burn-rate - emitted
     by ai-assisted - gprd-us-east1-d'
@@ -67,7 +67,7 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"ai-assisted"}[5m] offset 1m)
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"ai-assisted"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-apdex - 5m burn-rate - emitted
     by api - gprd-gitlab-gke'
@@ -76,7 +76,7 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"api"}[5m] offset 1m)
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"api"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-apdex - 5m burn-rate - emitted
     by api - gprd-us-east1-b'
@@ -85,7 +85,7 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"api"}[5m] offset 1m)
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"api"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-apdex - 5m burn-rate - emitted
     by api - gprd-us-east1-c'
@@ -94,7 +94,7 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"api"}[5m] offset 1m)
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"api"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-apdex - 5m burn-rate - emitted
     by api - gprd-us-east1-d'
@@ -103,7 +103,7 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"api"}[5m] offset 1m)
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"api"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-apdex - 5m burn-rate - emitted
     by git - gprd-gitlab-gke'
@@ -112,7 +112,7 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"git"}[5m] offset 1m)
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"git"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-apdex - 5m burn-rate - emitted
     by git - gprd-us-east1-b'
@@ -121,7 +121,7 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"git"}[5m] offset 1m)
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"git"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-apdex - 5m burn-rate - emitted
     by git - gprd-us-east1-c'
@@ -130,7 +130,7 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"git"}[5m] offset 1m)
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"git"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-apdex - 5m burn-rate - emitted
     by git - gprd-us-east1-d'
@@ -139,7 +139,7 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"git"}[5m] offset 1m)
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"git"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-apdex - 5m burn-rate - emitted
     by internal-api - gprd-gitlab-gke'
@@ -148,7 +148,7 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"internal-api"}[5m] offset 1m)
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"internal-api"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-apdex - 5m burn-rate - emitted
     by internal-api - gprd-us-east1-b'
@@ -157,7 +157,7 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"internal-api"}[5m] offset 1m)
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"internal-api"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-apdex - 5m burn-rate - emitted
     by internal-api - gprd-us-east1-c'
@@ -166,7 +166,7 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"internal-api"}[5m] offset 1m)
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"internal-api"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-apdex - 5m burn-rate - emitted
     by internal-api - gprd-us-east1-d'
@@ -175,7 +175,7 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"internal-api"}[5m] offset 1m)
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"internal-api"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-apdex - 5m burn-rate - emitted
     by ops-gitlab-net - gprd-gitlab-gke'
@@ -184,7 +184,7 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"ops-gitlab-net"}[5m] offset 1m)
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"ops-gitlab-net"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-apdex - 5m burn-rate - emitted
     by ops-gitlab-net - gprd-us-east1-b'
@@ -193,7 +193,7 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"ops-gitlab-net"}[5m] offset 1m)
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"ops-gitlab-net"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-apdex - 5m burn-rate - emitted
     by ops-gitlab-net - gprd-us-east1-c'
@@ -202,7 +202,7 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"ops-gitlab-net"}[5m] offset 1m)
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"ops-gitlab-net"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-apdex - 5m burn-rate - emitted
     by ops-gitlab-net - gprd-us-east1-d'
@@ -211,7 +211,7 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"ops-gitlab-net"}[5m] offset 1m)
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"ops-gitlab-net"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-apdex - 5m burn-rate - emitted
     by sidekiq - gprd-gitlab-gke'
@@ -220,7 +220,7 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"sidekiq"}[5m] offset 1m)
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"sidekiq"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-apdex - 5m burn-rate - emitted
     by sidekiq - gprd-us-east1-b'
@@ -229,7 +229,7 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"sidekiq"}[5m] offset 1m)
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"sidekiq"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-apdex - 5m burn-rate - emitted
     by sidekiq - gprd-us-east1-c'
@@ -238,7 +238,7 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"sidekiq"}[5m] offset 1m)
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"sidekiq"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-apdex - 5m burn-rate - emitted
     by sidekiq - gprd-us-east1-d'
@@ -247,7 +247,7 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"sidekiq"}[5m] offset 1m)
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"sidekiq"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-apdex - 5m burn-rate - emitted
     by web - gprd-gitlab-gke'
@@ -256,7 +256,7 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"web"}[5m] offset 1m)
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"web"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-apdex - 5m burn-rate - emitted
     by web - gprd-us-east1-b'
@@ -265,7 +265,7 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"web"}[5m] offset 1m)
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"web"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-apdex - 5m burn-rate - emitted
     by web - gprd-us-east1-c'
@@ -274,7 +274,7 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"web"}[5m] offset 1m)
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"web"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-apdex - 5m burn-rate - emitted
     by web - gprd-us-east1-d'
@@ -283,7 +283,7 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"web"}[5m] offset 1m)
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"web"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-apdex - 5m burn-rate - emitted
     by websockets - gprd-gitlab-gke'
@@ -292,7 +292,7 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"websockets"}[5m] offset 1m)
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"websockets"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-apdex - 5m burn-rate - emitted
     by websockets - gprd-us-east1-b'
@@ -301,7 +301,7 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"websockets"}[5m] offset 1m)
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"websockets"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-apdex - 5m burn-rate - emitted
     by websockets - gprd-us-east1-c'
@@ -310,7 +310,7 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"websockets"}[5m] offset 1m)
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"websockets"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-apdex - 5m burn-rate - emitted
     by websockets - gprd-us-east1-d'
@@ -319,7 +319,7 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"websockets"}[5m] offset 1m)
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"websockets"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-ops - 5m burn-rate - emitted
     by ai-assisted - gprd-gitlab-gke'
@@ -328,12 +328,12 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_exceptions_total{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"ai-assisted"}[5m] offset 1m)
+        rate(gitlab_redis_client_exceptions_total{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"ai-assisted"}[5m] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_total{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"ai-assisted"}[5m] offset 1m)
+        rate(gitlab_redis_client_requests_total{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"ai-assisted"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-ops - 5m burn-rate - emitted
     by ai-assisted - gprd-us-east1-b'
@@ -342,12 +342,12 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"ai-assisted"}[5m] offset 1m)
+        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"ai-assisted"}[5m] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"ai-assisted"}[5m] offset 1m)
+        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"ai-assisted"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-ops - 5m burn-rate - emitted
     by ai-assisted - gprd-us-east1-c'
@@ -356,12 +356,12 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"ai-assisted"}[5m] offset 1m)
+        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"ai-assisted"}[5m] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"ai-assisted"}[5m] offset 1m)
+        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"ai-assisted"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-ops - 5m burn-rate - emitted
     by ai-assisted - gprd-us-east1-d'
@@ -370,12 +370,12 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"ai-assisted"}[5m] offset 1m)
+        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"ai-assisted"}[5m] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"ai-assisted"}[5m] offset 1m)
+        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"ai-assisted"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-ops - 5m burn-rate - emitted
     by api - gprd-gitlab-gke'
@@ -384,12 +384,12 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_exceptions_total{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"api"}[5m] offset 1m)
+        rate(gitlab_redis_client_exceptions_total{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"api"}[5m] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_total{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"api"}[5m] offset 1m)
+        rate(gitlab_redis_client_requests_total{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"api"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-ops - 5m burn-rate - emitted
     by api - gprd-us-east1-b'
@@ -398,12 +398,12 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"api"}[5m] offset 1m)
+        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"api"}[5m] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"api"}[5m] offset 1m)
+        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"api"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-ops - 5m burn-rate - emitted
     by api - gprd-us-east1-c'
@@ -412,12 +412,12 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"api"}[5m] offset 1m)
+        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"api"}[5m] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"api"}[5m] offset 1m)
+        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"api"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-ops - 5m burn-rate - emitted
     by api - gprd-us-east1-d'
@@ -426,12 +426,12 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"api"}[5m] offset 1m)
+        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"api"}[5m] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"api"}[5m] offset 1m)
+        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"api"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-ops - 5m burn-rate - emitted
     by git - gprd-gitlab-gke'
@@ -440,12 +440,12 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_exceptions_total{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"git"}[5m] offset 1m)
+        rate(gitlab_redis_client_exceptions_total{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"git"}[5m] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_total{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"git"}[5m] offset 1m)
+        rate(gitlab_redis_client_requests_total{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"git"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-ops - 5m burn-rate - emitted
     by git - gprd-us-east1-b'
@@ -454,12 +454,12 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"git"}[5m] offset 1m)
+        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"git"}[5m] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"git"}[5m] offset 1m)
+        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"git"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-ops - 5m burn-rate - emitted
     by git - gprd-us-east1-c'
@@ -468,12 +468,12 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"git"}[5m] offset 1m)
+        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"git"}[5m] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"git"}[5m] offset 1m)
+        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"git"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-ops - 5m burn-rate - emitted
     by git - gprd-us-east1-d'
@@ -482,12 +482,12 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"git"}[5m] offset 1m)
+        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"git"}[5m] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"git"}[5m] offset 1m)
+        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"git"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-ops - 5m burn-rate - emitted
     by internal-api - gprd-gitlab-gke'
@@ -496,12 +496,12 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_exceptions_total{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"internal-api"}[5m] offset 1m)
+        rate(gitlab_redis_client_exceptions_total{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"internal-api"}[5m] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_total{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"internal-api"}[5m] offset 1m)
+        rate(gitlab_redis_client_requests_total{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"internal-api"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-ops - 5m burn-rate - emitted
     by internal-api - gprd-us-east1-b'
@@ -510,12 +510,12 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"internal-api"}[5m] offset 1m)
+        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"internal-api"}[5m] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"internal-api"}[5m] offset 1m)
+        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"internal-api"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-ops - 5m burn-rate - emitted
     by internal-api - gprd-us-east1-c'
@@ -524,12 +524,12 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"internal-api"}[5m] offset 1m)
+        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"internal-api"}[5m] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"internal-api"}[5m] offset 1m)
+        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"internal-api"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-ops - 5m burn-rate - emitted
     by internal-api - gprd-us-east1-d'
@@ -538,12 +538,12 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"internal-api"}[5m] offset 1m)
+        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"internal-api"}[5m] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"internal-api"}[5m] offset 1m)
+        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"internal-api"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-ops - 5m burn-rate - emitted
     by ops-gitlab-net - gprd-gitlab-gke'
@@ -552,12 +552,12 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_exceptions_total{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"ops-gitlab-net"}[5m] offset 1m)
+        rate(gitlab_redis_client_exceptions_total{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"ops-gitlab-net"}[5m] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_total{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"ops-gitlab-net"}[5m] offset 1m)
+        rate(gitlab_redis_client_requests_total{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"ops-gitlab-net"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-ops - 5m burn-rate - emitted
     by ops-gitlab-net - gprd-us-east1-b'
@@ -566,12 +566,12 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"ops-gitlab-net"}[5m] offset 1m)
+        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"ops-gitlab-net"}[5m] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"ops-gitlab-net"}[5m] offset 1m)
+        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"ops-gitlab-net"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-ops - 5m burn-rate - emitted
     by ops-gitlab-net - gprd-us-east1-c'
@@ -580,12 +580,12 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"ops-gitlab-net"}[5m] offset 1m)
+        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"ops-gitlab-net"}[5m] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"ops-gitlab-net"}[5m] offset 1m)
+        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"ops-gitlab-net"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-ops - 5m burn-rate - emitted
     by ops-gitlab-net - gprd-us-east1-d'
@@ -594,12 +594,12 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"ops-gitlab-net"}[5m] offset 1m)
+        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"ops-gitlab-net"}[5m] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"ops-gitlab-net"}[5m] offset 1m)
+        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"ops-gitlab-net"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-ops - 5m burn-rate - emitted
     by sidekiq - gprd-gitlab-gke'
@@ -608,12 +608,12 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_exceptions_total{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"sidekiq"}[5m] offset 1m)
+        rate(gitlab_redis_client_exceptions_total{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"sidekiq"}[5m] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_total{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"sidekiq"}[5m] offset 1m)
+        rate(gitlab_redis_client_requests_total{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"sidekiq"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-ops - 5m burn-rate - emitted
     by sidekiq - gprd-us-east1-b'
@@ -622,12 +622,12 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"sidekiq"}[5m] offset 1m)
+        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"sidekiq"}[5m] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"sidekiq"}[5m] offset 1m)
+        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"sidekiq"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-ops - 5m burn-rate - emitted
     by sidekiq - gprd-us-east1-c'
@@ -636,12 +636,12 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"sidekiq"}[5m] offset 1m)
+        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"sidekiq"}[5m] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"sidekiq"}[5m] offset 1m)
+        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"sidekiq"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-ops - 5m burn-rate - emitted
     by sidekiq - gprd-us-east1-d'
@@ -650,12 +650,12 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"sidekiq"}[5m] offset 1m)
+        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"sidekiq"}[5m] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"sidekiq"}[5m] offset 1m)
+        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"sidekiq"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-ops - 5m burn-rate - emitted
     by web - gprd-gitlab-gke'
@@ -664,12 +664,12 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_exceptions_total{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"web"}[5m] offset 1m)
+        rate(gitlab_redis_client_exceptions_total{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"web"}[5m] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_total{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"web"}[5m] offset 1m)
+        rate(gitlab_redis_client_requests_total{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"web"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-ops - 5m burn-rate - emitted
     by web - gprd-us-east1-b'
@@ -678,12 +678,12 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"web"}[5m] offset 1m)
+        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"web"}[5m] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"web"}[5m] offset 1m)
+        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"web"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-ops - 5m burn-rate - emitted
     by web - gprd-us-east1-c'
@@ -692,12 +692,12 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"web"}[5m] offset 1m)
+        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"web"}[5m] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"web"}[5m] offset 1m)
+        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"web"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-ops - 5m burn-rate - emitted
     by web - gprd-us-east1-d'
@@ -706,12 +706,12 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"web"}[5m] offset 1m)
+        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"web"}[5m] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"web"}[5m] offset 1m)
+        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"web"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-ops - 5m burn-rate - emitted
     by websockets - gprd-gitlab-gke'
@@ -720,12 +720,12 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_exceptions_total{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"websockets"}[5m] offset 1m)
+        rate(gitlab_redis_client_exceptions_total{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"websockets"}[5m] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_total{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"websockets"}[5m] offset 1m)
+        rate(gitlab_redis_client_requests_total{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"websockets"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-ops - 5m burn-rate - emitted
     by websockets - gprd-us-east1-b'
@@ -734,12 +734,12 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"websockets"}[5m] offset 1m)
+        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"websockets"}[5m] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"websockets"}[5m] offset 1m)
+        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"websockets"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-ops - 5m burn-rate - emitted
     by websockets - gprd-us-east1-c'
@@ -748,12 +748,12 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"websockets"}[5m] offset 1m)
+        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"websockets"}[5m] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"websockets"}[5m] offset 1m)
+        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"websockets"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-ops - 5m burn-rate - emitted
     by websockets - gprd-us-east1-d'
@@ -762,12 +762,12 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"websockets"}[5m] offset 1m)
+        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"websockets"}[5m] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"websockets"}[5m] offset 1m)
+        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"websockets"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - primary_server-ops - 30m burn-rate - gprd-gitlab-gke'
   interval: 2m
@@ -775,7 +775,7 @@ groups:
   - record: sli_aggregations:redis_commands_processed_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,instance,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(redis_commands_processed_total{cluster="gprd-gitlab-gke",env="gprd",type=~"redis"}[30m] offset 1m)
+        rate(redis_commands_processed_total{cluster="gprd-gitlab-gke",env="gprd",type=~"redis"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - primary_server-ops - 30m burn-rate - gprd-us-east1-b'
   interval: 2m
@@ -783,7 +783,7 @@ groups:
   - record: sli_aggregations:redis_commands_processed_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,instance,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(redis_commands_processed_total{cluster="gprd-us-east1-b",env="gprd",type=~"redis"}[30m] offset 1m)
+        rate(redis_commands_processed_total{cluster="gprd-us-east1-b",env="gprd",type=~"redis"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - primary_server-ops - 30m burn-rate - gprd-us-east1-c'
   interval: 2m
@@ -791,7 +791,7 @@ groups:
   - record: sli_aggregations:redis_commands_processed_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,instance,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(redis_commands_processed_total{cluster="gprd-us-east1-c",env="gprd",type=~"redis"}[30m] offset 1m)
+        rate(redis_commands_processed_total{cluster="gprd-us-east1-c",env="gprd",type=~"redis"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - primary_server-ops - 30m burn-rate - gprd-us-east1-d'
   interval: 2m
@@ -799,7 +799,7 @@ groups:
   - record: sli_aggregations:redis_commands_processed_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,instance,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(redis_commands_processed_total{cluster="gprd-us-east1-d",env="gprd",type=~"redis"}[30m] offset 1m)
+        rate(redis_commands_processed_total{cluster="gprd-us-east1-d",env="gprd",type=~"redis"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-apdex - 30m burn-rate - emitted
     by ai-assisted - gprd-gitlab-gke'
@@ -808,7 +808,7 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"ai-assisted"}[30m] offset 1m)
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"ai-assisted"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-apdex - 30m burn-rate - emitted
     by ai-assisted - gprd-us-east1-b'
@@ -817,7 +817,7 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"ai-assisted"}[30m] offset 1m)
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"ai-assisted"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-apdex - 30m burn-rate - emitted
     by ai-assisted - gprd-us-east1-c'
@@ -826,7 +826,7 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"ai-assisted"}[30m] offset 1m)
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"ai-assisted"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-apdex - 30m burn-rate - emitted
     by ai-assisted - gprd-us-east1-d'
@@ -835,7 +835,7 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"ai-assisted"}[30m] offset 1m)
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"ai-assisted"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-apdex - 30m burn-rate - emitted
     by api - gprd-gitlab-gke'
@@ -844,7 +844,7 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"api"}[30m] offset 1m)
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"api"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-apdex - 30m burn-rate - emitted
     by api - gprd-us-east1-b'
@@ -853,7 +853,7 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"api"}[30m] offset 1m)
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"api"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-apdex - 30m burn-rate - emitted
     by api - gprd-us-east1-c'
@@ -862,7 +862,7 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"api"}[30m] offset 1m)
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"api"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-apdex - 30m burn-rate - emitted
     by api - gprd-us-east1-d'
@@ -871,7 +871,7 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"api"}[30m] offset 1m)
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"api"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-apdex - 30m burn-rate - emitted
     by git - gprd-gitlab-gke'
@@ -880,7 +880,7 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"git"}[30m] offset 1m)
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"git"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-apdex - 30m burn-rate - emitted
     by git - gprd-us-east1-b'
@@ -889,7 +889,7 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"git"}[30m] offset 1m)
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"git"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-apdex - 30m burn-rate - emitted
     by git - gprd-us-east1-c'
@@ -898,7 +898,7 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"git"}[30m] offset 1m)
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"git"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-apdex - 30m burn-rate - emitted
     by git - gprd-us-east1-d'
@@ -907,7 +907,7 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"git"}[30m] offset 1m)
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"git"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-apdex - 30m burn-rate - emitted
     by internal-api - gprd-gitlab-gke'
@@ -916,7 +916,7 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"internal-api"}[30m] offset 1m)
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"internal-api"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-apdex - 30m burn-rate - emitted
     by internal-api - gprd-us-east1-b'
@@ -925,7 +925,7 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"internal-api"}[30m] offset 1m)
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"internal-api"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-apdex - 30m burn-rate - emitted
     by internal-api - gprd-us-east1-c'
@@ -934,7 +934,7 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"internal-api"}[30m] offset 1m)
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"internal-api"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-apdex - 30m burn-rate - emitted
     by internal-api - gprd-us-east1-d'
@@ -943,7 +943,7 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"internal-api"}[30m] offset 1m)
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"internal-api"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-apdex - 30m burn-rate - emitted
     by ops-gitlab-net - gprd-gitlab-gke'
@@ -952,7 +952,7 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"ops-gitlab-net"}[30m] offset 1m)
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"ops-gitlab-net"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-apdex - 30m burn-rate - emitted
     by ops-gitlab-net - gprd-us-east1-b'
@@ -961,7 +961,7 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"ops-gitlab-net"}[30m] offset 1m)
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"ops-gitlab-net"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-apdex - 30m burn-rate - emitted
     by ops-gitlab-net - gprd-us-east1-c'
@@ -970,7 +970,7 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"ops-gitlab-net"}[30m] offset 1m)
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"ops-gitlab-net"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-apdex - 30m burn-rate - emitted
     by ops-gitlab-net - gprd-us-east1-d'
@@ -979,7 +979,7 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"ops-gitlab-net"}[30m] offset 1m)
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"ops-gitlab-net"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-apdex - 30m burn-rate - emitted
     by sidekiq - gprd-gitlab-gke'
@@ -988,7 +988,7 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"sidekiq"}[30m] offset 1m)
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"sidekiq"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-apdex - 30m burn-rate - emitted
     by sidekiq - gprd-us-east1-b'
@@ -997,7 +997,7 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"sidekiq"}[30m] offset 1m)
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"sidekiq"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-apdex - 30m burn-rate - emitted
     by sidekiq - gprd-us-east1-c'
@@ -1006,7 +1006,7 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"sidekiq"}[30m] offset 1m)
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"sidekiq"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-apdex - 30m burn-rate - emitted
     by sidekiq - gprd-us-east1-d'
@@ -1015,7 +1015,7 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"sidekiq"}[30m] offset 1m)
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"sidekiq"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-apdex - 30m burn-rate - emitted
     by web - gprd-gitlab-gke'
@@ -1024,7 +1024,7 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"web"}[30m] offset 1m)
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"web"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-apdex - 30m burn-rate - emitted
     by web - gprd-us-east1-b'
@@ -1033,7 +1033,7 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"web"}[30m] offset 1m)
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"web"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-apdex - 30m burn-rate - emitted
     by web - gprd-us-east1-c'
@@ -1042,7 +1042,7 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"web"}[30m] offset 1m)
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"web"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-apdex - 30m burn-rate - emitted
     by web - gprd-us-east1-d'
@@ -1051,7 +1051,7 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"web"}[30m] offset 1m)
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"web"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-apdex - 30m burn-rate - emitted
     by websockets - gprd-gitlab-gke'
@@ -1060,7 +1060,7 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"websockets"}[30m] offset 1m)
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"websockets"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-apdex - 30m burn-rate - emitted
     by websockets - gprd-us-east1-b'
@@ -1069,7 +1069,7 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"websockets"}[30m] offset 1m)
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"websockets"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-apdex - 30m burn-rate - emitted
     by websockets - gprd-us-east1-c'
@@ -1078,7 +1078,7 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"websockets"}[30m] offset 1m)
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"websockets"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-apdex - 30m burn-rate - emitted
     by websockets - gprd-us-east1-d'
@@ -1087,7 +1087,7 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"websockets"}[30m] offset 1m)
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"websockets"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-ops - 30m burn-rate - emitted
     by ai-assisted - gprd-gitlab-gke'
@@ -1096,12 +1096,12 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_exceptions_total{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"ai-assisted"}[30m] offset 1m)
+        rate(gitlab_redis_client_exceptions_total{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"ai-assisted"}[30m] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_total{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"ai-assisted"}[30m] offset 1m)
+        rate(gitlab_redis_client_requests_total{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"ai-assisted"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-ops - 30m burn-rate - emitted
     by ai-assisted - gprd-us-east1-b'
@@ -1110,12 +1110,12 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"ai-assisted"}[30m] offset 1m)
+        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"ai-assisted"}[30m] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"ai-assisted"}[30m] offset 1m)
+        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"ai-assisted"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-ops - 30m burn-rate - emitted
     by ai-assisted - gprd-us-east1-c'
@@ -1124,12 +1124,12 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"ai-assisted"}[30m] offset 1m)
+        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"ai-assisted"}[30m] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"ai-assisted"}[30m] offset 1m)
+        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"ai-assisted"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-ops - 30m burn-rate - emitted
     by ai-assisted - gprd-us-east1-d'
@@ -1138,12 +1138,12 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"ai-assisted"}[30m] offset 1m)
+        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"ai-assisted"}[30m] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"ai-assisted"}[30m] offset 1m)
+        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"ai-assisted"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-ops - 30m burn-rate - emitted
     by api - gprd-gitlab-gke'
@@ -1152,12 +1152,12 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_exceptions_total{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"api"}[30m] offset 1m)
+        rate(gitlab_redis_client_exceptions_total{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"api"}[30m] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_total{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"api"}[30m] offset 1m)
+        rate(gitlab_redis_client_requests_total{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"api"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-ops - 30m burn-rate - emitted
     by api - gprd-us-east1-b'
@@ -1166,12 +1166,12 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"api"}[30m] offset 1m)
+        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"api"}[30m] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"api"}[30m] offset 1m)
+        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"api"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-ops - 30m burn-rate - emitted
     by api - gprd-us-east1-c'
@@ -1180,12 +1180,12 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"api"}[30m] offset 1m)
+        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"api"}[30m] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"api"}[30m] offset 1m)
+        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"api"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-ops - 30m burn-rate - emitted
     by api - gprd-us-east1-d'
@@ -1194,12 +1194,12 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"api"}[30m] offset 1m)
+        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"api"}[30m] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"api"}[30m] offset 1m)
+        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"api"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-ops - 30m burn-rate - emitted
     by git - gprd-gitlab-gke'
@@ -1208,12 +1208,12 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_exceptions_total{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"git"}[30m] offset 1m)
+        rate(gitlab_redis_client_exceptions_total{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"git"}[30m] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_total{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"git"}[30m] offset 1m)
+        rate(gitlab_redis_client_requests_total{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"git"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-ops - 30m burn-rate - emitted
     by git - gprd-us-east1-b'
@@ -1222,12 +1222,12 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"git"}[30m] offset 1m)
+        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"git"}[30m] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"git"}[30m] offset 1m)
+        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"git"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-ops - 30m burn-rate - emitted
     by git - gprd-us-east1-c'
@@ -1236,12 +1236,12 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"git"}[30m] offset 1m)
+        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"git"}[30m] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"git"}[30m] offset 1m)
+        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"git"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-ops - 30m burn-rate - emitted
     by git - gprd-us-east1-d'
@@ -1250,12 +1250,12 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"git"}[30m] offset 1m)
+        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"git"}[30m] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"git"}[30m] offset 1m)
+        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"git"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-ops - 30m burn-rate - emitted
     by internal-api - gprd-gitlab-gke'
@@ -1264,12 +1264,12 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_exceptions_total{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"internal-api"}[30m] offset 1m)
+        rate(gitlab_redis_client_exceptions_total{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"internal-api"}[30m] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_total{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"internal-api"}[30m] offset 1m)
+        rate(gitlab_redis_client_requests_total{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"internal-api"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-ops - 30m burn-rate - emitted
     by internal-api - gprd-us-east1-b'
@@ -1278,12 +1278,12 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"internal-api"}[30m] offset 1m)
+        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"internal-api"}[30m] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"internal-api"}[30m] offset 1m)
+        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"internal-api"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-ops - 30m burn-rate - emitted
     by internal-api - gprd-us-east1-c'
@@ -1292,12 +1292,12 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"internal-api"}[30m] offset 1m)
+        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"internal-api"}[30m] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"internal-api"}[30m] offset 1m)
+        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"internal-api"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-ops - 30m burn-rate - emitted
     by internal-api - gprd-us-east1-d'
@@ -1306,12 +1306,12 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"internal-api"}[30m] offset 1m)
+        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"internal-api"}[30m] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"internal-api"}[30m] offset 1m)
+        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"internal-api"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-ops - 30m burn-rate - emitted
     by ops-gitlab-net - gprd-gitlab-gke'
@@ -1320,12 +1320,12 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_exceptions_total{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"ops-gitlab-net"}[30m] offset 1m)
+        rate(gitlab_redis_client_exceptions_total{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"ops-gitlab-net"}[30m] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_total{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"ops-gitlab-net"}[30m] offset 1m)
+        rate(gitlab_redis_client_requests_total{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"ops-gitlab-net"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-ops - 30m burn-rate - emitted
     by ops-gitlab-net - gprd-us-east1-b'
@@ -1334,12 +1334,12 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"ops-gitlab-net"}[30m] offset 1m)
+        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"ops-gitlab-net"}[30m] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"ops-gitlab-net"}[30m] offset 1m)
+        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"ops-gitlab-net"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-ops - 30m burn-rate - emitted
     by ops-gitlab-net - gprd-us-east1-c'
@@ -1348,12 +1348,12 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"ops-gitlab-net"}[30m] offset 1m)
+        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"ops-gitlab-net"}[30m] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"ops-gitlab-net"}[30m] offset 1m)
+        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"ops-gitlab-net"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-ops - 30m burn-rate - emitted
     by ops-gitlab-net - gprd-us-east1-d'
@@ -1362,12 +1362,12 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"ops-gitlab-net"}[30m] offset 1m)
+        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"ops-gitlab-net"}[30m] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"ops-gitlab-net"}[30m] offset 1m)
+        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"ops-gitlab-net"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-ops - 30m burn-rate - emitted
     by sidekiq - gprd-gitlab-gke'
@@ -1376,12 +1376,12 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_exceptions_total{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"sidekiq"}[30m] offset 1m)
+        rate(gitlab_redis_client_exceptions_total{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"sidekiq"}[30m] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_total{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"sidekiq"}[30m] offset 1m)
+        rate(gitlab_redis_client_requests_total{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"sidekiq"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-ops - 30m burn-rate - emitted
     by sidekiq - gprd-us-east1-b'
@@ -1390,12 +1390,12 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"sidekiq"}[30m] offset 1m)
+        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"sidekiq"}[30m] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"sidekiq"}[30m] offset 1m)
+        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"sidekiq"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-ops - 30m burn-rate - emitted
     by sidekiq - gprd-us-east1-c'
@@ -1404,12 +1404,12 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"sidekiq"}[30m] offset 1m)
+        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"sidekiq"}[30m] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"sidekiq"}[30m] offset 1m)
+        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"sidekiq"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-ops - 30m burn-rate - emitted
     by sidekiq - gprd-us-east1-d'
@@ -1418,12 +1418,12 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"sidekiq"}[30m] offset 1m)
+        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"sidekiq"}[30m] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"sidekiq"}[30m] offset 1m)
+        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"sidekiq"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-ops - 30m burn-rate - emitted
     by web - gprd-gitlab-gke'
@@ -1432,12 +1432,12 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_exceptions_total{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"web"}[30m] offset 1m)
+        rate(gitlab_redis_client_exceptions_total{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"web"}[30m] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_total{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"web"}[30m] offset 1m)
+        rate(gitlab_redis_client_requests_total{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"web"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-ops - 30m burn-rate - emitted
     by web - gprd-us-east1-b'
@@ -1446,12 +1446,12 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"web"}[30m] offset 1m)
+        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"web"}[30m] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"web"}[30m] offset 1m)
+        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"web"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-ops - 30m burn-rate - emitted
     by web - gprd-us-east1-c'
@@ -1460,12 +1460,12 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"web"}[30m] offset 1m)
+        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"web"}[30m] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"web"}[30m] offset 1m)
+        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"web"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-ops - 30m burn-rate - emitted
     by web - gprd-us-east1-d'
@@ -1474,12 +1474,12 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"web"}[30m] offset 1m)
+        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"web"}[30m] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"web"}[30m] offset 1m)
+        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"web"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-ops - 30m burn-rate - emitted
     by websockets - gprd-gitlab-gke'
@@ -1488,12 +1488,12 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_exceptions_total{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"websockets"}[30m] offset 1m)
+        rate(gitlab_redis_client_exceptions_total{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"websockets"}[30m] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_total{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"websockets"}[30m] offset 1m)
+        rate(gitlab_redis_client_requests_total{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"websockets"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-ops - 30m burn-rate - emitted
     by websockets - gprd-us-east1-b'
@@ -1502,12 +1502,12 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"websockets"}[30m] offset 1m)
+        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"websockets"}[30m] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"websockets"}[30m] offset 1m)
+        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"websockets"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-ops - 30m burn-rate - emitted
     by websockets - gprd-us-east1-c'
@@ -1516,12 +1516,12 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"websockets"}[30m] offset 1m)
+        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"websockets"}[30m] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"websockets"}[30m] offset 1m)
+        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"websockets"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-ops - 30m burn-rate - emitted
     by websockets - gprd-us-east1-d'
@@ -1530,12 +1530,12 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"websockets"}[30m] offset 1m)
+        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"websockets"}[30m] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"websockets"}[30m] offset 1m)
+        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"websockets"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: redis - primary_server-ops - 1h burn-rate - gprd-gitlab-gke'
   interval: 1m
@@ -1543,7 +1543,7 @@ groups:
   - record: sli_aggregations:redis_commands_processed_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,instance,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(redis_commands_processed_total{cluster="gprd-gitlab-gke",env="gprd",type=~"redis"}[1h] offset 1m)
+        rate(redis_commands_processed_total{cluster="gprd-gitlab-gke",env="gprd",type=~"redis"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: redis - primary_server-ops - 1h burn-rate - gprd-us-east1-b'
   interval: 1m
@@ -1551,7 +1551,7 @@ groups:
   - record: sli_aggregations:redis_commands_processed_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,instance,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(redis_commands_processed_total{cluster="gprd-us-east1-b",env="gprd",type=~"redis"}[1h] offset 1m)
+        rate(redis_commands_processed_total{cluster="gprd-us-east1-b",env="gprd",type=~"redis"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: redis - primary_server-ops - 1h burn-rate - gprd-us-east1-c'
   interval: 1m
@@ -1559,7 +1559,7 @@ groups:
   - record: sli_aggregations:redis_commands_processed_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,instance,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(redis_commands_processed_total{cluster="gprd-us-east1-c",env="gprd",type=~"redis"}[1h] offset 1m)
+        rate(redis_commands_processed_total{cluster="gprd-us-east1-c",env="gprd",type=~"redis"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: redis - primary_server-ops - 1h burn-rate - gprd-us-east1-d'
   interval: 1m
@@ -1567,7 +1567,7 @@ groups:
   - record: sli_aggregations:redis_commands_processed_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,instance,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(redis_commands_processed_total{cluster="gprd-us-east1-d",env="gprd",type=~"redis"}[1h] offset 1m)
+        rate(redis_commands_processed_total{cluster="gprd-us-east1-d",env="gprd",type=~"redis"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-apdex - 1h burn-rate - emitted
     by ai-assisted - gprd-gitlab-gke'
@@ -1576,7 +1576,7 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"ai-assisted"}[1h] offset 1m)
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"ai-assisted"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-apdex - 1h burn-rate - emitted
     by ai-assisted - gprd-us-east1-b'
@@ -1585,7 +1585,7 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"ai-assisted"}[1h] offset 1m)
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"ai-assisted"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-apdex - 1h burn-rate - emitted
     by ai-assisted - gprd-us-east1-c'
@@ -1594,7 +1594,7 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"ai-assisted"}[1h] offset 1m)
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"ai-assisted"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-apdex - 1h burn-rate - emitted
     by ai-assisted - gprd-us-east1-d'
@@ -1603,7 +1603,7 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"ai-assisted"}[1h] offset 1m)
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"ai-assisted"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-apdex - 1h burn-rate - emitted
     by api - gprd-gitlab-gke'
@@ -1612,7 +1612,7 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"api"}[1h] offset 1m)
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"api"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-apdex - 1h burn-rate - emitted
     by api - gprd-us-east1-b'
@@ -1621,7 +1621,7 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"api"}[1h] offset 1m)
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"api"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-apdex - 1h burn-rate - emitted
     by api - gprd-us-east1-c'
@@ -1630,7 +1630,7 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"api"}[1h] offset 1m)
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"api"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-apdex - 1h burn-rate - emitted
     by api - gprd-us-east1-d'
@@ -1639,7 +1639,7 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"api"}[1h] offset 1m)
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"api"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-apdex - 1h burn-rate - emitted
     by git - gprd-gitlab-gke'
@@ -1648,7 +1648,7 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"git"}[1h] offset 1m)
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"git"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-apdex - 1h burn-rate - emitted
     by git - gprd-us-east1-b'
@@ -1657,7 +1657,7 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"git"}[1h] offset 1m)
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"git"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-apdex - 1h burn-rate - emitted
     by git - gprd-us-east1-c'
@@ -1666,7 +1666,7 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"git"}[1h] offset 1m)
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"git"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-apdex - 1h burn-rate - emitted
     by git - gprd-us-east1-d'
@@ -1675,7 +1675,7 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"git"}[1h] offset 1m)
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"git"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-apdex - 1h burn-rate - emitted
     by internal-api - gprd-gitlab-gke'
@@ -1684,7 +1684,7 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"internal-api"}[1h] offset 1m)
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"internal-api"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-apdex - 1h burn-rate - emitted
     by internal-api - gprd-us-east1-b'
@@ -1693,7 +1693,7 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"internal-api"}[1h] offset 1m)
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"internal-api"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-apdex - 1h burn-rate - emitted
     by internal-api - gprd-us-east1-c'
@@ -1702,7 +1702,7 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"internal-api"}[1h] offset 1m)
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"internal-api"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-apdex - 1h burn-rate - emitted
     by internal-api - gprd-us-east1-d'
@@ -1711,7 +1711,7 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"internal-api"}[1h] offset 1m)
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"internal-api"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-apdex - 1h burn-rate - emitted
     by ops-gitlab-net - gprd-gitlab-gke'
@@ -1720,7 +1720,7 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"ops-gitlab-net"}[1h] offset 1m)
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"ops-gitlab-net"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-apdex - 1h burn-rate - emitted
     by ops-gitlab-net - gprd-us-east1-b'
@@ -1729,7 +1729,7 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"ops-gitlab-net"}[1h] offset 1m)
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"ops-gitlab-net"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-apdex - 1h burn-rate - emitted
     by ops-gitlab-net - gprd-us-east1-c'
@@ -1738,7 +1738,7 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"ops-gitlab-net"}[1h] offset 1m)
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"ops-gitlab-net"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-apdex - 1h burn-rate - emitted
     by ops-gitlab-net - gprd-us-east1-d'
@@ -1747,7 +1747,7 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"ops-gitlab-net"}[1h] offset 1m)
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"ops-gitlab-net"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-apdex - 1h burn-rate - emitted
     by sidekiq - gprd-gitlab-gke'
@@ -1756,7 +1756,7 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"sidekiq"}[1h] offset 1m)
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"sidekiq"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-apdex - 1h burn-rate - emitted
     by sidekiq - gprd-us-east1-b'
@@ -1765,7 +1765,7 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"sidekiq"}[1h] offset 1m)
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"sidekiq"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-apdex - 1h burn-rate - emitted
     by sidekiq - gprd-us-east1-c'
@@ -1774,7 +1774,7 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"sidekiq"}[1h] offset 1m)
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"sidekiq"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-apdex - 1h burn-rate - emitted
     by sidekiq - gprd-us-east1-d'
@@ -1783,7 +1783,7 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"sidekiq"}[1h] offset 1m)
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"sidekiq"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-apdex - 1h burn-rate - emitted
     by web - gprd-gitlab-gke'
@@ -1792,7 +1792,7 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"web"}[1h] offset 1m)
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"web"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-apdex - 1h burn-rate - emitted
     by web - gprd-us-east1-b'
@@ -1801,7 +1801,7 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"web"}[1h] offset 1m)
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"web"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-apdex - 1h burn-rate - emitted
     by web - gprd-us-east1-c'
@@ -1810,7 +1810,7 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"web"}[1h] offset 1m)
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"web"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-apdex - 1h burn-rate - emitted
     by web - gprd-us-east1-d'
@@ -1819,7 +1819,7 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"web"}[1h] offset 1m)
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"web"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-apdex - 1h burn-rate - emitted
     by websockets - gprd-gitlab-gke'
@@ -1828,7 +1828,7 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"websockets"}[1h] offset 1m)
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"websockets"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-apdex - 1h burn-rate - emitted
     by websockets - gprd-us-east1-b'
@@ -1837,7 +1837,7 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"websockets"}[1h] offset 1m)
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"websockets"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-apdex - 1h burn-rate - emitted
     by websockets - gprd-us-east1-c'
@@ -1846,7 +1846,7 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"websockets"}[1h] offset 1m)
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"websockets"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-apdex - 1h burn-rate - emitted
     by websockets - gprd-us-east1-d'
@@ -1855,7 +1855,7 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"websockets"}[1h] offset 1m)
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"websockets"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-ops - 1h burn-rate - emitted
     by ai-assisted - gprd-gitlab-gke'
@@ -1864,12 +1864,12 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_exceptions_total{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"ai-assisted"}[1h] offset 1m)
+        rate(gitlab_redis_client_exceptions_total{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"ai-assisted"}[1h] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_total{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"ai-assisted"}[1h] offset 1m)
+        rate(gitlab_redis_client_requests_total{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"ai-assisted"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-ops - 1h burn-rate - emitted
     by ai-assisted - gprd-us-east1-b'
@@ -1878,12 +1878,12 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"ai-assisted"}[1h] offset 1m)
+        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"ai-assisted"}[1h] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"ai-assisted"}[1h] offset 1m)
+        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"ai-assisted"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-ops - 1h burn-rate - emitted
     by ai-assisted - gprd-us-east1-c'
@@ -1892,12 +1892,12 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"ai-assisted"}[1h] offset 1m)
+        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"ai-assisted"}[1h] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"ai-assisted"}[1h] offset 1m)
+        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"ai-assisted"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-ops - 1h burn-rate - emitted
     by ai-assisted - gprd-us-east1-d'
@@ -1906,12 +1906,12 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"ai-assisted"}[1h] offset 1m)
+        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"ai-assisted"}[1h] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"ai-assisted"}[1h] offset 1m)
+        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"ai-assisted"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-ops - 1h burn-rate - emitted
     by api - gprd-gitlab-gke'
@@ -1920,12 +1920,12 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_exceptions_total{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"api"}[1h] offset 1m)
+        rate(gitlab_redis_client_exceptions_total{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"api"}[1h] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_total{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"api"}[1h] offset 1m)
+        rate(gitlab_redis_client_requests_total{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"api"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-ops - 1h burn-rate - emitted
     by api - gprd-us-east1-b'
@@ -1934,12 +1934,12 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"api"}[1h] offset 1m)
+        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"api"}[1h] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"api"}[1h] offset 1m)
+        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"api"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-ops - 1h burn-rate - emitted
     by api - gprd-us-east1-c'
@@ -1948,12 +1948,12 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"api"}[1h] offset 1m)
+        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"api"}[1h] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"api"}[1h] offset 1m)
+        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"api"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-ops - 1h burn-rate - emitted
     by api - gprd-us-east1-d'
@@ -1962,12 +1962,12 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"api"}[1h] offset 1m)
+        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"api"}[1h] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"api"}[1h] offset 1m)
+        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"api"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-ops - 1h burn-rate - emitted
     by git - gprd-gitlab-gke'
@@ -1976,12 +1976,12 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_exceptions_total{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"git"}[1h] offset 1m)
+        rate(gitlab_redis_client_exceptions_total{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"git"}[1h] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_total{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"git"}[1h] offset 1m)
+        rate(gitlab_redis_client_requests_total{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"git"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-ops - 1h burn-rate - emitted
     by git - gprd-us-east1-b'
@@ -1990,12 +1990,12 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"git"}[1h] offset 1m)
+        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"git"}[1h] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"git"}[1h] offset 1m)
+        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"git"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-ops - 1h burn-rate - emitted
     by git - gprd-us-east1-c'
@@ -2004,12 +2004,12 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"git"}[1h] offset 1m)
+        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"git"}[1h] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"git"}[1h] offset 1m)
+        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"git"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-ops - 1h burn-rate - emitted
     by git - gprd-us-east1-d'
@@ -2018,12 +2018,12 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"git"}[1h] offset 1m)
+        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"git"}[1h] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"git"}[1h] offset 1m)
+        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"git"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-ops - 1h burn-rate - emitted
     by internal-api - gprd-gitlab-gke'
@@ -2032,12 +2032,12 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_exceptions_total{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"internal-api"}[1h] offset 1m)
+        rate(gitlab_redis_client_exceptions_total{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"internal-api"}[1h] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_total{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"internal-api"}[1h] offset 1m)
+        rate(gitlab_redis_client_requests_total{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"internal-api"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-ops - 1h burn-rate - emitted
     by internal-api - gprd-us-east1-b'
@@ -2046,12 +2046,12 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"internal-api"}[1h] offset 1m)
+        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"internal-api"}[1h] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"internal-api"}[1h] offset 1m)
+        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"internal-api"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-ops - 1h burn-rate - emitted
     by internal-api - gprd-us-east1-c'
@@ -2060,12 +2060,12 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"internal-api"}[1h] offset 1m)
+        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"internal-api"}[1h] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"internal-api"}[1h] offset 1m)
+        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"internal-api"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-ops - 1h burn-rate - emitted
     by internal-api - gprd-us-east1-d'
@@ -2074,12 +2074,12 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"internal-api"}[1h] offset 1m)
+        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"internal-api"}[1h] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"internal-api"}[1h] offset 1m)
+        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"internal-api"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-ops - 1h burn-rate - emitted
     by ops-gitlab-net - gprd-gitlab-gke'
@@ -2088,12 +2088,12 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_exceptions_total{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"ops-gitlab-net"}[1h] offset 1m)
+        rate(gitlab_redis_client_exceptions_total{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"ops-gitlab-net"}[1h] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_total{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"ops-gitlab-net"}[1h] offset 1m)
+        rate(gitlab_redis_client_requests_total{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"ops-gitlab-net"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-ops - 1h burn-rate - emitted
     by ops-gitlab-net - gprd-us-east1-b'
@@ -2102,12 +2102,12 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"ops-gitlab-net"}[1h] offset 1m)
+        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"ops-gitlab-net"}[1h] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"ops-gitlab-net"}[1h] offset 1m)
+        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"ops-gitlab-net"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-ops - 1h burn-rate - emitted
     by ops-gitlab-net - gprd-us-east1-c'
@@ -2116,12 +2116,12 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"ops-gitlab-net"}[1h] offset 1m)
+        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"ops-gitlab-net"}[1h] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"ops-gitlab-net"}[1h] offset 1m)
+        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"ops-gitlab-net"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-ops - 1h burn-rate - emitted
     by ops-gitlab-net - gprd-us-east1-d'
@@ -2130,12 +2130,12 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"ops-gitlab-net"}[1h] offset 1m)
+        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"ops-gitlab-net"}[1h] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"ops-gitlab-net"}[1h] offset 1m)
+        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"ops-gitlab-net"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-ops - 1h burn-rate - emitted
     by sidekiq - gprd-gitlab-gke'
@@ -2144,12 +2144,12 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_exceptions_total{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"sidekiq"}[1h] offset 1m)
+        rate(gitlab_redis_client_exceptions_total{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"sidekiq"}[1h] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_total{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"sidekiq"}[1h] offset 1m)
+        rate(gitlab_redis_client_requests_total{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"sidekiq"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-ops - 1h burn-rate - emitted
     by sidekiq - gprd-us-east1-b'
@@ -2158,12 +2158,12 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"sidekiq"}[1h] offset 1m)
+        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"sidekiq"}[1h] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"sidekiq"}[1h] offset 1m)
+        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"sidekiq"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-ops - 1h burn-rate - emitted
     by sidekiq - gprd-us-east1-c'
@@ -2172,12 +2172,12 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"sidekiq"}[1h] offset 1m)
+        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"sidekiq"}[1h] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"sidekiq"}[1h] offset 1m)
+        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"sidekiq"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-ops - 1h burn-rate - emitted
     by sidekiq - gprd-us-east1-d'
@@ -2186,12 +2186,12 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"sidekiq"}[1h] offset 1m)
+        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"sidekiq"}[1h] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"sidekiq"}[1h] offset 1m)
+        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"sidekiq"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-ops - 1h burn-rate - emitted
     by web - gprd-gitlab-gke'
@@ -2200,12 +2200,12 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_exceptions_total{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"web"}[1h] offset 1m)
+        rate(gitlab_redis_client_exceptions_total{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"web"}[1h] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_total{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"web"}[1h] offset 1m)
+        rate(gitlab_redis_client_requests_total{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"web"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-ops - 1h burn-rate - emitted
     by web - gprd-us-east1-b'
@@ -2214,12 +2214,12 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"web"}[1h] offset 1m)
+        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"web"}[1h] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"web"}[1h] offset 1m)
+        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"web"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-ops - 1h burn-rate - emitted
     by web - gprd-us-east1-c'
@@ -2228,12 +2228,12 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"web"}[1h] offset 1m)
+        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"web"}[1h] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"web"}[1h] offset 1m)
+        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"web"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-ops - 1h burn-rate - emitted
     by web - gprd-us-east1-d'
@@ -2242,12 +2242,12 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"web"}[1h] offset 1m)
+        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"web"}[1h] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"web"}[1h] offset 1m)
+        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"web"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-ops - 1h burn-rate - emitted
     by websockets - gprd-gitlab-gke'
@@ -2256,12 +2256,12 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_exceptions_total{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"websockets"}[1h] offset 1m)
+        rate(gitlab_redis_client_exceptions_total{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"websockets"}[1h] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_total{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"websockets"}[1h] offset 1m)
+        rate(gitlab_redis_client_requests_total{cluster="gprd-gitlab-gke",env="gprd",storage=~"buffered_counter",type=~"websockets"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-ops - 1h burn-rate - emitted
     by websockets - gprd-us-east1-b'
@@ -2270,12 +2270,12 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"websockets"}[1h] offset 1m)
+        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"websockets"}[1h] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"websockets"}[1h] offset 1m)
+        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-b",env="gprd",storage=~"buffered_counter",type=~"websockets"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-ops - 1h burn-rate - emitted
     by websockets - gprd-us-east1-c'
@@ -2284,12 +2284,12 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"websockets"}[1h] offset 1m)
+        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"websockets"}[1h] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"websockets"}[1h] offset 1m)
+        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-c",env="gprd",storage=~"buffered_counter",type=~"websockets"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: redis - rails_redis_client-ops - 1h burn-rate - emitted
     by websockets - gprd-us-east1-d'
@@ -2298,10 +2298,10 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"websockets"}[1h] offset 1m)
+        rate(gitlab_redis_client_exceptions_total{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"websockets"}[1h] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"websockets"}[1h] offset 1m)
+        rate(gitlab_redis_client_requests_total{cluster="gprd-us-east1-d",env="gprd",storage=~"buffered_counter",type=~"websockets"}[1h] offset 30s)
       )

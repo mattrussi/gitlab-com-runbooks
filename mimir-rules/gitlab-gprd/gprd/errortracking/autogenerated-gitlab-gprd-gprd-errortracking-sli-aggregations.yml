@@ -7,7 +7,7 @@ groups:
   - record: sli_aggregations:traefik_service_request_duration_seconds_bucket:rate_5m
     expr: |
       sum by (code,component,env,environment,feature_category,fqdn,job,le,product_stage,region,service,shard,stage,stage_group,team,tier,type) (
-        rate(traefik_service_request_duration_seconds_bucket{env="gprd",job=~"default/traefik",service=~".*errortracking-api.*",team=~"observability"}[5m] offset 1m)
+        rate(traefik_service_request_duration_seconds_bucket{env="gprd",job=~"default/traefik",service=~".*errortracking-api.*",team=~"observability"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: errortracking - loadbalancer-ops - 5m burn-rate'
   interval: 1m
@@ -15,7 +15,7 @@ groups:
   - record: sli_aggregations:traefik_service_requests_total:rate_5m
     expr: |
       sum by (code,component,env,environment,feature_category,fqdn,job,product_stage,region,service,shard,stage,stage_group,team,tier,type) (
-        rate(traefik_service_requests_total{env="gprd",job=~"default/traefik",service=~".*errortracking-api.*",team=~"observability"}[5m] offset 1m)
+        rate(traefik_service_requests_total{env="gprd",job=~"default/traefik",service=~".*errortracking-api.*",team=~"observability"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: errortracking - loadbalancer-apdex - 30m burn-rate'
   interval: 2m
@@ -23,7 +23,7 @@ groups:
   - record: sli_aggregations:traefik_service_request_duration_seconds_bucket:rate_30m
     expr: |
       sum by (code,component,env,environment,feature_category,fqdn,job,le,product_stage,region,service,shard,stage,stage_group,team,tier,type) (
-        rate(traefik_service_request_duration_seconds_bucket{env="gprd",job=~"default/traefik",service=~".*errortracking-api.*",team=~"observability"}[30m] offset 1m)
+        rate(traefik_service_request_duration_seconds_bucket{env="gprd",job=~"default/traefik",service=~".*errortracking-api.*",team=~"observability"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: errortracking - loadbalancer-ops - 30m burn-rate'
   interval: 2m
@@ -31,7 +31,7 @@ groups:
   - record: sli_aggregations:traefik_service_requests_total:rate_30m
     expr: |
       sum by (code,component,env,environment,feature_category,fqdn,job,product_stage,region,service,shard,stage,stage_group,team,tier,type) (
-        rate(traefik_service_requests_total{env="gprd",job=~"default/traefik",service=~".*errortracking-api.*",team=~"observability"}[30m] offset 1m)
+        rate(traefik_service_requests_total{env="gprd",job=~"default/traefik",service=~".*errortracking-api.*",team=~"observability"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: errortracking - loadbalancer-apdex - 1h burn-rate'
   interval: 1m
@@ -39,7 +39,7 @@ groups:
   - record: sli_aggregations:traefik_service_request_duration_seconds_bucket:rate_1h
     expr: |
       sum by (code,component,env,environment,feature_category,fqdn,job,le,product_stage,region,service,shard,stage,stage_group,team,tier,type) (
-        rate(traefik_service_request_duration_seconds_bucket{env="gprd",job=~"default/traefik",service=~".*errortracking-api.*",team=~"observability"}[1h] offset 1m)
+        rate(traefik_service_request_duration_seconds_bucket{env="gprd",job=~"default/traefik",service=~".*errortracking-api.*",team=~"observability"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: errortracking - loadbalancer-ops - 1h burn-rate'
   interval: 1m
@@ -47,5 +47,5 @@ groups:
   - record: sli_aggregations:traefik_service_requests_total:rate_1h
     expr: |
       sum by (code,component,env,environment,feature_category,fqdn,job,product_stage,region,service,shard,stage,stage_group,team,tier,type) (
-        rate(traefik_service_requests_total{env="gprd",job=~"default/traefik",service=~".*errortracking-api.*",team=~"observability"}[1h] offset 1m)
+        rate(traefik_service_requests_total{env="gprd",job=~"default/traefik",service=~".*errortracking-api.*",team=~"observability"}[1h] offset 30s)
       )
