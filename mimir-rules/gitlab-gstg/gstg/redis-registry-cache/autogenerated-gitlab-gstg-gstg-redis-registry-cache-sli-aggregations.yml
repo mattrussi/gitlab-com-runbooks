@@ -7,7 +7,7 @@ groups:
   - record: sli_aggregations:redis_commands_processed_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,instance,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(redis_commands_processed_total{env="gstg",type=~"redis-registry-cache"}[5m] offset 30s)
+        rate(redis_commands_processed_total{env="gstg",type=~"redis-registry-cache"}[5m] offset 1m)
       )
 - name: 'SLI Aggregations: redis-registry-cache - registry_redis_client-apdex - 5m
     burn-rate - emitted by registry'
@@ -16,7 +16,7 @@ groups:
   - record: sli_aggregations:registry_redis_single_commands_bucket:rate_5m
     expr: |
       sum by (command,component,env,environment,feature_category,fqdn,instance,le,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(registry_redis_single_commands_bucket{env="gstg",type=~"registry"}[5m] offset 30s)
+        rate(registry_redis_single_commands_bucket{env="gstg",type=~"registry"}[5m] offset 1m)
       )
 - name: 'SLI Aggregations: redis-registry-cache - registry_redis_client-ops - 5m burn-rate
     - emitted by registry'
@@ -25,12 +25,12 @@ groups:
   - record: sli_aggregations:registry_redis_single_commands_count:rate_5m
     expr: |
       sum by (command,component,env,environment,feature_category,fqdn,instance,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(registry_redis_single_commands_count{env="gstg",type=~"registry"}[5m] offset 30s)
+        rate(registry_redis_single_commands_count{env="gstg",type=~"registry"}[5m] offset 1m)
       )
   - record: sli_aggregations:registry_redis_single_errors_count:rate_5m
     expr: |
       sum by (command,component,env,environment,feature_category,fqdn,instance,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(registry_redis_single_errors_count{env="gstg",type=~"registry"}[5m] offset 30s)
+        rate(registry_redis_single_errors_count{env="gstg",type=~"registry"}[5m] offset 1m)
       )
 - name: 'SLI Aggregations: redis-registry-cache - primary_server-ops - 30m burn-rate'
   interval: 2m
@@ -38,7 +38,7 @@ groups:
   - record: sli_aggregations:redis_commands_processed_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,instance,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(redis_commands_processed_total{env="gstg",type=~"redis-registry-cache"}[30m] offset 30s)
+        rate(redis_commands_processed_total{env="gstg",type=~"redis-registry-cache"}[30m] offset 1m)
       )
 - name: 'SLI Aggregations: redis-registry-cache - registry_redis_client-apdex - 30m
     burn-rate - emitted by registry'
@@ -47,7 +47,7 @@ groups:
   - record: sli_aggregations:registry_redis_single_commands_bucket:rate_30m
     expr: |
       sum by (command,component,env,environment,feature_category,fqdn,instance,le,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(registry_redis_single_commands_bucket{env="gstg",type=~"registry"}[30m] offset 30s)
+        rate(registry_redis_single_commands_bucket{env="gstg",type=~"registry"}[30m] offset 1m)
       )
 - name: 'SLI Aggregations: redis-registry-cache - registry_redis_client-ops - 30m
     burn-rate - emitted by registry'
@@ -56,12 +56,12 @@ groups:
   - record: sli_aggregations:registry_redis_single_commands_count:rate_30m
     expr: |
       sum by (command,component,env,environment,feature_category,fqdn,instance,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(registry_redis_single_commands_count{env="gstg",type=~"registry"}[30m] offset 30s)
+        rate(registry_redis_single_commands_count{env="gstg",type=~"registry"}[30m] offset 1m)
       )
   - record: sli_aggregations:registry_redis_single_errors_count:rate_30m
     expr: |
       sum by (command,component,env,environment,feature_category,fqdn,instance,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(registry_redis_single_errors_count{env="gstg",type=~"registry"}[30m] offset 30s)
+        rate(registry_redis_single_errors_count{env="gstg",type=~"registry"}[30m] offset 1m)
       )
 - name: 'SLI Aggregations: redis-registry-cache - primary_server-ops - 1h burn-rate'
   interval: 1m
@@ -69,7 +69,7 @@ groups:
   - record: sli_aggregations:redis_commands_processed_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,instance,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(redis_commands_processed_total{env="gstg",type=~"redis-registry-cache"}[1h] offset 30s)
+        rate(redis_commands_processed_total{env="gstg",type=~"redis-registry-cache"}[1h] offset 1m)
       )
 - name: 'SLI Aggregations: redis-registry-cache - registry_redis_client-apdex - 1h
     burn-rate - emitted by registry'
@@ -78,7 +78,7 @@ groups:
   - record: sli_aggregations:registry_redis_single_commands_bucket:rate_1h
     expr: |
       sum by (command,component,env,environment,feature_category,fqdn,instance,le,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(registry_redis_single_commands_bucket{env="gstg",type=~"registry"}[1h] offset 30s)
+        rate(registry_redis_single_commands_bucket{env="gstg",type=~"registry"}[1h] offset 1m)
       )
 - name: 'SLI Aggregations: redis-registry-cache - registry_redis_client-ops - 1h burn-rate
     - emitted by registry'
@@ -87,10 +87,10 @@ groups:
   - record: sli_aggregations:registry_redis_single_commands_count:rate_1h
     expr: |
       sum by (command,component,env,environment,feature_category,fqdn,instance,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(registry_redis_single_commands_count{env="gstg",type=~"registry"}[1h] offset 30s)
+        rate(registry_redis_single_commands_count{env="gstg",type=~"registry"}[1h] offset 1m)
       )
   - record: sli_aggregations:registry_redis_single_errors_count:rate_1h
     expr: |
       sum by (command,component,env,environment,feature_category,fqdn,instance,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(registry_redis_single_errors_count{env="gstg",type=~"registry"}[1h] offset 30s)
+        rate(registry_redis_single_errors_count{env="gstg",type=~"registry"}[1h] offset 1m)
       )

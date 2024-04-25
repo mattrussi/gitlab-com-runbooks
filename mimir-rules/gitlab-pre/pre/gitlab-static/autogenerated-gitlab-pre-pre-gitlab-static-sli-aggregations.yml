@@ -7,12 +7,12 @@ groups:
   - record: sli_aggregations:cloudflare_zone_requests_status:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,status,tier,type,zone) (
-        rate(cloudflare_zone_requests_status{env="pre",status=~"5..",type=~"gitlab-static",zone=~"gitlab-static\\.net"}[5m] offset 30s)
+        rate(cloudflare_zone_requests_status{env="pre",status=~"5..",type=~"gitlab-static",zone=~"gitlab-static\\.net"}[5m] offset 1m)
       )
   - record: sli_aggregations:cloudflare_zone_requests_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type,zone) (
-        rate(cloudflare_zone_requests_total{env="pre",type=~"gitlab-static",zone=~"gitlab-static\\.net"}[5m] offset 30s)
+        rate(cloudflare_zone_requests_total{env="pre",type=~"gitlab-static",zone=~"gitlab-static\\.net"}[5m] offset 1m)
       )
 - name: 'SLI Aggregations: gitlab-static - web_ide_worker-ops - 5m burn-rate'
   interval: 1m
@@ -20,12 +20,12 @@ groups:
   - record: sli_aggregations:cloudflare_worker_errors_count:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,script_name,shard,stage,stage_group,tier,type) (
-        rate(cloudflare_worker_errors_count{env="pre",script_name=~"gitlab-web-ide-vscode-production",type=~"gitlab-static"}[5m] offset 30s)
+        rate(cloudflare_worker_errors_count{env="pre",script_name=~"gitlab-web-ide-vscode-production",type=~"gitlab-static"}[5m] offset 1m)
       )
   - record: sli_aggregations:cloudflare_worker_requests_count:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,script_name,shard,stage,stage_group,tier,type) (
-        rate(cloudflare_worker_requests_count{env="pre",script_name=~"gitlab-web-ide-vscode-production",type=~"gitlab-static"}[5m] offset 30s)
+        rate(cloudflare_worker_requests_count{env="pre",script_name=~"gitlab-web-ide-vscode-production",type=~"gitlab-static"}[5m] offset 1m)
       )
 - name: 'SLI Aggregations: gitlab-static - gitlab_static_net_zone-ops - 30m burn-rate'
   interval: 2m
@@ -33,12 +33,12 @@ groups:
   - record: sli_aggregations:cloudflare_zone_requests_status:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,status,tier,type,zone) (
-        rate(cloudflare_zone_requests_status{env="pre",status=~"5..",type=~"gitlab-static",zone=~"gitlab-static\\.net"}[30m] offset 30s)
+        rate(cloudflare_zone_requests_status{env="pre",status=~"5..",type=~"gitlab-static",zone=~"gitlab-static\\.net"}[30m] offset 1m)
       )
   - record: sli_aggregations:cloudflare_zone_requests_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type,zone) (
-        rate(cloudflare_zone_requests_total{env="pre",type=~"gitlab-static",zone=~"gitlab-static\\.net"}[30m] offset 30s)
+        rate(cloudflare_zone_requests_total{env="pre",type=~"gitlab-static",zone=~"gitlab-static\\.net"}[30m] offset 1m)
       )
 - name: 'SLI Aggregations: gitlab-static - web_ide_worker-ops - 30m burn-rate'
   interval: 2m
@@ -46,12 +46,12 @@ groups:
   - record: sli_aggregations:cloudflare_worker_errors_count:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,script_name,shard,stage,stage_group,tier,type) (
-        rate(cloudflare_worker_errors_count{env="pre",script_name=~"gitlab-web-ide-vscode-production",type=~"gitlab-static"}[30m] offset 30s)
+        rate(cloudflare_worker_errors_count{env="pre",script_name=~"gitlab-web-ide-vscode-production",type=~"gitlab-static"}[30m] offset 1m)
       )
   - record: sli_aggregations:cloudflare_worker_requests_count:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,script_name,shard,stage,stage_group,tier,type) (
-        rate(cloudflare_worker_requests_count{env="pre",script_name=~"gitlab-web-ide-vscode-production",type=~"gitlab-static"}[30m] offset 30s)
+        rate(cloudflare_worker_requests_count{env="pre",script_name=~"gitlab-web-ide-vscode-production",type=~"gitlab-static"}[30m] offset 1m)
       )
 - name: 'SLI Aggregations: gitlab-static - gitlab_static_net_zone-ops - 1h burn-rate'
   interval: 1m
@@ -59,12 +59,12 @@ groups:
   - record: sli_aggregations:cloudflare_zone_requests_status:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,status,tier,type,zone) (
-        rate(cloudflare_zone_requests_status{env="pre",status=~"5..",type=~"gitlab-static",zone=~"gitlab-static\\.net"}[1h] offset 30s)
+        rate(cloudflare_zone_requests_status{env="pre",status=~"5..",type=~"gitlab-static",zone=~"gitlab-static\\.net"}[1h] offset 1m)
       )
   - record: sli_aggregations:cloudflare_zone_requests_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type,zone) (
-        rate(cloudflare_zone_requests_total{env="pre",type=~"gitlab-static",zone=~"gitlab-static\\.net"}[1h] offset 30s)
+        rate(cloudflare_zone_requests_total{env="pre",type=~"gitlab-static",zone=~"gitlab-static\\.net"}[1h] offset 1m)
       )
 - name: 'SLI Aggregations: gitlab-static - web_ide_worker-ops - 1h burn-rate'
   interval: 1m
@@ -72,10 +72,10 @@ groups:
   - record: sli_aggregations:cloudflare_worker_errors_count:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,script_name,shard,stage,stage_group,tier,type) (
-        rate(cloudflare_worker_errors_count{env="pre",script_name=~"gitlab-web-ide-vscode-production",type=~"gitlab-static"}[1h] offset 30s)
+        rate(cloudflare_worker_errors_count{env="pre",script_name=~"gitlab-web-ide-vscode-production",type=~"gitlab-static"}[1h] offset 1m)
       )
   - record: sli_aggregations:cloudflare_worker_requests_count:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,script_name,shard,stage,stage_group,tier,type) (
-        rate(cloudflare_worker_requests_count{env="pre",script_name=~"gitlab-web-ide-vscode-production",type=~"gitlab-static"}[1h] offset 30s)
+        rate(cloudflare_worker_requests_count{env="pre",script_name=~"gitlab-web-ide-vscode-production",type=~"gitlab-static"}[1h] offset 1m)
       )

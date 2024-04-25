@@ -8,7 +8,7 @@ groups:
   - record: sli_aggregations:sidekiq_enqueued_jobs_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(sidekiq_enqueued_jobs_total{cluster="gprd-gitlab-gke",env="gprd",type=~"ai-assisted"}[5m] offset 30s)
+        rate(sidekiq_enqueued_jobs_total{cluster="gprd-gitlab-gke",env="gprd",type=~"ai-assisted"}[5m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - enqueued_jobs-ops - 5m burn-rate - emitted by
     ai-assisted - gprd-us-east1-b'
@@ -17,7 +17,7 @@ groups:
   - record: sli_aggregations:sidekiq_enqueued_jobs_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-b",env="gprd",type=~"ai-assisted"}[5m] offset 30s)
+        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-b",env="gprd",type=~"ai-assisted"}[5m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - enqueued_jobs-ops - 5m burn-rate - emitted by
     ai-assisted - gprd-us-east1-c'
@@ -26,7 +26,7 @@ groups:
   - record: sli_aggregations:sidekiq_enqueued_jobs_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-c",env="gprd",type=~"ai-assisted"}[5m] offset 30s)
+        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-c",env="gprd",type=~"ai-assisted"}[5m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - enqueued_jobs-ops - 5m burn-rate - emitted by
     ai-assisted - gprd-us-east1-d'
@@ -35,7 +35,7 @@ groups:
   - record: sli_aggregations:sidekiq_enqueued_jobs_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-d",env="gprd",type=~"ai-assisted"}[5m] offset 30s)
+        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-d",env="gprd",type=~"ai-assisted"}[5m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - enqueued_jobs-ops - 5m burn-rate - emitted by
     api - gprd-gitlab-gke'
@@ -44,7 +44,7 @@ groups:
   - record: sli_aggregations:sidekiq_enqueued_jobs_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(sidekiq_enqueued_jobs_total{cluster="gprd-gitlab-gke",env="gprd",type=~"api"}[5m] offset 30s)
+        rate(sidekiq_enqueued_jobs_total{cluster="gprd-gitlab-gke",env="gprd",type=~"api"}[5m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - enqueued_jobs-ops - 5m burn-rate - emitted by
     api - gprd-us-east1-b'
@@ -53,7 +53,7 @@ groups:
   - record: sli_aggregations:sidekiq_enqueued_jobs_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-b",env="gprd",type=~"api"}[5m] offset 30s)
+        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-b",env="gprd",type=~"api"}[5m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - enqueued_jobs-ops - 5m burn-rate - emitted by
     api - gprd-us-east1-c'
@@ -62,7 +62,7 @@ groups:
   - record: sli_aggregations:sidekiq_enqueued_jobs_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-c",env="gprd",type=~"api"}[5m] offset 30s)
+        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-c",env="gprd",type=~"api"}[5m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - enqueued_jobs-ops - 5m burn-rate - emitted by
     api - gprd-us-east1-d'
@@ -71,7 +71,7 @@ groups:
   - record: sli_aggregations:sidekiq_enqueued_jobs_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-d",env="gprd",type=~"api"}[5m] offset 30s)
+        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-d",env="gprd",type=~"api"}[5m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - enqueued_jobs-ops - 5m burn-rate - emitted by
     git - gprd-gitlab-gke'
@@ -80,7 +80,7 @@ groups:
   - record: sli_aggregations:sidekiq_enqueued_jobs_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(sidekiq_enqueued_jobs_total{cluster="gprd-gitlab-gke",env="gprd",type=~"git"}[5m] offset 30s)
+        rate(sidekiq_enqueued_jobs_total{cluster="gprd-gitlab-gke",env="gprd",type=~"git"}[5m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - enqueued_jobs-ops - 5m burn-rate - emitted by
     git - gprd-us-east1-b'
@@ -89,7 +89,7 @@ groups:
   - record: sli_aggregations:sidekiq_enqueued_jobs_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-b",env="gprd",type=~"git"}[5m] offset 30s)
+        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-b",env="gprd",type=~"git"}[5m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - enqueued_jobs-ops - 5m burn-rate - emitted by
     git - gprd-us-east1-c'
@@ -98,7 +98,7 @@ groups:
   - record: sli_aggregations:sidekiq_enqueued_jobs_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-c",env="gprd",type=~"git"}[5m] offset 30s)
+        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-c",env="gprd",type=~"git"}[5m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - enqueued_jobs-ops - 5m burn-rate - emitted by
     git - gprd-us-east1-d'
@@ -107,7 +107,7 @@ groups:
   - record: sli_aggregations:sidekiq_enqueued_jobs_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-d",env="gprd",type=~"git"}[5m] offset 30s)
+        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-d",env="gprd",type=~"git"}[5m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - enqueued_jobs-ops - 5m burn-rate - emitted by
     internal-api - gprd-gitlab-gke'
@@ -116,7 +116,7 @@ groups:
   - record: sli_aggregations:sidekiq_enqueued_jobs_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(sidekiq_enqueued_jobs_total{cluster="gprd-gitlab-gke",env="gprd",type=~"internal-api"}[5m] offset 30s)
+        rate(sidekiq_enqueued_jobs_total{cluster="gprd-gitlab-gke",env="gprd",type=~"internal-api"}[5m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - enqueued_jobs-ops - 5m burn-rate - emitted by
     internal-api - gprd-us-east1-b'
@@ -125,7 +125,7 @@ groups:
   - record: sli_aggregations:sidekiq_enqueued_jobs_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-b",env="gprd",type=~"internal-api"}[5m] offset 30s)
+        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-b",env="gprd",type=~"internal-api"}[5m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - enqueued_jobs-ops - 5m burn-rate - emitted by
     internal-api - gprd-us-east1-c'
@@ -134,7 +134,7 @@ groups:
   - record: sli_aggregations:sidekiq_enqueued_jobs_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-c",env="gprd",type=~"internal-api"}[5m] offset 30s)
+        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-c",env="gprd",type=~"internal-api"}[5m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - enqueued_jobs-ops - 5m burn-rate - emitted by
     internal-api - gprd-us-east1-d'
@@ -143,7 +143,7 @@ groups:
   - record: sli_aggregations:sidekiq_enqueued_jobs_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-d",env="gprd",type=~"internal-api"}[5m] offset 30s)
+        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-d",env="gprd",type=~"internal-api"}[5m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - enqueued_jobs-ops - 5m burn-rate - emitted by
     ops-gitlab-net - gprd-gitlab-gke'
@@ -152,7 +152,7 @@ groups:
   - record: sli_aggregations:sidekiq_enqueued_jobs_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(sidekiq_enqueued_jobs_total{cluster="gprd-gitlab-gke",env="gprd",type=~"ops-gitlab-net"}[5m] offset 30s)
+        rate(sidekiq_enqueued_jobs_total{cluster="gprd-gitlab-gke",env="gprd",type=~"ops-gitlab-net"}[5m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - enqueued_jobs-ops - 5m burn-rate - emitted by
     ops-gitlab-net - gprd-us-east1-b'
@@ -161,7 +161,7 @@ groups:
   - record: sli_aggregations:sidekiq_enqueued_jobs_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-b",env="gprd",type=~"ops-gitlab-net"}[5m] offset 30s)
+        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-b",env="gprd",type=~"ops-gitlab-net"}[5m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - enqueued_jobs-ops - 5m burn-rate - emitted by
     ops-gitlab-net - gprd-us-east1-c'
@@ -170,7 +170,7 @@ groups:
   - record: sli_aggregations:sidekiq_enqueued_jobs_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-c",env="gprd",type=~"ops-gitlab-net"}[5m] offset 30s)
+        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-c",env="gprd",type=~"ops-gitlab-net"}[5m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - enqueued_jobs-ops - 5m burn-rate - emitted by
     ops-gitlab-net - gprd-us-east1-d'
@@ -179,7 +179,7 @@ groups:
   - record: sli_aggregations:sidekiq_enqueued_jobs_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-d",env="gprd",type=~"ops-gitlab-net"}[5m] offset 30s)
+        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-d",env="gprd",type=~"ops-gitlab-net"}[5m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - enqueued_jobs-ops - 5m burn-rate - gprd-gitlab-gke'
   interval: 1m
@@ -187,7 +187,7 @@ groups:
   - record: sli_aggregations:sidekiq_enqueued_jobs_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(sidekiq_enqueued_jobs_total{cluster="gprd-gitlab-gke",env="gprd",type=~"sidekiq"}[5m] offset 30s)
+        rate(sidekiq_enqueued_jobs_total{cluster="gprd-gitlab-gke",env="gprd",type=~"sidekiq"}[5m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - enqueued_jobs-ops - 5m burn-rate - gprd-us-east1-b'
   interval: 1m
@@ -195,7 +195,7 @@ groups:
   - record: sli_aggregations:sidekiq_enqueued_jobs_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-b",env="gprd",type=~"sidekiq"}[5m] offset 30s)
+        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-b",env="gprd",type=~"sidekiq"}[5m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - enqueued_jobs-ops - 5m burn-rate - gprd-us-east1-c'
   interval: 1m
@@ -203,7 +203,7 @@ groups:
   - record: sli_aggregations:sidekiq_enqueued_jobs_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-c",env="gprd",type=~"sidekiq"}[5m] offset 30s)
+        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-c",env="gprd",type=~"sidekiq"}[5m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - enqueued_jobs-ops - 5m burn-rate - gprd-us-east1-d'
   interval: 1m
@@ -211,7 +211,7 @@ groups:
   - record: sli_aggregations:sidekiq_enqueued_jobs_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-d",env="gprd",type=~"sidekiq"}[5m] offset 30s)
+        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-d",env="gprd",type=~"sidekiq"}[5m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - enqueued_jobs-ops - 5m burn-rate - emitted by
     web - gprd-gitlab-gke'
@@ -220,7 +220,7 @@ groups:
   - record: sli_aggregations:sidekiq_enqueued_jobs_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(sidekiq_enqueued_jobs_total{cluster="gprd-gitlab-gke",env="gprd",type=~"web"}[5m] offset 30s)
+        rate(sidekiq_enqueued_jobs_total{cluster="gprd-gitlab-gke",env="gprd",type=~"web"}[5m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - enqueued_jobs-ops - 5m burn-rate - emitted by
     web - gprd-us-east1-b'
@@ -229,7 +229,7 @@ groups:
   - record: sli_aggregations:sidekiq_enqueued_jobs_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-b",env="gprd",type=~"web"}[5m] offset 30s)
+        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-b",env="gprd",type=~"web"}[5m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - enqueued_jobs-ops - 5m burn-rate - emitted by
     web - gprd-us-east1-c'
@@ -238,7 +238,7 @@ groups:
   - record: sli_aggregations:sidekiq_enqueued_jobs_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-c",env="gprd",type=~"web"}[5m] offset 30s)
+        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-c",env="gprd",type=~"web"}[5m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - enqueued_jobs-ops - 5m burn-rate - emitted by
     web - gprd-us-east1-d'
@@ -247,7 +247,7 @@ groups:
   - record: sli_aggregations:sidekiq_enqueued_jobs_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-d",env="gprd",type=~"web"}[5m] offset 30s)
+        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-d",env="gprd",type=~"web"}[5m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - enqueued_jobs-ops - 5m burn-rate - emitted by
     websockets - gprd-gitlab-gke'
@@ -256,7 +256,7 @@ groups:
   - record: sli_aggregations:sidekiq_enqueued_jobs_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(sidekiq_enqueued_jobs_total{cluster="gprd-gitlab-gke",env="gprd",type=~"websockets"}[5m] offset 30s)
+        rate(sidekiq_enqueued_jobs_total{cluster="gprd-gitlab-gke",env="gprd",type=~"websockets"}[5m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - enqueued_jobs-ops - 5m burn-rate - emitted by
     websockets - gprd-us-east1-b'
@@ -265,7 +265,7 @@ groups:
   - record: sli_aggregations:sidekiq_enqueued_jobs_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-b",env="gprd",type=~"websockets"}[5m] offset 30s)
+        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-b",env="gprd",type=~"websockets"}[5m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - enqueued_jobs-ops - 5m burn-rate - emitted by
     websockets - gprd-us-east1-c'
@@ -274,7 +274,7 @@ groups:
   - record: sli_aggregations:sidekiq_enqueued_jobs_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-c",env="gprd",type=~"websockets"}[5m] offset 30s)
+        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-c",env="gprd",type=~"websockets"}[5m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - enqueued_jobs-ops - 5m burn-rate - emitted by
     websockets - gprd-us-east1-d'
@@ -283,7 +283,7 @@ groups:
   - record: sli_aggregations:sidekiq_enqueued_jobs_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-d",env="gprd",type=~"websockets"}[5m] offset 30s)
+        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-d",env="gprd",type=~"websockets"}[5m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - llm_completion-apdex - 5m burn-rate - emitted
     by ops-gitlab-net - gprd-gitlab-gke'
@@ -292,12 +292,12 @@ groups:
   - record: sli_aggregations:gitlab_sli_llm_completion_apdex_success_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,service_class,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_llm_completion_apdex_success_total{cluster="gprd-gitlab-gke",env="gprd",type=~"ops-gitlab-net"}[5m] offset 30s)
+        rate(gitlab_sli_llm_completion_apdex_success_total{cluster="gprd-gitlab-gke",env="gprd",type=~"ops-gitlab-net"}[5m] offset 1m)
       )
   - record: sli_aggregations:gitlab_sli_llm_completion_apdex_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,service_class,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_llm_completion_apdex_total{cluster="gprd-gitlab-gke",env="gprd",type=~"ops-gitlab-net"}[5m] offset 30s)
+        rate(gitlab_sli_llm_completion_apdex_total{cluster="gprd-gitlab-gke",env="gprd",type=~"ops-gitlab-net"}[5m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - llm_completion-apdex - 5m burn-rate - emitted
     by ops-gitlab-net - gprd-us-east1-b'
@@ -306,12 +306,12 @@ groups:
   - record: sli_aggregations:gitlab_sli_llm_completion_apdex_success_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,service_class,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_llm_completion_apdex_success_total{cluster="gprd-us-east1-b",env="gprd",type=~"ops-gitlab-net"}[5m] offset 30s)
+        rate(gitlab_sli_llm_completion_apdex_success_total{cluster="gprd-us-east1-b",env="gprd",type=~"ops-gitlab-net"}[5m] offset 1m)
       )
   - record: sli_aggregations:gitlab_sli_llm_completion_apdex_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,service_class,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_llm_completion_apdex_total{cluster="gprd-us-east1-b",env="gprd",type=~"ops-gitlab-net"}[5m] offset 30s)
+        rate(gitlab_sli_llm_completion_apdex_total{cluster="gprd-us-east1-b",env="gprd",type=~"ops-gitlab-net"}[5m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - llm_completion-apdex - 5m burn-rate - emitted
     by ops-gitlab-net - gprd-us-east1-c'
@@ -320,12 +320,12 @@ groups:
   - record: sli_aggregations:gitlab_sli_llm_completion_apdex_success_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,service_class,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_llm_completion_apdex_success_total{cluster="gprd-us-east1-c",env="gprd",type=~"ops-gitlab-net"}[5m] offset 30s)
+        rate(gitlab_sli_llm_completion_apdex_success_total{cluster="gprd-us-east1-c",env="gprd",type=~"ops-gitlab-net"}[5m] offset 1m)
       )
   - record: sli_aggregations:gitlab_sli_llm_completion_apdex_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,service_class,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_llm_completion_apdex_total{cluster="gprd-us-east1-c",env="gprd",type=~"ops-gitlab-net"}[5m] offset 30s)
+        rate(gitlab_sli_llm_completion_apdex_total{cluster="gprd-us-east1-c",env="gprd",type=~"ops-gitlab-net"}[5m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - llm_completion-apdex - 5m burn-rate - emitted
     by ops-gitlab-net - gprd-us-east1-d'
@@ -334,12 +334,12 @@ groups:
   - record: sli_aggregations:gitlab_sli_llm_completion_apdex_success_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,service_class,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_llm_completion_apdex_success_total{cluster="gprd-us-east1-d",env="gprd",type=~"ops-gitlab-net"}[5m] offset 30s)
+        rate(gitlab_sli_llm_completion_apdex_success_total{cluster="gprd-us-east1-d",env="gprd",type=~"ops-gitlab-net"}[5m] offset 1m)
       )
   - record: sli_aggregations:gitlab_sli_llm_completion_apdex_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,service_class,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_llm_completion_apdex_total{cluster="gprd-us-east1-d",env="gprd",type=~"ops-gitlab-net"}[5m] offset 30s)
+        rate(gitlab_sli_llm_completion_apdex_total{cluster="gprd-us-east1-d",env="gprd",type=~"ops-gitlab-net"}[5m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - llm_completion-apdex - 5m burn-rate - gprd-gitlab-gke'
   interval: 1m
@@ -347,12 +347,12 @@ groups:
   - record: sli_aggregations:gitlab_sli_llm_completion_apdex_success_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,service_class,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_llm_completion_apdex_success_total{cluster="gprd-gitlab-gke",env="gprd",type=~"sidekiq"}[5m] offset 30s)
+        rate(gitlab_sli_llm_completion_apdex_success_total{cluster="gprd-gitlab-gke",env="gprd",type=~"sidekiq"}[5m] offset 1m)
       )
   - record: sli_aggregations:gitlab_sli_llm_completion_apdex_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,service_class,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_llm_completion_apdex_total{cluster="gprd-gitlab-gke",env="gprd",type=~"sidekiq"}[5m] offset 30s)
+        rate(gitlab_sli_llm_completion_apdex_total{cluster="gprd-gitlab-gke",env="gprd",type=~"sidekiq"}[5m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - llm_completion-apdex - 5m burn-rate - gprd-us-east1-b'
   interval: 1m
@@ -360,12 +360,12 @@ groups:
   - record: sli_aggregations:gitlab_sli_llm_completion_apdex_success_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,service_class,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_llm_completion_apdex_success_total{cluster="gprd-us-east1-b",env="gprd",type=~"sidekiq"}[5m] offset 30s)
+        rate(gitlab_sli_llm_completion_apdex_success_total{cluster="gprd-us-east1-b",env="gprd",type=~"sidekiq"}[5m] offset 1m)
       )
   - record: sli_aggregations:gitlab_sli_llm_completion_apdex_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,service_class,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_llm_completion_apdex_total{cluster="gprd-us-east1-b",env="gprd",type=~"sidekiq"}[5m] offset 30s)
+        rate(gitlab_sli_llm_completion_apdex_total{cluster="gprd-us-east1-b",env="gprd",type=~"sidekiq"}[5m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - llm_completion-apdex - 5m burn-rate - gprd-us-east1-c'
   interval: 1m
@@ -373,12 +373,12 @@ groups:
   - record: sli_aggregations:gitlab_sli_llm_completion_apdex_success_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,service_class,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_llm_completion_apdex_success_total{cluster="gprd-us-east1-c",env="gprd",type=~"sidekiq"}[5m] offset 30s)
+        rate(gitlab_sli_llm_completion_apdex_success_total{cluster="gprd-us-east1-c",env="gprd",type=~"sidekiq"}[5m] offset 1m)
       )
   - record: sli_aggregations:gitlab_sli_llm_completion_apdex_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,service_class,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_llm_completion_apdex_total{cluster="gprd-us-east1-c",env="gprd",type=~"sidekiq"}[5m] offset 30s)
+        rate(gitlab_sli_llm_completion_apdex_total{cluster="gprd-us-east1-c",env="gprd",type=~"sidekiq"}[5m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - llm_completion-apdex - 5m burn-rate - gprd-us-east1-d'
   interval: 1m
@@ -386,12 +386,12 @@ groups:
   - record: sli_aggregations:gitlab_sli_llm_completion_apdex_success_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,service_class,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_llm_completion_apdex_success_total{cluster="gprd-us-east1-d",env="gprd",type=~"sidekiq"}[5m] offset 30s)
+        rate(gitlab_sli_llm_completion_apdex_success_total{cluster="gprd-us-east1-d",env="gprd",type=~"sidekiq"}[5m] offset 1m)
       )
   - record: sli_aggregations:gitlab_sli_llm_completion_apdex_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,service_class,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_llm_completion_apdex_total{cluster="gprd-us-east1-d",env="gprd",type=~"sidekiq"}[5m] offset 30s)
+        rate(gitlab_sli_llm_completion_apdex_total{cluster="gprd-us-east1-d",env="gprd",type=~"sidekiq"}[5m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - llm_completion-ops - 5m burn-rate - emitted by
     ops-gitlab-net - gprd-gitlab-gke'
@@ -400,12 +400,12 @@ groups:
   - record: sli_aggregations:gitlab_sli_llm_completion_error_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,service_class,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_llm_completion_error_total{cluster="gprd-gitlab-gke",env="gprd",type=~"ops-gitlab-net"}[5m] offset 30s)
+        rate(gitlab_sli_llm_completion_error_total{cluster="gprd-gitlab-gke",env="gprd",type=~"ops-gitlab-net"}[5m] offset 1m)
       )
   - record: sli_aggregations:gitlab_sli_llm_completion_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,service_class,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_llm_completion_total{cluster="gprd-gitlab-gke",env="gprd",type=~"ops-gitlab-net"}[5m] offset 30s)
+        rate(gitlab_sli_llm_completion_total{cluster="gprd-gitlab-gke",env="gprd",type=~"ops-gitlab-net"}[5m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - llm_completion-ops - 5m burn-rate - emitted by
     ops-gitlab-net - gprd-us-east1-b'
@@ -414,12 +414,12 @@ groups:
   - record: sli_aggregations:gitlab_sli_llm_completion_error_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,service_class,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_llm_completion_error_total{cluster="gprd-us-east1-b",env="gprd",type=~"ops-gitlab-net"}[5m] offset 30s)
+        rate(gitlab_sli_llm_completion_error_total{cluster="gprd-us-east1-b",env="gprd",type=~"ops-gitlab-net"}[5m] offset 1m)
       )
   - record: sli_aggregations:gitlab_sli_llm_completion_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,service_class,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_llm_completion_total{cluster="gprd-us-east1-b",env="gprd",type=~"ops-gitlab-net"}[5m] offset 30s)
+        rate(gitlab_sli_llm_completion_total{cluster="gprd-us-east1-b",env="gprd",type=~"ops-gitlab-net"}[5m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - llm_completion-ops - 5m burn-rate - emitted by
     ops-gitlab-net - gprd-us-east1-c'
@@ -428,12 +428,12 @@ groups:
   - record: sli_aggregations:gitlab_sli_llm_completion_error_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,service_class,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_llm_completion_error_total{cluster="gprd-us-east1-c",env="gprd",type=~"ops-gitlab-net"}[5m] offset 30s)
+        rate(gitlab_sli_llm_completion_error_total{cluster="gprd-us-east1-c",env="gprd",type=~"ops-gitlab-net"}[5m] offset 1m)
       )
   - record: sli_aggregations:gitlab_sli_llm_completion_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,service_class,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_llm_completion_total{cluster="gprd-us-east1-c",env="gprd",type=~"ops-gitlab-net"}[5m] offset 30s)
+        rate(gitlab_sli_llm_completion_total{cluster="gprd-us-east1-c",env="gprd",type=~"ops-gitlab-net"}[5m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - llm_completion-ops - 5m burn-rate - emitted by
     ops-gitlab-net - gprd-us-east1-d'
@@ -442,12 +442,12 @@ groups:
   - record: sli_aggregations:gitlab_sli_llm_completion_error_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,service_class,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_llm_completion_error_total{cluster="gprd-us-east1-d",env="gprd",type=~"ops-gitlab-net"}[5m] offset 30s)
+        rate(gitlab_sli_llm_completion_error_total{cluster="gprd-us-east1-d",env="gprd",type=~"ops-gitlab-net"}[5m] offset 1m)
       )
   - record: sli_aggregations:gitlab_sli_llm_completion_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,service_class,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_llm_completion_total{cluster="gprd-us-east1-d",env="gprd",type=~"ops-gitlab-net"}[5m] offset 30s)
+        rate(gitlab_sli_llm_completion_total{cluster="gprd-us-east1-d",env="gprd",type=~"ops-gitlab-net"}[5m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - llm_completion-ops - 5m burn-rate - gprd-gitlab-gke'
   interval: 1m
@@ -455,12 +455,12 @@ groups:
   - record: sli_aggregations:gitlab_sli_llm_completion_error_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,service_class,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_llm_completion_error_total{cluster="gprd-gitlab-gke",env="gprd",type=~"sidekiq"}[5m] offset 30s)
+        rate(gitlab_sli_llm_completion_error_total{cluster="gprd-gitlab-gke",env="gprd",type=~"sidekiq"}[5m] offset 1m)
       )
   - record: sli_aggregations:gitlab_sli_llm_completion_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,service_class,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_llm_completion_total{cluster="gprd-gitlab-gke",env="gprd",type=~"sidekiq"}[5m] offset 30s)
+        rate(gitlab_sli_llm_completion_total{cluster="gprd-gitlab-gke",env="gprd",type=~"sidekiq"}[5m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - llm_completion-ops - 5m burn-rate - gprd-us-east1-b'
   interval: 1m
@@ -468,12 +468,12 @@ groups:
   - record: sli_aggregations:gitlab_sli_llm_completion_error_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,service_class,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_llm_completion_error_total{cluster="gprd-us-east1-b",env="gprd",type=~"sidekiq"}[5m] offset 30s)
+        rate(gitlab_sli_llm_completion_error_total{cluster="gprd-us-east1-b",env="gprd",type=~"sidekiq"}[5m] offset 1m)
       )
   - record: sli_aggregations:gitlab_sli_llm_completion_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,service_class,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_llm_completion_total{cluster="gprd-us-east1-b",env="gprd",type=~"sidekiq"}[5m] offset 30s)
+        rate(gitlab_sli_llm_completion_total{cluster="gprd-us-east1-b",env="gprd",type=~"sidekiq"}[5m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - llm_completion-ops - 5m burn-rate - gprd-us-east1-c'
   interval: 1m
@@ -481,12 +481,12 @@ groups:
   - record: sli_aggregations:gitlab_sli_llm_completion_error_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,service_class,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_llm_completion_error_total{cluster="gprd-us-east1-c",env="gprd",type=~"sidekiq"}[5m] offset 30s)
+        rate(gitlab_sli_llm_completion_error_total{cluster="gprd-us-east1-c",env="gprd",type=~"sidekiq"}[5m] offset 1m)
       )
   - record: sli_aggregations:gitlab_sli_llm_completion_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,service_class,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_llm_completion_total{cluster="gprd-us-east1-c",env="gprd",type=~"sidekiq"}[5m] offset 30s)
+        rate(gitlab_sli_llm_completion_total{cluster="gprd-us-east1-c",env="gprd",type=~"sidekiq"}[5m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - llm_completion-ops - 5m burn-rate - gprd-us-east1-d'
   interval: 1m
@@ -494,12 +494,12 @@ groups:
   - record: sli_aggregations:gitlab_sli_llm_completion_error_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,service_class,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_llm_completion_error_total{cluster="gprd-us-east1-d",env="gprd",type=~"sidekiq"}[5m] offset 30s)
+        rate(gitlab_sli_llm_completion_error_total{cluster="gprd-us-east1-d",env="gprd",type=~"sidekiq"}[5m] offset 1m)
       )
   - record: sli_aggregations:gitlab_sli_llm_completion_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,service_class,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_llm_completion_total{cluster="gprd-us-east1-d",env="gprd",type=~"sidekiq"}[5m] offset 30s)
+        rate(gitlab_sli_llm_completion_total{cluster="gprd-us-east1-d",env="gprd",type=~"sidekiq"}[5m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - sidekiq_execution-apdex - 5m burn-rate - gprd-gitlab-gke'
   interval: 1m
@@ -507,12 +507,12 @@ groups:
   - record: sli_aggregations:gitlab_sli_sidekiq_execution_apdex_success_total:rate_5m
     expr: |
       sum by (component,env,environment,external_dependencies,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(gitlab_sli_sidekiq_execution_apdex_success_total{cluster="gprd-gitlab-gke",env="gprd",type=~"sidekiq"}[5m] offset 30s)
+        rate(gitlab_sli_sidekiq_execution_apdex_success_total{cluster="gprd-gitlab-gke",env="gprd",type=~"sidekiq"}[5m] offset 1m)
       )
   - record: sli_aggregations:gitlab_sli_sidekiq_execution_apdex_total:rate_5m
     expr: |
       sum by (component,env,environment,external_dependencies,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(gitlab_sli_sidekiq_execution_apdex_total{cluster="gprd-gitlab-gke",env="gprd",type=~"sidekiq"}[5m] offset 30s)
+        rate(gitlab_sli_sidekiq_execution_apdex_total{cluster="gprd-gitlab-gke",env="gprd",type=~"sidekiq"}[5m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - sidekiq_execution-apdex - 5m burn-rate - gprd-us-east1-b'
   interval: 1m
@@ -520,12 +520,12 @@ groups:
   - record: sli_aggregations:gitlab_sli_sidekiq_execution_apdex_success_total:rate_5m
     expr: |
       sum by (component,env,environment,external_dependencies,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(gitlab_sli_sidekiq_execution_apdex_success_total{cluster="gprd-us-east1-b",env="gprd",type=~"sidekiq"}[5m] offset 30s)
+        rate(gitlab_sli_sidekiq_execution_apdex_success_total{cluster="gprd-us-east1-b",env="gprd",type=~"sidekiq"}[5m] offset 1m)
       )
   - record: sli_aggregations:gitlab_sli_sidekiq_execution_apdex_total:rate_5m
     expr: |
       sum by (component,env,environment,external_dependencies,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(gitlab_sli_sidekiq_execution_apdex_total{cluster="gprd-us-east1-b",env="gprd",type=~"sidekiq"}[5m] offset 30s)
+        rate(gitlab_sli_sidekiq_execution_apdex_total{cluster="gprd-us-east1-b",env="gprd",type=~"sidekiq"}[5m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - sidekiq_execution-apdex - 5m burn-rate - gprd-us-east1-c'
   interval: 1m
@@ -533,12 +533,12 @@ groups:
   - record: sli_aggregations:gitlab_sli_sidekiq_execution_apdex_success_total:rate_5m
     expr: |
       sum by (component,env,environment,external_dependencies,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(gitlab_sli_sidekiq_execution_apdex_success_total{cluster="gprd-us-east1-c",env="gprd",type=~"sidekiq"}[5m] offset 30s)
+        rate(gitlab_sli_sidekiq_execution_apdex_success_total{cluster="gprd-us-east1-c",env="gprd",type=~"sidekiq"}[5m] offset 1m)
       )
   - record: sli_aggregations:gitlab_sli_sidekiq_execution_apdex_total:rate_5m
     expr: |
       sum by (component,env,environment,external_dependencies,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(gitlab_sli_sidekiq_execution_apdex_total{cluster="gprd-us-east1-c",env="gprd",type=~"sidekiq"}[5m] offset 30s)
+        rate(gitlab_sli_sidekiq_execution_apdex_total{cluster="gprd-us-east1-c",env="gprd",type=~"sidekiq"}[5m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - sidekiq_execution-apdex - 5m burn-rate - gprd-us-east1-d'
   interval: 1m
@@ -546,12 +546,12 @@ groups:
   - record: sli_aggregations:gitlab_sli_sidekiq_execution_apdex_success_total:rate_5m
     expr: |
       sum by (component,env,environment,external_dependencies,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(gitlab_sli_sidekiq_execution_apdex_success_total{cluster="gprd-us-east1-d",env="gprd",type=~"sidekiq"}[5m] offset 30s)
+        rate(gitlab_sli_sidekiq_execution_apdex_success_total{cluster="gprd-us-east1-d",env="gprd",type=~"sidekiq"}[5m] offset 1m)
       )
   - record: sli_aggregations:gitlab_sli_sidekiq_execution_apdex_total:rate_5m
     expr: |
       sum by (component,env,environment,external_dependencies,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(gitlab_sli_sidekiq_execution_apdex_total{cluster="gprd-us-east1-d",env="gprd",type=~"sidekiq"}[5m] offset 30s)
+        rate(gitlab_sli_sidekiq_execution_apdex_total{cluster="gprd-us-east1-d",env="gprd",type=~"sidekiq"}[5m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - sidekiq_execution-ops - 5m burn-rate - gprd-gitlab-gke'
   interval: 1m
@@ -559,12 +559,12 @@ groups:
   - record: sli_aggregations:gitlab_sli_sidekiq_execution_error_total:rate_5m
     expr: |
       sum by (component,env,environment,external_dependencies,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(gitlab_sli_sidekiq_execution_error_total{cluster="gprd-gitlab-gke",env="gprd",type=~"sidekiq"}[5m] offset 30s)
+        rate(gitlab_sli_sidekiq_execution_error_total{cluster="gprd-gitlab-gke",env="gprd",type=~"sidekiq"}[5m] offset 1m)
       )
   - record: sli_aggregations:gitlab_sli_sidekiq_execution_total:rate_5m
     expr: |
       sum by (component,env,environment,external_dependencies,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(gitlab_sli_sidekiq_execution_total{cluster="gprd-gitlab-gke",env="gprd",type=~"sidekiq"}[5m] offset 30s)
+        rate(gitlab_sli_sidekiq_execution_total{cluster="gprd-gitlab-gke",env="gprd",type=~"sidekiq"}[5m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - sidekiq_execution-ops - 5m burn-rate - gprd-us-east1-b'
   interval: 1m
@@ -572,12 +572,12 @@ groups:
   - record: sli_aggregations:gitlab_sli_sidekiq_execution_error_total:rate_5m
     expr: |
       sum by (component,env,environment,external_dependencies,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(gitlab_sli_sidekiq_execution_error_total{cluster="gprd-us-east1-b",env="gprd",type=~"sidekiq"}[5m] offset 30s)
+        rate(gitlab_sli_sidekiq_execution_error_total{cluster="gprd-us-east1-b",env="gprd",type=~"sidekiq"}[5m] offset 1m)
       )
   - record: sli_aggregations:gitlab_sli_sidekiq_execution_total:rate_5m
     expr: |
       sum by (component,env,environment,external_dependencies,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(gitlab_sli_sidekiq_execution_total{cluster="gprd-us-east1-b",env="gprd",type=~"sidekiq"}[5m] offset 30s)
+        rate(gitlab_sli_sidekiq_execution_total{cluster="gprd-us-east1-b",env="gprd",type=~"sidekiq"}[5m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - sidekiq_execution-ops - 5m burn-rate - gprd-us-east1-c'
   interval: 1m
@@ -585,12 +585,12 @@ groups:
   - record: sli_aggregations:gitlab_sli_sidekiq_execution_error_total:rate_5m
     expr: |
       sum by (component,env,environment,external_dependencies,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(gitlab_sli_sidekiq_execution_error_total{cluster="gprd-us-east1-c",env="gprd",type=~"sidekiq"}[5m] offset 30s)
+        rate(gitlab_sli_sidekiq_execution_error_total{cluster="gprd-us-east1-c",env="gprd",type=~"sidekiq"}[5m] offset 1m)
       )
   - record: sli_aggregations:gitlab_sli_sidekiq_execution_total:rate_5m
     expr: |
       sum by (component,env,environment,external_dependencies,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(gitlab_sli_sidekiq_execution_total{cluster="gprd-us-east1-c",env="gprd",type=~"sidekiq"}[5m] offset 30s)
+        rate(gitlab_sli_sidekiq_execution_total{cluster="gprd-us-east1-c",env="gprd",type=~"sidekiq"}[5m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - sidekiq_execution-ops - 5m burn-rate - gprd-us-east1-d'
   interval: 1m
@@ -598,12 +598,12 @@ groups:
   - record: sli_aggregations:gitlab_sli_sidekiq_execution_error_total:rate_5m
     expr: |
       sum by (component,env,environment,external_dependencies,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(gitlab_sli_sidekiq_execution_error_total{cluster="gprd-us-east1-d",env="gprd",type=~"sidekiq"}[5m] offset 30s)
+        rate(gitlab_sli_sidekiq_execution_error_total{cluster="gprd-us-east1-d",env="gprd",type=~"sidekiq"}[5m] offset 1m)
       )
   - record: sli_aggregations:gitlab_sli_sidekiq_execution_total:rate_5m
     expr: |
       sum by (component,env,environment,external_dependencies,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(gitlab_sli_sidekiq_execution_total{cluster="gprd-us-east1-d",env="gprd",type=~"sidekiq"}[5m] offset 30s)
+        rate(gitlab_sli_sidekiq_execution_total{cluster="gprd-us-east1-d",env="gprd",type=~"sidekiq"}[5m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - sidekiq_queueing-apdex - 5m burn-rate - gprd-gitlab-gke'
   interval: 1m
@@ -611,7 +611,7 @@ groups:
   - record: sli_aggregations:gitlab_sli_sidekiq_queueing_apdex_success_total:rate_5m
     expr: |
       sum by (component,env,environment,external_dependencies,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(gitlab_sli_sidekiq_queueing_apdex_success_total{cluster="gprd-gitlab-gke",env="gprd",type=~"sidekiq"}[5m] offset 30s)
+        rate(gitlab_sli_sidekiq_queueing_apdex_success_total{cluster="gprd-gitlab-gke",env="gprd",type=~"sidekiq"}[5m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - sidekiq_queueing-apdex - 5m burn-rate - gprd-us-east1-b'
   interval: 1m
@@ -619,7 +619,7 @@ groups:
   - record: sli_aggregations:gitlab_sli_sidekiq_queueing_apdex_success_total:rate_5m
     expr: |
       sum by (component,env,environment,external_dependencies,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(gitlab_sli_sidekiq_queueing_apdex_success_total{cluster="gprd-us-east1-b",env="gprd",type=~"sidekiq"}[5m] offset 30s)
+        rate(gitlab_sli_sidekiq_queueing_apdex_success_total{cluster="gprd-us-east1-b",env="gprd",type=~"sidekiq"}[5m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - sidekiq_queueing-apdex - 5m burn-rate - gprd-us-east1-c'
   interval: 1m
@@ -627,7 +627,7 @@ groups:
   - record: sli_aggregations:gitlab_sli_sidekiq_queueing_apdex_success_total:rate_5m
     expr: |
       sum by (component,env,environment,external_dependencies,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(gitlab_sli_sidekiq_queueing_apdex_success_total{cluster="gprd-us-east1-c",env="gprd",type=~"sidekiq"}[5m] offset 30s)
+        rate(gitlab_sli_sidekiq_queueing_apdex_success_total{cluster="gprd-us-east1-c",env="gprd",type=~"sidekiq"}[5m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - sidekiq_queueing-apdex - 5m burn-rate - gprd-us-east1-d'
   interval: 1m
@@ -635,7 +635,7 @@ groups:
   - record: sli_aggregations:gitlab_sli_sidekiq_queueing_apdex_success_total:rate_5m
     expr: |
       sum by (component,env,environment,external_dependencies,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(gitlab_sli_sidekiq_queueing_apdex_success_total{cluster="gprd-us-east1-d",env="gprd",type=~"sidekiq"}[5m] offset 30s)
+        rate(gitlab_sli_sidekiq_queueing_apdex_success_total{cluster="gprd-us-east1-d",env="gprd",type=~"sidekiq"}[5m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - sidekiq_queueing-ops - 5m burn-rate - gprd-gitlab-gke'
   interval: 1m
@@ -643,7 +643,7 @@ groups:
   - record: sli_aggregations:gitlab_sli_sidekiq_queueing_apdex_total:rate_5m
     expr: |
       sum by (component,env,environment,external_dependencies,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(gitlab_sli_sidekiq_queueing_apdex_total{cluster="gprd-gitlab-gke",env="gprd",type=~"sidekiq"}[5m] offset 30s)
+        rate(gitlab_sli_sidekiq_queueing_apdex_total{cluster="gprd-gitlab-gke",env="gprd",type=~"sidekiq"}[5m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - sidekiq_queueing-ops - 5m burn-rate - gprd-us-east1-b'
   interval: 1m
@@ -651,7 +651,7 @@ groups:
   - record: sli_aggregations:gitlab_sli_sidekiq_queueing_apdex_total:rate_5m
     expr: |
       sum by (component,env,environment,external_dependencies,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(gitlab_sli_sidekiq_queueing_apdex_total{cluster="gprd-us-east1-b",env="gprd",type=~"sidekiq"}[5m] offset 30s)
+        rate(gitlab_sli_sidekiq_queueing_apdex_total{cluster="gprd-us-east1-b",env="gprd",type=~"sidekiq"}[5m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - sidekiq_queueing-ops - 5m burn-rate - gprd-us-east1-c'
   interval: 1m
@@ -659,7 +659,7 @@ groups:
   - record: sli_aggregations:gitlab_sli_sidekiq_queueing_apdex_total:rate_5m
     expr: |
       sum by (component,env,environment,external_dependencies,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(gitlab_sli_sidekiq_queueing_apdex_total{cluster="gprd-us-east1-c",env="gprd",type=~"sidekiq"}[5m] offset 30s)
+        rate(gitlab_sli_sidekiq_queueing_apdex_total{cluster="gprd-us-east1-c",env="gprd",type=~"sidekiq"}[5m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - sidekiq_queueing-ops - 5m burn-rate - gprd-us-east1-d'
   interval: 1m
@@ -667,7 +667,7 @@ groups:
   - record: sli_aggregations:gitlab_sli_sidekiq_queueing_apdex_total:rate_5m
     expr: |
       sum by (component,env,environment,external_dependencies,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(gitlab_sli_sidekiq_queueing_apdex_total{cluster="gprd-us-east1-d",env="gprd",type=~"sidekiq"}[5m] offset 30s)
+        rate(gitlab_sli_sidekiq_queueing_apdex_total{cluster="gprd-us-east1-d",env="gprd",type=~"sidekiq"}[5m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - enqueued_jobs-ops - 30m burn-rate - emitted by
     ai-assisted - gprd-gitlab-gke'
@@ -676,7 +676,7 @@ groups:
   - record: sli_aggregations:sidekiq_enqueued_jobs_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(sidekiq_enqueued_jobs_total{cluster="gprd-gitlab-gke",env="gprd",type=~"ai-assisted"}[30m] offset 30s)
+        rate(sidekiq_enqueued_jobs_total{cluster="gprd-gitlab-gke",env="gprd",type=~"ai-assisted"}[30m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - enqueued_jobs-ops - 30m burn-rate - emitted by
     ai-assisted - gprd-us-east1-b'
@@ -685,7 +685,7 @@ groups:
   - record: sli_aggregations:sidekiq_enqueued_jobs_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-b",env="gprd",type=~"ai-assisted"}[30m] offset 30s)
+        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-b",env="gprd",type=~"ai-assisted"}[30m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - enqueued_jobs-ops - 30m burn-rate - emitted by
     ai-assisted - gprd-us-east1-c'
@@ -694,7 +694,7 @@ groups:
   - record: sli_aggregations:sidekiq_enqueued_jobs_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-c",env="gprd",type=~"ai-assisted"}[30m] offset 30s)
+        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-c",env="gprd",type=~"ai-assisted"}[30m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - enqueued_jobs-ops - 30m burn-rate - emitted by
     ai-assisted - gprd-us-east1-d'
@@ -703,7 +703,7 @@ groups:
   - record: sli_aggregations:sidekiq_enqueued_jobs_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-d",env="gprd",type=~"ai-assisted"}[30m] offset 30s)
+        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-d",env="gprd",type=~"ai-assisted"}[30m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - enqueued_jobs-ops - 30m burn-rate - emitted by
     api - gprd-gitlab-gke'
@@ -712,7 +712,7 @@ groups:
   - record: sli_aggregations:sidekiq_enqueued_jobs_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(sidekiq_enqueued_jobs_total{cluster="gprd-gitlab-gke",env="gprd",type=~"api"}[30m] offset 30s)
+        rate(sidekiq_enqueued_jobs_total{cluster="gprd-gitlab-gke",env="gprd",type=~"api"}[30m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - enqueued_jobs-ops - 30m burn-rate - emitted by
     api - gprd-us-east1-b'
@@ -721,7 +721,7 @@ groups:
   - record: sli_aggregations:sidekiq_enqueued_jobs_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-b",env="gprd",type=~"api"}[30m] offset 30s)
+        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-b",env="gprd",type=~"api"}[30m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - enqueued_jobs-ops - 30m burn-rate - emitted by
     api - gprd-us-east1-c'
@@ -730,7 +730,7 @@ groups:
   - record: sli_aggregations:sidekiq_enqueued_jobs_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-c",env="gprd",type=~"api"}[30m] offset 30s)
+        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-c",env="gprd",type=~"api"}[30m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - enqueued_jobs-ops - 30m burn-rate - emitted by
     api - gprd-us-east1-d'
@@ -739,7 +739,7 @@ groups:
   - record: sli_aggregations:sidekiq_enqueued_jobs_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-d",env="gprd",type=~"api"}[30m] offset 30s)
+        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-d",env="gprd",type=~"api"}[30m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - enqueued_jobs-ops - 30m burn-rate - emitted by
     git - gprd-gitlab-gke'
@@ -748,7 +748,7 @@ groups:
   - record: sli_aggregations:sidekiq_enqueued_jobs_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(sidekiq_enqueued_jobs_total{cluster="gprd-gitlab-gke",env="gprd",type=~"git"}[30m] offset 30s)
+        rate(sidekiq_enqueued_jobs_total{cluster="gprd-gitlab-gke",env="gprd",type=~"git"}[30m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - enqueued_jobs-ops - 30m burn-rate - emitted by
     git - gprd-us-east1-b'
@@ -757,7 +757,7 @@ groups:
   - record: sli_aggregations:sidekiq_enqueued_jobs_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-b",env="gprd",type=~"git"}[30m] offset 30s)
+        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-b",env="gprd",type=~"git"}[30m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - enqueued_jobs-ops - 30m burn-rate - emitted by
     git - gprd-us-east1-c'
@@ -766,7 +766,7 @@ groups:
   - record: sli_aggregations:sidekiq_enqueued_jobs_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-c",env="gprd",type=~"git"}[30m] offset 30s)
+        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-c",env="gprd",type=~"git"}[30m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - enqueued_jobs-ops - 30m burn-rate - emitted by
     git - gprd-us-east1-d'
@@ -775,7 +775,7 @@ groups:
   - record: sli_aggregations:sidekiq_enqueued_jobs_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-d",env="gprd",type=~"git"}[30m] offset 30s)
+        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-d",env="gprd",type=~"git"}[30m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - enqueued_jobs-ops - 30m burn-rate - emitted by
     internal-api - gprd-gitlab-gke'
@@ -784,7 +784,7 @@ groups:
   - record: sli_aggregations:sidekiq_enqueued_jobs_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(sidekiq_enqueued_jobs_total{cluster="gprd-gitlab-gke",env="gprd",type=~"internal-api"}[30m] offset 30s)
+        rate(sidekiq_enqueued_jobs_total{cluster="gprd-gitlab-gke",env="gprd",type=~"internal-api"}[30m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - enqueued_jobs-ops - 30m burn-rate - emitted by
     internal-api - gprd-us-east1-b'
@@ -793,7 +793,7 @@ groups:
   - record: sli_aggregations:sidekiq_enqueued_jobs_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-b",env="gprd",type=~"internal-api"}[30m] offset 30s)
+        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-b",env="gprd",type=~"internal-api"}[30m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - enqueued_jobs-ops - 30m burn-rate - emitted by
     internal-api - gprd-us-east1-c'
@@ -802,7 +802,7 @@ groups:
   - record: sli_aggregations:sidekiq_enqueued_jobs_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-c",env="gprd",type=~"internal-api"}[30m] offset 30s)
+        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-c",env="gprd",type=~"internal-api"}[30m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - enqueued_jobs-ops - 30m burn-rate - emitted by
     internal-api - gprd-us-east1-d'
@@ -811,7 +811,7 @@ groups:
   - record: sli_aggregations:sidekiq_enqueued_jobs_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-d",env="gprd",type=~"internal-api"}[30m] offset 30s)
+        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-d",env="gprd",type=~"internal-api"}[30m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - enqueued_jobs-ops - 30m burn-rate - emitted by
     ops-gitlab-net - gprd-gitlab-gke'
@@ -820,7 +820,7 @@ groups:
   - record: sli_aggregations:sidekiq_enqueued_jobs_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(sidekiq_enqueued_jobs_total{cluster="gprd-gitlab-gke",env="gprd",type=~"ops-gitlab-net"}[30m] offset 30s)
+        rate(sidekiq_enqueued_jobs_total{cluster="gprd-gitlab-gke",env="gprd",type=~"ops-gitlab-net"}[30m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - enqueued_jobs-ops - 30m burn-rate - emitted by
     ops-gitlab-net - gprd-us-east1-b'
@@ -829,7 +829,7 @@ groups:
   - record: sli_aggregations:sidekiq_enqueued_jobs_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-b",env="gprd",type=~"ops-gitlab-net"}[30m] offset 30s)
+        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-b",env="gprd",type=~"ops-gitlab-net"}[30m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - enqueued_jobs-ops - 30m burn-rate - emitted by
     ops-gitlab-net - gprd-us-east1-c'
@@ -838,7 +838,7 @@ groups:
   - record: sli_aggregations:sidekiq_enqueued_jobs_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-c",env="gprd",type=~"ops-gitlab-net"}[30m] offset 30s)
+        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-c",env="gprd",type=~"ops-gitlab-net"}[30m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - enqueued_jobs-ops - 30m burn-rate - emitted by
     ops-gitlab-net - gprd-us-east1-d'
@@ -847,7 +847,7 @@ groups:
   - record: sli_aggregations:sidekiq_enqueued_jobs_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-d",env="gprd",type=~"ops-gitlab-net"}[30m] offset 30s)
+        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-d",env="gprd",type=~"ops-gitlab-net"}[30m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - enqueued_jobs-ops - 30m burn-rate - gprd-gitlab-gke'
   interval: 2m
@@ -855,7 +855,7 @@ groups:
   - record: sli_aggregations:sidekiq_enqueued_jobs_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(sidekiq_enqueued_jobs_total{cluster="gprd-gitlab-gke",env="gprd",type=~"sidekiq"}[30m] offset 30s)
+        rate(sidekiq_enqueued_jobs_total{cluster="gprd-gitlab-gke",env="gprd",type=~"sidekiq"}[30m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - enqueued_jobs-ops - 30m burn-rate - gprd-us-east1-b'
   interval: 2m
@@ -863,7 +863,7 @@ groups:
   - record: sli_aggregations:sidekiq_enqueued_jobs_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-b",env="gprd",type=~"sidekiq"}[30m] offset 30s)
+        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-b",env="gprd",type=~"sidekiq"}[30m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - enqueued_jobs-ops - 30m burn-rate - gprd-us-east1-c'
   interval: 2m
@@ -871,7 +871,7 @@ groups:
   - record: sli_aggregations:sidekiq_enqueued_jobs_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-c",env="gprd",type=~"sidekiq"}[30m] offset 30s)
+        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-c",env="gprd",type=~"sidekiq"}[30m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - enqueued_jobs-ops - 30m burn-rate - gprd-us-east1-d'
   interval: 2m
@@ -879,7 +879,7 @@ groups:
   - record: sli_aggregations:sidekiq_enqueued_jobs_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-d",env="gprd",type=~"sidekiq"}[30m] offset 30s)
+        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-d",env="gprd",type=~"sidekiq"}[30m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - enqueued_jobs-ops - 30m burn-rate - emitted by
     web - gprd-gitlab-gke'
@@ -888,7 +888,7 @@ groups:
   - record: sli_aggregations:sidekiq_enqueued_jobs_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(sidekiq_enqueued_jobs_total{cluster="gprd-gitlab-gke",env="gprd",type=~"web"}[30m] offset 30s)
+        rate(sidekiq_enqueued_jobs_total{cluster="gprd-gitlab-gke",env="gprd",type=~"web"}[30m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - enqueued_jobs-ops - 30m burn-rate - emitted by
     web - gprd-us-east1-b'
@@ -897,7 +897,7 @@ groups:
   - record: sli_aggregations:sidekiq_enqueued_jobs_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-b",env="gprd",type=~"web"}[30m] offset 30s)
+        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-b",env="gprd",type=~"web"}[30m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - enqueued_jobs-ops - 30m burn-rate - emitted by
     web - gprd-us-east1-c'
@@ -906,7 +906,7 @@ groups:
   - record: sli_aggregations:sidekiq_enqueued_jobs_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-c",env="gprd",type=~"web"}[30m] offset 30s)
+        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-c",env="gprd",type=~"web"}[30m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - enqueued_jobs-ops - 30m burn-rate - emitted by
     web - gprd-us-east1-d'
@@ -915,7 +915,7 @@ groups:
   - record: sli_aggregations:sidekiq_enqueued_jobs_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-d",env="gprd",type=~"web"}[30m] offset 30s)
+        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-d",env="gprd",type=~"web"}[30m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - enqueued_jobs-ops - 30m burn-rate - emitted by
     websockets - gprd-gitlab-gke'
@@ -924,7 +924,7 @@ groups:
   - record: sli_aggregations:sidekiq_enqueued_jobs_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(sidekiq_enqueued_jobs_total{cluster="gprd-gitlab-gke",env="gprd",type=~"websockets"}[30m] offset 30s)
+        rate(sidekiq_enqueued_jobs_total{cluster="gprd-gitlab-gke",env="gprd",type=~"websockets"}[30m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - enqueued_jobs-ops - 30m burn-rate - emitted by
     websockets - gprd-us-east1-b'
@@ -933,7 +933,7 @@ groups:
   - record: sli_aggregations:sidekiq_enqueued_jobs_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-b",env="gprd",type=~"websockets"}[30m] offset 30s)
+        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-b",env="gprd",type=~"websockets"}[30m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - enqueued_jobs-ops - 30m burn-rate - emitted by
     websockets - gprd-us-east1-c'
@@ -942,7 +942,7 @@ groups:
   - record: sli_aggregations:sidekiq_enqueued_jobs_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-c",env="gprd",type=~"websockets"}[30m] offset 30s)
+        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-c",env="gprd",type=~"websockets"}[30m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - enqueued_jobs-ops - 30m burn-rate - emitted by
     websockets - gprd-us-east1-d'
@@ -951,7 +951,7 @@ groups:
   - record: sli_aggregations:sidekiq_enqueued_jobs_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-d",env="gprd",type=~"websockets"}[30m] offset 30s)
+        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-d",env="gprd",type=~"websockets"}[30m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - llm_completion-apdex - 30m burn-rate - emitted
     by ops-gitlab-net - gprd-gitlab-gke'
@@ -960,12 +960,12 @@ groups:
   - record: sli_aggregations:gitlab_sli_llm_completion_apdex_success_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,service_class,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_llm_completion_apdex_success_total{cluster="gprd-gitlab-gke",env="gprd",type=~"ops-gitlab-net"}[30m] offset 30s)
+        rate(gitlab_sli_llm_completion_apdex_success_total{cluster="gprd-gitlab-gke",env="gprd",type=~"ops-gitlab-net"}[30m] offset 1m)
       )
   - record: sli_aggregations:gitlab_sli_llm_completion_apdex_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,service_class,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_llm_completion_apdex_total{cluster="gprd-gitlab-gke",env="gprd",type=~"ops-gitlab-net"}[30m] offset 30s)
+        rate(gitlab_sli_llm_completion_apdex_total{cluster="gprd-gitlab-gke",env="gprd",type=~"ops-gitlab-net"}[30m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - llm_completion-apdex - 30m burn-rate - emitted
     by ops-gitlab-net - gprd-us-east1-b'
@@ -974,12 +974,12 @@ groups:
   - record: sli_aggregations:gitlab_sli_llm_completion_apdex_success_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,service_class,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_llm_completion_apdex_success_total{cluster="gprd-us-east1-b",env="gprd",type=~"ops-gitlab-net"}[30m] offset 30s)
+        rate(gitlab_sli_llm_completion_apdex_success_total{cluster="gprd-us-east1-b",env="gprd",type=~"ops-gitlab-net"}[30m] offset 1m)
       )
   - record: sli_aggregations:gitlab_sli_llm_completion_apdex_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,service_class,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_llm_completion_apdex_total{cluster="gprd-us-east1-b",env="gprd",type=~"ops-gitlab-net"}[30m] offset 30s)
+        rate(gitlab_sli_llm_completion_apdex_total{cluster="gprd-us-east1-b",env="gprd",type=~"ops-gitlab-net"}[30m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - llm_completion-apdex - 30m burn-rate - emitted
     by ops-gitlab-net - gprd-us-east1-c'
@@ -988,12 +988,12 @@ groups:
   - record: sli_aggregations:gitlab_sli_llm_completion_apdex_success_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,service_class,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_llm_completion_apdex_success_total{cluster="gprd-us-east1-c",env="gprd",type=~"ops-gitlab-net"}[30m] offset 30s)
+        rate(gitlab_sli_llm_completion_apdex_success_total{cluster="gprd-us-east1-c",env="gprd",type=~"ops-gitlab-net"}[30m] offset 1m)
       )
   - record: sli_aggregations:gitlab_sli_llm_completion_apdex_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,service_class,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_llm_completion_apdex_total{cluster="gprd-us-east1-c",env="gprd",type=~"ops-gitlab-net"}[30m] offset 30s)
+        rate(gitlab_sli_llm_completion_apdex_total{cluster="gprd-us-east1-c",env="gprd",type=~"ops-gitlab-net"}[30m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - llm_completion-apdex - 30m burn-rate - emitted
     by ops-gitlab-net - gprd-us-east1-d'
@@ -1002,12 +1002,12 @@ groups:
   - record: sli_aggregations:gitlab_sli_llm_completion_apdex_success_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,service_class,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_llm_completion_apdex_success_total{cluster="gprd-us-east1-d",env="gprd",type=~"ops-gitlab-net"}[30m] offset 30s)
+        rate(gitlab_sli_llm_completion_apdex_success_total{cluster="gprd-us-east1-d",env="gprd",type=~"ops-gitlab-net"}[30m] offset 1m)
       )
   - record: sli_aggregations:gitlab_sli_llm_completion_apdex_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,service_class,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_llm_completion_apdex_total{cluster="gprd-us-east1-d",env="gprd",type=~"ops-gitlab-net"}[30m] offset 30s)
+        rate(gitlab_sli_llm_completion_apdex_total{cluster="gprd-us-east1-d",env="gprd",type=~"ops-gitlab-net"}[30m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - llm_completion-apdex - 30m burn-rate - gprd-gitlab-gke'
   interval: 2m
@@ -1015,12 +1015,12 @@ groups:
   - record: sli_aggregations:gitlab_sli_llm_completion_apdex_success_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,service_class,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_llm_completion_apdex_success_total{cluster="gprd-gitlab-gke",env="gprd",type=~"sidekiq"}[30m] offset 30s)
+        rate(gitlab_sli_llm_completion_apdex_success_total{cluster="gprd-gitlab-gke",env="gprd",type=~"sidekiq"}[30m] offset 1m)
       )
   - record: sli_aggregations:gitlab_sli_llm_completion_apdex_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,service_class,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_llm_completion_apdex_total{cluster="gprd-gitlab-gke",env="gprd",type=~"sidekiq"}[30m] offset 30s)
+        rate(gitlab_sli_llm_completion_apdex_total{cluster="gprd-gitlab-gke",env="gprd",type=~"sidekiq"}[30m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - llm_completion-apdex - 30m burn-rate - gprd-us-east1-b'
   interval: 2m
@@ -1028,12 +1028,12 @@ groups:
   - record: sli_aggregations:gitlab_sli_llm_completion_apdex_success_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,service_class,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_llm_completion_apdex_success_total{cluster="gprd-us-east1-b",env="gprd",type=~"sidekiq"}[30m] offset 30s)
+        rate(gitlab_sli_llm_completion_apdex_success_total{cluster="gprd-us-east1-b",env="gprd",type=~"sidekiq"}[30m] offset 1m)
       )
   - record: sli_aggregations:gitlab_sli_llm_completion_apdex_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,service_class,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_llm_completion_apdex_total{cluster="gprd-us-east1-b",env="gprd",type=~"sidekiq"}[30m] offset 30s)
+        rate(gitlab_sli_llm_completion_apdex_total{cluster="gprd-us-east1-b",env="gprd",type=~"sidekiq"}[30m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - llm_completion-apdex - 30m burn-rate - gprd-us-east1-c'
   interval: 2m
@@ -1041,12 +1041,12 @@ groups:
   - record: sli_aggregations:gitlab_sli_llm_completion_apdex_success_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,service_class,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_llm_completion_apdex_success_total{cluster="gprd-us-east1-c",env="gprd",type=~"sidekiq"}[30m] offset 30s)
+        rate(gitlab_sli_llm_completion_apdex_success_total{cluster="gprd-us-east1-c",env="gprd",type=~"sidekiq"}[30m] offset 1m)
       )
   - record: sli_aggregations:gitlab_sli_llm_completion_apdex_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,service_class,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_llm_completion_apdex_total{cluster="gprd-us-east1-c",env="gprd",type=~"sidekiq"}[30m] offset 30s)
+        rate(gitlab_sli_llm_completion_apdex_total{cluster="gprd-us-east1-c",env="gprd",type=~"sidekiq"}[30m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - llm_completion-apdex - 30m burn-rate - gprd-us-east1-d'
   interval: 2m
@@ -1054,12 +1054,12 @@ groups:
   - record: sli_aggregations:gitlab_sli_llm_completion_apdex_success_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,service_class,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_llm_completion_apdex_success_total{cluster="gprd-us-east1-d",env="gprd",type=~"sidekiq"}[30m] offset 30s)
+        rate(gitlab_sli_llm_completion_apdex_success_total{cluster="gprd-us-east1-d",env="gprd",type=~"sidekiq"}[30m] offset 1m)
       )
   - record: sli_aggregations:gitlab_sli_llm_completion_apdex_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,service_class,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_llm_completion_apdex_total{cluster="gprd-us-east1-d",env="gprd",type=~"sidekiq"}[30m] offset 30s)
+        rate(gitlab_sli_llm_completion_apdex_total{cluster="gprd-us-east1-d",env="gprd",type=~"sidekiq"}[30m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - llm_completion-ops - 30m burn-rate - emitted
     by ops-gitlab-net - gprd-gitlab-gke'
@@ -1068,12 +1068,12 @@ groups:
   - record: sli_aggregations:gitlab_sli_llm_completion_error_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,service_class,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_llm_completion_error_total{cluster="gprd-gitlab-gke",env="gprd",type=~"ops-gitlab-net"}[30m] offset 30s)
+        rate(gitlab_sli_llm_completion_error_total{cluster="gprd-gitlab-gke",env="gprd",type=~"ops-gitlab-net"}[30m] offset 1m)
       )
   - record: sli_aggregations:gitlab_sli_llm_completion_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,service_class,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_llm_completion_total{cluster="gprd-gitlab-gke",env="gprd",type=~"ops-gitlab-net"}[30m] offset 30s)
+        rate(gitlab_sli_llm_completion_total{cluster="gprd-gitlab-gke",env="gprd",type=~"ops-gitlab-net"}[30m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - llm_completion-ops - 30m burn-rate - emitted
     by ops-gitlab-net - gprd-us-east1-b'
@@ -1082,12 +1082,12 @@ groups:
   - record: sli_aggregations:gitlab_sli_llm_completion_error_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,service_class,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_llm_completion_error_total{cluster="gprd-us-east1-b",env="gprd",type=~"ops-gitlab-net"}[30m] offset 30s)
+        rate(gitlab_sli_llm_completion_error_total{cluster="gprd-us-east1-b",env="gprd",type=~"ops-gitlab-net"}[30m] offset 1m)
       )
   - record: sli_aggregations:gitlab_sli_llm_completion_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,service_class,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_llm_completion_total{cluster="gprd-us-east1-b",env="gprd",type=~"ops-gitlab-net"}[30m] offset 30s)
+        rate(gitlab_sli_llm_completion_total{cluster="gprd-us-east1-b",env="gprd",type=~"ops-gitlab-net"}[30m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - llm_completion-ops - 30m burn-rate - emitted
     by ops-gitlab-net - gprd-us-east1-c'
@@ -1096,12 +1096,12 @@ groups:
   - record: sli_aggregations:gitlab_sli_llm_completion_error_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,service_class,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_llm_completion_error_total{cluster="gprd-us-east1-c",env="gprd",type=~"ops-gitlab-net"}[30m] offset 30s)
+        rate(gitlab_sli_llm_completion_error_total{cluster="gprd-us-east1-c",env="gprd",type=~"ops-gitlab-net"}[30m] offset 1m)
       )
   - record: sli_aggregations:gitlab_sli_llm_completion_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,service_class,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_llm_completion_total{cluster="gprd-us-east1-c",env="gprd",type=~"ops-gitlab-net"}[30m] offset 30s)
+        rate(gitlab_sli_llm_completion_total{cluster="gprd-us-east1-c",env="gprd",type=~"ops-gitlab-net"}[30m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - llm_completion-ops - 30m burn-rate - emitted
     by ops-gitlab-net - gprd-us-east1-d'
@@ -1110,12 +1110,12 @@ groups:
   - record: sli_aggregations:gitlab_sli_llm_completion_error_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,service_class,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_llm_completion_error_total{cluster="gprd-us-east1-d",env="gprd",type=~"ops-gitlab-net"}[30m] offset 30s)
+        rate(gitlab_sli_llm_completion_error_total{cluster="gprd-us-east1-d",env="gprd",type=~"ops-gitlab-net"}[30m] offset 1m)
       )
   - record: sli_aggregations:gitlab_sli_llm_completion_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,service_class,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_llm_completion_total{cluster="gprd-us-east1-d",env="gprd",type=~"ops-gitlab-net"}[30m] offset 30s)
+        rate(gitlab_sli_llm_completion_total{cluster="gprd-us-east1-d",env="gprd",type=~"ops-gitlab-net"}[30m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - llm_completion-ops - 30m burn-rate - gprd-gitlab-gke'
   interval: 2m
@@ -1123,12 +1123,12 @@ groups:
   - record: sli_aggregations:gitlab_sli_llm_completion_error_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,service_class,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_llm_completion_error_total{cluster="gprd-gitlab-gke",env="gprd",type=~"sidekiq"}[30m] offset 30s)
+        rate(gitlab_sli_llm_completion_error_total{cluster="gprd-gitlab-gke",env="gprd",type=~"sidekiq"}[30m] offset 1m)
       )
   - record: sli_aggregations:gitlab_sli_llm_completion_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,service_class,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_llm_completion_total{cluster="gprd-gitlab-gke",env="gprd",type=~"sidekiq"}[30m] offset 30s)
+        rate(gitlab_sli_llm_completion_total{cluster="gprd-gitlab-gke",env="gprd",type=~"sidekiq"}[30m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - llm_completion-ops - 30m burn-rate - gprd-us-east1-b'
   interval: 2m
@@ -1136,12 +1136,12 @@ groups:
   - record: sli_aggregations:gitlab_sli_llm_completion_error_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,service_class,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_llm_completion_error_total{cluster="gprd-us-east1-b",env="gprd",type=~"sidekiq"}[30m] offset 30s)
+        rate(gitlab_sli_llm_completion_error_total{cluster="gprd-us-east1-b",env="gprd",type=~"sidekiq"}[30m] offset 1m)
       )
   - record: sli_aggregations:gitlab_sli_llm_completion_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,service_class,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_llm_completion_total{cluster="gprd-us-east1-b",env="gprd",type=~"sidekiq"}[30m] offset 30s)
+        rate(gitlab_sli_llm_completion_total{cluster="gprd-us-east1-b",env="gprd",type=~"sidekiq"}[30m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - llm_completion-ops - 30m burn-rate - gprd-us-east1-c'
   interval: 2m
@@ -1149,12 +1149,12 @@ groups:
   - record: sli_aggregations:gitlab_sli_llm_completion_error_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,service_class,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_llm_completion_error_total{cluster="gprd-us-east1-c",env="gprd",type=~"sidekiq"}[30m] offset 30s)
+        rate(gitlab_sli_llm_completion_error_total{cluster="gprd-us-east1-c",env="gprd",type=~"sidekiq"}[30m] offset 1m)
       )
   - record: sli_aggregations:gitlab_sli_llm_completion_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,service_class,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_llm_completion_total{cluster="gprd-us-east1-c",env="gprd",type=~"sidekiq"}[30m] offset 30s)
+        rate(gitlab_sli_llm_completion_total{cluster="gprd-us-east1-c",env="gprd",type=~"sidekiq"}[30m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - llm_completion-ops - 30m burn-rate - gprd-us-east1-d'
   interval: 2m
@@ -1162,12 +1162,12 @@ groups:
   - record: sli_aggregations:gitlab_sli_llm_completion_error_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,service_class,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_llm_completion_error_total{cluster="gprd-us-east1-d",env="gprd",type=~"sidekiq"}[30m] offset 30s)
+        rate(gitlab_sli_llm_completion_error_total{cluster="gprd-us-east1-d",env="gprd",type=~"sidekiq"}[30m] offset 1m)
       )
   - record: sli_aggregations:gitlab_sli_llm_completion_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,service_class,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_llm_completion_total{cluster="gprd-us-east1-d",env="gprd",type=~"sidekiq"}[30m] offset 30s)
+        rate(gitlab_sli_llm_completion_total{cluster="gprd-us-east1-d",env="gprd",type=~"sidekiq"}[30m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - sidekiq_execution-apdex - 30m burn-rate - gprd-gitlab-gke'
   interval: 2m
@@ -1175,12 +1175,12 @@ groups:
   - record: sli_aggregations:gitlab_sli_sidekiq_execution_apdex_success_total:rate_30m
     expr: |
       sum by (component,env,environment,external_dependencies,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(gitlab_sli_sidekiq_execution_apdex_success_total{cluster="gprd-gitlab-gke",env="gprd",type=~"sidekiq"}[30m] offset 30s)
+        rate(gitlab_sli_sidekiq_execution_apdex_success_total{cluster="gprd-gitlab-gke",env="gprd",type=~"sidekiq"}[30m] offset 1m)
       )
   - record: sli_aggregations:gitlab_sli_sidekiq_execution_apdex_total:rate_30m
     expr: |
       sum by (component,env,environment,external_dependencies,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(gitlab_sli_sidekiq_execution_apdex_total{cluster="gprd-gitlab-gke",env="gprd",type=~"sidekiq"}[30m] offset 30s)
+        rate(gitlab_sli_sidekiq_execution_apdex_total{cluster="gprd-gitlab-gke",env="gprd",type=~"sidekiq"}[30m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - sidekiq_execution-apdex - 30m burn-rate - gprd-us-east1-b'
   interval: 2m
@@ -1188,12 +1188,12 @@ groups:
   - record: sli_aggregations:gitlab_sli_sidekiq_execution_apdex_success_total:rate_30m
     expr: |
       sum by (component,env,environment,external_dependencies,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(gitlab_sli_sidekiq_execution_apdex_success_total{cluster="gprd-us-east1-b",env="gprd",type=~"sidekiq"}[30m] offset 30s)
+        rate(gitlab_sli_sidekiq_execution_apdex_success_total{cluster="gprd-us-east1-b",env="gprd",type=~"sidekiq"}[30m] offset 1m)
       )
   - record: sli_aggregations:gitlab_sli_sidekiq_execution_apdex_total:rate_30m
     expr: |
       sum by (component,env,environment,external_dependencies,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(gitlab_sli_sidekiq_execution_apdex_total{cluster="gprd-us-east1-b",env="gprd",type=~"sidekiq"}[30m] offset 30s)
+        rate(gitlab_sli_sidekiq_execution_apdex_total{cluster="gprd-us-east1-b",env="gprd",type=~"sidekiq"}[30m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - sidekiq_execution-apdex - 30m burn-rate - gprd-us-east1-c'
   interval: 2m
@@ -1201,12 +1201,12 @@ groups:
   - record: sli_aggregations:gitlab_sli_sidekiq_execution_apdex_success_total:rate_30m
     expr: |
       sum by (component,env,environment,external_dependencies,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(gitlab_sli_sidekiq_execution_apdex_success_total{cluster="gprd-us-east1-c",env="gprd",type=~"sidekiq"}[30m] offset 30s)
+        rate(gitlab_sli_sidekiq_execution_apdex_success_total{cluster="gprd-us-east1-c",env="gprd",type=~"sidekiq"}[30m] offset 1m)
       )
   - record: sli_aggregations:gitlab_sli_sidekiq_execution_apdex_total:rate_30m
     expr: |
       sum by (component,env,environment,external_dependencies,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(gitlab_sli_sidekiq_execution_apdex_total{cluster="gprd-us-east1-c",env="gprd",type=~"sidekiq"}[30m] offset 30s)
+        rate(gitlab_sli_sidekiq_execution_apdex_total{cluster="gprd-us-east1-c",env="gprd",type=~"sidekiq"}[30m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - sidekiq_execution-apdex - 30m burn-rate - gprd-us-east1-d'
   interval: 2m
@@ -1214,12 +1214,12 @@ groups:
   - record: sli_aggregations:gitlab_sli_sidekiq_execution_apdex_success_total:rate_30m
     expr: |
       sum by (component,env,environment,external_dependencies,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(gitlab_sli_sidekiq_execution_apdex_success_total{cluster="gprd-us-east1-d",env="gprd",type=~"sidekiq"}[30m] offset 30s)
+        rate(gitlab_sli_sidekiq_execution_apdex_success_total{cluster="gprd-us-east1-d",env="gprd",type=~"sidekiq"}[30m] offset 1m)
       )
   - record: sli_aggregations:gitlab_sli_sidekiq_execution_apdex_total:rate_30m
     expr: |
       sum by (component,env,environment,external_dependencies,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(gitlab_sli_sidekiq_execution_apdex_total{cluster="gprd-us-east1-d",env="gprd",type=~"sidekiq"}[30m] offset 30s)
+        rate(gitlab_sli_sidekiq_execution_apdex_total{cluster="gprd-us-east1-d",env="gprd",type=~"sidekiq"}[30m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - sidekiq_execution-ops - 30m burn-rate - gprd-gitlab-gke'
   interval: 2m
@@ -1227,12 +1227,12 @@ groups:
   - record: sli_aggregations:gitlab_sli_sidekiq_execution_error_total:rate_30m
     expr: |
       sum by (component,env,environment,external_dependencies,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(gitlab_sli_sidekiq_execution_error_total{cluster="gprd-gitlab-gke",env="gprd",type=~"sidekiq"}[30m] offset 30s)
+        rate(gitlab_sli_sidekiq_execution_error_total{cluster="gprd-gitlab-gke",env="gprd",type=~"sidekiq"}[30m] offset 1m)
       )
   - record: sli_aggregations:gitlab_sli_sidekiq_execution_total:rate_30m
     expr: |
       sum by (component,env,environment,external_dependencies,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(gitlab_sli_sidekiq_execution_total{cluster="gprd-gitlab-gke",env="gprd",type=~"sidekiq"}[30m] offset 30s)
+        rate(gitlab_sli_sidekiq_execution_total{cluster="gprd-gitlab-gke",env="gprd",type=~"sidekiq"}[30m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - sidekiq_execution-ops - 30m burn-rate - gprd-us-east1-b'
   interval: 2m
@@ -1240,12 +1240,12 @@ groups:
   - record: sli_aggregations:gitlab_sli_sidekiq_execution_error_total:rate_30m
     expr: |
       sum by (component,env,environment,external_dependencies,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(gitlab_sli_sidekiq_execution_error_total{cluster="gprd-us-east1-b",env="gprd",type=~"sidekiq"}[30m] offset 30s)
+        rate(gitlab_sli_sidekiq_execution_error_total{cluster="gprd-us-east1-b",env="gprd",type=~"sidekiq"}[30m] offset 1m)
       )
   - record: sli_aggregations:gitlab_sli_sidekiq_execution_total:rate_30m
     expr: |
       sum by (component,env,environment,external_dependencies,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(gitlab_sli_sidekiq_execution_total{cluster="gprd-us-east1-b",env="gprd",type=~"sidekiq"}[30m] offset 30s)
+        rate(gitlab_sli_sidekiq_execution_total{cluster="gprd-us-east1-b",env="gprd",type=~"sidekiq"}[30m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - sidekiq_execution-ops - 30m burn-rate - gprd-us-east1-c'
   interval: 2m
@@ -1253,12 +1253,12 @@ groups:
   - record: sli_aggregations:gitlab_sli_sidekiq_execution_error_total:rate_30m
     expr: |
       sum by (component,env,environment,external_dependencies,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(gitlab_sli_sidekiq_execution_error_total{cluster="gprd-us-east1-c",env="gprd",type=~"sidekiq"}[30m] offset 30s)
+        rate(gitlab_sli_sidekiq_execution_error_total{cluster="gprd-us-east1-c",env="gprd",type=~"sidekiq"}[30m] offset 1m)
       )
   - record: sli_aggregations:gitlab_sli_sidekiq_execution_total:rate_30m
     expr: |
       sum by (component,env,environment,external_dependencies,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(gitlab_sli_sidekiq_execution_total{cluster="gprd-us-east1-c",env="gprd",type=~"sidekiq"}[30m] offset 30s)
+        rate(gitlab_sli_sidekiq_execution_total{cluster="gprd-us-east1-c",env="gprd",type=~"sidekiq"}[30m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - sidekiq_execution-ops - 30m burn-rate - gprd-us-east1-d'
   interval: 2m
@@ -1266,12 +1266,12 @@ groups:
   - record: sli_aggregations:gitlab_sli_sidekiq_execution_error_total:rate_30m
     expr: |
       sum by (component,env,environment,external_dependencies,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(gitlab_sli_sidekiq_execution_error_total{cluster="gprd-us-east1-d",env="gprd",type=~"sidekiq"}[30m] offset 30s)
+        rate(gitlab_sli_sidekiq_execution_error_total{cluster="gprd-us-east1-d",env="gprd",type=~"sidekiq"}[30m] offset 1m)
       )
   - record: sli_aggregations:gitlab_sli_sidekiq_execution_total:rate_30m
     expr: |
       sum by (component,env,environment,external_dependencies,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(gitlab_sli_sidekiq_execution_total{cluster="gprd-us-east1-d",env="gprd",type=~"sidekiq"}[30m] offset 30s)
+        rate(gitlab_sli_sidekiq_execution_total{cluster="gprd-us-east1-d",env="gprd",type=~"sidekiq"}[30m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - sidekiq_queueing-apdex - 30m burn-rate - gprd-gitlab-gke'
   interval: 2m
@@ -1279,7 +1279,7 @@ groups:
   - record: sli_aggregations:gitlab_sli_sidekiq_queueing_apdex_success_total:rate_30m
     expr: |
       sum by (component,env,environment,external_dependencies,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(gitlab_sli_sidekiq_queueing_apdex_success_total{cluster="gprd-gitlab-gke",env="gprd",type=~"sidekiq"}[30m] offset 30s)
+        rate(gitlab_sli_sidekiq_queueing_apdex_success_total{cluster="gprd-gitlab-gke",env="gprd",type=~"sidekiq"}[30m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - sidekiq_queueing-apdex - 30m burn-rate - gprd-us-east1-b'
   interval: 2m
@@ -1287,7 +1287,7 @@ groups:
   - record: sli_aggregations:gitlab_sli_sidekiq_queueing_apdex_success_total:rate_30m
     expr: |
       sum by (component,env,environment,external_dependencies,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(gitlab_sli_sidekiq_queueing_apdex_success_total{cluster="gprd-us-east1-b",env="gprd",type=~"sidekiq"}[30m] offset 30s)
+        rate(gitlab_sli_sidekiq_queueing_apdex_success_total{cluster="gprd-us-east1-b",env="gprd",type=~"sidekiq"}[30m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - sidekiq_queueing-apdex - 30m burn-rate - gprd-us-east1-c'
   interval: 2m
@@ -1295,7 +1295,7 @@ groups:
   - record: sli_aggregations:gitlab_sli_sidekiq_queueing_apdex_success_total:rate_30m
     expr: |
       sum by (component,env,environment,external_dependencies,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(gitlab_sli_sidekiq_queueing_apdex_success_total{cluster="gprd-us-east1-c",env="gprd",type=~"sidekiq"}[30m] offset 30s)
+        rate(gitlab_sli_sidekiq_queueing_apdex_success_total{cluster="gprd-us-east1-c",env="gprd",type=~"sidekiq"}[30m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - sidekiq_queueing-apdex - 30m burn-rate - gprd-us-east1-d'
   interval: 2m
@@ -1303,7 +1303,7 @@ groups:
   - record: sli_aggregations:gitlab_sli_sidekiq_queueing_apdex_success_total:rate_30m
     expr: |
       sum by (component,env,environment,external_dependencies,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(gitlab_sli_sidekiq_queueing_apdex_success_total{cluster="gprd-us-east1-d",env="gprd",type=~"sidekiq"}[30m] offset 30s)
+        rate(gitlab_sli_sidekiq_queueing_apdex_success_total{cluster="gprd-us-east1-d",env="gprd",type=~"sidekiq"}[30m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - sidekiq_queueing-ops - 30m burn-rate - gprd-gitlab-gke'
   interval: 2m
@@ -1311,7 +1311,7 @@ groups:
   - record: sli_aggregations:gitlab_sli_sidekiq_queueing_apdex_total:rate_30m
     expr: |
       sum by (component,env,environment,external_dependencies,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(gitlab_sli_sidekiq_queueing_apdex_total{cluster="gprd-gitlab-gke",env="gprd",type=~"sidekiq"}[30m] offset 30s)
+        rate(gitlab_sli_sidekiq_queueing_apdex_total{cluster="gprd-gitlab-gke",env="gprd",type=~"sidekiq"}[30m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - sidekiq_queueing-ops - 30m burn-rate - gprd-us-east1-b'
   interval: 2m
@@ -1319,7 +1319,7 @@ groups:
   - record: sli_aggregations:gitlab_sli_sidekiq_queueing_apdex_total:rate_30m
     expr: |
       sum by (component,env,environment,external_dependencies,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(gitlab_sli_sidekiq_queueing_apdex_total{cluster="gprd-us-east1-b",env="gprd",type=~"sidekiq"}[30m] offset 30s)
+        rate(gitlab_sli_sidekiq_queueing_apdex_total{cluster="gprd-us-east1-b",env="gprd",type=~"sidekiq"}[30m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - sidekiq_queueing-ops - 30m burn-rate - gprd-us-east1-c'
   interval: 2m
@@ -1327,7 +1327,7 @@ groups:
   - record: sli_aggregations:gitlab_sli_sidekiq_queueing_apdex_total:rate_30m
     expr: |
       sum by (component,env,environment,external_dependencies,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(gitlab_sli_sidekiq_queueing_apdex_total{cluster="gprd-us-east1-c",env="gprd",type=~"sidekiq"}[30m] offset 30s)
+        rate(gitlab_sli_sidekiq_queueing_apdex_total{cluster="gprd-us-east1-c",env="gprd",type=~"sidekiq"}[30m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - sidekiq_queueing-ops - 30m burn-rate - gprd-us-east1-d'
   interval: 2m
@@ -1335,7 +1335,7 @@ groups:
   - record: sli_aggregations:gitlab_sli_sidekiq_queueing_apdex_total:rate_30m
     expr: |
       sum by (component,env,environment,external_dependencies,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(gitlab_sli_sidekiq_queueing_apdex_total{cluster="gprd-us-east1-d",env="gprd",type=~"sidekiq"}[30m] offset 30s)
+        rate(gitlab_sli_sidekiq_queueing_apdex_total{cluster="gprd-us-east1-d",env="gprd",type=~"sidekiq"}[30m] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - enqueued_jobs-ops - 1h burn-rate - emitted by
     ai-assisted - gprd-gitlab-gke'
@@ -1344,7 +1344,7 @@ groups:
   - record: sli_aggregations:sidekiq_enqueued_jobs_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(sidekiq_enqueued_jobs_total{cluster="gprd-gitlab-gke",env="gprd",type=~"ai-assisted"}[1h] offset 30s)
+        rate(sidekiq_enqueued_jobs_total{cluster="gprd-gitlab-gke",env="gprd",type=~"ai-assisted"}[1h] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - enqueued_jobs-ops - 1h burn-rate - emitted by
     ai-assisted - gprd-us-east1-b'
@@ -1353,7 +1353,7 @@ groups:
   - record: sli_aggregations:sidekiq_enqueued_jobs_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-b",env="gprd",type=~"ai-assisted"}[1h] offset 30s)
+        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-b",env="gprd",type=~"ai-assisted"}[1h] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - enqueued_jobs-ops - 1h burn-rate - emitted by
     ai-assisted - gprd-us-east1-c'
@@ -1362,7 +1362,7 @@ groups:
   - record: sli_aggregations:sidekiq_enqueued_jobs_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-c",env="gprd",type=~"ai-assisted"}[1h] offset 30s)
+        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-c",env="gprd",type=~"ai-assisted"}[1h] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - enqueued_jobs-ops - 1h burn-rate - emitted by
     ai-assisted - gprd-us-east1-d'
@@ -1371,7 +1371,7 @@ groups:
   - record: sli_aggregations:sidekiq_enqueued_jobs_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-d",env="gprd",type=~"ai-assisted"}[1h] offset 30s)
+        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-d",env="gprd",type=~"ai-assisted"}[1h] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - enqueued_jobs-ops - 1h burn-rate - emitted by
     api - gprd-gitlab-gke'
@@ -1380,7 +1380,7 @@ groups:
   - record: sli_aggregations:sidekiq_enqueued_jobs_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(sidekiq_enqueued_jobs_total{cluster="gprd-gitlab-gke",env="gprd",type=~"api"}[1h] offset 30s)
+        rate(sidekiq_enqueued_jobs_total{cluster="gprd-gitlab-gke",env="gprd",type=~"api"}[1h] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - enqueued_jobs-ops - 1h burn-rate - emitted by
     api - gprd-us-east1-b'
@@ -1389,7 +1389,7 @@ groups:
   - record: sli_aggregations:sidekiq_enqueued_jobs_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-b",env="gprd",type=~"api"}[1h] offset 30s)
+        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-b",env="gprd",type=~"api"}[1h] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - enqueued_jobs-ops - 1h burn-rate - emitted by
     api - gprd-us-east1-c'
@@ -1398,7 +1398,7 @@ groups:
   - record: sli_aggregations:sidekiq_enqueued_jobs_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-c",env="gprd",type=~"api"}[1h] offset 30s)
+        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-c",env="gprd",type=~"api"}[1h] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - enqueued_jobs-ops - 1h burn-rate - emitted by
     api - gprd-us-east1-d'
@@ -1407,7 +1407,7 @@ groups:
   - record: sli_aggregations:sidekiq_enqueued_jobs_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-d",env="gprd",type=~"api"}[1h] offset 30s)
+        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-d",env="gprd",type=~"api"}[1h] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - enqueued_jobs-ops - 1h burn-rate - emitted by
     git - gprd-gitlab-gke'
@@ -1416,7 +1416,7 @@ groups:
   - record: sli_aggregations:sidekiq_enqueued_jobs_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(sidekiq_enqueued_jobs_total{cluster="gprd-gitlab-gke",env="gprd",type=~"git"}[1h] offset 30s)
+        rate(sidekiq_enqueued_jobs_total{cluster="gprd-gitlab-gke",env="gprd",type=~"git"}[1h] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - enqueued_jobs-ops - 1h burn-rate - emitted by
     git - gprd-us-east1-b'
@@ -1425,7 +1425,7 @@ groups:
   - record: sli_aggregations:sidekiq_enqueued_jobs_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-b",env="gprd",type=~"git"}[1h] offset 30s)
+        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-b",env="gprd",type=~"git"}[1h] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - enqueued_jobs-ops - 1h burn-rate - emitted by
     git - gprd-us-east1-c'
@@ -1434,7 +1434,7 @@ groups:
   - record: sli_aggregations:sidekiq_enqueued_jobs_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-c",env="gprd",type=~"git"}[1h] offset 30s)
+        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-c",env="gprd",type=~"git"}[1h] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - enqueued_jobs-ops - 1h burn-rate - emitted by
     git - gprd-us-east1-d'
@@ -1443,7 +1443,7 @@ groups:
   - record: sli_aggregations:sidekiq_enqueued_jobs_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-d",env="gprd",type=~"git"}[1h] offset 30s)
+        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-d",env="gprd",type=~"git"}[1h] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - enqueued_jobs-ops - 1h burn-rate - emitted by
     internal-api - gprd-gitlab-gke'
@@ -1452,7 +1452,7 @@ groups:
   - record: sli_aggregations:sidekiq_enqueued_jobs_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(sidekiq_enqueued_jobs_total{cluster="gprd-gitlab-gke",env="gprd",type=~"internal-api"}[1h] offset 30s)
+        rate(sidekiq_enqueued_jobs_total{cluster="gprd-gitlab-gke",env="gprd",type=~"internal-api"}[1h] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - enqueued_jobs-ops - 1h burn-rate - emitted by
     internal-api - gprd-us-east1-b'
@@ -1461,7 +1461,7 @@ groups:
   - record: sli_aggregations:sidekiq_enqueued_jobs_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-b",env="gprd",type=~"internal-api"}[1h] offset 30s)
+        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-b",env="gprd",type=~"internal-api"}[1h] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - enqueued_jobs-ops - 1h burn-rate - emitted by
     internal-api - gprd-us-east1-c'
@@ -1470,7 +1470,7 @@ groups:
   - record: sli_aggregations:sidekiq_enqueued_jobs_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-c",env="gprd",type=~"internal-api"}[1h] offset 30s)
+        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-c",env="gprd",type=~"internal-api"}[1h] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - enqueued_jobs-ops - 1h burn-rate - emitted by
     internal-api - gprd-us-east1-d'
@@ -1479,7 +1479,7 @@ groups:
   - record: sli_aggregations:sidekiq_enqueued_jobs_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-d",env="gprd",type=~"internal-api"}[1h] offset 30s)
+        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-d",env="gprd",type=~"internal-api"}[1h] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - enqueued_jobs-ops - 1h burn-rate - emitted by
     ops-gitlab-net - gprd-gitlab-gke'
@@ -1488,7 +1488,7 @@ groups:
   - record: sli_aggregations:sidekiq_enqueued_jobs_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(sidekiq_enqueued_jobs_total{cluster="gprd-gitlab-gke",env="gprd",type=~"ops-gitlab-net"}[1h] offset 30s)
+        rate(sidekiq_enqueued_jobs_total{cluster="gprd-gitlab-gke",env="gprd",type=~"ops-gitlab-net"}[1h] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - enqueued_jobs-ops - 1h burn-rate - emitted by
     ops-gitlab-net - gprd-us-east1-b'
@@ -1497,7 +1497,7 @@ groups:
   - record: sli_aggregations:sidekiq_enqueued_jobs_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-b",env="gprd",type=~"ops-gitlab-net"}[1h] offset 30s)
+        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-b",env="gprd",type=~"ops-gitlab-net"}[1h] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - enqueued_jobs-ops - 1h burn-rate - emitted by
     ops-gitlab-net - gprd-us-east1-c'
@@ -1506,7 +1506,7 @@ groups:
   - record: sli_aggregations:sidekiq_enqueued_jobs_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-c",env="gprd",type=~"ops-gitlab-net"}[1h] offset 30s)
+        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-c",env="gprd",type=~"ops-gitlab-net"}[1h] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - enqueued_jobs-ops - 1h burn-rate - emitted by
     ops-gitlab-net - gprd-us-east1-d'
@@ -1515,7 +1515,7 @@ groups:
   - record: sli_aggregations:sidekiq_enqueued_jobs_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-d",env="gprd",type=~"ops-gitlab-net"}[1h] offset 30s)
+        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-d",env="gprd",type=~"ops-gitlab-net"}[1h] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - enqueued_jobs-ops - 1h burn-rate - gprd-gitlab-gke'
   interval: 1m
@@ -1523,7 +1523,7 @@ groups:
   - record: sli_aggregations:sidekiq_enqueued_jobs_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(sidekiq_enqueued_jobs_total{cluster="gprd-gitlab-gke",env="gprd",type=~"sidekiq"}[1h] offset 30s)
+        rate(sidekiq_enqueued_jobs_total{cluster="gprd-gitlab-gke",env="gprd",type=~"sidekiq"}[1h] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - enqueued_jobs-ops - 1h burn-rate - gprd-us-east1-b'
   interval: 1m
@@ -1531,7 +1531,7 @@ groups:
   - record: sli_aggregations:sidekiq_enqueued_jobs_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-b",env="gprd",type=~"sidekiq"}[1h] offset 30s)
+        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-b",env="gprd",type=~"sidekiq"}[1h] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - enqueued_jobs-ops - 1h burn-rate - gprd-us-east1-c'
   interval: 1m
@@ -1539,7 +1539,7 @@ groups:
   - record: sli_aggregations:sidekiq_enqueued_jobs_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-c",env="gprd",type=~"sidekiq"}[1h] offset 30s)
+        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-c",env="gprd",type=~"sidekiq"}[1h] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - enqueued_jobs-ops - 1h burn-rate - gprd-us-east1-d'
   interval: 1m
@@ -1547,7 +1547,7 @@ groups:
   - record: sli_aggregations:sidekiq_enqueued_jobs_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-d",env="gprd",type=~"sidekiq"}[1h] offset 30s)
+        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-d",env="gprd",type=~"sidekiq"}[1h] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - enqueued_jobs-ops - 1h burn-rate - emitted by
     web - gprd-gitlab-gke'
@@ -1556,7 +1556,7 @@ groups:
   - record: sli_aggregations:sidekiq_enqueued_jobs_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(sidekiq_enqueued_jobs_total{cluster="gprd-gitlab-gke",env="gprd",type=~"web"}[1h] offset 30s)
+        rate(sidekiq_enqueued_jobs_total{cluster="gprd-gitlab-gke",env="gprd",type=~"web"}[1h] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - enqueued_jobs-ops - 1h burn-rate - emitted by
     web - gprd-us-east1-b'
@@ -1565,7 +1565,7 @@ groups:
   - record: sli_aggregations:sidekiq_enqueued_jobs_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-b",env="gprd",type=~"web"}[1h] offset 30s)
+        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-b",env="gprd",type=~"web"}[1h] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - enqueued_jobs-ops - 1h burn-rate - emitted by
     web - gprd-us-east1-c'
@@ -1574,7 +1574,7 @@ groups:
   - record: sli_aggregations:sidekiq_enqueued_jobs_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-c",env="gprd",type=~"web"}[1h] offset 30s)
+        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-c",env="gprd",type=~"web"}[1h] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - enqueued_jobs-ops - 1h burn-rate - emitted by
     web - gprd-us-east1-d'
@@ -1583,7 +1583,7 @@ groups:
   - record: sli_aggregations:sidekiq_enqueued_jobs_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-d",env="gprd",type=~"web"}[1h] offset 30s)
+        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-d",env="gprd",type=~"web"}[1h] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - enqueued_jobs-ops - 1h burn-rate - emitted by
     websockets - gprd-gitlab-gke'
@@ -1592,7 +1592,7 @@ groups:
   - record: sli_aggregations:sidekiq_enqueued_jobs_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(sidekiq_enqueued_jobs_total{cluster="gprd-gitlab-gke",env="gprd",type=~"websockets"}[1h] offset 30s)
+        rate(sidekiq_enqueued_jobs_total{cluster="gprd-gitlab-gke",env="gprd",type=~"websockets"}[1h] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - enqueued_jobs-ops - 1h burn-rate - emitted by
     websockets - gprd-us-east1-b'
@@ -1601,7 +1601,7 @@ groups:
   - record: sli_aggregations:sidekiq_enqueued_jobs_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-b",env="gprd",type=~"websockets"}[1h] offset 30s)
+        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-b",env="gprd",type=~"websockets"}[1h] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - enqueued_jobs-ops - 1h burn-rate - emitted by
     websockets - gprd-us-east1-c'
@@ -1610,7 +1610,7 @@ groups:
   - record: sli_aggregations:sidekiq_enqueued_jobs_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-c",env="gprd",type=~"websockets"}[1h] offset 30s)
+        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-c",env="gprd",type=~"websockets"}[1h] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - enqueued_jobs-ops - 1h burn-rate - emitted by
     websockets - gprd-us-east1-d'
@@ -1619,7 +1619,7 @@ groups:
   - record: sli_aggregations:sidekiq_enqueued_jobs_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-d",env="gprd",type=~"websockets"}[1h] offset 30s)
+        rate(sidekiq_enqueued_jobs_total{cluster="gprd-us-east1-d",env="gprd",type=~"websockets"}[1h] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - llm_completion-apdex - 1h burn-rate - emitted
     by ops-gitlab-net - gprd-gitlab-gke'
@@ -1628,12 +1628,12 @@ groups:
   - record: sli_aggregations:gitlab_sli_llm_completion_apdex_success_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,service_class,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_llm_completion_apdex_success_total{cluster="gprd-gitlab-gke",env="gprd",type=~"ops-gitlab-net"}[1h] offset 30s)
+        rate(gitlab_sli_llm_completion_apdex_success_total{cluster="gprd-gitlab-gke",env="gprd",type=~"ops-gitlab-net"}[1h] offset 1m)
       )
   - record: sli_aggregations:gitlab_sli_llm_completion_apdex_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,service_class,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_llm_completion_apdex_total{cluster="gprd-gitlab-gke",env="gprd",type=~"ops-gitlab-net"}[1h] offset 30s)
+        rate(gitlab_sli_llm_completion_apdex_total{cluster="gprd-gitlab-gke",env="gprd",type=~"ops-gitlab-net"}[1h] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - llm_completion-apdex - 1h burn-rate - emitted
     by ops-gitlab-net - gprd-us-east1-b'
@@ -1642,12 +1642,12 @@ groups:
   - record: sli_aggregations:gitlab_sli_llm_completion_apdex_success_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,service_class,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_llm_completion_apdex_success_total{cluster="gprd-us-east1-b",env="gprd",type=~"ops-gitlab-net"}[1h] offset 30s)
+        rate(gitlab_sli_llm_completion_apdex_success_total{cluster="gprd-us-east1-b",env="gprd",type=~"ops-gitlab-net"}[1h] offset 1m)
       )
   - record: sli_aggregations:gitlab_sli_llm_completion_apdex_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,service_class,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_llm_completion_apdex_total{cluster="gprd-us-east1-b",env="gprd",type=~"ops-gitlab-net"}[1h] offset 30s)
+        rate(gitlab_sli_llm_completion_apdex_total{cluster="gprd-us-east1-b",env="gprd",type=~"ops-gitlab-net"}[1h] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - llm_completion-apdex - 1h burn-rate - emitted
     by ops-gitlab-net - gprd-us-east1-c'
@@ -1656,12 +1656,12 @@ groups:
   - record: sli_aggregations:gitlab_sli_llm_completion_apdex_success_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,service_class,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_llm_completion_apdex_success_total{cluster="gprd-us-east1-c",env="gprd",type=~"ops-gitlab-net"}[1h] offset 30s)
+        rate(gitlab_sli_llm_completion_apdex_success_total{cluster="gprd-us-east1-c",env="gprd",type=~"ops-gitlab-net"}[1h] offset 1m)
       )
   - record: sli_aggregations:gitlab_sli_llm_completion_apdex_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,service_class,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_llm_completion_apdex_total{cluster="gprd-us-east1-c",env="gprd",type=~"ops-gitlab-net"}[1h] offset 30s)
+        rate(gitlab_sli_llm_completion_apdex_total{cluster="gprd-us-east1-c",env="gprd",type=~"ops-gitlab-net"}[1h] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - llm_completion-apdex - 1h burn-rate - emitted
     by ops-gitlab-net - gprd-us-east1-d'
@@ -1670,12 +1670,12 @@ groups:
   - record: sli_aggregations:gitlab_sli_llm_completion_apdex_success_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,service_class,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_llm_completion_apdex_success_total{cluster="gprd-us-east1-d",env="gprd",type=~"ops-gitlab-net"}[1h] offset 30s)
+        rate(gitlab_sli_llm_completion_apdex_success_total{cluster="gprd-us-east1-d",env="gprd",type=~"ops-gitlab-net"}[1h] offset 1m)
       )
   - record: sli_aggregations:gitlab_sli_llm_completion_apdex_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,service_class,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_llm_completion_apdex_total{cluster="gprd-us-east1-d",env="gprd",type=~"ops-gitlab-net"}[1h] offset 30s)
+        rate(gitlab_sli_llm_completion_apdex_total{cluster="gprd-us-east1-d",env="gprd",type=~"ops-gitlab-net"}[1h] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - llm_completion-apdex - 1h burn-rate - gprd-gitlab-gke'
   interval: 1m
@@ -1683,12 +1683,12 @@ groups:
   - record: sli_aggregations:gitlab_sli_llm_completion_apdex_success_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,service_class,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_llm_completion_apdex_success_total{cluster="gprd-gitlab-gke",env="gprd",type=~"sidekiq"}[1h] offset 30s)
+        rate(gitlab_sli_llm_completion_apdex_success_total{cluster="gprd-gitlab-gke",env="gprd",type=~"sidekiq"}[1h] offset 1m)
       )
   - record: sli_aggregations:gitlab_sli_llm_completion_apdex_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,service_class,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_llm_completion_apdex_total{cluster="gprd-gitlab-gke",env="gprd",type=~"sidekiq"}[1h] offset 30s)
+        rate(gitlab_sli_llm_completion_apdex_total{cluster="gprd-gitlab-gke",env="gprd",type=~"sidekiq"}[1h] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - llm_completion-apdex - 1h burn-rate - gprd-us-east1-b'
   interval: 1m
@@ -1696,12 +1696,12 @@ groups:
   - record: sli_aggregations:gitlab_sli_llm_completion_apdex_success_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,service_class,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_llm_completion_apdex_success_total{cluster="gprd-us-east1-b",env="gprd",type=~"sidekiq"}[1h] offset 30s)
+        rate(gitlab_sli_llm_completion_apdex_success_total{cluster="gprd-us-east1-b",env="gprd",type=~"sidekiq"}[1h] offset 1m)
       )
   - record: sli_aggregations:gitlab_sli_llm_completion_apdex_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,service_class,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_llm_completion_apdex_total{cluster="gprd-us-east1-b",env="gprd",type=~"sidekiq"}[1h] offset 30s)
+        rate(gitlab_sli_llm_completion_apdex_total{cluster="gprd-us-east1-b",env="gprd",type=~"sidekiq"}[1h] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - llm_completion-apdex - 1h burn-rate - gprd-us-east1-c'
   interval: 1m
@@ -1709,12 +1709,12 @@ groups:
   - record: sli_aggregations:gitlab_sli_llm_completion_apdex_success_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,service_class,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_llm_completion_apdex_success_total{cluster="gprd-us-east1-c",env="gprd",type=~"sidekiq"}[1h] offset 30s)
+        rate(gitlab_sli_llm_completion_apdex_success_total{cluster="gprd-us-east1-c",env="gprd",type=~"sidekiq"}[1h] offset 1m)
       )
   - record: sli_aggregations:gitlab_sli_llm_completion_apdex_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,service_class,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_llm_completion_apdex_total{cluster="gprd-us-east1-c",env="gprd",type=~"sidekiq"}[1h] offset 30s)
+        rate(gitlab_sli_llm_completion_apdex_total{cluster="gprd-us-east1-c",env="gprd",type=~"sidekiq"}[1h] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - llm_completion-apdex - 1h burn-rate - gprd-us-east1-d'
   interval: 1m
@@ -1722,12 +1722,12 @@ groups:
   - record: sli_aggregations:gitlab_sli_llm_completion_apdex_success_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,service_class,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_llm_completion_apdex_success_total{cluster="gprd-us-east1-d",env="gprd",type=~"sidekiq"}[1h] offset 30s)
+        rate(gitlab_sli_llm_completion_apdex_success_total{cluster="gprd-us-east1-d",env="gprd",type=~"sidekiq"}[1h] offset 1m)
       )
   - record: sli_aggregations:gitlab_sli_llm_completion_apdex_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,service_class,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_llm_completion_apdex_total{cluster="gprd-us-east1-d",env="gprd",type=~"sidekiq"}[1h] offset 30s)
+        rate(gitlab_sli_llm_completion_apdex_total{cluster="gprd-us-east1-d",env="gprd",type=~"sidekiq"}[1h] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - llm_completion-ops - 1h burn-rate - emitted by
     ops-gitlab-net - gprd-gitlab-gke'
@@ -1736,12 +1736,12 @@ groups:
   - record: sli_aggregations:gitlab_sli_llm_completion_error_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,service_class,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_llm_completion_error_total{cluster="gprd-gitlab-gke",env="gprd",type=~"ops-gitlab-net"}[1h] offset 30s)
+        rate(gitlab_sli_llm_completion_error_total{cluster="gprd-gitlab-gke",env="gprd",type=~"ops-gitlab-net"}[1h] offset 1m)
       )
   - record: sli_aggregations:gitlab_sli_llm_completion_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,service_class,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_llm_completion_total{cluster="gprd-gitlab-gke",env="gprd",type=~"ops-gitlab-net"}[1h] offset 30s)
+        rate(gitlab_sli_llm_completion_total{cluster="gprd-gitlab-gke",env="gprd",type=~"ops-gitlab-net"}[1h] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - llm_completion-ops - 1h burn-rate - emitted by
     ops-gitlab-net - gprd-us-east1-b'
@@ -1750,12 +1750,12 @@ groups:
   - record: sli_aggregations:gitlab_sli_llm_completion_error_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,service_class,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_llm_completion_error_total{cluster="gprd-us-east1-b",env="gprd",type=~"ops-gitlab-net"}[1h] offset 30s)
+        rate(gitlab_sli_llm_completion_error_total{cluster="gprd-us-east1-b",env="gprd",type=~"ops-gitlab-net"}[1h] offset 1m)
       )
   - record: sli_aggregations:gitlab_sli_llm_completion_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,service_class,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_llm_completion_total{cluster="gprd-us-east1-b",env="gprd",type=~"ops-gitlab-net"}[1h] offset 30s)
+        rate(gitlab_sli_llm_completion_total{cluster="gprd-us-east1-b",env="gprd",type=~"ops-gitlab-net"}[1h] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - llm_completion-ops - 1h burn-rate - emitted by
     ops-gitlab-net - gprd-us-east1-c'
@@ -1764,12 +1764,12 @@ groups:
   - record: sli_aggregations:gitlab_sli_llm_completion_error_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,service_class,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_llm_completion_error_total{cluster="gprd-us-east1-c",env="gprd",type=~"ops-gitlab-net"}[1h] offset 30s)
+        rate(gitlab_sli_llm_completion_error_total{cluster="gprd-us-east1-c",env="gprd",type=~"ops-gitlab-net"}[1h] offset 1m)
       )
   - record: sli_aggregations:gitlab_sli_llm_completion_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,service_class,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_llm_completion_total{cluster="gprd-us-east1-c",env="gprd",type=~"ops-gitlab-net"}[1h] offset 30s)
+        rate(gitlab_sli_llm_completion_total{cluster="gprd-us-east1-c",env="gprd",type=~"ops-gitlab-net"}[1h] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - llm_completion-ops - 1h burn-rate - emitted by
     ops-gitlab-net - gprd-us-east1-d'
@@ -1778,12 +1778,12 @@ groups:
   - record: sli_aggregations:gitlab_sli_llm_completion_error_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,service_class,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_llm_completion_error_total{cluster="gprd-us-east1-d",env="gprd",type=~"ops-gitlab-net"}[1h] offset 30s)
+        rate(gitlab_sli_llm_completion_error_total{cluster="gprd-us-east1-d",env="gprd",type=~"ops-gitlab-net"}[1h] offset 1m)
       )
   - record: sli_aggregations:gitlab_sli_llm_completion_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,service_class,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_llm_completion_total{cluster="gprd-us-east1-d",env="gprd",type=~"ops-gitlab-net"}[1h] offset 30s)
+        rate(gitlab_sli_llm_completion_total{cluster="gprd-us-east1-d",env="gprd",type=~"ops-gitlab-net"}[1h] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - llm_completion-ops - 1h burn-rate - gprd-gitlab-gke'
   interval: 1m
@@ -1791,12 +1791,12 @@ groups:
   - record: sli_aggregations:gitlab_sli_llm_completion_error_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,service_class,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_llm_completion_error_total{cluster="gprd-gitlab-gke",env="gprd",type=~"sidekiq"}[1h] offset 30s)
+        rate(gitlab_sli_llm_completion_error_total{cluster="gprd-gitlab-gke",env="gprd",type=~"sidekiq"}[1h] offset 1m)
       )
   - record: sli_aggregations:gitlab_sli_llm_completion_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,service_class,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_llm_completion_total{cluster="gprd-gitlab-gke",env="gprd",type=~"sidekiq"}[1h] offset 30s)
+        rate(gitlab_sli_llm_completion_total{cluster="gprd-gitlab-gke",env="gprd",type=~"sidekiq"}[1h] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - llm_completion-ops - 1h burn-rate - gprd-us-east1-b'
   interval: 1m
@@ -1804,12 +1804,12 @@ groups:
   - record: sli_aggregations:gitlab_sli_llm_completion_error_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,service_class,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_llm_completion_error_total{cluster="gprd-us-east1-b",env="gprd",type=~"sidekiq"}[1h] offset 30s)
+        rate(gitlab_sli_llm_completion_error_total{cluster="gprd-us-east1-b",env="gprd",type=~"sidekiq"}[1h] offset 1m)
       )
   - record: sli_aggregations:gitlab_sli_llm_completion_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,service_class,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_llm_completion_total{cluster="gprd-us-east1-b",env="gprd",type=~"sidekiq"}[1h] offset 30s)
+        rate(gitlab_sli_llm_completion_total{cluster="gprd-us-east1-b",env="gprd",type=~"sidekiq"}[1h] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - llm_completion-ops - 1h burn-rate - gprd-us-east1-c'
   interval: 1m
@@ -1817,12 +1817,12 @@ groups:
   - record: sli_aggregations:gitlab_sli_llm_completion_error_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,service_class,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_llm_completion_error_total{cluster="gprd-us-east1-c",env="gprd",type=~"sidekiq"}[1h] offset 30s)
+        rate(gitlab_sli_llm_completion_error_total{cluster="gprd-us-east1-c",env="gprd",type=~"sidekiq"}[1h] offset 1m)
       )
   - record: sli_aggregations:gitlab_sli_llm_completion_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,service_class,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_llm_completion_total{cluster="gprd-us-east1-c",env="gprd",type=~"sidekiq"}[1h] offset 30s)
+        rate(gitlab_sli_llm_completion_total{cluster="gprd-us-east1-c",env="gprd",type=~"sidekiq"}[1h] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - llm_completion-ops - 1h burn-rate - gprd-us-east1-d'
   interval: 1m
@@ -1830,12 +1830,12 @@ groups:
   - record: sli_aggregations:gitlab_sli_llm_completion_error_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,service_class,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_llm_completion_error_total{cluster="gprd-us-east1-d",env="gprd",type=~"sidekiq"}[1h] offset 30s)
+        rate(gitlab_sli_llm_completion_error_total{cluster="gprd-us-east1-d",env="gprd",type=~"sidekiq"}[1h] offset 1m)
       )
   - record: sli_aggregations:gitlab_sli_llm_completion_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,service_class,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_llm_completion_total{cluster="gprd-us-east1-d",env="gprd",type=~"sidekiq"}[1h] offset 30s)
+        rate(gitlab_sli_llm_completion_total{cluster="gprd-us-east1-d",env="gprd",type=~"sidekiq"}[1h] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - sidekiq_execution-apdex - 1h burn-rate - gprd-gitlab-gke'
   interval: 1m
@@ -1843,12 +1843,12 @@ groups:
   - record: sli_aggregations:gitlab_sli_sidekiq_execution_apdex_success_total:rate_1h
     expr: |
       sum by (component,env,environment,external_dependencies,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(gitlab_sli_sidekiq_execution_apdex_success_total{cluster="gprd-gitlab-gke",env="gprd",type=~"sidekiq"}[1h] offset 30s)
+        rate(gitlab_sli_sidekiq_execution_apdex_success_total{cluster="gprd-gitlab-gke",env="gprd",type=~"sidekiq"}[1h] offset 1m)
       )
   - record: sli_aggregations:gitlab_sli_sidekiq_execution_apdex_total:rate_1h
     expr: |
       sum by (component,env,environment,external_dependencies,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(gitlab_sli_sidekiq_execution_apdex_total{cluster="gprd-gitlab-gke",env="gprd",type=~"sidekiq"}[1h] offset 30s)
+        rate(gitlab_sli_sidekiq_execution_apdex_total{cluster="gprd-gitlab-gke",env="gprd",type=~"sidekiq"}[1h] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - sidekiq_execution-apdex - 1h burn-rate - gprd-us-east1-b'
   interval: 1m
@@ -1856,12 +1856,12 @@ groups:
   - record: sli_aggregations:gitlab_sli_sidekiq_execution_apdex_success_total:rate_1h
     expr: |
       sum by (component,env,environment,external_dependencies,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(gitlab_sli_sidekiq_execution_apdex_success_total{cluster="gprd-us-east1-b",env="gprd",type=~"sidekiq"}[1h] offset 30s)
+        rate(gitlab_sli_sidekiq_execution_apdex_success_total{cluster="gprd-us-east1-b",env="gprd",type=~"sidekiq"}[1h] offset 1m)
       )
   - record: sli_aggregations:gitlab_sli_sidekiq_execution_apdex_total:rate_1h
     expr: |
       sum by (component,env,environment,external_dependencies,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(gitlab_sli_sidekiq_execution_apdex_total{cluster="gprd-us-east1-b",env="gprd",type=~"sidekiq"}[1h] offset 30s)
+        rate(gitlab_sli_sidekiq_execution_apdex_total{cluster="gprd-us-east1-b",env="gprd",type=~"sidekiq"}[1h] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - sidekiq_execution-apdex - 1h burn-rate - gprd-us-east1-c'
   interval: 1m
@@ -1869,12 +1869,12 @@ groups:
   - record: sli_aggregations:gitlab_sli_sidekiq_execution_apdex_success_total:rate_1h
     expr: |
       sum by (component,env,environment,external_dependencies,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(gitlab_sli_sidekiq_execution_apdex_success_total{cluster="gprd-us-east1-c",env="gprd",type=~"sidekiq"}[1h] offset 30s)
+        rate(gitlab_sli_sidekiq_execution_apdex_success_total{cluster="gprd-us-east1-c",env="gprd",type=~"sidekiq"}[1h] offset 1m)
       )
   - record: sli_aggregations:gitlab_sli_sidekiq_execution_apdex_total:rate_1h
     expr: |
       sum by (component,env,environment,external_dependencies,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(gitlab_sli_sidekiq_execution_apdex_total{cluster="gprd-us-east1-c",env="gprd",type=~"sidekiq"}[1h] offset 30s)
+        rate(gitlab_sli_sidekiq_execution_apdex_total{cluster="gprd-us-east1-c",env="gprd",type=~"sidekiq"}[1h] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - sidekiq_execution-apdex - 1h burn-rate - gprd-us-east1-d'
   interval: 1m
@@ -1882,12 +1882,12 @@ groups:
   - record: sli_aggregations:gitlab_sli_sidekiq_execution_apdex_success_total:rate_1h
     expr: |
       sum by (component,env,environment,external_dependencies,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(gitlab_sli_sidekiq_execution_apdex_success_total{cluster="gprd-us-east1-d",env="gprd",type=~"sidekiq"}[1h] offset 30s)
+        rate(gitlab_sli_sidekiq_execution_apdex_success_total{cluster="gprd-us-east1-d",env="gprd",type=~"sidekiq"}[1h] offset 1m)
       )
   - record: sli_aggregations:gitlab_sli_sidekiq_execution_apdex_total:rate_1h
     expr: |
       sum by (component,env,environment,external_dependencies,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(gitlab_sli_sidekiq_execution_apdex_total{cluster="gprd-us-east1-d",env="gprd",type=~"sidekiq"}[1h] offset 30s)
+        rate(gitlab_sli_sidekiq_execution_apdex_total{cluster="gprd-us-east1-d",env="gprd",type=~"sidekiq"}[1h] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - sidekiq_execution-ops - 1h burn-rate - gprd-gitlab-gke'
   interval: 1m
@@ -1895,12 +1895,12 @@ groups:
   - record: sli_aggregations:gitlab_sli_sidekiq_execution_error_total:rate_1h
     expr: |
       sum by (component,env,environment,external_dependencies,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(gitlab_sli_sidekiq_execution_error_total{cluster="gprd-gitlab-gke",env="gprd",type=~"sidekiq"}[1h] offset 30s)
+        rate(gitlab_sli_sidekiq_execution_error_total{cluster="gprd-gitlab-gke",env="gprd",type=~"sidekiq"}[1h] offset 1m)
       )
   - record: sli_aggregations:gitlab_sli_sidekiq_execution_total:rate_1h
     expr: |
       sum by (component,env,environment,external_dependencies,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(gitlab_sli_sidekiq_execution_total{cluster="gprd-gitlab-gke",env="gprd",type=~"sidekiq"}[1h] offset 30s)
+        rate(gitlab_sli_sidekiq_execution_total{cluster="gprd-gitlab-gke",env="gprd",type=~"sidekiq"}[1h] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - sidekiq_execution-ops - 1h burn-rate - gprd-us-east1-b'
   interval: 1m
@@ -1908,12 +1908,12 @@ groups:
   - record: sli_aggregations:gitlab_sli_sidekiq_execution_error_total:rate_1h
     expr: |
       sum by (component,env,environment,external_dependencies,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(gitlab_sli_sidekiq_execution_error_total{cluster="gprd-us-east1-b",env="gprd",type=~"sidekiq"}[1h] offset 30s)
+        rate(gitlab_sli_sidekiq_execution_error_total{cluster="gprd-us-east1-b",env="gprd",type=~"sidekiq"}[1h] offset 1m)
       )
   - record: sli_aggregations:gitlab_sli_sidekiq_execution_total:rate_1h
     expr: |
       sum by (component,env,environment,external_dependencies,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(gitlab_sli_sidekiq_execution_total{cluster="gprd-us-east1-b",env="gprd",type=~"sidekiq"}[1h] offset 30s)
+        rate(gitlab_sli_sidekiq_execution_total{cluster="gprd-us-east1-b",env="gprd",type=~"sidekiq"}[1h] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - sidekiq_execution-ops - 1h burn-rate - gprd-us-east1-c'
   interval: 1m
@@ -1921,12 +1921,12 @@ groups:
   - record: sli_aggregations:gitlab_sli_sidekiq_execution_error_total:rate_1h
     expr: |
       sum by (component,env,environment,external_dependencies,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(gitlab_sli_sidekiq_execution_error_total{cluster="gprd-us-east1-c",env="gprd",type=~"sidekiq"}[1h] offset 30s)
+        rate(gitlab_sli_sidekiq_execution_error_total{cluster="gprd-us-east1-c",env="gprd",type=~"sidekiq"}[1h] offset 1m)
       )
   - record: sli_aggregations:gitlab_sli_sidekiq_execution_total:rate_1h
     expr: |
       sum by (component,env,environment,external_dependencies,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(gitlab_sli_sidekiq_execution_total{cluster="gprd-us-east1-c",env="gprd",type=~"sidekiq"}[1h] offset 30s)
+        rate(gitlab_sli_sidekiq_execution_total{cluster="gprd-us-east1-c",env="gprd",type=~"sidekiq"}[1h] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - sidekiq_execution-ops - 1h burn-rate - gprd-us-east1-d'
   interval: 1m
@@ -1934,12 +1934,12 @@ groups:
   - record: sli_aggregations:gitlab_sli_sidekiq_execution_error_total:rate_1h
     expr: |
       sum by (component,env,environment,external_dependencies,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(gitlab_sli_sidekiq_execution_error_total{cluster="gprd-us-east1-d",env="gprd",type=~"sidekiq"}[1h] offset 30s)
+        rate(gitlab_sli_sidekiq_execution_error_total{cluster="gprd-us-east1-d",env="gprd",type=~"sidekiq"}[1h] offset 1m)
       )
   - record: sli_aggregations:gitlab_sli_sidekiq_execution_total:rate_1h
     expr: |
       sum by (component,env,environment,external_dependencies,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(gitlab_sli_sidekiq_execution_total{cluster="gprd-us-east1-d",env="gprd",type=~"sidekiq"}[1h] offset 30s)
+        rate(gitlab_sli_sidekiq_execution_total{cluster="gprd-us-east1-d",env="gprd",type=~"sidekiq"}[1h] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - sidekiq_queueing-apdex - 1h burn-rate - gprd-gitlab-gke'
   interval: 1m
@@ -1947,7 +1947,7 @@ groups:
   - record: sli_aggregations:gitlab_sli_sidekiq_queueing_apdex_success_total:rate_1h
     expr: |
       sum by (component,env,environment,external_dependencies,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(gitlab_sli_sidekiq_queueing_apdex_success_total{cluster="gprd-gitlab-gke",env="gprd",type=~"sidekiq"}[1h] offset 30s)
+        rate(gitlab_sli_sidekiq_queueing_apdex_success_total{cluster="gprd-gitlab-gke",env="gprd",type=~"sidekiq"}[1h] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - sidekiq_queueing-apdex - 1h burn-rate - gprd-us-east1-b'
   interval: 1m
@@ -1955,7 +1955,7 @@ groups:
   - record: sli_aggregations:gitlab_sli_sidekiq_queueing_apdex_success_total:rate_1h
     expr: |
       sum by (component,env,environment,external_dependencies,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(gitlab_sli_sidekiq_queueing_apdex_success_total{cluster="gprd-us-east1-b",env="gprd",type=~"sidekiq"}[1h] offset 30s)
+        rate(gitlab_sli_sidekiq_queueing_apdex_success_total{cluster="gprd-us-east1-b",env="gprd",type=~"sidekiq"}[1h] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - sidekiq_queueing-apdex - 1h burn-rate - gprd-us-east1-c'
   interval: 1m
@@ -1963,7 +1963,7 @@ groups:
   - record: sli_aggregations:gitlab_sli_sidekiq_queueing_apdex_success_total:rate_1h
     expr: |
       sum by (component,env,environment,external_dependencies,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(gitlab_sli_sidekiq_queueing_apdex_success_total{cluster="gprd-us-east1-c",env="gprd",type=~"sidekiq"}[1h] offset 30s)
+        rate(gitlab_sli_sidekiq_queueing_apdex_success_total{cluster="gprd-us-east1-c",env="gprd",type=~"sidekiq"}[1h] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - sidekiq_queueing-apdex - 1h burn-rate - gprd-us-east1-d'
   interval: 1m
@@ -1971,7 +1971,7 @@ groups:
   - record: sli_aggregations:gitlab_sli_sidekiq_queueing_apdex_success_total:rate_1h
     expr: |
       sum by (component,env,environment,external_dependencies,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(gitlab_sli_sidekiq_queueing_apdex_success_total{cluster="gprd-us-east1-d",env="gprd",type=~"sidekiq"}[1h] offset 30s)
+        rate(gitlab_sli_sidekiq_queueing_apdex_success_total{cluster="gprd-us-east1-d",env="gprd",type=~"sidekiq"}[1h] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - sidekiq_queueing-ops - 1h burn-rate - gprd-gitlab-gke'
   interval: 1m
@@ -1979,7 +1979,7 @@ groups:
   - record: sli_aggregations:gitlab_sli_sidekiq_queueing_apdex_total:rate_1h
     expr: |
       sum by (component,env,environment,external_dependencies,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(gitlab_sli_sidekiq_queueing_apdex_total{cluster="gprd-gitlab-gke",env="gprd",type=~"sidekiq"}[1h] offset 30s)
+        rate(gitlab_sli_sidekiq_queueing_apdex_total{cluster="gprd-gitlab-gke",env="gprd",type=~"sidekiq"}[1h] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - sidekiq_queueing-ops - 1h burn-rate - gprd-us-east1-b'
   interval: 1m
@@ -1987,7 +1987,7 @@ groups:
   - record: sli_aggregations:gitlab_sli_sidekiq_queueing_apdex_total:rate_1h
     expr: |
       sum by (component,env,environment,external_dependencies,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(gitlab_sli_sidekiq_queueing_apdex_total{cluster="gprd-us-east1-b",env="gprd",type=~"sidekiq"}[1h] offset 30s)
+        rate(gitlab_sli_sidekiq_queueing_apdex_total{cluster="gprd-us-east1-b",env="gprd",type=~"sidekiq"}[1h] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - sidekiq_queueing-ops - 1h burn-rate - gprd-us-east1-c'
   interval: 1m
@@ -1995,7 +1995,7 @@ groups:
   - record: sli_aggregations:gitlab_sli_sidekiq_queueing_apdex_total:rate_1h
     expr: |
       sum by (component,env,environment,external_dependencies,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(gitlab_sli_sidekiq_queueing_apdex_total{cluster="gprd-us-east1-c",env="gprd",type=~"sidekiq"}[1h] offset 30s)
+        rate(gitlab_sli_sidekiq_queueing_apdex_total{cluster="gprd-us-east1-c",env="gprd",type=~"sidekiq"}[1h] offset 1m)
       )
 - name: 'SLI Aggregations: sidekiq - sidekiq_queueing-ops - 1h burn-rate - gprd-us-east1-d'
   interval: 1m
@@ -2003,5 +2003,5 @@ groups:
   - record: sli_aggregations:gitlab_sli_sidekiq_queueing_apdex_total:rate_1h
     expr: |
       sum by (component,env,environment,external_dependencies,feature_category,fqdn,product_stage,queue,region,shard,stage,stage_group,tier,type,urgency,worker) (
-        rate(gitlab_sli_sidekiq_queueing_apdex_total{cluster="gprd-us-east1-d",env="gprd",type=~"sidekiq"}[1h] offset 30s)
+        rate(gitlab_sli_sidekiq_queueing_apdex_total{cluster="gprd-us-east1-d",env="gprd",type=~"sidekiq"}[1h] offset 1m)
       )

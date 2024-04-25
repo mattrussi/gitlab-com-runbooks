@@ -7,17 +7,17 @@ groups:
   - record: sli_aggregations:pgbouncer_pooler_errors_total:rate_5m
     expr: |
       sum by (component,env,environment,error,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(pgbouncer_pooler_errors_total{env="gstg",tier=~"db",type=~"pgbouncer-registry"}[5m] offset 30s)
+        rate(pgbouncer_pooler_errors_total{env="gstg",tier=~"db",type=~"pgbouncer-registry"}[5m] offset 1m)
       )
   - record: sli_aggregations:pgbouncer_stats_queries_pooled_total:rate_5m
     expr: |
       sum by (component,env,environment,error,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(pgbouncer_stats_queries_pooled_total{env="gstg",tier=~"db",type=~"pgbouncer-registry"}[5m] offset 30s)
+        rate(pgbouncer_stats_queries_pooled_total{env="gstg",tier=~"db",type=~"pgbouncer-registry"}[5m] offset 1m)
       )
   - record: sli_aggregations:pgbouncer_stats_sql_transactions_pooled_total:rate_5m
     expr: |
       sum by (component,env,environment,error,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(pgbouncer_stats_sql_transactions_pooled_total{env="gstg",tier=~"db",type=~"pgbouncer-registry"}[5m] offset 30s)
+        rate(pgbouncer_stats_sql_transactions_pooled_total{env="gstg",tier=~"db",type=~"pgbouncer-registry"}[5m] offset 1m)
       )
 - name: 'SLI Aggregations: pgbouncer-registry - service-ops - 30m burn-rate'
   interval: 2m
@@ -25,17 +25,17 @@ groups:
   - record: sli_aggregations:pgbouncer_pooler_errors_total:rate_30m
     expr: |
       sum by (component,env,environment,error,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(pgbouncer_pooler_errors_total{env="gstg",tier=~"db",type=~"pgbouncer-registry"}[30m] offset 30s)
+        rate(pgbouncer_pooler_errors_total{env="gstg",tier=~"db",type=~"pgbouncer-registry"}[30m] offset 1m)
       )
   - record: sli_aggregations:pgbouncer_stats_queries_pooled_total:rate_30m
     expr: |
       sum by (component,env,environment,error,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(pgbouncer_stats_queries_pooled_total{env="gstg",tier=~"db",type=~"pgbouncer-registry"}[30m] offset 30s)
+        rate(pgbouncer_stats_queries_pooled_total{env="gstg",tier=~"db",type=~"pgbouncer-registry"}[30m] offset 1m)
       )
   - record: sli_aggregations:pgbouncer_stats_sql_transactions_pooled_total:rate_30m
     expr: |
       sum by (component,env,environment,error,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(pgbouncer_stats_sql_transactions_pooled_total{env="gstg",tier=~"db",type=~"pgbouncer-registry"}[30m] offset 30s)
+        rate(pgbouncer_stats_sql_transactions_pooled_total{env="gstg",tier=~"db",type=~"pgbouncer-registry"}[30m] offset 1m)
       )
 - name: 'SLI Aggregations: pgbouncer-registry - service-ops - 1h burn-rate'
   interval: 1m
@@ -43,15 +43,15 @@ groups:
   - record: sli_aggregations:pgbouncer_pooler_errors_total:rate_1h
     expr: |
       sum by (component,env,environment,error,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(pgbouncer_pooler_errors_total{env="gstg",tier=~"db",type=~"pgbouncer-registry"}[1h] offset 30s)
+        rate(pgbouncer_pooler_errors_total{env="gstg",tier=~"db",type=~"pgbouncer-registry"}[1h] offset 1m)
       )
   - record: sli_aggregations:pgbouncer_stats_queries_pooled_total:rate_1h
     expr: |
       sum by (component,env,environment,error,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(pgbouncer_stats_queries_pooled_total{env="gstg",tier=~"db",type=~"pgbouncer-registry"}[1h] offset 30s)
+        rate(pgbouncer_stats_queries_pooled_total{env="gstg",tier=~"db",type=~"pgbouncer-registry"}[1h] offset 1m)
       )
   - record: sli_aggregations:pgbouncer_stats_sql_transactions_pooled_total:rate_1h
     expr: |
       sum by (component,env,environment,error,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(pgbouncer_stats_sql_transactions_pooled_total{env="gstg",tier=~"db",type=~"pgbouncer-registry"}[1h] offset 30s)
+        rate(pgbouncer_stats_sql_transactions_pooled_total{env="gstg",tier=~"db",type=~"pgbouncer-registry"}[1h] offset 1m)
       )
