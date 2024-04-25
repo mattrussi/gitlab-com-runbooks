@@ -14,9 +14,6 @@ Gitlab Rails supports this using an application-layer router which was implement
 
 Note that "shard" in this document is different from "shard" in the context of [K8s deployments](creating-a-shard.md)
 
-
-
-
 #### Sharding
 
 ![Diagram of sharding process](img/sidekiq-sharding-migrator.png)
@@ -50,16 +47,15 @@ The routing can be controlled using a feature flag `sidekiq_route_to_<queues_sha
 
 This involves updating the routing rules by specifying a Redis instance in the rule. Note that the particular instance needs to be configured in `config/redis.yml`.
 
-Refer to https://gitlab.com/gitlab-com/gl-infra/production/-/issues/17787 for an example of executing this change.
+Refer to [a previous change issue](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/17787) for an example of executing this change.
 
 2. Provision a temporary migration K8s deployment
-
 
 During the migration phase, 2 separate set of K8s pods are needed to poll from 2 Redis instances (migration source and migration target). This ensures that there are no unprocessed jobs that are not polled from a queue.
 
 A temporary Sidekiq deployment needs to be added in [k8s-workloads/gitlab-com](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-com/-/blob/master/releases/gitlab/values/gstg.yaml.gotmpl). The temporary deployment needs to have `SIDEKIQ_SHARD_NAME: "<new redis instance name>"` defined as an extra environment variable to correctly configure the `Sidekiq.redis`.
 
-Refer to https://gitlab.com/gitlab-com/gl-infra/production/-/issues/17787 for an example of executing this change.
+Refer to [a previous change issue](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/17787) for an example of executing this change.
 
 3. Gradually toggle feature flag to divert traffic
 
@@ -69,7 +65,7 @@ Use the following chatops command to gradually increase the percentage of time w
 chatops run feature set sidekiq_route_to_queues_shard_catchall_a 50 --random --ignore-random-deprecation-check
 ```
 
-Refer to https://gitlab.com/gitlab-com/gl-infra/production/-/issues/17841 for an example of a past migration. The proportion of jobs being completed by the new deployment will increase with the feature flag's enabled percentage.
+Refer to [a previous change issue](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/17841) for an example of a past migration. The proportion of jobs being completed by the new deployment will increase with the feature flag's enabled percentage.
 
 The migration can be considered completed after the feature flag is fully enabled and there are no more jobs being enqueued to the queue in the migration source. This can be verified by measuring `sidekiq_jobs_completion_count` rates and `sidekiq_queue_size` value.
 
