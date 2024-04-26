@@ -38,12 +38,12 @@ groups:
       (
         (
           gitlab_component_errors:ratio_1h{component="cnyHttpsServices",env="gprd",monitor="global",type="frontend"}
-          > (14.4 * 0.000100)
+          > (14.4 * 0.000400)
         )
         and
         (
           gitlab_component_errors:ratio_5m{component="cnyHttpsServices",env="gprd",monitor="global",type="frontend"}
-          > (14.4 * 0.000100)
+          > (14.4 * 0.000400)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -84,12 +84,12 @@ groups:
       (
         (
           gitlab_component_errors:ratio_6h{component="cnyHttpsServices",env="gprd",monitor="global",type="frontend"}
-          > (6 * 0.000100)
+          > (6 * 0.000400)
         )
         and
         (
           gitlab_component_errors:ratio_30m{component="cnyHttpsServices",env="gprd",monitor="global",type="frontend"}
-          > (6 * 0.000100)
+          > (6 * 0.000400)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -198,12 +198,12 @@ groups:
       (
         (
           gitlab_component_errors:ratio_1h{component="mainHttpsServices",env="gprd",monitor="global",type="frontend"}
-          > (14.4 * 0.000100)
+          > (14.4 * 0.000400)
         )
         and
         (
           gitlab_component_errors:ratio_5m{component="mainHttpsServices",env="gprd",monitor="global",type="frontend"}
-          > (14.4 * 0.000100)
+          > (14.4 * 0.000400)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -244,12 +244,12 @@ groups:
       (
         (
           gitlab_component_errors:ratio_6h{component="mainHttpsServices",env="gprd",monitor="global",type="frontend"}
-          > (6 * 0.000100)
+          > (6 * 0.000400)
         )
         and
         (
           gitlab_component_errors:ratio_30m{component="mainHttpsServices",env="gprd",monitor="global",type="frontend"}
-          > (6 * 0.000100)
+          > (6 * 0.000400)
         )
       )
       and on(env,environment,tier,type,stage,component)

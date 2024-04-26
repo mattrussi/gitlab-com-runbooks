@@ -15,7 +15,7 @@ groups:
       monitor: global
       tier: lb
       type: frontend
-    expr: "0.000100"
+    expr: "0.000400"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: cnyHttpsServices
@@ -29,7 +29,7 @@ groups:
       monitor: global
       tier: lb
       type: frontend
-    expr: "0.000100"
+    expr: "0.000400"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: mainHttpsServices
@@ -43,7 +43,7 @@ groups:
       monitor: global
       tier: lb
       type: frontend
-    expr: "0.000100"
+    expr: "0.000400"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: sshServices

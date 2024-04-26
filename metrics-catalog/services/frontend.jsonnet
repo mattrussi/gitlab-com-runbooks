@@ -12,7 +12,7 @@ metricsCatalog.serviceDefinition({
   tags: ['haproxy', 'gateway'],
   monitoringThresholds: {
     apdexScore: 0.999,
-    errorRatio: 0.9999,
+    errorRatio: 0.9996,
   },
   serviceDependencies: {
     git: true,
