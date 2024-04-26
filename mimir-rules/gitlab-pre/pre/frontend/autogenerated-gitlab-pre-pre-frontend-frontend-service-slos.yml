@@ -58,6 +58,20 @@ groups:
       tier: lb
       type: frontend
     expr: "0.001000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      component: websocketsServices
+      monitor: global
+      tier: lb
+      type: frontend
+    expr: "0.990000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      component: websocketsServices
+      monitor: global
+      tier: lb
+      type: frontend
+    expr: "0.001000"
   - record: gitlab_component_service:mapping
     labels:
       component: cnyHttpsServices
@@ -81,6 +95,16 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: sshServices
+      global_aggregation: "no"
+      monitor: global
+      regional_aggregation: "no"
+      service_aggregation: "yes"
+      tier: lb
+      type: frontend
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: websocketsServices
       global_aggregation: "no"
       monitor: global
       regional_aggregation: "no"

@@ -40,7 +40,7 @@ groups:
       type: frontend
     expr: |
       sum by (env,environment) (
-        rate(haproxy_backend_http_requests_total{backend!~"api_rate_limit|canary_.*|ssh",type="frontend"}[1m] offset 30s)
+        rate(haproxy_backend_http_requests_total{backend!~"api_rate_limit|canary_.*|ssh|websockets",type="frontend"}[1m] offset 30s)
       )
   - record: gitlab_component_errors:rate
     labels:
@@ -51,7 +51,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(haproxy_backend_response_errors_total{backend!~"api_rate_limit|canary_.*|ssh",type="frontend"}[1m] offset 30s)
+          rate(haproxy_backend_response_errors_total{backend!~"api_rate_limit|canary_.*|ssh|websockets",type="frontend"}[1m] offset 30s)
         )
       )
       or
@@ -84,6 +84,32 @@ groups:
       (
         0 * group by(env,environment,stage) (
           gitlab_component_ops:rate{component="sshServices",tier="lb",type="frontend"}
+        )
+      )
+  - record: gitlab_component_ops:rate
+    labels:
+      component: websocketsServices
+      tier: lb
+      type: frontend
+    expr: |
+      sum by (env,environment,stage) (
+        rate(haproxy_backend_http_requests_total{backend="websockets",type="frontend"}[1m] offset 30s)
+      )
+  - record: gitlab_component_errors:rate
+    labels:
+      component: websocketsServices
+      tier: lb
+      type: frontend
+    expr: |
+      (
+        sum by (env,environment,stage) (
+          rate(haproxy_backend_response_errors_total{backend="websockets",type="frontend"}[1m] offset 30s)
+        )
+      )
+      or
+      (
+        0 * group by(env,environment,stage) (
+          gitlab_component_ops:rate{component="websocketsServices",tier="lb",type="frontend"}
         )
       )
 - name: 'Component-Level SLIs: frontend - 5m burn-rate'
@@ -125,7 +151,7 @@ groups:
       type: frontend
     expr: |
       sum by (env,environment) (
-        rate(haproxy_backend_http_requests_total{backend!~"api_rate_limit|canary_.*|ssh",type="frontend"}[5m] offset 30s)
+        rate(haproxy_backend_http_requests_total{backend!~"api_rate_limit|canary_.*|ssh|websockets",type="frontend"}[5m] offset 30s)
       )
   - record: gitlab_component_errors:rate_5m
     labels:
@@ -136,7 +162,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(haproxy_backend_response_errors_total{backend!~"api_rate_limit|canary_.*|ssh",type="frontend"}[5m] offset 30s)
+          rate(haproxy_backend_response_errors_total{backend!~"api_rate_limit|canary_.*|ssh|websockets",type="frontend"}[5m] offset 30s)
         )
       )
       or
@@ -169,6 +195,32 @@ groups:
       (
         0 * group by(env,environment,stage) (
           gitlab_component_ops:rate_5m{component="sshServices",tier="lb",type="frontend"}
+        )
+      )
+  - record: gitlab_component_ops:rate_5m
+    labels:
+      component: websocketsServices
+      tier: lb
+      type: frontend
+    expr: |
+      sum by (env,environment,stage) (
+        rate(haproxy_backend_http_requests_total{backend="websockets",type="frontend"}[5m] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_5m
+    labels:
+      component: websocketsServices
+      tier: lb
+      type: frontend
+    expr: |
+      (
+        sum by (env,environment,stage) (
+          rate(haproxy_backend_response_errors_total{backend="websockets",type="frontend"}[5m] offset 30s)
+        )
+      )
+      or
+      (
+        0 * group by(env,environment,stage) (
+          gitlab_component_ops:rate_5m{component="websocketsServices",tier="lb",type="frontend"}
         )
       )
 - name: 'Component-Level SLIs: frontend - 30m burn-rate'
@@ -210,7 +262,7 @@ groups:
       type: frontend
     expr: |
       sum by (env,environment) (
-        rate(haproxy_backend_http_requests_total{backend!~"api_rate_limit|canary_.*|ssh",type="frontend"}[30m] offset 30s)
+        rate(haproxy_backend_http_requests_total{backend!~"api_rate_limit|canary_.*|ssh|websockets",type="frontend"}[30m] offset 30s)
       )
   - record: gitlab_component_errors:rate_30m
     labels:
@@ -221,7 +273,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(haproxy_backend_response_errors_total{backend!~"api_rate_limit|canary_.*|ssh",type="frontend"}[30m] offset 30s)
+          rate(haproxy_backend_response_errors_total{backend!~"api_rate_limit|canary_.*|ssh|websockets",type="frontend"}[30m] offset 30s)
         )
       )
       or
@@ -254,6 +306,32 @@ groups:
       (
         0 * group by(env,environment,stage) (
           gitlab_component_ops:rate_30m{component="sshServices",tier="lb",type="frontend"}
+        )
+      )
+  - record: gitlab_component_ops:rate_30m
+    labels:
+      component: websocketsServices
+      tier: lb
+      type: frontend
+    expr: |
+      sum by (env,environment,stage) (
+        rate(haproxy_backend_http_requests_total{backend="websockets",type="frontend"}[30m] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_30m
+    labels:
+      component: websocketsServices
+      tier: lb
+      type: frontend
+    expr: |
+      (
+        sum by (env,environment,stage) (
+          rate(haproxy_backend_response_errors_total{backend="websockets",type="frontend"}[30m] offset 30s)
+        )
+      )
+      or
+      (
+        0 * group by(env,environment,stage) (
+          gitlab_component_ops:rate_30m{component="websocketsServices",tier="lb",type="frontend"}
         )
       )
 - name: 'Component-Level SLIs: frontend - 1h burn-rate'
@@ -295,7 +373,7 @@ groups:
       type: frontend
     expr: |
       sum by (env,environment) (
-        rate(haproxy_backend_http_requests_total{backend!~"api_rate_limit|canary_.*|ssh",type="frontend"}[1h] offset 30s)
+        rate(haproxy_backend_http_requests_total{backend!~"api_rate_limit|canary_.*|ssh|websockets",type="frontend"}[1h] offset 30s)
       )
   - record: gitlab_component_errors:rate_1h
     labels:
@@ -306,7 +384,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(haproxy_backend_response_errors_total{backend!~"api_rate_limit|canary_.*|ssh",type="frontend"}[1h] offset 30s)
+          rate(haproxy_backend_response_errors_total{backend!~"api_rate_limit|canary_.*|ssh|websockets",type="frontend"}[1h] offset 30s)
         )
       )
       or
@@ -339,6 +417,32 @@ groups:
       (
         0 * group by(env,environment,stage) (
           gitlab_component_ops:rate_1h{component="sshServices",tier="lb",type="frontend"}
+        )
+      )
+  - record: gitlab_component_ops:rate_1h
+    labels:
+      component: websocketsServices
+      tier: lb
+      type: frontend
+    expr: |
+      sum by (env,environment,stage) (
+        rate(haproxy_backend_http_requests_total{backend="websockets",type="frontend"}[1h] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_1h
+    labels:
+      component: websocketsServices
+      tier: lb
+      type: frontend
+    expr: |
+      (
+        sum by (env,environment,stage) (
+          rate(haproxy_backend_response_errors_total{backend="websockets",type="frontend"}[1h] offset 30s)
+        )
+      )
+      or
+      (
+        0 * group by(env,environment,stage) (
+          gitlab_component_ops:rate_1h{component="websocketsServices",tier="lb",type="frontend"}
         )
       )
 - name: 'Component-Level SLIs: frontend - 6h burn-rate'
@@ -380,7 +484,7 @@ groups:
       type: frontend
     expr: |
       sum by (env,environment) (
-        rate(haproxy_backend_http_requests_total{backend!~"api_rate_limit|canary_.*|ssh",type="frontend"}[6h] offset 30s)
+        rate(haproxy_backend_http_requests_total{backend!~"api_rate_limit|canary_.*|ssh|websockets",type="frontend"}[6h] offset 30s)
       )
   - record: gitlab_component_errors:rate_6h
     labels:
@@ -391,7 +495,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(haproxy_backend_response_errors_total{backend!~"api_rate_limit|canary_.*|ssh",type="frontend"}[6h] offset 30s)
+          rate(haproxy_backend_response_errors_total{backend!~"api_rate_limit|canary_.*|ssh|websockets",type="frontend"}[6h] offset 30s)
         )
       )
       or
@@ -426,6 +530,32 @@ groups:
           gitlab_component_ops:rate_6h{component="sshServices",tier="lb",type="frontend"}
         )
       )
+  - record: gitlab_component_ops:rate_6h
+    labels:
+      component: websocketsServices
+      tier: lb
+      type: frontend
+    expr: |
+      sum by (env,environment,stage) (
+        rate(haproxy_backend_http_requests_total{backend="websockets",type="frontend"}[6h] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_6h
+    labels:
+      component: websocketsServices
+      tier: lb
+      type: frontend
+    expr: |
+      (
+        sum by (env,environment,stage) (
+          rate(haproxy_backend_response_errors_total{backend="websockets",type="frontend"}[6h] offset 30s)
+        )
+      )
+      or
+      (
+        0 * group by(env,environment,stage) (
+          gitlab_component_ops:rate_6h{component="websocketsServices",tier="lb",type="frontend"}
+        )
+      )
 - name: 'Component mapping: frontend'
   interval: 1m
   rules:
@@ -450,6 +580,15 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: sshServices
+      global_aggregation: "no"
+      regional_aggregation: "no"
+      service_aggregation: "yes"
+      tier: lb
+      type: frontend
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: websocketsServices
       global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"

@@ -34,7 +34,7 @@ metricsCatalog.serviceDefinition({
         stage: 'main',
       },
 
-      local mainHttpsSelector = { backend: { noneOf: ['ssh', 'api_rate_limit', 'canary_.*'] } },
+      local mainHttpsSelector = { backend: { noneOf: ['ssh', 'api_rate_limit', 'canary_.*', 'websockets'] } },
       requestRate: rateMetric(
         counter='haproxy_backend_http_requests_total',
         selector=baseSelector + mainHttpsSelector,
@@ -126,6 +126,35 @@ metricsCatalog.serviceDefinition({
           savedQuery='805818759045:d72111fcd69b4b5bb97f9b33b80f9edb',
         ),
       ],
+    },
+
+    websocketsServices: {
+      // HAProxy frontends and backends are proxy to actual services.
+      // These services are monitored separately as user-impacting services.
+      userImpacting: false,
+
+      significantLabels: ['fqdn'],
+
+      monitoringThresholds+: {
+        apdexScore: 0.99,
+        errorRatio: 0.999,
+      },
+
+      local websocketsSelector = { backend: 'websockets' },
+      requestRate: rateMetric(
+        counter='haproxy_backend_http_requests_total',
+        selector=baseSelector + websocketsSelector,
+      ),
+
+      responseRate: rateMetric(
+        counter='haproxy_backend_http_responses_total',
+        selector=baseSelector + websocketsSelector,
+      ),
+
+      errorRate: rateMetric(
+        counter='haproxy_backend_response_errors_total',
+        selector=baseSelector + websocketsSelector,
+      ),
     },
   },
 
