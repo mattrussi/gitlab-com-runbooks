@@ -53,7 +53,44 @@ Refer to [a previous change issue](https://gitlab.com/gitlab-com/gl-infra/produc
 
 During the migration phase, 2 separate set of K8s pods are needed to poll from 2 Redis instances (migration source and migration target). This ensures that there are no unprocessed jobs that are not polled from a queue.
 
-A temporary Sidekiq deployment needs to be added in [k8s-workloads/gitlab-com](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-com/-/blob/master/releases/gitlab/values/gstg.yaml.gotmpl). The temporary deployment needs to have `SIDEKIQ_SHARD_NAME: "<new redis instance name>"` defined as an extra environment variable to correctly configure the `Sidekiq.redis`.
+A temporary Sidekiq deployment needs to be added in [k8s-workloads/gitlab-com](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-com/-/blob/master/releases/gitlab/values/gstg.yaml.gotmpl) under `sidekiq.pods`. The temporary deployment needs to have `SIDEKIQ_SHARD_NAME: "<new redis instance name>"` defined as an extra environment variable to correctly configure the `Sidekiq.redis`.
+
+Below is an example. Note that variables like `maxReplicas`,  `resources.requests`, `resources.limits` may need to be tuned depending on the state of gitlab.com at the point of migration. `queues` and `extraEnv` would need to be updated to be relevant to the migration.
+
+ ```
+pods:
+  - name: catchall-migrator
+    common:
+      labels:
+        shard: catchall-migrator
+    concurrency: 10
+    minReplicas: 1
+    maxReplicas: 100
+    podLabels:
+      deployment: sidekiq-catchall
+      shard: catchall-migrator
+    queues: default,mailers
+    resources:
+      requests:
+        cpu: 800m
+        memory: 2G
+      limits:
+        cpu: 1.5
+        memory: 4G
+    extraEnv:
+      GITLAB_SENTRY_EXTRA_TAGS: "{\"type\": \"sidekiq\", \"stage\": \"main\", \"shard\": \"catchall\"}"
+      SIDEKIQ_SHARD_NAME: "queues_shard_catchall_a"
+    extraVolumeMounts: |
+      - name: sidekiq-shared
+        mountPath: /srv/gitlab/shared
+        readOnly: false
+    extraVolumes: |
+      # This is needed because of https://gitlab.com/gitlab-org/gitlab/-/issues/330317
+      # where temp files are written to `/srv/gitlab/shared`
+      - name: sidekiq-shared
+        emptyDir:
+          sizeLimit: 10G
+```
 
 Refer to [a previous change issue](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/17787) for an example of executing this change.
 
