@@ -8,7 +8,7 @@ local dependOnRedisSidekiq = import 'inhibit-rules/depend_on_redis_sidekiq.libso
 metricsCatalog.serviceDefinition({
   type: 'ci-runners',
   tier: 'runners',
-  tenants: [ 'gitlab-gprd', 'gitlab-gstg', 'gitlab-ops', 'gitlab-pre' ],
+  tenants: ['gitlab-gprd', 'gitlab-gstg', 'gitlab-ops', 'gitlab-pre'],
   contractualThresholds: {
     apdexRatio: 0.95,
     errorRatio: 0.05,
@@ -115,6 +115,13 @@ metricsCatalog.serviceDefinition({
           failure_reason: 'runner_system_failure',
         },
       ),
+
+      // `job_queue_duration_seconds_bucket` is emitted by `api`
+      // but `gitlab_runner_jobs_total` and `gitlab_runner_failed_jobs_total`
+      // is emitted by `ci-runners` itself.
+      // We set `emittedBy` as empty array so that `sli_aggregations:` rules
+      // in Mimir doesn't scope by `ci-runners` by default.
+      emittedBy: [],
 
       significantLabels: ['jobs_running_for_project'],
 
