@@ -68,12 +68,12 @@ groups:
   - record: sli_aggregations:cortex_prometheus_rule_evaluation_failures_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,job,namespace,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(cortex_prometheus_rule_evaluation_failures_total{job=~"mimir/compactor",namespace=~"mimir",type=~"mimir"}[5m])
+        rate(cortex_prometheus_rule_evaluation_failures_total{job=~"mimir/ruler",namespace=~"mimir",type=~"mimir"}[5m])
       )
   - record: sli_aggregations:cortex_prometheus_rule_evaluations_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,job,namespace,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(cortex_prometheus_rule_evaluations_total{job=~"mimir/compactor",namespace=~"mimir",type=~"mimir"}[5m])
+        rate(cortex_prometheus_rule_evaluations_total{job=~"mimir/ruler",namespace=~"mimir",type=~"mimir"}[5m])
       )
 - name: 'SLI Aggregations: mimir - mimir_store_gateway-apdex - 5m burn-rate'
   interval: 1m
@@ -158,12 +158,12 @@ groups:
   - record: sli_aggregations:cortex_prometheus_rule_evaluation_failures_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,job,namespace,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(cortex_prometheus_rule_evaluation_failures_total{job=~"mimir/compactor",namespace=~"mimir",type=~"mimir"}[30m])
+        rate(cortex_prometheus_rule_evaluation_failures_total{job=~"mimir/ruler",namespace=~"mimir",type=~"mimir"}[30m])
       )
   - record: sli_aggregations:cortex_prometheus_rule_evaluations_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,job,namespace,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(cortex_prometheus_rule_evaluations_total{job=~"mimir/compactor",namespace=~"mimir",type=~"mimir"}[30m])
+        rate(cortex_prometheus_rule_evaluations_total{job=~"mimir/ruler",namespace=~"mimir",type=~"mimir"}[30m])
       )
 - name: 'SLI Aggregations: mimir - mimir_store_gateway-apdex - 30m burn-rate'
   interval: 2m
@@ -248,12 +248,12 @@ groups:
   - record: sli_aggregations:cortex_prometheus_rule_evaluation_failures_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,job,namespace,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(cortex_prometheus_rule_evaluation_failures_total{job=~"mimir/compactor",namespace=~"mimir",type=~"mimir"}[1h])
+        rate(cortex_prometheus_rule_evaluation_failures_total{job=~"mimir/ruler",namespace=~"mimir",type=~"mimir"}[1h])
       )
   - record: sli_aggregations:cortex_prometheus_rule_evaluations_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,job,namespace,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(cortex_prometheus_rule_evaluations_total{job=~"mimir/compactor",namespace=~"mimir",type=~"mimir"}[1h])
+        rate(cortex_prometheus_rule_evaluations_total{job=~"mimir/ruler",namespace=~"mimir",type=~"mimir"}[1h])
       )
 - name: 'SLI Aggregations: mimir - mimir_store_gateway-apdex - 1h burn-rate'
   interval: 1m

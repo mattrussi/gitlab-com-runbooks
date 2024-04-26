@@ -429,7 +429,7 @@ metricsCatalog.serviceDefinition({
       |||,
 
       local mimirQuerySelector = mimirServiceSelector {
-        job: 'mimir/compactor',
+        job: 'mimir/ruler',
       },
 
       requestRate: rateMetric(
