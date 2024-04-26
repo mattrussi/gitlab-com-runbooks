@@ -5,7 +5,7 @@ This documents outlines the necessary steps to horizontally shard Sidekiq and mi
 
 ### Background
 
-Sidekiq uses a Redis instance as its backing datastore. However, Redis is not horizontally scalable and Redis Cluster is not suitable for Sidekiq since
+Sidekiq uses a Redis server (either standalone or with Sentinels) as its backing datastore. However, Redis is not horizontally scalable and Redis Cluster is not suitable for Sidekiq since
 there are only a small subset of hot keys.
 
 [Sharding](https://github.com/sidekiq/sidekiq/wiki/Sharding) Sidekiq involves routing jobs to another Redis at the application level.
@@ -16,7 +16,7 @@ Note that "shard" in this document is different from "shard" in the context of [
 
 #### Sharding
 
-![Diagram of sharding process](img/sidekiq-sharding-migrator.png)
+![Diagram of a sharded Sidekiq setup](img/sharded-sidekiq.png)
 
 The routing rules will specify how jobs are to be routed. For instance below, the last routing rule will
 route jobs to the `queues_shard_catchall_a` instance in the `config/redis.yml`.
@@ -42,6 +42,8 @@ To configure the Sidekiq server to poll from `queues_shard_catchall_a`, define a
 The routing can be controlled using a feature flag `sidekiq_route_to_<queues_shard_catchall_a or any relevant shard name>` and "pinned" using the `SIDEKIQ_MIGRATED_SHARDS` environment variable post-migration.
 
 #### Migration Overview
+
+![Diagram of sharding process](img/sidekiq-sharding-migrator.png)
 
 1. Configuring the Rails app and chef VMs.
 
