@@ -217,7 +217,7 @@ groups:
         sum by (env,environment,tier,type,stage) (
           sum_over_time(gitlab_component_ops:rate_1h{env="pre",monitor="global",type="git",upscale_source="yes"}[6h] offset 30s) and on(component, type) (gitlab_component_service:mapping{monitor="global",service_aggregation="yes"})
           and
-          gitlab_component_errors:rate_1h{env="pre",monitor="global",type="git",upscale_source="yes"} >= 0
+          (gitlab_component_errors:rate_1h{env="pre",monitor="global",type="git",upscale_source="yes"} offset 30s >= 0) and on(component, type) (gitlab_component_service:mapping{monitor="global",service_aggregation="yes"})
         )
       )
   - record: gitlab_service_apdex:weight:score_6h
@@ -298,7 +298,7 @@ groups:
       sum by (env,environment,tier,type,stage) (
         sum_over_time(gitlab_component_ops:rate_1h{env="pre",monitor="global",type="git"}[3d] offset 30s) and on(component, type) (gitlab_component_service:mapping{monitor="global",service_aggregation="yes"})
         and
-        gitlab_component_errors:rate_1h{env="pre",monitor="global",type="git"} >= 0
+        (gitlab_component_errors:rate_1h{env="pre",monitor="global",type="git"} offset 30s >= 0) and on(component, type) (gitlab_component_service:mapping{monitor="global",service_aggregation="yes"})
       )
   - record: gitlab_service_apdex:weight:score_3d
     labels:

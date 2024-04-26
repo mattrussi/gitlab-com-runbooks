@@ -113,7 +113,7 @@ groups:
       sum by (env,environment,tier,type,stage,shard,component) (
         sum_over_time(gitlab_component_shard_ops:rate_1h{env="gprd",monitor!="global"}[6h])
         and
-        gitlab_component_shard_errors:rate_1h{env="gprd",monitor!="global"} >= 0
+        (gitlab_component_shard_errors:rate_1h{env="gprd",monitor!="global"} >= 0)
       )
   - record: gitlab_component_shard_apdex:ratio_6h
     expr: |
@@ -138,7 +138,7 @@ groups:
       sum by (env,environment,tier,type,stage,shard,component) (
         sum_over_time(gitlab_component_shard_ops:rate_1h{env="gprd",monitor!="global"}[3d])
         and
-        gitlab_component_shard_errors:rate_1h{env="gprd",monitor!="global"} >= 0
+        (gitlab_component_shard_errors:rate_1h{env="gprd",monitor!="global"} >= 0)
       )
   - record: gitlab_component_shard_apdex:ratio_3d
     expr: |
