@@ -517,7 +517,7 @@ groups:
       type: mimir
     expr: |
       sum by () (
-        sli_aggregations:cortex_prometheus_rule_evaluations_total:rate_5m{job="mimir/compactor",namespace="mimir",type="mimir"} offset 30s
+        sli_aggregations:cortex_prometheus_rule_evaluations_total:rate_5m{job="mimir/ruler",namespace="mimir",type="mimir"} offset 30s
       )
   - record: gitlab_component_errors:rate_5m
     labels:
@@ -531,7 +531,7 @@ groups:
     expr: |
       (
         sum by () (
-          sli_aggregations:cortex_prometheus_rule_evaluation_failures_total:rate_5m{job="mimir/compactor",namespace="mimir",type="mimir"} offset 30s
+          sli_aggregations:cortex_prometheus_rule_evaluation_failures_total:rate_5m{job="mimir/ruler",namespace="mimir",type="mimir"} offset 30s
         )
       )
       or
@@ -1172,7 +1172,7 @@ groups:
       type: mimir
     expr: |
       sum by () (
-        sli_aggregations:cortex_prometheus_rule_evaluations_total:rate_30m{job="mimir/compactor",namespace="mimir",type="mimir"} offset 30s
+        sli_aggregations:cortex_prometheus_rule_evaluations_total:rate_30m{job="mimir/ruler",namespace="mimir",type="mimir"} offset 30s
       )
   - record: gitlab_component_errors:rate_30m
     labels:
@@ -1186,7 +1186,7 @@ groups:
     expr: |
       (
         sum by () (
-          sli_aggregations:cortex_prometheus_rule_evaluation_failures_total:rate_30m{job="mimir/compactor",namespace="mimir",type="mimir"} offset 30s
+          sli_aggregations:cortex_prometheus_rule_evaluation_failures_total:rate_30m{job="mimir/ruler",namespace="mimir",type="mimir"} offset 30s
         )
       )
       or
@@ -1827,7 +1827,7 @@ groups:
       type: mimir
     expr: |
       sum by () (
-        sli_aggregations:cortex_prometheus_rule_evaluations_total:rate_1h{job="mimir/compactor",namespace="mimir",type="mimir"} offset 30s
+        sli_aggregations:cortex_prometheus_rule_evaluations_total:rate_1h{job="mimir/ruler",namespace="mimir",type="mimir"} offset 30s
       )
   - record: gitlab_component_errors:rate_1h
     labels:
@@ -1841,7 +1841,7 @@ groups:
     expr: |
       (
         sum by () (
-          sli_aggregations:cortex_prometheus_rule_evaluation_failures_total:rate_1h{job="mimir/compactor",namespace="mimir",type="mimir"} offset 30s
+          sli_aggregations:cortex_prometheus_rule_evaluation_failures_total:rate_1h{job="mimir/ruler",namespace="mimir",type="mimir"} offset 30s
         )
       )
       or
