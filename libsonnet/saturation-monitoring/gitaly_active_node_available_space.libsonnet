@@ -54,5 +54,8 @@ local selectors = import 'promql/selectors.libsonnet';
       soft: 0.95,
       hard: 0.965,
     },
+    capacityPlanning: {
+      forecast_days: 30,
+    },
   }),
 }
