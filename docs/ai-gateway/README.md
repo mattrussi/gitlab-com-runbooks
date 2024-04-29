@@ -125,8 +125,8 @@ For more details, refer to [Runway runbook](../runway/README.md).
 
 When the decision is made to provision a new region, the following steps should be taken:
 
-1. Request a quota increase in the new region
-1. Follow the Runway documentation to set up the new region
+1. Request a quota increase in the new region (for instructions see [this section below](https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/ai-gateway/README.md#gcp-quotas))
+1. Follow the [Runway documentation to set up the new region](https://docs.runway.gitlab.com/guides/multi-region/)
 1. Notify the testing team that a new region has been set up so that they can run the necessary tests
 
 ## Services and Accounts
@@ -163,7 +163,7 @@ It is also possible to directly edit the tunables for the `ai-gateway` service v
 
 AI Gateway uses [capacity planning](https://about.gitlab.com/handbook/engineering/infrastructure/capacity-planning/) provided by Runway for long-term forecasting of saturation resources. To view forecasts, refer to [Tamland page](https://gitlab-com.gitlab.io/gl-infra/capacity-planning-trackers/gitlab-com/service_groups/ai-gateway/).
 
-### GCP quotas usage
+### GCP Quotas
 
 Apart from our quota monitoring in our usual GCP projects, the AI Gateway relies on resources that live on the
 `unreview-poc-390200e5` project. Refer to
