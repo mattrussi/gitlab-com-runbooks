@@ -11,7 +11,7 @@ Access to Vault is managed through [Okta](https://gitlab.okta.com), with Okta gr
 To obtain access to Vault for your team:
 
 1. Check if an Okta group already exists for your team, ask a member of the IT team if you aren't sure. You can also ask directly in the Access Request below;
-2. Open an [Change Request](https://gitlab.com/gitlab-com/business-technology/change-management/-/issues/new?issuable_template=okta_update_existing_app) with the following:
+2. Open a [Change Request](https://gitlab.com/gitlab-com/business-technology/change-management/-/issues/new?issuable_template=okta_update_existing_app) with the following:
 
     * if you don't have Okta group yet, ask for a new Okta group to be created and list the team members to be added to it
       * Group Naming Format - team-eng-{team-name}
