@@ -10,7 +10,7 @@ I will use as an example the issue: <https://gitlab.com/gitlab-com/gl-infra/reli
 
 Using this dashboard we can see the primary CPU utilization. Currently, the criteria used to generate a report are all the peaks over 50% of CPU utilization. Please consider that this number could increase, and we consider a peak when is 80% to 100% over the average CPU utilizatain. For example if the CPU utilization is 25% a 50% could trigger an investigation since is 100% more than the average at that moment.
 
-<https://dashboards.gitlab.net/d/bd2Kl9Imk/host-stats?viewPanel=8&orgId=1&var-env=gprd&var-node=patroni-v12-02-db-gprd.c.gitlab-production.internal>
+<https://dashboards.gitlab.net/d/bd2Kl9Imk/host-stats?viewPanel=8&orgId=1&var-env=gprd&var-node=patroni-main-v14-101-db-gprd.c.gitlab-production.internal>
 
 Please remember to filter this dashboard by the Primary database host. The primary can change regularly. To see which server is the current primary view this [dashboard](https://dashboards.gitlab.net/d/000000244/postgresql-replication-overview?orgId=1&from=now-3h&to=now&var-prometheus=Global&var-environment=gprd&var-type=patroni)
 
