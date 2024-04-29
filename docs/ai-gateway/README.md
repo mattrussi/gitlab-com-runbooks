@@ -127,7 +127,7 @@ When the decision is made to provision a new region, the following steps should 
 
 1. Request a quota increase in the new region (for instructions see [this section below](https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/ai-gateway/README.md#gcp-quotas))
 1. Follow the [Runway documentation to set up the new region](https://docs.runway.gitlab.com/guides/multi-region/)
-1. Notify the testing team that a new region has been set up so that they can run the necessary tests
+1. Notify the [testing team](https://handbook.gitlab.com/handbook/engineering/infrastructure/test-platform/) that a new region has been set up so that they can run the necessary tests
 
 ## Services and Accounts
 
