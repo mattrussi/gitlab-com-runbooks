@@ -12,7 +12,9 @@ there are only a small subset of hot keys.
 
 Gitlab Rails supports this using an application-layer router which was implemented as part of [epic 1218](https://gitlab.com/groups/gitlab-com/gl-infra/-/epics/1218)
 
-Note that "shard" in this document is different from "shard" in the context of [K8s deployments](creating-a-shard.md)
+Note that "shard" in this document refers to a Redis shard while "shard" in the context of [K8s deployments](creating-a-shard.md) refers to a Sidekiq shard. A Redis shard is
+a Redis instance meant to handle a fraction of the overall enqueueing workload required by Sidekiq. A Sidekiq shard refers to a single K8s deployment
+that is configured to poll from a single queue and a single Redis instance.
 
 #### Sharding
 
