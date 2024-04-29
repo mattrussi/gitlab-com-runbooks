@@ -715,6 +715,31 @@ services:
         grafana_folder: SRXyrrSmk
         primary_grafana_dashboard: gitaly-main/gitaly-overview
 
+  - name: http-router
+    tier: lb
+    friendly_name: Cloudflare HTTP Router
+    label: HttpRouter
+    owner: tenant_scale
+    technical:
+      project:
+        - https://gitlab.com/gitlab-org/cells/router
+      documents:
+        design:
+        architecture: https://docs.gitlab.com/ee/architecture/blueprints/cells/routing-service.html
+        readiness_review: https://gitlab.com/gitlab-com/gl-infra/readiness/-/tree/master/http-router
+        sre_guide:
+        developer_guide:
+        service:
+        security:
+      dependencies:
+      logging:
+        - name:
+          permalink:
+    observability:
+      monitors:
+        primary_grafana_dashboard:
+        sentry_slug:
+
   - name: influxdb
     tier: inf
     friendly_name: InfluxDB (deprecated)
