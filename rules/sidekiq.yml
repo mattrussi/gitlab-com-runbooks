@@ -5,7 +5,7 @@ groups:
     expr: >
       (
         sum by (environment, stage, feature_category, worker) (
-          sli_aggregations:sidekiq_enqueued_jobs_total:rate_5m{feature_category=~"continuous_integration|runner"}
+          sli_aggregations:sidekiq_enqueued_jobs_total_rate5m{feature_category=~"continuous_integration|runner"}
         )
         -
         sum by (environment, stage, feature_category, worker) (
