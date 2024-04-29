@@ -13,8 +13,10 @@ there are only a small subset of hot keys.
 Gitlab Rails supports this using an application-layer router which was implemented as part of [epic 1218](https://gitlab.com/groups/gitlab-com/gl-infra/-/epics/1218)
 
 Note that "shard" in this document refers to a Redis shard while "shard" in the context of [K8s deployments](creating-a-shard.md) refers to a Sidekiq shard. A Redis shard is
-a Redis instance meant to handle a fraction of the overall enqueueing workload required by Sidekiq. A Sidekiq shard refers to a single K8s deployment
-that is configured to poll from a single queue and a single Redis instance.
+a Redis instance meant to handle a fraction of the overall enqueueing workload required by Sidekiq.
+
+A Sidekiq shard refers to a single K8s deployment that is configured to poll from a single queue and a single Redis instance. For purpose of clarity, we will explicitly use "K8s deployment" in place
+of "Sidekiq shard" in this document.
 
 #### Sharding
 
@@ -113,15 +115,18 @@ The migration can be considered completed after the feature flag is fully enable
 - completion count chart - [thanos](https://thanos-query.ops.gitlab.net/graph?g0.expr=sum(rate(sidekiq_jobs_completion_count%7Benv%3D'gprd'%7D%5B1m%5D))%20by%20(shard)&g0.tab=0&g0.stacked=0&g0.range_input=1h&g0.max_source_resolution=0s&g0.deduplicate=1&g0.partial_response=0&g0.store_matches=%5B%5D)
 - queue size chart - [thanos](https://thanos-query.ops.gitlab.net/graph?g0.expr=max%20by(name)%20(sidekiq_queue_size%7Benv%3D%22gprd%22%7D)&g0.tab=0&g0.stacked=0&g0.range_input=1h&g0.max_source_resolution=0s&g0.deduplicate=1&g0.partial_response=0&g0.store_matches=%5B%5D)
 
-For example, we should observe a decrease in job completion rate on the Sidekiq shard polling the migration source and an increase on the temporary migration shard that polls the migration target. The effects will be more pronounced as the feature flag percentage increases. Refer to the example below:
+For example, we should observe a decrease in job completion rate on the Sidekiq shard polling the migration source and an increase on the temporary migration K8s deployment that polls the migration target. The effects will be more pronounced as the feature flag percentage increases. Refer to the example below:
 
 ![migration behaviour example](img/sidekiq-migration-example.png)
 
 4. Finalise migration by setting the `SIDEKIQ_MIGRATED_SHARDS` environment variable
 
-This will require a merge request to the [k8s-workloads project](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-com) and prevents accidental toggles from the feature flags.
+This will require a merge request to the [k8s-workloads project](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-com) and prevents accidental toggles from the feature flags. This updates the application
+with the list of Redis instances which are considered migrated and the application-router should route jobs to these instances without checking the feature flags.
 
-The shard to be migrated can be now configured to poll from the new Redis instance and the temporary migration k8s deployment can be removed.
+Note: We use the term "shard" in the environment variables to be consistent with [Sidekiq Sharding terminology](https://github.com/sidekiq/sidekiq/wiki/Sharding).
+
+The K8s deployment to be migrated can be now configured to poll from the new Redis instance and the temporary migration K8s deployment can be removed.
 
 Note: scheduled jobs left in the `schedule` sorted set of the migration source will be routed to the migration target as long as there are other Sidekiq processes still using the migration source, e.g. other active queues.
 
@@ -156,7 +161,7 @@ Gitlab::Redis::Queues.instances[source].with do |src|
 end
 ```
 
-**Provision a temporary shard to drain the jobs**
+**Provision a temporary K8s deployment to drain the jobs**
 
 In the event where a steady stream of jobs are being pushed to the incorrect Redis instance, we can create a Sidekiq deployment which
 uses the default `redis-sidekiq` for its `Sidekiq.redis` (i.e. no `SIDEKIQ_SHARD_NAME` environment variable). Set the `queues` values for the
