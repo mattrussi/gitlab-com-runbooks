@@ -28,7 +28,7 @@ The AI Gateway was formerly known as Model Gateway and Code Suggestions.
 ## Operational Roles and Responsibilities
 
 1. Regional deployment management - The AI-Gateway team is responsible for selecting, provisioning and de-provisioning regional deployments. Selection and provisioning can be self-served via the runway config ([multi region docs](https://runway-docs-4jdf82.runway.gitlab.net/guides/multi-region/)). Currently deprovisioning should be requested by contacting the Runway team.
-2. Quota Saturation Monitoring and Response - The AI-Gateway team is responsible for monitoring the saturation warnings and responding to the warnings when raised. 
+2. Quota Saturation Monitoring and Response - The AI-Gateway team is responsible for monitoring the saturation warnings and responding to the warnings when raised.
 
 ## Architecture
 
