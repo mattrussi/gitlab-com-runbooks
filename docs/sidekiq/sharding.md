@@ -39,7 +39,7 @@ sidekiq:
     - ["*", "default", "queues_shard_catchall_a"] # catchall on k8s
 ```
 
-To configure the Sidekiq server to poll from `queues_shard_catchall_a`, define an environment `SIDEKIQ_SHARD_NAME: "queues_shard_catchall_a"` in `extraEnv` of the desired [Sidekiq deployment](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-com/-/blob/master/releases/gitlab/values/gstg.yaml.gotmpl) under `sidekiq.pods`.
+To configure the Sidekiq server to poll from `queues_shard_catchall_a`, define an environment variable `SIDEKIQ_SHARD_NAME: "queues_shard_catchall_a"` in `extraEnv` of the desired [Sidekiq deployment](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-com/-/blob/master/releases/gitlab/values/gstg.yaml.gotmpl) under `sidekiq.pods`.
 
 The routing can be controlled using a feature flag `sidekiq_route_to_<queues_shard_catchall_a or any relevant shard name>` and "pinned" using the `SIDEKIQ_MIGRATED_SHARDS` environment variable post-migration.
 
