@@ -71,7 +71,7 @@ groups:
       monitor: global
       tier: lb
       type: frontend
-    expr: "0.003000"
+    expr: "0.005000"
   - record: gitlab_component_service:mapping
     labels:
       component: cnyHttpsServices

@@ -614,7 +614,7 @@ groups:
       component: websocketsServices
       tier: lb
       type: frontend
-    expr: "0.003000"
+    expr: "0.005000"
   - record: slo:min:gitlab_service_apdex:ratio
     labels:
       tier: sv
