@@ -14,9 +14,9 @@ To obtain access to Vault for your team:
 2. Open a [Change Request](https://gitlab.com/gitlab-com/business-technology/change-management/-/issues/new?issuable_template=okta_update_existing_app) with the following:
 
     * if you don't have Okta group yet, ask for a new Okta group to be created and list the team members to be added to it
-      * Group Naming Format - team-eng-{team-name}
-    * ask for your Okta group to be added to the Vault Production app (`hcp-vault-production`) in Okta **with the groups claim filter enabled**.
-    * Have the Business Owner of Hashicorp Vault approve the change request.
+      * Group Naming Format: `team-eng-{team-name}`
+    * ask for your Okta group to be added to the Vault Production app (`hcp-vault-production`) in Okta **with the groups claim filter enabled**;
+    * have the Business Owner of Hashicorp Vault approve the change request.
 
 3. Add your Okta group to the [Vault configuration in the `config-mgmt` project](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/) (ask a member of the Infrastructure team for help if you don't have access to this project or aren't familiar with Terraform):
 
