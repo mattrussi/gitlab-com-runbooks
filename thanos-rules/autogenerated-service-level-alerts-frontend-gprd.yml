@@ -519,12 +519,12 @@ groups:
       (
         (
           gitlab_component_errors:ratio_1h{component="websocketsServices",env="gprd",monitor="global",type="frontend"}
-          > (14.4 * 0.003000)
+          > (14.4 * 0.005000)
         )
         and
         (
           gitlab_component_errors:ratio_5m{component="websocketsServices",env="gprd",monitor="global",type="frontend"}
-          > (14.4 * 0.003000)
+          > (14.4 * 0.005000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -565,12 +565,12 @@ groups:
       (
         (
           gitlab_component_errors:ratio_6h{component="websocketsServices",env="gprd",monitor="global",type="frontend"}
-          > (6 * 0.003000)
+          > (6 * 0.005000)
         )
         and
         (
           gitlab_component_errors:ratio_30m{component="websocketsServices",env="gprd",monitor="global",type="frontend"}
-          > (6 * 0.003000)
+          > (6 * 0.005000)
         )
       )
       and on(env,environment,tier,type,stage,component)
