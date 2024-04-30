@@ -92,9 +92,9 @@ groups:
       tier: sv
       type: sidekiq
     expr: |
-      (sum by(environment, worker) (sli_aggregations:sidekiq_enqueued_jobs_total_rate6h{env!~"gprd|ops"})> 0.001)
+      (sum by(environment, worker) (sli_aggregations:sidekiq_enqueued_jobs_total_rate1h{env!~"gprd|ops"})> 0.001)
       unless
-      (sum by(environment, worker) (sli_aggregations:gitlab_sli_sidekiq_execution_total_rate6h{env!~"gprd|ops"})  > 0)
+      (sum by(environment, worker) (sli_aggregations:gitlab_sli_sidekiq_execution_total_rate1h{env!~"gprd|ops"})  > 0)
   - alert: SidekiqJobsSkippedTooLong
     for: 3h
     annotations:
@@ -150,21 +150,21 @@ groups:
     expr: |
       (
         (
-          sli_aggregations:gitlab_sli_sidekiq_execution_apdex_success_total_rate6h{env!~"gprd|ops"}
+          sli_aggregations:gitlab_sli_sidekiq_execution_apdex_success_total_rate1h{env!~"gprd|ops"}
           /
-          sli_aggregations:gitlab_sli_sidekiq_execution_apdex_total_rate6h{env!~"gprd|ops"}
+          sli_aggregations:gitlab_sli_sidekiq_execution_apdex_total_rate1h{env!~"gprd|ops"}
         ) < 0.90000000000000002
         and
         (
-          sli_aggregations:gitlab_sli_sidekiq_execution_apdex_success_total_rate30m{env!~"gprd|ops"}
+          sli_aggregations:gitlab_sli_sidekiq_execution_apdex_success_total_rate5m{env!~"gprd|ops"}
           /
-          sli_aggregations:gitlab_sli_sidekiq_execution_apdex_total_rate30m{env!~"gprd|ops"}
+          sli_aggregations:gitlab_sli_sidekiq_execution_apdex_total_rate5m{env!~"gprd|ops"}
         ) < 0.90000000000000002
       )
       and on (env, environment, tier, type, stage, shard, queue, feature_category, urgency, worker)
       (
         sum by (env, environment, tier, type, stage, shard, queue, feature_category, urgency, worker) (
-          sli_aggregations:gitlab_sli_sidekiq_execution_total_rate6h{env!~"gprd|ops"}
+          sli_aggregations:gitlab_sli_sidekiq_execution_total_rate1h{env!~"gprd|ops"}
         ) >= 0.055555555555555552
       )
   - alert: SidekiqServiceWorkerExecutionErrorSLOViolation
@@ -196,20 +196,20 @@ groups:
     expr: |
       (
         (
-          sli_aggregations:gitlab_sli_sidekiq_execution_error_total_rate6h{env!~"gprd|ops"}
+          sli_aggregations:gitlab_sli_sidekiq_execution_error_total_rate1h{env!~"gprd|ops"}
           /
-          sli_aggregations:gitlab_sli_sidekiq_execution_total_rate6h{env!~"gprd|ops"}
+          sli_aggregations:gitlab_sli_sidekiq_execution_total_rate1h{env!~"gprd|ops"}
         ) > 0.10000000000000001
         and
         (
-          sli_aggregations:gitlab_sli_sidekiq_execution_error_total_rate30m{env!~"gprd|ops"}
+          sli_aggregations:gitlab_sli_sidekiq_execution_error_total_rate5m{env!~"gprd|ops"}
           /
-          sli_aggregations:gitlab_sli_sidekiq_execution_total_rate30m{env!~"gprd|ops"}
+          sli_aggregations:gitlab_sli_sidekiq_execution_total_rate5m{env!~"gprd|ops"}
         ) > 0.10000000000000001
       )
       and on (env, environment, tier, type, stage, shard, queue, feature_category, urgency, worker)
       (
         sum by (env, environment, tier, type, stage, shard, queue, feature_category, urgency, worker) (
-          sli_aggregations:gitlab_sli_sidekiq_execution_total_rate6h{env!~"gprd|ops"}
+          sli_aggregations:gitlab_sli_sidekiq_execution_total_rate1h{env!~"gprd|ops"}
         ) >= 0.00013888888888888889
       )

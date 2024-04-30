@@ -10,11 +10,11 @@ local stableIds = import 'stable-ids/stable-ids.libsonnet';
 local fixedApdexThreshold = 0.90;
 local fixedErrorRateThreshold = 0.10;
 
-local minimumSamplesForMonitoringApdex = 1200; /* We don't really care if something runs only very infrequently, but is slow */
+local minimumSamplesForMonitoringApdex = 200; /* We don't really care if something runs only very infrequently, but is slow */
 
 // NB: https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/1324 discusses increases the operation rate
 // for some daily sidekiq jobs, to improve the sample rates.
-local minimumSamplesForMonitoringErrors = 3; /* Low-frequency jobs may be doing very important things */
+local minimumSamplesForMonitoringErrors = 0.5; /* Low-frequency jobs may be doing very important things */
 
 local sidekiqAlerts(registry, extraSelector) =
   [
@@ -108,13 +108,13 @@ local sidekiqAlerts(registry, extraSelector) =
     {
       alert: 'SidekiqWorkerNoLongerBeingProcessed',
       expr: |||
-        (sum by(environment, worker) (%(enqueueRate)s{%(selector)s})> 0.001)
+        (sum by(environment, worker) (%(enqueueRate1h)s{%(selector)s})> 0.001)
         unless
-        (sum by(environment, worker) (%(executionRate)s{%(selector)s})  > 0)
+        (sum by(environment, worker) (%(executionRate1h)s{%(selector)s})  > 0)
       ||| % {
         selector: selectors.serializeHash(extraSelector),
-        enqueueRate: registry.recordingRuleNameFor('sidekiq_enqueued_jobs_total', '6h'),
-        executionRate: registry.recordingRuleNameFor('gitlab_sli_sidekiq_execution_total', '6h'),
+        enqueueRate1h: registry.recordingRuleNameFor('sidekiq_enqueued_jobs_total', '1h'),
+        executionRate1h: registry.recordingRuleNameFor('gitlab_sli_sidekiq_execution_total', '1h'),
       },
       'for': '20m',
       labels: {
@@ -176,31 +176,31 @@ local sidekiqAlerts(registry, extraSelector) =
       expr: |||
         (
           (
-            %(apdexSuccessRate6h)s{%(selector)s}
+            %(apdexSuccessRate1h)s{%(selector)s}
             /
-            %(apdexTotalRate6h)s{%(selector)s}
+            %(apdexTotalRate1h)s{%(selector)s}
           ) < %(apdexThreshold)s
           and
           (
-            %(apdexSuccessRate30m)s{%(selector)s}
+            %(apdexSuccessRate5m)s{%(selector)s}
             /
-            %(apdexTotalRate30m)s{%(selector)s}
+            %(apdexTotalRate5m)s{%(selector)s}
           ) < %(apdexThreshold)s
         )
         and on (env, environment, tier, type, stage, shard, queue, feature_category, urgency, worker)
         (
           sum by (env, environment, tier, type, stage, shard, queue, feature_category, urgency, worker) (
-            %(opsRate6h)s{%(selector)s}
+            %(opsRate1h)s{%(selector)s}
           ) >= %(minimumOpRate)s
         )
       ||| % {
-        apdexSuccessRate6h: registry.recordingRuleNameFor('gitlab_sli_sidekiq_execution_apdex_success_total', '6h'),
-        apdexTotalRate6h: registry.recordingRuleNameFor('gitlab_sli_sidekiq_execution_apdex_total', '6h'),
-        apdexSuccessRate30m: registry.recordingRuleNameFor('gitlab_sli_sidekiq_execution_apdex_success_total', '30m'),
-        apdexTotalRate30m: registry.recordingRuleNameFor('gitlab_sli_sidekiq_execution_apdex_total', '30m'),
-        opsRate6h: registry.recordingRuleNameFor('gitlab_sli_sidekiq_execution_total', '6h'),
+        apdexSuccessRate1h: registry.recordingRuleNameFor('gitlab_sli_sidekiq_execution_apdex_success_total', '1h'),
+        apdexTotalRate1h: registry.recordingRuleNameFor('gitlab_sli_sidekiq_execution_apdex_total', '1h'),
+        apdexSuccessRate5m: registry.recordingRuleNameFor('gitlab_sli_sidekiq_execution_apdex_success_total', '5m'),
+        apdexTotalRate5m: registry.recordingRuleNameFor('gitlab_sli_sidekiq_execution_apdex_total', '5m'),
+        opsRate1h: registry.recordingRuleNameFor('gitlab_sli_sidekiq_execution_total', '1h'),
         selector: selectors.serializeHash(extraSelector),
-        minimumOpRate: minimumOpRate.calculateFromSamplesForDuration('6h', minimumSamplesForMonitoringApdex),
+        minimumOpRate: minimumOpRate.calculateFromSamplesForDuration('1h', minimumSamplesForMonitoringApdex),
         apdexThreshold: fixedApdexThreshold,
       },
       'for': '1h',
@@ -233,30 +233,30 @@ local sidekiqAlerts(registry, extraSelector) =
       expr: |||
         (
           (
-            %(errorRate6h)s{%(selector)s}
+            %(errorRate1h)s{%(selector)s}
             /
-            %(opsRate6h)s{%(selector)s}
+            %(opsRate1h)s{%(selector)s}
           ) > %(errorThreshold)s
           and
           (
-            %(errorRate30m)s{%(selector)s}
+            %(errorRate5m)s{%(selector)s}
             /
-            %(opsRate30m)s{%(selector)s}
+            %(opsRate5m)s{%(selector)s}
           ) > %(errorThreshold)s
         )
         and on (env, environment, tier, type, stage, shard, queue, feature_category, urgency, worker)
         (
           sum by (env, environment, tier, type, stage, shard, queue, feature_category, urgency, worker) (
-            %(opsRate6h)s{%(selector)s}
+            %(opsRate1h)s{%(selector)s}
           ) >= %(minimumOpRate)s
         )
       ||| % {
-        errorRate6h: registry.recordingRuleNameFor('gitlab_sli_sidekiq_execution_error_total', '6h'),
-        opsRate6h: registry.recordingRuleNameFor('gitlab_sli_sidekiq_execution_total', '6h'),
-        errorRate30m: registry.recordingRuleNameFor('gitlab_sli_sidekiq_execution_error_total', '30m'),
-        opsRate30m: registry.recordingRuleNameFor('gitlab_sli_sidekiq_execution_total', '30m'),
+        errorRate1h: registry.recordingRuleNameFor('gitlab_sli_sidekiq_execution_error_total', '1h'),
+        opsRate1h: registry.recordingRuleNameFor('gitlab_sli_sidekiq_execution_total', '1h'),
+        errorRate5m: registry.recordingRuleNameFor('gitlab_sli_sidekiq_execution_error_total', '5m'),
+        opsRate5m: registry.recordingRuleNameFor('gitlab_sli_sidekiq_execution_total', '5m'),
         selector: selectors.serializeHash(extraSelector),
-        minimumOpRate: minimumOpRate.calculateFromSamplesForDuration('6h', minimumSamplesForMonitoringErrors),
+        minimumOpRate: minimumOpRate.calculateFromSamplesForDuration('1h', minimumSamplesForMonitoringErrors),
         errorThreshold: fixedErrorRateThreshold,
       },
       'for': '1h',
