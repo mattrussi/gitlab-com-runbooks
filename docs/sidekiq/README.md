@@ -53,6 +53,7 @@
 * [Pull mirror overdue queue is too large](large-pull-mirror-queue.md)
 * [[`SidekiqQueueTooLarge`](../../rules/sidekiq-queues.yml)](large-sidekiq-queue.md)
 * [Sidekiq queue migration](queue-migration.md)
+* [sharding.md](sharding.md)
 * [Poking around at sidekiq's running state](sidekiq-inspection.md)
 * [Sidekiq queue no longer being processed](sidekiq-queue-not-being-processed.md)
 * [Sidekiq SLIs](sidekiq-slis.md)
