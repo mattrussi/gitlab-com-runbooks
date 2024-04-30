@@ -2059,7 +2059,7 @@ services:
     tier: sv
     friendly_name: Kubernetes Agent
     label: KAS
-    owner: reliability_general
+    owner: deploy_environments
     technical:
       project:
         - https://gitlab.com/gitlab-org/cluster-integration/gitlab-agent

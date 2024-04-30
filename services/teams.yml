@@ -11,6 +11,15 @@ teams:
   engagement_policy:  # Link to doc that talks about engagement and escalation policy
   oncall_schedule:    # Link to pagerduty oncall schedule
 
+- name: deploy_environments
+  url: https://handbook.gitlab.com/handbook/engineering/development/ops/deploy/environments/
+  slack_channel: g_environments
+  engagement_policy:  # Link to doc that talks about engagement and escalation policy
+  oncall_schedule:    # Link to pagerduty oncall schedule
+  # product_stage_group: deploy_environments
+  # ignored_components:
+  # - graphql_query
+
 - name: distribution_deploy
   url: https://about.gitlab.com/handbook/engineering/dev-backend/distribution/
   slack_channel: g_distribution
