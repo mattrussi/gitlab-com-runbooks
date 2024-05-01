@@ -39,6 +39,7 @@
 * [../elastic/elastic-cloud.md](../elastic/elastic-cloud.md)
 * [ErrorTracking main troubleshooting document](../errortracking/overview.md)
 * [Blocking and Disabling Things in HAProxy](../frontend/block-things-in-haproxy.md)
+* [HAProxy Logging](../frontend/haproxy-logging.md)
 * [HAProxy Management at GitLab](../frontend/haproxy.md)
 * [Possible Breach of SSH MaxStartups](../frontend/ssh-maxstartups-breach.md)
 * [Purge Git data](../git/purge-git-data.md)
