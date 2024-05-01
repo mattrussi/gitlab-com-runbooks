@@ -23,28 +23,27 @@ groups:
 - name: Gitaly grpc server handling buckets
   interval: 1m
   rules:
-  - record: gitaly_instance:grpc_server_handling_seconds_bucket:rate1m
-    expr: >
-      sum without (grpc_service, grpc_type) (
-        rate(grpc_server_handling_seconds_bucket{job="scrapeConfig/monitoring/prometheus-agent-gitaly",env="gstg"}[1m])
-      )
   - record: gitaly:grpc_server_handling_seconds_bucket:rate1m
     expr: >
-      sum without (fqdn, instance, ansible_deploy_name,zone,cluster) (
-        gitaly_instance:grpc_server_handling_seconds_bucket:rate1m{env="gstg"}
+      sum without (grpc_service, grpc_type, fqdn, instance, ansible_deploy_name,zone,cluster) (
+        rate(grpc_server_handling_seconds_bucket{job="scrapeConfig/monitoring/prometheus-agent-gitaly",env="gstg"}[1m])
       )
   - record: gitaly:grpc_server_handling_seconds:p95
     expr: >
       histogram_quantile(0.95,
         sum without (grpc_method) (
-          gitaly_instance:grpc_server_handling_seconds_bucket:rate1m{env="gstg"}
+          sum without (grpc_service, grpc_type) (
+            rate(grpc_server_handling_seconds_bucket{job="scrapeConfig/monitoring/prometheus-agent-gitaly",env="gstg"}[1m])
+          )
         )
       )
   - record: gitaly:grpc_server_handling_seconds:p50
     expr: >
       histogram_quantile(0.5,
         sum without (grpc_method) (
-          gitaly_instance:grpc_server_handling_seconds_bucket:rate1m{env="gstg"}
+          sum without (grpc_service, grpc_type) (
+            rate(grpc_server_handling_seconds_bucket{job="scrapeConfig/monitoring/prometheus-agent-gitaly",env="gstg"}[1m])
+          )
         )
       )
 
