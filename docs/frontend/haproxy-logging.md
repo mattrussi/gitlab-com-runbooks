@@ -2,7 +2,20 @@
 
 HAProxy logs are not indexed in *Elasticsearch* due to the volume of content.
 You can view logs for a single HAProxy node by connecting and tailing local logs.
-This may not be ideal when trying to investigate a site wide issue.
+
+```bash
+# syslog
+$ tail -f /var/log/haproxy.log
+$ tail -n 99 /var/log/haproxy.log
+
+# journald
+$ sudo journalctl --unit haproxy.service
+$ sudo journalctl --unit haproxy.service --lines 99
+$ sudo journalctl --unit haproxy.service --since today
+$ sudo journalctl --unit haproxy.service --grep '...'
+```
+
+This may not be ideal when trying to investigate a site-wide issue.
 
 ## Google BigQuery
 
@@ -26,33 +39,32 @@ Here is an example query that could show `tt` values:
 SELECT
   *
 FROM
-  `gitlab-production.haproxy_logs.haproxy_20231010`
+  `gitlab-production.haproxy_logs.haproxy_202405*`
 WHERE
-  jsonPayload.tt is not null
+  jsonPayload.path LIKE '/api/v4/%'
 LIMIT 1000
 ```
-
-BigQuery access is in alpha for gcloud command line access at this time.
 
 ## Logging Pipeline
 
 This is how the logging pipeline works for the `haproxy` nodes.
 
-The `haproxy` process sends its logs to `/dev/log` according to the following configurations.
+The `haproxy` process sends its logs to *standard output* according to the following configurations.
 
 ```plaintext
 global
-  log /dev/log len 4096 local0
-  log /dev/log len 4096 local1 notice
+  log stdout len 4096 format raw daemon
 
 defaults
   log global
   option dontlognull
 ```
 
-`/dev/log` is a Unix domain socket and everything that goes into it is received by the syslog daemon (`rsyslogd`).
+### Syslog
 
-Syslog is configured to read all configuration files in `/etc/rsyslog.d` directory, including the configurations for `haproxy` process.
+The logs are then automatically collected by `journald` and sent to `/dev/log`. `/dev/log` is a Unix socket and everything that goes into it is received by the syslog daemon (`rsyslogd`).
+
+Syslog is configured to read all configuration files in the `/etc/rsyslog.d` directory, including the configurations for the `haproxy` process.
 
 ```
 $ cat /etc/rsyslog.conf
@@ -75,9 +87,11 @@ $AddUnixListenSocket /var/lib/haproxy/dev/log
 }
 ```
 
-The [gprd-base-haproxy](https://gitlab.com/gitlab-com/gl-infra/chef-repo/-/blob/db605897e9a801529652bcab6af186a1b51983b0/roles/gprd-base-haproxy.json#L82)
+### Fluentd
+
+The [gprd-base-haproxy](https://gitlab.com/gitlab-com/gl-infra/chef-repo/-/blob/b3d6fc8f225ef7cf0144e12d47cc3868eed2c44d/roles/gprd-base-haproxy.json#L92)
 Chef role includes the [gitlab_fluentd::haproxy](https://gitlab.com/gitlab-cookbooks/gitlab_fluentd/-/blob/master/recipes/haproxy.rb) recipe.
-This recipe installs and configures Fluentd to collect and ship `haproxy` logs.
+This recipe installs and configures *Fluentd* to collect and ship `haproxy` logs to *BigQuery*.
 
 `td-agent` is a stable distribution package of Fluentd.
 
@@ -144,3 +158,43 @@ $ cat /etc/td-agent/conf.d/haproxy.conf
 
 The above output plugin (`google_cloud`) sends all the logs to Google Cloud *Stackdriver*.
 You can query the logs from the Google Cloud *BigQuery*.
+
+### Logrotate
+
+*Logrotate* is configured to read all configuration files in the`/etc/logrotate.d` directory,
+including the configurations for the `haproxy` process.
+
+```
+$ cat /etc/logrotate.conf
+
+# Include all config files in /etc/logrotate.d/
+include /etc/logrotate.d
+```
+
+```
+$ cat /etc/logrotate.d/haproxy
+
+# https://gitlab.com/gitlab-cookbooks/gitlab-haproxy/-/blob/master/files/default/logrotate-haproxy
+/var/log/haproxy.log {
+  hourly
+  rotate 6
+  missingok
+  notifempty
+  compress
+  copytruncate
+}
+
+$ cat /etc/logrotate.d/haproxy.dpkg-dist
+
+/var/log/haproxy.log {
+  daily
+  rotate 7
+  missingok
+  notifempty
+  compress
+  delaycompress
+  postrotate
+    [ ! -x /usr/lib/rsyslog/rsyslog-rotate ] || /usr/lib/rsyslog/rsyslog-rotate
+  endscript
+}
+```
