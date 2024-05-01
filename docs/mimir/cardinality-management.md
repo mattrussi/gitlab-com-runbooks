@@ -7,7 +7,7 @@ There are a couple of great articles from Grafana around Cardinality which are w
 
 Following the second article which references Grafana Cloud, we have implemented a similar set of dashboards you can leverage to dig into cardinality:
 
-- [Cardinality Overview](https://dashboards.gitlab.net/goto/OPQi7a2Ig?orgId=1)
+- [Cardinality Overview](https://dashboards.gitlab.net/d/cardinality-management/mimir-cardinality-overview?orgId=1)
 
 ## Example
 
