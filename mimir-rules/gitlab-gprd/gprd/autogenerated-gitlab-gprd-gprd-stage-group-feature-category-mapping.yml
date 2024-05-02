@@ -132,6 +132,13 @@ groups:
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
+      feature_category: ci_scaling
+      monitor: global
+      product_stage: verify
+      stage_group: ci_platform
+    expr: "1"
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
       feature_category: cloud_connector
       monitor: global
       product_stage: systems
@@ -475,13 +482,6 @@ groups:
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
-      feature_category: runner_saas
-      monitor: global
-      product_stage: verify
-      stage_group: hosted_runners
-    expr: "1"
-  - record: gitlab:feature_category:stage_group:mapping
-    labels:
       feature_category: importers
       monitor: global
       product_stage: manage
@@ -542,13 +542,6 @@ groups:
       monitor: global
       product_stage: monitor
       stage_group: observability
-    expr: "1"
-  - record: gitlab:feature_category:stage_group:mapping
-    labels:
-      feature_category: measurement_and_locking
-      monitor: global
-      product_stage: growth
-      stage_group: acquisition
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:

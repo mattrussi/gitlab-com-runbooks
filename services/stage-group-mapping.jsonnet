@@ -93,6 +93,13 @@
       'code_suggestions',
     ],
   },
+  ci_platform: {
+    name: 'CI Platform',
+    stage: 'verify',
+    feature_categories: [
+      'ci_scaling',
+    ],
+  },
   pipeline_execution: {
     name: 'Pipeline Execution',
     stage: 'verify',
@@ -325,7 +332,6 @@
     stage: 'growth',
     feature_categories: [
       'acquisition',
-      'measurement_and_locking',
       'onboarding',
     ],
   },
