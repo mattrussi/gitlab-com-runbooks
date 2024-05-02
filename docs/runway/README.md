@@ -97,7 +97,7 @@ Runway is a platform that depends on GitLab.com and GCP, so deployments cannot o
 
 ### Regions
 
-Runway is a platform, so services reside in [Cloud Run location](https://cloud.google.com/run/docs/locations). Right now, region is `us-east1`.
+Runway is a platform, so services determine region availability. Runway supports multi-region deployments across 40 GCP [regions](https://gitlab-com.gitlab.io/gl-infra/platform/runway/runwayctl/manifest.schema.html#spec_regions). The default region is `us-east1`. For more information, refer to [documentation](https://docs.runway.gitlab.com/guides/multi-region/).
 
 ### Quotas
 
