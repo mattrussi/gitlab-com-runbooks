@@ -91,7 +91,7 @@ you can remove a namespace from Zoekt manually as a last resort.
 
 #### When to add a Zoekt node
 
-Increase the number of [Zoekt replicas](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-com/-/blob/cda7e4434d3836592b08e16bad8a35705af9f72c/releases/gitlab/values/gprd.yaml.gotmpl#L5) (nodes) by 20% of total capacity if all Zoekt nodes are above 65% of disk utilization. For example, if there are 16 nodes, add 1.6 (2 nodes).
+Increase the number of [Zoekt replicas](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-com/-/blob/cda7e4434d3836592b08e16bad8a35705af9f72c/releases/gitlab/values/gprd.yaml.gotmpl#L5) (nodes) by 20% of total capacity if all Zoekt nodes are above 65% of disk utilization. For example, if there are 22 nodes, add 4.4 (4 nodes).
 
 #### Pausing Zoekt indexing
 
