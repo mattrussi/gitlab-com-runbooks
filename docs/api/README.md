@@ -58,6 +58,7 @@
 * [Scaling Elastic Cloud Clusters](../logging/scaling.md)
 * [How GitLab.com uses Mailgun](../mailgun/mailgun.md)
 * [Mailgun Events](../mailgun/mailgunevents.md)
+* [Auditing Metrics](../mimir/auditing-metrics.md)
 * [Mimir Onboarding](../mimir/getting-started.md)
 * [Alertmanager Notification Failures](../monitoring/alertmanager-notification-failures.md)
 * [../monitoring/apdex-alerts-guide.md](../monitoring/apdex-alerts-guide.md)
