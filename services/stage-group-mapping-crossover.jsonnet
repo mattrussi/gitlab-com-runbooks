@@ -6,5 +6,5 @@
 //
 // Blank values will be ignored.
 {
-  runner_saas: 'hosted_runners',
+  measurement_and_locking: '',
 }
