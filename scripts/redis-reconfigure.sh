@@ -172,13 +172,6 @@ bootstrap() {
 
   echo "> bootstrapping $fqdn"
 
-  # verify that the host doesn't have a functional redis
-
-  if ssh $fqdn "test -e /opt/gitlab/etc/gitlab-redis-cli-rc"; then
-    echo "Redis is already bootstrapped on this node, skipping bootstrap."
-    return
-  fi
-
   # Make everything work
 
   run_chef_client
@@ -194,8 +187,8 @@ for i in 01 02 03; do
 
   if [[ $bootstrap == "yes" ]]; then
     bootstrap $i
-    failover_if_master $i
   else
+    failover_if_master $i
     reconfigure $i
   fi
 
