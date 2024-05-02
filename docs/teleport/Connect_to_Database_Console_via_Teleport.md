@@ -305,6 +305,21 @@ tsh db connect db-main-replica-gprd --db-user=console-ro --db-name=gitlabhq_prod
 
 ```
 
+### `psql: error: SSL SYSCALL error: Undefined error: 0 ERROR: signal: segmentation fault`
+
+If you encounter the error, it is probably becuase you have `postgres` installed via `asdf`. To solve it:
+
+1. Install `postgres` via homebrew, if not already installed: `brew install postgresql@14`
+1. Run `brew info postgresql@14` to find the `psql` install localtion in `bin` directory
+    1. The location would be someting like `/opt/homebrew/Cellar/postgresql@14/14.11_1/bin/psql`
+2. Run the `tsh db config --format=cmd db-customersdot-gstg` to get the full command
+3. Replace the `~/.asdf/shims/psql` path with the homebrew `/opt/homebrew/Cellar/postgresql@14/14.11_1/bin/psql` path
+4. The command will look something like:
+
+```bash
+/opt/homebrew/Cellar/postgresql@14/14.11_1/bin/psql "postgres://teleport-cloudsql%40gitlab-subscriptions-staging.iam@staging.teleport.gitlab.net:443/CustomersDot_stg?sslrootcert=/Users/yourusername/.tsh/keys/staging.teleport.gitlab.net/cas/staging.teleport.gitlab.net.pem&sslcert=/Users/yourusername/.tsh/keys/staging.teleport.gitlab.net/yourusername@gitlab.com-db/staging.teleport.gitlab.net/db-customersdot-gstg-x509.pem&sslkey=/Users/yourusername/.tsh/keys/staging.teleport.gitlab.net/yourusername@gitlab.com&sslmode=verify-full"
+```
+
 ### `psql: error: sslmode value "verify-full" invalid when SSL support is not compiled in`
 
 `tsh db` is a wrapper over `psql` and this likely means that your installed psql version was not configured with OpenSSL options. You can consider taking steps like [this blog post](https://dev.to/jbranchaud/reinstall-postgresql-with-openssl-using-asdf-cmj) if psql was installed via asdf. Ideally, use the brew installed psql version.

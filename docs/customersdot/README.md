@@ -20,6 +20,7 @@
 * [CustomersDot main troubleshoot documentation](overview.md)
 * [How GitLab.com uses Mailgun](../mailgun/mailgun.md)
 * [../patroni/postgresql-backups-wale-walg.md](../patroni/postgresql-backups-wale-walg.md)
+* [How to connect to a Database console using Teleport](../teleport/Connect_to_Database_Console_via_Teleport.md)
 <!-- END_MARKER -->
 
 <!-- ## Summary -->
