@@ -2,7 +2,7 @@ groups:
 - name: Wiz Errors
   rules:
   - alert: WizRSContainersRestartsOOMKills
-    expr: sum by (cluster, pod) (container_oom_events_total{env='pre', container='wiz-sensor'} > 2)
+    expr: sum by (cluster, pod) (container_oom_events_total{env='gprd', container='wiz-sensor'} > 2)
     for: 15m
     labels:
       severity: s4
