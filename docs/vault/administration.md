@@ -66,18 +66,36 @@ See the [Vault documentation about the Kubernetes authentication method](https:/
 
 ### Vault configuration
 
-The cluster information must be saved in a Vault secret that will be used by Terraform to configure the Kubernetes authentication method and/or the Kubernetes secrets engine for this cluster:
+The cluster information must be saved in a Vault secret that will be used by Terraform to configure the Kubernetes authentication method and/or the Kubernetes secrets engine for this cluster.
+
+If the cluster is provisioned by `config-mgmt` then use the following module along with it:
+
+```terraform
+module "gitlab-gke-vault-cluster-info" {
+  source = "../../modules/vault-gke-cluster-info"
+
+  environment                = var.environment
+  gke_cluster_name           = module.gitlab-gke.cluster_name
+  gke_cluster_ca_certificate = module.gitlab-gke.cluster_ca_certificate
+  gke_cluster_endpoint       = module.gitlab-gke.cluster_endpoint
+}
+```
+
+If not, you will need to save the cluster information manually instead:
 
 ```shell
-KUBERNETES_HOST="$(kubectl config view -o jsonpath='{.clusters[?(@.name == "gke_gitlab-pre_us-east1_pre-gitlab-gke")].cluster.server}')"
+KUBERNETES_ENDPOINT="$(kubectl config view -o jsonpath='{.clusters[?(@.name == "gke_gitlab-pre_us-east1_pre-gitlab-gke")].cluster.server}')"
 CA_CERT="$(kubectl config view --raw -o jsonpath='{.clusters[?(@.name == "gke_gitlab-pre_us-east1_pre-gitlab-gke")].cluster.certificate-authority-data}' | base64 -d)"
+# Vault secret path: shared/kubernetes/<environment>/<cluster name>
+vault kv put shared/kubernetes/pre/pre-gitlab-gke endpoint="${KUBERNETES_ENDPOINT}" ca_cert="${CA_CERT}"
+```
 
-# if the chart vault-k8s-secrets has NOT been installed
-vault kv put ci/ops-gitlab-net/gitlab-com/gl-infra/config-mgmt/vault-production/kubernetes/pre-gitlab-gke host="${KUBERNETES_HOST}" ca_cert="${CA_CERT}"
+If the `vault-k8s-secrets` chart has been installed to enable authentication into the cluster via Vault, you will also need to save its JWT under a different path:
 
-# if the chart vault-k8s-secrets has been installed
+```shell
 JWT_TOKEN="$(kubectl --namespace vault-k8s-secrets get secret vault-k8s-secrets-token -o jsonpath='{.data.token}' | base64 -d)"
-vault kv put ci/ops-gitlab-net/gitlab-com/gl-infra/config-mgmt/vault-production/kubernetes/pre-gitlab-gke host="${KUBERNETES_HOST}" ca_cert="${CA_CERT}" service_account_jwt="${JWT_TOKEN}"
+# Vault secret path: ci/ops-gitlab-net/gitlab-com/gl-infra/config-mgmt/vault-production/kubernetes/<environment>/<cluster name>
+vault kv put ci/ops-gitlab-net/gitlab-com/gl-infra/config-mgmt/vault-production/kubernetes/clusters/pre/pre-gitlab-gke service_account_jwt="${JWT_TOKEN}"
 ```
 
 Finally, add the cluster in [`environments/vault-production/kubernetes.tf`](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/main/environments/vault-production/kubernetes.tf):
@@ -90,7 +108,9 @@ locals {
     [...]
 
     pre-gitlab-gke = {
-      environment   = "pre"
+      environment               = "pre"
+      enable_kubernetes_secrets = true
+
       auth_roles    = {}
       secrets_roles = {}
     }
