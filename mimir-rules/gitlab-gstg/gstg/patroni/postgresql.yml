@@ -18,7 +18,7 @@ groups:
   - record: postgres:pg_txid_per_second:rate5m
     expr: rate(pg_txid_current{env="gstg"}[5m])
   - record: postgres:databases
-    expr: count(pg_exporter_scrapes_total{env="gstg"}) BY (environment)
+    expr: count(pg_exporter_scrapes_total{env="gstg"}) BY (env)
   - record: postgres:pg_stat_seq_scans:rate2m
     expr: rate(pg_stat_user_tables_seq_tup_read{env="gstg"}[2m])
 
