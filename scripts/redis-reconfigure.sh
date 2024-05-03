@@ -108,6 +108,13 @@ run_chef_client() {
   ssh "$fqdn" "sudo chef-client"
 }
 
+restart_redis() {
+  # this _will_ restart processes
+  echo "Restarting $fqdn Redis server to apply config changes"
+  wait_for_input
+  ssh "$fqdn" 'sudo systemctl restart redis-server.service && sleep 30'
+}
+
 reconfigure() {
   export i=$1
   export fqdn="${gitlab_redis_cluster}-$i-db-${gitlab_env}.c.${gitlab_project}.internal"
@@ -138,6 +145,8 @@ reconfigure() {
 
   echo config set save
   ssh "$fqdn" "$redis_cli config set save ''"
+
+  restart_redis
 
   # wait for master to step down and sync (expect "slave" [sic] and "connected")
   while ! [[ "$(ssh "$fqdn" "$redis_cli role" | head -n1)" == "slave" ]]; do
