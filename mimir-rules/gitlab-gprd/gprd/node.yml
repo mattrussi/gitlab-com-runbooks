@@ -98,7 +98,10 @@ groups:
         node_namespace_pod:kube_pod_info:
       )
     record: node:node_disk_utilisation:avg_irate
-  - expr: avg(irate(node_disk_io_time_weighted_seconds_total{job="node-exporter",device=~"nvme.+|rbd.+|sd.+|vd.+|xvd.+|dm-.+", env="gprd"}[1m]))
+  - expr: |-
+      avg by (cluster, env, environment, monitor, prometheus, provider, region) (
+        irate(node_disk_io_time_weighted_seconds_total{job="node-exporter",device=~"nvme.+|rbd.+|sd.+|vd.+|xvd.+|dm-.+", env="gprd"}[1m])
+      )
     record: ':node_disk_saturation:avg_irate'
   - expr: |-
       avg by (node) (
@@ -119,4 +122,3 @@ groups:
   rules:
   - record: instance:up:count
     expr: count(up{job="scrapeConfig/monitoring/prometheus-agent-node-exporter-gce",type!="", env="gprd"} == 1) WITHOUT (instance, fqdn)
-

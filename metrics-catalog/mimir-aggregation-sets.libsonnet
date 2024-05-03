@@ -113,6 +113,7 @@ local mimirAggregetionSetDefaults = {
     name: 'Global Service-Regional-Aggregated Metrics',
     labels: ['env', 'environment', 'tier', 'type', 'stage', 'region'],
     sourceAggregationSet: $.regionalComponentSLIs,
+    enabledForService(serviceDefinition): serviceDefinition.regional,
     metricFormats: {
       apdexRatio: 'gitlab_service_regional_apdex:ratio_%s',
       opsRate: 'gitlab_service_regional_ops:rate_%s',
@@ -131,7 +132,7 @@ local mimirAggregetionSetDefaults = {
         errorRatio: 'gitlab_service_regional_errors:ratio_3d',
       },
     },
-    aggregationFilter: 'service',
+    aggregationFilter: ['regional', 'service'],
   }),
 
   shardComponentSLIs: aggregationSet(mimirAggregetionSetDefaults {
