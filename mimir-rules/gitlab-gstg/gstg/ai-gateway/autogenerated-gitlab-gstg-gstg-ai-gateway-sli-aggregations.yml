@@ -4,18 +4,18 @@ groups:
 - name: 'SLI Aggregations: ai-gateway - inference-apdex - 5m burn-rate'
   interval: 1m
   rules:
-  - record: sli_aggregations:code_suggestions_inference_request_duration_seconds_bucket:rate_5m
+  - record: sli_aggregations:inference_request_duration_seconds_bucket:rate_5m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,le,model_engine,model_name,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(code_suggestions_inference_request_duration_seconds_bucket{env="gstg",type=~"ai-gateway"}[5m])
+      sum by (component,env,environment,error,feature_category,fqdn,le,model_engine,model_name,product_stage,region,shard,stage,stage_group,streaming,tier,type) (
+        rate(inference_request_duration_seconds_bucket{env="gstg",error=~"no",streaming=~"no",type=~"ai-gateway"}[5m])
       )
 - name: 'SLI Aggregations: ai-gateway - inference-ops - 5m burn-rate'
   interval: 1m
   rules:
-  - record: sli_aggregations:code_suggestions_inference_requests_total:rate_5m
+  - record: sli_aggregations:model_inferences_total:rate_5m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,model_engine,model_name,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(code_suggestions_inference_requests_total{env="gstg",type=~"ai-gateway"}[5m])
+      sum by (component,env,environment,error,feature_category,fqdn,model_engine,model_name,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(model_inferences_total{env="gstg",type=~"ai-gateway"}[5m])
       )
 - name: 'SLI Aggregations: ai-gateway - runway_ingress-apdex - 5m burn-rate'
   interval: 1m
@@ -68,18 +68,18 @@ groups:
 - name: 'SLI Aggregations: ai-gateway - inference-apdex - 30m burn-rate'
   interval: 2m
   rules:
-  - record: sli_aggregations:code_suggestions_inference_request_duration_seconds_bucket:rate_30m
+  - record: sli_aggregations:inference_request_duration_seconds_bucket:rate_30m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,le,model_engine,model_name,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(code_suggestions_inference_request_duration_seconds_bucket{env="gstg",type=~"ai-gateway"}[30m])
+      sum by (component,env,environment,error,feature_category,fqdn,le,model_engine,model_name,product_stage,region,shard,stage,stage_group,streaming,tier,type) (
+        rate(inference_request_duration_seconds_bucket{env="gstg",error=~"no",streaming=~"no",type=~"ai-gateway"}[30m])
       )
 - name: 'SLI Aggregations: ai-gateway - inference-ops - 30m burn-rate'
   interval: 2m
   rules:
-  - record: sli_aggregations:code_suggestions_inference_requests_total:rate_30m
+  - record: sli_aggregations:model_inferences_total:rate_30m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,model_engine,model_name,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(code_suggestions_inference_requests_total{env="gstg",type=~"ai-gateway"}[30m])
+      sum by (component,env,environment,error,feature_category,fqdn,model_engine,model_name,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(model_inferences_total{env="gstg",type=~"ai-gateway"}[30m])
       )
 - name: 'SLI Aggregations: ai-gateway - runway_ingress-apdex - 30m burn-rate'
   interval: 2m
@@ -132,18 +132,18 @@ groups:
 - name: 'SLI Aggregations: ai-gateway - inference-apdex - 1h burn-rate'
   interval: 1m
   rules:
-  - record: sli_aggregations:code_suggestions_inference_request_duration_seconds_bucket:rate_1h
+  - record: sli_aggregations:inference_request_duration_seconds_bucket:rate_1h
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,le,model_engine,model_name,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(code_suggestions_inference_request_duration_seconds_bucket{env="gstg",type=~"ai-gateway"}[1h])
+      sum by (component,env,environment,error,feature_category,fqdn,le,model_engine,model_name,product_stage,region,shard,stage,stage_group,streaming,tier,type) (
+        rate(inference_request_duration_seconds_bucket{env="gstg",error=~"no",streaming=~"no",type=~"ai-gateway"}[1h])
       )
 - name: 'SLI Aggregations: ai-gateway - inference-ops - 1h burn-rate'
   interval: 1m
   rules:
-  - record: sli_aggregations:code_suggestions_inference_requests_total:rate_1h
+  - record: sli_aggregations:model_inferences_total:rate_1h
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,model_engine,model_name,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(code_suggestions_inference_requests_total{env="gstg",type=~"ai-gateway"}[1h])
+      sum by (component,env,environment,error,feature_category,fqdn,model_engine,model_name,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(model_inferences_total{env="gstg",type=~"ai-gateway"}[1h])
       )
 - name: 'SLI Aggregations: ai-gateway - runway_ingress-apdex - 1h burn-rate'
   interval: 1m
