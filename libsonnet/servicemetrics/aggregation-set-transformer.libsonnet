@@ -17,17 +17,17 @@ local generateRecordingRules(sourceAggregationSet, targetAggregationSet, burnRat
     burnRates
   );
 
-local groupForSetAndType(aggregationSet, burnType) =
+local groupForSetAndType(aggregationSet, burnType, emittingType) =
   {
-    name: '%s (%s burn)' % [aggregationSet.name, burnType],
+    name: '%s (%s burn)%s' % [aggregationSet.name, burnType, if emittingType != null then ' emitted by %s' % emittingType else ''],
     interval: intervalForDuration.intervalByBurnType[burnType],
   };
 
-local generateRecordingRuleGroups(sourceAggregationSet, targetAggregationSet, extrasForGroup={}) =
+local generateRecordingRuleGroups(sourceAggregationSet, targetAggregationSet, extrasForGroup={}, emittingType=null) =
   local burnRatesByType = targetAggregationSet.getBurnRatesByType();
   std.map(
     function(burnType)
-      groupForSetAndType(targetAggregationSet, burnType) {
+      groupForSetAndType(targetAggregationSet, burnType, emittingType) {
         rules: generateRecordingRules(sourceAggregationSet, targetAggregationSet, burnRatesByType[burnType]),
       } + extrasForGroup,
     std.objectFields(burnRatesByType)

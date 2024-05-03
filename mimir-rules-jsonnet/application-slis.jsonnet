@@ -7,17 +7,18 @@ local recordingRuleRegistry = import 'servicemetrics/recording-rule-registry.lib
 
 local thanosCompatibilityLabels = { monitor: 'global' };
 
-local transformRuleGroups(sourceAggregationSet, targetAggregationSet, extraSourceSelector, extrasForGroup={}) =
+local transformRuleGroups(sourceAggregationSet, targetAggregationSet, extraSourceSelector, emittingType, extrasForGroup={}) =
   aggregationSetTransformer.generateRecordingRuleGroups(
     sourceAggregationSet=sourceAggregationSet { selector+: extraSourceSelector },
     targetAggregationSet=targetAggregationSet,
     extrasForGroup=extrasForGroup,
+    emittingType=emittingType,
   );
 
-local groupsForApplicationSli(sli, extraSelector) =
+local groupsForApplicationSli(sli, extraSelector, emittingType) =
   local targetAggregationSet = applicationSliAggregations.targetAggregationSet(sli, extraStaticLabels=thanosCompatibilityLabels);
   local sourceAggregationSet = applicationSliAggregations.sourceAggregationSet(sli, recordingRuleRegistry=recordingRuleRegistry.unifiedRegistry);
-  transformRuleGroups(sourceAggregationSet, targetAggregationSet, extraSelector);
+  transformRuleGroups(sourceAggregationSet, targetAggregationSet, extraSelector, emittingType);
 
 local outputPromYaml(groups) =
   std.manifestYamlDoc({
@@ -33,13 +34,18 @@ local outputPromYaml(groups) =
 std.foldl(
   function(memo, serviceDefinition)
     local serviceSliNames = std.objectFields(serviceDefinition.serviceLevelIndicators);
-    local serviceApplicationSliNames = std.setInter(serviceSliNames, applicationSlis.names);
+    local serviceApplicationSliNames = std.setInter(std.set(serviceSliNames), std.set(applicationSlis.names));
     local serviceApplicationSliDefinitions = std.map(function(name) applicationSlis.get(name), serviceApplicationSliNames);
     memo + separateMimirRecordingFiles(
       function(service, selector, _extraArgs)
         local groups = std.flatMap(
           function(sli)
-            groupsForApplicationSli(sli, selector { type: service.type }),
+            local emittingTypes = serviceDefinition.serviceLevelIndicators[sli.name].emittedBy;
+            std.flatMap(
+              function(emittingType)
+                groupsForApplicationSli(sli, selector { type: emittingType }, emittingType),
+              emittingTypes,
+            ),
           serviceApplicationSliDefinitions
         );
         {
