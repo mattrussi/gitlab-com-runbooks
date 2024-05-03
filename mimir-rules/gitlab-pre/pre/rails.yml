@@ -5,15 +5,15 @@ groups:
   - record: instance:rails_requests_started:rate1m
     expr: sum(rate(rails_requests_started{env="pre"}[1m])) without (verb)
   - record: status:rails_requests_completed_seconds:p50
-    expr: > 
-      histogram_quantile(0.5, 
+    expr: >
+      histogram_quantile(0.5,
         sum without (fqdn,instance,node,pod,pod_template_hash) (
           rate(rails_requests_completed_seconds_bucket{env="pre"}[1m])
         )
       )
   - record: status:rails_requests_completed_seconds:p95
-    expr: > 
-      histogram_quantile(0.95, 
+    expr: >
+      histogram_quantile(0.95,
         sum without (fqdn,instance,node,pod,pod_template_hash) (
           rate(rails_requests_completed_seconds_bucket{env="pre"}[1m])
         )
@@ -34,9 +34,19 @@ groups:
         rate(gitlab_transaction_duration_seconds_sum{env="pre"}[1m])
       )
   - record: controller_action:gitlab_transaction_duration_seconds:p95
-    expr: histogram_quantile(0.95, controller_action:gitlab_transaction_duration_seconds_bucket:rate1m{env="pre"})
+    expr: >
+      histogram_quantile(0.95,
+        sum without (fqdn,instance,node,pod,pod_template_hash) (
+          rate(gitlab_transaction_duration_seconds_bucket{env="pre"}[1m])
+        )
+      )
   - record: controller_action:gitlab_transaction_duration_seconds:p99
-    expr: histogram_quantile(0.99, controller_action:gitlab_transaction_duration_seconds_bucket:rate1m{env="pre"})
+    expr: >
+      histogram_quantile(0.99,
+        sum without (fqdn,instance,node,pod,pod_template_hash) (
+          rate(gitlab_transaction_duration_seconds_bucket{env="pre"}[1m])
+        )
+      )
   # Request data, across the board.
   - record: job_environment:gitlab_transaction_duration_seconds_sum:rate1m
     expr: >
