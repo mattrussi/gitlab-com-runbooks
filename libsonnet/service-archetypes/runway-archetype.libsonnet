@@ -108,6 +108,7 @@ function(
         projectId='gitlab-runway-production',
         emittedBy=[],
         baseSelector={ job: 'runway-exporter', url_map_name: '%(type)s-url-map' % type },
+        serviceAggregation=false,
         extra={
           description: |||
             External load balancer serving global HTTP requests for the Runway service.
