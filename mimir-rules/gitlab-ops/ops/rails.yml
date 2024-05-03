@@ -78,12 +78,14 @@ groups:
   - record: job_environment:gitlab_sql_duration_seconds_bucket:rate1m
     expr: >
       sum without (endpoint_id,controller,action,fqdn,instance,node,pod,pod_template_hash) (
-        rate(gitlab_sql_duration_seconds_bucket{env="gstg"}[1m])
+        rate(gitlab_sql_duration_seconds_bucket{env="ops"}[1m])
       )
 
 
 - name: Rails SQL 5m
   interval: 1m
   rules:
+  - record: controller_action:gitlab_sql_duration_seconds_sum:rate5m
+    expr: sum(rate(gitlab_sql_duration_seconds_sum{env="ops"}[5m])) without (fqdn,instance,node,pod,pod_template_hash)
   - record: job_environment:gitlab_sql_duration_seconds_sum:rate5m
     expr: sum(controller_action:gitlab_sql_duration_seconds_sum:rate5m{env="ops"}) without (controller, action)

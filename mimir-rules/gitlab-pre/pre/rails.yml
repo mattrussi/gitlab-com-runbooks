@@ -86,6 +86,6 @@ groups:
   interval: 1m
   rules:
   - record: controller_action:gitlab_sql_duration_seconds_sum:rate5m
-    expr: sum(rate(gitlab_sql_duration_seconds_sum{env="gprd"}[5m])) without (fqdn,instance,node,pod,pod_template_hash)
+    expr: sum(rate(gitlab_sql_duration_seconds_sum{env="pre"}[5m])) without (fqdn,instance,node,pod,pod_template_hash)
   - record: job_environment:gitlab_sql_duration_seconds_sum:rate5m
     expr: sum(controller_action:gitlab_sql_duration_seconds_sum:rate5m{env="pre"}) without (controller, action)
