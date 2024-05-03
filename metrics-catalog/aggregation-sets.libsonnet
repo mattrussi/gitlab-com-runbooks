@@ -319,8 +319,8 @@ local aggregationSet = import 'servicemetrics/aggregation-set.libsonnet';
         errorRatio: 'gitlab_service_regional_errors:ratio_3d',
       },
     },
-    // Only include components (SLIs) with regional_aggregation="yes"
-    aggregationFilter: 'regional',
+    // Only include components (SLIs) with regional_aggregation="yes" and service_aggregation="yes"
+    aggregationFilter: ['regional', 'service'],
   }),
 
   featureCategorySourceSLIs: aggregationSet.AggregationSet({
