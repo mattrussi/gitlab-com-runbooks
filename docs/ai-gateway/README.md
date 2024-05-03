@@ -25,6 +25,11 @@ instance they are using: self-managed, dedicated or GitLab.com.
 
 The AI Gateway was formerly known as Model Gateway and Code Suggestions.
 
+## Operational Roles and Responsibilities
+
+1. Regional deployment management - The AI-Gateway team is responsible for selecting, provisioning and de-provisioning regional deployments. Selection and provisioning can be self-served via the runway config ([multi region docs](https://runway-docs-4jdf82.runway.gitlab.net/guides/multi-region/)). Currently deprovisioning should be requested by contacting the Runway team.
+2. Quota Saturation Monitoring and Response - The AI-Gateway team is responsible for monitoring the saturation warnings and responding to the warnings when raised.
+
 ## Architecture
 
 See the AI Gateway architecture blueprint at <https://docs.gitlab.com/ee/architecture/blueprints/ai_gateway/>
@@ -114,6 +119,16 @@ For more details, refer to [Runway runbook](../runway/README.md).
 * [Production](https://gitlab.com/gitlab-com/gl-infra/platform/runway/deployments/ai-gateway/-/environments/15709878)
 * [Staging](https://gitlab.com/gitlab-com/gl-infra/platform/runway/deployments/ai-gateway/-/environments/15709877)
 
+## Regions
+
+* [Runway Multi-Region Documentation](https://runway-docs-4jdf82.runway.gitlab.net/guides/multi-region/#regional-service)
+
+When the decision is made to provision a new region, the following steps should be taken:
+
+1. Request a quota increase in the new region (for instructions see [this section below](https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/ai-gateway/README.md#gcp-quotas))
+1. Follow the [Runway documentation to set up the new region](https://docs.runway.gitlab.com/guides/multi-region/)
+1. Notify the [testing team](https://handbook.gitlab.com/handbook/engineering/infrastructure/test-platform/) that a new region has been set up so that they can run the necessary tests. Our current contact is Abhinaba Ghosh and the active Slack channel is #ai-gateway-testing.
+
 ## Services and Accounts
 
 The Cloud Run service accounts are managed by Runway and have `aiplatform.user` role set, granting the service accounts the `aiplatform.endpoints.predict` permission. Other permissions granted by this role are unused. To set [additional roles](https://gitlab-com.gitlab.io/gl-infra/platform/runway/provisioner/inventory.schema.html#inventory_items_additional_roles), update `ai-gateway` entry in Runway [provisioner](https://gitlab.com/gitlab-com/gl-infra/platform/runway/provisioner/-/blob/main/inventory.json?ref_type=heads).
@@ -148,7 +163,7 @@ It is also possible to directly edit the tunables for the `ai-gateway` service v
 
 AI Gateway uses [capacity planning](https://about.gitlab.com/handbook/engineering/infrastructure/capacity-planning/) provided by Runway for long-term forecasting of saturation resources. To view forecasts, refer to [Tamland page](https://gitlab-com.gitlab.io/gl-infra/capacity-planning-trackers/gitlab-com/service_groups/ai-gateway/).
 
-### GCP quotas usage
+### GCP Quotas
 
 Apart from our quota monitoring in our usual GCP projects, the AI Gateway relies on resources that live on the
 `unreview-poc-390200e5` project. Refer to
@@ -165,6 +180,8 @@ To request a quota alteration:
 * Click 'EDIT QUOTAS'
 * Input the desired quota limit for each service and submit the request.
 * Existing/previous requests can be viewed [here](https://console.cloud.google.com/iam-admin/quotas/qirs?referrer=search&project=unreview-poc-390200e5&pageState=(%22allQuotasTable%22:(%22f%22:%22%255B%257B_22k_22_3A_22_22_2C_22t_22_3A10_2C_22v_22_3A_22_5C_22base_model_5C_22_22%257D%255D%22)))
+
+If you do not have access to the GCP console, please file an access request asking for the `Quota Administrator` role on the `ai-assisted-legacy-prd` project.
 
 <!-- ## Availability -->
 
