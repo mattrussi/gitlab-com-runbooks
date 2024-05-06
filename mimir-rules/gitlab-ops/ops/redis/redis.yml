@@ -37,7 +37,7 @@ groups:
         rate(namedprocess_namegroup_thread_cpu_seconds_total{type=~"redis.*", groupname="redis-server", threadname="redis-server", env="ops"}[1m]) or rate(container_cpu_usage_seconds_total:labeled{type=~"redis.*", env="ops"}[1m])
       )
   - record: gitlab:redis_rdb_last_save_in_seconds
-    expr: min(time() - redis_rdb_last_save_timestamp_seconds{env="ops"}) by (environment,type)
+    expr: min(time() - redis_rdb_last_save_timestamp_seconds{env="ops"}) by (env,environment,type)
   - record: gitlab:redis_cluster_redirections:irate1m
     labels:
       type: redis_cluster_ratelimiting

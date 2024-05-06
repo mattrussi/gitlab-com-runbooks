@@ -18,7 +18,7 @@ groups:
       type: git
       tier: sv
     expr: >
-      sum(avg_over_time(gitlab_workhorse_git_http_sessions_active{type="git", tier="sv", env="gstg"}[1m])) by (environment, stage, tier, type)
+      sum(avg_over_time(gitlab_workhorse_git_http_sessions_active{type="git", tier="sv", env="gstg"}[1m])) by (env, environment, stage, tier, type)
 
   - record: gitlab_workhorse_git_http_sessions_active:total:avg_over_time_1w
     labels:
