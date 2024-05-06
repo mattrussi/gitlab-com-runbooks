@@ -419,7 +419,7 @@ groups:
       component: runway_lb
       global_aggregation: "yes"
       regional_aggregation: "no"
-      service_aggregation: "yes"
+      service_aggregation: "no"
       tier: sv
       type: glgo
     expr: "1"

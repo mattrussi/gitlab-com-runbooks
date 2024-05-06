@@ -17,6 +17,7 @@ local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
     additionalToolingLinks=[],
     emittedBy=['monitoring'],
     baseSelector={ url_map_name: loadBalancerName, project_id: projectId },
+    serviceAggregation=true,
     extra={},
   )::
     metricsCatalog.serviceLevelIndicatorDefinition(extra {
@@ -43,6 +44,8 @@ local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
       ),
 
       emittedBy: emittedBy,
+
+      serviceAggregation: serviceAggregation,
 
       significantLabels: ['proxy_continent', 'response_code'],
 

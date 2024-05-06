@@ -168,7 +168,7 @@ groups:
       global_aggregation: "yes"
       monitor: global
       regional_aggregation: "yes"
-      service_aggregation: "yes"
+      service_aggregation: "no"
       tier: sv
       type: ai-gateway
     expr: "1"
