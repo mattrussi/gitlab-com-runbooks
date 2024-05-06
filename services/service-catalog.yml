@@ -2501,9 +2501,9 @@ services:
       project:
       documents:
         design:
-        architecture:
-        readiness_review:
-        sre_guide:
+        architecture: https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/mimir/README.md?ref_type=heads#architecture
+        readiness_review: https://gitlab.com/gitlab-com/gl-infra/readiness/-/merge_requests/214
+        sre_guide: https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/mimir/README.md?ref_type=heads#runbooks
         developer_guide:
         service:
         security:
@@ -2512,8 +2512,8 @@ services:
           permalink: https://nonprod-log.gitlab.net/app/r/s/BLV6G
     observability:
       monitors:
-        grafana_folder:
-        primary_grafana_dashboard:
+        grafana_folder: Mimir
+        primary_grafana_dashboard: mimir-main/mimir3a-overview
 
   - name: glgo
     tier: sv
