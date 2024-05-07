@@ -414,7 +414,7 @@ groups:
       severity: s4
     expr: |
       gitlab_component_saturation:ratio{component="gcp_quota_limit_vertex_ai",env="gprd",monitor="global"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="gcp_quota_limit_vertex_ai",env="gprd",monitor="global"}
+      slo:max:hard:gitlab_component_saturation:ratio{component="gcp_quota_limit_vertex_ai",monitor="global"}
   - alert: component_saturation_slo_out_of_bounds:gcp_quota_limit_vertex_ai_code_gecko
     for: 15m
     annotations:
@@ -473,7 +473,7 @@ groups:
       severity: s4
     expr: |
       gitlab_component_saturation:ratio{component="gcp_quota_limit_vertex_ai_code_gecko",env="gprd",monitor="global"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="gcp_quota_limit_vertex_ai_code_gecko",env="gprd",monitor="global"}
+      slo:max:hard:gitlab_component_saturation:ratio{component="gcp_quota_limit_vertex_ai_code_gecko",monitor="global"}
   - alert: component_saturation_slo_out_of_bounds:go_goroutines
     for: 5m
     annotations:
@@ -533,7 +533,7 @@ groups:
       severity: s2
     expr: |
       gitlab_component_saturation:ratio{component="go_goroutines",env="gprd",monitor="global"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="go_goroutines",env="gprd",monitor="global"}
+      slo:max:hard:gitlab_component_saturation:ratio{component="go_goroutines",monitor="global"}
   - alert: component_saturation_slo_out_of_bounds:go_memory
     for: 5m
     annotations:
@@ -592,7 +592,7 @@ groups:
       severity: s4
     expr: |
       gitlab_component_saturation:ratio{component="go_memory",env="gprd",monitor="global"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="go_memory",env="gprd",monitor="global"}
+      slo:max:hard:gitlab_component_saturation:ratio{component="go_memory",monitor="global"}
   - alert: component_saturation_slo_out_of_bounds:kube_go_memory
     for: 5m
     annotations:
@@ -647,7 +647,7 @@ groups:
       severity: s4
     expr: |
       gitlab_component_saturation:ratio{component="kube_go_memory",env="gprd",monitor="global"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="kube_go_memory",env="gprd",monitor="global"}
+      slo:max:hard:gitlab_component_saturation:ratio{component="kube_go_memory",monitor="global"}
   - alert: component_saturation_slo_out_of_bounds:kube_node_ips
     for: 5m
     annotations:
@@ -704,7 +704,7 @@ groups:
       severity: s3
     expr: |
       gitlab_component_saturation:ratio{component="kube_node_ips",env="gprd",monitor="global"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="kube_node_ips",env="gprd",monitor="global"}
+      slo:max:hard:gitlab_component_saturation:ratio{component="kube_node_ips",monitor="global"}
   - alert: component_saturation_slo_out_of_bounds:kube_pool_max_nodes
     for: 5m
     annotations:
@@ -781,7 +781,7 @@ groups:
       severity: s3
     expr: |
       gitlab_component_saturation:ratio{component="kube_pool_max_nodes",env="gprd",monitor="global"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="kube_pool_max_nodes",env="gprd",monitor="global"}
+      slo:max:hard:gitlab_component_saturation:ratio{component="kube_pool_max_nodes",monitor="global"}
   - alert: component_saturation_slo_out_of_bounds:max_concurrent_inferences
     for: 5m
     annotations:
@@ -840,7 +840,7 @@ groups:
       severity: s3
     expr: |
       gitlab_component_saturation:ratio{component="max_concurrent_inferences",env="gprd",monitor="global"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="max_concurrent_inferences",env="gprd",monitor="global"}
+      slo:max:hard:gitlab_component_saturation:ratio{component="max_concurrent_inferences",monitor="global"}
   - alert: component_saturation_slo_out_of_bounds:max_concurrent_inferences_per_engine
     for: 5m
     annotations:
@@ -899,7 +899,7 @@ groups:
       severity: s3
     expr: |
       gitlab_component_saturation:ratio{component="max_concurrent_inferences_per_engine",env="gprd",monitor="global"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="max_concurrent_inferences_per_engine",env="gprd",monitor="global"}
+      slo:max:hard:gitlab_component_saturation:ratio{component="max_concurrent_inferences_per_engine",monitor="global"}
   - alert: component_saturation_slo_out_of_bounds:open_fds
     for: 5m
     annotations:
@@ -971,7 +971,7 @@ groups:
       severity: s2
     expr: |
       gitlab_component_saturation:ratio{component="open_fds",env="gprd",monitor="global"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="open_fds",env="gprd",monitor="global"}
+      slo:max:hard:gitlab_component_saturation:ratio{component="open_fds",monitor="global"}
   - alert: component_saturation_slo_out_of_bounds:pg_primary_cpu
     for: 5m
     annotations:
@@ -1035,7 +1035,7 @@ groups:
       severity: s2
     expr: |
       gitlab_component_saturation:ratio{component="pg_primary_cpu",env="gprd",monitor="global"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="pg_primary_cpu",env="gprd",monitor="global"}
+      slo:max:hard:gitlab_component_saturation:ratio{component="pg_primary_cpu",monitor="global"}
   - alert: component_saturation_slo_out_of_bounds:pg_vacuum_activity_v2
     for: 5m
     annotations:
@@ -1104,7 +1104,7 @@ groups:
       severity: s3
     expr: |
       gitlab_component_saturation:ratio{component="pg_vacuum_activity_v2",env="gprd",monitor="global"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="pg_vacuum_activity_v2",env="gprd",monitor="global"}
+      slo:max:hard:gitlab_component_saturation:ratio{component="pg_vacuum_activity_v2",monitor="global"}
   - alert: component_saturation_slo_out_of_bounds:pg_walsender_cpu
     for: 5m
     annotations:
@@ -1173,7 +1173,7 @@ groups:
       severity: s3
     expr: |
       gitlab_component_saturation:ratio{component="pg_walsender_cpu",env="gprd",monitor="global"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="pg_walsender_cpu",env="gprd",monitor="global"}
+      slo:max:hard:gitlab_component_saturation:ratio{component="pg_walsender_cpu",monitor="global"}
   - alert: component_saturation_slo_out_of_bounds:runway_container_cpu_utilization
     for: 5m
     annotations:
@@ -1234,7 +1234,7 @@ groups:
       severity: s4
     expr: |
       gitlab_component_saturation:ratio{component="runway_container_cpu_utilization",env="gprd",monitor="global"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="runway_container_cpu_utilization",env="gprd",monitor="global"}
+      slo:max:hard:gitlab_component_saturation:ratio{component="runway_container_cpu_utilization",monitor="global"}
   - alert: component_saturation_slo_out_of_bounds:runway_container_instance_utilization
     for: 5m
     annotations:
@@ -1291,7 +1291,7 @@ groups:
       severity: s4
     expr: |
       gitlab_component_saturation:ratio{component="runway_container_instance_utilization",env="gprd",monitor="global"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="runway_container_instance_utilization",env="gprd",monitor="global"}
+      slo:max:hard:gitlab_component_saturation:ratio{component="runway_container_instance_utilization",monitor="global"}
   - alert: component_saturation_slo_out_of_bounds:runway_container_max_concurrent_requests
     for: 5m
     annotations:
@@ -1352,7 +1352,7 @@ groups:
       severity: s4
     expr: |
       gitlab_component_saturation:ratio{component="runway_container_max_concurrent_requests",env="gprd",monitor="global"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="runway_container_max_concurrent_requests",env="gprd",monitor="global"}
+      slo:max:hard:gitlab_component_saturation:ratio{component="runway_container_max_concurrent_requests",monitor="global"}
   - alert: component_saturation_slo_out_of_bounds:runway_container_memory_utilization
     for: 5m
     annotations:
@@ -1413,4 +1413,4 @@ groups:
       severity: s4
     expr: |
       gitlab_component_saturation:ratio{component="runway_container_memory_utilization",env="gprd",monitor="global"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="runway_container_memory_utilization",env="gprd",monitor="global"}
+      slo:max:hard:gitlab_component_saturation:ratio{component="runway_container_memory_utilization",monitor="global"}

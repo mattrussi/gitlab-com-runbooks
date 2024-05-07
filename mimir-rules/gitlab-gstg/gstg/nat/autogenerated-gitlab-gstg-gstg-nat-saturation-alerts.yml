@@ -104,7 +104,7 @@ groups:
       severity: s2
     expr: |
       gitlab_component_saturation:ratio{component="nat_gateway_port_allocation",env="gstg",type="nat"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="nat_gateway_port_allocation",env="gstg",type="nat"}
+      slo:max:hard:gitlab_component_saturation:ratio{component="nat_gateway_port_allocation"}
   - alert: component_saturation_slo_out_of_bounds:nat_host_port_allocation
     for: 10m
     annotations:
@@ -193,4 +193,4 @@ groups:
       severity: s3
     expr: |
       gitlab_component_saturation:ratio{component="nat_host_port_allocation",env="gstg",type="nat"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="nat_host_port_allocation",env="gstg",type="nat"}
+      slo:max:hard:gitlab_component_saturation:ratio{component="nat_host_port_allocation"}

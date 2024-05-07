@@ -81,7 +81,7 @@ groups:
       severity: s4
     expr: |
       gitlab_component_saturation:ratio{component="kube_container_cpu_limit",env="gstg",type="kube"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="kube_container_cpu_limit",env="gstg",type="kube"}
+      slo:max:hard:gitlab_component_saturation:ratio{component="kube_container_cpu_limit"}
   - alert: component_saturation_slo_out_of_bounds:kube_container_memory
     for: 15m
     annotations:
@@ -132,7 +132,7 @@ groups:
       severity: s4
     expr: |
       gitlab_component_saturation:ratio{component="kube_container_memory",env="gstg",type="kube"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="kube_container_memory",env="gstg",type="kube"}
+      slo:max:hard:gitlab_component_saturation:ratio{component="kube_container_memory"}
   - alert: component_saturation_slo_out_of_bounds:kube_container_throttling
     for: 10m
     annotations:
@@ -193,7 +193,7 @@ groups:
       severity: s3
     expr: |
       gitlab_component_saturation:ratio{component="kube_container_throttling",env="gstg",type="kube"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="kube_container_throttling",env="gstg",type="kube"}
+      slo:max:hard:gitlab_component_saturation:ratio{component="kube_container_throttling"}
   - alert: component_saturation_slo_out_of_bounds:kube_horizontalpodautoscaler_desired_replicas
     for: 25m
     annotations:
@@ -246,7 +246,7 @@ groups:
       severity: s3
     expr: |
       gitlab_component_saturation:ratio{component="kube_horizontalpodautoscaler_desired_replicas",env="gstg",type="kube"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="kube_horizontalpodautoscaler_desired_replicas",env="gstg",type="kube"}
+      slo:max:hard:gitlab_component_saturation:ratio{component="kube_horizontalpodautoscaler_desired_replicas"}
   - alert: component_saturation_slo_out_of_bounds:kube_node_ips
     for: 5m
     annotations:
@@ -303,7 +303,7 @@ groups:
       severity: s3
     expr: |
       gitlab_component_saturation:ratio{component="kube_node_ips",env="gstg",type="kube"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="kube_node_ips",env="gstg",type="kube"}
+      slo:max:hard:gitlab_component_saturation:ratio{component="kube_node_ips"}
   - alert: component_saturation_slo_out_of_bounds:kube_persistent_volume_claim_disk_space
     for: 5m
     annotations:
@@ -355,7 +355,7 @@ groups:
       severity: s2
     expr: |
       gitlab_component_saturation:ratio{component="kube_persistent_volume_claim_disk_space",env="gstg",type="kube"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="kube_persistent_volume_claim_disk_space",env="gstg",type="kube"}
+      slo:max:hard:gitlab_component_saturation:ratio{component="kube_persistent_volume_claim_disk_space"}
   - alert: component_saturation_slo_out_of_bounds:kube_persistent_volume_claim_inodes
     for: 5m
     annotations:
@@ -407,7 +407,7 @@ groups:
       severity: s2
     expr: |
       gitlab_component_saturation:ratio{component="kube_persistent_volume_claim_inodes",env="gstg",type="kube"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="kube_persistent_volume_claim_inodes",env="gstg",type="kube"}
+      slo:max:hard:gitlab_component_saturation:ratio{component="kube_persistent_volume_claim_inodes"}
   - alert: component_saturation_slo_out_of_bounds:kube_pool_cpu
     for: 5m
     annotations:
@@ -460,7 +460,7 @@ groups:
       severity: s3
     expr: |
       gitlab_component_saturation:ratio{component="kube_pool_cpu",env="gstg",type="kube"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="kube_pool_cpu",env="gstg",type="kube"}
+      slo:max:hard:gitlab_component_saturation:ratio{component="kube_pool_cpu"}
   - alert: component_saturation_slo_out_of_bounds:kube_pool_max_nodes
     for: 5m
     annotations:
@@ -537,4 +537,4 @@ groups:
       severity: s3
     expr: |
       gitlab_component_saturation:ratio{component="kube_pool_max_nodes",env="gstg",type="kube"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="kube_pool_max_nodes",env="gstg",type="kube"}
+      slo:max:hard:gitlab_component_saturation:ratio{component="kube_pool_max_nodes"}

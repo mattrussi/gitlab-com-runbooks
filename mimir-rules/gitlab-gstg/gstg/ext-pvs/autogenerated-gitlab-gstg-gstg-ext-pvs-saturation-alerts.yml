@@ -88,7 +88,7 @@ groups:
       severity: s2
     expr: |
       gitlab_component_saturation:ratio{component="open_fds",env="gstg",type="ext-pvs"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="open_fds",env="gstg",type="ext-pvs"}
+      slo:max:hard:gitlab_component_saturation:ratio{component="open_fds"}
   - alert: component_saturation_slo_out_of_bounds:runway_container_cpu_utilization
     for: 5m
     annotations:
@@ -149,7 +149,7 @@ groups:
       severity: s4
     expr: |
       gitlab_component_saturation:ratio{component="runway_container_cpu_utilization",env="gstg",type="ext-pvs"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="runway_container_cpu_utilization",env="gstg",type="ext-pvs"}
+      slo:max:hard:gitlab_component_saturation:ratio{component="runway_container_cpu_utilization"}
   - alert: component_saturation_slo_out_of_bounds:runway_container_instance_utilization
     for: 5m
     annotations:
@@ -206,7 +206,7 @@ groups:
       severity: s4
     expr: |
       gitlab_component_saturation:ratio{component="runway_container_instance_utilization",env="gstg",type="ext-pvs"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="runway_container_instance_utilization",env="gstg",type="ext-pvs"}
+      slo:max:hard:gitlab_component_saturation:ratio{component="runway_container_instance_utilization"}
   - alert: component_saturation_slo_out_of_bounds:runway_container_max_concurrent_requests
     for: 5m
     annotations:
@@ -267,7 +267,7 @@ groups:
       severity: s4
     expr: |
       gitlab_component_saturation:ratio{component="runway_container_max_concurrent_requests",env="gstg",type="ext-pvs"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="runway_container_max_concurrent_requests",env="gstg",type="ext-pvs"}
+      slo:max:hard:gitlab_component_saturation:ratio{component="runway_container_max_concurrent_requests"}
   - alert: component_saturation_slo_out_of_bounds:runway_container_memory_utilization
     for: 5m
     annotations:
@@ -328,4 +328,4 @@ groups:
       severity: s4
     expr: |
       gitlab_component_saturation:ratio{component="runway_container_memory_utilization",env="gstg",type="ext-pvs"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="runway_container_memory_utilization",env="gstg",type="ext-pvs"}
+      slo:max:hard:gitlab_component_saturation:ratio{component="runway_container_memory_utilization"}

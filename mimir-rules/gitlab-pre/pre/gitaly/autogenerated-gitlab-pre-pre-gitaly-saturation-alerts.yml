@@ -79,7 +79,7 @@ groups:
       severity: s4
     expr: |
       gitlab_component_saturation:ratio{component="cgroup_memory",env="pre",type="gitaly"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="cgroup_memory",env="pre",type="gitaly"}
+      slo:max:hard:gitlab_component_saturation:ratio{component="cgroup_memory"}
   - alert: component_saturation_slo_out_of_bounds:cpu
     for: 5m
     annotations:
@@ -130,7 +130,7 @@ groups:
       severity: s3
     expr: |
       gitlab_component_saturation:ratio{component="cpu",env="pre",type="gitaly"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="cpu",env="pre",type="gitaly"}
+      slo:max:hard:gitlab_component_saturation:ratio{component="cpu"}
   - alert: component_saturation_slo_out_of_bounds:disk_inodes
     for: 15m
     annotations:
@@ -188,7 +188,7 @@ groups:
       severity: s2
     expr: |
       gitlab_component_saturation:ratio{component="disk_inodes",env="pre",type="gitaly"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="disk_inodes",env="pre",type="gitaly"}
+      slo:max:hard:gitlab_component_saturation:ratio{component="disk_inodes"}
   - alert: ComponentResourceRunningOut_disk_inodes
     for: 15m
     annotations:
@@ -248,7 +248,7 @@ groups:
     expr: |
       predict_linear(gitlab_component_saturation:ratio{component="disk_inodes",env="pre",type="gitaly"}[6h], 21600)
       > on (component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="disk_inodes",env="pre",type="gitaly"}
+      slo:max:hard:gitlab_component_saturation:ratio{component="disk_inodes"}
   - alert: component_saturation_slo_out_of_bounds:disk_space
     for: 15m
     annotations:
@@ -300,7 +300,7 @@ groups:
       severity: s2
     expr: |
       gitlab_component_saturation:ratio{component="disk_space",env="pre",type="gitaly"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="disk_space",env="pre",type="gitaly"}
+      slo:max:hard:gitlab_component_saturation:ratio{component="disk_space"}
   - alert: ComponentResourceRunningOut_disk_space
     for: 15m
     annotations:
@@ -354,7 +354,7 @@ groups:
     expr: |
       predict_linear(gitlab_component_saturation:ratio{component="disk_space",env="pre",type="gitaly"}[6h], 21600)
       > on (component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="disk_space",env="pre",type="gitaly"}
+      slo:max:hard:gitlab_component_saturation:ratio{component="disk_space"}
   - alert: component_saturation_slo_out_of_bounds:disk_sustained_read_iops
     for: 25m
     annotations:
@@ -405,7 +405,7 @@ groups:
       severity: s3
     expr: |
       gitlab_component_saturation:ratio{component="disk_sustained_read_iops",env="pre",type="gitaly"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="disk_sustained_read_iops",env="pre",type="gitaly"}
+      slo:max:hard:gitlab_component_saturation:ratio{component="disk_sustained_read_iops"}
   - alert: component_saturation_slo_out_of_bounds:disk_sustained_read_throughput
     for: 25m
     annotations:
@@ -456,7 +456,7 @@ groups:
       severity: s3
     expr: |
       gitlab_component_saturation:ratio{component="disk_sustained_read_throughput",env="pre",type="gitaly"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="disk_sustained_read_throughput",env="pre",type="gitaly"}
+      slo:max:hard:gitlab_component_saturation:ratio{component="disk_sustained_read_throughput"}
   - alert: component_saturation_slo_out_of_bounds:disk_sustained_write_iops
     for: 25m
     annotations:
@@ -511,7 +511,7 @@ groups:
       severity: s3
     expr: |
       gitlab_component_saturation:ratio{component="disk_sustained_write_iops",env="pre",type="gitaly"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="disk_sustained_write_iops",env="pre",type="gitaly"}
+      slo:max:hard:gitlab_component_saturation:ratio{component="disk_sustained_write_iops"}
   - alert: component_saturation_slo_out_of_bounds:disk_sustained_write_throughput
     for: 25m
     annotations:
@@ -566,7 +566,7 @@ groups:
       severity: s3
     expr: |
       gitlab_component_saturation:ratio{component="disk_sustained_write_throughput",env="pre",type="gitaly"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="disk_sustained_write_throughput",env="pre",type="gitaly"}
+      slo:max:hard:gitlab_component_saturation:ratio{component="disk_sustained_write_throughput"}
   - alert: component_saturation_slo_out_of_bounds:gitaly_active_node_available_space
     for: 5m
     annotations:
@@ -646,7 +646,7 @@ groups:
       severity: s2
     expr: |
       gitlab_component_saturation:ratio{component="gitaly_active_node_available_space",env="pre",type="gitaly"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="gitaly_active_node_available_space",env="pre",type="gitaly"}
+      slo:max:hard:gitlab_component_saturation:ratio{component="gitaly_active_node_available_space"}
   - alert: component_saturation_slo_out_of_bounds:gitaly_total_disk_space
     for: 5m
     annotations:
@@ -713,7 +713,7 @@ groups:
       severity: s3
     expr: |
       gitlab_component_saturation:ratio{component="gitaly_total_disk_space",env="pre",type="gitaly"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="gitaly_total_disk_space",env="pre",type="gitaly"}
+      slo:max:hard:gitlab_component_saturation:ratio{component="gitaly_total_disk_space"}
   - alert: component_saturation_slo_out_of_bounds:go_goroutines
     for: 5m
     annotations:
@@ -773,7 +773,7 @@ groups:
       severity: s2
     expr: |
       gitlab_component_saturation:ratio{component="go_goroutines",env="pre",type="gitaly"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="go_goroutines",env="pre",type="gitaly"}
+      slo:max:hard:gitlab_component_saturation:ratio{component="go_goroutines"}
   - alert: component_saturation_slo_out_of_bounds:go_memory
     for: 5m
     annotations:
@@ -832,7 +832,7 @@ groups:
       severity: s4
     expr: |
       gitlab_component_saturation:ratio{component="go_memory",env="pre",type="gitaly"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="go_memory",env="pre",type="gitaly"}
+      slo:max:hard:gitlab_component_saturation:ratio{component="go_memory"}
   - alert: component_saturation_slo_out_of_bounds:memory
     for: 5m
     annotations:
@@ -879,7 +879,7 @@ groups:
       severity: s4
     expr: |
       gitlab_component_saturation:ratio{component="memory",env="pre",type="gitaly"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="memory",env="pre",type="gitaly"}
+      slo:max:hard:gitlab_component_saturation:ratio{component="memory"}
   - alert: component_saturation_slo_out_of_bounds:nf_conntrack_entries
     for: 5m
     annotations:
@@ -932,7 +932,7 @@ groups:
       severity: s3
     expr: |
       gitlab_component_saturation:ratio{component="nf_conntrack_entries",env="pre",type="gitaly"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="nf_conntrack_entries",env="pre",type="gitaly"}
+      slo:max:hard:gitlab_component_saturation:ratio{component="nf_conntrack_entries"}
   - alert: component_saturation_slo_out_of_bounds:node_schedstat_waiting
     for: 90m
     annotations:
@@ -983,7 +983,7 @@ groups:
       severity: s4
     expr: |
       gitlab_component_saturation:ratio{component="node_schedstat_waiting",env="pre",type="gitaly"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="node_schedstat_waiting",env="pre",type="gitaly"}
+      slo:max:hard:gitlab_component_saturation:ratio{component="node_schedstat_waiting"}
   - alert: component_saturation_slo_out_of_bounds:open_fds
     for: 5m
     annotations:
@@ -1055,7 +1055,7 @@ groups:
       severity: s2
     expr: |
       gitlab_component_saturation:ratio{component="open_fds",env="pre",type="gitaly"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="open_fds",env="pre",type="gitaly"}
+      slo:max:hard:gitlab_component_saturation:ratio{component="open_fds"}
   - alert: component_saturation_slo_out_of_bounds:shard_cpu
     for: 5m
     annotations:
@@ -1106,7 +1106,7 @@ groups:
       severity: s3
     expr: |
       gitlab_component_saturation:ratio{component="shard_cpu",env="pre",type="gitaly"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="shard_cpu",env="pre",type="gitaly"}
+      slo:max:hard:gitlab_component_saturation:ratio{component="shard_cpu"}
   - alert: component_saturation_slo_out_of_bounds:single_node_cpu
     for: 10m
     annotations:
@@ -1155,4 +1155,4 @@ groups:
       severity: s4
     expr: |
       gitlab_component_saturation:ratio{component="single_node_cpu",env="pre",type="gitaly"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="single_node_cpu",env="pre",type="gitaly"}
+      slo:max:hard:gitlab_component_saturation:ratio{component="single_node_cpu"}

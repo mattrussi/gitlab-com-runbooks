@@ -153,6 +153,7 @@ local generateSaturationAlerts(definition, componentName, selectorHash) =
     title: definition.title,
     selector: selectors.serializeHash(selectorHashWithComponent),
     titleStage: if stageLabel == '' then '' else ' ({{ $labels.%s }} stage)' % [stageLabel],
+    hardSLOSelector: selectors.serializeHash(selectors.without(selectorHashWithComponent, ['type', 'env'])),
   };
 
   local severityLabels =
@@ -185,7 +186,7 @@ local generateSaturationAlerts(definition, componentName, selectorHash) =
     },
     expr: |||
       gitlab_component_saturation:ratio{%(selector)s} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{%(selector)s}
+      slo:max:hard:gitlab_component_saturation:ratio{%(hardSLOSelector)s}
     ||| % formatConfig,
     annotations+: {
       title: 'The %(title)s resource of the {{ $labels.type }} service%(titleStage)s has a saturation exceeding SLO and is close to its capacity limit.' % formatConfig,
@@ -208,7 +209,7 @@ local generateSaturationAlerts(definition, componentName, selectorHash) =
        expr: |||
          predict_linear(gitlab_component_saturation:ratio{%(selector)s}[%(linearPredictionDuration)s], %(linearPredictionDurationSeconds)d)
          > on (component) group_left
-         slo:max:hard:gitlab_component_saturation:ratio{%(selector)s}
+         slo:max:hard:gitlab_component_saturation:ratio{%(hardSLOSelector)s}
        ||| % formatConfig2,
        labels+: {
          linear_prediction_saturation_alert: definition.linear_prediction_saturation_alert,

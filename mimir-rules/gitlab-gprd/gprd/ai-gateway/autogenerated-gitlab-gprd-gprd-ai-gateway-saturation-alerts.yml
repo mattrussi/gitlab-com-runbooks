@@ -75,7 +75,7 @@ groups:
       severity: s4
     expr: |
       gitlab_component_saturation:ratio{component="gcp_quota_limit_vertex_ai",env="gprd",type="ai-gateway"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="gcp_quota_limit_vertex_ai",env="gprd",type="ai-gateway"}
+      slo:max:hard:gitlab_component_saturation:ratio{component="gcp_quota_limit_vertex_ai"}
   - alert: component_saturation_slo_out_of_bounds:gcp_quota_limit_vertex_ai_code_gecko
     for: 15m
     annotations:
@@ -134,7 +134,7 @@ groups:
       severity: s4
     expr: |
       gitlab_component_saturation:ratio{component="gcp_quota_limit_vertex_ai_code_gecko",env="gprd",type="ai-gateway"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="gcp_quota_limit_vertex_ai_code_gecko",env="gprd",type="ai-gateway"}
+      slo:max:hard:gitlab_component_saturation:ratio{component="gcp_quota_limit_vertex_ai_code_gecko"}
   - alert: component_saturation_slo_out_of_bounds:max_concurrent_inferences
     for: 5m
     annotations:
@@ -193,7 +193,7 @@ groups:
       severity: s3
     expr: |
       gitlab_component_saturation:ratio{component="max_concurrent_inferences",env="gprd",type="ai-gateway"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="max_concurrent_inferences",env="gprd",type="ai-gateway"}
+      slo:max:hard:gitlab_component_saturation:ratio{component="max_concurrent_inferences"}
   - alert: component_saturation_slo_out_of_bounds:max_concurrent_inferences_per_engine
     for: 5m
     annotations:
@@ -252,7 +252,7 @@ groups:
       severity: s3
     expr: |
       gitlab_component_saturation:ratio{component="max_concurrent_inferences_per_engine",env="gprd",type="ai-gateway"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="max_concurrent_inferences_per_engine",env="gprd",type="ai-gateway"}
+      slo:max:hard:gitlab_component_saturation:ratio{component="max_concurrent_inferences_per_engine"}
   - alert: component_saturation_slo_out_of_bounds:open_fds
     for: 5m
     annotations:
@@ -324,7 +324,7 @@ groups:
       severity: s2
     expr: |
       gitlab_component_saturation:ratio{component="open_fds",env="gprd",type="ai-gateway"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="open_fds",env="gprd",type="ai-gateway"}
+      slo:max:hard:gitlab_component_saturation:ratio{component="open_fds"}
   - alert: component_saturation_slo_out_of_bounds:runway_container_cpu_utilization
     for: 5m
     annotations:
@@ -385,7 +385,7 @@ groups:
       severity: s4
     expr: |
       gitlab_component_saturation:ratio{component="runway_container_cpu_utilization",env="gprd",type="ai-gateway"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="runway_container_cpu_utilization",env="gprd",type="ai-gateway"}
+      slo:max:hard:gitlab_component_saturation:ratio{component="runway_container_cpu_utilization"}
   - alert: component_saturation_slo_out_of_bounds:runway_container_instance_utilization
     for: 5m
     annotations:
@@ -442,7 +442,7 @@ groups:
       severity: s4
     expr: |
       gitlab_component_saturation:ratio{component="runway_container_instance_utilization",env="gprd",type="ai-gateway"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="runway_container_instance_utilization",env="gprd",type="ai-gateway"}
+      slo:max:hard:gitlab_component_saturation:ratio{component="runway_container_instance_utilization"}
   - alert: component_saturation_slo_out_of_bounds:runway_container_max_concurrent_requests
     for: 5m
     annotations:
@@ -503,7 +503,7 @@ groups:
       severity: s4
     expr: |
       gitlab_component_saturation:ratio{component="runway_container_max_concurrent_requests",env="gprd",type="ai-gateway"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="runway_container_max_concurrent_requests",env="gprd",type="ai-gateway"}
+      slo:max:hard:gitlab_component_saturation:ratio{component="runway_container_max_concurrent_requests"}
   - alert: component_saturation_slo_out_of_bounds:runway_container_memory_utilization
     for: 5m
     annotations:
@@ -564,4 +564,4 @@ groups:
       severity: s4
     expr: |
       gitlab_component_saturation:ratio{component="runway_container_memory_utilization",env="gprd",type="ai-gateway"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="runway_container_memory_utilization",env="gprd",type="ai-gateway"}
+      slo:max:hard:gitlab_component_saturation:ratio{component="runway_container_memory_utilization"}

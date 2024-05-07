@@ -427,7 +427,7 @@ groups:
       severity: s3
     expr: |
       gitlab_component_saturation:ratio{component="cpu",monitor="global",type="thanos"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="cpu",monitor="global",type="thanos"}
+      slo:max:hard:gitlab_component_saturation:ratio{component="cpu",monitor="global"}
   - alert: component_saturation_slo_out_of_bounds:disk_inodes
     for: 15m
     annotations:
@@ -485,7 +485,7 @@ groups:
       severity: s2
     expr: |
       gitlab_component_saturation:ratio{component="disk_inodes",monitor="global",type="thanos"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="disk_inodes",monitor="global",type="thanos"}
+      slo:max:hard:gitlab_component_saturation:ratio{component="disk_inodes",monitor="global"}
   - alert: ComponentResourceRunningOut_disk_inodes
     for: 15m
     annotations:
@@ -545,7 +545,7 @@ groups:
     expr: |
       predict_linear(gitlab_component_saturation:ratio{component="disk_inodes",monitor="global",type="thanos"}[6h], 21600)
       > on (component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="disk_inodes",monitor="global",type="thanos"}
+      slo:max:hard:gitlab_component_saturation:ratio{component="disk_inodes",monitor="global"}
   - alert: component_saturation_slo_out_of_bounds:disk_space
     for: 15m
     annotations:
@@ -597,7 +597,7 @@ groups:
       severity: s2
     expr: |
       gitlab_component_saturation:ratio{component="disk_space",monitor="global",type="thanos"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="disk_space",monitor="global",type="thanos"}
+      slo:max:hard:gitlab_component_saturation:ratio{component="disk_space",monitor="global"}
   - alert: ComponentResourceRunningOut_disk_space
     for: 15m
     annotations:
@@ -651,7 +651,7 @@ groups:
     expr: |
       predict_linear(gitlab_component_saturation:ratio{component="disk_space",monitor="global",type="thanos"}[6h], 21600)
       > on (component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="disk_space",monitor="global",type="thanos"}
+      slo:max:hard:gitlab_component_saturation:ratio{component="disk_space",monitor="global"}
   - alert: component_saturation_slo_out_of_bounds:go_goroutines
     for: 5m
     annotations:
@@ -711,7 +711,7 @@ groups:
       severity: s2
     expr: |
       gitlab_component_saturation:ratio{component="go_goroutines",monitor="global",type="thanos"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="go_goroutines",monitor="global",type="thanos"}
+      slo:max:hard:gitlab_component_saturation:ratio{component="go_goroutines",monitor="global"}
   - alert: component_saturation_slo_out_of_bounds:go_memory
     for: 5m
     annotations:
@@ -770,7 +770,7 @@ groups:
       severity: s4
     expr: |
       gitlab_component_saturation:ratio{component="go_memory",monitor="global",type="thanos"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="go_memory",monitor="global",type="thanos"}
+      slo:max:hard:gitlab_component_saturation:ratio{component="go_memory",monitor="global"}
   - alert: component_saturation_slo_out_of_bounds:kube_container_cpu_limit
     for: 15m
     annotations:
@@ -835,7 +835,7 @@ groups:
       severity: s4
     expr: |
       gitlab_component_saturation:ratio{component="kube_container_cpu_limit",monitor="global",type="thanos"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="kube_container_cpu_limit",monitor="global",type="thanos"}
+      slo:max:hard:gitlab_component_saturation:ratio{component="kube_container_cpu_limit",monitor="global"}
   - alert: component_saturation_slo_out_of_bounds:kube_container_memory
     for: 15m
     annotations:
@@ -886,7 +886,7 @@ groups:
       severity: s4
     expr: |
       gitlab_component_saturation:ratio{component="kube_container_memory",monitor="global",type="thanos"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="kube_container_memory",monitor="global",type="thanos"}
+      slo:max:hard:gitlab_component_saturation:ratio{component="kube_container_memory",monitor="global"}
   - alert: component_saturation_slo_out_of_bounds:kube_container_throttling
     for: 10m
     annotations:
@@ -947,7 +947,7 @@ groups:
       severity: s3
     expr: |
       gitlab_component_saturation:ratio{component="kube_container_throttling",monitor="global",type="thanos"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="kube_container_throttling",monitor="global",type="thanos"}
+      slo:max:hard:gitlab_component_saturation:ratio{component="kube_container_throttling",monitor="global"}
   - alert: component_saturation_slo_out_of_bounds:kube_go_memory
     for: 5m
     annotations:
@@ -1002,7 +1002,7 @@ groups:
       severity: s4
     expr: |
       gitlab_component_saturation:ratio{component="kube_go_memory",monitor="global",type="thanos"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="kube_go_memory",monitor="global",type="thanos"}
+      slo:max:hard:gitlab_component_saturation:ratio{component="kube_go_memory",monitor="global"}
   - alert: component_saturation_slo_out_of_bounds:kube_horizontalpodautoscaler_desired_replicas
     for: 25m
     annotations:
@@ -1055,7 +1055,7 @@ groups:
       severity: s3
     expr: |
       gitlab_component_saturation:ratio{component="kube_horizontalpodautoscaler_desired_replicas",monitor="global",type="thanos"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="kube_horizontalpodautoscaler_desired_replicas",monitor="global",type="thanos"}
+      slo:max:hard:gitlab_component_saturation:ratio{component="kube_horizontalpodautoscaler_desired_replicas",monitor="global"}
   - alert: component_saturation_slo_out_of_bounds:memory
     for: 5m
     annotations:
@@ -1102,7 +1102,7 @@ groups:
       severity: s4
     expr: |
       gitlab_component_saturation:ratio{component="memory",monitor="global",type="thanos"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="memory",monitor="global",type="thanos"}
+      slo:max:hard:gitlab_component_saturation:ratio{component="memory",monitor="global"}
   - alert: component_saturation_slo_out_of_bounds:nf_conntrack_entries
     for: 5m
     annotations:
@@ -1155,7 +1155,7 @@ groups:
       severity: s3
     expr: |
       gitlab_component_saturation:ratio{component="nf_conntrack_entries",monitor="global",type="thanos"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="nf_conntrack_entries",monitor="global",type="thanos"}
+      slo:max:hard:gitlab_component_saturation:ratio{component="nf_conntrack_entries",monitor="global"}
   - alert: component_saturation_slo_out_of_bounds:node_schedstat_waiting
     for: 90m
     annotations:
@@ -1206,7 +1206,7 @@ groups:
       severity: s4
     expr: |
       gitlab_component_saturation:ratio{component="node_schedstat_waiting",monitor="global",type="thanos"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="node_schedstat_waiting",monitor="global",type="thanos"}
+      slo:max:hard:gitlab_component_saturation:ratio{component="node_schedstat_waiting",monitor="global"}
   - alert: component_saturation_slo_out_of_bounds:open_fds
     for: 5m
     annotations:
@@ -1278,7 +1278,7 @@ groups:
       severity: s2
     expr: |
       gitlab_component_saturation:ratio{component="open_fds",monitor="global",type="thanos"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="open_fds",monitor="global",type="thanos"}
+      slo:max:hard:gitlab_component_saturation:ratio{component="open_fds",monitor="global"}
   - alert: component_saturation_slo_out_of_bounds:shard_cpu
     for: 5m
     annotations:
@@ -1329,7 +1329,7 @@ groups:
       severity: s3
     expr: |
       gitlab_component_saturation:ratio{component="shard_cpu",monitor="global",type="thanos"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="shard_cpu",monitor="global",type="thanos"}
+      slo:max:hard:gitlab_component_saturation:ratio{component="shard_cpu",monitor="global"}
   - alert: component_saturation_slo_out_of_bounds:single_node_cpu
     for: 10m
     annotations:
@@ -1378,4 +1378,4 @@ groups:
       severity: s4
     expr: |
       gitlab_component_saturation:ratio{component="single_node_cpu",monitor="global",type="thanos"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="single_node_cpu",monitor="global",type="thanos"}
+      slo:max:hard:gitlab_component_saturation:ratio{component="single_node_cpu",monitor="global"}
