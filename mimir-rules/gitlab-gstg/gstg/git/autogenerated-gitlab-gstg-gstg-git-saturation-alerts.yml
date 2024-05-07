@@ -81,7 +81,7 @@ groups:
       severity: s4
     expr: |
       gitlab_component_saturation:ratio{component="kube_container_cpu_limit",env="gstg",type="git"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="kube_container_cpu_limit",env="gstg",type="git"}
+      slo:max:hard:gitlab_component_saturation:ratio{component="kube_container_cpu_limit"}
   - alert: component_saturation_slo_out_of_bounds:kube_container_rss
     for: 15m
     annotations:
@@ -140,7 +140,7 @@ groups:
       severity: s4
     expr: |
       gitlab_component_saturation:ratio{component="kube_container_rss",env="gstg",type="git"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="kube_container_rss",env="gstg",type="git"}
+      slo:max:hard:gitlab_component_saturation:ratio{component="kube_container_rss"}
   - alert: component_saturation_slo_out_of_bounds:kube_container_throttling
     for: 10m
     annotations:
@@ -201,7 +201,7 @@ groups:
       severity: s3
     expr: |
       gitlab_component_saturation:ratio{component="kube_container_throttling",env="gstg",type="git"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="kube_container_throttling",env="gstg",type="git"}
+      slo:max:hard:gitlab_component_saturation:ratio{component="kube_container_throttling"}
   - alert: component_saturation_slo_out_of_bounds:kube_go_memory
     for: 5m
     annotations:
@@ -256,7 +256,7 @@ groups:
       severity: s4
     expr: |
       gitlab_component_saturation:ratio{component="kube_go_memory",env="gstg",type="git"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="kube_go_memory",env="gstg",type="git"}
+      slo:max:hard:gitlab_component_saturation:ratio{component="kube_go_memory"}
   - alert: component_saturation_slo_out_of_bounds:kube_horizontalpodautoscaler_desired_replicas
     for: 25m
     annotations:
@@ -309,7 +309,7 @@ groups:
       severity: s3
     expr: |
       gitlab_component_saturation:ratio{component="kube_horizontalpodautoscaler_desired_replicas",env="gstg",type="git"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="kube_horizontalpodautoscaler_desired_replicas",env="gstg",type="git"}
+      slo:max:hard:gitlab_component_saturation:ratio{component="kube_horizontalpodautoscaler_desired_replicas"}
   - alert: component_saturation_slo_out_of_bounds:open_fds
     for: 5m
     annotations:
@@ -381,7 +381,7 @@ groups:
       severity: s2
     expr: |
       gitlab_component_saturation:ratio{component="open_fds",env="gstg",type="git"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="open_fds",env="gstg",type="git"}
+      slo:max:hard:gitlab_component_saturation:ratio{component="open_fds"}
   - alert: component_saturation_slo_out_of_bounds:puma_workers
     for: 5m
     annotations:
@@ -437,7 +437,7 @@ groups:
       severity: s2
     expr: |
       gitlab_component_saturation:ratio{component="puma_workers",env="gstg",type="git"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="puma_workers",env="gstg",type="git"}
+      slo:max:hard:gitlab_component_saturation:ratio{component="puma_workers"}
   - alert: component_saturation_slo_out_of_bounds:rails_db_connection_pool
     for: 15m
     annotations:
@@ -500,7 +500,7 @@ groups:
       severity: s4
     expr: |
       gitlab_component_saturation:ratio{component="rails_db_connection_pool",env="gstg",type="git"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="rails_db_connection_pool",env="gstg",type="git"}
+      slo:max:hard:gitlab_component_saturation:ratio{component="rails_db_connection_pool"}
   - alert: component_saturation_slo_out_of_bounds:ruby_thread_contention
     for: 5m
     annotations:
@@ -553,4 +553,4 @@ groups:
       severity: s3
     expr: |
       gitlab_component_saturation:ratio{component="ruby_thread_contention",env="gstg",type="git"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="ruby_thread_contention",env="gstg",type="git"}
+      slo:max:hard:gitlab_component_saturation:ratio{component="ruby_thread_contention"}

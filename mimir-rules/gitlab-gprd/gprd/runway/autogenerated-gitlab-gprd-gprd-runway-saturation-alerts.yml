@@ -88,4 +88,4 @@ groups:
       severity: s2
     expr: |
       gitlab_component_saturation:ratio{component="open_fds",env="gprd",type="runway"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="open_fds",env="gprd",type="runway"}
+      slo:max:hard:gitlab_component_saturation:ratio{component="open_fds"}

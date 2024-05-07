@@ -67,7 +67,7 @@ groups:
       severity: s3
     expr: |
       gitlab_component_saturation:ratio{component="cpu",env="gprd",type="pgbouncer-embedding"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="cpu",env="gprd",type="pgbouncer-embedding"}
+      slo:max:hard:gitlab_component_saturation:ratio{component="cpu"}
   - alert: component_saturation_slo_out_of_bounds:disk_inodes
     for: 15m
     annotations:
@@ -125,7 +125,7 @@ groups:
       severity: s2
     expr: |
       gitlab_component_saturation:ratio{component="disk_inodes",env="gprd",type="pgbouncer-embedding"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="disk_inodes",env="gprd",type="pgbouncer-embedding"}
+      slo:max:hard:gitlab_component_saturation:ratio{component="disk_inodes"}
   - alert: ComponentResourceRunningOut_disk_inodes
     for: 15m
     annotations:
@@ -185,7 +185,7 @@ groups:
     expr: |
       predict_linear(gitlab_component_saturation:ratio{component="disk_inodes",env="gprd",type="pgbouncer-embedding"}[6h], 21600)
       > on (component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="disk_inodes",env="gprd",type="pgbouncer-embedding"}
+      slo:max:hard:gitlab_component_saturation:ratio{component="disk_inodes"}
   - alert: component_saturation_slo_out_of_bounds:disk_space
     for: 15m
     annotations:
@@ -237,7 +237,7 @@ groups:
       severity: s2
     expr: |
       gitlab_component_saturation:ratio{component="disk_space",env="gprd",type="pgbouncer-embedding"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="disk_space",env="gprd",type="pgbouncer-embedding"}
+      slo:max:hard:gitlab_component_saturation:ratio{component="disk_space"}
   - alert: ComponentResourceRunningOut_disk_space
     for: 15m
     annotations:
@@ -291,7 +291,7 @@ groups:
     expr: |
       predict_linear(gitlab_component_saturation:ratio{component="disk_space",env="gprd",type="pgbouncer-embedding"}[6h], 21600)
       > on (component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="disk_space",env="gprd",type="pgbouncer-embedding"}
+      slo:max:hard:gitlab_component_saturation:ratio{component="disk_space"}
   - alert: component_saturation_slo_out_of_bounds:memory
     for: 5m
     annotations:
@@ -338,7 +338,7 @@ groups:
       severity: s4
     expr: |
       gitlab_component_saturation:ratio{component="memory",env="gprd",type="pgbouncer-embedding"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="memory",env="gprd",type="pgbouncer-embedding"}
+      slo:max:hard:gitlab_component_saturation:ratio{component="memory"}
   - alert: component_saturation_slo_out_of_bounds:nf_conntrack_entries
     for: 5m
     annotations:
@@ -391,7 +391,7 @@ groups:
       severity: s3
     expr: |
       gitlab_component_saturation:ratio{component="nf_conntrack_entries",env="gprd",type="pgbouncer-embedding"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="nf_conntrack_entries",env="gprd",type="pgbouncer-embedding"}
+      slo:max:hard:gitlab_component_saturation:ratio{component="nf_conntrack_entries"}
   - alert: component_saturation_slo_out_of_bounds:node_schedstat_waiting
     for: 90m
     annotations:
@@ -442,7 +442,7 @@ groups:
       severity: s4
     expr: |
       gitlab_component_saturation:ratio{component="node_schedstat_waiting",env="gprd",type="pgbouncer-embedding"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="node_schedstat_waiting",env="gprd",type="pgbouncer-embedding"}
+      slo:max:hard:gitlab_component_saturation:ratio{component="node_schedstat_waiting"}
   - alert: component_saturation_slo_out_of_bounds:open_fds
     for: 5m
     annotations:
@@ -514,7 +514,7 @@ groups:
       severity: s2
     expr: |
       gitlab_component_saturation:ratio{component="open_fds",env="gprd",type="pgbouncer-embedding"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="open_fds",env="gprd",type="pgbouncer-embedding"}
+      slo:max:hard:gitlab_component_saturation:ratio{component="open_fds"}
   - alert: component_saturation_slo_out_of_bounds:pgbouncer_client_conn_primary
     for: 5m
     annotations:
@@ -572,7 +572,7 @@ groups:
       severity: s2
     expr: |
       gitlab_component_saturation:ratio{component="pgbouncer_client_conn_primary",env="gprd",type="pgbouncer-embedding"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="pgbouncer_client_conn_primary",env="gprd",type="pgbouncer-embedding"}
+      slo:max:hard:gitlab_component_saturation:ratio{component="pgbouncer_client_conn_primary"}
   - alert: component_saturation_slo_out_of_bounds:pgbouncer_sync_primary_pool
     for: 10m
     annotations:
@@ -641,7 +641,7 @@ groups:
       severity: s3
     expr: |
       gitlab_component_saturation:ratio{component="pgbouncer_sync_primary_pool",env="gprd",type="pgbouncer-embedding"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="pgbouncer_sync_primary_pool",env="gprd",type="pgbouncer-embedding"}
+      slo:max:hard:gitlab_component_saturation:ratio{component="pgbouncer_sync_primary_pool"}
   - alert: component_saturation_slo_out_of_bounds:shard_cpu
     for: 5m
     annotations:
@@ -692,7 +692,7 @@ groups:
       severity: s3
     expr: |
       gitlab_component_saturation:ratio{component="shard_cpu",env="gprd",type="pgbouncer-embedding"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="shard_cpu",env="gprd",type="pgbouncer-embedding"}
+      slo:max:hard:gitlab_component_saturation:ratio{component="shard_cpu"}
   - alert: component_saturation_slo_out_of_bounds:single_node_cpu
     for: 10m
     annotations:
@@ -741,4 +741,4 @@ groups:
       severity: s4
     expr: |
       gitlab_component_saturation:ratio{component="single_node_cpu",env="gprd",type="pgbouncer-embedding"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="single_node_cpu",env="gprd",type="pgbouncer-embedding"}
+      slo:max:hard:gitlab_component_saturation:ratio{component="single_node_cpu"}

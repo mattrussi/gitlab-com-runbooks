@@ -81,7 +81,7 @@ groups:
       severity: s4
     expr: |
       gitlab_component_saturation:ratio{component="kube_container_cpu_limit",env="pre",type="nginx"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="kube_container_cpu_limit",env="pre",type="nginx"}
+      slo:max:hard:gitlab_component_saturation:ratio{component="kube_container_cpu_limit"}
   - alert: component_saturation_slo_out_of_bounds:kube_container_memory
     for: 15m
     annotations:
@@ -132,7 +132,7 @@ groups:
       severity: s4
     expr: |
       gitlab_component_saturation:ratio{component="kube_container_memory",env="pre",type="nginx"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="kube_container_memory",env="pre",type="nginx"}
+      slo:max:hard:gitlab_component_saturation:ratio{component="kube_container_memory"}
   - alert: component_saturation_slo_out_of_bounds:kube_container_throttling
     for: 10m
     annotations:
@@ -193,7 +193,7 @@ groups:
       severity: s3
     expr: |
       gitlab_component_saturation:ratio{component="kube_container_throttling",env="pre",type="nginx"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="kube_container_throttling",env="pre",type="nginx"}
+      slo:max:hard:gitlab_component_saturation:ratio{component="kube_container_throttling"}
   - alert: component_saturation_slo_out_of_bounds:kube_horizontalpodautoscaler_desired_replicas
     for: 25m
     annotations:
@@ -246,7 +246,7 @@ groups:
       severity: s3
     expr: |
       gitlab_component_saturation:ratio{component="kube_horizontalpodautoscaler_desired_replicas",env="pre",type="nginx"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="kube_horizontalpodautoscaler_desired_replicas",env="pre",type="nginx"}
+      slo:max:hard:gitlab_component_saturation:ratio{component="kube_horizontalpodautoscaler_desired_replicas"}
   - alert: component_saturation_slo_out_of_bounds:open_fds
     for: 5m
     annotations:
@@ -318,4 +318,4 @@ groups:
       severity: s2
     expr: |
       gitlab_component_saturation:ratio{component="open_fds",env="pre",type="nginx"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="open_fds",env="pre",type="nginx"}
+      slo:max:hard:gitlab_component_saturation:ratio{component="open_fds"}

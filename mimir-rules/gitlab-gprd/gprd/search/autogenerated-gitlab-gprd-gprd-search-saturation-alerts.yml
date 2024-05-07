@@ -69,7 +69,7 @@ groups:
       severity: s4
     expr: |
       gitlab_component_saturation:ratio{component="elastic_cpu",env="gprd",type="search"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="elastic_cpu",env="gprd",type="search"}
+      slo:max:hard:gitlab_component_saturation:ratio{component="elastic_cpu"}
   - alert: component_saturation_slo_out_of_bounds:elastic_disk_space
     for: 5m
     annotations:
@@ -129,7 +129,7 @@ groups:
       severity: s2
     expr: |
       gitlab_component_saturation:ratio{component="elastic_disk_space",env="gprd",type="search"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="elastic_disk_space",env="gprd",type="search"}
+      slo:max:hard:gitlab_component_saturation:ratio{component="elastic_disk_space"}
   - alert: component_saturation_slo_out_of_bounds:elastic_jvm_heap_memory
     for: 5m
     annotations:
@@ -180,7 +180,7 @@ groups:
       severity: s4
     expr: |
       gitlab_component_saturation:ratio{component="elastic_jvm_heap_memory",env="gprd",type="search"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="elastic_jvm_heap_memory",env="gprd",type="search"}
+      slo:max:hard:gitlab_component_saturation:ratio{component="elastic_jvm_heap_memory"}
   - alert: component_saturation_slo_out_of_bounds:elastic_single_node_cpu
     for: 5m
     annotations:
@@ -229,7 +229,7 @@ groups:
       severity: s4
     expr: |
       gitlab_component_saturation:ratio{component="elastic_single_node_cpu",env="gprd",type="search"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="elastic_single_node_cpu",env="gprd",type="search"}
+      slo:max:hard:gitlab_component_saturation:ratio{component="elastic_single_node_cpu"}
   - alert: component_saturation_slo_out_of_bounds:elastic_single_node_disk_space
     for: 5m
     annotations:
@@ -292,7 +292,7 @@ groups:
       severity: s4
     expr: |
       gitlab_component_saturation:ratio{component="elastic_single_node_disk_space",env="gprd",type="search"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="elastic_single_node_disk_space",env="gprd",type="search"}
+      slo:max:hard:gitlab_component_saturation:ratio{component="elastic_single_node_disk_space"}
   - alert: component_saturation_slo_out_of_bounds:elastic_thread_pools
     for: 5m
     annotations:
@@ -349,7 +349,7 @@ groups:
       severity: s4
     expr: |
       gitlab_component_saturation:ratio{component="elastic_thread_pools",env="gprd",type="search"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="elastic_thread_pools",env="gprd",type="search"}
+      slo:max:hard:gitlab_component_saturation:ratio{component="elastic_thread_pools"}
   - alert: component_saturation_slo_out_of_bounds:open_fds
     for: 5m
     annotations:
@@ -421,4 +421,4 @@ groups:
       severity: s2
     expr: |
       gitlab_component_saturation:ratio{component="open_fds",env="gprd",type="search"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="open_fds",env="gprd",type="search"}
+      slo:max:hard:gitlab_component_saturation:ratio{component="open_fds"}
