@@ -189,12 +189,13 @@ bootstrap() {
     echo "> setting $fqdn as replica of $primary"
     ssh $fqdn "$redis_cli replicaof $primary 6379"
   fi
-
 }
 
 for i in 01 02 03; do
 
   if [[ $bootstrap == "yes" ]]; then
+    echo ensure cluster is not already bootstrapped
+    wait_for_input
     bootstrap $i
   else
     failover_if_master $i
