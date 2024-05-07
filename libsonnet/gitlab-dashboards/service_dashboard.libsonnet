@@ -76,7 +76,7 @@ local overviewDashboard(
   showProvisioningDetails=true,
   showSystemDiagrams=true,
   expectMultipleSeries=false,
-) =
+      ) =
 
   local metricsCatalogServiceInfo = metricsCatalog.getService(type);
   local saturationComponents = metricsCatalogServiceInfo.applicableSaturationTypes();
@@ -97,6 +97,7 @@ local overviewDashboard(
       tags=['gitlab', 'type:' + type, type, 'service overview'],
       includeStandardEnvironmentAnnotations=includeStandardEnvironmentAnnotations,
       includeEnvironmentTemplate=!omitEnvironmentDropdown && std.objectHas(environmentStageSelectorHash, 'environment'),
+      defaultDatasource=metricsCatalogServiceInfo.defaultPrometheusDatasource
     )
     .addAnnotationIf(
       metricsCatalogServiceInfo.getProvisioning().runway,
