@@ -1093,6 +1093,7 @@ update-alertmanager:
       file: true
       vault: ${VAULT_SECRETS_PATH}/ops/alertmanager/secrets@ci
   variables:
+    ENVIRONMENT: ops
     GKE_CLUSTER: ops-gitlab-gke
     GOOGLE_PROJECT: gitlab-ops
     KUBE_NAMESPACE: monitoring
