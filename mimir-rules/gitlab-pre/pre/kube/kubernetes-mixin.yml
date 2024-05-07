@@ -2,10 +2,10 @@
 - "name": "k8s.rules"
   "rules":
   - "expr": |
-      sum(rate(container_cpu_usage_seconds_total{job="kubelet", image!="", container!="POD", env="pre"}[5m])) by (namespace)
+      sum(rate(container_cpu_usage_seconds_total{job="kubelet", image!="", container!="POD", env="pre"}[5m])) by (namespace, cluster, env, environment, monitor, prometheus, provider, region)
     "record": "namespace:container_cpu_usage_seconds_total:sum_rate"
   - "expr": |
-      sum by (namespace, pod, container) (
+      sum by (namespace, pod, container, cluster, env, environment, monitor, prometheus, provider, region) (
         rate(container_cpu_usage_seconds_total{job="kubelet", image!="", container!="POD", env="pre"}[5m])
       ) * on (namespace, pod) group_left(node) max by(namespace, pod, node) (kube_pod_info)
     "record": "node_namespace_pod_container:container_cpu_usage_seconds_total:sum_rate"
@@ -26,7 +26,7 @@
       * on (namespace, pod) group_left(node) max by(namespace, pod, node) (kube_pod_info)
     "record": "node_namespace_pod_container:container_memory_swap"
   - "expr": |
-      sum(container_memory_usage_bytes{job="kubelet", image!="", container!="POD", env="pre"}) by (namespace)
+      sum(container_memory_usage_bytes{job="kubelet", image!="", container!="POD", env="pre"}) by (namespace, cluster, env, environment, monitor, prometheus, provider, region)
     "record": "namespace:container_memory_usage_bytes:sum"
   - "expr": |
       sum by (namespace, label_name, resource, unit) (
@@ -76,10 +76,10 @@
       )
     "record": ":kube_pod_info_node_count:"
   - "expr": |
-      max(label_replace(kube_pod_info{job="kube-state-metrics", env="pre"}, "pod", "$1", "pod", "(.*)")) by (node, namespace, pod)
+      max(label_replace(kube_pod_info{job="kube-state-metrics", env="pre"}, "pod", "$1", "pod", "(.*)")) by (node, namespace, cluster, pod, env, environment, monitor, prometheus, region, provider, type)
     "record": "node_namespace_pod:kube_pod_info:"
   - "expr": |
-      count by (node) (sum by (node, cpu) (
+      count by (node, cluster, env, environment, monitor, prometheus, provider, region, type) (sum by (node, cpu, cluster, env, environment, monitor, prometheus, provider, region, type) (
         node_cpu_seconds_total{job="node-exporter", env="pre"}
       * on (namespace, pod) group_left(node)
         node_namespace_pod:kube_pod_info:

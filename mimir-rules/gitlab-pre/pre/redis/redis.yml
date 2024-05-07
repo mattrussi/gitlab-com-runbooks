@@ -33,7 +33,7 @@ groups:
     expr: redis_connected_slaves{env="pre"} > 1
   - record: instance:redis_cpu_usage:rate1m
     expr: >
-      sum by (environment, type, fqdn, instance, pod) (
+      sum by (env, environment, type, fqdn, instance, pod) (
         rate(namedprocess_namegroup_thread_cpu_seconds_total{type=~"redis.*", groupname="redis-server", threadname="redis-server", env="pre"}[1m]) or rate(container_cpu_usage_seconds_total:labeled{type=~"redis.*", env="pre"}[1m])
       )
   - record: gitlab:redis_rdb_last_save_in_seconds

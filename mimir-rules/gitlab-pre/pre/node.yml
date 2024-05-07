@@ -92,7 +92,7 @@ groups:
   - record: instance:node_disk_reads_completed:irate1m
     expr: sum(irate(node_disk_reads_completed_total{device=~"sd.*", env="pre"}[1m])) WITHOUT (device)
   - expr: |-
-      avg by (node) (
+      avg by (node, cluster, env, environment, monitor, prometheus, provider, region) (
         irate(node_disk_io_time_seconds_total{job="node-exporter",device=~"nvme.+|rbd.+|sd.+|vd.+|xvd.+|dm-.+", env="pre"}[1m])
       * on (cluster, namespace, pod) group_left(node)
         node_namespace_pod:kube_pod_info:
@@ -104,18 +104,18 @@ groups:
       )
     record: ':node_disk_saturation:avg_irate'
   - expr: |-
-      avg by (node) (
+      avg by (node, cluster, env, environment, monitor, prometheus, provider, region) (
         irate(node_disk_io_time_weighted_seconds_total{job="node-exporter",device=~"nvme.+|rbd.+|sd.+|vd.+|xvd.+|dm-.+", env="pre"}[1m])
       * on (cluster, namespace, pod) group_left(node)
         node_namespace_pod:kube_pod_info:
       )
     record: node:node_disk_saturation:avg_irate
   - expr: |-
-      max by (instance, namespace, pod, device) ((node_filesystem_size_bytes{fstype=~"ext[234]|btrfs|xfs|zfs", env="pre"}
+      max by (instance, namespace, pod, device, cluster, env, environment, monitor, prometheus, provider, region) ((node_filesystem_size_bytes{fstype=~"ext[234]|btrfs|xfs|zfs", env="pre"}
       - node_filesystem_avail_bytes{fstype=~"ext[234]|btrfs|xfs|zfs", env="pre"})
       / node_filesystem_size_bytes{fstype=~"ext[234]|btrfs|xfs|zfs", env="pre"})
     record: 'node:node_filesystem_usage:'
-  - expr: max by (instance, namespace, pod, device) (node_filesystem_avail_bytes{fstype=~"ext[234]|btrfs|xfs|zfs", env="pre"} / node_filesystem_size_bytes{fstype=~"ext[234]|btrfs|xfs|zfs", env="pre"})
+  - expr: max by (instance, namespace, pod, device, cluster, env, environment, monitor, prometheus, provider, region) (node_filesystem_avail_bytes{fstype=~"ext[234]|btrfs|xfs|zfs", env="pre"} / node_filesystem_size_bytes{fstype=~"ext[234]|btrfs|xfs|zfs", env="pre"})
     record: 'node:node_filesystem_avail:'
 
 - name: Misc rules

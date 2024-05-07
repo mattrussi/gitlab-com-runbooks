@@ -6,6 +6,7 @@ groups:
     labels:
       tier: inf
       environment: gprd
+      env: gprd
       lb_type: internal_tcp
       alert_type: cause
     expr: >
@@ -29,6 +30,7 @@ groups:
     labels:
       tier: inf
       environment: gprd
+      env: gprd
       lb_type: tcp
       alert_type: cause
     expr: >
