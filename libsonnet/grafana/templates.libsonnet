@@ -40,11 +40,11 @@ local library = import 'gitlab-slis/library.libsonnet';
       refresh='load',
       sort=1,
     ),
-  ds::
+  ds(current=null)::
     template.datasource(
       'PROMETHEUS_DS',
       'prometheus',
-      defaultPrometheusDatasource,
+      if current == null then defaultPrometheusDatasource else current,
     ),
   environment::
     template.new(
