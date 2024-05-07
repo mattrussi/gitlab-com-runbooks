@@ -4,6 +4,8 @@ local rateMetric = metricsCatalog.rateMetric;
 local histogramApdex = metricsCatalog.histogramApdex;
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 local runwayHelper = import 'service-archetypes/helpers/runway.libsonnet';
+local matching = import 'elasticlinkbuilder/matching.libsonnet';
+local serviceLevelIndicatorDefinition = import 'servicemetrics/service_level_indicator_definition.libsonnet';
 
 local baseSelector = { type: 'ai-gateway' };
 local serverSelector = baseSelector {
@@ -271,38 +273,44 @@ metricsCatalog.serviceDefinition(
         ],
       },
       inference: {
-        local inferenceSelector = baseSelector { model_engine: { ne: 'codegen' } },
         severity: 's2',
         userImpacting: true,
         serviceAggregation: false,
         team: 'code_creation',
-        featureCategory: 'code_suggestions',
+        featureCategory: serviceLevelIndicatorDefinition.featureCategoryFromSourceMetrics,
         trafficCessationAlertConfig: false,
         description: |||
-          Vertex AI API model inference requests for AI Gateway.
+          Inferences to the different model engines used by the AI-gateway.
+
+          Apdex applies to non-streaming inferences, they are considered fast enough
+          when the request took less than 30s. Errors don't count toward apdex
+
+          A failure means an inference threw an error, for example when the model is
+          not available.
         |||,
 
         apdex: histogramApdex(
-          histogram='code_suggestions_inference_request_duration_seconds_bucket',
-          selector=baseSelector,
+          histogram='inference_request_duration_seconds_bucket',
+          selector=baseSelector { 'error': 'no', streaming: 'no' },
           satisfiedThreshold=30,
           toleratedThreshold=60,
-          metricsFormat='migrating',
         ),
 
+        errorRate: rateMetric(counter='model_inferences_total', selector=baseSelector { 'error': 'yes' }),
+
         requestRate: rateMetric(
-          counter='code_suggestions_inference_requests_total',
+          counter='model_inferences_total',
           selector=baseSelector,
         ),
 
-        significantLabels: ['model_engine', 'model_name'] + runwayLabels,
+        significantLabels: ['model_engine', 'model_name', 'feature_category'] + runwayLabels,
 
         toolingLinks: [
           toolingLinks.kibana(
             title='Model Inference',
             index='mlops',
             includeMatchersForPrometheusSelector=false,
-            matches={ 'json.jsonPayload.model_engine': 'vertex-ai' }
+            filters=[matching.existsFilter('json.jsonPayload.model_engine')],
           ),
         ],
       },

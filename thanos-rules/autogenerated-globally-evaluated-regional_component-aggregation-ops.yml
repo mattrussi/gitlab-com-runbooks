@@ -14,11 +14,11 @@ groups:
     expr: |
       (
         sum by (env,environment,region,location) (
-          rate(code_suggestions_inference_request_duration_seconds_bucket{env="ops",le=~"30|30\\.0",type="ai-gateway"}[5m])
+          rate(inference_request_duration_seconds_bucket{env="ops",error="no",le="30",streaming="no",type="ai-gateway"}[5m])
         )
         +
         sum by (env,environment,region,location) (
-          rate(code_suggestions_inference_request_duration_seconds_bucket{env="ops",le=~"60|60\\.0",type="ai-gateway"}[5m])
+          rate(inference_request_duration_seconds_bucket{env="ops",error="no",le="60",streaming="no",type="ai-gateway"}[5m])
         )
       )
       /
@@ -31,7 +31,7 @@ groups:
       type: ai-gateway
     expr: |
       sum by (env,environment,region,location) (
-        rate(code_suggestions_inference_request_duration_seconds_bucket{env="ops",le="+Inf",type="ai-gateway"}[5m])
+        rate(inference_request_duration_seconds_bucket{env="ops",error="no",le="+Inf",streaming="no",type="ai-gateway"}[5m])
       )
   - record: gitlab_regional_sli_ops:rate_5m
     labels:
@@ -41,7 +41,25 @@ groups:
       type: ai-gateway
     expr: |
       sum by (env,environment,region,location) (
-        rate(code_suggestions_inference_requests_total{env="ops",type="ai-gateway"}[5m])
+        rate(model_inferences_total{env="ops",type="ai-gateway"}[5m])
+      )
+  - record: gitlab_regional_sli_errors:rate_5m
+    labels:
+      component: inference
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      (
+        sum by (env,environment,region,location) (
+          rate(model_inferences_total{env="ops",error="yes",type="ai-gateway"}[5m])
+        )
+      )
+      or
+      (
+        0 * group by(env,environment,region,location) (
+          gitlab_regional_sli_ops:rate_5m{component="inference",env="ops",stage="main",tier="sv",type="ai-gateway"}
+        )
       )
   - record: gitlab_regional_sli_errors:ratio_5m
     labels:
@@ -666,11 +684,11 @@ groups:
     expr: |
       (
         sum by (env,environment,region,location) (
-          rate(code_suggestions_inference_request_duration_seconds_bucket{env="ops",le=~"30|30\\.0",type="ai-gateway"}[30m])
+          rate(inference_request_duration_seconds_bucket{env="ops",error="no",le="30",streaming="no",type="ai-gateway"}[30m])
         )
         +
         sum by (env,environment,region,location) (
-          rate(code_suggestions_inference_request_duration_seconds_bucket{env="ops",le=~"60|60\\.0",type="ai-gateway"}[30m])
+          rate(inference_request_duration_seconds_bucket{env="ops",error="no",le="60",streaming="no",type="ai-gateway"}[30m])
         )
       )
       /
@@ -683,7 +701,7 @@ groups:
       type: ai-gateway
     expr: |
       sum by (env,environment,region,location) (
-        rate(code_suggestions_inference_request_duration_seconds_bucket{env="ops",le="+Inf",type="ai-gateway"}[30m])
+        rate(inference_request_duration_seconds_bucket{env="ops",error="no",le="+Inf",streaming="no",type="ai-gateway"}[30m])
       )
   - record: gitlab_regional_sli_ops:rate_30m
     labels:
@@ -693,7 +711,25 @@ groups:
       type: ai-gateway
     expr: |
       sum by (env,environment,region,location) (
-        rate(code_suggestions_inference_requests_total{env="ops",type="ai-gateway"}[30m])
+        rate(model_inferences_total{env="ops",type="ai-gateway"}[30m])
+      )
+  - record: gitlab_regional_sli_errors:rate_30m
+    labels:
+      component: inference
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      (
+        sum by (env,environment,region,location) (
+          rate(model_inferences_total{env="ops",error="yes",type="ai-gateway"}[30m])
+        )
+      )
+      or
+      (
+        0 * group by(env,environment,region,location) (
+          gitlab_regional_sli_ops:rate_30m{component="inference",env="ops",stage="main",tier="sv",type="ai-gateway"}
+        )
       )
   - record: gitlab_regional_sli_errors:ratio_30m
     labels:
@@ -1318,11 +1354,11 @@ groups:
     expr: |
       (
         sum by (env,environment,region,location) (
-          rate(code_suggestions_inference_request_duration_seconds_bucket{env="ops",le=~"30|30\\.0",type="ai-gateway"}[1h])
+          rate(inference_request_duration_seconds_bucket{env="ops",error="no",le="30",streaming="no",type="ai-gateway"}[1h])
         )
         +
         sum by (env,environment,region,location) (
-          rate(code_suggestions_inference_request_duration_seconds_bucket{env="ops",le=~"60|60\\.0",type="ai-gateway"}[1h])
+          rate(inference_request_duration_seconds_bucket{env="ops",error="no",le="60",streaming="no",type="ai-gateway"}[1h])
         )
       )
       /
@@ -1335,7 +1371,7 @@ groups:
       type: ai-gateway
     expr: |
       sum by (env,environment,region,location) (
-        rate(code_suggestions_inference_request_duration_seconds_bucket{env="ops",le="+Inf",type="ai-gateway"}[1h])
+        rate(inference_request_duration_seconds_bucket{env="ops",error="no",le="+Inf",streaming="no",type="ai-gateway"}[1h])
       )
   - record: gitlab_regional_sli_ops:rate_1h
     labels:
@@ -1345,7 +1381,25 @@ groups:
       type: ai-gateway
     expr: |
       sum by (env,environment,region,location) (
-        rate(code_suggestions_inference_requests_total{env="ops",type="ai-gateway"}[1h])
+        rate(model_inferences_total{env="ops",type="ai-gateway"}[1h])
+      )
+  - record: gitlab_regional_sli_errors:rate_1h
+    labels:
+      component: inference
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      (
+        sum by (env,environment,region,location) (
+          rate(model_inferences_total{env="ops",error="yes",type="ai-gateway"}[1h])
+        )
+      )
+      or
+      (
+        0 * group by(env,environment,region,location) (
+          gitlab_regional_sli_ops:rate_1h{component="inference",env="ops",stage="main",tier="sv",type="ai-gateway"}
+        )
       )
   - record: gitlab_regional_sli_errors:ratio_1h
     labels:
@@ -1970,11 +2024,11 @@ groups:
     expr: |
       (
         sum by (env,environment,region,location) (
-          rate(code_suggestions_inference_request_duration_seconds_bucket{env="ops",le=~"30|30\\.0",type="ai-gateway"}[6h])
+          rate(inference_request_duration_seconds_bucket{env="ops",error="no",le="30",streaming="no",type="ai-gateway"}[6h])
         )
         +
         sum by (env,environment,region,location) (
-          rate(code_suggestions_inference_request_duration_seconds_bucket{env="ops",le=~"60|60\\.0",type="ai-gateway"}[6h])
+          rate(inference_request_duration_seconds_bucket{env="ops",error="no",le="60",streaming="no",type="ai-gateway"}[6h])
         )
       )
       /
@@ -1987,7 +2041,7 @@ groups:
       type: ai-gateway
     expr: |
       sum by (env,environment,region,location) (
-        rate(code_suggestions_inference_request_duration_seconds_bucket{env="ops",le="+Inf",type="ai-gateway"}[6h])
+        rate(inference_request_duration_seconds_bucket{env="ops",error="no",le="+Inf",streaming="no",type="ai-gateway"}[6h])
       )
   - record: gitlab_regional_sli_ops:rate_6h
     labels:
@@ -1997,7 +2051,25 @@ groups:
       type: ai-gateway
     expr: |
       sum by (env,environment,region,location) (
-        rate(code_suggestions_inference_requests_total{env="ops",type="ai-gateway"}[6h])
+        rate(model_inferences_total{env="ops",type="ai-gateway"}[6h])
+      )
+  - record: gitlab_regional_sli_errors:rate_6h
+    labels:
+      component: inference
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      (
+        sum by (env,environment,region,location) (
+          rate(model_inferences_total{env="ops",error="yes",type="ai-gateway"}[6h])
+        )
+      )
+      or
+      (
+        0 * group by(env,environment,region,location) (
+          gitlab_regional_sli_ops:rate_6h{component="inference",env="ops",stage="main",tier="sv",type="ai-gateway"}
+        )
       )
   - record: gitlab_regional_sli_errors:ratio_6h
     labels:
@@ -2622,11 +2694,11 @@ groups:
     expr: |
       (
         sum by (env,environment,region,location) (
-          rate(code_suggestions_inference_request_duration_seconds_bucket{env="ops",le=~"30|30\\.0",type="ai-gateway"}[3d])
+          rate(inference_request_duration_seconds_bucket{env="ops",error="no",le="30",streaming="no",type="ai-gateway"}[3d])
         )
         +
         sum by (env,environment,region,location) (
-          rate(code_suggestions_inference_request_duration_seconds_bucket{env="ops",le=~"60|60\\.0",type="ai-gateway"}[3d])
+          rate(inference_request_duration_seconds_bucket{env="ops",error="no",le="60",streaming="no",type="ai-gateway"}[3d])
         )
       )
       /
@@ -2639,7 +2711,7 @@ groups:
       type: ai-gateway
     expr: |
       sum by (env,environment,region,location) (
-        rate(code_suggestions_inference_request_duration_seconds_bucket{env="ops",le="+Inf",type="ai-gateway"}[3d])
+        rate(inference_request_duration_seconds_bucket{env="ops",error="no",le="+Inf",streaming="no",type="ai-gateway"}[3d])
       )
   - record: gitlab_regional_sli_ops:rate_3d
     labels:
@@ -2649,7 +2721,25 @@ groups:
       type: ai-gateway
     expr: |
       sum by (env,environment,region,location) (
-        rate(code_suggestions_inference_requests_total{env="ops",type="ai-gateway"}[3d])
+        rate(model_inferences_total{env="ops",type="ai-gateway"}[3d])
+      )
+  - record: gitlab_regional_sli_errors:rate_3d
+    labels:
+      component: inference
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      (
+        sum by (env,environment,region,location) (
+          rate(model_inferences_total{env="ops",error="yes",type="ai-gateway"}[3d])
+        )
+      )
+      or
+      (
+        0 * group by(env,environment,region,location) (
+          gitlab_regional_sli_ops:rate_3d{component="inference",env="ops",stage="main",tier="sv",type="ai-gateway"}
+        )
       )
   - record: gitlab_regional_sli_errors:ratio_3d
     labels:
