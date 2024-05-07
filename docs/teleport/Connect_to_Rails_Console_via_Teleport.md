@@ -18,7 +18,7 @@ It is worth noting that the current access granted is a read-only access, if you
 
 There are two ways to use to Teleport to connect to a Rails console:
 
-1. Installing [tsh](https://goteleport.com/teleport/docs/cli-docs/#tsh), the Teleport CLI client. This is the recommended way.
+1. Installing [tsh](https://goteleport.com/docs/reference/cli/tsh/), the Teleport CLI client. This is the recommended way.
 1. Via the Teleport HTTP portal:
 
 - <https://staging.teleport.gitlab.net/> for staging
