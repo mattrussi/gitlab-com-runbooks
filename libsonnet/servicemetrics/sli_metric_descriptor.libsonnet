@@ -265,10 +265,12 @@ local collectMetricNamesAndTypes(metricNamesAndTypes) =
           std.set(std.setDiff(sli.apdexMetrics, opsMetrics)),
           seenMetricNames
         );
+        local metrics = std.setUnion(opsMetrics, apdexMetrics);
         memo {
-          [if std.length(opsMetrics) > 0 then '%s-ops' % [sli.name]]+: opsMetrics,
-          [if std.length(apdexMetrics) > 0 then '%s-apdex' % [sli.name]]+: apdexMetrics,
-        }, sliDefinitions, {}
+          [if std.length(metrics) > 0 then sli.name]+: metrics,
+        },
+      sliDefinitions,
+      {}
     ),
   },
 
