@@ -33,6 +33,14 @@ groups:
       sum by (code,component,env,environment,feature_category,fqdn,job,le,pod,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(grafana_http_request_duration_seconds_bucket{cluster="gprd-us-east1-d",env="gprd",job=~"grafana",shard=~"default",type=~"monitoring"}[5m] offset 30s)
       )
+- name: 'SLI Aggregations: monitoring - grafana - 5m burn-rate - gitlab-3okls'
+  interval: 1m
+  rules:
+  - record: sli_aggregations:grafana_http_request_duration_seconds_bucket:rate_5m
+    expr: |
+      sum by (code,component,env,environment,feature_category,fqdn,job,le,pod,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(grafana_http_request_duration_seconds_bucket{cluster="gitlab-3okls",env="gprd",job=~"grafana",shard=~"default",type=~"monitoring"}[5m] offset 30s)
+      )
 - name: 'SLI Aggregations: monitoring - grafana_datasources - 5m burn-rate - gprd-gitlab-gke'
   interval: 1m
   rules:
@@ -64,6 +72,14 @@ groups:
     expr: |
       sum by (code,component,datasource,env,environment,feature_category,fqdn,job,pod,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(grafana_datasource_request_total{cluster="gprd-us-east1-d",env="gprd",job=~"grafana",shard=~"default",type=~"monitoring"}[5m] offset 30s)
+      )
+- name: 'SLI Aggregations: monitoring - grafana_datasources - 5m burn-rate - gitlab-3okls'
+  interval: 1m
+  rules:
+  - record: sli_aggregations:grafana_datasource_request_total:rate_5m
+    expr: |
+      sum by (code,component,datasource,env,environment,feature_category,fqdn,job,pod,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(grafana_datasource_request_total{cluster="gitlab-3okls",env="gprd",job=~"grafana",shard=~"default",type=~"monitoring"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: monitoring - grafana_google_lb - 5m burn-rate - gprd-gitlab-gke'
   interval: 1m
@@ -97,6 +113,14 @@ groups:
       sum by (component,env,environment,feature_category,fqdn,product_stage,project_id,proxy_continent,region,response_code,response_code_class,shard,stage,stage_group,tier,type,url_map_name) (
         rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{cluster="gprd-us-east1-d",env="gprd",project_id=~"gitlab-ops",type=~"monitoring",url_map_name=~"k8s2-um-4zodnh0s-grafana-grafana-cfagrqyu"}[5m] offset 30s)
       )
+- name: 'SLI Aggregations: monitoring - grafana_google_lb - 5m burn-rate - gitlab-3okls'
+  interval: 1m
+  rules:
+  - record: sli_aggregations:stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count:rate_5m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,product_stage,project_id,proxy_continent,region,response_code,response_code_class,shard,stage,stage_group,tier,type,url_map_name) (
+        rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{cluster="gitlab-3okls",env="gprd",project_id=~"gitlab-ops",type=~"monitoring",url_map_name=~"k8s2-um-4zodnh0s-grafana-grafana-cfagrqyu"}[5m] offset 30s)
+      )
 - name: 'SLI Aggregations: monitoring - grafana_image_renderer - 5m burn-rate - gprd-gitlab-gke'
   interval: 1m
   rules:
@@ -128,6 +152,14 @@ groups:
     expr: |
       sum by (component,env,environment,feature_category,fqdn,job,le,pod,product_stage,region,shard,stage,stage_group,status_code,tier,type) (
         rate(grafana_image_renderer_service_http_request_duration_seconds_bucket{cluster="gprd-us-east1-d",env="gprd",job=~"grafana-image-renderer",shard=~"default",type=~"monitoring"}[5m] offset 30s)
+      )
+- name: 'SLI Aggregations: monitoring - grafana_image_renderer - 5m burn-rate - gitlab-3okls'
+  interval: 1m
+  rules:
+  - record: sli_aggregations:grafana_image_renderer_service_http_request_duration_seconds_bucket:rate_5m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,job,le,pod,product_stage,region,shard,stage,stage_group,status_code,tier,type) (
+        rate(grafana_image_renderer_service_http_request_duration_seconds_bucket{cluster="gitlab-3okls",env="gprd",job=~"grafana-image-renderer",shard=~"default",type=~"monitoring"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: monitoring - prometheus - 5m burn-rate - gprd-gitlab-gke'
   interval: 1m
@@ -181,6 +213,19 @@ groups:
       sum by (code,component,env,environment,feature_category,fqdn,handler,job,pod,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(prometheus_http_requests_total{cluster="gprd-us-east1-d",env="gprd",job=~"prometheus.*",type=~"monitoring"}[5m] offset 30s)
       )
+- name: 'SLI Aggregations: monitoring - prometheus - 5m burn-rate - gitlab-3okls'
+  interval: 1m
+  rules:
+  - record: sli_aggregations:prometheus_http_request_duration_seconds_bucket:rate_5m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,handler,job,le,pod,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(prometheus_http_request_duration_seconds_bucket{cluster="gitlab-3okls",env="gprd",job=~"prometheus.*",type=~"monitoring"}[5m] offset 30s)
+      )
+  - record: sli_aggregations:prometheus_http_requests_total:rate_5m
+    expr: |
+      sum by (code,component,env,environment,feature_category,fqdn,handler,job,pod,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(prometheus_http_requests_total{cluster="gitlab-3okls",env="gprd",job=~"prometheus.*",type=~"monitoring"}[5m] offset 30s)
+      )
 - name: 'SLI Aggregations: monitoring - prometheus_alert_sender - 5m burn-rate - gprd-gitlab-gke'
   interval: 1m
   rules:
@@ -232,6 +277,19 @@ groups:
     expr: |
       sum by (alertmanager,component,env,environment,feature_category,fqdn,job,pod,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(prometheus_notifications_sent_total{cluster="gprd-us-east1-d",env="gprd",job=~"prometheus",type=~"monitoring"}[5m] offset 30s)
+      )
+- name: 'SLI Aggregations: monitoring - prometheus_alert_sender - 5m burn-rate - gitlab-3okls'
+  interval: 1m
+  rules:
+  - record: sli_aggregations:prometheus_notifications_errors_total:rate_5m
+    expr: |
+      sum by (alertmanager,component,env,environment,feature_category,fqdn,job,pod,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(prometheus_notifications_errors_total{cluster="gitlab-3okls",env="gprd",job=~"prometheus",type=~"monitoring"}[5m] offset 30s)
+      )
+  - record: sli_aggregations:prometheus_notifications_sent_total:rate_5m
+    expr: |
+      sum by (alertmanager,component,env,environment,feature_category,fqdn,job,pod,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(prometheus_notifications_sent_total{cluster="gitlab-3okls",env="gprd",job=~"prometheus",type=~"monitoring"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: monitoring - rule_evaluation - 5m burn-rate - gprd-gitlab-gke'
   interval: 1m
@@ -325,6 +383,29 @@ groups:
       sum by (component,env,environment,feature_category,fqdn,job,pod,product_stage,region,rule_group,shard,stage,stage_group,tier,type) (
         rate(prometheus_rule_group_iterations_total{cluster="gprd-us-east1-d",env="gprd",type=~"monitoring"}[5m] offset 30s)
       )
+- name: 'SLI Aggregations: monitoring - rule_evaluation - 5m burn-rate - gitlab-3okls'
+  interval: 1m
+  rules:
+  - record: sli_aggregations:prometheus_rule_evaluation_failures_total:rate_5m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,job,pod,product_stage,region,rule_group,shard,stage,stage_group,tier,type) (
+        rate(prometheus_rule_evaluation_failures_total{cluster="gitlab-3okls",env="gprd",type=~"monitoring"}[5m] offset 30s)
+      )
+  - record: sli_aggregations:prometheus_rule_evaluations_total:rate_5m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,job,pod,product_stage,region,rule_group,shard,stage,stage_group,tier,type) (
+        rate(prometheus_rule_evaluations_total{cluster="gitlab-3okls",env="gprd",type=~"monitoring"}[5m] offset 30s)
+      )
+  - record: sli_aggregations:prometheus_rule_group_iterations_missed_total:rate_5m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,job,pod,product_stage,region,rule_group,shard,stage,stage_group,tier,type) (
+        rate(prometheus_rule_group_iterations_missed_total{cluster="gitlab-3okls",env="gprd",type=~"monitoring"}[5m] offset 30s)
+      )
+  - record: sli_aggregations:prometheus_rule_group_iterations_total:rate_5m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,job,pod,product_stage,region,rule_group,shard,stage,stage_group,tier,type) (
+        rate(prometheus_rule_group_iterations_total{cluster="gitlab-3okls",env="gprd",type=~"monitoring"}[5m] offset 30s)
+      )
 - name: 'SLI Aggregations: monitoring - grafana - 30m burn-rate - gprd-gitlab-gke'
   interval: 2m
   rules:
@@ -356,6 +437,14 @@ groups:
     expr: |
       sum by (code,component,env,environment,feature_category,fqdn,job,le,pod,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(grafana_http_request_duration_seconds_bucket{cluster="gprd-us-east1-d",env="gprd",job=~"grafana",shard=~"default",type=~"monitoring"}[30m] offset 30s)
+      )
+- name: 'SLI Aggregations: monitoring - grafana - 30m burn-rate - gitlab-3okls'
+  interval: 2m
+  rules:
+  - record: sli_aggregations:grafana_http_request_duration_seconds_bucket:rate_30m
+    expr: |
+      sum by (code,component,env,environment,feature_category,fqdn,job,le,pod,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(grafana_http_request_duration_seconds_bucket{cluster="gitlab-3okls",env="gprd",job=~"grafana",shard=~"default",type=~"monitoring"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: monitoring - grafana_datasources - 30m burn-rate - gprd-gitlab-gke'
   interval: 2m
@@ -389,6 +478,14 @@ groups:
       sum by (code,component,datasource,env,environment,feature_category,fqdn,job,pod,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(grafana_datasource_request_total{cluster="gprd-us-east1-d",env="gprd",job=~"grafana",shard=~"default",type=~"monitoring"}[30m] offset 30s)
       )
+- name: 'SLI Aggregations: monitoring - grafana_datasources - 30m burn-rate - gitlab-3okls'
+  interval: 2m
+  rules:
+  - record: sli_aggregations:grafana_datasource_request_total:rate_30m
+    expr: |
+      sum by (code,component,datasource,env,environment,feature_category,fqdn,job,pod,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(grafana_datasource_request_total{cluster="gitlab-3okls",env="gprd",job=~"grafana",shard=~"default",type=~"monitoring"}[30m] offset 30s)
+      )
 - name: 'SLI Aggregations: monitoring - grafana_google_lb - 30m burn-rate - gprd-gitlab-gke'
   interval: 2m
   rules:
@@ -421,6 +518,14 @@ groups:
       sum by (component,env,environment,feature_category,fqdn,product_stage,project_id,proxy_continent,region,response_code,response_code_class,shard,stage,stage_group,tier,type,url_map_name) (
         rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{cluster="gprd-us-east1-d",env="gprd",project_id=~"gitlab-ops",type=~"monitoring",url_map_name=~"k8s2-um-4zodnh0s-grafana-grafana-cfagrqyu"}[30m] offset 30s)
       )
+- name: 'SLI Aggregations: monitoring - grafana_google_lb - 30m burn-rate - gitlab-3okls'
+  interval: 2m
+  rules:
+  - record: sli_aggregations:stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count:rate_30m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,product_stage,project_id,proxy_continent,region,response_code,response_code_class,shard,stage,stage_group,tier,type,url_map_name) (
+        rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{cluster="gitlab-3okls",env="gprd",project_id=~"gitlab-ops",type=~"monitoring",url_map_name=~"k8s2-um-4zodnh0s-grafana-grafana-cfagrqyu"}[30m] offset 30s)
+      )
 - name: 'SLI Aggregations: monitoring - grafana_image_renderer - 30m burn-rate - gprd-gitlab-gke'
   interval: 2m
   rules:
@@ -452,6 +557,14 @@ groups:
     expr: |
       sum by (component,env,environment,feature_category,fqdn,job,le,pod,product_stage,region,shard,stage,stage_group,status_code,tier,type) (
         rate(grafana_image_renderer_service_http_request_duration_seconds_bucket{cluster="gprd-us-east1-d",env="gprd",job=~"grafana-image-renderer",shard=~"default",type=~"monitoring"}[30m] offset 30s)
+      )
+- name: 'SLI Aggregations: monitoring - grafana_image_renderer - 30m burn-rate - gitlab-3okls'
+  interval: 2m
+  rules:
+  - record: sli_aggregations:grafana_image_renderer_service_http_request_duration_seconds_bucket:rate_30m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,job,le,pod,product_stage,region,shard,stage,stage_group,status_code,tier,type) (
+        rate(grafana_image_renderer_service_http_request_duration_seconds_bucket{cluster="gitlab-3okls",env="gprd",job=~"grafana-image-renderer",shard=~"default",type=~"monitoring"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: monitoring - prometheus - 30m burn-rate - gprd-gitlab-gke'
   interval: 2m
@@ -504,6 +617,19 @@ groups:
     expr: |
       sum by (code,component,env,environment,feature_category,fqdn,handler,job,pod,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(prometheus_http_requests_total{cluster="gprd-us-east1-d",env="gprd",job=~"prometheus.*",type=~"monitoring"}[30m] offset 30s)
+      )
+- name: 'SLI Aggregations: monitoring - prometheus - 30m burn-rate - gitlab-3okls'
+  interval: 2m
+  rules:
+  - record: sli_aggregations:prometheus_http_request_duration_seconds_bucket:rate_30m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,handler,job,le,pod,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(prometheus_http_request_duration_seconds_bucket{cluster="gitlab-3okls",env="gprd",job=~"prometheus.*",type=~"monitoring"}[30m] offset 30s)
+      )
+  - record: sli_aggregations:prometheus_http_requests_total:rate_30m
+    expr: |
+      sum by (code,component,env,environment,feature_category,fqdn,handler,job,pod,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(prometheus_http_requests_total{cluster="gitlab-3okls",env="gprd",job=~"prometheus.*",type=~"monitoring"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: monitoring - prometheus_alert_sender - 30m burn-rate -
     gprd-gitlab-gke'
@@ -560,6 +686,20 @@ groups:
     expr: |
       sum by (alertmanager,component,env,environment,feature_category,fqdn,job,pod,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(prometheus_notifications_sent_total{cluster="gprd-us-east1-d",env="gprd",job=~"prometheus",type=~"monitoring"}[30m] offset 30s)
+      )
+- name: 'SLI Aggregations: monitoring - prometheus_alert_sender - 30m burn-rate -
+    gitlab-3okls'
+  interval: 2m
+  rules:
+  - record: sli_aggregations:prometheus_notifications_errors_total:rate_30m
+    expr: |
+      sum by (alertmanager,component,env,environment,feature_category,fqdn,job,pod,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(prometheus_notifications_errors_total{cluster="gitlab-3okls",env="gprd",job=~"prometheus",type=~"monitoring"}[30m] offset 30s)
+      )
+  - record: sli_aggregations:prometheus_notifications_sent_total:rate_30m
+    expr: |
+      sum by (alertmanager,component,env,environment,feature_category,fqdn,job,pod,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(prometheus_notifications_sent_total{cluster="gitlab-3okls",env="gprd",job=~"prometheus",type=~"monitoring"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: monitoring - rule_evaluation - 30m burn-rate - gprd-gitlab-gke'
   interval: 2m
@@ -653,6 +793,29 @@ groups:
       sum by (component,env,environment,feature_category,fqdn,job,pod,product_stage,region,rule_group,shard,stage,stage_group,tier,type) (
         rate(prometheus_rule_group_iterations_total{cluster="gprd-us-east1-d",env="gprd",type=~"monitoring"}[30m] offset 30s)
       )
+- name: 'SLI Aggregations: monitoring - rule_evaluation - 30m burn-rate - gitlab-3okls'
+  interval: 2m
+  rules:
+  - record: sli_aggregations:prometheus_rule_evaluation_failures_total:rate_30m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,job,pod,product_stage,region,rule_group,shard,stage,stage_group,tier,type) (
+        rate(prometheus_rule_evaluation_failures_total{cluster="gitlab-3okls",env="gprd",type=~"monitoring"}[30m] offset 30s)
+      )
+  - record: sli_aggregations:prometheus_rule_evaluations_total:rate_30m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,job,pod,product_stage,region,rule_group,shard,stage,stage_group,tier,type) (
+        rate(prometheus_rule_evaluations_total{cluster="gitlab-3okls",env="gprd",type=~"monitoring"}[30m] offset 30s)
+      )
+  - record: sli_aggregations:prometheus_rule_group_iterations_missed_total:rate_30m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,job,pod,product_stage,region,rule_group,shard,stage,stage_group,tier,type) (
+        rate(prometheus_rule_group_iterations_missed_total{cluster="gitlab-3okls",env="gprd",type=~"monitoring"}[30m] offset 30s)
+      )
+  - record: sli_aggregations:prometheus_rule_group_iterations_total:rate_30m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,job,pod,product_stage,region,rule_group,shard,stage,stage_group,tier,type) (
+        rate(prometheus_rule_group_iterations_total{cluster="gitlab-3okls",env="gprd",type=~"monitoring"}[30m] offset 30s)
+      )
 - name: 'SLI Aggregations: monitoring - grafana - 1h burn-rate - gprd-gitlab-gke'
   interval: 1m
   rules:
@@ -684,6 +847,14 @@ groups:
     expr: |
       sum by (code,component,env,environment,feature_category,fqdn,job,le,pod,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(grafana_http_request_duration_seconds_bucket{cluster="gprd-us-east1-d",env="gprd",job=~"grafana",shard=~"default",type=~"monitoring"}[1h] offset 30s)
+      )
+- name: 'SLI Aggregations: monitoring - grafana - 1h burn-rate - gitlab-3okls'
+  interval: 1m
+  rules:
+  - record: sli_aggregations:grafana_http_request_duration_seconds_bucket:rate_1h
+    expr: |
+      sum by (code,component,env,environment,feature_category,fqdn,job,le,pod,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(grafana_http_request_duration_seconds_bucket{cluster="gitlab-3okls",env="gprd",job=~"grafana",shard=~"default",type=~"monitoring"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: monitoring - grafana_datasources - 1h burn-rate - gprd-gitlab-gke'
   interval: 1m
@@ -717,6 +888,14 @@ groups:
       sum by (code,component,datasource,env,environment,feature_category,fqdn,job,pod,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(grafana_datasource_request_total{cluster="gprd-us-east1-d",env="gprd",job=~"grafana",shard=~"default",type=~"monitoring"}[1h] offset 30s)
       )
+- name: 'SLI Aggregations: monitoring - grafana_datasources - 1h burn-rate - gitlab-3okls'
+  interval: 1m
+  rules:
+  - record: sli_aggregations:grafana_datasource_request_total:rate_1h
+    expr: |
+      sum by (code,component,datasource,env,environment,feature_category,fqdn,job,pod,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(grafana_datasource_request_total{cluster="gitlab-3okls",env="gprd",job=~"grafana",shard=~"default",type=~"monitoring"}[1h] offset 30s)
+      )
 - name: 'SLI Aggregations: monitoring - grafana_google_lb - 1h burn-rate - gprd-gitlab-gke'
   interval: 1m
   rules:
@@ -749,6 +928,14 @@ groups:
       sum by (component,env,environment,feature_category,fqdn,product_stage,project_id,proxy_continent,region,response_code,response_code_class,shard,stage,stage_group,tier,type,url_map_name) (
         rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{cluster="gprd-us-east1-d",env="gprd",project_id=~"gitlab-ops",type=~"monitoring",url_map_name=~"k8s2-um-4zodnh0s-grafana-grafana-cfagrqyu"}[1h] offset 30s)
       )
+- name: 'SLI Aggregations: monitoring - grafana_google_lb - 1h burn-rate - gitlab-3okls'
+  interval: 1m
+  rules:
+  - record: sli_aggregations:stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count:rate_1h
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,product_stage,project_id,proxy_continent,region,response_code,response_code_class,shard,stage,stage_group,tier,type,url_map_name) (
+        rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{cluster="gitlab-3okls",env="gprd",project_id=~"gitlab-ops",type=~"monitoring",url_map_name=~"k8s2-um-4zodnh0s-grafana-grafana-cfagrqyu"}[1h] offset 30s)
+      )
 - name: 'SLI Aggregations: monitoring - grafana_image_renderer - 1h burn-rate - gprd-gitlab-gke'
   interval: 1m
   rules:
@@ -780,6 +967,14 @@ groups:
     expr: |
       sum by (component,env,environment,feature_category,fqdn,job,le,pod,product_stage,region,shard,stage,stage_group,status_code,tier,type) (
         rate(grafana_image_renderer_service_http_request_duration_seconds_bucket{cluster="gprd-us-east1-d",env="gprd",job=~"grafana-image-renderer",shard=~"default",type=~"monitoring"}[1h] offset 30s)
+      )
+- name: 'SLI Aggregations: monitoring - grafana_image_renderer - 1h burn-rate - gitlab-3okls'
+  interval: 1m
+  rules:
+  - record: sli_aggregations:grafana_image_renderer_service_http_request_duration_seconds_bucket:rate_1h
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,job,le,pod,product_stage,region,shard,stage,stage_group,status_code,tier,type) (
+        rate(grafana_image_renderer_service_http_request_duration_seconds_bucket{cluster="gitlab-3okls",env="gprd",job=~"grafana-image-renderer",shard=~"default",type=~"monitoring"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: monitoring - prometheus - 1h burn-rate - gprd-gitlab-gke'
   interval: 1m
@@ -833,6 +1028,19 @@ groups:
       sum by (code,component,env,environment,feature_category,fqdn,handler,job,pod,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(prometheus_http_requests_total{cluster="gprd-us-east1-d",env="gprd",job=~"prometheus.*",type=~"monitoring"}[1h] offset 30s)
       )
+- name: 'SLI Aggregations: monitoring - prometheus - 1h burn-rate - gitlab-3okls'
+  interval: 1m
+  rules:
+  - record: sli_aggregations:prometheus_http_request_duration_seconds_bucket:rate_1h
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,handler,job,le,pod,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(prometheus_http_request_duration_seconds_bucket{cluster="gitlab-3okls",env="gprd",job=~"prometheus.*",type=~"monitoring"}[1h] offset 30s)
+      )
+  - record: sli_aggregations:prometheus_http_requests_total:rate_1h
+    expr: |
+      sum by (code,component,env,environment,feature_category,fqdn,handler,job,pod,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(prometheus_http_requests_total{cluster="gitlab-3okls",env="gprd",job=~"prometheus.*",type=~"monitoring"}[1h] offset 30s)
+      )
 - name: 'SLI Aggregations: monitoring - prometheus_alert_sender - 1h burn-rate - gprd-gitlab-gke'
   interval: 1m
   rules:
@@ -884,6 +1092,19 @@ groups:
     expr: |
       sum by (alertmanager,component,env,environment,feature_category,fqdn,job,pod,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(prometheus_notifications_sent_total{cluster="gprd-us-east1-d",env="gprd",job=~"prometheus",type=~"monitoring"}[1h] offset 30s)
+      )
+- name: 'SLI Aggregations: monitoring - prometheus_alert_sender - 1h burn-rate - gitlab-3okls'
+  interval: 1m
+  rules:
+  - record: sli_aggregations:prometheus_notifications_errors_total:rate_1h
+    expr: |
+      sum by (alertmanager,component,env,environment,feature_category,fqdn,job,pod,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(prometheus_notifications_errors_total{cluster="gitlab-3okls",env="gprd",job=~"prometheus",type=~"monitoring"}[1h] offset 30s)
+      )
+  - record: sli_aggregations:prometheus_notifications_sent_total:rate_1h
+    expr: |
+      sum by (alertmanager,component,env,environment,feature_category,fqdn,job,pod,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(prometheus_notifications_sent_total{cluster="gitlab-3okls",env="gprd",job=~"prometheus",type=~"monitoring"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: monitoring - rule_evaluation - 1h burn-rate - gprd-gitlab-gke'
   interval: 1m
@@ -976,4 +1197,27 @@ groups:
     expr: |
       sum by (component,env,environment,feature_category,fqdn,job,pod,product_stage,region,rule_group,shard,stage,stage_group,tier,type) (
         rate(prometheus_rule_group_iterations_total{cluster="gprd-us-east1-d",env="gprd",type=~"monitoring"}[1h] offset 30s)
+      )
+- name: 'SLI Aggregations: monitoring - rule_evaluation - 1h burn-rate - gitlab-3okls'
+  interval: 1m
+  rules:
+  - record: sli_aggregations:prometheus_rule_evaluation_failures_total:rate_1h
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,job,pod,product_stage,region,rule_group,shard,stage,stage_group,tier,type) (
+        rate(prometheus_rule_evaluation_failures_total{cluster="gitlab-3okls",env="gprd",type=~"monitoring"}[1h] offset 30s)
+      )
+  - record: sli_aggregations:prometheus_rule_evaluations_total:rate_1h
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,job,pod,product_stage,region,rule_group,shard,stage,stage_group,tier,type) (
+        rate(prometheus_rule_evaluations_total{cluster="gitlab-3okls",env="gprd",type=~"monitoring"}[1h] offset 30s)
+      )
+  - record: sli_aggregations:prometheus_rule_group_iterations_missed_total:rate_1h
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,job,pod,product_stage,region,rule_group,shard,stage,stage_group,tier,type) (
+        rate(prometheus_rule_group_iterations_missed_total{cluster="gitlab-3okls",env="gprd",type=~"monitoring"}[1h] offset 30s)
+      )
+  - record: sli_aggregations:prometheus_rule_group_iterations_total:rate_1h
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,job,pod,product_stage,region,rule_group,shard,stage,stage_group,tier,type) (
+        rate(prometheus_rule_group_iterations_total{cluster="gitlab-3okls",env="gprd",type=~"monitoring"}[1h] offset 30s)
       )

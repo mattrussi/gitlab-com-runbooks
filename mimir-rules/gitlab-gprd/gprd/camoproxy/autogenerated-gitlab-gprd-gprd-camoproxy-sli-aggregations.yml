@@ -37,6 +37,15 @@ groups:
       sum by (component,env,environment,feature_category,fqdn,product_stage,project_id,proxy_continent,region,response_code,response_code_class,shard,stage,stage_group,tier,type,url_map_name) (
         rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{cluster="gprd-us-east1-d",env="gprd",project_id=~"gitlab-production",type=~"monitoring",url_map_name=~"k8s2-um-8kvupfyn-camoproxy-camoproxy-6ygs428t"}[5m] offset 30s)
       )
+- name: 'SLI Aggregations: camoproxy - loadbalancer - 5m burn-rate - emitted by monitoring
+    - gitlab-3okls'
+  interval: 1m
+  rules:
+  - record: sli_aggregations:stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count:rate_5m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,product_stage,project_id,proxy_continent,region,response_code,response_code_class,shard,stage,stage_group,tier,type,url_map_name) (
+        rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{cluster="gitlab-3okls",env="gprd",project_id=~"gitlab-production",type=~"monitoring",url_map_name=~"k8s2-um-8kvupfyn-camoproxy-camoproxy-6ygs428t"}[5m] offset 30s)
+      )
 - name: 'SLI Aggregations: camoproxy - server - 5m burn-rate - gprd-gitlab-gke'
   interval: 1m
   rules:
@@ -89,6 +98,19 @@ groups:
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(camo_response_duration_seconds_bucket{cluster="gprd-us-east1-d",env="gprd",type=~"camoproxy"}[5m] offset 30s)
       )
+- name: 'SLI Aggregations: camoproxy - server - 5m burn-rate - gitlab-3okls'
+  interval: 1m
+  rules:
+  - record: sli_aggregations:camo_proxy_reponses_failed_total:rate_5m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(camo_proxy_reponses_failed_total{cluster="gitlab-3okls",env="gprd",type=~"camoproxy"}[5m] offset 30s)
+      )
+  - record: sli_aggregations:camo_response_duration_seconds_bucket:rate_5m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(camo_response_duration_seconds_bucket{cluster="gitlab-3okls",env="gprd",type=~"camoproxy"}[5m] offset 30s)
+      )
 - name: 'SLI Aggregations: camoproxy - loadbalancer - 30m burn-rate - emitted by monitoring
     - gprd-gitlab-gke'
   interval: 2m
@@ -124,6 +146,15 @@ groups:
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,project_id,proxy_continent,region,response_code,response_code_class,shard,stage,stage_group,tier,type,url_map_name) (
         rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{cluster="gprd-us-east1-d",env="gprd",project_id=~"gitlab-production",type=~"monitoring",url_map_name=~"k8s2-um-8kvupfyn-camoproxy-camoproxy-6ygs428t"}[30m] offset 30s)
+      )
+- name: 'SLI Aggregations: camoproxy - loadbalancer - 30m burn-rate - emitted by monitoring
+    - gitlab-3okls'
+  interval: 2m
+  rules:
+  - record: sli_aggregations:stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count:rate_30m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,product_stage,project_id,proxy_continent,region,response_code,response_code_class,shard,stage,stage_group,tier,type,url_map_name) (
+        rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{cluster="gitlab-3okls",env="gprd",project_id=~"gitlab-production",type=~"monitoring",url_map_name=~"k8s2-um-8kvupfyn-camoproxy-camoproxy-6ygs428t"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: camoproxy - server - 30m burn-rate - gprd-gitlab-gke'
   interval: 2m
@@ -177,6 +208,19 @@ groups:
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(camo_response_duration_seconds_bucket{cluster="gprd-us-east1-d",env="gprd",type=~"camoproxy"}[30m] offset 30s)
       )
+- name: 'SLI Aggregations: camoproxy - server - 30m burn-rate - gitlab-3okls'
+  interval: 2m
+  rules:
+  - record: sli_aggregations:camo_proxy_reponses_failed_total:rate_30m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(camo_proxy_reponses_failed_total{cluster="gitlab-3okls",env="gprd",type=~"camoproxy"}[30m] offset 30s)
+      )
+  - record: sli_aggregations:camo_response_duration_seconds_bucket:rate_30m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(camo_response_duration_seconds_bucket{cluster="gitlab-3okls",env="gprd",type=~"camoproxy"}[30m] offset 30s)
+      )
 - name: 'SLI Aggregations: camoproxy - loadbalancer - 1h burn-rate - emitted by monitoring
     - gprd-gitlab-gke'
   interval: 1m
@@ -212,6 +256,15 @@ groups:
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,project_id,proxy_continent,region,response_code,response_code_class,shard,stage,stage_group,tier,type,url_map_name) (
         rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{cluster="gprd-us-east1-d",env="gprd",project_id=~"gitlab-production",type=~"monitoring",url_map_name=~"k8s2-um-8kvupfyn-camoproxy-camoproxy-6ygs428t"}[1h] offset 30s)
+      )
+- name: 'SLI Aggregations: camoproxy - loadbalancer - 1h burn-rate - emitted by monitoring
+    - gitlab-3okls'
+  interval: 1m
+  rules:
+  - record: sli_aggregations:stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count:rate_1h
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,product_stage,project_id,proxy_continent,region,response_code,response_code_class,shard,stage,stage_group,tier,type,url_map_name) (
+        rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{cluster="gitlab-3okls",env="gprd",project_id=~"gitlab-production",type=~"monitoring",url_map_name=~"k8s2-um-8kvupfyn-camoproxy-camoproxy-6ygs428t"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: camoproxy - server - 1h burn-rate - gprd-gitlab-gke'
   interval: 1m
@@ -264,4 +317,17 @@ groups:
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(camo_response_duration_seconds_bucket{cluster="gprd-us-east1-d",env="gprd",type=~"camoproxy"}[1h] offset 30s)
+      )
+- name: 'SLI Aggregations: camoproxy - server - 1h burn-rate - gitlab-3okls'
+  interval: 1m
+  rules:
+  - record: sli_aggregations:camo_proxy_reponses_failed_total:rate_1h
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(camo_proxy_reponses_failed_total{cluster="gitlab-3okls",env="gprd",type=~"camoproxy"}[1h] offset 30s)
+      )
+  - record: sli_aggregations:camo_response_duration_seconds_bucket:rate_1h
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(camo_response_duration_seconds_bucket{cluster="gitlab-3okls",env="gprd",type=~"camoproxy"}[1h] offset 30s)
       )

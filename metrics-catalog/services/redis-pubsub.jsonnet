@@ -9,7 +9,7 @@ metricsCatalog.serviceDefinition(
     descriptiveName='Redis that handles predominantly pub/sub operations',
   )
   {
-    tenants: [ 'gitlab-gprd', 'gitlab-gstg', 'gitlab-pre' ]
+    tenants: ['gitlab-gprd', 'gitlab-gstg', 'gitlab-pre'],
   }
   + redisHelpers.gitlabcomObservabilityToolingForRedis('redis-pubsub')
 )

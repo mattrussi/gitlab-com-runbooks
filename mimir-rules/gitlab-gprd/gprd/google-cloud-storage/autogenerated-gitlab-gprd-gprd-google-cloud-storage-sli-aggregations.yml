@@ -37,6 +37,15 @@ groups:
       sum by (component,env,environment,feature_category,fqdn,product_stage,project_id,proxy_continent,region,response_code,response_code_class,shard,stage,stage_group,tier,type,url_map_name) (
         rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{cluster="gprd-us-east1-d",env="gprd",project_id=~"gitlab-production",type=~"monitoring",url_map_name=~"gprd-artifacts-cdn"}[5m] offset 30s)
       )
+- name: 'SLI Aggregations: google-cloud-storage - artifacts_cdn - 5m burn-rate - emitted
+    by monitoring - gitlab-3okls'
+  interval: 1m
+  rules:
+  - record: sli_aggregations:stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count:rate_5m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,product_stage,project_id,proxy_continent,region,response_code,response_code_class,shard,stage,stage_group,tier,type,url_map_name) (
+        rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{cluster="gitlab-3okls",env="gprd",project_id=~"gitlab-production",type=~"monitoring",url_map_name=~"gprd-artifacts-cdn"}[5m] offset 30s)
+      )
 - name: 'SLI Aggregations: google-cloud-storage - pages_range_requests - 5m burn-rate
     - emitted by web-pages - gprd-gitlab-gke'
   interval: 1m
@@ -72,6 +81,15 @@ groups:
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,request_stage,shard,stage,stage_group,tier,type) (
         rate(gitlab_pages_httprange_trace_duration_bucket{cluster="gprd-us-east1-d",env="gprd",request_stage=~"httptrace\\.ClientTrace\\.GotFirstResponseByte",type=~"web-pages"}[5m] offset 30s)
+      )
+- name: 'SLI Aggregations: google-cloud-storage - pages_range_requests - 5m burn-rate
+    - emitted by web-pages - gitlab-3okls'
+  interval: 1m
+  rules:
+  - record: sli_aggregations:gitlab_pages_httprange_trace_duration_bucket:rate_5m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,request_stage,shard,stage,stage_group,tier,type) (
+        rate(gitlab_pages_httprange_trace_duration_bucket{cluster="gitlab-3okls",env="gprd",request_stage=~"httptrace\\.ClientTrace\\.GotFirstResponseByte",type=~"web-pages"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: google-cloud-storage - pages_request_duration - 5m burn-rate'
   interval: 1m
@@ -116,6 +134,15 @@ groups:
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(gitlab_pages_httprange_requests_total{cluster="gprd-us-east1-d",env="gprd",type=~"web-pages"}[5m] offset 30s)
+      )
+- name: 'SLI Aggregations: google-cloud-storage - pages_total_requests - 5m burn-rate
+    - emitted by web-pages - gitlab-3okls'
+  interval: 1m
+  rules:
+  - record: sli_aggregations:gitlab_pages_httprange_requests_total:rate_5m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(gitlab_pages_httprange_requests_total{cluster="gitlab-3okls",env="gprd",type=~"web-pages"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: google-cloud-storage - registry_storage - 5m burn-rate
     - emitted by ops-gitlab-net - gprd-gitlab-gke'
@@ -174,6 +201,20 @@ groups:
         rate(registry_storage_action_seconds_count{cluster="gprd-us-east1-d",env="gprd",type=~"ops-gitlab-net"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: google-cloud-storage - registry_storage - 5m burn-rate
+    - emitted by ops-gitlab-net - gitlab-3okls'
+  interval: 1m
+  rules:
+  - record: sli_aggregations:registry_storage_action_seconds_bucket:rate_5m
+    expr: |
+      sum by (action,component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(registry_storage_action_seconds_bucket{cluster="gitlab-3okls",env="gprd",type=~"ops-gitlab-net"}[5m] offset 30s)
+      )
+  - record: sli_aggregations:registry_storage_action_seconds_count:rate_5m
+    expr: |
+      sum by (action,component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(registry_storage_action_seconds_count{cluster="gitlab-3okls",env="gprd",type=~"ops-gitlab-net"}[5m] offset 30s)
+      )
+- name: 'SLI Aggregations: google-cloud-storage - registry_storage - 5m burn-rate
     - emitted by registry - gprd-gitlab-gke'
   interval: 1m
   rules:
@@ -229,6 +270,20 @@ groups:
       sum by (action,component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(registry_storage_action_seconds_count{cluster="gprd-us-east1-d",env="gprd",type=~"registry"}[5m] offset 30s)
       )
+- name: 'SLI Aggregations: google-cloud-storage - registry_storage - 5m burn-rate
+    - emitted by registry - gitlab-3okls'
+  interval: 1m
+  rules:
+  - record: sli_aggregations:registry_storage_action_seconds_bucket:rate_5m
+    expr: |
+      sum by (action,component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(registry_storage_action_seconds_bucket{cluster="gitlab-3okls",env="gprd",type=~"registry"}[5m] offset 30s)
+      )
+  - record: sli_aggregations:registry_storage_action_seconds_count:rate_5m
+    expr: |
+      sum by (action,component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(registry_storage_action_seconds_count{cluster="gitlab-3okls",env="gprd",type=~"registry"}[5m] offset 30s)
+      )
 - name: 'SLI Aggregations: google-cloud-storage - workhorse_upload - 5m burn-rate'
   interval: 1m
   rules:
@@ -278,6 +333,15 @@ groups:
       sum by (component,env,environment,feature_category,fqdn,product_stage,project_id,proxy_continent,region,response_code,response_code_class,shard,stage,stage_group,tier,type,url_map_name) (
         rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{cluster="gprd-us-east1-d",env="gprd",project_id=~"gitlab-production",type=~"monitoring",url_map_name=~"gprd-artifacts-cdn"}[30m] offset 30s)
       )
+- name: 'SLI Aggregations: google-cloud-storage - artifacts_cdn - 30m burn-rate -
+    emitted by monitoring - gitlab-3okls'
+  interval: 2m
+  rules:
+  - record: sli_aggregations:stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count:rate_30m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,product_stage,project_id,proxy_continent,region,response_code,response_code_class,shard,stage,stage_group,tier,type,url_map_name) (
+        rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{cluster="gitlab-3okls",env="gprd",project_id=~"gitlab-production",type=~"monitoring",url_map_name=~"gprd-artifacts-cdn"}[30m] offset 30s)
+      )
 - name: 'SLI Aggregations: google-cloud-storage - pages_range_requests - 30m burn-rate
     - emitted by web-pages - gprd-gitlab-gke'
   interval: 2m
@@ -313,6 +377,15 @@ groups:
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,request_stage,shard,stage,stage_group,tier,type) (
         rate(gitlab_pages_httprange_trace_duration_bucket{cluster="gprd-us-east1-d",env="gprd",request_stage=~"httptrace\\.ClientTrace\\.GotFirstResponseByte",type=~"web-pages"}[30m] offset 30s)
+      )
+- name: 'SLI Aggregations: google-cloud-storage - pages_range_requests - 30m burn-rate
+    - emitted by web-pages - gitlab-3okls'
+  interval: 2m
+  rules:
+  - record: sli_aggregations:gitlab_pages_httprange_trace_duration_bucket:rate_30m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,request_stage,shard,stage,stage_group,tier,type) (
+        rate(gitlab_pages_httprange_trace_duration_bucket{cluster="gitlab-3okls",env="gprd",request_stage=~"httptrace\\.ClientTrace\\.GotFirstResponseByte",type=~"web-pages"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: google-cloud-storage - pages_request_duration - 30m burn-rate'
   interval: 2m
@@ -357,6 +430,15 @@ groups:
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(gitlab_pages_httprange_requests_total{cluster="gprd-us-east1-d",env="gprd",type=~"web-pages"}[30m] offset 30s)
+      )
+- name: 'SLI Aggregations: google-cloud-storage - pages_total_requests - 30m burn-rate
+    - emitted by web-pages - gitlab-3okls'
+  interval: 2m
+  rules:
+  - record: sli_aggregations:gitlab_pages_httprange_requests_total:rate_30m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(gitlab_pages_httprange_requests_total{cluster="gitlab-3okls",env="gprd",type=~"web-pages"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: google-cloud-storage - registry_storage - 30m burn-rate
     - emitted by ops-gitlab-net - gprd-gitlab-gke'
@@ -415,6 +497,20 @@ groups:
         rate(registry_storage_action_seconds_count{cluster="gprd-us-east1-d",env="gprd",type=~"ops-gitlab-net"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: google-cloud-storage - registry_storage - 30m burn-rate
+    - emitted by ops-gitlab-net - gitlab-3okls'
+  interval: 2m
+  rules:
+  - record: sli_aggregations:registry_storage_action_seconds_bucket:rate_30m
+    expr: |
+      sum by (action,component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(registry_storage_action_seconds_bucket{cluster="gitlab-3okls",env="gprd",type=~"ops-gitlab-net"}[30m] offset 30s)
+      )
+  - record: sli_aggregations:registry_storage_action_seconds_count:rate_30m
+    expr: |
+      sum by (action,component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(registry_storage_action_seconds_count{cluster="gitlab-3okls",env="gprd",type=~"ops-gitlab-net"}[30m] offset 30s)
+      )
+- name: 'SLI Aggregations: google-cloud-storage - registry_storage - 30m burn-rate
     - emitted by registry - gprd-gitlab-gke'
   interval: 2m
   rules:
@@ -470,6 +566,20 @@ groups:
       sum by (action,component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(registry_storage_action_seconds_count{cluster="gprd-us-east1-d",env="gprd",type=~"registry"}[30m] offset 30s)
       )
+- name: 'SLI Aggregations: google-cloud-storage - registry_storage - 30m burn-rate
+    - emitted by registry - gitlab-3okls'
+  interval: 2m
+  rules:
+  - record: sli_aggregations:registry_storage_action_seconds_bucket:rate_30m
+    expr: |
+      sum by (action,component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(registry_storage_action_seconds_bucket{cluster="gitlab-3okls",env="gprd",type=~"registry"}[30m] offset 30s)
+      )
+  - record: sli_aggregations:registry_storage_action_seconds_count:rate_30m
+    expr: |
+      sum by (action,component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(registry_storage_action_seconds_count{cluster="gitlab-3okls",env="gprd",type=~"registry"}[30m] offset 30s)
+      )
 - name: 'SLI Aggregations: google-cloud-storage - workhorse_upload - 30m burn-rate'
   interval: 2m
   rules:
@@ -519,6 +629,15 @@ groups:
       sum by (component,env,environment,feature_category,fqdn,product_stage,project_id,proxy_continent,region,response_code,response_code_class,shard,stage,stage_group,tier,type,url_map_name) (
         rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{cluster="gprd-us-east1-d",env="gprd",project_id=~"gitlab-production",type=~"monitoring",url_map_name=~"gprd-artifacts-cdn"}[1h] offset 30s)
       )
+- name: 'SLI Aggregations: google-cloud-storage - artifacts_cdn - 1h burn-rate - emitted
+    by monitoring - gitlab-3okls'
+  interval: 1m
+  rules:
+  - record: sli_aggregations:stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count:rate_1h
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,product_stage,project_id,proxy_continent,region,response_code,response_code_class,shard,stage,stage_group,tier,type,url_map_name) (
+        rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{cluster="gitlab-3okls",env="gprd",project_id=~"gitlab-production",type=~"monitoring",url_map_name=~"gprd-artifacts-cdn"}[1h] offset 30s)
+      )
 - name: 'SLI Aggregations: google-cloud-storage - pages_range_requests - 1h burn-rate
     - emitted by web-pages - gprd-gitlab-gke'
   interval: 1m
@@ -554,6 +673,15 @@ groups:
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,request_stage,shard,stage,stage_group,tier,type) (
         rate(gitlab_pages_httprange_trace_duration_bucket{cluster="gprd-us-east1-d",env="gprd",request_stage=~"httptrace\\.ClientTrace\\.GotFirstResponseByte",type=~"web-pages"}[1h] offset 30s)
+      )
+- name: 'SLI Aggregations: google-cloud-storage - pages_range_requests - 1h burn-rate
+    - emitted by web-pages - gitlab-3okls'
+  interval: 1m
+  rules:
+  - record: sli_aggregations:gitlab_pages_httprange_trace_duration_bucket:rate_1h
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,request_stage,shard,stage,stage_group,tier,type) (
+        rate(gitlab_pages_httprange_trace_duration_bucket{cluster="gitlab-3okls",env="gprd",request_stage=~"httptrace\\.ClientTrace\\.GotFirstResponseByte",type=~"web-pages"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: google-cloud-storage - pages_request_duration - 1h burn-rate'
   interval: 1m
@@ -598,6 +726,15 @@ groups:
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(gitlab_pages_httprange_requests_total{cluster="gprd-us-east1-d",env="gprd",type=~"web-pages"}[1h] offset 30s)
+      )
+- name: 'SLI Aggregations: google-cloud-storage - pages_total_requests - 1h burn-rate
+    - emitted by web-pages - gitlab-3okls'
+  interval: 1m
+  rules:
+  - record: sli_aggregations:gitlab_pages_httprange_requests_total:rate_1h
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(gitlab_pages_httprange_requests_total{cluster="gitlab-3okls",env="gprd",type=~"web-pages"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: google-cloud-storage - registry_storage - 1h burn-rate
     - emitted by ops-gitlab-net - gprd-gitlab-gke'
@@ -656,6 +793,20 @@ groups:
         rate(registry_storage_action_seconds_count{cluster="gprd-us-east1-d",env="gprd",type=~"ops-gitlab-net"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: google-cloud-storage - registry_storage - 1h burn-rate
+    - emitted by ops-gitlab-net - gitlab-3okls'
+  interval: 1m
+  rules:
+  - record: sli_aggregations:registry_storage_action_seconds_bucket:rate_1h
+    expr: |
+      sum by (action,component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(registry_storage_action_seconds_bucket{cluster="gitlab-3okls",env="gprd",type=~"ops-gitlab-net"}[1h] offset 30s)
+      )
+  - record: sli_aggregations:registry_storage_action_seconds_count:rate_1h
+    expr: |
+      sum by (action,component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(registry_storage_action_seconds_count{cluster="gitlab-3okls",env="gprd",type=~"ops-gitlab-net"}[1h] offset 30s)
+      )
+- name: 'SLI Aggregations: google-cloud-storage - registry_storage - 1h burn-rate
     - emitted by registry - gprd-gitlab-gke'
   interval: 1m
   rules:
@@ -710,6 +861,20 @@ groups:
     expr: |
       sum by (action,component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(registry_storage_action_seconds_count{cluster="gprd-us-east1-d",env="gprd",type=~"registry"}[1h] offset 30s)
+      )
+- name: 'SLI Aggregations: google-cloud-storage - registry_storage - 1h burn-rate
+    - emitted by registry - gitlab-3okls'
+  interval: 1m
+  rules:
+  - record: sli_aggregations:registry_storage_action_seconds_bucket:rate_1h
+    expr: |
+      sum by (action,component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(registry_storage_action_seconds_bucket{cluster="gitlab-3okls",env="gprd",type=~"registry"}[1h] offset 30s)
+      )
+  - record: sli_aggregations:registry_storage_action_seconds_count:rate_1h
+    expr: |
+      sum by (action,component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(registry_storage_action_seconds_count{cluster="gitlab-3okls",env="gprd",type=~"registry"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: google-cloud-storage - workhorse_upload - 1h burn-rate'
   interval: 1m

@@ -58,6 +58,20 @@ groups:
         rate(gitlab_sli_db_transaction_apdex_total{cluster="gprd-us-east1-d",db_config_name=~"main",env="gprd",type=~"ai-assisted"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: patroni - client_database_transaction - 5m burn-rate -
+    emitted by ai-assisted - gitlab-3okls'
+  interval: 1m
+  rules:
+  - record: sli_aggregations:gitlab_sli_db_transaction_apdex_success_total:rate_5m
+    expr: |
+      sum by (component,db_config_name,env,environment,external_dependencies,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sli_db_transaction_apdex_success_total{cluster="gitlab-3okls",db_config_name=~"main",env="gprd",type=~"ai-assisted"}[5m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_sli_db_transaction_apdex_total:rate_5m
+    expr: |
+      sum by (component,db_config_name,env,environment,external_dependencies,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sli_db_transaction_apdex_total{cluster="gitlab-3okls",db_config_name=~"main",env="gprd",type=~"ai-assisted"}[5m] offset 30s)
+      )
+- name: 'SLI Aggregations: patroni - client_database_transaction - 5m burn-rate -
     emitted by api - gprd-gitlab-gke'
   interval: 1m
   rules:
@@ -112,6 +126,20 @@ groups:
     expr: |
       sum by (component,db_config_name,env,environment,external_dependencies,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type,urgency,worker) (
         rate(gitlab_sli_db_transaction_apdex_total{cluster="gprd-us-east1-d",db_config_name=~"main",env="gprd",type=~"api"}[5m] offset 30s)
+      )
+- name: 'SLI Aggregations: patroni - client_database_transaction - 5m burn-rate -
+    emitted by api - gitlab-3okls'
+  interval: 1m
+  rules:
+  - record: sli_aggregations:gitlab_sli_db_transaction_apdex_success_total:rate_5m
+    expr: |
+      sum by (component,db_config_name,env,environment,external_dependencies,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sli_db_transaction_apdex_success_total{cluster="gitlab-3okls",db_config_name=~"main",env="gprd",type=~"api"}[5m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_sli_db_transaction_apdex_total:rate_5m
+    expr: |
+      sum by (component,db_config_name,env,environment,external_dependencies,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sli_db_transaction_apdex_total{cluster="gitlab-3okls",db_config_name=~"main",env="gprd",type=~"api"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: patroni - client_database_transaction - 5m burn-rate -
     emitted by git - gprd-gitlab-gke'
@@ -170,6 +198,20 @@ groups:
         rate(gitlab_sli_db_transaction_apdex_total{cluster="gprd-us-east1-d",db_config_name=~"main",env="gprd",type=~"git"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: patroni - client_database_transaction - 5m burn-rate -
+    emitted by git - gitlab-3okls'
+  interval: 1m
+  rules:
+  - record: sli_aggregations:gitlab_sli_db_transaction_apdex_success_total:rate_5m
+    expr: |
+      sum by (component,db_config_name,env,environment,external_dependencies,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sli_db_transaction_apdex_success_total{cluster="gitlab-3okls",db_config_name=~"main",env="gprd",type=~"git"}[5m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_sli_db_transaction_apdex_total:rate_5m
+    expr: |
+      sum by (component,db_config_name,env,environment,external_dependencies,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sli_db_transaction_apdex_total{cluster="gitlab-3okls",db_config_name=~"main",env="gprd",type=~"git"}[5m] offset 30s)
+      )
+- name: 'SLI Aggregations: patroni - client_database_transaction - 5m burn-rate -
     emitted by internal-api - gprd-gitlab-gke'
   interval: 1m
   rules:
@@ -224,6 +266,20 @@ groups:
     expr: |
       sum by (component,db_config_name,env,environment,external_dependencies,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type,urgency,worker) (
         rate(gitlab_sli_db_transaction_apdex_total{cluster="gprd-us-east1-d",db_config_name=~"main",env="gprd",type=~"internal-api"}[5m] offset 30s)
+      )
+- name: 'SLI Aggregations: patroni - client_database_transaction - 5m burn-rate -
+    emitted by internal-api - gitlab-3okls'
+  interval: 1m
+  rules:
+  - record: sli_aggregations:gitlab_sli_db_transaction_apdex_success_total:rate_5m
+    expr: |
+      sum by (component,db_config_name,env,environment,external_dependencies,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sli_db_transaction_apdex_success_total{cluster="gitlab-3okls",db_config_name=~"main",env="gprd",type=~"internal-api"}[5m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_sli_db_transaction_apdex_total:rate_5m
+    expr: |
+      sum by (component,db_config_name,env,environment,external_dependencies,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sli_db_transaction_apdex_total{cluster="gitlab-3okls",db_config_name=~"main",env="gprd",type=~"internal-api"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: patroni - client_database_transaction - 5m burn-rate -
     emitted by ops-gitlab-net - gprd-gitlab-gke'
@@ -282,6 +338,20 @@ groups:
         rate(gitlab_sli_db_transaction_apdex_total{cluster="gprd-us-east1-d",db_config_name=~"main",env="gprd",type=~"ops-gitlab-net"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: patroni - client_database_transaction - 5m burn-rate -
+    emitted by ops-gitlab-net - gitlab-3okls'
+  interval: 1m
+  rules:
+  - record: sli_aggregations:gitlab_sli_db_transaction_apdex_success_total:rate_5m
+    expr: |
+      sum by (component,db_config_name,env,environment,external_dependencies,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sli_db_transaction_apdex_success_total{cluster="gitlab-3okls",db_config_name=~"main",env="gprd",type=~"ops-gitlab-net"}[5m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_sli_db_transaction_apdex_total:rate_5m
+    expr: |
+      sum by (component,db_config_name,env,environment,external_dependencies,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sli_db_transaction_apdex_total{cluster="gitlab-3okls",db_config_name=~"main",env="gprd",type=~"ops-gitlab-net"}[5m] offset 30s)
+      )
+- name: 'SLI Aggregations: patroni - client_database_transaction - 5m burn-rate -
     emitted by sidekiq - gprd-gitlab-gke'
   interval: 1m
   rules:
@@ -336,6 +406,20 @@ groups:
     expr: |
       sum by (component,db_config_name,env,environment,external_dependencies,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type,urgency,worker) (
         rate(gitlab_sli_db_transaction_apdex_total{cluster="gprd-us-east1-d",db_config_name=~"main",env="gprd",type=~"sidekiq"}[5m] offset 30s)
+      )
+- name: 'SLI Aggregations: patroni - client_database_transaction - 5m burn-rate -
+    emitted by sidekiq - gitlab-3okls'
+  interval: 1m
+  rules:
+  - record: sli_aggregations:gitlab_sli_db_transaction_apdex_success_total:rate_5m
+    expr: |
+      sum by (component,db_config_name,env,environment,external_dependencies,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sli_db_transaction_apdex_success_total{cluster="gitlab-3okls",db_config_name=~"main",env="gprd",type=~"sidekiq"}[5m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_sli_db_transaction_apdex_total:rate_5m
+    expr: |
+      sum by (component,db_config_name,env,environment,external_dependencies,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sli_db_transaction_apdex_total{cluster="gitlab-3okls",db_config_name=~"main",env="gprd",type=~"sidekiq"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: patroni - client_database_transaction - 5m burn-rate -
     emitted by web - gprd-gitlab-gke'
@@ -394,6 +478,20 @@ groups:
         rate(gitlab_sli_db_transaction_apdex_total{cluster="gprd-us-east1-d",db_config_name=~"main",env="gprd",type=~"web"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: patroni - client_database_transaction - 5m burn-rate -
+    emitted by web - gitlab-3okls'
+  interval: 1m
+  rules:
+  - record: sli_aggregations:gitlab_sli_db_transaction_apdex_success_total:rate_5m
+    expr: |
+      sum by (component,db_config_name,env,environment,external_dependencies,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sli_db_transaction_apdex_success_total{cluster="gitlab-3okls",db_config_name=~"main",env="gprd",type=~"web"}[5m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_sli_db_transaction_apdex_total:rate_5m
+    expr: |
+      sum by (component,db_config_name,env,environment,external_dependencies,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sli_db_transaction_apdex_total{cluster="gitlab-3okls",db_config_name=~"main",env="gprd",type=~"web"}[5m] offset 30s)
+      )
+- name: 'SLI Aggregations: patroni - client_database_transaction - 5m burn-rate -
     emitted by websockets - gprd-gitlab-gke'
   interval: 1m
   rules:
@@ -448,6 +546,20 @@ groups:
     expr: |
       sum by (component,db_config_name,env,environment,external_dependencies,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type,urgency,worker) (
         rate(gitlab_sli_db_transaction_apdex_total{cluster="gprd-us-east1-d",db_config_name=~"main",env="gprd",type=~"websockets"}[5m] offset 30s)
+      )
+- name: 'SLI Aggregations: patroni - client_database_transaction - 5m burn-rate -
+    emitted by websockets - gitlab-3okls'
+  interval: 1m
+  rules:
+  - record: sli_aggregations:gitlab_sli_db_transaction_apdex_success_total:rate_5m
+    expr: |
+      sum by (component,db_config_name,env,environment,external_dependencies,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sli_db_transaction_apdex_success_total{cluster="gitlab-3okls",db_config_name=~"main",env="gprd",type=~"websockets"}[5m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_sli_db_transaction_apdex_total:rate_5m
+    expr: |
+      sum by (component,db_config_name,env,environment,external_dependencies,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sli_db_transaction_apdex_total{cluster="gitlab-3okls",db_config_name=~"main",env="gprd",type=~"websockets"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: patroni - pgbouncer - 5m burn-rate'
   interval: 1m
@@ -504,6 +616,15 @@ groups:
         rate(gitlab_sql_primary_duration_seconds_bucket{cluster="gprd-us-east1-d",db_config_name=~"main",env="gprd",type=~"ai-assisted"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: patroni - rails_primary_sql - 5m burn-rate - emitted by
+    ai-assisted - gitlab-3okls'
+  interval: 1m
+  rules:
+  - record: sli_aggregations:gitlab_sql_primary_duration_seconds_bucket:rate_5m
+    expr: |
+      sum by (component,db_config_name,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(gitlab_sql_primary_duration_seconds_bucket{cluster="gitlab-3okls",db_config_name=~"main",env="gprd",type=~"ai-assisted"}[5m] offset 30s)
+      )
+- name: 'SLI Aggregations: patroni - rails_primary_sql - 5m burn-rate - emitted by
     api - gprd-gitlab-gke'
   interval: 1m
   rules:
@@ -538,6 +659,15 @@ groups:
     expr: |
       sum by (component,db_config_name,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(gitlab_sql_primary_duration_seconds_bucket{cluster="gprd-us-east1-d",db_config_name=~"main",env="gprd",type=~"api"}[5m] offset 30s)
+      )
+- name: 'SLI Aggregations: patroni - rails_primary_sql - 5m burn-rate - emitted by
+    api - gitlab-3okls'
+  interval: 1m
+  rules:
+  - record: sli_aggregations:gitlab_sql_primary_duration_seconds_bucket:rate_5m
+    expr: |
+      sum by (component,db_config_name,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(gitlab_sql_primary_duration_seconds_bucket{cluster="gitlab-3okls",db_config_name=~"main",env="gprd",type=~"api"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: patroni - rails_primary_sql - 5m burn-rate - emitted by
     git - gprd-gitlab-gke'
@@ -576,6 +706,15 @@ groups:
         rate(gitlab_sql_primary_duration_seconds_bucket{cluster="gprd-us-east1-d",db_config_name=~"main",env="gprd",type=~"git"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: patroni - rails_primary_sql - 5m burn-rate - emitted by
+    git - gitlab-3okls'
+  interval: 1m
+  rules:
+  - record: sli_aggregations:gitlab_sql_primary_duration_seconds_bucket:rate_5m
+    expr: |
+      sum by (component,db_config_name,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(gitlab_sql_primary_duration_seconds_bucket{cluster="gitlab-3okls",db_config_name=~"main",env="gprd",type=~"git"}[5m] offset 30s)
+      )
+- name: 'SLI Aggregations: patroni - rails_primary_sql - 5m burn-rate - emitted by
     internal-api - gprd-gitlab-gke'
   interval: 1m
   rules:
@@ -610,6 +749,15 @@ groups:
     expr: |
       sum by (component,db_config_name,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(gitlab_sql_primary_duration_seconds_bucket{cluster="gprd-us-east1-d",db_config_name=~"main",env="gprd",type=~"internal-api"}[5m] offset 30s)
+      )
+- name: 'SLI Aggregations: patroni - rails_primary_sql - 5m burn-rate - emitted by
+    internal-api - gitlab-3okls'
+  interval: 1m
+  rules:
+  - record: sli_aggregations:gitlab_sql_primary_duration_seconds_bucket:rate_5m
+    expr: |
+      sum by (component,db_config_name,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(gitlab_sql_primary_duration_seconds_bucket{cluster="gitlab-3okls",db_config_name=~"main",env="gprd",type=~"internal-api"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: patroni - rails_primary_sql - 5m burn-rate - emitted by
     ops-gitlab-net - gprd-gitlab-gke'
@@ -648,6 +796,15 @@ groups:
         rate(gitlab_sql_primary_duration_seconds_bucket{cluster="gprd-us-east1-d",db_config_name=~"main",env="gprd",type=~"ops-gitlab-net"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: patroni - rails_primary_sql - 5m burn-rate - emitted by
+    ops-gitlab-net - gitlab-3okls'
+  interval: 1m
+  rules:
+  - record: sli_aggregations:gitlab_sql_primary_duration_seconds_bucket:rate_5m
+    expr: |
+      sum by (component,db_config_name,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(gitlab_sql_primary_duration_seconds_bucket{cluster="gitlab-3okls",db_config_name=~"main",env="gprd",type=~"ops-gitlab-net"}[5m] offset 30s)
+      )
+- name: 'SLI Aggregations: patroni - rails_primary_sql - 5m burn-rate - emitted by
     sidekiq - gprd-gitlab-gke'
   interval: 1m
   rules:
@@ -682,6 +839,15 @@ groups:
     expr: |
       sum by (component,db_config_name,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(gitlab_sql_primary_duration_seconds_bucket{cluster="gprd-us-east1-d",db_config_name=~"main",env="gprd",type=~"sidekiq"}[5m] offset 30s)
+      )
+- name: 'SLI Aggregations: patroni - rails_primary_sql - 5m burn-rate - emitted by
+    sidekiq - gitlab-3okls'
+  interval: 1m
+  rules:
+  - record: sli_aggregations:gitlab_sql_primary_duration_seconds_bucket:rate_5m
+    expr: |
+      sum by (component,db_config_name,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(gitlab_sql_primary_duration_seconds_bucket{cluster="gitlab-3okls",db_config_name=~"main",env="gprd",type=~"sidekiq"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: patroni - rails_primary_sql - 5m burn-rate - emitted by
     web - gprd-gitlab-gke'
@@ -720,6 +886,15 @@ groups:
         rate(gitlab_sql_primary_duration_seconds_bucket{cluster="gprd-us-east1-d",db_config_name=~"main",env="gprd",type=~"web"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: patroni - rails_primary_sql - 5m burn-rate - emitted by
+    web - gitlab-3okls'
+  interval: 1m
+  rules:
+  - record: sli_aggregations:gitlab_sql_primary_duration_seconds_bucket:rate_5m
+    expr: |
+      sum by (component,db_config_name,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(gitlab_sql_primary_duration_seconds_bucket{cluster="gitlab-3okls",db_config_name=~"main",env="gprd",type=~"web"}[5m] offset 30s)
+      )
+- name: 'SLI Aggregations: patroni - rails_primary_sql - 5m burn-rate - emitted by
     websockets - gprd-gitlab-gke'
   interval: 1m
   rules:
@@ -754,6 +929,15 @@ groups:
     expr: |
       sum by (component,db_config_name,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(gitlab_sql_primary_duration_seconds_bucket{cluster="gprd-us-east1-d",db_config_name=~"main",env="gprd",type=~"websockets"}[5m] offset 30s)
+      )
+- name: 'SLI Aggregations: patroni - rails_primary_sql - 5m burn-rate - emitted by
+    websockets - gitlab-3okls'
+  interval: 1m
+  rules:
+  - record: sli_aggregations:gitlab_sql_primary_duration_seconds_bucket:rate_5m
+    expr: |
+      sum by (component,db_config_name,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(gitlab_sql_primary_duration_seconds_bucket{cluster="gitlab-3okls",db_config_name=~"main",env="gprd",type=~"websockets"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: patroni - rails_replica_sql - 5m burn-rate - emitted by
     ai-assisted - gprd-gitlab-gke'
@@ -792,6 +976,15 @@ groups:
         rate(gitlab_sql_replica_duration_seconds_bucket{cluster="gprd-us-east1-d",db_config_name=~"main_replica",env="gprd",type=~"ai-assisted"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: patroni - rails_replica_sql - 5m burn-rate - emitted by
+    ai-assisted - gitlab-3okls'
+  interval: 1m
+  rules:
+  - record: sli_aggregations:gitlab_sql_replica_duration_seconds_bucket:rate_5m
+    expr: |
+      sum by (component,db_config_name,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(gitlab_sql_replica_duration_seconds_bucket{cluster="gitlab-3okls",db_config_name=~"main_replica",env="gprd",type=~"ai-assisted"}[5m] offset 30s)
+      )
+- name: 'SLI Aggregations: patroni - rails_replica_sql - 5m burn-rate - emitted by
     api - gprd-gitlab-gke'
   interval: 1m
   rules:
@@ -826,6 +1019,15 @@ groups:
     expr: |
       sum by (component,db_config_name,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(gitlab_sql_replica_duration_seconds_bucket{cluster="gprd-us-east1-d",db_config_name=~"main_replica",env="gprd",type=~"api"}[5m] offset 30s)
+      )
+- name: 'SLI Aggregations: patroni - rails_replica_sql - 5m burn-rate - emitted by
+    api - gitlab-3okls'
+  interval: 1m
+  rules:
+  - record: sli_aggregations:gitlab_sql_replica_duration_seconds_bucket:rate_5m
+    expr: |
+      sum by (component,db_config_name,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(gitlab_sql_replica_duration_seconds_bucket{cluster="gitlab-3okls",db_config_name=~"main_replica",env="gprd",type=~"api"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: patroni - rails_replica_sql - 5m burn-rate - emitted by
     git - gprd-gitlab-gke'
@@ -864,6 +1066,15 @@ groups:
         rate(gitlab_sql_replica_duration_seconds_bucket{cluster="gprd-us-east1-d",db_config_name=~"main_replica",env="gprd",type=~"git"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: patroni - rails_replica_sql - 5m burn-rate - emitted by
+    git - gitlab-3okls'
+  interval: 1m
+  rules:
+  - record: sli_aggregations:gitlab_sql_replica_duration_seconds_bucket:rate_5m
+    expr: |
+      sum by (component,db_config_name,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(gitlab_sql_replica_duration_seconds_bucket{cluster="gitlab-3okls",db_config_name=~"main_replica",env="gprd",type=~"git"}[5m] offset 30s)
+      )
+- name: 'SLI Aggregations: patroni - rails_replica_sql - 5m burn-rate - emitted by
     internal-api - gprd-gitlab-gke'
   interval: 1m
   rules:
@@ -898,6 +1109,15 @@ groups:
     expr: |
       sum by (component,db_config_name,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(gitlab_sql_replica_duration_seconds_bucket{cluster="gprd-us-east1-d",db_config_name=~"main_replica",env="gprd",type=~"internal-api"}[5m] offset 30s)
+      )
+- name: 'SLI Aggregations: patroni - rails_replica_sql - 5m burn-rate - emitted by
+    internal-api - gitlab-3okls'
+  interval: 1m
+  rules:
+  - record: sli_aggregations:gitlab_sql_replica_duration_seconds_bucket:rate_5m
+    expr: |
+      sum by (component,db_config_name,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(gitlab_sql_replica_duration_seconds_bucket{cluster="gitlab-3okls",db_config_name=~"main_replica",env="gprd",type=~"internal-api"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: patroni - rails_replica_sql - 5m burn-rate - emitted by
     ops-gitlab-net - gprd-gitlab-gke'
@@ -936,6 +1156,15 @@ groups:
         rate(gitlab_sql_replica_duration_seconds_bucket{cluster="gprd-us-east1-d",db_config_name=~"main_replica",env="gprd",type=~"ops-gitlab-net"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: patroni - rails_replica_sql - 5m burn-rate - emitted by
+    ops-gitlab-net - gitlab-3okls'
+  interval: 1m
+  rules:
+  - record: sli_aggregations:gitlab_sql_replica_duration_seconds_bucket:rate_5m
+    expr: |
+      sum by (component,db_config_name,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(gitlab_sql_replica_duration_seconds_bucket{cluster="gitlab-3okls",db_config_name=~"main_replica",env="gprd",type=~"ops-gitlab-net"}[5m] offset 30s)
+      )
+- name: 'SLI Aggregations: patroni - rails_replica_sql - 5m burn-rate - emitted by
     sidekiq - gprd-gitlab-gke'
   interval: 1m
   rules:
@@ -970,6 +1199,15 @@ groups:
     expr: |
       sum by (component,db_config_name,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(gitlab_sql_replica_duration_seconds_bucket{cluster="gprd-us-east1-d",db_config_name=~"main_replica",env="gprd",type=~"sidekiq"}[5m] offset 30s)
+      )
+- name: 'SLI Aggregations: patroni - rails_replica_sql - 5m burn-rate - emitted by
+    sidekiq - gitlab-3okls'
+  interval: 1m
+  rules:
+  - record: sli_aggregations:gitlab_sql_replica_duration_seconds_bucket:rate_5m
+    expr: |
+      sum by (component,db_config_name,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(gitlab_sql_replica_duration_seconds_bucket{cluster="gitlab-3okls",db_config_name=~"main_replica",env="gprd",type=~"sidekiq"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: patroni - rails_replica_sql - 5m burn-rate - emitted by
     web - gprd-gitlab-gke'
@@ -1008,6 +1246,15 @@ groups:
         rate(gitlab_sql_replica_duration_seconds_bucket{cluster="gprd-us-east1-d",db_config_name=~"main_replica",env="gprd",type=~"web"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: patroni - rails_replica_sql - 5m burn-rate - emitted by
+    web - gitlab-3okls'
+  interval: 1m
+  rules:
+  - record: sli_aggregations:gitlab_sql_replica_duration_seconds_bucket:rate_5m
+    expr: |
+      sum by (component,db_config_name,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(gitlab_sql_replica_duration_seconds_bucket{cluster="gitlab-3okls",db_config_name=~"main_replica",env="gprd",type=~"web"}[5m] offset 30s)
+      )
+- name: 'SLI Aggregations: patroni - rails_replica_sql - 5m burn-rate - emitted by
     websockets - gprd-gitlab-gke'
   interval: 1m
   rules:
@@ -1042,6 +1289,15 @@ groups:
     expr: |
       sum by (component,db_config_name,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(gitlab_sql_replica_duration_seconds_bucket{cluster="gprd-us-east1-d",db_config_name=~"main_replica",env="gprd",type=~"websockets"}[5m] offset 30s)
+      )
+- name: 'SLI Aggregations: patroni - rails_replica_sql - 5m burn-rate - emitted by
+    websockets - gitlab-3okls'
+  interval: 1m
+  rules:
+  - record: sli_aggregations:gitlab_sql_replica_duration_seconds_bucket:rate_5m
+    expr: |
+      sum by (component,db_config_name,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(gitlab_sql_replica_duration_seconds_bucket{cluster="gitlab-3okls",db_config_name=~"main_replica",env="gprd",type=~"websockets"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: patroni - transactions_primary - 5m burn-rate'
   interval: 1m
@@ -1113,6 +1369,20 @@ groups:
         rate(gitlab_sli_db_transaction_apdex_total{cluster="gprd-us-east1-d",db_config_name=~"main",env="gprd",type=~"ai-assisted"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: patroni - client_database_transaction - 30m burn-rate -
+    emitted by ai-assisted - gitlab-3okls'
+  interval: 2m
+  rules:
+  - record: sli_aggregations:gitlab_sli_db_transaction_apdex_success_total:rate_30m
+    expr: |
+      sum by (component,db_config_name,env,environment,external_dependencies,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sli_db_transaction_apdex_success_total{cluster="gitlab-3okls",db_config_name=~"main",env="gprd",type=~"ai-assisted"}[30m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_sli_db_transaction_apdex_total:rate_30m
+    expr: |
+      sum by (component,db_config_name,env,environment,external_dependencies,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sli_db_transaction_apdex_total{cluster="gitlab-3okls",db_config_name=~"main",env="gprd",type=~"ai-assisted"}[30m] offset 30s)
+      )
+- name: 'SLI Aggregations: patroni - client_database_transaction - 30m burn-rate -
     emitted by api - gprd-gitlab-gke'
   interval: 2m
   rules:
@@ -1167,6 +1437,20 @@ groups:
     expr: |
       sum by (component,db_config_name,env,environment,external_dependencies,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type,urgency,worker) (
         rate(gitlab_sli_db_transaction_apdex_total{cluster="gprd-us-east1-d",db_config_name=~"main",env="gprd",type=~"api"}[30m] offset 30s)
+      )
+- name: 'SLI Aggregations: patroni - client_database_transaction - 30m burn-rate -
+    emitted by api - gitlab-3okls'
+  interval: 2m
+  rules:
+  - record: sli_aggregations:gitlab_sli_db_transaction_apdex_success_total:rate_30m
+    expr: |
+      sum by (component,db_config_name,env,environment,external_dependencies,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sli_db_transaction_apdex_success_total{cluster="gitlab-3okls",db_config_name=~"main",env="gprd",type=~"api"}[30m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_sli_db_transaction_apdex_total:rate_30m
+    expr: |
+      sum by (component,db_config_name,env,environment,external_dependencies,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sli_db_transaction_apdex_total{cluster="gitlab-3okls",db_config_name=~"main",env="gprd",type=~"api"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: patroni - client_database_transaction - 30m burn-rate -
     emitted by git - gprd-gitlab-gke'
@@ -1225,6 +1509,20 @@ groups:
         rate(gitlab_sli_db_transaction_apdex_total{cluster="gprd-us-east1-d",db_config_name=~"main",env="gprd",type=~"git"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: patroni - client_database_transaction - 30m burn-rate -
+    emitted by git - gitlab-3okls'
+  interval: 2m
+  rules:
+  - record: sli_aggregations:gitlab_sli_db_transaction_apdex_success_total:rate_30m
+    expr: |
+      sum by (component,db_config_name,env,environment,external_dependencies,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sli_db_transaction_apdex_success_total{cluster="gitlab-3okls",db_config_name=~"main",env="gprd",type=~"git"}[30m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_sli_db_transaction_apdex_total:rate_30m
+    expr: |
+      sum by (component,db_config_name,env,environment,external_dependencies,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sli_db_transaction_apdex_total{cluster="gitlab-3okls",db_config_name=~"main",env="gprd",type=~"git"}[30m] offset 30s)
+      )
+- name: 'SLI Aggregations: patroni - client_database_transaction - 30m burn-rate -
     emitted by internal-api - gprd-gitlab-gke'
   interval: 2m
   rules:
@@ -1279,6 +1577,20 @@ groups:
     expr: |
       sum by (component,db_config_name,env,environment,external_dependencies,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type,urgency,worker) (
         rate(gitlab_sli_db_transaction_apdex_total{cluster="gprd-us-east1-d",db_config_name=~"main",env="gprd",type=~"internal-api"}[30m] offset 30s)
+      )
+- name: 'SLI Aggregations: patroni - client_database_transaction - 30m burn-rate -
+    emitted by internal-api - gitlab-3okls'
+  interval: 2m
+  rules:
+  - record: sli_aggregations:gitlab_sli_db_transaction_apdex_success_total:rate_30m
+    expr: |
+      sum by (component,db_config_name,env,environment,external_dependencies,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sli_db_transaction_apdex_success_total{cluster="gitlab-3okls",db_config_name=~"main",env="gprd",type=~"internal-api"}[30m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_sli_db_transaction_apdex_total:rate_30m
+    expr: |
+      sum by (component,db_config_name,env,environment,external_dependencies,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sli_db_transaction_apdex_total{cluster="gitlab-3okls",db_config_name=~"main",env="gprd",type=~"internal-api"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: patroni - client_database_transaction - 30m burn-rate -
     emitted by ops-gitlab-net - gprd-gitlab-gke'
@@ -1337,6 +1649,20 @@ groups:
         rate(gitlab_sli_db_transaction_apdex_total{cluster="gprd-us-east1-d",db_config_name=~"main",env="gprd",type=~"ops-gitlab-net"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: patroni - client_database_transaction - 30m burn-rate -
+    emitted by ops-gitlab-net - gitlab-3okls'
+  interval: 2m
+  rules:
+  - record: sli_aggregations:gitlab_sli_db_transaction_apdex_success_total:rate_30m
+    expr: |
+      sum by (component,db_config_name,env,environment,external_dependencies,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sli_db_transaction_apdex_success_total{cluster="gitlab-3okls",db_config_name=~"main",env="gprd",type=~"ops-gitlab-net"}[30m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_sli_db_transaction_apdex_total:rate_30m
+    expr: |
+      sum by (component,db_config_name,env,environment,external_dependencies,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sli_db_transaction_apdex_total{cluster="gitlab-3okls",db_config_name=~"main",env="gprd",type=~"ops-gitlab-net"}[30m] offset 30s)
+      )
+- name: 'SLI Aggregations: patroni - client_database_transaction - 30m burn-rate -
     emitted by sidekiq - gprd-gitlab-gke'
   interval: 2m
   rules:
@@ -1391,6 +1717,20 @@ groups:
     expr: |
       sum by (component,db_config_name,env,environment,external_dependencies,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type,urgency,worker) (
         rate(gitlab_sli_db_transaction_apdex_total{cluster="gprd-us-east1-d",db_config_name=~"main",env="gprd",type=~"sidekiq"}[30m] offset 30s)
+      )
+- name: 'SLI Aggregations: patroni - client_database_transaction - 30m burn-rate -
+    emitted by sidekiq - gitlab-3okls'
+  interval: 2m
+  rules:
+  - record: sli_aggregations:gitlab_sli_db_transaction_apdex_success_total:rate_30m
+    expr: |
+      sum by (component,db_config_name,env,environment,external_dependencies,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sli_db_transaction_apdex_success_total{cluster="gitlab-3okls",db_config_name=~"main",env="gprd",type=~"sidekiq"}[30m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_sli_db_transaction_apdex_total:rate_30m
+    expr: |
+      sum by (component,db_config_name,env,environment,external_dependencies,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sli_db_transaction_apdex_total{cluster="gitlab-3okls",db_config_name=~"main",env="gprd",type=~"sidekiq"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: patroni - client_database_transaction - 30m burn-rate -
     emitted by web - gprd-gitlab-gke'
@@ -1449,6 +1789,20 @@ groups:
         rate(gitlab_sli_db_transaction_apdex_total{cluster="gprd-us-east1-d",db_config_name=~"main",env="gprd",type=~"web"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: patroni - client_database_transaction - 30m burn-rate -
+    emitted by web - gitlab-3okls'
+  interval: 2m
+  rules:
+  - record: sli_aggregations:gitlab_sli_db_transaction_apdex_success_total:rate_30m
+    expr: |
+      sum by (component,db_config_name,env,environment,external_dependencies,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sli_db_transaction_apdex_success_total{cluster="gitlab-3okls",db_config_name=~"main",env="gprd",type=~"web"}[30m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_sli_db_transaction_apdex_total:rate_30m
+    expr: |
+      sum by (component,db_config_name,env,environment,external_dependencies,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sli_db_transaction_apdex_total{cluster="gitlab-3okls",db_config_name=~"main",env="gprd",type=~"web"}[30m] offset 30s)
+      )
+- name: 'SLI Aggregations: patroni - client_database_transaction - 30m burn-rate -
     emitted by websockets - gprd-gitlab-gke'
   interval: 2m
   rules:
@@ -1503,6 +1857,20 @@ groups:
     expr: |
       sum by (component,db_config_name,env,environment,external_dependencies,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type,urgency,worker) (
         rate(gitlab_sli_db_transaction_apdex_total{cluster="gprd-us-east1-d",db_config_name=~"main",env="gprd",type=~"websockets"}[30m] offset 30s)
+      )
+- name: 'SLI Aggregations: patroni - client_database_transaction - 30m burn-rate -
+    emitted by websockets - gitlab-3okls'
+  interval: 2m
+  rules:
+  - record: sli_aggregations:gitlab_sli_db_transaction_apdex_success_total:rate_30m
+    expr: |
+      sum by (component,db_config_name,env,environment,external_dependencies,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sli_db_transaction_apdex_success_total{cluster="gitlab-3okls",db_config_name=~"main",env="gprd",type=~"websockets"}[30m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_sli_db_transaction_apdex_total:rate_30m
+    expr: |
+      sum by (component,db_config_name,env,environment,external_dependencies,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sli_db_transaction_apdex_total{cluster="gitlab-3okls",db_config_name=~"main",env="gprd",type=~"websockets"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: patroni - pgbouncer - 30m burn-rate'
   interval: 2m
@@ -1559,6 +1927,15 @@ groups:
         rate(gitlab_sql_primary_duration_seconds_bucket{cluster="gprd-us-east1-d",db_config_name=~"main",env="gprd",type=~"ai-assisted"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: patroni - rails_primary_sql - 30m burn-rate - emitted by
+    ai-assisted - gitlab-3okls'
+  interval: 2m
+  rules:
+  - record: sli_aggregations:gitlab_sql_primary_duration_seconds_bucket:rate_30m
+    expr: |
+      sum by (component,db_config_name,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(gitlab_sql_primary_duration_seconds_bucket{cluster="gitlab-3okls",db_config_name=~"main",env="gprd",type=~"ai-assisted"}[30m] offset 30s)
+      )
+- name: 'SLI Aggregations: patroni - rails_primary_sql - 30m burn-rate - emitted by
     api - gprd-gitlab-gke'
   interval: 2m
   rules:
@@ -1593,6 +1970,15 @@ groups:
     expr: |
       sum by (component,db_config_name,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(gitlab_sql_primary_duration_seconds_bucket{cluster="gprd-us-east1-d",db_config_name=~"main",env="gprd",type=~"api"}[30m] offset 30s)
+      )
+- name: 'SLI Aggregations: patroni - rails_primary_sql - 30m burn-rate - emitted by
+    api - gitlab-3okls'
+  interval: 2m
+  rules:
+  - record: sli_aggregations:gitlab_sql_primary_duration_seconds_bucket:rate_30m
+    expr: |
+      sum by (component,db_config_name,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(gitlab_sql_primary_duration_seconds_bucket{cluster="gitlab-3okls",db_config_name=~"main",env="gprd",type=~"api"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: patroni - rails_primary_sql - 30m burn-rate - emitted by
     git - gprd-gitlab-gke'
@@ -1631,6 +2017,15 @@ groups:
         rate(gitlab_sql_primary_duration_seconds_bucket{cluster="gprd-us-east1-d",db_config_name=~"main",env="gprd",type=~"git"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: patroni - rails_primary_sql - 30m burn-rate - emitted by
+    git - gitlab-3okls'
+  interval: 2m
+  rules:
+  - record: sli_aggregations:gitlab_sql_primary_duration_seconds_bucket:rate_30m
+    expr: |
+      sum by (component,db_config_name,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(gitlab_sql_primary_duration_seconds_bucket{cluster="gitlab-3okls",db_config_name=~"main",env="gprd",type=~"git"}[30m] offset 30s)
+      )
+- name: 'SLI Aggregations: patroni - rails_primary_sql - 30m burn-rate - emitted by
     internal-api - gprd-gitlab-gke'
   interval: 2m
   rules:
@@ -1665,6 +2060,15 @@ groups:
     expr: |
       sum by (component,db_config_name,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(gitlab_sql_primary_duration_seconds_bucket{cluster="gprd-us-east1-d",db_config_name=~"main",env="gprd",type=~"internal-api"}[30m] offset 30s)
+      )
+- name: 'SLI Aggregations: patroni - rails_primary_sql - 30m burn-rate - emitted by
+    internal-api - gitlab-3okls'
+  interval: 2m
+  rules:
+  - record: sli_aggregations:gitlab_sql_primary_duration_seconds_bucket:rate_30m
+    expr: |
+      sum by (component,db_config_name,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(gitlab_sql_primary_duration_seconds_bucket{cluster="gitlab-3okls",db_config_name=~"main",env="gprd",type=~"internal-api"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: patroni - rails_primary_sql - 30m burn-rate - emitted by
     ops-gitlab-net - gprd-gitlab-gke'
@@ -1703,6 +2107,15 @@ groups:
         rate(gitlab_sql_primary_duration_seconds_bucket{cluster="gprd-us-east1-d",db_config_name=~"main",env="gprd",type=~"ops-gitlab-net"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: patroni - rails_primary_sql - 30m burn-rate - emitted by
+    ops-gitlab-net - gitlab-3okls'
+  interval: 2m
+  rules:
+  - record: sli_aggregations:gitlab_sql_primary_duration_seconds_bucket:rate_30m
+    expr: |
+      sum by (component,db_config_name,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(gitlab_sql_primary_duration_seconds_bucket{cluster="gitlab-3okls",db_config_name=~"main",env="gprd",type=~"ops-gitlab-net"}[30m] offset 30s)
+      )
+- name: 'SLI Aggregations: patroni - rails_primary_sql - 30m burn-rate - emitted by
     sidekiq - gprd-gitlab-gke'
   interval: 2m
   rules:
@@ -1737,6 +2150,15 @@ groups:
     expr: |
       sum by (component,db_config_name,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(gitlab_sql_primary_duration_seconds_bucket{cluster="gprd-us-east1-d",db_config_name=~"main",env="gprd",type=~"sidekiq"}[30m] offset 30s)
+      )
+- name: 'SLI Aggregations: patroni - rails_primary_sql - 30m burn-rate - emitted by
+    sidekiq - gitlab-3okls'
+  interval: 2m
+  rules:
+  - record: sli_aggregations:gitlab_sql_primary_duration_seconds_bucket:rate_30m
+    expr: |
+      sum by (component,db_config_name,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(gitlab_sql_primary_duration_seconds_bucket{cluster="gitlab-3okls",db_config_name=~"main",env="gprd",type=~"sidekiq"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: patroni - rails_primary_sql - 30m burn-rate - emitted by
     web - gprd-gitlab-gke'
@@ -1775,6 +2197,15 @@ groups:
         rate(gitlab_sql_primary_duration_seconds_bucket{cluster="gprd-us-east1-d",db_config_name=~"main",env="gprd",type=~"web"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: patroni - rails_primary_sql - 30m burn-rate - emitted by
+    web - gitlab-3okls'
+  interval: 2m
+  rules:
+  - record: sli_aggregations:gitlab_sql_primary_duration_seconds_bucket:rate_30m
+    expr: |
+      sum by (component,db_config_name,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(gitlab_sql_primary_duration_seconds_bucket{cluster="gitlab-3okls",db_config_name=~"main",env="gprd",type=~"web"}[30m] offset 30s)
+      )
+- name: 'SLI Aggregations: patroni - rails_primary_sql - 30m burn-rate - emitted by
     websockets - gprd-gitlab-gke'
   interval: 2m
   rules:
@@ -1809,6 +2240,15 @@ groups:
     expr: |
       sum by (component,db_config_name,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(gitlab_sql_primary_duration_seconds_bucket{cluster="gprd-us-east1-d",db_config_name=~"main",env="gprd",type=~"websockets"}[30m] offset 30s)
+      )
+- name: 'SLI Aggregations: patroni - rails_primary_sql - 30m burn-rate - emitted by
+    websockets - gitlab-3okls'
+  interval: 2m
+  rules:
+  - record: sli_aggregations:gitlab_sql_primary_duration_seconds_bucket:rate_30m
+    expr: |
+      sum by (component,db_config_name,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(gitlab_sql_primary_duration_seconds_bucket{cluster="gitlab-3okls",db_config_name=~"main",env="gprd",type=~"websockets"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: patroni - rails_replica_sql - 30m burn-rate - emitted by
     ai-assisted - gprd-gitlab-gke'
@@ -1847,6 +2287,15 @@ groups:
         rate(gitlab_sql_replica_duration_seconds_bucket{cluster="gprd-us-east1-d",db_config_name=~"main_replica",env="gprd",type=~"ai-assisted"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: patroni - rails_replica_sql - 30m burn-rate - emitted by
+    ai-assisted - gitlab-3okls'
+  interval: 2m
+  rules:
+  - record: sli_aggregations:gitlab_sql_replica_duration_seconds_bucket:rate_30m
+    expr: |
+      sum by (component,db_config_name,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(gitlab_sql_replica_duration_seconds_bucket{cluster="gitlab-3okls",db_config_name=~"main_replica",env="gprd",type=~"ai-assisted"}[30m] offset 30s)
+      )
+- name: 'SLI Aggregations: patroni - rails_replica_sql - 30m burn-rate - emitted by
     api - gprd-gitlab-gke'
   interval: 2m
   rules:
@@ -1881,6 +2330,15 @@ groups:
     expr: |
       sum by (component,db_config_name,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(gitlab_sql_replica_duration_seconds_bucket{cluster="gprd-us-east1-d",db_config_name=~"main_replica",env="gprd",type=~"api"}[30m] offset 30s)
+      )
+- name: 'SLI Aggregations: patroni - rails_replica_sql - 30m burn-rate - emitted by
+    api - gitlab-3okls'
+  interval: 2m
+  rules:
+  - record: sli_aggregations:gitlab_sql_replica_duration_seconds_bucket:rate_30m
+    expr: |
+      sum by (component,db_config_name,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(gitlab_sql_replica_duration_seconds_bucket{cluster="gitlab-3okls",db_config_name=~"main_replica",env="gprd",type=~"api"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: patroni - rails_replica_sql - 30m burn-rate - emitted by
     git - gprd-gitlab-gke'
@@ -1919,6 +2377,15 @@ groups:
         rate(gitlab_sql_replica_duration_seconds_bucket{cluster="gprd-us-east1-d",db_config_name=~"main_replica",env="gprd",type=~"git"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: patroni - rails_replica_sql - 30m burn-rate - emitted by
+    git - gitlab-3okls'
+  interval: 2m
+  rules:
+  - record: sli_aggregations:gitlab_sql_replica_duration_seconds_bucket:rate_30m
+    expr: |
+      sum by (component,db_config_name,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(gitlab_sql_replica_duration_seconds_bucket{cluster="gitlab-3okls",db_config_name=~"main_replica",env="gprd",type=~"git"}[30m] offset 30s)
+      )
+- name: 'SLI Aggregations: patroni - rails_replica_sql - 30m burn-rate - emitted by
     internal-api - gprd-gitlab-gke'
   interval: 2m
   rules:
@@ -1953,6 +2420,15 @@ groups:
     expr: |
       sum by (component,db_config_name,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(gitlab_sql_replica_duration_seconds_bucket{cluster="gprd-us-east1-d",db_config_name=~"main_replica",env="gprd",type=~"internal-api"}[30m] offset 30s)
+      )
+- name: 'SLI Aggregations: patroni - rails_replica_sql - 30m burn-rate - emitted by
+    internal-api - gitlab-3okls'
+  interval: 2m
+  rules:
+  - record: sli_aggregations:gitlab_sql_replica_duration_seconds_bucket:rate_30m
+    expr: |
+      sum by (component,db_config_name,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(gitlab_sql_replica_duration_seconds_bucket{cluster="gitlab-3okls",db_config_name=~"main_replica",env="gprd",type=~"internal-api"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: patroni - rails_replica_sql - 30m burn-rate - emitted by
     ops-gitlab-net - gprd-gitlab-gke'
@@ -1991,6 +2467,15 @@ groups:
         rate(gitlab_sql_replica_duration_seconds_bucket{cluster="gprd-us-east1-d",db_config_name=~"main_replica",env="gprd",type=~"ops-gitlab-net"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: patroni - rails_replica_sql - 30m burn-rate - emitted by
+    ops-gitlab-net - gitlab-3okls'
+  interval: 2m
+  rules:
+  - record: sli_aggregations:gitlab_sql_replica_duration_seconds_bucket:rate_30m
+    expr: |
+      sum by (component,db_config_name,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(gitlab_sql_replica_duration_seconds_bucket{cluster="gitlab-3okls",db_config_name=~"main_replica",env="gprd",type=~"ops-gitlab-net"}[30m] offset 30s)
+      )
+- name: 'SLI Aggregations: patroni - rails_replica_sql - 30m burn-rate - emitted by
     sidekiq - gprd-gitlab-gke'
   interval: 2m
   rules:
@@ -2025,6 +2510,15 @@ groups:
     expr: |
       sum by (component,db_config_name,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(gitlab_sql_replica_duration_seconds_bucket{cluster="gprd-us-east1-d",db_config_name=~"main_replica",env="gprd",type=~"sidekiq"}[30m] offset 30s)
+      )
+- name: 'SLI Aggregations: patroni - rails_replica_sql - 30m burn-rate - emitted by
+    sidekiq - gitlab-3okls'
+  interval: 2m
+  rules:
+  - record: sli_aggregations:gitlab_sql_replica_duration_seconds_bucket:rate_30m
+    expr: |
+      sum by (component,db_config_name,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(gitlab_sql_replica_duration_seconds_bucket{cluster="gitlab-3okls",db_config_name=~"main_replica",env="gprd",type=~"sidekiq"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: patroni - rails_replica_sql - 30m burn-rate - emitted by
     web - gprd-gitlab-gke'
@@ -2063,6 +2557,15 @@ groups:
         rate(gitlab_sql_replica_duration_seconds_bucket{cluster="gprd-us-east1-d",db_config_name=~"main_replica",env="gprd",type=~"web"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: patroni - rails_replica_sql - 30m burn-rate - emitted by
+    web - gitlab-3okls'
+  interval: 2m
+  rules:
+  - record: sli_aggregations:gitlab_sql_replica_duration_seconds_bucket:rate_30m
+    expr: |
+      sum by (component,db_config_name,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(gitlab_sql_replica_duration_seconds_bucket{cluster="gitlab-3okls",db_config_name=~"main_replica",env="gprd",type=~"web"}[30m] offset 30s)
+      )
+- name: 'SLI Aggregations: patroni - rails_replica_sql - 30m burn-rate - emitted by
     websockets - gprd-gitlab-gke'
   interval: 2m
   rules:
@@ -2097,6 +2600,15 @@ groups:
     expr: |
       sum by (component,db_config_name,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(gitlab_sql_replica_duration_seconds_bucket{cluster="gprd-us-east1-d",db_config_name=~"main_replica",env="gprd",type=~"websockets"}[30m] offset 30s)
+      )
+- name: 'SLI Aggregations: patroni - rails_replica_sql - 30m burn-rate - emitted by
+    websockets - gitlab-3okls'
+  interval: 2m
+  rules:
+  - record: sli_aggregations:gitlab_sql_replica_duration_seconds_bucket:rate_30m
+    expr: |
+      sum by (component,db_config_name,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(gitlab_sql_replica_duration_seconds_bucket{cluster="gitlab-3okls",db_config_name=~"main_replica",env="gprd",type=~"websockets"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: patroni - transactions_primary - 30m burn-rate'
   interval: 2m
@@ -2168,6 +2680,20 @@ groups:
         rate(gitlab_sli_db_transaction_apdex_total{cluster="gprd-us-east1-d",db_config_name=~"main",env="gprd",type=~"ai-assisted"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: patroni - client_database_transaction - 1h burn-rate -
+    emitted by ai-assisted - gitlab-3okls'
+  interval: 1m
+  rules:
+  - record: sli_aggregations:gitlab_sli_db_transaction_apdex_success_total:rate_1h
+    expr: |
+      sum by (component,db_config_name,env,environment,external_dependencies,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sli_db_transaction_apdex_success_total{cluster="gitlab-3okls",db_config_name=~"main",env="gprd",type=~"ai-assisted"}[1h] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_sli_db_transaction_apdex_total:rate_1h
+    expr: |
+      sum by (component,db_config_name,env,environment,external_dependencies,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sli_db_transaction_apdex_total{cluster="gitlab-3okls",db_config_name=~"main",env="gprd",type=~"ai-assisted"}[1h] offset 30s)
+      )
+- name: 'SLI Aggregations: patroni - client_database_transaction - 1h burn-rate -
     emitted by api - gprd-gitlab-gke'
   interval: 1m
   rules:
@@ -2222,6 +2748,20 @@ groups:
     expr: |
       sum by (component,db_config_name,env,environment,external_dependencies,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type,urgency,worker) (
         rate(gitlab_sli_db_transaction_apdex_total{cluster="gprd-us-east1-d",db_config_name=~"main",env="gprd",type=~"api"}[1h] offset 30s)
+      )
+- name: 'SLI Aggregations: patroni - client_database_transaction - 1h burn-rate -
+    emitted by api - gitlab-3okls'
+  interval: 1m
+  rules:
+  - record: sli_aggregations:gitlab_sli_db_transaction_apdex_success_total:rate_1h
+    expr: |
+      sum by (component,db_config_name,env,environment,external_dependencies,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sli_db_transaction_apdex_success_total{cluster="gitlab-3okls",db_config_name=~"main",env="gprd",type=~"api"}[1h] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_sli_db_transaction_apdex_total:rate_1h
+    expr: |
+      sum by (component,db_config_name,env,environment,external_dependencies,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sli_db_transaction_apdex_total{cluster="gitlab-3okls",db_config_name=~"main",env="gprd",type=~"api"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: patroni - client_database_transaction - 1h burn-rate -
     emitted by git - gprd-gitlab-gke'
@@ -2280,6 +2820,20 @@ groups:
         rate(gitlab_sli_db_transaction_apdex_total{cluster="gprd-us-east1-d",db_config_name=~"main",env="gprd",type=~"git"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: patroni - client_database_transaction - 1h burn-rate -
+    emitted by git - gitlab-3okls'
+  interval: 1m
+  rules:
+  - record: sli_aggregations:gitlab_sli_db_transaction_apdex_success_total:rate_1h
+    expr: |
+      sum by (component,db_config_name,env,environment,external_dependencies,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sli_db_transaction_apdex_success_total{cluster="gitlab-3okls",db_config_name=~"main",env="gprd",type=~"git"}[1h] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_sli_db_transaction_apdex_total:rate_1h
+    expr: |
+      sum by (component,db_config_name,env,environment,external_dependencies,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sli_db_transaction_apdex_total{cluster="gitlab-3okls",db_config_name=~"main",env="gprd",type=~"git"}[1h] offset 30s)
+      )
+- name: 'SLI Aggregations: patroni - client_database_transaction - 1h burn-rate -
     emitted by internal-api - gprd-gitlab-gke'
   interval: 1m
   rules:
@@ -2334,6 +2888,20 @@ groups:
     expr: |
       sum by (component,db_config_name,env,environment,external_dependencies,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type,urgency,worker) (
         rate(gitlab_sli_db_transaction_apdex_total{cluster="gprd-us-east1-d",db_config_name=~"main",env="gprd",type=~"internal-api"}[1h] offset 30s)
+      )
+- name: 'SLI Aggregations: patroni - client_database_transaction - 1h burn-rate -
+    emitted by internal-api - gitlab-3okls'
+  interval: 1m
+  rules:
+  - record: sli_aggregations:gitlab_sli_db_transaction_apdex_success_total:rate_1h
+    expr: |
+      sum by (component,db_config_name,env,environment,external_dependencies,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sli_db_transaction_apdex_success_total{cluster="gitlab-3okls",db_config_name=~"main",env="gprd",type=~"internal-api"}[1h] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_sli_db_transaction_apdex_total:rate_1h
+    expr: |
+      sum by (component,db_config_name,env,environment,external_dependencies,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sli_db_transaction_apdex_total{cluster="gitlab-3okls",db_config_name=~"main",env="gprd",type=~"internal-api"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: patroni - client_database_transaction - 1h burn-rate -
     emitted by ops-gitlab-net - gprd-gitlab-gke'
@@ -2392,6 +2960,20 @@ groups:
         rate(gitlab_sli_db_transaction_apdex_total{cluster="gprd-us-east1-d",db_config_name=~"main",env="gprd",type=~"ops-gitlab-net"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: patroni - client_database_transaction - 1h burn-rate -
+    emitted by ops-gitlab-net - gitlab-3okls'
+  interval: 1m
+  rules:
+  - record: sli_aggregations:gitlab_sli_db_transaction_apdex_success_total:rate_1h
+    expr: |
+      sum by (component,db_config_name,env,environment,external_dependencies,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sli_db_transaction_apdex_success_total{cluster="gitlab-3okls",db_config_name=~"main",env="gprd",type=~"ops-gitlab-net"}[1h] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_sli_db_transaction_apdex_total:rate_1h
+    expr: |
+      sum by (component,db_config_name,env,environment,external_dependencies,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sli_db_transaction_apdex_total{cluster="gitlab-3okls",db_config_name=~"main",env="gprd",type=~"ops-gitlab-net"}[1h] offset 30s)
+      )
+- name: 'SLI Aggregations: patroni - client_database_transaction - 1h burn-rate -
     emitted by sidekiq - gprd-gitlab-gke'
   interval: 1m
   rules:
@@ -2446,6 +3028,20 @@ groups:
     expr: |
       sum by (component,db_config_name,env,environment,external_dependencies,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type,urgency,worker) (
         rate(gitlab_sli_db_transaction_apdex_total{cluster="gprd-us-east1-d",db_config_name=~"main",env="gprd",type=~"sidekiq"}[1h] offset 30s)
+      )
+- name: 'SLI Aggregations: patroni - client_database_transaction - 1h burn-rate -
+    emitted by sidekiq - gitlab-3okls'
+  interval: 1m
+  rules:
+  - record: sli_aggregations:gitlab_sli_db_transaction_apdex_success_total:rate_1h
+    expr: |
+      sum by (component,db_config_name,env,environment,external_dependencies,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sli_db_transaction_apdex_success_total{cluster="gitlab-3okls",db_config_name=~"main",env="gprd",type=~"sidekiq"}[1h] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_sli_db_transaction_apdex_total:rate_1h
+    expr: |
+      sum by (component,db_config_name,env,environment,external_dependencies,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sli_db_transaction_apdex_total{cluster="gitlab-3okls",db_config_name=~"main",env="gprd",type=~"sidekiq"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: patroni - client_database_transaction - 1h burn-rate -
     emitted by web - gprd-gitlab-gke'
@@ -2504,6 +3100,20 @@ groups:
         rate(gitlab_sli_db_transaction_apdex_total{cluster="gprd-us-east1-d",db_config_name=~"main",env="gprd",type=~"web"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: patroni - client_database_transaction - 1h burn-rate -
+    emitted by web - gitlab-3okls'
+  interval: 1m
+  rules:
+  - record: sli_aggregations:gitlab_sli_db_transaction_apdex_success_total:rate_1h
+    expr: |
+      sum by (component,db_config_name,env,environment,external_dependencies,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sli_db_transaction_apdex_success_total{cluster="gitlab-3okls",db_config_name=~"main",env="gprd",type=~"web"}[1h] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_sli_db_transaction_apdex_total:rate_1h
+    expr: |
+      sum by (component,db_config_name,env,environment,external_dependencies,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sli_db_transaction_apdex_total{cluster="gitlab-3okls",db_config_name=~"main",env="gprd",type=~"web"}[1h] offset 30s)
+      )
+- name: 'SLI Aggregations: patroni - client_database_transaction - 1h burn-rate -
     emitted by websockets - gprd-gitlab-gke'
   interval: 1m
   rules:
@@ -2558,6 +3168,20 @@ groups:
     expr: |
       sum by (component,db_config_name,env,environment,external_dependencies,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type,urgency,worker) (
         rate(gitlab_sli_db_transaction_apdex_total{cluster="gprd-us-east1-d",db_config_name=~"main",env="gprd",type=~"websockets"}[1h] offset 30s)
+      )
+- name: 'SLI Aggregations: patroni - client_database_transaction - 1h burn-rate -
+    emitted by websockets - gitlab-3okls'
+  interval: 1m
+  rules:
+  - record: sli_aggregations:gitlab_sli_db_transaction_apdex_success_total:rate_1h
+    expr: |
+      sum by (component,db_config_name,env,environment,external_dependencies,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sli_db_transaction_apdex_success_total{cluster="gitlab-3okls",db_config_name=~"main",env="gprd",type=~"websockets"}[1h] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_sli_db_transaction_apdex_total:rate_1h
+    expr: |
+      sum by (component,db_config_name,env,environment,external_dependencies,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type,urgency,worker) (
+        rate(gitlab_sli_db_transaction_apdex_total{cluster="gitlab-3okls",db_config_name=~"main",env="gprd",type=~"websockets"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: patroni - pgbouncer - 1h burn-rate'
   interval: 1m
@@ -2614,6 +3238,15 @@ groups:
         rate(gitlab_sql_primary_duration_seconds_bucket{cluster="gprd-us-east1-d",db_config_name=~"main",env="gprd",type=~"ai-assisted"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: patroni - rails_primary_sql - 1h burn-rate - emitted by
+    ai-assisted - gitlab-3okls'
+  interval: 1m
+  rules:
+  - record: sli_aggregations:gitlab_sql_primary_duration_seconds_bucket:rate_1h
+    expr: |
+      sum by (component,db_config_name,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(gitlab_sql_primary_duration_seconds_bucket{cluster="gitlab-3okls",db_config_name=~"main",env="gprd",type=~"ai-assisted"}[1h] offset 30s)
+      )
+- name: 'SLI Aggregations: patroni - rails_primary_sql - 1h burn-rate - emitted by
     api - gprd-gitlab-gke'
   interval: 1m
   rules:
@@ -2648,6 +3281,15 @@ groups:
     expr: |
       sum by (component,db_config_name,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(gitlab_sql_primary_duration_seconds_bucket{cluster="gprd-us-east1-d",db_config_name=~"main",env="gprd",type=~"api"}[1h] offset 30s)
+      )
+- name: 'SLI Aggregations: patroni - rails_primary_sql - 1h burn-rate - emitted by
+    api - gitlab-3okls'
+  interval: 1m
+  rules:
+  - record: sli_aggregations:gitlab_sql_primary_duration_seconds_bucket:rate_1h
+    expr: |
+      sum by (component,db_config_name,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(gitlab_sql_primary_duration_seconds_bucket{cluster="gitlab-3okls",db_config_name=~"main",env="gprd",type=~"api"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: patroni - rails_primary_sql - 1h burn-rate - emitted by
     git - gprd-gitlab-gke'
@@ -2686,6 +3328,15 @@ groups:
         rate(gitlab_sql_primary_duration_seconds_bucket{cluster="gprd-us-east1-d",db_config_name=~"main",env="gprd",type=~"git"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: patroni - rails_primary_sql - 1h burn-rate - emitted by
+    git - gitlab-3okls'
+  interval: 1m
+  rules:
+  - record: sli_aggregations:gitlab_sql_primary_duration_seconds_bucket:rate_1h
+    expr: |
+      sum by (component,db_config_name,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(gitlab_sql_primary_duration_seconds_bucket{cluster="gitlab-3okls",db_config_name=~"main",env="gprd",type=~"git"}[1h] offset 30s)
+      )
+- name: 'SLI Aggregations: patroni - rails_primary_sql - 1h burn-rate - emitted by
     internal-api - gprd-gitlab-gke'
   interval: 1m
   rules:
@@ -2720,6 +3371,15 @@ groups:
     expr: |
       sum by (component,db_config_name,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(gitlab_sql_primary_duration_seconds_bucket{cluster="gprd-us-east1-d",db_config_name=~"main",env="gprd",type=~"internal-api"}[1h] offset 30s)
+      )
+- name: 'SLI Aggregations: patroni - rails_primary_sql - 1h burn-rate - emitted by
+    internal-api - gitlab-3okls'
+  interval: 1m
+  rules:
+  - record: sli_aggregations:gitlab_sql_primary_duration_seconds_bucket:rate_1h
+    expr: |
+      sum by (component,db_config_name,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(gitlab_sql_primary_duration_seconds_bucket{cluster="gitlab-3okls",db_config_name=~"main",env="gprd",type=~"internal-api"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: patroni - rails_primary_sql - 1h burn-rate - emitted by
     ops-gitlab-net - gprd-gitlab-gke'
@@ -2758,6 +3418,15 @@ groups:
         rate(gitlab_sql_primary_duration_seconds_bucket{cluster="gprd-us-east1-d",db_config_name=~"main",env="gprd",type=~"ops-gitlab-net"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: patroni - rails_primary_sql - 1h burn-rate - emitted by
+    ops-gitlab-net - gitlab-3okls'
+  interval: 1m
+  rules:
+  - record: sli_aggregations:gitlab_sql_primary_duration_seconds_bucket:rate_1h
+    expr: |
+      sum by (component,db_config_name,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(gitlab_sql_primary_duration_seconds_bucket{cluster="gitlab-3okls",db_config_name=~"main",env="gprd",type=~"ops-gitlab-net"}[1h] offset 30s)
+      )
+- name: 'SLI Aggregations: patroni - rails_primary_sql - 1h burn-rate - emitted by
     sidekiq - gprd-gitlab-gke'
   interval: 1m
   rules:
@@ -2792,6 +3461,15 @@ groups:
     expr: |
       sum by (component,db_config_name,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(gitlab_sql_primary_duration_seconds_bucket{cluster="gprd-us-east1-d",db_config_name=~"main",env="gprd",type=~"sidekiq"}[1h] offset 30s)
+      )
+- name: 'SLI Aggregations: patroni - rails_primary_sql - 1h burn-rate - emitted by
+    sidekiq - gitlab-3okls'
+  interval: 1m
+  rules:
+  - record: sli_aggregations:gitlab_sql_primary_duration_seconds_bucket:rate_1h
+    expr: |
+      sum by (component,db_config_name,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(gitlab_sql_primary_duration_seconds_bucket{cluster="gitlab-3okls",db_config_name=~"main",env="gprd",type=~"sidekiq"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: patroni - rails_primary_sql - 1h burn-rate - emitted by
     web - gprd-gitlab-gke'
@@ -2830,6 +3508,15 @@ groups:
         rate(gitlab_sql_primary_duration_seconds_bucket{cluster="gprd-us-east1-d",db_config_name=~"main",env="gprd",type=~"web"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: patroni - rails_primary_sql - 1h burn-rate - emitted by
+    web - gitlab-3okls'
+  interval: 1m
+  rules:
+  - record: sli_aggregations:gitlab_sql_primary_duration_seconds_bucket:rate_1h
+    expr: |
+      sum by (component,db_config_name,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(gitlab_sql_primary_duration_seconds_bucket{cluster="gitlab-3okls",db_config_name=~"main",env="gprd",type=~"web"}[1h] offset 30s)
+      )
+- name: 'SLI Aggregations: patroni - rails_primary_sql - 1h burn-rate - emitted by
     websockets - gprd-gitlab-gke'
   interval: 1m
   rules:
@@ -2864,6 +3551,15 @@ groups:
     expr: |
       sum by (component,db_config_name,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(gitlab_sql_primary_duration_seconds_bucket{cluster="gprd-us-east1-d",db_config_name=~"main",env="gprd",type=~"websockets"}[1h] offset 30s)
+      )
+- name: 'SLI Aggregations: patroni - rails_primary_sql - 1h burn-rate - emitted by
+    websockets - gitlab-3okls'
+  interval: 1m
+  rules:
+  - record: sli_aggregations:gitlab_sql_primary_duration_seconds_bucket:rate_1h
+    expr: |
+      sum by (component,db_config_name,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(gitlab_sql_primary_duration_seconds_bucket{cluster="gitlab-3okls",db_config_name=~"main",env="gprd",type=~"websockets"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: patroni - rails_replica_sql - 1h burn-rate - emitted by
     ai-assisted - gprd-gitlab-gke'
@@ -2902,6 +3598,15 @@ groups:
         rate(gitlab_sql_replica_duration_seconds_bucket{cluster="gprd-us-east1-d",db_config_name=~"main_replica",env="gprd",type=~"ai-assisted"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: patroni - rails_replica_sql - 1h burn-rate - emitted by
+    ai-assisted - gitlab-3okls'
+  interval: 1m
+  rules:
+  - record: sli_aggregations:gitlab_sql_replica_duration_seconds_bucket:rate_1h
+    expr: |
+      sum by (component,db_config_name,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(gitlab_sql_replica_duration_seconds_bucket{cluster="gitlab-3okls",db_config_name=~"main_replica",env="gprd",type=~"ai-assisted"}[1h] offset 30s)
+      )
+- name: 'SLI Aggregations: patroni - rails_replica_sql - 1h burn-rate - emitted by
     api - gprd-gitlab-gke'
   interval: 1m
   rules:
@@ -2936,6 +3641,15 @@ groups:
     expr: |
       sum by (component,db_config_name,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(gitlab_sql_replica_duration_seconds_bucket{cluster="gprd-us-east1-d",db_config_name=~"main_replica",env="gprd",type=~"api"}[1h] offset 30s)
+      )
+- name: 'SLI Aggregations: patroni - rails_replica_sql - 1h burn-rate - emitted by
+    api - gitlab-3okls'
+  interval: 1m
+  rules:
+  - record: sli_aggregations:gitlab_sql_replica_duration_seconds_bucket:rate_1h
+    expr: |
+      sum by (component,db_config_name,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(gitlab_sql_replica_duration_seconds_bucket{cluster="gitlab-3okls",db_config_name=~"main_replica",env="gprd",type=~"api"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: patroni - rails_replica_sql - 1h burn-rate - emitted by
     git - gprd-gitlab-gke'
@@ -2974,6 +3688,15 @@ groups:
         rate(gitlab_sql_replica_duration_seconds_bucket{cluster="gprd-us-east1-d",db_config_name=~"main_replica",env="gprd",type=~"git"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: patroni - rails_replica_sql - 1h burn-rate - emitted by
+    git - gitlab-3okls'
+  interval: 1m
+  rules:
+  - record: sli_aggregations:gitlab_sql_replica_duration_seconds_bucket:rate_1h
+    expr: |
+      sum by (component,db_config_name,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(gitlab_sql_replica_duration_seconds_bucket{cluster="gitlab-3okls",db_config_name=~"main_replica",env="gprd",type=~"git"}[1h] offset 30s)
+      )
+- name: 'SLI Aggregations: patroni - rails_replica_sql - 1h burn-rate - emitted by
     internal-api - gprd-gitlab-gke'
   interval: 1m
   rules:
@@ -3008,6 +3731,15 @@ groups:
     expr: |
       sum by (component,db_config_name,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(gitlab_sql_replica_duration_seconds_bucket{cluster="gprd-us-east1-d",db_config_name=~"main_replica",env="gprd",type=~"internal-api"}[1h] offset 30s)
+      )
+- name: 'SLI Aggregations: patroni - rails_replica_sql - 1h burn-rate - emitted by
+    internal-api - gitlab-3okls'
+  interval: 1m
+  rules:
+  - record: sli_aggregations:gitlab_sql_replica_duration_seconds_bucket:rate_1h
+    expr: |
+      sum by (component,db_config_name,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(gitlab_sql_replica_duration_seconds_bucket{cluster="gitlab-3okls",db_config_name=~"main_replica",env="gprd",type=~"internal-api"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: patroni - rails_replica_sql - 1h burn-rate - emitted by
     ops-gitlab-net - gprd-gitlab-gke'
@@ -3046,6 +3778,15 @@ groups:
         rate(gitlab_sql_replica_duration_seconds_bucket{cluster="gprd-us-east1-d",db_config_name=~"main_replica",env="gprd",type=~"ops-gitlab-net"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: patroni - rails_replica_sql - 1h burn-rate - emitted by
+    ops-gitlab-net - gitlab-3okls'
+  interval: 1m
+  rules:
+  - record: sli_aggregations:gitlab_sql_replica_duration_seconds_bucket:rate_1h
+    expr: |
+      sum by (component,db_config_name,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(gitlab_sql_replica_duration_seconds_bucket{cluster="gitlab-3okls",db_config_name=~"main_replica",env="gprd",type=~"ops-gitlab-net"}[1h] offset 30s)
+      )
+- name: 'SLI Aggregations: patroni - rails_replica_sql - 1h burn-rate - emitted by
     sidekiq - gprd-gitlab-gke'
   interval: 1m
   rules:
@@ -3080,6 +3821,15 @@ groups:
     expr: |
       sum by (component,db_config_name,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(gitlab_sql_replica_duration_seconds_bucket{cluster="gprd-us-east1-d",db_config_name=~"main_replica",env="gprd",type=~"sidekiq"}[1h] offset 30s)
+      )
+- name: 'SLI Aggregations: patroni - rails_replica_sql - 1h burn-rate - emitted by
+    sidekiq - gitlab-3okls'
+  interval: 1m
+  rules:
+  - record: sli_aggregations:gitlab_sql_replica_duration_seconds_bucket:rate_1h
+    expr: |
+      sum by (component,db_config_name,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(gitlab_sql_replica_duration_seconds_bucket{cluster="gitlab-3okls",db_config_name=~"main_replica",env="gprd",type=~"sidekiq"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: patroni - rails_replica_sql - 1h burn-rate - emitted by
     web - gprd-gitlab-gke'
@@ -3118,6 +3868,15 @@ groups:
         rate(gitlab_sql_replica_duration_seconds_bucket{cluster="gprd-us-east1-d",db_config_name=~"main_replica",env="gprd",type=~"web"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: patroni - rails_replica_sql - 1h burn-rate - emitted by
+    web - gitlab-3okls'
+  interval: 1m
+  rules:
+  - record: sli_aggregations:gitlab_sql_replica_duration_seconds_bucket:rate_1h
+    expr: |
+      sum by (component,db_config_name,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(gitlab_sql_replica_duration_seconds_bucket{cluster="gitlab-3okls",db_config_name=~"main_replica",env="gprd",type=~"web"}[1h] offset 30s)
+      )
+- name: 'SLI Aggregations: patroni - rails_replica_sql - 1h burn-rate - emitted by
     websockets - gprd-gitlab-gke'
   interval: 1m
   rules:
@@ -3152,6 +3911,15 @@ groups:
     expr: |
       sum by (component,db_config_name,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(gitlab_sql_replica_duration_seconds_bucket{cluster="gprd-us-east1-d",db_config_name=~"main_replica",env="gprd",type=~"websockets"}[1h] offset 30s)
+      )
+- name: 'SLI Aggregations: patroni - rails_replica_sql - 1h burn-rate - emitted by
+    websockets - gitlab-3okls'
+  interval: 1m
+  rules:
+  - record: sli_aggregations:gitlab_sql_replica_duration_seconds_bucket:rate_1h
+    expr: |
+      sum by (component,db_config_name,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(gitlab_sql_replica_duration_seconds_bucket{cluster="gitlab-3okls",db_config_name=~"main_replica",env="gprd",type=~"websockets"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: patroni - transactions_primary - 1h burn-rate'
   interval: 1m
