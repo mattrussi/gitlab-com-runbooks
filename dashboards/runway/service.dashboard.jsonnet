@@ -43,17 +43,31 @@ basic.dashboard(
   layout.grid(
     [
       basic.timeseries(
-        title='Runway Service Request Count',
-        description='Number of requests reaching the service.',
+        title='Request count by Status',
+        description='Number of requests reaching the service, grouped by HTTP response status',
         yAxisLabel='Requests per Second',
         query=|||
-          sum by (response_code_class, region, location) (
+          sum by (response_code_class) (
             rate(
-              stackdriver_cloud_run_revision_run_googleapis_com_request_count{%(selector)s}[$__interval]
+              stackdriver_cloud_run_revision_run_googleapis_com_request_count{%(selector)s}[$__rate_interval]
             )
           )
         ||| % formatConfig,
-        legendFormat='{{response_code_class}} {{region}} {{location}}',
+        legendFormat='HTTP status {{response_code_class}}',
+        intervalFactor=2,
+      ),
+      basic.timeseries(
+        title='Request count by Region',
+        description='Number of requests reaching the service, grouped by region',
+        yAxisLabel='Requests per Second',
+        query=|||
+          sum by (region, location) (
+            rate(
+              stackdriver_cloud_run_revision_run_googleapis_com_request_count{%(selector)s}[$__rate_interval]
+            )
+          )
+        ||| % formatConfig,
+        legendFormat='Region {{location}}',
         intervalFactor=2,
       ),
       basic.latencyTimeseries(
