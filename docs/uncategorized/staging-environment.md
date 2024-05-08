@@ -31,8 +31,7 @@ Access to staging environment is treated the same as production as per
 * Try to start a console with:
 
     ```
-    ssh yourname-rails@console-01-sv-gstg.c.gitlab-staging-1.internal`
-    sudo gitlab-rails console
+    ssh your_user_name-rails@console-01-sv-gstg.c.gitlab-staging-1.internal
     ```
 
 ## Run a redis console in staging environment
