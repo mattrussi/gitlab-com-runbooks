@@ -46,7 +46,7 @@ local recordedMetricNamesAndLabelsByType =
   );
 
 local recordingRuleExpressionFor(metricName, labels, selector, burnRate) =
-  local query = 'rate(%(metricName)s{%(selector)s}[%(rangeInterval)s])' % {
+  local query = 'rate(%(metricName)s{%(selector)s}[%(rangeInterval)s] offset 30s)' % {
     metricName: metricName,
     rangeInterval: burnRate,
     selector: selectors.serializeHash(selector),

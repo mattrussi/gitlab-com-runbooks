@@ -673,14 +673,12 @@ test.suite({
         success_total_count: ['baz', 'foo'],
       },
       allMetricGroups: {
-        'combinedSli-ops': ['some_other_total', 'some_total'],
-        'sliTest-apdex': ['gitlab_cache_operation_duration_seconds_bucket'],
-        'sliTest-ops': ['gitlab_cache_operation_duration_seconds_count'],
-        'sliWithCombinedMetric-apdex': ['some_histogram_metrics'],
-        'sliWithCombinedMetric-ops': ['pg_stat_database_xact_commit', 'pg_stat_database_xact_rollback', 'some_total_count'],
-        'sliWithDerivMetric-ops': ['some_deriv_count'],
-        'sliWithGaugeMetric-ops': ['some_gauge'],
-        'sliWithSelectorErrorCounterApdex-apdex': ['error_total_count', 'success_total_count'],
+        combinedSli: std.set(['some_other_total', 'some_total']),
+        sliTest: std.set(['gitlab_cache_operation_duration_seconds_bucket', 'gitlab_cache_operation_duration_seconds_count']),
+        sliWithCombinedMetric: std.set(['some_histogram_metrics', 'pg_stat_database_xact_commit', 'pg_stat_database_xact_rollback', 'some_total_count']),
+        sliWithDerivMetric: std.set(['some_deriv_count']),
+        sliWithGaugeMetric: std.set(['some_gauge']),
+        sliWithSelectorErrorCounterApdex: std.set(['error_total_count', 'success_total_count']),
         // Not in this list because they are already part of the group through other SLIs
         // sliWithSelectorHistogramApdex: ['some_histogram_metrics', 'some_total_count'] same as `sliWithCombinedMetric-apdex` + `sliWithCombinedMetric-ops`
         // sliWithSelectorSuccessCounterApdex: ['success_total_count', 'some_total_count'] same as `sliWithSelectorErrorCounterApdex-apdex` + `sliWithCombinedMetric-ops`
