@@ -23,7 +23,7 @@ groups:
   - record: sli_aggregations:stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,project_id,proxy_continent,region,response_code,response_code_class,shard,stage,stage_group,tier,type,url_map_name) (
-        rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{env="pre",project_id=~"gitlab-ops",type=~"monitoring",url_map_name=~"k8s2-um-4zodnh0s-grafana-grafana-cfagrqyu"}[5m] offset 30s)
+        rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{env="pre",project_id=~"gitlab-ops",url_map_name=~"k8s2-um-4zodnh0s-grafana-grafana-cfagrqyu"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: monitoring - grafana_image_renderer - 5m burn-rate'
   interval: 1m
@@ -104,7 +104,7 @@ groups:
   - record: sli_aggregations:stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,project_id,proxy_continent,region,response_code,response_code_class,shard,stage,stage_group,tier,type,url_map_name) (
-        rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{env="pre",project_id=~"gitlab-ops",type=~"monitoring",url_map_name=~"k8s2-um-4zodnh0s-grafana-grafana-cfagrqyu"}[30m] offset 30s)
+        rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{env="pre",project_id=~"gitlab-ops",url_map_name=~"k8s2-um-4zodnh0s-grafana-grafana-cfagrqyu"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: monitoring - grafana_image_renderer - 30m burn-rate'
   interval: 2m
@@ -185,7 +185,7 @@ groups:
   - record: sli_aggregations:stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,project_id,proxy_continent,region,response_code,response_code_class,shard,stage,stage_group,tier,type,url_map_name) (
-        rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{env="pre",project_id=~"gitlab-ops",type=~"monitoring",url_map_name=~"k8s2-um-4zodnh0s-grafana-grafana-cfagrqyu"}[1h] offset 30s)
+        rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{env="pre",project_id=~"gitlab-ops",url_map_name=~"k8s2-um-4zodnh0s-grafana-grafana-cfagrqyu"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: monitoring - grafana_image_renderer - 1h burn-rate'
   interval: 1m
