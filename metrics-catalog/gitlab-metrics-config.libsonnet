@@ -105,6 +105,7 @@ local objects = import 'utils/objects.libsonnet';
       'gprd-us-east1-b',
       'gprd-us-east1-c',
       'gprd-us-east1-d',
+      'gitlab-3okls',  // dataplane v2 cluster
     ],
   },
 

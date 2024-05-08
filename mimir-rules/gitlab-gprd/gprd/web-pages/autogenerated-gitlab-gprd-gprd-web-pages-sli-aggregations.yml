@@ -94,6 +94,24 @@ groups:
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(gitlab_pages_http_time_to_write_header_seconds_count{cluster="gprd-us-east1-d",env="gprd",type=~"web-pages"}[5m] offset 30s)
       )
+- name: 'SLI Aggregations: web-pages - web_pages_server - 5m burn-rate - gitlab-3okls'
+  interval: 1m
+  rules:
+  - record: sli_aggregations:gitlab_pages_http_requests_total:rate_5m
+    expr: |
+      sum by (code,component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(gitlab_pages_http_requests_total{cluster="gitlab-3okls",code=~"5..",env="gprd",type=~"web-pages"}[5m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_pages_http_time_to_write_header_seconds_bucket:rate_5m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(gitlab_pages_http_time_to_write_header_seconds_bucket{cluster="gitlab-3okls",env="gprd",type=~"web-pages"}[5m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_pages_http_time_to_write_header_seconds_count:rate_5m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(gitlab_pages_http_time_to_write_header_seconds_count{cluster="gitlab-3okls",env="gprd",type=~"web-pages"}[5m] offset 30s)
+      )
 - name: 'SLI Aggregations: web-pages - loadbalancer - 30m burn-rate'
   interval: 2m
   rules:
@@ -187,6 +205,24 @@ groups:
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(gitlab_pages_http_time_to_write_header_seconds_count{cluster="gprd-us-east1-d",env="gprd",type=~"web-pages"}[30m] offset 30s)
       )
+- name: 'SLI Aggregations: web-pages - web_pages_server - 30m burn-rate - gitlab-3okls'
+  interval: 2m
+  rules:
+  - record: sli_aggregations:gitlab_pages_http_requests_total:rate_30m
+    expr: |
+      sum by (code,component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(gitlab_pages_http_requests_total{cluster="gitlab-3okls",code=~"5..",env="gprd",type=~"web-pages"}[30m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_pages_http_time_to_write_header_seconds_bucket:rate_30m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(gitlab_pages_http_time_to_write_header_seconds_bucket{cluster="gitlab-3okls",env="gprd",type=~"web-pages"}[30m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_pages_http_time_to_write_header_seconds_count:rate_30m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(gitlab_pages_http_time_to_write_header_seconds_count{cluster="gitlab-3okls",env="gprd",type=~"web-pages"}[30m] offset 30s)
+      )
 - name: 'SLI Aggregations: web-pages - loadbalancer - 1h burn-rate'
   interval: 1m
   rules:
@@ -279,4 +315,22 @@ groups:
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(gitlab_pages_http_time_to_write_header_seconds_count{cluster="gprd-us-east1-d",env="gprd",type=~"web-pages"}[1h] offset 30s)
+      )
+- name: 'SLI Aggregations: web-pages - web_pages_server - 1h burn-rate - gitlab-3okls'
+  interval: 1m
+  rules:
+  - record: sli_aggregations:gitlab_pages_http_requests_total:rate_1h
+    expr: |
+      sum by (code,component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(gitlab_pages_http_requests_total{cluster="gitlab-3okls",code=~"5..",env="gprd",type=~"web-pages"}[1h] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_pages_http_time_to_write_header_seconds_bucket:rate_1h
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(gitlab_pages_http_time_to_write_header_seconds_bucket{cluster="gitlab-3okls",env="gprd",type=~"web-pages"}[1h] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_pages_http_time_to_write_header_seconds_count:rate_1h
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(gitlab_pages_http_time_to_write_header_seconds_count{cluster="gitlab-3okls",env="gprd",type=~"web-pages"}[1h] offset 30s)
       )

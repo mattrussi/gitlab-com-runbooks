@@ -53,6 +53,19 @@ groups:
       sum by (component,env,environment,feature_category,fqdn,le,name,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(registry_database_query_duration_seconds_bucket{cluster="gprd-us-east1-d",env="gprd",type=~"registry"}[5m] offset 30s)
       )
+- name: 'SLI Aggregations: registry - database - 5m burn-rate - gitlab-3okls'
+  interval: 1m
+  rules:
+  - record: sli_aggregations:registry_database_queries_total:rate_5m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,name,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(registry_database_queries_total{cluster="gitlab-3okls",env="gprd",type=~"registry"}[5m] offset 30s)
+      )
+  - record: sli_aggregations:registry_database_query_duration_seconds_bucket:rate_5m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,le,name,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(registry_database_query_duration_seconds_bucket{cluster="gitlab-3okls",env="gprd",type=~"registry"}[5m] offset 30s)
+      )
 - name: 'SLI Aggregations: registry - garbagecollector - 5m burn-rate - gprd-gitlab-gke'
   interval: 1m
   rules:
@@ -104,6 +117,19 @@ groups:
     expr: |
       sum by (component,env,environment,error,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type,worker) (
         rate(registry_gc_runs_total{cluster="gprd-us-east1-d",env="gprd",type=~"registry"}[5m] offset 30s)
+      )
+- name: 'SLI Aggregations: registry - garbagecollector - 5m burn-rate - gitlab-3okls'
+  interval: 1m
+  rules:
+  - record: sli_aggregations:registry_gc_run_duration_seconds_bucket:rate_5m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,tier,type,worker) (
+        rate(registry_gc_run_duration_seconds_bucket{cluster="gitlab-3okls",env="gprd",type=~"registry"}[5m] offset 30s)
+      )
+  - record: sli_aggregations:registry_gc_runs_total:rate_5m
+    expr: |
+      sum by (component,env,environment,error,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type,worker) (
+        rate(registry_gc_runs_total{cluster="gitlab-3okls",env="gprd",type=~"registry"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: registry - loadbalancer - 5m burn-rate'
   interval: 1m
@@ -185,6 +211,24 @@ groups:
       sum by (command,component,env,environment,feature_category,fqdn,instance,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(registry_redis_single_errors_count{cluster="gprd-us-east1-d",env="gprd",type=~"registry"}[5m] offset 30s)
       )
+- name: 'SLI Aggregations: registry - redis - 5m burn-rate - gitlab-3okls'
+  interval: 1m
+  rules:
+  - record: sli_aggregations:registry_redis_single_commands_bucket:rate_5m
+    expr: |
+      sum by (command,component,env,environment,feature_category,fqdn,instance,le,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(registry_redis_single_commands_bucket{cluster="gitlab-3okls",env="gprd",type=~"registry"}[5m] offset 30s)
+      )
+  - record: sli_aggregations:registry_redis_single_commands_count:rate_5m
+    expr: |
+      sum by (command,component,env,environment,feature_category,fqdn,instance,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(registry_redis_single_commands_count{cluster="gitlab-3okls",env="gprd",type=~"registry"}[5m] offset 30s)
+      )
+  - record: sli_aggregations:registry_redis_single_errors_count:rate_5m
+    expr: |
+      sum by (command,component,env,environment,feature_category,fqdn,instance,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(registry_redis_single_errors_count{cluster="gitlab-3okls",env="gprd",type=~"registry"}[5m] offset 30s)
+      )
 - name: 'SLI Aggregations: registry - registry_cdn - 5m burn-rate - emitted by monitoring
     - gprd-gitlab-gke'
   interval: 1m
@@ -220,6 +264,15 @@ groups:
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,project_id,proxy_continent,region,response_code,response_code_class,shard,stage,stage_group,tier,type,url_map_name) (
         rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{cluster="gprd-us-east1-d",env="gprd",project_id=~"gitlab-production",type=~"monitoring",url_map_name=~"gprd-registry-cdn"}[5m] offset 30s)
+      )
+- name: 'SLI Aggregations: registry - registry_cdn - 5m burn-rate - emitted by monitoring
+    - gitlab-3okls'
+  interval: 1m
+  rules:
+  - record: sli_aggregations:stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count:rate_5m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,product_stage,project_id,proxy_continent,region,response_code,response_code_class,shard,stage,stage_group,tier,type,url_map_name) (
+        rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{cluster="gitlab-3okls",env="gprd",project_id=~"gitlab-production",type=~"monitoring",url_map_name=~"gprd-registry-cdn"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: registry - registry_server - 5m burn-rate - gprd-gitlab-gke'
   interval: 1m
@@ -273,6 +326,19 @@ groups:
       sum by (code,component,env,environment,feature_category,fqdn,method,product_stage,region,route,shard,stage,stage_group,tier,type) (
         rate(registry_http_requests_total{cluster="gprd-us-east1-d",env="gprd",type=~"registry"}[5m] offset 30s)
       )
+- name: 'SLI Aggregations: registry - registry_server - 5m burn-rate - gitlab-3okls'
+  interval: 1m
+  rules:
+  - record: sli_aggregations:registry_http_request_duration_seconds_bucket:rate_5m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,le,method,product_stage,region,route,shard,stage,stage_group,tier,type) (
+        rate(registry_http_request_duration_seconds_bucket{cluster="gitlab-3okls",env="gprd",type=~"registry"}[5m] offset 30s)
+      )
+  - record: sli_aggregations:registry_http_requests_total:rate_5m
+    expr: |
+      sum by (code,component,env,environment,feature_category,fqdn,method,product_stage,region,route,shard,stage,stage_group,tier,type) (
+        rate(registry_http_requests_total{cluster="gitlab-3okls",env="gprd",type=~"registry"}[5m] offset 30s)
+      )
 - name: 'SLI Aggregations: registry - server_route_blob_upload_uuid_deletes - 5m burn-rate
     - gprd-gitlab-gke'
   interval: 1m
@@ -308,6 +374,15 @@ groups:
     expr: |
       sum by (component,env,environment,feature_category,fqdn,method,product_stage,region,route,shard,stage,stage_group,tier,type) (
         rate(registry_http_request_duration_seconds_count{cluster="gprd-us-east1-d",env="gprd",method=~"delete|get|head|patch|post|put",route=~"/v2/\\{name\\}/blobs/uploads/\\{uuid\\}|/v2/\\{name\\}/manifests/\\{reference\\}",type=~"registry"}[5m] offset 30s)
+      )
+- name: 'SLI Aggregations: registry - server_route_blob_upload_uuid_deletes - 5m burn-rate
+    - gitlab-3okls'
+  interval: 1m
+  rules:
+  - record: sli_aggregations:registry_http_request_duration_seconds_count:rate_5m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,method,product_stage,region,route,shard,stage,stage_group,tier,type) (
+        rate(registry_http_request_duration_seconds_count{cluster="gitlab-3okls",env="gprd",method=~"delete|get|head|patch|post|put",route=~"/v2/\\{name\\}/blobs/uploads/\\{uuid\\}|/v2/\\{name\\}/manifests/\\{reference\\}",type=~"registry"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: registry - database - 30m burn-rate - gprd-gitlab-gke'
   interval: 2m
@@ -361,6 +436,19 @@ groups:
       sum by (component,env,environment,feature_category,fqdn,le,name,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(registry_database_query_duration_seconds_bucket{cluster="gprd-us-east1-d",env="gprd",type=~"registry"}[30m] offset 30s)
       )
+- name: 'SLI Aggregations: registry - database - 30m burn-rate - gitlab-3okls'
+  interval: 2m
+  rules:
+  - record: sli_aggregations:registry_database_queries_total:rate_30m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,name,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(registry_database_queries_total{cluster="gitlab-3okls",env="gprd",type=~"registry"}[30m] offset 30s)
+      )
+  - record: sli_aggregations:registry_database_query_duration_seconds_bucket:rate_30m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,le,name,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(registry_database_query_duration_seconds_bucket{cluster="gitlab-3okls",env="gprd",type=~"registry"}[30m] offset 30s)
+      )
 - name: 'SLI Aggregations: registry - garbagecollector - 30m burn-rate - gprd-gitlab-gke'
   interval: 2m
   rules:
@@ -412,6 +500,19 @@ groups:
     expr: |
       sum by (component,env,environment,error,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type,worker) (
         rate(registry_gc_runs_total{cluster="gprd-us-east1-d",env="gprd",type=~"registry"}[30m] offset 30s)
+      )
+- name: 'SLI Aggregations: registry - garbagecollector - 30m burn-rate - gitlab-3okls'
+  interval: 2m
+  rules:
+  - record: sli_aggregations:registry_gc_run_duration_seconds_bucket:rate_30m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,tier,type,worker) (
+        rate(registry_gc_run_duration_seconds_bucket{cluster="gitlab-3okls",env="gprd",type=~"registry"}[30m] offset 30s)
+      )
+  - record: sli_aggregations:registry_gc_runs_total:rate_30m
+    expr: |
+      sum by (component,env,environment,error,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type,worker) (
+        rate(registry_gc_runs_total{cluster="gitlab-3okls",env="gprd",type=~"registry"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: registry - loadbalancer - 30m burn-rate'
   interval: 2m
@@ -493,6 +594,24 @@ groups:
       sum by (command,component,env,environment,feature_category,fqdn,instance,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(registry_redis_single_errors_count{cluster="gprd-us-east1-d",env="gprd",type=~"registry"}[30m] offset 30s)
       )
+- name: 'SLI Aggregations: registry - redis - 30m burn-rate - gitlab-3okls'
+  interval: 2m
+  rules:
+  - record: sli_aggregations:registry_redis_single_commands_bucket:rate_30m
+    expr: |
+      sum by (command,component,env,environment,feature_category,fqdn,instance,le,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(registry_redis_single_commands_bucket{cluster="gitlab-3okls",env="gprd",type=~"registry"}[30m] offset 30s)
+      )
+  - record: sli_aggregations:registry_redis_single_commands_count:rate_30m
+    expr: |
+      sum by (command,component,env,environment,feature_category,fqdn,instance,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(registry_redis_single_commands_count{cluster="gitlab-3okls",env="gprd",type=~"registry"}[30m] offset 30s)
+      )
+  - record: sli_aggregations:registry_redis_single_errors_count:rate_30m
+    expr: |
+      sum by (command,component,env,environment,feature_category,fqdn,instance,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(registry_redis_single_errors_count{cluster="gitlab-3okls",env="gprd",type=~"registry"}[30m] offset 30s)
+      )
 - name: 'SLI Aggregations: registry - registry_cdn - 30m burn-rate - emitted by monitoring
     - gprd-gitlab-gke'
   interval: 2m
@@ -528,6 +647,15 @@ groups:
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,project_id,proxy_continent,region,response_code,response_code_class,shard,stage,stage_group,tier,type,url_map_name) (
         rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{cluster="gprd-us-east1-d",env="gprd",project_id=~"gitlab-production",type=~"monitoring",url_map_name=~"gprd-registry-cdn"}[30m] offset 30s)
+      )
+- name: 'SLI Aggregations: registry - registry_cdn - 30m burn-rate - emitted by monitoring
+    - gitlab-3okls'
+  interval: 2m
+  rules:
+  - record: sli_aggregations:stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count:rate_30m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,product_stage,project_id,proxy_continent,region,response_code,response_code_class,shard,stage,stage_group,tier,type,url_map_name) (
+        rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{cluster="gitlab-3okls",env="gprd",project_id=~"gitlab-production",type=~"monitoring",url_map_name=~"gprd-registry-cdn"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: registry - registry_server - 30m burn-rate - gprd-gitlab-gke'
   interval: 2m
@@ -581,6 +709,19 @@ groups:
       sum by (code,component,env,environment,feature_category,fqdn,method,product_stage,region,route,shard,stage,stage_group,tier,type) (
         rate(registry_http_requests_total{cluster="gprd-us-east1-d",env="gprd",type=~"registry"}[30m] offset 30s)
       )
+- name: 'SLI Aggregations: registry - registry_server - 30m burn-rate - gitlab-3okls'
+  interval: 2m
+  rules:
+  - record: sli_aggregations:registry_http_request_duration_seconds_bucket:rate_30m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,le,method,product_stage,region,route,shard,stage,stage_group,tier,type) (
+        rate(registry_http_request_duration_seconds_bucket{cluster="gitlab-3okls",env="gprd",type=~"registry"}[30m] offset 30s)
+      )
+  - record: sli_aggregations:registry_http_requests_total:rate_30m
+    expr: |
+      sum by (code,component,env,environment,feature_category,fqdn,method,product_stage,region,route,shard,stage,stage_group,tier,type) (
+        rate(registry_http_requests_total{cluster="gitlab-3okls",env="gprd",type=~"registry"}[30m] offset 30s)
+      )
 - name: 'SLI Aggregations: registry - server_route_blob_upload_uuid_deletes - 30m
     burn-rate - gprd-gitlab-gke'
   interval: 2m
@@ -616,6 +757,15 @@ groups:
     expr: |
       sum by (component,env,environment,feature_category,fqdn,method,product_stage,region,route,shard,stage,stage_group,tier,type) (
         rate(registry_http_request_duration_seconds_count{cluster="gprd-us-east1-d",env="gprd",method=~"delete|get|head|patch|post|put",route=~"/v2/\\{name\\}/blobs/uploads/\\{uuid\\}|/v2/\\{name\\}/manifests/\\{reference\\}",type=~"registry"}[30m] offset 30s)
+      )
+- name: 'SLI Aggregations: registry - server_route_blob_upload_uuid_deletes - 30m
+    burn-rate - gitlab-3okls'
+  interval: 2m
+  rules:
+  - record: sli_aggregations:registry_http_request_duration_seconds_count:rate_30m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,method,product_stage,region,route,shard,stage,stage_group,tier,type) (
+        rate(registry_http_request_duration_seconds_count{cluster="gitlab-3okls",env="gprd",method=~"delete|get|head|patch|post|put",route=~"/v2/\\{name\\}/blobs/uploads/\\{uuid\\}|/v2/\\{name\\}/manifests/\\{reference\\}",type=~"registry"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: registry - database - 1h burn-rate - gprd-gitlab-gke'
   interval: 1m
@@ -669,6 +819,19 @@ groups:
       sum by (component,env,environment,feature_category,fqdn,le,name,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(registry_database_query_duration_seconds_bucket{cluster="gprd-us-east1-d",env="gprd",type=~"registry"}[1h] offset 30s)
       )
+- name: 'SLI Aggregations: registry - database - 1h burn-rate - gitlab-3okls'
+  interval: 1m
+  rules:
+  - record: sli_aggregations:registry_database_queries_total:rate_1h
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,name,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(registry_database_queries_total{cluster="gitlab-3okls",env="gprd",type=~"registry"}[1h] offset 30s)
+      )
+  - record: sli_aggregations:registry_database_query_duration_seconds_bucket:rate_1h
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,le,name,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(registry_database_query_duration_seconds_bucket{cluster="gitlab-3okls",env="gprd",type=~"registry"}[1h] offset 30s)
+      )
 - name: 'SLI Aggregations: registry - garbagecollector - 1h burn-rate - gprd-gitlab-gke'
   interval: 1m
   rules:
@@ -720,6 +883,19 @@ groups:
     expr: |
       sum by (component,env,environment,error,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type,worker) (
         rate(registry_gc_runs_total{cluster="gprd-us-east1-d",env="gprd",type=~"registry"}[1h] offset 30s)
+      )
+- name: 'SLI Aggregations: registry - garbagecollector - 1h burn-rate - gitlab-3okls'
+  interval: 1m
+  rules:
+  - record: sli_aggregations:registry_gc_run_duration_seconds_bucket:rate_1h
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,tier,type,worker) (
+        rate(registry_gc_run_duration_seconds_bucket{cluster="gitlab-3okls",env="gprd",type=~"registry"}[1h] offset 30s)
+      )
+  - record: sli_aggregations:registry_gc_runs_total:rate_1h
+    expr: |
+      sum by (component,env,environment,error,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type,worker) (
+        rate(registry_gc_runs_total{cluster="gitlab-3okls",env="gprd",type=~"registry"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: registry - loadbalancer - 1h burn-rate'
   interval: 1m
@@ -801,6 +977,24 @@ groups:
       sum by (command,component,env,environment,feature_category,fqdn,instance,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(registry_redis_single_errors_count{cluster="gprd-us-east1-d",env="gprd",type=~"registry"}[1h] offset 30s)
       )
+- name: 'SLI Aggregations: registry - redis - 1h burn-rate - gitlab-3okls'
+  interval: 1m
+  rules:
+  - record: sli_aggregations:registry_redis_single_commands_bucket:rate_1h
+    expr: |
+      sum by (command,component,env,environment,feature_category,fqdn,instance,le,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(registry_redis_single_commands_bucket{cluster="gitlab-3okls",env="gprd",type=~"registry"}[1h] offset 30s)
+      )
+  - record: sli_aggregations:registry_redis_single_commands_count:rate_1h
+    expr: |
+      sum by (command,component,env,environment,feature_category,fqdn,instance,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(registry_redis_single_commands_count{cluster="gitlab-3okls",env="gprd",type=~"registry"}[1h] offset 30s)
+      )
+  - record: sli_aggregations:registry_redis_single_errors_count:rate_1h
+    expr: |
+      sum by (command,component,env,environment,feature_category,fqdn,instance,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(registry_redis_single_errors_count{cluster="gitlab-3okls",env="gprd",type=~"registry"}[1h] offset 30s)
+      )
 - name: 'SLI Aggregations: registry - registry_cdn - 1h burn-rate - emitted by monitoring
     - gprd-gitlab-gke'
   interval: 1m
@@ -836,6 +1030,15 @@ groups:
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,project_id,proxy_continent,region,response_code,response_code_class,shard,stage,stage_group,tier,type,url_map_name) (
         rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{cluster="gprd-us-east1-d",env="gprd",project_id=~"gitlab-production",type=~"monitoring",url_map_name=~"gprd-registry-cdn"}[1h] offset 30s)
+      )
+- name: 'SLI Aggregations: registry - registry_cdn - 1h burn-rate - emitted by monitoring
+    - gitlab-3okls'
+  interval: 1m
+  rules:
+  - record: sli_aggregations:stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count:rate_1h
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,product_stage,project_id,proxy_continent,region,response_code,response_code_class,shard,stage,stage_group,tier,type,url_map_name) (
+        rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{cluster="gitlab-3okls",env="gprd",project_id=~"gitlab-production",type=~"monitoring",url_map_name=~"gprd-registry-cdn"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: registry - registry_server - 1h burn-rate - gprd-gitlab-gke'
   interval: 1m
@@ -889,6 +1092,19 @@ groups:
       sum by (code,component,env,environment,feature_category,fqdn,method,product_stage,region,route,shard,stage,stage_group,tier,type) (
         rate(registry_http_requests_total{cluster="gprd-us-east1-d",env="gprd",type=~"registry"}[1h] offset 30s)
       )
+- name: 'SLI Aggregations: registry - registry_server - 1h burn-rate - gitlab-3okls'
+  interval: 1m
+  rules:
+  - record: sli_aggregations:registry_http_request_duration_seconds_bucket:rate_1h
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,le,method,product_stage,region,route,shard,stage,stage_group,tier,type) (
+        rate(registry_http_request_duration_seconds_bucket{cluster="gitlab-3okls",env="gprd",type=~"registry"}[1h] offset 30s)
+      )
+  - record: sli_aggregations:registry_http_requests_total:rate_1h
+    expr: |
+      sum by (code,component,env,environment,feature_category,fqdn,method,product_stage,region,route,shard,stage,stage_group,tier,type) (
+        rate(registry_http_requests_total{cluster="gitlab-3okls",env="gprd",type=~"registry"}[1h] offset 30s)
+      )
 - name: 'SLI Aggregations: registry - server_route_blob_upload_uuid_deletes - 1h burn-rate
     - gprd-gitlab-gke'
   interval: 1m
@@ -924,4 +1140,13 @@ groups:
     expr: |
       sum by (component,env,environment,feature_category,fqdn,method,product_stage,region,route,shard,stage,stage_group,tier,type) (
         rate(registry_http_request_duration_seconds_count{cluster="gprd-us-east1-d",env="gprd",method=~"delete|get|head|patch|post|put",route=~"/v2/\\{name\\}/blobs/uploads/\\{uuid\\}|/v2/\\{name\\}/manifests/\\{reference\\}",type=~"registry"}[1h] offset 30s)
+      )
+- name: 'SLI Aggregations: registry - server_route_blob_upload_uuid_deletes - 1h burn-rate
+    - gitlab-3okls'
+  interval: 1m
+  rules:
+  - record: sli_aggregations:registry_http_request_duration_seconds_count:rate_1h
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,method,product_stage,region,route,shard,stage,stage_group,tier,type) (
+        rate(registry_http_request_duration_seconds_count{cluster="gitlab-3okls",env="gprd",method=~"delete|get|head|patch|post|put",route=~"/v2/\\{name\\}/blobs/uploads/\\{uuid\\}|/v2/\\{name\\}/manifests/\\{reference\\}",type=~"registry"}[1h] offset 30s)
       )
