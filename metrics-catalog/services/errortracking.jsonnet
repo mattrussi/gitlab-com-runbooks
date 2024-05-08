@@ -13,6 +13,8 @@ metricsCatalog.serviceDefinition({
   // https://thanos.gitlab.net/stores -> thanos-query.opstracegcp.com:80
   dangerouslyThanosEvaluated: true,
 
+  tenants: [ 'gitlab-observability' ],
+
   type: 'errortracking',
   tier: 'sv',
   monitoringThresholds: {
