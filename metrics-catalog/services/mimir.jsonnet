@@ -21,7 +21,7 @@ local mimirServiceSelector = { type: 'mimir', namespace: 'mimir' };
 metricsCatalog.serviceDefinition({
   type: 'mimir',
   tier: 'inf',
-  tenants: [ 'metamonitoring' ],
+  tenants: ['metamonitoring'],
 
   tags: ['mimir'],
 
@@ -160,20 +160,19 @@ metricsCatalog.serviceDefinition({
       },
 
       apdex: histogramApdex(
-        histogram='cortex_querier_request_duration_seconds_count',
-        selector=mimirQuerySelector,
-        satisfiedThreshold=30,
-        metricsFormat='openmetrics'
+        histogram='cortex_querier_request_duration_seconds_bucket',
+        selector=mimirQuerySelector { route: { re: '(prometheus|api_prom)_api_v1_.+' } },
+        satisfiedThreshold=25,
       ),
 
       requestRate: rateMetric(
-        counter='cortex_request_duration_seconds_count',
-        selector=mimirQuerySelector
+        counter='cortex_querier_request_duration_seconds_count',
+        selector=mimirQuerySelector { route: { re: '(prometheus|api_prom)_api_v1_.+' } },
       ),
 
       errorRate: rateMetric(
-        counter='cortex_request_duration_seconds_count',
-        selector=mimirQuerySelector { code: { re: '^5.*' } }
+        counter='cortex_querier_request_duration_seconds_count',
+        selector=mimirQuerySelector { status_code: { re: '^5.*' }, route: { re: '(prometheus|api_prom)_api_v1_.+' } },
       ),
 
       significantLabels: [],
@@ -199,20 +198,19 @@ metricsCatalog.serviceDefinition({
       },
 
       apdex: histogramApdex(
-        histogram='cortex_querier_query_frontend_request_duration_seconds_bucket',
-        selector=mimirQuerySelector,
-        satisfiedThreshold=30,
-        metricsFormat='openmetrics'
+        histogram='cortex_request_duration_seconds_bucket',
+        selector=mimirQuerySelector { route: { re: '(prometheus|api_prom)_api_v1_.+' } },
+        satisfiedThreshold=25,
       ),
 
       requestRate: rateMetric(
         counter='cortex_request_duration_seconds_count',
-        selector=mimirQuerySelector
+        selector=mimirQuerySelector { route: { re: '(prometheus|api_prom)_api_v1_.+' } },
       ),
 
       errorRate: rateMetric(
         counter='cortex_request_duration_seconds_count',
-        selector=mimirQuerySelector { code: { re: '^5.*' } }
+        selector=mimirQuerySelector { status_code: { re: '^5.*' }, route: { re: '(prometheus|api_prom)_api_v1_.+' } },
       ),
 
       significantLabels: [],
@@ -241,8 +239,7 @@ metricsCatalog.serviceDefinition({
       apdex: histogramApdex(
         histogram='cortex_query_scheduler_queue_duration_seconds_bucket',
         selector=mimirQuerySelector,
-        satisfiedThreshold=30,
-        metricsFormat='openmetrics'
+        satisfiedThreshold=5,
       ),
 
       requestRate: rateMetric(
@@ -252,7 +249,7 @@ metricsCatalog.serviceDefinition({
 
       errorRate: rateMetric(
         counter='cortex_query_scheduler_queue_duration_seconds_count',
-        selector=mimirQuerySelector { code: { re: '^5.*' } }
+        selector=mimirQuerySelector { status_code: { re: '^5.*' } }
       ),
 
       significantLabels: [],
@@ -279,20 +276,19 @@ metricsCatalog.serviceDefinition({
       },
 
       apdex: histogramApdex(
-        histogram='cortex_kv_request_duration_seconds_bucket',
-        selector=mimirQuerySelector,
-        satisfiedThreshold=30,
-        metricsFormat='openmetrics'
+        histogram='cortex_request_duration_seconds_bucket',
+        selector=mimirQuerySelector { route: { re: '/gatewaypb.StoreGateway/.*' } },
+        satisfiedThreshold=25,
       ),
 
       requestRate: rateMetric(
-        counter='cortex_kv_request_duration_seconds_count',
-        selector=mimirQuerySelector
+        counter='cortex_request_duration_seconds_count',
+        selector=mimirQuerySelector { route: { re: '/gatewaypb.StoreGateway/.*' } },
       ),
 
       errorRate: rateMetric(
-        counter='cortex_kv_request_duration_seconds_count',
-        selector=mimirQuerySelector { code: { re: '^5.*' } }
+        counter='cortex_request_duration_seconds_count',
+        selector=mimirQuerySelector { status_code: { re: '^5.*' }, route: { re: '/gatewaypb.StoreGateway/.*' } }
       ),
 
       significantLabels: [],
@@ -322,19 +318,18 @@ metricsCatalog.serviceDefinition({
 
       apdex: histogramApdex(
         histogram='cortex_request_duration_seconds_bucket',
-        selector=mimirQuerySelector,
-        satisfiedThreshold=30,
-        metricsFormat='openmetrics'
+        selector=mimirQuerySelector { route: { re: '/distributor.Distributor/Push|/httpgrpc.*|api_(v1|prom)_push|otlp_v1_metrics' } },
+        satisfiedThreshold=1,
       ),
 
       requestRate: rateMetric(
         counter='cortex_request_duration_seconds_count',
-        selector=mimirQuerySelector
+        selector=mimirQuerySelector { route: { re: '/distributor.Distributor/Push|/httpgrpc.*|api_(v1|prom)_push|otlp_v1_metrics' } },
       ),
 
       errorRate: rateMetric(
         counter='cortex_request_duration_seconds_count',
-        selector=mimirQuerySelector { code: { re: '^5.*' } }
+        selector=mimirQuerySelector { status_code: { re: '^5.*' }, route: { re: '/distributor.Distributor/Push|/httpgrpc.*|api_(v1|prom)_push|otlp_v1_metrics' } },
       ),
 
       significantLabels: [],
@@ -363,19 +358,18 @@ metricsCatalog.serviceDefinition({
 
       apdex: histogramApdex(
         histogram='cortex_request_duration_seconds_bucket',
-        selector=mimirQuerySelector,
-        satisfiedThreshold=30,
-        metricsFormat='openmetrics'
+        selector=mimirQuerySelector { route: { re: '/cortex.Ingester/Push' } },
+        satisfiedThreshold=1,
       ),
 
       requestRate: rateMetric(
         counter='cortex_request_duration_seconds_count',
-        selector=mimirQuerySelector
+        selector=mimirQuerySelector { route: { re: '/cortex.Ingester/Push' } }
       ),
 
       errorRate: rateMetric(
         counter='cortex_request_duration_seconds_count',
-        selector=mimirQuerySelector { code: { re: '^5.*' } }
+        selector=mimirQuerySelector { status_code: { re: '^5.*' }, route: { re: '/cortex.Ingester/Push' } },
       ),
 
       significantLabels: [],
@@ -407,7 +401,7 @@ metricsCatalog.serviceDefinition({
 
       errorRate: rateMetric(
         counter='cortex_compactor_group_compactions_failures_total',
-        selector=mimirQuerySelector { code: { re: '^5.*' } }
+        selector=mimirQuerySelector
       ),
 
       significantLabels: [],
