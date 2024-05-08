@@ -43,18 +43,78 @@ basic.dashboard(
   layout.grid(
     [
       basic.timeseries(
-        title='Runway Service Request Count',
-        description='Number of requests reaching the service.',
+        title='Request count by Status',
+        description='Number of requests reaching the service, grouped by HTTP response status',
         yAxisLabel='Requests per Second',
         query=|||
-          sum by (response_code_class, region, location) (
+          sum by (response_code_class) (
             rate(
-              stackdriver_cloud_run_revision_run_googleapis_com_request_count{%(selector)s}[$__interval]
+              stackdriver_cloud_run_revision_run_googleapis_com_request_count{%(selector)s}[$__rate_interval]
             )
           )
         ||| % formatConfig,
-        legendFormat='{{response_code_class}} {{region}} {{location}}',
+        decimals=2,
+        legendFormat='HTTP status {{response_code_class}}',
         intervalFactor=2,
+      ),
+      basic.timeseries(
+        title='Request count by Region',
+        description='Number of requests reaching the service, grouped by region',
+        yAxisLabel='Requests per Second',
+        query=|||
+          sum by (region, location) (
+            rate(
+              stackdriver_cloud_run_revision_run_googleapis_com_request_count{%(selector)s}[$__rate_interval]
+            )
+          )
+        ||| % formatConfig,
+        decimals=2,
+        legendFormat='Region {{location}}',
+        intervalFactor=2,
+      ),
+      basic.percentageTimeseries(
+        title='Error ratio',
+        description='Ratio of errors (HTTP status 5xx) to total requests',
+        yAxisLabel='Error ratio',
+        query=|||
+          sum (
+            rate(
+              stackdriver_cloud_run_revision_run_googleapis_com_request_count{response_code_class="5xx",%(selector)s}[$__rate_interval]
+            )
+          )
+          /
+          sum (
+            rate(
+              stackdriver_cloud_run_revision_run_googleapis_com_request_count{%(selector)s}[$__rate_interval]
+            )
+          )
+        ||| % formatConfig,
+        decimals=2,
+        legendFormat='Overall error ratio',
+        intervalFactor=2,
+        min=0,
+      ),
+      basic.percentageTimeseries(
+        title='Error ratio by Revision',
+        description='Ratio of errors (HTTP status 5xx) to total requests, grouped by revision',
+        yAxisLabel='Error ratio',
+        query=|||
+          sum by(revision_name) (
+            rate(
+              stackdriver_cloud_run_revision_run_googleapis_com_request_count{response_code_class="5xx",%(selector)s}[$__rate_interval]
+            )
+          )
+          / on(revision_name)
+          sum by(revision_name) (
+            rate(
+              stackdriver_cloud_run_revision_run_googleapis_com_request_count{%(selector)s}[$__rate_interval]
+            )
+          )
+        ||| % formatConfig,
+        decimals=2,
+        legendFormat='Revision {{revision_name}}',
+        intervalFactor=2,
+        min=0,
       ),
       basic.latencyTimeseries(
         title='Runway Service Request Latency',
