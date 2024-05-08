@@ -102,7 +102,7 @@ metricsCatalog.serviceDefinition({
       requestRate: rateMetric(
         counter='gitlab_runner_jobs_total',
         selector={
-          job: 'runners-manager',
+          job: { oneOf: ['runners-manager', 'scrapeConfig/monitoring/prometheus-agent-runner'] },
           shard: { re: 'shared-gitlab-org|private|saas-.*|windows-shared' },
         },
       ),
@@ -110,7 +110,7 @@ metricsCatalog.serviceDefinition({
       errorRate: rateMetric(
         counter='gitlab_runner_failed_jobs_total',
         selector={
-          job: 'runners-manager',
+          job: { oneOf: ['runners-manager', 'scrapeConfig/monitoring/prometheus-agent-runner'] },
           shard: { re: 'shared-gitlab-org|private|saas-.*|windows-shared' },
           failure_reason: 'runner_system_failure',
         },
@@ -147,7 +147,7 @@ metricsCatalog.serviceDefinition({
       requestRate: rateMetric(
         counter='gitlab_runner_jobs_total',
         selector={
-          job: 'runners-manager',
+          job: { oneOf: ['runners-manager', 'scrapeConfig/monitoring/prometheus-agent-runner'] },
           shard: { re: 'shared-gitlab-org|private|saas-linux-.*' },
         },
       ),
@@ -155,11 +155,18 @@ metricsCatalog.serviceDefinition({
       errorRate: rateMetric(
         counter='gitlab_runner_failed_jobs_total',
         selector={
-          job: 'runners-manager',
+          job: { oneOf: ['runners-manager', 'scrapeConfig/monitoring/prometheus-agent-runner'] },
           shard: { re: 'shared-gitlab-org|private|saas-linux-.*' },
           failure_reason: 'image_pull_failure',
         },
       ),
+
+      // `job_queue_duration_seconds_bucket` is emitted by `api`
+      // but `gitlab_runner_jobs_total` and `gitlab_runner_failed_jobs_total`
+      // is emitted by `ci-runners` itself.
+      // We set `emittedBy` as empty array so that `sli_aggregations:` rules
+      // in Mimir doesn't scope by `ci-runners` by default.
+      emittedBy: [],
 
       significantLabels: ['jobs_running_for_project'],
 
