@@ -51,7 +51,7 @@ In the following example we will use Mimirtool to identify which metrics are, an
 1. Extract the Prometheus metrics used in the queries in the rules directory we created into a file called `metrics-in-ruler.json.`
 
    ```bash
-   mimirtool analyze rule-file "${RULES_DIR}/*"
+   mimirtool analyze rule-file $RULES_DIR/*
    ```
 
 1. Before we connect to the Mimir Query Frontend you may need to setup Port Forwarding to your Kubernetes cluster. We will be connecting to the `pre` cluster.
