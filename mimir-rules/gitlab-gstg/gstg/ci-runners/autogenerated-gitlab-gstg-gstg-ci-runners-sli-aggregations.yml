@@ -54,12 +54,12 @@ groups:
   - record: sli_aggregations:gitlab_runner_failed_jobs_total:rate_5m
     expr: |
       sum by (component,env,environment,failure_reason,feature_category,fqdn,job,jobs_running_for_project,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(gitlab_runner_failed_jobs_total{env="gstg",failure_reason=~"image_pull_failure|runner_system_failure",job=~"runners-manager",shard=~"private|saas-.*|saas-linux-.*|shared-gitlab-org|windows-shared",type=~"ci-runners"}[5m] offset 30s)
+        rate(gitlab_runner_failed_jobs_total{env="gstg",failure_reason=~"image_pull_failure|runner_system_failure",job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard=~"private|saas-.*|saas-linux-.*|shared-gitlab-org|windows-shared"}[5m] offset 30s)
       )
   - record: sli_aggregations:gitlab_runner_jobs_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,job,jobs_running_for_project,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(gitlab_runner_jobs_total{env="gstg",job=~"runners-manager",shard=~"private|saas-.*|saas-linux-.*|shared-gitlab-org|windows-shared",type=~"ci-runners"}[5m] offset 30s)
+        rate(gitlab_runner_jobs_total{env="gstg",job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard=~"private|saas-.*|saas-linux-.*|shared-gitlab-org|windows-shared"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: ci-runners - saas_runner_queues - 5m burn-rate'
   interval: 1m
@@ -150,12 +150,12 @@ groups:
   - record: sli_aggregations:gitlab_runner_failed_jobs_total:rate_30m
     expr: |
       sum by (component,env,environment,failure_reason,feature_category,fqdn,job,jobs_running_for_project,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(gitlab_runner_failed_jobs_total{env="gstg",failure_reason=~"image_pull_failure|runner_system_failure",job=~"runners-manager",shard=~"private|saas-.*|saas-linux-.*|shared-gitlab-org|windows-shared",type=~"ci-runners"}[30m] offset 30s)
+        rate(gitlab_runner_failed_jobs_total{env="gstg",failure_reason=~"image_pull_failure|runner_system_failure",job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard=~"private|saas-.*|saas-linux-.*|shared-gitlab-org|windows-shared"}[30m] offset 30s)
       )
   - record: sli_aggregations:gitlab_runner_jobs_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,job,jobs_running_for_project,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(gitlab_runner_jobs_total{env="gstg",job=~"runners-manager",shard=~"private|saas-.*|saas-linux-.*|shared-gitlab-org|windows-shared",type=~"ci-runners"}[30m] offset 30s)
+        rate(gitlab_runner_jobs_total{env="gstg",job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard=~"private|saas-.*|saas-linux-.*|shared-gitlab-org|windows-shared"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: ci-runners - saas_runner_queues - 30m burn-rate'
   interval: 2m
@@ -246,12 +246,12 @@ groups:
   - record: sli_aggregations:gitlab_runner_failed_jobs_total:rate_1h
     expr: |
       sum by (component,env,environment,failure_reason,feature_category,fqdn,job,jobs_running_for_project,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(gitlab_runner_failed_jobs_total{env="gstg",failure_reason=~"image_pull_failure|runner_system_failure",job=~"runners-manager",shard=~"private|saas-.*|saas-linux-.*|shared-gitlab-org|windows-shared",type=~"ci-runners"}[1h] offset 30s)
+        rate(gitlab_runner_failed_jobs_total{env="gstg",failure_reason=~"image_pull_failure|runner_system_failure",job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard=~"private|saas-.*|saas-linux-.*|shared-gitlab-org|windows-shared"}[1h] offset 30s)
       )
   - record: sli_aggregations:gitlab_runner_jobs_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,job,jobs_running_for_project,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(gitlab_runner_jobs_total{env="gstg",job=~"runners-manager",shard=~"private|saas-.*|saas-linux-.*|shared-gitlab-org|windows-shared",type=~"ci-runners"}[1h] offset 30s)
+        rate(gitlab_runner_jobs_total{env="gstg",job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard=~"private|saas-.*|saas-linux-.*|shared-gitlab-org|windows-shared"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: ci-runners - saas_runner_queues - 1h burn-rate'
   interval: 1m

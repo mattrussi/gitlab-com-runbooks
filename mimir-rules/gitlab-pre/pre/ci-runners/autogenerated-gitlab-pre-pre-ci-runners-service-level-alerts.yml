@@ -537,7 +537,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(gitlab_runner_failed_jobs_total{environment="{{ $labels.environment }}",failure_reason="image_pull_failure",job="runners-manager",shard=~"shared-gitlab-org|private|saas-linux-.*",stage="{{ $labels.stage }}"}[5m])
+          rate(gitlab_runner_failed_jobs_total{environment="{{ $labels.environment }}",failure_reason="image_pull_failure",job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard=~"shared-gitlab-org|private|saas-linux-.*",stage="{{ $labels.stage }}"}[5m])
         )
       runbook: docs/ci-runners/README.md
     labels:
@@ -587,7 +587,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(gitlab_runner_failed_jobs_total{environment="{{ $labels.environment }}",failure_reason="image_pull_failure",job="runners-manager",shard=~"shared-gitlab-org|private|saas-linux-.*",stage="{{ $labels.stage }}"}[5m])
+          rate(gitlab_runner_failed_jobs_total{environment="{{ $labels.environment }}",failure_reason="image_pull_failure",job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard=~"shared-gitlab-org|private|saas-linux-.*",stage="{{ $labels.stage }}"}[5m])
         )
       runbook: docs/ci-runners/README.md
     labels:
@@ -637,7 +637,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(gitlab_runner_jobs_total{environment="{{ $labels.environment }}",job="runners-manager",shard=~"shared-gitlab-org|private|saas-linux-.*",stage="{{ $labels.stage }}"}[5m])
+          rate(gitlab_runner_jobs_total{environment="{{ $labels.environment }}",job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard=~"shared-gitlab-org|private|saas-linux-.*",stage="{{ $labels.stage }}"}[5m])
         )
       runbook: docs/ci-runners/README.md
     labels:
@@ -676,7 +676,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(gitlab_runner_jobs_total{environment="{{ $labels.environment }}",job="runners-manager",shard=~"shared-gitlab-org|private|saas-linux-.*",stage="{{ $labels.stage }}"}[5m])
+          rate(gitlab_runner_jobs_total{environment="{{ $labels.environment }}",job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard=~"shared-gitlab-org|private|saas-linux-.*",stage="{{ $labels.stage }}"}[5m])
         )
       runbook: docs/ci-runners/README.md
     labels:
@@ -825,7 +825,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(gitlab_runner_failed_jobs_total{environment="{{ $labels.environment }}",failure_reason="runner_system_failure",job="runners-manager",shard=~"shared-gitlab-org|private|saas-.*|windows-shared",stage="{{ $labels.stage }}"}[5m])
+          rate(gitlab_runner_failed_jobs_total{environment="{{ $labels.environment }}",failure_reason="runner_system_failure",job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard=~"shared-gitlab-org|private|saas-.*|windows-shared",stage="{{ $labels.stage }}"}[5m])
         )
       runbook: docs/ci-runners/README.md
     labels:
@@ -877,7 +877,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(gitlab_runner_failed_jobs_total{environment="{{ $labels.environment }}",failure_reason="runner_system_failure",job="runners-manager",shard=~"shared-gitlab-org|private|saas-.*|windows-shared",stage="{{ $labels.stage }}"}[5m])
+          rate(gitlab_runner_failed_jobs_total{environment="{{ $labels.environment }}",failure_reason="runner_system_failure",job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard=~"shared-gitlab-org|private|saas-.*|windows-shared",stage="{{ $labels.stage }}"}[5m])
         )
       runbook: docs/ci-runners/README.md
     labels:
@@ -929,7 +929,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(gitlab_runner_jobs_total{environment="{{ $labels.environment }}",job="runners-manager",shard=~"shared-gitlab-org|private|saas-.*|windows-shared",stage="{{ $labels.stage }}"}[5m])
+          rate(gitlab_runner_jobs_total{environment="{{ $labels.environment }}",job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard=~"shared-gitlab-org|private|saas-.*|windows-shared",stage="{{ $labels.stage }}"}[5m])
         )
       runbook: docs/ci-runners/README.md
     labels:
@@ -970,7 +970,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(gitlab_runner_jobs_total{environment="{{ $labels.environment }}",job="runners-manager",shard=~"shared-gitlab-org|private|saas-.*|windows-shared",stage="{{ $labels.stage }}"}[5m])
+          rate(gitlab_runner_jobs_total{environment="{{ $labels.environment }}",job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard=~"shared-gitlab-org|private|saas-.*|windows-shared",stage="{{ $labels.stage }}"}[5m])
         )
       runbook: docs/ci-runners/README.md
     labels:
