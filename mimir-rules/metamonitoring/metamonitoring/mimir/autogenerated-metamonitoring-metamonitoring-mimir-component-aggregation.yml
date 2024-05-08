@@ -29,7 +29,7 @@ groups:
     expr: |
       (
         sum by () (
-          sli_aggregations:cortex_compactor_group_compactions_failures_total:rate_5m{code=~"^5.*",job="mimir/compactor",namespace="mimir",type="mimir"} offset 30s
+          sli_aggregations:cortex_compactor_group_compactions_failures_total:rate_5m{job="mimir/compactor",namespace="mimir",type="mimir"} offset 30s
         )
       )
       or
@@ -77,7 +77,7 @@ groups:
       type: mimir
     expr: |
       sum by () (
-        sli_aggregations:cortex_request_duration_seconds_bucket:rate_5m{job="mimir/distributor",le="30.0",namespace="mimir",type="mimir"}
+        sli_aggregations:cortex_request_duration_seconds_bucket:rate_5m{job="mimir/distributor",le="1",namespace="mimir",route=~"/distributor.Distributor/Push|/httpgrpc.*|api_(v1|prom)_push|otlp_v1_metrics",type="mimir"}
       )
   - record: gitlab_component_apdex:weight:score_5m
     labels:
@@ -90,7 +90,7 @@ groups:
       type: mimir
     expr: |
       sum by () (
-        sli_aggregations:cortex_request_duration_seconds_bucket:rate_5m{job="mimir/distributor",le="+Inf",namespace="mimir",type="mimir"}
+        sli_aggregations:cortex_request_duration_seconds_bucket:rate_5m{job="mimir/distributor",le="+Inf",namespace="mimir",route=~"/distributor.Distributor/Push|/httpgrpc.*|api_(v1|prom)_push|otlp_v1_metrics",type="mimir"}
       )
   - record: gitlab_component_ops:rate_5m
     labels:
@@ -103,7 +103,7 @@ groups:
       type: mimir
     expr: |
       sum by () (
-        sli_aggregations:cortex_request_duration_seconds_count:rate_5m{job="mimir/distributor",namespace="mimir",type="mimir"} offset 30s
+        sli_aggregations:cortex_request_duration_seconds_count:rate_5m{job="mimir/distributor",namespace="mimir",route=~"/distributor.Distributor/Push|/httpgrpc.*|api_(v1|prom)_push|otlp_v1_metrics",type="mimir"} offset 30s
       )
   - record: gitlab_component_errors:rate_5m
     labels:
@@ -117,7 +117,7 @@ groups:
     expr: |
       (
         sum by () (
-          sli_aggregations:cortex_request_duration_seconds_count:rate_5m{code=~"^5.*",job="mimir/distributor",namespace="mimir",type="mimir"} offset 30s
+          sli_aggregations:cortex_request_duration_seconds_count:rate_5m{job="mimir/distributor",namespace="mimir",route=~"/distributor.Distributor/Push|/httpgrpc.*|api_(v1|prom)_push|otlp_v1_metrics",status_code=~"^5.*",type="mimir"} offset 30s
         )
       )
       or
@@ -165,7 +165,7 @@ groups:
       type: mimir
     expr: |
       sum by () (
-        sli_aggregations:cortex_request_duration_seconds_bucket:rate_5m{job="mimir/ingester",le="30.0",namespace="mimir",type="mimir"}
+        sli_aggregations:cortex_request_duration_seconds_bucket:rate_5m{job="mimir/ingester",le="1",namespace="mimir",route=~"/cortex.Ingester/Push",type="mimir"}
       )
   - record: gitlab_component_apdex:weight:score_5m
     labels:
@@ -178,7 +178,7 @@ groups:
       type: mimir
     expr: |
       sum by () (
-        sli_aggregations:cortex_request_duration_seconds_bucket:rate_5m{job="mimir/ingester",le="+Inf",namespace="mimir",type="mimir"}
+        sli_aggregations:cortex_request_duration_seconds_bucket:rate_5m{job="mimir/ingester",le="+Inf",namespace="mimir",route=~"/cortex.Ingester/Push",type="mimir"}
       )
   - record: gitlab_component_ops:rate_5m
     labels:
@@ -191,7 +191,7 @@ groups:
       type: mimir
     expr: |
       sum by () (
-        sli_aggregations:cortex_request_duration_seconds_count:rate_5m{job="mimir/ingester",namespace="mimir",type="mimir"} offset 30s
+        sli_aggregations:cortex_request_duration_seconds_count:rate_5m{job="mimir/ingester",namespace="mimir",route=~"/cortex.Ingester/Push",type="mimir"} offset 30s
       )
   - record: gitlab_component_errors:rate_5m
     labels:
@@ -205,7 +205,7 @@ groups:
     expr: |
       (
         sum by () (
-          sli_aggregations:cortex_request_duration_seconds_count:rate_5m{code=~"^5.*",job="mimir/ingester",namespace="mimir",type="mimir"} offset 30s
+          sli_aggregations:cortex_request_duration_seconds_count:rate_5m{job="mimir/ingester",namespace="mimir",route=~"/cortex.Ingester/Push",status_code=~"^5.*",type="mimir"} offset 30s
         )
       )
       or
@@ -253,7 +253,7 @@ groups:
       type: mimir
     expr: |
       sum by () (
-        sli_aggregations:cortex_querier_request_duration_seconds_count:rate_5m{job="mimir/querier",le="30.0",namespace="mimir",type="mimir"}
+        sli_aggregations:cortex_querier_request_duration_seconds_bucket:rate_5m{job="mimir/querier",le="25",namespace="mimir",route=~"(prometheus|api_prom)_api_v1_.+",type="mimir"}
       )
   - record: gitlab_component_apdex:weight:score_5m
     labels:
@@ -266,7 +266,7 @@ groups:
       type: mimir
     expr: |
       sum by () (
-        sli_aggregations:cortex_querier_request_duration_seconds_count:rate_5m{job="mimir/querier",le="+Inf",namespace="mimir",type="mimir"}
+        sli_aggregations:cortex_querier_request_duration_seconds_bucket:rate_5m{job="mimir/querier",le="+Inf",namespace="mimir",route=~"(prometheus|api_prom)_api_v1_.+",type="mimir"}
       )
   - record: gitlab_component_ops:rate_5m
     labels:
@@ -279,7 +279,7 @@ groups:
       type: mimir
     expr: |
       sum by () (
-        sli_aggregations:cortex_request_duration_seconds_count:rate_5m{job="mimir/querier",namespace="mimir",type="mimir"} offset 30s
+        sli_aggregations:cortex_querier_request_duration_seconds_count:rate_5m{job="mimir/querier",namespace="mimir",route=~"(prometheus|api_prom)_api_v1_.+",type="mimir"} offset 30s
       )
   - record: gitlab_component_errors:rate_5m
     labels:
@@ -293,7 +293,7 @@ groups:
     expr: |
       (
         sum by () (
-          sli_aggregations:cortex_request_duration_seconds_count:rate_5m{code=~"^5.*",job="mimir/querier",namespace="mimir",type="mimir"} offset 30s
+          sli_aggregations:cortex_querier_request_duration_seconds_count:rate_5m{job="mimir/querier",namespace="mimir",route=~"(prometheus|api_prom)_api_v1_.+",status_code=~"^5.*",type="mimir"} offset 30s
         )
       )
       or
@@ -341,7 +341,7 @@ groups:
       type: mimir
     expr: |
       sum by () (
-        sli_aggregations:cortex_querier_query_frontend_request_duration_seconds_bucket:rate_5m{job="mimir/query-frontend",le="30.0",namespace="mimir",type="mimir"}
+        sli_aggregations:cortex_request_duration_seconds_bucket:rate_5m{job="mimir/query-frontend",le="25",namespace="mimir",route=~"(prometheus|api_prom)_api_v1_.+",type="mimir"}
       )
   - record: gitlab_component_apdex:weight:score_5m
     labels:
@@ -354,7 +354,7 @@ groups:
       type: mimir
     expr: |
       sum by () (
-        sli_aggregations:cortex_querier_query_frontend_request_duration_seconds_bucket:rate_5m{job="mimir/query-frontend",le="+Inf",namespace="mimir",type="mimir"}
+        sli_aggregations:cortex_request_duration_seconds_bucket:rate_5m{job="mimir/query-frontend",le="+Inf",namespace="mimir",route=~"(prometheus|api_prom)_api_v1_.+",type="mimir"}
       )
   - record: gitlab_component_ops:rate_5m
     labels:
@@ -367,7 +367,7 @@ groups:
       type: mimir
     expr: |
       sum by () (
-        sli_aggregations:cortex_request_duration_seconds_count:rate_5m{job="mimir/query-frontend",namespace="mimir",type="mimir"} offset 30s
+        sli_aggregations:cortex_request_duration_seconds_count:rate_5m{job="mimir/query-frontend",namespace="mimir",route=~"(prometheus|api_prom)_api_v1_.+",type="mimir"} offset 30s
       )
   - record: gitlab_component_errors:rate_5m
     labels:
@@ -381,7 +381,7 @@ groups:
     expr: |
       (
         sum by () (
-          sli_aggregations:cortex_request_duration_seconds_count:rate_5m{code=~"^5.*",job="mimir/query-frontend",namespace="mimir",type="mimir"} offset 30s
+          sli_aggregations:cortex_request_duration_seconds_count:rate_5m{job="mimir/query-frontend",namespace="mimir",route=~"(prometheus|api_prom)_api_v1_.+",status_code=~"^5.*",type="mimir"} offset 30s
         )
       )
       or
@@ -429,7 +429,7 @@ groups:
       type: mimir
     expr: |
       sum by () (
-        sli_aggregations:cortex_query_scheduler_queue_duration_seconds_bucket:rate_5m{job="mimir/query-scheduler",le="30.0",namespace="mimir",type="mimir"}
+        sli_aggregations:cortex_query_scheduler_queue_duration_seconds_bucket:rate_5m{job="mimir/query-scheduler",le="5",namespace="mimir",type="mimir"}
       )
   - record: gitlab_component_apdex:weight:score_5m
     labels:
@@ -469,7 +469,7 @@ groups:
     expr: |
       (
         sum by () (
-          sli_aggregations:cortex_query_scheduler_queue_duration_seconds_count:rate_5m{code=~"^5.*",job="mimir/query-scheduler",namespace="mimir",type="mimir"} offset 30s
+          sli_aggregations:cortex_query_scheduler_queue_duration_seconds_count:rate_5m{job="mimir/query-scheduler",namespace="mimir",status_code=~"^5.*",type="mimir"} offset 30s
         )
       )
       or
@@ -579,7 +579,7 @@ groups:
       type: mimir
     expr: |
       sum by () (
-        sli_aggregations:cortex_kv_request_duration_seconds_bucket:rate_5m{job="mimir/store-gateway",le="30.0",namespace="mimir",type="mimir"}
+        sli_aggregations:cortex_request_duration_seconds_bucket:rate_5m{job="mimir/store-gateway",le="25",namespace="mimir",route=~"/gatewaypb.StoreGateway/.*",type="mimir"}
       )
   - record: gitlab_component_apdex:weight:score_5m
     labels:
@@ -592,7 +592,7 @@ groups:
       type: mimir
     expr: |
       sum by () (
-        sli_aggregations:cortex_kv_request_duration_seconds_bucket:rate_5m{job="mimir/store-gateway",le="+Inf",namespace="mimir",type="mimir"}
+        sli_aggregations:cortex_request_duration_seconds_bucket:rate_5m{job="mimir/store-gateway",le="+Inf",namespace="mimir",route=~"/gatewaypb.StoreGateway/.*",type="mimir"}
       )
   - record: gitlab_component_ops:rate_5m
     labels:
@@ -605,7 +605,7 @@ groups:
       type: mimir
     expr: |
       sum by () (
-        sli_aggregations:cortex_kv_request_duration_seconds_count:rate_5m{job="mimir/store-gateway",namespace="mimir",type="mimir"} offset 30s
+        sli_aggregations:cortex_request_duration_seconds_count:rate_5m{job="mimir/store-gateway",namespace="mimir",route=~"/gatewaypb.StoreGateway/.*",type="mimir"} offset 30s
       )
   - record: gitlab_component_errors:rate_5m
     labels:
@@ -619,7 +619,7 @@ groups:
     expr: |
       (
         sum by () (
-          sli_aggregations:cortex_kv_request_duration_seconds_count:rate_5m{code=~"^5.*",job="mimir/store-gateway",namespace="mimir",type="mimir"} offset 30s
+          sli_aggregations:cortex_request_duration_seconds_count:rate_5m{job="mimir/store-gateway",namespace="mimir",route=~"/gatewaypb.StoreGateway/.*",status_code=~"^5.*",type="mimir"} offset 30s
         )
       )
       or
@@ -684,7 +684,7 @@ groups:
     expr: |
       (
         sum by () (
-          sli_aggregations:cortex_compactor_group_compactions_failures_total:rate_30m{code=~"^5.*",job="mimir/compactor",namespace="mimir",type="mimir"} offset 30s
+          sli_aggregations:cortex_compactor_group_compactions_failures_total:rate_30m{job="mimir/compactor",namespace="mimir",type="mimir"} offset 30s
         )
       )
       or
@@ -732,7 +732,7 @@ groups:
       type: mimir
     expr: |
       sum by () (
-        sli_aggregations:cortex_request_duration_seconds_bucket:rate_30m{job="mimir/distributor",le="30.0",namespace="mimir",type="mimir"}
+        sli_aggregations:cortex_request_duration_seconds_bucket:rate_30m{job="mimir/distributor",le="1",namespace="mimir",route=~"/distributor.Distributor/Push|/httpgrpc.*|api_(v1|prom)_push|otlp_v1_metrics",type="mimir"}
       )
   - record: gitlab_component_apdex:weight:score_30m
     labels:
@@ -745,7 +745,7 @@ groups:
       type: mimir
     expr: |
       sum by () (
-        sli_aggregations:cortex_request_duration_seconds_bucket:rate_30m{job="mimir/distributor",le="+Inf",namespace="mimir",type="mimir"}
+        sli_aggregations:cortex_request_duration_seconds_bucket:rate_30m{job="mimir/distributor",le="+Inf",namespace="mimir",route=~"/distributor.Distributor/Push|/httpgrpc.*|api_(v1|prom)_push|otlp_v1_metrics",type="mimir"}
       )
   - record: gitlab_component_ops:rate_30m
     labels:
@@ -758,7 +758,7 @@ groups:
       type: mimir
     expr: |
       sum by () (
-        sli_aggregations:cortex_request_duration_seconds_count:rate_30m{job="mimir/distributor",namespace="mimir",type="mimir"} offset 30s
+        sli_aggregations:cortex_request_duration_seconds_count:rate_30m{job="mimir/distributor",namespace="mimir",route=~"/distributor.Distributor/Push|/httpgrpc.*|api_(v1|prom)_push|otlp_v1_metrics",type="mimir"} offset 30s
       )
   - record: gitlab_component_errors:rate_30m
     labels:
@@ -772,7 +772,7 @@ groups:
     expr: |
       (
         sum by () (
-          sli_aggregations:cortex_request_duration_seconds_count:rate_30m{code=~"^5.*",job="mimir/distributor",namespace="mimir",type="mimir"} offset 30s
+          sli_aggregations:cortex_request_duration_seconds_count:rate_30m{job="mimir/distributor",namespace="mimir",route=~"/distributor.Distributor/Push|/httpgrpc.*|api_(v1|prom)_push|otlp_v1_metrics",status_code=~"^5.*",type="mimir"} offset 30s
         )
       )
       or
@@ -820,7 +820,7 @@ groups:
       type: mimir
     expr: |
       sum by () (
-        sli_aggregations:cortex_request_duration_seconds_bucket:rate_30m{job="mimir/ingester",le="30.0",namespace="mimir",type="mimir"}
+        sli_aggregations:cortex_request_duration_seconds_bucket:rate_30m{job="mimir/ingester",le="1",namespace="mimir",route=~"/cortex.Ingester/Push",type="mimir"}
       )
   - record: gitlab_component_apdex:weight:score_30m
     labels:
@@ -833,7 +833,7 @@ groups:
       type: mimir
     expr: |
       sum by () (
-        sli_aggregations:cortex_request_duration_seconds_bucket:rate_30m{job="mimir/ingester",le="+Inf",namespace="mimir",type="mimir"}
+        sli_aggregations:cortex_request_duration_seconds_bucket:rate_30m{job="mimir/ingester",le="+Inf",namespace="mimir",route=~"/cortex.Ingester/Push",type="mimir"}
       )
   - record: gitlab_component_ops:rate_30m
     labels:
@@ -846,7 +846,7 @@ groups:
       type: mimir
     expr: |
       sum by () (
-        sli_aggregations:cortex_request_duration_seconds_count:rate_30m{job="mimir/ingester",namespace="mimir",type="mimir"} offset 30s
+        sli_aggregations:cortex_request_duration_seconds_count:rate_30m{job="mimir/ingester",namespace="mimir",route=~"/cortex.Ingester/Push",type="mimir"} offset 30s
       )
   - record: gitlab_component_errors:rate_30m
     labels:
@@ -860,7 +860,7 @@ groups:
     expr: |
       (
         sum by () (
-          sli_aggregations:cortex_request_duration_seconds_count:rate_30m{code=~"^5.*",job="mimir/ingester",namespace="mimir",type="mimir"} offset 30s
+          sli_aggregations:cortex_request_duration_seconds_count:rate_30m{job="mimir/ingester",namespace="mimir",route=~"/cortex.Ingester/Push",status_code=~"^5.*",type="mimir"} offset 30s
         )
       )
       or
@@ -908,7 +908,7 @@ groups:
       type: mimir
     expr: |
       sum by () (
-        sli_aggregations:cortex_querier_request_duration_seconds_count:rate_30m{job="mimir/querier",le="30.0",namespace="mimir",type="mimir"}
+        sli_aggregations:cortex_querier_request_duration_seconds_bucket:rate_30m{job="mimir/querier",le="25",namespace="mimir",route=~"(prometheus|api_prom)_api_v1_.+",type="mimir"}
       )
   - record: gitlab_component_apdex:weight:score_30m
     labels:
@@ -921,7 +921,7 @@ groups:
       type: mimir
     expr: |
       sum by () (
-        sli_aggregations:cortex_querier_request_duration_seconds_count:rate_30m{job="mimir/querier",le="+Inf",namespace="mimir",type="mimir"}
+        sli_aggregations:cortex_querier_request_duration_seconds_bucket:rate_30m{job="mimir/querier",le="+Inf",namespace="mimir",route=~"(prometheus|api_prom)_api_v1_.+",type="mimir"}
       )
   - record: gitlab_component_ops:rate_30m
     labels:
@@ -934,7 +934,7 @@ groups:
       type: mimir
     expr: |
       sum by () (
-        sli_aggregations:cortex_request_duration_seconds_count:rate_30m{job="mimir/querier",namespace="mimir",type="mimir"} offset 30s
+        sli_aggregations:cortex_querier_request_duration_seconds_count:rate_30m{job="mimir/querier",namespace="mimir",route=~"(prometheus|api_prom)_api_v1_.+",type="mimir"} offset 30s
       )
   - record: gitlab_component_errors:rate_30m
     labels:
@@ -948,7 +948,7 @@ groups:
     expr: |
       (
         sum by () (
-          sli_aggregations:cortex_request_duration_seconds_count:rate_30m{code=~"^5.*",job="mimir/querier",namespace="mimir",type="mimir"} offset 30s
+          sli_aggregations:cortex_querier_request_duration_seconds_count:rate_30m{job="mimir/querier",namespace="mimir",route=~"(prometheus|api_prom)_api_v1_.+",status_code=~"^5.*",type="mimir"} offset 30s
         )
       )
       or
@@ -996,7 +996,7 @@ groups:
       type: mimir
     expr: |
       sum by () (
-        sli_aggregations:cortex_querier_query_frontend_request_duration_seconds_bucket:rate_30m{job="mimir/query-frontend",le="30.0",namespace="mimir",type="mimir"}
+        sli_aggregations:cortex_request_duration_seconds_bucket:rate_30m{job="mimir/query-frontend",le="25",namespace="mimir",route=~"(prometheus|api_prom)_api_v1_.+",type="mimir"}
       )
   - record: gitlab_component_apdex:weight:score_30m
     labels:
@@ -1009,7 +1009,7 @@ groups:
       type: mimir
     expr: |
       sum by () (
-        sli_aggregations:cortex_querier_query_frontend_request_duration_seconds_bucket:rate_30m{job="mimir/query-frontend",le="+Inf",namespace="mimir",type="mimir"}
+        sli_aggregations:cortex_request_duration_seconds_bucket:rate_30m{job="mimir/query-frontend",le="+Inf",namespace="mimir",route=~"(prometheus|api_prom)_api_v1_.+",type="mimir"}
       )
   - record: gitlab_component_ops:rate_30m
     labels:
@@ -1022,7 +1022,7 @@ groups:
       type: mimir
     expr: |
       sum by () (
-        sli_aggregations:cortex_request_duration_seconds_count:rate_30m{job="mimir/query-frontend",namespace="mimir",type="mimir"} offset 30s
+        sli_aggregations:cortex_request_duration_seconds_count:rate_30m{job="mimir/query-frontend",namespace="mimir",route=~"(prometheus|api_prom)_api_v1_.+",type="mimir"} offset 30s
       )
   - record: gitlab_component_errors:rate_30m
     labels:
@@ -1036,7 +1036,7 @@ groups:
     expr: |
       (
         sum by () (
-          sli_aggregations:cortex_request_duration_seconds_count:rate_30m{code=~"^5.*",job="mimir/query-frontend",namespace="mimir",type="mimir"} offset 30s
+          sli_aggregations:cortex_request_duration_seconds_count:rate_30m{job="mimir/query-frontend",namespace="mimir",route=~"(prometheus|api_prom)_api_v1_.+",status_code=~"^5.*",type="mimir"} offset 30s
         )
       )
       or
@@ -1084,7 +1084,7 @@ groups:
       type: mimir
     expr: |
       sum by () (
-        sli_aggregations:cortex_query_scheduler_queue_duration_seconds_bucket:rate_30m{job="mimir/query-scheduler",le="30.0",namespace="mimir",type="mimir"}
+        sli_aggregations:cortex_query_scheduler_queue_duration_seconds_bucket:rate_30m{job="mimir/query-scheduler",le="5",namespace="mimir",type="mimir"}
       )
   - record: gitlab_component_apdex:weight:score_30m
     labels:
@@ -1124,7 +1124,7 @@ groups:
     expr: |
       (
         sum by () (
-          sli_aggregations:cortex_query_scheduler_queue_duration_seconds_count:rate_30m{code=~"^5.*",job="mimir/query-scheduler",namespace="mimir",type="mimir"} offset 30s
+          sli_aggregations:cortex_query_scheduler_queue_duration_seconds_count:rate_30m{job="mimir/query-scheduler",namespace="mimir",status_code=~"^5.*",type="mimir"} offset 30s
         )
       )
       or
@@ -1234,7 +1234,7 @@ groups:
       type: mimir
     expr: |
       sum by () (
-        sli_aggregations:cortex_kv_request_duration_seconds_bucket:rate_30m{job="mimir/store-gateway",le="30.0",namespace="mimir",type="mimir"}
+        sli_aggregations:cortex_request_duration_seconds_bucket:rate_30m{job="mimir/store-gateway",le="25",namespace="mimir",route=~"/gatewaypb.StoreGateway/.*",type="mimir"}
       )
   - record: gitlab_component_apdex:weight:score_30m
     labels:
@@ -1247,7 +1247,7 @@ groups:
       type: mimir
     expr: |
       sum by () (
-        sli_aggregations:cortex_kv_request_duration_seconds_bucket:rate_30m{job="mimir/store-gateway",le="+Inf",namespace="mimir",type="mimir"}
+        sli_aggregations:cortex_request_duration_seconds_bucket:rate_30m{job="mimir/store-gateway",le="+Inf",namespace="mimir",route=~"/gatewaypb.StoreGateway/.*",type="mimir"}
       )
   - record: gitlab_component_ops:rate_30m
     labels:
@@ -1260,7 +1260,7 @@ groups:
       type: mimir
     expr: |
       sum by () (
-        sli_aggregations:cortex_kv_request_duration_seconds_count:rate_30m{job="mimir/store-gateway",namespace="mimir",type="mimir"} offset 30s
+        sli_aggregations:cortex_request_duration_seconds_count:rate_30m{job="mimir/store-gateway",namespace="mimir",route=~"/gatewaypb.StoreGateway/.*",type="mimir"} offset 30s
       )
   - record: gitlab_component_errors:rate_30m
     labels:
@@ -1274,7 +1274,7 @@ groups:
     expr: |
       (
         sum by () (
-          sli_aggregations:cortex_kv_request_duration_seconds_count:rate_30m{code=~"^5.*",job="mimir/store-gateway",namespace="mimir",type="mimir"} offset 30s
+          sli_aggregations:cortex_request_duration_seconds_count:rate_30m{job="mimir/store-gateway",namespace="mimir",route=~"/gatewaypb.StoreGateway/.*",status_code=~"^5.*",type="mimir"} offset 30s
         )
       )
       or
@@ -1339,7 +1339,7 @@ groups:
     expr: |
       (
         sum by () (
-          sli_aggregations:cortex_compactor_group_compactions_failures_total:rate_1h{code=~"^5.*",job="mimir/compactor",namespace="mimir",type="mimir"} offset 30s
+          sli_aggregations:cortex_compactor_group_compactions_failures_total:rate_1h{job="mimir/compactor",namespace="mimir",type="mimir"} offset 30s
         )
       )
       or
@@ -1387,7 +1387,7 @@ groups:
       type: mimir
     expr: |
       sum by () (
-        sli_aggregations:cortex_request_duration_seconds_bucket:rate_1h{job="mimir/distributor",le="30.0",namespace="mimir",type="mimir"}
+        sli_aggregations:cortex_request_duration_seconds_bucket:rate_1h{job="mimir/distributor",le="1",namespace="mimir",route=~"/distributor.Distributor/Push|/httpgrpc.*|api_(v1|prom)_push|otlp_v1_metrics",type="mimir"}
       )
   - record: gitlab_component_apdex:weight:score_1h
     labels:
@@ -1400,7 +1400,7 @@ groups:
       type: mimir
     expr: |
       sum by () (
-        sli_aggregations:cortex_request_duration_seconds_bucket:rate_1h{job="mimir/distributor",le="+Inf",namespace="mimir",type="mimir"}
+        sli_aggregations:cortex_request_duration_seconds_bucket:rate_1h{job="mimir/distributor",le="+Inf",namespace="mimir",route=~"/distributor.Distributor/Push|/httpgrpc.*|api_(v1|prom)_push|otlp_v1_metrics",type="mimir"}
       )
   - record: gitlab_component_ops:rate_1h
     labels:
@@ -1413,7 +1413,7 @@ groups:
       type: mimir
     expr: |
       sum by () (
-        sli_aggregations:cortex_request_duration_seconds_count:rate_1h{job="mimir/distributor",namespace="mimir",type="mimir"} offset 30s
+        sli_aggregations:cortex_request_duration_seconds_count:rate_1h{job="mimir/distributor",namespace="mimir",route=~"/distributor.Distributor/Push|/httpgrpc.*|api_(v1|prom)_push|otlp_v1_metrics",type="mimir"} offset 30s
       )
   - record: gitlab_component_errors:rate_1h
     labels:
@@ -1427,7 +1427,7 @@ groups:
     expr: |
       (
         sum by () (
-          sli_aggregations:cortex_request_duration_seconds_count:rate_1h{code=~"^5.*",job="mimir/distributor",namespace="mimir",type="mimir"} offset 30s
+          sli_aggregations:cortex_request_duration_seconds_count:rate_1h{job="mimir/distributor",namespace="mimir",route=~"/distributor.Distributor/Push|/httpgrpc.*|api_(v1|prom)_push|otlp_v1_metrics",status_code=~"^5.*",type="mimir"} offset 30s
         )
       )
       or
@@ -1475,7 +1475,7 @@ groups:
       type: mimir
     expr: |
       sum by () (
-        sli_aggregations:cortex_request_duration_seconds_bucket:rate_1h{job="mimir/ingester",le="30.0",namespace="mimir",type="mimir"}
+        sli_aggregations:cortex_request_duration_seconds_bucket:rate_1h{job="mimir/ingester",le="1",namespace="mimir",route=~"/cortex.Ingester/Push",type="mimir"}
       )
   - record: gitlab_component_apdex:weight:score_1h
     labels:
@@ -1488,7 +1488,7 @@ groups:
       type: mimir
     expr: |
       sum by () (
-        sli_aggregations:cortex_request_duration_seconds_bucket:rate_1h{job="mimir/ingester",le="+Inf",namespace="mimir",type="mimir"}
+        sli_aggregations:cortex_request_duration_seconds_bucket:rate_1h{job="mimir/ingester",le="+Inf",namespace="mimir",route=~"/cortex.Ingester/Push",type="mimir"}
       )
   - record: gitlab_component_ops:rate_1h
     labels:
@@ -1501,7 +1501,7 @@ groups:
       type: mimir
     expr: |
       sum by () (
-        sli_aggregations:cortex_request_duration_seconds_count:rate_1h{job="mimir/ingester",namespace="mimir",type="mimir"} offset 30s
+        sli_aggregations:cortex_request_duration_seconds_count:rate_1h{job="mimir/ingester",namespace="mimir",route=~"/cortex.Ingester/Push",type="mimir"} offset 30s
       )
   - record: gitlab_component_errors:rate_1h
     labels:
@@ -1515,7 +1515,7 @@ groups:
     expr: |
       (
         sum by () (
-          sli_aggregations:cortex_request_duration_seconds_count:rate_1h{code=~"^5.*",job="mimir/ingester",namespace="mimir",type="mimir"} offset 30s
+          sli_aggregations:cortex_request_duration_seconds_count:rate_1h{job="mimir/ingester",namespace="mimir",route=~"/cortex.Ingester/Push",status_code=~"^5.*",type="mimir"} offset 30s
         )
       )
       or
@@ -1563,7 +1563,7 @@ groups:
       type: mimir
     expr: |
       sum by () (
-        sli_aggregations:cortex_querier_request_duration_seconds_count:rate_1h{job="mimir/querier",le="30.0",namespace="mimir",type="mimir"}
+        sli_aggregations:cortex_querier_request_duration_seconds_bucket:rate_1h{job="mimir/querier",le="25",namespace="mimir",route=~"(prometheus|api_prom)_api_v1_.+",type="mimir"}
       )
   - record: gitlab_component_apdex:weight:score_1h
     labels:
@@ -1576,7 +1576,7 @@ groups:
       type: mimir
     expr: |
       sum by () (
-        sli_aggregations:cortex_querier_request_duration_seconds_count:rate_1h{job="mimir/querier",le="+Inf",namespace="mimir",type="mimir"}
+        sli_aggregations:cortex_querier_request_duration_seconds_bucket:rate_1h{job="mimir/querier",le="+Inf",namespace="mimir",route=~"(prometheus|api_prom)_api_v1_.+",type="mimir"}
       )
   - record: gitlab_component_ops:rate_1h
     labels:
@@ -1589,7 +1589,7 @@ groups:
       type: mimir
     expr: |
       sum by () (
-        sli_aggregations:cortex_request_duration_seconds_count:rate_1h{job="mimir/querier",namespace="mimir",type="mimir"} offset 30s
+        sli_aggregations:cortex_querier_request_duration_seconds_count:rate_1h{job="mimir/querier",namespace="mimir",route=~"(prometheus|api_prom)_api_v1_.+",type="mimir"} offset 30s
       )
   - record: gitlab_component_errors:rate_1h
     labels:
@@ -1603,7 +1603,7 @@ groups:
     expr: |
       (
         sum by () (
-          sli_aggregations:cortex_request_duration_seconds_count:rate_1h{code=~"^5.*",job="mimir/querier",namespace="mimir",type="mimir"} offset 30s
+          sli_aggregations:cortex_querier_request_duration_seconds_count:rate_1h{job="mimir/querier",namespace="mimir",route=~"(prometheus|api_prom)_api_v1_.+",status_code=~"^5.*",type="mimir"} offset 30s
         )
       )
       or
@@ -1651,7 +1651,7 @@ groups:
       type: mimir
     expr: |
       sum by () (
-        sli_aggregations:cortex_querier_query_frontend_request_duration_seconds_bucket:rate_1h{job="mimir/query-frontend",le="30.0",namespace="mimir",type="mimir"}
+        sli_aggregations:cortex_request_duration_seconds_bucket:rate_1h{job="mimir/query-frontend",le="25",namespace="mimir",route=~"(prometheus|api_prom)_api_v1_.+",type="mimir"}
       )
   - record: gitlab_component_apdex:weight:score_1h
     labels:
@@ -1664,7 +1664,7 @@ groups:
       type: mimir
     expr: |
       sum by () (
-        sli_aggregations:cortex_querier_query_frontend_request_duration_seconds_bucket:rate_1h{job="mimir/query-frontend",le="+Inf",namespace="mimir",type="mimir"}
+        sli_aggregations:cortex_request_duration_seconds_bucket:rate_1h{job="mimir/query-frontend",le="+Inf",namespace="mimir",route=~"(prometheus|api_prom)_api_v1_.+",type="mimir"}
       )
   - record: gitlab_component_ops:rate_1h
     labels:
@@ -1677,7 +1677,7 @@ groups:
       type: mimir
     expr: |
       sum by () (
-        sli_aggregations:cortex_request_duration_seconds_count:rate_1h{job="mimir/query-frontend",namespace="mimir",type="mimir"} offset 30s
+        sli_aggregations:cortex_request_duration_seconds_count:rate_1h{job="mimir/query-frontend",namespace="mimir",route=~"(prometheus|api_prom)_api_v1_.+",type="mimir"} offset 30s
       )
   - record: gitlab_component_errors:rate_1h
     labels:
@@ -1691,7 +1691,7 @@ groups:
     expr: |
       (
         sum by () (
-          sli_aggregations:cortex_request_duration_seconds_count:rate_1h{code=~"^5.*",job="mimir/query-frontend",namespace="mimir",type="mimir"} offset 30s
+          sli_aggregations:cortex_request_duration_seconds_count:rate_1h{job="mimir/query-frontend",namespace="mimir",route=~"(prometheus|api_prom)_api_v1_.+",status_code=~"^5.*",type="mimir"} offset 30s
         )
       )
       or
@@ -1739,7 +1739,7 @@ groups:
       type: mimir
     expr: |
       sum by () (
-        sli_aggregations:cortex_query_scheduler_queue_duration_seconds_bucket:rate_1h{job="mimir/query-scheduler",le="30.0",namespace="mimir",type="mimir"}
+        sli_aggregations:cortex_query_scheduler_queue_duration_seconds_bucket:rate_1h{job="mimir/query-scheduler",le="5",namespace="mimir",type="mimir"}
       )
   - record: gitlab_component_apdex:weight:score_1h
     labels:
@@ -1779,7 +1779,7 @@ groups:
     expr: |
       (
         sum by () (
-          sli_aggregations:cortex_query_scheduler_queue_duration_seconds_count:rate_1h{code=~"^5.*",job="mimir/query-scheduler",namespace="mimir",type="mimir"} offset 30s
+          sli_aggregations:cortex_query_scheduler_queue_duration_seconds_count:rate_1h{job="mimir/query-scheduler",namespace="mimir",status_code=~"^5.*",type="mimir"} offset 30s
         )
       )
       or
@@ -1889,7 +1889,7 @@ groups:
       type: mimir
     expr: |
       sum by () (
-        sli_aggregations:cortex_kv_request_duration_seconds_bucket:rate_1h{job="mimir/store-gateway",le="30.0",namespace="mimir",type="mimir"}
+        sli_aggregations:cortex_request_duration_seconds_bucket:rate_1h{job="mimir/store-gateway",le="25",namespace="mimir",route=~"/gatewaypb.StoreGateway/.*",type="mimir"}
       )
   - record: gitlab_component_apdex:weight:score_1h
     labels:
@@ -1902,7 +1902,7 @@ groups:
       type: mimir
     expr: |
       sum by () (
-        sli_aggregations:cortex_kv_request_duration_seconds_bucket:rate_1h{job="mimir/store-gateway",le="+Inf",namespace="mimir",type="mimir"}
+        sli_aggregations:cortex_request_duration_seconds_bucket:rate_1h{job="mimir/store-gateway",le="+Inf",namespace="mimir",route=~"/gatewaypb.StoreGateway/.*",type="mimir"}
       )
   - record: gitlab_component_ops:rate_1h
     labels:
@@ -1915,7 +1915,7 @@ groups:
       type: mimir
     expr: |
       sum by () (
-        sli_aggregations:cortex_kv_request_duration_seconds_count:rate_1h{job="mimir/store-gateway",namespace="mimir",type="mimir"} offset 30s
+        sli_aggregations:cortex_request_duration_seconds_count:rate_1h{job="mimir/store-gateway",namespace="mimir",route=~"/gatewaypb.StoreGateway/.*",type="mimir"} offset 30s
       )
   - record: gitlab_component_errors:rate_1h
     labels:
@@ -1929,7 +1929,7 @@ groups:
     expr: |
       (
         sum by () (
-          sli_aggregations:cortex_kv_request_duration_seconds_count:rate_1h{code=~"^5.*",job="mimir/store-gateway",namespace="mimir",type="mimir"} offset 30s
+          sli_aggregations:cortex_request_duration_seconds_count:rate_1h{job="mimir/store-gateway",namespace="mimir",route=~"/gatewaypb.StoreGateway/.*",status_code=~"^5.*",type="mimir"} offset 30s
         )
       )
       or
