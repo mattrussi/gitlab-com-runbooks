@@ -160,7 +160,7 @@ metricsCatalog.serviceDefinition(
           counter='stackdriver_gce_instance_logging_googleapis_com_log_entry_count',
         ),
 
-        emittedBy: ['monitoring'],
+        emittedBy: [],
 
         significantLabels: ['log', 'severity'],
       },
@@ -178,7 +178,7 @@ metricsCatalog.serviceDefinition(
           selector=monitoringTypeSelector,
         ),
 
-        emittedBy: ['monitoring'],
+        emittedBy: [],
 
         significantLabels: ['topic_id'],
 
@@ -199,7 +199,7 @@ metricsCatalog.serviceDefinition(
           selector=monitoringTypeSelector,
         ),
 
-        emittedBy: ['monitoring'],
+        emittedBy: [],
 
         significantLabels: ['subscription_id'],
 
