@@ -9,7 +9,7 @@ local formatConfig = {
     job: 'runway-exporter',
     env: '$environment',
     url_map_name: '$loadbalancer',
-    region: { re: '$region' },
+    backend_scope: { re: '$region' },
   }),
 };
 
