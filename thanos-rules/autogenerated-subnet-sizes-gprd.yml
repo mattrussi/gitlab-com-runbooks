@@ -10,24 +10,28 @@ groups:
       env: gprd
       environment: gprd
       subnet: gitlab-gke-gprd
+      type: kube
     expr: 510
   - record: gitlab:gcp_subnet_max_ips
     labels:
       env: gprd
       environment: gprd
       subnet: gke-us-east1-b-gprd
+      type: kube
     expr: 254
   - record: gitlab:gcp_subnet_max_ips
     labels:
       env: gprd
       environment: gprd
       subnet: gke-us-east1-c-gprd
+      type: kube
     expr: 254
   - record: gitlab:gcp_subnet_max_ips
     labels:
       env: gprd
       environment: gprd
       subnet: gke-us-east1-d-gprd
+      type: kube
     expr: 254
 - name: Subnet Cluster mapping
   interval: 1m
@@ -39,6 +43,7 @@ groups:
       env: gprd
       environment: gprd
       subnet: gitlab-gke-gprd
+      type: kube
     expr: 1
   - record: gitlab:cluster:subnet:mapping
     labels:
@@ -46,6 +51,7 @@ groups:
       env: gprd
       environment: gprd
       subnet: gke-us-east1-b-gprd
+      type: kube
     expr: 1
   - record: gitlab:cluster:subnet:mapping
     labels:
@@ -53,6 +59,7 @@ groups:
       env: gprd
       environment: gprd
       subnet: gke-us-east1-c-gprd
+      type: kube
     expr: 1
   - record: gitlab:cluster:subnet:mapping
     labels:
@@ -60,4 +67,5 @@ groups:
       env: gprd
       environment: gprd
       subnet: gke-us-east1-d-gprd
+      type: kube
     expr: 1

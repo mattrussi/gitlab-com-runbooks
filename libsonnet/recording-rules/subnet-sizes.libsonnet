@@ -16,6 +16,7 @@ local subnetSizeRules = [
       subnet: subnetName,
       env: 'gprd',
       environment: 'gprd',
+      type: 'kube',
     },
     expr: subnetSizes[subnetName],
   }
@@ -39,6 +40,7 @@ local clusterSubnetMappingRules = [
       cluster: clusterName,
       env: 'gprd',
       environment: 'gprd',
+      type: 'kube',
     },
     expr: 1,
   }
