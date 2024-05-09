@@ -12,6 +12,7 @@ metricsCatalog.serviceDefinition({
   // query endpoint for the upstream GitLab Thanos instance, see
   // https://thanos.gitlab.net/stores -> thanos-query.opstracegcp.com:80
   dangerouslyThanosEvaluated: true,
+  tenants: [ 'gitlab-observability' ],
 
   type: 'tracing',
   tier: 'sv',

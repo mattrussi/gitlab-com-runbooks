@@ -97,6 +97,10 @@ local objects = import 'utils/objects.libsonnet';
       selector: {},
       envName: 'metamonitoring',
     },
+    'gitlab-observability': {
+      selector: {},
+      envName: 'gitlab-observability',
+    }
   },
 
   gkeClustersByEnvironment: {
