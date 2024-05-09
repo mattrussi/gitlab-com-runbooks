@@ -15,7 +15,6 @@ local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
     team=null,
     trafficCessationAlertConfig=true,
     additionalToolingLinks=[],
-    emittedBy=['monitoring'],
     baseSelector={ url_map_name: loadBalancerName, project_id: projectId },
     serviceAggregation=true,
     extra={},
@@ -43,7 +42,7 @@ local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
         selector=baseSelector { response_code_class: '500' },
       ),
 
-      emittedBy: emittedBy,
+      emittedBy: [],
 
       serviceAggregation: serviceAggregation,
 

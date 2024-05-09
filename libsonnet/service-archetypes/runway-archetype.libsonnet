@@ -106,7 +106,6 @@ function(
         featureCategory=featureCategory,
         loadBalancerName='%(type)s-url-map' % type,
         projectId='gitlab-runway-production',
-        emittedBy=[],
         baseSelector={ job: 'runway-exporter', url_map_name: '%(type)s-url-map' % type },
         serviceAggregation=false,
         extra={
