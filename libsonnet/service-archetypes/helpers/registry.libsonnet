@@ -13,7 +13,7 @@ local registryApdex(selector, satisfiedThreshold, toleratedThreshold=null) =
 local mainApdex(selector, customRouteSLIs) =
   local customizedRoutes = std.set(std.map(function(routeConfig) routeConfig.route, customRouteSLIs));
   local withoutCustomizedRouteSelector = selector {
-    route: { nre: std.join('|', customizedRoutes) },
+    route: { noneOf: customizedRoutes },
   };
 
   registryApdex(selector + withoutCustomizedRouteSelector, satisfiedThreshold=2.5, toleratedThreshold=25);
@@ -21,7 +21,7 @@ local mainApdex(selector, customRouteSLIs) =
 local sliFromConfig(registryBaseSelector, defaultRegistrySLIProperties, config) =
   local selector = registryBaseSelector {
     route: { eq: config.route },
-    method: { re: std.join('|', config.methods) },
+    method: { oneOf: config.methods },
   };
   local toleratedThreshold =
     if std.objectHas(config, 'toleratedThreshold') then

@@ -56,11 +56,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(gitlab_workhorse_http_request_duration_seconds_bucket{job=~"gitlab-workhorse-api|gitlab-workhorse",le="1",route!="^/-/health$",route!="^/-/(readiness|liveness)$",type="internal-api"}[1m] offset 30s)
+          rate(gitlab_workhorse_http_request_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-api",le="1",route!="^/-/health$",route!="^/-/(readiness|liveness)$",type="internal-api"}[1m] offset 30s)
         )
         +
         sum by (env,environment,stage) (
-          rate(gitlab_workhorse_http_request_duration_seconds_bucket{job=~"gitlab-workhorse-api|gitlab-workhorse",le="10",route!="^/-/health$",route!="^/-/(readiness|liveness)$",type="internal-api"}[1m] offset 30s)
+          rate(gitlab_workhorse_http_request_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-api",le="10",route!="^/-/health$",route!="^/-/(readiness|liveness)$",type="internal-api"}[1m] offset 30s)
         )
       )
       /
@@ -72,7 +72,7 @@ groups:
       type: internal-api
     expr: |
       sum by (env,environment,stage) (
-        rate(gitlab_workhorse_http_request_duration_seconds_bucket{job=~"gitlab-workhorse-api|gitlab-workhorse",le="+Inf",route!="^/-/health$",route!="^/-/(readiness|liveness)$",type="internal-api"}[1m] offset 30s)
+        rate(gitlab_workhorse_http_request_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-api",le="+Inf",route!="^/-/health$",route!="^/-/(readiness|liveness)$",type="internal-api"}[1m] offset 30s)
       )
   - record: gitlab_component_ops:rate
     labels:
@@ -81,7 +81,7 @@ groups:
       type: internal-api
     expr: |
       sum by (env,environment,stage) (
-        rate(gitlab_workhorse_http_requests_total{job=~"gitlab-workhorse-api|gitlab-workhorse",type="internal-api"}[1m] offset 30s)
+        rate(gitlab_workhorse_http_requests_total{job=~"gitlab-workhorse|gitlab-workhorse-api",type="internal-api"}[1m] offset 30s)
       )
   - record: gitlab_component_errors:rate
     labels:
@@ -91,7 +91,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(gitlab_workhorse_http_requests_total{code=~"^5.*",job=~"gitlab-workhorse-api|gitlab-workhorse",route!="^/-/health$",route!="^/-/(readiness|liveness)$",type="internal-api"}[1m] offset 30s)
+          rate(gitlab_workhorse_http_requests_total{code=~"^5.*",job=~"gitlab-workhorse|gitlab-workhorse-api",route!="^/-/health$",route!="^/-/(readiness|liveness)$",type="internal-api"}[1m] offset 30s)
         )
       )
       or
@@ -155,11 +155,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(gitlab_workhorse_http_request_duration_seconds_bucket{job=~"gitlab-workhorse-api|gitlab-workhorse",le="1",route!="^/-/health$",route!="^/-/(readiness|liveness)$",type="internal-api"}[5m] offset 30s)
+          rate(gitlab_workhorse_http_request_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-api",le="1",route!="^/-/health$",route!="^/-/(readiness|liveness)$",type="internal-api"}[5m] offset 30s)
         )
         +
         sum by (env,environment,stage) (
-          rate(gitlab_workhorse_http_request_duration_seconds_bucket{job=~"gitlab-workhorse-api|gitlab-workhorse",le="10",route!="^/-/health$",route!="^/-/(readiness|liveness)$",type="internal-api"}[5m] offset 30s)
+          rate(gitlab_workhorse_http_request_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-api",le="10",route!="^/-/health$",route!="^/-/(readiness|liveness)$",type="internal-api"}[5m] offset 30s)
         )
       )
       /
@@ -171,7 +171,7 @@ groups:
       type: internal-api
     expr: |
       sum by (env,environment,stage) (
-        rate(gitlab_workhorse_http_request_duration_seconds_bucket{job=~"gitlab-workhorse-api|gitlab-workhorse",le="+Inf",route!="^/-/health$",route!="^/-/(readiness|liveness)$",type="internal-api"}[5m] offset 30s)
+        rate(gitlab_workhorse_http_request_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-api",le="+Inf",route!="^/-/health$",route!="^/-/(readiness|liveness)$",type="internal-api"}[5m] offset 30s)
       )
   - record: gitlab_component_ops:rate_5m
     labels:
@@ -180,7 +180,7 @@ groups:
       type: internal-api
     expr: |
       sum by (env,environment,stage) (
-        rate(gitlab_workhorse_http_requests_total{job=~"gitlab-workhorse-api|gitlab-workhorse",type="internal-api"}[5m] offset 30s)
+        rate(gitlab_workhorse_http_requests_total{job=~"gitlab-workhorse|gitlab-workhorse-api",type="internal-api"}[5m] offset 30s)
       )
   - record: gitlab_component_errors:rate_5m
     labels:
@@ -190,7 +190,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(gitlab_workhorse_http_requests_total{code=~"^5.*",job=~"gitlab-workhorse-api|gitlab-workhorse",route!="^/-/health$",route!="^/-/(readiness|liveness)$",type="internal-api"}[5m] offset 30s)
+          rate(gitlab_workhorse_http_requests_total{code=~"^5.*",job=~"gitlab-workhorse|gitlab-workhorse-api",route!="^/-/health$",route!="^/-/(readiness|liveness)$",type="internal-api"}[5m] offset 30s)
         )
       )
       or
@@ -254,11 +254,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(gitlab_workhorse_http_request_duration_seconds_bucket{job=~"gitlab-workhorse-api|gitlab-workhorse",le="1",route!="^/-/health$",route!="^/-/(readiness|liveness)$",type="internal-api"}[30m] offset 30s)
+          rate(gitlab_workhorse_http_request_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-api",le="1",route!="^/-/health$",route!="^/-/(readiness|liveness)$",type="internal-api"}[30m] offset 30s)
         )
         +
         sum by (env,environment,stage) (
-          rate(gitlab_workhorse_http_request_duration_seconds_bucket{job=~"gitlab-workhorse-api|gitlab-workhorse",le="10",route!="^/-/health$",route!="^/-/(readiness|liveness)$",type="internal-api"}[30m] offset 30s)
+          rate(gitlab_workhorse_http_request_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-api",le="10",route!="^/-/health$",route!="^/-/(readiness|liveness)$",type="internal-api"}[30m] offset 30s)
         )
       )
       /
@@ -270,7 +270,7 @@ groups:
       type: internal-api
     expr: |
       sum by (env,environment,stage) (
-        rate(gitlab_workhorse_http_request_duration_seconds_bucket{job=~"gitlab-workhorse-api|gitlab-workhorse",le="+Inf",route!="^/-/health$",route!="^/-/(readiness|liveness)$",type="internal-api"}[30m] offset 30s)
+        rate(gitlab_workhorse_http_request_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-api",le="+Inf",route!="^/-/health$",route!="^/-/(readiness|liveness)$",type="internal-api"}[30m] offset 30s)
       )
   - record: gitlab_component_ops:rate_30m
     labels:
@@ -279,7 +279,7 @@ groups:
       type: internal-api
     expr: |
       sum by (env,environment,stage) (
-        rate(gitlab_workhorse_http_requests_total{job=~"gitlab-workhorse-api|gitlab-workhorse",type="internal-api"}[30m] offset 30s)
+        rate(gitlab_workhorse_http_requests_total{job=~"gitlab-workhorse|gitlab-workhorse-api",type="internal-api"}[30m] offset 30s)
       )
   - record: gitlab_component_errors:rate_30m
     labels:
@@ -289,7 +289,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(gitlab_workhorse_http_requests_total{code=~"^5.*",job=~"gitlab-workhorse-api|gitlab-workhorse",route!="^/-/health$",route!="^/-/(readiness|liveness)$",type="internal-api"}[30m] offset 30s)
+          rate(gitlab_workhorse_http_requests_total{code=~"^5.*",job=~"gitlab-workhorse|gitlab-workhorse-api",route!="^/-/health$",route!="^/-/(readiness|liveness)$",type="internal-api"}[30m] offset 30s)
         )
       )
       or
@@ -353,11 +353,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(gitlab_workhorse_http_request_duration_seconds_bucket{job=~"gitlab-workhorse-api|gitlab-workhorse",le="1",route!="^/-/health$",route!="^/-/(readiness|liveness)$",type="internal-api"}[1h] offset 30s)
+          rate(gitlab_workhorse_http_request_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-api",le="1",route!="^/-/health$",route!="^/-/(readiness|liveness)$",type="internal-api"}[1h] offset 30s)
         )
         +
         sum by (env,environment,stage) (
-          rate(gitlab_workhorse_http_request_duration_seconds_bucket{job=~"gitlab-workhorse-api|gitlab-workhorse",le="10",route!="^/-/health$",route!="^/-/(readiness|liveness)$",type="internal-api"}[1h] offset 30s)
+          rate(gitlab_workhorse_http_request_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-api",le="10",route!="^/-/health$",route!="^/-/(readiness|liveness)$",type="internal-api"}[1h] offset 30s)
         )
       )
       /
@@ -369,7 +369,7 @@ groups:
       type: internal-api
     expr: |
       sum by (env,environment,stage) (
-        rate(gitlab_workhorse_http_request_duration_seconds_bucket{job=~"gitlab-workhorse-api|gitlab-workhorse",le="+Inf",route!="^/-/health$",route!="^/-/(readiness|liveness)$",type="internal-api"}[1h] offset 30s)
+        rate(gitlab_workhorse_http_request_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-api",le="+Inf",route!="^/-/health$",route!="^/-/(readiness|liveness)$",type="internal-api"}[1h] offset 30s)
       )
   - record: gitlab_component_ops:rate_1h
     labels:
@@ -378,7 +378,7 @@ groups:
       type: internal-api
     expr: |
       sum by (env,environment,stage) (
-        rate(gitlab_workhorse_http_requests_total{job=~"gitlab-workhorse-api|gitlab-workhorse",type="internal-api"}[1h] offset 30s)
+        rate(gitlab_workhorse_http_requests_total{job=~"gitlab-workhorse|gitlab-workhorse-api",type="internal-api"}[1h] offset 30s)
       )
   - record: gitlab_component_errors:rate_1h
     labels:
@@ -388,7 +388,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(gitlab_workhorse_http_requests_total{code=~"^5.*",job=~"gitlab-workhorse-api|gitlab-workhorse",route!="^/-/health$",route!="^/-/(readiness|liveness)$",type="internal-api"}[1h] offset 30s)
+          rate(gitlab_workhorse_http_requests_total{code=~"^5.*",job=~"gitlab-workhorse|gitlab-workhorse-api",route!="^/-/health$",route!="^/-/(readiness|liveness)$",type="internal-api"}[1h] offset 30s)
         )
       )
       or
@@ -452,11 +452,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(gitlab_workhorse_http_request_duration_seconds_bucket{job=~"gitlab-workhorse-api|gitlab-workhorse",le="1",route!="^/-/health$",route!="^/-/(readiness|liveness)$",type="internal-api"}[6h] offset 30s)
+          rate(gitlab_workhorse_http_request_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-api",le="1",route!="^/-/health$",route!="^/-/(readiness|liveness)$",type="internal-api"}[6h] offset 30s)
         )
         +
         sum by (env,environment,stage) (
-          rate(gitlab_workhorse_http_request_duration_seconds_bucket{job=~"gitlab-workhorse-api|gitlab-workhorse",le="10",route!="^/-/health$",route!="^/-/(readiness|liveness)$",type="internal-api"}[6h] offset 30s)
+          rate(gitlab_workhorse_http_request_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-api",le="10",route!="^/-/health$",route!="^/-/(readiness|liveness)$",type="internal-api"}[6h] offset 30s)
         )
       )
       /
@@ -468,7 +468,7 @@ groups:
       type: internal-api
     expr: |
       sum by (env,environment,stage) (
-        rate(gitlab_workhorse_http_request_duration_seconds_bucket{job=~"gitlab-workhorse-api|gitlab-workhorse",le="+Inf",route!="^/-/health$",route!="^/-/(readiness|liveness)$",type="internal-api"}[6h] offset 30s)
+        rate(gitlab_workhorse_http_request_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-api",le="+Inf",route!="^/-/health$",route!="^/-/(readiness|liveness)$",type="internal-api"}[6h] offset 30s)
       )
   - record: gitlab_component_ops:rate_6h
     labels:
@@ -477,7 +477,7 @@ groups:
       type: internal-api
     expr: |
       sum by (env,environment,stage) (
-        rate(gitlab_workhorse_http_requests_total{job=~"gitlab-workhorse-api|gitlab-workhorse",type="internal-api"}[6h] offset 30s)
+        rate(gitlab_workhorse_http_requests_total{job=~"gitlab-workhorse|gitlab-workhorse-api",type="internal-api"}[6h] offset 30s)
       )
   - record: gitlab_component_errors:rate_6h
     labels:
@@ -487,7 +487,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(gitlab_workhorse_http_requests_total{code=~"^5.*",job=~"gitlab-workhorse-api|gitlab-workhorse",route!="^/-/health$",route!="^/-/(readiness|liveness)$",type="internal-api"}[6h] offset 30s)
+          rate(gitlab_workhorse_http_requests_total{code=~"^5.*",job=~"gitlab-workhorse|gitlab-workhorse-api",route!="^/-/health$",route!="^/-/(readiness|liveness)$",type="internal-api"}[6h] offset 30s)
         )
       )
       or

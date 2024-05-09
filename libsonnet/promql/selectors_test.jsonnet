@@ -58,6 +58,10 @@ test.suite({
     actual: selectors.serializeHash({ a: { oneOf: [3, 'two', '1'] } }),
     expect: 'a=~"1|3|two"',
   },
+  testSerializeHashOneOfRegex: {
+    actual: selectors.serializeHash({ a: { oneOf: ['first_.*', 'test_(v1|v2)_second', 'third'] } }),
+    expect: 'a=~"first_.*|(test_(v1|v2)_second)|third"',
+  },
   testSerializeHashDuplicate: {
     actual: selectors.serializeHash({ a: { oneOf: [1, '1'] } }),
     expect: 'a=~"1"',

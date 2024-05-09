@@ -63,13 +63,13 @@ local normalizeSelectorExpression(exp) =
         else if keyword == 're' then
           if !std.isArray(value) then
             memo {
-              oneOf: std.setUnion(base, std.split(value, '|')),
+              oneOf: std.setUnion(base, [value]),
             }
           else
             memo {
               oneOf: std.setUnion(
                 base,
-                std.set([strings.escapeBackslash(strings.escapeStringRegex(v)) for v in value])
+                std.set(value)
               ),
             }
         else if keyword == 'oneOf' then

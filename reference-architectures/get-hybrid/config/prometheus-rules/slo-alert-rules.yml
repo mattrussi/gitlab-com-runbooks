@@ -2641,7 +2641,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (le) (
-            rate(registry_http_request_duration_seconds_bucket{method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}"}[5m])
+            rate(registry_http_request_duration_seconds_bucket{method=~"patch|post|put",route="/v2/{name}/blobs/uploads/{uuid}"}[5m])
           )
         )
       runbook: docs/registry/README.md
@@ -2696,7 +2696,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (le) (
-            rate(registry_http_request_duration_seconds_bucket{method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}"}[5m])
+            rate(registry_http_request_duration_seconds_bucket{method=~"patch|post|put",route="/v2/{name}/blobs/uploads/{uuid}"}[5m])
           )
         )
       runbook: docs/registry/README.md
@@ -2749,7 +2749,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by () (
-          rate(registry_http_request_duration_seconds_count{method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}"}[5m])
+          rate(registry_http_request_duration_seconds_count{method=~"patch|post|put",route="/v2/{name}/blobs/uploads/{uuid}"}[5m])
         )
       runbook: docs/registry/README.md
       title: The server_route_blob_upload_uuid_writes SLI of the registry service
@@ -2790,7 +2790,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by () (
-          rate(registry_http_request_duration_seconds_count{method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}"}[5m])
+          rate(registry_http_request_duration_seconds_count{method=~"patch|post|put",route="/v2/{name}/blobs/uploads/{uuid}"}[5m])
         )
       runbook: docs/registry/README.md
       title: The server_route_blob_upload_uuid_writes SLI of the registry service

@@ -32,6 +32,14 @@ local serializeValue(expressionName, value) =
   else
     error '%s requires string or number values only' % [expressionName];
 
+local joinRegexes(values) =
+  local valuesWithBraces = std.map(
+    function(regex)
+      if strings.contains(regex, '|') && std.length(values) > 1 then '(%s)' % regex else regex,
+    values
+  );
+  std.join('|', valuesWithBraces);
+
 // TODO: at present, this doesn't support escaping regular expressions,
 // so care should be taken to ensure that the values are safe
 local serializeArrayItems(label, expressionName, operator, valueArray) =
@@ -40,7 +48,7 @@ local serializeArrayItems(label, expressionName, operator, valueArray) =
       error '%s requires at least one value' % [expressionName]
     else
       local innerValue = std.map(function(value) serializeValue(expressionName, value), valueArray);
-      local selectors = '%s%s"%s"' % [label, operator, std.join('|', std.set(innerValue))];
+      local selectors = '%s%s"%s"' % [label, operator, joinRegexes(std.set(innerValue))];
       [selectors]
   else
     error '%s must be an array. Got %s' % [expressionName, std.type(valueArray)];

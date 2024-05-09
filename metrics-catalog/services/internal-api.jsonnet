@@ -13,7 +13,7 @@ local railsSelector = { job: 'gitlab-rails', type: 'internal-api' };
 metricsCatalog.serviceDefinition({
   type: 'internal-api',
   tier: 'sv',
-  tenants: [ 'gitlab-gprd', 'gitlab-gstg', 'gitlab-pre' ],
+  tenants: ['gitlab-gprd', 'gitlab-gstg', 'gitlab-pre'],
 
   tags: ['golang', 'rails', 'puma'],
 
@@ -76,7 +76,7 @@ metricsCatalog.serviceDefinition({
       |||,
 
       local workhorseSelector = {
-        job: { re: 'gitlab-workhorse-api|gitlab-workhorse' },
+        job: { oneOf: ['gitlab-workhorse-api', 'gitlab-workhorse'] },
         type: 'internal-api',
       },
       local healthCheckSelector = {
