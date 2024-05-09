@@ -32,7 +32,7 @@ metricsCatalog.serviceDefinition({
       requestRate: customRateQuery(|||
         sum by (environment) (
           avg_over_time(
-            stackdriver_nat_gateway_router_googleapis_com_nat_sent_packets_count{metric_prefix="router.googleapis.com/nat",  ip_protocol="6", project_id=~"gitlab-staging-1|gitlab-production"}[%(burnRate)s]
+            stackdriver_nat_gateway_router_googleapis_com_nat_sent_packets_count{ip_protocol="6", project_id=~"gitlab-staging-1|gitlab-production"}[%(burnRate)s]
           )
         )
       |||),
@@ -41,7 +41,7 @@ metricsCatalog.serviceDefinition({
       errorRate: customRateQuery(|||
         sum by (environment) (
           avg_over_time(
-            stackdriver_nat_gateway_router_googleapis_com_nat_dropped_sent_packets_count{metric_prefix="router.googleapis.com/nat",  ip_protocol="6", project_id=~"gitlab-staging-1|gitlab-production"}[%(burnRate)s]
+            stackdriver_nat_gateway_router_googleapis_com_nat_dropped_sent_packets_count{ip_protocol="6", project_id=~"gitlab-staging-1|gitlab-production"}[%(burnRate)s]
           )
         )
       |||),
@@ -74,7 +74,7 @@ metricsCatalog.serviceDefinition({
       requestRate: customRateQuery(|||
         sum by (environment) (
           avg_over_time(
-            stackdriver_nat_gateway_router_googleapis_com_nat_received_packets_count{metric_prefix="router.googleapis.com/nat",  ip_protocol="6", project_id=~"gitlab-staging-1|gitlab-production"}[%(burnRate)s]
+            stackdriver_nat_gateway_router_googleapis_com_nat_received_packets_count{ip_protocol="6", project_id=~"gitlab-staging-1|gitlab-production"}[%(burnRate)s]
           )
         )
       |||),
@@ -83,7 +83,7 @@ metricsCatalog.serviceDefinition({
       errorRate: customRateQuery(|||
         sum by (environment) (
           avg_over_time(
-            stackdriver_nat_gateway_router_googleapis_com_nat_dropped_received_packets_count{metric_prefix="router.googleapis.com/nat",  ip_protocol="6", project_id=~"gitlab-staging-1|gitlab-production"}[%(burnRate)s]
+            stackdriver_nat_gateway_router_googleapis_com_nat_dropped_received_packets_count{ip_protocol="6", project_id=~"gitlab-staging-1|gitlab-production"}[%(burnRate)s]
           )
         )
       |||),

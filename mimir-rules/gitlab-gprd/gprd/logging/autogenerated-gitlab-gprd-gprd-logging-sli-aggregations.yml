@@ -202,95 +202,21 @@ groups:
       sum by (component,env,environment,feature_category,fqdn,product_stage,project_id,proxy_continent,region,response_code,response_code_class,shard,stage,stage_group,tier,type,url_map_name) (
         rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{env="gprd",project_id=~"gitlab-ops",url_map_name=~"ops-prod-proxy"}[5m] offset 30s)
       )
-- name: 'SLI Aggregations: logging - pubsub_subscriptions - 5m burn-rate - emitted
-    by monitoring - gprd-gitlab-gke'
+- name: 'SLI Aggregations: logging - pubsub_subscriptions - 5m burn-rate'
   interval: 1m
   rules:
   - record: sli_aggregations:stackdriver_pubsub_subscription_pubsub_googleapis_com_subscription_byte_cost:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,subscription_id,tier,type) (
-        rate(stackdriver_pubsub_subscription_pubsub_googleapis_com_subscription_byte_cost{cluster="gprd-gitlab-gke",env="gprd",type=~"monitoring"}[5m] offset 30s)
+        rate(stackdriver_pubsub_subscription_pubsub_googleapis_com_subscription_byte_cost{env="gprd",type=~"monitoring"}[5m] offset 30s)
       )
-- name: 'SLI Aggregations: logging - pubsub_subscriptions - 5m burn-rate - emitted
-    by monitoring - gprd-us-east1-b'
-  interval: 1m
-  rules:
-  - record: sli_aggregations:stackdriver_pubsub_subscription_pubsub_googleapis_com_subscription_byte_cost:rate_5m
-    expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,subscription_id,tier,type) (
-        rate(stackdriver_pubsub_subscription_pubsub_googleapis_com_subscription_byte_cost{cluster="gprd-us-east1-b",env="gprd",type=~"monitoring"}[5m] offset 30s)
-      )
-- name: 'SLI Aggregations: logging - pubsub_subscriptions - 5m burn-rate - emitted
-    by monitoring - gprd-us-east1-c'
-  interval: 1m
-  rules:
-  - record: sli_aggregations:stackdriver_pubsub_subscription_pubsub_googleapis_com_subscription_byte_cost:rate_5m
-    expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,subscription_id,tier,type) (
-        rate(stackdriver_pubsub_subscription_pubsub_googleapis_com_subscription_byte_cost{cluster="gprd-us-east1-c",env="gprd",type=~"monitoring"}[5m] offset 30s)
-      )
-- name: 'SLI Aggregations: logging - pubsub_subscriptions - 5m burn-rate - emitted
-    by monitoring - gprd-us-east1-d'
-  interval: 1m
-  rules:
-  - record: sli_aggregations:stackdriver_pubsub_subscription_pubsub_googleapis_com_subscription_byte_cost:rate_5m
-    expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,subscription_id,tier,type) (
-        rate(stackdriver_pubsub_subscription_pubsub_googleapis_com_subscription_byte_cost{cluster="gprd-us-east1-d",env="gprd",type=~"monitoring"}[5m] offset 30s)
-      )
-- name: 'SLI Aggregations: logging - pubsub_subscriptions - 5m burn-rate - emitted
-    by monitoring - gitlab-3okls'
-  interval: 1m
-  rules:
-  - record: sli_aggregations:stackdriver_pubsub_subscription_pubsub_googleapis_com_subscription_byte_cost:rate_5m
-    expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,subscription_id,tier,type) (
-        rate(stackdriver_pubsub_subscription_pubsub_googleapis_com_subscription_byte_cost{cluster="gitlab-3okls",env="gprd",type=~"monitoring"}[5m] offset 30s)
-      )
-- name: 'SLI Aggregations: logging - pubsub_topics - 5m burn-rate - emitted by monitoring
-    - gprd-gitlab-gke'
+- name: 'SLI Aggregations: logging - pubsub_topics - 5m burn-rate'
   interval: 1m
   rules:
   - record: sli_aggregations:stackdriver_pubsub_topic_pubsub_googleapis_com_topic_byte_cost:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,topic_id,type) (
-        rate(stackdriver_pubsub_topic_pubsub_googleapis_com_topic_byte_cost{cluster="gprd-gitlab-gke",env="gprd",type=~"monitoring"}[5m] offset 30s)
-      )
-- name: 'SLI Aggregations: logging - pubsub_topics - 5m burn-rate - emitted by monitoring
-    - gprd-us-east1-b'
-  interval: 1m
-  rules:
-  - record: sli_aggregations:stackdriver_pubsub_topic_pubsub_googleapis_com_topic_byte_cost:rate_5m
-    expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,topic_id,type) (
-        rate(stackdriver_pubsub_topic_pubsub_googleapis_com_topic_byte_cost{cluster="gprd-us-east1-b",env="gprd",type=~"monitoring"}[5m] offset 30s)
-      )
-- name: 'SLI Aggregations: logging - pubsub_topics - 5m burn-rate - emitted by monitoring
-    - gprd-us-east1-c'
-  interval: 1m
-  rules:
-  - record: sli_aggregations:stackdriver_pubsub_topic_pubsub_googleapis_com_topic_byte_cost:rate_5m
-    expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,topic_id,type) (
-        rate(stackdriver_pubsub_topic_pubsub_googleapis_com_topic_byte_cost{cluster="gprd-us-east1-c",env="gprd",type=~"monitoring"}[5m] offset 30s)
-      )
-- name: 'SLI Aggregations: logging - pubsub_topics - 5m burn-rate - emitted by monitoring
-    - gprd-us-east1-d'
-  interval: 1m
-  rules:
-  - record: sli_aggregations:stackdriver_pubsub_topic_pubsub_googleapis_com_topic_byte_cost:rate_5m
-    expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,topic_id,type) (
-        rate(stackdriver_pubsub_topic_pubsub_googleapis_com_topic_byte_cost{cluster="gprd-us-east1-d",env="gprd",type=~"monitoring"}[5m] offset 30s)
-      )
-- name: 'SLI Aggregations: logging - pubsub_topics - 5m burn-rate - emitted by monitoring
-    - gitlab-3okls'
-  interval: 1m
-  rules:
-  - record: sli_aggregations:stackdriver_pubsub_topic_pubsub_googleapis_com_topic_byte_cost:rate_5m
-    expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,topic_id,type) (
-        rate(stackdriver_pubsub_topic_pubsub_googleapis_com_topic_byte_cost{cluster="gitlab-3okls",env="gprd",type=~"monitoring"}[5m] offset 30s)
+        rate(stackdriver_pubsub_topic_pubsub_googleapis_com_topic_byte_cost{env="gprd",type=~"monitoring"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: logging - pubsubbeat - 5m burn-rate'
   interval: 1m
@@ -305,50 +231,13 @@ groups:
       sum by (component,env,environment,feature_category,fqdn,pod,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(pubsubbeat_libbeat_output_events{env="gprd"}[5m] offset 30s)
       )
-- name: 'SLI Aggregations: logging - stackdriver - 5m burn-rate - emitted by monitoring
-    - gprd-gitlab-gke'
+- name: 'SLI Aggregations: logging - stackdriver - 5m burn-rate'
   interval: 1m
   rules:
   - record: sli_aggregations:stackdriver_gce_instance_logging_googleapis_com_log_entry_count:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,log,product_stage,region,severity,shard,stage,stage_group,tier,type) (
-        rate(stackdriver_gce_instance_logging_googleapis_com_log_entry_count{cluster="gprd-gitlab-gke",env="gprd",type=~"monitoring"}[5m] offset 30s)
-      )
-- name: 'SLI Aggregations: logging - stackdriver - 5m burn-rate - emitted by monitoring
-    - gprd-us-east1-b'
-  interval: 1m
-  rules:
-  - record: sli_aggregations:stackdriver_gce_instance_logging_googleapis_com_log_entry_count:rate_5m
-    expr: |
-      sum by (component,env,environment,feature_category,fqdn,log,product_stage,region,severity,shard,stage,stage_group,tier,type) (
-        rate(stackdriver_gce_instance_logging_googleapis_com_log_entry_count{cluster="gprd-us-east1-b",env="gprd",type=~"monitoring"}[5m] offset 30s)
-      )
-- name: 'SLI Aggregations: logging - stackdriver - 5m burn-rate - emitted by monitoring
-    - gprd-us-east1-c'
-  interval: 1m
-  rules:
-  - record: sli_aggregations:stackdriver_gce_instance_logging_googleapis_com_log_entry_count:rate_5m
-    expr: |
-      sum by (component,env,environment,feature_category,fqdn,log,product_stage,region,severity,shard,stage,stage_group,tier,type) (
-        rate(stackdriver_gce_instance_logging_googleapis_com_log_entry_count{cluster="gprd-us-east1-c",env="gprd",type=~"monitoring"}[5m] offset 30s)
-      )
-- name: 'SLI Aggregations: logging - stackdriver - 5m burn-rate - emitted by monitoring
-    - gprd-us-east1-d'
-  interval: 1m
-  rules:
-  - record: sli_aggregations:stackdriver_gce_instance_logging_googleapis_com_log_entry_count:rate_5m
-    expr: |
-      sum by (component,env,environment,feature_category,fqdn,log,product_stage,region,severity,shard,stage,stage_group,tier,type) (
-        rate(stackdriver_gce_instance_logging_googleapis_com_log_entry_count{cluster="gprd-us-east1-d",env="gprd",type=~"monitoring"}[5m] offset 30s)
-      )
-- name: 'SLI Aggregations: logging - stackdriver - 5m burn-rate - emitted by monitoring
-    - gitlab-3okls'
-  interval: 1m
-  rules:
-  - record: sli_aggregations:stackdriver_gce_instance_logging_googleapis_com_log_entry_count:rate_5m
-    expr: |
-      sum by (component,env,environment,feature_category,fqdn,log,product_stage,region,severity,shard,stage,stage_group,tier,type) (
-        rate(stackdriver_gce_instance_logging_googleapis_com_log_entry_count{cluster="gitlab-3okls",env="gprd",type=~"monitoring"}[5m] offset 30s)
+        rate(stackdriver_gce_instance_logging_googleapis_com_log_entry_count{env="gprd"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: logging - elasticsearch_indexing_cluster - 30m burn-rate
     - gprd-gitlab-gke'
@@ -551,95 +440,21 @@ groups:
       sum by (component,env,environment,feature_category,fqdn,product_stage,project_id,proxy_continent,region,response_code,response_code_class,shard,stage,stage_group,tier,type,url_map_name) (
         rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{env="gprd",project_id=~"gitlab-ops",url_map_name=~"ops-prod-proxy"}[30m] offset 30s)
       )
-- name: 'SLI Aggregations: logging - pubsub_subscriptions - 30m burn-rate - emitted
-    by monitoring - gprd-gitlab-gke'
+- name: 'SLI Aggregations: logging - pubsub_subscriptions - 30m burn-rate'
   interval: 2m
   rules:
   - record: sli_aggregations:stackdriver_pubsub_subscription_pubsub_googleapis_com_subscription_byte_cost:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,subscription_id,tier,type) (
-        rate(stackdriver_pubsub_subscription_pubsub_googleapis_com_subscription_byte_cost{cluster="gprd-gitlab-gke",env="gprd",type=~"monitoring"}[30m] offset 30s)
+        rate(stackdriver_pubsub_subscription_pubsub_googleapis_com_subscription_byte_cost{env="gprd",type=~"monitoring"}[30m] offset 30s)
       )
-- name: 'SLI Aggregations: logging - pubsub_subscriptions - 30m burn-rate - emitted
-    by monitoring - gprd-us-east1-b'
-  interval: 2m
-  rules:
-  - record: sli_aggregations:stackdriver_pubsub_subscription_pubsub_googleapis_com_subscription_byte_cost:rate_30m
-    expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,subscription_id,tier,type) (
-        rate(stackdriver_pubsub_subscription_pubsub_googleapis_com_subscription_byte_cost{cluster="gprd-us-east1-b",env="gprd",type=~"monitoring"}[30m] offset 30s)
-      )
-- name: 'SLI Aggregations: logging - pubsub_subscriptions - 30m burn-rate - emitted
-    by monitoring - gprd-us-east1-c'
-  interval: 2m
-  rules:
-  - record: sli_aggregations:stackdriver_pubsub_subscription_pubsub_googleapis_com_subscription_byte_cost:rate_30m
-    expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,subscription_id,tier,type) (
-        rate(stackdriver_pubsub_subscription_pubsub_googleapis_com_subscription_byte_cost{cluster="gprd-us-east1-c",env="gprd",type=~"monitoring"}[30m] offset 30s)
-      )
-- name: 'SLI Aggregations: logging - pubsub_subscriptions - 30m burn-rate - emitted
-    by monitoring - gprd-us-east1-d'
-  interval: 2m
-  rules:
-  - record: sli_aggregations:stackdriver_pubsub_subscription_pubsub_googleapis_com_subscription_byte_cost:rate_30m
-    expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,subscription_id,tier,type) (
-        rate(stackdriver_pubsub_subscription_pubsub_googleapis_com_subscription_byte_cost{cluster="gprd-us-east1-d",env="gprd",type=~"monitoring"}[30m] offset 30s)
-      )
-- name: 'SLI Aggregations: logging - pubsub_subscriptions - 30m burn-rate - emitted
-    by monitoring - gitlab-3okls'
-  interval: 2m
-  rules:
-  - record: sli_aggregations:stackdriver_pubsub_subscription_pubsub_googleapis_com_subscription_byte_cost:rate_30m
-    expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,subscription_id,tier,type) (
-        rate(stackdriver_pubsub_subscription_pubsub_googleapis_com_subscription_byte_cost{cluster="gitlab-3okls",env="gprd",type=~"monitoring"}[30m] offset 30s)
-      )
-- name: 'SLI Aggregations: logging - pubsub_topics - 30m burn-rate - emitted by monitoring
-    - gprd-gitlab-gke'
+- name: 'SLI Aggregations: logging - pubsub_topics - 30m burn-rate'
   interval: 2m
   rules:
   - record: sli_aggregations:stackdriver_pubsub_topic_pubsub_googleapis_com_topic_byte_cost:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,topic_id,type) (
-        rate(stackdriver_pubsub_topic_pubsub_googleapis_com_topic_byte_cost{cluster="gprd-gitlab-gke",env="gprd",type=~"monitoring"}[30m] offset 30s)
-      )
-- name: 'SLI Aggregations: logging - pubsub_topics - 30m burn-rate - emitted by monitoring
-    - gprd-us-east1-b'
-  interval: 2m
-  rules:
-  - record: sli_aggregations:stackdriver_pubsub_topic_pubsub_googleapis_com_topic_byte_cost:rate_30m
-    expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,topic_id,type) (
-        rate(stackdriver_pubsub_topic_pubsub_googleapis_com_topic_byte_cost{cluster="gprd-us-east1-b",env="gprd",type=~"monitoring"}[30m] offset 30s)
-      )
-- name: 'SLI Aggregations: logging - pubsub_topics - 30m burn-rate - emitted by monitoring
-    - gprd-us-east1-c'
-  interval: 2m
-  rules:
-  - record: sli_aggregations:stackdriver_pubsub_topic_pubsub_googleapis_com_topic_byte_cost:rate_30m
-    expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,topic_id,type) (
-        rate(stackdriver_pubsub_topic_pubsub_googleapis_com_topic_byte_cost{cluster="gprd-us-east1-c",env="gprd",type=~"monitoring"}[30m] offset 30s)
-      )
-- name: 'SLI Aggregations: logging - pubsub_topics - 30m burn-rate - emitted by monitoring
-    - gprd-us-east1-d'
-  interval: 2m
-  rules:
-  - record: sli_aggregations:stackdriver_pubsub_topic_pubsub_googleapis_com_topic_byte_cost:rate_30m
-    expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,topic_id,type) (
-        rate(stackdriver_pubsub_topic_pubsub_googleapis_com_topic_byte_cost{cluster="gprd-us-east1-d",env="gprd",type=~"monitoring"}[30m] offset 30s)
-      )
-- name: 'SLI Aggregations: logging - pubsub_topics - 30m burn-rate - emitted by monitoring
-    - gitlab-3okls'
-  interval: 2m
-  rules:
-  - record: sli_aggregations:stackdriver_pubsub_topic_pubsub_googleapis_com_topic_byte_cost:rate_30m
-    expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,topic_id,type) (
-        rate(stackdriver_pubsub_topic_pubsub_googleapis_com_topic_byte_cost{cluster="gitlab-3okls",env="gprd",type=~"monitoring"}[30m] offset 30s)
+        rate(stackdriver_pubsub_topic_pubsub_googleapis_com_topic_byte_cost{env="gprd",type=~"monitoring"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: logging - pubsubbeat - 30m burn-rate'
   interval: 2m
@@ -654,50 +469,13 @@ groups:
       sum by (component,env,environment,feature_category,fqdn,pod,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(pubsubbeat_libbeat_output_events{env="gprd"}[30m] offset 30s)
       )
-- name: 'SLI Aggregations: logging - stackdriver - 30m burn-rate - emitted by monitoring
-    - gprd-gitlab-gke'
+- name: 'SLI Aggregations: logging - stackdriver - 30m burn-rate'
   interval: 2m
   rules:
   - record: sli_aggregations:stackdriver_gce_instance_logging_googleapis_com_log_entry_count:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,log,product_stage,region,severity,shard,stage,stage_group,tier,type) (
-        rate(stackdriver_gce_instance_logging_googleapis_com_log_entry_count{cluster="gprd-gitlab-gke",env="gprd",type=~"monitoring"}[30m] offset 30s)
-      )
-- name: 'SLI Aggregations: logging - stackdriver - 30m burn-rate - emitted by monitoring
-    - gprd-us-east1-b'
-  interval: 2m
-  rules:
-  - record: sli_aggregations:stackdriver_gce_instance_logging_googleapis_com_log_entry_count:rate_30m
-    expr: |
-      sum by (component,env,environment,feature_category,fqdn,log,product_stage,region,severity,shard,stage,stage_group,tier,type) (
-        rate(stackdriver_gce_instance_logging_googleapis_com_log_entry_count{cluster="gprd-us-east1-b",env="gprd",type=~"monitoring"}[30m] offset 30s)
-      )
-- name: 'SLI Aggregations: logging - stackdriver - 30m burn-rate - emitted by monitoring
-    - gprd-us-east1-c'
-  interval: 2m
-  rules:
-  - record: sli_aggregations:stackdriver_gce_instance_logging_googleapis_com_log_entry_count:rate_30m
-    expr: |
-      sum by (component,env,environment,feature_category,fqdn,log,product_stage,region,severity,shard,stage,stage_group,tier,type) (
-        rate(stackdriver_gce_instance_logging_googleapis_com_log_entry_count{cluster="gprd-us-east1-c",env="gprd",type=~"monitoring"}[30m] offset 30s)
-      )
-- name: 'SLI Aggregations: logging - stackdriver - 30m burn-rate - emitted by monitoring
-    - gprd-us-east1-d'
-  interval: 2m
-  rules:
-  - record: sli_aggregations:stackdriver_gce_instance_logging_googleapis_com_log_entry_count:rate_30m
-    expr: |
-      sum by (component,env,environment,feature_category,fqdn,log,product_stage,region,severity,shard,stage,stage_group,tier,type) (
-        rate(stackdriver_gce_instance_logging_googleapis_com_log_entry_count{cluster="gprd-us-east1-d",env="gprd",type=~"monitoring"}[30m] offset 30s)
-      )
-- name: 'SLI Aggregations: logging - stackdriver - 30m burn-rate - emitted by monitoring
-    - gitlab-3okls'
-  interval: 2m
-  rules:
-  - record: sli_aggregations:stackdriver_gce_instance_logging_googleapis_com_log_entry_count:rate_30m
-    expr: |
-      sum by (component,env,environment,feature_category,fqdn,log,product_stage,region,severity,shard,stage,stage_group,tier,type) (
-        rate(stackdriver_gce_instance_logging_googleapis_com_log_entry_count{cluster="gitlab-3okls",env="gprd",type=~"monitoring"}[30m] offset 30s)
+        rate(stackdriver_gce_instance_logging_googleapis_com_log_entry_count{env="gprd"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: logging - elasticsearch_indexing_cluster - 1h burn-rate
     - gprd-gitlab-gke'
@@ -900,95 +678,21 @@ groups:
       sum by (component,env,environment,feature_category,fqdn,product_stage,project_id,proxy_continent,region,response_code,response_code_class,shard,stage,stage_group,tier,type,url_map_name) (
         rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{env="gprd",project_id=~"gitlab-ops",url_map_name=~"ops-prod-proxy"}[1h] offset 30s)
       )
-- name: 'SLI Aggregations: logging - pubsub_subscriptions - 1h burn-rate - emitted
-    by monitoring - gprd-gitlab-gke'
+- name: 'SLI Aggregations: logging - pubsub_subscriptions - 1h burn-rate'
   interval: 1m
   rules:
   - record: sli_aggregations:stackdriver_pubsub_subscription_pubsub_googleapis_com_subscription_byte_cost:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,subscription_id,tier,type) (
-        rate(stackdriver_pubsub_subscription_pubsub_googleapis_com_subscription_byte_cost{cluster="gprd-gitlab-gke",env="gprd",type=~"monitoring"}[1h] offset 30s)
+        rate(stackdriver_pubsub_subscription_pubsub_googleapis_com_subscription_byte_cost{env="gprd",type=~"monitoring"}[1h] offset 30s)
       )
-- name: 'SLI Aggregations: logging - pubsub_subscriptions - 1h burn-rate - emitted
-    by monitoring - gprd-us-east1-b'
-  interval: 1m
-  rules:
-  - record: sli_aggregations:stackdriver_pubsub_subscription_pubsub_googleapis_com_subscription_byte_cost:rate_1h
-    expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,subscription_id,tier,type) (
-        rate(stackdriver_pubsub_subscription_pubsub_googleapis_com_subscription_byte_cost{cluster="gprd-us-east1-b",env="gprd",type=~"monitoring"}[1h] offset 30s)
-      )
-- name: 'SLI Aggregations: logging - pubsub_subscriptions - 1h burn-rate - emitted
-    by monitoring - gprd-us-east1-c'
-  interval: 1m
-  rules:
-  - record: sli_aggregations:stackdriver_pubsub_subscription_pubsub_googleapis_com_subscription_byte_cost:rate_1h
-    expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,subscription_id,tier,type) (
-        rate(stackdriver_pubsub_subscription_pubsub_googleapis_com_subscription_byte_cost{cluster="gprd-us-east1-c",env="gprd",type=~"monitoring"}[1h] offset 30s)
-      )
-- name: 'SLI Aggregations: logging - pubsub_subscriptions - 1h burn-rate - emitted
-    by monitoring - gprd-us-east1-d'
-  interval: 1m
-  rules:
-  - record: sli_aggregations:stackdriver_pubsub_subscription_pubsub_googleapis_com_subscription_byte_cost:rate_1h
-    expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,subscription_id,tier,type) (
-        rate(stackdriver_pubsub_subscription_pubsub_googleapis_com_subscription_byte_cost{cluster="gprd-us-east1-d",env="gprd",type=~"monitoring"}[1h] offset 30s)
-      )
-- name: 'SLI Aggregations: logging - pubsub_subscriptions - 1h burn-rate - emitted
-    by monitoring - gitlab-3okls'
-  interval: 1m
-  rules:
-  - record: sli_aggregations:stackdriver_pubsub_subscription_pubsub_googleapis_com_subscription_byte_cost:rate_1h
-    expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,subscription_id,tier,type) (
-        rate(stackdriver_pubsub_subscription_pubsub_googleapis_com_subscription_byte_cost{cluster="gitlab-3okls",env="gprd",type=~"monitoring"}[1h] offset 30s)
-      )
-- name: 'SLI Aggregations: logging - pubsub_topics - 1h burn-rate - emitted by monitoring
-    - gprd-gitlab-gke'
+- name: 'SLI Aggregations: logging - pubsub_topics - 1h burn-rate'
   interval: 1m
   rules:
   - record: sli_aggregations:stackdriver_pubsub_topic_pubsub_googleapis_com_topic_byte_cost:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,topic_id,type) (
-        rate(stackdriver_pubsub_topic_pubsub_googleapis_com_topic_byte_cost{cluster="gprd-gitlab-gke",env="gprd",type=~"monitoring"}[1h] offset 30s)
-      )
-- name: 'SLI Aggregations: logging - pubsub_topics - 1h burn-rate - emitted by monitoring
-    - gprd-us-east1-b'
-  interval: 1m
-  rules:
-  - record: sli_aggregations:stackdriver_pubsub_topic_pubsub_googleapis_com_topic_byte_cost:rate_1h
-    expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,topic_id,type) (
-        rate(stackdriver_pubsub_topic_pubsub_googleapis_com_topic_byte_cost{cluster="gprd-us-east1-b",env="gprd",type=~"monitoring"}[1h] offset 30s)
-      )
-- name: 'SLI Aggregations: logging - pubsub_topics - 1h burn-rate - emitted by monitoring
-    - gprd-us-east1-c'
-  interval: 1m
-  rules:
-  - record: sli_aggregations:stackdriver_pubsub_topic_pubsub_googleapis_com_topic_byte_cost:rate_1h
-    expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,topic_id,type) (
-        rate(stackdriver_pubsub_topic_pubsub_googleapis_com_topic_byte_cost{cluster="gprd-us-east1-c",env="gprd",type=~"monitoring"}[1h] offset 30s)
-      )
-- name: 'SLI Aggregations: logging - pubsub_topics - 1h burn-rate - emitted by monitoring
-    - gprd-us-east1-d'
-  interval: 1m
-  rules:
-  - record: sli_aggregations:stackdriver_pubsub_topic_pubsub_googleapis_com_topic_byte_cost:rate_1h
-    expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,topic_id,type) (
-        rate(stackdriver_pubsub_topic_pubsub_googleapis_com_topic_byte_cost{cluster="gprd-us-east1-d",env="gprd",type=~"monitoring"}[1h] offset 30s)
-      )
-- name: 'SLI Aggregations: logging - pubsub_topics - 1h burn-rate - emitted by monitoring
-    - gitlab-3okls'
-  interval: 1m
-  rules:
-  - record: sli_aggregations:stackdriver_pubsub_topic_pubsub_googleapis_com_topic_byte_cost:rate_1h
-    expr: |
-      sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,topic_id,type) (
-        rate(stackdriver_pubsub_topic_pubsub_googleapis_com_topic_byte_cost{cluster="gitlab-3okls",env="gprd",type=~"monitoring"}[1h] offset 30s)
+        rate(stackdriver_pubsub_topic_pubsub_googleapis_com_topic_byte_cost{env="gprd",type=~"monitoring"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: logging - pubsubbeat - 1h burn-rate'
   interval: 1m
@@ -1003,48 +707,11 @@ groups:
       sum by (component,env,environment,feature_category,fqdn,pod,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(pubsubbeat_libbeat_output_events{env="gprd"}[1h] offset 30s)
       )
-- name: 'SLI Aggregations: logging - stackdriver - 1h burn-rate - emitted by monitoring
-    - gprd-gitlab-gke'
+- name: 'SLI Aggregations: logging - stackdriver - 1h burn-rate'
   interval: 1m
   rules:
   - record: sli_aggregations:stackdriver_gce_instance_logging_googleapis_com_log_entry_count:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,log,product_stage,region,severity,shard,stage,stage_group,tier,type) (
-        rate(stackdriver_gce_instance_logging_googleapis_com_log_entry_count{cluster="gprd-gitlab-gke",env="gprd",type=~"monitoring"}[1h] offset 30s)
-      )
-- name: 'SLI Aggregations: logging - stackdriver - 1h burn-rate - emitted by monitoring
-    - gprd-us-east1-b'
-  interval: 1m
-  rules:
-  - record: sli_aggregations:stackdriver_gce_instance_logging_googleapis_com_log_entry_count:rate_1h
-    expr: |
-      sum by (component,env,environment,feature_category,fqdn,log,product_stage,region,severity,shard,stage,stage_group,tier,type) (
-        rate(stackdriver_gce_instance_logging_googleapis_com_log_entry_count{cluster="gprd-us-east1-b",env="gprd",type=~"monitoring"}[1h] offset 30s)
-      )
-- name: 'SLI Aggregations: logging - stackdriver - 1h burn-rate - emitted by monitoring
-    - gprd-us-east1-c'
-  interval: 1m
-  rules:
-  - record: sli_aggregations:stackdriver_gce_instance_logging_googleapis_com_log_entry_count:rate_1h
-    expr: |
-      sum by (component,env,environment,feature_category,fqdn,log,product_stage,region,severity,shard,stage,stage_group,tier,type) (
-        rate(stackdriver_gce_instance_logging_googleapis_com_log_entry_count{cluster="gprd-us-east1-c",env="gprd",type=~"monitoring"}[1h] offset 30s)
-      )
-- name: 'SLI Aggregations: logging - stackdriver - 1h burn-rate - emitted by monitoring
-    - gprd-us-east1-d'
-  interval: 1m
-  rules:
-  - record: sli_aggregations:stackdriver_gce_instance_logging_googleapis_com_log_entry_count:rate_1h
-    expr: |
-      sum by (component,env,environment,feature_category,fqdn,log,product_stage,region,severity,shard,stage,stage_group,tier,type) (
-        rate(stackdriver_gce_instance_logging_googleapis_com_log_entry_count{cluster="gprd-us-east1-d",env="gprd",type=~"monitoring"}[1h] offset 30s)
-      )
-- name: 'SLI Aggregations: logging - stackdriver - 1h burn-rate - emitted by monitoring
-    - gitlab-3okls'
-  interval: 1m
-  rules:
-  - record: sli_aggregations:stackdriver_gce_instance_logging_googleapis_com_log_entry_count:rate_1h
-    expr: |
-      sum by (component,env,environment,feature_category,fqdn,log,product_stage,region,severity,shard,stage,stage_group,tier,type) (
-        rate(stackdriver_gce_instance_logging_googleapis_com_log_entry_count{cluster="gitlab-3okls",env="gprd",type=~"monitoring"}[1h] offset 30s)
+        rate(stackdriver_gce_instance_logging_googleapis_com_log_entry_count{env="gprd"}[1h] offset 30s)
       )
