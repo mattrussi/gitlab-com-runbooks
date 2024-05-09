@@ -48,9 +48,9 @@ local resourceSaturationPoint = metricsCatalog.resourceSaturationPoint;
     query: |||
       sum without(nat_ip) (
         stackdriver_nat_gateway_router_googleapis_com_nat_allocated_ports{
-          job="stackdriver",
+          job=~"stackdriver|scrapeConfig/monitoring/prometheus-agent-stackdriver",
           project_id="gitlab-production",
-          %(selector)s
+          %(selectorWithoutType)s
         }
       )
       /
@@ -58,9 +58,9 @@ local resourceSaturationPoint = metricsCatalog.resourceSaturationPoint;
       or
       sum without(nat_ip) (
         stackdriver_nat_gateway_router_googleapis_com_nat_allocated_ports{
-          job="stackdriver",
+          job=~"stackdriver|scrapeConfig/monitoring/prometheus-agent-stackdriver",
           project_id="gitlab-staging-1",
-          %(selector)s
+          %(selectorWithoutType)s
         }
       )
       /
