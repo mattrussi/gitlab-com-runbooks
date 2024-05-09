@@ -6,7 +6,7 @@ local type = template.new(
   'type',
   '$PROMETHEUS_DS',
   query=|||
-    label_values(gitlab_runner_version_info{job="runners-manager", environment="$environment"}, type)
+    label_values(gitlab_runner_version_info{job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner", environment="$environment"}, type)
   |||,
   current=runnersService.type,
   refresh='load',

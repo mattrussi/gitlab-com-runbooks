@@ -100,7 +100,7 @@ local objects = import 'utils/objects.libsonnet';
     'gitlab-observability': {
       selector: {},
       envName: 'gitlab-observability',
-    }
+    },
   },
 
   gkeClustersByEnvironment: {

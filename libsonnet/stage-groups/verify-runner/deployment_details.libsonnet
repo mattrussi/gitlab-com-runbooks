@@ -112,7 +112,7 @@ local versionsTable(partition=runnersManagerMatching.defaultPartition) = table(
 local uptimeTable(partition=runnersManagerMatching.defaultPartition) = table(
   'GitLab Runner Uptime',
   query=runnersManagerMatching.formatQuery(
-    'time() - process_start_time_seconds{environment=~"$environment",stage=~"$stage",%(runnerManagersMatcher)s,job="runners-manager"}',
+    'time() - process_start_time_seconds{environment=~"$environment",stage=~"$stage",%(runnerManagersMatcher)s,job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner"}',
     partition,
   ),
   sortBy=[{

@@ -543,10 +543,10 @@ groups:
           clamp_min(
             clamp_max(
               sum without(executor_stage, exported_stage, state) (
-                max_over_time(gitlab_runner_jobs{job="runners-manager",shard="private"}[1m])
+                max_over_time(gitlab_runner_jobs{job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard="private"}[1m])
               )
               /
-              gitlab_runner_limit{job="runners-manager",shard="private"} > 0
+              gitlab_runner_limit{job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard="private"} > 0
               ,
               1)
           ,
@@ -557,10 +557,10 @@ groups:
           clamp_min(
             clamp_max(
               sum without(executor_stage, exported_stage, state) (
-                max_over_time(gitlab_runner_jobs{job="runners-manager",shard="private"}[1m])
+                max_over_time(gitlab_runner_jobs{job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard="private"}[1m])
               )
               /
-              gitlab_runner_limit{job="runners-manager",shard="private"} > 0
+              gitlab_runner_limit{job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard="private"} > 0
               ,
               1)
           ,
@@ -602,10 +602,10 @@ groups:
           clamp_min(
             clamp_max(
               sum without(executor_stage, exported_stage, state) (
-                max_over_time(gitlab_runner_jobs{job="runners-manager",shard="saas-linux-large-amd64"}[1m])
+                max_over_time(gitlab_runner_jobs{job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard="saas-linux-large-amd64"}[1m])
               )
               /
-              gitlab_runner_limit{job="runners-manager",shard="saas-linux-large-amd64"} > 0
+              gitlab_runner_limit{job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard="saas-linux-large-amd64"} > 0
               ,
               1)
           ,
@@ -616,10 +616,10 @@ groups:
           clamp_min(
             clamp_max(
               sum without(executor_stage, exported_stage, state) (
-                max_over_time(gitlab_runner_jobs{job="runners-manager",shard="saas-linux-large-amd64"}[1m])
+                max_over_time(gitlab_runner_jobs{job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard="saas-linux-large-amd64"}[1m])
               )
               /
-              gitlab_runner_limit{job="runners-manager",shard="saas-linux-large-amd64"} > 0
+              gitlab_runner_limit{job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard="saas-linux-large-amd64"} > 0
               ,
               1)
           ,
@@ -661,10 +661,10 @@ groups:
           clamp_min(
             clamp_max(
               sum without(executor_stage, exported_stage, state) (
-                max_over_time(gitlab_runner_jobs{job="runners-manager",shard="saas-linux-medium-amd64-gpu-standard"}[1m])
+                max_over_time(gitlab_runner_jobs{job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard="saas-linux-medium-amd64-gpu-standard"}[1m])
               )
               /
-              gitlab_runner_limit{job="runners-manager",shard="saas-linux-medium-amd64-gpu-standard"} > 0
+              gitlab_runner_limit{job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard="saas-linux-medium-amd64-gpu-standard"} > 0
               ,
               1)
           ,
@@ -675,10 +675,10 @@ groups:
           clamp_min(
             clamp_max(
               sum without(executor_stage, exported_stage, state) (
-                max_over_time(gitlab_runner_jobs{job="runners-manager",shard="saas-linux-medium-amd64-gpu-standard"}[1m])
+                max_over_time(gitlab_runner_jobs{job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard="saas-linux-medium-amd64-gpu-standard"}[1m])
               )
               /
-              gitlab_runner_limit{job="runners-manager",shard="saas-linux-medium-amd64-gpu-standard"} > 0
+              gitlab_runner_limit{job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard="saas-linux-medium-amd64-gpu-standard"} > 0
               ,
               1)
           ,
@@ -720,10 +720,10 @@ groups:
           clamp_min(
             clamp_max(
               sum without(executor_stage, exported_stage, state) (
-                max_over_time(gitlab_runner_jobs{job="runners-manager",shard="saas-linux-medium-amd64"}[1m])
+                max_over_time(gitlab_runner_jobs{job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard="saas-linux-medium-amd64"}[1m])
               )
               /
-              gitlab_runner_limit{job="runners-manager",shard="saas-linux-medium-amd64"} > 0
+              gitlab_runner_limit{job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard="saas-linux-medium-amd64"} > 0
               ,
               1)
           ,
@@ -734,10 +734,10 @@ groups:
           clamp_min(
             clamp_max(
               sum without(executor_stage, exported_stage, state) (
-                max_over_time(gitlab_runner_jobs{job="runners-manager",shard="saas-linux-medium-amd64"}[1m])
+                max_over_time(gitlab_runner_jobs{job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard="saas-linux-medium-amd64"}[1m])
               )
               /
-              gitlab_runner_limit{job="runners-manager",shard="saas-linux-medium-amd64"} > 0
+              gitlab_runner_limit{job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard="saas-linux-medium-amd64"} > 0
               ,
               1)
           ,
@@ -779,10 +779,10 @@ groups:
           clamp_min(
             clamp_max(
               sum without(executor_stage, exported_stage, state) (
-                max_over_time(gitlab_runner_jobs{job="runners-manager",shard="saas-linux-small-amd64"}[1m])
+                max_over_time(gitlab_runner_jobs{job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard="saas-linux-small-amd64"}[1m])
               )
               /
-              gitlab_runner_limit{job="runners-manager",shard="saas-linux-small-amd64"} > 0
+              gitlab_runner_limit{job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard="saas-linux-small-amd64"} > 0
               ,
               1)
           ,
@@ -793,10 +793,10 @@ groups:
           clamp_min(
             clamp_max(
               sum without(executor_stage, exported_stage, state) (
-                max_over_time(gitlab_runner_jobs{job="runners-manager",shard="saas-linux-small-amd64"}[1m])
+                max_over_time(gitlab_runner_jobs{job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard="saas-linux-small-amd64"}[1m])
               )
               /
-              gitlab_runner_limit{job="runners-manager",shard="saas-linux-small-amd64"} > 0
+              gitlab_runner_limit{job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard="saas-linux-small-amd64"} > 0
               ,
               1)
           ,
@@ -838,10 +838,10 @@ groups:
           clamp_min(
             clamp_max(
               sum without(executor_stage, exported_stage, state) (
-                max_over_time(gitlab_runner_jobs{job="runners-manager",shard="saas-macos-medium-m1"}[1m])
+                max_over_time(gitlab_runner_jobs{job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard="saas-macos-medium-m1"}[1m])
               )
               /
-              gitlab_runner_limit{job="runners-manager",shard="saas-macos-medium-m1"} > 0
+              gitlab_runner_limit{job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard="saas-macos-medium-m1"} > 0
               ,
               1)
           ,
@@ -852,10 +852,10 @@ groups:
           clamp_min(
             clamp_max(
               sum without(executor_stage, exported_stage, state) (
-                max_over_time(gitlab_runner_jobs{job="runners-manager",shard="saas-macos-medium-m1"}[1m])
+                max_over_time(gitlab_runner_jobs{job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard="saas-macos-medium-m1"}[1m])
               )
               /
-              gitlab_runner_limit{job="runners-manager",shard="saas-macos-medium-m1"} > 0
+              gitlab_runner_limit{job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard="saas-macos-medium-m1"} > 0
               ,
               1)
           ,
@@ -897,10 +897,10 @@ groups:
           clamp_min(
             clamp_max(
               sum without(executor_stage, exported_stage, state) (
-                max_over_time(gitlab_runner_jobs{job="runners-manager",shard="saas-macos-staging"}[1m])
+                max_over_time(gitlab_runner_jobs{job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard="saas-macos-staging"}[1m])
               )
               /
-              gitlab_runner_limit{job="runners-manager",shard="saas-macos-staging"} > 0
+              gitlab_runner_limit{job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard="saas-macos-staging"} > 0
               ,
               1)
           ,
@@ -911,10 +911,10 @@ groups:
           clamp_min(
             clamp_max(
               sum without(executor_stage, exported_stage, state) (
-                max_over_time(gitlab_runner_jobs{job="runners-manager",shard="saas-macos-staging"}[1m])
+                max_over_time(gitlab_runner_jobs{job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard="saas-macos-staging"}[1m])
               )
               /
-              gitlab_runner_limit{job="runners-manager",shard="saas-macos-staging"} > 0
+              gitlab_runner_limit{job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard="saas-macos-staging"} > 0
               ,
               1)
           ,
@@ -1007,10 +1007,10 @@ groups:
           clamp_min(
             clamp_max(
               sum without(executor_stage, exported_stage, state) (
-                max_over_time(gitlab_runner_jobs{job="runners-manager",shard="shared-gitlab-org"}[1m])
+                max_over_time(gitlab_runner_jobs{job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard="shared-gitlab-org"}[1m])
               )
               /
-              gitlab_runner_limit{job="runners-manager",shard="shared-gitlab-org"} > 0
+              gitlab_runner_limit{job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard="shared-gitlab-org"} > 0
               ,
               1)
           ,
@@ -1021,10 +1021,10 @@ groups:
           clamp_min(
             clamp_max(
               sum without(executor_stage, exported_stage, state) (
-                max_over_time(gitlab_runner_jobs{job="runners-manager",shard="shared-gitlab-org"}[1m])
+                max_over_time(gitlab_runner_jobs{job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard="shared-gitlab-org"}[1m])
               )
               /
-              gitlab_runner_limit{job="runners-manager",shard="shared-gitlab-org"} > 0
+              gitlab_runner_limit{job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard="shared-gitlab-org"} > 0
               ,
               1)
           ,
@@ -1115,10 +1115,10 @@ groups:
           clamp_min(
             clamp_max(
               sum without(executor_stage, exported_stage, state) (
-                max_over_time(gitlab_runner_jobs{job="runners-manager",shard="windows-shared"}[1m])
+                max_over_time(gitlab_runner_jobs{job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard="windows-shared"}[1m])
               )
               /
-              gitlab_runner_limit{job="runners-manager",shard="windows-shared"} > 0
+              gitlab_runner_limit{job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard="windows-shared"} > 0
               ,
               1)
           ,
@@ -1129,10 +1129,10 @@ groups:
           clamp_min(
             clamp_max(
               sum without(executor_stage, exported_stage, state) (
-                max_over_time(gitlab_runner_jobs{job="runners-manager",shard="windows-shared"}[1m])
+                max_over_time(gitlab_runner_jobs{job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard="windows-shared"}[1m])
               )
               /
-              gitlab_runner_limit{job="runners-manager",shard="windows-shared"} > 0
+              gitlab_runner_limit{job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard="windows-shared"} > 0
               ,
               1)
           ,
