@@ -31,7 +31,7 @@ can be found at Teleport's website.
 
 #### Accessing the Rails console via Teleport
 
-Always use staging to test and experiment, unless production data is strickly necessary.
+Always use staging to test and experiment, unless production data is strictly necessary.
 
 ##### Staging
 
