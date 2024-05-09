@@ -130,7 +130,7 @@ groups:
       type: git
     expr: |
       sum by (env,environment) (
-        rate(haproxy_server_sessions_total{backend=~"ssh|altssh",type="frontend"}[1m] offset 30s)
+        rate(haproxy_server_sessions_total{backend=~"altssh|ssh",type="frontend"}[1m] offset 30s)
       )
   - record: gitlab_component_errors:rate
     labels:
@@ -141,7 +141,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(haproxy_server_connection_errors_total{backend=~"ssh|altssh",type="frontend"}[1m] offset 30s)
+          rate(haproxy_server_connection_errors_total{backend=~"altssh|ssh",type="frontend"}[1m] offset 30s)
         )
       )
       or
@@ -419,7 +419,7 @@ groups:
       type: git
     expr: |
       sum by (env,environment) (
-        rate(haproxy_server_sessions_total{backend=~"ssh|altssh",type="frontend"}[5m] offset 30s)
+        rate(haproxy_server_sessions_total{backend=~"altssh|ssh",type="frontend"}[5m] offset 30s)
       )
   - record: gitlab_component_errors:rate_5m
     labels:
@@ -430,7 +430,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(haproxy_server_connection_errors_total{backend=~"ssh|altssh",type="frontend"}[5m] offset 30s)
+          rate(haproxy_server_connection_errors_total{backend=~"altssh|ssh",type="frontend"}[5m] offset 30s)
         )
       )
       or
@@ -708,7 +708,7 @@ groups:
       type: git
     expr: |
       sum by (env,environment) (
-        rate(haproxy_server_sessions_total{backend=~"ssh|altssh",type="frontend"}[30m] offset 30s)
+        rate(haproxy_server_sessions_total{backend=~"altssh|ssh",type="frontend"}[30m] offset 30s)
       )
   - record: gitlab_component_errors:rate_30m
     labels:
@@ -719,7 +719,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(haproxy_server_connection_errors_total{backend=~"ssh|altssh",type="frontend"}[30m] offset 30s)
+          rate(haproxy_server_connection_errors_total{backend=~"altssh|ssh",type="frontend"}[30m] offset 30s)
         )
       )
       or
@@ -997,7 +997,7 @@ groups:
       type: git
     expr: |
       sum by (env,environment) (
-        rate(haproxy_server_sessions_total{backend=~"ssh|altssh",type="frontend"}[1h] offset 30s)
+        rate(haproxy_server_sessions_total{backend=~"altssh|ssh",type="frontend"}[1h] offset 30s)
       )
   - record: gitlab_component_errors:rate_1h
     labels:
@@ -1008,7 +1008,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(haproxy_server_connection_errors_total{backend=~"ssh|altssh",type="frontend"}[1h] offset 30s)
+          rate(haproxy_server_connection_errors_total{backend=~"altssh|ssh",type="frontend"}[1h] offset 30s)
         )
       )
       or
@@ -1286,7 +1286,7 @@ groups:
       type: git
     expr: |
       sum by (env,environment) (
-        rate(haproxy_server_sessions_total{backend=~"ssh|altssh",type="frontend"}[6h] offset 30s)
+        rate(haproxy_server_sessions_total{backend=~"altssh|ssh",type="frontend"}[6h] offset 30s)
       )
   - record: gitlab_component_errors:rate_6h
     labels:
@@ -1297,7 +1297,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(haproxy_server_connection_errors_total{backend=~"ssh|altssh",type="frontend"}[6h] offset 30s)
+          rate(haproxy_server_connection_errors_total{backend=~"altssh|ssh",type="frontend"}[6h] offset 30s)
         )
       )
       or

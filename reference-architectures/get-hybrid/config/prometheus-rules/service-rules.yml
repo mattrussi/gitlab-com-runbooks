@@ -2404,11 +2404,11 @@ groups:
   - expr: |
       (
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="25",method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}"}[5m])
+          rate(registry_http_request_duration_seconds_bucket{le="25",method=~"patch|post|put",route="/v2/{name}/blobs/uploads/{uuid}"}[5m])
         )
         +
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="60",method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}"}[5m])
+          rate(registry_http_request_duration_seconds_bucket{le="60",method=~"patch|post|put",route="/v2/{name}/blobs/uploads/{uuid}"}[5m])
         )
       )
       /
@@ -2420,7 +2420,7 @@ groups:
     record: gitlab_component_apdex:success:rate_5m
   - expr: |
       sum by () (
-        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}"}[5m])
+        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"patch|post|put",route="/v2/{name}/blobs/uploads/{uuid}"}[5m])
       )
     labels:
       component: server_route_blob_upload_uuid_writes
@@ -2429,7 +2429,7 @@ groups:
     record: gitlab_component_apdex:weight:score_5m
   - expr: |
       sum by () (
-        rate(registry_http_request_duration_seconds_count{method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}"}[5m])
+        rate(registry_http_request_duration_seconds_count{method=~"patch|post|put",route="/v2/{name}/blobs/uploads/{uuid}"}[5m])
       )
     labels:
       component: server_route_blob_upload_uuid_writes
@@ -2851,11 +2851,11 @@ groups:
   - expr: |
       (
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="25",method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}"}[30m])
+          rate(registry_http_request_duration_seconds_bucket{le="25",method=~"patch|post|put",route="/v2/{name}/blobs/uploads/{uuid}"}[30m])
         )
         +
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="60",method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}"}[30m])
+          rate(registry_http_request_duration_seconds_bucket{le="60",method=~"patch|post|put",route="/v2/{name}/blobs/uploads/{uuid}"}[30m])
         )
       )
       /
@@ -2867,7 +2867,7 @@ groups:
     record: gitlab_component_apdex:success:rate_30m
   - expr: |
       sum by () (
-        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}"}[30m])
+        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"patch|post|put",route="/v2/{name}/blobs/uploads/{uuid}"}[30m])
       )
     labels:
       component: server_route_blob_upload_uuid_writes
@@ -2876,7 +2876,7 @@ groups:
     record: gitlab_component_apdex:weight:score_30m
   - expr: |
       sum by () (
-        rate(registry_http_request_duration_seconds_count{method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}"}[30m])
+        rate(registry_http_request_duration_seconds_count{method=~"patch|post|put",route="/v2/{name}/blobs/uploads/{uuid}"}[30m])
       )
     labels:
       component: server_route_blob_upload_uuid_writes
@@ -3298,11 +3298,11 @@ groups:
   - expr: |
       (
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="25",method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}"}[1h])
+          rate(registry_http_request_duration_seconds_bucket{le="25",method=~"patch|post|put",route="/v2/{name}/blobs/uploads/{uuid}"}[1h])
         )
         +
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="60",method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}"}[1h])
+          rate(registry_http_request_duration_seconds_bucket{le="60",method=~"patch|post|put",route="/v2/{name}/blobs/uploads/{uuid}"}[1h])
         )
       )
       /
@@ -3314,7 +3314,7 @@ groups:
     record: gitlab_component_apdex:success:rate_1h
   - expr: |
       sum by () (
-        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}"}[1h])
+        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"patch|post|put",route="/v2/{name}/blobs/uploads/{uuid}"}[1h])
       )
     labels:
       component: server_route_blob_upload_uuid_writes
@@ -3323,7 +3323,7 @@ groups:
     record: gitlab_component_apdex:weight:score_1h
   - expr: |
       sum by () (
-        rate(registry_http_request_duration_seconds_count{method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}"}[1h])
+        rate(registry_http_request_duration_seconds_count{method=~"patch|post|put",route="/v2/{name}/blobs/uploads/{uuid}"}[1h])
       )
     labels:
       component: server_route_blob_upload_uuid_writes
@@ -3745,11 +3745,11 @@ groups:
   - expr: |
       (
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="25",method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}"}[6h])
+          rate(registry_http_request_duration_seconds_bucket{le="25",method=~"patch|post|put",route="/v2/{name}/blobs/uploads/{uuid}"}[6h])
         )
         +
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="60",method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}"}[6h])
+          rate(registry_http_request_duration_seconds_bucket{le="60",method=~"patch|post|put",route="/v2/{name}/blobs/uploads/{uuid}"}[6h])
         )
       )
       /
@@ -3761,7 +3761,7 @@ groups:
     record: gitlab_component_apdex:success:rate_6h
   - expr: |
       sum by () (
-        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}"}[6h])
+        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"patch|post|put",route="/v2/{name}/blobs/uploads/{uuid}"}[6h])
       )
     labels:
       component: server_route_blob_upload_uuid_writes
@@ -3770,7 +3770,7 @@ groups:
     record: gitlab_component_apdex:weight:score_6h
   - expr: |
       sum by () (
-        rate(registry_http_request_duration_seconds_count{method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}"}[6h])
+        rate(registry_http_request_duration_seconds_count{method=~"patch|post|put",route="/v2/{name}/blobs/uploads/{uuid}"}[6h])
       )
     labels:
       component: server_route_blob_upload_uuid_writes

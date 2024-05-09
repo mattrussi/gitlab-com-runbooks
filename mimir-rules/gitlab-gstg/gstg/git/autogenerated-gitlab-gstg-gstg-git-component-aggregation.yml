@@ -224,7 +224,7 @@ groups:
       type: git
     expr: |
       sum by (env,environment) (
-        sli_aggregations:haproxy_server_sessions_total:rate_5m{backend=~"ssh|altssh",env="gstg",type="frontend"} offset 30s
+        sli_aggregations:haproxy_server_sessions_total:rate_5m{backend=~"altssh|ssh",env="gstg",type="frontend"} offset 30s
       )
   - record: gitlab_component_errors:rate_5m
     labels:
@@ -236,7 +236,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          sli_aggregations:haproxy_server_connection_errors_total:rate_5m{backend=~"ssh|altssh",env="gstg",type="frontend"} offset 30s
+          sli_aggregations:haproxy_server_connection_errors_total:rate_5m{backend=~"altssh|ssh",env="gstg",type="frontend"} offset 30s
         )
       )
       or
@@ -732,7 +732,7 @@ groups:
       type: git
     expr: |
       sum by (env,environment) (
-        sli_aggregations:haproxy_server_sessions_total:rate_30m{backend=~"ssh|altssh",env="gstg",type="frontend"} offset 30s
+        sli_aggregations:haproxy_server_sessions_total:rate_30m{backend=~"altssh|ssh",env="gstg",type="frontend"} offset 30s
       )
   - record: gitlab_component_errors:rate_30m
     labels:
@@ -744,7 +744,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          sli_aggregations:haproxy_server_connection_errors_total:rate_30m{backend=~"ssh|altssh",env="gstg",type="frontend"} offset 30s
+          sli_aggregations:haproxy_server_connection_errors_total:rate_30m{backend=~"altssh|ssh",env="gstg",type="frontend"} offset 30s
         )
       )
       or
@@ -1240,7 +1240,7 @@ groups:
       type: git
     expr: |
       sum by (env,environment) (
-        sli_aggregations:haproxy_server_sessions_total:rate_1h{backend=~"ssh|altssh",env="gstg",type="frontend"} offset 30s
+        sli_aggregations:haproxy_server_sessions_total:rate_1h{backend=~"altssh|ssh",env="gstg",type="frontend"} offset 30s
       )
   - record: gitlab_component_errors:rate_1h
     labels:
@@ -1252,7 +1252,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          sli_aggregations:haproxy_server_connection_errors_total:rate_1h{backend=~"ssh|altssh",env="gstg",type="frontend"} offset 30s
+          sli_aggregations:haproxy_server_connection_errors_total:rate_1h{backend=~"altssh|ssh",env="gstg",type="frontend"} offset 30s
         )
       )
       or

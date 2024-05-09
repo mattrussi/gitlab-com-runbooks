@@ -116,6 +116,9 @@ local escapeBackslash(string) =
   );
   std.join('', escaped);
 
+local contains(str, substr) =
+  std.length(std.findSubstr(substr, str)) > 0;
+
 {
   removeBlankLines(str):: removeBlankLines(str),
   chomp(str):: chomp(str),
@@ -144,4 +147,7 @@ local escapeBackslash(string) =
 
   escapeStringRegex:: escapeStringRegex,
   escapeBackslash:: escapeBackslash,
+
+  // This is a workaround until std.contains gets released
+  contains: contains,
 }

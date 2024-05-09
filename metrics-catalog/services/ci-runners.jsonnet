@@ -103,7 +103,7 @@ metricsCatalog.serviceDefinition({
         counter='gitlab_runner_jobs_total',
         selector={
           job: { oneOf: ['runners-manager', 'scrapeConfig/monitoring/prometheus-agent-runner'] },
-          shard: { re: 'shared-gitlab-org|private|saas-.*|windows-shared' },
+          shard: { oneOf: ['shared-gitlab-org', 'private', 'saas-.*', 'windows-shared'] },
         },
       ),
 
@@ -111,7 +111,7 @@ metricsCatalog.serviceDefinition({
         counter='gitlab_runner_failed_jobs_total',
         selector={
           job: { oneOf: ['runners-manager', 'scrapeConfig/monitoring/prometheus-agent-runner'] },
-          shard: { re: 'shared-gitlab-org|private|saas-.*|windows-shared' },
+          shard: { oneOf: ['shared-gitlab-org', 'private', 'saas-.*', 'windows-shared'] },
           failure_reason: 'runner_system_failure',
         },
       ),
@@ -148,7 +148,7 @@ metricsCatalog.serviceDefinition({
         counter='gitlab_runner_jobs_total',
         selector={
           job: { oneOf: ['runners-manager', 'scrapeConfig/monitoring/prometheus-agent-runner'] },
-          shard: { re: 'shared-gitlab-org|private|saas-linux-.*' },
+          shard: { oneOf: ['shared-gitlab-org', 'private', 'saas-linux-.*'] },
         },
       ),
 
@@ -156,7 +156,7 @@ metricsCatalog.serviceDefinition({
         counter='gitlab_runner_failed_jobs_total',
         selector={
           job: { oneOf: ['runners-manager', 'scrapeConfig/monitoring/prometheus-agent-runner'] },
-          shard: { re: 'shared-gitlab-org|private|saas-linux-.*' },
+          shard: { oneOf: ['shared-gitlab-org', 'private', 'saas-linux-.*'] },
           failure_reason: 'image_pull_failure',
         },
       ),

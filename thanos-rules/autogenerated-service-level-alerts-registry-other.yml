@@ -3266,7 +3266,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
-            rate(registry_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}",stage="{{ $labels.stage }}",type="registry"}[5m])
+            rate(registry_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",method=~"patch|post|put",route="/v2/{name}/blobs/uploads/{uuid}",stage="{{ $labels.stage }}",type="registry"}[5m])
           )
         )
       runbook: docs/registry/README.md
@@ -3321,7 +3321,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
-            rate(registry_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}",stage="{{ $labels.stage }}",type="registry"}[5m])
+            rate(registry_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",method=~"patch|post|put",route="/v2/{name}/blobs/uploads/{uuid}",stage="{{ $labels.stage }}",type="registry"}[5m])
           )
         )
       runbook: docs/registry/README.md
@@ -3378,7 +3378,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,region,location,le) (
-            rate(registry_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",location="{{ $labels.location }}",method=~"put|patch|post",region="{{ $labels.region }}",route="/v2/{name}/blobs/uploads/{uuid}",stage="{{ $labels.stage }}",type="registry"}[5m])
+            rate(registry_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",location="{{ $labels.location }}",method=~"patch|post|put",region="{{ $labels.region }}",route="/v2/{name}/blobs/uploads/{uuid}",stage="{{ $labels.stage }}",type="registry"}[5m])
           )
         )
       runbook: docs/registry/README.md
@@ -3435,7 +3435,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,region,location,le) (
-            rate(registry_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",location="{{ $labels.location }}",method=~"put|patch|post",region="{{ $labels.region }}",route="/v2/{name}/blobs/uploads/{uuid}",stage="{{ $labels.stage }}",type="registry"}[5m])
+            rate(registry_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",location="{{ $labels.location }}",method=~"patch|post|put",region="{{ $labels.region }}",route="/v2/{name}/blobs/uploads/{uuid}",stage="{{ $labels.stage }}",type="registry"}[5m])
           )
         )
       runbook: docs/registry/README.md
@@ -3488,7 +3488,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(registry_http_request_duration_seconds_count{environment="{{ $labels.environment }}",method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}",stage="{{ $labels.stage }}",type="registry"}[5m])
+          rate(registry_http_request_duration_seconds_count{environment="{{ $labels.environment }}",method=~"patch|post|put",route="/v2/{name}/blobs/uploads/{uuid}",stage="{{ $labels.stage }}",type="registry"}[5m])
         )
       runbook: docs/registry/README.md
     labels:
@@ -3529,7 +3529,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(registry_http_request_duration_seconds_count{environment="{{ $labels.environment }}",method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}",stage="{{ $labels.stage }}",type="registry"}[5m])
+          rate(registry_http_request_duration_seconds_count{environment="{{ $labels.environment }}",method=~"patch|post|put",route="/v2/{name}/blobs/uploads/{uuid}",stage="{{ $labels.stage }}",type="registry"}[5m])
         )
       runbook: docs/registry/README.md
     labels:
@@ -3571,7 +3571,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage,region,location) (
-          rate(registry_http_request_duration_seconds_count{environment="{{ $labels.environment }}",location="{{ $labels.location }}",method=~"put|patch|post",region="{{ $labels.region }}",route="/v2/{name}/blobs/uploads/{uuid}",stage="{{ $labels.stage }}",type="registry"}[5m])
+          rate(registry_http_request_duration_seconds_count{environment="{{ $labels.environment }}",location="{{ $labels.location }}",method=~"patch|post|put",region="{{ $labels.region }}",route="/v2/{name}/blobs/uploads/{uuid}",stage="{{ $labels.stage }}",type="registry"}[5m])
         )
       runbook: docs/registry/README.md
     labels:
@@ -3615,7 +3615,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage,region,location) (
-          rate(registry_http_request_duration_seconds_count{environment="{{ $labels.environment }}",location="{{ $labels.location }}",method=~"put|patch|post",region="{{ $labels.region }}",route="/v2/{name}/blobs/uploads/{uuid}",stage="{{ $labels.stage }}",type="registry"}[5m])
+          rate(registry_http_request_duration_seconds_count{environment="{{ $labels.environment }}",location="{{ $labels.location }}",method=~"patch|post|put",region="{{ $labels.region }}",route="/v2/{name}/blobs/uploads/{uuid}",stage="{{ $labels.stage }}",type="registry"}[5m])
         )
       runbook: docs/registry/README.md
     labels:
@@ -4012,7 +4012,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
-            rate(registry_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",stage="{{ $labels.stage }}",type="registry"}[5m])
+            rate(registry_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",method=~"delete|patch|post|put",route="/v2/{name}/manifests/{reference}",stage="{{ $labels.stage }}",type="registry"}[5m])
           )
         )
       runbook: docs/registry/README.md
@@ -4067,7 +4067,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
-            rate(registry_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",stage="{{ $labels.stage }}",type="registry"}[5m])
+            rate(registry_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",method=~"delete|patch|post|put",route="/v2/{name}/manifests/{reference}",stage="{{ $labels.stage }}",type="registry"}[5m])
           )
         )
       runbook: docs/registry/README.md
@@ -4124,7 +4124,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,region,location,le) (
-            rate(registry_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",location="{{ $labels.location }}",method=~"put|delete|post|patch",region="{{ $labels.region }}",route="/v2/{name}/manifests/{reference}",stage="{{ $labels.stage }}",type="registry"}[5m])
+            rate(registry_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",location="{{ $labels.location }}",method=~"delete|patch|post|put",region="{{ $labels.region }}",route="/v2/{name}/manifests/{reference}",stage="{{ $labels.stage }}",type="registry"}[5m])
           )
         )
       runbook: docs/registry/README.md
@@ -4181,7 +4181,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,region,location,le) (
-            rate(registry_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",location="{{ $labels.location }}",method=~"put|delete|post|patch",region="{{ $labels.region }}",route="/v2/{name}/manifests/{reference}",stage="{{ $labels.stage }}",type="registry"}[5m])
+            rate(registry_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",location="{{ $labels.location }}",method=~"delete|patch|post|put",region="{{ $labels.region }}",route="/v2/{name}/manifests/{reference}",stage="{{ $labels.stage }}",type="registry"}[5m])
           )
         )
       runbook: docs/registry/README.md
@@ -4234,7 +4234,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(registry_http_request_duration_seconds_count{environment="{{ $labels.environment }}",method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",stage="{{ $labels.stage }}",type="registry"}[5m])
+          rate(registry_http_request_duration_seconds_count{environment="{{ $labels.environment }}",method=~"delete|patch|post|put",route="/v2/{name}/manifests/{reference}",stage="{{ $labels.stage }}",type="registry"}[5m])
         )
       runbook: docs/registry/README.md
     labels:
@@ -4275,7 +4275,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(registry_http_request_duration_seconds_count{environment="{{ $labels.environment }}",method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",stage="{{ $labels.stage }}",type="registry"}[5m])
+          rate(registry_http_request_duration_seconds_count{environment="{{ $labels.environment }}",method=~"delete|patch|post|put",route="/v2/{name}/manifests/{reference}",stage="{{ $labels.stage }}",type="registry"}[5m])
         )
       runbook: docs/registry/README.md
     labels:
@@ -4316,7 +4316,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage,region,location) (
-          rate(registry_http_request_duration_seconds_count{environment="{{ $labels.environment }}",location="{{ $labels.location }}",method=~"put|delete|post|patch",region="{{ $labels.region }}",route="/v2/{name}/manifests/{reference}",stage="{{ $labels.stage }}",type="registry"}[5m])
+          rate(registry_http_request_duration_seconds_count{environment="{{ $labels.environment }}",location="{{ $labels.location }}",method=~"delete|patch|post|put",region="{{ $labels.region }}",route="/v2/{name}/manifests/{reference}",stage="{{ $labels.stage }}",type="registry"}[5m])
         )
       runbook: docs/registry/README.md
     labels:
@@ -4359,7 +4359,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage,region,location) (
-          rate(registry_http_request_duration_seconds_count{environment="{{ $labels.environment }}",location="{{ $labels.location }}",method=~"put|delete|post|patch",region="{{ $labels.region }}",route="/v2/{name}/manifests/{reference}",stage="{{ $labels.stage }}",type="registry"}[5m])
+          rate(registry_http_request_duration_seconds_count{environment="{{ $labels.environment }}",location="{{ $labels.location }}",method=~"delete|patch|post|put",region="{{ $labels.region }}",route="/v2/{name}/manifests/{reference}",stage="{{ $labels.stage }}",type="registry"}[5m])
         )
       runbook: docs/registry/README.md
     labels:

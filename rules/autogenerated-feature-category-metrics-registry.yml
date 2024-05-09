@@ -385,11 +385,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(registry_http_request_duration_seconds_bucket{le="25",method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[5m] offset 30s)
+          rate(registry_http_request_duration_seconds_bucket{le="25",method=~"patch|post|put",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[5m] offset 30s)
         )
         +
         sum by (env,environment,stage) (
-          rate(registry_http_request_duration_seconds_bucket{le="60",method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[5m] offset 30s)
+          rate(registry_http_request_duration_seconds_bucket{le="60",method=~"patch|post|put",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[5m] offset 30s)
         )
       )
       /
@@ -402,7 +402,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage) (
-        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[5m] offset 30s)
+        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"patch|post|put",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[5m] offset 30s)
       )
   - record: gitlab:component:feature_category:execution:ops:rate_5m
     labels:
@@ -412,7 +412,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage) (
-        rate(registry_http_request_duration_seconds_count{method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[5m] offset 30s)
+        rate(registry_http_request_duration_seconds_count{method=~"patch|post|put",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[5m] offset 30s)
       )
   - record: gitlab:component:feature_category:execution:apdex:success:rate_5m
     labels:
@@ -461,11 +461,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(registry_http_request_duration_seconds_bucket{le="1",method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",type="registry"}[5m] offset 30s)
+          rate(registry_http_request_duration_seconds_bucket{le="1",method=~"delete|patch|post|put",route="/v2/{name}/manifests/{reference}",type="registry"}[5m] offset 30s)
         )
         +
         sum by (env,environment,stage) (
-          rate(registry_http_request_duration_seconds_bucket{le="2.5",method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",type="registry"}[5m] offset 30s)
+          rate(registry_http_request_duration_seconds_bucket{le="2.5",method=~"delete|patch|post|put",route="/v2/{name}/manifests/{reference}",type="registry"}[5m] offset 30s)
         )
       )
       /
@@ -478,7 +478,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage) (
-        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",type="registry"}[5m] offset 30s)
+        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"delete|patch|post|put",route="/v2/{name}/manifests/{reference}",type="registry"}[5m] offset 30s)
       )
   - record: gitlab:component:feature_category:execution:ops:rate_5m
     labels:
@@ -488,7 +488,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage) (
-        rate(registry_http_request_duration_seconds_count{method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",type="registry"}[5m] offset 30s)
+        rate(registry_http_request_duration_seconds_count{method=~"delete|patch|post|put",route="/v2/{name}/manifests/{reference}",type="registry"}[5m] offset 30s)
       )
 - name: 'Prometheus Intermediate Metrics per feature: registry - burn-rate 30m'
   interval: 2m
@@ -874,11 +874,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(registry_http_request_duration_seconds_bucket{le="25",method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[30m] offset 30s)
+          rate(registry_http_request_duration_seconds_bucket{le="25",method=~"patch|post|put",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[30m] offset 30s)
         )
         +
         sum by (env,environment,stage) (
-          rate(registry_http_request_duration_seconds_bucket{le="60",method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[30m] offset 30s)
+          rate(registry_http_request_duration_seconds_bucket{le="60",method=~"patch|post|put",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[30m] offset 30s)
         )
       )
       /
@@ -891,7 +891,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage) (
-        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[30m] offset 30s)
+        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"patch|post|put",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[30m] offset 30s)
       )
   - record: gitlab:component:feature_category:execution:ops:rate_30m
     labels:
@@ -901,7 +901,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage) (
-        rate(registry_http_request_duration_seconds_count{method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[30m] offset 30s)
+        rate(registry_http_request_duration_seconds_count{method=~"patch|post|put",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[30m] offset 30s)
       )
   - record: gitlab:component:feature_category:execution:apdex:success:rate_30m
     labels:
@@ -950,11 +950,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(registry_http_request_duration_seconds_bucket{le="1",method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",type="registry"}[30m] offset 30s)
+          rate(registry_http_request_duration_seconds_bucket{le="1",method=~"delete|patch|post|put",route="/v2/{name}/manifests/{reference}",type="registry"}[30m] offset 30s)
         )
         +
         sum by (env,environment,stage) (
-          rate(registry_http_request_duration_seconds_bucket{le="2.5",method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",type="registry"}[30m] offset 30s)
+          rate(registry_http_request_duration_seconds_bucket{le="2.5",method=~"delete|patch|post|put",route="/v2/{name}/manifests/{reference}",type="registry"}[30m] offset 30s)
         )
       )
       /
@@ -967,7 +967,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage) (
-        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",type="registry"}[30m] offset 30s)
+        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"delete|patch|post|put",route="/v2/{name}/manifests/{reference}",type="registry"}[30m] offset 30s)
       )
   - record: gitlab:component:feature_category:execution:ops:rate_30m
     labels:
@@ -977,7 +977,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage) (
-        rate(registry_http_request_duration_seconds_count{method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",type="registry"}[30m] offset 30s)
+        rate(registry_http_request_duration_seconds_count{method=~"delete|patch|post|put",route="/v2/{name}/manifests/{reference}",type="registry"}[30m] offset 30s)
       )
 - name: 'Prometheus Intermediate Metrics per feature: registry - burn-rate 1h'
   interval: 1m
@@ -1363,11 +1363,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(registry_http_request_duration_seconds_bucket{le="25",method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[1h] offset 30s)
+          rate(registry_http_request_duration_seconds_bucket{le="25",method=~"patch|post|put",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[1h] offset 30s)
         )
         +
         sum by (env,environment,stage) (
-          rate(registry_http_request_duration_seconds_bucket{le="60",method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[1h] offset 30s)
+          rate(registry_http_request_duration_seconds_bucket{le="60",method=~"patch|post|put",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[1h] offset 30s)
         )
       )
       /
@@ -1380,7 +1380,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage) (
-        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[1h] offset 30s)
+        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"patch|post|put",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[1h] offset 30s)
       )
   - record: gitlab:component:feature_category:execution:ops:rate_1h
     labels:
@@ -1390,7 +1390,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage) (
-        rate(registry_http_request_duration_seconds_count{method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[1h] offset 30s)
+        rate(registry_http_request_duration_seconds_count{method=~"patch|post|put",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[1h] offset 30s)
       )
   - record: gitlab:component:feature_category:execution:apdex:success:rate_1h
     labels:
@@ -1439,11 +1439,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(registry_http_request_duration_seconds_bucket{le="1",method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",type="registry"}[1h] offset 30s)
+          rate(registry_http_request_duration_seconds_bucket{le="1",method=~"delete|patch|post|put",route="/v2/{name}/manifests/{reference}",type="registry"}[1h] offset 30s)
         )
         +
         sum by (env,environment,stage) (
-          rate(registry_http_request_duration_seconds_bucket{le="2.5",method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",type="registry"}[1h] offset 30s)
+          rate(registry_http_request_duration_seconds_bucket{le="2.5",method=~"delete|patch|post|put",route="/v2/{name}/manifests/{reference}",type="registry"}[1h] offset 30s)
         )
       )
       /
@@ -1456,7 +1456,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage) (
-        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",type="registry"}[1h] offset 30s)
+        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"delete|patch|post|put",route="/v2/{name}/manifests/{reference}",type="registry"}[1h] offset 30s)
       )
   - record: gitlab:component:feature_category:execution:ops:rate_1h
     labels:
@@ -1466,5 +1466,5 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage) (
-        rate(registry_http_request_duration_seconds_count{method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",type="registry"}[1h] offset 30s)
+        rate(registry_http_request_duration_seconds_count{method=~"delete|patch|post|put",route="/v2/{name}/manifests/{reference}",type="registry"}[1h] offset 30s)
       )

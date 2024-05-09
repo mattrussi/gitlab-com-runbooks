@@ -15,7 +15,7 @@ local singleHTTPComponent(stage, selector, definition, userImpacting) =
   local backends = definition.backends;
   local toolingLinks = definition.toolingLinks;
   local baseSelector = selector {
-    backend: if std.length(backends) == 1 then backends[0] else { re: std.join('|', backends) },
+    backend: if std.length(backends) == 1 then backends[0] else { oneOf: backends },
   };
 
   metricsCatalog.serviceLevelIndicatorDefinition({
@@ -48,7 +48,7 @@ local singleL4Component(stage, selector, definition, userImpacting) =
   local toolingLinks = definition.toolingLinks;
 
   local baseSelector = selector {
-    backend: if std.length(backends) == 1 then backends[0] else { re: std.join('|', backends) },
+    backend: if std.length(backends) == 1 then backends[0] else { oneOf: backends },
   };
 
   metricsCatalog.serviceLevelIndicatorDefinition({

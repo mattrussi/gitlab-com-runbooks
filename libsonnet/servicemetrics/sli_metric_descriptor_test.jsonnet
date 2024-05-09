@@ -76,7 +76,7 @@ test.suite({
       { metric_foo: { code: { re: '^4.*|^5.*', ne: '200' } } },
       { metric_foo: { code: { re: '^4.*', nre: '^2.*' } } },
     ]),
-    expect: { metric_foo: { code: { oneOf: ['^4.*', '^5.*'] } } },
+    expect: { metric_foo: { code: { oneOf: ['^4.*', '^4.*|^5.*'] } } },
   },
   testCollectMetricNamesAndSelectorsNestedSelector4: {
     actual: collectMetricNamesAndSelectors([
@@ -149,7 +149,7 @@ test.suite({
   },
   testNormalizeSelectorHash3: {
     actual: sliMetricsDescriptor._normalizeSelectorExpression({ re: 'a|b' }),
-    expect: { oneOf: ['a', 'b'] },
+    expect: { oneOf: ['a|b'] },
   },
   testNormalizeSelectorHash4: {
     actual: sliMetricsDescriptor._normalizeSelectorExpression({ oneOf: ['a'] }),
@@ -173,7 +173,7 @@ test.suite({
   },
   testNormalizeSelectorHash9: {
     actual: sliMetricsDescriptor._normalizeSelectorExpression({ eq: 'a', re: 'a|b|c' }),
-    expect: { oneOf: ['a', 'b', 'c'] },
+    expect: { oneOf: ['a', 'a|b|c'] },
   },
   testNormalizeSelectorHash10: {
     actual: sliMetricsDescriptor._normalizeSelectorExpression({ eq: 'a', oneOf: ['a', 'b', 'c'] }),
@@ -181,7 +181,7 @@ test.suite({
   },
   testNormalizeSelectorHash11: {
     actual: sliMetricsDescriptor._normalizeSelectorExpression({ re: 'a|d|e|f', oneOf: ['a', 'b', 'c'] }),
-    expect: { oneOf: ['a', 'b', 'c', 'd', 'e', 'f'] },
+    expect: { oneOf: ['a', 'a|d|e|f', 'b', 'c'] },
   },
   testNormalizeSimpleStr: {
     actual: sliMetricsDescriptor._normalize({ a: '1' }),
@@ -213,7 +213,7 @@ test.suite({
   },
   testNormalizeObjectWithNegativeExp2: {
     actual: sliMetricsDescriptor._normalize({ a: { ne: '1', nre: '2|3', eq: '4', re: '1|2|5' } }),
-    expect: { a: { oneOf: ['1', '2', '4', '5'] } },
+    expect: { a: { oneOf: ['1|2|5', '4'] } },
   },
   testNormalizeObjectWithNegativeExp3: {
     actual: sliMetricsDescriptor._normalize({ a: [{ ne: '1' }, '2'] }),
@@ -250,14 +250,14 @@ test.suite({
       { a: { eq: '1', re: '2|3' } },
       { a: { eq: '4', oneOf: ['5', '6'] } },
     ),
-    expect: { a: { oneOf: ['1', '2', '3', '4', '5', '6'] } },
+    expect: { a: { oneOf: ['1', '2|3', '4', '5', '6'] } },
   },
   testMergeSelector4: {
     actual: sliMetricsDescriptor._mergeSelector(
       { a: [{ eq: '1' }, { re: '2|3' }] },
       { a: { eq: '4', oneOf: ['5', '6'] } },
     ),
-    expect: { a: { oneOf: ['1', '2', '3', '4', '5', '6'] } },
+    expect: { a: { oneOf: ['1', '2|3', '4', '5', '6'] } },
   },
   testMergeSelector5: {
     actual: sliMetricsDescriptor._mergeSelector(
@@ -265,8 +265,8 @@ test.suite({
       { a: { re: '2|3|4', ne: '2' }, b: { re: '11|12' } },
     ),
     expect: {
-      a: { oneOf: ['1', '2', '3', '4'] },
-      b: { oneOf: ['10', '11', '12'] },
+      a: { oneOf: ['1', '2|3|4'] },
+      b: { oneOf: ['10', '11|12'] },
     },
   },
   testMergeSelector6: {
@@ -595,7 +595,7 @@ test.suite({
     expect={
       some_total_count: {
         type: { oneOf: ['fake_service'] },
-        job: { oneOf: ['boo', 'hello', 'world'] },
+        job: { oneOf: ['boo', 'hello|world'] },
       },
     },
   ),
@@ -611,7 +611,7 @@ test.suite({
     expect={
       some_total_count: {
         label: { oneOf: ['bar', 'foo'] },
-        job: { oneOf: ['boo', 'hello', 'world'] },
+        job: { oneOf: ['boo', 'hello|world'] },
       },
     },
   ),

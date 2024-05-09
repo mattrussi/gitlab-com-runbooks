@@ -148,7 +148,7 @@ groups:
       type: web
     expr: |
       sum by (env,environment) (
-        sli_aggregations:haproxy_backend_http_responses_total:rate_5m{backend=~"web|main_web",env="gstg",type="frontend"} offset 30s
+        sli_aggregations:haproxy_backend_http_responses_total:rate_5m{backend=~"main_web|web",env="gstg",type="frontend"} offset 30s
       )
   - record: gitlab_component_errors:rate_5m
     labels:
@@ -179,7 +179,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          sli_aggregations:haproxy_backend_http_responses_total:rate_5m{backend=~"web|main_web",code="5xx",env="gstg",type="frontend"} offset 30s
+          sli_aggregations:haproxy_backend_http_responses_total:rate_5m{backend=~"main_web|web",code="5xx",env="gstg",type="frontend"} offset 30s
         )
       )
       or
@@ -523,7 +523,7 @@ groups:
       type: web
     expr: |
       sum by (env,environment) (
-        sli_aggregations:haproxy_backend_http_responses_total:rate_30m{backend=~"web|main_web",env="gstg",type="frontend"} offset 30s
+        sli_aggregations:haproxy_backend_http_responses_total:rate_30m{backend=~"main_web|web",env="gstg",type="frontend"} offset 30s
       )
   - record: gitlab_component_errors:rate_30m
     labels:
@@ -554,7 +554,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          sli_aggregations:haproxy_backend_http_responses_total:rate_30m{backend=~"web|main_web",code="5xx",env="gstg",type="frontend"} offset 30s
+          sli_aggregations:haproxy_backend_http_responses_total:rate_30m{backend=~"main_web|web",code="5xx",env="gstg",type="frontend"} offset 30s
         )
       )
       or
@@ -898,7 +898,7 @@ groups:
       type: web
     expr: |
       sum by (env,environment) (
-        sli_aggregations:haproxy_backend_http_responses_total:rate_1h{backend=~"web|main_web",env="gstg",type="frontend"} offset 30s
+        sli_aggregations:haproxy_backend_http_responses_total:rate_1h{backend=~"main_web|web",env="gstg",type="frontend"} offset 30s
       )
   - record: gitlab_component_errors:rate_1h
     labels:
@@ -929,7 +929,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          sli_aggregations:haproxy_backend_http_responses_total:rate_1h{backend=~"web|main_web",code="5xx",env="gstg",type="frontend"} offset 30s
+          sli_aggregations:haproxy_backend_http_responses_total:rate_1h{backend=~"main_web|web",code="5xx",env="gstg",type="frontend"} offset 30s
         )
       )
       or

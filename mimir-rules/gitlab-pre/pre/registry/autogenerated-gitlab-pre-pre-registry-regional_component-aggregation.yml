@@ -521,11 +521,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage,region) (
-          sli_aggregations:registry_http_request_duration_seconds_bucket:rate_5m{env="pre",le="25",method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}
+          sli_aggregations:registry_http_request_duration_seconds_bucket:rate_5m{env="pre",le="25",method=~"patch|post|put",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}
         )
         +
         sum by (env,environment,stage,region) (
-          sli_aggregations:registry_http_request_duration_seconds_bucket:rate_5m{env="pre",le="60",method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}
+          sli_aggregations:registry_http_request_duration_seconds_bucket:rate_5m{env="pre",le="60",method=~"patch|post|put",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}
         )
       )
       /
@@ -538,7 +538,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage,region) (
-        sli_aggregations:registry_http_request_duration_seconds_bucket:rate_5m{env="pre",le="+Inf",method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}
+        sli_aggregations:registry_http_request_duration_seconds_bucket:rate_5m{env="pre",le="+Inf",method=~"patch|post|put",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}
       )
   - record: gitlab_regional_sli_ops:rate_5m
     labels:
@@ -548,7 +548,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage,region) (
-        sli_aggregations:registry_http_request_duration_seconds_count:rate_5m{env="pre",method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"} offset 30s
+        sli_aggregations:registry_http_request_duration_seconds_count:rate_5m{env="pre",method=~"patch|post|put",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"} offset 30s
       )
   - record: gitlab_regional_sli_errors:ratio_5m
     labels:
@@ -653,11 +653,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage,region) (
-          sli_aggregations:registry_http_request_duration_seconds_bucket:rate_5m{env="pre",le="1",method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",type="registry"}
+          sli_aggregations:registry_http_request_duration_seconds_bucket:rate_5m{env="pre",le="1",method=~"delete|patch|post|put",route="/v2/{name}/manifests/{reference}",type="registry"}
         )
         +
         sum by (env,environment,stage,region) (
-          sli_aggregations:registry_http_request_duration_seconds_bucket:rate_5m{env="pre",le="2.5",method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",type="registry"}
+          sli_aggregations:registry_http_request_duration_seconds_bucket:rate_5m{env="pre",le="2.5",method=~"delete|patch|post|put",route="/v2/{name}/manifests/{reference}",type="registry"}
         )
       )
       /
@@ -670,7 +670,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage,region) (
-        sli_aggregations:registry_http_request_duration_seconds_bucket:rate_5m{env="pre",le="+Inf",method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",type="registry"}
+        sli_aggregations:registry_http_request_duration_seconds_bucket:rate_5m{env="pre",le="+Inf",method=~"delete|patch|post|put",route="/v2/{name}/manifests/{reference}",type="registry"}
       )
   - record: gitlab_regional_sli_ops:rate_5m
     labels:
@@ -680,7 +680,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage,region) (
-        sli_aggregations:registry_http_request_duration_seconds_count:rate_5m{env="pre",method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",type="registry"} offset 30s
+        sli_aggregations:registry_http_request_duration_seconds_count:rate_5m{env="pre",method=~"delete|patch|post|put",route="/v2/{name}/manifests/{reference}",type="registry"} offset 30s
       )
   - record: gitlab_regional_sli_errors:ratio_5m
     labels:
@@ -1230,11 +1230,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage,region) (
-          sli_aggregations:registry_http_request_duration_seconds_bucket:rate_30m{env="pre",le="25",method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}
+          sli_aggregations:registry_http_request_duration_seconds_bucket:rate_30m{env="pre",le="25",method=~"patch|post|put",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}
         )
         +
         sum by (env,environment,stage,region) (
-          sli_aggregations:registry_http_request_duration_seconds_bucket:rate_30m{env="pre",le="60",method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}
+          sli_aggregations:registry_http_request_duration_seconds_bucket:rate_30m{env="pre",le="60",method=~"patch|post|put",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}
         )
       )
       /
@@ -1247,7 +1247,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage,region) (
-        sli_aggregations:registry_http_request_duration_seconds_bucket:rate_30m{env="pre",le="+Inf",method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}
+        sli_aggregations:registry_http_request_duration_seconds_bucket:rate_30m{env="pre",le="+Inf",method=~"patch|post|put",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}
       )
   - record: gitlab_regional_sli_ops:rate_30m
     labels:
@@ -1257,7 +1257,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage,region) (
-        sli_aggregations:registry_http_request_duration_seconds_count:rate_30m{env="pre",method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"} offset 30s
+        sli_aggregations:registry_http_request_duration_seconds_count:rate_30m{env="pre",method=~"patch|post|put",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"} offset 30s
       )
   - record: gitlab_regional_sli_errors:ratio_30m
     labels:
@@ -1362,11 +1362,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage,region) (
-          sli_aggregations:registry_http_request_duration_seconds_bucket:rate_30m{env="pre",le="1",method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",type="registry"}
+          sli_aggregations:registry_http_request_duration_seconds_bucket:rate_30m{env="pre",le="1",method=~"delete|patch|post|put",route="/v2/{name}/manifests/{reference}",type="registry"}
         )
         +
         sum by (env,environment,stage,region) (
-          sli_aggregations:registry_http_request_duration_seconds_bucket:rate_30m{env="pre",le="2.5",method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",type="registry"}
+          sli_aggregations:registry_http_request_duration_seconds_bucket:rate_30m{env="pre",le="2.5",method=~"delete|patch|post|put",route="/v2/{name}/manifests/{reference}",type="registry"}
         )
       )
       /
@@ -1379,7 +1379,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage,region) (
-        sli_aggregations:registry_http_request_duration_seconds_bucket:rate_30m{env="pre",le="+Inf",method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",type="registry"}
+        sli_aggregations:registry_http_request_duration_seconds_bucket:rate_30m{env="pre",le="+Inf",method=~"delete|patch|post|put",route="/v2/{name}/manifests/{reference}",type="registry"}
       )
   - record: gitlab_regional_sli_ops:rate_30m
     labels:
@@ -1389,7 +1389,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage,region) (
-        sli_aggregations:registry_http_request_duration_seconds_count:rate_30m{env="pre",method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",type="registry"} offset 30s
+        sli_aggregations:registry_http_request_duration_seconds_count:rate_30m{env="pre",method=~"delete|patch|post|put",route="/v2/{name}/manifests/{reference}",type="registry"} offset 30s
       )
   - record: gitlab_regional_sli_errors:ratio_30m
     labels:
@@ -1939,11 +1939,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage,region) (
-          sli_aggregations:registry_http_request_duration_seconds_bucket:rate_1h{env="pre",le="25",method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}
+          sli_aggregations:registry_http_request_duration_seconds_bucket:rate_1h{env="pre",le="25",method=~"patch|post|put",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}
         )
         +
         sum by (env,environment,stage,region) (
-          sli_aggregations:registry_http_request_duration_seconds_bucket:rate_1h{env="pre",le="60",method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}
+          sli_aggregations:registry_http_request_duration_seconds_bucket:rate_1h{env="pre",le="60",method=~"patch|post|put",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}
         )
       )
       /
@@ -1956,7 +1956,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage,region) (
-        sli_aggregations:registry_http_request_duration_seconds_bucket:rate_1h{env="pre",le="+Inf",method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}
+        sli_aggregations:registry_http_request_duration_seconds_bucket:rate_1h{env="pre",le="+Inf",method=~"patch|post|put",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}
       )
   - record: gitlab_regional_sli_ops:rate_1h
     labels:
@@ -1966,7 +1966,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage,region) (
-        sli_aggregations:registry_http_request_duration_seconds_count:rate_1h{env="pre",method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"} offset 30s
+        sli_aggregations:registry_http_request_duration_seconds_count:rate_1h{env="pre",method=~"patch|post|put",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"} offset 30s
       )
   - record: gitlab_regional_sli_errors:ratio_1h
     labels:
@@ -2071,11 +2071,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage,region) (
-          sli_aggregations:registry_http_request_duration_seconds_bucket:rate_1h{env="pre",le="1",method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",type="registry"}
+          sli_aggregations:registry_http_request_duration_seconds_bucket:rate_1h{env="pre",le="1",method=~"delete|patch|post|put",route="/v2/{name}/manifests/{reference}",type="registry"}
         )
         +
         sum by (env,environment,stage,region) (
-          sli_aggregations:registry_http_request_duration_seconds_bucket:rate_1h{env="pre",le="2.5",method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",type="registry"}
+          sli_aggregations:registry_http_request_duration_seconds_bucket:rate_1h{env="pre",le="2.5",method=~"delete|patch|post|put",route="/v2/{name}/manifests/{reference}",type="registry"}
         )
       )
       /
@@ -2088,7 +2088,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage,region) (
-        sli_aggregations:registry_http_request_duration_seconds_bucket:rate_1h{env="pre",le="+Inf",method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",type="registry"}
+        sli_aggregations:registry_http_request_duration_seconds_bucket:rate_1h{env="pre",le="+Inf",method=~"delete|patch|post|put",route="/v2/{name}/manifests/{reference}",type="registry"}
       )
   - record: gitlab_regional_sli_ops:rate_1h
     labels:
@@ -2098,7 +2098,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage,region) (
-        sli_aggregations:registry_http_request_duration_seconds_count:rate_1h{env="pre",method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",type="registry"} offset 30s
+        sli_aggregations:registry_http_request_duration_seconds_count:rate_1h{env="pre",method=~"delete|patch|post|put",route="/v2/{name}/manifests/{reference}",type="registry"} offset 30s
       )
   - record: gitlab_regional_sli_errors:ratio_1h
     labels:

@@ -12,7 +12,7 @@ groups:
       type: ci-runners
     expr: |
       sum by (env,environment) (
-        rate(haproxy_backend_http_responses_total{backend=~"https_git|api|ci_gateway_catch_all",type="ci"}[1m] offset 30s)
+        rate(haproxy_backend_http_responses_total{backend=~"api|ci_gateway_catch_all|https_git",type="ci"}[1m] offset 30s)
       )
   - record: gitlab_component_errors:rate
     labels:
@@ -23,7 +23,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(haproxy_backend_http_responses_total{backend=~"https_git|api|ci_gateway_catch_all",code="5xx",type="ci"}[1m] offset 30s)
+          rate(haproxy_backend_http_responses_total{backend=~"api|ci_gateway_catch_all|https_git",code="5xx",type="ci"}[1m] offset 30s)
         )
       )
       or
@@ -92,7 +92,7 @@ groups:
       type: ci-runners
     expr: |
       sum by (env,environment,stage) (
-        rate(gitlab_runner_jobs_total{job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard=~"shared-gitlab-org|private|saas-linux-.*"}[1m] offset 30s)
+        rate(gitlab_runner_jobs_total{job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard=~"private|saas-linux-.*|shared-gitlab-org"}[1m] offset 30s)
       )
   - record: gitlab_component_errors:rate
     labels:
@@ -102,7 +102,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(gitlab_runner_failed_jobs_total{failure_reason="image_pull_failure",job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard=~"shared-gitlab-org|private|saas-linux-.*"}[1m] offset 30s)
+          rate(gitlab_runner_failed_jobs_total{failure_reason="image_pull_failure",job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard=~"private|saas-linux-.*|shared-gitlab-org"}[1m] offset 30s)
         )
       )
       or
@@ -136,7 +136,7 @@ groups:
       type: ci-runners
     expr: |
       sum by (env,environment,stage) (
-        rate(gitlab_runner_jobs_total{job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard=~"shared-gitlab-org|private|saas-.*|windows-shared"}[1m] offset 30s)
+        rate(gitlab_runner_jobs_total{job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard=~"private|saas-.*|shared-gitlab-org|windows-shared"}[1m] offset 30s)
       )
   - record: gitlab_component_errors:rate
     labels:
@@ -146,7 +146,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(gitlab_runner_failed_jobs_total{failure_reason="runner_system_failure",job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard=~"shared-gitlab-org|private|saas-.*|windows-shared"}[1m] offset 30s)
+          rate(gitlab_runner_failed_jobs_total{failure_reason="runner_system_failure",job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard=~"private|saas-.*|shared-gitlab-org|windows-shared"}[1m] offset 30s)
         )
       )
       or
@@ -192,7 +192,7 @@ groups:
       type: ci-runners
     expr: |
       sum by (env,environment) (
-        rate(haproxy_backend_http_responses_total{backend=~"https_git|api|ci_gateway_catch_all",type="ci"}[5m] offset 30s)
+        rate(haproxy_backend_http_responses_total{backend=~"api|ci_gateway_catch_all|https_git",type="ci"}[5m] offset 30s)
       )
   - record: gitlab_component_errors:rate_5m
     labels:
@@ -203,7 +203,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(haproxy_backend_http_responses_total{backend=~"https_git|api|ci_gateway_catch_all",code="5xx",type="ci"}[5m] offset 30s)
+          rate(haproxy_backend_http_responses_total{backend=~"api|ci_gateway_catch_all|https_git",code="5xx",type="ci"}[5m] offset 30s)
         )
       )
       or
@@ -272,7 +272,7 @@ groups:
       type: ci-runners
     expr: |
       sum by (env,environment,stage) (
-        rate(gitlab_runner_jobs_total{job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard=~"shared-gitlab-org|private|saas-linux-.*"}[5m] offset 30s)
+        rate(gitlab_runner_jobs_total{job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard=~"private|saas-linux-.*|shared-gitlab-org"}[5m] offset 30s)
       )
   - record: gitlab_component_errors:rate_5m
     labels:
@@ -282,7 +282,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(gitlab_runner_failed_jobs_total{failure_reason="image_pull_failure",job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard=~"shared-gitlab-org|private|saas-linux-.*"}[5m] offset 30s)
+          rate(gitlab_runner_failed_jobs_total{failure_reason="image_pull_failure",job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard=~"private|saas-linux-.*|shared-gitlab-org"}[5m] offset 30s)
         )
       )
       or
@@ -316,7 +316,7 @@ groups:
       type: ci-runners
     expr: |
       sum by (env,environment,stage) (
-        rate(gitlab_runner_jobs_total{job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard=~"shared-gitlab-org|private|saas-.*|windows-shared"}[5m] offset 30s)
+        rate(gitlab_runner_jobs_total{job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard=~"private|saas-.*|shared-gitlab-org|windows-shared"}[5m] offset 30s)
       )
   - record: gitlab_component_errors:rate_5m
     labels:
@@ -326,7 +326,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(gitlab_runner_failed_jobs_total{failure_reason="runner_system_failure",job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard=~"shared-gitlab-org|private|saas-.*|windows-shared"}[5m] offset 30s)
+          rate(gitlab_runner_failed_jobs_total{failure_reason="runner_system_failure",job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard=~"private|saas-.*|shared-gitlab-org|windows-shared"}[5m] offset 30s)
         )
       )
       or
@@ -372,7 +372,7 @@ groups:
       type: ci-runners
     expr: |
       sum by (env,environment) (
-        rate(haproxy_backend_http_responses_total{backend=~"https_git|api|ci_gateway_catch_all",type="ci"}[30m] offset 30s)
+        rate(haproxy_backend_http_responses_total{backend=~"api|ci_gateway_catch_all|https_git",type="ci"}[30m] offset 30s)
       )
   - record: gitlab_component_errors:rate_30m
     labels:
@@ -383,7 +383,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(haproxy_backend_http_responses_total{backend=~"https_git|api|ci_gateway_catch_all",code="5xx",type="ci"}[30m] offset 30s)
+          rate(haproxy_backend_http_responses_total{backend=~"api|ci_gateway_catch_all|https_git",code="5xx",type="ci"}[30m] offset 30s)
         )
       )
       or
@@ -452,7 +452,7 @@ groups:
       type: ci-runners
     expr: |
       sum by (env,environment,stage) (
-        rate(gitlab_runner_jobs_total{job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard=~"shared-gitlab-org|private|saas-linux-.*"}[30m] offset 30s)
+        rate(gitlab_runner_jobs_total{job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard=~"private|saas-linux-.*|shared-gitlab-org"}[30m] offset 30s)
       )
   - record: gitlab_component_errors:rate_30m
     labels:
@@ -462,7 +462,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(gitlab_runner_failed_jobs_total{failure_reason="image_pull_failure",job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard=~"shared-gitlab-org|private|saas-linux-.*"}[30m] offset 30s)
+          rate(gitlab_runner_failed_jobs_total{failure_reason="image_pull_failure",job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard=~"private|saas-linux-.*|shared-gitlab-org"}[30m] offset 30s)
         )
       )
       or
@@ -496,7 +496,7 @@ groups:
       type: ci-runners
     expr: |
       sum by (env,environment,stage) (
-        rate(gitlab_runner_jobs_total{job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard=~"shared-gitlab-org|private|saas-.*|windows-shared"}[30m] offset 30s)
+        rate(gitlab_runner_jobs_total{job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard=~"private|saas-.*|shared-gitlab-org|windows-shared"}[30m] offset 30s)
       )
   - record: gitlab_component_errors:rate_30m
     labels:
@@ -506,7 +506,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(gitlab_runner_failed_jobs_total{failure_reason="runner_system_failure",job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard=~"shared-gitlab-org|private|saas-.*|windows-shared"}[30m] offset 30s)
+          rate(gitlab_runner_failed_jobs_total{failure_reason="runner_system_failure",job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard=~"private|saas-.*|shared-gitlab-org|windows-shared"}[30m] offset 30s)
         )
       )
       or
@@ -552,7 +552,7 @@ groups:
       type: ci-runners
     expr: |
       sum by (env,environment) (
-        rate(haproxy_backend_http_responses_total{backend=~"https_git|api|ci_gateway_catch_all",type="ci"}[1h] offset 30s)
+        rate(haproxy_backend_http_responses_total{backend=~"api|ci_gateway_catch_all|https_git",type="ci"}[1h] offset 30s)
       )
   - record: gitlab_component_errors:rate_1h
     labels:
@@ -563,7 +563,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(haproxy_backend_http_responses_total{backend=~"https_git|api|ci_gateway_catch_all",code="5xx",type="ci"}[1h] offset 30s)
+          rate(haproxy_backend_http_responses_total{backend=~"api|ci_gateway_catch_all|https_git",code="5xx",type="ci"}[1h] offset 30s)
         )
       )
       or
@@ -632,7 +632,7 @@ groups:
       type: ci-runners
     expr: |
       sum by (env,environment,stage) (
-        rate(gitlab_runner_jobs_total{job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard=~"shared-gitlab-org|private|saas-linux-.*"}[1h] offset 30s)
+        rate(gitlab_runner_jobs_total{job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard=~"private|saas-linux-.*|shared-gitlab-org"}[1h] offset 30s)
       )
   - record: gitlab_component_errors:rate_1h
     labels:
@@ -642,7 +642,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(gitlab_runner_failed_jobs_total{failure_reason="image_pull_failure",job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard=~"shared-gitlab-org|private|saas-linux-.*"}[1h] offset 30s)
+          rate(gitlab_runner_failed_jobs_total{failure_reason="image_pull_failure",job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard=~"private|saas-linux-.*|shared-gitlab-org"}[1h] offset 30s)
         )
       )
       or
@@ -676,7 +676,7 @@ groups:
       type: ci-runners
     expr: |
       sum by (env,environment,stage) (
-        rate(gitlab_runner_jobs_total{job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard=~"shared-gitlab-org|private|saas-.*|windows-shared"}[1h] offset 30s)
+        rate(gitlab_runner_jobs_total{job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard=~"private|saas-.*|shared-gitlab-org|windows-shared"}[1h] offset 30s)
       )
   - record: gitlab_component_errors:rate_1h
     labels:
@@ -686,7 +686,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(gitlab_runner_failed_jobs_total{failure_reason="runner_system_failure",job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard=~"shared-gitlab-org|private|saas-.*|windows-shared"}[1h] offset 30s)
+          rate(gitlab_runner_failed_jobs_total{failure_reason="runner_system_failure",job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard=~"private|saas-.*|shared-gitlab-org|windows-shared"}[1h] offset 30s)
         )
       )
       or
@@ -732,7 +732,7 @@ groups:
       type: ci-runners
     expr: |
       sum by (env,environment) (
-        rate(haproxy_backend_http_responses_total{backend=~"https_git|api|ci_gateway_catch_all",type="ci"}[6h] offset 30s)
+        rate(haproxy_backend_http_responses_total{backend=~"api|ci_gateway_catch_all|https_git",type="ci"}[6h] offset 30s)
       )
   - record: gitlab_component_errors:rate_6h
     labels:
@@ -743,7 +743,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(haproxy_backend_http_responses_total{backend=~"https_git|api|ci_gateway_catch_all",code="5xx",type="ci"}[6h] offset 30s)
+          rate(haproxy_backend_http_responses_total{backend=~"api|ci_gateway_catch_all|https_git",code="5xx",type="ci"}[6h] offset 30s)
         )
       )
       or
@@ -812,7 +812,7 @@ groups:
       type: ci-runners
     expr: |
       sum by (env,environment,stage) (
-        rate(gitlab_runner_jobs_total{job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard=~"shared-gitlab-org|private|saas-linux-.*"}[6h] offset 30s)
+        rate(gitlab_runner_jobs_total{job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard=~"private|saas-linux-.*|shared-gitlab-org"}[6h] offset 30s)
       )
   - record: gitlab_component_errors:rate_6h
     labels:
@@ -822,7 +822,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(gitlab_runner_failed_jobs_total{failure_reason="image_pull_failure",job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard=~"shared-gitlab-org|private|saas-linux-.*"}[6h] offset 30s)
+          rate(gitlab_runner_failed_jobs_total{failure_reason="image_pull_failure",job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard=~"private|saas-linux-.*|shared-gitlab-org"}[6h] offset 30s)
         )
       )
       or
@@ -856,7 +856,7 @@ groups:
       type: ci-runners
     expr: |
       sum by (env,environment,stage) (
-        rate(gitlab_runner_jobs_total{job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard=~"shared-gitlab-org|private|saas-.*|windows-shared"}[6h] offset 30s)
+        rate(gitlab_runner_jobs_total{job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard=~"private|saas-.*|shared-gitlab-org|windows-shared"}[6h] offset 30s)
       )
   - record: gitlab_component_errors:rate_6h
     labels:
@@ -866,7 +866,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(gitlab_runner_failed_jobs_total{failure_reason="runner_system_failure",job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard=~"shared-gitlab-org|private|saas-.*|windows-shared"}[6h] offset 30s)
+          rate(gitlab_runner_failed_jobs_total{failure_reason="runner_system_failure",job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard=~"private|saas-.*|shared-gitlab-org|windows-shared"}[6h] offset 30s)
         )
       )
       or

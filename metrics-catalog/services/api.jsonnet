@@ -138,7 +138,7 @@ metricsCatalog.serviceDefinition({
       |||,
 
       local baseSelector = {
-        job: { re: 'gitlab-workhorse-api|gitlab-workhorse' },
+        job: { oneOf: ['gitlab-workhorse-api', 'gitlab-workhorse'] },
         type: 'api',
       },
 

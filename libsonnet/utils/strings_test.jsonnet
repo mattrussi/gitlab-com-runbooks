@@ -200,4 +200,20 @@ test.suite({
     actual: strings.escapeBackslash('\\^/api/v4/jobs/request\\\\z'),
     expect: '\\\\^/api/v4/jobs/request\\\\\\\\z',
   },
+  testContains: {
+    actual: strings.contains('hahiha', 'i'),
+    expect: true,
+  },
+  testNoContains: {
+    actual: strings.contains('hahiha', 'o'),
+    expect: false,
+  },
+  testContainsMultiple: {
+    actual: strings.contains('hahiha', 'hi'),
+    expect: true,
+  },
+  testContainsNoneMultiple: {
+    actual: strings.contains('hahiha', 'ho'),
+    expect: false,
+  },
 })

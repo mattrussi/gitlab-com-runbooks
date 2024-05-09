@@ -286,7 +286,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
-            rate(gitlab_workhorse_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",job=~"gitlab-workhorse-api|gitlab-workhorse",route!="^/-/health$",route!="^/-/(readiness|liveness)$",stage="{{ $labels.stage }}",type="ai-assisted"}[5m])
+            rate(gitlab_workhorse_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",job=~"gitlab-workhorse|gitlab-workhorse-api",route!="^/-/health$",route!="^/-/(readiness|liveness)$",stage="{{ $labels.stage }}",type="ai-assisted"}[5m])
           )
         )
       runbook: docs/ai-assisted/README.md
@@ -336,7 +336,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
-            rate(gitlab_workhorse_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",job=~"gitlab-workhorse-api|gitlab-workhorse",route!="^/-/health$",route!="^/-/(readiness|liveness)$",stage="{{ $labels.stage }}",type="ai-assisted"}[5m])
+            rate(gitlab_workhorse_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",job=~"gitlab-workhorse|gitlab-workhorse-api",route!="^/-/health$",route!="^/-/(readiness|liveness)$",stage="{{ $labels.stage }}",type="ai-assisted"}[5m])
           )
         )
       runbook: docs/ai-assisted/README.md
@@ -384,7 +384,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(gitlab_workhorse_http_requests_total{code=~"^5.*",environment="{{ $labels.environment }}",job=~"gitlab-workhorse-api|gitlab-workhorse",route!="^/-/health$",route!="^/-/(readiness|liveness)$",stage="{{ $labels.stage }}",type="ai-assisted"}[5m])
+          rate(gitlab_workhorse_http_requests_total{code=~"^5.*",environment="{{ $labels.environment }}",job=~"gitlab-workhorse|gitlab-workhorse-api",route!="^/-/health$",route!="^/-/(readiness|liveness)$",stage="{{ $labels.stage }}",type="ai-assisted"}[5m])
         )
       runbook: docs/ai-assisted/README.md
     labels:
@@ -431,7 +431,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(gitlab_workhorse_http_requests_total{code=~"^5.*",environment="{{ $labels.environment }}",job=~"gitlab-workhorse-api|gitlab-workhorse",route!="^/-/health$",route!="^/-/(readiness|liveness)$",stage="{{ $labels.stage }}",type="ai-assisted"}[5m])
+          rate(gitlab_workhorse_http_requests_total{code=~"^5.*",environment="{{ $labels.environment }}",job=~"gitlab-workhorse|gitlab-workhorse-api",route!="^/-/health$",route!="^/-/(readiness|liveness)$",stage="{{ $labels.stage }}",type="ai-assisted"}[5m])
         )
       runbook: docs/ai-assisted/README.md
     labels:
@@ -478,7 +478,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(gitlab_workhorse_http_requests_total{environment="{{ $labels.environment }}",job=~"gitlab-workhorse-api|gitlab-workhorse",stage="{{ $labels.stage }}",type="ai-assisted"}[5m])
+          rate(gitlab_workhorse_http_requests_total{environment="{{ $labels.environment }}",job=~"gitlab-workhorse|gitlab-workhorse-api",stage="{{ $labels.stage }}",type="ai-assisted"}[5m])
         )
       runbook: docs/ai-assisted/README.md
     labels:
@@ -514,7 +514,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(gitlab_workhorse_http_requests_total{environment="{{ $labels.environment }}",job=~"gitlab-workhorse-api|gitlab-workhorse",stage="{{ $labels.stage }}",type="ai-assisted"}[5m])
+          rate(gitlab_workhorse_http_requests_total{environment="{{ $labels.environment }}",job=~"gitlab-workhorse|gitlab-workhorse-api",stage="{{ $labels.stage }}",type="ai-assisted"}[5m])
         )
       runbook: docs/ai-assisted/README.md
     labels:

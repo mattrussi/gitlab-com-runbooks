@@ -8203,7 +8203,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "histogram_quantile(\n  0.950000,\n  sum by (le) (\n    rate(registry_http_request_duration_seconds_bucket{method=~\"put|patch|post\",route=\"/v2/{name}/blobs/uploads/{uuid}\"}[$__interval])\n  )\n)\n \u003e 0",
+              "expr": "histogram_quantile(\n  0.950000,\n  sum by (le) (\n    rate(registry_http_request_duration_seconds_bucket{method=~\"patch|post|put\",route=\"/v2/{name}/blobs/uploads/{uuid}\"}[$__interval])\n  )\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
@@ -8299,7 +8299,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum by () (\n  rate(registry_http_request_duration_seconds_count{method=~\"put|patch|post\",route=\"/v2/{name}/blobs/uploads/{uuid}\"}[$__interval])\n)\n \u003e 0",
+              "expr": "sum by () (\n  rate(registry_http_request_duration_seconds_count{method=~\"patch|post|put\",route=\"/v2/{name}/blobs/uploads/{uuid}\"}[$__interval])\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
@@ -8552,7 +8552,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum by (method) (\n  rate(registry_http_request_duration_seconds_count{method=~\"put|patch|post\",route=\"/v2/{name}/blobs/uploads/{uuid}\"}[$__interval])\n)\n \u003e 0",
+              "expr": "sum by (method) (\n  rate(registry_http_request_duration_seconds_count{method=~\"patch|post|put\",route=\"/v2/{name}/blobs/uploads/{uuid}\"}[$__interval])\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
