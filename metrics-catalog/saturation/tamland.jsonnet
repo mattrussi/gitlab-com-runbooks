@@ -73,6 +73,7 @@ local saturationPoints = {
       point.queryFormatConfig
       {
         selector: '%(selector)s',  // This will be replaced in Tamland, not here
+        selectorWithoutType: '%(selector)s',
         rangeInterval: std.get(point, 'burnRatePeriod', '5m'),
         aggregationLabels: std.join(',', point.resourceLabels),
       }

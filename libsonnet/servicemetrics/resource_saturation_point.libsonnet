@@ -246,6 +246,7 @@ local resourceSaturationPoint = function(options)
       local preaggregation = self.query % queryFormatConfig {
         rangeInterval: rangeInterval,
         selector: selectors.serializeHash(selectorHash),
+        selectorWithoutType: selectors.serializeHash(selectors.without(selectorHash, ['type'])),
         aggregationLabels: std.join(', ', queryAggregationLabelsExcludingStaticLabels),
       };
 
