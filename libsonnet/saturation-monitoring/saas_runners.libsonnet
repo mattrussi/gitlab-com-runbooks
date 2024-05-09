@@ -15,7 +15,7 @@ local runner_saturation(shard, gduid='', slot_soft=0.90, slot_hard=0.95) =
       When this metric is saturated, new CI jobs will queue. When this occurs we should consider adding more runner managers,
       or scaling the runner managers vertically and increasing their maximum runner capacity.
     ||| % shard,
-    grafana_dashboard_uid: if gduid != '' then gduid else 'sat_%s_runners' % std.strReplace(shard, "-", "_"),
+    grafana_dashboard_uid: if gduid != '' then gduid else 'sat_%s_runners' % std.strReplace(shard, '-', '_'),
     resourceLabels: ['instance'],
     staticLabels: {
       type: 'ci-runners',
@@ -24,10 +24,10 @@ local runner_saturation(shard, gduid='', slot_soft=0.90, slot_hard=0.95) =
     },
     query: |||
       sum without(executor_stage, exported_stage, state) (
-        max_over_time(gitlab_runner_jobs{job="runners-manager",shard="%(shard)s"}[%(rangeInterval)s])
+        max_over_time(gitlab_runner_jobs{job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard="%(shard)s"}[%(rangeInterval)s])
       )
       /
-      gitlab_runner_limit{job="runners-manager",shard="%(shard)s"} > 0
+      gitlab_runner_limit{job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard="%(shard)s"} > 0
     ||| % {
       shard: shard,
       // hack around the fact that `query` is passed through formatting again internally in resourceSaturationPoint()

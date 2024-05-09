@@ -37,9 +37,9 @@ local fdsUsage(partition=runnersManagerMatching.defaultPartition) =
     fill=0,
     stack=false,
     query=runnersManagerMatching.formatQuery(|||
-      process_open_fds{environment=~"$environment",stage=~"$stage",%(runnerManagersMatcher)s,job="runners-manager"}
+      process_open_fds{environment=~"$environment",stage=~"$stage",%(runnerManagersMatcher)s,job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner"}
       /
-      process_max_fds{environment=~"$environment",stage=~"$stage",%(runnerManagersMatcher)s,job="runners-manager"}
+      process_max_fds{environment=~"$environment",stage=~"$stage",%(runnerManagersMatcher)s,job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner"}
     |||, partition),
   );
 

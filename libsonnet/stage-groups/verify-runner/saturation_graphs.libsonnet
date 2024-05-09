@@ -22,11 +22,11 @@ local runnerSaturation(aggregators, saturationType, partition=runnersManagerMatc
     query=runnersManagerMatching.formatQuery(
       |||
         sum by (%(aggregator)s) (
-          gitlab_runner_jobs{environment="$environment", stage="$stage", job="runners-manager", %(runnerManagersMatcher)s}
+          gitlab_runner_jobs{environment="$environment", stage="$stage", job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner", %(runnerManagersMatcher)s}
         )
         /
         sum by (%(aggregator)s) (
-          %(maxJobsMetric)s{environment="$environment", stage="$stage", job="runners-manager", %(runnerManagersMatcher)s}
+          %(maxJobsMetric)s{environment="$environment", stage="$stage", job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner", %(runnerManagersMatcher)s}
         )
       |||,
       partition,
@@ -65,9 +65,9 @@ local runnerSaturationCounter(partition=runnersManagerMatching.defaultPartition)
   )
   .addTarget(promQuery.target(
     expr=runnersManagerMatching.formatQuery(|||
-      sum by(shard) (gitlab_runner_jobs{environment="$environment", stage="$stage", job="runners-manager", %(runnerManagersMatcher)s})
+      sum by(shard) (gitlab_runner_jobs{environment="$environment", stage="$stage", job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner", %(runnerManagersMatcher)s})
       /
-      sum by(shard) (gitlab_runner_concurrent{environment="$environment", stage="$stage", job="runners-manager", %(runnerManagersMatcher)s})
+      sum by(shard) (gitlab_runner_concurrent{environment="$environment", stage="$stage", job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner", %(runnerManagersMatcher)s})
     |||, partition),
     legendFormat='{{shard}}',
     interval='1d',
