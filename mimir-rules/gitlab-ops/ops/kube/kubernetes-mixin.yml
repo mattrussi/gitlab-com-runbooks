@@ -74,6 +74,8 @@
       sum by (env, environment, cluster, monitor, prometheus, provider, region) (
         min by (node, env, environment, cluster, monitor, prometheus, provider, region) (kube_pod_info{env="ops"})
       )
+    "labels":
+      "type": "kube"
     "record": ":kube_pod_info_node_count:"
   - "expr": |
       max(label_replace(kube_pod_info{job="kube-state-metrics", env="ops"}, "pod", "$1", "pod", "(.*)")) by (node, namespace, cluster, pod, env, environment, monitor, prometheus, region, provider, type)
