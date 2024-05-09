@@ -5,6 +5,8 @@ groups:
   interval: 30m
   rules:
   - record: gitlab:stage_group:availability:ratio_7d
+    labels:
+      monitor: global
     expr: |
       clamp_max(
         sum by (stage_group,product_stage,environment)(
@@ -50,6 +52,8 @@ groups:
   interval: 30m
   rules:
   - record: gitlab:stage_group:availability:ratio_28d
+    labels:
+      monitor: global
     expr: |
       clamp_max(
         sum by (stage_group,product_stage,environment)(
@@ -95,6 +99,8 @@ groups:
   interval: 30m
   rules:
   - record: gitlab:stage_group:sli_kind:availability:ratio_28d
+    labels:
+      monitor: global
     expr: |
       clamp_max(
         sum by (stage_group,product_stage,environment,sli_kind)(
@@ -140,6 +146,8 @@ groups:
   interval: 30m
   rules:
   - record: gitlab:stage_group:traffic_share:ratio_28d
+    labels:
+      monitor: global
     expr: |
       (
         sum by (environment,product_stage,stage_group) (

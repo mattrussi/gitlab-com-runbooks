@@ -20,6 +20,9 @@ local selector = {
   monitor: 'global',
 };
 local budget = errorBudget();
+local thanosCompatibilityLabels = {
+  monitor: 'global',
+};
 
 local rules(groupExtras={}) = {
   groups: [
@@ -27,6 +30,7 @@ local rules(groupExtras={}) = {
       name: '%s availability by stage group' % [range],
       rules: [{
         record: 'gitlab:stage_group:availability:ratio_%s' % [range],
+        labels: thanosCompatibilityLabels,
         expr: errorBudget(range).queries.errorBudgetRatio(selector, aggregationLabels),
       }],
     }
@@ -36,6 +40,7 @@ local rules(groupExtras={}) = {
       name: '28d availability by stage group and SLI kind',
       rules: [{
         record: 'gitlab:stage_group:sli_kind:availability:ratio_28d',
+        labels: thanosCompatibilityLabels,
         expr: budget.queries.errorBudgetRatio(selector, aggregationLabels + ['sli_kind']),
       }],
     },
@@ -43,6 +48,7 @@ local rules(groupExtras={}) = {
       name: '28d traffic share per stage group',
       rules: [{
         record: 'gitlab:stage_group:traffic_share:ratio_28d',
+        labels: thanosCompatibilityLabels,
         expr: |||
           (
             %(operationRateByStageGroup)s
