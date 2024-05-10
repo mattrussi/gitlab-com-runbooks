@@ -68,6 +68,9 @@ failover_if_master() {
     echo failing over
     wait_for_input
     ssh "$sentinel" "/opt/redis/redis-cli -p 26379 sentinel failover mymaster"
+
+    # sentinel failover reformats the redis.conf file, affecting how passwords are extracted
+    run_chef_client
   fi
 
   # wait for master to step down and sync (expect "slave" [sic] and "connected")
@@ -147,6 +150,8 @@ reconfigure() {
   ssh "$fqdn" "$redis_cli config set save ''"
 
   restart_redis
+
+  run_chef_client # fixes changes to redis.conf
 
   # wait for master to step down and sync (expect "slave" [sic] and "connected")
   while ! [[ "$(ssh "$fqdn" "$redis_cli role" | head -n1)" == "slave" ]]; do
