@@ -25,10 +25,13 @@
                 {{- printf "*%s*" .Labels.alertname -}}
             {{- end -}}
 
-            {{- if .Annotations.promql_template_1 -}}
-                {{- printf " :point_right: <https://thanos.gitlab.net/graph?g0.expr=%s|Thanos Graph>\n" (.Annotations.promql_template_1 | urlquery) -}}
-            {{- else -}}
-                {{- printf "\n" -}}
+            {{/* If we don't have a Grafana datasource ID fall back to the Thanos link */}}
+            {{- if or (eq .Annotations.grafana_datasource_id nil) (eq .Annotations.grafana_datasource_id "") }}
+                {{- if .Annotations.promql_template_1 -}}
+                    {{- printf " :point_right: <https://thanos.gitlab.net/graph?g0.expr=%s|Thanos Graph>\n" (.Annotations.promql_template_1 | urlquery) -}}
+                {{- else -}}
+                    {{- printf "\n" -}}
+                {{- end -}}
             {{- end -}}
 
             {{- printf "%s\n\n" .Annotations.title -}}
