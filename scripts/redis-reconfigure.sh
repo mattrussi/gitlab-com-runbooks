@@ -14,7 +14,7 @@ if [[ $# -lt 2 ]]; then
 fi
 
 export gitlab_env=$1
-export gitlab_redis_cluster=$2
+export gitlab_redis_service=$2
 
 if [[ $# -eq 3 && $3 == "bootstrap" ]]; then
   export bootstrap="yes"
@@ -39,7 +39,7 @@ gprd)
 esac
 
 export redis_cli='sudo gitlab-redis-cli'
-export sentinel="${gitlab_redis_cluster}-01-db-${gitlab_env}.c.${gitlab_project}.internal"
+export sentinel="${gitlab_redis_service}-01-db-${gitlab_env}.c.${gitlab_project}.internal"
 
 wait_for_input() {
   declare input
@@ -56,7 +56,7 @@ wait_for_input() {
 
 failover_if_master() {
   export i=$1
-  export fqdn="${gitlab_redis_cluster}-$i-db-${gitlab_env}.c.${gitlab_project}.internal"
+  export fqdn="${gitlab_redis_service}-$i-db-${gitlab_env}.c.${gitlab_project}.internal"
 
   echo "> failover_if_master $fqdn"
 
@@ -69,6 +69,7 @@ failover_if_master() {
     wait_for_input
     ssh "$sentinel" "/opt/redis/redis-cli -p 26379 sentinel failover mymaster"
 
+    # TODO: remove when gitlab-redis cookbook resolves secret parsing
     # sentinel failover reformats the redis.conf file, affecting how passwords are extracted
     run_chef_client
   fi
@@ -120,7 +121,7 @@ restart_redis() {
 
 reconfigure() {
   export i=$1
-  export fqdn="${gitlab_redis_cluster}-$i-db-${gitlab_env}.c.${gitlab_project}.internal"
+  export fqdn="${gitlab_redis_service}-$i-db-${gitlab_env}.c.${gitlab_project}.internal"
 
   echo "> reconfigure $fqdn"
 
@@ -151,7 +152,9 @@ reconfigure() {
 
   restart_redis
 
-  run_chef_client # fixes changes to redis.conf
+  # TODO: remove when gitlab-redis cookbook resolves secret parsing
+  # fixes changes to redis.conf
+  run_chef_client
 
   # wait for master to step down and sync (expect "slave" [sic] and "connected")
   while ! [[ "$(ssh "$fqdn" "$redis_cli role" | head -n1)" == "slave" ]]; do
@@ -169,7 +172,7 @@ reconfigure() {
 
   # check sync status
   echo check redis role for each node
-  for host in $(seq -f "${gitlab_redis_cluster}-%02g-db-${gitlab_env}.c.${gitlab_project}.internal" 1 3); do
+  for host in $(seq -f "${gitlab_redis_service}-%02g-db-${gitlab_env}.c.${gitlab_project}.internal" 1 3); do
     ssh "$host" 'hostname; '$redis_cli' role | head -n1; echo'
   done
 
@@ -181,8 +184,8 @@ reconfigure() {
 
 bootstrap() {
   export i=$1
-  export fqdn="${gitlab_redis_cluster}-$i-db-${gitlab_env}.c.${gitlab_project}.internal"
-  export primary="${gitlab_redis_cluster}-01-db-${gitlab_env}.c.${gitlab_project}.internal"
+  export fqdn="${gitlab_redis_service}-$i-db-${gitlab_env}.c.${gitlab_project}.internal"
+  export primary="${gitlab_redis_service}-01-db-${gitlab_env}.c.${gitlab_project}.internal"
 
   echo "> bootstrapping $fqdn"
 
