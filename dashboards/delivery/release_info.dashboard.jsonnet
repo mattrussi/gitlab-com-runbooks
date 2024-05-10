@@ -281,7 +281,7 @@ local patchReleaseInfoTextPanel =
       - [Overview of the Patch Release Process](https://handbook.gitlab.com/handbook/engineering/releases/#patch-releases-overview)
       - [Maintenance Policy](https://docs.gitlab.com/ee/policy/maintenance.html)
       - [Process to include bug fixes](https://gitlab.com/gitlab-org/release/docs/-/blob/master/general/patch/engineers.md)
-      - [Process to include security fixes](https://gitlab.com/gitlab-org/release/docs/-/blob/master/general/security/developer.md)
+      - [Process to include security fixes](https://gitlab.com/gitlab-org/release/docs/-/blob/master/general/security/engineer.md)
       - [Backporting to older releases](https://docs.gitlab.com/ee/policy/maintenance.html#backporting-to-older-releases)
       - [Security Tracking Issue](https://gitlab.com/gitlab-org/gitlab/-/issues/?sort=created_date&state=opened&label_name%5B%5D=upcoming%20security%20release&first_page_size=20)
 
