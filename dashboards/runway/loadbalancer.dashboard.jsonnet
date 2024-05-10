@@ -72,12 +72,16 @@ basic.dashboard(
         description='Ratio of HTTP 5xx status codes to total number of requests.',
         yAxisLabel='Error ratio',
         query=|||
-          rate(
-            stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{response_code_class="500",%(selector)s}[$__rate_interval]
+          sum(
+            rate(
+              stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{response_code_class="500",%(selector)s}[$__rate_interval]
+            )
           )
           /
-          rate(
-            stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{%(selector)s}[$__rate_interval]
+          sum(
+            rate(
+              stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{%(selector)s}[$__rate_interval]
+            )
           )
           OR on()
           vector(0)
