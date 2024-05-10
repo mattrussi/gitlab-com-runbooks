@@ -52,9 +52,11 @@
 {{ end }}
 
 {{ define "gitlab.runbook.link" }}
-  {{- if eq .CommonAnnotations.link "" -}}
-    https://ops.gitlab.net/gitlab-com/runbooks/blob/master/{{ .CommonAnnotations.runbook -}}
-  {{- else -}}
-    {{- .CommonAnnotations.link -}}
-  {{- end -}}
+    {{- if .Annotations.runbook_url -}}
+        {{- .Annotations.runbook_url -}}
+    {{- else if eq .CommonAnnotations.link "" -}}
+        https://ops.gitlab.net/gitlab-com/runbooks/blob/master/{{ .CommonAnnotations.runbook -}}
+    {{- else -}}
+        {{- .CommonAnnotations.link -}}
+    {{- end -}}
 {{- end }}
