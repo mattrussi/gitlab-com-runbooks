@@ -49,7 +49,7 @@ local library = import 'gitlab-slis/library.libsonnet';
   environment::
     template.new(
       'environment',
-      '$PROMETHEUS_DS',
+      defaultPrometheusDatasource,
       'label_values(gitlab_service_ops:rate_1h, environment)',
       current='gprd',
       refresh='load',
