@@ -277,7 +277,7 @@ metricsCatalog.serviceDefinition({
 
       local mimirStoreGatewaySelector = mimirServiceSelector {
         job: 'mimir/store-gateway',
-        route: { re: '/gatewaypb.StoreGateway/.*' },
+        route: { re: '/gatewaypb\\.StoreGateway/.*' },
       },
 
       apdex: histogramApdex(
@@ -319,7 +319,7 @@ metricsCatalog.serviceDefinition({
 
       local mimirQueryDistributorSelector = mimirServiceSelector {
         job: 'mimir/distributor',
-        route: { oneOf: ['/distributor.Distributor/Push', '/httpgrpc.*', 'api_(v1|prom)_push', 'otlp_v1_metrics'] },
+        route: { oneOf: ['/distributor\\.Distributor/Push', '/httpgrpc.*', 'api_(v1|prom)_push', 'otlp_v1_metrics'] },
       },
 
       apdex: histogramApdex(
