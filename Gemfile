@@ -24,6 +24,7 @@ group :development, :test do
   gem 'webmock'
   gem 'super_diff'
   gem 'byebug'
+  gem 'socksify' # required to access Mimir via SOCKS5 locally
 end
 
 group :danger do

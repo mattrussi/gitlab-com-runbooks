@@ -6,7 +6,7 @@ local now = std.extVar('current_time');
 {
   gitaly_rate_5m: periodicQuery.new({
     query: |||
-        avg_over_time(gitlab_service_ops:rate_5m{env="gprd",environment="gprd",monitor="global",stage="main",type="gitaly"}[1h])
+      avg_over_time(gitlab_service_ops:rate_5m{env="gprd",environment="gprd",monitor="global",stage="main",type="gitaly"}[1h])
     |||,
     time: now,
   }),

@@ -6,15 +6,18 @@ require_relative './prometheus_api/response'
 module PeriodicQueries
   class PrometheusApi
     PATH_PER_QUERY = {
-      'instant' => '/api/v1/query' # https://prometheus.io/docs/prometheus/latest/querying/api/#instant-queries
+      'instant' => 'api/v1/query' # https://prometheus.io/docs/prometheus/latest/querying/api/#instant-queries
     }.freeze
 
-    def initialize(url)
+    def initialize(url, tenant_id: nil, use_ssl: false)
       @base_url = url
+      @use_ssl = use_ssl
+      @tenant_id = tenant_id
     end
 
     def with_connection
       self.active_connection = Net::HTTP.new(uri.hostname, uri.port)
+      active_connection.use_ssl = use_ssl
       active_connection.start
       yield(self)
     ensure
@@ -26,7 +29,7 @@ module PeriodicQueries
       query_uri = URI.join(base_url, path)
       query_uri.query = URI.encode_www_form(query.params)
 
-      get = Net::HTTP::Get.new(query_uri)
+      get = Net::HTTP::Get.new(query_uri, headers)
       # Net::HTTP#request does not raise exceptions, so we'll get an empty response
       # and continue to the next request
       # https://ruby-doc.org/stdlib-2.7.1/libdoc/net/http/rdoc/Net/HTTP.html#method-i-request
@@ -35,11 +38,17 @@ module PeriodicQueries
 
     private
 
-    attr_reader :base_url
+    attr_reader :base_url, :use_ssl, :tenant_id
     attr_accessor :active_connection
 
     def uri
       @uri ||= URI(base_url)
+    end
+
+    def headers
+      @headers ||= {}.tap do |h|
+        h['X-Scope-OrgID'] = tenant_id if tenant_id
+      end
     end
   end
 end

@@ -670,7 +670,7 @@ expect(
 ### How to run tests?
 
 - Run the full Jsonnet test suite in your local environment with `make test-jsonnet && bundle exec rspec`
-- Run a particular Jsonnet unit test file with `scripts/jsonnet_test.sh periodic-thanos-queries/periodic-query_test.jsonnet`
+- Run a particular Jsonnet unit test file with `scripts/jsonnet_test.sh periodic-queries/periodic-query_test.jsonnet`
 - Run a particular Jsonnet integration test file with `bundle exec rspec spec/libsonnet/toolinglinks/grafana_spec.rb`
 
 _Note_: Verify that you have all the jsonnet dependencies downloaded  before attempting to run the tests, you can

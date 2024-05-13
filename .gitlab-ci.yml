@@ -1240,7 +1240,7 @@ test-periodic-queries:
       changes:
         paths:
           - libsonnet/**/*
-          - periodic-thanos-queries/*
+          - periodic-queries/*
           - lib/periodic_queries.rb
           - lib/periodic_queries/**/*
     - <<: *if-merge-request-rule
@@ -1249,7 +1249,7 @@ test-periodic-queries:
   script:
     - gem install bundler --no-document -v $BUNDLER_VERSION
     - bundle install
-    - bundle exec scripts/perform-periodic-thanos-queries.rb --dry-run
+    - bundle exec scripts/perform-periodic-queries.rb -n
 
 publish-periodic-queries:
   stage: deploy
@@ -1265,7 +1265,7 @@ publish-periodic-queries:
   script:
     - gem install bundler --no-document -v $BUNDLER_VERSION
     - bundle install
-    - bundle exec scripts/perform-periodic-thanos-queries.rb
+    - bundle exec scripts/perform-periodic-queries.rb
   artifacts:
     expose_as: thanos query results
     paths:

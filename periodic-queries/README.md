@@ -86,7 +86,7 @@ For each query, there are 4 fields:
 
 ## Defining or adjusting queries
 
-The query definitions live in the `periodic-thanos-queries` directory
+The query definitions live in the `periodic-queries` directory
 in the [runbooks repository][runbooks-repository] in jsonnet
 files per topic. The filename of the files to be included in the
 result needs to end in `.queries.jsonnet`. The name without the suffix
@@ -117,8 +117,8 @@ here. For now, only `instant` queries are supported.
 To validate if the query compiles, we can use the following script:
 
 ```sh
-bundle exec scripts/perform-periodic-thanos-queries.rb --dry-run -f
-periodic-thanos-queries/<topic name>.queries.jsonnet
+bundle exec scripts/perform-periodic-queries.rb --dry-run -f
+periodic-queries/<topic name>.queries.jsonnet
 ```
 
 The `--dry-run` option prevents actually trying to perform the
@@ -135,10 +135,31 @@ can validate the performace of the queries.
 All information about using the script is available in its output:
 
 ```sh
-bundle exec scripts/perform-periodic-thanos-queries.rb --help
+bundle exec scripts/perform-periodic-queries.rb --help
 ```
 
-## Connecting to thanos
+## Connecting to Mimir
+
+Our Mimir instance isn't accessible from the outside. But it can be
+reached through an SSH tunnel if you have access to a bastion. Most
+people should have access to a staging bastion. A tunnel can be
+created like this, creating a SOCKS proxy on port 18202:
+
+```sh
+ssh -l $(whoami) lb-bastion.gstg.gitlab.com -D 18202
+```
+
+This will make Mimir available at `https://mimir-internal.ops.gke.gitlab.net/prometheus`.
+This is the default configuration `scripts/perform-periodic-queries.rb`
+will use. A different URL can be configured using `PERIODIC_QUERY_PROMETHEUS_URL`.
+
+The `socksify` gem should be used to provide the SOCKS connectivity -- only required locally.
+For example:
+
+```sh
+bundle exec socksify_ruby localhost 18202 scripts/perform-periodic-queries.rb -n
+```
+## Connecting to Thanos
 
 Our Thanos instance isn't accessible from the outside. But it can be
 reached through an SSH tunnel if you have access to a bastion. Most
@@ -151,12 +172,11 @@ ssh -L 10902:thanos-query-frontend-internal.ops.gke.gitlab.net:9090 lb-bastion.g
 
 This will make thanos available at `http://localhost:10902`. This is
 the default configuration `scripts/perform-periodic-thanos-queries.rb`
-will use. A different URL can be configured using
-`PERIODIC_QUERY_THANOS_URL`.
+will use.
 
 ## Uploading to Google Cloud Storage
 
-To make the `script/perform-periodic-thanos-queries.rb` upload results
+To make the `script/perform-periodic-queries.rb` upload results
 to GCS. The following environment variables need to be set:
 
 1. `PERIODIC_QUERY_GCP_KEYFILE_PATH`: This is the path to a keyfile
