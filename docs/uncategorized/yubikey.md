@@ -18,6 +18,7 @@ You'll be using the following tooling:
 **WARNING**: When setting a pin, make sure it is between 6 and 8 ASCII characters, longer pins may be silently truncated.
 
 1. Follow the instructions for [installing `yubikey-agent`](https://github.com/FiloSottile/yubikey-agent#installation). **But do not run the `setup` command for your yubikey. This is handled as part of the yubikey-reset.sh script below.**
+   * Don't forget to add `export SSH_AUTH_SOCK="$(brew --prefix)/var/run/yubikey-agent.sock"` to your `~/.zshrc` and restart the shell.
 1. Follow the instructions for [installing `ykman`](https://docs.yubico.com/software/yubikey/tools/ykman/)
 1. Follow the instructions below for setting a "cached" touch policy. These steps, and the script run, will create keys and certificates using ykman.
 1. Set up Git commit signing using the YubiKey's SSH key:
