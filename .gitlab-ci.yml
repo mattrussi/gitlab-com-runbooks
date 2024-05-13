@@ -1239,7 +1239,9 @@ deploy-thanos-rules:production:
       vault: shared/observability/tenants/runbooks/password@k8s
 
 test-periodic-queries:
-  extends: .mimir-query-auth
+  extends:
+    - .mimir-query-auth
+    - .id-tokens
   stage: test
   needs: []
   rules:
@@ -1263,7 +1265,9 @@ test-periodic-queries:
     - bundle exec scripts/perform-periodic-queries.rb -n
 
 publish-periodic-queries:
-  extends: .mimir-query-auth
+  extends:
+    - .mimir-query-auth
+    - .id-tokens
   stage: deploy
   rules:
     - *ops-gitlab-net-only-rule
