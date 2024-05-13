@@ -9,11 +9,11 @@ module PeriodicQueries
       'instant' => 'api/v1/query' # https://prometheus.io/docs/prometheus/latest/querying/api/#instant-queries
     }.freeze
 
-    def initialize(url, tenant_id: nil, use_ssl: false, auth_token: nil)
+    def initialize(url, tenant_id: nil, use_ssl: false, auth_header: nil)
       @base_url = url
       @use_ssl = use_ssl
       @tenant_id = tenant_id
-      @auth_token = auth_token
+      @auth_header = auth_header
     end
 
     def with_connection
@@ -40,7 +40,7 @@ module PeriodicQueries
 
     private
 
-    attr_reader :base_url, :use_ssl, :tenant_id, :auth_token
+    attr_reader :base_url, :use_ssl, :tenant_id, :auth_header
     attr_accessor :active_connection
 
     def uri

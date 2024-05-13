@@ -14,7 +14,7 @@ config = Struct.new(
   :dry_run,
   :prom_tenant_id,
   :prom_use_ssl,
-  :prom_auth_token
+  :prom_auth_header
 ).new
 
 default_prom_url = 'https://mimir-internal.ops.gke.gitlab.net/prometheus'
