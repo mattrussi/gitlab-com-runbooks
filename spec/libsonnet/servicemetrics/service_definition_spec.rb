@@ -13,7 +13,7 @@ describe 'libsonnet/servicemetrics/service_definition.libsonnet' do
           description: '',
           significantLabels: ['world'],
           featureCategory: 'error_budgets',
-          requestRate: '',
+          requestRate: {},
           userImpacting: true
         },
         some_sli: {
@@ -23,7 +23,7 @@ describe 'libsonnet/servicemetrics/service_definition.libsonnet' do
           description: '',
           significantLabels: ['world'],
           featureCategory: 'error_budgets',
-          requestRate: '',
+          requestRate: {},
           userImpacting: true
         }
       }
