@@ -1,4 +1,4 @@
-local aggregationSets = (import 'gitlab-metrics-config.libsonnet').aggregationSets;
+local config = (import 'gitlab-metrics-config.libsonnet');
 local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
 local serviceAlertsGenerator = import 'slo-alerts/service-alerts-generator.libsonnet';
 
@@ -6,7 +6,7 @@ local serviceAlertsGenerator = import 'slo-alerts/service-alerts-generator.libso
 // This is to avoid low-volume, noisy alerts.
 // See docs/metrics-catalog/service-level-monitoring.md for more details
 // of how minimumSamplesForMonitoring works
-local minimumSamplesForMonitoring = 3600;
+local minimumSamplesForMonitoring = std.get(config.options, 'minimumSamplesForMonitoring', 3600);
 local minimumSamplesForTrafficCessation = 300;
 
 local alertDescriptors = [{
@@ -14,7 +14,7 @@ local alertDescriptors = [{
   alertSuffix: '',
   alertTitleTemplate: 'The %(sliName)s SLI of the %(serviceType)s service',
   alertExtraDetail: null,
-  aggregationSet: aggregationSets.componentSLIs,
+  aggregationSet: config.aggregationSets.componentSLIs,
   minimumSamplesForMonitoring: minimumSamplesForMonitoring,
   alertForDuration: null,  // Use default for window...
   trafficCessationSelector: {},
