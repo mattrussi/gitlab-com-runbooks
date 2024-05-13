@@ -176,7 +176,7 @@ GEM
     redis-clustering (5.2.0)
       redis (= 5.2.0)
       redis-cluster-client (>= 0.7.11)
-    regexp_parser (2.9.0)
+    regexp_parser (2.9.1)
     representable (3.2.0)
       declarative (< 0.1.0)
       trailblazer-option (>= 0.1.1, < 0.2.0)
