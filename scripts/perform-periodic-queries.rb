@@ -13,7 +13,8 @@ config = Struct.new(
   :target_directory,
   :dry_run,
   :prom_tenant_id,
-  :prom_use_ssl
+  :prom_use_ssl,
+  :prom_auth_token
 ).new
 
 default_prom_url = 'https://mimir-internal.ops.gke.gitlab.net/prometheus'
@@ -22,6 +23,7 @@ prom_url_key = 'PERIODIC_QUERY_PROMETHEUS_URL'
 config.prometheus_url = ENV.fetch(prom_url_key, default_prom_url)
 config.prom_tenant_id = ENV.fetch('PERIODIC_QUERY_PROMETHEUS_TENANT_ID', 'gitlab-gprd')
 config.prom_use_ssl = ENV.fetch('PERIODIC_QUERY_SSL', 'true') == 'true'
+config.prom_auth_token = ENV['PERIODIC_QUERY_AUTH_TOKEN']
 
 config.gcp_keyfile = ENV["PERIODIC_QUERY_GCP_KEYFILE_PATH"]
 config.gcp_project = ENV["PERIODIC_QUERY_GCP_PROJECT"]
@@ -88,7 +90,8 @@ end
 prometheus = PeriodicQueries::PrometheusApi.new(
   config.prometheus_url,
   use_ssl: config.prom_use_ssl,
-  tenant_id: config.prom_tenant_id
+  tenant_id: config.prom_tenant_id,
+  auth_token: config.prom_auth_token
 )
 prometheus.with_connection do |api|
   PeriodicQueries.perform_queries(topics, api)
