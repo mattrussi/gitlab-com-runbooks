@@ -94,9 +94,12 @@ prometheus.with_connection do |api|
   PeriodicQueries.perform_queries(topics, api)
 end
 
+puts topics.map(&:summary).join("\n")
+exit_code = topics.all?(&:success?) ? 0 : 1
+
 PeriodicQueries.write_results(topics, config.target_directory, Time.now)
 
-exit 0 if config.gcp_project.nil? || config.gcs_bucket.nil? || config.gcp_keyfile.nil?
+exit exit_code if config.gcp_project.nil? || config.gcs_bucket.nil? || config.gcp_keyfile.nil?
 
 storage = PeriodicQueries::Storage.new(
   config.gcp_keyfile,
@@ -106,6 +109,4 @@ storage = PeriodicQueries::Storage.new(
 
 PeriodicQueries.upload_results(config.target_directory, storage)
 
-puts topics.map(&:summary).join("\n")
-
-exit 1 unless topics.all?(&:success?)
+exit exit_code
