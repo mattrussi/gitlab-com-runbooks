@@ -5,16 +5,23 @@ require_relative '../lib/periodic_queries'
 require 'optparse'
 
 config = Struct.new(
-  :thanos_url,
+  :prometheus_url,
   :gcp_keyfile,
   :gcp_project,
   :gcs_bucket,
   :query_files,
   :target_directory,
-  :dry_run
+  :dry_run,
+  :prom_tenant_id,
+  :prom_use_ssl
 ).new
 
-config.thanos_url = ENV['PERIODIC_QUERY_THANOS_URL'] || 'http://localhost:10902'
+default_prom_url = 'https://mimir-internal.ops.gke.gitlab.net/prometheus'
+prom_url_key = 'PERIODIC_QUERY_PROMETHEUS_URL'
+
+config.prometheus_url = ENV.fetch(prom_url_key, default_prom_url)
+config.prom_tenant_id = ENV.fetch('PERIODIC_QUERY_PROMETHEUS_TENANT_ID', 'gitlab-gprd')
+config.prom_use_ssl = ENV.fetch('PERIODIC_QUERY_SSL', 'true') == 'true'
 
 config.gcp_keyfile = ENV["PERIODIC_QUERY_GCP_KEYFILE_PATH"]
 config.gcp_project = ENV["PERIODIC_QUERY_GCP_PROJECT"]
@@ -22,7 +29,7 @@ config.gcs_bucket = ENV["PERIODIC_QUERY_BUCKET"]
 
 base_dir = Pathname.new(File.join(File.dirname(__FILE__), '..')).realpath
 ext = PeriodicQueries::Topic::EXT
-files = Dir.glob(File.join(base_dir, 'periodic-thanos-queries', "*#{ext}"))
+files = Dir.glob(File.join(base_dir, 'periodic-queries', "*#{ext}"))
 config.query_files = files
 
 config.target_directory = File.join(base_dir, 'periodic-query-results')
@@ -56,9 +63,8 @@ OptionParser.new do |options|
   options.separator "Environment variables"
 
   options.separator(<<~ENVIRONMENT_VARIABLES)
-  #{options.summary_indent}PERIODIC_QUERY_THANOS_URL
-  #{options.summary_indent * 2}The URL to the thanos instance to query. Defaults to 'http://localhost:10902'
-
+  #{options.summary_indent}#{prom_url_key}
+  #{options.summary_indent * 2}The URL to the prometheus-like instance to query. Defaults to '#{default_prom_url}'
   #{options.summary_indent}PERIODIC_QUERY_GCP_KEYFILE_PATH
   #{options.summary_indent * 2}The keyfile to use to authenticate uploading to the GCS bucket.
   #{options.summary_indent}PERIODIC_QUERY_GCP_PROJECT
@@ -79,8 +85,12 @@ if config.dry_run
   exit 0
 end
 
-thanos = PeriodicQueries::PrometheusApi.new(config.thanos_url)
-thanos.with_connection do |api|
+prometheus = PeriodicQueries::PrometheusApi.new(
+  config.prometheus_url,
+  use_ssl: config.prom_use_ssl,
+  tenant_id: config.prom_tenant_id
+)
+prometheus.with_connection do |api|
   PeriodicQueries.perform_queries(topics, api)
 end
 
