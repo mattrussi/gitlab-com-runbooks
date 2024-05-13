@@ -27,7 +27,8 @@ module PeriodicQueries
 
     def perform_query(query)
       path = PATH_PER_QUERY.fetch(query.type)
-      query_uri = URI.join(base_url, path)
+      full_url = [base_url, path].join("/")
+      query_uri = URI(full_url)
       query_uri.query = URI.encode_www_form(query.params)
 
       get = Net::HTTP::Get.new(query_uri, headers)
