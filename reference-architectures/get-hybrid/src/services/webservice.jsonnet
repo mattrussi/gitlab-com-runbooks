@@ -3,6 +3,9 @@ local histogramApdex = metricsCatalog.histogramApdex;
 local rateMetric = metricsCatalog.rateMetric;
 local kubeLabelSelectors = metricsCatalog.kubeLabelSelectors;
 local successCounterApdex = metricsCatalog.successCounterApdex;
+local sliLibrary = import 'gitlab-application-slis.libsonnet';
+
+local railsSelector = { job: 'gitlab-rails', type: 'webservice' };
 
 metricsCatalog.serviceDefinition({
   type: 'webservice',
@@ -46,6 +49,7 @@ metricsCatalog.serviceDefinition({
   },
   serviceLevelIndicators:
     {
+      // Deprecated...
       puma: {
         userImpacting: true,
         description: |||
@@ -102,12 +106,12 @@ metricsCatalog.serviceDefinition({
           selector=nonAPIWorkhorseSelector {
             route+: {
               ne+: [
-                '^/([^/]+/){1,}[^/]+/uploads\\\\z', # ^/([^/]+/){1,}[^/]+/uploads\z
-                '^/.+\\\\.git/git-receive-pack\\\\z', # ^/.+\.git/git-receive-pack\z
-                '^/.+\\\\.git/git-upload-pack\\\\z', # ^/.+\.git/git-upload-pack\z
-                '^/.+\\\\.git/info/refs\\\\z', # ^/.+\.git/info/refs\z
-                '^/.+\\\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\\\z', # /.+\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\z
-                '^/-/cable\\\\z', # ^/-/cable\z
+                '^/([^/]+/){1,}[^/]+/uploads\\\\z',  // ^/([^/]+/){1,}[^/]+/uploads\z
+                '^/.+\\\\.git/git-receive-pack\\\\z',  // ^/.+\.git/git-receive-pack\z
+                '^/.+\\\\.git/git-upload-pack\\\\z',  // ^/.+\.git/git-upload-pack\z
+                '^/.+\\\\.git/info/refs\\\\z',  // ^/.+\.git/info/refs\z
+                '^/.+\\\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\\\z',  // /.+\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\z
+                '^/-/cable\\\\z',  // ^/-/cable\z
               ],
             },
           },
@@ -163,7 +167,12 @@ metricsCatalog.serviceDefinition({
 
         toolingLinks: [],
       },
-    },
+    }
+    + sliLibrary.get('rails_request').generateServiceLevelIndicator(railsSelector, {
+      toolingLinks: [
+      ],
+    })
+  ,
 
   extraRecordingRulesPerBurnRate: [],
 })

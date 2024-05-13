@@ -4658,6 +4658,76 @@ groups:
       type: webservice
     record: gitlab_component_apdex:ratio_5m
   - expr: |
+      sum by () (
+        rate(gitlab_sli_rails_request_apdex_success_total{job="gitlab-rails",type="webservice"}[5m])
+      )
+    labels:
+      component: rails_request
+      tier: sv
+      type: webservice
+    record: gitlab_component_apdex:success:rate_5m
+  - expr: |
+      sum by () (
+        rate(gitlab_sli_rails_request_apdex_total{job="gitlab-rails",type="webservice"}[5m])
+      )
+    labels:
+      component: rails_request
+      tier: sv
+      type: webservice
+    record: gitlab_component_apdex:weight:score_5m
+  - expr: |
+      sum by () (
+        rate(gitlab_sli_rails_request_total{job="gitlab-rails",type="webservice"}[5m])
+      )
+    labels:
+      component: rails_request
+      tier: sv
+      type: webservice
+    record: gitlab_component_ops:rate_5m
+  - expr: |
+      (
+        sum by () (
+          rate(gitlab_sli_rails_request_error_total{job="gitlab-rails",type="webservice"}[5m])
+        )
+      )
+      or
+      (
+        0 * group by() (
+          gitlab_component_ops:rate_5m{component="rails_request",tier="sv",type="webservice"}
+        )
+      )
+    labels:
+      component: rails_request
+      tier: sv
+      type: webservice
+    record: gitlab_component_errors:rate_5m
+  - expr: |
+      sum by () (
+        gitlab_component_errors:rate_5m{component="rails_request",tier="sv",type="webservice"}
+      )
+      /
+      sum by () (
+        gitlab_component_ops:rate_5m{component="rails_request",tier="sv",type="webservice"}
+      )
+    labels:
+      component: rails_request
+      tier: sv
+      type: webservice
+    record: gitlab_component_errors:ratio_5m
+  - expr: |
+      sum by () (
+        gitlab_component_apdex:success:rate_5m{component="rails_request",tier="sv",type="webservice"}
+      )
+      /
+      sum by () (
+        gitlab_component_apdex:weight:score_5m{component="rails_request",tier="sv",type="webservice"}
+      )
+    labels:
+      component: rails_request
+      tier: sv
+      type: webservice
+    record: gitlab_component_apdex:ratio_5m
+  - expr: |
       (
         sum by () (
           rate(gitlab_workhorse_http_request_duration_seconds_bucket{le="1",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/([^/]+/){1,}[^/]+/uploads\\z",route!="^/.+\\.git/git-receive-pack\\z",route!="^/.+\\.git/git-upload-pack\\z",route!="^/.+\\.git/info/refs\\z",route!="^/.+\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\z",route!="^/-/cable\\z",route!~"^\\^/api/.*"}[5m])
@@ -4875,6 +4945,76 @@ groups:
       )
     labels:
       component: puma
+      tier: sv
+      type: webservice
+    record: gitlab_component_apdex:ratio_30m
+  - expr: |
+      sum by () (
+        rate(gitlab_sli_rails_request_apdex_success_total{job="gitlab-rails",type="webservice"}[30m])
+      )
+    labels:
+      component: rails_request
+      tier: sv
+      type: webservice
+    record: gitlab_component_apdex:success:rate_30m
+  - expr: |
+      sum by () (
+        rate(gitlab_sli_rails_request_apdex_total{job="gitlab-rails",type="webservice"}[30m])
+      )
+    labels:
+      component: rails_request
+      tier: sv
+      type: webservice
+    record: gitlab_component_apdex:weight:score_30m
+  - expr: |
+      sum by () (
+        rate(gitlab_sli_rails_request_total{job="gitlab-rails",type="webservice"}[30m])
+      )
+    labels:
+      component: rails_request
+      tier: sv
+      type: webservice
+    record: gitlab_component_ops:rate_30m
+  - expr: |
+      (
+        sum by () (
+          rate(gitlab_sli_rails_request_error_total{job="gitlab-rails",type="webservice"}[30m])
+        )
+      )
+      or
+      (
+        0 * group by() (
+          gitlab_component_ops:rate_30m{component="rails_request",tier="sv",type="webservice"}
+        )
+      )
+    labels:
+      component: rails_request
+      tier: sv
+      type: webservice
+    record: gitlab_component_errors:rate_30m
+  - expr: |
+      sum by () (
+        gitlab_component_errors:rate_30m{component="rails_request",tier="sv",type="webservice"}
+      )
+      /
+      sum by () (
+        gitlab_component_ops:rate_30m{component="rails_request",tier="sv",type="webservice"}
+      )
+    labels:
+      component: rails_request
+      tier: sv
+      type: webservice
+    record: gitlab_component_errors:ratio_30m
+  - expr: |
+      sum by () (
+        gitlab_component_apdex:success:rate_30m{component="rails_request",tier="sv",type="webservice"}
+      )
+      /
+      sum by () (
+        gitlab_component_apdex:weight:score_30m{component="rails_request",tier="sv",type="webservice"}
+      )
+    labels:
+      component: rails_request
       tier: sv
       type: webservice
     record: gitlab_component_apdex:ratio_30m
@@ -5100,6 +5240,76 @@ groups:
       type: webservice
     record: gitlab_component_apdex:ratio_1h
   - expr: |
+      sum by () (
+        rate(gitlab_sli_rails_request_apdex_success_total{job="gitlab-rails",type="webservice"}[1h])
+      )
+    labels:
+      component: rails_request
+      tier: sv
+      type: webservice
+    record: gitlab_component_apdex:success:rate_1h
+  - expr: |
+      sum by () (
+        rate(gitlab_sli_rails_request_apdex_total{job="gitlab-rails",type="webservice"}[1h])
+      )
+    labels:
+      component: rails_request
+      tier: sv
+      type: webservice
+    record: gitlab_component_apdex:weight:score_1h
+  - expr: |
+      sum by () (
+        rate(gitlab_sli_rails_request_total{job="gitlab-rails",type="webservice"}[1h])
+      )
+    labels:
+      component: rails_request
+      tier: sv
+      type: webservice
+    record: gitlab_component_ops:rate_1h
+  - expr: |
+      (
+        sum by () (
+          rate(gitlab_sli_rails_request_error_total{job="gitlab-rails",type="webservice"}[1h])
+        )
+      )
+      or
+      (
+        0 * group by() (
+          gitlab_component_ops:rate_1h{component="rails_request",tier="sv",type="webservice"}
+        )
+      )
+    labels:
+      component: rails_request
+      tier: sv
+      type: webservice
+    record: gitlab_component_errors:rate_1h
+  - expr: |
+      sum by () (
+        gitlab_component_errors:rate_1h{component="rails_request",tier="sv",type="webservice"}
+      )
+      /
+      sum by () (
+        gitlab_component_ops:rate_1h{component="rails_request",tier="sv",type="webservice"}
+      )
+    labels:
+      component: rails_request
+      tier: sv
+      type: webservice
+    record: gitlab_component_errors:ratio_1h
+  - expr: |
+      sum by () (
+        gitlab_component_apdex:success:rate_1h{component="rails_request",tier="sv",type="webservice"}
+      )
+      /
+      sum by () (
+        gitlab_component_apdex:weight:score_1h{component="rails_request",tier="sv",type="webservice"}
+      )
+    labels:
+      component: rails_request
+      tier: sv
+      type: webservice
+    record: gitlab_component_apdex:ratio_1h
+  - expr: |
       (
         sum by () (
           rate(gitlab_workhorse_http_request_duration_seconds_bucket{le="1",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/([^/]+/){1,}[^/]+/uploads\\z",route!="^/.+\\.git/git-receive-pack\\z",route!="^/.+\\.git/git-upload-pack\\z",route!="^/.+\\.git/info/refs\\z",route!="^/.+\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\z",route!="^/-/cable\\z",route!~"^\\^/api/.*"}[1h])
@@ -5321,6 +5531,76 @@ groups:
       type: webservice
     record: gitlab_component_apdex:ratio_6h
   - expr: |
+      sum by () (
+        rate(gitlab_sli_rails_request_apdex_success_total{job="gitlab-rails",type="webservice"}[6h])
+      )
+    labels:
+      component: rails_request
+      tier: sv
+      type: webservice
+    record: gitlab_component_apdex:success:rate_6h
+  - expr: |
+      sum by () (
+        rate(gitlab_sli_rails_request_apdex_total{job="gitlab-rails",type="webservice"}[6h])
+      )
+    labels:
+      component: rails_request
+      tier: sv
+      type: webservice
+    record: gitlab_component_apdex:weight:score_6h
+  - expr: |
+      sum by () (
+        rate(gitlab_sli_rails_request_total{job="gitlab-rails",type="webservice"}[6h])
+      )
+    labels:
+      component: rails_request
+      tier: sv
+      type: webservice
+    record: gitlab_component_ops:rate_6h
+  - expr: |
+      (
+        sum by () (
+          rate(gitlab_sli_rails_request_error_total{job="gitlab-rails",type="webservice"}[6h])
+        )
+      )
+      or
+      (
+        0 * group by() (
+          gitlab_component_ops:rate_6h{component="rails_request",tier="sv",type="webservice"}
+        )
+      )
+    labels:
+      component: rails_request
+      tier: sv
+      type: webservice
+    record: gitlab_component_errors:rate_6h
+  - expr: |
+      sum by () (
+        gitlab_component_errors:rate_6h{component="rails_request",tier="sv",type="webservice"}
+      )
+      /
+      sum by () (
+        gitlab_component_ops:rate_6h{component="rails_request",tier="sv",type="webservice"}
+      )
+    labels:
+      component: rails_request
+      tier: sv
+      type: webservice
+    record: gitlab_component_errors:ratio_6h
+  - expr: |
+      sum by () (
+        gitlab_component_apdex:success:rate_6h{component="rails_request",tier="sv",type="webservice"}
+      )
+      /
+      sum by () (
+        gitlab_component_apdex:weight:score_6h{component="rails_request",tier="sv",type="webservice"}
+      )
+    labels:
+      component: rails_request
+      tier: sv
+      type: webservice
+    record: gitlab_component_apdex:ratio_6h
+  - expr: |
       (
         sum by () (
           rate(gitlab_workhorse_http_request_duration_seconds_bucket{le="1",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/([^/]+/){1,}[^/]+/uploads\\z",route!="^/.+\\.git/git-receive-pack\\z",route!="^/.+\\.git/git-upload-pack\\z",route!="^/.+\\.git/info/refs\\z",route!="^/.+\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\z",route!="^/-/cable\\z",route!~"^\\^/api/.*"}[6h])
@@ -5474,6 +5754,14 @@ groups:
   - expr: "1"
     labels:
       component: puma
+      regional_aggregation: "no"
+      service_aggregation: "yes"
+      tier: sv
+      type: webservice
+    record: gitlab_component_service:mapping
+  - expr: "1"
+    labels:
+      component: rails_request
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: sv
