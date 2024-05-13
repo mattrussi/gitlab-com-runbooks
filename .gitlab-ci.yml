@@ -1270,12 +1270,7 @@ publish-periodic-queries:
     - .id-tokens
   stage: deploy
   rules:
-    - *ops-gitlab-net-only-rule
     - if: $PERIODIC_QUERY_PUBLISH == "1"
-    # This condition allows us to open a test MR on ops to demo publishing
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-      when: manual
-      allow_failure: true
   tags:
     - k8s-workloads
   script:
