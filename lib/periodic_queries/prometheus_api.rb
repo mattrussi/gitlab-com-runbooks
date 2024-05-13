@@ -49,7 +49,7 @@ module PeriodicQueries
     def headers
       @headers ||= {}.tap do |h|
         h['X-Scope-OrgID'] = tenant_id if tenant_id
-        h['Authorization'] = "Basic #{auth_token}" if auth_token
+        h['Authorization'] = auth_token if auth_token
       end
     end
   end
