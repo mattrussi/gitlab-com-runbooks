@@ -1,5 +1,8 @@
 local aggregationSetErrorRatioReflectedRuleSet = (import 'recording-rules/aggregation-set-reflected-ratio-rule-set.libsonnet').aggregationSetErrorRatioReflectedRuleSet;
 local aggregationSetApdexRatioReflectedRuleSet = (import 'recording-rules/aggregation-set-reflected-ratio-rule-set.libsonnet').aggregationSetApdexRatioReflectedRuleSet;
+local errorRatioConfidenceInterval = (import 'confidence-interval-generators.libsonnet').errorRatioConfidenceInterval;
+local apdexRatioConfidenceInterval = (import 'confidence-interval-generators.libsonnet').apdexRatioConfidenceInterval;
+
 local aggregations = import 'promql/aggregations.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
 local filterLabelsFromLabelsHash = (import 'promql/labels.libsonnet').filterLabelsFromLabelsHash;
@@ -66,6 +69,30 @@ local generateErrorRatioRules(burnRate, aggregationSet, sliDefinition, recording
 local generateApdexRatioRules(burnRate, aggregationSet, sliDefinition, recordingRuleStaticLabels, extraSourceSelector, config) =
   aggregationSetApdexRatioReflectedRuleSet(aggregationSet, burnRate, extraSourceSelector, recordingRuleStaticLabels);
 
+local generateErrorRatioConfidenceIntervalRules(burnRate, aggregationSet, sliDefinition, recordingRuleStaticLabels, extraSourceSelector, config) =
+  if sliDefinition.usesConfidenceLevelForSLIAlerts() then
+    errorRatioConfidenceInterval(
+      aggregationSet,
+      burnRate,
+      extraSelector=aggregationSet.selector + recordingRuleStaticLabels + extraSourceSelector,
+      staticLabels=recordingRuleStaticLabels,
+      confidenceLevel=sliDefinition.useConfidenceLevelForSLIAlerts,
+    )
+  else
+    [];
+
+local generateApdexRatioConfidenceIntervalRules(burnRate, aggregationSet, sliDefinition, recordingRuleStaticLabels, extraSourceSelector, config) =
+  if sliDefinition.usesConfidenceLevelForSLIAlerts() then
+    apdexRatioConfidenceInterval(
+      aggregationSet,
+      burnRate,
+      extraSelector=aggregationSet.selector + recordingRuleStaticLabels + extraSourceSelector,
+      staticLabels=recordingRuleStaticLabels,
+      confidenceLevel=sliDefinition.useConfidenceLevelForSLIAlerts,
+    )
+  else
+    [];
+
 // Generates the recording rules given a component definition
 local generateRecordingRulesForComponent(burnRate, aggregationSet, serviceDefinition, sliDefinition, extraSourceSelector, config) =
   local recordingRuleStaticLabels = staticLabelsForAggregation(serviceDefinition, sliDefinition, aggregationSet);
@@ -85,6 +112,8 @@ local generateRecordingRulesForComponent(burnRate, aggregationSet, serviceDefini
       generateErrorRateRules,  // Error rates should always go after request rates as we have a fallback clause which relies on request rate existing
       generateErrorRatioRules,
       generateApdexRatioRules,
+      generateErrorRatioConfidenceIntervalRules,
+      generateApdexRatioConfidenceIntervalRules,
     ]
   );
 
@@ -194,6 +223,8 @@ local generateUpscaledRecordingRulesForComponent(burnRate, aggregationSet, servi
       generateErrorRateRulesUpscaled,
       generateErrorRatioRules,
       generateApdexRatioRules,
+      generateErrorRatioConfidenceIntervalRules,
+      generateApdexRatioConfidenceIntervalRules,
     ]
   );
 

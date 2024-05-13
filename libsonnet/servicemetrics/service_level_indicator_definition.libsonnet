@@ -33,6 +33,8 @@ local serviceLevelIndicatorDefaults = {
   dependsOn: [],  // When an sli depends on another component, don't alert on this SLI if the downstream service is already firing. This is meant for hard dependencies managed by GitLab.
   shardLevelMonitoring: false,
   emittedBy: [],  // Which services emit the metrics for this SLI, e.g. rails_redis_client SLI is emitted by web service
+
+  useConfidenceLevelForSLIAlerts: null,  // Use confidence intervals when alerting on SLIs. These have better performance in low RPS situations.
 };
 
 local validateHasField(object, field, message) =
@@ -202,6 +204,10 @@ local serviceLevelIndicatorDefinition(sliName, serviceLevelIndicator) =
     apdexMetrics: if self.hasApdex() then self.apdex.metricNames else [],
     metricNames:
       std.set(self.opsRateMetrics + self.errorRateMetrics + self.apdexMetrics),
+
+    // Returns true if this SLI should use confidence levels in alert evaulation.
+    usesConfidenceLevelForSLIAlerts()::
+      self.useConfidenceLevelForSLIAlerts != null,
 
     // Generate recording rules for apdex
     generateApdexRecordingRules(burnRate, aggregationSet, recordingRuleStaticLabels, selector={}, config={})::

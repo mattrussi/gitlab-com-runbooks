@@ -97,17 +97,19 @@ metricsCatalog.serviceDefinition({
           such as HTTP uploads, are excluded from the apdex score.
         |||,
 
+        useConfidenceLevelForSLIAlerts: '98%',
+
         apdex: histogramApdex(
           histogram='gitlab_workhorse_http_request_duration_seconds_bucket',
           selector=nonAPIWorkhorseSelector {
             route+: {
               ne+: [
-                '^/([^/]+/){1,}[^/]+/uploads\\\\z', # ^/([^/]+/){1,}[^/]+/uploads\z
-                '^/.+\\\\.git/git-receive-pack\\\\z', # ^/.+\.git/git-receive-pack\z
-                '^/.+\\\\.git/git-upload-pack\\\\z', # ^/.+\.git/git-upload-pack\z
-                '^/.+\\\\.git/info/refs\\\\z', # ^/.+\.git/info/refs\z
-                '^/.+\\\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\\\z', # /.+\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\z
-                '^/-/cable\\\\z', # ^/-/cable\z
+                '^/([^/]+/){1,}[^/]+/uploads\\\\z',  // ^/([^/]+/){1,}[^/]+/uploads\z
+                '^/.+\\\\.git/git-receive-pack\\\\z',  // ^/.+\.git/git-receive-pack\z
+                '^/.+\\\\.git/git-upload-pack\\\\z',  // ^/.+\.git/git-upload-pack\z
+                '^/.+\\\\.git/info/refs\\\\z',  // ^/.+\.git/info/refs\z
+                '^/.+\\\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\\\z',  // /.+\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\z
+                '^/-/cable\\\\z',  // ^/-/cable\z
               ],
             },
           },
