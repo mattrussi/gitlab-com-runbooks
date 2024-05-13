@@ -15,7 +15,7 @@ python       system
 ruby         3.3.1 # datasource=ruby-version depName=ruby/ruby
 shellcheck   0.10.0 # datasource=github-releases depName=koalaman/shellcheck
 shfmt        3.8.0 # datasource=github-releases depName=mvdan/sh
-terraform    1.8.2 # datasource=github-releases depName=hashicorp/terraform
+terraform    1.8.3 # datasource=github-releases depName=hashicorp/terraform
 thanos       0.35.0 # datasource=github-releases depName=thanos-io/thanos
 vault        1.16.2 # datasource=github-releases depName=hashicorp/vault
 yq           4.44.1 # datasource=github-releases depName=mikefarah/yq
