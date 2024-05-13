@@ -55,10 +55,34 @@ This scenario actually describes the above two scenarios as well, however becaus
 
 #### How to identify active abusive accounts?
 
-To find miners running numerous concurrent jobs from one or more accounts (a.k.a. namespaces), use the following dashboard panels to find any namespaces with numerous (say, 800-1000) jobs in either the `Pending` or `Running` state.  Adjust the dashboard's timespan to include at least a few hours prior to your alert about the SLO violation for jobs being promptly started.
+To find miners running numerous concurrent jobs from one or more accounts (a.k.a. namespaces), use the following DB query to find any namespaces with numerous (say, 800-1000) jobs in the `Pending` state.
 
-* ["CI Runners Service" -> "CI" -> "Jobs queue" -> "Running jobs on shared-runners"](https://dashboards.gitlab.net/d/000000159/ci?orgId=1&panelId=60&fullscreen&from=now-3h&to=now)
-* ["CI Runners Service" -> "CI" -> "Jobs queue" -> "Pending jobs with shared-runners enabled"](https://dashboards.gitlab.net/d/000000159/ci?orgId=1&panelId=33&fullscreen&from=now-3h&to=now)
+```psql
+##
+## Find one of the CI hosts
+## If needed use the [host-stats dashboard](https://dashboards.gitlab.net/d/bd2Kl9Imk/host-stats?orgId=1)
+##
+$ ssh patroni-ci-v14-03-db-gprd.c.gitlab-production.internal
+
+$ sudo gitlab-psql
+
+gitlabhq_production=# SELECT namespace_id, count(id) FROM ci_pending_builds GROUP BY namespace_id ORDER BY count(id) DESC LIMIT 10;
+
+## Example output
+ namespace_id | count
+--------------+-------
+     13264837 | 43325
+     33264816 | 32295
+     28868183 | 20800
+     53264790 | 14618
+     33264804 | 14016
+     23264777 | 12374
+     13264797 |  9838
+     32510040 |  8730
+     53264820 |  8406
+     66778311 |  5470
+(10 rows)
+```
 
 These namespace ids are all that the abuse-team needs to block the accounts and cancel the running or pending jobs, so if the situation is dire, skip ahead to the "Mitigation" step.
 
@@ -69,14 +93,14 @@ Caveats:
 
 #### Investigation
 
-To translate these namespace ids into namespace names and URLs, you can (a) run `/chatops run namespace <id>`, (b) query the Rails console, or (c) query the Postgres database directly.
+To translate these namespace ids into namespace names and URLs, you can (a) run `/chatops run namespace find <id>`, (b) query the Rails console, or (c) query the Postgres database directly.
 
 ##### Option A: ChatOps command
 
 The easiest way is to use this ChatOps command in Slack to lookup the namespace name:
 
 ```
-/chatops run namespace <namespace_id>
+/chatops run namespace find <namespace_id>
 ```
 
 ##### Option B: Database query
@@ -119,10 +143,16 @@ Connect to the Rails console server:
 ssh <username>-rails@gprd-console
 ```
 
-Put your namespace ids into the array at the start of this iterator expression:
+For a single namespace id:
 
 ```ruby
-%w[6334677 6336008].each { |id| n = Namespace.find(id); puts "#{id} (#{n.name}): https://gitlab.com/#{n.path}" }
+[ gprd ] production> Namespace.find_by_id(6334677)
+```
+
+For more than a single id, put your namespace ids into the array at the start of this iterator expression:
+
+```ruby
+%w[6334677 6336008].each { |id| n = Namespace.find(id); puts "#{id} (#{n.name}): https://gitlab.com/#{n.full_path}" }
 ```
 
 ##### Review the namespaces via the GitLab web UI
