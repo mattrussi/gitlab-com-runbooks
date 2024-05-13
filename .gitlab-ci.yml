@@ -662,7 +662,10 @@ rspec:
     - *avoid-merge-train-rule
     - <<: *if-merge-request-rule
       changes:
-        paths: *ruby-patterns
+        paths:
+          - "**/*.rb"
+          - "**/*.jsonnet"
+          - "**/*.libsonnet"
   script:
     - make jsonnet-bundle
     - gem install bundler --no-document -v $BUNDLER_VERSION
