@@ -102,7 +102,7 @@ prometheus = PeriodicQueries::PrometheusApi.new(
   config.prometheus_url,
   use_ssl: config.prom_use_ssl,
   tenant_id: config.prom_tenant_id,
-  auth_token: config.prom_auth_token
+  auth_header: config.prom_auth_header
 )
 prometheus.with_connection do |api|
   PeriodicQueries.perform_queries(topics, api)
