@@ -76,9 +76,17 @@ groups:
       tier: inf
       type: mimir
     expr: |
-      sum by () (
-        sli_aggregations:cortex_request_duration_seconds_bucket:rate_5m{job="mimir/distributor",le="1",namespace="mimir",route=~"/distributor\.Distributor/Push|/httpgrpc.*|(api_(v1|prom)_push)|otlp_v1_metrics",type="mimir"}
+      (
+        sum by () (
+          sli_aggregations:cortex_request_duration_seconds_bucket:rate_5m{job="mimir/distributor",le="0.5",namespace="mimir",route=~"/distributor\.Distributor/Push|/httpgrpc.*|(api_(v1|prom)_push)|otlp_v1_metrics",type="mimir"}
+        )
+        +
+        sum by () (
+          sli_aggregations:cortex_request_duration_seconds_bucket:rate_5m{job="mimir/distributor",le="1",namespace="mimir",route=~"/distributor\.Distributor/Push|/httpgrpc.*|(api_(v1|prom)_push)|otlp_v1_metrics",type="mimir"}
+        )
       )
+      /
+      2
   - record: gitlab_component_apdex:weight:score_5m
     labels:
       component: mimir_distributor
@@ -164,9 +172,17 @@ groups:
       tier: inf
       type: mimir
     expr: |
-      sum by () (
-        sli_aggregations:cortex_request_duration_seconds_bucket:rate_5m{job="mimir/ingester",le="1",namespace="mimir",route="/cortex.Ingester/Push",type="mimir"}
+      (
+        sum by () (
+          sli_aggregations:cortex_request_duration_seconds_bucket:rate_5m{job="mimir/ingester",le="0.1",namespace="mimir",route="/cortex.Ingester/Push",type="mimir"}
+        )
+        +
+        sum by () (
+          sli_aggregations:cortex_request_duration_seconds_bucket:rate_5m{job="mimir/ingester",le="1",namespace="mimir",route="/cortex.Ingester/Push",type="mimir"}
+        )
       )
+      /
+      2
   - record: gitlab_component_apdex:weight:score_5m
     labels:
       component: mimir_ingester
@@ -731,9 +747,17 @@ groups:
       tier: inf
       type: mimir
     expr: |
-      sum by () (
-        sli_aggregations:cortex_request_duration_seconds_bucket:rate_30m{job="mimir/distributor",le="1",namespace="mimir",route=~"/distributor\.Distributor/Push|/httpgrpc.*|(api_(v1|prom)_push)|otlp_v1_metrics",type="mimir"}
+      (
+        sum by () (
+          sli_aggregations:cortex_request_duration_seconds_bucket:rate_30m{job="mimir/distributor",le="0.5",namespace="mimir",route=~"/distributor\.Distributor/Push|/httpgrpc.*|(api_(v1|prom)_push)|otlp_v1_metrics",type="mimir"}
+        )
+        +
+        sum by () (
+          sli_aggregations:cortex_request_duration_seconds_bucket:rate_30m{job="mimir/distributor",le="1",namespace="mimir",route=~"/distributor\.Distributor/Push|/httpgrpc.*|(api_(v1|prom)_push)|otlp_v1_metrics",type="mimir"}
+        )
       )
+      /
+      2
   - record: gitlab_component_apdex:weight:score_30m
     labels:
       component: mimir_distributor
@@ -819,9 +843,17 @@ groups:
       tier: inf
       type: mimir
     expr: |
-      sum by () (
-        sli_aggregations:cortex_request_duration_seconds_bucket:rate_30m{job="mimir/ingester",le="1",namespace="mimir",route="/cortex.Ingester/Push",type="mimir"}
+      (
+        sum by () (
+          sli_aggregations:cortex_request_duration_seconds_bucket:rate_30m{job="mimir/ingester",le="0.1",namespace="mimir",route="/cortex.Ingester/Push",type="mimir"}
+        )
+        +
+        sum by () (
+          sli_aggregations:cortex_request_duration_seconds_bucket:rate_30m{job="mimir/ingester",le="1",namespace="mimir",route="/cortex.Ingester/Push",type="mimir"}
+        )
       )
+      /
+      2
   - record: gitlab_component_apdex:weight:score_30m
     labels:
       component: mimir_ingester
@@ -1386,9 +1418,17 @@ groups:
       tier: inf
       type: mimir
     expr: |
-      sum by () (
-        sli_aggregations:cortex_request_duration_seconds_bucket:rate_1h{job="mimir/distributor",le="1",namespace="mimir",route=~"/distributor\.Distributor/Push|/httpgrpc.*|(api_(v1|prom)_push)|otlp_v1_metrics",type="mimir"}
+      (
+        sum by () (
+          sli_aggregations:cortex_request_duration_seconds_bucket:rate_1h{job="mimir/distributor",le="0.5",namespace="mimir",route=~"/distributor\.Distributor/Push|/httpgrpc.*|(api_(v1|prom)_push)|otlp_v1_metrics",type="mimir"}
+        )
+        +
+        sum by () (
+          sli_aggregations:cortex_request_duration_seconds_bucket:rate_1h{job="mimir/distributor",le="1",namespace="mimir",route=~"/distributor\.Distributor/Push|/httpgrpc.*|(api_(v1|prom)_push)|otlp_v1_metrics",type="mimir"}
+        )
       )
+      /
+      2
   - record: gitlab_component_apdex:weight:score_1h
     labels:
       component: mimir_distributor
@@ -1474,9 +1514,17 @@ groups:
       tier: inf
       type: mimir
     expr: |
-      sum by () (
-        sli_aggregations:cortex_request_duration_seconds_bucket:rate_1h{job="mimir/ingester",le="1",namespace="mimir",route="/cortex.Ingester/Push",type="mimir"}
+      (
+        sum by () (
+          sli_aggregations:cortex_request_duration_seconds_bucket:rate_1h{job="mimir/ingester",le="0.1",namespace="mimir",route="/cortex.Ingester/Push",type="mimir"}
+        )
+        +
+        sum by () (
+          sli_aggregations:cortex_request_duration_seconds_bucket:rate_1h{job="mimir/ingester",le="1",namespace="mimir",route="/cortex.Ingester/Push",type="mimir"}
+        )
       )
+      /
+      2
   - record: gitlab_component_apdex:weight:score_1h
     labels:
       component: mimir_ingester
