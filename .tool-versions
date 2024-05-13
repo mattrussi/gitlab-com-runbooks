@@ -8,7 +8,7 @@ jb           0.5.1 # datasource=github-releases depName=jsonnet-bundler/jsonnet-
 jsonnet-tool 1.14.2 # datasource=gitlab-releases depName=gitlab-com/gl-infra/jsonnet-tool
 kubectl      1.28.9 # datasource=github-releases depName=kubernetes/kubernetes
 kubeconform  0.6.6 # datasource=github-releases depName=yannh/kubeconform
-nodejs       20.12.2 # datasource=node depName=nodejs/node
+nodejs       20.13.1 # datasource=node depName=nodejs/node
 pre-commit   3.7.1 # datasource=github-releases depName=pre-commit/pre-commit
 promtool     2.51.2 # datasource=github-releases depName=prometheus/prometheus
 python       system
