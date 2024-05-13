@@ -166,7 +166,7 @@ metricsCatalog.serviceDefinition({
       apdex: histogramApdex(
         histogram='cortex_querier_request_duration_seconds_bucket',
         selector=mimirQuerySelector + querierRouteSelector,
-        satisfiedThreshold=25,
+        satisfiedThreshold=25.0,
       ),
 
       requestRate: rateMetric(
@@ -204,7 +204,7 @@ metricsCatalog.serviceDefinition({
       apdex: histogramApdex(
         histogram='cortex_request_duration_seconds_bucket',
         selector=mimirQuerySelector + querierRouteSelector,
-        satisfiedThreshold=25,
+        satisfiedThreshold=25.0,
       ),
 
       requestRate: rateMetric(
@@ -243,7 +243,7 @@ metricsCatalog.serviceDefinition({
       apdex: histogramApdex(
         histogram='cortex_query_scheduler_queue_duration_seconds_bucket',
         selector=mimirSchedulerSelector,
-        satisfiedThreshold=5,
+        satisfiedThreshold=5.0,
       ),
 
       requestRate: rateMetric(
@@ -283,7 +283,7 @@ metricsCatalog.serviceDefinition({
       apdex: histogramApdex(
         histogram='cortex_request_duration_seconds_bucket',
         selector=mimirStoreGatewaySelector,
-        satisfiedThreshold=25,
+        satisfiedThreshold=25.0,
       ),
 
       requestRate: rateMetric(
@@ -325,7 +325,8 @@ metricsCatalog.serviceDefinition({
       apdex: histogramApdex(
         histogram='cortex_request_duration_seconds_bucket',
         selector=mimirQueryDistributorSelector,
-        satisfiedThreshold=1,
+        satisfiedThreshold=0.5,
+        toleratedThreshold=1.0,
       ),
 
       requestRate: rateMetric(
@@ -366,7 +367,8 @@ metricsCatalog.serviceDefinition({
       apdex: histogramApdex(
         histogram='cortex_request_duration_seconds_bucket',
         selector=mimirIngesterQuerySelector,
-        satisfiedThreshold=1,
+        satisfiedThreshold=0.1,
+        toleratedThreshold=1.0,
       ),
 
       requestRate: rateMetric(
