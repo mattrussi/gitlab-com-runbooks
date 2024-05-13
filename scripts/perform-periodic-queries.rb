@@ -13,15 +13,22 @@ config = Struct.new(
   :target_directory,
   :dry_run,
   :prom_tenant_id,
-  :prom_use_ssl
+  :prom_use_ssl,
+  :prom_auth_header
 ).new
 
 default_prom_url = 'https://mimir-internal.ops.gke.gitlab.net/prometheus'
+default_prom_tenant_id = 'gitlab-gprd'
+
 prom_url_key = 'PERIODIC_QUERY_PROMETHEUS_URL'
+prom_auth_header_key = 'PERIODIC_QUERY_PROMETHEUS_AUTH_HEADER'
+prom_tenant_id_key = 'PERIODIC_QUERY_PROMETHEUS_TENANT_ID'
+ssl_key = 'PERIODIC_QUERY_SSL'
 
 config.prometheus_url = ENV.fetch(prom_url_key, default_prom_url)
-config.prom_tenant_id = ENV.fetch('PERIODIC_QUERY_PROMETHEUS_TENANT_ID', 'gitlab-gprd')
-config.prom_use_ssl = ENV.fetch('PERIODIC_QUERY_SSL', 'true') == 'true'
+config.prom_tenant_id = ENV.fetch(prom_tenant_id_key, default_prom_tenant_id)
+config.prom_use_ssl = ENV.fetch(ssl_key, 'true') == 'true'
+config.prom_auth_header = ENV[prom_auth_header_key]
 
 config.gcp_keyfile = ENV["PERIODIC_QUERY_GCP_KEYFILE_PATH"]
 config.gcp_project = ENV["PERIODIC_QUERY_GCP_PROJECT"]
@@ -65,6 +72,12 @@ OptionParser.new do |options|
   options.separator(<<~ENVIRONMENT_VARIABLES)
   #{options.summary_indent}#{prom_url_key}
   #{options.summary_indent * 2}The URL to the prometheus-like instance to query. Defaults to '#{default_prom_url}'
+  #{options.summary_indent}#{prom_auth_header_key}
+  #{options.summary_indent * 2}The authorization header to the prometheus-like instance.
+  #{options.summary_indent}#{prom_tenant_id_key}
+  #{options.summary_indent * 2}The tenant ID to the prometheus-like instance to query. Defaults to '#{default_prom_tenant_id}'
+  #{options.summary_indent}#{ssl_key}
+  #{options.summary_indent * 2}The SSL setting to the prometheus-like instance. Defaults to 'true'
   #{options.summary_indent}PERIODIC_QUERY_GCP_KEYFILE_PATH
   #{options.summary_indent * 2}The keyfile to use to authenticate uploading to the GCS bucket.
   #{options.summary_indent}PERIODIC_QUERY_GCP_PROJECT
@@ -88,15 +101,19 @@ end
 prometheus = PeriodicQueries::PrometheusApi.new(
   config.prometheus_url,
   use_ssl: config.prom_use_ssl,
-  tenant_id: config.prom_tenant_id
+  tenant_id: config.prom_tenant_id,
+  auth_header: config.prom_auth_header
 )
 prometheus.with_connection do |api|
   PeriodicQueries.perform_queries(topics, api)
 end
 
+puts topics.map(&:summary).join("\n")
+exit_code = topics.all?(&:success?) ? 0 : 1
+
 PeriodicQueries.write_results(topics, config.target_directory, Time.now)
 
-exit 0 if config.gcp_project.nil? || config.gcs_bucket.nil? || config.gcp_keyfile.nil?
+exit exit_code if config.gcp_project.nil? || config.gcs_bucket.nil? || config.gcp_keyfile.nil?
 
 storage = PeriodicQueries::Storage.new(
   config.gcp_keyfile,
@@ -106,6 +123,4 @@ storage = PeriodicQueries::Storage.new(
 
 PeriodicQueries.upload_results(config.target_directory, storage)
 
-puts topics.map(&:summary).join("\n")
-
-exit 1 unless topics.all?(&:success?)
+exit exit_code

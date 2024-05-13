@@ -1229,7 +1229,19 @@ deploy-thanos-rules:production:
   extends:
     - .deploy-thanos-rules
 
+.mimir-query-auth:
+  secrets:
+    MIMIR_API_USER:
+      file: false
+      vault: shared/observability/tenants/runbooks/username@k8s
+    MIMIR_API_KEY:
+      file: false
+      vault: shared/observability/tenants/runbooks/password@k8s
+
 test-periodic-queries:
+  extends:
+    - .mimir-query-auth
+    - .id-tokens
   stage: test
   needs: []
   rules:
@@ -1247,11 +1259,15 @@ test-periodic-queries:
       when: manual
       allow_failure: true
   script:
+    - export PERIODIC_QUERY_PROMETHEUS_AUTH_HEADER="Basic $(echo -n "${MIMIR_API_USER}:${MIMIR_API_KEY}" | base64)"
     - gem install bundler --no-document -v $BUNDLER_VERSION
     - bundle install
     - bundle exec scripts/perform-periodic-queries.rb -n
 
 publish-periodic-queries:
+  extends:
+    - .mimir-query-auth
+    - .id-tokens
   stage: deploy
   rules:
     - *ops-gitlab-net-only-rule
@@ -1263,6 +1279,7 @@ publish-periodic-queries:
   tags:
     - k8s-workloads
   script:
+    - export PERIODIC_QUERY_MIMIR_AUTH_HEADER="Basic $(echo -n "${MIMIR_API_USER}:${MIMIR_API_KEY}" | base64)"
     - gem install bundler --no-document -v $BUNDLER_VERSION
     - bundle install
     - bundle exec scripts/perform-periodic-queries.rb

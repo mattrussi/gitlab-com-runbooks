@@ -9,10 +9,11 @@ module PeriodicQueries
       'instant' => 'api/v1/query' # https://prometheus.io/docs/prometheus/latest/querying/api/#instant-queries
     }.freeze
 
-    def initialize(url, tenant_id: nil, use_ssl: false)
+    def initialize(url, tenant_id: nil, use_ssl: false, auth_header: nil)
       @base_url = url
       @use_ssl = use_ssl
       @tenant_id = tenant_id
+      @auth_header = auth_header
     end
 
     def with_connection
@@ -26,7 +27,8 @@ module PeriodicQueries
 
     def perform_query(query)
       path = PATH_PER_QUERY.fetch(query.type)
-      query_uri = URI.join(base_url, path)
+      full_url = [base_url, path].join("/")
+      query_uri = URI(full_url)
       query_uri.query = URI.encode_www_form(query.params)
 
       get = Net::HTTP::Get.new(query_uri, headers)
@@ -38,7 +40,7 @@ module PeriodicQueries
 
     private
 
-    attr_reader :base_url, :use_ssl, :tenant_id
+    attr_reader :base_url, :use_ssl, :tenant_id, :auth_header
     attr_accessor :active_connection
 
     def uri
@@ -48,6 +50,7 @@ module PeriodicQueries
     def headers
       @headers ||= {}.tap do |h|
         h['X-Scope-OrgID'] = tenant_id if tenant_id
+        h['Authorization'] = auth_header if auth_header
       end
     end
   end

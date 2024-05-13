@@ -23,7 +23,9 @@ module PeriodicQueries
     end
 
     def summary
-      "#{response_status} #{name} (#{type}, params: #{params.keys.inspect})"
+      headline = "#{response_status} #{name} (#{type}, params: #{params.keys.inspect})"
+      body = response&.success? ? nil : response&.parsed_body
+      [headline, body].compact.join("\n")
     end
 
     def success?

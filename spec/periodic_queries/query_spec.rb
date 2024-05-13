@@ -2,6 +2,7 @@
 
 require 'spec_helper'
 require_relative '../../lib/periodic_queries/query'
+require_relative '../../lib/periodic_queries/prometheus_api'
 
 describe PeriodicQueries::Query do
   subject(:query) do
@@ -59,9 +60,9 @@ describe PeriodicQueries::Query do
       end
 
       it 'includes a failed status' do
-        query.response = instance_double(PeriodicQueries::PrometheusApi::Response, success?: false)
+        query.response = instance_double(PeriodicQueries::PrometheusApi::Response, success?: false, parsed_body: { error: "broken" })
 
-        expected = "❌ #{expected_text}"
+        expected = "❌ #{expected_text}\n{:error=>\"broken\"}"
 
         expect(query.summary).to eq(expected)
       end
