@@ -1275,7 +1275,7 @@ publish-periodic-queries:
   tags:
     - k8s-workloads
   script:
-    - export PERIODIC_QUERY_MIMIR_AUTH="$(echo -n "${MIMIR_API_USER}:${MIMIR_API_KEY}" | base64)"
+    - export PERIODIC_QUERY_MIMIR_AUTH_HEADER="Basic $(echo -n "${MIMIR_API_USER}:${MIMIR_API_KEY}" | base64)"
     - gem install bundler --no-document -v $BUNDLER_VERSION
     - bundle install
     - bundle exec scripts/perform-periodic-queries.rb

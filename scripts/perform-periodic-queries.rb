@@ -23,7 +23,7 @@ prom_url_key = 'PERIODIC_QUERY_PROMETHEUS_URL'
 config.prometheus_url = ENV.fetch(prom_url_key, default_prom_url)
 config.prom_tenant_id = ENV.fetch('PERIODIC_QUERY_PROMETHEUS_TENANT_ID', 'gitlab-gprd')
 config.prom_use_ssl = ENV.fetch('PERIODIC_QUERY_SSL', 'true') == 'true'
-config.prom_auth_token = ENV['PERIODIC_QUERY_PROMETHEUS_AUTH_HEADER']
+config.prom_auth_header = ENV['PERIODIC_QUERY_PROMETHEUS_AUTH_HEADER']
 
 config.gcp_keyfile = ENV["PERIODIC_QUERY_GCP_KEYFILE_PATH"]
 config.gcp_project = ENV["PERIODIC_QUERY_GCP_PROJECT"]
