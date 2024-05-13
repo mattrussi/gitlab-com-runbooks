@@ -7,6 +7,7 @@ groups:
   - alert: RedisDbLoadBalancingServicePrimaryServerTrafficCessation
     for: 5m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The primary_server SLI of the redis-db-load-balancing service (`{{ $labels.stage
         }}` stage) has not received any traffic in the past 30m
       description: |
@@ -42,6 +43,7 @@ groups:
   - alert: RedisDbLoadBalancingServicePrimaryServerTrafficAbsent
     for: 30m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The primary_server SLI of the redis-db-load-balancing service (`{{ $labels.stage
         }}` stage) has not reported any traffic in the past 30m
       description: |
@@ -79,6 +81,7 @@ groups:
   - alert: RedisDbLoadBalancingServiceRailsRedisClientApdexSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The rails_redis_client SLI of the redis-db-load-balancing service (`{{
         $labels.stage }}` stage) has an apdex violating SLO
       description: |
@@ -130,6 +133,7 @@ groups:
   - alert: RedisDbLoadBalancingServiceRailsRedisClientApdexSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The rails_redis_client SLI of the redis-db-load-balancing service (`{{
         $labels.stage }}` stage) has an apdex violating SLO
       description: |
@@ -181,6 +185,7 @@ groups:
   - alert: RedisDbLoadBalancingServiceRailsRedisClientErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The rails_redis_client SLI of the redis-db-load-balancing service (`{{
         $labels.stage }}` stage) has an error rate violating SLO
       description: |
@@ -229,6 +234,7 @@ groups:
   - alert: RedisDbLoadBalancingServiceRailsRedisClientErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The rails_redis_client SLI of the redis-db-load-balancing service (`{{
         $labels.stage }}` stage) has an error rate violating SLO
       description: |
@@ -277,6 +283,7 @@ groups:
   - alert: RedisDbLoadBalancingServiceRailsRedisClientTrafficCessation
     for: 5m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The rails_redis_client SLI of the redis-db-load-balancing service (`{{
         $labels.stage }}` stage) has not received any traffic in the past 30m
       description: |
@@ -312,6 +319,7 @@ groups:
   - alert: RedisDbLoadBalancingServiceRailsRedisClientTrafficAbsent
     for: 30m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The rails_redis_client SLI of the redis-db-load-balancing service (`{{
         $labels.stage }}` stage) has not reported any traffic in the past 30m
       description: |
@@ -349,6 +357,7 @@ groups:
   - alert: RedisDbLoadBalancingServiceSecondaryServersTrafficCessation
     for: 5m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The secondary_servers SLI of the redis-db-load-balancing service (`{{
         $labels.stage }}` stage) has not received any traffic in the past 30m
       description: |
@@ -384,6 +393,7 @@ groups:
   - alert: RedisDbLoadBalancingServiceSecondaryServersTrafficAbsent
     for: 30m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The secondary_servers SLI of the redis-db-load-balancing service (`{{
         $labels.stage }}` stage) has not reported any traffic in the past 30m
       description: |

@@ -7,6 +7,7 @@ groups:
   - alert: ThanosServiceRuleEvaluationApdexSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The rule_evaluation SLI of the thanos service (`{{ $labels.stage }}`
         stage) has an apdex violating SLO
       description: |
@@ -57,6 +58,7 @@ groups:
   - alert: ThanosServiceRuleEvaluationApdexSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The rule_evaluation SLI of the thanos service (`{{ $labels.stage }}`
         stage) has an apdex violating SLO
       description: |
@@ -107,6 +109,7 @@ groups:
   - alert: ThanosServiceRuleEvaluationErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The rule_evaluation SLI of the thanos service (`{{ $labels.stage }}`
         stage) has an error rate violating SLO
       description: |
@@ -163,6 +166,7 @@ groups:
   - alert: ThanosServiceRuleEvaluationErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The rule_evaluation SLI of the thanos service (`{{ $labels.stage }}`
         stage) has an error rate violating SLO
       description: |
@@ -219,6 +223,7 @@ groups:
   - alert: ThanosServiceRuleEvaluationTrafficCessation
     for: 5m
     annotations:
+      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The rule_evaluation SLI of the thanos service (`{{ $labels.stage }}`
         stage) has not received any traffic in the past 30m
       description: |
@@ -260,6 +265,7 @@ groups:
   - alert: ThanosServiceRuleEvaluationTrafficAbsent
     for: 30m
     annotations:
+      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The rule_evaluation SLI of the thanos service (`{{ $labels.stage }}`
         stage) has not reported any traffic in the past 30m
       description: |
@@ -303,6 +309,7 @@ groups:
   - alert: ThanosServiceThanosCompactorErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The thanos_compactor SLI of the thanos service (`{{ $labels.stage }}`
         stage) has an error rate violating SLO
       description: |
@@ -351,6 +358,7 @@ groups:
   - alert: ThanosServiceThanosCompactorErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The thanos_compactor SLI of the thanos service (`{{ $labels.stage }}`
         stage) has an error rate violating SLO
       description: |
@@ -399,6 +407,7 @@ groups:
   - alert: ThanosServiceThanosMemcachedApdexSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The thanos_memcached SLI of the thanos service (`{{ $labels.stage }}`
         stage) has an apdex violating SLO
       description: |
@@ -450,6 +459,7 @@ groups:
   - alert: ThanosServiceThanosMemcachedApdexSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The thanos_memcached SLI of the thanos service (`{{ $labels.stage }}`
         stage) has an apdex violating SLO
       description: |
@@ -501,6 +511,7 @@ groups:
   - alert: ThanosServiceThanosMemcachedErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The thanos_memcached SLI of the thanos service (`{{ $labels.stage }}`
         stage) has an error rate violating SLO
       description: |
@@ -549,6 +560,7 @@ groups:
   - alert: ThanosServiceThanosMemcachedErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The thanos_memcached SLI of the thanos service (`{{ $labels.stage }}`
         stage) has an error rate violating SLO
       description: |
@@ -597,6 +609,7 @@ groups:
   - alert: ThanosServiceThanosQueryApdexSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The thanos_query SLI of the thanos service (`{{ $labels.stage }}` stage)
         has an apdex violating SLO
       description: |
@@ -648,6 +661,7 @@ groups:
   - alert: ThanosServiceThanosQueryApdexSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The thanos_query SLI of the thanos service (`{{ $labels.stage }}` stage)
         has an apdex violating SLO
       description: |
@@ -699,6 +713,7 @@ groups:
   - alert: ThanosServiceThanosQueryErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The thanos_query SLI of the thanos service (`{{ $labels.stage }}` stage)
         has an error rate violating SLO
       description: |
@@ -747,6 +762,7 @@ groups:
   - alert: ThanosServiceThanosQueryErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The thanos_query SLI of the thanos service (`{{ $labels.stage }}` stage)
         has an error rate violating SLO
       description: |
@@ -795,6 +811,7 @@ groups:
   - alert: ThanosServiceThanosQueryTrafficCessation
     for: 5m
     annotations:
+      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The thanos_query SLI of the thanos service (`{{ $labels.stage }}` stage)
         has not received any traffic in the past 30m
       description: |
@@ -830,6 +847,7 @@ groups:
   - alert: ThanosServiceThanosQueryTrafficAbsent
     for: 30m
     annotations:
+      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The thanos_query SLI of the thanos service (`{{ $labels.stage }}` stage)
         has not reported any traffic in the past 30m
       description: |
@@ -867,6 +885,7 @@ groups:
   - alert: ThanosServiceThanosQueryFrontendApdexSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The thanos_query_frontend SLI of the thanos service (`{{ $labels.stage
         }}` stage) has an apdex violating SLO
       description: |
@@ -918,6 +937,7 @@ groups:
   - alert: ThanosServiceThanosQueryFrontendApdexSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The thanos_query_frontend SLI of the thanos service (`{{ $labels.stage
         }}` stage) has an apdex violating SLO
       description: |
@@ -969,6 +989,7 @@ groups:
   - alert: ThanosServiceThanosQueryFrontendErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The thanos_query_frontend SLI of the thanos service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
@@ -1017,6 +1038,7 @@ groups:
   - alert: ThanosServiceThanosQueryFrontendErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The thanos_query_frontend SLI of the thanos service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
@@ -1065,6 +1087,7 @@ groups:
   - alert: ThanosServiceThanosQueryFrontendTrafficCessation
     for: 5m
     annotations:
+      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The thanos_query_frontend SLI of the thanos service (`{{ $labels.stage
         }}` stage) has not received any traffic in the past 30m
       description: |
@@ -1100,6 +1123,7 @@ groups:
   - alert: ThanosServiceThanosQueryFrontendTrafficAbsent
     for: 30m
     annotations:
+      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The thanos_query_frontend SLI of the thanos service (`{{ $labels.stage
         }}` stage) has not reported any traffic in the past 30m
       description: |
@@ -1137,6 +1161,7 @@ groups:
   - alert: ThanosServiceThanosRuleAlertSenderErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The thanos_rule_alert_sender SLI of the thanos service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
@@ -1185,6 +1210,7 @@ groups:
   - alert: ThanosServiceThanosRuleAlertSenderErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The thanos_rule_alert_sender SLI of the thanos service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
@@ -1233,6 +1259,7 @@ groups:
   - alert: ThanosServiceThanosRuleAlertSenderTrafficCessation
     for: 5m
     annotations:
+      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The thanos_rule_alert_sender SLI of the thanos service (`{{ $labels.stage
         }}` stage) has not received any traffic in the past 30m
       description: |
@@ -1268,6 +1295,7 @@ groups:
   - alert: ThanosServiceThanosRuleAlertSenderTrafficAbsent
     for: 30m
     annotations:
+      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The thanos_rule_alert_sender SLI of the thanos service (`{{ $labels.stage
         }}` stage) has not reported any traffic in the past 30m
       description: |
@@ -1305,6 +1333,7 @@ groups:
   - alert: ThanosServiceThanosStoreApdexSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The thanos_store SLI of the thanos service (`{{ $labels.stage }}` stage)
         has an apdex violating SLO
       description: |
@@ -1356,6 +1385,7 @@ groups:
   - alert: ThanosServiceThanosStoreApdexSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The thanos_store SLI of the thanos service (`{{ $labels.stage }}` stage)
         has an apdex violating SLO
       description: |
@@ -1407,6 +1437,7 @@ groups:
   - alert: ThanosServiceThanosStoreErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The thanos_store SLI of the thanos service (`{{ $labels.stage }}` stage)
         has an error rate violating SLO
       description: |
@@ -1455,6 +1486,7 @@ groups:
   - alert: ThanosServiceThanosStoreErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The thanos_store SLI of the thanos service (`{{ $labels.stage }}` stage)
         has an error rate violating SLO
       description: |
@@ -1503,6 +1535,7 @@ groups:
   - alert: ThanosServiceThanosStoreTrafficCessation
     for: 5m
     annotations:
+      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The thanos_store SLI of the thanos service (`{{ $labels.stage }}` stage)
         has not received any traffic in the past 30m
       description: |
@@ -1538,6 +1571,7 @@ groups:
   - alert: ThanosServiceThanosStoreTrafficAbsent
     for: 30m
     annotations:
+      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The thanos_store SLI of the thanos service (`{{ $labels.stage }}` stage)
         has not reported any traffic in the past 30m
       description: |

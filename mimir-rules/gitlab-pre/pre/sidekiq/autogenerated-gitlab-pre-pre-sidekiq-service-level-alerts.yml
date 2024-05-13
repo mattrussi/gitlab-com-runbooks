@@ -7,6 +7,7 @@ groups:
   - alert: SidekiqServiceEnqueuedJobsTrafficCessation
     for: 5m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The enqueued_jobs SLI of the sidekiq service (`{{ $labels.stage }}` stage)
         has not received any traffic in the past 30m
       description: |
@@ -42,6 +43,7 @@ groups:
   - alert: SidekiqServiceEnqueuedJobsTrafficAbsent
     for: 30m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The enqueued_jobs SLI of the sidekiq service (`{{ $labels.stage }}` stage)
         has not reported any traffic in the past 30m
       description: |
@@ -79,6 +81,7 @@ groups:
   - alert: SidekiqServiceLlmCompletionApdexSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The llm_completion SLI of the sidekiq service (`{{ $labels.stage }}`
         stage) has an apdex violating SLO
       description: |
@@ -130,6 +133,7 @@ groups:
   - alert: SidekiqServiceLlmCompletionApdexSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The llm_completion SLI of the sidekiq service (`{{ $labels.stage }}`
         stage) has an apdex violating SLO
       description: |
@@ -181,6 +185,7 @@ groups:
   - alert: SidekiqServiceLlmCompletionErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The llm_completion SLI of the sidekiq service (`{{ $labels.stage }}`
         stage) has an error rate violating SLO
       description: |
@@ -236,6 +241,7 @@ groups:
   - alert: SidekiqServiceLlmCompletionErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The llm_completion SLI of the sidekiq service (`{{ $labels.stage }}`
         stage) has an error rate violating SLO
       description: |
@@ -291,6 +297,7 @@ groups:
   - alert: SidekiqServiceLlmCompletionTrafficCessation
     for: 5m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The llm_completion SLI of the sidekiq service (`{{ $labels.stage }}`
         stage) has not received any traffic in the past 30m
       description: |
@@ -333,6 +340,7 @@ groups:
   - alert: SidekiqServiceLlmCompletionTrafficAbsent
     for: 30m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The llm_completion SLI of the sidekiq service (`{{ $labels.stage }}`
         stage) has not reported any traffic in the past 30m
       description: |
@@ -377,6 +385,7 @@ groups:
   - alert: SidekiqServiceSidekiqExecutionApdexSLOViolationSingleShard
     for: 10m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The sidekiq_execution SLI of the sidekiq service on shard `{{ $labels.shard
         }}` has an apdex violating SLO
       description: |
@@ -426,6 +435,7 @@ groups:
   - alert: SidekiqServiceSidekiqExecutionApdexSLOViolationSingleShard
     for: 10m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The sidekiq_execution SLI of the sidekiq service on shard `{{ $labels.shard
         }}` has an apdex violating SLO
       description: |
@@ -475,6 +485,7 @@ groups:
   - alert: SidekiqServiceSidekiqExecutionApdexSLOViolationSingleShard
     for: 10m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The sidekiq_execution SLI of the sidekiq service on shard `{{ $labels.shard
         }}` has an apdex violating SLO
       description: |
@@ -524,6 +535,7 @@ groups:
   - alert: SidekiqServiceSidekiqExecutionApdexSLOViolationSingleShard
     for: 10m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The sidekiq_execution SLI of the sidekiq service on shard `{{ $labels.shard
         }}` has an apdex violating SLO
       description: |
@@ -573,6 +585,7 @@ groups:
   - alert: SidekiqServiceSidekiqExecutionApdexSLOViolationSingleShard
     for: 10m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The sidekiq_execution SLI of the sidekiq service on shard `{{ $labels.shard
         }}` has an apdex violating SLO
       description: |
@@ -622,6 +635,7 @@ groups:
   - alert: SidekiqServiceSidekiqExecutionApdexSLOViolationSingleShard
     for: 10m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The sidekiq_execution SLI of the sidekiq service on shard `{{ $labels.shard
         }}` has an apdex violating SLO
       description: |
@@ -671,6 +685,7 @@ groups:
   - alert: SidekiqServiceSidekiqExecutionApdexSLOViolationSingleShard
     for: 10m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The sidekiq_execution SLI of the sidekiq service on shard `{{ $labels.shard
         }}` has an apdex violating SLO
       description: |
@@ -720,6 +735,7 @@ groups:
   - alert: SidekiqServiceSidekiqExecutionApdexSLOViolationSingleShard
     for: 10m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The sidekiq_execution SLI of the sidekiq service on shard `{{ $labels.shard
         }}` has an apdex violating SLO
       description: |
@@ -769,6 +785,7 @@ groups:
   - alert: SidekiqServiceSidekiqExecutionErrorSLOViolationSingleShard
     for: 10m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The sidekiq_execution SLI of the sidekiq service on shard `{{ $labels.shard
         }}` has an error rate violating SLO
       description: |
@@ -822,6 +839,7 @@ groups:
   - alert: SidekiqServiceSidekiqExecutionErrorSLOViolationSingleShard
     for: 10m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The sidekiq_execution SLI of the sidekiq service on shard `{{ $labels.shard
         }}` has an error rate violating SLO
       description: |
@@ -875,6 +893,7 @@ groups:
   - alert: SidekiqServiceSidekiqExecutionTrafficCessationSingleShard
     for: 5m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The sidekiq_execution SLI of the sidekiq service on shard `{{ $labels.shard
         }}` has not received any traffic in the past 30m
       description: |
@@ -915,6 +934,7 @@ groups:
   - alert: SidekiqServiceSidekiqExecutionTrafficAbsentSingleShard
     for: 30m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The sidekiq_execution SLI of the sidekiq service on shard `{{ $labels.shard
         }}` has not reported any traffic in the past 30m
       description: |
@@ -957,6 +977,7 @@ groups:
   - alert: SidekiqServiceSidekiqExecutionWithExternalDependencyApdexSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The sidekiq_execution_with_external_dependency SLI of the sidekiq service
         (`{{ $labels.stage }}` stage) has an apdex violating SLO
       description: |
@@ -1002,6 +1023,7 @@ groups:
   - alert: SidekiqServiceSidekiqExecutionWithExternalDependencyApdexSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The sidekiq_execution_with_external_dependency SLI of the sidekiq service
         (`{{ $labels.stage }}` stage) has an apdex violating SLO
       description: |
@@ -1047,6 +1069,7 @@ groups:
   - alert: SidekiqServiceSidekiqExecutionWithExternalDependencyErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The sidekiq_execution_with_external_dependency SLI of the sidekiq service
         (`{{ $labels.stage }}` stage) has an error rate violating SLO
       description: |
@@ -1096,6 +1119,7 @@ groups:
   - alert: SidekiqServiceSidekiqExecutionWithExternalDependencyErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The sidekiq_execution_with_external_dependency SLI of the sidekiq service
         (`{{ $labels.stage }}` stage) has an error rate violating SLO
       description: |
@@ -1145,6 +1169,7 @@ groups:
   - alert: SidekiqServiceSidekiqExecutionWithExternalDependencyTrafficCessation
     for: 5m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The sidekiq_execution_with_external_dependency SLI of the sidekiq service
         (`{{ $labels.stage }}` stage) has not received any traffic in the past 30m
       description: |
@@ -1181,6 +1206,7 @@ groups:
   - alert: SidekiqServiceSidekiqExecutionWithExternalDependencyTrafficAbsent
     for: 30m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The sidekiq_execution_with_external_dependency SLI of the sidekiq service
         (`{{ $labels.stage }}` stage) has not reported any traffic in the past 30m
       description: |
@@ -1219,6 +1245,7 @@ groups:
   - alert: SidekiqServiceSidekiqQueueingApdexSLOViolationSingleShard
     for: 10m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The sidekiq_queueing SLI of the sidekiq service on shard `{{ $labels.shard
         }}` has an apdex violating SLO
       description: |
@@ -1268,6 +1295,7 @@ groups:
   - alert: SidekiqServiceSidekiqQueueingApdexSLOViolationSingleShard
     for: 10m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The sidekiq_queueing SLI of the sidekiq service on shard `{{ $labels.shard
         }}` has an apdex violating SLO
       description: |
@@ -1317,6 +1345,7 @@ groups:
   - alert: SidekiqServiceSidekiqQueueingApdexSLOViolationSingleShard
     for: 10m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The sidekiq_queueing SLI of the sidekiq service on shard `{{ $labels.shard
         }}` has an apdex violating SLO
       description: |
@@ -1366,6 +1395,7 @@ groups:
   - alert: SidekiqServiceSidekiqQueueingApdexSLOViolationSingleShard
     for: 10m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The sidekiq_queueing SLI of the sidekiq service on shard `{{ $labels.shard
         }}` has an apdex violating SLO
       description: |
@@ -1415,6 +1445,7 @@ groups:
   - alert: SidekiqServiceSidekiqQueueingTrafficCessationSingleShard
     for: 5m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The sidekiq_queueing SLI of the sidekiq service on shard `{{ $labels.shard
         }}` has not received any traffic in the past 30m
       description: |
@@ -1455,6 +1486,7 @@ groups:
   - alert: SidekiqServiceSidekiqQueueingTrafficAbsentSingleShard
     for: 30m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The sidekiq_queueing SLI of the sidekiq service on shard `{{ $labels.shard
         }}` has not reported any traffic in the past 30m
       description: |
@@ -1497,6 +1529,7 @@ groups:
   - alert: SidekiqServiceSidekiqQueueingWithExternalDependencyApdexSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The sidekiq_queueing_with_external_dependency SLI of the sidekiq service
         (`{{ $labels.stage }}` stage) has an apdex violating SLO
       description: |
@@ -1542,6 +1575,7 @@ groups:
   - alert: SidekiqServiceSidekiqQueueingWithExternalDependencyApdexSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The sidekiq_queueing_with_external_dependency SLI of the sidekiq service
         (`{{ $labels.stage }}` stage) has an apdex violating SLO
       description: |
@@ -1587,6 +1621,7 @@ groups:
   - alert: SidekiqServiceSidekiqQueueingWithExternalDependencyTrafficCessation
     for: 5m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The sidekiq_queueing_with_external_dependency SLI of the sidekiq service
         (`{{ $labels.stage }}` stage) has not received any traffic in the past 30m
       description: |
@@ -1623,6 +1658,7 @@ groups:
   - alert: SidekiqServiceSidekiqQueueingWithExternalDependencyTrafficAbsent
     for: 30m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The sidekiq_queueing_with_external_dependency SLI of the sidekiq service
         (`{{ $labels.stage }}` stage) has not reported any traffic in the past 30m
       description: |

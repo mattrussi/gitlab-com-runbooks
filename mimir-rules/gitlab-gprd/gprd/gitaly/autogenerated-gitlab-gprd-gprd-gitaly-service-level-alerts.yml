@@ -7,6 +7,7 @@ groups:
   - alert: GitalyServiceGoserverApdexSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The goserver SLI of the gitaly service (`{{ $labels.stage }}` stage)
         has an apdex violating SLO
       description: |
@@ -62,6 +63,7 @@ groups:
   - alert: GitalyServiceGoserverApdexSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The goserver SLI of the gitaly service (`{{ $labels.stage }}` stage)
         has an apdex violating SLO
       description: |
@@ -117,6 +119,7 @@ groups:
   - alert: GitalyServiceGoserverApdexSLOViolationSingleNode
     for: 10m
     annotations:
+      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The goserver SLI of the gitaly service on node `{{ $labels.fqdn }}` has
         an apdex violating SLO
       description: |
@@ -175,6 +178,7 @@ groups:
   - alert: GitalyServiceGoserverApdexSLOViolationSingleNode
     for: 10m
     annotations:
+      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The goserver SLI of the gitaly service on node `{{ $labels.fqdn }}` has
         an apdex violating SLO
       description: |
@@ -233,6 +237,7 @@ groups:
   - alert: GitalyServiceGoserverErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The goserver SLI of the gitaly service (`{{ $labels.stage }}` stage)
         has an error rate violating SLO
       description: |
@@ -283,6 +288,7 @@ groups:
   - alert: GitalyServiceGoserverErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The goserver SLI of the gitaly service (`{{ $labels.stage }}` stage)
         has an error rate violating SLO
       description: |
@@ -333,6 +339,7 @@ groups:
   - alert: GitalyServiceGoserverErrorSLOViolationSingleNode
     for: 10m
     annotations:
+      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The goserver SLI of the gitaly service on node `{{ $labels.fqdn }}` has
         an error rate violating SLO
       description: |
@@ -386,6 +393,7 @@ groups:
   - alert: GitalyServiceGoserverErrorSLOViolationSingleNode
     for: 10m
     annotations:
+      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The goserver SLI of the gitaly service on node `{{ $labels.fqdn }}` has
         an error rate violating SLO
       description: |
@@ -439,6 +447,7 @@ groups:
   - alert: GitalyServiceGoserverTrafficCessation
     for: 5m
     annotations:
+      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The goserver SLI of the gitaly service (`{{ $labels.stage }}` stage)
         has not received any traffic in the past 30m
       description: |
@@ -474,6 +483,7 @@ groups:
   - alert: GitalyServiceGoserverTrafficAbsent
     for: 30m
     annotations:
+      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The goserver SLI of the gitaly service (`{{ $labels.stage }}` stage)
         has not reported any traffic in the past 30m
       description: |
@@ -511,6 +521,7 @@ groups:
   - alert: GitalyServiceGoserverTrafficCessationSingleNode
     for: 5m
     annotations:
+      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The goserver SLI of the gitaly service on node `{{ $labels.fqdn }}` has
         not received any traffic in the past 30m
       description: |
@@ -549,6 +560,7 @@ groups:
   - alert: GitalyServiceGoserverTrafficAbsentSingleNode
     for: 30m
     annotations:
+      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The goserver SLI of the gitaly service on node `{{ $labels.fqdn }}` has
         not reported any traffic in the past 30m
       description: |

@@ -7,6 +7,7 @@ groups:
   - alert: OpsGitlabNetServiceGitlabSshdApdexSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The gitlab_sshd SLI of the ops-gitlab-net service (`{{ $labels.stage
         }}` stage) has an apdex violating SLO
       description: |
@@ -58,6 +59,7 @@ groups:
   - alert: OpsGitlabNetServiceGitlabSshdApdexSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The gitlab_sshd SLI of the ops-gitlab-net service (`{{ $labels.stage
         }}` stage) has an apdex violating SLO
       description: |
@@ -109,6 +111,7 @@ groups:
   - alert: OpsGitlabNetServiceGitlabSshdErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The gitlab_sshd SLI of the ops-gitlab-net service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
@@ -157,6 +160,7 @@ groups:
   - alert: OpsGitlabNetServiceGitlabSshdErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The gitlab_sshd SLI of the ops-gitlab-net service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
@@ -205,6 +209,7 @@ groups:
   - alert: OpsGitlabNetServiceGitlabSshdTrafficCessation
     for: 5m
     annotations:
+      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The gitlab_sshd SLI of the ops-gitlab-net service (`{{ $labels.stage
         }}` stage) has not received any traffic in the past 30m
       description: |
@@ -240,6 +245,7 @@ groups:
   - alert: OpsGitlabNetServiceGitlabSshdTrafficAbsent
     for: 30m
     annotations:
+      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The gitlab_sshd SLI of the ops-gitlab-net service (`{{ $labels.stage
         }}` stage) has not reported any traffic in the past 30m
       description: |
@@ -277,6 +283,7 @@ groups:
   - alert: OpsGitlabNetServiceGoserverApdexSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The goserver SLI of the ops-gitlab-net service (`{{ $labels.stage }}`
         stage) has an apdex violating SLO
       description: |
@@ -332,6 +339,7 @@ groups:
   - alert: OpsGitlabNetServiceGoserverApdexSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The goserver SLI of the ops-gitlab-net service (`{{ $labels.stage }}`
         stage) has an apdex violating SLO
       description: |
@@ -387,6 +395,7 @@ groups:
   - alert: OpsGitlabNetServiceGoserverErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The goserver SLI of the ops-gitlab-net service (`{{ $labels.stage }}`
         stage) has an error rate violating SLO
       description: |
@@ -437,6 +446,7 @@ groups:
   - alert: OpsGitlabNetServiceGoserverErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The goserver SLI of the ops-gitlab-net service (`{{ $labels.stage }}`
         stage) has an error rate violating SLO
       description: |
@@ -487,6 +497,7 @@ groups:
   - alert: OpsGitlabNetServiceGoserverTrafficCessation
     for: 5m
     annotations:
+      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The goserver SLI of the ops-gitlab-net service (`{{ $labels.stage }}`
         stage) has not received any traffic in the past 30m
       description: |
@@ -522,6 +533,7 @@ groups:
   - alert: OpsGitlabNetServiceGoserverTrafficAbsent
     for: 30m
     annotations:
+      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The goserver SLI of the ops-gitlab-net service (`{{ $labels.stage }}`
         stage) has not reported any traffic in the past 30m
       description: |
@@ -559,6 +571,7 @@ groups:
   - alert: OpsGitlabNetServicePumaApdexSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The puma SLI of the ops-gitlab-net service (`{{ $labels.stage }}` stage)
         has an apdex violating SLO
       description: |
@@ -603,6 +616,7 @@ groups:
   - alert: OpsGitlabNetServicePumaApdexSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The puma SLI of the ops-gitlab-net service (`{{ $labels.stage }}` stage)
         has an apdex violating SLO
       description: |
@@ -647,6 +661,7 @@ groups:
   - alert: OpsGitlabNetServicePumaErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The puma SLI of the ops-gitlab-net service (`{{ $labels.stage }}` stage)
         has an error rate violating SLO
       description: |
@@ -695,6 +710,7 @@ groups:
   - alert: OpsGitlabNetServicePumaErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The puma SLI of the ops-gitlab-net service (`{{ $labels.stage }}` stage)
         has an error rate violating SLO
       description: |
@@ -743,6 +759,7 @@ groups:
   - alert: OpsGitlabNetServicePumaTrafficCessation
     for: 5m
     annotations:
+      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The puma SLI of the ops-gitlab-net service (`{{ $labels.stage }}` stage)
         has not received any traffic in the past 30m
       description: |
@@ -778,6 +795,7 @@ groups:
   - alert: OpsGitlabNetServicePumaTrafficAbsent
     for: 30m
     annotations:
+      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The puma SLI of the ops-gitlab-net service (`{{ $labels.stage }}` stage)
         has not reported any traffic in the past 30m
       description: |
@@ -815,6 +833,7 @@ groups:
   - alert: OpsGitlabNetServiceRailsSqlApdexSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The rails_sql SLI of the ops-gitlab-net service (`{{ $labels.stage }}`
         stage) has an apdex violating SLO
       description: |
@@ -866,6 +885,7 @@ groups:
   - alert: OpsGitlabNetServiceRailsSqlApdexSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The rails_sql SLI of the ops-gitlab-net service (`{{ $labels.stage }}`
         stage) has an apdex violating SLO
       description: |
@@ -917,6 +937,7 @@ groups:
   - alert: OpsGitlabNetServiceRailsSqlTrafficCessation
     for: 5m
     annotations:
+      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The rails_sql SLI of the ops-gitlab-net service (`{{ $labels.stage }}`
         stage) has not received any traffic in the past 30m
       description: |
@@ -952,6 +973,7 @@ groups:
   - alert: OpsGitlabNetServiceRailsSqlTrafficAbsent
     for: 30m
     annotations:
+      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The rails_sql SLI of the ops-gitlab-net service (`{{ $labels.stage }}`
         stage) has not reported any traffic in the past 30m
       description: |
@@ -989,6 +1011,7 @@ groups:
   - alert: OpsGitlabNetServiceRegistryServerApdexSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The registry_server SLI of the ops-gitlab-net service (`{{ $labels.stage
         }}` stage) has an apdex violating SLO
       description: |
@@ -1040,6 +1063,7 @@ groups:
   - alert: OpsGitlabNetServiceRegistryServerApdexSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The registry_server SLI of the ops-gitlab-net service (`{{ $labels.stage
         }}` stage) has an apdex violating SLO
       description: |
@@ -1091,6 +1115,7 @@ groups:
   - alert: OpsGitlabNetServiceRegistryServerErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The registry_server SLI of the ops-gitlab-net service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
@@ -1139,6 +1164,7 @@ groups:
   - alert: OpsGitlabNetServiceRegistryServerErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The registry_server SLI of the ops-gitlab-net service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
@@ -1187,6 +1213,7 @@ groups:
   - alert: OpsGitlabNetServiceRegistryServerTrafficCessation
     for: 5m
     annotations:
+      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The registry_server SLI of the ops-gitlab-net service (`{{ $labels.stage
         }}` stage) has not received any traffic in the past 30m
       description: |
@@ -1222,6 +1249,7 @@ groups:
   - alert: OpsGitlabNetServiceRegistryServerTrafficAbsent
     for: 30m
     annotations:
+      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The registry_server SLI of the ops-gitlab-net service (`{{ $labels.stage
         }}` stage) has not reported any traffic in the past 30m
       description: |
@@ -1259,6 +1287,7 @@ groups:
   - alert: OpsGitlabNetServiceSidekiqExecutionApdexSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The sidekiq_execution SLI of the ops-gitlab-net service (`{{ $labels.stage
         }}` stage) has an apdex violating SLO
       description: |
@@ -1305,6 +1334,7 @@ groups:
   - alert: OpsGitlabNetServiceSidekiqExecutionApdexSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The sidekiq_execution SLI of the ops-gitlab-net service (`{{ $labels.stage
         }}` stage) has an apdex violating SLO
       description: |
@@ -1351,6 +1381,7 @@ groups:
   - alert: OpsGitlabNetServiceSidekiqExecutionErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The sidekiq_execution SLI of the ops-gitlab-net service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
@@ -1401,6 +1432,7 @@ groups:
   - alert: OpsGitlabNetServiceSidekiqExecutionErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The sidekiq_execution SLI of the ops-gitlab-net service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
@@ -1451,6 +1483,7 @@ groups:
   - alert: OpsGitlabNetServiceSidekiqExecutionTrafficCessation
     for: 5m
     annotations:
+      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The sidekiq_execution SLI of the ops-gitlab-net service (`{{ $labels.stage
         }}` stage) has not received any traffic in the past 30m
       description: |
@@ -1488,6 +1521,7 @@ groups:
   - alert: OpsGitlabNetServiceSidekiqExecutionTrafficAbsent
     for: 30m
     annotations:
+      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The sidekiq_execution SLI of the ops-gitlab-net service (`{{ $labels.stage
         }}` stage) has not reported any traffic in the past 30m
       description: |
@@ -1527,6 +1561,7 @@ groups:
   - alert: OpsGitlabNetServiceSidekiqQueueingApdexSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The sidekiq_queueing SLI of the ops-gitlab-net service (`{{ $labels.stage
         }}` stage) has an apdex violating SLO
       description: |
@@ -1573,6 +1608,7 @@ groups:
   - alert: OpsGitlabNetServiceSidekiqQueueingApdexSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The sidekiq_queueing SLI of the ops-gitlab-net service (`{{ $labels.stage
         }}` stage) has an apdex violating SLO
       description: |
@@ -1619,6 +1655,7 @@ groups:
   - alert: OpsGitlabNetServiceSidekiqQueueingTrafficCessation
     for: 5m
     annotations:
+      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The sidekiq_queueing SLI of the ops-gitlab-net service (`{{ $labels.stage
         }}` stage) has not received any traffic in the past 30m
       description: |
@@ -1656,6 +1693,7 @@ groups:
   - alert: OpsGitlabNetServiceSidekiqQueueingTrafficAbsent
     for: 30m
     annotations:
+      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The sidekiq_queueing SLI of the ops-gitlab-net service (`{{ $labels.stage
         }}` stage) has not reported any traffic in the past 30m
       description: |
@@ -1695,6 +1733,7 @@ groups:
   - alert: OpsGitlabNetServiceWorkhorseApdexSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The workhorse SLI of the ops-gitlab-net service (`{{ $labels.stage }}`
         stage) has an apdex violating SLO
       description: |
@@ -1746,6 +1785,7 @@ groups:
   - alert: OpsGitlabNetServiceWorkhorseApdexSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The workhorse SLI of the ops-gitlab-net service (`{{ $labels.stage }}`
         stage) has an apdex violating SLO
       description: |
@@ -1797,6 +1837,7 @@ groups:
   - alert: OpsGitlabNetServiceWorkhorseErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The workhorse SLI of the ops-gitlab-net service (`{{ $labels.stage }}`
         stage) has an error rate violating SLO
       description: |
@@ -1845,6 +1886,7 @@ groups:
   - alert: OpsGitlabNetServiceWorkhorseErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The workhorse SLI of the ops-gitlab-net service (`{{ $labels.stage }}`
         stage) has an error rate violating SLO
       description: |
@@ -1893,6 +1935,7 @@ groups:
   - alert: OpsGitlabNetServiceWorkhorseTrafficCessation
     for: 5m
     annotations:
+      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The workhorse SLI of the ops-gitlab-net service (`{{ $labels.stage }}`
         stage) has not received any traffic in the past 30m
       description: |
@@ -1928,6 +1971,7 @@ groups:
   - alert: OpsGitlabNetServiceWorkhorseTrafficAbsent
     for: 30m
     annotations:
+      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The workhorse SLI of the ops-gitlab-net service (`{{ $labels.stage }}`
         stage) has not reported any traffic in the past 30m
       description: |

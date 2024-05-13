@@ -7,6 +7,7 @@ groups:
   - alert: KasServiceGrpcRequestsApdexSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The grpc_requests SLI of the kas service (`{{ $labels.stage }}` stage)
         has an apdex violating SLO
       description: |
@@ -56,6 +57,7 @@ groups:
   - alert: KasServiceGrpcRequestsApdexSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The grpc_requests SLI of the kas service (`{{ $labels.stage }}` stage)
         has an apdex violating SLO
       description: |
@@ -105,6 +107,7 @@ groups:
   - alert: KasServiceGrpcRequestsErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The grpc_requests SLI of the kas service (`{{ $labels.stage }}` stage)
         has an error rate violating SLO
       description: |
@@ -151,6 +154,7 @@ groups:
   - alert: KasServiceGrpcRequestsErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The grpc_requests SLI of the kas service (`{{ $labels.stage }}` stage)
         has an error rate violating SLO
       description: |
@@ -197,6 +201,7 @@ groups:
   - alert: KasServiceGrpcRequestsTrafficCessation
     for: 5m
     annotations:
+      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The grpc_requests SLI of the kas service (`{{ $labels.stage }}` stage)
         has not received any traffic in the past 30m
       description: |
@@ -230,6 +235,7 @@ groups:
   - alert: KasServiceGrpcRequestsTrafficAbsent
     for: 30m
     annotations:
+      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The grpc_requests SLI of the kas service (`{{ $labels.stage }}` stage)
         has not reported any traffic in the past 30m
       description: |

@@ -16,6 +16,7 @@ groups:
       team: global_search
       user_impacting: "yes"
     annotations:
+      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       description: >
         The zoekt `{{ $labels.container }}` container is being OOM killed and restarting. This will likely affect users performing code searches.
       title: Zoekt GKE containers are being OOM killed

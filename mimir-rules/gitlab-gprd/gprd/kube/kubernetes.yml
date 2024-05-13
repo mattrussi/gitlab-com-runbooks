@@ -13,6 +13,7 @@ groups:
           alert_type: symptom
           team: delivery
         annotations:
+          grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
           description: Versions of GitLab components in {{ $labels.env }} have differed across our clusters for greater than 3 hours.
           runbook: docs/kube/kubernetes.md#gitlabcomponentversionoutofsync
           title: GitLab Versions differ across our zonal clusters.

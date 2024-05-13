@@ -6,6 +6,7 @@ groups:
   - alert: gitlab_component_opsrate_missing_series
     for: 1h
     annotations:
+      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: Operation rate data for the `{{ $labels.component }}` component of the
         `{{ $labels.type }}` service (`{{ $labels.stage }}` stage) is missing
       description: |
@@ -36,6 +37,7 @@ groups:
   - alert: gitlab_component_apdex_missing_series
     for: 1h
     annotations:
+      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: Apdex for the `{{ $labels.component }}` component of the `{{ $labels.type
         }}` service (`{{ $labels.stage }}` stage) is missing
       description: |
@@ -66,6 +68,7 @@ groups:
   - alert: gitlab_component_error_missing_series
     for: 2h
     annotations:
+      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: Error rate data for the `{{ $labels.component }}` component of the `{{
         $labels.type }}` service (`{{ $labels.stage }}` stage) is missing
       description: |

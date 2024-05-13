@@ -8,6 +8,7 @@ groups:
       severity: s4
       team: data-analytics
     annotations:
+      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: Airflow is down
       description: >
         Blackbox probes for {{ $labels.instance }} have been failing for about 10 minutes.

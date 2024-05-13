@@ -35,6 +35,7 @@ groups:
       severity: s1
       alert_type: symptom
     annotations:
+      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       description: WAL-G wal-push archiving WALs to GCS might be not working. Please follow the runbook
         to review the problem.
       runbook: docs/patroni/postgresql-backups-wale-walg.md
@@ -47,6 +48,7 @@ groups:
       severity: s1
       alert_type: symptom
     annotations:
+      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       description: WAL-G backup-push creating full backups and archiving them to GCS might be not working. Please follow the runbook
         to review the problem.
       runbook: docs/patroni/postgresql-backups-wale-walg.md
@@ -59,6 +61,7 @@ groups:
       severity: s1
       alert_type: cause
     annotations:
+      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: GitLab Job has failed
       description: >
         The GitLab job "{{ $labels.job}}" resource "{{ $labels.resource }}" has failed.

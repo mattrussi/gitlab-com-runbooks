@@ -9,6 +9,7 @@ groups:
       severity: s1
       alert_type: symptom
     annotations:
+      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       description: blackbox probe availability {{ $labels.instance }} is less than {{ $value | printf "%.2f" }}% for the last 10 minutes.
       runbook: docs/blackbox/README.md
       title: Blackbox probes for {{ $labels.instance }} are failing.
@@ -19,6 +20,7 @@ groups:
       severity: s1
       alert_type: symptom
     annotations:
+      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       description: blackbox probe availability {{ $labels.instance }} is less than {{ $value | printf "%.2f" }}% for the last 1 hour.
       runbook: docs/blackbox/README.md
       title: Blackbox probes for {{ $labels.instance }} are failing.
@@ -37,6 +39,7 @@ groups:
       alert_type: cause
       pager: pagerduty
     annotations:
+      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       description: Check SSL for specified nodes and consider reissuing certificate.
       runbook: docs/frontend/ssl_cert.md
       title: SSL certificate for {{ $labels.instance }} expires in {{ $value | humanizeDuration }}
@@ -48,6 +51,7 @@ groups:
       alert_type: cause
       incident_project: gitlab.com/gitlab-com/gl-infra/production
     annotations:
+      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       description: Check SSL for specified nodes and consider reissuing certificate.
       runbook: docs/frontend/ssl_cert.md
       expires: In {{ $value | humanizeDuration }}
@@ -61,6 +65,7 @@ groups:
       severity: s1
       alert_type: symptom
     annotations:
+      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       description: blackbox probe availability {{ $labels.instance }} is less than {{ $value | printf "%.2f" }}% for the last 30 minutes.
       runbook: docs/frontend/gitlab-com-is-down.md
       title: staging.gitlab.com is down for 30 minutes
@@ -74,6 +79,7 @@ groups:
       alert_type: symptom
       team: delivery
     annotations:
+      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       description: blackbox probe availability {{ $labels.instance }} is less than {{ $value | printf "%.2f" }}% for the last 1 hour.
       runbook: docs/blackbox/README.md
       title: Blackbox probes for {{ $labels.instance }} are failing.
@@ -84,6 +90,7 @@ groups:
       alert_type: symptom
       team: delivery
     annotations:
+      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       description: blackbox probe availability {{ $labels.instance }} is less than {{ $value | printf "%.2f" }}% for the last 1 hour.
       runbook: docs/blackbox/README.md
       title: Blackbox probes for {{ $labels.instance }} are failing.

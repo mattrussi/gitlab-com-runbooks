@@ -20,6 +20,7 @@ groups:
   - alert: component_saturation_slo_out_of_bounds:nat_gateway_port_allocation
     for: 5m
     annotations:
+      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The Cloud NAT Gateway Port Allocation resource of the {{ $labels.type
         }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
         is close to its capacity limit.
@@ -108,6 +109,7 @@ groups:
   - alert: component_saturation_slo_out_of_bounds:nat_host_port_allocation
     for: 10m
     annotations:
+      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The Cloud NAT Host Port Allocation resource of the {{ $labels.type }}
         service ({{ $labels.stage }} stage) has a saturation exceeding SLO and is
         close to its capacity limit.

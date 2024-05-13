@@ -6,6 +6,7 @@ groups:
   - alert: service_ops_out_of_bounds_upper_5m
     for: 5m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: 'Anomaly detection: The `{{ $labels.type }}` service (`{{ $labels.stage
         }}` stage) is receiving more requests than normal'
       description: |
@@ -42,6 +43,7 @@ groups:
   - alert: service_ops_out_of_bounds_lower_5m
     for: 5m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: 'Anomaly detection: The `{{ $labels.type }}` service (`{{ $labels.stage
         }}` stage) is receiving fewer requests than normal'
       description: |

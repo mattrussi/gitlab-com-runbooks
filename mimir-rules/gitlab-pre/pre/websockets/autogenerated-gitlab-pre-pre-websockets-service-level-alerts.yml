@@ -7,6 +7,7 @@ groups:
   - alert: WebsocketsServiceLoadbalancerErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The loadbalancer SLI of the websockets service (`{{ $labels.stage }}`
         stage) has an error rate violating SLO
       description: |
@@ -51,6 +52,7 @@ groups:
   - alert: WebsocketsServiceLoadbalancerErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The loadbalancer SLI of the websockets service (`{{ $labels.stage }}`
         stage) has an error rate violating SLO
       description: |
@@ -95,6 +97,7 @@ groups:
   - alert: WebsocketsServiceLoadbalancerErrorSLOViolationRegional
     for: 2m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The loadbalancer SLI of the websockets service in region `{{ $labels.region
         }}` has an error rate violating SLO
       description: |
@@ -141,6 +144,7 @@ groups:
   - alert: WebsocketsServiceLoadbalancerErrorSLOViolationRegional
     for: 2m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The loadbalancer SLI of the websockets service in region `{{ $labels.region
         }}` has an error rate violating SLO
       description: |
@@ -187,6 +191,7 @@ groups:
   - alert: WebsocketsServiceLoadbalancerTrafficCessation
     for: 5m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The loadbalancer SLI of the websockets service (`{{ $labels.stage }}`
         stage) has not received any traffic in the past 30m
       description: |
@@ -218,6 +223,7 @@ groups:
   - alert: WebsocketsServiceLoadbalancerTrafficAbsent
     for: 30m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The loadbalancer SLI of the websockets service (`{{ $labels.stage }}`
         stage) has not reported any traffic in the past 30m
       description: |
@@ -251,6 +257,7 @@ groups:
   - alert: WebsocketsServiceLoadbalancerTrafficCessationRegional
     for: 5m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The loadbalancer SLI of the websockets service in region `{{ $labels.region
         }}` has not received any traffic in the past 30m
       description: |
@@ -284,6 +291,7 @@ groups:
   - alert: WebsocketsServiceLoadbalancerTrafficAbsentRegional
     for: 30m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The loadbalancer SLI of the websockets service in region `{{ $labels.region
         }}` has not reported any traffic in the past 30m
       description: |
@@ -319,6 +327,7 @@ groups:
   - alert: WebsocketsServiceRailsRequestApdexSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The rails_request SLI of the websockets service (`{{ $labels.stage }}`
         stage) has an apdex violating SLO
       description: |
@@ -365,6 +374,7 @@ groups:
   - alert: WebsocketsServiceRailsRequestApdexSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The rails_request SLI of the websockets service (`{{ $labels.stage }}`
         stage) has an apdex violating SLO
       description: |
@@ -411,6 +421,7 @@ groups:
   - alert: WebsocketsServiceRailsRequestApdexSLOViolationRegional
     for: 2m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The rails_request SLI of the websockets service in region `{{ $labels.region
         }}` has an apdex violating SLO
       description: |
@@ -459,6 +470,7 @@ groups:
   - alert: WebsocketsServiceRailsRequestApdexSLOViolationRegional
     for: 2m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The rails_request SLI of the websockets service in region `{{ $labels.region
         }}` has an apdex violating SLO
       description: |
@@ -507,6 +519,7 @@ groups:
   - alert: WebsocketsServiceRailsRequestErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The rails_request SLI of the websockets service (`{{ $labels.stage }}`
         stage) has an error rate violating SLO
       description: |
@@ -557,6 +570,7 @@ groups:
   - alert: WebsocketsServiceRailsRequestErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The rails_request SLI of the websockets service (`{{ $labels.stage }}`
         stage) has an error rate violating SLO
       description: |
@@ -607,6 +621,7 @@ groups:
   - alert: WebsocketsServiceRailsRequestErrorSLOViolationRegional
     for: 2m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The rails_request SLI of the websockets service in region `{{ $labels.region
         }}` has an error rate violating SLO
       description: |
@@ -659,6 +674,7 @@ groups:
   - alert: WebsocketsServiceRailsRequestErrorSLOViolationRegional
     for: 2m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The rails_request SLI of the websockets service in region `{{ $labels.region
         }}` has an error rate violating SLO
       description: |
@@ -711,6 +727,7 @@ groups:
   - alert: WebsocketsServiceRailsRequestTrafficCessation
     for: 5m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The rails_request SLI of the websockets service (`{{ $labels.stage }}`
         stage) has not received any traffic in the past 30m
       description: |
@@ -748,6 +765,7 @@ groups:
   - alert: WebsocketsServiceRailsRequestTrafficAbsent
     for: 30m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The rails_request SLI of the websockets service (`{{ $labels.stage }}`
         stage) has not reported any traffic in the past 30m
       description: |
@@ -787,6 +805,7 @@ groups:
   - alert: WebsocketsServiceRailsRequestTrafficCessationRegional
     for: 5m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The rails_request SLI of the websockets service in region `{{ $labels.region
         }}` has not received any traffic in the past 30m
       description: |
@@ -826,6 +845,7 @@ groups:
   - alert: WebsocketsServiceRailsRequestTrafficAbsentRegional
     for: 30m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The rails_request SLI of the websockets service in region `{{ $labels.region
         }}` has not reported any traffic in the past 30m
       description: |
@@ -867,6 +887,7 @@ groups:
   - alert: WebsocketsServiceWorkhorseErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The workhorse SLI of the websockets service (`{{ $labels.stage }}` stage)
         has an error rate violating SLO
       description: |
@@ -914,6 +935,7 @@ groups:
   - alert: WebsocketsServiceWorkhorseErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The workhorse SLI of the websockets service (`{{ $labels.stage }}` stage)
         has an error rate violating SLO
       description: |
@@ -961,6 +983,7 @@ groups:
   - alert: WebsocketsServiceWorkhorseErrorSLOViolationRegional
     for: 2m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The workhorse SLI of the websockets service in region `{{ $labels.region
         }}` has an error rate violating SLO
       description: |
@@ -1010,6 +1033,7 @@ groups:
   - alert: WebsocketsServiceWorkhorseErrorSLOViolationRegional
     for: 2m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The workhorse SLI of the websockets service in region `{{ $labels.region
         }}` has an error rate violating SLO
       description: |
@@ -1059,6 +1083,7 @@ groups:
   - alert: WebsocketsServiceWorkhorseTrafficCessation
     for: 5m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The workhorse SLI of the websockets service (`{{ $labels.stage }}` stage)
         has not received any traffic in the past 30m
       description: |
@@ -1093,6 +1118,7 @@ groups:
   - alert: WebsocketsServiceWorkhorseTrafficAbsent
     for: 30m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The workhorse SLI of the websockets service (`{{ $labels.stage }}` stage)
         has not reported any traffic in the past 30m
       description: |
@@ -1129,6 +1155,7 @@ groups:
   - alert: WebsocketsServiceWorkhorseTrafficCessationRegional
     for: 5m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The workhorse SLI of the websockets service in region `{{ $labels.region
         }}` has not received any traffic in the past 30m
       description: |
@@ -1165,6 +1192,7 @@ groups:
   - alert: WebsocketsServiceWorkhorseTrafficAbsentRegional
     for: 30m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The workhorse SLI of the websockets service in region `{{ $labels.region
         }}` has not reported any traffic in the past 30m
       description: |

@@ -7,6 +7,7 @@ groups:
   - alert: RegistryServiceDatabaseApdexSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The database SLI of the registry service (`{{ $labels.stage }}` stage)
         has an apdex violating SLO
       description: |
@@ -58,6 +59,7 @@ groups:
   - alert: RegistryServiceDatabaseApdexSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The database SLI of the registry service (`{{ $labels.stage }}` stage)
         has an apdex violating SLO
       description: |
@@ -109,6 +111,7 @@ groups:
   - alert: RegistryServiceDatabaseApdexSLOViolationRegional
     for: 2m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The database SLI of the registry service in region `{{ $labels.region
         }}` has an apdex violating SLO
       description: |
@@ -162,6 +165,7 @@ groups:
   - alert: RegistryServiceDatabaseApdexSLOViolationRegional
     for: 2m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The database SLI of the registry service in region `{{ $labels.region
         }}` has an apdex violating SLO
       description: |
@@ -215,6 +219,7 @@ groups:
   - alert: RegistryServiceDatabaseTrafficCessation
     for: 5m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The database SLI of the registry service (`{{ $labels.stage }}` stage)
         has not received any traffic in the past 30m
       description: |
@@ -250,6 +255,7 @@ groups:
   - alert: RegistryServiceDatabaseTrafficAbsent
     for: 30m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The database SLI of the registry service (`{{ $labels.stage }}` stage)
         has not reported any traffic in the past 30m
       description: |
@@ -287,6 +293,7 @@ groups:
   - alert: RegistryServiceDatabaseTrafficCessationRegional
     for: 5m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The database SLI of the registry service in region `{{ $labels.region
         }}` has not received any traffic in the past 30m
       description: |
@@ -324,6 +331,7 @@ groups:
   - alert: RegistryServiceDatabaseTrafficAbsentRegional
     for: 30m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The database SLI of the registry service in region `{{ $labels.region
         }}` has not reported any traffic in the past 30m
       description: |
@@ -363,6 +371,7 @@ groups:
   - alert: RegistryServiceGarbagecollectorApdexSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The garbagecollector SLI of the registry service (`{{ $labels.stage }}`
         stage) has an apdex violating SLO
       description: |
@@ -413,6 +422,7 @@ groups:
   - alert: RegistryServiceGarbagecollectorApdexSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The garbagecollector SLI of the registry service (`{{ $labels.stage }}`
         stage) has an apdex violating SLO
       description: |
@@ -463,6 +473,7 @@ groups:
   - alert: RegistryServiceGarbagecollectorApdexSLOViolationRegional
     for: 2m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The garbagecollector SLI of the registry service in region `{{ $labels.region
         }}` has an apdex violating SLO
       description: |
@@ -515,6 +526,7 @@ groups:
   - alert: RegistryServiceGarbagecollectorApdexSLOViolationRegional
     for: 2m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The garbagecollector SLI of the registry service in region `{{ $labels.region
         }}` has an apdex violating SLO
       description: |
@@ -567,6 +579,7 @@ groups:
   - alert: RegistryServiceGarbagecollectorErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The garbagecollector SLI of the registry service (`{{ $labels.stage }}`
         stage) has an error rate violating SLO
       description: |
@@ -614,6 +627,7 @@ groups:
   - alert: RegistryServiceGarbagecollectorErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The garbagecollector SLI of the registry service (`{{ $labels.stage }}`
         stage) has an error rate violating SLO
       description: |
@@ -661,6 +675,7 @@ groups:
   - alert: RegistryServiceGarbagecollectorErrorSLOViolationRegional
     for: 2m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The garbagecollector SLI of the registry service in region `{{ $labels.region
         }}` has an error rate violating SLO
       description: |
@@ -710,6 +725,7 @@ groups:
   - alert: RegistryServiceGarbagecollectorErrorSLOViolationRegional
     for: 2m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The garbagecollector SLI of the registry service in region `{{ $labels.region
         }}` has an error rate violating SLO
       description: |
@@ -759,6 +775,7 @@ groups:
   - alert: RegistryServiceGarbagecollectorTrafficCessation
     for: 5m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The garbagecollector SLI of the registry service (`{{ $labels.stage }}`
         stage) has not received any traffic in the past 30m
       description: |
@@ -793,6 +810,7 @@ groups:
   - alert: RegistryServiceGarbagecollectorTrafficAbsent
     for: 30m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The garbagecollector SLI of the registry service (`{{ $labels.stage }}`
         stage) has not reported any traffic in the past 30m
       description: |
@@ -829,6 +847,7 @@ groups:
   - alert: RegistryServiceGarbagecollectorTrafficCessationRegional
     for: 5m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The garbagecollector SLI of the registry service in region `{{ $labels.region
         }}` has not received any traffic in the past 30m
       description: |
@@ -865,6 +884,7 @@ groups:
   - alert: RegistryServiceGarbagecollectorTrafficAbsentRegional
     for: 30m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The garbagecollector SLI of the registry service in region `{{ $labels.region
         }}` has not reported any traffic in the past 30m
       description: |
@@ -903,6 +923,7 @@ groups:
   - alert: RegistryServiceLoadbalancerErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The loadbalancer SLI of the registry service (`{{ $labels.stage }}` stage)
         has an error rate violating SLO
       description: |
@@ -947,6 +968,7 @@ groups:
   - alert: RegistryServiceLoadbalancerErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The loadbalancer SLI of the registry service (`{{ $labels.stage }}` stage)
         has an error rate violating SLO
       description: |
@@ -991,6 +1013,7 @@ groups:
   - alert: RegistryServiceLoadbalancerErrorSLOViolationRegional
     for: 2m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The loadbalancer SLI of the registry service in region `{{ $labels.region
         }}` has an error rate violating SLO
       description: |
@@ -1037,6 +1060,7 @@ groups:
   - alert: RegistryServiceLoadbalancerErrorSLOViolationRegional
     for: 2m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The loadbalancer SLI of the registry service in region `{{ $labels.region
         }}` has an error rate violating SLO
       description: |
@@ -1083,6 +1107,7 @@ groups:
   - alert: RegistryServiceLoadbalancerTrafficCessation
     for: 5m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The loadbalancer SLI of the registry service (`{{ $labels.stage }}` stage)
         has not received any traffic in the past 30m
       description: |
@@ -1114,6 +1139,7 @@ groups:
   - alert: RegistryServiceLoadbalancerTrafficAbsent
     for: 30m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The loadbalancer SLI of the registry service (`{{ $labels.stage }}` stage)
         has not reported any traffic in the past 30m
       description: |
@@ -1147,6 +1173,7 @@ groups:
   - alert: RegistryServiceLoadbalancerTrafficCessationRegional
     for: 5m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The loadbalancer SLI of the registry service in region `{{ $labels.region
         }}` has not received any traffic in the past 30m
       description: |
@@ -1180,6 +1207,7 @@ groups:
   - alert: RegistryServiceLoadbalancerTrafficAbsentRegional
     for: 30m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The loadbalancer SLI of the registry service in region `{{ $labels.region
         }}` has not reported any traffic in the past 30m
       description: |
@@ -1215,6 +1243,7 @@ groups:
   - alert: RegistryServiceRedisApdexSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The redis SLI of the registry service (`{{ $labels.stage }}` stage) has
         an apdex violating SLO
       description: |
@@ -1266,6 +1295,7 @@ groups:
   - alert: RegistryServiceRedisApdexSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The redis SLI of the registry service (`{{ $labels.stage }}` stage) has
         an apdex violating SLO
       description: |
@@ -1317,6 +1347,7 @@ groups:
   - alert: RegistryServiceRedisApdexSLOViolationRegional
     for: 2m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The redis SLI of the registry service in region `{{ $labels.region }}`
         has an apdex violating SLO
       description: |
@@ -1370,6 +1401,7 @@ groups:
   - alert: RegistryServiceRedisApdexSLOViolationRegional
     for: 2m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The redis SLI of the registry service in region `{{ $labels.region }}`
         has an apdex violating SLO
       description: |
@@ -1423,6 +1455,7 @@ groups:
   - alert: RegistryServiceRedisErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The redis SLI of the registry service (`{{ $labels.stage }}` stage) has
         an error rate violating SLO
       description: |
@@ -1471,6 +1504,7 @@ groups:
   - alert: RegistryServiceRedisErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The redis SLI of the registry service (`{{ $labels.stage }}` stage) has
         an error rate violating SLO
       description: |
@@ -1519,6 +1553,7 @@ groups:
   - alert: RegistryServiceRedisErrorSLOViolationRegional
     for: 2m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The redis SLI of the registry service in region `{{ $labels.region }}`
         has an error rate violating SLO
       description: |
@@ -1569,6 +1604,7 @@ groups:
   - alert: RegistryServiceRedisErrorSLOViolationRegional
     for: 2m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The redis SLI of the registry service in region `{{ $labels.region }}`
         has an error rate violating SLO
       description: |
@@ -1619,6 +1655,7 @@ groups:
   - alert: RegistryServiceRedisTrafficCessation
     for: 5m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The redis SLI of the registry service (`{{ $labels.stage }}` stage) has
         not received any traffic in the past 30m
       description: |
@@ -1654,6 +1691,7 @@ groups:
   - alert: RegistryServiceRedisTrafficAbsent
     for: 30m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The redis SLI of the registry service (`{{ $labels.stage }}` stage) has
         not reported any traffic in the past 30m
       description: |
@@ -1691,6 +1729,7 @@ groups:
   - alert: RegistryServiceRedisTrafficCessationRegional
     for: 5m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The redis SLI of the registry service in region `{{ $labels.region }}`
         has not received any traffic in the past 30m
       description: |
@@ -1728,6 +1767,7 @@ groups:
   - alert: RegistryServiceRedisTrafficAbsentRegional
     for: 30m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The redis SLI of the registry service in region `{{ $labels.region }}`
         has not reported any traffic in the past 30m
       description: |
@@ -1767,6 +1807,7 @@ groups:
   - alert: RegistryServiceRegistryCdnErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The registry_cdn SLI of the registry service (`{{ $labels.stage }}` stage)
         has an error rate violating SLO
       description: |
@@ -1813,6 +1854,7 @@ groups:
   - alert: RegistryServiceRegistryCdnErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The registry_cdn SLI of the registry service (`{{ $labels.stage }}` stage)
         has an error rate violating SLO
       description: |
@@ -1859,6 +1901,7 @@ groups:
   - alert: RegistryServiceRegistryCdnErrorSLOViolationRegional
     for: 2m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The registry_cdn SLI of the registry service in region `{{ $labels.region
         }}` has an error rate violating SLO
       description: |
@@ -1907,6 +1950,7 @@ groups:
   - alert: RegistryServiceRegistryCdnErrorSLOViolationRegional
     for: 2m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The registry_cdn SLI of the registry service in region `{{ $labels.region
         }}` has an error rate violating SLO
       description: |
@@ -1955,6 +1999,7 @@ groups:
   - alert: RegistryServiceRegistryCdnTrafficCessation
     for: 5m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The registry_cdn SLI of the registry service (`{{ $labels.stage }}` stage)
         has not received any traffic in the past 30m
       description: |
@@ -1988,6 +2033,7 @@ groups:
   - alert: RegistryServiceRegistryCdnTrafficAbsent
     for: 30m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The registry_cdn SLI of the registry service (`{{ $labels.stage }}` stage)
         has not reported any traffic in the past 30m
       description: |
@@ -2023,6 +2069,7 @@ groups:
   - alert: RegistryServiceRegistryCdnTrafficCessationRegional
     for: 5m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The registry_cdn SLI of the registry service in region `{{ $labels.region
         }}` has not received any traffic in the past 30m
       description: |
@@ -2058,6 +2105,7 @@ groups:
   - alert: RegistryServiceRegistryCdnTrafficAbsentRegional
     for: 30m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The registry_cdn SLI of the registry service in region `{{ $labels.region
         }}` has not reported any traffic in the past 30m
       description: |
@@ -2095,6 +2143,7 @@ groups:
   - alert: RegistryServiceRegistryServerApdexSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The registry_server SLI of the registry service (`{{ $labels.stage }}`
         stage) has an apdex violating SLO
       description: |
@@ -2146,6 +2195,7 @@ groups:
   - alert: RegistryServiceRegistryServerApdexSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The registry_server SLI of the registry service (`{{ $labels.stage }}`
         stage) has an apdex violating SLO
       description: |
@@ -2197,6 +2247,7 @@ groups:
   - alert: RegistryServiceRegistryServerApdexSLOViolationRegional
     for: 2m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The registry_server SLI of the registry service in region `{{ $labels.region
         }}` has an apdex violating SLO
       description: |
@@ -2250,6 +2301,7 @@ groups:
   - alert: RegistryServiceRegistryServerApdexSLOViolationRegional
     for: 2m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The registry_server SLI of the registry service in region `{{ $labels.region
         }}` has an apdex violating SLO
       description: |
@@ -2303,6 +2355,7 @@ groups:
   - alert: RegistryServiceRegistryServerErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The registry_server SLI of the registry service (`{{ $labels.stage }}`
         stage) has an error rate violating SLO
       description: |
@@ -2351,6 +2404,7 @@ groups:
   - alert: RegistryServiceRegistryServerErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The registry_server SLI of the registry service (`{{ $labels.stage }}`
         stage) has an error rate violating SLO
       description: |
@@ -2399,6 +2453,7 @@ groups:
   - alert: RegistryServiceRegistryServerErrorSLOViolationRegional
     for: 2m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The registry_server SLI of the registry service in region `{{ $labels.region
         }}` has an error rate violating SLO
       description: |
@@ -2449,6 +2504,7 @@ groups:
   - alert: RegistryServiceRegistryServerErrorSLOViolationRegional
     for: 2m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The registry_server SLI of the registry service in region `{{ $labels.region
         }}` has an error rate violating SLO
       description: |
@@ -2499,6 +2555,7 @@ groups:
   - alert: RegistryServiceRegistryServerTrafficCessation
     for: 5m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The registry_server SLI of the registry service (`{{ $labels.stage }}`
         stage) has not received any traffic in the past 30m
       description: |
@@ -2534,6 +2591,7 @@ groups:
   - alert: RegistryServiceRegistryServerTrafficAbsent
     for: 30m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The registry_server SLI of the registry service (`{{ $labels.stage }}`
         stage) has not reported any traffic in the past 30m
       description: |
@@ -2571,6 +2629,7 @@ groups:
   - alert: RegistryServiceRegistryServerTrafficCessationRegional
     for: 5m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The registry_server SLI of the registry service in region `{{ $labels.region
         }}` has not received any traffic in the past 30m
       description: |
@@ -2608,6 +2667,7 @@ groups:
   - alert: RegistryServiceRegistryServerTrafficAbsentRegional
     for: 30m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The registry_server SLI of the registry service in region `{{ $labels.region
         }}` has not reported any traffic in the past 30m
       description: |
@@ -2647,6 +2707,7 @@ groups:
   - alert: RegistryServiceServerRouteBlobUploadUuidDeletesApdexSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The server_route_blob_upload_uuid_deletes SLI of the registry service
         (`{{ $labels.stage }}` stage) has an apdex violating SLO
       description: |
@@ -2700,6 +2761,7 @@ groups:
   - alert: RegistryServiceServerRouteBlobUploadUuidDeletesApdexSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The server_route_blob_upload_uuid_deletes SLI of the registry service
         (`{{ $labels.stage }}` stage) has an apdex violating SLO
       description: |
@@ -2753,6 +2815,7 @@ groups:
   - alert: RegistryServiceServerRouteBlobUploadUuidDeletesApdexSLOViolationRegional
     for: 2m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The server_route_blob_upload_uuid_deletes SLI of the registry service
         in region `{{ $labels.region }}` has an apdex violating SLO
       description: |
@@ -2808,6 +2871,7 @@ groups:
   - alert: RegistryServiceServerRouteBlobUploadUuidDeletesApdexSLOViolationRegional
     for: 2m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The server_route_blob_upload_uuid_deletes SLI of the registry service
         in region `{{ $labels.region }}` has an apdex violating SLO
       description: |
@@ -2863,6 +2927,7 @@ groups:
   - alert: RegistryServiceServerRouteBlobUploadUuidDeletesTrafficCessation
     for: 5m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The server_route_blob_upload_uuid_deletes SLI of the registry service
         (`{{ $labels.stage }}` stage) has not received any traffic in the past 30m
       description: |
@@ -2900,6 +2965,7 @@ groups:
   - alert: RegistryServiceServerRouteBlobUploadUuidDeletesTrafficAbsent
     for: 30m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The server_route_blob_upload_uuid_deletes SLI of the registry service
         (`{{ $labels.stage }}` stage) has not reported any traffic in the past 30m
       description: |
@@ -2939,6 +3005,7 @@ groups:
   - alert: RegistryServiceServerRouteBlobUploadUuidDeletesTrafficCessationRegional
     for: 5m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The server_route_blob_upload_uuid_deletes SLI of the registry service
         in region `{{ $labels.region }}` has not received any traffic in the past
         30m
@@ -2979,6 +3046,7 @@ groups:
   - alert: RegistryServiceServerRouteBlobUploadUuidDeletesTrafficAbsentRegional
     for: 30m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The server_route_blob_upload_uuid_deletes SLI of the registry service
         in region `{{ $labels.region }}` has not reported any traffic in the past
         30m
@@ -3021,6 +3089,7 @@ groups:
   - alert: RegistryServiceServerRouteBlobUploadUuidReadsApdexSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The server_route_blob_upload_uuid_reads SLI of the registry service (`{{
         $labels.stage }}` stage) has an apdex violating SLO
       description: |
@@ -3076,6 +3145,7 @@ groups:
   - alert: RegistryServiceServerRouteBlobUploadUuidReadsApdexSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The server_route_blob_upload_uuid_reads SLI of the registry service (`{{
         $labels.stage }}` stage) has an apdex violating SLO
       description: |
@@ -3131,6 +3201,7 @@ groups:
   - alert: RegistryServiceServerRouteBlobUploadUuidReadsApdexSLOViolationRegional
     for: 2m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The server_route_blob_upload_uuid_reads SLI of the registry service in
         region `{{ $labels.region }}` has an apdex violating SLO
       description: |
@@ -3188,6 +3259,7 @@ groups:
   - alert: RegistryServiceServerRouteBlobUploadUuidReadsApdexSLOViolationRegional
     for: 2m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The server_route_blob_upload_uuid_reads SLI of the registry service in
         region `{{ $labels.region }}` has an apdex violating SLO
       description: |
@@ -3245,6 +3317,7 @@ groups:
   - alert: RegistryServiceServerRouteBlobUploadUuidWritesApdexSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The server_route_blob_upload_uuid_writes SLI of the registry service
         (`{{ $labels.stage }}` stage) has an apdex violating SLO
       description: |
@@ -3300,6 +3373,7 @@ groups:
   - alert: RegistryServiceServerRouteBlobUploadUuidWritesApdexSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The server_route_blob_upload_uuid_writes SLI of the registry service
         (`{{ $labels.stage }}` stage) has an apdex violating SLO
       description: |
@@ -3355,6 +3429,7 @@ groups:
   - alert: RegistryServiceServerRouteBlobUploadUuidWritesApdexSLOViolationRegional
     for: 2m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The server_route_blob_upload_uuid_writes SLI of the registry service
         in region `{{ $labels.region }}` has an apdex violating SLO
       description: |
@@ -3412,6 +3487,7 @@ groups:
   - alert: RegistryServiceServerRouteBlobUploadUuidWritesApdexSLOViolationRegional
     for: 2m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The server_route_blob_upload_uuid_writes SLI of the registry service
         in region `{{ $labels.region }}` has an apdex violating SLO
       description: |
@@ -3469,6 +3545,7 @@ groups:
   - alert: RegistryServiceServerRouteBlobUploadUuidWritesTrafficCessation
     for: 5m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The server_route_blob_upload_uuid_writes SLI of the registry service
         (`{{ $labels.stage }}` stage) has not received any traffic in the past 30m
       description: |
@@ -3508,6 +3585,7 @@ groups:
   - alert: RegistryServiceServerRouteBlobUploadUuidWritesTrafficAbsent
     for: 30m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The server_route_blob_upload_uuid_writes SLI of the registry service
         (`{{ $labels.stage }}` stage) has not reported any traffic in the past 30m
       description: |
@@ -3549,6 +3627,7 @@ groups:
   - alert: RegistryServiceServerRouteBlobUploadUuidWritesTrafficCessationRegional
     for: 5m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The server_route_blob_upload_uuid_writes SLI of the registry service
         in region `{{ $labels.region }}` has not received any traffic in the past
         30m
@@ -3591,6 +3670,7 @@ groups:
   - alert: RegistryServiceServerRouteBlobUploadUuidWritesTrafficAbsentRegional
     for: 30m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The server_route_blob_upload_uuid_writes SLI of the registry service
         in region `{{ $labels.region }}` has not reported any traffic in the past
         30m
@@ -3635,6 +3715,7 @@ groups:
   - alert: RegistryServiceServerRouteManifestReadsApdexSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The server_route_manifest_reads SLI of the registry service (`{{ $labels.stage
         }}` stage) has an apdex violating SLO
       description: |
@@ -3686,6 +3767,7 @@ groups:
   - alert: RegistryServiceServerRouteManifestReadsApdexSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The server_route_manifest_reads SLI of the registry service (`{{ $labels.stage
         }}` stage) has an apdex violating SLO
       description: |
@@ -3737,6 +3819,7 @@ groups:
   - alert: RegistryServiceServerRouteManifestReadsApdexSLOViolationRegional
     for: 2m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The server_route_manifest_reads SLI of the registry service in region
         `{{ $labels.region }}` has an apdex violating SLO
       description: |
@@ -3790,6 +3873,7 @@ groups:
   - alert: RegistryServiceServerRouteManifestReadsApdexSLOViolationRegional
     for: 2m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The server_route_manifest_reads SLI of the registry service in region
         `{{ $labels.region }}` has an apdex violating SLO
       description: |
@@ -3843,6 +3927,7 @@ groups:
   - alert: RegistryServiceServerRouteManifestReadsTrafficCessation
     for: 5m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The server_route_manifest_reads SLI of the registry service (`{{ $labels.stage
         }}` stage) has not received any traffic in the past 30m
       description: |
@@ -3878,6 +3963,7 @@ groups:
   - alert: RegistryServiceServerRouteManifestReadsTrafficAbsent
     for: 30m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The server_route_manifest_reads SLI of the registry service (`{{ $labels.stage
         }}` stage) has not reported any traffic in the past 30m
       description: |
@@ -3915,6 +4001,7 @@ groups:
   - alert: RegistryServiceServerRouteManifestReadsTrafficCessationRegional
     for: 5m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The server_route_manifest_reads SLI of the registry service in region
         `{{ $labels.region }}` has not received any traffic in the past 30m
       description: |
@@ -3952,6 +4039,7 @@ groups:
   - alert: RegistryServiceServerRouteManifestReadsTrafficAbsentRegional
     for: 30m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The server_route_manifest_reads SLI of the registry service in region
         `{{ $labels.region }}` has not reported any traffic in the past 30m
       description: |
@@ -3991,6 +4079,7 @@ groups:
   - alert: RegistryServiceServerRouteManifestWritesApdexSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The server_route_manifest_writes SLI of the registry service (`{{ $labels.stage
         }}` stage) has an apdex violating SLO
       description: |
@@ -4046,6 +4135,7 @@ groups:
   - alert: RegistryServiceServerRouteManifestWritesApdexSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The server_route_manifest_writes SLI of the registry service (`{{ $labels.stage
         }}` stage) has an apdex violating SLO
       description: |
@@ -4101,6 +4191,7 @@ groups:
   - alert: RegistryServiceServerRouteManifestWritesApdexSLOViolationRegional
     for: 2m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The server_route_manifest_writes SLI of the registry service in region
         `{{ $labels.region }}` has an apdex violating SLO
       description: |
@@ -4158,6 +4249,7 @@ groups:
   - alert: RegistryServiceServerRouteManifestWritesApdexSLOViolationRegional
     for: 2m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The server_route_manifest_writes SLI of the registry service in region
         `{{ $labels.region }}` has an apdex violating SLO
       description: |
@@ -4215,6 +4307,7 @@ groups:
   - alert: RegistryServiceServerRouteManifestWritesTrafficCessation
     for: 5m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The server_route_manifest_writes SLI of the registry service (`{{ $labels.stage
         }}` stage) has not received any traffic in the past 30m
       description: |
@@ -4254,6 +4347,7 @@ groups:
   - alert: RegistryServiceServerRouteManifestWritesTrafficAbsent
     for: 30m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The server_route_manifest_writes SLI of the registry service (`{{ $labels.stage
         }}` stage) has not reported any traffic in the past 30m
       description: |
@@ -4295,6 +4389,7 @@ groups:
   - alert: RegistryServiceServerRouteManifestWritesTrafficCessationRegional
     for: 5m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The server_route_manifest_writes SLI of the registry service in region
         `{{ $labels.region }}` has not received any traffic in the past 30m
       description: |
@@ -4336,6 +4431,7 @@ groups:
   - alert: RegistryServiceServerRouteManifestWritesTrafficAbsentRegional
     for: 30m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The server_route_manifest_writes SLI of the registry service in region
         `{{ $labels.region }}` has not reported any traffic in the past 30m
       description: |

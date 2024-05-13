@@ -7,6 +7,7 @@ groups:
   - alert: ConsulServiceConsulErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The consul SLI of the consul service (`{{ $labels.stage }}` stage) has
         an error rate violating SLO
       description: |
@@ -55,6 +56,7 @@ groups:
   - alert: ConsulServiceConsulErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The consul SLI of the consul service (`{{ $labels.stage }}` stage) has
         an error rate violating SLO
       description: |
@@ -103,6 +105,7 @@ groups:
   - alert: ConsulServiceConsulErrorSLOViolationRegional
     for: 2m
     annotations:
+      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The consul SLI of the consul service in region `{{ $labels.region }}`
         has an error rate violating SLO
       description: |
@@ -153,6 +156,7 @@ groups:
   - alert: ConsulServiceConsulErrorSLOViolationRegional
     for: 2m
     annotations:
+      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The consul SLI of the consul service in region `{{ $labels.region }}`
         has an error rate violating SLO
       description: |
@@ -203,6 +207,7 @@ groups:
   - alert: ConsulServiceConsulTrafficCessation
     for: 5m
     annotations:
+      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The consul SLI of the consul service (`{{ $labels.stage }}` stage) has
         not received any traffic in the past 30m
       description: |
@@ -238,6 +243,7 @@ groups:
   - alert: ConsulServiceConsulTrafficAbsent
     for: 30m
     annotations:
+      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The consul SLI of the consul service (`{{ $labels.stage }}` stage) has
         not reported any traffic in the past 30m
       description: |
@@ -275,6 +281,7 @@ groups:
   - alert: ConsulServiceConsulTrafficCessationRegional
     for: 5m
     annotations:
+      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The consul SLI of the consul service in region `{{ $labels.region }}`
         has not received any traffic in the past 30m
       description: |
@@ -312,6 +319,7 @@ groups:
   - alert: ConsulServiceConsulTrafficAbsentRegional
     for: 30m
     annotations:
+      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The consul SLI of the consul service in region `{{ $labels.region }}`
         has not reported any traffic in the past 30m
       description: |

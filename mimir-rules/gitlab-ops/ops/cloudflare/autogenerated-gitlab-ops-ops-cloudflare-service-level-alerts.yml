@@ -7,6 +7,7 @@ groups:
   - alert: CloudflareServiceGitlabNetZoneTrafficCessation
     for: 5m
     annotations:
+      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The gitlab_net_zone SLI of the cloudflare service (`{{ $labels.stage
         }}` stage) has not received any traffic in the past 30m
       description: |
@@ -44,6 +45,7 @@ groups:
   - alert: CloudflareServiceGitlabNetZoneTrafficAbsent
     for: 30m
     annotations:
+      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The gitlab_net_zone SLI of the cloudflare service (`{{ $labels.stage
         }}` stage) has not reported any traffic in the past 30m
       description: |
@@ -83,6 +85,7 @@ groups:
   - alert: CloudflareServiceGitlabZoneTrafficCessation
     for: 5m
     annotations:
+      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The gitlab_zone SLI of the cloudflare service (`{{ $labels.stage }}`
         stage) has not received any traffic in the past 30m
       description: |
@@ -120,6 +123,7 @@ groups:
   - alert: CloudflareServiceGitlabZoneTrafficAbsent
     for: 30m
     annotations:
+      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The gitlab_zone SLI of the cloudflare service (`{{ $labels.stage }}`
         stage) has not reported any traffic in the past 30m
       description: |

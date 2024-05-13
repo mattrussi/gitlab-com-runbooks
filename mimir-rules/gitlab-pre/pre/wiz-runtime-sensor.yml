@@ -9,5 +9,6 @@ groups:
       alert_type: cause
       team: infrasec_team
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       description: The Wiz Runtime Sensors are running out of memory, {{ $labels.pod }}.
       title: Wiz Runtime Sensors getting OOMkilled.
