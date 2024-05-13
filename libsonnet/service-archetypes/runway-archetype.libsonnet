@@ -25,6 +25,8 @@ function(
     type: type,
     tier: 'sv',
 
+    tenants: ['runway'],
+
     monitoringThresholds: {
       apdexScore: apdexScore,
       errorRatio: errorRatio,
