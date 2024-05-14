@@ -62,19 +62,19 @@ local apdexAlertForSLIForAlertDescriptor(service, sli, alertDescriptor, extraSel
 
   // We use confidence_levels when the SLI requests it
   // AND the aggregation set supports it too
-  local apdexConfidenceIntervalsAvailable =
-    if sli.useConfidenceLevelForSLIAlerts != null then
+  local confidenceLevelAvailable =
+    if sli.usesConfidenceLevelForSLIAlerts() != null then
       if std.all([
         alertDescriptor.aggregationSet.getApdexRatioConfidenceIntervalMetricForBurnRate(window) != null
         for window in service.alertWindows
       ]) then
-        sli.useConfidenceLevelForSLIAlerts
+        sli.getConfidenceLevel()
       else
         std.trace('warning: SLI %s-%s wants to use confidence intervals for apdex, but its not supported on the %s aggregation set used for SLO alerting' % [service.type, sli.name, alertDescriptor.aggregationSet.id], null)
     else
       null;
 
-  local confidenceAlertLabels = if apdexConfidenceIntervalsAvailable != null then { confidence: apdexConfidenceIntervalsAvailable } else {};
+  local confidenceAlertLabels = if confidenceLevelAvailable != null then { confidence: confidenceLevelAvailable } else {};
 
   local apdexAlerts = function(thresholdSLOValue, metricSelectorHash)
     serviceLevelAlerts.apdexAlertsForSLI(
@@ -88,7 +88,7 @@ local apdexAlertForSLIForAlertDescriptor(service, sli, alertDescriptor, extraSel
       windows=service.alertWindows,
       metricSelectorHash=metricSelectorHash,
       minimumSamplesForMonitoring=alertDescriptor.minimumSamplesForMonitoring,
-      confidenceIntervalLevel=apdexConfidenceIntervalsAvailable,
+      confidenceIntervalLevel=confidenceLevelAvailable,
       alertForDuration=alertDescriptor.alertForDuration,
       extraLabels=labelsForSLIAlert(sli) + confidenceAlertLabels,
       extraAnnotations=sloAlertAnnotations(service.type, sli, alertDescriptor.aggregationSet, 'apdex')
@@ -120,19 +120,19 @@ local errorAlertForSLIForAlertDescriptor(service, sli, alertDescriptor, extraSel
 
   // We use confidence_levels when the SLI requests it
   // AND the aggregation set supports it too
-  local errorConfidenceIntervalsAvailable =
-    if sli.useConfidenceLevelForSLIAlerts != null then
+  local confidenceLevelAvailable =
+    if sli.usesConfidenceLevelForSLIAlerts() != null then
       if std.all([
         alertDescriptor.aggregationSet.getErrorRatioConfidenceIntervalMetricForBurnRate(window) != null
         for window in service.alertWindows
       ]) then
-        sli.useConfidenceLevelForSLIAlerts
+        sli.getConfidenceLevel()
       else
         std.trace('warning: SLI %s-%s wants to use confidence intervals for errors, but its not supported on the %s aggregation set used for SLO alerting' % [service.type, sli.name, alertDescriptor.aggregationSet.id], null)
     else
       null;
 
-  local confidenceAlertLabels = if errorConfidenceIntervalsAvailable != null then { confidence: errorConfidenceIntervalsAvailable } else {};
+  local confidenceAlertLabels = if confidenceLevelAvailable != null then { confidence: confidenceLevelAvailable } else {};
 
   local errorAlerts = function(thresholdSLOValue, metricSelectorHash)
     serviceLevelAlerts.errorAlertsForSLI(
@@ -146,7 +146,7 @@ local errorAlertForSLIForAlertDescriptor(service, sli, alertDescriptor, extraSel
       windows=service.alertWindows,
       metricSelectorHash=metricSelectorHash,
       minimumSamplesForMonitoring=alertDescriptor.minimumSamplesForMonitoring,
-      confidenceIntervalLevel=errorConfidenceIntervalsAvailable,
+      confidenceIntervalLevel=confidenceLevelAvailable,
       extraLabels=labelsForSLIAlert(sli) + confidenceAlertLabels,
       alertForDuration=alertDescriptor.alertForDuration,
       extraAnnotations=sloAlertAnnotations(service.type, sli, alertDescriptor.aggregationSet, 'error'),

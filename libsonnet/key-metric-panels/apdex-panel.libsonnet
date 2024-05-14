@@ -83,6 +83,7 @@ local genericApdexPanel(
 
 local apdexPanel(
   title,
+  sli,  // SLI can be null if this panel is not being used for an SLI
   aggregationSet,
   selectorHash,
   description=null,
@@ -140,7 +141,34 @@ local apdexPanel(
   else
     panelWithAverage;
 
-  panelWithLastWeek;
+  local confidenceIntervalLevel =
+    if sli != null && sli.usesConfidenceLevelForSLIAlerts() then
+      sli.getConfidenceLevel()
+    else
+      null;
+
+  // Add a confidence interval SLI if its enabled for the SLI AND
+  // We aggregation set supports confidence level recording rules
+  // at 5m (which is what we display SLIs at)
+  local confidenceSLI =
+    if confidenceIntervalLevel != null then
+      aggregationSet.getApdexRatioConfidenceIntervalMetricForBurnRate('5m')
+    else
+      null;
+
+  local panelWithConfidenceIndicator = if confidenceSLI != null then
+    panelWithLastWeek.addTarget(
+      promQuery.target(
+        sliPromQL.apdexConfidenceQuery(confidenceIntervalLevel, aggregationSet, null, selectorHashWithExtras, '$__interval', worstCase=false),
+        legendFormat='%s confidence' % [confidenceIntervalLevel],
+      )
+    )
+  // TODO: add some overrides
+  // .addSeriesOverride(seriesOverrides.lastWeek)
+  else
+    panelWithLastWeek;
+
+  panelWithConfidenceIndicator;
 
 
 {

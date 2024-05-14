@@ -209,6 +209,12 @@ local serviceLevelIndicatorDefinition(sliName, serviceLevelIndicator) =
     usesConfidenceLevelForSLIAlerts()::
       self.useConfidenceLevelForSLIAlerts != null,
 
+    // Returns the confidence interval level used on this SLI.
+    // Using a method here allows this logic to be reconfigured in future
+    // to configure opt-out rather than opt-in on confidence levels.
+    getConfidenceLevel()::
+      self.useConfidenceLevelForSLIAlerts,
+
     // Generate recording rules for apdex
     generateApdexRecordingRules(burnRate, aggregationSet, recordingRuleStaticLabels, selector={}, config={})::
       if self.hasApdex() && !isUpscalingTarget(self, burnRate) then

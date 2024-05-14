@@ -2174,6 +2174,14 @@
           "intervalFactor": 1,
           "legendFormat": "last week",
           "refId": "E"
+        },
+        {
+          "expr": "avg_over_time(gitlab_component_apdex:confidence:ratio_5m{component=\"workhorse\",confidence=\"98%\",type=\"webservice\"}[$__interval])\n",
+          "format": "time_series",
+          "interval": "1m",
+          "intervalFactor": 1,
+          "legendFormat": "98% confidence",
+          "refId": "F"
         }
       ],
       "title": "workhorse SLI Apdex",

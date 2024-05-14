@@ -87,6 +87,7 @@ local sliOverviewMatrixRow(
   local columns =
     singleMetricRow.row(
       serviceType=serviceType,
+      sli=sli,
       aggregationSet=if shardAggregationSet != null && sli.shardLevelMonitoring then shardAggregationSet else aggregationSet,
       selectorHash=selectorHashWithExtras,
       titlePrefix=if !sli.shardLevelMonitoring then '%(sliName)s SLI' % formatConfig else '%(sliName)s SLI (By Shard)' % formatConfig,

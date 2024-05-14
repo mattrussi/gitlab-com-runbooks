@@ -8,8 +8,7 @@ local globalSelector = if labelTaxonomy.hasLabelFor(labelTaxonomy.labels.environ
   { monitor: 'global' }
 else {};
 
-local apdexQuery(aggregationSet, aggregationLabels, selectorHash, range=null, worstCase=true, offset=null, clampToExpression=null) =
-  local metric = aggregationSet.getApdexRatioMetricForBurnRate('5m');
+local apdexQueryInternal(metric, aggregationSet, aggregationLabels, selectorHash, range=null, worstCase=true, offset=null, clampToExpression=null) =
   local selector = selectors.merge(aggregationSet.selector, selectorHash);
 
   local aggregation = if worstCase then 'min' else 'avg';
@@ -50,6 +49,35 @@ local apdexQuery(aggregationSet, aggregationLabels, selectorHash, range=null, wo
         scalar(min(%s))
       )
     ||| % [inner, clampToExpression];
+
+local apdexQuery(aggregationSet, aggregationLabels, selectorHash, range=null, worstCase=true, offset=null, clampToExpression=null) =
+  local metric = aggregationSet.getApdexRatioMetricForBurnRate('5m');
+
+  apdexQueryInternal(
+    metric,
+    aggregationSet,
+    aggregationLabels,
+    selectorHash,
+    range=range,
+    worstCase=worstCase,
+    offset=offset,
+    clampToExpression=clampToExpression
+  );
+
+local apdexConfidenceQuery(confidenceLevel, aggregationSet, aggregationLabels, selectorHash, range=null, worstCase=true, offset=null, clampToExpression=null) =
+  local metric = aggregationSet.getApdexRatioConfidenceIntervalMetricForBurnRate('5m');
+
+  apdexQueryInternal(
+    metric,
+    aggregationSet,
+    aggregationLabels,
+    selectorHash { confidence: confidenceLevel },
+    range=range,
+    worstCase=worstCase,
+    offset=offset,
+    clampToExpression=clampToExpression
+  );
+
 
 local opsRateQuery(aggregationSet, selectorHash, range=null, offset=null) =
   local metric = aggregationSet.getOpsRateMetricForBurnRate('5m');
@@ -183,6 +211,8 @@ local getErrorRateThresholdExpressionForWindow(selectorHash, windowDuration, fix
 
 {
   apdexQuery:: apdexQuery,
+  apdexConfidenceQuery:: apdexConfidenceQuery,
+
   opsRateQuery:: opsRateQuery,
   errorRatioQuery:: errorRatioQuery,
   sloLabels:: sloLabels,

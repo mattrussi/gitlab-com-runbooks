@@ -77,6 +77,9 @@ local combinedServiceLevelIndicatorDefinition(
         usesConfidenceLevelForSLIAlerts()::
           componentsInitialised[0].usesConfidenceLevelForSLIAlerts(),
 
+        getConfidenceLevel()::
+          componentsInitialised[0].getConfidenceLevel(),
+
         hasToolingLinks()::
           std.length(self.getToolingLinks()) > 0,
 

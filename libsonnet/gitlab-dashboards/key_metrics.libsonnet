@@ -91,6 +91,7 @@ local getColumnWidths(
     local columns =
       singleMetricRow.row(
         serviceType=serviceType,
+        sli=null,  // No SLI for headline metrics
         aggregationSet=aggregationSet,
         selectorHash=selectorHashWithExtras,
         titlePrefix=titlePrefix,
