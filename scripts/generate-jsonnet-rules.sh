@@ -83,7 +83,7 @@ function render_multi_jsonnet() {
         continue
       fi
 
-      ruby ./scripts/generate-grafana-datasource-id.rb "$file" "$datasource_id"
+      ruby ./scripts/generate_grafana_datasource_id.rb "$file" "$datasource_id"
     done
   fi
 
