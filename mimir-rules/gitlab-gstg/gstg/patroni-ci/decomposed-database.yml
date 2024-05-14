@@ -10,6 +10,7 @@ groups:
       alert_type: symptom
       pager: pagerduty
     annotations:
+      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: "CI mirrored tables for {{ $labels.source_table }} inconsistencies has exceeded threshold"
       environment: "{{ $labels.environment }}"
       description: >

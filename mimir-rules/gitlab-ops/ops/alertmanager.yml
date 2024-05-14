@@ -12,6 +12,7 @@ groups:
       alert_type: cause
       type: alertmanager
     annotations:
+      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: Alertmanager is failing sending notifications
       runbook: docs/monitoring/alertmanager-notification-failures.md
       description: Alertmanager is seeing errors for the {{$labels.integration}} integration.
@@ -27,6 +28,7 @@ groups:
       alert_type: cause
       type: alertmanager
     annotations:
+      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: Alertmanager is failing sending notifications for the webhook integration
       runbook: docs/monitoring/alertmanager-notification-failures.md
       description: Alertmanager is seeing errors for the webhook integration, check https://console.cloud.google.com/functions/details/us-central1/alertManagerBridge?env=gen1&project=gitlab-infra-automation

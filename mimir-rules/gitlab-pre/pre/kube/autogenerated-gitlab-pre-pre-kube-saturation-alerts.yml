@@ -20,6 +20,7 @@ groups:
   - alert: component_saturation_slo_out_of_bounds:kube_container_cpu_limit
     for: 15m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The Kube Container CPU over-utilization resource of the {{ $labels.type
         }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
         is close to its capacity limit.
@@ -85,6 +86,7 @@ groups:
   - alert: component_saturation_slo_out_of_bounds:kube_container_memory
     for: 15m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The Kube Container Memory Utilization resource of the {{ $labels.type
         }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
         is close to its capacity limit.
@@ -136,6 +138,7 @@ groups:
   - alert: component_saturation_slo_out_of_bounds:kube_container_throttling
     for: 10m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The Kube container throttling resource of the {{ $labels.type }} service
         ({{ $labels.stage }} stage) has a saturation exceeding SLO and is close to
         its capacity limit.
@@ -197,6 +200,7 @@ groups:
   - alert: component_saturation_slo_out_of_bounds:kube_horizontalpodautoscaler_desired_replicas
     for: 25m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The Horizontal Pod Autoscaler Desired Replicas resource of the {{ $labels.type
         }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
         is close to its capacity limit.
@@ -250,6 +254,7 @@ groups:
   - alert: component_saturation_slo_out_of_bounds:kube_node_ips
     for: 5m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The Node IP subnet saturation resource of the {{ $labels.type }} service
         ({{ $labels.stage }} stage) has a saturation exceeding SLO and is close to
         its capacity limit.
@@ -307,6 +312,7 @@ groups:
   - alert: component_saturation_slo_out_of_bounds:kube_persistent_volume_claim_disk_space
     for: 5m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The Kube Persistent Volume Claim Space Utilisation resource of the {{
         $labels.type }} service ({{ $labels.stage }} stage) has a saturation exceeding
         SLO and is close to its capacity limit.
@@ -359,6 +365,7 @@ groups:
   - alert: component_saturation_slo_out_of_bounds:kube_persistent_volume_claim_inodes
     for: 5m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The Kube Persistent Volume Claim inode Utilisation resource of the {{
         $labels.type }} service ({{ $labels.stage }} stage) has a saturation exceeding
         SLO and is close to its capacity limit.
@@ -411,6 +418,7 @@ groups:
   - alert: component_saturation_slo_out_of_bounds:kube_pool_cpu
     for: 5m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The Average Node Pool CPU Utilization resource of the {{ $labels.type
         }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
         is close to its capacity limit.
@@ -464,6 +472,7 @@ groups:
   - alert: component_saturation_slo_out_of_bounds:kube_pool_max_nodes
     for: 5m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The Kube Pool Max Node Limit resource of the {{ $labels.type }} service
         ({{ $labels.stage }} stage) has a saturation exceeding SLO and is close to
         its capacity limit.

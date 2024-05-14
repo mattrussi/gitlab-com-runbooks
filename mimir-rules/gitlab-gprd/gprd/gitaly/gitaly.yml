@@ -87,6 +87,7 @@ groups:
       severity: s1
       alert_type: cause
     annotations:
+      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       description: Gitaly has been marked as down for the past minute on {{$labels.instance}}.
         Check Gitaly logs and restart the process if necessary
       runbook: docs/gitaly/gitaly-down.md
@@ -105,6 +106,7 @@ groups:
       severity: s1
       alert_type: cause
     annotations:
+      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       description: Two or more different version of Gitaly are running in stage {{ $labels.stage }}
         During a deployment, two distinct versions of Gitaly may be running
         alongside one another, but this should not be the case for more than 60m.
@@ -122,6 +124,7 @@ groups:
       alert_type: cause
       type: gitaly
     annotations:
+      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       description: Recent GCP scheduled snapshot are missing for one or more disks. Please follow the runbook to review the problem.
       runbook: docs/disaster-recovery/gcp-snapshots.md
       title: GCP scheduled snapshots are missing for at least one Gitaly data disk in Production

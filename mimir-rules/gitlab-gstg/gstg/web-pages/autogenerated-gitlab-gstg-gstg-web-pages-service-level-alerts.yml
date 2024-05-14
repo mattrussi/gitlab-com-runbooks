@@ -7,6 +7,7 @@ groups:
   - alert: WebPagesServiceLoadbalancerErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The loadbalancer SLI of the web-pages service (`{{ $labels.stage }}`
         stage) has an error rate violating SLO
       description: |
@@ -51,6 +52,7 @@ groups:
   - alert: WebPagesServiceLoadbalancerErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The loadbalancer SLI of the web-pages service (`{{ $labels.stage }}`
         stage) has an error rate violating SLO
       description: |
@@ -95,6 +97,7 @@ groups:
   - alert: WebPagesServiceLoadbalancerErrorSLOViolationRegional
     for: 2m
     annotations:
+      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The loadbalancer SLI of the web-pages service in region `{{ $labels.region
         }}` has an error rate violating SLO
       description: |
@@ -141,6 +144,7 @@ groups:
   - alert: WebPagesServiceLoadbalancerErrorSLOViolationRegional
     for: 2m
     annotations:
+      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The loadbalancer SLI of the web-pages service in region `{{ $labels.region
         }}` has an error rate violating SLO
       description: |
@@ -187,6 +191,7 @@ groups:
   - alert: WebPagesServiceLoadbalancerTrafficCessation
     for: 5m
     annotations:
+      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The loadbalancer SLI of the web-pages service (`{{ $labels.stage }}`
         stage) has not received any traffic in the past 30m
       description: |
@@ -218,6 +223,7 @@ groups:
   - alert: WebPagesServiceLoadbalancerTrafficAbsent
     for: 30m
     annotations:
+      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The loadbalancer SLI of the web-pages service (`{{ $labels.stage }}`
         stage) has not reported any traffic in the past 30m
       description: |
@@ -251,6 +257,7 @@ groups:
   - alert: WebPagesServiceLoadbalancerTrafficCessationRegional
     for: 5m
     annotations:
+      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The loadbalancer SLI of the web-pages service in region `{{ $labels.region
         }}` has not received any traffic in the past 30m
       description: |
@@ -284,6 +291,7 @@ groups:
   - alert: WebPagesServiceLoadbalancerTrafficAbsentRegional
     for: 30m
     annotations:
+      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The loadbalancer SLI of the web-pages service in region `{{ $labels.region
         }}` has not reported any traffic in the past 30m
       description: |
@@ -319,6 +327,7 @@ groups:
   - alert: WebPagesServiceLoadbalancerHttpsErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The loadbalancer_https SLI of the web-pages service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
@@ -363,6 +372,7 @@ groups:
   - alert: WebPagesServiceLoadbalancerHttpsErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The loadbalancer_https SLI of the web-pages service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
@@ -407,6 +417,7 @@ groups:
   - alert: WebPagesServiceLoadbalancerHttpsErrorSLOViolationRegional
     for: 2m
     annotations:
+      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The loadbalancer_https SLI of the web-pages service in region `{{ $labels.region
         }}` has an error rate violating SLO
       description: |
@@ -453,6 +464,7 @@ groups:
   - alert: WebPagesServiceLoadbalancerHttpsErrorSLOViolationRegional
     for: 2m
     annotations:
+      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The loadbalancer_https SLI of the web-pages service in region `{{ $labels.region
         }}` has an error rate violating SLO
       description: |
@@ -499,6 +511,7 @@ groups:
   - alert: WebPagesServiceLoadbalancerHttpsTrafficCessation
     for: 5m
     annotations:
+      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The loadbalancer_https SLI of the web-pages service (`{{ $labels.stage
         }}` stage) has not received any traffic in the past 30m
       description: |
@@ -530,6 +543,7 @@ groups:
   - alert: WebPagesServiceLoadbalancerHttpsTrafficAbsent
     for: 30m
     annotations:
+      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The loadbalancer_https SLI of the web-pages service (`{{ $labels.stage
         }}` stage) has not reported any traffic in the past 30m
       description: |
@@ -563,6 +577,7 @@ groups:
   - alert: WebPagesServiceLoadbalancerHttpsTrafficCessationRegional
     for: 5m
     annotations:
+      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The loadbalancer_https SLI of the web-pages service in region `{{ $labels.region
         }}` has not received any traffic in the past 30m
       description: |
@@ -596,6 +611,7 @@ groups:
   - alert: WebPagesServiceLoadbalancerHttpsTrafficAbsentRegional
     for: 30m
     annotations:
+      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The loadbalancer_https SLI of the web-pages service in region `{{ $labels.region
         }}` has not reported any traffic in the past 30m
       description: |
@@ -631,6 +647,7 @@ groups:
   - alert: WebPagesServiceWebPagesServerApdexSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The web_pages_server SLI of the web-pages service (`{{ $labels.stage
         }}` stage) has an apdex violating SLO
       description: |
@@ -682,6 +699,7 @@ groups:
   - alert: WebPagesServiceWebPagesServerApdexSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The web_pages_server SLI of the web-pages service (`{{ $labels.stage
         }}` stage) has an apdex violating SLO
       description: |
@@ -733,6 +751,7 @@ groups:
   - alert: WebPagesServiceWebPagesServerApdexSLOViolationRegional
     for: 2m
     annotations:
+      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The web_pages_server SLI of the web-pages service in region `{{ $labels.region
         }}` has an apdex violating SLO
       description: |
@@ -786,6 +805,7 @@ groups:
   - alert: WebPagesServiceWebPagesServerApdexSLOViolationRegional
     for: 2m
     annotations:
+      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The web_pages_server SLI of the web-pages service in region `{{ $labels.region
         }}` has an apdex violating SLO
       description: |
@@ -839,6 +859,7 @@ groups:
   - alert: WebPagesServiceWebPagesServerErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The web_pages_server SLI of the web-pages service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
@@ -887,6 +908,7 @@ groups:
   - alert: WebPagesServiceWebPagesServerErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The web_pages_server SLI of the web-pages service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
@@ -935,6 +957,7 @@ groups:
   - alert: WebPagesServiceWebPagesServerErrorSLOViolationRegional
     for: 2m
     annotations:
+      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The web_pages_server SLI of the web-pages service in region `{{ $labels.region
         }}` has an error rate violating SLO
       description: |
@@ -985,6 +1008,7 @@ groups:
   - alert: WebPagesServiceWebPagesServerErrorSLOViolationRegional
     for: 2m
     annotations:
+      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The web_pages_server SLI of the web-pages service in region `{{ $labels.region
         }}` has an error rate violating SLO
       description: |
@@ -1035,6 +1059,7 @@ groups:
   - alert: WebPagesServiceWebPagesServerTrafficCessation
     for: 5m
     annotations:
+      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The web_pages_server SLI of the web-pages service (`{{ $labels.stage
         }}` stage) has not received any traffic in the past 30m
       description: |
@@ -1070,6 +1095,7 @@ groups:
   - alert: WebPagesServiceWebPagesServerTrafficAbsent
     for: 30m
     annotations:
+      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The web_pages_server SLI of the web-pages service (`{{ $labels.stage
         }}` stage) has not reported any traffic in the past 30m
       description: |
@@ -1107,6 +1133,7 @@ groups:
   - alert: WebPagesServiceWebPagesServerTrafficCessationRegional
     for: 5m
     annotations:
+      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The web_pages_server SLI of the web-pages service in region `{{ $labels.region
         }}` has not received any traffic in the past 30m
       description: |
@@ -1144,6 +1171,7 @@ groups:
   - alert: WebPagesServiceWebPagesServerTrafficAbsentRegional
     for: 30m
     annotations:
+      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The web_pages_server SLI of the web-pages service in region `{{ $labels.region
         }}` has not reported any traffic in the past 30m
       description: |

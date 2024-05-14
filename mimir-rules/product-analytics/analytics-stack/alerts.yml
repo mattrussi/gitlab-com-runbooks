@@ -9,6 +9,7 @@ groups:
       severity: s4
       team: product_analytics
     annotations:
+      grafana_datasource_id: afc602e5-4a21-40e9-a7ed-b31a3dec1cc3
       title: Vector errors
       description: >
         Too many vector errors in cluster {{ $labels.cluster }} have been occurring for the last 5 minutes.
@@ -20,6 +21,7 @@ groups:
       severity: s4
       team: product_analytics
     annotations:
+      grafana_datasource_id: afc602e5-4a21-40e9-a7ed-b31a3dec1cc3
       title: SSL errors
       description: >
         Too many SSL errors in cluster {{ $labels.cluster }} have been occurring for the last 5 minutes.
@@ -31,6 +33,7 @@ groups:
       severity: s4
       team: product_analytics
     annotations:
+      grafana_datasource_id: afc602e5-4a21-40e9-a7ed-b31a3dec1cc3
       title: Kafka consumer group lag
       description: >
         Kafka consumer group lag in cluster {{ $labels.cluster }} for consumer group {{ $labels.consumergroup }} and topic {{ $labels.topic }} is too high the last 5 minutes.

@@ -7,6 +7,7 @@ groups:
   - alert: RedisRegistryCacheServicePrimaryServerTrafficCessation
     for: 5m
     annotations:
+      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The primary_server SLI of the redis-registry-cache service (`{{ $labels.stage
         }}` stage) has not received any traffic in the past 30m
       description: |
@@ -42,6 +43,7 @@ groups:
   - alert: RedisRegistryCacheServicePrimaryServerTrafficAbsent
     for: 30m
     annotations:
+      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The primary_server SLI of the redis-registry-cache service (`{{ $labels.stage
         }}` stage) has not reported any traffic in the past 30m
       description: |
@@ -79,6 +81,7 @@ groups:
   - alert: RedisRegistryCacheServiceRegistryRedisClientApdexSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The registry_redis_client SLI of the redis-registry-cache service (`{{
         $labels.stage }}` stage) has an apdex violating SLO
       description: |
@@ -129,6 +132,7 @@ groups:
   - alert: RedisRegistryCacheServiceRegistryRedisClientApdexSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The registry_redis_client SLI of the redis-registry-cache service (`{{
         $labels.stage }}` stage) has an apdex violating SLO
       description: |
@@ -179,6 +183,7 @@ groups:
   - alert: RedisRegistryCacheServiceRegistryRedisClientErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The registry_redis_client SLI of the redis-registry-cache service (`{{
         $labels.stage }}` stage) has an error rate violating SLO
       description: |
@@ -226,6 +231,7 @@ groups:
   - alert: RedisRegistryCacheServiceRegistryRedisClientErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The registry_redis_client SLI of the redis-registry-cache service (`{{
         $labels.stage }}` stage) has an error rate violating SLO
       description: |
@@ -273,6 +279,7 @@ groups:
   - alert: RedisRegistryCacheServiceRegistryRedisClientTrafficCessation
     for: 5m
     annotations:
+      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The registry_redis_client SLI of the redis-registry-cache service (`{{
         $labels.stage }}` stage) has not received any traffic in the past 30m
       description: |
@@ -307,6 +314,7 @@ groups:
   - alert: RedisRegistryCacheServiceRegistryRedisClientTrafficAbsent
     for: 30m
     annotations:
+      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The registry_redis_client SLI of the redis-registry-cache service (`{{
         $labels.stage }}` stage) has not reported any traffic in the past 30m
       description: |
@@ -343,6 +351,7 @@ groups:
   - alert: RedisRegistryCacheServiceSecondaryServersTrafficCessation
     for: 5m
     annotations:
+      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The secondary_servers SLI of the redis-registry-cache service (`{{ $labels.stage
         }}` stage) has not received any traffic in the past 30m
       description: |
@@ -378,6 +387,7 @@ groups:
   - alert: RedisRegistryCacheServiceSecondaryServersTrafficAbsent
     for: 30m
     annotations:
+      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The secondary_servers SLI of the redis-registry-cache service (`{{ $labels.stage
         }}` stage) has not reported any traffic in the past 30m
       description: |

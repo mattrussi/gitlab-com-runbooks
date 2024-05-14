@@ -7,6 +7,7 @@ groups:
   - alert: RedisPubsubServicePrimaryServerTrafficCessation
     for: 5m
     annotations:
+      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The primary_server SLI of the redis-pubsub service (`{{ $labels.stage
         }}` stage) has not received any traffic in the past 30m
       description: |
@@ -42,6 +43,7 @@ groups:
   - alert: RedisPubsubServicePrimaryServerTrafficAbsent
     for: 30m
     annotations:
+      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The primary_server SLI of the redis-pubsub service (`{{ $labels.stage
         }}` stage) has not reported any traffic in the past 30m
       description: |
@@ -79,6 +81,7 @@ groups:
   - alert: RedisPubsubServiceRailsRedisClientApdexSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The rails_redis_client SLI of the redis-pubsub service (`{{ $labels.stage
         }}` stage) has an apdex violating SLO
       description: |
@@ -130,6 +133,7 @@ groups:
   - alert: RedisPubsubServiceRailsRedisClientApdexSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The rails_redis_client SLI of the redis-pubsub service (`{{ $labels.stage
         }}` stage) has an apdex violating SLO
       description: |
@@ -181,6 +185,7 @@ groups:
   - alert: RedisPubsubServiceRailsRedisClientErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The rails_redis_client SLI of the redis-pubsub service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
@@ -229,6 +234,7 @@ groups:
   - alert: RedisPubsubServiceRailsRedisClientErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The rails_redis_client SLI of the redis-pubsub service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
@@ -277,6 +283,7 @@ groups:
   - alert: RedisPubsubServiceRailsRedisClientTrafficCessation
     for: 5m
     annotations:
+      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The rails_redis_client SLI of the redis-pubsub service (`{{ $labels.stage
         }}` stage) has not received any traffic in the past 30m
       description: |
@@ -312,6 +319,7 @@ groups:
   - alert: RedisPubsubServiceRailsRedisClientTrafficAbsent
     for: 30m
     annotations:
+      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The rails_redis_client SLI of the redis-pubsub service (`{{ $labels.stage
         }}` stage) has not reported any traffic in the past 30m
       description: |
@@ -349,6 +357,7 @@ groups:
   - alert: RedisPubsubServiceSecondaryServersTrafficCessation
     for: 5m
     annotations:
+      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The secondary_servers SLI of the redis-pubsub service (`{{ $labels.stage
         }}` stage) has not received any traffic in the past 30m
       description: |
@@ -384,6 +393,7 @@ groups:
   - alert: RedisPubsubServiceSecondaryServersTrafficAbsent
     for: 30m
     annotations:
+      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The secondary_servers SLI of the redis-pubsub service (`{{ $labels.stage
         }}` stage) has not reported any traffic in the past 30m
       description: |

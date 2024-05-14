@@ -9,6 +9,7 @@ groups:
       severity: s1
       alert_type: symptom
     annotations:
+      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       description: |
         ExternalDNS has not synced successfully with Google Cloud DNS in
         cluster {{.labels.cluster}} (region {{.labels.region}}) in the last

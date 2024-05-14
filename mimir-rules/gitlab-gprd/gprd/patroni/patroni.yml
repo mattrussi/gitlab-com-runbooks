@@ -9,6 +9,7 @@ groups:
           severity: s1
           alert_type: cause
         annotations:
+          grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
           description: Patroni on {{$labels.fqdn}} is logging errors, this can mean it can't start PostgreSQL.
           title: Patroni is logging errors
           runbook: docs/patroni/patroni-management.md
@@ -20,6 +21,7 @@ groups:
           severity: s1
           alert_type: cause
         annotations:
+          grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
           description: Patroni on {{$labels.fqdn}} seems to be down, which means that PostgreSQL is probably down there as well.
           title: Patroni is down
           runbook: docs/patroni/patroni-management.md
@@ -31,6 +33,7 @@ groups:
           alert_type: cause
           incident_project: gitlab.com/gitlab-com/gl-infra/production
         annotations:
+          grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
           description: The xmin horizon is too old on {{$labels.fqdn}}.
           title: Long-running transactions detected on Patroni
           runbook: docs/patroni/pg_xid_xmin_age_alert.md
@@ -43,6 +46,7 @@ groups:
           alert_type: cause
           incident_project: gitlab.com/gitlab-com/gl-infra/production
         annotations:
+          grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
           description: The patroni consul service {{$labels.service_id}} has more than one master.
           title: Patroni Consul service has more than one master registered.
           runbook: docs/patroni/patroni-management.md
@@ -55,6 +59,7 @@ groups:
           alert_type: cause
           incident_project: gitlab.com/gitlab-com/gl-infra/production
         annotations:
+          grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
           description: More than one postgres instance in read-write mode for cluster {{$labels.type}}.
           title: More than one postgres instance in read-write mode.
           runbook: docs/patroni/patroni-management.md

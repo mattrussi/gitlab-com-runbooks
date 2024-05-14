@@ -14,6 +14,7 @@ groups:
       alert_type: symptom
       team: container_registry
     annotations:
+      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: 'The Container Registry database connection pool saturation is too high'
       description: 'The average application-side database connection pool saturation in env {{ $labels.environment }} {{ $labels.stage }} stage has been above 70% for the last 30 minutes.'
       grafana_dashboard_id: registry-database/registry-database-detail

@@ -20,6 +20,7 @@ groups:
   - alert: component_saturation_slo_out_of_bounds:cpu
     for: 5m
     annotations:
+      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The Average Service CPU Utilization resource of the {{ $labels.type }}
         service ({{ $labels.stage }} stage) has a saturation exceeding SLO and is
         close to its capacity limit.
@@ -71,6 +72,7 @@ groups:
   - alert: component_saturation_slo_out_of_bounds:disk_inodes
     for: 15m
     annotations:
+      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The Disk inode Utilization per Device per Node resource of the {{ $labels.type
         }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
         is close to its capacity limit.
@@ -129,6 +131,7 @@ groups:
   - alert: ComponentResourceRunningOut_disk_inodes
     for: 15m
     annotations:
+      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The Disk inode Utilization per Device per Node resource of the {{ $labels.type
         }} service ({{ $labels.stage }} stage) is on track to hit capacity within
         6h
@@ -189,6 +192,7 @@ groups:
   - alert: component_saturation_slo_out_of_bounds:disk_space
     for: 15m
     annotations:
+      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The Disk Space Utilization per Device per Node resource of the {{ $labels.type
         }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
         is close to its capacity limit.
@@ -241,6 +245,7 @@ groups:
   - alert: ComponentResourceRunningOut_disk_space
     for: 15m
     annotations:
+      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The Disk Space Utilization per Device per Node resource of the {{ $labels.type
         }} service ({{ $labels.stage }} stage) is on track to hit capacity within
         6h
@@ -295,6 +300,7 @@ groups:
   - alert: component_saturation_slo_out_of_bounds:kube_container_cpu_limit
     for: 15m
     annotations:
+      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The Kube Container CPU over-utilization resource of the {{ $labels.type
         }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
         is close to its capacity limit.
@@ -360,6 +366,7 @@ groups:
   - alert: component_saturation_slo_out_of_bounds:kube_container_memory
     for: 15m
     annotations:
+      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The Kube Container Memory Utilization resource of the {{ $labels.type
         }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
         is close to its capacity limit.
@@ -411,6 +418,7 @@ groups:
   - alert: component_saturation_slo_out_of_bounds:kube_container_throttling
     for: 10m
     annotations:
+      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The Kube container throttling resource of the {{ $labels.type }} service
         ({{ $labels.stage }} stage) has a saturation exceeding SLO and is close to
         its capacity limit.
@@ -472,6 +480,7 @@ groups:
   - alert: component_saturation_slo_out_of_bounds:kube_horizontalpodautoscaler_desired_replicas
     for: 25m
     annotations:
+      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The Horizontal Pod Autoscaler Desired Replicas resource of the {{ $labels.type
         }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
         is close to its capacity limit.
@@ -525,6 +534,7 @@ groups:
   - alert: component_saturation_slo_out_of_bounds:kube_pool_cpu
     for: 5m
     annotations:
+      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The Average Node Pool CPU Utilization resource of the {{ $labels.type
         }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
         is close to its capacity limit.
@@ -578,6 +588,7 @@ groups:
   - alert: component_saturation_slo_out_of_bounds:kube_pool_max_nodes
     for: 5m
     annotations:
+      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The Kube Pool Max Node Limit resource of the {{ $labels.type }} service
         ({{ $labels.stage }} stage) has a saturation exceeding SLO and is close to
         its capacity limit.
@@ -655,6 +666,7 @@ groups:
   - alert: component_saturation_slo_out_of_bounds:memory
     for: 5m
     annotations:
+      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The Memory Utilization per Node resource of the {{ $labels.type }} service
         ({{ $labels.stage }} stage) has a saturation exceeding SLO and is close to
         its capacity limit.
@@ -702,6 +714,7 @@ groups:
   - alert: component_saturation_slo_out_of_bounds:nf_conntrack_entries
     for: 5m
     annotations:
+      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The conntrack Entries per Node resource of the {{ $labels.type }} service
         ({{ $labels.stage }} stage) has a saturation exceeding SLO and is close to
         its capacity limit.
@@ -755,6 +768,7 @@ groups:
   - alert: component_saturation_slo_out_of_bounds:node_schedstat_waiting
     for: 90m
     annotations:
+      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The Node Scheduler Waiting Time resource of the {{ $labels.type }} service
         ({{ $labels.stage }} stage) has a saturation exceeding SLO and is close to
         its capacity limit.
@@ -806,6 +820,7 @@ groups:
   - alert: component_saturation_slo_out_of_bounds:open_fds
     for: 5m
     annotations:
+      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The Open file descriptor utilization per instance resource of the {{
         $labels.type }} service ({{ $labels.stage }} stage) has a saturation exceeding
         SLO and is close to its capacity limit.
@@ -878,6 +893,7 @@ groups:
   - alert: component_saturation_slo_out_of_bounds:redis_clients
     for: 5m
     annotations:
+      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The Redis Client Utilization per Node resource of the {{ $labels.type
         }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
         is close to its capacity limit.
@@ -933,6 +949,7 @@ groups:
   - alert: component_saturation_slo_out_of_bounds:redis_memory
     for: 5m
     annotations:
+      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The Redis Memory Utilization per Node resource of the {{ $labels.type
         }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
         is close to its capacity limit.
@@ -1003,6 +1020,7 @@ groups:
   - alert: component_saturation_slo_out_of_bounds:redis_memory_sessions
     for: 5m
     annotations:
+      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The Redis Memory Utilization of Max Memory resource of the {{ $labels.type
         }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
         is close to its capacity limit.
@@ -1069,6 +1087,7 @@ groups:
   - alert: component_saturation_slo_out_of_bounds:redis_primary_cpu
     for: 5m
     annotations:
+      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The Redis Primary CPU Utilization per Node resource of the {{ $labels.type
         }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
         is close to its capacity limit.
@@ -1127,6 +1146,7 @@ groups:
   - alert: component_saturation_slo_out_of_bounds:redis_secondary_cpu
     for: 5m
     annotations:
+      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The Redis Secondary CPU Utilization per Node resource of the {{ $labels.type
         }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
         is close to its capacity limit.
@@ -1186,6 +1206,7 @@ groups:
   - alert: component_saturation_slo_out_of_bounds:shard_cpu
     for: 5m
     annotations:
+      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The Average CPU Utilization per Shard resource of the {{ $labels.type
         }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
         is close to its capacity limit.
@@ -1237,6 +1258,7 @@ groups:
   - alert: component_saturation_slo_out_of_bounds:single_node_cpu
     for: 10m
     annotations:
+      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The Average CPU Utilization per Node resource of the {{ $labels.type
         }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
         is close to its capacity limit.

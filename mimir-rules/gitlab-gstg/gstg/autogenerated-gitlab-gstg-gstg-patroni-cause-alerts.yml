@@ -6,6 +6,7 @@ groups:
   - alert: PostgreSQL_HotSpotTupleFetchingPrimary
     for: 10m
     annotations:
+      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: Hot spot tuple fetches on the postgres primary `{{ $labels.fqdn }}` in
         the `{{ $labels.relname }}` table, `{{ $labels.relname }}`.
       description: |
@@ -46,6 +47,7 @@ groups:
   - alert: PostgreSQL_HotSpotTupleFetchingReplicas
     for: 10m
     annotations:
+      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: Hot spot tuple fetches on the postgres postgres replicas in the `{{ $labels.relname
         }}` table, `{{ $labels.relname }}`.
       description: |
@@ -86,6 +88,7 @@ groups:
   - alert: PostgreSQLAccessGroupTupleFetchesWarningTrigger
     for: 1h
     annotations:
+      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: Average fetches on the postgres primary in the project_authorizations
         table exceeds 5% of total
       description: |
@@ -123,6 +126,7 @@ groups:
   - alert: PatroniSubtransControlLocksDetected
     for: 5m
     annotations:
+      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: Subtransactions wait events have been detected in the database in the
         last 5 minutes
       description: |
@@ -141,6 +145,7 @@ groups:
   - alert: PatroniLongRunningTransactionDetected
     for: 1m
     annotations:
+      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: Transactions detected that have been running on `{{ $labels.fqdn }}`
         for more than 10m
       description: |

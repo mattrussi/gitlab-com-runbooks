@@ -20,6 +20,7 @@ groups:
   - alert: component_saturation_slo_out_of_bounds:cloudsql_cpu
     for: 5m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The CloudSQL CPU Utilization resource of the {{ $labels.type }} service
         ({{ $labels.stage }} stage) has a saturation exceeding SLO and is close to
         its capacity limit.
@@ -69,6 +70,7 @@ groups:
   - alert: component_saturation_slo_out_of_bounds:cloudsql_disk
     for: 5m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The CloudSQL Disk Utilization resource of the {{ $labels.type }} service
         ({{ $labels.stage }} stage) has a saturation exceeding SLO and is close to
         its capacity limit.
@@ -118,6 +120,7 @@ groups:
   - alert: component_saturation_slo_out_of_bounds:cloudsql_memory
     for: 5m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The CloudSQL Memory Utilization resource of the {{ $labels.type }} service
         ({{ $labels.stage }} stage) has a saturation exceeding SLO and is close to
         its capacity limit.
