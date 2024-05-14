@@ -182,6 +182,20 @@ reconfigure() {
   echo "< reconfigure $fqdn"
 }
 
+check_bootstrapped() {
+  uniques=()
+  while IFS='' read -r line; do uniques+=("$line"); done < <(
+    for host in $(seq -f "${gitlab_redis_service}-%02g-db-${gitlab_env}.c.${gitlab_project}.internal" 1 3); do
+      ssh "$host" "$redis_cli role | head -n1"
+    done | sort
+  )
+
+  if [ "${uniques[*]}" == 'master slave slave' ]; then
+    echo >&2 "error: already bootstrapped"
+    exit 1
+  fi
+}
+
 bootstrap() {
   export i=$1
   export fqdn="${gitlab_redis_service}-$i-db-${gitlab_env}.c.${gitlab_project}.internal"
@@ -202,8 +216,7 @@ bootstrap() {
 for i in 01 02 03; do
 
   if [[ $bootstrap == "yes" ]]; then
-    echo ensure cluster is not already bootstrapped
-    wait_for_input
+    check_bootstrapped
     bootstrap $i
   else
     failover_if_master $i
