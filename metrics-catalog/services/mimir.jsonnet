@@ -21,7 +21,7 @@ local mimirServiceSelector = { type: 'mimir', namespace: 'mimir' };
 metricsCatalog.serviceDefinition({
   type: 'mimir',
   tier: 'inf',
-  tenants: [ 'metamonitoring' ],
+  tenants: ['metamonitoring'],
 
   tags: ['mimir'],
 
@@ -143,6 +143,10 @@ metricsCatalog.serviceDefinition({
     },
   },
   serviceLevelIndicators: {
+
+    // Shared by `mimir_querier` and `mimir_querier_frontend` SLIs
+    local querierRouteSelector = { route: { re: 'prometheus_(api|prom)_v1_.+' } },
+
     mimir_querier: {
       staticLabels: staticLabels,
       severity: 's3',
@@ -160,20 +164,19 @@ metricsCatalog.serviceDefinition({
       },
 
       apdex: histogramApdex(
-        histogram='cortex_querier_request_duration_seconds_count',
-        selector=mimirQuerySelector,
-        satisfiedThreshold=30,
-        metricsFormat='openmetrics'
+        histogram='cortex_querier_request_duration_seconds_bucket',
+        selector=mimirQuerySelector + querierRouteSelector,
+        satisfiedThreshold=25.0,
       ),
 
       requestRate: rateMetric(
-        counter='cortex_request_duration_seconds_count',
-        selector=mimirQuerySelector
+        counter='cortex_querier_request_duration_seconds_count',
+        selector=mimirQuerySelector + querierRouteSelector,
       ),
 
       errorRate: rateMetric(
-        counter='cortex_request_duration_seconds_count',
-        selector=mimirQuerySelector { code: { re: '^5.*' } }
+        counter='cortex_querier_request_duration_seconds_count',
+        selector=mimirQuerySelector + querierRouteSelector { status_code: { re: '^5.*' } },
       ),
 
       significantLabels: [],
@@ -199,20 +202,19 @@ metricsCatalog.serviceDefinition({
       },
 
       apdex: histogramApdex(
-        histogram='cortex_querier_query_frontend_request_duration_seconds_bucket',
-        selector=mimirQuerySelector,
-        satisfiedThreshold=30,
-        metricsFormat='openmetrics'
+        histogram='cortex_request_duration_seconds_bucket',
+        selector=mimirQuerySelector + querierRouteSelector,
+        satisfiedThreshold=25.0,
       ),
 
       requestRate: rateMetric(
         counter='cortex_request_duration_seconds_count',
-        selector=mimirQuerySelector
+        selector=mimirQuerySelector + querierRouteSelector,
       ),
 
       errorRate: rateMetric(
         counter='cortex_request_duration_seconds_count',
-        selector=mimirQuerySelector { code: { re: '^5.*' } }
+        selector=mimirQuerySelector + querierRouteSelector { status_code: { re: '^5.*' } },
       ),
 
       significantLabels: [],
@@ -234,25 +236,24 @@ metricsCatalog.serviceDefinition({
         This SLI monitors the query-scheduler requests. 5xx responses are considered failures.
       |||,
 
-      local mimirQuerySelector = mimirServiceSelector {
+      local mimirSchedulerSelector = mimirServiceSelector {
         job: 'mimir/query-scheduler',
       },
 
       apdex: histogramApdex(
         histogram='cortex_query_scheduler_queue_duration_seconds_bucket',
-        selector=mimirQuerySelector,
-        satisfiedThreshold=30,
-        metricsFormat='openmetrics'
+        selector=mimirSchedulerSelector,
+        satisfiedThreshold=5.0,
       ),
 
       requestRate: rateMetric(
         counter='cortex_query_scheduler_queue_duration_seconds_count',
-        selector=mimirQuerySelector
+        selector=mimirSchedulerSelector
       ),
 
       errorRate: rateMetric(
         counter='cortex_query_scheduler_queue_duration_seconds_count',
-        selector=mimirQuerySelector { code: { re: '^5.*' } }
+        selector=mimirSchedulerSelector { status_code: { re: '^5.*' } }
       ),
 
       significantLabels: [],
@@ -274,25 +275,25 @@ metricsCatalog.serviceDefinition({
         This SLI monitors the store-gatewau requests. 5xx responses are considered failures.
       |||,
 
-      local mimirQuerySelector = mimirServiceSelector {
+      local mimirStoreGatewaySelector = mimirServiceSelector {
         job: 'mimir/store-gateway',
+        route: { re: '/gatewaypb\\\\.StoreGateway/.*' },
       },
 
       apdex: histogramApdex(
-        histogram='cortex_kv_request_duration_seconds_bucket',
-        selector=mimirQuerySelector,
-        satisfiedThreshold=30,
-        metricsFormat='openmetrics'
+        histogram='cortex_request_duration_seconds_bucket',
+        selector=mimirStoreGatewaySelector,
+        satisfiedThreshold=25.0,
       ),
 
       requestRate: rateMetric(
-        counter='cortex_kv_request_duration_seconds_count',
-        selector=mimirQuerySelector
+        counter='cortex_request_duration_seconds_count',
+        selector=mimirStoreGatewaySelector,
       ),
 
       errorRate: rateMetric(
-        counter='cortex_kv_request_duration_seconds_count',
-        selector=mimirQuerySelector { code: { re: '^5.*' } }
+        counter='cortex_request_duration_seconds_count',
+        selector=mimirStoreGatewaySelector { status_code: { re: '^5.*' } }
       ),
 
       significantLabels: [],
@@ -316,25 +317,26 @@ metricsCatalog.serviceDefinition({
         This SLI monitors the distributor requests. 5xx responses are considered failures.
       |||,
 
-      local mimirQuerySelector = mimirServiceSelector {
+      local mimirQueryDistributorSelector = mimirServiceSelector {
         job: 'mimir/distributor',
+        route: { oneOf: ['/distributor\\\\.Distributor/Push', '/httpgrpc.*', 'api_(v1|prom)_push', 'otlp_v1_metrics'] },
       },
 
       apdex: histogramApdex(
         histogram='cortex_request_duration_seconds_bucket',
-        selector=mimirQuerySelector,
-        satisfiedThreshold=30,
-        metricsFormat='openmetrics'
+        selector=mimirQueryDistributorSelector,
+        satisfiedThreshold=0.5,
+        toleratedThreshold=1.0,
       ),
 
       requestRate: rateMetric(
         counter='cortex_request_duration_seconds_count',
-        selector=mimirQuerySelector
+        selector=mimirQueryDistributorSelector,
       ),
 
       errorRate: rateMetric(
         counter='cortex_request_duration_seconds_count',
-        selector=mimirQuerySelector { code: { re: '^5.*' } }
+        selector=mimirQueryDistributorSelector { status_code: { re: '^5.*' } },
       ),
 
       significantLabels: [],
@@ -357,25 +359,26 @@ metricsCatalog.serviceDefinition({
         This SLI monitors the distributor requests. 5xx responses are considered failures.
       |||,
 
-      local mimirQuerySelector = mimirServiceSelector {
+      local mimirIngesterQuerySelector = mimirServiceSelector {
         job: 'mimir/ingester',
+        route: '/cortex.Ingester/Push',
       },
 
       apdex: histogramApdex(
         histogram='cortex_request_duration_seconds_bucket',
-        selector=mimirQuerySelector,
-        satisfiedThreshold=30,
-        metricsFormat='openmetrics'
+        selector=mimirIngesterQuerySelector,
+        satisfiedThreshold=0.1,
+        toleratedThreshold=1.0,
       ),
 
       requestRate: rateMetric(
         counter='cortex_request_duration_seconds_count',
-        selector=mimirQuerySelector
+        selector=mimirIngesterQuerySelector,
       ),
 
       errorRate: rateMetric(
         counter='cortex_request_duration_seconds_count',
-        selector=mimirQuerySelector { code: { re: '^5.*' } }
+        selector=mimirIngesterQuerySelector { status_code: { re: '^5.*' } },
       ),
 
       significantLabels: [],
@@ -396,18 +399,18 @@ metricsCatalog.serviceDefinition({
         This SLI monitors the compactor operations for failures.
       |||,
 
-      local mimirQuerySelector = mimirServiceSelector {
+      local mimirCompactorSelector = mimirServiceSelector {
         job: 'mimir/compactor',
       },
 
       requestRate: rateMetric(
         counter='cortex_compactor_group_compaction_runs_started_total',
-        selector=mimirQuerySelector
+        selector=mimirCompactorSelector
       ),
 
       errorRate: rateMetric(
         counter='cortex_compactor_group_compactions_failures_total',
-        selector=mimirQuerySelector { code: { re: '^5.*' } }
+        selector=mimirCompactorSelector
       ),
 
       significantLabels: [],
@@ -428,18 +431,18 @@ metricsCatalog.serviceDefinition({
         This SLI monitors the rulers evaluation failures.
       |||,
 
-      local mimirQuerySelector = mimirServiceSelector {
+      local mimirRulerSelector = mimirServiceSelector {
         job: 'mimir/ruler',
       },
 
       requestRate: rateMetric(
         counter='cortex_prometheus_rule_evaluations_total',
-        selector=mimirQuerySelector
+        selector=mimirRulerSelector
       ),
 
       errorRate: rateMetric(
         counter='cortex_prometheus_rule_evaluation_failures_total',
-        selector=mimirQuerySelector
+        selector=mimirRulerSelector
       ),
 
       significantLabels: [],

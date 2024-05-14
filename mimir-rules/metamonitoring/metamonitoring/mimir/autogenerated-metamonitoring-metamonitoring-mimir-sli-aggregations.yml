@@ -11,37 +11,34 @@ groups:
       )
   - record: sli_aggregations:cortex_compactor_group_compactions_failures_total:rate_5m
     expr: |
-      sum by (code,component,env,environment,feature_category,fqdn,job,namespace,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(cortex_compactor_group_compactions_failures_total{code=~"^5.*",job=~"mimir/compactor",namespace=~"mimir",type=~"mimir"}[5m] offset 30s)
+      sum by (component,env,environment,feature_category,fqdn,job,namespace,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(cortex_compactor_group_compactions_failures_total{job=~"mimir/compactor",namespace=~"mimir",type=~"mimir"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: mimir - mimir_distributor - 5m burn-rate'
   interval: 1m
   rules:
   - record: sli_aggregations:cortex_request_duration_seconds_bucket:rate_5m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,job,le,namespace,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(cortex_request_duration_seconds_bucket{job=~"mimir/distributor|mimir/ingester",namespace=~"mimir",type=~"mimir"}[5m] offset 30s)
+      sum by (component,env,environment,feature_category,fqdn,job,le,namespace,product_stage,region,route,shard,stage,stage_group,tier,type) (
+        rate(cortex_request_duration_seconds_bucket{job=~"mimir/distributor|mimir/ingester|mimir/query-frontend|mimir/store-gateway",namespace=~"mimir",route=~"/cortex\\.Ingester/Push|/distributor\\.Distributor/Push|/gatewaypb\\.StoreGateway/.*|/httpgrpc.*|(api_(v1|prom)_push)|otlp_v1_metrics|(prometheus_(api|prom)_v1_.+)",type=~"mimir"}[5m] offset 30s)
       )
   - record: sli_aggregations:cortex_request_duration_seconds_count:rate_5m
     expr: |
-      sum by (code,component,env,environment,feature_category,fqdn,job,namespace,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(cortex_request_duration_seconds_count{job=~"mimir/distributor|mimir/ingester|mimir/querier|mimir/query-frontend",namespace=~"mimir",type=~"mimir"}[5m] offset 30s)
+      sum by (component,env,environment,feature_category,fqdn,job,namespace,product_stage,region,route,shard,stage,stage_group,status_code,tier,type) (
+        rate(cortex_request_duration_seconds_count{job=~"mimir/distributor|mimir/ingester|mimir/query-frontend|mimir/store-gateway",namespace=~"mimir",route=~"/cortex\\.Ingester/Push|/distributor\\.Distributor/Push|/gatewaypb\\.StoreGateway/.*|/httpgrpc.*|(api_(v1|prom)_push)|otlp_v1_metrics|(prometheus_(api|prom)_v1_.+)",type=~"mimir"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: mimir - mimir_querier - 5m burn-rate'
   interval: 1m
   rules:
+  - record: sli_aggregations:cortex_querier_request_duration_seconds_bucket:rate_5m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,job,le,namespace,product_stage,region,route,shard,stage,stage_group,tier,type) (
+        rate(cortex_querier_request_duration_seconds_bucket{job=~"mimir/querier",namespace=~"mimir",route=~"prometheus_(api|prom)_v1_.+",type=~"mimir"}[5m] offset 30s)
+      )
   - record: sli_aggregations:cortex_querier_request_duration_seconds_count:rate_5m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,job,le,namespace,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(cortex_querier_request_duration_seconds_count{job=~"mimir/querier",namespace=~"mimir",type=~"mimir"}[5m] offset 30s)
-      )
-- name: 'SLI Aggregations: mimir - mimir_query_frontend - 5m burn-rate'
-  interval: 1m
-  rules:
-  - record: sli_aggregations:cortex_querier_query_frontend_request_duration_seconds_bucket:rate_5m
-    expr: |
-      sum by (component,env,environment,feature_category,fqdn,job,le,namespace,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(cortex_querier_query_frontend_request_duration_seconds_bucket{job=~"mimir/query-frontend",namespace=~"mimir",type=~"mimir"}[5m] offset 30s)
+      sum by (component,env,environment,feature_category,fqdn,job,namespace,product_stage,region,route,shard,stage,stage_group,status_code,tier,type) (
+        rate(cortex_querier_request_duration_seconds_count{job=~"mimir/querier",namespace=~"mimir",route=~"prometheus_(api|prom)_v1_.+",type=~"mimir"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: mimir - mimir_query_scheduler - 5m burn-rate'
   interval: 1m
@@ -53,7 +50,7 @@ groups:
       )
   - record: sli_aggregations:cortex_query_scheduler_queue_duration_seconds_count:rate_5m
     expr: |
-      sum by (code,component,env,environment,feature_category,fqdn,job,namespace,product_stage,region,shard,stage,stage_group,tier,type) (
+      sum by (component,env,environment,feature_category,fqdn,job,namespace,product_stage,region,shard,stage,stage_group,status_code,tier,type) (
         rate(cortex_query_scheduler_queue_duration_seconds_count{job=~"mimir/query-scheduler",namespace=~"mimir",type=~"mimir"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: mimir - mimir_ruler - 5m burn-rate'
@@ -69,19 +66,6 @@ groups:
       sum by (component,env,environment,feature_category,fqdn,job,namespace,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(cortex_prometheus_rule_evaluations_total{job=~"mimir/ruler",namespace=~"mimir",type=~"mimir"}[5m] offset 30s)
       )
-- name: 'SLI Aggregations: mimir - mimir_store_gateway - 5m burn-rate'
-  interval: 1m
-  rules:
-  - record: sli_aggregations:cortex_kv_request_duration_seconds_bucket:rate_5m
-    expr: |
-      sum by (component,env,environment,feature_category,fqdn,job,le,namespace,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(cortex_kv_request_duration_seconds_bucket{job=~"mimir/store-gateway",namespace=~"mimir",type=~"mimir"}[5m] offset 30s)
-      )
-  - record: sli_aggregations:cortex_kv_request_duration_seconds_count:rate_5m
-    expr: |
-      sum by (code,component,env,environment,feature_category,fqdn,job,namespace,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(cortex_kv_request_duration_seconds_count{job=~"mimir/store-gateway",namespace=~"mimir",type=~"mimir"}[5m] offset 30s)
-      )
 - name: 'SLI Aggregations: mimir - mimir_compactor - 30m burn-rate'
   interval: 2m
   rules:
@@ -92,37 +76,34 @@ groups:
       )
   - record: sli_aggregations:cortex_compactor_group_compactions_failures_total:rate_30m
     expr: |
-      sum by (code,component,env,environment,feature_category,fqdn,job,namespace,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(cortex_compactor_group_compactions_failures_total{code=~"^5.*",job=~"mimir/compactor",namespace=~"mimir",type=~"mimir"}[30m] offset 30s)
+      sum by (component,env,environment,feature_category,fqdn,job,namespace,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(cortex_compactor_group_compactions_failures_total{job=~"mimir/compactor",namespace=~"mimir",type=~"mimir"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: mimir - mimir_distributor - 30m burn-rate'
   interval: 2m
   rules:
   - record: sli_aggregations:cortex_request_duration_seconds_bucket:rate_30m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,job,le,namespace,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(cortex_request_duration_seconds_bucket{job=~"mimir/distributor|mimir/ingester",namespace=~"mimir",type=~"mimir"}[30m] offset 30s)
+      sum by (component,env,environment,feature_category,fqdn,job,le,namespace,product_stage,region,route,shard,stage,stage_group,tier,type) (
+        rate(cortex_request_duration_seconds_bucket{job=~"mimir/distributor|mimir/ingester|mimir/query-frontend|mimir/store-gateway",namespace=~"mimir",route=~"/cortex\\.Ingester/Push|/distributor\\.Distributor/Push|/gatewaypb\\.StoreGateway/.*|/httpgrpc.*|(api_(v1|prom)_push)|otlp_v1_metrics|(prometheus_(api|prom)_v1_.+)",type=~"mimir"}[30m] offset 30s)
       )
   - record: sli_aggregations:cortex_request_duration_seconds_count:rate_30m
     expr: |
-      sum by (code,component,env,environment,feature_category,fqdn,job,namespace,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(cortex_request_duration_seconds_count{job=~"mimir/distributor|mimir/ingester|mimir/querier|mimir/query-frontend",namespace=~"mimir",type=~"mimir"}[30m] offset 30s)
+      sum by (component,env,environment,feature_category,fqdn,job,namespace,product_stage,region,route,shard,stage,stage_group,status_code,tier,type) (
+        rate(cortex_request_duration_seconds_count{job=~"mimir/distributor|mimir/ingester|mimir/query-frontend|mimir/store-gateway",namespace=~"mimir",route=~"/cortex\\.Ingester/Push|/distributor\\.Distributor/Push|/gatewaypb\\.StoreGateway/.*|/httpgrpc.*|(api_(v1|prom)_push)|otlp_v1_metrics|(prometheus_(api|prom)_v1_.+)",type=~"mimir"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: mimir - mimir_querier - 30m burn-rate'
   interval: 2m
   rules:
+  - record: sli_aggregations:cortex_querier_request_duration_seconds_bucket:rate_30m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,job,le,namespace,product_stage,region,route,shard,stage,stage_group,tier,type) (
+        rate(cortex_querier_request_duration_seconds_bucket{job=~"mimir/querier",namespace=~"mimir",route=~"prometheus_(api|prom)_v1_.+",type=~"mimir"}[30m] offset 30s)
+      )
   - record: sli_aggregations:cortex_querier_request_duration_seconds_count:rate_30m
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,job,le,namespace,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(cortex_querier_request_duration_seconds_count{job=~"mimir/querier",namespace=~"mimir",type=~"mimir"}[30m] offset 30s)
-      )
-- name: 'SLI Aggregations: mimir - mimir_query_frontend - 30m burn-rate'
-  interval: 2m
-  rules:
-  - record: sli_aggregations:cortex_querier_query_frontend_request_duration_seconds_bucket:rate_30m
-    expr: |
-      sum by (component,env,environment,feature_category,fqdn,job,le,namespace,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(cortex_querier_query_frontend_request_duration_seconds_bucket{job=~"mimir/query-frontend",namespace=~"mimir",type=~"mimir"}[30m] offset 30s)
+      sum by (component,env,environment,feature_category,fqdn,job,namespace,product_stage,region,route,shard,stage,stage_group,status_code,tier,type) (
+        rate(cortex_querier_request_duration_seconds_count{job=~"mimir/querier",namespace=~"mimir",route=~"prometheus_(api|prom)_v1_.+",type=~"mimir"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: mimir - mimir_query_scheduler - 30m burn-rate'
   interval: 2m
@@ -134,7 +115,7 @@ groups:
       )
   - record: sli_aggregations:cortex_query_scheduler_queue_duration_seconds_count:rate_30m
     expr: |
-      sum by (code,component,env,environment,feature_category,fqdn,job,namespace,product_stage,region,shard,stage,stage_group,tier,type) (
+      sum by (component,env,environment,feature_category,fqdn,job,namespace,product_stage,region,shard,stage,stage_group,status_code,tier,type) (
         rate(cortex_query_scheduler_queue_duration_seconds_count{job=~"mimir/query-scheduler",namespace=~"mimir",type=~"mimir"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: mimir - mimir_ruler - 30m burn-rate'
@@ -150,19 +131,6 @@ groups:
       sum by (component,env,environment,feature_category,fqdn,job,namespace,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(cortex_prometheus_rule_evaluations_total{job=~"mimir/ruler",namespace=~"mimir",type=~"mimir"}[30m] offset 30s)
       )
-- name: 'SLI Aggregations: mimir - mimir_store_gateway - 30m burn-rate'
-  interval: 2m
-  rules:
-  - record: sli_aggregations:cortex_kv_request_duration_seconds_bucket:rate_30m
-    expr: |
-      sum by (component,env,environment,feature_category,fqdn,job,le,namespace,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(cortex_kv_request_duration_seconds_bucket{job=~"mimir/store-gateway",namespace=~"mimir",type=~"mimir"}[30m] offset 30s)
-      )
-  - record: sli_aggregations:cortex_kv_request_duration_seconds_count:rate_30m
-    expr: |
-      sum by (code,component,env,environment,feature_category,fqdn,job,namespace,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(cortex_kv_request_duration_seconds_count{job=~"mimir/store-gateway",namespace=~"mimir",type=~"mimir"}[30m] offset 30s)
-      )
 - name: 'SLI Aggregations: mimir - mimir_compactor - 1h burn-rate'
   interval: 1m
   rules:
@@ -173,37 +141,34 @@ groups:
       )
   - record: sli_aggregations:cortex_compactor_group_compactions_failures_total:rate_1h
     expr: |
-      sum by (code,component,env,environment,feature_category,fqdn,job,namespace,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(cortex_compactor_group_compactions_failures_total{code=~"^5.*",job=~"mimir/compactor",namespace=~"mimir",type=~"mimir"}[1h] offset 30s)
+      sum by (component,env,environment,feature_category,fqdn,job,namespace,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(cortex_compactor_group_compactions_failures_total{job=~"mimir/compactor",namespace=~"mimir",type=~"mimir"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: mimir - mimir_distributor - 1h burn-rate'
   interval: 1m
   rules:
   - record: sli_aggregations:cortex_request_duration_seconds_bucket:rate_1h
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,job,le,namespace,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(cortex_request_duration_seconds_bucket{job=~"mimir/distributor|mimir/ingester",namespace=~"mimir",type=~"mimir"}[1h] offset 30s)
+      sum by (component,env,environment,feature_category,fqdn,job,le,namespace,product_stage,region,route,shard,stage,stage_group,tier,type) (
+        rate(cortex_request_duration_seconds_bucket{job=~"mimir/distributor|mimir/ingester|mimir/query-frontend|mimir/store-gateway",namespace=~"mimir",route=~"/cortex\\.Ingester/Push|/distributor\\.Distributor/Push|/gatewaypb\\.StoreGateway/.*|/httpgrpc.*|(api_(v1|prom)_push)|otlp_v1_metrics|(prometheus_(api|prom)_v1_.+)",type=~"mimir"}[1h] offset 30s)
       )
   - record: sli_aggregations:cortex_request_duration_seconds_count:rate_1h
     expr: |
-      sum by (code,component,env,environment,feature_category,fqdn,job,namespace,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(cortex_request_duration_seconds_count{job=~"mimir/distributor|mimir/ingester|mimir/querier|mimir/query-frontend",namespace=~"mimir",type=~"mimir"}[1h] offset 30s)
+      sum by (component,env,environment,feature_category,fqdn,job,namespace,product_stage,region,route,shard,stage,stage_group,status_code,tier,type) (
+        rate(cortex_request_duration_seconds_count{job=~"mimir/distributor|mimir/ingester|mimir/query-frontend|mimir/store-gateway",namespace=~"mimir",route=~"/cortex\\.Ingester/Push|/distributor\\.Distributor/Push|/gatewaypb\\.StoreGateway/.*|/httpgrpc.*|(api_(v1|prom)_push)|otlp_v1_metrics|(prometheus_(api|prom)_v1_.+)",type=~"mimir"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: mimir - mimir_querier - 1h burn-rate'
   interval: 1m
   rules:
+  - record: sli_aggregations:cortex_querier_request_duration_seconds_bucket:rate_1h
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,job,le,namespace,product_stage,region,route,shard,stage,stage_group,tier,type) (
+        rate(cortex_querier_request_duration_seconds_bucket{job=~"mimir/querier",namespace=~"mimir",route=~"prometheus_(api|prom)_v1_.+",type=~"mimir"}[1h] offset 30s)
+      )
   - record: sli_aggregations:cortex_querier_request_duration_seconds_count:rate_1h
     expr: |
-      sum by (component,env,environment,feature_category,fqdn,job,le,namespace,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(cortex_querier_request_duration_seconds_count{job=~"mimir/querier",namespace=~"mimir",type=~"mimir"}[1h] offset 30s)
-      )
-- name: 'SLI Aggregations: mimir - mimir_query_frontend - 1h burn-rate'
-  interval: 1m
-  rules:
-  - record: sli_aggregations:cortex_querier_query_frontend_request_duration_seconds_bucket:rate_1h
-    expr: |
-      sum by (component,env,environment,feature_category,fqdn,job,le,namespace,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(cortex_querier_query_frontend_request_duration_seconds_bucket{job=~"mimir/query-frontend",namespace=~"mimir",type=~"mimir"}[1h] offset 30s)
+      sum by (component,env,environment,feature_category,fqdn,job,namespace,product_stage,region,route,shard,stage,stage_group,status_code,tier,type) (
+        rate(cortex_querier_request_duration_seconds_count{job=~"mimir/querier",namespace=~"mimir",route=~"prometheus_(api|prom)_v1_.+",type=~"mimir"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: mimir - mimir_query_scheduler - 1h burn-rate'
   interval: 1m
@@ -215,7 +180,7 @@ groups:
       )
   - record: sli_aggregations:cortex_query_scheduler_queue_duration_seconds_count:rate_1h
     expr: |
-      sum by (code,component,env,environment,feature_category,fqdn,job,namespace,product_stage,region,shard,stage,stage_group,tier,type) (
+      sum by (component,env,environment,feature_category,fqdn,job,namespace,product_stage,region,shard,stage,stage_group,status_code,tier,type) (
         rate(cortex_query_scheduler_queue_duration_seconds_count{job=~"mimir/query-scheduler",namespace=~"mimir",type=~"mimir"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: mimir - mimir_ruler - 1h burn-rate'
@@ -230,17 +195,4 @@ groups:
     expr: |
       sum by (component,env,environment,feature_category,fqdn,job,namespace,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(cortex_prometheus_rule_evaluations_total{job=~"mimir/ruler",namespace=~"mimir",type=~"mimir"}[1h] offset 30s)
-      )
-- name: 'SLI Aggregations: mimir - mimir_store_gateway - 1h burn-rate'
-  interval: 1m
-  rules:
-  - record: sli_aggregations:cortex_kv_request_duration_seconds_bucket:rate_1h
-    expr: |
-      sum by (component,env,environment,feature_category,fqdn,job,le,namespace,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(cortex_kv_request_duration_seconds_bucket{job=~"mimir/store-gateway",namespace=~"mimir",type=~"mimir"}[1h] offset 30s)
-      )
-  - record: sli_aggregations:cortex_kv_request_duration_seconds_count:rate_1h
-    expr: |
-      sum by (code,component,env,environment,feature_category,fqdn,job,namespace,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(cortex_kv_request_duration_seconds_count{job=~"mimir/store-gateway",namespace=~"mimir",type=~"mimir"}[1h] offset 30s)
       )
