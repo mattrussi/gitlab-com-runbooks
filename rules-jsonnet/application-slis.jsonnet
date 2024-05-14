@@ -62,7 +62,7 @@ local groupForSli(sli) =
 local rules = {
   groups: std.filterMap(
     function(sli)
-      !sli.inRecordingRuleRegistry,
+      !sli.inRecordingRuleRegistry(),
     groupForSli,
     library.all
   ),
