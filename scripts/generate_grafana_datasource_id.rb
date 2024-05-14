@@ -3,7 +3,7 @@
 require 'yaml'
 
 unless ARGV.length == 2
-  puts "Usage: ruby generate-grafana-datasource-id.rb <file.yml> <grafana_datasource_id>"
+  puts "Usage: ruby generate_grafana_datasource_id.rb <file.yml> <grafana_datasource_id>"
   exit
 end
 
