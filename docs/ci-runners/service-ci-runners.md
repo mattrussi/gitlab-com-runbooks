@@ -53,9 +53,9 @@ to assign to new jobs. This allows jobs to start as soon as they're assigned wit
 
 This scenario actually describes the above two scenarios as well, however because the idle count is a hard coded value per runner manager, over time it will need to be updated as usage on GitLab.com grows.
 
-#### How to identify active abusive accounts?
+#### How to identify active accounts (namespaces) with large number of pending CI jobs?
 
-To find miners running numerous concurrent jobs from one or more accounts (a.k.a. namespaces), use the following DB query to find any namespaces with numerous (say, 800-1000) jobs in the `Pending` state.
+To find accounts (a.k.a. namespaces) with large number of pending CI jobs, use the following DB query which finds top 10 namespaces with most number of CI jobs in the `Pending` state.
 
 ```psql
 ##
