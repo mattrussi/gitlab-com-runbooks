@@ -4,6 +4,7 @@ local layout = import 'grafana/layout.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
 local template = grafana.template;
 local commonAnnotations = import 'grafana/common_annotations.libsonnet';
+local mimirHelper = import 'services/lib/mimir-helpers.libsonnet';
 
 // This dashboard currently shows both the `{{region}}` and `{{location}}` label.
 // We do this because in Thanos the `region` label on metrics gets overridden by
@@ -20,6 +21,7 @@ basic.dashboard(
   'Runway Service Metrics',
   tags=['runway', 'type:runway'],
   includeStandardEnvironmentAnnotations=false,
+  defaultDatasource=mimirHelper.mimirDatasource('Runway')
 )
 .addTemplate(template.new(
   'type',

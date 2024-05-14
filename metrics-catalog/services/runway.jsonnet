@@ -1,10 +1,12 @@
 local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 local gaugeMetric = metricsCatalog.gaugeMetric;
+local mimirHelper = import './lib/mimir-helpers.libsonnet';
 
 metricsCatalog.serviceDefinition({
   type: 'runway',
   tier: 'inf',
+  defaultPrometheusDatasource: mimirHelper.mimirDatasource('Runway'),
 
   monitoringThresholds: {
     apdexScore: 0.99,
