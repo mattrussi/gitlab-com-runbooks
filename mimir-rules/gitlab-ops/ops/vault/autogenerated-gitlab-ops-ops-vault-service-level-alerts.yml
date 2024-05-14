@@ -7,6 +7,7 @@ groups:
   - alert: VaultServiceIstioInternalIngressApdexSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The istio_internal_ingress SLI of the vault service (`{{ $labels.stage
         }}` stage) has an apdex violating SLO
       description: |
@@ -56,6 +57,7 @@ groups:
   - alert: VaultServiceIstioInternalIngressApdexSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The istio_internal_ingress SLI of the vault service (`{{ $labels.stage
         }}` stage) has an apdex violating SLO
       description: |
@@ -105,6 +107,7 @@ groups:
   - alert: VaultServiceIstioInternalIngressErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The istio_internal_ingress SLI of the vault service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
@@ -151,6 +154,7 @@ groups:
   - alert: VaultServiceIstioInternalIngressErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The istio_internal_ingress SLI of the vault service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
@@ -197,6 +201,7 @@ groups:
   - alert: VaultServiceIstioPublicIngressApdexSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The istio_public_ingress SLI of the vault service (`{{ $labels.stage
         }}` stage) has an apdex violating SLO
       description: |
@@ -246,6 +251,7 @@ groups:
   - alert: VaultServiceIstioPublicIngressApdexSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The istio_public_ingress SLI of the vault service (`{{ $labels.stage
         }}` stage) has an apdex violating SLO
       description: |
@@ -295,6 +301,7 @@ groups:
   - alert: VaultServiceIstioPublicIngressErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The istio_public_ingress SLI of the vault service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
@@ -341,6 +348,7 @@ groups:
   - alert: VaultServiceIstioPublicIngressErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The istio_public_ingress SLI of the vault service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
@@ -387,6 +395,7 @@ groups:
   - alert: VaultServiceVaultAuditLogRequestErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The vault_audit_log_request SLI of the vault service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
@@ -435,6 +444,7 @@ groups:
   - alert: VaultServiceVaultAuditLogRequestErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The vault_audit_log_request SLI of the vault service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
@@ -483,6 +493,7 @@ groups:
   - alert: VaultServiceVaultAuditLogResponseErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The vault_audit_log_response SLI of the vault service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
@@ -531,6 +542,7 @@ groups:
   - alert: VaultServiceVaultAuditLogResponseErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The vault_audit_log_response SLI of the vault service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
@@ -579,6 +591,7 @@ groups:
   - alert: VaultServiceVaultGoogleLbErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The vault_google_lb SLI of the vault service (`{{ $labels.stage }}` stage)
         has an error rate violating SLO
       description: |
@@ -625,6 +638,7 @@ groups:
   - alert: VaultServiceVaultGoogleLbErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The vault_google_lb SLI of the vault service (`{{ $labels.stage }}` stage)
         has an error rate violating SLO
       description: |

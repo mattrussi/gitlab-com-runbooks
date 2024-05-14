@@ -7,6 +7,7 @@ groups:
   - alert: GitlabStaticServiceWebIdeWorkerTrafficCessation
     for: 5m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The web_ide_worker SLI of the gitlab-static service (`{{ $labels.stage
         }}` stage) has not received any traffic in the past 30m
       description: |
@@ -42,6 +43,7 @@ groups:
   - alert: GitlabStaticServiceWebIdeWorkerTrafficAbsent
     for: 30m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The web_ide_worker SLI of the gitlab-static service (`{{ $labels.stage
         }}` stage) has not reported any traffic in the past 30m
       description: |

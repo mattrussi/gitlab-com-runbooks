@@ -7,6 +7,7 @@ groups:
   - alert: InternalApiServiceRailsRequestApdexSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The rails_request SLI of the internal-api service (`{{ $labels.stage
         }}` stage) has an apdex violating SLO
       description: |
@@ -53,6 +54,7 @@ groups:
   - alert: InternalApiServiceRailsRequestApdexSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The rails_request SLI of the internal-api service (`{{ $labels.stage
         }}` stage) has an apdex violating SLO
       description: |
@@ -99,6 +101,7 @@ groups:
   - alert: InternalApiServiceRailsRequestApdexSLOViolationRegional
     for: 2m
     annotations:
+      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The rails_request SLI of the internal-api service in region `{{ $labels.region
         }}` has an apdex violating SLO
       description: |
@@ -147,6 +150,7 @@ groups:
   - alert: InternalApiServiceRailsRequestApdexSLOViolationRegional
     for: 2m
     annotations:
+      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The rails_request SLI of the internal-api service in region `{{ $labels.region
         }}` has an apdex violating SLO
       description: |
@@ -195,6 +199,7 @@ groups:
   - alert: InternalApiServiceRailsRequestErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The rails_request SLI of the internal-api service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
@@ -245,6 +250,7 @@ groups:
   - alert: InternalApiServiceRailsRequestErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The rails_request SLI of the internal-api service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
@@ -295,6 +301,7 @@ groups:
   - alert: InternalApiServiceRailsRequestErrorSLOViolationRegional
     for: 2m
     annotations:
+      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The rails_request SLI of the internal-api service in region `{{ $labels.region
         }}` has an error rate violating SLO
       description: |
@@ -347,6 +354,7 @@ groups:
   - alert: InternalApiServiceRailsRequestErrorSLOViolationRegional
     for: 2m
     annotations:
+      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The rails_request SLI of the internal-api service in region `{{ $labels.region
         }}` has an error rate violating SLO
       description: |
@@ -399,6 +407,7 @@ groups:
   - alert: InternalApiServiceRailsRequestTrafficCessation
     for: 5m
     annotations:
+      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The rails_request SLI of the internal-api service (`{{ $labels.stage
         }}` stage) has not received any traffic in the past 30m
       description: |
@@ -436,6 +445,7 @@ groups:
   - alert: InternalApiServiceRailsRequestTrafficAbsent
     for: 30m
     annotations:
+      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The rails_request SLI of the internal-api service (`{{ $labels.stage
         }}` stage) has not reported any traffic in the past 30m
       description: |
@@ -475,6 +485,7 @@ groups:
   - alert: InternalApiServiceRailsRequestTrafficCessationRegional
     for: 5m
     annotations:
+      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The rails_request SLI of the internal-api service in region `{{ $labels.region
         }}` has not received any traffic in the past 30m
       description: |
@@ -514,6 +525,7 @@ groups:
   - alert: InternalApiServiceRailsRequestTrafficAbsentRegional
     for: 30m
     annotations:
+      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The rails_request SLI of the internal-api service in region `{{ $labels.region
         }}` has not reported any traffic in the past 30m
       description: |
@@ -555,6 +567,7 @@ groups:
   - alert: InternalApiServiceWorkhorseApdexSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The workhorse SLI of the internal-api service (`{{ $labels.stage }}`
         stage) has an apdex violating SLO
       description: |
@@ -606,6 +619,7 @@ groups:
   - alert: InternalApiServiceWorkhorseApdexSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The workhorse SLI of the internal-api service (`{{ $labels.stage }}`
         stage) has an apdex violating SLO
       description: |
@@ -657,6 +671,7 @@ groups:
   - alert: InternalApiServiceWorkhorseApdexSLOViolationRegional
     for: 2m
     annotations:
+      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The workhorse SLI of the internal-api service in region `{{ $labels.region
         }}` has an apdex violating SLO
       description: |
@@ -710,6 +725,7 @@ groups:
   - alert: InternalApiServiceWorkhorseApdexSLOViolationRegional
     for: 2m
     annotations:
+      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The workhorse SLI of the internal-api service in region `{{ $labels.region
         }}` has an apdex violating SLO
       description: |
@@ -763,6 +779,7 @@ groups:
   - alert: InternalApiServiceWorkhorseErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The workhorse SLI of the internal-api service (`{{ $labels.stage }}`
         stage) has an error rate violating SLO
       description: |
@@ -811,6 +828,7 @@ groups:
   - alert: InternalApiServiceWorkhorseErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The workhorse SLI of the internal-api service (`{{ $labels.stage }}`
         stage) has an error rate violating SLO
       description: |
@@ -859,6 +877,7 @@ groups:
   - alert: InternalApiServiceWorkhorseErrorSLOViolationRegional
     for: 2m
     annotations:
+      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The workhorse SLI of the internal-api service in region `{{ $labels.region
         }}` has an error rate violating SLO
       description: |
@@ -909,6 +928,7 @@ groups:
   - alert: InternalApiServiceWorkhorseErrorSLOViolationRegional
     for: 2m
     annotations:
+      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The workhorse SLI of the internal-api service in region `{{ $labels.region
         }}` has an error rate violating SLO
       description: |
@@ -959,6 +979,7 @@ groups:
   - alert: InternalApiServiceWorkhorseTrafficCessation
     for: 5m
     annotations:
+      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The workhorse SLI of the internal-api service (`{{ $labels.stage }}`
         stage) has not received any traffic in the past 30m
       description: |
@@ -994,6 +1015,7 @@ groups:
   - alert: InternalApiServiceWorkhorseTrafficAbsent
     for: 30m
     annotations:
+      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The workhorse SLI of the internal-api service (`{{ $labels.stage }}`
         stage) has not reported any traffic in the past 30m
       description: |
@@ -1031,6 +1053,7 @@ groups:
   - alert: InternalApiServiceWorkhorseTrafficCessationRegional
     for: 5m
     annotations:
+      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The workhorse SLI of the internal-api service in region `{{ $labels.region
         }}` has not received any traffic in the past 30m
       description: |
@@ -1068,6 +1091,7 @@ groups:
   - alert: InternalApiServiceWorkhorseTrafficAbsentRegional
     for: 30m
     annotations:
+      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The workhorse SLI of the internal-api service in region `{{ $labels.region
         }}` has not reported any traffic in the past 30m
       description: |

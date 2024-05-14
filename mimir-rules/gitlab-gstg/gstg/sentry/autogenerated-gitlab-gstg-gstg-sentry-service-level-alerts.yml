@@ -7,6 +7,7 @@ groups:
   - alert: SentryServicePgTransactionsErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The pg_transactions SLI of the sentry service (`{{ $labels.stage }}`
         stage) has an error rate violating SLO
       description: |
@@ -54,6 +55,7 @@ groups:
   - alert: SentryServicePgTransactionsErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The pg_transactions SLI of the sentry service (`{{ $labels.stage }}`
         stage) has an error rate violating SLO
       description: |
@@ -101,6 +103,7 @@ groups:
   - alert: SentryServicePgTransactionsTrafficCessation
     for: 5m
     annotations:
+      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The pg_transactions SLI of the sentry service (`{{ $labels.stage }}`
         stage) has not received any traffic in the past 30m
       description: |
@@ -137,6 +140,7 @@ groups:
   - alert: SentryServicePgTransactionsTrafficAbsent
     for: 30m
     annotations:
+      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The pg_transactions SLI of the sentry service (`{{ $labels.stage }}`
         stage) has not reported any traffic in the past 30m
       description: |
@@ -175,6 +179,7 @@ groups:
   - alert: SentryServiceSentryEventsApdexSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The sentry_events SLI of the sentry service (`{{ $labels.stage }}` stage)
         has an apdex violating SLO
       description: |
@@ -225,6 +230,7 @@ groups:
   - alert: SentryServiceSentryEventsApdexSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The sentry_events SLI of the sentry service (`{{ $labels.stage }}` stage)
         has an apdex violating SLO
       description: |
@@ -275,6 +281,7 @@ groups:
   - alert: SentryServiceSentryEventsErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The sentry_events SLI of the sentry service (`{{ $labels.stage }}` stage)
         has an error rate violating SLO
       description: |
@@ -322,6 +329,7 @@ groups:
   - alert: SentryServiceSentryEventsErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The sentry_events SLI of the sentry service (`{{ $labels.stage }}` stage)
         has an error rate violating SLO
       description: |
@@ -369,6 +377,7 @@ groups:
   - alert: SentryServiceSentryEventsTrafficCessation
     for: 5m
     annotations:
+      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The sentry_events SLI of the sentry service (`{{ $labels.stage }}` stage)
         has not received any traffic in the past 30m
       description: |
@@ -403,6 +412,7 @@ groups:
   - alert: SentryServiceSentryEventsTrafficAbsent
     for: 30m
     annotations:
+      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The sentry_events SLI of the sentry service (`{{ $labels.stage }}` stage)
         has not reported any traffic in the past 30m
       description: |

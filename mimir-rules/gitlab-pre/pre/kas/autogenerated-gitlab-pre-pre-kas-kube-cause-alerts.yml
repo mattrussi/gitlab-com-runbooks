@@ -6,6 +6,7 @@ groups:
   - alert: KubeContainersWaitingInError
     for: 20m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: Containers for the `{{ $labels.type }}` service, `{{ $labels.stage }}`
         are unable to start.
       description: |

@@ -12,6 +12,7 @@ groups:
           alert_type: symptom
           feature_category: "global_search"
         annotations:
+          grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
           title: 'Inital queue: Large number of documents waiting to be indexed by Elasticsearch'
           environment: "{{ $labels.environment }}"
           grafana_dashboard_id: stage-groups-global_search/stage-groups-group-dashboard-enablement-global-search
@@ -33,6 +34,7 @@ groups:
           alert_type: symptom
           feature_category: "global_search"
         annotations:
+          grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
           title: 'Incremental queue: Large number of documents waiting to be indexed by Elasticsearch'
           environment: "{{ $labels.environment }}"
           grafana_dashboard_id: stage-groups-global_search/stage-groups-group-dashboard-enablement-global-search

@@ -10,6 +10,7 @@ groups:
       severity: s1
       alert_type: cause
     annotations:
+      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       description: Recent GCP scheduled snapshot are missing for {{ $labels.env }}. Please follow the runbook to review the problem.
       runbook: docs/disaster-recovery/gcp-snapshots.md
       title: GCP scheduled snapshots are delayed
@@ -22,6 +23,7 @@ groups:
       severity: s1
       alert_type: cause
     annotations:
+      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       description: GCP scheduled snapshots are reporting failures for {{ $labels.env }}. Please follow the runbook to review the problem.
       runbook: docs/disaster-recovery/gcp-snapshots.md
       title: GCP scheduled snapshots are failing

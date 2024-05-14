@@ -4,6 +4,7 @@ groups:
   - alert: websocket_slow_broken_upgrades
     for: 10m
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       description: |
         A large increase in workhorse request durations can indicate that websocket requests are not being
         upgraded.

@@ -6,6 +6,7 @@ groups:
   - alert: RunnerJobDurationSpikeDetected
     for: 3m
     annotations:
+      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: Suspicious spike detected in the runner job durations.
       description: |
         The sum total time of CI jobs exceeded a threshold of 15,000 seconds per second for a 3 minute period; this can indicate crypto mining or other pipeline abuse.

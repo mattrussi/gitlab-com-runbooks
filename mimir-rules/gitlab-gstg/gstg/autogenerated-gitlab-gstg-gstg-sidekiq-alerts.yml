@@ -7,6 +7,7 @@ groups:
   - alert: sidekiq_throttled_jobs_enqueued_without_dequeuing
     for: 30m
     annotations:
+      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: Sidekiq jobs are being enqueued without being dequeued
       description: |
         The `{{ $labels.worker}}` worker in the {{ $labels.queue }} queue appears to have jobs being enqueued without those jobs being executed.
@@ -43,6 +44,7 @@ groups:
   - alert: SidekiqQueueNoLongerBeingProcessed
     for: 20m
     annotations:
+      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: A Sidekiq queue is no longer being processed.
       description: Sidekiq queue {{ $labels.queue }} in shard {{ $labels.shard }}
         is no longer being processed.
@@ -70,6 +72,7 @@ groups:
   - alert: SidekiqWorkerNoLongerBeingProcessed
     for: 20m
     annotations:
+      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: A Sidekiq worker is no longer being processed.
       description: Sidekiq worker {{ $labels.worker }} in shard {{ $labels.shard }}
         is no longer being processed.
@@ -97,6 +100,7 @@ groups:
   - alert: SidekiqJobsSkippedTooLong
     for: 3h
     annotations:
+      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: Sidekiq jobs from `{{ $labels.worker }}` are intentionally being `{{
         $labels.action }}` for too long
       description: |
@@ -123,6 +127,7 @@ groups:
   - alert: SidekiqServiceWorkerExecutionApdexSLOViolation
     for: 1h
     annotations:
+      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The `{{ $labels.worker }}` Sidekiq worker, `{{ $labels.stage }}` stage,
         has an apdex violating SLO
       description: |
@@ -169,6 +174,7 @@ groups:
   - alert: SidekiqServiceWorkerExecutionErrorSLOViolation
     for: 1h
     annotations:
+      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The `{{ $labels.worker }}` Sidekiq worker, `{{ $labels.stage }}` stage,
         has an error rate violating SLO
       description: |

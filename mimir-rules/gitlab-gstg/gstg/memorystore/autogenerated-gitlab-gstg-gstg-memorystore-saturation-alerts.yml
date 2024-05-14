@@ -20,6 +20,7 @@ groups:
   - alert: component_saturation_slo_out_of_bounds:open_fds
     for: 5m
     annotations:
+      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The Open file descriptor utilization per instance resource of the {{
         $labels.type }} service ({{ $labels.stage }} stage) has a saturation exceeding
         SLO and is close to its capacity limit.

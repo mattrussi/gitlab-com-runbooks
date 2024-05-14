@@ -20,6 +20,7 @@ groups:
   - alert: component_saturation_slo_out_of_bounds:kube_container_cpu_limit
     for: 15m
     annotations:
+      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The Kube Container CPU over-utilization resource of the {{ $labels.type
         }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
         is close to its capacity limit.
@@ -85,6 +86,7 @@ groups:
   - alert: component_saturation_slo_out_of_bounds:kube_container_memory
     for: 15m
     annotations:
+      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The Kube Container Memory Utilization resource of the {{ $labels.type
         }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
         is close to its capacity limit.
@@ -136,6 +138,7 @@ groups:
   - alert: component_saturation_slo_out_of_bounds:kube_container_throttling
     for: 10m
     annotations:
+      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The Kube container throttling resource of the {{ $labels.type }} service
         ({{ $labels.stage }} stage) has a saturation exceeding SLO and is close to
         its capacity limit.
@@ -197,6 +200,7 @@ groups:
   - alert: component_saturation_slo_out_of_bounds:kube_horizontalpodautoscaler_desired_replicas
     for: 25m
     annotations:
+      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The Horizontal Pod Autoscaler Desired Replicas resource of the {{ $labels.type
         }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
         is close to its capacity limit.
@@ -250,6 +254,7 @@ groups:
   - alert: component_saturation_slo_out_of_bounds:open_fds
     for: 5m
     annotations:
+      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The Open file descriptor utilization per instance resource of the {{
         $labels.type }} service ({{ $labels.stage }} stage) has a saturation exceeding
         SLO and is close to its capacity limit.

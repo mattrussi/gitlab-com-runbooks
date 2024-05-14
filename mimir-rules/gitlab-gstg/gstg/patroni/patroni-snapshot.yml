@@ -20,6 +20,7 @@ groups:
       severity: s1
       alert_type: cause
     annotations:
+      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       description: GCS disk snapshot has not ran successfully on {{ $labels.fqdn }}. Please follow the runbook to review the problem.
       runbook: docs/patroni/gcs-snapshots.md
       title: Last Patroni GCS snapshot did not run successfully
@@ -31,6 +32,7 @@ groups:
       severity: s1
       alert_type: cause
     annotations:
+      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       description: GCS disk snapshot failed on {{ $labels.fqdn }}. Please follow the runbook to review the problem.
       runbook: docs/patroni/gcs-snapshots.md
       title: Last Patroni GCS snapshot did not run successfully

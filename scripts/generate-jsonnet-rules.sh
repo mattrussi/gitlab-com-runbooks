@@ -74,6 +74,19 @@ function render_multi_jsonnet() {
   )"
   echo "$out"
 
+  if [ "$dest_dir" = "./mimir-rules" ]; then
+    echo "$out" | while IFS= read -r file; do
+      tenant=$(echo "$file" | cut -d'/' -f2)
+      datasource_id=$(echo '{"gitlab-pre": "af00a1ff-52ce-4144-b7b3-4902d1990376","product-analytics": "afc602e5-4a21-40e9-a7ed-b31a3dec1cc3","gitlab-ops": "ca3275a4-339e-4b20-91bc-739ff4dfa5aa","gitlab-gstg": "ee37ad60-dcd5-4699-98ff-949aca509226","gitlab-gprd": "e8b842b2-d53b-460b-9125-f4a50db5fdcc","metamonitoring": "e39b6275-f70a-41e7-9ef4-736b5c2f1871"}' | jq -r ".[\"$tenant\"]")
+
+      if [ "$datasource_id" = "null" ]; then
+        continue
+      fi
+
+      ruby ./scripts/generate-grafana-datasource-id.rb "$file" "$datasource_id"
+    done
+  fi
+
   if [[ ${GL_JSONNET_CACHE_SKIP:-} != 'true' ]]; then
     echo "$out" >"$cache_out_file"
     for file in $out; do

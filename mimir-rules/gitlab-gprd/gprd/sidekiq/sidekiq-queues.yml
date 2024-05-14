@@ -12,6 +12,7 @@ groups:
       pager: pagerduty
       alert_type: cause
     annotations:
+      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       description: There have been over 50k Sidekiq jobs in the {{ $labels.name }} queued for the last 30 minutes.
       runbook: docs/sidekiq/large-sidekiq-queue.md
       grafana_dashboard_id: sidekiq-main/sidekiq-overview

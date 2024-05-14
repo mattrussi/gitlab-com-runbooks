@@ -15,6 +15,7 @@ groups:
       severity: s3
       alert_type: cause
     annotations:
+      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: '90% of request queued on Workhorse is longer than 30s'
       description: |
         90% of requests queued on Workhorse are longer than 30s for last 5 minutes.
@@ -33,6 +34,7 @@ groups:
       severity: s4
       alert_type: cause
     annotations:
+      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: 'Too big number of traces archiving failures: {{$value}}'
       description: |
         Traces archiving keeps failing for more than 5 minutes.
@@ -54,6 +56,7 @@ groups:
       severity: s4
       alert_type: cause
     annotations:
+      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: 'More CI Jobs are in state docker_pulling_image than state docker_run'
       description: |
         More CI Jobs are in state docker_pulling_image than are in state docker_run
@@ -78,6 +81,7 @@ groups:
       severity: s3
       alert_type: cause
     annotations:
+      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: 'Number of Fleeting pending instances is constantly growing'
       description: |
         Constantly growing number of Fleeting's pending instances usually means that something

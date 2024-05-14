@@ -7,6 +7,7 @@ groups:
   - alert: PgbouncerCiServiceServiceTrafficCessation
     for: 5m
     annotations:
+      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The service SLI of the pgbouncer-ci service (`{{ $labels.stage }}` stage)
         has not received any traffic in the past 30m
       description: |
@@ -46,6 +47,7 @@ groups:
   - alert: PgbouncerCiServiceServiceTrafficAbsent
     for: 30m
     annotations:
+      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The service SLI of the pgbouncer-ci service (`{{ $labels.stage }}` stage)
         has not reported any traffic in the past 30m
       description: |

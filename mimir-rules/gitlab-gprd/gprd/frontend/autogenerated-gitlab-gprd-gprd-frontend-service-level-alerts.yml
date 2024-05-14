@@ -7,6 +7,7 @@ groups:
   - alert: FrontendServiceCnyHttpsServicesErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The cnyHttpsServices SLI of the frontend service (`{{ $labels.stage }}`
         stage) has an error rate violating SLO
       description: |
@@ -53,6 +54,7 @@ groups:
   - alert: FrontendServiceCnyHttpsServicesErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The cnyHttpsServices SLI of the frontend service (`{{ $labels.stage }}`
         stage) has an error rate violating SLO
       description: |
@@ -99,6 +101,7 @@ groups:
   - alert: FrontendServiceCnyHttpsServicesTrafficCessation
     for: 5m
     annotations:
+      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The cnyHttpsServices SLI of the frontend service (`{{ $labels.stage }}`
         stage) has not received any traffic in the past 30m
       description: |
@@ -132,6 +135,7 @@ groups:
   - alert: FrontendServiceCnyHttpsServicesTrafficAbsent
     for: 30m
     annotations:
+      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The cnyHttpsServices SLI of the frontend service (`{{ $labels.stage }}`
         stage) has not reported any traffic in the past 30m
       description: |
@@ -167,6 +171,7 @@ groups:
   - alert: FrontendServiceMainHttpsServicesErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The mainHttpsServices SLI of the frontend service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
@@ -213,6 +218,7 @@ groups:
   - alert: FrontendServiceMainHttpsServicesErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The mainHttpsServices SLI of the frontend service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
@@ -259,6 +265,7 @@ groups:
   - alert: FrontendServiceMainHttpsServicesTrafficCessation
     for: 5m
     annotations:
+      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The mainHttpsServices SLI of the frontend service (`{{ $labels.stage
         }}` stage) has not received any traffic in the past 30m
       description: |
@@ -292,6 +299,7 @@ groups:
   - alert: FrontendServiceMainHttpsServicesTrafficAbsent
     for: 30m
     annotations:
+      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The mainHttpsServices SLI of the frontend service (`{{ $labels.stage
         }}` stage) has not reported any traffic in the past 30m
       description: |
@@ -327,6 +335,7 @@ groups:
   - alert: FrontendServiceSshServicesErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The sshServices SLI of the frontend service (`{{ $labels.stage }}` stage)
         has an error rate violating SLO
       description: |
@@ -373,6 +382,7 @@ groups:
   - alert: FrontendServiceSshServicesErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The sshServices SLI of the frontend service (`{{ $labels.stage }}` stage)
         has an error rate violating SLO
       description: |
@@ -419,6 +429,7 @@ groups:
   - alert: FrontendServiceSshServicesTrafficCessation
     for: 5m
     annotations:
+      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The sshServices SLI of the frontend service (`{{ $labels.stage }}` stage)
         has not received any traffic in the past 30m
       description: |
@@ -452,6 +463,7 @@ groups:
   - alert: FrontendServiceSshServicesTrafficAbsent
     for: 30m
     annotations:
+      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The sshServices SLI of the frontend service (`{{ $labels.stage }}` stage)
         has not reported any traffic in the past 30m
       description: |
@@ -487,6 +499,7 @@ groups:
   - alert: FrontendServiceWebsocketsServicesErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The websocketsServices SLI of the frontend service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
@@ -533,6 +546,7 @@ groups:
   - alert: FrontendServiceWebsocketsServicesErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The websocketsServices SLI of the frontend service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
@@ -579,6 +593,7 @@ groups:
   - alert: FrontendServiceWebsocketsServicesTrafficCessation
     for: 5m
     annotations:
+      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The websocketsServices SLI of the frontend service (`{{ $labels.stage
         }}` stage) has not received any traffic in the past 30m
       description: |
@@ -612,6 +627,7 @@ groups:
   - alert: FrontendServiceWebsocketsServicesTrafficAbsent
     for: 30m
     annotations:
+      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The websocketsServices SLI of the frontend service (`{{ $labels.stage
         }}` stage) has not reported any traffic in the past 30m
       description: |

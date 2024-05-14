@@ -10,6 +10,7 @@ groups:
       severity: s3
       alert_type: symptom
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: No active Vault node
       description: >
         Vault has no active node. This could mean that the pods are failing to
@@ -23,6 +24,7 @@ groups:
       severity: s3
       alert_type: symptom
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: All Vault nodes sealed
       description: >
         All Vault nodes are sealed. This could mean that the pods are failing to
@@ -37,6 +39,7 @@ groups:
       severity: s3
       alert_type: symptom
     annotations:
+      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: Low failure tolerance for Vault cluster
       description: >
         The Vault cluster failure tolerance is diminished. It can only lose

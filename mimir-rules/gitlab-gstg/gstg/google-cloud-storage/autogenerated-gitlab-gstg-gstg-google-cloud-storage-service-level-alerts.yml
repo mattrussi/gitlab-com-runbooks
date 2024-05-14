@@ -7,6 +7,7 @@ groups:
   - alert: GoogleCloudStorageServiceArtifactsCdnErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The artifacts_cdn SLI of the google-cloud-storage service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
@@ -53,6 +54,7 @@ groups:
   - alert: GoogleCloudStorageServiceArtifactsCdnErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The artifacts_cdn SLI of the google-cloud-storage service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
@@ -99,6 +101,7 @@ groups:
   - alert: GoogleCloudStorageServiceArtifactsCdnTrafficCessation
     for: 5m
     annotations:
+      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The artifacts_cdn SLI of the google-cloud-storage service (`{{ $labels.stage
         }}` stage) has not received any traffic in the past 30m
       description: |
@@ -132,6 +135,7 @@ groups:
   - alert: GoogleCloudStorageServiceArtifactsCdnTrafficAbsent
     for: 30m
     annotations:
+      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The artifacts_cdn SLI of the google-cloud-storage service (`{{ $labels.stage
         }}` stage) has not reported any traffic in the past 30m
       description: |
@@ -167,6 +171,7 @@ groups:
   - alert: GoogleCloudStorageServicePagesRangeRequestsApdexSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The pages_range_requests SLI of the google-cloud-storage service (`{{
         $labels.stage }}` stage) has an apdex violating SLO
       description: |
@@ -218,6 +223,7 @@ groups:
   - alert: GoogleCloudStorageServicePagesRangeRequestsApdexSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The pages_range_requests SLI of the google-cloud-storage service (`{{
         $labels.stage }}` stage) has an apdex violating SLO
       description: |
@@ -269,6 +275,7 @@ groups:
   - alert: GoogleCloudStorageServicePagesRangeRequestsTrafficCessation
     for: 5m
     annotations:
+      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The pages_range_requests SLI of the google-cloud-storage service (`{{
         $labels.stage }}` stage) has not received any traffic in the past 30m
       description: |
@@ -304,6 +311,7 @@ groups:
   - alert: GoogleCloudStorageServicePagesRangeRequestsTrafficAbsent
     for: 30m
     annotations:
+      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The pages_range_requests SLI of the google-cloud-storage service (`{{
         $labels.stage }}` stage) has not reported any traffic in the past 30m
       description: |
@@ -341,6 +349,7 @@ groups:
   - alert: GoogleCloudStorageServicePagesRequestDurationApdexSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The pages_request_duration SLI of the google-cloud-storage service (`{{
         $labels.stage }}` stage) has an apdex violating SLO
       description: |
@@ -392,6 +401,7 @@ groups:
   - alert: GoogleCloudStorageServicePagesRequestDurationApdexSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The pages_request_duration SLI of the google-cloud-storage service (`{{
         $labels.stage }}` stage) has an apdex violating SLO
       description: |
@@ -443,6 +453,7 @@ groups:
   - alert: GoogleCloudStorageServicePagesRequestDurationTrafficCessation
     for: 5m
     annotations:
+      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The pages_request_duration SLI of the google-cloud-storage service (`{{
         $labels.stage }}` stage) has not received any traffic in the past 30m
       description: |
@@ -478,6 +489,7 @@ groups:
   - alert: GoogleCloudStorageServicePagesRequestDurationTrafficAbsent
     for: 30m
     annotations:
+      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The pages_request_duration SLI of the google-cloud-storage service (`{{
         $labels.stage }}` stage) has not reported any traffic in the past 30m
       description: |
@@ -515,6 +527,7 @@ groups:
   - alert: GoogleCloudStorageServicePagesTotalRequestsTrafficCessation
     for: 5m
     annotations:
+      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The pages_total_requests SLI of the google-cloud-storage service (`{{
         $labels.stage }}` stage) has not received any traffic in the past 30m
       description: |
@@ -550,6 +563,7 @@ groups:
   - alert: GoogleCloudStorageServicePagesTotalRequestsTrafficAbsent
     for: 30m
     annotations:
+      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The pages_total_requests SLI of the google-cloud-storage service (`{{
         $labels.stage }}` stage) has not reported any traffic in the past 30m
       description: |
@@ -587,6 +601,7 @@ groups:
   - alert: GoogleCloudStorageServiceRegistryStorageApdexSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The registry_storage SLI of the google-cloud-storage service (`{{ $labels.stage
         }}` stage) has an apdex violating SLO
       description: |
@@ -638,6 +653,7 @@ groups:
   - alert: GoogleCloudStorageServiceRegistryStorageApdexSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The registry_storage SLI of the google-cloud-storage service (`{{ $labels.stage
         }}` stage) has an apdex violating SLO
       description: |
@@ -689,6 +705,7 @@ groups:
   - alert: GoogleCloudStorageServiceRegistryStorageTrafficCessation
     for: 5m
     annotations:
+      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The registry_storage SLI of the google-cloud-storage service (`{{ $labels.stage
         }}` stage) has not received any traffic in the past 30m
       description: |
@@ -724,6 +741,7 @@ groups:
   - alert: GoogleCloudStorageServiceRegistryStorageTrafficAbsent
     for: 30m
     annotations:
+      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The registry_storage SLI of the google-cloud-storage service (`{{ $labels.stage
         }}` stage) has not reported any traffic in the past 30m
       description: |
@@ -761,6 +779,7 @@ groups:
   - alert: GoogleCloudStorageServiceWorkhorseUploadApdexSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The workhorse_upload SLI of the google-cloud-storage service (`{{ $labels.stage
         }}` stage) has an apdex violating SLO
       description: |
@@ -812,6 +831,7 @@ groups:
   - alert: GoogleCloudStorageServiceWorkhorseUploadApdexSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The workhorse_upload SLI of the google-cloud-storage service (`{{ $labels.stage
         }}` stage) has an apdex violating SLO
       description: |
@@ -863,6 +883,7 @@ groups:
   - alert: GoogleCloudStorageServiceWorkhorseUploadErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The workhorse_upload SLI of the google-cloud-storage service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
@@ -911,6 +932,7 @@ groups:
   - alert: GoogleCloudStorageServiceWorkhorseUploadErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The workhorse_upload SLI of the google-cloud-storage service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
@@ -959,6 +981,7 @@ groups:
   - alert: GoogleCloudStorageServiceWorkhorseUploadTrafficCessation
     for: 5m
     annotations:
+      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The workhorse_upload SLI of the google-cloud-storage service (`{{ $labels.stage
         }}` stage) has not received any traffic in the past 30m
       description: |
@@ -994,6 +1017,7 @@ groups:
   - alert: GoogleCloudStorageServiceWorkhorseUploadTrafficAbsent
     for: 30m
     annotations:
+      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The workhorse_upload SLI of the google-cloud-storage service (`{{ $labels.stage
         }}` stage) has not reported any traffic in the past 30m
       description: |

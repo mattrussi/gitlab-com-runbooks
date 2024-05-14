@@ -9,6 +9,7 @@ groups:
       alert_type: cause
       environment: gstg
     annotations:
+      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       runbook: docs/elastic/troubleshooting/README.md
       title: ILM errors have been detected in the nonproduction logging cluster!
   - alert: Elasticsearch ILM stopped in nonproduction
@@ -19,6 +20,7 @@ groups:
       alert_type: cause
       environment: gstg
     annotations:
+      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       runbook: docs/elastic/troubleshooting/README.md
       title: ILM is no longer running in the nonproduction logging cluster!
   - alert: Elasticsearch ILM errors in production
@@ -29,6 +31,7 @@ groups:
       alert_type: cause
       environment: gprd
     annotations:
+      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       runbook: docs/elastic/troubleshooting/README.md
       title: ILM errors have been detected in the logging cluster!
   - alert: Elasticsearch thread pool rejections growing
@@ -38,6 +41,7 @@ groups:
       severity: s3
       alert_type: cause
     annotations:
+      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       runbook: docs/elastic/troubleshooting/README.md
       title: Elasticsearch thread pool rejections growing
   - alert: Elasticsearch write thread pool rejections growing
@@ -47,6 +51,7 @@ groups:
       severity: s3
       alert_type: cause
     annotations:
+      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       runbook: docs/elastic/troubleshooting/README.md
       title: Elasticsearch thread pool rejections growing
   - alert: Elasticsearch is saturated and unable to process tasks real-time
@@ -56,6 +61,7 @@ groups:
       severity: s3
       alert_type: symptom
     annotations:
+      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       description: Elasticsearch is saturated and unable to process tasks real-time
       runbook: docs/elastic/troubleshooting/README.md
       title: Elasticsearch has a lot of pending tasks

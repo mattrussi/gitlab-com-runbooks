@@ -32,7 +32,7 @@ groups:
       avg without (cpu) (
         instance_cpu:node_cpu_seconds_not_idle:rate1m{env="gprd"}
       )
-  # CPU summaries
+  # CPU summaries.
   - record: job:node_cpu_utilization:min_ratio
     expr: >
       min without (fqdn,instance,node,pod) (
