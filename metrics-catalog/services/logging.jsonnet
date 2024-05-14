@@ -165,7 +165,6 @@ metricsCatalog.serviceDefinition(
         significantLabels: ['log', 'severity'],
       },
 
-      local monitoringTypeSelector = { type: 'monitoring' },
       pubsub_topics: {
         userImpacting: false,
         featureCategory: 'not_owned',
@@ -175,7 +174,6 @@ metricsCatalog.serviceDefinition(
 
         requestRate: rateMetric(
           counter='stackdriver_pubsub_topic_pubsub_googleapis_com_topic_byte_cost',
-          selector=monitoringTypeSelector,
         ),
 
         emittedBy: [],
@@ -196,7 +194,6 @@ metricsCatalog.serviceDefinition(
 
         requestRate: rateMetric(
           counter='stackdriver_pubsub_subscription_pubsub_googleapis_com_subscription_byte_cost',
-          selector=monitoringTypeSelector,
         ),
 
         emittedBy: [],
