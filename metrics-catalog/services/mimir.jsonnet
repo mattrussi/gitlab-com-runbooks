@@ -22,6 +22,7 @@ metricsCatalog.serviceDefinition({
   type: 'mimir',
   tier: 'inf',
   tenants: ['metamonitoring'],
+  defaultPrometheusDatasource: 'Mimir - Metamonitoring',
 
   tags: ['mimir'],
 
