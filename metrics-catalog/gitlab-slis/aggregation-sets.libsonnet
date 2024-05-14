@@ -67,7 +67,7 @@ local sourceAggregationSet(sli, recordingRuleRegistry) =
       supportedBurnRates: supportedBurnRates,
     }
     +
-    if sli.inRecordingRuleRegistry then
+    if sli.inRecordingRuleRegistry(registry=recordingRuleRegistry) then
       { burnRates: recordedBurnRatesForSLI(sli, recordingRuleRegistry) }
     else
       { metricFormats: aggregationFormats(sli) }
