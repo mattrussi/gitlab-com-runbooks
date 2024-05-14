@@ -570,7 +570,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(stackdriver_pubsub_subscription_pubsub_googleapis_com_subscription_byte_cost{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="monitoring"}[5m])
+          rate(stackdriver_pubsub_subscription_pubsub_googleapis_com_subscription_byte_cost{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
         )
       runbook: docs/logging/README.md
     labels:
@@ -607,7 +607,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(stackdriver_pubsub_subscription_pubsub_googleapis_com_subscription_byte_cost{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="monitoring"}[5m])
+          rate(stackdriver_pubsub_subscription_pubsub_googleapis_com_subscription_byte_cost{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
         )
       runbook: docs/logging/README.md
     labels:
@@ -642,7 +642,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(stackdriver_pubsub_topic_pubsub_googleapis_com_topic_byte_cost{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="monitoring"}[5m])
+          rate(stackdriver_pubsub_topic_pubsub_googleapis_com_topic_byte_cost{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
         )
       runbook: docs/logging/README.md
     labels:
@@ -679,7 +679,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(stackdriver_pubsub_topic_pubsub_googleapis_com_topic_byte_cost{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="monitoring"}[5m])
+          rate(stackdriver_pubsub_topic_pubsub_googleapis_com_topic_byte_cost{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
         )
       runbook: docs/logging/README.md
     labels:

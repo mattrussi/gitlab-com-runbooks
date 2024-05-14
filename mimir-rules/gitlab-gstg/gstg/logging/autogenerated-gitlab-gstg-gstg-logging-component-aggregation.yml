@@ -285,7 +285,7 @@ groups:
       type: logging
     expr: |
       sum by (env,environment) (
-        sli_aggregations:stackdriver_pubsub_subscription_pubsub_googleapis_com_subscription_byte_cost:rate_5m{env="gstg",type="monitoring"} offset 30s
+        sli_aggregations:stackdriver_pubsub_subscription_pubsub_googleapis_com_subscription_byte_cost:rate_5m{env="gstg"} offset 30s
       )
   - record: gitlab_component_errors:ratio_5m
     labels:
@@ -324,7 +324,7 @@ groups:
       type: logging
     expr: |
       sum by (env,environment) (
-        sli_aggregations:stackdriver_pubsub_topic_pubsub_googleapis_com_topic_byte_cost:rate_5m{env="gstg",type="monitoring"} offset 30s
+        sli_aggregations:stackdriver_pubsub_topic_pubsub_googleapis_com_topic_byte_cost:rate_5m{env="gstg"} offset 30s
       )
   - record: gitlab_component_errors:ratio_5m
     labels:
@@ -735,7 +735,7 @@ groups:
       type: logging
     expr: |
       sum by (env,environment) (
-        sli_aggregations:stackdriver_pubsub_subscription_pubsub_googleapis_com_subscription_byte_cost:rate_30m{env="gstg",type="monitoring"} offset 30s
+        sli_aggregations:stackdriver_pubsub_subscription_pubsub_googleapis_com_subscription_byte_cost:rate_30m{env="gstg"} offset 30s
       )
   - record: gitlab_component_errors:ratio_30m
     labels:
@@ -774,7 +774,7 @@ groups:
       type: logging
     expr: |
       sum by (env,environment) (
-        sli_aggregations:stackdriver_pubsub_topic_pubsub_googleapis_com_topic_byte_cost:rate_30m{env="gstg",type="monitoring"} offset 30s
+        sli_aggregations:stackdriver_pubsub_topic_pubsub_googleapis_com_topic_byte_cost:rate_30m{env="gstg"} offset 30s
       )
   - record: gitlab_component_errors:ratio_30m
     labels:
@@ -1185,7 +1185,7 @@ groups:
       type: logging
     expr: |
       sum by (env,environment) (
-        sli_aggregations:stackdriver_pubsub_subscription_pubsub_googleapis_com_subscription_byte_cost:rate_1h{env="gstg",type="monitoring"} offset 30s
+        sli_aggregations:stackdriver_pubsub_subscription_pubsub_googleapis_com_subscription_byte_cost:rate_1h{env="gstg"} offset 30s
       )
   - record: gitlab_component_errors:ratio_1h
     labels:
@@ -1224,7 +1224,7 @@ groups:
       type: logging
     expr: |
       sum by (env,environment) (
-        sli_aggregations:stackdriver_pubsub_topic_pubsub_googleapis_com_topic_byte_cost:rate_1h{env="gstg",type="monitoring"} offset 30s
+        sli_aggregations:stackdriver_pubsub_topic_pubsub_googleapis_com_topic_byte_cost:rate_1h{env="gstg"} offset 30s
       )
   - record: gitlab_component_errors:ratio_1h
     labels:
