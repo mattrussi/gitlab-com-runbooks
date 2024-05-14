@@ -166,6 +166,7 @@ metricsCatalog.serviceDefinition({
       apdex: histogramApdex(
         histogram='cortex_querier_request_duration_seconds_bucket',
         selector=mimirQuerySelector + querierRouteSelector,
+        metricsFormat='openmetrics',
         satisfiedThreshold=25.0,
       ),
 
@@ -204,6 +205,7 @@ metricsCatalog.serviceDefinition({
       apdex: histogramApdex(
         histogram='cortex_request_duration_seconds_bucket',
         selector=mimirQuerySelector + querierRouteSelector,
+        metricsFormat='openmetrics',
         satisfiedThreshold=25.0,
       ),
 
@@ -243,6 +245,7 @@ metricsCatalog.serviceDefinition({
       apdex: histogramApdex(
         histogram='cortex_query_scheduler_queue_duration_seconds_bucket',
         selector=mimirSchedulerSelector,
+        metricsFormat='openmetrics',
         satisfiedThreshold=5.0,
       ),
 
@@ -283,6 +286,7 @@ metricsCatalog.serviceDefinition({
       apdex: histogramApdex(
         histogram='cortex_request_duration_seconds_bucket',
         selector=mimirStoreGatewaySelector,
+        metricsFormat='openmetrics',
         satisfiedThreshold=25.0,
       ),
 
@@ -325,6 +329,7 @@ metricsCatalog.serviceDefinition({
       apdex: histogramApdex(
         histogram='cortex_request_duration_seconds_bucket',
         selector=mimirQueryDistributorSelector,
+        metricsFormat='openmetrics',
         satisfiedThreshold=0.5,
         toleratedThreshold=1.0,
       ),
@@ -367,6 +372,7 @@ metricsCatalog.serviceDefinition({
       apdex: histogramApdex(
         histogram='cortex_request_duration_seconds_bucket',
         selector=mimirIngesterQuerySelector,
+        metricsFormat='openmetrics',
         satisfiedThreshold=0.1,
         toleratedThreshold=1.0,
       ),
