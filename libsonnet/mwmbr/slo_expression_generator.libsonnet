@@ -73,6 +73,17 @@ local selectors = import 'promql/selectors.libsonnet';
     errorRate()::
       function(aggregationSet, windowDuration)
         aggregationSet.getErrorRatioMetricForBurnRate(windowDuration, required=true),
+
+    // Lookup a error rate confidence interval from the aggregation set
+    errorRateConfidenceInterval()::
+      function(aggregationSet, windowDuration)
+        aggregationSet.getErrorRatioConfidenceIntervalMetricForBurnRate(windowDuration, required=true),
+
+    // Lookup a apdex rate confidence interval from the aggregation set
+    apdexConfidenceInterval()::
+      function(aggregationSet, windowDuration)
+        aggregationSet.getApdexRatioConfidenceIntervalMetricForBurnRate(windowDuration, required=true),
+
   },
 
   expressionGenerator(
