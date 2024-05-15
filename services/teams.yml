@@ -104,8 +104,8 @@ teams:
   ignored_components:
   - graphql_query
 
-- name: runner_saas
-  product_stage_group: runner_saas
+- name: hosted_runners
+  product_stage_group: hosted_runners
   slack_alerts_channel: alerts-ci-cd
   send_error_budget_weekly_to_slack: true
   slack_error_budget_channel: ci-section
