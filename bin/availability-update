@@ -19,7 +19,6 @@ if [ -z "$GITLAB_API_TOKEN" ]; then
     exit 1
 fi
 
-
 #### Contstants
 # Extract grafana data point for the latest availability
 # source https://dashboards.gitlab.net/d/general-slas/general3a-slas?orgId=1&viewPanel=4
@@ -230,8 +229,8 @@ $new_row
 while getopts ":h" option; do
    case $option in
       h)
-         usage
-         exit;;
+        usage
+        exit;;
    esac
 done
 shift $((OPTIND - 1))
