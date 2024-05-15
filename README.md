@@ -439,7 +439,13 @@ Then, regenerate the rules using:
 make generate
 ```
 
-If you get errors while doing any of these steps, then read on for more details on how to set up your local environment.
+If you get errors while doing any of these steps try installing any missing dependencies:
+
+```shell
+make jsonnet-bundle
+```
+
+If the errors persist, read on for more details on how to set up your local environment.
 
 ## Generating a new runbooks image
 
