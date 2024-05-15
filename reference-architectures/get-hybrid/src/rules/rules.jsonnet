@@ -68,38 +68,38 @@ local saturationAuxGroup = saturationRules.generateSaturationAuxRulesGroup(
         function(service)
           groupsForService(service),
         services
-      )
+      ),
   },
   'prometheus-rules/sli-rules.yml': {
     groups:
-      serviceSLISGroups
+      serviceSLISGroups,
   },
   'prometheus-rules/slo-rules.yml': {
     groups:
-      serviceSLOsGroups
+      serviceSLOsGroups,
   },
   'prometheus-rules/saturation-rules.yml': {
     groups:
-      saturationGroup
+      saturationGroup,
   },
   'prometheus-rules/metadata-rules.yml': {
     groups:
-      saturationMetadataGroup
+      saturationMetadataGroup,
   },
   'prometheus-rules/auxiliary-rules.yml': {
     groups:
-      saturationAuxGroup
+      saturationAuxGroup,
   },
   'prometheus-rules/kube-state-rules.yml': {
     groups:
-      kubeStateMetricsGroups
+      kubeStateMetricsGroups,
   },
   'prometheus-rules/slo-alert-rules.yml': {
     groups:
-      sloAlertingRulesGroup
+      sloAlertingRulesGroup,
   },
   'prometheus-rules/availability-rules.yml': {
     groups:
-      availabilityRateRuleGroups
+      availabilityRateRuleGroups,
   },
 }

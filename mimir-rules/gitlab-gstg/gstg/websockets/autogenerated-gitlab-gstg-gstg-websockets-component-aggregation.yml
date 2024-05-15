@@ -168,6 +168,64 @@ groups:
       sum by (env,environment,stage) (
         gitlab_component_apdex:weight:score_5m{component="rails_request",env="gstg",monitor="global",tier="sv",type="websockets"} offset 30s
       )
+  - record: gitlab_component_errors:confidence:ratio_5m
+    labels:
+      component: rails_request
+      confidence: 98%
+      monitor: global
+      tier: sv
+      type: websockets
+    expr: |
+      (
+        (
+          (gitlab_component_errors:rate_5m{component="rails_request",env="gstg",monitor="global",tier="sv",type="websockets"} / gitlab_component_ops:rate_5m{component="rails_request",env="gstg",monitor="global",tier="sv",type="websockets"})
+          +
+          5.411894 / (2 * (gitlab_component_ops:rate_5m{component="rails_request",env="gstg",monitor="global",tier="sv",type="websockets"} * 300))
+        )
+        -
+        2.326348
+        *
+        sqrt(
+          (
+            (gitlab_component_errors:rate_5m{component="rails_request",env="gstg",monitor="global",tier="sv",type="websockets"} / gitlab_component_ops:rate_5m{component="rails_request",env="gstg",monitor="global",tier="sv",type="websockets"}) * (1 - (gitlab_component_errors:rate_5m{component="rails_request",env="gstg",monitor="global",tier="sv",type="websockets"} / gitlab_component_ops:rate_5m{component="rails_request",env="gstg",monitor="global",tier="sv",type="websockets"}))
+            +
+            5.411894 / (4 * (gitlab_component_ops:rate_5m{component="rails_request",env="gstg",monitor="global",tier="sv",type="websockets"} * 300))
+          )
+          /
+          (gitlab_component_ops:rate_5m{component="rails_request",env="gstg",monitor="global",tier="sv",type="websockets"} * 300)
+        )
+      )
+      /
+      (1 + 5.411894 / (gitlab_component_ops:rate_5m{component="rails_request",env="gstg",monitor="global",tier="sv",type="websockets"} * 300))
+  - record: gitlab_component_apdex:confidence:ratio_5m
+    labels:
+      component: rails_request
+      confidence: 98%
+      monitor: global
+      tier: sv
+      type: websockets
+    expr: |
+      (
+        (
+          (gitlab_component_apdex:success:rate_5m{component="rails_request",env="gstg",monitor="global",tier="sv",type="websockets"} / gitlab_component_apdex:weight:score_5m{component="rails_request",env="gstg",monitor="global",tier="sv",type="websockets"})
+          +
+          5.411894 / (2 * (gitlab_component_apdex:weight:score_5m{component="rails_request",env="gstg",monitor="global",tier="sv",type="websockets"} * 300))
+        )
+        +
+        2.326348
+        *
+        sqrt(
+          (
+            (gitlab_component_apdex:success:rate_5m{component="rails_request",env="gstg",monitor="global",tier="sv",type="websockets"} / gitlab_component_apdex:weight:score_5m{component="rails_request",env="gstg",monitor="global",tier="sv",type="websockets"}) * (1 - (gitlab_component_apdex:success:rate_5m{component="rails_request",env="gstg",monitor="global",tier="sv",type="websockets"} / gitlab_component_apdex:weight:score_5m{component="rails_request",env="gstg",monitor="global",tier="sv",type="websockets"}))
+            +
+            5.411894 / (4 * (gitlab_component_apdex:weight:score_5m{component="rails_request",env="gstg",monitor="global",tier="sv",type="websockets"} * 300))
+          )
+          /
+          (gitlab_component_apdex:weight:score_5m{component="rails_request",env="gstg",monitor="global",tier="sv",type="websockets"} * 300)
+        )
+      )
+      /
+      (1 + 5.411894 / (gitlab_component_apdex:weight:score_5m{component="rails_request",env="gstg",monitor="global",tier="sv",type="websockets"} * 300))
   - record: gitlab_component_ops:rate_5m
     labels:
       component: workhorse
@@ -391,6 +449,64 @@ groups:
       sum by (env,environment,stage) (
         gitlab_component_apdex:weight:score_30m{component="rails_request",env="gstg",monitor="global",tier="sv",type="websockets"} offset 30s
       )
+  - record: gitlab_component_errors:confidence:ratio_30m
+    labels:
+      component: rails_request
+      confidence: 98%
+      monitor: global
+      tier: sv
+      type: websockets
+    expr: |
+      (
+        (
+          (gitlab_component_errors:rate_30m{component="rails_request",env="gstg",monitor="global",tier="sv",type="websockets"} / gitlab_component_ops:rate_30m{component="rails_request",env="gstg",monitor="global",tier="sv",type="websockets"})
+          +
+          5.411894 / (2 * (gitlab_component_ops:rate_30m{component="rails_request",env="gstg",monitor="global",tier="sv",type="websockets"} * 1800))
+        )
+        -
+        2.326348
+        *
+        sqrt(
+          (
+            (gitlab_component_errors:rate_30m{component="rails_request",env="gstg",monitor="global",tier="sv",type="websockets"} / gitlab_component_ops:rate_30m{component="rails_request",env="gstg",monitor="global",tier="sv",type="websockets"}) * (1 - (gitlab_component_errors:rate_30m{component="rails_request",env="gstg",monitor="global",tier="sv",type="websockets"} / gitlab_component_ops:rate_30m{component="rails_request",env="gstg",monitor="global",tier="sv",type="websockets"}))
+            +
+            5.411894 / (4 * (gitlab_component_ops:rate_30m{component="rails_request",env="gstg",monitor="global",tier="sv",type="websockets"} * 1800))
+          )
+          /
+          (gitlab_component_ops:rate_30m{component="rails_request",env="gstg",monitor="global",tier="sv",type="websockets"} * 1800)
+        )
+      )
+      /
+      (1 + 5.411894 / (gitlab_component_ops:rate_30m{component="rails_request",env="gstg",monitor="global",tier="sv",type="websockets"} * 1800))
+  - record: gitlab_component_apdex:confidence:ratio_30m
+    labels:
+      component: rails_request
+      confidence: 98%
+      monitor: global
+      tier: sv
+      type: websockets
+    expr: |
+      (
+        (
+          (gitlab_component_apdex:success:rate_30m{component="rails_request",env="gstg",monitor="global",tier="sv",type="websockets"} / gitlab_component_apdex:weight:score_30m{component="rails_request",env="gstg",monitor="global",tier="sv",type="websockets"})
+          +
+          5.411894 / (2 * (gitlab_component_apdex:weight:score_30m{component="rails_request",env="gstg",monitor="global",tier="sv",type="websockets"} * 1800))
+        )
+        +
+        2.326348
+        *
+        sqrt(
+          (
+            (gitlab_component_apdex:success:rate_30m{component="rails_request",env="gstg",monitor="global",tier="sv",type="websockets"} / gitlab_component_apdex:weight:score_30m{component="rails_request",env="gstg",monitor="global",tier="sv",type="websockets"}) * (1 - (gitlab_component_apdex:success:rate_30m{component="rails_request",env="gstg",monitor="global",tier="sv",type="websockets"} / gitlab_component_apdex:weight:score_30m{component="rails_request",env="gstg",monitor="global",tier="sv",type="websockets"}))
+            +
+            5.411894 / (4 * (gitlab_component_apdex:weight:score_30m{component="rails_request",env="gstg",monitor="global",tier="sv",type="websockets"} * 1800))
+          )
+          /
+          (gitlab_component_apdex:weight:score_30m{component="rails_request",env="gstg",monitor="global",tier="sv",type="websockets"} * 1800)
+        )
+      )
+      /
+      (1 + 5.411894 / (gitlab_component_apdex:weight:score_30m{component="rails_request",env="gstg",monitor="global",tier="sv",type="websockets"} * 1800))
   - record: gitlab_component_ops:rate_30m
     labels:
       component: workhorse
@@ -614,6 +730,64 @@ groups:
       sum by (env,environment,stage) (
         gitlab_component_apdex:weight:score_1h{component="rails_request",env="gstg",monitor="global",tier="sv",type="websockets"} offset 30s
       )
+  - record: gitlab_component_errors:confidence:ratio_1h
+    labels:
+      component: rails_request
+      confidence: 98%
+      monitor: global
+      tier: sv
+      type: websockets
+    expr: |
+      (
+        (
+          (gitlab_component_errors:rate_1h{component="rails_request",env="gstg",monitor="global",tier="sv",type="websockets"} / gitlab_component_ops:rate_1h{component="rails_request",env="gstg",monitor="global",tier="sv",type="websockets"})
+          +
+          5.411894 / (2 * (gitlab_component_ops:rate_1h{component="rails_request",env="gstg",monitor="global",tier="sv",type="websockets"} * 3600))
+        )
+        -
+        2.326348
+        *
+        sqrt(
+          (
+            (gitlab_component_errors:rate_1h{component="rails_request",env="gstg",monitor="global",tier="sv",type="websockets"} / gitlab_component_ops:rate_1h{component="rails_request",env="gstg",monitor="global",tier="sv",type="websockets"}) * (1 - (gitlab_component_errors:rate_1h{component="rails_request",env="gstg",monitor="global",tier="sv",type="websockets"} / gitlab_component_ops:rate_1h{component="rails_request",env="gstg",monitor="global",tier="sv",type="websockets"}))
+            +
+            5.411894 / (4 * (gitlab_component_ops:rate_1h{component="rails_request",env="gstg",monitor="global",tier="sv",type="websockets"} * 3600))
+          )
+          /
+          (gitlab_component_ops:rate_1h{component="rails_request",env="gstg",monitor="global",tier="sv",type="websockets"} * 3600)
+        )
+      )
+      /
+      (1 + 5.411894 / (gitlab_component_ops:rate_1h{component="rails_request",env="gstg",monitor="global",tier="sv",type="websockets"} * 3600))
+  - record: gitlab_component_apdex:confidence:ratio_1h
+    labels:
+      component: rails_request
+      confidence: 98%
+      monitor: global
+      tier: sv
+      type: websockets
+    expr: |
+      (
+        (
+          (gitlab_component_apdex:success:rate_1h{component="rails_request",env="gstg",monitor="global",tier="sv",type="websockets"} / gitlab_component_apdex:weight:score_1h{component="rails_request",env="gstg",monitor="global",tier="sv",type="websockets"})
+          +
+          5.411894 / (2 * (gitlab_component_apdex:weight:score_1h{component="rails_request",env="gstg",monitor="global",tier="sv",type="websockets"} * 3600))
+        )
+        +
+        2.326348
+        *
+        sqrt(
+          (
+            (gitlab_component_apdex:success:rate_1h{component="rails_request",env="gstg",monitor="global",tier="sv",type="websockets"} / gitlab_component_apdex:weight:score_1h{component="rails_request",env="gstg",monitor="global",tier="sv",type="websockets"}) * (1 - (gitlab_component_apdex:success:rate_1h{component="rails_request",env="gstg",monitor="global",tier="sv",type="websockets"} / gitlab_component_apdex:weight:score_1h{component="rails_request",env="gstg",monitor="global",tier="sv",type="websockets"}))
+            +
+            5.411894 / (4 * (gitlab_component_apdex:weight:score_1h{component="rails_request",env="gstg",monitor="global",tier="sv",type="websockets"} * 3600))
+          )
+          /
+          (gitlab_component_apdex:weight:score_1h{component="rails_request",env="gstg",monitor="global",tier="sv",type="websockets"} * 3600)
+        )
+      )
+      /
+      (1 + 5.411894 / (gitlab_component_apdex:weight:score_1h{component="rails_request",env="gstg",monitor="global",tier="sv",type="websockets"} * 3600))
   - record: gitlab_component_ops:rate_1h
     labels:
       component: workhorse
@@ -809,6 +983,64 @@ groups:
       sum by (env,environment,stage) (
         gitlab_component_apdex:weight:score_6h{component="rails_request",env="gstg",monitor="global",tier="sv",type="websockets"} offset 30s
       )
+  - record: gitlab_component_errors:confidence:ratio_6h
+    labels:
+      component: rails_request
+      confidence: 98%
+      monitor: global
+      tier: sv
+      type: websockets
+    expr: |
+      (
+        (
+          (gitlab_component_errors:rate_6h{component="rails_request",env="gstg",monitor="global",tier="sv",type="websockets"} / gitlab_component_ops:rate_6h{component="rails_request",env="gstg",monitor="global",tier="sv",type="websockets"})
+          +
+          5.411894 / (2 * (gitlab_component_ops:rate_6h{component="rails_request",env="gstg",monitor="global",tier="sv",type="websockets"} * 21600))
+        )
+        -
+        2.326348
+        *
+        sqrt(
+          (
+            (gitlab_component_errors:rate_6h{component="rails_request",env="gstg",monitor="global",tier="sv",type="websockets"} / gitlab_component_ops:rate_6h{component="rails_request",env="gstg",monitor="global",tier="sv",type="websockets"}) * (1 - (gitlab_component_errors:rate_6h{component="rails_request",env="gstg",monitor="global",tier="sv",type="websockets"} / gitlab_component_ops:rate_6h{component="rails_request",env="gstg",monitor="global",tier="sv",type="websockets"}))
+            +
+            5.411894 / (4 * (gitlab_component_ops:rate_6h{component="rails_request",env="gstg",monitor="global",tier="sv",type="websockets"} * 21600))
+          )
+          /
+          (gitlab_component_ops:rate_6h{component="rails_request",env="gstg",monitor="global",tier="sv",type="websockets"} * 21600)
+        )
+      )
+      /
+      (1 + 5.411894 / (gitlab_component_ops:rate_6h{component="rails_request",env="gstg",monitor="global",tier="sv",type="websockets"} * 21600))
+  - record: gitlab_component_apdex:confidence:ratio_6h
+    labels:
+      component: rails_request
+      confidence: 98%
+      monitor: global
+      tier: sv
+      type: websockets
+    expr: |
+      (
+        (
+          (gitlab_component_apdex:success:rate_6h{component="rails_request",env="gstg",monitor="global",tier="sv",type="websockets"} / gitlab_component_apdex:weight:score_6h{component="rails_request",env="gstg",monitor="global",tier="sv",type="websockets"})
+          +
+          5.411894 / (2 * (gitlab_component_apdex:weight:score_6h{component="rails_request",env="gstg",monitor="global",tier="sv",type="websockets"} * 21600))
+        )
+        +
+        2.326348
+        *
+        sqrt(
+          (
+            (gitlab_component_apdex:success:rate_6h{component="rails_request",env="gstg",monitor="global",tier="sv",type="websockets"} / gitlab_component_apdex:weight:score_6h{component="rails_request",env="gstg",monitor="global",tier="sv",type="websockets"}) * (1 - (gitlab_component_apdex:success:rate_6h{component="rails_request",env="gstg",monitor="global",tier="sv",type="websockets"} / gitlab_component_apdex:weight:score_6h{component="rails_request",env="gstg",monitor="global",tier="sv",type="websockets"}))
+            +
+            5.411894 / (4 * (gitlab_component_apdex:weight:score_6h{component="rails_request",env="gstg",monitor="global",tier="sv",type="websockets"} * 21600))
+          )
+          /
+          (gitlab_component_apdex:weight:score_6h{component="rails_request",env="gstg",monitor="global",tier="sv",type="websockets"} * 21600)
+        )
+      )
+      /
+      (1 + 5.411894 / (gitlab_component_apdex:weight:score_6h{component="rails_request",env="gstg",monitor="global",tier="sv",type="websockets"} * 21600))
   - record: gitlab_component_apdex:success:rate_6h
     labels:
       component: workhorse
@@ -1016,6 +1248,64 @@ groups:
       sum by (env,environment,stage) (
         gitlab_component_apdex:weight:score_3d{component="rails_request",env="gstg",monitor="global",tier="sv",type="websockets"} offset 30s
       )
+  - record: gitlab_component_errors:confidence:ratio_3d
+    labels:
+      component: rails_request
+      confidence: 98%
+      monitor: global
+      tier: sv
+      type: websockets
+    expr: |
+      (
+        (
+          (gitlab_component_errors:rate_3d{component="rails_request",env="gstg",monitor="global",tier="sv",type="websockets"} / gitlab_component_ops:rate_3d{component="rails_request",env="gstg",monitor="global",tier="sv",type="websockets"})
+          +
+          5.411894 / (2 * (gitlab_component_ops:rate_3d{component="rails_request",env="gstg",monitor="global",tier="sv",type="websockets"} * 259200))
+        )
+        -
+        2.326348
+        *
+        sqrt(
+          (
+            (gitlab_component_errors:rate_3d{component="rails_request",env="gstg",monitor="global",tier="sv",type="websockets"} / gitlab_component_ops:rate_3d{component="rails_request",env="gstg",monitor="global",tier="sv",type="websockets"}) * (1 - (gitlab_component_errors:rate_3d{component="rails_request",env="gstg",monitor="global",tier="sv",type="websockets"} / gitlab_component_ops:rate_3d{component="rails_request",env="gstg",monitor="global",tier="sv",type="websockets"}))
+            +
+            5.411894 / (4 * (gitlab_component_ops:rate_3d{component="rails_request",env="gstg",monitor="global",tier="sv",type="websockets"} * 259200))
+          )
+          /
+          (gitlab_component_ops:rate_3d{component="rails_request",env="gstg",monitor="global",tier="sv",type="websockets"} * 259200)
+        )
+      )
+      /
+      (1 + 5.411894 / (gitlab_component_ops:rate_3d{component="rails_request",env="gstg",monitor="global",tier="sv",type="websockets"} * 259200))
+  - record: gitlab_component_apdex:confidence:ratio_3d
+    labels:
+      component: rails_request
+      confidence: 98%
+      monitor: global
+      tier: sv
+      type: websockets
+    expr: |
+      (
+        (
+          (gitlab_component_apdex:success:rate_3d{component="rails_request",env="gstg",monitor="global",tier="sv",type="websockets"} / gitlab_component_apdex:weight:score_3d{component="rails_request",env="gstg",monitor="global",tier="sv",type="websockets"})
+          +
+          5.411894 / (2 * (gitlab_component_apdex:weight:score_3d{component="rails_request",env="gstg",monitor="global",tier="sv",type="websockets"} * 259200))
+        )
+        +
+        2.326348
+        *
+        sqrt(
+          (
+            (gitlab_component_apdex:success:rate_3d{component="rails_request",env="gstg",monitor="global",tier="sv",type="websockets"} / gitlab_component_apdex:weight:score_3d{component="rails_request",env="gstg",monitor="global",tier="sv",type="websockets"}) * (1 - (gitlab_component_apdex:success:rate_3d{component="rails_request",env="gstg",monitor="global",tier="sv",type="websockets"} / gitlab_component_apdex:weight:score_3d{component="rails_request",env="gstg",monitor="global",tier="sv",type="websockets"}))
+            +
+            5.411894 / (4 * (gitlab_component_apdex:weight:score_3d{component="rails_request",env="gstg",monitor="global",tier="sv",type="websockets"} * 259200))
+          )
+          /
+          (gitlab_component_apdex:weight:score_3d{component="rails_request",env="gstg",monitor="global",tier="sv",type="websockets"} * 259200)
+        )
+      )
+      /
+      (1 + 5.411894 / (gitlab_component_apdex:weight:score_3d{component="rails_request",env="gstg",monitor="global",tier="sv",type="websockets"} * 259200))
   - record: gitlab_component_apdex:success:rate_3d
     labels:
       component: workhorse

@@ -13,4 +13,7 @@
   serviceSLORuleSetGenerator: (import 'service-slo-rule-set-generator.libsonnet').serviceSLORuleSetGenerator,
   sliRecordingRulesSetGenerator: (import 'sli-recording-rule-set-generator.libsonnet').sliRecordingRulesSetGenerator,
   thresholdHealthRuleSet: (import 'mwmbr-threshold-health-rule-set.libsonnet').thresholdHealthRuleSet,
+
+  errorRatioConfidenceInterval: (import 'confidence-interval-generators.libsonnet').errorRatioConfidenceInterval,
+  apdexRatioConfidenceInterval: (import 'confidence-interval-generators.libsonnet').apdexRatioConfidenceInterval,
 }

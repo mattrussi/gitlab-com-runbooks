@@ -12,7 +12,7 @@ local railsSelector = { job: 'gitlab-rails', type: 'websockets' };
 metricsCatalog.serviceDefinition({
   type: 'websockets',
   tier: 'sv',
-  tenants: [ 'gitlab-gprd', 'gitlab-gstg', 'gitlab-pre' ],
+  tenants: ['gitlab-gprd', 'gitlab-gstg', 'gitlab-pre'],
 
   tags: ['golang', 'rails', 'puma'],
 
@@ -113,6 +113,12 @@ metricsCatalog.serviceDefinition({
     toolingLinks: [
       toolingLinks.kibana(title='Rails', index='rails'),
     ],
+
+    // Experimentally evaluate this SLI with
+    // confidence levels, to assess how well this approach
+    // works
+    useConfidenceLevelForSLIAlerts: '98%',
+
     dependsOn: dependOnPatroni.sqlComponents,
   }),
 })
