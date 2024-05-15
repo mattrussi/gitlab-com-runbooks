@@ -173,7 +173,7 @@ apply_change() {
     new_date=$(process_date "$last_found_year $last_found_month")
 
     echo -e "Gitlab.com Availability: ${GREEN}$percentage${NC}"
-    
+
     read -p "Would you like to apply a comment (leave empty if not)? " comment
     new_row="| $new_date | $percentage | $comment |"
     # add new date into the table
@@ -183,7 +183,7 @@ $new_row
     echo
     echo -e "${RED}Change will be applied:${NC}"
     git diff
-    echo 
+    echo
     read -p "Do you want to continue? (yes/y): " response
     if [[ "$response" != "yes" && "$response" != "y" ]]; then
         echo "Exiting..."
@@ -223,15 +223,15 @@ $new_row
       echo
       echo -e "${GREEN}MERGE REQUEST CREATED:${NC} $mr_url/diffs"
     fi
-    
+
 }
 
 while getopts ":h" option; do
-   case $option in
+    case $option in
       h)
         usage
         exit;;
-   esac
+    esac
 done
 shift $((OPTIND - 1))
 
