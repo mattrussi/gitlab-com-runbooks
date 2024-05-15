@@ -9,7 +9,8 @@ metricsCatalog.serviceDefinition(
     apdexScore=0.999,
     errorRatio=0.999,
     apdexSatisfiedThreshold='4052.650622296292',
-    trafficCessationAlertConfig=false,
+    trafficCessationAlertConfig=true,
+    severity='s2',
     externalLoadBalancer=false,
     customToolingLinks=[],
   )
