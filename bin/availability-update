@@ -167,7 +167,7 @@ apply_change() {
     git checkout -b "$SOURCE_BRANCH" > /dev/null
 
     # Get the existing first row from the Historical Service Availability table
-    first_row=$(sed -n -E  '/^\| [0-9]{4} [A-Za-z]+.*/p' _index.md | head -n 1)
+    first_row=$(sed -n -E  '/^\| [0-9]{4} [A-Za-z]+.*/p' $FILEPATH | head -n 1)
     # Extract the year and month from the first row
     last_found_year=$(echo "$first_row" | awk '{print $2}')
     last_found_month=$(echo "$first_row" | awk '{print $3}')
