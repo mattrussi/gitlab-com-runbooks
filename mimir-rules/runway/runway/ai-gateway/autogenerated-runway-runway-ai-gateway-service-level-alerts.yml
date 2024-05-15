@@ -7,6 +7,7 @@ groups:
   - alert: AiGatewayServiceInferenceApdexSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The inference SLI of the ai-gateway service (`{{ $labels.stage }}` stage)
         has an apdex violating SLO
       description: |
@@ -62,6 +63,7 @@ groups:
   - alert: AiGatewayServiceInferenceApdexSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The inference SLI of the ai-gateway service (`{{ $labels.stage }}` stage)
         has an apdex violating SLO
       description: |
@@ -117,6 +119,7 @@ groups:
   - alert: AiGatewayServiceInferenceApdexSLOViolationRegional
     for: 2m
     annotations:
+      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The inference SLI of the ai-gateway service in region `{{ $labels.region
         }}` has an apdex violating SLO
       description: |
@@ -174,6 +177,7 @@ groups:
   - alert: AiGatewayServiceInferenceApdexSLOViolationRegional
     for: 2m
     annotations:
+      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The inference SLI of the ai-gateway service in region `{{ $labels.region
         }}` has an apdex violating SLO
       description: |
@@ -231,6 +235,7 @@ groups:
   - alert: AiGatewayServiceInferenceErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The inference SLI of the ai-gateway service (`{{ $labels.stage }}` stage)
         has an error rate violating SLO
       description: |
@@ -283,6 +288,7 @@ groups:
   - alert: AiGatewayServiceInferenceErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The inference SLI of the ai-gateway service (`{{ $labels.stage }}` stage)
         has an error rate violating SLO
       description: |
@@ -335,6 +341,7 @@ groups:
   - alert: AiGatewayServiceInferenceErrorSLOViolationRegional
     for: 2m
     annotations:
+      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The inference SLI of the ai-gateway service in region `{{ $labels.region
         }}` has an error rate violating SLO
       description: |
@@ -389,6 +396,7 @@ groups:
   - alert: AiGatewayServiceInferenceErrorSLOViolationRegional
     for: 2m
     annotations:
+      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The inference SLI of the ai-gateway service in region `{{ $labels.region
         }}` has an error rate violating SLO
       description: |
@@ -443,6 +451,7 @@ groups:
   - alert: AiGatewayServiceRunwayIngressApdexSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The runway_ingress SLI of the ai-gateway service (`{{ $labels.stage }}`
         stage) has an apdex violating SLO
       description: |
@@ -494,6 +503,7 @@ groups:
   - alert: AiGatewayServiceRunwayIngressApdexSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The runway_ingress SLI of the ai-gateway service (`{{ $labels.stage }}`
         stage) has an apdex violating SLO
       description: |
@@ -545,6 +555,7 @@ groups:
   - alert: AiGatewayServiceRunwayIngressApdexSLOViolationRegional
     for: 2m
     annotations:
+      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The runway_ingress SLI of the ai-gateway service in region `{{ $labels.region
         }}` has an apdex violating SLO
       description: |
@@ -598,6 +609,7 @@ groups:
   - alert: AiGatewayServiceRunwayIngressApdexSLOViolationRegional
     for: 2m
     annotations:
+      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The runway_ingress SLI of the ai-gateway service in region `{{ $labels.region
         }}` has an apdex violating SLO
       description: |
@@ -651,6 +663,7 @@ groups:
   - alert: AiGatewayServiceRunwayIngressErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The runway_ingress SLI of the ai-gateway service (`{{ $labels.stage }}`
         stage) has an error rate violating SLO
       description: |
@@ -699,6 +712,7 @@ groups:
   - alert: AiGatewayServiceRunwayIngressErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The runway_ingress SLI of the ai-gateway service (`{{ $labels.stage }}`
         stage) has an error rate violating SLO
       description: |
@@ -747,6 +761,7 @@ groups:
   - alert: AiGatewayServiceRunwayIngressErrorSLOViolationRegional
     for: 2m
     annotations:
+      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The runway_ingress SLI of the ai-gateway service in region `{{ $labels.region
         }}` has an error rate violating SLO
       description: |
@@ -797,6 +812,7 @@ groups:
   - alert: AiGatewayServiceRunwayIngressErrorSLOViolationRegional
     for: 2m
     annotations:
+      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The runway_ingress SLI of the ai-gateway service in region `{{ $labels.region
         }}` has an error rate violating SLO
       description: |
@@ -847,6 +863,7 @@ groups:
   - alert: AiGatewayServiceRunwayIngressTrafficCessation
     for: 5m
     annotations:
+      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The runway_ingress SLI of the ai-gateway service (`{{ $labels.stage }}`
         stage) has not received any traffic in the past 30m
       description: |
@@ -882,6 +899,7 @@ groups:
   - alert: AiGatewayServiceRunwayIngressTrafficAbsent
     for: 30m
     annotations:
+      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The runway_ingress SLI of the ai-gateway service (`{{ $labels.stage }}`
         stage) has not reported any traffic in the past 30m
       description: |
@@ -919,6 +937,7 @@ groups:
   - alert: AiGatewayServiceRunwayIngressTrafficCessationRegional
     for: 5m
     annotations:
+      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The runway_ingress SLI of the ai-gateway service in region `{{ $labels.region
         }}` has not received any traffic in the past 30m
       description: |
@@ -956,6 +975,7 @@ groups:
   - alert: AiGatewayServiceRunwayIngressTrafficAbsentRegional
     for: 30m
     annotations:
+      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The runway_ingress SLI of the ai-gateway service in region `{{ $labels.region
         }}` has not reported any traffic in the past 30m
       description: |
@@ -995,6 +1015,7 @@ groups:
   - alert: AiGatewayServiceRunwayLbErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The runway_lb SLI of the ai-gateway service (`{{ $labels.stage }}` stage)
         has an error rate violating SLO
       description: |
@@ -1043,6 +1064,7 @@ groups:
   - alert: AiGatewayServiceRunwayLbErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The runway_lb SLI of the ai-gateway service (`{{ $labels.stage }}` stage)
         has an error rate violating SLO
       description: |
@@ -1091,6 +1113,7 @@ groups:
   - alert: AiGatewayServiceRunwayLbErrorSLOViolationRegional
     for: 2m
     annotations:
+      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The runway_lb SLI of the ai-gateway service in region `{{ $labels.region
         }}` has an error rate violating SLO
       description: |
@@ -1141,6 +1164,7 @@ groups:
   - alert: AiGatewayServiceRunwayLbErrorSLOViolationRegional
     for: 2m
     annotations:
+      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The runway_lb SLI of the ai-gateway service in region `{{ $labels.region
         }}` has an error rate violating SLO
       description: |
@@ -1191,6 +1215,7 @@ groups:
   - alert: AiGatewayServiceRunwayLbTrafficCessation
     for: 5m
     annotations:
+      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The runway_lb SLI of the ai-gateway service (`{{ $labels.stage }}` stage)
         has not received any traffic in the past 30m
       description: |
@@ -1226,6 +1251,7 @@ groups:
   - alert: AiGatewayServiceRunwayLbTrafficAbsent
     for: 30m
     annotations:
+      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The runway_lb SLI of the ai-gateway service (`{{ $labels.stage }}` stage)
         has not reported any traffic in the past 30m
       description: |
@@ -1263,6 +1289,7 @@ groups:
   - alert: AiGatewayServiceRunwayLbTrafficCessationRegional
     for: 5m
     annotations:
+      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The runway_lb SLI of the ai-gateway service in region `{{ $labels.region
         }}` has not received any traffic in the past 30m
       description: |
@@ -1300,6 +1327,7 @@ groups:
   - alert: AiGatewayServiceRunwayLbTrafficAbsentRegional
     for: 30m
     annotations:
+      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The runway_lb SLI of the ai-gateway service in region `{{ $labels.region
         }}` has not reported any traffic in the past 30m
       description: |
@@ -1339,6 +1367,7 @@ groups:
   - alert: AiGatewayServiceServerApdexSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The server SLI of the ai-gateway service (`{{ $labels.stage }}` stage)
         has an apdex violating SLO
       description: |
@@ -1389,6 +1418,7 @@ groups:
   - alert: AiGatewayServiceServerApdexSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The server SLI of the ai-gateway service (`{{ $labels.stage }}` stage)
         has an apdex violating SLO
       description: |
@@ -1439,6 +1469,7 @@ groups:
   - alert: AiGatewayServiceServerApdexSLOViolationRegional
     for: 2m
     annotations:
+      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The server SLI of the ai-gateway service in region `{{ $labels.region
         }}` has an apdex violating SLO
       description: |
@@ -1491,6 +1522,7 @@ groups:
   - alert: AiGatewayServiceServerApdexSLOViolationRegional
     for: 2m
     annotations:
+      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The server SLI of the ai-gateway service in region `{{ $labels.region
         }}` has an apdex violating SLO
       description: |
@@ -1543,6 +1575,7 @@ groups:
   - alert: AiGatewayServiceServerErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The server SLI of the ai-gateway service (`{{ $labels.stage }}` stage)
         has an error rate violating SLO
       description: |
@@ -1590,6 +1623,7 @@ groups:
   - alert: AiGatewayServiceServerErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The server SLI of the ai-gateway service (`{{ $labels.stage }}` stage)
         has an error rate violating SLO
       description: |
@@ -1637,6 +1671,7 @@ groups:
   - alert: AiGatewayServiceServerErrorSLOViolationRegional
     for: 2m
     annotations:
+      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The server SLI of the ai-gateway service in region `{{ $labels.region
         }}` has an error rate violating SLO
       description: |
@@ -1686,6 +1721,7 @@ groups:
   - alert: AiGatewayServiceServerErrorSLOViolationRegional
     for: 2m
     annotations:
+      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The server SLI of the ai-gateway service in region `{{ $labels.region
         }}` has an error rate violating SLO
       description: |
@@ -1735,6 +1771,7 @@ groups:
   - alert: AiGatewayServiceServerChatApdexSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The server_chat SLI of the ai-gateway service (`{{ $labels.stage }}`
         stage) has an apdex violating SLO
       description: |
@@ -1786,6 +1823,7 @@ groups:
   - alert: AiGatewayServiceServerChatApdexSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The server_chat SLI of the ai-gateway service (`{{ $labels.stage }}`
         stage) has an apdex violating SLO
       description: |
@@ -1837,6 +1875,7 @@ groups:
   - alert: AiGatewayServiceServerChatApdexSLOViolationRegional
     for: 2m
     annotations:
+      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The server_chat SLI of the ai-gateway service in region `{{ $labels.region
         }}` has an apdex violating SLO
       description: |
@@ -1890,6 +1929,7 @@ groups:
   - alert: AiGatewayServiceServerChatApdexSLOViolationRegional
     for: 2m
     annotations:
+      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The server_chat SLI of the ai-gateway service in region `{{ $labels.region
         }}` has an apdex violating SLO
       description: |
@@ -1943,6 +1983,7 @@ groups:
   - alert: AiGatewayServiceServerChatErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The server_chat SLI of the ai-gateway service (`{{ $labels.stage }}`
         stage) has an error rate violating SLO
       description: |
@@ -1991,6 +2032,7 @@ groups:
   - alert: AiGatewayServiceServerChatErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The server_chat SLI of the ai-gateway service (`{{ $labels.stage }}`
         stage) has an error rate violating SLO
       description: |
@@ -2039,6 +2081,7 @@ groups:
   - alert: AiGatewayServiceServerChatErrorSLOViolationRegional
     for: 2m
     annotations:
+      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The server_chat SLI of the ai-gateway service in region `{{ $labels.region
         }}` has an error rate violating SLO
       description: |
@@ -2089,6 +2132,7 @@ groups:
   - alert: AiGatewayServiceServerChatErrorSLOViolationRegional
     for: 2m
     annotations:
+      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The server_chat SLI of the ai-gateway service in region `{{ $labels.region
         }}` has an error rate violating SLO
       description: |
@@ -2139,6 +2183,7 @@ groups:
   - alert: AiGatewayServiceServerCodeCompletionsApdexSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The server_code_completions SLI of the ai-gateway service (`{{ $labels.stage
         }}` stage) has an apdex violating SLO
       description: |
@@ -2190,6 +2235,7 @@ groups:
   - alert: AiGatewayServiceServerCodeCompletionsApdexSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The server_code_completions SLI of the ai-gateway service (`{{ $labels.stage
         }}` stage) has an apdex violating SLO
       description: |
@@ -2241,6 +2287,7 @@ groups:
   - alert: AiGatewayServiceServerCodeCompletionsApdexSLOViolationRegional
     for: 2m
     annotations:
+      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The server_code_completions SLI of the ai-gateway service in region `{{
         $labels.region }}` has an apdex violating SLO
       description: |
@@ -2294,6 +2341,7 @@ groups:
   - alert: AiGatewayServiceServerCodeCompletionsApdexSLOViolationRegional
     for: 2m
     annotations:
+      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The server_code_completions SLI of the ai-gateway service in region `{{
         $labels.region }}` has an apdex violating SLO
       description: |
@@ -2347,6 +2395,7 @@ groups:
   - alert: AiGatewayServiceServerCodeCompletionsErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The server_code_completions SLI of the ai-gateway service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
@@ -2395,6 +2444,7 @@ groups:
   - alert: AiGatewayServiceServerCodeCompletionsErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The server_code_completions SLI of the ai-gateway service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
@@ -2443,6 +2493,7 @@ groups:
   - alert: AiGatewayServiceServerCodeCompletionsErrorSLOViolationRegional
     for: 2m
     annotations:
+      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The server_code_completions SLI of the ai-gateway service in region `{{
         $labels.region }}` has an error rate violating SLO
       description: |
@@ -2493,6 +2544,7 @@ groups:
   - alert: AiGatewayServiceServerCodeCompletionsErrorSLOViolationRegional
     for: 2m
     annotations:
+      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The server_code_completions SLI of the ai-gateway service in region `{{
         $labels.region }}` has an error rate violating SLO
       description: |
@@ -2543,6 +2595,7 @@ groups:
   - alert: AiGatewayServiceServerCodeGenerationsApdexSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The server_code_generations SLI of the ai-gateway service (`{{ $labels.stage
         }}` stage) has an apdex violating SLO
       description: |
@@ -2594,6 +2647,7 @@ groups:
   - alert: AiGatewayServiceServerCodeGenerationsApdexSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The server_code_generations SLI of the ai-gateway service (`{{ $labels.stage
         }}` stage) has an apdex violating SLO
       description: |
@@ -2645,6 +2699,7 @@ groups:
   - alert: AiGatewayServiceServerCodeGenerationsApdexSLOViolationRegional
     for: 2m
     annotations:
+      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The server_code_generations SLI of the ai-gateway service in region `{{
         $labels.region }}` has an apdex violating SLO
       description: |
@@ -2698,6 +2753,7 @@ groups:
   - alert: AiGatewayServiceServerCodeGenerationsApdexSLOViolationRegional
     for: 2m
     annotations:
+      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The server_code_generations SLI of the ai-gateway service in region `{{
         $labels.region }}` has an apdex violating SLO
       description: |
@@ -2751,6 +2807,7 @@ groups:
   - alert: AiGatewayServiceServerCodeGenerationsErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The server_code_generations SLI of the ai-gateway service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
@@ -2799,6 +2856,7 @@ groups:
   - alert: AiGatewayServiceServerCodeGenerationsErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The server_code_generations SLI of the ai-gateway service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
@@ -2847,6 +2905,7 @@ groups:
   - alert: AiGatewayServiceServerCodeGenerationsErrorSLOViolationRegional
     for: 2m
     annotations:
+      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The server_code_generations SLI of the ai-gateway service in region `{{
         $labels.region }}` has an error rate violating SLO
       description: |
@@ -2897,6 +2956,7 @@ groups:
   - alert: AiGatewayServiceServerCodeGenerationsErrorSLOViolationRegional
     for: 2m
     annotations:
+      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The server_code_generations SLI of the ai-gateway service in region `{{
         $labels.region }}` has an error rate violating SLO
       description: |
@@ -2947,6 +3007,7 @@ groups:
   - alert: AiGatewayServiceServerXRayApdexSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The server_x_ray SLI of the ai-gateway service (`{{ $labels.stage }}`
         stage) has an apdex violating SLO
       description: |
@@ -2997,6 +3058,7 @@ groups:
   - alert: AiGatewayServiceServerXRayApdexSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The server_x_ray SLI of the ai-gateway service (`{{ $labels.stage }}`
         stage) has an apdex violating SLO
       description: |
@@ -3047,6 +3109,7 @@ groups:
   - alert: AiGatewayServiceServerXRayApdexSLOViolationRegional
     for: 2m
     annotations:
+      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The server_x_ray SLI of the ai-gateway service in region `{{ $labels.region
         }}` has an apdex violating SLO
       description: |
@@ -3099,6 +3162,7 @@ groups:
   - alert: AiGatewayServiceServerXRayApdexSLOViolationRegional
     for: 2m
     annotations:
+      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The server_x_ray SLI of the ai-gateway service in region `{{ $labels.region
         }}` has an apdex violating SLO
       description: |
@@ -3151,6 +3215,7 @@ groups:
   - alert: AiGatewayServiceServerXRayErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The server_x_ray SLI of the ai-gateway service (`{{ $labels.stage }}`
         stage) has an error rate violating SLO
       description: |
@@ -3198,6 +3263,7 @@ groups:
   - alert: AiGatewayServiceServerXRayErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The server_x_ray SLI of the ai-gateway service (`{{ $labels.stage }}`
         stage) has an error rate violating SLO
       description: |
@@ -3245,6 +3311,7 @@ groups:
   - alert: AiGatewayServiceServerXRayErrorSLOViolationRegional
     for: 2m
     annotations:
+      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The server_x_ray SLI of the ai-gateway service in region `{{ $labels.region
         }}` has an error rate violating SLO
       description: |
@@ -3294,6 +3361,7 @@ groups:
   - alert: AiGatewayServiceServerXRayErrorSLOViolationRegional
     for: 2m
     annotations:
+      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The server_x_ray SLI of the ai-gateway service in region `{{ $labels.region
         }}` has an error rate violating SLO
       description: |
@@ -3343,6 +3411,7 @@ groups:
   - alert: AiGatewayServiceWafErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The waf SLI of the ai-gateway service (`{{ $labels.stage }}` stage) has
         an error rate violating SLO
       description: |
@@ -3390,6 +3459,7 @@ groups:
   - alert: AiGatewayServiceWafErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The waf SLI of the ai-gateway service (`{{ $labels.stage }}` stage) has
         an error rate violating SLO
       description: |
@@ -3437,6 +3507,7 @@ groups:
   - alert: AiGatewayServiceWafErrorSLOViolationRegional
     for: 2m
     annotations:
+      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The waf SLI of the ai-gateway service in region `{{ $labels.region }}`
         has an error rate violating SLO
       description: |
@@ -3486,6 +3557,7 @@ groups:
   - alert: AiGatewayServiceWafErrorSLOViolationRegional
     for: 2m
     annotations:
+      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The waf SLI of the ai-gateway service in region `{{ $labels.region }}`
         has an error rate violating SLO
       description: |
@@ -3535,6 +3607,7 @@ groups:
   - alert: AiGatewayServiceWafTrafficCessation
     for: 5m
     annotations:
+      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The waf SLI of the ai-gateway service (`{{ $labels.stage }}` stage) has
         not received any traffic in the past 30m
       description: |
@@ -3569,6 +3642,7 @@ groups:
   - alert: AiGatewayServiceWafTrafficAbsent
     for: 30m
     annotations:
+      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The waf SLI of the ai-gateway service (`{{ $labels.stage }}` stage) has
         not reported any traffic in the past 30m
       description: |
@@ -3605,6 +3679,7 @@ groups:
   - alert: AiGatewayServiceWafTrafficCessationRegional
     for: 5m
     annotations:
+      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The waf SLI of the ai-gateway service in region `{{ $labels.region }}`
         has not received any traffic in the past 30m
       description: |
@@ -3641,6 +3716,7 @@ groups:
   - alert: AiGatewayServiceWafTrafficAbsentRegional
     for: 30m
     annotations:
+      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The waf SLI of the ai-gateway service in region `{{ $labels.region }}`
         has not reported any traffic in the past 30m
       description: |

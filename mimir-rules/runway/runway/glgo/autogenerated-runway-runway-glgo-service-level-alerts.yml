@@ -7,6 +7,7 @@ groups:
   - alert: GlgoServiceRunwayIngressApdexSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The runway_ingress SLI of the glgo service (`{{ $labels.stage }}` stage)
         has an apdex violating SLO
       description: |
@@ -58,6 +59,7 @@ groups:
   - alert: GlgoServiceRunwayIngressApdexSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The runway_ingress SLI of the glgo service (`{{ $labels.stage }}` stage)
         has an apdex violating SLO
       description: |
@@ -109,6 +111,7 @@ groups:
   - alert: GlgoServiceRunwayIngressErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The runway_ingress SLI of the glgo service (`{{ $labels.stage }}` stage)
         has an error rate violating SLO
       description: |
@@ -157,6 +160,7 @@ groups:
   - alert: GlgoServiceRunwayIngressErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The runway_ingress SLI of the glgo service (`{{ $labels.stage }}` stage)
         has an error rate violating SLO
       description: |
@@ -205,6 +209,7 @@ groups:
   - alert: GlgoServiceRunwayIngressTrafficCessation
     for: 5m
     annotations:
+      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The runway_ingress SLI of the glgo service (`{{ $labels.stage }}` stage)
         has not received any traffic in the past 30m
       description: |
@@ -240,6 +245,7 @@ groups:
   - alert: GlgoServiceRunwayIngressTrafficAbsent
     for: 30m
     annotations:
+      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The runway_ingress SLI of the glgo service (`{{ $labels.stage }}` stage)
         has not reported any traffic in the past 30m
       description: |
@@ -277,6 +283,7 @@ groups:
   - alert: GlgoServiceRunwayLbErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The runway_lb SLI of the glgo service (`{{ $labels.stage }}` stage) has
         an error rate violating SLO
       description: |
@@ -326,6 +333,7 @@ groups:
   - alert: GlgoServiceRunwayLbErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The runway_lb SLI of the glgo service (`{{ $labels.stage }}` stage) has
         an error rate violating SLO
       description: |
@@ -375,6 +383,7 @@ groups:
   - alert: GlgoServiceRunwayLbTrafficCessation
     for: 5m
     annotations:
+      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The runway_lb SLI of the glgo service (`{{ $labels.stage }}` stage) has
         not received any traffic in the past 30m
       description: |
@@ -411,6 +420,7 @@ groups:
   - alert: GlgoServiceRunwayLbTrafficAbsent
     for: 30m
     annotations:
+      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The runway_lb SLI of the glgo service (`{{ $labels.stage }}` stage) has
         not reported any traffic in the past 30m
       description: |

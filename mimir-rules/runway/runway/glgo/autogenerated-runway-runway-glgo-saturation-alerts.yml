@@ -20,6 +20,7 @@ groups:
   - alert: component_saturation_slo_out_of_bounds:open_fds
     for: 5m
     annotations:
+      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The Open file descriptor utilization per instance resource of the {{
         $labels.type }} service ({{ $labels.stage }} stage) has a saturation exceeding
         SLO and is close to its capacity limit.
@@ -92,6 +93,7 @@ groups:
   - alert: component_saturation_slo_out_of_bounds:runway_container_cpu_utilization
     for: 5m
     annotations:
+      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The Runway Container CPU Utilization resource of the {{ $labels.type
         }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
         is close to its capacity limit.
@@ -153,6 +155,7 @@ groups:
   - alert: component_saturation_slo_out_of_bounds:runway_container_instance_utilization
     for: 5m
     annotations:
+      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The Runway Container Instance Utilization resource of the {{ $labels.type
         }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
         is close to its capacity limit.
@@ -210,6 +213,7 @@ groups:
   - alert: component_saturation_slo_out_of_bounds:runway_container_max_concurrent_requests
     for: 5m
     annotations:
+      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The Runway Max Concurrent Requests resource of the {{ $labels.type }}
         service ({{ $labels.stage }} stage) has a saturation exceeding SLO and is
         close to its capacity limit.
@@ -271,6 +275,7 @@ groups:
   - alert: component_saturation_slo_out_of_bounds:runway_container_memory_utilization
     for: 5m
     annotations:
+      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The Runway Container Memory Utilization resource of the {{ $labels.type
         }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
         is close to its capacity limit.
