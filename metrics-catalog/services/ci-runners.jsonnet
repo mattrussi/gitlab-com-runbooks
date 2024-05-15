@@ -79,11 +79,11 @@ metricsCatalog.serviceDefinition({
       ],
     },
 
-    saas_runner_queues: {
+    hosted_runners_queues: {
       userImpacting: true,
-      featureCategory: 'runner',
+      featureCategory: 'hosted_runners',
       description: |||
-        This SLI monitors the shared runner queues on GitLab.com. Each job is an operation.
+        This SLI monitors the hosted runners queues on GitLab.com. Each job is an operation.
 
         Apdex uses queueing latencies for jobs which are considered to be fair-usage (less than 5 concurrently running jobs).
 
@@ -127,7 +127,7 @@ metricsCatalog.serviceDefinition({
       },
 
       userImpacting: true,
-      featureCategory: 'runner',
+      featureCategory: 'hosted_runners',
       description: |||
         This SLI monitors the saas runner queues on GitLab.com. Each job is an operation.
 
