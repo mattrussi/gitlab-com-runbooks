@@ -3,6 +3,7 @@ local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 
 local rateMetric = metricsCatalog.rateMetric;
 local histogramApdex = metricsCatalog.histogramApdex;
+local mimirHelper = import 'services/lib/mimir-helpers.libsonnet';
 
 metricsCatalog.serviceDefinition({
   // This is important for recording-rules corresponding to this
@@ -14,6 +15,8 @@ metricsCatalog.serviceDefinition({
   dangerouslyThanosEvaluated: true,
 
   tenants: [ 'gitlab-observability' ],
+
+  defaultPrometheusDatasource: mimirHelper.mimirDatasource('Gitlab Observability'),
 
   type: 'errortracking',
   tier: 'sv',
