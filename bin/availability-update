@@ -52,7 +52,7 @@ MR_TITLE="Availability Update"
 MR_LABELS="Handbook::Content"
 MR_ASSIGNEE_IDS="194566,10588567"
 MR_REVIEWER_IDS=""
-FILEPATH="_index.md"
+FILEPATH="content/handbook/engineering/monitoring/_index.md"
 GREEN='\033[0;32m'
 RED='\033[0;31m'
 NC='\033[0m'
@@ -92,7 +92,7 @@ usage() {
 cleanup() {
     echo "Performing cleanup..."
     cd ..
-    rm -rf temp_repo
+    rm -rf handbook
 }
 
 validate_gitlab_token() {
@@ -162,8 +162,8 @@ apply_change() {
     # update _index.md file with a new date and data
     # push the change and create an MR
     echo "Cloning the $REPO_URL repository"
-    git clone "$REPO_URL" temp_repo > /dev/null
-    cd temp_repo
+    git clone "$REPO_URL" handbook > /dev/null
+    cd handbook
     git checkout -b "$SOURCE_BRANCH" > /dev/null
 
     # Get the existing first row from the Historical Service Availability table
