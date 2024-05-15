@@ -6,15 +6,15 @@
 set -euo pipefail
 
 if [[ $# -lt 2 ]]; then
-  echo >&2 "usage: redis-reconfigure.sh env cluster [bootstrap]"
+  echo >&2 "usage: omnibus-redis-reconfigure.sh env cluster [bootstrap]"
   echo >&2 ""
-  echo >&2 "  e.g. redis-reconfigure.sh gstg redis-cache"
+  echo >&2 "  e.g. omnibus-redis-reconfigure.sh gstg redis-cache"
   echo >&2 ""
   exit 65
 fi
 
 export gitlab_env=$1
-export gitlab_redis_service=$2
+export gitlab_redis_cluster=$2
 
 if [[ $# -eq 3 && $3 == "bootstrap" ]]; then
   export bootstrap="yes"
@@ -38,8 +38,13 @@ gprd)
   ;;
 esac
 
-export redis_cli='sudo gitlab-redis-cli'
-export sentinel="${gitlab_redis_service}-01-db-${gitlab_env}.c.${gitlab_project}.internal"
+export redis_cli='REDISCLI_AUTH="$(sudo grep ^requirepass /var/opt/gitlab/redis/redis.conf|cut -d" " -f2|tr -d \")" /opt/gitlab/embedded/bin/redis-cli'
+
+if [[ $gitlab_redis_cluster == "redis-cache" ]]; then
+  export sentinel="${gitlab_redis_cluster}-sentinel-01-db-${gitlab_env}.c.${gitlab_project}.internal"
+else
+  export sentinel="${gitlab_redis_cluster}-01-db-${gitlab_env}.c.${gitlab_project}.internal"
+fi
 
 wait_for_input() {
   declare input
@@ -56,7 +61,7 @@ wait_for_input() {
 
 failover_if_master() {
   export i=$1
-  export fqdn="${gitlab_redis_service}-$i-db-${gitlab_env}.c.${gitlab_project}.internal"
+  export fqdn="${gitlab_redis_cluster}-$i-db-${gitlab_env}.c.${gitlab_project}.internal"
 
   echo "> failover_if_master $fqdn"
 
@@ -67,11 +72,7 @@ failover_if_master() {
   if [[ $role == "master" ]]; then
     echo failing over
     wait_for_input
-    ssh "$sentinel" "/opt/redis/redis-cli -p 26379 sentinel failover mymaster"
-
-    # TODO: remove when gitlab-redis cookbook resolves secret parsing
-    # sentinel failover reformats the redis.conf file, affecting how passwords are extracted
-    run_chef_client
+    ssh "$sentinel" "/opt/gitlab/embedded/bin/redis-cli -p 26379 sentinel failover ${gitlab_env}-${gitlab_redis_cluster}"
   fi
 
   # wait for master to step down and sync (expect "slave" [sic] and "connected")
@@ -85,7 +86,7 @@ failover_if_master() {
   done
 
   # wait for sentinel to ack the master change
-  while [[ "$(ssh "$sentinel" "/opt/redis/redis-cli -p 26379 --raw sentinel master mymaster" | grep -A1 ^ip$ | tail -n +2 | awk '{ print substr($0, length($0)-1) }')" == "$i" ]]; do
+  while [[ "$(ssh "$sentinel" "/opt/gitlab/embedded/bin/redis-cli -p 26379 --raw sentinel master ${gitlab_env}-${gitlab_redis_cluster}" | grep -A1 ^ip$ | tail -n +2 | awk '{ print substr($0, length($0)-1) }')" == "$i" ]]; do
     echo waiting for sentinel
     sleep 1
   done
@@ -97,7 +98,7 @@ check_sentinel_quorum() {
   # check sentinel quorum
   echo sentinel ckquorum
 
-  quorum=$(ssh "$sentinel" "/opt/redis/redis-cli -p 26379 sentinel ckquorum mymaster")
+  quorum=$(ssh "$sentinel" "/opt/gitlab/embedded/bin/redis-cli -p 26379 sentinel ckquorum ${gitlab_env}-${gitlab_redis_cluster}")
   echo $quorum
 
   if [[ $quorum != "OK 3 usable Sentinels. Quorum and failover authorization can be reached" ]]; then
@@ -112,16 +113,22 @@ run_chef_client() {
   ssh "$fqdn" "sudo chef-client"
 }
 
-restart_redis() {
+gitlab_ctl_reconfigure() {
   # this _will_ restart processes
-  echo "Restarting $fqdn Redis server to apply config changes"
+  echo gitlab-ctl reconfigure
   wait_for_input
-  ssh "$fqdn" 'sudo systemctl restart redis-server.service && sleep 30'
+  ssh "$fqdn" "sudo gitlab-ctl reconfigure"
+}
+
+gitlab_ctl_restart_sentinel() {
+  echo gitlab-ctl restart sentinel
+  wait_for_input
+  ssh "$fqdn" "sudo gitlab-ctl restart sentinel"
 }
 
 reconfigure() {
   export i=$1
-  export fqdn="${gitlab_redis_service}-$i-db-${gitlab_env}.c.${gitlab_project}.internal"
+  export fqdn="${gitlab_redis_cluster}-$i-db-${gitlab_env}.c.${gitlab_project}.internal"
 
   echo "> reconfigure $fqdn"
 
@@ -150,11 +157,7 @@ reconfigure() {
   echo config set save
   ssh "$fqdn" "$redis_cli config set save ''"
 
-  restart_redis
-
-  # TODO: remove when gitlab-redis cookbook resolves secret parsing
-  # fixes changes to redis.conf
-  run_chef_client
+  gitlab_ctl_reconfigure
 
   # wait for master to step down and sync (expect "slave" [sic] and "connected")
   while ! [[ "$(ssh "$fqdn" "$redis_cli role" | head -n1)" == "slave" ]]; do
@@ -172,7 +175,7 @@ reconfigure() {
 
   # check sync status
   echo check redis role for each node
-  for host in $(seq -f "${gitlab_redis_service}-%02g-db-${gitlab_env}.c.${gitlab_project}.internal" 1 3); do
+  for host in $(seq -f "${gitlab_redis_cluster}-%02g-db-${gitlab_env}.c.${gitlab_project}.internal" 1 3); do
     ssh "$host" 'hostname; '$redis_cli' role | head -n1; echo'
   done
 
@@ -182,45 +185,62 @@ reconfigure() {
   echo "< reconfigure $fqdn"
 }
 
-check_bootstrapped() {
-  uniques=()
-  while IFS='' read -r line; do uniques+=("$line"); done < <(
-    for host in $(seq -f "${gitlab_redis_service}-%02g-db-${gitlab_env}.c.${gitlab_project}.internal" 1 3); do
-      ssh "$host" "$redis_cli role | head -n1"
-    done | sort
-  )
+reconfigure_sentinel() {
+  export i=$1
+  export fqdn="${gitlab_redis_cluster}-sentinel-$i-db-${gitlab_env}.c.${gitlab_project}.internal"
 
-  if [ "${uniques[*]}" == 'master slave slave' ]; then
-    echo >&2 "error: already bootstrapped"
-    exit 1
-  fi
+  check_sentinel_quorum
+
+  run_chef_client
+
+  gitlab_ctl_reconfigure
+
+  gitlab_ctl_restart_sentinel
+
+  check_sentinel_quorum
+
+  echo "< reconfigure $fqdn"
 }
 
 bootstrap() {
   export i=$1
-  export fqdn="${gitlab_redis_service}-$i-db-${gitlab_env}.c.${gitlab_project}.internal"
-  export primary="${gitlab_redis_service}-01-db-${gitlab_env}.c.${gitlab_project}.internal"
+  export fqdn="${gitlab_redis_cluster}-$i-db-${gitlab_env}.c.${gitlab_project}.internal"
+  export primary="${gitlab_redis_cluster}-01-db-${gitlab_env}.c.${gitlab_project}.internal"
 
   echo "> bootstrapping $fqdn"
+
+  # verify that the host doesn't have a functional redis
+
+  if ssh $fqdn "test -e /opt/gitlab/etc/gitlab-redis-cli-rc"; then
+    echo "Redis is already bootstrapped on this node, skipping bootstrap."
+    return
+  fi
 
   # Make everything work
 
   run_chef_client
 
+  gitlab_ctl_reconfigure
+
   if [ $i != 01 ]; then
     echo "> setting $fqdn as replica of $primary"
     ssh $fqdn "$redis_cli replicaof $primary 6379"
   fi
+
 }
 
 for i in 01 02 03; do
 
   if [[ $bootstrap == "yes" ]]; then
-    check_bootstrapped
     bootstrap $i
   else
     failover_if_master $i
     reconfigure $i
+
+    if [[ $gitlab_redis_cluster == "redis-cache" ]]; then
+      reconfigure_sentinel $i
+    fi
+
   fi
 
   echo
