@@ -19,7 +19,6 @@ test.suite({
       featureCategory: 'error_budgets',
       description: 'an SLI counting hellos',
       significantLabels: ['world'],
-      inRecordingRuleRegistry: false,
       totalCounterName: 'gitlab_sli_hello_sli_apdex_total',
       apdexTotalCounterName: 'gitlab_sli_hello_sli_apdex_total',
       apdexSuccessCounterName: 'gitlab_sli_hello_sli_apdex_success_total',
@@ -71,6 +70,11 @@ test.suite({
         'gitlab_sli_hello_sli_error_total',
       ],
     },
+  },
+
+  testInRecordingRuleRegistry: {
+    actual: sliDefinition.new(validDefinition).inRecordingRuleRegistry(),
+    expect: false,
   },
 
   local validSLI = sliDefinition._applyDefaults(validDefinition),

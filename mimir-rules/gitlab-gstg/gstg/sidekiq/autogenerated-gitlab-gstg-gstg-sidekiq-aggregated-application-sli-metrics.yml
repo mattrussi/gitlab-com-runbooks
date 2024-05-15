@@ -11,7 +11,7 @@ groups:
       monitor: global
     expr: |
       sum by (env,environment,tier,type,stage,service_class) (
-        (application_sli_aggregation:llm_completion:error:rate_5m{env="gstg",monitor!="global",type="ops-gitlab-net"} >= 0)
+        (sli_aggregations:gitlab_sli_llm_completion_error_total:rate_5m{env="gstg",monitor!="global",type="ops-gitlab-net"} >= 0)
       )
   - record: application_sli_aggregation:llm_completion:ops:rate_5m
     labels:
@@ -19,7 +19,7 @@ groups:
       monitor: global
     expr: |
       sum by (env,environment,tier,type,stage,service_class) (
-        (application_sli_aggregation:llm_completion:ops:rate_5m{env="gstg",monitor!="global",type="ops-gitlab-net"} >= 0)
+        (sli_aggregations:gitlab_sli_llm_completion_total:rate_5m{env="gstg",monitor!="global",type="ops-gitlab-net"} >= 0)
       )
   - record: application_sli_aggregation:llm_completion:apdex:weight:score_5m
     labels:
@@ -27,7 +27,7 @@ groups:
       monitor: global
     expr: |
       sum by (env,environment,tier,type,stage,service_class) (
-        (application_sli_aggregation:llm_completion:apdex:weight:score_5m{env="gstg",monitor!="global",type="ops-gitlab-net"} >= 0)
+        (sli_aggregations:gitlab_sli_llm_completion_apdex_total:rate_5m{env="gstg",monitor!="global",type="ops-gitlab-net"} >= 0)
       )
   - record: application_sli_aggregation:llm_completion:apdex:success:rate_5m
     labels:
@@ -35,7 +35,7 @@ groups:
       monitor: global
     expr: |
       sum by (env,environment,tier,type,stage,service_class) (
-        (application_sli_aggregation:llm_completion:apdex:success:rate_5m{env="gstg",monitor!="global",type="ops-gitlab-net"} >= 0)
+        (sli_aggregations:gitlab_sli_llm_completion_apdex_success_total:rate_5m{env="gstg",monitor!="global",type="ops-gitlab-net"} >= 0)
       )
   - record: application_sli_aggregation:llm_completion:error:rate_1h
     labels:
@@ -43,7 +43,7 @@ groups:
       monitor: global
     expr: |
       sum by (env,environment,tier,type,stage,service_class) (
-        (application_sli_aggregation:llm_completion:error:rate_1h{env="gstg",monitor!="global",type="ops-gitlab-net"} >= 0)
+        (sli_aggregations:gitlab_sli_llm_completion_error_total:rate_1h{env="gstg",monitor!="global",type="ops-gitlab-net"} >= 0)
       )
   - record: application_sli_aggregation:llm_completion:ops:rate_1h
     labels:
@@ -51,7 +51,7 @@ groups:
       monitor: global
     expr: |
       sum by (env,environment,tier,type,stage,service_class) (
-        (application_sli_aggregation:llm_completion:ops:rate_1h{env="gstg",monitor!="global",type="ops-gitlab-net"} >= 0)
+        (sli_aggregations:gitlab_sli_llm_completion_total:rate_1h{env="gstg",monitor!="global",type="ops-gitlab-net"} >= 0)
       )
   - record: application_sli_aggregation:llm_completion:apdex:weight:score_1h
     labels:
@@ -59,7 +59,7 @@ groups:
       monitor: global
     expr: |
       sum by (env,environment,tier,type,stage,service_class) (
-        (application_sli_aggregation:llm_completion:apdex:weight:score_1h{env="gstg",monitor!="global",type="ops-gitlab-net"} >= 0)
+        (sli_aggregations:gitlab_sli_llm_completion_apdex_total:rate_1h{env="gstg",monitor!="global",type="ops-gitlab-net"} >= 0)
       )
   - record: application_sli_aggregation:llm_completion:apdex:success:rate_1h
     labels:
@@ -67,7 +67,7 @@ groups:
       monitor: global
     expr: |
       sum by (env,environment,tier,type,stage,service_class) (
-        (application_sli_aggregation:llm_completion:apdex:success:rate_1h{env="gstg",monitor!="global",type="ops-gitlab-net"} >= 0)
+        (sli_aggregations:gitlab_sli_llm_completion_apdex_success_total:rate_1h{env="gstg",monitor!="global",type="ops-gitlab-net"} >= 0)
       )
 - name: 'Application Defined SLI Global metrics: llm_completion (fast burn) emitted
     by sidekiq'
@@ -79,7 +79,7 @@ groups:
       monitor: global
     expr: |
       sum by (env,environment,tier,type,stage,service_class) (
-        (application_sli_aggregation:llm_completion:error:rate_5m{env="gstg",monitor!="global",type="sidekiq"} >= 0)
+        (sli_aggregations:gitlab_sli_llm_completion_error_total:rate_5m{env="gstg",monitor!="global",type="sidekiq"} >= 0)
       )
   - record: application_sli_aggregation:llm_completion:ops:rate_5m
     labels:
@@ -87,7 +87,7 @@ groups:
       monitor: global
     expr: |
       sum by (env,environment,tier,type,stage,service_class) (
-        (application_sli_aggregation:llm_completion:ops:rate_5m{env="gstg",monitor!="global",type="sidekiq"} >= 0)
+        (sli_aggregations:gitlab_sli_llm_completion_total:rate_5m{env="gstg",monitor!="global",type="sidekiq"} >= 0)
       )
   - record: application_sli_aggregation:llm_completion:apdex:weight:score_5m
     labels:
@@ -95,7 +95,7 @@ groups:
       monitor: global
     expr: |
       sum by (env,environment,tier,type,stage,service_class) (
-        (application_sli_aggregation:llm_completion:apdex:weight:score_5m{env="gstg",monitor!="global",type="sidekiq"} >= 0)
+        (sli_aggregations:gitlab_sli_llm_completion_apdex_total:rate_5m{env="gstg",monitor!="global",type="sidekiq"} >= 0)
       )
   - record: application_sli_aggregation:llm_completion:apdex:success:rate_5m
     labels:
@@ -103,7 +103,7 @@ groups:
       monitor: global
     expr: |
       sum by (env,environment,tier,type,stage,service_class) (
-        (application_sli_aggregation:llm_completion:apdex:success:rate_5m{env="gstg",monitor!="global",type="sidekiq"} >= 0)
+        (sli_aggregations:gitlab_sli_llm_completion_apdex_success_total:rate_5m{env="gstg",monitor!="global",type="sidekiq"} >= 0)
       )
   - record: application_sli_aggregation:llm_completion:error:rate_1h
     labels:
@@ -111,7 +111,7 @@ groups:
       monitor: global
     expr: |
       sum by (env,environment,tier,type,stage,service_class) (
-        (application_sli_aggregation:llm_completion:error:rate_1h{env="gstg",monitor!="global",type="sidekiq"} >= 0)
+        (sli_aggregations:gitlab_sli_llm_completion_error_total:rate_1h{env="gstg",monitor!="global",type="sidekiq"} >= 0)
       )
   - record: application_sli_aggregation:llm_completion:ops:rate_1h
     labels:
@@ -119,7 +119,7 @@ groups:
       monitor: global
     expr: |
       sum by (env,environment,tier,type,stage,service_class) (
-        (application_sli_aggregation:llm_completion:ops:rate_1h{env="gstg",monitor!="global",type="sidekiq"} >= 0)
+        (sli_aggregations:gitlab_sli_llm_completion_total:rate_1h{env="gstg",monitor!="global",type="sidekiq"} >= 0)
       )
   - record: application_sli_aggregation:llm_completion:apdex:weight:score_1h
     labels:
@@ -127,7 +127,7 @@ groups:
       monitor: global
     expr: |
       sum by (env,environment,tier,type,stage,service_class) (
-        (application_sli_aggregation:llm_completion:apdex:weight:score_1h{env="gstg",monitor!="global",type="sidekiq"} >= 0)
+        (sli_aggregations:gitlab_sli_llm_completion_apdex_total:rate_1h{env="gstg",monitor!="global",type="sidekiq"} >= 0)
       )
   - record: application_sli_aggregation:llm_completion:apdex:success:rate_1h
     labels:
@@ -135,7 +135,7 @@ groups:
       monitor: global
     expr: |
       sum by (env,environment,tier,type,stage,service_class) (
-        (application_sli_aggregation:llm_completion:apdex:success:rate_1h{env="gstg",monitor!="global",type="sidekiq"} >= 0)
+        (sli_aggregations:gitlab_sli_llm_completion_apdex_success_total:rate_1h{env="gstg",monitor!="global",type="sidekiq"} >= 0)
       )
 - name: 'Application Defined SLI Global metrics: sidekiq_execution (fast burn) emitted
     by sidekiq'

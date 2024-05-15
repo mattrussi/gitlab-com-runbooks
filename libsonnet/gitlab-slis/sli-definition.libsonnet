@@ -93,9 +93,9 @@ local validateAndApplyDefaults(definition) =
       misc.dig(self, ['errorCounterName']),
     ]),
 
-    inRecordingRuleRegistry: misc.all(
+    inRecordingRuleRegistry(registry=self.config.recordingRuleRegistry): misc.all(
       function(metricName)
-        self.config.recordingRuleRegistry.resolveRecordingRuleFor(metricName=metricName) != null,
+        registry.resolveRecordingRuleFor(metricName=metricName) != null,
       self.recordingRuleMetrics,
     ),
 
