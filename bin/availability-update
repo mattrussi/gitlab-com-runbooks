@@ -4,7 +4,7 @@
 # https://handbook.gitlab.com/handbook/engineering/infrastructure/team/ops/#monthly-availability-updates
 # use glsh availability-update -h for help
 
-set -efo pipefail
+set -fo pipefail
 
 if [ -z "$GRAFANA_API_TOKEN" ]; then
     echo "Error: GRAFANA_API_TOKEN environment variable is not set."
@@ -43,15 +43,15 @@ GRAFANA_QUERY_DATA='{
   "from":"5m",
   "to":"now-1d"
 }'
-REPO_URL="git@gitlab.com:astarovoytov_ultimate_group/test-mr-creation.git"
-GL_PROJECT_ID="57855688"
+REPO_URL="git@gitlab.com:gitlab-com/content-sites/handbook.git"
+GL_PROJECT_ID="42817607" # https://gitlab.com/gitlab-com/content-sites/handbook
 GL_TOKEN_VALIDATION_URL="https://gitlab.com/api/v4/personal_access_tokens/self"
 SOURCE_BRANCH="auto-availability-update"
 TARGET_BRANCH="main"
 MR_TITLE="Availability Update"
 MR_LABELS="Handbook::Content"
-MR_ASSIGNEE_ID=10588567
-MR_REVIEWER_IDS=[]
+MR_ASSIGNEE_IDS="194566,10588567"
+MR_REVIEWER_IDS=""
 FILEPATH="_index.md"
 GREEN='\033[0;32m'
 RED='\033[0;31m'
@@ -74,7 +74,7 @@ Update the handbook page with past availability numbers.
 _NOTE_: Auto-generated with https://gitlab.com/gitlab-com/runbooks/-/blob/master/bin/help?ref_type=heads
 '
 
-trap cleanup SIGINT ERR
+trap cleanup SIGINT
 
 usage() {
     echo "Monthly Availability Updates creation"
@@ -202,11 +202,9 @@ $new_row
         # Continue with the rest of your script logic here
     else
         echo "Git push failed with exit code $?. Exiting..."
+        cleanup
         exit 1
     fi
-
-
-
 
     gl_output=$(curl -s --request POST \
       --header "PRIVATE-TOKEN: $GITLAB_API_TOKEN" \
@@ -214,7 +212,7 @@ $new_row
       --data-urlencode "target_branch=$TARGET_BRANCH" \
       --data-urlencode "title=$MR_TITLE" \
       --data-urlencode "description=$MR_DESCRIPTION" \
-      --data-urlencode "assignee_id=$MR_ASSIGNEE_ID" \
+      --data-urlencode "assignee_ids=$MR_ASSIGNEE_IDS" \
       --data-urlencode "reviewer_ids=$MR_REVIEWER_IDS" \
       --data-urlencode "remove_source_branch=true" \
       "https://gitlab.com/api/v4/projects/$GL_PROJECT_ID/merge_requests")
