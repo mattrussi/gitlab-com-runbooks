@@ -1,0 +1,244 @@
+#!/usr/bin/env bash
+
+# Script is used for Monthly Availability Updates
+# https://handbook.gitlab.com/handbook/engineering/infrastructure/team/ops/#monthly-availability-updates
+# use glsh availability-update -h for help
+
+set -efo pipefail
+
+if [ -z "$GRAFANA_API_TOKEN" ]; then
+    echo "Error: GRAFANA_API_TOKEN environment variable is not set."
+    echo "Please set the GRAFANA_API_TOKEN environment variable before running this script."
+    exit 1
+fi
+
+
+if [ -z "$GITLAB_API_TOKEN" ]; then
+    echo "Error: GITLAB_API_TOKEN environment variable is not set."
+    echo "Please set the GITLAB_API_TOKEN environment variable before running this script."
+    exit 1
+fi
+
+
+#### Contstants
+# Extract grafana data point for the latest availability
+# source https://dashboards.gitlab.net/d/general-slas/general3a-slas?orgId=1&viewPanel=4
+GRAFANA_URL="https://dashboards.gitlab.net/api/ds/query"
+GRAFANA_DATASOURCE_UID="PA258B30F88C30650" # Global datasource
+GRAFANA_AVAILABILITY_VIEW="https://dashboards.gitlab.net/d/general-slas/general3a-slas?orgId=1&viewPanel=4"
+GRAFANA_QUERY_DATA='{
+  "queries":[
+      {
+        "expr": "sum by (environment, env, stage) (\n  min without (slo) (\n    avg_over_time(slo_observation_status{env=~\"ops|gprd\",environment=\"gprd\",monitor=~\"global|\",stage=\"main\",type=\"api\"}[3628800s])\n    or\n    avg_over_time(slo:observation_status{env=~\"ops|gprd\",environment=\"gprd\",monitor=~\"global|\",stage=\"main\",type=\"api\"}[3628800s])\n  ) * 5\n  or\n  min without (slo) (\n    avg_over_time(slo_observation_status{env=~\"ops|gprd\",environment=\"gprd\",monitor=~\"global|\",stage=\"main\",type=\"ci-runners\"}[3628800s])\n    or\n    avg_over_time(slo:observation_status{env=~\"ops|gprd\",environment=\"gprd\",monitor=~\"global|\",stage=\"main\",type=\"ci-runners\"}[3628800s])\n  ) * 0\n  or\n  min without (slo) (\n    avg_over_time(slo_observation_status{env=~\"ops|gprd\",environment=\"gprd\",monitor=~\"global|\",stage=\"main\",type=\"git\"}[3628800s])\n    or\n    avg_over_time(slo:observation_status{env=~\"ops|gprd\",environment=\"gprd\",monitor=~\"global|\",stage=\"main\",type=\"git\"}[3628800s])\n  ) * 5\n  or\n  min without (slo) (\n    avg_over_time(slo_observation_status{env=~\"ops|gprd\",environment=\"gprd\",monitor=~\"global|\",stage=\"main\",type=\"internal-api\"}[3628800s])\n    or\n    avg_over_time(slo:observation_status{env=~\"ops|gprd\",environment=\"gprd\",monitor=~\"global|\",stage=\"main\",type=\"internal-api\"}[3628800s])\n  ) * 5\n  or\n  min without (slo) (\n    avg_over_time(slo_observation_status{env=~\"ops|gprd\",environment=\"gprd\",monitor=~\"global|\",stage=\"main\",type=\"registry\"}[3628800s])\n    or\n    avg_over_time(slo:observation_status{env=~\"ops|gprd\",environment=\"gprd\",monitor=~\"global|\",stage=\"main\",type=\"registry\"}[3628800s])\n  ) * 1\n  or\n  min without (slo) (\n    avg_over_time(slo_observation_status{env=~\"ops|gprd\",environment=\"gprd\",monitor=~\"global|\",stage=\"main\",type=\"sidekiq\"}[3628800s])\n    or\n    avg_over_time(slo:observation_status{env=~\"ops|gprd\",environment=\"gprd\",monitor=~\"global|\",stage=\"main\",type=\"sidekiq\"}[3628800s])\n  ) * 0\n  or\n  min without (slo) (\n    avg_over_time(slo_observation_status{env=~\"ops|gprd\",environment=\"gprd\",monitor=~\"global|\",stage=\"main\",type=\"web\"}[3628800s])\n    or\n    avg_over_time(slo:observation_status{env=~\"ops|gprd\",environment=\"gprd\",monitor=~\"global|\",stage=\"main\",type=\"web\"}[3628800s])\n  ) * 5\n  or\n  min without (slo) (\n    avg_over_time(slo_observation_status{env=~\"ops|gprd\",environment=\"gprd\",monitor=~\"global|\",stage=\"main\",type=\"web-pages\"}[3628800s])\n    or\n    avg_over_time(slo:observation_status{env=~\"ops|gprd\",environment=\"gprd\",monitor=~\"global|\",stage=\"main\",type=\"web-pages\"}[3628800s])\n  ) * 0\n)\n/\nsum by (environment, env, stage) (\n  group without (slo) (\n    avg_over_time(slo_observation_status{env=~\"ops|gprd\",environment=\"gprd\",monitor=~\"global|\",stage=\"main\",type=\"api\"}[3628800s])\n    or\n    avg_over_time(slo:observation_status{env=~\"ops|gprd\",environment=\"gprd\",monitor=~\"global|\",stage=\"main\",type=\"api\"}[3628800s])\n  ) * 5\n  or\n  group without (slo) (\n    avg_over_time(slo_observation_status{env=~\"ops|gprd\",environment=\"gprd\",monitor=~\"global|\",stage=\"main\",type=\"ci-runners\"}[3628800s])\n    or\n    avg_over_time(slo:observation_status{env=~\"ops|gprd\",environment=\"gprd\",monitor=~\"global|\",stage=\"main\",type=\"ci-runners\"}[3628800s])\n  ) * 0\n  or\n  group without (slo) (\n    avg_over_time(slo_observation_status{env=~\"ops|gprd\",environment=\"gprd\",monitor=~\"global|\",stage=\"main\",type=\"git\"}[3628800s])\n    or\n    avg_over_time(slo:observation_status{env=~\"ops|gprd\",environment=\"gprd\",monitor=~\"global|\",stage=\"main\",type=\"git\"}[3628800s])\n  ) * 5\n  or\n  group without (slo) (\n    avg_over_time(slo_observation_status{env=~\"ops|gprd\",environment=\"gprd\",monitor=~\"global|\",stage=\"main\",type=\"internal-api\"}[3628800s])\n    or\n    avg_over_time(slo:observation_status{env=~\"ops|gprd\",environment=\"gprd\",monitor=~\"global|\",stage=\"main\",type=\"internal-api\"}[3628800s])\n  ) * 5\n  or\n  group without (slo) (\n    avg_over_time(slo_observation_status{env=~\"ops|gprd\",environment=\"gprd\",monitor=~\"global|\",stage=\"main\",type=\"registry\"}[3628800s])\n    or\n    avg_over_time(slo:observation_status{env=~\"ops|gprd\",environment=\"gprd\",monitor=~\"global|\",stage=\"main\",type=\"registry\"}[3628800s])\n  ) * 1\n  or\n  group without (slo) (\n    avg_over_time(slo_observation_status{env=~\"ops|gprd\",environment=\"gprd\",monitor=~\"global|\",stage=\"main\",type=\"sidekiq\"}[3628800s])\n    or\n    avg_over_time(slo:observation_status{env=~\"ops|gprd\",environment=\"gprd\",monitor=~\"global|\",stage=\"main\",type=\"sidekiq\"}[3628800s])\n  ) * 0\n  or\n  group without (slo) (\n    avg_over_time(slo_observation_status{env=~\"ops|gprd\",environment=\"gprd\",monitor=~\"global|\",stage=\"main\",type=\"web\"}[3628800s])\n    or\n    avg_over_time(slo:observation_status{env=~\"ops|gprd\",environment=\"gprd\",monitor=~\"global|\",stage=\"main\",type=\"web\"}[3628800s])\n  ) * 5\n  or\n  group without (slo) (\n    avg_over_time(slo_observation_status{env=~\"ops|gprd\",environment=\"gprd\",monitor=~\"global|\",stage=\"main\",type=\"web-pages\"}[3628800s])\n    or\n    avg_over_time(slo:observation_status{env=~\"ops|gprd\",environment=\"gprd\",monitor=~\"global|\",stage=\"main\",type=\"web-pages\"}[3628800s])\n  ) * 0\n)",
+        "format": "time_series",
+        "instant": true,
+        "interval": "1m",
+        "intervalFactor": 1,
+        "refId": "A",
+        "datasource": {
+          "uid": "'"$GRAFANA_DATASOURCE_UID"'"
+        }
+      }
+  ],
+  "from":"5m",
+  "to":"now-1d"
+}'
+REPO_URL="git@gitlab.com:astarovoytov_ultimate_group/test-mr-creation.git"
+GL_PROJECT_ID="57855688"
+GL_TOKEN_VALIDATION_URL="https://gitlab.com/api/v4/personal_access_tokens/self"
+SOURCE_BRANCH="auto-availability-update"
+TARGET_BRANCH="main"
+MR_TITLE="Availability Update"
+MR_LABELS="Handbook::Content"
+MR_ASSIGNEE_ID=10588567
+MR_REVIEWER_IDS=[]
+FILEPATH="_index.md"
+GREEN='\033[0;32m'
+RED='\033[0;31m'
+NC='\033[0m'
+MR_DESCRIPTION='
+<!-- Before proceeding, please check if you need to apply a specific MR description template from the dropdown menu above next to `Description` (e.g. blog post, website bug report). -->
+
+## Why is this change being made?
+
+> :bulb: **Provide a detailed answer to the question on *why* this change is being proposed, in accordance with our value of [Transparency][transparency].**
+
+<!-- Example: `We have discussed the topic in Slack - (copy of Slack conversation). The current process is not efficient, this MR makes the description of X more clear, and helps move Y forward.` -->
+
+To meet requirements described here: https://handbook.gitlab.com/handbook/engineering/infrastructure/team/ops/#monthly-availability-updates
+
+* Availability Update for GitLab.com
+
+Update the handbook page with past availability numbers.
+
+_NOTE_: Auto-generated with https://gitlab.com/gitlab-com/runbooks/-/blob/master/bin/help?ref_type=heads
+'
+
+trap cleanup SIGINT ERR
+
+usage() {
+    echo "Monthly Availability Updates creation"
+    echo "https://handbook.gitlab.com/handbook/engineering/infrastructure/team/ops/#monthly-availability-updates"
+    echo
+    echo "Expected env variables:"
+    echo "  GRAFANA_API_TOKEN - grafana service account api key with Viewer permissions"
+    echo "  GITLAB_API_TOKEN - GitLab PAT with api, read_repository, write_repository scopes"
+    echo "Syntax: $(basename "$0") [-h]"
+    echo "options:"
+    echo "h     Print this Help."
+    echo
+}
+
+cleanup() {
+    echo "Performing cleanup..."
+    cd ..
+    rm -rf temp_repo
+}
+
+validate_gitlab_token() {
+  echo "Validating GitLab token"
+  gl_output=$(curl -s --request GET \
+      --header "PRIVATE-TOKEN: $GITLAB_API_TOKEN" \
+      "$GL_TOKEN_VALIDATION_URL")
+  token_id=$(echo "$gl_output" | jq -r .id)
+  if [[ "$token_id" == "null" ]]; then
+      echo "Token GITLAB_API_TOKEN is invalid. Exiting..."
+      exit 1
+  fi
+  # todo: implement validation for the token scope
+}
+
+get_availability_data() {
+  # fetch availability data from grafana
+  availability=`curl -s \
+    -X POST \
+    -H "Accept: application/json" \
+    -H "Content-Type: application/json" \
+    -H "Authorization: Bearer $GRAFANA_API_TOKEN" \
+    -d "$GRAFANA_QUERY_DATA" \
+    "$GRAFANA_URL" | \
+    jq -r '.results.A.frames[0].data.values[1][0]' | \
+    awk '{printf "%.2f%%\n", $1 * 100}'`
+  echo $availability
+}
+
+process_date() {
+    # input date expected in "2024 April" string format
+    # "date" on macos is unable to process this format
+    # this function modifies the input date to the format accepted by "date"
+    # returns processed date plus one month "2024 May"
+    input_date="$1"
+    year=$(echo "$input_date" | cut -d ' ' -f 1) # 2024
+    month=$(echo "$input_date" | cut -d ' ' -f 2) # April
+
+    case $month in
+        "January") month_number="1" ;;
+        "February") month_number="2" ;;
+        "March") month_number="3" ;;
+        "April") month_number="4" ;;
+        "May") month_number="5" ;;
+        "June") month_number="6" ;;
+        "July") month_number="7" ;;
+        "August") month_number="8" ;;
+        "September") month_number="9" ;;
+        "October") month_number="10" ;;
+        "November") month_number="11" ;;
+        "December") month_number="12" ;;
+    esac
+
+    # Extract last two digits of the year
+    year_short="${year: -2}"
+    one_month_ahead=$(date -v+1m -j -f '%y %m' "$year_short $month_number" "+%Y %B")
+
+    echo "$one_month_ahead"
+}
+
+apply_change() {
+    # fetch data from grafana
+    echo "Fetching grafana..."
+    percentage=$(get_availability_data)
+
+    # clone the repo
+    # update _index.md file with a new date and data
+    # push the change and create an MR
+    echo "Cloning the $REPO_URL repository"
+    git clone "$REPO_URL" temp_repo > /dev/null
+    cd temp_repo
+    git checkout -b "$SOURCE_BRANCH" > /dev/null
+
+    # Get the existing first row from the Historical Service Availability table
+    first_row=$(sed -n -E  '/^\| [0-9]{4} [A-Za-z]+.*/p' _index.md | head -n 1)
+    # Extract the year and month from the first row
+    last_found_year=$(echo "$first_row" | awk '{print $2}')
+    last_found_month=$(echo "$first_row" | awk '{print $3}')
+    new_date=$(process_date "$last_found_year $last_found_month")
+
+    echo -e "Gitlab.com Availability: ${GREEN}$percentage${NC}"
+    
+    read -p "Would you like to apply a comment (leave empty if not)? " comment
+    new_row="| $new_date | $percentage | $comment |"
+    # add new date into the table
+    sed -i '' "/$first_row/i\\
+$new_row
+" "$FILEPATH"
+    echo
+    echo -e "${RED}Change will be applied:${NC}"
+    git diff
+    echo 
+    read -p "Do you want to continue? (yes/y): " response
+    if [[ "$response" != "yes" && "$response" != "y" ]]; then
+        echo "Exiting..."
+        exit 1
+    fi
+    git add . > /dev/null
+    git commit -m "Availability Update for GitLab.com" > /dev/null
+    # git push origin "$SOURCE_BRANCH" > /dev/null
+
+    git push origin "$SOURCE_BRANCH" > /dev/null
+
+    # Check the exit code of the git push command
+    if [ $? -eq 0 ]; then
+        echo "Git push successful."
+        # Continue with the rest of your script logic here
+    else
+        echo "Git push failed with exit code $?. Exiting..."
+        exit 1
+    fi
+
+
+
+
+    gl_output=$(curl -s --request POST \
+      --header "PRIVATE-TOKEN: $GITLAB_API_TOKEN" \
+      --data-urlencode "source_branch=$SOURCE_BRANCH" \
+      --data-urlencode "target_branch=$TARGET_BRANCH" \
+      --data-urlencode "title=$MR_TITLE" \
+      --data-urlencode "description=$MR_DESCRIPTION" \
+      --data-urlencode "assignee_id=$MR_ASSIGNEE_ID" \
+      --data-urlencode "reviewer_ids=$MR_REVIEWER_IDS" \
+      --data-urlencode "remove_source_branch=true" \
+      "https://gitlab.com/api/v4/projects/$GL_PROJECT_ID/merge_requests")
+    mr_url=$(echo "$gl_output" | jq -r .web_url)
+    if [[ "$mr_url" == "null" ]]; then
+      echo "Unable to create a Merge Request. Check token GITLAB_API_TOKEN"
+      exit 1
+    else
+      echo
+      echo -e "${GREEN}MERGE REQUEST CREATED:${NC} $mr_url/diffs"
+    fi
+    
+}
+
+while getopts ":h" option; do
+   case $option in
+      h)
+         usage
+         exit;;
+   esac
+done
+shift $((OPTIND - 1))
+
+
+validate_gitlab_token
+apply_change
+cleanup
