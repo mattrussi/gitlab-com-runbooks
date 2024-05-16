@@ -274,7 +274,7 @@ horizontally by adding more pods. But this also means we open more connections
 to the database or Redis and could shift scalability issues downward. We have
 saturation alerts to cover us but should also have a regular look at the
 [capacity planning
-forecast](https://gitlab-com.gitlab.io/gl-infra/tamland/saturation.html).
+forecast](https://gitlab-com.gitlab.io/gl-infra/capacity-planning-trackers/gitlab-com/).
 
 Scaling is currently handled automatically by the Horizontal Pod Autoscaler.
 The configuration for such is defined here:
