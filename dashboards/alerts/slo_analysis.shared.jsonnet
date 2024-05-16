@@ -7,12 +7,79 @@ local template = grafana.template;
 local multiburnFactors = import 'mwmbr/multiburn_factors.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
 local statusDescription = import 'key-metric-panels/status_description.libsonnet';
-local aggregationSets = (import 'gitlab-metrics-config.libsonnet').aggregationSets;
+local aggregationSets = (import 'mimir-aggregation-sets.libsonnet');
+local wilsonScore = import 'wilson-score/wilson-score.libsonnet';
+local durationParser = import 'utils/duration-parser.libsonnet';
+
+local g = import 'github.com/grafana/grafonnet/gen/grafonnet-latest/main.libsonnet';
 
 local apdexSLOMetric = 'slo:min:events:gitlab_service_apdex:ratio';
 local errorSLOMetric = 'slo:max:events:gitlab_service_errors:ratio';
 
+local sliSeriesName(sliType, duration) =
+  if sliType == 'apdex' then
+    '%s apdex burn rate' % duration
+  else
+    '%s error burn rate' % duration;
+
+local confidenceSeriesName(sliType, duration) =
+  if sliType == 'apdex' then
+    'apdex confidence upper boundary %s' % duration
+  else
+    'error rate confidence lower boundary %s' % duration;
+
+local sliOverride(name, lineWidth, color, fillBelowTo) =
+  local standardOptions = g.panel.timeSeries.standardOptions;
+  local override = standardOptions.override;
+  local custom = g.panel.timeSeries.fieldConfig.defaults.custom;
+
+  override.byName.new(name)
+  + override.byName.withPropertiesFromOptions(
+    standardOptions.color.withMode('shades') +
+    standardOptions.color.withFixedColor(color) +
+    custom.withLineWidth(lineWidth) +
+    (
+      if fillBelowTo != null then
+        custom.withFillBelowTo(fillBelowTo)
+      else {}
+    )
+  );
+
+local sloOverride(name, color) =
+  local standardOptions = g.panel.timeSeries.standardOptions;
+  local override = standardOptions.override;
+  local custom = g.panel.timeSeries.fieldConfig.defaults.custom;
+
+  override.byName.new(name)
+  + override.byName.withPropertiesFromOptions(
+    standardOptions.color.withMode('shades') +
+    standardOptions.color.withFixedColor(color) +
+    custom.withLineWidth(2) +
+    custom.lineStyle.withFill('dash') +
+    custom.lineStyle.withDash([10, 10])
+  );
+
+
+// Produces output to generate a confidence interval graph value
+local confidenceIntervalGraphs(isLower, scoreMetric, totalMetric, duration, selectorHash) =
+  local wilsonScoreFunc = if isLower then wilsonScore.lower else wilsonScore.upper;
+
+  if scoreMetric != null && totalMetric != null then
+    [{
+      legendFormat: confidenceSeriesName(if isLower then 'error' else 'apdex', duration),
+      query: wilsonScoreFunc(
+        scoreRate='%s{%s}' % [scoreMetric, selectors.serializeHash(selectorHash)],
+        totalRate='%s{%s}' % [totalMetric, selectors.serializeHash(selectorHash)],
+        windowInSeconds=durationParser.toSeconds(duration),
+        confidence='$confidence',
+        confidenceIsZScore=true,
+      ),
+    }]
+  else [];
+
 local errorBurnRatePair(aggregationSet, shortDuration, longDuration, selectorHash) =
+  local sliType = 'error';
+
   local formatConfig = {
     shortMetric: aggregationSet.getErrorRatioMetricForBurnRate(shortDuration, required=true),
     shortDuration: shortDuration,
@@ -35,11 +102,11 @@ local errorBurnRatePair(aggregationSet, shortDuration, longDuration, selectorHas
 
   [
     {
-      legendFormat: '%(longDuration)s error burn rate' % formatConfig,
+      legendFormat: sliSeriesName(sliType, longDuration),
       query: longQuery,
     },
     {
-      legendFormat: '%(shortDuration)s error burn rate' % formatConfig,
+      legendFormat: sliSeriesName(sliType, shortDuration),
       query: shortQuery,
     },
     {
@@ -50,9 +117,13 @@ local errorBurnRatePair(aggregationSet, shortDuration, longDuration, selectorHas
       legendFormat: 'Proposed SLO @ %(longDuration)s burn' % formatConfig,
       query: '%(longBurnFactor)g * (1 - $proposed_slo)' % formatConfig,
     },
-  ];
+  ] +
+  confidenceIntervalGraphs(true, aggregationSet.getErrorRateMetricForBurnRate(shortDuration), aggregationSet.getOpsRateMetricForBurnRate(shortDuration), shortDuration, aggregationSet.selector + selectorHash) +
+  confidenceIntervalGraphs(true, aggregationSet.getErrorRateMetricForBurnRate(longDuration), aggregationSet.getOpsRateMetricForBurnRate(longDuration), longDuration, aggregationSet.selector + selectorHash);
 
 local apdexBurnRatePair(aggregationSet, shortDuration, longDuration, selectorHash) =
+  local sliType = 'apdex';
+
   local formatConfig = {
     shortMetric: aggregationSet.getApdexRatioMetricForBurnRate(shortDuration, required=true),
     shortDuration: shortDuration,
@@ -75,11 +146,11 @@ local apdexBurnRatePair(aggregationSet, shortDuration, longDuration, selectorHas
 
   [
     {
-      legendFormat: '%(longDuration)s apdex burn rate' % formatConfig,
+      legendFormat: sliSeriesName(sliType, longDuration),
       query: longQuery,
     },
     {
-      legendFormat: '%(shortDuration)s apdex burn rate' % formatConfig,
+      legendFormat: sliSeriesName(sliType, shortDuration),
       query: shortQuery,
     },
     {
@@ -90,83 +161,112 @@ local apdexBurnRatePair(aggregationSet, shortDuration, longDuration, selectorHas
       legendFormat: 'Proposed SLO @ %(longDuration)s burn' % formatConfig,
       query: '1 - (%(longBurnFactor)g * (1 - $proposed_slo))' % formatConfig,
     },
-  ];
+  ] +
+  confidenceIntervalGraphs(false, aggregationSet.getApdexSuccessRateMetricForBurnRate(shortDuration), aggregationSet.getApdexWeightMetricForBurnRate(shortDuration), shortDuration, aggregationSet.selector + selectorHash) +
+  confidenceIntervalGraphs(false, aggregationSet.getApdexSuccessRateMetricForBurnRate(longDuration), aggregationSet.getApdexWeightMetricForBurnRate(longDuration), longDuration, aggregationSet.selector + selectorHash);
 
 local burnRatePanel(
   title,
   combinations,
+  sliType,
   stableId,
       ) =
-  local basePanel = basic.percentageTimeseries(
-    title=title,
-    decimals=4,
-    description='apdex burn rates: higher is better',
-    query=combinations[0].query,
-    legendFormat=combinations[0].legendFormat,
-    stableId=stableId,
-  );
+  local sloTypeDescription = if sliType == 'apdex' then 'apdex burn threshold' else 'error burn threshold';
+
+  local basePanel =
+    g.panel.timeSeries.new(title)
+    + g.panel.timeSeries.queryOptions.withMaxDataPoints(1024 * 8)
+    + g.panel.timeSeries.queryOptions.withInterval('15s')
+    + g.panel.timeSeries.queryOptions.withTargetsMixin([
+      g.query.prometheus.new(
+        '$PROMETHEUS_DS',
+        combinations[0].query,
+      )
+      + g.query.prometheus.withLegendFormat(combinations[0].legendFormat),
+    ])
+    + g.panel.timeSeries.standardOptions.withUnit('percentunit');
 
   std.foldl(
     function(memo, combo)
-      memo.addTarget(promQuery.target(combo.query, legendFormat=combo.legendFormat)),
+      memo
+      + g.panel.timeSeries.queryOptions.withTargetsMixin([
+        g.query.prometheus.new(
+          '$PROMETHEUS_DS',
+          combo.query
+        )
+        + g.query.prometheus.withLegendFormat(combo.legendFormat),
+      ]),
     combinations[1:],
     basePanel
   )
-  .addSeriesOverride({
-    alias: '6h apdex burn rate',
-    color: '#5794F2',
-    linewidth: 4,
-    zindex: 0,
-    fillBelowTo: '30m apdex burn rate',
-  })
-  .addSeriesOverride({
-    alias: '1h apdex burn rate',
-    color: '#73BF69',
-    linewidth: 4,
-    zindex: 1,
-    fillBelowTo: '5m apdex burn rate',
-  })
-  .addSeriesOverride({
-    alias: '30m apdex burn rate',
-    color: '#5794F2',
-    linewidth: 2,
-    zindex: 2,
-  })
-  .addSeriesOverride({
-    alias: '5m apdex burn rate',
-    color: '#73BF69',
-    linewidth: 2,
-    zindex: 3,
-  })
-  .addSeriesOverride({
-    alias: '6h apdex burn threshold',
-    color: '#5794F2',
-    dashLength: 2,
-    dashes: true,
-    lines: true,
-    linewidth: 2,
-    spaceLength: 4,
-    zindex: -1,
-  })
-  .addSeriesOverride({
-    alias: '1h apdex burn threshold',
-    color: '#73BF69',
-    dashLength: 2,
-    dashes: true,
-    lines: true,
-    linewidth: 2,
-    spaceLength: 4,
-    zindex: -2,
-  });
+  + g.panel.timeSeries.standardOptions.withOverridesMixin([
+    sliOverride(
+      name=sliSeriesName(sliType, '6h'),
+      lineWidth=3,
+      color='dark-purple',
+      fillBelowTo=if sliType == 'error' then confidenceSeriesName(sliType, '6h') else null,
+    ),
+    sliOverride(
+      name=confidenceSeriesName(sliType, '6h'),
+      lineWidth=0,
+      color='semi-dark-purple',
+      fillBelowTo=if sliType == 'apdex' then sliSeriesName(sliType, '6h') else null,
+    ),
+    sliOverride(
+      name=sliSeriesName(sliType, '30m'),
+      lineWidth=2,
+      color='light-purple',
+      fillBelowTo=if sliType == 'error' then confidenceSeriesName(sliType, '30m') else null,
+    ),
+    sliOverride(
+      name=confidenceSeriesName(sliType, '30m'),
+      lineWidth=0,
+      color='super-light-purple',
+      fillBelowTo=if sliType == 'apdex' then sliSeriesName(sliType, '30m') else null,
+    ),
+    sliOverride(
+      name=sliSeriesName(sliType, '1h'),
+      lineWidth=3,
+      color='dark-yellow',
+      fillBelowTo=if sliType == 'error' then confidenceSeriesName(sliType, '1h') else null,
+    ),
+    sliOverride(
+      name=confidenceSeriesName(sliType, '1h'),
+      lineWidth=0,
+      color='semi-dark-yellow',
+      fillBelowTo=if sliType == 'apdex' then sliSeriesName(sliType, '1h') else null,
+    ),
+    sliOverride(
+      name=sliSeriesName(sliType, '5m'),
+      lineWidth=2,
+      color='light-yellow',
+      fillBelowTo=if sliType == 'error' then confidenceSeriesName(sliType, '5m') else null,
+    ),
+    sliOverride(
+      name=confidenceSeriesName(sliType, '5m'),
+      lineWidth=0,
+      color='super-light-yellow',
+      fillBelowTo=if sliType == 'apdex' then sliSeriesName(sliType, '5m') else null,
+    ),
+    sloOverride(
+      name='6h %s' % sloTypeDescription,
+      color='semi-dark-red'
+    ),
+    sloOverride(
+      name='1h %s' % sloTypeDescription,
+      color='super-light-red'
+    ),
+  ]);
 
 local burnRatePanelWithHelp(
   title,
   combinations,
+  sliType,
   content,
   stableId=null,
       ) =
   [
-    burnRatePanel(title, combinations, stableId),
+    burnRatePanel(title, combinations, sliType, stableId),
     grafana.text.new(
       title='Help',
       mode='markdown',
@@ -234,6 +334,21 @@ local multiburnRateAlertsDashboard(
       'NaN,0.9,0.95,0.99,0.995,0.999,0.9995,0.9999',
       'NaN',
     )
+  ).addTemplate(
+    template.custom(
+      'confidence',
+      // For custom templates Grafana uses a
+      // `key : value,key : value` format.
+      // Construct this from the confidence intervals
+      std.join(
+        ',',
+        std.map(
+          function(confidence) '%s : %s' % [confidence, wilsonScore.confidenceLookup[confidence]],
+          std.objectFields(wilsonScore.confidenceLookup)
+        )
+      ),
+      '98%',
+    )
   );
 
   local selectorHash = dashboardAndSelector.selectorHash;
@@ -291,6 +406,7 @@ local multiburnRateAlertsDashboard(
       burnRatePanelWithHelp(
         title='Multi-window, multi-burn-rates',
         combinations=oneHourBurnRateCombinations + sixHourBurnRateCombinations,
+        sliType=sliType,
         content=|||
           # Multi-window, multi-burn-rates
 
@@ -302,6 +418,7 @@ local multiburnRateAlertsDashboard(
       burnRatePanelWithHelp(
         title='Single window, 1h/5m burn-rates',
         combinations=oneHourBurnRateCombinations,
+        sliType=sliType,
         content=|||
           # Single window, 1h/5m burn-rates
 
@@ -313,6 +430,7 @@ local multiburnRateAlertsDashboard(
       burnRatePanelWithHelp(
         title='Single window, 6h/30m burn-rates',
         combinations=sixHourBurnRateCombinations,
+        sliType=sliType,
         content=|||
           # Single window, 6h/30m burn-rates
 
@@ -323,7 +441,8 @@ local multiburnRateAlertsDashboard(
       ),
       burnRatePanelWithHelp(
         title='Single window, 1h/5m burn-rates, no thresholds',
-        combinations=oneHourBurnRateCombinations[:2],
+        combinations=oneHourBurnRateCombinations[:2] + oneHourBurnRateCombinations[4:],
+        sliType=sliType,
         content=|||
           # Single window, 1h/5m burn-rates, no thresholds
 
@@ -332,7 +451,8 @@ local multiburnRateAlertsDashboard(
       ),
       burnRatePanelWithHelp(
         title='Single window, 6h/30m burn-rates, no thresholds',
-        combinations=sixHourBurnRateCombinations[:2],
+        combinations=sixHourBurnRateCombinations[:2] + sixHourBurnRateCombinations[4:],
+        sliType=sliType,
         content=|||
           # Single window, 6h/30m burn-rates, no thresholds
 

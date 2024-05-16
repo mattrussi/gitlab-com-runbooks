@@ -3,7 +3,6 @@ local aggregationSet = (import 'servicemetrics/aggregation-set.libsonnet').Aggre
 local mimirAggregetionSetDefaults = {
   intermediateSource: false,
   selector: { monitor: 'global' },
-  generateSLODashboards: false,
   offset: '30s',
   recordingRuleStaticLabels: {
     // This is to ensure compatibility with the current thanos aggregations.
