@@ -4735,58 +4735,66 @@ groups:
       tier: sv
       type: webservice
     record: gitlab_component_apdex:ratio_5m
-  - expr: |+
-      (
+  - expr: |
+      (gitlab_component_ops:rate_5m{component="workhorse",tier="sv",type="webservice"} == 0)
+      or
+      clamp(
         (
-          (gitlab_component_errors:rate_5m{component="workhorse",tier="sv",type="webservice"} / gitlab_component_ops:rate_5m{component="workhorse",tier="sv",type="webservice"})
-          +
-          5.411894 / (2 * (gitlab_component_ops:rate_5m{component="workhorse",tier="sv",type="webservice"} * 300))
-        )
-        -
-        2.326348
-        *
-        sqrt(
           (
-            (gitlab_component_errors:rate_5m{component="workhorse",tier="sv",type="webservice"} / gitlab_component_ops:rate_5m{component="workhorse",tier="sv",type="webservice"}) * (1 - (gitlab_component_errors:rate_5m{component="workhorse",tier="sv",type="webservice"} / gitlab_component_ops:rate_5m{component="workhorse",tier="sv",type="webservice"}))
+            (gitlab_component_errors:rate_5m{component="workhorse",tier="sv",type="webservice"} / gitlab_component_ops:rate_5m{component="workhorse",tier="sv",type="webservice"})
             +
-            5.411894 / (4 * (gitlab_component_ops:rate_5m{component="workhorse",tier="sv",type="webservice"} * 300))
+            5.411894 / (2 * (gitlab_component_ops:rate_5m{component="workhorse",tier="sv",type="webservice"} * 300))
           )
-          /
-          (gitlab_component_ops:rate_5m{component="workhorse",tier="sv",type="webservice"} * 300)
+          -
+          2.326348
+          *
+          sqrt(
+            (
+              (gitlab_component_errors:rate_5m{component="workhorse",tier="sv",type="webservice"} / gitlab_component_ops:rate_5m{component="workhorse",tier="sv",type="webservice"}) * (1 - (gitlab_component_errors:rate_5m{component="workhorse",tier="sv",type="webservice"} / gitlab_component_ops:rate_5m{component="workhorse",tier="sv",type="webservice"}))
+              +
+              5.411894 / (4 * (gitlab_component_ops:rate_5m{component="workhorse",tier="sv",type="webservice"} * 300))
+            )
+            /
+            (gitlab_component_ops:rate_5m{component="workhorse",tier="sv",type="webservice"} * 300)
+          )
         )
+        /
+        (1 + 5.411894 / (gitlab_component_ops:rate_5m{component="workhorse",tier="sv",type="webservice"} * 300)),
+        0, 1
       )
-      /
-      (1 + 5.411894 / (gitlab_component_ops:rate_5m{component="workhorse",tier="sv",type="webservice"} * 300))
-
     labels:
       component: workhorse
       confidence: 98%
       tier: sv
       type: webservice
     record: gitlab_component_errors:confidence:ratio_5m
-  - expr: |+
-      (
+  - expr: |
+      clamp_min(gitlab_component_apdex:weight:score_5m{component="workhorse",tier="sv",type="webservice"} == 0, 1)
+      or
+      clamp(
         (
-          (gitlab_component_apdex:success:rate_5m{component="workhorse",tier="sv",type="webservice"} / gitlab_component_apdex:weight:score_5m{component="workhorse",tier="sv",type="webservice"})
-          +
-          5.411894 / (2 * (gitlab_component_apdex:weight:score_5m{component="workhorse",tier="sv",type="webservice"} * 300))
-        )
-        +
-        2.326348
-        *
-        sqrt(
           (
-            (gitlab_component_apdex:success:rate_5m{component="workhorse",tier="sv",type="webservice"} / gitlab_component_apdex:weight:score_5m{component="workhorse",tier="sv",type="webservice"}) * (1 - (gitlab_component_apdex:success:rate_5m{component="workhorse",tier="sv",type="webservice"} / gitlab_component_apdex:weight:score_5m{component="workhorse",tier="sv",type="webservice"}))
+            (gitlab_component_apdex:success:rate_5m{component="workhorse",tier="sv",type="webservice"} / gitlab_component_apdex:weight:score_5m{component="workhorse",tier="sv",type="webservice"})
             +
-            5.411894 / (4 * (gitlab_component_apdex:weight:score_5m{component="workhorse",tier="sv",type="webservice"} * 300))
+            5.411894 / (2 * (gitlab_component_apdex:weight:score_5m{component="workhorse",tier="sv",type="webservice"} * 300))
           )
-          /
-          (gitlab_component_apdex:weight:score_5m{component="workhorse",tier="sv",type="webservice"} * 300)
+          +
+          2.326348
+          *
+          sqrt(
+            (
+              (gitlab_component_apdex:success:rate_5m{component="workhorse",tier="sv",type="webservice"} / gitlab_component_apdex:weight:score_5m{component="workhorse",tier="sv",type="webservice"}) * (1 - (gitlab_component_apdex:success:rate_5m{component="workhorse",tier="sv",type="webservice"} / gitlab_component_apdex:weight:score_5m{component="workhorse",tier="sv",type="webservice"}))
+              +
+              5.411894 / (4 * (gitlab_component_apdex:weight:score_5m{component="workhorse",tier="sv",type="webservice"} * 300))
+            )
+            /
+            (gitlab_component_apdex:weight:score_5m{component="workhorse",tier="sv",type="webservice"} * 300)
+          )
         )
+        /
+        (1 + 5.411894 / (gitlab_component_apdex:weight:score_5m{component="workhorse",tier="sv",type="webservice"} * 300)),
+        0, 1
       )
-      /
-      (1 + 5.411894 / (gitlab_component_apdex:weight:score_5m{component="workhorse",tier="sv",type="webservice"} * 300))
-
     labels:
       component: workhorse
       confidence: 98%
@@ -5014,58 +5022,66 @@ groups:
       tier: sv
       type: webservice
     record: gitlab_component_apdex:ratio_30m
-  - expr: |+
-      (
+  - expr: |
+      (gitlab_component_ops:rate_30m{component="workhorse",tier="sv",type="webservice"} == 0)
+      or
+      clamp(
         (
-          (gitlab_component_errors:rate_30m{component="workhorse",tier="sv",type="webservice"} / gitlab_component_ops:rate_30m{component="workhorse",tier="sv",type="webservice"})
-          +
-          5.411894 / (2 * (gitlab_component_ops:rate_30m{component="workhorse",tier="sv",type="webservice"} * 1800))
-        )
-        -
-        2.326348
-        *
-        sqrt(
           (
-            (gitlab_component_errors:rate_30m{component="workhorse",tier="sv",type="webservice"} / gitlab_component_ops:rate_30m{component="workhorse",tier="sv",type="webservice"}) * (1 - (gitlab_component_errors:rate_30m{component="workhorse",tier="sv",type="webservice"} / gitlab_component_ops:rate_30m{component="workhorse",tier="sv",type="webservice"}))
+            (gitlab_component_errors:rate_30m{component="workhorse",tier="sv",type="webservice"} / gitlab_component_ops:rate_30m{component="workhorse",tier="sv",type="webservice"})
             +
-            5.411894 / (4 * (gitlab_component_ops:rate_30m{component="workhorse",tier="sv",type="webservice"} * 1800))
+            5.411894 / (2 * (gitlab_component_ops:rate_30m{component="workhorse",tier="sv",type="webservice"} * 1800))
           )
-          /
-          (gitlab_component_ops:rate_30m{component="workhorse",tier="sv",type="webservice"} * 1800)
+          -
+          2.326348
+          *
+          sqrt(
+            (
+              (gitlab_component_errors:rate_30m{component="workhorse",tier="sv",type="webservice"} / gitlab_component_ops:rate_30m{component="workhorse",tier="sv",type="webservice"}) * (1 - (gitlab_component_errors:rate_30m{component="workhorse",tier="sv",type="webservice"} / gitlab_component_ops:rate_30m{component="workhorse",tier="sv",type="webservice"}))
+              +
+              5.411894 / (4 * (gitlab_component_ops:rate_30m{component="workhorse",tier="sv",type="webservice"} * 1800))
+            )
+            /
+            (gitlab_component_ops:rate_30m{component="workhorse",tier="sv",type="webservice"} * 1800)
+          )
         )
+        /
+        (1 + 5.411894 / (gitlab_component_ops:rate_30m{component="workhorse",tier="sv",type="webservice"} * 1800)),
+        0, 1
       )
-      /
-      (1 + 5.411894 / (gitlab_component_ops:rate_30m{component="workhorse",tier="sv",type="webservice"} * 1800))
-
     labels:
       component: workhorse
       confidence: 98%
       tier: sv
       type: webservice
     record: gitlab_component_errors:confidence:ratio_30m
-  - expr: |+
-      (
+  - expr: |
+      clamp_min(gitlab_component_apdex:weight:score_30m{component="workhorse",tier="sv",type="webservice"} == 0, 1)
+      or
+      clamp(
         (
-          (gitlab_component_apdex:success:rate_30m{component="workhorse",tier="sv",type="webservice"} / gitlab_component_apdex:weight:score_30m{component="workhorse",tier="sv",type="webservice"})
-          +
-          5.411894 / (2 * (gitlab_component_apdex:weight:score_30m{component="workhorse",tier="sv",type="webservice"} * 1800))
-        )
-        +
-        2.326348
-        *
-        sqrt(
           (
-            (gitlab_component_apdex:success:rate_30m{component="workhorse",tier="sv",type="webservice"} / gitlab_component_apdex:weight:score_30m{component="workhorse",tier="sv",type="webservice"}) * (1 - (gitlab_component_apdex:success:rate_30m{component="workhorse",tier="sv",type="webservice"} / gitlab_component_apdex:weight:score_30m{component="workhorse",tier="sv",type="webservice"}))
+            (gitlab_component_apdex:success:rate_30m{component="workhorse",tier="sv",type="webservice"} / gitlab_component_apdex:weight:score_30m{component="workhorse",tier="sv",type="webservice"})
             +
-            5.411894 / (4 * (gitlab_component_apdex:weight:score_30m{component="workhorse",tier="sv",type="webservice"} * 1800))
+            5.411894 / (2 * (gitlab_component_apdex:weight:score_30m{component="workhorse",tier="sv",type="webservice"} * 1800))
           )
-          /
-          (gitlab_component_apdex:weight:score_30m{component="workhorse",tier="sv",type="webservice"} * 1800)
+          +
+          2.326348
+          *
+          sqrt(
+            (
+              (gitlab_component_apdex:success:rate_30m{component="workhorse",tier="sv",type="webservice"} / gitlab_component_apdex:weight:score_30m{component="workhorse",tier="sv",type="webservice"}) * (1 - (gitlab_component_apdex:success:rate_30m{component="workhorse",tier="sv",type="webservice"} / gitlab_component_apdex:weight:score_30m{component="workhorse",tier="sv",type="webservice"}))
+              +
+              5.411894 / (4 * (gitlab_component_apdex:weight:score_30m{component="workhorse",tier="sv",type="webservice"} * 1800))
+            )
+            /
+            (gitlab_component_apdex:weight:score_30m{component="workhorse",tier="sv",type="webservice"} * 1800)
+          )
         )
+        /
+        (1 + 5.411894 / (gitlab_component_apdex:weight:score_30m{component="workhorse",tier="sv",type="webservice"} * 1800)),
+        0, 1
       )
-      /
-      (1 + 5.411894 / (gitlab_component_apdex:weight:score_30m{component="workhorse",tier="sv",type="webservice"} * 1800))
-
     labels:
       component: workhorse
       confidence: 98%
@@ -5293,58 +5309,66 @@ groups:
       tier: sv
       type: webservice
     record: gitlab_component_apdex:ratio_1h
-  - expr: |+
-      (
+  - expr: |
+      (gitlab_component_ops:rate_1h{component="workhorse",tier="sv",type="webservice"} == 0)
+      or
+      clamp(
         (
-          (gitlab_component_errors:rate_1h{component="workhorse",tier="sv",type="webservice"} / gitlab_component_ops:rate_1h{component="workhorse",tier="sv",type="webservice"})
-          +
-          5.411894 / (2 * (gitlab_component_ops:rate_1h{component="workhorse",tier="sv",type="webservice"} * 3600))
-        )
-        -
-        2.326348
-        *
-        sqrt(
           (
-            (gitlab_component_errors:rate_1h{component="workhorse",tier="sv",type="webservice"} / gitlab_component_ops:rate_1h{component="workhorse",tier="sv",type="webservice"}) * (1 - (gitlab_component_errors:rate_1h{component="workhorse",tier="sv",type="webservice"} / gitlab_component_ops:rate_1h{component="workhorse",tier="sv",type="webservice"}))
+            (gitlab_component_errors:rate_1h{component="workhorse",tier="sv",type="webservice"} / gitlab_component_ops:rate_1h{component="workhorse",tier="sv",type="webservice"})
             +
-            5.411894 / (4 * (gitlab_component_ops:rate_1h{component="workhorse",tier="sv",type="webservice"} * 3600))
+            5.411894 / (2 * (gitlab_component_ops:rate_1h{component="workhorse",tier="sv",type="webservice"} * 3600))
           )
-          /
-          (gitlab_component_ops:rate_1h{component="workhorse",tier="sv",type="webservice"} * 3600)
+          -
+          2.326348
+          *
+          sqrt(
+            (
+              (gitlab_component_errors:rate_1h{component="workhorse",tier="sv",type="webservice"} / gitlab_component_ops:rate_1h{component="workhorse",tier="sv",type="webservice"}) * (1 - (gitlab_component_errors:rate_1h{component="workhorse",tier="sv",type="webservice"} / gitlab_component_ops:rate_1h{component="workhorse",tier="sv",type="webservice"}))
+              +
+              5.411894 / (4 * (gitlab_component_ops:rate_1h{component="workhorse",tier="sv",type="webservice"} * 3600))
+            )
+            /
+            (gitlab_component_ops:rate_1h{component="workhorse",tier="sv",type="webservice"} * 3600)
+          )
         )
+        /
+        (1 + 5.411894 / (gitlab_component_ops:rate_1h{component="workhorse",tier="sv",type="webservice"} * 3600)),
+        0, 1
       )
-      /
-      (1 + 5.411894 / (gitlab_component_ops:rate_1h{component="workhorse",tier="sv",type="webservice"} * 3600))
-
     labels:
       component: workhorse
       confidence: 98%
       tier: sv
       type: webservice
     record: gitlab_component_errors:confidence:ratio_1h
-  - expr: |+
-      (
+  - expr: |
+      clamp_min(gitlab_component_apdex:weight:score_1h{component="workhorse",tier="sv",type="webservice"} == 0, 1)
+      or
+      clamp(
         (
-          (gitlab_component_apdex:success:rate_1h{component="workhorse",tier="sv",type="webservice"} / gitlab_component_apdex:weight:score_1h{component="workhorse",tier="sv",type="webservice"})
-          +
-          5.411894 / (2 * (gitlab_component_apdex:weight:score_1h{component="workhorse",tier="sv",type="webservice"} * 3600))
-        )
-        +
-        2.326348
-        *
-        sqrt(
           (
-            (gitlab_component_apdex:success:rate_1h{component="workhorse",tier="sv",type="webservice"} / gitlab_component_apdex:weight:score_1h{component="workhorse",tier="sv",type="webservice"}) * (1 - (gitlab_component_apdex:success:rate_1h{component="workhorse",tier="sv",type="webservice"} / gitlab_component_apdex:weight:score_1h{component="workhorse",tier="sv",type="webservice"}))
+            (gitlab_component_apdex:success:rate_1h{component="workhorse",tier="sv",type="webservice"} / gitlab_component_apdex:weight:score_1h{component="workhorse",tier="sv",type="webservice"})
             +
-            5.411894 / (4 * (gitlab_component_apdex:weight:score_1h{component="workhorse",tier="sv",type="webservice"} * 3600))
+            5.411894 / (2 * (gitlab_component_apdex:weight:score_1h{component="workhorse",tier="sv",type="webservice"} * 3600))
           )
-          /
-          (gitlab_component_apdex:weight:score_1h{component="workhorse",tier="sv",type="webservice"} * 3600)
+          +
+          2.326348
+          *
+          sqrt(
+            (
+              (gitlab_component_apdex:success:rate_1h{component="workhorse",tier="sv",type="webservice"} / gitlab_component_apdex:weight:score_1h{component="workhorse",tier="sv",type="webservice"}) * (1 - (gitlab_component_apdex:success:rate_1h{component="workhorse",tier="sv",type="webservice"} / gitlab_component_apdex:weight:score_1h{component="workhorse",tier="sv",type="webservice"}))
+              +
+              5.411894 / (4 * (gitlab_component_apdex:weight:score_1h{component="workhorse",tier="sv",type="webservice"} * 3600))
+            )
+            /
+            (gitlab_component_apdex:weight:score_1h{component="workhorse",tier="sv",type="webservice"} * 3600)
+          )
         )
+        /
+        (1 + 5.411894 / (gitlab_component_apdex:weight:score_1h{component="workhorse",tier="sv",type="webservice"} * 3600)),
+        0, 1
       )
-      /
-      (1 + 5.411894 / (gitlab_component_apdex:weight:score_1h{component="workhorse",tier="sv",type="webservice"} * 3600))
-
     labels:
       component: workhorse
       confidence: 98%
@@ -5572,58 +5596,66 @@ groups:
       tier: sv
       type: webservice
     record: gitlab_component_apdex:ratio_6h
-  - expr: |+
-      (
+  - expr: |
+      (gitlab_component_ops:rate_6h{component="workhorse",tier="sv",type="webservice"} == 0)
+      or
+      clamp(
         (
-          (gitlab_component_errors:rate_6h{component="workhorse",tier="sv",type="webservice"} / gitlab_component_ops:rate_6h{component="workhorse",tier="sv",type="webservice"})
-          +
-          5.411894 / (2 * (gitlab_component_ops:rate_6h{component="workhorse",tier="sv",type="webservice"} * 21600))
-        )
-        -
-        2.326348
-        *
-        sqrt(
           (
-            (gitlab_component_errors:rate_6h{component="workhorse",tier="sv",type="webservice"} / gitlab_component_ops:rate_6h{component="workhorse",tier="sv",type="webservice"}) * (1 - (gitlab_component_errors:rate_6h{component="workhorse",tier="sv",type="webservice"} / gitlab_component_ops:rate_6h{component="workhorse",tier="sv",type="webservice"}))
+            (gitlab_component_errors:rate_6h{component="workhorse",tier="sv",type="webservice"} / gitlab_component_ops:rate_6h{component="workhorse",tier="sv",type="webservice"})
             +
-            5.411894 / (4 * (gitlab_component_ops:rate_6h{component="workhorse",tier="sv",type="webservice"} * 21600))
+            5.411894 / (2 * (gitlab_component_ops:rate_6h{component="workhorse",tier="sv",type="webservice"} * 21600))
           )
-          /
-          (gitlab_component_ops:rate_6h{component="workhorse",tier="sv",type="webservice"} * 21600)
+          -
+          2.326348
+          *
+          sqrt(
+            (
+              (gitlab_component_errors:rate_6h{component="workhorse",tier="sv",type="webservice"} / gitlab_component_ops:rate_6h{component="workhorse",tier="sv",type="webservice"}) * (1 - (gitlab_component_errors:rate_6h{component="workhorse",tier="sv",type="webservice"} / gitlab_component_ops:rate_6h{component="workhorse",tier="sv",type="webservice"}))
+              +
+              5.411894 / (4 * (gitlab_component_ops:rate_6h{component="workhorse",tier="sv",type="webservice"} * 21600))
+            )
+            /
+            (gitlab_component_ops:rate_6h{component="workhorse",tier="sv",type="webservice"} * 21600)
+          )
         )
+        /
+        (1 + 5.411894 / (gitlab_component_ops:rate_6h{component="workhorse",tier="sv",type="webservice"} * 21600)),
+        0, 1
       )
-      /
-      (1 + 5.411894 / (gitlab_component_ops:rate_6h{component="workhorse",tier="sv",type="webservice"} * 21600))
-
     labels:
       component: workhorse
       confidence: 98%
       tier: sv
       type: webservice
     record: gitlab_component_errors:confidence:ratio_6h
-  - expr: |+
-      (
+  - expr: |
+      clamp_min(gitlab_component_apdex:weight:score_6h{component="workhorse",tier="sv",type="webservice"} == 0, 1)
+      or
+      clamp(
         (
-          (gitlab_component_apdex:success:rate_6h{component="workhorse",tier="sv",type="webservice"} / gitlab_component_apdex:weight:score_6h{component="workhorse",tier="sv",type="webservice"})
-          +
-          5.411894 / (2 * (gitlab_component_apdex:weight:score_6h{component="workhorse",tier="sv",type="webservice"} * 21600))
-        )
-        +
-        2.326348
-        *
-        sqrt(
           (
-            (gitlab_component_apdex:success:rate_6h{component="workhorse",tier="sv",type="webservice"} / gitlab_component_apdex:weight:score_6h{component="workhorse",tier="sv",type="webservice"}) * (1 - (gitlab_component_apdex:success:rate_6h{component="workhorse",tier="sv",type="webservice"} / gitlab_component_apdex:weight:score_6h{component="workhorse",tier="sv",type="webservice"}))
+            (gitlab_component_apdex:success:rate_6h{component="workhorse",tier="sv",type="webservice"} / gitlab_component_apdex:weight:score_6h{component="workhorse",tier="sv",type="webservice"})
             +
-            5.411894 / (4 * (gitlab_component_apdex:weight:score_6h{component="workhorse",tier="sv",type="webservice"} * 21600))
+            5.411894 / (2 * (gitlab_component_apdex:weight:score_6h{component="workhorse",tier="sv",type="webservice"} * 21600))
           )
-          /
-          (gitlab_component_apdex:weight:score_6h{component="workhorse",tier="sv",type="webservice"} * 21600)
+          +
+          2.326348
+          *
+          sqrt(
+            (
+              (gitlab_component_apdex:success:rate_6h{component="workhorse",tier="sv",type="webservice"} / gitlab_component_apdex:weight:score_6h{component="workhorse",tier="sv",type="webservice"}) * (1 - (gitlab_component_apdex:success:rate_6h{component="workhorse",tier="sv",type="webservice"} / gitlab_component_apdex:weight:score_6h{component="workhorse",tier="sv",type="webservice"}))
+              +
+              5.411894 / (4 * (gitlab_component_apdex:weight:score_6h{component="workhorse",tier="sv",type="webservice"} * 21600))
+            )
+            /
+            (gitlab_component_apdex:weight:score_6h{component="workhorse",tier="sv",type="webservice"} * 21600)
+          )
         )
+        /
+        (1 + 5.411894 / (gitlab_component_apdex:weight:score_6h{component="workhorse",tier="sv",type="webservice"} * 21600)),
+        0, 1
       )
-      /
-      (1 + 5.411894 / (gitlab_component_apdex:weight:score_6h{component="workhorse",tier="sv",type="webservice"} * 21600))
-
     labels:
       component: workhorse
       confidence: 98%
