@@ -1,5 +1,5 @@
 local services = (import 'gitlab-metrics-config.libsonnet').monitoredServices;
-local aggregationSets = (import 'gitlab-metrics-config.libsonnet').aggregationSets;
+local aggregationSets = import 'prom-thanos-aggregation-sets.libsonnet';
 local filesForServices = (import 'recording-rules/service-key-metrics-rule-files.libsonnet').filesForServices;
 
 /**

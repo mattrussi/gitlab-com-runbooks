@@ -1,7 +1,7 @@
 local separateMimirRecordingFiles = (import 'recording-rules/lib/mimir/separate-mimir-recording-files.libsonnet').separateMimirRecordingFiles;
 local monitoredServices = (import 'gitlab-metrics-config.libsonnet').monitoredServices;
 local recordingRules = import 'recording-rules/recording-rules.libsonnet';
-local aggregationSets = import 'mimir-aggregation-sets.libsonnet';
+local aggregationSets = (import 'gitlab-metrics-config.libsonnet').aggregationSets;
 local intervalForDuration = import 'servicemetrics/interval-for-duration.libsonnet';
 local recordingRuleRegistry = import 'servicemetrics/recording-rule-registry.libsonnet';
 

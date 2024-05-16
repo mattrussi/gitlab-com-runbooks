@@ -1,4 +1,4 @@
-local aggregationSets = import './aggregation-sets.libsonnet';
+local aggregationSets = import './mimir-aggregation-sets.libsonnet';
 local allSaturationTypes = import './saturation/all.libsonnet';
 local allServices = import './services/all.jsonnet';
 local allUtilizationMetrics = import './utilization/all.libsonnet';

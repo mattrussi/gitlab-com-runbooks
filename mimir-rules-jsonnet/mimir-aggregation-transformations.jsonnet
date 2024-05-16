@@ -1,6 +1,6 @@
 local separateMimirRecordingFiles = (import 'recording-rules/lib/mimir/separate-mimir-recording-files.libsonnet').separateMimirRecordingFiles;
 local monitoredServices = (import 'gitlab-metrics-config.libsonnet').monitoredServices;
-local aggregationSets = import 'mimir-aggregation-sets.libsonnet';
+local aggregationSets = (import 'gitlab-metrics-config.libsonnet').aggregationSets;
 local aggregationSetTransformer = import 'servicemetrics/aggregation-set-transformer.libsonnet';
 
 local outputPromYaml(groups) =

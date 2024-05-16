@@ -1,4 +1,4 @@
-local aggregationSets = (import 'gitlab-metrics-config.libsonnet').aggregationSets;
+local aggregationSets = import 'prom-thanos-aggregation-sets.libsonnet';
 local aggregationSetTransformer = import 'servicemetrics/aggregation-set-transformer.libsonnet';
 local applicationSlis = (import 'gitlab-slis/library.libsonnet').all;
 local applicationSliAggregations = import 'gitlab-slis/aggregation-sets.libsonnet';
