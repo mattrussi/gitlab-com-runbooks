@@ -42,11 +42,11 @@ As well as checking if the problem is isolated to a single tenant, or effecting 
 
 We have some useful dashboards to reference for a quick view of system health:
 
-- [Overview](https://dashboards.gitlab.net/goto/X55QdiPSg?orgId=1)
-- [Writes](https://dashboards.gitlab.net/goto/TN4lOiESg?orgId=1)
-- [Reads](https://dashboards.gitlab.net/goto/53U_dmPSg?orgId=1)
-- [Rule Evalutions](https://dashboards.gitlab.net/goto/TnZ9dmPIg?orgId=1)
-- [Mimir Tenants](https://dashboards.gitlab.net/goto/H3cmKmESR?orgId=1)
+* [Overview](https://dashboards.gitlab.net/goto/X55QdiPSg?orgId=1)
+* [Writes](https://dashboards.gitlab.net/goto/TN4lOiESg?orgId=1)
+* [Reads](https://dashboards.gitlab.net/goto/53U_dmPSg?orgId=1)
+* [Rule Evalutions](https://dashboards.gitlab.net/goto/TnZ9dmPIg?orgId=1)
+* [Mimir Tenants](https://dashboards.gitlab.net/goto/H3cmKmESR?orgId=1)
 
 There are other useful operational dashboards you can navigate to from the top right, under "Mimir dashboards".
 
