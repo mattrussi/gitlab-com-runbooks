@@ -65,6 +65,15 @@ local generateRecordingRulesForMetric(metricName, labels, selector, burnRate) =
     expr: recordingRuleExpressionFor(metricName, labels, selector, burnRate),
   };
 
+local splitAggregationString(aggregationLabelsString) =
+  if aggregationLabelsString == '' then
+    []
+  else
+    [
+      std.stripChars(str, ' \n\t')
+      for str in std.split(aggregationLabelsString, ',')
+    ];
+
 local resolveRecordingRuleFor(metricName, aggregationLabels, selector, rangeInterval) =
   // Recording rules can't handle `$__interval` or $__rate_interval variable ranges, so always resolve these as 5m
   local durationWithRecordingRule = if std.startsWith(rangeInterval, '$__') then '5m' else rangeInterval;
@@ -73,17 +82,22 @@ local resolveRecordingRuleFor(metricName, aggregationLabels, selector, rangeInte
   local allMetricNamesAndLabels = sliMetricDescriptor.collectMetricNamesAndLabels(std.objectValues(recordedMetricNamesAndLabelsByType));
   local recordedLabels = allMetricNamesAndLabels[metricName];
 
+  local aggregationLabelsArray = if std.isArray(aggregationLabels) then
+    aggregationLabels
+  else
+    splitAggregationString(aggregationLabels);
+
   // monitor is added in thanos, but not in prometheus.
   // In mimir it should not matter either as everything is global (but per tenant)
   local ignoredLabels = ['monitor'];
-  local requiredLabelsWithIgnoredLabels = std.set(aggregationLabels + selectors.getLabels(selector));
+  local requiredLabelsWithIgnoredLabels = std.set(aggregationLabelsArray + selectors.getLabels(selector));
   local requiredLabels = std.setDiff(requiredLabelsWithIgnoredLabels, ignoredLabels);
 
   local missingLabels = std.setDiff(requiredLabels, recordedLabels);
   assert std.length(missingLabels) == 0 : '%s labels are missing in the SLI aggregations for %s' % [missingLabels, metricName];
 
   '%(metricName)s{%(selector)s}' % {
-    metricName: recordingRuleNameFor(metricName, rangeInterval),
+    metricName: recordingRuleNameFor(metricName, durationWithRecordingRule),
     selector: selectors.serializeHash(selector),
   };
 
