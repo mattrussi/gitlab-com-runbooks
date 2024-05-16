@@ -50,14 +50,22 @@ local enqueueCountTimeseries(title, aggregators, legendFormat) =
 local rpsTimeseries(title, aggregators, legendFormat) =
   basic.timeseries(
     title=title,
-    query=recordingRuleRateQuery('sli_aggregations:gitlab_sli_sidekiq_execution_total_rate5m', 'environment="$environment", queue=~"$queue"', aggregators),
+    query=recordingRuleRateQuery(
+      recordingRuleRegistry.recordingRuleNameFor('gitlab_sli_sidekiq_execution_total', '5m'),
+      'environment="$environment", queue=~"$queue"',
+      aggregators
+    ),
     legendFormat=legendFormat,
   );
 
 local errorRateTimeseries(title, aggregators, legendFormat) =
   basic.timeseries(
     title=title,
-    query=recordingRuleRateQuery('sli_aggregations:gitlab_sli_sidekiq_execution_error_total_rate5m', 'environment="$environment", queue=~"$queue"', aggregators),
+    query=recordingRuleRateQuery(
+      recordingRuleRegistry.recordingRuleNameFor('gitlab_sli_sidekiq_execution_error_total', '5m'),
+      'environment="$environment", queue=~"$queue"',
+      aggregators
+    ),
     legendFormat=legendFormat,
   );
 
@@ -214,13 +222,16 @@ basic.dashboard(
       description='Queue apdex monitors the percentage of jobs that are dequeued within their queue threshold. Higher is better. Different jobs have different thresholds.',
       query=|||
         sum by (queue) (
-          sli_aggregations:gitlab_sli_sidekiq_queueing_apdex_success_total_rate5m{environment="$environment",queue=~"$queue"}
+          %(apdexSuccessRate)s{environment="$environment",queue=~"$queue"}
         )
         /
         sum by (queue) (
-          sli_aggregations:gitlab_sli_sidekiq_queueing_apdex_total_rate5m{environment="$environment",queue=~"$queue"}
+          %(apdexWeight)s{environment="$environment",queue=~"$queue"}
         )
-      |||,
+      ||| % {
+        apdexSuccessRate: recordingRuleRegistry.recordingRuleNameFor('gitlab_sli_sidekiq_queueing_apdex_success_total', '5m'),
+        apdexWeight: recordingRuleRegistry.recordingRuleNameFor('gitlab_sli_sidekiq_queueing_apdex_total', '5m'),
+      },
       yAxisLabel='% Jobs within Max Queuing Duration SLO',
       legendFormat='{{ queue }} queue apdex',
       legend_show=true,
@@ -238,13 +249,16 @@ basic.dashboard(
       description='Execution apdex monitors the percentage of jobs that run within their execution (run-time) threshold. Higher is better. Different jobs have different thresholds.',
       query=|||
         sum by (queue) (
-          sli_aggregations:gitlab_sli_sidekiq_execution_apdex_success_total_rate5m{environment="$environment",queue=~"$queue"}
+          %(apdexSuccessRate)s{environment="$environment",queue=~"$queue"}
         )
         /
         sum by (queue) (
-          sli_aggregations:gitlab_sli_sidekiq_execution_apdex_total_rate5m{environment="$environment",queue=~"$queue"}
+          %(apdexWeight)s{environment="$environment",queue=~"$queue"}
         )
-      |||,
+      ||| % {
+        apdexSuccessRate: recordingRuleRegistry.recordingRuleNameFor('gitlab_sli_sidekiq_execution_apdex_success_total', '5m'),
+        apdexWeight: recordingRuleRegistry.recordingRuleNameFor('gitlab_sli_sidekiq_execution_apdex_total', '5m'),
+      },
       yAxisLabel='% Jobs within Max Execution Duration SLO',
       legendFormat='{{ queue }} execution apdex',
       legend_show=true,
@@ -262,8 +276,10 @@ basic.dashboard(
       title='Execution Rate (RPS)',
       description='Jobs executed per second',
       query=|||
-        sum by (queue) (sli_aggregations:gitlab_sli_sidekiq_execution_total_rate5m{environment="$environment", queue=~"$queue"})
-      |||,
+        sum by (queue) (%(metric)s{environment="$environment", queue=~"$queue"})
+      ||| % {
+        metric: recordingRuleRegistry.recordingRuleNameFor('gitlab_sli_sidekiq_execution_total', '5m'),
+      },
       legendFormat='{{ queue }} rps',
       format='ops',
       yAxisLabel='Jobs per Second',
@@ -282,13 +298,16 @@ basic.dashboard(
       description='Percentage of jobs that fail with an error. Lower is better.',
       query=|||
         sum by (queue) (
-          (sli_aggregations:gitlab_sli_sidekiq_execution_error_total_rate5m{environment="$environment", queue=~"$queue"} >= 0)
+          (%(errorRate)s{environment="$environment", queue=~"$queue"} >= 0)
         )
         /
         sum by (queue) (
-          (sli_aggregations:gitlab_sli_sidekiq_execution_total_rate5m{environment="$environment", queue=~"$queue"} >= 0)
+          (%(opsRate)s{environment="$environment", queue=~"$queue"} >= 0)
         )
-      |||,
+      ||| % {
+        errorRate: recordingRuleRegistry.recordingRuleNameFor('gitlab_sli_sidekiq_execution_error_total', '5m'),
+        opsRate: recordingRuleRegistry.recordingRuleNameFor('gitlab_sli_sidekiq_execution_total', '5m'),
+      },
       legendFormat='{{ queue }} error ratio',
       yAxisLabel='Error Percentage',
       legend_show=true,

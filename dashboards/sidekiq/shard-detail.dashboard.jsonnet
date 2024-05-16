@@ -13,6 +13,7 @@ local promQuery = import 'grafana/prom_query.libsonnet';
 local link = grafana.link;
 local matching = import 'elasticlinkbuilder/matching.libsonnet';
 local elasticsearchLinks = import 'elasticlinkbuilder/elasticsearch_links.libsonnet';
+local recordingRuleRegistry = (import 'gitlab-metrics-config.libsonnet').recordingRuleRegistry;
 
 local selectors = import 'promql/selectors.libsonnet';
 
@@ -66,11 +67,13 @@ basic.dashboard(
           and on (queue)
           (
             max by (queue) (
-              sli_aggregations:gitlab_sli_sidekiq_queueing_apdex_total_rate1m{environment="$environment", shard=~"$shard"} > 0
+              %(queueingApdexWeight)s{environment="$environment", shard=~"$shard"} > 0
             )
           )
         )
-      |||,
+      ||| % {
+        queueingApdexWeight: recordingRuleRegistry.recordingRuleNameFor('gitlab_sli_sidekiq_queueing_apdex_total', '5m'),
+      },
       legendFormat='{{ queue }}',
       format='short',
       interval='1m',
@@ -92,11 +95,13 @@ basic.dashboard(
           and on (queue)
           (
             max by (queue) (
-              sli_aggregations:gitlab_sli_sidekiq_queueing_apdex_total_rate1m{environment="$environment", shard=~"$shard"} > 0
+              %(queueingApdexWeight)s{environment="$environment", shard=~"$shard"} > 0
             )
           )
         )
-      |||,
+      ||| % {
+        queueingApdexWeight: recordingRuleRegistry.recordingRuleNameFor('gitlab_sli_sidekiq_queueing_apdex_total', '5m'),
+      },
       legendFormat='Aggregated queue length',
       format='short',
       interval='1m',
@@ -166,8 +171,10 @@ basic.dashboard(
       title='Sidekiq Aggregated Throughput for $shard Shard',
       description='The total number of jobs being completed',
       query=|||
-        sum(sli_aggregations:gitlab_sli_sidekiq_execution_total_rate5m{environment="$environment", shard=~"$shard"}) by (shard)
-      |||,
+        sum(%(executionOpsRate)s{environment="$environment", shard=~"$shard"}) by (shard)
+      ||| % {
+        executionOpsRate: recordingRuleRegistry.recordingRuleNameFor('gitlab_sli_sidekiq_execution_total', '5m'),
+      },
       legendFormat='{{ shard }}',
       interval='1m',
       intervalFactor=1,
@@ -178,8 +185,10 @@ basic.dashboard(
       title='Sidekiq Throughput per Queue for $shard Shard',
       description='The total number of jobs being completed per queue for shard',
       query=|||
-        sum(sli_aggregations:gitlab_sli_sidekiq_execution_total_rate5m{environment="$environment", shard=~"$shard"}) by (queue)
-      |||,
+        sum(%(executionOpsRate)s{environment="$environment", shard=~"$shard"}) by (queue)
+      ||| % {
+        executionOpsRate: recordingRuleRegistry.recordingRuleNameFor('gitlab_sli_sidekiq_execution_total', '5m'),
+      },
       legendFormat='{{ queue }}',
       interval='1m',
       intervalFactor=1,
@@ -195,10 +204,12 @@ basic.dashboard(
         and on (worker)
         (
           sum by (worker) (
-            sli_aggregations:gitlab_sli_sidekiq_execution_apdex_total_rate1m{env="gprd",shard=~"$shard"} > 0
+            %(executionOpsRate)s{env="gprd",shard=~"$shard"} > 0
           )
         )
-      |||,
+      ||| % {
+        executionOpsRate: recordingRuleRegistry.recordingRuleNameFor('gitlab_sli_sidekiq_execution_total', '5m'),
+      },
       legendFormat='{{ worker }}',
       interval='1m',
       intervalFactor=1,
