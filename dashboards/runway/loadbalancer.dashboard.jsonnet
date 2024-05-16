@@ -75,18 +75,14 @@ basic.dashboard(
         yAxisLabel='Error ratio',
         query=|||
           sum(
-            rate(
-              stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{response_code_class="500",%(selector)s}[$__rate_interval]
-            )
+            stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{response_code_class="500",%(selector)s}
+            OR on()
+            vector(0)
           )
           /
           sum(
-            rate(
-              stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{%(selector)s}[$__rate_interval]
-            )
+            stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{%(selector)s}
           )
-          OR on()
-          vector(0)
         ||| % formatConfig,
         legendFormat='Total error ratio',
         decimals=2,
@@ -98,10 +94,8 @@ basic.dashboard(
         yAxisLabel='Requests per Second',
         query=|||
           sum by(backend_scope) (
-            rate(
-              stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{response_code_class="500",%(selector)s}[$__rate_interval]
-            )
-          )
+            stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{response_code_class="500",%(selector)s}
+          ) / 60
         ||| % formatConfig,
         legendFormat='Region {{backend_scope}}',
         decimals=2,
