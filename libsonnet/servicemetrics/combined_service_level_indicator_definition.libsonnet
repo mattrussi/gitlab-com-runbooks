@@ -71,6 +71,8 @@ local combinedServiceLevelIndicatorDefinition(
         hasErrorRate():: componentsInitialised[0].hasErrorRate(),
         hasDependencies():: std.length(self.dependsOn) > 0,
 
+        useConfidenceLevelForSLIAlerts: null,
+
         // Returns true if this SLI should use confidence levels in alert evaulation.
         usesConfidenceLevelForSLIAlerts()::
           componentsInitialised[0].usesConfidenceLevelForSLIAlerts(),

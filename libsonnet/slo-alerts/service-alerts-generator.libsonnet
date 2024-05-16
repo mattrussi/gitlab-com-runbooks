@@ -60,21 +60,39 @@ local apdexAlertForSLIForAlertDescriptor(service, sli, alertDescriptor, extraSel
   else
     [];
 
-  local apdexAlerts = function(thresholdSLOValue, metricSelectorHash) serviceLevelAlerts.apdexAlertsForSLI(
-    alertName=serviceLevelAlerts.nameSLOViolationAlert(service.type, sli.name, 'ApdexSLOViolation' + alertDescriptor.alertSuffix),
-    alertTitle=(alertDescriptor.alertTitleTemplate + ' has an apdex violating SLO') % formatConfig,
-    alertDescriptionLines=[sli.description] + if alertDescriptor.alertExtraDetail != null then [alertDescriptor.alertExtraDetail] else [],
-    serviceType=service.type,
-    severity=sli.severity,
-    thresholdSLOValue=thresholdSLOValue,
-    aggregationSet=alertDescriptor.aggregationSet,
-    windows=service.alertWindows,
-    metricSelectorHash=metricSelectorHash,
-    minimumSamplesForMonitoring=alertDescriptor.minimumSamplesForMonitoring,
-    alertForDuration=alertDescriptor.alertForDuration,
-    extraLabels=labelsForSLIAlert(sli),
-    extraAnnotations=sloAlertAnnotations(service.type, sli, alertDescriptor.aggregationSet, 'apdex')
-  );
+  // We use confidence_levels when the SLI requests it
+  // AND the aggregation set supports it too
+  local apdexConfidenceIntervalsAvailable =
+    if sli.useConfidenceLevelForSLIAlerts != null then
+      if std.all([
+        alertDescriptor.aggregationSet.getApdexRatioConfidenceIntervalMetricForBurnRate(window) != null
+        for window in service.alertWindows
+      ]) then
+        sli.useConfidenceLevelForSLIAlerts
+      else
+        std.trace('warning: SLI %s wants to use confidence intervals, but its not supported on some of the aggregation sets used for SLO alerting' % [sli.name], null)
+    else
+      null;
+
+  local confidenceAlertLabels = if apdexConfidenceIntervalsAvailable != null then { confidence: apdexConfidenceIntervalsAvailable } else {};
+
+  local apdexAlerts = function(thresholdSLOValue, metricSelectorHash)
+    serviceLevelAlerts.apdexAlertsForSLI(
+      alertName=serviceLevelAlerts.nameSLOViolationAlert(service.type, sli.name, 'ApdexSLOViolation' + alertDescriptor.alertSuffix),
+      alertTitle=(alertDescriptor.alertTitleTemplate + ' has an apdex violating SLO') % formatConfig,
+      alertDescriptionLines=[sli.description] + if alertDescriptor.alertExtraDetail != null then [alertDescriptor.alertExtraDetail] else [],
+      serviceType=service.type,
+      severity=sli.severity,
+      thresholdSLOValue=thresholdSLOValue,
+      aggregationSet=alertDescriptor.aggregationSet,
+      windows=service.alertWindows,
+      metricSelectorHash=metricSelectorHash,
+      minimumSamplesForMonitoring=alertDescriptor.minimumSamplesForMonitoring,
+      confidenceIntervalLevel=apdexConfidenceIntervalsAvailable,
+      alertForDuration=alertDescriptor.alertForDuration,
+      extraLabels=labelsForSLIAlert(sli) + confidenceAlertLabels,
+      extraAnnotations=sloAlertAnnotations(service.type, sli, alertDescriptor.aggregationSet, 'apdex')
+    );
 
   if std.length(shardSelectors) > 0 then
     std.flatMap(
@@ -100,21 +118,39 @@ local errorAlertForSLIForAlertDescriptor(service, sli, alertDescriptor, extraSel
   else
     [];
 
-  local errorAlerts = function(thresholdSLOValue, metricSelectorHash) serviceLevelAlerts.errorAlertsForSLI(
-    alertName=serviceLevelAlerts.nameSLOViolationAlert(service.type, sli.name, 'ErrorSLOViolation' + alertDescriptor.alertSuffix),
-    alertTitle=(alertDescriptor.alertTitleTemplate + ' has an error rate violating SLO') % formatConfig,
-    alertDescriptionLines=[sli.description] + if alertDescriptor.alertExtraDetail != null then [alertDescriptor.alertExtraDetail] else [],
-    serviceType=service.type,
-    severity=sli.severity,
-    thresholdSLOValue=thresholdSLOValue,
-    aggregationSet=alertDescriptor.aggregationSet,
-    windows=service.alertWindows,
-    metricSelectorHash=metricSelectorHash,
-    minimumSamplesForMonitoring=alertDescriptor.minimumSamplesForMonitoring,
-    extraLabels=labelsForSLIAlert(sli),
-    alertForDuration=alertDescriptor.alertForDuration,
-    extraAnnotations=sloAlertAnnotations(service.type, sli, alertDescriptor.aggregationSet, 'error'),
-  );
+  // We use confidence_levels when the SLI requests it
+  // AND the aggregation set supports it too
+  local errorConfidenceIntervalsAvailable =
+    if sli.useConfidenceLevelForSLIAlerts != null then
+      if std.all([
+        alertDescriptor.aggregationSet.getErrorRatioConfidenceIntervalMetricForBurnRate(window) != null
+        for window in service.alertWindows
+      ]) then
+        sli.useConfidenceLevelForSLIAlerts
+      else
+        std.trace('warning: SLI %s wants to use confidence intervals, but its not supported on some of the aggregation sets used for SLO alerting' % [sli.name], null)
+    else
+      null;
+
+  local confidenceAlertLabels = if errorConfidenceIntervalsAvailable != null then { confidence: errorConfidenceIntervalsAvailable } else {};
+
+  local errorAlerts = function(thresholdSLOValue, metricSelectorHash)
+    serviceLevelAlerts.errorAlertsForSLI(
+      alertName=serviceLevelAlerts.nameSLOViolationAlert(service.type, sli.name, 'ErrorSLOViolation' + alertDescriptor.alertSuffix),
+      alertTitle=(alertDescriptor.alertTitleTemplate + ' has an error rate violating SLO') % formatConfig,
+      alertDescriptionLines=[sli.description] + if alertDescriptor.alertExtraDetail != null then [alertDescriptor.alertExtraDetail] else [],
+      serviceType=service.type,
+      severity=sli.severity,
+      thresholdSLOValue=thresholdSLOValue,
+      aggregationSet=alertDescriptor.aggregationSet,
+      windows=service.alertWindows,
+      metricSelectorHash=metricSelectorHash,
+      minimumSamplesForMonitoring=alertDescriptor.minimumSamplesForMonitoring,
+      confidenceIntervalLevel=errorConfidenceIntervalsAvailable,
+      extraLabels=labelsForSLIAlert(sli) + confidenceAlertLabels,
+      alertForDuration=alertDescriptor.alertForDuration,
+      extraAnnotations=sloAlertAnnotations(service.type, sli, alertDescriptor.aggregationSet, 'error'),
+    );
 
   if std.length(shardSelectors) > 0 then
     std.flatMap(

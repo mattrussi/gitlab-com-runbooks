@@ -179,6 +179,13 @@ local buildValidator(definition) =
       getErrorRatioConfidenceIntervalMetricForBurnRate(burnRate, required=false)::
         getMetricNameForBurnRate(burnRate, 'errorConfidenceRatio', required),
 
+      // Convienence method: given the confidence level
+      // returns a selector for that confidence level
+      // All confidence interval SLI recording rules will have
+      // a `confidence='...'` and this function will provide the selector
+      confidenceSelector(confidenceLevel)::
+        { confidence: confidenceLevel },
+
       upscaleBurnRate(burnRate)::
         self.upscaleLongerBurnRates && std.member(upscaledBurnRates, burnRate),
       // Returns a set of burn rates for the aggregation set,

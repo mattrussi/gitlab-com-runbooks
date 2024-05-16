@@ -3551,12 +3551,12 @@ groups:
     expr: |
       (
         (
-          gitlab_component_apdex:ratio_1h{component="workhorse",type="webservice"}
+          gitlab_component_apdex:confidence:ratio_1h{component="workhorse",confidence="98%",type="webservice"}
           < (1 - 14.4 * 0.002000)
         )
         and
         (
-          gitlab_component_apdex:ratio_5m{component="workhorse",type="webservice"}
+          gitlab_component_apdex:confidence:ratio_5m{component="workhorse",confidence="98%",type="webservice"}
           < (1 - 14.4 * 0.002000)
         )
       )
@@ -3569,6 +3569,7 @@ groups:
       aggregation: component
       alert_class: slo_violation
       alert_type: symptom
+      confidence: 98%
       feature_category: not_owned
       pager: pagerduty
       rules_domain: general
@@ -3601,12 +3602,12 @@ groups:
     expr: |
       (
         (
-          gitlab_component_apdex:ratio_6h{component="workhorse",type="webservice"}
+          gitlab_component_apdex:confidence:ratio_6h{component="workhorse",confidence="98%",type="webservice"}
           < (1 - 6 * 0.002000)
         )
         and
         (
-          gitlab_component_apdex:ratio_30m{component="workhorse",type="webservice"}
+          gitlab_component_apdex:confidence:ratio_30m{component="workhorse",confidence="98%",type="webservice"}
           < (1 - 6 * 0.002000)
         )
       )
@@ -3619,6 +3620,7 @@ groups:
       aggregation: component
       alert_class: slo_violation
       alert_type: symptom
+      confidence: 98%
       feature_category: not_owned
       pager: pagerduty
       rules_domain: general
@@ -3649,12 +3651,12 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_1h{component="workhorse",type="webservice"}
+          gitlab_component_errors:confidence:ratio_1h{component="workhorse",confidence="98%",type="webservice"}
           > (14.4 * 0.000100)
         )
         and
         (
-          gitlab_component_errors:ratio_5m{component="workhorse",type="webservice"}
+          gitlab_component_errors:confidence:ratio_5m{component="workhorse",confidence="98%",type="webservice"}
           > (14.4 * 0.000100)
         )
       )
@@ -3667,6 +3669,7 @@ groups:
       aggregation: component
       alert_class: slo_violation
       alert_type: symptom
+      confidence: 98%
       feature_category: not_owned
       pager: pagerduty
       rules_domain: general
@@ -3697,12 +3700,12 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_6h{component="workhorse",type="webservice"}
+          gitlab_component_errors:confidence:ratio_6h{component="workhorse",confidence="98%",type="webservice"}
           > (6 * 0.000100)
         )
         and
         (
-          gitlab_component_errors:ratio_30m{component="workhorse",type="webservice"}
+          gitlab_component_errors:confidence:ratio_30m{component="workhorse",confidence="98%",type="webservice"}
           > (6 * 0.000100)
         )
       )
@@ -3715,6 +3718,7 @@ groups:
       aggregation: component
       alert_class: slo_violation
       alert_type: symptom
+      confidence: 98%
       feature_category: not_owned
       pager: pagerduty
       rules_domain: general

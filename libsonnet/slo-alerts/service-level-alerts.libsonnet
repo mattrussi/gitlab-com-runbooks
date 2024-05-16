@@ -66,6 +66,7 @@ local apdexAlertsForSLI(
   windows,  // Array of long window durations for the alert
   metricSelectorHash,  // Additional selectors to apply to the query
   minimumSamplesForMonitoring=null,  // Minimum sample rate threshold: see docs/metrics-catalog/service-level-monitoring.md
+  confidenceIntervalLevel=null,  // Use confidence levels, adjusting for low RPS situations, instead of the absolute SLI,
   alertForDuration=null,  // Use the default `for` alert duration
   extraLabels={},  // Extra labels for the alert
   extraAnnotations={},  // Extra annotations for the alert
@@ -80,6 +81,7 @@ local apdexAlertsForSLI(
         aggregationSet=aggregationSet,
         metricSelectorHash=metricSelectorHash,
         requiredOpRate=minimumOpRate.calculateFromSamplesForDuration(windowDuration, minimumSamplesForMonitoring),
+        confidenceIntervalLevel=confidenceIntervalLevel,
         thresholdSLOValue=thresholdSLOValue,
         windows=[windowDuration],
         operationRateWindowDuration=windowDuration,
@@ -109,6 +111,7 @@ local errorAlertsForSLI(
   windows,  // Array of long window durations for the alert
   metricSelectorHash,  // Additional selectors to apply to the query
   minimumSamplesForMonitoring=null,  // Minimum sample rate threshold see docs/metrics-catalog/service-level-monitoring.md
+  confidenceIntervalLevel=null,  // Use confidence levels, adjusting for low RPS situations, instead of the absolute SLI,
   alertForDuration=null,  // Use the default `for` alert duration
   extraLabels={},  // Extra labels for the alert
   extraAnnotations={},  // Extra annotations for the alert
@@ -123,6 +126,7 @@ local errorAlertsForSLI(
         aggregationSet=aggregationSet,
         metricSelectorHash=metricSelectorHash,
         requiredOpRate=minimumOpRate.calculateFromSamplesForDuration(windowDuration, minimumSamplesForMonitoring),
+        confidenceIntervalLevel=confidenceIntervalLevel,
         thresholdSLOValue=1 - thresholdSLOValue,
         windows=[windowDuration],
         operationRateWindowDuration=windowDuration,

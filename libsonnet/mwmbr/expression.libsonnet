@@ -54,16 +54,25 @@ local defaultWindows = ['1h', '6h'];
     windows=defaultWindows,  // Sets of windows in this SLO expression, identified by longWindow duration
     thresholdSLOValue,  // Error budget float value (between 0 and 1)
     requiredOpRate=null,  // minimum operation rate recorded, over the longWindow period, for monitoring
+    confidenceIntervalLevel=null,  // Use confidence levels, adjusting for low RPS situations, instead of the absolute SLI,
     operationRateWindowDuration='1h',  // Window over which to evaluate operation rate
   )::
     local mergedMetricSelectors = selectors.merge(aggregationSet.selector, metricSelectorHash);
 
+    // If we're using a confidence interval error rate, we'll need to add
+    // the `confidence='98%'` label onto the metric selector...
+    local confidenceSelectors =
+      if confidenceIntervalLevel != null then
+        aggregationSet.confidenceSelector(confidenceIntervalLevel)
+      else
+        {};
+
     local preOperationRateExpr = generator.expressionGenerator(
       aggregationSet=aggregationSet,
-      metricSelectorHash=metricSelectorHash,
+      metricSelectorHash=metricSelectorHash + confidenceSelectors,
       windows=windows,
       termGenerator=generator.termGenerators.fixed(thresholdValue=thresholdSLOValue),
-      metricLookup=generator.metricLookups.errorRate(),
+      metricLookup=if confidenceIntervalLevel != null then generator.metricLookups.errorRateConfidenceInterval() else generator.metricLookups.errorRate(),
       isApdexExpression=false,
     );
 
@@ -81,18 +90,27 @@ local defaultWindows = ['1h', '6h'];
     aggregationSet,
     metricSelectorHash,  // Selectors for the error rate metrics
     thresholdSLOValue,  // Error budget float value (between 0 and 1)
-    windows=['1h', '6h'],  // Sets of windows in this SLO expression, identified by longWindow duration
+    windows=defaultWindows,  // Sets of windows in this SLO expression, identified by longWindow duration
     requiredOpRate=null,  // minimum operation-rate, over the longWindow period, for monitoring
+    confidenceIntervalLevel=null,  // Use confidence levels, adjusting for low RPS situations, instead of the absolute SLI,
     operationRateWindowDuration='1h',  // Window over which to evaluate operation rate
   )::
     local mergedMetricSelectors = selectors.merge(aggregationSet.selector, metricSelectorHash);
 
+    // If we're using a confidence interval apdex, we'll need to add
+    // the `confidence='98%'` label onto the metric selector...
+    local confidenceSelectors =
+      if confidenceIntervalLevel != null then
+        aggregationSet.confidenceSelector(confidenceIntervalLevel)
+      else
+        {};
+
     local preOperationRateExpr = generator.expressionGenerator(
       aggregationSet=aggregationSet,
-      metricSelectorHash=metricSelectorHash,
+      metricSelectorHash=metricSelectorHash + confidenceSelectors,
       windows=windows,
       termGenerator=generator.termGenerators.fixed(thresholdValue=thresholdSLOValue),
-      metricLookup=generator.metricLookups.apdex(),
+      metricLookup=if confidenceIntervalLevel != null then generator.metricLookups.apdexConfidenceInterval() else generator.metricLookups.apdex(),
       isApdexExpression=true,
     );
 
