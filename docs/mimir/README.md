@@ -34,6 +34,34 @@
 | Dashboards | [Mimir Overview](https://dashboards.gitlab.net/d/ffcd83628d7d4b5a03d1cafd159e6c9c/mimir-overview?orgId=1) |
 | Logs | [Elastic Cloud](https://nonprod-log.gitlab.net/app/r/s/h3UsR) |
 
+## Troubleshooting
+
+If you received a page for Mimir, the first thing is to determine if the problem is on the write path, read path, or with recording rule evaluation.
+
+As well as checking if the problem is isolated to a single tenant, or effecting all tenants.
+
+We have some useful dashboards to reference for a quick view of system health:
+
+- [Overview](https://dashboards.gitlab.net/goto/X55QdiPSg?orgId=1)
+- [Writes](https://dashboards.gitlab.net/goto/TN4lOiESg?orgId=1)
+- [Reads](https://dashboards.gitlab.net/goto/53U_dmPSg?orgId=1)
+- [Rule Evalutions](https://dashboards.gitlab.net/goto/TnZ9dmPIg?orgId=1)
+- [Mimir Tenants](https://dashboards.gitlab.net/goto/H3cmKmESR?orgId=1)
+
+There are other useful operational dashboards you can navigate to from the top right, under "Mimir dashboards".
+
+When checking tenants, the key metrics/questions here are:
+
+* Is the tenant exceeding a quota?
+  * To increase quotas see [](./getting-starded.md)
+* Is the "Newest seen sample age" recent.
+  * If there is no recent samples coming in, this could indicate the remote-write client may be experiencing issues and not sending any data.
+* Are any series being dropped under "Distributor and ingester discarded samples rate".
+  * Dropped samples would usually be the effect of a quota being exceeded so refer to the quota point above.
+
+It's also worth checking the observability alerts channel on slack `#g_infra_observability_alerts`,
+as there is some much more targeted alerting that will have direct links to appropriate [runbooks](#runbooks).
+
 ## Runbooks
 
 We use a slightly refactored version of the [Grafana Monitoring Mixin](https://gitlab.com/gitlab-com/gl-infra/monitoring-mixins) for much of the operational monitoring.
@@ -78,6 +106,38 @@ There is some good capacity planning docs from Grafana [here](https://grafana.co
 These include some guidelines around sizing for various components in Mimir.
 
 Keep in mind that at GitLab we have some incredibly high cardinality metrics, and while these numbers serve as good guidelines we often require more resources than recommended.
+
+## Scaling Mimir
+
+### Scaling up
+
+All components in Mimir are horizontally scalable.
+
+We have autoscaling in place for the following components:
+
+* Distributor
+* Querier
+* Query-Frontend
+
+All components can be scaled up without concern.
+
+The main consideration with scaling up is that with [shuffle sharding](https://grafana.com/docs/mimir/latest/configure/configure-shuffle-sharding/) enabled, new pods might not pick up workloads depending on shard assignments.
+
+There is a [runbook](https://grafana.com/docs/mimir/latest/manage/mimir-runbooks/#mimiringesterinstancehasnotenants) for the various component explaining the cause and fix in more detail.
+
+### Scaling down
+
+Scaling down for stateless components can be done without issue, with only the usual concerns for saturation and ensuring enough resource is left available.
+
+There are several stateful components in Mimir that require special consideration when scaling down.
+
+* Alertmanagers
+* Ingesters
+* Store-Gateways
+
+Scaling down these needs to be done following a process as they contain recent data used for querying, unexpected removal of this data can cause missing datapoints.
+
+More details on scaling down these components can be [read here](https://grafana.com/docs/mimir/latest/manage/run-production-environment/scaling-out/#microservices-mode)
 
 <!-- ## Availability -->
 
