@@ -1,0 +1,18 @@
+groups:
+- name: gitaly-shard-weight-assigner.rules
+  rules:
+  - alert: GitalyShardWeightAssignerFailed
+    expr: gitlab_job_failed{resource="gitaly-shard-weight-assigner"} == 1
+    for: 6h
+    labels:
+      severity: s3
+      alert_type: cause
+      incident_project: gitlab.com/gitlab-com/gl-infra/production
+      team: gitaly
+    annotations:
+      title: There have been multiple job failures for assigning weights to Gitaly shards
+      description: >
+        The weight assigner is failing for an extended period of time.
+        Check the reason for the failure by looking at the weight assigner pipeline
+        https://ops.gitlab.net/gitlab-com/gl-infra/gitaly-shard-weights-assigner/-/pipelines
+      runbook: docs/uncategorized/job_completion.md
