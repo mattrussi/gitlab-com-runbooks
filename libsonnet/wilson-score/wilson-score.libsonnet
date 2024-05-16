@@ -70,19 +70,33 @@ local confidenceBoundaryExpression(isLowerBoundary, scoreRate, totalRate, window
 
   local operator = if isLowerBoundary then '-' else '+';
 
+  local boundaryConditionExpr =
+    if isLowerBoundary then
+      // If totalCount == 0, then return 0 for lower boundary
+      '(%s == 0)' % [totalRate]
+    else
+      // If totalCount == 0, then return 1 for upper boundary
+      'clamp_min(%s == 0, 1)' % [totalRate];
+
   |||
-    (
-      %(aExpr)s
-      %(operator)s
-      %(bExpr)s
+    %(boundaryConditionExpr)s
+    or
+    clamp(
+      (
+        %(aExpr)s
+        %(operator)s
+        %(bExpr)s
+      )
+      /
+      %(cExpr)s,
+      0, 1
     )
-    /
-    %(cExpr)s
   ||| % {
+    boundaryConditionExpr: boundaryConditionExpr,
     operator: operator,
-    aExpr: strings.indent(aExpr, 2),
-    bExpr: strings.indent(bExpr, 2),
-    cExpr: cExpr,
+    aExpr: strings.indent(aExpr, 4),
+    bExpr: strings.indent(bExpr, 4),
+    cExpr: strings.indent(cExpr, 2),
   };
 
 {
