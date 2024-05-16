@@ -32,10 +32,6 @@ local sliValidator = validator.new({
     validator.validator(function(values) std.isArray(values) && std.length(values) > 0, 'must be present'),
     validKindsValidator
   ),
-  excludeKindsFromSLI: validator.or(
-    validator.validator(function(values) std.isArray(values) && std.length(values) == 0, 'can be an empty array'),
-    validKindsValidator
-  ),
   featureCategory: validator.validator(validateFeatureCategory, 'please specify a known feature category or include `feature_category` as a significant label'),
   dashboardFeatureCategories: validator.validator(
     function(values) misc.all(function(v) std.objectHas(stages.featureCategoryMap, v), values),
@@ -55,7 +51,6 @@ local applyDefaults(definition) = {
   hasApdex():: std.member(definition.kinds, apdexKind),
   hasErrorRate():: std.member(definition.kinds, errorRateKind),
   dashboardFeatureCategories: [],
-  excludeKindsFromSLI: [],
   counterName: if std.get(definition, 'counterName') == null then definition.name else definition.counterName,
 } + definition;
 
@@ -77,7 +72,7 @@ local validateAndApplyDefaults(definition) =
     [if sli.hasErrorRate() then 'errorTotalCounterName']: 'gitlab_sli_%s_total' % [self.counterName],
     [if sli.hasErrorRate() then 'errorCounterName']: 'gitlab_sli_%s_error_total' % [self.counterName],
     totalCounterName:
-      if sli.hasErrorRate() && !std.member(parent.excludeKindsFromSLI, errorRateKind) then
+      if sli.hasErrorRate() then
         self.errorTotalCounterName
       else
         self.apdexTotalCounterName,
@@ -117,9 +112,9 @@ local validateAndApplyDefaults(definition) =
         requestRate: rateMetric(parent.totalCounterName, extraSelector),
         significantLabels: parent.significantLabels,
 
-        [if parent.hasApdex() && !std.member(parent.excludeKindsFromSLI, apdexKind) then 'apdex']:
+        [if parent.hasApdex() then 'apdex']:
           successCounterApdex(parent.apdexSuccessCounterName, parent.apdexTotalCounterName, extraSelector),
-        [if parent.hasErrorRate() && !std.member(parent.excludeKindsFromSLI, errorRateKind) then 'errorRate']:
+        [if parent.hasErrorRate() then 'errorRate']:
           rateMetric(parent.errorCounterName, extraSelector),
       } + extraFields,
     },
