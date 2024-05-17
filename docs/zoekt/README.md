@@ -28,12 +28,8 @@ number of customers as part of this [epic](https://gitlab.com/groups/gitlab-org/
 
 #### Enabling/Disabling Zoekt search
 
-You can prevent Gitlab from using Zoekt integration for searching with the [`search_code_with_zoekt`](https://gitlab.com/gitlab-org/gitlab/blob/master/ee/config/feature_flags/development/search_code_with_zoekt.yml) feature flag, but leave the indexing integration itself enabled.
+You can prevent Gitlab from using Zoekt integration for searching by unchecking the checkbox `Enable exact code search` under the section `Exact code search configuration` found in the admin [settings](https://gitlab.com/admin/application_settings/advanced_search)(accessed by admins only) `Settings->Search`, but leave the indexing integration itself enabled.
 An example of when this is useful is during an incident where users are experiencing slow searches or Zoekt is unresponsive.
-
-```
-  /chatops run feature set search_code_with_zoekt false --production
-```
 
 #### Reallocating namespaces from one Zoekt node to another
 
@@ -95,23 +91,15 @@ Increase the number of [Zoekt replicas](https://gitlab.com/gitlab-com/gl-infra/k
 
 #### Pausing Zoekt indexing
 
-Zoekt indexing can be paused with the [`zoekt_pause_indexing`](https://gitlab.com/gitlab-org/gitlab/-/blob/181c48dda21c9f92b5eda3b25b21069fa09b4e73/config/feature_flags/ops/zoekt_pause_indexing.yml) feature flag. The [jobs are stored in a separate `ZSET`](https://docs.gitlab.com/ee/development/sidekiq/worker_attributes.html#job-pause-control) and re-enqueued when indexing is unpaused. An example
+Zoekt indexing can be paused by checking the checkbox `Pause indexing for exact code search` under the section `Exact code search configuration` found in the admin [settings](https://gitlab.com/admin/application_settings/advanced_search)(accessed by admins only) `Settings->Search`. The [jobs are stored in a separate `ZSET`](https://docs.gitlab.com/ee/development/sidekiq/worker_attributes.html#job-pause-control) and re-enqueued when indexing is unpaused. An example
 of when this is useful is during an incident when there are a large number of indexing Sidekiq jobs failing.
-
-```
-  /chatops run feature set zoekt_pause_indexing true --production
-```
 
 #### Disabling Zoekt indexing
 
-Zoekt indexing can be completely disabled with the [`index_code_with_zoekt`](https://gitlab.com/gitlab-org/gitlab/blob/master/ee/config/feature_flags/development/index_code_with_zoekt.yml) feature flag. Pausing indexing is the preferred method to halt Zoekt indexing.
+Zoekt indexing can be completely disabled by unchecking the checkbox `Enable indexing for exact code search` under the section `Exact code search configuration` found in the admin [settings](https://gitlab.com/admin/application_settings/advanced_search)(accessed by admins only) `Settings->Search`. Pausing indexing is the preferred method to halt Zoekt indexing.
 
 WARNING:
 Indexed data will be stale after indexing is re-enabled. Reindexing from scratch may be necessary to ensure up to date search results.
-
-```
-  /chatops run feature set index_code_with_zoekt false --production
-```
 
 #### Shards management
 
