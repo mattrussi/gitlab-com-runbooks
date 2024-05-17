@@ -50,10 +50,8 @@ basic.dashboard(
         yAxisLabel='Requests per Second',
         query=|||
           sum by (response_code_class) (
-            rate(
-              stackdriver_cloud_run_revision_run_googleapis_com_request_count{%(selector)s}[$__rate_interval]
-            )
-          )
+            stackdriver_cloud_run_revision_run_googleapis_com_request_count{%(selector)s}
+          ) / 60
         ||| % formatConfig,
         decimals=2,
         legendFormat='HTTP status {{response_code_class}}',
@@ -65,10 +63,8 @@ basic.dashboard(
         yAxisLabel='Requests per Second',
         query=|||
           sum by (region, location) (
-            rate(
-              stackdriver_cloud_run_revision_run_googleapis_com_request_count{%(selector)s}[$__rate_interval]
-            )
-          )
+            stackdriver_cloud_run_revision_run_googleapis_com_request_count{%(selector)s}
+          ) / 60
         ||| % formatConfig,
         decimals=2,
         legendFormat='Region {{location}}',
@@ -80,15 +76,12 @@ basic.dashboard(
         yAxisLabel='Error ratio',
         query=|||
           sum (
-            rate(
-              stackdriver_cloud_run_revision_run_googleapis_com_request_count{response_code_class="5xx",%(selector)s}[$__rate_interval]
-            )
+            stackdriver_cloud_run_revision_run_googleapis_com_request_count{response_code_class="5xx",%(selector)s}
+            OR on() vector(0)
           )
           /
           sum (
-            rate(
-              stackdriver_cloud_run_revision_run_googleapis_com_request_count{%(selector)s}[$__rate_interval]
-            )
+            stackdriver_cloud_run_revision_run_googleapis_com_request_count{%(selector)s}
           )
         ||| % formatConfig,
         decimals=2,
@@ -102,15 +95,12 @@ basic.dashboard(
         yAxisLabel='Error ratio',
         query=|||
           sum by(revision_name) (
-            rate(
-              stackdriver_cloud_run_revision_run_googleapis_com_request_count{response_code_class="5xx",%(selector)s}[$__rate_interval]
-            )
+            stackdriver_cloud_run_revision_run_googleapis_com_request_count{response_code_class="5xx",%(selector)s}
+            OR on(revision_name) vector(0)
           )
           / on(revision_name)
           sum by(revision_name) (
-            rate(
-              stackdriver_cloud_run_revision_run_googleapis_com_request_count{%(selector)s}[$__rate_interval]
-            )
+            stackdriver_cloud_run_revision_run_googleapis_com_request_count{%(selector)s}
           )
         ||| % formatConfig,
         decimals=2,
@@ -151,13 +141,11 @@ basic.dashboard(
       basic.timeseries(
         title='Runway Service Billable Container Instance Time',
         description='Billable time aggregated from all container instances.',
-        yAxisLabel='Requests per Second',
+        yAxisLabel='Seconds per Second',
         query=|||
           sum by (service_name) (
-            rate(
-              stackdriver_cloud_run_revision_run_googleapis_com_container_billable_instance_time{%(selector)s}[${__interval}]
-            )
-          )
+            stackdriver_cloud_run_revision_run_googleapis_com_container_billable_instance_time{%(selector)s}
+          ) / 60
         ||| % formatConfig,
         legendFormat='{{service_name}}',
         intervalFactor=2,
@@ -199,28 +187,24 @@ basic.dashboard(
         decimals=2,
       ),
       basic.networkTrafficGraph(
-        title='Runway Service Sent Bytes',
+        title='Sent bytes by Kind',
         description='Outgoing socket and HTTP response traffic, in bytes.',
         sendQuery=|||
-          sum by (revision_name, region, location, kind) (
-            rate(
-              stackdriver_cloud_run_revision_run_googleapis_com_container_network_sent_bytes_count{%(selector)s}[$__rate_interval]
-            )
-          )
+          sum by(kind) (
+            stackdriver_cloud_run_revision_run_googleapis_com_container_network_sent_bytes_count{%(selector)s}
+          ) / 60
         ||| % formatConfig,
-        legendFormat='{{kind}} {{revision_name}} {{region}} {{location}}',
+        legendFormat='{{kind}}',
       ),
       basic.networkTrafficGraph(
-        title='Runway Service Received Bytes',
+        title='Received bytes by Kind',
         description='Incoming socket and HTTP response traffic, in bytes.',
         receiveQuery=|||
-          sum by (revision_name, region, location, kind) (
-            rate(
-              stackdriver_cloud_run_revision_run_googleapis_com_container_network_received_bytes_count{%(selector)s}[$__rate_interval]
-            )
-          )
+          sum by(kind) (
+            stackdriver_cloud_run_revision_run_googleapis_com_container_network_received_bytes_count{%(selector)s}
+          ) * -1 / 60
         ||| % formatConfig,
-        legendFormat='{{kind}} {{revision_name}} {{region}} {{location}}',
+        legendFormat='{{kind}}',
       ),
       basic.percentageTimeseries(
         title='Runway Service Max Concurrent Requests',
@@ -245,10 +229,8 @@ basic.dashboard(
         description='Distribution of time spent starting a new container instance, in milliseconds.',
         query=|||
           sum by (revision_name, region, location) (
-            rate(
-              stackdriver_cloud_run_revision_run_googleapis_com_container_startup_latencies_sum{%(selector)s}[$__interval]
-            )
-          )
+            stackdriver_cloud_run_revision_run_googleapis_com_container_startup_latencies_sum{%(selector)s}
+          ) / 60
         ||| % formatConfig,
         legendFormat='{{revision_name}} {{region}} {{location}}',
         format='ms',
@@ -260,7 +242,7 @@ basic.dashboard(
         query=|||
           sum by (revision_name, region, location, probe_type, is_healthy) (
             stackdriver_cloud_run_revision_run_googleapis_com_container_completed_probe_attempt_count{%(selector)s, container_name='ingress'}
-          )
+          ) / 60
         ||| % formatConfig,
         legendFormat='{{revision_name}} {{region}} {{location}} {{probe_type}} healthy: {{is_healthy}}',
         intervalFactor=2,
@@ -269,9 +251,10 @@ basic.dashboard(
         title='Runway Service Container Healthcheck Latency',
         description='Distribution of time spent probing a container instance, in milliseconds.',
         query=|||
-          sum by (revision_name, region, location, probe_type, is_healthy) (
-            rate(
-              stackdriver_cloud_run_revision_run_googleapis_com_container_probe_attempt_latencies_sum{%(selector)s, container_name='ingress'}[$__interval]
+          histogram_quantile(
+            0.99,
+            sum by (le, revision_name, region, location, probe_type, is_healthy) (
+              max_over_time(stackdriver_cloud_run_revision_run_googleapis_com_container_probe_attempt_latencies_bucket{%(selector)s, container_name='ingress'}[$__interval])
             )
           )
         ||| % formatConfig,
