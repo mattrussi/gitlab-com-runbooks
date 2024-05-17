@@ -209,6 +209,7 @@ groups:
   - alert: ExtPvsServiceRunwayIngressTrafficCessation
     for: 5m
     annotations:
+      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The runway_ingress SLI of the ext-pvs service (`{{ $labels.stage }}`
         stage) has not received any traffic in the past 30m
       description: |
@@ -244,6 +245,7 @@ groups:
   - alert: ExtPvsServiceRunwayIngressTrafficAbsent
     for: 30m
     annotations:
+      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The runway_ingress SLI of the ext-pvs service (`{{ $labels.stage }}`
         stage) has not reported any traffic in the past 30m
       description: |
