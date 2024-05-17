@@ -951,9 +951,9 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_regional_sli_ops:rate_30m{component="runway_ingress",env="gprd",monitor="global",stage="main",type="ai-gateway"} == 0
+      gitlab_regional_sli_ops:rate_30m{component="runway_ingress",env="gprd",monitor="global",region=~"us-.*",stage="main",type="ai-gateway"} == 0
       and
-      gitlab_regional_sli_ops:rate_30m{component="runway_ingress",env="gprd",monitor="global",stage="main",type="ai-gateway"} offset 1h >= 0.16666666666666666
+      gitlab_regional_sli_ops:rate_30m{component="runway_ingress",env="gprd",monitor="global",region=~"us-.*",stage="main",type="ai-gateway"} offset 1h >= 0.16666666666666666
   - alert: AiGatewayServiceRunwayIngressTrafficAbsentRegional
     for: 30m
     annotations:
@@ -990,9 +990,9 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_regional_sli_ops:rate_5m{component="runway_ingress",env="gprd",monitor="global",stage="main",type="ai-gateway"} offset 1h
+      gitlab_regional_sli_ops:rate_5m{component="runway_ingress",env="gprd",monitor="global",region=~"us-.*",stage="main",type="ai-gateway"} offset 1h
       unless
-      gitlab_regional_sli_ops:rate_5m{component="runway_ingress",env="gprd",monitor="global",stage="main",type="ai-gateway"}
+      gitlab_regional_sli_ops:rate_5m{component="runway_ingress",env="gprd",monitor="global",region=~"us-.*",stage="main",type="ai-gateway"}
   - alert: AiGatewayServiceRunwayLbErrorSLOViolation
     for: 2m
     annotations:
@@ -1295,9 +1295,9 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_regional_sli_ops:rate_30m{component="runway_lb",env="gprd",monitor="global",stage="main",type="ai-gateway"} == 0
+      gitlab_regional_sli_ops:rate_30m{component="runway_lb",env="gprd",monitor="global",region=~"us-.*",stage="main",type="ai-gateway"} == 0
       and
-      gitlab_regional_sli_ops:rate_30m{component="runway_lb",env="gprd",monitor="global",stage="main",type="ai-gateway"} offset 1h >= 0.16666666666666666
+      gitlab_regional_sli_ops:rate_30m{component="runway_lb",env="gprd",monitor="global",region=~"us-.*",stage="main",type="ai-gateway"} offset 1h >= 0.16666666666666666
   - alert: AiGatewayServiceRunwayLbTrafficAbsentRegional
     for: 30m
     annotations:
@@ -1334,9 +1334,9 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_regional_sli_ops:rate_5m{component="runway_lb",env="gprd",monitor="global",stage="main",type="ai-gateway"} offset 1h
+      gitlab_regional_sli_ops:rate_5m{component="runway_lb",env="gprd",monitor="global",region=~"us-.*",stage="main",type="ai-gateway"} offset 1h
       unless
-      gitlab_regional_sli_ops:rate_5m{component="runway_lb",env="gprd",monitor="global",stage="main",type="ai-gateway"}
+      gitlab_regional_sli_ops:rate_5m{component="runway_lb",env="gprd",monitor="global",region=~"us-.*",stage="main",type="ai-gateway"}
   - alert: AiGatewayServiceServerApdexSLOViolation
     for: 2m
     annotations:

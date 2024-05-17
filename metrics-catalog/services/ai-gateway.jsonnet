@@ -49,7 +49,8 @@ metricsCatalog.serviceDefinition(
         includeMatchersForPrometheusSelector=false,
         matches={ 'json.jsonPayload.project_id': 'gitlab-runway-production' }
       ),
-    ]
+    ],
+    trafficCessationAlertConfig={ regional_component: { region: { re: 'us-.*' } } },
   )
   // Custom AI Gateway SLIs
   {
