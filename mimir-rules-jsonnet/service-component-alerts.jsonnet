@@ -15,7 +15,7 @@ local fileForService(service, selector, _extraArgs) =
 
 local servicesWithSlis = std.filter(
   function(service)
-    std.length(service.listServiceLevelIndicators()) > 0 && service.type != 'mimir',
+    std.length(service.listServiceLevelIndicators()) > 0,
   monitoredServices
 );
 

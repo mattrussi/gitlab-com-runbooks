@@ -151,8 +151,7 @@ metricsCatalog.serviceDefinition({
 
     mimir_querier: {
       staticLabels: staticLabels,
-      severity: 's3',
-      team: 'scalability:observability',
+      severity: 's2',
       userImpacting: false,
       featureCategory: 'not_owned',
       description: |||
@@ -191,7 +190,7 @@ metricsCatalog.serviceDefinition({
 
     mimir_query_frontend: {
       staticLabels: staticLabels,
-      severity: 's3',
+      severity: 's2',
       team: 'scalability:observability',
       userImpacting: false,
       featureCategory: 'not_owned',
@@ -230,7 +229,7 @@ metricsCatalog.serviceDefinition({
 
     mimir_query_scheduler: {
       staticLabels: staticLabels,
-      severity: 's3',
+      severity: 's2',
       team: 'scalability:observability',
       userImpacting: false,
       featureCategory: 'not_owned',
@@ -270,7 +269,7 @@ metricsCatalog.serviceDefinition({
 
     mimir_store_gateway: {
       staticLabels: staticLabels,
-      severity: 's3',
+      severity: 's2',
       team: 'scalability:observability',
       userImpacting: false,
       featureCategory: 'not_owned',
@@ -311,7 +310,7 @@ metricsCatalog.serviceDefinition({
 
     mimir_distributor: {
       staticLabels: staticLabels,
-      severity: 's3',
+      severity: 's2',
       team: 'scalability:observability',
       userImpacting: false,
       featureCategory: 'not_owned',
@@ -355,7 +354,7 @@ metricsCatalog.serviceDefinition({
 
     mimir_ingester: {
       staticLabels: staticLabels,
-      severity: 's3',
+      severity: 's2',
       team: 'scalability:observability',
       userImpacting: false,
       featureCategory: 'not_owned',
@@ -430,7 +429,7 @@ metricsCatalog.serviceDefinition({
 
     mimir_ruler: {
       staticLabels: staticLabels,
-      severity: 's3',
+      severity: 's2',
       team: 'scalability:observability',
       userImpacting: false,
       featureCategory: 'not_owned',
