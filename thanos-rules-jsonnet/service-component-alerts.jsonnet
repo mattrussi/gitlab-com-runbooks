@@ -1,4 +1,4 @@
-local aggregationSets = (import 'gitlab-metrics-config.libsonnet').aggregationSets;
+local aggregationSets = import 'prom-thanos-aggregation-sets.libsonnet';
 local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
 local separateGlobalRecordingFiles = (import 'recording-rules/lib/thanos/separate-global-recording-files.libsonnet').separateGlobalRecordingFiles;
 local alertGroupsForService = import 'alerts/service-component-alerts.libsonnet';

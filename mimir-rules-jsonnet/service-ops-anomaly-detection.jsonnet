@@ -2,7 +2,8 @@ local separateMimirRecordingFiles = (import 'recording-rules/lib/mimir/separate-
 local serviceOpsAnomalyDetection = import 'recording-rules/service-ops-anomaly-detection.libsonnet';
 local monitoredServices = (import 'gitlab-metrics-config.libsonnet').monitoredServices;
 
-local serviceAggregation = (import 'mimir-aggregation-sets.libsonnet').serviceSLIs;
+local aggregationSets = (import 'gitlab-metrics-config.libsonnet').aggregationSets;
+local serviceAggregation = aggregationSets.serviceSLIs;
 
 local outputPromYaml(groups) =
   std.manifestYamlDoc({ groups: groups });

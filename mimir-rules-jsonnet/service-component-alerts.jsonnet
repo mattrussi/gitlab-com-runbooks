@@ -1,8 +1,7 @@
-local aggregationSets = import 'mimir-aggregation-sets.libsonnet';
+local aggregationSets = (import 'gitlab-metrics-config.libsonnet').aggregationSets;
 local separateMimirRecordingFiles = (import 'recording-rules/lib/mimir/separate-mimir-recording-files.libsonnet').separateMimirRecordingFiles;
 local monitoredServices = (import 'gitlab-metrics-config.libsonnet').monitoredServices;
 local serviceAlertsGenerator = import 'slo-alerts/service-alerts-generator.libsonnet';
-local aggregationSets = import 'mimir-aggregation-sets.libsonnet';
 local alertGroupsForService = import 'alerts/service-component-alerts.libsonnet';
 
 local fileForService(service, selector, _extraArgs) =

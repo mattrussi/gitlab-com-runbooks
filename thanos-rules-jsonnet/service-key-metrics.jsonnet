@@ -2,7 +2,7 @@ local services = (import 'gitlab-metrics-config.libsonnet').monitoredServices;
 
 local filesForServices = (import 'recording-rules/service-key-metrics-rule-files.libsonnet').filesForServices;
 
-local aggregationSets = (import 'gitlab-metrics-config.libsonnet').aggregationSets;
+local aggregationSets = import 'prom-thanos-aggregation-sets.libsonnet';
 
 /**
  * The source SLI recording rules are each kept in their own files, generated from this

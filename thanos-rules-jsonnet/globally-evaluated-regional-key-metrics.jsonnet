@@ -16,6 +16,7 @@
 //
 // For more information see https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/3398
 local config = import 'gitlab-metrics-config.libsonnet';
+local aggregationSets = import 'prom-thanos-aggregation-sets.libsonnet';
 local recordingRules = import 'recording-rules/recording-rules.libsonnet';
 local intervalForDuration = import 'servicemetrics/interval-for-duration.libsonnet';
 local separateGlobalRecordingFiles = (import 'recording-rules/lib/thanos/separate-global-recording-files.libsonnet').separateGlobalRecordingFiles;
@@ -25,7 +26,7 @@ local aggregationSetTransformer = import 'servicemetrics/aggregation-set-transfo
 local applicableServices = std.filter(function(service)
   service.dangerouslyThanosEvaluated && service.regional && std.length(service.listServiceLevelIndicators()) > 0, config.monitoredServices);
 
-local regionalAggregationSet = aggregationSet.AggregationSet(config.aggregationSets.regionalComponentSLIs {
+local regionalAggregationSet = aggregationSet.AggregationSet(aggregationSets.regionalComponentSLIs {
   // So we only generate these rules for SLIs that are part of the regional aggregation.
   slisForService(serviceDefinition): std.filter(function(sli) sli.regional, serviceDefinition.listServiceLevelIndicators()),
 
@@ -124,7 +125,7 @@ separateGlobalRecordingFiles(
         outputPromYaml(
           transformRuleGroups(
             sourceAggregationSet=manipulatedRegionalSourceSLIs,
-            targetAggregationSet=config.aggregationSets.regionalServiceSLIs,
+            targetAggregationSet=aggregationSets.regionalServiceSLIs,
             extraSourceSelector=selector,
           ),
         ),
