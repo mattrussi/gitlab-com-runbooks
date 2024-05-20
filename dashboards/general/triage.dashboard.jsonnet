@@ -192,7 +192,7 @@ basic.dashboard(
     'Anomaly detection: Requests per second',
     |||
       (
-        gitlab_service_ops:rate{%(selector)s}
+        gitlab_service_ops:rate_5m{%(selector)s}
         -
         gitlab_service_ops:rate:prediction{%(selector)s}
       )
