@@ -53,7 +53,7 @@ There are other useful operational dashboards you can navigate to from the top r
 When checking tenants, the key metrics/questions here are:
 
 * Is the tenant exceeding a quota?
-  * To increase quotas see the [getting-started](./getting-starded.md) docs.
+  * To increase quotas, see the [getting-started](./getting-started.md) docs.
 * Is the "Newest seen sample age" recent.
   * If there is no recent samples coming in, this could indicate the remote-write client may be experiencing issues and not sending any data.
 * Are any series being dropped under "Distributor and ingester discarded samples rate".
