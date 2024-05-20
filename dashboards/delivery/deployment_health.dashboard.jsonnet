@@ -164,8 +164,8 @@ basic.dashboard(
       showcases the burnrates for the various windows of time that contribute
       towards to deployment health metric for the selected component, stage,
       and environment.
-        - [Error SLO Analysis](https://dashboards.gitlab.net/d/alerts-service_slo_error/alerts-global-service-aggregated-metrics-error-slo-analysis?orgId=1&var-PROMETHEUS_DS=Global&var-environment=%(environment)s&var-type=%(type)s&var-stage=%(stage)s&var-proposed_slo=0.999)
-        - [Apdex SLO Analysis](https://dashboards.gitlab.net/d/alerts-service_slo_apdex/alerts-global-service-aggregated-metrics-apdex-slo-analysis?orgId=1&var-PROMETHEUS_DS=Global&var-environment=%(environment)s&var-type=%(type)s&var-stage=%(stage)s&var-proposed_slo=0.997)
+        - [Error SLO Analysis](https://dashboards.gitlab.net/d/alerts-service_slo_error/alerts-global-service-aggregated-metrics-error-slo-analysis?orgId=1&var-environment=%(environment)s&var-type=%(type)s&var-stage=%(stage)s&var-proposed_slo=0.999)
+        - [Apdex SLO Analysis](https://dashboards.gitlab.net/d/alerts-service_slo_apdex/alerts-global-service-aggregated-metrics-apdex-slo-analysis?orgId=1&var-environment=%(environment)s&var-type=%(type)s&var-stage=%(stage)s&var-proposed_slo=0.997)
     ||| % { environment: '$environment', type: '$type', stage: '$stage' }
   ), gridPos={ x: 0, y: 3, w: 8, h: 8 }
 )
