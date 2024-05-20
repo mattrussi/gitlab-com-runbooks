@@ -26,7 +26,7 @@ Lets pick the `gitlab_sql_duration_seconds_bucket` metric.
 
 ![cardinality-overview](./img/cardinality-overview.png)
 
-If we click on that series, it will take us to a [series drill down dashboard](https://dashboards.gitlab.net/goto/e_lh7ahIR?orgId=1).
+If we click on that series, it will take us to a [series drill down dashboard](https://dashboards.gitlab.net/d/cardinality-management-metrics-detail/mimir-cardinality-metrics?var-metric=gitlab_sql_duration_seconds_bucket&var-tenant=gitlab-gprd&orgId=1).
 
 This view drills into the series and shows us a tree map which shows the label names with the highest amount of unique values.
 

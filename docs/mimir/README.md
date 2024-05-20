@@ -42,18 +42,18 @@ As well as checking if the problem is isolated to a single tenant, or effecting 
 
 We have some useful dashboards to reference for a quick view of system health:
 
-* [Overview](https://dashboards.gitlab.net/goto/X55QdiPSg?orgId=1)
-* [Writes](https://dashboards.gitlab.net/goto/TN4lOiESg?orgId=1)
-* [Reads](https://dashboards.gitlab.net/goto/53U_dmPSg?orgId=1)
-* [Rule Evalutions](https://dashboards.gitlab.net/goto/TnZ9dmPIg?orgId=1)
-* [Mimir Tenants](https://dashboards.gitlab.net/goto/H3cmKmESR?orgId=1)
+* [Overview](https://dashboards.gitlab.net/d/ffcd83628d7d4b5a03d1cafd159e6c9c/mimir-overview?orgId=1)
+* [Writes](https://dashboards.gitlab.net/d/8280707b8f16e7b87b840fc1cc92d4c5/mimir-writes?orgId=1)
+* [Reads](https://dashboards.gitlab.net/d/e327503188913dc38ad571c647eef643/mimir-reads?orgId=1)
+* [Rule Evaluations](https://dashboards.gitlab.net/d/631e15d5d85afb2ca8e35d62984eeaa0/mimir-ruler?orgId=1)
+* [Mimir Tenants](https://dashboards.gitlab.net/d/35fa247ce651ba189debf33d7ae41611/mimir-tenants?orgId=1)
 
 There are other useful operational dashboards you can navigate to from the top right, under "Mimir dashboards".
 
 When checking tenants, the key metrics/questions here are:
 
 * Is the tenant exceeding a quota?
-  * To increase quotas see [](./getting-starded.md)
+  * To increase quotas, see the [getting-started](./getting-started.md) docs.
 * Is the "Newest seen sample age" recent.
   * If there is no recent samples coming in, this could indicate the remote-write client may be experiencing issues and not sending any data.
 * Are any series being dropped under "Distributor and ingester discarded samples rate".
@@ -69,7 +69,7 @@ We use a slightly refactored version of the [Grafana Monitoring Mixin](https://g
 As such the Grafana Runbooks apply to our alerts as well, and are the best source of information for troubleshooting:
 
 * [Grafana Runbooks](https://grafana.com/docs/mimir/latest/manage/mimir-runbooks/)
-* [Grafana Dashboards](https://dashboards.gitlab.net/goto/NWm6gahIR?orgId=1)
+* [Grafana Dashboards](https://dashboards.gitlab.net/d/ffcd83628d7d4b5a03d1cafd159e6c9c/mimir-overview?orgId=1)
 
 ## Onboarding
 
