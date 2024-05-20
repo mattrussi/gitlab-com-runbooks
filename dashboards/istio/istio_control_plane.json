@@ -27,7 +27,7 @@
       "collapsed": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "PA258B30F88C30650"
+        "uid": "${datasource}"
       },
       "gridPos": {
         "h": 1,
@@ -41,7 +41,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PA258B30F88C30650"
+            "uid": "${datasource}"
           },
           "refId": "A"
         }
@@ -56,7 +56,7 @@
       "dashes": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "PA258B30F88C30650"
+        "uid": "${datasource}"
       },
       "fill": 1,
       "fillGradient": 0,
@@ -97,7 +97,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PA258B30F88C30650"
+            "uid": "${datasource}"
           },
           "editorMode": "code",
           "expr": "sum(istio_build{component=\"pilot\",environment=\"$environment\"}) by (tag)",
@@ -142,7 +142,7 @@
       "collapsed": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "PA258B30F88C30650"
+        "uid": "${datasource}"
       },
       "gridPos": {
         "h": 1,
@@ -156,7 +156,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PA258B30F88C30650"
+            "uid": "${datasource}"
           },
           "refId": "A"
         }
@@ -171,7 +171,7 @@
       "dashes": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "PA258B30F88C30650"
+        "uid": "${datasource}"
       },
       "fill": 1,
       "fillGradient": 0,
@@ -212,7 +212,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PA258B30F88C30650"
+            "uid": "${datasource}"
           },
           "expr": "process_virtual_memory_bytes{app=\"istiod\",environment=\"$environment\"}",
           "format": "time_series",
@@ -225,7 +225,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PA258B30F88C30650"
+            "uid": "${datasource}"
           },
           "expr": "process_resident_memory_bytes{app=\"istiod\",environment=\"$environment\"}",
           "format": "time_series",
@@ -237,7 +237,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PA258B30F88C30650"
+            "uid": "${datasource}"
           },
           "expr": "go_memstats_heap_sys_bytes{app=\"istiod\",environment=\"$environment\"}",
           "format": "time_series",
@@ -249,7 +249,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PA258B30F88C30650"
+            "uid": "${datasource}"
           },
           "expr": "go_memstats_heap_alloc_bytes{app=\"istiod\",environment=\"$environment\"}",
           "format": "time_series",
@@ -261,7 +261,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PA258B30F88C30650"
+            "uid": "${datasource}"
           },
           "expr": "go_memstats_alloc_bytes{app=\"istiod\",environment=\"$environment\"}",
           "format": "time_series",
@@ -273,7 +273,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PA258B30F88C30650"
+            "uid": "${datasource}"
           },
           "expr": "go_memstats_heap_inuse_bytes{app=\"istiod\",environment=\"$environment\"}",
           "format": "time_series",
@@ -286,7 +286,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PA258B30F88C30650"
+            "uid": "${datasource}"
           },
           "expr": "go_memstats_stack_inuse_bytes{app=\"istiod\",environment=\"$environment\"}",
           "format": "time_series",
@@ -298,7 +298,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PA258B30F88C30650"
+            "uid": "${datasource}"
           },
           "expr": "container_memory_working_set_bytes{container=~\"discovery\", pod=~\"istiod-.*|istio-pilot-.*\",environment=\"$environment\"}",
           "format": "time_series",
@@ -311,7 +311,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PA258B30F88C30650"
+            "uid": "${datasource}"
           },
           "expr": "container_memory_working_set_bytes{container=~\"istio-proxy\", pod=~\"istiod-.*|istio-pilot-.*\",environment=\"$environment\"}",
           "format": "time_series",
@@ -357,7 +357,7 @@
       "dashes": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "PA258B30F88C30650"
+        "uid": "${datasource}"
       },
       "fill": 1,
       "fillGradient": 0,
@@ -398,7 +398,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PA258B30F88C30650"
+            "uid": "${datasource}"
           },
           "expr": "sum(irate(container_cpu_usage_seconds_total{container=\"discovery\", pod=~\"istiod-.*|istio-pilot-.*\",environment=\"$environment\"}[1m]))",
           "format": "time_series",
@@ -409,7 +409,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PA258B30F88C30650"
+            "uid": "${datasource}"
           },
           "expr": "irate(process_cpu_seconds_total{app=\"istiod\",environment=\"$environment\"}[1m])",
           "format": "time_series",
@@ -422,7 +422,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PA258B30F88C30650"
+            "uid": "${datasource}"
           },
           "expr": "sum(irate(container_cpu_usage_seconds_total{container=\"istio-proxy\", pod=~\"istiod-.*|istio-pilot-.*\",environment=\"$environment\"}[1m]))",
           "format": "time_series",
@@ -470,7 +470,7 @@
       "dashes": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "PA258B30F88C30650"
+        "uid": "${datasource}"
       },
       "fill": 1,
       "fillGradient": 0,
@@ -511,7 +511,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PA258B30F88C30650"
+            "uid": "${datasource}"
           },
           "expr": "container_fs_usage_bytes{container=\"discovery\", pod=~\"istiod-.*|istio-pilot-.*\",environment=\"$environment\"}",
           "format": "time_series",
@@ -523,7 +523,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PA258B30F88C30650"
+            "uid": "${datasource}"
           },
           "expr": "container_fs_usage_bytes{container=\"istio-proxy\", pod=~\"istiod-.*|istio-pilot-.*\",environment=\"$environment\"}",
           "format": "time_series",
@@ -571,7 +571,7 @@
       "dashes": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "PA258B30F88C30650"
+        "uid": "${datasource}"
       },
       "fill": 1,
       "fillGradient": 0,
@@ -612,7 +612,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PA258B30F88C30650"
+            "uid": "${datasource}"
           },
           "expr": "go_goroutines{app=\"istiod\",environment=\"$environment\"}",
           "format": "time_series",
@@ -657,7 +657,7 @@
       "collapsed": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "PA258B30F88C30650"
+        "uid": "${datasource}"
       },
       "gridPos": {
         "h": 1,
@@ -671,7 +671,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PA258B30F88C30650"
+            "uid": "${datasource}"
           },
           "refId": "A"
         }
@@ -686,7 +686,7 @@
       "dashes": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "PA258B30F88C30650"
+        "uid": "${datasource}"
       },
       "description": "Shows the rate of pilot pushes",
       "fill": 1,
@@ -729,7 +729,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PA258B30F88C30650"
+            "uid": "${datasource}"
           },
           "expr": "sum(irate(pilot_xds_pushes{type=\"cds\",environment=\"$environment\"}[1m]))",
           "format": "time_series",
@@ -740,7 +740,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PA258B30F88C30650"
+            "uid": "${datasource}"
           },
           "expr": "sum(irate(pilot_xds_pushes{type=\"eds\",environment=\"$environment\"}[1m]))",
           "format": "time_series",
@@ -751,7 +751,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PA258B30F88C30650"
+            "uid": "${datasource}"
           },
           "expr": "sum(irate(pilot_xds_pushes{type=\"lds\",environment=\"$environment\"}[1m]))",
           "format": "time_series",
@@ -762,7 +762,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PA258B30F88C30650"
+            "uid": "${datasource}"
           },
           "expr": "sum(irate(pilot_xds_pushes{type=\"rds\",environment=\"$environment\"}[1m]))",
           "format": "time_series",
@@ -773,7 +773,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PA258B30F88C30650"
+            "uid": "${datasource}"
           },
           "expr": "sum(irate(pilot_xds_pushes{type=\"sds\",environment=\"$environment\"}[1m]))",
           "interval": "",
@@ -783,7 +783,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PA258B30F88C30650"
+            "uid": "${datasource}"
           },
           "expr": "sum(irate(pilot_xds_pushes{type=\"nds\",environment=\"$environment\"}[1m]))",
           "interval": "",
@@ -831,7 +831,7 @@
       "dashes": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "PA258B30F88C30650"
+        "uid": "${datasource}"
       },
       "description": "Captures a variety of pilot errors",
       "fill": 1,
@@ -875,7 +875,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PA258B30F88C30650"
+            "uid": "${datasource}"
           },
           "expr": "sum(pilot_xds_cds_reject{app=\"istiod\",environment=\"$environment\"}) or (absent(pilot_xds_cds_reject{app=\"istiod\",environment=\"$environment\"}) - 1)",
           "format": "time_series",
@@ -887,7 +887,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PA258B30F88C30650"
+            "uid": "${datasource}"
           },
           "expr": "sum(pilot_xds_eds_reject{app=\"istiod\",environment=\"$environment\"}) or (absent(pilot_xds_eds_reject{app=\"istiod\",environment=\"$environment\"}) - 1)",
           "format": "time_series",
@@ -899,7 +899,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PA258B30F88C30650"
+            "uid": "${datasource}"
           },
           "expr": "sum(pilot_xds_rds_reject{app=\"istiod\",environment=\"$environment\"}) or (absent(pilot_xds_rds_reject{app=\"istiod\",environment=\"$environment\"}) - 1)",
           "format": "time_series",
@@ -911,7 +911,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PA258B30F88C30650"
+            "uid": "${datasource}"
           },
           "expr": "sum(pilot_xds_lds_reject{app=\"istiod\",environment=\"$environment\"}) or (absent(pilot_xds_lds_reject{app=\"istiod\",environment=\"$environment\"}) - 1)",
           "format": "time_series",
@@ -923,7 +923,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PA258B30F88C30650"
+            "uid": "${datasource}"
           },
           "expr": "sum(rate(pilot_xds_write_timeout{app=\"istiod\",environment=\"$environment\"}[1m]))",
           "format": "time_series",
@@ -934,7 +934,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PA258B30F88C30650"
+            "uid": "${datasource}"
           },
           "expr": "sum(rate(pilot_total_xds_internal_errors{app=\"istiod\",environment=\"$environment\"}[1m]))",
           "format": "time_series",
@@ -946,7 +946,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PA258B30F88C30650"
+            "uid": "${datasource}"
           },
           "expr": "sum(rate(pilot_total_xds_rejects{app=\"istiod\",environment=\"$environment\"}[1m]))",
           "format": "time_series",
@@ -958,7 +958,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PA258B30F88C30650"
+            "uid": "${datasource}"
           },
           "expr": "sum(rate(pilot_xds_push_context_errors{app=\"istiod\",environment=\"$environment\"}[1m]))",
           "format": "time_series",
@@ -970,7 +970,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PA258B30F88C30650"
+            "uid": "${datasource}"
           },
           "expr": "sum(rate(pilot_xds_write_timeout{app=\"istiod\",environment=\"$environment\"}[1m]))",
           "format": "time_series",
@@ -1016,7 +1016,7 @@
       "dashes": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "PA258B30F88C30650"
+        "uid": "${datasource}"
       },
       "description": "Shows the total time it takes to push a config update to a proxy",
       "fill": 1,
@@ -1058,7 +1058,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PA258B30F88C30650"
+            "uid": "${datasource}"
           },
           "expr": "histogram_quantile(0.5, sum(rate(pilot_proxy_convergence_time_bucket{environment=\"$environment\"}[1m])) by (le))",
           "format": "time_series",
@@ -1069,7 +1069,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PA258B30F88C30650"
+            "uid": "${datasource}"
           },
           "expr": "histogram_quantile(0.9, sum(rate(pilot_proxy_convergence_time_bucket{environment=\"$environment\"}[1m])) by (le))",
           "format": "time_series",
@@ -1080,7 +1080,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PA258B30F88C30650"
+            "uid": "${datasource}"
           },
           "expr": "histogram_quantile(0.99, sum(rate(pilot_proxy_convergence_time_bucket{environment=\"$environment\"}[1m])) by (le))",
           "format": "time_series",
@@ -1091,7 +1091,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PA258B30F88C30650"
+            "uid": "${datasource}"
           },
           "expr": "histogram_quantile(0.999, sum(rate(pilot_proxy_convergence_time_bucket{environment=\"$environment\"}[1m])) by (le))",
           "format": "time_series",
@@ -1137,7 +1137,7 @@
       "dashes": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "PA258B30F88C30650"
+        "uid": "${datasource}"
       },
       "fill": 1,
       "fillGradient": 0,
@@ -1180,7 +1180,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PA258B30F88C30650"
+            "uid": "${datasource}"
           },
           "expr": "pilot_conflict_inbound_listener{app=\"istiod\",environment=\"$environment\"}",
           "format": "time_series",
@@ -1192,7 +1192,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PA258B30F88C30650"
+            "uid": "${datasource}"
           },
           "expr": "pilot_conflict_outbound_listener_http_over_current_tcp{app=\"istiod\",environment=\"$environment\"}",
           "format": "time_series",
@@ -1204,7 +1204,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PA258B30F88C30650"
+            "uid": "${datasource}"
           },
           "expr": "pilot_conflict_outbound_listener_tcp_over_current_tcp{app=\"istiod\",environment=\"$environment\"}",
           "format": "time_series",
@@ -1216,7 +1216,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PA258B30F88C30650"
+            "uid": "${datasource}"
           },
           "expr": "pilot_conflict_outbound_listener_tcp_over_current_http{app=\"istiod\",environment=\"$environment\"}",
           "format": "time_series",
@@ -1263,7 +1263,7 @@
       "dashes": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "PA258B30F88C30650"
+        "uid": "${datasource}"
       },
       "fill": 1,
       "fillGradient": 0,
@@ -1304,7 +1304,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PA258B30F88C30650"
+            "uid": "${datasource}"
           },
           "expr": "avg(pilot_virt_services{app=\"istiod\",environment=\"$environment\"})",
           "format": "time_series",
@@ -1315,7 +1315,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PA258B30F88C30650"
+            "uid": "${datasource}"
           },
           "expr": "avg(pilot_services{app=\"istiod\",environment=\"$environment\"})",
           "format": "time_series",
@@ -1326,7 +1326,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PA258B30F88C30650"
+            "uid": "${datasource}"
           },
           "expr": "sum(pilot_xds{app=\"istiod\",environment=\"$environment\"}) by (pod)",
           "format": "time_series",
@@ -1369,7 +1369,7 @@
       "collapsed": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "PA258B30F88C30650"
+        "uid": "${datasource}"
       },
       "gridPos": {
         "h": 1,
@@ -1383,7 +1383,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PA258B30F88C30650"
+            "uid": "${datasource}"
           },
           "refId": "A"
         }
@@ -1398,7 +1398,7 @@
       "dashes": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "PA258B30F88C30650"
+        "uid": "${datasource}"
       },
       "description": "Shows details about Envoy proxies in the mesh",
       "fill": 1,
@@ -1440,7 +1440,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PA258B30F88C30650"
+            "uid": "${datasource}"
           },
           "expr": "sum(irate(envoy_cluster_upstream_cx_total{cluster_name=\"xds-grpc\",environment=\"$environment\"}[1m]))",
           "format": "time_series",
@@ -1452,7 +1452,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PA258B30F88C30650"
+            "uid": "${datasource}"
           },
           "expr": "sum(irate(envoy_cluster_upstream_cx_connect_fail{cluster_name=\"xds-grpc\",environment=\"$environment\"}[1m]))",
           "format": "time_series",
@@ -1464,7 +1464,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PA258B30F88C30650"
+            "uid": "${datasource}"
           },
           "expr": "sum(increase(envoy_server_hot_restart_epoch[1m]))",
           "format": "time_series",
@@ -1510,7 +1510,7 @@
       "dashes": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "PA258B30F88C30650"
+        "uid": "${datasource}"
       },
       "fill": 1,
       "fillGradient": 0,
@@ -1551,7 +1551,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PA258B30F88C30650"
+            "uid": "${datasource}"
           },
           "expr": "sum(envoy_cluster_upstream_cx_active{cluster_name=\"xds-grpc\",environment=\"$environment\"})",
           "format": "time_series",
@@ -1598,7 +1598,7 @@
       "dashes": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "PA258B30F88C30650"
+        "uid": "${datasource}"
       },
       "description": "Shows the size of XDS requests and responses",
       "fill": 1,
@@ -1642,7 +1642,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PA258B30F88C30650"
+            "uid": "${datasource}"
           },
           "expr": "max(rate(envoy_cluster_upstream_cx_rx_bytes_total{cluster_name=\"xds-grpc\",environment=\"$environment\"}[1m]))",
           "format": "time_series",
@@ -1654,7 +1654,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PA258B30F88C30650"
+            "uid": "${datasource}"
           },
           "expr": "quantile(0.5, rate(envoy_cluster_upstream_cx_rx_bytes_total{cluster_name=\"xds-grpc\",environment=\"$environment\"}[1m]))",
           "format": "time_series",
@@ -1666,7 +1666,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PA258B30F88C30650"
+            "uid": "${datasource}"
           },
           "expr": "max(rate(envoy_cluster_upstream_cx_tx_bytes_total{cluster_name=\"xds-grpc\",environment=\"$environment\"}[1m]))",
           "format": "time_series",
@@ -1677,7 +1677,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PA258B30F88C30650"
+            "uid": "${datasource}"
           },
           "expr": "quantile(.5, rate(envoy_cluster_upstream_cx_tx_bytes_total{cluster_name=\"xds-grpc\",environment=\"$environment\"}[1m]))",
           "format": "time_series",
@@ -1720,7 +1720,7 @@
       "collapsed": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "PA258B30F88C30650"
+        "uid": "${datasource}"
       },
       "gridPos": {
         "h": 1,
@@ -1734,7 +1734,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PA258B30F88C30650"
+            "uid": "${datasource}"
           },
           "refId": "A"
         }
@@ -1749,7 +1749,7 @@
       "dashes": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "PA258B30F88C30650"
+        "uid": "${datasource}"
       },
       "fieldConfig": {
         "defaults": {
@@ -1797,7 +1797,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PA258B30F88C30650"
+            "uid": "${datasource}"
           },
           "expr": "sum(rate(galley_validation_passed[1m]))",
           "interval": "",
@@ -1807,7 +1807,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PA258B30F88C30650"
+            "uid": "${datasource}"
           },
           "expr": "sum(rate(galley_validation_failed[1m]))",
           "interval": "",
@@ -1852,7 +1852,7 @@
       "dashes": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "PA258B30F88C30650"
+        "uid": "${datasource}"
       },
       "description": "",
       "fieldConfig": {
@@ -1900,7 +1900,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PA258B30F88C30650"
+            "uid": "${datasource}"
           },
           "expr": "sum(rate(sidecar_injection_success_total[1m]))",
           "interval": "",
@@ -1910,7 +1910,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PA258B30F88C30650"
+            "uid": "${datasource}"
           },
           "expr": "sum(rate(sidecar_injection_failure_total[1m]))",
           "interval": "",
@@ -1960,8 +1960,8 @@
       {
         "current": {
           "selected": false,
-          "text": "default",
-          "value": "default"
+          "text": "Mimir - Gitlab - All Environments",
+          "value": "Mimir - Gitlab - All Environments"
         },
         "hide": 0,
         "includeAll": false,
@@ -1983,7 +1983,7 @@
         },
         "datasource": {
           "type": "prometheus",
-          "uid": "PA258B30F88C30650"
+          "uid": "${datasource}"
         },
         "definition": "label_values(environment)",
         "hide": 0,
