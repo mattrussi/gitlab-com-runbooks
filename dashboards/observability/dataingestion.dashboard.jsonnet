@@ -4,12 +4,14 @@ local layout = import 'grafana/layout.libsonnet';
 local row = grafana.row;
 local templates = import 'grafana/templates.libsonnet';
 local template = grafana.template;
+local mimirHelper = import 'services/lib/mimir-helpers.libsonnet';
 
 basic.dashboard(
   'Data Ingestion',
   tags=[
     'gitlab-observability',
   ],
+  defaultDatasource=mimirHelper.mimirDatasource('Gitlab Observability')
 )
 .addTemplate(
   template.custom(
