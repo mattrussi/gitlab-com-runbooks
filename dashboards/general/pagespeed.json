@@ -2777,7 +2777,7 @@
           "text": "All",
           "value": "$__all"
         },
-        "datasource": "Global",
+        "datasource": "Mimir - Gitlab - All Environments",
         "definition": "",
         "hide": 0,
         "includeAll": true,

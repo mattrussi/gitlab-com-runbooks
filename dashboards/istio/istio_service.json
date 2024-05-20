@@ -2830,8 +2830,8 @@
       {
         "current": {
           "selected": false,
-          "text": "default",
-          "value": "default"
+          "text": "Mimir - Gitlab - All Environments",
+          "value": "Mimir - Gitlab - All Environments"
         },
         "hide": 0,
         "includeAll": false,
