@@ -1,11 +1,11 @@
 local sliPromql = import './sli_promql.libsonnet';
 local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
+local basic = import 'grafana/basic.libsonnet';
 local promQuery = import 'grafana/prom_query.libsonnet';
 local multiburnFactors = import 'mwmbr/multiburn_factors.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
 local objects = import 'utils/objects.libsonnet';
 local strings = import 'utils/strings.libsonnet';
-local statPanel = grafana.statPanel;
 
 local descriptionMappings = [
   /* 0 */
@@ -98,7 +98,7 @@ local apdexStatusQuery(selectorHash, type, aggregationSet, fixedThreshold) =
   local allSelectors = selectorHash + aggregationSet.selector;
 
   local sloExpression = if fixedThreshold == null then
-    'on(tier, type) group_left() (1 - (%(burnrateFactor)g * (1 - slo:min:events:gitlab_service_apdex:ratio{%(slaSelector)s})))'
+    'on(tier, type, __tenant_id__) group_left() (1 - (%(burnrateFactor)g * (1 - slo:min:events:gitlab_service_apdex:ratio{%(slaSelector)s})))'
   else
     '(1 - (%(burnrateFactor)g * (1 - %(fixedSlo)g)))';
 
@@ -155,7 +155,7 @@ local errorRateStatusQuery(selectorHash, type, aggregationSet, fixedThreshold) =
 
   local sloExpression =
     if fixedThreshold == null then
-      'on(tier, type) group_left() (%(burnrateFactor)s * slo:max:events:gitlab_service_errors:ratio{%(slaSelector)s})'
+      'on(tier, type, __tenant_id__) group_left() (%(burnrateFactor)s * slo:max:events:gitlab_service_errors:ratio{%(slaSelector)s})'
     else
       '(%(burnrateFactor)g * %(fixedSlo)g)';
   local formatConfig = std.prune({
@@ -202,10 +202,19 @@ local errorRateStatusQuery(selectorHash, type, aggregationSet, fixedThreshold) =
     sloExpr6h: strings.chomp(sloExpr6h),
   };
 
-
 local statusDescriptionPanel(legendFormat, query) =
-  statPanel.new(
-    '',
+  basic.statPanel(
+    title='Status',
+    panelTitle='',
+    color=std.mapWithIndex(
+      function(index, v)
+        {
+          value: index,
+          color: v.color,
+        },
+      descriptionMappings
+    ),
+    query=query,
     allValues=false,
     reducerFunction='lastNotNull',
     graphMode='none',
@@ -213,11 +222,8 @@ local statusDescriptionPanel(legendFormat, query) =
     justifyMode='auto',
     thresholdsMode='absolute',
     unit='none',
-    displayName='Status',
     orientation='vertical',
-  )
-  .addMapping(
-    {
+    mappings=[{
       type: 'value',
       options: objects.fromPairs(
         std.mapWithIndex(
@@ -226,24 +232,8 @@ local statusDescriptionPanel(legendFormat, query) =
           descriptionMappings
         )
       ),
-    }
-  )
-  .addThresholds(
-    std.mapWithIndex(
-      function(index, v)
-        {
-          value: index,
-          color: v.color,
-        },
-      descriptionMappings
-    ),
-  )
-  .addTarget(
-    promQuery.target(
-      query,
-      legendFormat=legendFormat,
-      instant=true
-    )
+    }],
+    legendFormat=legendFormat,
   );
 
 {

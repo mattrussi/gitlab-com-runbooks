@@ -948,6 +948,7 @@ local validateTags(tags) =
     panelTitle,
     color,
     query,
+    datasource='$PROMETHEUS_DS',
     legendFormat='',
     format='time_series',
     description='',
@@ -981,6 +982,7 @@ local validateTags(tags) =
     statPanel.new(
       panelTitle,
       description=description,
+      datasource=datasource,
       allValues=allValues,
       reducerFunction=reducerFunction,
       fields=fields,
