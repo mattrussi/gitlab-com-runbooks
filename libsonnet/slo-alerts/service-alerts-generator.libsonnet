@@ -70,7 +70,7 @@ local apdexAlertForSLIForAlertDescriptor(service, sli, alertDescriptor, extraSel
       ]) then
         sli.useConfidenceLevelForSLIAlerts
       else
-        std.trace('warning: SLI %s wants to use confidence intervals, but its not supported on some of the aggregation sets used for SLO alerting' % [sli.name], null)
+        std.trace('warning: SLI %s-%s wants to use confidence intervals for apdex, but its not supported on the %s aggregation set used for SLO alerting' % [service.type, sli.name, alertDescriptor.aggregationSet.id], null)
     else
       null;
 
@@ -128,7 +128,7 @@ local errorAlertForSLIForAlertDescriptor(service, sli, alertDescriptor, extraSel
       ]) then
         sli.useConfidenceLevelForSLIAlerts
       else
-        std.trace('warning: SLI %s wants to use confidence intervals, but its not supported on some of the aggregation sets used for SLO alerting' % [sli.name], null)
+        std.trace('warning: SLI %s-%s wants to use confidence intervals for errors, but its not supported on the %s aggregation set used for SLO alerting' % [service.type, sli.name, alertDescriptor.aggregationSet.id], null)
     else
       null;
 
