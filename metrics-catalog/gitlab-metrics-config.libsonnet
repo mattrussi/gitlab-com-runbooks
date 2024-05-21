@@ -5,9 +5,9 @@ local allUtilizationMetrics = import './utilization/all.libsonnet';
 local labelSet = import 'label-taxonomy/label-set.libsonnet';
 local rawServiceCatalog = import 'raw-catalog.jsonnet';
 local serviceCatalog = import 'service-catalog/service-catalog.libsonnet';
+local mimirHelper = import 'services/lib/mimir-helpers.libsonnet';
 local overridenStageGroupMapping = import 'stage-group-mapping-with-overrides.jsonnet';
 local objects = import 'utils/objects.libsonnet';
-local mimirHelper = import 'services/lib/mimir-helpers.libsonnet';
 
 // Site-wide configuration options
 {
