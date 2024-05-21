@@ -86,8 +86,8 @@ If not, you will need to save the cluster information manually instead:
 ```shell
 KUBERNETES_ENDPOINT="$(kubectl config view -o jsonpath='{.clusters[?(@.name == "gke_gitlab-pre_us-east1_pre-gitlab-gke")].cluster.server}')"
 CA_CERT="$(kubectl config view --raw -o jsonpath='{.clusters[?(@.name == "gke_gitlab-pre_us-east1_pre-gitlab-gke")].cluster.certificate-authority-data}' | base64 -d)"
-# Vault secret path: shared/kubernetes/<environment>/<cluster name>
-vault kv put shared/kubernetes/pre/pre-gitlab-gke endpoint="${KUBERNETES_ENDPOINT}" ca_cert="${CA_CERT}"
+# Vault secret path: shared/kubernetes/clusters/<environment>/<cluster name>
+vault kv put shared/kubernetes/clusters/pre/pre-gitlab-gke endpoint="${KUBERNETES_ENDPOINT}" ca_cert="${CA_CERT}"
 ```
 
 If the `vault-k8s-secrets` chart has been installed to enable authentication into the cluster via Vault, you will also need to save its JWT under a different path:
