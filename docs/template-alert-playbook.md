@@ -11,6 +11,7 @@
 ## Services
 
 - All alerts require one or more Service Overview links
+- Team that owns the service
 
 ## Metrics
 
