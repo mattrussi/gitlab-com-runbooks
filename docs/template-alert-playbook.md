@@ -46,6 +46,11 @@
 - How and when to escalate
 - List of SME's and people who can help
 
+# Alert definitions
+
+- Link to the definition of this alert for review and tuning
+- Advice or limitations on how we should or shouldn't tune the alert
+
 # Related Links
 
 - Related alerts
