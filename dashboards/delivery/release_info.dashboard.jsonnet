@@ -231,7 +231,7 @@ local monthlyReleaseStatusStatPanel =
             },
             Time: {
               aggregations: [
-                'min',
+                'max',
               ],
               operation: 'aggregate',
             },
@@ -244,7 +244,7 @@ local monthlyReleaseStatusStatPanel =
           fields: {},
           sort: [
             {
-              field: 'Time (min)',
+              field: 'Time (max)',
               desc: true,
             },
           ],
