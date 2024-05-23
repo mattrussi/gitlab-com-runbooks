@@ -28,6 +28,13 @@ groups:
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
+      feature_category: saas_provisioning
+      monitor: global
+      product_stage: fulfillment
+      stage_group: provision
+    expr: "1"
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
       feature_category: advisory_database
       monitor: global
       product_stage: secure
@@ -252,6 +259,13 @@ groups:
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
+      feature_category: customersdot_application
+      monitor: global
+      product_stage: fulfillment
+      stage_group: fulfillment_platform
+    expr: "1"
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
       feature_category: database
       monitor: global
       product_stage: data_stores
@@ -406,7 +420,21 @@ groups:
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
+      feature_category: fulfillment_infrastructure
+      monitor: global
+      product_stage: fulfillment
+      stage_group: fulfillment_platform
+    expr: "1"
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
       feature_category: fulfillment_internal_admin_tooling
+      monitor: global
+      product_stage: fulfillment
+      stage_group: fulfillment_platform
+    expr: "1"
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
+      feature_category: fulfillment_admin_tooling
       monitor: global
       product_stage: fulfillment
       stage_group: fulfillment_platform
@@ -651,6 +679,13 @@ groups:
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
+      feature_category: sm_provisioning
+      monitor: global
+      product_stage: fulfillment
+      stage_group: provision
+    expr: "1"
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
       feature_category: portfolio_management
       monitor: global
       product_stage: plan
@@ -827,6 +862,13 @@ groups:
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: subscription_management
+      monitor: global
+      product_stage: fulfillment
+      stage_group: subscription_management
+    expr: "1"
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
+      feature_category: purchase
       monitor: global
       product_stage: fulfillment
       stage_group: subscription_management

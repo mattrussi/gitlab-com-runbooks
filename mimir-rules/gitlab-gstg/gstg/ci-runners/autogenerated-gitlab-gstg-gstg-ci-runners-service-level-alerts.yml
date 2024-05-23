@@ -7,7 +7,6 @@ groups:
   - alert: CiRunnersServiceLoadbalancerErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The loadbalancer SLI of the ci-runners service (`{{ $labels.stage }}`
         stage) has an error rate violating SLO
       description: |
@@ -52,7 +51,6 @@ groups:
   - alert: CiRunnersServiceLoadbalancerErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The loadbalancer SLI of the ci-runners service (`{{ $labels.stage }}`
         stage) has an error rate violating SLO
       description: |
@@ -97,7 +95,6 @@ groups:
   - alert: CiRunnersServiceLoadbalancerTrafficCessation
     for: 5m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The loadbalancer SLI of the ci-runners service (`{{ $labels.stage }}`
         stage) has not received any traffic in the past 30m
       description: |
@@ -129,7 +126,6 @@ groups:
   - alert: CiRunnersServiceLoadbalancerTrafficAbsent
     for: 30m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The loadbalancer SLI of the ci-runners service (`{{ $labels.stage }}`
         stage) has not reported any traffic in the past 30m
       description: |
@@ -163,7 +159,6 @@ groups:
   - alert: CiRunnersServicePollingErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The polling SLI of the ci-runners service (`{{ $labels.stage }}` stage)
         has an error rate violating SLO
       description: |
@@ -214,7 +209,6 @@ groups:
   - alert: CiRunnersServicePollingErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The polling SLI of the ci-runners service (`{{ $labels.stage }}` stage)
         has an error rate violating SLO
       description: |
@@ -265,7 +259,6 @@ groups:
   - alert: CiRunnersServicePollingTrafficCessation
     for: 5m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The polling SLI of the ci-runners service (`{{ $labels.stage }}` stage)
         has not received any traffic in the past 30m
       description: |
@@ -303,7 +296,6 @@ groups:
   - alert: CiRunnersServicePollingTrafficAbsent
     for: 30m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The polling SLI of the ci-runners service (`{{ $labels.stage }}` stage)
         has not reported any traffic in the past 30m
       description: |
@@ -343,7 +335,6 @@ groups:
   - alert: CiRunnersServiceQueuingQueriesDurationApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The queuing_queries_duration SLI of the ci-runners service (`{{ $labels.stage
         }}` stage) has an apdex violating SLO
       description: |
@@ -398,7 +389,6 @@ groups:
   - alert: CiRunnersServiceQueuingQueriesDurationApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The queuing_queries_duration SLI of the ci-runners service (`{{ $labels.stage
         }}` stage) has an apdex violating SLO
       description: |
@@ -453,7 +443,6 @@ groups:
   - alert: CiRunnersServiceQueuingQueriesDurationTrafficCessation
     for: 5m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The queuing_queries_duration SLI of the ci-runners service (`{{ $labels.stage
         }}` stage) has not received any traffic in the past 30m
       description: |
@@ -492,7 +481,6 @@ groups:
   - alert: CiRunnersServiceQueuingQueriesDurationTrafficAbsent
     for: 30m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The queuing_queries_duration SLI of the ci-runners service (`{{ $labels.stage
         }}` stage) has not reported any traffic in the past 30m
       description: |
@@ -533,7 +521,6 @@ groups:
   - alert: CiRunnersServiceSaasLinuxRunnerImagePullFailuresErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The saas_linux_runner_image_pull_failures SLI of the ci-runners service
         (`{{ $labels.stage }}` stage) has an error rate violating SLO
       description: |
@@ -584,7 +571,6 @@ groups:
   - alert: CiRunnersServiceSaasLinuxRunnerImagePullFailuresErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The saas_linux_runner_image_pull_failures SLI of the ci-runners service
         (`{{ $labels.stage }}` stage) has an error rate violating SLO
       description: |
@@ -635,7 +621,6 @@ groups:
   - alert: CiRunnersServiceSaasLinuxRunnerImagePullFailuresTrafficCessation
     for: 5m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The saas_linux_runner_image_pull_failures SLI of the ci-runners service
         (`{{ $labels.stage }}` stage) has not received any traffic in the past 30m
       description: |
@@ -673,7 +658,6 @@ groups:
   - alert: CiRunnersServiceSaasLinuxRunnerImagePullFailuresTrafficAbsent
     for: 30m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The saas_linux_runner_image_pull_failures SLI of the ci-runners service
         (`{{ $labels.stage }}` stage) has not reported any traffic in the past 30m
       description: |
@@ -713,7 +697,6 @@ groups:
   - alert: CiRunnersServiceSaasRunnerQueuesApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The saas_runner_queues SLI of the ci-runners service (`{{ $labels.stage
         }}` stage) has an apdex violating SLO
       description: |
@@ -769,7 +752,6 @@ groups:
   - alert: CiRunnersServiceSaasRunnerQueuesApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The saas_runner_queues SLI of the ci-runners service (`{{ $labels.stage
         }}` stage) has an apdex violating SLO
       description: |
@@ -825,7 +807,6 @@ groups:
   - alert: CiRunnersServiceSaasRunnerQueuesErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The saas_runner_queues SLI of the ci-runners service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
@@ -878,7 +859,6 @@ groups:
   - alert: CiRunnersServiceSaasRunnerQueuesErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The saas_runner_queues SLI of the ci-runners service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
@@ -931,7 +911,6 @@ groups:
   - alert: CiRunnersServiceSaasRunnerQueuesTrafficCessation
     for: 5m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The saas_runner_queues SLI of the ci-runners service (`{{ $labels.stage
         }}` stage) has not received any traffic in the past 30m
       description: |
@@ -971,7 +950,6 @@ groups:
   - alert: CiRunnersServiceSaasRunnerQueuesTrafficAbsent
     for: 30m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The saas_runner_queues SLI of the ci-runners service (`{{ $labels.stage
         }}` stage) has not reported any traffic in the past 30m
       description: |
@@ -1013,7 +991,6 @@ groups:
   - alert: CiRunnersServiceTraceArchivingCiJobsErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The trace_archiving_ci_jobs SLI of the ci-runners service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
@@ -1062,7 +1039,6 @@ groups:
   - alert: CiRunnersServiceTraceArchivingCiJobsErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The trace_archiving_ci_jobs SLI of the ci-runners service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
@@ -1111,7 +1087,6 @@ groups:
   - alert: CiRunnersServiceTraceArchivingCiJobsTrafficCessation
     for: 5m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The trace_archiving_ci_jobs SLI of the ci-runners service (`{{ $labels.stage
         }}` stage) has not received any traffic in the past 30m
       description: |
@@ -1147,7 +1122,6 @@ groups:
   - alert: CiRunnersServiceTraceArchivingCiJobsTrafficAbsent
     for: 30m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The trace_archiving_ci_jobs SLI of the ci-runners service (`{{ $labels.stage
         }}` stage) has not reported any traffic in the past 30m
       description: |

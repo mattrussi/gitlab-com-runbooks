@@ -7,7 +7,6 @@ groups:
   - alert: PatroniServiceClientDatabaseTransactionApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The client_database_transaction SLI of the patroni service (`{{ $labels.stage
         }}` stage) has an apdex violating SLO
       description: |
@@ -53,7 +52,6 @@ groups:
   - alert: PatroniServiceClientDatabaseTransactionApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The client_database_transaction SLI of the patroni service (`{{ $labels.stage
         }}` stage) has an apdex violating SLO
       description: |
@@ -99,7 +97,6 @@ groups:
   - alert: PatroniServiceClientDatabaseTransactionTrafficCessation
     for: 5m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The client_database_transaction SLI of the patroni service (`{{ $labels.stage
         }}` stage) has not received any traffic in the past 30m
       description: |
@@ -136,7 +133,6 @@ groups:
   - alert: PatroniServiceClientDatabaseTransactionTrafficAbsent
     for: 30m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The client_database_transaction SLI of the patroni service (`{{ $labels.stage
         }}` stage) has not reported any traffic in the past 30m
       description: |
@@ -175,7 +171,6 @@ groups:
   - alert: PatroniServicePgbouncerErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The pgbouncer SLI of the patroni service (`{{ $labels.stage }}` stage)
         has an error rate violating SLO
       description: |
@@ -226,7 +221,6 @@ groups:
   - alert: PatroniServicePgbouncerErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The pgbouncer SLI of the patroni service (`{{ $labels.stage }}` stage)
         has an error rate violating SLO
       description: |
@@ -277,7 +271,6 @@ groups:
   - alert: PatroniServicePgbouncerTrafficCessation
     for: 5m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The pgbouncer SLI of the patroni service (`{{ $labels.stage }}` stage)
         has not received any traffic in the past 30m
       description: |
@@ -317,7 +310,6 @@ groups:
   - alert: PatroniServicePgbouncerTrafficAbsent
     for: 30m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The pgbouncer SLI of the patroni service (`{{ $labels.stage }}` stage)
         has not reported any traffic in the past 30m
       description: |
@@ -359,7 +351,6 @@ groups:
   - alert: PatroniServiceRailsPrimarySqlApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The rails_primary_sql SLI of the patroni service (`{{ $labels.stage }}`
         stage) has an apdex violating SLO
       description: |
@@ -411,7 +402,6 @@ groups:
   - alert: PatroniServiceRailsPrimarySqlApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The rails_primary_sql SLI of the patroni service (`{{ $labels.stage }}`
         stage) has an apdex violating SLO
       description: |
@@ -463,7 +453,6 @@ groups:
   - alert: PatroniServiceRailsPrimarySqlTrafficCessation
     for: 5m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The rails_primary_sql SLI of the patroni service (`{{ $labels.stage }}`
         stage) has not received any traffic in the past 30m
       description: |
@@ -499,7 +488,6 @@ groups:
   - alert: PatroniServiceRailsPrimarySqlTrafficAbsent
     for: 30m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The rails_primary_sql SLI of the patroni service (`{{ $labels.stage }}`
         stage) has not reported any traffic in the past 30m
       description: |
@@ -537,7 +525,6 @@ groups:
   - alert: PatroniServiceRailsReplicaSqlApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The rails_replica_sql SLI of the patroni service (`{{ $labels.stage }}`
         stage) has an apdex violating SLO
       description: |
@@ -589,7 +576,6 @@ groups:
   - alert: PatroniServiceRailsReplicaSqlApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The rails_replica_sql SLI of the patroni service (`{{ $labels.stage }}`
         stage) has an apdex violating SLO
       description: |
@@ -641,7 +627,6 @@ groups:
   - alert: PatroniServiceRailsReplicaSqlTrafficCessation
     for: 5m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The rails_replica_sql SLI of the patroni service (`{{ $labels.stage }}`
         stage) has not received any traffic in the past 30m
       description: |
@@ -677,7 +662,6 @@ groups:
   - alert: PatroniServiceRailsReplicaSqlTrafficAbsent
     for: 30m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The rails_replica_sql SLI of the patroni service (`{{ $labels.stage }}`
         stage) has not reported any traffic in the past 30m
       description: |
@@ -715,7 +699,6 @@ groups:
   - alert: PatroniServiceTransactionsPrimaryErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The transactions_primary SLI of the patroni service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
@@ -764,7 +747,6 @@ groups:
   - alert: PatroniServiceTransactionsPrimaryErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The transactions_primary SLI of the patroni service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
@@ -813,7 +795,6 @@ groups:
   - alert: PatroniServiceTransactionsPrimaryTrafficCessation
     for: 5m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The transactions_primary SLI of the patroni service (`{{ $labels.stage
         }}` stage) has not received any traffic in the past 30m
       description: |
@@ -851,7 +832,6 @@ groups:
   - alert: PatroniServiceTransactionsPrimaryTrafficAbsent
     for: 30m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The transactions_primary SLI of the patroni service (`{{ $labels.stage
         }}` stage) has not reported any traffic in the past 30m
       description: |
@@ -891,7 +871,6 @@ groups:
   - alert: PatroniServiceTransactionsReplicaErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The transactions_replica SLI of the patroni service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
@@ -940,7 +919,6 @@ groups:
   - alert: PatroniServiceTransactionsReplicaErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The transactions_replica SLI of the patroni service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
@@ -989,7 +967,6 @@ groups:
   - alert: PatroniServiceTransactionsReplicaTrafficCessation
     for: 5m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The transactions_replica SLI of the patroni service (`{{ $labels.stage
         }}` stage) has not received any traffic in the past 30m
       description: |
@@ -1027,7 +1004,6 @@ groups:
   - alert: PatroniServiceTransactionsReplicaTrafficAbsent
     for: 30m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The transactions_replica SLI of the patroni service (`{{ $labels.stage
         }}` stage) has not reported any traffic in the past 30m
       description: |

@@ -7,7 +7,6 @@ groups:
   - alert: ApiServiceGlobalSearchApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The global_search SLI of the api service (`{{ $labels.stage }}` stage)
         has an apdex violating SLO
       description: |
@@ -51,7 +50,6 @@ groups:
   - alert: ApiServiceGlobalSearchApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The global_search SLI of the api service (`{{ $labels.stage }}` stage)
         has an apdex violating SLO
       description: |
@@ -95,7 +93,6 @@ groups:
   - alert: ApiServiceGlobalSearchApdexSLOViolationRegional
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The global_search SLI of the api service in region `{{ $labels.region
         }}` has an apdex violating SLO
       description: |
@@ -141,7 +138,6 @@ groups:
   - alert: ApiServiceGlobalSearchApdexSLOViolationRegional
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The global_search SLI of the api service in region `{{ $labels.region
         }}` has an apdex violating SLO
       description: |
@@ -187,7 +183,6 @@ groups:
   - alert: ApiServiceGlobalSearchTrafficCessation
     for: 5m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The global_search SLI of the api service (`{{ $labels.stage }}` stage)
         has not received any traffic in the past 30m
       description: |
@@ -222,7 +217,6 @@ groups:
   - alert: ApiServiceGlobalSearchTrafficAbsent
     for: 30m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The global_search SLI of the api service (`{{ $labels.stage }}` stage)
         has not reported any traffic in the past 30m
       description: |
@@ -259,7 +253,6 @@ groups:
   - alert: ApiServiceGlobalSearchTrafficCessationRegional
     for: 5m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The global_search SLI of the api service in region `{{ $labels.region
         }}` has not received any traffic in the past 30m
       description: |
@@ -296,7 +289,6 @@ groups:
   - alert: ApiServiceGlobalSearchTrafficAbsentRegional
     for: 30m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The global_search SLI of the api service in region `{{ $labels.region
         }}` has not reported any traffic in the past 30m
       description: |
@@ -335,7 +327,6 @@ groups:
   - alert: ApiServiceGraphqlQueryApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The graphql_query SLI of the api service (`{{ $labels.stage }}` stage)
         has an apdex violating SLO
       description: |
@@ -382,7 +373,6 @@ groups:
   - alert: ApiServiceGraphqlQueryApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The graphql_query SLI of the api service (`{{ $labels.stage }}` stage)
         has an apdex violating SLO
       description: |
@@ -429,7 +419,6 @@ groups:
   - alert: ApiServiceGraphqlQueryApdexSLOViolationRegional
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The graphql_query SLI of the api service in region `{{ $labels.region
         }}` has an apdex violating SLO
       description: |
@@ -478,7 +467,6 @@ groups:
   - alert: ApiServiceGraphqlQueryApdexSLOViolationRegional
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The graphql_query SLI of the api service in region `{{ $labels.region
         }}` has an apdex violating SLO
       description: |
@@ -527,7 +515,6 @@ groups:
   - alert: ApiServiceGraphqlQueryTrafficCessation
     for: 5m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The graphql_query SLI of the api service (`{{ $labels.stage }}` stage)
         has not received any traffic in the past 30m
       description: |
@@ -565,7 +552,6 @@ groups:
   - alert: ApiServiceGraphqlQueryTrafficAbsent
     for: 30m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The graphql_query SLI of the api service (`{{ $labels.stage }}` stage)
         has not reported any traffic in the past 30m
       description: |
@@ -605,7 +591,6 @@ groups:
   - alert: ApiServiceGraphqlQueryTrafficCessationRegional
     for: 5m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The graphql_query SLI of the api service in region `{{ $labels.region
         }}` has not received any traffic in the past 30m
       description: |
@@ -645,7 +630,6 @@ groups:
   - alert: ApiServiceGraphqlQueryTrafficAbsentRegional
     for: 30m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The graphql_query SLI of the api service in region `{{ $labels.region
         }}` has not reported any traffic in the past 30m
       description: |
@@ -687,7 +671,6 @@ groups:
   - alert: ApiServiceLoadbalancerErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The loadbalancer SLI of the api service (`{{ $labels.stage }}` stage)
         has an error rate violating SLO
       description: |
@@ -732,7 +715,6 @@ groups:
   - alert: ApiServiceLoadbalancerErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The loadbalancer SLI of the api service (`{{ $labels.stage }}` stage)
         has an error rate violating SLO
       description: |
@@ -777,7 +759,6 @@ groups:
   - alert: ApiServiceLoadbalancerErrorSLOViolationRegional
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The loadbalancer SLI of the api service in region `{{ $labels.region
         }}` has an error rate violating SLO
       description: |
@@ -824,7 +805,6 @@ groups:
   - alert: ApiServiceLoadbalancerErrorSLOViolationRegional
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The loadbalancer SLI of the api service in region `{{ $labels.region
         }}` has an error rate violating SLO
       description: |
@@ -871,7 +851,6 @@ groups:
   - alert: ApiServiceLoadbalancerTrafficCessation
     for: 5m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The loadbalancer SLI of the api service (`{{ $labels.stage }}` stage)
         has not received any traffic in the past 30m
       description: |
@@ -903,7 +882,6 @@ groups:
   - alert: ApiServiceLoadbalancerTrafficAbsent
     for: 30m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The loadbalancer SLI of the api service (`{{ $labels.stage }}` stage)
         has not reported any traffic in the past 30m
       description: |
@@ -937,7 +915,6 @@ groups:
   - alert: ApiServiceLoadbalancerTrafficCessationRegional
     for: 5m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The loadbalancer SLI of the api service in region `{{ $labels.region
         }}` has not received any traffic in the past 30m
       description: |
@@ -971,7 +948,6 @@ groups:
   - alert: ApiServiceLoadbalancerTrafficAbsentRegional
     for: 30m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The loadbalancer SLI of the api service in region `{{ $labels.region
         }}` has not reported any traffic in the past 30m
       description: |
@@ -1007,7 +983,6 @@ groups:
   - alert: ApiServiceNginxIngressErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The nginx_ingress SLI of the api service (`{{ $labels.stage }}` stage)
         has an error rate violating SLO
       description: |
@@ -1056,7 +1031,6 @@ groups:
   - alert: ApiServiceNginxIngressErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The nginx_ingress SLI of the api service (`{{ $labels.stage }}` stage)
         has an error rate violating SLO
       description: |
@@ -1105,7 +1079,6 @@ groups:
   - alert: ApiServiceNginxIngressErrorSLOViolationRegional
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The nginx_ingress SLI of the api service in region `{{ $labels.region
         }}` has an error rate violating SLO
       description: |
@@ -1156,7 +1129,6 @@ groups:
   - alert: ApiServiceNginxIngressErrorSLOViolationRegional
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The nginx_ingress SLI of the api service in region `{{ $labels.region
         }}` has an error rate violating SLO
       description: |
@@ -1207,7 +1179,6 @@ groups:
   - alert: ApiServiceNginxIngressTrafficCessation
     for: 5m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The nginx_ingress SLI of the api service (`{{ $labels.stage }}` stage)
         has not received any traffic in the past 30m
       description: |
@@ -1243,7 +1214,6 @@ groups:
   - alert: ApiServiceNginxIngressTrafficAbsent
     for: 30m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The nginx_ingress SLI of the api service (`{{ $labels.stage }}` stage)
         has not reported any traffic in the past 30m
       description: |
@@ -1281,7 +1251,6 @@ groups:
   - alert: ApiServiceNginxIngressTrafficCessationRegional
     for: 5m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The nginx_ingress SLI of the api service in region `{{ $labels.region
         }}` has not received any traffic in the past 30m
       description: |
@@ -1319,7 +1288,6 @@ groups:
   - alert: ApiServiceNginxIngressTrafficAbsentRegional
     for: 30m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The nginx_ingress SLI of the api service in region `{{ $labels.region
         }}` has not reported any traffic in the past 30m
       description: |
@@ -1359,7 +1327,6 @@ groups:
   - alert: ApiServiceRailsRequestApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The rails_request SLI of the api service (`{{ $labels.stage }}` stage)
         has an apdex violating SLO
       description: |
@@ -1406,7 +1373,6 @@ groups:
   - alert: ApiServiceRailsRequestApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The rails_request SLI of the api service (`{{ $labels.stage }}` stage)
         has an apdex violating SLO
       description: |
@@ -1453,7 +1419,6 @@ groups:
   - alert: ApiServiceRailsRequestApdexSLOViolationRegional
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The rails_request SLI of the api service in region `{{ $labels.region
         }}` has an apdex violating SLO
       description: |
@@ -1502,7 +1467,6 @@ groups:
   - alert: ApiServiceRailsRequestApdexSLOViolationRegional
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The rails_request SLI of the api service in region `{{ $labels.region
         }}` has an apdex violating SLO
       description: |
@@ -1551,7 +1515,6 @@ groups:
   - alert: ApiServiceRailsRequestErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The rails_request SLI of the api service (`{{ $labels.stage }}` stage)
         has an error rate violating SLO
       description: |
@@ -1602,7 +1565,6 @@ groups:
   - alert: ApiServiceRailsRequestErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The rails_request SLI of the api service (`{{ $labels.stage }}` stage)
         has an error rate violating SLO
       description: |
@@ -1653,7 +1615,6 @@ groups:
   - alert: ApiServiceRailsRequestErrorSLOViolationRegional
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The rails_request SLI of the api service in region `{{ $labels.region
         }}` has an error rate violating SLO
       description: |
@@ -1706,7 +1667,6 @@ groups:
   - alert: ApiServiceRailsRequestErrorSLOViolationRegional
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The rails_request SLI of the api service in region `{{ $labels.region
         }}` has an error rate violating SLO
       description: |
@@ -1759,7 +1719,6 @@ groups:
   - alert: ApiServiceRailsRequestTrafficCessation
     for: 5m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The rails_request SLI of the api service (`{{ $labels.stage }}` stage)
         has not received any traffic in the past 30m
       description: |
@@ -1797,7 +1756,6 @@ groups:
   - alert: ApiServiceRailsRequestTrafficAbsent
     for: 30m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The rails_request SLI of the api service (`{{ $labels.stage }}` stage)
         has not reported any traffic in the past 30m
       description: |
@@ -1837,7 +1795,6 @@ groups:
   - alert: ApiServiceRailsRequestTrafficCessationRegional
     for: 5m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The rails_request SLI of the api service in region `{{ $labels.region
         }}` has not received any traffic in the past 30m
       description: |
@@ -1877,7 +1834,6 @@ groups:
   - alert: ApiServiceRailsRequestTrafficAbsentRegional
     for: 30m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The rails_request SLI of the api service in region `{{ $labels.region
         }}` has not reported any traffic in the past 30m
       description: |
@@ -1919,7 +1875,6 @@ groups:
   - alert: ApiServiceWorkhorseApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The workhorse SLI of the api service (`{{ $labels.stage }}` stage) has
         an apdex violating SLO
       description: |
@@ -1971,7 +1926,6 @@ groups:
   - alert: ApiServiceWorkhorseApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The workhorse SLI of the api service (`{{ $labels.stage }}` stage) has
         an apdex violating SLO
       description: |
@@ -2023,7 +1977,6 @@ groups:
   - alert: ApiServiceWorkhorseApdexSLOViolationRegional
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The workhorse SLI of the api service in region `{{ $labels.region }}`
         has an apdex violating SLO
       description: |
@@ -2077,7 +2030,6 @@ groups:
   - alert: ApiServiceWorkhorseApdexSLOViolationRegional
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The workhorse SLI of the api service in region `{{ $labels.region }}`
         has an apdex violating SLO
       description: |
@@ -2131,7 +2083,6 @@ groups:
   - alert: ApiServiceWorkhorseErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The workhorse SLI of the api service (`{{ $labels.stage }}` stage) has
         an error rate violating SLO
       description: |
@@ -2180,7 +2131,6 @@ groups:
   - alert: ApiServiceWorkhorseErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The workhorse SLI of the api service (`{{ $labels.stage }}` stage) has
         an error rate violating SLO
       description: |
@@ -2229,7 +2179,6 @@ groups:
   - alert: ApiServiceWorkhorseErrorSLOViolationRegional
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The workhorse SLI of the api service in region `{{ $labels.region }}`
         has an error rate violating SLO
       description: |
@@ -2280,7 +2229,6 @@ groups:
   - alert: ApiServiceWorkhorseErrorSLOViolationRegional
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The workhorse SLI of the api service in region `{{ $labels.region }}`
         has an error rate violating SLO
       description: |
@@ -2331,7 +2279,6 @@ groups:
   - alert: ApiServiceWorkhorseTrafficCessation
     for: 5m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The workhorse SLI of the api service (`{{ $labels.stage }}` stage) has
         not received any traffic in the past 30m
       description: |
@@ -2367,7 +2314,6 @@ groups:
   - alert: ApiServiceWorkhorseTrafficAbsent
     for: 30m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The workhorse SLI of the api service (`{{ $labels.stage }}` stage) has
         not reported any traffic in the past 30m
       description: |
@@ -2405,7 +2351,6 @@ groups:
   - alert: ApiServiceWorkhorseTrafficCessationRegional
     for: 5m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The workhorse SLI of the api service in region `{{ $labels.region }}`
         has not received any traffic in the past 30m
       description: |
@@ -2443,7 +2388,6 @@ groups:
   - alert: ApiServiceWorkhorseTrafficAbsentRegional
     for: 30m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The workhorse SLI of the api service in region `{{ $labels.region }}`
         has not reported any traffic in the past 30m
       description: |

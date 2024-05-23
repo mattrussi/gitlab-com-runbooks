@@ -7,7 +7,6 @@ groups:
   - alert: IstioServiceIstioPilotApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The istio_pilot SLI of the istio service (`{{ $labels.stage }}` stage)
         has an apdex violating SLO
       description: |
@@ -57,7 +56,6 @@ groups:
   - alert: IstioServiceIstioPilotApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The istio_pilot SLI of the istio service (`{{ $labels.stage }}` stage)
         has an apdex violating SLO
       description: |
@@ -107,7 +105,6 @@ groups:
   - alert: IstioServiceIstioSidecarInjectionErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The istio_sidecar_injection SLI of the istio service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
@@ -154,7 +151,6 @@ groups:
   - alert: IstioServiceIstioSidecarInjectionErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The istio_sidecar_injection SLI of the istio service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |

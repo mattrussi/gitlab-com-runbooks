@@ -7,7 +7,6 @@ groups:
   - alert: WoodhouseServiceAsyncJobsApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The async_jobs SLI of the woodhouse service (`{{ $labels.stage }}` stage)
         has an apdex violating SLO
       description: |
@@ -59,7 +58,6 @@ groups:
   - alert: WoodhouseServiceAsyncJobsApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The async_jobs SLI of the woodhouse service (`{{ $labels.stage }}` stage)
         has an apdex violating SLO
       description: |
@@ -111,7 +109,6 @@ groups:
   - alert: WoodhouseServiceAsyncJobsErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The async_jobs SLI of the woodhouse service (`{{ $labels.stage }}` stage)
         has an error rate violating SLO
       description: |
@@ -160,7 +157,6 @@ groups:
   - alert: WoodhouseServiceAsyncJobsErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The async_jobs SLI of the woodhouse service (`{{ $labels.stage }}` stage)
         has an error rate violating SLO
       description: |
@@ -209,7 +205,6 @@ groups:
   - alert: WoodhouseServiceHttpApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The http SLI of the woodhouse service (`{{ $labels.stage }}` stage) has
         an apdex violating SLO
       description: |
@@ -261,7 +256,6 @@ groups:
   - alert: WoodhouseServiceHttpApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The http SLI of the woodhouse service (`{{ $labels.stage }}` stage) has
         an apdex violating SLO
       description: |
@@ -313,7 +307,6 @@ groups:
   - alert: WoodhouseServiceHttpErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The http SLI of the woodhouse service (`{{ $labels.stage }}` stage) has
         an error rate violating SLO
       description: |
@@ -362,7 +355,6 @@ groups:
   - alert: WoodhouseServiceHttpErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The http SLI of the woodhouse service (`{{ $labels.stage }}` stage) has
         an error rate violating SLO
       description: |

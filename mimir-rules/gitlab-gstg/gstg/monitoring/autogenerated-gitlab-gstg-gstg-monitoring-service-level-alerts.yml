@@ -7,7 +7,6 @@ groups:
   - alert: MonitoringServiceGrafanaApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The grafana SLI of the monitoring service (`{{ $labels.stage }}` stage)
         has an apdex violating SLO
       description: |
@@ -59,7 +58,6 @@ groups:
   - alert: MonitoringServiceGrafanaApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The grafana SLI of the monitoring service (`{{ $labels.stage }}` stage)
         has an apdex violating SLO
       description: |
@@ -111,7 +109,6 @@ groups:
   - alert: MonitoringServiceGrafanaErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The grafana SLI of the monitoring service (`{{ $labels.stage }}` stage)
         has an error rate violating SLO
       description: |
@@ -160,7 +157,6 @@ groups:
   - alert: MonitoringServiceGrafanaErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The grafana SLI of the monitoring service (`{{ $labels.stage }}` stage)
         has an error rate violating SLO
       description: |
@@ -209,7 +205,6 @@ groups:
   - alert: MonitoringServiceGrafanaDatasourcesErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The grafana_datasources SLI of the monitoring service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
@@ -258,7 +253,6 @@ groups:
   - alert: MonitoringServiceGrafanaDatasourcesErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The grafana_datasources SLI of the monitoring service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
@@ -307,7 +301,6 @@ groups:
   - alert: MonitoringServiceGrafanaGoogleLbErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The grafana_google_lb SLI of the monitoring service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
@@ -353,7 +346,6 @@ groups:
   - alert: MonitoringServiceGrafanaGoogleLbErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The grafana_google_lb SLI of the monitoring service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
@@ -399,7 +391,6 @@ groups:
   - alert: MonitoringServiceGrafanaImageRendererApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The grafana_image_renderer SLI of the monitoring service (`{{ $labels.stage
         }}` stage) has an apdex violating SLO
       description: |
@@ -451,7 +442,6 @@ groups:
   - alert: MonitoringServiceGrafanaImageRendererApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The grafana_image_renderer SLI of the monitoring service (`{{ $labels.stage
         }}` stage) has an apdex violating SLO
       description: |
@@ -503,7 +493,6 @@ groups:
   - alert: MonitoringServiceGrafanaImageRendererErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The grafana_image_renderer SLI of the monitoring service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
@@ -552,7 +541,6 @@ groups:
   - alert: MonitoringServiceGrafanaImageRendererErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The grafana_image_renderer SLI of the monitoring service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
@@ -601,7 +589,6 @@ groups:
   - alert: MonitoringServicePrometheusApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The prometheus SLI of the monitoring service (`{{ $labels.stage }}` stage)
         has an apdex violating SLO
       description: |
@@ -653,7 +640,6 @@ groups:
   - alert: MonitoringServicePrometheusApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The prometheus SLI of the monitoring service (`{{ $labels.stage }}` stage)
         has an apdex violating SLO
       description: |
@@ -705,7 +691,6 @@ groups:
   - alert: MonitoringServicePrometheusErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The prometheus SLI of the monitoring service (`{{ $labels.stage }}` stage)
         has an error rate violating SLO
       description: |
@@ -754,7 +739,6 @@ groups:
   - alert: MonitoringServicePrometheusErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The prometheus SLI of the monitoring service (`{{ $labels.stage }}` stage)
         has an error rate violating SLO
       description: |
@@ -803,7 +787,6 @@ groups:
   - alert: MonitoringServicePrometheusTrafficCessation
     for: 5m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The prometheus SLI of the monitoring service (`{{ $labels.stage }}` stage)
         has not received any traffic in the past 30m
       description: |
@@ -839,7 +822,6 @@ groups:
   - alert: MonitoringServicePrometheusTrafficAbsent
     for: 30m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The prometheus SLI of the monitoring service (`{{ $labels.stage }}` stage)
         has not reported any traffic in the past 30m
       description: |
@@ -877,7 +859,6 @@ groups:
   - alert: MonitoringServicePrometheusAlertSenderErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The prometheus_alert_sender SLI of the monitoring service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
@@ -926,7 +907,6 @@ groups:
   - alert: MonitoringServicePrometheusAlertSenderErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The prometheus_alert_sender SLI of the monitoring service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
@@ -975,7 +955,6 @@ groups:
   - alert: MonitoringServicePrometheusAlertSenderTrafficCessation
     for: 5m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The prometheus_alert_sender SLI of the monitoring service (`{{ $labels.stage
         }}` stage) has not received any traffic in the past 30m
       description: |
@@ -1011,7 +990,6 @@ groups:
   - alert: MonitoringServicePrometheusAlertSenderTrafficAbsent
     for: 30m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The prometheus_alert_sender SLI of the monitoring service (`{{ $labels.stage
         }}` stage) has not reported any traffic in the past 30m
       description: |
@@ -1049,7 +1027,6 @@ groups:
   - alert: MonitoringServiceRuleEvaluationApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The rule_evaluation SLI of the monitoring service (`{{ $labels.stage
         }}` stage) has an apdex violating SLO
       description: |
@@ -1099,7 +1076,6 @@ groups:
   - alert: MonitoringServiceRuleEvaluationApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The rule_evaluation SLI of the monitoring service (`{{ $labels.stage
         }}` stage) has an apdex violating SLO
       description: |
@@ -1149,7 +1125,6 @@ groups:
   - alert: MonitoringServiceRuleEvaluationErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The rule_evaluation SLI of the monitoring service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
@@ -1203,7 +1178,6 @@ groups:
   - alert: MonitoringServiceRuleEvaluationErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The rule_evaluation SLI of the monitoring service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
@@ -1257,7 +1231,6 @@ groups:
   - alert: MonitoringServiceRuleEvaluationTrafficCessation
     for: 5m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The rule_evaluation SLI of the monitoring service (`{{ $labels.stage
         }}` stage) has not received any traffic in the past 30m
       description: |
@@ -1298,7 +1271,6 @@ groups:
   - alert: MonitoringServiceRuleEvaluationTrafficAbsent
     for: 30m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The rule_evaluation SLI of the monitoring service (`{{ $labels.stage
         }}` stage) has not reported any traffic in the past 30m
       description: |

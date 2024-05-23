@@ -7,7 +7,6 @@ groups:
   - alert: RedisClusterQueuesMetaServicePrimaryServerTrafficCessation
     for: 5m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The primary_server SLI of the redis-cluster-queues-meta service (`{{
         $labels.stage }}` stage) has not received any traffic in the past 30m
       description: |
@@ -43,7 +42,6 @@ groups:
   - alert: RedisClusterQueuesMetaServicePrimaryServerTrafficAbsent
     for: 30m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The primary_server SLI of the redis-cluster-queues-meta service (`{{
         $labels.stage }}` stage) has not reported any traffic in the past 30m
       description: |
@@ -81,7 +79,6 @@ groups:
   - alert: RedisClusterQueuesMetaServiceRailsRedisClientApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The rails_redis_client SLI of the redis-cluster-queues-meta service (`{{
         $labels.stage }}` stage) has an apdex violating SLO
       description: |
@@ -133,7 +130,6 @@ groups:
   - alert: RedisClusterQueuesMetaServiceRailsRedisClientApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The rails_redis_client SLI of the redis-cluster-queues-meta service (`{{
         $labels.stage }}` stage) has an apdex violating SLO
       description: |
@@ -185,7 +181,6 @@ groups:
   - alert: RedisClusterQueuesMetaServiceRailsRedisClientErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The rails_redis_client SLI of the redis-cluster-queues-meta service (`{{
         $labels.stage }}` stage) has an error rate violating SLO
       description: |
@@ -234,7 +229,6 @@ groups:
   - alert: RedisClusterQueuesMetaServiceRailsRedisClientErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The rails_redis_client SLI of the redis-cluster-queues-meta service (`{{
         $labels.stage }}` stage) has an error rate violating SLO
       description: |
@@ -283,7 +277,6 @@ groups:
   - alert: RedisClusterQueuesMetaServiceRailsRedisClientTrafficCessation
     for: 5m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The rails_redis_client SLI of the redis-cluster-queues-meta service (`{{
         $labels.stage }}` stage) has not received any traffic in the past 30m
       description: |
@@ -319,7 +312,6 @@ groups:
   - alert: RedisClusterQueuesMetaServiceRailsRedisClientTrafficAbsent
     for: 30m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The rails_redis_client SLI of the redis-cluster-queues-meta service (`{{
         $labels.stage }}` stage) has not reported any traffic in the past 30m
       description: |
@@ -357,7 +349,6 @@ groups:
   - alert: RedisClusterQueuesMetaServiceSecondaryServersTrafficCessation
     for: 5m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The secondary_servers SLI of the redis-cluster-queues-meta service (`{{
         $labels.stage }}` stage) has not received any traffic in the past 30m
       description: |
@@ -393,7 +384,6 @@ groups:
   - alert: RedisClusterQueuesMetaServiceSecondaryServersTrafficAbsent
     for: 30m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The secondary_servers SLI of the redis-cluster-queues-meta service (`{{
         $labels.stage }}` stage) has not reported any traffic in the past 30m
       description: |
