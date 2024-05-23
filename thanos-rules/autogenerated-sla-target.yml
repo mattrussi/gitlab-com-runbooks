@@ -6,4 +6,6 @@ groups:
   partial_response_strategy: warn
   rules:
   - record: sla:gitlab:target
+    labels:
+      monitor: global
     expr: "0.9995"

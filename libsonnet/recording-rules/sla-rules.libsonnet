@@ -125,6 +125,7 @@ local slaTargetRules(groupExtras={}) = {
     interval: '5m',
     rules: [{
       record: 'sla:gitlab:target',
+      labels: { monitor: 'global' },
       expr: '%g' % [metricsConfig.slaTarget],
     }],
   } + groupExtras],
