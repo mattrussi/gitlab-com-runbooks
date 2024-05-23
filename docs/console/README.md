@@ -57,6 +57,7 @@
 * [../kube/k8s-operations.md](../kube/k8s-operations.md)
 * [How to resize Persistent Volumes in Kubernetes](../kube/k8s-pvc-resize.md)
 * [How to take a snapshot of an application running in a StatefulSet](../kube/k8s-sts-snapshot.md)
+* [GKE/Kubernetes Administration](../kube/kube-administration.md)
 * [Kubernetes](../kube/kubernetes.md)
 * [../logging/logging_gcs_archive_bigquery.md](../logging/logging_gcs_archive_bigquery.md)
 * [Scaling Elastic Cloud Clusters](../logging/scaling.md)
