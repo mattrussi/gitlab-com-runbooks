@@ -6,7 +6,7 @@
 //
 // Blank values will be ignored.
 {
-  dependency_proxy: '',
+  dependency_proxy: 'virtual_registry',
   gitlab_docs: '',
   fulfillment_infrastructure: 'fulfillment_infradev',
   customersdot_application: 'customersdot_and_quote_to_cash_integrations',
