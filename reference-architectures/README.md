@@ -89,14 +89,15 @@ runbooks/scripts/generate-reference-architecture-config.sh \
 
 The following configuration options are available in `gitlab-metrics-options.libsonnet`.
 
-| **Option**        | **Type** | **Default** | **Description** |
-| ----------------- | -------- | ----------- | --------------- |
-| `elasticacheMonitoring` | Boolean | `false` | Set to `true` to enable AWS Elasticache monitoring. |
+| **Option**                    | **Type** | **Default** | **Description**                                                                                                                                                                        |
+|-------------------------------| -------- | ----------- |----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `elasticacheMonitoring`       | Boolean | `false` | Set to `true` to enable AWS Elasticache monitoring.                                                                                                                                    |
 | `minimumSamplesForMonitoring` | int | 3600 | Minimum operation rate thresholds. This is to avoid low-volume, noisy alerts. See [service-level-monitoring.md](../docs/metrics-catalog/service-level-monitoring.md) for more details. |
-| `praefect.enable` | Boolean  | `true`      | Set to `false` to disable Praefect monitoring. This is usually done when Praefect/Gitaly Cluster is disabled in GitLab Environment Toolkit with `praefect_node_count = 0` |
-| `services`        | Array    | empty       | Import any customized service monitoring. For examples see [`reference-architectures/get-hybrid/src/services/`](reference-architectures/get-hybrid/src/services/)  |
-| `saturationMonitoring`        | Array    | empty       | Import any customized saturation monitoring. For examples see [`reference-architectures/get-hybrid/src/services/`](reference-architectures/get-hybrid/src/services/)  |
-| `rdsInstanceRAMGB`            | int      | null    | Configure the size of the RAM for a given RDS instance.  Specified in unit GB. |
-| `rdsMaxStorageAllocationGB`   | int      | null    | Configure the size of the maximum allocated storage for a given RDS instance.  Specified in unit GB. |
-| `rdsMaxConnections`           | int      | null    | Configure the count of the maximum allowed connections for a given RDS instance.  Specified as count. |
-| `rdsMonitoring`               | Boolean  | `false` | Set to `true` to enable AWS RDS monitoring. |
+| `praefect.enable`             | Boolean  | `true`      | Set to `false` to disable Praefect monitoring. This is usually done when Praefect/Gitaly Cluster is disabled in GitLab Environment Toolkit with `praefect_node_count = 0`              |
+| `services`                    | Array    | empty       | Import any customized service monitoring. For examples see [`reference-architectures/get-hybrid/src/services/`](reference-architectures/get-hybrid/src/services/)                      |
+| `saturationMonitoring`        | Array    | empty       | Import any customized saturation monitoring. For examples see [`reference-architectures/get-hybrid/src/services/`](reference-architectures/get-hybrid/src/services/)                   |
+| `rdsInstanceRAMGB`            | int      | null    | Configure the size of the RAM for a given RDS instance.  Specified in unit GB.                                                                                                         |
+| `rdsMaxStorageAllocationGB`   | int      | null    | Configure the size of the maximum allocated storage for a given RDS instance.  Specified in unit GB.                                                                                   |
+| `rdsMaxConnections`           | int      | null    | Configure the count of the maximum allowed connections for a given RDS instance.  Specified as count.                                                                                  |
+| `rdsMonitoring`               | Boolean  | `false` | Set to `true` to enable AWS RDS monitoring.                                                                                                                                            |
+| `useGitlabSSHD`               | Boolean  | `false` | Set to `true` to use GitLab SSHD instead of GitLab Shell.                                                                                                                              |

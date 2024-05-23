@@ -2,6 +2,10 @@ local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local rateMetric = metricsCatalog.rateMetric;
 local gitalyHelper = import 'service-archetypes/helpers/gitaly.libsonnet';
 local kubeLabelSelectors = metricsCatalog.kubeLabelSelectors;
+local gitlabMetricsConfig = (import 'gitlab-metrics-config.libsonnet');
+local histogramApdex = metricsCatalog.histogramApdex;
+
+local useGitLabSSHD = std.get(gitlabMetricsConfig.options, 'useGitlabSSHD', false);
 
 metricsCatalog.serviceDefinition({
   type: 'gitlab-shell',
@@ -40,7 +44,7 @@ metricsCatalog.serviceDefinition({
   serviceLevelIndicators: {
     // TODO: use a better metric than GPRC calls in future.
     // see https://gitlab.com/gitlab-com/runbooks/-/issues/88 for more details.
-    grpc_requests: {
+    [if !useGitLabSSHD then 'grpc_requests']: {
       userImpacting: true,
       description: |||
         A proxy measurement of the number of GRPC SSH service requests made to Gitaly and Praefect.
@@ -66,6 +70,45 @@ metricsCatalog.serviceDefinition({
       ),
 
       significantLabels: ['node'],
+
+      toolingLinks: [],
+    },
+
+    [if useGitLabSSHD then 'gitlab_sshd']: {
+      // https://gitlab.com/gitlab-org/gitaly/-/issues/4331
+      monitoringThresholds+: {
+        errorRatio: 0.999,
+      },
+      userImpacting: true,
+      description: |||
+        Monitors GitLab-sshd using application metrics.
+
+        For the apdex score, the time taken to establish an SSH connection is used as the latency.
+      |||,
+
+      apdex: histogramApdex(
+        histogram='gitlab_shell_sshd_session_established_duration_seconds_bucket',
+        selector={},
+        satisfiedThreshold=1,
+        toleratedThreshold=5
+      ),
+
+      errorRate: rateMetric(
+        counter='gitlab_sli:shell_sshd_sessions:errors_total',
+        selector={},
+      ),
+
+      requestRate: rateMetric(
+        counter='gitlab_sli:shell_sshd_sessions:total',
+        selector={},
+      ),
+
+      // Experimentally evaluate this SLI with
+      // confidence levels, to assess how well this approach
+      // works
+      useConfidenceLevelForSLIAlerts: '98%',
+
+      significantLabels: [],
 
       toolingLinks: [],
     },

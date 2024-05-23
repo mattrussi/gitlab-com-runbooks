@@ -6,4 +6,8 @@
   rdsMonitoring: false,
   rdsInstanceRAMBytes: null,
   rdsMaxAllocatedStorageGB: null,
+
+  // set useGitlabSSHD to true to enable monitoring of gitlab-sshd instead of
+  // the legacy gitlab-shell approach.
+  useGitlabSSHD: false,
 }
