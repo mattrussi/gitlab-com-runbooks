@@ -41,6 +41,7 @@
 * [`gitalyctl`](../gitaly/gitalyctl.md)
 * [CI Artifacts CDN](../google-cloud-storage/artifacts-cdn.md)
 * [Rebuilding a kubernetes cluster](../kube/k8s-cluster-rebuild.md)
+* [GKE/Kubernetes Administration](../kube/kube-administration.md)
 * [StatefulSet Guidelines](../kube/sts-guidelines.md)
 * [Mimir Onboarding](../mimir/getting-started.md)
 * [Prometheus Dead Man's Snitch](../monitoring/prometheus-snitch.md)

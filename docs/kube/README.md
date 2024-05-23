@@ -26,6 +26,7 @@
 * [k8s-operations.md](k8s-operations.md)
 * [How to resize Persistent Volumes in Kubernetes](k8s-pvc-resize.md)
 * [How to take a snapshot of an application running in a StatefulSet](k8s-sts-snapshot.md)
+* [GKE/Kubernetes Administration](kube-administration.md)
 * [Kubernetes](kubernetes.md)
 * [Auditing Metrics](../mimir/auditing-metrics.md)
 * [Prometheus pod crashlooping](../monitoring/prometheus-pod-crashlooping.md)

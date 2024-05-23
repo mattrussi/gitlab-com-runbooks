@@ -54,6 +54,7 @@
 * [Ad hoc observability tools on Kubernetes nodes](../kube/k8s-adhoc-observability.md)
 * [../kube/k8s-oncall-setup.md](../kube/k8s-oncall-setup.md)
 * [How to resize Persistent Volumes in Kubernetes](../kube/k8s-pvc-resize.md)
+* [GKE/Kubernetes Administration](../kube/kube-administration.md)
 * [Kubernetes](../kube/kubernetes.md)
 * [Scaling Elastic Cloud Clusters](../logging/scaling.md)
 * [How GitLab.com uses Mailgun](../mailgun/mailgun.md)

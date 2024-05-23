@@ -20,6 +20,7 @@
 * [../certificates/gcp.md](../certificates/gcp.md)
 * [Chef Tips and Tools](../config_management/chef-workflow.md)
 * [Rebuilding a kubernetes cluster](../kube/k8s-cluster-rebuild.md)
+* [GKE/Kubernetes Administration](../kube/kube-administration.md)
 * [Prometheus Dead Man's Snitch](../monitoring/prometheus-snitch.md)
 * [OPS-GITLAB-NET Users and Access Tokens](../uncategorized/ops-gitlab-net-pat.md)
 * [Access Management for Vault](../vault/access.md)
