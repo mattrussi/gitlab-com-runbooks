@@ -1,4 +1,10 @@
-local prometheusServiceGroupGenerator = import 'servicemetrics/prometheus-service-group-generator.libsonnet';
+// This entire file is only used by Thanos and prometheus environments, so it can be removed
+// when we only rely on Mimir.
+local selectiveRegistry = (import 'servicemetrics/recording-rule-registry.libsonnet').selectiveRegistry;
+
+local prometheusServiceGroupGenerator = (import 'servicemetrics/prometheus-service-group-generator.libsonnet') {
+  config+: { recordingRuleRegistry: selectiveRegistry },
+};
 
 local outputPromYaml(groups, groupExtras) =
   std.manifestYamlDoc({

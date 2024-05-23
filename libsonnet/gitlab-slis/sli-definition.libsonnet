@@ -42,7 +42,7 @@ local sliValidator = validator.new({
 local rateQueryFunction(sli, counter) =
   function(selector={}, aggregationLabels=[], rangeInterval)
     local labels = std.set(aggregationLabels + sli.significantLabels);
-    rateMetric(sli[counter], selector).aggregatedRateQuery(labels, selector, rangeInterval);
+    rateMetric(sli[counter], selector) { config+: sli.config }.aggregatedRateQuery(labels, selector, rangeInterval);
 
 local applyDefaults(definition) = {
   config:: recordingRuleRegistry.defaultConfig,

@@ -22,6 +22,7 @@ local intervalForDuration = import 'servicemetrics/interval-for-duration.libsonn
 local separateGlobalRecordingFiles = (import 'recording-rules/lib/thanos/separate-global-recording-files.libsonnet').separateGlobalRecordingFiles;
 local aggregationSet = import 'servicemetrics/aggregation-set.libsonnet';
 local aggregationSetTransformer = import 'servicemetrics/aggregation-set-transformer.libsonnet';
+local recordingRuleRegistry = (import 'servicemetrics/recording-rule-registry.libsonnet').selectiveRegistry;
 
 local applicableServices = std.filter(function(service)
   service.dangerouslyThanosEvaluated && service.regional && std.length(service.listServiceLevelIndicators()) > 0, config.monitoredServices);
@@ -62,6 +63,7 @@ local generatorsForService(aggregationSet, burnRate, extraSelector) = [
     burnRate=burnRate,
     aggregationSet=aggregationSet,
     extraSourceSelector=extraSelector,
+    config={ recordingRuleRegistry: recordingRuleRegistry }
   ),
 ];
 

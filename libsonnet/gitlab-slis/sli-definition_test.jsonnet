@@ -73,8 +73,12 @@ test.suite({
   },
 
   testInRecordingRuleRegistry: {
-    actual: sliDefinition.new(validDefinition).inRecordingRuleRegistry(),
-    expect: false,
+    local dummyRegistry = {
+      resolveRecordingRuleFor(metricName=null, aggregationLabels=[], selector={}, rangeInterval='5m')::
+        metricName == 'gitlab_sli_hello_sli_apdex_total',
+    },
+    actual: sliDefinition.new(validDefinition) { config+: { recordingRuleRegistry: dummyRegistry } }.inRecordingRuleRegistry(),
+    expect: true,
   },
 
   local validSLI = sliDefinition._applyDefaults(validDefinition),

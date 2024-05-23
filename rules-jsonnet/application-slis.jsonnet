@@ -1,6 +1,8 @@
 local aggregationSets = import 'gitlab-slis/aggregation-sets.libsonnet';
 local library = import 'gitlab-slis/library.libsonnet';
 local sliDefinition = import 'gitlab-slis/sli-definition.libsonnet';
+local recordingRuleRegistry = import 'servicemetrics/recording-rule-registry.libsonnet';
+
 
 local rulesForSli(sli, aggregationSet) =
   std.flatMap(function(burnRate)
@@ -64,7 +66,7 @@ local rules = {
     function(sli)
       !sli.inRecordingRuleRegistry(),
     groupForSli,
-    library.all
+    std.map(function(sli) sli { config+: { recordingRuleRegistry: recordingRuleRegistry.selectiveRegistry } }, library.all)
   ),
 };
 

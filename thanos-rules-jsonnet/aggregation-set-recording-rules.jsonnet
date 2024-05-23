@@ -3,7 +3,7 @@ local aggregationSetTransformer = import 'servicemetrics/aggregation-set-transfo
 local applicationSlis = (import 'gitlab-slis/library.libsonnet').all;
 local applicationSliAggregations = import 'gitlab-slis/aggregation-sets.libsonnet';
 local separateGlobalRecordingFiles = (import 'recording-rules/lib/thanos/separate-global-recording-files.libsonnet').separateGlobalRecordingFiles;
-
+local recordingRuleRegistry = import 'servicemetrics/recording-rule-registry.libsonnet';
 local defaultsForRecordingRuleGroup = { partial_response_strategy: 'warn' };
 
 local outputPromYaml(groups) =
@@ -19,8 +19,9 @@ local transformRuleGroups(sourceAggregationSet, targetAggregationSet, extraSourc
   );
 
 local groupsForApplicationSli(sli, extraSelector) =
-  local targetAggregationSet = applicationSliAggregations.targetAggregationSet(sli);
-  local sourceAggregationSet = applicationSliAggregations.sourceAggregationSet(sli);
+  local sliWithRegistry = sli { config+: { recordingRuleRegistry: recordingRuleRegistry.selectiveRegistry } };
+  local targetAggregationSet = applicationSliAggregations.targetAggregationSet(sliWithRegistry);
+  local sourceAggregationSet = applicationSliAggregations.sourceAggregationSet(sliWithRegistry);
   transformRuleGroups(sourceAggregationSet, targetAggregationSet, extraSelector);
 
 /**

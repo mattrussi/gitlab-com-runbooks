@@ -89,6 +89,6 @@ local targetAggregationSet(sli, extraStaticLabels) =
   });
 
 {
-  sourceAggregationSet(sli, recordingRuleRegistry=defaultRecordingRuleRegistry):: sourceAggregationSet(sli, recordingRuleRegistry),
+  sourceAggregationSet(sli, recordingRuleRegistry=sli.config.recordingRuleRegistry):: sourceAggregationSet(sli, recordingRuleRegistry),
   targetAggregationSet(sli, extraStaticLabels={}):: targetAggregationSet(sli, extraStaticLabels),
 }

@@ -120,9 +120,7 @@ local objects = import 'utils/objects.libsonnet';
 
   defaultMimirTenants: ['gitlab-gprd', 'gitlab-gstg'],
 
-  // TODO: change this to the `unified-registry.libsonnet when we've migrated all to mimir
-
-  recordingRuleRegistry: import 'servicemetrics/recording-rule-registry/selective-registry.libsonnet',
+  recordingRuleRegistry: import 'servicemetrics/recording-rule-registry/unified-registry.libsonnet',
 
   // This selector is used in a handful of places where there are too many "type" labels
   // and we want to exclude one (or more) labels
