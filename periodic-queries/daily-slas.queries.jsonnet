@@ -36,6 +36,6 @@ local keyServiceNames = std.map(
     },
   }),
   overall_target: periodicQuery.new({
-    query: "sla:gitlab:target{__tenant_id__="gitlab-gprd"}"
+    query: "sla:gitlab:target{__tenant_id__='gitlab-gprd'}",
   }),
 }
