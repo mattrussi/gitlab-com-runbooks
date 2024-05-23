@@ -14,11 +14,11 @@ groups:
       sum by (env,environment,stage,shard,fqdn) (
         label_replace((
           sum by (env,environment,stage,shard,fqdn) (
-            rate(grpc_server_handling_seconds_bucket{env="gprd",grpc_method!~"CalculateChecksum|CommitLanguages|CommitStats|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindCommit|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|GetArchive|LastCommitForPath|OptimizeRepository|PackObjectsHookWithSidechannel|PostReceiveHook|PostUploadPackWithSidechannel|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|RepositorySize|SSHUploadPackWithSidechannel|UpdateHook|WriteRef",grpc_service!="gitaly.OperationService",grpc_type="unary",job=~"gitaly|scrapeConfig/monitoring/prometheus-agent-gitaly",le="0.5",type="gitaly"}[5m] offset 30s)
+            sli_aggregations:grpc_server_handling_seconds_bucket:rate_5m{env="gprd",grpc_method!~"CalculateChecksum|CommitLanguages|CommitStats|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindCommit|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|GetArchive|LastCommitForPath|OptimizeRepository|PackObjectsHookWithSidechannel|PostReceiveHook|PostUploadPackWithSidechannel|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|RepositorySize|SSHUploadPackWithSidechannel|UpdateHook|WriteRef",grpc_service!="gitaly.OperationService",grpc_type="unary",job=~"gitaly|scrapeConfig/monitoring/prometheus-agent-gitaly",le="0.5",type="gitaly"}
           )
           +
           sum by (env,environment,stage,shard,fqdn) (
-            rate(grpc_server_handling_seconds_bucket{env="gprd",grpc_method!~"CalculateChecksum|CommitLanguages|CommitStats|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindCommit|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|GetArchive|LastCommitForPath|OptimizeRepository|PackObjectsHookWithSidechannel|PostReceiveHook|PostUploadPackWithSidechannel|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|RepositorySize|SSHUploadPackWithSidechannel|UpdateHook|WriteRef",grpc_service!="gitaly.OperationService",grpc_type="unary",job=~"gitaly|scrapeConfig/monitoring/prometheus-agent-gitaly",le="1",type="gitaly"}[5m] offset 30s)
+            sli_aggregations:grpc_server_handling_seconds_bucket:rate_5m{env="gprd",grpc_method!~"CalculateChecksum|CommitLanguages|CommitStats|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindCommit|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|GetArchive|LastCommitForPath|OptimizeRepository|PackObjectsHookWithSidechannel|PostReceiveHook|PostUploadPackWithSidechannel|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|RepositorySize|SSHUploadPackWithSidechannel|UpdateHook|WriteRef",grpc_service!="gitaly.OperationService",grpc_type="unary",job=~"gitaly|scrapeConfig/monitoring/prometheus-agent-gitaly",le="1",type="gitaly"}
           )
         )
         /
@@ -27,11 +27,11 @@ groups:
         or
         label_replace((
           sum by (env,environment,stage,shard,fqdn) (
-            rate(grpc_server_handling_seconds_bucket{env="gprd",grpc_method=~"FindCommit|GetArchive|LastCommitForPath|RepositorySize|WriteRef",grpc_service!="gitaly.OperationService",grpc_type="unary",job=~"gitaly|scrapeConfig/monitoring/prometheus-agent-gitaly",le="10",type="gitaly"}[5m] offset 30s)
+            sli_aggregations:grpc_server_handling_seconds_bucket:rate_5m{env="gprd",grpc_method=~"FindCommit|GetArchive|LastCommitForPath|RepositorySize|WriteRef",grpc_service!="gitaly.OperationService",grpc_type="unary",job=~"gitaly|scrapeConfig/monitoring/prometheus-agent-gitaly",le="10",type="gitaly"}
           )
           +
           sum by (env,environment,stage,shard,fqdn) (
-            rate(grpc_server_handling_seconds_bucket{env="gprd",grpc_method=~"FindCommit|GetArchive|LastCommitForPath|RepositorySize|WriteRef",grpc_service!="gitaly.OperationService",grpc_type="unary",job=~"gitaly|scrapeConfig/monitoring/prometheus-agent-gitaly",le="30",type="gitaly"}[5m] offset 30s)
+            sli_aggregations:grpc_server_handling_seconds_bucket:rate_5m{env="gprd",grpc_method=~"FindCommit|GetArchive|LastCommitForPath|RepositorySize|WriteRef",grpc_service!="gitaly.OperationService",grpc_type="unary",job=~"gitaly|scrapeConfig/monitoring/prometheus-agent-gitaly",le="30",type="gitaly"}
           )
         )
         /
@@ -40,11 +40,11 @@ groups:
         or
         label_replace((
           sum by (env,environment,stage,shard,fqdn) (
-            rate(grpc_server_handling_seconds_bucket{env="gprd",grpc_service="gitaly.OperationService",grpc_type="unary",job=~"gitaly|scrapeConfig/monitoring/prometheus-agent-gitaly",le="10",type="gitaly"}[5m] offset 30s)
+            sli_aggregations:grpc_server_handling_seconds_bucket:rate_5m{env="gprd",grpc_service="gitaly.OperationService",grpc_type="unary",job=~"gitaly|scrapeConfig/monitoring/prometheus-agent-gitaly",le="10",type="gitaly"}
           )
           +
           sum by (env,environment,stage,shard,fqdn) (
-            rate(grpc_server_handling_seconds_bucket{env="gprd",grpc_service="gitaly.OperationService",grpc_type="unary",job=~"gitaly|scrapeConfig/monitoring/prometheus-agent-gitaly",le="30",type="gitaly"}[5m] offset 30s)
+            sli_aggregations:grpc_server_handling_seconds_bucket:rate_5m{env="gprd",grpc_service="gitaly.OperationService",grpc_type="unary",job=~"gitaly|scrapeConfig/monitoring/prometheus-agent-gitaly",le="30",type="gitaly"}
           )
         )
         /
@@ -60,17 +60,17 @@ groups:
     expr: |
       sum by (env,environment,stage,shard,fqdn) (
         label_replace(sum by (env,environment,stage,shard,fqdn) (
-          rate(grpc_server_handling_seconds_bucket{env="gprd",grpc_method!~"CalculateChecksum|CommitLanguages|CommitStats|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindCommit|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|GetArchive|LastCommitForPath|OptimizeRepository|PackObjectsHookWithSidechannel|PostReceiveHook|PostUploadPackWithSidechannel|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|RepositorySize|SSHUploadPackWithSidechannel|UpdateHook|WriteRef",grpc_service!="gitaly.OperationService",grpc_type="unary",job=~"gitaly|scrapeConfig/monitoring/prometheus-agent-gitaly",le="+Inf",type="gitaly"}[5m] offset 30s)
+          sli_aggregations:grpc_server_handling_seconds_bucket:rate_5m{env="gprd",grpc_method!~"CalculateChecksum|CommitLanguages|CommitStats|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindCommit|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|GetArchive|LastCommitForPath|OptimizeRepository|PackObjectsHookWithSidechannel|PostReceiveHook|PostUploadPackWithSidechannel|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|RepositorySize|SSHUploadPackWithSidechannel|UpdateHook|WriteRef",grpc_service!="gitaly.OperationService",grpc_type="unary",job=~"gitaly|scrapeConfig/monitoring/prometheus-agent-gitaly",le="+Inf",type="gitaly"}
         )
         , "_c", "0", "", "")
         or
         label_replace(sum by (env,environment,stage,shard,fqdn) (
-          rate(grpc_server_handling_seconds_bucket{env="gprd",grpc_method=~"FindCommit|GetArchive|LastCommitForPath|RepositorySize|WriteRef",grpc_service!="gitaly.OperationService",grpc_type="unary",job=~"gitaly|scrapeConfig/monitoring/prometheus-agent-gitaly",le="+Inf",type="gitaly"}[5m] offset 30s)
+          sli_aggregations:grpc_server_handling_seconds_bucket:rate_5m{env="gprd",grpc_method=~"FindCommit|GetArchive|LastCommitForPath|RepositorySize|WriteRef",grpc_service!="gitaly.OperationService",grpc_type="unary",job=~"gitaly|scrapeConfig/monitoring/prometheus-agent-gitaly",le="+Inf",type="gitaly"}
         )
         , "_c", "1", "", "")
         or
         label_replace(sum by (env,environment,stage,shard,fqdn) (
-          rate(grpc_server_handling_seconds_bucket{env="gprd",grpc_service="gitaly.OperationService",grpc_type="unary",job=~"gitaly|scrapeConfig/monitoring/prometheus-agent-gitaly",le="+Inf",type="gitaly"}[5m] offset 30s)
+          sli_aggregations:grpc_server_handling_seconds_bucket:rate_5m{env="gprd",grpc_service="gitaly.OperationService",grpc_type="unary",job=~"gitaly|scrapeConfig/monitoring/prometheus-agent-gitaly",le="+Inf",type="gitaly"}
         )
         , "_c", "2", "", "")
       )
@@ -145,11 +145,11 @@ groups:
       sum by (env,environment,stage,shard,fqdn) (
         label_replace((
           sum by (env,environment,stage,shard,fqdn) (
-            rate(grpc_server_handling_seconds_bucket{env="gprd",grpc_method!~"CalculateChecksum|CommitLanguages|CommitStats|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindCommit|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|GetArchive|LastCommitForPath|OptimizeRepository|PackObjectsHookWithSidechannel|PostReceiveHook|PostUploadPackWithSidechannel|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|RepositorySize|SSHUploadPackWithSidechannel|UpdateHook|WriteRef",grpc_service!="gitaly.OperationService",grpc_type="unary",job=~"gitaly|scrapeConfig/monitoring/prometheus-agent-gitaly",le="0.5",type="gitaly"}[30m] offset 30s)
+            sli_aggregations:grpc_server_handling_seconds_bucket:rate_30m{env="gprd",grpc_method!~"CalculateChecksum|CommitLanguages|CommitStats|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindCommit|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|GetArchive|LastCommitForPath|OptimizeRepository|PackObjectsHookWithSidechannel|PostReceiveHook|PostUploadPackWithSidechannel|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|RepositorySize|SSHUploadPackWithSidechannel|UpdateHook|WriteRef",grpc_service!="gitaly.OperationService",grpc_type="unary",job=~"gitaly|scrapeConfig/monitoring/prometheus-agent-gitaly",le="0.5",type="gitaly"}
           )
           +
           sum by (env,environment,stage,shard,fqdn) (
-            rate(grpc_server_handling_seconds_bucket{env="gprd",grpc_method!~"CalculateChecksum|CommitLanguages|CommitStats|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindCommit|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|GetArchive|LastCommitForPath|OptimizeRepository|PackObjectsHookWithSidechannel|PostReceiveHook|PostUploadPackWithSidechannel|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|RepositorySize|SSHUploadPackWithSidechannel|UpdateHook|WriteRef",grpc_service!="gitaly.OperationService",grpc_type="unary",job=~"gitaly|scrapeConfig/monitoring/prometheus-agent-gitaly",le="1",type="gitaly"}[30m] offset 30s)
+            sli_aggregations:grpc_server_handling_seconds_bucket:rate_30m{env="gprd",grpc_method!~"CalculateChecksum|CommitLanguages|CommitStats|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindCommit|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|GetArchive|LastCommitForPath|OptimizeRepository|PackObjectsHookWithSidechannel|PostReceiveHook|PostUploadPackWithSidechannel|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|RepositorySize|SSHUploadPackWithSidechannel|UpdateHook|WriteRef",grpc_service!="gitaly.OperationService",grpc_type="unary",job=~"gitaly|scrapeConfig/monitoring/prometheus-agent-gitaly",le="1",type="gitaly"}
           )
         )
         /
@@ -158,11 +158,11 @@ groups:
         or
         label_replace((
           sum by (env,environment,stage,shard,fqdn) (
-            rate(grpc_server_handling_seconds_bucket{env="gprd",grpc_method=~"FindCommit|GetArchive|LastCommitForPath|RepositorySize|WriteRef",grpc_service!="gitaly.OperationService",grpc_type="unary",job=~"gitaly|scrapeConfig/monitoring/prometheus-agent-gitaly",le="10",type="gitaly"}[30m] offset 30s)
+            sli_aggregations:grpc_server_handling_seconds_bucket:rate_30m{env="gprd",grpc_method=~"FindCommit|GetArchive|LastCommitForPath|RepositorySize|WriteRef",grpc_service!="gitaly.OperationService",grpc_type="unary",job=~"gitaly|scrapeConfig/monitoring/prometheus-agent-gitaly",le="10",type="gitaly"}
           )
           +
           sum by (env,environment,stage,shard,fqdn) (
-            rate(grpc_server_handling_seconds_bucket{env="gprd",grpc_method=~"FindCommit|GetArchive|LastCommitForPath|RepositorySize|WriteRef",grpc_service!="gitaly.OperationService",grpc_type="unary",job=~"gitaly|scrapeConfig/monitoring/prometheus-agent-gitaly",le="30",type="gitaly"}[30m] offset 30s)
+            sli_aggregations:grpc_server_handling_seconds_bucket:rate_30m{env="gprd",grpc_method=~"FindCommit|GetArchive|LastCommitForPath|RepositorySize|WriteRef",grpc_service!="gitaly.OperationService",grpc_type="unary",job=~"gitaly|scrapeConfig/monitoring/prometheus-agent-gitaly",le="30",type="gitaly"}
           )
         )
         /
@@ -171,11 +171,11 @@ groups:
         or
         label_replace((
           sum by (env,environment,stage,shard,fqdn) (
-            rate(grpc_server_handling_seconds_bucket{env="gprd",grpc_service="gitaly.OperationService",grpc_type="unary",job=~"gitaly|scrapeConfig/monitoring/prometheus-agent-gitaly",le="10",type="gitaly"}[30m] offset 30s)
+            sli_aggregations:grpc_server_handling_seconds_bucket:rate_30m{env="gprd",grpc_service="gitaly.OperationService",grpc_type="unary",job=~"gitaly|scrapeConfig/monitoring/prometheus-agent-gitaly",le="10",type="gitaly"}
           )
           +
           sum by (env,environment,stage,shard,fqdn) (
-            rate(grpc_server_handling_seconds_bucket{env="gprd",grpc_service="gitaly.OperationService",grpc_type="unary",job=~"gitaly|scrapeConfig/monitoring/prometheus-agent-gitaly",le="30",type="gitaly"}[30m] offset 30s)
+            sli_aggregations:grpc_server_handling_seconds_bucket:rate_30m{env="gprd",grpc_service="gitaly.OperationService",grpc_type="unary",job=~"gitaly|scrapeConfig/monitoring/prometheus-agent-gitaly",le="30",type="gitaly"}
           )
         )
         /
@@ -191,17 +191,17 @@ groups:
     expr: |
       sum by (env,environment,stage,shard,fqdn) (
         label_replace(sum by (env,environment,stage,shard,fqdn) (
-          rate(grpc_server_handling_seconds_bucket{env="gprd",grpc_method!~"CalculateChecksum|CommitLanguages|CommitStats|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindCommit|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|GetArchive|LastCommitForPath|OptimizeRepository|PackObjectsHookWithSidechannel|PostReceiveHook|PostUploadPackWithSidechannel|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|RepositorySize|SSHUploadPackWithSidechannel|UpdateHook|WriteRef",grpc_service!="gitaly.OperationService",grpc_type="unary",job=~"gitaly|scrapeConfig/monitoring/prometheus-agent-gitaly",le="+Inf",type="gitaly"}[30m] offset 30s)
+          sli_aggregations:grpc_server_handling_seconds_bucket:rate_30m{env="gprd",grpc_method!~"CalculateChecksum|CommitLanguages|CommitStats|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindCommit|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|GetArchive|LastCommitForPath|OptimizeRepository|PackObjectsHookWithSidechannel|PostReceiveHook|PostUploadPackWithSidechannel|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|RepositorySize|SSHUploadPackWithSidechannel|UpdateHook|WriteRef",grpc_service!="gitaly.OperationService",grpc_type="unary",job=~"gitaly|scrapeConfig/monitoring/prometheus-agent-gitaly",le="+Inf",type="gitaly"}
         )
         , "_c", "0", "", "")
         or
         label_replace(sum by (env,environment,stage,shard,fqdn) (
-          rate(grpc_server_handling_seconds_bucket{env="gprd",grpc_method=~"FindCommit|GetArchive|LastCommitForPath|RepositorySize|WriteRef",grpc_service!="gitaly.OperationService",grpc_type="unary",job=~"gitaly|scrapeConfig/monitoring/prometheus-agent-gitaly",le="+Inf",type="gitaly"}[30m] offset 30s)
+          sli_aggregations:grpc_server_handling_seconds_bucket:rate_30m{env="gprd",grpc_method=~"FindCommit|GetArchive|LastCommitForPath|RepositorySize|WriteRef",grpc_service!="gitaly.OperationService",grpc_type="unary",job=~"gitaly|scrapeConfig/monitoring/prometheus-agent-gitaly",le="+Inf",type="gitaly"}
         )
         , "_c", "1", "", "")
         or
         label_replace(sum by (env,environment,stage,shard,fqdn) (
-          rate(grpc_server_handling_seconds_bucket{env="gprd",grpc_service="gitaly.OperationService",grpc_type="unary",job=~"gitaly|scrapeConfig/monitoring/prometheus-agent-gitaly",le="+Inf",type="gitaly"}[30m] offset 30s)
+          sli_aggregations:grpc_server_handling_seconds_bucket:rate_30m{env="gprd",grpc_service="gitaly.OperationService",grpc_type="unary",job=~"gitaly|scrapeConfig/monitoring/prometheus-agent-gitaly",le="+Inf",type="gitaly"}
         )
         , "_c", "2", "", "")
       )
@@ -276,11 +276,11 @@ groups:
       sum by (env,environment,stage,shard,fqdn) (
         label_replace((
           sum by (env,environment,stage,shard,fqdn) (
-            rate(grpc_server_handling_seconds_bucket{env="gprd",grpc_method!~"CalculateChecksum|CommitLanguages|CommitStats|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindCommit|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|GetArchive|LastCommitForPath|OptimizeRepository|PackObjectsHookWithSidechannel|PostReceiveHook|PostUploadPackWithSidechannel|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|RepositorySize|SSHUploadPackWithSidechannel|UpdateHook|WriteRef",grpc_service!="gitaly.OperationService",grpc_type="unary",job=~"gitaly|scrapeConfig/monitoring/prometheus-agent-gitaly",le="0.5",type="gitaly"}[1h] offset 30s)
+            sli_aggregations:grpc_server_handling_seconds_bucket:rate_1h{env="gprd",grpc_method!~"CalculateChecksum|CommitLanguages|CommitStats|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindCommit|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|GetArchive|LastCommitForPath|OptimizeRepository|PackObjectsHookWithSidechannel|PostReceiveHook|PostUploadPackWithSidechannel|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|RepositorySize|SSHUploadPackWithSidechannel|UpdateHook|WriteRef",grpc_service!="gitaly.OperationService",grpc_type="unary",job=~"gitaly|scrapeConfig/monitoring/prometheus-agent-gitaly",le="0.5",type="gitaly"}
           )
           +
           sum by (env,environment,stage,shard,fqdn) (
-            rate(grpc_server_handling_seconds_bucket{env="gprd",grpc_method!~"CalculateChecksum|CommitLanguages|CommitStats|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindCommit|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|GetArchive|LastCommitForPath|OptimizeRepository|PackObjectsHookWithSidechannel|PostReceiveHook|PostUploadPackWithSidechannel|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|RepositorySize|SSHUploadPackWithSidechannel|UpdateHook|WriteRef",grpc_service!="gitaly.OperationService",grpc_type="unary",job=~"gitaly|scrapeConfig/monitoring/prometheus-agent-gitaly",le="1",type="gitaly"}[1h] offset 30s)
+            sli_aggregations:grpc_server_handling_seconds_bucket:rate_1h{env="gprd",grpc_method!~"CalculateChecksum|CommitLanguages|CommitStats|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindCommit|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|GetArchive|LastCommitForPath|OptimizeRepository|PackObjectsHookWithSidechannel|PostReceiveHook|PostUploadPackWithSidechannel|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|RepositorySize|SSHUploadPackWithSidechannel|UpdateHook|WriteRef",grpc_service!="gitaly.OperationService",grpc_type="unary",job=~"gitaly|scrapeConfig/monitoring/prometheus-agent-gitaly",le="1",type="gitaly"}
           )
         )
         /
@@ -289,11 +289,11 @@ groups:
         or
         label_replace((
           sum by (env,environment,stage,shard,fqdn) (
-            rate(grpc_server_handling_seconds_bucket{env="gprd",grpc_method=~"FindCommit|GetArchive|LastCommitForPath|RepositorySize|WriteRef",grpc_service!="gitaly.OperationService",grpc_type="unary",job=~"gitaly|scrapeConfig/monitoring/prometheus-agent-gitaly",le="10",type="gitaly"}[1h] offset 30s)
+            sli_aggregations:grpc_server_handling_seconds_bucket:rate_1h{env="gprd",grpc_method=~"FindCommit|GetArchive|LastCommitForPath|RepositorySize|WriteRef",grpc_service!="gitaly.OperationService",grpc_type="unary",job=~"gitaly|scrapeConfig/monitoring/prometheus-agent-gitaly",le="10",type="gitaly"}
           )
           +
           sum by (env,environment,stage,shard,fqdn) (
-            rate(grpc_server_handling_seconds_bucket{env="gprd",grpc_method=~"FindCommit|GetArchive|LastCommitForPath|RepositorySize|WriteRef",grpc_service!="gitaly.OperationService",grpc_type="unary",job=~"gitaly|scrapeConfig/monitoring/prometheus-agent-gitaly",le="30",type="gitaly"}[1h] offset 30s)
+            sli_aggregations:grpc_server_handling_seconds_bucket:rate_1h{env="gprd",grpc_method=~"FindCommit|GetArchive|LastCommitForPath|RepositorySize|WriteRef",grpc_service!="gitaly.OperationService",grpc_type="unary",job=~"gitaly|scrapeConfig/monitoring/prometheus-agent-gitaly",le="30",type="gitaly"}
           )
         )
         /
@@ -302,11 +302,11 @@ groups:
         or
         label_replace((
           sum by (env,environment,stage,shard,fqdn) (
-            rate(grpc_server_handling_seconds_bucket{env="gprd",grpc_service="gitaly.OperationService",grpc_type="unary",job=~"gitaly|scrapeConfig/monitoring/prometheus-agent-gitaly",le="10",type="gitaly"}[1h] offset 30s)
+            sli_aggregations:grpc_server_handling_seconds_bucket:rate_1h{env="gprd",grpc_service="gitaly.OperationService",grpc_type="unary",job=~"gitaly|scrapeConfig/monitoring/prometheus-agent-gitaly",le="10",type="gitaly"}
           )
           +
           sum by (env,environment,stage,shard,fqdn) (
-            rate(grpc_server_handling_seconds_bucket{env="gprd",grpc_service="gitaly.OperationService",grpc_type="unary",job=~"gitaly|scrapeConfig/monitoring/prometheus-agent-gitaly",le="30",type="gitaly"}[1h] offset 30s)
+            sli_aggregations:grpc_server_handling_seconds_bucket:rate_1h{env="gprd",grpc_service="gitaly.OperationService",grpc_type="unary",job=~"gitaly|scrapeConfig/monitoring/prometheus-agent-gitaly",le="30",type="gitaly"}
           )
         )
         /
@@ -322,17 +322,17 @@ groups:
     expr: |
       sum by (env,environment,stage,shard,fqdn) (
         label_replace(sum by (env,environment,stage,shard,fqdn) (
-          rate(grpc_server_handling_seconds_bucket{env="gprd",grpc_method!~"CalculateChecksum|CommitLanguages|CommitStats|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindCommit|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|GetArchive|LastCommitForPath|OptimizeRepository|PackObjectsHookWithSidechannel|PostReceiveHook|PostUploadPackWithSidechannel|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|RepositorySize|SSHUploadPackWithSidechannel|UpdateHook|WriteRef",grpc_service!="gitaly.OperationService",grpc_type="unary",job=~"gitaly|scrapeConfig/monitoring/prometheus-agent-gitaly",le="+Inf",type="gitaly"}[1h] offset 30s)
+          sli_aggregations:grpc_server_handling_seconds_bucket:rate_1h{env="gprd",grpc_method!~"CalculateChecksum|CommitLanguages|CommitStats|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindCommit|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|GetArchive|LastCommitForPath|OptimizeRepository|PackObjectsHookWithSidechannel|PostReceiveHook|PostUploadPackWithSidechannel|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|RepositorySize|SSHUploadPackWithSidechannel|UpdateHook|WriteRef",grpc_service!="gitaly.OperationService",grpc_type="unary",job=~"gitaly|scrapeConfig/monitoring/prometheus-agent-gitaly",le="+Inf",type="gitaly"}
         )
         , "_c", "0", "", "")
         or
         label_replace(sum by (env,environment,stage,shard,fqdn) (
-          rate(grpc_server_handling_seconds_bucket{env="gprd",grpc_method=~"FindCommit|GetArchive|LastCommitForPath|RepositorySize|WriteRef",grpc_service!="gitaly.OperationService",grpc_type="unary",job=~"gitaly|scrapeConfig/monitoring/prometheus-agent-gitaly",le="+Inf",type="gitaly"}[1h] offset 30s)
+          sli_aggregations:grpc_server_handling_seconds_bucket:rate_1h{env="gprd",grpc_method=~"FindCommit|GetArchive|LastCommitForPath|RepositorySize|WriteRef",grpc_service!="gitaly.OperationService",grpc_type="unary",job=~"gitaly|scrapeConfig/monitoring/prometheus-agent-gitaly",le="+Inf",type="gitaly"}
         )
         , "_c", "1", "", "")
         or
         label_replace(sum by (env,environment,stage,shard,fqdn) (
-          rate(grpc_server_handling_seconds_bucket{env="gprd",grpc_service="gitaly.OperationService",grpc_type="unary",job=~"gitaly|scrapeConfig/monitoring/prometheus-agent-gitaly",le="+Inf",type="gitaly"}[1h] offset 30s)
+          sli_aggregations:grpc_server_handling_seconds_bucket:rate_1h{env="gprd",grpc_service="gitaly.OperationService",grpc_type="unary",job=~"gitaly|scrapeConfig/monitoring/prometheus-agent-gitaly",le="+Inf",type="gitaly"}
         )
         , "_c", "2", "", "")
       )

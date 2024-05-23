@@ -2,6 +2,8 @@ local aggregations = import 'promql/aggregations.libsonnet';
 local misc = import 'utils/misc.libsonnet';
 local strings = import 'utils/strings.libsonnet';
 local collectMetricNamesAndSelectors = (import 'servicemetrics/sli_metric_descriptor.libsonnet').collectMetricNamesAndSelectors;
+local metric = import './metric.libsonnet';
+local recordingRuleRegistry = import 'servicemetrics/recording-rule-registry.libsonnet';
 
 // Merge two hashes of the form { key: set },
 local merge(h1, h2) =
@@ -79,83 +81,82 @@ local generateApdexPercentileLatencyQuery(c, percentile, aggregationLabels, sele
 // to generate a new metric value
 {
   combined(
-    metrics
+    metrics,
   )::
-    // If the combiner only includes a single metric, unwind it and just
-    // delegate directly to the underlying metric
-    if std.length(metrics) == 1 then
-      metrics[0]
-    else
-      {
-        metrics: metrics,
-        useRecordingRuleRegistry:: misc.any(function(metric) metric.useRecordingRuleRegistry, metrics),
-        // We use `combined(histogramApdex(), histogramApdex())` with diferent
-        // thresholds to categorize different operations.
-        // This allows us to still generate the `histogram_quantile` graphs on
-        // service dashboards.
-        [if std.objectHas(metrics[0], 'histogram') then 'histogram']: metrics[0].histogram,
+    assert std.length(metrics) > 1 : 'Use `combined` for multiple metrics.';
+    {
+      config:: recordingRuleRegistry.defaultConfig,
+      metrics:
+        local c = self.config;
+        std.map(function(m) metric.new(m) + { config+: c }, metrics),
+      useRecordingRuleRegistry:: misc.any(function(metric) metric.useRecordingRuleRegistry, metrics),
+      // We use `combined(histogramApdex(), histogramApdex())` with diferent
+      // thresholds to categorize different operations.
+      // This allows us to still generate the `histogram_quantile` graphs on
+      // service dashboards.
+      [if std.objectHas(metrics[0], 'histogram') then 'histogram']: metrics[0].histogram,
 
-        // This creates a rate query of the form
-        // rate(....{<selector>}[<rangeInterval>])
-        rateQuery(selector, rangeInterval, withoutLabels=[])::
-          generateRateQuery(self, selector, rangeInterval, withoutLabels=withoutLabels),
+      // This creates a rate query of the form
+      // rate(....{<selector>}[<rangeInterval>])
+      rateQuery(selector, rangeInterval, withoutLabels=[])::
+        generateRateQuery(self, selector, rangeInterval, withoutLabels=withoutLabels),
 
-        // This creates a increase query of the form
-        // rate(....{<selector>}[<rangeInterval>])
-        increaseQuery(selector, rangeInterval, withoutLabels=[])::
-          generateIncreaseQuery(self, selector, rangeInterval, withoutLabels=withoutLabels),
+      // This creates a increase query of the form
+      // rate(....{<selector>}[<rangeInterval>])
+      increaseQuery(selector, rangeInterval, withoutLabels=[])::
+        generateIncreaseQuery(self, selector, rangeInterval, withoutLabels=withoutLabels),
 
-        // This creates an aggregated rate query of the form
-        // sum by(<aggregationLabels>) (...)
-        aggregatedRateQuery(aggregationLabels, selector, rangeInterval, withoutLabels=[], offset=null)::
-          local query = generateRateQuery(self, selector, rangeInterval, withoutLabels=withoutLabels, offset=offset);
-          aggregations.aggregateOverQuery('sum', aggregationLabels, query),
+      // This creates an aggregated rate query of the form
+      // sum by(<aggregationLabels>) (...)
+      aggregatedRateQuery(aggregationLabels, selector, rangeInterval, withoutLabels=[], offset=null)::
+        local query = generateRateQuery(self, selector, rangeInterval, withoutLabels=withoutLabels, offset=offset);
+        aggregations.aggregateOverQuery('sum', aggregationLabels, query),
 
-        // This creates an aggregated increase query of the form
-        // sum by(<aggregationLabels>) (...)
-        aggregatedIncreaseQuery(aggregationLabels, selector, rangeInterval, withoutLabels=[])::
-          local query = generateIncreaseQuery(self, selector, rangeInterval, withoutLabels=withoutLabels);
-          aggregations.aggregateOverQuery('sum', aggregationLabels, query),
+      // This creates an aggregated increase query of the form
+      // sum by(<aggregationLabels>) (...)
+      aggregatedIncreaseQuery(aggregationLabels, selector, rangeInterval, withoutLabels=[])::
+        local query = generateIncreaseQuery(self, selector, rangeInterval, withoutLabels=withoutLabels);
+        aggregations.aggregateOverQuery('sum', aggregationLabels, query),
 
-        /* apdexSuccessRateQuery measures the rate at which apdex violations occur */
-        apdexSuccessRateQuery(aggregationLabels, selector, rangeInterval, withoutLabels=[], offset=null)::
-          generateApdexNumeratorQuery(self, aggregationLabels, selector, rangeInterval, withoutLabels=withoutLabels, offset=offset),
+      /* apdexSuccessRateQuery measures the rate at which apdex violations occur */
+      apdexSuccessRateQuery(aggregationLabels, selector, rangeInterval, withoutLabels=[], offset=null)::
+        generateApdexNumeratorQuery(self, aggregationLabels, selector, rangeInterval, withoutLabels=withoutLabels, offset=offset),
 
-        apdexQuery(aggregationLabels, selector, rangeInterval, withoutLabels=[])::
-          generateApdexQuery(self, aggregationLabels, selector, rangeInterval, withoutLabels=withoutLabels),
+      apdexQuery(aggregationLabels, selector, rangeInterval, withoutLabels=[])::
+        generateApdexQuery(self, aggregationLabels, selector, rangeInterval, withoutLabels=withoutLabels),
 
-        apdexWeightQuery(aggregationLabels, selector, rangeInterval, withoutLabels=[], offset=null)::
-          generateApdexWeightQuery(self, aggregationLabels, selector, rangeInterval, withoutLabels=withoutLabels, offset=offset),
+      apdexWeightQuery(aggregationLabels, selector, rangeInterval, withoutLabels=[], offset=null)::
+        generateApdexWeightQuery(self, aggregationLabels, selector, rangeInterval, withoutLabels=withoutLabels, offset=offset),
 
-        percentileLatencyQuery(percentile, aggregationLabels, selector, rangeInterval, withoutLabels=[])::
-          generateApdexPercentileLatencyQuery(self, percentile, aggregationLabels, selector, rangeInterval, withoutLabels=withoutLabels),
+      percentileLatencyQuery(percentile, aggregationLabels, selector, rangeInterval, withoutLabels=[])::
+        generateApdexPercentileLatencyQuery(self, percentile, aggregationLabels, selector, rangeInterval, withoutLabels=withoutLabels),
 
-        // Forward the below methods and fields to the first metric for
-        // apdex scores, which is wrong but hopefully not catastrophic.
-        describe()::
-          metrics[0].describe(),
+      // Forward the below methods and fields to the first metric for
+      // apdex scores, which is wrong but hopefully not catastrophic.
+      describe()::
+        metrics[0].describe(),
 
-        toleratedThreshold:
-          metrics[0].toleratedThreshold,
+      toleratedThreshold:
+        metrics[0].toleratedThreshold,
 
-        satisfiedThreshold:
-          metrics[0].satisfiedThreshold,
+      satisfiedThreshold:
+        metrics[0].satisfiedThreshold,
 
-        unit:
-          metrics[0].unit,
+      unit:
+        metrics[0].unit,
 
-        metricNames: std.set(std.flatMap(function(m) m.metricNames, metrics)),
+      metricNames: std.set(std.flatMap(function(m) m.metricNames, metrics)),
 
-        [if std.objectHasAll(metrics[0], 'supportsReflection') then 'supportsReflection']():: {
-          // Returns a list of metrics and the labels that they use
-          getMetricNamesAndLabels()::
-            std.foldl(
-              function(memo, metric) merge(memo, metric.supportsReflection().getMetricNamesAndLabels()),
-              metrics,
-              {}
-            ),
-          getMetricNamesAndSelectors()::
-            collectMetricNamesAndSelectors([metric.supportsReflection().getMetricNamesAndSelectors() for metric in metrics]),
-        },
+      [if std.objectHasAll(metrics[0], 'supportsReflection') then 'supportsReflection']():: {
+        // Returns a list of metrics and the labels that they use
+        getMetricNamesAndLabels()::
+          std.foldl(
+            function(memo, metric) merge(memo, metric.supportsReflection().getMetricNamesAndLabels()),
+            metrics,
+            {}
+          ),
+        getMetricNamesAndSelectors()::
+          collectMetricNamesAndSelectors([metric.supportsReflection().getMetricNamesAndSelectors() for metric in metrics]),
       },
+    },
 }

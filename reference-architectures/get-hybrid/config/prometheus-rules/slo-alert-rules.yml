@@ -2994,19 +2994,19 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (le) (
-            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{urgency="high"}
+            rate(sidekiq_jobs_completion_seconds_bucket{urgency="high"}[5m])
             or
-            sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{urgency="high"}
+            rate(sidekiq_jobs_queue_duration_seconds_bucket{urgency="high"}[5m])
             or
-            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{urgency="low"}
+            rate(sidekiq_jobs_completion_seconds_bucket{urgency="low"}[5m])
             or
-            sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{urgency="low"}
+            rate(sidekiq_jobs_queue_duration_seconds_bucket{urgency="low"}[5m])
             or
-            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{urgency="throttled"}
+            rate(sidekiq_jobs_completion_seconds_bucket{urgency="throttled"}[5m])
             or
-            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{urgency=""}
+            rate(sidekiq_jobs_completion_seconds_bucket{urgency=""}[5m])
             or
-            sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{urgency=""}
+            rate(sidekiq_jobs_queue_duration_seconds_bucket{urgency=""}[5m])
           )
         )
       runbook: docs/sidekiq/README.md
@@ -3057,19 +3057,19 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (le) (
-            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{urgency="high"}
+            rate(sidekiq_jobs_completion_seconds_bucket{urgency="high"}[5m])
             or
-            sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{urgency="high"}
+            rate(sidekiq_jobs_queue_duration_seconds_bucket{urgency="high"}[5m])
             or
-            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{urgency="low"}
+            rate(sidekiq_jobs_completion_seconds_bucket{urgency="low"}[5m])
             or
-            sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{urgency="low"}
+            rate(sidekiq_jobs_queue_duration_seconds_bucket{urgency="low"}[5m])
             or
-            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{urgency="throttled"}
+            rate(sidekiq_jobs_completion_seconds_bucket{urgency="throttled"}[5m])
             or
-            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{urgency=""}
+            rate(sidekiq_jobs_completion_seconds_bucket{urgency=""}[5m])
             or
-            sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{urgency=""}
+            rate(sidekiq_jobs_queue_duration_seconds_bucket{urgency=""}[5m])
           )
         )
       runbook: docs/sidekiq/README.md
