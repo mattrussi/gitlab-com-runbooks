@@ -62,10 +62,12 @@
 - How and when to escalate
 - List of SME's and people who can help
 
-# Alert definitions
+# Definitions
 
 - Link to the definition of this alert for review and tuning
 - Advice or limitations on how we should or shouldn't tune the alert
+- Link to edit this playbook
+- [Update the template used to format this playbook](https://gitlab.com/gitlab-com/runbooks/-/edit/master/docs/template-alert-playbook.md?ref_type=heads)
 
 # Related Links
 
