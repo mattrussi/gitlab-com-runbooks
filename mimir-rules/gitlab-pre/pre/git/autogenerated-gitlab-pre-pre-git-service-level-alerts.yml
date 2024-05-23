@@ -7,7 +7,6 @@ groups:
   - alert: GitServiceGitlabShellTrafficCessation
     for: 5m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The gitlab_shell SLI of the git service (`{{ $labels.stage }}` stage)
         has not received any traffic in the past 30m
       description: |
@@ -43,7 +42,6 @@ groups:
   - alert: GitServiceGitlabShellTrafficAbsent
     for: 30m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The gitlab_shell SLI of the git service (`{{ $labels.stage }}` stage)
         has not reported any traffic in the past 30m
       description: |
@@ -81,7 +79,6 @@ groups:
   - alert: GitServiceGitlabShellTrafficCessationRegional
     for: 5m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The gitlab_shell SLI of the git service in region `{{ $labels.region
         }}` has not received any traffic in the past 30m
       description: |
@@ -119,7 +116,6 @@ groups:
   - alert: GitServiceGitlabShellTrafficAbsentRegional
     for: 30m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The gitlab_shell SLI of the git service in region `{{ $labels.region
         }}` has not reported any traffic in the past 30m
       description: |
@@ -159,7 +155,6 @@ groups:
   - alert: GitServiceGitlabSshdApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The gitlab_sshd SLI of the git service (`{{ $labels.stage }}` stage)
         has an apdex violating SLO
       description: |
@@ -211,7 +206,6 @@ groups:
   - alert: GitServiceGitlabSshdApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The gitlab_sshd SLI of the git service (`{{ $labels.stage }}` stage)
         has an apdex violating SLO
       description: |
@@ -263,7 +257,6 @@ groups:
   - alert: GitServiceGitlabSshdApdexSLOViolationRegional
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The gitlab_sshd SLI of the git service in region `{{ $labels.region }}`
         has an apdex violating SLO
       description: |
@@ -317,7 +310,6 @@ groups:
   - alert: GitServiceGitlabSshdApdexSLOViolationRegional
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The gitlab_sshd SLI of the git service in region `{{ $labels.region }}`
         has an apdex violating SLO
       description: |
@@ -371,7 +363,6 @@ groups:
   - alert: GitServiceGitlabSshdErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The gitlab_sshd SLI of the git service (`{{ $labels.stage }}` stage)
         has an error rate violating SLO
       description: |
@@ -420,7 +411,6 @@ groups:
   - alert: GitServiceGitlabSshdErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The gitlab_sshd SLI of the git service (`{{ $labels.stage }}` stage)
         has an error rate violating SLO
       description: |
@@ -469,7 +459,6 @@ groups:
   - alert: GitServiceGitlabSshdErrorSLOViolationRegional
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The gitlab_sshd SLI of the git service in region `{{ $labels.region }}`
         has an error rate violating SLO
       description: |
@@ -520,7 +509,6 @@ groups:
   - alert: GitServiceGitlabSshdErrorSLOViolationRegional
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The gitlab_sshd SLI of the git service in region `{{ $labels.region }}`
         has an error rate violating SLO
       description: |
@@ -571,7 +559,6 @@ groups:
   - alert: GitServiceGitlabSshdTrafficCessation
     for: 5m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The gitlab_sshd SLI of the git service (`{{ $labels.stage }}` stage)
         has not received any traffic in the past 30m
       description: |
@@ -607,7 +594,6 @@ groups:
   - alert: GitServiceGitlabSshdTrafficAbsent
     for: 30m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The gitlab_sshd SLI of the git service (`{{ $labels.stage }}` stage)
         has not reported any traffic in the past 30m
       description: |
@@ -645,7 +631,6 @@ groups:
   - alert: GitServiceGitlabSshdTrafficCessationRegional
     for: 5m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The gitlab_sshd SLI of the git service in region `{{ $labels.region }}`
         has not received any traffic in the past 30m
       description: |
@@ -683,7 +668,6 @@ groups:
   - alert: GitServiceGitlabSshdTrafficAbsentRegional
     for: 30m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The gitlab_sshd SLI of the git service in region `{{ $labels.region }}`
         has not reported any traffic in the past 30m
       description: |
@@ -723,7 +707,6 @@ groups:
   - alert: GitServiceLoadbalancerErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The loadbalancer SLI of the git service (`{{ $labels.stage }}` stage)
         has an error rate violating SLO
       description: |
@@ -768,7 +751,6 @@ groups:
   - alert: GitServiceLoadbalancerErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The loadbalancer SLI of the git service (`{{ $labels.stage }}` stage)
         has an error rate violating SLO
       description: |
@@ -813,7 +795,6 @@ groups:
   - alert: GitServiceLoadbalancerErrorSLOViolationRegional
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The loadbalancer SLI of the git service in region `{{ $labels.region
         }}` has an error rate violating SLO
       description: |
@@ -860,7 +841,6 @@ groups:
   - alert: GitServiceLoadbalancerErrorSLOViolationRegional
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The loadbalancer SLI of the git service in region `{{ $labels.region
         }}` has an error rate violating SLO
       description: |
@@ -907,7 +887,6 @@ groups:
   - alert: GitServiceLoadbalancerTrafficCessation
     for: 5m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The loadbalancer SLI of the git service (`{{ $labels.stage }}` stage)
         has not received any traffic in the past 30m
       description: |
@@ -939,7 +918,6 @@ groups:
   - alert: GitServiceLoadbalancerTrafficAbsent
     for: 30m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The loadbalancer SLI of the git service (`{{ $labels.stage }}` stage)
         has not reported any traffic in the past 30m
       description: |
@@ -973,7 +951,6 @@ groups:
   - alert: GitServiceLoadbalancerTrafficCessationRegional
     for: 5m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The loadbalancer SLI of the git service in region `{{ $labels.region
         }}` has not received any traffic in the past 30m
       description: |
@@ -1007,7 +984,6 @@ groups:
   - alert: GitServiceLoadbalancerTrafficAbsentRegional
     for: 30m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The loadbalancer SLI of the git service in region `{{ $labels.region
         }}` has not reported any traffic in the past 30m
       description: |
@@ -1043,7 +1019,6 @@ groups:
   - alert: GitServiceLoadbalancerSshErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The loadbalancer_ssh SLI of the git service (`{{ $labels.stage }}` stage)
         has an error rate violating SLO
       description: |
@@ -1088,7 +1063,6 @@ groups:
   - alert: GitServiceLoadbalancerSshErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The loadbalancer_ssh SLI of the git service (`{{ $labels.stage }}` stage)
         has an error rate violating SLO
       description: |
@@ -1133,7 +1107,6 @@ groups:
   - alert: GitServiceLoadbalancerSshErrorSLOViolationRegional
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The loadbalancer_ssh SLI of the git service in region `{{ $labels.region
         }}` has an error rate violating SLO
       description: |
@@ -1180,7 +1153,6 @@ groups:
   - alert: GitServiceLoadbalancerSshErrorSLOViolationRegional
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The loadbalancer_ssh SLI of the git service in region `{{ $labels.region
         }}` has an error rate violating SLO
       description: |
@@ -1227,7 +1199,6 @@ groups:
   - alert: GitServiceLoadbalancerSshTrafficCessation
     for: 5m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The loadbalancer_ssh SLI of the git service (`{{ $labels.stage }}` stage)
         has not received any traffic in the past 30m
       description: |
@@ -1259,7 +1230,6 @@ groups:
   - alert: GitServiceLoadbalancerSshTrafficAbsent
     for: 30m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The loadbalancer_ssh SLI of the git service (`{{ $labels.stage }}` stage)
         has not reported any traffic in the past 30m
       description: |
@@ -1293,7 +1263,6 @@ groups:
   - alert: GitServiceLoadbalancerSshTrafficCessationRegional
     for: 5m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The loadbalancer_ssh SLI of the git service in region `{{ $labels.region
         }}` has not received any traffic in the past 30m
       description: |
@@ -1327,7 +1296,6 @@ groups:
   - alert: GitServiceLoadbalancerSshTrafficAbsentRegional
     for: 30m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The loadbalancer_ssh SLI of the git service in region `{{ $labels.region
         }}` has not reported any traffic in the past 30m
       description: |
@@ -1363,7 +1331,6 @@ groups:
   - alert: GitServiceRailsRequestApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The rails_request SLI of the git service (`{{ $labels.stage }}` stage)
         has an apdex violating SLO
       description: |
@@ -1410,7 +1377,6 @@ groups:
   - alert: GitServiceRailsRequestApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The rails_request SLI of the git service (`{{ $labels.stage }}` stage)
         has an apdex violating SLO
       description: |
@@ -1457,7 +1423,6 @@ groups:
   - alert: GitServiceRailsRequestApdexSLOViolationRegional
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The rails_request SLI of the git service in region `{{ $labels.region
         }}` has an apdex violating SLO
       description: |
@@ -1506,7 +1471,6 @@ groups:
   - alert: GitServiceRailsRequestApdexSLOViolationRegional
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The rails_request SLI of the git service in region `{{ $labels.region
         }}` has an apdex violating SLO
       description: |
@@ -1555,7 +1519,6 @@ groups:
   - alert: GitServiceRailsRequestErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The rails_request SLI of the git service (`{{ $labels.stage }}` stage)
         has an error rate violating SLO
       description: |
@@ -1606,7 +1569,6 @@ groups:
   - alert: GitServiceRailsRequestErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The rails_request SLI of the git service (`{{ $labels.stage }}` stage)
         has an error rate violating SLO
       description: |
@@ -1657,7 +1619,6 @@ groups:
   - alert: GitServiceRailsRequestErrorSLOViolationRegional
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The rails_request SLI of the git service in region `{{ $labels.region
         }}` has an error rate violating SLO
       description: |
@@ -1710,7 +1671,6 @@ groups:
   - alert: GitServiceRailsRequestErrorSLOViolationRegional
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The rails_request SLI of the git service in region `{{ $labels.region
         }}` has an error rate violating SLO
       description: |
@@ -1763,7 +1723,6 @@ groups:
   - alert: GitServiceRailsRequestTrafficCessation
     for: 5m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The rails_request SLI of the git service (`{{ $labels.stage }}` stage)
         has not received any traffic in the past 30m
       description: |
@@ -1801,7 +1760,6 @@ groups:
   - alert: GitServiceRailsRequestTrafficAbsent
     for: 30m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The rails_request SLI of the git service (`{{ $labels.stage }}` stage)
         has not reported any traffic in the past 30m
       description: |
@@ -1841,7 +1799,6 @@ groups:
   - alert: GitServiceRailsRequestTrafficCessationRegional
     for: 5m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The rails_request SLI of the git service in region `{{ $labels.region
         }}` has not received any traffic in the past 30m
       description: |
@@ -1881,7 +1838,6 @@ groups:
   - alert: GitServiceRailsRequestTrafficAbsentRegional
     for: 30m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The rails_request SLI of the git service in region `{{ $labels.region
         }}` has not reported any traffic in the past 30m
       description: |
@@ -1923,7 +1879,6 @@ groups:
   - alert: GitServiceWorkhorseApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The workhorse SLI of the git service (`{{ $labels.stage }}` stage) has
         an apdex violating SLO
       description: |
@@ -1975,7 +1930,6 @@ groups:
   - alert: GitServiceWorkhorseApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The workhorse SLI of the git service (`{{ $labels.stage }}` stage) has
         an apdex violating SLO
       description: |
@@ -2027,7 +1981,6 @@ groups:
   - alert: GitServiceWorkhorseApdexSLOViolationRegional
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The workhorse SLI of the git service in region `{{ $labels.region }}`
         has an apdex violating SLO
       description: |
@@ -2081,7 +2034,6 @@ groups:
   - alert: GitServiceWorkhorseApdexSLOViolationRegional
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The workhorse SLI of the git service in region `{{ $labels.region }}`
         has an apdex violating SLO
       description: |
@@ -2135,7 +2087,6 @@ groups:
   - alert: GitServiceWorkhorseErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The workhorse SLI of the git service (`{{ $labels.stage }}` stage) has
         an error rate violating SLO
       description: |
@@ -2184,7 +2135,6 @@ groups:
   - alert: GitServiceWorkhorseErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The workhorse SLI of the git service (`{{ $labels.stage }}` stage) has
         an error rate violating SLO
       description: |
@@ -2233,7 +2183,6 @@ groups:
   - alert: GitServiceWorkhorseErrorSLOViolationRegional
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The workhorse SLI of the git service in region `{{ $labels.region }}`
         has an error rate violating SLO
       description: |
@@ -2284,7 +2233,6 @@ groups:
   - alert: GitServiceWorkhorseErrorSLOViolationRegional
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The workhorse SLI of the git service in region `{{ $labels.region }}`
         has an error rate violating SLO
       description: |
@@ -2335,7 +2283,6 @@ groups:
   - alert: GitServiceWorkhorseTrafficCessation
     for: 5m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The workhorse SLI of the git service (`{{ $labels.stage }}` stage) has
         not received any traffic in the past 30m
       description: |
@@ -2371,7 +2318,6 @@ groups:
   - alert: GitServiceWorkhorseTrafficAbsent
     for: 30m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The workhorse SLI of the git service (`{{ $labels.stage }}` stage) has
         not reported any traffic in the past 30m
       description: |
@@ -2409,7 +2355,6 @@ groups:
   - alert: GitServiceWorkhorseTrafficCessationRegional
     for: 5m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The workhorse SLI of the git service in region `{{ $labels.region }}`
         has not received any traffic in the past 30m
       description: |
@@ -2447,7 +2392,6 @@ groups:
   - alert: GitServiceWorkhorseTrafficAbsentRegional
     for: 30m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The workhorse SLI of the git service in region `{{ $labels.region }}`
         has not reported any traffic in the past 30m
       description: |
@@ -2487,7 +2431,6 @@ groups:
   - alert: GitServiceWorkhorseAuthApiApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The workhorse_auth_api SLI of the git service (`{{ $labels.stage }}`
         stage) has an apdex violating SLO
       description: |
@@ -2539,7 +2482,6 @@ groups:
   - alert: GitServiceWorkhorseAuthApiApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The workhorse_auth_api SLI of the git service (`{{ $labels.stage }}`
         stage) has an apdex violating SLO
       description: |
@@ -2591,7 +2533,6 @@ groups:
   - alert: GitServiceWorkhorseAuthApiApdexSLOViolationRegional
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The workhorse_auth_api SLI of the git service in region `{{ $labels.region
         }}` has an apdex violating SLO
       description: |
@@ -2645,7 +2586,6 @@ groups:
   - alert: GitServiceWorkhorseAuthApiApdexSLOViolationRegional
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The workhorse_auth_api SLI of the git service in region `{{ $labels.region
         }}` has an apdex violating SLO
       description: |
@@ -2699,7 +2639,6 @@ groups:
   - alert: GitServiceWorkhorseAuthApiErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The workhorse_auth_api SLI of the git service (`{{ $labels.stage }}`
         stage) has an error rate violating SLO
       description: |
@@ -2748,7 +2687,6 @@ groups:
   - alert: GitServiceWorkhorseAuthApiErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The workhorse_auth_api SLI of the git service (`{{ $labels.stage }}`
         stage) has an error rate violating SLO
       description: |
@@ -2797,7 +2735,6 @@ groups:
   - alert: GitServiceWorkhorseAuthApiErrorSLOViolationRegional
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The workhorse_auth_api SLI of the git service in region `{{ $labels.region
         }}` has an error rate violating SLO
       description: |
@@ -2848,7 +2785,6 @@ groups:
   - alert: GitServiceWorkhorseAuthApiErrorSLOViolationRegional
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The workhorse_auth_api SLI of the git service in region `{{ $labels.region
         }}` has an error rate violating SLO
       description: |
@@ -2899,7 +2835,6 @@ groups:
   - alert: GitServiceWorkhorseAuthApiTrafficCessation
     for: 5m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The workhorse_auth_api SLI of the git service (`{{ $labels.stage }}`
         stage) has not received any traffic in the past 30m
       description: |
@@ -2935,7 +2870,6 @@ groups:
   - alert: GitServiceWorkhorseAuthApiTrafficAbsent
     for: 30m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The workhorse_auth_api SLI of the git service (`{{ $labels.stage }}`
         stage) has not reported any traffic in the past 30m
       description: |
@@ -2973,7 +2907,6 @@ groups:
   - alert: GitServiceWorkhorseAuthApiTrafficCessationRegional
     for: 5m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The workhorse_auth_api SLI of the git service in region `{{ $labels.region
         }}` has not received any traffic in the past 30m
       description: |
@@ -3011,7 +2944,6 @@ groups:
   - alert: GitServiceWorkhorseAuthApiTrafficAbsentRegional
     for: 30m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The workhorse_auth_api SLI of the git service in region `{{ $labels.region
         }}` has not reported any traffic in the past 30m
       description: |

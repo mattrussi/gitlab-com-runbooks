@@ -6,5 +6,13 @@
 //
 // Blank values will be ignored.
 {
-  measurement_and_locking: '',
+  dependency_proxy: '',
+  gitlab_docs: '',
+  fulfillment_infrastructure: '',
+  customersdot_application: '',
+  fulfillment_admin_tooling: '',
+  sm_provisioning: '',
+  saas_provisioning: '',
+  commerce_integrations: '',
+  purchase: '',
 }

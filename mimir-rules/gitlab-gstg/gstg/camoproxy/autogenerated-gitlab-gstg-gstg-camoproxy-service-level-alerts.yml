@@ -7,7 +7,6 @@ groups:
   - alert: CamoproxyServiceLoadbalancerErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The loadbalancer SLI of the camoproxy service (`{{ $labels.stage }}`
         stage) has an error rate violating SLO
       description: |
@@ -54,7 +53,6 @@ groups:
   - alert: CamoproxyServiceLoadbalancerErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The loadbalancer SLI of the camoproxy service (`{{ $labels.stage }}`
         stage) has an error rate violating SLO
       description: |
@@ -101,7 +99,6 @@ groups:
   - alert: CamoproxyServiceLoadbalancerTrafficCessation
     for: 5m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The loadbalancer SLI of the camoproxy service (`{{ $labels.stage }}`
         stage) has not received any traffic in the past 30m
       description: |
@@ -135,7 +132,6 @@ groups:
   - alert: CamoproxyServiceLoadbalancerTrafficAbsent
     for: 30m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The loadbalancer SLI of the camoproxy service (`{{ $labels.stage }}`
         stage) has not reported any traffic in the past 30m
       description: |
@@ -171,7 +167,6 @@ groups:
   - alert: CamoproxyServiceServerApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The server SLI of the camoproxy service (`{{ $labels.stage }}` stage)
         has an apdex violating SLO
       description: |
@@ -223,7 +218,6 @@ groups:
   - alert: CamoproxyServiceServerApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The server SLI of the camoproxy service (`{{ $labels.stage }}` stage)
         has an apdex violating SLO
       description: |
@@ -275,7 +269,6 @@ groups:
   - alert: CamoproxyServiceServerErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The server SLI of the camoproxy service (`{{ $labels.stage }}` stage)
         has an error rate violating SLO
       description: |
@@ -324,7 +317,6 @@ groups:
   - alert: CamoproxyServiceServerErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The server SLI of the camoproxy service (`{{ $labels.stage }}` stage)
         has an error rate violating SLO
       description: |
@@ -373,7 +365,6 @@ groups:
   - alert: CamoproxyServiceServerTrafficCessation
     for: 5m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The server SLI of the camoproxy service (`{{ $labels.stage }}` stage)
         has not received any traffic in the past 30m
       description: |
@@ -409,7 +400,6 @@ groups:
   - alert: CamoproxyServiceServerTrafficAbsent
     for: 30m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The server SLI of the camoproxy service (`{{ $labels.stage }}` stage)
         has not reported any traffic in the past 30m
       description: |

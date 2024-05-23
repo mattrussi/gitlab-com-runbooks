@@ -7,7 +7,6 @@ groups:
   - alert: CustomersdotServiceCustomersDotRequestsApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The customers_dot_requests SLI of the customersdot service (`{{ $labels.stage
         }}` stage) has an apdex violating SLO
       description: |
@@ -51,7 +50,6 @@ groups:
   - alert: CustomersdotServiceCustomersDotRequestsApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The customers_dot_requests SLI of the customersdot service (`{{ $labels.stage
         }}` stage) has an apdex violating SLO
       description: |
@@ -95,7 +93,6 @@ groups:
   - alert: CustomersdotServiceCustomersDotRequestsErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The customers_dot_requests SLI of the customersdot service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
@@ -143,7 +140,6 @@ groups:
   - alert: CustomersdotServiceCustomersDotRequestsErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The customers_dot_requests SLI of the customersdot service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
@@ -191,7 +187,6 @@ groups:
   - alert: CustomersdotServiceCustomersDotRequestsTrafficCessation
     for: 5m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The customers_dot_requests SLI of the customersdot service (`{{ $labels.stage
         }}` stage) has not received any traffic in the past 30m
       description: |
@@ -226,7 +221,6 @@ groups:
   - alert: CustomersdotServiceCustomersDotRequestsTrafficAbsent
     for: 30m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The customers_dot_requests SLI of the customersdot service (`{{ $labels.stage
         }}` stage) has not reported any traffic in the past 30m
       description: |
@@ -263,7 +257,6 @@ groups:
   - alert: CustomersdotServiceCustomersDotSidekiqJobsApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The customers_dot_sidekiq_jobs SLI of the customersdot service (`{{ $labels.stage
         }}` stage) has an apdex violating SLO
       description: |
@@ -307,7 +300,6 @@ groups:
   - alert: CustomersdotServiceCustomersDotSidekiqJobsApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The customers_dot_sidekiq_jobs SLI of the customersdot service (`{{ $labels.stage
         }}` stage) has an apdex violating SLO
       description: |
@@ -351,7 +343,6 @@ groups:
   - alert: CustomersdotServiceCustomersDotSidekiqJobsErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The customers_dot_sidekiq_jobs SLI of the customersdot service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
@@ -399,7 +390,6 @@ groups:
   - alert: CustomersdotServiceCustomersDotSidekiqJobsErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The customers_dot_sidekiq_jobs SLI of the customersdot service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
@@ -447,7 +437,6 @@ groups:
   - alert: CustomersdotServiceCustomersDotSidekiqJobsTrafficCessation
     for: 5m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The customers_dot_sidekiq_jobs SLI of the customersdot service (`{{ $labels.stage
         }}` stage) has not received any traffic in the past 30m
       description: |
@@ -482,7 +471,6 @@ groups:
   - alert: CustomersdotServiceCustomersDotSidekiqJobsTrafficAbsent
     for: 30m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The customers_dot_sidekiq_jobs SLI of the customersdot service (`{{ $labels.stage
         }}` stage) has not reported any traffic in the past 30m
       description: |
