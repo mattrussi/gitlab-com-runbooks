@@ -1,16 +1,15 @@
 local intervalForDuration = import './interval-for-duration.libsonnet';
-local gitlabMetricsConfig = import 'gitlab-metrics-config.libsonnet';
-local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
-local recordingRuleRegistry = gitlabMetricsConfig.recordingRuleRegistry;
 local recordingRules = import 'recording-rules/recording-rules.libsonnet';
+local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 
-local recordingRuleGroupsForServiceForBurnRate(serviceDefinition, componentAggregationSet, nodeAggregationSet, shardAggregationSet, burnRate) =
+local recordingRuleGroupsForServiceForBurnRate(serviceDefinition, componentAggregationSet, nodeAggregationSet, shardAggregationSet, burnRate, config) =
   local rulesetGenerators =
     [
-      recordingRules.sliRecordingRulesSetGenerator(burnRate, recordingRuleRegistry),
+      recordingRules.sliRecordingRulesSetGenerator(burnRate, config.recordingRuleRegistry),
       recordingRules.componentMetricsRuleSetGenerator(
         burnRate=burnRate,
-        aggregationSet=componentAggregationSet
+        aggregationSet=componentAggregationSet,
+        config=config
       ),
       recordingRules.extraRecordingRuleSetGenerator(burnRate),
     ]
@@ -21,6 +20,7 @@ local recordingRuleGroupsForServiceForBurnRate(serviceDefinition, componentAggre
           recordingRules.componentMetricsRuleSetGenerator(
             burnRate=burnRate,
             aggregationSet=nodeAggregationSet,
+            config=config
           ),
         ]
       else
@@ -31,6 +31,7 @@ local recordingRuleGroupsForServiceForBurnRate(serviceDefinition, componentAggre
   local shardLevelIndicatorsRules = recordingRules.componentMetricsRuleSetGenerator(
     burnRate=burnRate,
     aggregationSet=shardAggregationSet,
+    config=config,
   );
 
   {
@@ -46,8 +47,8 @@ local recordingRuleGroupsForServiceForBurnRate(serviceDefinition, componentAggre
         [],
   };
 
-local featureCategoryRecordingRuleGroupsForService(serviceDefinition, aggregationSet, burnRate) =
-  local generator = recordingRules.componentMetricsRuleSetGenerator(burnRate, aggregationSet);
+local featureCategoryRecordingRuleGroupsForService(serviceDefinition, aggregationSet, burnRate, config) =
+  local generator = recordingRules.componentMetricsRuleSetGenerator(burnRate, aggregationSet, config=config);
   local indicators = std.filter(function(indicator) indicator.hasFeatureCategory(), serviceDefinition.listServiceLevelIndicators());
   {
     name: 'Prometheus Intermediate Metrics per feature: %s - burn-rate %s' % [serviceDefinition.type, burnRate],
@@ -56,6 +57,8 @@ local featureCategoryRecordingRuleGroupsForService(serviceDefinition, aggregatio
   };
 
 {
+
+  config: import 'gitlab-metrics-config.libsonnet',
   /**
    * Generate all source recording rule groups for a specific service.
    * These are the first level aggregation, for normalizing source metrics
@@ -67,7 +70,7 @@ local featureCategoryRecordingRuleGroupsForService(serviceDefinition, aggregatio
     local burnRates = componentAggregationSet.getBurnRates();
 
     [
-      recordingRuleGroupsForServiceForBurnRate(serviceDefinition, componentAggregationSet, nodeAggregationSet, shardAggregationSet, burnRate)
+      recordingRuleGroupsForServiceForBurnRate(serviceDefinition, componentAggregationSet, nodeAggregationSet, shardAggregationSet, burnRate, self.config)
       for burnRate in burnRates
     ]
     +
@@ -83,7 +86,7 @@ local featureCategoryRecordingRuleGroupsForService(serviceDefinition, aggregatio
 
   featureCategoryRecordingRuleGroupsForService(serviceDefinition, aggregationSet)::
     [
-      featureCategoryRecordingRuleGroupsForService(serviceDefinition, aggregationSet, burnRate)
+      featureCategoryRecordingRuleGroupsForService(serviceDefinition, aggregationSet, burnRate, self.config)
       for burnRate in aggregationSet.getBurnRates()
     ],
 
