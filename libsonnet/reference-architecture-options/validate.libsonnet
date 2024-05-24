@@ -14,6 +14,9 @@ local defaults = {
     // Override this to disable Praefect monitoring
     enable: true,
   },
+  consul: {
+    enable: true,
+  }
   rdsMonitoring: false,
 };
 
