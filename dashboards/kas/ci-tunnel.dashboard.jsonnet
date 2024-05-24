@@ -32,10 +32,19 @@ basic.dashboard(
       legendFormat='__auto',
     ),
     basic.timeseries(
-      title='Routing request timed out',
-      description='CI tunnel request routing took longer than 20s',
+      title='Routing request timed out for recently connected agents',
+      description='CI tunnel request routing took longer than 20s for agents that have recently connected (within the last 15 minutes)',
       query=|||
-        sum (increase(tunnel_routing_timeout_total{%s}[$__rate_interval]))
+        sum (increase(tunnel_routing_timeout_connected_recently_total{%s}[$__rate_interval]))
+      ||| % selectorString,
+      yAxisLabel='requests',
+      legend_show=false,
+    ),
+    basic.timeseries(
+      title='Routing request timed out for disconnected agents',
+      description='CI tunnel request routing took longer than 20s for agents that are disconnected',
+      query=|||
+        sum (increase(tunnel_routing_timeout_not_connected_recently_total{%s}[$__rate_interval]))
       ||| % selectorString,
       yAxisLabel='requests',
       legend_show=false,
