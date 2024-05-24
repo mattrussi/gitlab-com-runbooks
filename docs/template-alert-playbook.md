@@ -29,6 +29,9 @@
 ## Severities
 
 - Guidance for assigning incident severity to this alert
+- Who is likely to be impacted by this cause of this alert?
+  - All gitlab.com customers or a subset?
+  - Internal customers only?
 - Things to check to determine severity
 
 ## Verification
@@ -61,6 +64,7 @@
 
 - How and when to escalate
 - List of SME's and people who can help
+- Slack channels where help is likely to be found
 
 # Definitions
 
