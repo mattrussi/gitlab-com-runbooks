@@ -124,6 +124,7 @@ module Storage
   # The Verifier class
   class Verifier
     include ::Storage::Logging
+
     def initialize(options)
       @options = options
       log.level = @options[:log_level]
@@ -156,10 +157,10 @@ module Storage
       Project.find(project_identifiers).each do |project|
         if project.repository_read_only?
           log.info "The repository for project id #{project.id} is still marked read-only on " \
-                   "storage node #{project.repository_storage}"
+            "storage node #{project.repository_storage}"
         else
           log.info "The repository for project id #{project.id} appears to have successfully " \
-                   "migrated to #{project.repository_storage}"
+            "migrated to #{project.repository_storage}"
         end
       end
       log.info "All logged project repository migrations are accounted for"

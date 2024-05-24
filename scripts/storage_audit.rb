@@ -83,8 +83,8 @@ module Storage
         leftovers_dir_name: 'leftovers.d',
         leftovers_file_name: 'leftover-git-repositories-%<date>s.txt',
         inventory_find_command: 'find %<path>s -mindepth 2 -maxdepth 3 ' \
-                                '-type d -name "*.git" -not -name "*.wiki.git" -not -name "*.design.git" ' \
-                                '-not -name "*+moved+*.git" -not -name "*+deleted*.git"',
+          '-type d -name "*.git" -not -name "*.wiki.git" -not -name "*.design.git" ' \
+          '-not -name "*+moved+*.git" -not -name "*+deleted*.git"',
         reset: false,
         rescan: false,
         log_level: Logger::INFO,
@@ -166,6 +166,7 @@ module Storage
     # OptionsParser class
     class OptionsParser
       include ::Storage::Helpers
+
       attr_reader :parser, :options
 
       def initialize
@@ -255,6 +256,7 @@ module Storage
   class RepositoryAuditor
     include ::Storage::Helpers
     include ::Storage::Logging
+
     attr_reader :options, :inventory_dir_path, :leftovers_file_path, :gitaly_address
 
     def initialize(options)

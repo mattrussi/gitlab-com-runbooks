@@ -59,7 +59,7 @@ module Registry
 
     def dry_run_notice
       log.info '[Dry-run] This is only a dry-run -- write operations will be logged but not ' \
-               'executed'
+        'executed'
     end
 
     def debug_command(cmd)
@@ -210,6 +210,7 @@ module Registry
   class Storage
     include ::Registry::LoggingSupport
     include ::Registry::SelectorMethods
+
     attr_reader :options, :project, :client, :buckets_cache, :files_cache
 
     def initialize(opts)

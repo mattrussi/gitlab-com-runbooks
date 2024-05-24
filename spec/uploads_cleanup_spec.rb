@@ -29,7 +29,7 @@ describe ::Uploads::Cleaner do
 
     let(:find_with_delete_command) do
       command = format(options[:find], path:, minutes: options[:interval_minutes])
-      command = command << " -#{operation}"
+      command <<= " -#{operation}"
       format(
         options[:remote_command],
         hostname: options[:hostname],
@@ -80,7 +80,7 @@ describe ::Uploads::CleanupScript do
         expect(::Uploads::Cleaner).to receive(:new).and_return(cleanup)
         expect(cleanup).to receive(:clean)
         expect(subject.log).to receive(:info).with("[Dry-run] This is only a dry-run -- write " \
-                                                   "operations will be logged but not executed")
+          "operations will be logged but not executed")
         expect(subject.main).to be_nil
       end
     end

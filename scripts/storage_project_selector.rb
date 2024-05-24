@@ -169,6 +169,7 @@ module Storage
     # OptionsParser class
     class OptionsParser
       include ::Storage::Helpers
+
       attr_reader :parser, :options
 
       def initialize
@@ -332,6 +333,7 @@ module Storage
   class ProjectSelector
     include ::Storage::Helpers
     include ::Storage::Logging
+
     attr_reader :options
 
     def initialize(options)
