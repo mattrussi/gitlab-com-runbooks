@@ -11,7 +11,7 @@ name = ARGV[0]
 datasource_id = ARGV[1]
 output = ""
 
-File.open(name, "r") do |file|
+File.open(name, "rt") do |file|
   file.each_line do |line|
     output += line
     object = line.strip
