@@ -22,6 +22,9 @@ local referenceArchitectureOptionsValidator = validator.new({
   praefect: {
     enable: validator.boolean,
   },
+  consul: {
+    enable: validator.boolean,
+  },
   rdsMonitoring: validator.boolean,
 });
 
