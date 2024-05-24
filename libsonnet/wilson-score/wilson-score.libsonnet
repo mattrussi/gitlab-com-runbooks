@@ -14,10 +14,11 @@ local confidenceLookup =
     '99.95%': 3.4807564,
   };
 
-local confidenceBoundaryExpression(isLowerBoundary, scoreRate, totalRate, windowInSeconds, confidence) =
-  local z = std.get(confidenceLookup, confidence, error 'Unknown confidence value ' + confidence);
+local confidenceBoundaryExpression(isLowerBoundary, scoreRate, totalRate, windowInSeconds, confidence, confidenceIsZScore=false) =
+  local z = if confidenceIsZScore then confidence else std.get(confidenceLookup, confidence, error 'Unknown confidence value ' + confidence);
+  local zs = if std.isNumber(z) then '%f' % z else z;
 
-  local zSquared = z * z;
+  local zSquared = if std.isNumber(z) then '%f' % (z * z) else '(%s * %s)' % [z, z];
 
   // phat is a ratio in a Bernoulli trial process
   local phatExpression = '(%s / %s)' % [scoreRate, totalRate];
@@ -31,7 +32,7 @@ local confidenceBoundaryExpression(isLowerBoundary, scoreRate, totalRate, window
     (
       %(phatExpression)s
       +
-      %(zSquared)f / (2 * %(totalCountExpr)s)
+      %(zSquared)s / (2 * %(totalCountExpr)s)
     )
   ||| % {
     phatExpression: strings.indent(phatExpression, 2),
@@ -42,27 +43,27 @@ local confidenceBoundaryExpression(isLowerBoundary, scoreRate, totalRate, window
   // b = z * sqrt((phat * (1 - phat) + z * z / (4 * total)) / total);
   local bExpr =
     |||
-      %(z)f
+      %(zs)s
       *
       sqrt(
         (
           %(phatExpression)s * (1 - %(phatExpression)s)
           +
-          %(zSquared)f / (4 * %(totalCountExpr)s)
+          %(zSquared)s / (4 * %(totalCountExpr)s)
         )
         /
         %(totalCountExpr)s
       )
     ||| % {
       phatExpression: phatExpression,
-      z: z,
+      zs: zs,
       zSquared: zSquared,
       totalCountExpr: totalCountExpr,
     };
 
   local cExpr =
     |||
-      (1 + %(zSquared)f / %(totalCountExpr)s)
+      (1 + %(zSquared)s / %(totalCountExpr)s)
     ||| % {
       zSquared: zSquared,
       totalCountExpr: totalCountExpr,
@@ -104,11 +105,13 @@ local confidenceBoundaryExpression(isLowerBoundary, scoreRate, totalRate, window
    * Given a score, total, window and confidence, produces a PromQL expression for the lower boundary
    * Wilson Score Interval
    */
-  lower(scoreRate, totalRate, windowInSeconds, confidence):: confidenceBoundaryExpression(true, scoreRate, totalRate, windowInSeconds, confidence),
+  lower(scoreRate, totalRate, windowInSeconds, confidence, confidenceIsZScore=false):: confidenceBoundaryExpression(true, scoreRate, totalRate, windowInSeconds, confidence, confidenceIsZScore=confidenceIsZScore),
 
   /**
    * Given a score, total, window and confidence, produces a PromQL expression for the upper boundary
    * Wilson Score Interval
    */
-  upper(scoreRate, totalRate, windowInSeconds, confidence):: confidenceBoundaryExpression(false, scoreRate, totalRate, windowInSeconds, confidence),
+  upper(scoreRate, totalRate, windowInSeconds, confidence, confidenceIsZScore=false):: confidenceBoundaryExpression(false, scoreRate, totalRate, windowInSeconds, confidence, confidenceIsZScore=confidenceIsZScore),
+
+  confidenceLookup:: confidenceLookup,
 }

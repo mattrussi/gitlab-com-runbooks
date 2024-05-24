@@ -127,4 +127,66 @@ test.suite({
       )
     |||),
   },
+  testDedicated: {
+    actual: strings.chomp(underTest.upper(scoreRate='gitlab_component_apdex:success:rate_5m{component="grpc_requests",type="gitlab-shell"}', totalRate='gitlab_component_apdex:weight:score_5m{component="grpc_requests",type="gitlab-shell"}', windowInSeconds=300, confidence='98%')),
+    expect: strings.chomp(|||
+      clamp_min(gitlab_component_apdex:weight:score_5m{component="grpc_requests",type="gitlab-shell"} == 0, 1)
+      or
+      clamp(
+        (
+          (
+            (gitlab_component_apdex:success:rate_5m{component="grpc_requests",type="gitlab-shell"} / gitlab_component_apdex:weight:score_5m{component="grpc_requests",type="gitlab-shell"})
+            +
+            5.411894 / (2 * (gitlab_component_apdex:weight:score_5m{component="grpc_requests",type="gitlab-shell"} * 300))
+          )
+          +
+          2.326348
+          *
+          sqrt(
+            (
+              (gitlab_component_apdex:success:rate_5m{component="grpc_requests",type="gitlab-shell"} / gitlab_component_apdex:weight:score_5m{component="grpc_requests",type="gitlab-shell"}) * (1 - (gitlab_component_apdex:success:rate_5m{component="grpc_requests",type="gitlab-shell"} / gitlab_component_apdex:weight:score_5m{component="grpc_requests",type="gitlab-shell"}))
+              +
+              5.411894 / (4 * (gitlab_component_apdex:weight:score_5m{component="grpc_requests",type="gitlab-shell"} * 300))
+            )
+            /
+            (gitlab_component_apdex:weight:score_5m{component="grpc_requests",type="gitlab-shell"} * 300)
+          )
+        )
+        /
+        (1 + 5.411894 / (gitlab_component_apdex:weight:score_5m{component="grpc_requests",type="gitlab-shell"} * 300)),
+        0, 1
+      )
+    |||),
+  },
+  testWithGrafanaVariables: {
+    actual: strings.chomp(underTest.lower(scoreRate='score', totalRate='total', windowInSeconds=3600, confidence='$confidence', confidenceIsZScore=true)),
+    expect: strings.chomp(|||
+      (total == 0)
+      or
+      clamp(
+        (
+          (
+            (score / total)
+            +
+            ($confidence * $confidence) / (2 * (total * 3600))
+          )
+          -
+          $confidence
+          *
+          sqrt(
+            (
+              (score / total) * (1 - (score / total))
+              +
+              ($confidence * $confidence) / (4 * (total * 3600))
+            )
+            /
+            (total * 3600)
+          )
+        )
+        /
+        (1 + ($confidence * $confidence) / (total * 3600)),
+        0, 1
+      )
+    |||),
+  },
 })

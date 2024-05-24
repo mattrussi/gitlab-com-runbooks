@@ -82,6 +82,6 @@ else
 
     url=$(echo "${response}" | jq -r '.url')
     title=$(echo "${snapshot}" | jq -r '.dashboard.title')
-    echo "Installed ${url} - ${title}"
+    echo "Installed ${url}?var-environment=gprd&orgId=1&var-type=web&var-PROMETHEUS_DS=e8b842b2-d53b-460b-9125-f4a50db5fdcc&var-stage=main - ${title}"
   done
 fi
