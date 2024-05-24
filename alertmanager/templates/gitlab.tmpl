@@ -9,28 +9,44 @@
 {{ define "gitlab.text" }}
     {{- if eq .Status "firing" -}}
         {{- printf ":fire: Alerts :fire:\n" -}}
-
+        {{- $panesTemplate := `{"00v":{"datasource":"%s","queries":[{"refId":"A","expr":"%s","range":true,"instant":true,"datasource":{"type":"prometheus","uid":"%s"},"editorMode":"code"}],"range":{"from":"now-1h","to":"now"}}}` -}}
+        {{- $baseURL := "https://dashboards.gitlab.net/explore?schemaVersion=1&orgId=1&panes=" -}}
         {{- range .Alerts -}}
             {{/* If we have a Grafana datasource ID the alert has come from Mimir so link to Grafana's explore page */}}
             {{- if and .Annotations.grafana_datasource_id .GeneratorURL -}}
                 {{/* First we need to pull the query expression from the generator URL */}}
                 {{- $expr := (.GeneratorURL | reReplaceAll ".*expr=" "" | reReplaceAll "&g0.*" "" | reReplaceAll "%7B" "{" | reReplaceAll "%3D" "=" | reReplaceAll "%3E" ">" | reReplaceAll "%3C" "<" | reReplaceAll "%22" "\"" | reReplaceAll "%2C" "," | reReplaceAll "%21" "!" | reReplaceAll "%7D" "}" | reReplaceAll "\\+" " " | reReplaceAll "%2A" "*" | reReplaceAll "%2F" "/" | reReplaceAll "%28" "(" | reReplaceAll "%29" ")" | reReplaceAll "%5E" "^" | reReplaceAll "%5B" "[" | reReplaceAll "%5D" "]" | reReplaceAll `"` `\"` | reReplaceAll "%3A" ":") -}}
                 {{/* Then we need to insert the query expression into the panes JSON object that Grafana expects and URL encode it */}}
-                {{- $panes := urlquery (printf `{"00v":{"datasource":"%s","queries":[{"refId":"A","expr":"%s","range":true,"instant":true,"datasource":{"type":"prometheus","uid":"%s"},"editorMode":"code"}],"range":{"from":"now-1h","to":"now"}}}` .Annotations.grafana_datasource_id $expr .Annotations.grafana_datasource_id) -}}
+                {{- $panes := urlquery (printf $panesTemplate .Annotations.grafana_datasource_id $expr .Annotations.grafana_datasource_id) -}}
                 {{/* Finally we build the link to the Grafana explore page */}}
-                {{- printf "*<https://dashboards.gitlab.net/explore?schemaVersion=1&orgId=1&panes=%s|%s>*\n" $panes .Labels.alertname -}}
+                {{- printf "*<%s%s|%s>*\n" $baseURL $panes .Labels.alertname -}}
             {{- else if .GeneratorURL -}}
                 {{- printf "*<%s|%s>*" .GeneratorURL .Labels.alertname -}}
             {{- else -}}
                 {{- printf "*%s*" .Labels.alertname -}}
             {{- end -}}
 
-            {{/* If we don't have a Grafana datasource ID fall back to the Thanos link */}}
-            {{- if or (eq .Annotations.grafana_datasource_id nil) (eq .Annotations.grafana_datasource_id "") }}
-                {{- if .Annotations.promql_template_1 -}}
+            {{/* If we have a Grafana data source ID we can link to the Grafana Explore page */}}
+            {{- if .Annotations.grafana_datasource_id -}}
+                {{/* If we have two PromQL template annotations build a split view */}}
+                {{- if and .Annotations.promql_template_1 .Annotations.promql_template_2 -}}
+                    {{- $panesTemplate = `{"yzb":{"datasource":"%s","queries":[{"refId":"A","expr":"%s","range":true,"instant":true,"datasource":{"type":"prometheus","uid":"%s"},"editorMode":"code"}],"range":{"from":"now-1h","to":"now"}},"6nt":{"datasource":"%s","queries":[{"refId":"A","expr":"%s","range":true,"instant":true,"datasource":{"type":"prometheus","uid":"%s"},"editorMode":"code"}],"range":{"from":"now-1h","to":"now"}}}` -}}
+                    {{- $expr1 := (.Annotations.promql_template_1 | reReplaceAll "\n" "\\n" | reReplaceAll "\"" `\"`) -}}
+                    {{- $expr2 := (.Annotations.promql_template_2 | reReplaceAll "\n" "\\n" | reReplaceAll "\"" `\"`) -}}
+                    {{- $panes := urlquery (printf $panesTemplate .Annotations.grafana_datasource_id $expr1 .Annotations.grafana_datasource_id .Annotations.grafana_datasource_id $expr2 .Annotations.grafana_datasource_id) -}}
+                    {{- printf " :point_right: <%s%s|Grafana Explore>\n" $baseURL $panes -}}
+                {{/* Otherwise just build the single view */}}
+                {{- else if .Annotations.promql_template_1 -}}
+                    {{- $expr := (.Annotations.promql_template_1 | reReplaceAll "\n" "\\n" | reReplaceAll "\"" `\"`) -}}
+                    {{- $panes := urlquery (printf $panesTemplate .Annotations.grafana_datasource_id $expr .Annotations.grafana_datasource_id) -}}
+                    {{- printf " :point_right: <%s%s|Grafana Explore>\n" $baseURL $panes -}}
+                {{- end -}}
+            {{/* Fall back to the Thanos links */}}
+            {{- else -}}
+                {{- if and .Annotations.promql_template_1 .Annotations.promql_template_2 -}}
+                    {{- printf " :point_right: <https://thanos.gitlab.net/graph?g0.expr=%s&g1.expr=%s|Thanos Graph>\n" (.Annotations.promql_template_1 | urlquery) (.Annotations.promql_template_2 | urlquery) -}}
+                {{- else if .Annotations.promql_template_1 -}}
                     {{- printf " :point_right: <https://thanos.gitlab.net/graph?g0.expr=%s|Thanos Graph>\n" (.Annotations.promql_template_1 | urlquery) -}}
-                {{- else -}}
-                    {{- printf "\n" -}}
                 {{- end -}}
             {{- end -}}
 
