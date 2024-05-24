@@ -145,25 +145,6 @@ class Validator
     end
   end
 
-  def validate_file(alert_file_path, thanos_evaluation)
-    @context << "file: #{alert_file_path}"
-    begin
-      alert_yaml = YAML.load_file(alert_file_path)
-      raise "Invalid configuration" unless alert_yaml
-
-      groups = alert_yaml["groups"]
-      groups.each do |group|
-        validate_group group, thanos_evaluation
-      rescue ValidationError
-        # Continue onto next group after validation failure
-      end
-    ensure
-      @context.pop
-    end
-  end
-
-  public
-
   # Validates Prometheus and Thanos rules
   # Returns true if validation succeeded
   def validate
@@ -187,6 +168,23 @@ class Validator
     end
 
     !has_errors
+  end
+
+  def validate_file(alert_file_path, thanos_evaluation)
+    @context << "file: #{alert_file_path}"
+    begin
+      alert_yaml = YAML.load_file(alert_file_path)
+      raise "Invalid configuration" unless alert_yaml
+
+      groups = alert_yaml["groups"]
+      groups.each do |group|
+        validate_group group, thanos_evaluation
+      rescue ValidationError
+        # Continue onto next group after validation failure
+      end
+    ensure
+      @context.pop
+    end
   end
 end
 

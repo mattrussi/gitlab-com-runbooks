@@ -69,7 +69,7 @@ module Uploads
 
     def dry_run_notice
       log.info '[Dry-run] This is only a dry-run -- write operations will be logged but not ' \
-               'executed'
+        'executed'
     end
 
     def debug_command(cmd)
@@ -240,6 +240,7 @@ module Uploads
     include ::Uploads::LoggingSupport
     include ::Uploads::SelectorMethods
     include ::Uploads::CommandSupport
+
     attr_reader :options
 
     def initialize(opts)

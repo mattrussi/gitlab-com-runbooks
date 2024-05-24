@@ -9,6 +9,10 @@ class JsonnetTestHelper
     new.tap { |helper| helper.render(content) }
   end
 
+  def initialize
+    @error = nil
+  end
+
   def render(content)
     file = Tempfile.new('file.jsonnet')
     file.write(content)
@@ -27,12 +31,6 @@ class JsonnetTestHelper
 
   def error_message
     @error.message
-  end
-
-  private
-
-  def initialize
-    @error = nil
   end
 end
 
