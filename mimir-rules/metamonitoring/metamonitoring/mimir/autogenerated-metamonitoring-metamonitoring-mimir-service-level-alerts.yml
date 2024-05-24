@@ -7,6 +7,7 @@ groups:
   - alert: MimirServiceMimirCompactorErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: e39b6275-f70a-41e7-9ef4-736b5c2f1871
       title: The mimir_compactor SLI of the mimir service (`{{ $labels.stage }}` stage)
         has an error rate violating SLO
       description: |
@@ -55,6 +56,7 @@ groups:
   - alert: MimirServiceMimirCompactorErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: e39b6275-f70a-41e7-9ef4-736b5c2f1871
       title: The mimir_compactor SLI of the mimir service (`{{ $labels.stage }}` stage)
         has an error rate violating SLO
       description: |
@@ -103,6 +105,7 @@ groups:
   - alert: MimirServiceMimirCompactorTrafficCessation
     for: 5m
     annotations:
+      grafana_datasource_id: e39b6275-f70a-41e7-9ef4-736b5c2f1871
       title: The mimir_compactor SLI of the mimir service (`{{ $labels.stage }}` stage)
         has not received any traffic in the past 30m
       description: |
@@ -138,6 +141,7 @@ groups:
   - alert: MimirServiceMimirCompactorTrafficAbsent
     for: 30m
     annotations:
+      grafana_datasource_id: e39b6275-f70a-41e7-9ef4-736b5c2f1871
       title: The mimir_compactor SLI of the mimir service (`{{ $labels.stage }}` stage)
         has not reported any traffic in the past 30m
       description: |
@@ -175,6 +179,7 @@ groups:
   - alert: MimirServiceMimirDistributorApdexSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: e39b6275-f70a-41e7-9ef4-736b5c2f1871
       title: The mimir_distributor SLI of the mimir service (`{{ $labels.stage }}`
         stage) has an apdex violating SLO
       description: |
@@ -227,6 +232,7 @@ groups:
   - alert: MimirServiceMimirDistributorApdexSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: e39b6275-f70a-41e7-9ef4-736b5c2f1871
       title: The mimir_distributor SLI of the mimir service (`{{ $labels.stage }}`
         stage) has an apdex violating SLO
       description: |
@@ -279,6 +285,7 @@ groups:
   - alert: MimirServiceMimirDistributorErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: e39b6275-f70a-41e7-9ef4-736b5c2f1871
       title: The mimir_distributor SLI of the mimir service (`{{ $labels.stage }}`
         stage) has an error rate violating SLO
       description: |
@@ -328,6 +335,7 @@ groups:
   - alert: MimirServiceMimirDistributorErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: e39b6275-f70a-41e7-9ef4-736b5c2f1871
       title: The mimir_distributor SLI of the mimir service (`{{ $labels.stage }}`
         stage) has an error rate violating SLO
       description: |
@@ -377,6 +385,7 @@ groups:
   - alert: MimirServiceMimirDistributorTrafficCessation
     for: 5m
     annotations:
+      grafana_datasource_id: e39b6275-f70a-41e7-9ef4-736b5c2f1871
       title: The mimir_distributor SLI of the mimir service (`{{ $labels.stage }}`
         stage) has not received any traffic in the past 30m
       description: |
@@ -413,6 +422,7 @@ groups:
   - alert: MimirServiceMimirDistributorTrafficAbsent
     for: 30m
     annotations:
+      grafana_datasource_id: e39b6275-f70a-41e7-9ef4-736b5c2f1871
       title: The mimir_distributor SLI of the mimir service (`{{ $labels.stage }}`
         stage) has not reported any traffic in the past 30m
       description: |
@@ -451,6 +461,7 @@ groups:
   - alert: MimirServiceMimirIngesterApdexSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: e39b6275-f70a-41e7-9ef4-736b5c2f1871
       title: The mimir_ingester SLI of the mimir service (`{{ $labels.stage }}` stage)
         has an apdex violating SLO
       description: |
@@ -503,6 +514,7 @@ groups:
   - alert: MimirServiceMimirIngesterApdexSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: e39b6275-f70a-41e7-9ef4-736b5c2f1871
       title: The mimir_ingester SLI of the mimir service (`{{ $labels.stage }}` stage)
         has an apdex violating SLO
       description: |
@@ -555,6 +567,7 @@ groups:
   - alert: MimirServiceMimirIngesterErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: e39b6275-f70a-41e7-9ef4-736b5c2f1871
       title: The mimir_ingester SLI of the mimir service (`{{ $labels.stage }}` stage)
         has an error rate violating SLO
       description: |
@@ -604,6 +617,7 @@ groups:
   - alert: MimirServiceMimirIngesterErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: e39b6275-f70a-41e7-9ef4-736b5c2f1871
       title: The mimir_ingester SLI of the mimir service (`{{ $labels.stage }}` stage)
         has an error rate violating SLO
       description: |
@@ -653,6 +667,7 @@ groups:
   - alert: MimirServiceMimirIngesterTrafficCessation
     for: 5m
     annotations:
+      grafana_datasource_id: e39b6275-f70a-41e7-9ef4-736b5c2f1871
       title: The mimir_ingester SLI of the mimir service (`{{ $labels.stage }}` stage)
         has not received any traffic in the past 30m
       description: |
@@ -689,6 +704,7 @@ groups:
   - alert: MimirServiceMimirIngesterTrafficAbsent
     for: 30m
     annotations:
+      grafana_datasource_id: e39b6275-f70a-41e7-9ef4-736b5c2f1871
       title: The mimir_ingester SLI of the mimir service (`{{ $labels.stage }}` stage)
         has not reported any traffic in the past 30m
       description: |
@@ -727,6 +743,7 @@ groups:
   - alert: MimirServiceMimirQuerierApdexSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: e39b6275-f70a-41e7-9ef4-736b5c2f1871
       title: The mimir_querier SLI of the mimir service (`{{ $labels.stage }}` stage)
         has an apdex violating SLO
       description: |
@@ -778,6 +795,7 @@ groups:
   - alert: MimirServiceMimirQuerierApdexSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: e39b6275-f70a-41e7-9ef4-736b5c2f1871
       title: The mimir_querier SLI of the mimir service (`{{ $labels.stage }}` stage)
         has an apdex violating SLO
       description: |
@@ -829,6 +847,7 @@ groups:
   - alert: MimirServiceMimirQuerierErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: e39b6275-f70a-41e7-9ef4-736b5c2f1871
       title: The mimir_querier SLI of the mimir service (`{{ $labels.stage }}` stage)
         has an error rate violating SLO
       description: |
@@ -877,6 +896,7 @@ groups:
   - alert: MimirServiceMimirQuerierErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: e39b6275-f70a-41e7-9ef4-736b5c2f1871
       title: The mimir_querier SLI of the mimir service (`{{ $labels.stage }}` stage)
         has an error rate violating SLO
       description: |
@@ -925,6 +945,7 @@ groups:
   - alert: MimirServiceMimirQuerierTrafficCessation
     for: 5m
     annotations:
+      grafana_datasource_id: e39b6275-f70a-41e7-9ef4-736b5c2f1871
       title: The mimir_querier SLI of the mimir service (`{{ $labels.stage }}` stage)
         has not received any traffic in the past 30m
       description: |
@@ -960,6 +981,7 @@ groups:
   - alert: MimirServiceMimirQuerierTrafficAbsent
     for: 30m
     annotations:
+      grafana_datasource_id: e39b6275-f70a-41e7-9ef4-736b5c2f1871
       title: The mimir_querier SLI of the mimir service (`{{ $labels.stage }}` stage)
         has not reported any traffic in the past 30m
       description: |
@@ -997,6 +1019,7 @@ groups:
   - alert: MimirServiceMimirQueryFrontendApdexSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: e39b6275-f70a-41e7-9ef4-736b5c2f1871
       title: The mimir_query_frontend SLI of the mimir service (`{{ $labels.stage
         }}` stage) has an apdex violating SLO
       description: |
@@ -1049,6 +1072,7 @@ groups:
   - alert: MimirServiceMimirQueryFrontendApdexSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: e39b6275-f70a-41e7-9ef4-736b5c2f1871
       title: The mimir_query_frontend SLI of the mimir service (`{{ $labels.stage
         }}` stage) has an apdex violating SLO
       description: |
@@ -1101,6 +1125,7 @@ groups:
   - alert: MimirServiceMimirQueryFrontendErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: e39b6275-f70a-41e7-9ef4-736b5c2f1871
       title: The mimir_query_frontend SLI of the mimir service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
@@ -1150,6 +1175,7 @@ groups:
   - alert: MimirServiceMimirQueryFrontendErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: e39b6275-f70a-41e7-9ef4-736b5c2f1871
       title: The mimir_query_frontend SLI of the mimir service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
@@ -1199,6 +1225,7 @@ groups:
   - alert: MimirServiceMimirQueryFrontendTrafficCessation
     for: 5m
     annotations:
+      grafana_datasource_id: e39b6275-f70a-41e7-9ef4-736b5c2f1871
       title: The mimir_query_frontend SLI of the mimir service (`{{ $labels.stage
         }}` stage) has not received any traffic in the past 30m
       description: |
@@ -1235,6 +1262,7 @@ groups:
   - alert: MimirServiceMimirQueryFrontendTrafficAbsent
     for: 30m
     annotations:
+      grafana_datasource_id: e39b6275-f70a-41e7-9ef4-736b5c2f1871
       title: The mimir_query_frontend SLI of the mimir service (`{{ $labels.stage
         }}` stage) has not reported any traffic in the past 30m
       description: |
@@ -1273,6 +1301,7 @@ groups:
   - alert: MimirServiceMimirQuerySchedulerApdexSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: e39b6275-f70a-41e7-9ef4-736b5c2f1871
       title: The mimir_query_scheduler SLI of the mimir service (`{{ $labels.stage
         }}` stage) has an apdex violating SLO
       description: |
@@ -1325,6 +1354,7 @@ groups:
   - alert: MimirServiceMimirQuerySchedulerApdexSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: e39b6275-f70a-41e7-9ef4-736b5c2f1871
       title: The mimir_query_scheduler SLI of the mimir service (`{{ $labels.stage
         }}` stage) has an apdex violating SLO
       description: |
@@ -1377,6 +1407,7 @@ groups:
   - alert: MimirServiceMimirQuerySchedulerErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: e39b6275-f70a-41e7-9ef4-736b5c2f1871
       title: The mimir_query_scheduler SLI of the mimir service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
@@ -1426,6 +1457,7 @@ groups:
   - alert: MimirServiceMimirQuerySchedulerErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: e39b6275-f70a-41e7-9ef4-736b5c2f1871
       title: The mimir_query_scheduler SLI of the mimir service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
@@ -1475,6 +1507,7 @@ groups:
   - alert: MimirServiceMimirQuerySchedulerTrafficCessation
     for: 5m
     annotations:
+      grafana_datasource_id: e39b6275-f70a-41e7-9ef4-736b5c2f1871
       title: The mimir_query_scheduler SLI of the mimir service (`{{ $labels.stage
         }}` stage) has not received any traffic in the past 30m
       description: |
@@ -1511,6 +1544,7 @@ groups:
   - alert: MimirServiceMimirQuerySchedulerTrafficAbsent
     for: 30m
     annotations:
+      grafana_datasource_id: e39b6275-f70a-41e7-9ef4-736b5c2f1871
       title: The mimir_query_scheduler SLI of the mimir service (`{{ $labels.stage
         }}` stage) has not reported any traffic in the past 30m
       description: |
@@ -1549,6 +1583,7 @@ groups:
   - alert: MimirServiceMimirRulerErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: e39b6275-f70a-41e7-9ef4-736b5c2f1871
       title: The mimir_ruler SLI of the mimir service (`{{ $labels.stage }}` stage)
         has an error rate violating SLO
       description: |
@@ -1598,6 +1633,7 @@ groups:
   - alert: MimirServiceMimirRulerErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: e39b6275-f70a-41e7-9ef4-736b5c2f1871
       title: The mimir_ruler SLI of the mimir service (`{{ $labels.stage }}` stage)
         has an error rate violating SLO
       description: |
@@ -1647,6 +1683,7 @@ groups:
   - alert: MimirServiceMimirRulerTrafficCessation
     for: 5m
     annotations:
+      grafana_datasource_id: e39b6275-f70a-41e7-9ef4-736b5c2f1871
       title: The mimir_ruler SLI of the mimir service (`{{ $labels.stage }}` stage)
         has not received any traffic in the past 30m
       description: |
@@ -1683,6 +1720,7 @@ groups:
   - alert: MimirServiceMimirRulerTrafficAbsent
     for: 30m
     annotations:
+      grafana_datasource_id: e39b6275-f70a-41e7-9ef4-736b5c2f1871
       title: The mimir_ruler SLI of the mimir service (`{{ $labels.stage }}` stage)
         has not reported any traffic in the past 30m
       description: |
@@ -1721,6 +1759,7 @@ groups:
   - alert: MimirServiceMimirStoreGatewayApdexSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: e39b6275-f70a-41e7-9ef4-736b5c2f1871
       title: The mimir_store_gateway SLI of the mimir service (`{{ $labels.stage }}`
         stage) has an apdex violating SLO
       description: |
@@ -1773,6 +1812,7 @@ groups:
   - alert: MimirServiceMimirStoreGatewayApdexSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: e39b6275-f70a-41e7-9ef4-736b5c2f1871
       title: The mimir_store_gateway SLI of the mimir service (`{{ $labels.stage }}`
         stage) has an apdex violating SLO
       description: |
@@ -1825,6 +1865,7 @@ groups:
   - alert: MimirServiceMimirStoreGatewayErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: e39b6275-f70a-41e7-9ef4-736b5c2f1871
       title: The mimir_store_gateway SLI of the mimir service (`{{ $labels.stage }}`
         stage) has an error rate violating SLO
       description: |
@@ -1874,6 +1915,7 @@ groups:
   - alert: MimirServiceMimirStoreGatewayErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: e39b6275-f70a-41e7-9ef4-736b5c2f1871
       title: The mimir_store_gateway SLI of the mimir service (`{{ $labels.stage }}`
         stage) has an error rate violating SLO
       description: |
@@ -1923,6 +1965,7 @@ groups:
   - alert: MimirServiceMimirStoreGatewayTrafficCessation
     for: 5m
     annotations:
+      grafana_datasource_id: e39b6275-f70a-41e7-9ef4-736b5c2f1871
       title: The mimir_store_gateway SLI of the mimir service (`{{ $labels.stage }}`
         stage) has not received any traffic in the past 30m
       description: |
@@ -1959,6 +2002,7 @@ groups:
   - alert: MimirServiceMimirStoreGatewayTrafficAbsent
     for: 30m
     annotations:
+      grafana_datasource_id: e39b6275-f70a-41e7-9ef4-736b5c2f1871
       title: The mimir_store_gateway SLI of the mimir service (`{{ $labels.stage }}`
         stage) has not reported any traffic in the past 30m
       description: |

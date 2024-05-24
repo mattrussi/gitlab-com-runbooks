@@ -7,6 +7,7 @@ groups:
   - alert: PatroniEmbeddingServicePgbouncerErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The pgbouncer SLI of the patroni-embedding service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
@@ -57,6 +58,7 @@ groups:
   - alert: PatroniEmbeddingServicePgbouncerErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The pgbouncer SLI of the patroni-embedding service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
@@ -107,6 +109,7 @@ groups:
   - alert: PatroniEmbeddingServicePgbouncerTrafficCessation
     for: 5m
     annotations:
+      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The pgbouncer SLI of the patroni-embedding service (`{{ $labels.stage
         }}` stage) has not received any traffic in the past 30m
       description: |
@@ -146,6 +149,7 @@ groups:
   - alert: PatroniEmbeddingServicePgbouncerTrafficAbsent
     for: 30m
     annotations:
+      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The pgbouncer SLI of the patroni-embedding service (`{{ $labels.stage
         }}` stage) has not reported any traffic in the past 30m
       description: |
@@ -187,6 +191,7 @@ groups:
   - alert: PatroniEmbeddingServiceTransactionsPrimaryErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The transactions_primary SLI of the patroni-embedding service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
@@ -235,6 +240,7 @@ groups:
   - alert: PatroniEmbeddingServiceTransactionsPrimaryErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The transactions_primary SLI of the patroni-embedding service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
@@ -283,6 +289,7 @@ groups:
   - alert: PatroniEmbeddingServiceTransactionsPrimaryTrafficCessation
     for: 5m
     annotations:
+      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The transactions_primary SLI of the patroni-embedding service (`{{ $labels.stage
         }}` stage) has not received any traffic in the past 30m
       description: |
@@ -320,6 +327,7 @@ groups:
   - alert: PatroniEmbeddingServiceTransactionsPrimaryTrafficAbsent
     for: 30m
     annotations:
+      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The transactions_primary SLI of the patroni-embedding service (`{{ $labels.stage
         }}` stage) has not reported any traffic in the past 30m
       description: |
@@ -359,6 +367,7 @@ groups:
   - alert: PatroniEmbeddingServiceTransactionsReplicaErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The transactions_replica SLI of the patroni-embedding service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
@@ -407,6 +416,7 @@ groups:
   - alert: PatroniEmbeddingServiceTransactionsReplicaErrorSLOViolation
     for: 2m
     annotations:
+      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The transactions_replica SLI of the patroni-embedding service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
@@ -455,6 +465,7 @@ groups:
   - alert: PatroniEmbeddingServiceTransactionsReplicaTrafficCessation
     for: 5m
     annotations:
+      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The transactions_replica SLI of the patroni-embedding service (`{{ $labels.stage
         }}` stage) has not received any traffic in the past 30m
       description: |
@@ -492,6 +503,7 @@ groups:
   - alert: PatroniEmbeddingServiceTransactionsReplicaTrafficAbsent
     for: 30m
     annotations:
+      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The transactions_replica SLI of the patroni-embedding service (`{{ $labels.stage
         }}` stage) has not reported any traffic in the past 30m
       description: |
