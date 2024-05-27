@@ -475,9 +475,27 @@ groups:
       max by(environment, shard) (
         clamp_min(
           clamp_max(
-            kubelet_volume_stats_used_bytes
+            kubelet_volume_stats_used_bytes{persistentvolumeclaim!~"^zoekt.*$"}
             /
-            kubelet_volume_stats_capacity_bytes
+            kubelet_volume_stats_capacity_bytes{persistentvolumeclaim!~"^zoekt.*$"}
+            ,
+            1)
+        ,
+        0)
+      )
+  - record: gitlab_component_saturation:ratio
+    labels:
+      component: kube_persistent_volume_claim_disk_space_zoekt
+      stage: main
+      tier: inf
+      type: kube
+    expr: |
+      max by(environment, shard) (
+        clamp_min(
+          clamp_max(
+            kubelet_volume_stats_used_bytes{persistentvolumeclaim=~"^zoekt.*$"}
+            /
+            kubelet_volume_stats_capacity_bytes{persistentvolumeclaim=~"^zoekt.*$"}
             ,
             1)
         ,
@@ -1653,6 +1671,14 @@ groups:
     expr: "0.9"
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:
+      component: kube_persistent_volume_claim_disk_space_zoekt
+    expr: "0.9"
+  - record: slo:max:hard:gitlab_component_saturation:ratio
+    labels:
+      component: kube_persistent_volume_claim_disk_space_zoekt
+    expr: "0.95"
+  - record: slo:max:soft:gitlab_component_saturation:ratio
+    labels:
       component: kube_persistent_volume_claim_inodes
     expr: "0.85"
   - record: slo:max:hard:gitlab_component_saturation:ratio
@@ -2282,6 +2308,14 @@ groups:
     labels:
       capacity_planning_strategy: quantile95_1h
       component: kube_persistent_volume_claim_disk_space
+      horiz_scaling: "yes"
+      quantile: max
+      severity: s2
+    expr: "1"
+  - record: gitlab_component_saturation_info
+    labels:
+      capacity_planning_strategy: quantile95_1h
+      component: kube_persistent_volume_claim_disk_space_zoekt
       horiz_scaling: "yes"
       quantile: max
       severity: s2
@@ -4312,9 +4346,9 @@ groups:
         max by(environment, shard, cluster, namespace, persistentvolumeclaim) (
           clamp_min(
             clamp_max(
-              kubelet_volume_stats_used_bytes
+              kubelet_volume_stats_used_bytes{persistentvolumeclaim!~"^zoekt.*$"}
               /
-              kubelet_volume_stats_capacity_bytes
+              kubelet_volume_stats_capacity_bytes{persistentvolumeclaim!~"^zoekt.*$"}
               ,
               1)
           ,
@@ -4324,9 +4358,9 @@ groups:
         max by(environment, shard, cluster, namespace, persistentvolumeclaim) (
           clamp_min(
             clamp_max(
-              kubelet_volume_stats_used_bytes
+              kubelet_volume_stats_used_bytes{persistentvolumeclaim!~"^zoekt.*$"}
               /
-              kubelet_volume_stats_capacity_bytes
+              kubelet_volume_stats_capacity_bytes{persistentvolumeclaim!~"^zoekt.*$"}
               ,
               1)
           ,
@@ -4341,6 +4375,58 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="kube_persistent_volume_claim_disk_space"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="kube_persistent_volume_claim_disk_space"}
+  - alert: component_saturation_slo_out_of_bounds:kube_persistent_volume_claim_disk_space_zoekt
+    for: 5m
+    annotations:
+      title: The Kube Persistent Volume Claim Space Utilisation resource of the {{
+        $labels.type }} service ({{ $labels.stage }} stage) has a saturation exceeding
+        SLO and is close to its capacity limit.
+      description: |
+        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
+
+        Details of the Kube Persistent Volume Claim Space Utilisation resource:
+
+        disk space utilization on persistent volume claims.
+      grafana_dashboard_id: alerts-sat_zoekt_kube_pvc_disk_space
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_zoekt_kube_pvc_disk_space?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "581146623"
+      grafana_variables: environment,type,stage
+      promql_query: |
+        max by(environment, shard, cluster, namespace, persistentvolumeclaim) (
+          clamp_min(
+            clamp_max(
+              kubelet_volume_stats_used_bytes{persistentvolumeclaim=~"^zoekt.*$"}
+              /
+              kubelet_volume_stats_capacity_bytes{persistentvolumeclaim=~"^zoekt.*$"}
+              ,
+              1)
+          ,
+          0)
+        )
+      promql_template_1: |
+        max by(environment, shard, cluster, namespace, persistentvolumeclaim) (
+          clamp_min(
+            clamp_max(
+              kubelet_volume_stats_used_bytes{persistentvolumeclaim=~"^zoekt.*$"}
+              /
+              kubelet_volume_stats_capacity_bytes{persistentvolumeclaim=~"^zoekt.*$"}
+              ,
+              1)
+          ,
+          0)
+        )
+      runbook: docs/{{ $labels.type }}/README.md
+    labels:
+      alert_type: cause
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+    expr: |
+      gitlab_component_saturation:ratio{component="kube_persistent_volume_claim_disk_space_zoekt"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="kube_persistent_volume_claim_disk_space_zoekt"}
   - alert: component_saturation_slo_out_of_bounds:kube_persistent_volume_claim_inodes
     for: 5m
     annotations:
