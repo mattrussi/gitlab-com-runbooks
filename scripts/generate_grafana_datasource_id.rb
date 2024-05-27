@@ -13,6 +13,9 @@ output = ""
 
 File.open(name, "rt") do |file|
   file.each_line do |line|
+    line = line
+      .force_encoding(Encoding::UTF_8)
+      .encode(Encoding::UTF_8, undef: :replace, invalid: :replace, replace: '')
     output += line
     object = line.strip
 
@@ -22,6 +25,9 @@ File.open(name, "rt") do |file|
     datasource_line = " " * indent
     datasource_line += "grafana_datasource_id: #{datasource_id}\n"
     output += datasource_line
+  rescue StandardError => e
+    puts "Error: reading the file=\"#{file}\" has thrown the error=\"#{e.message}\""
+    raise e
   end
 end
 
