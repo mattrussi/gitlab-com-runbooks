@@ -15,6 +15,31 @@ class Validator
     @service_catalog_teams = @service_catalog["teams"].to_h { |team| [team["name"], team] }
   end
 
+  # Validates Prometheus and Thanos rules
+  # Returns true if validation succeeded
+  def validate
+    # Check Prometheus rules
+    alert_files = File.join(__dir__, "..", "rules", "*.yml")
+    Dir[alert_files].each do |file|
+      validate_file File.expand_path(file), false
+    end
+
+    # Check Thanos rules
+    thanos_alert_files = File.join(__dir__, "..", "thanos-rules", "*.yml")
+    Dir[thanos_alert_files].each do |file|
+      validate_file File.expand_path(file), true
+    end
+
+    has_errors = false
+    @failures.each do |failure|
+      has_errors = true if failure[:level] == :error
+
+      warn "#{failure[:level]}: #{failure[:context].join(', ')}: #{failure[:message]}"
+    end
+
+    !has_errors
+  end
+
   private
 
   # Add a validation warning
@@ -143,31 +168,6 @@ class Validator
     ensure
       @context.pop
     end
-  end
-
-  # Validates Prometheus and Thanos rules
-  # Returns true if validation succeeded
-  def validate
-    # Check Prometheus rules
-    alert_files = File.join(__dir__, "..", "rules", "*.yml")
-    Dir[alert_files].each do |file|
-      validate_file File.expand_path(file), false
-    end
-
-    # Check Thanos rules
-    thanos_alert_files = File.join(__dir__, "..", "thanos-rules", "*.yml")
-    Dir[thanos_alert_files].each do |file|
-      validate_file File.expand_path(file), true
-    end
-
-    has_errors = false
-    @failures.each do |failure|
-      has_errors = true if failure[:level] == :error
-
-      warn "#{failure[:level]}: #{failure[:context].join(', ')}: #{failure[:message]}"
-    end
-
-    !has_errors
   end
 
   def validate_file(alert_file_path, thanos_evaluation)
