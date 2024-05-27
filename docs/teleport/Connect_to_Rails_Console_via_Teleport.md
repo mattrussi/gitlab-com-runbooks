@@ -71,16 +71,16 @@ tsh login --proxy=production.teleport.gitlab.net --request-id=<request-id>
 tsh ssh rails-ro@console-ro-01-sv-gprd
 ```
 
-The request ID is shown in the output of `tsh login` when making the initial request, and can also be found attached to your request notification in `#infrastructure-lounge`.
+The request ID is shown in the output of `tsh login` when making the initial request, and can also be found attached to your request notification in `#teleport-requests`.
 
 The access will be temporary (`12h` max) and can be approved by any SRE or Reliability Manager.  The `@sre-oncall` can help if it's urgent, but if you can wait it is considerate to spread the load out by asking the wider SRE team in `#infrastructure-lounge`. Access can be extended before or after expiration using the same process.
 
 ### Access approval
 
-Approvers will get your request via an automated notification in the `#infrastructure-lounge` Slack channel.  If you have additional context,
+Approvers will get your request via an automated notification in the `#teleport-requests` Slack channel.  If you have additional context,
 or need to expedite an approval, please comment as a thread under that message.  If the request is urgent, you can ping `@sre-oncall`, but
 to spread out the workload please try to allow some time for others to review first if possible. If the approval request **doesn't show up** in
-`#infrastructure-lounge` feel free to ask someone in that channel to take a look at your request, and provide the request ID.
+`#teleport-requests` feel free to ask someone in that channel to take a look at your request, and provide the request ID.
 
 Approvers will review the issue URL in the request and if Rails Console access seems like a reasonable step to address that issue, they will approve it.
 
