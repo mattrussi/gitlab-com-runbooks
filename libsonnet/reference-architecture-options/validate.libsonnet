@@ -16,7 +16,7 @@ local defaults = {
   },
   consul: {
     enable: true,
-  }
+  },
   rdsMonitoring: false,
 };
 
