@@ -1066,10 +1066,6 @@
       "linewidth": 1,
       "links": [
         {
-          "title": "registry Service | kube_container_cpu resource Dashboard",
-          "url": "https://dashboards.gitlab.net/d/alerts-sat_kube_container_cpu/?var-environment=gprd\u0026var-type=registry\u0026var-stage=main\u0026var-component=kube_container_cpu"
-        },
-        {
           "title": "registry Service | kube_container_cpu_limit resource Dashboard",
           "url": "https://dashboards.gitlab.net/d/alerts-sat_kube_container_cpu_limit/?var-environment=gprd\u0026var-type=registry\u0026var-stage=main\u0026var-component=kube_container_cpu_limit"
         },
@@ -8645,200 +8641,13 @@
           "dashes": false,
           "datasource": "$PROMETHEUS_DS",
           "decimals": 2,
-          "description": "Kubernetes containers are allocated a share of CPU. Configured using resource requests.\n\nThis is the amount of CPU that a container should always have available,\nthough it can briefly utilize more. However, if a lot of pods on the same\nhost exceed their requested CPU the container could be throttled earlier.\n\nThis monitors utilization/allocated requests over a 1 hour period, and takes\nthe 99th quantile of that utilization percentage in that period.\nWe want the worst case to be around 80%-90% utilization,\nmeaning we've sized the container correctly. If utilization is much higher than that\nthe container could already be throttled because the host is overused, if it\nis much lower, then we could be underutilizing a host.\n\nThis saturation point is only used for capacity planning.\nContainers that have a quota specified are excluded here and can be monitored using\nthe `kube_container_throttling` saturation component.\nThe burst utilization of a CPU is monitored and alerted upon using the\n`kube_container_cpu_limit` saturation point.\n Lower is better.",
-          "fill": 0,
-          "fillGradient": 0,
-          "gridPos": {
-            "h": 10,
-            "w": 12,
-            "x": 0,
-            "y": 0
-          },
-          "id": 2713861591,
-          "legend": {
-            "alignAsTable": true,
-            "avg": true,
-            "current": true,
-            "hideEmpty": true,
-            "max": true,
-            "min": true,
-            "rightSide": false,
-            "show": true,
-            "sideWidth": null,
-            "sort": "max",
-            "sortDesc": true,
-            "total": false,
-            "values": true
-          },
-          "lines": true,
-          "linewidth": 1,
-          "links": [],
-          "nullPointMode": "null",
-          "percentage": false,
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "repeat": null,
-          "seriesOverrides": [
-            {
-              "alias": "/^Soft SLO/",
-              "color": "#FF4500",
-              "dashLength": 4,
-              "dashes": true,
-              "legend": true,
-              "lines": true,
-              "linewidth": 2,
-              "nullPointMode": "connected",
-              "spaceLength": 10,
-              "zindex": -2
-            },
-            {
-              "alias": "/^Hard SLO/",
-              "color": "#F2495C",
-              "dashLength": 4,
-              "dashes": true,
-              "legend": true,
-              "lines": true,
-              "linewidth": 4,
-              "nullPointMode": "connected",
-              "spaceLength": 4,
-              "zindex": -2
-            },
-            {
-              "alias": "/aggregated /",
-              "color": "#E7D551",
-              "linewidth": 2,
-              "zindex": 3
-            },
-            {
-              "alias": "/^95th quantile for week/",
-              "color": "#37872D",
-              "dashLength": 4,
-              "dashes": true,
-              "legend": true,
-              "lines": true,
-              "linewidth": 1,
-              "nullPointMode": "connected",
-              "spaceLength": 10,
-              "zindex": -2
-            },
-            {
-              "alias": "/^99th quantile for week/",
-              "color": "#56A64B",
-              "dashLength": 4,
-              "dashes": true,
-              "legend": true,
-              "lines": true,
-              "linewidth": 2,
-              "nullPointMode": "connected",
-              "spaceLength": 4,
-              "zindex": -2
-            }
-          ],
-          "spaceLength": 10,
-          "stableId": "saturation-kube_container_cpu",
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {
-              "expr": "clamp_min(\n  clamp_max(\n    quantile by(type, pod, container) (\n  0.99,\n  clamp_min(\n    clamp_max(\n      (\n        sum by (type, pod, container) (\n          rate(container_cpu_usage_seconds_total:labeled{container!=\"\", container!=\"POD\", type=\"registry\"}[1h])\n        )\n        unless on(type, pod, container) (\n          container_spec_cpu_quota:labeled{container!=\"\", container!=\"POD\", type=\"registry\"}\n        )\n      )\n      /\n      sum by(type, pod, container) (\n        kube_pod_container_resource_requests:labeled{container!=\"\", container!=\"POD\", resource=\"cpu\", type=\"registry\"}\n      )\n      ,\n      1)\n  ,\n  0)\n)\n\n  ,1)\n,0)\n",
-              "format": "time_series",
-              "interval": "1m",
-              "intervalFactor": 1,
-              "legendFormat": "{{ pod }} {{ container }}",
-              "refId": "A"
-            },
-            {
-              "expr": "clamp_min(\n  clamp_max(\n    max(\n      max_over_time(gitlab_component_saturation:ratio{type=\"registry\", component=\"kube_container_cpu\"}[$__interval])\n    ) by (component)\n  ,1)\n,0)\n",
-              "format": "time_series",
-              "interval": "1m",
-              "intervalFactor": 1,
-              "legendFormat": "aggregated {{ component }}",
-              "refId": "B"
-            },
-            {
-              "expr": "max(\n  gitlab_component_saturation:ratio_quantile95_1w{type=\"registry\", component=\"kube_container_cpu\"}\n)\n",
-              "format": "time_series",
-              "interval": "1m",
-              "intervalFactor": 1,
-              "legendFormat": "95th quantile for week {{ component }}",
-              "refId": "C"
-            },
-            {
-              "expr": "max(\n  gitlab_component_saturation:ratio_quantile99_1w{type=\"registry\", component=\"kube_container_cpu\"}\n)\n",
-              "format": "time_series",
-              "interval": "1m",
-              "intervalFactor": 1,
-              "legendFormat": "99th quantile for week {{ component }}",
-              "refId": "D"
-            },
-            {
-              "expr": "avg(slo:max:soft:gitlab_component_saturation:ratio{component=\"kube_container_cpu\"}) by (component)\n",
-              "format": "time_series",
-              "interval": "1m",
-              "intervalFactor": 1,
-              "legendFormat": "Soft SLO: {{ component }}",
-              "refId": "E"
-            },
-            {
-              "expr": "avg(slo:max:hard:gitlab_component_saturation:ratio{component=\"kube_container_cpu\"}) by (component)\n",
-              "format": "time_series",
-              "interval": "1m",
-              "intervalFactor": 1,
-              "legendFormat": "Hard SLO: {{ component }}",
-              "refId": "F"
-            }
-          ],
-          "thresholds": [],
-          "timeFrom": null,
-          "timeShift": null,
-          "title": "kube_container_cpu component saturation: Kube Container CPU Utilization",
-          "tooltip": {
-            "shared": true,
-            "sort": 2,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "buckets": null,
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "format": "percentunit",
-              "label": "Saturation %",
-              "logBase": 1,
-              "max": 1,
-              "min": null,
-              "show": true
-            },
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": 1,
-              "min": 0,
-              "show": false
-            }
-          ]
-        },
-        {
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": "$PROMETHEUS_DS",
-          "decimals": 2,
           "description": "Kubernetes containers can have a limit configured on how much CPU they can consume in\na burst. If we are at this limit, exceeding the allocated requested resources, we\nshould consider revisting the container's HPA configuration.\n\nWhen a container is utilizing CPU resources up-to it's configured limit for\nextended periods of time, this could cause it and other running containers to be\nthrottled.\n Lower is better.",
           "fill": 0,
           "fillGradient": 0,
           "gridPos": {
             "h": 10,
             "w": 12,
-            "x": 12,
+            "x": 0,
             "y": 0
           },
           "id": 1262336683,
@@ -9025,8 +8834,8 @@
           "gridPos": {
             "h": 10,
             "w": 12,
-            "x": 0,
-            "y": 10
+            "x": 12,
+            "y": 0
           },
           "id": 172578411,
           "legend": {
@@ -9217,7 +9026,7 @@
         "x": 0,
         "y": 110000
       },
-      "id": 92,
+      "id": 91,
       "mode": "markdown",
       "title": "Source",
       "type": "text"

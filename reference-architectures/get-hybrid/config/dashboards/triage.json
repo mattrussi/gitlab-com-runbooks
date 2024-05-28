@@ -1033,10 +1033,6 @@
       "linewidth": 2,
       "links": [
         {
-          "title": "gitlab-shell Service | kube_container_cpu resource Dashboard",
-          "url": "https://dashboards.gitlab.net/d/alerts-sat_kube_container_cpu/?var-environment=gprd\u0026var-type=gitlab-shell\u0026var-stage=main\u0026var-component=kube_container_cpu"
-        },
-        {
           "title": "gitlab-shell Service | kube_container_cpu_limit resource Dashboard",
           "url": "https://dashboards.gitlab.net/d/alerts-sat_kube_container_cpu_limit/?var-environment=gprd\u0026var-type=gitlab-shell\u0026var-stage=main\u0026var-component=kube_container_cpu_limit"
         },
@@ -2074,10 +2070,6 @@
       "linewidth": 2,
       "links": [
         {
-          "title": "registry Service | kube_container_cpu resource Dashboard",
-          "url": "https://dashboards.gitlab.net/d/alerts-sat_kube_container_cpu/?var-environment=gprd\u0026var-type=registry\u0026var-stage=main\u0026var-component=kube_container_cpu"
-        },
-        {
           "title": "registry Service | kube_container_cpu_limit resource Dashboard",
           "url": "https://dashboards.gitlab.net/d/alerts-sat_kube_container_cpu_limit/?var-environment=gprd\u0026var-type=registry\u0026var-stage=main\u0026var-component=kube_container_cpu_limit"
         },
@@ -3114,10 +3106,6 @@
       "lines": true,
       "linewidth": 2,
       "links": [
-        {
-          "title": "sidekiq Service | kube_container_cpu resource Dashboard",
-          "url": "https://dashboards.gitlab.net/d/alerts-sat_kube_container_cpu/?var-environment=gprd\u0026var-type=sidekiq\u0026var-stage=main\u0026var-component=kube_container_cpu"
-        },
         {
           "title": "sidekiq Service | kube_container_cpu_limit resource Dashboard",
           "url": "https://dashboards.gitlab.net/d/alerts-sat_kube_container_cpu_limit/?var-environment=gprd\u0026var-type=sidekiq\u0026var-stage=main\u0026var-component=kube_container_cpu_limit"
@@ -4159,10 +4147,6 @@
       "lines": true,
       "linewidth": 2,
       "links": [
-        {
-          "title": "webservice Service | kube_container_cpu resource Dashboard",
-          "url": "https://dashboards.gitlab.net/d/alerts-sat_kube_container_cpu/?var-environment=gprd\u0026var-type=webservice\u0026var-stage=main\u0026var-component=kube_container_cpu"
-        },
         {
           "title": "webservice Service | kube_container_cpu_limit resource Dashboard",
           "url": "https://dashboards.gitlab.net/d/alerts-sat_kube_container_cpu_limit/?var-environment=gprd\u0026var-type=webservice\u0026var-stage=main\u0026var-component=kube_container_cpu_limit"
@@ -6432,10 +6416,6 @@
         {
           "title": "consul Service | disk_space resource Dashboard",
           "url": "https://dashboards.gitlab.net/d/alerts-sat_disk_space/?var-environment=gprd\u0026var-type=consul\u0026var-stage=main\u0026var-component=disk_space"
-        },
-        {
-          "title": "consul Service | kube_container_cpu resource Dashboard",
-          "url": "https://dashboards.gitlab.net/d/alerts-sat_kube_container_cpu/?var-environment=gprd\u0026var-type=consul\u0026var-stage=main\u0026var-component=kube_container_cpu"
         },
         {
           "title": "consul Service | kube_container_cpu_limit resource Dashboard",

@@ -1,14 +1,12 @@
 local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
 local resourceSaturationPoint = (import 'servicemetrics/resource_saturation_point.libsonnet').resourceSaturationPoint;
 
-local commonMemory = {
-  severity: 's4',
-  horizontallyScalable: true,
-  appliesTo: metricsCatalog.findKubeProvisionedServices(first='web'),
-  resourceLabels: ['pod', 'container'],
-};
 {
-  kube_container_cpu: resourceSaturationPoint(commonMemory {
+  kube_container_cpu: resourceSaturationPoint({
+    severity: 's4',
+    horizontallyScalable: true,
+    appliesTo: metricsCatalog.findKubeProvisionedServices(first='web'),
+    resourceLabels: ['pod', 'container'],
     title: 'Kube Container CPU Utilization',
     description: |||
       Kubernetes containers are allocated a share of CPU. Configured using resource requests.
@@ -52,38 +50,6 @@ local commonMemory = {
     slos: {
       soft: 0.95,
       hard: 0.99,
-    },
-  }),
-
-  kube_container_cpu_limit: resourceSaturationPoint(commonMemory {
-    title: 'Kube Container CPU over-utilization',
-    description: |||
-      Kubernetes containers can have a limit configured on how much CPU they can consume in
-      a burst. If we are at this limit, exceeding the allocated requested resources, we
-      should consider revisting the container's HPA configuration.
-
-      When a container is utilizing CPU resources up-to it's configured limit for
-      extended periods of time, this could cause it and other running containers to be
-      throttled.
-    |||,
-    grafana_dashboard_uid: 'sat_kube_container_cpu_limit',
-    burnRatePeriod: '5m',
-    capacityPlanning: { strategy: 'exclude' },
-    query: |||
-      sum by (%(aggregationLabels)s) (
-        rate(container_cpu_usage_seconds_total:labeled{container!="", container!="POD", %(selector)s}[%(rangeInterval)s])
-      )
-      /
-      sum by(%(aggregationLabels)s) (
-        container_spec_cpu_quota:labeled{container!="", container!="POD", %(selector)s}
-        /
-        container_spec_cpu_period:labeled{container!="", container!="POD", %(selector)s}
-      )
-    |||,
-    slos: {
-      soft: 0.90,
-      hard: 0.99,
-      alertTriggerDuration: '15m',
     },
   }),
 }
