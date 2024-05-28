@@ -2,7 +2,6 @@ local gitlabMetricsConfig = (import 'gitlab-metrics-config.libsonnet');
 
 local all =
   [
-    import 'consul.jsonnet',
     import 'gitaly.jsonnet',
     import 'gitlab-shell.jsonnet',
     import 'redis.jsonnet',
@@ -22,6 +21,11 @@ local all =
   ) + (
     if gitlabMetricsConfig.options.praefect.enable then
       [import 'praefect.jsonnet']
+    else
+      []
+  ) + (
+    if gitlabMetricsConfig.options.consul.enable then
+      [import 'consul.jsonnet']
     else
       []
   ) +

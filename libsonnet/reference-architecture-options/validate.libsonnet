@@ -14,12 +14,18 @@ local defaults = {
     // Override this to disable Praefect monitoring
     enable: true,
   },
+  consul: {
+    enable: true,
+  },
   rdsMonitoring: false,
 };
 
 local referenceArchitectureOptionsValidator = validator.new({
   elasticacheMonitoring: validator.boolean,
   praefect: {
+    enable: validator.boolean,
+  },
+  consul: {
     enable: validator.boolean,
   },
   rdsMonitoring: validator.boolean,
