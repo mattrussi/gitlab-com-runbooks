@@ -7,7 +7,7 @@ local defaultSelector = {
 };
 
 local bloatSelector = {
-  job: 'gitlab-monitor-database-bloat',
+  job: 'scrapeConfig/monitoring/prometheus-agent-postgres-database-bloat',
 
 };
 

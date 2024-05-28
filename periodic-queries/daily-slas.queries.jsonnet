@@ -26,7 +26,7 @@ local keyServiceNames = std.map(
   service_ratio: periodicQuery.new({
     query: |||
       avg by (type) (
-        avg_over_time(slo_observation_status{%(selectors)s}[%(interval)s])
+        avg_over_time(slo:observation_status{%(selectors)s}[%(interval)s])
       )
     ||| % {
       selectors: selectors.serializeHash(defaultSelector {
