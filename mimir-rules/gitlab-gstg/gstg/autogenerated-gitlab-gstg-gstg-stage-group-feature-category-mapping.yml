@@ -20,6 +20,20 @@ groups:
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
+      feature_category: add-on_provisioning
+      monitor: global
+      product_stage: fulfillment
+      stage_group: provision
+    expr: "1"
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
+      feature_category: saas_provisioning
+      monitor: global
+      product_stage: fulfillment
+      stage_group: provision
+    expr: "1"
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
       feature_category: advisory_database
       monitor: global
       product_stage: secure
@@ -188,13 +202,6 @@ groups:
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
-      feature_category: commerce_integrations
-      monitor: global
-      product_stage: fulfillment
-      stage_group: provision
-    expr: "1"
-  - record: gitlab:feature_category:stage_group:mapping
-    labels:
       feature_category: compliance_management
       monitor: global
       product_stage: govern
@@ -241,6 +248,13 @@ groups:
       monitor: global
       product_stage: ai-powered
       stage_group: custom_models
+    expr: "1"
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
+      feature_category: customersdot_and_quote_to_cash_integrations
+      monitor: global
+      product_stage: fulfillment
+      stage_group: fulfillment_platform
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -293,13 +307,6 @@ groups:
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
-      feature_category: dependency_proxy
-      monitor: global
-      product_stage: package
-      stage_group: container_registry
-    expr: "1"
-  - record: gitlab:feature_category:stage_group:mapping
-    labels:
       feature_category: deployment_management
       monitor: global
       product_stage: deploy
@@ -317,7 +324,7 @@ groups:
       feature_category: design_system
       monitor: global
       product_stage: manage
-      stage_group: foundations
+      stage_group: design_system
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -405,7 +412,7 @@ groups:
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
-      feature_category: fulfillment_admin_tooling
+      feature_category: fulfillment_infradev
       monitor: global
       product_stage: fulfillment
       stage_group: fulfillment_platform
@@ -413,6 +420,20 @@ groups:
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: fulfillment_infrastructure
+      monitor: global
+      product_stage: fulfillment
+      stage_group: fulfillment_platform
+    expr: "1"
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
+      feature_category: fulfillment_internal_admin_tooling
+      monitor: global
+      product_stage: fulfillment
+      stage_group: fulfillment_platform
+    expr: "1"
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
+      feature_category: fulfillment_admin_tooling
       monitor: global
       product_stage: fulfillment
       stage_group: fulfillment_platform
@@ -444,13 +465,6 @@ groups:
       monitor: global
       product_stage: create
       stage_group: code_review
-    expr: "1"
-  - record: gitlab:feature_category:stage_group:mapping
-    labels:
-      feature_category: gitlab_docs
-      monitor: global
-      product_stage: manage
-      stage_group: foundations
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -576,7 +590,7 @@ groups:
       feature_category: navigation
       monitor: global
       product_stage: manage
-      stage_group: foundations
+      stage_group: personal_productivity
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -584,6 +598,13 @@ groups:
       monitor: global
       product_stage: not_owned
       stage_group: not_owned
+    expr: "1"
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
+      feature_category: notifications
+      monitor: global
+      product_stage: manage
+      stage_group: personal_productivity
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -650,6 +671,20 @@ groups:
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
+      feature_category: plan_provisioning
+      monitor: global
+      product_stage: fulfillment
+      stage_group: provision
+    expr: "1"
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
+      feature_category: sm_provisioning
+      monitor: global
+      product_stage: fulfillment
+      stage_group: provision
+    expr: "1"
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
       feature_category: portfolio_management
       monitor: global
       product_stage: plan
@@ -675,13 +710,6 @@ groups:
       monitor: global
       product_stage: platforms
       stage_group: pubsec_services
-    expr: "1"
-  - record: gitlab:feature_category:stage_group:mapping
-    labels:
-      feature_category: purchase
-      monitor: global
-      product_stage: fulfillment
-      stage_group: subscription_management
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -748,13 +776,6 @@ groups:
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
-      feature_category: saas_provisioning
-      monitor: global
-      product_stage: fulfillment
-      stage_group: provision
-    expr: "1"
-  - record: gitlab:feature_category:stage_group:mapping
-    labels:
       feature_category: sbom
       monitor: global
       product_stage: govern
@@ -811,10 +832,10 @@ groups:
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
-      feature_category: sm_provisioning
+      feature_category: settings
       monitor: global
-      product_stage: fulfillment
-      stage_group: provision
+      product_stage: manage
+      stage_group: personal_productivity
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -840,6 +861,13 @@ groups:
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: subscription_management
+      monitor: global
+      product_stage: fulfillment
+      stage_group: subscription_management
+    expr: "1"
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
+      feature_category: purchase
       monitor: global
       product_stage: fulfillment
       stage_group: subscription_management
@@ -899,6 +927,20 @@ groups:
       monitor: global
       product_stage: plan
       stage_group: optimize
+    expr: "1"
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
+      feature_category: virtual_registry
+      monitor: global
+      product_stage: package
+      stage_group: container_registry
+    expr: "1"
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
+      feature_category: dependency_proxy
+      monitor: global
+      product_stage: package
+      stage_group: container_registry
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:

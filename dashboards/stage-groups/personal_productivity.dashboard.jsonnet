@@ -2,5 +2,5 @@
 // Please feel free to customize this file.
 local stageGroupDashboards = import './stage-group-dashboards.libsonnet';
 
-stageGroupDashboards.dashboard('foundations')
+stageGroupDashboards.dashboard('personal_productivity')
 .stageGroupDashboardTrailer()

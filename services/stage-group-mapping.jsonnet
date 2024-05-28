@@ -12,13 +12,27 @@
       'internationalization',
     ],
   },
-  foundations: {
-    name: 'Foundations',
+  personal_productivity: {
+    name: 'Personal productivity',
+    stage: 'manage',
+    feature_categories: [
+      'navigation',
+      'settings',
+      'notifications',
+    ],
+  },
+  design_system: {
+    name: 'Design System',
     stage: 'manage',
     feature_categories: [
       'design_system',
-      'gitlab_docs',
-      'navigation',
+    ],
+  },
+  ux_paper_cuts: {
+    name: 'UX Paper Cuts',
+    stage: 'manage',
+    feature_categories: [
+
     ],
   },
   project_management: {
@@ -153,7 +167,7 @@
     stage: 'package',
     feature_categories: [
       'container_registry',
-      'dependency_proxy',
+      'virtual_registry',
       'dependency_firewall',
     ],
   },
@@ -297,9 +311,8 @@
     name: 'Provision',
     stage: 'fulfillment',
     feature_categories: [
-      'sm_provisioning',
-      'saas_provisioning',
-      'commerce_integrations',
+      'plan_provisioning',
+      'add-on_provisioning',
     ],
   },
   utilization: {
@@ -314,16 +327,15 @@
     name: 'Fulfillment Platform',
     stage: 'fulfillment',
     feature_categories: [
-      'fulfillment_infrastructure',
-      'customersdot_application',
-      'fulfillment_admin_tooling',
+      'fulfillment_infradev',
+      'customersdot_and_quote_to_cash_integrations',
+      'fulfillment_internal_admin_tooling',
     ],
   },
   subscription_management: {
     name: 'Subscription Management',
     stage: 'fulfillment',
     feature_categories: [
-      'purchase',
       'subscription_management',
     ],
   },
@@ -533,13 +545,6 @@
   },
   contributor_success: {
     name: 'Contributor Success',
-    stage: 'unlisted_stage',
-    feature_categories: [
-
-    ],
-  },
-  ux_paper_cuts: {
-    name: 'UX Paper Cuts',
     stage: 'unlisted_stage',
     feature_categories: [
 

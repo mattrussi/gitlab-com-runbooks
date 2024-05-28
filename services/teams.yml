@@ -270,8 +270,8 @@ teams:
   product_stage_group: ide
   ignored_components:
   - graphql_query
-- name: foundations
-  product_stage_group: foundations
+- name: personal_productivity
+  product_stage_group: personal_productivity
   ignored_components:
   - graphql_query
 - name: dedicated
