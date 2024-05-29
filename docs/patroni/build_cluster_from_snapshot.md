@@ -170,7 +170,7 @@ Example:
 ```
 all:
   vars:
-    walg_gs_prefix: 'gs://gitlab-gstg-postgres-backup/pitr-walg-main-pg12-2004'
+    walg_gs_prefix: 'gs://gitlab-gprd-postgres-backup/pitr-walg-main-v14'
   hosts:
     patroni-main-v14-[101:105]-db-gstg.c.gitlab-staging-1.internal:
 ```
