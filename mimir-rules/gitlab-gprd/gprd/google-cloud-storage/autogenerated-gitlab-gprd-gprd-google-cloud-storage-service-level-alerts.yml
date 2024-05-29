@@ -7,7 +7,6 @@ groups:
   - alert: GoogleCloudStorageServiceArtifactsCdnErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The artifacts_cdn SLI of the google-cloud-storage service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
@@ -15,6 +14,7 @@ groups:
       grafana_dashboard_id: google-cloud-storage-main/google-cloud-storage-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/google-cloud-storage-main/google-cloud-storage-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "4093837669"
       grafana_variables: environment,stage
@@ -54,7 +54,6 @@ groups:
   - alert: GoogleCloudStorageServiceArtifactsCdnErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The artifacts_cdn SLI of the google-cloud-storage service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
@@ -62,6 +61,7 @@ groups:
       grafana_dashboard_id: google-cloud-storage-main/google-cloud-storage-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/google-cloud-storage-main/google-cloud-storage-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "4093837669"
       grafana_variables: environment,stage
@@ -101,7 +101,6 @@ groups:
   - alert: GoogleCloudStorageServiceArtifactsCdnTrafficCessation
     for: 5m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The artifacts_cdn SLI of the google-cloud-storage service (`{{ $labels.stage
         }}` stage) has not received any traffic in the past 30m
       description: |
@@ -109,6 +108,7 @@ groups:
       grafana_dashboard_id: google-cloud-storage-main/google-cloud-storage-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/google-cloud-storage-main/google-cloud-storage-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2443344261"
       grafana_variables: environment,stage
@@ -135,7 +135,6 @@ groups:
   - alert: GoogleCloudStorageServiceArtifactsCdnTrafficAbsent
     for: 30m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The artifacts_cdn SLI of the google-cloud-storage service (`{{ $labels.stage
         }}` stage) has not reported any traffic in the past 30m
       description: |
@@ -145,6 +144,7 @@ groups:
       grafana_dashboard_id: google-cloud-storage-main/google-cloud-storage-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/google-cloud-storage-main/google-cloud-storage-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2443344261"
       grafana_variables: environment,stage
@@ -171,7 +171,6 @@ groups:
   - alert: GoogleCloudStorageServicePagesRangeRequestsApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The pages_range_requests SLI of the google-cloud-storage service (`{{
         $labels.stage }}` stage) has an apdex violating SLO
       description: |
@@ -181,6 +180,7 @@ groups:
       grafana_dashboard_id: google-cloud-storage-main/google-cloud-storage-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/google-cloud-storage-main/google-cloud-storage-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "334781615"
       grafana_variables: environment,stage
@@ -223,7 +223,6 @@ groups:
   - alert: GoogleCloudStorageServicePagesRangeRequestsApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The pages_range_requests SLI of the google-cloud-storage service (`{{
         $labels.stage }}` stage) has an apdex violating SLO
       description: |
@@ -233,6 +232,7 @@ groups:
       grafana_dashboard_id: google-cloud-storage-main/google-cloud-storage-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/google-cloud-storage-main/google-cloud-storage-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "334781615"
       grafana_variables: environment,stage
@@ -275,7 +275,6 @@ groups:
   - alert: GoogleCloudStorageServicePagesRangeRequestsTrafficCessation
     for: 5m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The pages_range_requests SLI of the google-cloud-storage service (`{{
         $labels.stage }}` stage) has not received any traffic in the past 30m
       description: |
@@ -285,6 +284,7 @@ groups:
       grafana_dashboard_id: google-cloud-storage-main/google-cloud-storage-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/google-cloud-storage-main/google-cloud-storage-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "4082714249"
       grafana_variables: environment,stage
@@ -311,7 +311,6 @@ groups:
   - alert: GoogleCloudStorageServicePagesRangeRequestsTrafficAbsent
     for: 30m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The pages_range_requests SLI of the google-cloud-storage service (`{{
         $labels.stage }}` stage) has not reported any traffic in the past 30m
       description: |
@@ -323,6 +322,7 @@ groups:
       grafana_dashboard_id: google-cloud-storage-main/google-cloud-storage-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/google-cloud-storage-main/google-cloud-storage-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "4082714249"
       grafana_variables: environment,stage
@@ -349,7 +349,6 @@ groups:
   - alert: GoogleCloudStorageServicePagesRequestDurationApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The pages_request_duration SLI of the google-cloud-storage service (`{{
         $labels.stage }}` stage) has an apdex violating SLO
       description: |
@@ -359,6 +358,7 @@ groups:
       grafana_dashboard_id: google-cloud-storage-main/google-cloud-storage-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/google-cloud-storage-main/google-cloud-storage-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "250979464"
       grafana_variables: environment,stage
@@ -401,7 +401,6 @@ groups:
   - alert: GoogleCloudStorageServicePagesRequestDurationApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The pages_request_duration SLI of the google-cloud-storage service (`{{
         $labels.stage }}` stage) has an apdex violating SLO
       description: |
@@ -411,6 +410,7 @@ groups:
       grafana_dashboard_id: google-cloud-storage-main/google-cloud-storage-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/google-cloud-storage-main/google-cloud-storage-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "250979464"
       grafana_variables: environment,stage
@@ -453,7 +453,6 @@ groups:
   - alert: GoogleCloudStorageServicePagesRequestDurationTrafficCessation
     for: 5m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The pages_request_duration SLI of the google-cloud-storage service (`{{
         $labels.stage }}` stage) has not received any traffic in the past 30m
       description: |
@@ -463,6 +462,7 @@ groups:
       grafana_dashboard_id: google-cloud-storage-main/google-cloud-storage-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/google-cloud-storage-main/google-cloud-storage-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3558887144"
       grafana_variables: environment,stage
@@ -489,7 +489,6 @@ groups:
   - alert: GoogleCloudStorageServicePagesRequestDurationTrafficAbsent
     for: 30m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The pages_request_duration SLI of the google-cloud-storage service (`{{
         $labels.stage }}` stage) has not reported any traffic in the past 30m
       description: |
@@ -501,6 +500,7 @@ groups:
       grafana_dashboard_id: google-cloud-storage-main/google-cloud-storage-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/google-cloud-storage-main/google-cloud-storage-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3558887144"
       grafana_variables: environment,stage
@@ -527,7 +527,6 @@ groups:
   - alert: GoogleCloudStorageServicePagesTotalRequestsTrafficCessation
     for: 5m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The pages_total_requests SLI of the google-cloud-storage service (`{{
         $labels.stage }}` stage) has not received any traffic in the past 30m
       description: |
@@ -537,6 +536,7 @@ groups:
       grafana_dashboard_id: google-cloud-storage-main/google-cloud-storage-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/google-cloud-storage-main/google-cloud-storage-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "316715522"
       grafana_variables: environment,stage
@@ -563,7 +563,6 @@ groups:
   - alert: GoogleCloudStorageServicePagesTotalRequestsTrafficAbsent
     for: 30m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The pages_total_requests SLI of the google-cloud-storage service (`{{
         $labels.stage }}` stage) has not reported any traffic in the past 30m
       description: |
@@ -575,6 +574,7 @@ groups:
       grafana_dashboard_id: google-cloud-storage-main/google-cloud-storage-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/google-cloud-storage-main/google-cloud-storage-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "316715522"
       grafana_variables: environment,stage
@@ -601,7 +601,6 @@ groups:
   - alert: GoogleCloudStorageServiceRegistryStorageApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The registry_storage SLI of the google-cloud-storage service (`{{ $labels.stage
         }}` stage) has an apdex violating SLO
       description: |
@@ -611,6 +610,7 @@ groups:
       grafana_dashboard_id: google-cloud-storage-main/google-cloud-storage-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/google-cloud-storage-main/google-cloud-storage-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2548962903"
       grafana_variables: environment,stage
@@ -653,7 +653,6 @@ groups:
   - alert: GoogleCloudStorageServiceRegistryStorageApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The registry_storage SLI of the google-cloud-storage service (`{{ $labels.stage
         }}` stage) has an apdex violating SLO
       description: |
@@ -663,6 +662,7 @@ groups:
       grafana_dashboard_id: google-cloud-storage-main/google-cloud-storage-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/google-cloud-storage-main/google-cloud-storage-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2548962903"
       grafana_variables: environment,stage
@@ -705,7 +705,6 @@ groups:
   - alert: GoogleCloudStorageServiceRegistryStorageTrafficCessation
     for: 5m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The registry_storage SLI of the google-cloud-storage service (`{{ $labels.stage
         }}` stage) has not received any traffic in the past 30m
       description: |
@@ -715,6 +714,7 @@ groups:
       grafana_dashboard_id: google-cloud-storage-main/google-cloud-storage-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/google-cloud-storage-main/google-cloud-storage-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "207503232"
       grafana_variables: environment,stage
@@ -741,7 +741,6 @@ groups:
   - alert: GoogleCloudStorageServiceRegistryStorageTrafficAbsent
     for: 30m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The registry_storage SLI of the google-cloud-storage service (`{{ $labels.stage
         }}` stage) has not reported any traffic in the past 30m
       description: |
@@ -753,6 +752,7 @@ groups:
       grafana_dashboard_id: google-cloud-storage-main/google-cloud-storage-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/google-cloud-storage-main/google-cloud-storage-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "207503232"
       grafana_variables: environment,stage
@@ -779,7 +779,6 @@ groups:
   - alert: GoogleCloudStorageServiceWorkhorseUploadApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The workhorse_upload SLI of the google-cloud-storage service (`{{ $labels.stage
         }}` stage) has an apdex violating SLO
       description: |
@@ -789,6 +788,7 @@ groups:
       grafana_dashboard_id: google-cloud-storage-main/google-cloud-storage-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/google-cloud-storage-main/google-cloud-storage-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "680195893"
       grafana_variables: environment,stage
@@ -831,7 +831,6 @@ groups:
   - alert: GoogleCloudStorageServiceWorkhorseUploadApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The workhorse_upload SLI of the google-cloud-storage service (`{{ $labels.stage
         }}` stage) has an apdex violating SLO
       description: |
@@ -841,6 +840,7 @@ groups:
       grafana_dashboard_id: google-cloud-storage-main/google-cloud-storage-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/google-cloud-storage-main/google-cloud-storage-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "680195893"
       grafana_variables: environment,stage
@@ -883,7 +883,6 @@ groups:
   - alert: GoogleCloudStorageServiceWorkhorseUploadErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The workhorse_upload SLI of the google-cloud-storage service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
@@ -893,6 +892,7 @@ groups:
       grafana_dashboard_id: google-cloud-storage-main/google-cloud-storage-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/google-cloud-storage-main/google-cloud-storage-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "4218921310"
       grafana_variables: environment,stage
@@ -932,7 +932,6 @@ groups:
   - alert: GoogleCloudStorageServiceWorkhorseUploadErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The workhorse_upload SLI of the google-cloud-storage service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
@@ -942,6 +941,7 @@ groups:
       grafana_dashboard_id: google-cloud-storage-main/google-cloud-storage-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/google-cloud-storage-main/google-cloud-storage-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "4218921310"
       grafana_variables: environment,stage
@@ -981,7 +981,6 @@ groups:
   - alert: GoogleCloudStorageServiceWorkhorseUploadTrafficCessation
     for: 5m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The workhorse_upload SLI of the google-cloud-storage service (`{{ $labels.stage
         }}` stage) has not received any traffic in the past 30m
       description: |
@@ -991,6 +990,7 @@ groups:
       grafana_dashboard_id: google-cloud-storage-main/google-cloud-storage-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/google-cloud-storage-main/google-cloud-storage-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1641073818"
       grafana_variables: environment,stage
@@ -1017,7 +1017,6 @@ groups:
   - alert: GoogleCloudStorageServiceWorkhorseUploadTrafficAbsent
     for: 30m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The workhorse_upload SLI of the google-cloud-storage service (`{{ $labels.stage
         }}` stage) has not reported any traffic in the past 30m
       description: |
@@ -1029,6 +1028,7 @@ groups:
       grafana_dashboard_id: google-cloud-storage-main/google-cloud-storage-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/google-cloud-storage-main/google-cloud-storage-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1641073818"
       grafana_variables: environment,stage

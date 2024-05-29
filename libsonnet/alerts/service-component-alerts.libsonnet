@@ -60,12 +60,13 @@ local alertDescriptors(aggregationSets) = [{
   minimumSamplesForTrafficCessation: minimumSamplesForTrafficCessation,
 }];
 
-local groupsForService(service, selector, aggregationSets, groupExtras={}) =
+local groupsForService(service, selector, aggregationSets, groupExtras={}, tenant=null) =
   local groups = serviceAlertsGenerator(
     service,
     alertDescriptors(aggregationSets),
     groupExtras=groupExtras,
-    extraSelector=selector
+    extraSelector=selector,
+    tenant=tenant,
   );
   if std.length(groups) > 0 then
     {

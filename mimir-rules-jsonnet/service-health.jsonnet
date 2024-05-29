@@ -5,7 +5,7 @@ local recordingRules = import 'recording-rules/recording-rules.libsonnet';
 local thresholds = import 'mwmbr/thresholds.libsonnet';
 
 separateMimirRecordingFiles(
-  function(service, selector, extraArgs)
+  function(service, selector, extraArgs, _)
     std.foldl(
       function(result, threshold)
         local filename = '%(name)s-health' % { name: threshold.name };

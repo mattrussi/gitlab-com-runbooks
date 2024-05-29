@@ -6,9 +6,9 @@ std.foldl(
   function(memo, serviceName)
     local service = metricsCatalog.getService(serviceName);
     memo + separateMimirRecordingFiles(
-      function(service, selector, extraArgs)
+      function(service, selector, extraArgs, tenant)
         {
-          'kube-cause-alerts': std.manifestYamlDoc(kubeCauseAlerts(selector { type: serviceName })),
+          'kube-cause-alerts': std.manifestYamlDoc(kubeCauseAlerts(selector { type: serviceName }, tenant)),
         },
       serviceDefinition=service
     ),

@@ -6,7 +6,6 @@ groups:
   - alert: KubeContainersWaitingInError
     for: 20m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: Containers for the `{{ $labels.type }}` service, `{{ $labels.stage }}`
         are unable to start.
       description: |
@@ -15,6 +14,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-kube_containers_waiting/alerts-containers-waiting?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
         }}&var-cluster={{ $labels.cluster }}
+      grafana_datasource_id: mimir-gitlab-pre
       grafana_min_zoom_hours: "6"
       grafana_variables: environment,type,stage,cluster
     labels:

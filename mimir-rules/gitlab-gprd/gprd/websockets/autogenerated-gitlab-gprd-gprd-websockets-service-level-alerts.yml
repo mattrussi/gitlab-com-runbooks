@@ -7,7 +7,6 @@ groups:
   - alert: WebsocketsServiceLoadbalancerErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The loadbalancer SLI of the websockets service (`{{ $labels.stage }}`
         stage) has an error rate violating SLO
       description: |
@@ -17,6 +16,7 @@ groups:
       grafana_dashboard_id: websockets-main/websockets-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/websockets-main/websockets-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3255520955"
       grafana_variables: environment,stage
@@ -52,7 +52,6 @@ groups:
   - alert: WebsocketsServiceLoadbalancerErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The loadbalancer SLI of the websockets service (`{{ $labels.stage }}`
         stage) has an error rate violating SLO
       description: |
@@ -62,6 +61,7 @@ groups:
       grafana_dashboard_id: websockets-main/websockets-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/websockets-main/websockets-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3255520955"
       grafana_variables: environment,stage
@@ -97,7 +97,6 @@ groups:
   - alert: WebsocketsServiceLoadbalancerErrorSLOViolationRegional
     for: 2m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The loadbalancer SLI of the websockets service in region `{{ $labels.region
         }}` has an error rate violating SLO
       description: |
@@ -109,6 +108,7 @@ groups:
       grafana_dashboard_id: websockets-main/websockets-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/websockets-main/websockets-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3255520955"
       grafana_variables: environment,stage
@@ -144,7 +144,6 @@ groups:
   - alert: WebsocketsServiceLoadbalancerErrorSLOViolationRegional
     for: 2m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The loadbalancer SLI of the websockets service in region `{{ $labels.region
         }}` has an error rate violating SLO
       description: |
@@ -156,6 +155,7 @@ groups:
       grafana_dashboard_id: websockets-main/websockets-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/websockets-main/websockets-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3255520955"
       grafana_variables: environment,stage
@@ -191,7 +191,6 @@ groups:
   - alert: WebsocketsServiceLoadbalancerTrafficCessation
     for: 5m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The loadbalancer SLI of the websockets service (`{{ $labels.stage }}`
         stage) has not received any traffic in the past 30m
       description: |
@@ -201,6 +200,7 @@ groups:
       grafana_dashboard_id: websockets-main/websockets-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/websockets-main/websockets-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "138982496"
       grafana_variables: environment,stage
@@ -223,7 +223,6 @@ groups:
   - alert: WebsocketsServiceLoadbalancerTrafficAbsent
     for: 30m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The loadbalancer SLI of the websockets service (`{{ $labels.stage }}`
         stage) has not reported any traffic in the past 30m
       description: |
@@ -235,6 +234,7 @@ groups:
       grafana_dashboard_id: websockets-main/websockets-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/websockets-main/websockets-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "138982496"
       grafana_variables: environment,stage
@@ -257,7 +257,6 @@ groups:
   - alert: WebsocketsServiceLoadbalancerTrafficCessationRegional
     for: 5m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The loadbalancer SLI of the websockets service in region `{{ $labels.region
         }}` has not received any traffic in the past 30m
       description: |
@@ -269,6 +268,7 @@ groups:
       grafana_dashboard_id: websockets-main/websockets-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/websockets-main/websockets-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "138982496"
       grafana_variables: environment,stage
@@ -291,7 +291,6 @@ groups:
   - alert: WebsocketsServiceLoadbalancerTrafficAbsentRegional
     for: 30m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The loadbalancer SLI of the websockets service in region `{{ $labels.region
         }}` has not reported any traffic in the past 30m
       description: |
@@ -305,6 +304,7 @@ groups:
       grafana_dashboard_id: websockets-main/websockets-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/websockets-main/websockets-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "138982496"
       grafana_variables: environment,stage
@@ -327,7 +327,6 @@ groups:
   - alert: WebsocketsServiceRailsRequestApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The rails_request SLI of the websockets service (`{{ $labels.stage }}`
         stage) has an apdex violating SLO
       description: |
@@ -339,6 +338,7 @@ groups:
       grafana_dashboard_id: websockets-main/websockets-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/websockets-main/websockets-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "495984175"
       grafana_variables: environment,stage
@@ -375,7 +375,6 @@ groups:
   - alert: WebsocketsServiceRailsRequestApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The rails_request SLI of the websockets service (`{{ $labels.stage }}`
         stage) has an apdex violating SLO
       description: |
@@ -387,6 +386,7 @@ groups:
       grafana_dashboard_id: websockets-main/websockets-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/websockets-main/websockets-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "495984175"
       grafana_variables: environment,stage
@@ -423,7 +423,6 @@ groups:
   - alert: WebsocketsServiceRailsRequestApdexSLOViolationRegional
     for: 2m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The rails_request SLI of the websockets service in region `{{ $labels.region
         }}` has an apdex violating SLO
       description: |
@@ -437,6 +436,7 @@ groups:
       grafana_dashboard_id: websockets-main/websockets-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/websockets-main/websockets-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "495984175"
       grafana_variables: environment,stage
@@ -472,7 +472,6 @@ groups:
   - alert: WebsocketsServiceRailsRequestApdexSLOViolationRegional
     for: 2m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The rails_request SLI of the websockets service in region `{{ $labels.region
         }}` has an apdex violating SLO
       description: |
@@ -486,6 +485,7 @@ groups:
       grafana_dashboard_id: websockets-main/websockets-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/websockets-main/websockets-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "495984175"
       grafana_variables: environment,stage
@@ -521,7 +521,6 @@ groups:
   - alert: WebsocketsServiceRailsRequestErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The rails_request SLI of the websockets service (`{{ $labels.stage }}`
         stage) has an error rate violating SLO
       description: |
@@ -533,6 +532,7 @@ groups:
       grafana_dashboard_id: websockets-main/websockets-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/websockets-main/websockets-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "387946920"
       grafana_variables: environment,stage
@@ -573,7 +573,6 @@ groups:
   - alert: WebsocketsServiceRailsRequestErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The rails_request SLI of the websockets service (`{{ $labels.stage }}`
         stage) has an error rate violating SLO
       description: |
@@ -585,6 +584,7 @@ groups:
       grafana_dashboard_id: websockets-main/websockets-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/websockets-main/websockets-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "387946920"
       grafana_variables: environment,stage
@@ -625,7 +625,6 @@ groups:
   - alert: WebsocketsServiceRailsRequestErrorSLOViolationRegional
     for: 2m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The rails_request SLI of the websockets service in region `{{ $labels.region
         }}` has an error rate violating SLO
       description: |
@@ -639,6 +638,7 @@ groups:
       grafana_dashboard_id: websockets-main/websockets-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/websockets-main/websockets-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "387946920"
       grafana_variables: environment,stage
@@ -678,7 +678,6 @@ groups:
   - alert: WebsocketsServiceRailsRequestErrorSLOViolationRegional
     for: 2m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The rails_request SLI of the websockets service in region `{{ $labels.region
         }}` has an error rate violating SLO
       description: |
@@ -692,6 +691,7 @@ groups:
       grafana_dashboard_id: websockets-main/websockets-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/websockets-main/websockets-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "387946920"
       grafana_variables: environment,stage
@@ -731,7 +731,6 @@ groups:
   - alert: WebsocketsServiceRailsRequestTrafficCessation
     for: 5m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The rails_request SLI of the websockets service (`{{ $labels.stage }}`
         stage) has not received any traffic in the past 30m
       description: |
@@ -743,6 +742,7 @@ groups:
       grafana_dashboard_id: websockets-main/websockets-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/websockets-main/websockets-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "538903447"
       grafana_variables: environment,stage
@@ -769,7 +769,6 @@ groups:
   - alert: WebsocketsServiceRailsRequestTrafficAbsent
     for: 30m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The rails_request SLI of the websockets service (`{{ $labels.stage }}`
         stage) has not reported any traffic in the past 30m
       description: |
@@ -783,6 +782,7 @@ groups:
       grafana_dashboard_id: websockets-main/websockets-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/websockets-main/websockets-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "538903447"
       grafana_variables: environment,stage
@@ -809,7 +809,6 @@ groups:
   - alert: WebsocketsServiceRailsRequestTrafficCessationRegional
     for: 5m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The rails_request SLI of the websockets service in region `{{ $labels.region
         }}` has not received any traffic in the past 30m
       description: |
@@ -823,6 +822,7 @@ groups:
       grafana_dashboard_id: websockets-main/websockets-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/websockets-main/websockets-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "538903447"
       grafana_variables: environment,stage
@@ -849,7 +849,6 @@ groups:
   - alert: WebsocketsServiceRailsRequestTrafficAbsentRegional
     for: 30m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The rails_request SLI of the websockets service in region `{{ $labels.region
         }}` has not reported any traffic in the past 30m
       description: |
@@ -865,6 +864,7 @@ groups:
       grafana_dashboard_id: websockets-main/websockets-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/websockets-main/websockets-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "538903447"
       grafana_variables: environment,stage
@@ -891,7 +891,6 @@ groups:
   - alert: WebsocketsServiceWorkhorseErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The workhorse SLI of the websockets service (`{{ $labels.stage }}` stage)
         has an error rate violating SLO
       description: |
@@ -901,6 +900,7 @@ groups:
       grafana_dashboard_id: websockets-main/websockets-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/websockets-main/websockets-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2047984749"
       grafana_variables: environment,stage
@@ -939,7 +939,6 @@ groups:
   - alert: WebsocketsServiceWorkhorseErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The workhorse SLI of the websockets service (`{{ $labels.stage }}` stage)
         has an error rate violating SLO
       description: |
@@ -949,6 +948,7 @@ groups:
       grafana_dashboard_id: websockets-main/websockets-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/websockets-main/websockets-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2047984749"
       grafana_variables: environment,stage
@@ -987,7 +987,6 @@ groups:
   - alert: WebsocketsServiceWorkhorseErrorSLOViolationRegional
     for: 2m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The workhorse SLI of the websockets service in region `{{ $labels.region
         }}` has an error rate violating SLO
       description: |
@@ -999,6 +998,7 @@ groups:
       grafana_dashboard_id: websockets-main/websockets-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/websockets-main/websockets-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2047984749"
       grafana_variables: environment,stage
@@ -1037,7 +1037,6 @@ groups:
   - alert: WebsocketsServiceWorkhorseErrorSLOViolationRegional
     for: 2m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The workhorse SLI of the websockets service in region `{{ $labels.region
         }}` has an error rate violating SLO
       description: |
@@ -1049,6 +1048,7 @@ groups:
       grafana_dashboard_id: websockets-main/websockets-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/websockets-main/websockets-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2047984749"
       grafana_variables: environment,stage
@@ -1087,7 +1087,6 @@ groups:
   - alert: WebsocketsServiceWorkhorseTrafficCessation
     for: 5m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The workhorse SLI of the websockets service (`{{ $labels.stage }}` stage)
         has not received any traffic in the past 30m
       description: |
@@ -1097,6 +1096,7 @@ groups:
       grafana_dashboard_id: websockets-main/websockets-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/websockets-main/websockets-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "831392945"
       grafana_variables: environment,stage
@@ -1122,7 +1122,6 @@ groups:
   - alert: WebsocketsServiceWorkhorseTrafficAbsent
     for: 30m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The workhorse SLI of the websockets service (`{{ $labels.stage }}` stage)
         has not reported any traffic in the past 30m
       description: |
@@ -1134,6 +1133,7 @@ groups:
       grafana_dashboard_id: websockets-main/websockets-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/websockets-main/websockets-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "831392945"
       grafana_variables: environment,stage
@@ -1159,7 +1159,6 @@ groups:
   - alert: WebsocketsServiceWorkhorseTrafficCessationRegional
     for: 5m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The workhorse SLI of the websockets service in region `{{ $labels.region
         }}` has not received any traffic in the past 30m
       description: |
@@ -1171,6 +1170,7 @@ groups:
       grafana_dashboard_id: websockets-main/websockets-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/websockets-main/websockets-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "831392945"
       grafana_variables: environment,stage
@@ -1196,7 +1196,6 @@ groups:
   - alert: WebsocketsServiceWorkhorseTrafficAbsentRegional
     for: 30m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The workhorse SLI of the websockets service in region `{{ $labels.region
         }}` has not reported any traffic in the past 30m
       description: |
@@ -1210,6 +1209,7 @@ groups:
       grafana_dashboard_id: websockets-main/websockets-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/websockets-main/websockets-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "831392945"
       grafana_variables: environment,stage

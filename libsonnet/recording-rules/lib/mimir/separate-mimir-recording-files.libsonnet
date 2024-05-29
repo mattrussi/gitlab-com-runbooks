@@ -45,7 +45,7 @@ local namespaceFormat(tenant, env, serviceDefinition, baseName) =
               envName: envName,
               serviceName: serviceDefinition.type,
             },
-          filesForSeparateSelector(serviceDefinition, metricsConfig.separateMimirRecordingSelectors[tenantName].selector, extraArgs)
+          filesForSeparateSelector(serviceDefinition, metricsConfig.separateMimirRecordingSelectors[tenantName].selector, extraArgs, "mimir-%s" % tenantName)
         ),
       tenants,
       {},

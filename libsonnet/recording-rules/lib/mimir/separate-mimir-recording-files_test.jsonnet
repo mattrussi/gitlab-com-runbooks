@@ -11,7 +11,7 @@ local fakeService = serviceDefinition.serviceDefinition({
 test.suite({
   testSeparateMimirRecordingFiles: {
     actual: separateMimirRecordingFiles(
-      function(service, selector, extraArgs) { rule_file_basename: selector },
+      function(service, selector, extraArgs, _) { rule_file_basename: selector },
       serviceDefinition=fakeService,
       metricsConfig=metricsConfig
     ),
@@ -23,7 +23,7 @@ test.suite({
   },
   testSeparateMimirRecordingFilesWithoutService: {
     actual: separateMimirRecordingFiles(
-      function(service, selector, extraArgs) { rule_file_basename: selector },
+      function(service, selector, extraArgs, _) { rule_file_basename: selector },
       metricsConfig=metricsConfig
     ),
     expect: {

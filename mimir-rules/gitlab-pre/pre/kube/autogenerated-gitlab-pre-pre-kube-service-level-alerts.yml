@@ -7,7 +7,6 @@ groups:
   - alert: KubeServiceApiserverApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The apiserver SLI of the kube service (`{{ $labels.stage }}` stage) has
         an apdex violating SLO
       description: |
@@ -19,6 +18,7 @@ groups:
       grafana_dashboard_id: kube-main/kube-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/kube-main/kube-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-pre
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1666123778"
       grafana_variables: environment,stage
@@ -61,7 +61,6 @@ groups:
   - alert: KubeServiceApiserverApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The apiserver SLI of the kube service (`{{ $labels.stage }}` stage) has
         an apdex violating SLO
       description: |
@@ -73,6 +72,7 @@ groups:
       grafana_dashboard_id: kube-main/kube-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/kube-main/kube-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-pre
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1666123778"
       grafana_variables: environment,stage
@@ -115,7 +115,6 @@ groups:
   - alert: KubeServiceApiserverErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The apiserver SLI of the kube service (`{{ $labels.stage }}` stage) has
         an error rate violating SLO
       description: |
@@ -127,6 +126,7 @@ groups:
       grafana_dashboard_id: kube-main/kube-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/kube-main/kube-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-pre
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "693885455"
       grafana_variables: environment,stage
@@ -166,7 +166,6 @@ groups:
   - alert: KubeServiceApiserverErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The apiserver SLI of the kube service (`{{ $labels.stage }}` stage) has
         an error rate violating SLO
       description: |
@@ -178,6 +177,7 @@ groups:
       grafana_dashboard_id: kube-main/kube-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/kube-main/kube-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-pre
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "693885455"
       grafana_variables: environment,stage
@@ -217,7 +217,6 @@ groups:
   - alert: KubeServiceApiserverTrafficCessation
     for: 5m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The apiserver SLI of the kube service (`{{ $labels.stage }}` stage) has
         not received any traffic in the past 30m
       description: |
@@ -229,6 +228,7 @@ groups:
       grafana_dashboard_id: kube-main/kube-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/kube-main/kube-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-pre
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3184144040"
       grafana_variables: environment,stage
@@ -255,7 +255,6 @@ groups:
   - alert: KubeServiceApiserverTrafficAbsent
     for: 30m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The apiserver SLI of the kube service (`{{ $labels.stage }}` stage) has
         not reported any traffic in the past 30m
       description: |
@@ -269,6 +268,7 @@ groups:
       grafana_dashboard_id: kube-main/kube-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/kube-main/kube-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-pre
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3184144040"
       grafana_variables: environment,stage
@@ -295,7 +295,6 @@ groups:
   - alert: KubeServiceClusterScaleupsErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The cluster_scaleups SLI of the kube service (`{{ $labels.stage }}` stage)
         has an error rate violating SLO
       description: |
@@ -307,6 +306,7 @@ groups:
       grafana_dashboard_id: kube-main/kube-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/kube-main/kube-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-pre
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2542610088"
       grafana_variables: environment,stage
@@ -348,7 +348,6 @@ groups:
   - alert: KubeServiceClusterScaleupsErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The cluster_scaleups SLI of the kube service (`{{ $labels.stage }}` stage)
         has an error rate violating SLO
       description: |
@@ -360,6 +359,7 @@ groups:
       grafana_dashboard_id: kube-main/kube-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/kube-main/kube-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-pre
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2542610088"
       grafana_variables: environment,stage

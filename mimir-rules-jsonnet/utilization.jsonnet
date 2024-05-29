@@ -10,7 +10,7 @@ local l = labelTaxonomy.labels;
 local environmentLabels = labelTaxonomy.labelTaxonomy(l.environmentThanos | l.tier | l.service | l.stage);
 
 local filesForSeparateSelector(serviceUtilizationMetrics) =
-  function(service, selector, _extraArgs)
+  function(service, selector, _extraArgs, _)
     local serviceSelector = selector { type: service.type };
     utilizationRules.generateUtilizationRules(
       serviceUtilizationMetrics,

@@ -10,7 +10,7 @@ local labels = {
   alert_type: 'cause',
 };
 
-local rules(extraSelector) = [
+local rules(extraSelector, tenant) = [
   // Ops Rate
   {
     alert: 'gitlab_component_opsrate_missing_series',
@@ -42,6 +42,7 @@ local rules(extraSelector) = [
       grafana_panel_id: stableIds.hashStableId('missing-series'),
       grafana_variables: 'environment,type,component,stage',
       grafana_min_zoom_hours: '24',
+      grafana_datasource_id: tenant,
     },
   },
   {
@@ -75,6 +76,7 @@ local rules(extraSelector) = [
       grafana_panel_id: stableIds.hashStableId('missing-series'),
       grafana_variables: 'environment,type,component,stage',
       grafana_min_zoom_hours: '24',
+      grafana_datasource_id: tenant,
     },
   },
   {
@@ -111,18 +113,19 @@ local rules(extraSelector) = [
       grafana_panel_id: stableIds.hashStableId('missing-series'),
       grafana_variables: 'environment,type,component,stage',
       grafana_min_zoom_hours: '24',
+      grafana_datasource_id: tenant,
     },
   },
 ];
 
 separateMimirRecordingFiles(
-  function(serviceDefinition, selector, extraSelector)
+  function(serviceDefinition, selector, extraSelector, tenant)
     {
       'missing-series-alerts': std.manifestYamlDoc({
         groups: [
           {
             name: 'missing_series_alerts.rules',
-            rules: alerts.processAlertRules(rules(selector)),
+            rules: alerts.processAlertRules(rules(selector, tenant)),
           },
         ],
       }),

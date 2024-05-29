@@ -42,7 +42,7 @@ local alertExpr(aggregationLabels, selectorNumerator, selectorDenominator, repli
     threshold: threshold,
   };
 
-local hotspotTupleAlert(alertName, periodFor, warning, replica, extraSelector) =
+local hotspotTupleAlert(alertName, periodFor, warning, replica, extraSelector, tenant=null) =
   local threshold = 0.5;  // 50%
   local aggregationLabels = if replica then aggregationLabelsForReplicas else aggregationLabelsForPrimary;
 
@@ -97,11 +97,12 @@ local hotspotTupleAlert(alertName, periodFor, warning, replica, extraSelector) =
       grafana_min_zoom_hours: '6',
       grafana_panel_id: '2',
       grafana_variables: aggregations.serialize(aggregationLabels + ['relname']),
+      grafana_datasource_id: tenant,
       runbook: 'docs/patroni/rails-sql-apdex-slow.md',
     },
   });
 
-local rules(extraSelector={}) = {
+local rules(extraSelector={}, tenant=null) = {
   groups: [
     {
       name: 'patroni_cause_alerts',
@@ -111,14 +112,16 @@ local rules(extraSelector={}) = {
           '10m',
           warning=true,
           replica=false,
-          extraSelector=extraSelector
+          extraSelector=extraSelector,
+          tenant=tenant,
         ),
         hotspotTupleAlert(
           'PostgreSQL_HotSpotTupleFetchingReplicas',
           '10m',
           warning=true,
           replica=true,
-          extraSelector=extraSelector
+          extraSelector=extraSelector,
+          tenant=tenant,
         ),
 
         // Special alert for Access Group
@@ -153,6 +156,7 @@ local rules(extraSelector={}) = {
             grafana_min_zoom_hours: '24',
             grafana_panel_id: '2',
             grafana_variables: aggregations.serialize(aggregationLabelsForPrimary + ['relname']),
+            grafana_datasource_id: tenant,
             runbook: 'docs/patroni/rails-sql-apdex-slow.md',
           },
         }),
@@ -180,6 +184,7 @@ local rules(extraSelector={}) = {
 
               This can eventually saturate entire database cluster if this situation continues for a longer period of time.
             |||,
+            grafana_datasource_id: tenant,
             runbook: 'docs/patroni/postgresql-subtransactions.md',
           },
         }),
@@ -228,6 +233,7 @@ local rules(extraSelector={}) = {
             grafana_dashboard_id: 'alerts-long_running_transactions/alerts-long-running-transactions',
             grafana_min_zoom_hours: '6',
             grafana_variables: 'environment',
+            grafana_datasource_id: tenant,
             runbook: 'docs/patroni/alerts/PatroniLongRunningTransactionsDetected.md',
           },
         }),

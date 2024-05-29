@@ -10,4 +10,3 @@ groups:
       - ignoring (fqdn,instance,primary) group_right (primary) (
         pg_xlog_position_bytes{env="gstg"} and pg_replication_is_replica{env="gstg"} == 1
       )
-

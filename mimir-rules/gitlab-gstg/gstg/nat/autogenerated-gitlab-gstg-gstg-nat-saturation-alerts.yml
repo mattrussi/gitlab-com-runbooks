@@ -20,7 +20,6 @@ groups:
   - alert: component_saturation_slo_out_of_bounds:nat_gateway_port_allocation
     for: 5m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The Cloud NAT Gateway Port Allocation resource of the {{ $labels.type
         }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
         is close to its capacity limit.
@@ -38,6 +37,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_nat_gw_port_allocation?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
         }}
+      grafana_datasource_id: mimir-gitlab-gstg
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1436589381"
       grafana_variables: environment,type,stage
@@ -109,7 +109,6 @@ groups:
   - alert: component_saturation_slo_out_of_bounds:nat_host_port_allocation
     for: 10m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The Cloud NAT Host Port Allocation resource of the {{ $labels.type }}
         service ({{ $labels.stage }} stage) has a saturation exceeding SLO and is
         close to its capacity limit.
@@ -129,6 +128,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_nat_host_port_allocation?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
         }}
+      grafana_datasource_id: mimir-gitlab-gstg
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2254997722"
       grafana_variables: environment,type,stage

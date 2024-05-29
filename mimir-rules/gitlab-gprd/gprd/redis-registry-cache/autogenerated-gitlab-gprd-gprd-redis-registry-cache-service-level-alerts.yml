@@ -7,7 +7,6 @@ groups:
   - alert: RedisRegistryCacheServicePrimaryServerTrafficCessation
     for: 5m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The primary_server SLI of the redis-registry-cache service (`{{ $labels.stage
         }}` stage) has not received any traffic in the past 30m
       description: |
@@ -17,6 +16,7 @@ groups:
       grafana_dashboard_id: redis-registry-cache-main/redis-registry-cache-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/redis-registry-cache-main/redis-registry-cache-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "175328272"
       grafana_variables: environment,stage
@@ -43,7 +43,6 @@ groups:
   - alert: RedisRegistryCacheServicePrimaryServerTrafficAbsent
     for: 30m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The primary_server SLI of the redis-registry-cache service (`{{ $labels.stage
         }}` stage) has not reported any traffic in the past 30m
       description: |
@@ -55,6 +54,7 @@ groups:
       grafana_dashboard_id: redis-registry-cache-main/redis-registry-cache-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/redis-registry-cache-main/redis-registry-cache-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "175328272"
       grafana_variables: environment,stage
@@ -81,7 +81,6 @@ groups:
   - alert: RedisRegistryCacheServiceRegistryRedisClientApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The registry_redis_client SLI of the redis-registry-cache service (`{{
         $labels.stage }}` stage) has an apdex violating SLO
       description: |
@@ -91,6 +90,7 @@ groups:
       grafana_dashboard_id: redis-registry-cache-main/redis-registry-cache-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/redis-registry-cache-main/redis-registry-cache-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "912357574"
       grafana_variables: environment,stage
@@ -132,7 +132,6 @@ groups:
   - alert: RedisRegistryCacheServiceRegistryRedisClientApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The registry_redis_client SLI of the redis-registry-cache service (`{{
         $labels.stage }}` stage) has an apdex violating SLO
       description: |
@@ -142,6 +141,7 @@ groups:
       grafana_dashboard_id: redis-registry-cache-main/redis-registry-cache-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/redis-registry-cache-main/redis-registry-cache-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "912357574"
       grafana_variables: environment,stage
@@ -183,7 +183,6 @@ groups:
   - alert: RedisRegistryCacheServiceRegistryRedisClientErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The registry_redis_client SLI of the redis-registry-cache service (`{{
         $labels.stage }}` stage) has an error rate violating SLO
       description: |
@@ -193,6 +192,7 @@ groups:
       grafana_dashboard_id: redis-registry-cache-main/redis-registry-cache-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/redis-registry-cache-main/redis-registry-cache-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "4062082595"
       grafana_variables: environment,stage
@@ -231,7 +231,6 @@ groups:
   - alert: RedisRegistryCacheServiceRegistryRedisClientErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The registry_redis_client SLI of the redis-registry-cache service (`{{
         $labels.stage }}` stage) has an error rate violating SLO
       description: |
@@ -241,6 +240,7 @@ groups:
       grafana_dashboard_id: redis-registry-cache-main/redis-registry-cache-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/redis-registry-cache-main/redis-registry-cache-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "4062082595"
       grafana_variables: environment,stage
@@ -279,7 +279,6 @@ groups:
   - alert: RedisRegistryCacheServiceRegistryRedisClientTrafficCessation
     for: 5m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The registry_redis_client SLI of the redis-registry-cache service (`{{
         $labels.stage }}` stage) has not received any traffic in the past 30m
       description: |
@@ -289,6 +288,7 @@ groups:
       grafana_dashboard_id: redis-registry-cache-main/redis-registry-cache-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/redis-registry-cache-main/redis-registry-cache-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3833447775"
       grafana_variables: environment,stage
@@ -314,7 +314,6 @@ groups:
   - alert: RedisRegistryCacheServiceRegistryRedisClientTrafficAbsent
     for: 30m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The registry_redis_client SLI of the redis-registry-cache service (`{{
         $labels.stage }}` stage) has not reported any traffic in the past 30m
       description: |
@@ -326,6 +325,7 @@ groups:
       grafana_dashboard_id: redis-registry-cache-main/redis-registry-cache-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/redis-registry-cache-main/redis-registry-cache-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3833447775"
       grafana_variables: environment,stage
@@ -351,7 +351,6 @@ groups:
   - alert: RedisRegistryCacheServiceSecondaryServersTrafficCessation
     for: 5m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The secondary_servers SLI of the redis-registry-cache service (`{{ $labels.stage
         }}` stage) has not received any traffic in the past 30m
       description: |
@@ -361,6 +360,7 @@ groups:
       grafana_dashboard_id: redis-registry-cache-main/redis-registry-cache-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/redis-registry-cache-main/redis-registry-cache-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3020974736"
       grafana_variables: environment,stage
@@ -387,7 +387,6 @@ groups:
   - alert: RedisRegistryCacheServiceSecondaryServersTrafficAbsent
     for: 30m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The secondary_servers SLI of the redis-registry-cache service (`{{ $labels.stage
         }}` stage) has not reported any traffic in the past 30m
       description: |
@@ -399,6 +398,7 @@ groups:
       grafana_dashboard_id: redis-registry-cache-main/redis-registry-cache-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/redis-registry-cache-main/redis-registry-cache-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3020974736"
       grafana_variables: environment,stage

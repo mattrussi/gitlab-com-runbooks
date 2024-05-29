@@ -8,7 +8,7 @@ local serviceAggregation = aggregationSets.serviceSLIs;
 local outputPromYaml(groups) =
   std.manifestYamlDoc({ groups: groups });
 
-local fileForService(service, selector, _extraArgs) = {
+local fileForService(service, selector, _extraArgs, _) = {
   service_ops_anomaly_detection: outputPromYaml(
     serviceOpsAnomalyDetection.recordingRuleGroupsFor(
       service.type, serviceAggregation, selector { type: service.type }

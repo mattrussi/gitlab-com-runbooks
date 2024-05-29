@@ -7,7 +7,6 @@ groups:
   - alert: PlantumlServiceLoadbalancerErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The loadbalancer SLI of the plantuml service (`{{ $labels.stage }}` stage)
         has an error rate violating SLO
       description: |
@@ -15,6 +14,7 @@ groups:
       grafana_dashboard_id: plantuml-main/plantuml-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/plantuml-main/plantuml-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gstg
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3255520955"
       grafana_variables: environment,stage
@@ -54,7 +54,6 @@ groups:
   - alert: PlantumlServiceLoadbalancerErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The loadbalancer SLI of the plantuml service (`{{ $labels.stage }}` stage)
         has an error rate violating SLO
       description: |
@@ -62,6 +61,7 @@ groups:
       grafana_dashboard_id: plantuml-main/plantuml-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/plantuml-main/plantuml-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gstg
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3255520955"
       grafana_variables: environment,stage
@@ -101,7 +101,6 @@ groups:
   - alert: PlantumlServiceLoadbalancerTrafficCessation
     for: 5m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The loadbalancer SLI of the plantuml service (`{{ $labels.stage }}` stage)
         has not received any traffic in the past 30m
       description: |
@@ -109,6 +108,7 @@ groups:
       grafana_dashboard_id: plantuml-main/plantuml-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/plantuml-main/plantuml-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gstg
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "138982496"
       grafana_variables: environment,stage
@@ -135,7 +135,6 @@ groups:
   - alert: PlantumlServiceLoadbalancerTrafficAbsent
     for: 30m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The loadbalancer SLI of the plantuml service (`{{ $labels.stage }}` stage)
         has not reported any traffic in the past 30m
       description: |
@@ -145,6 +144,7 @@ groups:
       grafana_dashboard_id: plantuml-main/plantuml-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/plantuml-main/plantuml-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gstg
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "138982496"
       grafana_variables: environment,stage

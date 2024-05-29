@@ -7,7 +7,6 @@ groups:
   - alert: PostgresArchiveServiceTransactionsTrafficCessation
     for: 5m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The transactions SLI of the postgres-archive service (`{{ $labels.stage
         }}` stage) has not received any traffic in the past 30m
       description: |
@@ -17,6 +16,7 @@ groups:
       grafana_dashboard_id: postgres-archive-main/postgres-archive-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/postgres-archive-main/postgres-archive-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2867357670"
       grafana_variables: environment,stage
@@ -45,7 +45,6 @@ groups:
   - alert: PostgresArchiveServiceTransactionsTrafficAbsent
     for: 30m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The transactions SLI of the postgres-archive service (`{{ $labels.stage
         }}` stage) has not reported any traffic in the past 30m
       description: |
@@ -57,6 +56,7 @@ groups:
       grafana_dashboard_id: postgres-archive-main/postgres-archive-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/postgres-archive-main/postgres-archive-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2867357670"
       grafana_variables: environment,stage

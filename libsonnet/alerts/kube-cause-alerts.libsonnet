@@ -7,7 +7,7 @@ local defaultSelector = {
   type: { ne: '' },
 };
 
-local rules = function(selector=defaultSelector) {
+local rules = function(selector=defaultSelector, tenant=null) {
   groups: [
     {
       name: 'kube_cause_alerts',
@@ -49,6 +49,7 @@ local rules = function(selector=defaultSelector) {
             grafana_dashboard_id: 'alerts-kube_containers_waiting/alerts-containers-waiting',
             grafana_min_zoom_hours: '6',
             grafana_variables: 'environment,type,stage,cluster',
+            grafana_datasource_id: tenant,
           },
         }),
       ],

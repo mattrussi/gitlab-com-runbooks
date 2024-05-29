@@ -1,6 +1,6 @@
 local selectors = import 'promql/selectors.libsonnet';
 local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
-local misc = import 'utils/misc.libsonnet';
+local objects = import 'utils/objects.libsonnet';
 
 local assertEvaluationType(evaluation) =
   local knownTypes = ['prometheus', 'thanos', 'both'];
@@ -59,6 +59,7 @@ local generateSaturationAuxRulesGroup(
   evaluation,
   extraSelector={},
   thanosSelfMonitoring=false,  // Include Thanos self-monitor saturation rules in the alert groups
+  tenant=null,
       ) =
   local knownEvaluation = assertEvaluationType(evaluation);
   local selectorHash = getSelectorHash(knownEvaluation) + extraSelector;
@@ -66,7 +67,19 @@ local generateSaturationAuxRulesGroup(
 
   local filtered = filterSaturationDefinitions(saturationResources, knownEvaluation, thanosSelfMonitoring);
 
-  local saturationAlerts = std.flatMap(function(key) saturationResources[key].getSaturationAlerts(key, selectorHash), filtered);
+  local saturationAlerts = std.flatMap(
+    function(key)
+      std.map(
+        function(alert)
+          objects.nestedMerge(alert, {
+            annotations: {
+              grafana_datasource_id: tenant,
+            },
+          }),
+        saturationResources[key].getSaturationAlerts(key, selectorHash)
+      ),
+    filtered
+  );
   local recordedQuantiles = (import 'servicemetrics/resource_saturation_point.libsonnet').recordedQuantiles;
 
   prepareGroups([{

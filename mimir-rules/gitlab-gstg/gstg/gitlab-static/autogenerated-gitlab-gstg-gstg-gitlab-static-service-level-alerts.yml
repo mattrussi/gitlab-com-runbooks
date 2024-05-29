@@ -7,7 +7,6 @@ groups:
   - alert: GitlabStaticServiceWebIdeWorkerTrafficCessation
     for: 5m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The web_ide_worker SLI of the gitlab-static service (`{{ $labels.stage
         }}` stage) has not received any traffic in the past 30m
       description: |
@@ -17,6 +16,7 @@ groups:
       grafana_dashboard_id: gitlab-static-main/gitlab-static-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/gitlab-static-main/gitlab-static-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gstg
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2805533989"
       grafana_variables: environment,stage
@@ -43,7 +43,6 @@ groups:
   - alert: GitlabStaticServiceWebIdeWorkerTrafficAbsent
     for: 30m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The web_ide_worker SLI of the gitlab-static service (`{{ $labels.stage
         }}` stage) has not reported any traffic in the past 30m
       description: |
@@ -55,6 +54,7 @@ groups:
       grafana_dashboard_id: gitlab-static-main/gitlab-static-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/gitlab-static-main/gitlab-static-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gstg
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2805533989"
       grafana_variables: environment,stage

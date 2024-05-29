@@ -23,8 +23,8 @@ index a1a24d18f..9ce5d73b1 100644
    tags: ['golang', 'thanos'],
 ```
 
-This configuration will allow outputing recording rules only to the tenant(s) listed.
+This configuration will allow outputting recording rules only to the tenant(s) listed.
 
 ## Further reading
 
-- [Grafana Mimir oficial docs](https://grafana.com/docs/mimir/latest/)
+- [Grafana Mimir official docs](https://grafana.com/docs/mimir/latest/)

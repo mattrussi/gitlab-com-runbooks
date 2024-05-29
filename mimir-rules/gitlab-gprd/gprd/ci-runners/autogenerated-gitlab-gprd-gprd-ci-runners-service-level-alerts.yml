@@ -7,7 +7,6 @@ groups:
   - alert: CiRunnersServiceLoadbalancerErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The loadbalancer SLI of the ci-runners service (`{{ $labels.stage }}`
         stage) has an error rate violating SLO
       description: |
@@ -17,6 +16,7 @@ groups:
       grafana_dashboard_id: ci-runners-main/ci-runners-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ci-runners-main/ci-runners-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3255520955"
       grafana_variables: environment,stage
@@ -52,7 +52,6 @@ groups:
   - alert: CiRunnersServiceLoadbalancerErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The loadbalancer SLI of the ci-runners service (`{{ $labels.stage }}`
         stage) has an error rate violating SLO
       description: |
@@ -62,6 +61,7 @@ groups:
       grafana_dashboard_id: ci-runners-main/ci-runners-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ci-runners-main/ci-runners-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3255520955"
       grafana_variables: environment,stage
@@ -97,7 +97,6 @@ groups:
   - alert: CiRunnersServiceLoadbalancerTrafficCessation
     for: 5m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The loadbalancer SLI of the ci-runners service (`{{ $labels.stage }}`
         stage) has not received any traffic in the past 30m
       description: |
@@ -107,6 +106,7 @@ groups:
       grafana_dashboard_id: ci-runners-main/ci-runners-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ci-runners-main/ci-runners-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "138982496"
       grafana_variables: environment,stage
@@ -129,7 +129,6 @@ groups:
   - alert: CiRunnersServiceLoadbalancerTrafficAbsent
     for: 30m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The loadbalancer SLI of the ci-runners service (`{{ $labels.stage }}`
         stage) has not reported any traffic in the past 30m
       description: |
@@ -141,6 +140,7 @@ groups:
       grafana_dashboard_id: ci-runners-main/ci-runners-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ci-runners-main/ci-runners-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "138982496"
       grafana_variables: environment,stage
@@ -163,7 +163,6 @@ groups:
   - alert: CiRunnersServicePollingErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The polling SLI of the ci-runners service (`{{ $labels.stage }}` stage)
         has an error rate violating SLO
       description: |
@@ -175,6 +174,7 @@ groups:
       grafana_dashboard_id: ci-runners-main/ci-runners-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ci-runners-main/ci-runners-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2980174133"
       grafana_variables: environment,stage
@@ -214,7 +214,6 @@ groups:
   - alert: CiRunnersServicePollingErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The polling SLI of the ci-runners service (`{{ $labels.stage }}` stage)
         has an error rate violating SLO
       description: |
@@ -226,6 +225,7 @@ groups:
       grafana_dashboard_id: ci-runners-main/ci-runners-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ci-runners-main/ci-runners-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2980174133"
       grafana_variables: environment,stage
@@ -265,7 +265,6 @@ groups:
   - alert: CiRunnersServicePollingTrafficCessation
     for: 5m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The polling SLI of the ci-runners service (`{{ $labels.stage }}` stage)
         has not received any traffic in the past 30m
       description: |
@@ -277,6 +276,7 @@ groups:
       grafana_dashboard_id: ci-runners-main/ci-runners-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ci-runners-main/ci-runners-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2481485218"
       grafana_variables: environment,stage
@@ -303,7 +303,6 @@ groups:
   - alert: CiRunnersServicePollingTrafficAbsent
     for: 30m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The polling SLI of the ci-runners service (`{{ $labels.stage }}` stage)
         has not reported any traffic in the past 30m
       description: |
@@ -317,6 +316,7 @@ groups:
       grafana_dashboard_id: ci-runners-main/ci-runners-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ci-runners-main/ci-runners-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2481485218"
       grafana_variables: environment,stage
@@ -343,7 +343,6 @@ groups:
   - alert: CiRunnersServiceQueuingQueriesDurationApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The queuing_queries_duration SLI of the ci-runners service (`{{ $labels.stage
         }}` stage) has an apdex violating SLO
       description: |
@@ -355,6 +354,7 @@ groups:
       grafana_dashboard_id: ci-runners-main/ci-runners-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ci-runners-main/ci-runners-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "4172966397"
       grafana_variables: environment,stage
@@ -398,7 +398,6 @@ groups:
   - alert: CiRunnersServiceQueuingQueriesDurationApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The queuing_queries_duration SLI of the ci-runners service (`{{ $labels.stage
         }}` stage) has an apdex violating SLO
       description: |
@@ -410,6 +409,7 @@ groups:
       grafana_dashboard_id: ci-runners-main/ci-runners-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ci-runners-main/ci-runners-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "4172966397"
       grafana_variables: environment,stage
@@ -453,7 +453,6 @@ groups:
   - alert: CiRunnersServiceQueuingQueriesDurationTrafficCessation
     for: 5m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The queuing_queries_duration SLI of the ci-runners service (`{{ $labels.stage
         }}` stage) has not received any traffic in the past 30m
       description: |
@@ -465,6 +464,7 @@ groups:
       grafana_dashboard_id: ci-runners-main/ci-runners-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ci-runners-main/ci-runners-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "462690019"
       grafana_variables: environment,stage
@@ -492,7 +492,6 @@ groups:
   - alert: CiRunnersServiceQueuingQueriesDurationTrafficAbsent
     for: 30m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The queuing_queries_duration SLI of the ci-runners service (`{{ $labels.stage
         }}` stage) has not reported any traffic in the past 30m
       description: |
@@ -506,6 +505,7 @@ groups:
       grafana_dashboard_id: ci-runners-main/ci-runners-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ci-runners-main/ci-runners-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "462690019"
       grafana_variables: environment,stage
@@ -533,7 +533,6 @@ groups:
   - alert: CiRunnersServiceSaasLinuxRunnerImagePullFailuresErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The saas_linux_runner_image_pull_failures SLI of the ci-runners service
         (`{{ $labels.stage }}` stage) has an error rate violating SLO
       description: |
@@ -545,6 +544,7 @@ groups:
       grafana_dashboard_id: ci-runners-main/ci-runners-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ci-runners-main/ci-runners-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3789838818"
       grafana_variables: environment,stage
@@ -584,7 +584,6 @@ groups:
   - alert: CiRunnersServiceSaasLinuxRunnerImagePullFailuresErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The saas_linux_runner_image_pull_failures SLI of the ci-runners service
         (`{{ $labels.stage }}` stage) has an error rate violating SLO
       description: |
@@ -596,6 +595,7 @@ groups:
       grafana_dashboard_id: ci-runners-main/ci-runners-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ci-runners-main/ci-runners-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3789838818"
       grafana_variables: environment,stage
@@ -635,7 +635,6 @@ groups:
   - alert: CiRunnersServiceSaasLinuxRunnerImagePullFailuresTrafficCessation
     for: 5m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The saas_linux_runner_image_pull_failures SLI of the ci-runners service
         (`{{ $labels.stage }}` stage) has not received any traffic in the past 30m
       description: |
@@ -647,6 +646,7 @@ groups:
       grafana_dashboard_id: ci-runners-main/ci-runners-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ci-runners-main/ci-runners-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "908209902"
       grafana_variables: environment,stage
@@ -673,7 +673,6 @@ groups:
   - alert: CiRunnersServiceSaasLinuxRunnerImagePullFailuresTrafficAbsent
     for: 30m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The saas_linux_runner_image_pull_failures SLI of the ci-runners service
         (`{{ $labels.stage }}` stage) has not reported any traffic in the past 30m
       description: |
@@ -687,6 +686,7 @@ groups:
       grafana_dashboard_id: ci-runners-main/ci-runners-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ci-runners-main/ci-runners-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "908209902"
       grafana_variables: environment,stage
@@ -713,7 +713,6 @@ groups:
   - alert: CiRunnersServiceSaasRunnerQueuesApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The saas_runner_queues SLI of the ci-runners service (`{{ $labels.stage
         }}` stage) has an apdex violating SLO
       description: |
@@ -727,6 +726,7 @@ groups:
       grafana_dashboard_id: ci-runners-main/ci-runners-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ci-runners-main/ci-runners-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2041793685"
       grafana_variables: environment,stage
@@ -769,7 +769,6 @@ groups:
   - alert: CiRunnersServiceSaasRunnerQueuesApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The saas_runner_queues SLI of the ci-runners service (`{{ $labels.stage
         }}` stage) has an apdex violating SLO
       description: |
@@ -783,6 +782,7 @@ groups:
       grafana_dashboard_id: ci-runners-main/ci-runners-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ci-runners-main/ci-runners-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2041793685"
       grafana_variables: environment,stage
@@ -825,7 +825,6 @@ groups:
   - alert: CiRunnersServiceSaasRunnerQueuesErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The saas_runner_queues SLI of the ci-runners service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
@@ -839,6 +838,7 @@ groups:
       grafana_dashboard_id: ci-runners-main/ci-runners-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ci-runners-main/ci-runners-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1376431699"
       grafana_variables: environment,stage
@@ -878,7 +878,6 @@ groups:
   - alert: CiRunnersServiceSaasRunnerQueuesErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The saas_runner_queues SLI of the ci-runners service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
@@ -892,6 +891,7 @@ groups:
       grafana_dashboard_id: ci-runners-main/ci-runners-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ci-runners-main/ci-runners-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1376431699"
       grafana_variables: environment,stage
@@ -931,7 +931,6 @@ groups:
   - alert: CiRunnersServiceSaasRunnerQueuesTrafficCessation
     for: 5m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The saas_runner_queues SLI of the ci-runners service (`{{ $labels.stage
         }}` stage) has not received any traffic in the past 30m
       description: |
@@ -945,6 +944,7 @@ groups:
       grafana_dashboard_id: ci-runners-main/ci-runners-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ci-runners-main/ci-runners-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3471152086"
       grafana_variables: environment,stage
@@ -971,7 +971,6 @@ groups:
   - alert: CiRunnersServiceSaasRunnerQueuesTrafficAbsent
     for: 30m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The saas_runner_queues SLI of the ci-runners service (`{{ $labels.stage
         }}` stage) has not reported any traffic in the past 30m
       description: |
@@ -987,6 +986,7 @@ groups:
       grafana_dashboard_id: ci-runners-main/ci-runners-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ci-runners-main/ci-runners-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3471152086"
       grafana_variables: environment,stage
@@ -1013,7 +1013,6 @@ groups:
   - alert: CiRunnersServiceTraceArchivingCiJobsErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The trace_archiving_ci_jobs SLI of the ci-runners service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
@@ -1023,6 +1022,7 @@ groups:
       grafana_dashboard_id: ci-runners-main/ci-runners-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ci-runners-main/ci-runners-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "294711071"
       grafana_variables: environment,stage
@@ -1062,7 +1062,6 @@ groups:
   - alert: CiRunnersServiceTraceArchivingCiJobsErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The trace_archiving_ci_jobs SLI of the ci-runners service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
@@ -1072,6 +1071,7 @@ groups:
       grafana_dashboard_id: ci-runners-main/ci-runners-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ci-runners-main/ci-runners-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "294711071"
       grafana_variables: environment,stage
@@ -1111,7 +1111,6 @@ groups:
   - alert: CiRunnersServiceTraceArchivingCiJobsTrafficCessation
     for: 5m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The trace_archiving_ci_jobs SLI of the ci-runners service (`{{ $labels.stage
         }}` stage) has not received any traffic in the past 30m
       description: |
@@ -1121,6 +1120,7 @@ groups:
       grafana_dashboard_id: ci-runners-main/ci-runners-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ci-runners-main/ci-runners-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2495268542"
       grafana_variables: environment,stage
@@ -1147,7 +1147,6 @@ groups:
   - alert: CiRunnersServiceTraceArchivingCiJobsTrafficAbsent
     for: 30m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The trace_archiving_ci_jobs SLI of the ci-runners service (`{{ $labels.stage
         }}` stage) has not reported any traffic in the past 30m
       description: |
@@ -1159,6 +1158,7 @@ groups:
       grafana_dashboard_id: ci-runners-main/ci-runners-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ci-runners-main/ci-runners-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2495268542"
       grafana_variables: environment,stage

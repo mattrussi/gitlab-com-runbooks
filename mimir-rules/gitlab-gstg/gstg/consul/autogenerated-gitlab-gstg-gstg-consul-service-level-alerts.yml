@@ -7,7 +7,6 @@ groups:
   - alert: ConsulServiceConsulErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The consul SLI of the consul service (`{{ $labels.stage }}` stage) has
         an error rate violating SLO
       description: |
@@ -17,6 +16,7 @@ groups:
       grafana_dashboard_id: consul-main/consul-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/consul-main/consul-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gstg
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "862567575"
       grafana_variables: environment,stage
@@ -56,7 +56,6 @@ groups:
   - alert: ConsulServiceConsulErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The consul SLI of the consul service (`{{ $labels.stage }}` stage) has
         an error rate violating SLO
       description: |
@@ -66,6 +65,7 @@ groups:
       grafana_dashboard_id: consul-main/consul-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/consul-main/consul-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gstg
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "862567575"
       grafana_variables: environment,stage
@@ -105,7 +105,6 @@ groups:
   - alert: ConsulServiceConsulErrorSLOViolationRegional
     for: 2m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The consul SLI of the consul service in region `{{ $labels.region }}`
         has an error rate violating SLO
       description: |
@@ -117,6 +116,7 @@ groups:
       grafana_dashboard_id: consul-main/consul-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/consul-main/consul-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gstg
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "862567575"
       grafana_variables: environment,stage
@@ -156,7 +156,6 @@ groups:
   - alert: ConsulServiceConsulErrorSLOViolationRegional
     for: 2m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The consul SLI of the consul service in region `{{ $labels.region }}`
         has an error rate violating SLO
       description: |
@@ -168,6 +167,7 @@ groups:
       grafana_dashboard_id: consul-main/consul-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/consul-main/consul-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gstg
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "862567575"
       grafana_variables: environment,stage
@@ -207,7 +207,6 @@ groups:
   - alert: ConsulServiceConsulTrafficCessation
     for: 5m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The consul SLI of the consul service (`{{ $labels.stage }}` stage) has
         not received any traffic in the past 30m
       description: |
@@ -217,6 +216,7 @@ groups:
       grafana_dashboard_id: consul-main/consul-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/consul-main/consul-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gstg
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "4242308695"
       grafana_variables: environment,stage
@@ -243,7 +243,6 @@ groups:
   - alert: ConsulServiceConsulTrafficAbsent
     for: 30m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The consul SLI of the consul service (`{{ $labels.stage }}` stage) has
         not reported any traffic in the past 30m
       description: |
@@ -255,6 +254,7 @@ groups:
       grafana_dashboard_id: consul-main/consul-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/consul-main/consul-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gstg
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "4242308695"
       grafana_variables: environment,stage
@@ -281,7 +281,6 @@ groups:
   - alert: ConsulServiceConsulTrafficCessationRegional
     for: 5m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The consul SLI of the consul service in region `{{ $labels.region }}`
         has not received any traffic in the past 30m
       description: |
@@ -293,6 +292,7 @@ groups:
       grafana_dashboard_id: consul-main/consul-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/consul-main/consul-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gstg
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "4242308695"
       grafana_variables: environment,stage
@@ -319,7 +319,6 @@ groups:
   - alert: ConsulServiceConsulTrafficAbsentRegional
     for: 30m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The consul SLI of the consul service in region `{{ $labels.region }}`
         has not reported any traffic in the past 30m
       description: |
@@ -333,6 +332,7 @@ groups:
       grafana_dashboard_id: consul-main/consul-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/consul-main/consul-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gstg
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "4242308695"
       grafana_variables: environment,stage

@@ -14,6 +14,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/general-service/service-platform-metrics?from=now-12h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
         }}
+      grafana_datasource_id: mimir-gitlab-observability
       grafana_min_zoom_hours: "12"
       grafana_panel_id: "2633741645"
       grafana_variables: environment,type,stage
@@ -50,6 +51,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/general-service/service-platform-metrics?from=now-12h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
         }}
+      grafana_datasource_id: mimir-gitlab-observability
       grafana_min_zoom_hours: "12"
       grafana_panel_id: "2633741645"
       grafana_variables: environment,type,stage

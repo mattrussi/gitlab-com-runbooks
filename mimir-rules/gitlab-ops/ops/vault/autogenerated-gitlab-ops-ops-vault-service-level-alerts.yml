@@ -7,7 +7,6 @@ groups:
   - alert: VaultServiceIstioInternalIngressApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The istio_internal_ingress SLI of the vault service (`{{ $labels.stage
         }}` stage) has an apdex violating SLO
       description: |
@@ -15,6 +14,7 @@ groups:
       grafana_dashboard_id: vault-main/vault-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/vault-main/vault-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1564844886"
       grafana_variables: environment,stage
@@ -57,7 +57,6 @@ groups:
   - alert: VaultServiceIstioInternalIngressApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The istio_internal_ingress SLI of the vault service (`{{ $labels.stage
         }}` stage) has an apdex violating SLO
       description: |
@@ -65,6 +64,7 @@ groups:
       grafana_dashboard_id: vault-main/vault-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/vault-main/vault-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1564844886"
       grafana_variables: environment,stage
@@ -107,7 +107,6 @@ groups:
   - alert: VaultServiceIstioInternalIngressErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The istio_internal_ingress SLI of the vault service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
@@ -115,6 +114,7 @@ groups:
       grafana_dashboard_id: vault-main/vault-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/vault-main/vault-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "623521050"
       grafana_variables: environment,stage
@@ -154,7 +154,6 @@ groups:
   - alert: VaultServiceIstioInternalIngressErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The istio_internal_ingress SLI of the vault service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
@@ -162,6 +161,7 @@ groups:
       grafana_dashboard_id: vault-main/vault-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/vault-main/vault-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "623521050"
       grafana_variables: environment,stage
@@ -201,7 +201,6 @@ groups:
   - alert: VaultServiceIstioPublicIngressApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The istio_public_ingress SLI of the vault service (`{{ $labels.stage
         }}` stage) has an apdex violating SLO
       description: |
@@ -209,6 +208,7 @@ groups:
       grafana_dashboard_id: vault-main/vault-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/vault-main/vault-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1170118037"
       grafana_variables: environment,stage
@@ -251,7 +251,6 @@ groups:
   - alert: VaultServiceIstioPublicIngressApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The istio_public_ingress SLI of the vault service (`{{ $labels.stage
         }}` stage) has an apdex violating SLO
       description: |
@@ -259,6 +258,7 @@ groups:
       grafana_dashboard_id: vault-main/vault-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/vault-main/vault-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1170118037"
       grafana_variables: environment,stage
@@ -301,7 +301,6 @@ groups:
   - alert: VaultServiceIstioPublicIngressErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The istio_public_ingress SLI of the vault service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
@@ -309,6 +308,7 @@ groups:
       grafana_dashboard_id: vault-main/vault-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/vault-main/vault-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2481683697"
       grafana_variables: environment,stage
@@ -348,7 +348,6 @@ groups:
   - alert: VaultServiceIstioPublicIngressErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The istio_public_ingress SLI of the vault service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
@@ -356,6 +355,7 @@ groups:
       grafana_dashboard_id: vault-main/vault-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/vault-main/vault-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2481683697"
       grafana_variables: environment,stage
@@ -395,7 +395,6 @@ groups:
   - alert: VaultServiceVaultAuditLogRequestErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The vault_audit_log_request SLI of the vault service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
@@ -405,6 +404,7 @@ groups:
       grafana_dashboard_id: vault-main/vault-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/vault-main/vault-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "4110925204"
       grafana_variables: environment,stage
@@ -444,7 +444,6 @@ groups:
   - alert: VaultServiceVaultAuditLogRequestErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The vault_audit_log_request SLI of the vault service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
@@ -454,6 +453,7 @@ groups:
       grafana_dashboard_id: vault-main/vault-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/vault-main/vault-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "4110925204"
       grafana_variables: environment,stage
@@ -493,7 +493,6 @@ groups:
   - alert: VaultServiceVaultAuditLogResponseErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The vault_audit_log_response SLI of the vault service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
@@ -503,6 +502,7 @@ groups:
       grafana_dashboard_id: vault-main/vault-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/vault-main/vault-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "298512225"
       grafana_variables: environment,stage
@@ -542,7 +542,6 @@ groups:
   - alert: VaultServiceVaultAuditLogResponseErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The vault_audit_log_response SLI of the vault service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
@@ -552,6 +551,7 @@ groups:
       grafana_dashboard_id: vault-main/vault-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/vault-main/vault-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "298512225"
       grafana_variables: environment,stage
@@ -591,7 +591,6 @@ groups:
   - alert: VaultServiceVaultGoogleLbErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The vault_google_lb SLI of the vault service (`{{ $labels.stage }}` stage)
         has an error rate violating SLO
       description: |
@@ -599,6 +598,7 @@ groups:
       grafana_dashboard_id: vault-main/vault-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/vault-main/vault-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3274927083"
       grafana_variables: environment,stage
@@ -638,7 +638,6 @@ groups:
   - alert: VaultServiceVaultGoogleLbErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The vault_google_lb SLI of the vault service (`{{ $labels.stage }}` stage)
         has an error rate violating SLO
       description: |
@@ -646,6 +645,7 @@ groups:
       grafana_dashboard_id: vault-main/vault-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/vault-main/vault-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3274927083"
       grafana_variables: environment,stage

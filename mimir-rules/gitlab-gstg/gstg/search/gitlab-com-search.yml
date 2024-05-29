@@ -12,11 +12,11 @@ groups:
           alert_type: symptom
           feature_category: "global_search"
         annotations:
-          grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
-          title: 'Inital queue: Large number of documents waiting to be indexed by Elasticsearch'
+          grafana_datasource_id: mimir-gitlab-gstg
+          title: "Inital queue: Large number of documents waiting to be indexed by Elasticsearch"
           environment: "{{ $labels.environment }}"
           grafana_dashboard_id: stage-groups-global_search/stage-groups-group-dashboard-enablement-global-search
-          grafana_panel_id: "499025569"  # stableId=global-search-queue-size-overall
+          grafana_panel_id: "499025569" # stableId=global-search-queue-size-overall
           grafana_dashobard_link: >
             https://dashboards.gitlab.net/d/stage-groups-global_search/stage-groups-group-dashboard-enablement-global-search?orgId=1&var-environment={{ $labels.environment }}&var-stage={{ $labels.stage }}
           description: >
@@ -34,11 +34,11 @@ groups:
           alert_type: symptom
           feature_category: "global_search"
         annotations:
-          grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
-          title: 'Incremental queue: Large number of documents waiting to be indexed by Elasticsearch'
+          grafana_datasource_id: mimir-gitlab-gstg
+          title: "Incremental queue: Large number of documents waiting to be indexed by Elasticsearch"
           environment: "{{ $labels.environment }}"
           grafana_dashboard_id: stage-groups-global_search/stage-groups-group-dashboard-enablement-global-search
-          grafana_panel_id: "499025569"  # stableId=global-search-queue-size-overall
+          grafana_panel_id: "499025569" # stableId=global-search-queue-size-overall
           grafana_dashobard_link: >
             https://dashboards.gitlab.net/d/stage-groups-global_search/stage-groups-group-dashboard-enablement-global-search?orgId=1&var-environment={{ $labels.environment }}&var-stage={{ $labels.stage }}
           description: >

@@ -20,7 +20,6 @@ groups:
   - alert: component_saturation_slo_out_of_bounds:kube_container_cpu_limit
     for: 15m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The Kube Container CPU over-utilization resource of the {{ $labels.type
         }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
         is close to its capacity limit.
@@ -36,6 +35,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_kube_container_cpu_limit?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
         }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1262336683"
       grafana_variables: environment,type,stage
@@ -86,7 +86,6 @@ groups:
   - alert: component_saturation_slo_out_of_bounds:kube_container_memory
     for: 15m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The Kube Container Memory Utilization resource of the {{ $labels.type
         }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
         is close to its capacity limit.
@@ -100,6 +99,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_kube_container_memory?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
         }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "172578411"
       grafana_variables: environment,type,stage
@@ -138,7 +138,6 @@ groups:
   - alert: component_saturation_slo_out_of_bounds:kube_container_throttling
     for: 10m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The Kube container throttling resource of the {{ $labels.type }} service
         ({{ $labels.stage }} stage) has a saturation exceeding SLO and is close to
         its capacity limit.
@@ -156,6 +155,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-kube_container_throttling?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
         }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "54512634"
       grafana_variables: environment,type,stage
@@ -200,7 +200,6 @@ groups:
   - alert: component_saturation_slo_out_of_bounds:kube_horizontalpodautoscaler_desired_replicas
     for: 25m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The Horizontal Pod Autoscaler Desired Replicas resource of the {{ $labels.type
         }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
         is close to its capacity limit.
@@ -216,6 +215,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_kube_horizontalpodautoscaler?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
         }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "351198712"
       grafana_variables: environment,type,stage
@@ -254,7 +254,6 @@ groups:
   - alert: component_saturation_slo_out_of_bounds:open_fds
     for: 5m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The Open file descriptor utilization per instance resource of the {{
         $labels.type }} service ({{ $labels.stage }} stage) has a saturation exceeding
         SLO and is close to its capacity limit.
@@ -272,6 +271,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_open_fds?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
         }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1001792825"
       grafana_variables: environment,type,stage

@@ -11,7 +11,7 @@ local rules(extraSelector) = {
 };
 
 separateMimirRecordingFiles(
-  function(service, selector, extraArgs)
+  function(service, selector, extraArgs, _)
     {
       'sidekiq-alerts': std.manifestYamlDoc(rules(selector)),
     }

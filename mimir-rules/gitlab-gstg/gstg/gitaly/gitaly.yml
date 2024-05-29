@@ -75,4 +75,3 @@ groups:
   rules:
   - record: gitaly:gitaly_rate_limiting_queued:grpc_method
     expr: sum(gitaly_rate_limiting_queued{env="gstg"}) by (environment, grpc_method, job)
-

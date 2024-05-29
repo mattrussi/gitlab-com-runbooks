@@ -16,6 +16,7 @@ groups:
       grafana_dashboard_id: tracing-main/tracing-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/tracing-main/tracing-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-observability
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "4160214294"
       grafana_variables: environment,stage
@@ -66,6 +67,7 @@ groups:
       grafana_dashboard_id: tracing-main/tracing-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/tracing-main/tracing-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-observability
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "4160214294"
       grafana_variables: environment,stage
@@ -116,6 +118,7 @@ groups:
       grafana_dashboard_id: tracing-main/tracing-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/tracing-main/tracing-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-observability
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1225540327"
       grafana_variables: environment,stage
@@ -163,6 +166,7 @@ groups:
       grafana_dashboard_id: tracing-main/tracing-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/tracing-main/tracing-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-observability
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1225540327"
       grafana_variables: environment,stage
@@ -210,6 +214,7 @@ groups:
       grafana_dashboard_id: tracing-main/tracing-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/tracing-main/tracing-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-observability
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2810685938"
       grafana_variables: environment,stage
@@ -246,6 +251,7 @@ groups:
       grafana_dashboard_id: tracing-main/tracing-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/tracing-main/tracing-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-observability
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2810685938"
       grafana_variables: environment,stage

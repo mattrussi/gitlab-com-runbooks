@@ -7,7 +7,6 @@ groups:
   - alert: PackagecloudServiceCloudsqlTrafficCessation
     for: 5m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The cloudsql SLI of the packagecloud service (`{{ $labels.stage }}` stage)
         has not received any traffic in the past 30m
       description: |
@@ -17,6 +16,7 @@ groups:
       grafana_dashboard_id: packagecloud-main/packagecloud-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/packagecloud-main/packagecloud-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "4035616449"
       grafana_variables: environment,stage
@@ -44,7 +44,6 @@ groups:
   - alert: PackagecloudServiceCloudsqlTrafficAbsent
     for: 30m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The cloudsql SLI of the packagecloud service (`{{ $labels.stage }}` stage)
         has not reported any traffic in the past 30m
       description: |
@@ -56,6 +55,7 @@ groups:
       grafana_dashboard_id: packagecloud-main/packagecloud-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/packagecloud-main/packagecloud-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "4035616449"
       grafana_variables: environment,stage
@@ -83,7 +83,6 @@ groups:
   - alert: PackagecloudServiceLoadbalancerErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The loadbalancer SLI of the packagecloud service (`{{ $labels.stage }}`
         stage) has an error rate violating SLO
       description: |
@@ -91,6 +90,7 @@ groups:
       grafana_dashboard_id: packagecloud-main/packagecloud-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/packagecloud-main/packagecloud-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3255520955"
       grafana_variables: environment,stage
@@ -131,7 +131,6 @@ groups:
   - alert: PackagecloudServiceLoadbalancerErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The loadbalancer SLI of the packagecloud service (`{{ $labels.stage }}`
         stage) has an error rate violating SLO
       description: |
@@ -139,6 +138,7 @@ groups:
       grafana_dashboard_id: packagecloud-main/packagecloud-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/packagecloud-main/packagecloud-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3255520955"
       grafana_variables: environment,stage
@@ -179,7 +179,6 @@ groups:
   - alert: PackagecloudServiceLoadbalancerTrafficCessation
     for: 5m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The loadbalancer SLI of the packagecloud service (`{{ $labels.stage }}`
         stage) has not received any traffic in the past 30m
       description: |
@@ -187,6 +186,7 @@ groups:
       grafana_dashboard_id: packagecloud-main/packagecloud-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/packagecloud-main/packagecloud-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "138982496"
       grafana_variables: environment,stage
@@ -214,7 +214,6 @@ groups:
   - alert: PackagecloudServiceLoadbalancerTrafficAbsent
     for: 30m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The loadbalancer SLI of the packagecloud service (`{{ $labels.stage }}`
         stage) has not reported any traffic in the past 30m
       description: |
@@ -224,6 +223,7 @@ groups:
       grafana_dashboard_id: packagecloud-main/packagecloud-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/packagecloud-main/packagecloud-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "138982496"
       grafana_variables: environment,stage

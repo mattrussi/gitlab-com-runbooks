@@ -7,7 +7,6 @@ groups:
   - alert: WoodhouseServiceAsyncJobsApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The async_jobs SLI of the woodhouse service (`{{ $labels.stage }}` stage)
         has an apdex violating SLO
       description: |
@@ -17,6 +16,7 @@ groups:
       grafana_dashboard_id: woodhouse-main/woodhouse-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/woodhouse-main/woodhouse-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-pre
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "839701162"
       grafana_variables: environment,stage
@@ -59,7 +59,6 @@ groups:
   - alert: WoodhouseServiceAsyncJobsApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The async_jobs SLI of the woodhouse service (`{{ $labels.stage }}` stage)
         has an apdex violating SLO
       description: |
@@ -69,6 +68,7 @@ groups:
       grafana_dashboard_id: woodhouse-main/woodhouse-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/woodhouse-main/woodhouse-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-pre
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "839701162"
       grafana_variables: environment,stage
@@ -111,7 +111,6 @@ groups:
   - alert: WoodhouseServiceAsyncJobsErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The async_jobs SLI of the woodhouse service (`{{ $labels.stage }}` stage)
         has an error rate violating SLO
       description: |
@@ -121,6 +120,7 @@ groups:
       grafana_dashboard_id: woodhouse-main/woodhouse-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/woodhouse-main/woodhouse-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-pre
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "648994915"
       grafana_variables: environment,stage
@@ -160,7 +160,6 @@ groups:
   - alert: WoodhouseServiceAsyncJobsErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The async_jobs SLI of the woodhouse service (`{{ $labels.stage }}` stage)
         has an error rate violating SLO
       description: |
@@ -170,6 +169,7 @@ groups:
       grafana_dashboard_id: woodhouse-main/woodhouse-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/woodhouse-main/woodhouse-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-pre
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "648994915"
       grafana_variables: environment,stage
@@ -209,7 +209,6 @@ groups:
   - alert: WoodhouseServiceHttpApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The http SLI of the woodhouse service (`{{ $labels.stage }}` stage) has
         an apdex violating SLO
       description: |
@@ -219,6 +218,7 @@ groups:
       grafana_dashboard_id: woodhouse-main/woodhouse-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/woodhouse-main/woodhouse-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-pre
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "308155966"
       grafana_variables: environment,stage
@@ -261,7 +261,6 @@ groups:
   - alert: WoodhouseServiceHttpApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The http SLI of the woodhouse service (`{{ $labels.stage }}` stage) has
         an apdex violating SLO
       description: |
@@ -271,6 +270,7 @@ groups:
       grafana_dashboard_id: woodhouse-main/woodhouse-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/woodhouse-main/woodhouse-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-pre
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "308155966"
       grafana_variables: environment,stage
@@ -313,7 +313,6 @@ groups:
   - alert: WoodhouseServiceHttpErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The http SLI of the woodhouse service (`{{ $labels.stage }}` stage) has
         an error rate violating SLO
       description: |
@@ -323,6 +322,7 @@ groups:
       grafana_dashboard_id: woodhouse-main/woodhouse-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/woodhouse-main/woodhouse-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-pre
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1863342341"
       grafana_variables: environment,stage
@@ -362,7 +362,6 @@ groups:
   - alert: WoodhouseServiceHttpErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The http SLI of the woodhouse service (`{{ $labels.stage }}` stage) has
         an error rate violating SLO
       description: |
@@ -372,6 +371,7 @@ groups:
       grafana_dashboard_id: woodhouse-main/woodhouse-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/woodhouse-main/woodhouse-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-pre
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1863342341"
       grafana_variables: environment,stage

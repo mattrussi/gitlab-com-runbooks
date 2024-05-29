@@ -55,7 +55,7 @@ local groupsForService(service, selector) =
     },
   ];
 
-local fileForService(service, selector, _extraArgs) =
+local fileForService(service, selector, _extraArgs, _) =
   {
     'service-slo-observance': outputPromYaml(groupsForService(service, selector)),
   };

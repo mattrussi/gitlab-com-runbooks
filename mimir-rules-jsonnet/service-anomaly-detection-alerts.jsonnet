@@ -14,14 +14,14 @@ local outputPromYaml(groups) =
     groups: groups,
   });
 
-local fileForService(service, extraSelector, _extraArgs) =
+local fileForService(service, extraSelector, _extraArgs, tenant) =
   local selector = selectors.merge(extraSelector, { type: service.type });
   {
     'service-anomaly-detection-alerts': outputPromYaml(
       [
         {
           name: '%s - service_ops_anomaly_detection' % service.type,
-          rules: alerts.processAlertRules(serviceAnomalyDetectionAlerts(selector)),
+          rules: alerts.processAlertRules(serviceAnomalyDetectionAlerts(selector, tenant)),
         },
       ],
     ),
