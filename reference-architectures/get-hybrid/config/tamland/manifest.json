@@ -230,6 +230,48 @@
       },
       "title": "Kube Container Memory Utilization (RSS)"
     },
+    "kube_persistent_volume_claim_disk_space": {
+      "appliesTo": [
+        "kube"
+      ],
+      "capacityPlanning": {
+        "changepoints_count": 25,
+        "forecast_days": 90,
+        "historical_days": 365,
+        "strategy": "quantile95_1h"
+      },
+      "description": "disk space utilization on persistent volume claims.\n",
+      "horizontallyScalable": true,
+      "raw_query": "kubelet_volume_stats_used_bytes\n/\nkubelet_volume_stats_capacity_bytes\n",
+      "severity": "s2",
+      "slos": {
+        "alertTriggerDuration": "5m",
+        "hard": 0.9,
+        "soft": 0.85
+      },
+      "title": "Kube Persistent Volume Claim Space Utilisation"
+    },
+    "kube_persistent_volume_claim_inodes": {
+      "appliesTo": [
+        "kube"
+      ],
+      "capacityPlanning": {
+        "changepoints_count": 25,
+        "forecast_days": 90,
+        "historical_days": 365,
+        "strategy": "quantile95_1h"
+      },
+      "description": "inode utilization on persistent volume claims.\n",
+      "horizontallyScalable": true,
+      "raw_query": "kubelet_volume_stats_inodes_used\n/\nkubelet_volume_stats_inodes\n",
+      "severity": "s2",
+      "slos": {
+        "alertTriggerDuration": "5m",
+        "hard": 0.9,
+        "soft": 0.85
+      },
+      "title": "Kube Persistent Volume Claim inode Utilisation"
+    },
     "kube_pool_cpu": {
       "appliesTo": [
         "sidekiq",
@@ -527,6 +569,14 @@
           "name": "kube_container_rss",
           "url": ""
         },
+        "kube_persistent_volume_claim_disk_space": {
+          "name": "kube_persistent_volume_claim_disk_space",
+          "url": ""
+        },
+        "kube_persistent_volume_claim_inodes": {
+          "name": "kube_persistent_volume_claim_inodes",
+          "url": ""
+        },
         "kube_pool_cpu": {
           "name": "kube_pool_cpu",
           "url": ""
@@ -619,6 +669,14 @@
         },
         "kube_container_rss": {
           "name": "kube_container_rss",
+          "url": ""
+        },
+        "kube_persistent_volume_claim_disk_space": {
+          "name": "kube_persistent_volume_claim_disk_space",
+          "url": ""
+        },
+        "kube_persistent_volume_claim_inodes": {
+          "name": "kube_persistent_volume_claim_inodes",
           "url": ""
         },
         "kube_pool_cpu": {
@@ -715,6 +773,116 @@
           "name": "kube_container_rss",
           "url": ""
         },
+        "kube_persistent_volume_claim_disk_space": {
+          "name": "kube_persistent_volume_claim_disk_space",
+          "url": ""
+        },
+        "kube_persistent_volume_claim_inodes": {
+          "name": "kube_persistent_volume_claim_inodes",
+          "url": ""
+        },
+        "kube_pool_cpu": {
+          "name": "kube_pool_cpu",
+          "url": ""
+        },
+        "memory": {
+          "name": "memory",
+          "url": ""
+        },
+        "memory_redis_cache": {
+          "name": "memory_redis_cache",
+          "url": ""
+        },
+        "node_schedstat_waiting": {
+          "name": "node_schedstat_waiting",
+          "url": ""
+        },
+        "opensearch_cpu": {
+          "name": "opensearch_cpu",
+          "url": ""
+        },
+        "opensearch_disk_space": {
+          "name": "opensearch_disk_space",
+          "url": ""
+        },
+        "pg_btree_bloat": {
+          "name": "pg_btree_bloat",
+          "url": ""
+        },
+        "pg_table_bloat": {
+          "name": "pg_table_bloat",
+          "url": ""
+        },
+        "pg_vacuum_activity": {
+          "name": "pg_vacuum_activity",
+          "url": ""
+        },
+        "pg_xid_wraparound": {
+          "name": "pg_xid_wraparound",
+          "url": ""
+        },
+        "puma_workers": {
+          "name": "puma_workers",
+          "url": ""
+        },
+        "single_node_cpu": {
+          "name": "single_node_cpu",
+          "url": ""
+        }
+      }
+    },
+    "kube": {
+      "capacityPlanning": {},
+      "name": "kube",
+      "overviewDashboard": {
+        "name": "",
+        "url": ""
+      },
+      "resourceDashboard": {
+        "cpu": {
+          "name": "cpu",
+          "url": ""
+        },
+        "disk_inodes": {
+          "name": "disk_inodes",
+          "url": ""
+        },
+        "disk_space": {
+          "name": "disk_space",
+          "url": ""
+        },
+        "go_goroutines": {
+          "name": "go_goroutines",
+          "url": ""
+        },
+        "go_memory": {
+          "name": "go_memory",
+          "url": ""
+        },
+        "kube_container_cpu": {
+          "name": "kube_container_cpu",
+          "url": ""
+        },
+        "kube_container_cpu_limit": {
+          "name": "kube_container_cpu_limit",
+          "url": ""
+        },
+        "kube_container_memory": {
+          "name": "kube_container_memory",
+          "url": ""
+        },
+        "kube_container_rss": {
+          "name": "kube_container_rss",
+          "url": ""
+        },
+        "kube_persistent_volume_claim_disk_space": {
+          "name": "kube_persistent_volume_claim_disk_space",
+          "url": ""
+        },
+        "kube_persistent_volume_claim_inodes": {
+          "name": "kube_persistent_volume_claim_inodes",
+          "url": ""
+        },
         "kube_pool_cpu": {
           "name": "kube_pool_cpu",
           "url": ""
@@ -807,6 +975,14 @@
         },
         "kube_container_rss": {
           "name": "kube_container_rss",
+          "url": ""
+        },
+        "kube_persistent_volume_claim_disk_space": {
+          "name": "kube_persistent_volume_claim_disk_space",
+          "url": ""
+        },
+        "kube_persistent_volume_claim_inodes": {
+          "name": "kube_persistent_volume_claim_inodes",
           "url": ""
         },
         "kube_pool_cpu": {
@@ -903,6 +1079,14 @@
           "name": "kube_container_rss",
           "url": ""
         },
+        "kube_persistent_volume_claim_disk_space": {
+          "name": "kube_persistent_volume_claim_disk_space",
+          "url": ""
+        },
+        "kube_persistent_volume_claim_inodes": {
+          "name": "kube_persistent_volume_claim_inodes",
+          "url": ""
+        },
         "kube_pool_cpu": {
           "name": "kube_pool_cpu",
           "url": ""
@@ -995,6 +1179,14 @@
         },
         "kube_container_rss": {
           "name": "kube_container_rss",
+          "url": ""
+        },
+        "kube_persistent_volume_claim_disk_space": {
+          "name": "kube_persistent_volume_claim_disk_space",
+          "url": ""
+        },
+        "kube_persistent_volume_claim_inodes": {
+          "name": "kube_persistent_volume_claim_inodes",
           "url": ""
         },
         "kube_pool_cpu": {
@@ -1091,6 +1283,14 @@
           "name": "kube_container_rss",
           "url": ""
         },
+        "kube_persistent_volume_claim_disk_space": {
+          "name": "kube_persistent_volume_claim_disk_space",
+          "url": ""
+        },
+        "kube_persistent_volume_claim_inodes": {
+          "name": "kube_persistent_volume_claim_inodes",
+          "url": ""
+        },
         "kube_pool_cpu": {
           "name": "kube_pool_cpu",
           "url": ""
@@ -1185,6 +1385,14 @@
           "name": "kube_container_rss",
           "url": ""
         },
+        "kube_persistent_volume_claim_disk_space": {
+          "name": "kube_persistent_volume_claim_disk_space",
+          "url": ""
+        },
+        "kube_persistent_volume_claim_inodes": {
+          "name": "kube_persistent_volume_claim_inodes",
+          "url": ""
+        },
         "kube_pool_cpu": {
           "name": "kube_pool_cpu",
           "url": ""
@@ -1277,6 +1485,14 @@
         },
         "kube_container_rss": {
           "name": "kube_container_rss",
+          "url": ""
+        },
+        "kube_persistent_volume_claim_disk_space": {
+          "name": "kube_persistent_volume_claim_disk_space",
+          "url": ""
+        },
+        "kube_persistent_volume_claim_inodes": {
+          "name": "kube_persistent_volume_claim_inodes",
           "url": ""
         },
         "kube_pool_cpu": {
