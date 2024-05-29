@@ -1,3 +1,5 @@
+[TOC]
+
 # (Title: Name of alert)
 
 ## Overview
