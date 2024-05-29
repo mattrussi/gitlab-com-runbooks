@@ -10,11 +10,17 @@ describe PeriodicQueries::Topic do
     {
       'error_budget_availability' => {
         'type' => 'instant',
-        'query' => 'promql'
+        'tenantId' => 'gitlab-gprd',
+        'requestParams' => {
+          'query' => 'promql'
+        }
       },
       'error_budget_seconds_remaining' => {
         'type' => 'instant',
-        'query' => 'promql'
+        'tenantId' => 'gitlab-gprd',
+        'requestParams' => {
+          'query' => 'promql'
+        }
       }
     }
   end

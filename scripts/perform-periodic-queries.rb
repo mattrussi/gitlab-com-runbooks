@@ -18,15 +18,12 @@ config = Struct.new(
 ).new
 
 default_prom_url = 'https://mimir-internal.ops.gke.gitlab.net/prometheus'
-default_prom_tenant_id = 'gitlab-gprd'
 
 prom_url_key = 'PERIODIC_QUERY_PROMETHEUS_URL'
 prom_auth_header_key = 'PERIODIC_QUERY_PROMETHEUS_AUTH_HEADER'
-prom_tenant_id_key = 'PERIODIC_QUERY_PROMETHEUS_TENANT_ID'
 ssl_key = 'PERIODIC_QUERY_SSL'
 
 config.prometheus_url = ENV.fetch(prom_url_key, default_prom_url)
-config.prom_tenant_id = ENV.fetch(prom_tenant_id_key, default_prom_tenant_id)
 config.prom_use_ssl = ENV.fetch(ssl_key, 'true') == 'true'
 config.prom_auth_header = ENV[prom_auth_header_key]
 
@@ -74,8 +71,6 @@ OptionParser.new do |options|
   #{options.summary_indent * 2}The URL to the prometheus-like instance to query. Defaults to '#{default_prom_url}'
   #{options.summary_indent}#{prom_auth_header_key}
   #{options.summary_indent * 2}The authorization header to the prometheus-like instance.
-  #{options.summary_indent}#{prom_tenant_id_key}
-  #{options.summary_indent * 2}The tenant ID to the prometheus-like instance to query. Defaults to '#{default_prom_tenant_id}'
   #{options.summary_indent}#{ssl_key}
   #{options.summary_indent * 2}The SSL setting to the prometheus-like instance. Defaults to 'true'
   #{options.summary_indent}PERIODIC_QUERY_GCP_KEYFILE_PATH
@@ -101,7 +96,6 @@ end
 prometheus = PeriodicQueries::PrometheusApi.new(
   config.prometheus_url,
   use_ssl: config.prom_use_ssl,
-  tenant_id: config.prom_tenant_id,
   auth_header: config.prom_auth_header
 )
 prometheus.with_connection do |api|

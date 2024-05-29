@@ -34,6 +34,7 @@ describe PeriodicQueries::PrometheusApi do
       query = instance_double(
         PeriodicQueries::Query,
         type: 'instant',
+        tenant_id: 'gitlab-gprd',
         params: {
           query: 'promql'
         }

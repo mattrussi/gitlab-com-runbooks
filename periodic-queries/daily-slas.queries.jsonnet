@@ -16,26 +16,32 @@ local keyServiceNames = std.map(
 
 {
   overall_ratio: periodicQuery.new({
-    query: |||
-      avg_over_time(sla:gitlab:ratio{%(selectors)s}[%(interval)s])
-    ||| % {
-      selectors: selectors.serializeHash(defaultSelector),
-      interval: interval,
+    requestParams: {
+      query: |||
+        avg_over_time(sla:gitlab:ratio{%(selectors)s}[%(interval)s])
+      ||| % {
+        selectors: selectors.serializeHash(defaultSelector),
+        interval: interval,
+      },
     },
   }),
   service_ratio: periodicQuery.new({
-    query: |||
-      avg by (type) (
-        avg_over_time(slo:observation_status{%(selectors)s}[%(interval)s])
-      )
-    ||| % {
-      selectors: selectors.serializeHash(defaultSelector {
-        type: { re: std.join('|', keyServiceNames) },
-      }),
-      interval: interval,
+    requestParams: {
+      query: |||
+        avg by (type) (
+          avg_over_time(slo:observation_status{%(selectors)s}[%(interval)s])
+        )
+      ||| % {
+        selectors: selectors.serializeHash(defaultSelector {
+          type: { re: std.join('|', keyServiceNames) },
+        }),
+        interval: interval,
+      },
     },
   }),
   overall_target: periodicQuery.new({
-    query: "sla:gitlab:target{monitor='global'}",
+    requestParams: {
+      query: "sla:gitlab:target{monitor='global'}",
+    },
   }),
 }

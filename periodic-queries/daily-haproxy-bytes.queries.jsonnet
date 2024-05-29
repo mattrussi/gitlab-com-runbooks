@@ -11,11 +11,13 @@ local interval = '1d';
 
 {
   total_haproxy_bytes_out: periodicQuery.new({
-    query: |||
-      sum by (backend)(increase(haproxy_backend_bytes_out_total{%(selectors)s}[%(interval)s]))
-    ||| % {
-      selectors: selectors.serializeHash(defaultSelector),
-      interval: interval,
+    requestParams: {
+      query: |||
+        sum by (backend)(increase(haproxy_backend_bytes_out_total{%(selectors)s}[%(interval)s]))
+      ||| % {
+        selectors: selectors.serializeHash(defaultSelector),
+        interval: interval,
+      },
     },
   }),
 }
