@@ -147,10 +147,10 @@ Then you have to clean out the `pg_wal` directory of all nodes of the new standb
 You can perform the following:
 
 ```
-knife ssh "role:<patroni_standby_cluster_role>" "sudo rm -rf /var/opt/gitlab/postgresql/data12/pg_wal; sudo install -d -m 0700 -o gitlab-psql -g gitlab-psql /var/opt/gitlab/postgresql/data12/pg_wal"
+knife ssh "role:<patroni_standby_cluster_role>" "sudo rm -rf /var/opt/gitlab/postgresql/data14/pg_wal; sudo install -d -m 0700 -o gitlab-psql -g gitlab-psql /var/opt/gitlab/postgresql/data14/pg_wal"
 ```
 
-Note: you can change `/var/opt/gitlab/postgresql/data12` to any other data directory that is in use, eg. `/var/opt/gitlab/postgresql/data14`, etc.
+Note: you can change `/var/opt/gitlab/postgresql/data14` to any other data directory that is in use, eg. `/var/opt/gitlab/postgresql/data16`, etc.
 
 ### 5.3. <a name='InitializePatronistandby_clusterwithAnsibleplaybook'></a>Initialize Patroni standby_cluster with Ansible playbook
 
@@ -170,7 +170,7 @@ Example:
 ```
 all:
   vars:
-    walg_gs_prefix: 'gs://gitlab-gstg-postgres-backup/pitr-walg-main-pg12-2004'
+    walg_gs_prefix: 'gs://gitlab-gprd-postgres-backup/pitr-walg-main-v14'
   hosts:
     patroni-main-v14-[101:105]-db-gstg.c.gitlab-staging-1.internal:
 ```
