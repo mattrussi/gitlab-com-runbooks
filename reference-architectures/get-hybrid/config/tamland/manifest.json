@@ -135,31 +135,6 @@
       },
       "title": "Go Memory Utilization per Node"
     },
-    "kube_container_cpu": {
-      "appliesTo": [
-        "consul",
-        "gitlab-shell",
-        "registry",
-        "sidekiq",
-        "webservice"
-      ],
-      "capacityPlanning": {
-        "changepoints_count": 25,
-        "forecast_days": 90,
-        "historical_days": 365,
-        "strategy": "quantile99_1h"
-      },
-      "description": "Kubernetes containers are allocated a share of CPU. Configured using resource requests.\n\nThis is the amount of CPU that a container should always have available,\nthough it can briefly utilize more. However, if a lot of pods on the same\nhost exceed their requested CPU the container could be throttled earlier.\n\nThis monitors utilization/allocated requests over a 1 hour period, and takes\nthe 99th quantile of that utilization percentage in that period.\nWe want the worst case to be around 80%-90% utilization,\nmeaning we've sized the container correctly. If utilization is much higher than that\nthe container could already be throttled because the host is overused, if it\nis much lower, then we could be underutilizing a host.\n\nThis saturation point is only used for capacity planning.\nContainers that have a quota specified are excluded here and can be monitored using\nthe `kube_container_throttling` saturation component.\nThe burst utilization of a CPU is monitored and alerted upon using the\n`kube_container_cpu_limit` saturation point.\n",
-      "horizontallyScalable": true,
-      "raw_query": "(\n  sum by (pod,container) (\n    rate(container_cpu_usage_seconds_total:labeled{container!=\"\", container!=\"POD\", %(selector)s}[1h])\n  )\n  unless on(pod,container) (\n    container_spec_cpu_quota:labeled{container!=\"\", container!=\"POD\", %(selector)s}\n  )\n)\n/\nsum by(pod,container) (\n  kube_pod_container_resource_requests:labeled{container!=\"\", container!=\"POD\", resource=\"cpu\", %(selector)s}\n)\n",
-      "severity": "s4",
-      "slos": {
-        "alertTriggerDuration": "5m",
-        "hard": 0.99,
-        "soft": 0.95
-      },
-      "title": "Kube Container CPU Utilization"
-    },
     "kube_container_cpu_limit": {
       "appliesTo": [
         "consul",
@@ -553,10 +528,6 @@
           "name": "go_memory",
           "url": ""
         },
-        "kube_container_cpu": {
-          "name": "kube_container_cpu",
-          "url": ""
-        },
         "kube_container_cpu_limit": {
           "name": "kube_container_cpu_limit",
           "url": ""
@@ -653,10 +624,6 @@
         },
         "go_memory": {
           "name": "go_memory",
-          "url": ""
-        },
-        "kube_container_cpu": {
-          "name": "kube_container_cpu",
           "url": ""
         },
         "kube_container_cpu_limit": {
@@ -757,10 +724,6 @@
           "name": "go_memory",
           "url": ""
         },
-        "kube_container_cpu": {
-          "name": "kube_container_cpu",
-          "url": ""
-        },
         "kube_container_cpu_limit": {
           "name": "kube_container_cpu_limit",
           "url": ""
@@ -857,10 +820,6 @@
         },
         "go_memory": {
           "name": "go_memory",
-          "url": ""
-        },
-        "kube_container_cpu": {
-          "name": "kube_container_cpu",
           "url": ""
         },
         "kube_container_cpu_limit": {
@@ -961,10 +920,6 @@
           "name": "go_memory",
           "url": ""
         },
-        "kube_container_cpu": {
-          "name": "kube_container_cpu",
-          "url": ""
-        },
         "kube_container_cpu_limit": {
           "name": "kube_container_cpu_limit",
           "url": ""
@@ -1061,10 +1016,6 @@
         },
         "go_memory": {
           "name": "go_memory",
-          "url": ""
-        },
-        "kube_container_cpu": {
-          "name": "kube_container_cpu",
           "url": ""
         },
         "kube_container_cpu_limit": {
@@ -1165,10 +1116,6 @@
           "name": "go_memory",
           "url": ""
         },
-        "kube_container_cpu": {
-          "name": "kube_container_cpu",
-          "url": ""
-        },
         "kube_container_cpu_limit": {
           "name": "kube_container_cpu_limit",
           "url": ""
@@ -1265,10 +1212,6 @@
         },
         "go_memory": {
           "name": "go_memory",
-          "url": ""
-        },
-        "kube_container_cpu": {
-          "name": "kube_container_cpu",
           "url": ""
         },
         "kube_container_cpu_limit": {
@@ -1369,10 +1312,6 @@
           "name": "go_memory",
           "url": ""
         },
-        "kube_container_cpu": {
-          "name": "kube_container_cpu",
-          "url": ""
-        },
         "kube_container_cpu_limit": {
           "name": "kube_container_cpu_limit",
           "url": ""
@@ -1469,10 +1408,6 @@
         },
         "go_memory": {
           "name": "go_memory",
-          "url": ""
-        },
-        "kube_container_cpu": {
-          "name": "kube_container_cpu",
           "url": ""
         },
         "kube_container_cpu_limit": {
