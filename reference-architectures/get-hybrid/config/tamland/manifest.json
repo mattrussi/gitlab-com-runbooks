@@ -822,10 +822,6 @@
           "name": "go_memory",
           "url": ""
         },
-        "kube_container_cpu": {
-          "name": "kube_container_cpu",
-          "url": ""
-        },
         "kube_container_cpu_limit": {
           "name": "kube_container_cpu_limit",
           "url": ""
