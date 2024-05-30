@@ -1,5 +1,9 @@
 # Packagecloud Infrastructure and Backups
 
+**Table of Contents**
+
+[TOC]
+
 This document will cover how our [packagecloud:enterprise](https://packagecloud.io/) infrastructure works, which is a commercial software package that powers packages.gitlab.com. We will cover the architecture, backups (what is & isn't backed up) and other useful bits such as how to update the license key.
 
 ## Architecture Overview

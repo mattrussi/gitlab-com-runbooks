@@ -1,5 +1,9 @@
 # Making a manual clone of the DB for the data team
 
+**Table of Contents**
+
+[TOC]
+
 This page has information for making a manual clone of the database for the data team.
 It was a process created in April 2022 related to [Reliability/15565](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/15565)
 and is based on the notes from [Reliability](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/15574).

@@ -1,5 +1,9 @@
 # Databasebase backup health check
 
+**Table of Contents**
+
+[TOC]
+
 ## Experiment
 
 Stop running the daily database backups verification pipeline.

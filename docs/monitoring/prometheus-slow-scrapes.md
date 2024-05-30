@@ -1,5 +1,9 @@
 # Prometheus Scraping Slowly
 
+**Table of Contents**
+
+[TOC]
+
 ## Symptoms
 
 Prometheus is scraping targets slowly. New metrics will appear slower than

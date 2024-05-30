@@ -1,5 +1,9 @@
 # How to resize Persistent Volumes in Kubernetes
 
+**Table of Contents**
+
+[TOC]
+
 Suppose you have some Persistent Volumes attached to Pods from a Controller
 (StatefulSet/Deployment/DaemonSet) and you need to increase their size because
 it is getting full. Kubernetes supports volume expansion by default (>=

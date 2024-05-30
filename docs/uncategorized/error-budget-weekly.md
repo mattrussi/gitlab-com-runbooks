@@ -1,5 +1,9 @@
 # Error budget weekly reporting
 
+**Table of Contents**
+
+[TOC]
+
 How to setup a weekly slack report on error budget spend to your team.
 
 ## My stage group would like to receive Slack notifications weekly on their error budget spend

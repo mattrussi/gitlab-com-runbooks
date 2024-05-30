@@ -1,5 +1,9 @@
 # Patroni GCS Snapshots
 
+**Table of Contents**
+
+[TOC]
+
 We take GCS snapshots of the data disk of a Patroni replica periodically
 (period specified by Chef's `node['gitlab-patroni']['snapshot']['cron']['hour']`).
 Only one specific replica is used for the purpose of a snapshot, and this replica

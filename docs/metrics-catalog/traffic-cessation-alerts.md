@@ -1,5 +1,9 @@
 # Traffic Cessation Alerts
 
+**Table of Contents**
+
+[TOC]
+
 Because of the way alerts in Prometheus are built, it treats "no-signal" and "no-alert" conditions in the same way. A change may lead to an SLI no longer matching the metrics being emitted from the application, and when this happens, care needs to be taken to alert on this situation as Prometheus will not notify about this by default.
 
 ## Types of Traffic Cessation Alerts

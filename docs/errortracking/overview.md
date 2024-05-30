@@ -1,5 +1,9 @@
 # ErrorTracking main troubleshooting document
 
+**Table of Contents**
+
+[TOC]
+
 ## Overview
 
 Customers take advantage of the [Error Tracking](https://about.gitlab.com/handbook/engineering/development/ops/monitor/observability/#clickhouse-datastore) feature by configuring their application using the sentry-sdk to send error tracking data to GitLab.com opstrace instance.

@@ -1,5 +1,9 @@
 # Blackbox git exporter is down
 
+**Table of Contents**
+
+[TOC]
+
 ## Symptoms
 
 * Message in prometheus-alerts _Blackbox git [pulls|pushes] over [https|ssh] are taking too long._

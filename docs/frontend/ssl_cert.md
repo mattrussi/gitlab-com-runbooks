@@ -1,5 +1,9 @@
 # SSL Certificate Expiring or Expired
 
+**Table of Contents**
+
+[TOC]
+
 ## Symptoms
 
 You see alerts like

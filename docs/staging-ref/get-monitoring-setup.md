@@ -1,5 +1,9 @@
 # GET Monitoring Setup
 
+**Table of Contents**
+
+[TOC]
+
 This documentation outlines setting up the staging-ref environment to work with GitLab infrastructure monitoring.
 
 ## Prerequisites

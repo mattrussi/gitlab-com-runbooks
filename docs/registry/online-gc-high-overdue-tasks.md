@@ -1,5 +1,9 @@
 # High Number of Overdue Online GC Tasks
 
+**Table of Contents**
+
+[TOC]
+
 ## Background
 
 The new version of the Container Registry includes an [online Garbage Collection (GC)](https://gitlab.com/gitlab-org/container-registry/-/blob/master/docs-gitlab/db/online-garbage-collection.md) feature that takes care of deleting dangling artifacts both from the storage backend and the database. Artifacts can be of two types, blobs or manifests.

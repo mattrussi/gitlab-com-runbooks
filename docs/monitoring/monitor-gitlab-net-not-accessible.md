@@ -1,5 +1,9 @@
 # monitor.gitlab.net not accessible or return 5xx errors
 
+**Table of Contents**
+
+[TOC]
+
 ## Possible checks
 
 1. Check nginx - `sudo service nginx status`

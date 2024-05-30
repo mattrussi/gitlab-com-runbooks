@@ -1,5 +1,9 @@
 # MacOS resources in AWS
 
+**Table of Contents**
+
+[TOC]
+
 This document outlines where most of the resources live in AWS, this can help you know where to look to debug issues.
 
 Go to [access.md](./access.md) for information on how to access the resources described in this document.

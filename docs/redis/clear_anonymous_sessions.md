@@ -1,5 +1,9 @@
 # Clearing sessions for anonymous users
 
+**Table of Contents**
+
+[TOC]
+
 The following script will clear all sessions from redis that have no
 current user attached.
 

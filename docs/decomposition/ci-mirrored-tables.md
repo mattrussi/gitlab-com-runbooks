@@ -1,5 +1,9 @@
 # CI Mirrored Tables
 
+**Table of Contents**
+
+[TOC]
+
 The tables `gitlab_main` tables: `namespaces` and `projects` that reside on the `main` database, are partially
 copied to their corresponding `gitlab_ci` database tables `ci_namespace_mirrors` and `ci_project_mirrors` respectively. This even happens on single database mode.
 

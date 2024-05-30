@@ -1,5 +1,9 @@
 ## OPS bastion hosts
 
+**Table of Contents**
+
+[TOC]
+
 ### How to start using them
 
 Add the following to your `~/.ssh/config` (specify your username and path to ssh private key):

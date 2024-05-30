@@ -1,5 +1,9 @@
 # Alerting
 
+**Table of Contents**
+
+[TOC]
+
 ## Overview
 
 videos and materials in `./runbooks/docs/monitoring/README.md`

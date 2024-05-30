@@ -1,5 +1,9 @@
 # Service Error Rate
 
+**Table of Contents**
+
+[TOC]
+
 The error rate for a service is a measure of how many errors that service is generating per second.
 
 Note the error rate of a service is the sum of the error rates of each component within that service, so the

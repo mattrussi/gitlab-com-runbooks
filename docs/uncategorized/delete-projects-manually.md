@@ -1,5 +1,9 @@
 # Deleting a project manually
 
+**Table of Contents**
+
+[TOC]
+
 Sometimes projects are not completely deleted due to [postgres statement timeouts](https://gitlab.com/gitlab-org/gitlab-ce/issues/52517) and can end up in a half-deleted state where it cannot be deleted via the admin dashboard.
 
 ## Preparation

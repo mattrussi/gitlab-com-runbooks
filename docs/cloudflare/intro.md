@@ -1,5 +1,9 @@
 # Cloudflare
 
+**Table of Contents**
+
+[TOC]
+
 Cloudflare provides a web application firewall (WAF), domain name system
 (DNS), and content delivery network (CDN) for the following zones:
 

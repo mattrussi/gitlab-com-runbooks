@@ -1,5 +1,9 @@
 # Chef secrets using GKMS
 
+**Table of Contents**
+
+[TOC]
+
 In general, gkms secrets replace chef vaults, these are data bag items which have been encrypted. The chef vault conventions remain the same, an `<vault> <item>`.
 
 ## Using gkms secrets in cookbooks

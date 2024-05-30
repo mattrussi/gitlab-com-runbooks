@@ -1,5 +1,9 @@
 ## Remove VM
 
+**Table of Contents**
+
+[TOC]
+
 ### Checklist for removing VM from the Azure
 
 1. Remove VM

@@ -1,5 +1,9 @@
 # Pingdom
 
+**Table of Contents**
+
+[TOC]
+
 ## How to configure checks in Pingdom
 
 * Pingdom checks are configured in the `pingdom/pingdom.yml` file

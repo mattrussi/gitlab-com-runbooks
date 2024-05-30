@@ -1,5 +1,9 @@
 # Deploying a change to gitlab.rb
 
+**Table of Contents**
+
+[TOC]
+
 From time to time we deploy changes that result in modifications to gitlab.rb.  These are distilled notes from one such occurrence which may provide context and confidence to future SRE's.  It is by no means fully comprehensive, but should help let you know which questions still need to be asked.
 
 ## Lay of the land

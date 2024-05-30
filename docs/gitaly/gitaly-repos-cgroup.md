@@ -1,5 +1,9 @@
 # Gitaly repository cgroups
 
+**Table of Contents**
+
+[TOC]
+
 Each repository will be assigned to a cgroup to enforce resource limits for
 memory and cpu (cgroup v1). This implementation of cgroups prevents any one
 project from starving other projects from resources. There are several ways to

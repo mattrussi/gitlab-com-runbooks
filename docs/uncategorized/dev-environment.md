@@ -1,5 +1,9 @@
 # GitLab dev environment
 
+**Table of Contents**
+
+[TOC]
+
 We have a dev environment which is based in GitLab CE
 
 Every morning at 7:20AM UTC a new nightly package is built and deployed into it with the latest version from the master branch.

@@ -1,5 +1,9 @@
 # Renovate Bot
 
+**Table of Contents**
+
+[TOC]
+
 We use [Renovate](https://github.com/renovatebot/renovate) to keep our project's
 dependencies automatically up-to-date. A daily scheduled CI job scans projects
 under the `gitlab-com/gl/infra` namespaces, both

@@ -1,5 +1,9 @@
 ## Accessing the GCP hosts
 
+**Table of Contents**
+
+[TOC]
+
 If you need ssh access to individual vms on GCP you have come to the right
 place. If you are having difficulty with getting access or you don't believe we
 have enabled your public ssh key on these hosts please submit an issue to the

@@ -1,5 +1,9 @@
 # Recovering from CI Patroni cluster lagging too much or becoming completely broken
 
+**Table of Contents**
+
+[TOC]
+
 **IMPORTANT:** This troubleshooting only applies before CI decomposition is finished (ie. `patroni-ci` is still just a standby replica of `patroni`), after `patroni-ci` is promoted as Writer this runbook is no longer valid.
 
 ## Symptoms

@@ -1,6 +1,10 @@
 ## Symptoms
 
-You're likely here because you saw a message saying Free inodes on __host__ on __path__ is at __very low number__".
+**Table of Contents**
+
+[TOC]
+
+You're likely here because you saw a message saying Free inodes on **host** on **path** is at **very low number**".
 
 ## Troubleshooting
 

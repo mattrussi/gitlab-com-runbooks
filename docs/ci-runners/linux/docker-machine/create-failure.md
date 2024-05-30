@@ -1,5 +1,9 @@
 # Docker machine fails to create machine
 
+**Table of Contents**
+
+[TOC]
+
 ## `bad certificate`
 
 This usually means that the certificates in

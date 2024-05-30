@@ -1,5 +1,9 @@
 # Sentry general tasks
 
+**Table of Contents**
+
+[TOC]
+
 **It is assumed that you have _Owner_, _Manager_ or _Admin_ access in Sentry. If you don't, ask someone who does have that access to grant it to you.**
 
 ## How to send dummy events to Sentry

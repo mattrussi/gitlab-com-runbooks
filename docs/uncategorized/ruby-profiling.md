@@ -1,5 +1,9 @@
 # Ruby profiling
 
+**Table of Contents**
+
+[TOC]
+
 ## Stackprof
 
 [Stackprof](https://github.com/tmm1/stackprof) is a sampling CPU profiler for

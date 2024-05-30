@@ -1,5 +1,9 @@
 ## Runbook for audit evidence gathering procedures
 
+**Table of Contents**
+
+[TOC]
+
 ### Artifacts and collection methods
 
 To best meet our compliance requirements, we need to provide screen captures or console logs of the collection method used to gather data, as well as the resulting artifacts with the data requested by our auditors (access policies, group memberships, user lists, etc.). All commands executed while gathering evidence should be time/date stamped whenever possible, as they can be a part of the validation chain; for example, when we sign the artifacts we collect with GPG, the corresponding validation will indicate _when_ the file(s) were signed, which can be correlated back to the logs/screenshots of the collection method.

@@ -1,5 +1,9 @@
 ## Forum / Discourse
 
+**Table of Contents**
+
+[TOC]
+
 ### Replacement
 
 1. Obtain the new certificate from [SSLMate](https://sslmate.com/console/orders/).

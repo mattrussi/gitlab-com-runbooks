@@ -1,5 +1,9 @@
 # Session: Application architecture
 
+**Table of Contents**
+
+[TOC]
+
 This is a synchronous session that covers the foundational architecture of
 GitLab.com.
 

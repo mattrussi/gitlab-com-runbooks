@@ -1,5 +1,9 @@
 # Helm Upgrade is Stuck
 
+**Table of Contents**
+
+[TOC]
+
 On the `k8s-workloads/gitlab-com` repository, [we ask that helm be the
 maintainer for
 operations](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-com/-/blob/bc4d1c0b71668c679200ca282d5cd55a479837b2/bases/helmDefaults.yaml#L5).

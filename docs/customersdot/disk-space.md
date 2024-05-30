@@ -1,5 +1,9 @@
 # Disk space alerts (production)
 
+**Table of Contents**
+
+[TOC]
+
 We have a CRON job that checks the disk space and alerts in `#g_fulfillment_status` if it reaches a threshold:
 
 Currently Slack alerts are triggered when disk space has less than 6% free space (>94% used), and it runs the check every 3 hours.

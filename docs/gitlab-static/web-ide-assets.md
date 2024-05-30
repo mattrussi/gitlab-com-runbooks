@@ -1,5 +1,9 @@
 # Web IDE Assets
 
+**Table of Contents**
+
+[TOC]
+
 The [Web IDE](https://docs.gitlab.com/ee/user/project/web_ide/) requires external assets that would previously be
 fetched from `*.vscode-cdn.net`, however in order to prevent our customers from having to fetch resources from a 3rd party, we self-host those assets.
 

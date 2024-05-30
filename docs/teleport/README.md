@@ -1,5 +1,9 @@
 # Teleport
 
+**Table of Contents**
+
+[TOC]
+
 [Teleport](https://goteleport.com/docs/) is an *Access Management Platform*.
 
 ## Guides

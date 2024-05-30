@@ -1,5 +1,9 @@
 # Mailgun Events
 
+**Table of Contents**
+
+[TOC]
+
 During the course of troubleshooting a Mailgun related incident, you may want to review all the messages Mailgun was asked to deliver and view the responses, etc. The Mailgun web console does not provide a comprehensive analytics interface to query events in a way that is helpful. This is a process you can use to allow using BigQuery in Google Cloud to process events from Mailgun.
 
 ## Collect Events

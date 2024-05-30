@@ -1,5 +1,9 @@
 # Sidekiq queue migration
 
+**Table of Contents**
+
+[TOC]
+
 ## Overview
 
 As of June 2021, we use a model for our background jobs (which use

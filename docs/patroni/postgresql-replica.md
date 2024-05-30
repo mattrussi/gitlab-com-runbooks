@@ -1,5 +1,9 @@
 # Adding a PostgreSQL replica
 
+**Table of Contents**
+
+[TOC]
+
 In order to add a PostgreSQL replica to the Patroni cluster, please refer to [patroni-management.md](patroni-management.md).
 
 Other examples here are largely based on taking a basebackup manually.

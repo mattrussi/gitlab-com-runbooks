@@ -1,5 +1,9 @@
 # GitHost / GitLab Hosted
 
+**Table of Contents**
+
+[TOC]
+
 ## Overview
 
 GitHost or GitLab Hosted is a hosted Software as a Service offering where the users

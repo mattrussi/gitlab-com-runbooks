@@ -1,5 +1,9 @@
 # Debugging Service Desk
 
+**Table of Contents**
+
+[TOC]
+
 [Docs](https://docs.gitlab.com/ee/user/project/service_desk.html)
 
 ## DRI

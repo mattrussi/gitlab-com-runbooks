@@ -1,5 +1,9 @@
 # Postgresql
 
+**Table of Contents**
+
+[TOC]
+
 ## Find out which table a given toast belongs to
 
 Run this query

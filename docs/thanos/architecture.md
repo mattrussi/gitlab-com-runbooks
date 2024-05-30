@@ -1,5 +1,9 @@
 # Thanos Architecture Overview
 
+**Table of Contents**
+
+[TOC]
+
 ![thanos-architecture](img/thanos-architecture.png)
 
 ## Overview

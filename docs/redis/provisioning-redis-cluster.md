@@ -1,5 +1,9 @@
 # Provisioning Redis Cluster
 
+**Table of Contents**
+
+[TOC]
+
 This document outlines the steps for provisioning a Redis Cluster. Former attempts are documented here:
 
 - [`redis-cluster-ratelimiting`](https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/2256)

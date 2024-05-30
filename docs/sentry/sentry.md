@@ -1,5 +1,9 @@
 # Managing Sentry in Kubernetes
 
+**Table of Contents**
+
+[TOC]
+
 The following runbooks only applies to the instance of Sentry running in the `ops-gitlab-gke` cluster (running Sentry 22.9.0+). They are **not applicable** to the old instance of Sentry running on a single VM (version 9.1.2).
 
 ## Architecture

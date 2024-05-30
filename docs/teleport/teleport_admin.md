@@ -1,5 +1,9 @@
 # Teleport Administration
 
+**Table of Contents**
+
+[TOC]
+
 This run book covers administration of the Teleport service from an infrastructure perspective.
 
 - See the [Teleport Rails Console](Connect_to_Rails_Console_via_Teleport.md) runbook if you'd like to log in to a machine using teleport

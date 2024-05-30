@@ -1,5 +1,9 @@
 ## Reason
 
+**Table of Contents**
+
+[TOC]
+
 GitLab Container Registry is not responding or returns not 200 OK statuses.
 
 ## Possible checks

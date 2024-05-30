@@ -1,5 +1,9 @@
 # Rate of successful user logins is zero
 
+**Table of Contents**
+
+[TOC]
+
 ## Reason
 
 The rate of logins (per second) almost never drops below 2 (and even then, only just).  This metric being zero is unprecedented, and suggests something awful has happened.

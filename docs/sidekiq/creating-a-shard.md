@@ -1,5 +1,9 @@
 # Creating a Sidekiq Shard
 
+**Table of Contents**
+
+[TOC]
+
 This document will outline the necessary items when considering and building a
 new Sidekiq shard.
 

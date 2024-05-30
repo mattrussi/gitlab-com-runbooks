@@ -1,5 +1,9 @@
 # Scaling Elastic Cloud Clusters
 
+**Table of Contents**
+
+[TOC]
+
 You are most likely re-sizing the hot data tier in Elasticsearch since all
 ingestion takes place through that tier before being migrated to the warm tier.
 

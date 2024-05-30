@@ -1,5 +1,9 @@
 ## Purpose of the service
 
+**Table of Contents**
+
+[TOC]
+
 CI Runners are used by customers to run CI jobs for any project hosted on GitLab.com.
 
 Because this allows even free accounts to execute arbitrary code for up to 2000 wallclock minutes per month,

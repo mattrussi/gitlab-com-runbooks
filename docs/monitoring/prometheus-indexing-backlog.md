@@ -1,5 +1,9 @@
 # Prometheus Indexing Backlog
 
+**Table of Contents**
+
+[TOC]
+
 ## Symptoms
 
 Prometheus is taking a long time to index new time series, and thus newly

@@ -1,5 +1,9 @@
 # Prometheus Series Maintenance Stalled
 
+**Table of Contents**
+
+[TOC]
+
 ## Symptoms
 
 Prometheus is maintaining (persisting, archiving, truncating, purging, ...) memory

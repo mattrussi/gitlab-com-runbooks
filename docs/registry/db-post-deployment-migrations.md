@@ -1,5 +1,9 @@
 # Container Registry database post-deployment migrations
 
+**Table of Contents**
+
+[TOC]
+
 ## Context
 
 Until recently the registry only had support for regular database schema migrations. After completing the GitLab.com registry upgrade/migration ([gitlab-org&5523](https://gitlab.com/groups/gitlab-org/-/epics/5523)), we're now in a position where the database has grown enough to make simple changes (like creating new indexes) take a long time to execute, so we had to introduce support for post-deployment migrations.

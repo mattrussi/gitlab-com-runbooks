@@ -1,5 +1,9 @@
 # AWS Managed Certificates
 
+**Table of Contents**
+
+[TOC]
+
 The only certificate currently managed by AWS is the `snowplowstg.trx.gitlab.net` certificate. It is not currently terraform managed.
 The `snowplow.trx.gitlab.net` is currently an SSLMate certificate that has been uploaded to the cert manager.
 

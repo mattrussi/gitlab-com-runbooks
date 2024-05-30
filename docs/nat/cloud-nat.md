@@ -1,5 +1,9 @@
 # Cloud NAT Troubleshooting
 
+**Table of Contents**
+
+[TOC]
+
 ## Background
 
 Unless a static IP is needed for ingress, most of our GCP VMs should not have

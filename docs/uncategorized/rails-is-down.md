@@ -1,5 +1,9 @@
 # Rails is down
 
+**Table of Contents**
+
+[TOC]
+
 Many data gathering exercises listed in these docs involve accessing the Rails console.
 
 However, during particularly severe incidents, the Rails console may be totally inaccessible, likely because Redis (specifically `redis-cache`) is unusable. This would also render Teleport useless as it uses the Rails console.

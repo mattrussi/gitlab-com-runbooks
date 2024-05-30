@@ -1,5 +1,9 @@
 # Blue Green Deployments
 
+**Table of Contents**
+
+[TOC]
+
 ## Background
 
 At the moment we are working on improving the deployments for our runner

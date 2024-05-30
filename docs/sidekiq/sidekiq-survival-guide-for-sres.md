@@ -1,5 +1,9 @@
 # A survival guide for SREs to working with Sidekiq at GitLab
 
+**Table of Contents**
+
+[TOC]
+
 # What is Sidekiq and why do we use it?
 
 Sidekiq is a background job processor for Ruby-on-Rails (arguably the most well

@@ -1,5 +1,9 @@
 ## Cloudflare Certificates
 
+**Table of Contents**
+
+[TOC]
+
 ### Summary
 
 The SSL certificate for `gitlab.com` and `staging.gitlab.com` are provided by SSLMate. SSL certificates are downloaded from SSLMate and placed into a Vault Secret. We use a Custom SSL Certificate in Cloudflare which is managed using Terraform. Terraform retrieves the secret from Vault and uploads the corresponding certificate to Cloudflare.

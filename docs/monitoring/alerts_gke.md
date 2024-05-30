@@ -1,5 +1,9 @@
 # Accessing a GKE Alertmanager
 
+**Table of Contents**
+
+[TOC]
+
 This should be a temporary way to access Alertmanager for our GKE
 infrastructure.
 [Original reference](https://gitlab.com/gitlab-com/gl-infra/delivery/-/issues/733#note_306622484).

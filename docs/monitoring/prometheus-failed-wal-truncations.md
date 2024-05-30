@@ -1,5 +1,9 @@
 ## Steps to check
 
+**Table of Contents**
+
+[TOC]
+
 1. Login to server.
 1. Look for wal errors in the log file. (`/var/log/prometheus/prometheus/current`)
 

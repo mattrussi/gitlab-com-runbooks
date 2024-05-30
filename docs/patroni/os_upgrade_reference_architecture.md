@@ -1,5 +1,9 @@
 # OS Upgrade Reference Architecture
 
+**Table of Contents**
+
+[TOC]
+
 ## Purpose
 
 Define the architecture being used for the Patroni OS Upgrade as well as the steps to build and configure the infrastructure.

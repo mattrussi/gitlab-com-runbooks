@@ -1,5 +1,9 @@
 # version.gitlab.com Runbook
 
+**Table of Contents**
+
+[TOC]
+
 ## Overview
 
 The `version.gitlab.com` application is the endpoint for self hosted GitLab instances to report their version to us (if that feature is enabled).  The three primary functions of this app are:

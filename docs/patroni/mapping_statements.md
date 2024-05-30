@@ -1,5 +1,9 @@
 # Mapping Postgres Statements, Slowlogs, Activity Monitoring and Traces
 
+**Table of Contents**
+
+[TOC]
+
 Understanding the workloads that the application is sending to the database is critical to diagnosing performance issues.
 
 GitLab's Postgres cluster has several tools for understanding these workloads, including:

@@ -1,5 +1,9 @@
 ### Applications can not log into pgbouncer
 
+**Table of Contents**
+
+[TOC]
+
 Pgbouncer does not know what users exist on the database. It accepts a new connection
 and executes the query configured under `auth_query`
 [in the cookbook](https://gitlab.com/gitlab-cookbooks/gitlab-pgbouncer/-/blob/67a9dc6e910c8c6efef1a4407a8b03b22083bb27/attributes/default.rb).

@@ -1,5 +1,9 @@
 # HAProxy Management at GitLab
 
+**Table of Contents**
+
+[TOC]
+
 ## Overview
 
 GitLab uses HAProxy for directing traffic to various fleets in our infrastructure.

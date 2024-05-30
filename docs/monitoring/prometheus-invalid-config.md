@@ -1,5 +1,9 @@
 # Prometheus Invalid Configuration File
 
+**Table of Contents**
+
+[TOC]
+
 ## Symptoms
 
 Prometheus cannot read its configuration file and will thus keep on using a

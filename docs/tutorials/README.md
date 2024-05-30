@@ -1,5 +1,9 @@
 # Tutorials
 
+**Table of Contents**
+
+[TOC]
+
 ## Purpose
 
 This Tutorials section provides a public area for sharing knowledge with teammates related to operating GitLab at scale.  This helps supports:

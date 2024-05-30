@@ -1,5 +1,9 @@
 # Debugging gitaly with gitaly-debug
 
+**Table of Contents**
+
+[TOC]
+
 In GitLab 11.6 and up, Gitaly comes with a debugging tool `gitaly-debug`
 that can be run on a production Gitaly server. It is meant to avoid
 having to copy-paste shell scripts when troubleshooting. For a list of

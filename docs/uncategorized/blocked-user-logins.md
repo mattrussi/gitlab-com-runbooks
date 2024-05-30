@@ -1,5 +1,9 @@
 # Blocked user login attempts are high
 
+**Table of Contents**
+
+[TOC]
+
 ## Reason
 
 We are seeing a higher than the usual (very low) rate of login attempts failing because the user is blocked.  The goal of this alert is to provide a clear signal of cause for an unusual sort of situation that will likely be widely noticed/reported, but for which an underlying reason may be difficult to determine quickly.

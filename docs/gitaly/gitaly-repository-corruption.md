@@ -1,5 +1,9 @@
 # Restoring gitaly data corruption on a project after an unclean shutdown
 
+**Table of Contents**
+
+[TOC]
+
 ## Why does this happen?
 
 For all we know commits and git objects themselves are not lost, but in some cases refs getting updated might result in them getting stored as an empty file.

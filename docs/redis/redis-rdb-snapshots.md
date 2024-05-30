@@ -1,5 +1,9 @@
 # Redis RDB Snapshots
 
+**Table of Contents**
+
+[TOC]
+
 We use RDB for [Redis
 persistence](https://redis.io/docs/management/persistence/). In order to avoid a
 performance hit on our primaries, we do **not** configure RDB snapshots via the

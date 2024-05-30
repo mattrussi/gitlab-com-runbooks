@@ -1,5 +1,9 @@
 # Investors Relations (ir.gitlab.com) main troubleshoot documentation
 
+**Table of Contents**
+
+[TOC]
+
 ## Overview
 
 [https://ir.gitlab.com](ir.gitlab.com) is the investors relation site. It is a Drupal site managed by a third party. Infrastructure only manages the DNS record.

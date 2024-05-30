@@ -1,5 +1,9 @@
 # Windows Autoscaling Runners
 
+**Table of Contents**
+
+[TOC]
+
 We operate 2 runner manager servers that run Windows and build Windows shared runners. We
 must use Windows as the manager and executors talk via WinRM. However, the data flow
 of the Windows runners managers are the same as the Linux runner described in

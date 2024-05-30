@@ -1,5 +1,9 @@
 ## INSTRUCTIONS
 
+**Table of Contents**
+
+[TOC]
+
 1. Install gitlab-runner on your workstation <https://docs.gitlab.com/runner/install/osx.html>
 2. Generate a cicd token:
     * `/usr/local/bin/gitlab-runner register`

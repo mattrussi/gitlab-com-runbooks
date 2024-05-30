@@ -1,5 +1,9 @@
 # Example Tutorial Template
 
+**Table of Contents**
+
+[TOC]
+
 ## Learning objectives
 
 * Gain a high-level view of the major components and behaviors of the service.

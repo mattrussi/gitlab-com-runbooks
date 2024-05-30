@@ -1,5 +1,9 @@
 # Static objects caching
 
+**Table of Contents**
+
+[TOC]
+
 _See the [HOWTO][howto] for background info._
 
 ## Symptoms

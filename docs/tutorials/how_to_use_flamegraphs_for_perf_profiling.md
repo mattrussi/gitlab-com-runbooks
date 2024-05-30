@@ -1,5 +1,9 @@
 # How to use flamegraphs for performance profiling
 
+**Table of Contents**
+
+[TOC]
+
 ## Learning objectives
 
 Profiling lets you observe a live system to see where the code is spending its time.

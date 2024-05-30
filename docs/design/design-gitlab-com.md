@@ -1,5 +1,9 @@
 # design.gitlab.com Runbook
 
+**Table of Contents**
+
+[TOC]
+
 ## Overview
 
 The `design.gitlab.com` runs Pajamas Design System and contains brand and product design guidelines and UI components for all things GitLab. The project is located in [https://gitlab.com/gitlab-org/gitlab-services/design.gitlab.com](https://gitlab.com/gitlab-org/gitlab-services/design.gitlab.com). You can read more this system [here](https://about.gitlab.com/handbook/engineering/ux/pajamas-design-system/).

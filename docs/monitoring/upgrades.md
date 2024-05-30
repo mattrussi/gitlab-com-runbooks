@@ -1,5 +1,9 @@
 # Upgrading Monitoring Components
 
+**Table of Contents**
+
+[TOC]
+
 Upgrading monitoring components requires changes in a few different places, but is standard from release-to-release.
 
 Links to releases:

@@ -1,5 +1,9 @@
 # Postgresql minor upgrade
 
+**Table of Contents**
+
+[TOC]
+
 This runbook describes all the steps to execute a Postgresql minor upgrade.
 
 **Important!** Please read the release notes before getting started (for all minor versions after the current version of postgresql) - <https://www.postgresql.org/docs/12/release.html>

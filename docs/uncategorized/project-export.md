@@ -1,5 +1,9 @@
 # Project exports
 
+**Table of Contents**
+
+[TOC]
+
 We sometimes need to manually export a project. This mostly is necessary when
 exporting via UI fails for some reason. Are you looking for [Exporting a Gitaly Repository](https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/gitaly/gitaly-repositry-export.md) instead?
 
@@ -24,7 +28,7 @@ was increased to 200GB recently, leaving more than 150GB free space for project
 exports. Typically, a project export needs twice it's size on disk space - for
 extracting all files and then writing out the tar.gz archive.
 
-__Warning:__ You can't judge the size of a project export by the size shown in
+**Warning:** You can't judge the size of a project export by the size shown in
 the admin UI! It doesn't account for uploads. We have cases, where small
 projects have more than 30GB of uploads (release files or attachments...) which
 are using external object storage and need to be downloaded from there when
@@ -75,7 +79,7 @@ It seems that, when manually exporting, the archive file get's uploaded to GCS,
 but we do not show a download link in the Web UI (under Settings -> Advanced -
 Project export) and do not send out an email with the download link.
 
-__Solution:__ In the output of `p.execute` you should see the upload location,
+**Solution:** In the output of `p.execute` you should see the upload location,
 something like
 `gitlab-gprd-uploads/import_export_upload/export_file/<some-number>/<some-archive>.tar.gz`
 
@@ -102,7 +106,7 @@ If you get an error with `/etc/gitlab/gcs-creds.json` missing (very likely) that
 means that the repository has external object storage items (e.g. Merge Request
 Diffs) that need to be downloaded from GCS.
 
-__Solution:__ temporarily copy this file from the console node over to the file
+**Solution:** temporarily copy this file from the console node over to the file
 node (and delete it again when you are done!)
 
 ## Statement timeouts

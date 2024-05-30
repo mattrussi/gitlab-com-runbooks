@@ -1,5 +1,9 @@
 # Life of a Web Request
 
+**Table of Contents**
+
+[TOC]
+
 Work in progress:
 
 * Issue: <https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/10388>

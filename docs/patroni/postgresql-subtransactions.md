@@ -1,5 +1,9 @@
 # PostgreSQL subtransactions
 
+**Table of Contents**
+
+[TOC]
+
 In August 2021 [we've learned that PostgreSQL subtransactions can contribute to
 production incidents](https://gitlab.com/gitlab-org/gitlab/-/issues/338346)
 causing database contention and saturating PostgreSQL replicas..

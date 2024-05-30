@@ -1,5 +1,9 @@
 # Game days
 
+**Table of Contents**
+
+[TOC]
+
 ## Introduction
 
 We run

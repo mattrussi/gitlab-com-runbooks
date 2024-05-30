@@ -1,5 +1,9 @@
 # Backups
 
+**Table of Contents**
+
+[TOC]
+
 ## Verification
 
 Backups, and verification process use

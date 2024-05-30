@@ -1,5 +1,9 @@
 # Linux CI/CD Runners fleet configuration changes
 
+**Table of Contents**
+
+[TOC]
+
 ## Preflight checklist
 
 Before you will start any work

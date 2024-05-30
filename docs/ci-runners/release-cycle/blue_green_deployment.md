@@ -1,5 +1,9 @@
 # Blue_Green_Deployment
 
+**Table of Contents**
+
+[TOC]
+
 This document outlines the blue/green deployment strategy where we maintain a single active cluster serving production traffic. The inactive cluster sits around awaiting a new deployment, before becoming active again.
 
 While troubleshooting or working with blue-green deployments you might need to:

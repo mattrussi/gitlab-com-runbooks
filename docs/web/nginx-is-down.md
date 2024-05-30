@@ -1,5 +1,9 @@
 # Nginx is down
 
+**Table of Contents**
+
+[TOC]
+
 Nginx sits between HAProxy and gitlab-workhorse, which means a wide-spread of nginx instances being
 down could bring GitLab.com down completely or put a lot of stress on unaffected nodes.
 

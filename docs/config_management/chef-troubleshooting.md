@@ -1,5 +1,9 @@
 # Chef troubleshooting
 
+**Table of Contents**
+
+[TOC]
+
 ## Symptoms
 
 1. HAProxy is missing workers:

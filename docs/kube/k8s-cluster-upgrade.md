@@ -1,5 +1,9 @@
 # GKE Cluster Upgrade Procedure
 
+**Table of Contents**
+
+[TOC]
+
 All of our GKE clusters are now set to automatically upgrade. They are all
 using the [Regular release channel](https://cloud.google.com/kubernetes-engine/docs/concepts/release-channels)
 and have specific times they will upgrade themselves, as documented below

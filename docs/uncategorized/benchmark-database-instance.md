@@ -1,5 +1,9 @@
 # Benchmarking Database Instances
 
+**Table of Contents**
+
+[TOC]
+
 To properly analyze performance of a given cloud instance with Postgres, multiple benchmarking tools and approaches should be combined:
 
 - synthetic benchmarks for Postgres server ([pgbench](https://www.postgresql.org/docs/10/static/pgbench.html), [sysbench](https://github.com/akopytov/sysbench))

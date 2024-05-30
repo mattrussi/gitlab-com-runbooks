@@ -1,5 +1,9 @@
 # Node memory alerts
 
+**Table of Contents**
+
+[TOC]
+
 ## HighMemoryPressure
 
 This indicates there may not be enough memory on the node in order to operate.

@@ -1,5 +1,9 @@
 # Linux CI/CD Runners fleet configuration management
 
+**Table of Contents**
+
+[TOC]
+
 All of the Linux CI Runners fleet is currently managed through our main
 [`chef-repo`](https://ops.gitlab.net/gitlab-cookbooks/chef-repo/).
 All nodes are managed by a set of structured roles.

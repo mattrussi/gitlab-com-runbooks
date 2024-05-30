@@ -1,5 +1,9 @@
 ## Database Peak Analysis Report
 
+**Table of Contents**
+
+[TOC]
+
 The goal of this report is to detail what is being executed in the primary database of the PostgreSQL cluster during a CPU utilization peak.
 
 The CPU utilization peak represent that some queries are generating an excessive load on the database server and could impact the SLA, availability and performance from the database host.

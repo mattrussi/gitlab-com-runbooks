@@ -1,5 +1,9 @@
 # Thanos General Alerts
 
+**Table of Contents**
+
+[TOC]
+
 Docs: <https://thanos.io/>
 
 ## ThanosBucketHighOperationFailures

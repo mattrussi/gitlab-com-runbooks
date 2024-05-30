@@ -1,5 +1,9 @@
 # Summary
 
+**Table of Contents**
+
+[TOC]
+
 To export data from a cloudSQL database (such as `version.gitlab.com`), to give to the data team for analytics, use this procedure
 
 # Prepare

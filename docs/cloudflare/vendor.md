@@ -1,5 +1,9 @@
 # Accessing and Using CloudFlare
 
+**Table of Contents**
+
+[TOC]
+
 Users that have been provisioned can access Cloudflare directly at
 `https://dash.cloudflare.com`.
 

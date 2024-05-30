@@ -1,5 +1,9 @@
 # Thanos Query and Stores
 
+**Table of Contents**
+
+[TOC]
+
 ## Overview
 
 Thanos query (querier) docs: <https://thanos.io/tip/components/query.md/>

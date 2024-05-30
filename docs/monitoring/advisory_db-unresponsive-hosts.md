@@ -1,5 +1,9 @@
 # Advisory Database Unresponsive Hosts/Outdated Repositories
 
+**Table of Contents**
+
+[TOC]
+
 ## Symptoms
 
 The [Advisory Database](https://gitlab.com/gitlab-org/security-products/gemnasium-db) managed by the [Vulnerability Research Team](https://about.gitlab.com/handbook/engineering/development/sec/secure/vulnerability-research/) communicates with many hosts to pull down third party advisories and data. These are almost always updated every day/week. This rule triggers if we are unable to communicate or get fresh information from one of these third parties.

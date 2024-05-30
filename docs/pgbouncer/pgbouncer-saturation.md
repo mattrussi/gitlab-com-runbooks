@@ -1,5 +1,9 @@
 # Sidekiq or Web/API is using most of its PgBouncer connections
 
+**Table of Contents**
+
+[TOC]
+
 ## Symptoms
 
 * Message in #alerts-general: _The pgbouncer service (main stage), pgbouncer_async_pool component has a saturation exceeding SLO_

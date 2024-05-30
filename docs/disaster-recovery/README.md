@@ -1,5 +1,9 @@
 ## Summary
 
+**Table of Contents**
+
+[TOC]
+
 This contains the relevant information for Disaster Recovery on GitLab.com as it relates to testing, validation, and current gaps that would prevent recovery.
 
 [GitLab backups](https://about.gitlab.com/handbook/engineering/infrastructure/production/#backups) are designed to be tolerant for both zonal and regional outages by storing data in global (multi-region) object storage.

@@ -1,5 +1,9 @@
 # Missing Repositories
 
+**Table of Contents**
+
+[TOC]
+
 A repository may appear missing, but it does not mean it was erased completely.
 
 ## Symptoms

@@ -1,4 +1,8 @@
 
+**Table of Contents**
+
+[TOC]
+
 # WAL logs analysis
 
 Analysis of write-ahead log of a PostgreSQL database cluster can be performed using the `pg_waldump` tool, however there are considerations on how to safely use `pg_waldump` with production data.

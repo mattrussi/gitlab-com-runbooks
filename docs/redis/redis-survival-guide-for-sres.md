@@ -1,5 +1,9 @@
 # A survival guide for SREs to working with Redis at GitLab
 
+**Table of Contents**
+
+[TOC]
+
 See also <https://docs.gitlab.com/ee/development/redis.html> which covers some of the same
 ground, but with a developer orientation and the SRE-oriented [runbook](https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/redis/redis.md)
 

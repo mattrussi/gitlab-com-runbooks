@@ -1,4 +1,8 @@
 
+**Table of Contents**
+
+[TOC]
+
 # Managing Geekbot standups
 
 ## What is Geekbot?

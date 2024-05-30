@@ -1,5 +1,9 @@
 # How to take a snapshot of an application running in a StatefulSet
 
+**Table of Contents**
+
+[TOC]
+
 !!! WARNING! this procedure has only ever been tested in staging, not in production! Use it with caution! It was captured here so that we have a written track of what might be useful in the future !!!
 
 Some questions that need to be answered before gaining more confidence:

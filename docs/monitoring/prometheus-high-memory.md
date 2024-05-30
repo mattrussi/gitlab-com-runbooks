@@ -1,5 +1,9 @@
 # Prometheus High Memory Utilization
 
+**Table of Contents**
+
+[TOC]
+
 ## Symptoms
 
 Prometheus RSS is using a large amount of the system memory.

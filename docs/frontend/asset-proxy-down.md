@@ -1,5 +1,9 @@
 # `asset_proxy` is `DOWN`
 
+**Table of Contents**
+
+[TOC]
+
 ## Symptom
 
 ```shell

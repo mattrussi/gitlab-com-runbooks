@@ -1,5 +1,9 @@
 # CI Artifacts CDN
 
+**Table of Contents**
+
+[TOC]
+
 The GitLab CI Artifacts CDN is a Google Application Load Balancer that caches requests made to the Artifacts backend bucket.
 
 ## Possible Checks

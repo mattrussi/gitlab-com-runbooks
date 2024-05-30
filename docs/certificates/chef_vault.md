@@ -1,5 +1,9 @@
 ## Chef Vault
 
+**Table of Contents**
+
+[TOC]
+
 ### Replacement
 
 Make sure you know the data bag (e.g. `about-gitlab-com`) item (e.g. `_default`) and eventual fields (if they differ from `ssl_certificate` and `ssl_key`). Refer to the certificate table for that information.
@@ -17,7 +21,7 @@ Make sure you know the data bag (e.g. `about-gitlab-com`) item (e.g. `_default`)
    sed -E ':a;N;$!ba;s/\r{0,1}\n/\\n/g' ${new_certificate}.pem
    ```
 
-1. __Always make sure to take the chained certificate - else you will see cert verify issues later!__
+1. **Always make sure to take the chained certificate - else you will see cert verify issues later!**
 1. Update the values in the data bag. Make sure to only edit the fields that were specified. Some data bags will contain multiple certificates!
 
    ```shell

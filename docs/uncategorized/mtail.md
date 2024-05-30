@@ -1,5 +1,9 @@
 # Google mtail for prometheus metrics
 
+**Table of Contents**
+
+[TOC]
+
 <https://github.com/google/mtail>
 
 This is a way of getting metrics out of logs.

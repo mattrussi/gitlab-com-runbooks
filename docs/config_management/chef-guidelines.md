@@ -1,5 +1,9 @@
 # Chef Guidelines
 
+**Table of Contents**
+
+[TOC]
+
 The purpose of this page should be to document how we at GitLab use chef, write cookbooks and configure nodes. It is a work in progress, however the points made here should be agreed upon by those who work with chef on a daily basis.
 
 ## Nodes dos and donts

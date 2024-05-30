@@ -1,5 +1,9 @@
 # How to connect to a Database console using Teleport
 
+**Table of Contents**
+
+[TOC]
+
 ## Background info about [Teleport](https://goteleport.com/teleport/docs/)
 
 Database consoles in Staging/Production are accessed via Gravitational [Teleport](https://goteleport.com/teleport/docs/). Our legacy Database consoles (using the console servers) are in the process of being removed for most use cases.

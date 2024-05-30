@@ -1,5 +1,9 @@
 # Shared Configurations
 
+**Table of Contents**
+
+[TOC]
+
 In this document we'll discuss the topic of shared secrets and shared
 configuration items that tie our Kubernetes and Chef infrastructure together.
 

@@ -1,5 +1,9 @@
 # Mimir Onboarding
 
+**Table of Contents**
+
+[TOC]
+
 Mimir is a multi-tenanted system.
 
 This helps us to create soft boundaries by tenant and introduces a few key benefits:

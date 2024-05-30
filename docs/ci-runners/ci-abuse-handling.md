@@ -1,5 +1,9 @@
 # How to detect CI Abuse
 
+**Table of Contents**
+
+[TOC]
+
 - Check [started jobs by project](https://log.gprd.gitlab.net/goto/63f83c2a163fb0b29edc33b19773db25).
 
 # Summary

@@ -1,5 +1,9 @@
 # Block specific pages domains through HAproxy
 
+**Table of Contents**
+
+[TOC]
+
 If the pages service is saturated you can view which
 [pages domain is getting the most traffic](https://log.gprd.gitlab.net/app/dashboards#/view/8a1a3c40-7bf2-11ec-a649-b7cbb8e4f62e)
 and place a block for that domain through HAproxy.

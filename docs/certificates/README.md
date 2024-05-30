@@ -1,5 +1,9 @@
 # Gitlab Certificate Run Books
 
+**Table of Contents**
+
+[TOC]
+
 This is an overview of certificates, where they are used and how they can be replaced in their service.
 
 ## Deployment and replacement strategies

@@ -1,5 +1,9 @@
 # How to connect to a Rails Console using Teleport
 
+**Table of Contents**
+
+[TOC]
+
 ## Background info about [Teleport](https://goteleport.com/teleport/docs/)
 
 Rails consoles in Staging/Production are accessed via Gravitational [Teleport](https://goteleport.com/teleport/docs/). Our legacy Rails consoles (using the console servers) are in the process of being fully removed for most use cases.

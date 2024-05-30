@@ -1,5 +1,9 @@
 # Prometheus Notifications Backlog
 
+**Table of Contents**
+
+[TOC]
+
 ## Symptoms
 
 Prometheus is having trouble working off its queue of notifications to send

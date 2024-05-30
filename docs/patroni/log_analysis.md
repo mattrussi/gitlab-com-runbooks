@@ -1,5 +1,9 @@
 # Log analysis on PostgreSQL, Pgbouncer, Patroni and consul Runbook
 
+**Table of Contents**
+
+[TOC]
+
 ## Intro
 
 Nowadays all informatics services/system has a log mechanism due to can register events from services/system and can be useful for *audit* or *troubleshooting*. The Gitlab database architecture is made up of some components such as: [PostgreSQL](https://www.postgresql.org/), [pgbouncer](https://www.pgbouncer.org/), [patroni](https://github.com/zalando/patroni) and [counsul](https://www.consul.io/intro/index). This runbook describe the most common errors for each component, what that means and how to anlayze logs for these components.

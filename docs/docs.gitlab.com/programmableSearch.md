@@ -1,5 +1,9 @@
 # What is Programmable Search Engine?
 
+**Table of Contents**
+
+[TOC]
+
 Programmable Search Engine lets you include a search engine on your website to help your visitors find the information they're looking for. To learn more about Programmable Search Engine you can view Google documentation on Getting started with Programmable Search Engine [here](https://support.google.com/programmable-search/answer/4513751?hl=en&ref_topic=4513742)
 
 ## Configuration

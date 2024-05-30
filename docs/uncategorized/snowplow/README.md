@@ -1,5 +1,9 @@
 # [SnowPlow](https://github.com/snowplow/snowplow/wiki/snowplow-tracker-protocol)
 
+**Table of Contents**
+
+[TOC]
+
 SnowPlow is a pipeline of nodes and streams that is used to accept events from
 the GitLab.com front-end web tracker. The tracker is javascript that is
 executed by a user's browser.

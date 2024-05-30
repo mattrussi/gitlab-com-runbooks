@@ -1,5 +1,9 @@
 # Rebuilding a kubernetes cluster
 
+**Table of Contents**
+
+[TOC]
+
 This page is for replacing a zonal cluster, if you seek creating a new cluster on a different region/zone,
 please refer to the [create new kubernetes cluster page](/k8s-new-cluster.md)
 

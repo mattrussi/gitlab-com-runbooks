@@ -1,5 +1,9 @@
 # Workhorse Session Alerts
 
+**Table of Contents**
+
+[TOC]
+
 ## Symptoms
 
 ![Workhorse HTTP](img/workhorse-git-http-session-issues.png)

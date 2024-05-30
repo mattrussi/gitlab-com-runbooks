@@ -1,5 +1,9 @@
 # Metrics Catalog
 
+**Table of Contents**
+
+[TOC]
+
 The Metrics-Catalog is a declarative approach to monitoring GitLab using Service-Level Monitoring.
 
 At present, the documentation on the Metrics-Catalog requires some work, but there are several conference talks on the approach we use:

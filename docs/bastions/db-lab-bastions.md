@@ -1,5 +1,9 @@
 # db-lab bastion hosts
 
+**Table of Contents**
+
+[TOC]
+
 For a user to login to the `db-lab` hosts, a user's ssh key needs to be in the chef-repo [users data_bags](https://gitlab.com/gitlab-com/gl-infra/chef-repo/-/tree/master/data_bags/users?ref_type=heads), and the groups should include `db-lab` role.
 
 ```json

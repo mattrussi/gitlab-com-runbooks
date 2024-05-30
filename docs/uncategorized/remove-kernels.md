@@ -1,5 +1,9 @@
 # Removing kernels from fleet
 
+**Table of Contents**
+
+[TOC]
+
 ## First and foremost
 
 *Don't Panic*

@@ -1,5 +1,9 @@
 # Debug failed chef provisioning
 
+**Table of Contents**
+
+[TOC]
+
 ## Background
 
 We provision GCP machines with terraform and Chef. Most machines are provisioned

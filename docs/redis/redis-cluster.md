@@ -1,5 +1,9 @@
 # Redis Cluster
 
+**Table of Contents**
+
+[TOC]
+
 ## Core concepts
 
 Redis Cluster is a mode of Redis to enable horizontal scaling. The dataset is divided among multiple nodes, allowing the computational load to be distributed.

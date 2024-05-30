@@ -1,5 +1,9 @@
 # Removing a PgBouncer instance
 
+**Table of Contents**
+
+[TOC]
+
 Here the link to the video of the [runbook simulation](https://youtu.be/BGheMAGOR48).
 
 Removing PgBouncer instances might be necessary for conserving costs or simplifying setups.

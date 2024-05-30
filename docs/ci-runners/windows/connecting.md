@@ -1,5 +1,9 @@
 # Connecting to a Windows machine
 
+**Table of Contents**
+
+[TOC]
+
 Ideally, one would never have to log into Windows servers. Alas,
 everything does not always work as planned and sometimes one must.
 

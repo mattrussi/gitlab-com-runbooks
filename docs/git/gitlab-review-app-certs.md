@@ -1,5 +1,9 @@
 Rough notes on TLS certs for \*.gitlab-review.app
 
+**Table of Contents**
+
+[TOC]
+
 Actual repos are changing, but it looks like the new single master repo (`gitlab`, was `gitlab-ee`) will be using \*.gitlab-review.app for it's GKE k8s hosted review apps.
 
 The cert for this is stored in a K8S secret.  To replace this when it expires:

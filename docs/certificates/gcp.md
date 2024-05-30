@@ -1,5 +1,9 @@
 ## GCP Load Balancer
 
+**Table of Contents**
+
+[TOC]
+
 GCP provides [automatic SSL Certificates](https://cloud.google.com/load-balancing/docs/ssl-certificates/google-managed-certs). Where possible, we use this feature to automatically generate and renew certificates.
 
 For legacy certificates, or services behind a CDN, there is a manual procedure for updating them.

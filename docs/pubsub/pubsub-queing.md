@@ -1,5 +1,9 @@
 # PubSub Queuing Rate Increasing
 
+**Table of Contents**
+
+[TOC]
+
 ## Reason
 
 * PubSub takes our log messages from fluentd and sends them to PubSub, which is

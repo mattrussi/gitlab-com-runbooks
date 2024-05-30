@@ -1,5 +1,9 @@
 ## Introduction
 
+**Table of Contents**
+
+[TOC]
+
 Link to the video of the [runbook simulation](https://youtu.be/ibqBq9rjgCg).
 
 postgres-checkup is an open-source diagnostics tool for a deep analysis of a Postgres database health. It detects current and potential issues with database performance, scalability, and security. It also produces recommendations on how to resolve or prevent them. It is considered as an addition to existing monitoring data, augmenting it. A monitoring system will only show current, urgent problems. And postgres-checkup will show sneaking up, deeper problems that may hit you in the future. It helps to solve many known database administration problems and common pitfalls. It aims to detect issues at a very early stage and to suggest the best ways to prevent them.

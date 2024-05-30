@@ -1,5 +1,9 @@
 # GitLab Docs website troubleshooting
 
+**Table of Contents**
+
+[TOC]
+
 ## Overview
 
 The GitLab Docs websites, [docs.gitlab.com](https://docs.gitlab.com) and [archives.docs.gitlab.com](https://archives.gitlab.com) host documentation about the GitLab product. Help links within the GitLab product point to pages on these sites.

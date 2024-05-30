@@ -1,5 +1,9 @@
 # PostgreSQL VACUUM
 
+**Table of Contents**
+
+[TOC]
+
 ## Intro
 
 PostgreSQL maintains data consistency using a [Multiversion Concurrency Control (MVCC)](https://www.postgresql.org/docs/current/mvcc-intro.html).

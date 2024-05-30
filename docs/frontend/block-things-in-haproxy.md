@@ -1,5 +1,9 @@
 # Blocking and Disabling Things in HAProxy
 
+**Table of Contents**
+
+[TOC]
+
 ## First and Foremost
 
 - **Don't Panic!**

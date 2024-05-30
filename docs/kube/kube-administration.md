@@ -1,5 +1,9 @@
 # GKE/Kubernetes Administration
 
+**Table of Contents**
+
+[TOC]
+
 ## Rotating Certificate Authority
 
 GKE uses a root [Certificate Authority](https://kubernetes.io/docs/tasks/tls/managing-tls-in-a-cluster/) as  the **root of trust**.

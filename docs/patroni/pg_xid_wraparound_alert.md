@@ -1,5 +1,9 @@
 # `pg_xid_wraparound` Saturation Alert
 
+**Table of Contents**
+
+[TOC]
+
 ## Risk of DB shutdown in the near future, approaching transaction ID wraparound
 
 This is a critical situation.

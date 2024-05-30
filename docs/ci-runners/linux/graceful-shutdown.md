@@ -1,5 +1,9 @@
 # Linux CI/CD Runners fleet graceful shutdown procedure
 
+**Table of Contents**
+
+[TOC]
+
 ## Preflight checklist
 
 Before you will start any work

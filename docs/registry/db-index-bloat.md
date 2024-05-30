@@ -1,5 +1,9 @@
 # Container Registry Database Index Bloat
 
+**Table of Contents**
+
+[TOC]
+
 This document is a condensed summary of the troubleshooting and corrective steps taken while investigating [gitlab-com/gl-infra/capacity-planning#39](https://gitlab.com/gitlab-com/gl-infra/capacity-planning/-/issues/39) - the first potential index bloat saturation for the Container Registry database.
 
 ## Metrics

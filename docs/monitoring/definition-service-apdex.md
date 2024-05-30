@@ -1,5 +1,9 @@
 # Service Apdex
 
+**Table of Contents**
+
+[TOC]
+
 The apdex score for a service is a measure of relative performance for a service.
 
 Our apdex scoring is loosely based on NewRelic's apdex scoring: <https://docs.newrelic.com/docs/apm/new-relic-apm/apdex/apdex-measure-user-satisfaction>

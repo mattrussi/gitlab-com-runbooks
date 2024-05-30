@@ -1,5 +1,9 @@
 # Blocking a project causing high load
 
+**Table of Contents**
+
+[TOC]
+
 ## Steps
 
 1. Start a rails console issuing the command `sudo gitlab-rails console`.

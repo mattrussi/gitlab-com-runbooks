@@ -1,5 +1,9 @@
 # Re-indexing a package
 
+**Table of Contents**
+
+[TOC]
+
 If the indexing of a package in PackageCloud fails, you will need to manually trigger the reindexing of the package in question.
 
 Failed indexing will show stack traces in [Elasticsearch](https://nonprod-log.gitlab.net/app/r/s/Qg7LN) and you will see the `Indexing` yellow label in the UI. Indexing can sometimes take a while so seeing the label in the UI doesn't necessarily mean a package has failed indexing. Best to confirm that there are indexing errors in the [logs](https://nonprod-log.gitlab.net/app/r/s/Qg7LN) before you go through this process.

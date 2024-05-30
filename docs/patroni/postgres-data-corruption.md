@@ -1,5 +1,9 @@
 # Dealing with Data Corruption in PostgreSQL
 
+**Table of Contents**
+
+[TOC]
+
 Data corruption in PostgreSQL is a very unlilely, but possible scenario. Common causes of data corruption involves:
 
 - Faulty Disks

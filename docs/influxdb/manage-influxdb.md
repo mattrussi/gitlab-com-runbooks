@@ -1,5 +1,9 @@
 # InfluxDB
 
+**Table of Contents**
+
+[TOC]
+
 ## Connect to the DB
 
 1. ssh into the influxdb running host (performance-new at the time of writing this)

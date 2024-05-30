@@ -1,5 +1,9 @@
 # Blocking individual IPs and Net Blocks on HA Proxy
 
+**Table of Contents**
+
+[TOC]
+
 ## First and Foremost
 
 - **Don't Panic!**

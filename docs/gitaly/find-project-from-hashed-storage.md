@@ -1,5 +1,9 @@
 # Find a project from its hashed storage path
 
+**Table of Contents**
+
+[TOC]
+
 From time to time you might have a hashed repo path like `/var/opt/gitlab/git-data/repositories/@hashed/00/11/00112233445566778899aabbccddeeff00112233445566778899aabbccddeeff.git` (fake hash, used for examples below) and want to find which project it belongs to.
 
 There are a variety of ways you can do this, and the most effective will depend on what you've currently got to hand.

@@ -1,5 +1,9 @@
 # Prometheus Not Ingesting
 
+**Table of Contents**
+
+[TOC]
+
 ## Symptoms
 
 Prometheus is not ingesting any new samples, so new data points will not

@@ -1,5 +1,9 @@
 # Deleted Project Restoration
 
+**Table of Contents**
+
+[TOC]
+
 # You should not perform this action
 
 As a general policy, we do not perform these restores. You should refuse to perform this restore unless the request is escalated to an Infrastructure manager.

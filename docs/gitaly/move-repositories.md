@@ -1,5 +1,9 @@
 # Moving repositories from one Gitaly node to another
 
+**Table of Contents**
+
+[TOC]
+
 A GitLab Project will have a git repository associated with it which is hosted on a Gitaly node. This can be moved from 1 Gitaly node to another for whatever reason.
 
 ## Single Repository

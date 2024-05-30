@@ -1,5 +1,9 @@
 ## Summary
 
+**Table of Contents**
+
+[TOC]
+
 This directory contains the kubernetes configuration for the GKE runner cluster
 that is created by Terraform run for the projects that config runners on GKE.
 

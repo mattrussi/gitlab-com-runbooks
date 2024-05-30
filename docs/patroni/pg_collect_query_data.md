@@ -1,5 +1,9 @@
 ## The goal of this runbook is collect the info to fulfill the [form](https://gitlab.com/gitlab-org/gitlab/-/issues/new?issuable_template=Query%20Performance%20Investigation) for a SQL query investigation
 
+**Table of Contents**
+
+[TOC]
+
 We need to gather the following information:
 
 - QPS - Queries per second.

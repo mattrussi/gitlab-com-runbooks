@@ -1,5 +1,9 @@
 # Filesystem errors are reported in LOG files
 
+**Table of Contents**
+
+[TOC]
+
 ## Symptoms
 
 You're likely here because you saw a message saying "Really low disk space left on _path_ on _host_: _very low number_%".

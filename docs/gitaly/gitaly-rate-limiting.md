@@ -1,5 +1,9 @@
 # Gitaly Queuing
 
+**Table of Contents**
+
+[TOC]
+
 ## Symptoms
 
 ![Gitaly Queuing Graph](../../img/gitaly-queuing.png)

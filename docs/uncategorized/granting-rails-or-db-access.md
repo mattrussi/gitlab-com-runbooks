@@ -1,5 +1,9 @@
 ## Background
 
+**Table of Contents**
+
+[TOC]
+
 In some cases it is necessary to grant database or rails console access
 to team members who are not in the Infrastructure Engineering team.
 

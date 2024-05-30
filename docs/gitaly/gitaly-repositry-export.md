@@ -1,5 +1,9 @@
 # Gitaly Repository Export
 
+**Table of Contents**
+
+[TOC]
+
 Developers might need the disk represenation of a repository in a Gitaly server
 for debugging purpose. Below is a step by step guide on how to do it. At the
 moment this is all manual, we plan to automate/self-serve this in

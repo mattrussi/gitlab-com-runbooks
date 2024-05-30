@@ -1,5 +1,9 @@
 # [`SidekiqQueueTooLarge`](../../rules/sidekiq-queues.yml)
 
+**Table of Contents**
+
+[TOC]
+
 * [Previous Incidents](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/?sort=created_date&state=all&label_name%5B%5D=a%3ASidekiqQueueTooLarge&first_page_size=20)
 * [Queue Detail Dashboard](https://dashboards.gitlab.net/d/sidekiq-queue-detail/sidekiq3a-queue-detail?orgId=1)
 * [Shard Detail Dashboard](https://dashboards.gitlab.net/d/sidekiq-shard-detail/sidekiq3a-shard-detail?orgId=1&var-PROMETHEUS_DS=PA258B30F88C30650&var-environment=gprd&var-stage=main&var-shard=catchall&from=1702857600000&to=1702943999000)
