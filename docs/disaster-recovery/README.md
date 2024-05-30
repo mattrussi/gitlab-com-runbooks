@@ -29,12 +29,17 @@ The Reliability team validates the ability of recovery from a disaster that impa
 
 ### Zonal recovery checklist
 
-In the unlikely scenario of a zonal outage on GitLab:
+In the unlikely scenario of a zonal outage on GitLab, there are several sets of work that can be taken to restore GitLab.com to operational status by routing away from the zone that is degraded and spinning up new resources in working zones. To ensure speedy recovery, enlist help and delegate out these changes so they can be performed in parallel.
 
-- [ ] Declare a change request by running the command `/change decare` in the production channel.
-- [ ] Select the `change_zonal_recovery.md` template and follow the steps in the template.
+- [ ] [Gitaly Zonal Outage Change Issue](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/new?issuable_template=change_zonal_recovery_gitaly)
+- [ ] [Patroni Zonal Outage Change Issue](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/new?issuable_template=change_zonal_recovery_patroni)
+- [ ] [HAProxy Zonal Outage Change Issue](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/new?issuable_template=change_zonal_recovery_haproxy)
 
-**Note**: If GitLab.com is unavailable, [create a new issue on the ops instance](https://ops.gitlab.net/gitlab-com/gl-infra/production/-/issues/new?issuable_template=change_zonal_recovery) and select the `change_zonal_recovery` template.
+**Note**: If GitLab.com is unavailable, you can open these templates on the Ops instance:
+
+- [ ] [Gitaly Zonal Outage Change Issue](https://ops.gitlab.net/gitlab-com/gl-infra/production/-/issues/new?issuable_template=change_zonal_recovery_gitaly)
+- [ ] [Patroni Zonal Outage Change Issue](https://ops.gitlab.net/gitlab-com/gl-infra/production/-/issues/new?issuable_template=change_zonal_recovery_patroni)
+- [ ] [HAProxy Zonal Outage Change Issue](https://ops.gitlab.net/gitlab-com/gl-infra/production/-/issues/new?issuable_template=change_zonal_recovery_haproxy)
 
 **Note**: When the outage ends, it is not recommended to fail back or use the old infrastructure (if it is available) to avoid losing additional data.
 
