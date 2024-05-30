@@ -1,5 +1,9 @@
 # Database Connection Pool Saturation
 
+**Table of Contents**
+
+[TOC]
+
 Each registry instance (Go application) maintains a configurable application-side connection pool for the underlying PostgreSQL database (through PgBouncer).
 
 ⚠️ The container registry database is still in the early days. It is expected that we will need to perform additional debugging and scaling/performance adjustments during the [GitLab.com gradual rollout](https://gitlab.com/groups/gitlab-org/-/epics/6442), so a good portion of alerts may be a false alarm.

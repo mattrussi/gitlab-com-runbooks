@@ -1,5 +1,9 @@
 # Omnibus package troubleshooting
 
+**Table of Contents**
+
+[TOC]
+
 ## Symptoms
 
 * Omnibus packages are set to disabled preventing automatic updates

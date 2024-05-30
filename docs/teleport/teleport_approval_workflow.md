@@ -1,5 +1,9 @@
 # Teleport Approver Workflow
 
+**Table of Contents**
+
+[TOC]
+
 The approval process for Rails and Database Console access is the same.
 
 ## Approval Process

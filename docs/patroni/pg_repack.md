@@ -1,5 +1,9 @@
 # Pg_repack using gitlab-pgrepack
 
+**Table of Contents**
+
+[TOC]
+
  Here the link to the video of the [runbook simulation](https://youtu.be/fXSEGypfHGs).
 
 [gitlab-pgrepack](https://gitlab.com/gitlab-com/gl-infra/gitlab-pgrepack.git) is a helper tool for running pg_repack in GitLab environments. It is open source and works on top of the [pg_repack PostgreSQL](https://github.com/reorg/pg_repack) program.

@@ -1,5 +1,9 @@
 # Rotating Rails' PostgreSQL password
 
+**Table of Contents**
+
+[TOC]
+
 Follow the following steps in order to rotate the password of the PostgreSQL
 user used by the Rails application.
 

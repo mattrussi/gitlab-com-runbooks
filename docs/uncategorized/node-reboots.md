@@ -1,5 +1,9 @@
 # Node Reboots
 
+**Table of Contents**
+
+[TOC]
+
 Search tags: reboot, restart, instance, node, VM, machine
 
 ## Discovering GCE Casualties

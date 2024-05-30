@@ -1,5 +1,9 @@
 # Purge Git data
 
+**Table of Contents**
+
+[TOC]
+
 ## Overview
 
 From time to time, a GitLabber may push a commit with data they didn't intend to commit/push to their repo on GitLab.com. The user may delete the branch if able, or rewrite their git history and force push, but other data may still be left dangling. In those cases, for confidentiality or security, waiting for an eventual garbage collection to get rid of such data may not be sufficient, and the following manual steps may need to be taken:

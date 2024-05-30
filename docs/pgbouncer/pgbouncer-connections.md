@@ -1,5 +1,9 @@
 # PgBouncer connection management and troubleshooting
 
+**Table of Contents**
+
+[TOC]
+
 We use PgBouncer for connection pooling with the purpose of optimizing our usage
 of database connections. This runbook includes some pointers on monitoring,
 tuning and troubleshooting PgBouncer connectivity. For incident response see

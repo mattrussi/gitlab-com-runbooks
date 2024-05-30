@@ -1,5 +1,9 @@
 # Gitaly token rotation
 
+**Table of Contents**
+
+[TOC]
+
 ## Execution
 
 To disable enforcement of gitaly authentication:

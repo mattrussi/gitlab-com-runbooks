@@ -1,5 +1,9 @@
 # Kubernetes
 
+**Table of Contents**
+
+[TOC]
+
 GitLab utilizes Google Kubernetes Engine (GKE) for running Kubernetes provided
 resources.
 

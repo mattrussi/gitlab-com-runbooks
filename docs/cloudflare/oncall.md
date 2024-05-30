@@ -1,5 +1,9 @@
 # Cloudflare for the on-call
 
+**Table of Contents**
+
+[TOC]
+
 - [Cloudflare Status](https://www.cloudflarestatus.com/)
 - [Run a traceroute from the Cloudflare network](https://ops.gitlab.net/gitlab-com/gl-infra/cloudflare-traceroute)
 

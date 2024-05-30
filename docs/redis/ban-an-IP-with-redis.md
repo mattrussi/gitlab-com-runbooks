@@ -1,5 +1,9 @@
 # Blocking individual IPs using Redis and Rack Attack
 
+**Table of Contents**
+
+[TOC]
+
 ## First and foremost
 
 * *Don't Panic*

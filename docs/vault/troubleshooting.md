@@ -1,5 +1,9 @@
 # Troubleshooting Hashicorp Vault
 
+**Table of Contents**
+
+[TOC]
+
 ## No Active Vault Instance / Vault Sealed / Vault Low Failure Tolerance
 
 The Vault pods are failing to start, have lost quorum or are unable to auto-unseal.

@@ -1,5 +1,9 @@
 # Migration Skipping
 
+**Table of Contents**
+
+[TOC]
+
 Skipping or disabling a Rails migration could be needed if one migration is deemed to cause
 a regression on GitLab.com. Instead of reverting the commit that introduced said migration,
 we can instruct Rails to never execute it by marking it as already-executed.

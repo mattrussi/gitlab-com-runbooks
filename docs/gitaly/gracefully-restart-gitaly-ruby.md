@@ -1,5 +1,9 @@
 # Gracefully restart gitaly-ruby
 
+**Table of Contents**
+
+[TOC]
+
 If you need to restart gitaly-ruby manually (perhaps because you're applying a patch from <https://dev.gitlab.org/gitlab/post-deployment-patches>) you can do so without downtime, thanks to gitaly-ruby worker redundancy, the following way:
 
 ```bash

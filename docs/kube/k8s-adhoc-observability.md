@@ -1,5 +1,9 @@
 # Ad hoc observability tools on Kubernetes nodes
 
+**Table of Contents**
+
+[TOC]
+
 The following notes cover a variety of tools and methods for capturing and analyzing ad hoc observability data
 (e.g. resource usage and performance characteristics) on a GKE node.
 

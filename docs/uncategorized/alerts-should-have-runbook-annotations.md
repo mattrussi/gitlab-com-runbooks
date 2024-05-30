@@ -1,5 +1,9 @@
 # Alerts Should Have Runbook Annotations
 
+**Table of Contents**
+
+[TOC]
+
 If you are reading this, you may have found your way here from a notification in Slack.
 
 The notification you received needs a runbook link that benefits the Engineer On Call.

@@ -1,5 +1,9 @@
 # CI runner manager report a high number of errors
 
+**Table of Contents**
+
+[TOC]
+
 ## Possible checks
 
 1. Check DigitalOcean status on Twitter: [@DOStatus](https://twitter.com/DOStatus).

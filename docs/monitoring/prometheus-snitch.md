@@ -1,5 +1,9 @@
 # Prometheus Dead Man's Snitch
 
+**Table of Contents**
+
+[TOC]
+
 ## Symptoms
 
 Prometheus SnitchHeartBeat is an always-firing alert. It's used as an end-to-end test of Prometheus through the Alertmanager.

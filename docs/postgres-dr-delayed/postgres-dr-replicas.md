@@ -1,5 +1,9 @@
 # Postgres Replicas
 
+**Table of Contents**
+
+[TOC]
+
 <!-- vim-markdown-toc GitLab -->
 
 - [Postgres Replicas](#postgres-replicas)
@@ -153,7 +157,7 @@ and (currently) take about 9 hrs (mileage-may-vary)
 - `chef-client-disable <comment or link to issue>`
 - `gitlab-ctl stop postgresql`
 - Clean up the current PGDATA: `rm -rf /var/opt/gitlab/postgresql/data/*`
-- Run backup-fetch __in a tmux__ as it will take hours:
+- Run backup-fetch **in a tmux** as it will take hours:
   - `BASE=<base_000... from backup-list above>`
   - `cd /tmp/; sudo -u gitlab-psql /usr/bin/envdir /etc/wal-g.d/env /opt/wal-g/bin/wal-g backup-fetch /var/opt/gitlab/postgresql/data/ $BASE`
 - Converge Chef to create `postgresql.auto.conf` and `standby.signal`: `sudo /opt/chef/bin/chef-client`
@@ -208,7 +212,7 @@ set +x
 
     1. If the most recent snapshot is not recent enough (say <1hr), then you should probably [take a new snapshot](https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/patroni/gcs-snapshots.md):
 
-        > __NOTE__: if you're working on a delayed replica, then you probably want a snapshot older than 8 hours (currently - confirm by checking the `recovery_min_apply_delay` setting in the delayed replica Chef role)
+        > **NOTE**: if you're working on a delayed replica, then you probably want a snapshot older than 8 hours (currently - confirm by checking the `recovery_min_apply_delay` setting in the delayed replica Chef role)
 
         1. SSH to the designated backup replica of the cluster
         1. Run `/usr/local/bin/gcs-snapshot.sh` as the user `gitlab-psql`. Wait for the snapshot to finish.

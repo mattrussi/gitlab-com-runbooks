@@ -1,5 +1,9 @@
 # ClickHouse Cloud Failure Remediation, Backup & Restore Process
 
+**Table of Contents**
+
+[TOC]
+
 Follow this runbook when a ClickHouse Cloud database is broken beyond repair and requires remediation.
 
 ## Check metrics

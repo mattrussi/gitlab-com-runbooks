@@ -1,5 +1,9 @@
 # (Title: Service Name)
 
+**Table of Contents**
+
+[TOC]
+
 ## Summary
 
 - Service description

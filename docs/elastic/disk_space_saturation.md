@@ -1,5 +1,9 @@
 # Elastic Nodes Disk Space Saturation
 
+**Table of Contents**
+
+[TOC]
+
 ![disk saturation dashboard](./img/disk_saturation.png)
 
 [source](https://dashboards.gitlab.net/d/alerts-sat_elastic_disk_space/alerts-elastic_disk_space-saturation-detail?orgId=1&from=now-2d&to=now)

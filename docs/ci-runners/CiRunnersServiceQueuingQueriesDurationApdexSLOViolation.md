@@ -1,5 +1,9 @@
 # Deadtuples affecting query performance
 
+**Table of Contents**
+
+[TOC]
+
 This can be one of the reasons of seeing this alert.
 
 Currently reindexing operations are scheduled during the weekend, during these operations, deadtuples can accumlate to the point of affecting query performance.

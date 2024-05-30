@@ -1,5 +1,9 @@
 # How GitLab.com uses Mailgun
 
+**Table of Contents**
+
+[TOC]
+
 ## Sending Mail
 
 The application is provided credentials to use authenticated SMTP to deliver outbound email to Mailgun. These values are defined in [the helm charts for GitLab.com](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-com).

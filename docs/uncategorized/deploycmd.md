@@ -1,5 +1,9 @@
 # Deploy Cmd for Chatops
 
+**Table of Contents**
+
+[TOC]
+
 The purpose of this command in Chatops is to run pre-vetted, common commands
 across the Gitlab.com fleet in a repeatable, and convenient way. The commands
 are defined in ansible playbooks. When a command is run, it will execute on

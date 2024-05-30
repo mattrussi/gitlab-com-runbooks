@@ -1,5 +1,9 @@
 # Tuning and Modifying Alerts
 
+**Table of Contents**
+
+[TOC]
+
 Our metrics and notification systems are all configurable to help engineers be aware of the status of our environments. When you are creating, removing, or changing notification parameters, keep these questions in mind:
 
 1. Who needs to see this notification?

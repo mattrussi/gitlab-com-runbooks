@@ -1,5 +1,9 @@
 # Memory space analysis with cupcake-rdb
 
+**Table of Contents**
+
+[TOC]
+
 For Redis we often focus on analyzing CPU utilization, but sometimes we also need to investigate growth trends in memory usage.
 
 For this purpose we have a tool called [cupcake-rdb](https://gitlab.com/gitlab-com/gl-infra/cupcake-rdb) that is able to process Redis RDB dumps into folded format for use in [flamegraph](https://www.brendangregg.com/flamegraphs.html) generation.

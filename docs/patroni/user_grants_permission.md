@@ -1,5 +1,9 @@
 # Roles/Users grants and permission Runbook
 
+**Table of Contents**
+
+[TOC]
+
 ## Intro
 
 PostgreSQL uses the concept of [roles](https://www.postgresql.org/docs/11/user-manag.html) to manage database access. The roles are global objects which means that a role doesn't belong to a specific database but all of them and can access all databases if given the appropriate permissions.

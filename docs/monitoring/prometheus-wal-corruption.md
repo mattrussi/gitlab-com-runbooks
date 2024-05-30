@@ -1,5 +1,9 @@
 # Prometheus WAL Corruptions
 
+**Table of Contents**
+
+[TOC]
+
 ## Symptoms
 
 Prometheus WAL detected corruption.

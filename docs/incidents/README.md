@@ -1,5 +1,9 @@
 # Incidents
 
+**Table of Contents**
+
+[TOC]
+
 General documentation about our incident workflow itself. Service-specific
 information, including what to do in response to an incident relating to that
 service, is found in the docs for that service.

@@ -1,5 +1,9 @@
 ## Problem: git processes spawned by Gitaly may consume significant CPU and memory
 
+**Table of Contents**
+
+[TOC]
+
 Gitaly routinely spawns `git` child processes to perform tasks on individual repos.
 
 These processes are usually short-lived.  However, in some cases, they can be

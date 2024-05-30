@@ -1,5 +1,9 @@
 # Rails SQL Apdex alerts
 
+**Table of Contents**
+
+[TOC]
+
 When we see an SQL Apdex alert is important to quickly asses the impact and rule out common causes like abuse and identify problematic queries.
 This runbook covers some of the topics that were discussed in the [EOC Firedrill](https://docs.google.com/document/d/1WiHy60tedoZnjKs8ypceHVu8p-E0-6wXZkzFb02P4CY/edit#heading=h.39dmlgcxc042).
 

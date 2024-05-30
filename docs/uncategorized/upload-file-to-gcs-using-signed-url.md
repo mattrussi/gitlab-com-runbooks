@@ -1,5 +1,9 @@
 # How to upload a file to Google Cloud Storage from any system without a credentials configuration
 
+**Table of Contents**
+
+[TOC]
+
 This document describes how to use `gsutil signurl` and a couple of `curl` calls to upload files directly to GCS from gitaly nodes (or any other system).  From the official documentation:
 
 > To construct a signed `URL` that allows anyone in possession of the `URL` to `POST` a resumable upload to the specified bucket for one day, creating an object of `Content-Type` [`application/tar+gzip`], run:

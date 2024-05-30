@@ -1,5 +1,9 @@
 # Prometheus FileSD read errors
 
+**Table of Contents**
+
+[TOC]
+
 ## Symptoms
 
 The `rate(prometheus_sd_file_read_errors_total[5m])` expression is showing

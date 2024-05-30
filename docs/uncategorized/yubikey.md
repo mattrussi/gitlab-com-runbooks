@@ -1,5 +1,9 @@
 # Configuring and Using the Yubikey
 
+**Table of Contents**
+
+[TOC]
+
 The following setup enables us to use the YubiKey with OpenPGP, the Authentication subkey [as an SSH key](https://developers.yubico.com/PGP/SSH_authentication/) and the Encryption subkey to sign Git commits.
 
 :warning:

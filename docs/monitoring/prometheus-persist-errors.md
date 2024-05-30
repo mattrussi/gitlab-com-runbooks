@@ -1,5 +1,9 @@
 # Prometheus Persist Errors
 
+**Table of Contents**
+
+[TOC]
+
 ## Symptoms
 
 Prometheus is encountering errors while persisting sample chunks.

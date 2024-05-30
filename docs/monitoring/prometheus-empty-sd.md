@@ -1,5 +1,9 @@
 # Prometheus Empty Service Discovery
 
+**Table of Contents**
+
+[TOC]
+
 ## Symptoms
 
 Prometheus has one or more jobs with empty target lists.

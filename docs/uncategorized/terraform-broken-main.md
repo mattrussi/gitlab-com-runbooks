@@ -1,5 +1,9 @@
 # Terraform Broken Main
 
+**Table of Contents**
+
+[TOC]
+
 ## Summary
 
 In order to avoid Terraform drift, we have a daily job that checks for a Terraform plan diff.

@@ -1,5 +1,9 @@
 # Cloudflare: Managing Traffic
 
+**Table of Contents**
+
+[TOC]
+
 ## General
 
 Cloudflare settings are managed with Terraform in the [`config-mgmt`](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt) repo.

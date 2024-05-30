@@ -1,5 +1,9 @@
 # Static repository objects caching
 
+**Table of Contents**
+
+[TOC]
+
 Static repository objects such as repository archives and raw blobs can be
 served from an external storage such as a CDN, to relieve the application from
 serving a fresh version of the object for every request.

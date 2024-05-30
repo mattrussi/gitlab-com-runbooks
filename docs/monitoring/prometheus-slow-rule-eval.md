@@ -1,5 +1,9 @@
 # Prometheus Rule Evaluation Slow
 
+**Table of Contents**
+
+[TOC]
+
 ## Symptoms
 
 Rule evaluations are executed in sequence on a per rule file/group basis.

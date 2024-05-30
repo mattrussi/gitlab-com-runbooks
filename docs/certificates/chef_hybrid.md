@@ -1,5 +1,9 @@
 ## Chef Hybrid
 
+**Table of Contents**
+
+[TOC]
+
 In this approach the certificate is stored in a role unencrypted, where the key is stored in [chef vault](chef_vault.md).
 
 ### Replacement

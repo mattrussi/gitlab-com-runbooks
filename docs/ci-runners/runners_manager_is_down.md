@@ -1,5 +1,9 @@
 # Alerts that runners manager is down
 
+**Table of Contents**
+
+[TOC]
+
 ## Symptoms
 
 Builds are not processed because of runners manager is down.

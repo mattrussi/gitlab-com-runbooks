@@ -1,5 +1,9 @@
 # Exporting projects silently
 
+**Table of Contents**
+
+[TOC]
+
 From time to time, for legal reasons, we are required to export projects without the owner being aware.  Requests for this will come through Legal, and will have suitable looking authorizations (e.g. subpeonas).
 
 While it is possible for an admin to create an export and it won't *email* the owner, it will be visible in the UI while the export exists, and the owner might notice this and infer something is going on.

@@ -1,5 +1,9 @@
 # Deploy docker-machine
 
+**Table of Contents**
+
+[TOC]
+
 We have our fork of `docker-machine` available at
 <http://gitlab.com/gitlab-org/ci-cd/docker-machine> which we use for
 GitLab.com Linux shared runners. A list of releases can be found in

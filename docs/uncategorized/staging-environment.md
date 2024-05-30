@@ -1,5 +1,9 @@
 # GitLab staging environment
 
+**Table of Contents**
+
+[TOC]
+
 The GitLab.com staging environment has a copy of the production database that
 is not current, ways to keep staging updates are being discussed but no plan are
 yet made to keep it regularly updated.

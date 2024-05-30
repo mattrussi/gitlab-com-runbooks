@@ -1,5 +1,9 @@
 # Kubernetes-Agent Disable Integrations
 
+**Table of Contents**
+
+[TOC]
+
 In case of incidents where kas might be inadvertedly be affecting services it
 integrates with including API, Gitaly, and Redis, it is possible to temporary
 disable these integrations until proper diagnosis and remediation of problems

@@ -1,5 +1,9 @@
 # Stackdriver tracing for the Thanos stack
 
+**Table of Contents**
+
+[TOC]
+
 Thanos will generate traces for all `gRPC` and `HTTP APIs` calls thanks to generic `middlewares`. Each Thanos component generates spans related to its work and sends them to a central place which in our case is [Cloud trace](https://cloud.google.com/trace/). Not every request is sent to Cloud Trace, but only a sample of requests which is configurable. If the HTTP header `X-Thanos-Force-Tracing` is set it will force a request to be traced and saved in Cloud Trace.
 
 ## Obtaining Trace ID

@@ -1,5 +1,9 @@
 # Managing Chef
 
+**Table of Contents**
+
+[TOC]
+
 ## Add a user to the chef server
 
 To add a user you will need ssh and root access to the chef server.

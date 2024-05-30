@@ -1,5 +1,9 @@
 ## About Locking and cancelling/terminating queries
 
+**Table of Contents**
+
+[TOC]
+
 Link to the video of the [runbook simulation](https://youtu.be/-mrKyJuTd5w).
 
 A `lock` in PostgreSQL is a feature that allows transactions to _hold_ something. Usually, that _something_ is a table, an index, or a portion (row/s) of these.

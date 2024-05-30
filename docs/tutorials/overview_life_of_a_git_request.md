@@ -1,5 +1,9 @@
 # Life of a Git Request
 
+**Table of Contents**
+
+[TOC]
+
 ## Learning objectives
 
 * Learn which application and infrastructure components are involved in handling `git` requests.

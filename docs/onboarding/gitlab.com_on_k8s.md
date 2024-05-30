@@ -1,5 +1,9 @@
 # Gitlab.com on Kubernetes
 
+**Table of Contents**
+
+[TOC]
+
 A collection of info about gitlab.com on K8S
 
 ## Which workloads are actually running on k8s?

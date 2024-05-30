@@ -1,5 +1,9 @@
 # Config Management
 
+**Table of Contents**
+
+[TOC]
+
 GitLab.com virtual machines are managed by Chef.
 
 * [Chef Troubleshooting](chef-troubleshooting.md)

@@ -1,5 +1,9 @@
 # Shared Runners Cost Factors
 
+**Table of Contents**
+
+[TOC]
+
 > Available for GitLab.com Admins only
 
 Cost Factor is a multiplier for every CI minute being counted towards the Usage Quota.

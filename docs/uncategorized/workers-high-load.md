@@ -1,5 +1,9 @@
 # Workers under heavy load because of being used as a CDN
 
+**Table of Contents**
+
+[TOC]
+
 ## Symptoms
 
 * skyrocket increase of load in workers

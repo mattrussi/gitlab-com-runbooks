@@ -1,5 +1,9 @@
 # GitLab Storage Re-balancing
 
+**Table of Contents**
+
+[TOC]
+
 Moving project repositories between `gitaly` storage shards presently
 involves direct human intervention, which is obviously a less than
 ideal arrangement. To help reduce the cognitive load involved in the

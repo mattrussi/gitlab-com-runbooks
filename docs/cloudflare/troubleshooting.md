@@ -1,5 +1,9 @@
 # CloudFlare Troubleshooting
 
+**Table of Contents**
+
+[TOC]
+
 ## Links
 
 - [Cloudflare Grafana Dashboard](https://dashboards.gitlab.net/d/sPqgMv9Zk/cloudflare-traffic-overview?orgId=1)

@@ -1,5 +1,9 @@
 # Alertmanager Notification Failures
 
+**Table of Contents**
+
+[TOC]
+
 ## Symptoms
 
 Alertmanager is getting errors trying to send alerts. Alerts will be

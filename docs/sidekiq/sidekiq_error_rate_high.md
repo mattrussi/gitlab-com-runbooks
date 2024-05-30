@@ -1,5 +1,9 @@
 ## Symptoms
 
+**Table of Contents**
+
+[TOC]
+
 * An alert in `#alerts-general` for Sidekiq's error ratio exceeding SLO
 
 ## Troubleshooting

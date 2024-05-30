@@ -1,5 +1,9 @@
 ## Troubleshooting database (postgres/pgbouncer) degradation
 
+**Table of Contents**
+
+[TOC]
+
 Database performance degradation may be due to several reasons. To search for the root cause, you can start digging by checking existing metrics.
 
 ### Check CPU utilization

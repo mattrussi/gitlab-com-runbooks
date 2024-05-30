@@ -1,4 +1,8 @@
 
+**Table of Contents**
+
+[TOC]
+
 ## Remove broken runners vms
 
 Execute this command:

@@ -1,5 +1,9 @@
 # Git
 
+**Table of Contents**
+
+[TOC]
+
 ## Test pushing through all the git nodes
 
 This is particularly useful to understand if a particular git node is misbehaving

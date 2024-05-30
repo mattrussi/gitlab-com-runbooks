@@ -1,5 +1,9 @@
 # Gitaly version mismatch
 
+**Table of Contents**
+
+[TOC]
+
 ## Symptoms
 
 * Multiple versions of Gitaly are running within a fleet.

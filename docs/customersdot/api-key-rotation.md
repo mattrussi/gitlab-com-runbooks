@@ -1,5 +1,9 @@
 # customers.gitlab.com
 
+**Table of Contents**
+
+[TOC]
+
 Overview: <https://gitlab.com/gitlab-org/customers-gitlab-com/-/blob/staging/README.md>
 
 customers.gitlab.com is currently hosted in Azure with a plan to move it to

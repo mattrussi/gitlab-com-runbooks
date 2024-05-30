@@ -1,5 +1,9 @@
 # Application Database Queries
 
+**Table of Contents**
+
+[TOC]
+
 ## Tracing the Source
 
 If the database experiences high load, you may see the same queries duplicated in the

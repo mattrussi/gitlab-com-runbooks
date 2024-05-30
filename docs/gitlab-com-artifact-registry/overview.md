@@ -1,5 +1,9 @@
 ## Artifact Registry for GitLab.com
 
+**Table of Contents**
+
+[TOC]
+
 ### Overview
 
 The Artifact Registry for GitLab.com is used as an alternate private Docker Registry for K8s clusters for GitLab.com.

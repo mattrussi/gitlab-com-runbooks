@@ -1,5 +1,9 @@
 # Copying or moving a Git repository by hand
 
+**Table of Contents**
+
+[TOC]
+
 Most of the time, a Git repository on a Gitaly node can be copied from
 a source location to the destination without any complication.
 

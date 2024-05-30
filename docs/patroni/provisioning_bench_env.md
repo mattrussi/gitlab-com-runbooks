@@ -1,5 +1,9 @@
 # How to provision the benchmark environment
 
+**Table of Contents**
+
+[TOC]
+
 ## Intro
 
 This document will explain how is organized the benchmark environment and how to provision it. Also, we explain how it is being used in our use case for testing a switchover and promotion.

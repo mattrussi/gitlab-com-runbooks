@@ -1,5 +1,9 @@
 # Set up bastions for Release managers
 
+**Table of Contents**
+
+[TOC]
+
 :warning: **This will soon be superseded via [Teleport](../teleport/Connect_to_Rails_Console_via_Teleport.md)** :warning:
 
 All SSH commands need to be proxied trough one of the bastion

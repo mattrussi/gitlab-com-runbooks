@@ -1,5 +1,9 @@
 # Interacting with Consul
 
+**Table of Contents**
+
+[TOC]
+
 ## CLI
 
 The `consul` CLI is very extensive.  Check out [Consul's Commands Documentation](https://www.consul.io/commands)

@@ -1,5 +1,9 @@
 # Disabling Sidekiq workers
 
+**Table of Contents**
+
+[TOC]
+
 ## Incident Quick Reference
 
 In case of an incident caused by a misbehaving sidekiq worker, here's the immediate actions you should take.

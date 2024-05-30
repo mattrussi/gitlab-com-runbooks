@@ -1,5 +1,9 @@
 # How and when to deprovision the db-benchmarking environment
 
+**Table of Contents**
+
+[TOC]
+
 # Introduction
 
 From time to time we create Patroni cluster(s) in the `db-benchmarking` environment, with or without, using data disk snapshot of `gstg` or `gprd`. We understand the need to provision and use GCP resources in the `db-benchmarking` environment for a project/task but we want to be frugal and control the cost associated with such transient GCP resources.

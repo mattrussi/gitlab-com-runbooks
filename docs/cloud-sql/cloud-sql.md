@@ -1,5 +1,9 @@
 # Cloud SQL Troubleshooting
 
+**Table of Contents**
+
+[TOC]
+
 Some services such as Praefect, `ops.gitlab.net` or Grafana use a Google Cloud
 SQL PostgreSQL instance.
 

@@ -1,5 +1,9 @@
 # Gitaly unusual activity alert
 
+**Table of Contents**
+
+[TOC]
+
 ## Symptoms
 
 * Alert on Slack: _Unusual Gitaly activity for a project has been detected. Review the runbook at <https://gitlab.com/gitlab-com/runbooks/tree/master/docs/gitaly/gitaly-unusual-activity.md> for more details_

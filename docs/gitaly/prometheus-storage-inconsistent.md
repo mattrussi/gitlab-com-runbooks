@@ -1,5 +1,9 @@
 # Prometheus Storage Inconsistent
 
+**Table of Contents**
+
+[TOC]
+
 ## Symptoms
 
 Prometheus has encountered an inconsistency in its storage while reading/writing

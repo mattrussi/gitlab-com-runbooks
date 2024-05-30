@@ -1,5 +1,9 @@
 # Getting setup with Google gcloud CLI
 
+**Table of Contents**
+
+[TOC]
+
 ## Install
 
 - Install the [Google Cloud SDK](https://cloud.google.com/sdk/docs/)

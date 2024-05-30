@@ -1,4 +1,8 @@
 <!--
+
+**Table of Contents**
+
+[TOC]
 Service: product_analytics
 -->
 

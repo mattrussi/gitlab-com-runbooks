@@ -1,5 +1,9 @@
 # Cloudflare Logs
 
+**Table of Contents**
+
+[TOC]
+
 Each CloudFlare zone pushes logs to a Google Cloud Storage (GCS) bucket with
 the name of `gitlab-<environment>-cloudflare-logpush`. This operation happens
 every 5 minutes so the logs don't give an immediate overview of what's

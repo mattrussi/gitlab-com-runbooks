@@ -1,5 +1,9 @@
 #### How to access MacOS VMs?
 
+**Table of Contents**
+
+[TOC]
+
 MacOS VMs are currently hosted in AWS. SRE should have access to the Production environment via Okta.
 
 ### Production via Okta

@@ -1,5 +1,9 @@
 # (Title: Name of alert)
 
+**Table of Contents**
+
+[TOC]
+
 ## Overview
 
 - What does this alert mean?

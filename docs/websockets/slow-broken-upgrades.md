@@ -1,5 +1,9 @@
 # Custom Websocket Alerts
 
+**Table of Contents**
+
+[TOC]
+
 ## Websocket Upgrades may be slow
 
 - [Alert Origin](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/17488)

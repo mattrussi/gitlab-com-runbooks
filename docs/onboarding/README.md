@@ -1,5 +1,9 @@
 # Onboarding
 
+**Table of Contents**
+
+[TOC]
+
 This is a small curriculum of onboarding sessions and resources for SREs.
 
 There is a foundational synchronous session to set the stage. The rest of the

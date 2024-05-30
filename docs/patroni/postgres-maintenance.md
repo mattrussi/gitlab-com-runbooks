@@ -1,5 +1,9 @@
 # Postgres maintenance
 
+**Table of Contents**
+
+[TOC]
+
 ## Prevent DDL operations before a database maintenance with `disallow_database_ddl_feature_flags`
 
 During database maintenances, DDL statements should be ceased to avoid conflicts with the common maintenance operations like logical replication, maintenance DDLs, etc..

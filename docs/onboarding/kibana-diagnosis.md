@@ -1,5 +1,9 @@
 # Diagnosis with Kibana
 
+**Table of Contents**
+
+[TOC]
+
 ## Background
 
 - Logging pipeline architecture ([complex diagram](https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/logging/README.md#concepts))

@@ -1,5 +1,9 @@
 # Disabling a Sidekiq queue
 
+**Table of Contents**
+
+[TOC]
+
 When the system in under strain due to job processing, it may be necessary to completely disable a queue so that jobs will queue and not be processed.
 To disable a queue it needs to be excluded from the queue selectors,
 

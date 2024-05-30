@@ -1,5 +1,9 @@
 # Google Cloud Snapshots
 
+**Table of Contents**
+
+[TOC]
+
 GCP [Scheduled Snapshots](https://cloud.google.com/compute/docs/disks/scheduled-snapshots)
 automate the creation and the cleaning-up of disk snapshots.
 

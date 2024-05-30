@@ -1,5 +1,9 @@
 # Custom PostgreSQL Package Build Process for Ubuntu Xenial 16.04
 
+**Table of Contents**
+
+[TOC]
+
 Postgres Development community is no longer building packages for Ubuntu Xenial 16.04.
 This procedure explains the process of building custom PostgreSQL 12.X packages that we can use until we migrate off Xenial.
 

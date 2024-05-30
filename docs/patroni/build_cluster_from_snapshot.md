@@ -1,5 +1,9 @@
 # Steps to create (or recreate) a Standby CLuster using a Snapshot from a Production cluster as Master cluster (instead of pg_basebackup)
 
+**Table of Contents**
+
+[TOC]
+
 <!-- vscode-markdown-toc -->
 * 1. [Pre-requisites](#Pre-requisites)
 * 2. [Chef role for the Target cluster](#ChefrolefortheTargetcluster)

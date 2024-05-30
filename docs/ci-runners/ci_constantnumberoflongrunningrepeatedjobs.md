@@ -1,5 +1,9 @@
 ## CI/CD Constant Number of Long Running, Repeated Jobs
 
+**Table of Contents**
+
+[TOC]
+
 Alert Name: CICDNamespaceWithConstantNumberOfLongRunningRepeatedJobs
 
 This alert does not directly indicate a failure of the CI/CD system to work, but is designed to look for abuse or unusual use of the system.

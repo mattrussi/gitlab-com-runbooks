@@ -1,5 +1,9 @@
 # GCP snapshot health check
 
+**Table of Contents**
+
+[TOC]
+
 ## Experiment
 
 Stop running the daily snapshot verification pipeline.

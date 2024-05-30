@@ -1,5 +1,9 @@
 # Prometheus Invalid Configuration File
 
+**Table of Contents**
+
+[TOC]
+
 ## Symptoms
 
 Prometheus is ingesting samples for the same series with duplicate timestamps,

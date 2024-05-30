@@ -1,5 +1,9 @@
 # GitLab.com on Kubernetes
 
+**Table of Contents**
+
+[TOC]
+
 The following is a high level guide on what it takes to build out the necessary
 bits for adding GKE and bringing over components of GitLab into Kubernetes.
 

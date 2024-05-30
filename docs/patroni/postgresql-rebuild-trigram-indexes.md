@@ -1,5 +1,9 @@
 # PostgreSQL Trigram Indexes
 
+**Table of Contents**
+
+[TOC]
+
 This documents to action taken on <https://gitlab.com/gitlab-com/database/issues/14>. The script below rebuilds
 all trigram indexes that existed at the time of writing (note this may change in the future).
 

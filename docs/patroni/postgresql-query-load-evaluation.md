@@ -1,5 +1,9 @@
 # How to evaluate load from queries
 
+**Table of Contents**
+
+[TOC]
+
 ## Introduction
 
 PostgreSQL supports a high level of concurrency by implementing what is called [MVCC](https://www.postgresql.org/docs/11/mvcc-intro.html), or `M`ulti`v`ersion `C`oncurrency `C`ontrol, to allow multiple transactions to read (and possibly update) the very same data, and yet providing full [ACID compilance](https://en.wikipedia.org/wiki/ACID) for every transaction.
@@ -134,7 +138,7 @@ select queryid, substr(query, 1, 50), calls, total_time, min_time, max_time, mea
 
 ```
 
-__Note: pg_stat_statements information is most useful for troubleshooting when the age of his content is fresh enough. As there is not easy way to say when this statistics have been reset, you may want to use the `pg_stat_statements_reset()` function to do so (you have to reset every host separately!)__
+**Note: pg_stat_statements information is most useful for troubleshooting when the age of his content is fresh enough. As there is not easy way to say when this statistics have been reset, you may want to use the `pg_stat_statements_reset()` function to do so (you have to reset every host separately!)**
 
 ### Statements are tracked by Prometheus
 

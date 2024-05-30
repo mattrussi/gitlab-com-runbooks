@@ -1,5 +1,9 @@
 # Service-Level Monitoring
 
+**Table of Contents**
+
+[TOC]
+
 ## Notes
 
 Some notes on our Service-Level Monitoring implementation. Over time these will migrate to their own pages.

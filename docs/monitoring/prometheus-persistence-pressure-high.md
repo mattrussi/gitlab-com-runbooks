@@ -1,5 +1,9 @@
 # Prometheus Persistence Pressure Too High
 
+**Table of Contents**
+
+[TOC]
+
 ## Symptoms
 
 Prometheus is approaching critical persistence pressure, meaning that it cannot

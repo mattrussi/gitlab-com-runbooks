@@ -1,5 +1,9 @@
 # org-ci runners
 
+**Table of Contents**
+
+[TOC]
+
 We are now operating a new set of shared runners in the `org-ci` environment.
 These runners are designed to be used on projects in the `gitlab-org` namespace
 that may have community contributions.

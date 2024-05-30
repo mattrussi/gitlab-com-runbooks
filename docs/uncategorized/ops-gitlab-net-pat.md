@@ -1,5 +1,9 @@
 # OPS-GITLAB-NET Users and Access Tokens
 
+**Table of Contents**
+
+[TOC]
+
 The `ops-gitlab-net` user is our common account for automating interactions
 with GitLab instances. Many CI jobs and automated tools use this user for
 access to read and manipluate the Infrastructure GPRD and OPS data of GitLab

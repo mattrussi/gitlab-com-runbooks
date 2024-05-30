@@ -1,5 +1,9 @@
 # Service Operation Rate
 
+**Table of Contents**
+
+[TOC]
+
 The operation rate of a service is a measure of how many requests the service is having to handle per second.
 
 Note the operation rate of a service is the sum of the operation rates of each component within that service, so the

@@ -1,5 +1,9 @@
 # GCP Projects
 
+**Table of Contents**
+
+[TOC]
+
 ## New Project Creation
 
 The following assumes you want to utilize our existing infrastructure as much as

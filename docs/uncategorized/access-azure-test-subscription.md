@@ -1,5 +1,9 @@
 # Azure Test Subscription
 
+**Table of Contents**
+
+[TOC]
+
 Due to requests like: [AKS testing](https://gitlab.com/gitlab-com/access-requests/issues/526) and [customer testing needs](https://gitlab.com/gitlab-com/access-requests/issues/537), we now have a testing Subscription in Azure for the GitLab team.
 
 The Subscription is called Pay-As-You-Go Testing and is tied to the existing Default directory for user access.

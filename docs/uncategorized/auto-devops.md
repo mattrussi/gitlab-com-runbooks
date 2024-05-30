@@ -1,5 +1,9 @@
 # Auto DevOps
 
+**Table of Contents**
+
+[TOC]
+
 [Auto DevOps](https://docs.gitlab.com/ee/topics/autodevops/) is a reusable CI/CD
 configuration.  Auto DevOps can be used [in place of a
 `.gitlab-ci.yml`](https://docs.gitlab.com/ee/topics/autodevops/#enable-or-disable-auto-devops),

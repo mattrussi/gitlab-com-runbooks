@@ -1,5 +1,9 @@
 For gitlab.com we use the external Spam Check endpoint to hook up to a system run by the Security department.
 
+**Table of Contents**
+
+[TOC]
+
 # Configuration
 
 Configured in the `Spam and Anti-bot Protection` section of <https://gitlab.com/admin/application_settings/reporting>.  It can be turned off quickly with the `Enable Spam Check via external API endpoint` checkbox in the event it causes troubles.

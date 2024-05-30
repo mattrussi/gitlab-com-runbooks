@@ -1,5 +1,9 @@
 # Kubernetes-Agent Basic Troubleshooting
 
+**Table of Contents**
+
+[TOC]
+
 ## Kas deployment manifest location
 
 Kas is running inside our regional GKE cluster, in the `gitlab` namespace. It is deployed via the Gitlab Helm chart through CI jobs at the [k8s-workloads/gitlab-com](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-com) repository

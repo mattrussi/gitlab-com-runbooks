@@ -1,5 +1,9 @@
 # Alert Routing Howto
 
+**Table of Contents**
+
+[TOC]
+
 How to setup alert routing for your team.
 
 ## My stage group would like to receive Slack alerts when our components violate their SLOs

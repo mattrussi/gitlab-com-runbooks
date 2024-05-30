@@ -1,5 +1,9 @@
 # Domain Registration
 
+**Table of Contents**
+
+[TOC]
+
 See the latest policy on domain registration in the [handbook](https://handbook.gitlab.com/handbook/it/guides/domains-dns/).
 
 So you want to register a domain? This is the guide for you!

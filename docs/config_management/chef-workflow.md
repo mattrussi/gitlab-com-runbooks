@@ -1,5 +1,9 @@
 # Chef Tips and Tools
 
+**Table of Contents**
+
+[TOC]
+
 ## Create New Cookbook
 
 Creating new cookbook consists of several steps:

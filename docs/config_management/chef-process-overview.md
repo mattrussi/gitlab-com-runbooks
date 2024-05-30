@@ -1,5 +1,9 @@
 # VM Build Process with Terraform and Chef
 
+**Table of Contents**
+
+[TOC]
+
 1. The Terrafom configuration defines the number, role, and configuration of
    virtual machines that will be built.
 1. When the Terraform configuration is applied in order to create a new VM,

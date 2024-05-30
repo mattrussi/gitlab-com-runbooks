@@ -1,5 +1,9 @@
 ## Overview of Rate Limits for <https://gitlab.com>
 
+**Table of Contents**
+
+[TOC]
+
 To keep gitlab.com stable in the face of both malicious and unintentional traffic levels, we have rate-limiting (or
 similar) controls at several layers, that can interact in interesting and sometimes surprising ways.  There are also a
 small selection of knobs we can use  to adjust the customer experience and allow valid traffic.  This document is

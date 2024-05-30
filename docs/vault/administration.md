@@ -1,5 +1,9 @@
 # Vault Administration
 
+**Table of Contents**
+
+[TOC]
+
 ## Adding a GitLab instance to Vault
 
 In order to enable authentication to Vault from CI for a GitLab instance, add it to the `jwt_auth_backends` map in [`environments/vault-production/vault_config.tf`](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/main/environments/vault-production/vault_config.tf):

@@ -1,5 +1,9 @@
 *Last Reviewed for accuracy:*  2019-11-18
 
+**Table of Contents**
+
+[TOC]
+
 ## Table of Contents
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->

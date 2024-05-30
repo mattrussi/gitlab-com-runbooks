@@ -1,5 +1,9 @@
 # Aptly
 
+**Table of Contents**
+
+[TOC]
+
 Our Aptly server is aptly.gitlab.com and is primarily used to host custom packages that we built (e.g. [gitlab-cadvisor][cadvisor]).
 
 When prompted for the passphrase for the GPG key, you can find it in 1Password in the DevOps vault under item "Aptly GitLab Repo GPG Passphrase".

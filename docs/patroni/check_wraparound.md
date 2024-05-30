@@ -1,5 +1,9 @@
 # Check the status of transaction wraparound Runbook
 
+**Table of Contents**
+
+[TOC]
+
 Here the link to the video of the [runbook simulation](https://youtu.be/lR-yjLbRrmk).
 
 ## Intro

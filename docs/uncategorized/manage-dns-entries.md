@@ -1,5 +1,9 @@
 # Manage DNS entries
 
+**Table of Contents**
+
+[TOC]
+
 We use Route 53 and/or Cloudflare [depending on zone](https://ops.gitlab.net/gitlab-com/gl-infra/terraform-modules/dns-record/-/blob/master/zones.json) to manage DNS entries in our hosted zones through the terraform
 environment `dns` on <https://ops.gitlab.net/gitlab-com/gitlab-com-infrastructure> and also thoughout other environments for terraform bound DNS entries.
 

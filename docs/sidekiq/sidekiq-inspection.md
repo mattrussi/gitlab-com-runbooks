@@ -1,5 +1,9 @@
 # Poking around at sidekiq's running state
 
+**Table of Contents**
+
+[TOC]
+
 Here in are some pre-packaged bits of Ruby for poking around (non-destructively) in what's running on Sidekiq.
 
 ## Prep/connection

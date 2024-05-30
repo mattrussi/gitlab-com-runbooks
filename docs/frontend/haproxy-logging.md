@@ -1,5 +1,9 @@
 # HAProxy Logging
 
+**Table of Contents**
+
+[TOC]
+
 HAProxy logs are not indexed in *Elasticsearch* due to the volume of content.
 You can view logs for a single HAProxy node by connecting and tailing local logs.
 

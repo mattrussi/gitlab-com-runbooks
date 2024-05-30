@@ -1,5 +1,9 @@
 ## Summary
 
+**Table of Contents**
+
+[TOC]
+
 This runbook provides some hints and details on how to restore a namespace from a database backup and disk snapshots.
 
 > This is NOT the preferred method to restore a deleted project.  For that, please see the [Deleted Project Restoration](https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/uncategorized/deleted-project-restore.md) Runbook

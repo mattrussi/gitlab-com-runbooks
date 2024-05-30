@@ -1,5 +1,9 @@
 # Removing cache entries from Redis
 
+**Table of Contents**
+
+[TOC]
+
 Cache invalidation is one of the [hard things]. Sometimes we have incidents like
 [#5478] where we end up with invalid data in the cache, and no convenient way to
 clear it. This document describes an approach for deleting a specified set of

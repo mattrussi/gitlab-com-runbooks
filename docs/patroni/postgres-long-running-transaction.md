@@ -1,5 +1,9 @@
 # Diagnosing long running transactions
 
+**Table of Contents**
+
+[TOC]
+
 This runbook documents the methodology for diagnosing `PatroniLongRunningTransactionDetected` alerts.
 
 ## Background

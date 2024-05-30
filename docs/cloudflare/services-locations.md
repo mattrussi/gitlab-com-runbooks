@@ -1,5 +1,9 @@
 # Service Locations
 
+**Table of Contents**
+
+[TOC]
+
 This is a table of various services we run and what they run behind.
 
 | Domain               | Service            | Provider                             |

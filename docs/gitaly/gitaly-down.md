@@ -1,5 +1,9 @@
 # Gitaly is down
 
+**Table of Contents**
+
+[TOC]
+
 ## Symptoms
 
 * Message in prometheus-alerts _Gitaly is down on [hostname]_

@@ -1,5 +1,9 @@
 # Thanos Receive
 
+**Table of Contents**
+
+[TOC]
+
 Docs: <https://thanos.io/tip/components/receive.md/>
 
 Thanos Receive implements a remote write endpoint for Prometheus.  We are using it to more easily ingest metrics from various projects.

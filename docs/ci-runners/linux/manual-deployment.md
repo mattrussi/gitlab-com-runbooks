@@ -1,5 +1,9 @@
 # Linux CI/CD Runners fleet deployments when Ops/Deployer is down
 
+**Table of Contents**
+
+[TOC]
+
 Please refer to [Blue/Green deployment](./blue-green-deployment.md) if `ops` and `deployer` are available.
 
 ## Recent Deployments

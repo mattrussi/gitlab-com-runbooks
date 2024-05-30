@@ -1,5 +1,9 @@
 # Possible Breach of SSH MaxStartups
 
+**Table of Contents**
+
+[TOC]
+
 <https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/7168> provides the context where we discovered this was necessary.
 If this document is too brief, refer to that for more detail.
 

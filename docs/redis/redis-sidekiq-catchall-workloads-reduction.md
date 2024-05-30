@@ -1,5 +1,9 @@
 # Redis-Sidekiq catchall workloads reduction
 
+**Table of Contents**
+
+[TOC]
+
 To reduce the load on Redis-Sidekiq from the number of catchall workloads,
 
 ## For VMs

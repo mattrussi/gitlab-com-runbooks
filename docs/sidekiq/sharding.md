@@ -1,4 +1,8 @@
 
+**Table of Contents**
+
+[TOC]
+
 ## Sidekiq Sharding
 
 This documents outlines the necessary steps to horizontally shard Sidekiq and migrate workloads to the new Redis instance.

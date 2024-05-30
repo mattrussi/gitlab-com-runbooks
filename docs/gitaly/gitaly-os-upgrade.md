@@ -1,5 +1,9 @@
 # Upgrading the OS of Gitaly VMs
 
+**Table of Contents**
+
+[TOC]
+
 Since most of our Gitaly VMs in staging and production are not part of a
 replicated Gitaly cluster and are thus Single Points Of Failure, we've
 established a process to perform upgrades that require downtime (e.g. Ubuntu

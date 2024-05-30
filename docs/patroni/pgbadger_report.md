@@ -1,5 +1,9 @@
 # pgbadger Runbook
 
+**Table of Contents**
+
+[TOC]
+
 Here the link to the video of the [runbook simulation](https://youtu.be/yUwaWMUJyS4).
 
 ## Intro

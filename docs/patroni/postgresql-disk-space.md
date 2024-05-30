@@ -1,5 +1,9 @@
 # PostgreSQL
 
+**Table of Contents**
+
+[TOC]
+
 ## So your Postgres server has run out of disk space
 
 * Don't panic -- Postgres should handle the situation cleanly

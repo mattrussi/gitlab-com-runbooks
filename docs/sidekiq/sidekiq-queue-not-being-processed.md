@@ -1,5 +1,9 @@
 # Sidekiq queue no longer being processed
 
+**Table of Contents**
+
+[TOC]
+
 ## Symptoms
 
 A Sidekiq queue with a reasonable processing rate 6 hours ago is no longer being

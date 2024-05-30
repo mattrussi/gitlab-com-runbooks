@@ -1,5 +1,9 @@
 # Tips for writing tutorials
 
+**Table of Contents**
+
+[TOC]
+
 ## Learning objectives
 
 * Provide multiple ways to engage with key topics.

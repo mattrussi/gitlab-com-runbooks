@@ -1,5 +1,9 @@
 # Camoproxy troubleshooting
 
+**Table of Contents**
+
+[TOC]
+
 Camoproxy is an SSL/TLS proxy for insecure static assets that uses [go-camo](https://github.com/cactus/go-camo).
 
 ## Alerting

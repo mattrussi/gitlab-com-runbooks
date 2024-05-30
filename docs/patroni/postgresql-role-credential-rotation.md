@@ -1,5 +1,9 @@
 # Credential rotation
 
+**Table of Contents**
+
+[TOC]
+
 Rotating credentials in a high-availability database deployment with the
 objective to ensure zero downtime can be a challenge.
 

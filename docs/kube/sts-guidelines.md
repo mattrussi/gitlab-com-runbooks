@@ -1,5 +1,9 @@
 # StatefulSet Guidelines
 
+**Table of Contents**
+
+[TOC]
+
 This document will provide a set of guidelines when considering running a
 StatefulSet inside of a Kubernetes cluster.  To understand what a StatefulSet
 provides, please refer to [the existing Kubernetes StatefulSet

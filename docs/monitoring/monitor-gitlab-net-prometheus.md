@@ -1,5 +1,9 @@
 # Prometheus on monitor.gitlab.net is down
 
+**Table of Contents**
+
+[TOC]
+
 ## Possible checks
 
 1. Try check status of service with `sudo sv status prometheus`

@@ -1,5 +1,9 @@
 # postgres_exporter
 
+**Table of Contents**
+
+[TOC]
+
 We use [`postgres_exporter`](https://github.com/wrouesnel/postgres_exporter) to collect metrics
 from a running PostgreSQL server. Metrics collected are internal to PostgreSQL (e.g. tuple statistics
 or replication progress) and _not_ related to the actual data stored (e.g. number of archived projects).

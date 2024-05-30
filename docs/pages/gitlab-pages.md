@@ -1,5 +1,9 @@
 # GitLab Pages returning 404
 
+**Table of Contents**
+
+[TOC]
+
 ## Symptoms
 
 Users may report seeing 404 errors whenever they access a GitLab pages domain

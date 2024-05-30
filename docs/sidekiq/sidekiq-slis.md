@@ -1,5 +1,9 @@
 # Sidekiq SLIs
 
+**Table of Contents**
+
+[TOC]
+
 In the past, Sidekiq SLIs exist in the form of [SLI per-shard](https://gitlab.com/gitlab-com/runbooks/-/blob/0d35ba19351adeee62ca0096975541e5c515f903/metrics-catalog/services/sidekiq.jsonnet#L91-177) (e.g. `shard_catchall`, `shard_urgent_other`, etc). These SLIs combine both execution and queueing (duration that a job was queued before being executed) into a single apdex per shard. Therefore, when a particular shard's apdex is not performing well, we couldn't pinpoint whether it's an execution or queueing problem. On the other hand, we could see the apdex meeting the SLO target, but in reality the real queueing apdex is not meeting the target because execution apdex is still meeting the target.
 
 As part of the works in [epic 700](https://gitlab.com/groups/gitlab-com/gl-infra/-/epics/700), we re-organized SLI per-shard into `sidekiq_execution` and `sidekiq_queueing` SLIs (which are aggregated by `shard` label).

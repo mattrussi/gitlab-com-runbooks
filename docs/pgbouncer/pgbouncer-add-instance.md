@@ -1,5 +1,9 @@
 # Add a new PgBouncer instance
 
+**Table of Contents**
+
+[TOC]
+
 Here the link to the video of the [runbook simulation](https://youtu.be/343VuLGTJn0).
 
 Adding PgBouncer instances might be necessary for special tasks such as rolling

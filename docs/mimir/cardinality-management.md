@@ -1,5 +1,9 @@
 # Cardinality Management
 
+**Table of Contents**
+
+[TOC]
+
 There are a couple of great articles from Grafana around Cardinality which are worth a read before starting:
 
 - [What is cardinality and why does it matter](https://grafana.com/blog/2022/02/15/what-are-cardinality-spikes-and-why-do-they-matter/)

@@ -1,5 +1,9 @@
 # Reprovisioning nodes
 
+**Table of Contents**
+
+[TOC]
+
 Reprovisioning nodes can become a bit of a headache with Chef (mostly Chef Vault to be exact), as there are some considerations that need to be made in order to be able to reprovision a node without errors.
 
 ## Steps to reprovision a node (assuming you are using Terraform)

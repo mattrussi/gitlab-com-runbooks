@@ -1,5 +1,9 @@
 # Thanos Rule
 
+**Table of Contents**
+
+[TOC]
+
 Docs: <https://thanos.io/tip/components/rule.md/>
 
 Thanos Rule acts similar to a Prometheus server. It evalutes Prometheus

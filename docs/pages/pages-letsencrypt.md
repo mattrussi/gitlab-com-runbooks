@@ -1,5 +1,9 @@
 # Troubleshooting LetsEncrypt for Pages
 
+**Table of Contents**
+
+[TOC]
+
 In GitLab Pages, you can turn on the use of LetsEncrypt (LE) to provide the TLS certificate, per domain.  When this is on, GitLab takes care of talking ACME to LetsEncrypt to initially generate, and later renew, certificates for the Pages domain.
 
 It has been observed that this may fail, and the logging is somewhere between negligible and non-existent.

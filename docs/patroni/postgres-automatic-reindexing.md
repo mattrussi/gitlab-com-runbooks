@@ -1,5 +1,9 @@
 # GitLab application-side reindexing
 
+**Table of Contents**
+
+[TOC]
+
 GitLab comes with an application-side cronjob to execute database reindexing automatically and in background. This runbook links a couple relevant resources and documentation for this and contains steps to cancel reindexing actions during an emergency.
 
 ## What is reindexing?

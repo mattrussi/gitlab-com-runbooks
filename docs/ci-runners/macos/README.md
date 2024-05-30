@@ -1,5 +1,9 @@
 # MacOS Runners
 
+**Table of Contents**
+
+[TOC]
+
 ## Overview
 
 All of the MacOS runners are hosted in AWS.

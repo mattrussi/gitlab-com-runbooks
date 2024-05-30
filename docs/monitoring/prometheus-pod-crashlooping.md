@@ -1,5 +1,9 @@
 # Prometheus pod crashlooping
 
+**Table of Contents**
+
+[TOC]
+
 A Prometheus Kubernetes pod is crashlooping.
 
 ## Common symptoms

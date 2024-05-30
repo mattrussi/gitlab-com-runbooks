@@ -1,5 +1,9 @@
 # CustomersDot main troubleshoot documentation
 
+**Table of Contents**
+
+[TOC]
+
 ## Overview
 
 customers.gitlab.com is the site where GitLab customers can manage

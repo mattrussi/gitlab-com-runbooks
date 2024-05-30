@@ -1,5 +1,9 @@
 ## Runners Manager: Auto-scaling
 
+**Table of Contents**
+
+[TOC]
+
 ![](../img/auto_scaling_details.png)
 
 This graph can be found in

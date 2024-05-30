@@ -1,5 +1,9 @@
 # Node CPU alerts
 
+**Table of Contents**
+
+[TOC]
+
 ## HighCPU
 
 This indicates there may not be enough CPU on the node in order to operate.

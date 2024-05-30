@@ -1,5 +1,9 @@
 ## GKMS and Vault
 
+**Table of Contents**
+
+[TOC]
+
 At the time of this writing, the GKMS secrets are in the process of being
 migrated into Vault under the `chef/` KV mount. Both share the same process for
 certificate management.

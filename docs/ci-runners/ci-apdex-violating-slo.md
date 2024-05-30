@@ -1,5 +1,9 @@
 ## Runner Manager's queues violating the SLI of the ci-runners service
 
+**Table of Contents**
+
+[TOC]
+
 To Check the overall health of the runners:
 
 - Check the [CI-Runners standard SLI dashboard](https://dashboards.gitlab.net/d/ci-runners-main/ci-runners-overview?orgId=1&from=now-6h%2Fm&to=now%2Fm&var-PROMETHEUS_DS=Global&var-environment=gprd&var-stage=main) to check the impact of degradation

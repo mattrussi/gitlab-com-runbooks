@@ -1,5 +1,9 @@
 # Uploads
 
+**Table of Contents**
+
+[TOC]
+
 ## Intro
 
 Search keywords: attachments, files

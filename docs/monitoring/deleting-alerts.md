@@ -1,5 +1,9 @@
 # An impatient SRE's guide to deleting alerts
 
+**Table of Contents**
+
+[TOC]
+
 This memo documents an opinionated methodology for triaging and dealing with unactionable alerts and alert fatigue, with the goal of ultimately reducing the alert volume in order to improve the on-call experience.
 
 When a useless alert comes in, and you still have the mental capacity and energy to do so, don't ignore it. The next time you get dragged out of bed on a Sunday for an expiring SSL cert in a non-production environment, it's 🔨 time.

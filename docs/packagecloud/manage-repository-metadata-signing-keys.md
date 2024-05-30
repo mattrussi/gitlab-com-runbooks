@@ -1,5 +1,9 @@
 # GPG Keys for Repository Metadata Signing
 
+**Table of Contents**
+
+[TOC]
+
 [Packagecloud](https://packagecloud.io), the application that powers packages.gitlab.com, supports two different types of GPG signatures: **packages** and **repository metadata**.
 
 This document is concerned with **repository metadata signing** keys. For package signing, see [manage package signing keys](../packaging/manage-package-signing-keys.md).

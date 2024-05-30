@@ -1,5 +1,9 @@
 # Database dump of ops.gitlab.net
 
+**Table of Contents**
+
+[TOC]
+
 The database of ops.gitlab.net is being dumped partially for analytics purposes.
 This is done by means of CI schedules that dumps certain tables from the database
 host, then restores the dump into another database accessible by the Data team.

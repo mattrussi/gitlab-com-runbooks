@@ -1,5 +1,9 @@
 ## How to set a maintenance window to exlucde from SLA
 
+**Table of Contents**
+
+[TOC]
+
 With [this MR](https://gitlab.com/gitlab-com/runbooks/-/merge_requests/5887/diffs) to the metrics catalog, we can make sure that the SLA does not include maintenance events in SLA calculations.
 
 The Event should have a pre-approved Change Issue and followed the proper notification checklists.

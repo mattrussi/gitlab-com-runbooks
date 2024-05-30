@@ -1,5 +1,9 @@
 # Prometheus Checkpointing Slow
 
+**Table of Contents**
+
+[TOC]
+
 ## Symptoms
 
 Prometheus is taking a long time to checkpoint its unpersisted in-memory

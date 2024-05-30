@@ -1,5 +1,9 @@
 # Redis on Kubernetes
 
+**Table of Contents**
+
+[TOC]
+
 This documentation covers Redis-specific tools and techniques.
 
 For CPU profiling, packet captures, `pidstat` usage, and other general-purpose observability tools/techniques, see

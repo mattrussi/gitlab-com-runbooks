@@ -1,5 +1,9 @@
 # Advanced Search Disaster recovery
 
+**Table of Contents**
+
+[TOC]
+
 In case of a disaster that resulted in lost updates, you can use this code snippet to reindex affected projects. Please
 update the `TIMESTAMP` before running this snippet. Running this will increase the number of documents in the
 [initial indexing queue](https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-12h&orgId=1&to=now&viewPanel=315),

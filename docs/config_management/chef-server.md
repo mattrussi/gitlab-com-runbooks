@@ -1,5 +1,9 @@
 # Chef Server
 
+**Table of Contents**
+
+[TOC]
+
 The Chef server (cinc-01-inf-ops.c.gitlab-ops.internal) is hosted in the `gitlab-ops` GCP project. The server is a
 standalone server and runs the embedded PostgreSQL database service locally. This server runs [CINC Server](https://cinc.sh/start/server/) v14.
 

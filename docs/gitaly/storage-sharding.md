@@ -1,5 +1,9 @@
 # Managing GitLab Storage Shards (Gitaly)
 
+**Table of Contents**
+
+[TOC]
+
 ## Sharding Overview
 
 Sharding was introduced into GitLab in version 8.10 with modifications in 8.13.

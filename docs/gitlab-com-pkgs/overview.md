@@ -1,5 +1,9 @@
 ## GCS Bucket for GitLab.com Omnibus Packages
 
+**Table of Contents**
+
+[TOC]
+
 ### Overview
 
 To reduce our dependency on packages.gitlab.com, we sync all Omnibus packages to a bucket in GCP that can be used by [Deployer](https://ops.gitlab.net/gitlab-com/gl-infra/deployer) for Omnibus installations.

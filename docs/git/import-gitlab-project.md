@@ -1,5 +1,9 @@
 ## Custom import
 
+**Table of Contents**
+
+[TOC]
+
 Customers and potential ones may want to import a large project into GitLab.com. Some imports might need our support for various reasons. In such cases, a rake task can be used.
 
 ### Deprecation notice

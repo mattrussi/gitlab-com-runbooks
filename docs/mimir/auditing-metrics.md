@@ -1,5 +1,9 @@
 # Auditing Metrics
 
+**Table of Contents**
+
+[TOC]
+
 **Warning:** Running these commands can put unnecessary pressure on our metrics backend and should be used sparingly and with caution. You shouldn't be running these commands unless you really need to.
 
 [Mimirtool](https://grafana.com/docs/mimir/latest/manage/tools/mimirtool/#analyze) is a CLI tool that can be used to manage and gather information on Mimir, and which we can utilize to audit our metrics.

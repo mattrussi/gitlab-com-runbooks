@@ -1,5 +1,9 @@
 # PostgreSQL HA
 
+**Table of Contents**
+
+[TOC]
+
 This page has historically been about PostgreSQL HA with repmgr. These
 parts have been removed since we switched to Patroni. Still valid
 information has been retained.

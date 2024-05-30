@@ -1,5 +1,9 @@
 # Increased Error Rate
 
+**Table of Contents**
+
+[TOC]
+
 ## Symptoms
 
 - Message in prometheus-alerts *Increased Error Rate Across Fleet*

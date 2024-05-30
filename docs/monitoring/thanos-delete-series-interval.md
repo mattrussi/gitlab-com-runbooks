@@ -1,5 +1,9 @@
 # Deleting series over a given interval from thanos
 
+**Table of Contents**
+
+[TOC]
+
 It may happen that some bad data lands in prometheus and subsequently thanos.
 
 Since we rely heavily on monitoring data for all kinds of processes, including availability reporting, error budgets for stage groups, capacity planning, we may have an interest in purging that bad data.

@@ -1,5 +1,9 @@
 # When GitLab.com is down
 
+**Table of Contents**
+
+[TOC]
+
 When GitLab.com is down it may not be possible to open incidents, make configuration changes, or deploy changes.
 
 Below we will refer to:

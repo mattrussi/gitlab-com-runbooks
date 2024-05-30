@@ -1,5 +1,9 @@
 # Upgrades and Rollbacks of Application Code
 
+**Table of Contents**
+
+[TOC]
+
 # Overview
 
 Upgrades and rollbacks are normally handled by the [delivery team](ttps://about.gitlab.com/handbook/engineering/infrastructure/team/delivery/)

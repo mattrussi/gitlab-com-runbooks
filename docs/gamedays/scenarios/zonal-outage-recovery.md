@@ -1,5 +1,9 @@
 # Complete zonal failure recovery procedure
 
+**Table of Contents**
+
+[TOC]
+
 ## Experiment
 
 The steps for the experiment are included in the change_zonal_recovery [template](https://gitlab.com/gitlab-com/gl-infra/production/-/blob/master/.gitlab/issue_templates/change_zonal_recovery.md?ref_type=heads)

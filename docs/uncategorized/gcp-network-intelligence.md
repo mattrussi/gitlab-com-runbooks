@@ -1,5 +1,9 @@
 The GCP console has a useful set of dashboards they call Network Intelligence, that show details of networking performance and throughput within GCP that may otherwise be challenging to see (or, if we can gather the data ourselves, is easier to visualize here).
 
+**Table of Contents**
+
+[TOC]
+
 Some specific features that may be useful:
 
 ### Performance Dashboard

@@ -1,5 +1,9 @@
 # `release.gitlab.net`
 
+**Table of Contents**
+
+[TOC]
+
 The release environment is a single VM installation that is configured using our existing terraform and chef tooling.  It serves as a target environment for the latest self-managed omnibus release.  This environment will serve as the location where QA is run prior to a package being released to the public.
 
 Note that auto-deploy release candidates (RC's) will not be deployed to this environment, instead they are deployed to `preprod`.  Only self-managed omnibus releases will be installed on this environment.  Like auto-deploy, the deployment pipeline for the release environment is triggered from the [omnibus-gitlab] pipeline.

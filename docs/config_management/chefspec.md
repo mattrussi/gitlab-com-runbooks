@@ -1,5 +1,9 @@
 # Chefspec
 
+**Table of Contents**
+
+[TOC]
+
 We use chefspec for doing TDD with Chef
 
 ## Tests are taking too long to run

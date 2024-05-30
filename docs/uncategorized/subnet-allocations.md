@@ -1,5 +1,9 @@
 ## Summary
 
+**Table of Contents**
+
+[TOC]
+
 This document tracks the subnet allocation across multiple infrastructure
 projects related to GitLab.com. Any project that requires centralized monitoring
 or maintenance from ops runners should be configured to not overlap with the
