@@ -33,6 +33,9 @@ local options = validateReferenceArchitectureOptions(import 'gitlab-metrics-opti
       import 'saturation-monitoring/disk_space.libsonnet',
       import 'saturation-monitoring/go_goroutines.libsonnet',
       import 'saturation-monitoring/go_memory.libsonnet',
+      // Use of kube_container_cpu_requests is not useful with mixed-load deploys or where
+      // CPU requests has not been very carefully curated, as in GET hybrid deploys.
+      // That is better handled by watching node-group-level CPU saturation
       import 'saturation-monitoring/kube_container_cpu_limits.libsonnet',
       import 'saturation-monitoring/kube_container_memory.libsonnet',
       import 'saturation-monitoring/kube_container_rss.libsonnet',
