@@ -491,7 +491,7 @@ local patchReleaseStatusStatPanel =
             },
             Time: {
               aggregations: [
-                'min',
+                'max',
               ],
               operation: 'aggregate',
             },
@@ -504,7 +504,7 @@ local patchReleaseStatusStatPanel =
           fields: {},
           sort: [
             {
-              field: 'Time (min)',
+              field: 'Time (max)',
               desc: true,
             },
           ],
