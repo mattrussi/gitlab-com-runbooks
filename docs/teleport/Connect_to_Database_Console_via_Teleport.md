@@ -311,18 +311,33 @@ tsh db connect db-main-replica-gprd --db-user=console-ro --db-name=gitlabhq_prod
 
 ### `psql: error: SSL SYSCALL error: Undefined error: 0 ERROR: signal: segmentation fault`
 
-If you encounter the error, it is probably becuase you have `postgres` installed via `asdf`. To solve it:
+If you encounter the error, it's probably because you have `postgres` installed via [`asdf`](https://asdf-vm.com/) or [`mise`](https://github.com/jdx/mise). To solve it:
 
-1. Install `postgres` via homebrew, if not already installed: `brew install postgresql@14`
-1. Run `brew info postgresql@14` to find the `psql` install localtion in `bin` directory
-    1. The location would be someting like `/opt/homebrew/Cellar/postgresql@14/14.11_1/bin/psql`
-2. Run the `tsh db config --format=cmd db-customersdot-gstg` to get the full command
-3. Replace the `~/.asdf/shims/psql` path with the homebrew `/opt/homebrew/Cellar/postgresql@14/14.11_1/bin/psql` path
-4. The command will look something like:
+1. Install `postgres` via [homebrew](https://brew.sh), if not already installed:
 
-```bash
-/opt/homebrew/Cellar/postgresql@14/14.11_1/bin/psql "postgres://teleport-cloudsql%40gitlab-subscriptions-staging.iam@staging.teleport.gitlab.net:443/CustomersDot_stg?sslrootcert=/Users/yourusername/.tsh/keys/staging.teleport.gitlab.net/cas/staging.teleport.gitlab.net.pem&sslcert=/Users/yourusername/.tsh/keys/staging.teleport.gitlab.net/yourusername@gitlab.com-db/staging.teleport.gitlab.net/db-customersdot-gstg-x509.pem&sslkey=/Users/yourusername/.tsh/keys/staging.teleport.gitlab.net/yourusername@gitlab.com&sslmode=verify-full"
-```
+   ```bash
+   brew install postgresql@14
+   ```
+
+1. Run `brew --prefix` to obtain the path to the `psql` binary installed via `homebrew`:
+
+   ```bash
+   $(brew --prefix postgresql@14)/bin/psql
+   ```
+
+1. Run `tsh db config --format=cmd <database-name>` to get the full `tsh` command, for example:
+
+   ```bash
+   tsh db config --format=cmd db-customersdot-gstg
+
+   ~/.asdf/shims/psql "postgres://teleport-cloudsql%40gitlab-subscriptions-staging.iam@staging.teleport.gitlab.net..."
+   ```
+
+1. Replace the `~/.asdf/shims/psql` (or `~/.local/share/mise/installs/postgres/13.9/bin/psql` if using `mise`) path from the output of the full `tsh` command obtained in step `3.` above with the path to the `psql` binary installed via `homebrew`:
+
+   ```bash
+   $(brew --prefix postgresql@14)/bin/psql "postgres://teleport-cloudsql%40gitlab-subscriptions-staging.iam@staging.teleport.gitlab.net:443/CustomersDot_stg?sslrootcert=/Users/yourusername/.tsh/keys/staging.teleport.gitlab.net/cas/staging.teleport.gitlab.net.pem&sslcert=/Users/yourusername/.tsh/keys/staging.teleport.gitlab.net/yourusername@gitlab.com-db/staging.teleport.gitlab.net/db-customersdot-gstg-x509.pem&sslkey=/Users/yourusername/.tsh/keys/staging.teleport.gitlab.net/yourusername@gitlab.com&sslmode=verify-full"
+   ```
 
 ### `psql: error: sslmode value "verify-full" invalid when SSL support is not compiled in`
 
