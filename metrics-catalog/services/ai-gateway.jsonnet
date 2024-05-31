@@ -50,7 +50,12 @@ metricsCatalog.serviceDefinition(
         matches={ 'json.jsonPayload.project_id': 'gitlab-runway-production' }
       ),
     ],
-    trafficCessationAlertConfig={ regional_component: { region: { re: 'us-.*' } } },
+    // The traffic cessation config here has a `location=""` selector to
+    // avoid triggering this alert in Thanos. In thanos the `region` label is incorrect.
+    // The `location` label contains the correct value in Thanos. However, Mimir does not
+    // have this label.
+    // This can be removed in https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/3398
+    trafficCessationAlertConfig={ regional_component: { region: { re: 'us-.*' }, location: '' } },
   )
   // Custom AI Gateway SLIs
   {
