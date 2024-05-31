@@ -20,7 +20,7 @@ groups:
     labels:
       alert_type: cause
       pager: pagerduty
-      runbook: docs/kube/kubernetes.md#kubecontainerswaitinginerror
+      runbook: docs/kube/alerts/KubeContainersWaitingInError.md
       severity: s2
       team: sre_reliability
     expr: |

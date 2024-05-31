@@ -38,7 +38,7 @@ local rules = function(selector=defaultSelector) {
             severity: 's2',
             alert_type: 'cause',
             pager: 'pagerduty',
-            runbook: 'docs/kube/kubernetes.md#kubecontainerswaitinginerror',
+            runbook: 'docs/kube/alerts/KubeContainersWaitingInError.md',
           },
           annotations: {
             title: 'Containers for the `{{ $labels.type }}` service, `{{ $labels.stage }}` are unable to start.',
