@@ -406,6 +406,18 @@ renovate_bot:
       vault: access_tokens/${VAULT_SECRETS_PATH}/renovate/token@ci
 
 ################
+# Semantic release
+################
+
+semantic_release:
+  extends: .id-tokens
+  stage: release
+  secrets:
+    SEMANTIC_RELEASE_GITLAB_TOKEN:
+      file: false
+      vault: access_tokens/${VAULT_SECRETS_PATH}/semantic-release/token@ci
+
+################
 # Linting
 ################
 
