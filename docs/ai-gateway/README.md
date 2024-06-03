@@ -165,8 +165,14 @@ AI Gateway uses [capacity planning](https://about.gitlab.com/handbook/engineerin
 
 ### GCP Quotas
 
-Apart from our quota monitoring in our usual GCP projects, the AI Gateway relies on resources that live on the
-`unreview-poc-390200e5` project. Refer to
+Apart from our quota monitoring in our usual GCP projects, the AI Gateway relies on resources that live in the following projects:
+
+* `unreview-poc-390200e5`
+* `gitlab-ai-framework-dev`
+* `gitlab-ai-framework-stage`
+* `gitlab-ai-framework-prod`
+
+Refer to
 <https://gitlab-com.gitlab.io/gl-infra/tamland/saturation.html?highlight=code_suggestions#other-utilization-and-saturation-forecasting-non-horizontally-scalable-resources>
 for quota usage trends and projections.
 
