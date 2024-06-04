@@ -77,5 +77,5 @@
 
 # Related Links
 
-- [Related alerts](./)
+- [Related alerts](https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/patroni/alerts?ref_type=heads)
 - [PostgreSQL Backup Docs](../postgresql-backups-wale-walg.md)
