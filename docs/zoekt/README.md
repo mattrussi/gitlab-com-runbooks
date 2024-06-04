@@ -31,6 +31,20 @@ number of customers as part of this [epic](https://gitlab.com/groups/gitlab-org/
 You can prevent Gitlab from using Zoekt integration for searching by unchecking the checkbox `Enable exact code search` under the section `Exact code search configuration` found in the admin [settings](https://gitlab.com/admin/application_settings/advanced_search)(accessed by admins only) `Settings->Search`, but leave the indexing integration itself enabled.
 An example of when this is useful is during an incident where users are experiencing slow searches or Zoekt is unresponsive.
 
+#### Enabling/Disabling Zoekt search for specific namespaces
+
+When we rollout Zoekt search for SaaS customers, it is enabled by default. But if a customer wish to get it disabled we can run the following chatops command to disable the Zoekt search specifically for a namespace.
+
+```
+  /chatops run feature set --group=root-group-path disable_zoekt_search_for_saas true --production
+```
+
+To re-enable it again we can run the following chatops command
+
+```
+  /chatops run feature set --group=root-group-path disable_zoekt_search_for_saas false --production
+```
+
 #### Reallocating namespaces from one Zoekt node to another
 
 Zoekt has a `reallocation` task that runs on a [defined schedule for GitLab.com](https://gitlab.com/gitlab-org/gitlab/-/blob/master/ee/app/services/search/zoekt/scheduling_service.rb#L64). It detects nodes
