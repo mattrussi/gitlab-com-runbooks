@@ -1,5 +1,9 @@
 # PatroniLongRunningTransactionDetected
 
+**Table of Contents**
+
+[TOC]
+
 ## Overview
 
 This alert means that there are transactions older than 10 minutes running
@@ -12,14 +16,31 @@ This is important as long running transactions can prevent Postgres from running
 
 Long-running transactions are one of the main drivers for [`pg_txid_xmin_age`](pg_xid_xmin_age_alert.md), and can result in severe performance degradation if left unaddressed.
 
+The recipient of this alert should investigate what the long running transaction is, and whether it is going to
+cause performance problems. In most cases we are going to want to cancel the transaction.
+
 ## Services
 
-- [Patroni Service](https://ops.gitlab.net/gitlab-com/runbooks/blob/master/docs/patroni/)
+- [Patroni Service](../README.md)
+- Team that owns the service: [Production Engineering : Database Reliability](https://handbook.gitlab.com/handbook/engineering/infrastructure/core-platform/data_stores/database-reliability/)
+
+## Metrics
+
+- [Long Running Alerts Dashboard](https://dashboards.gitlab.net/d/alerts-long_running_transactions/alerts3a-long-running-transactions?orgId=1)
+- This alert fires when we measure one or more transactions with an age greater than 9 minutes, AND we have been in this state for 1 minute - which gives a total of 10 minutes that a transaction can be active before alerting
+- Under normal conditions this dashboard should show lists of transactions with ages less 1 minute. Occasionally, there will be transactions which have been running for longer, but very few shoud approach the threshold
+
+## Alert Behavior
+
+- This alert will clear once the long running transactions are no longer active. The alert should only be silenced during an open Change Reqeust
+- This alert should be fairly rare, and usually indicates that there is a query that is not behaving as we expect.
+- [Previous Incidents for alert](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/?sort=created_date&state=all&label_name%5B%5D=a%3APatroniLongRunningTransactionDetected)
 
 ## Severities
 
-- This alert is unlikely to be causing active customer issues, and is most likely an S4.
-- This alert could evolve into performance issues, however.
+- This alert is unlikely to be causing active customer issues, and is most likely an S4
+- However, this alert could evolve into performance issues for all of GitLab.com
+- Check the [Patroni SLI Overview Dashboard](https://dashboards.gitlab.net/d/patroni-main/patroni3a-overview?orgId=1) to determine whether we are already experiencing performance issues
 
 ## Verification
 
@@ -29,6 +50,10 @@ Long-running transactions are one of the main drivers for [`pg_txid_xmin_age`](p
 ## Recent changes
 
 - [Recent Patroni Service change issues](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/?sort=updated_desc&state=opened&or%5Blabel_name%5D%5B%5D=Service%3A%3APatroniCI&or%5Blabel_name%5D%5B%5D=Service%3A%3APatroni&or%5Blabel_name%5D%5B%5D=Service%3A%3APatroniRegistry&or%5Blabel_name%5D%5B%5D=Service%3A%3APatroniEmbedding&first_page_size=20)
+- [Recent Patroni Change Requests](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/?sort=created_date&state=closed&label_name%5B%5D=Service%3A%3APatroni&label_name%5B%5D=change)
+- This alert is likely to have been triggered by a recent deployment, rather than a database related change.
+- If there is a deployment causing the issue, roll back the change that was deployed
+- If a change request caused the problem, follow the rollback instructions in the Change Request.
 
 ## Troubleshooting
 
@@ -147,11 +172,12 @@ gitlabhq_production=# select pg_terminate_backend(<pid>);
  t
 ```
 
-## Example Incidents
+## Possible Resolutions
 
 - [2023-02-01: long postgres transaction](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/8339) was a long running transaction in a rails console session.
 - [2021-08-18: Long running transaction on database](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/5379) was expected behavior as a foreign key was being added.
 - [2023-10-21: Long Postgres transactions Vulnerabilities::MarkDroppedAsResolvedWorker](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/17011) was an application issue that warrented an InfraDev issue.
+- [Other incidents for this alert](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/?sort=created_date&state=all&label_name%5B%5D=a%3APatroniLongRunningTransactionDetected)
 
 ## Dependencies
 
@@ -160,11 +186,25 @@ gitlabhq_production=# select pg_terminate_backend(<pid>);
 
 # Escalation
 
-- How and when to escalate
--
+- If the recipient of this alert cann't determine the cause of the long running transaction and correct it using the troubleshooting steps above, it may be necessary to escalate
+- List of SME's and people who can help
+  - Alexander Sosna
+  - Biren Shah
+  - Rafael Henchen
+- Slack channels where help is likely to be found: `#g_infra_database_reliability`
+
+# Definitions
+
+- [Link to the definition of this alert for review and tuning](../../../libsonnet/alerts/patroni-cause-alerts.libsonnet)
+- The main parameter that we can tune is the amount of time we allow before alerting. It is currently set to 10 minutes. We can also exclude certain types of transactions from alerting
+- [Link to edit this playbook](https://gitlab.com/gitlab-com/runbooks/-/edit/master/docs/patroni/alerts/PatroniLongRunningTransactionsDetected.md?ref_type=heads)
+- [Update the template used to format this playbook](https://gitlab.com/gitlab-com/runbooks/-/edit/master/docs/template-alert-playbook.md?ref_type=heads)
 
 # Related Links
 
+- [Related alerts](https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/patroni/alerts?ref_type=heads)
+- [Previous Incidents involving this alert](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/?sort=created_date&state=all&search=PatroniLongRunningTransactionDetected&not%5Blabel_name%5D%5B%5D=Status%20Report)
 - [Wraparound status](../check_wraparound.md)
 - [Handling unhealthy patroni replica](../unhealthy_patroni_node_handling.md)
 - [Troubleshooting performance degredation](../performance-degradation-troubleshooting.md)
+- [Postgres Long Runniong Transaction](../postgres-long-running-transaction.md)
