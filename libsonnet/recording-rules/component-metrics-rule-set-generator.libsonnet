@@ -76,7 +76,7 @@ local generateErrorRatioConfidenceIntervalRules(burnRate, aggregationSet, sliDef
       burnRate,
       extraSelector=aggregationSet.selector + recordingRuleStaticLabels + extraSourceSelector,
       staticLabels=recordingRuleStaticLabels,
-      confidenceLevel=sliDefinition.useConfidenceLevelForSLIAlerts,
+      confidenceLevel=sliDefinition.getConfidenceLevel(),
     )
   else
     [];
@@ -88,7 +88,7 @@ local generateApdexRatioConfidenceIntervalRules(burnRate, aggregationSet, sliDef
       burnRate,
       extraSelector=aggregationSet.selector + recordingRuleStaticLabels + extraSourceSelector,
       staticLabels=recordingRuleStaticLabels,
-      confidenceLevel=sliDefinition.useConfidenceLevelForSLIAlerts,
+      confidenceLevel=sliDefinition.getConfidenceLevel(),
     )
   else
     [];

@@ -376,7 +376,7 @@ local multiburnRateAlertsDashboard(
     selectorHash=selectorHash
   );
 
-  local statusDescriptionPanel = statusDescription.apdexStatusDescriptionPanel('SLO Analysis', selectorHash, aggregationSet=aggregationSet);
+  local statusDescriptionPanel = statusDescription.apdexStatusDescriptionPanel('SLO Analysis', selectorHash, aggregationSet=aggregationSet, sli=null);
 
   dashboardWithTemplates.addPanels(
     layout.columnGrid([

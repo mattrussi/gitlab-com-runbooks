@@ -83,6 +83,7 @@ local genericApdexPanel(
 
 local apdexPanel(
   title,
+  sli,  // SLI can be null if this panel is not being used for an SLI
   aggregationSet,
   selectorHash,
   description=null,
@@ -117,7 +118,6 @@ local apdexPanel(
         legendFormat=legendFormat + ' avg',
       )
     )
-    .addSeriesOverride(seriesOverrides.goldenMetric(legendFormat))
     .addSeriesOverride(seriesOverrides.averageCaseSeries(legendFormat + ' avg', { fillBelowTo: legendFormat }))
   else
     panel;
@@ -140,7 +140,42 @@ local apdexPanel(
   else
     panelWithAverage;
 
-  panelWithLastWeek;
+  local confidenceIntervalLevel =
+    if !expectMultipleSeries && sli != null && sli.usesConfidenceLevelForSLIAlerts() then
+      sli.getConfidenceLevel()
+    else
+      null;
+
+  // Add a confidence interval SLI if its enabled for the SLI AND
+  // We aggregation set supports confidence level recording rules
+  // at 5m (which is what we display SLIs at)
+  local confidenceSLI =
+    if confidenceIntervalLevel != null then
+      aggregationSet.getApdexRatioConfidenceIntervalMetricForBurnRate('5m')
+    else
+      null;
+
+  local panelWithConfidenceIndicator = if confidenceSLI != null then
+    local confidenceSignalSeriesName = 'Apdex SLI (upper %s confidence boundary)' % [confidenceIntervalLevel];
+    panelWithLastWeek.addTarget(
+      promQuery.target(
+        sliPromQL.apdexConfidenceQuery(confidenceIntervalLevel, aggregationSet, null, selectorHashWithExtras, '$__interval', worstCase=false),
+        legendFormat=confidenceSignalSeriesName,
+      )
+    )
+    // If there is a confidence SLI, we use that as the golden signal
+    .addSeriesOverride(seriesOverrides.goldenMetric(confidenceSignalSeriesName))
+    .addSeriesOverride({
+      alias: legendFormat,
+      color: '#082e69',
+      lines: true,
+    })
+  else
+    // If there is no confidence SLI, we use the main (non-confidence) signal as the golden signal
+    panelWithLastWeek.addSeriesOverride(seriesOverrides.goldenMetric(legendFormat));
+
+
+  panelWithConfidenceIndicator;
 
 
 {

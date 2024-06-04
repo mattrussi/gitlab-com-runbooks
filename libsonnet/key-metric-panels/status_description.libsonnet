@@ -7,95 +7,127 @@ local selectors = import 'promql/selectors.libsonnet';
 local objects = import 'utils/objects.libsonnet';
 local strings = import 'utils/strings.libsonnet';
 
+/* --------------------------------------------
+ * Values are bitmapped, 0000, each bit indicates a degrades burn-rate signal
+ * Bit 0: 5m
+ * Bit 1: 1h
+ * Bit 2: 30m
+ * Bit 3: 6h
+ */
+
 local descriptionMappings = [
-  /* 0 */
+  /* 0: 0000 */
   {
     text: 'Healthy',
     color: 'black',
   },
-  /* 1 */
+  /* 1: 0001 */
   {
-    text: 'Warning 🔥',
+    text: 'Warning: 1h deteriorating',
     color: 'orange',
   },
-  /* 2 */
+  /* 2: 0010 */
   {
-    text: 'Warning 🔥',
+    text: 'Warning: 1h recovering',
     color: 'orange',
   },
-  /* 3 */
+  /* 3: 0011 */
   {
-    text: 'Degraded 🔥',
+    text: 'Degraded: 1h degraded',
     color: 'red',
   },
-  /* 4 */
+  /* 4: 0100 */
   {
-    text: 'Warning 🥵',
+    text: 'Warning: 6h deteriorating',
     color: 'orange',
   },
-  /* 5 */
+  /* 5: 0101 */
   {
-    text: 'Warning 🔥🥵',
+    text: 'Warning: 6h deteriorating, 1h deteriorating',
     color: 'orange',
   },
-  /* 6 */
+  /* 6: 0110 */
   {
-    text: 'Warning 🔥🥵',
+    text: 'Warning: 6h deteriorating, 1h recovering',
     color: 'orange',
   },
-  /* 7 */
+  /* 7: 0111 */
   {
-    text: 'Degraded 🔥🥵',
+    text: 'Degraded: 6h deteriorating, 1h degraded',
     color: 'red',
   },
-  /* 8 */
+  /* 8: 1000 */
   {
-    text: 'Warning 🥵',
+    text: 'Warning: 6h recovering',
     color: 'orange',
   },
-  /* 9 */
+  /* 9: 1001 */
   {
-    text: 'Warning 🔥🥵',
+    text: 'Warning: 6h recovering, 1h deteriorating',
     color: 'orange',
   },
-  /* 10 */
+  /* 10: 1010 */
   {
-    text: 'Warning 🔥🥵',
+    text: 'Warning: 6h recovering, 1h recovering',
     color: 'orange',
   },
-  /* 11 */
+  /* 11: 1011 */
   {
-    text: 'Degraded 🔥🥵',
+    text: 'Degraded: 6h recovering, 1h degraded',
     color: 'red',
   },
-  /* 12 */
+  /* 12: 1100 */
   {
-    text: 'Degraded 🥵',
+    text: 'Degraded: 6h degraded',
     color: 'red',
   },
-  /* 13 */
+  /* 13: 1101 */
   {
-    text: 'Degraded 🔥🥵',
+    text: 'Degraded: 6h degraded, 1h deteriorating',
     color: 'red',
   },
-  /* 14 */
+  /* 14: 1110 */
   {
-    text: 'Degraded 🔥🥵',
+    text: 'Degraded: 6h degraded, 1h recovering',
     color: 'red',
   },
-  /* 15 */
+  /* 15: 1111 */
   {
-    text: 'Degraded 🔥🥵',
+    text: 'Degraded: 6h degraded, 1h degraded',
     color: 'red',
   },
 ];
 
-local apdexStatusQuery(selectorHash, type, aggregationSet, fixedThreshold) =
-  local metric1h = aggregationSet.getApdexRatioMetricForBurnRate('1h', required=true);
-  local metric5m = aggregationSet.getApdexRatioMetricForBurnRate('5m', required=true);
-  local metric6h = aggregationSet.getApdexRatioMetricForBurnRate('6h', required=true);
-  local metric30m = aggregationSet.getApdexRatioMetricForBurnRate('30m', required=true);
+local getApdexMetric(aggregationSet, sli, duration, selectorHash) =
+  local confidenceIntervalLevel =
+    if sli != null && sli.usesConfidenceLevelForSLIAlerts() then
+      sli.getConfidenceLevel()
+    else
+      null;
+
+  local confidenceSelector =
+    if confidenceIntervalLevel != null then
+      aggregationSet.confidenceSelector(confidenceIntervalLevel)
+    else
+      {};
+
+  local metric =
+    if confidenceIntervalLevel != null then
+      aggregationSet.getApdexRatioConfidenceIntervalMetricForBurnRate(duration, required=true)
+    else
+      aggregationSet.getApdexRatioMetricForBurnRate(duration, required=true);
+
+  '%(metric)s{%(selector)s}' % {
+    metric: metric,
+    selector: selectors.serializeHash(selectorHash + aggregationSet.selector + confidenceSelector),
+  };
+
+local apdexStatusQuery(selectorHash, type, aggregationSet, sli, fixedThreshold) =
   local allSelectors = selectorHash + aggregationSet.selector;
+  local expr1h = getApdexMetric(aggregationSet, sli, '1h', selectorHash);
+  local expr5m = getApdexMetric(aggregationSet, sli, '5m', selectorHash);
+  local expr6h = getApdexMetric(aggregationSet, sli, '6h', selectorHash);
+  local expr30m = getApdexMetric(aggregationSet, sli, '30m', selectorHash);
 
   local sloExpression = if fixedThreshold == null then
     'on(tier, type, __tenant_id__) group_left() (1 - (%(burnrateFactor)g * (1 - slo:min:events:gitlab_service_apdex:ratio{%(slaSelector)s})))'
@@ -112,52 +144,76 @@ local apdexStatusQuery(selectorHash, type, aggregationSet, fixedThreshold) =
   |||
     sum(
       label_replace(
-        vector(0) and on() (%(metric1h)s{%(selector)s}),
+        vector(0) and on() (%(expr1h)s),
         "period", "na", "", ""
       )
       or
       label_replace(
-        vector(1) and on () (%(metric5m)s{%(selector)s} < %(sloExpr1h)s),
+        vector(1) and on () (%(expr5m)s < %(sloExpr1h)s),
         "period", "5m", "", ""
       )
       or
       label_replace(
-        vector(2) and on () (%(metric1h)s{%(selector)s} < %(sloExpr1h)s),
+        vector(2) and on () (%(expr1h)s < %(sloExpr1h)s),
         "period", "1h", "", ""
       )
       or
       label_replace(
-        vector(4) and on () (%(metric30m)s{%(selector)s} < %(sloExpr6h)s),
+        vector(4) and on () (%(expr30m)s < %(sloExpr6h)s),
         "period", "30m", "", ""
       )
       or
       label_replace(
-        vector(8) and on () (%(metric6h)s{%(selector)s} < %(sloExpr6h)s),
+        vector(8) and on () (%(expr6h)s < %(sloExpr6h)s),
         "period", "6h", "", ""
       )
     )
   ||| % {
-    selector: selectors.serializeHash(allSelectors),
-    metric1h: metric1h,
-    metric5m: metric5m,
-    metric6h: metric6h,
-    metric30m: metric30m,
+    expr1h: expr1h,
+    expr5m: expr5m,
+    expr6h: expr6h,
+    expr30m: expr30m,
     sloExpr1h: strings.chomp(sloExpr1h),
     sloExpr6h: strings.chomp(sloExpr6h),
   };
 
-local errorRateStatusQuery(selectorHash, type, aggregationSet, fixedThreshold) =
-  local metric1h = aggregationSet.getErrorRatioMetricForBurnRate('1h', required=true);
-  local metric5m = aggregationSet.getErrorRatioMetricForBurnRate('5m', required=true);
-  local metric6h = aggregationSet.getErrorRatioMetricForBurnRate('6h', required=true);
-  local metric30m = aggregationSet.getErrorRatioMetricForBurnRate('30m', required=true);
+local getErrorMetric(aggregationSet, sli, duration, selectorHash) =
+  local confidenceIntervalLevel =
+    if sli != null && sli.usesConfidenceLevelForSLIAlerts() then
+      sli.getConfidenceLevel()
+    else
+      null;
+
+  local confidenceSelector =
+    if confidenceIntervalLevel != null then
+      aggregationSet.confidenceSelector(confidenceIntervalLevel)
+    else
+      {};
+
+  local metric =
+    if confidenceIntervalLevel != null then
+      aggregationSet.getErrorRatioConfidenceIntervalMetricForBurnRate(duration, required=true)
+    else
+      aggregationSet.getErrorRatioMetricForBurnRate(duration, required=true);
+
+  '%(metric)s{%(selector)s}' % {
+    metric: metric,
+    selector: selectors.serializeHash(selectorHash + aggregationSet.selector + confidenceSelector),
+  };
+
+local errorRateStatusQuery(selectorHash, type, aggregationSet, sli, fixedThreshold) =
   local allSelectors = selectorHash + aggregationSet.selector;
+  local expr1h = getErrorMetric(aggregationSet, sli, '1h', selectorHash);
+  local expr5m = getErrorMetric(aggregationSet, sli, '5m', selectorHash);
+  local expr6h = getErrorMetric(aggregationSet, sli, '6h', selectorHash);
+  local expr30m = getErrorMetric(aggregationSet, sli, '30m', selectorHash);
 
   local sloExpression =
     if fixedThreshold == null then
       'on(tier, type, __tenant_id__) group_left() (%(burnrateFactor)s * slo:max:events:gitlab_service_errors:ratio{%(slaSelector)s})'
     else
       '(%(burnrateFactor)g * %(fixedSlo)g)';
+
   local formatConfig = std.prune({
     slaSelector: selectors.serializeHash(sliPromql.sloLabels(allSelectors)),
     fixedSlo: fixedThreshold,
@@ -166,38 +222,37 @@ local errorRateStatusQuery(selectorHash, type, aggregationSet, fixedThreshold) =
   local sloExpr6h = sloExpression % formatConfig { burnrateFactor: multiburnFactors.errorBudgetFactorFor('6h') };
 
   |||
-    sum (
+    sum(
       label_replace(
-        vector(0) and on() (%(metric1h)s{%(selector)s}),
+        vector(0) and on() (%(expr1h)s),
         "period", "na", "", ""
       )
       or
       label_replace(
-        vector(1) and on() (%(metric5m)s{%(selector)s} > %(sloExpr1h)s),
+        vector(1) and on () (%(expr5m)s > %(sloExpr1h)s),
         "period", "5m", "", ""
       )
       or
       label_replace(
-        vector(2) and on() (%(metric1h)s{%(selector)s} > %(sloExpr1h)s),
+        vector(2) and on () (%(expr1h)s > %(sloExpr1h)s),
         "period", "1h", "", ""
       )
       or
       label_replace(
-        vector(4) and on() (%(metric30m)s{%(selector)s} > %(sloExpr6h)s),
+        vector(4) and on () (%(expr30m)s > %(sloExpr6h)s),
         "period", "30m", "", ""
       )
       or
       label_replace(
-        vector(8) and on() (%(metric6h)s{%(selector)s} > %(sloExpr6h)s),
+        vector(8) and on () (%(expr6h)s > %(sloExpr6h)s),
         "period", "6h", "", ""
       )
     )
   ||| % {
-    selector: selectors.serializeHash(allSelectors),
-    metric1h: metric1h,
-    metric5m: metric5m,
-    metric6h: metric6h,
-    metric30m: metric30m,
+    expr1h: expr1h,
+    expr5m: expr5m,
+    expr6h: expr6h,
+    expr30m: expr30m,
     sloExpr1h: strings.chomp(sloExpr1h),
     sloExpr6h: strings.chomp(sloExpr6h),
   };
@@ -237,12 +292,18 @@ local statusDescriptionPanel(legendFormat, query) =
   );
 
 {
-  apdexStatusDescriptionPanel(name, selectorHash, aggregationSet, fixedThreshold=null)::
-    local query = apdexStatusQuery(selectorHash, selectorHash.type, aggregationSet=aggregationSet, fixedThreshold=fixedThreshold);
+  apdexStatusQuery(selectorHash, aggregationSet, sli=null, fixedThreshold=null)::
+    apdexStatusQuery(selectorHash, selectorHash.type, aggregationSet=aggregationSet, sli=sli, fixedThreshold=fixedThreshold),
+
+  apdexStatusDescriptionPanel(name, selectorHash, aggregationSet, sli=null, fixedThreshold=null)::
+    local query = apdexStatusQuery(selectorHash, selectorHash.type, aggregationSet=aggregationSet, sli=sli, fixedThreshold=fixedThreshold);
     statusDescriptionPanel(legendFormat=name + ' | Latency/Apdex', query=query),
 
-  errorRateStatusDescriptionPanel(name, selectorHash, aggregationSet, fixedThreshold=null)::
-    local query = errorRateStatusQuery(selectorHash, selectorHash.type, aggregationSet=aggregationSet, fixedThreshold=fixedThreshold);
+  errorRateStatusQuery(selectorHash, aggregationSet, sli=null, fixedThreshold=null)::
+    errorRateStatusQuery(selectorHash, selectorHash.type, aggregationSet=aggregationSet, sli=sli, fixedThreshold=fixedThreshold),
+
+  errorRateStatusDescriptionPanel(name, selectorHash, aggregationSet, sli=null, fixedThreshold=null)::
+    local query = errorRateStatusQuery(selectorHash, selectorHash.type, aggregationSet=aggregationSet, sli=sli, fixedThreshold=fixedThreshold);
     statusDescriptionPanel(legendFormat=name + ' | Errors', query=query),
 
 }
