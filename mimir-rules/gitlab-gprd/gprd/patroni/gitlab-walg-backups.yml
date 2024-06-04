@@ -51,7 +51,7 @@ groups:
       grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       description: WAL-G backup-push creating full backups and archiving them to GCS might be not working. Please follow the runbook
         to review the problem.
-      runbook: docs/patroni/postgresql-backups-wale-walg.md
+      runbook: docs/patroni/alerts/walgBaseBackupDelayed.md
       title: Last successful WAL-G basebackup was seen {{ $value }} hours ago for env {{ $labels.environment }}.
   - alert: WALGBaseBackupFailed
     expr: gitlab_job_failed{resource="walg-basebackup", type!~".+logical.+", env="gprd"} == 1
