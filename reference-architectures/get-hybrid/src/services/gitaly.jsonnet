@@ -13,6 +13,10 @@ metricsCatalog.serviceDefinition({
     apdexScore: 0.999,
     errorRatio: 0.9995,
   },
+
+  // A 98% confidence interval will be used for all SLIs on this service
+  useConfidenceLevelForSLIAlerts: '98%',
+
   serviceLevelIndicators: {
     goserver: {
       userImpacting: true,

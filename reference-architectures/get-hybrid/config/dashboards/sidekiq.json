@@ -1240,10 +1240,14 @@
           "zindex": -3
         },
         {
-          "alias": "email_receiver error ratio",
+          "alias": "Error SLI (lower 98% confidence boundary)",
           "color": "#E7D551",
-          "fillBelowTo": "email_receiver error ratio avg",
           "zindex": 3
+        },
+        {
+          "alias": "email_receiver error ratio",
+          "color": "#082e69",
+          "lines": true
         }
       ],
       "spaceLength": 10,
@@ -1290,6 +1294,14 @@
           "intervalFactor": 1,
           "legendFormat": "last week",
           "refId": "E"
+        },
+        {
+          "expr": "clamp_max(\n  avg_over_time(gitlab_component_errors:confidence:ratio_5m{component=\"email_receiver\",confidence=\"98%\",type=\"sidekiq\"}[$__interval])\n,\n  1\n)\n",
+          "format": "time_series",
+          "interval": "1m",
+          "intervalFactor": 1,
+          "legendFormat": "Error SLI (lower 98% confidence boundary)",
+          "refId": "F"
         }
       ],
       "title": "email_receiver SLI Error Ratio",
@@ -1511,7 +1523,7 @@
       "pluginVersion": "7",
       "targets": [
         {
-          "expr": "sum(\n  label_replace(\n    vector(0) and on() (gitlab_component_errors:ratio_1h{component=\"email_receiver\",type=\"sidekiq\"}),\n    \"period\", \"na\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(1) and on () (gitlab_component_errors:ratio_5m{component=\"email_receiver\",type=\"sidekiq\"} \u003e on(tier, type, __tenant_id__) group_left() (14.4 * slo:max:events:gitlab_service_errors:ratio{component=\"email_receiver\",type=\"sidekiq\"})),\n    \"period\", \"5m\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(2) and on () (gitlab_component_errors:ratio_1h{component=\"email_receiver\",type=\"sidekiq\"} \u003e on(tier, type, __tenant_id__) group_left() (14.4 * slo:max:events:gitlab_service_errors:ratio{component=\"email_receiver\",type=\"sidekiq\"})),\n    \"period\", \"1h\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(4) and on () (gitlab_component_errors:ratio_30m{component=\"email_receiver\",type=\"sidekiq\"} \u003e on(tier, type, __tenant_id__) group_left() (6 * slo:max:events:gitlab_service_errors:ratio{component=\"email_receiver\",type=\"sidekiq\"})),\n    \"period\", \"30m\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(8) and on () (gitlab_component_errors:ratio_6h{component=\"email_receiver\",type=\"sidekiq\"} \u003e on(tier, type, __tenant_id__) group_left() (6 * slo:max:events:gitlab_service_errors:ratio{component=\"email_receiver\",type=\"sidekiq\"})),\n    \"period\", \"6h\", \"\", \"\"\n  )\n)\n",
+          "expr": "sum(\n  label_replace(\n    vector(0) and on() (gitlab_component_errors:confidence:ratio_1h{component=\"email_receiver\",confidence=\"98%\",type=\"sidekiq\"}),\n    \"period\", \"na\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(1) and on () (gitlab_component_errors:confidence:ratio_5m{component=\"email_receiver\",confidence=\"98%\",type=\"sidekiq\"} \u003e on(tier, type, __tenant_id__) group_left() (14.4 * slo:max:events:gitlab_service_errors:ratio{component=\"email_receiver\",type=\"sidekiq\"})),\n    \"period\", \"5m\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(2) and on () (gitlab_component_errors:confidence:ratio_1h{component=\"email_receiver\",confidence=\"98%\",type=\"sidekiq\"} \u003e on(tier, type, __tenant_id__) group_left() (14.4 * slo:max:events:gitlab_service_errors:ratio{component=\"email_receiver\",type=\"sidekiq\"})),\n    \"period\", \"1h\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(4) and on () (gitlab_component_errors:confidence:ratio_30m{component=\"email_receiver\",confidence=\"98%\",type=\"sidekiq\"} \u003e on(tier, type, __tenant_id__) group_left() (6 * slo:max:events:gitlab_service_errors:ratio{component=\"email_receiver\",type=\"sidekiq\"})),\n    \"period\", \"30m\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(8) and on () (gitlab_component_errors:confidence:ratio_6h{component=\"email_receiver\",confidence=\"98%\",type=\"sidekiq\"} \u003e on(tier, type, __tenant_id__) group_left() (6 * slo:max:events:gitlab_service_errors:ratio{component=\"email_receiver\",type=\"sidekiq\"})),\n    \"period\", \"6h\", \"\", \"\"\n  )\n)\n",
           "format": "time_series",
           "instant": true,
           "interval": "1m",
@@ -1742,9 +1754,14 @@
           "zindex": -3
         },
         {
-          "alias": "shard_catchall apdex",
+          "alias": "Apdex SLI (upper 98% confidence boundary)",
           "color": "#E7D551",
           "zindex": 3
+        },
+        {
+          "alias": "shard_catchall apdex",
+          "color": "#082e69",
+          "lines": true
         }
       ],
       "spaceLength": 10,
@@ -1791,6 +1808,14 @@
           "intervalFactor": 1,
           "legendFormat": "last week",
           "refId": "E"
+        },
+        {
+          "expr": "avg_over_time(gitlab_component_apdex:confidence:ratio_5m{component=\"shard_catchall\",confidence=\"98%\",type=\"sidekiq\"}[$__interval])\n",
+          "format": "time_series",
+          "interval": "1m",
+          "intervalFactor": 1,
+          "legendFormat": "Apdex SLI (upper 98% confidence boundary)",
+          "refId": "F"
         }
       ],
       "title": "shard_catchall SLI Apdex",
@@ -2012,7 +2037,7 @@
       "pluginVersion": "7",
       "targets": [
         {
-          "expr": "sum(\n  label_replace(\n    vector(0) and on() (gitlab_component_apdex:ratio_1h{component=\"shard_catchall\",type=\"sidekiq\"}),\n    \"period\", \"na\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(1) and on () (gitlab_component_apdex:ratio_5m{component=\"shard_catchall\",type=\"sidekiq\"} \u003c on(tier, type, __tenant_id__) group_left() (1 - (14.4 * (1 - slo:min:events:gitlab_service_apdex:ratio{component=\"shard_catchall\",type=\"sidekiq\"})))),\n    \"period\", \"5m\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(2) and on () (gitlab_component_apdex:ratio_1h{component=\"shard_catchall\",type=\"sidekiq\"} \u003c on(tier, type, __tenant_id__) group_left() (1 - (14.4 * (1 - slo:min:events:gitlab_service_apdex:ratio{component=\"shard_catchall\",type=\"sidekiq\"})))),\n    \"period\", \"1h\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(4) and on () (gitlab_component_apdex:ratio_30m{component=\"shard_catchall\",type=\"sidekiq\"} \u003c on(tier, type, __tenant_id__) group_left() (1 - (6 * (1 - slo:min:events:gitlab_service_apdex:ratio{component=\"shard_catchall\",type=\"sidekiq\"})))),\n    \"period\", \"30m\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(8) and on () (gitlab_component_apdex:ratio_6h{component=\"shard_catchall\",type=\"sidekiq\"} \u003c on(tier, type, __tenant_id__) group_left() (1 - (6 * (1 - slo:min:events:gitlab_service_apdex:ratio{component=\"shard_catchall\",type=\"sidekiq\"})))),\n    \"period\", \"6h\", \"\", \"\"\n  )\n)\n",
+          "expr": "sum(\n  label_replace(\n    vector(0) and on() (gitlab_component_apdex:confidence:ratio_1h{component=\"shard_catchall\",confidence=\"98%\",type=\"sidekiq\"}),\n    \"period\", \"na\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(1) and on () (gitlab_component_apdex:confidence:ratio_5m{component=\"shard_catchall\",confidence=\"98%\",type=\"sidekiq\"} \u003c on(tier, type, __tenant_id__) group_left() (1 - (14.4 * (1 - slo:min:events:gitlab_service_apdex:ratio{component=\"shard_catchall\",type=\"sidekiq\"})))),\n    \"period\", \"5m\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(2) and on () (gitlab_component_apdex:confidence:ratio_1h{component=\"shard_catchall\",confidence=\"98%\",type=\"sidekiq\"} \u003c on(tier, type, __tenant_id__) group_left() (1 - (14.4 * (1 - slo:min:events:gitlab_service_apdex:ratio{component=\"shard_catchall\",type=\"sidekiq\"})))),\n    \"period\", \"1h\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(4) and on () (gitlab_component_apdex:confidence:ratio_30m{component=\"shard_catchall\",confidence=\"98%\",type=\"sidekiq\"} \u003c on(tier, type, __tenant_id__) group_left() (1 - (6 * (1 - slo:min:events:gitlab_service_apdex:ratio{component=\"shard_catchall\",type=\"sidekiq\"})))),\n    \"period\", \"30m\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(8) and on () (gitlab_component_apdex:confidence:ratio_6h{component=\"shard_catchall\",confidence=\"98%\",type=\"sidekiq\"} \u003c on(tier, type, __tenant_id__) group_left() (1 - (6 * (1 - slo:min:events:gitlab_service_apdex:ratio{component=\"shard_catchall\",type=\"sidekiq\"})))),\n    \"period\", \"6h\", \"\", \"\"\n  )\n)\n",
           "format": "time_series",
           "instant": true,
           "interval": "1m",
@@ -2121,10 +2146,14 @@
           "zindex": -3
         },
         {
-          "alias": "shard_catchall error ratio",
+          "alias": "Error SLI (lower 98% confidence boundary)",
           "color": "#E7D551",
-          "fillBelowTo": "shard_catchall error ratio avg",
           "zindex": 3
+        },
+        {
+          "alias": "shard_catchall error ratio",
+          "color": "#082e69",
+          "lines": true
         }
       ],
       "spaceLength": 10,
@@ -2171,6 +2200,14 @@
           "intervalFactor": 1,
           "legendFormat": "last week",
           "refId": "E"
+        },
+        {
+          "expr": "clamp_max(\n  avg_over_time(gitlab_component_errors:confidence:ratio_5m{component=\"shard_catchall\",confidence=\"98%\",type=\"sidekiq\"}[$__interval])\n,\n  1\n)\n",
+          "format": "time_series",
+          "interval": "1m",
+          "intervalFactor": 1,
+          "legendFormat": "Error SLI (lower 98% confidence boundary)",
+          "refId": "F"
         }
       ],
       "title": "shard_catchall SLI Error Ratio",
@@ -2392,7 +2429,7 @@
       "pluginVersion": "7",
       "targets": [
         {
-          "expr": "sum(\n  label_replace(\n    vector(0) and on() (gitlab_component_errors:ratio_1h{component=\"shard_catchall\",type=\"sidekiq\"}),\n    \"period\", \"na\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(1) and on () (gitlab_component_errors:ratio_5m{component=\"shard_catchall\",type=\"sidekiq\"} \u003e on(tier, type, __tenant_id__) group_left() (14.4 * slo:max:events:gitlab_service_errors:ratio{component=\"shard_catchall\",type=\"sidekiq\"})),\n    \"period\", \"5m\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(2) and on () (gitlab_component_errors:ratio_1h{component=\"shard_catchall\",type=\"sidekiq\"} \u003e on(tier, type, __tenant_id__) group_left() (14.4 * slo:max:events:gitlab_service_errors:ratio{component=\"shard_catchall\",type=\"sidekiq\"})),\n    \"period\", \"1h\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(4) and on () (gitlab_component_errors:ratio_30m{component=\"shard_catchall\",type=\"sidekiq\"} \u003e on(tier, type, __tenant_id__) group_left() (6 * slo:max:events:gitlab_service_errors:ratio{component=\"shard_catchall\",type=\"sidekiq\"})),\n    \"period\", \"30m\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(8) and on () (gitlab_component_errors:ratio_6h{component=\"shard_catchall\",type=\"sidekiq\"} \u003e on(tier, type, __tenant_id__) group_left() (6 * slo:max:events:gitlab_service_errors:ratio{component=\"shard_catchall\",type=\"sidekiq\"})),\n    \"period\", \"6h\", \"\", \"\"\n  )\n)\n",
+          "expr": "sum(\n  label_replace(\n    vector(0) and on() (gitlab_component_errors:confidence:ratio_1h{component=\"shard_catchall\",confidence=\"98%\",type=\"sidekiq\"}),\n    \"period\", \"na\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(1) and on () (gitlab_component_errors:confidence:ratio_5m{component=\"shard_catchall\",confidence=\"98%\",type=\"sidekiq\"} \u003e on(tier, type, __tenant_id__) group_left() (14.4 * slo:max:events:gitlab_service_errors:ratio{component=\"shard_catchall\",type=\"sidekiq\"})),\n    \"period\", \"5m\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(2) and on () (gitlab_component_errors:confidence:ratio_1h{component=\"shard_catchall\",confidence=\"98%\",type=\"sidekiq\"} \u003e on(tier, type, __tenant_id__) group_left() (14.4 * slo:max:events:gitlab_service_errors:ratio{component=\"shard_catchall\",type=\"sidekiq\"})),\n    \"period\", \"1h\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(4) and on () (gitlab_component_errors:confidence:ratio_30m{component=\"shard_catchall\",confidence=\"98%\",type=\"sidekiq\"} \u003e on(tier, type, __tenant_id__) group_left() (6 * slo:max:events:gitlab_service_errors:ratio{component=\"shard_catchall\",type=\"sidekiq\"})),\n    \"period\", \"30m\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(8) and on () (gitlab_component_errors:confidence:ratio_6h{component=\"shard_catchall\",confidence=\"98%\",type=\"sidekiq\"} \u003e on(tier, type, __tenant_id__) group_left() (6 * slo:max:events:gitlab_service_errors:ratio{component=\"shard_catchall\",type=\"sidekiq\"})),\n    \"period\", \"6h\", \"\", \"\"\n  )\n)\n",
           "format": "time_series",
           "instant": true,
           "interval": "1m",

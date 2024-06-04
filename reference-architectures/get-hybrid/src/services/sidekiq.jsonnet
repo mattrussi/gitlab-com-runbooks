@@ -67,6 +67,10 @@ metricsCatalog.serviceDefinition({
       ],
     },
   },
+
+  // A 98% confidence interval will be used for all SLIs on this service
+  useConfidenceLevelForSLIAlerts: '98%',
+
   serviceLevelIndicators: {
     shard_catchall: {
       userImpacting: true,
