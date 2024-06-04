@@ -45,6 +45,7 @@
 
 - Check `/var/log/wal-g/wal-g_backup_push.log` and/or `/var/log/wal-g/wal-g_backup_push.log.1` on patroni nodes. Unfortunately WAL-G logs are not sent to Kibana at this time.
 - This will give you information on what is happening. A finished backup will look something like this:
+
     ```
     <13>Sep  2 00:00:01 backup.sh: INFO: 2021/09/02 08:20:54.669692 Finished writing part 14245.
     <13>Sep  2 00:00:01 backup.sh: INFO: 2021/09/02 08:20:56.337685 Wrote backup with name base_000000050005E38E000000A1
@@ -56,7 +57,6 @@
 - [Another process using CPU causing the backup to slow down](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/16403)
 - [base_backup started on a node that later became unavailable](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/17710)
 - [The generating cluster isn't in production, but still alerting](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/15918)
-- 
 
 ## Dependencies
 
@@ -69,7 +69,6 @@
   - Biren Shah
   - Rafael Henchen
 - Slack channels where help is likely to be found: `#g_infra_database_reliability`
-
 
 # Definitions
 
