@@ -18,6 +18,7 @@
 
 * [Provisioning Redis Cluster](../redis/provisioning-redis-cluster.md)
 * [A survival guide for SREs to working with Redis at GitLab](../redis/redis-survival-guide-for-sres.md)
+* [Scaling Redis Cluster](../redis/scaling-redis-cluster.md)
 <!-- END_MARKER -->
 
 ## Summary

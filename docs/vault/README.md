@@ -53,6 +53,7 @@
 * [../product_analytics/clickhouse-backup-restore.md](../product_analytics/clickhouse-backup-restore.md)
 * [Provisioning Redis Cluster](../redis/provisioning-redis-cluster.md)
 * [../redis/redis-functional-partitioning.md](../redis/redis-functional-partitioning.md)
+* [Scaling Redis Cluster](../redis/scaling-redis-cluster.md)
 * [Container Registry CDN](../registry/cdn.md)
 * [Teleport Administration](../teleport/teleport_admin.md)
 * [Aptly](../uncategorized/aptly.md)

@@ -95,6 +95,7 @@
 * [Provisioning Redis Cluster](../redis/provisioning-redis-cluster.md)
 * [Redis-Sidekiq catchall workloads reduction](../redis/redis-sidekiq-catchall-workloads-reduction.md)
 * [../redis/redis.md](../redis/redis.md)
+* [Scaling Redis Cluster](../redis/scaling-redis-cluster.md)
 * [Container Registry database post-deployment migrations](../registry/db-post-deployment-migrations.md)
 * [../registry/gitlab-registry.md](../registry/gitlab-registry.md)
 * [Managing Sentry in Kubernetes](../sentry/sentry.md)
