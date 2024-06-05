@@ -1,7 +1,6 @@
 groups:
   - name: kubernetes.rules
     rules:
-
       - alert: GitLabZonalComponentVersionsOutOfSync
         expr: |-
           sum by (image, env) (
