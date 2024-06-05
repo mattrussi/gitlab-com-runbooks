@@ -67,9 +67,6 @@
 # Escalation
 
 - > How and when to escalate
-- List of SME's and people who can help
-  - > @person1
-  - > @person2
 - > Slack channels where help is likely to be found:
 
 # Definitions

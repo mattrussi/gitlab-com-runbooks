@@ -187,10 +187,6 @@ gitlabhq_production=# select pg_terminate_backend(<pid>);
 # Escalation
 
 - If the recipient of this alert cann't determine the cause of the long running transaction and correct it using the troubleshooting steps above, it may be necessary to escalate
-- List of SME's and people who can help
-  - Alexander Sosna
-  - Biren Shah
-  - Rafael Henchen
 - Slack channels where help is likely to be found: `#g_infra_database_reliability`
 
 # Definitions
