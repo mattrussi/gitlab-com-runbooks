@@ -35,6 +35,7 @@ local serviceDefaults = {
   capacityPlanning: {},  // Consumed by Tamland
   tenants: config.defaultMimirTenants,
   defaultPrometheusDatasource: config.defaultPrometheusDatasource,
+  useConfidenceLevelForSLIAlerts: null,  // Use confidence interval default values across all SLIs in a service
 };
 
 local shardLevelMonitoringEnabled(serviceDefinition) =
@@ -105,6 +106,8 @@ local validateAndApplyServiceDefaults(service) =
     {
       regional: serviceWithDefaults.regional,
       type: serviceWithDefaults.type,
+
+      useConfidenceLevelForSLIAlerts: serviceWithDefaults.useConfidenceLevelForSLIAlerts,
     }
     +
     (

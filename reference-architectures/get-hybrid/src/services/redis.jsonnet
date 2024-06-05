@@ -1,5 +1,5 @@
-local redisArchetype = import 'service-archetypes/redis-rails-archetype.libsonnet';
 local redisHelpers = import '../../../metrics-catalog/services/lib/redis-helpers.libsonnet';
+local redisArchetype = import 'service-archetypes/redis-rails-archetype.libsonnet';
 local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local histogramApdex = metricsCatalog.histogramApdex;
 local rateMetric = metricsCatalog.rateMetric;
@@ -24,6 +24,10 @@ metricsCatalog.serviceDefinition(
     monitoringThresholds+: {
       apdexScore: 0.9995,
     },
+
+    // A 98% confidence interval will be used for all SLIs on this service
+    useConfidenceLevelForSLIAlerts: '98%',
+
     serviceLevelIndicators+: {
       redis: {
         userImpacting: true,

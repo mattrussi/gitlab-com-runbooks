@@ -16,6 +16,9 @@ metricsCatalog.serviceDefinition({
     errorRatio: 0.9995,  // 99.95% of Praefect requests should succeed, over multiple window periods
   },
 
+  // A 98% confidence interval will be used for all SLIs on this service
+  useConfidenceLevelForSLIAlerts: '98%',
+
   serviceLevelIndicators: {
     proxy: {
       userImpacting: true,

@@ -1,9 +1,9 @@
-local registryArchetype = import 'service-archetypes/registry-archetype.libsonnet';
 local registryCustomRouteSLIs = import './lib/registry-custom-route-slis.libsonnet';
+local registryArchetype = import 'service-archetypes/registry-archetype.libsonnet';
 local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local rateMetric = metricsCatalog.rateMetric;
 local kubeLabelSelectors = metricsCatalog.kubeLabelSelectors;
-local kubeResourceName='gitlab-registry';
+local kubeResourceName = 'gitlab-registry';
 
 local customRouteSLIs = registryCustomRouteSLIs.customApdexRouteConfig;
 
@@ -22,5 +22,8 @@ metricsCatalog.serviceDefinition(
       ),
     },
     kubeResourceName=kubeResourceName,
-  )
+  ) {
+    // A 98% confidence interval will be used for all SLIs on this service
+    useConfidenceLevelForSLIAlerts: '98%',
+  }
 )

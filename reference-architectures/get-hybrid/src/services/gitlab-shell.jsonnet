@@ -41,6 +41,10 @@ metricsCatalog.serviceDefinition({
       ],
     },
   },
+
+  // A 98% confidence interval will be used for all SLIs on this service
+  useConfidenceLevelForSLIAlerts: '98%',
+
   serviceLevelIndicators: {
     // TODO: use a better metric than GPRC calls in future.
     // see https://gitlab.com/gitlab-com/runbooks/-/issues/88 for more details.
@@ -102,11 +106,6 @@ metricsCatalog.serviceDefinition({
         counter='gitlab_sli:shell_sshd_sessions:total',
         selector={},
       ),
-
-      // Experimentally evaluate this SLI with
-      // confidence levels, to assess how well this approach
-      // works
-      useConfidenceLevelForSLIAlerts: '98%',
 
       significantLabels: [],
 

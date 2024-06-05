@@ -44,6 +44,10 @@ metricsCatalog.serviceDefinition({
       ],
     },
   },
+
+  // A 98% confidence interval will be used for all SLIs on this service
+  useConfidenceLevelForSLIAlerts: '98%',
+
   serviceLevelIndicators:
     {
       puma: {
@@ -96,8 +100,6 @@ metricsCatalog.serviceDefinition({
           Excludes API requests health, readiness and liveness requests. Some known slow requests,
           such as HTTP uploads, are excluded from the apdex score.
         |||,
-
-        useConfidenceLevelForSLIAlerts: '98%',
 
         apdex: histogramApdex(
           histogram='gitlab_workhorse_http_request_duration_seconds_bucket',
