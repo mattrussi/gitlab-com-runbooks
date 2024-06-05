@@ -17,7 +17,7 @@ To avoid this we can do it via the API with some effort. Adjust as necessary if 
 1. Create a throwaway GCS bucket, preferably in a sandbox GCP project.
 1. Create a temporary service account and key.
    - This would need the `signBlob` permission and permissions to upload to the bucket. If in doubt, just give the service account admin permissions to the bucket.
-1. Download the key and assign it to the `GOOGLE_APPLICATION_CREDENTIALS` env var: `export GOOGLE_APPLICATION_CREDENTIALS=$(cat key.json)`
+1. Download the key and assign the path to it to the `GOOGLE_APPLICATION_CREDENTIALS` env var: `export GOOGLE_APPLICATION_CREDENTIALS=$(readlink -f key.json)`
 1. Run ./export_projects_gcs.py --gitlab-group-id <group/namespace_id> --bucket-name <gcs_bucket_name>
    - You may need to make minor modifications to the script if you're targeting a specific user instead of a group (e.g. by using `https://gitlab.com/api/v4/users/{user_id}/projects?page={page}&per_page={per_page}` as the URL).
 1. Copy exports from GCS to where SIRT needs these (often they provide a Drive folder).
