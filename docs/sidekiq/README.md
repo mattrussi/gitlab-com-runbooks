@@ -51,7 +51,7 @@
 * [Disabling a Sidekiq queue](disabling-a-queue.md)
 * [Disabling Sidekiq workers](disabling-a-worker.md)
 * [Pull mirror overdue queue is too large](large-pull-mirror-queue.md)
-* [[`SidekiqQueueTooLarge`](../../rules/sidekiq-queues.yml)](large-sidekiq-queue.md)
+* [[`SidekiqQueueTooLarge`](../../legacy-prometheus-rules/sidekiq-queues.yml)](large-sidekiq-queue.md)
 * [Sidekiq queue migration](queue-migration.md)
 * [sharding.md](sharding.md)
 * [Poking around at sidekiq's running state](sidekiq-inspection.md)

@@ -18,7 +18,7 @@ An application-side connection pool saturation might happen in the following occ
 
 ## Symptoms
 
-The [`ContainerRegistryDBConnPoolSaturationTooHigh`](https://gitlab.com/gitlab-com/runbooks/-/blob/master/rules/registry-db.yml) alert will be triggered if the connection pool saturation remains above the configured threshold for longer than the configured period. If the saturation approaches 100%, this alert will likely be followed by API SLI alerts due to slow or error API responses.
+The [`ContainerRegistryDBConnPoolSaturationTooHigh`](https://gitlab.com/gitlab-com/runbooks/-/blob/master/legacy-prometheus-rules/registry-db.yml) alert will be triggered if the connection pool saturation remains above the configured threshold for longer than the configured period. If the saturation approaches 100%, this alert will likely be followed by API SLI alerts due to slow or error API responses.
 
 ## Troubleshooting
 

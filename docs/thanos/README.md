@@ -63,7 +63,7 @@
 * [../redis/redis.md](../redis/redis.md)
 * [Container Registry Database Index Bloat](../registry/db-index-bloat.md)
 * [Disabling Sidekiq workers](../sidekiq/disabling-a-worker.md)
-* [[`SidekiqQueueTooLarge`](../../rules/sidekiq-queues.yml)](../sidekiq/large-sidekiq-queue.md)
+* [[`SidekiqQueueTooLarge`](../../legacy-prometheus-rules/sidekiq-queues.yml)](../sidekiq/large-sidekiq-queue.md)
 * [../sidekiq/sharding.md](../sidekiq/sharding.md)
 * [GET Monitoring Setup](../staging-ref/get-monitoring-setup.md)
 * [Thanos Architecture Overview](architecture.md)

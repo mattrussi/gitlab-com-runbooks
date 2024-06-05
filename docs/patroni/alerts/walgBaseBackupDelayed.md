@@ -72,7 +72,7 @@
 
 # Definitions
 
-- [Alert Definition](https://gitlab.com/gitlab-com/runbooks/-/blob/master/rules/gitlab-walg-backups.yml#L42-53)
+- [Alert Definition](https://gitlab.com/gitlab-com/runbooks/-/blob/master/legacy-prometheus-rules/gitlab-walg-backups.yml#L42-53)
 - [Update the template used to format this playbook](https://gitlab.com/gitlab-com/runbooks/-/edit/master/docs/template-alert-playbook.md?ref_type=heads)
 
 # Related Links

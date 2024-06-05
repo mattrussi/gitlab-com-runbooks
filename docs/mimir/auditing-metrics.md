@@ -37,7 +37,7 @@ In the following example we will use Mimirtool to identify which metrics are, an
 1. Copy the rules from the Runbooks repository to our newly created directory.
 
    ```bash
-   find "${RUNBOOKS_DIR}/mimir-rules" "${RUNBOOKS_DIR}/rules" -type f \( -name "*.yml" -o -name "*.yaml" \) | xargs -I {} cp {} "${RULES_DIR}/"
+   find "${RUNBOOKS_DIR}/mimir-rules" "${RUNBOOKS_DIR}/legacy-prometheus-rules" -type f \( -name "*.yml" -o -name "*.yaml" \) | xargs -I {} cp {} "${RULES_DIR}/"
    ```
 
 1. You may need to merge files with duplicate namespaces due to this [issue](https://github.com/grafana/mimir/issues/6748). Here is an example with two files that are both using the `alerts` namespace.

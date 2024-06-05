@@ -56,7 +56,7 @@
 * [Gitlab.com on Kubernetes](../onboarding/gitlab.com_on_k8s.md)
 * [Diagnosis with Kibana](../onboarding/kibana-diagnosis.md)
 * [A survival guide for SREs to working with Redis at GitLab](../redis/redis-survival-guide-for-sres.md)
-* [[`SidekiqQueueTooLarge`](../../rules/sidekiq-queues.yml)](../sidekiq/large-sidekiq-queue.md)
+* [[`SidekiqQueueTooLarge`](../../legacy-prometheus-rules/sidekiq-queues.yml)](../sidekiq/large-sidekiq-queue.md)
 * [../sidekiq/sharding.md](../sidekiq/sharding.md)
 * [Life of a Git Request](../tutorials/overview_life_of_a_git_request.md)
 * [Life of a Web Request](../tutorials/overview_life_of_a_web_request.md)

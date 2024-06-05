@@ -129,7 +129,7 @@ We utilize Prometheus blackbox to regularly check endpoints and send us alerts
 when those endpoints go down as well as validate and alert us at a threshold
 when those certificates are going to expire.
 
-See [SSL certificate expiration rules](../../rules/ssl-certificate-expirations.yml).
+See [SSL certificate expiration rules](../../legacy-prometheus-rules/ssl-certificate-expirations.yml).
 
 #### Modify list of hosts with SSL certificate
 

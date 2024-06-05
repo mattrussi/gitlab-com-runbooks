@@ -11,3 +11,5 @@
 docs/ci-runners/* @gitlab-com/runner-group/saas @gitlab-org/reliability
 docs/zoekt/* @gitlab-org/search-team/migration-maintainers @gitlab-org/reliability
 docs/elastic/* @gitlab-org/search-team/migration-maintainers @gitlab-org/reliability
+legacy-prometheus-rules/* @gitlab-org/scalability/observability
+legacy-prometheus-rules-jsonnet/* @gitlab-org/scalability/observability
