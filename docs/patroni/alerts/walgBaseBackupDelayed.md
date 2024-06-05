@@ -64,10 +64,6 @@
 
 # Escalation
 
-- List of SME's and people who can help
-  - Alexander Sosna
-  - Biren Shah
-  - Rafael Henchen
 - Slack channels where help is likely to be found: `#g_infra_database_reliability`
 
 # Definitions
