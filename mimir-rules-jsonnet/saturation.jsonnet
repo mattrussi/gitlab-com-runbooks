@@ -24,7 +24,7 @@ local resourcesByService = std.foldl(
   {},
 );
 
-local filesForSeparateSelector(service, selector, _extraArgs) =
+local filesForSeparateSelector(service, selector, _extraArgs, tenant) =
   local serviceResources = resourcesByService[service.type];
   local extraSourceSelector = selector { type: service.type };
   {
@@ -42,6 +42,7 @@ local filesForSeparateSelector(service, selector, _extraArgs) =
           saturationResources=serviceResources,
           extraSelector=extraSourceSelector,
           evaluation='both',  // Drop this when migration to mimir is complete: https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/2815
+          tenant=tenant,
         ),
     }),
     'saturation-metadata': std.manifestYamlDoc({

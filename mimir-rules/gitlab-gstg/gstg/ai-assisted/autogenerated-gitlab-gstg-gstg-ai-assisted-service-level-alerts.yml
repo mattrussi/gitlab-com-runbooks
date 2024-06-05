@@ -7,7 +7,6 @@ groups:
   - alert: AiAssistedServiceRailsRequestApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The rails_request SLI of the ai-assisted service (`{{ $labels.stage }}`
         stage) has an apdex violating SLO
       description: |
@@ -19,6 +18,7 @@ groups:
       grafana_dashboard_id: ai-assisted-main/ai-assisted-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-assisted-main/ai-assisted-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gstg
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "495984175"
       grafana_variables: environment,stage
@@ -53,7 +53,6 @@ groups:
   - alert: AiAssistedServiceRailsRequestApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The rails_request SLI of the ai-assisted service (`{{ $labels.stage }}`
         stage) has an apdex violating SLO
       description: |
@@ -65,6 +64,7 @@ groups:
       grafana_dashboard_id: ai-assisted-main/ai-assisted-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-assisted-main/ai-assisted-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gstg
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "495984175"
       grafana_variables: environment,stage
@@ -99,7 +99,6 @@ groups:
   - alert: AiAssistedServiceRailsRequestErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The rails_request SLI of the ai-assisted service (`{{ $labels.stage }}`
         stage) has an error rate violating SLO
       description: |
@@ -111,6 +110,7 @@ groups:
       grafana_dashboard_id: ai-assisted-main/ai-assisted-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-assisted-main/ai-assisted-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gstg
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "387946920"
       grafana_variables: environment,stage
@@ -149,7 +149,6 @@ groups:
   - alert: AiAssistedServiceRailsRequestErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The rails_request SLI of the ai-assisted service (`{{ $labels.stage }}`
         stage) has an error rate violating SLO
       description: |
@@ -161,6 +160,7 @@ groups:
       grafana_dashboard_id: ai-assisted-main/ai-assisted-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-assisted-main/ai-assisted-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gstg
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "387946920"
       grafana_variables: environment,stage
@@ -199,7 +199,6 @@ groups:
   - alert: AiAssistedServiceRailsRequestTrafficCessation
     for: 5m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The rails_request SLI of the ai-assisted service (`{{ $labels.stage }}`
         stage) has not received any traffic in the past 30m
       description: |
@@ -211,6 +210,7 @@ groups:
       grafana_dashboard_id: ai-assisted-main/ai-assisted-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-assisted-main/ai-assisted-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gstg
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "538903447"
       grafana_variables: environment,stage
@@ -236,7 +236,6 @@ groups:
   - alert: AiAssistedServiceRailsRequestTrafficAbsent
     for: 30m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The rails_request SLI of the ai-assisted service (`{{ $labels.stage }}`
         stage) has not reported any traffic in the past 30m
       description: |
@@ -250,6 +249,7 @@ groups:
       grafana_dashboard_id: ai-assisted-main/ai-assisted-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-assisted-main/ai-assisted-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gstg
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "538903447"
       grafana_variables: environment,stage
@@ -275,7 +275,6 @@ groups:
   - alert: AiAssistedServiceWorkhorseApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The workhorse SLI of the ai-assisted service (`{{ $labels.stage }}` stage)
         has an apdex violating SLO
       description: |
@@ -285,6 +284,7 @@ groups:
       grafana_dashboard_id: ai-assisted-main/ai-assisted-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-assisted-main/ai-assisted-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gstg
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2586818196"
       grafana_variables: environment,stage
@@ -326,7 +326,6 @@ groups:
   - alert: AiAssistedServiceWorkhorseApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The workhorse SLI of the ai-assisted service (`{{ $labels.stage }}` stage)
         has an apdex violating SLO
       description: |
@@ -336,6 +335,7 @@ groups:
       grafana_dashboard_id: ai-assisted-main/ai-assisted-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-assisted-main/ai-assisted-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gstg
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2586818196"
       grafana_variables: environment,stage
@@ -377,7 +377,6 @@ groups:
   - alert: AiAssistedServiceWorkhorseErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The workhorse SLI of the ai-assisted service (`{{ $labels.stage }}` stage)
         has an error rate violating SLO
       description: |
@@ -387,6 +386,7 @@ groups:
       grafana_dashboard_id: ai-assisted-main/ai-assisted-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-assisted-main/ai-assisted-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gstg
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2047984749"
       grafana_variables: environment,stage
@@ -425,7 +425,6 @@ groups:
   - alert: AiAssistedServiceWorkhorseErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The workhorse SLI of the ai-assisted service (`{{ $labels.stage }}` stage)
         has an error rate violating SLO
       description: |
@@ -435,6 +434,7 @@ groups:
       grafana_dashboard_id: ai-assisted-main/ai-assisted-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-assisted-main/ai-assisted-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gstg
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2047984749"
       grafana_variables: environment,stage
@@ -473,7 +473,6 @@ groups:
   - alert: AiAssistedServiceWorkhorseTrafficCessation
     for: 5m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The workhorse SLI of the ai-assisted service (`{{ $labels.stage }}` stage)
         has not received any traffic in the past 30m
       description: |
@@ -483,6 +482,7 @@ groups:
       grafana_dashboard_id: ai-assisted-main/ai-assisted-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-assisted-main/ai-assisted-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gstg
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "831392945"
       grafana_variables: environment,stage
@@ -508,7 +508,6 @@ groups:
   - alert: AiAssistedServiceWorkhorseTrafficAbsent
     for: 30m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The workhorse SLI of the ai-assisted service (`{{ $labels.stage }}` stage)
         has not reported any traffic in the past 30m
       description: |
@@ -520,6 +519,7 @@ groups:
       grafana_dashboard_id: ai-assisted-main/ai-assisted-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-assisted-main/ai-assisted-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gstg
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "831392945"
       grafana_variables: environment,stage

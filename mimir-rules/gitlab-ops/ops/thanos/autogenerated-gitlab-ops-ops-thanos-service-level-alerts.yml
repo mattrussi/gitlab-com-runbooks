@@ -7,7 +7,6 @@ groups:
   - alert: ThanosServiceRuleEvaluationApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The rule_evaluation SLI of the thanos service (`{{ $labels.stage }}`
         stage) has an apdex violating SLO
       description: |
@@ -23,6 +22,7 @@ groups:
       grafana_dashboard_id: thanos-main/thanos-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/thanos-main/thanos-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2667244350"
       grafana_variables: environment,stage
@@ -58,7 +58,6 @@ groups:
   - alert: ThanosServiceRuleEvaluationApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The rule_evaluation SLI of the thanos service (`{{ $labels.stage }}`
         stage) has an apdex violating SLO
       description: |
@@ -74,6 +73,7 @@ groups:
       grafana_dashboard_id: thanos-main/thanos-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/thanos-main/thanos-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2667244350"
       grafana_variables: environment,stage
@@ -109,7 +109,6 @@ groups:
   - alert: ThanosServiceRuleEvaluationErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The rule_evaluation SLI of the thanos service (`{{ $labels.stage }}`
         stage) has an error rate violating SLO
       description: |
@@ -125,6 +124,7 @@ groups:
       grafana_dashboard_id: thanos-main/thanos-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/thanos-main/thanos-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3727131931"
       grafana_variables: environment,stage
@@ -166,7 +166,6 @@ groups:
   - alert: ThanosServiceRuleEvaluationErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The rule_evaluation SLI of the thanos service (`{{ $labels.stage }}`
         stage) has an error rate violating SLO
       description: |
@@ -182,6 +181,7 @@ groups:
       grafana_dashboard_id: thanos-main/thanos-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/thanos-main/thanos-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3727131931"
       grafana_variables: environment,stage
@@ -223,7 +223,6 @@ groups:
   - alert: ThanosServiceRuleEvaluationTrafficCessation
     for: 5m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The rule_evaluation SLI of the thanos service (`{{ $labels.stage }}`
         stage) has not received any traffic in the past 30m
       description: |
@@ -239,6 +238,7 @@ groups:
       grafana_dashboard_id: thanos-main/thanos-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/thanos-main/thanos-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2621394178"
       grafana_variables: environment,stage
@@ -265,7 +265,6 @@ groups:
   - alert: ThanosServiceRuleEvaluationTrafficAbsent
     for: 30m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The rule_evaluation SLI of the thanos service (`{{ $labels.stage }}`
         stage) has not reported any traffic in the past 30m
       description: |
@@ -283,6 +282,7 @@ groups:
       grafana_dashboard_id: thanos-main/thanos-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/thanos-main/thanos-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2621394178"
       grafana_variables: environment,stage
@@ -309,7 +309,6 @@ groups:
   - alert: ThanosServiceThanosCompactorErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The thanos_compactor SLI of the thanos service (`{{ $labels.stage }}`
         stage) has an error rate violating SLO
       description: |
@@ -319,6 +318,7 @@ groups:
       grafana_dashboard_id: thanos-main/thanos-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/thanos-main/thanos-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3147757590"
       grafana_variables: environment,stage
@@ -358,7 +358,6 @@ groups:
   - alert: ThanosServiceThanosCompactorErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The thanos_compactor SLI of the thanos service (`{{ $labels.stage }}`
         stage) has an error rate violating SLO
       description: |
@@ -368,6 +367,7 @@ groups:
       grafana_dashboard_id: thanos-main/thanos-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/thanos-main/thanos-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3147757590"
       grafana_variables: environment,stage
@@ -407,7 +407,6 @@ groups:
   - alert: ThanosServiceThanosMemcachedApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The thanos_memcached SLI of the thanos service (`{{ $labels.stage }}`
         stage) has an apdex violating SLO
       description: |
@@ -417,6 +416,7 @@ groups:
       grafana_dashboard_id: thanos-main/thanos-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/thanos-main/thanos-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1018147051"
       grafana_variables: environment,stage
@@ -459,7 +459,6 @@ groups:
   - alert: ThanosServiceThanosMemcachedApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The thanos_memcached SLI of the thanos service (`{{ $labels.stage }}`
         stage) has an apdex violating SLO
       description: |
@@ -469,6 +468,7 @@ groups:
       grafana_dashboard_id: thanos-main/thanos-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/thanos-main/thanos-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1018147051"
       grafana_variables: environment,stage
@@ -511,7 +511,6 @@ groups:
   - alert: ThanosServiceThanosMemcachedErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The thanos_memcached SLI of the thanos service (`{{ $labels.stage }}`
         stage) has an error rate violating SLO
       description: |
@@ -521,6 +520,7 @@ groups:
       grafana_dashboard_id: thanos-main/thanos-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/thanos-main/thanos-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "362238449"
       grafana_variables: environment,stage
@@ -560,7 +560,6 @@ groups:
   - alert: ThanosServiceThanosMemcachedErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The thanos_memcached SLI of the thanos service (`{{ $labels.stage }}`
         stage) has an error rate violating SLO
       description: |
@@ -570,6 +569,7 @@ groups:
       grafana_dashboard_id: thanos-main/thanos-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/thanos-main/thanos-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "362238449"
       grafana_variables: environment,stage
@@ -609,7 +609,6 @@ groups:
   - alert: ThanosServiceThanosQueryApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The thanos_query SLI of the thanos service (`{{ $labels.stage }}` stage)
         has an apdex violating SLO
       description: |
@@ -619,6 +618,7 @@ groups:
       grafana_dashboard_id: thanos-main/thanos-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/thanos-main/thanos-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1281064991"
       grafana_variables: environment,stage
@@ -661,7 +661,6 @@ groups:
   - alert: ThanosServiceThanosQueryApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The thanos_query SLI of the thanos service (`{{ $labels.stage }}` stage)
         has an apdex violating SLO
       description: |
@@ -671,6 +670,7 @@ groups:
       grafana_dashboard_id: thanos-main/thanos-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/thanos-main/thanos-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1281064991"
       grafana_variables: environment,stage
@@ -713,7 +713,6 @@ groups:
   - alert: ThanosServiceThanosQueryErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The thanos_query SLI of the thanos service (`{{ $labels.stage }}` stage)
         has an error rate violating SLO
       description: |
@@ -723,6 +722,7 @@ groups:
       grafana_dashboard_id: thanos-main/thanos-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/thanos-main/thanos-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "4004985658"
       grafana_variables: environment,stage
@@ -762,7 +762,6 @@ groups:
   - alert: ThanosServiceThanosQueryErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The thanos_query SLI of the thanos service (`{{ $labels.stage }}` stage)
         has an error rate violating SLO
       description: |
@@ -772,6 +771,7 @@ groups:
       grafana_dashboard_id: thanos-main/thanos-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/thanos-main/thanos-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "4004985658"
       grafana_variables: environment,stage
@@ -811,7 +811,6 @@ groups:
   - alert: ThanosServiceThanosQueryTrafficCessation
     for: 5m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The thanos_query SLI of the thanos service (`{{ $labels.stage }}` stage)
         has not received any traffic in the past 30m
       description: |
@@ -821,6 +820,7 @@ groups:
       grafana_dashboard_id: thanos-main/thanos-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/thanos-main/thanos-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "431223751"
       grafana_variables: environment,stage
@@ -847,7 +847,6 @@ groups:
   - alert: ThanosServiceThanosQueryTrafficAbsent
     for: 30m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The thanos_query SLI of the thanos service (`{{ $labels.stage }}` stage)
         has not reported any traffic in the past 30m
       description: |
@@ -859,6 +858,7 @@ groups:
       grafana_dashboard_id: thanos-main/thanos-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/thanos-main/thanos-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "431223751"
       grafana_variables: environment,stage
@@ -885,7 +885,6 @@ groups:
   - alert: ThanosServiceThanosQueryFrontendApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The thanos_query_frontend SLI of the thanos service (`{{ $labels.stage
         }}` stage) has an apdex violating SLO
       description: |
@@ -895,6 +894,7 @@ groups:
       grafana_dashboard_id: thanos-main/thanos-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/thanos-main/thanos-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3015468996"
       grafana_variables: environment,stage
@@ -937,7 +937,6 @@ groups:
   - alert: ThanosServiceThanosQueryFrontendApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The thanos_query_frontend SLI of the thanos service (`{{ $labels.stage
         }}` stage) has an apdex violating SLO
       description: |
@@ -947,6 +946,7 @@ groups:
       grafana_dashboard_id: thanos-main/thanos-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/thanos-main/thanos-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3015468996"
       grafana_variables: environment,stage
@@ -989,7 +989,6 @@ groups:
   - alert: ThanosServiceThanosQueryFrontendErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The thanos_query_frontend SLI of the thanos service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
@@ -999,6 +998,7 @@ groups:
       grafana_dashboard_id: thanos-main/thanos-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/thanos-main/thanos-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1994646344"
       grafana_variables: environment,stage
@@ -1038,7 +1038,6 @@ groups:
   - alert: ThanosServiceThanosQueryFrontendErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The thanos_query_frontend SLI of the thanos service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
@@ -1048,6 +1047,7 @@ groups:
       grafana_dashboard_id: thanos-main/thanos-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/thanos-main/thanos-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1994646344"
       grafana_variables: environment,stage
@@ -1087,7 +1087,6 @@ groups:
   - alert: ThanosServiceThanosQueryFrontendTrafficCessation
     for: 5m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The thanos_query_frontend SLI of the thanos service (`{{ $labels.stage
         }}` stage) has not received any traffic in the past 30m
       description: |
@@ -1097,6 +1096,7 @@ groups:
       grafana_dashboard_id: thanos-main/thanos-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/thanos-main/thanos-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1877464727"
       grafana_variables: environment,stage
@@ -1123,7 +1123,6 @@ groups:
   - alert: ThanosServiceThanosQueryFrontendTrafficAbsent
     for: 30m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The thanos_query_frontend SLI of the thanos service (`{{ $labels.stage
         }}` stage) has not reported any traffic in the past 30m
       description: |
@@ -1135,6 +1134,7 @@ groups:
       grafana_dashboard_id: thanos-main/thanos-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/thanos-main/thanos-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1877464727"
       grafana_variables: environment,stage
@@ -1161,7 +1161,6 @@ groups:
   - alert: ThanosServiceThanosRuleAlertSenderErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The thanos_rule_alert_sender SLI of the thanos service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
@@ -1171,6 +1170,7 @@ groups:
       grafana_dashboard_id: thanos-main/thanos-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/thanos-main/thanos-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3718148749"
       grafana_variables: environment,stage
@@ -1210,7 +1210,6 @@ groups:
   - alert: ThanosServiceThanosRuleAlertSenderErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The thanos_rule_alert_sender SLI of the thanos service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
@@ -1220,6 +1219,7 @@ groups:
       grafana_dashboard_id: thanos-main/thanos-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/thanos-main/thanos-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3718148749"
       grafana_variables: environment,stage
@@ -1259,7 +1259,6 @@ groups:
   - alert: ThanosServiceThanosRuleAlertSenderTrafficCessation
     for: 5m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The thanos_rule_alert_sender SLI of the thanos service (`{{ $labels.stage
         }}` stage) has not received any traffic in the past 30m
       description: |
@@ -1269,6 +1268,7 @@ groups:
       grafana_dashboard_id: thanos-main/thanos-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/thanos-main/thanos-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2608229891"
       grafana_variables: environment,stage
@@ -1295,7 +1295,6 @@ groups:
   - alert: ThanosServiceThanosRuleAlertSenderTrafficAbsent
     for: 30m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The thanos_rule_alert_sender SLI of the thanos service (`{{ $labels.stage
         }}` stage) has not reported any traffic in the past 30m
       description: |
@@ -1307,6 +1306,7 @@ groups:
       grafana_dashboard_id: thanos-main/thanos-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/thanos-main/thanos-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2608229891"
       grafana_variables: environment,stage
@@ -1333,7 +1333,6 @@ groups:
   - alert: ThanosServiceThanosStoreApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The thanos_store SLI of the thanos service (`{{ $labels.stage }}` stage)
         has an apdex violating SLO
       description: |
@@ -1343,6 +1342,7 @@ groups:
       grafana_dashboard_id: thanos-main/thanos-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/thanos-main/thanos-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3649067073"
       grafana_variables: environment,stage
@@ -1385,7 +1385,6 @@ groups:
   - alert: ThanosServiceThanosStoreApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The thanos_store SLI of the thanos service (`{{ $labels.stage }}` stage)
         has an apdex violating SLO
       description: |
@@ -1395,6 +1394,7 @@ groups:
       grafana_dashboard_id: thanos-main/thanos-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/thanos-main/thanos-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3649067073"
       grafana_variables: environment,stage
@@ -1437,7 +1437,6 @@ groups:
   - alert: ThanosServiceThanosStoreErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The thanos_store SLI of the thanos service (`{{ $labels.stage }}` stage)
         has an error rate violating SLO
       description: |
@@ -1447,6 +1446,7 @@ groups:
       grafana_dashboard_id: thanos-main/thanos-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/thanos-main/thanos-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "279093558"
       grafana_variables: environment,stage
@@ -1486,7 +1486,6 @@ groups:
   - alert: ThanosServiceThanosStoreErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The thanos_store SLI of the thanos service (`{{ $labels.stage }}` stage)
         has an error rate violating SLO
       description: |
@@ -1496,6 +1495,7 @@ groups:
       grafana_dashboard_id: thanos-main/thanos-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/thanos-main/thanos-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "279093558"
       grafana_variables: environment,stage
@@ -1535,7 +1535,6 @@ groups:
   - alert: ThanosServiceThanosStoreTrafficCessation
     for: 5m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The thanos_store SLI of the thanos service (`{{ $labels.stage }}` stage)
         has not received any traffic in the past 30m
       description: |
@@ -1545,6 +1544,7 @@ groups:
       grafana_dashboard_id: thanos-main/thanos-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/thanos-main/thanos-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1091689110"
       grafana_variables: environment,stage
@@ -1571,7 +1571,6 @@ groups:
   - alert: ThanosServiceThanosStoreTrafficAbsent
     for: 30m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The thanos_store SLI of the thanos service (`{{ $labels.stage }}` stage)
         has not reported any traffic in the past 30m
       description: |
@@ -1583,6 +1582,7 @@ groups:
       grafana_dashboard_id: thanos-main/thanos-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/thanos-main/thanos-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1091689110"
       grafana_variables: environment,stage

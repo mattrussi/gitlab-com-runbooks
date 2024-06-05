@@ -32,7 +32,7 @@ local fileForService(service, extraSelector={}) =
 std.foldl(
   function(memo, service)
     memo + separateMimirRecordingFiles(
-      function(service, selector, _)
+      function(service, selector, _, _)
         fileForService(service, extraSelector=selector),
       service,
     ),

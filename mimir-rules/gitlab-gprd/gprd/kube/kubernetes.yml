@@ -1,7 +1,6 @@
 groups:
   - name: kubernetes.rules
     rules:
-
       - alert: GitLabZonalComponentVersionsOutOfSync
         expr: |-
           sum by (image, env) (
@@ -13,7 +12,7 @@ groups:
           alert_type: symptom
           team: delivery
         annotations:
-          grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
+          grafana_datasource_id: mimir-gitlab-gprd
           description: Versions of GitLab components in {{ $labels.env }} have differed across our clusters for greater than 3 hours.
           runbook: docs/kube/kubernetes.md#gitlabcomponentversionoutofsync
           title: GitLab Versions differ across our zonal clusters.
@@ -21,4 +20,3 @@ groups:
             sum by (image, env) (
               group by (image, cluster, env) (kube_pod_container_info{env=~"gprd", cluster=~".*-us-east1-.*", container_id!="", namespace=~"gitlab"})
             )
-

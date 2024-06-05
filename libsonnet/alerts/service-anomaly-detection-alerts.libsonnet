@@ -1,7 +1,7 @@
 local selectors = import 'promql/selectors.libsonnet';
 local stableIds = import 'stable-ids/stable-ids.libsonnet';
 
-local rules = function(extraSelector)
+local rules = function(extraSelector, tenant=null)
   local selector = { monitor: 'global' } + extraSelector;
   [
     //###############################################
@@ -46,6 +46,7 @@ local rules = function(extraSelector)
         grafana_panel_id: stableIds.hashStableId('service-$type-ops-rate'),
         grafana_variables: 'environment,type,stage',
         grafana_min_zoom_hours: '12',
+        grafana_datasource_id: tenant,
         link1_title: 'Definition',
         link1_url: 'https://gitlab.com/gitlab-com/runbooks/blob/master/docs/monitoring/definition-service-ops-rate.md',
         promql_template_1: 'gitlab_service_ops:rate{environment="$environment", type="$type", stage="$stage"}',
@@ -89,6 +90,7 @@ local rules = function(extraSelector)
         grafana_panel_id: stableIds.hashStableId('service-$type-ops-rate'),
         grafana_variables: 'environment,type,stage',
         grafana_min_zoom_hours: '12',
+        grafana_datasource_id: tenant,
         link1_title: 'Definition',
         link1_url: 'https://gitlab.com/gitlab-com/runbooks/blob/master/docs/monitoring/definition-service-ops-rate.md',
         promql_template_1: 'gitlab_service_ops:rate{environment="$environment", type="$type", stage="$stage"}',

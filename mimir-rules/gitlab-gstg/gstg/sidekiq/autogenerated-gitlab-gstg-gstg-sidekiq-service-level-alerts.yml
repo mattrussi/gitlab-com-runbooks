@@ -7,7 +7,6 @@ groups:
   - alert: SidekiqServiceEnqueuedJobsTrafficCessation
     for: 5m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The enqueued_jobs SLI of the sidekiq service (`{{ $labels.stage }}` stage)
         has not received any traffic in the past 30m
       description: |
@@ -17,6 +16,7 @@ groups:
       grafana_dashboard_id: sidekiq-main/sidekiq-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gstg
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "459286986"
       grafana_variables: environment,stage
@@ -43,7 +43,6 @@ groups:
   - alert: SidekiqServiceEnqueuedJobsTrafficAbsent
     for: 30m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The enqueued_jobs SLI of the sidekiq service (`{{ $labels.stage }}` stage)
         has not reported any traffic in the past 30m
       description: |
@@ -55,6 +54,7 @@ groups:
       grafana_dashboard_id: sidekiq-main/sidekiq-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gstg
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "459286986"
       grafana_variables: environment,stage
@@ -81,7 +81,6 @@ groups:
   - alert: SidekiqServiceLlmCompletionApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The llm_completion SLI of the sidekiq service (`{{ $labels.stage }}`
         stage) has an apdex violating SLO
       description: |
@@ -99,6 +98,7 @@ groups:
       grafana_dashboard_id: sidekiq-main/sidekiq-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gstg
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1328354732"
       grafana_variables: environment,stage
@@ -133,7 +133,6 @@ groups:
   - alert: SidekiqServiceLlmCompletionApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The llm_completion SLI of the sidekiq service (`{{ $labels.stage }}`
         stage) has an apdex violating SLO
       description: |
@@ -151,6 +150,7 @@ groups:
       grafana_dashboard_id: sidekiq-main/sidekiq-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gstg
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1328354732"
       grafana_variables: environment,stage
@@ -185,7 +185,6 @@ groups:
   - alert: SidekiqServiceLlmCompletionErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The llm_completion SLI of the sidekiq service (`{{ $labels.stage }}`
         stage) has an error rate violating SLO
       description: |
@@ -203,6 +202,7 @@ groups:
       grafana_dashboard_id: sidekiq-main/sidekiq-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gstg
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3924591239"
       grafana_variables: environment,stage
@@ -241,7 +241,6 @@ groups:
   - alert: SidekiqServiceLlmCompletionErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The llm_completion SLI of the sidekiq service (`{{ $labels.stage }}`
         stage) has an error rate violating SLO
       description: |
@@ -259,6 +258,7 @@ groups:
       grafana_dashboard_id: sidekiq-main/sidekiq-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gstg
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3924591239"
       grafana_variables: environment,stage
@@ -297,7 +297,6 @@ groups:
   - alert: SidekiqServiceLlmCompletionTrafficCessation
     for: 5m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The llm_completion SLI of the sidekiq service (`{{ $labels.stage }}`
         stage) has not received any traffic in the past 30m
       description: |
@@ -315,6 +314,7 @@ groups:
       grafana_dashboard_id: sidekiq-main/sidekiq-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gstg
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "4254137942"
       grafana_variables: environment,stage
@@ -340,7 +340,6 @@ groups:
   - alert: SidekiqServiceLlmCompletionTrafficAbsent
     for: 30m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The llm_completion SLI of the sidekiq service (`{{ $labels.stage }}`
         stage) has not reported any traffic in the past 30m
       description: |
@@ -360,6 +359,7 @@ groups:
       grafana_dashboard_id: sidekiq-main/sidekiq-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gstg
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "4254137942"
       grafana_variables: environment,stage
@@ -385,7 +385,6 @@ groups:
   - alert: SidekiqServiceSidekiqExecutionApdexSLOViolationSingleShard
     for: 10m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The sidekiq_execution SLI of the sidekiq service on shard `{{ $labels.shard
         }}` has an apdex violating SLO
       description: |
@@ -400,6 +399,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}&var-shard={{ $labels.shard
         }}
+      grafana_datasource_id: mimir-gitlab-gstg
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1200908149"
       grafana_variables: environment,stage,shard
@@ -435,7 +435,6 @@ groups:
   - alert: SidekiqServiceSidekiqExecutionApdexSLOViolationSingleShard
     for: 10m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The sidekiq_execution SLI of the sidekiq service on shard `{{ $labels.shard
         }}` has an apdex violating SLO
       description: |
@@ -450,6 +449,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}&var-shard={{ $labels.shard
         }}
+      grafana_datasource_id: mimir-gitlab-gstg
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1200908149"
       grafana_variables: environment,stage,shard
@@ -485,7 +485,6 @@ groups:
   - alert: SidekiqServiceSidekiqExecutionApdexSLOViolationSingleShard
     for: 10m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The sidekiq_execution SLI of the sidekiq service on shard `{{ $labels.shard
         }}` has an apdex violating SLO
       description: |
@@ -500,6 +499,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}&var-shard={{ $labels.shard
         }}
+      grafana_datasource_id: mimir-gitlab-gstg
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1200908149"
       grafana_variables: environment,stage,shard
@@ -535,7 +535,6 @@ groups:
   - alert: SidekiqServiceSidekiqExecutionApdexSLOViolationSingleShard
     for: 10m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The sidekiq_execution SLI of the sidekiq service on shard `{{ $labels.shard
         }}` has an apdex violating SLO
       description: |
@@ -550,6 +549,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}&var-shard={{ $labels.shard
         }}
+      grafana_datasource_id: mimir-gitlab-gstg
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1200908149"
       grafana_variables: environment,stage,shard
@@ -585,7 +585,6 @@ groups:
   - alert: SidekiqServiceSidekiqExecutionApdexSLOViolationSingleShard
     for: 10m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The sidekiq_execution SLI of the sidekiq service on shard `{{ $labels.shard
         }}` has an apdex violating SLO
       description: |
@@ -600,6 +599,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}&var-shard={{ $labels.shard
         }}
+      grafana_datasource_id: mimir-gitlab-gstg
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1200908149"
       grafana_variables: environment,stage,shard
@@ -635,7 +635,6 @@ groups:
   - alert: SidekiqServiceSidekiqExecutionApdexSLOViolationSingleShard
     for: 10m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The sidekiq_execution SLI of the sidekiq service on shard `{{ $labels.shard
         }}` has an apdex violating SLO
       description: |
@@ -650,6 +649,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}&var-shard={{ $labels.shard
         }}
+      grafana_datasource_id: mimir-gitlab-gstg
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1200908149"
       grafana_variables: environment,stage,shard
@@ -685,7 +685,6 @@ groups:
   - alert: SidekiqServiceSidekiqExecutionApdexSLOViolationSingleShard
     for: 10m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The sidekiq_execution SLI of the sidekiq service on shard `{{ $labels.shard
         }}` has an apdex violating SLO
       description: |
@@ -700,6 +699,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}&var-shard={{ $labels.shard
         }}
+      grafana_datasource_id: mimir-gitlab-gstg
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1200908149"
       grafana_variables: environment,stage,shard
@@ -735,7 +735,6 @@ groups:
   - alert: SidekiqServiceSidekiqExecutionApdexSLOViolationSingleShard
     for: 10m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The sidekiq_execution SLI of the sidekiq service on shard `{{ $labels.shard
         }}` has an apdex violating SLO
       description: |
@@ -750,6 +749,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}&var-shard={{ $labels.shard
         }}
+      grafana_datasource_id: mimir-gitlab-gstg
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1200908149"
       grafana_variables: environment,stage,shard
@@ -785,7 +785,6 @@ groups:
   - alert: SidekiqServiceSidekiqExecutionErrorSLOViolationSingleShard
     for: 10m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The sidekiq_execution SLI of the sidekiq service on shard `{{ $labels.shard
         }}` has an error rate violating SLO
       description: |
@@ -800,6 +799,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}&var-shard={{ $labels.shard
         }}
+      grafana_datasource_id: mimir-gitlab-gstg
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "4267233911"
       grafana_variables: environment,stage,shard
@@ -839,7 +839,6 @@ groups:
   - alert: SidekiqServiceSidekiqExecutionErrorSLOViolationSingleShard
     for: 10m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The sidekiq_execution SLI of the sidekiq service on shard `{{ $labels.shard
         }}` has an error rate violating SLO
       description: |
@@ -854,6 +853,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}&var-shard={{ $labels.shard
         }}
+      grafana_datasource_id: mimir-gitlab-gstg
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "4267233911"
       grafana_variables: environment,stage,shard
@@ -893,7 +893,6 @@ groups:
   - alert: SidekiqServiceSidekiqExecutionTrafficCessationSingleShard
     for: 5m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The sidekiq_execution SLI of the sidekiq service on shard `{{ $labels.shard
         }}` has not received any traffic in the past 30m
       description: |
@@ -908,6 +907,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}&var-shard={{ $labels.shard
         }}
+      grafana_datasource_id: mimir-gitlab-gstg
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "597131258"
       grafana_variables: environment,stage,shard
@@ -934,7 +934,6 @@ groups:
   - alert: SidekiqServiceSidekiqExecutionTrafficAbsentSingleShard
     for: 30m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The sidekiq_execution SLI of the sidekiq service on shard `{{ $labels.shard
         }}` has not reported any traffic in the past 30m
       description: |
@@ -951,6 +950,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}&var-shard={{ $labels.shard
         }}
+      grafana_datasource_id: mimir-gitlab-gstg
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "597131258"
       grafana_variables: environment,stage,shard
@@ -977,7 +977,6 @@ groups:
   - alert: SidekiqServiceSidekiqExecutionWithExternalDependencyApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The sidekiq_execution_with_external_dependency SLI of the sidekiq service
         (`{{ $labels.stage }}` stage) has an apdex violating SLO
       description: |
@@ -989,6 +988,7 @@ groups:
       grafana_dashboard_id: sidekiq-main/sidekiq-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gstg
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "18986092"
       grafana_variables: environment,stage
@@ -1023,7 +1023,6 @@ groups:
   - alert: SidekiqServiceSidekiqExecutionWithExternalDependencyApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The sidekiq_execution_with_external_dependency SLI of the sidekiq service
         (`{{ $labels.stage }}` stage) has an apdex violating SLO
       description: |
@@ -1035,6 +1034,7 @@ groups:
       grafana_dashboard_id: sidekiq-main/sidekiq-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gstg
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "18986092"
       grafana_variables: environment,stage
@@ -1069,7 +1069,6 @@ groups:
   - alert: SidekiqServiceSidekiqExecutionWithExternalDependencyErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The sidekiq_execution_with_external_dependency SLI of the sidekiq service
         (`{{ $labels.stage }}` stage) has an error rate violating SLO
       description: |
@@ -1081,6 +1080,7 @@ groups:
       grafana_dashboard_id: sidekiq-main/sidekiq-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gstg
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1827889567"
       grafana_variables: environment,stage
@@ -1119,7 +1119,6 @@ groups:
   - alert: SidekiqServiceSidekiqExecutionWithExternalDependencyErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The sidekiq_execution_with_external_dependency SLI of the sidekiq service
         (`{{ $labels.stage }}` stage) has an error rate violating SLO
       description: |
@@ -1131,6 +1130,7 @@ groups:
       grafana_dashboard_id: sidekiq-main/sidekiq-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gstg
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1827889567"
       grafana_variables: environment,stage
@@ -1169,7 +1169,6 @@ groups:
   - alert: SidekiqServiceSidekiqExecutionWithExternalDependencyTrafficCessation
     for: 5m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The sidekiq_execution_with_external_dependency SLI of the sidekiq service
         (`{{ $labels.stage }}` stage) has not received any traffic in the past 30m
       description: |
@@ -1181,6 +1180,7 @@ groups:
       grafana_dashboard_id: sidekiq-main/sidekiq-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gstg
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1764212523"
       grafana_variables: environment,stage
@@ -1206,7 +1206,6 @@ groups:
   - alert: SidekiqServiceSidekiqExecutionWithExternalDependencyTrafficAbsent
     for: 30m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The sidekiq_execution_with_external_dependency SLI of the sidekiq service
         (`{{ $labels.stage }}` stage) has not reported any traffic in the past 30m
       description: |
@@ -1220,6 +1219,7 @@ groups:
       grafana_dashboard_id: sidekiq-main/sidekiq-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gstg
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1764212523"
       grafana_variables: environment,stage
@@ -1245,7 +1245,6 @@ groups:
   - alert: SidekiqServiceSidekiqQueueingApdexSLOViolationSingleShard
     for: 10m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The sidekiq_queueing SLI of the sidekiq service on shard `{{ $labels.shard
         }}` has an apdex violating SLO
       description: |
@@ -1260,6 +1259,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}&var-shard={{ $labels.shard
         }}
+      grafana_datasource_id: mimir-gitlab-gstg
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3643825112"
       grafana_variables: environment,stage,shard
@@ -1295,7 +1295,6 @@ groups:
   - alert: SidekiqServiceSidekiqQueueingApdexSLOViolationSingleShard
     for: 10m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The sidekiq_queueing SLI of the sidekiq service on shard `{{ $labels.shard
         }}` has an apdex violating SLO
       description: |
@@ -1310,6 +1309,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}&var-shard={{ $labels.shard
         }}
+      grafana_datasource_id: mimir-gitlab-gstg
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3643825112"
       grafana_variables: environment,stage,shard
@@ -1345,7 +1345,6 @@ groups:
   - alert: SidekiqServiceSidekiqQueueingApdexSLOViolationSingleShard
     for: 10m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The sidekiq_queueing SLI of the sidekiq service on shard `{{ $labels.shard
         }}` has an apdex violating SLO
       description: |
@@ -1360,6 +1359,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}&var-shard={{ $labels.shard
         }}
+      grafana_datasource_id: mimir-gitlab-gstg
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3643825112"
       grafana_variables: environment,stage,shard
@@ -1395,7 +1395,6 @@ groups:
   - alert: SidekiqServiceSidekiqQueueingApdexSLOViolationSingleShard
     for: 10m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The sidekiq_queueing SLI of the sidekiq service on shard `{{ $labels.shard
         }}` has an apdex violating SLO
       description: |
@@ -1410,6 +1409,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}&var-shard={{ $labels.shard
         }}
+      grafana_datasource_id: mimir-gitlab-gstg
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3643825112"
       grafana_variables: environment,stage,shard
@@ -1445,7 +1445,6 @@ groups:
   - alert: SidekiqServiceSidekiqQueueingTrafficCessationSingleShard
     for: 5m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The sidekiq_queueing SLI of the sidekiq service on shard `{{ $labels.shard
         }}` has not received any traffic in the past 30m
       description: |
@@ -1460,6 +1459,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}&var-shard={{ $labels.shard
         }}
+      grafana_datasource_id: mimir-gitlab-gstg
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "330011744"
       grafana_variables: environment,stage,shard
@@ -1486,7 +1486,6 @@ groups:
   - alert: SidekiqServiceSidekiqQueueingTrafficAbsentSingleShard
     for: 30m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The sidekiq_queueing SLI of the sidekiq service on shard `{{ $labels.shard
         }}` has not reported any traffic in the past 30m
       description: |
@@ -1503,6 +1502,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}&var-shard={{ $labels.shard
         }}
+      grafana_datasource_id: mimir-gitlab-gstg
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "330011744"
       grafana_variables: environment,stage,shard
@@ -1529,7 +1529,6 @@ groups:
   - alert: SidekiqServiceSidekiqQueueingWithExternalDependencyApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The sidekiq_queueing_with_external_dependency SLI of the sidekiq service
         (`{{ $labels.stage }}` stage) has an apdex violating SLO
       description: |
@@ -1541,6 +1540,7 @@ groups:
       grafana_dashboard_id: sidekiq-main/sidekiq-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gstg
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2093896509"
       grafana_variables: environment,stage
@@ -1575,7 +1575,6 @@ groups:
   - alert: SidekiqServiceSidekiqQueueingWithExternalDependencyApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The sidekiq_queueing_with_external_dependency SLI of the sidekiq service
         (`{{ $labels.stage }}` stage) has an apdex violating SLO
       description: |
@@ -1587,6 +1586,7 @@ groups:
       grafana_dashboard_id: sidekiq-main/sidekiq-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gstg
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2093896509"
       grafana_variables: environment,stage
@@ -1621,7 +1621,6 @@ groups:
   - alert: SidekiqServiceSidekiqQueueingWithExternalDependencyTrafficCessation
     for: 5m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The sidekiq_queueing_with_external_dependency SLI of the sidekiq service
         (`{{ $labels.stage }}` stage) has not received any traffic in the past 30m
       description: |
@@ -1633,6 +1632,7 @@ groups:
       grafana_dashboard_id: sidekiq-main/sidekiq-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gstg
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2719779965"
       grafana_variables: environment,stage
@@ -1658,7 +1658,6 @@ groups:
   - alert: SidekiqServiceSidekiqQueueingWithExternalDependencyTrafficAbsent
     for: 30m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The sidekiq_queueing_with_external_dependency SLI of the sidekiq service
         (`{{ $labels.stage }}` stage) has not reported any traffic in the past 30m
       description: |
@@ -1672,6 +1671,7 @@ groups:
       grafana_dashboard_id: sidekiq-main/sidekiq-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gstg
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2719779965"
       grafana_variables: environment,stage

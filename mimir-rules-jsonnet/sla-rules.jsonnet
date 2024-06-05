@@ -2,7 +2,7 @@ local separateMimirRecordingFiles = (import 'recording-rules/lib/mimir/separate-
 local rules = import 'recording-rules/sla-rules.libsonnet';
 
 separateMimirRecordingFiles(
-  function(_, selector, _)
+  function(_, selector, _, _)
     {
       'sla-rules': std.manifestYamlDoc(
         rules.slaRules(

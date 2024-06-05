@@ -7,7 +7,6 @@ groups:
   - alert: InternalApiServiceRailsRequestApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The rails_request SLI of the internal-api service (`{{ $labels.stage
         }}` stage) has an apdex violating SLO
       description: |
@@ -19,6 +18,7 @@ groups:
       grafana_dashboard_id: internal-api-main/internal-api-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/internal-api-main/internal-api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gstg
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "495984175"
       grafana_variables: environment,stage
@@ -54,7 +54,6 @@ groups:
   - alert: InternalApiServiceRailsRequestApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The rails_request SLI of the internal-api service (`{{ $labels.stage
         }}` stage) has an apdex violating SLO
       description: |
@@ -66,6 +65,7 @@ groups:
       grafana_dashboard_id: internal-api-main/internal-api-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/internal-api-main/internal-api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gstg
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "495984175"
       grafana_variables: environment,stage
@@ -101,7 +101,6 @@ groups:
   - alert: InternalApiServiceRailsRequestApdexSLOViolationRegional
     for: 2m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The rails_request SLI of the internal-api service in region `{{ $labels.region
         }}` has an apdex violating SLO
       description: |
@@ -115,6 +114,7 @@ groups:
       grafana_dashboard_id: internal-api-main/internal-api-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/internal-api-main/internal-api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gstg
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "495984175"
       grafana_variables: environment,stage
@@ -150,7 +150,6 @@ groups:
   - alert: InternalApiServiceRailsRequestApdexSLOViolationRegional
     for: 2m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The rails_request SLI of the internal-api service in region `{{ $labels.region
         }}` has an apdex violating SLO
       description: |
@@ -164,6 +163,7 @@ groups:
       grafana_dashboard_id: internal-api-main/internal-api-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/internal-api-main/internal-api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gstg
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "495984175"
       grafana_variables: environment,stage
@@ -199,7 +199,6 @@ groups:
   - alert: InternalApiServiceRailsRequestErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The rails_request SLI of the internal-api service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
@@ -211,6 +210,7 @@ groups:
       grafana_dashboard_id: internal-api-main/internal-api-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/internal-api-main/internal-api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gstg
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "387946920"
       grafana_variables: environment,stage
@@ -250,7 +250,6 @@ groups:
   - alert: InternalApiServiceRailsRequestErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The rails_request SLI of the internal-api service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
@@ -262,6 +261,7 @@ groups:
       grafana_dashboard_id: internal-api-main/internal-api-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/internal-api-main/internal-api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gstg
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "387946920"
       grafana_variables: environment,stage
@@ -301,7 +301,6 @@ groups:
   - alert: InternalApiServiceRailsRequestErrorSLOViolationRegional
     for: 2m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The rails_request SLI of the internal-api service in region `{{ $labels.region
         }}` has an error rate violating SLO
       description: |
@@ -315,6 +314,7 @@ groups:
       grafana_dashboard_id: internal-api-main/internal-api-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/internal-api-main/internal-api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gstg
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "387946920"
       grafana_variables: environment,stage
@@ -354,7 +354,6 @@ groups:
   - alert: InternalApiServiceRailsRequestErrorSLOViolationRegional
     for: 2m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The rails_request SLI of the internal-api service in region `{{ $labels.region
         }}` has an error rate violating SLO
       description: |
@@ -368,6 +367,7 @@ groups:
       grafana_dashboard_id: internal-api-main/internal-api-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/internal-api-main/internal-api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gstg
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "387946920"
       grafana_variables: environment,stage
@@ -407,7 +407,6 @@ groups:
   - alert: InternalApiServiceRailsRequestTrafficCessation
     for: 5m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The rails_request SLI of the internal-api service (`{{ $labels.stage
         }}` stage) has not received any traffic in the past 30m
       description: |
@@ -419,6 +418,7 @@ groups:
       grafana_dashboard_id: internal-api-main/internal-api-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/internal-api-main/internal-api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gstg
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "538903447"
       grafana_variables: environment,stage
@@ -445,7 +445,6 @@ groups:
   - alert: InternalApiServiceRailsRequestTrafficAbsent
     for: 30m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The rails_request SLI of the internal-api service (`{{ $labels.stage
         }}` stage) has not reported any traffic in the past 30m
       description: |
@@ -459,6 +458,7 @@ groups:
       grafana_dashboard_id: internal-api-main/internal-api-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/internal-api-main/internal-api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gstg
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "538903447"
       grafana_variables: environment,stage
@@ -485,7 +485,6 @@ groups:
   - alert: InternalApiServiceRailsRequestTrafficCessationRegional
     for: 5m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The rails_request SLI of the internal-api service in region `{{ $labels.region
         }}` has not received any traffic in the past 30m
       description: |
@@ -499,6 +498,7 @@ groups:
       grafana_dashboard_id: internal-api-main/internal-api-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/internal-api-main/internal-api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gstg
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "538903447"
       grafana_variables: environment,stage
@@ -525,7 +525,6 @@ groups:
   - alert: InternalApiServiceRailsRequestTrafficAbsentRegional
     for: 30m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The rails_request SLI of the internal-api service in region `{{ $labels.region
         }}` has not reported any traffic in the past 30m
       description: |
@@ -541,6 +540,7 @@ groups:
       grafana_dashboard_id: internal-api-main/internal-api-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/internal-api-main/internal-api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gstg
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "538903447"
       grafana_variables: environment,stage
@@ -567,7 +567,6 @@ groups:
   - alert: InternalApiServiceWorkhorseApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The workhorse SLI of the internal-api service (`{{ $labels.stage }}`
         stage) has an apdex violating SLO
       description: |
@@ -577,6 +576,7 @@ groups:
       grafana_dashboard_id: internal-api-main/internal-api-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/internal-api-main/internal-api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gstg
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2586818196"
       grafana_variables: environment,stage
@@ -619,7 +619,6 @@ groups:
   - alert: InternalApiServiceWorkhorseApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The workhorse SLI of the internal-api service (`{{ $labels.stage }}`
         stage) has an apdex violating SLO
       description: |
@@ -629,6 +628,7 @@ groups:
       grafana_dashboard_id: internal-api-main/internal-api-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/internal-api-main/internal-api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gstg
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2586818196"
       grafana_variables: environment,stage
@@ -671,7 +671,6 @@ groups:
   - alert: InternalApiServiceWorkhorseApdexSLOViolationRegional
     for: 2m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The workhorse SLI of the internal-api service in region `{{ $labels.region
         }}` has an apdex violating SLO
       description: |
@@ -683,6 +682,7 @@ groups:
       grafana_dashboard_id: internal-api-main/internal-api-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/internal-api-main/internal-api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gstg
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2586818196"
       grafana_variables: environment,stage
@@ -725,7 +725,6 @@ groups:
   - alert: InternalApiServiceWorkhorseApdexSLOViolationRegional
     for: 2m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The workhorse SLI of the internal-api service in region `{{ $labels.region
         }}` has an apdex violating SLO
       description: |
@@ -737,6 +736,7 @@ groups:
       grafana_dashboard_id: internal-api-main/internal-api-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/internal-api-main/internal-api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gstg
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2586818196"
       grafana_variables: environment,stage
@@ -779,7 +779,6 @@ groups:
   - alert: InternalApiServiceWorkhorseErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The workhorse SLI of the internal-api service (`{{ $labels.stage }}`
         stage) has an error rate violating SLO
       description: |
@@ -789,6 +788,7 @@ groups:
       grafana_dashboard_id: internal-api-main/internal-api-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/internal-api-main/internal-api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gstg
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2047984749"
       grafana_variables: environment,stage
@@ -828,7 +828,6 @@ groups:
   - alert: InternalApiServiceWorkhorseErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The workhorse SLI of the internal-api service (`{{ $labels.stage }}`
         stage) has an error rate violating SLO
       description: |
@@ -838,6 +837,7 @@ groups:
       grafana_dashboard_id: internal-api-main/internal-api-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/internal-api-main/internal-api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gstg
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2047984749"
       grafana_variables: environment,stage
@@ -877,7 +877,6 @@ groups:
   - alert: InternalApiServiceWorkhorseErrorSLOViolationRegional
     for: 2m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The workhorse SLI of the internal-api service in region `{{ $labels.region
         }}` has an error rate violating SLO
       description: |
@@ -889,6 +888,7 @@ groups:
       grafana_dashboard_id: internal-api-main/internal-api-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/internal-api-main/internal-api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gstg
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2047984749"
       grafana_variables: environment,stage
@@ -928,7 +928,6 @@ groups:
   - alert: InternalApiServiceWorkhorseErrorSLOViolationRegional
     for: 2m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The workhorse SLI of the internal-api service in region `{{ $labels.region
         }}` has an error rate violating SLO
       description: |
@@ -940,6 +939,7 @@ groups:
       grafana_dashboard_id: internal-api-main/internal-api-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/internal-api-main/internal-api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gstg
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2047984749"
       grafana_variables: environment,stage
@@ -979,7 +979,6 @@ groups:
   - alert: InternalApiServiceWorkhorseTrafficCessation
     for: 5m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The workhorse SLI of the internal-api service (`{{ $labels.stage }}`
         stage) has not received any traffic in the past 30m
       description: |
@@ -989,6 +988,7 @@ groups:
       grafana_dashboard_id: internal-api-main/internal-api-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/internal-api-main/internal-api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gstg
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "831392945"
       grafana_variables: environment,stage
@@ -1015,7 +1015,6 @@ groups:
   - alert: InternalApiServiceWorkhorseTrafficAbsent
     for: 30m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The workhorse SLI of the internal-api service (`{{ $labels.stage }}`
         stage) has not reported any traffic in the past 30m
       description: |
@@ -1027,6 +1026,7 @@ groups:
       grafana_dashboard_id: internal-api-main/internal-api-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/internal-api-main/internal-api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gstg
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "831392945"
       grafana_variables: environment,stage
@@ -1053,7 +1053,6 @@ groups:
   - alert: InternalApiServiceWorkhorseTrafficCessationRegional
     for: 5m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The workhorse SLI of the internal-api service in region `{{ $labels.region
         }}` has not received any traffic in the past 30m
       description: |
@@ -1065,6 +1064,7 @@ groups:
       grafana_dashboard_id: internal-api-main/internal-api-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/internal-api-main/internal-api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gstg
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "831392945"
       grafana_variables: environment,stage
@@ -1091,7 +1091,6 @@ groups:
   - alert: InternalApiServiceWorkhorseTrafficAbsentRegional
     for: 30m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The workhorse SLI of the internal-api service in region `{{ $labels.region
         }}` has not reported any traffic in the past 30m
       description: |
@@ -1105,6 +1104,7 @@ groups:
       grafana_dashboard_id: internal-api-main/internal-api-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/internal-api-main/internal-api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gstg
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "831392945"
       grafana_variables: environment,stage

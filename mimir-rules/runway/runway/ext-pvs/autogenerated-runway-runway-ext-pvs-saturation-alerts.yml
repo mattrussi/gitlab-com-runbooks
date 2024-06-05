@@ -20,7 +20,6 @@ groups:
   - alert: component_saturation_slo_out_of_bounds:open_fds
     for: 5m
     annotations:
-      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The Open file descriptor utilization per instance resource of the {{
         $labels.type }} service ({{ $labels.stage }} stage) has a saturation exceeding
         SLO and is close to its capacity limit.
@@ -38,6 +37,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_open_fds?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
         }}
+      grafana_datasource_id: mimir-runway
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1001792825"
       grafana_variables: environment,type,stage
@@ -93,7 +93,6 @@ groups:
   - alert: component_saturation_slo_out_of_bounds:runway_container_cpu_utilization
     for: 5m
     annotations:
-      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The Runway Container CPU Utilization resource of the {{ $labels.type
         }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
         is close to its capacity limit.
@@ -109,6 +108,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_runway_container_cpu?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
         }}
+      grafana_datasource_id: mimir-runway
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1050857443"
       grafana_variables: environment,type,stage
@@ -155,7 +155,6 @@ groups:
   - alert: component_saturation_slo_out_of_bounds:runway_container_instance_utilization
     for: 5m
     annotations:
-      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The Runway Container Instance Utilization resource of the {{ $labels.type
         }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
         is close to its capacity limit.
@@ -171,6 +170,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_runway_container_instance?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
         }}
+      grafana_datasource_id: mimir-runway
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1738137433"
       grafana_variables: environment,type,stage
@@ -213,7 +213,6 @@ groups:
   - alert: component_saturation_slo_out_of_bounds:runway_container_max_concurrent_requests
     for: 5m
     annotations:
-      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The Runway Max Concurrent Requests resource of the {{ $labels.type }}
         service ({{ $labels.stage }} stage) has a saturation exceeding SLO and is
         close to its capacity limit.
@@ -229,6 +228,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_runway_container_max_con_reqs?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
         }}
+      grafana_datasource_id: mimir-runway
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "4285373877"
       grafana_variables: environment,type,stage
@@ -275,7 +275,6 @@ groups:
   - alert: component_saturation_slo_out_of_bounds:runway_container_memory_utilization
     for: 5m
     annotations:
-      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The Runway Container Memory Utilization resource of the {{ $labels.type
         }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
         is close to its capacity limit.
@@ -291,6 +290,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_runway_container_memory?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
         }}
+      grafana_datasource_id: mimir-runway
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "377718254"
       grafana_variables: environment,type,stage

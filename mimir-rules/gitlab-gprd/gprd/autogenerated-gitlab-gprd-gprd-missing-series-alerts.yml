@@ -6,7 +6,6 @@ groups:
   - alert: gitlab_component_opsrate_missing_series
     for: 1h
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: Operation rate data for the `{{ $labels.component }}` component of the
         `{{ $labels.type }}` service (`{{ $labels.stage }}` stage) is missing
       description: |
@@ -15,6 +14,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-component_opsrate_missing/alerts-component-request-rate-series-missing?from=now-24h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-component={{ $labels.component
         }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "24"
       grafana_panel_id: "803754892"
       grafana_variables: environment,type,component,stage
@@ -37,7 +37,6 @@ groups:
   - alert: gitlab_component_apdex_missing_series
     for: 1h
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: Apdex for the `{{ $labels.component }}` component of the `{{ $labels.type
         }}` service (`{{ $labels.stage }}` stage) is missing
       description: |
@@ -46,6 +45,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-component_opsrate_missing/alerts-component-request-rate-series-missing?from=now-24h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-component={{ $labels.component
         }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "24"
       grafana_panel_id: "803754892"
       grafana_variables: environment,type,component,stage
@@ -68,7 +68,6 @@ groups:
   - alert: gitlab_component_error_missing_series
     for: 2h
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: Error rate data for the `{{ $labels.component }}` component of the `{{
         $labels.type }}` service (`{{ $labels.stage }}` stage) is missing
       description: |
@@ -77,6 +76,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-component_error_missing/alerts-component-error-rate-series-missing?from=now-24h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-component={{ $labels.component
         }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "24"
       grafana_panel_id: "803754892"
       grafana_variables: environment,type,component,stage

@@ -10,7 +10,7 @@ local outputPromYaml(groups) =
 // No need to separate this by environment
 
 separateMimirRecordingFiles(
-  function(service, selector, extraArgs)
+  function(service, selector, extraArgs, _)
     {
       'stage-group-ignored-components': outputPromYaml(ignoredComponentRuleGroup),
     }

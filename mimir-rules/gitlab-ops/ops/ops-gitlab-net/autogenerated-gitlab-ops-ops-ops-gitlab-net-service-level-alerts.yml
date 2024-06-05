@@ -7,7 +7,6 @@ groups:
   - alert: OpsGitlabNetServiceGitlabSshdApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The gitlab_sshd SLI of the ops-gitlab-net service (`{{ $labels.stage
         }}` stage) has an apdex violating SLO
       description: |
@@ -17,6 +16,7 @@ groups:
       grafana_dashboard_id: ops-gitlab-net-main/ops-gitlab-net-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ops-gitlab-net-main/ops-gitlab-net-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2395479737"
       grafana_variables: environment,stage
@@ -59,7 +59,6 @@ groups:
   - alert: OpsGitlabNetServiceGitlabSshdApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The gitlab_sshd SLI of the ops-gitlab-net service (`{{ $labels.stage
         }}` stage) has an apdex violating SLO
       description: |
@@ -69,6 +68,7 @@ groups:
       grafana_dashboard_id: ops-gitlab-net-main/ops-gitlab-net-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ops-gitlab-net-main/ops-gitlab-net-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2395479737"
       grafana_variables: environment,stage
@@ -111,7 +111,6 @@ groups:
   - alert: OpsGitlabNetServiceGitlabSshdErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The gitlab_sshd SLI of the ops-gitlab-net service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
@@ -121,6 +120,7 @@ groups:
       grafana_dashboard_id: ops-gitlab-net-main/ops-gitlab-net-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ops-gitlab-net-main/ops-gitlab-net-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2213856730"
       grafana_variables: environment,stage
@@ -160,7 +160,6 @@ groups:
   - alert: OpsGitlabNetServiceGitlabSshdErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The gitlab_sshd SLI of the ops-gitlab-net service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
@@ -170,6 +169,7 @@ groups:
       grafana_dashboard_id: ops-gitlab-net-main/ops-gitlab-net-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ops-gitlab-net-main/ops-gitlab-net-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2213856730"
       grafana_variables: environment,stage
@@ -209,7 +209,6 @@ groups:
   - alert: OpsGitlabNetServiceGitlabSshdTrafficCessation
     for: 5m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The gitlab_sshd SLI of the ops-gitlab-net service (`{{ $labels.stage
         }}` stage) has not received any traffic in the past 30m
       description: |
@@ -219,6 +218,7 @@ groups:
       grafana_dashboard_id: ops-gitlab-net-main/ops-gitlab-net-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ops-gitlab-net-main/ops-gitlab-net-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "315783164"
       grafana_variables: environment,stage
@@ -245,7 +245,6 @@ groups:
   - alert: OpsGitlabNetServiceGitlabSshdTrafficAbsent
     for: 30m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The gitlab_sshd SLI of the ops-gitlab-net service (`{{ $labels.stage
         }}` stage) has not reported any traffic in the past 30m
       description: |
@@ -257,6 +256,7 @@ groups:
       grafana_dashboard_id: ops-gitlab-net-main/ops-gitlab-net-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ops-gitlab-net-main/ops-gitlab-net-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "315783164"
       grafana_variables: environment,stage
@@ -283,7 +283,6 @@ groups:
   - alert: OpsGitlabNetServiceGoserverApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The goserver SLI of the ops-gitlab-net service (`{{ $labels.stage }}`
         stage) has an apdex violating SLO
       description: |
@@ -293,6 +292,7 @@ groups:
       grafana_dashboard_id: ops-gitlab-net-main/ops-gitlab-net-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ops-gitlab-net-main/ops-gitlab-net-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "877804374"
       grafana_variables: environment,stage
@@ -339,7 +339,6 @@ groups:
   - alert: OpsGitlabNetServiceGoserverApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The goserver SLI of the ops-gitlab-net service (`{{ $labels.stage }}`
         stage) has an apdex violating SLO
       description: |
@@ -349,6 +348,7 @@ groups:
       grafana_dashboard_id: ops-gitlab-net-main/ops-gitlab-net-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ops-gitlab-net-main/ops-gitlab-net-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "877804374"
       grafana_variables: environment,stage
@@ -395,7 +395,6 @@ groups:
   - alert: OpsGitlabNetServiceGoserverErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The goserver SLI of the ops-gitlab-net service (`{{ $labels.stage }}`
         stage) has an error rate violating SLO
       description: |
@@ -405,6 +404,7 @@ groups:
       grafana_dashboard_id: ops-gitlab-net-main/ops-gitlab-net-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ops-gitlab-net-main/ops-gitlab-net-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "594670537"
       grafana_variables: environment,stage
@@ -446,7 +446,6 @@ groups:
   - alert: OpsGitlabNetServiceGoserverErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The goserver SLI of the ops-gitlab-net service (`{{ $labels.stage }}`
         stage) has an error rate violating SLO
       description: |
@@ -456,6 +455,7 @@ groups:
       grafana_dashboard_id: ops-gitlab-net-main/ops-gitlab-net-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ops-gitlab-net-main/ops-gitlab-net-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "594670537"
       grafana_variables: environment,stage
@@ -497,7 +497,6 @@ groups:
   - alert: OpsGitlabNetServiceGoserverTrafficCessation
     for: 5m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The goserver SLI of the ops-gitlab-net service (`{{ $labels.stage }}`
         stage) has not received any traffic in the past 30m
       description: |
@@ -507,6 +506,7 @@ groups:
       grafana_dashboard_id: ops-gitlab-net-main/ops-gitlab-net-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ops-gitlab-net-main/ops-gitlab-net-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1687078843"
       grafana_variables: environment,stage
@@ -533,7 +533,6 @@ groups:
   - alert: OpsGitlabNetServiceGoserverTrafficAbsent
     for: 30m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The goserver SLI of the ops-gitlab-net service (`{{ $labels.stage }}`
         stage) has not reported any traffic in the past 30m
       description: |
@@ -545,6 +544,7 @@ groups:
       grafana_dashboard_id: ops-gitlab-net-main/ops-gitlab-net-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ops-gitlab-net-main/ops-gitlab-net-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1687078843"
       grafana_variables: environment,stage
@@ -571,7 +571,6 @@ groups:
   - alert: OpsGitlabNetServicePumaApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The puma SLI of the ops-gitlab-net service (`{{ $labels.stage }}` stage)
         has an apdex violating SLO
       description: |
@@ -581,6 +580,7 @@ groups:
       grafana_dashboard_id: ops-gitlab-net-main/ops-gitlab-net-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ops-gitlab-net-main/ops-gitlab-net-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "561966508"
       grafana_variables: environment,stage
@@ -616,7 +616,6 @@ groups:
   - alert: OpsGitlabNetServicePumaApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The puma SLI of the ops-gitlab-net service (`{{ $labels.stage }}` stage)
         has an apdex violating SLO
       description: |
@@ -626,6 +625,7 @@ groups:
       grafana_dashboard_id: ops-gitlab-net-main/ops-gitlab-net-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ops-gitlab-net-main/ops-gitlab-net-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "561966508"
       grafana_variables: environment,stage
@@ -661,7 +661,6 @@ groups:
   - alert: OpsGitlabNetServicePumaErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The puma SLI of the ops-gitlab-net service (`{{ $labels.stage }}` stage)
         has an error rate violating SLO
       description: |
@@ -671,6 +670,7 @@ groups:
       grafana_dashboard_id: ops-gitlab-net-main/ops-gitlab-net-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ops-gitlab-net-main/ops-gitlab-net-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2425637513"
       grafana_variables: environment,stage
@@ -710,7 +710,6 @@ groups:
   - alert: OpsGitlabNetServicePumaErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The puma SLI of the ops-gitlab-net service (`{{ $labels.stage }}` stage)
         has an error rate violating SLO
       description: |
@@ -720,6 +719,7 @@ groups:
       grafana_dashboard_id: ops-gitlab-net-main/ops-gitlab-net-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ops-gitlab-net-main/ops-gitlab-net-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2425637513"
       grafana_variables: environment,stage
@@ -759,7 +759,6 @@ groups:
   - alert: OpsGitlabNetServicePumaTrafficCessation
     for: 5m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The puma SLI of the ops-gitlab-net service (`{{ $labels.stage }}` stage)
         has not received any traffic in the past 30m
       description: |
@@ -769,6 +768,7 @@ groups:
       grafana_dashboard_id: ops-gitlab-net-main/ops-gitlab-net-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ops-gitlab-net-main/ops-gitlab-net-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "110019945"
       grafana_variables: environment,stage
@@ -795,7 +795,6 @@ groups:
   - alert: OpsGitlabNetServicePumaTrafficAbsent
     for: 30m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The puma SLI of the ops-gitlab-net service (`{{ $labels.stage }}` stage)
         has not reported any traffic in the past 30m
       description: |
@@ -807,6 +806,7 @@ groups:
       grafana_dashboard_id: ops-gitlab-net-main/ops-gitlab-net-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ops-gitlab-net-main/ops-gitlab-net-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "110019945"
       grafana_variables: environment,stage
@@ -833,7 +833,6 @@ groups:
   - alert: OpsGitlabNetServiceRailsSqlApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The rails_sql SLI of the ops-gitlab-net service (`{{ $labels.stage }}`
         stage) has an apdex violating SLO
       description: |
@@ -843,6 +842,7 @@ groups:
       grafana_dashboard_id: ops-gitlab-net-main/ops-gitlab-net-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ops-gitlab-net-main/ops-gitlab-net-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2459326260"
       grafana_variables: environment,stage
@@ -885,7 +885,6 @@ groups:
   - alert: OpsGitlabNetServiceRailsSqlApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The rails_sql SLI of the ops-gitlab-net service (`{{ $labels.stage }}`
         stage) has an apdex violating SLO
       description: |
@@ -895,6 +894,7 @@ groups:
       grafana_dashboard_id: ops-gitlab-net-main/ops-gitlab-net-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ops-gitlab-net-main/ops-gitlab-net-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2459326260"
       grafana_variables: environment,stage
@@ -937,7 +937,6 @@ groups:
   - alert: OpsGitlabNetServiceRailsSqlTrafficCessation
     for: 5m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The rails_sql SLI of the ops-gitlab-net service (`{{ $labels.stage }}`
         stage) has not received any traffic in the past 30m
       description: |
@@ -947,6 +946,7 @@ groups:
       grafana_dashboard_id: ops-gitlab-net-main/ops-gitlab-net-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ops-gitlab-net-main/ops-gitlab-net-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3345453447"
       grafana_variables: environment,stage
@@ -973,7 +973,6 @@ groups:
   - alert: OpsGitlabNetServiceRailsSqlTrafficAbsent
     for: 30m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The rails_sql SLI of the ops-gitlab-net service (`{{ $labels.stage }}`
         stage) has not reported any traffic in the past 30m
       description: |
@@ -985,6 +984,7 @@ groups:
       grafana_dashboard_id: ops-gitlab-net-main/ops-gitlab-net-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ops-gitlab-net-main/ops-gitlab-net-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3345453447"
       grafana_variables: environment,stage
@@ -1011,7 +1011,6 @@ groups:
   - alert: OpsGitlabNetServiceRegistryServerApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The registry_server SLI of the ops-gitlab-net service (`{{ $labels.stage
         }}` stage) has an apdex violating SLO
       description: |
@@ -1021,6 +1020,7 @@ groups:
       grafana_dashboard_id: ops-gitlab-net-main/ops-gitlab-net-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ops-gitlab-net-main/ops-gitlab-net-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2595080210"
       grafana_variables: environment,stage
@@ -1063,7 +1063,6 @@ groups:
   - alert: OpsGitlabNetServiceRegistryServerApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The registry_server SLI of the ops-gitlab-net service (`{{ $labels.stage
         }}` stage) has an apdex violating SLO
       description: |
@@ -1073,6 +1072,7 @@ groups:
       grafana_dashboard_id: ops-gitlab-net-main/ops-gitlab-net-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ops-gitlab-net-main/ops-gitlab-net-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2595080210"
       grafana_variables: environment,stage
@@ -1115,7 +1115,6 @@ groups:
   - alert: OpsGitlabNetServiceRegistryServerErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The registry_server SLI of the ops-gitlab-net service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
@@ -1125,6 +1124,7 @@ groups:
       grafana_dashboard_id: ops-gitlab-net-main/ops-gitlab-net-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ops-gitlab-net-main/ops-gitlab-net-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1063087290"
       grafana_variables: environment,stage
@@ -1164,7 +1164,6 @@ groups:
   - alert: OpsGitlabNetServiceRegistryServerErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The registry_server SLI of the ops-gitlab-net service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
@@ -1174,6 +1173,7 @@ groups:
       grafana_dashboard_id: ops-gitlab-net-main/ops-gitlab-net-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ops-gitlab-net-main/ops-gitlab-net-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1063087290"
       grafana_variables: environment,stage
@@ -1213,7 +1213,6 @@ groups:
   - alert: OpsGitlabNetServiceRegistryServerTrafficCessation
     for: 5m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The registry_server SLI of the ops-gitlab-net service (`{{ $labels.stage
         }}` stage) has not received any traffic in the past 30m
       description: |
@@ -1223,6 +1222,7 @@ groups:
       grafana_dashboard_id: ops-gitlab-net-main/ops-gitlab-net-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ops-gitlab-net-main/ops-gitlab-net-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1064354686"
       grafana_variables: environment,stage
@@ -1249,7 +1249,6 @@ groups:
   - alert: OpsGitlabNetServiceRegistryServerTrafficAbsent
     for: 30m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The registry_server SLI of the ops-gitlab-net service (`{{ $labels.stage
         }}` stage) has not reported any traffic in the past 30m
       description: |
@@ -1261,6 +1260,7 @@ groups:
       grafana_dashboard_id: ops-gitlab-net-main/ops-gitlab-net-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ops-gitlab-net-main/ops-gitlab-net-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1064354686"
       grafana_variables: environment,stage
@@ -1287,7 +1287,6 @@ groups:
   - alert: OpsGitlabNetServiceSidekiqExecutionApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The sidekiq_execution SLI of the ops-gitlab-net service (`{{ $labels.stage
         }}` stage) has an apdex violating SLO
       description: |
@@ -1299,6 +1298,7 @@ groups:
       grafana_dashboard_id: ops-gitlab-net-main/ops-gitlab-net-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ops-gitlab-net-main/ops-gitlab-net-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1200908149"
       grafana_variables: environment,stage
@@ -1334,7 +1334,6 @@ groups:
   - alert: OpsGitlabNetServiceSidekiqExecutionApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The sidekiq_execution SLI of the ops-gitlab-net service (`{{ $labels.stage
         }}` stage) has an apdex violating SLO
       description: |
@@ -1346,6 +1345,7 @@ groups:
       grafana_dashboard_id: ops-gitlab-net-main/ops-gitlab-net-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ops-gitlab-net-main/ops-gitlab-net-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1200908149"
       grafana_variables: environment,stage
@@ -1381,7 +1381,6 @@ groups:
   - alert: OpsGitlabNetServiceSidekiqExecutionErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The sidekiq_execution SLI of the ops-gitlab-net service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
@@ -1393,6 +1392,7 @@ groups:
       grafana_dashboard_id: ops-gitlab-net-main/ops-gitlab-net-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ops-gitlab-net-main/ops-gitlab-net-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "4267233911"
       grafana_variables: environment,stage
@@ -1432,7 +1432,6 @@ groups:
   - alert: OpsGitlabNetServiceSidekiqExecutionErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The sidekiq_execution SLI of the ops-gitlab-net service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
@@ -1444,6 +1443,7 @@ groups:
       grafana_dashboard_id: ops-gitlab-net-main/ops-gitlab-net-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ops-gitlab-net-main/ops-gitlab-net-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "4267233911"
       grafana_variables: environment,stage
@@ -1483,7 +1483,6 @@ groups:
   - alert: OpsGitlabNetServiceSidekiqExecutionTrafficCessation
     for: 5m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The sidekiq_execution SLI of the ops-gitlab-net service (`{{ $labels.stage
         }}` stage) has not received any traffic in the past 30m
       description: |
@@ -1495,6 +1494,7 @@ groups:
       grafana_dashboard_id: ops-gitlab-net-main/ops-gitlab-net-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ops-gitlab-net-main/ops-gitlab-net-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "597131258"
       grafana_variables: environment,stage
@@ -1521,7 +1521,6 @@ groups:
   - alert: OpsGitlabNetServiceSidekiqExecutionTrafficAbsent
     for: 30m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The sidekiq_execution SLI of the ops-gitlab-net service (`{{ $labels.stage
         }}` stage) has not reported any traffic in the past 30m
       description: |
@@ -1535,6 +1534,7 @@ groups:
       grafana_dashboard_id: ops-gitlab-net-main/ops-gitlab-net-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ops-gitlab-net-main/ops-gitlab-net-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "597131258"
       grafana_variables: environment,stage
@@ -1561,7 +1561,6 @@ groups:
   - alert: OpsGitlabNetServiceSidekiqQueueingApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The sidekiq_queueing SLI of the ops-gitlab-net service (`{{ $labels.stage
         }}` stage) has an apdex violating SLO
       description: |
@@ -1573,6 +1572,7 @@ groups:
       grafana_dashboard_id: ops-gitlab-net-main/ops-gitlab-net-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ops-gitlab-net-main/ops-gitlab-net-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3643825112"
       grafana_variables: environment,stage
@@ -1608,7 +1608,6 @@ groups:
   - alert: OpsGitlabNetServiceSidekiqQueueingApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The sidekiq_queueing SLI of the ops-gitlab-net service (`{{ $labels.stage
         }}` stage) has an apdex violating SLO
       description: |
@@ -1620,6 +1619,7 @@ groups:
       grafana_dashboard_id: ops-gitlab-net-main/ops-gitlab-net-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ops-gitlab-net-main/ops-gitlab-net-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3643825112"
       grafana_variables: environment,stage
@@ -1655,7 +1655,6 @@ groups:
   - alert: OpsGitlabNetServiceSidekiqQueueingTrafficCessation
     for: 5m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The sidekiq_queueing SLI of the ops-gitlab-net service (`{{ $labels.stage
         }}` stage) has not received any traffic in the past 30m
       description: |
@@ -1667,6 +1666,7 @@ groups:
       grafana_dashboard_id: ops-gitlab-net-main/ops-gitlab-net-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ops-gitlab-net-main/ops-gitlab-net-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "330011744"
       grafana_variables: environment,stage
@@ -1693,7 +1693,6 @@ groups:
   - alert: OpsGitlabNetServiceSidekiqQueueingTrafficAbsent
     for: 30m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The sidekiq_queueing SLI of the ops-gitlab-net service (`{{ $labels.stage
         }}` stage) has not reported any traffic in the past 30m
       description: |
@@ -1707,6 +1706,7 @@ groups:
       grafana_dashboard_id: ops-gitlab-net-main/ops-gitlab-net-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ops-gitlab-net-main/ops-gitlab-net-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "330011744"
       grafana_variables: environment,stage
@@ -1733,7 +1733,6 @@ groups:
   - alert: OpsGitlabNetServiceWorkhorseApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The workhorse SLI of the ops-gitlab-net service (`{{ $labels.stage }}`
         stage) has an apdex violating SLO
       description: |
@@ -1743,6 +1742,7 @@ groups:
       grafana_dashboard_id: ops-gitlab-net-main/ops-gitlab-net-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ops-gitlab-net-main/ops-gitlab-net-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2586818196"
       grafana_variables: environment,stage
@@ -1785,7 +1785,6 @@ groups:
   - alert: OpsGitlabNetServiceWorkhorseApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The workhorse SLI of the ops-gitlab-net service (`{{ $labels.stage }}`
         stage) has an apdex violating SLO
       description: |
@@ -1795,6 +1794,7 @@ groups:
       grafana_dashboard_id: ops-gitlab-net-main/ops-gitlab-net-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ops-gitlab-net-main/ops-gitlab-net-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2586818196"
       grafana_variables: environment,stage
@@ -1837,7 +1837,6 @@ groups:
   - alert: OpsGitlabNetServiceWorkhorseErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The workhorse SLI of the ops-gitlab-net service (`{{ $labels.stage }}`
         stage) has an error rate violating SLO
       description: |
@@ -1847,6 +1846,7 @@ groups:
       grafana_dashboard_id: ops-gitlab-net-main/ops-gitlab-net-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ops-gitlab-net-main/ops-gitlab-net-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2047984749"
       grafana_variables: environment,stage
@@ -1886,7 +1886,6 @@ groups:
   - alert: OpsGitlabNetServiceWorkhorseErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The workhorse SLI of the ops-gitlab-net service (`{{ $labels.stage }}`
         stage) has an error rate violating SLO
       description: |
@@ -1896,6 +1895,7 @@ groups:
       grafana_dashboard_id: ops-gitlab-net-main/ops-gitlab-net-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ops-gitlab-net-main/ops-gitlab-net-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2047984749"
       grafana_variables: environment,stage
@@ -1935,7 +1935,6 @@ groups:
   - alert: OpsGitlabNetServiceWorkhorseTrafficCessation
     for: 5m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The workhorse SLI of the ops-gitlab-net service (`{{ $labels.stage }}`
         stage) has not received any traffic in the past 30m
       description: |
@@ -1945,6 +1944,7 @@ groups:
       grafana_dashboard_id: ops-gitlab-net-main/ops-gitlab-net-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ops-gitlab-net-main/ops-gitlab-net-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "831392945"
       grafana_variables: environment,stage
@@ -1971,7 +1971,6 @@ groups:
   - alert: OpsGitlabNetServiceWorkhorseTrafficAbsent
     for: 30m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The workhorse SLI of the ops-gitlab-net service (`{{ $labels.stage }}`
         stage) has not reported any traffic in the past 30m
       description: |
@@ -1983,6 +1982,7 @@ groups:
       grafana_dashboard_id: ops-gitlab-net-main/ops-gitlab-net-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ops-gitlab-net-main/ops-gitlab-net-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "831392945"
       grafana_variables: environment,stage

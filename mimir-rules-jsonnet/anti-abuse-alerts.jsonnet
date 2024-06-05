@@ -5,8 +5,8 @@ local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
 local ciRunnersService = metricsCatalog.getService('ci-runners');
 
 separateMimirRecordingFiles(
-  function(_, _, _) {
-    'anti-abuse-alerts': std.manifestYamlDoc(antiAbuseAlerts),
+  function(_, _, _, tenant) {
+    'anti-abuse-alerts': std.manifestYamlDoc(antiAbuseAlerts(tenant)),
   },
   ciRunnersService
 )

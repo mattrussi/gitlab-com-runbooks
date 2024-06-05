@@ -7,7 +7,6 @@ groups:
   - alert: MailroomServiceEmailReceiverErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The email_receiver SLI of the mailroom service (`{{ $labels.stage }}`
         stage) has an error rate violating SLO
       description: |
@@ -17,6 +16,7 @@ groups:
       grafana_dashboard_id: mailroom-main/mailroom-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/mailroom-main/mailroom-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "212053046"
       grafana_variables: environment,stage
@@ -55,7 +55,6 @@ groups:
   - alert: MailroomServiceEmailReceiverErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The email_receiver SLI of the mailroom service (`{{ $labels.stage }}`
         stage) has an error rate violating SLO
       description: |
@@ -65,6 +64,7 @@ groups:
       grafana_dashboard_id: mailroom-main/mailroom-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/mailroom-main/mailroom-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "212053046"
       grafana_variables: environment,stage
@@ -103,7 +103,6 @@ groups:
   - alert: MailroomServiceEmailReceiverTrafficCessation
     for: 5m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The email_receiver SLI of the mailroom service (`{{ $labels.stage }}`
         stage) has not received any traffic in the past 30m
       description: |
@@ -113,6 +112,7 @@ groups:
       grafana_dashboard_id: mailroom-main/mailroom-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/mailroom-main/mailroom-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1545803555"
       grafana_variables: environment,stage
@@ -138,7 +138,6 @@ groups:
   - alert: MailroomServiceEmailReceiverTrafficAbsent
     for: 30m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The email_receiver SLI of the mailroom service (`{{ $labels.stage }}`
         stage) has not reported any traffic in the past 30m
       description: |
@@ -150,6 +149,7 @@ groups:
       grafana_dashboard_id: mailroom-main/mailroom-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/mailroom-main/mailroom-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1545803555"
       grafana_variables: environment,stage
@@ -175,7 +175,6 @@ groups:
   - alert: MailroomServiceEmailsProcessedErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The emailsProcessed SLI of the mailroom service (`{{ $labels.stage }}`
         stage) has an error rate violating SLO
       description: |
@@ -185,6 +184,7 @@ groups:
       grafana_dashboard_id: mailroom-main/mailroom-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/mailroom-main/mailroom-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "225761444"
       grafana_variables: environment,stage
@@ -224,7 +224,6 @@ groups:
   - alert: MailroomServiceEmailsProcessedErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The emailsProcessed SLI of the mailroom service (`{{ $labels.stage }}`
         stage) has an error rate violating SLO
       description: |
@@ -234,6 +233,7 @@ groups:
       grafana_dashboard_id: mailroom-main/mailroom-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/mailroom-main/mailroom-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "225761444"
       grafana_variables: environment,stage
@@ -273,7 +273,6 @@ groups:
   - alert: MailroomServiceEmailsProcessedTrafficCessation
     for: 5m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The emailsProcessed SLI of the mailroom service (`{{ $labels.stage }}`
         stage) has not received any traffic in the past 30m
       description: |
@@ -283,6 +282,7 @@ groups:
       grafana_dashboard_id: mailroom-main/mailroom-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/mailroom-main/mailroom-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1411619640"
       grafana_variables: environment,stage
@@ -309,7 +309,6 @@ groups:
   - alert: MailroomServiceEmailsProcessedTrafficAbsent
     for: 30m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The emailsProcessed SLI of the mailroom service (`{{ $labels.stage }}`
         stage) has not reported any traffic in the past 30m
       description: |
@@ -321,6 +320,7 @@ groups:
       grafana_dashboard_id: mailroom-main/mailroom-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/mailroom-main/mailroom-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1411619640"
       grafana_variables: environment,stage

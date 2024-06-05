@@ -1,7 +1,7 @@
 local recordingRules = import 'kube-state-metrics/recording-rules.libsonnet';
 local separateMimirRecordingFiles = (import 'recording-rules/lib/mimir/separate-mimir-recording-files.libsonnet').separateMimirRecordingFiles;
 
-local filesForSeparateSelector(service, selector, extraArgs) =
+local filesForSeparateSelector(service, selector, extraArgs, _) =
   local groups = recordingRules.groupsWithFilter(
     function(s) !s.dangerouslyThanosEvaluated && s.type == service.type,
     selector

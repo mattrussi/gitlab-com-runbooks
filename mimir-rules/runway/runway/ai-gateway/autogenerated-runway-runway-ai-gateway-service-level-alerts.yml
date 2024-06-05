@@ -7,7 +7,6 @@ groups:
   - alert: AiGatewayServiceInferenceApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The inference SLI of the ai-gateway service (`{{ $labels.stage }}` stage)
         has an apdex violating SLO
       description: |
@@ -21,6 +20,7 @@ groups:
       grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-runway
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "4259195235"
       grafana_variables: environment,stage
@@ -63,7 +63,6 @@ groups:
   - alert: AiGatewayServiceInferenceApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The inference SLI of the ai-gateway service (`{{ $labels.stage }}` stage)
         has an apdex violating SLO
       description: |
@@ -77,6 +76,7 @@ groups:
       grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-runway
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "4259195235"
       grafana_variables: environment,stage
@@ -119,7 +119,6 @@ groups:
   - alert: AiGatewayServiceInferenceApdexSLOViolationRegional
     for: 2m
     annotations:
-      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The inference SLI of the ai-gateway service in region `{{ $labels.region
         }}` has an apdex violating SLO
       description: |
@@ -135,6 +134,7 @@ groups:
       grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-runway
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "4259195235"
       grafana_variables: environment,stage
@@ -177,7 +177,6 @@ groups:
   - alert: AiGatewayServiceInferenceApdexSLOViolationRegional
     for: 2m
     annotations:
-      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The inference SLI of the ai-gateway service in region `{{ $labels.region
         }}` has an apdex violating SLO
       description: |
@@ -193,6 +192,7 @@ groups:
       grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-runway
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "4259195235"
       grafana_variables: environment,stage
@@ -235,7 +235,6 @@ groups:
   - alert: AiGatewayServiceInferenceErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The inference SLI of the ai-gateway service (`{{ $labels.stage }}` stage)
         has an error rate violating SLO
       description: |
@@ -249,6 +248,7 @@ groups:
       grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-runway
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "873407058"
       grafana_variables: environment,stage
@@ -288,7 +288,6 @@ groups:
   - alert: AiGatewayServiceInferenceErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The inference SLI of the ai-gateway service (`{{ $labels.stage }}` stage)
         has an error rate violating SLO
       description: |
@@ -302,6 +301,7 @@ groups:
       grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-runway
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "873407058"
       grafana_variables: environment,stage
@@ -341,7 +341,6 @@ groups:
   - alert: AiGatewayServiceInferenceErrorSLOViolationRegional
     for: 2m
     annotations:
-      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The inference SLI of the ai-gateway service in region `{{ $labels.region
         }}` has an error rate violating SLO
       description: |
@@ -357,6 +356,7 @@ groups:
       grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-runway
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "873407058"
       grafana_variables: environment,stage
@@ -396,7 +396,6 @@ groups:
   - alert: AiGatewayServiceInferenceErrorSLOViolationRegional
     for: 2m
     annotations:
-      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The inference SLI of the ai-gateway service in region `{{ $labels.region
         }}` has an error rate violating SLO
       description: |
@@ -412,6 +411,7 @@ groups:
       grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-runway
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "873407058"
       grafana_variables: environment,stage
@@ -451,7 +451,6 @@ groups:
   - alert: AiGatewayServiceRunwayIngressApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The runway_ingress SLI of the ai-gateway service (`{{ $labels.stage }}`
         stage) has an apdex violating SLO
       description: |
@@ -461,6 +460,7 @@ groups:
       grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-runway
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3996186971"
       grafana_variables: environment,stage
@@ -503,7 +503,6 @@ groups:
   - alert: AiGatewayServiceRunwayIngressApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The runway_ingress SLI of the ai-gateway service (`{{ $labels.stage }}`
         stage) has an apdex violating SLO
       description: |
@@ -513,6 +512,7 @@ groups:
       grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-runway
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3996186971"
       grafana_variables: environment,stage
@@ -555,7 +555,6 @@ groups:
   - alert: AiGatewayServiceRunwayIngressApdexSLOViolationRegional
     for: 2m
     annotations:
-      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The runway_ingress SLI of the ai-gateway service in region `{{ $labels.region
         }}` has an apdex violating SLO
       description: |
@@ -567,6 +566,7 @@ groups:
       grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-runway
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3996186971"
       grafana_variables: environment,stage
@@ -609,7 +609,6 @@ groups:
   - alert: AiGatewayServiceRunwayIngressApdexSLOViolationRegional
     for: 2m
     annotations:
-      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The runway_ingress SLI of the ai-gateway service in region `{{ $labels.region
         }}` has an apdex violating SLO
       description: |
@@ -621,6 +620,7 @@ groups:
       grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-runway
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3996186971"
       grafana_variables: environment,stage
@@ -663,7 +663,6 @@ groups:
   - alert: AiGatewayServiceRunwayIngressErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The runway_ingress SLI of the ai-gateway service (`{{ $labels.stage }}`
         stage) has an error rate violating SLO
       description: |
@@ -673,6 +672,7 @@ groups:
       grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-runway
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3451331792"
       grafana_variables: environment,stage
@@ -712,7 +712,6 @@ groups:
   - alert: AiGatewayServiceRunwayIngressErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The runway_ingress SLI of the ai-gateway service (`{{ $labels.stage }}`
         stage) has an error rate violating SLO
       description: |
@@ -722,6 +721,7 @@ groups:
       grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-runway
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3451331792"
       grafana_variables: environment,stage
@@ -761,7 +761,6 @@ groups:
   - alert: AiGatewayServiceRunwayIngressErrorSLOViolationRegional
     for: 2m
     annotations:
-      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The runway_ingress SLI of the ai-gateway service in region `{{ $labels.region
         }}` has an error rate violating SLO
       description: |
@@ -773,6 +772,7 @@ groups:
       grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-runway
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3451331792"
       grafana_variables: environment,stage
@@ -812,7 +812,6 @@ groups:
   - alert: AiGatewayServiceRunwayIngressErrorSLOViolationRegional
     for: 2m
     annotations:
-      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The runway_ingress SLI of the ai-gateway service in region `{{ $labels.region
         }}` has an error rate violating SLO
       description: |
@@ -824,6 +823,7 @@ groups:
       grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-runway
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3451331792"
       grafana_variables: environment,stage
@@ -863,7 +863,6 @@ groups:
   - alert: AiGatewayServiceRunwayIngressTrafficCessation
     for: 5m
     annotations:
-      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The runway_ingress SLI of the ai-gateway service (`{{ $labels.stage }}`
         stage) has not received any traffic in the past 30m
       description: |
@@ -873,6 +872,7 @@ groups:
       grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-runway
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1866380853"
       grafana_variables: environment,stage
@@ -899,7 +899,6 @@ groups:
   - alert: AiGatewayServiceRunwayIngressTrafficAbsent
     for: 30m
     annotations:
-      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The runway_ingress SLI of the ai-gateway service (`{{ $labels.stage }}`
         stage) has not reported any traffic in the past 30m
       description: |
@@ -911,6 +910,7 @@ groups:
       grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-runway
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1866380853"
       grafana_variables: environment,stage
@@ -937,7 +937,6 @@ groups:
   - alert: AiGatewayServiceRunwayIngressTrafficCessationRegional
     for: 5m
     annotations:
-      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The runway_ingress SLI of the ai-gateway service in region `{{ $labels.region
         }}` has not received any traffic in the past 30m
       description: |
@@ -949,6 +948,7 @@ groups:
       grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-runway
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1866380853"
       grafana_variables: environment,stage
@@ -975,7 +975,6 @@ groups:
   - alert: AiGatewayServiceRunwayIngressTrafficAbsentRegional
     for: 30m
     annotations:
-      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The runway_ingress SLI of the ai-gateway service in region `{{ $labels.region
         }}` has not reported any traffic in the past 30m
       description: |
@@ -989,6 +988,7 @@ groups:
       grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-runway
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1866380853"
       grafana_variables: environment,stage
@@ -1015,7 +1015,6 @@ groups:
   - alert: AiGatewayServiceRunwayLbErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The runway_lb SLI of the ai-gateway service (`{{ $labels.stage }}` stage)
         has an error rate violating SLO
       description: |
@@ -1025,6 +1024,7 @@ groups:
       grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-runway
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "812057818"
       grafana_variables: environment,stage
@@ -1064,7 +1064,6 @@ groups:
   - alert: AiGatewayServiceRunwayLbErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The runway_lb SLI of the ai-gateway service (`{{ $labels.stage }}` stage)
         has an error rate violating SLO
       description: |
@@ -1074,6 +1073,7 @@ groups:
       grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-runway
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "812057818"
       grafana_variables: environment,stage
@@ -1113,7 +1113,6 @@ groups:
   - alert: AiGatewayServiceRunwayLbErrorSLOViolationRegional
     for: 2m
     annotations:
-      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The runway_lb SLI of the ai-gateway service in region `{{ $labels.region
         }}` has an error rate violating SLO
       description: |
@@ -1125,6 +1124,7 @@ groups:
       grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-runway
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "812057818"
       grafana_variables: environment,stage
@@ -1164,7 +1164,6 @@ groups:
   - alert: AiGatewayServiceRunwayLbErrorSLOViolationRegional
     for: 2m
     annotations:
-      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The runway_lb SLI of the ai-gateway service in region `{{ $labels.region
         }}` has an error rate violating SLO
       description: |
@@ -1176,6 +1175,7 @@ groups:
       grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-runway
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "812057818"
       grafana_variables: environment,stage
@@ -1215,7 +1215,6 @@ groups:
   - alert: AiGatewayServiceRunwayLbTrafficCessation
     for: 5m
     annotations:
-      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The runway_lb SLI of the ai-gateway service (`{{ $labels.stage }}` stage)
         has not received any traffic in the past 30m
       description: |
@@ -1225,6 +1224,7 @@ groups:
       grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-runway
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1782139780"
       grafana_variables: environment,stage
@@ -1251,7 +1251,6 @@ groups:
   - alert: AiGatewayServiceRunwayLbTrafficAbsent
     for: 30m
     annotations:
-      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The runway_lb SLI of the ai-gateway service (`{{ $labels.stage }}` stage)
         has not reported any traffic in the past 30m
       description: |
@@ -1263,6 +1262,7 @@ groups:
       grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-runway
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1782139780"
       grafana_variables: environment,stage
@@ -1289,7 +1289,6 @@ groups:
   - alert: AiGatewayServiceRunwayLbTrafficCessationRegional
     for: 5m
     annotations:
-      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The runway_lb SLI of the ai-gateway service in region `{{ $labels.region
         }}` has not received any traffic in the past 30m
       description: |
@@ -1301,6 +1300,7 @@ groups:
       grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-runway
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1782139780"
       grafana_variables: environment,stage
@@ -1327,7 +1327,6 @@ groups:
   - alert: AiGatewayServiceRunwayLbTrafficAbsentRegional
     for: 30m
     annotations:
-      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The runway_lb SLI of the ai-gateway service in region `{{ $labels.region
         }}` has not reported any traffic in the past 30m
       description: |
@@ -1341,6 +1340,7 @@ groups:
       grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-runway
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1782139780"
       grafana_variables: environment,stage
@@ -1367,7 +1367,6 @@ groups:
   - alert: AiGatewayServiceServerApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The server SLI of the ai-gateway service (`{{ $labels.stage }}` stage)
         has an apdex violating SLO
       description: |
@@ -1377,6 +1376,7 @@ groups:
       grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-runway
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2863319079"
       grafana_variables: environment,stage
@@ -1418,7 +1418,6 @@ groups:
   - alert: AiGatewayServiceServerApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The server SLI of the ai-gateway service (`{{ $labels.stage }}` stage)
         has an apdex violating SLO
       description: |
@@ -1428,6 +1427,7 @@ groups:
       grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-runway
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2863319079"
       grafana_variables: environment,stage
@@ -1469,7 +1469,6 @@ groups:
   - alert: AiGatewayServiceServerApdexSLOViolationRegional
     for: 2m
     annotations:
-      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The server SLI of the ai-gateway service in region `{{ $labels.region
         }}` has an apdex violating SLO
       description: |
@@ -1481,6 +1480,7 @@ groups:
       grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-runway
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2863319079"
       grafana_variables: environment,stage
@@ -1522,7 +1522,6 @@ groups:
   - alert: AiGatewayServiceServerApdexSLOViolationRegional
     for: 2m
     annotations:
-      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The server SLI of the ai-gateway service in region `{{ $labels.region
         }}` has an apdex violating SLO
       description: |
@@ -1534,6 +1533,7 @@ groups:
       grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-runway
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2863319079"
       grafana_variables: environment,stage
@@ -1575,7 +1575,6 @@ groups:
   - alert: AiGatewayServiceServerErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The server SLI of the ai-gateway service (`{{ $labels.stage }}` stage)
         has an error rate violating SLO
       description: |
@@ -1585,6 +1584,7 @@ groups:
       grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-runway
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1631973137"
       grafana_variables: environment,stage
@@ -1623,7 +1623,6 @@ groups:
   - alert: AiGatewayServiceServerErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The server SLI of the ai-gateway service (`{{ $labels.stage }}` stage)
         has an error rate violating SLO
       description: |
@@ -1633,6 +1632,7 @@ groups:
       grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-runway
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1631973137"
       grafana_variables: environment,stage
@@ -1671,7 +1671,6 @@ groups:
   - alert: AiGatewayServiceServerErrorSLOViolationRegional
     for: 2m
     annotations:
-      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The server SLI of the ai-gateway service in region `{{ $labels.region
         }}` has an error rate violating SLO
       description: |
@@ -1683,6 +1682,7 @@ groups:
       grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-runway
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1631973137"
       grafana_variables: environment,stage
@@ -1721,7 +1721,6 @@ groups:
   - alert: AiGatewayServiceServerErrorSLOViolationRegional
     for: 2m
     annotations:
-      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The server SLI of the ai-gateway service in region `{{ $labels.region
         }}` has an error rate violating SLO
       description: |
@@ -1733,6 +1732,7 @@ groups:
       grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-runway
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1631973137"
       grafana_variables: environment,stage
@@ -1771,7 +1771,6 @@ groups:
   - alert: AiGatewayServiceServerChatApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The server_chat SLI of the ai-gateway service (`{{ $labels.stage }}`
         stage) has an apdex violating SLO
       description: |
@@ -1781,6 +1780,7 @@ groups:
       grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-runway
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3566889786"
       grafana_variables: environment,stage
@@ -1823,7 +1823,6 @@ groups:
   - alert: AiGatewayServiceServerChatApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The server_chat SLI of the ai-gateway service (`{{ $labels.stage }}`
         stage) has an apdex violating SLO
       description: |
@@ -1833,6 +1832,7 @@ groups:
       grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-runway
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3566889786"
       grafana_variables: environment,stage
@@ -1875,7 +1875,6 @@ groups:
   - alert: AiGatewayServiceServerChatApdexSLOViolationRegional
     for: 2m
     annotations:
-      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The server_chat SLI of the ai-gateway service in region `{{ $labels.region
         }}` has an apdex violating SLO
       description: |
@@ -1887,6 +1886,7 @@ groups:
       grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-runway
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3566889786"
       grafana_variables: environment,stage
@@ -1929,7 +1929,6 @@ groups:
   - alert: AiGatewayServiceServerChatApdexSLOViolationRegional
     for: 2m
     annotations:
-      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The server_chat SLI of the ai-gateway service in region `{{ $labels.region
         }}` has an apdex violating SLO
       description: |
@@ -1941,6 +1940,7 @@ groups:
       grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-runway
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3566889786"
       grafana_variables: environment,stage
@@ -1983,7 +1983,6 @@ groups:
   - alert: AiGatewayServiceServerChatErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The server_chat SLI of the ai-gateway service (`{{ $labels.stage }}`
         stage) has an error rate violating SLO
       description: |
@@ -1993,6 +1992,7 @@ groups:
       grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-runway
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1462095494"
       grafana_variables: environment,stage
@@ -2032,7 +2032,6 @@ groups:
   - alert: AiGatewayServiceServerChatErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The server_chat SLI of the ai-gateway service (`{{ $labels.stage }}`
         stage) has an error rate violating SLO
       description: |
@@ -2042,6 +2041,7 @@ groups:
       grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-runway
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1462095494"
       grafana_variables: environment,stage
@@ -2081,7 +2081,6 @@ groups:
   - alert: AiGatewayServiceServerChatErrorSLOViolationRegional
     for: 2m
     annotations:
-      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The server_chat SLI of the ai-gateway service in region `{{ $labels.region
         }}` has an error rate violating SLO
       description: |
@@ -2093,6 +2092,7 @@ groups:
       grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-runway
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1462095494"
       grafana_variables: environment,stage
@@ -2132,7 +2132,6 @@ groups:
   - alert: AiGatewayServiceServerChatErrorSLOViolationRegional
     for: 2m
     annotations:
-      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The server_chat SLI of the ai-gateway service in region `{{ $labels.region
         }}` has an error rate violating SLO
       description: |
@@ -2144,6 +2143,7 @@ groups:
       grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-runway
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1462095494"
       grafana_variables: environment,stage
@@ -2183,7 +2183,6 @@ groups:
   - alert: AiGatewayServiceServerCodeCompletionsApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The server_code_completions SLI of the ai-gateway service (`{{ $labels.stage
         }}` stage) has an apdex violating SLO
       description: |
@@ -2193,6 +2192,7 @@ groups:
       grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-runway
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "792111394"
       grafana_variables: environment,stage
@@ -2235,7 +2235,6 @@ groups:
   - alert: AiGatewayServiceServerCodeCompletionsApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The server_code_completions SLI of the ai-gateway service (`{{ $labels.stage
         }}` stage) has an apdex violating SLO
       description: |
@@ -2245,6 +2244,7 @@ groups:
       grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-runway
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "792111394"
       grafana_variables: environment,stage
@@ -2287,7 +2287,6 @@ groups:
   - alert: AiGatewayServiceServerCodeCompletionsApdexSLOViolationRegional
     for: 2m
     annotations:
-      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The server_code_completions SLI of the ai-gateway service in region `{{
         $labels.region }}` has an apdex violating SLO
       description: |
@@ -2299,6 +2298,7 @@ groups:
       grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-runway
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "792111394"
       grafana_variables: environment,stage
@@ -2341,7 +2341,6 @@ groups:
   - alert: AiGatewayServiceServerCodeCompletionsApdexSLOViolationRegional
     for: 2m
     annotations:
-      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The server_code_completions SLI of the ai-gateway service in region `{{
         $labels.region }}` has an apdex violating SLO
       description: |
@@ -2353,6 +2352,7 @@ groups:
       grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-runway
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "792111394"
       grafana_variables: environment,stage
@@ -2395,7 +2395,6 @@ groups:
   - alert: AiGatewayServiceServerCodeCompletionsErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The server_code_completions SLI of the ai-gateway service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
@@ -2405,6 +2404,7 @@ groups:
       grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-runway
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2484607007"
       grafana_variables: environment,stage
@@ -2444,7 +2444,6 @@ groups:
   - alert: AiGatewayServiceServerCodeCompletionsErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The server_code_completions SLI of the ai-gateway service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
@@ -2454,6 +2453,7 @@ groups:
       grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-runway
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2484607007"
       grafana_variables: environment,stage
@@ -2493,7 +2493,6 @@ groups:
   - alert: AiGatewayServiceServerCodeCompletionsErrorSLOViolationRegional
     for: 2m
     annotations:
-      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The server_code_completions SLI of the ai-gateway service in region `{{
         $labels.region }}` has an error rate violating SLO
       description: |
@@ -2505,6 +2504,7 @@ groups:
       grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-runway
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2484607007"
       grafana_variables: environment,stage
@@ -2544,7 +2544,6 @@ groups:
   - alert: AiGatewayServiceServerCodeCompletionsErrorSLOViolationRegional
     for: 2m
     annotations:
-      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The server_code_completions SLI of the ai-gateway service in region `{{
         $labels.region }}` has an error rate violating SLO
       description: |
@@ -2556,6 +2555,7 @@ groups:
       grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-runway
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2484607007"
       grafana_variables: environment,stage
@@ -2595,7 +2595,6 @@ groups:
   - alert: AiGatewayServiceServerCodeGenerationsApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The server_code_generations SLI of the ai-gateway service (`{{ $labels.stage
         }}` stage) has an apdex violating SLO
       description: |
@@ -2605,6 +2604,7 @@ groups:
       grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-runway
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "886296197"
       grafana_variables: environment,stage
@@ -2647,7 +2647,6 @@ groups:
   - alert: AiGatewayServiceServerCodeGenerationsApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The server_code_generations SLI of the ai-gateway service (`{{ $labels.stage
         }}` stage) has an apdex violating SLO
       description: |
@@ -2657,6 +2656,7 @@ groups:
       grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-runway
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "886296197"
       grafana_variables: environment,stage
@@ -2699,7 +2699,6 @@ groups:
   - alert: AiGatewayServiceServerCodeGenerationsApdexSLOViolationRegional
     for: 2m
     annotations:
-      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The server_code_generations SLI of the ai-gateway service in region `{{
         $labels.region }}` has an apdex violating SLO
       description: |
@@ -2711,6 +2710,7 @@ groups:
       grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-runway
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "886296197"
       grafana_variables: environment,stage
@@ -2753,7 +2753,6 @@ groups:
   - alert: AiGatewayServiceServerCodeGenerationsApdexSLOViolationRegional
     for: 2m
     annotations:
-      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The server_code_generations SLI of the ai-gateway service in region `{{
         $labels.region }}` has an apdex violating SLO
       description: |
@@ -2765,6 +2764,7 @@ groups:
       grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-runway
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "886296197"
       grafana_variables: environment,stage
@@ -2807,7 +2807,6 @@ groups:
   - alert: AiGatewayServiceServerCodeGenerationsErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The server_code_generations SLI of the ai-gateway service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
@@ -2817,6 +2816,7 @@ groups:
       grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-runway
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2564361589"
       grafana_variables: environment,stage
@@ -2856,7 +2856,6 @@ groups:
   - alert: AiGatewayServiceServerCodeGenerationsErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The server_code_generations SLI of the ai-gateway service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
@@ -2866,6 +2865,7 @@ groups:
       grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-runway
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2564361589"
       grafana_variables: environment,stage
@@ -2905,7 +2905,6 @@ groups:
   - alert: AiGatewayServiceServerCodeGenerationsErrorSLOViolationRegional
     for: 2m
     annotations:
-      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The server_code_generations SLI of the ai-gateway service in region `{{
         $labels.region }}` has an error rate violating SLO
       description: |
@@ -2917,6 +2916,7 @@ groups:
       grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-runway
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2564361589"
       grafana_variables: environment,stage
@@ -2956,7 +2956,6 @@ groups:
   - alert: AiGatewayServiceServerCodeGenerationsErrorSLOViolationRegional
     for: 2m
     annotations:
-      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The server_code_generations SLI of the ai-gateway service in region `{{
         $labels.region }}` has an error rate violating SLO
       description: |
@@ -2968,6 +2967,7 @@ groups:
       grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-runway
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2564361589"
       grafana_variables: environment,stage
@@ -3007,7 +3007,6 @@ groups:
   - alert: AiGatewayServiceServerXRayApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The server_x_ray SLI of the ai-gateway service (`{{ $labels.stage }}`
         stage) has an apdex violating SLO
       description: |
@@ -3017,6 +3016,7 @@ groups:
       grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-runway
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "532989566"
       grafana_variables: environment,stage
@@ -3058,7 +3058,6 @@ groups:
   - alert: AiGatewayServiceServerXRayApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The server_x_ray SLI of the ai-gateway service (`{{ $labels.stage }}`
         stage) has an apdex violating SLO
       description: |
@@ -3068,6 +3067,7 @@ groups:
       grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-runway
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "532989566"
       grafana_variables: environment,stage
@@ -3109,7 +3109,6 @@ groups:
   - alert: AiGatewayServiceServerXRayApdexSLOViolationRegional
     for: 2m
     annotations:
-      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The server_x_ray SLI of the ai-gateway service in region `{{ $labels.region
         }}` has an apdex violating SLO
       description: |
@@ -3121,6 +3120,7 @@ groups:
       grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-runway
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "532989566"
       grafana_variables: environment,stage
@@ -3162,7 +3162,6 @@ groups:
   - alert: AiGatewayServiceServerXRayApdexSLOViolationRegional
     for: 2m
     annotations:
-      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The server_x_ray SLI of the ai-gateway service in region `{{ $labels.region
         }}` has an apdex violating SLO
       description: |
@@ -3174,6 +3173,7 @@ groups:
       grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-runway
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "532989566"
       grafana_variables: environment,stage
@@ -3215,7 +3215,6 @@ groups:
   - alert: AiGatewayServiceServerXRayErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The server_x_ray SLI of the ai-gateway service (`{{ $labels.stage }}`
         stage) has an error rate violating SLO
       description: |
@@ -3225,6 +3224,7 @@ groups:
       grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-runway
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2737483849"
       grafana_variables: environment,stage
@@ -3263,7 +3263,6 @@ groups:
   - alert: AiGatewayServiceServerXRayErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The server_x_ray SLI of the ai-gateway service (`{{ $labels.stage }}`
         stage) has an error rate violating SLO
       description: |
@@ -3273,6 +3272,7 @@ groups:
       grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-runway
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2737483849"
       grafana_variables: environment,stage
@@ -3311,7 +3311,6 @@ groups:
   - alert: AiGatewayServiceServerXRayErrorSLOViolationRegional
     for: 2m
     annotations:
-      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The server_x_ray SLI of the ai-gateway service in region `{{ $labels.region
         }}` has an error rate violating SLO
       description: |
@@ -3323,6 +3322,7 @@ groups:
       grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-runway
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2737483849"
       grafana_variables: environment,stage
@@ -3361,7 +3361,6 @@ groups:
   - alert: AiGatewayServiceServerXRayErrorSLOViolationRegional
     for: 2m
     annotations:
-      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The server_x_ray SLI of the ai-gateway service in region `{{ $labels.region
         }}` has an error rate violating SLO
       description: |
@@ -3373,6 +3372,7 @@ groups:
       grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-runway
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2737483849"
       grafana_variables: environment,stage
@@ -3411,7 +3411,6 @@ groups:
   - alert: AiGatewayServiceWafErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The waf SLI of the ai-gateway service (`{{ $labels.stage }}` stage) has
         an error rate violating SLO
       description: |
@@ -3421,6 +3420,7 @@ groups:
       grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-runway
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1626131899"
       grafana_variables: environment,stage
@@ -3459,7 +3459,6 @@ groups:
   - alert: AiGatewayServiceWafErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The waf SLI of the ai-gateway service (`{{ $labels.stage }}` stage) has
         an error rate violating SLO
       description: |
@@ -3469,6 +3468,7 @@ groups:
       grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-runway
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1626131899"
       grafana_variables: environment,stage
@@ -3507,7 +3507,6 @@ groups:
   - alert: AiGatewayServiceWafErrorSLOViolationRegional
     for: 2m
     annotations:
-      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The waf SLI of the ai-gateway service in region `{{ $labels.region }}`
         has an error rate violating SLO
       description: |
@@ -3519,6 +3518,7 @@ groups:
       grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-runway
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1626131899"
       grafana_variables: environment,stage
@@ -3557,7 +3557,6 @@ groups:
   - alert: AiGatewayServiceWafErrorSLOViolationRegional
     for: 2m
     annotations:
-      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The waf SLI of the ai-gateway service in region `{{ $labels.region }}`
         has an error rate violating SLO
       description: |
@@ -3569,6 +3568,7 @@ groups:
       grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-runway
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1626131899"
       grafana_variables: environment,stage
@@ -3607,7 +3607,6 @@ groups:
   - alert: AiGatewayServiceWafTrafficCessation
     for: 5m
     annotations:
-      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The waf SLI of the ai-gateway service (`{{ $labels.stage }}` stage) has
         not received any traffic in the past 30m
       description: |
@@ -3617,6 +3616,7 @@ groups:
       grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-runway
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "225787872"
       grafana_variables: environment,stage
@@ -3642,7 +3642,6 @@ groups:
   - alert: AiGatewayServiceWafTrafficAbsent
     for: 30m
     annotations:
-      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The waf SLI of the ai-gateway service (`{{ $labels.stage }}` stage) has
         not reported any traffic in the past 30m
       description: |
@@ -3654,6 +3653,7 @@ groups:
       grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-runway
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "225787872"
       grafana_variables: environment,stage
@@ -3679,7 +3679,6 @@ groups:
   - alert: AiGatewayServiceWafTrafficCessationRegional
     for: 5m
     annotations:
-      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The waf SLI of the ai-gateway service in region `{{ $labels.region }}`
         has not received any traffic in the past 30m
       description: |
@@ -3691,6 +3690,7 @@ groups:
       grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-runway
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "225787872"
       grafana_variables: environment,stage
@@ -3716,7 +3716,6 @@ groups:
   - alert: AiGatewayServiceWafTrafficAbsentRegional
     for: 30m
     annotations:
-      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The waf SLI of the ai-gateway service in region `{{ $labels.region }}`
         has not reported any traffic in the past 30m
       description: |
@@ -3730,6 +3729,7 @@ groups:
       grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-runway
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "225787872"
       grafana_variables: environment,stage

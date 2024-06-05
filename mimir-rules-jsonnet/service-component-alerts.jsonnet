@@ -2,10 +2,10 @@ local aggregationSets = (import 'gitlab-metrics-config.libsonnet').aggregationSe
 local separateMimirRecordingFiles = (import 'recording-rules/lib/mimir/separate-mimir-recording-files.libsonnet').separateMimirRecordingFiles;
 local monitoredServices = (import 'gitlab-metrics-config.libsonnet').monitoredServices;
 local serviceAlertsGenerator = import 'slo-alerts/service-alerts-generator.libsonnet';
-local alertGroupsForService = import 'alerts/service-component-alerts.libsonnet';
+local groupsForService = import 'alerts/service-component-alerts.libsonnet';
 
-local fileForService(service, selector, _extraArgs) =
-  local groups = alertGroupsForService(service, selector, aggregationSets);
+local fileForService(service, selector, _extraArgs, tenant) =
+  local groups = groupsForService(service, selector, aggregationSets, {}, tenant);
   if groups != null then
     {
       'service-level-alerts': std.manifestYamlDoc(groups),

@@ -7,7 +7,6 @@ groups:
   - alert: MonitoringServiceGrafanaApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The grafana SLI of the monitoring service (`{{ $labels.stage }}` stage)
         has an apdex violating SLO
       description: |
@@ -17,6 +16,7 @@ groups:
       grafana_dashboard_id: monitoring-main/monitoring-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/monitoring-main/monitoring-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1543481783"
       grafana_variables: environment,stage
@@ -59,7 +59,6 @@ groups:
   - alert: MonitoringServiceGrafanaApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The grafana SLI of the monitoring service (`{{ $labels.stage }}` stage)
         has an apdex violating SLO
       description: |
@@ -69,6 +68,7 @@ groups:
       grafana_dashboard_id: monitoring-main/monitoring-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/monitoring-main/monitoring-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1543481783"
       grafana_variables: environment,stage
@@ -111,7 +111,6 @@ groups:
   - alert: MonitoringServiceGrafanaErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The grafana SLI of the monitoring service (`{{ $labels.stage }}` stage)
         has an error rate violating SLO
       description: |
@@ -121,6 +120,7 @@ groups:
       grafana_dashboard_id: monitoring-main/monitoring-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/monitoring-main/monitoring-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3079737102"
       grafana_variables: environment,stage
@@ -160,7 +160,6 @@ groups:
   - alert: MonitoringServiceGrafanaErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The grafana SLI of the monitoring service (`{{ $labels.stage }}` stage)
         has an error rate violating SLO
       description: |
@@ -170,6 +169,7 @@ groups:
       grafana_dashboard_id: monitoring-main/monitoring-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/monitoring-main/monitoring-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3079737102"
       grafana_variables: environment,stage
@@ -209,7 +209,6 @@ groups:
   - alert: MonitoringServiceGrafanaDatasourcesErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The grafana_datasources SLI of the monitoring service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
@@ -219,6 +218,7 @@ groups:
       grafana_dashboard_id: monitoring-main/monitoring-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/monitoring-main/monitoring-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "402312104"
       grafana_variables: environment,stage
@@ -258,7 +258,6 @@ groups:
   - alert: MonitoringServiceGrafanaDatasourcesErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The grafana_datasources SLI of the monitoring service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
@@ -268,6 +267,7 @@ groups:
       grafana_dashboard_id: monitoring-main/monitoring-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/monitoring-main/monitoring-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "402312104"
       grafana_variables: environment,stage
@@ -307,7 +307,6 @@ groups:
   - alert: MonitoringServiceGrafanaGoogleLbErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The grafana_google_lb SLI of the monitoring service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
@@ -315,6 +314,7 @@ groups:
       grafana_dashboard_id: monitoring-main/monitoring-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/monitoring-main/monitoring-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "665917726"
       grafana_variables: environment,stage
@@ -353,7 +353,6 @@ groups:
   - alert: MonitoringServiceGrafanaGoogleLbErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The grafana_google_lb SLI of the monitoring service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
@@ -361,6 +360,7 @@ groups:
       grafana_dashboard_id: monitoring-main/monitoring-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/monitoring-main/monitoring-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "665917726"
       grafana_variables: environment,stage
@@ -399,7 +399,6 @@ groups:
   - alert: MonitoringServiceGrafanaImageRendererApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The grafana_image_renderer SLI of the monitoring service (`{{ $labels.stage
         }}` stage) has an apdex violating SLO
       description: |
@@ -409,6 +408,7 @@ groups:
       grafana_dashboard_id: monitoring-main/monitoring-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/monitoring-main/monitoring-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3617039935"
       grafana_variables: environment,stage
@@ -451,7 +451,6 @@ groups:
   - alert: MonitoringServiceGrafanaImageRendererApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The grafana_image_renderer SLI of the monitoring service (`{{ $labels.stage
         }}` stage) has an apdex violating SLO
       description: |
@@ -461,6 +460,7 @@ groups:
       grafana_dashboard_id: monitoring-main/monitoring-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/monitoring-main/monitoring-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3617039935"
       grafana_variables: environment,stage
@@ -503,7 +503,6 @@ groups:
   - alert: MonitoringServiceGrafanaImageRendererErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The grafana_image_renderer SLI of the monitoring service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
@@ -513,6 +512,7 @@ groups:
       grafana_dashboard_id: monitoring-main/monitoring-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/monitoring-main/monitoring-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1209709030"
       grafana_variables: environment,stage
@@ -552,7 +552,6 @@ groups:
   - alert: MonitoringServiceGrafanaImageRendererErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The grafana_image_renderer SLI of the monitoring service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
@@ -562,6 +561,7 @@ groups:
       grafana_dashboard_id: monitoring-main/monitoring-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/monitoring-main/monitoring-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1209709030"
       grafana_variables: environment,stage
@@ -601,7 +601,6 @@ groups:
   - alert: MonitoringServicePrometheusApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The prometheus SLI of the monitoring service (`{{ $labels.stage }}` stage)
         has an apdex violating SLO
       description: |
@@ -611,6 +610,7 @@ groups:
       grafana_dashboard_id: monitoring-main/monitoring-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/monitoring-main/monitoring-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "4146537329"
       grafana_variables: environment,stage
@@ -653,7 +653,6 @@ groups:
   - alert: MonitoringServicePrometheusApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The prometheus SLI of the monitoring service (`{{ $labels.stage }}` stage)
         has an apdex violating SLO
       description: |
@@ -663,6 +662,7 @@ groups:
       grafana_dashboard_id: monitoring-main/monitoring-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/monitoring-main/monitoring-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "4146537329"
       grafana_variables: environment,stage
@@ -705,7 +705,6 @@ groups:
   - alert: MonitoringServicePrometheusErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The prometheus SLI of the monitoring service (`{{ $labels.stage }}` stage)
         has an error rate violating SLO
       description: |
@@ -715,6 +714,7 @@ groups:
       grafana_dashboard_id: monitoring-main/monitoring-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/monitoring-main/monitoring-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "190969910"
       grafana_variables: environment,stage
@@ -754,7 +754,6 @@ groups:
   - alert: MonitoringServicePrometheusErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The prometheus SLI of the monitoring service (`{{ $labels.stage }}` stage)
         has an error rate violating SLO
       description: |
@@ -764,6 +763,7 @@ groups:
       grafana_dashboard_id: monitoring-main/monitoring-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/monitoring-main/monitoring-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "190969910"
       grafana_variables: environment,stage
@@ -803,7 +803,6 @@ groups:
   - alert: MonitoringServicePrometheusTrafficCessation
     for: 5m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The prometheus SLI of the monitoring service (`{{ $labels.stage }}` stage)
         has not received any traffic in the past 30m
       description: |
@@ -813,6 +812,7 @@ groups:
       grafana_dashboard_id: monitoring-main/monitoring-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/monitoring-main/monitoring-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "443859513"
       grafana_variables: environment,stage
@@ -839,7 +839,6 @@ groups:
   - alert: MonitoringServicePrometheusTrafficAbsent
     for: 30m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The prometheus SLI of the monitoring service (`{{ $labels.stage }}` stage)
         has not reported any traffic in the past 30m
       description: |
@@ -851,6 +850,7 @@ groups:
       grafana_dashboard_id: monitoring-main/monitoring-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/monitoring-main/monitoring-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "443859513"
       grafana_variables: environment,stage
@@ -877,7 +877,6 @@ groups:
   - alert: MonitoringServicePrometheusAlertSenderErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The prometheus_alert_sender SLI of the monitoring service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
@@ -887,6 +886,7 @@ groups:
       grafana_dashboard_id: monitoring-main/monitoring-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/monitoring-main/monitoring-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3098809023"
       grafana_variables: environment,stage
@@ -926,7 +926,6 @@ groups:
   - alert: MonitoringServicePrometheusAlertSenderErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The prometheus_alert_sender SLI of the monitoring service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
@@ -936,6 +935,7 @@ groups:
       grafana_dashboard_id: monitoring-main/monitoring-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/monitoring-main/monitoring-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3098809023"
       grafana_variables: environment,stage
@@ -975,7 +975,6 @@ groups:
   - alert: MonitoringServicePrometheusAlertSenderTrafficCessation
     for: 5m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The prometheus_alert_sender SLI of the monitoring service (`{{ $labels.stage
         }}` stage) has not received any traffic in the past 30m
       description: |
@@ -985,6 +984,7 @@ groups:
       grafana_dashboard_id: monitoring-main/monitoring-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/monitoring-main/monitoring-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2970883772"
       grafana_variables: environment,stage
@@ -1011,7 +1011,6 @@ groups:
   - alert: MonitoringServicePrometheusAlertSenderTrafficAbsent
     for: 30m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The prometheus_alert_sender SLI of the monitoring service (`{{ $labels.stage
         }}` stage) has not reported any traffic in the past 30m
       description: |
@@ -1023,6 +1022,7 @@ groups:
       grafana_dashboard_id: monitoring-main/monitoring-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/monitoring-main/monitoring-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2970883772"
       grafana_variables: environment,stage
@@ -1049,7 +1049,6 @@ groups:
   - alert: MonitoringServiceRuleEvaluationApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The rule_evaluation SLI of the monitoring service (`{{ $labels.stage
         }}` stage) has an apdex violating SLO
       description: |
@@ -1065,6 +1064,7 @@ groups:
       grafana_dashboard_id: monitoring-main/monitoring-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/monitoring-main/monitoring-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2667244350"
       grafana_variables: environment,stage
@@ -1099,7 +1099,6 @@ groups:
   - alert: MonitoringServiceRuleEvaluationApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The rule_evaluation SLI of the monitoring service (`{{ $labels.stage
         }}` stage) has an apdex violating SLO
       description: |
@@ -1115,6 +1114,7 @@ groups:
       grafana_dashboard_id: monitoring-main/monitoring-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/monitoring-main/monitoring-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2667244350"
       grafana_variables: environment,stage
@@ -1149,7 +1149,6 @@ groups:
   - alert: MonitoringServiceRuleEvaluationErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The rule_evaluation SLI of the monitoring service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
@@ -1165,6 +1164,7 @@ groups:
       grafana_dashboard_id: monitoring-main/monitoring-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/monitoring-main/monitoring-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3727131931"
       grafana_variables: environment,stage
@@ -1203,7 +1203,6 @@ groups:
   - alert: MonitoringServiceRuleEvaluationErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The rule_evaluation SLI of the monitoring service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
@@ -1219,6 +1218,7 @@ groups:
       grafana_dashboard_id: monitoring-main/monitoring-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/monitoring-main/monitoring-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3727131931"
       grafana_variables: environment,stage
@@ -1257,7 +1257,6 @@ groups:
   - alert: MonitoringServiceRuleEvaluationTrafficCessation
     for: 5m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The rule_evaluation SLI of the monitoring service (`{{ $labels.stage
         }}` stage) has not received any traffic in the past 30m
       description: |
@@ -1273,6 +1272,7 @@ groups:
       grafana_dashboard_id: monitoring-main/monitoring-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/monitoring-main/monitoring-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2621394178"
       grafana_variables: environment,stage
@@ -1298,7 +1298,6 @@ groups:
   - alert: MonitoringServiceRuleEvaluationTrafficAbsent
     for: 30m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The rule_evaluation SLI of the monitoring service (`{{ $labels.stage
         }}` stage) has not reported any traffic in the past 30m
       description: |
@@ -1316,6 +1315,7 @@ groups:
       grafana_dashboard_id: monitoring-main/monitoring-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/monitoring-main/monitoring-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2621394178"
       grafana_variables: environment,stage

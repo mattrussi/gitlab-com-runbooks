@@ -7,7 +7,6 @@ groups:
   - alert: CloudflareServiceGitlabNetZoneTrafficCessation
     for: 5m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The gitlab_net_zone SLI of the cloudflare service (`{{ $labels.stage
         }}` stage) has not received any traffic in the past 30m
       description: |
@@ -19,6 +18,7 @@ groups:
       grafana_dashboard_id: cloudflare-main/cloudflare-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/cloudflare-main/cloudflare-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3342493164"
       grafana_variables: environment,stage
@@ -45,7 +45,6 @@ groups:
   - alert: CloudflareServiceGitlabNetZoneTrafficAbsent
     for: 30m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The gitlab_net_zone SLI of the cloudflare service (`{{ $labels.stage
         }}` stage) has not reported any traffic in the past 30m
       description: |
@@ -59,6 +58,7 @@ groups:
       grafana_dashboard_id: cloudflare-main/cloudflare-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/cloudflare-main/cloudflare-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3342493164"
       grafana_variables: environment,stage
@@ -85,7 +85,6 @@ groups:
   - alert: CloudflareServiceGitlabZoneTrafficCessation
     for: 5m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The gitlab_zone SLI of the cloudflare service (`{{ $labels.stage }}`
         stage) has not received any traffic in the past 30m
       description: |
@@ -97,6 +96,7 @@ groups:
       grafana_dashboard_id: cloudflare-main/cloudflare-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/cloudflare-main/cloudflare-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "443878888"
       grafana_variables: environment,stage
@@ -123,7 +123,6 @@ groups:
   - alert: CloudflareServiceGitlabZoneTrafficAbsent
     for: 30m
     annotations:
-      grafana_datasource_id: ca3275a4-339e-4b20-91bc-739ff4dfa5aa
       title: The gitlab_zone SLI of the cloudflare service (`{{ $labels.stage }}`
         stage) has not reported any traffic in the past 30m
       description: |
@@ -137,6 +136,7 @@ groups:
       grafana_dashboard_id: cloudflare-main/cloudflare-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/cloudflare-main/cloudflare-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "443878888"
       grafana_variables: environment,stage

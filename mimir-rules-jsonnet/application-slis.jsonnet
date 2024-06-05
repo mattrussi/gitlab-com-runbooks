@@ -37,7 +37,7 @@ std.foldl(
     local serviceApplicationSliNames = std.setInter(std.set(serviceSliNames), std.set(applicationSlis.names));
     local serviceApplicationSliDefinitions = std.map(function(name) applicationSlis.get(name), serviceApplicationSliNames);
     memo + separateMimirRecordingFiles(
-      function(service, selector, _extraArgs)
+      function(service, selector, _extraArgs, _)
         local groups = std.flatMap(
           function(sli)
             local emittingTypes = serviceDefinition.serviceLevelIndicators[sli.name].emittedBy;

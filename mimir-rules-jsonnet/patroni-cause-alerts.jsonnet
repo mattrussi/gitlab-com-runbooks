@@ -2,8 +2,8 @@ local separateMimirRecordingFiles = (import 'recording-rules/lib/mimir/separate-
 local patroniCauseAlerts = import 'alerts/patroni-cause-alerts.libsonnet';
 
 separateMimirRecordingFiles(
-  function(service, selector, extraArgs)
+  function(service, selector, extraArgs, tenant)
     {
-      'patroni-cause-alerts': std.manifestYamlDoc(patroniCauseAlerts(selector)),
+      'patroni-cause-alerts': std.manifestYamlDoc(patroniCauseAlerts(selector, tenant)),
     }
 )

@@ -18,7 +18,7 @@ local transformRuleGroups(aggregationSet, extraSourceSelector, service) =
       extrasForGroup={}
     ) else [];
 
-local aggregationsForService(service, selector, _extraArgs) =
+local aggregationsForService(service, selector, _extraArgs, _) =
   std.foldl(
     function(memo, aggregationSet)
       local groups = transformRuleGroups(aggregationSet, selector, service);

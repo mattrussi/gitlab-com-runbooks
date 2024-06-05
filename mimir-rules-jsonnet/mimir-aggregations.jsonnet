@@ -36,7 +36,7 @@ local groupsForService(service, aggregationSet, extraSelector) =
     aggregationSet.getBurnRates(),
   );
 
-local aggregationsForService(service, selector, _extraArgs) =
+local aggregationsForService(service, selector, _extraArgs, _) =
   std.foldl(
     function(memo, set)
       local groups = std.prune(groupsForService(service, set, selector));

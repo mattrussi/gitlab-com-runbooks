@@ -20,7 +20,6 @@ groups:
   - alert: component_saturation_slo_out_of_bounds:cpu
     for: 5m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The Average Service CPU Utilization resource of the {{ $labels.type }}
         service ({{ $labels.stage }} stage) has a saturation exceeding SLO and is
         close to its capacity limit.
@@ -34,6 +33,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_cpu?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
         }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1465724101"
       grafana_variables: environment,type,stage
@@ -72,7 +72,6 @@ groups:
   - alert: component_saturation_slo_out_of_bounds:disk_inodes
     for: 15m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The Disk inode Utilization per Device per Node resource of the {{ $labels.type
         }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
         is close to its capacity limit.
@@ -88,6 +87,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_disk_inodes?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
         }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "39965907"
       grafana_variables: environment,type,stage
@@ -131,7 +131,6 @@ groups:
   - alert: ComponentResourceRunningOut_disk_inodes
     for: 15m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The Disk inode Utilization per Device per Node resource of the {{ $labels.type
         }} service ({{ $labels.stage }} stage) is on track to hit capacity within
         6h
@@ -147,6 +146,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_disk_inodes?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
         }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "39965907"
       grafana_variables: environment,type,stage
@@ -192,7 +192,6 @@ groups:
   - alert: component_saturation_slo_out_of_bounds:disk_space
     for: 15m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The Disk Space Utilization per Device per Node resource of the {{ $labels.type
         }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
         is close to its capacity limit.
@@ -206,6 +205,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_disk_space?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
         }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2661375984"
       grafana_variables: environment,type,stage
@@ -245,7 +245,6 @@ groups:
   - alert: ComponentResourceRunningOut_disk_space
     for: 15m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The Disk Space Utilization per Device per Node resource of the {{ $labels.type
         }} service ({{ $labels.stage }} stage) is on track to hit capacity within
         6h
@@ -259,6 +258,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_disk_space?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
         }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2661375984"
       grafana_variables: environment,type,stage
@@ -300,7 +300,6 @@ groups:
   - alert: component_saturation_slo_out_of_bounds:disk_sustained_read_iops
     for: 25m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The Disk Sustained Read IOPS Utilization per Node resource of the {{
         $labels.type }} service ({{ $labels.stage }} stage) has a saturation exceeding
         SLO and is close to its capacity limit.
@@ -314,6 +313,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_disk_sus_read_iops?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
         }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3942129027"
       grafana_variables: environment,type,stage
@@ -352,7 +352,6 @@ groups:
   - alert: component_saturation_slo_out_of_bounds:disk_sustained_read_throughput
     for: 25m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The Disk Sustained Read Throughput Utilization per Node resource of the
         {{ $labels.type }} service ({{ $labels.stage }} stage) has a saturation exceeding
         SLO and is close to its capacity limit.
@@ -366,6 +365,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_disk_sus_read_throughput?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
         }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3120931940"
       grafana_variables: environment,type,stage
@@ -404,7 +404,6 @@ groups:
   - alert: component_saturation_slo_out_of_bounds:disk_sustained_write_iops
     for: 25m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The Disk Sustained Write IOPS Utilization per Node resource of the {{
         $labels.type }} service ({{ $labels.stage }} stage) has a saturation exceeding
         SLO and is close to its capacity limit.
@@ -422,6 +421,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_disk_sus_write_iops?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
         }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1520756669"
       grafana_variables: environment,type,stage
@@ -460,7 +460,6 @@ groups:
   - alert: component_saturation_slo_out_of_bounds:disk_sustained_write_throughput
     for: 25m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The Disk Sustained Write Throughput Utilization per Node resource of
         the {{ $labels.type }} service ({{ $labels.stage }} stage) has a saturation
         exceeding SLO and is close to its capacity limit.
@@ -478,6 +477,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_disk_sus_write_throughput?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
         }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "374696527"
       grafana_variables: environment,type,stage
@@ -516,7 +516,6 @@ groups:
   - alert: component_saturation_slo_out_of_bounds:memory
     for: 5m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The Memory Utilization per Node resource of the {{ $labels.type }} service
         ({{ $labels.stage }} stage) has a saturation exceeding SLO and is close to
         its capacity limit.
@@ -530,6 +529,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_memory?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
         }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1955556769"
       grafana_variables: environment,type,stage
@@ -564,7 +564,6 @@ groups:
   - alert: component_saturation_slo_out_of_bounds:nf_conntrack_entries
     for: 5m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The conntrack Entries per Node resource of the {{ $labels.type }} service
         ({{ $labels.stage }} stage) has a saturation exceeding SLO and is close to
         its capacity limit.
@@ -580,6 +579,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_conntrack?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
         }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "503581002"
       grafana_variables: environment,type,stage
@@ -618,7 +618,6 @@ groups:
   - alert: component_saturation_slo_out_of_bounds:node_schedstat_waiting
     for: 90m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The Node Scheduler Waiting Time resource of the {{ $labels.type }} service
         ({{ $labels.stage }} stage) has a saturation exceeding SLO and is close to
         its capacity limit.
@@ -636,6 +635,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_node_schedstat_waiting?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
         }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1415313189"
       grafana_variables: environment,type,stage
@@ -670,7 +670,6 @@ groups:
   - alert: component_saturation_slo_out_of_bounds:open_fds
     for: 5m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The Open file descriptor utilization per instance resource of the {{
         $labels.type }} service ({{ $labels.stage }} stage) has a saturation exceeding
         SLO and is close to its capacity limit.
@@ -688,6 +687,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_open_fds?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
         }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1001792825"
       grafana_variables: environment,type,stage
@@ -743,7 +743,6 @@ groups:
   - alert: component_saturation_slo_out_of_bounds:pg_active_db_connections_primary
     for: 5m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The Active Primary DB Connection Utilization resource of the {{ $labels.type
         }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
         is close to its capacity limit.
@@ -759,6 +758,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_active_db_conns_primary?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
         }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1954311497"
       grafana_variables: environment,type,stage
@@ -801,7 +801,6 @@ groups:
   - alert: component_saturation_slo_out_of_bounds:pg_active_db_connections_replica
     for: 5m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The Active Secondary DB Connection Utilization resource of the {{ $labels.type
         }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
         is close to its capacity limit.
@@ -817,6 +816,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_active_db_conns_replica?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
         }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3266646533"
       grafana_variables: environment,type,stage
@@ -859,7 +859,6 @@ groups:
   - alert: component_saturation_slo_out_of_bounds:pg_btree_bloat
     for: 5m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The Postgres btree bloat resource of the {{ $labels.type }} service ({{
         $labels.stage }} stage) has a saturation exceeding SLO and is close to its
         capacity limit.
@@ -877,6 +876,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_pg_btree_bloat?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
         }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2387842464"
       grafana_variables: environment,type,stage
@@ -915,7 +915,6 @@ groups:
   - alert: component_saturation_slo_out_of_bounds:pg_int4_id
     for: 5m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The Postgres int4 ID capacity resource of the {{ $labels.type }} service
         ({{ $labels.stage }} stage) has a saturation exceeding SLO and is close to
         its capacity limit.
@@ -933,6 +932,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_pg_int4_id?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
         }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3254820333"
       grafana_variables: environment,type,stage
@@ -972,7 +972,6 @@ groups:
   - alert: component_saturation_slo_out_of_bounds:pg_primary_cpu
     for: 5m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The Average CPU Utilization on Postgres Primary Instance resource of
         the {{ $labels.type }} service ({{ $labels.stage }} stage) has a saturation
         exceeding SLO and is close to its capacity limit.
@@ -986,6 +985,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_pg_primary_cpu?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
         }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3989464622"
       grafana_variables: environment,type,stage
@@ -1037,7 +1037,6 @@ groups:
   - alert: component_saturation_slo_out_of_bounds:pg_table_bloat
     for: 5m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The Postgres Table Bloat resource of the {{ $labels.type }} service ({{
         $labels.stage }} stage) has a saturation exceeding SLO and is close to its
         capacity limit.
@@ -1051,6 +1050,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_pg_table_bloat?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
         }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "773890326"
       grafana_variables: environment,type,stage
@@ -1089,7 +1089,6 @@ groups:
   - alert: component_saturation_slo_out_of_bounds:pg_txid_vacuum_to_wraparound
     for: 5m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The Total autovacuum time to TXID wraparound horizon resource of the
         {{ $labels.type }} service ({{ $labels.stage }} stage) has a saturation exceeding
         SLO and is close to its capacity limit.
@@ -1111,6 +1110,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_pg_txid_vac_wraparound?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
         }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "4019870218"
       grafana_variables: environment,type,stage
@@ -1184,7 +1184,6 @@ groups:
   - alert: component_saturation_slo_out_of_bounds:pg_vacuum_activity_v2
     for: 5m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The Postgres Autovacuum Activity (non-sampled) resource of the {{ $labels.type
         }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
         is close to its capacity limit.
@@ -1204,6 +1203,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_pg_vacuum_activity_v2?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
         }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3412018865"
       grafana_variables: environment,type,stage
@@ -1254,7 +1254,6 @@ groups:
   - alert: component_saturation_slo_out_of_bounds:pg_walsender_cpu
     for: 5m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The Walsender CPU Saturation resource of the {{ $labels.type }} service
         ({{ $labels.stage }} stage) has a saturation exceeding SLO and is close to
         its capacity limit.
@@ -1272,6 +1271,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_pg_walsender_cpu?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
         }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1879384722"
       grafana_variables: environment,type,stage
@@ -1324,7 +1324,6 @@ groups:
   - alert: component_saturation_slo_out_of_bounds:pg_xid_wraparound
     for: 5m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The Transaction ID Wraparound resource of the {{ $labels.type }} service
         ({{ $labels.stage }} stage) has a saturation exceeding SLO and is close to
         its capacity limit.
@@ -1358,6 +1357,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_pg_xid_wraparound?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
         }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3666116359"
       grafana_variables: environment,type,stage
@@ -1411,7 +1411,6 @@ groups:
   - alert: component_saturation_slo_out_of_bounds:pgbouncer_async_replica_pool
     for: 10m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The Postgres Async (Sidekiq) replica Connection Pool Utilization per
         Node resource of the {{ $labels.type }} service ({{ $labels.stage }} stage)
         has a saturation exceeding SLO and is close to its capacity limit.
@@ -1427,6 +1426,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_pgbouncer_async_pool_replica?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
         }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "4069682945"
       grafana_variables: environment,type,stage
@@ -1479,7 +1479,6 @@ groups:
   - alert: component_saturation_slo_out_of_bounds:pgbouncer_client_conn_replicas
     for: 5m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The PGBouncer Client Connections per Process (Replicas) resource of the
         {{ $labels.type }} service ({{ $labels.stage }} stage) has a saturation exceeding
         SLO and is close to its capacity limit.
@@ -1499,6 +1498,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_pgb_client_conn_replicas?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
         }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3093058894"
       grafana_variables: environment,type,stage
@@ -1538,7 +1538,6 @@ groups:
   - alert: component_saturation_slo_out_of_bounds:pgbouncer_sync_replica_pool
     for: 10m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The Postgres Sync (Web/API/Git) replica Connection Pool Utilization per
         Node resource of the {{ $labels.type }} service ({{ $labels.stage }} stage)
         has a saturation exceeding SLO and is close to its capacity limit.
@@ -1556,6 +1555,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_pgb_sync_pool_replica?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
         }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2061891964"
       grafana_variables: environment,type,stage
@@ -1608,7 +1608,6 @@ groups:
   - alert: component_saturation_slo_out_of_bounds:shard_cpu
     for: 5m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The Average CPU Utilization per Shard resource of the {{ $labels.type
         }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
         is close to its capacity limit.
@@ -1622,6 +1621,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_shard_cpu?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
         }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1472933476"
       grafana_variables: environment,type,stage
@@ -1660,7 +1660,6 @@ groups:
   - alert: component_saturation_slo_out_of_bounds:single_node_cpu
     for: 10m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The Average CPU Utilization per Node resource of the {{ $labels.type
         }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
         is close to its capacity limit.
@@ -1676,6 +1675,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_single_node_cpu?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
         }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3372411356"
       grafana_variables: environment,type,stage

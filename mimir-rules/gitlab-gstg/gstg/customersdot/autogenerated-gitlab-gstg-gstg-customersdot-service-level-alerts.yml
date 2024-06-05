@@ -7,7 +7,6 @@ groups:
   - alert: CustomersdotServiceCustomersDotRequestsApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The customers_dot_requests SLI of the customersdot service (`{{ $labels.stage
         }}` stage) has an apdex violating SLO
       description: |
@@ -17,6 +16,7 @@ groups:
       grafana_dashboard_id: customersdot-main/customersdot-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/customersdot-main/customersdot-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gstg
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1773645961"
       grafana_variables: environment,stage
@@ -51,7 +51,6 @@ groups:
   - alert: CustomersdotServiceCustomersDotRequestsApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The customers_dot_requests SLI of the customersdot service (`{{ $labels.stage
         }}` stage) has an apdex violating SLO
       description: |
@@ -61,6 +60,7 @@ groups:
       grafana_dashboard_id: customersdot-main/customersdot-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/customersdot-main/customersdot-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gstg
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1773645961"
       grafana_variables: environment,stage
@@ -95,7 +95,6 @@ groups:
   - alert: CustomersdotServiceCustomersDotRequestsErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The customers_dot_requests SLI of the customersdot service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
@@ -105,6 +104,7 @@ groups:
       grafana_dashboard_id: customersdot-main/customersdot-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/customersdot-main/customersdot-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gstg
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2871402489"
       grafana_variables: environment,stage
@@ -143,7 +143,6 @@ groups:
   - alert: CustomersdotServiceCustomersDotRequestsErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The customers_dot_requests SLI of the customersdot service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
@@ -153,6 +152,7 @@ groups:
       grafana_dashboard_id: customersdot-main/customersdot-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/customersdot-main/customersdot-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gstg
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2871402489"
       grafana_variables: environment,stage
@@ -191,7 +191,6 @@ groups:
   - alert: CustomersdotServiceCustomersDotRequestsTrafficCessation
     for: 5m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The customers_dot_requests SLI of the customersdot service (`{{ $labels.stage
         }}` stage) has not received any traffic in the past 30m
       description: |
@@ -201,6 +200,7 @@ groups:
       grafana_dashboard_id: customersdot-main/customersdot-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/customersdot-main/customersdot-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gstg
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3104934119"
       grafana_variables: environment,stage
@@ -226,7 +226,6 @@ groups:
   - alert: CustomersdotServiceCustomersDotRequestsTrafficAbsent
     for: 30m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The customers_dot_requests SLI of the customersdot service (`{{ $labels.stage
         }}` stage) has not reported any traffic in the past 30m
       description: |
@@ -238,6 +237,7 @@ groups:
       grafana_dashboard_id: customersdot-main/customersdot-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/customersdot-main/customersdot-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gstg
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3104934119"
       grafana_variables: environment,stage
@@ -263,7 +263,6 @@ groups:
   - alert: CustomersdotServiceCustomersDotSidekiqJobsApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The customers_dot_sidekiq_jobs SLI of the customersdot service (`{{ $labels.stage
         }}` stage) has an apdex violating SLO
       description: |
@@ -273,6 +272,7 @@ groups:
       grafana_dashboard_id: customersdot-main/customersdot-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/customersdot-main/customersdot-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gstg
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2519680602"
       grafana_variables: environment,stage
@@ -307,7 +307,6 @@ groups:
   - alert: CustomersdotServiceCustomersDotSidekiqJobsApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The customers_dot_sidekiq_jobs SLI of the customersdot service (`{{ $labels.stage
         }}` stage) has an apdex violating SLO
       description: |
@@ -317,6 +316,7 @@ groups:
       grafana_dashboard_id: customersdot-main/customersdot-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/customersdot-main/customersdot-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gstg
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2519680602"
       grafana_variables: environment,stage
@@ -351,7 +351,6 @@ groups:
   - alert: CustomersdotServiceCustomersDotSidekiqJobsErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The customers_dot_sidekiq_jobs SLI of the customersdot service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
@@ -361,6 +360,7 @@ groups:
       grafana_dashboard_id: customersdot-main/customersdot-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/customersdot-main/customersdot-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gstg
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "889369649"
       grafana_variables: environment,stage
@@ -399,7 +399,6 @@ groups:
   - alert: CustomersdotServiceCustomersDotSidekiqJobsErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The customers_dot_sidekiq_jobs SLI of the customersdot service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
@@ -409,6 +408,7 @@ groups:
       grafana_dashboard_id: customersdot-main/customersdot-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/customersdot-main/customersdot-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gstg
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "889369649"
       grafana_variables: environment,stage
@@ -447,7 +447,6 @@ groups:
   - alert: CustomersdotServiceCustomersDotSidekiqJobsTrafficCessation
     for: 5m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The customers_dot_sidekiq_jobs SLI of the customersdot service (`{{ $labels.stage
         }}` stage) has not received any traffic in the past 30m
       description: |
@@ -457,6 +456,7 @@ groups:
       grafana_dashboard_id: customersdot-main/customersdot-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/customersdot-main/customersdot-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gstg
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "809412225"
       grafana_variables: environment,stage
@@ -482,7 +482,6 @@ groups:
   - alert: CustomersdotServiceCustomersDotSidekiqJobsTrafficAbsent
     for: 30m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The customers_dot_sidekiq_jobs SLI of the customersdot service (`{{ $labels.stage
         }}` stage) has not reported any traffic in the past 30m
       description: |
@@ -494,6 +493,7 @@ groups:
       grafana_dashboard_id: customersdot-main/customersdot-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/customersdot-main/customersdot-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gstg
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "809412225"
       grafana_variables: environment,stage

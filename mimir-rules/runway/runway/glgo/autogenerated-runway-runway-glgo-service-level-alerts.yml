@@ -7,7 +7,6 @@ groups:
   - alert: GlgoServiceRunwayIngressApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The runway_ingress SLI of the glgo service (`{{ $labels.stage }}` stage)
         has an apdex violating SLO
       description: |
@@ -17,6 +16,7 @@ groups:
       grafana_dashboard_id: glgo-main/glgo-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/glgo-main/glgo-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-runway
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3996186971"
       grafana_variables: environment,stage
@@ -59,7 +59,6 @@ groups:
   - alert: GlgoServiceRunwayIngressApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The runway_ingress SLI of the glgo service (`{{ $labels.stage }}` stage)
         has an apdex violating SLO
       description: |
@@ -69,6 +68,7 @@ groups:
       grafana_dashboard_id: glgo-main/glgo-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/glgo-main/glgo-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-runway
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3996186971"
       grafana_variables: environment,stage
@@ -111,7 +111,6 @@ groups:
   - alert: GlgoServiceRunwayIngressErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The runway_ingress SLI of the glgo service (`{{ $labels.stage }}` stage)
         has an error rate violating SLO
       description: |
@@ -121,6 +120,7 @@ groups:
       grafana_dashboard_id: glgo-main/glgo-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/glgo-main/glgo-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-runway
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3451331792"
       grafana_variables: environment,stage
@@ -160,7 +160,6 @@ groups:
   - alert: GlgoServiceRunwayIngressErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The runway_ingress SLI of the glgo service (`{{ $labels.stage }}` stage)
         has an error rate violating SLO
       description: |
@@ -170,6 +169,7 @@ groups:
       grafana_dashboard_id: glgo-main/glgo-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/glgo-main/glgo-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-runway
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3451331792"
       grafana_variables: environment,stage
@@ -209,7 +209,6 @@ groups:
   - alert: GlgoServiceRunwayIngressTrafficCessation
     for: 5m
     annotations:
-      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The runway_ingress SLI of the glgo service (`{{ $labels.stage }}` stage)
         has not received any traffic in the past 30m
       description: |
@@ -219,6 +218,7 @@ groups:
       grafana_dashboard_id: glgo-main/glgo-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/glgo-main/glgo-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-runway
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1866380853"
       grafana_variables: environment,stage
@@ -245,7 +245,6 @@ groups:
   - alert: GlgoServiceRunwayIngressTrafficAbsent
     for: 30m
     annotations:
-      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The runway_ingress SLI of the glgo service (`{{ $labels.stage }}` stage)
         has not reported any traffic in the past 30m
       description: |
@@ -257,6 +256,7 @@ groups:
       grafana_dashboard_id: glgo-main/glgo-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/glgo-main/glgo-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-runway
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1866380853"
       grafana_variables: environment,stage
@@ -283,7 +283,6 @@ groups:
   - alert: GlgoServiceRunwayLbErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The runway_lb SLI of the glgo service (`{{ $labels.stage }}` stage) has
         an error rate violating SLO
       description: |
@@ -293,6 +292,7 @@ groups:
       grafana_dashboard_id: glgo-main/glgo-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/glgo-main/glgo-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-runway
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "812057818"
       grafana_variables: environment,stage
@@ -333,7 +333,6 @@ groups:
   - alert: GlgoServiceRunwayLbErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The runway_lb SLI of the glgo service (`{{ $labels.stage }}` stage) has
         an error rate violating SLO
       description: |
@@ -343,6 +342,7 @@ groups:
       grafana_dashboard_id: glgo-main/glgo-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/glgo-main/glgo-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-runway
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "812057818"
       grafana_variables: environment,stage
@@ -383,7 +383,6 @@ groups:
   - alert: GlgoServiceRunwayLbTrafficCessation
     for: 5m
     annotations:
-      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The runway_lb SLI of the glgo service (`{{ $labels.stage }}` stage) has
         not received any traffic in the past 30m
       description: |
@@ -393,6 +392,7 @@ groups:
       grafana_dashboard_id: glgo-main/glgo-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/glgo-main/glgo-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-runway
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1782139780"
       grafana_variables: environment,stage
@@ -420,7 +420,6 @@ groups:
   - alert: GlgoServiceRunwayLbTrafficAbsent
     for: 30m
     annotations:
-      grafana_datasource_id: a83c4b97-2bbd-4af2-b5c9-941a0f3b08ed
       title: The runway_lb SLI of the glgo service (`{{ $labels.stage }}` stage) has
         not reported any traffic in the past 30m
       description: |
@@ -432,6 +431,7 @@ groups:
       grafana_dashboard_id: glgo-main/glgo-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/glgo-main/glgo-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-runway
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1782139780"
       grafana_variables: environment,stage

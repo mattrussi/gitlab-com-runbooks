@@ -7,7 +7,6 @@ groups:
   - alert: LoggingServiceElasticsearchIndexingClusterTrafficCessation
     for: 5m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The elasticsearch_indexing_cluster SLI of the logging service (`{{ $labels.stage
         }}` stage) has not received any traffic in the past 30m
       description: |
@@ -17,6 +16,7 @@ groups:
       grafana_dashboard_id: logging-main/logging-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/logging-main/logging-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1468912914"
       grafana_variables: environment,stage
@@ -43,7 +43,6 @@ groups:
   - alert: LoggingServiceElasticsearchIndexingClusterTrafficAbsent
     for: 30m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The elasticsearch_indexing_cluster SLI of the logging service (`{{ $labels.stage
         }}` stage) has not reported any traffic in the past 30m
       description: |
@@ -55,6 +54,7 @@ groups:
       grafana_dashboard_id: logging-main/logging-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/logging-main/logging-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1468912914"
       grafana_variables: environment,stage
@@ -81,7 +81,6 @@ groups:
   - alert: LoggingServiceElasticsearchIndexingIndexTrafficCessation
     for: 5m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The elasticsearch_indexing_index SLI of the logging service (`{{ $labels.stage
         }}` stage) has not received any traffic in the past 30m
       description: |
@@ -91,6 +90,7 @@ groups:
       grafana_dashboard_id: logging-main/logging-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/logging-main/logging-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2294808141"
       grafana_variables: environment,stage
@@ -117,7 +117,6 @@ groups:
   - alert: LoggingServiceElasticsearchIndexingIndexTrafficAbsent
     for: 30m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The elasticsearch_indexing_index SLI of the logging service (`{{ $labels.stage
         }}` stage) has not reported any traffic in the past 30m
       description: |
@@ -129,6 +128,7 @@ groups:
       grafana_dashboard_id: logging-main/logging-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/logging-main/logging-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2294808141"
       grafana_variables: environment,stage
@@ -155,7 +155,6 @@ groups:
   - alert: LoggingServiceElasticsearchSearchingClusterTrafficCessation
     for: 5m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The elasticsearch_searching_cluster SLI of the logging service (`{{ $labels.stage
         }}` stage) has not received any traffic in the past 30m
       description: |
@@ -165,6 +164,7 @@ groups:
       grafana_dashboard_id: logging-main/logging-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/logging-main/logging-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "4214347698"
       grafana_variables: environment,stage
@@ -191,7 +191,6 @@ groups:
   - alert: LoggingServiceElasticsearchSearchingClusterTrafficAbsent
     for: 30m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The elasticsearch_searching_cluster SLI of the logging service (`{{ $labels.stage
         }}` stage) has not reported any traffic in the past 30m
       description: |
@@ -203,6 +202,7 @@ groups:
       grafana_dashboard_id: logging-main/logging-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/logging-main/logging-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "4214347698"
       grafana_variables: environment,stage
@@ -229,7 +229,6 @@ groups:
   - alert: LoggingServiceElasticsearchSearchingIndexTrafficCessation
     for: 5m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The elasticsearch_searching_index SLI of the logging service (`{{ $labels.stage
         }}` stage) has not received any traffic in the past 30m
       description: |
@@ -239,6 +238,7 @@ groups:
       grafana_dashboard_id: logging-main/logging-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/logging-main/logging-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2852417009"
       grafana_variables: environment,stage
@@ -265,7 +265,6 @@ groups:
   - alert: LoggingServiceElasticsearchSearchingIndexTrafficAbsent
     for: 30m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The elasticsearch_searching_index SLI of the logging service (`{{ $labels.stage
         }}` stage) has not reported any traffic in the past 30m
       description: |
@@ -277,6 +276,7 @@ groups:
       grafana_dashboard_id: logging-main/logging-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/logging-main/logging-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2852417009"
       grafana_variables: environment,stage
@@ -303,7 +303,6 @@ groups:
   - alert: LoggingServiceFluentdLogOutputErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The fluentd_log_output SLI of the logging service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
@@ -313,6 +312,7 @@ groups:
       grafana_dashboard_id: logging-main/logging-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/logging-main/logging-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3405007546"
       grafana_variables: environment,stage
@@ -352,7 +352,6 @@ groups:
   - alert: LoggingServiceFluentdLogOutputErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The fluentd_log_output SLI of the logging service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
@@ -362,6 +361,7 @@ groups:
       grafana_dashboard_id: logging-main/logging-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/logging-main/logging-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3405007546"
       grafana_variables: environment,stage
@@ -401,7 +401,6 @@ groups:
   - alert: LoggingServiceFluentdLogOutputTrafficCessation
     for: 5m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The fluentd_log_output SLI of the logging service (`{{ $labels.stage
         }}` stage) has not received any traffic in the past 30m
       description: |
@@ -411,6 +410,7 @@ groups:
       grafana_dashboard_id: logging-main/logging-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/logging-main/logging-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3827296992"
       grafana_variables: environment,stage
@@ -437,7 +437,6 @@ groups:
   - alert: LoggingServiceFluentdLogOutputTrafficAbsent
     for: 30m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The fluentd_log_output SLI of the logging service (`{{ $labels.stage
         }}` stage) has not reported any traffic in the past 30m
       description: |
@@ -449,6 +448,7 @@ groups:
       grafana_dashboard_id: logging-main/logging-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/logging-main/logging-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3827296992"
       grafana_variables: environment,stage
@@ -475,7 +475,6 @@ groups:
   - alert: LoggingServiceKibanaGooglelbErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The kibana_googlelb SLI of the logging service (`{{ $labels.stage }}`
         stage) has an error rate violating SLO
       description: |
@@ -483,6 +482,7 @@ groups:
       grafana_dashboard_id: logging-main/logging-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/logging-main/logging-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1918266605"
       grafana_variables: environment,stage
@@ -522,7 +522,6 @@ groups:
   - alert: LoggingServiceKibanaGooglelbErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The kibana_googlelb SLI of the logging service (`{{ $labels.stage }}`
         stage) has an error rate violating SLO
       description: |
@@ -530,6 +529,7 @@ groups:
       grafana_dashboard_id: logging-main/logging-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/logging-main/logging-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1918266605"
       grafana_variables: environment,stage
@@ -569,7 +569,6 @@ groups:
   - alert: LoggingServicePubsubSubscriptionsTrafficCessation
     for: 5m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The pubsub_subscriptions SLI of the logging service (`{{ $labels.stage
         }}` stage) has not received any traffic in the past 30m
       description: |
@@ -579,6 +578,7 @@ groups:
       grafana_dashboard_id: logging-main/logging-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/logging-main/logging-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3855936082"
       grafana_variables: environment,stage
@@ -605,7 +605,6 @@ groups:
   - alert: LoggingServicePubsubSubscriptionsTrafficAbsent
     for: 30m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The pubsub_subscriptions SLI of the logging service (`{{ $labels.stage
         }}` stage) has not reported any traffic in the past 30m
       description: |
@@ -617,6 +616,7 @@ groups:
       grafana_dashboard_id: logging-main/logging-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/logging-main/logging-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3855936082"
       grafana_variables: environment,stage
@@ -643,7 +643,6 @@ groups:
   - alert: LoggingServicePubsubTopicsTrafficCessation
     for: 5m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The pubsub_topics SLI of the logging service (`{{ $labels.stage }}` stage)
         has not received any traffic in the past 30m
       description: |
@@ -653,6 +652,7 @@ groups:
       grafana_dashboard_id: logging-main/logging-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/logging-main/logging-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "705066779"
       grafana_variables: environment,stage
@@ -679,7 +679,6 @@ groups:
   - alert: LoggingServicePubsubTopicsTrafficAbsent
     for: 30m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The pubsub_topics SLI of the logging service (`{{ $labels.stage }}` stage)
         has not reported any traffic in the past 30m
       description: |
@@ -691,6 +690,7 @@ groups:
       grafana_dashboard_id: logging-main/logging-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/logging-main/logging-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "705066779"
       grafana_variables: environment,stage
@@ -717,7 +717,6 @@ groups:
   - alert: LoggingServicePubsubbeatErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The pubsubbeat SLI of the logging service (`{{ $labels.stage }}` stage)
         has an error rate violating SLO
       description: |
@@ -727,6 +726,7 @@ groups:
       grafana_dashboard_id: logging-main/logging-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/logging-main/logging-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2430725542"
       grafana_variables: environment,stage
@@ -766,7 +766,6 @@ groups:
   - alert: LoggingServicePubsubbeatErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The pubsubbeat SLI of the logging service (`{{ $labels.stage }}` stage)
         has an error rate violating SLO
       description: |
@@ -776,6 +775,7 @@ groups:
       grafana_dashboard_id: logging-main/logging-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/logging-main/logging-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2430725542"
       grafana_variables: environment,stage
@@ -815,7 +815,6 @@ groups:
   - alert: LoggingServicePubsubbeatTrafficCessation
     for: 5m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The pubsubbeat SLI of the logging service (`{{ $labels.stage }}` stage)
         has not received any traffic in the past 30m
       description: |
@@ -825,6 +824,7 @@ groups:
       grafana_dashboard_id: logging-main/logging-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/logging-main/logging-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1522766756"
       grafana_variables: environment,stage
@@ -851,7 +851,6 @@ groups:
   - alert: LoggingServicePubsubbeatTrafficAbsent
     for: 30m
     annotations:
-      grafana_datasource_id: e8b842b2-d53b-460b-9125-f4a50db5fdcc
       title: The pubsubbeat SLI of the logging service (`{{ $labels.stage }}` stage)
         has not reported any traffic in the past 30m
       description: |
@@ -863,6 +862,7 @@ groups:
       grafana_dashboard_id: logging-main/logging-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/logging-main/logging-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gprd
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1522766756"
       grafana_variables: environment,stage

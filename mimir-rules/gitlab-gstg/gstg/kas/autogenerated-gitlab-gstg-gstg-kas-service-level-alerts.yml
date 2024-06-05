@@ -7,7 +7,6 @@ groups:
   - alert: KasServiceGrpcRequestsApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The grpc_requests SLI of the kas service (`{{ $labels.stage }}` stage)
         has an apdex violating SLO
       description: |
@@ -15,6 +14,7 @@ groups:
       grafana_dashboard_id: kas-main/kas-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/kas-main/kas-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gstg
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2041855155"
       grafana_variables: environment,stage
@@ -57,7 +57,6 @@ groups:
   - alert: KasServiceGrpcRequestsApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The grpc_requests SLI of the kas service (`{{ $labels.stage }}` stage)
         has an apdex violating SLO
       description: |
@@ -65,6 +64,7 @@ groups:
       grafana_dashboard_id: kas-main/kas-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/kas-main/kas-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gstg
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2041855155"
       grafana_variables: environment,stage
@@ -107,7 +107,6 @@ groups:
   - alert: KasServiceGrpcRequestsErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The grpc_requests SLI of the kas service (`{{ $labels.stage }}` stage)
         has an error rate violating SLO
       description: |
@@ -115,6 +114,7 @@ groups:
       grafana_dashboard_id: kas-main/kas-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/kas-main/kas-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gstg
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "928307072"
       grafana_variables: environment,stage
@@ -154,7 +154,6 @@ groups:
   - alert: KasServiceGrpcRequestsErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The grpc_requests SLI of the kas service (`{{ $labels.stage }}` stage)
         has an error rate violating SLO
       description: |
@@ -162,6 +161,7 @@ groups:
       grafana_dashboard_id: kas-main/kas-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/kas-main/kas-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gstg
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "928307072"
       grafana_variables: environment,stage
@@ -201,7 +201,6 @@ groups:
   - alert: KasServiceGrpcRequestsTrafficCessation
     for: 5m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The grpc_requests SLI of the kas service (`{{ $labels.stage }}` stage)
         has not received any traffic in the past 30m
       description: |
@@ -209,6 +208,7 @@ groups:
       grafana_dashboard_id: kas-main/kas-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/kas-main/kas-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gstg
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3837654202"
       grafana_variables: environment,stage
@@ -235,7 +235,6 @@ groups:
   - alert: KasServiceGrpcRequestsTrafficAbsent
     for: 30m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: The grpc_requests SLI of the kas service (`{{ $labels.stage }}` stage)
         has not reported any traffic in the past 30m
       description: |
@@ -245,6 +244,7 @@ groups:
       grafana_dashboard_id: kas-main/kas-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/kas-main/kas-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-gstg
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3837654202"
       grafana_variables: environment,stage

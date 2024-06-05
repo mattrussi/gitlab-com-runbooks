@@ -7,7 +7,6 @@ groups:
   - alert: ApiServiceGlobalSearchApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The global_search SLI of the api service (`{{ $labels.stage }}` stage)
         has an apdex violating SLO
       description: |
@@ -17,6 +16,7 @@ groups:
       grafana_dashboard_id: api-main/api-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-pre
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "4181740019"
       grafana_variables: environment,stage
@@ -51,7 +51,6 @@ groups:
   - alert: ApiServiceGlobalSearchApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The global_search SLI of the api service (`{{ $labels.stage }}` stage)
         has an apdex violating SLO
       description: |
@@ -61,6 +60,7 @@ groups:
       grafana_dashboard_id: api-main/api-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-pre
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "4181740019"
       grafana_variables: environment,stage
@@ -95,7 +95,6 @@ groups:
   - alert: ApiServiceGlobalSearchApdexSLOViolationRegional
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The global_search SLI of the api service in region `{{ $labels.region
         }}` has an apdex violating SLO
       description: |
@@ -107,6 +106,7 @@ groups:
       grafana_dashboard_id: api-main/api-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-pre
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "4181740019"
       grafana_variables: environment,stage
@@ -141,7 +141,6 @@ groups:
   - alert: ApiServiceGlobalSearchApdexSLOViolationRegional
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The global_search SLI of the api service in region `{{ $labels.region
         }}` has an apdex violating SLO
       description: |
@@ -153,6 +152,7 @@ groups:
       grafana_dashboard_id: api-main/api-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-pre
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "4181740019"
       grafana_variables: environment,stage
@@ -187,7 +187,6 @@ groups:
   - alert: ApiServiceGlobalSearchTrafficCessation
     for: 5m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The global_search SLI of the api service (`{{ $labels.stage }}` stage)
         has not received any traffic in the past 30m
       description: |
@@ -197,6 +196,7 @@ groups:
       grafana_dashboard_id: api-main/api-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-pre
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3070581511"
       grafana_variables: environment,stage
@@ -222,7 +222,6 @@ groups:
   - alert: ApiServiceGlobalSearchTrafficAbsent
     for: 30m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The global_search SLI of the api service (`{{ $labels.stage }}` stage)
         has not reported any traffic in the past 30m
       description: |
@@ -234,6 +233,7 @@ groups:
       grafana_dashboard_id: api-main/api-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-pre
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3070581511"
       grafana_variables: environment,stage
@@ -259,7 +259,6 @@ groups:
   - alert: ApiServiceGlobalSearchTrafficCessationRegional
     for: 5m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The global_search SLI of the api service in region `{{ $labels.region
         }}` has not received any traffic in the past 30m
       description: |
@@ -271,6 +270,7 @@ groups:
       grafana_dashboard_id: api-main/api-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-pre
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3070581511"
       grafana_variables: environment,stage
@@ -296,7 +296,6 @@ groups:
   - alert: ApiServiceGlobalSearchTrafficAbsentRegional
     for: 30m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The global_search SLI of the api service in region `{{ $labels.region
         }}` has not reported any traffic in the past 30m
       description: |
@@ -310,6 +309,7 @@ groups:
       grafana_dashboard_id: api-main/api-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-pre
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3070581511"
       grafana_variables: environment,stage
@@ -335,7 +335,6 @@ groups:
   - alert: ApiServiceGraphqlQueryApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The graphql_query SLI of the api service (`{{ $labels.stage }}` stage)
         has an apdex violating SLO
       description: |
@@ -347,6 +346,7 @@ groups:
       grafana_dashboard_id: api-main/api-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-pre
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3837080777"
       grafana_variables: environment,stage
@@ -382,7 +382,6 @@ groups:
   - alert: ApiServiceGraphqlQueryApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The graphql_query SLI of the api service (`{{ $labels.stage }}` stage)
         has an apdex violating SLO
       description: |
@@ -394,6 +393,7 @@ groups:
       grafana_dashboard_id: api-main/api-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-pre
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3837080777"
       grafana_variables: environment,stage
@@ -429,7 +429,6 @@ groups:
   - alert: ApiServiceGraphqlQueryApdexSLOViolationRegional
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The graphql_query SLI of the api service in region `{{ $labels.region
         }}` has an apdex violating SLO
       description: |
@@ -443,6 +442,7 @@ groups:
       grafana_dashboard_id: api-main/api-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-pre
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3837080777"
       grafana_variables: environment,stage
@@ -478,7 +478,6 @@ groups:
   - alert: ApiServiceGraphqlQueryApdexSLOViolationRegional
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The graphql_query SLI of the api service in region `{{ $labels.region
         }}` has an apdex violating SLO
       description: |
@@ -492,6 +491,7 @@ groups:
       grafana_dashboard_id: api-main/api-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-pre
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3837080777"
       grafana_variables: environment,stage
@@ -527,7 +527,6 @@ groups:
   - alert: ApiServiceGraphqlQueryTrafficCessation
     for: 5m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The graphql_query SLI of the api service (`{{ $labels.stage }}` stage)
         has not received any traffic in the past 30m
       description: |
@@ -539,6 +538,7 @@ groups:
       grafana_dashboard_id: api-main/api-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-pre
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1872300215"
       grafana_variables: environment,stage
@@ -565,7 +565,6 @@ groups:
   - alert: ApiServiceGraphqlQueryTrafficAbsent
     for: 30m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The graphql_query SLI of the api service (`{{ $labels.stage }}` stage)
         has not reported any traffic in the past 30m
       description: |
@@ -579,6 +578,7 @@ groups:
       grafana_dashboard_id: api-main/api-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-pre
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1872300215"
       grafana_variables: environment,stage
@@ -605,7 +605,6 @@ groups:
   - alert: ApiServiceGraphqlQueryTrafficCessationRegional
     for: 5m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The graphql_query SLI of the api service in region `{{ $labels.region
         }}` has not received any traffic in the past 30m
       description: |
@@ -619,6 +618,7 @@ groups:
       grafana_dashboard_id: api-main/api-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-pre
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1872300215"
       grafana_variables: environment,stage
@@ -645,7 +645,6 @@ groups:
   - alert: ApiServiceGraphqlQueryTrafficAbsentRegional
     for: 30m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The graphql_query SLI of the api service in region `{{ $labels.region
         }}` has not reported any traffic in the past 30m
       description: |
@@ -661,6 +660,7 @@ groups:
       grafana_dashboard_id: api-main/api-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-pre
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1872300215"
       grafana_variables: environment,stage
@@ -687,7 +687,6 @@ groups:
   - alert: ApiServiceLoadbalancerErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The loadbalancer SLI of the api service (`{{ $labels.stage }}` stage)
         has an error rate violating SLO
       description: |
@@ -697,6 +696,7 @@ groups:
       grafana_dashboard_id: api-main/api-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-pre
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3255520955"
       grafana_variables: environment,stage
@@ -732,7 +732,6 @@ groups:
   - alert: ApiServiceLoadbalancerErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The loadbalancer SLI of the api service (`{{ $labels.stage }}` stage)
         has an error rate violating SLO
       description: |
@@ -742,6 +741,7 @@ groups:
       grafana_dashboard_id: api-main/api-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-pre
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3255520955"
       grafana_variables: environment,stage
@@ -777,7 +777,6 @@ groups:
   - alert: ApiServiceLoadbalancerErrorSLOViolationRegional
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The loadbalancer SLI of the api service in region `{{ $labels.region
         }}` has an error rate violating SLO
       description: |
@@ -789,6 +788,7 @@ groups:
       grafana_dashboard_id: api-main/api-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-pre
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3255520955"
       grafana_variables: environment,stage
@@ -824,7 +824,6 @@ groups:
   - alert: ApiServiceLoadbalancerErrorSLOViolationRegional
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The loadbalancer SLI of the api service in region `{{ $labels.region
         }}` has an error rate violating SLO
       description: |
@@ -836,6 +835,7 @@ groups:
       grafana_dashboard_id: api-main/api-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-pre
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3255520955"
       grafana_variables: environment,stage
@@ -871,7 +871,6 @@ groups:
   - alert: ApiServiceLoadbalancerTrafficCessation
     for: 5m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The loadbalancer SLI of the api service (`{{ $labels.stage }}` stage)
         has not received any traffic in the past 30m
       description: |
@@ -881,6 +880,7 @@ groups:
       grafana_dashboard_id: api-main/api-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-pre
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "138982496"
       grafana_variables: environment,stage
@@ -903,7 +903,6 @@ groups:
   - alert: ApiServiceLoadbalancerTrafficAbsent
     for: 30m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The loadbalancer SLI of the api service (`{{ $labels.stage }}` stage)
         has not reported any traffic in the past 30m
       description: |
@@ -915,6 +914,7 @@ groups:
       grafana_dashboard_id: api-main/api-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-pre
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "138982496"
       grafana_variables: environment,stage
@@ -937,7 +937,6 @@ groups:
   - alert: ApiServiceLoadbalancerTrafficCessationRegional
     for: 5m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The loadbalancer SLI of the api service in region `{{ $labels.region
         }}` has not received any traffic in the past 30m
       description: |
@@ -949,6 +948,7 @@ groups:
       grafana_dashboard_id: api-main/api-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-pre
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "138982496"
       grafana_variables: environment,stage
@@ -971,7 +971,6 @@ groups:
   - alert: ApiServiceLoadbalancerTrafficAbsentRegional
     for: 30m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The loadbalancer SLI of the api service in region `{{ $labels.region
         }}` has not reported any traffic in the past 30m
       description: |
@@ -985,6 +984,7 @@ groups:
       grafana_dashboard_id: api-main/api-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-pre
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "138982496"
       grafana_variables: environment,stage
@@ -1007,7 +1007,6 @@ groups:
   - alert: ApiServiceNginxIngressErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The nginx_ingress SLI of the api service (`{{ $labels.stage }}` stage)
         has an error rate violating SLO
       description: |
@@ -1017,6 +1016,7 @@ groups:
       grafana_dashboard_id: api-main/api-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-pre
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1425819584"
       grafana_variables: environment,stage
@@ -1056,7 +1056,6 @@ groups:
   - alert: ApiServiceNginxIngressErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The nginx_ingress SLI of the api service (`{{ $labels.stage }}` stage)
         has an error rate violating SLO
       description: |
@@ -1066,6 +1065,7 @@ groups:
       grafana_dashboard_id: api-main/api-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-pre
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1425819584"
       grafana_variables: environment,stage
@@ -1105,7 +1105,6 @@ groups:
   - alert: ApiServiceNginxIngressErrorSLOViolationRegional
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The nginx_ingress SLI of the api service in region `{{ $labels.region
         }}` has an error rate violating SLO
       description: |
@@ -1117,6 +1116,7 @@ groups:
       grafana_dashboard_id: api-main/api-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-pre
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1425819584"
       grafana_variables: environment,stage
@@ -1156,7 +1156,6 @@ groups:
   - alert: ApiServiceNginxIngressErrorSLOViolationRegional
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The nginx_ingress SLI of the api service in region `{{ $labels.region
         }}` has an error rate violating SLO
       description: |
@@ -1168,6 +1167,7 @@ groups:
       grafana_dashboard_id: api-main/api-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-pre
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1425819584"
       grafana_variables: environment,stage
@@ -1207,7 +1207,6 @@ groups:
   - alert: ApiServiceNginxIngressTrafficCessation
     for: 5m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The nginx_ingress SLI of the api service (`{{ $labels.stage }}` stage)
         has not received any traffic in the past 30m
       description: |
@@ -1217,6 +1216,7 @@ groups:
       grafana_dashboard_id: api-main/api-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-pre
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2358192786"
       grafana_variables: environment,stage
@@ -1243,7 +1243,6 @@ groups:
   - alert: ApiServiceNginxIngressTrafficAbsent
     for: 30m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The nginx_ingress SLI of the api service (`{{ $labels.stage }}` stage)
         has not reported any traffic in the past 30m
       description: |
@@ -1255,6 +1254,7 @@ groups:
       grafana_dashboard_id: api-main/api-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-pre
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2358192786"
       grafana_variables: environment,stage
@@ -1281,7 +1281,6 @@ groups:
   - alert: ApiServiceNginxIngressTrafficCessationRegional
     for: 5m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The nginx_ingress SLI of the api service in region `{{ $labels.region
         }}` has not received any traffic in the past 30m
       description: |
@@ -1293,6 +1292,7 @@ groups:
       grafana_dashboard_id: api-main/api-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-pre
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2358192786"
       grafana_variables: environment,stage
@@ -1319,7 +1319,6 @@ groups:
   - alert: ApiServiceNginxIngressTrafficAbsentRegional
     for: 30m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The nginx_ingress SLI of the api service in region `{{ $labels.region
         }}` has not reported any traffic in the past 30m
       description: |
@@ -1333,6 +1332,7 @@ groups:
       grafana_dashboard_id: api-main/api-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-pre
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2358192786"
       grafana_variables: environment,stage
@@ -1359,7 +1359,6 @@ groups:
   - alert: ApiServiceRailsRequestApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The rails_request SLI of the api service (`{{ $labels.stage }}` stage)
         has an apdex violating SLO
       description: |
@@ -1371,6 +1370,7 @@ groups:
       grafana_dashboard_id: api-main/api-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-pre
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "495984175"
       grafana_variables: environment,stage
@@ -1406,7 +1406,6 @@ groups:
   - alert: ApiServiceRailsRequestApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The rails_request SLI of the api service (`{{ $labels.stage }}` stage)
         has an apdex violating SLO
       description: |
@@ -1418,6 +1417,7 @@ groups:
       grafana_dashboard_id: api-main/api-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-pre
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "495984175"
       grafana_variables: environment,stage
@@ -1453,7 +1453,6 @@ groups:
   - alert: ApiServiceRailsRequestApdexSLOViolationRegional
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The rails_request SLI of the api service in region `{{ $labels.region
         }}` has an apdex violating SLO
       description: |
@@ -1467,6 +1466,7 @@ groups:
       grafana_dashboard_id: api-main/api-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-pre
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "495984175"
       grafana_variables: environment,stage
@@ -1502,7 +1502,6 @@ groups:
   - alert: ApiServiceRailsRequestApdexSLOViolationRegional
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The rails_request SLI of the api service in region `{{ $labels.region
         }}` has an apdex violating SLO
       description: |
@@ -1516,6 +1515,7 @@ groups:
       grafana_dashboard_id: api-main/api-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-pre
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "495984175"
       grafana_variables: environment,stage
@@ -1551,7 +1551,6 @@ groups:
   - alert: ApiServiceRailsRequestErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The rails_request SLI of the api service (`{{ $labels.stage }}` stage)
         has an error rate violating SLO
       description: |
@@ -1563,6 +1562,7 @@ groups:
       grafana_dashboard_id: api-main/api-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-pre
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "387946920"
       grafana_variables: environment,stage
@@ -1602,7 +1602,6 @@ groups:
   - alert: ApiServiceRailsRequestErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The rails_request SLI of the api service (`{{ $labels.stage }}` stage)
         has an error rate violating SLO
       description: |
@@ -1614,6 +1613,7 @@ groups:
       grafana_dashboard_id: api-main/api-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-pre
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "387946920"
       grafana_variables: environment,stage
@@ -1653,7 +1653,6 @@ groups:
   - alert: ApiServiceRailsRequestErrorSLOViolationRegional
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The rails_request SLI of the api service in region `{{ $labels.region
         }}` has an error rate violating SLO
       description: |
@@ -1667,6 +1666,7 @@ groups:
       grafana_dashboard_id: api-main/api-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-pre
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "387946920"
       grafana_variables: environment,stage
@@ -1706,7 +1706,6 @@ groups:
   - alert: ApiServiceRailsRequestErrorSLOViolationRegional
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The rails_request SLI of the api service in region `{{ $labels.region
         }}` has an error rate violating SLO
       description: |
@@ -1720,6 +1719,7 @@ groups:
       grafana_dashboard_id: api-main/api-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-pre
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "387946920"
       grafana_variables: environment,stage
@@ -1759,7 +1759,6 @@ groups:
   - alert: ApiServiceRailsRequestTrafficCessation
     for: 5m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The rails_request SLI of the api service (`{{ $labels.stage }}` stage)
         has not received any traffic in the past 30m
       description: |
@@ -1771,6 +1770,7 @@ groups:
       grafana_dashboard_id: api-main/api-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-pre
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "538903447"
       grafana_variables: environment,stage
@@ -1797,7 +1797,6 @@ groups:
   - alert: ApiServiceRailsRequestTrafficAbsent
     for: 30m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The rails_request SLI of the api service (`{{ $labels.stage }}` stage)
         has not reported any traffic in the past 30m
       description: |
@@ -1811,6 +1810,7 @@ groups:
       grafana_dashboard_id: api-main/api-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-pre
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "538903447"
       grafana_variables: environment,stage
@@ -1837,7 +1837,6 @@ groups:
   - alert: ApiServiceRailsRequestTrafficCessationRegional
     for: 5m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The rails_request SLI of the api service in region `{{ $labels.region
         }}` has not received any traffic in the past 30m
       description: |
@@ -1851,6 +1850,7 @@ groups:
       grafana_dashboard_id: api-main/api-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-pre
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "538903447"
       grafana_variables: environment,stage
@@ -1877,7 +1877,6 @@ groups:
   - alert: ApiServiceRailsRequestTrafficAbsentRegional
     for: 30m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The rails_request SLI of the api service in region `{{ $labels.region
         }}` has not reported any traffic in the past 30m
       description: |
@@ -1893,6 +1892,7 @@ groups:
       grafana_dashboard_id: api-main/api-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-pre
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "538903447"
       grafana_variables: environment,stage
@@ -1919,7 +1919,6 @@ groups:
   - alert: ApiServiceWorkhorseApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The workhorse SLI of the api service (`{{ $labels.stage }}` stage) has
         an apdex violating SLO
       description: |
@@ -1929,6 +1928,7 @@ groups:
       grafana_dashboard_id: api-main/api-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-pre
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2586818196"
       grafana_variables: environment,stage
@@ -1971,7 +1971,6 @@ groups:
   - alert: ApiServiceWorkhorseApdexSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The workhorse SLI of the api service (`{{ $labels.stage }}` stage) has
         an apdex violating SLO
       description: |
@@ -1981,6 +1980,7 @@ groups:
       grafana_dashboard_id: api-main/api-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-pre
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2586818196"
       grafana_variables: environment,stage
@@ -2023,7 +2023,6 @@ groups:
   - alert: ApiServiceWorkhorseApdexSLOViolationRegional
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The workhorse SLI of the api service in region `{{ $labels.region }}`
         has an apdex violating SLO
       description: |
@@ -2035,6 +2034,7 @@ groups:
       grafana_dashboard_id: api-main/api-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-pre
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2586818196"
       grafana_variables: environment,stage
@@ -2077,7 +2077,6 @@ groups:
   - alert: ApiServiceWorkhorseApdexSLOViolationRegional
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The workhorse SLI of the api service in region `{{ $labels.region }}`
         has an apdex violating SLO
       description: |
@@ -2089,6 +2088,7 @@ groups:
       grafana_dashboard_id: api-main/api-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-pre
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2586818196"
       grafana_variables: environment,stage
@@ -2131,7 +2131,6 @@ groups:
   - alert: ApiServiceWorkhorseErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The workhorse SLI of the api service (`{{ $labels.stage }}` stage) has
         an error rate violating SLO
       description: |
@@ -2141,6 +2140,7 @@ groups:
       grafana_dashboard_id: api-main/api-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-pre
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2047984749"
       grafana_variables: environment,stage
@@ -2180,7 +2180,6 @@ groups:
   - alert: ApiServiceWorkhorseErrorSLOViolation
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The workhorse SLI of the api service (`{{ $labels.stage }}` stage) has
         an error rate violating SLO
       description: |
@@ -2190,6 +2189,7 @@ groups:
       grafana_dashboard_id: api-main/api-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-pre
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2047984749"
       grafana_variables: environment,stage
@@ -2229,7 +2229,6 @@ groups:
   - alert: ApiServiceWorkhorseErrorSLOViolationRegional
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The workhorse SLI of the api service in region `{{ $labels.region }}`
         has an error rate violating SLO
       description: |
@@ -2241,6 +2240,7 @@ groups:
       grafana_dashboard_id: api-main/api-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-pre
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2047984749"
       grafana_variables: environment,stage
@@ -2280,7 +2280,6 @@ groups:
   - alert: ApiServiceWorkhorseErrorSLOViolationRegional
     for: 2m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The workhorse SLI of the api service in region `{{ $labels.region }}`
         has an error rate violating SLO
       description: |
@@ -2292,6 +2291,7 @@ groups:
       grafana_dashboard_id: api-main/api-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-pre
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2047984749"
       grafana_variables: environment,stage
@@ -2331,7 +2331,6 @@ groups:
   - alert: ApiServiceWorkhorseTrafficCessation
     for: 5m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The workhorse SLI of the api service (`{{ $labels.stage }}` stage) has
         not received any traffic in the past 30m
       description: |
@@ -2341,6 +2340,7 @@ groups:
       grafana_dashboard_id: api-main/api-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-pre
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "831392945"
       grafana_variables: environment,stage
@@ -2367,7 +2367,6 @@ groups:
   - alert: ApiServiceWorkhorseTrafficAbsent
     for: 30m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The workhorse SLI of the api service (`{{ $labels.stage }}` stage) has
         not reported any traffic in the past 30m
       description: |
@@ -2379,6 +2378,7 @@ groups:
       grafana_dashboard_id: api-main/api-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-pre
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "831392945"
       grafana_variables: environment,stage
@@ -2405,7 +2405,6 @@ groups:
   - alert: ApiServiceWorkhorseTrafficCessationRegional
     for: 5m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The workhorse SLI of the api service in region `{{ $labels.region }}`
         has not received any traffic in the past 30m
       description: |
@@ -2417,6 +2416,7 @@ groups:
       grafana_dashboard_id: api-main/api-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-pre
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "831392945"
       grafana_variables: environment,stage
@@ -2443,7 +2443,6 @@ groups:
   - alert: ApiServiceWorkhorseTrafficAbsentRegional
     for: 30m
     annotations:
-      grafana_datasource_id: af00a1ff-52ce-4144-b7b3-4902d1990376
       title: The workhorse SLI of the api service in region `{{ $labels.region }}`
         has not reported any traffic in the past 30m
       description: |
@@ -2457,6 +2456,7 @@ groups:
       grafana_dashboard_id: api-main/api-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-pre
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "831392945"
       grafana_variables: environment,stage

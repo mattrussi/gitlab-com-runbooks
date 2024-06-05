@@ -4,6 +4,7 @@ local labelsForSLIAlert = import './slo-alert-labels.libsonnet';
 local trafficCessationAlertForSLIForAlertDescriptor = import './traffic-cessation-alerts.libsonnet';
 local alerts = import 'alerts/alerts.libsonnet';
 local misc = import 'utils/misc.libsonnet';
+local objects = import 'utils/objects.libsonnet';
 
 // maps aggregationSet.id to corresponding field in service.monitoring (following misc.dig key path)
 local aggregationSetToServiceMonitoringField = {
@@ -197,36 +198,44 @@ local trafficCessationAlertsForSLI(service, sli, alertDescriptors, extraSelector
   );
 
 
-local alertsForService(service, alertDescriptors, extraSelector) =
+local alertsForService(service, alertDescriptors, extraSelector, tenant=null) =
   local slis = service.listServiceLevelIndicators();
 
-  local rules = std.flatMap(
-    function(sli)
-      (
-        if sli.hasApdexSLO() && sli.hasApdex() then
-          apdexAlertForSLI(service, sli, alertDescriptors, extraSelector)
-        else
-          []
-      )
-      +
-      (
-        if sli.hasErrorRateSLO() && sli.hasErrorRate() then
-          errorRateAlertsForSLI(service, sli, alertDescriptors, extraSelector)
-        else
-          []
-      )
-      +
-      (
-        trafficCessationAlertsForSLI(service, sli, alertDescriptors, extraSelector)
-      ),
-    slis
+  local rules = std.map(
+    function(alert)
+      objects.nestedMerge(alert, {
+        annotations: {
+          grafana_datasource_id: tenant,
+        },
+      }),
+    std.flatMap(
+      function(sli)
+        (
+          if sli.hasApdexSLO() && sli.hasApdex() then
+            apdexAlertForSLI(service, sli, alertDescriptors, extraSelector)
+          else
+            []
+        )
+        +
+        (
+          if sli.hasErrorRateSLO() && sli.hasErrorRate() then
+            errorRateAlertsForSLI(service, sli, alertDescriptors, extraSelector)
+          else
+            []
+        )
+        +
+        (
+          trafficCessationAlertsForSLI(service, sli, alertDescriptors, extraSelector)
+        ),
+      slis
+    )
   );
 
   alerts.processAlertRules(rules);
 
 
-function(service, alertDescriptors, groupExtras={}, extraSelector={})
-  local alertRules = alertsForService(service, alertDescriptors, extraSelector);
+function(service, alertDescriptors, groupExtras={}, extraSelector={}, tenant=null)
+  local alertRules = alertsForService(service, alertDescriptors, extraSelector, tenant);
   if std.length(alertRules) > 0 then
     [{
       name: 'Service Component Alerts: %s' % [service.type],

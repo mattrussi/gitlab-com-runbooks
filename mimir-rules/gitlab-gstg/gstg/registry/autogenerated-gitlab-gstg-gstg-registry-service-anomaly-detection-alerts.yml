@@ -6,7 +6,6 @@ groups:
   - alert: service_ops_out_of_bounds_upper_5m
     for: 5m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: 'Anomaly detection: The `{{ $labels.type }}` service (`{{ $labels.stage
         }}` stage) is receiving more requests than normal'
       description: |
@@ -15,6 +14,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/general-service/service-platform-metrics?from=now-12h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
         }}
+      grafana_datasource_id: mimir-gitlab-gstg
       grafana_min_zoom_hours: "12"
       grafana_panel_id: "2633741645"
       grafana_variables: environment,type,stage
@@ -43,7 +43,6 @@ groups:
   - alert: service_ops_out_of_bounds_lower_5m
     for: 5m
     annotations:
-      grafana_datasource_id: ee37ad60-dcd5-4699-98ff-949aca509226
       title: 'Anomaly detection: The `{{ $labels.type }}` service (`{{ $labels.stage
         }}` stage) is receiving fewer requests than normal'
       description: |
@@ -52,6 +51,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/general-service/service-platform-metrics?from=now-12h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
         }}
+      grafana_datasource_id: mimir-gitlab-gstg
       grafana_min_zoom_hours: "12"
       grafana_panel_id: "2633741645"
       grafana_variables: environment,type,stage
