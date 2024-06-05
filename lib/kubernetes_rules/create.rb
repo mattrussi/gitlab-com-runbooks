@@ -4,7 +4,7 @@
 module KubernetesRules
   # Create will render our template files
   class Create
-    def initialize(input_dir: './rules', output_dir: './rules-k8s')
+    def initialize(input_dir: './legacy-prometheus-rules', output_dir: './rules-k8s')
       @input_dir = input_dir
       @output_dir = output_dir
     end
