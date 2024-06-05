@@ -1904,8 +1904,8 @@ services:
         - https://cloud.google.com/pubsub/docs/overview
         - https://ops.gitlab.net/gitlab-com/gl-infra/terraform-modules/google/pubsubbeat
         - https://gitlab.com/gitlab-cookbooks/gitlab-elk
-        - https://gitlab.com/gitlab-com/runbooks/tree/master/rules/pubsub.yml
-        - https://gitlab.com/gitlab-com/runbooks/tree/master/rules/gitaly.yml
+        - https://gitlab.com/gitlab-com/runbooks/tree/master/legacy-prometheus-rules/pubsub.yml
+        - https://gitlab.com/gitlab-com/runbooks/tree/master/legacy-prometheus-rules/gitaly.yml
         - https://gitlab.com/gitlab-com/runbooks/blob/master/howto/logging.md
       documents:
         design:

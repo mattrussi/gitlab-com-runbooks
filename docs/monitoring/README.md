@@ -274,7 +274,7 @@ e.g. evaluating rules pertaining to postgresql metrics on non-DB shards still
 works, but emits no metrics.
 
 Rules are uploaded to all Prometheus shards from
-[here](https://gitlab.com/gitlab-com/runbooks/-/tree/master/rules). This in turn
+[here](https://gitlab.com/gitlab-com/runbooks/-/tree/master/legacy-prometheus-rules). This in turn
 comes from 2 places:
 
 1. Handwritten rules, in the various files.
@@ -385,12 +385,12 @@ go wrong.
   (app, db).
 * "Monitors" in this context simply means that we have alerting rules for
   Prometheus being down / not functioning:
-  <https://gitlab.com/gitlab-com/runbooks/-/blob/master/rules/default/prometheus-metamons.yml>
+  <https://gitlab.com/gitlab-com/runbooks/-/blob/master/legacy-prometheus-rules/default/prometheus-metamons.yml>
 * This is in a state of flux: The GKE shard is not part of this type of
   meta-monitoring. A pragmatic improvement would be to have the default-GKE
   shards monitor any other GKE shards ("app" when it exists), and eventually
   turn down the GCE shards by migrating GCE jobs to GKE Prometheus instances.
-* All Prometheus instances monitor the Alertmanager: <https://gitlab.com/gitlab-com/runbooks/-/blob/master/rules/alertmanager.yml>
+* All Prometheus instances monitor the Alertmanager: <https://gitlab.com/gitlab-com/runbooks/-/blob/master/legacy-prometheus-rules/alertmanager.yml>
 * We similarly monitor thanos components from Prometheus, including thanos-rule
   to catch evaluation failures there.
 * There is likely a hole in this setup since we introduced zonal clusters: we

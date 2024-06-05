@@ -85,7 +85,7 @@
 * [Container Registry database post-deployment migrations](../registry/db-post-deployment-migrations.md)
 * [High Number of Overdue Online GC Tasks](../registry/online-gc-high-overdue-tasks.md)
 * [Managing Sentry in Kubernetes](../sentry/sentry.md)
-* [[`SidekiqQueueTooLarge`](../../rules/sidekiq-queues.yml)](../sidekiq/large-sidekiq-queue.md)
+* [[`SidekiqQueueTooLarge`](../../legacy-prometheus-rules/sidekiq-queues.yml)](../sidekiq/large-sidekiq-queue.md)
 * [A survival guide for SREs to working with Sidekiq at GitLab](../sidekiq/sidekiq-survival-guide-for-sres.md)
 * [Exporting projects silently](../sidekiq/silent-project-exports.md)
 * [../spamcheck/index.md](../spamcheck/index.md)

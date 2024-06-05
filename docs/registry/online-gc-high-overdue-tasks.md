@@ -24,7 +24,7 @@ A high number of overdue tasks sitting on the queues is likely related to one of
 
 ## Symptoms
 
-The [`ContainerRegistryGCOverdue[Blob|Manifest]QueueTooLarge`](https://gitlab.com/gitlab-com/runbooks/-/blob/master/rules/registry-db.yml) alerts (one for each artifact type) will be triggered if the number of overdue tasks remains above the configured threshold for longer than the configured period.
+The [`ContainerRegistryGCOverdue[Blob|Manifest]QueueTooLarge`](https://gitlab.com/gitlab-com/runbooks/-/blob/master/legacy-prometheus-rules/registry-db.yml) alerts (one for each artifact type) will be triggered if the number of overdue tasks remains above the configured threshold for longer than the configured period.
 
 No API impact is expected in these situations, as online GC is a background process and therefore detached from the main (server) process.
 

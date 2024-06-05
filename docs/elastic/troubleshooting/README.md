@@ -133,9 +133,9 @@ Solution:  See [retry shard allocation](#retry-shard-allocation)
 `_cluster/health` endpoint returns anything other than `green`.
 
 We have alerts for the production logging cluster:
-<https://gitlab.com/gitlab-com/runbooks/blob/master/rules/elastic-clusters.yml#L24-33>
+<https://gitlab.com/gitlab-com/runbooks/blob/master/legacy-prometheus-rules/elastic-clusters.yml#L24-33>
 and monitoring cluster:
-<https://gitlab.com/gitlab-com/runbooks/blob/master/rules/elastic-clusters.yml#L44-53>
+<https://gitlab.com/gitlab-com/runbooks/blob/master/legacy-prometheus-rules/elastic-clusters.yml#L44-53>
 being in a state other than `green`.
 
 ### Shard Allocation Failure

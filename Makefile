@@ -15,7 +15,7 @@ JSONET_COMMAND = $(shell which jsonnetfmt || (which jsonnet && echo " fmt"))
 PROMTOOL_COMMAND = $(shell which promtool || echo "/prometheus/promtool")
 THANOS_COMMAND = $(shell which thanos || echo "/thanos/thanos")
 
-PROM_RULE_FILES = $(shell find rules \( -name "*.yml" -o -name "*.yaml" \) -type f)
+PROM_RULE_FILES = $(shell find legacy-prometheus-rules \( -name "*.yml" -o -name "*.yaml" \) -type f)
 
 SHELLCHECK_FLAGS := -e SC1090,SC1091,SC2002
 

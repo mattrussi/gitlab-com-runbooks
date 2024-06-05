@@ -1,4 +1,4 @@
-# [`SidekiqQueueTooLarge`](../../rules/sidekiq-queues.yml)
+# [`SidekiqQueueTooLarge`](../../legacy-prometheus-rules/sidekiq-queues.yml)
 
 **Table of Contents**
 

@@ -10,7 +10,7 @@ The most likely issue deriving from the Wiz Rutime Sensor rollout might be relat
 
 However it should not create much performance implications as we have configured the limits which are very resource convervative. We have the CPU and Memory limits configured and those can be viewed [here](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/blob/master/releases/wiz-sensor/values.yaml.gotmpl?ref_type=heads#L13).
 
-In addition, an [alert for OOM kills](https://gitlab.com/gitlab-com/runbooks/-/blob/master/rules/wiz-runtime-sensor.yml) for Wiz Sensor containers which would help us understand if the resource consumption is more and if the sensor are getting OOM killed.
+In addition, an [alert for OOM kills](https://gitlab.com/gitlab-com/runbooks/-/blob/master/legacy-prometheus-rules/wiz-runtime-sensor.yml) for Wiz Sensor containers which would help us understand if the resource consumption is more and if the sensor are getting OOM killed.
 
 # Service Managment
 

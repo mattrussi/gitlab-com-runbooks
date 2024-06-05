@@ -190,7 +190,7 @@ variables:
   - pingdom/pingdom.yml
 
 .prometheus-rules-patterns: &prometheus-rules-patterns
-  - rules/**/*
+  - legacy-prometheus-rules/**/*
 
 .thanos-rules-patterns: &thanos-rules-patterns
   - thanos-rules/**/*
@@ -1051,7 +1051,7 @@ check-alerts:
     # github.com/prometheus/prometheus/promql/parser when we try to set up go
     # modules. For now, let's get this working hackily.
     - go get github.com/prometheus/prometheus/...
-    - go run alerts-checker.go ../rules $THANOS_URL $IGNORED_ALERTS
+    - go run alerts-checker.go ../legacy-prometheus-rules $THANOS_URL $IGNORED_ALERTS
 
 validate-alerts:
   stage: validate
@@ -1063,7 +1063,7 @@ validate-alerts:
       changes:
         paths:
           - docs/**/*
-          - rules/**/*
+          - legacy-prometheus-rules/**/*
           - thanos-rules/**/*
           - services/**/*
   script:
@@ -1136,7 +1136,7 @@ generate-prometheus-rules:
     - changes:
         paths: &rule-validation-paths
           - scripts/prometheus.yml
-          - rules/**/*
+          - legacy-prometheus-rules/**/*
           - thanos-rules/**/*
   script:
     - gem install bundler --no-document -v "${BUNDLER_VERSION}"
