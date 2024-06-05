@@ -39,11 +39,15 @@ local completenessIndicatorQuery = |||
 
 {
   stage_group_error_budget_completeness: periodicQuery.new({
-    query: completenessIndicatorQuery,
-    time: midnight,
+    requestParams: {
+      query: completenessIndicatorQuery,
+      time: midnight,
+    },
   }),
   stage_group_error_budget_teams_over_budget_availability: periodicQuery.new({
-    query: queries.errorBudgetGroupsOverBudget(selector),
-    time: midnight,
+    requestParams: {
+      query: queries.errorBudgetGroupsOverBudget(selector),
+      time: midnight,
+    },
   }),
 }

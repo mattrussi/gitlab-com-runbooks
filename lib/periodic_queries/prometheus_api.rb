@@ -9,10 +9,9 @@ module PeriodicQueries
       'instant' => 'api/v1/query' # https://prometheus.io/docs/prometheus/latest/querying/api/#instant-queries
     }.freeze
 
-    def initialize(url, tenant_id: nil, use_ssl: false, auth_header: nil)
+    def initialize(url, use_ssl: false, auth_header: nil)
       @base_url = url
       @use_ssl = use_ssl
-      @tenant_id = tenant_id
       @auth_header = auth_header
     end
 
@@ -31,7 +30,7 @@ module PeriodicQueries
       query_uri = URI(full_url)
       query_uri.query = URI.encode_www_form(query.params)
 
-      get = Net::HTTP::Get.new(query_uri, headers)
+      get = Net::HTTP::Get.new(query_uri, headers(query.tenant_id))
       # Net::HTTP#request does not raise exceptions, so we'll get an empty response
       # and continue to the next request
       # https://ruby-doc.org/stdlib-2.7.1/libdoc/net/http/rdoc/Net/HTTP.html#method-i-request
@@ -47,7 +46,7 @@ module PeriodicQueries
       @uri ||= URI(base_url)
     end
 
-    def headers
+    def headers(tenant_id)
       @headers ||= {}.tap do |h|
         h['X-Scope-OrgID'] = tenant_id if tenant_id
         h['Authorization'] = auth_header if auth_header

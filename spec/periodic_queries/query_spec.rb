@@ -10,8 +10,11 @@ describe PeriodicQueries::Query do
       'error_budget_availability',
       {
         'type' => 'instant',
-        'query' => 'promql',
-        'time' => '123'
+        'tenantId' => 'gitlab-gprd',
+        'requestParams' => {
+          'query' => 'promql',
+          'time' => '123'
+        }
       }
     )
   end
@@ -19,7 +22,7 @@ describe PeriodicQueries::Query do
   let(:name) { 'error_budget_availability' }
 
   describe '#params' do
-    it 'excludes the type from the passed info' do
+    it 'excludes the type and tenant_id from the passed info' do
       expected_params = { 'query' => 'promql', 'time' => '123' }
 
       expect(query.params).to eq(expected_params)
@@ -42,7 +45,7 @@ describe PeriodicQueries::Query do
   end
 
   describe '#summary' do
-    let(:expected_text) { "#{name} (instant, params: [\"query\", \"time\"])" }
+    let(:expected_text) { "#{name} (instant, params: [\"query\", \"time\"], tenant_id: gitlab-gprd)" }
 
     it 'returns a summary of the query state' do
       expected = "➖ #{expected_text}"

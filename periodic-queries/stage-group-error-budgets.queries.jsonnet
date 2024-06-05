@@ -34,40 +34,48 @@ local trafficShareQuery = |||
 
 {
   stage_group_error_budget_availability: periodicQuery.new({
-    query: ratioQuery,
-    time: midnight,
+    requestParams: {
+      query: ratioQuery,
+      time: midnight,
+    },
   }),
 
   stage_group_error_budget_seconds_spent: periodicQuery.new({
-    query: |||
-      (
+    requestParams: {
+      query: |||
         (
-           1 - %(ratioQuery)s
-        ) * %(rangeInSeconds)i
-      )
-    ||| % {
-      ratioQuery: ratioQuery,
-      rangeInSeconds: durationParser.toSeconds('28d'),
+          (
+             1 - %(ratioQuery)s
+          ) * %(rangeInSeconds)i
+        )
+      ||| % {
+        ratioQuery: ratioQuery,
+        rangeInSeconds: durationParser.toSeconds('28d'),
+      },
+      time: midnight,
     },
-    time: midnight,
   }),
 
   stage_group_error_budget_seconds_remaining:
     local secondsSpent = self.stage_group_error_budget_seconds_spent;
     periodicQuery.new({
-      query: |||
-        %(budgetSeconds)i
-        -
-        %(timeSpentQuery)s
-      ||| % {
-        budgetSeconds: budgetSeconds(errorBudget().slaTarget, '28d'),
-        timeSpentQuery: secondsSpent.query,
+      requestParams: {
+        query: |||
+          %(budgetSeconds)i
+          -
+          %(timeSpentQuery)s
+        ||| % {
+          budgetSeconds: budgetSeconds(errorBudget().slaTarget, '28d'),
+          timeSpentQuery: secondsSpent.requestParams.query,
+        },
+        time: midnight,
       },
-      time: midnight,
     }),
 
   stage_group_traffic_share: periodicQuery.new({
-    query: trafficShareQuery,
-    time: midnight,
+    requestParams: {
+      query: trafficShareQuery,
+      time: midnight,
+    },
   }),
 }

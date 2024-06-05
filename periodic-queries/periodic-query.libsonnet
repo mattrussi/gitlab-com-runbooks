@@ -1,7 +1,9 @@
+local mimirHelpers = import 'services/lib/mimir-helpers.libsonnet';
 local validator = import 'utils/validator.libsonnet';
 
 local defaults = {
   type: 'instant',
+  tenantId: 'gitlab-gprd',
 };
 
 // Supported query types should be defined here with their params
@@ -14,15 +16,10 @@ local paramsPerType = {
 };
 
 local validateRequestParams(definition) =
-  // The type field, should always be there, but it is not passed on when querying
-  // all other fields will be passed on as request params when querying thanos.
-  local supportedFields = paramsPerType[definition.type] + ['type'];
-  local validationObject = {
-    queryObject: definition,
-  };
+  local supportedFields = paramsPerType[definition.type];
 
   local v = validator.new({
-    queryObject: validator.validator(
+    requestParams: validator.validator(
       function(object)
         local definedFields = std.objectFields(object);
         std.setDiff(definedFields, supportedFields) == []
@@ -32,13 +29,15 @@ local validateRequestParams(definition) =
       }
     ),
   });
-  v.assertValid(validationObject).queryObject;
+  v.assertValid(definition);
 
 local validateQuery(definition) =
   local v = validator.new({
     // Currently only instant queries are supported
     type: validator.setMember(std.objectFields(paramsPerType)),
-    query: validator.string,
+    // all fields in requestParams is passed on as request params when querying Prometheus
+    requestParams: validator.object,
+    tenantId: validator.setMember(mimirHelpers.mimirTenants),
   });
   v.assertValid(definition);
 

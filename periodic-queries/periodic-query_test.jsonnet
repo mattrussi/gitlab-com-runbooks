@@ -4,11 +4,16 @@ local test = import 'github.com/yugui/jsonnetunit/jsonnetunit/test.libsonnet';
 test.suite({
   testDefaults: {
     actual: periodicQueries.new({
-      query: 'promql',
+      requestParams: {
+        query: 'promql',
+      },
     }),
     expect: {
-      query: 'promql',
+      requestParams: {
+        query: 'promql',
+      },
       type: 'instant',
+      tenantId: 'gitlab-gprd',
     },
   },
 })
