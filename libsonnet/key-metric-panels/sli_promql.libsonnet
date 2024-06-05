@@ -8,8 +8,7 @@ local globalSelector = if labelTaxonomy.hasLabelFor(labelTaxonomy.labels.environ
   { monitor: 'global' }
 else {};
 
-local apdexQuery(aggregationSet, aggregationLabels, selectorHash, range=null, worstCase=true, offset=null, clampToExpression=null) =
-  local metric = aggregationSet.getApdexRatioMetricForBurnRate('5m');
+local apdexQueryForMetric(metric, aggregationSet, aggregationLabels, selectorHash, range=null, worstCase=true, offset=null, clampToExpression=null) =
   local selector = selectors.merge(aggregationSet.selector, selectorHash);
 
   local aggregation = if worstCase then 'min' else 'avg';
@@ -51,6 +50,34 @@ local apdexQuery(aggregationSet, aggregationLabels, selectorHash, range=null, wo
       )
     ||| % [inner, clampToExpression];
 
+local apdexQuery(aggregationSet, aggregationLabels, selectorHash, range=null, worstCase=true, offset=null, clampToExpression=null) =
+  local metric = aggregationSet.getApdexRatioMetricForBurnRate('5m');
+
+  apdexQueryForMetric(
+    metric,
+    aggregationSet,
+    aggregationLabels,
+    selectorHash,
+    range=range,
+    worstCase=worstCase,
+    offset=offset,
+    clampToExpression=clampToExpression
+  );
+
+local apdexConfidenceQuery(confidenceLevel, aggregationSet, aggregationLabels, selectorHash, range=null, worstCase=true, offset=null, clampToExpression=null) =
+  local metric = aggregationSet.getApdexRatioConfidenceIntervalMetricForBurnRate('5m');
+
+  apdexQueryForMetric(
+    metric,
+    aggregationSet,
+    aggregationLabels,
+    selectorHash { confidence: confidenceLevel },
+    range=range,
+    worstCase=worstCase,
+    offset=offset,
+    clampToExpression=clampToExpression
+  );
+
 local opsRateQuery(aggregationSet, selectorHash, range=null, offset=null) =
   local metric = aggregationSet.getOpsRateMetricForBurnRate('5m');
   local selector = selectors.merge(aggregationSet.selector, selectorHash);
@@ -73,10 +100,8 @@ local opsRateQuery(aggregationSet, selectorHash, range=null, offset=null) =
       avg_over_time(%(metric)s{%(selector)s}[%(range)s]%(offsetExpression)s)
     ||| % formatConfig;
 
-local errorRatioQuery(aggregationSet, aggregationLabels, selectorHash, range=null, clampMax=1.0, worstCase=true, offset=null, clampToExpression=null) =
-  local metric = aggregationSet.getErrorRatioMetricForBurnRate('5m');
+local errorRatioQueryForMetric(metric, aggregationSet, aggregationLabels, selectorHash, range=null, clampMax=1.0, worstCase=true, offset=null, clampToExpression=null) =
   local selector = selectors.merge(aggregationSet.selector, selectorHash);
-
   local aggregation = if worstCase then 'max' else 'avg';
   local rangeVectorFunction = if worstCase then 'max_over_time' else 'avg_over_time';
   local offsetExpression = if offset == null then '' else ' offset ' + offset;
@@ -117,6 +142,36 @@ local errorRatioQuery(aggregationSet, aggregationLabels, selectorHash, range=nul
       %s
     )
   ||| % [expr, clampMaxExpressionWithDefault];
+
+local errorRatioQuery(aggregationSet, aggregationLabels, selectorHash, range=null, clampMax=1.0, worstCase=true, offset=null, clampToExpression=null) =
+  local metric = aggregationSet.getErrorRatioMetricForBurnRate('5m');
+
+  errorRatioQueryForMetric(
+    metric,
+    aggregationSet,
+    aggregationLabels,
+    selectorHash,
+    range=range,
+    clampMax=clampMax,
+    worstCase=worstCase,
+    offset=offset,
+    clampToExpression=clampToExpression
+  );
+
+local errorRatioConfidenceQuery(confidenceLevel, aggregationSet, aggregationLabels, selectorHash, range=null, clampMax=1.0, worstCase=true, offset=null, clampToExpression=null) =
+  local metric = aggregationSet.getErrorRatioConfidenceIntervalMetricForBurnRate('5m');
+
+  errorRatioQueryForMetric(
+    metric,
+    aggregationSet,
+    aggregationLabels,
+    selectorHash { confidence: confidenceLevel },
+    range=range,
+    clampMax=clampMax,
+    worstCase=worstCase,
+    offset=offset,
+    clampToExpression=clampToExpression
+  );
 
 local sloLabels(selectorHash) =
   // An `component=''` will result in the overal service SLO recording, not a component specific one
@@ -183,8 +238,13 @@ local getErrorRateThresholdExpressionForWindow(selectorHash, windowDuration, fix
 
 {
   apdexQuery:: apdexQuery,
+  apdexConfidenceQuery:: apdexConfidenceQuery,
+
   opsRateQuery:: opsRateQuery,
+
   errorRatioQuery:: errorRatioQuery,
+  errorRatioConfidenceQuery:: errorRatioConfidenceQuery,
+
   sloLabels:: sloLabels,
 
   apdex:: {

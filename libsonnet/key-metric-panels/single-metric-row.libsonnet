@@ -18,6 +18,7 @@ local selectorToGrafanaURLParams(selectorHash) =
 // Returns a row in column format, specifically designed for consumption in
 local row(
   serviceType,
+  sli,  // The serviceLevelIndicator object for which this row is being create (CAN BE NULL for headline rows etc)
   aggregationSet,
   selectorHash,
   titlePrefix,
@@ -51,6 +52,7 @@ local row(
         [
           apdexPanel.panel(
             title='%(titlePrefix)s Apdex' % formatConfig,
+            sli=sli,
             aggregationSet=aggregationSet,
             selectorHash=selectorHashWithExtras,
             stableId='%(stableIdPrefix)s-apdex' % formatConfig,
@@ -76,6 +78,7 @@ local row(
             [statusDescription.apdexStatusDescriptionPanel(
               titlePrefix,
               selectorHashWithExtras,
+              sli=sli,
               aggregationSet=aggregationSet,
               fixedThreshold=fixedThreshold
             )]
@@ -92,6 +95,7 @@ local row(
         [
           errorRatioPanel.panel(
             '%(titlePrefix)s Error Ratio' % formatConfig,
+            sli=sli,
             aggregationSet=aggregationSet,
             selectorHash=selectorHashWithExtras,
             stableId='%(stableIdPrefix)s-error-rate' % formatConfig,
@@ -116,6 +120,7 @@ local row(
             [statusDescription.errorRateStatusDescriptionPanel(
               titlePrefix,
               selectorHashWithExtras,
+              sli=sli,
               aggregationSet=aggregationSet,
               fixedThreshold=fixedThreshold
             )]

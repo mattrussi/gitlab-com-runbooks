@@ -114,6 +114,7 @@ local headlineRow(startRow=1) =
   local columns =
     singleMetricRow.row(
       serviceType='gitaly',
+      sli=null,
       aggregationSet=aggregationSets.nodeServiceSLIs,
       selectorHash=selectorHashWithExtras,
       titlePrefix='Gitaly Per-Node Service Aggregated SLIs',

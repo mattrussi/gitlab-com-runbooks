@@ -16,6 +16,7 @@ local dashboardForService(serviceType, serviceSLIsAggregationSet, componentSLIsA
   local headlineRow =
     singleMetricRow.row(
       serviceType=serviceType,
+      sli=null,
       aggregationSet=serviceSLIsAggregationSet,
       selectorHash=selectorHash,
       titlePrefix='Regional Service Aggregated ',

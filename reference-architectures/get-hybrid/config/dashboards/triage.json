@@ -166,11 +166,6 @@
           "color": "#E7D551"
         },
         {
-          "alias": "gitlab-shell apdex",
-          "color": "#E7D551",
-          "zindex": 3
-        },
-        {
           "alias": "gitlab-shell apdex avg",
           "color": "#5794F2",
           "dashLength": 1,
@@ -191,6 +186,11 @@
           "nullPointMode": "connected",
           "spaceLength": 2,
           "zindex": -3
+        },
+        {
+          "alias": "gitlab-shell apdex",
+          "color": "#E7D551",
+          "zindex": 3
         }
       ],
       "spaceLength": 10,
@@ -286,77 +286,77 @@
                 "1": {
                   "color": "orange",
                   "index": 1,
-                  "text": "Warning 🔥"
+                  "text": "Warning: 1h deteriorating"
                 },
                 "10": {
                   "color": "orange",
                   "index": 10,
-                  "text": "Warning 🔥🥵"
+                  "text": "Warning: 6h recovering, 1h recovering"
                 },
                 "11": {
                   "color": "red",
                   "index": 11,
-                  "text": "Degraded 🔥🥵"
+                  "text": "Degraded: 6h recovering, 1h degraded"
                 },
                 "12": {
                   "color": "red",
                   "index": 12,
-                  "text": "Degraded 🥵"
+                  "text": "Degraded: 6h degraded"
                 },
                 "13": {
                   "color": "red",
                   "index": 13,
-                  "text": "Degraded 🔥🥵"
+                  "text": "Degraded: 6h degraded, 1h deteriorating"
                 },
                 "14": {
                   "color": "red",
                   "index": 14,
-                  "text": "Degraded 🔥🥵"
+                  "text": "Degraded: 6h degraded, 1h recovering"
                 },
                 "15": {
                   "color": "red",
                   "index": 15,
-                  "text": "Degraded 🔥🥵"
+                  "text": "Degraded: 6h degraded, 1h degraded"
                 },
                 "2": {
                   "color": "orange",
                   "index": 2,
-                  "text": "Warning 🔥"
+                  "text": "Warning: 1h recovering"
                 },
                 "3": {
                   "color": "red",
                   "index": 3,
-                  "text": "Degraded 🔥"
+                  "text": "Degraded: 1h degraded"
                 },
                 "4": {
                   "color": "orange",
                   "index": 4,
-                  "text": "Warning 🥵"
+                  "text": "Warning: 6h deteriorating"
                 },
                 "5": {
                   "color": "orange",
                   "index": 5,
-                  "text": "Warning 🔥🥵"
+                  "text": "Warning: 6h deteriorating, 1h deteriorating"
                 },
                 "6": {
                   "color": "orange",
                   "index": 6,
-                  "text": "Warning 🔥🥵"
+                  "text": "Warning: 6h deteriorating, 1h recovering"
                 },
                 "7": {
                   "color": "red",
                   "index": 7,
-                  "text": "Degraded 🔥🥵"
+                  "text": "Degraded: 6h deteriorating, 1h degraded"
                 },
                 "8": {
                   "color": "orange",
                   "index": 8,
-                  "text": "Warning 🥵"
+                  "text": "Warning: 6h recovering"
                 },
                 "9": {
                   "color": "orange",
                   "index": 9,
-                  "text": "Warning 🔥🥵"
+                  "text": "Warning: 6h recovering, 1h deteriorating"
                 }
               },
               "type": "value"
@@ -545,12 +545,6 @@
           "color": "#E7D551"
         },
         {
-          "alias": "gitlab-shell error ratio",
-          "color": "#E7D551",
-          "fillBelowTo": "gitlab-shell error ratio avg",
-          "zindex": 3
-        },
-        {
           "alias": "gitlab-shell error ratio avg",
           "color": "#5794F2",
           "dashLength": 1,
@@ -571,6 +565,12 @@
           "nullPointMode": "connected",
           "spaceLength": 2,
           "zindex": -3
+        },
+        {
+          "alias": "gitlab-shell error ratio",
+          "color": "#E7D551",
+          "fillBelowTo": "gitlab-shell error ratio avg",
+          "zindex": 3
         }
       ],
       "spaceLength": 10,
@@ -666,77 +666,77 @@
                 "1": {
                   "color": "orange",
                   "index": 1,
-                  "text": "Warning 🔥"
+                  "text": "Warning: 1h deteriorating"
                 },
                 "10": {
                   "color": "orange",
                   "index": 10,
-                  "text": "Warning 🔥🥵"
+                  "text": "Warning: 6h recovering, 1h recovering"
                 },
                 "11": {
                   "color": "red",
                   "index": 11,
-                  "text": "Degraded 🔥🥵"
+                  "text": "Degraded: 6h recovering, 1h degraded"
                 },
                 "12": {
                   "color": "red",
                   "index": 12,
-                  "text": "Degraded 🥵"
+                  "text": "Degraded: 6h degraded"
                 },
                 "13": {
                   "color": "red",
                   "index": 13,
-                  "text": "Degraded 🔥🥵"
+                  "text": "Degraded: 6h degraded, 1h deteriorating"
                 },
                 "14": {
                   "color": "red",
                   "index": 14,
-                  "text": "Degraded 🔥🥵"
+                  "text": "Degraded: 6h degraded, 1h recovering"
                 },
                 "15": {
                   "color": "red",
                   "index": 15,
-                  "text": "Degraded 🔥🥵"
+                  "text": "Degraded: 6h degraded, 1h degraded"
                 },
                 "2": {
                   "color": "orange",
                   "index": 2,
-                  "text": "Warning 🔥"
+                  "text": "Warning: 1h recovering"
                 },
                 "3": {
                   "color": "red",
                   "index": 3,
-                  "text": "Degraded 🔥"
+                  "text": "Degraded: 1h degraded"
                 },
                 "4": {
                   "color": "orange",
                   "index": 4,
-                  "text": "Warning 🥵"
+                  "text": "Warning: 6h deteriorating"
                 },
                 "5": {
                   "color": "orange",
                   "index": 5,
-                  "text": "Warning 🔥🥵"
+                  "text": "Warning: 6h deteriorating, 1h deteriorating"
                 },
                 "6": {
                   "color": "orange",
                   "index": 6,
-                  "text": "Warning 🔥🥵"
+                  "text": "Warning: 6h deteriorating, 1h recovering"
                 },
                 "7": {
                   "color": "red",
                   "index": 7,
-                  "text": "Degraded 🔥🥵"
+                  "text": "Degraded: 6h deteriorating, 1h degraded"
                 },
                 "8": {
                   "color": "orange",
                   "index": 8,
-                  "text": "Warning 🥵"
+                  "text": "Warning: 6h recovering"
                 },
                 "9": {
                   "color": "orange",
                   "index": 9,
-                  "text": "Warning 🔥🥵"
+                  "text": "Warning: 6h recovering, 1h deteriorating"
                 }
               },
               "type": "value"
@@ -838,7 +838,7 @@
       "pluginVersion": "7",
       "targets": [
         {
-          "expr": "sum (\n  label_replace(\n    vector(0) and on() (gitlab_service_errors:ratio_1h{type=\"gitlab-shell\"}),\n    \"period\", \"na\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(1) and on() (gitlab_service_errors:ratio_5m{type=\"gitlab-shell\"} \u003e on(tier, type, __tenant_id__) group_left() (14.4 * slo:max:events:gitlab_service_errors:ratio{component=\"\",type=\"gitlab-shell\"})),\n    \"period\", \"5m\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(2) and on() (gitlab_service_errors:ratio_1h{type=\"gitlab-shell\"} \u003e on(tier, type, __tenant_id__) group_left() (14.4 * slo:max:events:gitlab_service_errors:ratio{component=\"\",type=\"gitlab-shell\"})),\n    \"period\", \"1h\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(4) and on() (gitlab_service_errors:ratio_30m{type=\"gitlab-shell\"} \u003e on(tier, type, __tenant_id__) group_left() (6 * slo:max:events:gitlab_service_errors:ratio{component=\"\",type=\"gitlab-shell\"})),\n    \"period\", \"30m\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(8) and on() (gitlab_service_errors:ratio_6h{type=\"gitlab-shell\"} \u003e on(tier, type, __tenant_id__) group_left() (6 * slo:max:events:gitlab_service_errors:ratio{component=\"\",type=\"gitlab-shell\"})),\n    \"period\", \"6h\", \"\", \"\"\n  )\n)\n",
+          "expr": "sum(\n  label_replace(\n    vector(0) and on() (gitlab_service_errors:ratio_1h{type=\"gitlab-shell\"}),\n    \"period\", \"na\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(1) and on () (gitlab_service_errors:ratio_5m{type=\"gitlab-shell\"} \u003e on(tier, type, __tenant_id__) group_left() (14.4 * slo:max:events:gitlab_service_errors:ratio{component=\"\",type=\"gitlab-shell\"})),\n    \"period\", \"5m\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(2) and on () (gitlab_service_errors:ratio_1h{type=\"gitlab-shell\"} \u003e on(tier, type, __tenant_id__) group_left() (14.4 * slo:max:events:gitlab_service_errors:ratio{component=\"\",type=\"gitlab-shell\"})),\n    \"period\", \"1h\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(4) and on () (gitlab_service_errors:ratio_30m{type=\"gitlab-shell\"} \u003e on(tier, type, __tenant_id__) group_left() (6 * slo:max:events:gitlab_service_errors:ratio{component=\"\",type=\"gitlab-shell\"})),\n    \"period\", \"30m\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(8) and on () (gitlab_service_errors:ratio_6h{type=\"gitlab-shell\"} \u003e on(tier, type, __tenant_id__) group_left() (6 * slo:max:events:gitlab_service_errors:ratio{component=\"\",type=\"gitlab-shell\"})),\n    \"period\", \"6h\", \"\", \"\"\n  )\n)\n",
           "format": "time_series",
           "instant": true,
           "interval": "1m",
@@ -1203,11 +1203,6 @@
           "color": "#E7D551"
         },
         {
-          "alias": "registry apdex",
-          "color": "#E7D551",
-          "zindex": 3
-        },
-        {
           "alias": "registry apdex avg",
           "color": "#5794F2",
           "dashLength": 1,
@@ -1228,6 +1223,11 @@
           "nullPointMode": "connected",
           "spaceLength": 2,
           "zindex": -3
+        },
+        {
+          "alias": "registry apdex",
+          "color": "#E7D551",
+          "zindex": 3
         }
       ],
       "spaceLength": 10,
@@ -1323,77 +1323,77 @@
                 "1": {
                   "color": "orange",
                   "index": 1,
-                  "text": "Warning 🔥"
+                  "text": "Warning: 1h deteriorating"
                 },
                 "10": {
                   "color": "orange",
                   "index": 10,
-                  "text": "Warning 🔥🥵"
+                  "text": "Warning: 6h recovering, 1h recovering"
                 },
                 "11": {
                   "color": "red",
                   "index": 11,
-                  "text": "Degraded 🔥🥵"
+                  "text": "Degraded: 6h recovering, 1h degraded"
                 },
                 "12": {
                   "color": "red",
                   "index": 12,
-                  "text": "Degraded 🥵"
+                  "text": "Degraded: 6h degraded"
                 },
                 "13": {
                   "color": "red",
                   "index": 13,
-                  "text": "Degraded 🔥🥵"
+                  "text": "Degraded: 6h degraded, 1h deteriorating"
                 },
                 "14": {
                   "color": "red",
                   "index": 14,
-                  "text": "Degraded 🔥🥵"
+                  "text": "Degraded: 6h degraded, 1h recovering"
                 },
                 "15": {
                   "color": "red",
                   "index": 15,
-                  "text": "Degraded 🔥🥵"
+                  "text": "Degraded: 6h degraded, 1h degraded"
                 },
                 "2": {
                   "color": "orange",
                   "index": 2,
-                  "text": "Warning 🔥"
+                  "text": "Warning: 1h recovering"
                 },
                 "3": {
                   "color": "red",
                   "index": 3,
-                  "text": "Degraded 🔥"
+                  "text": "Degraded: 1h degraded"
                 },
                 "4": {
                   "color": "orange",
                   "index": 4,
-                  "text": "Warning 🥵"
+                  "text": "Warning: 6h deteriorating"
                 },
                 "5": {
                   "color": "orange",
                   "index": 5,
-                  "text": "Warning 🔥🥵"
+                  "text": "Warning: 6h deteriorating, 1h deteriorating"
                 },
                 "6": {
                   "color": "orange",
                   "index": 6,
-                  "text": "Warning 🔥🥵"
+                  "text": "Warning: 6h deteriorating, 1h recovering"
                 },
                 "7": {
                   "color": "red",
                   "index": 7,
-                  "text": "Degraded 🔥🥵"
+                  "text": "Degraded: 6h deteriorating, 1h degraded"
                 },
                 "8": {
                   "color": "orange",
                   "index": 8,
-                  "text": "Warning 🥵"
+                  "text": "Warning: 6h recovering"
                 },
                 "9": {
                   "color": "orange",
                   "index": 9,
-                  "text": "Warning 🔥🥵"
+                  "text": "Warning: 6h recovering, 1h deteriorating"
                 }
               },
               "type": "value"
@@ -1582,12 +1582,6 @@
           "color": "#E7D551"
         },
         {
-          "alias": "registry error ratio",
-          "color": "#E7D551",
-          "fillBelowTo": "registry error ratio avg",
-          "zindex": 3
-        },
-        {
           "alias": "registry error ratio avg",
           "color": "#5794F2",
           "dashLength": 1,
@@ -1608,6 +1602,12 @@
           "nullPointMode": "connected",
           "spaceLength": 2,
           "zindex": -3
+        },
+        {
+          "alias": "registry error ratio",
+          "color": "#E7D551",
+          "fillBelowTo": "registry error ratio avg",
+          "zindex": 3
         }
       ],
       "spaceLength": 10,
@@ -1703,77 +1703,77 @@
                 "1": {
                   "color": "orange",
                   "index": 1,
-                  "text": "Warning 🔥"
+                  "text": "Warning: 1h deteriorating"
                 },
                 "10": {
                   "color": "orange",
                   "index": 10,
-                  "text": "Warning 🔥🥵"
+                  "text": "Warning: 6h recovering, 1h recovering"
                 },
                 "11": {
                   "color": "red",
                   "index": 11,
-                  "text": "Degraded 🔥🥵"
+                  "text": "Degraded: 6h recovering, 1h degraded"
                 },
                 "12": {
                   "color": "red",
                   "index": 12,
-                  "text": "Degraded 🥵"
+                  "text": "Degraded: 6h degraded"
                 },
                 "13": {
                   "color": "red",
                   "index": 13,
-                  "text": "Degraded 🔥🥵"
+                  "text": "Degraded: 6h degraded, 1h deteriorating"
                 },
                 "14": {
                   "color": "red",
                   "index": 14,
-                  "text": "Degraded 🔥🥵"
+                  "text": "Degraded: 6h degraded, 1h recovering"
                 },
                 "15": {
                   "color": "red",
                   "index": 15,
-                  "text": "Degraded 🔥🥵"
+                  "text": "Degraded: 6h degraded, 1h degraded"
                 },
                 "2": {
                   "color": "orange",
                   "index": 2,
-                  "text": "Warning 🔥"
+                  "text": "Warning: 1h recovering"
                 },
                 "3": {
                   "color": "red",
                   "index": 3,
-                  "text": "Degraded 🔥"
+                  "text": "Degraded: 1h degraded"
                 },
                 "4": {
                   "color": "orange",
                   "index": 4,
-                  "text": "Warning 🥵"
+                  "text": "Warning: 6h deteriorating"
                 },
                 "5": {
                   "color": "orange",
                   "index": 5,
-                  "text": "Warning 🔥🥵"
+                  "text": "Warning: 6h deteriorating, 1h deteriorating"
                 },
                 "6": {
                   "color": "orange",
                   "index": 6,
-                  "text": "Warning 🔥🥵"
+                  "text": "Warning: 6h deteriorating, 1h recovering"
                 },
                 "7": {
                   "color": "red",
                   "index": 7,
-                  "text": "Degraded 🔥🥵"
+                  "text": "Degraded: 6h deteriorating, 1h degraded"
                 },
                 "8": {
                   "color": "orange",
                   "index": 8,
-                  "text": "Warning 🥵"
+                  "text": "Warning: 6h recovering"
                 },
                 "9": {
                   "color": "orange",
                   "index": 9,
-                  "text": "Warning 🔥🥵"
+                  "text": "Warning: 6h recovering, 1h deteriorating"
                 }
               },
               "type": "value"
@@ -1875,7 +1875,7 @@
       "pluginVersion": "7",
       "targets": [
         {
-          "expr": "sum (\n  label_replace(\n    vector(0) and on() (gitlab_service_errors:ratio_1h{type=\"registry\"}),\n    \"period\", \"na\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(1) and on() (gitlab_service_errors:ratio_5m{type=\"registry\"} \u003e on(tier, type, __tenant_id__) group_left() (14.4 * slo:max:events:gitlab_service_errors:ratio{component=\"\",type=\"registry\"})),\n    \"period\", \"5m\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(2) and on() (gitlab_service_errors:ratio_1h{type=\"registry\"} \u003e on(tier, type, __tenant_id__) group_left() (14.4 * slo:max:events:gitlab_service_errors:ratio{component=\"\",type=\"registry\"})),\n    \"period\", \"1h\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(4) and on() (gitlab_service_errors:ratio_30m{type=\"registry\"} \u003e on(tier, type, __tenant_id__) group_left() (6 * slo:max:events:gitlab_service_errors:ratio{component=\"\",type=\"registry\"})),\n    \"period\", \"30m\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(8) and on() (gitlab_service_errors:ratio_6h{type=\"registry\"} \u003e on(tier, type, __tenant_id__) group_left() (6 * slo:max:events:gitlab_service_errors:ratio{component=\"\",type=\"registry\"})),\n    \"period\", \"6h\", \"\", \"\"\n  )\n)\n",
+          "expr": "sum(\n  label_replace(\n    vector(0) and on() (gitlab_service_errors:ratio_1h{type=\"registry\"}),\n    \"period\", \"na\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(1) and on () (gitlab_service_errors:ratio_5m{type=\"registry\"} \u003e on(tier, type, __tenant_id__) group_left() (14.4 * slo:max:events:gitlab_service_errors:ratio{component=\"\",type=\"registry\"})),\n    \"period\", \"5m\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(2) and on () (gitlab_service_errors:ratio_1h{type=\"registry\"} \u003e on(tier, type, __tenant_id__) group_left() (14.4 * slo:max:events:gitlab_service_errors:ratio{component=\"\",type=\"registry\"})),\n    \"period\", \"1h\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(4) and on () (gitlab_service_errors:ratio_30m{type=\"registry\"} \u003e on(tier, type, __tenant_id__) group_left() (6 * slo:max:events:gitlab_service_errors:ratio{component=\"\",type=\"registry\"})),\n    \"period\", \"30m\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(8) and on () (gitlab_service_errors:ratio_6h{type=\"registry\"} \u003e on(tier, type, __tenant_id__) group_left() (6 * slo:max:events:gitlab_service_errors:ratio{component=\"\",type=\"registry\"})),\n    \"period\", \"6h\", \"\", \"\"\n  )\n)\n",
           "format": "time_series",
           "instant": true,
           "interval": "1m",
@@ -2240,11 +2240,6 @@
           "color": "#E7D551"
         },
         {
-          "alias": "sidekiq apdex",
-          "color": "#E7D551",
-          "zindex": 3
-        },
-        {
           "alias": "sidekiq apdex avg",
           "color": "#5794F2",
           "dashLength": 1,
@@ -2265,6 +2260,11 @@
           "nullPointMode": "connected",
           "spaceLength": 2,
           "zindex": -3
+        },
+        {
+          "alias": "sidekiq apdex",
+          "color": "#E7D551",
+          "zindex": 3
         }
       ],
       "spaceLength": 10,
@@ -2360,77 +2360,77 @@
                 "1": {
                   "color": "orange",
                   "index": 1,
-                  "text": "Warning 🔥"
+                  "text": "Warning: 1h deteriorating"
                 },
                 "10": {
                   "color": "orange",
                   "index": 10,
-                  "text": "Warning 🔥🥵"
+                  "text": "Warning: 6h recovering, 1h recovering"
                 },
                 "11": {
                   "color": "red",
                   "index": 11,
-                  "text": "Degraded 🔥🥵"
+                  "text": "Degraded: 6h recovering, 1h degraded"
                 },
                 "12": {
                   "color": "red",
                   "index": 12,
-                  "text": "Degraded 🥵"
+                  "text": "Degraded: 6h degraded"
                 },
                 "13": {
                   "color": "red",
                   "index": 13,
-                  "text": "Degraded 🔥🥵"
+                  "text": "Degraded: 6h degraded, 1h deteriorating"
                 },
                 "14": {
                   "color": "red",
                   "index": 14,
-                  "text": "Degraded 🔥🥵"
+                  "text": "Degraded: 6h degraded, 1h recovering"
                 },
                 "15": {
                   "color": "red",
                   "index": 15,
-                  "text": "Degraded 🔥🥵"
+                  "text": "Degraded: 6h degraded, 1h degraded"
                 },
                 "2": {
                   "color": "orange",
                   "index": 2,
-                  "text": "Warning 🔥"
+                  "text": "Warning: 1h recovering"
                 },
                 "3": {
                   "color": "red",
                   "index": 3,
-                  "text": "Degraded 🔥"
+                  "text": "Degraded: 1h degraded"
                 },
                 "4": {
                   "color": "orange",
                   "index": 4,
-                  "text": "Warning 🥵"
+                  "text": "Warning: 6h deteriorating"
                 },
                 "5": {
                   "color": "orange",
                   "index": 5,
-                  "text": "Warning 🔥🥵"
+                  "text": "Warning: 6h deteriorating, 1h deteriorating"
                 },
                 "6": {
                   "color": "orange",
                   "index": 6,
-                  "text": "Warning 🔥🥵"
+                  "text": "Warning: 6h deteriorating, 1h recovering"
                 },
                 "7": {
                   "color": "red",
                   "index": 7,
-                  "text": "Degraded 🔥🥵"
+                  "text": "Degraded: 6h deteriorating, 1h degraded"
                 },
                 "8": {
                   "color": "orange",
                   "index": 8,
-                  "text": "Warning 🥵"
+                  "text": "Warning: 6h recovering"
                 },
                 "9": {
                   "color": "orange",
                   "index": 9,
-                  "text": "Warning 🔥🥵"
+                  "text": "Warning: 6h recovering, 1h deteriorating"
                 }
               },
               "type": "value"
@@ -2619,12 +2619,6 @@
           "color": "#E7D551"
         },
         {
-          "alias": "sidekiq error ratio",
-          "color": "#E7D551",
-          "fillBelowTo": "sidekiq error ratio avg",
-          "zindex": 3
-        },
-        {
           "alias": "sidekiq error ratio avg",
           "color": "#5794F2",
           "dashLength": 1,
@@ -2645,6 +2639,12 @@
           "nullPointMode": "connected",
           "spaceLength": 2,
           "zindex": -3
+        },
+        {
+          "alias": "sidekiq error ratio",
+          "color": "#E7D551",
+          "fillBelowTo": "sidekiq error ratio avg",
+          "zindex": 3
         }
       ],
       "spaceLength": 10,
@@ -2740,77 +2740,77 @@
                 "1": {
                   "color": "orange",
                   "index": 1,
-                  "text": "Warning 🔥"
+                  "text": "Warning: 1h deteriorating"
                 },
                 "10": {
                   "color": "orange",
                   "index": 10,
-                  "text": "Warning 🔥🥵"
+                  "text": "Warning: 6h recovering, 1h recovering"
                 },
                 "11": {
                   "color": "red",
                   "index": 11,
-                  "text": "Degraded 🔥🥵"
+                  "text": "Degraded: 6h recovering, 1h degraded"
                 },
                 "12": {
                   "color": "red",
                   "index": 12,
-                  "text": "Degraded 🥵"
+                  "text": "Degraded: 6h degraded"
                 },
                 "13": {
                   "color": "red",
                   "index": 13,
-                  "text": "Degraded 🔥🥵"
+                  "text": "Degraded: 6h degraded, 1h deteriorating"
                 },
                 "14": {
                   "color": "red",
                   "index": 14,
-                  "text": "Degraded 🔥🥵"
+                  "text": "Degraded: 6h degraded, 1h recovering"
                 },
                 "15": {
                   "color": "red",
                   "index": 15,
-                  "text": "Degraded 🔥🥵"
+                  "text": "Degraded: 6h degraded, 1h degraded"
                 },
                 "2": {
                   "color": "orange",
                   "index": 2,
-                  "text": "Warning 🔥"
+                  "text": "Warning: 1h recovering"
                 },
                 "3": {
                   "color": "red",
                   "index": 3,
-                  "text": "Degraded 🔥"
+                  "text": "Degraded: 1h degraded"
                 },
                 "4": {
                   "color": "orange",
                   "index": 4,
-                  "text": "Warning 🥵"
+                  "text": "Warning: 6h deteriorating"
                 },
                 "5": {
                   "color": "orange",
                   "index": 5,
-                  "text": "Warning 🔥🥵"
+                  "text": "Warning: 6h deteriorating, 1h deteriorating"
                 },
                 "6": {
                   "color": "orange",
                   "index": 6,
-                  "text": "Warning 🔥🥵"
+                  "text": "Warning: 6h deteriorating, 1h recovering"
                 },
                 "7": {
                   "color": "red",
                   "index": 7,
-                  "text": "Degraded 🔥🥵"
+                  "text": "Degraded: 6h deteriorating, 1h degraded"
                 },
                 "8": {
                   "color": "orange",
                   "index": 8,
-                  "text": "Warning 🥵"
+                  "text": "Warning: 6h recovering"
                 },
                 "9": {
                   "color": "orange",
                   "index": 9,
-                  "text": "Warning 🔥🥵"
+                  "text": "Warning: 6h recovering, 1h deteriorating"
                 }
               },
               "type": "value"
@@ -2912,7 +2912,7 @@
       "pluginVersion": "7",
       "targets": [
         {
-          "expr": "sum (\n  label_replace(\n    vector(0) and on() (gitlab_service_errors:ratio_1h{type=\"sidekiq\"}),\n    \"period\", \"na\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(1) and on() (gitlab_service_errors:ratio_5m{type=\"sidekiq\"} \u003e on(tier, type, __tenant_id__) group_left() (14.4 * slo:max:events:gitlab_service_errors:ratio{component=\"\",type=\"sidekiq\"})),\n    \"period\", \"5m\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(2) and on() (gitlab_service_errors:ratio_1h{type=\"sidekiq\"} \u003e on(tier, type, __tenant_id__) group_left() (14.4 * slo:max:events:gitlab_service_errors:ratio{component=\"\",type=\"sidekiq\"})),\n    \"period\", \"1h\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(4) and on() (gitlab_service_errors:ratio_30m{type=\"sidekiq\"} \u003e on(tier, type, __tenant_id__) group_left() (6 * slo:max:events:gitlab_service_errors:ratio{component=\"\",type=\"sidekiq\"})),\n    \"period\", \"30m\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(8) and on() (gitlab_service_errors:ratio_6h{type=\"sidekiq\"} \u003e on(tier, type, __tenant_id__) group_left() (6 * slo:max:events:gitlab_service_errors:ratio{component=\"\",type=\"sidekiq\"})),\n    \"period\", \"6h\", \"\", \"\"\n  )\n)\n",
+          "expr": "sum(\n  label_replace(\n    vector(0) and on() (gitlab_service_errors:ratio_1h{type=\"sidekiq\"}),\n    \"period\", \"na\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(1) and on () (gitlab_service_errors:ratio_5m{type=\"sidekiq\"} \u003e on(tier, type, __tenant_id__) group_left() (14.4 * slo:max:events:gitlab_service_errors:ratio{component=\"\",type=\"sidekiq\"})),\n    \"period\", \"5m\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(2) and on () (gitlab_service_errors:ratio_1h{type=\"sidekiq\"} \u003e on(tier, type, __tenant_id__) group_left() (14.4 * slo:max:events:gitlab_service_errors:ratio{component=\"\",type=\"sidekiq\"})),\n    \"period\", \"1h\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(4) and on () (gitlab_service_errors:ratio_30m{type=\"sidekiq\"} \u003e on(tier, type, __tenant_id__) group_left() (6 * slo:max:events:gitlab_service_errors:ratio{component=\"\",type=\"sidekiq\"})),\n    \"period\", \"30m\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(8) and on () (gitlab_service_errors:ratio_6h{type=\"sidekiq\"} \u003e on(tier, type, __tenant_id__) group_left() (6 * slo:max:events:gitlab_service_errors:ratio{component=\"\",type=\"sidekiq\"})),\n    \"period\", \"6h\", \"\", \"\"\n  )\n)\n",
           "format": "time_series",
           "instant": true,
           "interval": "1m",
@@ -3281,11 +3281,6 @@
           "color": "#E7D551"
         },
         {
-          "alias": "webservice apdex",
-          "color": "#E7D551",
-          "zindex": 3
-        },
-        {
           "alias": "webservice apdex avg",
           "color": "#5794F2",
           "dashLength": 1,
@@ -3306,6 +3301,11 @@
           "nullPointMode": "connected",
           "spaceLength": 2,
           "zindex": -3
+        },
+        {
+          "alias": "webservice apdex",
+          "color": "#E7D551",
+          "zindex": 3
         }
       ],
       "spaceLength": 10,
@@ -3401,77 +3401,77 @@
                 "1": {
                   "color": "orange",
                   "index": 1,
-                  "text": "Warning 🔥"
+                  "text": "Warning: 1h deteriorating"
                 },
                 "10": {
                   "color": "orange",
                   "index": 10,
-                  "text": "Warning 🔥🥵"
+                  "text": "Warning: 6h recovering, 1h recovering"
                 },
                 "11": {
                   "color": "red",
                   "index": 11,
-                  "text": "Degraded 🔥🥵"
+                  "text": "Degraded: 6h recovering, 1h degraded"
                 },
                 "12": {
                   "color": "red",
                   "index": 12,
-                  "text": "Degraded 🥵"
+                  "text": "Degraded: 6h degraded"
                 },
                 "13": {
                   "color": "red",
                   "index": 13,
-                  "text": "Degraded 🔥🥵"
+                  "text": "Degraded: 6h degraded, 1h deteriorating"
                 },
                 "14": {
                   "color": "red",
                   "index": 14,
-                  "text": "Degraded 🔥🥵"
+                  "text": "Degraded: 6h degraded, 1h recovering"
                 },
                 "15": {
                   "color": "red",
                   "index": 15,
-                  "text": "Degraded 🔥🥵"
+                  "text": "Degraded: 6h degraded, 1h degraded"
                 },
                 "2": {
                   "color": "orange",
                   "index": 2,
-                  "text": "Warning 🔥"
+                  "text": "Warning: 1h recovering"
                 },
                 "3": {
                   "color": "red",
                   "index": 3,
-                  "text": "Degraded 🔥"
+                  "text": "Degraded: 1h degraded"
                 },
                 "4": {
                   "color": "orange",
                   "index": 4,
-                  "text": "Warning 🥵"
+                  "text": "Warning: 6h deteriorating"
                 },
                 "5": {
                   "color": "orange",
                   "index": 5,
-                  "text": "Warning 🔥🥵"
+                  "text": "Warning: 6h deteriorating, 1h deteriorating"
                 },
                 "6": {
                   "color": "orange",
                   "index": 6,
-                  "text": "Warning 🔥🥵"
+                  "text": "Warning: 6h deteriorating, 1h recovering"
                 },
                 "7": {
                   "color": "red",
                   "index": 7,
-                  "text": "Degraded 🔥🥵"
+                  "text": "Degraded: 6h deteriorating, 1h degraded"
                 },
                 "8": {
                   "color": "orange",
                   "index": 8,
-                  "text": "Warning 🥵"
+                  "text": "Warning: 6h recovering"
                 },
                 "9": {
                   "color": "orange",
                   "index": 9,
-                  "text": "Warning 🔥🥵"
+                  "text": "Warning: 6h recovering, 1h deteriorating"
                 }
               },
               "type": "value"
@@ -3660,12 +3660,6 @@
           "color": "#E7D551"
         },
         {
-          "alias": "webservice error ratio",
-          "color": "#E7D551",
-          "fillBelowTo": "webservice error ratio avg",
-          "zindex": 3
-        },
-        {
           "alias": "webservice error ratio avg",
           "color": "#5794F2",
           "dashLength": 1,
@@ -3686,6 +3680,12 @@
           "nullPointMode": "connected",
           "spaceLength": 2,
           "zindex": -3
+        },
+        {
+          "alias": "webservice error ratio",
+          "color": "#E7D551",
+          "fillBelowTo": "webservice error ratio avg",
+          "zindex": 3
         }
       ],
       "spaceLength": 10,
@@ -3781,77 +3781,77 @@
                 "1": {
                   "color": "orange",
                   "index": 1,
-                  "text": "Warning 🔥"
+                  "text": "Warning: 1h deteriorating"
                 },
                 "10": {
                   "color": "orange",
                   "index": 10,
-                  "text": "Warning 🔥🥵"
+                  "text": "Warning: 6h recovering, 1h recovering"
                 },
                 "11": {
                   "color": "red",
                   "index": 11,
-                  "text": "Degraded 🔥🥵"
+                  "text": "Degraded: 6h recovering, 1h degraded"
                 },
                 "12": {
                   "color": "red",
                   "index": 12,
-                  "text": "Degraded 🥵"
+                  "text": "Degraded: 6h degraded"
                 },
                 "13": {
                   "color": "red",
                   "index": 13,
-                  "text": "Degraded 🔥🥵"
+                  "text": "Degraded: 6h degraded, 1h deteriorating"
                 },
                 "14": {
                   "color": "red",
                   "index": 14,
-                  "text": "Degraded 🔥🥵"
+                  "text": "Degraded: 6h degraded, 1h recovering"
                 },
                 "15": {
                   "color": "red",
                   "index": 15,
-                  "text": "Degraded 🔥🥵"
+                  "text": "Degraded: 6h degraded, 1h degraded"
                 },
                 "2": {
                   "color": "orange",
                   "index": 2,
-                  "text": "Warning 🔥"
+                  "text": "Warning: 1h recovering"
                 },
                 "3": {
                   "color": "red",
                   "index": 3,
-                  "text": "Degraded 🔥"
+                  "text": "Degraded: 1h degraded"
                 },
                 "4": {
                   "color": "orange",
                   "index": 4,
-                  "text": "Warning 🥵"
+                  "text": "Warning: 6h deteriorating"
                 },
                 "5": {
                   "color": "orange",
                   "index": 5,
-                  "text": "Warning 🔥🥵"
+                  "text": "Warning: 6h deteriorating, 1h deteriorating"
                 },
                 "6": {
                   "color": "orange",
                   "index": 6,
-                  "text": "Warning 🔥🥵"
+                  "text": "Warning: 6h deteriorating, 1h recovering"
                 },
                 "7": {
                   "color": "red",
                   "index": 7,
-                  "text": "Degraded 🔥🥵"
+                  "text": "Degraded: 6h deteriorating, 1h degraded"
                 },
                 "8": {
                   "color": "orange",
                   "index": 8,
-                  "text": "Warning 🥵"
+                  "text": "Warning: 6h recovering"
                 },
                 "9": {
                   "color": "orange",
                   "index": 9,
-                  "text": "Warning 🔥🥵"
+                  "text": "Warning: 6h recovering, 1h deteriorating"
                 }
               },
               "type": "value"
@@ -3953,7 +3953,7 @@
       "pluginVersion": "7",
       "targets": [
         {
-          "expr": "sum (\n  label_replace(\n    vector(0) and on() (gitlab_service_errors:ratio_1h{type=\"webservice\"}),\n    \"period\", \"na\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(1) and on() (gitlab_service_errors:ratio_5m{type=\"webservice\"} \u003e on(tier, type, __tenant_id__) group_left() (14.4 * slo:max:events:gitlab_service_errors:ratio{component=\"\",type=\"webservice\"})),\n    \"period\", \"5m\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(2) and on() (gitlab_service_errors:ratio_1h{type=\"webservice\"} \u003e on(tier, type, __tenant_id__) group_left() (14.4 * slo:max:events:gitlab_service_errors:ratio{component=\"\",type=\"webservice\"})),\n    \"period\", \"1h\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(4) and on() (gitlab_service_errors:ratio_30m{type=\"webservice\"} \u003e on(tier, type, __tenant_id__) group_left() (6 * slo:max:events:gitlab_service_errors:ratio{component=\"\",type=\"webservice\"})),\n    \"period\", \"30m\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(8) and on() (gitlab_service_errors:ratio_6h{type=\"webservice\"} \u003e on(tier, type, __tenant_id__) group_left() (6 * slo:max:events:gitlab_service_errors:ratio{component=\"\",type=\"webservice\"})),\n    \"period\", \"6h\", \"\", \"\"\n  )\n)\n",
+          "expr": "sum(\n  label_replace(\n    vector(0) and on() (gitlab_service_errors:ratio_1h{type=\"webservice\"}),\n    \"period\", \"na\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(1) and on () (gitlab_service_errors:ratio_5m{type=\"webservice\"} \u003e on(tier, type, __tenant_id__) group_left() (14.4 * slo:max:events:gitlab_service_errors:ratio{component=\"\",type=\"webservice\"})),\n    \"period\", \"5m\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(2) and on () (gitlab_service_errors:ratio_1h{type=\"webservice\"} \u003e on(tier, type, __tenant_id__) group_left() (14.4 * slo:max:events:gitlab_service_errors:ratio{component=\"\",type=\"webservice\"})),\n    \"period\", \"1h\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(4) and on () (gitlab_service_errors:ratio_30m{type=\"webservice\"} \u003e on(tier, type, __tenant_id__) group_left() (6 * slo:max:events:gitlab_service_errors:ratio{component=\"\",type=\"webservice\"})),\n    \"period\", \"30m\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(8) and on () (gitlab_service_errors:ratio_6h{type=\"webservice\"} \u003e on(tier, type, __tenant_id__) group_left() (6 * slo:max:events:gitlab_service_errors:ratio{component=\"\",type=\"webservice\"})),\n    \"period\", \"6h\", \"\", \"\"\n  )\n)\n",
           "format": "time_series",
           "instant": true,
           "interval": "1m",
@@ -4326,11 +4326,6 @@
           "color": "#E7D551"
         },
         {
-          "alias": "gitaly apdex",
-          "color": "#E7D551",
-          "zindex": 3
-        },
-        {
           "alias": "gitaly apdex avg",
           "color": "#5794F2",
           "dashLength": 1,
@@ -4351,6 +4346,11 @@
           "nullPointMode": "connected",
           "spaceLength": 2,
           "zindex": -3
+        },
+        {
+          "alias": "gitaly apdex",
+          "color": "#E7D551",
+          "zindex": 3
         }
       ],
       "spaceLength": 10,
@@ -4446,77 +4446,77 @@
                 "1": {
                   "color": "orange",
                   "index": 1,
-                  "text": "Warning 🔥"
+                  "text": "Warning: 1h deteriorating"
                 },
                 "10": {
                   "color": "orange",
                   "index": 10,
-                  "text": "Warning 🔥🥵"
+                  "text": "Warning: 6h recovering, 1h recovering"
                 },
                 "11": {
                   "color": "red",
                   "index": 11,
-                  "text": "Degraded 🔥🥵"
+                  "text": "Degraded: 6h recovering, 1h degraded"
                 },
                 "12": {
                   "color": "red",
                   "index": 12,
-                  "text": "Degraded 🥵"
+                  "text": "Degraded: 6h degraded"
                 },
                 "13": {
                   "color": "red",
                   "index": 13,
-                  "text": "Degraded 🔥🥵"
+                  "text": "Degraded: 6h degraded, 1h deteriorating"
                 },
                 "14": {
                   "color": "red",
                   "index": 14,
-                  "text": "Degraded 🔥🥵"
+                  "text": "Degraded: 6h degraded, 1h recovering"
                 },
                 "15": {
                   "color": "red",
                   "index": 15,
-                  "text": "Degraded 🔥🥵"
+                  "text": "Degraded: 6h degraded, 1h degraded"
                 },
                 "2": {
                   "color": "orange",
                   "index": 2,
-                  "text": "Warning 🔥"
+                  "text": "Warning: 1h recovering"
                 },
                 "3": {
                   "color": "red",
                   "index": 3,
-                  "text": "Degraded 🔥"
+                  "text": "Degraded: 1h degraded"
                 },
                 "4": {
                   "color": "orange",
                   "index": 4,
-                  "text": "Warning 🥵"
+                  "text": "Warning: 6h deteriorating"
                 },
                 "5": {
                   "color": "orange",
                   "index": 5,
-                  "text": "Warning 🔥🥵"
+                  "text": "Warning: 6h deteriorating, 1h deteriorating"
                 },
                 "6": {
                   "color": "orange",
                   "index": 6,
-                  "text": "Warning 🔥🥵"
+                  "text": "Warning: 6h deteriorating, 1h recovering"
                 },
                 "7": {
                   "color": "red",
                   "index": 7,
-                  "text": "Degraded 🔥🥵"
+                  "text": "Degraded: 6h deteriorating, 1h degraded"
                 },
                 "8": {
                   "color": "orange",
                   "index": 8,
-                  "text": "Warning 🥵"
+                  "text": "Warning: 6h recovering"
                 },
                 "9": {
                   "color": "orange",
                   "index": 9,
-                  "text": "Warning 🔥🥵"
+                  "text": "Warning: 6h recovering, 1h deteriorating"
                 }
               },
               "type": "value"
@@ -4705,12 +4705,6 @@
           "color": "#E7D551"
         },
         {
-          "alias": "gitaly error ratio",
-          "color": "#E7D551",
-          "fillBelowTo": "gitaly error ratio avg",
-          "zindex": 3
-        },
-        {
           "alias": "gitaly error ratio avg",
           "color": "#5794F2",
           "dashLength": 1,
@@ -4731,6 +4725,12 @@
           "nullPointMode": "connected",
           "spaceLength": 2,
           "zindex": -3
+        },
+        {
+          "alias": "gitaly error ratio",
+          "color": "#E7D551",
+          "fillBelowTo": "gitaly error ratio avg",
+          "zindex": 3
         }
       ],
       "spaceLength": 10,
@@ -4826,77 +4826,77 @@
                 "1": {
                   "color": "orange",
                   "index": 1,
-                  "text": "Warning 🔥"
+                  "text": "Warning: 1h deteriorating"
                 },
                 "10": {
                   "color": "orange",
                   "index": 10,
-                  "text": "Warning 🔥🥵"
+                  "text": "Warning: 6h recovering, 1h recovering"
                 },
                 "11": {
                   "color": "red",
                   "index": 11,
-                  "text": "Degraded 🔥🥵"
+                  "text": "Degraded: 6h recovering, 1h degraded"
                 },
                 "12": {
                   "color": "red",
                   "index": 12,
-                  "text": "Degraded 🥵"
+                  "text": "Degraded: 6h degraded"
                 },
                 "13": {
                   "color": "red",
                   "index": 13,
-                  "text": "Degraded 🔥🥵"
+                  "text": "Degraded: 6h degraded, 1h deteriorating"
                 },
                 "14": {
                   "color": "red",
                   "index": 14,
-                  "text": "Degraded 🔥🥵"
+                  "text": "Degraded: 6h degraded, 1h recovering"
                 },
                 "15": {
                   "color": "red",
                   "index": 15,
-                  "text": "Degraded 🔥🥵"
+                  "text": "Degraded: 6h degraded, 1h degraded"
                 },
                 "2": {
                   "color": "orange",
                   "index": 2,
-                  "text": "Warning 🔥"
+                  "text": "Warning: 1h recovering"
                 },
                 "3": {
                   "color": "red",
                   "index": 3,
-                  "text": "Degraded 🔥"
+                  "text": "Degraded: 1h degraded"
                 },
                 "4": {
                   "color": "orange",
                   "index": 4,
-                  "text": "Warning 🥵"
+                  "text": "Warning: 6h deteriorating"
                 },
                 "5": {
                   "color": "orange",
                   "index": 5,
-                  "text": "Warning 🔥🥵"
+                  "text": "Warning: 6h deteriorating, 1h deteriorating"
                 },
                 "6": {
                   "color": "orange",
                   "index": 6,
-                  "text": "Warning 🔥🥵"
+                  "text": "Warning: 6h deteriorating, 1h recovering"
                 },
                 "7": {
                   "color": "red",
                   "index": 7,
-                  "text": "Degraded 🔥🥵"
+                  "text": "Degraded: 6h deteriorating, 1h degraded"
                 },
                 "8": {
                   "color": "orange",
                   "index": 8,
-                  "text": "Warning 🥵"
+                  "text": "Warning: 6h recovering"
                 },
                 "9": {
                   "color": "orange",
                   "index": 9,
-                  "text": "Warning 🔥🥵"
+                  "text": "Warning: 6h recovering, 1h deteriorating"
                 }
               },
               "type": "value"
@@ -4998,7 +4998,7 @@
       "pluginVersion": "7",
       "targets": [
         {
-          "expr": "sum (\n  label_replace(\n    vector(0) and on() (gitlab_service_errors:ratio_1h{type=\"gitaly\"}),\n    \"period\", \"na\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(1) and on() (gitlab_service_errors:ratio_5m{type=\"gitaly\"} \u003e on(tier, type, __tenant_id__) group_left() (14.4 * slo:max:events:gitlab_service_errors:ratio{component=\"\",type=\"gitaly\"})),\n    \"period\", \"5m\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(2) and on() (gitlab_service_errors:ratio_1h{type=\"gitaly\"} \u003e on(tier, type, __tenant_id__) group_left() (14.4 * slo:max:events:gitlab_service_errors:ratio{component=\"\",type=\"gitaly\"})),\n    \"period\", \"1h\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(4) and on() (gitlab_service_errors:ratio_30m{type=\"gitaly\"} \u003e on(tier, type, __tenant_id__) group_left() (6 * slo:max:events:gitlab_service_errors:ratio{component=\"\",type=\"gitaly\"})),\n    \"period\", \"30m\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(8) and on() (gitlab_service_errors:ratio_6h{type=\"gitaly\"} \u003e on(tier, type, __tenant_id__) group_left() (6 * slo:max:events:gitlab_service_errors:ratio{component=\"\",type=\"gitaly\"})),\n    \"period\", \"6h\", \"\", \"\"\n  )\n)\n",
+          "expr": "sum(\n  label_replace(\n    vector(0) and on() (gitlab_service_errors:ratio_1h{type=\"gitaly\"}),\n    \"period\", \"na\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(1) and on () (gitlab_service_errors:ratio_5m{type=\"gitaly\"} \u003e on(tier, type, __tenant_id__) group_left() (14.4 * slo:max:events:gitlab_service_errors:ratio{component=\"\",type=\"gitaly\"})),\n    \"period\", \"5m\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(2) and on () (gitlab_service_errors:ratio_1h{type=\"gitaly\"} \u003e on(tier, type, __tenant_id__) group_left() (14.4 * slo:max:events:gitlab_service_errors:ratio{component=\"\",type=\"gitaly\"})),\n    \"period\", \"1h\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(4) and on () (gitlab_service_errors:ratio_30m{type=\"gitaly\"} \u003e on(tier, type, __tenant_id__) group_left() (6 * slo:max:events:gitlab_service_errors:ratio{component=\"\",type=\"gitaly\"})),\n    \"period\", \"30m\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(8) and on () (gitlab_service_errors:ratio_6h{type=\"gitaly\"} \u003e on(tier, type, __tenant_id__) group_left() (6 * slo:max:events:gitlab_service_errors:ratio{component=\"\",type=\"gitaly\"})),\n    \"period\", \"6h\", \"\", \"\"\n  )\n)\n",
           "format": "time_series",
           "instant": true,
           "interval": "1m",
@@ -5387,11 +5387,6 @@
           "color": "#E7D551"
         },
         {
-          "alias": "praefect apdex",
-          "color": "#E7D551",
-          "zindex": 3
-        },
-        {
           "alias": "praefect apdex avg",
           "color": "#5794F2",
           "dashLength": 1,
@@ -5412,6 +5407,11 @@
           "nullPointMode": "connected",
           "spaceLength": 2,
           "zindex": -3
+        },
+        {
+          "alias": "praefect apdex",
+          "color": "#E7D551",
+          "zindex": 3
         }
       ],
       "spaceLength": 10,
@@ -5507,77 +5507,77 @@
                 "1": {
                   "color": "orange",
                   "index": 1,
-                  "text": "Warning 🔥"
+                  "text": "Warning: 1h deteriorating"
                 },
                 "10": {
                   "color": "orange",
                   "index": 10,
-                  "text": "Warning 🔥🥵"
+                  "text": "Warning: 6h recovering, 1h recovering"
                 },
                 "11": {
                   "color": "red",
                   "index": 11,
-                  "text": "Degraded 🔥🥵"
+                  "text": "Degraded: 6h recovering, 1h degraded"
                 },
                 "12": {
                   "color": "red",
                   "index": 12,
-                  "text": "Degraded 🥵"
+                  "text": "Degraded: 6h degraded"
                 },
                 "13": {
                   "color": "red",
                   "index": 13,
-                  "text": "Degraded 🔥🥵"
+                  "text": "Degraded: 6h degraded, 1h deteriorating"
                 },
                 "14": {
                   "color": "red",
                   "index": 14,
-                  "text": "Degraded 🔥🥵"
+                  "text": "Degraded: 6h degraded, 1h recovering"
                 },
                 "15": {
                   "color": "red",
                   "index": 15,
-                  "text": "Degraded 🔥🥵"
+                  "text": "Degraded: 6h degraded, 1h degraded"
                 },
                 "2": {
                   "color": "orange",
                   "index": 2,
-                  "text": "Warning 🔥"
+                  "text": "Warning: 1h recovering"
                 },
                 "3": {
                   "color": "red",
                   "index": 3,
-                  "text": "Degraded 🔥"
+                  "text": "Degraded: 1h degraded"
                 },
                 "4": {
                   "color": "orange",
                   "index": 4,
-                  "text": "Warning 🥵"
+                  "text": "Warning: 6h deteriorating"
                 },
                 "5": {
                   "color": "orange",
                   "index": 5,
-                  "text": "Warning 🔥🥵"
+                  "text": "Warning: 6h deteriorating, 1h deteriorating"
                 },
                 "6": {
                   "color": "orange",
                   "index": 6,
-                  "text": "Warning 🔥🥵"
+                  "text": "Warning: 6h deteriorating, 1h recovering"
                 },
                 "7": {
                   "color": "red",
                   "index": 7,
-                  "text": "Degraded 🔥🥵"
+                  "text": "Degraded: 6h deteriorating, 1h degraded"
                 },
                 "8": {
                   "color": "orange",
                   "index": 8,
-                  "text": "Warning 🥵"
+                  "text": "Warning: 6h recovering"
                 },
                 "9": {
                   "color": "orange",
                   "index": 9,
-                  "text": "Warning 🔥🥵"
+                  "text": "Warning: 6h recovering, 1h deteriorating"
                 }
               },
               "type": "value"
@@ -5766,12 +5766,6 @@
           "color": "#E7D551"
         },
         {
-          "alias": "praefect error ratio",
-          "color": "#E7D551",
-          "fillBelowTo": "praefect error ratio avg",
-          "zindex": 3
-        },
-        {
           "alias": "praefect error ratio avg",
           "color": "#5794F2",
           "dashLength": 1,
@@ -5792,6 +5786,12 @@
           "nullPointMode": "connected",
           "spaceLength": 2,
           "zindex": -3
+        },
+        {
+          "alias": "praefect error ratio",
+          "color": "#E7D551",
+          "fillBelowTo": "praefect error ratio avg",
+          "zindex": 3
         }
       ],
       "spaceLength": 10,
@@ -5887,77 +5887,77 @@
                 "1": {
                   "color": "orange",
                   "index": 1,
-                  "text": "Warning 🔥"
+                  "text": "Warning: 1h deteriorating"
                 },
                 "10": {
                   "color": "orange",
                   "index": 10,
-                  "text": "Warning 🔥🥵"
+                  "text": "Warning: 6h recovering, 1h recovering"
                 },
                 "11": {
                   "color": "red",
                   "index": 11,
-                  "text": "Degraded 🔥🥵"
+                  "text": "Degraded: 6h recovering, 1h degraded"
                 },
                 "12": {
                   "color": "red",
                   "index": 12,
-                  "text": "Degraded 🥵"
+                  "text": "Degraded: 6h degraded"
                 },
                 "13": {
                   "color": "red",
                   "index": 13,
-                  "text": "Degraded 🔥🥵"
+                  "text": "Degraded: 6h degraded, 1h deteriorating"
                 },
                 "14": {
                   "color": "red",
                   "index": 14,
-                  "text": "Degraded 🔥🥵"
+                  "text": "Degraded: 6h degraded, 1h recovering"
                 },
                 "15": {
                   "color": "red",
                   "index": 15,
-                  "text": "Degraded 🔥🥵"
+                  "text": "Degraded: 6h degraded, 1h degraded"
                 },
                 "2": {
                   "color": "orange",
                   "index": 2,
-                  "text": "Warning 🔥"
+                  "text": "Warning: 1h recovering"
                 },
                 "3": {
                   "color": "red",
                   "index": 3,
-                  "text": "Degraded 🔥"
+                  "text": "Degraded: 1h degraded"
                 },
                 "4": {
                   "color": "orange",
                   "index": 4,
-                  "text": "Warning 🥵"
+                  "text": "Warning: 6h deteriorating"
                 },
                 "5": {
                   "color": "orange",
                   "index": 5,
-                  "text": "Warning 🔥🥵"
+                  "text": "Warning: 6h deteriorating, 1h deteriorating"
                 },
                 "6": {
                   "color": "orange",
                   "index": 6,
-                  "text": "Warning 🔥🥵"
+                  "text": "Warning: 6h deteriorating, 1h recovering"
                 },
                 "7": {
                   "color": "red",
                   "index": 7,
-                  "text": "Degraded 🔥🥵"
+                  "text": "Degraded: 6h deteriorating, 1h degraded"
                 },
                 "8": {
                   "color": "orange",
                   "index": 8,
-                  "text": "Warning 🥵"
+                  "text": "Warning: 6h recovering"
                 },
                 "9": {
                   "color": "orange",
                   "index": 9,
-                  "text": "Warning 🔥🥵"
+                  "text": "Warning: 6h recovering, 1h deteriorating"
                 }
               },
               "type": "value"
@@ -6059,7 +6059,7 @@
       "pluginVersion": "7",
       "targets": [
         {
-          "expr": "sum (\n  label_replace(\n    vector(0) and on() (gitlab_service_errors:ratio_1h{type=\"praefect\"}),\n    \"period\", \"na\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(1) and on() (gitlab_service_errors:ratio_5m{type=\"praefect\"} \u003e on(tier, type, __tenant_id__) group_left() (14.4 * slo:max:events:gitlab_service_errors:ratio{component=\"\",type=\"praefect\"})),\n    \"period\", \"5m\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(2) and on() (gitlab_service_errors:ratio_1h{type=\"praefect\"} \u003e on(tier, type, __tenant_id__) group_left() (14.4 * slo:max:events:gitlab_service_errors:ratio{component=\"\",type=\"praefect\"})),\n    \"period\", \"1h\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(4) and on() (gitlab_service_errors:ratio_30m{type=\"praefect\"} \u003e on(tier, type, __tenant_id__) group_left() (6 * slo:max:events:gitlab_service_errors:ratio{component=\"\",type=\"praefect\"})),\n    \"period\", \"30m\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(8) and on() (gitlab_service_errors:ratio_6h{type=\"praefect\"} \u003e on(tier, type, __tenant_id__) group_left() (6 * slo:max:events:gitlab_service_errors:ratio{component=\"\",type=\"praefect\"})),\n    \"period\", \"6h\", \"\", \"\"\n  )\n)\n",
+          "expr": "sum(\n  label_replace(\n    vector(0) and on() (gitlab_service_errors:ratio_1h{type=\"praefect\"}),\n    \"period\", \"na\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(1) and on () (gitlab_service_errors:ratio_5m{type=\"praefect\"} \u003e on(tier, type, __tenant_id__) group_left() (14.4 * slo:max:events:gitlab_service_errors:ratio{component=\"\",type=\"praefect\"})),\n    \"period\", \"5m\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(2) and on () (gitlab_service_errors:ratio_1h{type=\"praefect\"} \u003e on(tier, type, __tenant_id__) group_left() (14.4 * slo:max:events:gitlab_service_errors:ratio{component=\"\",type=\"praefect\"})),\n    \"period\", \"1h\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(4) and on () (gitlab_service_errors:ratio_30m{type=\"praefect\"} \u003e on(tier, type, __tenant_id__) group_left() (6 * slo:max:events:gitlab_service_errors:ratio{component=\"\",type=\"praefect\"})),\n    \"period\", \"30m\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(8) and on () (gitlab_service_errors:ratio_6h{type=\"praefect\"} \u003e on(tier, type, __tenant_id__) group_left() (6 * slo:max:events:gitlab_service_errors:ratio{component=\"\",type=\"praefect\"})),\n    \"period\", \"6h\", \"\", \"\"\n  )\n)\n",
           "format": "time_series",
           "instant": true,
           "interval": "1m",
@@ -6600,11 +6600,6 @@
           "color": "#E7D551"
         },
         {
-          "alias": "redis apdex",
-          "color": "#E7D551",
-          "zindex": 3
-        },
-        {
           "alias": "redis apdex avg",
           "color": "#5794F2",
           "dashLength": 1,
@@ -6625,6 +6620,11 @@
           "nullPointMode": "connected",
           "spaceLength": 2,
           "zindex": -3
+        },
+        {
+          "alias": "redis apdex",
+          "color": "#E7D551",
+          "zindex": 3
         }
       ],
       "spaceLength": 10,
@@ -6720,77 +6720,77 @@
                 "1": {
                   "color": "orange",
                   "index": 1,
-                  "text": "Warning 🔥"
+                  "text": "Warning: 1h deteriorating"
                 },
                 "10": {
                   "color": "orange",
                   "index": 10,
-                  "text": "Warning 🔥🥵"
+                  "text": "Warning: 6h recovering, 1h recovering"
                 },
                 "11": {
                   "color": "red",
                   "index": 11,
-                  "text": "Degraded 🔥🥵"
+                  "text": "Degraded: 6h recovering, 1h degraded"
                 },
                 "12": {
                   "color": "red",
                   "index": 12,
-                  "text": "Degraded 🥵"
+                  "text": "Degraded: 6h degraded"
                 },
                 "13": {
                   "color": "red",
                   "index": 13,
-                  "text": "Degraded 🔥🥵"
+                  "text": "Degraded: 6h degraded, 1h deteriorating"
                 },
                 "14": {
                   "color": "red",
                   "index": 14,
-                  "text": "Degraded 🔥🥵"
+                  "text": "Degraded: 6h degraded, 1h recovering"
                 },
                 "15": {
                   "color": "red",
                   "index": 15,
-                  "text": "Degraded 🔥🥵"
+                  "text": "Degraded: 6h degraded, 1h degraded"
                 },
                 "2": {
                   "color": "orange",
                   "index": 2,
-                  "text": "Warning 🔥"
+                  "text": "Warning: 1h recovering"
                 },
                 "3": {
                   "color": "red",
                   "index": 3,
-                  "text": "Degraded 🔥"
+                  "text": "Degraded: 1h degraded"
                 },
                 "4": {
                   "color": "orange",
                   "index": 4,
-                  "text": "Warning 🥵"
+                  "text": "Warning: 6h deteriorating"
                 },
                 "5": {
                   "color": "orange",
                   "index": 5,
-                  "text": "Warning 🔥🥵"
+                  "text": "Warning: 6h deteriorating, 1h deteriorating"
                 },
                 "6": {
                   "color": "orange",
                   "index": 6,
-                  "text": "Warning 🔥🥵"
+                  "text": "Warning: 6h deteriorating, 1h recovering"
                 },
                 "7": {
                   "color": "red",
                   "index": 7,
-                  "text": "Degraded 🔥🥵"
+                  "text": "Degraded: 6h deteriorating, 1h degraded"
                 },
                 "8": {
                   "color": "orange",
                   "index": 8,
-                  "text": "Warning 🥵"
+                  "text": "Warning: 6h recovering"
                 },
                 "9": {
                   "color": "orange",
                   "index": 9,
-                  "text": "Warning 🔥🥵"
+                  "text": "Warning: 6h recovering, 1h deteriorating"
                 }
               },
               "type": "value"
@@ -6979,12 +6979,6 @@
           "color": "#E7D551"
         },
         {
-          "alias": "redis error ratio",
-          "color": "#E7D551",
-          "fillBelowTo": "redis error ratio avg",
-          "zindex": 3
-        },
-        {
           "alias": "redis error ratio avg",
           "color": "#5794F2",
           "dashLength": 1,
@@ -7005,6 +6999,12 @@
           "nullPointMode": "connected",
           "spaceLength": 2,
           "zindex": -3
+        },
+        {
+          "alias": "redis error ratio",
+          "color": "#E7D551",
+          "fillBelowTo": "redis error ratio avg",
+          "zindex": 3
         }
       ],
       "spaceLength": 10,
@@ -7100,77 +7100,77 @@
                 "1": {
                   "color": "orange",
                   "index": 1,
-                  "text": "Warning 🔥"
+                  "text": "Warning: 1h deteriorating"
                 },
                 "10": {
                   "color": "orange",
                   "index": 10,
-                  "text": "Warning 🔥🥵"
+                  "text": "Warning: 6h recovering, 1h recovering"
                 },
                 "11": {
                   "color": "red",
                   "index": 11,
-                  "text": "Degraded 🔥🥵"
+                  "text": "Degraded: 6h recovering, 1h degraded"
                 },
                 "12": {
                   "color": "red",
                   "index": 12,
-                  "text": "Degraded 🥵"
+                  "text": "Degraded: 6h degraded"
                 },
                 "13": {
                   "color": "red",
                   "index": 13,
-                  "text": "Degraded 🔥🥵"
+                  "text": "Degraded: 6h degraded, 1h deteriorating"
                 },
                 "14": {
                   "color": "red",
                   "index": 14,
-                  "text": "Degraded 🔥🥵"
+                  "text": "Degraded: 6h degraded, 1h recovering"
                 },
                 "15": {
                   "color": "red",
                   "index": 15,
-                  "text": "Degraded 🔥🥵"
+                  "text": "Degraded: 6h degraded, 1h degraded"
                 },
                 "2": {
                   "color": "orange",
                   "index": 2,
-                  "text": "Warning 🔥"
+                  "text": "Warning: 1h recovering"
                 },
                 "3": {
                   "color": "red",
                   "index": 3,
-                  "text": "Degraded 🔥"
+                  "text": "Degraded: 1h degraded"
                 },
                 "4": {
                   "color": "orange",
                   "index": 4,
-                  "text": "Warning 🥵"
+                  "text": "Warning: 6h deteriorating"
                 },
                 "5": {
                   "color": "orange",
                   "index": 5,
-                  "text": "Warning 🔥🥵"
+                  "text": "Warning: 6h deteriorating, 1h deteriorating"
                 },
                 "6": {
                   "color": "orange",
                   "index": 6,
-                  "text": "Warning 🔥🥵"
+                  "text": "Warning: 6h deteriorating, 1h recovering"
                 },
                 "7": {
                   "color": "red",
                   "index": 7,
-                  "text": "Degraded 🔥🥵"
+                  "text": "Degraded: 6h deteriorating, 1h degraded"
                 },
                 "8": {
                   "color": "orange",
                   "index": 8,
-                  "text": "Warning 🥵"
+                  "text": "Warning: 6h recovering"
                 },
                 "9": {
                   "color": "orange",
                   "index": 9,
-                  "text": "Warning 🔥🥵"
+                  "text": "Warning: 6h recovering, 1h deteriorating"
                 }
               },
               "type": "value"
@@ -7272,7 +7272,7 @@
       "pluginVersion": "7",
       "targets": [
         {
-          "expr": "sum (\n  label_replace(\n    vector(0) and on() (gitlab_service_errors:ratio_1h{type=\"redis\"}),\n    \"period\", \"na\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(1) and on() (gitlab_service_errors:ratio_5m{type=\"redis\"} \u003e on(tier, type, __tenant_id__) group_left() (14.4 * slo:max:events:gitlab_service_errors:ratio{component=\"\",type=\"redis\"})),\n    \"period\", \"5m\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(2) and on() (gitlab_service_errors:ratio_1h{type=\"redis\"} \u003e on(tier, type, __tenant_id__) group_left() (14.4 * slo:max:events:gitlab_service_errors:ratio{component=\"\",type=\"redis\"})),\n    \"period\", \"1h\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(4) and on() (gitlab_service_errors:ratio_30m{type=\"redis\"} \u003e on(tier, type, __tenant_id__) group_left() (6 * slo:max:events:gitlab_service_errors:ratio{component=\"\",type=\"redis\"})),\n    \"period\", \"30m\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(8) and on() (gitlab_service_errors:ratio_6h{type=\"redis\"} \u003e on(tier, type, __tenant_id__) group_left() (6 * slo:max:events:gitlab_service_errors:ratio{component=\"\",type=\"redis\"})),\n    \"period\", \"6h\", \"\", \"\"\n  )\n)\n",
+          "expr": "sum(\n  label_replace(\n    vector(0) and on() (gitlab_service_errors:ratio_1h{type=\"redis\"}),\n    \"period\", \"na\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(1) and on () (gitlab_service_errors:ratio_5m{type=\"redis\"} \u003e on(tier, type, __tenant_id__) group_left() (14.4 * slo:max:events:gitlab_service_errors:ratio{component=\"\",type=\"redis\"})),\n    \"period\", \"5m\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(2) and on () (gitlab_service_errors:ratio_1h{type=\"redis\"} \u003e on(tier, type, __tenant_id__) group_left() (14.4 * slo:max:events:gitlab_service_errors:ratio{component=\"\",type=\"redis\"})),\n    \"period\", \"1h\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(4) and on () (gitlab_service_errors:ratio_30m{type=\"redis\"} \u003e on(tier, type, __tenant_id__) group_left() (6 * slo:max:events:gitlab_service_errors:ratio{component=\"\",type=\"redis\"})),\n    \"period\", \"30m\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(8) and on () (gitlab_service_errors:ratio_6h{type=\"redis\"} \u003e on(tier, type, __tenant_id__) group_left() (6 * slo:max:events:gitlab_service_errors:ratio{component=\"\",type=\"redis\"})),\n    \"period\", \"6h\", \"\", \"\"\n  )\n)\n",
           "format": "time_series",
           "instant": true,
           "interval": "1m",
