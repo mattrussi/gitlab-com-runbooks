@@ -174,7 +174,7 @@ This step will enable the `debug` command by reconfiguring the existing redis pr
 
 Run this from chef-repo, to find the existing redis instances and reconfigure them via `redis-cluster-reconfigure.sh`, excluding new shard as it was configured already with `enable-debug-command` above during provisioning.
 
-**Warning:** `enable-debug-command` config option must already be enabled for newly added nodes during the time of provisioning otherwise failover wouldn't work, which is required for reconfiguring the redis process. Failover requires atleast one keyslot to be present on the shard.
+**Warning:** `enable-debug-command` config option must already be enabled for newly added nodes during the time of provisioning otherwise failover wouldn't work, which is required for reconfiguring the Redis process. Failover requires at least one keyslot to be present on the shard.
 
 ```
 knife search -i 'roles:$ENV-base-db-$DEPLOYMENT' | sort -V | grep -v $SHARD_NUMBER > $DEPLOYMENT-nodes.txt
@@ -277,7 +277,7 @@ ssh $DEPLOYMENT-shard-01-01-db-$ENV.c.$PROJECT.internal
 time sudo gitlab-redis-cli --cluster reshard 127.0.0.1:6379 --cluster-from <FROM_MASTER_NODE_ID> --cluster-to <TO_MASTER_NODE_ID> --cluster-slots <KEYSLOTS_TO_MOVE> --cluster-pipeline <BATCH_SIZE> --cluster-yes
 ```
 
-At the same time, keep an eye on CPU/Memory saturation and Apdex violation metrics in redis-cluster dashboard. Also, note the time taken for migration of keyslots to estimate required time for completing the migration. If there is no impact on resources and time taken by migration is not reasonable, then try by increasing the `<BATCH_SIZE` and `<KEYSLOTS_TO_MOVE>` to come to a workable number.
+At the same time, keep an eye on CPU/Memory saturation and Apdex violation metrics in redis-cluster dashboard. Also, note the time taken for migration of keyslots to estimate required time for completing the migration. If there is no impact on resources and time taken by migration is not reasonable, then try increasing the `<BATCH_SIZE>` and `<KEYSLOTS_TO_MOVE>` to a workable number.
 
 ### 3. Migrate keys from existing shards to new shard
 
