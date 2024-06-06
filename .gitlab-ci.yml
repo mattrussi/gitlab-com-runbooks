@@ -9,7 +9,7 @@ include:
 
   # automatically tag releases using semantic-releases, based on conventional commit messages
   - project: gitlab-com/gl-infra/common-ci-tasks
-    ref: v2.10.0
+    ref: v2.11.0
     file: semantic-release.yml
 
   # Checks that the `.tool-versions` file is synced with .gitlab-ci-asdf-versions.yml,
@@ -404,18 +404,6 @@ renovate_bot:
     RENOVATE_GITLAB_TOKEN:
       file: false
       vault: access_tokens/${VAULT_SECRETS_PATH}/renovate/token@ci
-
-################
-# Semantic release
-################
-
-semantic_release:
-  extends: .id-tokens
-  stage: release
-  secrets:
-    SEMANTIC_RELEASE_GITLAB_TOKEN:
-      file: false
-      vault: access_tokens/${VAULT_SECRETS_PATH}/semantic-release/token@ci
 
 ################
 # Linting
