@@ -42,7 +42,7 @@ local resourceSaturationPoint = metricsCatalog.resourceSaturationPoint;
       //   https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/main/environments/gprd/main.tf#L111-148
       // * For gstg: Just copy "nat_ip_count".
       //   https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/main/environments/gstg/main.tf#L94-122
-      gprd_nat_ip_count: 48,
+      gprd_nat_ip_count: 64,
       gstg_nat_ip_count: 16,
     },
     query: |||
