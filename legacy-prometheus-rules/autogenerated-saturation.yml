@@ -552,7 +552,7 @@ groups:
       (\n        stackdriver_nat_gateway_router_googleapis_com_nat_allocated_ports{\n
       \         job=~\"stackdriver|scrapeConfig/monitoring/prometheus-agent-stackdriver\",\n
       \         project_id=\"gitlab-production\",\n          \n        }\n      )\n
-      \     /\n      ( 64512 * 48 )\n      or\n      sum without(nat_ip) (\n        stackdriver_nat_gateway_router_googleapis_com_nat_allocated_ports{\n
+      \     /\n      ( 64512 * 80 )\n      or\n      sum without(nat_ip) (\n        stackdriver_nat_gateway_router_googleapis_com_nat_allocated_ports{\n
       \         job=~\"stackdriver|scrapeConfig/monitoring/prometheus-agent-stackdriver\",\n
       \         project_id=\"gitlab-staging-1\",\n          \n        }\n      )\n
       \     /\n      ( 64512 * 16 )\n      ,\n      1)\n  ,\n  0)\n)\n"
@@ -4578,7 +4578,7 @@ groups:
                 }
               )
               /
-              ( 64512 * 48 )
+              ( 64512 * 80 )
               or
               sum without(nat_ip) (
                 stackdriver_nat_gateway_router_googleapis_com_nat_allocated_ports{
@@ -4606,7 +4606,7 @@ groups:
                 }
               )
               /
-              ( 64512 * 48 )
+              ( 64512 * 80 )
               or
               sum without(nat_ip) (
                 stackdriver_nat_gateway_router_googleapis_com_nat_allocated_ports{
