@@ -4,7 +4,7 @@ This document outlines the steps for scaling an existing Redis Cluster. Previous
 
 ## Previous CRs for scaling `redis-cluster-ratelimiting`
 
-- [Provision nodes for new shard in redis-cluste-ratelimiting](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/18042)
+- [Provision nodes for new shard in redis-cluster-ratelimiting](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/18042)
 - [Enable debug command](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/18043) (If the cluster already doesn't have `debug` command enabled)
 - [Migrate the keyslots](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/18061)
 
