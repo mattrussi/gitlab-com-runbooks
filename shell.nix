@@ -24,6 +24,7 @@ in pkgs.mkShell {
   name     = "runbooks";
   packages = with pkgs; [
     jsonnet-tool
+    jq
     ruby_3_2
     go-jsonnet
     jsonnet-bundler

@@ -18,8 +18,8 @@
 
 * [Interacting with Consul](../consul/interaction.md)
 * [../elastic/kibana.md](../elastic/kibana.md)
-* [../git/gitlab-review-app-certs.md](../git/gitlab-review-app-certs.md)
 * [`gitalyctl`](../gitaly/gitalyctl.md)
+* [../git/gitlab-review-app-certs.md](../git/gitlab-review-app-certs.md)
 * [Kubernetes-Agent Basic Troubleshooting](../kas/kubernetes-agent-basic-troubleshooting.md)
 * [Rebuilding a kubernetes cluster](k8s-cluster-rebuild.md)
 * [k8s-oncall-setup.md](k8s-oncall-setup.md)

@@ -16,8 +16,8 @@
 
 ## Troubleshooting Pointers
 
-* [How GitLab.com uses Mailgun](mailgun.md)
 * [Mailgun Events](mailgunevents.md)
+* [How GitLab.com uses Mailgun](mailgun.md)
 <!-- END_MARKER -->
 
 <!-- ## Summary -->

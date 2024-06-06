@@ -22,7 +22,7 @@ groups:
               }
             )
             /
-            ( 64512 * 48 )
+            ( 64512 * 64 )
             or
             sum without(nat_ip) (
               stackdriver_nat_gateway_router_googleapis_com_nat_allocated_ports{
