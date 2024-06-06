@@ -184,7 +184,7 @@ scripts/redis-cluster-reconfigure.sh $DEPLOYMENT-nodes.txt
 
 ## Scale out cluster by resharding redis keys
 
-Until now, we just added redis instances for new shard to the cluster but they do not have any redis keys (keyslots) yet and hence they are not serving any user requests.
+Until now, we just added Redis instances for new shard to the cluster but they do not have any redis keys (keyslots) yet and hence they are not serving any user requests.
 
 In this phase, we will migrate keyslots from previous redis shards to the new shard, for load balancing. Previous CR [here](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/18061).
 
