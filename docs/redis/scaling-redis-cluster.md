@@ -38,7 +38,7 @@ Update `redis-cluster` gkms vault secrets to disable `debug` command for `rails`
 ./bin/gkms-vault-edit redis-cluster $ENV
 ```
 
-Update the JSON payload to include `-debug` for `rails` user for the target redis cluster (There is a space between `-debug` and `<`):
+Update the JSON payload to include `-debug` for `rails` user for the target Redis Cluster (There is a space between `-debug` and `<`):
 
 ```
     ...
@@ -68,17 +68,17 @@ Complete json object, with modification:
 
 ```
 
-This won't change anything yet, on the existing redis instances, as we would reconfigure the redis processes as mentioned later in this guide.
+This won't change anything yet, on the existing Redis servers, as we would reconfigure the Redis processes as mentioned later in this guide.
 
 ### 2. Create Chef role for new shard
 
-Create chef role for the new redis shard, based on the chef roles of existing redis shards of the cluster. Also add `enable-debug-command` option to redis configuration in the base role, if not added already.
+Create chef role for the new Redis shard, based on the chef roles of existing Redis shards of the cluster. Also add `enable-debug-command` option to Redis configuration in the base role, if not added already.
 
 An example MR can be found [here](https://gitlab.com/gitlab-com/gl-infra/chef-repo/-/merge_requests/4789).
 
 ### 3. Provision VMs
 
-Provision the VMs for new redis shard by incrementing `count` parameter to generic-stor/google terraform module of target redis cluster in the [config-mgmt project in the ops environment](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/). An example MR can be found [here](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/merge_requests/8474).
+Provision the VMs for new Redis shard by incrementing `count` parameter to generic-stor/google terraform module of target Redis Cluster in the [config-mgmt project in the ops environment](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/). An example MR can be found [here](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/merge_requests/8474).
 
 After the MR is merged and applied, check the VM state via:
 
@@ -110,7 +110,7 @@ ssh $DEPLOYMENT-shard-01-01-db-$ENV.c.$PROJECT.internal
 
 b. Run the following:
 
-Note: here we are exporting these env vars in the shell within redis instance.
+Note: here we are exporting these env vars in the shell within Redis server.
 
 ```
 export ENV=<ENV>
@@ -166,13 +166,13 @@ cluster_known_nodes:12
 cluster_size:4
 ```
 
-## Enable `debug` command on redis-cluster
+## Enable `debug` command on Redis Cluster
 
-As mentioned in the beginning, most of the existing redis clusters do not have `debug` command enabled, which is needed to fix the cluster state as part of troubleshooting broken cluster.
+As mentioned in the beginning, most of the existing Redis Clusters do not have `debug` command enabled, which is needed to fix the cluster state as part of troubleshooting broken cluster.
 
-This step will enable the `debug` command by reconfiguring the existing redis processes. Previous CR [here](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/18043).
+This step will enable the `debug` command by reconfiguring the existing Redis processes. Previous CR [here](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/18043).
 
-Run this from chef-repo, to find the existing redis instances and reconfigure them via `redis-cluster-reconfigure.sh`, excluding new shard as it was configured already with `enable-debug-command` above during provisioning.
+Run this from chef-repo, to find the existing Redis servers and reconfigure them via `redis-cluster-reconfigure.sh`, excluding new shard as it was configured already with `enable-debug-command` above during provisioning.
 
 **Warning:** `enable-debug-command` config option must already be enabled for newly added nodes during the time of provisioning otherwise failover wouldn't work, which is required for reconfiguring the Redis process. Failover requires at least one keyslot to be present on the shard.
 
@@ -182,11 +182,11 @@ knife search -i 'roles:$ENV-base-db-$DEPLOYMENT' | sort -V | grep -v $SHARD_NUMB
 scripts/redis-cluster-reconfigure.sh $DEPLOYMENT-nodes.txt
 ```
 
-## Scale out cluster by resharding redis keys
+## Scale out cluster by resharding Redis keys
 
-Until now, we just added Redis instances for new shard to the cluster but they do not have any redis keys (keyslots) yet and hence they are not serving any user requests.
+The goal here is to distribute the number of keyslots among all shards equally (With some rounding off). By default, we have 16384 keyslots in a given Redis Cluster. Until now, we just added Redis instances for new shard to the cluster, but they do not have any Redis keys (keyslots) yet and hence they are not serving any user requests.
 
-In this phase, we will migrate keyslots from previous redis shards to the new shard, for load balancing. Previous CR [here](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/18061).
+In this phase, we will migrate some keyslots from previous Redis shards to the new shard, so that new Redis instances start load sharing with existing Redis instances and hence lower their resource (CPU/Memory) utilization. Previous CR [here](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/18061).
 
 ### 1. Check the current keyslot assignments
 
@@ -261,14 +261,23 @@ First level keys are
 
 Second level keys are
 
-- (1) is FQDN of the redis instance
-- (2) is the port number of redis server
-- **(3) is the node ID of the redis instance** and required in resharding commands
-- (4) is IP address of redis instance
+- (1) is FQDN of the Redis server
+- (2) is the port number of Redis server
+- **(3) is the node ID of the Redis instance** and required in resharding commands
+- (4) is IP address of Redis instance
 
 ### 2. Calibrate the batch size for migration
 
-At first, make a few migrations with incrementally increasing batch sizes controlled by `--cluster-pipeline` argument. This is to avoid bringing down the masters involved in migration by consuming too much CPU and/or memory.
+At first, make a few migrations with incrementally increasing `BATCH_SIZE`, to determine a suitable size which does not cause large CPU/memory saturation spikes on the existing Redis instances and also is fast enough to complete migration within a few hours. Larger `BATCH_SIZE` will finish faster but will consume more CPU/memory due to concurrent read/writes and also compete with user requests, specially if keys have large values e.g. `set`, `list` or any other multi-value type data.
+
+During previous migration in `redis-cluster-ratelimiting`, a `BATCH_SIZE` of 30 was used and moving 1365 keyslots took less than [5 seconds](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/18061#note_1924076365).
+
+Variables that need to be replaced in command below are:
+
+- `FROM_MASTER_NODE_ID`: node ID of master node **from** which keyslots are to be migrated
+- `TO_MASTER_NODE_ID`: node ID of master node **to** which keyslots are to be migrated
+- `KEYSLOTS_TO_MOVE`: number of keyslots to be migrated
+- `BATCH_SIZE`: Number of redis keys to be read and written from one master to another
 
 ```
 ssh $DEPLOYMENT-shard-01-01-db-$ENV.c.$PROJECT.internal
@@ -277,11 +286,11 @@ ssh $DEPLOYMENT-shard-01-01-db-$ENV.c.$PROJECT.internal
 time sudo gitlab-redis-cli --cluster reshard 127.0.0.1:6379 --cluster-from <FROM_MASTER_NODE_ID> --cluster-to <TO_MASTER_NODE_ID> --cluster-slots <KEYSLOTS_TO_MOVE> --cluster-pipeline <BATCH_SIZE> --cluster-yes
 ```
 
-At the same time, keep an eye on CPU/Memory saturation and Apdex violation metrics in redis-cluster dashboard. Also, note the time taken for migration of keyslots to estimate required time for completing the migration. If there is no impact on resources and time taken by migration is not reasonable, then try increasing the `<BATCH_SIZE>` and `<KEYSLOTS_TO_MOVE>` to a workable number.
+At the same time, keep an eye on CPU/Memory saturation and Apdex violation metrics in Redis Cluster dashboard. Also, note the time taken for migration of keyslots to estimate required time for completing the migration. If there is no impact on resources and time taken by migration is not reasonable, then try increasing the `<BATCH_SIZE>` and `<KEYSLOTS_TO_MOVE>` to a workable number.
 
 ### 3. Migrate keys from existing shards to new shard
 
-The end goal is to distribute the number of keyslots (16384) among all shards equally (With some rounding off). By default, we have 16384 keyslots in a given redis cluster and a cluster with 3 shards have distribution like following:
+We have 16384 keyslots in a given Redis Cluster and a cluster with 3 shards have distribution like following:
 
 1. First shard: 0-5460
 2. Second shard: 5461-10922
@@ -296,18 +305,20 @@ ssh $DEPLOYMENT-shard-01-01-db-$ENV.c.$PROJECT.internal
 time sudo gitlab-redis-cli --cluster reshard 127.0.0.1:6379 --cluster-from <FROM_MASTER_NODE_ID> --cluster-to <TO_MASTER_NODE_ID> --cluster-slots <KEYSLOTS_TO_MOVE> --cluster-pipeline <BATCH_SIZE> --cluster-yes
 ```
 
-Keep a check on CPU/Memory saturation and Apdex violation metrics in redis-cluster dashboard. If an impact becomes visible and migration needs to be stopped, the process can be killed (ctrl + c).
+Keep a check on CPU/Memory saturation and Apdex violation metrics in Redis Cluster dashboard. If an impact becomes visible and migration needs to be stopped, the process can be killed (ctrl + c).
+
+Killing a running migration will likely leave one migrating keyslot in a hanging state, where it might have some keys migrated to new master but some keys might still be on the previous master. The hanging keyslot can be fixed by running `--cluster fix` command as mentioned in the troubleshooting section below.
 
 ### 4. Troubleshooting
 
-- If during migration, cluster configuration breaks for some reason (redis process died or migration halted manually), then subsequent migrations will fail due to broken cluster state. Run the cluster fix command as follows, to recover from this situation:
+- If during migration, cluster configuration breaks for some reason (Redis process died or migration halted manually), then subsequent migrations will fail due to broken cluster state. Run the cluster fix command as follows, to recover from this situation:
 
 ```
 ssh $DEPLOYMENT-shard-01-01-db-$ENV.c.$PROJECT.internal
 sudo gitlab-redis-cli --cluster fix 127.0.0.1:6379
 ```
 
-- During and after migration, redis clients will receive `redirections` to contact the new owner of keyslots. These are not errors themselves as redis clients would update their internal mapping of `keyslot -> master` upon receiving redirection from server. The redirections will take time to taper off and will definitely be gone after a new deployment in the environment, as all pods will be rotated in that scenario and will start off with up-to-date keyslot mapping.
+- During and after migration, Redis clients will receive `redirections` to contact the new owner of keyslots. These are not errors themselves as Redis clients would update their internal mapping of `keyslot -> master` upon receiving redirection from server. The redirections will take time to taper off and will definitely be gone after a new deployment in the environment, as all pods will be rotated in that scenario and will start off with up-to-date keyslot mapping.
 
 ## Key metrics to observe
 
