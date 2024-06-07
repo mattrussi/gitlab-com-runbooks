@@ -14,6 +14,11 @@ teams:
 - name: deploy_environments
   url: https://handbook.gitlab.com/handbook/engineering/development/ops/deploy/environments/
   slack_channel: g_environments
+  slack_alerts_channel: feed_alerts_configure
+  product_stage_group: environments
+  send_slo_alerts_to_team_slack_channel: true
+  send_error_budget_weekly_to_slack: true
+  slack_error_budget_channel: cd-section
   engagement_policy:  # Link to doc that talks about engagement and escalation policy
   oncall_schedule:    # Link to pagerduty oncall schedule
   # product_stage_group: deploy_environments
@@ -65,22 +70,6 @@ teams:
   alerts:
   - prod-1
   - prd-278964
-
-- name: release
-  slack_channel: g_release
-  slack_alerts_channel: feed_alerts_configure
-  product_stage_group: environments
-  send_slo_alerts_to_team_slack_channel: true
-  send_error_budget_weekly_to_slack: true
-  slack_error_budget_channel: cd-section
-  ignored_components:
-  - graphql_query
-
-- name: release-management
-  url: https://about.gitlab.com/handbook/engineering/development/ci-cd/release/release-management/
-  slack_channel: g_release_management
-  engagement_policy:  # Link to doc that talks about engagement and escalation policy
-  oncall_schedule:    # Link to pagerduty oncall schedule
 
 - name: support
   url: https://about.gitlab.com/handbook/support/
