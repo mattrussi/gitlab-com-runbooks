@@ -207,16 +207,6 @@ groups:
       product_stage: secure
       stage_group: dynamic_analysis
     expr: "1"
-- name: 'Stage group Ignored components: deploy - Environments'
-  interval: 1m
-  partial_response_strategy: warn
-  rules:
-  - record: gitlab:ignored_component:stage_group
-    labels:
-      component: graphql_query
-      product_stage: deploy
-      stage_group: environments
-    expr: "1"
 - name: 'Stage group Ignored components: fulfillment - Fulfillment Platform'
   interval: 1m
   partial_response_strategy: warn
