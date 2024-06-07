@@ -46,7 +46,7 @@ local leftJoinStageGroup(query) =
     or on () (%(query)s)
   ||| % {
     query: query,
-    groupSelector: selectors.serializeHash(baseSelector + groupSelector),
+    groupSelector: selectors.serializeHash(groupSelector),
   };
 
 local operationsApdex =

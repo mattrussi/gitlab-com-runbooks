@@ -217,7 +217,7 @@ local library = import 'gitlab-slis/library.libsonnet';
     template.new(
       'product_stage',
       '$PROMETHEUS_DS',
-      'label_values(gitlab:feature_category:stage_group:mapping{monitor="global"}, product_stage)',
+      'label_values(gitlab:feature_category:stage_group:mapping, product_stage)',
       multi=multi,
       refresh='load',
       includeAll=true,
@@ -227,7 +227,7 @@ local library = import 'gitlab-slis/library.libsonnet';
     template.new(
       'stage_group',
       '$PROMETHEUS_DS',
-      'label_values(gitlab:feature_category:stage_group:mapping{monitor="global", product_stage=~"$product_stage"}, stage_group)',
+      'label_values(gitlab:feature_category:stage_group:mapping{product_stage=~"$product_stage"}, stage_group)',
       multi=multi,
       refresh='load',
       includeAll=true,
