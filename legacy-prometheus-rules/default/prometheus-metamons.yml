@@ -25,22 +25,6 @@ groups:
       runbook: docs/monitoring/prometheus-is-down.md
       title: '{{$labels.job}} is unreachable'
 
-  - alert: PrometheusNotConnectedToAlertmanagers
-    expr: >
-      sum without (fqdn,instance,pod) (
-        prometheus_notifications_alertmanagers_discovered{job!="gitlab-rw-prometheus"}
-      ) < 1
-    for: 30m
-    labels:
-      pager: pagerduty
-      severity: s1
-      alert_type: cause
-    annotations:
-      description: >
-        Prometheus {{$labels.shard}} is not connected to any Alertmanagers
-      runbook: docs/monitoring/prometheus-is-down.md
-      title: 'Prometheus not connected to any Alertmanagers'
-
   - alert: PrometheusManyRestarts
     expr: round(changes(process_start_time_seconds{job=~"(alertmanager|prometheus|thanos)",fqdn!~"thanos-compact-.+"}[1h])) > 2
     for: 30m
@@ -53,20 +37,6 @@ groups:
         {{ $value }} times in the last hour. It may be crashlooping.'
       runbook: docs/monitoring/prometheus-is-down.md#thanos-compact
       title: '{{$labels.job}} is restarting frequently'
-
-  - alert: PrometheusNotificationsBacklog
-    expr: prometheus_notifications_queue_length > 0
-    for: 10m
-    labels:
-      pager: pagerduty
-      severity: s1
-      alert_type: cause
-    annotations:
-      description: '{{$labels.job}} at {{$labels.instance}} {{$labels.pod}} is backlogging on the
-        notifications queue. The queue has not been empty for 10 minutes. Current
-        queue length: {{$value}}.'
-      runbook: docs/monitoring/prometheus-notifications-backlog.md
-      title: '{{$labels.job}} is backlogging on the notifications queue'
 
   - alert: PrometheusInvalidConfigFile
     expr: prometheus_config_last_reload_successful == 0
