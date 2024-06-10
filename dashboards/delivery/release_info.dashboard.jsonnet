@@ -6,7 +6,7 @@ local row = grafana.row;
 
 // Monthly Release Information panels
 
-local monthlyReleaseStatusQuery = 'max_over_time(delivery_release_monthly_status[30d])';
+local monthlyReleaseStatusQuery = 'delivery_release_monthly_status';
 
 local monthlyReleaseInfoTextPanel =
   basic.text(
@@ -78,7 +78,7 @@ local monthlyReleaseVersionStatPanel =
             },
             Time: {
               aggregations: [
-                'min',
+                'max',
               ],
               operation: 'aggregate',
             },
@@ -91,7 +91,7 @@ local monthlyReleaseVersionStatPanel =
           fields: {},
           sort: [
             {
-              field: 'Time (min)',
+              field: 'Time (max)',
               desc: true,
             },
           ],
@@ -143,7 +143,7 @@ local monthlyReleaseDateStatPanel =
             },
             Time: {
               aggregations: [
-                'min',
+                'max',
               ],
               operation: 'aggregate',
             },
@@ -156,7 +156,7 @@ local monthlyReleaseDateStatPanel =
           fields: {},
           sort: [
             {
-              field: 'Time (min)',
+              field: 'Time (max)',
               desc: true,
             },
           ],
@@ -180,7 +180,7 @@ local monthlyReleaseStatusStatPanel =
     title='',
     panelTitle='Current Release Status',
     description='Current status of the monthly release. More information about the statuses in the text panel above.',
-    query='delivery_release_monthly_status',
+    query=monthlyReleaseStatusQuery,
     colorMode='value',
     fields='/^Value$/',
     format='table',
@@ -265,7 +265,7 @@ local monthlyReleaseStatusStatPanel =
 
 // Patch Release Information panels
 
-local patchReleaseStatusQuery = 'max_over_time(delivery_release_patch_status[30d])';
+local patchReleaseStatusQuery = 'delivery_release_patch_status';
 
 local patchReleaseInfoTextPanel =
   basic.text(
@@ -338,7 +338,7 @@ local patchReleaseVersionStatPanel =
             },
             Time: {
               aggregations: [
-                'min',
+                'max',
               ],
               operation: 'aggregate',
             },
@@ -351,7 +351,7 @@ local patchReleaseVersionStatPanel =
           fields: {},
           sort: [
             {
-              field: 'Time (min)',
+              field: 'Time (max)',
               desc: true,
             },
           ],
@@ -403,7 +403,7 @@ local patchReleaseDateStatPanel =
             },
             Time: {
               aggregations: [
-                'min',
+                'max',
               ],
               operation: 'aggregate',
             },
@@ -416,7 +416,7 @@ local patchReleaseDateStatPanel =
           fields: {},
           sort: [
             {
-              field: 'Time (min)',
+              field: 'Time (max)',
               desc: true,
             },
           ],
@@ -440,7 +440,7 @@ local patchReleaseStatusStatPanel =
     title='',
     panelTitle='Current Release Status',
     description='Current status of the patch release. More information about the statuses in the text panel above.',
-    query='delivery_release_patch_status',
+    query=patchReleaseStatusQuery,
     colorMode='value',
     fields='/^Value$/',
     format='table',
@@ -527,7 +527,7 @@ basic.dashboard(
   'Release Information',
   tags=['release'],
   editable=true,
-  time_from='now-22d',
+  time_from='now-24h',
   time_to='now',
   includeStandardEnvironmentAnnotations=false,
   includeEnvironmentTemplate=false,
