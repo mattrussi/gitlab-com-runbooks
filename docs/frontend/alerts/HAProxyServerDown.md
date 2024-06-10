@@ -1,3 +1,8 @@
+# (Title: HAProxyServerDown)
+
+**Table of Contents**
+
+[TOC]
 
 ## Overview
 
@@ -51,6 +56,40 @@
 - [ ] Additional dashboards to check
 - [ ] Useful scripts or commands
 
+Errors are being reported by HAProxy, this could be a spike in 5xx errors, server connection errors, or backends reporting unhealthy.
+
+**Basic troubleshooting order**
+
+- Examine the health of all backends and the HAProxy dashboard
+  - HAProxy - <https://dashboards.gitlab.net/d/haproxy/haproxy>
+  - HAProxy Backend Status - <https://dashboards.gitlab.net/d/frontend-main/frontend-overview>
+- Is the alert specific to canary servers or the canary backend? Check canaries to ensure they are reporting OK. If this is the cause you should immediately change the weight of canary traffic.
+  - Canary dashboard - <https://dashboards.gitlab.net/d/llfd4b2ik/canary>
+  - To disable canary traffic see the [Canary ChatOps documentation](https://gitlab.com/gitlab-org/release/docs/blob/master/general/deploy/canary.md#canary-chatops)
+
+**Useful scripts or commands**
+
+- Check the health of the deployment in Kubernetes:
+
+  ```bash
+  kubectl --namespace gitlab get deployment gitlab-gitlab-shell
+  kubectl --namespace gitlab get pods --selector app=gitlab-shell
+  ```
+
+- HAProxy logs are not currently being sent to ELK because of capacity issues. More information can be read [here](./haproxy-logging.md).
+- If the errors are from pages backends, consider possible intentional abuse or accidental DoS from specific IPs or for specific domains in Pages. Client IPs can be identified by volume from the current HAProxy logs on the Haproxy nodes with:
+  ```
+  sudo grep -v check_http /var/log/haproxy.log | awk '{print $6}' | cut -d: -f1|sort|uniq -c |sort -n|tail
+  ```
+
+- To block: In <https://gitlab.com/gitlab-com/security-tools/front-end-security> edit `deny-403-ips.lst`. Commit, push, open MR, ensure it has pull mirrored to `ops.gitlab.net`, then run chef on the pages HAProxy nodes to deploy. This will block that IP across *all* frontend (pages, web, api etc), so be sure you want to do this.
+- Problem sites/projects/domains can be identified with the `Gitlab-Pages activity` dashboard on Kibana - <https://log.gprd.gitlab.net/app/kibana#/dashboard/AW6GlNKPqthdGjPJ2HqH>
+- To block: In <https://gitlab.com/gitlab-com/security-tools/front-end-security> edit `deny-403-ips.lst`. Commit, push, open MR, ensure it has pull mirrored to `ops.gitlab.net`, then run chef on the pages HAProxy nodes to deploy. This will block only the named domain (exact match) in pages, preventing the request ever making it to the pages deployments. This is low-risk.
+
+**Additional dashboards to check**
+
+
+
 ## Possible Resolutions
 
 - [ ] Links to past incidents where this alert helped identify an issue with clear resolutions
@@ -75,3 +114,4 @@
 
 - [Related alerts](./)
 - [ ] Related documentation
+- [Update the template used to format this playbook](https://gitlab.com/gitlab-com/runbooks/-/edit/master/docs/template-alert-playbook.md?ref_type=heads)
