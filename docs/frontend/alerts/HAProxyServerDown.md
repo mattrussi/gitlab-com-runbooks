@@ -1,4 +1,4 @@
-# (Title: HAProxyServerDown)
+# HAProxyServerDown
 
 **Table of Contents**
 
@@ -13,8 +13,9 @@
 
 ## Services
 
-- [ ] All alerts require one or more Service Overview links
-- [ ] Team that owns the service
+- [Service Overview](https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/frontend/haproxy.md?ref_type=heads)
+- Team that owns the service: [Production Engineering Foundations Team](https://handbook.gitlab.com/handbook/engineering/infrastructure/core-platform/systems/gitaly/)
+- **Label:** gitlab-com/gl-infra/production~"Service::HAProxy"
 
 ## Metrics
 
@@ -66,6 +67,8 @@ Errors are being reported by HAProxy, this could be a spike in 5xx errors, serve
 - Is the alert specific to canary servers or the canary backend? Check canaries to ensure they are reporting OK. If this is the cause you should immediately change the weight of canary traffic.
   - Canary dashboard - <https://dashboards.gitlab.net/d/llfd4b2ik/canary>
   - To disable canary traffic see the [Canary ChatOps documentation](https://gitlab.com/gitlab-org/release/docs/blob/master/general/deploy/canary.md#canary-chatops)
+- From a HAProxy node, ping and/or curl the backend server and health check.
+- From a HAProxy node, check the logs of the process.
 
 **Useful scripts or commands**
 
@@ -86,7 +89,37 @@ Errors are being reported by HAProxy, this could be a spike in 5xx errors, serve
 - Problem sites/projects/domains can be identified with the `Gitlab-Pages activity` dashboard on Kibana - <https://log.gprd.gitlab.net/app/kibana#/dashboard/AW6GlNKPqthdGjPJ2HqH>
 - To block: In <https://gitlab.com/gitlab-com/security-tools/front-end-security> edit `deny-403-ips.lst`. Commit, push, open MR, ensure it has pull mirrored to `ops.gitlab.net`, then run chef on the pages HAProxy nodes to deploy. This will block only the named domain (exact match) in pages, preventing the request ever making it to the pages deployments. This is low-risk.
 
-**Additional dashboards to check**
+*Note*: HAProxy forks on reload and old processes will continue to service requests, for long-lived SSH connections we use the `hard-stop` configuration parameter to prevent processes from lingering more than `5` minutes. 
+In <https://gitlab.com/gitlab-com/gl-infra/delivery/issues/588> we have observed that processes remain for longer than this interval, this may require manual intervention:
+
+- Display the process tree for HAProxy (2 processes instead of 1 expected):
+
+```
+pstree -pals $(pgrep -u root -f /usr/sbin/haproxy)
+systemd,1 --system --deserialize 36
+  └─haproxy,28214 -Ws -f /etc/haproxy/haproxy.cfg -p /run/haproxy.pid -sf 1827
+      ├─haproxy,1827 -Ws -f /etc/haproxy/haproxy.cfg -p /run/haproxy.pid -sf 1639
+      └─haproxy,2002 -Ws -f /etc/haproxy/haproxy.cfg -p /run/haproxy.pid -sf
+```
+
+- Show the elapsed time of the haproxy processes:
+
+```
+# for p in $(pgrep -u haproxy -f haproxy); do ps -o user,pid,etimes,command $p; done
+USER       PID ELAPSED COMMAND
+haproxy   1827   99999 /usr/sbin/haproxy -Ws -f /etc/haproxy/haproxy.cfg -p /run/haproxy.pid -sf 1639
+USER       PID ELAPSED COMMAND
+haproxy   2002      20 /usr/sbin/haproxy -Ws -f /etc/haproxy/haproxy.cfg -p /run/haproxy.pid -sf 1827
+
+```
+
+- Kill the process with the longer elapsed time:
+
+```
+kill -TERM 1827
+```
+
+
 
 
 
