@@ -6,12 +6,44 @@
 
 set -fo pipefail
 
+dry_run=false
+
+trap cleanup SIGINT
+
+usage() {
+    echo "Monthly Availability Updates creation"
+    echo "https://handbook.gitlab.com/handbook/engineering/infrastructure/team/ops/#monthly-availability-updates"
+    echo
+    echo "Expected env variables:"
+    echo "  GRAFANA_API_TOKEN - grafana service account api key with Viewer permissions"
+    echo "  GITLAB_API_TOKEN - GitLab PAT with api, read_repository, write_repository scopes"
+    echo "Syntax: $(basename "$0") [-h]"
+    echo
+    echo "Options:"
+    echo "  h     Print this Help."
+    echo "  d     Dry run (do not create a merge request)"
+    echo
+}
+
+while getopts ":hd" option; do
+    case $option in
+      h)
+        usage
+        exit;;
+      d)
+        dry_run=true
+        ;;
+      -*) echo "$0: Unrecognized option $1" >&2
+        exit 2;;
+    esac
+done
+shift $((OPTIND - 1))
+
 if [ -z "$GRAFANA_API_TOKEN" ]; then
     echo "Error: GRAFANA_API_TOKEN environment variable is not set."
     echo "Please set the GRAFANA_API_TOKEN environment variable before running this script."
     exit 1
 fi
-
 
 if [ -z "$GITLAB_API_TOKEN" ]; then
     echo "Error: GITLAB_API_TOKEN environment variable is not set."
@@ -55,7 +87,7 @@ FILEPATH="content/handbook/engineering/monitoring/_index.md"
 GREEN='\033[0;32m'
 RED='\033[0;31m'
 NC='\033[0m'
-MR_DESCRIPTION='
+MR_DESCRIPTION=$(cat <<EOF
 <!-- Before proceeding, please check if you need to apply a specific MR description template from the dropdown menu above next to `Description` (e.g. blog post, website bug report). -->
 
 ## Why is this change being made?
@@ -70,23 +102,13 @@ To meet requirements described here: https://handbook.gitlab.com/handbook/engine
 
 Update the handbook page with past availability numbers.
 
+Grafana view: $GRAFANA_AVAILABILITY_VIEW
+
 _NOTE_: Auto-generated with https://gitlab.com/gitlab-com/runbooks/-/blob/master/bin/help?ref_type=heads
-'
+EOF
+)
 
-trap cleanup SIGINT
 
-usage() {
-    echo "Monthly Availability Updates creation"
-    echo "https://handbook.gitlab.com/handbook/engineering/infrastructure/team/ops/#monthly-availability-updates"
-    echo
-    echo "Expected env variables:"
-    echo "  GRAFANA_API_TOKEN - grafana service account api key with Viewer permissions"
-    echo "  GITLAB_API_TOKEN - GitLab PAT with api, read_repository, write_repository scopes"
-    echo "Syntax: $(basename "$0") [-h]"
-    echo "options:"
-    echo "h     Print this Help."
-    echo
-}
 
 cleanup() {
     echo "Performing cleanup..."
@@ -95,7 +117,7 @@ cleanup() {
 }
 
 validate_gitlab_token() {
-  echo "Validating GitLab token"
+  # echo "Validating GitLab token"
   gl_output=$(curl -s --request GET \
       --header "PRIVATE-TOKEN: $GITLAB_API_TOKEN" \
       "$GL_TOKEN_VALIDATION_URL")
@@ -109,7 +131,7 @@ validate_gitlab_token() {
 
 get_availability_data() {
   # fetch availability data from grafana
-  availability=`curl -s \
+  availability=$(curl -s \
     -X POST \
     -H "Accept: application/json" \
     -H "Content-Type: application/json" \
@@ -117,8 +139,8 @@ get_availability_data() {
     -d "$GRAFANA_QUERY_DATA" \
     "$GRAFANA_URL" | \
     jq -r '.results.A.frames[0].data.values[1][0]' | \
-    awk '{printf "%.2f%%\n", $1 * 100}'`
-  echo $availability
+    awk '{printf "%.2f%%\n", $1 * 100}')
+  echo "$availability"
 }
 
 process_date() {
@@ -153,6 +175,11 @@ process_date() {
 }
 
 apply_change() {
+    if $dry_run; then
+      echo -e "${RED}Dry-run is enabled, change will NOT be applied${NC}"
+    else
+      echo -e "${RED}Dry-run is disabled, change will be applied${NC}"
+    fi
     # fetch data from grafana
     echo "Fetching grafana..."
     percentage=$(get_availability_data)
@@ -162,7 +189,7 @@ apply_change() {
     # push the change and create an MR
     echo "Cloning the $REPO_URL repository"
     git clone "$REPO_URL" handbook > /dev/null
-    cd handbook
+    cd handbook || exit
     git checkout -b "$SOURCE_BRANCH" > /dev/null
 
     # Get the existing first row from the Historical Service Availability table
@@ -174,66 +201,46 @@ apply_change() {
 
     echo -e "Gitlab.com Availability: ${GREEN}$percentage${NC}"
 
-    read -p "Would you like to apply a comment (leave empty if not)? " comment
-    new_row="| $new_date | $percentage | $comment |"
+    new_row="| $new_date | $percentage |  |"
     # add new date into the table
     sed -i '' "/$first_row/i\\
 $new_row
 " "$FILEPATH"
     echo
-    echo -e "${RED}Change will be applied:${NC}"
     git diff
     echo
-    read -p "Do you want to continue? (yes/y): " response
-    if [[ "$response" != "yes" && "$response" != "y" ]]; then
-        echo "Exiting..."
+    if ! $dry_run; then
+      git add . > /dev/null
+      git commit -m "Availability Update for GitLab.com" > /dev/null
+      if git push origin "$SOURCE_BRANCH" > /dev/null; then
+          echo "Git push successful."
+          # Continue with the rest of your script logic here
+      else
+          echo "Git push failed with exit code $?. Exiting..."
+          cleanup
+          exit 1
+      fi
+      gl_output=$(curl -s --request POST \
+        --header "PRIVATE-TOKEN: $GITLAB_API_TOKEN" \
+        --data-urlencode "source_branch=$SOURCE_BRANCH" \
+        --data-urlencode "target_branch=$TARGET_BRANCH" \
+        --data-urlencode "title=$MR_TITLE" \
+        --data-urlencode "description=$MR_DESCRIPTION" \
+        --data-urlencode "assignee_ids=$MR_ASSIGNEE_IDS" \
+        --data-urlencode "reviewer_ids=$MR_REVIEWER_IDS" \
+        --data-urlencode "labels=$MR_LABELS" \
+        --data-urlencode "remove_source_branch=true" \
+        "https://gitlab.com/api/v4/projects/$GL_PROJECT_ID/merge_requests")
+      mr_url=$(echo "$gl_output" | jq -r .web_url)
+      if [[ "$mr_url" == "null" ]]; then
+        echo "Unable to create a Merge Request. Check token GITLAB_API_TOKEN"
         exit 1
+      else
+        echo
+        echo -e "${GREEN}MERGE REQUEST CREATED:${NC} $mr_url/diffs"
+      fi
     fi
-    git add . > /dev/null
-    git commit -m "Availability Update for GitLab.com" > /dev/null
-    # git push origin "$SOURCE_BRANCH" > /dev/null
-
-    git push origin "$SOURCE_BRANCH" > /dev/null
-
-    # Check the exit code of the git push command
-    if [ $? -eq 0 ]; then
-        echo "Git push successful."
-        # Continue with the rest of your script logic here
-    else
-        echo "Git push failed with exit code $?. Exiting..."
-        cleanup
-        exit 1
-    fi
-
-    gl_output=$(curl -s --request POST \
-      --header "PRIVATE-TOKEN: $GITLAB_API_TOKEN" \
-      --data-urlencode "source_branch=$SOURCE_BRANCH" \
-      --data-urlencode "target_branch=$TARGET_BRANCH" \
-      --data-urlencode "title=$MR_TITLE" \
-      --data-urlencode "description=$MR_DESCRIPTION" \
-      --data-urlencode "assignee_ids=$MR_ASSIGNEE_IDS" \
-      --data-urlencode "reviewer_ids=$MR_REVIEWER_IDS" \
-      --data-urlencode "remove_source_branch=true" \
-      "https://gitlab.com/api/v4/projects/$GL_PROJECT_ID/merge_requests")
-    mr_url=$(echo "$gl_output" | jq -r .web_url)
-    if [[ "$mr_url" == "null" ]]; then
-      echo "Unable to create a Merge Request. Check token GITLAB_API_TOKEN"
-      exit 1
-    else
-      echo
-      echo -e "${GREEN}MERGE REQUEST CREATED:${NC} $mr_url/diffs"
-    fi
-
 }
-
-while getopts ":h" option; do
-    case $option in
-      h)
-        usage
-        exit;;
-    esac
-done
-shift $((OPTIND - 1))
 
 
 validate_gitlab_token
