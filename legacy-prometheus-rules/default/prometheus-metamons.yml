@@ -1,15 +1,4 @@
 groups:
-- name: SnitchHeartBeat
-  interval: 1m
-  rules:
-  - alert: SnitchHeartBeat
-    expr: vector(1)
-    labels:
-      severity: s1
-      alert_type: heartbeat
-    annotations:
-      runbook: docs/monitoring/prometheus-snitch.md
-      title: SnitchHeartBeat
 - name: Prometheus Metamon
   rules:
   - alert: PrometheusUnreachable
