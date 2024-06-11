@@ -6,10 +6,14 @@
 
 ## Overview
 
-- [ ] What does this alert mean?
-- [ ] What factors can contribute?
-- [ ] What parts of the service are effected?
-- [ ] What action is the recipient of this alert expected to take when it fires?
+- What does this alert mean?
+This alert indicates that there could be a spike in 5xx errors, server connection errors, or backends reporting unhealthy.
+
+*Note*: [`set-server-state` server draining](https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/frontend/haproxy.md?ref_type=heads#set-server-state) will also generate this alert.
+- What parts of the service are effected?
+The alert will indicate which backend server is down. 
+- What action is the recipient of this alert expected to take when it fires?
+
 
 ## Services
 
@@ -47,9 +51,8 @@
 
 ## Recent changes
 
-- [ ] Links to queries for recent related production change requests
-- [ ] Links to queries for recent cookbook or helm MR's
-- [ ] How to properly roll back changes
+- [Recent HAProxy Production Changes and Incident Issues](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/?sort=created_date&state=all&label_name%5B%5D=Service%3A%3AHAProxy&first_page_size=100)
+- [Recent Chef HAProxy changes](https://gitlab.com/gitlab-com/gl-infra/chef-repo/-/merge_requests?scope=all&state=merged&label_name[]=Service%3A%3AHAProxy)
 
 ## Troubleshooting
 
