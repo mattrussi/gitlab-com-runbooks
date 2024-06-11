@@ -1325,3 +1325,14 @@ deploy-mimir-rules:
         printf "Deploying rules for tenant: ${tenant}\n"
         mimirtool rules sync --rule-dirs="${dir}" --id="${tenant}"
       done
+
+commit-and-push-feature-categories-update:
+  extends:
+    - .jsonnet-cache
+  stage: deploy
+  rules:
+    - if: $UPDATE_FEATURE_CATEGORIES == "1"
+  script: |
+    git config user.email ops@ops.gitlab.net
+    git config user.name ops-gitlab-net
+    ./scripts/commit-and-push-feature-categories-update.sh
