@@ -4,7 +4,7 @@ local layout = import 'grafana/layout.libsonnet';
 local prometheus = grafana.prometheus;
 local template = grafana.template;
 local graphPanel = grafana.graphPanel;
-local mimirHelper = import 'services/lib/mimir-helpers.libsonnet';
+local mimirHelper = import 'mimir-helpers/mimir-helpers.libsonnet';
 
 local sloQuery = |||
   sum(rate(delivery_deployment_duration_seconds_bucket{job="delivery-metrics",status="success",le="$target_slo"}[$__range]))
@@ -46,14 +46,14 @@ basic.dashboard(
   time_to='now',
   includeStandardEnvironmentAnnotations=false,
   includeEnvironmentTemplate=false,
-  defaultDatasource=mimirHelper.mimirDatasource('Gitlab - All Environments'),
+  defaultDatasource=mimirHelper.mimirDatasource('gitlab-ops'),
 )
 .addTemplate(template.new(
   current='28800',
   label='target SLO',
   name='target_slo',
   query='label_values(delivery_deployment_duration_seconds_bucket, le)',
-  datasource=mimirHelper.mimirDatasource('Gitlab - All Environments'),
+  datasource=mimirHelper.mimirDatasource('gitlab-ops'),
   refresh='load',
   regex='/\\d+/',
   sort=3,  //numerical asc

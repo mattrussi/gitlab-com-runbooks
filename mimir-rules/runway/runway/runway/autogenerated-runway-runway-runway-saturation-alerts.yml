@@ -5,15 +5,15 @@ groups:
   interval: 5m
   rules:
   - record: gitlab_component_saturation:ratio_quantile95_1w
-    expr: quantile_over_time(0.95, gitlab_component_saturation:ratio{env="gprd",type="runway"}[1w])
+    expr: quantile_over_time(0.95, gitlab_component_saturation:ratio{type="runway"}[1w])
   - record: gitlab_component_saturation:ratio_quantile99_1w
-    expr: quantile_over_time(0.99, gitlab_component_saturation:ratio{env="gprd",type="runway"}[1w])
+    expr: quantile_over_time(0.99, gitlab_component_saturation:ratio{type="runway"}[1w])
   - record: gitlab_component_saturation:ratio_quantile95_1h
-    expr: quantile_over_time(0.95, gitlab_component_saturation:ratio{env="gprd",type="runway"}[1h])
+    expr: quantile_over_time(0.95, gitlab_component_saturation:ratio{type="runway"}[1h])
   - record: gitlab_component_saturation:ratio_quantile99_1h
-    expr: quantile_over_time(0.99, gitlab_component_saturation:ratio{env="gprd",type="runway"}[1h])
+    expr: quantile_over_time(0.99, gitlab_component_saturation:ratio{type="runway"}[1h])
   - record: gitlab_component_saturation:ratio_avg_1h
-    expr: avg_over_time(gitlab_component_saturation:ratio{env="gprd",type="runway"}[1h])
+    expr: avg_over_time(gitlab_component_saturation:ratio{type="runway"}[1h])
 - name: GitLab Saturation Alerts
   interval: 1m
   rules:
@@ -37,7 +37,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_open_fds?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
         }}
-      grafana_datasource_id: mimir-gitlab-gprd
+      grafana_datasource_id: mimir-runway
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1001792825"
       grafana_variables: environment,type,stage
@@ -88,5 +88,5 @@ groups:
       rules_domain: general
       severity: s2
     expr: |
-      gitlab_component_saturation:ratio{component="open_fds",env="gprd",type="runway"} > on(component) group_left
+      gitlab_component_saturation:ratio{component="open_fds",type="runway"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="open_fds"}

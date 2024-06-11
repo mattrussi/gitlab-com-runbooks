@@ -12,15 +12,15 @@ groups:
         clamp_min(
           clamp_max(
             (
-              process_open_fds{env="gprd",type="runway"}
+              process_open_fds{type="runway"}
               /
-              process_max_fds{env="gprd",type="runway"}
+              process_max_fds{type="runway"}
             )
             or
             (
-              ruby_file_descriptors{env="gprd",type="runway"}
+              ruby_file_descriptors{type="runway"}
               /
-              ruby_process_max_fds{env="gprd",type="runway"}
+              ruby_process_max_fds{type="runway"}
             )
             ,
             1)

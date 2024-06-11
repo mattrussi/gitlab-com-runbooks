@@ -3,9 +3,9 @@ local allSaturationTypes = import './saturation/all.libsonnet';
 local allServices = import './services/all.jsonnet';
 local allUtilizationMetrics = import './utilization/all.libsonnet';
 local labelSet = import 'label-taxonomy/label-set.libsonnet';
+local mimirHelper = import 'mimir-helpers/mimir-helpers.libsonnet';
 local rawServiceCatalog = import 'raw-catalog.jsonnet';
 local serviceCatalog = import 'service-catalog/service-catalog.libsonnet';
-local mimirHelper = import 'services/lib/mimir-helpers.libsonnet';
 local overridenStageGroupMapping = import 'stage-group-mapping-with-overrides.jsonnet';
 local objects = import 'utils/objects.libsonnet';
 
@@ -52,7 +52,7 @@ local objects = import 'utils/objects.libsonnet';
   usesThanos:: true,
 
   // Name of the default Prometheus datasource to use
-  defaultPrometheusDatasource: mimirHelper.mimirDatasource('Gitlab - All Environments'),
+  defaultPrometheusDatasource: mimirHelper.mimirDatasource('gitlab-gprd'),
 
   labelTaxonomy:: labelSet.makeLabelSet({
     environmentThanos: 'env',

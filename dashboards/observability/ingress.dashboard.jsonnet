@@ -6,7 +6,7 @@ local templates = import 'grafana/templates.libsonnet';
 local row = grafana.row;
 local basic = import 'grafana/basic.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
-local mimirHelper = import 'services/lib/mimir-helpers.libsonnet';
+local mimirHelper = import 'mimir-helpers/mimir-helpers.libsonnet';
 
 basic.dashboard(
   'Ingress',
@@ -14,7 +14,7 @@ basic.dashboard(
     'k8s',
     'gitlab-observability',
   ],
-  defaultDatasource=mimirHelper.mimirDatasource('Gitlab Observability')
+  defaultDatasource=mimirHelper.mimirDatasource('gitlab-observability')
 )
 .addTemplate(templates.Node)
 .addTemplate(

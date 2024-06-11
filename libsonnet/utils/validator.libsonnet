@@ -103,6 +103,9 @@ local isDuration(v) =
     )
   );
 
+local isArrayOfStrings(v) =
+  std.isArray(v) && std.foldl(function(memo, e) memo && std.isString(e), v, true);
+
 {
   new:: newValidator,
   array:: validator(std.isArray, 'expected an array'),
@@ -112,6 +115,7 @@ local isDuration(v) =
   object:: validator(std.isObject, 'expected an object'),
   string:: validator(std.isString, 'expected a string'),
   duration:: validator(isDuration, 'expected a promql duration'),
+  arrayOfStrings:: validator(isArrayOfStrings, 'expected an array of strings'),
   optional:: optional,
   or:: or,
   and:: and,

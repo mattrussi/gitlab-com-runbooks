@@ -97,7 +97,7 @@ local overviewDashboard(
       tags=['gitlab', 'type:' + type, type, 'service overview'],
       includeStandardEnvironmentAnnotations=includeStandardEnvironmentAnnotations,
       includeEnvironmentTemplate=!omitEnvironmentDropdown && std.objectHas(environmentStageSelectorHash, 'environment'),
-      defaultDatasource=metricsCatalogServiceInfo.defaultPrometheusDatasource
+      defaultDatasource=metricsCatalogServiceInfo.defaultPrometheusDatasource()
     )
     .addAnnotationIf(
       metricsCatalogServiceInfo.getProvisioning().runway,

@@ -1,4 +1,4 @@
-local mimirHelpers = import 'services/lib/mimir-helpers.libsonnet';
+local mimirHelpers = import 'mimir-helpers/mimir-helpers.libsonnet';
 local validator = import 'utils/validator.libsonnet';
 
 local defaults = {
