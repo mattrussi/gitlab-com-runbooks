@@ -1,6 +1,6 @@
 module gitlab.com/gitlab-com/runbooks/pingdom
 
-go 1.22.3
+go 1.22.4
 
 require (
 	github.com/russellcardullo/go-pingdom v1.3.0
