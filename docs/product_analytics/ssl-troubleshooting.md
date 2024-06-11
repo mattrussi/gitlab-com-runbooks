@@ -8,6 +8,11 @@ Service: product_analytics
 
 # Product Analytics SSL Troubleshooting
 
+Note: For running the `kubectl` commands suggested in this document, you need to make sure you're in the correct kubernetes
+context and namespace. You can find out which context to run these commands by checking the "Cluster" dropdown in the
+[monitoring dashboard](https://dashboards.gitlab.net/d/da6cf9ea-d593-41ed-91c5-8536fd15c2fa/product-analytics-service-health?viewPanel=25&orgId=1&refresh=5m).
+All commands should be run in the `default` namespace.
+
 ## Services affected by SSL outages
 
 All of our [external endpoints](https://gitlab.com/gitlab-org/analytics-section/product-analytics/analytics-stack/-/blob/main/docs/architecture.md) are using SSL certificates, as well as the internal communication between various services.
@@ -50,6 +55,15 @@ Failed authentication with <REDACTED_CLUSTER_NAME>-kafka/<REDACTED_IP> (SSL hand
 
 ```
 │ [2023-12-14 10:14:23,906] INFO [SocketServer listenerType=ZK_BROKER, nodeId=0] Failed authentication with /<REDACTED_IP> (channelId=<REDACTED_CHANNEL_ID>) (SSL handshake failed) (org.apache.kafka.common.network.Selector)
+```
+
+**LoadBalancer**
+
+GKE events from Ingress type can be found in [this panel](https://dashboards.gitlab.net/d/da6cf9ea-d593-41ed-91c5-8536fd15c2fa/product-analytics-service-health?viewPanel=25)
+Alternatively, you can run `kubectl get events --field-selector involvedObject.kind=Ingress`
+
+```
+Error syncing to GCP: error running backend syncing routine: error ensuring health check: googleapi: Error 400: Invalid value for field 'resource.timeoutSec': '15'. TimeoutSec should be less than checkIntervalSec., invalid
 ```
 
 ## Fixing SSL errors
@@ -113,3 +127,19 @@ to use the existing [CI pipelines](https://gitlab.com/gitlab-org/analytics-secti
 1. Click the commit at the bottom of the release.
 1. Click the pipeline for the commit.
 1. Trigger the environment deployment for the affected environment.
+
+In some cases, certificates might have a status ready while the certificate issuer is not ready. You can use the following
+command to get information on issuers.
+
+```shell
+kubectl get issuer
+```
+
+Confirm that all issuers have True in the READY column. If not, get more information on the specific issuer with
+
+```shell
+kubectl describe issuer [issuer_name]
+```
+
+which will give you detailed information on the issuer. You can check the Status field and look for "Reason" and "Message".
+These fields should give information on why the issuer is not ready.
