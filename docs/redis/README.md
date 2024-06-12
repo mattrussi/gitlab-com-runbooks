@@ -41,6 +41,7 @@
 * [Redis-Sidekiq catchall workloads reduction](redis-sidekiq-catchall-workloads-reduction.md)
 * [A survival guide for SREs to working with Redis at GitLab](redis-survival-guide-for-sres.md)
 * [redis.md](redis.md)
+* [Scaling Redis Cluster](scaling-redis-cluster.md)
 * [Managing Sentry in Kubernetes](../sentry/sentry.md)
 * [Disabling Sidekiq workers](../sidekiq/disabling-a-worker.md)
 * [Pull mirror overdue queue is too large](../sidekiq/large-pull-mirror-queue.md)
