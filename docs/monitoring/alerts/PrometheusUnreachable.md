@@ -11,9 +11,12 @@
 The alert named `PrometheusUnreachable` is set up to detect when Prometheus instances cannot be scraped (i.e., they are unreachable) for more than 10 minutes.
 
 ###  What factors can contribute?
+
+CPU and Memory saturation results in unresponsive prometheus instances
+
 ###  What parts of the service are effected?
 
-### What action is the recipient of this alert expected to take when it fires?
+###  What action is the recipient of this alert expected to take when it fires?
 
 Refer [here](https://gitlab.com/gitlab-com/runbooks/-/blob/2cd0f564d4d4d2483e7ee413945726d975e39c90/troubleshooting/prometheus-is-down.md)
 
@@ -79,6 +82,9 @@ Refer [here](https://gitlab.com/gitlab-com/runbooks/-/blob/2cd0f564d4d4d2483e7ee
 ## Possible Resolutions
 
 - > Links to past incidents where this alert helped identify an issue with clear resolutions
+
+- https://gitlab.com/gitlab-com/gl-infra/production/-/issues/17962
+
 
 ## Dependencies
 
