@@ -39,7 +39,7 @@ groups:
           runbook: docs/patroni/pg_xid_xmin_age_alert.md
       - alert: PatroniConsulMultipleMaster
         expr: sum by (env, service_id, service_name) (consul_catalog_service_node_healthy{service_name=~'patroni|patroni-.*', service_id=~".+-master", env="gprd"}) > 1
-        for: 1m
+        for: 2m
         labels:
           severity: s1
           pager: pagerduty
