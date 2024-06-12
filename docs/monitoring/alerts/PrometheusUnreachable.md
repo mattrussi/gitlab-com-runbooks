@@ -6,15 +6,35 @@
 
 ## Overview
 
-- > What does this alert mean?
-- > What factors can contribute?
-- > What parts of the service are effected?
-- > What action is the recipient of this alert expected to take when it fires?
+### What does this alert mean?
+
+The alert named `PrometheusUnreachable` is set up to detect when Prometheus instances cannot be scraped (i.e., they are unreachable) for more than 10 minutes.
+
+###  What factors can contribute?
+###  What parts of the service are effected?
+
+### What action is the recipient of this alert expected to take when it fires?
+
+Refer [here](https://gitlab.com/gitlab-com/runbooks/-/blob/2cd0f564d4d4d2483e7ee413945726d975e39c90/troubleshooting/prometheus-is-down.md)
+
+#### Steps to check
+
+- Login to server - prometheus.gitlab.com or prometheus-2.gitlab.com.
+- Check service with sv status prometheus. If it is run for more than 0s. Then it is ok.
+- If it is down state, then check logs in /var/log/prometheus/prometheus/current. Actions can be taken after logs investigating. Usually it is configuration error or IO/space problems.
+
+
+#### How to work with Prometheus
+
+- Check configuration - /opt/prometheus/prometheus/promtool check config /opt/prometheus/prometheus/prometheus.yml.
+- It should check prometheus configuration file and alerts being used. Please always run this check before restarting prometheus      service.
+- Reload configuration - sudo sv reload prometheus.
+- Restart service - sudo sv restart prometheus after checking configuration.
 
 ## Services
 
 - > All alerts require one or more Service Overview links
-- > Team that owns the service
+- > Owner: [Scalability:Observability](https://handbook.gitlab.com/handbook/engineering/infrastructure/team/scalability/observability/)
 
 ## Metrics
 
