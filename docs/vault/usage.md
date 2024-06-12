@@ -228,15 +228,17 @@ token_policies             [ops-gitlab-net-project-gitlab-com_gl-infra_k8s-workl
 
 It will also create the following CI variables in the project:
 
-* `VAULT_AUTH_ROLE:` read-only role name, and read-write role name for each defined protected environment if any
+* `VAULT_AUTH_ROLE`: read-only role name (with an optional suffix, see below), and read-write role name for each defined protected environment if any
+* `VAULT_AUTH_ROLE_SUFFIX` (protected): suffix appended to `VAULT_AUTH_ROLE` in protected branch/environment pipelines to automatically update it to the read-write role
 * `VAULT_SECRETS_PATH`: the secrets base path (`ci/<gitlab-instance>/<project-full-path>`)
 * `VAULT_TRANSIT_KEY_NAME`: the transit key name relative to `transit/ci`
 
 The following variables are also set at the group level:
 
 * `VAULT_ADDR` / `VAULT_SERVER_URL`: `https://vault.ops.gke.gitlab.net`
-* `VAULT_AUTH_PATH`: authentication method path relative to `auth/`, for instance `gitlab-com` or `ops-gitlab-net`
-* `VAULT_TRANSIT_PATH`: `transit/ci`
+* `VAULT_AUTH_PATH`: JWT authentication method path relative to `auth/`, for instance `gitlab-com` or `ops-gitlab-net`
+* `VAULT_SECRETS_SHARED_PATH`: `shared` KV mount path
+* `VAULT_TRANSIT_PATH`: `transit/ci` Transit engine mount path
 
 #### Using Vault secrets in CI
 
@@ -395,7 +397,7 @@ provider "vault" {}
 And the Vault token can instead be generated in the job script just before running Terraform:
 
 ```sh
-export VAULT_TOKEN="$(vault write -field=token "auth/${VAULT_AUTH_PATH}/login" role="${TF_VAULT_AUTH_ROLE}" jwt="${VAULT_ID_TOKEN}")"
+VAULT_TOKEN="$(vault write -field=token "auth/${VAULT_AUTH_PATH}/login" role="${VAULT_AUTH_ROLE}" jwt="${VAULT_ID_TOKEN}")"; export VAULT_TOKEN
 ```
 
 See the [Vault provider documentation](https://registry.terraform.io/providers/hashicorp/vault/latest/docs) for more information.
@@ -1263,13 +1265,22 @@ variables:
     VAULT_ID_TOKEN:
       aud: https://vault.gitlab.net
   variables:
-    FOO_VAULT_AUTH_ROLE: ${VAULT_AUTH_ROLE}
     VAULT_GCP_IMPERSONATED_ACCOUNT: ${GOOGLE_PROJECT}--foo-readonly
     GCP_SERVICE_ACCOUNT_FILE: ${CI_BUILDS_DIR}/.google-service-account-key.json
+  secrets:
+    # Generate a temporary OAuth token
+    GOOGLE_OAUTH_ACCESS_TOKEN:
+      file: false
+      vault:
+        engine:
+          name: generic
+          path: gcp
+        field: token
+        path: impersonated-account/${VAULT_GCP_IMPERSONATED_ACCOUNT}/token
   before_script:
     # Log into Vault
-    - VAULT_TOKEN="$(vault write -field=token "auth/${VAULT_AUTH_PATH}/login" role="${FOO_VAULT_AUTH_ROLE}" jwt="${VAULT_ID_TOKEN}")"; export VAULT_TOKEN
-    # Generate a temporary OAuth token
+    - VAULT_TOKEN="$(vault write -field=token "auth/${VAULT_AUTH_PATH}/login" role="${VAULT_AUTH_ROLE}" jwt="${VAULT_ID_TOKEN}")"; export VAULT_TOKEN
+    # Generate a temporary OAuth token (alternative to the secrets keyword above)
     - CLOUDSDK_AUTH_ACCESS_TOKEN="$(vault read -field=token "gcp/impersonated-account/${VAULT_GCP_IMPERSONATED_ACCOUNT}/token")"; export CLOUDSDK_AUTH_ACCESS_TOKEN
     # Generate a temporary service account key
     - vault read -field=private_key_data "gcp/static-account/${VAULT_GCP_IMPERSONATED_ACCOUNT}/key" | base64 -d > "${GCP_SERVICE_ACCOUNT_FILE}"
@@ -1283,7 +1294,6 @@ apply:
   extends: .vault-auth-gcp
   variables:
     VAULT_GCP_IMPERSONATED_ACCOUNT: ${GOOGLE_PROJECT}--foo-readwrite
-    FOO_VAULT_AUTH_ROLE: ${VAULT_AUTH_ROLE}-rw
   script:
     - foo apply
 ```
@@ -1431,12 +1441,11 @@ variables:
     VAULT_ID_TOKEN:
       aud: https://vault.gitlab.net
   variables:
-    FOO_VAULT_AUTH_ROLE: ${VAULT_AUTH_ROLE}
     VAULT_GCP_IMPERSONATED_ACCOUNT: ${GOOGLE_PROJECT}--foo-readonly
     VAULT_KUBERNETES_ROLE: foo-readonly
   before_script:
     # Log into Vault
-    - VAULT_TOKEN="$(vault write -field=token "auth/${VAULT_AUTH_PATH}/login" role="${FOO_VAULT_AUTH_ROLE}" jwt="${VAULT_ID_TOKEN}")"; export VAULT_TOKEN
+    - VAULT_TOKEN="$(vault write -field=token "auth/${VAULT_AUTH_PATH}/login" role="${VAULT_AUTH_ROLE}" jwt="${VAULT_ID_TOKEN}")"; export VAULT_TOKEN
     # If the cluster details (IP, CA certificate) are not retrieved by any other way, get them via gcloud
     - CLOUDSDK_AUTH_ACCESS_TOKEN="$(vault read -field=token "gcp/impersonated-account/${VAULT_GCP_IMPERSONATED_ACCOUNT}/token")"; export CLOUDSDK_AUTH_ACCESS_TOKEN
     - gcloud container clusters get-credentials "${GKE_CLUSTER}" --project "${GOOGLE_PROJECT}" --location "${GOOGLE_LOCATION}"
@@ -1459,7 +1468,6 @@ diff:
 apply:
   extends: .vault-auth-k8s
   variables:
-    FOO_VAULT_AUTH_ROLE: ${VAULT_AUTH_ROLE}-rw
     VAULT_GCP_IMPERSONATED_ACCOUNT: ${GOOGLE_PROJECT}--foo-readwrite
     VAULT_KUBERNETES_ROLE: foo-readwrite
   script:
