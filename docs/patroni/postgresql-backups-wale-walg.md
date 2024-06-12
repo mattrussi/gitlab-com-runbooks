@@ -85,7 +85,7 @@ We currently take a basebackup each day at 0 am UTC and continuously stream WAL
 data to GCS. As of September 2021, the daily backup process performed by WAL-G takes
 ~9 hours with Postgres cluster size ~14 TiB.
 
-Backups are kept for 14 days, moved to the Nearline storage class after 14 days, and deleted after 120 days by a lifecycle rule on GCS (check [the production documentation](https://about.gitlab.com/handbook/engineering/infrastructure/production/#summary-of-backup-strategy) for changes).
+Backups are kept for 7 days, moved to the Coldling storage class after 7 days, and deleted after 90 days by a lifecycle rule on GCS (check [the production documentation](https://about.gitlab.com/handbook/engineering/infrastructure/production/#backups) for changes).
 
 ### How Does it Get There?
 
