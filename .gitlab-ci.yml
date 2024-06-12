@@ -61,11 +61,6 @@ stages:
 variables:
   BUNDLER_VERSION: 2.4.12
   GOLANG_IMAGE: golang:${GL_ASDF_GOLANG_VERSION}
-  RUNBOOKS_VAULT_AUTH_ROLE: ${VAULT_AUTH_ROLE}
-
-.vault-rw:
-  variables:
-    RUNBOOKS_VAULT_AUTH_ROLE: gitlab-com_runbooks-rw
 
 .id-tokens: &id-tokens
   id_tokens:
@@ -1068,7 +1063,6 @@ update-alertmanager:
   extends:
     - .id-tokens
     - .gke-cluster-auth
-    - .vault-rw
   stage: deploy
   needs:
     - job: test-alertmanager
@@ -1102,11 +1096,10 @@ update-alertmanager:
   extends: .id-tokens
   variables:
     KUBE_NAMESPACE: default
-    RUNBOOKS_VAULT_AUTH_ROLE: ${VAULT_AUTH_ROLE}
     VAULT_KUBERNETES_ROLE: prometheus-rules-view
   before_script:
     - kube_context="gke_${GOOGLE_PROJECT}_${LOCATION}_${GKE_CLUSTER}"
-    - VAULT_TOKEN="$(vault write -field=token "auth/${VAULT_AUTH_PATH}/login" role="${RUNBOOKS_VAULT_AUTH_ROLE}" jwt="${VAULT_ID_TOKEN}")"; export VAULT_TOKEN
+    - VAULT_TOKEN="$(vault write -field=token "auth/${VAULT_AUTH_PATH}/login" role="${VAULT_AUTH_ROLE}" jwt="${VAULT_ID_TOKEN}")"; export VAULT_TOKEN
     - kube_token="$(vault write -field=service_account_token "kubernetes/${GKE_CLUSTER_VAULT:-${GKE_CLUSTER}}/creds/${VAULT_KUBERNETES_ROLE}" kubernetes_namespace="${KUBE_NAMESPACE}" ttl=30m)"
     - kubectl config set-credentials "${VAULT_KUBERNETES_ROLE}" --token "${kube_token}"
     - gke_endpoint="$(vault kv get -mount shared -field endpoint "kubernetes/clusters/${ENVIRONMENT}/${GKE_CLUSTER}")"
@@ -1152,7 +1145,6 @@ validate-prom-rules:
 .deploy-prometheus-rules:
   extends:
     - .gke-cluster-auth
-    - .vault-rw
   stage: deploy
   needs:
     - job: generate-prometheus-rules
@@ -1191,7 +1183,6 @@ deploy-prometheus-rules:production:
 .deploy-thanos-rules:
   extends:
     - .id-tokens
-    - .vault-rw
   rules:
     - !reference [.default-job-rules, rules]
     - *ops-gitlab-net-only-rule
@@ -1202,7 +1193,7 @@ deploy-prometheus-rules:production:
     THANOS_RULES_BUCKET: ${GOOGLE_PROJECT}-thanos-rules
     VAULT_GCP_IMPERSONATED_ACCOUNT: ${GOOGLE_PROJECT}--thanos-rules
   before_script:
-    - export VAULT_TOKEN="$(vault write -field=token "auth/${VAULT_AUTH_PATH}/login" role="${RUNBOOKS_VAULT_AUTH_ROLE}" jwt="${VAULT_ID_TOKEN}")"
+    - export VAULT_TOKEN="$(vault write -field=token "auth/${VAULT_AUTH_PATH}/login" role="${VAULT_AUTH_ROLE}" jwt="${VAULT_ID_TOKEN}")"
     - export CLOUDSDK_AUTH_ACCESS_TOKEN="$(vault read -field=token "gcp/impersonated-account/${VAULT_GCP_IMPERSONATED_ACCOUNT}/token")"
   script:
     - tar -czvf thanos-rules.tar.gz thanos-rules
