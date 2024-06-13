@@ -19,6 +19,10 @@ This helps us to create soft boundaries by tenant and introduces a few key benef
 | ------ | -------- | ----------------- |
 | us-east1 | mimir.ops-gitlab-gke.us-east1.gitlab-ops.gke.gitlab.net | mimir-internal.ops-gitlab-gke.us-east1.gitlab-ops.gke.gitlab.net |
 
+## Data Retention
+
+By default Mimir keeps all data for 1year. This is configurable per tenant through [tenant limits configuratoin](#checking-tenant-limits)
+
 ## Creating a tenant
 
 Tenants are provisioned through [config-mgmt](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/tree/main/environments/observability-tenants).
