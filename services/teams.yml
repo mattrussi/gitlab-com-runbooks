@@ -41,7 +41,7 @@ teams:
   product_stage_group: geo
   ignored_components:
   - graphql_query
-
+know
 - name: gitaly
   url: https://about.gitlab.com/handbook/engineering/dev-backend/gitaly/
   manager: andrashorvath
@@ -400,6 +400,13 @@ teams:
   slack_channel: doe-ops
   engagement_policy:  # Link to doc that talks about engagement and escalation policy
   oncall_schedule:    # Link to pagerduty oncall schedule
+
+- name: knowledge
+  product_stage_group: knowledge
+  slack_error_budget_channel:
+  - g_knowledge
+  - s_plan
+  send_error_budget_weekly_to_slack: true
 
 
 # Infrastructure Reliability
