@@ -357,6 +357,20 @@ groups:
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
+      component: ci_runner_jobs
+      shard: ""
+      tier: runners
+      type: ci-runners
+    expr: "0.970000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      component: ci_runner_jobs
+      shard: ""
+      tier: runners
+      type: ci-runners
+    expr: "0.001000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
       component: loadbalancer
       tier: runners
       type: ci-runners
@@ -403,18 +417,6 @@ groups:
       tier: runners
       type: ci-runners
     expr: "0.010000"
-  - record: slo:min:events:gitlab_service_apdex:ratio
-    labels:
-      component: saas_runner_queues
-      tier: runners
-      type: ci-runners
-    expr: "0.970000"
-  - record: slo:max:events:gitlab_service_errors:ratio
-    labels:
-      component: saas_runner_queues
-      tier: runners
-      type: ci-runners
-    expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: trace_archiving_ci_jobs
@@ -3397,6 +3399,15 @@ groups:
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:
+      component: ci_runner_jobs
+      global_aggregation: "no"
+      regional_aggregation: "no"
+      service_aggregation: "yes"
+      tier: runners
+      type: ci-runners
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
       component: loadbalancer
       global_aggregation: "no"
       regional_aggregation: "no"
@@ -3428,15 +3439,6 @@ groups:
       global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "no"
-      tier: runners
-      type: ci-runners
-    expr: "1"
-  - record: gitlab_component_service:mapping
-    labels:
-      component: saas_runner_queues
-      global_aggregation: "no"
-      regional_aggregation: "no"
-      service_aggregation: "yes"
       tier: runners
       type: ci-runners
     expr: "1"

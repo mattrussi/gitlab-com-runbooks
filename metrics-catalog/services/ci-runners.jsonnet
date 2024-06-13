@@ -1,5 +1,6 @@
 local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local histogramApdex = metricsCatalog.histogramApdex;
+local errorCounterApdex = metricsCatalog.errorCounterApdex;
 local rateMetric = metricsCatalog.rateMetric;
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 local haproxyComponents = import './lib/haproxy_components.libsonnet';
@@ -9,6 +10,7 @@ metricsCatalog.serviceDefinition({
   type: 'ci-runners',
   tier: 'runners',
   tenants: ['gitlab-gprd', 'gitlab-gstg', 'gitlab-ops', 'gitlab-pre'],
+  shardLevelMonitoring: true,
   contractualThresholds: {
     apdexRatio: 0.95,
     errorRatio: 0.05,
@@ -35,10 +37,12 @@ metricsCatalog.serviceDefinition({
         main: { backends: ['https_git', 'api', 'ci_gateway_catch_all'], toolingLinks: [] },
       },
       dependsOn=dependOnRedisSidekiq.railsClientComponents,
-    ),
+    ) { shardLevelMonitoring: false },
+
     polling: {
       userImpacting: true,
       featureCategory: 'runner',
+      shardLevelMonitoring: false,
       description: |||
         This SLI monitors job polling operations from runners, via
         Workhorse's `/api/v4/jobs/request` route.
@@ -82,54 +86,6 @@ metricsCatalog.serviceDefinition({
       ],
     },
 
-    saas_runner_queues: {
-      userImpacting: true,
-      featureCategory: 'runner',
-      description: |||
-        This SLI monitors the shared runner queues on GitLab.com. Each job is an operation.
-
-        Apdex uses queueing latencies for jobs which are considered to be fair-usage (less than 5 concurrently running jobs).
-
-        Jobs marked as failing with runner system failures are considered to be in error.
-      |||,
-
-      apdex: histogramApdex(
-        histogram='job_queue_duration_seconds_bucket',
-        selector={ shared_runner: 'true', jobs_running_for_project: { oneOf: ['^(0|1|2|3|4)$'] } },
-        satisfiedThreshold=60,
-      ),
-
-      requestRate: rateMetric(
-        counter='gitlab_runner_jobs_total',
-        selector={
-          job: { oneOf: ['runners-manager', 'scrapeConfig/monitoring/prometheus-agent-runner'] },
-          shard: { oneOf: ['shared-gitlab-org', 'private', 'saas-.*', 'windows-shared'] },
-        },
-      ),
-
-      errorRate: rateMetric(
-        counter='gitlab_runner_failed_jobs_total',
-        selector={
-          job: { oneOf: ['runners-manager', 'scrapeConfig/monitoring/prometheus-agent-runner'] },
-          shard: { oneOf: ['shared-gitlab-org', 'private', 'saas-.*', 'windows-shared'] },
-          failure_reason: 'runner_system_failure',
-        },
-      ),
-
-      // `job_queue_duration_seconds_bucket` is emitted by `api`
-      // but `gitlab_runner_jobs_total` and `gitlab_runner_failed_jobs_total`
-      // is emitted by `ci-runners` itself.
-      // We set `emittedBy` as empty array so that `sli_aggregations:` rules
-      // in Mimir doesn't scope by `ci-runners` by default.
-      emittedBy: [],
-
-      significantLabels: ['jobs_running_for_project'],
-
-      toolingLinks: [
-        toolingLinks.kibana(title='CI Runners', index='runners', slowRequestSeconds=60),
-      ],
-    },
-
     saas_linux_runner_image_pull_failures: {
       serviceAggregation: false,
       monitoringThresholds+: {
@@ -139,15 +95,14 @@ metricsCatalog.serviceDefinition({
       userImpacting: true,
       featureCategory: 'runner',
       description: |||
-        This SLI monitors the saas runner queues on GitLab.com. Each job is an operation.
-
-        Jobs marked as failing with image pull failures are considered to be in error.
+        This SLI monitors the image pulling failures on SaaS runner.
       |||,
 
       requestRate: rateMetric(
         counter='gitlab_runner_jobs_total',
         selector={
           job: { oneOf: ['runners-manager', 'scrapeConfig/monitoring/prometheus-agent-runner'] },
+          type: 'ci-runners',
           shard: { oneOf: ['shared-gitlab-org', 'private', 'saas-linux-.*'] },
         },
       ),
@@ -156,19 +111,13 @@ metricsCatalog.serviceDefinition({
         counter='gitlab_runner_failed_jobs_total',
         selector={
           job: { oneOf: ['runners-manager', 'scrapeConfig/monitoring/prometheus-agent-runner'] },
+          type: 'ci-runners',
           shard: { oneOf: ['shared-gitlab-org', 'private', 'saas-linux-.*'] },
           failure_reason: 'image_pull_failure',
         },
       ),
 
-      // `job_queue_duration_seconds_bucket` is emitted by `api`
-      // but `gitlab_runner_jobs_total` and `gitlab_runner_failed_jobs_total`
-      // is emitted by `ci-runners` itself.
-      // We set `emittedBy` as empty array so that `sli_aggregations:` rules
-      // in Mimir doesn't scope by `ci-runners` by default.
-      emittedBy: [],
-
-      significantLabels: ['jobs_running_for_project'],
+      significantLabels: [],
 
       toolingLinks: [
         toolingLinks.kibana(title='CI Runners', index='runners', slowRequestSeconds=60),
@@ -177,6 +126,7 @@ metricsCatalog.serviceDefinition({
 
     queuing_queries_duration: {
       userImpacting: false,
+      shardLevelMonitoring: false,
       featureCategory: 'continuous_integration',
       team: 'pipeline_execution',
       description: |||
@@ -213,6 +163,7 @@ metricsCatalog.serviceDefinition({
     // https://gitlab.com/gitlab-org/gitlab/blob/master/app/services/ci/archive_trace_service.rb
     trace_archiving_ci_jobs: {
       userImpacting: true,
+      shardLevelMonitoring: false,
       featureCategory: 'continuous_integration',
       description: |||
         This SLI monitors CI job archiving, via Sidekiq jobs.
@@ -238,6 +189,56 @@ metricsCatalog.serviceDefinition({
           index='sidekiq',
           matches={ 'json.class.keyword': 'Ci::ArchiveTraceWorker' }
         ),
+      ],
+    },
+
+    ci_runner_jobs: {
+      userImpacting: true,
+      featureCategory: 'runner',
+      shardLevelMonitoring: true,
+      description: |||
+        This SLI monitors the SaaS runner jobs handling. Each job is an operation.
+
+        Apdex uses queueing latencies. If shard is for instance runners on GitLab.com, it counts
+        jobs which are considered to be fair-usage (less than 5 concurrently running jobs from
+        a project on instance runners).
+
+        Jobs marked as failing with runner system failures are considered to be in error.
+      |||,
+
+      apdex: errorCounterApdex(
+        errorRateMetric='gitlab_runner_acceptable_job_queuing_duration_exceeded_total',
+        operationRateMetric='gitlab_runner_jobs_total',
+        selector={
+          job: { oneOf: ['runners-manager', 'scrapeConfig/monitoring/prometheus-agent-runner'] },
+          type: 'ci-runners',
+          shard: { oneOf: ['shared-gitlab-org', 'private', 'saas-.*', 'windows-shared'] },
+        },
+      ),
+
+      requestRate: rateMetric(
+        counter='gitlab_runner_jobs_total',
+        selector={
+          job: { oneOf: ['runners-manager', 'scrapeConfig/monitoring/prometheus-agent-runner'] },
+          type: 'ci-runners',
+          shard: { oneOf: ['shared-gitlab-org', 'private', 'saas-.*', 'windows-shared'] },
+        },
+      ),
+
+      errorRate: rateMetric(
+        counter='gitlab_runner_failed_jobs_total',
+        selector={
+          job: { oneOf: ['runners-manager', 'scrapeConfig/monitoring/prometheus-agent-runner'] },
+          type: 'ci-runners',
+          shard: { oneOf: ['shared-gitlab-org', 'private', 'saas-.*', 'windows-shared'] },
+          failure_reason: 'runner_system_failure',
+        },
+      ),
+
+      significantLabels: [],
+
+      toolingLinks: [
+        toolingLinks.kibana(title='CI Runners', index='runners', slowRequestSeconds=60),
       ],
     },
   },

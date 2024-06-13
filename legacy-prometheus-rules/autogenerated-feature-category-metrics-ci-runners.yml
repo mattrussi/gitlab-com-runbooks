@@ -4,6 +4,61 @@ groups:
 - name: 'Prometheus Intermediate Metrics per feature: ci-runners - burn-rate 5m'
   interval: 1m
   rules:
+  - record: gitlab:component:feature_category:execution:apdex:success:rate_5m
+    labels:
+      component: ci_runner_jobs
+      feature_category: runner
+      tier: runners
+      type: ci-runners
+    expr: |
+      sum by (env,environment,stage) (
+        rate(gitlab_runner_jobs_total{job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard=~"private|saas-.*|shared-gitlab-org|windows-shared",type="ci-runners"}[5m] offset 30s)
+      ) - (
+        sum by (env,environment,stage) (
+          rate(gitlab_runner_acceptable_job_queuing_duration_exceeded_total{job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard=~"private|saas-.*|shared-gitlab-org|windows-shared",type="ci-runners"}[5m] offset 30s)
+        ) or
+        0 * sum by (env,environment,stage) (
+          rate(gitlab_runner_jobs_total{job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard=~"private|saas-.*|shared-gitlab-org|windows-shared",type="ci-runners"}[5m] offset 30s)
+        )
+      )
+  - record: gitlab:component:feature_category:execution:apdex:weight:score_5m
+    labels:
+      component: ci_runner_jobs
+      feature_category: runner
+      tier: runners
+      type: ci-runners
+    expr: |
+      sum by (env,environment,stage) (
+        rate(gitlab_runner_jobs_total{job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard=~"private|saas-.*|shared-gitlab-org|windows-shared",type="ci-runners"}[5m] offset 30s)
+      )
+  - record: gitlab:component:feature_category:execution:ops:rate_5m
+    labels:
+      component: ci_runner_jobs
+      feature_category: runner
+      tier: runners
+      type: ci-runners
+    expr: |
+      sum by (env,environment,stage) (
+        rate(gitlab_runner_jobs_total{job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard=~"private|saas-.*|shared-gitlab-org|windows-shared",type="ci-runners"}[5m] offset 30s)
+      )
+  - record: gitlab:component:feature_category:execution:error:rate_5m
+    labels:
+      component: ci_runner_jobs
+      feature_category: runner
+      tier: runners
+      type: ci-runners
+    expr: |
+      (
+        sum by (env,environment,stage) (
+          rate(gitlab_runner_failed_jobs_total{failure_reason="runner_system_failure",job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard=~"private|saas-.*|shared-gitlab-org|windows-shared",type="ci-runners"}[5m] offset 30s)
+        )
+      )
+      or
+      (
+        0 * group by(env,environment,stage) (
+          gitlab:component:feature_category:execution:ops:rate_5m{component="ci_runner_jobs",feature_category="runner",tier="runners",type="ci-runners"}
+        )
+      )
   - record: gitlab:component:feature_category:execution:ops:rate_5m
     labels:
       component: loadbalancer
@@ -100,7 +155,7 @@ groups:
       type: ci-runners
     expr: |
       sum by (env,environment,stage) (
-        rate(gitlab_runner_jobs_total{job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard=~"private|saas-linux-.*|shared-gitlab-org"}[5m] offset 30s)
+        rate(gitlab_runner_jobs_total{job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard=~"private|saas-linux-.*|shared-gitlab-org",type="ci-runners"}[5m] offset 30s)
       )
   - record: gitlab:component:feature_category:execution:error:rate_5m
     labels:
@@ -111,61 +166,13 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(gitlab_runner_failed_jobs_total{failure_reason="image_pull_failure",job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard=~"private|saas-linux-.*|shared-gitlab-org"}[5m] offset 30s)
+          rate(gitlab_runner_failed_jobs_total{failure_reason="image_pull_failure",job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard=~"private|saas-linux-.*|shared-gitlab-org",type="ci-runners"}[5m] offset 30s)
         )
       )
       or
       (
         0 * group by(env,environment,stage) (
           gitlab:component:feature_category:execution:ops:rate_5m{component="saas_linux_runner_image_pull_failures",feature_category="runner",tier="runners",type="ci-runners"}
-        )
-      )
-  - record: gitlab:component:feature_category:execution:apdex:success:rate_5m
-    labels:
-      component: saas_runner_queues
-      feature_category: runner
-      tier: runners
-      type: ci-runners
-    expr: |
-      sum by (env,environment,stage) (
-        rate(job_queue_duration_seconds_bucket{jobs_running_for_project=~"^(0|1|2|3|4)$",le="60",shared_runner="true"}[5m] offset 30s)
-      )
-  - record: gitlab:component:feature_category:execution:apdex:weight:score_5m
-    labels:
-      component: saas_runner_queues
-      feature_category: runner
-      tier: runners
-      type: ci-runners
-    expr: |
-      sum by (env,environment,stage) (
-        rate(job_queue_duration_seconds_bucket{jobs_running_for_project=~"^(0|1|2|3|4)$",le="+Inf",shared_runner="true"}[5m] offset 30s)
-      )
-  - record: gitlab:component:feature_category:execution:ops:rate_5m
-    labels:
-      component: saas_runner_queues
-      feature_category: runner
-      tier: runners
-      type: ci-runners
-    expr: |
-      sum by (env,environment,stage) (
-        rate(gitlab_runner_jobs_total{job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard=~"private|saas-.*|shared-gitlab-org|windows-shared"}[5m] offset 30s)
-      )
-  - record: gitlab:component:feature_category:execution:error:rate_5m
-    labels:
-      component: saas_runner_queues
-      feature_category: runner
-      tier: runners
-      type: ci-runners
-    expr: |
-      (
-        sum by (env,environment,stage) (
-          rate(gitlab_runner_failed_jobs_total{failure_reason="runner_system_failure",job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard=~"private|saas-.*|shared-gitlab-org|windows-shared"}[5m] offset 30s)
-        )
-      )
-      or
-      (
-        0 * group by(env,environment,stage) (
-          gitlab:component:feature_category:execution:ops:rate_5m{component="saas_runner_queues",feature_category="runner",tier="runners",type="ci-runners"}
         )
       )
   - record: gitlab:component:feature_category:execution:ops:rate_5m
@@ -199,6 +206,61 @@ groups:
 - name: 'Prometheus Intermediate Metrics per feature: ci-runners - burn-rate 30m'
   interval: 2m
   rules:
+  - record: gitlab:component:feature_category:execution:apdex:success:rate_30m
+    labels:
+      component: ci_runner_jobs
+      feature_category: runner
+      tier: runners
+      type: ci-runners
+    expr: |
+      sum by (env,environment,stage) (
+        rate(gitlab_runner_jobs_total{job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard=~"private|saas-.*|shared-gitlab-org|windows-shared",type="ci-runners"}[30m] offset 30s)
+      ) - (
+        sum by (env,environment,stage) (
+          rate(gitlab_runner_acceptable_job_queuing_duration_exceeded_total{job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard=~"private|saas-.*|shared-gitlab-org|windows-shared",type="ci-runners"}[30m] offset 30s)
+        ) or
+        0 * sum by (env,environment,stage) (
+          rate(gitlab_runner_jobs_total{job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard=~"private|saas-.*|shared-gitlab-org|windows-shared",type="ci-runners"}[30m] offset 30s)
+        )
+      )
+  - record: gitlab:component:feature_category:execution:apdex:weight:score_30m
+    labels:
+      component: ci_runner_jobs
+      feature_category: runner
+      tier: runners
+      type: ci-runners
+    expr: |
+      sum by (env,environment,stage) (
+        rate(gitlab_runner_jobs_total{job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard=~"private|saas-.*|shared-gitlab-org|windows-shared",type="ci-runners"}[30m] offset 30s)
+      )
+  - record: gitlab:component:feature_category:execution:ops:rate_30m
+    labels:
+      component: ci_runner_jobs
+      feature_category: runner
+      tier: runners
+      type: ci-runners
+    expr: |
+      sum by (env,environment,stage) (
+        rate(gitlab_runner_jobs_total{job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard=~"private|saas-.*|shared-gitlab-org|windows-shared",type="ci-runners"}[30m] offset 30s)
+      )
+  - record: gitlab:component:feature_category:execution:error:rate_30m
+    labels:
+      component: ci_runner_jobs
+      feature_category: runner
+      tier: runners
+      type: ci-runners
+    expr: |
+      (
+        sum by (env,environment,stage) (
+          rate(gitlab_runner_failed_jobs_total{failure_reason="runner_system_failure",job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard=~"private|saas-.*|shared-gitlab-org|windows-shared",type="ci-runners"}[30m] offset 30s)
+        )
+      )
+      or
+      (
+        0 * group by(env,environment,stage) (
+          gitlab:component:feature_category:execution:ops:rate_30m{component="ci_runner_jobs",feature_category="runner",tier="runners",type="ci-runners"}
+        )
+      )
   - record: gitlab:component:feature_category:execution:ops:rate_30m
     labels:
       component: loadbalancer
@@ -295,7 +357,7 @@ groups:
       type: ci-runners
     expr: |
       sum by (env,environment,stage) (
-        rate(gitlab_runner_jobs_total{job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard=~"private|saas-linux-.*|shared-gitlab-org"}[30m] offset 30s)
+        rate(gitlab_runner_jobs_total{job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard=~"private|saas-linux-.*|shared-gitlab-org",type="ci-runners"}[30m] offset 30s)
       )
   - record: gitlab:component:feature_category:execution:error:rate_30m
     labels:
@@ -306,61 +368,13 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(gitlab_runner_failed_jobs_total{failure_reason="image_pull_failure",job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard=~"private|saas-linux-.*|shared-gitlab-org"}[30m] offset 30s)
+          rate(gitlab_runner_failed_jobs_total{failure_reason="image_pull_failure",job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard=~"private|saas-linux-.*|shared-gitlab-org",type="ci-runners"}[30m] offset 30s)
         )
       )
       or
       (
         0 * group by(env,environment,stage) (
           gitlab:component:feature_category:execution:ops:rate_30m{component="saas_linux_runner_image_pull_failures",feature_category="runner",tier="runners",type="ci-runners"}
-        )
-      )
-  - record: gitlab:component:feature_category:execution:apdex:success:rate_30m
-    labels:
-      component: saas_runner_queues
-      feature_category: runner
-      tier: runners
-      type: ci-runners
-    expr: |
-      sum by (env,environment,stage) (
-        rate(job_queue_duration_seconds_bucket{jobs_running_for_project=~"^(0|1|2|3|4)$",le="60",shared_runner="true"}[30m] offset 30s)
-      )
-  - record: gitlab:component:feature_category:execution:apdex:weight:score_30m
-    labels:
-      component: saas_runner_queues
-      feature_category: runner
-      tier: runners
-      type: ci-runners
-    expr: |
-      sum by (env,environment,stage) (
-        rate(job_queue_duration_seconds_bucket{jobs_running_for_project=~"^(0|1|2|3|4)$",le="+Inf",shared_runner="true"}[30m] offset 30s)
-      )
-  - record: gitlab:component:feature_category:execution:ops:rate_30m
-    labels:
-      component: saas_runner_queues
-      feature_category: runner
-      tier: runners
-      type: ci-runners
-    expr: |
-      sum by (env,environment,stage) (
-        rate(gitlab_runner_jobs_total{job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard=~"private|saas-.*|shared-gitlab-org|windows-shared"}[30m] offset 30s)
-      )
-  - record: gitlab:component:feature_category:execution:error:rate_30m
-    labels:
-      component: saas_runner_queues
-      feature_category: runner
-      tier: runners
-      type: ci-runners
-    expr: |
-      (
-        sum by (env,environment,stage) (
-          rate(gitlab_runner_failed_jobs_total{failure_reason="runner_system_failure",job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard=~"private|saas-.*|shared-gitlab-org|windows-shared"}[30m] offset 30s)
-        )
-      )
-      or
-      (
-        0 * group by(env,environment,stage) (
-          gitlab:component:feature_category:execution:ops:rate_30m{component="saas_runner_queues",feature_category="runner",tier="runners",type="ci-runners"}
         )
       )
   - record: gitlab:component:feature_category:execution:ops:rate_30m
@@ -394,6 +408,61 @@ groups:
 - name: 'Prometheus Intermediate Metrics per feature: ci-runners - burn-rate 1h'
   interval: 1m
   rules:
+  - record: gitlab:component:feature_category:execution:apdex:success:rate_1h
+    labels:
+      component: ci_runner_jobs
+      feature_category: runner
+      tier: runners
+      type: ci-runners
+    expr: |
+      sum by (env,environment,stage) (
+        rate(gitlab_runner_jobs_total{job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard=~"private|saas-.*|shared-gitlab-org|windows-shared",type="ci-runners"}[1h] offset 30s)
+      ) - (
+        sum by (env,environment,stage) (
+          rate(gitlab_runner_acceptable_job_queuing_duration_exceeded_total{job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard=~"private|saas-.*|shared-gitlab-org|windows-shared",type="ci-runners"}[1h] offset 30s)
+        ) or
+        0 * sum by (env,environment,stage) (
+          rate(gitlab_runner_jobs_total{job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard=~"private|saas-.*|shared-gitlab-org|windows-shared",type="ci-runners"}[1h] offset 30s)
+        )
+      )
+  - record: gitlab:component:feature_category:execution:apdex:weight:score_1h
+    labels:
+      component: ci_runner_jobs
+      feature_category: runner
+      tier: runners
+      type: ci-runners
+    expr: |
+      sum by (env,environment,stage) (
+        rate(gitlab_runner_jobs_total{job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard=~"private|saas-.*|shared-gitlab-org|windows-shared",type="ci-runners"}[1h] offset 30s)
+      )
+  - record: gitlab:component:feature_category:execution:ops:rate_1h
+    labels:
+      component: ci_runner_jobs
+      feature_category: runner
+      tier: runners
+      type: ci-runners
+    expr: |
+      sum by (env,environment,stage) (
+        rate(gitlab_runner_jobs_total{job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard=~"private|saas-.*|shared-gitlab-org|windows-shared",type="ci-runners"}[1h] offset 30s)
+      )
+  - record: gitlab:component:feature_category:execution:error:rate_1h
+    labels:
+      component: ci_runner_jobs
+      feature_category: runner
+      tier: runners
+      type: ci-runners
+    expr: |
+      (
+        sum by (env,environment,stage) (
+          rate(gitlab_runner_failed_jobs_total{failure_reason="runner_system_failure",job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard=~"private|saas-.*|shared-gitlab-org|windows-shared",type="ci-runners"}[1h] offset 30s)
+        )
+      )
+      or
+      (
+        0 * group by(env,environment,stage) (
+          gitlab:component:feature_category:execution:ops:rate_1h{component="ci_runner_jobs",feature_category="runner",tier="runners",type="ci-runners"}
+        )
+      )
   - record: gitlab:component:feature_category:execution:ops:rate_1h
     labels:
       component: loadbalancer
@@ -490,7 +559,7 @@ groups:
       type: ci-runners
     expr: |
       sum by (env,environment,stage) (
-        rate(gitlab_runner_jobs_total{job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard=~"private|saas-linux-.*|shared-gitlab-org"}[1h] offset 30s)
+        rate(gitlab_runner_jobs_total{job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard=~"private|saas-linux-.*|shared-gitlab-org",type="ci-runners"}[1h] offset 30s)
       )
   - record: gitlab:component:feature_category:execution:error:rate_1h
     labels:
@@ -501,61 +570,13 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(gitlab_runner_failed_jobs_total{failure_reason="image_pull_failure",job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard=~"private|saas-linux-.*|shared-gitlab-org"}[1h] offset 30s)
+          rate(gitlab_runner_failed_jobs_total{failure_reason="image_pull_failure",job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard=~"private|saas-linux-.*|shared-gitlab-org",type="ci-runners"}[1h] offset 30s)
         )
       )
       or
       (
         0 * group by(env,environment,stage) (
           gitlab:component:feature_category:execution:ops:rate_1h{component="saas_linux_runner_image_pull_failures",feature_category="runner",tier="runners",type="ci-runners"}
-        )
-      )
-  - record: gitlab:component:feature_category:execution:apdex:success:rate_1h
-    labels:
-      component: saas_runner_queues
-      feature_category: runner
-      tier: runners
-      type: ci-runners
-    expr: |
-      sum by (env,environment,stage) (
-        rate(job_queue_duration_seconds_bucket{jobs_running_for_project=~"^(0|1|2|3|4)$",le="60",shared_runner="true"}[1h] offset 30s)
-      )
-  - record: gitlab:component:feature_category:execution:apdex:weight:score_1h
-    labels:
-      component: saas_runner_queues
-      feature_category: runner
-      tier: runners
-      type: ci-runners
-    expr: |
-      sum by (env,environment,stage) (
-        rate(job_queue_duration_seconds_bucket{jobs_running_for_project=~"^(0|1|2|3|4)$",le="+Inf",shared_runner="true"}[1h] offset 30s)
-      )
-  - record: gitlab:component:feature_category:execution:ops:rate_1h
-    labels:
-      component: saas_runner_queues
-      feature_category: runner
-      tier: runners
-      type: ci-runners
-    expr: |
-      sum by (env,environment,stage) (
-        rate(gitlab_runner_jobs_total{job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard=~"private|saas-.*|shared-gitlab-org|windows-shared"}[1h] offset 30s)
-      )
-  - record: gitlab:component:feature_category:execution:error:rate_1h
-    labels:
-      component: saas_runner_queues
-      feature_category: runner
-      tier: runners
-      type: ci-runners
-    expr: |
-      (
-        sum by (env,environment,stage) (
-          rate(gitlab_runner_failed_jobs_total{failure_reason="runner_system_failure",job=~"runners-manager|scrapeConfig/monitoring/prometheus-agent-runner",shard=~"private|saas-.*|shared-gitlab-org|windows-shared"}[1h] offset 30s)
-        )
-      )
-      or
-      (
-        0 * group by(env,environment,stage) (
-          gitlab:component:feature_category:execution:ops:rate_1h{component="saas_runner_queues",feature_category="runner",tier="runners",type="ci-runners"}
         )
       )
   - record: gitlab:component:feature_category:execution:ops:rate_1h
