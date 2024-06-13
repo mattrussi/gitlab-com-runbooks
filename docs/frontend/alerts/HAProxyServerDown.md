@@ -6,8 +6,7 @@
 
 ## Overview
 
-- What does this alert mean?
-This alert indicates that there could be a spike in 5xx errors, server connection errors, or backends reporting unhealthy.
+- This alert indicates that there could be a spike in 5xx errors, server connection errors, or backends reporting unhealthy.
 
 *Note*: [`set-server-state` server draining](https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/frontend/haproxy.md?ref_type=heads#set-server-state) will also generate this alert.
 - What factors can contribute?
@@ -131,7 +130,14 @@ kill -TERM 1827
 
 ## Possible Resolutions
 
-- [ ] Links to past incidents where this alert helped identify an issue with clear resolutions
+- Links to past incidents where this alert helped identify an issue with clear resolutions:
+  - [Previous HAProxy closed incidents](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/?sort=created_date&state=closed&label_name%5B%5D=Service%3A%3AHAProxy&label_name%5B%5D=incident&first_page_size=100)
+  - [2023-09-25: gprd failind due to haproxy assets are DOWN](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/16425)
+  - [2023-04-14: Spike in ErrorRatio in HAProxy](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/8725)
+  - [2023-02-08: Large short-lived burst in haproxy traffic](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/8373)
+
+
+
 
 ## Dependencies
 
@@ -140,7 +146,7 @@ kill -TERM 1827
 # Escalation
 
 - [ ] How and when to escalate
-- [ ] Slack channels where help is likely to be found:
+- Slack channels where help is likely to be found: `#g_infra_foundations`
 
 # Definitions
 
@@ -152,7 +158,7 @@ kill -TERM 1827
 # Related Links
 
 - [Related alerts](./)
-- [ ] Related documentation
+- Related documentation
   - [HAProxy Logging](https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/frontend/haproxy-logging.md?ref_type=heads)
   - [`asset_proxy` is `DOWN`](https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/frontend/asset-proxy-down.md?ref_type=heads)
   - [IPs and Net Blocking](https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/frontend/ban-netblocks-on-haproxy.md?ref_type=heads)
