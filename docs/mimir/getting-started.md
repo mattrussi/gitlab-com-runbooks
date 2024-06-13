@@ -21,7 +21,7 @@ This helps us to create soft boundaries by tenant and introduces a few key benef
 
 ## Data Retention
 
-By default Mimir keeps all data for 1year. This is configurable per tenant through [tenant limits configuratoin](#checking-tenant-limits)
+By default Mimir keeps all data for 1 year. This is configurable per tenant through [tenant limits configuration](#checking-tenant-limits).
 
 ## Creating a tenant
 
