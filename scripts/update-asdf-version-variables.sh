@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# Vendored from https://gitlab.com/gitlab-com/gl-infra/common-template-copier
+# Consider contributing upstream when updating this file
 
 # See the README.md for details of how this script works
 
