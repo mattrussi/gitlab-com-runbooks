@@ -7,6 +7,7 @@ local serviceCatalog = import 'service-catalog/service-catalog.libsonnet';
 local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
 local dashboard = import './grafana.libsonnet';
 local prom = import './prom.libsonnet';
+local config = import 'gitlab-metrics-config.libsonnet';
 
 local uniqServices(saturationPoints) = std.foldl(
   function(memo, definition) std.set(memo + definition.appliesTo),
@@ -82,6 +83,16 @@ local saturationPoints = {
   for name in std.objectFields(saturation)
 };
 
+local tenantMapping =
+  local serviceNames = std.objectFields(services(uniqServices(saturation)));
+  std.foldl(
+    function(memo, service)
+      local serviceDefinition = metricsCatalog.getService(service);
+      local tenant = serviceDefinition.defaultTenant;
+      memo { [tenant]: memo[tenant] + [service] },
+    serviceNames,
+    { [tenant]: [] for tenant in config.mimirTenants },
+  );
 
 {
   defaults: {
@@ -105,8 +116,9 @@ local saturationPoints = {
       'saas-macos-medium-m1',
       'saas-macos-large-m2pro',
       'windows-shared',
-    ]
+    ],
   },
+  tenantMapping: tenantMapping,
   teams: serviceCatalog.getRawCatalogTeams(),
   report: {
     pages: [
