@@ -49,7 +49,6 @@ The alert will indicate which backend server is down.
 - Additional monitoring dashboards
 - Link to log queries if applicable
 
-
 ## Recent changes
 
 - Links to queries for recent related production change requests
@@ -135,9 +134,6 @@ kill -TERM 1827
   - [2023-09-25: gprd failind due to haproxy assets are DOWN](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/16425)
   - [2023-04-14: Spike in ErrorRatio in HAProxy](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/8725)
   - [2023-02-08: Large short-lived burst in haproxy traffic](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/8373)
-
-
-
 
 ## Dependencies
 
