@@ -85,6 +85,7 @@ Refer [here](https://gitlab.com/gitlab-com/runbooks/-/blob/2cd0f564d4d4d2483e7ee
 ## Verification
 
 - > Prometheus link to query that triggered the alert
+    https://prometheus.ops.gitlab.net/graph?g0.expr=avg_over_time(up%7Bjob%3D~%22prometheus.*%22%7D%5B5m%5D)%20*%20100%20%3C%2050&g0.tab=1&g0.stacked=0&g0.show_exemplars=0.g0.range_input=1h.
 - > Additional monitoring dashboards
 - > Link to log queries if applicable
 
