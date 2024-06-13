@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-# Vendored from https://gitlab.com/gitlab-com/gl-infra/common-template-copier/-/blob/main/scripts/prepare-dev-env.sh
+# Vendored from https://gitlab.com/gitlab-com/gl-infra/common-template-copier
+# Consider contributing upstream when updating this file
 
 set -euo pipefail
 
