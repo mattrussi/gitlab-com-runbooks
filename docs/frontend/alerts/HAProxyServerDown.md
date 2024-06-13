@@ -6,53 +6,58 @@
 
 ## Overview
 
-- What does this alert mean?
+- > What does this alert mean?
 This alert indicates that there could be a spike in 5xx errors, server connection errors, or backends reporting unhealthy.
 
 *Note*: [`set-server-state` server draining](https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/frontend/haproxy.md?ref_type=heads#set-server-state) will also generate this alert.
-- What parts of the service are effected?
+- > What factors can contribute?
+- > What parts of the service are effected?
 The alert will indicate which backend server is down. 
-- What action is the recipient of this alert expected to take when it fires?
-
+- > What action is the recipient of this alert expected to take when it fires?
 
 ## Services
 
-- [Service Overview](https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/frontend/haproxy.md?ref_type=heads)
-- Team that owns the service: [Production Engineering Foundations Team](https://handbook.gitlab.com/handbook/engineering/infrastructure/core-platform/systems/gitaly/)
-- **Label:** gitlab-com/gl-infra/production~"Service::HAProxy"
+- > All alerts require one or more Service Overview links
+[Service Overview](https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/frontend/haproxy.md?ref_type=heads)
+- > Team that owns the service: [Production Engineering Foundations Team](https://handbook.gitlab.com/handbook/engineering/infrastructure/core-platform/systems/gitaly/)
+- > **Label:** gitlab-com/gl-infra/production~"Service::HAProxy"
 
 ## Metrics
 
-- [ ] Briefly explain the metric this alert is based on and link to the metrics catalogue. What unit is it measured in? (e.g., CPU usage in percentage, request latency in milliseconds)
-- [ ] Explain the reasoning behind the chosen threshold value for triggering the alert. Is it based on historical data, best practices, or capacity planning?
-- [ ] Describe the expected behavior of the metric under normal conditions. This helps identify situations where the alert might be falsely firing.
-- [ ] Add screenshots of what a dashboard will look like when this alert is firing and when it recovers
-- [ ] Are there any specific visuals or messages one should look for in the screenshots?
+- > Briefly explain the metric this alert is based on and link to the metrics catalogue. What unit is it measured in? (e.g., CPU usage in percentage, request latency in milliseconds)
+- > Explain the reasoning behind the chosen threshold value for triggering the alert. Is it based on historical data, best practices, or capacity planning?
+- > Describe the expected behavior of the metric under normal conditions. This helps identify situations where the alert might be falsely firing.
+- > Add screenshots of what a dashboard will look like when this alert is firing and when it recovers
+- > Are there any specific visuals or messages one should look for in the screenshots?
 
 ## Alert Behavior
 
-- [ ] Information on silencing the alert (if applicable). When and how can silencing be used? Are there automated silencing rules?
-- [ ] Expected frequency of the alert. Is it a high-volume alert or expected to be rare?
-- [ ] Show historical trends of the alert firing e.g  Kibana dashboard
+- > Information on silencing the alert (if applicable). When and how can silencing be used? Are there automated silencing rules?
+- > Expected frequency of the alert. Is it a high-volume alert or expected to be rare?
+- > Show historical trends of the alert firing e.g  Kibana dashboard
 
 ## Severities
 
-- [ ] Guidance for assigning incident severity to this alert
-- [ ] Who is likely to be impacted by this cause of this alert?
-  - [ ] All gitlab.com customers or a subset?
-  - [ ] Internal customers only?
-- [ ] Things to check to determine severity
+- > Guidance for assigning incident severity to this alert
+- > Who is likely to be impacted by this cause of this alert?
+  - > All gitlab.com customers or a subset?
+  - > Internal customers only?
+- > Things to check to determine severity
 
 ## Verification
 
-- [ ] Prometheus link to query that triggered the alert
-- [ ] Additional monitoring dashboards
-- [ ] Link to log queries if applicable
+- > Prometheus link to query that triggered the alert
+- > Additional monitoring dashboards
+- > Link to log queries if applicable
+
 
 ## Recent changes
 
-- [Recent HAProxy Production Changes and Incident Issues](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/?sort=created_date&state=all&label_name%5B%5D=Service%3A%3AHAProxy&first_page_size=100)
-- [Recent Chef HAProxy changes](https://gitlab.com/gitlab-com/gl-infra/chef-repo/-/merge_requests?scope=all&state=merged&label_name[]=Service%3A%3AHAProxy)
+- > Links to queries for recent related production change requests
+[Recent HAProxy Production Changes and Incident Issues](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/?sort=created_date&state=all&label_name%5B%5D=Service%3A%3AHAProxy&first_page_size=100)
+- > Links to queries for recent cookbook or helm MR's
+[Recent Chef HAProxy changes](https://gitlab.com/gitlab-com/gl-infra/chef-repo/-/merge_requests?scope=all&state=merged&label_name[]=Service%3A%3AHAProxy)
+- > How to properly roll back changes
 
 ## Troubleshooting
 
@@ -121,10 +126,6 @@ haproxy   2002      20 /usr/sbin/haproxy -Ws -f /etc/haproxy/haproxy.cfg -p /run
 ```
 kill -TERM 1827
 ```
-
-
-
-
 
 ## Possible Resolutions
 
