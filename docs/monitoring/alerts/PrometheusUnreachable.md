@@ -41,10 +41,31 @@ Refer [here](https://gitlab.com/gitlab-com/runbooks/-/blob/2cd0f564d4d4d2483e7ee
 
 ## Metrics
 
-- > Briefly explain the metric this alert is based on and link to the metrics catalogue. What unit is it measured in? (e.g., CPU usage in percentage, request latency in milliseconds)
-- > Explain the reasoning behind the chosen threshold value for triggering the alert. Is it based on historical data, best practices, or capacity planning?
-- > Describe the expected behavior of the metric under normal conditions. This helps identify situations where the alert might be falsely firing.
-- > Add screenshots of what a dashboard will look like when this alert is firing and when it recovers
+- #### Briefly explain the metric this alert is based on and link to the metrics catalogue. What unit is it measured in? (e.g., CPU usage in percentage, request latency in milliseconds)
+
+- #### Explain the reasoning behind the chosen threshold value for triggering the alert. Is it based on historical data, best practices, or capacity planning?
+
+- #### Describe the expected behavior of the metric under normal conditions. This helps identify situations where the alert might be falsely firing.
+
+  - On firing the below query under normal conditions in the prometheus dashboard [here](https://prometheus.ops.gitlab.net/graph?g0.expr=avg_over_time(up%7Bjob%3D~%22prometheus.*%22%7D%5B5m%5D)%20*%20100%20&g0.tab=0&g0.stacked=0&g0.show_exemplars=0&g0.range_input=1h)
+
+    `avg_over_time(up{job=~"prometheus.*"}[5m]) * 100 `
+
+    It should ideally come out to be a flat line ( at 100 ) like below , the above query calculates the average availability percentage of Prometheus jobs over the last 5 minutes
+
+    ![Ideal](ideal.png)
+
+- #### Add screenshots of what a dashboard will look like when this alert is firing and when it recovers
+
+  - In case the alert is firing you will most probably see a dip in the availability percentage , a good example of how it might
+    look like is  below , this has been generated in the prometheus dashboard using the below query
+
+    `avg_over_time(up{job=~"prometheus.*"}[5m]) * 100 < 50`
+
+    ![Recovery](recovery.png)
+
+    The above screenshot depicts how the availability fell below 100 but then after sometime how it recovered by itself.
+
 - > Are there any specific visuals or messages one should look for in the screenshots?
 
 ## Alert Behavior
