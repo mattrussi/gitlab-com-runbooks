@@ -401,6 +401,13 @@ teams:
   engagement_policy:  # Link to doc that talks about engagement and escalation policy
   oncall_schedule:    # Link to pagerduty oncall schedule
 
+- name: knowledge
+  product_stage_group: knowledge
+  slack_error_budget_channel:
+  - g_knowledge
+  - s_plan
+  send_error_budget_weekly_to_slack: true
+
 
 # Infrastructure Reliability
 
