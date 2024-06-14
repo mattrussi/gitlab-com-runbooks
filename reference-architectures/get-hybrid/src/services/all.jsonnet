@@ -8,6 +8,7 @@ local all =
     import 'registry.jsonnet',
     import 'sidekiq.jsonnet',
     import 'webservice.jsonnet',
+    import 'kube.jsonnet',
   ] + (
     if gitlabMetricsConfig.options.elasticacheMonitoring then
       [import 'aws-elasticache.jsonnet']

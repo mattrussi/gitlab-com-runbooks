@@ -247,28 +247,6 @@
       },
       "title": "Kube Persistent Volume Claim inode Utilisation"
     },
-    "kube_pool_cpu": {
-      "appliesTo": [
-        "sidekiq",
-        "webservice"
-      ],
-      "capacityPlanning": {
-        "changepoints_count": 25,
-        "forecast_days": 90,
-        "historical_days": 365,
-        "strategy": "quantile95_1h"
-      },
-      "description": "This resource measures average CPU utilization across an all cores in the node pool for\na service fleet.\n\nIf it is becoming saturated, it may indicate that the fleet needs horizontal scaling.\n",
-      "horizontallyScalable": true,
-      "raw_query": "1 - avg by () (\n  rate(node_cpu_seconds_total:labeled{mode=\"idle\", %(selector)s}[5m])\n)\n",
-      "severity": "s3",
-      "slos": {
-        "alertTriggerDuration": "5m",
-        "hard": 0.9,
-        "soft": 0.8
-      },
-      "title": "Average Node Pool CPU Utilization"
-    },
     "memory": {
       "appliesTo": [
         "gitaly",
@@ -312,6 +290,27 @@
         "soft": 0.9
       },
       "title": "Memory Utilization per Node"
+    },
+    "node_group_cpu": {
+      "appliesTo": [
+        "kube"
+      ],
+      "capacityPlanning": {
+        "changepoints_count": 25,
+        "forecast_days": 90,
+        "historical_days": 365,
+        "strategy": "quantile95_1h"
+      },
+      "description": "This resource measures average CPU utilization across an all cores in a node group\n\nIf it is becoming saturated, it may indicate that the node group needs resizing.\n",
+      "horizontallyScalable": true,
+      "raw_query": "1 - avg by () (\n  rate(node_cpu_seconds_total{mode=\"idle\", type=~\".*pool\"}[5m])\n)\n",
+      "severity": "s3",
+      "slos": {
+        "alertTriggerDuration": "5m",
+        "hard": 0.9,
+        "soft": 0.8
+      },
+      "title": "Average Node Pool CPU Utilization"
     },
     "node_schedstat_waiting": {
       "appliesTo": [
@@ -548,16 +547,16 @@
           "name": "kube_persistent_volume_claim_inodes",
           "url": ""
         },
-        "kube_pool_cpu": {
-          "name": "kube_pool_cpu",
-          "url": ""
-        },
         "memory": {
           "name": "memory",
           "url": ""
         },
         "memory_redis_cache": {
           "name": "memory_redis_cache",
+          "url": ""
+        },
+        "node_group_cpu": {
+          "name": "node_group_cpu",
           "url": ""
         },
         "node_schedstat_waiting": {
@@ -646,16 +645,16 @@
           "name": "kube_persistent_volume_claim_inodes",
           "url": ""
         },
-        "kube_pool_cpu": {
-          "name": "kube_pool_cpu",
-          "url": ""
-        },
         "memory": {
           "name": "memory",
           "url": ""
         },
         "memory_redis_cache": {
           "name": "memory_redis_cache",
+          "url": ""
+        },
+        "node_group_cpu": {
+          "name": "node_group_cpu",
           "url": ""
         },
         "node_schedstat_waiting": {
@@ -744,16 +743,16 @@
           "name": "kube_persistent_volume_claim_inodes",
           "url": ""
         },
-        "kube_pool_cpu": {
-          "name": "kube_pool_cpu",
-          "url": ""
-        },
         "memory": {
           "name": "memory",
           "url": ""
         },
         "memory_redis_cache": {
           "name": "memory_redis_cache",
+          "url": ""
+        },
+        "node_group_cpu": {
+          "name": "node_group_cpu",
           "url": ""
         },
         "node_schedstat_waiting": {
@@ -842,16 +841,16 @@
           "name": "kube_persistent_volume_claim_inodes",
           "url": ""
         },
-        "kube_pool_cpu": {
-          "name": "kube_pool_cpu",
-          "url": ""
-        },
         "memory": {
           "name": "memory",
           "url": ""
         },
         "memory_redis_cache": {
           "name": "memory_redis_cache",
+          "url": ""
+        },
+        "node_group_cpu": {
+          "name": "node_group_cpu",
           "url": ""
         },
         "node_schedstat_waiting": {
@@ -940,16 +939,16 @@
           "name": "kube_persistent_volume_claim_inodes",
           "url": ""
         },
-        "kube_pool_cpu": {
-          "name": "kube_pool_cpu",
-          "url": ""
-        },
         "memory": {
           "name": "memory",
           "url": ""
         },
         "memory_redis_cache": {
           "name": "memory_redis_cache",
+          "url": ""
+        },
+        "node_group_cpu": {
+          "name": "node_group_cpu",
           "url": ""
         },
         "node_schedstat_waiting": {
@@ -1038,16 +1037,16 @@
           "name": "kube_persistent_volume_claim_inodes",
           "url": ""
         },
-        "kube_pool_cpu": {
-          "name": "kube_pool_cpu",
-          "url": ""
-        },
         "memory": {
           "name": "memory",
           "url": ""
         },
         "memory_redis_cache": {
           "name": "memory_redis_cache",
+          "url": ""
+        },
+        "node_group_cpu": {
+          "name": "node_group_cpu",
           "url": ""
         },
         "node_schedstat_waiting": {
@@ -1136,16 +1135,16 @@
           "name": "kube_persistent_volume_claim_inodes",
           "url": ""
         },
-        "kube_pool_cpu": {
-          "name": "kube_pool_cpu",
-          "url": ""
-        },
         "memory": {
           "name": "memory",
           "url": ""
         },
         "memory_redis_cache": {
           "name": "memory_redis_cache",
+          "url": ""
+        },
+        "node_group_cpu": {
+          "name": "node_group_cpu",
           "url": ""
         },
         "node_schedstat_waiting": {
@@ -1234,16 +1233,16 @@
           "name": "kube_persistent_volume_claim_inodes",
           "url": ""
         },
-        "kube_pool_cpu": {
-          "name": "kube_pool_cpu",
-          "url": ""
-        },
         "memory": {
           "name": "memory",
           "url": ""
         },
         "memory_redis_cache": {
           "name": "memory_redis_cache",
+          "url": ""
+        },
+        "node_group_cpu": {
+          "name": "node_group_cpu",
           "url": ""
         },
         "node_schedstat_waiting": {
@@ -1332,16 +1331,16 @@
           "name": "kube_persistent_volume_claim_inodes",
           "url": ""
         },
-        "kube_pool_cpu": {
-          "name": "kube_pool_cpu",
-          "url": ""
-        },
         "memory": {
           "name": "memory",
           "url": ""
         },
         "memory_redis_cache": {
           "name": "memory_redis_cache",
+          "url": ""
+        },
+        "node_group_cpu": {
+          "name": "node_group_cpu",
           "url": ""
         },
         "node_schedstat_waiting": {
@@ -1430,16 +1429,16 @@
           "name": "kube_persistent_volume_claim_inodes",
           "url": ""
         },
-        "kube_pool_cpu": {
-          "name": "kube_pool_cpu",
-          "url": ""
-        },
         "memory": {
           "name": "memory",
           "url": ""
         },
         "memory_redis_cache": {
           "name": "memory_redis_cache",
+          "url": ""
+        },
+        "node_group_cpu": {
+          "name": "node_group_cpu",
           "url": ""
         },
         "node_schedstat_waiting": {
