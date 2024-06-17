@@ -14,7 +14,7 @@ local resourceSaturationPoint = (import 'servicemetrics/resource_saturation_poin
 
       If it is becoming saturated, it may indicate that the node group needs resizing.
     |||,
-    grafana_dashboard_uid: 'sat_kube_pool_cpu',
+    grafana_dashboard_uid: 'sat_node_group_cpu',
     resourceLabels: [],
     burnRatePeriod: '5m',
     query: |||
