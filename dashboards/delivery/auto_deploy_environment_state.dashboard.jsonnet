@@ -1,5 +1,6 @@
 local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
 local prometheus = grafana.prometheus;
+local promQuery = import 'grafana/prom_query.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
 local basic = import 'grafana/basic.libsonnet';
 local row = grafana.row;
@@ -20,16 +21,19 @@ basic.dashboard(
 )
 
 .addPanels(layout.grid([
-  statPanel.new(
-    'Production awaiting promotion',
+  basic.statPanel(
+    panelTitle='',
+    title='Production awaiting promotion',
     description='Percentage of time of the selected time range that production is ready to accept a new deployment, and there is a package available for promotion.',
     decimals=1,
     unit='percentunit',
     thresholdsMode='percentage',
     reducerFunction='mean',
+    color='',
+    query='sum without (pod,instance) (delivery_auto_deploy_environment_state{target_env="gprd", target_stage="main",env_state="awaiting_promotion"})',
   )
   .addTarget(
-    prometheus.target(
+    promQuery.target(
       'sum without (pod,instance) (delivery_auto_deploy_environment_state{target_env="gprd", target_stage="main",env_state="awaiting_promotion"})',
       legendFormat=''
     ),
@@ -44,14 +48,18 @@ basic.dashboard(
         value: 0
     },
   ]),
-  statPanel.new(
-    'Staging awaiting promotion',
+  basic.statPanel(
+    panelTitle='',
+    title='Staging awaiting promotion',
     description='Percentage of time of the selected time range that staging is ready to accept a new deployment, and there is a package available for promotion.',
     unit='percentunit',
     thresholdsMode='percentage',
+    reducerFunction='mean',
+    color='',
+    query='sum without (pod,instance) (delivery_auto_deploy_environment_state{target_env="gstg", target_stage="main",env_state="awaiting_promotion"})',
   )
   .addTarget(
-    prometheus.target(
+    promQuery.target(
       'sum without (pod,instance) (delivery_auto_deploy_environment_state{target_env="gstg", target_stage="main",env_state="awaiting_promotion"})',
       legendFormat=''
     ),
@@ -66,14 +74,18 @@ basic.dashboard(
         value: 0
     },
   ]),
-  statPanel.new(
-    'Production canary ready to accept new packages',
+  basic.statPanel(
+    panelTitle='',
+    title='Production canary ready to accept new packages',
     description='Percentage of time of the selected time range where production-canary was idle and ready to accept a new deployment.',
     unit='percentunit',
     thresholdsMode='percentage',
+    reducerFunction='mean',
+    color='',
+    query='sum without (pod,instance) (delivery_auto_deploy_environment_state{target_env="gprd", target_stage="cny",env_state="ready"})',
   )
   .addTarget(
-    prometheus.target(
+    promQuery.target(
       'sum without (pod,instance) (delivery_auto_deploy_environment_state{target_env="gprd", target_stage="cny",env_state="ready"})',
       legendFormat=''
     ),
@@ -88,14 +100,18 @@ basic.dashboard(
         value: 0
     },
   ]),
-  statPanel.new(
-    'Staging canary ready to accept new packages',
+  basic.statPanel(
+    panelTitle='',
+    title='Staging canary ready to accept new packages',
     description='Percentage of time of the selected time range where staging-canary was idle and ready to accept a new deployment.',
     unit='percentunit',
     thresholdsMode='percentage',
+    reducerFunction='mean',
+    color='',
+    query='sum without (pod,instance) (delivery_auto_deploy_environment_state{target_env="gstg", target_stage="cny",env_state="ready"})',
   )
   .addTarget(
-    prometheus.target(
+    promQuery.target(
       'sum without (pod,instance) (delivery_auto_deploy_environment_state{target_env="gstg", target_stage="cny",env_state="ready"})',
       legendFormat=''
     ),
@@ -110,14 +126,18 @@ basic.dashboard(
         value: 0
     },
   ]),
-  statPanel.new(
-    'Production canary baking time',
+  basic.statPanel(
+    panelTitle='',
+    title='Production canary baking time',
     description='Percentage of time in the selected time range that production canary is baking a package.',
     unit='percentunit',
     thresholdsMode='percentage',
+    reducerFunction='mean',
+    color='',
+    query='sum without (pod,instance) (delivery_auto_deploy_environment_state{target_env="gprd", target_stage="cny",env_state="baking_time"})',
   )
   .addTarget(
-    prometheus.target(
+    promQuery.target(
       'sum without (pod,instance) (delivery_auto_deploy_environment_state{target_env="gprd", target_stage="cny",env_state="baking_time"})',
       legendFormat=''
     ),
