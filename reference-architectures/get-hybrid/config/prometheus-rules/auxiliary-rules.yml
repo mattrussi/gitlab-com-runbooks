@@ -736,8 +736,8 @@ groups:
 
         If it is becoming saturated, it may indicate that the node group needs resizing.
 
-      grafana_dashboard_id: alerts-sat_kube_pool_cpu
-      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_kube_pool_cpu?from=now-6h/m&to=now-1m/m&var-type={{
+      grafana_dashboard_id: alerts-sat_node_group_cpu
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_node_group_cpu?from=now-6h/m&to=now-1m/m&var-type={{
         $labels.type }}
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2284482674"

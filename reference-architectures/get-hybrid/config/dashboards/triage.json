@@ -7468,7 +7468,7 @@
         },
         {
           "title": "kube Service | node_group_cpu resource Dashboard",
-          "url": "https://dashboards.gitlab.net/d/alerts-sat_kube_pool_cpu/?var-environment=gprd\u0026var-type=kube\u0026var-stage=main\u0026var-component=node_group_cpu"
+          "url": "https://dashboards.gitlab.net/d/alerts-sat_node_group_cpu/?var-environment=gprd\u0026var-type=kube\u0026var-stage=main\u0026var-component=node_group_cpu"
         }
       ],
       "nullPointMode": "null",
