@@ -25,7 +25,7 @@ groups:
         At least 10% of chef-runs are failing for the {{ $labels.env }} environment, this likely points to a configuration
         error. Check the syslog of the failing hosts to see the reasons
       grafana_dashboard_id: "000000231/chef-client"
-      runbook: docs/config_management/chef-troubleshooting.md
+      runbook: docs/config_management/alerts/ChefClientErrorCritical.md
       title: Chef client failures have reached critical levels
   - alert: ChefClientStale
     expr: (time() - chef_client_last_run_timestamp_seconds{env="gstg"} > 5 * 3600) and on (instance) (chef_client_enabled == 1)
