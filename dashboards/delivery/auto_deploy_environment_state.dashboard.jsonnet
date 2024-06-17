@@ -26,6 +26,7 @@ basic.dashboard(
     decimals=1,
     unit='percentunit',
     thresholdsMode='percentage',
+    reducerFunction='mean',
   )
   .addTarget(
     prometheus.target(
