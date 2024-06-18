@@ -66,6 +66,8 @@ metricsCatalog.serviceDefinition({
       toolingLinks: [
         toolingLinks.kibana(title='Elasticsearch', index='search', includeMatchersForPrometheusSelector=false),
       ],
+
+      severity: 's3',
     },
   } + sliLibrary.get('global_search_indexing').generateServiceLevelIndicator({}, {
     serviceAggregation: false,  // Don't add this to the request rate of the service
