@@ -128,6 +128,62 @@ groups:
       sum by (env,environment,stage,region) (
         gitlab_regional_sli_apdex:weight:score_5m{component="imagescaler",env="gstg",monitor="global",tier="sv",type="web"} offset 30s
       )
+  - record: gitlab_regional_sli_ops:rate_5m
+    labels:
+      component: logins
+      monitor: global
+      tier: sv
+      type: web
+    expr: |
+      sum by (env,environment,stage,region) (
+        sli_aggregations:gitlab_sli_rails_request_total:rate_5m{endpoint_id!~".*#failure",endpoint_id=~".*OmniauthCallbacksController.*|SessionsController#create",env="gstg"} offset 30s
+      )
+  - record: gitlab_regional_sli_errors:rate_5m
+    labels:
+      component: logins
+      monitor: global
+      tier: sv
+      type: web
+    expr: |
+      (
+        sum by (env,environment,stage,region) (
+          sli_aggregations:gitlab_sli_rails_request_error_total:rate_5m{endpoint_id=~".*OmniauthCallbacksController.*|SessionsController#create",env="gstg"} offset 30s
+        )
+      )
+      or
+      (
+        0 * group by(env,environment,stage,region) (
+          gitlab_regional_sli_ops:rate_5m{component="logins",env="gstg",monitor="global",tier="sv",type="web"}
+        )
+      )
+  - record: gitlab_regional_sli_errors:ratio_5m
+    labels:
+      component: logins
+      monitor: global
+      tier: sv
+      type: web
+    expr: |
+      sum by (env,environment,stage,region) (
+        gitlab_regional_sli_errors:rate_5m{component="logins",env="gstg",monitor="global",tier="sv",type="web"} offset 30s
+      )
+      /
+      sum by (env,environment,stage,region) (
+        gitlab_regional_sli_ops:rate_5m{component="logins",env="gstg",monitor="global",tier="sv",type="web"} offset 30s
+      )
+  - record: gitlab_regional_sli_apdex:ratio_5m
+    labels:
+      component: logins
+      monitor: global
+      tier: sv
+      type: web
+    expr: |
+      sum by (env,environment,stage,region) (
+        gitlab_regional_sli_apdex:success:rate_5m{component="logins",env="gstg",monitor="global",tier="sv",type="web"} offset 30s
+      )
+      /
+      sum by (env,environment,stage,region) (
+        gitlab_regional_sli_apdex:weight:score_5m{component="logins",env="gstg",monitor="global",tier="sv",type="web"} offset 30s
+      )
   - record: gitlab_regional_sli_apdex:success:rate_5m
     labels:
       component: rails_request
@@ -415,6 +471,62 @@ groups:
       sum by (env,environment,stage,region) (
         gitlab_regional_sli_apdex:weight:score_30m{component="imagescaler",env="gstg",monitor="global",tier="sv",type="web"} offset 30s
       )
+  - record: gitlab_regional_sli_ops:rate_30m
+    labels:
+      component: logins
+      monitor: global
+      tier: sv
+      type: web
+    expr: |
+      sum by (env,environment,stage,region) (
+        sli_aggregations:gitlab_sli_rails_request_total:rate_30m{endpoint_id!~".*#failure",endpoint_id=~".*OmniauthCallbacksController.*|SessionsController#create",env="gstg"} offset 30s
+      )
+  - record: gitlab_regional_sli_errors:rate_30m
+    labels:
+      component: logins
+      monitor: global
+      tier: sv
+      type: web
+    expr: |
+      (
+        sum by (env,environment,stage,region) (
+          sli_aggregations:gitlab_sli_rails_request_error_total:rate_30m{endpoint_id=~".*OmniauthCallbacksController.*|SessionsController#create",env="gstg"} offset 30s
+        )
+      )
+      or
+      (
+        0 * group by(env,environment,stage,region) (
+          gitlab_regional_sli_ops:rate_30m{component="logins",env="gstg",monitor="global",tier="sv",type="web"}
+        )
+      )
+  - record: gitlab_regional_sli_errors:ratio_30m
+    labels:
+      component: logins
+      monitor: global
+      tier: sv
+      type: web
+    expr: |
+      sum by (env,environment,stage,region) (
+        gitlab_regional_sli_errors:rate_30m{component="logins",env="gstg",monitor="global",tier="sv",type="web"} offset 30s
+      )
+      /
+      sum by (env,environment,stage,region) (
+        gitlab_regional_sli_ops:rate_30m{component="logins",env="gstg",monitor="global",tier="sv",type="web"} offset 30s
+      )
+  - record: gitlab_regional_sli_apdex:ratio_30m
+    labels:
+      component: logins
+      monitor: global
+      tier: sv
+      type: web
+    expr: |
+      sum by (env,environment,stage,region) (
+        gitlab_regional_sli_apdex:success:rate_30m{component="logins",env="gstg",monitor="global",tier="sv",type="web"} offset 30s
+      )
+      /
+      sum by (env,environment,stage,region) (
+        gitlab_regional_sli_apdex:weight:score_30m{component="logins",env="gstg",monitor="global",tier="sv",type="web"} offset 30s
+      )
   - record: gitlab_regional_sli_apdex:success:rate_30m
     labels:
       component: rails_request
@@ -701,6 +813,62 @@ groups:
       /
       sum by (env,environment,stage,region) (
         gitlab_regional_sli_apdex:weight:score_1h{component="imagescaler",env="gstg",monitor="global",tier="sv",type="web"} offset 30s
+      )
+  - record: gitlab_regional_sli_ops:rate_1h
+    labels:
+      component: logins
+      monitor: global
+      tier: sv
+      type: web
+    expr: |
+      sum by (env,environment,stage,region) (
+        sli_aggregations:gitlab_sli_rails_request_total:rate_1h{endpoint_id!~".*#failure",endpoint_id=~".*OmniauthCallbacksController.*|SessionsController#create",env="gstg"} offset 30s
+      )
+  - record: gitlab_regional_sli_errors:rate_1h
+    labels:
+      component: logins
+      monitor: global
+      tier: sv
+      type: web
+    expr: |
+      (
+        sum by (env,environment,stage,region) (
+          sli_aggregations:gitlab_sli_rails_request_error_total:rate_1h{endpoint_id=~".*OmniauthCallbacksController.*|SessionsController#create",env="gstg"} offset 30s
+        )
+      )
+      or
+      (
+        0 * group by(env,environment,stage,region) (
+          gitlab_regional_sli_ops:rate_1h{component="logins",env="gstg",monitor="global",tier="sv",type="web"}
+        )
+      )
+  - record: gitlab_regional_sli_errors:ratio_1h
+    labels:
+      component: logins
+      monitor: global
+      tier: sv
+      type: web
+    expr: |
+      sum by (env,environment,stage,region) (
+        gitlab_regional_sli_errors:rate_1h{component="logins",env="gstg",monitor="global",tier="sv",type="web"} offset 30s
+      )
+      /
+      sum by (env,environment,stage,region) (
+        gitlab_regional_sli_ops:rate_1h{component="logins",env="gstg",monitor="global",tier="sv",type="web"} offset 30s
+      )
+  - record: gitlab_regional_sli_apdex:ratio_1h
+    labels:
+      component: logins
+      monitor: global
+      tier: sv
+      type: web
+    expr: |
+      sum by (env,environment,stage,region) (
+        gitlab_regional_sli_apdex:success:rate_1h{component="logins",env="gstg",monitor="global",tier="sv",type="web"} offset 30s
+      )
+      /
+      sum by (env,environment,stage,region) (
+        gitlab_regional_sli_apdex:weight:score_1h{component="logins",env="gstg",monitor="global",tier="sv",type="web"} offset 30s
       )
   - record: gitlab_regional_sli_apdex:success:rate_1h
     labels:
@@ -1003,6 +1171,74 @@ groups:
       )
   - record: gitlab_regional_sli_apdex:success:rate_6h
     labels:
+      component: logins
+      monitor: global
+      tier: sv
+      type: web
+    expr: |
+      sum by (env,environment,stage,region) (
+        avg_over_time(gitlab_regional_sli_apdex:success:rate_1h{component="logins",env="gstg",monitor="global",tier="sv",type="web"}[6h] offset 30s)
+      )
+  - record: gitlab_regional_sli_apdex:weight:score_6h
+    labels:
+      component: logins
+      monitor: global
+      tier: sv
+      type: web
+    expr: |
+      sum by (env,environment,stage,region) (
+        avg_over_time(gitlab_regional_sli_apdex:weight:score_1h{component="logins",env="gstg",monitor="global",tier="sv",type="web"}[6h] offset 30s)
+      )
+  - record: gitlab_regional_sli_ops:rate_6h
+    labels:
+      component: logins
+      monitor: global
+      tier: sv
+      type: web
+    expr: |
+      sum by (env,environment,stage,region) (
+        avg_over_time(gitlab_regional_sli_ops:rate_1h{component="logins",env="gstg",monitor="global",tier="sv",type="web"}[6h] offset 30s)
+      )
+  - record: gitlab_regional_sli_errors:rate_6h
+    labels:
+      component: logins
+      monitor: global
+      tier: sv
+      type: web
+    expr: |
+      sum by (env,environment,stage,region) (
+        avg_over_time(gitlab_regional_sli_errors:rate_1h{component="logins",env="gstg",monitor="global",tier="sv",type="web"}[6h] offset 30s)
+      )
+  - record: gitlab_regional_sli_errors:ratio_6h
+    labels:
+      component: logins
+      monitor: global
+      tier: sv
+      type: web
+    expr: |
+      sum by (env,environment,stage,region) (
+        gitlab_regional_sli_errors:rate_6h{component="logins",env="gstg",monitor="global",tier="sv",type="web"} offset 30s
+      )
+      /
+      sum by (env,environment,stage,region) (
+        gitlab_regional_sli_ops:rate_6h{component="logins",env="gstg",monitor="global",tier="sv",type="web"} offset 30s
+      )
+  - record: gitlab_regional_sli_apdex:ratio_6h
+    labels:
+      component: logins
+      monitor: global
+      tier: sv
+      type: web
+    expr: |
+      sum by (env,environment,stage,region) (
+        gitlab_regional_sli_apdex:success:rate_6h{component="logins",env="gstg",monitor="global",tier="sv",type="web"} offset 30s
+      )
+      /
+      sum by (env,environment,stage,region) (
+        gitlab_regional_sli_apdex:weight:score_6h{component="logins",env="gstg",monitor="global",tier="sv",type="web"} offset 30s
+      )
+  - record: gitlab_regional_sli_apdex:success:rate_6h
+    labels:
       component: rails_request
       monitor: global
       tier: sv
@@ -1275,6 +1511,74 @@ groups:
       /
       sum by (env,environment,stage,region) (
         gitlab_regional_sli_apdex:weight:score_3d{component="imagescaler",env="gstg",monitor="global",tier="sv",type="web"} offset 30s
+      )
+  - record: gitlab_regional_sli_apdex:success:rate_3d
+    labels:
+      component: logins
+      monitor: global
+      tier: sv
+      type: web
+    expr: |
+      sum by (env,environment,stage,region) (
+        avg_over_time(gitlab_regional_sli_apdex:success:rate_1h{component="logins",env="gstg",monitor="global",tier="sv",type="web"}[3d] offset 30s)
+      )
+  - record: gitlab_regional_sli_apdex:weight:score_3d
+    labels:
+      component: logins
+      monitor: global
+      tier: sv
+      type: web
+    expr: |
+      sum by (env,environment,stage,region) (
+        avg_over_time(gitlab_regional_sli_apdex:weight:score_1h{component="logins",env="gstg",monitor="global",tier="sv",type="web"}[3d] offset 30s)
+      )
+  - record: gitlab_regional_sli_ops:rate_3d
+    labels:
+      component: logins
+      monitor: global
+      tier: sv
+      type: web
+    expr: |
+      sum by (env,environment,stage,region) (
+        avg_over_time(gitlab_regional_sli_ops:rate_1h{component="logins",env="gstg",monitor="global",tier="sv",type="web"}[3d] offset 30s)
+      )
+  - record: gitlab_regional_sli_errors:rate_3d
+    labels:
+      component: logins
+      monitor: global
+      tier: sv
+      type: web
+    expr: |
+      sum by (env,environment,stage,region) (
+        avg_over_time(gitlab_regional_sli_errors:rate_1h{component="logins",env="gstg",monitor="global",tier="sv",type="web"}[3d] offset 30s)
+      )
+  - record: gitlab_regional_sli_errors:ratio_3d
+    labels:
+      component: logins
+      monitor: global
+      tier: sv
+      type: web
+    expr: |
+      sum by (env,environment,stage,region) (
+        gitlab_regional_sli_errors:rate_3d{component="logins",env="gstg",monitor="global",tier="sv",type="web"} offset 30s
+      )
+      /
+      sum by (env,environment,stage,region) (
+        gitlab_regional_sli_ops:rate_3d{component="logins",env="gstg",monitor="global",tier="sv",type="web"} offset 30s
+      )
+  - record: gitlab_regional_sli_apdex:ratio_3d
+    labels:
+      component: logins
+      monitor: global
+      tier: sv
+      type: web
+    expr: |
+      sum by (env,environment,stage,region) (
+        gitlab_regional_sli_apdex:success:rate_3d{component="logins",env="gstg",monitor="global",tier="sv",type="web"} offset 30s
+      )
+      /
+      sum by (env,environment,stage,region) (
+        gitlab_regional_sli_apdex:weight:score_3d{component="logins",env="gstg",monitor="global",tier="sv",type="web"} offset 30s
       )
   - record: gitlab_regional_sli_apdex:success:rate_3d
     labels:

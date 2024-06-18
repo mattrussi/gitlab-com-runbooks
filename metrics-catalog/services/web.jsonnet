@@ -184,6 +184,35 @@ metricsCatalog.serviceDefinition({
         toolingLinks.kibana(title='Image Resizer', index='workhorse_imageresizer', type='web'),
       ],
     },
+
+    logins: {
+      monitoringThresholds+: {
+        errorRatio: 0.99,
+      },
+      severity: 's3',
+      serviceAggregation: false,
+      userImpacting: true,
+      featureCategory: 'system_access',
+      description: |||
+        Measures Logins as the number of successful Logins vs the number of initated attempts.
+
+        An alert on this SLI may indicate that users are unable to login to GitLab.
+      |||,
+
+      requestRate: rateMetric(
+        counter='gitlab_sli_rails_request_total',
+        selector={ endpoint_id: { re: '.*OmniauthCallbacksController.*|SessionsController#create', nre: '.*#failure' } },
+      ),
+
+      errorRate: rateMetric(
+        counter='gitlab_sli_rails_request_error_total',
+        selector={ endpoint_id: { re: '.*OmniauthCallbacksController.*|SessionsController#create' } },
+      ),
+
+      significantLabels: ['endpoint_id'],
+
+      toolingLinks: [],
+    },
   } + sliLibrary.get('rails_request').generateServiceLevelIndicator(railsSelector, {
     toolingLinks: [
       toolingLinks.kibana(title='Rails', index='rails'),
