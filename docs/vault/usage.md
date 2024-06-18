@@ -203,7 +203,7 @@ module "project_my-project" {
 
 ⚠️ Note: if your project doesn't exist yet in `infra-mgmt`, you will need to add and [import it](https://gitlab.com/gitlab-com/gl-infra/infra-mgmt/-/blob/main/CONTRIBUTING.md?ref_type=heads#how-to-addupdatedelete-projects) (example: <https://gitlab.com/gitlab-com/gl-infra/infra-mgmt/-/merge_requests/498>).
 
-There are additional attributes that you can set to allow access to more secrets paths and policies, see [the project module documentation](https://gitlab.com/gitlab-com/gl-infra/infra-mgmt/-/tree/main/modules/project#input_vault) to learn more about those.
+There are additional attributes that you can set to allow access to more secrets paths and policies, see [the project module documentation](https://ops.gitlab.net/gitlab-com/gl-infra/terraform-modules/gitlab/project#input_vault) to learn more about those.
 
 Terraform will then create 2 JWT roles in Vault named `<project-full-path>` for read-only access and `<project-full-path>-rw` for read/write access from protected branches/environments, along with their associated policies:
 
@@ -1203,13 +1203,14 @@ my-project:                         # GitLab project identifier, can be any name
         - my-roleset-baz
 ```
 
-Then in the Terraform configuration those files are used to compute sets of Vault policies for each projects in the local variables `local.gcp_impersonated_account_policies`, `local.gcp_static_account_policies` and `local.gcp_roleset_policies`, which can be used with the `vault.extra_readonly_policies` and `vault.extra_readwrite_policies` parameters of each GitLab project like so:
+Then in the Terraform configuration those files are used to compute sets of Vault policies for each projects in the local variables `local.gcp_impersonated_account_policies`, `local.gcp_static_account_policies` and `local.gcp_roleset_policies`, which can be used with the `vault.extra_readonly_policies` and `vault.extra_protected_policies` parameters of each GitLab project like so:
 
 ```terraform
 module "project_my-project" {
-  source = "../../modules/project"
+  source  = "../../modules/project"
+  version = "5.0.0"
 
-  path     = "my-project"
+  path = "my-project"
 
   [...]
 
@@ -1221,7 +1222,7 @@ module "project_my-project" {
       local.gcp_impersonated_account_policies.my-project.something,
       local.gcp_roleset_policies.my-project.something,
     )
-    extra_readwrite_policies = setunion(
+    extra_protected_policies = setunion(
       local.gcp_impersonated_account_policies.my-project.something,
       local.gcp_static_account_policies.my-project.something-else,
       local.gcp_roleset_policies.my-project.something,
@@ -1392,13 +1393,14 @@ my-project:                         # GitLab project identifier, can be any name
         - my-service-account
 ```
 
-Then in the Terraform configuration those files are used to compute sets of Vault policies for each cluster in the local variable `local.kubernetes_role_policies`, which can be used with the `vault.extra_readonly_policies` and `vault.extra_readwrite_policies` parameters of each GitLab project like so:
+Then in the Terraform configuration those files are used to compute sets of Vault policies for each cluster in the local variable `local.kubernetes_role_policies`, which can be used with the `vault.extra_readonly_policies` and `vault.extra_protected_policies` parameters of each GitLab project like so:
 
 ```terraform
 module "project_my-project" {
   source = "../../modules/project"
+  version = "5.0.0"
 
-  path     = "my-project"
+  path = "my-project"
 
   [...]
 
@@ -1409,7 +1411,7 @@ module "project_my-project" {
     extra_readonly_policies = setunion(
       local.kubernetes_role_policies.my-project.something,
     )
-    extra_readwrite_policies = setunion(
+    extra_protected_policies = setunion(
       local.kubernetes_role_policies.my-project.something-else,
     )
   }
