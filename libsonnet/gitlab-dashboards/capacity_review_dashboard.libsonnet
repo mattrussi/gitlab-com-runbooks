@@ -180,6 +180,7 @@ local dashboardsForService(
         time_to='now-1d/d',
         includeStandardEnvironmentAnnotations=false,
         includeEnvironmentTemplate=std.objectHas(environmentSelectorHash, 'environment'),
+        defaultDatasource=serviceInfo.defaultPrometheusDatasource
       )
       .addPanels(
         std.flattenArrays(

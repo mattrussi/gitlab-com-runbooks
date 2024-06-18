@@ -31,6 +31,7 @@ local dashboardForService(serviceType, serviceSLIsAggregationSet, componentSLIsA
   basic.dashboard(
     'Regional Detail',
     tags=['type:%(serviceType)s' % formatConfig, 'regional'],
+    defaultDatasource=metricsCatalogServiceInfo.defaultPrometheusDatasource
   )
   .addTemplate(templates.stage)
   .addPanels(

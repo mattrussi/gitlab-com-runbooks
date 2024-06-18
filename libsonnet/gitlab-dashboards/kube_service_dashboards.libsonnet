@@ -299,6 +299,7 @@ local dashboardsForService(
         'Kube Containers Detail',
         tags=[type, 'type:' + type, 'kube', 'kube detail'],
         includeEnvironmentTemplate=std.objectHas(environmentSelectorHash, 'environment'),
+        defaultDatasource=serviceInfo.defaultPrometheusDatasource
       )
       .addTemplateIf(std.objectHas(selector, 'stage'), templates.stage)
       .addPanels(
@@ -328,6 +329,7 @@ local dashboardsForService(
         'Kube Deployment Detail',
         tags=[type, 'type:' + type, 'kube', 'kube detail'],
         includeEnvironmentTemplate=std.objectHas(environmentSelectorHash, 'environment'),
+        defaultDatasource=serviceInfo.defaultPrometheusDatasource
       )
       .addTemplateIf(std.objectHas(selector, 'stage'), templates.stage)
       .addPanels(

@@ -1,5 +1,6 @@
 local config = import 'gitlab-metrics-config.libsonnet';
 local kubeLabelSelectors = import 'kube_label_selectors.libsonnet';
+local mimirHelpers = import 'mimir-helpers/mimir-helpers.libsonnet';
 local multiburnExpression = import 'mwmbr/expression.libsonnet';
 local maturityLevels = import 'service-maturity/levels.libsonnet';
 local serviceLevelIndicatorDefinition = import 'service_level_indicator_definition.libsonnet';
@@ -237,7 +238,7 @@ local serviceDefinition(service) =
         )
       ),
 
-    defaultPrometheusDatasource()::
+    defaultPrometheusDatasource:
       if service.defaultTenant != null then
         mimirHelpers.mimirDatasource(service.defaultTenant)
       else
