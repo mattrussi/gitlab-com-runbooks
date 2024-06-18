@@ -1,9 +1,9 @@
 local config = import 'gitlab-metrics-config.libsonnet';
 local kubeLabelSelectors = import 'kube_label_selectors.libsonnet';
-local mimirHelpers = import 'mimir-helpers/mimir-helpers.libsonnet';
 local multiburnExpression = import 'mwmbr/expression.libsonnet';
 local maturityLevels = import 'service-maturity/levels.libsonnet';
 local serviceLevelIndicatorDefinition = import 'service_level_indicator_definition.libsonnet';
+local mimirHelpers = import 'services/lib/mimir-helpers.libsonnet';
 local misc = import 'utils/misc.libsonnet';
 local objects = import 'utils/objects.libsonnet';
 local validator = import 'utils/validator.libsonnet';

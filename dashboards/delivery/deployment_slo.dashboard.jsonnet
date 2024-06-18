@@ -4,7 +4,7 @@ local layout = import 'grafana/layout.libsonnet';
 local prometheus = grafana.prometheus;
 local template = grafana.template;
 local graphPanel = grafana.graphPanel;
-local mimirHelper = import 'mimir-helpers/mimir-helpers.libsonnet';
+local mimirHelper = import 'services/lib/mimir-helpers.libsonnet';
 
 local sloQuery = |||
   sum(rate(delivery_deployment_duration_seconds_bucket{job="delivery-metrics",status="success",le="$target_slo"}[$__range]))

@@ -3,7 +3,7 @@ local basic = import 'grafana/basic.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
 local template = grafana.template;
-local mimirHelper = import 'mimir-helpers/mimir-helpers.libsonnet';
+local mimirHelper = import 'services/lib/mimir-helpers.libsonnet';
 
 local formatConfig = {
   selector: selectors.serializeHash({

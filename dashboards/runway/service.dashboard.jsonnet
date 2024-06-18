@@ -4,7 +4,7 @@ local layout = import 'grafana/layout.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
 local template = grafana.template;
 local commonAnnotations = import 'grafana/common_annotations.libsonnet';
-local mimirHelper = import 'mimir-helpers/mimir-helpers.libsonnet';
+local mimirHelper = import 'services/lib/mimir-helpers.libsonnet';
 
 // This dashboard currently shows both the `{{region}}` and `{{location}}` label.
 // We do this because in Thanos the `region` label on metrics gets overridden by

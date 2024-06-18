@@ -9,7 +9,7 @@ local k8sPodsCommon = import 'gitlab-dashboards/kubernetes_pods_common.libsonnet
 local promQuery = import 'grafana/prom_query.libsonnet';
 
 local env_cluster_ns = 'env=~"$environment", cluster="$cluster", namespace="$namespace"';
-local mimirHelper = import 'mimir-helpers/mimir-helpers.libsonnet';
+local mimirHelper = import 'services/lib/mimir-helpers.libsonnet';
 
 local generalGraphPanel(
   title,
