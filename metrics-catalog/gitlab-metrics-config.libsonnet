@@ -8,6 +8,7 @@ local rawServiceCatalog = import 'raw-catalog.jsonnet';
 local serviceCatalog = import 'service-catalog/service-catalog.libsonnet';
 local overridenStageGroupMapping = import 'stage-group-mapping-with-overrides.jsonnet';
 local objects = import 'utils/objects.libsonnet';
+local strings = import 'utils/strings.libsonnet';
 
 // Site-wide configuration options
 {
@@ -123,6 +124,7 @@ local objects = import 'utils/objects.libsonnet';
   },
 
   defaultMimirTenants: ['gitlab-gprd', 'gitlab-gstg'],
+  mimirTenants:: std.objectFields(self.separateMimirRecordingSelectors),
 
   recordingRuleRegistry: import 'servicemetrics/recording-rule-registry/unified-registry.libsonnet',
 

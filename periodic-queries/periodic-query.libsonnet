@@ -1,4 +1,4 @@
-local mimirHelpers = import 'mimir-helpers/mimir-helpers.libsonnet';
+local config = import 'gitlab-metrics-config.libsonnet';
 local validator = import 'utils/validator.libsonnet';
 
 local defaults = {
@@ -37,7 +37,7 @@ local validateQuery(definition) =
     type: validator.setMember(std.objectFields(paramsPerType)),
     // all fields in requestParams is passed on as request params when querying Prometheus
     requestParams: validator.object,
-    tenantId: validator.setMember(mimirHelpers.mimirTenants),
+    tenantId: validator.setMember(config.mimirTenants),
   });
   v.assertValid(definition);
 
