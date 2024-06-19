@@ -107,6 +107,11 @@ link to metrics catalogue [here](https://gitlab.com/gitlab-com/runbooks/-/blob/m
 - > Additional dashboards to check
 - > Useful scripts or commands
 
+It might be useful to check resource usage in DB hosts because saturation of that might cause these alerts in the first place
+Logging into the hosts and using the `top` command to check resource usage might be helpful
+
+![DB_HOST](db_host.png)
+
 ## Possible Resolutions
 
 - > Links to past incidents where this alert helped identify an issue with clear resolutions
