@@ -16,7 +16,7 @@ groups:
       grafana_dashboard_id: customersdot-main/customersdot-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/customersdot-main/customersdot-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_datasource_id: mimir-gitlab-gprd
+      grafana_datasource_id: mimir-fulfillment-platform
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1773645961"
       grafana_variables: environment,stage
@@ -35,18 +35,18 @@ groups:
     expr: |
       (
         (
-          gitlab_component_apdex:ratio_1h{component="customers_dot_requests",env="gprd",monitor="global",type="customersdot"}
+          gitlab_component_apdex:ratio_1h{component="customers_dot_requests",monitor="global",type="customersdot"}
           < (1 - 14.4 * 0.100000)
         )
         and
         (
-          gitlab_component_apdex:ratio_5m{component="customers_dot_requests",env="gprd",monitor="global",type="customersdot"}
+          gitlab_component_apdex:ratio_5m{component="customers_dot_requests",monitor="global",type="customersdot"}
           < (1 - 14.4 * 0.100000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="customers_dot_requests",env="gprd",monitor="global",type="customersdot"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="customers_dot_requests",monitor="global",type="customersdot"}) >= 1
       )
   - alert: CustomersdotServiceCustomersDotRequestsApdexSLOViolation
     for: 2m
@@ -60,7 +60,7 @@ groups:
       grafana_dashboard_id: customersdot-main/customersdot-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/customersdot-main/customersdot-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_datasource_id: mimir-gitlab-gprd
+      grafana_datasource_id: mimir-fulfillment-platform
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1773645961"
       grafana_variables: environment,stage
@@ -79,18 +79,18 @@ groups:
     expr: |
       (
         (
-          gitlab_component_apdex:ratio_6h{component="customers_dot_requests",env="gprd",monitor="global",type="customersdot"}
+          gitlab_component_apdex:ratio_6h{component="customers_dot_requests",monitor="global",type="customersdot"}
           < (1 - 6 * 0.100000)
         )
         and
         (
-          gitlab_component_apdex:ratio_30m{component="customers_dot_requests",env="gprd",monitor="global",type="customersdot"}
+          gitlab_component_apdex:ratio_30m{component="customers_dot_requests",monitor="global",type="customersdot"}
           < (1 - 6 * 0.100000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="customers_dot_requests",env="gprd",monitor="global",type="customersdot"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="customers_dot_requests",monitor="global",type="customersdot"}) >= 0.16667
       )
   - alert: CustomersdotServiceCustomersDotRequestsErrorSLOViolation
     for: 2m
@@ -104,7 +104,7 @@ groups:
       grafana_dashboard_id: customersdot-main/customersdot-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/customersdot-main/customersdot-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_datasource_id: mimir-gitlab-gprd
+      grafana_datasource_id: mimir-fulfillment-platform
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2871402489"
       grafana_variables: environment,stage
@@ -127,18 +127,18 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_1h{component="customers_dot_requests",env="gprd",monitor="global",type="customersdot"}
+          gitlab_component_errors:ratio_1h{component="customers_dot_requests",monitor="global",type="customersdot"}
           > (14.4 * 0.050000)
         )
         and
         (
-          gitlab_component_errors:ratio_5m{component="customers_dot_requests",env="gprd",monitor="global",type="customersdot"}
+          gitlab_component_errors:ratio_5m{component="customers_dot_requests",monitor="global",type="customersdot"}
           > (14.4 * 0.050000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="customers_dot_requests",env="gprd",monitor="global",type="customersdot"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="customers_dot_requests",monitor="global",type="customersdot"}) >= 1
       )
   - alert: CustomersdotServiceCustomersDotRequestsErrorSLOViolation
     for: 2m
@@ -152,7 +152,7 @@ groups:
       grafana_dashboard_id: customersdot-main/customersdot-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/customersdot-main/customersdot-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_datasource_id: mimir-gitlab-gprd
+      grafana_datasource_id: mimir-fulfillment-platform
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2871402489"
       grafana_variables: environment,stage
@@ -175,18 +175,18 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_6h{component="customers_dot_requests",env="gprd",monitor="global",type="customersdot"}
+          gitlab_component_errors:ratio_6h{component="customers_dot_requests",monitor="global",type="customersdot"}
           > (6 * 0.050000)
         )
         and
         (
-          gitlab_component_errors:ratio_30m{component="customers_dot_requests",env="gprd",monitor="global",type="customersdot"}
+          gitlab_component_errors:ratio_30m{component="customers_dot_requests",monitor="global",type="customersdot"}
           > (6 * 0.050000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="customers_dot_requests",env="gprd",monitor="global",type="customersdot"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="customers_dot_requests",monitor="global",type="customersdot"}) >= 0.16667
       )
   - alert: CustomersdotServiceCustomersDotRequestsTrafficCessation
     for: 5m
@@ -200,7 +200,7 @@ groups:
       grafana_dashboard_id: customersdot-main/customersdot-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/customersdot-main/customersdot-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_datasource_id: mimir-gitlab-gprd
+      grafana_datasource_id: mimir-fulfillment-platform
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3104934119"
       grafana_variables: environment,stage
@@ -220,9 +220,9 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_30m{component="customers_dot_requests",env="gprd",monitor="global",stage="main",type="customersdot"} == 0
+      gitlab_component_ops:rate_30m{component="customers_dot_requests",monitor="global",stage="main",type="customersdot"} == 0
       and
-      gitlab_component_ops:rate_30m{component="customers_dot_requests",env="gprd",monitor="global",stage="main",type="customersdot"} offset 1h >= 0.16666666666666666
+      gitlab_component_ops:rate_30m{component="customers_dot_requests",monitor="global",stage="main",type="customersdot"} offset 1h >= 0.16666666666666666
   - alert: CustomersdotServiceCustomersDotRequestsTrafficAbsent
     for: 30m
     annotations:
@@ -237,7 +237,7 @@ groups:
       grafana_dashboard_id: customersdot-main/customersdot-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/customersdot-main/customersdot-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_datasource_id: mimir-gitlab-gprd
+      grafana_datasource_id: mimir-fulfillment-platform
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3104934119"
       grafana_variables: environment,stage
@@ -257,9 +257,9 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_5m{component="customers_dot_requests",env="gprd",monitor="global",stage="main",type="customersdot"} offset 1h
+      gitlab_component_ops:rate_5m{component="customers_dot_requests",monitor="global",stage="main",type="customersdot"} offset 1h
       unless
-      gitlab_component_ops:rate_5m{component="customers_dot_requests",env="gprd",monitor="global",stage="main",type="customersdot"}
+      gitlab_component_ops:rate_5m{component="customers_dot_requests",monitor="global",stage="main",type="customersdot"}
   - alert: CustomersdotServiceCustomersDotSidekiqJobsApdexSLOViolation
     for: 2m
     annotations:
@@ -272,7 +272,7 @@ groups:
       grafana_dashboard_id: customersdot-main/customersdot-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/customersdot-main/customersdot-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_datasource_id: mimir-gitlab-gprd
+      grafana_datasource_id: mimir-fulfillment-platform
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2519680602"
       grafana_variables: environment,stage
@@ -291,18 +291,18 @@ groups:
     expr: |
       (
         (
-          gitlab_component_apdex:ratio_1h{component="customers_dot_sidekiq_jobs",env="gprd",monitor="global",type="customersdot"}
+          gitlab_component_apdex:ratio_1h{component="customers_dot_sidekiq_jobs",monitor="global",type="customersdot"}
           < (1 - 14.4 * 0.100000)
         )
         and
         (
-          gitlab_component_apdex:ratio_5m{component="customers_dot_sidekiq_jobs",env="gprd",monitor="global",type="customersdot"}
+          gitlab_component_apdex:ratio_5m{component="customers_dot_sidekiq_jobs",monitor="global",type="customersdot"}
           < (1 - 14.4 * 0.100000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="customers_dot_sidekiq_jobs",env="gprd",monitor="global",type="customersdot"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="customers_dot_sidekiq_jobs",monitor="global",type="customersdot"}) >= 1
       )
   - alert: CustomersdotServiceCustomersDotSidekiqJobsApdexSLOViolation
     for: 2m
@@ -316,7 +316,7 @@ groups:
       grafana_dashboard_id: customersdot-main/customersdot-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/customersdot-main/customersdot-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_datasource_id: mimir-gitlab-gprd
+      grafana_datasource_id: mimir-fulfillment-platform
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2519680602"
       grafana_variables: environment,stage
@@ -335,18 +335,18 @@ groups:
     expr: |
       (
         (
-          gitlab_component_apdex:ratio_6h{component="customers_dot_sidekiq_jobs",env="gprd",monitor="global",type="customersdot"}
+          gitlab_component_apdex:ratio_6h{component="customers_dot_sidekiq_jobs",monitor="global",type="customersdot"}
           < (1 - 6 * 0.100000)
         )
         and
         (
-          gitlab_component_apdex:ratio_30m{component="customers_dot_sidekiq_jobs",env="gprd",monitor="global",type="customersdot"}
+          gitlab_component_apdex:ratio_30m{component="customers_dot_sidekiq_jobs",monitor="global",type="customersdot"}
           < (1 - 6 * 0.100000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="customers_dot_sidekiq_jobs",env="gprd",monitor="global",type="customersdot"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="customers_dot_sidekiq_jobs",monitor="global",type="customersdot"}) >= 0.16667
       )
   - alert: CustomersdotServiceCustomersDotSidekiqJobsErrorSLOViolation
     for: 2m
@@ -360,7 +360,7 @@ groups:
       grafana_dashboard_id: customersdot-main/customersdot-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/customersdot-main/customersdot-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_datasource_id: mimir-gitlab-gprd
+      grafana_datasource_id: mimir-fulfillment-platform
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "889369649"
       grafana_variables: environment,stage
@@ -383,18 +383,18 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_1h{component="customers_dot_sidekiq_jobs",env="gprd",monitor="global",type="customersdot"}
+          gitlab_component_errors:ratio_1h{component="customers_dot_sidekiq_jobs",monitor="global",type="customersdot"}
           > (14.4 * 0.050000)
         )
         and
         (
-          gitlab_component_errors:ratio_5m{component="customers_dot_sidekiq_jobs",env="gprd",monitor="global",type="customersdot"}
+          gitlab_component_errors:ratio_5m{component="customers_dot_sidekiq_jobs",monitor="global",type="customersdot"}
           > (14.4 * 0.050000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="customers_dot_sidekiq_jobs",env="gprd",monitor="global",type="customersdot"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="customers_dot_sidekiq_jobs",monitor="global",type="customersdot"}) >= 1
       )
   - alert: CustomersdotServiceCustomersDotSidekiqJobsErrorSLOViolation
     for: 2m
@@ -408,7 +408,7 @@ groups:
       grafana_dashboard_id: customersdot-main/customersdot-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/customersdot-main/customersdot-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_datasource_id: mimir-gitlab-gprd
+      grafana_datasource_id: mimir-fulfillment-platform
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "889369649"
       grafana_variables: environment,stage
@@ -431,18 +431,18 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_6h{component="customers_dot_sidekiq_jobs",env="gprd",monitor="global",type="customersdot"}
+          gitlab_component_errors:ratio_6h{component="customers_dot_sidekiq_jobs",monitor="global",type="customersdot"}
           > (6 * 0.050000)
         )
         and
         (
-          gitlab_component_errors:ratio_30m{component="customers_dot_sidekiq_jobs",env="gprd",monitor="global",type="customersdot"}
+          gitlab_component_errors:ratio_30m{component="customers_dot_sidekiq_jobs",monitor="global",type="customersdot"}
           > (6 * 0.050000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="customers_dot_sidekiq_jobs",env="gprd",monitor="global",type="customersdot"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="customers_dot_sidekiq_jobs",monitor="global",type="customersdot"}) >= 0.16667
       )
   - alert: CustomersdotServiceCustomersDotSidekiqJobsTrafficCessation
     for: 5m
@@ -456,7 +456,7 @@ groups:
       grafana_dashboard_id: customersdot-main/customersdot-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/customersdot-main/customersdot-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_datasource_id: mimir-gitlab-gprd
+      grafana_datasource_id: mimir-fulfillment-platform
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "809412225"
       grafana_variables: environment,stage
@@ -476,9 +476,9 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_30m{component="customers_dot_sidekiq_jobs",env="gprd",monitor="global",stage="main",type="customersdot"} == 0
+      gitlab_component_ops:rate_30m{component="customers_dot_sidekiq_jobs",monitor="global",stage="main",type="customersdot"} == 0
       and
-      gitlab_component_ops:rate_30m{component="customers_dot_sidekiq_jobs",env="gprd",monitor="global",stage="main",type="customersdot"} offset 1h >= 0.16666666666666666
+      gitlab_component_ops:rate_30m{component="customers_dot_sidekiq_jobs",monitor="global",stage="main",type="customersdot"} offset 1h >= 0.16666666666666666
   - alert: CustomersdotServiceCustomersDotSidekiqJobsTrafficAbsent
     for: 30m
     annotations:
@@ -493,7 +493,7 @@ groups:
       grafana_dashboard_id: customersdot-main/customersdot-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/customersdot-main/customersdot-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_datasource_id: mimir-gitlab-gprd
+      grafana_datasource_id: mimir-fulfillment-platform
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "809412225"
       grafana_variables: environment,stage
@@ -513,6 +513,6 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_5m{component="customers_dot_sidekiq_jobs",env="gprd",monitor="global",stage="main",type="customersdot"} offset 1h
+      gitlab_component_ops:rate_5m{component="customers_dot_sidekiq_jobs",monitor="global",stage="main",type="customersdot"} offset 1h
       unless
-      gitlab_component_ops:rate_5m{component="customers_dot_sidekiq_jobs",env="gprd",monitor="global",stage="main",type="customersdot"}
+      gitlab_component_ops:rate_5m{component="customers_dot_sidekiq_jobs",monitor="global",stage="main",type="customersdot"}

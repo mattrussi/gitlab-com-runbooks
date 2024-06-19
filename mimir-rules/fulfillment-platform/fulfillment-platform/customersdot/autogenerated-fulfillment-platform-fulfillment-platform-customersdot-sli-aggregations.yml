@@ -7,22 +7,22 @@ groups:
   - record: sli_aggregations:gitlab_sli_customers_dot_requests_apdex_success_total:rate_5m
     expr: |
       sum by (component,endpoint_id,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_customers_dot_requests_apdex_success_total{env="gstg",type=~"customersdot"}[5m] offset 30s)
+        rate(gitlab_sli_customers_dot_requests_apdex_success_total{type=~"customersdot"}[5m] offset 30s)
       )
   - record: sli_aggregations:gitlab_sli_customers_dot_requests_apdex_total:rate_5m
     expr: |
       sum by (component,endpoint_id,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_customers_dot_requests_apdex_total{env="gstg",type=~"customersdot"}[5m] offset 30s)
+        rate(gitlab_sli_customers_dot_requests_apdex_total{type=~"customersdot"}[5m] offset 30s)
       )
   - record: sli_aggregations:gitlab_sli_customers_dot_requests_error_total:rate_5m
     expr: |
       sum by (component,endpoint_id,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_customers_dot_requests_error_total{env="gstg",type=~"customersdot"}[5m] offset 30s)
+        rate(gitlab_sli_customers_dot_requests_error_total{type=~"customersdot"}[5m] offset 30s)
       )
   - record: sli_aggregations:gitlab_sli_customers_dot_requests_total:rate_5m
     expr: |
       sum by (component,endpoint_id,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_customers_dot_requests_total{env="gstg",type=~"customersdot"}[5m] offset 30s)
+        rate(gitlab_sli_customers_dot_requests_total{type=~"customersdot"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: customersdot - customers_dot_sidekiq_jobs - 5m burn-rate'
   interval: 1m
@@ -30,22 +30,22 @@ groups:
   - record: sli_aggregations:gitlab_sli_customers_dot_sidekiq_jobs_apdex_success_total:rate_5m
     expr: |
       sum by (component,endpoint_id,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_customers_dot_sidekiq_jobs_apdex_success_total{env="gstg",type=~"customersdot"}[5m] offset 30s)
+        rate(gitlab_sli_customers_dot_sidekiq_jobs_apdex_success_total{type=~"customersdot"}[5m] offset 30s)
       )
   - record: sli_aggregations:gitlab_sli_customers_dot_sidekiq_jobs_apdex_total:rate_5m
     expr: |
       sum by (component,endpoint_id,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_customers_dot_sidekiq_jobs_apdex_total{env="gstg",type=~"customersdot"}[5m] offset 30s)
+        rate(gitlab_sli_customers_dot_sidekiq_jobs_apdex_total{type=~"customersdot"}[5m] offset 30s)
       )
   - record: sli_aggregations:gitlab_sli_customers_dot_sidekiq_jobs_error_total:rate_5m
     expr: |
       sum by (component,endpoint_id,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_customers_dot_sidekiq_jobs_error_total{env="gstg",type=~"customersdot"}[5m] offset 30s)
+        rate(gitlab_sli_customers_dot_sidekiq_jobs_error_total{type=~"customersdot"}[5m] offset 30s)
       )
   - record: sli_aggregations:gitlab_sli_customers_dot_sidekiq_jobs_total:rate_5m
     expr: |
       sum by (component,endpoint_id,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_customers_dot_sidekiq_jobs_total{env="gstg",type=~"customersdot"}[5m] offset 30s)
+        rate(gitlab_sli_customers_dot_sidekiq_jobs_total{type=~"customersdot"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: customersdot - customers_dot_requests - 30m burn-rate'
   interval: 2m
@@ -53,22 +53,22 @@ groups:
   - record: sli_aggregations:gitlab_sli_customers_dot_requests_apdex_success_total:rate_30m
     expr: |
       sum by (component,endpoint_id,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_customers_dot_requests_apdex_success_total{env="gstg",type=~"customersdot"}[30m] offset 30s)
+        rate(gitlab_sli_customers_dot_requests_apdex_success_total{type=~"customersdot"}[30m] offset 30s)
       )
   - record: sli_aggregations:gitlab_sli_customers_dot_requests_apdex_total:rate_30m
     expr: |
       sum by (component,endpoint_id,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_customers_dot_requests_apdex_total{env="gstg",type=~"customersdot"}[30m] offset 30s)
+        rate(gitlab_sli_customers_dot_requests_apdex_total{type=~"customersdot"}[30m] offset 30s)
       )
   - record: sli_aggregations:gitlab_sli_customers_dot_requests_error_total:rate_30m
     expr: |
       sum by (component,endpoint_id,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_customers_dot_requests_error_total{env="gstg",type=~"customersdot"}[30m] offset 30s)
+        rate(gitlab_sli_customers_dot_requests_error_total{type=~"customersdot"}[30m] offset 30s)
       )
   - record: sli_aggregations:gitlab_sli_customers_dot_requests_total:rate_30m
     expr: |
       sum by (component,endpoint_id,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_customers_dot_requests_total{env="gstg",type=~"customersdot"}[30m] offset 30s)
+        rate(gitlab_sli_customers_dot_requests_total{type=~"customersdot"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: customersdot - customers_dot_sidekiq_jobs - 30m burn-rate'
   interval: 2m
@@ -76,22 +76,22 @@ groups:
   - record: sli_aggregations:gitlab_sli_customers_dot_sidekiq_jobs_apdex_success_total:rate_30m
     expr: |
       sum by (component,endpoint_id,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_customers_dot_sidekiq_jobs_apdex_success_total{env="gstg",type=~"customersdot"}[30m] offset 30s)
+        rate(gitlab_sli_customers_dot_sidekiq_jobs_apdex_success_total{type=~"customersdot"}[30m] offset 30s)
       )
   - record: sli_aggregations:gitlab_sli_customers_dot_sidekiq_jobs_apdex_total:rate_30m
     expr: |
       sum by (component,endpoint_id,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_customers_dot_sidekiq_jobs_apdex_total{env="gstg",type=~"customersdot"}[30m] offset 30s)
+        rate(gitlab_sli_customers_dot_sidekiq_jobs_apdex_total{type=~"customersdot"}[30m] offset 30s)
       )
   - record: sli_aggregations:gitlab_sli_customers_dot_sidekiq_jobs_error_total:rate_30m
     expr: |
       sum by (component,endpoint_id,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_customers_dot_sidekiq_jobs_error_total{env="gstg",type=~"customersdot"}[30m] offset 30s)
+        rate(gitlab_sli_customers_dot_sidekiq_jobs_error_total{type=~"customersdot"}[30m] offset 30s)
       )
   - record: sli_aggregations:gitlab_sli_customers_dot_sidekiq_jobs_total:rate_30m
     expr: |
       sum by (component,endpoint_id,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_customers_dot_sidekiq_jobs_total{env="gstg",type=~"customersdot"}[30m] offset 30s)
+        rate(gitlab_sli_customers_dot_sidekiq_jobs_total{type=~"customersdot"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: customersdot - customers_dot_requests - 1h burn-rate'
   interval: 1m
@@ -99,22 +99,22 @@ groups:
   - record: sli_aggregations:gitlab_sli_customers_dot_requests_apdex_success_total:rate_1h
     expr: |
       sum by (component,endpoint_id,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_customers_dot_requests_apdex_success_total{env="gstg",type=~"customersdot"}[1h] offset 30s)
+        rate(gitlab_sli_customers_dot_requests_apdex_success_total{type=~"customersdot"}[1h] offset 30s)
       )
   - record: sli_aggregations:gitlab_sli_customers_dot_requests_apdex_total:rate_1h
     expr: |
       sum by (component,endpoint_id,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_customers_dot_requests_apdex_total{env="gstg",type=~"customersdot"}[1h] offset 30s)
+        rate(gitlab_sli_customers_dot_requests_apdex_total{type=~"customersdot"}[1h] offset 30s)
       )
   - record: sli_aggregations:gitlab_sli_customers_dot_requests_error_total:rate_1h
     expr: |
       sum by (component,endpoint_id,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_customers_dot_requests_error_total{env="gstg",type=~"customersdot"}[1h] offset 30s)
+        rate(gitlab_sli_customers_dot_requests_error_total{type=~"customersdot"}[1h] offset 30s)
       )
   - record: sli_aggregations:gitlab_sli_customers_dot_requests_total:rate_1h
     expr: |
       sum by (component,endpoint_id,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_customers_dot_requests_total{env="gstg",type=~"customersdot"}[1h] offset 30s)
+        rate(gitlab_sli_customers_dot_requests_total{type=~"customersdot"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: customersdot - customers_dot_sidekiq_jobs - 1h burn-rate'
   interval: 1m
@@ -122,20 +122,20 @@ groups:
   - record: sli_aggregations:gitlab_sli_customers_dot_sidekiq_jobs_apdex_success_total:rate_1h
     expr: |
       sum by (component,endpoint_id,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_customers_dot_sidekiq_jobs_apdex_success_total{env="gstg",type=~"customersdot"}[1h] offset 30s)
+        rate(gitlab_sli_customers_dot_sidekiq_jobs_apdex_success_total{type=~"customersdot"}[1h] offset 30s)
       )
   - record: sli_aggregations:gitlab_sli_customers_dot_sidekiq_jobs_apdex_total:rate_1h
     expr: |
       sum by (component,endpoint_id,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_customers_dot_sidekiq_jobs_apdex_total{env="gstg",type=~"customersdot"}[1h] offset 30s)
+        rate(gitlab_sli_customers_dot_sidekiq_jobs_apdex_total{type=~"customersdot"}[1h] offset 30s)
       )
   - record: sli_aggregations:gitlab_sli_customers_dot_sidekiq_jobs_error_total:rate_1h
     expr: |
       sum by (component,endpoint_id,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_customers_dot_sidekiq_jobs_error_total{env="gstg",type=~"customersdot"}[1h] offset 30s)
+        rate(gitlab_sli_customers_dot_sidekiq_jobs_error_total{type=~"customersdot"}[1h] offset 30s)
       )
   - record: sli_aggregations:gitlab_sli_customers_dot_sidekiq_jobs_total:rate_1h
     expr: |
       sum by (component,endpoint_id,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_customers_dot_sidekiq_jobs_total{env="gstg",type=~"customersdot"}[1h] offset 30s)
+        rate(gitlab_sli_customers_dot_sidekiq_jobs_total{type=~"customersdot"}[1h] offset 30s)
       )

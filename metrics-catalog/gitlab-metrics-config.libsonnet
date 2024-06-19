@@ -106,6 +106,10 @@ local objects = import 'utils/objects.libsonnet';
       selector: {},
       envName: 'runway',
     },
+    'fulfillment-platform': {
+      selector: {},
+      envName: 'fulfillment-platform',
+    },
   },
 
   gkeClustersByEnvironment: {

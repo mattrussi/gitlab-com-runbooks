@@ -7,6 +7,8 @@ metricsCatalog.serviceDefinition({
   type: 'customersdot',
   tier: 'sv',
 
+  tenants: ['fulfillment-platform'],
+
   monitoringThresholds: {
     apdexScore: 0.9,
     errorRatio: 0.95,
