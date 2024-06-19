@@ -8813,6 +8813,142 @@ groups:
   rules:
   - expr: |
       sum by () (
+        rate(gitlab_sli_graphql_query_apdex_success_total{endpoint_id!="graphql:unknown",job="gitlab-rails"}[5m])
+      )
+    labels:
+      component: graphql_query
+      tier: sv
+      type: webservice
+    record: gitlab_component_apdex:success:rate_5m
+  - expr: |
+      sum by () (
+        rate(gitlab_sli_graphql_query_apdex_total{endpoint_id!="graphql:unknown",job="gitlab-rails"}[5m])
+      )
+    labels:
+      component: graphql_query
+      tier: sv
+      type: webservice
+    record: gitlab_component_apdex:weight:score_5m
+  - expr: |
+      sum by () (
+        rate(gitlab_sli_graphql_query_total{endpoint_id!="graphql:unknown",job="gitlab-rails"}[5m])
+      )
+    labels:
+      component: graphql_query
+      tier: sv
+      type: webservice
+    record: gitlab_component_ops:rate_5m
+  - expr: |
+      (
+        sum by () (
+          rate(gitlab_sli_graphql_query_error_total{endpoint_id!="graphql:unknown",job="gitlab-rails"}[5m])
+        )
+      )
+      or
+      (
+        0 * group by() (
+          gitlab_component_ops:rate_5m{component="graphql_query",tier="sv",type="webservice"}
+        )
+      )
+    labels:
+      component: graphql_query
+      tier: sv
+      type: webservice
+    record: gitlab_component_errors:rate_5m
+  - expr: |
+      sum by () (
+        gitlab_component_errors:rate_5m{component="graphql_query",tier="sv",type="webservice"}
+      )
+      /
+      sum by () (
+        gitlab_component_ops:rate_5m{component="graphql_query",tier="sv",type="webservice"}
+      )
+    labels:
+      component: graphql_query
+      tier: sv
+      type: webservice
+    record: gitlab_component_errors:ratio_5m
+  - expr: |
+      sum by () (
+        gitlab_component_apdex:success:rate_5m{component="graphql_query",tier="sv",type="webservice"}
+      )
+      /
+      sum by () (
+        gitlab_component_apdex:weight:score_5m{component="graphql_query",tier="sv",type="webservice"}
+      )
+    labels:
+      component: graphql_query
+      tier: sv
+      type: webservice
+    record: gitlab_component_apdex:ratio_5m
+  - expr: |
+      (gitlab_component_ops:rate_5m{component="graphql_query",tier="sv",type="webservice"} == 0)
+      or
+      clamp(
+        (
+          (
+            (gitlab_component_errors:rate_5m{component="graphql_query",tier="sv",type="webservice"} / gitlab_component_ops:rate_5m{component="graphql_query",tier="sv",type="webservice"})
+            +
+            5.411894 / (2 * (gitlab_component_ops:rate_5m{component="graphql_query",tier="sv",type="webservice"} * 300))
+          )
+          -
+          2.326348
+          *
+          sqrt(
+            (
+              (gitlab_component_errors:rate_5m{component="graphql_query",tier="sv",type="webservice"} / gitlab_component_ops:rate_5m{component="graphql_query",tier="sv",type="webservice"}) * (1 - (gitlab_component_errors:rate_5m{component="graphql_query",tier="sv",type="webservice"} / gitlab_component_ops:rate_5m{component="graphql_query",tier="sv",type="webservice"}))
+              +
+              5.411894 / (4 * (gitlab_component_ops:rate_5m{component="graphql_query",tier="sv",type="webservice"} * 300))
+            )
+            /
+            (gitlab_component_ops:rate_5m{component="graphql_query",tier="sv",type="webservice"} * 300)
+          )
+        )
+        /
+        (1 + 5.411894 / (gitlab_component_ops:rate_5m{component="graphql_query",tier="sv",type="webservice"} * 300)),
+        0, 1
+      )
+    labels:
+      component: graphql_query
+      confidence: 98%
+      tier: sv
+      type: webservice
+    record: gitlab_component_errors:confidence:ratio_5m
+  - expr: |
+      clamp_min(gitlab_component_apdex:weight:score_5m{component="graphql_query",tier="sv",type="webservice"} == 0, 1)
+      or
+      clamp(
+        (
+          (
+            (gitlab_component_apdex:success:rate_5m{component="graphql_query",tier="sv",type="webservice"} / gitlab_component_apdex:weight:score_5m{component="graphql_query",tier="sv",type="webservice"})
+            +
+            5.411894 / (2 * (gitlab_component_apdex:weight:score_5m{component="graphql_query",tier="sv",type="webservice"} * 300))
+          )
+          +
+          2.326348
+          *
+          sqrt(
+            (
+              (gitlab_component_apdex:success:rate_5m{component="graphql_query",tier="sv",type="webservice"} / gitlab_component_apdex:weight:score_5m{component="graphql_query",tier="sv",type="webservice"}) * (1 - (gitlab_component_apdex:success:rate_5m{component="graphql_query",tier="sv",type="webservice"} / gitlab_component_apdex:weight:score_5m{component="graphql_query",tier="sv",type="webservice"}))
+              +
+              5.411894 / (4 * (gitlab_component_apdex:weight:score_5m{component="graphql_query",tier="sv",type="webservice"} * 300))
+            )
+            /
+            (gitlab_component_apdex:weight:score_5m{component="graphql_query",tier="sv",type="webservice"} * 300)
+          )
+        )
+        /
+        (1 + 5.411894 / (gitlab_component_apdex:weight:score_5m{component="graphql_query",tier="sv",type="webservice"} * 300)),
+        0, 1
+      )
+    labels:
+      component: graphql_query
+      confidence: 98%
+      tier: sv
+      type: webservice
+    record: gitlab_component_apdex:confidence:ratio_5m
+  - expr: |
+      sum by () (
         rate(gitlab_sli_rails_request_apdex_success_total{job="gitlab-rails"}[5m])
       )
     labels:
@@ -9230,6 +9366,142 @@ groups:
 - interval: 2m
   name: 'Component-Level SLIs: webservice - 30m burn-rate'
   rules:
+  - expr: |
+      sum by () (
+        rate(gitlab_sli_graphql_query_apdex_success_total{endpoint_id!="graphql:unknown",job="gitlab-rails"}[30m])
+      )
+    labels:
+      component: graphql_query
+      tier: sv
+      type: webservice
+    record: gitlab_component_apdex:success:rate_30m
+  - expr: |
+      sum by () (
+        rate(gitlab_sli_graphql_query_apdex_total{endpoint_id!="graphql:unknown",job="gitlab-rails"}[30m])
+      )
+    labels:
+      component: graphql_query
+      tier: sv
+      type: webservice
+    record: gitlab_component_apdex:weight:score_30m
+  - expr: |
+      sum by () (
+        rate(gitlab_sli_graphql_query_total{endpoint_id!="graphql:unknown",job="gitlab-rails"}[30m])
+      )
+    labels:
+      component: graphql_query
+      tier: sv
+      type: webservice
+    record: gitlab_component_ops:rate_30m
+  - expr: |
+      (
+        sum by () (
+          rate(gitlab_sli_graphql_query_error_total{endpoint_id!="graphql:unknown",job="gitlab-rails"}[30m])
+        )
+      )
+      or
+      (
+        0 * group by() (
+          gitlab_component_ops:rate_30m{component="graphql_query",tier="sv",type="webservice"}
+        )
+      )
+    labels:
+      component: graphql_query
+      tier: sv
+      type: webservice
+    record: gitlab_component_errors:rate_30m
+  - expr: |
+      sum by () (
+        gitlab_component_errors:rate_30m{component="graphql_query",tier="sv",type="webservice"}
+      )
+      /
+      sum by () (
+        gitlab_component_ops:rate_30m{component="graphql_query",tier="sv",type="webservice"}
+      )
+    labels:
+      component: graphql_query
+      tier: sv
+      type: webservice
+    record: gitlab_component_errors:ratio_30m
+  - expr: |
+      sum by () (
+        gitlab_component_apdex:success:rate_30m{component="graphql_query",tier="sv",type="webservice"}
+      )
+      /
+      sum by () (
+        gitlab_component_apdex:weight:score_30m{component="graphql_query",tier="sv",type="webservice"}
+      )
+    labels:
+      component: graphql_query
+      tier: sv
+      type: webservice
+    record: gitlab_component_apdex:ratio_30m
+  - expr: |
+      (gitlab_component_ops:rate_30m{component="graphql_query",tier="sv",type="webservice"} == 0)
+      or
+      clamp(
+        (
+          (
+            (gitlab_component_errors:rate_30m{component="graphql_query",tier="sv",type="webservice"} / gitlab_component_ops:rate_30m{component="graphql_query",tier="sv",type="webservice"})
+            +
+            5.411894 / (2 * (gitlab_component_ops:rate_30m{component="graphql_query",tier="sv",type="webservice"} * 1800))
+          )
+          -
+          2.326348
+          *
+          sqrt(
+            (
+              (gitlab_component_errors:rate_30m{component="graphql_query",tier="sv",type="webservice"} / gitlab_component_ops:rate_30m{component="graphql_query",tier="sv",type="webservice"}) * (1 - (gitlab_component_errors:rate_30m{component="graphql_query",tier="sv",type="webservice"} / gitlab_component_ops:rate_30m{component="graphql_query",tier="sv",type="webservice"}))
+              +
+              5.411894 / (4 * (gitlab_component_ops:rate_30m{component="graphql_query",tier="sv",type="webservice"} * 1800))
+            )
+            /
+            (gitlab_component_ops:rate_30m{component="graphql_query",tier="sv",type="webservice"} * 1800)
+          )
+        )
+        /
+        (1 + 5.411894 / (gitlab_component_ops:rate_30m{component="graphql_query",tier="sv",type="webservice"} * 1800)),
+        0, 1
+      )
+    labels:
+      component: graphql_query
+      confidence: 98%
+      tier: sv
+      type: webservice
+    record: gitlab_component_errors:confidence:ratio_30m
+  - expr: |
+      clamp_min(gitlab_component_apdex:weight:score_30m{component="graphql_query",tier="sv",type="webservice"} == 0, 1)
+      or
+      clamp(
+        (
+          (
+            (gitlab_component_apdex:success:rate_30m{component="graphql_query",tier="sv",type="webservice"} / gitlab_component_apdex:weight:score_30m{component="graphql_query",tier="sv",type="webservice"})
+            +
+            5.411894 / (2 * (gitlab_component_apdex:weight:score_30m{component="graphql_query",tier="sv",type="webservice"} * 1800))
+          )
+          +
+          2.326348
+          *
+          sqrt(
+            (
+              (gitlab_component_apdex:success:rate_30m{component="graphql_query",tier="sv",type="webservice"} / gitlab_component_apdex:weight:score_30m{component="graphql_query",tier="sv",type="webservice"}) * (1 - (gitlab_component_apdex:success:rate_30m{component="graphql_query",tier="sv",type="webservice"} / gitlab_component_apdex:weight:score_30m{component="graphql_query",tier="sv",type="webservice"}))
+              +
+              5.411894 / (4 * (gitlab_component_apdex:weight:score_30m{component="graphql_query",tier="sv",type="webservice"} * 1800))
+            )
+            /
+            (gitlab_component_apdex:weight:score_30m{component="graphql_query",tier="sv",type="webservice"} * 1800)
+          )
+        )
+        /
+        (1 + 5.411894 / (gitlab_component_apdex:weight:score_30m{component="graphql_query",tier="sv",type="webservice"} * 1800)),
+        0, 1
+      )
+    labels:
+      component: graphql_query
+      confidence: 98%
+      tier: sv
+      type: webservice
+    record: gitlab_component_apdex:confidence:ratio_30m
   - expr: |
       sum by () (
         rate(gitlab_sli_rails_request_apdex_success_total{job="gitlab-rails"}[30m])
@@ -9651,6 +9923,142 @@ groups:
   rules:
   - expr: |
       sum by () (
+        rate(gitlab_sli_graphql_query_apdex_success_total{endpoint_id!="graphql:unknown",job="gitlab-rails"}[1h])
+      )
+    labels:
+      component: graphql_query
+      tier: sv
+      type: webservice
+    record: gitlab_component_apdex:success:rate_1h
+  - expr: |
+      sum by () (
+        rate(gitlab_sli_graphql_query_apdex_total{endpoint_id!="graphql:unknown",job="gitlab-rails"}[1h])
+      )
+    labels:
+      component: graphql_query
+      tier: sv
+      type: webservice
+    record: gitlab_component_apdex:weight:score_1h
+  - expr: |
+      sum by () (
+        rate(gitlab_sli_graphql_query_total{endpoint_id!="graphql:unknown",job="gitlab-rails"}[1h])
+      )
+    labels:
+      component: graphql_query
+      tier: sv
+      type: webservice
+    record: gitlab_component_ops:rate_1h
+  - expr: |
+      (
+        sum by () (
+          rate(gitlab_sli_graphql_query_error_total{endpoint_id!="graphql:unknown",job="gitlab-rails"}[1h])
+        )
+      )
+      or
+      (
+        0 * group by() (
+          gitlab_component_ops:rate_1h{component="graphql_query",tier="sv",type="webservice"}
+        )
+      )
+    labels:
+      component: graphql_query
+      tier: sv
+      type: webservice
+    record: gitlab_component_errors:rate_1h
+  - expr: |
+      sum by () (
+        gitlab_component_errors:rate_1h{component="graphql_query",tier="sv",type="webservice"}
+      )
+      /
+      sum by () (
+        gitlab_component_ops:rate_1h{component="graphql_query",tier="sv",type="webservice"}
+      )
+    labels:
+      component: graphql_query
+      tier: sv
+      type: webservice
+    record: gitlab_component_errors:ratio_1h
+  - expr: |
+      sum by () (
+        gitlab_component_apdex:success:rate_1h{component="graphql_query",tier="sv",type="webservice"}
+      )
+      /
+      sum by () (
+        gitlab_component_apdex:weight:score_1h{component="graphql_query",tier="sv",type="webservice"}
+      )
+    labels:
+      component: graphql_query
+      tier: sv
+      type: webservice
+    record: gitlab_component_apdex:ratio_1h
+  - expr: |
+      (gitlab_component_ops:rate_1h{component="graphql_query",tier="sv",type="webservice"} == 0)
+      or
+      clamp(
+        (
+          (
+            (gitlab_component_errors:rate_1h{component="graphql_query",tier="sv",type="webservice"} / gitlab_component_ops:rate_1h{component="graphql_query",tier="sv",type="webservice"})
+            +
+            5.411894 / (2 * (gitlab_component_ops:rate_1h{component="graphql_query",tier="sv",type="webservice"} * 3600))
+          )
+          -
+          2.326348
+          *
+          sqrt(
+            (
+              (gitlab_component_errors:rate_1h{component="graphql_query",tier="sv",type="webservice"} / gitlab_component_ops:rate_1h{component="graphql_query",tier="sv",type="webservice"}) * (1 - (gitlab_component_errors:rate_1h{component="graphql_query",tier="sv",type="webservice"} / gitlab_component_ops:rate_1h{component="graphql_query",tier="sv",type="webservice"}))
+              +
+              5.411894 / (4 * (gitlab_component_ops:rate_1h{component="graphql_query",tier="sv",type="webservice"} * 3600))
+            )
+            /
+            (gitlab_component_ops:rate_1h{component="graphql_query",tier="sv",type="webservice"} * 3600)
+          )
+        )
+        /
+        (1 + 5.411894 / (gitlab_component_ops:rate_1h{component="graphql_query",tier="sv",type="webservice"} * 3600)),
+        0, 1
+      )
+    labels:
+      component: graphql_query
+      confidence: 98%
+      tier: sv
+      type: webservice
+    record: gitlab_component_errors:confidence:ratio_1h
+  - expr: |
+      clamp_min(gitlab_component_apdex:weight:score_1h{component="graphql_query",tier="sv",type="webservice"} == 0, 1)
+      or
+      clamp(
+        (
+          (
+            (gitlab_component_apdex:success:rate_1h{component="graphql_query",tier="sv",type="webservice"} / gitlab_component_apdex:weight:score_1h{component="graphql_query",tier="sv",type="webservice"})
+            +
+            5.411894 / (2 * (gitlab_component_apdex:weight:score_1h{component="graphql_query",tier="sv",type="webservice"} * 3600))
+          )
+          +
+          2.326348
+          *
+          sqrt(
+            (
+              (gitlab_component_apdex:success:rate_1h{component="graphql_query",tier="sv",type="webservice"} / gitlab_component_apdex:weight:score_1h{component="graphql_query",tier="sv",type="webservice"}) * (1 - (gitlab_component_apdex:success:rate_1h{component="graphql_query",tier="sv",type="webservice"} / gitlab_component_apdex:weight:score_1h{component="graphql_query",tier="sv",type="webservice"}))
+              +
+              5.411894 / (4 * (gitlab_component_apdex:weight:score_1h{component="graphql_query",tier="sv",type="webservice"} * 3600))
+            )
+            /
+            (gitlab_component_apdex:weight:score_1h{component="graphql_query",tier="sv",type="webservice"} * 3600)
+          )
+        )
+        /
+        (1 + 5.411894 / (gitlab_component_apdex:weight:score_1h{component="graphql_query",tier="sv",type="webservice"} * 3600)),
+        0, 1
+      )
+    labels:
+      component: graphql_query
+      confidence: 98%
+      tier: sv
+      type: webservice
+    record: gitlab_component_apdex:confidence:ratio_1h
+  - expr: |
+      sum by () (
         rate(gitlab_sli_rails_request_apdex_success_total{job="gitlab-rails"}[1h])
       )
     labels:
@@ -10070,6 +10478,142 @@ groups:
   rules:
   - expr: |
       sum by () (
+        rate(gitlab_sli_graphql_query_apdex_success_total{endpoint_id!="graphql:unknown",job="gitlab-rails"}[6h])
+      )
+    labels:
+      component: graphql_query
+      tier: sv
+      type: webservice
+    record: gitlab_component_apdex:success:rate_6h
+  - expr: |
+      sum by () (
+        rate(gitlab_sli_graphql_query_apdex_total{endpoint_id!="graphql:unknown",job="gitlab-rails"}[6h])
+      )
+    labels:
+      component: graphql_query
+      tier: sv
+      type: webservice
+    record: gitlab_component_apdex:weight:score_6h
+  - expr: |
+      sum by () (
+        rate(gitlab_sli_graphql_query_total{endpoint_id!="graphql:unknown",job="gitlab-rails"}[6h])
+      )
+    labels:
+      component: graphql_query
+      tier: sv
+      type: webservice
+    record: gitlab_component_ops:rate_6h
+  - expr: |
+      (
+        sum by () (
+          rate(gitlab_sli_graphql_query_error_total{endpoint_id!="graphql:unknown",job="gitlab-rails"}[6h])
+        )
+      )
+      or
+      (
+        0 * group by() (
+          gitlab_component_ops:rate_6h{component="graphql_query",tier="sv",type="webservice"}
+        )
+      )
+    labels:
+      component: graphql_query
+      tier: sv
+      type: webservice
+    record: gitlab_component_errors:rate_6h
+  - expr: |
+      sum by () (
+        gitlab_component_errors:rate_6h{component="graphql_query",tier="sv",type="webservice"}
+      )
+      /
+      sum by () (
+        gitlab_component_ops:rate_6h{component="graphql_query",tier="sv",type="webservice"}
+      )
+    labels:
+      component: graphql_query
+      tier: sv
+      type: webservice
+    record: gitlab_component_errors:ratio_6h
+  - expr: |
+      sum by () (
+        gitlab_component_apdex:success:rate_6h{component="graphql_query",tier="sv",type="webservice"}
+      )
+      /
+      sum by () (
+        gitlab_component_apdex:weight:score_6h{component="graphql_query",tier="sv",type="webservice"}
+      )
+    labels:
+      component: graphql_query
+      tier: sv
+      type: webservice
+    record: gitlab_component_apdex:ratio_6h
+  - expr: |
+      (gitlab_component_ops:rate_6h{component="graphql_query",tier="sv",type="webservice"} == 0)
+      or
+      clamp(
+        (
+          (
+            (gitlab_component_errors:rate_6h{component="graphql_query",tier="sv",type="webservice"} / gitlab_component_ops:rate_6h{component="graphql_query",tier="sv",type="webservice"})
+            +
+            5.411894 / (2 * (gitlab_component_ops:rate_6h{component="graphql_query",tier="sv",type="webservice"} * 21600))
+          )
+          -
+          2.326348
+          *
+          sqrt(
+            (
+              (gitlab_component_errors:rate_6h{component="graphql_query",tier="sv",type="webservice"} / gitlab_component_ops:rate_6h{component="graphql_query",tier="sv",type="webservice"}) * (1 - (gitlab_component_errors:rate_6h{component="graphql_query",tier="sv",type="webservice"} / gitlab_component_ops:rate_6h{component="graphql_query",tier="sv",type="webservice"}))
+              +
+              5.411894 / (4 * (gitlab_component_ops:rate_6h{component="graphql_query",tier="sv",type="webservice"} * 21600))
+            )
+            /
+            (gitlab_component_ops:rate_6h{component="graphql_query",tier="sv",type="webservice"} * 21600)
+          )
+        )
+        /
+        (1 + 5.411894 / (gitlab_component_ops:rate_6h{component="graphql_query",tier="sv",type="webservice"} * 21600)),
+        0, 1
+      )
+    labels:
+      component: graphql_query
+      confidence: 98%
+      tier: sv
+      type: webservice
+    record: gitlab_component_errors:confidence:ratio_6h
+  - expr: |
+      clamp_min(gitlab_component_apdex:weight:score_6h{component="graphql_query",tier="sv",type="webservice"} == 0, 1)
+      or
+      clamp(
+        (
+          (
+            (gitlab_component_apdex:success:rate_6h{component="graphql_query",tier="sv",type="webservice"} / gitlab_component_apdex:weight:score_6h{component="graphql_query",tier="sv",type="webservice"})
+            +
+            5.411894 / (2 * (gitlab_component_apdex:weight:score_6h{component="graphql_query",tier="sv",type="webservice"} * 21600))
+          )
+          +
+          2.326348
+          *
+          sqrt(
+            (
+              (gitlab_component_apdex:success:rate_6h{component="graphql_query",tier="sv",type="webservice"} / gitlab_component_apdex:weight:score_6h{component="graphql_query",tier="sv",type="webservice"}) * (1 - (gitlab_component_apdex:success:rate_6h{component="graphql_query",tier="sv",type="webservice"} / gitlab_component_apdex:weight:score_6h{component="graphql_query",tier="sv",type="webservice"}))
+              +
+              5.411894 / (4 * (gitlab_component_apdex:weight:score_6h{component="graphql_query",tier="sv",type="webservice"} * 21600))
+            )
+            /
+            (gitlab_component_apdex:weight:score_6h{component="graphql_query",tier="sv",type="webservice"} * 21600)
+          )
+        )
+        /
+        (1 + 5.411894 / (gitlab_component_apdex:weight:score_6h{component="graphql_query",tier="sv",type="webservice"} * 21600)),
+        0, 1
+      )
+    labels:
+      component: graphql_query
+      confidence: 98%
+      tier: sv
+      type: webservice
+    record: gitlab_component_apdex:confidence:ratio_6h
+  - expr: |
+      sum by () (
         rate(gitlab_sli_rails_request_apdex_success_total{job="gitlab-rails"}[6h])
       )
     labels:
@@ -10487,6 +11031,14 @@ groups:
 - interval: 1m
   name: 'Component mapping: webservice'
   rules:
+  - expr: "1"
+    labels:
+      component: graphql_query
+      regional_aggregation: "no"
+      service_aggregation: "no"
+      tier: sv
+      type: webservice
+    record: gitlab_component_service:mapping
   - expr: "1"
     labels:
       component: puma
