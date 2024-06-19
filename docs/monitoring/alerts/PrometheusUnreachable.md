@@ -43,6 +43,13 @@ Refer [here](https://gitlab.com/gitlab-com/runbooks/-/blob/2cd0f564d4d4d2483e7ee
 
 - #### Briefly explain the metric this alert is based on and link to the metrics catalogue. What unit is it measured in? (e.g., CPU usage in percentage, request latency in milliseconds)
 
+The alert is based on the metric up, which is used in Prometheus to determine whether a target is reachable or not.
+`up` metric has a value of 1 if the target is reachable and 0 if it is not reachable.
+
+The unit of measurement for this alert is the percentage of reachable Prometheus targets
+
+link to metrics catalogue [here](https://gitlab.com/gitlab-com/runbooks/-/blob/master/legacy-prometheus-rules/default/prometheus-metamons.yml#L4)
+
 - #### Explain the reasoning behind the chosen threshold value for triggering the alert. Is it based on historical data, best practices, or capacity planning?
 
 - #### Describe the expected behavior of the metric under normal conditions. This helps identify situations where the alert might be falsely firing.
