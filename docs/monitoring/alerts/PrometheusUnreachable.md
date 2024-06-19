@@ -85,7 +85,7 @@ link to metrics catalogue [here](https://gitlab.com/gitlab-com/runbooks/-/blob/m
 
 - > Guidance for assigning incident severity to this alert
 - > Who is likely to be impacted by this cause of this alert?
-  - Internal impact only
+  - Internal impact mostly
 - > Things to check to determine severity
 
 ## Verification
