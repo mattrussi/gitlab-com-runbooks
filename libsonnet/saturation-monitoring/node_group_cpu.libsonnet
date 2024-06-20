@@ -17,6 +17,9 @@ local resourceSaturationPoint = (import 'servicemetrics/resource_saturation_poin
     grafana_dashboard_uid: 'sat_node_group_cpu',
     resourceLabels: [],
     burnRatePeriod: '5m',
+    // Matching type on ".*pool" derives from GET adding a gitlab_node_type tag to EKS nodes with a "pool" suffix
+    // and a node exporter scrape config using that tag and relabling it into the `type` label
+    // This is a bit brittle; take care.
     query: |||
       1 - avg by (%(aggregationLabels)s) (
         rate(node_cpu_seconds_total{mode="idle", type=~".*pool"}[%(rangeInterval)s])
