@@ -1,3 +1,4 @@
+local datasource = import './datasource.libsonnet';
 local metricsCatalogDashboards = import './metrics_catalog_dashboards.libsonnet';
 local basic = import 'grafana/basic.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
@@ -31,6 +32,7 @@ local dashboardForService(serviceType, serviceSLIsAggregationSet, componentSLIsA
   basic.dashboard(
     'Regional Detail',
     tags=['type:%(serviceType)s' % formatConfig, 'regional'],
+    defaultDatasource=datasource.defaultDatasourceForService(metricsCatalogServiceInfo)
   )
   .addTemplate(templates.stage)
   .addPanels(

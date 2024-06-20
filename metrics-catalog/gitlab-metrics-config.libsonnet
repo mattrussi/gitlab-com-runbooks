@@ -8,6 +8,7 @@ local serviceCatalog = import 'service-catalog/service-catalog.libsonnet';
 local mimirHelper = import 'services/lib/mimir-helpers.libsonnet';
 local overridenStageGroupMapping = import 'stage-group-mapping-with-overrides.jsonnet';
 local objects = import 'utils/objects.libsonnet';
+local strings = import 'utils/strings.libsonnet';
 
 // Site-wide configuration options
 {
@@ -52,7 +53,7 @@ local objects = import 'utils/objects.libsonnet';
   usesThanos:: true,
 
   // Name of the default Prometheus datasource to use
-  defaultPrometheusDatasource: mimirHelper.mimirDatasource('Gitlab - All Environments'),
+  defaultPrometheusDatasource: mimirHelper.mimirDatasource('gitlab-gprd'),
 
   labelTaxonomy:: labelSet.makeLabelSet({
     environmentThanos: 'env',
@@ -123,6 +124,7 @@ local objects = import 'utils/objects.libsonnet';
   },
 
   defaultMimirTenants: ['gitlab-gprd', 'gitlab-gstg'],
+  mimirTenants:: std.objectFields(self.separateMimirRecordingSelectors),
 
   recordingRuleRegistry: import 'servicemetrics/recording-rule-registry/unified-registry.libsonnet',
 

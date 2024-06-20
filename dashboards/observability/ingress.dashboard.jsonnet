@@ -14,7 +14,7 @@ basic.dashboard(
     'k8s',
     'gitlab-observability',
   ],
-  defaultDatasource=mimirHelper.mimirDatasource('Gitlab Observability')
+  defaultDatasource=mimirHelper.mimirDatasource('gitlab-observability')
 )
 .addTemplate(templates.Node)
 .addTemplate(

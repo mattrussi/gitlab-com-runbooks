@@ -46,14 +46,14 @@ basic.dashboard(
   time_to='now',
   includeStandardEnvironmentAnnotations=false,
   includeEnvironmentTemplate=false,
-  defaultDatasource=mimirHelper.mimirDatasource('Gitlab - All Environments'),
+  defaultDatasource=mimirHelper.mimirDatasource('gitlab-ops'),
 )
 .addTemplate(template.new(
   current='28800',
   label='target SLO',
   name='target_slo',
   query='label_values(delivery_deployment_duration_seconds_bucket, le)',
-  datasource=mimirHelper.mimirDatasource('Gitlab - All Environments'),
+  datasource=mimirHelper.mimirDatasource('gitlab-ops'),
   refresh='load',
   regex='/\\d+/',
   sort=3,  //numerical asc

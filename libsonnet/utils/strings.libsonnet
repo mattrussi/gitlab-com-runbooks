@@ -119,6 +119,14 @@ local escapeBackslash(string) =
 local contains(str, substr) =
   std.length(std.findSubstr(substr, str)) > 0;
 
+local title(str) =
+  local words = splitOnChars(str, ' ');
+  std.join(
+    ' ',
+    [capitalizeFirstLetter(word) for word in words]
+  );
+
+
 {
   removeBlankLines(str):: removeBlankLines(str),
   chomp(str):: chomp(str),
@@ -150,4 +158,7 @@ local contains(str, substr) =
 
   // This is a workaround until std.contains gets released
   contains: contains,
+
+  // Capitalize first letter of every word
+  title: title,
 }

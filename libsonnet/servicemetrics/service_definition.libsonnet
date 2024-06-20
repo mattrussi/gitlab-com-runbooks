@@ -33,8 +33,8 @@ local serviceDefaults = {
   skippedMaturityCriteria: {},
   dangerouslyThanosEvaluated: false,  // This is only used for thanos self-monitoring
   capacityPlanning: {},  // Consumed by Tamland
-  tenants: config.defaultMimirTenants,
-  defaultPrometheusDatasource: config.defaultPrometheusDatasource,
+  tenants: std.get(config, 'defaultMimirTenants', []),  // List of Mimir tenants in which the recording rules are generated
+  defaultTenant: if std.length(self.tenants) > 0 then self.tenants[0],  // Default tenant for dashboard datasource, saturation manifest
   useConfidenceLevelForSLIAlerts: null,  // Use confidence interval default values across all SLIs in a service
 };
 
@@ -71,6 +71,27 @@ local validateMonitoring(serviceDefinition) =
   });
 
   monitoringValidator.assertValid(serviceDefinition);
+
+local validateTenants(serviceDefinition) =
+  local mimirTenants = config.mimirTenants;
+  local tenantMemberValidator = validator.validator(
+    function(v) misc.arrayDiff(v, mimirTenants) == [],
+    'Invalid tenants in %s service. Allowed tenants: %s' % [serviceDefinition.type, mimirTenants]
+  );
+  local tenantsValidator = validator.new({
+    tenants: validator.and(
+      validator.arrayOfStrings,
+      tenantMemberValidator
+    ),
+    defaultTenant: validator.optional(validator.setMember(mimirTenants)),
+  });
+
+  tenantsValidator.assertValid(serviceDefinition);
+
+local validate(serviceDefinition) =
+  validateTenants(serviceDefinition)
+  +
+  validateMonitoring(serviceDefinition);
 
 // Convenience method, will wrap a raw definition in a serviceLevelIndicatorDefinition if needed
 local prepareComponent(definition) =
@@ -134,7 +155,7 @@ local validateAndApplyServiceDefaults(service) =
     );
 
   // If this service is provisioned on kubernetes we should include a kubernetes deployment map
-  validateMonitoring(serviceWithDefaults {
+  validate(serviceWithDefaults {
     tags: std.set(serviceWithDefaults.tags),
     serviceLevelIndicators: {
       [sliName]: prepareComponent(service.serviceLevelIndicators[sliName]).initServiceLevelIndicatorWithName(sliName, sliInheritedDefaults)

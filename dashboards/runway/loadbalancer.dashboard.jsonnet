@@ -18,7 +18,7 @@ basic.dashboard(
   'Runway Load Balancer Metrics',
   tags=['runway', 'type:runway'],
   includeStandardEnvironmentAnnotations=false,
-  defaultDatasource=mimirHelper.mimirDatasource('Runway')
+  defaultDatasource=mimirHelper.mimirDatasource('runway')
 )
 .addTemplate(template.new(
   'loadbalancer',

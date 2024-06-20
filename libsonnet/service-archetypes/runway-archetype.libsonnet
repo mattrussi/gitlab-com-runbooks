@@ -4,7 +4,6 @@ local gaugeMetric = metricsCatalog.gaugeMetric;
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 local runwayHelper = import 'service-archetypes/helpers/runway.libsonnet';
 local googleLoadBalancerComponents = import 'services/lib/google_load_balancer_components.libsonnet';
-local mimirHelper = import 'services/lib/mimir-helpers.libsonnet';
 
 // Default Runway SLIs
 function(
@@ -41,8 +40,6 @@ function(
 
     // Runway splits traffic between multiple revisions for canary deployments
     serviceIsStageless: true,
-
-    defaultPrometheusDatasource: mimirHelper.mimirDatasource('Runway'),
 
     dangerouslyThanosEvaluated: true,
 

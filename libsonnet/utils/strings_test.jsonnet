@@ -216,4 +216,28 @@ test.suite({
     actual: strings.contains('hahiha', 'ho'),
     expect: false,
   },
+  testTitleHelloWorld: {
+    actual: strings.title('hello world'),
+    expect: 'Hello World',
+  },
+  testTitleAlreadyTitleCased: {
+    actual: strings.title('Hello World'),
+    expect: 'Hello World',
+  },
+  testTitleOneWord: {
+    actual: strings.title('hello'),
+    expect: 'Hello',
+  },
+  testTitleEmpty: {
+    actual: strings.title(''),
+    expect: '',
+  },
+  testTitleOnlySpace: {
+    actual: strings.title(' '),
+    expect: ' ',
+  },
+  testTitleMultipleSpaces: {
+    actual: strings.title('   '),
+    expect: '   ',
+  },
 })

@@ -11,14 +11,14 @@ local collectorSelector = {
   env: '$environment',
   cluster: '$cluster',
   namespace: '$namespace',
-  container: 'otel-collector'
+  container: 'otel-collector',
 };
 local collectorSelectorSerialized = selectors.serializeHash(collectorSelector);
 local queryAPISelector = {
   env: '$environment',
   cluster: '$cluster',
   namespace: 'default',
-  container: 'trace-query-api'
+  container: 'trace-query-api',
 };
 local queryAPISelectorSerialized = selectors.serializeHash(queryAPISelector);
 
@@ -27,7 +27,7 @@ basic.dashboard(
   tags=[
     'gitlab-observability',
   ],
-  defaultDatasource=mimirHelper.mimirDatasource('Gitlab Observability')
+  defaultDatasource=mimirHelper.mimirDatasource('gitlab-observability')
 )
 .addTemplate(templates.Node)
 .addTemplate(
@@ -94,12 +94,12 @@ basic.dashboard(
         up{%(selector)s, endpoint="metrics"}
       ||| % { selector: queryAPISelectorSerialized },
       legendFormat='{{ container }}',
-    )
+    ),
   ], cols=4, rowHeight=8, startRow=1)
 )
 .addPanel(
   row.new(title='HTTP Receiver'),
-  gridPos={ x: 0, y: 100, w: 24, h: 1}
+  gridPos={ x: 0, y: 100, w: 24, h: 1 }
 )
 .addPanels(
   layout.grid([
@@ -155,7 +155,7 @@ basic.dashboard(
         ) by (namespace)
       ||| % { selector: collectorSelectorSerialized },
       legendFormat='{{ namespace }}',
-    )
+    ),
   ], cols=3, rowHeight=8, startRow=201)
 )
 .addPanel(
@@ -195,7 +195,7 @@ basic.dashboard(
         max(container_memory_working_set_bytes{%(selector)s}) / (1024*1024*1024)
       ||| % { selector: queryAPISelectorSerialized },
       legendFormat='{{ container }}'
-    )
+    ),
   ], cols=4, rowHeight=8, startRow=301)
 )
 .addPanel(
@@ -276,6 +276,6 @@ basic.dashboard(
         )
       ||| % { selector: queryAPISelectorSerialized },
       legendFormat='{{ container }}',
-    )
+    ),
   ], cols=3, rowHeight=8, startRow=501)
 )

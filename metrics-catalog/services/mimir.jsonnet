@@ -7,7 +7,6 @@ local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 local googleLoadBalancerComponents = import './lib/google_load_balancer_components.libsonnet';
 local kubeLabelSelectors = metricsCatalog.kubeLabelSelectors;
 local combined = metricsCatalog.combined;
-local mimirHelper = import './lib/mimir-helpers.libsonnet';
 
 // Mimir operates across all stages and all environments,
 // so we use special labels to merge environments and stages...
@@ -23,7 +22,6 @@ metricsCatalog.serviceDefinition({
   type: 'mimir',
   tier: 'inf',
   tenants: ['metamonitoring'],
-  defaultPrometheusDatasource: mimirHelper.mimirDatasource('Metamonitoring'),
 
   tags: ['mimir'],
 

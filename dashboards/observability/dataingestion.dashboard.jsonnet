@@ -11,7 +11,7 @@ basic.dashboard(
   tags=[
     'gitlab-observability',
   ],
-  defaultDatasource=mimirHelper.mimirDatasource('Gitlab Observability')
+  defaultDatasource=mimirHelper.mimirDatasource('gitlab-observability')
 )
 .addTemplate(
   template.custom(

@@ -50,7 +50,7 @@ local mwmbrValidator = validator.validator(
 local buildValidator(definition) =
   local required = {
     selector: validator.object,
-    labels: arrayOfStringsValidator,
+    labels: validator.arrayOfStrings,
     upscaleLongerBurnRates: validator.boolean,
     offset: validator.optional(validator.duration),
   };
@@ -68,9 +68,9 @@ local buildValidator(definition) =
     if std.objectHas(definition, 'supportedBurnRates') then
       {
         supportedBurnRates: if definition.generateSLODashboards then
-          validator.and(arrayOfStringsValidator, mwmbrValidator)
+          validator.and(validator.arrayOfStrings, mwmbrValidator)
         else
-          arrayOfStringsValidator,
+          validator.arrayOfStrings,
       } else {};
   validator.new(required + optionalBurnRates + optionalFormats + optionalSupportedBurnRates);
 /**
