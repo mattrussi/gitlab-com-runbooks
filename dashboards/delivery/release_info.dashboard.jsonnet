@@ -3,6 +3,7 @@ local basic = import 'grafana/basic.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
 local promQuery = import 'grafana/prom_query.libsonnet';
 local row = grafana.row;
+local mimirHelper = import 'services/lib/mimir-helpers.libsonnet';
 
 // Monthly Release Information panels
 
@@ -531,6 +532,7 @@ basic.dashboard(
   time_to='now',
   includeStandardEnvironmentAnnotations=false,
   includeEnvironmentTemplate=false,
+  defaultDatasource=mimirHelper.mimirDatasource('gitlab-ops'),
 )
 
 .addPanel(
