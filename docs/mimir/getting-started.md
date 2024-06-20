@@ -125,3 +125,13 @@ Ensure you have selected the correct datasource for your tenant:
 Query away.
 
 For more information on using the explore UI, you can reference the [Grafana official docs](https://grafana.com/docs/grafana/latest/explore/).
+
+## VM Metrics Ingestion
+
+Mimir uses a different method to scrape virtual machines than Thanos did.  It no longer depends on chef relabelling and instead scrapes VMs based on two GCP labels:  gitlab_com_service and gitlab_com_type.  The service labels is used to scrape for specific services (as an example, all postgres running hosts have the service label postgres).  The type label is passed through to the metrics and will be the type label on the metrics themselves.
+
+These labels should be set in [config-mgmt](https://gitlab.com/gitlab-com/gl-infra/config-mgmt) as part of the Terraform configuration.  An example MR that set these is [https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/merge_requests/7714](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/merge_requests/7714)
+
+These labels are set either in variables or in the terraform configuration directly.
+
+The label scrape configs are managed via `scrapeConfig` CRD objects as part of the [GitLab Helmfiles](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/tree/master/releases/prometheus-agent?ref_type=heads) and are not yet self-service.  To add a new service, please open an issue in the [Scalability issue tracker](https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/).
