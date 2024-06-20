@@ -1,3 +1,4 @@
+local datasource = import './datasource.libsonnet';
 local platformLinks = import './platform_links.libsonnet';
 local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
 local metricsConfig = import 'gitlab-metrics-config.libsonnet';
@@ -299,7 +300,7 @@ local dashboardsForService(
         'Kube Containers Detail',
         tags=[type, 'type:' + type, 'kube', 'kube detail'],
         includeEnvironmentTemplate=std.objectHas(environmentSelectorHash, 'environment'),
-        defaultDatasource=serviceInfo.defaultPrometheusDatasource
+        defaultDatasource=datasource.defaultDatasourceForService(serviceInfo)
       )
       .addTemplateIf(std.objectHas(selector, 'stage'), templates.stage)
       .addPanels(
@@ -329,7 +330,7 @@ local dashboardsForService(
         'Kube Deployment Detail',
         tags=[type, 'type:' + type, 'kube', 'kube detail'],
         includeEnvironmentTemplate=std.objectHas(environmentSelectorHash, 'environment'),
-        defaultDatasource=serviceInfo.defaultPrometheusDatasource
+        defaultDatasource=datasource.defaultDatasourceForService(serviceInfo)
       )
       .addTemplateIf(std.objectHas(selector, 'stage'), templates.stage)
       .addPanels(

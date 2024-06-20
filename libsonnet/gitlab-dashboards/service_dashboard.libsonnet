@@ -14,6 +14,7 @@ local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
 local gitlabMetricsConfig = (import 'gitlab-metrics-config.libsonnet');
 local row = grafana.row;
 local commonAnnotations = import 'grafana/common_annotations.libsonnet';
+local datasource = import './datasource.libsonnet';
 
 local defaultEnvironmentSelector = gitlabMetricsConfig.grafanaEnvironmentSelector;
 
@@ -97,7 +98,7 @@ local overviewDashboard(
       tags=['gitlab', 'type:' + type, type, 'service overview'],
       includeStandardEnvironmentAnnotations=includeStandardEnvironmentAnnotations,
       includeEnvironmentTemplate=!omitEnvironmentDropdown && std.objectHas(environmentStageSelectorHash, 'environment'),
-      defaultDatasource=metricsCatalogServiceInfo.defaultPrometheusDatasource
+      defaultDatasource=datasource.defaultDatasourceForService(metricsCatalogServiceInfo)
     )
     .addAnnotationIf(
       metricsCatalogServiceInfo.getProvisioning().runway,
