@@ -20,26 +20,27 @@ Validation of restores happen in CI pipelines for both the Postgresql database a
 
 ## Recovery from a regional outage
 
-GitLab.com is deployed in single region, [us-east1 in GCP](https://about.gitlab.com/handbook/engineering/infrastructure/production/architecture/), a regional outage is not currently in scope for Infrastructure disaster recovery validation.
-In the [discovery issue for regional recovery](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/16250) we proposed what steps would be necessary to validate a regional recovery.
+GitLab.com is deployed in single region, [us-east1 in GCP](https://about.gitlab.com/handbook/engineering/infrastructure/production/architecture/).
+In the case of a regional outage, GitLab will restore capacity using the `us-central1` region.
+
+The recovery will start with a change issue using `/change declare` and selecting the `change_regional_recovery` template.
+
+**Note**: If the `us-east1` region is unavailable, it will be necessary to create a change issue on the Ops instance, so the `Use ops.gitlab.net instead of gitlab.com` option should be checked.
 
 ## Recovery from a zonal outage
 
 The Reliability team validates the ability of recovery from a disaster that impacts a single availability zone.
 
-### Zonal recovery checklist
+In the unlikely scenario of a zonal outage on GitLab, there are several sets of work that can be taken to restore GitLab.com to operational status by routing away from the zone that is degraded and spinning up new resources in working zones.
+To ensure speedy recovery, enlist help and delegate out these changes so they can be performed in parallel.
 
-In the unlikely scenario of a zonal outage on GitLab, there are several sets of work that can be taken to restore GitLab.com to operational status by routing away from the zone that is degraded and spinning up new resources in working zones. To ensure speedy recovery, enlist help and delegate out these changes so they can be performed in parallel.
+All recoveries start with a change issue using `/change declare` and selecting one of the following templates:
 
-- [ ] [Gitaly Zonal Outage Change Issue](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/new?issuable_template=change_zonal_recovery_gitaly)
-- [ ] [Patroni Zonal Outage Change Issue](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/new?issuable_template=change_zonal_recovery_patroni)
-- [ ] [HAProxy Zonal Outage Change Issue](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/new?issuable_template=change_zonal_recovery_haproxy)
+- `change_zonal_recovery_gitaly`
+- `change_zonal_recovery_patroni`
+- `change_zonal_recovery_haproxy`
 
-**Note**: If GitLab.com is unavailable, you can open these templates on the Ops instance:
-
-- [ ] [Gitaly Zonal Outage Change Issue](https://ops.gitlab.net/gitlab-com/gl-infra/production/-/issues/new?issuable_template=change_zonal_recovery_gitaly)
-- [ ] [Patroni Zonal Outage Change Issue](https://ops.gitlab.net/gitlab-com/gl-infra/production/-/issues/new?issuable_template=change_zonal_recovery_patroni)
-- [ ] [HAProxy Zonal Outage Change Issue](https://ops.gitlab.net/gitlab-com/gl-infra/production/-/issues/new?issuable_template=change_zonal_recovery_haproxy)
+**Note**: If GitLab.com is unavailable, check the `Use ops.gitlab.net instead of gitlab.com` option when creating the change issue.
 
 **Note**: When the outage ends, it is not recommended to fail back or use the old infrastructure (if it is available) to avoid losing additional data.
 
