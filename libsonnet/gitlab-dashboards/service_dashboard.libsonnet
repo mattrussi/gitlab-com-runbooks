@@ -1,5 +1,4 @@
 local aggregationSets = (import 'gitlab-metrics-config.libsonnet').aggregationSets;
-local defaultPrometheusDS = (import 'gitlab-metrics-config.libsonnet').defaultPrometheusDatasource;
 local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
 local keyMetrics = import './key_metrics.libsonnet';
 local kubeServiceDashboards = import './kube_service_dashboards.libsonnet';
