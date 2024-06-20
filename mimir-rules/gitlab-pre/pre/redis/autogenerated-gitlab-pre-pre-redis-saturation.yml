@@ -137,9 +137,9 @@ groups:
       max by(env, environment, tier, type, stage, shard) (
         clamp_min(
           clamp_max(
-            kube_horizontalpodautoscaler_status_desired_replicas:labeled{env="pre",type="redis", shard!~"database-throttled|elasticsearch|gitaly-throttled|urgent-authorized-projects|urgent-other", namespace!~"pubsubbeat"}
+            kube_horizontalpodautoscaler_status_desired_replicas:labeled{env="pre",type="redis", shard!~"database-throttled|elasticsearch|gitaly-throttled|urgent-authorized-projects", namespace!~"pubsubbeat"}
             /
-            kube_horizontalpodautoscaler_spec_max_replicas:labeled{env="pre",type="redis", shard!~"database-throttled|elasticsearch|gitaly-throttled|urgent-authorized-projects|urgent-other", namespace!~"pubsubbeat"}
+            kube_horizontalpodautoscaler_spec_max_replicas:labeled{env="pre",type="redis", shard!~"database-throttled|elasticsearch|gitaly-throttled|urgent-authorized-projects", namespace!~"pubsubbeat"}
             ,
             1)
         ,

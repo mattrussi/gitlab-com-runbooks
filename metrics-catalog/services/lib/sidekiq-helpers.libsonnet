@@ -12,7 +12,7 @@ local shardDefinitions = {
   'memory-bound': { urgency: null, gkeDeployment: 'gitlab-sidekiq-memory-bound-v2', trafficCessationAlertConfig: false },
   quarantine: { urgency: null, gkeDeployment: 'gitlab-sidekiq-catchall-v2', trafficCessationAlertConfig: false },
   'urgent-cpu-bound': { urgency: 'high', gkeDeployment: 'gitlab-sidekiq-urgent-cpu-bound-v2' },
-  'urgent-other': { urgency: 'high', autoScaling: false, gkeDeployment: 'gitlab-sidekiq-urgent-other-v2' },
+  'urgent-other': { urgency: 'high', gkeDeployment: 'gitlab-sidekiq-urgent-other-v2' },
   'urgent-authorized-projects': { urgency: 'throttled', gkeDeployment: 'gitlab-sidekiq-urgent-authorized-projects-v2', trafficCessationAlertConfig: false },
   catchall: { urgency: null, gkeDeployment: 'gitlab-sidekiq-catchall-v2' },
   elasticsearch: { urgency: 'throttled', gkeDeployment: 'gitlab-sidekiq-elasticsearch-v2', trafficCessationAlertConfig: false },
