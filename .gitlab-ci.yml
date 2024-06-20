@@ -1036,6 +1036,20 @@ check-alerts:
     - go get github.com/prometheus/prometheus/...
     - go run alerts-checker.go ../legacy-prometheus-rules $THANOS_URL $IGNORED_ALERTS
 
+test-alert-templates:
+  stage: test
+  needs: []
+  image: $GOLANG_IMAGE
+  rules:
+    - !reference [.default-job-rules, rules]
+    - *avoid-schedule-rule
+    - <<: *if-merge-request-rule
+      changes:
+        paths:
+          - alertmanager/templates/**/*
+  script:
+    - make test-alert-templates
+
 validate-alerts:
   stage: validate
   needs: []

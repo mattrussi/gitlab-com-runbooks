@@ -15,7 +15,7 @@
             {{/* If we have a Grafana datasource ID the alert has come from Mimir so link to Grafana's explore page */}}
             {{- if and .Annotations.grafana_datasource_id .GeneratorURL -}}
                 {{/* First we need to pull the query expression from the generator URL, this is urlquery encoded already */}}
-                {{- $expr := (.GeneratorURL | reReplaceAll ".*expr=" "" | reReplaceAll "\n" "\\n" | reReplaceAll "\"" `\"`) -}}
+                {{- $expr := (.GeneratorURL | reReplaceAll "&g0.*" "" | reReplaceAll ".*expr=" "" | reReplaceAll "\n" "\\n" | reReplaceAll "\"" `\"`) -}}
                 {{/* Then we need to insert the query expression into the panes JSON object that Grafana expects and URL encode it */}}
                 {{- $panes := urlquery (printf $panesTemplate .Annotations.grafana_datasource_id .Annotations.grafana_datasource_id) | reReplaceAll "EXPR_PLACEHOLDER" $expr -}}
                 {{/* Finally we build the link to the Grafana explore page */}}

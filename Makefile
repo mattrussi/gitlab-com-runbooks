@@ -106,6 +106,10 @@ test-jsonnet:
 test-shunit:
 	./test/custom-reference-architecture_test.sh
 
+.PHONY: test-alert-templates
+test-alert-templates:
+	cd alertmanager/templates && go test -v ./...
+
 .PHONY: jsonnet-bundle
 jsonnet-bundle:
 	./scripts/bundler.sh
