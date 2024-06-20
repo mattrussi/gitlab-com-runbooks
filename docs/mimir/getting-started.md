@@ -132,4 +132,4 @@ Mimir uses a different method to scrape virtual machines than Thanos did.  It no
 
 These labels should be set in [config-mgmt](https://gitlab.com/gitlab-com/gl-infra/config-mgmt) as part of the Terraform configuration.
 
-The label scrape configs are managed as part of the [GitLab Helmfiles](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/tree/master/releases/prometheus-agent?ref_type=heads) and are not yet self-service.  To add a new service, please open an issue in the [Scalability issue tracker](https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/).
+The label scrape configs are managed via `scrapeConfig` CRD objects as part of the [GitLab Helmfiles](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/tree/master/releases/prometheus-agent?ref_type=heads) and are not yet self-service.  To add a new service, please open an issue in the [Scalability issue tracker](https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/).
