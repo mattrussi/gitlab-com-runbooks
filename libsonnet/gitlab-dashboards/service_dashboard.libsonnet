@@ -1,4 +1,5 @@
 local aggregationSets = (import 'gitlab-metrics-config.libsonnet').aggregationSets;
+local defaultPrometheusDS = (import 'gitlab-metrics-config.libsonnet').defaultPrometheusDatasource;
 local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
 local keyMetrics = import './key_metrics.libsonnet';
 local kubeServiceDashboards = import './kube_service_dashboards.libsonnet';
@@ -71,6 +72,7 @@ local overviewDashboard(
   saturationEnvironmentSelectorHash=defaultEnvironmentSelector,
   omitEnvironmentDropdown=false,
   includeStandardEnvironmentAnnotations=true,
+  dashboardDatasource=null,
 
   // Features
   showProvisioningDetails=true,
@@ -80,6 +82,14 @@ local overviewDashboard(
 
   local metricsCatalogServiceInfo = metricsCatalog.getService(type);
   local saturationComponents = metricsCatalogServiceInfo.applicableSaturationTypes();
+
+  // Use dashboardDatasource if set in dashboard definition,
+  // otherwise use the default datasource by service type
+  local prometheusDatasource =
+    if dashboardDatasource != null then
+      dashboardDatasource
+    else
+      metricsCatalogServiceInfo.defaultPrometheusDatasource;
 
   local stageLabels =
     if metricsCatalogServiceInfo.serviceIsStageless || !gitlabMetricsConfig.useEnvironmentStages then
@@ -97,7 +107,7 @@ local overviewDashboard(
       tags=['gitlab', 'type:' + type, type, 'service overview'],
       includeStandardEnvironmentAnnotations=includeStandardEnvironmentAnnotations,
       includeEnvironmentTemplate=!omitEnvironmentDropdown && std.objectHas(environmentStageSelectorHash, 'environment'),
-      defaultDatasource=metricsCatalogServiceInfo.defaultPrometheusDatasource
+      defaultDatasource=prometheusDatasource
     )
     .addAnnotationIf(
       metricsCatalogServiceInfo.getProvisioning().runway,
