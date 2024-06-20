@@ -12,7 +12,7 @@ groups:
       type: customersdot
     expr: |
       sum by (env,environment,stage,feature_category) (
-        sli_aggregations:gitlab_sli_customers_dot_requests_apdex_success_total:rate_5m{env="gstg"} offset 30s
+        sli_aggregations:gitlab_sli_customers_dot_requests_apdex_success_total:rate_5m{} offset 30s
       )
   - record: gitlab:component:feature_category:execution:apdex:weight:score_5m
     labels:
@@ -22,7 +22,7 @@ groups:
       type: customersdot
     expr: |
       sum by (env,environment,stage,feature_category) (
-        sli_aggregations:gitlab_sli_customers_dot_requests_apdex_total:rate_5m{env="gstg"} offset 30s
+        sli_aggregations:gitlab_sli_customers_dot_requests_apdex_total:rate_5m{} offset 30s
       )
   - record: gitlab:component:feature_category:execution:ops:rate_5m
     labels:
@@ -32,7 +32,7 @@ groups:
       type: customersdot
     expr: |
       sum by (env,environment,stage,feature_category) (
-        sli_aggregations:gitlab_sli_customers_dot_requests_total:rate_5m{env="gstg"} offset 30s
+        sli_aggregations:gitlab_sli_customers_dot_requests_total:rate_5m{} offset 30s
       )
   - record: gitlab:component:feature_category:execution:error:rate_5m
     labels:
@@ -43,13 +43,13 @@ groups:
     expr: |
       (
         sum by (env,environment,stage,feature_category) (
-          sli_aggregations:gitlab_sli_customers_dot_requests_error_total:rate_5m{env="gstg"} offset 30s
+          sli_aggregations:gitlab_sli_customers_dot_requests_error_total:rate_5m{} offset 30s
         )
       )
       or
       (
         0 * group by(env,environment,stage,feature_category) (
-          gitlab:component:feature_category:execution:ops:rate_5m{component="customers_dot_requests",env="gstg",monitor="global",tier="sv",type="customersdot"}
+          gitlab:component:feature_category:execution:ops:rate_5m{component="customers_dot_requests",monitor="global",tier="sv",type="customersdot"}
         )
       )
   - record: gitlab:component:feature_category:execution:apdex:success:rate_5m
@@ -60,7 +60,7 @@ groups:
       type: customersdot
     expr: |
       sum by (env,environment,stage,feature_category) (
-        sli_aggregations:gitlab_sli_customers_dot_sidekiq_jobs_apdex_success_total:rate_5m{env="gstg",type="customersdot"} offset 30s
+        sli_aggregations:gitlab_sli_customers_dot_sidekiq_jobs_apdex_success_total:rate_5m{type="customersdot"} offset 30s
       )
   - record: gitlab:component:feature_category:execution:apdex:weight:score_5m
     labels:
@@ -70,7 +70,7 @@ groups:
       type: customersdot
     expr: |
       sum by (env,environment,stage,feature_category) (
-        sli_aggregations:gitlab_sli_customers_dot_sidekiq_jobs_apdex_total:rate_5m{env="gstg",type="customersdot"} offset 30s
+        sli_aggregations:gitlab_sli_customers_dot_sidekiq_jobs_apdex_total:rate_5m{type="customersdot"} offset 30s
       )
   - record: gitlab:component:feature_category:execution:ops:rate_5m
     labels:
@@ -80,7 +80,7 @@ groups:
       type: customersdot
     expr: |
       sum by (env,environment,stage,feature_category) (
-        sli_aggregations:gitlab_sli_customers_dot_sidekiq_jobs_total:rate_5m{env="gstg",type="customersdot"} offset 30s
+        sli_aggregations:gitlab_sli_customers_dot_sidekiq_jobs_total:rate_5m{type="customersdot"} offset 30s
       )
   - record: gitlab:component:feature_category:execution:error:rate_5m
     labels:
@@ -91,13 +91,13 @@ groups:
     expr: |
       (
         sum by (env,environment,stage,feature_category) (
-          sli_aggregations:gitlab_sli_customers_dot_sidekiq_jobs_error_total:rate_5m{env="gstg",type="customersdot"} offset 30s
+          sli_aggregations:gitlab_sli_customers_dot_sidekiq_jobs_error_total:rate_5m{type="customersdot"} offset 30s
         )
       )
       or
       (
         0 * group by(env,environment,stage,feature_category) (
-          gitlab:component:feature_category:execution:ops:rate_5m{component="customers_dot_sidekiq_jobs",env="gstg",monitor="global",tier="sv",type="customersdot"}
+          gitlab:component:feature_category:execution:ops:rate_5m{component="customers_dot_sidekiq_jobs",monitor="global",tier="sv",type="customersdot"}
         )
       )
 - name: 'Feature Category Metrics: customersdot - Burn-Rate 30m'
@@ -111,7 +111,7 @@ groups:
       type: customersdot
     expr: |
       sum by (env,environment,stage,feature_category) (
-        sli_aggregations:gitlab_sli_customers_dot_requests_apdex_success_total:rate_30m{env="gstg"} offset 30s
+        sli_aggregations:gitlab_sli_customers_dot_requests_apdex_success_total:rate_30m{} offset 30s
       )
   - record: gitlab:component:feature_category:execution:apdex:weight:score_30m
     labels:
@@ -121,7 +121,7 @@ groups:
       type: customersdot
     expr: |
       sum by (env,environment,stage,feature_category) (
-        sli_aggregations:gitlab_sli_customers_dot_requests_apdex_total:rate_30m{env="gstg"} offset 30s
+        sli_aggregations:gitlab_sli_customers_dot_requests_apdex_total:rate_30m{} offset 30s
       )
   - record: gitlab:component:feature_category:execution:ops:rate_30m
     labels:
@@ -131,7 +131,7 @@ groups:
       type: customersdot
     expr: |
       sum by (env,environment,stage,feature_category) (
-        sli_aggregations:gitlab_sli_customers_dot_requests_total:rate_30m{env="gstg"} offset 30s
+        sli_aggregations:gitlab_sli_customers_dot_requests_total:rate_30m{} offset 30s
       )
   - record: gitlab:component:feature_category:execution:error:rate_30m
     labels:
@@ -142,13 +142,13 @@ groups:
     expr: |
       (
         sum by (env,environment,stage,feature_category) (
-          sli_aggregations:gitlab_sli_customers_dot_requests_error_total:rate_30m{env="gstg"} offset 30s
+          sli_aggregations:gitlab_sli_customers_dot_requests_error_total:rate_30m{} offset 30s
         )
       )
       or
       (
         0 * group by(env,environment,stage,feature_category) (
-          gitlab:component:feature_category:execution:ops:rate_30m{component="customers_dot_requests",env="gstg",monitor="global",tier="sv",type="customersdot"}
+          gitlab:component:feature_category:execution:ops:rate_30m{component="customers_dot_requests",monitor="global",tier="sv",type="customersdot"}
         )
       )
   - record: gitlab:component:feature_category:execution:apdex:success:rate_30m
@@ -159,7 +159,7 @@ groups:
       type: customersdot
     expr: |
       sum by (env,environment,stage,feature_category) (
-        sli_aggregations:gitlab_sli_customers_dot_sidekiq_jobs_apdex_success_total:rate_30m{env="gstg",type="customersdot"} offset 30s
+        sli_aggregations:gitlab_sli_customers_dot_sidekiq_jobs_apdex_success_total:rate_30m{type="customersdot"} offset 30s
       )
   - record: gitlab:component:feature_category:execution:apdex:weight:score_30m
     labels:
@@ -169,7 +169,7 @@ groups:
       type: customersdot
     expr: |
       sum by (env,environment,stage,feature_category) (
-        sli_aggregations:gitlab_sli_customers_dot_sidekiq_jobs_apdex_total:rate_30m{env="gstg",type="customersdot"} offset 30s
+        sli_aggregations:gitlab_sli_customers_dot_sidekiq_jobs_apdex_total:rate_30m{type="customersdot"} offset 30s
       )
   - record: gitlab:component:feature_category:execution:ops:rate_30m
     labels:
@@ -179,7 +179,7 @@ groups:
       type: customersdot
     expr: |
       sum by (env,environment,stage,feature_category) (
-        sli_aggregations:gitlab_sli_customers_dot_sidekiq_jobs_total:rate_30m{env="gstg",type="customersdot"} offset 30s
+        sli_aggregations:gitlab_sli_customers_dot_sidekiq_jobs_total:rate_30m{type="customersdot"} offset 30s
       )
   - record: gitlab:component:feature_category:execution:error:rate_30m
     labels:
@@ -190,13 +190,13 @@ groups:
     expr: |
       (
         sum by (env,environment,stage,feature_category) (
-          sli_aggregations:gitlab_sli_customers_dot_sidekiq_jobs_error_total:rate_30m{env="gstg",type="customersdot"} offset 30s
+          sli_aggregations:gitlab_sli_customers_dot_sidekiq_jobs_error_total:rate_30m{type="customersdot"} offset 30s
         )
       )
       or
       (
         0 * group by(env,environment,stage,feature_category) (
-          gitlab:component:feature_category:execution:ops:rate_30m{component="customers_dot_sidekiq_jobs",env="gstg",monitor="global",tier="sv",type="customersdot"}
+          gitlab:component:feature_category:execution:ops:rate_30m{component="customers_dot_sidekiq_jobs",monitor="global",tier="sv",type="customersdot"}
         )
       )
 - name: 'Feature Category Metrics: customersdot - Burn-Rate 1h'
@@ -210,7 +210,7 @@ groups:
       type: customersdot
     expr: |
       sum by (env,environment,stage,feature_category) (
-        sli_aggregations:gitlab_sli_customers_dot_requests_apdex_success_total:rate_1h{env="gstg"} offset 30s
+        sli_aggregations:gitlab_sli_customers_dot_requests_apdex_success_total:rate_1h{} offset 30s
       )
   - record: gitlab:component:feature_category:execution:apdex:weight:score_1h
     labels:
@@ -220,7 +220,7 @@ groups:
       type: customersdot
     expr: |
       sum by (env,environment,stage,feature_category) (
-        sli_aggregations:gitlab_sli_customers_dot_requests_apdex_total:rate_1h{env="gstg"} offset 30s
+        sli_aggregations:gitlab_sli_customers_dot_requests_apdex_total:rate_1h{} offset 30s
       )
   - record: gitlab:component:feature_category:execution:ops:rate_1h
     labels:
@@ -230,7 +230,7 @@ groups:
       type: customersdot
     expr: |
       sum by (env,environment,stage,feature_category) (
-        sli_aggregations:gitlab_sli_customers_dot_requests_total:rate_1h{env="gstg"} offset 30s
+        sli_aggregations:gitlab_sli_customers_dot_requests_total:rate_1h{} offset 30s
       )
   - record: gitlab:component:feature_category:execution:error:rate_1h
     labels:
@@ -241,13 +241,13 @@ groups:
     expr: |
       (
         sum by (env,environment,stage,feature_category) (
-          sli_aggregations:gitlab_sli_customers_dot_requests_error_total:rate_1h{env="gstg"} offset 30s
+          sli_aggregations:gitlab_sli_customers_dot_requests_error_total:rate_1h{} offset 30s
         )
       )
       or
       (
         0 * group by(env,environment,stage,feature_category) (
-          gitlab:component:feature_category:execution:ops:rate_1h{component="customers_dot_requests",env="gstg",monitor="global",tier="sv",type="customersdot"}
+          gitlab:component:feature_category:execution:ops:rate_1h{component="customers_dot_requests",monitor="global",tier="sv",type="customersdot"}
         )
       )
   - record: gitlab:component:feature_category:execution:apdex:success:rate_1h
@@ -258,7 +258,7 @@ groups:
       type: customersdot
     expr: |
       sum by (env,environment,stage,feature_category) (
-        sli_aggregations:gitlab_sli_customers_dot_sidekiq_jobs_apdex_success_total:rate_1h{env="gstg",type="customersdot"} offset 30s
+        sli_aggregations:gitlab_sli_customers_dot_sidekiq_jobs_apdex_success_total:rate_1h{type="customersdot"} offset 30s
       )
   - record: gitlab:component:feature_category:execution:apdex:weight:score_1h
     labels:
@@ -268,7 +268,7 @@ groups:
       type: customersdot
     expr: |
       sum by (env,environment,stage,feature_category) (
-        sli_aggregations:gitlab_sli_customers_dot_sidekiq_jobs_apdex_total:rate_1h{env="gstg",type="customersdot"} offset 30s
+        sli_aggregations:gitlab_sli_customers_dot_sidekiq_jobs_apdex_total:rate_1h{type="customersdot"} offset 30s
       )
   - record: gitlab:component:feature_category:execution:ops:rate_1h
     labels:
@@ -278,7 +278,7 @@ groups:
       type: customersdot
     expr: |
       sum by (env,environment,stage,feature_category) (
-        sli_aggregations:gitlab_sli_customers_dot_sidekiq_jobs_total:rate_1h{env="gstg",type="customersdot"} offset 30s
+        sli_aggregations:gitlab_sli_customers_dot_sidekiq_jobs_total:rate_1h{type="customersdot"} offset 30s
       )
   - record: gitlab:component:feature_category:execution:error:rate_1h
     labels:
@@ -289,13 +289,13 @@ groups:
     expr: |
       (
         sum by (env,environment,stage,feature_category) (
-          sli_aggregations:gitlab_sli_customers_dot_sidekiq_jobs_error_total:rate_1h{env="gstg",type="customersdot"} offset 30s
+          sli_aggregations:gitlab_sli_customers_dot_sidekiq_jobs_error_total:rate_1h{type="customersdot"} offset 30s
         )
       )
       or
       (
         0 * group by(env,environment,stage,feature_category) (
-          gitlab:component:feature_category:execution:ops:rate_1h{component="customers_dot_sidekiq_jobs",env="gstg",monitor="global",tier="sv",type="customersdot"}
+          gitlab:component:feature_category:execution:ops:rate_1h{component="customers_dot_sidekiq_jobs",monitor="global",tier="sv",type="customersdot"}
         )
       )
 - name: 'Feature Category Metrics: customersdot - Burn-Rate 6h'
@@ -309,7 +309,7 @@ groups:
       type: customersdot
     expr: |
       sum by (env,environment,stage,feature_category) (
-        avg_over_time(gitlab:component:feature_category:execution:apdex:success:rate_1h{component="customers_dot_requests",env="gstg",monitor="global",tier="sv",type="customersdot"}[6h] offset 30s)
+        avg_over_time(gitlab:component:feature_category:execution:apdex:success:rate_1h{component="customers_dot_requests",monitor="global",tier="sv",type="customersdot"}[6h] offset 30s)
       )
   - record: gitlab:component:feature_category:execution:apdex:weight:score_6h
     labels:
@@ -319,7 +319,7 @@ groups:
       type: customersdot
     expr: |
       sum by (env,environment,stage,feature_category) (
-        avg_over_time(gitlab:component:feature_category:execution:apdex:weight:score_1h{component="customers_dot_requests",env="gstg",monitor="global",tier="sv",type="customersdot"}[6h] offset 30s)
+        avg_over_time(gitlab:component:feature_category:execution:apdex:weight:score_1h{component="customers_dot_requests",monitor="global",tier="sv",type="customersdot"}[6h] offset 30s)
       )
   - record: gitlab:component:feature_category:execution:ops:rate_6h
     labels:
@@ -329,7 +329,7 @@ groups:
       type: customersdot
     expr: |
       sum by (env,environment,stage,feature_category) (
-        avg_over_time(gitlab:component:feature_category:execution:ops:rate_1h{component="customers_dot_requests",env="gstg",monitor="global",tier="sv",type="customersdot"}[6h] offset 30s)
+        avg_over_time(gitlab:component:feature_category:execution:ops:rate_1h{component="customers_dot_requests",monitor="global",tier="sv",type="customersdot"}[6h] offset 30s)
       )
   - record: gitlab:component:feature_category:execution:error:rate_6h
     labels:
@@ -339,7 +339,7 @@ groups:
       type: customersdot
     expr: |
       sum by (env,environment,stage,feature_category) (
-        avg_over_time(gitlab:component:feature_category:execution:error:rate_1h{component="customers_dot_requests",env="gstg",monitor="global",tier="sv",type="customersdot"}[6h] offset 30s)
+        avg_over_time(gitlab:component:feature_category:execution:error:rate_1h{component="customers_dot_requests",monitor="global",tier="sv",type="customersdot"}[6h] offset 30s)
       )
   - record: gitlab:component:feature_category:execution:apdex:success:rate_6h
     labels:
@@ -349,7 +349,7 @@ groups:
       type: customersdot
     expr: |
       sum by (env,environment,stage,feature_category) (
-        avg_over_time(gitlab:component:feature_category:execution:apdex:success:rate_1h{component="customers_dot_sidekiq_jobs",env="gstg",monitor="global",tier="sv",type="customersdot"}[6h] offset 30s)
+        avg_over_time(gitlab:component:feature_category:execution:apdex:success:rate_1h{component="customers_dot_sidekiq_jobs",monitor="global",tier="sv",type="customersdot"}[6h] offset 30s)
       )
   - record: gitlab:component:feature_category:execution:apdex:weight:score_6h
     labels:
@@ -359,7 +359,7 @@ groups:
       type: customersdot
     expr: |
       sum by (env,environment,stage,feature_category) (
-        avg_over_time(gitlab:component:feature_category:execution:apdex:weight:score_1h{component="customers_dot_sidekiq_jobs",env="gstg",monitor="global",tier="sv",type="customersdot"}[6h] offset 30s)
+        avg_over_time(gitlab:component:feature_category:execution:apdex:weight:score_1h{component="customers_dot_sidekiq_jobs",monitor="global",tier="sv",type="customersdot"}[6h] offset 30s)
       )
   - record: gitlab:component:feature_category:execution:ops:rate_6h
     labels:
@@ -369,7 +369,7 @@ groups:
       type: customersdot
     expr: |
       sum by (env,environment,stage,feature_category) (
-        avg_over_time(gitlab:component:feature_category:execution:ops:rate_1h{component="customers_dot_sidekiq_jobs",env="gstg",monitor="global",tier="sv",type="customersdot"}[6h] offset 30s)
+        avg_over_time(gitlab:component:feature_category:execution:ops:rate_1h{component="customers_dot_sidekiq_jobs",monitor="global",tier="sv",type="customersdot"}[6h] offset 30s)
       )
   - record: gitlab:component:feature_category:execution:error:rate_6h
     labels:
@@ -379,7 +379,7 @@ groups:
       type: customersdot
     expr: |
       sum by (env,environment,stage,feature_category) (
-        avg_over_time(gitlab:component:feature_category:execution:error:rate_1h{component="customers_dot_sidekiq_jobs",env="gstg",monitor="global",tier="sv",type="customersdot"}[6h] offset 30s)
+        avg_over_time(gitlab:component:feature_category:execution:error:rate_1h{component="customers_dot_sidekiq_jobs",monitor="global",tier="sv",type="customersdot"}[6h] offset 30s)
       )
 - name: 'Feature Category Metrics: customersdot - Burn-Rate 3d'
   interval: 2m
@@ -392,7 +392,7 @@ groups:
       type: customersdot
     expr: |
       sum by (env,environment,stage,feature_category) (
-        avg_over_time(gitlab:component:feature_category:execution:apdex:success:rate_1h{component="customers_dot_requests",env="gstg",monitor="global",tier="sv",type="customersdot"}[3d] offset 30s)
+        avg_over_time(gitlab:component:feature_category:execution:apdex:success:rate_1h{component="customers_dot_requests",monitor="global",tier="sv",type="customersdot"}[3d] offset 30s)
       )
   - record: gitlab:component:feature_category:execution:apdex:weight:score_3d
     labels:
@@ -402,7 +402,7 @@ groups:
       type: customersdot
     expr: |
       sum by (env,environment,stage,feature_category) (
-        avg_over_time(gitlab:component:feature_category:execution:apdex:weight:score_1h{component="customers_dot_requests",env="gstg",monitor="global",tier="sv",type="customersdot"}[3d] offset 30s)
+        avg_over_time(gitlab:component:feature_category:execution:apdex:weight:score_1h{component="customers_dot_requests",monitor="global",tier="sv",type="customersdot"}[3d] offset 30s)
       )
   - record: gitlab:component:feature_category:execution:ops:rate_3d
     labels:
@@ -412,7 +412,7 @@ groups:
       type: customersdot
     expr: |
       sum by (env,environment,stage,feature_category) (
-        avg_over_time(gitlab:component:feature_category:execution:ops:rate_1h{component="customers_dot_requests",env="gstg",monitor="global",tier="sv",type="customersdot"}[3d] offset 30s)
+        avg_over_time(gitlab:component:feature_category:execution:ops:rate_1h{component="customers_dot_requests",monitor="global",tier="sv",type="customersdot"}[3d] offset 30s)
       )
   - record: gitlab:component:feature_category:execution:error:rate_3d
     labels:
@@ -422,7 +422,7 @@ groups:
       type: customersdot
     expr: |
       sum by (env,environment,stage,feature_category) (
-        avg_over_time(gitlab:component:feature_category:execution:error:rate_1h{component="customers_dot_requests",env="gstg",monitor="global",tier="sv",type="customersdot"}[3d] offset 30s)
+        avg_over_time(gitlab:component:feature_category:execution:error:rate_1h{component="customers_dot_requests",monitor="global",tier="sv",type="customersdot"}[3d] offset 30s)
       )
   - record: gitlab:component:feature_category:execution:apdex:success:rate_3d
     labels:
@@ -432,7 +432,7 @@ groups:
       type: customersdot
     expr: |
       sum by (env,environment,stage,feature_category) (
-        avg_over_time(gitlab:component:feature_category:execution:apdex:success:rate_1h{component="customers_dot_sidekiq_jobs",env="gstg",monitor="global",tier="sv",type="customersdot"}[3d] offset 30s)
+        avg_over_time(gitlab:component:feature_category:execution:apdex:success:rate_1h{component="customers_dot_sidekiq_jobs",monitor="global",tier="sv",type="customersdot"}[3d] offset 30s)
       )
   - record: gitlab:component:feature_category:execution:apdex:weight:score_3d
     labels:
@@ -442,7 +442,7 @@ groups:
       type: customersdot
     expr: |
       sum by (env,environment,stage,feature_category) (
-        avg_over_time(gitlab:component:feature_category:execution:apdex:weight:score_1h{component="customers_dot_sidekiq_jobs",env="gstg",monitor="global",tier="sv",type="customersdot"}[3d] offset 30s)
+        avg_over_time(gitlab:component:feature_category:execution:apdex:weight:score_1h{component="customers_dot_sidekiq_jobs",monitor="global",tier="sv",type="customersdot"}[3d] offset 30s)
       )
   - record: gitlab:component:feature_category:execution:ops:rate_3d
     labels:
@@ -452,7 +452,7 @@ groups:
       type: customersdot
     expr: |
       sum by (env,environment,stage,feature_category) (
-        avg_over_time(gitlab:component:feature_category:execution:ops:rate_1h{component="customers_dot_sidekiq_jobs",env="gstg",monitor="global",tier="sv",type="customersdot"}[3d] offset 30s)
+        avg_over_time(gitlab:component:feature_category:execution:ops:rate_1h{component="customers_dot_sidekiq_jobs",monitor="global",tier="sv",type="customersdot"}[3d] offset 30s)
       )
   - record: gitlab:component:feature_category:execution:error:rate_3d
     labels:
@@ -462,5 +462,5 @@ groups:
       type: customersdot
     expr: |
       sum by (env,environment,stage,feature_category) (
-        avg_over_time(gitlab:component:feature_category:execution:error:rate_1h{component="customers_dot_sidekiq_jobs",env="gstg",monitor="global",tier="sv",type="customersdot"}[3d] offset 30s)
+        avg_over_time(gitlab:component:feature_category:execution:error:rate_1h{component="customers_dot_sidekiq_jobs",monitor="global",tier="sv",type="customersdot"}[3d] offset 30s)
       )

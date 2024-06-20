@@ -5,15 +5,15 @@ groups:
   interval: 5m
   rules:
   - record: gitlab_component_saturation:ratio_quantile95_1w
-    expr: quantile_over_time(0.95, gitlab_component_saturation:ratio{env="gprd",type="customersdot"}[1w])
+    expr: quantile_over_time(0.95, gitlab_component_saturation:ratio{type="customersdot"}[1w])
   - record: gitlab_component_saturation:ratio_quantile99_1w
-    expr: quantile_over_time(0.99, gitlab_component_saturation:ratio{env="gprd",type="customersdot"}[1w])
+    expr: quantile_over_time(0.99, gitlab_component_saturation:ratio{type="customersdot"}[1w])
   - record: gitlab_component_saturation:ratio_quantile95_1h
-    expr: quantile_over_time(0.95, gitlab_component_saturation:ratio{env="gprd",type="customersdot"}[1h])
+    expr: quantile_over_time(0.95, gitlab_component_saturation:ratio{type="customersdot"}[1h])
   - record: gitlab_component_saturation:ratio_quantile99_1h
-    expr: quantile_over_time(0.99, gitlab_component_saturation:ratio{env="gprd",type="customersdot"}[1h])
+    expr: quantile_over_time(0.99, gitlab_component_saturation:ratio{type="customersdot"}[1h])
   - record: gitlab_component_saturation:ratio_avg_1h
-    expr: avg_over_time(gitlab_component_saturation:ratio{env="gprd",type="customersdot"}[1h])
+    expr: avg_over_time(gitlab_component_saturation:ratio{type="customersdot"}[1h])
 - name: GitLab Saturation Alerts
   interval: 1m
   rules:
@@ -33,7 +33,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_cpu?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
         }}
-      grafana_datasource_id: mimir-gitlab-gprd
+      grafana_datasource_id: mimir-fulfillment-platform
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1465724101"
       grafana_variables: environment,type,stage
@@ -67,7 +67,7 @@ groups:
       rules_domain: general
       severity: s3
     expr: |
-      gitlab_component_saturation:ratio{component="cpu",env="gprd",type="customersdot"} > on(component) group_left
+      gitlab_component_saturation:ratio{component="cpu",type="customersdot"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="cpu"}
   - alert: component_saturation_slo_out_of_bounds:disk_inodes
     for: 15m
@@ -87,7 +87,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_disk_inodes?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
         }}
-      grafana_datasource_id: mimir-gitlab-gprd
+      grafana_datasource_id: mimir-fulfillment-platform
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "39965907"
       grafana_variables: environment,type,stage
@@ -126,7 +126,7 @@ groups:
       rules_domain: general
       severity: s2
     expr: |
-      gitlab_component_saturation:ratio{component="disk_inodes",env="gprd",type="customersdot"} > on(component) group_left
+      gitlab_component_saturation:ratio{component="disk_inodes",type="customersdot"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="disk_inodes"}
   - alert: ComponentResourceRunningOut_disk_inodes
     for: 15m
@@ -146,7 +146,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_disk_inodes?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
         }}
-      grafana_datasource_id: mimir-gitlab-gprd
+      grafana_datasource_id: mimir-fulfillment-platform
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "39965907"
       grafana_variables: environment,type,stage
@@ -186,7 +186,7 @@ groups:
       rules_domain: general
       severity: s2
     expr: |
-      predict_linear(gitlab_component_saturation:ratio{component="disk_inodes",env="gprd",type="customersdot"}[6h], 21600)
+      predict_linear(gitlab_component_saturation:ratio{component="disk_inodes",type="customersdot"}[6h], 21600)
       > on (component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="disk_inodes"}
   - alert: component_saturation_slo_out_of_bounds:disk_space
@@ -205,7 +205,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_disk_space?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
         }}
-      grafana_datasource_id: mimir-gitlab-gprd
+      grafana_datasource_id: mimir-fulfillment-platform
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2661375984"
       grafana_variables: environment,type,stage
@@ -240,7 +240,7 @@ groups:
       rules_domain: general
       severity: s2
     expr: |
-      gitlab_component_saturation:ratio{component="disk_space",env="gprd",type="customersdot"} > on(component) group_left
+      gitlab_component_saturation:ratio{component="disk_space",type="customersdot"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="disk_space"}
   - alert: ComponentResourceRunningOut_disk_space
     for: 15m
@@ -258,7 +258,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_disk_space?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
         }}
-      grafana_datasource_id: mimir-gitlab-gprd
+      grafana_datasource_id: mimir-fulfillment-platform
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2661375984"
       grafana_variables: environment,type,stage
@@ -294,7 +294,7 @@ groups:
       rules_domain: general
       severity: s2
     expr: |
-      predict_linear(gitlab_component_saturation:ratio{component="disk_space",env="gprd",type="customersdot"}[6h], 21600)
+      predict_linear(gitlab_component_saturation:ratio{component="disk_space",type="customersdot"}[6h], 21600)
       > on (component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="disk_space"}
   - alert: component_saturation_slo_out_of_bounds:memory
@@ -313,7 +313,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_memory?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
         }}
-      grafana_datasource_id: mimir-gitlab-gprd
+      grafana_datasource_id: mimir-fulfillment-platform
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1955556769"
       grafana_variables: environment,type,stage
@@ -343,7 +343,7 @@ groups:
       rules_domain: general
       severity: s4
     expr: |
-      gitlab_component_saturation:ratio{component="memory",env="gprd",type="customersdot"} > on(component) group_left
+      gitlab_component_saturation:ratio{component="memory",type="customersdot"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="memory"}
   - alert: component_saturation_slo_out_of_bounds:nf_conntrack_entries
     for: 5m
@@ -363,7 +363,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_conntrack?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
         }}
-      grafana_datasource_id: mimir-gitlab-gprd
+      grafana_datasource_id: mimir-fulfillment-platform
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "503581002"
       grafana_variables: environment,type,stage
@@ -397,7 +397,7 @@ groups:
       rules_domain: general
       severity: s3
     expr: |
-      gitlab_component_saturation:ratio{component="nf_conntrack_entries",env="gprd",type="customersdot"} > on(component) group_left
+      gitlab_component_saturation:ratio{component="nf_conntrack_entries",type="customersdot"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="nf_conntrack_entries"}
   - alert: component_saturation_slo_out_of_bounds:node_schedstat_waiting
     for: 90m
@@ -419,7 +419,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_node_schedstat_waiting?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
         }}
-      grafana_datasource_id: mimir-gitlab-gprd
+      grafana_datasource_id: mimir-fulfillment-platform
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1415313189"
       grafana_variables: environment,type,stage
@@ -449,7 +449,7 @@ groups:
       rules_domain: general
       severity: s4
     expr: |
-      gitlab_component_saturation:ratio{component="node_schedstat_waiting",env="gprd",type="customersdot"} > on(component) group_left
+      gitlab_component_saturation:ratio{component="node_schedstat_waiting",type="customersdot"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="node_schedstat_waiting"}
   - alert: component_saturation_slo_out_of_bounds:open_fds
     for: 5m
@@ -471,7 +471,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_open_fds?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
         }}
-      grafana_datasource_id: mimir-gitlab-gprd
+      grafana_datasource_id: mimir-fulfillment-platform
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1001792825"
       grafana_variables: environment,type,stage
@@ -522,7 +522,7 @@ groups:
       rules_domain: general
       severity: s2
     expr: |
-      gitlab_component_saturation:ratio{component="open_fds",env="gprd",type="customersdot"} > on(component) group_left
+      gitlab_component_saturation:ratio{component="open_fds",type="customersdot"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="open_fds"}
   - alert: component_saturation_slo_out_of_bounds:shard_cpu
     for: 5m
@@ -540,7 +540,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_shard_cpu?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
         }}
-      grafana_datasource_id: mimir-gitlab-gprd
+      grafana_datasource_id: mimir-fulfillment-platform
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1472933476"
       grafana_variables: environment,type,stage
@@ -574,7 +574,7 @@ groups:
       rules_domain: general
       severity: s3
     expr: |
-      gitlab_component_saturation:ratio{component="shard_cpu",env="gprd",type="customersdot"} > on(component) group_left
+      gitlab_component_saturation:ratio{component="shard_cpu",type="customersdot"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="shard_cpu"}
   - alert: component_saturation_slo_out_of_bounds:single_node_cpu
     for: 10m
@@ -594,7 +594,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_single_node_cpu?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
         }}
-      grafana_datasource_id: mimir-gitlab-gprd
+      grafana_datasource_id: mimir-fulfillment-platform
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3372411356"
       grafana_variables: environment,type,stage
@@ -624,5 +624,5 @@ groups:
       rules_domain: general
       severity: s4
     expr: |
-      gitlab_component_saturation:ratio{component="single_node_cpu",env="gprd",type="customersdot"} > on(component) group_left
+      gitlab_component_saturation:ratio{component="single_node_cpu",type="customersdot"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="single_node_cpu"}

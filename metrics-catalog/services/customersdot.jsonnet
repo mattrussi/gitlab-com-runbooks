@@ -6,6 +6,7 @@ local rateMetric = metricsCatalog.rateMetric;
 metricsCatalog.serviceDefinition({
   type: 'customersdot',
   tier: 'sv',
+  tenants: ['fulfillment-platform'],
 
   monitoringThresholds: {
     apdexScore: 0.9,

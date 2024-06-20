@@ -12,7 +12,7 @@ groups:
         clamp_min(
           clamp_max(
             1 - avg by (env, environment, tier, type, stage, shard) (
-              rate(node_cpu_seconds_total{mode="idle", env="gstg",type="customersdot"}[5m])
+              rate(node_cpu_seconds_total{mode="idle", type="customersdot"}[5m])
             )
             ,
             1)
@@ -27,9 +27,9 @@ groups:
         clamp_min(
           clamp_max(
             1 - (
-              node_filesystem_files_free{fstype=~"(ext.|xfs)", env="gstg",type="customersdot"}
+              node_filesystem_files_free{fstype=~"(ext.|xfs)", type="customersdot"}
               /
-              node_filesystem_files{fstype=~"(ext.|xfs)", env="gstg",type="customersdot"}
+              node_filesystem_files{fstype=~"(ext.|xfs)", type="customersdot"}
             )
             ,
             1)
@@ -44,7 +44,7 @@ groups:
         clamp_min(
           clamp_max(
             (
-              1 - node_filesystem_avail_bytes{fstype=~"ext.|xfs", env="gstg",type="customersdot"} / node_filesystem_size_bytes{fstype=~"ext.|xfs", env="gstg",type="customersdot"}
+              1 - node_filesystem_avail_bytes{fstype=~"ext.|xfs", type="customersdot"} / node_filesystem_size_bytes{fstype=~"ext.|xfs", type="customersdot"}
             )
             ,
             1)
@@ -58,7 +58,7 @@ groups:
       max by(env, environment, tier, type, stage, shard) (
         clamp_min(
           clamp_max(
-            instance:node_memory_utilization:ratio{env="gstg",type="customersdot"} or instance:node_memory_utilisation:ratio{env="gstg",type="customersdot"}
+            instance:node_memory_utilization:ratio{type="customersdot"} or instance:node_memory_utilisation:ratio{type="customersdot"}
             ,
             1)
         ,
@@ -71,9 +71,9 @@ groups:
       max by(env, environment, tier, type, stage, shard) (
         clamp_min(
           clamp_max(
-            max_over_time(node_nf_conntrack_entries{env="gstg",type="customersdot"}[1m])
+            max_over_time(node_nf_conntrack_entries{type="customersdot"}[1m])
             /
-            node_nf_conntrack_entries_limit{env="gstg",type="customersdot"}
+            node_nf_conntrack_entries_limit{type="customersdot"}
             ,
             1)
         ,
@@ -86,7 +86,7 @@ groups:
       max by(env, environment, tier, type, stage, shard) (
         clamp_min(
           clamp_max(
-            avg without (cpu) (rate(node_schedstat_waiting_seconds_total{env="gstg",type="customersdot"}[1h]))
+            avg without (cpu) (rate(node_schedstat_waiting_seconds_total{type="customersdot"}[1h]))
             ,
             1)
         ,
@@ -100,15 +100,15 @@ groups:
         clamp_min(
           clamp_max(
             (
-              process_open_fds{env="gstg",type="customersdot"}
+              process_open_fds{type="customersdot"}
               /
-              process_max_fds{env="gstg",type="customersdot"}
+              process_max_fds{type="customersdot"}
             )
             or
             (
-              ruby_file_descriptors{env="gstg",type="customersdot"}
+              ruby_file_descriptors{type="customersdot"}
               /
-              ruby_process_max_fds{env="gstg",type="customersdot"}
+              ruby_process_max_fds{type="customersdot"}
             )
             ,
             1)
@@ -123,7 +123,7 @@ groups:
         clamp_min(
           clamp_max(
             1 - avg by (env, environment, tier, type, stage, shard, shard) (
-              rate(node_cpu_seconds_total{mode="idle", env="gstg",type="customersdot"}[5m])
+              rate(node_cpu_seconds_total{mode="idle", type="customersdot"}[5m])
             )
             ,
             1)
@@ -137,7 +137,7 @@ groups:
       max by(env, environment, tier, type, stage, shard) (
         clamp_min(
           clamp_max(
-            avg without(cpu, mode) (1 - rate(node_cpu_seconds_total{mode="idle", env="gstg",type="customersdot"}[5m]))
+            avg without(cpu, mode) (1 - rate(node_cpu_seconds_total{mode="idle", type="customersdot"}[5m]))
             ,
             1)
         ,
