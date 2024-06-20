@@ -12,10 +12,15 @@ For more information on mixins, consult the docs/monitoring/mixins.md readme in 
 EOF
 fi
 
-for file in $(find mimir-rules -name "mixin.libsonnet" ! -path "*/vendor/*"); do
+find mimir-rules -name "mixin.libsonnet" ! -path "*/vendor/*" | while IFS= read -r file; do
   (
-    cd $(dirname ${file})
-    jb update
+    cd "$(dirname "${file}")" || exit
+    if test -f ./jsonnetfile.lock.json; then
+      jb update
+    else
+      jb install
+    fi
+
     mixtool generate all --output-alerts "alerts.yaml" --output-rules "rules.yaml" --directory "dashboards" mixin.libsonnet
   )
 done
