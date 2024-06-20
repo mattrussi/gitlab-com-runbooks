@@ -13,7 +13,7 @@ local selectorHash = {
 };
 local selectorSerialized = selectors.serializeHash(selectorHash);
 
-serviceDashboard.overview('customersdot')
+serviceDashboard.overview('customersdot', dashboardDatasource='Mimir - Fulfillment Platform')
 .addPanel(
   row.new(title='Availability', collapse=true).addPanel(
     basic.slaStats(
