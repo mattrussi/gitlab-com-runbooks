@@ -17,7 +17,7 @@ not be firing yet.
 Are metrics being reported from the relevant queues, or is the data missing? Are
 these jobs scheduled anywhere (you'll need to check both chef and k8s configs)?
 
-See [large-sidekiq-queue](large-sidekiq-queue.md).
+See [SidekiqQueueTooLarge Alert](../sidekiq/alerts/SidekiqQueueTooLarge.md)
 
 This is a new alert, please update this section with useful findings from
 instances of it.
