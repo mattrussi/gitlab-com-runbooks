@@ -457,9 +457,9 @@ groups:
       max by(environment, tier, type, stage, shard) (
         clamp_min(
           clamp_max(
-            kube_horizontalpodautoscaler_status_desired_replicas:labeled{type=~"web|ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|istio|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis-tracechunks|redis|registry|sidekiq|vault|web-pages|websockets|woodhouse|zoekt", shard!~"database-throttled|elasticsearch|gitaly-throttled|urgent-authorized-projects|urgent-other", namespace!~"pubsubbeat"}
+            kube_horizontalpodautoscaler_status_desired_replicas:labeled{type=~"web|ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|istio|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis-tracechunks|redis|registry|sidekiq|vault|web-pages|websockets|woodhouse|zoekt", shard!~"database-throttled|elasticsearch|gitaly-throttled|urgent-authorized-projects", namespace!~"pubsubbeat"}
             /
-            kube_horizontalpodautoscaler_spec_max_replicas:labeled{type=~"web|ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|istio|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis-tracechunks|redis|registry|sidekiq|vault|web-pages|websockets|woodhouse|zoekt", shard!~"database-throttled|elasticsearch|gitaly-throttled|urgent-authorized-projects|urgent-other", namespace!~"pubsubbeat"}
+            kube_horizontalpodautoscaler_spec_max_replicas:labeled{type=~"web|ai-assisted|api|atlantis|camoproxy|consul|external-dns|git|internal-api|istio|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|packagecloud|plantuml|redis-cluster-cache|redis-cluster-chat-cache|redis-cluster-feature-flag|redis-cluster-queues-meta|redis-cluster-ratelimiting|redis-cluster-repo-cache|redis-cluster-shared-state|redis-db-load-balancing|redis-pubsub|redis-registry-cache|redis-sessions|redis-sidekiq|redis-tracechunks|redis|registry|sidekiq|vault|web-pages|websockets|woodhouse|zoekt", shard!~"database-throttled|elasticsearch|gitaly-throttled|urgent-authorized-projects", namespace!~"pubsubbeat"}
             ,
             1)
         ,
@@ -4261,9 +4261,9 @@ groups:
         max by(environment, tier, type, stage, shard, horizontalpodautoscaler, shard) (
           clamp_min(
             clamp_max(
-              kube_horizontalpodautoscaler_status_desired_replicas:labeled{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}", shard!~"database-throttled|elasticsearch|gitaly-throttled|urgent-authorized-projects|urgent-other", namespace!~"pubsubbeat"}
+              kube_horizontalpodautoscaler_status_desired_replicas:labeled{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}", shard!~"database-throttled|elasticsearch|gitaly-throttled|urgent-authorized-projects", namespace!~"pubsubbeat"}
               /
-              kube_horizontalpodautoscaler_spec_max_replicas:labeled{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}", shard!~"database-throttled|elasticsearch|gitaly-throttled|urgent-authorized-projects|urgent-other", namespace!~"pubsubbeat"}
+              kube_horizontalpodautoscaler_spec_max_replicas:labeled{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}", shard!~"database-throttled|elasticsearch|gitaly-throttled|urgent-authorized-projects", namespace!~"pubsubbeat"}
               ,
               1)
           ,
@@ -4273,9 +4273,9 @@ groups:
         max by(environment, tier, type, stage, shard, horizontalpodautoscaler, shard) (
           clamp_min(
             clamp_max(
-              kube_horizontalpodautoscaler_status_desired_replicas:labeled{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}", shard!~"database-throttled|elasticsearch|gitaly-throttled|urgent-authorized-projects|urgent-other", namespace!~"pubsubbeat"}
+              kube_horizontalpodautoscaler_status_desired_replicas:labeled{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}", shard!~"database-throttled|elasticsearch|gitaly-throttled|urgent-authorized-projects", namespace!~"pubsubbeat"}
               /
-              kube_horizontalpodautoscaler_spec_max_replicas:labeled{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}", shard!~"database-throttled|elasticsearch|gitaly-throttled|urgent-authorized-projects|urgent-other", namespace!~"pubsubbeat"}
+              kube_horizontalpodautoscaler_spec_max_replicas:labeled{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}", shard!~"database-throttled|elasticsearch|gitaly-throttled|urgent-authorized-projects", namespace!~"pubsubbeat"}
               ,
               1)
           ,
