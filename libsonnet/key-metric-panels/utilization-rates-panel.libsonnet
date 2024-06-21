@@ -7,7 +7,8 @@ local utilizationRatesPanel(
   serviceType,
   selectorHash,
   compact=false,
-  stableId=stableId
+  stableId=stableId,
+  linewidth=if compact then 1 else 2,
       ) =
   local hasShardSelector = std.objectHas(selectorHash, 'shard');
   local aggregationLabels = if !hasShardSelector then ['component'] else ['component', 'shard'];
@@ -26,8 +27,8 @@ local utilizationRatesPanel(
     description='Saturation is a measure of what ratio of a finite resource is currently being utilized. Lower is better.',
     sort='decreasing',
     legend_show=!compact,
-    linewidth=if compact then 1 else 2,
-    stableId=stableId
+    linewidth=linewidth,
+    stableId=stableId,
   )
   .addTarget(  // Primary metric
     promQuery.target(

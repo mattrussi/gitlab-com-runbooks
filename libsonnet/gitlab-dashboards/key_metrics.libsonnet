@@ -114,7 +114,8 @@ local getColumnWidths(
               serviceType,
               selectorHash=selectorHashWithShard,
               compact=compact,
-              stableId='%(stableIdPrefix)sservice-utilization' % formatConfig
+              stableId='%(stableIdPrefix)sservice-utilization' % formatConfig,
+              linewidth=1,
             ),
           ]]
         else
