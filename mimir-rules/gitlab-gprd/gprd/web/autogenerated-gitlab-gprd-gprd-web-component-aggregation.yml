@@ -216,6 +216,62 @@ groups:
       sum by (env,environment,stage) (
         gitlab_component_apdex:weight:score_5m{component="loadbalancer",env="gprd",monitor="global",tier="sv",type="web"} offset 30s
       )
+  - record: gitlab_component_ops:rate_5m
+    labels:
+      component: logins
+      monitor: global
+      tier: sv
+      type: web
+    expr: |
+      sum by (env,environment,stage) (
+        sli_aggregations:gitlab_sli_rails_request_total:rate_5m{endpoint_id!~".*#failure",endpoint_id=~".*OmniauthCallbacksController.*|SessionsController#create",env="gprd"} offset 30s
+      )
+  - record: gitlab_component_errors:rate_5m
+    labels:
+      component: logins
+      monitor: global
+      tier: sv
+      type: web
+    expr: |
+      (
+        sum by (env,environment,stage) (
+          sli_aggregations:gitlab_sli_rails_request_error_total:rate_5m{endpoint_id=~".*OmniauthCallbacksController.*|SessionsController#create",env="gprd"} offset 30s
+        )
+      )
+      or
+      (
+        0 * group by(env,environment,stage) (
+          gitlab_component_ops:rate_5m{component="logins",env="gprd",monitor="global",tier="sv",type="web"}
+        )
+      )
+  - record: gitlab_component_errors:ratio_5m
+    labels:
+      component: logins
+      monitor: global
+      tier: sv
+      type: web
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_5m{component="logins",env="gprd",monitor="global",tier="sv",type="web"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_5m{component="logins",env="gprd",monitor="global",tier="sv",type="web"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_5m
+    labels:
+      component: logins
+      monitor: global
+      tier: sv
+      type: web
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_5m{component="logins",env="gprd",monitor="global",tier="sv",type="web"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_5m{component="logins",env="gprd",monitor="global",tier="sv",type="web"} offset 30s
+      )
   - record: gitlab_component_apdex:success:rate_5m
     labels:
       component: rails_request
@@ -590,6 +646,62 @@ groups:
       /
       sum by (env,environment,stage) (
         gitlab_component_apdex:weight:score_30m{component="loadbalancer",env="gprd",monitor="global",tier="sv",type="web"} offset 30s
+      )
+  - record: gitlab_component_ops:rate_30m
+    labels:
+      component: logins
+      monitor: global
+      tier: sv
+      type: web
+    expr: |
+      sum by (env,environment,stage) (
+        sli_aggregations:gitlab_sli_rails_request_total:rate_30m{endpoint_id!~".*#failure",endpoint_id=~".*OmniauthCallbacksController.*|SessionsController#create",env="gprd"} offset 30s
+      )
+  - record: gitlab_component_errors:rate_30m
+    labels:
+      component: logins
+      monitor: global
+      tier: sv
+      type: web
+    expr: |
+      (
+        sum by (env,environment,stage) (
+          sli_aggregations:gitlab_sli_rails_request_error_total:rate_30m{endpoint_id=~".*OmniauthCallbacksController.*|SessionsController#create",env="gprd"} offset 30s
+        )
+      )
+      or
+      (
+        0 * group by(env,environment,stage) (
+          gitlab_component_ops:rate_30m{component="logins",env="gprd",monitor="global",tier="sv",type="web"}
+        )
+      )
+  - record: gitlab_component_errors:ratio_30m
+    labels:
+      component: logins
+      monitor: global
+      tier: sv
+      type: web
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_30m{component="logins",env="gprd",monitor="global",tier="sv",type="web"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_30m{component="logins",env="gprd",monitor="global",tier="sv",type="web"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_30m
+    labels:
+      component: logins
+      monitor: global
+      tier: sv
+      type: web
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_30m{component="logins",env="gprd",monitor="global",tier="sv",type="web"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_30m{component="logins",env="gprd",monitor="global",tier="sv",type="web"} offset 30s
       )
   - record: gitlab_component_apdex:success:rate_30m
     labels:
@@ -966,6 +1078,62 @@ groups:
       sum by (env,environment,stage) (
         gitlab_component_apdex:weight:score_1h{component="loadbalancer",env="gprd",monitor="global",tier="sv",type="web"} offset 30s
       )
+  - record: gitlab_component_ops:rate_1h
+    labels:
+      component: logins
+      monitor: global
+      tier: sv
+      type: web
+    expr: |
+      sum by (env,environment,stage) (
+        sli_aggregations:gitlab_sli_rails_request_total:rate_1h{endpoint_id!~".*#failure",endpoint_id=~".*OmniauthCallbacksController.*|SessionsController#create",env="gprd"} offset 30s
+      )
+  - record: gitlab_component_errors:rate_1h
+    labels:
+      component: logins
+      monitor: global
+      tier: sv
+      type: web
+    expr: |
+      (
+        sum by (env,environment,stage) (
+          sli_aggregations:gitlab_sli_rails_request_error_total:rate_1h{endpoint_id=~".*OmniauthCallbacksController.*|SessionsController#create",env="gprd"} offset 30s
+        )
+      )
+      or
+      (
+        0 * group by(env,environment,stage) (
+          gitlab_component_ops:rate_1h{component="logins",env="gprd",monitor="global",tier="sv",type="web"}
+        )
+      )
+  - record: gitlab_component_errors:ratio_1h
+    labels:
+      component: logins
+      monitor: global
+      tier: sv
+      type: web
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_1h{component="logins",env="gprd",monitor="global",tier="sv",type="web"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_1h{component="logins",env="gprd",monitor="global",tier="sv",type="web"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_1h
+    labels:
+      component: logins
+      monitor: global
+      tier: sv
+      type: web
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_1h{component="logins",env="gprd",monitor="global",tier="sv",type="web"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_1h{component="logins",env="gprd",monitor="global",tier="sv",type="web"} offset 30s
+      )
   - record: gitlab_component_apdex:success:rate_1h
     labels:
       component: rails_request
@@ -1335,6 +1503,74 @@ groups:
       )
   - record: gitlab_component_apdex:success:rate_6h
     labels:
+      component: logins
+      monitor: global
+      tier: sv
+      type: web
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="logins",env="gprd",monitor="global",tier="sv",type="web"}[6h] offset 30s)
+      )
+  - record: gitlab_component_apdex:weight:score_6h
+    labels:
+      component: logins
+      monitor: global
+      tier: sv
+      type: web
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="logins",env="gprd",monitor="global",tier="sv",type="web"}[6h] offset 30s)
+      )
+  - record: gitlab_component_ops:rate_6h
+    labels:
+      component: logins
+      monitor: global
+      tier: sv
+      type: web
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_ops:rate_1h{component="logins",env="gprd",monitor="global",tier="sv",type="web"}[6h] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_6h
+    labels:
+      component: logins
+      monitor: global
+      tier: sv
+      type: web
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_errors:rate_1h{component="logins",env="gprd",monitor="global",tier="sv",type="web"}[6h] offset 30s)
+      )
+  - record: gitlab_component_errors:ratio_6h
+    labels:
+      component: logins
+      monitor: global
+      tier: sv
+      type: web
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_6h{component="logins",env="gprd",monitor="global",tier="sv",type="web"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_6h{component="logins",env="gprd",monitor="global",tier="sv",type="web"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_6h
+    labels:
+      component: logins
+      monitor: global
+      tier: sv
+      type: web
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_6h{component="logins",env="gprd",monitor="global",tier="sv",type="web"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_6h{component="logins",env="gprd",monitor="global",tier="sv",type="web"} offset 30s
+      )
+  - record: gitlab_component_apdex:success:rate_6h
+    labels:
       component: rails_request
       monitor: global
       tier: sv
@@ -1675,6 +1911,74 @@ groups:
       /
       sum by (env,environment,stage) (
         gitlab_component_apdex:weight:score_3d{component="loadbalancer",env="gprd",monitor="global",tier="sv",type="web"} offset 30s
+      )
+  - record: gitlab_component_apdex:success:rate_3d
+    labels:
+      component: logins
+      monitor: global
+      tier: sv
+      type: web
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="logins",env="gprd",monitor="global",tier="sv",type="web"}[3d] offset 30s)
+      )
+  - record: gitlab_component_apdex:weight:score_3d
+    labels:
+      component: logins
+      monitor: global
+      tier: sv
+      type: web
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="logins",env="gprd",monitor="global",tier="sv",type="web"}[3d] offset 30s)
+      )
+  - record: gitlab_component_ops:rate_3d
+    labels:
+      component: logins
+      monitor: global
+      tier: sv
+      type: web
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_ops:rate_1h{component="logins",env="gprd",monitor="global",tier="sv",type="web"}[3d] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_3d
+    labels:
+      component: logins
+      monitor: global
+      tier: sv
+      type: web
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_errors:rate_1h{component="logins",env="gprd",monitor="global",tier="sv",type="web"}[3d] offset 30s)
+      )
+  - record: gitlab_component_errors:ratio_3d
+    labels:
+      component: logins
+      monitor: global
+      tier: sv
+      type: web
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_3d{component="logins",env="gprd",monitor="global",tier="sv",type="web"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_3d{component="logins",env="gprd",monitor="global",tier="sv",type="web"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_3d
+    labels:
+      component: logins
+      monitor: global
+      tier: sv
+      type: web
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_3d{component="logins",env="gprd",monitor="global",tier="sv",type="web"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_3d{component="logins",env="gprd",monitor="global",tier="sv",type="web"} offset 30s
       )
   - record: gitlab_component_apdex:success:rate_3d
     labels:
