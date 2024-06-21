@@ -44,14 +44,14 @@ All recoveries start with a change issue using `/change declare` and selecting o
 
 **Note**: When the outage ends, it is not recommended to fail back or use the old infrastructure (if it is available) to avoid losing additional data.
 
-#### Draining HAProxy traffic to divert traffic away from the affected zone
+### Draining HAProxy traffic to divert traffic away from the affected zone
 
 HAProxy traffic is divided into multiple Kubernetes clusters by zone.
 Services like `web`, `api`, `registry`, `pages` run in these clusters and do not require any data recovery since they are stateless.
 In the case of a zonal outage, it is expected that checks will fail on the corresponding cluster and traffic will be routed to the unaffected zones which will trigger a scaling event.
 To ensure that traffic does not reach the failed zone, it is recommended to divert traffic away from it using the [`set-server-state`](/docs/frontend/haproxy.md#set-server-state) HAProxy script.
 
-#### Drain canary and reconfigure regional node pools to exclude the affected zone
+### Drain canary and reconfigure regional node pools to exclude the affected zone
 
 The regional cluster hosts the [Canary infrastructure](https://about.gitlab.com/handbook/engineering/infrastructure/environments/canary-stage/) and is responsible all backend workloads including Sidekiq.
 In the case of a zonal outage, the quickest way to prevent canary impact will be to [remove all traffic canary environment](https://gitlab.com/gitlab-org/release/docs/blob/master/general/deploy/canary.md#how-to-stop-all-production-traffic-to-canary).
@@ -72,7 +72,7 @@ To reconfigure the regional node pools, set `regional_cluster_zones` to the list
 
 ```
 
-#### Database recovery using snapshots and WAL-G
+### Database recovery using snapshots and WAL-G
 
 - Patroni clusters are deployed across multiple zones within the `us-east1` region. In the case of a zonal failure, it is possible that the primary will fail over to a new zone resulting in a short interruption of service.
 - When a zone is lost, up to 1/3rd of the replica capacity will be removed resulting in a severe degradation of service. To recover, it will be necessary to provision a new replicas in one of the zones that are available.
@@ -101,7 +101,7 @@ Fetching snapshot data, opts: env=gprd days=1 bucket_duration=hour zone=us-east1
 
 **Note**: Snapshot age may be anywhere from minutes to 6 hours.
 
-#### Gitaly recovery using disk snapshots
+### Gitaly recovery using disk snapshots
 
 - The first 20 Gitaly VMs are deployed in `us-east1-c` due to a limitation of capacity when nodes were migrated from Azure to GCP. The remaining Gitaly servers alternate in all available zones in `us-east1`.
 - When a zone is lost, all projects on the affected node will fail. There is no Gitaly data replication strategy on GitLab.com. In the case of a zone failure, there will be both a significant service interruption and data loss.
@@ -138,7 +138,7 @@ Following this, the recovery requires two configuration changes:
 ([example MR](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/merge_requests/4863)).
 2. [`git_data_dirs`](https://gitlab.com/gitlab-com/gl-infra/chef-repo/-/blob/f9154f7956376ac3eb801f51c2a505051d24595b/roles/gprd-base.json#L206) in the application's `gitlab.yml` will need to be updated so that the replacement nodes are used for the corresponding storages.
 
-#### Redis
+### Redis
 
 The majority of load from the GitLab application is on the Redis primary.
 After a zone failure, we may want to start provisioning a new Redis node in each cluster to make up for lost capacity.
