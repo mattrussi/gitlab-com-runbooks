@@ -348,11 +348,11 @@ teams:
   product_stage_group: static_analysis
   slack_error_budget_channel: g_secure-static-analysis
   send_error_budget_weekly_to_slack: true
-- name: pipeline_security
-  product_stage_group: pipeline_security
-  slack_channel: g_pipeline-security
-  slack_alerts_channel: g_pipeline-security_alerts
-  slack_error_budget_channel: ci-section
+- name: secrets_management
+  product_stage_group: secrets_management
+  slack_channel: g_govern_secrets-management
+  slack_alerts_channel: g_govern_secrets-management_alerts
+  slack_error_budget_channel: g_govern_secrets-management_alerts
   send_error_budget_weekly_to_slack: true
   ignored_components:
   - graphql_query
