@@ -26,15 +26,15 @@ local queries = {
       |||
         sum by (root_cause) (
           last_over_time(
-              delivery_deployment_blocker_count{
-                  root_cause=~".+",
-                  root_cause!="RootCause::FlakyTest"
-                  }
+            delivery_deployment_blocker_count{
+                root_cause=~".+",
+                root_cause!="RootCause::FlakyTest"
+                }
           [1d])
         )
       |||
     )
-    + prometheusQuery.withInterval(2d)
+    + prometheusQuery.withInterval('2d')
     + prometheusQuery.withFormat("time_series"),
 
   totalGprdHoursBlocked:
@@ -52,7 +52,7 @@ local queries = {
         )
       |||
     )
-    + prometheusQuery.withInterval(2d)
+    + prometheusQuery.withInterval('2d')
     + prometheusQuery.withFormat("time_series"),
 
   totalGstgHoursBlocked:
@@ -69,7 +69,7 @@ local queries = {
         )
       |||
     )
-    + prometheusQuery.withInterval(2d)
+    + prometheusQuery.withInterval('2d')
     + prometheusQuery.withFormat("time_series"),
 
   blockersCount:
@@ -85,7 +85,7 @@ local queries = {
         )
       |||
     )
-    + prometheusQuery.withInterval(2d)
+    + prometheusQuery.withInterval('2d')
     + prometheusQuery.withFormat("table"),
 
   gprdHoursBlocked:
@@ -101,7 +101,7 @@ local queries = {
         )
       |||
     )
-    + prometheusQuery.withInterval(2d)
+    + prometheusQuery.withInterval('2d')
     + prometheusQuery.withFormat("table"),
 
   gstgHoursBlocked:
@@ -118,7 +118,7 @@ local queries = {
         )
       |||
     )
-    + prometheusQuery.withInterval(2d)
+    + prometheusQuery.withInterval('2d')
     + prometheusQuery.withFormat("table"),
 
   tabulatedDeploymentBlockers:
@@ -135,7 +135,7 @@ local queries = {
           )
         |||
       )
-      + prometheusQuery.withInterval(2d)
+      + prometheusQuery.withInterval('2d')
       + prometheusQuery.withFormat("time_series"),
     ] + [
       prometheusQuery.new(
@@ -150,7 +150,7 @@ local queries = {
             )
         |||
       )
-      + prometheusQuery.withInterval(2d)
+      + prometheusQuery.withInterval('2d')
       + prometheusQuery.withFormat("time_series"),
     ] + [
       prometheusQuery.new(
@@ -165,92 +165,78 @@ local queries = {
             )
         |||
       )
-      + prometheusQuery.withInterval(2d)
+      + prometheusQuery.withInterval('2d')
       + prometheusQuery.withFormat("time_series"),
     ],
 };
 
 local panels = {
   text: {
-    local text = g.panel.text,
-    local options = text.options,
+    textPanel(title, h, w, x, y):
+      g.panel.text.new(title)
+      + g.panel.text.options.withMode("markdown")
+      + g.panel.text.options.withContent(|||
+          # Deployment Blockers
 
-    textPanel:
-      text.new('')
-      + options.withMode("markdown")
-      + options.withContent('''
-        # Deployment Blockers
+          Deployment failures are currently automatically captured under [release/tasks issues](https://gitlab.com/gitlab-org/release/tasks/-/issues).
+          Release managers are responsible for labeling these failures with appropriate `RootCause::*` labels. By the start of the following week (Monday), the `deployments:blockers_report` scheduled pipeline in the [release/tools](https://ops.gitlab.net/gitlab-org/release/tools/-/pipeline_schedules) repo reviews the labeled issues and generates a weekly deployment blockers issue, like this [one](https://gitlab.com/gitlab-org/release/tasks/-/issues/11125).
 
-        Deployment failures are currently automatically captured under [release/tasks issues](https://gitlab.com/gitlab-org/release/tasks/-/issues).
-        Release managers are responsible for labeling these failures with appropriate `RootCause::*` labels. By the start of the following week (Monday), the `deployments:blockers_report` scheduled pipeline in the [release/tools](https://ops.gitlab.net/gitlab-org/release/tools/-/pipeline_schedules) repo reviews the labeled issues and generates a weekly deployment blockers issue, like this [one](https://gitlab.com/gitlab-org/release/tasks/-/issues/11125).
+          This dashboard tracks the trend of recurring root causes for deployment blockers. Each root cause is displayed in separate rows with three panels: one for the count of blockers, one for `gprd` hours blocked, and one for `gstg` hours blocked. At the top, there is an overview of the failure types, including the total calculations for the entire specified time window.
 
-        This dashboard tracks the trend of recurring root causes for deployment blockers. Each root cause is displayed in separate rows with three panels: one for the count of blockers, one for `gprd` hours blocked, and one for `gstg` hours blocked. At the top, there is an overview of the failure types, including the total calculations for the entire specified time window.
-
-        Links:
-        - [List of root causes](https://gitlab.com/gitlab-org/release/tasks/-/labels?subscribed=&sort=relevance&search=RootCause)
-        - [Deployments metrics review](https://gitlab.com/groups/gitlab-com/gl-infra/-/epics/1192)
-      ''')
-      + text.panelOptions.withGridPos(h=7, w=24, x=0, y=1)
+          Links:
+          - [List of root causes](https://gitlab.com/gitlab-org/release/tasks/-/labels?subscribed=&sort=relevance&search=RootCause)
+          - [Deployments metrics review](https://gitlab.com/groups/gitlab-com/gl-infra/-/epics/1192)
+        |||)
+      + g.panel.text.panelOptions.withGridPos({ h: h, w: w, x: x, y: y }),
   },
 
   barChart: {
-    local barChart = g.panel.barChart,
-    local options = barChart.options,
-    local standardOptions = barChart.standardOptions,
-    local queryOptions = barChart.queryOptions,
-
-    barChartPanel: function(targets) {
-      barChart.new('')
-      + queryOptions.withTargets(targets)
-      + queryOptions.withInterval('2d')
-      + options.withOrientation("horizontal")
-      + options.legend.withDisplayMode('table')
-      + options.legend.withPlacement("bottom")
-      + options.legend.withCalcs(['total'])
-      + standardOptions.withDisplayName("blockers_count")
-      + standardOptions.color.withMode("thresholds")
-      + queryOptions.withTransformations([
-        queryOptions.transformation.withId("reduce")
-        + queryOptions.transformation.withOptions({ reducers: ['sum'] })
+    barChartPanel(title, targets, h, w, x, y):
+      g.panel.barChart.new(title)
+      + g.panel.barChart.queryOptions.withTargets(targets)
+      + g.panel.barChart.queryOptions.withInterval('2d')
+      + g.panel.barChart.options.withOrientation("horizontal")
+      + g.panel.barChart.options.legend.withDisplayMode('table')
+      + g.panel.barChart.options.legend.withPlacement("bottom")
+      + g.panel.barChart.options.legend.withCalcs(['total'])
+      + g.panel.barChart.standardOptions.withDisplayName("blockers_count")
+      + g.panel.barChart.standardOptions.color.withMode("thresholds")
+      + g.panel.barChart.queryOptions.withTransformations([
+        g.panel.barChart.queryOptions.transformation.withId("reduce")
+        + g.panel.barChart.queryOptions.transformation.withOptions({ reducers: ['sum'] })
       ])
-    }
+      + g.panel.barChart.panelOptions.withGridPos({ h: h, w: w, x: x, y: y }),
   },
 
   trend: {
-    local trend = g.panel.trend,
-    local custom = trend.fieldConfig.defaults.custom,
-    local options = trend.options,
-    local standardOptions = trend.standardOptions,
-    local queryOptions = trend.queryOptions,
-
-    trendPanel: function(title, targets) {
-      trend.new(title)
-      + queryOptions.withTargets(targets)
-      + queryOptions.withInterval('2d')
-      + options.withXField("week_index")
-      + options.legend.withDisplayMode('list')
-      + options.legend.withPlacement("bottom")
-      + custom.withDrawStyle("line")
-      + custom.withLineInterpolation("linear")
-      + custom.withLineWidth(1)
-      + custom.withShowPoints("always")
-      + custom.withSpanNulls(true)
-      + custom.withAxisBorderShow(true)
-      + custom.withAxisSoftMin(1)
-      + standardOptions.withDecimals(0)
-      + standardOptions.withUnit("short")
-      + standardOptions.withMin(1)
-      + standardOptions.color.withMode("palette-classic")
-      + standardOptions.withOverrides([
-        standardOptions.override.byName.new('week_index')
-        + standardOptions.override.byName.withPropertiesFromOptions(
-          custom.withAxisLabel("week_index")
-          + custom.withAxisPlacement("hidden")
+    trendPanel(title, targets, h, w, x, y ):
+      g.panel.trend.new(title)
+      + g.panel.trend.queryOptions.withTargets(targets)
+      + g.panel.trend.queryOptions.withInterval('2d')
+      + g.panel.trend.options.withXField("week_index")
+      + g.panel.trend.options.legend.withDisplayMode('list')
+      + g.panel.trend.options.legend.withPlacement("bottom")
+      + g.panel.trend.fieldConfig.defaults.custom.withDrawStyle("line")
+      + g.panel.trend.fieldConfig.defaults.custom.withLineInterpolation("linear")
+      + g.panel.trend.fieldConfig.defaults.custom.withLineWidth(1)
+      + g.panel.trend.fieldConfig.defaults.custom.withShowPoints("always")
+      + g.panel.trend.fieldConfig.defaults.custom.withSpanNulls(true)
+      + g.panel.trend.fieldConfig.defaults.custom.withAxisBorderShow(true)
+      + g.panel.trend.fieldConfig.defaults.custom.withAxisSoftMin(1)
+      + g.panel.trend.standardOptions.withDecimals(0)
+      + g.panel.trend.standardOptions.withUnit("short")
+      + g.panel.trend.standardOptions.withMin(1)
+      + g.panel.trend.standardOptions.color.withMode("palette-classic")
+      + g.panel.trend.standardOptions.withOverrides([
+        g.panel.trend.standardOptions.override.byName.new('week_index')
+        + g.panel.trend.standardOptions.override.byName.withPropertiesFromOptions(
+          g.panel.trend.fieldConfig.defaults.custom.withAxisLabel("week_index")
+          + g.panel.trend.fieldConfig.defaults.custom.withAxisPlacement("hidden")
         )
       ])
-      + queryOptions.withTransformations([
-        queryOptions.transformation.withId("calculateField")
-        + queryOptions.transformation.withOptions({
+      + g.panel.trend.queryOptions.withTransformations([
+        g.panel.trend.queryOptions.transformation.withId("calculateField")
+        + g.panel.trend.queryOptions.transformation.withOptions({
           alias: "count",
           binary: {
             left: "week"
@@ -260,8 +246,8 @@ local panels = {
             reducer: "sum"
           }
         }),
-        queryOptions.transformation.withId("calculateField")
-        + queryOptions.transformation.withOptions({
+        g.panel.trend.queryOptions.transformation.withId("calculateField")
+        + g.panel.trend.queryOptions.transformation.withOptions({
           alias: "week_index",
           binary: {
             left: "count",
@@ -272,8 +258,8 @@ local panels = {
             reducer: "sum"
           }
         }),
-        queryOptions.transformation.withId("organize")
-        + queryOptions.transformation.withOptions({
+        g.panel.trend.queryOptions.transformation.withId("organize")
+        + g.panel.trend.queryOptions.transformation.withOptions({
           excludeByName: {
             Time: false,
             count: true
@@ -287,39 +273,32 @@ local panels = {
           }
         })
       ])
-    }
+      + g.panel.trend.panelOptions.withGridPos({ h: h, w: w, x: x, y: y }),
   },
 
   table: {
-    local table = g.panel.table,
-    local custom = table.fieldConfig.defaults.custom,
-    local options = table.options,
-    local standardOptions = table.standardOptions,
-    local queryOptions = table.queryOptions,
-
-    tablePanel: function(targets) {
-      table.new('')
-      + queryOptions.withTargets(targets)
-      + queryOptions.withInterval('2d')
-      + custom.withFilterable(true)
-      + custom.withDisplayMode("auto")
-      + options.withShowHeader(true)
-      + standardOptions.color.withMode("thresholds")
-      + queryOptions.withTransformations([
-        queryOptions.transformation.withId("timeSeriesTable")
-        + queryOptions.transformation.withOptions({}),
-        queryOptions.transformation.withId("merge")
-        + queryOptions.transformation.withOptions({}),
-        queryOptions.transformation.withId("calculateField")
-        + queryOptions.transformation.withOptions({
+    tablePanel(title, targets, h, w, x, y):
+      g.panel.table.new(title)
+      + g.panel.table.queryOptions.withTargets(targets)
+      + g.panel.table.queryOptions.withInterval('2d')
+      + g.panel.table.fieldConfig.defaults.custom.withFilterable(true)
+      + g.panel.table.options.withShowHeader(true)
+      + g.panel.table.standardOptions.color.withMode("thresholds")
+      + g.panel.table.queryOptions.withTransformations([
+        g.panel.table.queryOptions.transformation.withId("timeSeriesTable")
+        + g.panel.table.queryOptions.transformation.withOptions({}),
+        g.panel.table.queryOptions.transformation.withId("merge")
+        + g.panel.table.queryOptions.transformation.withOptions({}),
+        g.panel.table.queryOptions.transformation.withId("calculateField")
+        + g.panel.table.queryOptions.transformation.withOptions({
           alias: "count",
           mode: "index",
           reduce: {
             reducer: "sum"
           }
         }),
-        queryOptions.transformation.withId("calculateField")
-        + queryOptions.transformation.withOptions({
+        g.panel.table.queryOptions.transformation.withId("calculateField")
+        + g.panel.table.queryOptions.transformation.withOptions({
           alias: "week_index",
           binary: {
             left: "count",
@@ -330,8 +309,8 @@ local panels = {
             reducer: "sum"
           }
         }),
-        queryOptions.transformation.withId("organize")
-        + queryOptions.transformation.withOptions({
+        g.panel.table.queryOptions.transformation.withId("organize")
+        + g.panel.table.queryOptions.transformation.withOptions({
           excludeByName: {
             count: true
           },
@@ -344,9 +323,8 @@ local panels = {
           }
         })
       ])
-      + table.panelOptions.withGridPos(h=8, w=24, x=0, y=8)
-    }
-  }
+      + g.panel.table.panelOptions.withGridPos({ h: h, w: w, x: x, y: y }),
+  },
 };
 
 g.dashboard.new('Deployment Blockers')
@@ -354,27 +332,24 @@ g.dashboard.new('Deployment Blockers')
   variables.datasource,
   variables.root_cause,
 ])
-+ g.dashboard.withPanels(
++ g.dashboard.withPanels([
   row.new('Overview')
   + row.withCollapsed(false)
+  + row.withGridPos(0)
   + row.withPanels([
-    panels.text.textPanel,
-    g.util.grid.makeGrid([
-      panels.barChart.barChartPanel(queries.totalBlockersCount),
-      panels.barChart.barChartPanel(queries.totalGprdHoursBlocked),
-      panels.barChart.barChartPanel(queries.totalGstgHoursBlocked),
-    ], panelWidth=8),
+    panels.text.textPanel('Overview Panel Title', 7, 24, 0, 1),
+    panels.barChart.barChartPanel('Total Blockers Count', queries.totalBlockersCount, '10', '8', '0', '8'),
+    panels.barChart.barChartPanel('Total Gprd Hours Blocked', queries.totalGprdHoursBlocked, '10', '8', '8', '8'),
+    panels.barChart.barChartPanel('Total Gstg Hours Blocked', queries.totalGstgHoursBlocked, '10', '8', '16', '8'),
   ]),
-  row.new('$root_cause')
+  row.new('Root Cause Details')
   + row.withRepeat('$root_cause')
   + row.withCollapsed(true)
+  + row.withGridPos(18)
   + row.withPanels([
-    g.util.grid.makeGrid([
-      panels.trend.trendPanel('Blockers Count for $root_cause', queries.blockersCount),
-      panels.trend.trendPanel('gprd Hours Blocked for $root_cause', queries.gprdHoursBlocked),
-      panels.trend.trendPanel('gstg Hours Blocked for $root_cause', queries.gstgHoursBlocked),
-    ]),
-    panels.table.tablePanel(queries.tabulatedDeploymentBlockers),
-  ], panelWidth=8),
-)
-.trailer()
+    panels.trend.trendPanel('Blockers Count for $root_cause', queries.blockersCount, '8', '8', '0', '19'),
+    panels.trend.trendPanel('Gprd Hours Blocked for $root_cause', queries.gprdHoursBlocked, '8', '8', '8', '19'),
+    panels.trend.trendPanel('Gstg Hours Blocked for $root_cause', queries.gstgHoursBlocked, '8', '8', '16', '19'),
+    panels.table.tablePanel('Tabulated Deployment Blockers', queries.tabulatedDeploymentBlockers, '8', '24', '0', '27'),
+  ])
+])
