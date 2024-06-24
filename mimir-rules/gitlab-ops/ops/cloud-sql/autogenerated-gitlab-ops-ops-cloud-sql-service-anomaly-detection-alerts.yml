@@ -32,7 +32,7 @@ groups:
     expr: |
       (
           (
-            (gitlab_service_ops:rate{env="ops",monitor="global",type="cloud-sql"} -  gitlab_service_ops:rate:prediction{env="ops",monitor="global",type="cloud-sql"}) /
+            (gitlab_service_ops:rate_5m{env="ops",monitor="global",type="cloud-sql"} -  gitlab_service_ops:rate:prediction{env="ops",monitor="global",type="cloud-sql"}) /
           gitlab_service_ops:rate:stddev_over_time_1w{env="ops",monitor="global",type="cloud-sql"}
         )
         >
@@ -69,7 +69,7 @@ groups:
     expr: |
       (
           (
-            (gitlab_service_ops:rate{env="ops",monitor="global",type="cloud-sql"} -  gitlab_service_ops:rate:prediction{env="ops",monitor="global",type="cloud-sql"}) /
+            (gitlab_service_ops:rate_5m{env="ops",monitor="global",type="cloud-sql"} -  gitlab_service_ops:rate:prediction{env="ops",monitor="global",type="cloud-sql"}) /
           gitlab_service_ops:rate:stddev_over_time_1w{env="ops",monitor="global",type="cloud-sql"}
         )
         <

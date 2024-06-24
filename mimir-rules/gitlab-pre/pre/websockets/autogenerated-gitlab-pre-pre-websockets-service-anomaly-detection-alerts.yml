@@ -32,7 +32,7 @@ groups:
     expr: |
       (
           (
-            (gitlab_service_ops:rate{env="pre",monitor="global",type="websockets"} -  gitlab_service_ops:rate:prediction{env="pre",monitor="global",type="websockets"}) /
+            (gitlab_service_ops:rate_5m{env="pre",monitor="global",type="websockets"} -  gitlab_service_ops:rate:prediction{env="pre",monitor="global",type="websockets"}) /
           gitlab_service_ops:rate:stddev_over_time_1w{env="pre",monitor="global",type="websockets"}
         )
         >
@@ -69,7 +69,7 @@ groups:
     expr: |
       (
           (
-            (gitlab_service_ops:rate{env="pre",monitor="global",type="websockets"} -  gitlab_service_ops:rate:prediction{env="pre",monitor="global",type="websockets"}) /
+            (gitlab_service_ops:rate_5m{env="pre",monitor="global",type="websockets"} -  gitlab_service_ops:rate:prediction{env="pre",monitor="global",type="websockets"}) /
           gitlab_service_ops:rate:stddev_over_time_1w{env="pre",monitor="global",type="websockets"}
         )
         <
