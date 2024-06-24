@@ -267,6 +267,18 @@ groups:
     record: slo:max:events:gitlab_service_errors:ratio
   - expr: "0.998000"
     labels:
+      component: graphql_query
+      tier: sv
+      type: webservice
+    record: slo:min:events:gitlab_service_apdex:ratio
+  - expr: "0.000100"
+    labels:
+      component: graphql_query
+      tier: sv
+      type: webservice
+    record: slo:max:events:gitlab_service_errors:ratio
+  - expr: "0.998000"
+    labels:
       component: puma
       tier: sv
       type: webservice

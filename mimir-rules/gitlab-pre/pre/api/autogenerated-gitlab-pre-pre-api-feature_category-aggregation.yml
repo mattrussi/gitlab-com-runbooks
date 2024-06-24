@@ -45,7 +45,7 @@ groups:
       type: api
     expr: |
       sum by (env,environment,stage,feature_category) (
-        sli_aggregations:gitlab_sli_graphql_query_apdex_success_total:rate_5m{env="pre",job="gitlab-rails",type="api"} offset 30s
+        sli_aggregations:gitlab_sli_graphql_query_apdex_success_total:rate_5m{endpoint_id!="graphql:unknown",env="pre",job="gitlab-rails",type="api"} offset 30s
       )
   - record: gitlab:component:feature_category:execution:apdex:weight:score_5m
     labels:
@@ -55,7 +55,7 @@ groups:
       type: api
     expr: |
       sum by (env,environment,stage,feature_category) (
-        sli_aggregations:gitlab_sli_graphql_query_apdex_total:rate_5m{env="pre",job="gitlab-rails",type="api"} offset 30s
+        sli_aggregations:gitlab_sli_graphql_query_apdex_total:rate_5m{endpoint_id!="graphql:unknown",env="pre",job="gitlab-rails",type="api"} offset 30s
       )
   - record: gitlab:component:feature_category:execution:ops:rate_5m
     labels:
@@ -65,7 +65,25 @@ groups:
       type: api
     expr: |
       sum by (env,environment,stage,feature_category) (
-        sli_aggregations:gitlab_sli_graphql_query_apdex_total:rate_5m{env="pre",job="gitlab-rails",type="api"} offset 30s
+        sli_aggregations:gitlab_sli_graphql_query_total:rate_5m{endpoint_id!="graphql:unknown",env="pre",job="gitlab-rails",type="api"} offset 30s
+      )
+  - record: gitlab:component:feature_category:execution:error:rate_5m
+    labels:
+      component: graphql_query
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      (
+        sum by (env,environment,stage,feature_category) (
+          sli_aggregations:gitlab_sli_graphql_query_error_total:rate_5m{endpoint_id!="graphql:unknown",env="pre",job="gitlab-rails",type="api"} offset 30s
+        )
+      )
+      or
+      (
+        0 * group by(env,environment,stage,feature_category) (
+          gitlab:component:feature_category:execution:ops:rate_5m{component="graphql_query",env="pre",monitor="global",tier="sv",type="api"}
+        )
       )
   - record: gitlab:component:feature_category:execution:apdex:success:rate_5m
     labels:
@@ -159,7 +177,7 @@ groups:
       type: api
     expr: |
       sum by (env,environment,stage,feature_category) (
-        sli_aggregations:gitlab_sli_graphql_query_apdex_success_total:rate_30m{env="pre",job="gitlab-rails",type="api"} offset 30s
+        sli_aggregations:gitlab_sli_graphql_query_apdex_success_total:rate_30m{endpoint_id!="graphql:unknown",env="pre",job="gitlab-rails",type="api"} offset 30s
       )
   - record: gitlab:component:feature_category:execution:apdex:weight:score_30m
     labels:
@@ -169,7 +187,7 @@ groups:
       type: api
     expr: |
       sum by (env,environment,stage,feature_category) (
-        sli_aggregations:gitlab_sli_graphql_query_apdex_total:rate_30m{env="pre",job="gitlab-rails",type="api"} offset 30s
+        sli_aggregations:gitlab_sli_graphql_query_apdex_total:rate_30m{endpoint_id!="graphql:unknown",env="pre",job="gitlab-rails",type="api"} offset 30s
       )
   - record: gitlab:component:feature_category:execution:ops:rate_30m
     labels:
@@ -179,7 +197,25 @@ groups:
       type: api
     expr: |
       sum by (env,environment,stage,feature_category) (
-        sli_aggregations:gitlab_sli_graphql_query_apdex_total:rate_30m{env="pre",job="gitlab-rails",type="api"} offset 30s
+        sli_aggregations:gitlab_sli_graphql_query_total:rate_30m{endpoint_id!="graphql:unknown",env="pre",job="gitlab-rails",type="api"} offset 30s
+      )
+  - record: gitlab:component:feature_category:execution:error:rate_30m
+    labels:
+      component: graphql_query
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      (
+        sum by (env,environment,stage,feature_category) (
+          sli_aggregations:gitlab_sli_graphql_query_error_total:rate_30m{endpoint_id!="graphql:unknown",env="pre",job="gitlab-rails",type="api"} offset 30s
+        )
+      )
+      or
+      (
+        0 * group by(env,environment,stage,feature_category) (
+          gitlab:component:feature_category:execution:ops:rate_30m{component="graphql_query",env="pre",monitor="global",tier="sv",type="api"}
+        )
       )
   - record: gitlab:component:feature_category:execution:apdex:success:rate_30m
     labels:
@@ -273,7 +309,7 @@ groups:
       type: api
     expr: |
       sum by (env,environment,stage,feature_category) (
-        sli_aggregations:gitlab_sli_graphql_query_apdex_success_total:rate_1h{env="pre",job="gitlab-rails",type="api"} offset 30s
+        sli_aggregations:gitlab_sli_graphql_query_apdex_success_total:rate_1h{endpoint_id!="graphql:unknown",env="pre",job="gitlab-rails",type="api"} offset 30s
       )
   - record: gitlab:component:feature_category:execution:apdex:weight:score_1h
     labels:
@@ -283,7 +319,7 @@ groups:
       type: api
     expr: |
       sum by (env,environment,stage,feature_category) (
-        sli_aggregations:gitlab_sli_graphql_query_apdex_total:rate_1h{env="pre",job="gitlab-rails",type="api"} offset 30s
+        sli_aggregations:gitlab_sli_graphql_query_apdex_total:rate_1h{endpoint_id!="graphql:unknown",env="pre",job="gitlab-rails",type="api"} offset 30s
       )
   - record: gitlab:component:feature_category:execution:ops:rate_1h
     labels:
@@ -293,7 +329,25 @@ groups:
       type: api
     expr: |
       sum by (env,environment,stage,feature_category) (
-        sli_aggregations:gitlab_sli_graphql_query_apdex_total:rate_1h{env="pre",job="gitlab-rails",type="api"} offset 30s
+        sli_aggregations:gitlab_sli_graphql_query_total:rate_1h{endpoint_id!="graphql:unknown",env="pre",job="gitlab-rails",type="api"} offset 30s
+      )
+  - record: gitlab:component:feature_category:execution:error:rate_1h
+    labels:
+      component: graphql_query
+      monitor: global
+      tier: sv
+      type: api
+    expr: |
+      (
+        sum by (env,environment,stage,feature_category) (
+          sli_aggregations:gitlab_sli_graphql_query_error_total:rate_1h{endpoint_id!="graphql:unknown",env="pre",job="gitlab-rails",type="api"} offset 30s
+        )
+      )
+      or
+      (
+        0 * group by(env,environment,stage,feature_category) (
+          gitlab:component:feature_category:execution:ops:rate_1h{component="graphql_query",env="pre",monitor="global",tier="sv",type="api"}
+        )
       )
   - record: gitlab:component:feature_category:execution:apdex:success:rate_1h
     labels:

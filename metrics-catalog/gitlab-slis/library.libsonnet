@@ -24,13 +24,21 @@ local list = [
   sliDefinition.new({
     name: 'graphql_query',
     significantLabels: ['endpoint_id', 'feature_category', 'query_urgency'],
-    kinds: [sliDefinition.apdexKind],
+    kinds: [sliDefinition.errorRateKind, sliDefinition.apdexKind],
     description: |||
+      A GraphQL query is executed in the context of a request. An error does not
+      always result in a 5xx error. But could contain errors in the response.
+      Mutliple queries could be batched inside a single request.
+
+      This SLI counts all operations, a succeeded operation does not contain errors in
+      it's response or return a 500 error.
+
       The number of GraphQL queries meeting their duration target based on the urgency
       of the endpoint. By default, a query should take no more than 1s. We're working
       on making the urgency customizable in [this epic](https://gitlab.com/groups/gitlab-org/-/epics/5841).
 
-      Mutliple queries could be batched inside a single request.
+      We're only taking known operations into account. Known operations are queries
+      defined in our codebase and originating from our frontend.
     |||,
   }),
   sliDefinition.new({

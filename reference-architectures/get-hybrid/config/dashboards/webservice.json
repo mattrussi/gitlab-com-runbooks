@@ -1163,6 +1163,912 @@
         "x": 0,
         "y": 21
       },
+      "id": 3837080777,
+      "legend": {
+        "alignAsTable": true,
+        "avg": true,
+        "current": true,
+        "hideEmpty": true,
+        "max": true,
+        "min": true,
+        "rightSide": false,
+        "show": true,
+        "total": false,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 2,
+      "nullPointMode": "null",
+      "options": {
+        "dataLinks": [
+          {
+            "targetBlank": true,
+            "title": "graphql_query SLI Apdex SLO Analysis",
+            "url": "/d/alerts-component_slo_apdex?${__url_time_range}\u0026${__all_variables}\u0026var-component=graphql_query\u0026var-type=webservice"
+          }
+        ]
+      },
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [
+        {
+          "alias": "/6h Degradation SLO \\(5% of monthly error budget\\).*/",
+          "color": "#FF4500",
+          "dashLength": 4,
+          "dashes": true,
+          "legend": true,
+          "lines": true,
+          "linewidth": 2,
+          "nullPointMode": "connected",
+          "spaceLength": 10,
+          "zindex": -2
+        },
+        {
+          "alias": "/1h Outage SLO \\(2% of monthly error budget\\).*/",
+          "color": "#F2495C",
+          "dashLength": 4,
+          "dashes": true,
+          "legend": true,
+          "lines": true,
+          "linewidth": 4,
+          "nullPointMode": "connected",
+          "spaceLength": 4,
+          "zindex": -2
+        },
+        {
+          "alias": "/.*shard (apdex|error ratio|RPS)$/",
+          "color": "#E7D551"
+        },
+        {
+          "alias": "graphql_query apdex avg",
+          "color": "#5794F2",
+          "dashLength": 1,
+          "fillBelowTo": "graphql_query apdex",
+          "linewidth": 1,
+          "spaceLength": 1,
+          "zindex": -3
+        },
+        {
+          "alias": "last week",
+          "color": "#dddddd80",
+          "dashLength": 4,
+          "dashes": true,
+          "fill": 0,
+          "legend": true,
+          "lines": true,
+          "linewidth": 1,
+          "nullPointMode": "connected",
+          "spaceLength": 2,
+          "zindex": -3
+        },
+        {
+          "alias": "Apdex SLI (upper 98% confidence boundary)",
+          "color": "#E7D551",
+          "zindex": 3
+        },
+        {
+          "alias": "graphql_query apdex",
+          "color": "#082e69",
+          "lines": true
+        }
+      ],
+      "spaceLength": 10,
+      "stableId": "sli-graphql_query-apdex",
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "min_over_time(gitlab_component_apdex:ratio_5m{component=\"graphql_query\",type=\"webservice\"}[$__interval])\n",
+          "format": "time_series",
+          "interval": "1m",
+          "intervalFactor": 1,
+          "legendFormat": "graphql_query apdex",
+          "refId": "A"
+        },
+        {
+          "expr": "(1 - 6 * (1 - avg(slo:min:events:gitlab_service_apdex:ratio{component=\"graphql_query\",type=\"webservice\"})\n))\n",
+          "format": "time_series",
+          "interval": "5m",
+          "intervalFactor": 1,
+          "legendFormat": "6h Degradation SLO (5% of monthly error budget)",
+          "refId": "B"
+        },
+        {
+          "expr": "(1 - 14.4 * (1 - avg(slo:min:events:gitlab_service_apdex:ratio{component=\"graphql_query\",type=\"webservice\"})\n))\n",
+          "format": "time_series",
+          "interval": "5m",
+          "intervalFactor": 1,
+          "legendFormat": "1h Outage SLO (2% of monthly error budget)",
+          "refId": "C"
+        },
+        {
+          "expr": "avg_over_time(gitlab_component_apdex:ratio_5m{component=\"graphql_query\",type=\"webservice\"}[$__interval])\n",
+          "format": "time_series",
+          "interval": "1m",
+          "intervalFactor": 1,
+          "legendFormat": "graphql_query apdex avg",
+          "refId": "D"
+        },
+        {
+          "expr": "clamp_min(\n  gitlab_component_apdex:ratio_5m{component=\"graphql_query\",type=\"webservice\"} offset 1w\n,\n  scalar(min((1 - 14.4 * (1 - avg(slo:min:events:gitlab_service_apdex:ratio{component=\"graphql_query\",type=\"webservice\"})\n))\n))\n)\n",
+          "format": "time_series",
+          "interval": "1m",
+          "intervalFactor": 1,
+          "legendFormat": "last week",
+          "refId": "E"
+        },
+        {
+          "expr": "avg_over_time(gitlab_component_apdex:confidence:ratio_5m{component=\"graphql_query\",confidence=\"98%\",type=\"webservice\"}[$__interval])\n",
+          "format": "time_series",
+          "interval": "1m",
+          "intervalFactor": 1,
+          "legendFormat": "Apdex SLI (upper 98% confidence boundary)",
+          "refId": "F"
+        }
+      ],
+      "title": "graphql_query SLI Apdex",
+      "tooltip": {
+        "shared": true,
+        "sort": 1,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "mode": "time",
+        "show": true
+      },
+      "yaxes": [
+        {
+          "format": "percentunit",
+          "label": "Apdex %",
+          "logBase": 1,
+          "max": 1,
+          "show": true
+        },
+        {
+          "format": "short",
+          "logBase": 1,
+          "max": 1,
+          "min": 0,
+          "show": false
+        }
+      ]
+    },
+    {
+      "datasource": "$PROMETHEUS_DS",
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "decimals": 0,
+          "displayName": "Status",
+          "mappings": [
+            {
+              "id": 0,
+              "options": {
+                "0": {
+                  "color": "black",
+                  "index": 0,
+                  "text": "Healthy"
+                },
+                "1": {
+                  "color": "orange",
+                  "index": 1,
+                  "text": "Warning: 1h deteriorating"
+                },
+                "10": {
+                  "color": "orange",
+                  "index": 10,
+                  "text": "Warning: 6h recovering, 1h recovering"
+                },
+                "11": {
+                  "color": "red",
+                  "index": 11,
+                  "text": "Degraded: 6h recovering, 1h degraded"
+                },
+                "12": {
+                  "color": "red",
+                  "index": 12,
+                  "text": "Degraded: 6h degraded"
+                },
+                "13": {
+                  "color": "red",
+                  "index": 13,
+                  "text": "Degraded: 6h degraded, 1h deteriorating"
+                },
+                "14": {
+                  "color": "red",
+                  "index": 14,
+                  "text": "Degraded: 6h degraded, 1h recovering"
+                },
+                "15": {
+                  "color": "red",
+                  "index": 15,
+                  "text": "Degraded: 6h degraded, 1h degraded"
+                },
+                "2": {
+                  "color": "orange",
+                  "index": 2,
+                  "text": "Warning: 1h recovering"
+                },
+                "3": {
+                  "color": "red",
+                  "index": 3,
+                  "text": "Degraded: 1h degraded"
+                },
+                "4": {
+                  "color": "orange",
+                  "index": 4,
+                  "text": "Warning: 6h deteriorating"
+                },
+                "5": {
+                  "color": "orange",
+                  "index": 5,
+                  "text": "Warning: 6h deteriorating, 1h deteriorating"
+                },
+                "6": {
+                  "color": "orange",
+                  "index": 6,
+                  "text": "Warning: 6h deteriorating, 1h recovering"
+                },
+                "7": {
+                  "color": "red",
+                  "index": 7,
+                  "text": "Degraded: 6h deteriorating, 1h degraded"
+                },
+                "8": {
+                  "color": "orange",
+                  "index": 8,
+                  "text": "Warning: 6h recovering"
+                },
+                "9": {
+                  "color": "orange",
+                  "index": 9,
+                  "text": "Warning: 6h recovering, 1h deteriorating"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "black",
+                "value": 0
+              },
+              {
+                "color": "orange",
+                "value": 1
+              },
+              {
+                "color": "orange",
+                "value": 2
+              },
+              {
+                "color": "red",
+                "value": 3
+              },
+              {
+                "color": "orange",
+                "value": 4
+              },
+              {
+                "color": "orange",
+                "value": 5
+              },
+              {
+                "color": "orange",
+                "value": 6
+              },
+              {
+                "color": "red",
+                "value": 7
+              },
+              {
+                "color": "orange",
+                "value": 8
+              },
+              {
+                "color": "orange",
+                "value": 9
+              },
+              {
+                "color": "orange",
+                "value": 10
+              },
+              {
+                "color": "red",
+                "value": 11
+              },
+              {
+                "color": "red",
+                "value": 12
+              },
+              {
+                "color": "red",
+                "value": 13
+              },
+              {
+                "color": "red",
+                "value": 14
+              },
+              {
+                "color": "red",
+                "value": 15
+              }
+            ]
+          },
+          "unit": "none"
+        }
+      },
+      "gridPos": {
+        "h": 1,
+        "w": 6,
+        "x": 0,
+        "y": 28
+      },
+      "id": 11,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "vertical",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "7",
+      "targets": [
+        {
+          "expr": "sum(\n  label_replace(\n    vector(0) and on() (gitlab_component_apdex:confidence:ratio_1h{component=\"graphql_query\",confidence=\"98%\",type=\"webservice\"}),\n    \"period\", \"na\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(1) and on () (gitlab_component_apdex:confidence:ratio_5m{component=\"graphql_query\",confidence=\"98%\",type=\"webservice\"} \u003c on(tier, type, __tenant_id__) group_left() (1 - (14.4 * (1 - slo:min:events:gitlab_service_apdex:ratio{component=\"graphql_query\",type=\"webservice\"})))),\n    \"period\", \"5m\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(2) and on () (gitlab_component_apdex:confidence:ratio_1h{component=\"graphql_query\",confidence=\"98%\",type=\"webservice\"} \u003c on(tier, type, __tenant_id__) group_left() (1 - (14.4 * (1 - slo:min:events:gitlab_service_apdex:ratio{component=\"graphql_query\",type=\"webservice\"})))),\n    \"period\", \"1h\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(4) and on () (gitlab_component_apdex:confidence:ratio_30m{component=\"graphql_query\",confidence=\"98%\",type=\"webservice\"} \u003c on(tier, type, __tenant_id__) group_left() (1 - (6 * (1 - slo:min:events:gitlab_service_apdex:ratio{component=\"graphql_query\",type=\"webservice\"})))),\n    \"period\", \"30m\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(8) and on () (gitlab_component_apdex:confidence:ratio_6h{component=\"graphql_query\",confidence=\"98%\",type=\"webservice\"} \u003c on(tier, type, __tenant_id__) group_left() (1 - (6 * (1 - slo:min:events:gitlab_service_apdex:ratio{component=\"graphql_query\",type=\"webservice\"})))),\n    \"period\", \"6h\", \"\", \"\"\n  )\n)\n",
+          "format": "time_series",
+          "instant": true,
+          "interval": "1m",
+          "intervalFactor": 1,
+          "legendFormat": "graphql_query SLI | Latency/Apdex",
+          "refId": "A"
+        }
+      ],
+      "title": "",
+      "transparent": false,
+      "type": "stat"
+    },
+    {
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "$PROMETHEUS_DS",
+      "decimals": 2,
+      "description": "Error rates are a measure of unhandled service exceptions per second. Client errors are excluded when possible. Lower is better",
+      "fill": 0,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 7,
+        "w": 6,
+        "x": 6,
+        "y": 21
+      },
+      "id": 1966600567,
+      "legend": {
+        "alignAsTable": true,
+        "avg": true,
+        "current": true,
+        "hideEmpty": true,
+        "max": true,
+        "min": true,
+        "rightSide": false,
+        "show": true,
+        "total": false,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 2,
+      "nullPointMode": "null",
+      "options": {
+        "dataLinks": [
+          {
+            "targetBlank": true,
+            "title": "graphql_query SLI Error-Rate SLO Analysis",
+            "url": "/d/alerts-component_slo_error?${__url_time_range}\u0026${__all_variables}\u0026var-component=graphql_query\u0026var-type=webservice"
+          }
+        ]
+      },
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [
+        {
+          "alias": "/6h Degradation SLO \\(5% of monthly error budget\\).*/",
+          "color": "#FF4500",
+          "dashLength": 4,
+          "dashes": true,
+          "legend": true,
+          "lines": true,
+          "linewidth": 2,
+          "nullPointMode": "connected",
+          "spaceLength": 10,
+          "zindex": -2
+        },
+        {
+          "alias": "/1h Outage SLO \\(2% of monthly error budget\\).*/",
+          "color": "#F2495C",
+          "dashLength": 4,
+          "dashes": true,
+          "legend": true,
+          "lines": true,
+          "linewidth": 4,
+          "nullPointMode": "connected",
+          "spaceLength": 4,
+          "zindex": -2
+        },
+        {
+          "alias": "/.*shard (apdex|error ratio|RPS)$/",
+          "color": "#E7D551"
+        },
+        {
+          "alias": "graphql_query error ratio avg",
+          "color": "#5794F2",
+          "dashLength": 1,
+          "fillGradient": 10,
+          "linewidth": 1,
+          "spaceLength": 1,
+          "zindex": -3
+        },
+        {
+          "alias": "last week",
+          "color": "#dddddd80",
+          "dashLength": 4,
+          "dashes": true,
+          "fill": 0,
+          "legend": true,
+          "lines": true,
+          "linewidth": 1,
+          "nullPointMode": "connected",
+          "spaceLength": 2,
+          "zindex": -3
+        },
+        {
+          "alias": "Error SLI (lower 98% confidence boundary)",
+          "color": "#E7D551",
+          "zindex": 3
+        },
+        {
+          "alias": "graphql_query error ratio",
+          "color": "#082e69",
+          "lines": true
+        }
+      ],
+      "spaceLength": 10,
+      "stableId": "sli-graphql_query-error-rate",
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "clamp_max(\n  max_over_time(gitlab_component_errors:ratio_5m{component=\"graphql_query\",type=\"webservice\"}[$__interval])\n,\n  1\n)\n",
+          "format": "time_series",
+          "interval": "1m",
+          "intervalFactor": 1,
+          "legendFormat": "graphql_query error ratio",
+          "refId": "A"
+        },
+        {
+          "expr": "(6 * avg(slo:max:events:gitlab_service_errors:ratio{component=\"graphql_query\",type=\"webservice\"})\n)\n",
+          "format": "time_series",
+          "interval": "5m",
+          "intervalFactor": 1,
+          "legendFormat": "6h Degradation SLO (5% of monthly error budget)",
+          "refId": "B"
+        },
+        {
+          "expr": "(14.4 * avg(slo:max:events:gitlab_service_errors:ratio{component=\"graphql_query\",type=\"webservice\"})\n)\n",
+          "format": "time_series",
+          "interval": "5m",
+          "intervalFactor": 1,
+          "legendFormat": "1h Outage SLO (2% of monthly error budget)",
+          "refId": "C"
+        },
+        {
+          "expr": "clamp_max(\n  avg_over_time(gitlab_component_errors:ratio_5m{component=\"graphql_query\",type=\"webservice\"}[$__interval])\n,\n  1\n)\n",
+          "format": "time_series",
+          "interval": "1m",
+          "intervalFactor": 1,
+          "legendFormat": "graphql_query error ratio avg",
+          "refId": "D"
+        },
+        {
+          "expr": "clamp_max(\n  gitlab_component_errors:ratio_5m{component=\"graphql_query\",type=\"webservice\"} offset 1w\n,\n  scalar(max((14.4 * avg(slo:max:events:gitlab_service_errors:ratio{component=\"graphql_query\",type=\"webservice\"})\n)\n))\n)\n",
+          "format": "time_series",
+          "interval": "1m",
+          "intervalFactor": 1,
+          "legendFormat": "last week",
+          "refId": "E"
+        },
+        {
+          "expr": "clamp_max(\n  avg_over_time(gitlab_component_errors:confidence:ratio_5m{component=\"graphql_query\",confidence=\"98%\",type=\"webservice\"}[$__interval])\n,\n  1\n)\n",
+          "format": "time_series",
+          "interval": "1m",
+          "intervalFactor": 1,
+          "legendFormat": "Error SLI (lower 98% confidence boundary)",
+          "refId": "F"
+        }
+      ],
+      "title": "graphql_query SLI Error Ratio",
+      "tooltip": {
+        "shared": true,
+        "sort": 2,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "mode": "time",
+        "show": true
+      },
+      "yaxes": [
+        {
+          "format": "percentunit",
+          "label": "Error %",
+          "logBase": 1,
+          "min": 0,
+          "show": true
+        },
+        {
+          "format": "short",
+          "logBase": 1,
+          "max": 1,
+          "min": 0,
+          "show": false
+        }
+      ]
+    },
+    {
+      "datasource": "$PROMETHEUS_DS",
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "decimals": 0,
+          "displayName": "Status",
+          "mappings": [
+            {
+              "id": 0,
+              "options": {
+                "0": {
+                  "color": "black",
+                  "index": 0,
+                  "text": "Healthy"
+                },
+                "1": {
+                  "color": "orange",
+                  "index": 1,
+                  "text": "Warning: 1h deteriorating"
+                },
+                "10": {
+                  "color": "orange",
+                  "index": 10,
+                  "text": "Warning: 6h recovering, 1h recovering"
+                },
+                "11": {
+                  "color": "red",
+                  "index": 11,
+                  "text": "Degraded: 6h recovering, 1h degraded"
+                },
+                "12": {
+                  "color": "red",
+                  "index": 12,
+                  "text": "Degraded: 6h degraded"
+                },
+                "13": {
+                  "color": "red",
+                  "index": 13,
+                  "text": "Degraded: 6h degraded, 1h deteriorating"
+                },
+                "14": {
+                  "color": "red",
+                  "index": 14,
+                  "text": "Degraded: 6h degraded, 1h recovering"
+                },
+                "15": {
+                  "color": "red",
+                  "index": 15,
+                  "text": "Degraded: 6h degraded, 1h degraded"
+                },
+                "2": {
+                  "color": "orange",
+                  "index": 2,
+                  "text": "Warning: 1h recovering"
+                },
+                "3": {
+                  "color": "red",
+                  "index": 3,
+                  "text": "Degraded: 1h degraded"
+                },
+                "4": {
+                  "color": "orange",
+                  "index": 4,
+                  "text": "Warning: 6h deteriorating"
+                },
+                "5": {
+                  "color": "orange",
+                  "index": 5,
+                  "text": "Warning: 6h deteriorating, 1h deteriorating"
+                },
+                "6": {
+                  "color": "orange",
+                  "index": 6,
+                  "text": "Warning: 6h deteriorating, 1h recovering"
+                },
+                "7": {
+                  "color": "red",
+                  "index": 7,
+                  "text": "Degraded: 6h deteriorating, 1h degraded"
+                },
+                "8": {
+                  "color": "orange",
+                  "index": 8,
+                  "text": "Warning: 6h recovering"
+                },
+                "9": {
+                  "color": "orange",
+                  "index": 9,
+                  "text": "Warning: 6h recovering, 1h deteriorating"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "black",
+                "value": 0
+              },
+              {
+                "color": "orange",
+                "value": 1
+              },
+              {
+                "color": "orange",
+                "value": 2
+              },
+              {
+                "color": "red",
+                "value": 3
+              },
+              {
+                "color": "orange",
+                "value": 4
+              },
+              {
+                "color": "orange",
+                "value": 5
+              },
+              {
+                "color": "orange",
+                "value": 6
+              },
+              {
+                "color": "red",
+                "value": 7
+              },
+              {
+                "color": "orange",
+                "value": 8
+              },
+              {
+                "color": "orange",
+                "value": 9
+              },
+              {
+                "color": "orange",
+                "value": 10
+              },
+              {
+                "color": "red",
+                "value": 11
+              },
+              {
+                "color": "red",
+                "value": 12
+              },
+              {
+                "color": "red",
+                "value": 13
+              },
+              {
+                "color": "red",
+                "value": 14
+              },
+              {
+                "color": "red",
+                "value": 15
+              }
+            ]
+          },
+          "unit": "none"
+        }
+      },
+      "gridPos": {
+        "h": 1,
+        "w": 6,
+        "x": 6,
+        "y": 28
+      },
+      "id": 13,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "vertical",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "7",
+      "targets": [
+        {
+          "expr": "sum(\n  label_replace(\n    vector(0) and on() (gitlab_component_errors:confidence:ratio_1h{component=\"graphql_query\",confidence=\"98%\",type=\"webservice\"}),\n    \"period\", \"na\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(1) and on () (gitlab_component_errors:confidence:ratio_5m{component=\"graphql_query\",confidence=\"98%\",type=\"webservice\"} \u003e on(tier, type, __tenant_id__) group_left() (14.4 * slo:max:events:gitlab_service_errors:ratio{component=\"graphql_query\",type=\"webservice\"})),\n    \"period\", \"5m\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(2) and on () (gitlab_component_errors:confidence:ratio_1h{component=\"graphql_query\",confidence=\"98%\",type=\"webservice\"} \u003e on(tier, type, __tenant_id__) group_left() (14.4 * slo:max:events:gitlab_service_errors:ratio{component=\"graphql_query\",type=\"webservice\"})),\n    \"period\", \"1h\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(4) and on () (gitlab_component_errors:confidence:ratio_30m{component=\"graphql_query\",confidence=\"98%\",type=\"webservice\"} \u003e on(tier, type, __tenant_id__) group_left() (6 * slo:max:events:gitlab_service_errors:ratio{component=\"graphql_query\",type=\"webservice\"})),\n    \"period\", \"30m\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(8) and on () (gitlab_component_errors:confidence:ratio_6h{component=\"graphql_query\",confidence=\"98%\",type=\"webservice\"} \u003e on(tier, type, __tenant_id__) group_left() (6 * slo:max:events:gitlab_service_errors:ratio{component=\"graphql_query\",type=\"webservice\"})),\n    \"period\", \"6h\", \"\", \"\"\n  )\n)\n",
+          "format": "time_series",
+          "instant": true,
+          "interval": "1m",
+          "intervalFactor": 1,
+          "legendFormat": "graphql_query SLI | Errors",
+          "refId": "A"
+        }
+      ],
+      "title": "",
+      "transparent": false,
+      "type": "stat"
+    },
+    {
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "$PROMETHEUS_DS",
+      "decimals": 2,
+      "description": "The operation rate is the sum total of all requests being handle for all components within this service. Note that a single user request can lead to requests to multiple components. Higher is busier.",
+      "fill": 0,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 8,
+        "w": 6,
+        "x": 12,
+        "y": 21
+      },
+      "id": 1872300215,
+      "legend": {
+        "alignAsTable": true,
+        "avg": true,
+        "current": true,
+        "hideEmpty": true,
+        "max": true,
+        "min": true,
+        "rightSide": false,
+        "show": true,
+        "total": false,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 2,
+      "nullPointMode": "null",
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [
+        {
+          "alias": "/.*shard (apdex|error ratio|RPS)$/",
+          "color": "#E7D551"
+        },
+        {
+          "alias": "graphql_query RPS",
+          "color": "#E7D551",
+          "zindex": 3
+        },
+        {
+          "alias": "last week",
+          "color": "#dddddd80",
+          "dashLength": 4,
+          "dashes": true,
+          "fill": 0,
+          "legend": true,
+          "lines": true,
+          "linewidth": 1,
+          "nullPointMode": "connected",
+          "spaceLength": 2,
+          "zindex": -3
+        }
+      ],
+      "spaceLength": 10,
+      "stableId": "sli-graphql_query-ops-rate",
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "avg_over_time(gitlab_component_ops:rate_5m{component=\"graphql_query\",type=\"webservice\"}[$__interval])\n",
+          "format": "time_series",
+          "interval": "1m",
+          "intervalFactor": 1,
+          "legendFormat": "graphql_query RPS",
+          "refId": "A"
+        },
+        {
+          "expr": "gitlab_component_ops:rate_5m{component=\"graphql_query\",type=\"webservice\"} offset 1w\n",
+          "format": "time_series",
+          "interval": "1m",
+          "intervalFactor": 1,
+          "legendFormat": "last week",
+          "refId": "B"
+        }
+      ],
+      "title": "graphql_query SLI RPS - Requests per Second",
+      "tooltip": {
+        "shared": true,
+        "sort": 2,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "mode": "time",
+        "show": true
+      },
+      "yaxes": [
+        {
+          "format": "short",
+          "label": "Operations per Second",
+          "logBase": 1,
+          "min": 0,
+          "show": true
+        },
+        {
+          "format": "short",
+          "logBase": 1,
+          "max": 1,
+          "min": 0,
+          "show": false
+        }
+      ]
+    },
+    {
+      "content": "### Description\n\nA GraphQL query is executed in the context of a request. An error does not\nalways result in a 5xx error. But could contain errors in the response.\nMutliple queries could be batched inside a single request.\n\nThis SLI counts all operations, a succeeded operation does not contain errors in\nit's response or return a 500 error.\n\nThe number of GraphQL queries meeting their duration target based on the urgency\nof the endpoint. By default, a query should take no more than 1s. We're working\non making the urgency customizable in [this epic](https://gitlab.com/groups/gitlab-org/-/epics/5841).\n\nWe're only taking known operations into account. Known operations are queries\ndefined in our codebase and originating from our frontend.\n\n",
+      "gridPos": {
+        "h": 8,
+        "w": 6,
+        "x": 18,
+        "y": 21
+      },
+      "id": 15,
+      "mode": "markdown",
+      "title": "Details",
+      "type": "text"
+    },
+    {
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "$PROMETHEUS_DS",
+      "decimals": 2,
+      "description": "Apdex is a measure of requests that complete within a tolerable period of time for the service. Higher is better.",
+      "fill": 0,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 7,
+        "w": 6,
+        "x": 0,
+        "y": 31
+      },
       "id": 561966508,
       "legend": {
         "alignAsTable": true,
@@ -1507,9 +2413,9 @@
         "h": 1,
         "w": 6,
         "x": 0,
-        "y": 28
+        "y": 38
       },
-      "id": 11,
+      "id": 17,
       "options": {
         "colorMode": "background",
         "graphMode": "none",
@@ -1553,7 +2459,7 @@
         "h": 7,
         "w": 6,
         "x": 6,
-        "y": 21
+        "y": 31
       },
       "id": 2425637513,
       "legend": {
@@ -1899,9 +2805,9 @@
         "h": 1,
         "w": 6,
         "x": 6,
-        "y": 28
+        "y": 38
       },
-      "id": 13,
+      "id": 19,
       "options": {
         "colorMode": "background",
         "graphMode": "none",
@@ -1945,7 +2851,7 @@
         "h": 8,
         "w": 6,
         "x": 12,
-        "y": 21
+        "y": 31
       },
       "id": 110019945,
       "legend": {
@@ -2047,9 +2953,9 @@
         "h": 8,
         "w": 6,
         "x": 18,
-        "y": 21
+        "y": 31
       },
-      "id": 15,
+      "id": 21,
       "mode": "markdown",
       "title": "Details",
       "type": "text"
@@ -2067,7 +2973,7 @@
         "h": 7,
         "w": 6,
         "x": 0,
-        "y": 31
+        "y": 41
       },
       "id": 2586818196,
       "legend": {
@@ -2413,9 +3319,9 @@
         "h": 1,
         "w": 6,
         "x": 0,
-        "y": 38
+        "y": 48
       },
-      "id": 17,
+      "id": 23,
       "options": {
         "colorMode": "background",
         "graphMode": "none",
@@ -2459,7 +3365,7 @@
         "h": 7,
         "w": 6,
         "x": 6,
-        "y": 31
+        "y": 41
       },
       "id": 2047984749,
       "legend": {
@@ -2805,9 +3711,9 @@
         "h": 1,
         "w": 6,
         "x": 6,
-        "y": 38
+        "y": 48
       },
-      "id": 19,
+      "id": 25,
       "options": {
         "colorMode": "background",
         "graphMode": "none",
@@ -2851,7 +3757,7 @@
         "h": 8,
         "w": 6,
         "x": 12,
-        "y": 31
+        "y": 41
       },
       "id": 831392945,
       "legend": {
@@ -2953,9 +3859,9 @@
         "h": 8,
         "w": 6,
         "x": 18,
-        "y": 31
+        "y": 41
       },
-      "id": 21,
+      "id": 27,
       "mode": "markdown",
       "title": "Details",
       "type": "text"
@@ -2973,7 +3879,7 @@
         "h": 7,
         "w": 6,
         "x": 0,
-        "y": 41
+        "y": 51
       },
       "id": 1061500963,
       "legend": {
@@ -3319,9 +4225,9 @@
         "h": 1,
         "w": 6,
         "x": 0,
-        "y": 48
+        "y": 58
       },
-      "id": 23,
+      "id": 29,
       "options": {
         "colorMode": "background",
         "graphMode": "none",
@@ -3365,7 +4271,7 @@
         "h": 7,
         "w": 6,
         "x": 6,
-        "y": 41
+        "y": 51
       },
       "id": 1957610638,
       "legend": {
@@ -3711,9 +4617,9 @@
         "h": 1,
         "w": 6,
         "x": 6,
-        "y": 48
+        "y": 58
       },
-      "id": 25,
+      "id": 31,
       "options": {
         "colorMode": "background",
         "graphMode": "none",
@@ -3757,7 +4663,7 @@
         "h": 8,
         "w": 6,
         "x": 12,
-        "y": 41
+        "y": 51
       },
       "id": 3800674929,
       "legend": {
@@ -3859,9 +4765,9 @@
         "h": 8,
         "w": 6,
         "x": 18,
-        "y": 41
+        "y": 51
       },
-      "id": 27,
+      "id": 33,
       "mode": "markdown",
       "title": "Details",
       "type": "text"
@@ -3875,7 +4781,7 @@
         "x": 0,
         "y": 200
       },
-      "id": 28,
+      "id": 34,
       "panels": [
         {
           "bars": false,
@@ -3892,7 +4798,412 @@
             "x": 0,
             "y": 0
           },
-          "id": 29,
+          "id": 35,
+          "legend": {
+            "alignAsTable": true,
+            "avg": true,
+            "current": true,
+            "hideEmpty": true,
+            "max": true,
+            "min": true,
+            "rightSide": false,
+            "show": true,
+            "total": false,
+            "values": true
+          },
+          "lines": true,
+          "linewidth": 2,
+          "nullPointMode": "null",
+          "percentage": false,
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "expr": "sum by () (\n  rate(gitlab_sli_graphql_query_error_total{endpoint_id!=\"graphql:unknown\",job=\"gitlab-rails\"}[$__interval])\n)\n \u003e 0",
+              "format": "time_series",
+              "interval": "1m",
+              "intervalFactor": 1,
+              "legendFormat": "overall",
+              "refId": "A"
+            }
+          ],
+          "title": "graphql_query Errors - Overall",
+          "tooltip": {
+            "shared": true,
+            "sort": 2,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "mode": "time",
+            "show": true
+          },
+          "yaxes": [
+            {
+              "format": "short",
+              "label": "Errors",
+              "logBase": 1,
+              "min": 0,
+              "show": true
+            },
+            {
+              "format": "short",
+              "logBase": 1,
+              "max": 1,
+              "min": 0,
+              "show": false
+            }
+          ]
+        },
+        {
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "$PROMETHEUS_DS",
+          "decimals": 0,
+          "description": "",
+          "fill": 0,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 10,
+            "w": 12,
+            "x": 12,
+            "y": 0
+          },
+          "id": 36,
+          "legend": {
+            "alignAsTable": true,
+            "avg": true,
+            "current": true,
+            "hideEmpty": true,
+            "max": true,
+            "min": true,
+            "rightSide": false,
+            "show": true,
+            "total": false,
+            "values": true
+          },
+          "lines": true,
+          "linewidth": 2,
+          "nullPointMode": "null",
+          "percentage": false,
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "expr": "sum by () (\n  rate(gitlab_sli_graphql_query_total{endpoint_id!=\"graphql:unknown\",job=\"gitlab-rails\"}[$__interval])\n)\n \u003e 0",
+              "format": "time_series",
+              "interval": "1m",
+              "intervalFactor": 1,
+              "legendFormat": "overall",
+              "refId": "A"
+            }
+          ],
+          "title": "graphql_query RPS - Overall",
+          "tooltip": {
+            "shared": true,
+            "sort": 2,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "mode": "time",
+            "show": true
+          },
+          "yaxes": [
+            {
+              "format": "short",
+              "label": "Requests per Second",
+              "logBase": 1,
+              "min": 0,
+              "show": true
+            },
+            {
+              "format": "short",
+              "logBase": 1,
+              "max": 1,
+              "min": 0,
+              "show": false
+            }
+          ]
+        },
+        {
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "$PROMETHEUS_DS",
+          "decimals": 2,
+          "description": "Attributes apdex downscoring",
+          "fill": 4,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 10,
+            "w": 8,
+            "x": 0,
+            "y": 10
+          },
+          "id": 37,
+          "legend": {
+            "alignAsTable": true,
+            "avg": true,
+            "current": true,
+            "hideEmpty": true,
+            "max": true,
+            "min": true,
+            "rightSide": false,
+            "show": true,
+            "total": false,
+            "values": true
+          },
+          "lines": true,
+          "linewidth": 1,
+          "nullPointMode": "null",
+          "percentage": false,
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [
+            {
+              "alias": "/.*/",
+              "transform": "negative-Y"
+            }
+          ],
+          "spaceLength": 10,
+          "stack": true,
+          "steppedLine": false,
+          "targets": [
+            {
+              "expr": "clamp_min(clamp_max((\n  (\n    sum by (endpoint_id) (\n      rate(gitlab_sli_graphql_query_apdex_total{endpoint_id!=\"\",job=\"gitlab-rails\"}[$__interval])\n    )\n    -\n    sum by (endpoint_id) (\n      rate(gitlab_sli_graphql_query_apdex_success_total{endpoint_id!=\"\",job=\"gitlab-rails\"}[$__interval])\n    )\n  )\n  / ignoring (endpoint_id) group_left()\n  (\n    sum by () (\n      rate(gitlab_sli_graphql_query_apdex_total{endpoint_id!=\"\",job=\"gitlab-rails\"}[$__interval])\n    )\n  )\n) \u003e 0\n,1),0)\n",
+              "format": "time_series",
+              "interval": "1m",
+              "intervalFactor": 1,
+              "legendFormat": "{{endpoint_id}}",
+              "refId": "A"
+            }
+          ],
+          "title": "Apdex attribution for graphql_query Latency - per endpoint_id",
+          "tooltip": {
+            "shared": true,
+            "sort": 2,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "mode": "time",
+            "show": true
+          },
+          "yaxes": [
+            {
+              "format": "percentunit",
+              "label": "Percent",
+              "logBase": 1,
+              "show": true
+            },
+            {
+              "format": "short",
+              "logBase": 1,
+              "max": 1,
+              "min": 0,
+              "show": false
+            }
+          ]
+        },
+        {
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "$PROMETHEUS_DS",
+          "decimals": 2,
+          "description": "",
+          "fill": 0,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 10,
+            "w": 8,
+            "x": 8,
+            "y": 10
+          },
+          "id": 38,
+          "legend": {
+            "alignAsTable": true,
+            "avg": true,
+            "current": true,
+            "hideEmpty": true,
+            "max": true,
+            "min": true,
+            "rightSide": false,
+            "show": true,
+            "total": false,
+            "values": true
+          },
+          "lines": true,
+          "linewidth": 2,
+          "nullPointMode": "null",
+          "percentage": false,
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "expr": "sum by (endpoint_id) (\n  rate(gitlab_sli_graphql_query_error_total{endpoint_id!=\"graphql:unknown\",job=\"gitlab-rails\"}[$__interval])\n)\n \u003e 0",
+              "format": "time_series",
+              "interval": "1m",
+              "intervalFactor": 1,
+              "legendFormat": "{{endpoint_id}}",
+              "refId": "A"
+            }
+          ],
+          "title": "graphql_query Errors - per endpoint_id",
+          "tooltip": {
+            "shared": true,
+            "sort": 2,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "mode": "time",
+            "show": true
+          },
+          "yaxes": [
+            {
+              "format": "short",
+              "label": "Errors",
+              "logBase": 1,
+              "min": 0,
+              "show": true
+            },
+            {
+              "format": "short",
+              "logBase": 1,
+              "max": 1,
+              "min": 0,
+              "show": false
+            }
+          ]
+        },
+        {
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "$PROMETHEUS_DS",
+          "decimals": 0,
+          "description": "",
+          "fill": 0,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 10,
+            "w": 8,
+            "x": 16,
+            "y": 10
+          },
+          "id": 39,
+          "legend": {
+            "alignAsTable": true,
+            "avg": true,
+            "current": true,
+            "hideEmpty": true,
+            "max": true,
+            "min": true,
+            "rightSide": false,
+            "show": true,
+            "total": false,
+            "values": true
+          },
+          "lines": true,
+          "linewidth": 2,
+          "nullPointMode": "null",
+          "percentage": false,
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "expr": "sum by (endpoint_id) (\n  rate(gitlab_sli_graphql_query_total{endpoint_id!=\"graphql:unknown\",job=\"gitlab-rails\"}[$__interval])\n)\n \u003e 0",
+              "format": "time_series",
+              "interval": "1m",
+              "intervalFactor": 1,
+              "legendFormat": "{{endpoint_id}}",
+              "refId": "A"
+            }
+          ],
+          "title": "graphql_query RPS - per endpoint_id",
+          "tooltip": {
+            "shared": true,
+            "sort": 2,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "mode": "time",
+            "show": true
+          },
+          "yaxes": [
+            {
+              "format": "short",
+              "label": "Requests per Second",
+              "logBase": 1,
+              "min": 0,
+              "show": true
+            },
+            {
+              "format": "short",
+              "logBase": 1,
+              "max": 1,
+              "min": 0,
+              "show": false
+            }
+          ]
+        }
+      ],
+      "repeat": null,
+      "repeatIteration": null,
+      "repeatRowId": null,
+      "showTitle": true,
+      "title": "🔬 SLI Detail: graphql_query",
+      "titleSize": "h6",
+      "type": "row"
+    },
+    {
+      "collapse": true,
+      "collapsed": true,
+      "gridPos": {
+        "h": 10,
+        "w": 24,
+        "x": 0,
+        "y": 210
+      },
+      "id": 40,
+      "panels": [
+        {
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "$PROMETHEUS_DS",
+          "decimals": 2,
+          "description": "",
+          "fill": 0,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 10,
+            "w": 12,
+            "x": 0,
+            "y": 0
+          },
+          "id": 41,
           "legend": {
             "alignAsTable": true,
             "avg": true,
@@ -3968,7 +5279,7 @@
             "x": 12,
             "y": 0
           },
-          "id": 30,
+          "id": 42,
           "legend": {
             "alignAsTable": true,
             "avg": true,
@@ -4045,9 +5356,9 @@
         "h": 10,
         "w": 24,
         "x": 0,
-        "y": 210
+        "y": 220
       },
-      "id": 31,
+      "id": 43,
       "panels": [
         {
           "bars": false,
@@ -4064,7 +5375,7 @@
             "x": 0,
             "y": 0
           },
-          "id": 32,
+          "id": 44,
           "legend": {
             "alignAsTable": true,
             "avg": true,
@@ -4160,7 +5471,7 @@
             "x": 8,
             "y": 0
           },
-          "id": 33,
+          "id": 45,
           "legend": {
             "alignAsTable": true,
             "avg": true,
@@ -4236,7 +5547,7 @@
             "x": 16,
             "y": 0
           },
-          "id": 34,
+          "id": 46,
           "legend": {
             "alignAsTable": true,
             "avg": true,
@@ -4312,7 +5623,7 @@
             "x": 0,
             "y": 10
           },
-          "id": 35,
+          "id": 47,
           "legend": {
             "alignAsTable": true,
             "avg": true,
@@ -4408,7 +5719,7 @@
             "x": 6,
             "y": 10
           },
-          "id": 36,
+          "id": 48,
           "legend": {
             "alignAsTable": true,
             "avg": true,
@@ -4489,7 +5800,7 @@
             "x": 12,
             "y": 10
           },
-          "id": 37,
+          "id": 49,
           "legend": {
             "alignAsTable": true,
             "avg": true,
@@ -4565,7 +5876,7 @@
             "x": 18,
             "y": 10
           },
-          "id": 38,
+          "id": 50,
           "legend": {
             "alignAsTable": true,
             "avg": true,
@@ -4642,9 +5953,9 @@
         "h": 10,
         "w": 24,
         "x": 0,
-        "y": 220
+        "y": 230
       },
-      "id": 39,
+      "id": 51,
       "panels": [
         {
           "bars": false,
@@ -4661,7 +5972,7 @@
             "x": 0,
             "y": 0
           },
-          "id": 40,
+          "id": 52,
           "legend": {
             "alignAsTable": true,
             "avg": true,
@@ -4756,7 +6067,7 @@
             "x": 8,
             "y": 0
           },
-          "id": 41,
+          "id": 53,
           "legend": {
             "alignAsTable": true,
             "avg": true,
@@ -4832,7 +6143,7 @@
             "x": 16,
             "y": 0
           },
-          "id": 42,
+          "id": 54,
           "legend": {
             "alignAsTable": true,
             "avg": true,
@@ -4908,7 +6219,7 @@
             "x": 0,
             "y": 10
           },
-          "id": 43,
+          "id": 55,
           "legend": {
             "alignAsTable": true,
             "avg": true,
@@ -5003,7 +6314,7 @@
             "x": 6,
             "y": 10
           },
-          "id": 44,
+          "id": 56,
           "legend": {
             "alignAsTable": true,
             "avg": true,
@@ -5084,7 +6395,7 @@
             "x": 12,
             "y": 10
           },
-          "id": 45,
+          "id": 57,
           "legend": {
             "alignAsTable": true,
             "avg": true,
@@ -5160,7 +6471,7 @@
             "x": 18,
             "y": 10
           },
-          "id": 46,
+          "id": 58,
           "legend": {
             "alignAsTable": true,
             "avg": true,
@@ -5239,7 +6550,7 @@
         "x": 0,
         "y": 500
       },
-      "id": 47,
+      "id": 59,
       "panels": [
         {
           "aliasColors": {},
@@ -6007,7 +7318,7 @@
         "x": 0,
         "y": 110000
       },
-      "id": 52,
+      "id": 64,
       "mode": "markdown",
       "title": "Source",
       "type": "text"

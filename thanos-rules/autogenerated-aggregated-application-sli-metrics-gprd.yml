@@ -49,6 +49,16 @@ groups:
   interval: 1m
   partial_response_strategy: warn
   rules:
+  - record: application_sli_aggregation:graphql_query:error:rate_5m
+    expr: |
+      sum by (env,environment,tier,type,stage,endpoint_id,feature_category,query_urgency) (
+        (sli_aggregations:gitlab_sli_graphql_query_error_total_rate5m{env="gprd",monitor!="global"} >= 0)
+      )
+  - record: application_sli_aggregation:graphql_query:ops:rate_5m
+    expr: |
+      sum by (env,environment,tier,type,stage,endpoint_id,feature_category,query_urgency) (
+        (sli_aggregations:gitlab_sli_graphql_query_total_rate5m{env="gprd",monitor!="global"} >= 0)
+      )
   - record: application_sli_aggregation:graphql_query:apdex:weight:score_5m
     expr: |
       sum by (env,environment,tier,type,stage,endpoint_id,feature_category,query_urgency) (
@@ -58,6 +68,16 @@ groups:
     expr: |
       sum by (env,environment,tier,type,stage,endpoint_id,feature_category,query_urgency) (
         (sli_aggregations:gitlab_sli_graphql_query_apdex_success_total_rate5m{env="gprd",monitor!="global"} >= 0)
+      )
+  - record: application_sli_aggregation:graphql_query:error:rate_1h
+    expr: |
+      sum by (env,environment,tier,type,stage,endpoint_id,feature_category,query_urgency) (
+        (sli_aggregations:gitlab_sli_graphql_query_error_total_rate1h{env="gprd",monitor!="global"} >= 0)
+      )
+  - record: application_sli_aggregation:graphql_query:ops:rate_1h
+    expr: |
+      sum by (env,environment,tier,type,stage,endpoint_id,feature_category,query_urgency) (
+        (sli_aggregations:gitlab_sli_graphql_query_total_rate1h{env="gprd",monitor!="global"} >= 0)
       )
   - record: application_sli_aggregation:graphql_query:apdex:weight:score_1h
     expr: |
