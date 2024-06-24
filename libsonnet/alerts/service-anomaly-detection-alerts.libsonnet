@@ -18,7 +18,7 @@ local rules = function(extraSelector, tenant=null)
       expr: |||
         (
             (
-              (gitlab_service_ops:rate{%(selector)s} -  gitlab_service_ops:rate:prediction{%(selector)s}) /
+              (gitlab_service_ops:rate_5m{%(selector)s} -  gitlab_service_ops:rate:prediction{%(selector)s}) /
             gitlab_service_ops:rate:stddev_over_time_1w{%(selector)s}
           )
           >
@@ -62,7 +62,7 @@ local rules = function(extraSelector, tenant=null)
       expr: |||
         (
             (
-              (gitlab_service_ops:rate{%(selector)s} -  gitlab_service_ops:rate:prediction{%(selector)s}) /
+              (gitlab_service_ops:rate_5m{%(selector)s} -  gitlab_service_ops:rate:prediction{%(selector)s}) /
             gitlab_service_ops:rate:stddev_over_time_1w{%(selector)s}
           )
           <
