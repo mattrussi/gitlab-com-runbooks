@@ -36,9 +36,9 @@ To ensure speedy recovery, enlist help and delegate out these changes so they ca
 
 All recoveries start with a change issue using `/change declare` and selecting one of the following templates:
 
-- `change_zonal_recovery_gitaly`
-- `change_zonal_recovery_patroni`
-- `change_zonal_recovery_haproxy`
+- `[change_zonal_recovery_gitaly](https://gitlab.com/gitlab-com/gl-infra/production/-/blob/master/.gitlab/issue_templates/change_zonal_recovery_gitaly.md?ref_type=heads)`
+- `[change_zonal_recovery_patroni](https://gitlab.com/gitlab-com/gl-infra/production/-/blob/master/.gitlab/issue_templates/change_zonal_recovery_patroni.md?ref_type=heads)`
+- `[change_zonal_recovery_haproxy](https://gitlab.com/gitlab-com/gl-infra/production/-/blob/master/.gitlab/issue_templates/change_zonal_recovery_haproxy.md?ref_type=heads)`
 
 **Note**: If GitLab.com is unavailable, check the `Use ops.gitlab.net instead of gitlab.com` option when creating the change issue.
 
