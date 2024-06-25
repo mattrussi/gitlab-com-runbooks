@@ -3,8 +3,7 @@ local basic = import 'grafana/basic.libsonnet';
 local template = grafana.template;
 local promQuery = import 'grafana/prom_query.libsonnet';
 local g = import 'github.com/grafana/grafonnet/gen/grafonnet-latest/main.libsonnet';
-local prometheusQuery = g.query.prometheus;
-local row = grafana.row;
+local layout = import 'grafana/layout.libsonnet';
 local mimirHelper = import 'services/lib/mimir-helpers.libsonnet';
 
 local totalBlockersCount = 'sum by (root_cause) (last_over_time(delivery_deployment_blocker_count{root_cause=~".+", root_cause!="RootCause::FlakyTest"}[1d]))';
@@ -14,50 +13,44 @@ local blockersCount = 'max by (week) (last_over_time(delivery_deployment_blocker
 local gprdHoursBlocked = 'max by (week) (last_over_time(delivery_deployment_hours_blocked{root_cause="$root_cause", target_env="gprd"}[1d]))';
 local gstgHoursBlocked = 'max by (week) (last_over_time(delivery_deployment_hours_blocked{root_cause="$root_cause", target_env="gstg"}[1d]))';
 
-local panels = {
-  text: {
-    textPanel(title):
-      g.panel.text.new(title)
-      + g.panel.text.options.withMode("markdown")
-      + g.panel.text.options.withContent(|||
-          # Deployment Blockers
+  local textPanel(title) =
+    g.panel.text.new(title)
+    + g.panel.text.options.withMode("markdown")
+    + g.panel.text.options.withContent(|||
+        # Deployment Blockers
 
-          Deployment failures are currently automatically captured under [release/tasks issues](https://gitlab.com/gitlab-org/release/tasks/-/issues).
-          Release managers are responsible for labeling these failures with appropriate `RootCause::*` labels. By the start of the following week (Monday), the `deployments:blockers_report` scheduled pipeline in the [release/tools](https://ops.gitlab.net/gitlab-org/release/tools/-/pipeline_schedules) repo reviews the labeled issues and generates a weekly deployment blockers issue, like this [one](https://gitlab.com/gitlab-org/release/tasks/-/issues/11125).
+        Deployment failures are currently automatically captured under [release/tasks issues](https://gitlab.com/gitlab-org/release/tasks/-/issues).
+        Release managers are responsible for labeling these failures with appropriate `RootCause::*` labels. By the start of the following week (Monday), the `deployments:blockers_report` scheduled pipeline in the [release/tools](https://ops.gitlab.net/gitlab-org/release/tools/-/pipeline_schedules) repo reviews the labeled issues and generates a weekly deployment blockers issue, like this [one](https://gitlab.com/gitlab-org/release/tasks/-/issues/11125).
 
-          This dashboard tracks the trend of recurring root causes for deployment blockers. Each root cause is displayed in separate rows with three panels: one for the count of blockers, one for `gprd` hours blocked, and one for `gstg` hours blocked. At the top, there is an overview of the failure types, including the total calculations for the entire specified time window.
+        This dashboard tracks the trend of recurring root causes for deployment blockers. Each root cause is displayed in separate rows with three panels: one for the count of blockers, one for `gprd` hours blocked, and one for `gstg` hours blocked. At the top, there is an overview of the failure types, including the total calculations for the entire specified time window.
 
-          Links:
-          - [List of root causes](https://gitlab.com/gitlab-org/release/tasks/-/labels?subscribed=&sort=relevance&search=RootCause)
-          - [Deployments metrics review](https://gitlab.com/groups/gitlab-com/gl-infra/-/epics/1192)
-        |||)
-  },
+        Links:
+        - [List of root causes](https://gitlab.com/gitlab-org/release/tasks/-/labels?subscribed=&sort=relevance&search=RootCause)
+        - [Deployments metrics review](https://gitlab.com/groups/gitlab-com/gl-infra/-/epics/1192)
+      |||);
 
-  barChart: {
-    barChartPanel(title, query):
-      g.panel.barChart.new(title)
-      + g.panel.barChart.queryOptions.withInterval('2d')
-      + g.panel.barChart.options.withOrientation("horizontal")
-      + g.panel.barChart.options.legend.withDisplayMode('table')
-      + g.panel.barChart.options.legend.withPlacement("bottom")
-      + g.panel.barChart.options.legend.withCalcs(['total'])
-      + g.panel.barChart.standardOptions.withDisplayName("blockers_count")
-      + g.panel.barChart.standardOptions.color.withMode("thresholds")
-      + g.panel.barChart.queryOptions.withTargetsMixin([
-        g.query.prometheus.new(
-          '$PROMETHEUS_DS',
-          query,
-        )
-        + g.query.prometheus.withFormat("time_series"),
-      ])
-      + g.panel.barChart.queryOptions.withTransformations([
-        g.panel.barChart.queryOptions.transformation.withId("reduce")
-        + g.panel.barChart.queryOptions.transformation.withOptions({ reducers: ['sum'] })
-      ])
-  },
+  local barChartPanel(title, query) =
+    g.panel.barChart.new(title)
+    + g.panel.barChart.queryOptions.withInterval('2d')
+    + g.panel.barChart.options.withOrientation("horizontal")
+    + g.panel.barChart.options.legend.withDisplayMode('table')
+    + g.panel.barChart.options.legend.withPlacement("bottom")
+    + g.panel.barChart.options.legend.withCalcs(['total'])
+    + g.panel.barChart.standardOptions.withDisplayName("blockers_count")
+    + g.panel.barChart.standardOptions.color.withMode("thresholds")
+    + g.panel.barChart.queryOptions.withTargetsMixin([
+      g.query.prometheus.new(
+        '$PROMETHEUS_DS',
+        query,
+      )
+      + g.query.prometheus.withFormat("time_series"),
+    ])
+    + g.panel.barChart.queryOptions.withTransformations([
+      g.panel.barChart.queryOptions.transformation.withId("reduce")
+      + g.panel.barChart.queryOptions.transformation.withOptions({ reducers: ['sum'] })
+    ]);
 
-  trend: {
-    trendPanel(title, query):
+  local trendPanel(title, query) =
       g.panel.trend.new(title)
       + g.panel.trend.queryOptions.withInterval('2d')
       + g.panel.trend.options.withXField("week_index")
@@ -126,73 +119,69 @@ local panels = {
             "week_count": "week_index"
           }
         })
-      ])
-  },
+      ]);
 
-  table: {
-    tablePanel(title):
-      g.panel.table.new(title)
-      + g.panel.table.queryOptions.withInterval('2d')
-      + g.panel.table.fieldConfig.defaults.custom.withFilterable(true)
-      + g.panel.table.options.withShowHeader(true)
-      + g.panel.table.standardOptions.color.withMode("thresholds")
-      + g.panel.table.queryOptions.withTargetsMixin([
-        g.query.prometheus.new(
-          '$PROMETHEUS_DS',
-          blockersCount,
-        ) + g.query.prometheus.withFormat("time_series"),
+  local tablePanel(title) =
+    g.panel.table.new(title)
+    + g.panel.table.queryOptions.withInterval('2d')
+    + g.panel.table.fieldConfig.defaults.custom.withFilterable(true)
+    + g.panel.table.options.withShowHeader(true)
+    + g.panel.table.standardOptions.color.withMode("thresholds")
+    + g.panel.table.queryOptions.withTargetsMixin([
+      g.query.prometheus.new(
+        '$PROMETHEUS_DS',
+        blockersCount,
+      ) + g.query.prometheus.withFormat("time_series"),
 
-        g.query.prometheus.new(
-          '$PROMETHEUS_DS',
-          gprdHoursBlocked,
-        ) + g.query.prometheus.withFormat("time_series"),
+      g.query.prometheus.new(
+        '$PROMETHEUS_DS',
+        gprdHoursBlocked,
+      ) + g.query.prometheus.withFormat("time_series"),
 
-        g.query.prometheus.new(
-          '$PROMETHEUS_DS',
-          gstgHoursBlocked,
-        ) + g.query.prometheus.withFormat("time_series"),
-      ])
-      + g.panel.table.queryOptions.withTransformations([
-        g.panel.table.queryOptions.transformation.withId("timeSeriesTable")
-        + g.panel.table.queryOptions.transformation.withOptions({}),
-        g.panel.table.queryOptions.transformation.withId("merge")
-        + g.panel.table.queryOptions.transformation.withOptions({}),
-        g.panel.table.queryOptions.transformation.withId("calculateField")
-        + g.panel.table.queryOptions.transformation.withOptions({
-          alias: "count",
-          mode: "index",
-          reduce: {
-            reducer: "sum"
-          }
-        }),
-        g.panel.table.queryOptions.transformation.withId("calculateField")
-        + g.panel.table.queryOptions.transformation.withOptions({
-          alias: "week_index",
-          binary: {
-            left: "count",
-            right: "1"
-          },
-          mode: "binary",
-          reduce: {
-            reducer: "sum"
-          }
-        }),
-        g.panel.table.queryOptions.transformation.withId("organize")
-        + g.panel.table.queryOptions.transformation.withOptions({
-          excludeByName: {
-            count: true
-          },
-          includeByName: {},
-          indexByName: {},
-          renameByName: {
-            "Trend #blocker count": "blockers_count",
-            "Trend #gprd hours blocked": "gprd_hours_blocked",
-            "Trend #gstg hours blocked": "gstg_hours_blocked"
-          }
-        })
-      ])
-  },
-};
+      g.query.prometheus.new(
+        '$PROMETHEUS_DS',
+        gstgHoursBlocked,
+      ) + g.query.prometheus.withFormat("time_series"),
+    ])
+    + g.panel.table.queryOptions.withTransformations([
+      g.panel.table.queryOptions.transformation.withId("timeSeriesTable")
+      + g.panel.table.queryOptions.transformation.withOptions({}),
+      g.panel.table.queryOptions.transformation.withId("merge")
+      + g.panel.table.queryOptions.transformation.withOptions({}),
+      g.panel.table.queryOptions.transformation.withId("calculateField")
+      + g.panel.table.queryOptions.transformation.withOptions({
+        alias: "count",
+        mode: "index",
+        reduce: {
+          reducer: "sum"
+        }
+      }),
+      g.panel.table.queryOptions.transformation.withId("calculateField")
+      + g.panel.table.queryOptions.transformation.withOptions({
+        alias: "week_index",
+        binary: {
+          left: "count",
+          right: "1"
+        },
+        mode: "binary",
+        reduce: {
+          reducer: "sum"
+        }
+      }),
+      g.panel.table.queryOptions.transformation.withId("organize")
+      + g.panel.table.queryOptions.transformation.withOptions({
+        excludeByName: {
+          count: true
+        },
+        includeByName: {},
+        indexByName: {},
+        renameByName: {
+          "Trend #blocker count": "blockers_count",
+          "Trend #gprd hours blocked": "gprd_hours_blocked",
+          "Trend #gstg hours blocked": "gstg_hours_blocked"
+        }
+      })
+    ]);
 
 basic.dashboard(
   'Deployment Blockers',
@@ -213,41 +202,20 @@ basic.dashboard(
     multi=true,
   )
 )
-.addRow(
-  row.new(
-    title='Overview',
-    height='250px',
-  )
-  .addPanel(
-    panels.text.textPanel(''), gridPos={ x: 0, y: 1, w: 24, h: 7 }
-  )
-  .addPanel(
-    panels.barChart.barChartPanel('', totalBlockersCount), gridPos={ x: 0, y: 8, w: 8, h: 10 }
-  )
-  .addPanel(
-    panels.barChart.barChartPanel('', totalGprdHoursBlocked), gridPos={ x: 8, y: 8, w: 8, h: 10 }
-  )
-  .addPanel(
-    panels.barChart.barChartPanel('', totalGstgHoursBlocked), gridPos={ x: 16, y: 8, w: 8, h: 10 }
-  )
+.addPanel(textPanel(''), gridPos={ x: 0, y: 0, w: 24, h: 7 })
+.addPanel(
+  row.new(title='Overview'),
+  gridPos={ x: 0, y: 7, w: 24, h: 1 },
 )
-.addRow(
-  row.new(
-    title='$root_cause',
-    repeat='root_cause',
-    height='250px',
-  )
-  .addPanel(
-    panels.trend.trendPanel('Blockers Count for $root_cause', blockersCount), gridPos={ x: 0, y: 19, w: 8, h: 8 }
-  )
-  .addPanel(
-    panels.trend.trendPanel('gprd Hours Blocked for $root_cause', gprdHoursBlocked), gridPos={ x: 8, y: 19, w: 8, h: 8 }
-  )
-  .addPanel(
-    panels.trend.trendPanel('gstg Hours Blocked for $root_cause', gstgHoursBlocked), gridPos={ x: 16, y: 19, w: 8, h: 8 }
-  )
-  .addPanel(
-    panels.table.tablePanel(''), gridPos={ x: 0, y: 27, w: 24, h: 8 }
-  )
+.addPanel(barChartPanel('', totalBlockersCount), gridPos={ x: 0, y: 8, w: 8, h: 10 })
+.addPanel(barChartPanel('', totalGprdHoursBlocked), gridPos={ x: 8, y: 8, w: 8, h: 10 })
+.addPanel(barChartPanel('', totalGstgHoursBlocked), gridPos={ x: 16, y: 8, w: 8, h: 10 })
+.addPanel(
+  row.new(title='$root_cause', repeat='root_cause'),
+  gridPos={ x: 0, y: 18, w: 24, h: 1 },
 )
+.addPanel(trendPanel('Blockers Count for $root_cause', blockersCount), gridPos={ x: 0, y: 19, w: 8, h: 8 })
+.addPanel(trendPanel('gprd Hours Blocked for $root_cause', gprdHoursBlocked), gridPos={ x: 8, y: 19, w: 8, h: 8 })
+.addPanel(trendPanel('gstg Hours Blocked for $root_cause', gstgHoursBlocked), gridPos={ x: 16, y: 19, w: 8, h: 8 })
+.addPanel(tablePanel(''), gridPos={ x: 0, y: 27, w: 24, h: 8 })
 .trailer()
