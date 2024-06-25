@@ -12,7 +12,6 @@ config = Struct.new(
   :query_files,
   :target_directory,
   :dry_run,
-  :prom_tenant_id,
   :prom_use_ssl,
   :prom_auth_header
 ).new

@@ -7,13 +7,14 @@ test.suite({
       requestParams: {
         query: 'promql',
       },
+      tenants: ['gitlab-gprd'],
     }),
     expect: {
       requestParams: {
         query: 'promql',
       },
       type: 'instant',
-      tenantId: 'gitlab-gprd',
+      tenants: ['gitlab-gprd'],
     },
   },
 })

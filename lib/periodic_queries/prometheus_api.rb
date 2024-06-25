@@ -30,7 +30,7 @@ module PeriodicQueries
       query_uri = URI(full_url)
       query_uri.query = URI.encode_www_form(query.params)
 
-      get = Net::HTTP::Get.new(query_uri, headers(query.tenant_id))
+      get = Net::HTTP::Get.new(query_uri, headers(query.tenants))
       # Net::HTTP#request does not raise exceptions, so we'll get an empty response
       # and continue to the next request
       # https://ruby-doc.org/stdlib-2.7.1/libdoc/net/http/rdoc/Net/HTTP.html#method-i-request
@@ -46,9 +46,9 @@ module PeriodicQueries
       @uri ||= URI(base_url)
     end
 
-    def headers(tenant_id)
+    def headers(tenants)
       @headers ||= {}.tap do |h|
-        h['X-Scope-OrgID'] = tenant_id if tenant_id
+        h['X-Scope-OrgID'] = tenants.join("|")
         h['Authorization'] = auth_header if auth_header
       end
     end

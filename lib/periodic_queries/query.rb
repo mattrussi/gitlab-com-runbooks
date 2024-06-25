@@ -2,13 +2,13 @@
 
 module PeriodicQueries
   class Query
-    attr_reader :name, :type, :query, :params, :tenant_id
+    attr_reader :name, :type, :query, :params, :tenants
     attr_writer :response
 
     def initialize(name, query_info)
       @name = name
       @type = query_info.fetch('type')
-      @tenant_id = query_info.fetch('tenantId')
+      @tenants = query_info.fetch('tenants')
       @params = query_info.fetch('requestParams')
     end
 
@@ -24,7 +24,7 @@ module PeriodicQueries
     end
 
     def summary
-      headline = "#{response_status} #{name} (#{type}, params: #{params.keys.inspect}, tenant_id: #{tenant_id})"
+      headline = "#{response_status} #{name} (#{type}, params: #{params.keys.inspect}, tenants: #{tenants})"
       body = response&.success? ? nil : response&.parsed_body
       [headline, body].compact.join("\n")
     end

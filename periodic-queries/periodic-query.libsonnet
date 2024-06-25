@@ -1,9 +1,10 @@
 local config = import 'gitlab-metrics-config.libsonnet';
+local misc = import 'utils/misc.libsonnet';
 local validator = import 'utils/validator.libsonnet';
 
 local defaults = {
   type: 'instant',
-  tenantId: 'gitlab-gprd',
+  tenants: ['gitlab-gprd'],
 };
 
 // Supported query types should be defined here with their params
@@ -32,12 +33,21 @@ local validateRequestParams(definition) =
   v.assertValid(definition);
 
 local validateQuery(definition) =
+  local tenantMemberValidator = validator.validator(
+    local definedTenants = definition.tenants;
+    function(v) misc.arrayDiff(v, config.mimirTenants) == [],
+    'Only %s tenants are supported' % [config.mimirTenants]
+  );
+
   local v = validator.new({
     // Currently only instant queries are supported
     type: validator.setMember(std.objectFields(paramsPerType)),
     // all fields in requestParams is passed on as request params when querying Prometheus
     requestParams: validator.object,
-    tenantId: validator.setMember(config.mimirTenants),
+    tenants: validator.and(
+      validator.arrayOfStrings,
+      tenantMemberValidator
+    ),
   });
   v.assertValid(definition);
 
