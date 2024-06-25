@@ -131,21 +131,21 @@ local tablePanel =
     g.query.prometheus.new(
       '$PROMETHEUS_DS',
       blockersCount,
-    ) 
+    )
     + g.query.prometheus.withFormat("time_series")
     + g.query.prometheus.withRefId("blockers_count"),
 
     g.query.prometheus.new(
       '$PROMETHEUS_DS',
       gprdHoursBlocked,
-    ) 
+    )
     + g.query.prometheus.withFormat("time_series")
     + g.query.prometheus.withRefId("gprd_hours_blocked"),
 
     g.query.prometheus.new(
       '$PROMETHEUS_DS',
       gstgHoursBlocked,
-    ) 
+    )
     + g.query.prometheus.withFormat("time_series")
     + g.query.prometheus.withRefId("gstg_hours_blocked"),
 
