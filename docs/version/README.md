@@ -78,7 +78,6 @@
 * [Managing Chef](../uncategorized/manage-chef.md)
 * [Google mtail for prometheus metrics](../uncategorized/mtail.md)
 * [Omnibus package troubleshooting](../uncategorized/omnibus-package-updates.md)
-* [../uncategorized/osquery.md](../uncategorized/osquery.md)
 * [Project exports](../uncategorized/project-export.md)
 * [Removing kernels from fleet](../uncategorized/remove-kernels.md)
 * [../uncategorized/wiz-runtime-sensor.md](../uncategorized/wiz-runtime-sensor.md)

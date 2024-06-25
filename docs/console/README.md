@@ -125,7 +125,6 @@
 * [Missing Repositories](../uncategorized/missing_repos.md)
 * [../uncategorized/namespace-restore.md](../uncategorized/namespace-restore.md)
 * [Node CPU alerts](../uncategorized/node_cpu.md)
-* [../uncategorized/osquery.md](../uncategorized/osquery.md)
 * [Project exports](../uncategorized/project-export.md)
 * [Rails is down](../uncategorized/rails-is-down.md)
 * [Ruby profiling](../uncategorized/ruby-profiling.md)

@@ -117,7 +117,6 @@
 * [Missing Repositories](../uncategorized/missing_repos.md)
 * [Omnibus package troubleshooting](../uncategorized/omnibus-package-updates.md)
 * [OPS-GITLAB-NET Users and Access Tokens](../uncategorized/ops-gitlab-net-pat.md)
-* [../uncategorized/osquery.md](../uncategorized/osquery.md)
 * [Periodic Job Monitoring](../uncategorized/periodic_job_monitoring.md)
 * [Renaming Nodes](../uncategorized/rename-nodes.md)
 * [Shared Configurations](../uncategorized/shared-configurations.md)

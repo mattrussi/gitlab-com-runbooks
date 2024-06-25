@@ -7,6 +7,7 @@ groups:
     labels:
       severity: s4
       alert_type: cause
+      team: infrasec_team
     annotations:
       description: The osqueryd process is using more than 10% CPU on {{ $labels.fqdn }}.
       runbook: docs/uncategorized/osquery.md
