@@ -7,11 +7,16 @@ There are three different timing categories right now:
 1. Component specific DR restore process time
 1. Total DR restore process time
 
+Common measurements:
+
+- Terraform provision time: The time from an apply of a Terraform plan until the end of the full bootstrap (including any restarts).
+- Bootstrap time: The time it takes the bootstrap script to complete successfully during a VM being provisioned.
+
 ## Gitaly
 
 ### VM Recreation Times
 
-| Date | Chef Provision Time | Bootstrap Time | Notes |
+| Date | Terraform Provision Time | Bootstrap Time | Notes |
 | ---- | ------------------- | -------------- | ----- |
 | 2024-06-20 | XX:XX | XX:XX | N/A |
 
@@ -25,7 +30,7 @@ There are three different timing categories right now:
 
 ### VM Recreation Times
 
-| Date | Chef Provision Time | Bootstrap Time | Notes |
+| Date | Terraform Provision Time | Bootstrap Time | Notes |
 | ---- | ------------------- | -------------- | ----- |
 | 2024-XX-XX | XX:XX | XX:XX | N/A |
 
