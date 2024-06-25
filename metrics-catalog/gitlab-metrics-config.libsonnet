@@ -81,35 +81,27 @@ local strings = import 'utils/strings.libsonnet';
   separateMimirRecordingSelectors: {
     'gitlab-gprd': {
       selector: { env: 'gprd' },
-      envName: 'gprd',
     },
     'gitlab-ops': {
       selector: { env: 'ops' },
-      envName: 'ops',
     },
     'gitlab-gstg': {
       selector: { env: 'gstg' },
-      envName: 'gstg',
     },
     'gitlab-pre': {
       selector: { env: 'pre' },
-      envName: 'pre',
     },
     metamonitoring: {
       selector: {},
-      envName: 'metamonitoring',
     },
     'gitlab-observability': {
       selector: {},
-      envName: 'gitlab-observability',
     },
     runway: {
       selector: {},
-      envName: 'runway',
     },
     'fulfillment-platform': {
       selector: {},
-      envName: 'fulfillment-platform',
     },
   },
 
