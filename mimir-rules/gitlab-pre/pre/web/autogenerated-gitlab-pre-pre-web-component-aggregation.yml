@@ -4,6 +4,62 @@ groups:
 - name: 'Global SLI Metrics: web - Burn-Rate 5m'
   interval: 1m
   rules:
+  - record: gitlab_component_ops:rate_5m
+    labels:
+      component: dependency_proxy
+      monitor: global
+      tier: sv
+      type: web
+    expr: |
+      sum by (env,environment,stage) (
+        sli_aggregations:gitlab_sli_rails_request_total:rate_5m{endpoint_id=~"Groups::DependencyProxyForContainersController.*",env="pre"} offset 30s
+      )
+  - record: gitlab_component_errors:rate_5m
+    labels:
+      component: dependency_proxy
+      monitor: global
+      tier: sv
+      type: web
+    expr: |
+      (
+        sum by (env,environment,stage) (
+          sli_aggregations:gitlab_sli_rails_request_error_total:rate_5m{endpoint_id=~"Groups::DependencyProxyForContainersController.*",env="pre"} offset 30s
+        )
+      )
+      or
+      (
+        0 * group by(env,environment,stage) (
+          gitlab_component_ops:rate_5m{component="dependency_proxy",env="pre",monitor="global",tier="sv",type="web"}
+        )
+      )
+  - record: gitlab_component_errors:ratio_5m
+    labels:
+      component: dependency_proxy
+      monitor: global
+      tier: sv
+      type: web
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_5m{component="dependency_proxy",env="pre",monitor="global",tier="sv",type="web"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_5m{component="dependency_proxy",env="pre",monitor="global",tier="sv",type="web"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_5m
+    labels:
+      component: dependency_proxy
+      monitor: global
+      tier: sv
+      type: web
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_5m{component="dependency_proxy",env="pre",monitor="global",tier="sv",type="web"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_5m{component="dependency_proxy",env="pre",monitor="global",tier="sv",type="web"} offset 30s
+      )
   - record: gitlab_component_apdex:success:rate_5m
     labels:
       component: global_search
@@ -435,6 +491,62 @@ groups:
 - name: 'Global SLI Metrics: web - Burn-Rate 30m'
   interval: 2m
   rules:
+  - record: gitlab_component_ops:rate_30m
+    labels:
+      component: dependency_proxy
+      monitor: global
+      tier: sv
+      type: web
+    expr: |
+      sum by (env,environment,stage) (
+        sli_aggregations:gitlab_sli_rails_request_total:rate_30m{endpoint_id=~"Groups::DependencyProxyForContainersController.*",env="pre"} offset 30s
+      )
+  - record: gitlab_component_errors:rate_30m
+    labels:
+      component: dependency_proxy
+      monitor: global
+      tier: sv
+      type: web
+    expr: |
+      (
+        sum by (env,environment,stage) (
+          sli_aggregations:gitlab_sli_rails_request_error_total:rate_30m{endpoint_id=~"Groups::DependencyProxyForContainersController.*",env="pre"} offset 30s
+        )
+      )
+      or
+      (
+        0 * group by(env,environment,stage) (
+          gitlab_component_ops:rate_30m{component="dependency_proxy",env="pre",monitor="global",tier="sv",type="web"}
+        )
+      )
+  - record: gitlab_component_errors:ratio_30m
+    labels:
+      component: dependency_proxy
+      monitor: global
+      tier: sv
+      type: web
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_30m{component="dependency_proxy",env="pre",monitor="global",tier="sv",type="web"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_30m{component="dependency_proxy",env="pre",monitor="global",tier="sv",type="web"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_30m
+    labels:
+      component: dependency_proxy
+      monitor: global
+      tier: sv
+      type: web
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_30m{component="dependency_proxy",env="pre",monitor="global",tier="sv",type="web"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_30m{component="dependency_proxy",env="pre",monitor="global",tier="sv",type="web"} offset 30s
+      )
   - record: gitlab_component_apdex:success:rate_30m
     labels:
       component: global_search
@@ -866,6 +978,62 @@ groups:
 - name: 'Global SLI Metrics: web - Burn-Rate 1h'
   interval: 1m
   rules:
+  - record: gitlab_component_ops:rate_1h
+    labels:
+      component: dependency_proxy
+      monitor: global
+      tier: sv
+      type: web
+    expr: |
+      sum by (env,environment,stage) (
+        sli_aggregations:gitlab_sli_rails_request_total:rate_1h{endpoint_id=~"Groups::DependencyProxyForContainersController.*",env="pre"} offset 30s
+      )
+  - record: gitlab_component_errors:rate_1h
+    labels:
+      component: dependency_proxy
+      monitor: global
+      tier: sv
+      type: web
+    expr: |
+      (
+        sum by (env,environment,stage) (
+          sli_aggregations:gitlab_sli_rails_request_error_total:rate_1h{endpoint_id=~"Groups::DependencyProxyForContainersController.*",env="pre"} offset 30s
+        )
+      )
+      or
+      (
+        0 * group by(env,environment,stage) (
+          gitlab_component_ops:rate_1h{component="dependency_proxy",env="pre",monitor="global",tier="sv",type="web"}
+        )
+      )
+  - record: gitlab_component_errors:ratio_1h
+    labels:
+      component: dependency_proxy
+      monitor: global
+      tier: sv
+      type: web
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_1h{component="dependency_proxy",env="pre",monitor="global",tier="sv",type="web"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_1h{component="dependency_proxy",env="pre",monitor="global",tier="sv",type="web"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_1h
+    labels:
+      component: dependency_proxy
+      monitor: global
+      tier: sv
+      type: web
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_1h{component="dependency_proxy",env="pre",monitor="global",tier="sv",type="web"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_1h{component="dependency_proxy",env="pre",monitor="global",tier="sv",type="web"} offset 30s
+      )
   - record: gitlab_component_apdex:success:rate_1h
     labels:
       component: global_search
@@ -1299,6 +1467,74 @@ groups:
   rules:
   - record: gitlab_component_apdex:success:rate_6h
     labels:
+      component: dependency_proxy
+      monitor: global
+      tier: sv
+      type: web
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="dependency_proxy",env="pre",monitor="global",tier="sv",type="web"}[6h] offset 30s)
+      )
+  - record: gitlab_component_apdex:weight:score_6h
+    labels:
+      component: dependency_proxy
+      monitor: global
+      tier: sv
+      type: web
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="dependency_proxy",env="pre",monitor="global",tier="sv",type="web"}[6h] offset 30s)
+      )
+  - record: gitlab_component_ops:rate_6h
+    labels:
+      component: dependency_proxy
+      monitor: global
+      tier: sv
+      type: web
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_ops:rate_1h{component="dependency_proxy",env="pre",monitor="global",tier="sv",type="web"}[6h] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_6h
+    labels:
+      component: dependency_proxy
+      monitor: global
+      tier: sv
+      type: web
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_errors:rate_1h{component="dependency_proxy",env="pre",monitor="global",tier="sv",type="web"}[6h] offset 30s)
+      )
+  - record: gitlab_component_errors:ratio_6h
+    labels:
+      component: dependency_proxy
+      monitor: global
+      tier: sv
+      type: web
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_6h{component="dependency_proxy",env="pre",monitor="global",tier="sv",type="web"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_6h{component="dependency_proxy",env="pre",monitor="global",tier="sv",type="web"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_6h
+    labels:
+      component: dependency_proxy
+      monitor: global
+      tier: sv
+      type: web
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_6h{component="dependency_proxy",env="pre",monitor="global",tier="sv",type="web"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_6h{component="dependency_proxy",env="pre",monitor="global",tier="sv",type="web"} offset 30s
+      )
+  - record: gitlab_component_apdex:success:rate_6h
+    labels:
       component: global_search
       monitor: global
       tier: sv
@@ -1708,6 +1944,74 @@ groups:
 - name: 'Global SLI Metrics: web - Burn-Rate 3d'
   interval: 2m
   rules:
+  - record: gitlab_component_apdex:success:rate_3d
+    labels:
+      component: dependency_proxy
+      monitor: global
+      tier: sv
+      type: web
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="dependency_proxy",env="pre",monitor="global",tier="sv",type="web"}[3d] offset 30s)
+      )
+  - record: gitlab_component_apdex:weight:score_3d
+    labels:
+      component: dependency_proxy
+      monitor: global
+      tier: sv
+      type: web
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="dependency_proxy",env="pre",monitor="global",tier="sv",type="web"}[3d] offset 30s)
+      )
+  - record: gitlab_component_ops:rate_3d
+    labels:
+      component: dependency_proxy
+      monitor: global
+      tier: sv
+      type: web
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_ops:rate_1h{component="dependency_proxy",env="pre",monitor="global",tier="sv",type="web"}[3d] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_3d
+    labels:
+      component: dependency_proxy
+      monitor: global
+      tier: sv
+      type: web
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_errors:rate_1h{component="dependency_proxy",env="pre",monitor="global",tier="sv",type="web"}[3d] offset 30s)
+      )
+  - record: gitlab_component_errors:ratio_3d
+    labels:
+      component: dependency_proxy
+      monitor: global
+      tier: sv
+      type: web
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_3d{component="dependency_proxy",env="pre",monitor="global",tier="sv",type="web"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_3d{component="dependency_proxy",env="pre",monitor="global",tier="sv",type="web"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_3d
+    labels:
+      component: dependency_proxy
+      monitor: global
+      tier: sv
+      type: web
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_3d{component="dependency_proxy",env="pre",monitor="global",tier="sv",type="web"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_3d{component="dependency_proxy",env="pre",monitor="global",tier="sv",type="web"} offset 30s
+      )
   - record: gitlab_component_apdex:success:rate_3d
     labels:
       component: global_search
