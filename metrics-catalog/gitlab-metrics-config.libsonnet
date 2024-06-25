@@ -81,6 +81,7 @@ local strings = import 'utils/strings.libsonnet';
   separateMimirRecordingSelectors: {
     'gitlab-gprd': {
       selector: { env: 'gprd' },
+      hasStageGroup: true,
     },
     'gitlab-ops': {
       selector: { env: 'ops' },
@@ -99,9 +100,11 @@ local strings = import 'utils/strings.libsonnet';
     },
     runway: {
       selector: {},
+      hasStageGroup: true,
     },
     'fulfillment-platform': {
       selector: {},
+      hasStageGroup: true,
     },
   },
 
@@ -117,6 +120,10 @@ local strings = import 'utils/strings.libsonnet';
 
   defaultMimirTenants: ['gitlab-gprd', 'gitlab-gstg'],
   mimirTenants:: std.objectFields(self.separateMimirRecordingSelectors),
+  stageGroupTenants:: std.filter(
+    function(tenant) std.get(self.separateMimirRecordingSelectors[tenant], 'hasStageGroup') == true,
+    std.objectFields(self.separateMimirRecordingSelectors)
+  ),
 
   recordingRuleRegistry: import 'servicemetrics/recording-rule-registry/unified-registry.libsonnet',
 

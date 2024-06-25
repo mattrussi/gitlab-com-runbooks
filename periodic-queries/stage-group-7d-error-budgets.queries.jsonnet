@@ -5,6 +5,7 @@ local errorBudget = import 'stage-groups/error_budget.libsonnet';
 local datetime = import 'utils/datetime.libsonnet';
 local durationParser = import 'utils/duration-parser.libsonnet';
 local budgetSeconds = (import 'stage-groups/error-budget/utils.libsonnet').budgetSeconds;
+local stageGroupTenants = (import 'gitlab-metrics-config.libsonnet').stageGroupTenants;
 
 local selector = {
   environment: 'gprd',
@@ -25,6 +26,7 @@ local ratioQuery = |||
 
 {
   stage_group_error_budget_availability: periodicQuery.new({
+    tenants: stageGroupTenants,
     requestParams: {
       query: ratioQuery,
       time: midnight,
@@ -32,6 +34,7 @@ local ratioQuery = |||
   }),
 
   stage_group_error_budget_seconds_spent: periodicQuery.new({
+    tenants: stageGroupTenants,
     requestParams: {
       query: |||
         (
@@ -50,6 +53,7 @@ local ratioQuery = |||
   stage_group_error_budget_seconds_remaining:
     local secondsSpent = self.stage_group_error_budget_seconds_spent;
     periodicQuery.new({
+      tenants: stageGroupTenants,
       requestParams: {
         query: |||
           %(budgetSeconds)i
