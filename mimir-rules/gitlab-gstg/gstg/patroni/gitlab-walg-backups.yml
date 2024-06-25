@@ -53,7 +53,7 @@ groups:
           description:
             WAL-G backup-push creating full backups and archiving them to GCS might be not working. Please follow the runbook
             to review the problem.
-          runbook: docs/patroni/alerts/walgBaseBackupDelayed.md
+          runbook: docs/patroni/alerts/walgBaseBackup.md
           title: Last successful WAL-G basebackup was seen {{ $value }} hours ago for env {{ $labels.environment }}.
       - alert: WALGBaseBackupFailed
         expr: gitlab_job_failed{resource="walg-basebackup", type!~".+logical.+", env="gstg"} == 1
@@ -67,4 +67,4 @@ groups:
           title: GitLab Job has failed
           description: >
             The GitLab job "{{ $labels.job}}" resource "{{ $labels.resource }}" has failed.
-          runbook: docs/uncategorized/job_completion.md
+          runbook: docs/patroni/alerts/walgBaseBackup.md
