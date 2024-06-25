@@ -5,7 +5,7 @@ There are three different timing categories right now:
 
 1. Fleet specific VM recreation time
 1. Component specific DR restore process time
-1. Total DR restore process time 
+1. Total DR restore process time
 
 ## Gitaly
 
