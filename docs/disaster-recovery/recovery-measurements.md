@@ -11,6 +11,7 @@ Common measurements:
 
 - Terraform provision time: The time from an apply of a Terraform plan until the end of the full bootstrap (including any restarts).
 - Bootstrap time: The time it takes the bootstrap script to complete successfully during a VM being provisioned.
+- Gameday DR process time: The time it takes to execute a DR process. This should include creating MRs, communications, execution, and verification.
 
 ## Gitaly
 
@@ -20,7 +21,7 @@ Common measurements:
 | ---- | ------------------- | -------------- | ----- |
 | 2024-06-20 | XX:XX | XX:XX | N/A |
 
-### Gameday DR Process Time
+### Gameday Zonal Outage DR Process Time
 
 | Date | Duration | Notes |
 | ---- | -------- | ----- |
@@ -34,7 +35,7 @@ Common measurements:
 | ---- | ------------------- | -------------- | ----- |
 | 2024-XX-XX | XX:XX | XX:XX | N/A |
 
-### Gameday DR Process Time
+### Gameday  Zonal Outage DR Process Time
 
 | Date | Duration | Notes |
 | ---- | -------- | ----- |
