@@ -36,7 +36,6 @@ local panels = {
   barChart: {
     barChartPanel(title, query):
       g.panel.barChart.new(title)
-      + g.panel.barChart.queryOptions.withTargets([query])
       + g.panel.barChart.queryOptions.withInterval('2d')
       + g.panel.barChart.options.withOrientation("horizontal")
       + g.panel.barChart.options.legend.withDisplayMode('table')
@@ -60,7 +59,6 @@ local panels = {
   trend: {
     trendPanel(title, query):
       g.panel.trend.new(title)
-      + g.panel.trend.queryOptions.withTargets([query])
       + g.panel.trend.queryOptions.withInterval('2d')
       + g.panel.trend.options.withXField("week_index")
       + g.panel.trend.options.legend.withDisplayMode('list')
@@ -134,7 +132,6 @@ local panels = {
   table: {
     tablePanel(title):
       g.panel.table.new(title)
-      + g.panel.table.queryOptions.withTargets(query)
       + g.panel.table.queryOptions.withInterval('2d')
       + g.panel.table.fieldConfig.defaults.custom.withFilterable(true)
       + g.panel.table.options.withShowHeader(true)
