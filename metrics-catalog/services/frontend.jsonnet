@@ -8,7 +8,7 @@ local baseSelector = { type: 'frontend' };
 metricsCatalog.serviceDefinition({
   type: 'frontend',
   tier: 'lb',
-  tenants: [ 'gitlab-gprd', 'gitlab-gstg', 'gitlab-pre' ],
+  tenants: ['gitlab-gprd', 'gitlab-gstg', 'gitlab-pre'],
   tags: ['haproxy', 'gateway'],
   monitoringThresholds: {
     apdexScore: 0.999,
@@ -20,6 +20,7 @@ metricsCatalog.serviceDefinition({
     web: true,
     registry: true,
   },
+  serviceIsStageless: true,
   serviceLevelIndicators: {
     // We want to keep track of the errors that are our faults (backend failures) and not the client faults.
     // For this reason, we use haproxy_backend_* metrics (not haproxy_frontend_* ones)

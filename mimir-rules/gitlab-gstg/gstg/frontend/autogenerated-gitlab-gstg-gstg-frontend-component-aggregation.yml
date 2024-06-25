@@ -124,28 +124,30 @@ groups:
     labels:
       component: sshServices
       monitor: global
+      stage: main
       tier: lb
       type: frontend
     expr: |
-      sum by (env,environment,stage) (
+      sum by (env,environment) (
         sli_aggregations:haproxy_backend_http_requests_total:rate_5m{backend="ssh",env="gstg",type="frontend"} offset 30s
       )
   - record: gitlab_component_errors:rate_5m
     labels:
       component: sshServices
       monitor: global
+      stage: main
       tier: lb
       type: frontend
     expr: |
       (
-        sum by (env,environment,stage) (
+        sum by (env,environment) (
           sli_aggregations:haproxy_backend_response_errors_total:rate_5m{backend="ssh",env="gstg",type="frontend"} offset 30s
         )
       )
       or
       (
-        0 * group by(env,environment,stage) (
-          gitlab_component_ops:rate_5m{component="sshServices",env="gstg",monitor="global",tier="lb",type="frontend"}
+        0 * group by(env,environment) (
+          gitlab_component_ops:rate_5m{component="sshServices",env="gstg",monitor="global",stage="main",tier="lb",type="frontend"}
         )
       )
   - record: gitlab_component_errors:ratio_5m
@@ -180,28 +182,30 @@ groups:
     labels:
       component: websocketsServices
       monitor: global
+      stage: main
       tier: lb
       type: frontend
     expr: |
-      sum by (env,environment,stage) (
+      sum by (env,environment) (
         sli_aggregations:haproxy_backend_http_requests_total:rate_5m{backend="websockets",env="gstg",type="frontend"} offset 30s
       )
   - record: gitlab_component_errors:rate_5m
     labels:
       component: websocketsServices
       monitor: global
+      stage: main
       tier: lb
       type: frontend
     expr: |
       (
-        sum by (env,environment,stage) (
+        sum by (env,environment) (
           sli_aggregations:haproxy_backend_response_errors_total:rate_5m{backend="websockets",env="gstg",type="frontend"} offset 30s
         )
       )
       or
       (
-        0 * group by(env,environment,stage) (
-          gitlab_component_ops:rate_5m{component="websocketsServices",env="gstg",monitor="global",tier="lb",type="frontend"}
+        0 * group by(env,environment) (
+          gitlab_component_ops:rate_5m{component="websocketsServices",env="gstg",monitor="global",stage="main",tier="lb",type="frontend"}
         )
       )
   - record: gitlab_component_errors:ratio_5m
@@ -355,28 +359,30 @@ groups:
     labels:
       component: sshServices
       monitor: global
+      stage: main
       tier: lb
       type: frontend
     expr: |
-      sum by (env,environment,stage) (
+      sum by (env,environment) (
         sli_aggregations:haproxy_backend_http_requests_total:rate_30m{backend="ssh",env="gstg",type="frontend"} offset 30s
       )
   - record: gitlab_component_errors:rate_30m
     labels:
       component: sshServices
       monitor: global
+      stage: main
       tier: lb
       type: frontend
     expr: |
       (
-        sum by (env,environment,stage) (
+        sum by (env,environment) (
           sli_aggregations:haproxy_backend_response_errors_total:rate_30m{backend="ssh",env="gstg",type="frontend"} offset 30s
         )
       )
       or
       (
-        0 * group by(env,environment,stage) (
-          gitlab_component_ops:rate_30m{component="sshServices",env="gstg",monitor="global",tier="lb",type="frontend"}
+        0 * group by(env,environment) (
+          gitlab_component_ops:rate_30m{component="sshServices",env="gstg",monitor="global",stage="main",tier="lb",type="frontend"}
         )
       )
   - record: gitlab_component_errors:ratio_30m
@@ -411,28 +417,30 @@ groups:
     labels:
       component: websocketsServices
       monitor: global
+      stage: main
       tier: lb
       type: frontend
     expr: |
-      sum by (env,environment,stage) (
+      sum by (env,environment) (
         sli_aggregations:haproxy_backend_http_requests_total:rate_30m{backend="websockets",env="gstg",type="frontend"} offset 30s
       )
   - record: gitlab_component_errors:rate_30m
     labels:
       component: websocketsServices
       monitor: global
+      stage: main
       tier: lb
       type: frontend
     expr: |
       (
-        sum by (env,environment,stage) (
+        sum by (env,environment) (
           sli_aggregations:haproxy_backend_response_errors_total:rate_30m{backend="websockets",env="gstg",type="frontend"} offset 30s
         )
       )
       or
       (
-        0 * group by(env,environment,stage) (
-          gitlab_component_ops:rate_30m{component="websocketsServices",env="gstg",monitor="global",tier="lb",type="frontend"}
+        0 * group by(env,environment) (
+          gitlab_component_ops:rate_30m{component="websocketsServices",env="gstg",monitor="global",stage="main",tier="lb",type="frontend"}
         )
       )
   - record: gitlab_component_errors:ratio_30m
@@ -586,28 +594,30 @@ groups:
     labels:
       component: sshServices
       monitor: global
+      stage: main
       tier: lb
       type: frontend
     expr: |
-      sum by (env,environment,stage) (
+      sum by (env,environment) (
         sli_aggregations:haproxy_backend_http_requests_total:rate_1h{backend="ssh",env="gstg",type="frontend"} offset 30s
       )
   - record: gitlab_component_errors:rate_1h
     labels:
       component: sshServices
       monitor: global
+      stage: main
       tier: lb
       type: frontend
     expr: |
       (
-        sum by (env,environment,stage) (
+        sum by (env,environment) (
           sli_aggregations:haproxy_backend_response_errors_total:rate_1h{backend="ssh",env="gstg",type="frontend"} offset 30s
         )
       )
       or
       (
-        0 * group by(env,environment,stage) (
-          gitlab_component_ops:rate_1h{component="sshServices",env="gstg",monitor="global",tier="lb",type="frontend"}
+        0 * group by(env,environment) (
+          gitlab_component_ops:rate_1h{component="sshServices",env="gstg",monitor="global",stage="main",tier="lb",type="frontend"}
         )
       )
   - record: gitlab_component_errors:ratio_1h
@@ -642,28 +652,30 @@ groups:
     labels:
       component: websocketsServices
       monitor: global
+      stage: main
       tier: lb
       type: frontend
     expr: |
-      sum by (env,environment,stage) (
+      sum by (env,environment) (
         sli_aggregations:haproxy_backend_http_requests_total:rate_1h{backend="websockets",env="gstg",type="frontend"} offset 30s
       )
   - record: gitlab_component_errors:rate_1h
     labels:
       component: websocketsServices
       monitor: global
+      stage: main
       tier: lb
       type: frontend
     expr: |
       (
-        sum by (env,environment,stage) (
+        sum by (env,environment) (
           sli_aggregations:haproxy_backend_response_errors_total:rate_1h{backend="websockets",env="gstg",type="frontend"} offset 30s
         )
       )
       or
       (
-        0 * group by(env,environment,stage) (
-          gitlab_component_ops:rate_1h{component="websocketsServices",env="gstg",monitor="global",tier="lb",type="frontend"}
+        0 * group by(env,environment) (
+          gitlab_component_ops:rate_1h{component="websocketsServices",env="gstg",monitor="global",stage="main",tier="lb",type="frontend"}
         )
       )
   - record: gitlab_component_errors:ratio_1h
@@ -845,40 +857,44 @@ groups:
     labels:
       component: sshServices
       monitor: global
+      stage: main
       tier: lb
       type: frontend
     expr: |
-      sum by (env,environment,stage) (
+      sum by (env,environment) (
         avg_over_time(gitlab_component_apdex:success:rate_1h{component="sshServices",env="gstg",monitor="global",tier="lb",type="frontend"}[6h] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_6h
     labels:
       component: sshServices
       monitor: global
+      stage: main
       tier: lb
       type: frontend
     expr: |
-      sum by (env,environment,stage) (
+      sum by (env,environment) (
         avg_over_time(gitlab_component_apdex:weight:score_1h{component="sshServices",env="gstg",monitor="global",tier="lb",type="frontend"}[6h] offset 30s)
       )
   - record: gitlab_component_ops:rate_6h
     labels:
       component: sshServices
       monitor: global
+      stage: main
       tier: lb
       type: frontend
     expr: |
-      sum by (env,environment,stage) (
+      sum by (env,environment) (
         avg_over_time(gitlab_component_ops:rate_1h{component="sshServices",env="gstg",monitor="global",tier="lb",type="frontend"}[6h] offset 30s)
       )
   - record: gitlab_component_errors:rate_6h
     labels:
       component: sshServices
       monitor: global
+      stage: main
       tier: lb
       type: frontend
     expr: |
-      sum by (env,environment,stage) (
+      sum by (env,environment) (
         avg_over_time(gitlab_component_errors:rate_1h{component="sshServices",env="gstg",monitor="global",tier="lb",type="frontend"}[6h] offset 30s)
       )
   - record: gitlab_component_errors:ratio_6h
@@ -913,40 +929,44 @@ groups:
     labels:
       component: websocketsServices
       monitor: global
+      stage: main
       tier: lb
       type: frontend
     expr: |
-      sum by (env,environment,stage) (
+      sum by (env,environment) (
         avg_over_time(gitlab_component_apdex:success:rate_1h{component="websocketsServices",env="gstg",monitor="global",tier="lb",type="frontend"}[6h] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_6h
     labels:
       component: websocketsServices
       monitor: global
+      stage: main
       tier: lb
       type: frontend
     expr: |
-      sum by (env,environment,stage) (
+      sum by (env,environment) (
         avg_over_time(gitlab_component_apdex:weight:score_1h{component="websocketsServices",env="gstg",monitor="global",tier="lb",type="frontend"}[6h] offset 30s)
       )
   - record: gitlab_component_ops:rate_6h
     labels:
       component: websocketsServices
       monitor: global
+      stage: main
       tier: lb
       type: frontend
     expr: |
-      sum by (env,environment,stage) (
+      sum by (env,environment) (
         avg_over_time(gitlab_component_ops:rate_1h{component="websocketsServices",env="gstg",monitor="global",tier="lb",type="frontend"}[6h] offset 30s)
       )
   - record: gitlab_component_errors:rate_6h
     labels:
       component: websocketsServices
       monitor: global
+      stage: main
       tier: lb
       type: frontend
     expr: |
-      sum by (env,environment,stage) (
+      sum by (env,environment) (
         avg_over_time(gitlab_component_errors:rate_1h{component="websocketsServices",env="gstg",monitor="global",tier="lb",type="frontend"}[6h] offset 30s)
       )
   - record: gitlab_component_errors:ratio_6h
@@ -1128,40 +1148,44 @@ groups:
     labels:
       component: sshServices
       monitor: global
+      stage: main
       tier: lb
       type: frontend
     expr: |
-      sum by (env,environment,stage) (
+      sum by (env,environment) (
         avg_over_time(gitlab_component_apdex:success:rate_1h{component="sshServices",env="gstg",monitor="global",tier="lb",type="frontend"}[3d] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_3d
     labels:
       component: sshServices
       monitor: global
+      stage: main
       tier: lb
       type: frontend
     expr: |
-      sum by (env,environment,stage) (
+      sum by (env,environment) (
         avg_over_time(gitlab_component_apdex:weight:score_1h{component="sshServices",env="gstg",monitor="global",tier="lb",type="frontend"}[3d] offset 30s)
       )
   - record: gitlab_component_ops:rate_3d
     labels:
       component: sshServices
       monitor: global
+      stage: main
       tier: lb
       type: frontend
     expr: |
-      sum by (env,environment,stage) (
+      sum by (env,environment) (
         avg_over_time(gitlab_component_ops:rate_1h{component="sshServices",env="gstg",monitor="global",tier="lb",type="frontend"}[3d] offset 30s)
       )
   - record: gitlab_component_errors:rate_3d
     labels:
       component: sshServices
       monitor: global
+      stage: main
       tier: lb
       type: frontend
     expr: |
-      sum by (env,environment,stage) (
+      sum by (env,environment) (
         avg_over_time(gitlab_component_errors:rate_1h{component="sshServices",env="gstg",monitor="global",tier="lb",type="frontend"}[3d] offset 30s)
       )
   - record: gitlab_component_errors:ratio_3d
@@ -1196,40 +1220,44 @@ groups:
     labels:
       component: websocketsServices
       monitor: global
+      stage: main
       tier: lb
       type: frontend
     expr: |
-      sum by (env,environment,stage) (
+      sum by (env,environment) (
         avg_over_time(gitlab_component_apdex:success:rate_1h{component="websocketsServices",env="gstg",monitor="global",tier="lb",type="frontend"}[3d] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_3d
     labels:
       component: websocketsServices
       monitor: global
+      stage: main
       tier: lb
       type: frontend
     expr: |
-      sum by (env,environment,stage) (
+      sum by (env,environment) (
         avg_over_time(gitlab_component_apdex:weight:score_1h{component="websocketsServices",env="gstg",monitor="global",tier="lb",type="frontend"}[3d] offset 30s)
       )
   - record: gitlab_component_ops:rate_3d
     labels:
       component: websocketsServices
       monitor: global
+      stage: main
       tier: lb
       type: frontend
     expr: |
-      sum by (env,environment,stage) (
+      sum by (env,environment) (
         avg_over_time(gitlab_component_ops:rate_1h{component="websocketsServices",env="gstg",monitor="global",tier="lb",type="frontend"}[3d] offset 30s)
       )
   - record: gitlab_component_errors:rate_3d
     labels:
       component: websocketsServices
       monitor: global
+      stage: main
       tier: lb
       type: frontend
     expr: |
-      sum by (env,environment,stage) (
+      sum by (env,environment) (
         avg_over_time(gitlab_component_errors:rate_1h{component="websocketsServices",env="gstg",monitor="global",tier="lb",type="frontend"}[3d] offset 30s)
       )
   - record: gitlab_component_errors:ratio_3d
