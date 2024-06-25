@@ -67,13 +67,21 @@ groups:
     labels:
       component: kube_container_rss
     record: slo:max:hard:gitlab_component_saturation:ratio
-  - expr: "0.8"
+  - expr: "0.85"
     labels:
-      component: kube_pool_cpu
+      component: kube_persistent_volume_claim_disk_space
     record: slo:max:soft:gitlab_component_saturation:ratio
   - expr: "0.9"
     labels:
-      component: kube_pool_cpu
+      component: kube_persistent_volume_claim_disk_space
+    record: slo:max:hard:gitlab_component_saturation:ratio
+  - expr: "0.85"
+    labels:
+      component: kube_persistent_volume_claim_inodes
+    record: slo:max:soft:gitlab_component_saturation:ratio
+  - expr: "0.9"
+    labels:
+      component: kube_persistent_volume_claim_inodes
     record: slo:max:hard:gitlab_component_saturation:ratio
   - expr: "0.9"
     labels:
@@ -82,6 +90,14 @@ groups:
   - expr: "0.98"
     labels:
       component: memory
+    record: slo:max:hard:gitlab_component_saturation:ratio
+  - expr: "0.8"
+    labels:
+      component: node_group_cpu
+    record: slo:max:soft:gitlab_component_saturation:ratio
+  - expr: "0.9"
+    labels:
+      component: node_group_cpu
     record: slo:max:hard:gitlab_component_saturation:ratio
   - expr: "0.1"
     labels:
@@ -177,10 +193,18 @@ groups:
   - expr: "1"
     labels:
       capacity_planning_strategy: quantile95_1h
-      component: kube_pool_cpu
+      component: kube_persistent_volume_claim_disk_space
       horiz_scaling: "yes"
       quantile: max
-      severity: s3
+      severity: s2
+    record: gitlab_component_saturation_info
+  - expr: "1"
+    labels:
+      capacity_planning_strategy: quantile95_1h
+      component: kube_persistent_volume_claim_inodes
+      horiz_scaling: "yes"
+      quantile: max
+      severity: s2
     record: gitlab_component_saturation_info
   - expr: "1"
     labels:
@@ -189,6 +213,14 @@ groups:
       horiz_scaling: "yes"
       quantile: max
       severity: s4
+    record: gitlab_component_saturation_info
+  - expr: "1"
+    labels:
+      capacity_planning_strategy: quantile95_1h
+      component: node_group_cpu
+      horiz_scaling: "yes"
+      quantile: max
+      severity: s3
     record: gitlab_component_saturation_info
   - expr: "1"
     labels:

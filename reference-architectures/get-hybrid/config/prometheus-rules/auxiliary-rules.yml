@@ -575,58 +575,110 @@ groups:
       alert_type: cause
       rules_domain: general
       severity: s4
-  - alert: component_saturation_slo_out_of_bounds:kube_pool_cpu
+  - alert: component_saturation_slo_out_of_bounds:kube_persistent_volume_claim_disk_space
     annotations:
       description: |+
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
-        Details of the Average Node Pool CPU Utilization resource:
+        Details of the Kube Persistent Volume Claim Space Utilisation resource:
 
-        This resource measures average CPU utilization across an all cores in the node pool for a service fleet.
+        disk space utilization on persistent volume claims.
 
-        If it is becoming saturated, it may indicate that the fleet needs horizontal scaling.
-
-      grafana_dashboard_id: alerts-sat_kube_pool_cpu
-      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_kube_pool_cpu?from=now-6h/m&to=now-1m/m&var-type={{
+      grafana_dashboard_id: alerts-sat_kube_pvc_disk_space
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_kube_pvc_disk_space?from=now-6h/m&to=now-1m/m&var-type={{
         $labels.type }}
       grafana_min_zoom_hours: "6"
-      grafana_panel_id: "1839360107"
+      grafana_panel_id: "4167694322"
       grafana_variables: type
       promql_query: |
-        max by(type) (
+        max by(cluster, namespace, persistentvolumeclaim) (
           clamp_min(
             clamp_max(
-              1 - avg by (type) (
-                rate(node_cpu_seconds_total:labeled{mode="idle", type="{{ $labels.type }}"}[5m])
-              )
+              kubelet_volume_stats_used_bytes
+              /
+              kubelet_volume_stats_capacity_bytes
               ,
               1)
           ,
           0)
         )
       promql_template_1: |
-        max by(type) (
+        max by(cluster, namespace, persistentvolumeclaim) (
           clamp_min(
             clamp_max(
-              1 - avg by (type) (
-                rate(node_cpu_seconds_total:labeled{mode="idle", type="{{ $labels.type }}"}[5m])
-              )
+              kubelet_volume_stats_used_bytes
+              /
+              kubelet_volume_stats_capacity_bytes
               ,
               1)
           ,
           0)
         )
       runbook: docs/{{ $labels.type }}/README.md
-      title: The Average Node Pool CPU Utilization resource of the {{ $labels.type
-        }} service has a saturation exceeding SLO and is close to its capacity limit.
+      title: The Kube Persistent Volume Claim Space Utilisation resource of the {{
+        $labels.type }} service has a saturation exceeding SLO and is close to its
+        capacity limit.
     expr: |
-      gitlab_component_saturation:ratio{component="kube_pool_cpu"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="kube_pool_cpu"}
+      gitlab_component_saturation:ratio{component="kube_persistent_volume_claim_disk_space"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="kube_persistent_volume_claim_disk_space"}
     for: 5m
     labels:
       alert_type: cause
+      pager: pagerduty
       rules_domain: general
-      severity: s3
+      severity: s2
+  - alert: component_saturation_slo_out_of_bounds:kube_persistent_volume_claim_inodes
+    annotations:
+      description: |+
+        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
+
+        Details of the Kube Persistent Volume Claim inode Utilisation resource:
+
+        inode utilization on persistent volume claims.
+
+      grafana_dashboard_id: alerts-sat_kube_pvc_inodes
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_kube_pvc_inodes?from=now-6h/m&to=now-1m/m&var-type={{
+        $labels.type }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3153876074"
+      grafana_variables: type
+      promql_query: |
+        max by(persistentvolumeclaim) (
+          clamp_min(
+            clamp_max(
+              kubelet_volume_stats_inodes_used
+              /
+              kubelet_volume_stats_inodes
+              ,
+              1)
+          ,
+          0)
+        )
+      promql_template_1: |
+        max by(persistentvolumeclaim) (
+          clamp_min(
+            clamp_max(
+              kubelet_volume_stats_inodes_used
+              /
+              kubelet_volume_stats_inodes
+              ,
+              1)
+          ,
+          0)
+        )
+      runbook: docs/{{ $labels.type }}/README.md
+      title: The Kube Persistent Volume Claim inode Utilisation resource of the {{
+        $labels.type }} service has a saturation exceeding SLO and is close to its
+        capacity limit.
+    expr: |
+      gitlab_component_saturation:ratio{component="kube_persistent_volume_claim_inodes"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="kube_persistent_volume_claim_inodes"}
+    for: 5m
+    labels:
+      alert_type: cause
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
   - alert: component_saturation_slo_out_of_bounds:memory
     annotations:
       description: |+
@@ -673,6 +725,58 @@ groups:
       alert_type: cause
       rules_domain: general
       severity: s4
+  - alert: component_saturation_slo_out_of_bounds:node_group_cpu
+    annotations:
+      description: |+
+        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
+
+        Details of the Average Node Pool CPU Utilization resource:
+
+        This resource measures average CPU utilization across an all cores in a node group
+
+        If it is becoming saturated, it may indicate that the node group needs resizing.
+
+      grafana_dashboard_id: alerts-sat_node_group_cpu
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_node_group_cpu?from=now-6h/m&to=now-1m/m&var-type={{
+        $labels.type }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2284482674"
+      grafana_variables: type
+      promql_query: |
+        max by(type) (
+          clamp_min(
+            clamp_max(
+              1 - avg by (type) (
+                rate(node_cpu_seconds_total{mode="idle", type=~".*pool"}[5m])
+              )
+              ,
+              1)
+          ,
+          0)
+        )
+      promql_template_1: |
+        max by(type) (
+          clamp_min(
+            clamp_max(
+              1 - avg by (type) (
+                rate(node_cpu_seconds_total{mode="idle", type=~".*pool"}[5m])
+              )
+              ,
+              1)
+          ,
+          0)
+        )
+      runbook: docs/{{ $labels.type }}/README.md
+      title: The Average Node Pool CPU Utilization resource of the {{ $labels.type
+        }} service has a saturation exceeding SLO and is close to its capacity limit.
+    expr: |
+      gitlab_component_saturation:ratio{component="node_group_cpu"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="node_group_cpu"}
+    for: 5m
+    labels:
+      alert_type: cause
+      rules_domain: general
+      severity: s3
   - alert: component_saturation_slo_out_of_bounds:node_schedstat_waiting
     annotations:
       description: |+

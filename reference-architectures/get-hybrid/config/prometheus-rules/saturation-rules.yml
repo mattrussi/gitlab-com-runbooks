@@ -138,19 +138,40 @@ groups:
       component: kube_container_rss
     record: gitlab_component_saturation:ratio
   - expr: |
-      max by(type) (
+      max by() (
         clamp_min(
           clamp_max(
-            1 - avg by (type) (
-              rate(node_cpu_seconds_total:labeled{mode="idle", type=~"sidekiq|webservice"}[5m])
-            )
+            kubelet_volume_stats_used_bytes
+            /
+            kubelet_volume_stats_capacity_bytes
             ,
             1)
         ,
         0)
       )
     labels:
-      component: kube_pool_cpu
+      component: kube_persistent_volume_claim_disk_space
+      stage: main
+      tier: inf
+      type: kube
+    record: gitlab_component_saturation:ratio
+  - expr: |
+      max by() (
+        clamp_min(
+          clamp_max(
+            kubelet_volume_stats_inodes_used
+            /
+            kubelet_volume_stats_inodes
+            ,
+            1)
+        ,
+        0)
+      )
+    labels:
+      component: kube_persistent_volume_claim_inodes
+      stage: main
+      tier: inf
+      type: kube
     record: gitlab_component_saturation:ratio
   - expr: |
       max by(type) (
@@ -164,6 +185,21 @@ groups:
       )
     labels:
       component: memory
+    record: gitlab_component_saturation:ratio
+  - expr: |
+      max by(type) (
+        clamp_min(
+          clamp_max(
+            1 - avg by (type) (
+              rate(node_cpu_seconds_total{mode="idle", type=~".*pool"}[5m])
+            )
+            ,
+            1)
+        ,
+        0)
+      )
+    labels:
+      component: node_group_cpu
     record: gitlab_component_saturation:ratio
   - expr: |
       max by(type) (
