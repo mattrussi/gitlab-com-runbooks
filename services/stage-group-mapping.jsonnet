@@ -122,6 +122,8 @@
       'merge_trains',
       'code_testing',
       'review_apps',
+      'job_artifacts',
+      'pipeline_reports',
     ],
   },
   pipeline_authoring: {
@@ -144,14 +146,6 @@
     stage: 'verify',
     feature_categories: [
       'hosted_runners',
-    ],
-  },
-  pipeline_security: {
-    name: 'Pipeline Security',
-    stage: 'verify',
-    feature_categories: [
-      'build_artifacts',
-      'secrets_management',
     ],
   },
   package_registry: {
@@ -252,7 +246,6 @@
     feature_categories: [
       'vulnerability_management',
       'dependency_management',
-      'sbom',
     ],
   },
   compliance: {
@@ -262,6 +255,7 @@
       'audit_events',
       'compliance_management',
       'release_evidence',
+      'sscs',
     ],
   },
   'anti-abuse': {
@@ -270,6 +264,14 @@
     feature_categories: [
       'instance_resiliency',
       'insider_threat',
+    ],
+  },
+  pipeline_security: {
+    name: 'Pipeline Security',
+    stage: 'govern',
+    feature_categories: [
+      'secure_artifacts',
+      'secrets_management',
     ],
   },
   analytics_instrumentation: {

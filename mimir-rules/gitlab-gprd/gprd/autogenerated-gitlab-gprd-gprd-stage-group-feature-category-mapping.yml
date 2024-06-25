@@ -27,13 +27,6 @@ groups:
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
-      feature_category: saas_provisioning
-      monitor: global
-      product_stage: fulfillment
-      stage_group: provision
-    expr: "1"
-  - record: gitlab:feature_category:stage_group:mapping
-    labels:
       feature_category: advisory_database
       monitor: global
       product_stage: secure
@@ -122,13 +115,6 @@ groups:
       monitor: global
       product_stage: systems
       stage_group: distribution_build
-    expr: "1"
-  - record: gitlab:feature_category:stage_group:mapping
-    labels:
-      feature_category: build_artifacts
-      monitor: global
-      product_stage: verify
-      stage_group: pipeline_security
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -252,13 +238,6 @@ groups:
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: customersdot_and_quote_to_cash_integrations
-      monitor: global
-      product_stage: fulfillment
-      stage_group: fulfillment_platform
-    expr: "1"
-  - record: gitlab:feature_category:stage_group:mapping
-    labels:
-      feature_category: customersdot_application
       monitor: global
       product_stage: fulfillment
       stage_group: fulfillment_platform
@@ -419,21 +398,7 @@ groups:
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
-      feature_category: fulfillment_infrastructure
-      monitor: global
-      product_stage: fulfillment
-      stage_group: fulfillment_platform
-    expr: "1"
-  - record: gitlab:feature_category:stage_group:mapping
-    labels:
       feature_category: fulfillment_internal_admin_tooling
-      monitor: global
-      product_stage: fulfillment
-      stage_group: fulfillment_platform
-    expr: "1"
-  - record: gitlab:feature_category:stage_group:mapping
-    labels:
-      feature_category: fulfillment_admin_tooling
       monitor: global
       product_stage: fulfillment
       stage_group: fulfillment_platform
@@ -549,6 +514,20 @@ groups:
       monitor: global
       product_stage: manage
       stage_group: import_and_integrate
+    expr: "1"
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
+      feature_category: job_artifacts
+      monitor: global
+      product_stage: verify
+      stage_group: pipeline_execution
+    expr: "1"
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
+      feature_category: build_artifacts
+      monitor: global
+      product_stage: verify
+      stage_group: pipeline_execution
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -671,14 +650,14 @@ groups:
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
-      feature_category: plan_provisioning
+      feature_category: pipeline_reports
       monitor: global
-      product_stage: fulfillment
-      stage_group: provision
+      product_stage: verify
+      stage_group: pipeline_execution
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
-      feature_category: sm_provisioning
+      feature_category: plan_provisioning
       monitor: global
       product_stage: fulfillment
       stage_group: provision
@@ -776,13 +755,6 @@ groups:
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
-      feature_category: sbom
-      monitor: global
-      product_stage: govern
-      stage_group: threat_insights
-    expr: "1"
-  - record: gitlab:feature_category:stage_group:mapping
-    labels:
       feature_category: scalability
       monitor: global
       product_stage: platforms
@@ -806,7 +778,14 @@ groups:
     labels:
       feature_category: secrets_management
       monitor: global
-      product_stage: verify
+      product_stage: govern
+      stage_group: pipeline_security
+    expr: "1"
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
+      feature_category: secure_artifacts
+      monitor: global
+      product_stage: govern
       stage_group: pipeline_security
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
@@ -853,6 +832,20 @@ groups:
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
+      feature_category: sscs
+      monitor: global
+      product_stage: govern
+      stage_group: compliance
+    expr: "1"
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
+      feature_category: sbom
+      monitor: global
+      product_stage: govern
+      stage_group: compliance
+    expr: "1"
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
       feature_category: static_application_security_testing
       monitor: global
       product_stage: secure
@@ -861,13 +854,6 @@ groups:
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: subscription_management
-      monitor: global
-      product_stage: fulfillment
-      stage_group: subscription_management
-    expr: "1"
-  - record: gitlab:feature_category:stage_group:mapping
-    labels:
-      feature_category: purchase
       monitor: global
       product_stage: fulfillment
       stage_group: subscription_management
@@ -931,13 +917,6 @@ groups:
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: virtual_registry
-      monitor: global
-      product_stage: package
-      stage_group: container_registry
-    expr: "1"
-  - record: gitlab:feature_category:stage_group:mapping
-    labels:
-      feature_category: dependency_proxy
       monitor: global
       product_stage: package
       stage_group: container_registry
