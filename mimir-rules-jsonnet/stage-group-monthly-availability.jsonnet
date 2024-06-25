@@ -1,6 +1,11 @@
+local metricsConfig = import 'gitlab-metrics-config.libsonnet';
 local rules = import 'recording-rules/stage-group-monthly-availability.libsonnet';
+local separateMimirRecordingFiles = (import 'recording-rules/lib/mimir/separate-mimir-recording-files.libsonnet').separateMimirRecordingFiles;
 
-// This is filtered to only record for gprd, no need to separatly record for each environment
-{
-  'gitlab-gprd/stage-group-monthly-availability.yml': std.manifestYamlDoc(rules()),
-}
+separateMimirRecordingFiles(
+  function(service, selector, extraArgs, _)
+    {
+      'stage-group-monthly-availability': std.manifestYamlDoc(rules()),
+    },
+  overrideTenants=metricsConfig.stageGroupTenants
+)

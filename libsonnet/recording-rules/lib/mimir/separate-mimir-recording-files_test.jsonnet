@@ -31,4 +31,14 @@ test.suite({
       'gitlab-gstg/gitlab-gstg-rule_file_basename.yml': { env: 'gstg' },
     },
   },
+  testSeparateMimirRecordingFilesWithOverrideTenants: {
+    actual: separateMimirRecordingFiles(
+      function(service, selector, extraArgs, _) { rule_file_basename: selector },
+      metricsConfig=metricsConfig,
+      overrideTenants=['gitlab-gstg']
+    ),
+    expect: {
+      'gitlab-gstg/gitlab-gstg-rule_file_basename.yml': { env: 'gstg' },
+    },
+  },
 })

@@ -22,15 +22,20 @@ local namespaceFormat(tenant, serviceDefinition, baseName) =
     extraArgs={},
     metricsConfig=(import 'gitlab-metrics-config.libsonnet'),
     pathFormat=defaultPathFormat(serviceDefinition),
+    overrideTenants=[],
   )::
     local serviceTenants =
       if serviceDefinition == null
       then defaultMimirTenants
       else std.get(serviceDefinition, 'tenants', defaultMimirTenants);
-    local tenants = std.filter(
+    local serviceTenantsFiltered = std.filter(
       function(tenant) std.member(serviceTenants, tenant),
       std.objectFields(metricsConfig.separateMimirRecordingSelectors)
     );
+    local tenants = if std.length(overrideTenants) > 0 then
+      overrideTenants
+    else
+      serviceTenantsFiltered;
     std.foldl(
       function(memo, tenantName)
         memo + objects.transformKeys(
