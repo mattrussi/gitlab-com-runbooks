@@ -1,153 +1,18 @@
 local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
 local basic = import 'grafana/basic.libsonnet';
 local template = grafana.template;
+local promQuery = import 'grafana/prom_query.libsonnet';
 local g = import 'github.com/grafana/grafonnet/gen/grafonnet-latest/main.libsonnet';
 local prometheusQuery = g.query.prometheus;
 local row = grafana.row;
 local mimirHelper = import 'services/lib/mimir-helpers.libsonnet';
 
-local queries = {
-  totalBlockersCount:
-    prometheusQuery.new(
-      '$PROMETHEUS_DS',
-      |||
-        sum by (root_cause) (
-          last_over_time(
-            delivery_deployment_blocker_count{
-                root_cause=~".+",
-                root_cause!="RootCause::FlakyTest"
-                }
-          [1d])
-        )
-      |||
-    )
-    + prometheusQuery.withFormat("time_series"),
-
-  totalGprdHoursBlocked:
-    prometheusQuery.new(
-      '$PROMETHEUS_DS',
-      |||
-        sum by (root_cause) (
-          last_over_time(
-            delivery_deployment_hours_blocked{
-              target_env="gprd",
-              root_cause=~".+",
-              root_cause!="RootCause::FlakyTest"
-              }
-            [1d])
-        )
-      |||
-    )
-    + prometheusQuery.withFormat("time_series"),
-
-  totalGstgHoursBlocked:
-    prometheusQuery.new(
-      '$PROMETHEUS_DS',
-      |||
-        sum by (root_cause) (
-          last_over_time(
-            delivery_deployment_hours_blocked{
-              target_env="gstg",
-              root_cause=~".+",
-              root_cause!="RootCause::FlakyTest"}
-            [1d])
-        )
-      |||
-    )
-    + prometheusQuery.withFormat("time_series"),
-
-  blockersCount(root_cause):
-    prometheusQuery.new(
-      '$PROMETHEUS_DS',
-      |||
-        max by(week) (
-          last_over_time(
-            delivery_deployment_blocker_count{
-              root_cause=root_cause
-              }
-            [1d])
-        )
-      |||
-    )
-    + prometheusQuery.withFormat("table"),
-
-  gprdHoursBlocked(root_cause):
-    prometheusQuery.new(
-      '$PROMETHEUS_DS',
-      |||
-        max by(week) (
-          last_over_time(
-            delivery_deployment_hours_blocked{
-              root_cause=root_cause,
-              target_env="gprd"
-              }
-            [1d])
-        )
-      |||
-    )
-    + prometheusQuery.withFormat("table"),
-
-  gstgHoursBlocked(root_cause):
-    prometheusQuery.new(
-      '$PROMETHEUS_DS',
-      |||
-        max by(week) (
-          last_over_time(
-            delivery_deployment_hours_blocked{
-              root_cause=root_cause,
-              target_env="gstg"
-              }
-            [1d])
-        )
-      |||
-    )
-    + prometheusQuery.withFormat("table"),
-
-  tabulatedDeploymentBlockers(root_cause):
-    [
-      prometheusQuery.new(
-        '$PROMETHEUS_DS',
-        |||
-          max by(week) (
-            last_over_time(
-              delivery_deployment_blocker_count{
-                root_cause=root_cause
-                }
-              [1d])
-          )
-        |||
-      )
-      + prometheusQuery.withFormat("time_series"),
-    ] + [
-      prometheusQuery.new(
-        '$PROMETHEUS_DS',
-        |||
-          max by(week) (
-            last_over_time(
-              delivery_deployment_hours_blocked{
-                root_cause=root_cause,
-                target_env="gprd"}
-              [1d])
-            )
-        |||
-      )
-      + prometheusQuery.withFormat("time_series"),
-    ] + [
-      prometheusQuery.new(
-        '$PROMETHEUS_DS',
-        |||
-          max by(week) (
-            last_over_time(
-              delivery_deployment_hours_blocked{
-                root_cause=root_cause,
-                target_env="gstg"}
-              [1d])
-            )
-        |||
-      )
-      + prometheusQuery.withFormat("time_series"),
-    ],
-};
+local totalBlockersCount = 'sum by (root_cause) (last_over_time(delivery_deployment_blocker_count{root_cause=~".+", root_cause!="RootCause::FlakyTest"}[1d]))';
+local totalGprdHoursBlocked = 'sum by (root_cause) (last_over_time(delivery_deployment_hours_blocked{target_env="gprd", root_cause=~".+", root_cause!="RootCause::FlakyTest"}[1d]))';
+local totalGstgHoursBlocked = 'sum by (root_cause) (last_over_time(delivery_deployment_hours_blocked{target_env="gstg", root_cause=~".+", root_cause!="RootCause::FlakyTest"}[1d]))';
+local blockersCount = 'max by (week) (last_over_time(delivery_deployment_blocker_count{root_cause="$root_cause"}[1d]))';
+local gprdHoursBlocked = 'max by (week) (last_over_time(delivery_deployment_hours_blocked{root_cause="$root_cause", target_env="gprd"}[1d]))';
+local gstgHoursBlocked = 'max by (week) (last_over_time(delivery_deployment_hours_blocked{root_cause="$root_cause", target_env="gstg"}[1d]))';
 
 local panels = {
   text: {
@@ -179,6 +44,13 @@ local panels = {
       + g.panel.barChart.options.legend.withCalcs(['total'])
       + g.panel.barChart.standardOptions.withDisplayName("blockers_count")
       + g.panel.barChart.standardOptions.color.withMode("thresholds")
+      + g.panel.barChart.queryOptions.withTargetsMixin([
+        g.query.prometheus.new(
+          '$PROMETHEUS_DS',
+          query,
+        )
+        + g.query.prometheus.withFormat("time_series"),
+      ])
       + g.panel.barChart.queryOptions.withTransformations([
         g.panel.barChart.queryOptions.transformation.withId("reduce")
         + g.panel.barChart.queryOptions.transformation.withOptions({ reducers: ['sum'] })
@@ -210,6 +82,13 @@ local panels = {
           g.panel.trend.fieldConfig.defaults.custom.withAxisLabel("week_index")
           + g.panel.trend.fieldConfig.defaults.custom.withAxisPlacement("hidden")
         )
+      ])
+      + g.panel.trend.queryOptions.withTargetsMixin([
+        g.query.prometheus.new(
+          '$PROMETHEUS_DS',
+          query,
+        )
+        + g.query.prometheus.withFormat("table"),
       ])
       + g.panel.trend.queryOptions.withTransformations([
         g.panel.trend.queryOptions.transformation.withId("calculateField")
@@ -253,13 +132,29 @@ local panels = {
   },
 
   table: {
-    tablePanel(title, query):
+    tablePanel(title):
       g.panel.table.new(title)
       + g.panel.table.queryOptions.withTargets(query)
       + g.panel.table.queryOptions.withInterval('2d')
       + g.panel.table.fieldConfig.defaults.custom.withFilterable(true)
       + g.panel.table.options.withShowHeader(true)
       + g.panel.table.standardOptions.color.withMode("thresholds")
+      + g.panel.table.queryOptions.withTargetsMixin([
+        g.query.prometheus.new(
+          '$PROMETHEUS_DS',
+          blockersCount,
+        ) + g.query.prometheus.withFormat("time_series"),
+
+        g.query.prometheus.new(
+          '$PROMETHEUS_DS',
+          gprdHoursBlocked,
+        ) + g.query.prometheus.withFormat("time_series"),
+
+        g.query.prometheus.new(
+          '$PROMETHEUS_DS',
+          gstgHoursBlocked,
+        ) + g.query.prometheus.withFormat("time_series"),
+      ])
       + g.panel.table.queryOptions.withTransformations([
         g.panel.table.queryOptions.transformation.withId("timeSeriesTable")
         + g.panel.table.queryOptions.transformation.withOptions({}),
@@ -330,13 +225,13 @@ basic.dashboard(
     panels.text.textPanel(''), gridPos={ x: 0, y: 1, w: 24, h: 7 }
   )
   .addPanel(
-    panels.barChart.barChartPanel('', queries.totalBlockersCount), gridPos={ x: 0, y: 8, w: 8, h: 10 }
+    panels.barChart.barChartPanel('', totalBlockersCount), gridPos={ x: 0, y: 8, w: 8, h: 10 }
   )
   .addPanel(
-    panels.barChart.barChartPanel('', queries.totalGprdHoursBlocked), gridPos={ x: 8, y: 8, w: 8, h: 10 }
+    panels.barChart.barChartPanel('', totalGprdHoursBlocked), gridPos={ x: 8, y: 8, w: 8, h: 10 }
   )
   .addPanel(
-    panels.barChart.barChartPanel('', queries.totalGstgHoursBlocked), gridPos={ x: 16, y: 8, w: 8, h: 10 }
+    panels.barChart.barChartPanel('', totalGstgHoursBlocked), gridPos={ x: 16, y: 8, w: 8, h: 10 }
   )
 )
 .addRow(
@@ -346,16 +241,16 @@ basic.dashboard(
     height='250px',
   )
   .addPanel(
-    panels.trend.trendPanel('Blockers Count for $root_cause', queries.blockersCount('$root_cause')), gridPos={ x: 0, y: 19, w: 8, h: 8 }
+    panels.trend.trendPanel('Blockers Count for $root_cause', blockersCount), gridPos={ x: 0, y: 19, w: 8, h: 8 }
   )
   .addPanel(
-    panels.trend.trendPanel('gprd Hours Blocked for $root_cause', queries.gprdHoursBlocked('$root_cause')), gridPos={ x: 8, y: 19, w: 8, h: 8 }
+    panels.trend.trendPanel('gprd Hours Blocked for $root_cause', gprdHoursBlocked), gridPos={ x: 8, y: 19, w: 8, h: 8 }
   )
   .addPanel(
-    panels.trend.trendPanel('gstg Hours Blocked for $root_cause', queries.gstgHoursBlocked('$root_cause')), gridPos={ x: 16, y: 19, w: 8, h: 8 }
+    panels.trend.trendPanel('gstg Hours Blocked for $root_cause', gstgHoursBlocked), gridPos={ x: 16, y: 19, w: 8, h: 8 }
   )
   .addPanel(
-    panels.table.tablePanel('', queries.tabulatedDeploymentBlockers('$root_cause')), gridPos={ x: 0, y: 27, w: 24, h: 8 }
+    panels.table.tablePanel(''), gridPos={ x: 0, y: 27, w: 24, h: 8 }
   )
 )
 .trailer()
