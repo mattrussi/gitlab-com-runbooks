@@ -1,21 +1,10 @@
 local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
+local basic = import 'grafana/basic.libsonnet';
+local template = grafana.template;
 local g = import 'github.com/grafana/grafonnet/gen/grafonnet-latest/main.libsonnet';
 local prometheusQuery = g.query.prometheus;
-local row = g.panel.row;
-local var = g.dashboard.variable;
-
-local variables = {
-  root_cause: (
-    var.query.new('root_cause') +
-    var.query.withDatasource('prometheus', '$PROMETHEUS_DS') +
-    var.query.queryTypes.withLabelValues(
-      'delivery_deployment_blocker_count{root_cause!="RootCause::FlakyTest"}',
-      'root_cause'
-    ) +
-    var.query.selectionOptions.withMulti() +
-    var.query.selectionOptions.withIncludeAll()
-  )
-};
+local row = grafana.row;
+local mimirHelper = import 'services/lib/mimir-helpers.libsonnet';
 
 local queries = {
   totalBlockersCount:
@@ -161,7 +150,7 @@ local queries = {
 
 local panels = {
   text: {
-    textPanel(title, h, w, x, y):
+    textPanel(title):
       g.panel.text.new(title)
       + g.panel.text.options.withMode("markdown")
       + g.panel.text.options.withContent(|||
@@ -176,11 +165,10 @@ local panels = {
           - [List of root causes](https://gitlab.com/gitlab-org/release/tasks/-/labels?subscribed=&sort=relevance&search=RootCause)
           - [Deployments metrics review](https://gitlab.com/groups/gitlab-com/gl-infra/-/epics/1192)
         |||)
-      + g.panel.text.panelOptions.withGridPos({ h: h, w: w, x: x, y: y }),
   },
 
   barChart: {
-    barChartPanel(title, targets, h, w, x, y):
+    barChartPanel(title, targets):
       g.panel.barChart.new(title)
       + g.panel.barChart.queryOptions.withTargets(targets)
       + g.panel.barChart.queryOptions.withInterval('2d')
@@ -194,11 +182,10 @@ local panels = {
         g.panel.barChart.queryOptions.transformation.withId("reduce")
         + g.panel.barChart.queryOptions.transformation.withOptions({ reducers: ['sum'] })
       ])
-      + g.panel.barChart.panelOptions.withGridPos({ h: h, w: w, x: x, y: y }),
   },
 
   trend: {
-    trendPanel(title, targets, h, w, x, y ):
+    trendPanel(title, targets):
       g.panel.trend.new(title)
       + g.panel.trend.queryOptions.withTargets(targets)
       + g.panel.trend.queryOptions.withInterval('2d')
@@ -262,11 +249,10 @@ local panels = {
           }
         })
       ])
-      + g.panel.trend.panelOptions.withGridPos({ h: h, w: w, x: x, y: y }),
   },
 
   table: {
-    tablePanel(title, targets, h, w, x, y):
+    tablePanel(title, targets):
       g.panel.table.new(title)
       + g.panel.table.queryOptions.withTargets(targets)
       + g.panel.table.queryOptions.withInterval('2d')
@@ -312,32 +298,63 @@ local panels = {
           }
         })
       ])
-      + g.panel.table.panelOptions.withGridPos({ h: h, w: w, x: x, y: y }),
   },
 };
 
-g.dashboard.new('Deployment Blockers')
-+ g.dashboard.withVariables([
-  variables.root_cause,
-])
-+ g.dashboard.withPanels([
-  row.new('Overview')
-  + row.withCollapsed(false)
-  + row.withGridPos(0)
-  + row.withPanels([
-    panels.text.textPanel('', 7, 24, 0, 1),
-    panels.barChart.barChartPanel('', queries.totalBlockersCount, '10', '8', '0', '8'),
-    panels.barChart.barChartPanel('', queries.totalGprdHoursBlocked, '10', '8', '8', '8'),
-    panels.barChart.barChartPanel('', queries.totalGstgHoursBlocked, '10', '8', '16', '8'),
-  ]),
-  row.new('$root_cause')
-  + row.withRepeat('$root_cause')
-  + row.withCollapsed(false)
-  + row.withGridPos(18)
-  + row.withPanels([
-    panels.trend.trendPanel('Blockers Count for $root_cause', queries.blockersCount, '8', '8', '0', '19'),
-    panels.trend.trendPanel('Gprd Hours Blocked for $root_cause', queries.gprdHoursBlocked, '8', '8', '8', '19'),
-    panels.trend.trendPanel('Gstg Hours Blocked for $root_cause', queries.gstgHoursBlocked, '8', '8', '16', '19'),
-    panels.table.tablePanel('', queries.tabulatedDeploymentBlockers, '8', '24', '0', '27'),
-  ])
-])
+basic.dashboard(
+  'Deployment Blockers',
+  tags=['release'],
+  editable=true,
+  time_from='now-90d',
+  time_to='now',
+  includeStandardEnvironmentAnnotations=false,
+  includeEnvironmentTemplate=false,
+  defaultDatasource=mimirHelper.mimirDatasource('gitlab-ops'),
+)
+.addTemplate(
+  template.new(
+    'root_cause',
+    '$PROMETHEUS_DS',
+    'label_values(delivery_deployment_blocker_count{root_cause!="RootCause::FlakyTest"},root_cause)',
+    includeAll=true,
+    multi=true,
+  )
+)
+.addRow(
+  row.new(
+    title='Overview',
+    height='250px',
+  )
+  .addPanel(
+    panels.text.textPanel(''), gridPos={ x: 0, y: 1, w: 24, h: 7 }
+  )
+  .addPanel(
+    panels.barChart.barChartPanel('', queries.totalBlockersCount), gridPos={ x: 0, y: 8, w: 8, h: 10 }
+  )
+  .addPanel(
+    panels.barChart.barChartPanel('', queries.totalGprdHoursBlocked), gridPos={ x: 8, y: 8, w: 8, h: 10 }
+  )
+  .addPanel(
+    panels.barChart.barChartPanel('', queries.totalGstgHoursBlocked), gridPos={ x: 16, y: 8, w: 8, h: 10 }
+  )
+)
+.addRow(
+  row.new(
+    title='$root_cause',
+    repeat='root_cause',
+    height='250px',
+  )
+  .addPanel(
+    panels.trend.trendPanel('Blockers Count for $root_cause', queries.blockersCount), gridPos={ x: 0, y: 19, w: 8, h: 8 }
+  )
+  .addPanel(
+    panels.trend.trendPanel('gprd Hours Blocked for $root_cause', queries.gprdHoursBlocked), gridPos={ x: 8, y: 19, w: 8, h: 8 }
+  )
+  .addPanel(
+    panels.trend.trendPanel('gstg Hours Blocked for $root_cause', queries.gstgHoursBlocked), gridPos={ x: 16, y: 19, w: 8, h: 8 }
+  )
+  .addPanel(
+    panels.table.tablePanel('', queries.tabulatedDeploymentBlockers), gridPos={ x: 0, y: 27, w: 24, h: 8 }
+  )
+)
+.trailer()
