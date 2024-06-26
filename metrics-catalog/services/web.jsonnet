@@ -213,6 +213,39 @@ metricsCatalog.serviceDefinition({
 
       toolingLinks: [],
     },
+
+    dependency_proxy: {
+      severity: 's3',
+      serviceAggregation: false,
+      userImpacting: true,
+      featureCategory: 'virtual_registry',
+      description: |||
+        Measures calls to Dependency Proxy as the number of unsuccessful calls vs the number of total calls.
+
+        An alert on this SLI may indicate that pulling images from the container registry takes longer than expected or fails outright.
+      |||,
+
+      local depencencyProxySelector = { endpoint_id: { re: 'Groups::DependencyProxyForContainersController.*' } },
+      requestRate: rateMetric(
+        counter='gitlab_sli_rails_request_total',
+        selector=depencencyProxySelector,
+      ),
+
+      errorRate: rateMetric(
+        counter='gitlab_sli_rails_request_error_total',
+        selector=depencencyProxySelector,
+      ),
+
+      significantLabels: ['endpoint_id'],
+
+      toolingLinks: [
+        toolingLinks.kibana(
+          title='Rails',
+          index='rails',
+          matches={ 'json.meta.caller_id': 'Groups::DependencyProxyForContainersController' }
+        ),
+      ],
+    },
   } + sliLibrary.get('rails_request').generateServiceLevelIndicator(railsSelector, {
     toolingLinks: [
       toolingLinks.kibana(title='Rails', index='rails'),
