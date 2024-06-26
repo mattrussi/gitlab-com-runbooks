@@ -23,6 +23,12 @@ This helps us to create soft boundaries by tenant and introduces a few key benef
 
 By default Mimir keeps all data for 1 year. This is configurable per tenant through [tenant limits configuration](#checking-tenant-limits).
 
+## Historical Data
+
+Historical data from Thanos is still available by the Thanos datasource in Grafana `Thanos - Historical Data`. Due to the limited use cases we have availalbe currently, and the risks around important the data in to Mimir we have opted to just keep this accessible through Thanos for now.
+
+At a later date we will offline this completely by the data will still be able to be onlined in a need arises.
+
 ## Creating a tenant
 
 Tenants are provisioned through [config-mgmt](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/tree/main/environments/observability-tenants).
