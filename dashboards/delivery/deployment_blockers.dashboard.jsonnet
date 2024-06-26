@@ -1,10 +1,8 @@
 local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
 local basic = import 'grafana/basic.libsonnet';
 local template = grafana.template;
-local promQuery = import 'grafana/prom_query.libsonnet';
 local g = import 'github.com/grafana/grafonnet/gen/grafonnet-latest/main.libsonnet';
 local row = grafana.row;
-local layout = import 'grafana/layout.libsonnet';
 local mimirHelper = import 'services/lib/mimir-helpers.libsonnet';
 
 local totalBlockersCount = 'sum by (root_cause) (last_over_time(delivery_deployment_blocker_count{root_cause=~".+", root_cause!="RootCause::FlakyTest"}[1d]))';
@@ -221,9 +219,9 @@ basic.dashboard(
   row.new(title='$root_cause', repeat='root_cause'),
   gridPos={ x: 0, y: 18, w: 24, h: 1 },
 )
-.addPanel(trendPanel('Blockers Count for $root_cause', blockersCount, 'blockers_count'), gridPos={ x: 0, y: 19, w: 8, h: 8 })
-.addPanel(trendPanel('gprd Hours Blocked for $root_cause', gprdHoursBlocked, 'gprd_hours_blocked'), gridPos={ x: 8, y: 19, w: 8, h: 8 })
-.addPanel(trendPanel('gstg Hours Blocked for $root_cause', gstgHoursBlocked, 'gstg_hours_blocked'), gridPos={ x: 16, y: 19, w: 8, h: 8 })
-.addPanel(tablePanel, gridPos={ x: 0, y: 27, w: 24, h: 8 })
+.addPanel(trendPanel('Blockers Count for $root_cause', blockersCount, 'blockers_count'), gridPos={ x: 0, y: 19, w: 8, h: 9 })
+.addPanel(trendPanel('gprd Hours Blocked for $root_cause', gprdHoursBlocked, 'gprd_hours_blocked'), gridPos={ x: 8, y: 19, w: 8, h: 9 })
+.addPanel(trendPanel('gstg Hours Blocked for $root_cause', gstgHoursBlocked, 'gstg_hours_blocked'), gridPos={ x: 16, y: 19, w: 8, h: 9 })
+.addPanel(tablePanel, gridPos={ x: 0, y: 28, w: 24, h: 7 })
 .addPanel(row.new(''), gridPos={ x: 0, y: 100000, w: 24, h: 1 })
 .trailer()
