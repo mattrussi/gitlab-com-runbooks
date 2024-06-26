@@ -40,7 +40,7 @@ for disaster recovery and WAL archive testing purposes:
 Archive and delayed replica both are replaying WAL archive files from GCS via
 wal-g which are sent to GCS by the Patroni primary (with a [retention
 policy](https://ops.gitlab.net/gitlab-com/gl-infra/terraform-modules/google/database-backup-bucket/-/merge_requests/10)
-sending them to nearline storage after 2 weeks and deletion after 120 days).
+sending them to coldling storage after 1 week and deletion after 90 days).
 The delayed replica though is replaying them with an 8 hour delay, so we are
 able to retrieve deleted objects from there within 8h after deletion if needed.
 
