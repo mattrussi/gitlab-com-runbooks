@@ -15,12 +15,12 @@ This is the time from when an apply is performed from an MR to create new VMs un
 In the bootstrap logs (or console output), look for `Bootstrap finished in X minutes and Y seconds.`
 When many VMs are provisioned, we should find the last VM to complete as our measurement.
 
-### Chef Converge Time
+### Bootstrap Time
 
-During the provisioning process, when a new VM is created, it is provided a bootstrap script that may restart the VM.
-In the event that a chef-client converge is performed twice this is the longest run of the two.
-The measurement can be recorded from the chef-client output in logs on a random selection of VMs being provisioned.
-In the Chef logs, look for `Chef Client finished, X/Y resources updated in 00 minutes 00 seconds`.
+During the provisioning process, when a new VM is created, it executes a bootstrap script that may restart the VM.
+This measurement might take place over multiple boots.
+[This script](https://gitlab.com/gitlab-com/runbooks/-/blob/master/scripts/find-bootstrap-duration.sh?ref_type=heads) can help measure the bootstrap time.
+This can be collected for all VMs during a gameday, or a random VM if we are creating many VMs.
 
 ## Gameday DR Process Time
 
