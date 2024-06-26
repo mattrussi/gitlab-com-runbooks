@@ -32,26 +32,26 @@ Ideally, this measurement is designed to inform the overall flow and duration of
 
 ### VM Recreation Times
 
-| Date | Terraform Provision Time | Bootstrap Time | Notes |
-| ---- | ------------------- | -------------- | ----- |
-| 2024-06-20 | XX:XX | XX:XX | N/A |
+| Date | Environment | Terraform Provision Time | Bootstrap Time | Notes |
+| ---- | ----------- | ------------------------ | -------------- | ----- |
+| 2024-06-20 | GPRD | XX:XX | XX:XX | N/A |
 
 ### Gameday Zonal Outage DR Process Time
 
-| Date | Duration | Notes |
-| ---- | -------- | ----- |
-| 2024-XX-XX | XX:XX | N/A |
+| Date | Environment | Duration | Notes |
+| ---- | ----------- | -------- | ----- |
+| 2024-XX-XX | GSTG | XX:XX | N/A |
 
 ## Patroni/PGBouncer
 
 ### VM Recreation Times
 
-| Date | Terraform Provision Time | Bootstrap Time | Notes |
-| ---- | ------------------- | -------------- | ----- |
-| 2024-XX-XX | XX:XX | XX:XX | N/A |
+| Date | Environment | Terraform Provision Time | Bootstrap Time | Notes |
+| ---- | ----------- | ------------------------ | -------------- | ----- |
+| 2024-06-20 | GPRD | XX:XX | XX:XX | N/A |
 
-### Gameday  Zonal Outage DR Process Time
+### Gameday Zonal Outage DR Process Time
 
-| Date | Duration | Notes |
-| ---- | -------- | ----- |
-| 2024-XX-XX | XX:XX | N/A |
+| Date | Environment | Duration | Notes |
+| ---- | ----------- | -------- | ----- |
+| 2024-XX-XX | GSTG | XX:XX | N/A |
