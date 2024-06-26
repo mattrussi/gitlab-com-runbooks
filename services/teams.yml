@@ -219,6 +219,17 @@ teams:
   slack_error_budget_channel: g_mlops-alerts
   send_error_budget_weekly_to_slack: true
 
+- name: duo_chat
+  url: https://handbook.gitlab.com/handbook/engineering/development/data-science/ai-powered/duo-chat/
+  manager: juan-silva
+  label: group::duo chat
+  slack_alerts_channel: g_mlops-alerts
+  product_stage_group: duo_chat
+  ignored_components:
+  - graphql_query
+  slack_error_budget_channel: duo_chat_lounge
+  send_error_budget_weekly_to_slack: true
+
 - name: code_review
   product_stage_group: code_review
   ignored_components:
