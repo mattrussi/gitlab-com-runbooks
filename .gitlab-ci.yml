@@ -542,7 +542,7 @@ validate-service-catalog-schema:
     - ./scripts/compile_jsonnet.rb ./services/raw-catalog.jsonnet > ./services/service_catalog.json
     - npm run validate-service-catalog-schema -- -s ./services/service-catalog-schema.json -d ./services/service_catalog.json
 
-validate-service-mappings:
+validate-service-catalog:
   stage: validate
   needs: []
   rules:
@@ -553,7 +553,7 @@ validate-service-mappings:
         paths:
           - services/**/*
   script:
-    - make validate-service-mappings
+    - make validate-service-catalog
 
 check-stage-groups:
   extends:

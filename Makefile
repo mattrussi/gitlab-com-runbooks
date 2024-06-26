@@ -67,11 +67,11 @@ test-alertmanager: alertmanager/alertmanager.yml
 	PATH=$(AMTOOL_PATH):$(PATH) alertmanager/test-routing.sh alertmanager/alertmanager.yml
 
 .PHONY: test
-test: validate-service-dashboards validate-service-mappings validate-prom-rules validate-kibana-urls validate-alerts validate-yaml jsonnet-bundle test-jsonnet test-shunit
+test: validate-service-dashboards validate-service-catalog validate-prom-rules validate-kibana-urls validate-alerts validate-yaml jsonnet-bundle test-jsonnet test-shunit
 
-.PHONY: validate-service-mappings
-validate-service-mappings:
-	./scripts/validate-service-mappings.rb
+.PHONY: validate-service-catalog
+validate-service-catalog:
+	./scripts/validate-service-catalog.rb
 
 .PHONY: validate-service-dashboards
 validate-service-dashboards:
