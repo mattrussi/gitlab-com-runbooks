@@ -28,8 +28,8 @@ local textPanel =
       - [Deployments metrics review](https://gitlab.com/groups/gitlab-com/gl-infra/-/epics/1192)
     |||);
 
-local barChartPanel(name, query) =
-  g.panel.barChart.new('')
+local barChartPanel(title, name, query) =
+  g.panel.barChart.new(title)
   + g.panel.barChart.queryOptions.withInterval('2d')
   + g.panel.barChart.options.withOrientation("horizontal")
   + g.panel.barChart.options.legend.withDisplayMode("table")
@@ -212,9 +212,9 @@ basic.dashboard(
   row.new(title='Overview'),
   gridPos={ x: 0, y: 7, w: 24, h: 1 },
 )
-.addPanel(barChartPanel('blockers_count', totalBlockersCount), gridPos={ x: 0, y: 8, w: 8, h: 10 })
-.addPanel(barChartPanel('gprd_hours_blocked', totalGprdHoursBlocked), gridPos={ x: 8, y: 8, w: 8, h: 10 })
-.addPanel(barChartPanel('gstg_hours_blocked', totalGstgHoursBlocked), gridPos={ x: 16, y: 8, w: 8, h: 10 })
+.addPanel(barChartPanel('Total Blockers Count per Root Cause', 'blockers_count', totalBlockersCount), gridPos={ x: 0, y: 8, w: 8, h: 10 })
+.addPanel(barChartPanel('Total gprd Hours Blocked per Root Cause', 'gprd_hours_blocked', totalGprdHoursBlocked), gridPos={ x: 8, y: 8, w: 8, h: 10 })
+.addPanel(barChartPanel('Total gstg Hours Blocked per Root Cause', 'gstg_hours_blocked', totalGstgHoursBlocked), gridPos={ x: 16, y: 8, w: 8, h: 10 })
 .addPanel(
   row.new(title='$root_cause', repeat='root_cause'),
   gridPos={ x: 0, y: 18, w: 24, h: 1 },
