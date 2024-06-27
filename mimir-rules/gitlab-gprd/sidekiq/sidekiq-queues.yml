@@ -3,7 +3,7 @@ groups:
   rules:
   - alert: SidekiqQueueTooLarge
     expr: >
-      max by (environment, name) (
+      max by (env, environment, name) (
         sidekiq_queue_size{env="gprd"}
       ) > 50000
     for: 30m
