@@ -31,7 +31,7 @@
         },
         "startsAt": "2020-07-17T08:00:05.09866521Z",
         "endsAt": "2020-07-17T08:00:50.09866521Z",
-        "generatorURL": "https://prometheus.gstg.gitlab.net/graph?g0.expr=gitlab_service_ops%3Arate+%3E+gitlab_service_ops%3Arate%3Aavg_over_time_1w+%2B+2.5+%2A+gitlab_service_ops%3Arate%3Astddev_over_time_1w&g0.tab=1"
+        "generatorURL": "https://prometheus.gstg.gitlab.net/graph?g0.expr=gitlab_service_ops%3Arate+%3E+gitlab_service_ops%3Arate%3Aavg_over_time_1w+%2B+2.5+%2A+gitlab_service_ops%3Arate%3Astddev_over_time_1w%7Benv%3D%22gstg%22%7D&g0.tab=1"
       }
     ],
     "groupLabels": {
