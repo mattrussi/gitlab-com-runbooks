@@ -135,7 +135,7 @@
       "fill": 0,
       "fillGradient": 0,
       "gridPos": {
-        "h": 7,
+        "h": 9,
         "w": 6,
         "x": 0,
         "y": 1
@@ -149,7 +149,7 @@
         "max": true,
         "min": true,
         "rightSide": false,
-        "show": false,
+        "show": true,
         "total": false,
         "values": true
       },
@@ -286,7 +286,7 @@
       "yaxes": [
         {
           "format": "percentunit",
-          "label": "",
+          "label": "Apdex %",
           "logBase": 1,
           "max": 1,
           "show": true
@@ -471,7 +471,7 @@
         "h": 1,
         "w": 6,
         "x": 0,
-        "y": 8
+        "y": 10
       },
       "id": 4,
       "options": {
@@ -514,7 +514,7 @@
       "fill": 0,
       "fillGradient": 0,
       "gridPos": {
-        "h": 7,
+        "h": 9,
         "w": 6,
         "x": 6,
         "y": 1
@@ -528,7 +528,7 @@
         "max": true,
         "min": true,
         "rightSide": false,
-        "show": false,
+        "show": true,
         "total": false,
         "values": true
       },
@@ -666,7 +666,7 @@
       "yaxes": [
         {
           "format": "percentunit",
-          "label": "",
+          "label": "Error %",
           "logBase": 1,
           "min": 0,
           "show": true
@@ -851,7 +851,7 @@
         "h": 1,
         "w": 6,
         "x": 6,
-        "y": 8
+        "y": 10
       },
       "id": 6,
       "options": {
@@ -894,7 +894,7 @@
       "fill": 0,
       "fillGradient": 0,
       "gridPos": {
-        "h": 8,
+        "h": 10,
         "w": 6,
         "x": 12,
         "y": 1
@@ -908,7 +908,7 @@
         "max": true,
         "min": true,
         "rightSide": false,
-        "show": false,
+        "show": true,
         "total": false,
         "values": true
       },
@@ -1020,7 +1020,7 @@
       "yaxes": [
         {
           "format": "short",
-          "label": "",
+          "label": "Operations per Second",
           "logBase": 1,
           "min": 0,
           "show": true
@@ -1044,7 +1044,7 @@
       "fill": 0,
       "fillGradient": 0,
       "gridPos": {
-        "h": 8,
+        "h": 10,
         "w": 6,
         "x": 18,
         "y": 1
@@ -1058,7 +1058,7 @@
         "max": true,
         "min": true,
         "rightSide": false,
-        "show": false,
+        "show": true,
         "total": false,
         "values": true
       },
@@ -1131,7 +1131,7 @@
       "yaxes": [
         {
           "format": "percentunit",
-          "label": "",
+          "label": "Saturation %",
           "logBase": 1,
           "max": 1,
           "show": true

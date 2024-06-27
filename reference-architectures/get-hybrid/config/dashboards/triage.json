@@ -1030,7 +1030,7 @@
         "values": true
       },
       "lines": true,
-      "linewidth": 2,
+      "linewidth": 1,
       "links": [
         {
           "title": "gitlab-shell Service | kube_container_cpu_limit resource Dashboard",
@@ -2067,7 +2067,7 @@
         "values": true
       },
       "lines": true,
-      "linewidth": 2,
+      "linewidth": 1,
       "links": [
         {
           "title": "registry Service | kube_container_cpu_limit resource Dashboard",
@@ -3104,7 +3104,7 @@
         "values": true
       },
       "lines": true,
-      "linewidth": 2,
+      "linewidth": 1,
       "links": [
         {
           "title": "sidekiq Service | kube_container_cpu_limit resource Dashboard",
@@ -4141,7 +4141,7 @@
         "values": true
       },
       "lines": true,
-      "linewidth": 2,
+      "linewidth": 1,
       "links": [
         {
           "title": "webservice Service | kube_container_cpu_limit resource Dashboard",
@@ -5182,7 +5182,7 @@
         "values": true
       },
       "lines": true,
-      "linewidth": 2,
+      "linewidth": 1,
       "links": [
         {
           "title": "gitaly Service | cpu resource Dashboard",
@@ -6243,7 +6243,7 @@
         "values": true
       },
       "lines": true,
-      "linewidth": 2,
+      "linewidth": 1,
       "links": [
         {
           "title": "praefect Service | cpu resource Dashboard",
@@ -6395,7 +6395,7 @@
         "values": true
       },
       "lines": true,
-      "linewidth": 2,
+      "linewidth": 1,
       "links": [
         {
           "title": "consul Service | cpu resource Dashboard",
@@ -7456,7 +7456,7 @@
         "values": true
       },
       "lines": true,
-      "linewidth": 2,
+      "linewidth": 1,
       "links": [
         {
           "title": "kube Service | kube_persistent_volume_claim_disk_space resource Dashboard",
@@ -8497,7 +8497,7 @@
         "values": true
       },
       "lines": true,
-      "linewidth": 2,
+      "linewidth": 1,
       "nullPointMode": "null",
       "percentage": false,
       "pointradius": 5,
