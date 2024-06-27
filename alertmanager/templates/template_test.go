@@ -2,7 +2,6 @@ package templates
 
 import (
 	"bytes"
-	"encoding/json"
 	"os"
 	"testing"
 	"text/template"
@@ -13,8 +12,10 @@ import (
 // This test pulls some of the functionality from the Alertmanager repository and
 // renders the alert templates to ensure they're being parsed as expected.
 func TestTemplates(t *testing.T) {
+	t.Parallel()
+
 	type args struct {
-		dataPath     string
+		payload      Payload
 		templatePath string
 		templateName string
 	}
@@ -25,36 +26,107 @@ func TestTemplates(t *testing.T) {
 		wantErr bool
 	}{
 		{
-			name: "gitlab.text_mimir-success",
+			name: "gitlab.text_mimir_.Alerts.Annotations.grafana_datasource_id",
 			args: args{
-				dataPath:     "./testdata/mimir-payload.json",
+				payload: Payload{
+					Status: "firing",
+					Alerts: []Alert{
+						{
+							Labels: amtemplate.KV{
+								"alertname": "service_ops_out_of_bounds_upper_2sigma_5m",
+							},
+							Annotations: amtemplate.KV{
+								"grafana_datasource_id": "mimir-gitlab-gstg",
+								"title":                 "redis service operation rate alert",
+								"description":           "Server is running outside of normal operation rate parameters\n",
+							},
+							GeneratorURL: "https://prometheus.gstg.gitlab.net/graph?g0.expr=gitlab_service_ops%3Arate+%3E+gitlab_service_ops%3Arate%3Aavg_over_time_1w+%2B+2.5+%2A+gitlab_service_ops%3Arate%3Astddev_over_time_1w%7Benv%3D%22gstg%22%7D&g0.tab=1",
+						},
+					},
+					CommonLabels: amtemplate.KV{
+						"environment": "gstg",
+						"type":        "web",
+					},
+				},
 				templatePath: "gitlab.tmpl",
 				templateName: "gitlab.text",
 			},
-			want:    wantFromFile(t, "./testdata/gitlab.text_mimir-success.txt"),
+			want:    wantFromFile(t, "./testdata/gitlab.text_mimir_.Alerts.Annotations.grafana_datasource_id.txt"),
+			wantErr: false,
+		},
+		{
+			name: "gitlab.text_mimir_.Alerts.Annotations.promql_template_1",
+			args: args{
+				payload: Payload{
+					Status: "firing",
+					Alerts: []Alert{
+						{
+							Labels: amtemplate.KV{
+								"alertname": "service_ops_out_of_bounds_upper_2sigma_5m",
+							},
+							Annotations: amtemplate.KV{
+								"grafana_datasource_id": "mimir-gitlab-gstg",
+								"title":                 "redis service operation rate alert",
+								"description":           "Server is running outside of normal operation rate parameters\n",
+								"promql_template_1":     "gitlab_workhorse_git_http_sessions_active:total{stage=\"main\"}",
+							},
+							GeneratorURL: "https://prometheus.gstg.gitlab.net/graph?g0.expr=gitlab_service_ops%3Arate+%3E+gitlab_service_ops%3Arate%3Aavg_over_time_1w+%2B+2.5+%2A+gitlab_service_ops%3Arate%3Astddev_over_time_1w%7Benv%3D%22gstg%22%7D&g0.tab=1",
+						},
+					},
+					CommonLabels: amtemplate.KV{
+						"environment": "gstg",
+						"type":        "web",
+					},
+				},
+				templatePath: "gitlab.tmpl",
+				templateName: "gitlab.text",
+			},
+			want:    wantFromFile(t, "./testdata/gitlab.text_mimir_.Alerts.Annotations.promql_template_1.txt"),
+			wantErr: false,
+		},
+		{
+			name: "gitlab.text_mimir_.Alerts.Annotations.promql_template_2",
+			args: args{
+				payload: Payload{
+					Status: "firing",
+					Alerts: []Alert{
+						{
+							Labels: amtemplate.KV{
+								"alertname": "service_ops_out_of_bounds_upper_2sigma_5m",
+							},
+							Annotations: amtemplate.KV{
+								"grafana_datasource_id": "mimir-gitlab-gstg",
+								"title":                 "redis service operation rate alert",
+								"description":           "Server is running outside of normal operation rate parameters\n",
+								"promql_template_1":     "gitlab_workhorse_git_http_sessions_active:total{stage=\"main\"}",
+								"promql_template_2":     "avg_over_time(gitlab_workhorse_git_http_sessions_active{type=\"git\", tier=\"sv\", stage=\"$stage\"}[1m])",
+							},
+							GeneratorURL: "https://prometheus.gstg.gitlab.net/graph?g0.expr=gitlab_service_ops%3Arate+%3E+gitlab_service_ops%3Arate%3Aavg_over_time_1w+%2B+2.5+%2A+gitlab_service_ops%3Arate%3Astddev_over_time_1w%7Benv%3D%22gstg%22%7D&g0.tab=1",
+						},
+					},
+					CommonLabels: amtemplate.KV{
+						"environment": "gstg",
+						"type":        "web",
+					},
+				},
+				templatePath: "gitlab.tmpl",
+				templateName: "gitlab.text",
+			},
+			want:    wantFromFile(t, "./testdata/gitlab.text_mimir_.Alerts.Annotations.promql_template_2.txt"),
 			wantErr: false,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			data, err := os.ReadFile(tt.args.dataPath)
-			if err != nil {
-				t.Fatal(err)
-			}
-			payload := Payload{}
-			if err := json.Unmarshal(data, &payload); err != nil {
-				t.Fatal(err)
-			}
-
 			tmpl := &template.Template{}
 			tmpl = tmpl.Funcs(template.FuncMap(amtemplate.DefaultFuncs))
-			tmpl, err = tmpl.ParseFiles(tt.args.templatePath)
+			tmpl, err := tmpl.ParseFiles(tt.args.templatePath)
 			if err != nil {
 				t.Fatal(err)
 			}
 
 			got := bytes.Buffer{}
-			if err := tmpl.ExecuteTemplate(&got, tt.args.templateName, payload); err != nil {
+			if err := tmpl.ExecuteTemplate(&got, tt.args.templateName, tt.args.payload); err != nil {
 				t.Fatal(err)
 			}
 
