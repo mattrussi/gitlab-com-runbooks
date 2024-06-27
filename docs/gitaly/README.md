@@ -20,6 +20,7 @@
 
 * [Cloudflare: Managing Traffic](../cloudflare/managing-traffic.md)
 * [Google Cloud Snapshots](../disaster-recovery/gcp-snapshots.md)
+* [Measuring Recovery Activities](../disaster-recovery/recovery-measurements.md)
 * [../elastic/advanced-search-in-gitlab.md](../elastic/advanced-search-in-gitlab.md)
 * [Elastic Nodes Disk Space Saturation](../elastic/disk_space_saturation.md)
 * [Deploying a change to gitlab.rb](../git/deploy-gitlab-rb-change.md)
