@@ -14,8 +14,12 @@
         {{- range .Alerts -}}
             {{/* If we have a Grafana datasource ID the alert has come from Mimir so link to Grafana's explore page */}}
             {{- if and .Annotations.grafana_datasource_id .GeneratorURL -}}
-                {{/* First we need to pull the query expression from the generator URL, this is urlquery encoded already */}}
-                {{- $expr := (.GeneratorURL | reReplaceAll "&g0.*" "" | reReplaceAll ".*expr=" "" | reReplaceAll "\n" "\\n" | reReplaceAll "\"" `\"`) -}}
+                {{/*
+                    First we need to pull the query expression from the generator URL, this is urlquery encoded already
+                    Double quotes have to be escaped manually before being inserted into the panes query, so `"` or `%22` becomes `\"` or `%5C%22`
+                    This is because unfortunately if a query parameter has a JSON value Grafana will only accept it if it uses double quotes, not single quotes
+                */}}
+                {{- $expr := (.GeneratorURL | reReplaceAll "&g0.*" "" | reReplaceAll ".*expr=" "" | reReplaceAll "\n" "\\n" | reReplaceAll "\"" `\"` | reReplaceAll "%22" "%5C%22") -}}
                 {{/* Then we need to insert the query expression into the panes JSON object that Grafana expects and URL encode it */}}
                 {{- $panes := urlquery (printf $panesTemplate .Annotations.grafana_datasource_id .Annotations.grafana_datasource_id) | reReplaceAll "EXPR_PLACEHOLDER" $expr -}}
                 {{/* Finally we build the link to the Grafana explore page */}}
