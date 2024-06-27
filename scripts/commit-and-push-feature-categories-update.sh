@@ -25,10 +25,6 @@ if [ -z "$(git status --untracked-files=no --porcelain)" ]; then
   exit 0
 fi
 
-if [ -z "$FORCE_MAKE_GENERATE" ]; then
-  make update-feature-categories
-fi
-
 git add .
 git commit -m "chore: ${mr_title}"
 echo "Pushing to $runbooks_origin..."
