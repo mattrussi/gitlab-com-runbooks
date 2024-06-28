@@ -5,12 +5,12 @@ local g = import 'github.com/grafana/grafonnet/gen/grafonnet-latest/main.libsonn
 local row = grafana.row;
 local mimirHelper = import 'services/lib/mimir-helpers.libsonnet';
 
-local totalBlockersCount = 'sum by (root_cause) (last_over_time(delivery_deployment_blocker_count{root_cause=~".+", root_cause!="RootCause::FlakyTest"}[1d]))';
-local totalGprdHoursBlocked = 'sum by (root_cause) (last_over_time(delivery_deployment_hours_blocked{target_env="gprd", root_cause=~".+", root_cause!="RootCause::FlakyTest"}[1d]))';
-local totalGstgHoursBlocked = 'sum by (root_cause) (last_over_time(delivery_deployment_hours_blocked{target_env="gstg", root_cause=~".+", root_cause!="RootCause::FlakyTest"}[1d]))';
-local blockersCount = 'max by (week) (last_over_time(delivery_deployment_blocker_count{root_cause="$root_cause"}[1d]))';
-local gprdHoursBlocked = 'max by (week) (last_over_time(delivery_deployment_hours_blocked{root_cause="$root_cause", target_env="gprd"}[1d]))';
-local gstgHoursBlocked = 'max by (week) (last_over_time(delivery_deployment_hours_blocked{root_cause="$root_cause", target_env="gstg"}[1d]))';
+local totalBlockersCount = 'max by (week, root_cause) (last_over_time(delivery_deployment_blocker_count{root_cause=~".+", root_cause!="RootCause::FlakyTest"}[1d]))';
+local totalGprdHoursBlocked = 'max by (week, root_cause) (last_over_time(delivery_deployment_hours_blocked{root_cause=~".+", root_cause!="RootCause::FlakyTest", target_env="gprd"}[1d]))';
+local totalGstgHoursBlocked = 'max by (week, root_cause) (last_over_time(delivery_deployment_hours_blocked{root_cause=~".+", root_cause!="RootCause::FlakyTest", target_env="gstg"}[1d]))';
+local blockersCount = 'max by (week, root_cause) (last_over_time(delivery_deployment_blocker_count{root_cause="$root_cause"}[1d]))';
+local gprdHoursBlocked = 'max by (week, root_cause) (last_over_time(delivery_deployment_hours_blocked{root_cause="$root_cause", target_env="gprd"}[1d]))';
+local gstgHoursBlocked = 'max by (week, root_cause) (last_over_time(delivery_deployment_hours_blocked{root_cause="$root_cause", target_env="gstg"}[1d]))';
 
 local textPanel =
   g.panel.text.new('')
@@ -30,7 +30,6 @@ local textPanel =
 
 local barChartPanel(title, name, query) =
   g.panel.barChart.new(title)
-  + g.panel.barChart.queryOptions.withInterval('2d')
   + g.panel.barChart.options.withOrientation("horizontal")
   + g.panel.barChart.options.legend.withDisplayMode("table")
   + g.panel.barChart.options.legend.withShowLegend(true)
@@ -43,17 +42,48 @@ local barChartPanel(title, name, query) =
       '$PROMETHEUS_DS',
       query,
     )
-    + g.query.prometheus.withFormat("time_series")
+    + g.query.prometheus.withFormat("table")
     + g.query.prometheus.withLegendFormat('{{root_cause}}'),
   ])
   + g.panel.barChart.queryOptions.withTransformations([
-    g.panel.barChart.queryOptions.transformation.withId("reduce")
-    + g.panel.barChart.queryOptions.transformation.withOptions({ reducers: ['sum'] })
+    g.panel.barChart.queryOptions.transformation.withId("groupBy")
+    + g.panel.barChart.queryOptions.transformation.withOptions({
+      fields: {
+        "week": {
+          "aggregations": [],
+          "operation": "groupby"
+        },
+        "root_cause": {
+          "aggregations": [],
+          "operation": "groupby"
+        },
+        "Value": {
+          "aggregations": [
+            "lastNotNull"
+          ],
+          "operation": "aggregate"
+        }
+      }
+    }),
+    g.panel.barChart.queryOptions.transformation.withId("groupBy")
+    + g.panel.barChart.queryOptions.transformation.withOptions({
+      fields: {
+        "root_cause": {
+          aggregations: [],
+          operation: "groupby"
+        },
+        "Value (lastNotNull)": {
+          "aggregations": [
+            "sum"
+          ],
+          "operation": "aggregate"
+        }
+      }
+    })
   ]);
 
 local trendPanel(title, query, name) =
   g.panel.trend.new(title)
-  + g.panel.trend.queryOptions.withInterval('2d')
   + g.panel.trend.options.withXField("week_index")
   + g.panel.trend.options.legend.withDisplayMode('list')
   + g.panel.trend.options.legend.withPlacement("bottom")
@@ -84,6 +114,25 @@ local trendPanel(title, query, name) =
     + g.query.prometheus.withFormat("table"),
   ])
   + g.panel.trend.queryOptions.withTransformations([
+    g.panel.trend.queryOptions.transformation.withId("groupBy")
+    + g.panel.trend.queryOptions.transformation.withOptions({
+      "fields": {
+        "week": {
+          "aggregations": [],
+          "operation": "groupby"
+        },
+        "root_cause": {
+          "aggregations": [],
+          "operation": null
+        },
+        "Value": {
+          "aggregations": [
+            "last"
+          ],
+          "operation": "aggregate"
+        }
+      }
+    }),
     g.panel.trend.queryOptions.transformation.withId("calculateField")
     + g.panel.trend.queryOptions.transformation.withOptions({
       alias: "count",
@@ -121,7 +170,6 @@ local trendPanel(title, query, name) =
 
 local tablePanel =
   g.panel.table.new('')
-  + g.panel.table.queryOptions.withInterval('2d')
   + g.panel.table.fieldConfig.defaults.custom.withFilterable(true)
   + g.panel.table.options.withShowHeader(true)
   + g.panel.table.standardOptions.color.withMode("thresholds")
@@ -176,7 +224,8 @@ local tablePanel =
     g.panel.table.queryOptions.transformation.withId("organize")
     + g.panel.table.queryOptions.transformation.withOptions({
       excludeByName: {
-        count: true
+        count: true,
+        root_cause: true
       },
       includeByName: {},
       indexByName: {},
