@@ -37,6 +37,13 @@ local barChartPanel(title, name, query) =
   + g.panel.barChart.options.legend.withCalcs(["sum"])
   + g.panel.barChart.standardOptions.withDisplayName(name)
   + g.panel.barChart.standardOptions.color.withMode("thresholds")
+  + g.panel.barChart.standardOptions.thresholds.withMode("absolute")
+  + g.panel.barChart.standardOptions.thresholds.withSteps([
+    {
+      "value": null,
+      "color": "green"
+    }
+  ])
   + g.panel.barChart.queryOptions.withTargetsMixin([
     g.query.prometheus.new(
       '$PROMETHEUS_DS',
@@ -99,6 +106,13 @@ local trendPanel(title, query, name) =
   + g.panel.trend.standardOptions.withUnit("short")
   + g.panel.trend.standardOptions.withMin(1)
   + g.panel.trend.standardOptions.color.withMode("palette-classic")
+  + g.panel.trend.standardOptions.thresholds.withMode("absolute")
+  + g.panel.trend.standardOptions.thresholds.withSteps([
+    {
+      "value": null,
+      "color": "green"
+    }
+  ])
   + g.panel.trend.standardOptions.withOverrides([
     g.panel.trend.standardOptions.override.byName.new('week_index')
     + g.panel.trend.standardOptions.override.byName.withPropertiesFromOptions(
