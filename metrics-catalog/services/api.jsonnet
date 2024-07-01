@@ -188,6 +188,46 @@ metricsCatalog.serviceDefinition({
 
       dependsOn: dependOnPatroni.sqlComponents,
     },
+
+    group_management: {
+      monitoringThresholds+: {
+        errorRatio: 0.999,
+      },
+      severity: 's3',
+      serviceAggregation: false,
+      userImpacting: true,
+      featureCategory: 'groups_and_projects',
+      description: |||
+        Measures calls to the Groups API resource as the number of unsuccessful calls vs the number of total calls.
+
+        An alert on this SLI may indicate that users are unable to modify or create groups via the API.
+      |||,
+
+      local endpointIds = ['PUT /api/:version/groups/:id', 'POST /api/:version/groups'],
+      local groupManagementSelector = { endpoint_id: { oneOf: endpointIds }, type: 'api' },
+
+      requestRate: rateMetric(
+        counter='gitlab_sli_rails_request_total',
+        selector=groupManagementSelector,
+      ),
+
+      errorRate: rateMetric(
+        counter='gitlab_sli_rails_request_error_total',
+        selector=groupManagementSelector,
+      ),
+
+      useConfidenceLevelForSLIAlerts: '98%',
+
+      significantLabels: ['endpoint_id'],
+
+      toolingLinks: [
+        toolingLinks.kibana(
+          title='Rails',
+          index='rails',
+          matches={ 'json.meta.caller_id': endpointIds }
+        ),
+      ],
+    },
   } + sliLibrary.get('rails_request').generateServiceLevelIndicator(railsSelector, {
     monitoringThresholds+: {
       apdexScore: 0.99,

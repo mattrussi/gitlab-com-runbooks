@@ -37,6 +37,19 @@ groups:
       sum by (component,endpoint_id,env,environment,feature_category,fqdn,job,product_stage,query_urgency,region,shard,stage,stage_group,tier,type) (
         rate(gitlab_sli_graphql_query_total{env="gstg",job=~"gitlab-rails",type=~"api"}[5m] offset 30s)
       )
+- name: 'SLI Aggregations: api - group_management - 5m burn-rate'
+  interval: 1m
+  rules:
+  - record: sli_aggregations:gitlab_sli_rails_request_error_total:rate_5m
+    expr: |
+      sum by (component,endpoint_id,env,environment,feature_category,fqdn,job,product_stage,region,request_urgency,shard,stage,stage_group,tier,type) (
+        rate(gitlab_sli_rails_request_error_total{env="gstg",type=~"api"}[5m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_sli_rails_request_total:rate_5m
+    expr: |
+      sum by (component,endpoint_id,env,environment,feature_category,fqdn,job,product_stage,region,request_urgency,shard,stage,stage_group,tier,type) (
+        rate(gitlab_sli_rails_request_total{env="gstg",type=~"api"}[5m] offset 30s)
+      )
 - name: 'SLI Aggregations: api - loadbalancer - 5m burn-rate'
   interval: 1m
   rules:
@@ -65,16 +78,6 @@ groups:
     expr: |
       sum by (component,endpoint_id,env,environment,feature_category,fqdn,job,product_stage,region,request_urgency,shard,stage,stage_group,tier,type) (
         rate(gitlab_sli_rails_request_apdex_total{env="gstg",job=~"gitlab-rails",type=~"api"}[5m] offset 30s)
-      )
-  - record: sli_aggregations:gitlab_sli_rails_request_error_total:rate_5m
-    expr: |
-      sum by (component,endpoint_id,env,environment,feature_category,fqdn,job,product_stage,region,request_urgency,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_rails_request_error_total{env="gstg",job=~"gitlab-rails",type=~"api"}[5m] offset 30s)
-      )
-  - record: sli_aggregations:gitlab_sli_rails_request_total:rate_5m
-    expr: |
-      sum by (component,endpoint_id,env,environment,feature_category,fqdn,job,product_stage,region,request_urgency,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_rails_request_total{env="gstg",job=~"gitlab-rails",type=~"api"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: api - workhorse - 5m burn-rate'
   interval: 1m
@@ -125,6 +128,19 @@ groups:
       sum by (component,endpoint_id,env,environment,feature_category,fqdn,job,product_stage,query_urgency,region,shard,stage,stage_group,tier,type) (
         rate(gitlab_sli_graphql_query_total{env="gstg",job=~"gitlab-rails",type=~"api"}[30m] offset 30s)
       )
+- name: 'SLI Aggregations: api - group_management - 30m burn-rate'
+  interval: 2m
+  rules:
+  - record: sli_aggregations:gitlab_sli_rails_request_error_total:rate_30m
+    expr: |
+      sum by (component,endpoint_id,env,environment,feature_category,fqdn,job,product_stage,region,request_urgency,shard,stage,stage_group,tier,type) (
+        rate(gitlab_sli_rails_request_error_total{env="gstg",type=~"api"}[30m] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_sli_rails_request_total:rate_30m
+    expr: |
+      sum by (component,endpoint_id,env,environment,feature_category,fqdn,job,product_stage,region,request_urgency,shard,stage,stage_group,tier,type) (
+        rate(gitlab_sli_rails_request_total{env="gstg",type=~"api"}[30m] offset 30s)
+      )
 - name: 'SLI Aggregations: api - loadbalancer - 30m burn-rate'
   interval: 2m
   rules:
@@ -153,16 +169,6 @@ groups:
     expr: |
       sum by (component,endpoint_id,env,environment,feature_category,fqdn,job,product_stage,region,request_urgency,shard,stage,stage_group,tier,type) (
         rate(gitlab_sli_rails_request_apdex_total{env="gstg",job=~"gitlab-rails",type=~"api"}[30m] offset 30s)
-      )
-  - record: sli_aggregations:gitlab_sli_rails_request_error_total:rate_30m
-    expr: |
-      sum by (component,endpoint_id,env,environment,feature_category,fqdn,job,product_stage,region,request_urgency,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_rails_request_error_total{env="gstg",job=~"gitlab-rails",type=~"api"}[30m] offset 30s)
-      )
-  - record: sli_aggregations:gitlab_sli_rails_request_total:rate_30m
-    expr: |
-      sum by (component,endpoint_id,env,environment,feature_category,fqdn,job,product_stage,region,request_urgency,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_rails_request_total{env="gstg",job=~"gitlab-rails",type=~"api"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: api - workhorse - 30m burn-rate'
   interval: 2m
@@ -213,6 +219,19 @@ groups:
       sum by (component,endpoint_id,env,environment,feature_category,fqdn,job,product_stage,query_urgency,region,shard,stage,stage_group,tier,type) (
         rate(gitlab_sli_graphql_query_total{env="gstg",job=~"gitlab-rails",type=~"api"}[1h] offset 30s)
       )
+- name: 'SLI Aggregations: api - group_management - 1h burn-rate'
+  interval: 1m
+  rules:
+  - record: sli_aggregations:gitlab_sli_rails_request_error_total:rate_1h
+    expr: |
+      sum by (component,endpoint_id,env,environment,feature_category,fqdn,job,product_stage,region,request_urgency,shard,stage,stage_group,tier,type) (
+        rate(gitlab_sli_rails_request_error_total{env="gstg",type=~"api"}[1h] offset 30s)
+      )
+  - record: sli_aggregations:gitlab_sli_rails_request_total:rate_1h
+    expr: |
+      sum by (component,endpoint_id,env,environment,feature_category,fqdn,job,product_stage,region,request_urgency,shard,stage,stage_group,tier,type) (
+        rate(gitlab_sli_rails_request_total{env="gstg",type=~"api"}[1h] offset 30s)
+      )
 - name: 'SLI Aggregations: api - loadbalancer - 1h burn-rate'
   interval: 1m
   rules:
@@ -241,16 +260,6 @@ groups:
     expr: |
       sum by (component,endpoint_id,env,environment,feature_category,fqdn,job,product_stage,region,request_urgency,shard,stage,stage_group,tier,type) (
         rate(gitlab_sli_rails_request_apdex_total{env="gstg",job=~"gitlab-rails",type=~"api"}[1h] offset 30s)
-      )
-  - record: sli_aggregations:gitlab_sli_rails_request_error_total:rate_1h
-    expr: |
-      sum by (component,endpoint_id,env,environment,feature_category,fqdn,job,product_stage,region,request_urgency,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_rails_request_error_total{env="gstg",job=~"gitlab-rails",type=~"api"}[1h] offset 30s)
-      )
-  - record: sli_aggregations:gitlab_sli_rails_request_total:rate_1h
-    expr: |
-      sum by (component,endpoint_id,env,environment,feature_category,fqdn,job,product_stage,region,request_urgency,shard,stage,stage_group,tier,type) (
-        rate(gitlab_sli_rails_request_total{env="gstg",job=~"gitlab-rails",type=~"api"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: api - workhorse - 1h burn-rate'
   interval: 1m

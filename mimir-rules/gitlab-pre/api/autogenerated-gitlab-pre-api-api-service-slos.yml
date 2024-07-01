@@ -58,6 +58,20 @@ groups:
     expr: "0.000500"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
+      component: group_management
+      monitor: global
+      tier: sv
+      type: api
+    expr: "0.995000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      component: group_management
+      monitor: global
+      tier: sv
+      type: api
+    expr: "0.001000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
       component: loadbalancer
       monitor: global
       tier: sv
@@ -149,6 +163,16 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: graphql_query
+      global_aggregation: "no"
+      monitor: global
+      regional_aggregation: "yes"
+      service_aggregation: "no"
+      tier: sv
+      type: api
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: group_management
       global_aggregation: "no"
       monitor: global
       regional_aggregation: "yes"

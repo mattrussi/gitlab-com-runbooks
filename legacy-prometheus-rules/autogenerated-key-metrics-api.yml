@@ -97,6 +97,32 @@ groups:
       )
   - record: gitlab_component_ops:rate
     labels:
+      component: group_management
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        sli_aggregations:gitlab_sli_rails_request_total_rate1m{endpoint_id=~"POST /api/:version/groups|PUT /api/:version/groups/:id",type="api"} offset 30s
+      )
+  - record: gitlab_component_errors:rate
+    labels:
+      component: group_management
+      tier: sv
+      type: api
+    expr: |
+      (
+        sum by (env,environment,stage) (
+          sli_aggregations:gitlab_sli_rails_request_error_total_rate1m{endpoint_id=~"POST /api/:version/groups|PUT /api/:version/groups/:id",type="api"} offset 30s
+        )
+      )
+      or
+      (
+        0 * group by(env,environment,stage) (
+          gitlab_component_ops:rate{component="group_management",tier="sv",type="api"}
+        )
+      )
+  - record: gitlab_component_ops:rate
+    labels:
       component: loadbalancer
       stage: cny
       tier: sv
@@ -365,6 +391,32 @@ groups:
       (
         0 * group by(env,environment,stage) (
           gitlab_component_ops:rate_5m{component="graphql_query",tier="sv",type="api"}
+        )
+      )
+  - record: gitlab_component_ops:rate_5m
+    labels:
+      component: group_management
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        sli_aggregations:gitlab_sli_rails_request_total_rate5m{endpoint_id=~"POST /api/:version/groups|PUT /api/:version/groups/:id",type="api"} offset 30s
+      )
+  - record: gitlab_component_errors:rate_5m
+    labels:
+      component: group_management
+      tier: sv
+      type: api
+    expr: |
+      (
+        sum by (env,environment,stage) (
+          sli_aggregations:gitlab_sli_rails_request_error_total_rate5m{endpoint_id=~"POST /api/:version/groups|PUT /api/:version/groups/:id",type="api"} offset 30s
+        )
+      )
+      or
+      (
+        0 * group by(env,environment,stage) (
+          gitlab_component_ops:rate_5m{component="group_management",tier="sv",type="api"}
         )
       )
   - record: gitlab_component_ops:rate_5m
@@ -641,6 +693,32 @@ groups:
       )
   - record: gitlab_component_ops:rate_30m
     labels:
+      component: group_management
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        sli_aggregations:gitlab_sli_rails_request_total_rate30m{endpoint_id=~"POST /api/:version/groups|PUT /api/:version/groups/:id",type="api"} offset 30s
+      )
+  - record: gitlab_component_errors:rate_30m
+    labels:
+      component: group_management
+      tier: sv
+      type: api
+    expr: |
+      (
+        sum by (env,environment,stage) (
+          sli_aggregations:gitlab_sli_rails_request_error_total_rate30m{endpoint_id=~"POST /api/:version/groups|PUT /api/:version/groups/:id",type="api"} offset 30s
+        )
+      )
+      or
+      (
+        0 * group by(env,environment,stage) (
+          gitlab_component_ops:rate_30m{component="group_management",tier="sv",type="api"}
+        )
+      )
+  - record: gitlab_component_ops:rate_30m
+    labels:
       component: loadbalancer
       stage: cny
       tier: sv
@@ -909,6 +987,32 @@ groups:
       (
         0 * group by(env,environment,stage) (
           gitlab_component_ops:rate_1h{component="graphql_query",tier="sv",type="api"}
+        )
+      )
+  - record: gitlab_component_ops:rate_1h
+    labels:
+      component: group_management
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        sli_aggregations:gitlab_sli_rails_request_total_rate1h{endpoint_id=~"POST /api/:version/groups|PUT /api/:version/groups/:id",type="api"} offset 30s
+      )
+  - record: gitlab_component_errors:rate_1h
+    labels:
+      component: group_management
+      tier: sv
+      type: api
+    expr: |
+      (
+        sum by (env,environment,stage) (
+          sli_aggregations:gitlab_sli_rails_request_error_total_rate1h{endpoint_id=~"POST /api/:version/groups|PUT /api/:version/groups/:id",type="api"} offset 30s
+        )
+      )
+      or
+      (
+        0 * group by(env,environment,stage) (
+          gitlab_component_ops:rate_1h{component="group_management",tier="sv",type="api"}
         )
       )
   - record: gitlab_component_ops:rate_1h
@@ -1185,6 +1289,32 @@ groups:
       )
   - record: gitlab_component_ops:rate_6h
     labels:
+      component: group_management
+      tier: sv
+      type: api
+    expr: |
+      sum by (env,environment,stage) (
+        sli_aggregations:gitlab_sli_rails_request_total_rate6h{endpoint_id=~"POST /api/:version/groups|PUT /api/:version/groups/:id",type="api"} offset 30s
+      )
+  - record: gitlab_component_errors:rate_6h
+    labels:
+      component: group_management
+      tier: sv
+      type: api
+    expr: |
+      (
+        sum by (env,environment,stage) (
+          sli_aggregations:gitlab_sli_rails_request_error_total_rate6h{endpoint_id=~"POST /api/:version/groups|PUT /api/:version/groups/:id",type="api"} offset 30s
+        )
+      )
+      or
+      (
+        0 * group by(env,environment,stage) (
+          gitlab_component_ops:rate_6h{component="group_management",tier="sv",type="api"}
+        )
+      )
+  - record: gitlab_component_ops:rate_6h
+    labels:
       component: loadbalancer
       stage: cny
       tier: sv
@@ -1376,6 +1506,15 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: graphql_query
+      global_aggregation: "no"
+      regional_aggregation: "yes"
+      service_aggregation: "no"
+      tier: sv
+      type: api
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: group_management
       global_aggregation: "no"
       regional_aggregation: "yes"
       service_aggregation: "no"
