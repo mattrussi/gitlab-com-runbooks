@@ -39,7 +39,7 @@ groups:
           description:
             WAL-G wal-push archiving WALs to GCS might be not working. Please follow the runbook
             to review the problem.
-          runbook: docs/patroni/alerts/walgBaseBackupDelayed.md
+          runbook: docs/patroni/alerts/walgBaseBackup.md
           title: Last WAL was archived {{ .Value | humanizeDuration }} ago for env {{ $labels.environment }}.
       - alert: walgBaseBackupDelayed
         expr: gitlab_com:last_walg_successful_basebackup_age_in_hours{env="gprd"} >= 30
@@ -67,4 +67,4 @@ groups:
           title: GitLab Job has failed
           description: >
             The GitLab job "{{ $labels.job}}" resource "{{ $labels.resource }}" has failed.
-          runbook: docs/uncategorized/job_completion.md
+          runbook: docs/patroni/alerts/walgBaseBackup.md

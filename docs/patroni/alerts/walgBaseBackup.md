@@ -1,4 +1,4 @@
-# walgBaseBackupDelayed
+# walgBaseBackupDelayed, WALGBaseBackupFailed
 
 **Table of Contents**
 
@@ -6,10 +6,11 @@
 
 ## Overview
 
-- This alert indicates that the `base_backup` for WAL-G has not finished in a certain amount of time.
-- This can be due to load on the database servers and network conditions.
+- walgBaseBackupDelayed alert indicates that the `base_backup` for WAL-G has not finished in a certain amount of time.
+- WALGBaseBackupFailed means the most recent `base_backup` has failed.
+- This can be due to load on the database servers, network conditions, or problems with GCS.
 - This is not a user impacting alert.
-- When this alert fires, it is expected that the recipient of the alert will check in on the `base_backup`, ensure that it is running, and if not try to determine what has interrupted the backup.
+- When this alert fires, it is expected that the recipient of the alert will check in on the `base_backup` and try to determine what has interrupted or failed the backup.
 
 ## Services
 
@@ -18,8 +19,15 @@
 
 ## Metrics
 
-- This alert fires if the most recent `base_backup` is older than 30 hours.
+### walgBaseBackupDelayed
+
+- walgBaseBackupDelayed fires if the most recent `base_backup` is older than 30 hours.
 - This is recorded via the `gitlab_com:last_walg_successful_basebackup_age_in_hours` recording rule.
+
+### WALGBaseBackupFailed
+
+- walgBaseBackupDelayed fires if the most recent `base_backup` is older than 30 hours.
+- This is determined by the metric `gitlab_job_failed{resource="walg-basebackup", type!~".+logical.+", env="gprd"} == 1`
 
 ## Alert Behavior
 
