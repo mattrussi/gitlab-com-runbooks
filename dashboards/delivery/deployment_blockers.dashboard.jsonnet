@@ -178,29 +178,116 @@ local tablePanel =
       '$PROMETHEUS_DS',
       blockersCount,
     )
-    + g.query.prometheus.withFormat("time_series")
-    + g.query.prometheus.withRefId("blockers_count"),
+    + g.query.prometheus.withFormat("table"),
 
     g.query.prometheus.new(
       '$PROMETHEUS_DS',
       gprdHoursBlocked,
     )
-    + g.query.prometheus.withFormat("time_series")
-    + g.query.prometheus.withRefId("gprd_hours_blocked"),
+    + g.query.prometheus.withFormat("table"),
 
     g.query.prometheus.new(
       '$PROMETHEUS_DS',
       gstgHoursBlocked,
     )
-    + g.query.prometheus.withFormat("time_series")
-    + g.query.prometheus.withRefId("gstg_hours_blocked"),
+    + g.query.prometheus.withFormat("table"),
 
   ])
   + g.panel.table.queryOptions.withTransformations([
-    g.panel.table.queryOptions.transformation.withId("timeSeriesTable")
-    + g.panel.table.queryOptions.transformation.withOptions({}),
     g.panel.table.queryOptions.transformation.withId("merge")
     + g.panel.table.queryOptions.transformation.withOptions({}),
+    g.panel.table.queryOptions.transformation.withId("sortBy")
+    + g.panel.table.queryOptions.transformation.withOptions({
+      "fields": {},
+      "sort": [
+        {
+          "field": "week"
+        }
+      ]
+    }),
+    g.panel.table.queryOptions.transformation.withId("groupBy")
+    + g.panel.table.queryOptions.transformation.withOptions({
+      "fields": {
+        "Value #A": {
+          "aggregations": [
+            "lastNotNull"
+          ],
+          "operation": "aggregate"
+        },
+        "Value #B": {
+          "aggregations": [
+            "lastNotNull"
+          ],
+          "operation": "aggregate"
+        },
+        "Value #C": {
+          "aggregations": [
+            "lastNotNull"
+          ],
+          "operation": "aggregate"
+        },
+        "root_cause": {
+          "aggregations": [],
+          "operation": "groupby"
+        },
+        "week": {
+          "aggregations": [],
+          "operation": "groupby"
+        }
+      }
+    }),
+    g.panel.table.queryOptions.transformation.withId("groupBy")
+    + g.panel.table.queryOptions.transformation.withOptions({
+      "fields": {
+        "Value #A": {
+          "aggregations": [
+            "sum"
+          ],
+          "operation": "aggregate"
+        },
+        "Value #A (lastNotNull)": {
+          "aggregations": [
+            "sum"
+          ],
+          "operation": "aggregate"
+        },
+        "Value #B": {
+          "aggregations": [
+            "sum"
+          ],
+          "operation": "aggregate"
+        },
+        "Value #B (lastNotNull)": {
+          "aggregations": [
+            "sum"
+          ],
+          "operation": "aggregate"
+        },
+        "Value #C": {
+          "aggregations": [
+            "sum"
+          ],
+          "operation": "aggregate"
+        },
+        "Value #C (lastNotNull)": {
+          "aggregations": [
+            "sum"
+          ],
+          "operation": "aggregate"
+        },
+        "root_cause": {
+          "aggregations": [],
+          "operation": "aggregate"
+        },
+        "week": {
+          "aggregations": [],
+          "operation": "groupby"
+        },
+        "week_index": {
+          "aggregations": []
+        }
+      }
+    }),
     g.panel.table.queryOptions.transformation.withId("calculateField")
     + g.panel.table.queryOptions.transformation.withOptions({
       alias: "count",
@@ -223,16 +310,18 @@ local tablePanel =
     }),
     g.panel.table.queryOptions.transformation.withId("organize")
     + g.panel.table.queryOptions.transformation.withOptions({
-      excludeByName: {
-        count: true,
-        root_cause: true
+      "excludeByName": {
+        "count": true
       },
-      includeByName: {},
-      indexByName: {},
-      renameByName: {
-        "Trend #blockers_count": "blockers_count",
-        "Trend #gprd_hours_blocked": "gprd_hours_blocked",
-        "Trend #gstg_hours_blocked": "gstg_hours_blocked"
+      "includeByName": {},
+      "indexByName": {},
+      "renameByName": {
+        "Value #A (lastNotNull) (sum)": "blockers_count",
+        "Value #A (sum)": "blockers_count",
+        "Value #B (lastNotNull) (sum)": "gprd_hours_blocked",
+        "Value #B (sum)": "gprd_hours_blocked",
+        "Value #C (lastNotNull) (sum)": "gstg_hours_blocked",
+        "Value #C (sum)": "gstg_hours_blocked"
       }
     })
   ]);
