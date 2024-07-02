@@ -5,6 +5,8 @@ local histogramApdex = metricsCatalog.histogramApdex;
 metricsCatalog.serviceDefinition({
   type: 'mailgun',
   tier: 'sv',
+  tenants: ['gitlab-ops'],
+
   serviceIsStageless: true,
   monitoringThresholds: {
     errorRatio: 0.9,

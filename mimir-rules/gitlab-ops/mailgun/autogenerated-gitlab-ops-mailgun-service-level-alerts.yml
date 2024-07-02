@@ -14,7 +14,7 @@ groups:
       grafana_dashboard_id: mailgun-main/mailgun-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/mailgun-main/mailgun-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_datasource_id: mimir-gitlab-gprd
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3443616108"
       grafana_variables: environment,stage
@@ -37,18 +37,18 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_1h{component="mail_delivery",env="gprd",monitor="global",type="mailgun"}
+          gitlab_component_errors:ratio_1h{component="mail_delivery",env="ops",monitor="global",type="mailgun"}
           > (14.4 * 0.100000)
         )
         and
         (
-          gitlab_component_errors:ratio_5m{component="mail_delivery",env="gprd",monitor="global",type="mailgun"}
+          gitlab_component_errors:ratio_5m{component="mail_delivery",env="ops",monitor="global",type="mailgun"}
           > (14.4 * 0.100000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="mail_delivery",env="gprd",monitor="global",type="mailgun"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="mail_delivery",env="ops",monitor="global",type="mailgun"}) >= 1
       )
   - alert: MailgunServiceMailDeliveryErrorSLOViolation
     for: 2m
@@ -60,7 +60,7 @@ groups:
       grafana_dashboard_id: mailgun-main/mailgun-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/mailgun-main/mailgun-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_datasource_id: mimir-gitlab-gprd
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3443616108"
       grafana_variables: environment,stage
@@ -83,18 +83,18 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_6h{component="mail_delivery",env="gprd",monitor="global",type="mailgun"}
+          gitlab_component_errors:ratio_6h{component="mail_delivery",env="ops",monitor="global",type="mailgun"}
           > (6 * 0.100000)
         )
         and
         (
-          gitlab_component_errors:ratio_30m{component="mail_delivery",env="gprd",monitor="global",type="mailgun"}
+          gitlab_component_errors:ratio_30m{component="mail_delivery",env="ops",monitor="global",type="mailgun"}
           > (6 * 0.100000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="mail_delivery",env="gprd",monitor="global",type="mailgun"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="mail_delivery",env="ops",monitor="global",type="mailgun"}) >= 0.16667
       )
   - alert: MailgunServiceMailDeliveryTrafficCessation
     for: 5m
@@ -106,7 +106,7 @@ groups:
       grafana_dashboard_id: mailgun-main/mailgun-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/mailgun-main/mailgun-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_datasource_id: mimir-gitlab-gprd
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2745539985"
       grafana_variables: environment,stage
@@ -126,9 +126,9 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_30m{component="mail_delivery",env="gprd",monitor="global",stage="main",type="mailgun"} == 0
+      gitlab_component_ops:rate_30m{component="mail_delivery",env="ops",monitor="global",stage="main",type="mailgun"} == 0
       and
-      gitlab_component_ops:rate_30m{component="mail_delivery",env="gprd",monitor="global",stage="main",type="mailgun"} offset 1h >= 0.16666666666666666
+      gitlab_component_ops:rate_30m{component="mail_delivery",env="ops",monitor="global",stage="main",type="mailgun"} offset 1h >= 0.16666666666666666
   - alert: MailgunServiceMailDeliveryTrafficAbsent
     for: 30m
     annotations:
@@ -141,7 +141,7 @@ groups:
       grafana_dashboard_id: mailgun-main/mailgun-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/mailgun-main/mailgun-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_datasource_id: mimir-gitlab-gprd
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2745539985"
       grafana_variables: environment,stage
@@ -161,6 +161,6 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_5m{component="mail_delivery",env="gprd",monitor="global",stage="main",type="mailgun"} offset 1h
+      gitlab_component_ops:rate_5m{component="mail_delivery",env="ops",monitor="global",stage="main",type="mailgun"} offset 1h
       unless
-      gitlab_component_ops:rate_5m{component="mail_delivery",env="gprd",monitor="global",stage="main",type="mailgun"}
+      gitlab_component_ops:rate_5m{component="mail_delivery",env="ops",monitor="global",stage="main",type="mailgun"}

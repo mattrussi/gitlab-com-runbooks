@@ -13,7 +13,7 @@ groups:
       type: mailgun
     expr: |
       sum by (env,environment) (
-        sli_aggregations:mailgun_delivery_time_seconds_bucket:rate_5m{env="gprd",le="60"}
+        sli_aggregations:mailgun_delivery_time_seconds_bucket:rate_5m{env="ops",le="60"}
       )
   - record: gitlab_component_apdex:weight:score_5m
     labels:
@@ -24,7 +24,7 @@ groups:
       type: mailgun
     expr: |
       sum by (env,environment) (
-        sli_aggregations:mailgun_delivery_time_seconds_bucket:rate_5m{env="gprd",le="+Inf"}
+        sli_aggregations:mailgun_delivery_time_seconds_bucket:rate_5m{env="ops",le="+Inf"}
       )
   - record: gitlab_component_ops:rate_5m
     labels:
@@ -35,7 +35,7 @@ groups:
       type: mailgun
     expr: |
       sum by (env,environment) (
-        sli_aggregations:mailgun_delivery_accepted_total:rate_5m{env="gprd"} offset 30s
+        sli_aggregations:mailgun_delivery_accepted_total:rate_5m{env="ops"} offset 30s
       )
   - record: gitlab_component_errors:rate_5m
     labels:
@@ -47,13 +47,13 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          sli_aggregations:mailgun_delivery_errors_total:rate_5m{env="gprd"} offset 30s
+          sli_aggregations:mailgun_delivery_errors_total:rate_5m{env="ops"} offset 30s
         )
       )
       or
       (
         0 * group by(env,environment) (
-          gitlab_component_ops:rate_5m{component="mail_delivery",env="gprd",monitor="global",stage="main",tier="sv",type="mailgun"}
+          gitlab_component_ops:rate_5m{component="mail_delivery",env="ops",monitor="global",stage="main",tier="sv",type="mailgun"}
         )
       )
   - record: gitlab_component_errors:ratio_5m
@@ -64,11 +64,11 @@ groups:
       type: mailgun
     expr: |
       sum by (env,environment,stage) (
-        gitlab_component_errors:rate_5m{component="mail_delivery",env="gprd",monitor="global",tier="sv",type="mailgun"} offset 30s
+        gitlab_component_errors:rate_5m{component="mail_delivery",env="ops",monitor="global",tier="sv",type="mailgun"} offset 30s
       )
       /
       sum by (env,environment,stage) (
-        gitlab_component_ops:rate_5m{component="mail_delivery",env="gprd",monitor="global",tier="sv",type="mailgun"} offset 30s
+        gitlab_component_ops:rate_5m{component="mail_delivery",env="ops",monitor="global",tier="sv",type="mailgun"} offset 30s
       )
   - record: gitlab_component_apdex:ratio_5m
     labels:
@@ -78,11 +78,11 @@ groups:
       type: mailgun
     expr: |
       sum by (env,environment,stage) (
-        gitlab_component_apdex:success:rate_5m{component="mail_delivery",env="gprd",monitor="global",tier="sv",type="mailgun"} offset 30s
+        gitlab_component_apdex:success:rate_5m{component="mail_delivery",env="ops",monitor="global",tier="sv",type="mailgun"} offset 30s
       )
       /
       sum by (env,environment,stage) (
-        gitlab_component_apdex:weight:score_5m{component="mail_delivery",env="gprd",monitor="global",tier="sv",type="mailgun"} offset 30s
+        gitlab_component_apdex:weight:score_5m{component="mail_delivery",env="ops",monitor="global",tier="sv",type="mailgun"} offset 30s
       )
 - name: 'Global SLI Metrics: mailgun - Burn-Rate 30m'
   interval: 2m
@@ -96,7 +96,7 @@ groups:
       type: mailgun
     expr: |
       sum by (env,environment) (
-        sli_aggregations:mailgun_delivery_time_seconds_bucket:rate_30m{env="gprd",le="60"}
+        sli_aggregations:mailgun_delivery_time_seconds_bucket:rate_30m{env="ops",le="60"}
       )
   - record: gitlab_component_apdex:weight:score_30m
     labels:
@@ -107,7 +107,7 @@ groups:
       type: mailgun
     expr: |
       sum by (env,environment) (
-        sli_aggregations:mailgun_delivery_time_seconds_bucket:rate_30m{env="gprd",le="+Inf"}
+        sli_aggregations:mailgun_delivery_time_seconds_bucket:rate_30m{env="ops",le="+Inf"}
       )
   - record: gitlab_component_ops:rate_30m
     labels:
@@ -118,7 +118,7 @@ groups:
       type: mailgun
     expr: |
       sum by (env,environment) (
-        sli_aggregations:mailgun_delivery_accepted_total:rate_30m{env="gprd"} offset 30s
+        sli_aggregations:mailgun_delivery_accepted_total:rate_30m{env="ops"} offset 30s
       )
   - record: gitlab_component_errors:rate_30m
     labels:
@@ -130,13 +130,13 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          sli_aggregations:mailgun_delivery_errors_total:rate_30m{env="gprd"} offset 30s
+          sli_aggregations:mailgun_delivery_errors_total:rate_30m{env="ops"} offset 30s
         )
       )
       or
       (
         0 * group by(env,environment) (
-          gitlab_component_ops:rate_30m{component="mail_delivery",env="gprd",monitor="global",stage="main",tier="sv",type="mailgun"}
+          gitlab_component_ops:rate_30m{component="mail_delivery",env="ops",monitor="global",stage="main",tier="sv",type="mailgun"}
         )
       )
   - record: gitlab_component_errors:ratio_30m
@@ -147,11 +147,11 @@ groups:
       type: mailgun
     expr: |
       sum by (env,environment,stage) (
-        gitlab_component_errors:rate_30m{component="mail_delivery",env="gprd",monitor="global",tier="sv",type="mailgun"} offset 30s
+        gitlab_component_errors:rate_30m{component="mail_delivery",env="ops",monitor="global",tier="sv",type="mailgun"} offset 30s
       )
       /
       sum by (env,environment,stage) (
-        gitlab_component_ops:rate_30m{component="mail_delivery",env="gprd",monitor="global",tier="sv",type="mailgun"} offset 30s
+        gitlab_component_ops:rate_30m{component="mail_delivery",env="ops",monitor="global",tier="sv",type="mailgun"} offset 30s
       )
   - record: gitlab_component_apdex:ratio_30m
     labels:
@@ -161,11 +161,11 @@ groups:
       type: mailgun
     expr: |
       sum by (env,environment,stage) (
-        gitlab_component_apdex:success:rate_30m{component="mail_delivery",env="gprd",monitor="global",tier="sv",type="mailgun"} offset 30s
+        gitlab_component_apdex:success:rate_30m{component="mail_delivery",env="ops",monitor="global",tier="sv",type="mailgun"} offset 30s
       )
       /
       sum by (env,environment,stage) (
-        gitlab_component_apdex:weight:score_30m{component="mail_delivery",env="gprd",monitor="global",tier="sv",type="mailgun"} offset 30s
+        gitlab_component_apdex:weight:score_30m{component="mail_delivery",env="ops",monitor="global",tier="sv",type="mailgun"} offset 30s
       )
 - name: 'Global SLI Metrics: mailgun - Burn-Rate 1h'
   interval: 1m
@@ -179,7 +179,7 @@ groups:
       type: mailgun
     expr: |
       sum by (env,environment) (
-        sli_aggregations:mailgun_delivery_time_seconds_bucket:rate_1h{env="gprd",le="60"}
+        sli_aggregations:mailgun_delivery_time_seconds_bucket:rate_1h{env="ops",le="60"}
       )
   - record: gitlab_component_apdex:weight:score_1h
     labels:
@@ -190,7 +190,7 @@ groups:
       type: mailgun
     expr: |
       sum by (env,environment) (
-        sli_aggregations:mailgun_delivery_time_seconds_bucket:rate_1h{env="gprd",le="+Inf"}
+        sli_aggregations:mailgun_delivery_time_seconds_bucket:rate_1h{env="ops",le="+Inf"}
       )
   - record: gitlab_component_ops:rate_1h
     labels:
@@ -201,7 +201,7 @@ groups:
       type: mailgun
     expr: |
       sum by (env,environment) (
-        sli_aggregations:mailgun_delivery_accepted_total:rate_1h{env="gprd"} offset 30s
+        sli_aggregations:mailgun_delivery_accepted_total:rate_1h{env="ops"} offset 30s
       )
   - record: gitlab_component_errors:rate_1h
     labels:
@@ -213,13 +213,13 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          sli_aggregations:mailgun_delivery_errors_total:rate_1h{env="gprd"} offset 30s
+          sli_aggregations:mailgun_delivery_errors_total:rate_1h{env="ops"} offset 30s
         )
       )
       or
       (
         0 * group by(env,environment) (
-          gitlab_component_ops:rate_1h{component="mail_delivery",env="gprd",monitor="global",stage="main",tier="sv",type="mailgun"}
+          gitlab_component_ops:rate_1h{component="mail_delivery",env="ops",monitor="global",stage="main",tier="sv",type="mailgun"}
         )
       )
   - record: gitlab_component_errors:ratio_1h
@@ -230,11 +230,11 @@ groups:
       type: mailgun
     expr: |
       sum by (env,environment,stage) (
-        gitlab_component_errors:rate_1h{component="mail_delivery",env="gprd",monitor="global",tier="sv",type="mailgun"} offset 30s
+        gitlab_component_errors:rate_1h{component="mail_delivery",env="ops",monitor="global",tier="sv",type="mailgun"} offset 30s
       )
       /
       sum by (env,environment,stage) (
-        gitlab_component_ops:rate_1h{component="mail_delivery",env="gprd",monitor="global",tier="sv",type="mailgun"} offset 30s
+        gitlab_component_ops:rate_1h{component="mail_delivery",env="ops",monitor="global",tier="sv",type="mailgun"} offset 30s
       )
   - record: gitlab_component_apdex:ratio_1h
     labels:
@@ -244,11 +244,11 @@ groups:
       type: mailgun
     expr: |
       sum by (env,environment,stage) (
-        gitlab_component_apdex:success:rate_1h{component="mail_delivery",env="gprd",monitor="global",tier="sv",type="mailgun"} offset 30s
+        gitlab_component_apdex:success:rate_1h{component="mail_delivery",env="ops",monitor="global",tier="sv",type="mailgun"} offset 30s
       )
       /
       sum by (env,environment,stage) (
-        gitlab_component_apdex:weight:score_1h{component="mail_delivery",env="gprd",monitor="global",tier="sv",type="mailgun"} offset 30s
+        gitlab_component_apdex:weight:score_1h{component="mail_delivery",env="ops",monitor="global",tier="sv",type="mailgun"} offset 30s
       )
 - name: 'Global SLI Metrics: mailgun - Burn-Rate 6h'
   interval: 2m
@@ -262,7 +262,7 @@ groups:
       type: mailgun
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab_component_apdex:success:rate_1h{component="mail_delivery",env="gprd",monitor="global",tier="sv",type="mailgun"}[6h] offset 30s)
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="mail_delivery",env="ops",monitor="global",tier="sv",type="mailgun"}[6h] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_6h
     labels:
@@ -273,7 +273,7 @@ groups:
       type: mailgun
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab_component_apdex:weight:score_1h{component="mail_delivery",env="gprd",monitor="global",tier="sv",type="mailgun"}[6h] offset 30s)
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="mail_delivery",env="ops",monitor="global",tier="sv",type="mailgun"}[6h] offset 30s)
       )
   - record: gitlab_component_ops:rate_6h
     labels:
@@ -284,7 +284,7 @@ groups:
       type: mailgun
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab_component_ops:rate_1h{component="mail_delivery",env="gprd",monitor="global",tier="sv",type="mailgun"}[6h] offset 30s)
+        avg_over_time(gitlab_component_ops:rate_1h{component="mail_delivery",env="ops",monitor="global",tier="sv",type="mailgun"}[6h] offset 30s)
       )
   - record: gitlab_component_errors:rate_6h
     labels:
@@ -295,7 +295,7 @@ groups:
       type: mailgun
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab_component_errors:rate_1h{component="mail_delivery",env="gprd",monitor="global",tier="sv",type="mailgun"}[6h] offset 30s)
+        avg_over_time(gitlab_component_errors:rate_1h{component="mail_delivery",env="ops",monitor="global",tier="sv",type="mailgun"}[6h] offset 30s)
       )
   - record: gitlab_component_errors:ratio_6h
     labels:
@@ -305,11 +305,11 @@ groups:
       type: mailgun
     expr: |
       sum by (env,environment,stage) (
-        gitlab_component_errors:rate_6h{component="mail_delivery",env="gprd",monitor="global",tier="sv",type="mailgun"} offset 30s
+        gitlab_component_errors:rate_6h{component="mail_delivery",env="ops",monitor="global",tier="sv",type="mailgun"} offset 30s
       )
       /
       sum by (env,environment,stage) (
-        gitlab_component_ops:rate_6h{component="mail_delivery",env="gprd",monitor="global",tier="sv",type="mailgun"} offset 30s
+        gitlab_component_ops:rate_6h{component="mail_delivery",env="ops",monitor="global",tier="sv",type="mailgun"} offset 30s
       )
   - record: gitlab_component_apdex:ratio_6h
     labels:
@@ -319,11 +319,11 @@ groups:
       type: mailgun
     expr: |
       sum by (env,environment,stage) (
-        gitlab_component_apdex:success:rate_6h{component="mail_delivery",env="gprd",monitor="global",tier="sv",type="mailgun"} offset 30s
+        gitlab_component_apdex:success:rate_6h{component="mail_delivery",env="ops",monitor="global",tier="sv",type="mailgun"} offset 30s
       )
       /
       sum by (env,environment,stage) (
-        gitlab_component_apdex:weight:score_6h{component="mail_delivery",env="gprd",monitor="global",tier="sv",type="mailgun"} offset 30s
+        gitlab_component_apdex:weight:score_6h{component="mail_delivery",env="ops",monitor="global",tier="sv",type="mailgun"} offset 30s
       )
 - name: 'Global SLI Metrics: mailgun - Burn-Rate 3d'
   interval: 2m
@@ -337,7 +337,7 @@ groups:
       type: mailgun
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab_component_apdex:success:rate_1h{component="mail_delivery",env="gprd",monitor="global",tier="sv",type="mailgun"}[3d] offset 30s)
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="mail_delivery",env="ops",monitor="global",tier="sv",type="mailgun"}[3d] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_3d
     labels:
@@ -348,7 +348,7 @@ groups:
       type: mailgun
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab_component_apdex:weight:score_1h{component="mail_delivery",env="gprd",monitor="global",tier="sv",type="mailgun"}[3d] offset 30s)
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="mail_delivery",env="ops",monitor="global",tier="sv",type="mailgun"}[3d] offset 30s)
       )
   - record: gitlab_component_ops:rate_3d
     labels:
@@ -359,7 +359,7 @@ groups:
       type: mailgun
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab_component_ops:rate_1h{component="mail_delivery",env="gprd",monitor="global",tier="sv",type="mailgun"}[3d] offset 30s)
+        avg_over_time(gitlab_component_ops:rate_1h{component="mail_delivery",env="ops",monitor="global",tier="sv",type="mailgun"}[3d] offset 30s)
       )
   - record: gitlab_component_errors:rate_3d
     labels:
@@ -370,7 +370,7 @@ groups:
       type: mailgun
     expr: |
       sum by (env,environment) (
-        avg_over_time(gitlab_component_errors:rate_1h{component="mail_delivery",env="gprd",monitor="global",tier="sv",type="mailgun"}[3d] offset 30s)
+        avg_over_time(gitlab_component_errors:rate_1h{component="mail_delivery",env="ops",monitor="global",tier="sv",type="mailgun"}[3d] offset 30s)
       )
   - record: gitlab_component_errors:ratio_3d
     labels:
@@ -380,11 +380,11 @@ groups:
       type: mailgun
     expr: |
       sum by (env,environment,stage) (
-        gitlab_component_errors:rate_3d{component="mail_delivery",env="gprd",monitor="global",tier="sv",type="mailgun"} offset 30s
+        gitlab_component_errors:rate_3d{component="mail_delivery",env="ops",monitor="global",tier="sv",type="mailgun"} offset 30s
       )
       /
       sum by (env,environment,stage) (
-        gitlab_component_ops:rate_3d{component="mail_delivery",env="gprd",monitor="global",tier="sv",type="mailgun"} offset 30s
+        gitlab_component_ops:rate_3d{component="mail_delivery",env="ops",monitor="global",tier="sv",type="mailgun"} offset 30s
       )
   - record: gitlab_component_apdex:ratio_3d
     labels:
@@ -394,9 +394,9 @@ groups:
       type: mailgun
     expr: |
       sum by (env,environment,stage) (
-        gitlab_component_apdex:success:rate_3d{component="mail_delivery",env="gprd",monitor="global",tier="sv",type="mailgun"} offset 30s
+        gitlab_component_apdex:success:rate_3d{component="mail_delivery",env="ops",monitor="global",tier="sv",type="mailgun"} offset 30s
       )
       /
       sum by (env,environment,stage) (
-        gitlab_component_apdex:weight:score_3d{component="mail_delivery",env="gprd",monitor="global",tier="sv",type="mailgun"} offset 30s
+        gitlab_component_apdex:weight:score_3d{component="mail_delivery",env="ops",monitor="global",tier="sv",type="mailgun"} offset 30s
       )
