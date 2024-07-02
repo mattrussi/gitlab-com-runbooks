@@ -586,12 +586,12 @@ groups:
       (
         (
           gitlab_component_errors:confidence:ratio_1h{component="graphql_query",confidence="98%",env="gprd",monitor="global",type="api"}
-          > (14.4 * 0.000500)
+          > (14.4 * 0.001000)
         )
         and
         (
           gitlab_component_errors:confidence:ratio_5m{component="graphql_query",confidence="98%",env="gprd",monitor="global",type="api"}
-          > (14.4 * 0.000500)
+          > (14.4 * 0.001000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -642,12 +642,12 @@ groups:
       (
         (
           gitlab_component_errors:confidence:ratio_6h{component="graphql_query",confidence="98%",env="gprd",monitor="global",type="api"}
-          > (6 * 0.000500)
+          > (6 * 0.001000)
         )
         and
         (
           gitlab_component_errors:confidence:ratio_30m{component="graphql_query",confidence="98%",env="gprd",monitor="global",type="api"}
-          > (6 * 0.000500)
+          > (6 * 0.001000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -699,12 +699,12 @@ groups:
       (
         (
           gitlab_regional_sli_errors:ratio_1h{component="graphql_query",env="gprd",monitor="global",type="api"}
-          > (14.4 * 0.000500)
+          > (14.4 * 0.001000)
         )
         and
         (
           gitlab_regional_sli_errors:ratio_5m{component="graphql_query",env="gprd",monitor="global",type="api"}
-          > (14.4 * 0.000500)
+          > (14.4 * 0.001000)
         )
       )
       and on(env,environment,tier,type,stage,region,component)
@@ -756,12 +756,12 @@ groups:
       (
         (
           gitlab_regional_sli_errors:ratio_6h{component="graphql_query",env="gprd",monitor="global",type="api"}
-          > (6 * 0.000500)
+          > (6 * 0.001000)
         )
         and
         (
           gitlab_regional_sli_errors:ratio_30m{component="graphql_query",env="gprd",monitor="global",type="api"}
-          > (6 * 0.000500)
+          > (6 * 0.001000)
         )
       )
       and on(env,environment,tier,type,stage,region,component)

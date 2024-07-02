@@ -210,7 +210,9 @@ metricsCatalog.serviceDefinition({
         toolingLinks.kibana(title='Rails', index='rails_graphql'),
       ],
       monitoringThresholds+: {
-        errorRatio: 0.9995,
+        // lowered from 0.9995 until https://gitlab.com/gitlab-org/gitlab/-/issues/469590
+        // is resolved.
+        errorRatio: 0.999,
       },
       dependsOn: dependOnPatroni.sqlComponents,
     }
