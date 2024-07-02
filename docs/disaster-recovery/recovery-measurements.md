@@ -32,26 +32,28 @@ Ideally, this measurement is designed to inform the overall flow and duration of
 
 ### VM Recreation Times
 
-| Date | Environment | Terraform Provision Time | Bootstrap Time | Notes |
+| Date | Environment | VM Provision Time | Bootstrap Time | Notes |
 | ---- | ----------- | ------------------------ | -------------- | ----- |
-| 2024-06-20 | GPRD | XX:XX | XX:XX | N/A |
+| 2024-06-20 | GPRD | 00:24:13 | 00:7:11 | Initial test of using OS disk snapshots for restore in GPRD. [Change issue](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/18157) |
+| 2024-06-10 | GSTG | 00:14:21 | 00:8:01 | [Game Day change issue](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/18091) |
 
 ### Gameday Zonal Outage DR Process Time
 
 | Date | Environment | Duration | Notes |
 | ---- | ----------- | -------- | ----- |
-| 2024-XX-XX | GSTG | XX:XX | N/A |
+| 2024-06-10 | GSTG | 01:20:00 | *Time difference is between the change::in-progress & change::complete labels being set. Doesn't include time to create MRs. |
 
 ## Patroni/PGBouncer
 
 ### VM Recreation Times
 
-| Date | Environment | Terraform Provision Time | Bootstrap Time | Notes |
+| Date | Environment | VM Provision Time | Bootstrap Time | Notes |
 | ---- | ----------- | ------------------------ | -------------- | ----- |
-| 2024-06-20 | GPRD | XX:XX | XX:XX | N/A |
+| 2024-04-25 | GSTG | HH:MM:SS | 00:06:00 | Collection of a Patroni bootstrap duration baseline while using OS disk snapshots. Terraform apply duration was not recorded. |
+| 2024-04-25 | GSTG | HH:MM:SS | 00:35:00 | Collection of a Patroni bootstrap duration baseline while using a clean Ubuntu image. Terraform apply duration was not recorded. |
 
 ### Gameday Zonal Outage DR Process Time
 
 | Date | Environment | Duration | Notes |
 | ---- | ----------- | -------- | ----- |
-| 2024-XX-XX | GSTG | XX:XX | N/A |
+| 2024-XX-XX | GSTG | HH:MM:SS | N/A |
