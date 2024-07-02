@@ -55,7 +55,7 @@ groups:
       monitor: global
       tier: sv
       type: api
-    expr: "0.000500"
+    expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: loadbalancer
