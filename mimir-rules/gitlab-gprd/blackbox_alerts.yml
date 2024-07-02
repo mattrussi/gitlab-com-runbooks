@@ -59,7 +59,7 @@ groups:
 
 # SSL Alerts for GSTG
 
-- name: SSL Certificates
+- name: SSL Certificates for GSTG
   rules:
   - record: domain:probe_ssl_earliest_cert_expiry:min
     expr: |
