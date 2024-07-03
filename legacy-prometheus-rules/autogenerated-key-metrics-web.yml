@@ -92,6 +92,32 @@ groups:
       sum by (env,environment,stage) (
         sli_aggregations:gitlab_sli_global_search_apdex_total_rate1m{job="gitlab-rails",type="web"} offset 30s
       )
+  - record: gitlab_component_ops:rate
+    labels:
+      component: group_management
+      tier: sv
+      type: web
+    expr: |
+      sum by (env,environment,stage) (
+        sli_aggregations:gitlab_sli_rails_request_total_rate1m{endpoint_id=~"GroupsController#create|GroupsController#update",type="web"} offset 30s
+      )
+  - record: gitlab_component_errors:rate
+    labels:
+      component: group_management
+      tier: sv
+      type: web
+    expr: |
+      (
+        sum by (env,environment,stage) (
+          sli_aggregations:gitlab_sli_rails_request_error_total_rate1m{endpoint_id=~"GroupsController#create|GroupsController#update",type="web"} offset 30s
+        )
+      )
+      or
+      (
+        0 * group by(env,environment,stage) (
+          gitlab_component_ops:rate{component="group_management",tier="sv",type="web"}
+        )
+      )
   - record: gitlab_component_apdex:success:rate
     labels:
       component: imagescaler
@@ -395,6 +421,32 @@ groups:
     expr: |
       sum by (env,environment,stage) (
         sli_aggregations:gitlab_sli_global_search_apdex_total_rate5m{job="gitlab-rails",type="web"} offset 30s
+      )
+  - record: gitlab_component_ops:rate_5m
+    labels:
+      component: group_management
+      tier: sv
+      type: web
+    expr: |
+      sum by (env,environment,stage) (
+        sli_aggregations:gitlab_sli_rails_request_total_rate5m{endpoint_id=~"GroupsController#create|GroupsController#update",type="web"} offset 30s
+      )
+  - record: gitlab_component_errors:rate_5m
+    labels:
+      component: group_management
+      tier: sv
+      type: web
+    expr: |
+      (
+        sum by (env,environment,stage) (
+          sli_aggregations:gitlab_sli_rails_request_error_total_rate5m{endpoint_id=~"GroupsController#create|GroupsController#update",type="web"} offset 30s
+        )
+      )
+      or
+      (
+        0 * group by(env,environment,stage) (
+          gitlab_component_ops:rate_5m{component="group_management",tier="sv",type="web"}
+        )
       )
   - record: gitlab_component_apdex:success:rate_5m
     labels:
@@ -700,6 +752,32 @@ groups:
       sum by (env,environment,stage) (
         sli_aggregations:gitlab_sli_global_search_apdex_total_rate30m{job="gitlab-rails",type="web"} offset 30s
       )
+  - record: gitlab_component_ops:rate_30m
+    labels:
+      component: group_management
+      tier: sv
+      type: web
+    expr: |
+      sum by (env,environment,stage) (
+        sli_aggregations:gitlab_sli_rails_request_total_rate30m{endpoint_id=~"GroupsController#create|GroupsController#update",type="web"} offset 30s
+      )
+  - record: gitlab_component_errors:rate_30m
+    labels:
+      component: group_management
+      tier: sv
+      type: web
+    expr: |
+      (
+        sum by (env,environment,stage) (
+          sli_aggregations:gitlab_sli_rails_request_error_total_rate30m{endpoint_id=~"GroupsController#create|GroupsController#update",type="web"} offset 30s
+        )
+      )
+      or
+      (
+        0 * group by(env,environment,stage) (
+          gitlab_component_ops:rate_30m{component="group_management",tier="sv",type="web"}
+        )
+      )
   - record: gitlab_component_apdex:success:rate_30m
     labels:
       component: imagescaler
@@ -1003,6 +1081,32 @@ groups:
     expr: |
       sum by (env,environment,stage) (
         sli_aggregations:gitlab_sli_global_search_apdex_total_rate1h{job="gitlab-rails",type="web"} offset 30s
+      )
+  - record: gitlab_component_ops:rate_1h
+    labels:
+      component: group_management
+      tier: sv
+      type: web
+    expr: |
+      sum by (env,environment,stage) (
+        sli_aggregations:gitlab_sli_rails_request_total_rate1h{endpoint_id=~"GroupsController#create|GroupsController#update",type="web"} offset 30s
+      )
+  - record: gitlab_component_errors:rate_1h
+    labels:
+      component: group_management
+      tier: sv
+      type: web
+    expr: |
+      (
+        sum by (env,environment,stage) (
+          sli_aggregations:gitlab_sli_rails_request_error_total_rate1h{endpoint_id=~"GroupsController#create|GroupsController#update",type="web"} offset 30s
+        )
+      )
+      or
+      (
+        0 * group by(env,environment,stage) (
+          gitlab_component_ops:rate_1h{component="group_management",tier="sv",type="web"}
+        )
       )
   - record: gitlab_component_apdex:success:rate_1h
     labels:
@@ -1308,6 +1412,32 @@ groups:
       sum by (env,environment,stage) (
         sli_aggregations:gitlab_sli_global_search_apdex_total_rate6h{job="gitlab-rails",type="web"} offset 30s
       )
+  - record: gitlab_component_ops:rate_6h
+    labels:
+      component: group_management
+      tier: sv
+      type: web
+    expr: |
+      sum by (env,environment,stage) (
+        sli_aggregations:gitlab_sli_rails_request_total_rate6h{endpoint_id=~"GroupsController#create|GroupsController#update",type="web"} offset 30s
+      )
+  - record: gitlab_component_errors:rate_6h
+    labels:
+      component: group_management
+      tier: sv
+      type: web
+    expr: |
+      (
+        sum by (env,environment,stage) (
+          sli_aggregations:gitlab_sli_rails_request_error_total_rate6h{endpoint_id=~"GroupsController#create|GroupsController#update",type="web"} offset 30s
+        )
+      )
+      or
+      (
+        0 * group by(env,environment,stage) (
+          gitlab_component_ops:rate_6h{component="group_management",tier="sv",type="web"}
+        )
+      )
   - record: gitlab_component_apdex:success:rate_6h
     labels:
       component: imagescaler
@@ -1536,6 +1666,15 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: global_search
+      global_aggregation: "no"
+      regional_aggregation: "yes"
+      service_aggregation: "no"
+      tier: sv
+      type: web
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: group_management
       global_aggregation: "no"
       regional_aggregation: "yes"
       service_aggregation: "no"

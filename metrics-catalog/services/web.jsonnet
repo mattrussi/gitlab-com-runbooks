@@ -246,6 +246,46 @@ metricsCatalog.serviceDefinition({
         ),
       ],
     },
+
+    group_management: {
+      monitoringThresholds+: {
+        errorRatio: 0.999,
+      },
+      severity: 's3',
+      serviceAggregation: false,
+      userImpacting: true,
+      featureCategory: 'groups_and_projects',
+      description: |||
+        Measures calls to the Groups web resource as the number of unsuccessful calls vs the number of total calls.
+
+        An alert on this SLI may indicate that users are unable to modify or create groups via the web.
+      |||,
+
+      local endpointIds = ['GroupsController#create', 'GroupsController#update'],
+      local groupManagementSelector = { endpoint_id: { oneOf: endpointIds }, type: 'web' },
+
+      requestRate: rateMetric(
+        counter='gitlab_sli_rails_request_total',
+        selector=groupManagementSelector,
+      ),
+
+      errorRate: rateMetric(
+        counter='gitlab_sli_rails_request_error_total',
+        selector=groupManagementSelector,
+      ),
+
+      useConfidenceLevelForSLIAlerts: '98%',
+
+      significantLabels: ['endpoint_id'],
+
+      toolingLinks: [
+        toolingLinks.kibana(
+          title='Rails',
+          index='rails',
+          matches={ 'json.meta.caller_id': endpointIds }
+        ),
+      ],
+    },
   } + sliLibrary.get('rails_request').generateServiceLevelIndicator(railsSelector, {
     toolingLinks: [
       toolingLinks.kibana(title='Rails', index='rails'),
