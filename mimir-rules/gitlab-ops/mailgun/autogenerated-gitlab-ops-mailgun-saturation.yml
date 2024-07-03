@@ -12,15 +12,15 @@ groups:
         clamp_min(
           clamp_max(
             (
-              process_open_fds{env="gprd",type="mailgun"}
+              process_open_fds{env="ops",type="mailgun"}
               /
-              process_max_fds{env="gprd",type="mailgun"}
+              process_max_fds{env="ops",type="mailgun"}
             )
             or
             (
-              ruby_file_descriptors{env="gprd",type="mailgun"}
+              ruby_file_descriptors{env="ops",type="mailgun"}
               /
-              ruby_process_max_fds{env="gprd",type="mailgun"}
+              ruby_process_max_fds{env="ops",type="mailgun"}
             )
             ,
             1)
