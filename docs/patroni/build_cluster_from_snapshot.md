@@ -19,9 +19,9 @@
 * 6. [Build DR Archive and Delayed replicas](#6-build-dr-archive-and-delayed-replicas)
 
 <!-- vscode-markdown-toc-config
-	numbering=true
-	autoSave=true
-	/vscode-markdown-toc-config -->
+  numbering=true
+  autoSave=true
+  /vscode-markdown-toc-config -->
 <!-- /vscode-markdown-toc -->
 
 # Summary
