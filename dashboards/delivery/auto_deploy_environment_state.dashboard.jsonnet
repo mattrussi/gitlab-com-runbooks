@@ -8,7 +8,7 @@ local mimirHelper = import 'services/lib/mimir-helpers.libsonnet';
 
 local explainer = |||
   - Production awaiting promotion - Percentage of time over the selected window where production was idle and waiting for a package to be promoted. This only counts the time where there was a package available for promotion.
-  - Production awaiting promotion - Percentage of time over the selected window where staging was idle and waiting for a package to be promoted. This only counts the time where there was a package available for promotion.
+  - Staging awaiting promotion - Percentage of time over the selected window where staging was idle and waiting for a package to be promoted. This only counts the time where there was a package available for promotion.
   - Production canary ready to accept new packages - Percentage of time that gprd-cny was idle.
   - Staging canary ready to accept new packages - Percentage of time that gstg-cny was idle.
   - Production canary baking time - Percentage of time where there was a package baking on gprd-cny.
