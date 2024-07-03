@@ -2546,3 +2546,22 @@ services:
       logging:
         - name:
           permalink:
+  - name: pd-event-logger-7760xa
+    tier: inf
+    friendly_name: Logs PagerDuty incident events to ElasticSearch
+    label: PDEventLogger
+    owner: reliability_general
+    technical:
+      project:
+        - https://gitlab.com/gitlab-com/gl-infra/pd-event-logger
+      documents:
+        design:
+        architecture:
+        readiness_review:
+        sre_guide:
+        developer_guide:
+        service:
+        security:
+      logging:
+        - name: stackdriver
+          permalink: https://console.cloud.google.com/run/detail/us-central1/pd-event-logger-7760xa/logs?project=gitlab-runway-production
