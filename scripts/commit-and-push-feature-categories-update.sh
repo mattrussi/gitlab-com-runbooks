@@ -17,7 +17,7 @@ git checkout -b "${branch_name}"
 if [ -n "$FORCE_MAKE_GENERATE" ]; then
   make update-feature-categories
 else
-  make .update-feature-categories
+  ./scripts/update_stage_groups_feature_categories.rb
 fi
 
 if [ -z "$(git status --untracked-files=no --porcelain)" ]; then
