@@ -338,7 +338,7 @@ teams:
   - graphql_query
 - name: analytics_instrumentation
   product_stage_group: analytics_instrumentation
-  slack_error_budget_channel: g_monitor_analytics_instrumentation
+  slack_error_budget_channel: g_analytics_instrumentation_alerts
   send_error_budget_weekly_to_slack: true
   ignored_components:
   - graphql_query
