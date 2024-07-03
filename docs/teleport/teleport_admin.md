@@ -21,7 +21,7 @@ Associations between Okta groups and Teleport roles are fairly straightforward, 
 
 Modifications to role permissions and settings are made in the `roles-*.tf` files.
 
-## Checking status of the Teleport Server
+## Checking Status of Teleport Server
 
 Teleport runs in two GKE clusters, both in the `gitlab-ops` GCP project:
 
@@ -56,7 +56,7 @@ Generally, if the pods are healthy, then the service is healthy.
 
 All cluster cert secrets are stored in KMS, we don't manage any private keys (including CA).
 
-## Slack integration
+## Slack Integration
 
 The slack integration connects to the authentication proxy as a user, using client identity auth.  This client identity does not yet auto-renew.
 
@@ -398,3 +398,50 @@ $ glsh kube use-cluster ops-central
 # Restart the teleport auth pods
 $ kubectl rollout restart deployment/teleport-production-auth --namespace=teleport-cluster-production
 ```
+
+## Backup and Restore
+
+The backup practice is based on the official Teleport
+[guide](https://goteleport.com/docs/management/operations/backup-restore/#our-recommended-backup-practice).
+For more details on how we made decisions and implemented back and restore process, please see this
+[epic](https://gitlab.com/groups/gitlab-com/gl-infra/-/epics/1357).
+
+- Teleport Agents and [Proxy](https://goteleport.com/docs/architecture/proxy/) Service are stateless.
+- We use [Firestore](https://cloud.google.com/firestore) as the [storage backend](https://goteleport.com/docs/reference/backends/)
+    for Teleport and it is shared among all *Auth Service* instances.
+- We also store the [session recordings](https://goteleport.com/docs/architecture/session-recording/)
+    on an [Object Storage](https://cloud.google.com/storage) bucket.
+- The configurations, including the `teleport.yaml` files, are version controlled in our repositories and deloyed through CI.
+
+As a result, we only need to backup the Firestore database used by Teleport both for persisting the state of Cluster and the audit logs.
+
+### Firestore
+
+The `(default)` Firestore database used by the Teleport cluster is backed up
+[daily](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/7cfb8a1cd38bc16c01c0fb0f436e9297357c2867/modules/teleport-project/firestore.tf#L29). These daily backups have a retention period of 30 days for Teleport staging cluster and 90 days for Teleport production cluster.
+
+To list the current backup schedules, run the following command:
+
+```bash
+$ gcloud firestore backups schedules list --project="gitlab-teleport-staging" --database="(default)"
+$ gcloud firestore backups schedules list --project="gitlab-teleport-production" --database="(default)"
+```
+
+#### Restore a Backup
+
+To restore a backup, run the following command:
+
+```bash
+$ gcloud firestore backups schedules list \
+    --project="gitlab-teleport-staging" \
+    --destination-database="(default)" \
+    --source-backup=projects/PROJECT_ID/locations/LOCATION/backups/BACKUP_ID \
+
+$ gcloud firestore backups schedules list \
+    --project="gitlab-teleport-production" \
+    --destination-database="(default)" \
+    --source-backup=projects/PROJECT_ID/locations/LOCATION/backups/BACKUP_ID \
+```
+
+For more details on how to backup and restore Firestore database,
+please see the official [documentation](https://firebase.google.com/docs/firestore/backups).
