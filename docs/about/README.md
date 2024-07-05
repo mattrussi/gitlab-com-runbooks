@@ -84,6 +84,7 @@
 * [PostgreSQL VACUUM](../patroni/postgresql-vacuum.md)
 * [Postgresql](../patroni/postgresql.md)
 * [Rails SQL Apdex alerts](../patroni/rails-sql-apdex-slow.md)
+* [../pd-event-logger-7760xa/events.md](../pd-event-logger-7760xa/events.md)
 * [../pgbouncer/patroni-consul-postgres-pgbouncer-interactions.md](../pgbouncer/patroni-consul-postgres-pgbouncer-interactions.md)
 * [../pgbouncer/service-pgbouncer.md](../pgbouncer/service-pgbouncer.md)
 * [Postgres Replicas](../postgres-dr-delayed/postgres-dr-replicas.md)
