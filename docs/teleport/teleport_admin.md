@@ -427,20 +427,44 @@ $ gcloud firestore backups schedules list --project="gitlab-teleport-staging" --
 $ gcloud firestore backups schedules list --project="gitlab-teleport-production" --database="(default)"
 ```
 
+To list the current backups, run the following command:
+
+```bash
+$ gcloud firestore backups list --project="gitlab-teleport-staging"
+$ gcloud firestore backups list --project="gitlab-teleport-production"
+```
+
+### Object Storage
+
+The `gl-teleport-staging-teleport-sessions` and `gl-teleport-production-teleport-sessions` buckets
+are used for storing the [session recordings](https://goteleport.com/docs/architecture/session-recording/).
+
+These buckets use the [Multi-Regional](https://cloud.google.com/storage/docs/locations#location-mr) location
+and have [soft deletion](https://cloud.google.com/storage/docs/soft-delete)
+and [versioning](https://cloud.google.com/storage/docs/object-versioning) enabled.
+
+Objects that have been in the bucket for 30 days will be automatically transitioned to the
+[Nearline](https://cloud.google.com/storage/docs/storage-classes#nearline) storage class
+(see [this](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/5264ff990704be24398216378c17aff1312de735/modules/teleport-project/storage.tf#L14)).
+Noncurrent objects (previous versions of objects) that have been noncurrent for 30 days will be automatically deleted
+(see [this](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/5264ff990704be24398216378c17aff1312de735/modules/teleport-project/storage.tf#L24)).
+
+The combination of multi-region storage, versioning, and soft deletion provide high **redundancy** and protect against loss of objects (files).
+
 #### Restore a Backup
 
 To restore a backup, run the following command:
 
 ```bash
-$ gcloud firestore backups schedules list \
+$ gcloud firestore backups schedules restore \
     --project="gitlab-teleport-staging" \
     --destination-database="(default)" \
-    --source-backup=projects/PROJECT_ID/locations/LOCATION/backups/BACKUP_ID \
+    --source-backup="projects/PROJECT_ID/locations/LOCATION/backups/BACKUP_ID" \
 
-$ gcloud firestore backups schedules list \
+$ gcloud firestore backups schedules restore \
     --project="gitlab-teleport-production" \
     --destination-database="(default)" \
-    --source-backup=projects/PROJECT_ID/locations/LOCATION/backups/BACKUP_ID \
+    --source-backup="projects/PROJECT_ID/locations/LOCATION/backups/BACKUP_ID" \
 ```
 
 For more details on how to backup and restore Firestore database,
