@@ -12,7 +12,7 @@ ARG GL_ASDF_THANOS_VERSION
 ARG GL_ASDF_VAULT_VERSION
 ARG GL_ASDF_YQ_VERSION
 # renovate: datasource=github-releases depName=grafana/mimir
-ARG MIMIRTOOL_VERSION=2.12.0
+ARG MIMIRTOOL_VERSION=2.13.0
 
 # Referenced container images
 FROM bitnami/kubectl:${GL_ASDF_KUBECTL_VERSION} AS kubectl
