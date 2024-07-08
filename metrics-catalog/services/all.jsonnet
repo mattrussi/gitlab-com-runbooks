@@ -68,7 +68,6 @@
   import 'search.jsonnet',
   import 'sentry.jsonnet',
   import 'sidekiq.jsonnet',
-  import 'thanos.jsonnet',
   import 'tracing.jsonnet',
   import 'vault.jsonnet',
   import 'web-pages.jsonnet',
