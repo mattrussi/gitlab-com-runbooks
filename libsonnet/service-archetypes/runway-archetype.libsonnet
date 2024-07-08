@@ -112,6 +112,7 @@ function(
         baseSelector={ job: 'runway-exporter', url_map_name: '%(type)s-url-map' % type },
         serviceAggregation=false,
         extra={
+          severity: severity,
           description: |||
             External load balancer serving global HTTP requests for the Runway service.
           |||,
