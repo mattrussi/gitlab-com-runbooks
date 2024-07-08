@@ -354,9 +354,11 @@ basic.dashboard(
   template.new(
     'root_cause',
     '$PROMETHEUS_DS',
-    'label_values(delivery_deployment_blocker_count{root_cause!="RootCause::FlakyTest"},root_cause)',
+    'query_result(max by (root_cause) (last_over_time(delivery_deployment_blocker_count{root_cause!="RootCause::FlakyTest"}[60d]) > 0))',
     includeAll=true,
     multi=true,
+    sort=1,
+    regex='/root_cause="(?<text>[^"]+)/g',
   )
 )
 .addPanel(textPanel, gridPos={ x: 0, y: 0, w: 24, h: 7 })
