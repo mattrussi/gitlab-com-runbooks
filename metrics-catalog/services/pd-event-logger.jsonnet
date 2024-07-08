@@ -5,5 +5,6 @@ metricsCatalog.serviceDefinition(
   runwayArchetype(
     type='pd-event-logger-7760xa',
     team='sre_reliability',
+    trafficCessationAlertConfig=false,
   )
 )
