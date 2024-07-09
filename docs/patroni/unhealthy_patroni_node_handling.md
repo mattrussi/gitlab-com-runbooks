@@ -98,7 +98,47 @@ If there is intense resource contention a resource can become unhealthy and get 
 - Disk Metrics (eg. I/O wait per operation)
 - Look for Stuck I/O and Disk Failure in syslog
 - Memory Swapping (ocasional swapping can happen, intense swapping can cause PostgreSQL to hang)
-- OOM Kill messages in syslog or VM serial console
+- OOM Kill messages in syslog or VM serial console, see [OOM and Memory Pressure](#oom-and-memory-pressure)
+
+### OOM and Memory Pressure
+
+Our production database servers currently have an abundance of free memory.
+This is necessary to have enough headroom for peeks and also to keep a significant portion of the available memory unallocated to be used by the file system cache.
+Without large free memory for the fs cache we will start to see more disk read load, which in an worst case scenario could saturate and slow down the application.
+This should trigger memory saturation alerts as well as Apdex degradation alerts.
+
+If memory pressure continues to a point where not enough memory is available to keep operating the Linux Kernel will start the out of memory killer.
+In general, it is not advised for PostgreSQL to over provision memory, but due to third party software running systems it was decided to not disable it globally, but only for the cgroup PostgreSQL and Patroni are running in. Details can be found here [Our production database servers currently have an abundance of free memory](https://gitlab.com/gitlab-com/gl-infra/production-engineering/-/issues/15679).
+
+Should the OOM kiler become active it will start killing processes based on their OOM score.
+For us it will be processes outside the PostgreSQL cgroup consuming significant memory.
+This will most likely trigger exporters or log collectors, which should trigger additional alerts.
+
+#### Investigation
+
+**Under no circumstances should you ever terminate PostgreSQL process with `SIGKILL` aka. `kill -9`!**
+This will trigger a complete shutdown of the affected PostgreSQL instance, more details here [PostgreSQL, memory and the cloud](https://sosna.de/posts/pgaas-memory-overcommit/).
+
+It should be investigated which processes are consuming problematic amounts of memory.
+If PostgreSQL's processes are involved it should be checked if they belong to a long-running transaction.
+Use the following command to find the longest running quarries on the system.
+
+```sql
+gitlab-psql -c "SELECT * FROM pg_stat_activity ORDER BY query_start ASC LIMIT 10;"
+```
+
+### Mitigation
+
+Once identified, a problematic query can be terminated *safely* via [`pg_terminate_backend ( pid, ... )`](https://www.postgresql.org/docs/current/functions-admin.html).
+
+```sql
+gitlab-psql -c "SELECT pg_terminate_backend(xxxxx);"
+```
+
+Should the memory consumption not be the result of a few queries consuming an excessive amount of memory, but caused by many smaller queries it needs to be investigated where the consumption is coming from.
+Involve the database team to get inside and help to analyze the query plans.
+
+A first go-to mitigation should be to add more replicas to spread the queries over more machines, reducing the memory pressure per system.
 
 # Draining Workload from the Unhealty Patroni replica
 
