@@ -138,7 +138,7 @@ metricsCatalog.serviceDefinition({
 
       monitoringThresholds+: {
         apdexScore: 0.99,
-        errorRatio: 0.995,
+        errorRatio: 0.99,
       },
 
       local websocketsSelector = { backend: 'websockets' },
