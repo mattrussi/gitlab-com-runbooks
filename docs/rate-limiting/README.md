@@ -13,6 +13,8 @@ discussion and context; if you are looking for some more formulaic options for r
 incidents, these are at the end, but deliberately so because very little about making changes has an automatic simple
 answer.  Please consider strongly reading the relevant context before using those simpler sections.
 
+If you are looking for information about requesting a rate limit bypass for <GitLab.com>, please see the [Rate Limit bypass policy](bypass-policy.md).
+
 ### What are the current rate-limits?
 
 Not the actual numbers, but links to where to find the current active values:
@@ -52,12 +54,12 @@ be discussed with the [Infrastructure Foundations SRE team](https://gitlab.slack
 
 #### Bypasses and Special Cases
 
+For customers and internal teams seeking a bypass, please refer to the [Rate Limit bypass policy](bypass-policy.md). This section of documentation is targeted for SREs working in the production environment.
+
 [Published rate limits](https://docs.gitlab.com/ee/user/gitlab_com/index.html#gitlabcom-specific-rate-limits) apply to all customers and users with no exceptions. Rate limiting bypasses are only allowed for specific cases:
 
 1. To mitigate an incident
-1. A temporary bypass may be granted for a customer who has an urgent need while they work to mitigate the problem and work within our limits on their side.
-
-While we have historically had some customers on the list for longer periods, these are considered legacy cases.
+1. A temporary bypass may be granted for a customer who has an urgent need while they work to mitigate the problem and work within our limits on their side. Bypasses are only granted for as much as 2 weeks and require Director level approval.
 
 We need special handling for various partners and other scenarios (e.g. excluding GitLab's internal services).
 To permit this we have lists of IP addresses, termed `allowlist` that are permitted to bypass the haproxy rate limit.
@@ -100,6 +102,8 @@ header set to 1, which RackAttack (see below) interprets to mean they get a bypa
 sort-of-temporary measure, to allow us to enable the RackAttack rate-limiting without having to solve every high-usage
 use-case before doing so.  Ideally we will remove this eventually, once the bypass list is smaller (or gone), or we've
 ensured that our known users are below the new limits.
+
+When an IP is added to the allowlist, an issue for removing the IP should be [opened in the production engineering tracker](https://gitlab.com/gitlab-com/gl-infra/production-engineering/-/issues/new). A due date should be set on the issue for the date of removal agreed upon.
 
 There are a few other special cases that also set `X-GitLab-RateLimit-Bypass`; this may change over time, but at this time
 includes git-over-https, `/jwt/auth`, various package registries (e.g. maven, nuget, composer compatibility APIs), and
@@ -209,6 +213,8 @@ paid groups/users and permanent identities of customers.
 
 #### Bypasses
 
+For customers and internal teams seeking a bypass, please refer to the [Rate Limit bypass policy](bypass-policy.md). This section of documentation is targeted for SREs working in the production environment.
+
 To add an IP to the RackAttack allowlist:
 
 * Create a new version of the vault secret at
@@ -218,6 +224,8 @@ To add an IP to the RackAttack allowlist:
   <https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-com/-/merge_requests/3057>
 * Create a MR to remove the old secret version from our k8s deployment. Example MR:
   <https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-com/-/merge_requests/3058>
+
+Anytime an IP is added to the allowlist, an issue for removing the IP should be [opened in the production engineering tracker](https://gitlab.com/gitlab-com/gl-infra/production-engineering/-/issues/new) cross-linking the original issue or incident where the IP was added and setting a due date for the IPs to be removed. In the case of allow-list requests, this is at most 2 weeks after the IP was added.
 
 #### Application (ApplicationRateLimiter)
 
