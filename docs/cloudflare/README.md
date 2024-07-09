@@ -36,6 +36,7 @@
 * [Session: Application architecture](../onboarding/architecture.md)
 * [Packagecloud Infrastructure and Backups](../packagecloud/infrastructure.md)
 * [../pgbouncer/patroni-consul-postgres-pgbouncer-interactions.md](../pgbouncer/patroni-consul-postgres-pgbouncer-interactions.md)
+* [../rate-limiting/bypass-policy.md](../rate-limiting/bypass-policy.md)
 * [Life of a Git Request](../tutorials/overview_life_of_a_git_request.md)
 * [Life of a Web Request](../tutorials/overview_life_of_a_web_request.md)
 * [about.gitlab.com](../uncategorized/about-gitlab-com.md)
