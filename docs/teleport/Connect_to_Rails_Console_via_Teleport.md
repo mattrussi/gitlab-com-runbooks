@@ -61,7 +61,7 @@ tsh login --proxy=production.teleport.gitlab.net
 Currently only `rails-console-ro-gprd` is implemented, and is only required in `gprd`
 
 ```shell
-tsh login --proxy=production.teleport.gitlab.net --request-roles=rails-console-ro-gprd --request-reason="Issue-URL or explanation"
+tsh login --proxy=production.teleport.gitlab.net --request-roles=rails-console-ro-gprd --request-reason="Issue URL or ZenDesk ticket URL, and brief explanation"
 ```
 
 This command will pause while it waits for the approver to approve the request.  It may appear to hang, but it is waiting for someone to approve it.  The command will return as soon as the request is approved, denied, or times out.
@@ -127,10 +127,10 @@ $ tsh status
 
 Note that the default certificate might not have any roles assigned, allowing you to interact with the Teleport server, and to request more roles, but does not allow connecting to any other services.
 
-To request permission to connect to a service, you must use the `--request-roles` flag.  You can request a role after already having a valid certificate, or simply by adding the flag to your initial login. Each `--request-roles` requires a `--request-reason`. It's best to use the URL of the issue or incident that this activity relates to.
+To request permission to connect to a service, you must use the `--request-roles` flag.  You can request a role after already having a valid certificate, or simply by adding the flag to your initial login. Each `--request-roles` requires a `--request-reason`. It's best to use the URL of the issue or incident that this activity relates to, or a ZenDesk ticket URL.
 
 ```shell
-tsh login --proxy=staging.teleport.gitlab.net --request-roles=rails-console-ro-gstg --request-reason="Issue-URL or explanation"
+tsh login --proxy=staging.teleport.gitlab.net --request-roles=rails-console-ro-gstg --request-reason="Issue URL or ZenDesk ticket URL, and brief explanation"
 ```
 
 Once approved, the server will replace your locally stored certificate with an updated one, and your newly valid roles will appear in the `tsh status` output.
