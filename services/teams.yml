@@ -67,6 +67,8 @@ teams:
   url: https://about.gitlab.com/handbook/engineering/development/analytics/product-analytics/
   slack_channel: g_monitor_product_analytics
   slack_alerts_channel: g_monitor_product_analytics_infra_alerts
+  slack_error_budget_channel: g_monitor_product_analytics
+  send_error_budget_weekly_to_slack: true
   alerts:
   - prod-1
   - prd-278964
@@ -336,6 +338,8 @@ teams:
   - graphql_query
 - name: analytics_instrumentation
   product_stage_group: analytics_instrumentation
+  slack_error_budget_channel: g_analytics_instrumentation_alerts
+  send_error_budget_weekly_to_slack: true
   ignored_components:
   - graphql_query
 - name: product_planning
