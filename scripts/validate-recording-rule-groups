@@ -5,7 +5,7 @@ require 'yaml'
 require 'pathname'
 
 dir = Pathname.new(File.join(File.dirname(__FILE__), '..')).realpath
-rule_files = %w[rules thanos-rules mimir-rules].flat_map { |rule_dir| Dir.glob(File.join(dir, rule_dir, '**', '*.yml')) }
+rule_files = %w[legacy-promethes-rules mimir-rules].flat_map { |rule_dir| Dir.glob(File.join(dir, rule_dir, '**', '*.yml')) }
 
 duplicates = {}
 empty_groups_per_file = {}

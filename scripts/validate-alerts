@@ -15,7 +15,7 @@ class Validator
     @service_catalog_teams = @service_catalog["teams"].to_h { |team| [team["name"], team] }
   end
 
-  # Validates Prometheus and Thanos rules
+  # Validates Prometheus and Mimir rules
   # Returns true if validation succeeded
   def validate
     # Check Prometheus rules
@@ -24,9 +24,9 @@ class Validator
       validate_file File.expand_path(file), false
     end
 
-    # Check Thanos rules
-    thanos_alert_files = File.join(__dir__, "..", "thanos-rules", "*.yml")
-    Dir[thanos_alert_files].each do |file|
+    # Check Mimir rules
+    mimir_alert_files = File.join(__dir__, "..", "mimir-rules", "*.yml")
+    Dir[mimir_alert_files].each do |file|
       validate_file File.expand_path(file), true
     end
 
@@ -59,7 +59,7 @@ class Validator
   end
 
   # Ensures that the rule has valid annotations
-  def validate_alert_rule_annotations(rule, _thanos_evaluation)
+  def validate_alert_rule_annotations(rule, _mimir_evaluation)
     annotations = rule["annotations"]
     validation_fatal("rules must contain a `title` annotation") unless annotations["title"]
 
@@ -89,7 +89,7 @@ class Validator
     validation_error("channel annotations have been removed in favour of team labels, please use a team label instead") if annotations["channel"]
   end
 
-  def validate_pager_severity_labels(rule, _thanos_evaluation)
+  def validate_pager_severity_labels(rule, _mimir_evaluation)
     labels = rule["labels"]
 
     if labels["pager"]
@@ -100,7 +100,7 @@ class Validator
     end
   end
 
-  def validate_label_team(rule, _thanos_evaluation)
+  def validate_label_team(rule, _mimir_evaluation)
     labels = rule["labels"]
     team = @service_catalog_teams[labels["team"]]
 
@@ -108,14 +108,14 @@ class Validator
   end
 
   # Ensures that the rule conforms to our labeling rules
-  def validate_alert_rule_labels(rule, thanos_evaluation)
+  def validate_alert_rule_labels(rule, mimir_evaluation)
     labels = rule["labels"]
 
     validation_error("rules must contain a `severity` label") unless labels["severity"]
     validation_error("rules contains an invalid `severity` label: #{labels['severity']}") unless %w[s1 s2 s3 s4].include?(labels["severity"])
     validation_error("alerts must include an alert_type label. This label should either be 'cause' or 'symptom'. For more information on cause and symptom-based alerts, review http://landing.google.com/sre/sre-book/chapters/monitoring-distributed-systems/#symptoms-versus-causes-g0sEi4") unless %w[cause heartbeat symptom].include?(labels["alert_type"])
 
-    validate_pager_severity_labels(rule, thanos_evaluation)
+    validate_pager_severity_labels(rule, mimir_evaluation)
 
     # Check that all label values are strings since non-string values, while being technically valid,
     # will trip-up the Prometheus Operator, leading to downstream failures.
@@ -126,10 +126,10 @@ class Validator
 
     validation_error("channels have been removed in favour of teams, please use a team label instead") if labels["channel"]
 
-    validate_label_team(rule, thanos_evaluation) if labels["team"]
+    validate_label_team(rule, mimir_evaluation) if labels["team"]
   end
 
-  def validate_rule(rule, thanos_evaluation)
+  def validate_rule(rule, mimir_evaluation)
     return if rule["record"] # Don't validate recordings
 
     alert = rule["alert"]
@@ -137,30 +137,21 @@ class Validator
 
     @context << "alert: #{alert}"
     begin
-      validate_alert_rule_annotations(rule, thanos_evaluation)
-      validate_alert_rule_labels(rule, thanos_evaluation)
+      validate_alert_rule_annotations(rule, mimir_evaluation)
+      validate_alert_rule_labels(rule, mimir_evaluation)
     ensure
       @context.pop
     end
   end
 
-  def validate_group(group, thanos_evaluation)
+  def validate_group(group, mimir_evaluation)
     name = group["name"]
     @context << "group: #{name}"
 
     begin
-      if thanos_evaluation
-        # Partial Response Strategy:
-        # See https://github.com/thanos-io/thanos/blob/master/docs/components/rule.md#partial-response
-        partial_response_strategy = group["partial_response_strategy"]
-
-        validation_error("group should include an explicit partial_response_strategy value. The default is 'abort' but because of the way we use Thanos Ruler, many of our rules will use 'warn' and therefore we prefer this to be explicitly set.") unless partial_response_strategy
-        validation_error("group should have an partial_response_strategy value of 'warn' or 'abort'.") unless %w[warn abort].include?(partial_response_strategy)
-      end
-
       rules = group["rules"]
       rules.each do |rule|
-        validate_rule rule, thanos_evaluation
+        validate_rule rule, mimir_evaluation
       rescue ValidationError
         # Continue onto next rule after validation failure
       end
@@ -170,7 +161,7 @@ class Validator
     end
   end
 
-  def validate_file(alert_file_path, thanos_evaluation)
+  def validate_file(alert_file_path, mimir_evaluation)
     @context << "file: #{alert_file_path}"
     begin
       alert_yaml = YAML.load_file(alert_file_path)
@@ -178,7 +169,7 @@ class Validator
 
       groups = alert_yaml["groups"]
       groups.each do |group|
-        validate_group group, thanos_evaluation
+        validate_group group, mimir_evaluation
       rescue ValidationError
         # Continue onto next group after validation failure
       end
