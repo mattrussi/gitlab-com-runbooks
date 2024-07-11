@@ -7,6 +7,7 @@
 /dashboards/.env.sh
 /dashboards/vendor
 /dashboards/generated
+/mixins-monitoring/generated
 /periodic-query-results
 /services/service_catalog.json
 vendor
