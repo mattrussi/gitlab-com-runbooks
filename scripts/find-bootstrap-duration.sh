@@ -22,7 +22,7 @@ if [[ -n "$DATE_OVERRIDE" ]]; then
 fi
 
 if [[ -n "$host" ]]; then
-  scp -q $0 "$host:/tmp/find-bootstrap.sh"
+  scp -o StrictHostKeyChecking=no -q $0 "$host:/tmp/find-bootstrap.sh"
   ssh -o StrictHostKeyChecking=no "$host" "DATE_OVERRIDE=$DATE_OVERRIDE bash /tmp/find-bootstrap.sh"
   exit 0
 fi
@@ -35,4 +35,24 @@ start_seconds="$(date --date="$start_date" "+%s")"
 end_date="$(grep 'Bootstrap finished' $file_prefix* | grep -v echo | tail -n1 | cut -f2- -d':' | sed 's/: Bootstrap finished.*//')"
 end_seconds="$(date --date="$end_date" "+%s")"
 
-echo "$HOSTNAME: Bootstrap duration: $((end_seconds - start_seconds)) seconds at $end_date"
+chef_durations="$(grep 'Chef Client finished' $file_prefix* | awk -F'in ' '{print $2}' | awk '{print $1":"$3}')"
+chef_seconds=0
+chef_minutes=0
+
+for duration in $chef_durations; do
+  seconds="$(awk -F':' '{print $2}' <<<"$duration")"
+
+  if [[ -z "$seconds" ]]; then
+    seconds="$(awk -F':' '{print $1}' <<<"$duration")"
+    chef_seconds=$((chef_seconds + 10#$seconds))
+    continue
+  fi
+
+  minutes="$(awk -F':' '{print $1}' <<<"$duration")"
+  chef_seconds=$((chef_seconds + 10#$seconds))
+  chef_minutes=$((chef_minutes + 10#$minutes))
+done
+
+chef_seconds=$((chef_seconds + chef_minutes * 60))
+
+echo "$HOSTNAME: Bootstrap duration: total: $((end_seconds - start_seconds))s, Chef: ${chef_seconds}s at $(date --date="$end_date" "+%Y-%m-%d %T")"
