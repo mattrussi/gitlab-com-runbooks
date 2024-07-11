@@ -354,7 +354,7 @@ basic.dashboard(
   template.new(
     'root_cause',
     '$PROMETHEUS_DS',
-    'query_result(max by (root_cause) (last_over_time(delivery_deployment_blocker_count{root_cause!="RootCause::FlakyTest"}[60d]) > 0))',
+    'query_result(max by (root_cause) (last_over_time(delivery_deployment_blocker_count{root_cause!="RootCause::FlakyTest"}[$__range]) > 0))',
     includeAll=true,
     multi=true,
     sort=1,
