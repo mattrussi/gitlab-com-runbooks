@@ -1,6 +1,6 @@
 local alerts = import 'alerts/alerts.libsonnet';
 local separateGlobalRecordingFiles = (import 'recording-rules/lib/thanos/separate-global-recording-files.libsonnet').separateGlobalRecordingFiles;
-local serviceAnomalyDetectionAlerts = import 'alerts/service-anomaly-detection-alerts.libsonnet';
+local serviceAnomalyDetectionAlerts = import 'alerts/service-ops-anomaly-detection-alerts.libsonnet';
 
 separateGlobalRecordingFiles(
   function(selector)

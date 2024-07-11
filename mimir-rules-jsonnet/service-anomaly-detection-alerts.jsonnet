@@ -2,7 +2,7 @@ local monitoredServices = (import 'gitlab-metrics-config.libsonnet').monitoredSe
 local selectors = import 'promql/selectors.libsonnet';
 local alerts = import 'alerts/alerts.libsonnet';
 local separateMimirRecordingFiles = (import 'recording-rules/lib/mimir/separate-mimir-recording-files.libsonnet').separateMimirRecordingFiles;
-local serviceAnomalyDetectionAlerts = import 'alerts/service-anomaly-detection-alerts.libsonnet';
+local serviceAnomalyDetectionAlerts = import 'alerts/service-ops-anomaly-detection-alerts.libsonnet';
 
 local servicesWithOpsRatePrediction = std.filter(
   function(service) !service.disableOpsRatePrediction,
@@ -17,7 +17,7 @@ local outputPromYaml(groups) =
 local fileForService(service, extraSelector, _extraArgs, tenant) =
   local selector = selectors.merge(extraSelector, { type: service.type });
   {
-    'service-anomaly-detection-alerts': outputPromYaml(
+    'service-ops-anomaly-detection-alerts': outputPromYaml(
       [
         {
           name: '%s - service_ops_anomaly_detection' % service.type,
