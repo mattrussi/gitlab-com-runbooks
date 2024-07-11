@@ -267,5 +267,4 @@ local library = import 'gitlab-slis/library.libsonnet';
       includeAll=true,
       allValues='.*',
     ),
-
 }
