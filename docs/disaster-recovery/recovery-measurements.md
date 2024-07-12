@@ -34,13 +34,15 @@ Ideally, this measurement is designed to inform the overall flow and duration of
 
 | Date | Environment | VM Provision Time | Bootstrap Time | Notes |
 | ---- | ----------- | ------------------------ | -------------- | ----- |
-| 2024-06-20 | GPRD | 00:24:13 | 00:7:11 | Initial test of using OS disk snapshots for restore in GPRD. [Change issue](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/18157) |
+| 2024-07-10 | GSTG | 00:18:21 | 00:08:48 | [Change issue](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/18221) |
+| 2024-06-20 | GPRD | 00:24:13 | 00:07:11 | Initial test of using OS disk snapshots for restore in GPRD. [Change issue](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/18157) |
 | 2024-06-10 | GSTG | 00:14:21 | 00:8:01 | [Game Day change issue](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/18091) |
 
 ### Gameday Zonal Outage DR Process Time
 
 | Date | Environment | Duration | Notes |
 | ---- | ----------- | -------- | ----- |
+| 2024-07-10 | GSTG | 01:15:00 | [Change issue](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/18221) |
 | 2024-06-10 | GSTG | 01:20:00 | *Time difference is between the change::in-progress & change::complete labels being set. Doesn't include time to create MRs. |
 
 ## Patroni/PGBouncer
