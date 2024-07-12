@@ -6,10 +6,7 @@
 
 ## Overview
 
-- > What does this alert mean?
-- > What factors can contribute?
-- > What parts of the service are effected?
-- > What action is the recipient of this alert expected to take when it fires?
+This alert means that the disk space utilization on a device for a node is growing rapidly and will reach it's capacity in the next 6 hours. The cause of the fast growth should be investigated.
 
 ## Services
 
@@ -71,9 +68,8 @@
 
 # Definitions
 
-- > Link to the definition of this alert for review and tuning
-- > Advice or limitations on how we should or shouldn't tune the alert
-- > Link to edit this playbook
+- [ComponentResourceRunningOut_ alert definition](https://gitlab.com/gitlab-com/runbooks/-/blob/master/libsonnet/servicemetrics/resource_saturation_point.libsonnet?ref_type=heads#L208)
+- [Edit this playbook](https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/config_management/alerts/ComponentResourceRunningOut_disk_space.md)
 - [Update the template used to format this playbook](https://gitlab.com/gitlab-com/runbooks/-/edit/master/docs/template-alert-playbook.md?ref_type=heads)
 
 # Related Links
