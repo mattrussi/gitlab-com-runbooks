@@ -301,7 +301,7 @@ local patchReleaseStatusTextPanel =
       The following are what the statuses signify for engineers:
 
       * Open: Bug fixes and MRs associated with security issues labelled `security-target` are expected to be included in the next patch release.
-      * Warning: Signals that teams should get bug and security fixes ready to merge.
+      * Warning: Set 3 business days before the patch release due date, signals that teams should get bug and security fixes ready to merge. **Security merge requests should be approved, with green pipelines and ready to be merged 2 working days before the patch release due date, by the start of EMEA day**
       * Closed: Default branch MRs have been merged, no further bug or security fixes will be included.
     |||,
   );
