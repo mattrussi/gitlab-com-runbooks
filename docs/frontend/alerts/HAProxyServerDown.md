@@ -153,7 +153,7 @@ kill -TERM 1827
 
 # Related Links
 
-- [Related alerts](./)
+- [Related alerts](https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/frontend/alerts?ref_type=heads)
 - Related documentation
   - [HAProxy Logging](https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/frontend/haproxy-logging.md?ref_type=heads)
   - [`asset_proxy` is `DOWN`](https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/frontend/asset-proxy-down.md?ref_type=heads)
