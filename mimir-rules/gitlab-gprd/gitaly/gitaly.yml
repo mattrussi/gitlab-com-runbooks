@@ -128,6 +128,6 @@ groups:
         annotations:
           grafana_datasource_id: mimir-gitlab-gprd
           description: Recent GCP scheduled snapshot are missing for one or more disks. Please follow the runbook to review the problem.
-          runbook: docs/disaster-recovery/gcp-snapshots.md
+          runbook: docs/disaster-recovery/alerts/GCPScheduledSnapshots.md
           title: GCP scheduled snapshots are missing for at least one Gitaly data disk in Production
           promql_template_1: present_over_time(stackdriver_gce_disk_logging_googleapis_com_user_scheduled_snapshots{env="gprd", disk_name=~"(file|gitaly)-.*-stor-gprd-data$"env="gprd"}[2h]) == 0

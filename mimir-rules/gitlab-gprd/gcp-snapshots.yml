@@ -12,7 +12,7 @@ groups:
     annotations:
       grafana_datasource_id: mimir-gitlab-gprd
       description: Recent GCP scheduled snapshot are missing for {{ $labels.env }}. Please follow the runbook to review the problem.
-      runbook: docs/disaster-recovery/gcp-snapshots.md
+      runbook: docs/disaster-recovery/alerts/GCPScheduledSnapshots.md
       title: GCP scheduled snapshots are delayed
   - alert: GCPScheduledSnapshotsFailed
     expr: |
@@ -25,5 +25,5 @@ groups:
     annotations:
       grafana_datasource_id: mimir-gitlab-gprd
       description: GCP scheduled snapshots are reporting failures for {{ $labels.env }}. Please follow the runbook to review the problem.
-      runbook: docs/disaster-recovery/gcp-snapshots.md
+      runbook: docs/disaster-recovery/alerts/GCPScheduledSnapshots.md
       title: GCP scheduled snapshots are failing
