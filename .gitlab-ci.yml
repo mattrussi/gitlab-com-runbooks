@@ -1049,7 +1049,9 @@ validate-alerts:
         paths:
           - docs/**/*
           - legacy-prometheus-rules/**/*
+          - mimir-rules/**/*
           - services/**/*
+          - script/validate-alerts
   script:
     - make validate-alerts
 
