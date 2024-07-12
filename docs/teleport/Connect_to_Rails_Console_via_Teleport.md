@@ -58,10 +58,10 @@ tsh login --proxy=production.teleport.gitlab.net
 
 2. Request approval for the rails console role that you need
 
-Currently only `rails-console-ro-gprd` is implemented, and is only required in `gprd`
+Currently only `prod-rails-console-ro` is implemented, and is only required in `gprd`
 
 ```shell
-tsh login --proxy=production.teleport.gitlab.net --request-roles=rails-console-ro-gprd --request-reason="Issue URL or ZenDesk ticket URL, and brief explanation"
+tsh login --proxy=production.teleport.gitlab.net --request-roles=prod-rails-console-ro --request-reason="Issue URL or ZenDesk ticket URL, and brief explanation"
 ```
 
 This command will pause while it waits for the approver to approve the request.  It may appear to hang, but it is waiting for someone to approve it.  The command will return as soon as the request is approved, denied, or times out.
