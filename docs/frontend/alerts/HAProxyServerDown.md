@@ -45,25 +45,17 @@ The alert will indicate which backend server is down.
 
 ## Verification
 
-- Prometheus link to query that triggered the alert
-- Additional monitoring dashboards
-- Link to log queries if applicable
+- [Frontend dashboard](https://dashboards.gitlab.net/d/frontend-main/frontend3a-overview?orgId=1)
+- [GCP BigQuery HAProxy logs](https://console.cloud.google.com/bigquery?referrer=search&project=gitlab-production&ws=!1m4!1m3!3m2!1sgitlab-production!2shaproxy_logs)
+- [HAProxy Logging docs](https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/frontend/haproxy-logging.md)
 
 ## Recent changes
 
-- Links to queries for recent related production change requests
+- [Recent HAProxy Production Changes and Incident Issues](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/?sort=created_date&state=all&label_name%5B%5D=Service%3A%3AHAProxy&first_page_size=100)
 
-[Recent HAProxy Production Changes and Incident Issues](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/?sort=created_date&state=all&label_name%5B%5D=Service%3A%3AHAProxy&first_page_size=100)
-- Links to queries for recent cookbook or helm MR's
-
-[Recent Chef HAProxy changes](https://gitlab.com/gitlab-com/gl-infra/chef-repo/-/merge_requests?scope=all&state=merged&label_name[]=Service%3A%3AHAProxy)
-- How to properly roll back changes
+- [Recent Chef HAProxy changes](https://gitlab.com/gitlab-com/gl-infra/chef-repo/-/merge_requests?scope=all&state=merged&label_name[]=Service%3A%3AHAProxy)
 
 ## Troubleshooting
-
-- [ ] Basic troubleshooting order
-- [ ] Additional dashboards to check
-- [ ] Useful scripts or commands
 
 Errors are being reported by HAProxy, this could be a spike in 5xx errors, server connection errors, or backends reporting unhealthy.
 
@@ -127,6 +119,12 @@ haproxy   2002      20 /usr/sbin/haproxy -Ws -f /etc/haproxy/haproxy.cfg -p /run
 kill -TERM 1827
 ```
 
+**Logging**
+
+[HAProxy Logging](https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/frontend/haproxy-logging.md)
+
+[**Other troubleshooting docs**](https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/frontend)
+
 ## Possible Resolutions
 
 - Links to past incidents where this alert helped identify an issue with clear resolutions:
@@ -141,14 +139,12 @@ kill -TERM 1827
 
 # Escalation
 
-- [ ] How and when to escalate
 - Slack channels where help is likely to be found: `#g_infra_foundations`
 
 # Definitions
 
 - [ ] Link to the definition of this alert for review and tuning
 - [ ] Advice or limitations on how we should or shouldn't tune the alert
-- [ ] Link to edit this playbook
 - [Update the template used to format this playbook](https://gitlab.com/gitlab-com/runbooks/-/edit/master/docs/template-alert-playbook.md?ref_type=heads)
 
 # Related Links
