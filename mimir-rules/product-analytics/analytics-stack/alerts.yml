@@ -22,7 +22,7 @@ groups:
           team: product_analytics
         annotations:
           grafana_datasource_id: product-analytics
-          title: SSL errors
+          title: SSLErrorsTooHigh
           description: >
             Too many SSL errors in cluster {{ $labels.cluster }} have been occurring for the last 5 minutes.
       - alert: KafkaConsumerGroupLagTooHigh
@@ -34,6 +34,6 @@ groups:
           team: product_analytics
         annotations:
           grafana_datasource_id: product-analytics
-          title: Kafka consumer group lag
+          title: KafkaConsumerGroupLagTooHigh
           description: >
             Kafka consumer group lag in cluster {{ $labels.cluster }} for åconsumer group {{ $labels.consumergroup }} and topic {{ $labels.topic }} is too high the last 5 minutes.
