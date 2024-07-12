@@ -19,15 +19,27 @@ class Validator
   # Returns true if validation succeeded
   def validate
     # Check Prometheus rules
-    alert_files = File.join(__dir__, "..", "rules", "*.yml")
-    Dir[alert_files].each do |file|
-      validate_file File.expand_path(file), false
+    directory_path = File.join(__dir__, "..", "legacy-prometheus-rules")
+    alert_files = Dir.glob(File.join(directory_path, "**", "*.{yml,yaml}"))
+    alert_files.each do |file|
+      validate_file File.expand_path(file)
     end
 
     # Check Mimir rules
-    mimir_alert_files = File.join(__dir__, "..", "mimir-rules", "*.yml")
-    Dir[mimir_alert_files].each do |file|
-      validate_file File.expand_path(file), true
+    directory_path = File.join(__dir__, "..", "mimir-rules")
+    mimir_alert_files = Dir.glob(File.join(directory_path, "**", "*.{yml,yaml}"))
+    mimir_alert_files.each do |file|
+      dir = File.dirname(file)
+
+      # Check if the file lives in a mixin directory for now and skip.
+      # This can be removed once the mixins conform to our standards.
+      mixin_file = File.join(dir, "mixin.libsonnet")
+
+      if File.exist?(mixin_file)
+        next
+      end
+
+      validate_file File.expand_path(file)
     end
 
     has_errors = false
@@ -59,7 +71,7 @@ class Validator
   end
 
   # Ensures that the rule has valid annotations
-  def validate_alert_rule_annotations(rule, _mimir_evaluation)
+  def validate_alert_rule_annotations(rule)
     annotations = rule["annotations"]
     validation_fatal("rules must contain a `title` annotation") unless annotations["title"]
 
@@ -89,7 +101,7 @@ class Validator
     validation_error("channel annotations have been removed in favour of team labels, please use a team label instead") if annotations["channel"]
   end
 
-  def validate_pager_severity_labels(rule, _mimir_evaluation)
+  def validate_pager_severity_labels(rule)
     labels = rule["labels"]
 
     if labels["pager"]
@@ -100,7 +112,7 @@ class Validator
     end
   end
 
-  def validate_label_team(rule, _mimir_evaluation)
+  def validate_label_team(rule)
     labels = rule["labels"]
     team = @service_catalog_teams[labels["team"]]
 
@@ -108,14 +120,14 @@ class Validator
   end
 
   # Ensures that the rule conforms to our labeling rules
-  def validate_alert_rule_labels(rule, mimir_evaluation)
+  def validate_alert_rule_labels(rule)
     labels = rule["labels"]
 
     validation_error("rules must contain a `severity` label") unless labels["severity"]
     validation_error("rules contains an invalid `severity` label: #{labels['severity']}") unless %w[s1 s2 s3 s4].include?(labels["severity"])
     validation_error("alerts must include an alert_type label. This label should either be 'cause' or 'symptom'. For more information on cause and symptom-based alerts, review http://landing.google.com/sre/sre-book/chapters/monitoring-distributed-systems/#symptoms-versus-causes-g0sEi4") unless %w[cause heartbeat symptom].include?(labels["alert_type"])
 
-    validate_pager_severity_labels(rule, mimir_evaluation)
+    validate_pager_severity_labels(rule)
 
     # Check that all label values are strings since non-string values, while being technically valid,
     # will trip-up the Prometheus Operator, leading to downstream failures.
@@ -126,10 +138,10 @@ class Validator
 
     validation_error("channels have been removed in favour of teams, please use a team label instead") if labels["channel"]
 
-    validate_label_team(rule, mimir_evaluation) if labels["team"]
+    validate_label_team(rule) if labels["team"]
   end
 
-  def validate_rule(rule, mimir_evaluation)
+  def validate_rule(rule)
     return if rule["record"] # Don't validate recordings
 
     alert = rule["alert"]
@@ -137,21 +149,21 @@ class Validator
 
     @context << "alert: #{alert}"
     begin
-      validate_alert_rule_annotations(rule, mimir_evaluation)
-      validate_alert_rule_labels(rule, mimir_evaluation)
+      validate_alert_rule_annotations(rule)
+      validate_alert_rule_labels(rule)
     ensure
       @context.pop
     end
   end
 
-  def validate_group(group, mimir_evaluation)
+  def validate_group(group)
     name = group["name"]
     @context << "group: #{name}"
 
     begin
       rules = group["rules"]
       rules.each do |rule|
-        validate_rule rule, mimir_evaluation
+        validate_rule rule
       rescue ValidationError
         # Continue onto next rule after validation failure
       end
@@ -161,7 +173,7 @@ class Validator
     end
   end
 
-  def validate_file(alert_file_path, mimir_evaluation)
+  def validate_file(alert_file_path)
     @context << "file: #{alert_file_path}"
     begin
       alert_yaml = YAML.load_file(alert_file_path)
@@ -169,7 +181,7 @@ class Validator
 
       groups = alert_yaml["groups"]
       groups.each do |group|
-        validate_group group, mimir_evaluation
+        validate_group group
       rescue ValidationError
         # Continue onto next group after validation failure
       end
