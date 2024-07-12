@@ -48,6 +48,7 @@ Note:
 HELP
     exit 2
     ;;
+
   repositories)
     cat <<HELP >&2
 USAGE:
@@ -55,6 +56,7 @@ USAGE:
 
 SUBCOMMANDS:
   move       Move repositories to a different storage
+  checksum   Clone a repository and generate a checksum from the contents
 HELP
     ;;
 
@@ -74,6 +76,32 @@ Example:
   glsh gitaly repositories move -e gstg proj/path1 proj/path2
   # Move proj/path1 and proj/path2 to storage gitaly-02-stor-gstg.c.gitlab-gitaly-gstg-380a.internal
   glsh gitaly repositories move -e gstg -d gitaly-02-stor-gstg.c.gitlab-gitaly-gstg-380a.internal proj/path1 proj/path2
+
+Note:
+  To list available storages use \`glsh gitaly storage list -e [gstg,gprd]\`
+HELP
+    exit 2
+    ;;
+
+  repositories_checksum)
+    cat <<HELP >&2
+
+Clones a project and generates an md5sum based on it's contents. Either specify a storage name
+to clone the first repository found on the storage, or a project path to clone a specific repository.
+
+USAGE:
+  glsh gitaly repositories checksum -e [gstg,gprd] [-s [storage name]] [-p [project name]] [-g [group name]]
+
+  -e [gstg,gprd]            Environment to validate
+  -s [storage name]         (optional)* Storage name to select a project from to checksum. It looks for the oldest repository on the storage.
+  -p [project name]         (optional)* Project name to checksum
+  -g [group name]           (optional)  Group filter for the repository when used with the -s flag
+
+  * Either project name or storage name is required
+
+Example:
+  # Generate a checksum of a repository in the gitlab-com group on gitaly-02-stor-gstg.c.gitlab-gitaly-gstg-164c.internal
+  glsh gitaly repositories checksum -s gitaly-02-stor-gstg.c.gitlab-gitaly-gstg-164c.internal -e gstg -g gitlab-com
 
 Note:
   To list available storages use \`glsh gitaly storage list -e [gstg,gprd]\`
@@ -285,6 +313,55 @@ repositories_move() {
     new_storage="$(jq -r '.repository_storage' <<<"$info_resp")"
     echo "[new_storage=$new_storage]"
   done
+}
+
+repositories_checksum() {
+  local storage dst_storage group
+  while getopts "h?s:p:g:e:" opt; do
+    case "$opt" in
+    h | \?)
+      usage "${FUNCNAME[0]}"
+      ;;
+    s)
+      storage=${OPTARG}
+      ;;
+    p)
+      project=${OPTARG}
+      ;;
+    g)
+      group=${OPTARG}
+      ;;
+    e)
+      env=${OPTARG}
+      ;;
+    esac
+  done
+  shift "$((OPTIND - 1))"
+
+  [[ -z $project ]] && [[ -z $storage ]] || [[ -z ${env:-} ]] && usage "${FUNCNAME[0]}"
+
+  if [[ -n "$storage" ]]; then
+    local pat
+    pat="$(admin_pat)"
+    project_json="$(find_project_on_storage "$storage" "$group")"
+    clone_url="$(jq -r .ssh_url_to_repo <<<"$project_json")"
+    project="$(jq -r '.path_with_namespace' <<<"$project_json")"
+  else
+    clone_url="git@${gitlab_host}/${project}.git"
+  fi
+  project_name="$(awk -F'/' '{print $NF}' <<<"$project")"
+  temp_dir="$(mktemp -d)"
+  mkdir -p "$temp_dir/$project"
+
+  echo "Cloning repository: $project"
+  git clone "$clone_url" "$temp_dir/$project"
+
+  pushd "$temp_dir/$project" >/dev/null
+  local sums="$(find . -type f | grep -v '.git' | sort | xargs md5sum)"
+  popd >/dev/null
+
+  echo "Project ${project_name}: $(md5sum <<<"$sums")"
+  rm -rf "$temp_dir"
 }
 
 ################## Helper Functions #####################
@@ -509,6 +586,34 @@ project_info() {
   echo "$resp"
 }
 
+find_project_on_storage() {
+  local storage="$1"
+  local group="$2"
+  local curl_opts
+
+  curl_uri="$(api_for_env)/projects?repository_storage=${storage}&order_by=created_at&sort=asc"
+
+  if [[ -n "$group" ]]; then
+    curl_uri="${curl_uri}&search=${group}/"
+  fi
+
+  curl_opts=(
+    --silent --fail-with-body --show-error
+    --header "PRIVATE-TOKEN: $pat"
+    --header "Content-Type: application/json"
+    $curl_uri
+  )
+
+  local resp
+  if ! resp=$(curl "${curl_opts[@]}" 2>&1); then
+    echo_err "✘ curl exited non-zero!"
+    echo_err "        $resp"
+    exit 1
+  fi
+
+  echo "$resp" | jq '.[0]'
+}
+
 ###################################################
 # echos the API URL depending on which environment
 # is set
@@ -595,6 +700,10 @@ main() {
       repositories_move "$@"
       ;;
 
+    checksum)
+      shift 2
+      repositories_checksum "$@"
+      ;;
     *)
       usage repositories
       ;;
