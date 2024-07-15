@@ -14,7 +14,7 @@ Database consoles in Staging/Production are accessed via Gravitational [Teleport
 
 ## Access Requests
 
-Before you start using Teleport, you must be assigned the app in Okta.  This should be a part of your role's baseline group assignment. In most cases there should be no additional action required to gain access to the services appropriate to your role. If your onboarding is complete and you still do not have access to the Teleport app in Okta, open an [access request](https://about.gitlab.com/handbook/business-technology/team-member-enablement/onboarding-access-requests/access-requests/) and follow the appropriate approval methods.
+Before you start using Teleport, you must be assigned the app in Okta. This should be a part of your role's baseline group assignment. In most cases there should be no additional action required to gain access to the services appropriate to your role. If your onboarding is complete and you still do not have access to the Teleport app in Okta, open an [access request](https://about.gitlab.com/handbook/business-technology/team-member-enablement/onboarding-access-requests/access-requests/) and follow the appropriate approval methods.
 
 ## How to use Teleport to connect to Database console
 
@@ -43,7 +43,7 @@ Linux install instructions are [also available on the Teleport site](https://got
 3. Log in to the database with the appropriate database user
 4. Connect the database console
 
-The access will be temporary (`12h` max) and can be approved by any SRE or Reliability Manager.  The `@sre-oncall` can help if it's urgent, but if you can wait it is considerate to spread the load out by asking the wider SRE team in `#teleport-requests`. Access can be extended before or after expiration using the same process.
+The access will be temporary (`12h` max) and can be approved by any SRE or Reliability Manager. The `@sre-oncall` can help if it's urgent, but if you can wait it is considerate to spread the load out by asking the wider SRE team in `#teleport-requests`. Access can be extended before or after expiration using the same process.
 
 There are two Teleport cluster/servers:
 
@@ -60,22 +60,22 @@ tsh login --proxy=staging.teleport.gitlab.net
 
 2. Request approval for the database role that you need
 
-> Note: The `database-ro-gstg` role in the `gstg` environment does not require a request or approval, so you can skip the next step. Use the `database-ro-gstg` role unless you know for sure that you need something else. For Package Team members, they additionaly have `database-registry-ro-gstg` role in the `gstg`, which gives them access to registry database without approval.
+> Note: The `non-prod-database-ro` role in the `gstg` environment does not require a request or approval, so you can skip the next step. Use the `non-prod-database-registry-ro` role unless you know for sure that you need something else. For Package Team members, they additionally have `database-registry-ro-gstg` role in the `gstg`, which gives them access to registry database without approval.
 
 If you need to request a role which includes elevated permissions for the Database console. Request any of the following roles:
 
 Staging `main` and `CI` database roles:
 
-- `database-ro-gstg`
-- `database-rw-gstg`
+- `non-prod-database-ro`
+- `non-prod-database-rw`
 
 Staging `registry` database roles:
 
-- `database-registry-ro-gstg`
-- `database-registry-rw-gstg`
+- `non-prod-database-registry-ro`
+- `non-prod-database-registry-rw`
 
 ```shell
-tsh login --proxy=staging.teleport.gitlab.net --request-roles=database-ro-gstg --request-reason="Issue-URL or explanation"
+tsh login --proxy=staging.teleport.gitlab.net --request-roles=non-prod-database-ro --request-reason="Issue-URL or explanation"
 ```
 
 3. Login with the approved request ID
@@ -86,7 +86,7 @@ If approval is required and the above command is stopped or times out, but the r
 tsh login --request-id=<request-id>
 ```
 
- 3. Login to the database
+3. Login to the database
 
 Once an approval (if required) is issued, the next step is to log in to the database. The database name at the end of the line refers to the database host that Teleport is pointing to (which you can see with `tsh db ls`):
 
@@ -148,13 +148,13 @@ tsh login --proxy=production.teleport.gitlab.net
 
 Production `main` and `CI` database roles:
 
-- `database-ro-gprd`
-- `database-rw-gprd`
+- `prod-database-ro`
+- `prod-database-rw`
 
 Production `registry` database roles:
 
-- `database-registry-ro-gprd`
-- `database-registry-rw-gprd`
+- `prod-database-registry-ro`
+- `prod-database-registry-rw`
 
 ```shell
 tsh login --proxy=production.teleport.gitlab.net --request-roles=database-ro-gprd --request-reason="Issue-URL or explanation"
@@ -162,7 +162,7 @@ tsh login --proxy=production.teleport.gitlab.net --request-roles=database-ro-gpr
 
 3. Login with the approved request ID
 
-If the command is stopped or times out, but the request is approved, you don't need to request another approval.  Simply login and provide the approved request ID (output by the previous command, or find it in the web interface):
+If the command is stopped or times out, but the request is approved, you don't need to request another approval. Simply login and provide the approved request ID (output by the previous command, or find it in the web interface):
 
 ```shell
 tsh login --request-id=<request-id>
@@ -234,7 +234,7 @@ tsh login --proxy=staging.teleport.gitlab.net --request-roles=database-ro-gstg -
 
 This command will pause while it waits for the approver to approve the request. It may appear to hang, but it is waiting for someone to approve it. The command will return as soon as the request is approved, denied, or times out.
 
-If the command is stopped or times out, but the request is approved, you don't need to request another approval.  Instead, login and provide the approved request ID (output by the previous command, or find it in the web interface):
+If the command is stopped or times out, but the request is approved, you don't need to request another approval. Instead, login and provide the approved request ID (output by the previous command, or find it in the web interface):
 
 ```shell
 tsh login --request-id=<request-id>
@@ -246,8 +246,8 @@ The request ID is shown in the output of `tsh login` when making the initial req
 
 #### Access approval
 
-Approvers will get your request via an automated notification in the `#teleport-requests` Slack channel.  If you have additional context,
-or need to expedite an approval, please comment as a thread under that message.  If the request is urgent, you can ping `@sre-oncall`, but
+Approvers will get your request via an automated notification in the `#teleport-requests` Slack channel. If you have additional context,
+or need to expedite an approval, please comment as a thread under that message. If the request is urgent, you can ping `@sre-oncall`, but
 to spread out the workload please try to allow some time for others to review first if possible. If the approval request **doesn't show up** in
 `#teleport-requests` feel free to ask someone in that channel to take a look at your request, and provide the request ID.
 
@@ -261,9 +261,9 @@ If you have any issues using Teleport, or this approval process, please ask the 
 
 ## More detail
 
-The Teleport login process is a little different from other services.  With Teleport, you are not opening a network session with a server so much as requesting that the server sign your certificate and add the appropriate role permissions to it.
+The Teleport login process is a little different from other services. With Teleport, you are not opening a network session with a server so much as requesting that the server sign your certificate and add the appropriate role permissions to it.
 
-The `tsh login` command requests that the server validate your identity with Okta and give you a certificate which can be used as the equivalent of an SSH key.  However, in contrast to an SSH key, this certificate expires, and also contains information on which roles you are approved for.  This information is displayed at login, but can be viewed again with `tsh status`.
+The `tsh login` command requests that the server validate your identity with Okta and give you a certificate which can be used as the equivalent of an SSH key. However, in contrast to an SSH key, this certificate expires, and also contains information on which roles you are approved for. This information is displayed at login, but can be viewed again with `tsh status`.
 
 ```text
 $ tsh status
@@ -280,7 +280,7 @@ $ tsh status
 
 Note that the default certificate might not have any roles assigned, allowing you to interact with the Teleport server, and to request more roles, but does not allow connecting to any other services.
 
-To request permission to connect to a service, you must use the `--request-roles` flag.  You can request a role after already having a valid certificate, or simply by adding the flag to your initial login. Each `--request-roles` requires a `--request-reason`. It's best to use the URL of the issue or incident that this activity relates to.
+To request permission to connect to a service, you must use the `--request-roles` flag. You can request a role after already having a valid certificate, or simply by adding the flag to your initial login. Each `--request-roles` requires a `--request-reason`. It's best to use the URL of the issue or incident that this activity relates to.
 
 ```shell
 tsh login --proxy=staging.teleport.gitlab.net --request-roles=database-ro-gstg --request-reason="Issue-URL or explanation"
