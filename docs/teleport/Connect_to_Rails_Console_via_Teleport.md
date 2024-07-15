@@ -23,10 +23,7 @@ It is worth noting that the current access granted is a read-only access, if you
 There are two ways to use to Teleport to connect to a Rails console:
 
 1. Installing [tsh](https://goteleport.com/docs/reference/cli/tsh/), the Teleport CLI client. This is the recommended way.
-1. Via the Teleport HTTP portal:
-
-- <https://staging.teleport.gitlab.net/> for staging
-- <https://production.teleport.gitlab.net/> for production
+1. Via the [Teleport HTTP portal](https://production.teleport.gitlab.net/)
 
 ### Installing tsh
 
@@ -42,7 +39,7 @@ Always use staging to test and experiment, unless production data is strictly ne
 The `rails-console-ro-gstg` role in the `gstg` environment does not require a request or approval.
 
 ```shell
-tsh login --proxy=staging.teleport.gitlab.net
+tsh login --proxy=production.teleport.gitlab.net
 tsh ssh rails-ro@console-ro-01-sv-gstg
 ```
 
@@ -114,9 +111,9 @@ The `tsh login` command requests that the server validate your identity with Okt
 
 ```shell
 $ tsh status
-> Profile URL:        https://staging.teleport.gitlab.net:443
+> Profile URL:        https://production.teleport.gitlab.net:443
   Logged in as:       <username>@gitlab.com
-  Cluster:            staging.teleport.gitlab.net
+  Cluster:            production.teleport.gitlab.net
   Roles:              <roles>
   Logins:             <username>, rails, rails-ro, <any other logins (SSH)>
   Kubernetes:         enabled
@@ -130,7 +127,7 @@ Note that the default certificate might not have any roles assigned, allowing yo
 To request permission to connect to a service, you must use the `--request-roles` flag.  You can request a role after already having a valid certificate, or simply by adding the flag to your initial login. Each `--request-roles` requires a `--request-reason`. It's best to use the URL of the issue or incident that this activity relates to, or a ZenDesk ticket URL.
 
 ```shell
-tsh login --proxy=staging.teleport.gitlab.net --request-roles=rails-console-ro-gstg --request-reason="Issue URL or ZenDesk ticket URL, and brief explanation"
+tsh login --proxy=production.teleport.gitlab.net --request-roles=rails-console-ro-gstg --request-reason="Issue URL or ZenDesk ticket URL, and brief explanation"
 ```
 
 Once approved, the server will replace your locally stored certificate with an updated one, and your newly valid roles will appear in the `tsh status` output.
