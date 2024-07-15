@@ -57,9 +57,9 @@ See the guidance from the IMOC onboarding:
 
 ### Estimate the Severity of the issue
 
-Estimate the severity of the issue as soon as EOC or you have an idea on what the problem is. Evaluate based on [Availability](https://about.gitlab.com/handbook/engineering/quality/issue-triage/#availability). Sometimes it is tough to say to the upset customer that their issue is not S1 for us, but we need to think about the whole situation and other users.
+Estimate the severity of the issue as soon as EOC or you have an idea on what the problem is. Evaluate based on [Availability](https://handbook.gitlab.com/handbook/engineering/infrastructure/engineering-productivity/issue-triage/#availability). Sometimes it is tough to say to the upset customer that their issue is not S1 for us, but we need to think about the whole situation and other users.
 
-If the incident directly affects availability for customers and you have access to a sample of namespace IDs or names you can use the [ChatOps](https://about.gitlab.com/handbook/support/workflows/chatops.html#namespace) tool to quickly establish the tier and number of members. The `find` command takes up to 5 namespaces at a time.
+If the incident directly affects availability for customers and you have access to a sample of namespace IDs or names you can use the [ChatOps](https://handbook.gitlab.com/handbook/support/workflows/chatops/#namespace) tool to quickly establish the tier and number of members. The `find` command takes up to 5 namespaces at a time.
 
 We prefer to avoid [hotpatches](https://gitlab.com/gitlab-org/release/docs/-/blob/master/general/deploy/post-deployment-patches.md#overview). If a hotpatch is being considered, the issue severity will drive the decision:
 
@@ -82,7 +82,7 @@ As an IMOC, on roughly these times, you can ask yourself these questions:
     * If not sev1/down, a little more relaxed - say every 15 min
 4. Do we understand what to do to resolve or mitigate the problem? (first 10 min frequently after we have identified the issue- every 2-3 min)
     * If not sev1/down, again a little more relaxed, every 15 min
-5. Do we need a [CMOC](https://about.gitlab.com/handbook/engineering/infrastructure/incident-management/#how-to-engage-the-cmoc-only-during-weekdays)?  Is this customer facing?  Default to yes, but if deploy blocker - probably no.
+5. Do we need a [CMOC](https://handbook.gitlab.com/handbook/engineering/infrastructure/incident-management/#how-to-engage-the-cmoc)?  Is this customer facing?  Default to yes, but if deploy blocker - probably no.
 6. Regularly check on the EOC. EOC is in a highly stressful situation, pager is going off every few minutes and they are asked to try and deduct what is happening. As IMOC, you need to support the EOC.
 7. 10-15 minutes in.  Make sure there is an executive summary somewhere.  Most times at the top of the prod issue description.  If hard down, make sure gdoc exists with this summary.  Make sure the gdoc is shared in slack so people see it.
 8. Help the EOC keep the Timeline tab in the incident issue up to date.  If you are collecting things, use issue comments, then edit the Timeline later.
