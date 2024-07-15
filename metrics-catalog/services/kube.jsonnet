@@ -8,7 +8,7 @@ local kubeLabelSelectors = metricsCatalog.kubeLabelSelectors;
 metricsCatalog.serviceDefinition({
   type: 'kube',
   tier: 'inf',
-  tenants: [ 'gitlab-gprd', 'gitlab-gstg', 'gitlab-ops', 'gitlab-pre' ],
+  tenants: ['gitlab-gprd', 'gitlab-gstg', 'gitlab-ops', 'gitlab-pre'],
   serviceIsStageless: true,  // kube does not have a cny stage
   monitoringThresholds: {
     apdexScore: 0.999,
@@ -49,6 +49,7 @@ metricsCatalog.serviceDefinition({
 
         This SLI measures all non-health-check endpoints. Long-polling endpoints are excluded from apdex scores.
       |||,
+      useConfidenceLevelForSLIAlerts: '98%',
 
       local baseSelector = {
         job: 'apiserver',
@@ -105,6 +106,7 @@ metricsCatalog.serviceDefinition({
         Each decision by the cluster autoscaler to scale up is treated as an operation, and each cluster scaleup failure is
         treated as an error.
       |||,
+      useConfidenceLevelForSLIAlerts: '98%',
 
       staticLabels: {
         tier: 'inf',

@@ -34,6 +34,7 @@ groups:
       aggregation: component
       alert_class: slo_violation
       alert_type: symptom
+      confidence: 98%
       feature_category: not_owned
       pager: pagerduty
       rules_domain: general
@@ -45,12 +46,12 @@ groups:
     expr: |
       (
         (
-          gitlab_component_apdex:ratio_1h{component="apiserver",env="gprd",monitor="global",type="kube"}
+          gitlab_component_apdex:confidence:ratio_1h{component="apiserver",confidence="98%",env="gprd",monitor="global",type="kube"}
           < (1 - 14.4 * 0.001000)
         )
         and
         (
-          gitlab_component_apdex:ratio_5m{component="apiserver",env="gprd",monitor="global",type="kube"}
+          gitlab_component_apdex:confidence:ratio_5m{component="apiserver",confidence="98%",env="gprd",monitor="global",type="kube"}
           < (1 - 14.4 * 0.001000)
         )
       )
@@ -88,6 +89,7 @@ groups:
       aggregation: component
       alert_class: slo_violation
       alert_type: symptom
+      confidence: 98%
       feature_category: not_owned
       pager: pagerduty
       rules_domain: general
@@ -99,12 +101,12 @@ groups:
     expr: |
       (
         (
-          gitlab_component_apdex:ratio_6h{component="apiserver",env="gprd",monitor="global",type="kube"}
+          gitlab_component_apdex:confidence:ratio_6h{component="apiserver",confidence="98%",env="gprd",monitor="global",type="kube"}
           < (1 - 6 * 0.001000)
         )
         and
         (
-          gitlab_component_apdex:ratio_30m{component="apiserver",env="gprd",monitor="global",type="kube"}
+          gitlab_component_apdex:confidence:ratio_30m{component="apiserver",confidence="98%",env="gprd",monitor="global",type="kube"}
           < (1 - 6 * 0.001000)
         )
       )
@@ -139,6 +141,7 @@ groups:
       aggregation: component
       alert_class: slo_violation
       alert_type: symptom
+      confidence: 98%
       feature_category: not_owned
       pager: pagerduty
       rules_domain: general
@@ -150,12 +153,12 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_1h{component="apiserver",env="gprd",monitor="global",type="kube"}
+          gitlab_component_errors:confidence:ratio_1h{component="apiserver",confidence="98%",env="gprd",monitor="global",type="kube"}
           > (14.4 * 0.000500)
         )
         and
         (
-          gitlab_component_errors:ratio_5m{component="apiserver",env="gprd",monitor="global",type="kube"}
+          gitlab_component_errors:confidence:ratio_5m{component="apiserver",confidence="98%",env="gprd",monitor="global",type="kube"}
           > (14.4 * 0.000500)
         )
       )
@@ -190,6 +193,7 @@ groups:
       aggregation: component
       alert_class: slo_violation
       alert_type: symptom
+      confidence: 98%
       feature_category: not_owned
       pager: pagerduty
       rules_domain: general
@@ -201,12 +205,12 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_6h{component="apiserver",env="gprd",monitor="global",type="kube"}
+          gitlab_component_errors:confidence:ratio_6h{component="apiserver",confidence="98%",env="gprd",monitor="global",type="kube"}
           > (6 * 0.000500)
         )
         and
         (
-          gitlab_component_errors:ratio_30m{component="apiserver",env="gprd",monitor="global",type="kube"}
+          gitlab_component_errors:confidence:ratio_30m{component="apiserver",confidence="98%",env="gprd",monitor="global",type="kube"}
           > (6 * 0.000500)
         )
       )
@@ -321,6 +325,7 @@ groups:
       aggregation: component
       alert_class: slo_violation
       alert_type: symptom
+      confidence: 98%
       feature_category: not_owned
       pager: pagerduty
       rules_domain: general
@@ -332,12 +337,12 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_1h{component="cluster_scaleups",env="gprd",monitor="global",type="kube"}
+          gitlab_component_errors:confidence:ratio_1h{component="cluster_scaleups",confidence="98%",env="gprd",monitor="global",type="kube"}
           > (14.4 * 0.050000)
         )
         and
         (
-          gitlab_component_errors:ratio_5m{component="cluster_scaleups",env="gprd",monitor="global",type="kube"}
+          gitlab_component_errors:confidence:ratio_5m{component="cluster_scaleups",confidence="98%",env="gprd",monitor="global",type="kube"}
           > (14.4 * 0.050000)
         )
       )
@@ -374,6 +379,7 @@ groups:
       aggregation: component
       alert_class: slo_violation
       alert_type: symptom
+      confidence: 98%
       feature_category: not_owned
       pager: pagerduty
       rules_domain: general
@@ -385,12 +391,12 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_6h{component="cluster_scaleups",env="gprd",monitor="global",type="kube"}
+          gitlab_component_errors:confidence:ratio_6h{component="cluster_scaleups",confidence="98%",env="gprd",monitor="global",type="kube"}
           > (6 * 0.050000)
         )
         and
         (
-          gitlab_component_errors:ratio_30m{component="cluster_scaleups",env="gprd",monitor="global",type="kube"}
+          gitlab_component_errors:confidence:ratio_30m{component="cluster_scaleups",confidence="98%",env="gprd",monitor="global",type="kube"}
           > (6 * 0.050000)
         )
       )
