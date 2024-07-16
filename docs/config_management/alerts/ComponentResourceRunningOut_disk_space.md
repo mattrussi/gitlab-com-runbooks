@@ -8,10 +8,11 @@
 
 This alert means that the disk space utilization on a disk for a node is growing rapidly and will reach it's capacity in the next 6 hours. The cause of the fast growth should be investigated.
 
+Affected Service will be mentioned in the alert and the team owning the service can be determined in the [Service Catalog](https://gitlab.com/gitlab-com/runbooks/-/blob/master/services/service-catalog.yml?ref_type=heads) by searching for the Service name.
+
 ## Services
 
-- > All alerts require one or more Service Overview links
-- > Team that owns the service
+This alert does not have an assigned team and created from [the template](https://gitlab.com/gitlab-com/runbooks/-/blob/master/libsonnet/servicemetrics/resource_saturation_point.libsonnet?ref_type=heads#L208). So the alert can be firing for any GitLab component. To identify the team, identify the service for which the alert fired and search through the [Service Catalog](https://gitlab.com/gitlab-com/runbooks/-/blob/master/services/service-catalog.yml?ref_type=heads) to get the details about the ownership.
 
 ## Metrics
 
@@ -23,9 +24,7 @@ This alert means that the disk space utilization on a disk for a node is growing
 
 ## Alert Behavior
 
-- > Information on silencing the alert (if applicable). When and how can silencing be used? Are there automated silencing rules?
-- > Expected frequency of the alert. Is it a high-volume alert or expected to be rare?
-- > Show historical trends of the alert firing e.g  Kibana dashboard
+This alert is rare and if triggered, should be investigated, as it may lead to the fullfilment of the available disk space on a node, which could trigger other incidents with higher Severity. It is not recommended to silence this alert.
 
 ## Severities
 
@@ -43,9 +42,7 @@ This alert means that the disk space utilization on a disk for a node is growing
 
 ## Recent changes
 
-- > Links to queries for recent related production change requests
-- > Links to queries for recent cookbook or helm MR's
-- > How to properly roll back changes
+The alert is applicable to many services, and created from a template. To find out recent changes review the [closed prodcution issues for a specific Service](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/?sort=created_date&state=all&first_page_size=100). To filter the issue to the affected service from the alert apply search filter with `Label=Service::<service_name>`. [Example for HAProxy service](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/?sort=created_date&state=all&label_name%5B%5D=Service%3A%3AHAProxy&label_name%5B%5D=change&first_page_size=100)
 
 ## Troubleshooting
 
@@ -62,7 +59,7 @@ Examples of the previous incidents:
 
 ## Dependencies
 
-- > Internal and external dependencies which could potentially cause this alert
+There are no external dependencies for this alert
 
 # Escalation
 
@@ -77,5 +74,6 @@ Examples of the previous incidents:
 
 # Related Links
 
-- [Related alerts](./)
-- > Related documentation
+- [Related alerts](https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/config_management/alerts/ComponentResourceRunningOut_disk_space.md)
+- [Alert template](https://gitlab.com/gitlab-com/runbooks/-/blob/master/libsonnet/servicemetrics/resource_saturation_point.libsonnet?ref_type=heads#L208)
+- [Update the template used to format this playbook](https://gitlab.com/gitlab-com/runbooks/-/edit/master/docs/template-alert-playbook.md?ref_type=heads)
