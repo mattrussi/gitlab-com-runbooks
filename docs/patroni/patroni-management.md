@@ -394,21 +394,11 @@ and Chef nodes are removed when its GCP node is restarted, so it's not totally p
 Alternatively, we can utilize a special Chef role (`<env>-base-db-patroni-maintenance`)
 that sets `nofailover` and `noloadbalance` to `true`, and then instruct Terraform to assign it to a particular instance.
 
-1. In Terraform `patroni` module, add the following snippet:
+1. In Chef repo, add the role `<env>-base-db-patroni-maintenance` into the node `run_list` and then execute `chef-client` on the specific node:
 
    ```sh
-   per_node_chef_run_list = {
-     "3" = "\"role[${var.environment}-base-db-patroni-maintenance]\""
-   }
-   ```
-
-   Replace `3` with the zero-based index of the replica we are targeting. In this example we're targeting
-   `patroni-04`.
-1. Apply the Terraform change.
-1. In the target replica, run:
-
-   ```sh
-   sudo google_metadata_script_runner --script-type startup --debug
+   knife node run_list add <node-fqdn> "role[<env>-base-db-patroni-maintenance]"
+   ssh <node-fqdn> "sudo chef-client"
    ```
 
 1. Verify the replica is in maintenance by checking for the node name
@@ -418,7 +408,24 @@ that sets `nofailover` and `noloadbalance` to `true`, and then instruct Terrafor
    dig @127.0.0.1 -p 8600 db-replica.service.consul. SRV
    ```
 
-    If the name is absent, then the reload worked.
+   If the name is absent, then the reload worked.
+
+1. Check [Grafana `pgbouncer_stats_queries_pooled_total` metric](https://dashboards.gitlab.net/explore?schemaVersion=1&panes=%7B%22pum%22:%7B%22datasource%22:%22mimir-gitlab-gprd%22,%22queries%22:%5B%7B%22refId%22:%22A%22,%22expr%22:%22sum%28rate%28pgbouncer_stats_queries_pooled_total%7Btype%3D~%5C%22patroni%7Cpatroni-ci%7Cpatroni-registry%7Cpatroni-embedding%5C%22,%20environment%3D%5C%22gprd%5C%22%7D%5B1m%5D%29%29%20by%20%28fqdn%29%22,%22range%22:true,%22instant%22:true,%22datasource%22:%7B%22type%22:%22prometheus%22,%22uid%22:%22mimir-gitlab-gprd%22%7D,%22editorMode%22:%22code%22,%22legendFormat%22:%22__auto%22%7D%5D,%22range%22:%7B%22from%22:%22now-1h%22,%22to%22:%22now%22%7D%7D%7D&orgId=1) 
+
+1. To let the configuration in Sync add the `${var.environment}-base-db-patroni-maintenance` role in the `chef_run_list_extra` for the specific patroni module and node, like the following snippet:
+
+   ```
+   nodes = {
+      ...
+      10 = {
+         chef_run_list_extra = "\"role[${var.environment}-base-db-patroni-maintenance]\""
+      }
+   }
+   ```
+
+   Replace `10` with the zero-based index of the replica we are targeting.
+
+1. Apply the Terraform change.
 
 ### Legacy Method (Consul Maintenance)
 
