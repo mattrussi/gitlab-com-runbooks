@@ -410,7 +410,7 @@ that sets `nofailover` and `noloadbalance` to `true`, and then instruct Terrafor
 
    If the name is absent, then the reload worked.
 
-1. Check [Grafana `pgbouncer_stats_queries_pooled_total` metric](https://dashboards.gitlab.net/explore?schemaVersion=1&panes=%7B%22pum%22:%7B%22datasource%22:%22mimir-gitlab-gprd%22,%22queries%22:%5B%7B%22refId%22:%22A%22,%22expr%22:%22sum%28rate%28pgbouncer_stats_queries_pooled_total%7Btype%3D~%5C%22patroni%7Cpatroni-ci%7Cpatroni-registry%7Cpatroni-embedding%5C%22,%20environment%3D%5C%22gprd%5C%22%7D%5B1m%5D%29%29%20by%20%28fqdn%29%22,%22range%22:true,%22instant%22:true,%22datasource%22:%7B%22type%22:%22prometheus%22,%22uid%22:%22mimir-gitlab-gprd%22%7D,%22editorMode%22:%22code%22,%22legendFormat%22:%22__auto%22%7D%5D,%22range%22:%7B%22from%22:%22now-1h%22,%22to%22:%22now%22%7D%7D%7D&orgId=1) 
+1. Check [Grafana `pgbouncer_stats_queries_pooled_total` metric](https://dashboards.gitlab.net/explore?schemaVersion=1&panes=%7B%22pum%22:%7B%22datasource%22:%22mimir-gitlab-gprd%22,%22queries%22:%5B%7B%22refId%22:%22A%22,%22expr%22:%22sum%28rate%28pgbouncer_stats_queries_pooled_total%7Btype%3D~%5C%22patroni%7Cpatroni-ci%7Cpatroni-registry%7Cpatroni-embedding%5C%22,%20environment%3D%5C%22gprd%5C%22%7D%5B1m%5D%29%29%20by%20%28fqdn%29%22,%22range%22:true,%22instant%22:true,%22datasource%22:%7B%22type%22:%22prometheus%22,%22uid%22:%22mimir-gitlab-gprd%22%7D,%22editorMode%22:%22code%22,%22legendFormat%22:%22__auto%22%7D%5D,%22range%22:%7B%22from%22:%22now-1h%22,%22to%22:%22now%22%7D%7D%7D&orgId=1)
 
 1. To let the configuration in Sync add the `${var.environment}-base-db-patroni-maintenance` role in the `chef_run_list_extra` for the specific patroni module and node, like the following snippet:
 
@@ -426,7 +426,6 @@ that sets `nofailover` and `noloadbalance` to `true`, and then instruct Terrafor
    Replace `10` with the zero-based index of the replica we are targeting.
 
 1. Apply the Terraform change.
-
 
 #### Remove long-term maintenace from a Replica
 
