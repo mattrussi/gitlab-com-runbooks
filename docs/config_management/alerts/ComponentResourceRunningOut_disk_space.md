@@ -28,11 +28,7 @@ This alert is rare and if triggered, should be investigated, as it may lead to t
 
 ## Severities
 
-- > Guidance for assigning incident severity to this alert
-- > Who is likely to be impacted by this cause of this alert?
-  - > All gitlab.com customers or a subset?
-  - > Internal customers only?
-- > Things to check to determine severity
+This alert is usually assigned a low Severity (S4 or S3)
 
 ## Verification
 
