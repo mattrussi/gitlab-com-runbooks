@@ -2079,7 +2079,26 @@ services:
     observability:
       monitors:
         primary_grafana_dashboard: woodhouse/woodhouse-overview
-
+  - name: woodhouse-slack
+    tier: sv
+    friendly_name: Woodhouse Slack bot
+    label: WoodhouseSlack
+    owner: reliability_general
+    technical:
+      project:
+        - https://gitlab.com/gitlab-com/gl-infra/woodhouse
+      documents:
+        design:
+        architecture:
+        readiness_review:
+        sre_guide:
+        developer_guide:
+        service:
+        security:
+      dependencies:
+      logging:
+        - name: Woodhouse GCP logs
+          permalink: https://cloudlogging.app.goo.gl/8fxWBxq18peA4ssE6
   - name: kas
     tier: sv
     friendly_name: Kubernetes Agent

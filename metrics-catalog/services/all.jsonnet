@@ -74,5 +74,6 @@
   import 'web.jsonnet',
   import 'websockets.jsonnet',
   import 'woodhouse.jsonnet',
+  import 'woodhouse-slack.jsonnet',
   import 'zoekt.jsonnet',
 ]
