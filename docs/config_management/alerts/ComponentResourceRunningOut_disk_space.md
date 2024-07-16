@@ -6,7 +6,7 @@
 
 ## Overview
 
-This alert means that the disk space utilization on a device for a node is growing rapidly and will reach it's capacity in the next 6 hours. The cause of the fast growth should be investigated.
+This alert means that the disk space utilization on a disk for a node is growing rapidly and will reach it's capacity in the next 6 hours. The cause of the fast growth should be investigated.
 
 ## Services
 
@@ -55,7 +55,10 @@ This alert means that the disk space utilization on a device for a node is growi
 
 ## Possible Resolutions
 
-- > Links to past incidents where this alert helped identify an issue with clear resolutions
+Examples of the previous incidents:
+- [Low disk space on Gitaly storage](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/17000)
+- [Disk Space Utilization for ci-runners service](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/17848)
+- [All past incdents for ComponentResourceRunningOut_disk_space alert](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/?sort=created_date&state=closed&label_name%5B%5D=a%3AComponentResourceRunningOut_disk_space&first_page_size=100)
 
 ## Dependencies
 
