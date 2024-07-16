@@ -381,7 +381,7 @@ For more information on why this is necessary, please read this [investigation](
 
 An example for stopping, decommissioning then re-provisioning a replica can be found in this [issue](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/4721).
 
-### Permanently marking a replica as in maintenance
+### Long-term marking a replica as in maintenance
 
 The method described above is suitable for short-term maintenance (e.g. 1 hour or less),
 during which it's acceptable to keep `chef-client` disabled. However, if the replica is
@@ -426,6 +426,20 @@ that sets `nofailover` and `noloadbalance` to `true`, and then instruct Terrafor
    Replace `10` with the zero-based index of the replica we are targeting.
 
 1. Apply the Terraform change.
+
+
+#### Remove long-term maintenace from a Replica
+
+These are the steps to revert the long-term marking of a replica as in maintenance:
+
+1. In Chef repo, remove the role `<env>-base-db-patroni-maintenance` from the node `run_list` and then execute `chef-client` on the specific node:
+
+   ```sh
+   knife node run_list remove <node-fqdn> "role[<env>-base-db-patroni-maintenance]"
+   ssh <node-fqdn> "sudo chef-client"
+   ```
+
+1. Don't forget to revert the MR you created to add `${var.environment}-base-db-patroni-maintenance` in the node `chef_run_list_extra`
 
 ### Legacy Method (Consul Maintenance)
 
