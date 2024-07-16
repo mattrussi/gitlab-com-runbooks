@@ -1280,6 +1280,23 @@ services:
         grafana_folder: thanos
         primary_grafana_dashboard: thanos-main/thanos-overview
 
+  - name: topology
+    tier: sv
+    friendly_name: Topology Service
+    label: Topology
+    owner: tenant_scale
+    technical:
+      project:
+        - https://gitlab.com/gitlab-org/cells/topology-service
+      documents:
+        architecture: https://handbook.gitlab.com/handbook/engineering/architecture/design-documents/cells/topology_service
+      logging:
+        - name:
+          permalink:
+    observability:
+      monitors:
+        primary_grafana_dashboard: topology-service-main/topology-service-overview
+
   - name: redis
     tier: db
     friendly_name: Persistent Redis
