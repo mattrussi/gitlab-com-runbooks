@@ -53,6 +53,7 @@
 * [Diagnosing long running transactions](postgres-long-running-transaction.md)
 * [postgres.md](postgres.md)
 * [postgresql-backups-wale-walg.md](postgresql-backups-wale-walg.md)
+* [postgresql-buffermapping-lwlock-contention.md](postgresql-buffermapping-lwlock-contention.md)
 * [PostgreSQL](postgresql-disk-space.md)
 * [postgresql-locking.md](postgresql-locking.md)
 * [Adding a PostgreSQL replica](postgresql-replica.md)

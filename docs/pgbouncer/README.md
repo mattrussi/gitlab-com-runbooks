@@ -30,6 +30,7 @@
 * [Pg_repack using gitlab-pgrepack](../patroni/pg_repack.md)
 * [Diagnosing long running transactions](../patroni/postgres-long-running-transaction.md)
 * [../patroni/postgres.md](../patroni/postgres.md)
+* [../patroni/postgresql-buffermapping-lwlock-contention.md](../patroni/postgresql-buffermapping-lwlock-contention.md)
 * [How to evaluate load from queries](../patroni/postgresql-query-load-evaluation.md)
 * [How to provision the benchmark environment](../patroni/provisioning_bench_env.md)
 * [Rotating Rails' PostgreSQL password](../patroni/rotating-rails-postgresql-password.md)
