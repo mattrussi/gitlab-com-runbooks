@@ -16,11 +16,7 @@ This alert does not have an assigned team and created from [the template](https:
 
 ## Metrics
 
-- > Briefly explain the metric this alert is based on and link to the metrics catalogue. What unit is it measured in? (e.g., CPU usage in percentage, request latency in milliseconds)
-- > Explain the reasoning behind the chosen threshold value for triggering the alert. Is it based on historical data, best practices, or capacity planning?
-- > Describe the expected behavior of the metric under normal conditions. This helps identify situations where the alert might be falsely firing.
-- > Add screenshots of what a dashboard will look like when this alert is firing and when it recovers
-- > Are there any specific visuals or messages one should look for in the screenshots?
+The [alert expression](https://gitlab.com/gitlab-com/runbooks/-/blob/master/libsonnet/servicemetrics/resource_saturation_point.libsonnet?ref_type=heads#L209) is predicting whether the component saturation will exceed the defined hard SLO within the specified time frame. This means that this resource is growing rapidly and is predicted to exceed saturation threshold within the specified interval.
 
 ## Alert Behavior
 
@@ -42,13 +38,12 @@ The alert is applicable to many services, and created from a template. To find o
 
 ## Troubleshooting
 
-- > Basic troubleshooting order
-- > Additional dashboards to check
-- > Useful scripts or commands
+Basic troubleshooting will require a direct access to the affected nodes/services and investigation of the disk usage and capacity using `sudo du -sh` tool. This may help to identify the source of the disk usage growth. 
 
 ## Possible Resolutions
 
 Examples of the previous incidents:
+
 - [Low disk space on Gitaly storage](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/17000)
 - [Disk Space Utilization for ci-runners service](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/17848)
 - [All past incdents for ComponentResourceRunningOut_disk_space alert](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/?sort=created_date&state=closed&label_name%5B%5D=a%3AComponentResourceRunningOut_disk_space&first_page_size=100)
@@ -59,8 +54,12 @@ There are no external dependencies for this alert
 
 # Escalation
 
-- > How and when to escalate
-- > Slack channels where help is likely to be found:
+After the ownership team has been identified for the affected component, search for the Slack channel of the team and look for the escalation there.
+
+Alternative slack channels:
+
+- `[#production_engineering](https://gitlab.enterprise.slack.com/archives/C03QC5KNW5N)`
+- `[#infrastructure-lounge](https://gitlab.enterprise.slack.com/archives/CB3LSMEJV)`
 
 # Definitions
 
