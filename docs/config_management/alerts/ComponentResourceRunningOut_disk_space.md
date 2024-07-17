@@ -38,7 +38,15 @@ The alert is applicable to many services, and created from a template. To find o
 
 ## Troubleshooting
 
-Basic troubleshooting will require a direct access to the affected nodes/services and investigation of the disk usage and capacity using `sudo du -sh` tool. This may help to identify the source of the disk usage growth.
+Basic approach for troubleshooting would involve finding the disk running out of space and identifying the cause of the disk usage.
+
+- start with `sudo df -h -x squashfs` to find which disk is out of space
+- use `du` and `lsof` tools to understnad what might be the reason for the disk usage
+- use `sudo apt-get clean` to purge package manager cache
+- consider removing old kernels with `sudo apt-get autoremove`
+- examine log files for rapid growth: `find /var/log -type f -size +100M`
+
+The goal of the troubleshooting is to understand the nature of the increased disk usage and identifying the need for adjustments, fixes or required capacity changes.
 
 ## Possible Resolutions
 
