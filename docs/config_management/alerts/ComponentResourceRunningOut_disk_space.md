@@ -24,13 +24,11 @@ This alert is rare and if triggered, should be investigated, as it may lead to t
 
 ## Severities
 
-This alert is usually assigned a low Severity (S4 or S3)
+This alert is usually assigned a low Severity (S4 or S3), but may become a higher severity if the resource is not investigated and the disk usage reaches the capacity.
 
 ## Verification
 
-- > Prometheus link to query that triggered the alert
-- > Additional monitoring dashboards
-- > Link to log queries if applicable
+Additional monitring dashboards can be found for the affected service in the "Saturation Details" section for the "disk_space component saturation" view - [HAProxy Disk Space Utilization per Device per Node Example](https://dashboards.gitlab.net/d/frontend-main/frontend3a-overview?orgId=1&viewPanel=2661375984)
 
 ## Recent changes
 
@@ -38,7 +36,7 @@ The alert is applicable to many services, and created from a template. To find o
 
 ## Troubleshooting
 
-Basic troubleshooting will require a direct access to the affected nodes/services and investigation of the disk usage and capacity using `sudo du -sh` tool. This may help to identify the source of the disk usage growth. 
+Basic troubleshooting will require a direct access to the affected nodes/services and investigation of the disk usage and capacity using `sudo du -sh` tool. This may help to identify the source of the disk usage growth.
 
 ## Possible Resolutions
 
