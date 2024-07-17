@@ -20,7 +20,7 @@ The [alert expression](https://gitlab.com/gitlab-com/runbooks/-/blob/master/libs
 
 ## Alert Behavior
 
-This alert is rare and if triggered, should be investigated, as it may lead to the fullfilment of the available disk space on a node, which could trigger other incidents with higher Severity. It is not recommended to silence this alert.
+This alert is rare and if triggered, should be investigated, as it may lead to a service running out of available disk space, which could trigger other incidents with higher Severity. It is not recommended to silence this alert.
 
 ## Severities
 
