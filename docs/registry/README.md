@@ -31,6 +31,7 @@
 * [An impatient SRE's guide to deleting alerts](../monitoring/deleting-alerts.md)
 * [Gitlab.com on Kubernetes](../onboarding/gitlab.com_on_k8s.md)
 * [Diagnosis with Kibana](../onboarding/kibana-diagnosis.md)
+* [Patroni Cluster Management](../patroni/patroni-management.md)
 * [../patroni/postgresql-backups-wale-walg.md](../patroni/postgresql-backups-wale-walg.md)
 * [Scaling Redis Cluster](../redis/scaling-redis-cluster.md)
 * [Database Connection Pool Saturation](app-db-conn-pool-saturation.md)
