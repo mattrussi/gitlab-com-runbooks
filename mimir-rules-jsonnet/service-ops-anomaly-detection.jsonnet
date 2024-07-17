@@ -1,5 +1,5 @@
 local separateMimirRecordingFiles = (import 'recording-rules/lib/mimir/separate-mimir-recording-files.libsonnet').separateMimirRecordingFiles;
-local serviceOpsAnomalyDetection = import 'recording-rules/service-ops-anomaly-detection.libsonnet';
+local serviceAnomalyDetection = import 'recording-rules/service-anomaly-detection.libsonnet';
 local monitoredServices = (import 'gitlab-metrics-config.libsonnet').monitoredServices;
 
 local aggregationSets = (import 'gitlab-metrics-config.libsonnet').aggregationSets;
@@ -10,8 +10,14 @@ local outputPromYaml(groups) =
 
 local fileForService(service, selector, _extraArgs, _) = {
   service_ops_anomaly_detection: outputPromYaml(
-    serviceOpsAnomalyDetection.recordingRuleGroupsFor(
-      service.type, serviceAggregation, selector { type: service.type }
+    serviceAnomalyDetection.recordingRuleGroupsFor(
+      service.type,
+      serviceAggregation,
+      serviceAggregation.getOpsRateMetricForBurnRate,
+      'ops rate',
+      'gitlab_service_ops',
+      'disable_ops_rate_prediction',
+      selector { type: service.type },
     )
   ),
 };
