@@ -26,6 +26,8 @@ This alert is rare and if triggered, should be investigated, as it may lead to t
 
 This alert is usually assigned a low Severity (S4 or S3), but may become a higher severity if the resource is not investigated and the disk usage reaches the capacity.
 
+Review [Incident Severity Handbook](https://handbook.gitlab.com/handbook/engineering/infrastructure/incident-management/#incident-severity) page to identify the required Severity Level
+
 ## Verification
 
 Additional monitring dashboards can be found for the affected service in the "Saturation Details" section for the "disk_space component saturation" view - [HAProxy Disk Space Utilization per Device per Node Example](https://dashboards.gitlab.net/d/frontend-main/frontend3a-overview?orgId=1&viewPanel=2661375984)
