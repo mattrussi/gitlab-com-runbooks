@@ -1,347 +1,349 @@
-# How to connect to a Database console using Teleport
+# Connecting To a Database via Teleport
 
 **Table of Contents**
 
 [TOC]
 
-## Background info about [Teleport](https://goteleport.com/teleport/docs/)
+## Background on Teleport
 
-Database consoles in Staging/Production are accessed via Gravitational [Teleport](https://goteleport.com/teleport/docs/). Our legacy Database consoles (using the console servers) are in the process of being removed for most use cases.
+Database consoles in `gprd`, `gstg`, and other environments are accessed via [Teleport](https://goteleport.com/teleport/docs/).
+Access to Database consoles by SSH'ing into the console servers will be removed in future (for the majority of use cases).
 
-- The main reasons for this change are security and compliance: With Teleport we'll have fully flexible, on-demand, and audited access to our Database consoles and to some other terminal/CLI tools, like `kubectl`, [Rails Console](Connect_to_Rails_Console_via_Teleport.md), and more.
-- Teleport's goal is to provide a Unified Access Plane for all of our infrastructure. [Here](https://goteleport.com/teleport/docs/#why-use-teleport) you can find some of the most popular use cases for Teleport.
-- We evaluated Teleport thoroughly (see this [issue](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/11568)) and found it to comply with most of our infrastructure access requirements, unlike some of its competitors ([Okta-ASA](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/12042), [Hashicorp Boundary](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/11666) and others).
+- The main reasons for this change are security and compliance:
+  With Teleport we have fully flexible, on-demand, and audited access to our Database consoles and to some other terminal/CLI tools,
+  like `kubectl`, [Rails Console](Connect_to_Rails_Console_via_Teleport.md), and more.
+- Teleport's goal is to provide a *Unified Access Plane* for all of our infrastructure.
+  [Here](https://goteleport.com/docs/) you can find some of the most popular use cases for Teleport.
+- We evaluated Teleport thoroughly (see this [issue](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/11568))
+  and found it to comply with most of our infrastructure access requirements,
+  unlike some of its competitors ([Okta-ASA](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/12042),
+  [Hashicorp Boundary](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/11666) and others).
 
 ## Access Requests
 
-Before you start using Teleport, you must be assigned the app in Okta.  This should be a part of your role's baseline group assignment. In most cases there should be no additional action required to gain access to the services appropriate to your role. If your onboarding is complete and you still do not have access to the Teleport app in Okta, open an [access request](https://about.gitlab.com/handbook/business-technology/team-member-enablement/onboarding-access-requests/access-requests/) and follow the appropriate approval methods.
+Before you start using Teleport, you must be assigned the app in Okta. This should be a part of your role's baseline group assignment.
+In most cases there should be no additional action required to gain access to the services appropriate to your role.
+If your onboarding is complete and you still do not have access to the Teleport app in Okta, open an
+[access request](https://handbook.gitlab.com/handbook/business-technology/end-user-services/onboarding-access-requests/access-requests/)
+and follow the appropriate approval methods.
 
-## How to use Teleport to connect to Database console
+Note that trying to login to the Teleport Console from Okta dashboard can fail with a message "Login Unsuccessful",
+this is totally expected and does not mean you need to open an access request.
 
-You need the Teleport CLI client ([tsh](https://goteleport.com/teleport/docs/cli-docs/#tsh)) to connect to a Database console.
+## Connect To Database Console
+
+You need the Teleport CLI client [tsh](https://goteleport.com/docs/reference/cli/tsh/) for connecting to a Database console.
 
 ### Installing tsh
 
-On MacOS, it is as simple as running:
+Official packages for [macOS](hhttps://goteleport.com/docs/installation/#macos) and
+[Linux](https://goteleport.com/docs/installation/#linux) can be found at Teleport's website.
+
+### Installing psql
+
+You also need `psql` for accessing a Database shell.
+Please ensure you install it with [Homebrew](https://brew.sh) and not other tools such as `mise` or `asdf`.
 
 ```shell
-brew install teleport
+brew install postgresql@14
 ```
 
-However, the database console requires `psql` so if it is not already installed on your machine, you'll also have to run:
+### Accessing The Database Console
 
-```shell
-brew install postgres
+NOTE: we now have only one Teleport instance available at <https://production.teleport.gitlab.net>.
+
+The typical workflow for accessing a database is as follows.
+
+1. Authenticate to the Teleport instance.
+2. Submit an access request for the database role that you need.
+3. After your request is approved, log in to the database with the appropriate database user.
+4. Connect to the database shell.
+
+The read-only access to non-production (`gstg` or `pre`) databases is given to everyone by default via the `non-prod-database-ro` role.
+Hence, you do NOT need to submit an access request for read-only access in non-production environments (`gstg` or `pre`).
+If read-write access or production data are strictly necessary for the job, submit an access request using Teleport for the appropriate role.
+
+The access will be temporary (12 hours) and can be approved by any SRE or Reliability Manager.
+If the request is urgent, you can ping `@sre-oncall`, but to spread out the workload,
+please try to allow some time for others to review first if possible.
+Access can be extended before or after expiration using the same process.
+
+#### Non-Production
+
+1. Authenticate to the Teleport instance. This command opens Okta in a browser window:
+
+```bash
+$ tsh login --proxy=production.teleport.gitlab.net
 ```
 
-Linux install instructions are [also available on the Teleport site](https://goteleport.com/docs/installation/#linux)
+2. Request approval for the database role that you need.
 
-### Accessing the Database console via Teleport
+Note: The `non-prod-database-ro` role in the `gstg` or `pre` environments does not require a request or approval, so you can skip this step.
+Use the `non-prod-database-ro` role unless you know for sure that you need something else.
+For Package Team members, they additionaly have `non-prod-database-registry-ro` role in the `gstg` and `pre`,
+which gives them access to registry database without approval.
 
-1. Authenticate to the Teleport server
-2. Unless using read only access in staging, request approval for the database role that you need
-3. Log in to the database with the appropriate database user
-4. Connect the database console
+Request any of the following roles, if you need a role which includes elevated permissions for the database console.
 
-The access will be temporary (`12h` max) and can be approved by any SRE or Reliability Manager.  The `@sre-oncall` can help if it's urgent, but if you can wait it is considerate to spread the load out by asking the wider SRE team in `#teleport-requests`. Access can be extended before or after expiration using the same process.
+Non-production (`gstg` or `pre`) `main` and `CI` database roles:
 
-There are two Teleport cluster/servers:
+- Read-only:  `non-prod-database-ro`
+- Read-Write: `non-prod-database-rw`
 
-- <https://staging.teleport.gitlab.net/> for staging
-- <https://production.teleport.gitlab.net/> for production
+Non-production (`gstg` or `pre`) `registry` database roles:
 
-#### Staging
+- Read-only:  `non-prod-database-registry-ro`
+- Read-Write: `non-prod-database-registry-rw`
 
-1. Authenticate to the Teleport proxy/server. This command opens Okta in a browser window:
-
-```shell
-tsh login --proxy=staging.teleport.gitlab.net
+```bash
+$ tsh login --proxy=production.teleport.gitlab.net --request-roles=non-prod-database-rw --request-reason="GitLab Issue URL or ZenDesk Ticket URL"
 ```
 
-2. Request approval for the database role that you need
+This command will pause while it waits for the reviewer to approve the request.
+It may appear to hang, but it is waiting for someone to approve it.
+The command will return as soon as the request is approved, denied, or expires.
 
-> Note: The `database-ro-gstg` role in the `gstg` environment does not require a request or approval, so you can skip the next step. Use the `database-ro-gstg` role unless you know for sure that you need something else. For Package Team members, they additionaly have `database-registry-ro-gstg` role in the `gstg`, which gives them access to registry database without approval.
+If the command is stopped or times out, but the request is approved, you do not need to request another approval.
+Simply login and provide the approved request ID (output by the previous command, or find it in the web interface).
 
-If you need to request a role which includes elevated permissions for the Database console. Request any of the following roles:
+3. Login with the approved request ID.
 
-Staging `main` and `CI` database roles:
+The request ID is shown in the output of `tsh login` when making the initial request, and can also be found attached to
+your request notification in [#teleport-requests](https://gitlab.enterprise.slack.com/archives/C06Q2JK3YPM).
 
-- `database-ro-gstg`
-- `database-rw-gstg`
-
-Staging `registry` database roles:
-
-- `database-registry-ro-gstg`
-- `database-registry-rw-gstg`
-
-```shell
-tsh login --proxy=staging.teleport.gitlab.net --request-roles=database-ro-gstg --request-reason="Issue-URL or explanation"
+```bash
+$ tsh login --request-id=<request-id>
 ```
 
-3. Login with the approved request ID
+4. Login to the database.
 
-If approval is required and the above command is stopped or times out, but the request is approved, you don't need to request another approval. Instead, provide the approved request ID (output by the previous command, or find it in the web interface):
+Once an approval (if required) is issued, the next step is to log in to the database.
+The database name at the end of the line refers to the database host that Teleport is pointing to (which you can see with `tsh db ls`).
 
-```shell
-tsh login --request-id=<request-id>
+```bash
+# Main Database
+$ tsh db login --db-user=console-rw --db-name=gitlabhq_production db-main-replica-gstg
+
+# CI Database
+$ tsh db login --db-user=console-rw --db-name=gitlabhq_production db-ci-replica-gstg
+
+# Registry Database
+$ tsh db login --db-user=console-rw --db-name=gitlabhq_registry db-registry-replica-gstg
+
+# Delayed Replica (DR) archive of main Database
+$ tsh db login --db-user=console-rw --db-name=gitlabhq_production db-main-dr-archive-gstg
+
+# Delayed Replica (DR) archive of CI Database
+$ tsh db login --db-user=console-rw --db-name=gitlabhq_production db-ci-dr-archive-gstg
+
+# Delayed Replica (DR) archive of registry Database
+$ tsh db login --db-user=console-rw --db-name=gitlabhq_registry db-registry-dr-archive-gstg
 ```
 
- 3. Login to the database
-
-Once an approval (if required) is issued, the next step is to log in to the database. The database name at the end of the line refers to the database host that Teleport is pointing to (which you can see with `tsh db ls`):
-
-```shell
-# Main Database:
-tsh db login --db-user=console-ro --db-name=gitlabhq_production db-main-replica-gstg
-
-# CI Database:
-tsh db login --db-user=console-ro --db-name=gitlabhq_production db-ci-replica-gstg
-
-# Registry Database:
-tsh db login --db-user=console-ro --db-name=gitlabhq_registry db-registry-replica-gstg
-
-# Delayed Replica (DR) archive of main Database:
-tsh db login --db-user=console-ro --db-name=gitlabhq_production db-main-dr-archive-gstg
-
-# Delayed Replica (DR) archive of CI Database:
-tsh db login --db-user=console-ro --db-name=gitlabhq_production db-ci-dr-archive-gstg
-
-# Delayed Replica (DR) archive of registry Database:
-tsh db login --db-user=console-ro --db-name=gitlabhq_registry db-registry-dr-archive-gstg
-```
-
-4. Connect to the database
+5. Connect to the database.
 
 Once logged in, you can connect and disconnect from the console as many times as needed.
 
-> Tip: use the `tsh status` command to show which logins you are currently approved for.
+```bash
+# Main Database
+$ tsh db connect db-main-replica-gstg
 
-```shell
-# Main Database:
-tsh db connect db-main-replica-gstg
+# CI Database
+$ tsh db connect db-ci-replica-gstg
 
-# CI Database:
-tsh db connect db-ci-replica-gstg
+# Registry Database
+$ tsh db connect db-registry-replica-gstg
 
-# Registry Database:
-tsh db connect db-registry-replica-gstg
+# Delayed Replica (DR) archive of main Database
+$ tsh db connect db-main-dr-archive-gstg
 
-# Delayed Replica (DR) archive of main Database:
-tsh db connect db-main-dr-archive-gstg
+# Delayed Replica (DR) archive of CI Database
+$ tsh db connect db-ci-dr-archive-gstg
 
-# Delayed Replica (DR) archive of CI Database:
-tsh db connect db-ci-dr-archive-gstg
-
-# Delayed Replica (DR) archive of registry Database:
-tsh db connect db-registry-dr-archive-gstg
+# Delayed Replica (DR) archive of registry Database
+$ tsh db connect db-registry-dr-archive-gstg
 ```
 
 #### Production
 
-1. Authenticate to the Teleport proxy/server. This command opens Okta in a browser window:
+1. Authenticate to the Teleport instance. This command opens Okta in a browser window:
 
-```shell
-tsh login --proxy=production.teleport.gitlab.net
+```bash
+$ tsh login --proxy=production.teleport.gitlab.net
 ```
 
-2. Request approval for the database role that you need
+2. Request approval for the database role that you need.
 
-Production `main` and `CI` database roles:
+Production (`gprd`) `main` and `CI` database roles:
 
-- `database-ro-gprd`
-- `database-rw-gprd`
+- Read-only:  `prod-database-ro`
+- Read-Write: `prod-database-rw`
 
-Production `registry` database roles:
+Production (`gprd`) `registry` database roles:
 
-- `database-registry-ro-gprd`
-- `database-registry-rw-gprd`
+- Read-only:  `prod-database-registry-ro`
+- Read-Write: `prod-database-registry-rw`
 
-```shell
-tsh login --proxy=production.teleport.gitlab.net --request-roles=database-ro-gprd --request-reason="Issue-URL or explanation"
+```bash
+$ tsh login --proxy=production.teleport.gitlab.net --request-roles=prod-database-ro --request-reason="GitLab Issue URL or ZenDesk Ticket URL"
 ```
 
-3. Login with the approved request ID
+This command will pause while it waits for the reviewer to approve the request.
+It may appear to hang, but it is waiting for someone to approve it.
+The command will return as soon as the request is approved, denied, or expires.
 
-If the command is stopped or times out, but the request is approved, you don't need to request another approval.  Simply login and provide the approved request ID (output by the previous command, or find it in the web interface):
+If the command is stopped or times out, but the request is approved, you do not need to request another approval.
+Simply login and provide the approved request ID (output by the previous command, or find it in the web interface).
 
-```shell
-tsh login --request-id=<request-id>
+3. Login with the approved request ID.
+
+The request ID is shown in the output of `tsh login` when making the initial request, and can also be found attached to
+your request notification in [#teleport-requests](https://gitlab.enterprise.slack.com/archives/C06Q2JK3YPM).
+
+```bash
+$ tsh login --request-id=<request-id>
 ```
 
-The request ID is shown in the output of `tsh login` when making the initial request, and can also be found attached to your request notification in `#teleport-requests`.
+4. Login to the database.
 
-4. Login to the database
+Once an approval is issued, the next step is to log in to the database.
+The database name at the end of the line refers to the database host that Teleport is pointing to (which you can see with `tsh db ls`).
 
-Once an approval is issued, the next step is to log in to the database. The database name at the end of the line refers to the database host that Teleport is pointing to (which you can see with `tsh db ls`):
+```bash
+# Main Database
+$ tsh db login --db-user=console-ro --db-name=gitlabhq_production db-main-replica-gprd
 
-For the Main Database:
+# CI Database
+$ tsh db login --db-user=console-ro --db-name=gitlabhq_production db-ci-replica-gprd
 
-```shell
-# Main Database:
-tsh db login --db-user=console-ro --db-name=gitlabhq_production db-main-replica-gprd
+# Registry Database
+$ tsh db login --db-user=console-ro --db-name=gitlabhq_registry db-registry-replica-gprd
 
-# CI Database:
-tsh db login --db-user=console-ro --db-name=gitlabhq_production db-ci-replica-gprd
+# Delayed Replica (DR) archive of main Database
+$ tsh db login --db-user=console-ro --db-name=gitlabhq_production db-main-dr-archive-gprd
 
-# Registry Database:
-tsh db login --db-user=console-ro --db-name=gitlabhq_registry db-registry-replica-gprd
+# Delayed Replica (DR) archive of CI Database
+$ tsh db login --db-user=console-ro --db-name=gitlabhq_production db-ci-dr-archive-gprd
 
-# Delayed Replica (DR) archive of main Database:
-tsh db login --db-user=console-ro --db-name=gitlabhq_production db-main-dr-archive-gprd
-
-# Delayed Replica (DR) archive of CI Database:
-tsh db login --db-user=console-ro --db-name=gitlabhq_production db-ci-dr-archive-gprd
-
-# Delayed Replica (DR) archive of registry Database:
-tsh db login --db-user=console-ro --db-name=gitlabhq_registry db-registry-dr-archive-gprd
+# Delayed Replica (DR) archive of registry Database
+$ tsh db login --db-user=console-ro --db-name=gitlabhq_registry db-registry-dr-archive-gprd
 ```
 
-4. Connect to the database
+5. Connect to the database.
 
 Once logged in, you can connect and disconnect from the console as many times as needed.
 
-> Tip: use the `tsh status` command to show which logins you are currently approved for.
-
-```shell
-# Main Database:
+```bash
+# Main Database
 tsh db connect db-main-replica-gprd
 
-# CI Database:
+# CI Database
 tsh db connect db-ci-replica-gprd
 
-# Registry Database:
+# Registry Database
 tsh db connect db-registry-replica-gprd
 
-# Delayed Replica (DR) archive of main Database:
+# Delayed Replica (DR) archive of main Database
 tsh db connect db-main-dr-archive-gprd
 
-# Delayed Replica (DR) archive of CI Database:
+# Delayed Replica (DR) archive of CI Database
 tsh db connect db-ci-dr-archive-gprd
 
-# Delayed Replica (DR) archive of registry Database:
+# Delayed Replica (DR) archive of registry Database
 tsh db connect db-registry-dr-archive-gprd
 ```
 
-#### For all databases to request superuser privileges (DBREs only)
+#### Request Superuser Privileges (DBREs Only)
 
-- `database-admin`
+The `database-admin` role gives admin access to any database.
+This role is only meant to be used by DBREs (and SREs in case of incidents).
 
-using the following format.
+Submit an access request as follows.
 
-```shell
-tsh login --proxy=staging.teleport.gitlab.net --request-roles=database-ro-gstg --request-reason="Issue-URL or explanation"
+```bash
+$ tsh login --proxy=production.teleport.gitlab.net --request-roles=database-admin --request-reason="GitLab Issue URL or ZenDesk Ticket URL"
+$ tsh login --request-id=<request-id>
 ```
 
-This command will pause while it waits for the approver to approve the request. It may appear to hang, but it is waiting for someone to approve it. The command will return as soon as the request is approved, denied, or times out.
+## Access Approval
 
-If the command is stopped or times out, but the request is approved, you don't need to request another approval.  Instead, login and provide the approved request ID (output by the previous command, or find it in the web interface):
+Approvers will get your request via an automated notification in the
+[#teleport-requests](https://gitlab.enterprise.slack.com/archives/C06Q2JK3YPM) Slack channel.
+If you have additional context, or need to expedite an approval, please comment as a thread under that message.
+If the request is urgent, you can ping `@sre-oncall`, but to spread out the workload,
+please try to allow some time for others to review first if possible.
+If the approval request **does not show up** in [#teleport-requests](https://gitlab.enterprise.slack.com/archives/C06Q2JK3YPM),
+feel free to ask someone in that channel to take a look at your request, and provide the request ID.
 
-```shell
-tsh login --request-id=<request-id>
-```
-
-The request ID is shown in the output of `tsh login` when making the initial request, and can also be found attached to your request notification in `#teleport-requests`.
-
-> Note: These examples assume you are requesting read-only access. For read-write, simply `--request-roles=database-rw-gstg` rather than `--request-roles=database-ro-gstg`. Please default to read-only though, since we will have stricter requirements for approving read-write access.
-
-#### Access approval
-
-Approvers will get your request via an automated notification in the `#teleport-requests` Slack channel.  If you have additional context,
-or need to expedite an approval, please comment as a thread under that message.  If the request is urgent, you can ping `@sre-oncall`, but
-to spread out the workload please try to allow some time for others to review first if possible. If the approval request **doesn't show up** in
-`#teleport-requests` feel free to ask someone in that channel to take a look at your request, and provide the request ID.
-
-Approvers will review the issue URL in the request and if database access seems like a reasonable step to address that issue, they will approve it.
+Approvers will review the issue URL in the request.
+If Rails Console access seems like a reasonable step to address that issue, they will approve it.
 
 ## Support
 
-If you have any issues using Teleport, or this approval process, please ask the **Reliability team** (SREs and/or managers) in the [#production](https://gitlab.slack.com/archives/C101F3796) or [#teleport-requests](https://gitlab.enterprise.slack.com/archives/C06Q2JK3YPM) Slack channels.
+If you have any issues using Teleport, or the approval process,
+please ask the [Foundations team](https://gitlab.enterprise.slack.com/archives/C0313V3L5T6)
+or in the [#infrastructure-lounge](https://gitlab.enterprise.slack.com/archives/CB3LSMEJV) Slack channel.
 
-> Note: If you need more time, you can renew your role access approval before or after expiration using the same method as the initial request
-
-## More detail
-
-The Teleport login process is a little different from other services.  With Teleport, you are not opening a network session with a server so much as requesting that the server sign your certificate and add the appropriate role permissions to it.
-
-The `tsh login` command requests that the server validate your identity with Okta and give you a certificate which can be used as the equivalent of an SSH key.  However, in contrast to an SSH key, this certificate expires, and also contains information on which roles you are approved for.  This information is displayed at login, but can be viewed again with `tsh status`.
-
-```text
-$ tsh status
-> Profile URL:        https://staging.teleport.gitlab.net:443
-  Logged in as:       <username>@gitlab.com
-  Cluster:            staging.teleport.gitlab.net
-  Roles:              <roles>
-  Logins:             <usernames (SSH)>
-  Kubernetes:         enabled
-  Kubernetes groups:  <k8s groups>
-  Valid until:        2023-05-02 07:00:26 +1200 NZST [valid for 11h49m0s]
-  Extensions:         login-ip, permit-agent-forwarding, permit-port-forwarding, permit-pty, private-key-policy
-```
-
-Note that the default certificate might not have any roles assigned, allowing you to interact with the Teleport server, and to request more roles, but does not allow connecting to any other services.
-
-To request permission to connect to a service, you must use the `--request-roles` flag.  You can request a role after already having a valid certificate, or simply by adding the flag to your initial login. Each `--request-roles` requires a `--request-reason`. It's best to use the URL of the issue or incident that this activity relates to.
-
-```shell
-tsh login --proxy=staging.teleport.gitlab.net --request-roles=database-ro-gstg --request-reason="Issue-URL or explanation"
-```
-
-Once approved, the server will replace your loally stored certificate with an updated one, and your newly valid roles will appear in the `tsh status` output.
+Note: If you need more time, you can renew your role access before or after expiration using the same method as the initial request.
 
 ## Troubleshooting
 
 ### Debug
 
-If you have issues connecting, try using the `--debug` flag to display more verbose information
+If you have issues connecting, try using the `--debug` flag to display more verbose information.
 
 ### `psql: error: could not connect to server: Connection refused Is the server running on host "localhost" (::1) and accepting TCP/IP connections on port X`
 
-This is possibly because the local `psql` client is overriding the user and database name. It can be resolved by running this more explicit command
+This is possibly because the local `psql` client is overriding the user and database name.
+It can be resolved by running this more explicit command.
 
-```
-tsh db connect <DATABASE_NAME> --db-user=console-ro --db-name=gitlabhq_production
+```bash
+$ tsh db connect --db-user=console-ro --db-name=gitlabhq_production <database_name>
 ```
 
 For example:
 
-```
-tsh db connect db-main-replica-gprd --db-user=console-ro --db-name=gitlabhq_production
-
+```bash
+$ tsh db connect --db-user=console-ro --db-name=gitlabhq_production db-main-replica-gstg
 ```
 
 ### `psql: error: SSL SYSCALL error: Undefined error: 0 ERROR: signal: segmentation fault`
 
-If you encounter the error, it's probably because you have `postgres` installed via [`asdf`](https://asdf-vm.com/) or [`mise`](https://github.com/jdx/mise). To solve it:
+If you encounter the error, it is probably because you have `postgresql` installed via
+[`asdf`](https://asdf-vm.com/) or[`mise`](https://github.com/jdx/mise). To solve it:
 
-1. Install `postgres` via [homebrew](https://brew.sh), if not already installed:
+1. Install `postgresql` via [homebrew](https://brew.sh), if not already installed:
 
-   ```bash
-   brew install postgresql@14
-   ```
+```bash
+$ brew install postgresql@14
+```
 
-1. Run `brew --prefix` to obtain the path to the `psql` binary installed via `homebrew`:
+2. Run `brew --prefix` to obtain the path to the `psql` binary installed via `homebrew`:
 
-   ```bash
-   $(brew --prefix postgresql@14)/bin/psql
-   ```
+```bash
+$ $(brew --prefix postgresql@14)/bin/psql
+```
 
-1. Run `tsh db config --format=cmd <database-name>` to get the full `tsh` command, for example:
+3. Run `tsh db config --format=cmd <database_name>` to get the full `tsh` command, for example:
 
-   ```bash
-   tsh db config --format=cmd db-customersdot-gstg
+```bash
+$ tsh db config --format=cmd db-customersdot-gstg
 
-   ~/.asdf/shims/psql "postgres://teleport-cloudsql%40gitlab-subscriptions-staging.iam@staging.teleport.gitlab.net..."
-   ```
+~/.asdf/shims/psql "postgres://teleport-cloudsql%40gitlab-subscriptions-staging.iam@production.teleport.gitlab.net..."
+```
 
-1. Replace the `~/.asdf/shims/psql` (or `~/.local/share/mise/installs/postgres/13.9/bin/psql` if using `mise`) path from the output of the full `tsh` command obtained in step `3.` above with the path to the `psql` binary installed via `homebrew`:
+4. Replace the `~/.asdf/shims/psql` or `~/.local/share/mise/installs/postgres/13.9/bin/psql` if using `mise` path from
+   the output of the full `tsh` command obtained in step 3 above with the path to the `psql` binary installed via `homebrew`:
 
-   ```bash
-   $(brew --prefix postgresql@14)/bin/psql "postgres://teleport-cloudsql%40gitlab-subscriptions-staging.iam@staging.teleport.gitlab.net:443/CustomersDot_stg?sslrootcert=/Users/yourusername/.tsh/keys/staging.teleport.gitlab.net/cas/staging.teleport.gitlab.net.pem&sslcert=/Users/yourusername/.tsh/keys/staging.teleport.gitlab.net/yourusername@gitlab.com-db/staging.teleport.gitlab.net/db-customersdot-gstg-x509.pem&sslkey=/Users/yourusername/.tsh/keys/staging.teleport.gitlab.net/yourusername@gitlab.com&sslmode=verify-full"
-   ```
+```bash
+$ $(brew --prefix postgresql@14)/bin/psql "postgres://teleport-cloudsql%40gitlab-subscriptions-staging.iam@production.teleport.gitlab.net:443/CustomersDot_stg?sslrootcert=/Users/<username>/.tsh/keys/production.teleport.gitlab.net/cas/production.teleport.gitlab.net.pem&sslcert=/Users/<username>/.tsh/keys/production.teleport.gitlab.net/<username>@gitlab.com-db/production.teleport.gitlab.net/db-customersdot-gstg-x509.pem&sslkey=/Users/<username>/.tsh/keys/production.teleport.gitlab.net/<username>@gitlab.com&sslmode=verify-full"
+```
 
 ### `psql: error: sslmode value "verify-full" invalid when SSL support is not compiled in`
 
-`tsh db` is a wrapper over `psql` and this likely means that your installed psql version was not configured with OpenSSL options. You can consider taking steps like [this blog post](https://dev.to/jbranchaud/reinstall-postgresql-with-openssl-using-asdf-cmj) if psql was installed via asdf. Ideally, use the brew installed psql version.
+`tsh db` is a wrapper over `psql` and this likely means that your installed psql version was not configured with OpenSSL options.
+You can consider taking steps like [this blog post](https://dev.to/jbranchaud/reinstall-postgresql-with-openssl-using-asdf-cmj)
+if `psql` was installed via `asdf`. Ideally, use the Homebrew installed `psql` version.
 
 ### `failed to add one or more keys to the agent`
 
@@ -354,8 +356,8 @@ agent: failure, agent: failure
 
 Try running the same command and passing in the flag `--add-keys-to-agent=no`
 
-```
-tsh login --add-keys-to-agent=no --proxy=staging.teleport.gitlab.net
+```bash
+$ tsh login --add-keys-to-agent=no --proxy=production.teleport.gitlab.net
 ```
 
 There is an open issue about [this](https://github.com/gravitational/teleport/issues/22326)
