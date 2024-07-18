@@ -31,6 +31,7 @@
 * [Auditing Metrics](../mimir/auditing-metrics.md)
 * [Prometheus pod crashlooping](../monitoring/prometheus-pod-crashlooping.md)
 * [Thanos Compact](../monitoring/thanos-compact.md)
+* [../product_analytics/k8s-architecture.md](../product_analytics/k8s-architecture.md)
 * [Redis on Kubernetes](../redis/kubernetes.md)
 * [Container Registry database post-deployment migrations](../registry/db-post-deployment-migrations.md)
 * [../registry/gitlab-registry.md](../registry/gitlab-registry.md)
