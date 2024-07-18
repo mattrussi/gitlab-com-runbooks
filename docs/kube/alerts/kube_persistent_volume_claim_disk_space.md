@@ -70,5 +70,5 @@
 
 # Related Links
 
-- [Related alerts](https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/patroni/alerts)
-- [Related documentation](https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/patroni)
+- [Related alerts](https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/kube/alerts)
+- [Related documentation](https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/kube)
