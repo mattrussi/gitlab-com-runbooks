@@ -9,17 +9,13 @@ Users that have been provisioned can access Cloudflare directly at
 
 ## Instructions for Access Provisioners
 
-**IT:**
-
 1. Add the user to the `okta-cloudflare-users` Google group.
-1. Ping `@gitlab-org/production-engineering/foundations` to privision the Cloudflare role
-
-**Foundations**
-
-1. Open a merge request adding the user to <https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/main/environments/cloudflare/users.tf>
-   1. Assign the role based on the access request or baseline entitlements (SREs receive Administrator acess as baseline).
-1. The user will automatically receive an invite once the change is applied.
-   1. If the user does not accept the invite before expiration, a state drift will occur and the change will need to be applied again.
+1. If the team member needs to be added to the GitLab.com Cloudflare account: (usually Production Engineering or Scalability SREs)
+   1. Open a merge request adding the user to <https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/main/environments/cloudflare/users.tf>
+      1. Assign the role based on the access request or baseline entitlements (SREs receive Administrator access as baseline).
+   1. The user will automatically receive an invite once the change is applied.
+      1. If the user does not accept the invite before expiration, a state drift will occur and the change will need to be applied again.
+1. If the team member should be added to the Dedicated Cloudflare accounts (for SREs on the Dedicated Teams), they should open an MR against the [Dedicated Cloudflare Organization](https://gitlab.com/gitlab-com/gl-infra/gitlab-dedicated/dedicated-organization-cloudflare) project
 
 # Configuraion
 
