@@ -1,1 +1,1 @@
-(import 'main.libsonnet')
+(import 'hosted-runner.libsonnet')
