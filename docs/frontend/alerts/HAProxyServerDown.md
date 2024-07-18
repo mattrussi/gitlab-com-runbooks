@@ -18,8 +18,6 @@ This alert indicates that there could be a spike in 5xx errors, server connectio
 
 ## Metrics
 
-
-
 ## Alert Behavior
 
 If you drain a node using `set-server-state` tool, [add a new silence](https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/frontend/haproxy.md?ref_type=heads#set-server-state) before draining.
@@ -28,6 +26,7 @@ If you drain a node using `set-server-state` tool, [add a new silence](https://g
 
 - This alert might create incidents with Severity 3 or 4. Severity 2 incidents are possible, but rare
 - There might be customer user impact depending on which service is affected
+- Review [Incident Severity Handbook](https://handbook.gitlab.com/handbook/engineering/infrastructure/incident-management/#incident-severity) page to identify the required Severity Level
 
 ## Verification
 
