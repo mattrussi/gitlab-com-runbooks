@@ -5,9 +5,9 @@ local g = import 'github.com/grafana/grafonnet/gen/grafonnet-latest/main.libsonn
 local row = grafana.row;
 local mimirHelper = import 'services/lib/mimir-helpers.libsonnet';
 
-local totalBlockersCount = 'max by (week, root_cause) (last_over_time(delivery_deployment_blocker_count{root_cause=~".+", root_cause!="RootCause::FlakyTest"}[1d]))';
-local totalGprdHoursBlocked = 'max by (week, root_cause) (last_over_time(delivery_deployment_hours_blocked{root_cause=~".+", root_cause!="RootCause::FlakyTest", target_env="gprd"}[1d]))';
-local totalGstgHoursBlocked = 'max by (week, root_cause) (last_over_time(delivery_deployment_hours_blocked{root_cause=~".+", root_cause!="RootCause::FlakyTest", target_env="gstg"}[1d]))';
+local totalBlockersCount = 'max by (week, root_cause) (last_over_time(delivery_deployment_blocker_count{root_cause=~".+", root_cause!="RootCause::FlakyTest"}[1d])) != 0';
+local totalGprdHoursBlocked = 'max by (week, root_cause) (last_over_time(delivery_deployment_hours_blocked{root_cause=~".+", root_cause!="RootCause::FlakyTest", target_env="gprd"}[1d])) != 0';
+local totalGstgHoursBlocked = 'max by (week, root_cause) (last_over_time(delivery_deployment_hours_blocked{root_cause=~".+", root_cause!="RootCause::FlakyTest", target_env="gstg"}[1d])) != 0';
 local blockersCount = 'max by (week, root_cause) (last_over_time(delivery_deployment_blocker_count{root_cause="$root_cause"}[1d]))';
 local gprdHoursBlocked = 'max by (week, root_cause) (last_over_time(delivery_deployment_hours_blocked{root_cause="$root_cause", target_env="gprd"}[1d]))';
 local gstgHoursBlocked = 'max by (week, root_cause) (last_over_time(delivery_deployment_hours_blocked{root_cause="$root_cause", target_env="gstg"}[1d]))';
@@ -100,11 +100,9 @@ local trendPanel(title, query, name) =
   + g.panel.trend.fieldConfig.defaults.custom.withShowPoints("always")
   + g.panel.trend.fieldConfig.defaults.custom.withSpanNulls(true)
   + g.panel.trend.fieldConfig.defaults.custom.withAxisBorderShow(true)
-  + g.panel.trend.fieldConfig.defaults.custom.withAxisSoftMin(1)
   + g.panel.trend.standardOptions.withDisplayName(name)
   + g.panel.trend.standardOptions.withDecimals(0)
   + g.panel.trend.standardOptions.withUnit("short")
-  + g.panel.trend.standardOptions.withMin(1)
   + g.panel.trend.standardOptions.color.withMode("palette-classic")
   + g.panel.trend.standardOptions.thresholds.withMode("absolute")
   + g.panel.trend.standardOptions.thresholds.withSteps([
