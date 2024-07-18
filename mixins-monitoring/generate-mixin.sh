@@ -37,7 +37,7 @@ mkdir -p "$OUTPUT_DIR"
 # Change to the specified MIXIN_DIR
 cd "$MIXIN_DIR" || exit
 
-jb update
+jb install
 
 # Common options for mixtool commands
 COMMON_OPTS=("-J" "vendor" "-J" "vendor/gitlab.com/gitlab-com/runbooks/libsonnet")

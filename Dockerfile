@@ -11,6 +11,7 @@ ARG GL_ASDF_TERRAFORM_VERSION
 ARG GL_ASDF_THANOS_VERSION
 ARG GL_ASDF_VAULT_VERSION
 ARG GL_ASDF_YQ_VERSION
+ARG GL_ASDF_GOLANG_VERSION
 # renovate: datasource=github-releases depName=grafana/mimir
 ARG MIMIRTOOL_VERSION=2.13.0
 
@@ -28,6 +29,10 @@ FROM quay.io/thanos/thanos:v${GL_ASDF_THANOS_VERSION} AS thanos
 FROM registry.gitlab.com/gitlab-com/gl-infra/jsonnet-tool:v${GL_ASDF_JSONNET_TOOL_VERSION} AS jsonnet-tool
 FROM registry.gitlab.com/gitlab-com/gl-infra/third-party-container-images/go-jsonnet:v${GL_ASDF_GO_JSONNET_VERSION} AS go-jsonnet
 FROM registry.gitlab.com/gitlab-com/gl-infra/third-party-container-images/jb:v${GL_ASDF_JB_VERSION} AS jb
+# There is no official mixtool Docker image from the author, so we need to create one
+FROM golang:${GL_ASDF_GOLANG_VERSION}-alpine as mixtool
+
+RUN go install github.com/monitoring-mixins/mixtool/cmd/mixtool@main
 
 # Main stage build
 FROM ruby:${GL_ASDF_RUBY_VERSION}-alpine
@@ -69,5 +74,6 @@ COPY --from=thanos /bin/thanos /bin/thanos
 COPY --from=vault /bin/vault /bin/vault
 COPY --from=yq /usr/bin/yq /usr/bin/yq
 COPY --from=mimirtool /bin/mimirtool /bin/mimirtool
+COPY --from=mixtool /go/bin/mixtool /bin/mixtool
 
 ENTRYPOINT ["/bin/sh", "-c"]

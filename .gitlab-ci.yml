@@ -191,7 +191,8 @@ variables:
   if: $CHECK_STAGE_GROUPS == "1"
   when: never
 
-.avoid-downstream-generation-pipelines: &avoid-downstream-generation-pipelines-rule
+.avoid-downstream-generation-pipelines:
+  &avoid-downstream-generation-pipelines-rule
   if: ($GENERATE_SERVICE_MATURITY_MANIFEST == "1") || ($GENERATE_TAMLAND_SATURATION_MANIFEST == "1")
   when: never
 
@@ -308,6 +309,7 @@ notify-mirror-source:
       --build-arg GL_ASDF_THANOS_VERSION
       --build-arg GL_ASDF_VAULT_VERSION
       --build-arg GL_ASDF_YQ_VERSION
+      --build-arg GL_ASDF_GOLANG_VERSION
 
 test-docker-image:
   extends: .docker-image
