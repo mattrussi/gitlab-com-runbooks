@@ -201,6 +201,30 @@ serviceDashboard.overview('sidekiq', expectMultipleSeries=true)
   }
 )
 .addPanel(
+  row.new(title='Sidekiq Queues (Concurrency Limit)'),
+  gridPos={
+    x: 0,
+    y: 1700,
+    w: 24,
+    h: 1,
+  }
+)
+.addPanels(
+  layout.grid([
+    basic.timeseries(
+      title='Concurrency limit workers queue length',
+      description='Number of Sidekiq jobs waiting in the concurrency limit queue.',
+      query=|||
+        sum(sidekiq_concurrency_limit_queue_jobs{env="$environment"}) by (worker)
+      |||,
+      legendFormat='{{ worker }}',
+      interval='1m',
+      intervalFactor=1,
+      legend_show=true,
+    ),
+  ], cols=2, rowHeight=10, startRow=1701),
+)
+.addPanel(
   row.new(title='Sidekiq Future Sets'),
   gridPos={
     x: 0,
