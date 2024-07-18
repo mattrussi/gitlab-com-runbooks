@@ -67,7 +67,7 @@ After the ownership team has been identified for the affected component, search 
 Alternative slack channels:
 
 - `[#production_engineering](https://gitlab.enterprise.slack.com/archives/C03QC5KNW5N)`
-- `[#infrastructure-lounge](https://gitlab.enterprise.slack.com/archives/CB3LSMEJV)`
+- [#infrastructure-lounge](https://gitlab.enterprise.slack.com/archives/CB3LSMEJV)
 
 # Definitions
 
