@@ -77,6 +77,6 @@ Alternative slack channels:
 
 # Related Links
 
-- [Related alerts](https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/config_management/alerts/ComponentResourceRunningOut_disk_space.md)
+- [Related alerts](https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/config_management/alerts/)
 - [Alert template](https://gitlab.com/gitlab-com/runbooks/-/blob/master/libsonnet/servicemetrics/resource_saturation_point.libsonnet?ref_type=heads#L208)
 - [Update the template used to format this playbook](https://gitlab.com/gitlab-com/runbooks/-/edit/master/docs/template-alert-playbook.md?ref_type=heads)
