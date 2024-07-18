@@ -18,11 +18,7 @@ This alert indicates that there could be a spike in 5xx errors, server connectio
 
 ## Metrics
 
-- Briefly explain the metric this alert is based on and link to the metrics catalogue. What unit is it measured in? (e.g., CPU usage in percentage, request latency in milliseconds)
-- Explain the reasoning behind the chosen threshold value for triggering the alert. Is it based on historical data, best practices, or capacity planning?
-- Describe the expected behavior of the metric under normal conditions. This helps identify situations where the alert might be falsely firing.
-- Add screenshots of what a dashboard will look like when this alert is firing and when it recovers
-- Are there any specific visuals or messages one should look for in the screenshots?
+
 
 ## Alert Behavior
 
