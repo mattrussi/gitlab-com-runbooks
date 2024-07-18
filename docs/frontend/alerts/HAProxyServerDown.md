@@ -6,18 +6,13 @@
 
 ## Overview
 
-- This alert indicates that there could be a spike in 5xx errors, server connection errors, or backends reporting unhealthy.
+This alert indicates that there could be a spike in 5xx errors, server connection errors, or backends reporting unhealthy (backend server is down).
 
 *Note*: [`set-server-state` server draining](https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/frontend/haproxy.md?ref_type=heads#set-server-state) will also generate this alert.
-- What factors can contribute?
-- What parts of the service are effected?
-The alert will indicate which backend server is down. 
-- What action is the recipient of this alert expected to take when it fires?
 
 ## Services
 
-- All alerts require one or more Service Overview links
-[Service Overview](https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/frontend/haproxy.md?ref_type=heads)
+- [Service Overview](https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/frontend/haproxy.md?ref_type=heads)
 - Team that owns the service: [Production Engineering Foundations Team](https://handbook.gitlab.com/handbook/engineering/infrastructure/core-platform/systems/gitaly/)
 - **Label:** gitlab-com/gl-infra/production~"Service::HAProxy"
 
@@ -52,7 +47,6 @@ The alert will indicate which backend server is down.
 ## Recent changes
 
 - [Recent HAProxy Production Changes and Incident Issues](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/?sort=created_date&state=all&label_name%5B%5D=Service%3A%3AHAProxy&first_page_size=100)
-
 - [Recent Chef HAProxy changes](https://gitlab.com/gitlab-com/gl-infra/chef-repo/-/merge_requests?scope=all&state=merged&label_name[]=Service%3A%3AHAProxy)
 
 ## Troubleshooting
@@ -122,7 +116,6 @@ kill -TERM 1827
 **Logging**
 
 [HAProxy Logging](https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/frontend/haproxy-logging.md)
-
 [**Other troubleshooting docs**](https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/frontend)
 
 ## Possible Resolutions
