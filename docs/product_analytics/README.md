@@ -12,11 +12,12 @@
 
 ## Logging
 
-* [GKE logs](https://cloudlogging.app.goo.gl/QWoCS2kDVF5LaTqG9)
+* [GKE logs](https://cloudlogging.app.goo.gl/g6td7zD8QnUTStzt7)
 
 ## Troubleshooting Pointers
 
 * [clickhouse-backup-restore.md](clickhouse-backup-restore.md)
+* [k8s-architecture.md](k8s-architecture.md)
 * [ssl-troubleshooting.md](ssl-troubleshooting.md)
 <!-- END_MARKER -->
 
