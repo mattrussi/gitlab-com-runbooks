@@ -178,6 +178,8 @@ function generate_mixins() {
   local mixins_out=""
 
   if [[ -f "$mixins_file" ]]; then
+    "${REPO_DIR}/scripts/ensure-mixtool.sh"
+
     local original_dir=$(pwd)
 
     mixins_out=$(jsonnet "$mixins_file" | jq -r '.mixins[]' | while IFS= read -r mixin; do
