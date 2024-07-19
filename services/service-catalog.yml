@@ -2584,3 +2584,21 @@ services:
       logging:
         - name: stackdriver
           permalink: https://console.cloud.google.com/run/detail/us-central1/pd-event-logger-7760xa/logs?project=gitlab-runway-production
+
+  - name: wiz-runtime-sensor
+    tier: inf
+    friendly_name: Wiz Sensor
+    label: WizSensor
+    owner: infrasec_team
+    technical:
+      project:
+      documents:
+        design:
+        architecture: https://internal.gitlab.com/handbook/security/product_security/infrastructure_security/tooling/wiz-sensor/#architecture
+        readiness_review: https://gitlab.com/gitlab-com/gl-infra/readiness/-/merge_requests/208/
+        sre_guide: https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/uncategorized/wiz-runtime-sensor.md
+        service:
+        security:
+      logging:
+        - name:
+          permalink:

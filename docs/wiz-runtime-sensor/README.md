@@ -1,20 +1,54 @@
+<!-- MARKER: do not edit this section directly. Edit services/service-catalog.yml then run scripts/generate-docs -->
+
+**Table of Contents**
+
 [[_TOC_]]
 
+# Wiz Sensor Service
+
+* **Alerts**: <https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22wiz-runtime-sensor%22%2C%20tier%3D%22inf%22%7D>
+* **Label**: gitlab-com/gl-infra/production~"Service::WizSensor"
+
+## Logging
+
+* []()
+
+<!-- END_MARKER -->
+
+<!-- ## Summary -->
 # Summary
 
-`Wiz Runtime Sensor` is a small ebpf (Extended Berkeley Packet Filter) agent deployed on every Kubernetes Node, meticulously monitoring system calls to pinpoint suspicious activities. It proactively identifies and alerts on behaviors that look malicious, signaling potential security threats or anomalies. The Wiz Sensor operates by leveraging a set of rules that define which system call sequences and activities are deemed abnormal or indicative of security incidents.
+`Wiz Runtime Sensor` is a small ebpf (Extended Berkeley Packet Filter) agent deployed on every Kubernetes Node, meticulously monitoring system calls to pinpoint suspicious activities. It proactively identifies and alerts on behaviours that look malicious, signalling potential security threats or anomalies. The Wiz Sensor operates by leveraging a set of rules that define which system call sequences and activities are deemed abnormal or indicative of security incidents.
 
+<!-- ## Architecture -->
+## Architecture
+
+Can be found in the [Internal handbook](https://internal.gitlab.com/handbook/security/product_security/infrastructure_security/tooling/wiz-sensor/#architecture)
+
+<!-- ## Performance -->
+
+<!-- ## Scalability -->
+
+<!-- ## Availability -->
+
+<!-- ## Durability -->
+
+<!-- ## Security/Compliance -->
+
+<!-- ## Monitoring/Alerting -->
 # Monitoring/Alerting
 
-The most likely issue deriving from the Wiz Rutime Sensor rollout might be related to an eventual performance penalty on the underlying kubernetes cluster nodes.
+The most likely issue deriving from the Wiz Runtime Sensor rollout might be related to an eventual performance penalty on the underlying Kubernetes cluster nodes.
 
-However it should not create much performance implications as we have configured the limits which are very resource convervative. We have the CPU and Memory limits configured and those can be viewed [here](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/blob/master/releases/wiz-sensor/values.yaml.gotmpl?ref_type=heads#L13).
+However, it should not create much performance implications as we have configured the limits which are very resource conservative. We have the CPU and Memory limits configured and those can be viewed [here](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/blob/master/releases/wiz-sensor/values.yaml.gotmpl?ref_type=heads#L13).
 
 In addition, an [alert for OOM kills](https://gitlab.com/gitlab-com/runbooks/-/blob/master/legacy-prometheus-rules/wiz-runtime-sensor.yml) for Wiz Sensor containers which would help us understand if the resource consumption is more and if the sensor are getting OOM killed.
 
-# Service Managment
+# Troubleshooting
 
-## Deploy Wiz Runtime Sensor
+## Service Management
+
+### Deploy Wiz Runtime Sensor
 
 All of our workload deployments are taken care of from the [GitLab helm repo](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles).
 
@@ -29,15 +63,15 @@ wiz-sensor:
 
 ```
 
-## Disable Wiz Runtime Sensor
+### Disable Wiz Runtime Sensor
 
 **Note: Before disabling the Wiz Runtime Sensor we have to update the compliance team to track the GAP in coverage. Create the issue to disable the Wiz Sensor and tag `@gitlab-com/gl-security/security-assurance/team-commercial-compliance` team.**
 
-All of our workload deployments are taken care of from the [Gitlab helm repo](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles).
+All of our workload deployments are taken care of from the [GitLab helm repo](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles).
 
 To remove/disable the sensor we need to follow the below steps.
 
-1. Navigate to the environments folder [here](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/tree/master/bases/environments)
+1. Navigate to the environments' folder [here](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/tree/master/bases/environments)
 
 1. Open the file for the specific environment, naming syntax for the file is {$env-name}.yaml.
 
@@ -48,8 +82,6 @@ To remove/disable the sensor we need to follow the below steps.
       installed: false
       chart_version: x.x.x.x
     ```
-
-# Troubleshooting
 
 <!--Import from Wiz Doc Starts here -->
 ## Verify the Runtime Sensor is installed and running
@@ -72,8 +104,8 @@ wiz-sensor   6         6         6       6            6           <none>        
 
 Inspect the output:
 
-- If your output is as expected, continue to the other scenarios listed on this page to locate your problem.
-- If you do not see a similar output, it could indicate something went wrong with the Runtime Sensor installation. Refer back to the installation guide to verify proper installation, and to perform a sanity check.
+* If your output is as expected, continue to the other scenarios listed on this page to locate your problem.
+* If you do not see a similar output, it could indicate something went wrong with the Runtime Sensor installation. Refer back to the installation guide to verify proper installation, and to perform a sanity check.
 
 ## Check the Runtime Sensor status
 
@@ -97,9 +129,9 @@ wiz-sensor-wccbk   1/1     Running   180 (12m ago)   24d
 
 Inspect the output:
 
-- If a Runtime Sensor pod is in Pending status, then the underlying node does not have enough resources to run the pod (see resource consumption for all details). Once some node resources are free, the Sensor pod status should automatically change to Running.
+* If a Runtime Sensor pod is in Pending status, then the underlying node does not have enough resources to run the pod (see resource consumption for all details). Once some node resources are free, the Sensor pod status should automatically change to Running.
 
-- If one or more Runtime Sensor pods are neither in Running nor Pending status, refer to the Runtime Sensor is not running troubleshooting procedure below.
+* If one or more Runtime Sensor pods are neither in Running nor Pending status, refer to the Runtime Sensor is not running troubleshooting procedure below.
 
 ## Check the Runtime Sensor version
 
@@ -149,8 +181,8 @@ Events:
 
 Inspect the output and search for any errors in the Message column. If you detect errors related to pulling the image, such as `ImagePullBackOff` or `ErrImagePull`, check the following:
 
-- There is outbound connectivity to "wizio.azurecr.io"
-- The correct credentials were used to pull the container image
+* There is outbound connectivity to "wizio.azurecr.io"
+* The correct credentials were used to pull the container image
 
 ## There is outbound connectivity to "wizio.azurecr.io"
 
@@ -181,29 +213,29 @@ Www-Authenticate: Bearer realm="https://wizio.azurecr.io/oauth2/token",service="
 
 Inspect the output:
 
-- If your output is as expected, continue to verify the correct credentials were used to pull the container image.
+* If your output is as expected, continue to verify the correct credentials were used to pull the container image.
 
-- If your output differs from the expected output (for example, you see a Connection refused error), then your cluster does not have outbound connectivity to "wizio.azurecr.io". To resolve this:
+* If your output differs from the expected output (for example, you see a Connection refused error), then your cluster does not have outbound connectivity to "wizio.azurecr.io". To resolve this:
 
-- Check any network configurations that might block outbound connections (e.g., firewall rules, proxy configurations, Kubernetes network policies) and allow the connectivity to "wizio.azurecr.io".
+* Check any network configurations that might block outbound connections (e.g., firewall rules, proxy configurations, Kubernetes network policies) and allow the connectivity to "wizio.azurecr.io".
 
-- Re-install the Runtime Sensor.
+* Re-install the Runtime Sensor.
 
 The correct credentials were used to pull the container image
 
 ## Verify you installed the Runtime Sensor using the correct credentials to pull the container image
 
-- Retrieve the values you used for imagePullSecret.username and imagePullSecret.password, in either the helm install command or the YAML file.
+* Retrieve the values you used for imagePullSecret.username and imagePullSecret.password, in either the helm install command or the YAML file.
 
-- Refer to get the Runtime Sensor image pull key from wiz to obtain the correct values that should be used for imagePullSecret.username and imagePullSecret.password.
+* Refer to get the Runtime Sensor image pull key from wiz to obtain the correct values that should be used for imagePullSecret.username and imagePullSecret.password.
 
 Compare the set of values.
 
-- If the credentials used in the installation are not identical to the ones you retrieved from the Wiz portal:
-  - Update the values in your helm install command or yaml file.
-  - Re-install the Runtime Sensor using the new values.
+* If the credentials used in the installation are not identical to the ones you retrieved from the Wiz portal:
+  * Update the values in your helm install command or yaml file.
+  * Re-install the Runtime Sensor using the new values.
 
-- If the credentials are identical but your pods are not in Running or Pending status, please contact support.
+* If the credentials are identical but your pods are not in Running or Pending status, please contact support.
 
 ## Verify the Kubernetes nodes have enough resources to run the Runtime Sensor
 
@@ -253,10 +285,10 @@ kubectl -n wiz logs $(kubectl get pods -n wiz -l "app.kubernetes.io/name=wiz-sen
 
 According to the output, proceed to one of the following use cases:
 
-- Invalid TLS/SSL certificate
-- Invalid service account type (status code 400)
-- Invalid credentials (status code 401)
-- Service Account token is not mounted
+* Invalid TLS/SSL certificate
+* Invalid service account type (status code 400)
+* Invalid credentials (status code 401)
+* Service Account token is not mounted
 
 ### Invalid TLS/SSL certificate
 
@@ -362,8 +394,8 @@ Assuming this error persists:
 
 "dns error: failed to lookup address information: Temporary failure in name resolution"
 
-- Check your DNS settings.
-- Verify that the namespace where you deployed the Runtime Sensor has "DNS enabled". You can check the DNS resolution using a curl command:
+* Check your DNS settings.
+* Verify that the namespace where you deployed the Runtime Sensor has "DNS enabled". You can check the DNS resolution using a curl command:
 
 ```shell
 kubectl run -n wiz networkcheck --image=curlimages/curl -it --rm --restart=Never --overrides='{"apiVersion": "v1", "spec": {"hostNetwork": true}}' -- curl -I https://wizio.azurecr.io/v2/
@@ -470,7 +502,7 @@ Below is an example error log message:
     "pid": 8542,
     "machine_arch": "x86_64",
     "cloud_provider": "aws",
-    "comm_client_id": "elxchgtoqfhnrd4igptg6s662tlrbhcmdy6vlbvhr5gnd75p74ngc",
+    "comm_client_id": "xxxxx",
     "binary_ver": "1.0.2142",
     "machine_kernel_build_time": "#1 SMP Wed Jan 25 03:13:54 UTC 2023",
     "total_memory": 4110323712,
@@ -621,7 +653,8 @@ The output is saved to a file named k8s_outputs.tar.gz. Attach it when contactin
 
 <!--Import from Wiz Doc Ends here -->
 
+<!-- ## Links to further Documentation -->
 # Links to further Documentation
 
-- [Wiz Helm Chart](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/tree/master/releases/wiz-sensor)
-- [Internal Handbook Page](https://internal.gitlab.com/handbook/security/infrastructure_security/tooling/wiz-sensor/)
+* [Wiz Helm Chart](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/tree/master/releases/wiz-sensor)
+* [Internal Handbook Page](https://internal.gitlab.com/handbook/security/infrastructure_security/tooling/wiz-sensor/)
