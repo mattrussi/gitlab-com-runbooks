@@ -81,7 +81,6 @@
 * [Omnibus package troubleshooting](../uncategorized/omnibus-package-updates.md)
 * [Project exports](../uncategorized/project-export.md)
 * [Removing kernels from fleet](../uncategorized/remove-kernels.md)
-* [../uncategorized/wiz-runtime-sensor.md](../uncategorized/wiz-runtime-sensor.md)
 * [How to Use Vault for Secrets Management in Infrastructure](../vault/usage.md)
 * [Vault Secrets Management](../vault/vault.md)
 * [Gitaly version mismatch](gitaly-version-mismatch.md)

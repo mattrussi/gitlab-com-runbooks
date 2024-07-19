@@ -42,7 +42,6 @@
 * [High Number of Overdue Online GC Tasks](online-gc-high-overdue-tasks.md)
 * [Connecting To a Database via Teleport](../teleport/Connect_to_Database_Console_via_Teleport.md)
 * [Deleting a project manually](../uncategorized/delete-projects-manually.md)
-* [../uncategorized/wiz-runtime-sensor.md](../uncategorized/wiz-runtime-sensor.md)
 * [How to Use Vault for Secrets Management in Infrastructure](../vault/usage.md)
 * [Vault Secrets Management](../vault/vault.md)
 <!-- END_MARKER -->
