@@ -89,7 +89,7 @@ groups:
         annotations:
           grafana_datasource_id: mimir-gitlab-gprd
           description:
-            Gitaly has been marked as down for the past minute on {{$labels.instance}}.
+            Gitaly has been marked as down for the past 15 minutes on {{$labels.instance}}.
             Check Gitaly logs and restart the process if necessary
           runbook: docs/gitaly/gitaly-down.md
           title: Gitaly is down on {{ $labels.fqdn }}
