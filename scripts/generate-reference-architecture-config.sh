@@ -22,8 +22,10 @@ function main() {
   mixins_src_dir="${REPO_DIR}/mixins-monitoring"
   echo "Mixin Source Directory: ${mixins_src_dir}"
 
-  # Add header if specified
-  [[ -n ${GL_GENERATE_CONFIG_HEADER:-} ]] && params+=(--header "${GL_GENERATE_CONFIG_HEADER}")
+  # Pass a header via GL_GENERATE_CONFIG_HEADER
+  if [[ -n ${GL_GENERATE_CONFIG_HEADER:-} ]]; then
+    params+=(--header "${GL_GENERATE_CONFIG_HEADER}")
+  fi
 
   # Validate input arguments
   if [[ $# -eq 2 ]] || [[ $# -eq 3 ]]; then
@@ -34,7 +36,7 @@ function main() {
     echo "Destination Directory: ${dest_dir}"
 
     if [[ $# -eq 3 ]]; then
-      local overrides_dir="$3"
+      overrides_dir="$3"
       paths+=("-J" "${overrides_dir}")
       echo "Overrides Directory: ${overrides_dir}"
     fi
@@ -44,8 +46,7 @@ function main() {
   fi
 
   local source_file="${reference_architecture_src_dir}/generate.jsonnet"
-  local args_hash
-  args_hash="$(echo "$@" | sha256sum | awk '{ print $1 }')"
+  local args_hash="$(echo "$@" | sha256sum | awk '{ print $1 }')"
   local sha256sum_file="${REPO_DIR}/.cache/$source_file.$args_hash.sha256sum"
   local cache_out_file="${REPO_DIR}/.cache/$source_file.$args_hash.out"
 
@@ -64,8 +65,7 @@ function main() {
     [[ ${GL_JSONNET_CACHE_DEBUG:-} == 'true' ]] && echo >&2 "jsonnet_cache: miss: $source_file"
   fi
 
-  local out
-  out=$(generate_output "$dest_dir" "$source_file" "${paths[@]}" "${params[@]}")
+  local out=$(generate_output "$dest_dir" "$source_file" "${paths[@]}" "${params[@]}")
   echo "$out"
 
   if [[ ${GL_JSONNET_CACHE_SKIP:-} != 'true' ]]; then
@@ -73,7 +73,7 @@ function main() {
     update_cache "$source_file" "$sha256sum_file"
   fi
 
-  generate_mixins "$mixins_src_dir" "$overrides_dir" "$dest_dir"
+  generate_mixins "$mixins_src_dir" "${paths[1]}" "$dest_dir"
 }
 
 function setup_cache_directories() {
@@ -167,7 +167,7 @@ function generate_mixins() {
 function usage() {
   cat >&2 <<-EOD
 $0 source_dir output_dir [overrides_dir]
-Generate prometheus rules and grafana dashboards for a reference architecture.
+Generate mixins, prometheus rules and grafana dashboards for a reference architecture.
 
   * source_dir: the Jsonnet source directory containing the configuration.
   * output_dir: the directory in which generated configuration should be emitted
