@@ -36,6 +36,8 @@ metricsCatalog.serviceDefinition({
    */
   disableOpsRatePrediction: true,
 
+  disableApdexSuccessRatePrediction: true,
+
   // Thanos needs to self-monitor in Thanos
   // this should not be required for other services.
   dangerouslyThanosEvaluated: false,

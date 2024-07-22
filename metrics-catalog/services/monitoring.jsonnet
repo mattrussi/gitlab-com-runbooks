@@ -10,7 +10,7 @@ local kubeLabelSelectors = metricsCatalog.kubeLabelSelectors;
 metricsCatalog.serviceDefinition({
   type: 'monitoring',
   tier: 'inf',
-  tenants: [ 'gitlab-gprd', 'gitlab-gstg', 'gitlab-ops', 'gitlab-pre' ],
+  tenants: ['gitlab-gprd', 'gitlab-gstg', 'gitlab-ops', 'gitlab-pre'],
 
   tags: ['cloud-sql', 'golang', 'grafana', 'prometheus'],
 
@@ -24,6 +24,7 @@ metricsCatalog.serviceDefinition({
    * disable ops-rate anomaly detection on this service.
    */
   disableOpsRatePrediction: true,
+  disableApdexSuccessRatePrediction: true,
   provisioning: {
     kubernetes: true,
     vms: true,
