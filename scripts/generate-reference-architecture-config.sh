@@ -9,87 +9,158 @@ function main() {
     pwd
   )
 
+  echo "Repository Directory: ${REPO_DIR}"
+
   cd "${REPO_DIR}"
 
-  # Check that jsonnet-tool is installed
+  # Ensure jsonnet-tool is installed
   "${REPO_DIR}/scripts/ensure-jsonnet-tool.sh"
 
   local params=()
   local paths=()
 
-  # Pass a header via GL_GENERATE_CONFIG_HEADER
-  if [[ -n ${GL_GENERATE_CONFIG_HEADER:-} ]]; then
-    params+=(--header "${GL_GENERATE_CONFIG_HEADER}")
-  fi
+  mixins_src_dir="${REPO_DIR}/mixins-monitoring"
+  echo "Mixin Source Directory: ${mixins_src_dir}"
 
+  # Add header if specified
+  [[ -n ${GL_GENERATE_CONFIG_HEADER:-} ]] && params+=(--header "${GL_GENERATE_CONFIG_HEADER}")
+
+  # Validate input arguments
   if [[ $# -eq 2 ]] || [[ $# -eq 3 ]]; then
-    reference_architecture_src_dir="$1"
-    dest_dir="$2"
+    local reference_architecture_src_dir="$1"
+    local dest_dir="$2"
+
+    echo "Reference Architecture Source Directory: ${reference_architecture_src_dir}"
+    echo "Destination Directory: ${dest_dir}"
 
     if [[ $# -eq 3 ]]; then
-      overrides_dir="$3"
+      local overrides_dir="$3"
       paths+=("-J" "${overrides_dir}")
+      echo "Overrides Directory: ${overrides_dir}"
     fi
   else
-    echo "$# is "
+    echo "Invalid number of arguments: $#"
     usage
   fi
 
   local source_file="${reference_architecture_src_dir}/generate.jsonnet"
-  local args_hash="$(echo "$@" | sha256sum | awk '{ print $1 }')"
+  local args_hash
+  args_hash="$(echo "$@" | sha256sum | awk '{ print $1 }')"
   local sha256sum_file="${REPO_DIR}/.cache/$source_file.$args_hash.sha256sum"
   local cache_out_file="${REPO_DIR}/.cache/$source_file.$args_hash.out"
 
-  if [[ ${GL_JSONNET_CACHE_SKIP:-} != 'true' ]]; then
-    mkdir -p "$(dirname "$sha256sum_file")" "$(dirname "$cache_out_file")"
+  echo "Source File: ${source_file}"
+  echo "SHA256 Sum File: ${sha256sum_file}"
+  echo "Cache Output File: ${cache_out_file}"
 
-    if [[ -f $cache_out_file ]] && [[ -f $sha256sum_file ]] && sha256sum --check --status <"$sha256sum_file"; then
-      for file in $(cat "$cache_out_file"); do
-        mkdir -p "$(dirname "$file")"
-        cp "${REPO_DIR}/.cache/$file" "$file"
-      done
-      cat "$cache_out_file"
+  if [[ ${GL_JSONNET_CACHE_SKIP:-} != 'true' ]]; then
+    setup_cache_directories "$sha256sum_file" "$cache_out_file"
+
+    if cache_hit "$sha256sum_file" "$cache_out_file"; then
+      restore_cache "$cache_out_file"
       return 0
     fi
 
-    if [[ ${GL_JSONNET_CACHE_DEBUG:-} == 'true' ]]; then
-      echo >&2 "jsonnet_cache: miss: $source_file"
-    fi
+    [[ ${GL_JSONNET_CACHE_DEBUG:-} == 'true' ]] && echo >&2 "jsonnet_cache: miss: $source_file"
   fi
 
-  out="$(
-    set +u
-    jsonnet-tool render \
-      --multi "$dest_dir" \
-      -J "${REPO_DIR}/libsonnet/" \
-      -J "${REPO_DIR}/reference-architectures/default-overrides" \
-      -J "${reference_architecture_src_dir}" \
-      -J "${REPO_DIR}/vendor/" \
-      "${paths[@]}" \
-      "${params[@]}" \
-      "$source_file"
-    set -u
-  )"
+  local out
+  out=$(generate_output "$dest_dir" "$source_file" "${paths[@]}" "${params[@]}")
   echo "$out"
 
   if [[ ${GL_JSONNET_CACHE_SKIP:-} != 'true' ]]; then
-    echo "$out" >"$cache_out_file"
-    for file in $out; do
-      mkdir -p "$(dirname "${REPO_DIR}/.cache/$file")"
-      cp "$file" "${REPO_DIR}/.cache/$file"
+    save_cache "$out" "$cache_out_file"
+    update_cache "$source_file" "$sha256sum_file"
+  fi
+
+  generate_mixins "$mixins_src_dir" "$overrides_dir" "$dest_dir"
+}
+
+function setup_cache_directories() {
+  local sha256sum_file="$1"
+  local cache_out_file="$2"
+  mkdir -p "$(dirname "$sha256sum_file")" "$(dirname "$cache_out_file")"
+}
+
+function cache_hit() {
+  local sha256sum_file="$1"
+  local cache_out_file="$2"
+  [[ -f $cache_out_file ]] && [[ -f $sha256sum_file ]] && sha256sum --check --status <"$sha256sum_file"
+}
+
+function restore_cache() {
+  local cache_out_file="$1"
+  while IFS= read -r file; do
+    mkdir -p "$(dirname "$file")"
+    cp "${REPO_DIR}/.cache/$file" "$file"
+  done < "$cache_out_file"
+  cat "$cache_out_file"
+}
+
+function generate_output() {
+  local dest_dir="$1"
+  local source_file="$2"
+  shift 2
+  local params=("$@")
+  local paths=()
+  jsonnet-tool render \
+    --multi "$dest_dir" \
+    -J "${REPO_DIR}/libsonnet/" \
+    -J "${REPO_DIR}/reference-architectures/default-overrides" \
+    -J "${reference_architecture_src_dir}" \
+    -J "${REPO_DIR}/vendor/" \
+    "${paths[@]}" \
+    "${params[@]}" \
+    "$source_file"
+}
+
+function save_cache() {
+  local out="$1"
+  local cache_out_file="$2"
+  echo "$out" >"$cache_out_file"
+  while IFS= read -r file; do
+    mkdir -p "$(dirname "${REPO_DIR}/.cache/$file")"
+    cp "$file" "${REPO_DIR}/.cache/$file"
+  done <<< "$out"
+}
+
+function update_cache() {
+  local source_file="$1"
+  local sha256sum_file="$2"
+  jsonnet-deps \
+    -J "${REPO_DIR}/metrics-catalog/" \
+    -J "${REPO_DIR}/dashboards/" \
+    -J "${REPO_DIR}/libsonnet/" \
+    -J "${REPO_DIR}/reference-architectures/default-overrides" \
+    -J "${reference_architecture_src_dir}" \
+    -J "${REPO_DIR}/vendor/" \
+    "${paths[@]}" \
+    "$source_file" | xargs sha256sum >"$sha256sum_file"
+  echo "$source_file" "${REPO_DIR}/.tool-versions" | xargs realpath | xargs sha256sum >>"$sha256sum_file"
+}
+
+function generate_mixins() {
+  local mixins_src_dir="$1"
+  local overrides_dir="$2"
+  local dest_dir="$3"
+
+  if [[ -f "$overrides_dir/mixins.libsonnet" ]]; then
+    local original_dir=$(pwd)
+
+    jsonnet "$overrides_dir/mixins.libsonnet" | jq -r '.mixins[]' | while IFS= read -r mixin; do
+      echo "$mixins_src_dir/$mixin"
+      cd "$mixins_src_dir/$mixin"
+      jb install -q
+      mixtool generate all "-J" "vendor" "-J" "vendor/gitlab.com/gitlab-com/runbooks/libsonnet" \
+        -d "$dest_dir/dashboards" \
+        -r "$dest_dir/prometheus-rules/${mixin}.rules.yaml" \
+        -a "$dest_dir/prometheus-rules/${mixin}.alerts.yaml" \
+        -y "$mixins_src_dir/$mixin/mixin.libsonnet"
     done
-    set +u
-    jsonnet-deps \
-      -J "${REPO_DIR}/metrics-catalog/" \
-      -J "${REPO_DIR}/dashboards/" \
-      -J "${REPO_DIR}/libsonnet/" \
-      -J "${REPO_DIR}/reference-architectures/default-overrides" \
-      -J "${reference_architecture_src_dir}" \
-      -J "${REPO_DIR}/vendor/" \
-      "${paths[@]}" \
-      "$source_file" | xargs sha256sum >"$sha256sum_file"
-    set -u
-    echo "$source_file" "${REPO_DIR}/.tool-versions" | xargs realpath | xargs sha256sum >>"$sha256sum_file"
+
+    cd "$original_dir"
+  else
+    echo "mixins.libsonnet file does not exist in $overrides_dir"
   fi
 }
 
