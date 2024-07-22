@@ -13,7 +13,7 @@ function main() {
 
   cd "${REPO_DIR}"
 
-  # Ensure jsonnet-tool is installed
+  # Check that jsonnet-tool is installed
   "${REPO_DIR}/scripts/ensure-jsonnet-tool.sh"
 
   local params=()
