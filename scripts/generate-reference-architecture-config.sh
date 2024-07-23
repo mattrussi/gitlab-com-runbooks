@@ -9,6 +9,10 @@ function main() {
     pwd
   )
 
+  if [[ -z "${JSONNET_VENDOR_DIR:-}" ]]; then
+    JSONNET_VENDOR_DIR="${REPO_DIR}/vendor"
+  fi
+
   cd "${REPO_DIR}"
 
   # Check that jsonnet-tool is installed
@@ -64,7 +68,7 @@ function main() {
       -J "${REPO_DIR}/libsonnet/" \
       -J "${REPO_DIR}/reference-architectures/default-overrides" \
       -J "${reference_architecture_src_dir}" \
-      -J "${REPO_DIR}/vendor/" \
+      -J "${JSONNET_VENDOR_DIR}" \
       "${paths[@]}" \
       "${params[@]}" \
       "$source_file"
@@ -85,7 +89,7 @@ function main() {
       -J "${REPO_DIR}/libsonnet/" \
       -J "${REPO_DIR}/reference-architectures/default-overrides" \
       -J "${reference_architecture_src_dir}" \
-      -J "${REPO_DIR}/vendor/" \
+      -J "${JSONNET_VENDOR_DIR}" \
       "${paths[@]}" \
       "$source_file" | xargs sha256sum >"$sha256sum_file"
     set -u
