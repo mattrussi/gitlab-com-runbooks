@@ -22,6 +22,7 @@ function main() {
 
   local params=()
   local paths=()
+  local generate_mixins_flag=false
 
   mixins_src_dir="${REPO_DIR}/mixins-monitoring"
   echo "Mixin Source Directory: ${mixins_src_dir}"
@@ -31,23 +32,38 @@ function main() {
     params+=(--header "${GL_GENERATE_CONFIG_HEADER}")
   fi
 
-  # Validate input arguments
-  if [[ $# -eq 2 ]] || [[ $# -eq 3 ]]; then
-    local reference_architecture_src_dir="$1"
-    local dest_dir="$2"
+  # Validate input arguments and flags
+  while [[ $# -gt 0 ]]; do
+    case $1 in
+      --generate-mixins)
+        generate_mixins_flag=true
+        shift
+        ;;
+      *)
+        if [[ -z "${reference_architecture_src_dir:-}" ]]; then
+          reference_architecture_src_dir="$1"
+        elif [[ -z "${dest_dir:-}" ]]; then
+          dest_dir="$1"
+        elif [[ -z "${overrides_dir:-}" ]]; then
+          overrides_dir="$1"
+          paths+=("-J" "${overrides_dir}")
+          echo "Overrides Directory: ${overrides_dir}"
+        else
+          echo "Invalid argument: $1"
+          usage
+        fi
+        shift
+        ;;
+    esac
+  done
 
-    echo "Reference Architecture Source Directory: ${reference_architecture_src_dir}"
-    echo "Destination Directory: ${dest_dir}"
-
-    if [[ $# -eq 3 ]]; then
-      overrides_dir="$3"
-      paths+=("-J" "${overrides_dir}")
-      echo "Overrides Directory: ${overrides_dir}"
-    fi
-  else
-    echo "Invalid number of arguments: $#"
+  if [[ -z "${reference_architecture_src_dir:-}" ]] || [[ -z "${dest_dir:-}" ]]; then
+    echo "Missing required arguments"
     usage
   fi
+
+  echo "Reference Architecture Source Directory: ${reference_architecture_src_dir}"
+  echo "Destination Directory: ${dest_dir}"
 
   local source_file="${reference_architecture_src_dir}/generate.jsonnet"
   local args_hash="$(echo "$@" | sha256sum | awk '{ print $1 }')"
@@ -77,7 +93,9 @@ function main() {
     update_cache "$source_file" "$sha256sum_file"
   fi
 
-  generate_mixins "$mixins_src_dir" "${paths[1]}" "$dest_dir"
+  if [[ "$generate_mixins_flag" == true ]]; then
+    generate_mixins "$mixins_src_dir" "${paths[1]}" "$dest_dir"
+  fi
 }
 
 function setup_cache_directories() {
@@ -170,12 +188,13 @@ function generate_mixins() {
 
 function usage() {
   cat >&2 <<-EOD
-$0 source_dir output_dir [overrides_dir]
+$0 [--generate-mixins] source_dir output_dir [overrides_dir]
 Generate mixins, prometheus rules and grafana dashboards for a reference architecture.
 
+  * --generate-mixins: (optional) flag to generate mixins
   * source_dir: the Jsonnet source directory containing the configuration.
   * output_dir: the directory in which generated configuration should be emitted
-  * overrides_dir: [optional] the directory containing any Jsonnet source file overrides
+  * overrides_dir: (optional) the directory containing any Jsonnet source file overrides
 
 For detailed instructions on using this command, please refer to the README.md file at
 https://gitlab.com/gitlab-com/runbooks/-/blob/master/reference-architectures/README.md.
