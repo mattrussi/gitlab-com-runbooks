@@ -23,6 +23,7 @@ function main() {
   local params=()
   local paths=()
   local generate_mixins_flag=false
+  local overrides_dir=""
 
   mixins_src_dir="${REPO_DIR}/mixins-monitoring"
   echo "Mixin Source Directory: ${mixins_src_dir}"
@@ -94,7 +95,13 @@ function main() {
   fi
 
   if [[ "$generate_mixins_flag" == true ]]; then
-    generate_mixins "$mixins_src_dir" "${paths[1]}" "$dest_dir"
+    if [[ -f "$overrides_dir/mixins.jsonnet" ]]; then
+      mixins_file="$overrides_dir/mixins.jsonnet"
+    else
+      mixins_file="${reference_architecture_src_dir}/mixins/mixins.jsonnet"
+    fi
+
+    generate_mixins "$mixins_src_dir" "$mixins_file" "$dest_dir" "$reference_architecture_src_dir"
   fi
 }
 
@@ -163,14 +170,14 @@ function update_cache() {
 
 function generate_mixins() {
   local mixins_src_dir="$1"
-  local overrides_dir="$2"
+  local mixins_file="$2"
   local dest_dir="$3"
+  local reference_architecture_src_dir="$4"
 
-  if [[ -f "$overrides_dir/mixins.libsonnet" ]]; then
+  if [[ -f "$mixins_file" ]]; then
     local original_dir=$(pwd)
 
-    jsonnet "$overrides_dir/mixins.libsonnet" | jq -r '.mixins[]' | while IFS= read -r mixin; do
-      echo "$mixins_src_dir/$mixin"
+    jsonnet "$mixins_file" | jq -r '.mixins[]' | while IFS= read -r mixin; do
       cd "$mixins_src_dir/$mixin"
       jb install -q
       mixtool generate all "-J" "vendor" "-J" "vendor/gitlab.com/gitlab-com/runbooks/libsonnet" \
@@ -178,11 +185,13 @@ function generate_mixins() {
         -r "$dest_dir/prometheus-rules/${mixin}.rules.yaml" \
         -a "$dest_dir/prometheus-rules/${mixin}.alerts.yaml" \
         -y "$mixins_src_dir/$mixin/mixin.libsonnet"
+      
+      echo "$dest_dir/{prometheus-rules|dashboards}/${mixin}"
     done
 
     cd "$original_dir"
   else
-    echo "mixins.libsonnet file does not exist in $overrides_dir"
+    echo "mixins.jsonnet file does not exist in $overrides_dir or ${reference_architecture_src_dir}/mixins"
   fi
 }
 
