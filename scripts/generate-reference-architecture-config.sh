@@ -185,7 +185,6 @@ function generate_mixins() {
         -r "$dest_dir/prometheus-rules/${mixin}.rules.yaml" \
         -a "$dest_dir/prometheus-rules/${mixin}.alerts.yaml" \
         -y "$mixins_src_dir/$mixin/mixin.libsonnet"
-      
       echo "$dest_dir/{prometheus-rules|dashboards}/${mixin}"
     done
 
