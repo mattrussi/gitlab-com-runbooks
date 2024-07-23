@@ -79,8 +79,11 @@ COPY --from=mimirtool /bin/mimirtool /bin/mimirtool
 COPY --from=mixtool /go/bin/mixtool /bin/mixtool
 COPY --from=tenant-observability-config-manager /config-manager-app /usr/bin/tenant-observability-config-manager
 
-# Ship repository contents as a part of this image, along with jsonnet dependencies installed
-COPY . /runbooks
-RUN cd /runbooks && jb install
+# Ship jsonnet dependencies as a part of this image
+RUN mkdir /jsonnet-deps
+COPY jsonnetfile.json /jsonnet-deps
+COPY jsonnetfile.lock.json /jsonnet-deps
+RUN cd /jsonnet-deps && jb install
+ENV JSONNET_VENDOR_DIR=/jsonnet-deps/vendor
 
 ENTRYPOINT ["/bin/sh", "-c"]

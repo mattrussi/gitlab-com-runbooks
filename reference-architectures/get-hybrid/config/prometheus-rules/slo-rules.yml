@@ -335,3 +335,15 @@ groups:
       tier: sv
       type: webservice
     record: slo:max:events:gitlab_service_errors:ratio
+  - expr: "0.998000"
+    labels:
+      component: workhorse_git
+      tier: sv
+      type: webservice
+    record: slo:min:events:gitlab_service_apdex:ratio
+  - expr: "0.000100"
+    labels:
+      component: workhorse_git
+      tier: sv
+      type: webservice
+    record: slo:max:events:gitlab_service_errors:ratio

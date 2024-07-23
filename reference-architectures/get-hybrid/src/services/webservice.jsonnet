@@ -3,6 +3,7 @@ local histogramApdex = metricsCatalog.histogramApdex;
 local rateMetric = metricsCatalog.rateMetric;
 local kubeLabelSelectors = metricsCatalog.kubeLabelSelectors;
 local successCounterApdex = metricsCatalog.successCounterApdex;
+local workhorseRoutes = import 'gitlab-utils/workhorse-routes.libsonnet';
 
 metricsCatalog.serviceDefinition({
   type: 'webservice',
@@ -82,37 +83,47 @@ metricsCatalog.serviceDefinition({
 
       local workhorseSelector = {
         route: {
-          ne: [
-            '^/-/health$',
-            '^/-/(readiness|liveness)$',
-          ],
+          ne: workhorseRoutes.escapeForLiterals(|||
+            ^/-/health$
+            ^/-/(readiness|liveness)$
+          |||),
         },
       },
 
-      local nonAPIWorkhorseSelector = workhorseSelector { route+: { nre+: ['^\\\\^/api/.*'] } },
-      local apiWorkhorseSelector = workhorseSelector { route+: { re+: ['^\\\\^/api/.*'] } },
+      // Routes associated with api traffic
+      local apiRoutes = ['^\\\\^/api/.*'],
+
+      // Routes associated with git traffic
+      local gitRouteRegexps = workhorseRoutes.escapeForRegexp(|||
+        ^/.+\.git/git-receive-pack\z
+        ^/.+\.git/git-upload-pack\z
+        ^/.+\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\z
+        ^/.+\.git/info/refs\z
+      |||),
+
+      local nonAPIWorkhorseSelector = workhorseSelector { route+: { nre+: apiRoutes, noneOf: gitRouteRegexps } },
+      local apiWorkhorseSelector = workhorseSelector { route+: { re+: apiRoutes } },
+      local gitWorkhorseSelector = { route: { oneOf: gitRouteRegexps } },
 
       workhorse: {
         userImpacting: true,
         featureCategory: 'not_owned',
         description: |||
           Aggregation of most rails requests that pass through workhorse, monitored via the HTTP interface.
-          Excludes API requests health, readiness and liveness requests. Some known slow requests,
+          Excludes API requests, git requests, health, readiness and liveness requests. Some known slow requests,
           such as HTTP uploads, are excluded from the apdex score.
         |||,
 
         apdex: histogramApdex(
           histogram='gitlab_workhorse_http_request_duration_seconds_bucket',
           selector=nonAPIWorkhorseSelector {
+            // In addition to excluding all git and API traffic, exclude
+            // these routes from apdex as they have variable durations
             route+: {
-              ne+: [
-                '^/([^/]+/){1,}[^/]+/uploads\\\\z',  // ^/([^/]+/){1,}[^/]+/uploads\z
-                '^/.+\\\\.git/git-receive-pack\\\\z',  // ^/.+\.git/git-receive-pack\z
-                '^/.+\\\\.git/git-upload-pack\\\\z',  // ^/.+\.git/git-upload-pack\z
-                '^/.+\\\\.git/info/refs\\\\z',  // ^/.+\.git/info/refs\z
-                '^/.+\\\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\\\z',  // /.+\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\z
-                '^/-/cable\\\\z',  // ^/-/cable\z
-              ],
+              ne+: workhorseRoutes.escapeForLiterals(|||
+                ^/([^/]+/){1,}[^/]+/uploads\z
+                ^/-/cable\z
+              |||),
             },
           },
           satisfiedThreshold=1,
@@ -131,7 +142,7 @@ metricsCatalog.serviceDefinition({
           },
         ),
 
-        significantLabels: ['route'],
+        significantLabels: ['route', 'code'],
 
         toolingLinks: [],
       },
@@ -163,7 +174,46 @@ metricsCatalog.serviceDefinition({
           },
         ),
 
-        significantLabels: ['route'],
+        significantLabels: ['route', 'code'],
+
+        toolingLinks: [],
+      },
+
+      workhorse_git: {
+        userImpacting: true,
+        featureCategory: 'not_owned',
+        description: |||
+          Aggregation of git+https requests that pass through workhorse,
+          monitored via the HTTP interface.
+
+          For apdex score, we avoid potentially long running requests, so only use the info-refs
+          endpoint for monitoring git+https performance.
+        |||,
+
+        apdex: histogramApdex(
+          histogram='gitlab_workhorse_http_request_duration_seconds_bucket',
+          selector={
+            // We only use the info-refs endpoint, not long-duration clone endpoints
+            route: workhorseRoutes.escapeForLiterals(|||
+              ^/.+\.git/info/refs\z
+            |||),
+          },
+          satisfiedThreshold=10
+        ),
+
+        requestRate: rateMetric(
+          counter='gitlab_workhorse_http_requests_total',
+          selector=gitWorkhorseSelector,
+        ),
+
+        errorRate: rateMetric(
+          counter='gitlab_workhorse_http_requests_total',
+          selector=gitWorkhorseSelector {
+            code: { re: '^5.*' },
+          },
+        ),
+
+        significantLabels: ['route', 'code'],
 
         toolingLinks: [],
       },
