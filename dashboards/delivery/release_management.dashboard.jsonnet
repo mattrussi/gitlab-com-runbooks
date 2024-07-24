@@ -106,7 +106,7 @@ local packageVersion(environment) =
   prometheus.target(
     |||
       topk(1, count(
-        omnibus_build_info{environment="%(env)s", stage="%(stage)s"}
+        omnibus_build_info{environment="%(env)s", stage="%(stage)s", type!~"^redis.*"}
       ) by (version))
     ||| % { env: environment.role, stage: environment.stage },
     instant=true,
