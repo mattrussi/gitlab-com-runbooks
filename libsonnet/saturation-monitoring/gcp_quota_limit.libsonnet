@@ -9,6 +9,7 @@ local selectors = import 'promql/selectors.libsonnet';
     horizontallyScalable: false,
     appliesTo: ['monitoring'],
     burnRatePeriod: '5m',
+    runbook: 'docs/uncategorized/alerts/gcp_quota_limit.md',
     description: |||
       GCP Quota utilization / limit ratio
 
