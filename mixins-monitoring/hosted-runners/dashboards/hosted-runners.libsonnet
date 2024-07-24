@@ -360,7 +360,7 @@ local provisionerInstanceLifeDuration() =
   _runnerManagerTemplate:: templates.runnerManager,
 
   grafanaDashboards+:: {
-    'hosted-runner.json':
+    'hosted-runners.json':
       basic.dashboard(
         title='%s Overview' % $._config.dashboardNamePrefix,
         tags=$._config.dashboardTags,
