@@ -25,9 +25,6 @@ function main() {
   local generate_mixins_flag=false
   local overrides_dir=""
 
-  mixins_src_dir="${REPO_DIR}/mixins-monitoring"
-  echo "Mixin Source Directory: ${mixins_src_dir}"
-
   # Pass a header via GL_GENERATE_CONFIG_HEADER
   if [[ -n ${GL_GENERATE_CONFIG_HEADER:-} ]]; then
     params+=(--header "${GL_GENERATE_CONFIG_HEADER}")
@@ -38,6 +35,8 @@ function main() {
     case $1 in
       --generate-mixins)
         generate_mixins_flag=true
+        mixins_src_dir="${REPO_DIR}/mixins-monitoring"
+        echo "Mixin Source Directory: ${mixins_src_dir}"
         shift
         ;;
       *)
@@ -87,12 +86,6 @@ function main() {
   fi
 
   local out=$(generate_output "$dest_dir" "$source_file" "${paths[@]}" "${params[@]}")
-  echo "$out"
-
-  if [[ ${GL_JSONNET_CACHE_SKIP:-} != 'true' ]]; then
-    save_cache "$out" "$cache_out_file"
-    update_cache "$source_file" "$sha256sum_file"
-  fi
 
   if [[ "$generate_mixins_flag" == true ]]; then
     if [[ -f "$overrides_dir/mixins.jsonnet" ]]; then
@@ -101,7 +94,15 @@ function main() {
       mixins_file="${reference_architecture_src_dir}/mixins/mixins.jsonnet"
     fi
 
-    generate_mixins "$mixins_src_dir" "$mixins_file" "$dest_dir" "$reference_architecture_src_dir"
+    local mixins_out=$(generate_mixins "$mixins_src_dir" "$mixins_file" "$dest_dir" "$reference_architecture_src_dir")
+    out="$out"$'\n'"$mixins_out"
+  fi
+
+  echo "$out"
+
+  if [[ ${GL_JSONNET_CACHE_SKIP:-} != 'true' ]]; then
+    save_cache "$out" "$cache_out_file"
+    update_cache "$source_file" "$sha256sum_file"
   fi
 }
 
@@ -174,10 +175,12 @@ function generate_mixins() {
   local dest_dir="$3"
   local reference_architecture_src_dir="$4"
 
+  local mixins_out=""
+
   if [[ -f "$mixins_file" ]]; then
     local original_dir=$(pwd)
 
-    jsonnet "$mixins_file" | jq -r '.mixins[]' | while IFS= read -r mixin; do
+    mixins_out=$(jsonnet "$mixins_file" | jq -r '.mixins[]' | while IFS= read -r mixin; do
       cd "$mixins_src_dir/$mixin"
       jb install -q
       mixtool generate all "-J" "vendor" "-J" "vendor/gitlab.com/gitlab-com/runbooks/libsonnet" \
@@ -185,13 +188,17 @@ function generate_mixins() {
         -r "$dest_dir/prometheus-rules/${mixin}.rules.yaml" \
         -a "$dest_dir/prometheus-rules/${mixin}.alerts.yaml" \
         -y "$mixins_src_dir/$mixin/mixin.libsonnet"
-      echo "$dest_dir/{prometheus-rules|dashboards}/${mixin}"
-    done
+      echo "$dest_dir/dashboards/${mixin}.json"
+      echo "$dest_dir/prometheus-rules/${mixin}.rules.yaml"
+      echo "$dest_dir/prometheus-rules/${mixin}.alerts.yaml"
+    done)
 
     cd "$original_dir"
   else
-    echo "mixins.jsonnet file does not exist in $overrides_dir or ${reference_architecture_src_dir}/mixins"
+    mixins_out="mixins.jsonnet file does not exist in $overrides_dir or ${reference_architecture_src_dir}/mixins"
   fi
+
+  echo "$mixins_out"
 }
 
 function usage() {
