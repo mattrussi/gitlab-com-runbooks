@@ -12,7 +12,7 @@ groups:
       grafana_datasource_id: mimir-gitlab-pre
       title: CloudSQL database {{ $labels.database_id }} is down
       description: The CloudSQL database {{ $labels.database_id }} appears to be down.
-      runbook: docs/cloud-sql/cloud-sql.md
+      runbook: docs/cloud-sql/alerts/CloudSQLDatabaseDown.md
   - alert: CloudSQLDatabaseFailedCreate
     expr: stackdriver_cloudsql_database_cloudsql_googleapis_com_database_instance_state{env="pre", state="FAILED"} == 1
     for: 5m
