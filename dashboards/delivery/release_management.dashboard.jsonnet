@@ -91,7 +91,7 @@ local railsVersion(environment) =
     |||
       label_replace(
         topk(1, count(
-          gitlab_version_info{environment="%(env)s", stage="%(stage)s", component="gitlab-rails"}
+          gitlab_version_info{environment="%(env)s", stage="%(stage)s", component="gitlab-rails", type!~"^redis.*"}
         ) by (version)),
         "version", "$1",
         "version", "^([A-Fa-f0-9]{11}).*$"
