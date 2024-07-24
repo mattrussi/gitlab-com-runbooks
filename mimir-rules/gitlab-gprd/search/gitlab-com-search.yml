@@ -3,7 +3,7 @@ groups:
     rules:
       - alert: gitlab_search_initial_indexing_queue_backing_up
         expr: >
-          avg by (environment, stage) (
+          avg by (env, environment, stage) (
             global_search_bulk_cron_initial_queue_size{env="gprd"}
           ) > 50000
         for: 15m
@@ -25,7 +25,7 @@ groups:
             cannot keep up with the number of elements being enqueued. Reach out to  #g_global_search to see what is causing this.
       - alert: gitlab_search_incremental_indexing_queue_backing_up
         expr: >
-          avg by (environment, stage) (
+          avg by (env,environment, stage) (
             global_search_bulk_cron_queue_size{env="gprd"}
           ) > 50000
         for: 15m
