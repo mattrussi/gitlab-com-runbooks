@@ -40,6 +40,7 @@
 * [Gitaly Repository Export](gitaly-repositry-export.md)
 * [Gitaly token rotation](gitaly-token-rotation.md)
 * [Gitaly unusual activity alert](gitaly-unusual-activity.md)
+* [Gitaly version mismatch](gitaly-version-mismatch.md)
 * [`gitalyctl`](gitalyctl.md)
 * [Gracefully restart gitaly-ruby](gracefully-restart-gitaly-ruby.md)
 * [Moving repositories from one Gitaly node to another](move-repositories.md)
@@ -67,7 +68,6 @@
 * [Project exports](../uncategorized/project-export.md)
 * [Ruby profiling](../uncategorized/ruby-profiling.md)
 * [How to upload a file to Google Cloud Storage from any system without a credentials configuration](../uncategorized/upload-file-to-gcs-using-signed-url.md)
-* [Gitaly version mismatch](../version/gitaly-version-mismatch.md)
 <!-- END_MARKER -->
 
 <!-- ## Summary -->
