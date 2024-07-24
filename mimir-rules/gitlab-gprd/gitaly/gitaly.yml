@@ -91,7 +91,7 @@ groups:
           description:
             Gitaly has been marked as down for the past minute on {{$labels.instance}}.
             Check Gitaly logs and restart the process if necessary
-          runbook: docs/gitaly/gitaly-down.md
+          runbook: docs/gitaly/alerts/GitalyFileServerDown.md
           title: Gitaly is down on {{ $labels.fqdn }}
       - alert: GitalyVersionMismatch
         expr: >
@@ -114,7 +114,7 @@ groups:
             alongside one another, but this should not be the case for more than 60m.
             Visit https://dashboards.gitlab.net/dashboard/db/gitaly-version-tracker?orgId=1
             for details of versions deployed across the fleet.
-          runbook: docs/version/gitaly-version-mismatch.md
+          runbook: docs/gitaly/alerts/GitalyVersionMismatch.md
           title: "Multiple versions of Gitaly have been running alongside one another"
       - alert: GCPScheduledSnapshotMissingForGitaly
         expr: |

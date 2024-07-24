@@ -48,6 +48,7 @@
 * [Restoring gitaly data corruption on a project after an unclean shutdown](../gitaly/gitaly-repository-corruption.md)
 * [Gitaly Repository Export](../gitaly/gitaly-repositry-export.md)
 * [Gitaly unusual activity alert](../gitaly/gitaly-unusual-activity.md)
+* [Gitaly version mismatch](../gitaly/gitaly-version-mismatch.md)
 * [`gitalyctl`](../gitaly/gitalyctl.md)
 * [Moving repositories from one Gitaly node to another](../gitaly/move-repositories.md)
 * [GitLab Storage Re-balancing](../gitaly/storage-rebalancing.md)
@@ -91,7 +92,6 @@
 * [How to upload a file to Google Cloud Storage from any system without a credentials configuration](../uncategorized/upload-file-to-gcs-using-signed-url.md)
 * [Workers under heavy load because of being used as a CDN](../uncategorized/workers-high-load.md)
 * [Configuring and Using the Yubikey](../uncategorized/yubikey.md)
-* [Gitaly version mismatch](../version/gitaly-version-mismatch.md)
 <!-- END_MARKER -->
 
 <!-- ## Summary -->

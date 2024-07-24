@@ -30,6 +30,7 @@
 * [../elastic/elastic-cloud.md](../elastic/elastic-cloud.md)
 * [Gitaly error rate is too high](../gitaly/gitaly-error-rate.md)
 * [Upgrading the OS of Gitaly VMs](../gitaly/gitaly-os-upgrade.md)
+* [Gitaly version mismatch](../gitaly/gitaly-version-mismatch.md)
 * [Managing GitLab Storage Shards (Gitaly)](../gitaly/storage-sharding.md)
 * [../gitlab-com-pkgs/overview.md](../gitlab-com-pkgs/overview.md)
 * [CI Artifacts CDN](../google-cloud-storage/artifacts-cdn.md)
@@ -83,7 +84,6 @@
 * [Removing kernels from fleet](../uncategorized/remove-kernels.md)
 * [How to Use Vault for Secrets Management in Infrastructure](../vault/usage.md)
 * [Vault Secrets Management](../vault/vault.md)
-* [Gitaly version mismatch](gitaly-version-mismatch.md)
 * [version.gitlab.com Runbook](version-gitlab-com.md)
 * [Static repository objects caching](../web/static-repository-objects-caching.md)
 <!-- END_MARKER -->
