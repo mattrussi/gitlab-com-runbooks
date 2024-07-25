@@ -7,11 +7,33 @@ local basic = import 'grafana/basic.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
 local promQuery = import 'grafana/prom_query.libsonnet';
 
-local clusterNameTemplate = grafana.template.custom(
+local clusterNameTemplate = grafana.template.new(
     'cluster',
-    'main,ci,registry',
+    '$PROMETHEUS_DS',
+    'label_values(pg_settings_server_version_num, fqdn)',
+    regex='/patroni-(\\w+)-/',
     current='main',
 );
+
+// source version relies on the minimum server version for the cluster
+local sourceVersionTemplate = grafana.template.new(
+      'source_version',
+      '$PROMETHEUS_DS',
+      'query_result(min by(__name__) (pg_settings_server_version_num{fqdn=~"patroni-main.*"}))',
+      regex='/.*\\} (\\d{2})/',
+      refresh='load',
+      sort=1,
+    );
+
+// destination version relies on naming convention of v(version_number) in fqdn
+local destinationVersionTemplate = grafana.template.new(
+      'destination_version',
+      '$PROMETHEUS_DS',
+      'label_values(pg_settings_server_version_num{fqdn=~"patroni-${cluster}.*"}, fqdn)',
+      regex='/.*v(\\d{2})/',
+      refresh='load',
+      sort=1,
+    );
 
 local logicalReplicationLag =
     panels.generalGraphPanel('Logical replication lag (all slots in $environment)', fill=10, decimals=1, legend_show=true,legend_min=false,legend_current=false)
@@ -34,7 +56,7 @@ local logicalReplicationLag =
         );
 
 local context =
-    panels.generalTextPanel('Context',content='# **$environment** **$cluster**', transparent=true);
+    panels.generalTextPanel('Context',content='# **$environment** **$cluster** **source_version**', transparent=true);
 
 local usefulLinks =
     panels.generalTextPanel('Useful links',
@@ -46,10 +68,9 @@ local usefulLinks =
     ', transparent=true);
 
 local clusterLeft =
-    panels.generalTextPanel('Cluster on the left',content='🏹 Source cluster: PG12, Ubuntu 20.04 (prefixes contain hard-coded `v12` and/or `2004`)', transparent=true);
-
+    panels.generalTextPanel('Cluster on the left',content='🏹 Source cluster: PG${source_version}, Ubuntu 20.04',  transparent=true);
 local clusterRight =
-    panels.generalTextPanel('Cluster on the right',content='🎯 Target cluster: PG14 (prefixes contain hard-coded `v14`)', transparent=true);
+    panels.generalTextPanel('Cluster on the right',content='🎯 Target cluster: PG${destination_version} ', transparent=true);
 
 local replicationLagSourceSeconds =
     panels.generalGraphPanel('🏹 🏃🏻‍♀️ Physical replication lag on source standbys, in seconds', decimals=2, legend_show=true,legend_min=false,legend_current=false)
@@ -66,7 +87,7 @@ local replicationLagSourceSeconds =
         .addTarget(
             promQuery.target(
                 |||
-                    sum(pg_replication_lag{env="$environment", fqdn=~"(patroni-${cluster}-2004|patroni-v12-${cluster})-.*"}) by (fqdn)
+                    sum(pg_replication_lag{env="$environment", fqdn=~"(patroni-${cluster}-v${source_version}|patroni-${cluster}-[0-9]+).*"}) by (fqdn)
                 |||,
             ),
         );
@@ -86,7 +107,7 @@ local replicationLagTargetSeconds =
         .addTarget(
             promQuery.target(
                 |||
-                    sum(pg_replication_lag{env="$environment", fqdn=~"patroni-${cluster}-v14-.*"}) by (fqdn)
+                    sum(pg_replication_lag{env="$environment", fqdn=~"patroni-${cluster}-v${destination_version}-.*"}) by (fqdn)
                 |||,
             ),
         );
@@ -106,7 +127,7 @@ local replicationLagSourceBytes =
         .addTarget(
             promQuery.target(
                 |||
-                    sum(postgres:pg_replication_lag_bytes{env="$environment", fqdn=~"(patroni-${cluster}-2004|patroni-v12-${cluster})-.*"}) by (fqdn)
+                    sum(postgres:pg_replication_lag_bytes{env="$environment", fqdn=~"(patroni-${cluster}-v${source_version}|patroni-${cluster}-[0-9]+).*"}) by (fqdn)
                 |||,
             ),
         );
@@ -126,7 +147,7 @@ local replicationLagTargetBytes =
         .addTarget(
             promQuery.target(
                 |||
-                    sum(postgres:pg_replication_lag_bytes{env="$environment", fqdn=~"patroni-${cluster}-v14-.*"}) by (fqdn)
+                    sum(postgres:pg_replication_lag_bytes{env="$environment", fqdn=~"patroni-${cluster}-v${destination_version}-.*"}) by (fqdn)
                 |||,
             ),
         );
@@ -146,7 +167,7 @@ local sourceLeaderTPSCommits =
         .addTarget(
             promQuery.target(
                 |||
-                    (sum(irate(pg_stat_database_xact_commit{env="$environment", fqdn=~"(patroni-${cluster}-2004|patroni-v12-${cluster})-.*"}[1m])) by (instance)) and on(instance) pg_replication_is_replica==0
+                    (sum(irate(pg_stat_database_xact_commit{env="$environment", fqdn=~"(patroni-${cluster}-v${source_version}|patroni-${cluster}-[0-9]+).*"}[1m])) by (instance)) and on(instance) pg_replication_is_replica==0
                 |||,
             ),
         );
@@ -166,7 +187,7 @@ local targetLeaderTPSCommits =
         .addTarget(
             promQuery.target(
                 |||
-                    (sum(irate(pg_stat_database_xact_commit{env="$environment", fqdn=~"patroni-${cluster}-v14-.*"}[1m])) by (instance)) and on(instance) pg_replication_is_replica==0
+                    (sum(irate(pg_stat_database_xact_commit{env="$environment", fqdn=~"patroni-${cluster}-v${destination_version}-.*"}[1m])) by (instance)) and on(instance) pg_replication_is_replica==0
                 |||,
             ),
         );
@@ -186,7 +207,7 @@ local sourceStandbysTPSCommits =
         .addTarget(
             promQuery.target(
                 |||
-                    (sum(irate(pg_stat_database_xact_commit{env="$environment", fqdn=~"(patroni-${cluster}-2004|patroni-v12-${cluster})-.*"}[1m])) by (instance)) and on(instance) pg_replication_is_replica==1
+                    (sum(irate(pg_stat_database_xact_commit{env="$environment", fqdn=~"(patroni-${cluster}-v${source_version}|patroni-${cluster}-[0-9]+).*"}[1m])) by (instance)) and on(instance) pg_replication_is_replica==1
                 |||,
             ),
         );
@@ -206,7 +227,7 @@ local targetStandbysTPSCommits =
         .addTarget(
             promQuery.target(
                 |||
-                    (sum(irate(pg_stat_database_xact_commit{env="$environment", fqdn=~"patroni-${cluster}-v14-.*"}[1m])) by (instance)) and on(instance) pg_replication_is_replica==1
+                    (sum(irate(pg_stat_database_xact_commit{env="$environment", fqdn=~"patroni-${cluster}-v${destination_version}-.*"}[1m])) by (instance)) and on(instance) pg_replication_is_replica==1
                 |||,
             ),
         );
@@ -226,7 +247,7 @@ local sourceLeaderRollbackTPSErrors =
         .addTarget(
             promQuery.target(
                 |||
-                    (sum(irate(pg_stat_database_xact_rollback{env="$environment", fqdn=~"(patroni-${cluster}-2004|patroni-v12-${cluster})-.*"}[1m])) by (instance)) and on(instance) pg_replication_is_replica==0
+                    (sum(irate(pg_stat_database_xact_rollback{env="$environment", fqdn=~"(patroni-${cluster}-v${source_version}|patroni-${cluster}-[0-9]+).*"}[1m])) by (instance)) and on(instance) pg_replication_is_replica==0
                 |||,
             ),
         );
@@ -246,7 +267,7 @@ local targetLeaderRollbackTPSErrors =
         .addTarget(
             promQuery.target(
                 |||
-                    (sum(irate(pg_stat_database_xact_rollback{env="$environment", fqdn=~"patroni-${cluster}-v14-.*"}[1m])) by (instance)) and on(instance) pg_replication_is_replica==0
+                    (sum(irate(pg_stat_database_xact_rollback{env="$environment", fqdn=~"patroni-${cluster}-v${destination_version}-.*"}[1m])) by (instance)) and on(instance) pg_replication_is_replica==0
                 |||,
             ),
         );
@@ -266,7 +287,7 @@ local sourceStandbysRollbackTPSErrors =
         .addTarget(
             promQuery.target(
                 |||
-                    (sum(irate(pg_stat_database_xact_rollback{env="$environment", fqdn=~"(patroni-${cluster}-2004|patroni-v12-${cluster})-.*"}[1m])) by (instance)) and on(instance) pg_replication_is_replica==1
+                    (sum(irate(pg_stat_database_xact_rollback{env="$environment", fqdn=~"(patroni-${cluster}-v${source_version}|patroni-${cluster}-[0-9]+).*"}[1m])) by (instance)) and on(instance) pg_replication_is_replica==1
                 |||,
             ),
         );
@@ -286,7 +307,7 @@ local targetStandbysRollbackTPSErrors =
         .addTarget(
             promQuery.target(
                 |||
-                    (sum(irate(pg_stat_database_xact_rollback{env="$environment", fqdn=~"patroni-${cluster}-v14-.*"}[1m])) by (instance)) and on(instance) pg_replication_is_replica==1
+                    (sum(irate(pg_stat_database_xact_rollback{env="$environment", fqdn=~"patroni-${cluster}-v${destination_version}-.*"}[1m])) by (instance)) and on(instance) pg_replication_is_replica==1
                 |||,
             ),
         );
@@ -306,11 +327,11 @@ local sourceWritesTuple =
         .addTarget(
             promQuery.target(
                 |||
-                    sum(irate(pg_stat_user_tables_n_tup_ins{env="$environment", fqdn=~"(patroni-${cluster}-2004|patroni-v12-${cluster})-.*"}[1m])
+                    sum(irate(pg_stat_user_tables_n_tup_ins{env="$environment", fqdn=~"(patroni-${cluster}-v${source_version}|patroni-${cluster}-[0-9]+).*"}[1m])
                     +
-                    irate(pg_stat_user_tables_n_tup_del{env="$environment", fqdn=~"(patroni-${cluster}-2004|patroni-v12-${cluster})-.*"}[1m])
+                    irate(pg_stat_user_tables_n_tup_del{env="$environment", fqdn=~"(patroni-${cluster}-v${source_version}|patroni-${cluster}-[0-9]+).*"}[1m])
                     +
-                    irate(pg_stat_user_tables_n_tup_upd{env="$environment", fqdn=~"(patroni-${cluster}-2004|patroni-v12-${cluster})-.*"}[1m])) by (instance)
+                    irate(pg_stat_user_tables_n_tup_upd{env="$environment", fqdn=~"(patroni-${cluster}-v${source_version}|patroni-${cluster}-[0-9]+).*"}[1m])) by (instance)
                     and on(instance) pg_replication_is_replica==0
                 |||,
             ),
@@ -331,11 +352,11 @@ local targetWritesTuple =
         .addTarget(
             promQuery.target(
                 |||
-                    sum(irate(pg_stat_user_tables_n_tup_ins{env="$environment", fqdn=~"patroni-${cluster}-v14-.*"}[1m])
+                    sum(irate(pg_stat_user_tables_n_tup_ins{env="$environment", fqdn=~"patroni-${cluster}-v${destination_version}-.*"}[1m])
                     +
-                    irate(pg_stat_user_tables_n_tup_del{env="$environment", fqdn=~"patroni-${cluster}-v14-.*"}[1m])
+                    irate(pg_stat_user_tables_n_tup_del{env="$environment", fqdn=~"patroni-${cluster}-v${destination_version}-.*"}[1m])
                     +
-                    irate(pg_stat_user_tables_n_tup_upd{env="$environment", fqdn=~"patroni-${cluster}-v14-.*"}[1m])) by (instance)
+                    irate(pg_stat_user_tables_n_tup_upd{env="$environment", fqdn=~"patroni-${cluster}-v${destination_version}-.*"}[1m])) by (instance)
                     and on(instance) pg_replication_is_replica==0
                 |||,
             ),
@@ -356,7 +377,7 @@ local sourceIndexTupleFetches =
         .addTarget(
             promQuery.target(
                 |||
-                    (sum(rate(pg_stat_user_tables_idx_tup_fetch{env="$environment", fqdn=~"(patroni-${cluster}-2004|patroni-v12-${cluster})-.*"}[1m])) by (instance)) and on(instance) pg_replication_is_replica==1
+                    (sum(rate(pg_stat_user_tables_idx_tup_fetch{env="$environment", fqdn=~"(patroni-${cluster}-v${source_version}|patroni-${cluster}-[0-9]+).*"}[1m])) by (instance)) and on(instance) pg_replication_is_replica==1
                 |||,
             ),
         );
@@ -376,7 +397,7 @@ local targetIndexTupleFetches =
         .addTarget(
             promQuery.target(
                 |||
-                    (sum(rate(pg_stat_user_tables_idx_tup_fetch{env="$environment", fqdn=~"patroni-${cluster}-v14-.*"}[1m])) by (instance)) and on(instance) pg_replication_is_replica==1
+                    (sum(rate(pg_stat_user_tables_idx_tup_fetch{env="$environment", fqdn=~"patroni-${cluster}-v${destination_version}-.*"}[1m])) by (instance)) and on(instance) pg_replication_is_replica==1
                 |||,
             ),
         );
@@ -396,7 +417,7 @@ local sourceSeqTupleReads =
         .addTarget(
             promQuery.target(
                 |||
-                    (sum(rate(pg_stat_user_tables_seq_tup_read{env="$environment", fqdn=~"(patroni-${cluster}-2004|patroni-v12-${cluster})-.*"}[1m])) by (instance)) and on(instance) pg_replication_is_replica==1
+                    (sum(rate(pg_stat_user_tables_seq_tup_read{env="$environment", fqdn=~"(patroni-${cluster}-v${source_version}|patroni-${cluster}-[0-9]+).*"}[1m])) by (instance)) and on(instance) pg_replication_is_replica==1
                 |||,
             ),
         );
@@ -416,7 +437,7 @@ local targetSeqTupleReads =
         .addTarget(
             promQuery.target(
                 |||
-                    (sum(rate(pg_stat_user_tables_seq_tup_read{env="$environment", fqdn=~"patroni-${cluster}-v14-.*"}[1m])) by (instance)) and on(instance) pg_replication_is_replica==1
+                    (sum(rate(pg_stat_user_tables_seq_tup_read{env="$environment", fqdn=~"patroni-${cluster}-v${destination_version}-.*"}[1m])) by (instance)) and on(instance) pg_replication_is_replica==1
                 |||,
             ),
         );
@@ -427,6 +448,8 @@ basic.dashboard(
 )
 
 .addTemplate(clusterNameTemplate)
+.addTemplate(sourceVersionTemplate)
+.addTemplate(destinationVersionTemplate)
 .addPanel(context,gridPos={'x':0,'y':0,'w':6,'h':7})
 .addPanel(clusterLeft,gridPos={'x':0,'y':7,'w':6,'h':3})
 .addPanel(logicalReplicationLag,gridPos={'x':6,'y':0,'w':12,'h':10})
