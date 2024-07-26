@@ -1,33 +1,36 @@
 local selectors = import 'promql/selectors.libsonnet';
 local stableIds = import 'stable-ids/stable-ids.libsonnet';
 
-local rules = function(extraSelector, tenant=null)
+local rules = function(extraSelector, alert_name_prefix, service_metric_name, disable_metric_name, upper_bound_alert_title, upper_bound_alert_description, service_definition_doc_url, component_metric_name, lower_bound_alert_title, lower_bound_alert_description, stable_id_string, tenant=null)
   local selector = { monitor: 'global' } + extraSelector;
   [
     //###############################################
     // Operation Rate: how many operations is this service handling per second?
+    // Apdex success Rate: how many successful operations?
     //###############################################
     // ------------------------------------
     // Upper bound thresholds exceeded
     // ------------------------------------
-    // Warn: Operation rate above 2 sigma
+    // Warn: Rate above 2 sigma
     {
-      alert: 'service_ops_out_of_bounds_upper_5m',
+      alert: '%(alert_name_prefix)s_out_of_bounds_upper_5m' % { alert_name_prefix: alert_name_prefix },
       // gitlab_service:mapping rules are still recorded across environments
       // They apply to all environments
       expr: |||
         (
             (
-              (gitlab_service_ops:rate_5m{%(selector)s} -  gitlab_service_ops:rate:prediction{%(selector)s}) /
-            gitlab_service_ops:rate:stddev_over_time_1w{%(selector)s}
+              (%(service_metric_name)s:rate_5m{%(selector)s} -  %(service_metric_name)s:rate:prediction{%(selector)s}) /
+            %(service_metric_name)s:rate:stddev_over_time_1w{%(selector)s}
           )
           >
           3
         )
         unless on(tier, type)
-        gitlab_service:mapping:disable_ops_rate_prediction{monitor="global"}
+        gitlab_service:mapping:%(disable_metric_name)s{monitor="global"}
       ||| % {
         selector: selectors.serializeHash(selector),
+        service_metric_name: service_metric_name,
+        disable_metric_name: disable_metric_name,
       },
       'for': '5m',
       labels: {
@@ -36,42 +39,41 @@ local rules = function(extraSelector, tenant=null)
         alert_type: 'cause',
       },
       annotations: {
-        description: |||
-          The `{{ $labels.type }}` service (`{{ $labels.stage }}` stage) is receiving more requests than normal.
-          This is often caused by user generated traffic, sometimes abuse. It can also be cause by application changes that lead to higher operations rates or from retries in the event of errors. Check the abuse reporting watches in Elastic, ELK for possible abuse, error rates (possibly on upstream services) for root cause.
-        |||,
+        description: upper_bound_alert_description,
         runbook: 'docs/{{ $labels.type }}/README.md',
-        title: 'Anomaly detection: The `{{ $labels.type }}` service (`{{ $labels.stage }}` stage) is receiving more requests than normal',
+        title: upper_bound_alert_title,
         grafana_dashboard_id: 'general-service/service-platform-metrics',
-        grafana_panel_id: stableIds.hashStableId('service-$type-ops-rate'),
+        grafana_panel_id: stableIds.hashStableId(stable_id_string),
         grafana_variables: 'environment,type,stage',
         grafana_min_zoom_hours: '12',
         grafana_datasource_id: tenant,
         link1_title: 'Definition',
-        link1_url: 'https://gitlab.com/gitlab-com/runbooks/blob/master/docs/monitoring/definition-service-ops-rate.md',
-        promql_template_1: 'gitlab_service_ops:rate{environment="$environment", type="$type", stage="$stage"}',
-        promql_template_2: 'gitlab_component_ops:rate{environment="$environment", type="$type", stage="$stage"}',
+        link1_url: service_definition_doc_url,
+        promql_template_1: '%(service_metric_name)s:rate{environment="$environment", type="$type", stage="$stage"}' % { service_metric_name: service_metric_name },
+        promql_template_2: '%(component_metric_name)s:rate{environment="$environment", type="$type", stage="$stage"}' % { component_metric_name: component_metric_name },
       },
     },
     // ------------------------------------
     // Lower bound thresholds exceeded
     // ------------------------------------
-    // Warn: Operation rate below 2 sigma
+    // Warn: Rate below 2 sigma
     {
-      alert: 'service_ops_out_of_bounds_lower_5m',
+      alert: '%(alert_name_prefix)s_out_of_bounds_lower_5m' % { alert_name_prefix: alert_name_prefix },
       expr: |||
         (
             (
-              (gitlab_service_ops:rate_5m{%(selector)s} -  gitlab_service_ops:rate:prediction{%(selector)s}) /
-            gitlab_service_ops:rate:stddev_over_time_1w{%(selector)s}
+              (%(service_metric_name)s:rate_5m{%(selector)s} -  %(service_metric_name)s:rate:prediction{%(selector)s}) /
+            %(service_metric_name)s:rate:stddev_over_time_1w{%(selector)s}
           )
           <
           -3
         )
         unless on(tier, type)
-        gitlab_service:mapping:disable_ops_rate_prediction{monitor="global"}
+        gitlab_service:mapping:%(disable_metric_name)s{monitor="global"}
       ||| % {
         selector: selectors.serializeHash(selector),
+        service_metric_name: service_metric_name,
+        disable_metric_name: disable_metric_name,
       },
       'for': '5m',
       labels: {
@@ -80,21 +82,18 @@ local rules = function(extraSelector, tenant=null)
         alert_type: 'cause',
       },
       annotations: {
-        description: |||
-          The `{{ $labels.type }}` service (`{{ $labels.stage }}` stage) is receiving fewer requests than normal.
-          This is often caused by a failure in an upstream service - for example, an upstream load balancer rejected all incoming traffic. In many cases, this is as serious or more serious than a traffic spike. Check upstream services for errors that may be leading to traffic flow issues in downstream services.
-        |||,
+        description: lower_bound_alert_description,
         runbook: 'docs/{{ $labels.type }}/README.md',
-        title: 'Anomaly detection: The `{{ $labels.type }}` service (`{{ $labels.stage }}` stage) is receiving fewer requests than normal',
+        title: lower_bound_alert_title,
         grafana_dashboard_id: 'general-service/service-platform-metrics',
-        grafana_panel_id: stableIds.hashStableId('service-$type-ops-rate'),
+        grafana_panel_id: stableIds.hashStableId(stable_id_string),
         grafana_variables: 'environment,type,stage',
         grafana_min_zoom_hours: '12',
         grafana_datasource_id: tenant,
         link1_title: 'Definition',
-        link1_url: 'https://gitlab.com/gitlab-com/runbooks/blob/master/docs/monitoring/definition-service-ops-rate.md',
-        promql_template_1: 'gitlab_service_ops:rate{environment="$environment", type="$type", stage="$stage"}',
-        promql_template_2: 'gitlab_component_ops:rate{environment="$environment", type="$type", stage="$stage"}',
+        link1_url: service_definition_doc_url,
+        promql_template_1: '%(service_metric_name)s:rate{environment="$environment", type="$type", stage="$stage"}' % { service_metric_name: service_metric_name },
+        promql_template_2: '%(component_metric_name)s:rate{environment="$environment", type="$type", stage="$stage"}' % { component_metric_name: component_metric_name },
       },
     },
   ];
