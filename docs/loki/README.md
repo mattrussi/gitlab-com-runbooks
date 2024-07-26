@@ -25,3 +25,7 @@ curl -X POST --header "Authorization: $VAULT_TOKEN" --data '{ "name": "TENANT_NA
 
 It'll return the tenant credentials on a successful request, otherwise a 500 in all other cases; The new credentials are also written to
 `shared/observability-tenants/{TENANT_NAME}` in vault, this value is b64 encoded.
+
+### Architecture
+
+![](./loki-architecture.jpg)
