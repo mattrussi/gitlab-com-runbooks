@@ -2,7 +2,7 @@
 
 [Published rate limits](https://docs.gitlab.com/ee/user/gitlab_com/index.html#gitlabcom-specific-rate-limits) apply to all customers and users with no exceptions. Rate limiting bypasses are only considered in exceptional circumstances for customers experiencing a high severity incident, such as a full outage. Even with this requirement satisfied, it is still possible that a bypass request will be rejected. Permanent bypasses are not made.
 
-The reason for this strict policy is we want to help every customer as much as possible when they run into problems, but on GitLab.com, we have to prioritize the reliability and stability of the entire instance to protect all customers and users. Allowing even one customer to bypass rate limits creates a high risk situation where we have opened an avenue for a high severity production incident (such as GitLab.com being unavailable to all users) to occur. This is why it is always prefered to find ways to resolve the issue without needing to bypass rate limits.
+The reason for this strict policy is we want to help every customer as much as possible when they run into problems, but on GitLab.com, we have to prioritize the reliability and stability of the entire instance to protect all customers and users. Allowing even one customer to bypass rate limits creates a high risk situation where we have opened an avenue for a high severity production incident (such as GitLab.com being unavailable to all users) to occur. This is why it is always preferred to find ways to resolve the issue without needing to bypass rate limits.
 
 ## Bypass requests
 
