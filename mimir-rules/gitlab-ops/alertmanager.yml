@@ -14,7 +14,7 @@ groups:
     annotations:
       grafana_datasource_id: mimir-gitlab-ops
       title: Alertmanager is failing sending notifications
-      runbook: docs/monitoring/alertmanager-notification-failures.md
+      runbook: docs/monitoring/alerts/AlertmanagerNotificationsFailing.md
       description: Alertmanager is seeing errors for the {{$labels.integration}} integration.
   - alert: AlertmanagerWebhookNotificationsFailing
     expr: >
@@ -30,7 +30,7 @@ groups:
     annotations:
       grafana_datasource_id: mimir-gitlab-ops
       title: Alertmanager is failing sending notifications for the webhook integration
-      runbook: docs/monitoring/alertmanager-notification-failures.md
+      runbook: docs/monitoring/alerts/AlertmanagerNotificationsFailing.md
       description: Alertmanager is seeing errors for the webhook integration, check https://console.cloud.google.com/functions/details/us-central1/alertManagerBridge?env=gen1&project=gitlab-infra-automation
   - alert: SnitchHeartBeat
     # Fires as long as there are no notification failures on any alertmanager.
