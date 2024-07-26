@@ -82,7 +82,7 @@ $ tsh login --proxy=production.teleport.gitlab.net
 Currently only `prod-rails-console-ro` is implemented, and is only required in `gprd`
 
 ```bash
-$ tsh login --proxy=production.teleport.gitlab.net --request-roles=prod-rails-console-ro --request-reason="GitLab Issue URL or ZenDesk Ticket URL"
+$ tsh login --proxy=production.teleport.gitlab.net --request-roles=prdsub-customersdot-rails-console-rw --request-reason="GitLab Issue URL or ZenDesk Ticket URL"
 ```
 
 This command will pause while it waits for the reviewer to approve the request.
