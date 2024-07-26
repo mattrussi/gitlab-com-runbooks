@@ -1,7 +1,20 @@
 local selectors = import 'promql/selectors.libsonnet';
 local stableIds = import 'stable-ids/stable-ids.libsonnet';
 
-local rules = function(extraSelector, alert_name_prefix, service_metric_name, disable_metric_name, upper_bound_alert_title, upper_bound_alert_description, service_definition_doc_url, component_metric_name, lower_bound_alert_title, lower_bound_alert_description, stable_id_string, tenant=null)
+local rules = function(
+  extraSelector,
+  alert_name_prefix,
+  service_metric_name,
+  disable_metric_name,
+  upper_bound_alert_title,
+  upper_bound_alert_description,
+  service_definition_doc_url,
+  component_metric_name,
+  lower_bound_alert_title,
+  lower_bound_alert_description,
+  stable_id_string,
+  tenant=null
+              )
   local selector = { monitor: 'global' } + extraSelector;
   [
     //###############################################

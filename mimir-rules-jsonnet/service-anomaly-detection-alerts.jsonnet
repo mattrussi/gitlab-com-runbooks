@@ -44,6 +44,31 @@ local fileForService(service, extraSelector, _extraArgs, tenant) =
             )
           ),
         },
+        {
+          name: '%s - service_apdex_anomaly_detection' % service.type,
+          rules: alerts.processAlertRules(
+            serviceAnomalyDetectionAlerts(
+              selector,
+              'service_apdex',
+              'gitlab_service_apdex:success',
+              'disable_apdex_success_rate_prediction',
+              'Anomaly detection: The `{{ $labels.type }}` service (`{{ $labels.stage }}` stage) has higher apdex than normal',
+              |||
+                The `{{ $labels.type }}` service (`{{ $labels.stage }}` stage) has higher apdex than normal.
+                This is often caused by user generated traffic, sometimes abuse. It can also be caused by application changes that lead to higher apdex success rates. Check the abuse reporting watches in Elastic, ELK for possible abuse, error rates (possibly on upstream services) for root cause.
+              |||,
+              'https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/monitoring/definition-service-apdex.md',
+              'gitlab_component_apdex:success',
+              'Anomaly detection: The `{{ $labels.type }}` service (`{{ $labels.stage }}` stage) has lower apdex than normal',
+              |||
+                The `{{ $labels.type }}` service (`{{ $labels.stage }}` stage) has lower apdex than normal.
+                This can be caused by a failure or latency increases in an upstream service. In many cases, this is as serious or more serious than a traffic spike. Check upstream services for errors or latency increases that may be leading to traffic flow issues in downstream services.
+              |||,
+              'service-$type-apdex',
+              tenant
+            )
+          ),
+        },
       ],
     ),
   };
