@@ -24,7 +24,7 @@ local fileForService(service, selector, _extraArgs, _) = {
       serviceAggregation,
       serviceAggregation.getApdexSuccessRateMetricForBurnRate,
       'apdex success rate',
-      'gitlab_service_apdex',
+      'gitlab_service_apdex:success',
       'disable_apdex_success_rate_prediction',
       selector { type: service.type },
     )
