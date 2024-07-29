@@ -19,6 +19,13 @@ stageGroupDashboards.dashboard('security_policies')
         dataFormat='tsbuckets',
         legendFormat='{{ le }}'
       ),
+      basic.heatmap(
+        title='ScanPipelineService execution duration',
+        description='Time spent rendering scan execution policy CI configurations',
+        query='sum by (le) (rate(gitlab_security_policies_scan_execution_configuration_rendering_seconds_bucket{environment="$environment"}[$__rate_interval]))',
+        dataFormat='tsbuckets',
+        legendFormat='{{ le }}'
+      ),
     ], cols=1, rowHeight=10)
   ),
   gridPos={ x: 0, y: 4000, w: 24, h: 1 }
