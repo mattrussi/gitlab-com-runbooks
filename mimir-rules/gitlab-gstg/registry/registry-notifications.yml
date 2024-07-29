@@ -1,0 +1,55 @@
+groups:
+  - name: Container Registry Webhook Notifications
+    rules:
+      - alert: ContainerRegistryNotificationsFailedStatusCode
+        expr: >
+          sum by (env,environment,stage) (
+            rate(registry_notifications_status_total{code!="200 OK",type="registry"}[1m])
+          ) > 5
+        for: 5m
+        labels:
+          severity: s4
+          alert_type: symptom
+          team: container_registry
+        annotations:
+          grafana_datasource_id: mimir-gitlab-gstg
+          title: "The number of Container Registry notifications unsuccessful responses is too high"
+          description: "There have been over 5 failed webhook notifications responses in {{ $labels.environment }} {{ $labels.stage }} stage for the last 5 minutes."
+          grafana_dashboard_id: registry-notifications/registry-webhook-notifications-detail
+          runbook: docs/registry/webhook-notifications.md
+      - alert: ContainerRegistryNotificationsErrorCountTooHigh
+        expr: >
+          sum by (env,environment,stage) (
+            rate(registry_notifications_events_total{exported_type="Errors"}[30s])
+          ) > 5
+          or
+          sum by (env,environment,stage, exported_type) (
+            rate(registry_notifications_events_total{exported_type="Failures"}[1m])
+          ) > 5
+        for: 5m
+        labels:
+          severity: s4
+          alert_type: symptom
+          team: container_registry
+        annotations:
+          grafana_datasource_id: mimir-gitlab-gstg
+          title: "Container Registry outgoing webhook notifications are failing"
+          description: "There have been over 5 failed webhook notifications in {{ $labels.environment }} {{ $labels.stage }} stage for the last 5 minutes."
+          grafana_dashboard_id: registry-notifications/registry-webhook-notifications-detail
+          runbook: docs/registry/webhook-notifications.md
+      - alert: ContainerRegistryNotificationsPendingCountTooHigh
+        expr: >
+          avg (
+            rate(registry_notifications_pending_total[5m])
+          ) > 10
+        for: 1h
+        labels:
+          severity: s3
+          alert_type: symptom
+          team: container_registry
+        annotations:
+          grafana_datasource_id: mimir-gitlab-gstg
+          title: "The number of Container Registry pending webhook notifications is too high"
+          description: "There are over 100 pending notifications in {{ $labels.environment }} {{ $labels.stage }} stage for the last hour."
+          grafana_dashboard_id: registry-notifications/registry-webhook-notifications-detail
+          runbook: docs/registry/webhook-notifications.md
