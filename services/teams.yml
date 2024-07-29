@@ -365,6 +365,10 @@ teams:
   product_stage_group: static_analysis
   slack_error_budget_channel: g_secure-static-analysis
   send_error_budget_weekly_to_slack: true
+- name: secret_detection
+  product_stage_group: secret_detection
+  slack_error_budget_channel: g_secure-secret-detection
+  send_error_budget_weekly_to_slack: true
 - name: pipeline_security
   product_stage_group: pipeline_security
   slack_channel: g_pipeline-security
