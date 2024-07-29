@@ -40,6 +40,7 @@
 * [Container Registry database post-deployment migrations](db-post-deployment-migrations.md)
 * [gitlab-registry.md](gitlab-registry.md)
 * [High Number of Overdue Online GC Tasks](online-gc-high-overdue-tasks.md)
+* [Failed or Pending Webhook Notifications](webhook-notifications.md)
 * [Connecting To a Database via Teleport](../teleport/Connect_to_Database_Console_via_Teleport.md)
 * [Deleting a project manually](../uncategorized/delete-projects-manually.md)
 * [How to Use Vault for Secrets Management in Infrastructure](../vault/usage.md)
