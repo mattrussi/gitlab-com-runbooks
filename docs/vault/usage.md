@@ -168,6 +168,8 @@ CI secrets are available under the following paths:
 * `ci/<gitlab-instance>/<project-full-path>/<environment>/outputs/...`: to be used for *writing* secrets to Vault scoped to an environment (primarily from Terraform but it can be from other tools), this path is only readable/writable from CI jobs running for protected branches/environments;
 * `ci/<gitlab-instance>/<project-full-path>/outputs/...`: to be used for *writing* secrets to Vault (primarily from Terraform but it can be from other tools), this path is only readable/writable by CI jobs running from protected branches.
 
+Project access tokens generated and managed via [`infra-mgmt`](https://gitlab.com/gitlab-com/gl-infra/infra-mgmt) are stored under `ci/access_tokens/<gitlab-instance>/<project-full-path>/`
+
 Note that your secrets need to be in subdirectories _under_ the paths above - for example, simply adding your secrets as keys in `ci/<gitlab-instance>/<project-full-path>/<environment>` will not work, as the policy only allows access to `ci/<gitlab-instance>/<project-full-path>/<environment>/*`.
 
 Additionally, a Transit key is created under `transit/ci/<gitlab-instance>-<project-full-path>`, which can be used for encryption, decryption and signing of CI artifacts and anything else. Decryption and signing is restricted to the project, while encryption and signature verification is allowed for all, this can be useful for sharing artifacts securely between projects. See [the Vault documentation about the Transit secrets engine](https://developer.hashicorp.com/vault/docs/secrets/transit) to learn more about it.
@@ -185,6 +187,7 @@ Examples:
 * `ci/ops-gitlab-net/gitlab-com/gl-infra/my-project/gprd/foo` is a secret named `foo` for the environment `gprd` only from the project `gitlab-com/gl-infra/my-project` on `ops.gitlab.net`
 * `ci/gitlab-com/gitlab-com/gl-infra/some-group/my-other-project/shared/bar` is a secret named `bar` for all environments from the project `gitlab-com/gl-infra/some-group/my-other-project` on `gitlab.com`
 * `ci/ops-gitlab-net/gitlab-com/gl-infra/my-project/outputs/qux` is a secret named `qux` created by Terraform in a CI job from a protected branch or environment from the project `gitlab-com/gl-infra/my-project` on `ops.gitlab.net`
+* `ci/access_tokens/ops-gitlab-net/gitlab-com/gl-infra/some-project/project-access-token` is a managed access token created by Terraform e.g. [this](https://gitlab.com/gitlab-com/gl-infra/infra-mgmt/-/blob/65a51f36d2c7695512683afcac80d56acc424af2/environments/ops-gitlab-net/projects_gitlab-restore.tf#L192-208)
 
 #### Authorizing a GitLab Project
 
@@ -201,9 +204,34 @@ module "project_my-project" {
 }
 ```
 
-⚠️ Note: if your project doesn't exist yet in `infra-mgmt`, you will need to add and [import it](https://gitlab.com/gitlab-com/gl-infra/infra-mgmt/-/blob/main/CONTRIBUTING.md?ref_type=heads#how-to-addupdatedelete-projects) (example: <https://gitlab.com/gitlab-com/gl-infra/infra-mgmt/-/merge_requests/498>).
+⚠️ Note: if your project doesn't exist yet in [`infra-mgmt`](https://gitlab.com/gitlab-com/gl-infra/infra-mgmt), you will need to add and [import it](https://gitlab.com/gitlab-com/gl-infra/infra-mgmt/-/blob/main/CONTRIBUTING.md?ref_type=heads#how-to-addupdatedelete-projects) (example: <https://gitlab.com/gitlab-com/gl-infra/infra-mgmt/-/merge_requests/498>).
 
 There are additional attributes that you can set to allow access to more secrets paths and policies, see [the project module documentation](https://ops.gitlab.net/gitlab-com/gl-infra/terraform-modules/gitlab/project#input_vault) to learn more about those.
+
+If you created a project access token for your project in [`infra-mgmt`](https://gitlab.com/gitlab-com/gl-infra/infra-mgmt) and want your CI jobs to read the access token, then specify additional `readonly_secret_paths` as following:
+
+```terraform
+module "project_some-project" {
+  ...
+
+  vault = {
+    enabled   = true
+    auth_path = local.vault_auth_path
+    readonly_secret_paths = [
+      module.prat_for_some_project.vault_secret_path,
+    ]
+  }
+}
+
+module "prat_for_some_project" {
+    source  = "ops.gitlab.net/gitlab-com/project/gitlab//modules/access-token"
+    ...
+    name = "some_api_token"
+    ...
+}
+```
+
+Example project and access token definition [here](https://gitlab.com/gitlab-com/gl-infra/infra-mgmt/-/blob/65a51f36d2c7695512683afcac80d56acc424af2/environments/ops-gitlab-net/projects_gitlab-restore.tf#L147-185) and [here](https://gitlab.com/gitlab-com/gl-infra/infra-mgmt/-/blob/65a51f36d2c7695512683afcac80d56acc424af2/environments/ops-gitlab-net/projects_gitlab-restore.tf#L192-208).
 
 Terraform will then create 2 JWT roles in Vault named `<project-full-path>` for read-only access and `<project-full-path>-rw` for read/write access from protected branches/environments, along with their associated policies:
 
