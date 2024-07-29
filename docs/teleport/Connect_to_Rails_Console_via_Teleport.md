@@ -130,6 +130,20 @@ Note: If you need more time, you can renew your role access before or after expi
 
 ## Troubleshooting
 
+### Term issue
+
+If you are getting the error:
+
+```
+[WARNING] Could not load command "rails/commands/console/console_command". Error: The terminal could not be found, or that it is a generic type, having too little information for curses applications to run..
+```
+
+It is possibly because your terminal is using an unsupported setting for `TERM`. Try setting the `TERM` environment variable to `xterm-256color`:
+
+```shell
+TERM=xterm-256color tsh ssh rails-ro@console-ro-01-sv-gprd
+```
+
 ### Debug
 
 If you have issues connecting, try using the `--debug` flag to display more verbose information.
