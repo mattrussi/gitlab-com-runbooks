@@ -199,6 +199,7 @@ If you do not have access to the GCP console, please file an access request aski
 
 AI Gateway uses both [custom metrics](../../metrics-catalog/services/ai-gateway.jsonnet) scrapped from application and default metrics provided by [Runway](../runway/README.md#monitoringalerting). Right now, alerts are routed to `#g_mlops-alerts` in Slack. To route to different channel, refer to [documentation](../uncategorized/alert-routing.md).
 
+* [AiGatewayServiceRunwayIngressTrafficCessationRegional alert playbook](alerts/AiGatewayServiceRunwayIngressTrafficCessationRegional.md)
 * [AI Gateway Service Overview Dashboard](https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway3a-overview?orgId=1)
 * [AI Gateway Logs](https://log.gprd.gitlab.net/app/r/s/mkS0F)
 * [AI Gateway Alerts](https://gitlab.enterprise.slack.com/archives/C0586SBDZU2)
