@@ -116,6 +116,8 @@ graph TD
 
 <!-- ## Security/Compliance -->
 
-<!-- ## Monitoring/Alerting -->
+## Monitoring/Alerting
+
+[GitalyServiceGoserverTrafficCessationSingleNode Playbook](alerts/GitalyServiceGoserverTrafficCessationSingleNode.md)
 
 <!-- ## Links to further Documentation -->
