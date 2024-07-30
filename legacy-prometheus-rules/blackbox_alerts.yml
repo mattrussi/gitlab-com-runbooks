@@ -10,7 +10,7 @@ groups:
       alert_type: symptom
     annotations:
       description: blackbox probe availability {{ $labels.instance }} is less than {{ $value | printf "%.2f" }}% for the last 10 minutes.
-      runbook: docs/blackbox/README.md
+      runbook: docs/blackbox/alerts/BlackboxProbeFailures.md
       title: Blackbox probes for {{ $labels.instance }} are failing.
   - alert: BlackboxProbeFailuresLong
     expr: avg_over_time(probe_success{job="blackbox", instance=~"(https://ops.gitlab.net/users/sign_in|https://dev.gitlab.org)"}[1h]) * 100 < 75

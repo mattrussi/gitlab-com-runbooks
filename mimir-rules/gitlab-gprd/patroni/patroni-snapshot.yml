@@ -22,7 +22,7 @@ groups:
         annotations:
           grafana_datasource_id: mimir-gitlab-gprd
           description: GCS disk snapshot has not ran successfully on {{ $labels.fqdn }}. Please follow the runbook to review the problem.
-          runbook: docs/patroni/gcs-snapshots.md
+          runbook: docs/patroni/alerts/PatroniGCSSnapshotDelayed.md
           title: Last Patroni GCS snapshot did not run successfully
       - alert: PatroniGCSSnapshotFailed
         expr: gitlab_job_failed{resource="patroni-gcs-snapshot", env="gprd"} == 1
