@@ -103,7 +103,7 @@ groups:
     labels:
       component: gcp_quota_limit
     expr: |
-      max by(env, environment, tier, type, stage, shard) (
+      max by(env, environment, tier, type, stage, shard, project, metric, quotaregion, region) (
         clamp_min(
           clamp_max(
             (

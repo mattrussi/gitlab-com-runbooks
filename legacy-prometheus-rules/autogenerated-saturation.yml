@@ -296,7 +296,7 @@ groups:
     labels:
       component: gcp_quota_limit
     expr: |
-      max by(environment, tier, type, stage, shard) (
+      max by(environment, tier, type, stage, shard, project, metric, quotaregion, region) (
         clamp_min(
           clamp_max(
             (
@@ -3817,7 +3817,7 @@ groups:
       grafana_panel_id: "2585628061"
       grafana_variables: environment,type,stage
       promql_query: |
-        max by(environment, tier, type, stage, shard, project, metric, quotaregion) (
+        max by(environment, tier, type, stage, shard, project, metric, quotaregion, region) (
           clamp_min(
             clamp_max(
               (
@@ -3831,7 +3831,7 @@ groups:
           0)
         )
       promql_template_1: |
-        max by(environment, tier, type, stage, shard, project, metric, quotaregion) (
+        max by(environment, tier, type, stage, shard, project, metric, quotaregion, region) (
           clamp_min(
             clamp_max(
               (
