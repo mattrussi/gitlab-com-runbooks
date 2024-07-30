@@ -15,7 +15,7 @@ send the event until it succeeds, which can lead to problems of high resource co
 [this issue](https://gitlab.com/gitlab-org/container-registry/-/issues/1210).
 
 NOTE:
-There is pending work to fix the the issue above by replacing the `threshold` setting with `maxretries` (see https://gitlab.com/gitlab-org/container-registry/-/issues/1311).
+There is pending work to fix the the issue above by replacing the `threshold` setting with `maxretries` as part of [this issue](https://gitlab.com/gitlab-org/container-registry/-/issues/1311).
 
 ## Causes
 
@@ -29,7 +29,7 @@ A high number of pending or failed events is likely related to one of these poss
 The [`ContainerRegistryNotificationsPendingCountTooHigh`](../../mimir-rules/gitlab-gprd/registry/registry-notifications.yml) alerts will be triggered if the number of
 pending outgoing events count is higher than the configured threshold for a prolonged period of time.
 
-A small API impact could be expected in these situations while [this issue](https://gitlab.com/gitlab-org/container-registry/-/issues/1311) is implemented.
+A small Registry API impact could be expected in these situations while [this issue](https://gitlab.com/gitlab-org/container-registry/-/issues/1311) is implemented, as the registry instances could run out of resources to serve requests.
 Ideally, we would catch high resource usage by different metrics, as well as the Kubernetes scheduler recycling pods
 if the memory/CPU usage threshold is reached.
 
@@ -44,6 +44,7 @@ We first need to identify the cause for the accumulation of pending outgoing not
 1. [`registry-notifications/webhook-notifications-detail`](https://dashboards.gitlab.net/d/registry-notifications/webhook-notifications-detail)
 1. [`api-main/api-overview`](https://dashboards.gitlab.net/d/api-main/api-overview)
 1. [`cloudflare-main/cloudflare-overview`](https://dashboards.gitlab.net/d/cloudflare-main/cloudflare-overview)
+1. [Rails API logs](https://log.gprd.gitlab.net/app/r/s/nxwUF).
 
 In (1), we should inspect the current Apdex/error rate SLIs, both for the server (to rule out any unexpected customer impact) and database components.
 Expanding the `Node Metrics` section can be used to get an indication of high memory or CPU usage.
@@ -52,7 +53,10 @@ In (2), we should look at the failure and error rates, as well as the different 
 
 In (3) and (4), we should look for potential errors at the Rails API level or any Cloudflare errors affecting the notifications delivery rate.
 
-In the presence of errors, we should also look at the registry access/application logs in Kibana. This might allow us to see error details while trying to send a notification
+In (5), we can monitor the Rails API for the `/api/v4/container_registry_event/events` endpoint for clues on what could be going wrong.
+
+In the presence of errors, we should also look at the registry access/application [logs in Kibana](https://log.gprd.gitlab.net/app/r/s/mUjiG).
+This might allow us to see error details while trying to send a notification
 by searching for the string `error writing event`.
 The same applies to Sentry, where all unknown application errors are reported.
 
