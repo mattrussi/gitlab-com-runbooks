@@ -18,7 +18,8 @@ local selectors = import 'promql/selectors.libsonnet';
       To fix, we can request a quota increase for the specific resource to the GCP support team.
     |||,
     grafana_dashboard_uid: 'gcp_quota_limit',
-    resourceLabels: ['project', 'metric', 'quotaregion'],
+    resourceLabels: ['project', 'metric', 'quotaregion', 'region'],
+    useResourceLabelsAsMaxAggregationLabels: true,
     query: |||
       (
         gcp_quota_usage{%(selector)s}
@@ -30,6 +31,13 @@ local selectors = import 'promql/selectors.libsonnet';
       soft: 0.85,
       hard: 0.90,
       alertTriggerDuration: '15m',
+    },
+    capacityPlanning: {
+      saturation_dimensions: [
+        selectors.serializeHash({ region: 'us-central1' }),
+        selectors.serializeHash({ region: 'us-east1' }),
+        selectors.serializeHash({ region: 'us-east4' }),
+      ],
     },
   }),
 
@@ -58,6 +66,11 @@ local selectors = import 'promql/selectors.libsonnet';
         stackdriver_aiplatform_googleapis_com_location_aiplatform_googleapis_com_quota_online_prediction_requests_per_base_model_limit{%(selector)s,base_model!="code-gecko"}
       ) > 0
     |||,
+    capacityPlanning: {
+      saturation_dimensions: [
+        selectors.serializeHash({ region: 'us-east4' }),
+      ],
+    },
   }),
 
   gcp_quota_limit_vertex_ai_code_gecko: self.gcp_quota_limit_vertex_ai {
@@ -76,5 +89,15 @@ local selectors = import 'promql/selectors.libsonnet';
         stackdriver_aiplatform_googleapis_com_location_aiplatform_googleapis_com_quota_online_prediction_requests_per_base_model_limit{%(selector)s,base_model="code-gecko"}
       ) > 0
     |||,
+    capabilityPlanning: {
+      saturation_dimensions: [
+        selectors.serializeHash({ region: 'asia-northeast1' }),
+        selectors.serializeHash({ region: 'asia-northeast3' }),
+        selectors.serializeHash({ region: 'europe-west2' }),
+        selectors.serializeHash({ region: 'europe-west3' }),
+        selectors.serializeHash({ region: 'europe-west9' }),
+        selectors.serializeHash({ region: 'us-central1' }),
+      ],
+    },
   },
 }
