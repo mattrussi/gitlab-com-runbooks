@@ -29,7 +29,7 @@ A high number of pending or failed events is likely related to one of these poss
 The [`ContainerRegistryNotificationsPendingCountTooHigh`](../../mimir-rules/gitlab-gprd/registry/registry-notifications.yml) alerts will be triggered if the number of
 pending outgoing events count is higher than the configured threshold for a prolonged period of time.
 
-A small API impact could be expected in these situations while https://gitlab.com/gitlab-org/container-registry/-/issues/1311 is implemented.
+A small API impact could be expected in these situations while [this issue](https://gitlab.com/gitlab-org/container-registry/-/issues/1311) is implemented.
 Ideally, we would catch high resource usage by different metrics, as well as the Kubernetes scheduler recycling pods
 if the memory/CPU usage threshold is reached.
 

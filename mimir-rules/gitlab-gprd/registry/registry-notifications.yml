@@ -3,8 +3,8 @@ groups:
     rules:
       - alert: ContainerRegistryNotificationsFailedStatusCode
         expr: >
-          sum by (env,environment,stage) (
-            rate(registry_notifications_status_total{code!="200 OK",type="registry"}[1m])
+          sum (
+            rate(registry_notifications_status_total{code!="200 OK", env="gprd"}[1m])
           ) > 5
         for: 5m
         labels:
@@ -39,12 +39,12 @@ groups:
           runbook: docs/registry/webhook-notifications.md
       - alert: ContainerRegistryNotificationsPendingCountTooHigh
         expr: >
-          avg (
-            rate(registry_notifications_pending_total[5m])
-          ) > 100
+          sum (
+            rate(registry_notifications_pending_total[1m])
+          ) > 2
         for: 1h
         labels:
-          severity: s3
+          severity: s4
           alert_type: symptom
           team: container_registry
         annotations:
