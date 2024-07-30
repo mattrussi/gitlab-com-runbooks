@@ -182,7 +182,7 @@ teams:
 - name: global_search
   manager: changzhengliu
   label: group::global search
-  slack_alerts_channel: g_global_search
+  slack_alerts_channel: g_global_search_alerts
   slack_error_budget_channel: g_global_search
   send_error_budget_weekly_to_slack: true
   product_stage_group: global_search
