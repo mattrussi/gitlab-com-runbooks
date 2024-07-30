@@ -17,7 +17,13 @@ Users that have been provisioned can access Cloudflare directly at
       1. If the user does not accept the invite before expiration, a state drift will occur and the change will need to be applied again.
 1. If the team member should be added to the Dedicated Cloudflare accounts (for SREs on the Dedicated Teams), they should open an MR against the [Dedicated Cloudflare Organization](https://gitlab.com/gitlab-com/gl-infra/gitlab-dedicated/dedicated-organization-cloudflare) project
 
-# Configuraion
+### Deprovisioning
+
+1. Remove user from [Google group](https://groups.google.com/a/gitlab.com/g/okta-cloudflare-users/members) if they have not already been removed.
+1. Remove user from <https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/main/environments/cloudflare/users.tf>.
+1. If applicable: Remove user from [Dedicated Cloudflare Organization](https://gitlab.com/gitlab-com/gl-infra/gitlab-dedicated/dedicated-organization-cloudflare).
+
+# Configuration
 
 ## Creating or Editing Custom Rules
 
