@@ -19,12 +19,8 @@ groups:
           runbook: docs/registry/webhook-notifications.md
       - alert: ContainerRegistryNotificationsErrorCountTooHigh
         expr: >
-          sum by (env,environment,stage) (
-            rate(registry_notifications_events_total{exported_type="Errors"}[30s])
-          ) > 5
-          or
-          sum by (env,environment,stage, exported_type) (
-            rate(registry_notifications_events_total{exported_type="Failures"}[1m])
+          sum (
+            rate(registry_notifications_events_total{exported_type=~"Errors|Failures", env="gprd"}[1m])
           ) > 5
         for: 5m
         labels:
