@@ -78,5 +78,5 @@
 
 # Related Links
 
-- [Related alerts](./)
+- > [Related alerts](https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/<service>/alerts?ref_type=heads) Link to this /alert/ directory
 - > Related documentation
