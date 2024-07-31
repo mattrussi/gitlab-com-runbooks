@@ -56,7 +56,7 @@ local definitionValidor = validator.new({
     forecast_days: positiveNumber,
     historical_days: positiveNumber,
     changepoints_count: positiveNumber,
-    saturation_dimensions: validator.array,
+    saturation_dimensions: validator.optional(validator.array),
   },
   alerting: {
     // TODO: we should move all of the alerting attributes in here
@@ -85,7 +85,7 @@ local nestedDefaults = {
     forecast_days: 90,
     historical_days: 365,
     changepoints_count: 25,
-    saturation_dimensions: [],
+    saturation_dimensions: null,  // No saturation dimensions by default
   },
   alerting: {
     enabled: true,

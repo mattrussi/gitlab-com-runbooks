@@ -32,7 +32,7 @@
         "changepoints_count": 25,
         "forecast_days": 90,
         "historical_days": 365,
-        "saturation_dimensions": [],
+        "saturation_dimensions": null,
         "strategy": "quantile95_1h"
       },
       "description": "This resource measures average CPU utilization across an all cores in a service fleet.\nIf it is becoming saturated, it may indicate that the fleet needs\nhorizontal or vertical scaling.\n",
@@ -56,7 +56,7 @@
         "changepoints_count": 25,
         "forecast_days": 90,
         "historical_days": 365,
-        "saturation_dimensions": [],
+        "saturation_dimensions": null,
         "strategy": "quantile95_1h"
       },
       "description": "Disk inode utilization per device per node.\n\nIf this is too high, its possible that a directory is filling up with\nfiles. Consider logging in an checking temp directories for large numbers\nof files\n",
@@ -80,7 +80,7 @@
         "changepoints_count": 25,
         "forecast_days": 90,
         "historical_days": 365,
-        "saturation_dimensions": [],
+        "saturation_dimensions": null,
         "strategy": "quantile95_1h"
       },
       "description": "Disk space utilization per device per node.\n",
@@ -103,7 +103,7 @@
         "changepoints_count": 25,
         "forecast_days": 90,
         "historical_days": 365,
-        "saturation_dimensions": [],
+        "saturation_dimensions": null,
         "strategy": "quantile95_1h"
       },
       "description": "Go goroutines utilization per node.\n\nGoroutines leaks can cause memory saturation which can cause service degradation.\n\nA limit of 250k goroutines is very generous, so if a service exceeds this limit,\nit's a sign of a leak and it should be dealt with.\n",
@@ -126,7 +126,7 @@
         "changepoints_count": 25,
         "forecast_days": 90,
         "historical_days": 365,
-        "saturation_dimensions": [],
+        "saturation_dimensions": null,
         "strategy": "quantile95_1h"
       },
       "description": "Go's memory allocation strategy can make it look like a Go process is saturating memory when measured using RSS, when in fact\nthe process is not at risk of memory saturation. For this reason, we measure Go processes using the `go_memstat_alloc_bytes`\n",
@@ -152,7 +152,7 @@
         "changepoints_count": 25,
         "forecast_days": 90,
         "historical_days": 365,
-        "saturation_dimensions": [],
+        "saturation_dimensions": null,
         "strategy": "exclude"
       },
       "description": "Kubernetes containers can have a limit configured on how much CPU they can consume in\na burst. If we are at this limit, exceeding the allocated requested resources, we\nshould consider revisting the container's HPA configuration.\n\nWhen a container is utilizing CPU resources up-to it's configured limit for\nextended periods of time, this could cause it and other running containers to be\nthrottled.\n",
@@ -177,7 +177,7 @@
         "changepoints_count": 25,
         "forecast_days": 90,
         "historical_days": 365,
-        "saturation_dimensions": [],
+        "saturation_dimensions": null,
         "strategy": "quantile95_1h"
       },
       "description": "This uses the working set size from cAdvisor for the cgroup's memory usage. That may\nnot be a good measure as it includes filesystem cache pages that are not necessarily\nattributable to the application inside the cgroup, and are permitted to be evicted\ninstead of being OOM killed.\n",
@@ -199,7 +199,7 @@
         "changepoints_count": 25,
         "forecast_days": 90,
         "historical_days": 365,
-        "saturation_dimensions": [],
+        "saturation_dimensions": null,
         "strategy": "quantile95_1h"
       },
       "description": "Records the total anonymous (unevictable) memory utilization for containers for this\nservice, as a percentage of the memory limit as configured through Kubernetes.\n\nThis is computed using the container's resident set size (RSS), as opposed to\nkube_container_memory which uses the working set size. For our purposes, RSS is the\nbetter metric as cAdvisor's working set calculation includes pages from the\nfilesystem cache that can (and will) be evicted before the OOM killer kills the\ncgroup.\n\nA container's RSS (anonymous memory usage) is still not precisely what the OOM\nkiller will use, but it's a better approximation of what the container's workload is\nactually using. RSS metrics can, however, be dramatically inflated if a process in\nthe container uses MADV_FREE (lazy-free) memory. RSS will include the memory that is\navailable to be reclaimed without a page fault, but not currently in use.\n\nThe most common case of OOM kills is for anonymous memory demand to overwhelm the\ncontainer's memory limit. On swapless hosts, anonymous memory cannot be evicted from\nthe page cache, so when a container's memory usage is mostly anonymous pages, the\nonly remaining option to relieve memory pressure may be the OOM killer.\n\nAs container RSS approaches container memory limit, OOM kills become much more\nlikely. Consequently, this ratio is a good leading indicator of memory saturation\nand OOM risk.\n",
@@ -221,7 +221,7 @@
         "changepoints_count": 25,
         "forecast_days": 90,
         "historical_days": 365,
-        "saturation_dimensions": [],
+        "saturation_dimensions": null,
         "strategy": "quantile95_1h"
       },
       "description": "disk space utilization on persistent volume claims.\n",
@@ -243,7 +243,7 @@
         "changepoints_count": 25,
         "forecast_days": 90,
         "historical_days": 365,
-        "saturation_dimensions": [],
+        "saturation_dimensions": null,
         "strategy": "quantile95_1h"
       },
       "description": "inode utilization on persistent volume claims.\n",
@@ -267,7 +267,7 @@
         "changepoints_count": 25,
         "forecast_days": 90,
         "historical_days": 365,
-        "saturation_dimensions": [],
+        "saturation_dimensions": null,
         "strategy": "quantile95_1h"
       },
       "description": "Memory utilization per device per node.\n",
@@ -289,7 +289,7 @@
         "changepoints_count": 25,
         "forecast_days": 90,
         "historical_days": 365,
-        "saturation_dimensions": [],
+        "saturation_dimensions": null,
         "strategy": "exclude"
       },
       "description": "Memory utilization per device per node.\n\n\nredis-cluster-cache has a separate saturation point for this to exclude it from capacity planning calculations.\n",
@@ -311,7 +311,7 @@
         "changepoints_count": 25,
         "forecast_days": 90,
         "historical_days": 365,
-        "saturation_dimensions": [],
+        "saturation_dimensions": null,
         "strategy": "quantile95_1h"
       },
       "description": "This resource measures average CPU utilization across an all cores in a node group\n\nIf it is becoming saturated, it may indicate that the node group needs resizing.\n",
@@ -335,7 +335,7 @@
         "changepoints_count": 25,
         "forecast_days": 90,
         "historical_days": 365,
-        "saturation_dimensions": [],
+        "saturation_dimensions": null,
         "strategy": "exclude"
       },
       "description": "Measures the amount of scheduler waiting time that processes are waiting\nto be scheduled, according to [`CPU Scheduling Metrics`](https://www.robustperception.io/cpu-scheduling-metrics-from-the-node-exporter).\n\nA high value indicates that a node has more processes to be run than CPU time available\nto handle them, and may lead to degraded responsiveness and performance from the application.\n\nAdditionally, it may indicate that the fleet is under-provisioned.\n",
@@ -357,7 +357,7 @@
         "changepoints_count": 25,
         "forecast_days": 90,
         "historical_days": 365,
-        "saturation_dimensions": [],
+        "saturation_dimensions": null,
         "strategy": "quantile95_1h"
       },
       "description": "Average CPU utilization.\n\nThis resource measures the CPU utilization for the selected cluster or domain. If it is becoming saturated, it may indicate that the fleet needs horizontal or\nvertical scaling. The metrics are coming from cloudwatch_exporter.\n",
@@ -379,7 +379,7 @@
         "changepoints_count": 25,
         "forecast_days": 90,
         "historical_days": 365,
-        "saturation_dimensions": [],
+        "saturation_dimensions": null,
         "strategy": "quantile95_1h"
       },
       "description": "Disk utilization for Opensearch\n",
@@ -399,7 +399,7 @@
         "changepoints_count": 5,
         "forecast_days": 90,
         "historical_days": 365,
-        "saturation_dimensions": [],
+        "saturation_dimensions": null,
         "strategy": "quantile95_1h"
       },
       "description": "This estimates the total bloat in Postgres Btree indexes, as a percentage of total index size.\n\nIMPORTANT: bloat estimates are rough and depending on table/index structure, can be off for individual indexes,\nin some cases significantly (10-50%).\n\nThe larger this measure, the more pages will unnecessarily be retrieved during index scans.\n",
@@ -419,7 +419,7 @@
         "changepoints_count": 25,
         "forecast_days": 90,
         "historical_days": 365,
-        "saturation_dimensions": [],
+        "saturation_dimensions": null,
         "strategy": "quantile95_1h"
       },
       "description": "This measures the total bloat in Postgres Table pages, as a percentage of total size. This includes bloat in TOAST tables,\nand excludes extra space reserved due to fillfactor.\n",
@@ -439,7 +439,7 @@
         "changepoints_count": 25,
         "forecast_days": 90,
         "historical_days": 365,
-        "saturation_dimensions": [],
+        "saturation_dimensions": null,
         "strategy": "quantile95_1h"
       },
       "description": "This measures the total saturation of autovacuum workers, as a percentage of total autovacuum capacity.\n",
@@ -459,7 +459,7 @@
         "changepoints_count": 25,
         "forecast_days": 90,
         "historical_days": 365,
-        "saturation_dimensions": [],
+        "saturation_dimensions": null,
         "strategy": "quantile95_1h"
       },
       "description": "Risk of DB shutdown in the near future, approaching transaction ID wraparound.\n\nThis is a critical situation.\n\nThis saturation metric measures how close the database is to Transaction ID wraparound.\n\nWhen wraparound occurs, the database will automatically shutdown to prevent data loss, causing a full outage.\n\nRecovery would require entering single-user mode to run vacuum, taking the site down for a potentially multi-hour maintenance session.\n\nTo avoid reaching the db shutdown threshold, consider the following short-term actions:\n\n1. Escalate to the SRE Datastores team, and then,\n\n2. Find and terminate any very old transactions. The runbook for this alert has details.  Do this first.  It is the most critical step and may be all that is necessary to let autovacuum do its job.\n\n3. Run a manual vacuum on tables with oldest relfrozenxid.  Manual vacuums run faster than autovacuum.\n\n4. Add autovacuum workers or reduce autovacuum cost delay, if autovacuum is chronically unable to keep up with the transaction rate.\n\nLong running transaction dashboard: https://dashboards.gitlab.net/d/alerts-long_running_transactions/alerts-long-running-transactions?orgId=1\n",
@@ -481,7 +481,7 @@
         "changepoints_count": 25,
         "forecast_days": 90,
         "historical_days": 365,
-        "saturation_dimensions": [],
+        "saturation_dimensions": null,
         "strategy": "quantile95_1h"
       },
       "description": "Puma thread utilization.\n\nPuma uses a fixed size thread pool to handle HTTP requests. This metric shows how many threads are busy handling requests. When this resource is saturated,\nwe will see puma queuing taking place. Leading to slowdowns across the application.\n\nPuma saturation is usually caused by latency problems in downstream services: usually Gitaly or Postgres, but possibly also Redis.\nPuma saturation can also be caused by traffic spikes.\n",
@@ -505,7 +505,7 @@
         "changepoints_count": 25,
         "forecast_days": 90,
         "historical_days": 365,
-        "saturation_dimensions": [],
+        "saturation_dimensions": null,
         "strategy": "quantile95_1h"
       },
       "description": "Average CPU utilization per Node.\n\nIf average CPU is saturated, it may indicate that a fleet is in need to horizontal or vertical scaling. It may also indicate\nimbalances in load in a fleet.\n",
