@@ -1,3 +1,9 @@
+## Workflow
+
+- [ ] Copy [Alert Playbook Template](https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/template-alert-playbook.md?ref_type=heads) to `/docs/(service-name)/alerts/`
+- [ ] Name the playbook file the same as the alert (or alert prefix when combining alerts with a different suffix such as `Error`, `Delayed`, `Missing`)
+- [ ] Update the `runbook` link in the associated alert definition to point to the new playbook
+- [ ] Run `make generate`
 
 ## Overview
 
@@ -69,9 +75,8 @@
 - [ ] Link to the definition of this alert for review and tuning
 - [ ] Advice or limitations on how we should or shouldn't tune the alert
 - [ ] Link to edit this playbook
-- [Update the template used to format this playbook](https://gitlab.com/gitlab-com/runbooks/-/edit/master/docs/template-alert-playbook.md?ref_type=heads)
 
 # Related Links
 
-- [Related alerts](./)
+- [ ] `Related alerts` link to the alerts folder containing this playbook
 - [ ] Related documentation
