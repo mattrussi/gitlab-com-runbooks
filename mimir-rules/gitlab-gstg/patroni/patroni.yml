@@ -62,4 +62,4 @@ groups:
           grafana_datasource_id: mimir-gitlab-gstg
           description: More than one postgres instance in read-write mode for cluster {{$labels.type}}.
           title: More than one postgres instance in read-write mode.
-          runbook: docs/patroni/patroni-management.md
+          runbook: docs/patroni/alerts/PostgresSplitBrain.md
