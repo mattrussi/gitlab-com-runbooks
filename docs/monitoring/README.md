@@ -65,6 +65,7 @@
 * [A survival guide for SREs to working with Sidekiq at GitLab](../sidekiq/sidekiq-survival-guide-for-sres.md)
 * [../spamcheck/index.md](../spamcheck/index.md)
 * [GET Monitoring Setup](../staging-ref/get-monitoring-setup.md)
+* [Teleport Disaster Recovery](../teleport/teleport_disaster_recovery.md)
 * [../uncategorized/access-gcp-hosts.md](../uncategorized/access-gcp-hosts.md)
 * [Alert Routing Howto](../uncategorized/alert-routing.md)
 * [GitLab Job Completion](../uncategorized/job_completion.md)

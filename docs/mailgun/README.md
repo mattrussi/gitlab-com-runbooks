@@ -18,6 +18,7 @@
 
 * [How GitLab.com uses Mailgun](mailgun.md)
 * [Mailgun Events](mailgunevents.md)
+* [Teleport Disaster Recovery](../teleport/teleport_disaster_recovery.md)
 <!-- END_MARKER -->
 
 <!-- ## Summary -->
