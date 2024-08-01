@@ -56,19 +56,6 @@ local serviceSlaRow(availability, service, sloThreshold, selector) =
       colors=[budgetMinutesColor],
       colorMode='value',
     ),
-    grafanaCalHeatmap.heatmapCalendarPanel(
-      'Calendar',
-      query=availability.availabilityRatio(
-        aggregationLabels=[],
-        selector=selector,
-        services=[service],
-        range='1d',
-      ),
-      legendFormat='',
-      datasource='$PROMETHEUS_DS',
-      intervalFactor=1,
-      threshold='%f' % [sloThreshold]
-    ),
     basic.slaTimeseries(
       title='%s SLA over time period' % [service],
       description='Availability over time, higher is better.',
@@ -105,14 +92,6 @@ local overallSlaRow(availability, keyServiceWeights, sloThreshold, selector) =
       colors=[budgetMinutesColor],
       colorMode='value',
     ),
-    grafanaCalHeatmap.heatmapCalendarPanel(
-      'Calendar',
-      query=availability.weightedAvailabilityQuery(dashboardServiceWeights, selector, '1d'),
-      legendFormat='',
-      datasource='$PROMETHEUS_DS',
-      intervalFactor=1,
-      threshold='%f' % [sloThreshold]
-    ),
     basic.slaTimeseries(
       title='Overall GitLab.com SLA over time period',
       description='Availability over time, higher is better.',
@@ -147,7 +126,7 @@ local dashboard(availability, keyServiceWeights, slo, selector, sortedServices) 
       startRow=5,
       panels=layout.columnGrid(
         rowsOfPanels=[overallSlaRow(availability, keyServiceWeights, slo, selector)],
-        columnWidths=[4, 4, 4, 12],
+        columnWidths=[4, 4, 16],
         rowHeight=5,
         startRow=10
       ),
@@ -162,7 +141,7 @@ local dashboard(availability, keyServiceWeights, slo, selector, sortedServices) 
           serviceSlaRow(availability, service, slo, selector)
           for service in sortedServices
         ],
-        columnWidths=[4, 4, 4, 12],
+        columnWidths=[4, 4, 16],
         rowHeight=5,
         startRow=15
       ),
