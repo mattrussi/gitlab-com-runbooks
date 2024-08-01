@@ -110,6 +110,7 @@
 * [Connecting To a Rails Console via Teleport](../teleport/Connect_to_Rails_Console_via_Teleport.md)
 * [Teleport Administration](../teleport/teleport_admin.md)
 * [Teleport Approver Workflow](../teleport/teleport_approval_workflow.md)
+* [Teleport Disaster Recovery](../teleport/teleport_disaster_recovery.md)
 * [How to use flamegraphs for performance profiling](../tutorials/how_to_use_flamegraphs_for_perf_profiling.md)
 * [about.gitlab.com](../uncategorized/about-gitlab-com.md)
 * [Access Requests](../uncategorized/access-requests.md)

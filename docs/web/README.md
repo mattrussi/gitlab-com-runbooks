@@ -73,6 +73,7 @@
 * [Connecting To a Rails Console via Teleport](../teleport/Connect_to_Rails_Console_via_Teleport.md)
 * [Teleport Administration](../teleport/teleport_admin.md)
 * [Teleport Approver Workflow](../teleport/teleport_approval_workflow.md)
+* [Teleport Disaster Recovery](../teleport/teleport_disaster_recovery.md)
 * [Example Tutorial Template](../tutorials/example_tutorial_template.md)
 * [How to use flamegraphs for performance profiling](../tutorials/how_to_use_flamegraphs_for_perf_profiling.md)
 * [Life of a Git Request](../tutorials/overview_life_of_a_git_request.md)

@@ -26,6 +26,7 @@
 * [../patroni/postgresql-backups-wale-walg.md](../patroni/postgresql-backups-wale-walg.md)
 * [Container Registry CDN](../registry/cdn.md)
 * [../spamcheck/index.md](../spamcheck/index.md)
+* [Teleport Disaster Recovery](../teleport/teleport_disaster_recovery.md)
 * [GitLab Job Completion](../uncategorized/job_completion.md)
 * [version.gitlab.com Runbook](../version/version-gitlab-com.md)
 <!-- END_MARKER -->

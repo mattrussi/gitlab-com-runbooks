@@ -14,6 +14,9 @@
 
 * [Atlantis](https://dashboards.gitlab.net/goto/ZJOLqE4SR)
 
+## Troubleshooting Pointers
+
+* [Teleport Disaster Recovery](../teleport/teleport_disaster_recovery.md)
 <!-- END_MARKER -->
 
 <!-- ## Summary -->

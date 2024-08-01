@@ -57,6 +57,7 @@
 * [Scaling Redis Cluster](../redis/scaling-redis-cluster.md)
 * [Container Registry CDN](../registry/cdn.md)
 * [Teleport Administration](../teleport/teleport_admin.md)
+* [Teleport Disaster Recovery](../teleport/teleport_disaster_recovery.md)
 * [Aptly](../uncategorized/aptly.md)
 * [Chef secrets using GKMS](../uncategorized/gkms-chef-secrets.md)
 * [Managing Chef](../uncategorized/manage-chef.md)

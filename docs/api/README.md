@@ -90,6 +90,7 @@
 * [Exporting projects silently](../sidekiq/silent-project-exports.md)
 * [../spamcheck/index.md](../spamcheck/index.md)
 * [GET Monitoring Setup](../staging-ref/get-monitoring-setup.md)
+* [Teleport Disaster Recovery](../teleport/teleport_disaster_recovery.md)
 * [Thanos Architecture Overview](../thanos/architecture.md)
 * [Example Tutorial Template](../tutorials/example_tutorial_template.md)
 * [Life of a Web Request](../tutorials/overview_life_of_a_web_request.md)
