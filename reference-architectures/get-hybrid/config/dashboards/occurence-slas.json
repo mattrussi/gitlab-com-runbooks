@@ -176,74 +176,6 @@
       "type": "stat"
     },
     {
-      "config": {
-        "animationDuration": 0,
-        "cellPadding": "3",
-        "cellRadius": "2",
-        "cellSize": "11",
-        "colLimit": null,
-        "displayLegend": false,
-        "domain": "month",
-        "domainGutter": 2,
-        "hoverDecimals": 2,
-        "hoverUnitFormat": "percentunit",
-        "itemName": [
-          "percentunit",
-          "percentunit"
-        ],
-        "label": {
-          "position": "bottom",
-          "rotate": "null",
-          "width": 60
-        },
-        "legendColors": {
-          "base": "transparent",
-          "empty": "#444444",
-          "max": "#73BF69",
-          "min": "#F2495C"
-        },
-        "legendStr": "0.995000",
-        "legendTitleFormat": {
-          "inner": {},
-          "lower": {},
-          "upper": {}
-        },
-        "rowLimit": null,
-        "subDomain": "day",
-        "subDomainTitleFormat": {
-          "empty": "{date}",
-          "filled": "{date}"
-        },
-        "verticalOrientation": false
-      },
-      "datasource": "$PROMETHEUS_DS",
-      "fieldConfig": {
-        "defaults": {
-          "custom": {}
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 5,
-        "w": 4,
-        "x": 8,
-        "y": 10
-      },
-      "id": 5,
-      "targets": [
-        {
-          "expr": "sum(\n  sum by (type)(\n    sum_over_time(gitlab:availability:success:rate_1h{type=\"registry\"}[1d]) * $registry_weight\n  )\n  or\n  sum by (type)(\n    sum_over_time(gitlab:availability:success:rate_1h{type=\"webservice\"}[1d]) * $webservice_weight\n  )\n)\n/\nsum(\n  sum by (type)(\n    sum_over_time(gitlab:availability:ops:rate_1h{type=\"registry\"}[1d]) * $registry_weight\n  )\n  or\n  sum by (type)(\n    sum_over_time(gitlab:availability:ops:rate_1h{type=\"webservice\"}[1d]) * $webservice_weight\n  )\n)\n",
-          "format": "time_series",
-          "instant": false,
-          "interval": "1d",
-          "intervalFactor": 1,
-          "legendFormat": ""
-        }
-      ],
-      "title": "Calendar",
-      "type": "neocat-cal-heatmap-panel"
-    },
-    {
       "aliasColors": {},
       "bars": false,
       "dashLength": 10,
@@ -256,10 +188,10 @@
       "gridPos": {
         "h": 5,
         "w": 12,
-        "x": 12,
+        "x": 8,
         "y": 10
       },
-      "id": 6,
+      "id": 5,
       "legend": {
         "alignAsTable": true,
         "avg": true,
@@ -341,7 +273,7 @@
         "x": 0,
         "y": 15
       },
-      "id": 7,
+      "id": 6,
       "panels": [],
       "repeat": null,
       "repeatIteration": null,
@@ -403,7 +335,7 @@
         "x": 0,
         "y": 15
       },
-      "id": 8,
+      "id": 7,
       "links": [],
       "options": {
         "colorMode": "background",
@@ -464,7 +396,7 @@
         "x": 4,
         "y": 15
       },
-      "id": 9,
+      "id": 8,
       "links": [],
       "options": {
         "colorMode": "value",
@@ -497,74 +429,6 @@
       "type": "stat"
     },
     {
-      "config": {
-        "animationDuration": 0,
-        "cellPadding": "3",
-        "cellRadius": "2",
-        "cellSize": "11",
-        "colLimit": null,
-        "displayLegend": false,
-        "domain": "month",
-        "domainGutter": 2,
-        "hoverDecimals": 2,
-        "hoverUnitFormat": "percentunit",
-        "itemName": [
-          "percentunit",
-          "percentunit"
-        ],
-        "label": {
-          "position": "bottom",
-          "rotate": "null",
-          "width": 60
-        },
-        "legendColors": {
-          "base": "transparent",
-          "empty": "#444444",
-          "max": "#73BF69",
-          "min": "#F2495C"
-        },
-        "legendStr": "0.995000",
-        "legendTitleFormat": {
-          "inner": {},
-          "lower": {},
-          "upper": {}
-        },
-        "rowLimit": null,
-        "subDomain": "day",
-        "subDomainTitleFormat": {
-          "empty": "{date}",
-          "filled": "{date}"
-        },
-        "verticalOrientation": false
-      },
-      "datasource": "$PROMETHEUS_DS",
-      "fieldConfig": {
-        "defaults": {
-          "custom": {}
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 5,
-        "w": 4,
-        "x": 8,
-        "y": 15
-      },
-      "id": 10,
-      "targets": [
-        {
-          "expr": "sum by () (\n  sum_over_time(gitlab:availability:success:rate_1h{type=~\"webservice\"}[1d])\n)\n/\nsum by () (\n  sum_over_time(gitlab:availability:ops:rate_1h{type=~\"webservice\"}[1d])\n)\n",
-          "format": "time_series",
-          "instant": false,
-          "interval": "1d",
-          "intervalFactor": 1,
-          "legendFormat": ""
-        }
-      ],
-      "title": "Calendar",
-      "type": "neocat-cal-heatmap-panel"
-    },
-    {
       "aliasColors": {},
       "bars": false,
       "dashLength": 10,
@@ -577,10 +441,10 @@
       "gridPos": {
         "h": 5,
         "w": 12,
-        "x": 12,
+        "x": 8,
         "y": 15
       },
-      "id": 11,
+      "id": 9,
       "legend": {
         "alignAsTable": true,
         "avg": true,
@@ -705,7 +569,7 @@
         "x": 0,
         "y": 20
       },
-      "id": 12,
+      "id": 10,
       "links": [],
       "options": {
         "colorMode": "background",
@@ -766,7 +630,7 @@
         "x": 4,
         "y": 20
       },
-      "id": 13,
+      "id": 11,
       "links": [],
       "options": {
         "colorMode": "value",
@@ -799,74 +663,6 @@
       "type": "stat"
     },
     {
-      "config": {
-        "animationDuration": 0,
-        "cellPadding": "3",
-        "cellRadius": "2",
-        "cellSize": "11",
-        "colLimit": null,
-        "displayLegend": false,
-        "domain": "month",
-        "domainGutter": 2,
-        "hoverDecimals": 2,
-        "hoverUnitFormat": "percentunit",
-        "itemName": [
-          "percentunit",
-          "percentunit"
-        ],
-        "label": {
-          "position": "bottom",
-          "rotate": "null",
-          "width": 60
-        },
-        "legendColors": {
-          "base": "transparent",
-          "empty": "#444444",
-          "max": "#73BF69",
-          "min": "#F2495C"
-        },
-        "legendStr": "0.995000",
-        "legendTitleFormat": {
-          "inner": {},
-          "lower": {},
-          "upper": {}
-        },
-        "rowLimit": null,
-        "subDomain": "day",
-        "subDomainTitleFormat": {
-          "empty": "{date}",
-          "filled": "{date}"
-        },
-        "verticalOrientation": false
-      },
-      "datasource": "$PROMETHEUS_DS",
-      "fieldConfig": {
-        "defaults": {
-          "custom": {}
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 5,
-        "w": 4,
-        "x": 8,
-        "y": 20
-      },
-      "id": 14,
-      "targets": [
-        {
-          "expr": "sum by () (\n  sum_over_time(gitlab:availability:success:rate_1h{type=~\"registry\"}[1d])\n)\n/\nsum by () (\n  sum_over_time(gitlab:availability:ops:rate_1h{type=~\"registry\"}[1d])\n)\n",
-          "format": "time_series",
-          "instant": false,
-          "interval": "1d",
-          "intervalFactor": 1,
-          "legendFormat": ""
-        }
-      ],
-      "title": "Calendar",
-      "type": "neocat-cal-heatmap-panel"
-    },
-    {
       "aliasColors": {},
       "bars": false,
       "dashLength": 10,
@@ -879,10 +675,10 @@
       "gridPos": {
         "h": 5,
         "w": 12,
-        "x": 12,
+        "x": 8,
         "y": 20
       },
-      "id": 15,
+      "id": 12,
       "legend": {
         "alignAsTable": true,
         "avg": true,

@@ -207,13 +207,6 @@ local serviceRow(service) =
       colorMode='value',
       intervalFactor=1,
     ),
-    grafanaCalHeatmap.heatmapCalendarPanel(
-      '',
-      query=serviceAvailabilityQuery({ type: service.name }, 'slo_observation_status', 'slo:observation_status', '1d'),
-      legendFormat='',
-      datasource='$PROMETHEUS_DS',
-      intervalFactor=1,
-    ),
     basic.slaTimeseries(
       title='%s: SLA Trends ' % [service.friendly_name],
       description='Rolling average SLO adherence for primary services. Higher is better.',
@@ -286,13 +279,6 @@ basic.dashboard(
       colorMode='value',
       intervalFactor=1,
     )],
-    [grafanaCalHeatmap.heatmapCalendarPanel(
-      'Calendar',
-      query=systemAvailabilityQuery(systemSelector, '1d'),
-      legendFormat='',
-      datasource='$PROMETHEUS_DS',
-      intervalFactor=1,
-    )],
     [basic.slaTimeseries(
        title='Overall SLA over time period - gitlab.com',
        description='Rolling average SLO adherence across all primary services. Higher is better.',
@@ -304,7 +290,7 @@ basic.dashboard(
      )
      .addSeriesOverride(seriesOverrides.goldenMetric('gitlab.com SLA'))
      + thresholdsValues],
-  ], cellHeights=[3, 2], columnWidths=[4, 4, 4, 12], startRow=1)
+  ], cellHeights=[3, 2], columnWidths=[4, 4, 16], startRow=1)
 )
 .addPanel(
   row.new(title='Primary Services'),
@@ -316,7 +302,7 @@ basic.dashboard(
   }
 )
 .addPanels(
-  layout.columnGrid(primaryServiceRows, [4, 4, 4, 12], rowHeight=5, startRow=2101)
+  layout.columnGrid(primaryServiceRows, [4, 4, 16], rowHeight=5, startRow=2101)
 )
 .addPanels(
   layout.grid([
