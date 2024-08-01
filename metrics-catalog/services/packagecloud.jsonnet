@@ -7,7 +7,7 @@ local gaugeMetric = metricsCatalog.gaugeMetric;
 metricsCatalog.serviceDefinition({
   type: 'packagecloud',
   tier: 'inf',
-  tenants: [ 'gitlab-ops', 'gitlab-pre' ],
+  tenants: ['gitlab-ops', 'gitlab-pre'],
 
   tags: ['cloud-sql'],
 
@@ -70,7 +70,7 @@ metricsCatalog.serviceDefinition({
 
   local sliCommon = {
     userImpacting: true,
-    team: 'reliability_general',
+    team: 'reliability_unowned',
   },
 
   serviceLevelIndicators: {

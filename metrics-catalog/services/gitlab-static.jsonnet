@@ -5,7 +5,7 @@ local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 metricsCatalog.serviceDefinition({
   type: 'gitlab-static',
   tier: 'inf',
-  tenants: [ 'gitlab-gprd', 'gitlab-gstg', 'gitlab-ops', 'gitlab-pre' ],
+  tenants: ['gitlab-gprd', 'gitlab-gstg', 'gitlab-ops', 'gitlab-pre'],
   monitoringThresholds: {},
   serviceDependencies: {},
   provisioning: {
@@ -18,7 +18,7 @@ metricsCatalog.serviceDefinition({
   serviceLevelIndicators: {
     gitlab_static_net_zone: {
       severity: 's3',
-      team: 'reliability_general',
+      team: 'reliability_unowned',
       trafficCessationAlertConfig: false,
       userImpacting: true,
       featureCategory: 'not_owned',
@@ -48,7 +48,7 @@ metricsCatalog.serviceDefinition({
 
     web_ide_worker: {
       severity: 's3',
-      team: 'reliability_general',
+      team: 'reliability_unowned',
       userImpacting: true,
       featureCategory: 'web_ide',
       description: |||
