@@ -73,6 +73,7 @@
   import 'web-pages.jsonnet',
   import 'web.jsonnet',
   import 'websockets.jsonnet',
+  import 'wiz-runtime-sensor.jsonnet',
   import 'woodhouse.jsonnet',
   import 'woodhouse-slack.jsonnet',
   import 'zoekt.jsonnet',
