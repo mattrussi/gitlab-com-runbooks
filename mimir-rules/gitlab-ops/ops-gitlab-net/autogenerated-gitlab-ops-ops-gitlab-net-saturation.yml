@@ -100,12 +100,12 @@ groups:
       )
   - record: gitlab_component_saturation:ratio
     labels:
-      component: kube_container_rss
+      component: kube_container_memory
     expr: |
       max by(env, environment, tier, type, stage, shard) (
         clamp_min(
           clamp_max(
-            container_memory_rss:labeled{container!="", container!="POD", env="ops",type="ops-gitlab-net"}
+            container_memory_working_set_bytes:labeled{container!="", container!="POD", env="ops",type="ops-gitlab-net"}
             /
             (container_spec_memory_limit_bytes:labeled{container!="", container!="POD", env="ops",type="ops-gitlab-net"} > 0)
             ,

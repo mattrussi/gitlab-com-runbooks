@@ -6,7 +6,7 @@ local resourceSaturationPoint = (import 'servicemetrics/resource_saturation_poin
     title: 'Kube Container Memory Utilization (RSS)',
     severity: 's4',
     horizontallyScalable: true,
-    appliesTo: metricsCatalog.findServicesWithTag(tag='rails'),
+    appliesTo: metricsCatalog.findServicesWithTag(tag='kube_container_rss'),
     description: |||
       Records the total anonymous (unevictable) memory utilization for containers for this
       service, as a percentage of the memory limit as configured through Kubernetes.
