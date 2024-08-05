@@ -63,16 +63,38 @@ The issue most likely exists within the Monolith. Access the [Sidekiq logs](http
 2. Update the `json.meta.user: "<user_name>" ` field with the specific users.
 3. Add the last 7 days as the time frame for searching for relevant logs. 
 
+The following should 
+
+### Debugging Error Codes M3005
+
+The following error is pretty straightforward for reasoning.
+>access_forbidden
+
+### Debugging Error Codes M4000 
+
+The following all relate towards a slash command issues.
+
+| Slash Command | Tool | Team Owner |
+|---------------|------|------------|
+| /troubleshoot              |      | #           |
+| /explain            |      |            |
+| /tests             |      |            |
+| /summarize_comments             |      |            |
+| /refactor            |      |            |
+| /vulnerability_explain            |      |            |
+
+
 
 ## Further troubleshooting
 
 Assuming you can't find anything of value within the error logs to help debug an issue, you may want to enabled `expanded_ai_logging` to see input and ouput of any of the following AI tools. 
 
-To enable expanded AI logging, access #
+To enable expanded AI logging, access #production channel and run the following command.
 
 ```
 /chatops run features set expanded_ai_logging --user=<USERNAME>
 ```
 
-
 **WARNING**: **DO NOT ENABLE FOR CUSTOMERS**. Please submit a Support Intake ticket if you want to enable to debug a customer specific issues. Try to replicate the issue with you development environment before submitting a customer support ticket.
+
+With the following enabled, you can debug any production or development logs to see the internal input/outputs of the GitLab Duo Chat.
