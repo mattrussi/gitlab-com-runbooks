@@ -120,7 +120,8 @@ teams:
   oncall_schedule: https://about.gitlab.com/handbook/business-ops/data-team/how-we-work/duties/
 
 - name: delivery
-  slack_alerts_channel: g_delivery
+  slack_alerts_channel: g_delivery_alerts
+  send_slo_alerts_to_team_slack_channel: true
   product_stage_group: delivery
   ignored_components:
   - graphql_query
