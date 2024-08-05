@@ -35,9 +35,7 @@ class Validator
       # This can be removed once the mixins conform to our standards.
       mixin_file = File.join(dir, "mixin.libsonnet")
 
-      if File.exist?(mixin_file)
-        next
-      end
+      next if File.exist?(mixin_file)
 
       validate_file File.expand_path(file)
     end
