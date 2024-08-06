@@ -16,7 +16,7 @@ groups:
           title: "The number of Container Registry notifications unsuccessful responses is too high"
           description: "There have been over 5 failed webhook notifications responses in {{ $labels.environment }} {{ $labels.stage }} stage for the last 5 minutes."
           grafana_dashboard_id: registry-notifications/registry-webhook-notifications-detail
-          runbook: docs/registry/webhook-notifications.md
+          runbook: docs/registry/alerts/ContainerRegistryNotificationsFailedStatusCode.md
       - alert: ContainerRegistryNotificationsErrorCountTooHigh
         expr: >
           sum (
@@ -32,7 +32,7 @@ groups:
           title: "Container Registry outgoing webhook notifications are failing"
           description: "There have been over 5 failed webhook notifications in {{ $labels.environment }} {{ $labels.stage }} stage for the last 5 minutes."
           grafana_dashboard_id: registry-notifications/registry-webhook-notifications-detail
-          runbook: docs/registry/webhook-notifications.md
+          runbook: docs/registry/alerts/ContainerRegistryNotificationsErrorCountTooHigh.md
       - alert: ContainerRegistryNotificationsPendingCountTooHigh
         expr: >
           sum (
@@ -48,4 +48,4 @@ groups:
           title: "The number of Container Registry pending webhook notifications is too high"
           description: "There are over 100 pending notifications in {{ $labels.environment }} {{ $labels.stage }} stage for the last hour."
           grafana_dashboard_id: registry-notifications/registry-webhook-notifications-detail
-          runbook: docs/registry/webhook-notifications.md
+          runbook: docs/registry/alerts/ContainerRegistryNotificationsPendingCountTooHigh.md

@@ -113,5 +113,6 @@
 
 # Related Links
 
+- [Webhook notifications runbook](../webhook-notifications.md)
 - [Related alerts](https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/registry/alerts?ref_type=heads).
 - [Documentation](https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/registry/README.md?ref_type=heads).
