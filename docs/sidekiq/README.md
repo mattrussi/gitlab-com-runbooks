@@ -20,6 +20,7 @@
 
 ## Troubleshooting Pointers
 
+* [ErrorSLOViolation](../alerts/ErrorSLOViolation.md)
 * [CustomersDot main troubleshoot documentation](../customersdot/overview.md)
 * [../elastic/advanced-search-in-gitlab.md](../elastic/advanced-search-in-gitlab.md)
 * [`gitalyctl`](../gitaly/gitalyctl.md)
