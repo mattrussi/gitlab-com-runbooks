@@ -39,12 +39,12 @@ groups:
 - name: 'sentry apdex success rate weekly statistics: {"env": "gprd", "type": "sentry"}'
   interval: 5m
   rules:
-  - record: gitlab_service_apdex:rate:avg_over_time_1w
+  - record: gitlab_service_apdex:success:rate:avg_over_time_1w
     expr: |
       avg_over_time(gitlab_service_apdex:success:rate_5m{env="gprd",monitor="global",type="sentry"}[1w])
       unless on(tier, type)
       gitlab_service:mapping:disable_apdex_success_rate_prediction{monitor="global",type="sentry"}
-  - record: gitlab_service_apdex:rate:stddev_over_time_1w
+  - record: gitlab_service_apdex:success:rate:stddev_over_time_1w
     expr: |
       stddev_over_time(gitlab_service_apdex:success:rate_5m{env="gprd",monitor="global",type="sentry"}[1w])
       unless on(tier, type)
@@ -53,22 +53,22 @@ groups:
     "sentry"}'
   interval: 5m
   rules:
-  - record: gitlab_service_apdex:rate:prediction
+  - record: gitlab_service_apdex:success:rate:prediction
     expr: |
       quantile(0.5,
         label_replace(
           gitlab_service_apdex:success:rate_1h{env="gprd",monitor="global",type="sentry"} offset 10050m # 1 week - 30mins
-          + delta(gitlab_service_apdex:rate:avg_over_time_1w{env="gprd",monitor="global",type="sentry"}[1w])
+          + delta(gitlab_service_apdex:success:rate:avg_over_time_1w{env="gprd",monitor="global",type="sentry"}[1w])
           , "p", "1w", "", "")
         or
         label_replace(
           gitlab_service_apdex:success:rate_1h{env="gprd",monitor="global",type="sentry"} offset 20130m # 2 weeks - 30mins
-          + delta(gitlab_service_apdex:rate:avg_over_time_1w{env="gprd",monitor="global",type="sentry"}[2w])
+          + delta(gitlab_service_apdex:success:rate:avg_over_time_1w{env="gprd",monitor="global",type="sentry"}[2w])
           , "p", "2w", "", "")
         or
         label_replace(
           gitlab_service_apdex:success:rate_1h{env="gprd",monitor="global",type="sentry"} offset 30210m # 3 weeks - 30mins
-          + delta(gitlab_service_apdex:rate:avg_over_time_1w{env="gprd",monitor="global",type="sentry"}[3w])
+          + delta(gitlab_service_apdex:success:rate:avg_over_time_1w{env="gprd",monitor="global",type="sentry"}[3w])
           , "p", "3w", "", "")
       )
       without (p)

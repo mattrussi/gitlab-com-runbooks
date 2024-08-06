@@ -39,12 +39,12 @@ groups:
 - name: 'consul apdex success rate weekly statistics: {"env": "pre", "type": "consul"}'
   interval: 5m
   rules:
-  - record: gitlab_service_apdex:rate:avg_over_time_1w
+  - record: gitlab_service_apdex:success:rate:avg_over_time_1w
     expr: |
       avg_over_time(gitlab_service_apdex:success:rate_5m{env="pre",monitor="global",type="consul"}[1w])
       unless on(tier, type)
       gitlab_service:mapping:disable_apdex_success_rate_prediction{monitor="global",type="consul"}
-  - record: gitlab_service_apdex:rate:stddev_over_time_1w
+  - record: gitlab_service_apdex:success:rate:stddev_over_time_1w
     expr: |
       stddev_over_time(gitlab_service_apdex:success:rate_5m{env="pre",monitor="global",type="consul"}[1w])
       unless on(tier, type)
@@ -53,22 +53,22 @@ groups:
     "consul"}'
   interval: 5m
   rules:
-  - record: gitlab_service_apdex:rate:prediction
+  - record: gitlab_service_apdex:success:rate:prediction
     expr: |
       quantile(0.5,
         label_replace(
           gitlab_service_apdex:success:rate_1h{env="pre",monitor="global",type="consul"} offset 10050m # 1 week - 30mins
-          + delta(gitlab_service_apdex:rate:avg_over_time_1w{env="pre",monitor="global",type="consul"}[1w])
+          + delta(gitlab_service_apdex:success:rate:avg_over_time_1w{env="pre",monitor="global",type="consul"}[1w])
           , "p", "1w", "", "")
         or
         label_replace(
           gitlab_service_apdex:success:rate_1h{env="pre",monitor="global",type="consul"} offset 20130m # 2 weeks - 30mins
-          + delta(gitlab_service_apdex:rate:avg_over_time_1w{env="pre",monitor="global",type="consul"}[2w])
+          + delta(gitlab_service_apdex:success:rate:avg_over_time_1w{env="pre",monitor="global",type="consul"}[2w])
           , "p", "2w", "", "")
         or
         label_replace(
           gitlab_service_apdex:success:rate_1h{env="pre",monitor="global",type="consul"} offset 30210m # 3 weeks - 30mins
-          + delta(gitlab_service_apdex:rate:avg_over_time_1w{env="pre",monitor="global",type="consul"}[3w])
+          + delta(gitlab_service_apdex:success:rate:avg_over_time_1w{env="pre",monitor="global",type="consul"}[3w])
           , "p", "3w", "", "")
       )
       without (p)
