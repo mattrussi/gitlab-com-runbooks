@@ -84,6 +84,7 @@
 * [Database Connection Pool Saturation](../registry/app-db-conn-pool-saturation.md)
 * [Container Registry database post-deployment migrations](../registry/db-post-deployment-migrations.md)
 * [High Number of Overdue Online GC Tasks](../registry/online-gc-high-overdue-tasks.md)
+* [High Number of Pending or Failed Outgoing Webhook Notifications](../registry/webhook-notifications.md)
 * [Managing Sentry in Kubernetes](../sentry/sentry.md)
 * [[`SidekiqQueueTooLarge`](../../legacy-prometheus-rules/sidekiq-queues.yml)](../sidekiq/large-sidekiq-queue.md)
 * [A survival guide for SREs to working with Sidekiq at GitLab](../sidekiq/sidekiq-survival-guide-for-sres.md)

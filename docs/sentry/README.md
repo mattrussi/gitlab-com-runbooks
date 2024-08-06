@@ -27,6 +27,7 @@
 * [Rotating Rails' PostgreSQL password](../patroni/rotating-rails-postgresql-password.md)
 * [Database Connection Pool Saturation](../registry/app-db-conn-pool-saturation.md)
 * [High Number of Overdue Online GC Tasks](../registry/online-gc-high-overdue-tasks.md)
+* [High Number of Pending or Failed Outgoing Webhook Notifications](../registry/webhook-notifications.md)
 * [Sentry general tasks](sentry-general.md)
 * [Managing Sentry in Kubernetes](sentry.md)
 * [Pull mirror overdue queue is too large](../sidekiq/large-pull-mirror-queue.md)
