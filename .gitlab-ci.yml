@@ -1303,7 +1303,7 @@ commit-and-push-feature-categories-update:
   stage: deploy
   rules:
     - if: $UPDATE_FEATURE_CATEGORIES == "1"
-  script: |
-    git config user.email ops@ops.gitlab.net
-    git config user.name ops-gitlab-net
-    ./scripts/commit-and-push-feature-categories-update.sh
+  script:
+    - git config user.email ops@ops.gitlab.net
+    - git config user.name ops-gitlab-net
+    - ./scripts/commit-and-push-feature-categories-update.sh

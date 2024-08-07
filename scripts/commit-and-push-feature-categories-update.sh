@@ -1,4 +1,4 @@
-#!/bin/bash -e
+#!/bin/bash -x
 
 if [ -z "$UPDATE_FEATURE_CATEGORIES_GITLAB_TOKEN" ]; then
   echo "UPDATE_FEATURE_CATEGORIES_GITLAB_TOKEN must be set"
@@ -6,7 +6,7 @@ if [ -z "$UPDATE_FEATURE_CATEGORIES_GITLAB_TOKEN" ]; then
 fi
 
 current_date="$(date +'%Y-%m-%d')"
-branch_name="update-feature-categories-automation"
+branch_name="update-feature-categories-${current_date}"
 runbooks_origin=https://oauth2:${UPDATE_FEATURE_CATEGORIES_GITLAB_TOKEN}@gitlab.com/gitlab-com/${CI_PROJECT_NAME}.git
 mr_title="Update feature categories ${current_date}"
 mr_description="Update feature categories to ${current_date}.\n1. Please check the mapping on [stage-group-mapping-crossover.jsonnet](https://gitlab.com/gitlab-com/runbooks/-/blob/master/services/stage-group-mapping-crossover.jsonnet) to make sure old categories are mapped to new ones. The history of updates can be found on [stages.yml](https://gitlab.com/gitlab-com/www-gitlab-com/-/blob/master/data/stages.yml).\n1. Run \`make generate\` again.\n\nIf you would like to improve the script that generated this MR, please check https://gitlab.com/gitlab-com/runbooks/-/blob/master/scripts/commit-and-push-feature-categories-update.sh\n\n/reviewer @gitlab-org/scalability/observability"
