@@ -26,7 +26,7 @@ local resourcesByService = std.foldl(
 
 local filesForSeparateSelector(service, selector, _extraArgs, tenant) =
   local serviceResources = resourcesByService[service.type];
-  local extraSourceSelector = selector { type: service.type };
+  local extraSourceSelector = selector + service.getSaturationSelectors();
   {
     saturation: std.manifestYamlDoc({
       groups:

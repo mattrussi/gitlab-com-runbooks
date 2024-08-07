@@ -243,6 +243,13 @@ local serviceDefinition(service) =
           ))
         )
       ),
+
+    getSaturationSelectors()::
+      local shards = std.get(service, 'shards');
+      {
+        type: service.type,
+        [if shards != null then 'shard']: { oneOf: shards },
+      },
   };
 
 {
