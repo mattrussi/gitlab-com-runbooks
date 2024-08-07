@@ -20,7 +20,11 @@ local validateNested(prefix, definition, object) =
             else
               ['field %s: %s' % [fullField, failureMessage]]
         else
-          ['field %s is required' % [fullField]],
+          local isOptional = std.isFunction(validator) && validator(null) == null;
+          if isOptional then
+            []
+          else
+            ['field %s is required' % [fullField]],
       std.objectFields(definition)
     );
 
