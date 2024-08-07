@@ -21,6 +21,7 @@
 * [Cloud SQL Troubleshooting](../cloud-sql/cloud-sql.md)
 * [Cloudflare: Managing Traffic](../cloudflare/managing-traffic.md)
 * [Interacting with Consul](../consul/interaction.md)
+* [Measuring Recovery Activities](../disaster-recovery/recovery-measurements.md)
 * [Blocking individual IPs and Net Blocks on HA Proxy](../frontend/ban-netblocks-on-haproxy.md)
 * [HAProxy Management at GitLab](../frontend/haproxy.md)
 * [../gitlab-com-artifact-registry/overview.md](../gitlab-com-artifact-registry/overview.md)
