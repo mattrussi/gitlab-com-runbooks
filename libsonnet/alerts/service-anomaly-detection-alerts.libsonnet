@@ -50,6 +50,7 @@ local rules = function(
         rules_domain: 'general',
         severity: 's4',
         alert_type: 'cause',
+        alert_trigger: alert_name_prefix + '_anomaly',
       },
       annotations: {
         description: upper_bound_alert_description,
