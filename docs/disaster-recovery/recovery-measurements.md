@@ -51,6 +51,7 @@ Ideally, this measurement is designed to inform the overall flow and duration of
 
 | Date | Environment | VM Provision Time | Bootstrap Time | Notes |
 | ---- | ----------- | ------------------------ | -------------- | ----- |
+| 2024-08-06 | GPRD | 00:17:41 | 00:11:03 | GPRD Patroni [provisioning test](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/18334) with the registry cluster. |
 | 2024-04-25 | GSTG | HH:MM:SS | 00:06:00 | Collection of a Patroni bootstrap duration baseline while using OS disk snapshots. Terraform apply duration was not recorded. |
 | 2024-04-25 | GSTG | HH:MM:SS | 00:35:00 | Collection of a Patroni bootstrap duration baseline while using a clean Ubuntu image. Terraform apply duration was not recorded. |
 
