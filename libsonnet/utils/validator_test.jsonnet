@@ -130,4 +130,8 @@ test.suite({
     actual: optionalValidator._validationMessages({ optionalString: 1, optionalNumber: 'a' }),
     expect: ['field optionalNumber: expected a number or null', 'field optionalString: expected a string or null'],
   },
+  testOptionalValidatorAbsentFields: {
+    actual: optionalValidator._validationMessages({}),
+    expect: [],
+  },
 })

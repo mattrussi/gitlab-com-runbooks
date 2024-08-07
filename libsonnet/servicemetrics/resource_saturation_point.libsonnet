@@ -85,7 +85,6 @@ local nestedDefaults = {
     forecast_days: 90,
     historical_days: 365,
     changepoints_count: 25,
-    saturation_dimensions: null,  // No saturation dimensions by default
   },
   alerting: {
     enabled: true,
