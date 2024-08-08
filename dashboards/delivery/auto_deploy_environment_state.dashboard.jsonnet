@@ -3,6 +3,7 @@ local prometheus = grafana.prometheus;
 local promQuery = import 'grafana/prom_query.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
 local basic = import 'grafana/basic.libsonnet';
+local graphPanel = grafana.graphPanel;
 local row = grafana.row;
 local mimirHelper = import 'services/lib/mimir-helpers.libsonnet';
 local g = import 'github.com/grafana/grafonnet/gen/grafonnet-latest/main.libsonnet';
@@ -14,39 +15,94 @@ local explainer = |||
   - Locked - State where there was a deployment ongoing on the environment, or QA, or post-deploy migrations being executed.
 |||;
 
-local pieChartPanel(env, stage) =
+local envStatePieChartPanel(env, stage) =
   g.panel.pieChart.new('%s-%s environment states' % [env, stage])
   + g.panel.pieChart.options.legend.withDisplayMode('table')
   + g.panel.pieChart.options.legend.withShowLegend(true)
-  + g.panel.pieChart.options.legend.withValues(['value'])
-  + g.panel.pieChart.options.withDisplayLabels(['value'])
+  + g.panel.pieChart.options.legend.withValues(['value', 'percent'])
+  + g.panel.pieChart.options.withDisplayLabels(['value', 'percent'])
   + g.panel.pieChart.panelOptions.withDescription('Pie chart representation of the percentage of time %s-%s spent in different states' % [env, stage])
   + g.panel.pieChart.options.withReduceOptions({ calcs: ['mean'] })
-  + g.panel.pieChart.standardOptions.withUnit('percentunit')
+  + g.panel.pieChart.standardOptions.withUnit('s')
   + g.panel.pieChart.queryOptions.withTargetsMixin([
     g.query.prometheus.new(
       '$PROMETHEUS_DS',
-      'sum without (pod,instance) (delivery_auto_deploy_environment_state{target_env="%s", target_stage="%s"})' % [env, stage],
+      'sum without (pod,instance) (delivery_auto_deploy_environment_state{target_env="%s", target_stage="%s"}) * $__range_s' % [env, stage],
     )
     + g.query.prometheus.withFormat('time_series')
     + g.query.prometheus.withLegendFormat('{{env_state}}'),
   ]);
 
-local graphPanel(env, stage) =
-  basic.graphPanel(
-    '%s-%s environment states' % [env, stage],
+local envStateGraphPanel(env, stage) =
+  graphPanel.new(
+    title='%s-%s environment states' % [env, stage],
     description='Time series representation of the percentage of time %s-%s spent in different states' % [env, stage],
     legend_show=true,
+    legend_values=true,
+    legend_alignAsTable=true,
     legend_current=true,
     legend_max=false,
     legend_min=false,
     legend_avg=false,
+    legend_hideEmpty=true,
+    legend_hideZero=true,
     decimals=0,
   )
   .addTarget(
     promQuery.target(
       'sum without (pod,instance) (delivery_auto_deploy_environment_state{target_env="%s", target_stage="%s"})' % [env, stage],
       legendFormat='{{env_state}}'
+    ),
+  );
+
+local packageStateBarGaugePanel() =
+  g.panel.barGauge.new('Package status when gstg-cny is idle')
+  + g.panel.barGauge.panelOptions.withDescription('Amount of time where gstg-cny was idle and packages were in varying states of being built. There can be overlap in the numbers.')
+  + g.panel.barGauge.options.withReduceOptions({ calcs: ['mean'] })
+  + g.panel.barGauge.standardOptions.withUnit('s')
+  + g.panel.barGauge.standardOptions.thresholds.withMode('absolute')
+  + g.panel.barGauge.standardOptions.thresholds.withSteps([{ value: null, color: 'green' }])
+  + g.panel.barGauge.queryOptions.withTargetsMixin([
+    g.query.prometheus.new(
+      '$PROMETHEUS_DS',
+      '(max by (pkg_state) (delivery_auto_deploy_building_package_state)) * on() group_left max(delivery_auto_deploy_environment_state{target_env="gstg",target_stage="cny",env_state="ready"}) * $__range_s',
+    )
+    + g.query.prometheus.withFormat('time_series')
+    + g.query.prometheus.withLegendFormat('Package build {{pkg_state}}'),
+
+    g.query.prometheus.new(
+      '$PROMETHEUS_DS',
+      'max(delivery_auto_deploy_environment_state{target_env="gstg",target_stage="cny",env_state="ready"}) * $__range_s',
+    )
+    + g.query.prometheus.withFormat('time_series')
+    + g.query.prometheus.withLegendFormat('gstg-cny idle'),
+  ]);
+
+local packageStateGraphPanel() =
+  graphPanel.new(
+    title='Package build status when gstg-cny is idle',
+    description='Time series representation of amount of time where gstg-cny was idle and packages were in varying states of being built.',
+    legend_show=true,
+    legend_values=true,
+    legend_alignAsTable=true,
+    legend_current=true,
+    legend_max=false,
+    legend_min=false,
+    legend_avg=false,
+    legend_hideEmpty=true,
+    legend_hideZero=true,
+    decimals=0,
+  )
+  .addTarget(
+    promQuery.target(
+      '(max by (pkg_state) (delivery_auto_deploy_building_package_state)) * on() group_left max(delivery_auto_deploy_environment_state{target_env="gstg",target_stage="cny",env_state="ready"})',
+      legendFormat='Package build {{pkg_state}}'
+    )
+  )
+  .addTarget(
+    promQuery.target(
+      'max(delivery_auto_deploy_environment_state{target_env="gstg",target_stage="cny",env_state="ready"})',
+      legendFormat='gstg-cny idle'
     ),
   );
 
@@ -71,17 +127,19 @@ basic.dashboard(
   ], rowHeight=4, startRow=0)
 )
 .addPanels(layout.grid([
-  pieChartPanel('gprd', 'main'),
-  graphPanel('gprd', 'main'),
+  envStatePieChartPanel('gprd', 'main'),
+  envStateGraphPanel('gprd', 'main'),
 
-  pieChartPanel('gprd', 'cny'),
-  graphPanel('gprd', 'cny'),
+  envStatePieChartPanel('gprd', 'cny'),
+  envStateGraphPanel('gprd', 'cny'),
 
-  pieChartPanel('gstg', 'main'),
-  graphPanel('gstg', 'main'),
+  envStatePieChartPanel('gstg', 'main'),
+  envStateGraphPanel('gstg', 'main'),
 
-  pieChartPanel('gstg', 'cny'),
-  graphPanel('gstg', 'cny'),
+  envStatePieChartPanel('gstg', 'cny'),
+  envStateGraphPanel('gstg', 'cny'),
 
-], cols=2, startRow=100))
+  packageStateBarGaugePanel(),
+  packageStateGraphPanel(),
+], rowHeight=12, cols=2, startRow=100))
 .trailer()
