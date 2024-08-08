@@ -123,6 +123,7 @@ metricsCatalog.serviceDefinition({
               ne+: workhorseRoutes.escapeForLiterals(|||
                 ^/([^/]+/){1,}[^/]+/uploads\z
                 ^/-/cable\z
+                ^/v2/.+/containers/.+/blobs/sha256:[a-z0-9]+\z
               |||),
             },
           },
