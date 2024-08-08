@@ -79,7 +79,7 @@ A few examples of how the metrics is been calculated:
 
 In the graph below traffic absent alert fires when an SLI (`gitlab_component_ops:rate_5m`) is missing for `30m`, while it was present an hour ago.
 
-  ![alt text](image/traffic-absent.png)
+![alt text](image/traffic-absent.png)
 
 ## Severities
 
@@ -112,7 +112,7 @@ The trafficCessation alerts can be disabled by specifying `trafficCessationAlert
 
 # Escalation
 
- If the issue cannot be resolved quickly, escalate to the appropriate engineering or operations team for further investigation.
+If the issue cannot be resolved quickly, escalate to the appropriate engineering or operations team for further investigation.
 
 # Definitions
 
@@ -120,4 +120,4 @@ The trafficCessation alerts can be disabled by specifying `trafficCessationAlert
 
 # Related Links
 
-- [Related alerts](.)
+- [Related alerts](../alerts/)
