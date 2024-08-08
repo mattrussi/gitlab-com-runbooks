@@ -5,6 +5,9 @@ local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 metricsCatalog.serviceDefinition({
   type: 'plantuml',
   tier: 'sv',
+
+  tags: ['java', 'kube_container_rss'],
+
   // plantuml doesn't have a `cny` stage
   serviceIsStageless: true,
   monitoringThresholds: {

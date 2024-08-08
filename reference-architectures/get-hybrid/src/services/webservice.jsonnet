@@ -9,7 +9,7 @@ metricsCatalog.serviceDefinition({
   type: 'webservice',
   tier: 'sv',
 
-  tags: ['golang', 'rails', 'puma'],
+  tags: ['golang', 'rails', 'puma', 'kube_container_rss'],
 
   monitoringThresholds: {
     apdexScore: 0.998,

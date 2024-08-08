@@ -16,7 +16,7 @@ metricsCatalog.serviceDefinition({
   tier: 'sv',
   tenants: ['gitlab-gprd', 'gitlab-gstg', 'gitlab-pre'],
 
-  tags: ['golang', 'rails', 'puma'],
+  tags: ['golang', 'rails', 'puma', 'kube_container_rss'],
 
   contractualThresholds: {
     apdexRatio: 0.9,

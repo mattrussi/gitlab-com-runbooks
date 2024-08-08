@@ -29,6 +29,7 @@ local slos = {
 metricsCatalog.serviceDefinition({
   type: 'sidekiq',
   tier: 'sv',
+  tags: ['rails', 'kube_container_rss'],
   monitoringThresholds: {
     apdexScore: 0.995,
     errorRatio: 0.995,

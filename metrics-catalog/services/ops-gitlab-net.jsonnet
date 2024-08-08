@@ -20,7 +20,7 @@ metricsCatalog.serviceDefinition({
 
   tenants: ['gitlab-ops'],
 
-  tags: ['golang', 'rails', 'cloud-sql'],
+  tags: ['golang', 'rails', 'cloud-sql', 'kube_container_rss'],
 
   monitoringThresholds: {
     apdexScore: 0.998,

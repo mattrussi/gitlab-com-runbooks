@@ -111,9 +111,9 @@ groups:
       max by(type) (
         clamp_min(
           clamp_max(
-            container_memory_working_set_bytes:labeled{container!="", container!="POD", type=~"consul|gitlab-shell|registry|sidekiq"}
+            container_memory_working_set_bytes:labeled{container!="", container!="POD", type=~"consul|gitlab-shell|registry"}
             /
-            (container_spec_memory_limit_bytes:labeled{container!="", container!="POD", type=~"consul|gitlab-shell|registry|sidekiq"} > 0)
+            (container_spec_memory_limit_bytes:labeled{container!="", container!="POD", type=~"consul|gitlab-shell|registry"} > 0)
             ,
             1)
         ,
@@ -126,9 +126,9 @@ groups:
       max by(type) (
         clamp_min(
           clamp_max(
-            container_memory_rss:labeled{container!="", container!="POD", type="webservice"}
+            container_memory_rss:labeled{container!="", container!="POD", type=~"sidekiq|webservice"}
             /
-            (container_spec_memory_limit_bytes:labeled{container!="", container!="POD", type="webservice"} > 0)
+            (container_spec_memory_limit_bytes:labeled{container!="", container!="POD", type=~"sidekiq|webservice"} > 0)
             ,
             1)
         ,

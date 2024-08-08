@@ -164,8 +164,7 @@
       "appliesTo": [
         "consul",
         "gitlab-shell",
-        "registry",
-        "sidekiq"
+        "registry"
       ],
       "capacityPlanning": {
         "changepoints_count": 25,
@@ -186,6 +185,7 @@
     },
     "kube_container_rss": {
       "appliesTo": [
+        "sidekiq",
         "webservice"
       ],
       "capacityPlanning": {
