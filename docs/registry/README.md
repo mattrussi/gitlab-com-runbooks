@@ -18,6 +18,7 @@
 
 ## Troubleshooting Pointers
 
+* [TrafficAbsent and TrafficCessation](../alerts/TrafficAbsent.md)
 * [Cloud SQL Troubleshooting](../cloud-sql/cloud-sql.md)
 * [Cloudflare: Managing Traffic](../cloudflare/managing-traffic.md)
 * [Interacting with Consul](../consul/interaction.md)
