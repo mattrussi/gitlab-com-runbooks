@@ -4166,7 +4166,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (le) (
-            rate(gitlab_workhorse_http_request_duration_seconds_bucket{route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/([^/]+/){1,}[^/]+/uploads\\z",route!="^/-/cable\\z",route!~"\\^/\\.\\+\\\\\\.git/git-receive-pack\\\\z|\\^/\\.\\+\\\\\\.git/git-upload-pack\\\\z|\\^/\\.\\+\\\\\\.git/gitlab-lfs/objects/\\(\\[0-9a-f\\]\\{64\\}\\)/\\(\\[0-9\\]\\+\\)\\\\z|\\^/\\.\\+\\\\\\.git/info/refs\\\\z",route!~"^\\^/api/.*"}[5m])
+            rate(gitlab_workhorse_http_request_duration_seconds_bucket{route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/([^/]+/){1,}[^/]+/uploads\\z",route!="^/-/cable\\z",route!="^/v2/.+/containers/.+/blobs/sha256:[a-z0-9]+\\z",route!~"\\^/\\.\\+\\\\\\.git/git-receive-pack\\\\z|\\^/\\.\\+\\\\\\.git/git-upload-pack\\\\z|\\^/\\.\\+\\\\\\.git/gitlab-lfs/objects/\\(\\[0-9a-f\\]\\{64\\}\\)/\\(\\[0-9\\]\\+\\)\\\\z|\\^/\\.\\+\\\\\\.git/info/refs\\\\z",route!~"^\\^/api/.*"}[5m])
           )
         )
       runbook: docs/webservice/README.md
@@ -4217,7 +4217,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (le) (
-            rate(gitlab_workhorse_http_request_duration_seconds_bucket{route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/([^/]+/){1,}[^/]+/uploads\\z",route!="^/-/cable\\z",route!~"\\^/\\.\\+\\\\\\.git/git-receive-pack\\\\z|\\^/\\.\\+\\\\\\.git/git-upload-pack\\\\z|\\^/\\.\\+\\\\\\.git/gitlab-lfs/objects/\\(\\[0-9a-f\\]\\{64\\}\\)/\\(\\[0-9\\]\\+\\)\\\\z|\\^/\\.\\+\\\\\\.git/info/refs\\\\z",route!~"^\\^/api/.*"}[5m])
+            rate(gitlab_workhorse_http_request_duration_seconds_bucket{route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/([^/]+/){1,}[^/]+/uploads\\z",route!="^/-/cable\\z",route!="^/v2/.+/containers/.+/blobs/sha256:[a-z0-9]+\\z",route!~"\\^/\\.\\+\\\\\\.git/git-receive-pack\\\\z|\\^/\\.\\+\\\\\\.git/git-upload-pack\\\\z|\\^/\\.\\+\\\\\\.git/gitlab-lfs/objects/\\(\\[0-9a-f\\]\\{64\\}\\)/\\(\\[0-9\\]\\+\\)\\\\z|\\^/\\.\\+\\\\\\.git/info/refs\\\\z",route!~"^\\^/api/.*"}[5m])
           )
         )
       runbook: docs/webservice/README.md
