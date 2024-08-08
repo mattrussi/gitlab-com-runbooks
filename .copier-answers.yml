@@ -3,9 +3,11 @@
 # See the project for instructions on how to update the project
 #
 # Changes here will be overwritten by Copier; NEVER EDIT MANUALLY
-_commit: v1.14.1
+_commit: v1.16.2
 _src_path: https://gitlab.com/gitlab-com/gl-infra/common-template-copier.git
 ee_licensed: false
 golang: true
 initial_codeowners: '@andrewn @pguinoiseau @sxuereb @f_santos @jarv @reprazent'
+jsonnet: true
 project_name: runbooks
+terraform: false
