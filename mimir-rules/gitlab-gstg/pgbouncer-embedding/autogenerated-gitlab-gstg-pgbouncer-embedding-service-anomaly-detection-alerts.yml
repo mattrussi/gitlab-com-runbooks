@@ -26,6 +26,7 @@ groups:
         stage="$stage"}
       runbook: docs/{{ $labels.type }}/README.md
     labels:
+      alert_trigger: service_ops_anomaly
       alert_type: cause
       rules_domain: general
       severity: s4
@@ -102,6 +103,7 @@ groups:
         type="$type", stage="$stage"}
       runbook: docs/{{ $labels.type }}/README.md
     labels:
+      alert_trigger: service_apdex_anomaly
       alert_type: cause
       rules_domain: general
       severity: s4
