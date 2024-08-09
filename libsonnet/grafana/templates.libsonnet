@@ -267,4 +267,16 @@ local library = import 'gitlab-slis/library.libsonnet';
       includeAll=true,
       allValues='.*',
     ),
+  runnerShard(current='.*')::
+    template.new(
+      'shard',
+      '$PROMETHEUS_DS',
+      'label_values(sli_aggregations:gitlab_runner_jobs_total:rate_5m{environment="$environment", type="ci-runners"}, shard)',
+      current=current,
+      refresh='load',
+      sort=1,
+      multi=true,
+      includeAll=true,
+      allValues='.*',
+    ),
 }
