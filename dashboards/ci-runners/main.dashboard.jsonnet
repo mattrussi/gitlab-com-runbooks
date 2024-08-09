@@ -3,6 +3,7 @@ local nodeMetrics = import 'gitlab-dashboards/node_metrics.libsonnet';
 local serviceDashboard = import 'gitlab-dashboards/service_dashboard.libsonnet';
 local row = grafana.row;
 local processExporter = import 'gitlab-dashboards/process_exporter.libsonnet';
+local templates = import 'grafana/templates.libsonnet';
 
 local selectorHash = {
   environment: '$environment',
@@ -10,7 +11,8 @@ local selectorHash = {
   type: 'ci',
 };
 
-serviceDashboard.overview('ci-runners')
+serviceDashboard.overview('ci-runners', expectMultipleSeries=true)
+.addTemplate(templates.runnerShard())
 .addPanel(
   nodeMetrics.nodeMetricsDetailRow(selectorHash, title='🖥️ HAProxy Node Metrics'),
   gridPos={
