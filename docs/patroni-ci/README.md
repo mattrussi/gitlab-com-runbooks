@@ -17,6 +17,7 @@
 
 ## Troubleshooting Pointers
 
+* [ApdexSLOViolation](../alerts/ApdexSLOViolation.md)
 * [ErrorSLOViolation](../alerts/ErrorSLOViolation.md)
 * [../ci-runners/service-ci-runners.md](../ci-runners/service-ci-runners.md)
 * [Recovering from CI Patroni cluster lagging too much or becoming completely broken](recovering_patroni_ci_intense_lagging_or_replication_stopped.md)

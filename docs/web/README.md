@@ -18,6 +18,7 @@
 
 ## Troubleshooting Pointers
 
+* [ApdexSLOViolation](../alerts/ApdexSLOViolation.md)
 * [ErrorSLOViolation](../alerts/ErrorSLOViolation.md)
 * [Deadtuples affecting query performance](../ci-runners/CiRunnersServiceQueuingQueriesDurationApdexSLOViolation.md)
 * [../ci-runners/service-ci-runners.md](../ci-runners/service-ci-runners.md)
