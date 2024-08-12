@@ -11,7 +11,6 @@ local recordingRuleGroupsForServiceForBurnRate(serviceDefinition, componentAggre
         aggregationSet=componentAggregationSet,
         config=config
       ),
-      recordingRules.extraRecordingRuleSetGenerator(burnRate),
     ]
     +
     (
