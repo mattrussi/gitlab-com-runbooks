@@ -190,10 +190,6 @@ teams:
   ignored_components:
   - graphql_query
 
-- name: 5-min-app
-  product_stage_group: 5-min-app
-  ignored_components:
-  - graphql_query
 - name: activation
   product_stage_group: activation
   slack_error_budget_channel: g_activation
@@ -271,8 +267,8 @@ teams:
   send_error_budget_weekly_to_slack: true
   ignored_components:
   - graphql_query
-- name: ide
-  product_stage_group: ide
+- name: remote_development
+  product_stage_group: remote_development
   ignored_components:
   - graphql_query
 - name: personal_productivity
