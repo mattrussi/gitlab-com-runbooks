@@ -39,7 +39,7 @@ local resourceSaturationPoint = (import 'servicemetrics/resource_saturation_poin
           rate(container_cpu_usage_seconds_total:labeled{container!="", container!="POD", %(selector)s}[%(rangeInterval)s])
         )
         unless on(%(aggregationLabels)s) (
-          container_spec_cpu_quota:labeled{container!="", container!="POD", %(selector)s}
+          last_over_time(container_spec_cpu_quota:labeled{container!="", container!="POD", %(selector)s}[%(rangeInterval)s])
         )
       )
       /
