@@ -10,7 +10,7 @@ kubectl      1.30.3 # datasource=github-releases depName=kubernetes/kubernetes
 kubeconform  0.6.7 # datasource=github-releases depName=yannh/kubeconform
 nodejs       20.16.0 # datasource=node depName=nodejs/node
 pre-commit   3.8.0 # datasource=github-releases depName=pre-commit/pre-commit
-promtool     2.53.1 # datasource=github-releases depName=prometheus/prometheus
+promtool     2.54.0 # datasource=github-releases depName=prometheus/prometheus
 python       system
 ruby         3.3.4 # datasource=ruby-version depName=ruby/ruby
 shellcheck   0.10.0 # datasource=github-releases depName=koalaman/shellcheck
