@@ -6,6 +6,6 @@
 //
 // Blank values will be ignored.
 {
-  build_artifacts: 'job_artifacts',
-  sbom: 'sscs',
+  custom_models: 'self-hosted_models',
+  remote_development: 'workspaces',
 }

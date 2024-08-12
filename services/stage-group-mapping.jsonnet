@@ -40,6 +40,7 @@
     stage: 'plan',
     feature_categories: [
       'team_planning',
+      'service_desk',
     ],
   },
   product_planning: {
@@ -85,12 +86,12 @@
       'gitlab_cli',
     ],
   },
-  ide: {
-    name: 'IDE',
+  remote_development: {
+    name: 'Remote Development',
     stage: 'create',
     feature_categories: [
       'web_ide',
-      'remote_development',
+      'workspaces',
     ],
   },
   editor_extensions: {
@@ -170,6 +171,7 @@
     stage: 'secure',
     feature_categories: [
       'static_application_security_testing',
+      'code_quality',
     ],
   },
   secret_detection: {
@@ -177,7 +179,6 @@
     stage: 'secure',
     feature_categories: [
       'secret_detection',
-      'code_quality',
     ],
   },
   dynamic_analysis: {
@@ -306,7 +307,6 @@
     feature_categories: [
       'incident_management',
       'on_call_schedule_management',
-      'service_desk',
     ],
   },
   provision: {
@@ -486,6 +486,7 @@
     stage: 'ai-powered',
     feature_categories: [
       'ai_abstraction_layer',
+      'duo_workflow',
     ],
   },
   duo_chat: {
@@ -507,7 +508,8 @@
     name: 'Custom Models',
     stage: 'ai-powered',
     feature_categories: [
-      'custom_models',
+      'model_personalization',
+      'self-hosted_models',
     ],
   },
   mobile_devops: {
@@ -515,13 +517,6 @@
     stage: 'mobile',
     feature_categories: [
       'mobile_devops',
-    ],
-  },
-  '5-min-app': {
-    name: 'Five Minute Production App',
-    stage: '5-min-app',
-    feature_categories: [
-      'five_minute_production_app',
     ],
   },
   gdk: {

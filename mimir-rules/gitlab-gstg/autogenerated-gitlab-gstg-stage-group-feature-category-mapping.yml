@@ -156,7 +156,7 @@ groups:
       feature_category: code_quality
       monitor: global
       product_stage: secure
-      stage_group: secret_detection
+      stage_group: static_analysis
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -227,13 +227,6 @@ groups:
       monitor: global
       product_stage: verify
       stage_group: pipeline_execution
-    expr: "1"
-  - record: gitlab:feature_category:stage_group:mapping
-    labels:
-      feature_category: custom_models
-      monitor: global
-      product_stage: ai-powered
-      stage_group: custom_models
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -335,6 +328,13 @@ groups:
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
+      feature_category: duo_workflow
+      monitor: global
+      product_stage: ai-powered
+      stage_group: ai_framework
+    expr: "1"
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
       feature_category: dynamic_application_security_testing
       monitor: global
       product_stage: secure
@@ -374,13 +374,6 @@ groups:
       monitor: global
       product_stage: deploy
       stage_group: environments
-    expr: "1"
-  - record: gitlab:feature_category:stage_group:mapping
-    labels:
-      feature_category: five_minute_production_app
-      monitor: global
-      product_stage: 5-min-app
-      stage_group: 5-min-app
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -524,13 +517,6 @@ groups:
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
-      feature_category: build_artifacts
-      monitor: global
-      product_stage: verify
-      stage_group: pipeline_execution
-    expr: "1"
-  - record: gitlab:feature_category:stage_group:mapping
-    labels:
       feature_category: logging
       monitor: global
       product_stage: monitor
@@ -563,6 +549,13 @@ groups:
       monitor: global
       product_stage: mobile
       stage_group: mobile_devops
+    expr: "1"
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
+      feature_category: model_personalization
+      monitor: global
+      product_stage: ai-powered
+      stage_group: custom_models
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -727,13 +720,6 @@ groups:
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
-      feature_category: remote_development
-      monitor: global
-      product_stage: create
-      stage_group: ide
-    expr: "1"
-  - record: gitlab:feature_category:stage_group:mapping
-    labels:
       feature_category: requirements_management
       monitor: global
       product_stage: plan
@@ -797,10 +783,24 @@ groups:
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
+      feature_category: self-hosted_models
+      monitor: global
+      product_stage: ai-powered
+      stage_group: custom_models
+    expr: "1"
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
+      feature_category: custom_models
+      monitor: global
+      product_stage: ai-powered
+      stage_group: custom_models
+    expr: "1"
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
       feature_category: service_desk
       monitor: global
-      product_stage: monitor
-      stage_group: respond
+      product_stage: plan
+      stage_group: project_management
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -833,13 +833,6 @@ groups:
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: sscs
-      monitor: global
-      product_stage: govern
-      stage_group: compliance
-    expr: "1"
-  - record: gitlab:feature_category:stage_group:mapping
-    labels:
-      feature_category: sbom
       monitor: global
       product_stage: govern
       stage_group: compliance
@@ -933,7 +926,7 @@ groups:
       feature_category: web_ide
       monitor: global
       product_stage: create
-      stage_group: ide
+      stage_group: remote_development
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -948,4 +941,18 @@ groups:
       monitor: global
       product_stage: plan
       stage_group: knowledge
+    expr: "1"
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
+      feature_category: workspaces
+      monitor: global
+      product_stage: create
+      stage_group: remote_development
+    expr: "1"
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
+      feature_category: remote_development
+      monitor: global
+      product_stage: create
+      stage_group: remote_development
     expr: "1"
