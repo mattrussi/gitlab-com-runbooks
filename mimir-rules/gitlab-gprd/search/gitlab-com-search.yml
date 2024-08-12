@@ -6,6 +6,8 @@ groups:
           avg by (env, environment, stage) (
             global_search_bulk_cron_initial_queue_size{env="gprd"}
           ) > 50000
+          unless
+          search_advanced_boolean_settings{name="elasticsearch_pause_indexing", env="gprd"} == 1
         for: 15m
         labels:
           severity: s4
@@ -28,6 +30,8 @@ groups:
           avg by (env,environment, stage) (
             global_search_bulk_cron_queue_size{env="gprd"}
           ) > 50000
+          unless
+          search_advanced_boolean_settings{name="elasticsearch_pause_indexing", env="gprd"} == 1
         for: 15m
         labels:
           severity: s4
