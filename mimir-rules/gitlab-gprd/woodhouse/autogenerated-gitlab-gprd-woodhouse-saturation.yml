@@ -17,7 +17,7 @@ groups:
                 rate(container_cpu_usage_seconds_total:labeled{container!="", container!="POD", env="gprd",type="woodhouse"}[1h])
               )
               unless on(env, environment, tier, type, stage, shard, pod, container) (
-                container_spec_cpu_quota:labeled{container!="", container!="POD", env="gprd",type="woodhouse"}
+                last_over_time(container_spec_cpu_quota:labeled{container!="", container!="POD", env="gprd",type="woodhouse"}[1h])
               )
             )
             /
