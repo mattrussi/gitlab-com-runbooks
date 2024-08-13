@@ -479,3 +479,9 @@ teams:
 - name: developer_relations
   url: https://about.gitlab.com/handbook/marketing/developer-relations/
   slack_channel: developer-relations
+
+# Test and Tools Infrastructure Team
+
+- name: test_tools_infrastructure
+  url: https://about.gitlab.com/handbook/marketing/developer-relations/
+  slack_alerts_channel: test-tools-infrastructure-team

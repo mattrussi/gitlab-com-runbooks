@@ -74,6 +74,20 @@ groups:
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
+      component: qa_runner_jobs
+      monitor: global
+      tier: runners
+      type: ci-runners
+    expr: "0.900000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      component: qa_runner_jobs
+      monitor: global
+      tier: runners
+      type: ci-runners
+    expr: "0.050000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
       component: queuing_queries_duration
       monitor: global
       tier: runners
@@ -153,6 +167,16 @@ groups:
       monitor: global
       regional_aggregation: "no"
       service_aggregation: "yes"
+      tier: runners
+      type: ci-runners
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: qa_runner_jobs
+      global_aggregation: "no"
+      monitor: global
+      regional_aggregation: "no"
+      service_aggregation: "no"
       tier: runners
       type: ci-runners
     expr: "1"

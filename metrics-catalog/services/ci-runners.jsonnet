@@ -241,6 +241,47 @@ metricsCatalog.serviceDefinition({
         toolingLinks.kibana(title='CI Runners', index='runners', slowRequestSeconds=60),
       ],
     },
+    local ciRunnerJobs = self.ci_runner_jobs,
+    qa_runner_jobs: ciRunnerJobs {
+      userImpacting: false,
+      shardLevelMonitoring: false,
+      serviceAggregation: false,
+      featureCategory: 'not_owned',
+      team: 'test_tools_infrastructure',
+
+      // These runners are only used internally so this shouldn't page the EoC
+      // directly. The owning team will escalate when needed.
+      severity: 's4',
+
+      description+: |||
+        This SLI only focuses on the qa-runners shard, which is excluded from the
+        main SLI because it is not user impacting.
+      |||,
+
+      local qaRunnersSelector = { shard: 'qa-runners' },
+
+      apdex: errorCounterApdex(
+        errorRateMetric=ciRunnerJobs.apdex.errorRateMetric,
+        operationRateMetric=ciRunnerJobs.apdex.operationRateMetric,
+        selector=ciRunnerJobs.apdex.selector + qaRunnersSelector,
+      ),
+
+      requestRate: rateMetric(
+        counter=ciRunnerJobs.requestRate.counter,
+        selector=ciRunnerJobs.requestRate.selector + qaRunnersSelector,
+      ),
+
+      errorRate: rateMetric(
+        counter=ciRunnerJobs.errorRate.counter,
+        selector=ciRunnerJobs.errorRate.selector + qaRunnersSelector,
+      ),
+
+      monitoringThresholds+: {
+        apdexScore: 0.90,
+        errorRatio: 0.95,
+      },
+    },
+
   },
 } + {
   capacityPlanning+: {
