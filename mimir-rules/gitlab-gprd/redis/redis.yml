@@ -87,3 +87,17 @@ groups:
           description: Redis RDB snapshots might not be working
           runbook: docs/redis/redis-rdb-snapshots.md
           title: Last Redis RDB snapshot was {{ .Value | humanizeDuration }} ago for env {{ $labels.environment }}.
+      - alert: redisReductionInClusterSize
+        for: 2m
+        expr: |
+          (sum by (environment, tier, type) (redis_cluster_size{env='gprd'} offset 1h))  > (sum by (environment, tier, type) (redis_cluster_size{env='gprd'}))
+        labels:
+          pager: pagerduty
+          severity: s2
+          alert_type: cause
+        annotations:
+          grafana_datasource_id: mimir-gitlab-gprd
+          title: Redis cluster size is reduced for {{ $labels.type }} cluster
+          description: |
+            This alert indicates that sum of redis cluster size reported by all of the redis servers in the {{ $labels.type }} cluster has been reduced.
+            This likely means that at least one of the redis server is reporting a different cluster topology and might need a restart.
