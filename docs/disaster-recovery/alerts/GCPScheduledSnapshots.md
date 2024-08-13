@@ -33,7 +33,7 @@ If snapshot failures or delays are observed, you should check [Stackdriver logs]
 ## Metrics
 
 - [gcp-snapshots.yml](https://gitlab.com/gitlab-com/runbooks/-/blob/master/mimir-rules/gitlab-gprd/gcp-snapshots.yml) defines two alerts outside of the metrics-catalog. Both alerts use metrics scraped by the Stackdriver exporter.
-  - GCPScheduledSnapshotsDelayed looks for a timeseries that indicates that a snapshot has occurred to go missing for a period longer than 4 hours.
+  - GCPScheduledSnapshotsDelayed looks for a timeseries that indicates that snapshots have stopped appearing for a disk that was previously taking scheduled snapshots in the past week.
   - GCPScheduledSnapshotsFailed looks for any timeseries that represents a snapshot failure  in the environment.
 - Under normal circumstances, we do not expect any snapshot failures, and the alert thresholds are set to reflect that.
 - Metrics in Grafana:
@@ -47,7 +47,8 @@ If snapshot failures or delays are observed, you should check [Stackdriver logs]
 
 ## Alert Behavior
 
-- Because these alerts are scoped to the entire GPRD environment without other distinguishing labels, it is not recommended to create a silence unless the cause of the alert is understood and a resolution is in progress.
+- The GCPScheduledSnapshotsFailed alert is scoped to the entire GPRD environment without other distinguishing labels, it is not recommended to create a silence unless the cause of the alert is understood and a resolution is in progress.
+- The GCPScheduledSnapshotsDelayed alert may also fire if a snapshot schedule is paused or removed. If this is done intentionally, and the disk needs to stay around, silence the alert for the impacted disk for 1 week, and it will fall out of the query results.
 - False positive alerts can occur when there is an issue ingesting Stackdriver exporter metrics into the monitoring system, resulting in a GCPScheduledSnapshotsDelayed alert.
 
 ## Severities
