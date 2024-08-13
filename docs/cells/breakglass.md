@@ -47,50 +47,6 @@ flowchart TD
 
     is_incident-->|No| is_change_normal
     is_change_normal-->|No|is_specific_cell
-    is_specific_cell-->|Yes|project_read
-    is_specific_cell-->|No|org_read
-    is_change_operational-->|Yes|project_admin
-    is_change_operational-->|No|iac_change
-    is_change_normal-->|Yes|is_change_operational
-
----
-title: PAM access entitlements
----
-flowchart TD
-    need_access[I need access to Cells]
-
-    is_incident{Are you in
-    an incident?}
-    is_change_incident{Need changes
-    to fix an incident?}
-    is_change_normal{Need to
-    make changes?}
-    is_specific_cell{Do you know which Cell
-    you need to look at?}
-    is_team_members_available{Are team members
-    available?}
-    is_change_operational{Do you need to
-    make temporary changes
-    as part of a CR?}
-
-    iac_change[Make changes through IaC]
-
-    project_read
-    project_admin
-    project_breakglass
-    org_read
-
-    need_access-->is_incident
-
-    is_incident-->|Yes| is_change_incident
-    is_change_incident-->|No|project_read
-    is_change_incident-->|Yes, need write access to quickly solve incident
-    I will sync IaC after|is_team_members_available
-    is_team_members_available-->|Yes|project_admin
-    is_team_members_available-->|No|project_breakglass
-
-    is_incident-->|No| is_change_normal
-    is_change_normal-->|No|is_specific_cell
     is_change_normal-->|Yes|is_change_operational
     is_specific_cell-->|Yes|project_read
     is_specific_cell-->|No|org_read
@@ -225,8 +181,6 @@ Admin access provides typical operational readwrite abilities for managing cell 
 
 This level of access requires an approver, and typically will also link to an issue detailing why the access is required.
 We should prefer making changes through IaC wherever possible.
-
-<!-- TODO Add recording for elevating access -->
 
 #### [Breakglass](https://gitlab.com/gitlab-com/gl-infra/gitlab-dedicated/library/terraform/google-privileged-access-manager/-/blob/346edc2e8c2ecee79b8bf06a23819675d4be644d/predefined-entitlements.tf#L55-L110)
 
