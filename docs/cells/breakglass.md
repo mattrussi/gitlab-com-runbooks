@@ -6,8 +6,6 @@ the console or `gcloud`.
 
 ## When to escalate
 
-<!-- TODO also make a flow chart for deciding this -->
-
 - Using cloud asset viewer: `org-readonly`
 - General discovery: `org-readonly`
 - Detailed discovery: `project-readonly`
@@ -15,6 +13,43 @@ the console or `gcloud`.
 - In an incident:
   - If there are other SREs: `project-admin`
   - Else: `project-breakglass`
+
+```mermaid
+---
+title: PAM access entitlements
+---
+flowchart TD
+    A(I need access to Cells)
+    B{{Are you in an incident?}}
+    C{{Are team members available?}}
+    D{{Do you need to make changes to a cell?}}
+    E{{Do you need to view cell details?}}
+    F{{Are these changes temporary?}}
+
+    X1(Org readonly)
+    Y1(Project readonly)
+    Y2(Project admin)
+    Y3(Project breakglass)
+    Z1([Make changes through IaC])
+
+    A-->B
+
+    B -->|Yes| C
+    B -->|Yes, but I only need to explore| X1
+    B -->|No| D
+
+    C -->|Yes| Y2
+    C -->|No| Y3
+
+    D -->|Yes| F
+    D -->|No| E
+
+    E -->|Yes| Y1
+    E -->|No| X1
+
+    F -->|Yes| Y2
+    F -->|No| Z1
+```
 
 ## How to escalate
 
