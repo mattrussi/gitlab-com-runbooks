@@ -260,6 +260,4 @@ metricsCatalog.serviceDefinition({
 
       },
     },
-
-  extraRecordingRulesPerBurnRate: [],
 })

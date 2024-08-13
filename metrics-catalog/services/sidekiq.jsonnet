@@ -188,9 +188,6 @@ metricsCatalog.serviceDefinition({
     emittedBy: ['ops-gitlab-net', 'sidekiq'],
   }),
 
-  // Special per-worker recording rules
-  extraRecordingRulesPerBurnRate: [
-  ],
   capacityPlanning: {
     components: [
       {
