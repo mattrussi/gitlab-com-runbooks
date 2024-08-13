@@ -12,7 +12,7 @@ groups:
         clamp_min(
           clamp_max(
             1 - avg by (env, environment, tier, type, stage, shard) (
-              rate(node_cpu_seconds_total{mode="idle", env="gstg",type="sentry"}[5m])
+              rate(node_cpu_seconds_total{mode="idle", env="ops",type="sentry"}[5m])
             )
             ,
             1)
@@ -27,9 +27,9 @@ groups:
         clamp_min(
           clamp_max(
             1 - (
-              node_filesystem_files_free{fstype=~"(ext.|xfs)", env="gstg",type="sentry"}
+              node_filesystem_files_free{fstype=~"(ext.|xfs)", env="ops",type="sentry"}
               /
-              node_filesystem_files{fstype=~"(ext.|xfs)", env="gstg",type="sentry"}
+              node_filesystem_files{fstype=~"(ext.|xfs)", env="ops",type="sentry"}
             )
             ,
             1)
@@ -44,7 +44,7 @@ groups:
         clamp_min(
           clamp_max(
             (
-              1 - node_filesystem_avail_bytes{fstype=~"ext.|xfs", env="gstg",type="sentry"} / node_filesystem_size_bytes{fstype=~"ext.|xfs", env="gstg",type="sentry"}
+              1 - node_filesystem_avail_bytes{fstype=~"ext.|xfs", env="ops",type="sentry"} / node_filesystem_size_bytes{fstype=~"ext.|xfs", env="ops",type="sentry"}
             )
             ,
             1)
@@ -58,7 +58,7 @@ groups:
       max by(env, environment, tier, type, stage, shard) (
         clamp_min(
           clamp_max(
-            instance:node_memory_utilization:ratio{env="gstg",type="sentry"} or instance:node_memory_utilisation:ratio{env="gstg",type="sentry"}
+            instance:node_memory_utilization:ratio{env="ops",type="sentry"} or instance:node_memory_utilisation:ratio{env="ops",type="sentry"}
             ,
             1)
         ,
@@ -71,9 +71,9 @@ groups:
       max by(env, environment, tier, type, stage, shard) (
         clamp_min(
           clamp_max(
-            max_over_time(node_nf_conntrack_entries{env="gstg",type="sentry"}[1m])
+            max_over_time(node_nf_conntrack_entries{env="ops",type="sentry"}[1m])
             /
-            node_nf_conntrack_entries_limit{env="gstg",type="sentry"}
+            node_nf_conntrack_entries_limit{env="ops",type="sentry"}
             ,
             1)
         ,
@@ -86,7 +86,7 @@ groups:
       max by(env, environment, tier, type, stage, shard) (
         clamp_min(
           clamp_max(
-            avg without (cpu) (rate(node_schedstat_waiting_seconds_total{env="gstg",type="sentry"}[1h]))
+            avg without (cpu) (rate(node_schedstat_waiting_seconds_total{env="ops",type="sentry"}[1h]))
             ,
             1)
         ,
@@ -100,15 +100,15 @@ groups:
         clamp_min(
           clamp_max(
             (
-              process_open_fds{env="gstg",type="sentry"}
+              process_open_fds{env="ops",type="sentry"}
               /
-              process_max_fds{env="gstg",type="sentry"}
+              process_max_fds{env="ops",type="sentry"}
             )
             or
             (
-              ruby_file_descriptors{env="gstg",type="sentry"}
+              ruby_file_descriptors{env="ops",type="sentry"}
               /
-              ruby_process_max_fds{env="gstg",type="sentry"}
+              ruby_process_max_fds{env="ops",type="sentry"}
             )
             ,
             1)
@@ -126,9 +126,9 @@ groups:
               1
               -
               (
-                rate(node_cpu_seconds_total{mode="idle", env="gstg",type="sentry"}[5m])
+                rate(node_cpu_seconds_total{mode="idle", env="ops",type="sentry"}[5m])
                 and on(fqdn)
-                pg_replication_is_replica{env="gstg",type="sentry"} == 0
+                pg_replication_is_replica{env="ops",type="sentry"} == 0
               )
             )
             ,
@@ -145,11 +145,11 @@ groups:
           clamp_max(
             (
               max without (series) (
-                label_replace(pg_database_wraparound_age_datfrozenxid{env="gstg",type="sentry"}, "series", "datfrozenxid", "", "")
+                label_replace(pg_database_wraparound_age_datfrozenxid{env="ops",type="sentry"}, "series", "datfrozenxid", "", "")
                 or
-                label_replace(pg_database_wraparound_age_datminmxid{env="gstg",type="sentry"}, "series", "datminmxid", "", "")
+                label_replace(pg_database_wraparound_age_datminmxid{env="ops",type="sentry"}, "series", "datminmxid", "", "")
               )
-              and on (instance, job) (pg_replication_is_replica{env="gstg",type="sentry"} == 0)
+              and on (instance, job) (pg_replication_is_replica{env="ops",type="sentry"} == 0)
             )
             /
             (2^31 - 3000000)
@@ -166,7 +166,7 @@ groups:
         clamp_min(
           clamp_max(
             1 - avg by (env, environment, tier, type, stage, shard, shard) (
-              rate(node_cpu_seconds_total{mode="idle", env="gstg",type="sentry"}[5m])
+              rate(node_cpu_seconds_total{mode="idle", env="ops",type="sentry"}[5m])
             )
             ,
             1)
@@ -180,7 +180,7 @@ groups:
       max by(env, environment, tier, type, stage, shard) (
         clamp_min(
           clamp_max(
-            avg without(cpu, mode) (1 - rate(node_cpu_seconds_total{mode="idle", env="gstg",type="sentry"}[5m]))
+            avg without(cpu, mode) (1 - rate(node_cpu_seconds_total{mode="idle", env="ops",type="sentry"}[5m]))
             ,
             1)
         ,

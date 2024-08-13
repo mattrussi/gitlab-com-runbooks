@@ -16,7 +16,7 @@ groups:
       grafana_dashboard_id: sentry-main/sentry-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/sentry-main/sentry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_datasource_id: mimir-gitlab-gprd
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2208809543"
       grafana_variables: environment,stage
@@ -39,18 +39,18 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_1h{component="pg_transactions",env="gprd",monitor="global",type="sentry"}
+          gitlab_component_errors:ratio_1h{component="pg_transactions",env="ops",monitor="global",type="sentry"}
           > (14.4 * 0.010000)
         )
         and
         (
-          gitlab_component_errors:ratio_5m{component="pg_transactions",env="gprd",monitor="global",type="sentry"}
+          gitlab_component_errors:ratio_5m{component="pg_transactions",env="ops",monitor="global",type="sentry"}
           > (14.4 * 0.010000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="pg_transactions",env="gprd",monitor="global",type="sentry"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="pg_transactions",env="ops",monitor="global",type="sentry"}) >= 1
       )
   - alert: SentryServicePgTransactionsErrorSLOViolation
     for: 2m
@@ -64,7 +64,7 @@ groups:
       grafana_dashboard_id: sentry-main/sentry-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/sentry-main/sentry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_datasource_id: mimir-gitlab-gprd
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2208809543"
       grafana_variables: environment,stage
@@ -87,18 +87,18 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_6h{component="pg_transactions",env="gprd",monitor="global",type="sentry"}
+          gitlab_component_errors:ratio_6h{component="pg_transactions",env="ops",monitor="global",type="sentry"}
           > (6 * 0.010000)
         )
         and
         (
-          gitlab_component_errors:ratio_30m{component="pg_transactions",env="gprd",monitor="global",type="sentry"}
+          gitlab_component_errors:ratio_30m{component="pg_transactions",env="ops",monitor="global",type="sentry"}
           > (6 * 0.010000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="pg_transactions",env="gprd",monitor="global",type="sentry"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="pg_transactions",env="ops",monitor="global",type="sentry"}) >= 0.16667
       )
   - alert: SentryServicePgTransactionsTrafficCessation
     for: 5m
@@ -112,7 +112,7 @@ groups:
       grafana_dashboard_id: sentry-main/sentry-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/sentry-main/sentry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_datasource_id: mimir-gitlab-gprd
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "4230593776"
       grafana_variables: environment,stage
@@ -134,9 +134,9 @@ groups:
       slo_alert: "no"
       user_impacting: "no"
     expr: |
-      gitlab_component_ops:rate_30m{component="pg_transactions",env="gprd",monitor="global",stage="main",type="sentry"} == 0
+      gitlab_component_ops:rate_30m{component="pg_transactions",env="ops",monitor="global",stage="main",type="sentry"} == 0
       and
-      gitlab_component_ops:rate_30m{component="pg_transactions",env="gprd",monitor="global",stage="main",type="sentry"} offset 1h >= 0.16666666666666666
+      gitlab_component_ops:rate_30m{component="pg_transactions",env="ops",monitor="global",stage="main",type="sentry"} offset 1h >= 0.16666666666666666
   - alert: SentryServicePgTransactionsTrafficAbsent
     for: 30m
     annotations:
@@ -151,7 +151,7 @@ groups:
       grafana_dashboard_id: sentry-main/sentry-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/sentry-main/sentry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_datasource_id: mimir-gitlab-gprd
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "4230593776"
       grafana_variables: environment,stage
@@ -173,9 +173,9 @@ groups:
       slo_alert: "no"
       user_impacting: "no"
     expr: |
-      gitlab_component_ops:rate_5m{component="pg_transactions",env="gprd",monitor="global",stage="main",type="sentry"} offset 1h
+      gitlab_component_ops:rate_5m{component="pg_transactions",env="ops",monitor="global",stage="main",type="sentry"} offset 1h
       unless
-      gitlab_component_ops:rate_5m{component="pg_transactions",env="gprd",monitor="global",stage="main",type="sentry"}
+      gitlab_component_ops:rate_5m{component="pg_transactions",env="ops",monitor="global",stage="main",type="sentry"}
   - alert: SentryServiceSentryEventsApdexSLOViolation
     for: 2m
     annotations:
@@ -188,7 +188,7 @@ groups:
       grafana_dashboard_id: sentry-main/sentry-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/sentry-main/sentry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_datasource_id: mimir-gitlab-gprd
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2366272614"
       grafana_variables: environment,stage
@@ -214,18 +214,18 @@ groups:
     expr: |
       (
         (
-          gitlab_component_apdex:ratio_1h{component="sentry_events",env="gprd",monitor="global",type="sentry"}
+          gitlab_component_apdex:ratio_1h{component="sentry_events",env="ops",monitor="global",type="sentry"}
           < (1 - 14.4 * 0.010000)
         )
         and
         (
-          gitlab_component_apdex:ratio_5m{component="sentry_events",env="gprd",monitor="global",type="sentry"}
+          gitlab_component_apdex:ratio_5m{component="sentry_events",env="ops",monitor="global",type="sentry"}
           < (1 - 14.4 * 0.010000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="sentry_events",env="gprd",monitor="global",type="sentry"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="sentry_events",env="ops",monitor="global",type="sentry"}) >= 1
       )
   - alert: SentryServiceSentryEventsApdexSLOViolation
     for: 2m
@@ -239,7 +239,7 @@ groups:
       grafana_dashboard_id: sentry-main/sentry-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/sentry-main/sentry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_datasource_id: mimir-gitlab-gprd
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2366272614"
       grafana_variables: environment,stage
@@ -265,18 +265,18 @@ groups:
     expr: |
       (
         (
-          gitlab_component_apdex:ratio_6h{component="sentry_events",env="gprd",monitor="global",type="sentry"}
+          gitlab_component_apdex:ratio_6h{component="sentry_events",env="ops",monitor="global",type="sentry"}
           < (1 - 6 * 0.010000)
         )
         and
         (
-          gitlab_component_apdex:ratio_30m{component="sentry_events",env="gprd",monitor="global",type="sentry"}
+          gitlab_component_apdex:ratio_30m{component="sentry_events",env="ops",monitor="global",type="sentry"}
           < (1 - 6 * 0.010000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="sentry_events",env="gprd",monitor="global",type="sentry"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="sentry_events",env="ops",monitor="global",type="sentry"}) >= 0.16667
       )
   - alert: SentryServiceSentryEventsErrorSLOViolation
     for: 2m
@@ -290,7 +290,7 @@ groups:
       grafana_dashboard_id: sentry-main/sentry-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/sentry-main/sentry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_datasource_id: mimir-gitlab-gprd
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2130486158"
       grafana_variables: environment,stage
@@ -313,18 +313,18 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_1h{component="sentry_events",env="gprd",monitor="global",type="sentry"}
+          gitlab_component_errors:ratio_1h{component="sentry_events",env="ops",monitor="global",type="sentry"}
           > (14.4 * 0.010000)
         )
         and
         (
-          gitlab_component_errors:ratio_5m{component="sentry_events",env="gprd",monitor="global",type="sentry"}
+          gitlab_component_errors:ratio_5m{component="sentry_events",env="ops",monitor="global",type="sentry"}
           > (14.4 * 0.010000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="sentry_events",env="gprd",monitor="global",type="sentry"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="sentry_events",env="ops",monitor="global",type="sentry"}) >= 1
       )
   - alert: SentryServiceSentryEventsErrorSLOViolation
     for: 2m
@@ -338,7 +338,7 @@ groups:
       grafana_dashboard_id: sentry-main/sentry-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/sentry-main/sentry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_datasource_id: mimir-gitlab-gprd
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2130486158"
       grafana_variables: environment,stage
@@ -361,18 +361,18 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_6h{component="sentry_events",env="gprd",monitor="global",type="sentry"}
+          gitlab_component_errors:ratio_6h{component="sentry_events",env="ops",monitor="global",type="sentry"}
           > (6 * 0.010000)
         )
         and
         (
-          gitlab_component_errors:ratio_30m{component="sentry_events",env="gprd",monitor="global",type="sentry"}
+          gitlab_component_errors:ratio_30m{component="sentry_events",env="ops",monitor="global",type="sentry"}
           > (6 * 0.010000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="sentry_events",env="gprd",monitor="global",type="sentry"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="sentry_events",env="ops",monitor="global",type="sentry"}) >= 0.16667
       )
   - alert: SentryServiceSentryEventsTrafficCessation
     for: 5m
@@ -386,7 +386,7 @@ groups:
       grafana_dashboard_id: sentry-main/sentry-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/sentry-main/sentry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_datasource_id: mimir-gitlab-gprd
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2778770723"
       grafana_variables: environment,stage
@@ -406,9 +406,9 @@ groups:
       slo_alert: "no"
       user_impacting: "no"
     expr: |
-      gitlab_component_ops:rate_30m{component="sentry_events",env="gprd",monitor="global",stage="main",type="sentry"} == 0
+      gitlab_component_ops:rate_30m{component="sentry_events",env="ops",monitor="global",stage="main",type="sentry"} == 0
       and
-      gitlab_component_ops:rate_30m{component="sentry_events",env="gprd",monitor="global",stage="main",type="sentry"} offset 1h >= 0.16666666666666666
+      gitlab_component_ops:rate_30m{component="sentry_events",env="ops",monitor="global",stage="main",type="sentry"} offset 1h >= 0.16666666666666666
   - alert: SentryServiceSentryEventsTrafficAbsent
     for: 30m
     annotations:
@@ -423,7 +423,7 @@ groups:
       grafana_dashboard_id: sentry-main/sentry-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/sentry-main/sentry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_datasource_id: mimir-gitlab-gprd
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2778770723"
       grafana_variables: environment,stage
@@ -443,6 +443,6 @@ groups:
       slo_alert: "no"
       user_impacting: "no"
     expr: |
-      gitlab_component_ops:rate_5m{component="sentry_events",env="gprd",monitor="global",stage="main",type="sentry"} offset 1h
+      gitlab_component_ops:rate_5m{component="sentry_events",env="ops",monitor="global",stage="main",type="sentry"} offset 1h
       unless
-      gitlab_component_ops:rate_5m{component="sentry_events",env="gprd",monitor="global",stage="main",type="sentry"}
+      gitlab_component_ops:rate_5m{component="sentry_events",env="ops",monitor="global",stage="main",type="sentry"}
