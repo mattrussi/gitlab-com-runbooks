@@ -18,6 +18,8 @@ metricsCatalog.serviceDefinition({
     'postgres_with_primaries',
   ],
 
+  tenants: ['gitlab-ops'],
+
   monitoringThresholds: {
     apdexScore: 0.99,
     // Setting the Error SLO at 99% because we see high transaction rollback rates
