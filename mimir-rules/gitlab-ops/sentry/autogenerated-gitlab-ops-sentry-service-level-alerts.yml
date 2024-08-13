@@ -196,7 +196,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
-            rate(sentry_events_latency_seconds_bucket{environment="{{ $labels.environment }}",job="statsd_exporter",stage="{{ $labels.stage }}",type="sentry"}[5m])
+            rate(nginx_ingress_controller_request_duration_seconds_bucket{environment="{{ $labels.environment }}",namespace="sentry",stage="{{ $labels.stage }}"}[5m])
           )
         )
       runbook: docs/sentry/README.md
@@ -247,7 +247,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
-            rate(sentry_events_latency_seconds_bucket{environment="{{ $labels.environment }}",job="statsd_exporter",stage="{{ $labels.stage }}",type="sentry"}[5m])
+            rate(nginx_ingress_controller_request_duration_seconds_bucket{environment="{{ $labels.environment }}",namespace="sentry",stage="{{ $labels.stage }}"}[5m])
           )
         )
       runbook: docs/sentry/README.md
@@ -296,7 +296,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(sentry_client_api_responses_total{environment="{{ $labels.environment }}",job="statsd_exporter",stage="{{ $labels.stage }}",status=~"^5.*",type="sentry"}[5m])
+          rate(nginx_ingress_controller_requests{environment="{{ $labels.environment }}",namespace="sentry",stage="{{ $labels.stage }}",status=~"^5.*"}[5m])
         )
       runbook: docs/sentry/README.md
     labels:
@@ -344,7 +344,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(sentry_client_api_responses_total{environment="{{ $labels.environment }}",job="statsd_exporter",stage="{{ $labels.stage }}",status=~"^5.*",type="sentry"}[5m])
+          rate(nginx_ingress_controller_requests{environment="{{ $labels.environment }}",namespace="sentry",stage="{{ $labels.stage }}",status=~"^5.*"}[5m])
         )
       runbook: docs/sentry/README.md
     labels:
@@ -392,7 +392,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(sentry_client_api_responses_total{environment="{{ $labels.environment }}",job="statsd_exporter",stage="{{ $labels.stage }}",type="sentry"}[5m])
+          rate(nginx_ingress_controller_requests{environment="{{ $labels.environment }}",namespace="sentry",stage="{{ $labels.stage }}"}[5m])
         )
       runbook: docs/sentry/README.md
     labels:
@@ -429,7 +429,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(sentry_client_api_responses_total{environment="{{ $labels.environment }}",job="statsd_exporter",stage="{{ $labels.stage }}",type="sentry"}[5m])
+          rate(nginx_ingress_controller_requests{environment="{{ $labels.environment }}",namespace="sentry",stage="{{ $labels.stage }}"}[5m])
         )
       runbook: docs/sentry/README.md
     labels:

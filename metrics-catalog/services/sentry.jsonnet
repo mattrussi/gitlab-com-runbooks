@@ -32,8 +32,8 @@ metricsCatalog.serviceDefinition({
    * disable ops-rate anomaly detection on this service.
    */
   provisioning: {
-    kubernetes: false,
-    vms: true,
+    kubernetes: true,
+    vms: false,
   },
   serviceLevelIndicators: {
 
@@ -47,23 +47,22 @@ metricsCatalog.serviceDefinition({
       |||,
 
       local sentryQuerySelector = {
-        job: 'statsd_exporter',
-        type: 'sentry',
+        namespace: 'sentry',
       },
 
       apdex: histogramApdex(
-        histogram='sentry_events_latency_seconds_bucket',
+        histogram='nginx_ingress_controller_request_duration_seconds_bucket',
         selector=sentryQuerySelector,
         satisfiedThreshold=10,
       ),
 
       requestRate: rateMetric(
-        counter='sentry_client_api_responses_total',
+        counter='nginx_ingress_controller_requests',
         selector=sentryQuerySelector,
       ),
 
       errorRate: rateMetric(
-        counter='sentry_client_api_responses_total',
+        counter='nginx_ingress_controller_requests',
         selector=sentryQuerySelector { status: { re: '^5.*' } },
       ),
 

@@ -70,7 +70,7 @@ groups:
       type: sentry
     expr: |
       sum by (env,environment,stage) (
-        sli_aggregations:sentry_events_latency_seconds_bucket:rate_5m{env="ops",job="statsd_exporter",le="10",type="sentry"}
+        sli_aggregations:nginx_ingress_controller_request_duration_seconds_bucket:rate_5m{env="ops",le="10",namespace="sentry"}
       )
   - record: gitlab_component_apdex:weight:score_5m
     labels:
@@ -80,7 +80,7 @@ groups:
       type: sentry
     expr: |
       sum by (env,environment,stage) (
-        sli_aggregations:sentry_events_latency_seconds_bucket:rate_5m{env="ops",job="statsd_exporter",le="+Inf",type="sentry"}
+        sli_aggregations:nginx_ingress_controller_request_duration_seconds_bucket:rate_5m{env="ops",le="+Inf",namespace="sentry"}
       )
   - record: gitlab_component_ops:rate_5m
     labels:
@@ -90,7 +90,7 @@ groups:
       type: sentry
     expr: |
       sum by (env,environment,stage) (
-        sli_aggregations:sentry_client_api_responses_total:rate_5m{env="ops",job="statsd_exporter",type="sentry"} offset 30s
+        sli_aggregations:nginx_ingress_controller_requests:rate_5m{env="ops",namespace="sentry"} offset 30s
       )
   - record: gitlab_component_errors:rate_5m
     labels:
@@ -101,7 +101,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          sli_aggregations:sentry_client_api_responses_total:rate_5m{env="ops",job="statsd_exporter",status=~"^5.*",type="sentry"} offset 30s
+          sli_aggregations:nginx_ingress_controller_requests:rate_5m{env="ops",namespace="sentry",status=~"^5.*"} offset 30s
         )
       )
       or
@@ -207,7 +207,7 @@ groups:
       type: sentry
     expr: |
       sum by (env,environment,stage) (
-        sli_aggregations:sentry_events_latency_seconds_bucket:rate_30m{env="ops",job="statsd_exporter",le="10",type="sentry"}
+        sli_aggregations:nginx_ingress_controller_request_duration_seconds_bucket:rate_30m{env="ops",le="10",namespace="sentry"}
       )
   - record: gitlab_component_apdex:weight:score_30m
     labels:
@@ -217,7 +217,7 @@ groups:
       type: sentry
     expr: |
       sum by (env,environment,stage) (
-        sli_aggregations:sentry_events_latency_seconds_bucket:rate_30m{env="ops",job="statsd_exporter",le="+Inf",type="sentry"}
+        sli_aggregations:nginx_ingress_controller_request_duration_seconds_bucket:rate_30m{env="ops",le="+Inf",namespace="sentry"}
       )
   - record: gitlab_component_ops:rate_30m
     labels:
@@ -227,7 +227,7 @@ groups:
       type: sentry
     expr: |
       sum by (env,environment,stage) (
-        sli_aggregations:sentry_client_api_responses_total:rate_30m{env="ops",job="statsd_exporter",type="sentry"} offset 30s
+        sli_aggregations:nginx_ingress_controller_requests:rate_30m{env="ops",namespace="sentry"} offset 30s
       )
   - record: gitlab_component_errors:rate_30m
     labels:
@@ -238,7 +238,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          sli_aggregations:sentry_client_api_responses_total:rate_30m{env="ops",job="statsd_exporter",status=~"^5.*",type="sentry"} offset 30s
+          sli_aggregations:nginx_ingress_controller_requests:rate_30m{env="ops",namespace="sentry",status=~"^5.*"} offset 30s
         )
       )
       or
@@ -344,7 +344,7 @@ groups:
       type: sentry
     expr: |
       sum by (env,environment,stage) (
-        sli_aggregations:sentry_events_latency_seconds_bucket:rate_1h{env="ops",job="statsd_exporter",le="10",type="sentry"}
+        sli_aggregations:nginx_ingress_controller_request_duration_seconds_bucket:rate_1h{env="ops",le="10",namespace="sentry"}
       )
   - record: gitlab_component_apdex:weight:score_1h
     labels:
@@ -354,7 +354,7 @@ groups:
       type: sentry
     expr: |
       sum by (env,environment,stage) (
-        sli_aggregations:sentry_events_latency_seconds_bucket:rate_1h{env="ops",job="statsd_exporter",le="+Inf",type="sentry"}
+        sli_aggregations:nginx_ingress_controller_request_duration_seconds_bucket:rate_1h{env="ops",le="+Inf",namespace="sentry"}
       )
   - record: gitlab_component_ops:rate_1h
     labels:
@@ -364,7 +364,7 @@ groups:
       type: sentry
     expr: |
       sum by (env,environment,stage) (
-        sli_aggregations:sentry_client_api_responses_total:rate_1h{env="ops",job="statsd_exporter",type="sentry"} offset 30s
+        sli_aggregations:nginx_ingress_controller_requests:rate_1h{env="ops",namespace="sentry"} offset 30s
       )
   - record: gitlab_component_errors:rate_1h
     labels:
@@ -375,7 +375,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          sli_aggregations:sentry_client_api_responses_total:rate_1h{env="ops",job="statsd_exporter",status=~"^5.*",type="sentry"} offset 30s
+          sli_aggregations:nginx_ingress_controller_requests:rate_1h{env="ops",namespace="sentry",status=~"^5.*"} offset 30s
         )
       )
       or
