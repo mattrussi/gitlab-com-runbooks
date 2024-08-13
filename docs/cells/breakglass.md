@@ -60,16 +60,15 @@ and through the [`gcloud` CLI](https://cloud.google.com/iam/docs/pam-request-tem
 
 #### `cellsdev`
 
-- Org-wide: https://console.cloud.google.com/iam-admin/pam/entitlements/my?organizationId=425712905585
-- Amp: https://console.cloud.google.com/iam-admin/pam/entitlements/my?project=amp-b6f1
-- Example Cell: https://console.cloud.google.com/iam-admin/pam/entitlements/my?project=cell-c01j2t2v563b55mswz
+- [Org-wide](https://console.cloud.google.com/iam-admin/pam/entitlements/my?organizationId=425712905585)
+- [Amp](https://console.cloud.google.com/iam-admin/pam/entitlements/my?project=amp-b6f1)
+- [Example Cell](https://console.cloud.google.com/iam-admin/pam/entitlements/my?project=cell-c01j2t2v563b55mswz)
 
 #### `cellsprod`
 
-- Org-wide PAM: https://console.cloud.google.com/iam-admin/pam/entitlements/my?organizationId=1073525295030
-- Amp PAM: https://console.cloud.google.com/iam-admin/pam/entitlements/my?project=amp-3c0d
-- Example Cell PAM: https://console.cloud.google.com/iam-admin/pam/entitlements/my?project=cell-c01j2gdw0zfdafxr6
-
+- [Org-wide](https://console.cloud.google.com/iam-admin/pam/entitlements/my?organizationId=1073525295030)
+- [Amp](https://console.cloud.google.com/iam-admin/pam/entitlements/my?project=amp-3c0d)
+- [Example Cell](https://console.cloud.google.com/iam-admin/pam/entitlements/my?project=cell-c01j2gdw0zfdafxr6)
 
 ## Levels of access
 
@@ -81,7 +80,6 @@ through IaC or using PAM escalation.
 | Cells Dev                                               | Cells Prod                                                      |
 |---------------------------------------------------------|-----------------------------------------------------------------|
 | ![cells dev overview](./img/cells_dev_org_switcher.png) | ![cells_production_overview](./img/cells_prod_org_switcher.png) |
-
 
 ### Org-wide Access
 
