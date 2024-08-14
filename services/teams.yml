@@ -25,14 +25,24 @@ teams:
   # ignored_components:
   # - graphql_query
 
+- name: distribution_build
+  url: https://handbook.gitlab.com/handbook/engineering/infrastructure/core-platform/systems/distribution/#distribution-build-team
+  slack_channel: g_distribution
+  engagement_policy:  # Link to doc that talks about engagement and escalation policy
+  oncall_schedule:    # Link to pagerduty oncall schedule
+  product_stage_group: distribution_build
+  ignored_components:
+  - graphql_query
+
 - name: distribution_deploy
-  url: https://about.gitlab.com/handbook/engineering/dev-backend/distribution/
+  url: https://handbook.gitlab.com/handbook/engineering/infrastructure/core-platform/systems/distribution/#distribution-deploy-team
   slack_channel: g_distribution
   engagement_policy:  # Link to doc that talks about engagement and escalation policy
   oncall_schedule:    # Link to pagerduty oncall schedule
   product_stage_group: distribution_deploy
   ignored_components:
   - graphql_query
+
 - name: geo
   url: https://about.gitlab.com/handbook/engineering/dev-backend/geo/
   slack_channel: g_geo

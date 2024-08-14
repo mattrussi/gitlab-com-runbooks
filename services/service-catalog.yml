@@ -106,6 +106,32 @@ services:
     observability:
       monitors:
 
+  - name: build-tooling
+    friendly_name: Distribution Build Tooling
+    tier: inf
+    teams:
+      - distribution_build
+    label: Build-Tooling
+    owner: distribution_build
+    technical:
+      project:
+        - https://gitlab.com/gitlab-org/omnibus-gitlab
+        - https://gitlab.com/gitlab-org/build/CNG
+      documents:
+        design:
+        architecture:
+        readiness_review:
+        sre_guide:
+        developer_guide:
+        service:
+        security:
+      dependencies:
+      logging:
+        - name:
+          permalink:
+    observability:
+      monitors:
+
   - name: camoproxy
     tier: sv
     friendly_name: Camoproxy
