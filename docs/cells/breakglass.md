@@ -54,8 +54,6 @@ flowchart TD
     is_change_operational-->|No
     OR
     Yes, but I can make changes through IaC|iac_change
-
-
 ```
 
 ## How to escalate
@@ -63,92 +61,13 @@ flowchart TD
 Google provides guides to request access through [the console](https://cloud.google.com/iam/docs/pam-request-temporary-elevated-access#request-grant-console)
 and through the [`gcloud` CLI](https://cloud.google.com/iam/docs/pam-request-temporary-elevated-access#request_a_grant_programmatically).
 
-### Quick links
+Specific Examples:
 
-#### `cellsdev`
-
-- [Org-wide](https://console.cloud.google.com/iam-admin/pam/entitlements/my?organizationId=425712905585)
-- [Amp](https://console.cloud.google.com/iam-admin/pam/entitlements/my?project=amp-b6f1)
-- [Example Cell](https://console.cloud.google.com/iam-admin/pam/entitlements/my?project=cell-c01j2t2v563b55mswz)
-
-#### `cellsprod`
-
-- [Org-wide](https://console.cloud.google.com/iam-admin/pam/entitlements/my?organizationId=1073525295030)
-- [Amp](https://console.cloud.google.com/iam-admin/pam/entitlements/my?project=amp-3c0d)
-- [Example Cell](https://console.cloud.google.com/iam-admin/pam/entitlements/my?project=cell-c01j2gdw0zfdafxr6)
-
-### Quick commands
-
-For these commands you need to either set the `TENANT_ID` or `ORG_ID` environment variale (or adapt the commands as needed).
-
-Additionally, `ISSUE_LINK` also needs to be set to ensure we're correctly justifying our escalated access.
-
-```
-# Example for a production cell
-#
-# This can be found in the "tenant_id" field in the tenant model in `cells/tissue`.
-export TENANT_ID="c01j2gdw0zfdafxr6"
-```
-
-For the organization-wide entitlements use either:
-
-- `cellsdev`
-
-  ```
-  export CELL_ENV="dev"
-  export ORG_ID="425712905585"
-  ```
-
-- `cellsprod`
-
-  ```
-  export CELL_ENV="prod"
-  export ORG_ID="1073525295030"
-  ```
-
-#### `project_read`
-
-```
-gcloud beta pam grants create \
-          --entitlement="gldt-readonly-entitlement-${TENANT_ID}" \
-          --requested-duration="1800s" \
-          --justification="$ISSUE_LINK" \
-          --location=global \
-          --project="cell-${TENANT_ID}"
-```
-
-#### `project_admin`
-
-```
-gcloud beta pam grants create \
-          --entitlement="gldt-admin-entitlement-${TENANT_ID}" \
-          --requested-duration="1800s" \
-          --justification="$ISSUE_LINK" \
-          --location=global \
-          --project="cell-${TENANT_ID}"
-```
-
-#### `project_breakglass`
-
-```
-gcloud beta pam grants create \
-          --entitlement="gldt-breakglass-entitlement-${TENANT_ID}" \
-          --requested-duration="1800s" \
-          --justification="$ISSUE_LINK" \
-          --location=global \
-          --project="cell-${TENANT_ID}"
-```
-
-#### `org_read`
-
-```
-$ gcloud beta pam grants create \
-          --entitlement="org-readonly-entitlement-${CELL_ENV}" \
-          --requested-duration="1800s" \
-          --justification="$ISSUE_LINK" \
-          --location=global \
-          --organization="$ORG_ID"
-```
+- [`org_read`](#org_read)
+- [`project_read`](#project_read)
+- [`project_admin`](#project_admin)
+- [`project_breakglass`](#project_breakglass)
+- [amp](#amp)
 
 ## Levels of access
 
@@ -163,32 +82,113 @@ through IaC or using PAM escalation.
 
 ### Org-wide Access
 
-#### [Read-only](https://gitlab.com/gitlab-com/gl-infra/gitlab-dedicated/library/terraform/google-privileged-access-manager/-/blob/346edc2e8c2ecee79b8bf06a23819675d4be644d/predefined-entitlements.tf#L9-L28)
+#### [org_read](https://gitlab.com/gitlab-com/gl-infra/gitlab-dedicated/library/terraform/google-privileged-access-manager/-/blob/346edc2e8c2ecee79b8bf06a23819675d4be644d/predefined-entitlements.tf#L9-L28)
+
+- Get access with `gcloud`:
+
+    ```sh
+    # $ORG_ID for dev: `425712905585`
+    # $ORG_ID for prod: `1073525295030`
+    # $CELL_ENV for dev: `dev`
+    # $CELL_ENV for prod: `prod`
+    gcloud beta pam grants create \
+              --entitlement="org-readonly-entitlement-${CELL_ENV}" \
+              --requested-duration="1800s" \
+              --justification="$ISSUE_LINK" \
+              --location=global \
+              --organization="$ORG_ID"
+    ```
+
+- Get access with console: [dev](https://console.cloud.google.com/iam-admin/pam/entitlements/my?organizationId=425712905585) | [prod](https://console.cloud.google.com/iam-admin/pam/entitlements/my?organizationId=1073525295030)
 
 This entitlement provides the ability to `list` resources at an org-wide level, but does not provide the ability to `get` details for resources, other than IAM bindings. This is useful for initial
 discovery and exploration of the resources available across the org.
 
 ### Project Access
 
-#### [Read-only](https://gitlab.com/gitlab-com/gl-infra/gitlab-dedicated/library/terraform/google-privileged-access-manager/-/blob/346edc2e8c2ecee79b8bf06a23819675d4be644d/predefined-entitlements.tf#L30-L53)
+#### [project_read](https://gitlab.com/gitlab-com/gl-infra/gitlab-dedicated/library/terraform/google-privileged-access-manager/-/blob/346edc2e8c2ecee79b8bf06a23819675d4be644d/predefined-entitlements.tf#L30-L53)
+
+- Get access with `gcloud`:
+
+    ```sh
+    # TENANT_ID: Can be found in the "tenant_id" field in the tenant model in `cells/tissue`.
+    # example TENANT_ID="c01j2gdw0zfdafxr6"
+    gcloud beta pam grants create \
+              --entitlement="gldt-readonly-entitlement-${TENANT_ID}" \
+              --requested-duration="1800s" \
+              --justification="$ISSUE_LINK" \
+              --location=global \
+              --project="cell-${TENANT_ID}"
+    ```
+
+- Get access with console: [dev](https://console.cloud.google.com/iam-admin/pam/entitlements/my?project=cell-c01j2t2v563b55mswz) | [prod](https://console.cloud.google.com/iam-admin/pam/entitlements/my?project=cell-c01j2gdw0zfdafxr6)
 
 This entitlement provides the ability to view resources within a project scope. This allows you to `list` and `get` resources to discover and describe specific resource configurations, e.g. Viewing
 the details for a GKE cluster and its nodes.
 
-#### [Admin](https://gitlab.com/gitlab-com/gl-infra/gitlab-dedicated/library/terraform/google-privileged-access-manager/-/blob/346edc2e8c2ecee79b8bf06a23819675d4be644d/predefined-entitlements.tf#L55-L110)
+#### [project_admin](https://gitlab.com/gitlab-com/gl-infra/gitlab-dedicated/library/terraform/google-privileged-access-manager/-/blob/346edc2e8c2ecee79b8bf06a23819675d4be644d/predefined-entitlements.tf#L55-L110)
+
+- Get access with `gcloud`:
+
+    ```sh
+    # TENANT_ID: Can be found in the "tenant_id" field in the tenant model in `cells/tissue`.
+    # example TENANT_ID="c01j2gdw0zfdafxr6"
+    gcloud beta pam grants create \
+              --entitlement="gldt-admin-entitlement-${TENANT_ID}" \
+              --requested-duration="1800s" \
+              --justification="$ISSUE_LINK" \
+              --location=global \
+              --project="cell-${TENANT_ID}"
+    ```
+
+- Get access with console: [dev](https://console.cloud.google.com/iam-admin/pam/entitlements/my?project=cell-c01j2t2v563b55mswz) | [prod](https://console.cloud.google.com/iam-admin/pam/entitlements/my?project=cell-c01j2gdw0zfdafxr6)
 
 Admin access provides typical operational readwrite abilities for managing cell infrastructure.
 
 This level of access requires an approver, and typically will also link to an issue detailing why the access is required.
 We should prefer making changes through IaC wherever possible.
 
-#### [Breakglass](https://gitlab.com/gitlab-com/gl-infra/gitlab-dedicated/library/terraform/google-privileged-access-manager/-/blob/346edc2e8c2ecee79b8bf06a23819675d4be644d/predefined-entitlements.tf#L55-L110)
+#### [project_breakglass](https://gitlab.com/gitlab-com/gl-infra/gitlab-dedicated/library/terraform/google-privileged-access-manager/-/blob/346edc2e8c2ecee79b8bf06a23819675d4be644d/predefined-entitlements.tf#L55-L110)
 
-Breakglass provides the same level of access as the [`admin`](#admin) entitlement.
+- Get access with `gcloud` access:
+
+    ```sh
+    # TENANT_ID: Can be found in the "tenant_id" field in the tenant model in `cells/tissue`.
+    # example TENANT_ID="c01j2gdw0zfdafxr6"
+    gcloud beta pam grants create \
+              --entitlement="gldt-breakglass-entitlement-${TENANT_ID}" \
+              --requested-duration="1800s" \
+              --justification="$ISSUE_LINK" \
+              --location=global \
+              --project="cell-${TENANT_ID}"
+    ```
+
+- Get access with console: [dev](https://console.cloud.google.com/iam-admin/pam/entitlements/my?project=cell-c01j2t2v563b55mswz) | [prod](https://console.cloud.google.com/iam-admin/pam/entitlements/my?project=cell-c01j2gdw0zfdafxr6)
+
+Breakglass provides the same level of access as the [`project_admin`](#project_admin) entitlement.
 
 This access does not require an approver. The entitlement is intended to be used
 during an incident response when there is low team member availability.
 
 We should use `breakglass` as a last resort when we need to make an emergency change to speed up incident response.
+
+#### Amp
+
+- Get access with `gcloud`
+
+    ```sh
+    # AMP_PROJECT_ID for dev: `amp-b6f1`
+    # AMP_PROJECT_ID for prod: `amp-3c0d`
+    gcloud beta pam grants create \
+                    --entitlement="gld-readonly-entitlement" \
+                    --requested-duration="1800s" \
+                    --justification="review of https://gitlab.com/gitlab-com/runbooks/-/merge_requests/7731/diffs" \
+                    --location=global \
+                    --project="amp-3c0d"
+    ```
+
+- Get access with console: [dev](https://console.cloud.google.com/iam-admin/pam/entitlements/my?project=amp-b6f1) | [prod](https://console.cloud.google.com/iam-admin/pam/entitlements/my?project=amp-3c0d)
+
+The AMP GCP project has the same entitlements as a Cell, meaning [`project_read`](#project_read), [`proejct_admin`](#project_admin), [`project_breakglass`](#project_breakglass)
 
 [PAM]: https://cloud.google.com/iam/docs/pam-overview
