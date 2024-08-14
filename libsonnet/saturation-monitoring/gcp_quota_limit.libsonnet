@@ -73,7 +73,7 @@ local selectors = import 'promql/selectors.libsonnet';
     },
   }),
 
-  gcp_quota_limit_vertex_ai_code_gecko: self.gcp_quota_limit_vertex_ai {
+  gcp_quota_limit_vertex_ai_code_gecko: resourceSaturationPoint(self.gcp_quota_limit_vertex_ai {
     grafana_dashboard_uid: 'sat_vertex_ai_code_gecko_quota',
     description: |||
       GCP Quota utilization / limit ratio for Vertex AI for code-gecko model (used by code completion part of Code Suggestions)
@@ -99,5 +99,5 @@ local selectors = import 'promql/selectors.libsonnet';
         selectors.serializeHash({ region: 'us-central1' }),
       ],
     },
-  },
+  }),
 }
