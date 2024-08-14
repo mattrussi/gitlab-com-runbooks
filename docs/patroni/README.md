@@ -78,6 +78,7 @@
 * [Postgres Replicas](../postgres-dr-delayed/postgres-dr-replicas.md)
 * [Container Registry Database Index Bloat](../registry/db-index-bloat.md)
 * [Container Registry database post-deployment migrations](../registry/db-post-deployment-migrations.md)
+* [Teleport Administration](../teleport/teleport_admin.md)
 * [How to use flamegraphs for performance profiling](../tutorials/how_to_use_flamegraphs_for_perf_profiling.md)
 * [Deleted Project Restoration](../uncategorized/deleted-project-restore.md)
 * [Rails is down](../uncategorized/rails-is-down.md)
