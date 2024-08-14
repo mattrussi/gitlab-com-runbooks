@@ -5,15 +5,15 @@ groups:
   interval: 5m
   rules:
   - record: gitlab_component_saturation:ratio_quantile95_1w
-    expr: quantile_over_time(0.95, gitlab_component_saturation:ratio{env="gprd",type="sidekiq"}[1w])
+    expr: quantile_over_time(0.95, gitlab_component_saturation:ratio{env="gprd",shard=~"catchall|database-throttled|elasticsearch|gitaly-throttled|low-urgency-cpu-bound|memory-bound|quarantine|urgent-authorized-projects|urgent-cpu-bound|urgent-other",type="sidekiq"}[1w])
   - record: gitlab_component_saturation:ratio_quantile99_1w
-    expr: quantile_over_time(0.99, gitlab_component_saturation:ratio{env="gprd",type="sidekiq"}[1w])
+    expr: quantile_over_time(0.99, gitlab_component_saturation:ratio{env="gprd",shard=~"catchall|database-throttled|elasticsearch|gitaly-throttled|low-urgency-cpu-bound|memory-bound|quarantine|urgent-authorized-projects|urgent-cpu-bound|urgent-other",type="sidekiq"}[1w])
   - record: gitlab_component_saturation:ratio_quantile95_1h
-    expr: quantile_over_time(0.95, gitlab_component_saturation:ratio{env="gprd",type="sidekiq"}[1h])
+    expr: quantile_over_time(0.95, gitlab_component_saturation:ratio{env="gprd",shard=~"catchall|database-throttled|elasticsearch|gitaly-throttled|low-urgency-cpu-bound|memory-bound|quarantine|urgent-authorized-projects|urgent-cpu-bound|urgent-other",type="sidekiq"}[1h])
   - record: gitlab_component_saturation:ratio_quantile99_1h
-    expr: quantile_over_time(0.99, gitlab_component_saturation:ratio{env="gprd",type="sidekiq"}[1h])
+    expr: quantile_over_time(0.99, gitlab_component_saturation:ratio{env="gprd",shard=~"catchall|database-throttled|elasticsearch|gitaly-throttled|low-urgency-cpu-bound|memory-bound|quarantine|urgent-authorized-projects|urgent-cpu-bound|urgent-other",type="sidekiq"}[1h])
   - record: gitlab_component_saturation:ratio_avg_1h
-    expr: avg_over_time(gitlab_component_saturation:ratio{env="gprd",type="sidekiq"}[1h])
+    expr: avg_over_time(gitlab_component_saturation:ratio{env="gprd",shard=~"catchall|database-throttled|elasticsearch|gitaly-throttled|low-urgency-cpu-bound|memory-bound|quarantine|urgent-authorized-projects|urgent-cpu-bound|urgent-other",type="sidekiq"}[1h])
 - name: GitLab Saturation Alerts
   interval: 1m
   rules:
@@ -69,8 +69,8 @@ groups:
       rules_domain: general
       severity: s3
     expr: |
-      gitlab_component_saturation:ratio{component="excluded_sidekiq_thread_contention",env="gprd",type="sidekiq"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="excluded_sidekiq_thread_contention"}
+      gitlab_component_saturation:ratio{component="excluded_sidekiq_thread_contention",env="gprd",shard=~"catchall|database-throttled|elasticsearch|gitaly-throttled|low-urgency-cpu-bound|memory-bound|quarantine|urgent-authorized-projects|urgent-cpu-bound|urgent-other",type="sidekiq"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="excluded_sidekiq_thread_contention",shard=~"catchall|database-throttled|elasticsearch|gitaly-throttled|low-urgency-cpu-bound|memory-bound|quarantine|urgent-authorized-projects|urgent-cpu-bound|urgent-other"}
   - alert: component_saturation_slo_out_of_bounds:kube_container_cpu_limit
     for: 15m
     annotations:
@@ -135,8 +135,8 @@ groups:
       rules_domain: general
       severity: s4
     expr: |
-      gitlab_component_saturation:ratio{component="kube_container_cpu_limit",env="gprd",type="sidekiq"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="kube_container_cpu_limit"}
+      gitlab_component_saturation:ratio{component="kube_container_cpu_limit",env="gprd",shard=~"catchall|database-throttled|elasticsearch|gitaly-throttled|low-urgency-cpu-bound|memory-bound|quarantine|urgent-authorized-projects|urgent-cpu-bound|urgent-other",type="sidekiq"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="kube_container_cpu_limit",shard=~"catchall|database-throttled|elasticsearch|gitaly-throttled|low-urgency-cpu-bound|memory-bound|quarantine|urgent-authorized-projects|urgent-cpu-bound|urgent-other"}
   - alert: component_saturation_slo_out_of_bounds:kube_container_rss
     for: 15m
     annotations:
@@ -195,8 +195,8 @@ groups:
       rules_domain: general
       severity: s4
     expr: |
-      gitlab_component_saturation:ratio{component="kube_container_rss",env="gprd",type="sidekiq"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="kube_container_rss"}
+      gitlab_component_saturation:ratio{component="kube_container_rss",env="gprd",shard=~"catchall|database-throttled|elasticsearch|gitaly-throttled|low-urgency-cpu-bound|memory-bound|quarantine|urgent-authorized-projects|urgent-cpu-bound|urgent-other",type="sidekiq"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="kube_container_rss",shard=~"catchall|database-throttled|elasticsearch|gitaly-throttled|low-urgency-cpu-bound|memory-bound|quarantine|urgent-authorized-projects|urgent-cpu-bound|urgent-other"}
   - alert: component_saturation_slo_out_of_bounds:kube_container_throttling
     for: 10m
     annotations:
@@ -257,8 +257,8 @@ groups:
       rules_domain: general
       severity: s3
     expr: |
-      gitlab_component_saturation:ratio{component="kube_container_throttling",env="gprd",type="sidekiq"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="kube_container_throttling"}
+      gitlab_component_saturation:ratio{component="kube_container_throttling",env="gprd",shard=~"catchall|database-throttled|elasticsearch|gitaly-throttled|low-urgency-cpu-bound|memory-bound|quarantine|urgent-authorized-projects|urgent-cpu-bound|urgent-other",type="sidekiq"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="kube_container_throttling",shard=~"catchall|database-throttled|elasticsearch|gitaly-throttled|low-urgency-cpu-bound|memory-bound|quarantine|urgent-authorized-projects|urgent-cpu-bound|urgent-other"}
   - alert: component_saturation_slo_out_of_bounds:kube_horizontalpodautoscaler_desired_replicas
     for: 25m
     annotations:
@@ -311,8 +311,8 @@ groups:
       rules_domain: general
       severity: s3
     expr: |
-      gitlab_component_saturation:ratio{component="kube_horizontalpodautoscaler_desired_replicas",env="gprd",type="sidekiq"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="kube_horizontalpodautoscaler_desired_replicas"}
+      gitlab_component_saturation:ratio{component="kube_horizontalpodautoscaler_desired_replicas",env="gprd",shard=~"catchall|database-throttled|elasticsearch|gitaly-throttled|low-urgency-cpu-bound|memory-bound|quarantine|urgent-authorized-projects|urgent-cpu-bound|urgent-other",type="sidekiq"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="kube_horizontalpodautoscaler_desired_replicas",shard=~"catchall|database-throttled|elasticsearch|gitaly-throttled|low-urgency-cpu-bound|memory-bound|quarantine|urgent-authorized-projects|urgent-cpu-bound|urgent-other"}
   - alert: component_saturation_slo_out_of_bounds:open_fds
     for: 5m
     annotations:
@@ -384,8 +384,8 @@ groups:
       rules_domain: general
       severity: s2
     expr: |
-      gitlab_component_saturation:ratio{component="open_fds",env="gprd",type="sidekiq"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="open_fds"}
+      gitlab_component_saturation:ratio{component="open_fds",env="gprd",shard=~"catchall|database-throttled|elasticsearch|gitaly-throttled|low-urgency-cpu-bound|memory-bound|quarantine|urgent-authorized-projects|urgent-cpu-bound|urgent-other",type="sidekiq"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="open_fds",shard=~"catchall|database-throttled|elasticsearch|gitaly-throttled|low-urgency-cpu-bound|memory-bound|quarantine|urgent-authorized-projects|urgent-cpu-bound|urgent-other"}
   - alert: component_saturation_slo_out_of_bounds:rails_db_connection_pool
     for: 15m
     annotations:
@@ -448,8 +448,8 @@ groups:
       rules_domain: general
       severity: s4
     expr: |
-      gitlab_component_saturation:ratio{component="rails_db_connection_pool",env="gprd",type="sidekiq"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="rails_db_connection_pool"}
+      gitlab_component_saturation:ratio{component="rails_db_connection_pool",env="gprd",shard=~"catchall|database-throttled|elasticsearch|gitaly-throttled|low-urgency-cpu-bound|memory-bound|quarantine|urgent-authorized-projects|urgent-cpu-bound|urgent-other",type="sidekiq"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="rails_db_connection_pool",shard=~"catchall|database-throttled|elasticsearch|gitaly-throttled|low-urgency-cpu-bound|memory-bound|quarantine|urgent-authorized-projects|urgent-cpu-bound|urgent-other"}
   - alert: component_saturation_slo_out_of_bounds:sidekiq_shard_workers
     for: 10m
     annotations:
@@ -512,8 +512,8 @@ groups:
       rules_domain: general
       severity: s4
     expr: |
-      gitlab_component_saturation:ratio{component="sidekiq_shard_workers",env="gprd",type="sidekiq"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="sidekiq_shard_workers"}
+      gitlab_component_saturation:ratio{component="sidekiq_shard_workers",env="gprd",shard=~"catchall|database-throttled|elasticsearch|gitaly-throttled|low-urgency-cpu-bound|memory-bound|quarantine|urgent-authorized-projects|urgent-cpu-bound|urgent-other",type="sidekiq"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="sidekiq_shard_workers",shard=~"catchall|database-throttled|elasticsearch|gitaly-throttled|low-urgency-cpu-bound|memory-bound|quarantine|urgent-authorized-projects|urgent-cpu-bound|urgent-other"}
   - alert: component_saturation_slo_out_of_bounds:sidekiq_thread_contention
     for: 5m
     annotations:
@@ -566,5 +566,5 @@ groups:
       rules_domain: general
       severity: s3
     expr: |
-      gitlab_component_saturation:ratio{component="sidekiq_thread_contention",env="gprd",type="sidekiq"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="sidekiq_thread_contention"}
+      gitlab_component_saturation:ratio{component="sidekiq_thread_contention",env="gprd",shard=~"catchall|database-throttled|elasticsearch|gitaly-throttled|low-urgency-cpu-bound|memory-bound|quarantine|urgent-authorized-projects|urgent-cpu-bound|urgent-other",type="sidekiq"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="sidekiq_thread_contention",shard=~"catchall|database-throttled|elasticsearch|gitaly-throttled|low-urgency-cpu-bound|memory-bound|quarantine|urgent-authorized-projects|urgent-cpu-bound|urgent-other"}

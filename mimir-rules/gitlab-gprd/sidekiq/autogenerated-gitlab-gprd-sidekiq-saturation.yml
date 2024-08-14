@@ -12,7 +12,7 @@ groups:
         0.99,
         clamp_min(
           clamp_max(
-            rate(ruby_process_cpu_seconds_total{env="gprd",type="sidekiq", shard="memory-bound"}[1h])
+            rate(ruby_process_cpu_seconds_total{env="gprd",shard=~"catchall|database-throttled|elasticsearch|gitaly-throttled|low-urgency-cpu-bound|memory-bound|quarantine|urgent-authorized-projects|urgent-cpu-bound|urgent-other",type="sidekiq", shard="memory-bound"}[1h])
             ,
             1)
         ,
@@ -28,15 +28,15 @@ groups:
           clamp_max(
             (
               sum by (env, environment, tier, type, stage, shard, pod, container) (
-                rate(container_cpu_usage_seconds_total:labeled{container!="", container!="POD", env="gprd",type="sidekiq"}[1h])
+                rate(container_cpu_usage_seconds_total:labeled{container!="", container!="POD", env="gprd",shard=~"catchall|database-throttled|elasticsearch|gitaly-throttled|low-urgency-cpu-bound|memory-bound|quarantine|urgent-authorized-projects|urgent-cpu-bound|urgent-other",type="sidekiq"}[1h])
               )
               unless on(env, environment, tier, type, stage, shard, pod, container) (
-                last_over_time(container_spec_cpu_quota:labeled{container!="", container!="POD", env="gprd",type="sidekiq"}[1h])
+                last_over_time(container_spec_cpu_quota:labeled{container!="", container!="POD", env="gprd",shard=~"catchall|database-throttled|elasticsearch|gitaly-throttled|low-urgency-cpu-bound|memory-bound|quarantine|urgent-authorized-projects|urgent-cpu-bound|urgent-other",type="sidekiq"}[1h])
               )
             )
             /
             sum by(env, environment, tier, type, stage, shard, pod, container) (
-              kube_pod_container_resource_requests:labeled{container!="", container!="POD", resource="cpu", env="gprd",type="sidekiq"}
+              kube_pod_container_resource_requests:labeled{container!="", container!="POD", resource="cpu", env="gprd",shard=~"catchall|database-throttled|elasticsearch|gitaly-throttled|low-urgency-cpu-bound|memory-bound|quarantine|urgent-authorized-projects|urgent-cpu-bound|urgent-other",type="sidekiq"}
             )
             ,
             1)
@@ -51,13 +51,13 @@ groups:
         clamp_min(
           clamp_max(
             sum by (env, environment, tier, type, stage, shard, pod, container) (
-              rate(container_cpu_usage_seconds_total:labeled{container!="", container!="POD", env="gprd",type="sidekiq"}[5m])
+              rate(container_cpu_usage_seconds_total:labeled{container!="", container!="POD", env="gprd",shard=~"catchall|database-throttled|elasticsearch|gitaly-throttled|low-urgency-cpu-bound|memory-bound|quarantine|urgent-authorized-projects|urgent-cpu-bound|urgent-other",type="sidekiq"}[5m])
             )
             /
             sum by(env, environment, tier, type, stage, shard, pod, container) (
-              container_spec_cpu_quota:labeled{container!="", container!="POD", env="gprd",type="sidekiq"}
+              container_spec_cpu_quota:labeled{container!="", container!="POD", env="gprd",shard=~"catchall|database-throttled|elasticsearch|gitaly-throttled|low-urgency-cpu-bound|memory-bound|quarantine|urgent-authorized-projects|urgent-cpu-bound|urgent-other",type="sidekiq"}
               /
-              container_spec_cpu_period:labeled{container!="", container!="POD", env="gprd",type="sidekiq"}
+              container_spec_cpu_period:labeled{container!="", container!="POD", env="gprd",shard=~"catchall|database-throttled|elasticsearch|gitaly-throttled|low-urgency-cpu-bound|memory-bound|quarantine|urgent-authorized-projects|urgent-cpu-bound|urgent-other",type="sidekiq"}
             )
             ,
             1)
@@ -71,9 +71,9 @@ groups:
       max by(env, environment, tier, type, stage, shard) (
         clamp_min(
           clamp_max(
-            container_memory_rss:labeled{container!="", container!="POD", env="gprd",type="sidekiq"}
+            container_memory_rss:labeled{container!="", container!="POD", env="gprd",shard=~"catchall|database-throttled|elasticsearch|gitaly-throttled|low-urgency-cpu-bound|memory-bound|quarantine|urgent-authorized-projects|urgent-cpu-bound|urgent-other",type="sidekiq"}
             /
-            (container_spec_memory_limit_bytes:labeled{container!="", container!="POD", env="gprd",type="sidekiq"} > 0)
+            (container_spec_memory_limit_bytes:labeled{container!="", container!="POD", env="gprd",shard=~"catchall|database-throttled|elasticsearch|gitaly-throttled|low-urgency-cpu-bound|memory-bound|quarantine|urgent-authorized-projects|urgent-cpu-bound|urgent-other",type="sidekiq"} > 0)
             ,
             1)
         ,
@@ -88,9 +88,9 @@ groups:
         clamp_min(
           clamp_max(
             avg by (env, environment, tier, type, stage, shard, pod, container)(
-              rate(container_cpu_cfs_throttled_periods_total:labeled{container!="", env="gprd",type="sidekiq"}[5m])
+              rate(container_cpu_cfs_throttled_periods_total:labeled{container!="", env="gprd",shard=~"catchall|database-throttled|elasticsearch|gitaly-throttled|low-urgency-cpu-bound|memory-bound|quarantine|urgent-authorized-projects|urgent-cpu-bound|urgent-other",type="sidekiq"}[5m])
               /
-              rate(container_cpu_cfs_periods_total:labeled{container!="", env="gprd",type="sidekiq"}[5m])
+              rate(container_cpu_cfs_periods_total:labeled{container!="", env="gprd",shard=~"catchall|database-throttled|elasticsearch|gitaly-throttled|low-urgency-cpu-bound|memory-bound|quarantine|urgent-authorized-projects|urgent-cpu-bound|urgent-other",type="sidekiq"}[5m])
             )
             ,
             1)
@@ -104,9 +104,9 @@ groups:
       max by(env, environment, tier, type, stage, shard) (
         clamp_min(
           clamp_max(
-            kube_horizontalpodautoscaler_status_desired_replicas:labeled{env="gprd",type="sidekiq", shard!~"database-throttled|elasticsearch|gitaly-throttled|urgent-authorized-projects", namespace!~"pubsubbeat"}
+            kube_horizontalpodautoscaler_status_desired_replicas:labeled{env="gprd",shard=~"catchall|database-throttled|elasticsearch|gitaly-throttled|low-urgency-cpu-bound|memory-bound|quarantine|urgent-authorized-projects|urgent-cpu-bound|urgent-other",type="sidekiq", shard!~"database-throttled|elasticsearch|gitaly-throttled|urgent-authorized-projects", namespace!~"pubsubbeat"}
             /
-            kube_horizontalpodautoscaler_spec_max_replicas:labeled{env="gprd",type="sidekiq", shard!~"database-throttled|elasticsearch|gitaly-throttled|urgent-authorized-projects", namespace!~"pubsubbeat"}
+            kube_horizontalpodautoscaler_spec_max_replicas:labeled{env="gprd",shard=~"catchall|database-throttled|elasticsearch|gitaly-throttled|low-urgency-cpu-bound|memory-bound|quarantine|urgent-authorized-projects|urgent-cpu-bound|urgent-other",type="sidekiq", shard!~"database-throttled|elasticsearch|gitaly-throttled|urgent-authorized-projects", namespace!~"pubsubbeat"}
             ,
             1)
         ,
@@ -120,15 +120,15 @@ groups:
         clamp_min(
           clamp_max(
             (
-              process_open_fds{env="gprd",type="sidekiq"}
+              process_open_fds{env="gprd",shard=~"catchall|database-throttled|elasticsearch|gitaly-throttled|low-urgency-cpu-bound|memory-bound|quarantine|urgent-authorized-projects|urgent-cpu-bound|urgent-other",type="sidekiq"}
               /
-              process_max_fds{env="gprd",type="sidekiq"}
+              process_max_fds{env="gprd",shard=~"catchall|database-throttled|elasticsearch|gitaly-throttled|low-urgency-cpu-bound|memory-bound|quarantine|urgent-authorized-projects|urgent-cpu-bound|urgent-other",type="sidekiq"}
             )
             or
             (
-              ruby_file_descriptors{env="gprd",type="sidekiq"}
+              ruby_file_descriptors{env="gprd",shard=~"catchall|database-throttled|elasticsearch|gitaly-throttled|low-urgency-cpu-bound|memory-bound|quarantine|urgent-authorized-projects|urgent-cpu-bound|urgent-other",type="sidekiq"}
               /
-              ruby_process_max_fds{env="gprd",type="sidekiq"}
+              ruby_process_max_fds{env="gprd",shard=~"catchall|database-throttled|elasticsearch|gitaly-throttled|low-urgency-cpu-bound|memory-bound|quarantine|urgent-authorized-projects|urgent-cpu-bound|urgent-other",type="sidekiq"}
             )
             ,
             1)
@@ -143,12 +143,12 @@ groups:
         clamp_min(
           clamp_max(
             (
-              avg_over_time(gitlab_database_connection_pool_busy{class="ActiveRecord::Base", env="gprd",type="sidekiq"}[5m])
+              avg_over_time(gitlab_database_connection_pool_busy{class="ActiveRecord::Base", env="gprd",shard=~"catchall|database-throttled|elasticsearch|gitaly-throttled|low-urgency-cpu-bound|memory-bound|quarantine|urgent-authorized-projects|urgent-cpu-bound|urgent-other",type="sidekiq"}[5m])
               +
-              avg_over_time(gitlab_database_connection_pool_dead{class="ActiveRecord::Base", env="gprd",type="sidekiq"}[5m])
+              avg_over_time(gitlab_database_connection_pool_dead{class="ActiveRecord::Base", env="gprd",shard=~"catchall|database-throttled|elasticsearch|gitaly-throttled|low-urgency-cpu-bound|memory-bound|quarantine|urgent-authorized-projects|urgent-cpu-bound|urgent-other",type="sidekiq"}[5m])
             )
             /
-            gitlab_database_connection_pool_size{class="ActiveRecord::Base", env="gprd",type="sidekiq"}
+            gitlab_database_connection_pool_size{class="ActiveRecord::Base", env="gprd",shard=~"catchall|database-throttled|elasticsearch|gitaly-throttled|low-urgency-cpu-bound|memory-bound|quarantine|urgent-authorized-projects|urgent-cpu-bound|urgent-other",type="sidekiq"}
             ,
             1)
         ,
@@ -162,11 +162,11 @@ groups:
         clamp_min(
           clamp_max(
             sum by (env, environment, tier, type, stage, shard, shard) (
-              avg_over_time(sidekiq_running_jobs{shard!~"database-throttled|elasticsearch|gitaly-throttled|urgent-authorized-projects", env="gprd",type="sidekiq"}[5m])
+              avg_over_time(sidekiq_running_jobs{shard!~"database-throttled|elasticsearch|gitaly-throttled|urgent-authorized-projects", env="gprd",shard=~"catchall|database-throttled|elasticsearch|gitaly-throttled|low-urgency-cpu-bound|memory-bound|quarantine|urgent-authorized-projects|urgent-cpu-bound|urgent-other",type="sidekiq"}[5m])
             )
             /
             sum by (env, environment, tier, type, stage, shard, shard) (
-              avg_over_time(sidekiq_concurrency{shard!~"database-throttled|elasticsearch|gitaly-throttled|urgent-authorized-projects", env="gprd",type="sidekiq"}[5m])
+              avg_over_time(sidekiq_concurrency{shard!~"database-throttled|elasticsearch|gitaly-throttled|urgent-authorized-projects", env="gprd",shard=~"catchall|database-throttled|elasticsearch|gitaly-throttled|low-urgency-cpu-bound|memory-bound|quarantine|urgent-authorized-projects|urgent-cpu-bound|urgent-other",type="sidekiq"}[5m])
             )
             ,
             1)
@@ -181,7 +181,7 @@ groups:
         0.99,
         clamp_min(
           clamp_max(
-            rate(ruby_process_cpu_seconds_total{env="gprd",type="sidekiq", shard!~"memory-bound"}[1h])
+            rate(ruby_process_cpu_seconds_total{env="gprd",shard=~"catchall|database-throttled|elasticsearch|gitaly-throttled|low-urgency-cpu-bound|memory-bound|quarantine|urgent-authorized-projects|urgent-cpu-bound|urgent-other",type="sidekiq", shard!~"memory-bound"}[1h])
             ,
             1)
         ,
@@ -198,11 +198,11 @@ groups:
         clamp_min(
           clamp_max(
             sum by (environment, tier, type, stage, shard, shard) (
-              avg_over_time(sidekiq_running_jobs{shard!~"database-throttled|elasticsearch|gitaly-throttled|urgent-authorized-projects", env="gprd",type="sidekiq"}[5m])
+              avg_over_time(sidekiq_running_jobs{shard!~"database-throttled|elasticsearch|gitaly-throttled|urgent-authorized-projects", env="gprd",shard=~"catchall|database-throttled|elasticsearch|gitaly-throttled|low-urgency-cpu-bound|memory-bound|quarantine|urgent-authorized-projects|urgent-cpu-bound|urgent-other",type="sidekiq"}[5m])
             )
             /
             sum by (environment, tier, type, stage, shard, shard) (
-              avg_over_time(sidekiq_concurrency{shard!~"database-throttled|elasticsearch|gitaly-throttled|urgent-authorized-projects", env="gprd",type="sidekiq"}[5m])
+              avg_over_time(sidekiq_concurrency{shard!~"database-throttled|elasticsearch|gitaly-throttled|urgent-authorized-projects", env="gprd",shard=~"catchall|database-throttled|elasticsearch|gitaly-throttled|low-urgency-cpu-bound|memory-bound|quarantine|urgent-authorized-projects|urgent-cpu-bound|urgent-other",type="sidekiq"}[5m])
             )
             ,
             1)
