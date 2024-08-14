@@ -28,7 +28,7 @@ failed pods, then check the events and logs to see what is causing them to be in
 
 ## Services
 
-- [kube Service Overview](./kubernetes.md)
+- [kube Service Overview](../kubernetes.md)
 - Owner: [Production Engineering: Foundations](https://handbook.gitlab.com/handbook/engineering/infrastructure/team/foundations/)
 
 ## Metrics
