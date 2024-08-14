@@ -22,7 +22,7 @@ while the staging one runs on `ops-gitlab-gke` GKE cluster in `us-east1`.
 We run the production Teleport cluster on a different region than the region we run our production infrastruture,
 so we can still access our infrastructure in case there is a region failure in our production region (`us-east1`).
 
-THe infra-as-code for these Teleport clusters can be found in the following locations:
+The infra-as-code for these Teleport clusters can be found in the following locations:
 
 - [teleport-production](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/tree/main/environments/teleport-production)
 - [teleport-staging](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/tree/main/environments/teleport-staging)
@@ -81,6 +81,56 @@ Teleport uses *Role-Based Access Control* (RBAC) model.
 We define roles and each role specifies what is allowed and what is not allowed.
 You can read more about authoriztion in Teleport [here](https://goteleport.com/docs/architecture/authorization/).
 
+## Secrets
+
+We use the *Google Cloud Key Management Service* (KMS) to store and handle Teleport certificate authorities.
+
+> Teleport generates private key material for its internal Certificate Authorities (CAs) during the first Auth Server's initial startup.
+> These CAs are used to sign all certificates issued to clients and hosts in the Teleport cluster.
+> When configured to use Google Cloud KMS,
+> all private key material for these CAs will be generated, stored, and used for signing inside of Google Cloud KMS.
+> Instead of the actual private key, Teleport will only store the ID of the KMS key.
+> In short, private key material will never leave Google Cloud KMS.
+
+Please refer to this [guide](https://goteleport.com/docs/choose-an-edition/teleport-enterprise/gcp-kms/)
+for more information on storing Teleport private keys in Google Cloud KMS.
+
+We create a [Key Ring](https://cloud.google.com/kms/docs/resource-hierarchy#key_rings) and a *CryptoKey* for Teleport CA
+in this [file](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/main/modules/teleport-project/kms.tf).
+We then reference this key when installing the `teleport-cluster` Helm chart
+[here](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/blob/01976afc89a7f3b86e58751a13aad6d0c8d25572/releases/teleport-cluster/ops-central-production.yaml.gotmpl#L30)
+
+We do not manage any certificate authority and private keys inside the cluster. They are all stored in and managed by KMS.
+
+> To help guard against data corruption and to verify that data can be decrypted successfully,
+> Cloud KMS periodically scans and backs up all key material and metadata.
+
+Please refer to this [deep dive document](https://cloud.google.com/docs/security/key-management-deep-dive)
+on Google Cloud KMS and automatic backups.
+
+## Database Management
+
+The PosgreSQL databases are registered with the Teleport instance by
+[Teleport agents](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/tree/master/releases/teleport-agent)
+running on our regional Kubernetes clusters.
+
+The certificates (
+  [gprd](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/blob/7b160f1ea422ae44515ba46830347565c19ca708/releases/teleport-agent/values-secrets/gprd.yaml.gotmpl#L12) and
+  [gstg](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/blob/7b160f1ea422ae44515ba46830347565c19ca708/releases/teleport-agent/values-secrets/gstg.yaml.gotmpl#L12
+) used by
+[teleport-agent](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/tree/master/releases/teleport-agent)
+running on Kubernetes clusters should match the PostgreSQL server certificate located at `/var/opt/gitlab/postgresql/server.crt`.
+
+Furthermore, the CA file found at `/var/opt/gitlab/postgresql/cacert` on each Patroni or PostgreSQL node should correspond to
+the certificate authority used by the Teleport instance with which those databases are registered.
+This file is written by the `gitlab-patroni::postgres` recipe which is imported by the `gitlab-patroni::default` recipe.
+This recipe retrives the content of CA file from `gs://gitlab-<env>-secrets/gitlab-patroni/gstg.enc`.
+
+If you move databases to a different Teleport instance and update this CA file, please remember to
+run the `select pg_reload_conf();` command from the `gitlab-psql` shell on each node to reload the update CA.
+
+Here is an example [CR](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/18355) for updating the CA file.
+
 ## Role and Access Management
 
 Teleport [roles](https://goteleport.com/docs/access-controls/reference/) and permissions are defined in
@@ -91,7 +141,7 @@ If you add a new role, you also need to add it to
 The association between Okta groups and Teleport roles are configured in
 [`groups.tf`](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/main/environments/teleport-production/groups.tf) file.
 
-## Checking Status of Teleport Server
+## Checking Status of Teleport
 
 All the services comprise a Teleport cluster are stateless.
 
@@ -130,33 +180,6 @@ CA pin        sha256:25869bcdc1a347668dd9a83110f96a9a7fb70c2791bf839180b3abeadde
 </details>
 
 Generally, if the pods are healthy, then the service is healthy.
-
-## Secrets
-
-We use the *Google Cloud Key Management Service* (KMS) to store and handle Teleport certificate authorities.
-
-> Teleport generates private key material for its internal Certificate Authorities (CAs) during the first Auth Server's initial startup.
-> These CAs are used to sign all certificates issued to clients and hosts in the Teleport cluster.
-> When configured to use Google Cloud KMS,
-> all private key material for these CAs will be generated, stored, and used for signing inside of Google Cloud KMS.
-> Instead of the actual private key, Teleport will only store the ID of the KMS key.
-> In short, private key material will never leave Google Cloud KMS.
-
-Please refer to this [guide](https://goteleport.com/docs/choose-an-edition/teleport-enterprise/gcp-kms/)
-for more information on storing Teleport private keys in Google Cloud KMS.
-
-We create a [Key Ring](https://cloud.google.com/kms/docs/resource-hierarchy#key_rings) and a *CryptoKey* for Teleport CA
-in this [file](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/main/modules/teleport-project/kms.tf).
-We then reference this key when installing the `teleport-cluster` Helm chart
-[here](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/blob/01976afc89a7f3b86e58751a13aad6d0c8d25572/releases/teleport-cluster/ops-central-production.yaml.gotmpl#L30)
-
-We do not manage any certificate authority and private keys inside the cluster. They are all stored in and managed by KMS.
-
-> To help guard against data corruption and to verify that data can be decrypted successfully,
-> Cloud KMS periodically scans and backs up all key material and metadata.
-
-Please refer to this [deep dive document](https://cloud.google.com/docs/security/key-management-deep-dive)
-on Google Cloud KMS and automatic backups.
 
 ## Updating Enterprise License
 
@@ -206,7 +229,7 @@ for temporarily creating an `impersonator` role and assign it to the `teleport-p
 
 ## SIEM Integration
 
-`teleport-plugin-event-handler` is used for handling Teleport audit events and sending them to a [Fluentd](https://www.fluentd.org/) instance,
+The `teleport-plugin-event-handler` is used for handling Teleport audit events and sending them to a [Fluentd](https://www.fluentd.org/) instance,
 so such events can be further shipped to other systems (i.e. SIEM) for security and auditing purposes.
 Read more about exporting exporting Teleport audit events [here](https://goteleport.com/docs/management/export-audit-events/).
 
@@ -258,7 +281,7 @@ Get the lastest secret version from Vault and update the `teleport-cluster` rele
 
 The `teleport-plugin-event-handler` requires *Mutual TLS* connection be enabled on `fluentd` instance for security purposes.
 The certificate authority, server key and certificate, and client key and certificate are stored in Vault at
-`k8s/ops-gitlab-gke/teleport-cluster-staging/fluentd-certs` and `k8s/ops-gitlab-gke/teleport-cluster-production/fluentd-certs`.
+`k8s/ops-gitlab-gke/teleport-cluster-staging/fluentd-certs` and `k8s/ops-central/teleport-cluster-production/fluentd-certs`.
 
 For renewing the certificates, create the following files in a directory.
 
@@ -405,7 +428,7 @@ and the `make gen-production` command for the `teleport-production` cluster.
 Next, update the Vault secret as follows.
 
 ```bash
-$ vault login -method oidc role=admin
+$ vault login -method oidc
 $ vault kv put k8s/ops-central/teleport-cluster-production/fluentd-certs \
     ca.crt="$(cat ca.crt)" \
     server.crt="$(cat server.crt)" \
@@ -414,8 +437,9 @@ $ vault kv put k8s/ops-central/teleport-cluster-production/fluentd-certs \
     client.key="$(cat client.key)"
 ```
 
-Finally, get the latest secret version from Vault and update the `teleport-cluster` release with it
-[here]()
+Finally, get the latest secret version from the Vault and update the `teleport-cluster` release for
+staging [here](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/blob/99d1cf9ab9c96a25b68148fe98ddb4b3c62018ee/releases/teleport-cluster/values-secrets/ops-staging.yaml.gotmpl#L38)
+and production [here](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/blob/99d1cf9ab9c96a25b68148fe98ddb4b3c62018ee/releases/teleport-cluster/values-secrets/ops-central-production.yaml.gotmpl#L38).
 
 ### Google Cloud Pub/Sub Configurations
 

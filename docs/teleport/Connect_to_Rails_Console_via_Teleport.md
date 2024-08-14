@@ -34,11 +34,11 @@ It is worth noting that if you need to make changes to the production environmen
 then declare a change in [#production](https://gitlab.enterprise.slack.com/archives/C101F3796) Slack channel
 using the `/change declare` command, after filling the steps and other details, an SRE should be able to execute the change for you.
 
-## Connect To Rails Console
+## SSH To Servers and Rails Console
 
 NOTE: we now have only one Teleport instance available at <https://production.teleport.gitlab.net>.
 
-There are two ways to use Teleport for connecting to a Rails console:
+There are two ways to use Teleport for connecting to a server (a.k.a. node, instance, virtual machine):
 
 1. Installing [tsh](https://goteleport.com/docs/reference/cli/tsh/), the Teleport CLI client. This is the recommended way.
 1. Via the [Teleport Web UI](https://production.teleport.gitlab.net/)
@@ -48,13 +48,16 @@ There are two ways to use Teleport for connecting to a Rails console:
 Official packages for [macOS](https://goteleport.com/docs/installation/#macos) and
 [Linux](https://goteleport.com/docs/installation/#linux) can be found at Teleport's website.
 
-### Accessing The Rails Console
+> Tip: The syntax and options for `tsh ssh` are very similar standard `ssh` command (with some additional options).
+See this [guide](https://goteleport.com/docs/connect-your-client/tsh/) for more information on using the `tsh` command-line tool.
 
-#### Non-Production
+### Non-Production
 
 Always use **non-production** (`gstg` or `pre`) consoles to test and experiment, unless production data is strictly necessary.
 
-The `non-prod-rails-console-ro` role gives you access to non-production (`gstg` or `pre`) consoles.
+#### Read-Only Access
+
+The `non-prod-rails-console-ro` role gives you **read-only** access to non-production (`gstg` or `pre`) consoles.
 You do NOT require a request or approval for this role.
 
 ```bash
@@ -64,22 +67,45 @@ $ tsh ssh rails-ro@console-ro-01-sv-gstg
 
 The last command takes some time to return a shell.
 
-Tip: The syntax and options for `tsh ssh` are very similar standard `ssh` command (with some additional options).
-See this [guide](https://goteleport.com/docs/connect-your-client/tsh/) for more information on using the `tsh` command-line tool.
+#### Read-Write Access
 
-#### Production
+The `non-prod-rails-console-rw` role gives you **read-write** access to non-production (`gstg` or `pre`) consoles.
+
+1. Authenticate to the Teleport instance and request the rails console role that you need.
+
+```bash
+$ tsh login --proxy=production.teleport.gitlab.net --request-roles=non-prod-rails-console-rw --request-reason="GitLab Issue URL or ZenDesk Ticket URL"
+```
+
+This command will pause while it waits for the reviewer to approve the request.
+It may appear to hang, but it is waiting for someone to approve it.
+The command will return as soon as the request is approved, denied, or expires.
+
+If the command is stopped or times out, but the request is approved, you do not need to request another approval.
+Simply login and provide the approved request ID (output by the previous command, or find it in the web interface).
+
+2. Connect to the Rails Console.
+
+```bash
+$ tsh login --proxy=production.teleport.gitlab.net --request-id=<request-id>
+$ tsh ssh rails@console-01-sv-gstg
+```
+
+The last command takes some time to return a shell.
+
+The request ID is shown in the output of `tsh login` when making the initial request, and can also be found attached to
+your request notification in [#teleport-requests](https://gitlab.enterprise.slack.com/archives/C06Q2JK3YPM).
+
+The access will be temporary (12 hours) and can be approved by any SRE or Reliability Manager.
+Access can be extended before or after expiration using the same process.
+
+### Production
 
 For accessing the Rails consoles in `gprd`, you need to explicity ask for access.
 
-1. Authenticate to the Teleport instance. This command opens Okta in a browser window:
+#### Read-Only Access
 
-```bash
-$ tsh login --proxy=production.teleport.gitlab.net
-```
-
-2. Request approval for the rails console role that you need.
-
-Currently only `prod-rails-console-ro` is implemented, and is only required in `gprd`
+1. Authenticate to the Teleport instance and request the rails console role that you need.
 
 ```bash
 $ tsh login --proxy=production.teleport.gitlab.net --request-roles=prod-rails-console-ro --request-reason="GitLab Issue URL or ZenDesk Ticket URL"
@@ -92,7 +118,7 @@ The command will return as soon as the request is approved, denied, or expires.
 If the command is stopped or times out, but the request is approved, you do not need to request another approval.
 Simply login and provide the approved request ID (output by the previous command, or find it in the web interface).
 
-3. Connect to the Rails Console.
+2. Connect to the Rails Console.
 
 ```bash
 $ tsh login --proxy=production.teleport.gitlab.net --request-id=<request-id>
