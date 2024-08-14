@@ -471,8 +471,6 @@ test-jsonnet:
       paths:
         - vendor
     - key: cache-$CI_COMMIT_REF_SLUG
-      fallback_keys:
-        - cache-$CI_DEFAULT_BRANCH
       paths:
         - .cache
 
