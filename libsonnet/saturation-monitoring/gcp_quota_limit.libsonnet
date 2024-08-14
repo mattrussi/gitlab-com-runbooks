@@ -89,7 +89,7 @@ local selectors = import 'promql/selectors.libsonnet';
         stackdriver_aiplatform_googleapis_com_location_aiplatform_googleapis_com_quota_online_prediction_requests_per_base_model_limit{%(selector)s,base_model="code-gecko"}
       ) > 0
     |||,
-    capabilityPlanning: {
+    capacityPlanning: {
       saturation_dimensions: [
         selectors.serializeHash({ region: 'asia-northeast1' }),
         selectors.serializeHash({ region: 'asia-northeast3' }),
