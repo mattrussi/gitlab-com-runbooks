@@ -4,102 +4,6 @@ groups:
 - name: 'Service Component Alerts: sentry'
   interval: 1m
   rules:
-  - alert: SentryServicePgTransactionsErrorSLOViolation
-    for: 2m
-    annotations:
-      title: The pg_transactions SLI of the sentry service (`{{ $labels.stage }}`
-        stage) has an error rate violating SLO
-      description: |
-        Represents all SQL transactions issued to the sentry Postgres instance. Errors represent transaction rollbacks.
-
-        Currently the error-rate is {{ $value | humanizePercentage }}.
-      grafana_dashboard_id: sentry-main/sentry-overview
-      grafana_dashboard_link: https://dashboards.gitlab.net/d/sentry-main/sentry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_datasource_id: mimir-gitlab-ops
-      grafana_min_zoom_hours: "6"
-      grafana_panel_id: "2208809543"
-      grafana_variables: environment,stage
-      promql_template_1: |
-        sum by (env,environment,tier,stage) (
-          rate(pg_stat_database_xact_rollback{datname="sentry",environment="{{ $labels.environment }}",job="postgres",stage="{{ $labels.stage }}",type="sentry"}[5m])
-        )
-      runbook: docs/sentry/README.md
-    labels:
-      aggregation: component
-      alert_class: slo_violation
-      alert_type: symptom
-      feature_category: not_owned
-      rules_domain: general
-      severity: s3
-      sli_type: error
-      slo_alert: "yes"
-      user_impacting: "no"
-      window: 1h
-    expr: |
-      (
-        (
-          gitlab_component_errors:ratio_1h{component="pg_transactions",env="ops",monitor="global",type="sentry"}
-          > (14.4 * 0.010000)
-        )
-        and
-        (
-          gitlab_component_errors:ratio_5m{component="pg_transactions",env="ops",monitor="global",type="sentry"}
-          > (14.4 * 0.010000)
-        )
-      )
-      and on(env,environment,tier,type,stage,component)
-      (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="pg_transactions",env="ops",monitor="global",type="sentry"}) >= 1
-      )
-  - alert: SentryServicePgTransactionsErrorSLOViolation
-    for: 2m
-    annotations:
-      title: The pg_transactions SLI of the sentry service (`{{ $labels.stage }}`
-        stage) has an error rate violating SLO
-      description: |
-        Represents all SQL transactions issued to the sentry Postgres instance. Errors represent transaction rollbacks.
-
-        Currently the error-rate is {{ $value | humanizePercentage }}.
-      grafana_dashboard_id: sentry-main/sentry-overview
-      grafana_dashboard_link: https://dashboards.gitlab.net/d/sentry-main/sentry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_datasource_id: mimir-gitlab-ops
-      grafana_min_zoom_hours: "6"
-      grafana_panel_id: "2208809543"
-      grafana_variables: environment,stage
-      promql_template_1: |
-        sum by (env,environment,tier,stage) (
-          rate(pg_stat_database_xact_rollback{datname="sentry",environment="{{ $labels.environment }}",job="postgres",stage="{{ $labels.stage }}",type="sentry"}[5m])
-        )
-      runbook: docs/sentry/README.md
-    labels:
-      aggregation: component
-      alert_class: slo_violation
-      alert_type: symptom
-      feature_category: not_owned
-      rules_domain: general
-      severity: s3
-      sli_type: error
-      slo_alert: "yes"
-      user_impacting: "no"
-      window: 6h
-    expr: |
-      (
-        (
-          gitlab_component_errors:ratio_6h{component="pg_transactions",env="ops",monitor="global",type="sentry"}
-          > (6 * 0.010000)
-        )
-        and
-        (
-          gitlab_component_errors:ratio_30m{component="pg_transactions",env="ops",monitor="global",type="sentry"}
-          > (6 * 0.010000)
-        )
-      )
-      and on(env,environment,tier,type,stage,component)
-      (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="pg_transactions",env="ops",monitor="global",type="sentry"}) >= 0.16667
-      )
   - alert: SentryServicePgTransactionsTrafficCessation
     for: 5m
     annotations:
@@ -118,9 +22,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          label_replace(rate(pg_stat_database_xact_commit{datname="sentry",environment="{{ $labels.environment }}",job="postgres",stage="{{ $labels.stage }}",type="sentry"}[5m]), "_c", "0", "", "")
-          or
-          label_replace(rate(pg_stat_database_xact_rollback{datname="sentry",environment="{{ $labels.environment }}",job="postgres",stage="{{ $labels.stage }}",type="sentry"}[5m]), "_c", "1", "", "")
+          rate(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count{database_id="gitlab-ops:sentry",environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
         )
       runbook: docs/sentry/README.md
     labels:
@@ -157,9 +59,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          label_replace(rate(pg_stat_database_xact_commit{datname="sentry",environment="{{ $labels.environment }}",job="postgres",stage="{{ $labels.stage }}",type="sentry"}[5m]), "_c", "0", "", "")
-          or
-          label_replace(rate(pg_stat_database_xact_rollback{datname="sentry",environment="{{ $labels.environment }}",job="postgres",stage="{{ $labels.stage }}",type="sentry"}[5m]), "_c", "1", "", "")
+          rate(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count{database_id="gitlab-ops:sentry",environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
         )
       runbook: docs/sentry/README.md
     labels:
@@ -176,6 +76,226 @@ groups:
       gitlab_component_ops:rate_5m{component="pg_transactions",env="ops",monitor="global",stage="main",type="sentry"} offset 1h
       unless
       gitlab_component_ops:rate_5m{component="pg_transactions",env="ops",monitor="global",stage="main",type="sentry"}
+  - alert: SentryServiceRabbitmqQueueTrafficCessation
+    for: 5m
+    annotations:
+      title: The rabbitmq_queue SLI of the sentry service (`{{ $labels.stage }}` stage)
+        has not received any traffic in the past 30m
+      description: |
+        Represents the size of the rabbitmq queue
+
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
+      grafana_dashboard_id: sentry-main/sentry-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/sentry-main/sentry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3909236269"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(rabbitmq_queue_messages{environment="{{ $labels.environment }}",namespace="sentry",stage="{{ $labels.stage }}"}[5m])
+        )
+      runbook: docs/sentry/README.md
+    labels:
+      aggregation: component
+      alert_class: traffic_cessation
+      alert_type: cause
+      feature_category: not_owned
+      rules_domain: general
+      severity: s3
+      sli_type: ops
+      slo_alert: "no"
+      user_impacting: "no"
+    expr: |
+      gitlab_component_ops:rate_30m{component="rabbitmq_queue",env="ops",monitor="global",stage="main",type="sentry"} == 0
+      and
+      gitlab_component_ops:rate_30m{component="rabbitmq_queue",env="ops",monitor="global",stage="main",type="sentry"} offset 1h >= 0.16666666666666666
+  - alert: SentryServiceRabbitmqQueueTrafficAbsent
+    for: 30m
+    annotations:
+      title: The rabbitmq_queue SLI of the sentry service (`{{ $labels.stage }}` stage)
+        has not reported any traffic in the past 30m
+      description: |
+        Represents the size of the rabbitmq queue
+
+        This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
+
+        This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
+      grafana_dashboard_id: sentry-main/sentry-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/sentry-main/sentry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3909236269"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(rabbitmq_queue_messages{environment="{{ $labels.environment }}",namespace="sentry",stage="{{ $labels.stage }}"}[5m])
+        )
+      runbook: docs/sentry/README.md
+    labels:
+      aggregation: component
+      alert_class: traffic_cessation
+      alert_type: cause
+      feature_category: not_owned
+      rules_domain: general
+      severity: s3
+      sli_type: ops
+      slo_alert: "no"
+      user_impacting: "no"
+    expr: |
+      gitlab_component_ops:rate_5m{component="rabbitmq_queue",env="ops",monitor="global",stage="main",type="sentry"} offset 1h
+      unless
+      gitlab_component_ops:rate_5m{component="rabbitmq_queue",env="ops",monitor="global",stage="main",type="sentry"}
+  - alert: SentryServiceRedisPrimaryServerTrafficCessation
+    for: 5m
+    annotations:
+      title: The redis_primary_server SLI of the sentry service (`{{ $labels.stage
+        }}` stage) has not received any traffic in the past 30m
+      description: |
+        Operations on the Redis primary for sentry's instance
+
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
+      grafana_dashboard_id: sentry-main/sentry-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/sentry-main/sentry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3519347278"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(redis_commands_processed_total{environment="{{ $labels.environment }}",namespace="sentry",stage="{{ $labels.stage }}"}[5m]) and on (instance) redis_instance_info{role="master"}
+        )
+      runbook: docs/sentry/README.md
+    labels:
+      aggregation: component
+      alert_class: traffic_cessation
+      alert_type: cause
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: ops
+      slo_alert: "no"
+      user_impacting: "no"
+    expr: |
+      gitlab_component_ops:rate_30m{component="redis_primary_server",env="ops",monitor="global",stage="main",type="sentry"} == 0
+      and
+      gitlab_component_ops:rate_30m{component="redis_primary_server",env="ops",monitor="global",stage="main",type="sentry"} offset 1h >= 0.16666666666666666
+  - alert: SentryServiceRedisPrimaryServerTrafficAbsent
+    for: 30m
+    annotations:
+      title: The redis_primary_server SLI of the sentry service (`{{ $labels.stage
+        }}` stage) has not reported any traffic in the past 30m
+      description: |
+        Operations on the Redis primary for sentry's instance
+
+        This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
+
+        This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
+      grafana_dashboard_id: sentry-main/sentry-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/sentry-main/sentry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3519347278"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(redis_commands_processed_total{environment="{{ $labels.environment }}",namespace="sentry",stage="{{ $labels.stage }}"}[5m]) and on (instance) redis_instance_info{role="master"}
+        )
+      runbook: docs/sentry/README.md
+    labels:
+      aggregation: component
+      alert_class: traffic_cessation
+      alert_type: cause
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: ops
+      slo_alert: "no"
+      user_impacting: "no"
+    expr: |
+      gitlab_component_ops:rate_5m{component="redis_primary_server",env="ops",monitor="global",stage="main",type="sentry"} offset 1h
+      unless
+      gitlab_component_ops:rate_5m{component="redis_primary_server",env="ops",monitor="global",stage="main",type="sentry"}
+  - alert: SentryServiceRedisSecondaryServersTrafficCessation
+    for: 5m
+    annotations:
+      title: The redis_secondary_servers SLI of the sentry service (`{{ $labels.stage
+        }}` stage) has not received any traffic in the past 30m
+      description: |
+        Operations on the Redis secondaries for the sentry instance.
+
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
+      grafana_dashboard_id: sentry-main/sentry-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/sentry-main/sentry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3264880497"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(redis_commands_processed_total{environment="{{ $labels.environment }}",namespace="sentry",stage="{{ $labels.stage }}"}[5m]) and on (instance) redis_instance_info{role="slave"}
+        )
+      runbook: docs/sentry/README.md
+    labels:
+      aggregation: component
+      alert_class: traffic_cessation
+      alert_type: cause
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: ops
+      slo_alert: "no"
+      user_impacting: "no"
+    expr: |
+      gitlab_component_ops:rate_30m{component="redis_secondary_servers",env="ops",monitor="global",stage="main",type="sentry"} == 0
+      and
+      gitlab_component_ops:rate_30m{component="redis_secondary_servers",env="ops",monitor="global",stage="main",type="sentry"} offset 1h >= 0.16666666666666666
+  - alert: SentryServiceRedisSecondaryServersTrafficAbsent
+    for: 30m
+    annotations:
+      title: The redis_secondary_servers SLI of the sentry service (`{{ $labels.stage
+        }}` stage) has not reported any traffic in the past 30m
+      description: |
+        Operations on the Redis secondaries for the sentry instance.
+
+        This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
+
+        This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
+      grafana_dashboard_id: sentry-main/sentry-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/sentry-main/sentry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-gitlab-ops
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3264880497"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(redis_commands_processed_total{environment="{{ $labels.environment }}",namespace="sentry",stage="{{ $labels.stage }}"}[5m]) and on (instance) redis_instance_info{role="slave"}
+        )
+      runbook: docs/sentry/README.md
+    labels:
+      aggregation: component
+      alert_class: traffic_cessation
+      alert_type: cause
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: ops
+      slo_alert: "no"
+      user_impacting: "no"
+    expr: |
+      gitlab_component_ops:rate_5m{component="redis_secondary_servers",env="ops",monitor="global",stage="main",type="sentry"} offset 1h
+      unless
+      gitlab_component_ops:rate_5m{component="redis_secondary_servers",env="ops",monitor="global",stage="main",type="sentry"}
   - alert: SentryServiceSentryEventsApdexSLOViolation
     for: 2m
     annotations:

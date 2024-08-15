@@ -32,6 +32,48 @@ groups:
     expr: "0.010000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
+      component: rabbitmq_queue
+      monitor: global
+      tier: inf
+      type: sentry
+    expr: "0.990000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      component: rabbitmq_queue
+      monitor: global
+      tier: inf
+      type: sentry
+    expr: "0.010000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      component: redis_primary_server
+      monitor: global
+      tier: inf
+      type: sentry
+    expr: "0.990000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      component: redis_primary_server
+      monitor: global
+      tier: inf
+      type: sentry
+    expr: "0.010000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      component: redis_secondary_servers
+      monitor: global
+      tier: inf
+      type: sentry
+    expr: "0.990000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      component: redis_secondary_servers
+      monitor: global
+      tier: inf
+      type: sentry
+    expr: "0.010000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
       component: sentry_events
       monitor: global
       tier: inf
@@ -47,6 +89,36 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: pg_transactions
+      global_aggregation: "no"
+      monitor: global
+      regional_aggregation: "no"
+      service_aggregation: "no"
+      tier: inf
+      type: sentry
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: rabbitmq_queue
+      global_aggregation: "no"
+      monitor: global
+      regional_aggregation: "no"
+      service_aggregation: "no"
+      tier: inf
+      type: sentry
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: redis_primary_server
+      global_aggregation: "no"
+      monitor: global
+      regional_aggregation: "no"
+      service_aggregation: "no"
+      tier: inf
+      type: sentry
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: redis_secondary_servers
       global_aggregation: "no"
       monitor: global
       regional_aggregation: "no"

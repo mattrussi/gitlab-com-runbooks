@@ -4,7 +4,12 @@ local histogramApdex = metricsCatalog.histogramApdex;
 local rateMetric = metricsCatalog.rateMetric;
 local combined = metricsCatalog.combined;
 
-metricsCatalog.serviceDefinition({
+ local sentryQuerySelector = {
+    namespace: 'sentry',
+  };
+
+metricsCatalog.serviceDefinition(
+  {
   type: 'sentry',
   tier: 'inf',
 
@@ -69,7 +74,7 @@ metricsCatalog.serviceDefinition({
       significantLabels: ['api_version', 'status'],
     },
 
-    pg_transactions: {
+    pg_transactions:  {
       severity: 's3',
       userImpacting: false,
       serviceAggregation: false,
@@ -79,23 +84,12 @@ metricsCatalog.serviceDefinition({
         Errors represent transaction rollbacks.
       |||,
 
-      local baseSelector = { type: 'sentry', job: 'postgres', datname: 'sentry' },
+      local baseSelector = { database_id: "gitlab-ops:sentry" },
 
-      requestRate: combined([
-        rateMetric(
-          counter='pg_stat_database_xact_commit',
+      requestRate: rateMetric(
+          counter='stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count',
           selector=baseSelector,
         ),
-        rateMetric(
-          counter='pg_stat_database_xact_rollback',
-          selector=baseSelector,
-        ),
-      ]),
-
-      errorRate: rateMetric(
-        counter='pg_stat_database_xact_rollback',
-        selector=baseSelector,
-      ),
 
       significantLabels: [],
       toolingLinks: [
@@ -110,6 +104,59 @@ metricsCatalog.serviceDefinition({
       ],
     },
 
+    redis_primary_server: {
+      apdexSkip: 'apdex for redis is measured clientside',
+      userImpacting: false,
+      featureCategory: 'not_owned',
+      serviceAggregation: false,
+      description: |||
+          Operations on the Redis primary for sentry's instance
+        |||,
+
+      requestRate: rateMetric(
+        counter='redis_commands_processed_total',
+        selector=sentryQuerySelector,
+        instanceFilter='redis_instance_info{role="master"}'
+        ),
+
+        significantLabels: ['instance'],
+
+        toolingLinks: [],
+    },
+
+      redis_secondary_servers: {
+        apdexSkip: 'apdex for redis is measured clientside',
+        userImpacting: false,  // userImpacting for data redundancy reasons
+        featureCategory: 'not_owned',
+        description: |||
+          Operations on the Redis secondaries for the sentry instance.
+        |||,
+
+        requestRate: rateMetric(
+          counter='redis_commands_processed_total',
+          selector=sentryQuerySelector,
+          instanceFilter='redis_instance_info{role="slave"}'
+        ),
+
+        significantLabels: ['instance'],
+        serviceAggregation: false,
+      },
+
+      rabbitmq_queue: {
+        severity: 's3',
+        userImpacting: false,
+        serviceAggregation: false,
+        featureCategory: 'not_owned',
+        description: |||
+          Represents the size of the rabbitmq queue
+        |||,
+
+        requestRate: rateMetric(
+          counter='rabbitmq_queue_messages',
+          selector=sentryQuerySelector,
+        ), 
+        significantLabels: [],
+      },
   },
   skippedMaturityCriteria: {
     'Structured logs available in Kibana': 'We are migrating our self-managed Sentry instance to the hosted one. For more information: https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/13963. Besides, Sentry logs are also available in Stackdriver.',

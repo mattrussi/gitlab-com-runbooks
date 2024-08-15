@@ -4,15 +4,26 @@ groups:
 - name: 'SLI Aggregations: sentry - pg_transactions - 5m burn-rate'
   interval: 1m
   rules:
-  - record: sli_aggregations:pg_stat_database_xact_commit:rate_5m
+  - record: sli_aggregations:stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count:rate_5m
     expr: |
-      sum by (component,datname,env,environment,feature_category,fqdn,job,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(pg_stat_database_xact_commit{datname=~"sentry",env="ops",job=~"postgres",type=~"sentry"}[5m] offset 30s)
+      sum by (component,database_id,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count{database_id=~"gitlab-ops:sentry",env="ops",type=~"sentry"}[5m] offset 30s)
       )
-  - record: sli_aggregations:pg_stat_database_xact_rollback:rate_5m
+- name: 'SLI Aggregations: sentry - rabbitmq_queue - 5m burn-rate'
+  interval: 1m
+  rules:
+  - record: sli_aggregations:rabbitmq_queue_messages:rate_5m
     expr: |
-      sum by (component,datname,env,environment,feature_category,fqdn,job,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(pg_stat_database_xact_rollback{datname=~"sentry",env="ops",job=~"postgres",type=~"sentry"}[5m] offset 30s)
+      sum by (component,env,environment,feature_category,fqdn,namespace,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(rabbitmq_queue_messages{env="ops",namespace=~"sentry",type=~"sentry"}[5m] offset 30s)
+      )
+- name: 'SLI Aggregations: sentry - redis_primary_server - 5m burn-rate'
+  interval: 1m
+  rules:
+  - record: sli_aggregations:redis_commands_processed_total:rate_5m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,instance,namespace,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(redis_commands_processed_total{env="ops",namespace=~"sentry",type=~"sentry"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: sentry - sentry_events - 5m burn-rate'
   interval: 1m
@@ -30,15 +41,26 @@ groups:
 - name: 'SLI Aggregations: sentry - pg_transactions - 30m burn-rate'
   interval: 2m
   rules:
-  - record: sli_aggregations:pg_stat_database_xact_commit:rate_30m
+  - record: sli_aggregations:stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count:rate_30m
     expr: |
-      sum by (component,datname,env,environment,feature_category,fqdn,job,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(pg_stat_database_xact_commit{datname=~"sentry",env="ops",job=~"postgres",type=~"sentry"}[30m] offset 30s)
+      sum by (component,database_id,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count{database_id=~"gitlab-ops:sentry",env="ops",type=~"sentry"}[30m] offset 30s)
       )
-  - record: sli_aggregations:pg_stat_database_xact_rollback:rate_30m
+- name: 'SLI Aggregations: sentry - rabbitmq_queue - 30m burn-rate'
+  interval: 2m
+  rules:
+  - record: sli_aggregations:rabbitmq_queue_messages:rate_30m
     expr: |
-      sum by (component,datname,env,environment,feature_category,fqdn,job,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(pg_stat_database_xact_rollback{datname=~"sentry",env="ops",job=~"postgres",type=~"sentry"}[30m] offset 30s)
+      sum by (component,env,environment,feature_category,fqdn,namespace,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(rabbitmq_queue_messages{env="ops",namespace=~"sentry",type=~"sentry"}[30m] offset 30s)
+      )
+- name: 'SLI Aggregations: sentry - redis_primary_server - 30m burn-rate'
+  interval: 2m
+  rules:
+  - record: sli_aggregations:redis_commands_processed_total:rate_30m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,instance,namespace,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(redis_commands_processed_total{env="ops",namespace=~"sentry",type=~"sentry"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: sentry - sentry_events - 30m burn-rate'
   interval: 2m
@@ -56,15 +78,26 @@ groups:
 - name: 'SLI Aggregations: sentry - pg_transactions - 1h burn-rate'
   interval: 1m
   rules:
-  - record: sli_aggregations:pg_stat_database_xact_commit:rate_1h
+  - record: sli_aggregations:stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count:rate_1h
     expr: |
-      sum by (component,datname,env,environment,feature_category,fqdn,job,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(pg_stat_database_xact_commit{datname=~"sentry",env="ops",job=~"postgres",type=~"sentry"}[1h] offset 30s)
+      sum by (component,database_id,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count{database_id=~"gitlab-ops:sentry",env="ops",type=~"sentry"}[1h] offset 30s)
       )
-  - record: sli_aggregations:pg_stat_database_xact_rollback:rate_1h
+- name: 'SLI Aggregations: sentry - rabbitmq_queue - 1h burn-rate'
+  interval: 1m
+  rules:
+  - record: sli_aggregations:rabbitmq_queue_messages:rate_1h
     expr: |
-      sum by (component,datname,env,environment,feature_category,fqdn,job,product_stage,region,shard,stage,stage_group,tier,type) (
-        rate(pg_stat_database_xact_rollback{datname=~"sentry",env="ops",job=~"postgres",type=~"sentry"}[1h] offset 30s)
+      sum by (component,env,environment,feature_category,fqdn,namespace,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(rabbitmq_queue_messages{env="ops",namespace=~"sentry",type=~"sentry"}[1h] offset 30s)
+      )
+- name: 'SLI Aggregations: sentry - redis_primary_server - 1h burn-rate'
+  interval: 1m
+  rules:
+  - record: sli_aggregations:redis_commands_processed_total:rate_1h
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,instance,namespace,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(redis_commands_processed_total{env="ops",namespace=~"sentry",type=~"sentry"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: sentry - sentry_events - 1h burn-rate'
   interval: 1m
