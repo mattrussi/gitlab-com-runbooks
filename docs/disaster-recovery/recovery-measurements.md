@@ -1,5 +1,7 @@
 # Measuring Recovery Activities
 
+[TOC]
+
 During the process of testing our recovery processes for Zonal and Regional outages, we want to record timing information.
 There are three different timing categories right now:
 
@@ -61,3 +63,17 @@ Ideally, this measurement is designed to inform the overall flow and duration of
 | Date | Environment | Duration | Notes |
 | ---- | ----------- | -------- | ----- |
 | 2024-08-08 | GSTG | 01:12:SS | For this [Gameday excersize on GSTG](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/18358) , attempted to create new patroni nodes in recovery zones , took longer than expected because we hit the snapshot quota|
+
+## HAProxy/Traffic Routing Zonal Outage DR Process Time
+
+### VM Creation Times
+
+| Date | Environment | VM Provision Time | Bootstrap time | Notes |
+| ---- | ----------- | -------- | ---- | ----- |
+| 2024-08-14 | GSTG | 00:14:40 | 00:13:15 | [Game Day change issue on GSTG](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/18356) |
+
+### Gameday Zonal Outage DR Process Time
+
+| Date | Environment | Duration | Notes |
+| ---- | ----------- | -------- | ----- |
+| 2024-08-14 | GSTG | 00:53:00 | [Game Day change issue on GSTG](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/18356) |
