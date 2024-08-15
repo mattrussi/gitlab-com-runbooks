@@ -1,4 +1,5 @@
 teams:
+
 - name: sre_reliability
   url: https://about.gitlab.com/handbook/engineering/infrastructure/team/reliability/#core-infra
   slack_channel: production
@@ -181,6 +182,7 @@ teams:
   product_stage_group: authentication
   ignored_components:
   - graphql_query
+
 - name: authorization
   slack_alerts_channel: g_govern_authorization
   slack_error_budget_channel: g_govern_authorization
@@ -245,76 +247,92 @@ teams:
   product_stage_group: code_review
   ignored_components:
   - graphql_query
+
 - name: compliance
   product_stage_group: compliance
   slack_error_budget_channel: g_govern_compliance
   send_error_budget_weekly_to_slack: true
   ignored_components:
   - graphql_query
+
 - name: composition_analysis
   product_stage_group: composition_analysis
   slack_error_budget_channel: g_secure-composition-analysis
   send_error_budget_weekly_to_slack: true
   ignored_components:
   - graphql_query
+
 - name: acquisition
   product_stage_group: acquisition
   slack_error_budget_channel: g_acquisition
   send_error_budget_weekly_to_slack: true
   ignored_components:
   - graphql_query
+
 - name: database
   product_stage_group: database
   ignored_components:
   - graphql_query
+
 - name: dataops
   product_stage_group: dataops
   ignored_components:
   - graphql_query
+
 - name: dynamic_analysis
   product_stage_group: dynamic_analysis
   slack_error_budget_channel: g_secure-dynamic-analysis
   send_error_budget_weekly_to_slack: true
   ignored_components:
   - graphql_query
+
 - name: remote_development
   product_stage_group: remote_development
   ignored_components:
   - graphql_query
+
 - name: personal_productivity
   product_stage_group: personal_productivity
   ignored_components:
   - graphql_query
+
 - name: dedicated
   product_stage_group: dedicated
   ignored_components:
   - graphql_query
+
 - name: import_and_integrate
   product_stage_group: import_and_integrate
   ignored_components:
   - graphql_query
+
 - name: provision
   product_stage_group: provision
   ignored_components:
   - graphql_query
+
 - name: cloud_connector
   product_stage_group: cloud_connector
   ignored_components:
   - graphql_query
+
 - name: mlops
   product_stage_group: mlops
   ignored_components:
   - graphql_query
+
 - name: mobile_devops
   product_stage_group: mobile_devops
   ignored_components:
   - graphql_query
+
 - name: respond
   product_stage_group: respond
   send_error_budget_weekly_to_slack: true
   slack_error_budget_channel: s_monitor
   ignored_components:
   - graphql_query
+
 - name: observability
   product_stage_group: observability
   slack_alerts_channel: g_observability_alerts
@@ -324,10 +342,12 @@ teams:
   - gstg
   ignored_components:
   - graphql_query
+
 - name: optimize
   product_stage_group: optimize
   ignored_components:
   - graphql_query
+
 - name: pipeline_authoring
   product_stage_group: pipeline_authoring
   send_slo_alerts_to_team_slack_channel: true
@@ -336,6 +356,7 @@ teams:
   slack_error_budget_channel: ci-section
   ignored_components:
   - graphql_query
+
 - name: pipeline_execution
   product_stage_group: pipeline_execution
   slack_channel: g_pipeline-execution
@@ -345,37 +366,45 @@ teams:
   send_error_budget_weekly_to_slack: true
   ignored_components:
   - graphql_query
+
 - name: analytics_instrumentation
   product_stage_group: analytics_instrumentation
   slack_error_budget_channel: g_analytics_instrumentation_alerts
   send_error_budget_weekly_to_slack: true
   ignored_components:
   - graphql_query
+
 - name: product_planning
   product_stage_group: product_planning
   slack_alerts_channel: s_plan-be
   ignored_components:
   - graphql_query
+
 - name: project_management
   product_stage_group: project_management
   ignored_components:
   - graphql_query
+
 - name: tenant_scale
   product_stage_group: tenant_scale
   ignored_components:
   - graphql_query
+
 - name: source_code
   product_stage_group: source_code
   ignored_components:
   - graphql_query
+
 - name: static_analysis
   product_stage_group: static_analysis
   slack_error_budget_channel: g_secure-static-analysis
   send_error_budget_weekly_to_slack: true
+
 - name: secret_detection
   product_stage_group: secret_detection
   slack_error_budget_channel: g_secure-secret-detection
   send_error_budget_weekly_to_slack: true
+
 - name: pipeline_security
   product_stage_group: pipeline_security
   slack_channel: g_pipeline-security
@@ -384,12 +413,14 @@ teams:
   send_error_budget_weekly_to_slack: true
   ignored_components:
   - graphql_query
+
 - name: threat_insights
   product_stage_group: threat_insights
   ignored_components:
   - graphql_query
   slack_error_budget_channel: g_govern_threat_insights
   send_error_budget_weekly_to_slack: true
+
 - name: ai_framework
   url: https://about.gitlab.com/handbook/engineering/development/data-science/ai-framework/
   manager: oregand
@@ -401,28 +432,34 @@ teams:
   send_error_budget_weekly_to_slack: true
   send_slo_alerts_to_team_slack_channel: true
   slack_alerts_channel: g_mlops-alerts
+
 - name: subscription_management
   product_stage_group: subscription_management
   ignored_components:
   - graphql_query
+
 - name: utilization
   product_stage_group: utilization
   ignored_components:
   - graphql_query
+
 - name: vulnerability_research
   product_stage_group: vulnerability_research
   ignored_components:
   - graphql_query
+
 - name: fulfillment_platform
   product_stage_group: fulfillment_platform
   slack_alerts_channel: s_fulfillment_status
   send_slo_alerts_to_team_slack_channel: true
   ignored_components:
   - graphql_query
+
 - name: security_policies
   product_stage_group: security_policies
   slack_error_budget_channel: g_govern_security_policies
   send_error_budget_weekly_to_slack: true
+
 - name: ops
   url: https://about.gitlab.com/handbook/engineering/development/ops
   slack_channel: doe-ops
@@ -461,7 +498,6 @@ teams:
   url: https://handbook.gitlab.com/handbook/engineering/infrastructure/
   label: team::Unowned
 
-
 - name: reliability_database_reliability
   url: https://about.gitlab.com/handbook/engineering/infrastructure/team/reliability/database-reliability.html#ownership
   manager: rmar1
@@ -483,6 +519,11 @@ teams:
 
 - name: security_operations
   url: https://handbook.gitlab.com/handbook/security/security-operations
+
+- name: security_corporate
+  url: https://handbook.gitlab.com/handbook/security/corporate/team/
+  manager: dzhu
+  label: team::CorpSec
 
 # Marketing
 

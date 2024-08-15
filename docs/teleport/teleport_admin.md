@@ -249,14 +249,14 @@ If you need to update or rotate the auth identity for `teleport-event-handler` u
 follow the steps below for each Teleport cluster.
 
 <details>
-<summary></summary>
+<summary>Commands</summary>
 
 ```bash
 $ tsh login --proxy=production.teleport.gitlab.net
 $ tctl get saml/okta --with-secrets > user-saml-production.yaml
 
-#   1. Open user-saml-production.yaml
-#   2. Add `teleport-event-handler-impersonator` to your "GitLab - SRE" group roles.
+# 1. Open user-saml-production.yaml
+# 2. Add `teleport-event-handler-impersonator` to your "GitLab - SRE" group roles.
 tctl create -f user-saml-production.yaml
 
 # Login again to assume the teleport-event-handler-impersonator role
@@ -267,7 +267,7 @@ $ tsh login --proxy=production.teleport.gitlab.net
 $ tctl auth sign --user=teleport-event-handler --ttl=8760h --out=auth-id-production
 
 # Write the secret to Vault
-$ vault login -method oidc role=admin
+$ vault login -method oidc
 $ vault kv put k8s/ops-central/teleport-cluster-production/event-handler auth_id=@auth-id-production
 $ vault kv get -format=json k8s/ops-central/teleport-cluster-production/event-handler | jq '.data.metadata.version'
 ```
