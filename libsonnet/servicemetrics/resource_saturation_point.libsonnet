@@ -56,7 +56,7 @@ local definitionValidor = validator.new({
     forecast_days: positiveNumber,
     historical_days: positiveNumber,
     changepoints_count: positiveNumber,
-    saturation_dimensions: validator.optional(validator.array),
+    saturation_dimensions: validator.optional(validator.arrayOfStrings),
   },
   alerting: {
     // TODO: we should move all of the alerting attributes in here
