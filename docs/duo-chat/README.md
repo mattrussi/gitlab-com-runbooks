@@ -10,7 +10,7 @@
 
 ## Overview
 
-When you encounter a Duo Chat error code, it is not always clear where the error comes from and which team is responsible. The following runbook should be give any GitLab team member a quick start guide for debugging Duo Chat errors.
+When you encounter a Duo Chat error code, it is not always clear where the error comes from and which team is responsible. The following runbook should give any GitLab team member a quick start guide for debugging Duo Chat errors.
 
 ## Quick Links
 
@@ -21,12 +21,12 @@ When you encounter a Duo Chat error code, it is not always clear where the error
 
 Log links for various environments can be found [here](../logging#quick-start).
 
-Different deployments use different indexes. AN The following indexes are most helpful when debugging Duo Chat:
+Different deployments use different indexes. The following indexes are most helpful when debugging Duo Chat:
 
 - AI Gateway logs are in the `pubsub-mlops-inf-gprd-*` index
 - GitLab Rails Sidekiq logs are in the `pubsub-sidekiq-inf-gprd*` index
-  - When searching this index, filtering on `json.subcomponent : "llm"` ensures you are only include
-- GitLab Rails logs are in the the `pubsub-rails-inf-gprd-*` index
+  - When searching this index, filtering on `json.subcomponent : "llm"` ensures only LLM logs are returned
+- GitLab Rails logs are in the `pubsub-rails-inf-gprd-*` index
 
 ### Extra Kibana links
 
@@ -37,7 +37,7 @@ You can find other helpful log searches by looking at saved Kibana objects with 
 
 ## Types of Duo Chat Errors
 
-All of GitLab Duo Chat [error codes are documented in the following](https://gitlab.com/gitlab-org/gitlab/-/blob/master/doc/user/gitlab_duo_chat/troubleshooting.md#the-gitlab-duo-chat-button-is-not-displayed) page. To discover what the issue is please use the error code prefix letter to help choose where to search in Elastic logs.
+All of GitLab Duo Chat [error codes are documented in the following](https://gitlab.com/gitlab-org/gitlab/-/blob/master/doc/user/gitlab_duo_chat/troubleshooting.md#the-gitlab-duo-chat-button-is-not-displayed) page. To discover what the issue is, please use the error code prefix letter to help choose where to search in Elastic logs.
 
 ### Error Code Layer Identifier
 
@@ -49,7 +49,7 @@ All of GitLab Duo Chat [error codes are documented in the following](https://git
 
 ### Debugging Error Codes A1000-6000
 
-Normally, when you recieve an error code starting with 'A', there's an issue regarding either a timeout or limit access due to rate limiting, etc with our third party llm provider. The first step to take is make sure their are no on-going outages.
+Normally, when you recieve an error code starting with 'A', there's an issue regarding either a timeout or limit access due to rate limiting, etc with our third party llm provider. The first step to take is make sure there are no on-going outages.
 
 Here are the following steps to go through:
 
@@ -61,7 +61,7 @@ Check to see if Google Cloud Platform is currently not reporting any issues:
 
 - [Google Cloud Platform Issues](https://status.cloud.google.com/)
 
-If there's a degredation of service from one of our LLM providers, you still won't know what blast radius the degredation of services is causing to Duo Chat. We have a grafana dashboard that provides a better overivew of the following issues we may be seeing [Grafana AIGW Dashboard](https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway3a-overview?orgId=1)
+If there's a degredation of service from one of our LLM providers, you still won't know what blast radius the degredation of services is causing to Duo Chat. We have a Grafana dashboard that provides a better overivew of the following issues we may be seeing [Grafana AIGW Dashboard](https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway3a-overview?orgId=1)
 
 The most valuable dashboards to provide an overall health status are `Aggregated Service Level Indicators (𝙎𝙇𝙄𝙨)`
 
@@ -111,7 +111,8 @@ With a `correlation_id` from GitLab Rails or Sidekiq logs, you can find the same
 
 ## Further troubleshooting
 
-**WARNING**: **DO NOT ENABLE FOR CUSTOMERS**.GitLab does not retain input and output data unless customers provide consent through a [GitLab Support Ticket](https://docs.gitlab.com/ee/user/gitlab_duo/data_usage.html#:~:text=GitLab%20does%20not%20retain%20input%20and%20output%20data%20unless%20customers%20provide%20consent%20through%20a%20GitLab%20Support%20Ticket.).
+**WARNING**: **DO NOT ENABLE FOR CUSTOMERS**.
+GitLab does not retain input and output data unless customers provide consent through a [GitLab Support Ticket](https://docs.gitlab.com/ee/user/gitlab_duo/data_usage.html#:~:text=GitLab%20does%20not%20retain%20input%20and%20output%20data%20unless%20customers%20provide%20consent%20through%20a%20GitLab%20Support%20Ticket.).
 
 We do allow the option to enable enhanced ai logging by enabling the `expanded_ai_logging` feature flag. The flag will allow you to see input and ouput of any of the following AI tools.
 
