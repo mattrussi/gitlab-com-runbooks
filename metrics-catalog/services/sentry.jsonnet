@@ -154,7 +154,7 @@ metricsCatalog.serviceDefinition(
         requestRate: rateMetric(
           counter='rabbitmq_queue_messages',
           selector=sentryQuerySelector,
-        ), 
+        ),
         significantLabels: [],
       },
   },
