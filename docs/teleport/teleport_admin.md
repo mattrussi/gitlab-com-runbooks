@@ -98,7 +98,7 @@ for more information on storing Teleport private keys in Google Cloud KMS.
 We create a [Key Ring](https://cloud.google.com/kms/docs/resource-hierarchy#key_rings) and a *CryptoKey* for Teleport CA
 in this [file](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/main/modules/teleport-project/kms.tf).
 We then reference this key when installing the `teleport-cluster` Helm chart
-[here](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/blob/01976afc89a7f3b86e58751a13aad6d0c8d25572/releases/teleport-cluster/ops-central-production.yaml.gotmpl#L30)
+[here](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/blob/1191371c0675c947ff40ed9bb76f58f2bdee24f9/releases/teleport-cluster/ops-central-production.yaml.gotmpl#L31)
 
 We do not manage any certificate authority and private keys inside the cluster. They are all stored in and managed by KMS.
 
@@ -115,8 +115,8 @@ The PosgreSQL databases are registered with the Teleport instance by
 running on our regional Kubernetes clusters.
 
 The certificates (
-  [gprd](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/blob/7b160f1ea422ae44515ba46830347565c19ca708/releases/teleport-agent/values-secrets/gprd.yaml.gotmpl#L12) and
-  [gstg](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/blob/7b160f1ea422ae44515ba46830347565c19ca708/releases/teleport-agent/values-secrets/gstg.yaml.gotmpl#L12
+  [gprd](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/blob/1191371c0675c947ff40ed9bb76f58f2bdee24f9/releases/teleport-agent/values-secrets/gprd.yaml.gotmpl#L12) and
+  [gstg](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/blob/1191371c0675c947ff40ed9bb76f58f2bdee24f9/releases/teleport-agent/values-secrets/gstg.yaml.gotmpl#L12
 ) used by
 [teleport-agent](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/tree/master/releases/teleport-agent)
 running on Kubernetes clusters should match the PostgreSQL server certificate located at `/var/opt/gitlab/postgresql/server.crt`.
@@ -203,7 +203,7 @@ $ vault kv put k8s/ops-central/teleport-cluster-production/license license.pem=@
 ```
 
 Grab the latest version from the output last command and update it
-[here](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/blob/master/releases/teleport-cluster/values-secrets/ops-central-production.yaml.gotmpl?ref_type=heads#L10).
+[here](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/blob/1191371c0675c947ff40ed9bb76f58f2bdee24f9/releases/teleport-cluster/values-secrets/ops-central-production.yaml.gotmpl#L14).
 
 Finally restart the Teleport Auth component.
 
@@ -275,7 +275,7 @@ $ vault kv get -format=json k8s/ops-central/teleport-cluster-production/event-ha
 </details>
 
 Get the lastest secret version from Vault and update the `teleport-cluster` release with it
-[here](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/blob/a2aa14a8676e6a839e62ad90350f438e13cca58e/releases/teleport-cluster/values-secrets/ops-central-production.yaml.gotmpl#L36)
+[here](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/blob/1191371c0675c947ff40ed9bb76f58f2bdee24f9/releases/teleport-cluster/values-secrets/ops-central-production.yaml.gotmpl#L22)
 
 ### Configuring mTLS Communication
 
@@ -437,9 +437,8 @@ $ vault kv put k8s/ops-central/teleport-cluster-production/fluentd-certs \
     client.key="$(cat client.key)"
 ```
 
-Finally, get the latest secret version from the Vault and update the `teleport-cluster` release for
-staging [here](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/blob/99d1cf9ab9c96a25b68148fe98ddb4b3c62018ee/releases/teleport-cluster/values-secrets/ops-staging.yaml.gotmpl#L38)
-and production [here](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/blob/99d1cf9ab9c96a25b68148fe98ddb4b3c62018ee/releases/teleport-cluster/values-secrets/ops-central-production.yaml.gotmpl#L38).
+Finally, get the latest secret version from the Vault and update the `teleport-cluster` release
+[here](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/blob/1191371c0675c947ff40ed9bb76f58f2bdee24f9/releases/teleport-cluster/values-secrets/ops-central-production.yaml.gotmpl#L24).
 
 ### Google Cloud Pub/Sub Configurations
 
