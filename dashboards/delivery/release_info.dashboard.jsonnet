@@ -274,7 +274,7 @@ local patchReleaseInfoTextPanel =
     content=|||
       # Active Patch Release
 
-      Patch releases include bug and security fixes based on the [Maintenance Policy](https://docs.gitlab.com/ee/policy/maintenance.html), they are scheduled twice a month on the second and fourth Wednesdays.
+      Patch releases include bug and security fixes based on the [Maintenance Policy](https://docs.gitlab.com/ee/policy/maintenance.html), they are scheduled twice a month on the Wednesday the week before and the Wednesday the week after the monthly minor release.
 
       The following panels contain information about the active patch release.
 
