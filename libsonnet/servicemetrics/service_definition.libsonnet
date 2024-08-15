@@ -7,6 +7,12 @@ local misc = import 'utils/misc.libsonnet';
 local objects = import 'utils/objects.libsonnet';
 local validator = import 'utils/validator.libsonnet';
 
+local capacityPlanningValidator = validator.new({
+  capacityPlanning: {
+    saturation_dimensions: validator.optional(validator.arrayOfStrings),
+  },
+});
+
 // For now we assume that services are provisioned on vms and not kubernetes
 local provisioningDefaults = { vms: true, kubernetes: false, runway: false };
 local serviceDefaults = {
@@ -92,7 +98,9 @@ local validateTenants(serviceDefinition) =
 local validate(serviceDefinition) =
   validateTenants(serviceDefinition)
   +
-  validateMonitoring(serviceDefinition);
+  validateMonitoring(serviceDefinition)
+  +
+  capacityPlanningValidator.assertValid(serviceDefinition);
 
 // Convenience method, will wrap a raw definition in a serviceLevelIndicatorDefinition if needed
 local prepareComponent(definition) =
