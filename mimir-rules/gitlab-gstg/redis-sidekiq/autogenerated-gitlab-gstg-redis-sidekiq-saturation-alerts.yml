@@ -1136,6 +1136,62 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="redis_secondary_cpu",env="gstg",type="redis-sidekiq"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="redis_secondary_cpu"}
+  - alert: component_saturation_slo_out_of_bounds:redis_sentinel_clients
+    for: 5m
+    annotations:
+      title: The Redis Sentinel Client Utilization per Node resource of the {{ $labels.type
+        }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
+        is close to its capacity limit.
+      description: |
+        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
+
+        Details of the Redis Sentinel Client Utilization per Node resource:
+
+        Redis sentinel client utilization per node.
+
+        A redis sentinel has a maximum number of clients that can connect. When this resource is saturated, new clients may fail to connect redis server because "Sentinel is both responsible for reconfiguring instances during failovers, and providing configurations to clients connecting to Redis masters or replicas" per docs.
+
+        More details at https://redis.io/docs/latest/develop/reference/sentinel-clients/
+      grafana_dashboard_id: alerts-sat_redis_sentinel_clients
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_redis_sentinel_clients?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}
+      grafana_datasource_id: mimir-gitlab-gstg
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "387778341"
+      grafana_variables: environment,type,stage
+      promql_query: |
+        max by(environment, tier, type, stage, shard, fqdn, instance, shard) (
+          clamp_min(
+            clamp_max(
+              max_over_time(gitlab_redis_sentinel_connected_clients{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[1m])
+              /
+              gitlab_redis_sentinel_maxclients{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
+              ,
+              1)
+          ,
+          0)
+        )
+      promql_template_1: |
+        max by(environment, tier, type, stage, shard, fqdn, instance, shard) (
+          clamp_min(
+            clamp_max(
+              max_over_time(gitlab_redis_sentinel_connected_clients{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[1m])
+              /
+              gitlab_redis_sentinel_maxclients{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
+              ,
+              1)
+          ,
+          0)
+        )
+      runbook: docs/{{ $labels.type }}/README.md
+    labels:
+      alert_type: cause
+      rules_domain: general
+      severity: s3
+    expr: |
+      gitlab_component_saturation:ratio{component="redis_sentinel_clients",env="gstg",type="redis-sidekiq"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="redis_sentinel_clients"}
   - alert: component_saturation_slo_out_of_bounds:shard_cpu
     for: 5m
     annotations:

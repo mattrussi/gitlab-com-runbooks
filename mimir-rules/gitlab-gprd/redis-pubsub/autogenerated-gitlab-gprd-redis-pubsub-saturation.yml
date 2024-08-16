@@ -324,6 +324,21 @@ groups:
       )
   - record: gitlab_component_saturation:ratio
     labels:
+      component: redis_sentinel_clients
+    expr: |
+      max by(env, environment, tier, type, stage, shard) (
+        clamp_min(
+          clamp_max(
+            max_over_time(gitlab_redis_sentinel_connected_clients{env="gprd",type="redis-pubsub"}[1m])
+            /
+            gitlab_redis_sentinel_maxclients{env="gprd",type="redis-pubsub"}
+            ,
+            1)
+        ,
+        0)
+      )
+  - record: gitlab_component_saturation:ratio
+    labels:
       component: shard_cpu
     expr: |
       max by(env, environment, tier, type, stage, shard) (
