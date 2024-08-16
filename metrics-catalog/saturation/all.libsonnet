@@ -56,6 +56,7 @@
   import 'saturation-monitoring/puma_workers.libsonnet',
   import 'saturation-monitoring/rails_db_connection_pool.libsonnet',
   import 'saturation-monitoring/redis_clients.libsonnet',
+  import 'saturation-monitoring/redis_sentinel_clients.libsonnet',
   import 'saturation-monitoring/redis_memory.libsonnet',
   import 'saturation-monitoring/redis_primary_cpu.libsonnet',
   import 'saturation-monitoring/redis_secondary_cpu.libsonnet',
