@@ -11,7 +11,7 @@ function main() {
 
   echo "Repository Directory: ${REPO_DIR}"
 
-  if [[ -z "${JSONNET_VENDOR_DIR:-}" ]]; then
+  if [[ -z ${JSONNET_VENDOR_DIR:-} ]]; then
     JSONNET_VENDOR_DIR="${REPO_DIR}/vendor"
   fi
 
@@ -33,31 +33,31 @@ function main() {
   # Validate input arguments and flags
   while [[ $# -gt 0 ]]; do
     case $1 in
-      --generate-mixins)
-        generate_mixins_flag=true
-        mixins_src_dir="${REPO_DIR}/mixins-monitoring"
-        echo "Mixin Source Directory: ${mixins_src_dir}"
-        shift
-        ;;
-      *)
-        if [[ -z "${reference_architecture_src_dir:-}" ]]; then
-          reference_architecture_src_dir="$1"
-        elif [[ -z "${dest_dir:-}" ]]; then
-          dest_dir="$1"
-        elif [[ -z "${overrides_dir:-}" ]]; then
-          overrides_dir="$1"
-          paths+=("-J" "${overrides_dir}")
-          echo "Overrides Directory: ${overrides_dir}"
-        else
-          echo "Invalid argument: $1"
-          usage
-        fi
-        shift
-        ;;
+    --generate-mixins)
+      generate_mixins_flag=true
+      mixins_src_dir="${REPO_DIR}/mixins-monitoring"
+      echo "Mixin Source Directory: ${mixins_src_dir}"
+      shift
+      ;;
+    *)
+      if [[ -z ${reference_architecture_src_dir:-} ]]; then
+        reference_architecture_src_dir="$1"
+      elif [[ -z ${dest_dir:-} ]]; then
+        dest_dir="$1"
+      elif [[ -z ${overrides_dir:-} ]]; then
+        overrides_dir="$1"
+        paths+=("-J" "${overrides_dir}")
+        echo "Overrides Directory: ${overrides_dir}"
+      else
+        echo "Invalid argument: $1"
+        usage
+      fi
+      shift
+      ;;
     esac
   done
 
-  if [[ -z "${reference_architecture_src_dir:-}" ]] || [[ -z "${dest_dir:-}" ]]; then
+  if [[ -z ${reference_architecture_src_dir:-} ]] || [[ -z ${dest_dir:-} ]]; then
     echo "Missing required arguments"
     usage
   fi
@@ -87,7 +87,7 @@ function main() {
 
   local out=$(generate_output "$dest_dir" "$source_file" "${paths[@]}" "${params[@]}")
 
-  if [[ "$generate_mixins_flag" == true ]]; then
+  if [[ $generate_mixins_flag == true ]]; then
     if [[ -f "$overrides_dir/mixins.jsonnet" ]]; then
       mixins_file="$overrides_dir/mixins.jsonnet"
     else
@@ -123,7 +123,7 @@ function restore_cache() {
   while IFS= read -r file; do
     mkdir -p "$(dirname "$file")"
     cp "${REPO_DIR}/.cache/$file" "$file"
-  done < "$cache_out_file"
+  done <"$cache_out_file"
   cat "$cache_out_file"
 }
 
@@ -151,7 +151,7 @@ function save_cache() {
   while IFS= read -r file; do
     mkdir -p "$(dirname "${REPO_DIR}/.cache/$file")"
     cp "$file" "${REPO_DIR}/.cache/$file"
-  done <<< "$out"
+  done <<<"$out"
 }
 
 function update_cache() {
@@ -177,7 +177,7 @@ function generate_mixins() {
 
   local mixins_out=""
 
-  if [[ -f "$mixins_file" ]]; then
+  if [[ -f $mixins_file ]]; then
     "${REPO_DIR}/scripts/ensure-mixtool.sh"
 
     local original_dir=$(pwd)
