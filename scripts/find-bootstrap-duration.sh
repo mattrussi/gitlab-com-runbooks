@@ -17,11 +17,11 @@ host="$1"
 
 date="$(date "+%F" | tr -d '-')"
 
-if [[ -n "$DATE_OVERRIDE" ]]; then
+if [[ -n $DATE_OVERRIDE ]]; then
   date="$DATE_OVERRIDE"
 fi
 
-if [[ -n "$host" ]]; then
+if [[ -n $host ]]; then
   scp -o StrictHostKeyChecking=no -q $0 "$host:/tmp/find-bootstrap.sh"
   ssh -o StrictHostKeyChecking=no "$host" "DATE_OVERRIDE=$DATE_OVERRIDE bash /tmp/find-bootstrap.sh"
   exit 0
@@ -42,7 +42,7 @@ chef_minutes=0
 for duration in $chef_durations; do
   seconds="$(awk -F':' '{print $2}' <<<"$duration")"
 
-  if [[ -z "$seconds" ]]; then
+  if [[ -z $seconds ]]; then
     seconds="$(awk -F':' '{print $1}' <<<"$duration")"
     chef_seconds=$((chef_seconds + 10#$seconds))
     continue
