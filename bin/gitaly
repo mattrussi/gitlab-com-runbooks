@@ -340,7 +340,7 @@ repositories_checksum() {
 
   [[ -z $project ]] && [[ -z $storage ]] || [[ -z ${env:-} ]] && usage "${FUNCNAME[0]}"
 
-  if [[ -n "$storage" ]]; then
+  if [[ -n $storage ]]; then
     local pat
     pat="$(admin_pat)"
     project_json="$(find_project_on_storage "$storage" "$group")"
@@ -593,7 +593,7 @@ find_project_on_storage() {
 
   curl_uri="$(api_for_env)/projects?repository_storage=${storage}&order_by=created_at&sort=asc"
 
-  if [[ -n "$group" ]]; then
+  if [[ -n $group ]]; then
     curl_uri="${curl_uri}&search=${group}/"
   fi
 
