@@ -6,18 +6,18 @@ groups:
       clamp_max(stackdriver_gce_disk_logging_googleapis_com_user_scheduled_snapshots + 1, 1)
   - alert: GCPScheduledSnapshotsDelayed
     expr: |
-      max(
-        increase(gcp_scheduled_snapshot:occurrence{env="gprd"}[12h])
-      ) by (disk_name, environment) == 0
-        and on (disk_name, environment)
-      present_over_time(stackdriver_gce_disk_logging_googleapis_com_user_scheduled_snapshots{env="gprd"}[7d]) == 1
+        (
+            max by (disk_name, disk_id, env) (sum_over_time(gcp_scheduled_snapshot:occurrence{env="gprd"}[6h])) > 0
+          or on (disk_id, disk_name, env)
+            present_over_time(stackdriver_gce_disk_logging_googleapis_com_user_scheduled_snapshots{env="gprd"}[1w]) * 0
+        ) == 0
     for: 4h
     labels:
       severity: s4
       alert_type: cause
     annotations:
       grafana_datasource_id: mimir-gitlab-gprd
-      description: Recent GCP scheduled snapshot are missing for {{ $labels.disk_name }}. Please follow the runbook to review the problem.
+      description: Recent GCP scheduled snapshot are missing for {{ $labels.disk_name }}, with ID {{ $labels.disk_id }}. Please follow the runbook to review the problem.
       runbook: docs/disaster-recovery/alerts/GCPScheduledSnapshots.md
       title: GCP scheduled snapshots are delayed
   - alert: GCPScheduledSnapshotsFailed
