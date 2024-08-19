@@ -1,8 +1,5 @@
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 
-**Table of Contents**
-
-[TOC]
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
@@ -259,3 +256,63 @@ When there is high CPU usage across all the Elasticsearch data nodes, here are t
   - Go to the Elastic Cloud login page, click the `Manage` link under Actions column corresponding to the deployment under `Dedicated deployments` table. Click the `Actions` button on the top-right corner of the deployment page and click `Restart Elasticsearch`. In the popop window, choose `Full restart`. Please note, there are two other `No Downtime` restart options, `Restart instances one at a time` and `Restart all instances within an availability zone, before moving on to the next zone`. But, according to our experience, they may take much longer time than `Full restart`. Since the Advanced Search requests are very likely to time out in high CPU situation, `Full restart` will actually bring the service back quicker. The pausing indexing step above will also help minimize the impact of potential data loss during the `Downtime`.
   - Monitor the CPU usage of the cluster nodes. [Unpause indexing](https://docs.gitlab.com/ee/integration/advanced_search/elasticsearch.html#unpause-indexing) from the GitLab instance's Admin UI after CPU usage is back to normal.
   - File an Elastic Support ticket with the thread dumps taken in the step above.
+
+## Indexing queue backing up
+
+When the one of the indexing queues (initial,  incremental, or embeddings) is backing up and indexing is not paused, it may be due to errors serializing documents for indexing. Look for [errors in Kibana](https://log.gprd.gitlab.net/app/r/s/UVyNT) that follow this pattern:
+
+- `json.class.keyword`
+  - `ElasticIndexBulkCronWorker`
+  - `ElasticIndexInitialBulkCronWorker`
+  - `Search::ElasticIndexEmbeddingBulkCronWorker`
+- `json.exception.class.keyword` = `NoMethodError`
+- `json.exception.message` = `undefined method...`
+
+It's likely that only one data type is affected. Note the method name causing the error and find the data type class by looking at `json.exception.backtrace`. Once you have the class and method, run the following script to find the records causing issues.
+
+```ruby
+# Each queue uses it's own Service class.
+# Update the example below with the appropricate class
+# initial => Elastic::ProcessInitialBookkeepingService
+# incremental => Elastic::ProcessBookkeepingService
+# embeddings => Search::Elastic::ProcessEmbeddingBookkeepingService
+
+items = Elastic::ProcessBookkeepingService.queued_items
+affected_klass = CLASS_FROM_LOGS
+affected_method = METHOD_FROM_LOGS
+
+to_remove = {}.tap do |hash|
+  items.each do |shard, refs|
+
+    refs.each do |ref, _|
+      reference = Search::Elastic::Reference.deserialize(ref)
+      klass = reference.klass
+      next unless affected_klass == klass
+
+      id = reference.identifier
+      db_record = affected_klass.find_by_id(id)
+      next unless db_record
+      next if db_record.respond_to?(affected_method) && db_record.public_send(affected_method)
+
+      hash[shard] ||= []
+      hash[shard] << ref
+    end
+  end
+end
+```
+
+Once the data has been validated, run the following script to remove the records from the queue.
+
+```ruby
+Gitlab::Redis::SharedState.with do |redis|
+  to_remove.each do |shard, refs|
+    refs.each do |ref|
+      redis.zrem Elastic::ProcessBookkeepingService.redis_set_key(shard), ref.first
+    end
+  end
+end
+```
+
+The indexing queue should drain slowly once the records have been cleared from the queue. It is
+important to understand what caused the records to be queued for indexing. An issue must be opened
+to ensure the records do not get indexed again or the issue will reoccur.
