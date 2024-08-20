@@ -58,12 +58,6 @@ metricsCatalog.serviceDefinition({
         verb: { re: 'LIST|GET' },
       },
 
-      apdex: histogramApdex(
-        histogram='apiserver_request_sli_duration_seconds_bucket',
-        selector=baseSelector,
-        satisfiedThreshold=1,
-      ),
-
       requestRate: rateMetric(
         counter='apiserver_request_total',
         selector=baseSelector
