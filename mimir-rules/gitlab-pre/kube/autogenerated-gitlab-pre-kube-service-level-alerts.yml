@@ -26,7 +26,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
-            rate(apiserver_request_duration_seconds_bucket{environment="{{ $labels.environment }}",job="apiserver",scope!="",stage="{{ $labels.stage }}",verb!~"^(?:CONNECT|WATCHLIST|WATCH|PROXY)$"}[5m])
+            rate(apiserver_request_sli_duration_seconds_bucket{environment="{{ $labels.environment }}",job="apiserver",scope!="",stage="{{ $labels.stage }}",subresource!~"proxy|attach|log|exec|portforward|/readyz|/livez|/healthz|",verb=~"LIST|GET"}[5m])
           )
         )
       runbook: docs/kube/README.md
@@ -40,6 +40,7 @@ groups:
       severity: s2
       sli_type: apdex
       slo_alert: "yes"
+      team: reliability_foundations
       user_impacting: "no"
       window: 1h
     expr: |
@@ -80,7 +81,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
-            rate(apiserver_request_duration_seconds_bucket{environment="{{ $labels.environment }}",job="apiserver",scope!="",stage="{{ $labels.stage }}",verb!~"^(?:CONNECT|WATCHLIST|WATCH|PROXY)$"}[5m])
+            rate(apiserver_request_sli_duration_seconds_bucket{environment="{{ $labels.environment }}",job="apiserver",scope!="",stage="{{ $labels.stage }}",subresource!~"proxy|attach|log|exec|portforward|/readyz|/livez|/healthz|",verb=~"LIST|GET"}[5m])
           )
         )
       runbook: docs/kube/README.md
@@ -94,6 +95,7 @@ groups:
       severity: s2
       sli_type: apdex
       slo_alert: "yes"
+      team: reliability_foundations
       user_impacting: "no"
       window: 6h
     expr: |
@@ -132,7 +134,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(apiserver_request_total{code=~"5..",environment="{{ $labels.environment }}",job="apiserver",scope!="",stage="{{ $labels.stage }}"}[5m])
+          rate(apiserver_request_total{code=~"5..",environment="{{ $labels.environment }}",job="apiserver",scope!="",stage="{{ $labels.stage }}",subresource!~"proxy|attach|log|exec|portforward|/readyz|/livez|/healthz|",verb=~"LIST|GET"}[5m])
         )
       runbook: docs/kube/README.md
     labels:
@@ -145,6 +147,7 @@ groups:
       severity: s2
       sli_type: error
       slo_alert: "yes"
+      team: reliability_foundations
       user_impacting: "no"
       window: 1h
     expr: |
@@ -183,7 +186,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(apiserver_request_total{code=~"5..",environment="{{ $labels.environment }}",job="apiserver",scope!="",stage="{{ $labels.stage }}"}[5m])
+          rate(apiserver_request_total{code=~"5..",environment="{{ $labels.environment }}",job="apiserver",scope!="",stage="{{ $labels.stage }}",subresource!~"proxy|attach|log|exec|portforward|/readyz|/livez|/healthz|",verb=~"LIST|GET"}[5m])
         )
       runbook: docs/kube/README.md
     labels:
@@ -196,6 +199,7 @@ groups:
       severity: s2
       sli_type: error
       slo_alert: "yes"
+      team: reliability_foundations
       user_impacting: "no"
       window: 6h
     expr: |
@@ -234,7 +238,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(apiserver_request_total{environment="{{ $labels.environment }}",job="apiserver",scope!="",stage="{{ $labels.stage }}"}[5m])
+          rate(apiserver_request_total{environment="{{ $labels.environment }}",job="apiserver",scope!="",stage="{{ $labels.stage }}",subresource!~"proxy|attach|log|exec|portforward|/readyz|/livez|/healthz|",verb=~"LIST|GET"}[5m])
         )
       runbook: docs/kube/README.md
     labels:
@@ -247,6 +251,7 @@ groups:
       severity: s2
       sli_type: ops
       slo_alert: "no"
+      team: reliability_foundations
       user_impacting: "no"
     expr: |
       gitlab_component_ops:rate_30m{component="apiserver",env="pre",monitor="global",stage="main",type="kube"} == 0
@@ -274,7 +279,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(apiserver_request_total{environment="{{ $labels.environment }}",job="apiserver",scope!="",stage="{{ $labels.stage }}"}[5m])
+          rate(apiserver_request_total{environment="{{ $labels.environment }}",job="apiserver",scope!="",stage="{{ $labels.stage }}",subresource!~"proxy|attach|log|exec|portforward|/readyz|/livez|/healthz|",verb=~"LIST|GET"}[5m])
         )
       runbook: docs/kube/README.md
     labels:
@@ -287,6 +292,7 @@ groups:
       severity: s2
       sli_type: ops
       slo_alert: "no"
+      team: reliability_foundations
       user_impacting: "no"
     expr: |
       gitlab_component_ops:rate_5m{component="apiserver",env="pre",monitor="global",stage="main",type="kube"} offset 1h

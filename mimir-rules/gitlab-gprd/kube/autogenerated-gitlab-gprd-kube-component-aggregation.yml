@@ -13,7 +13,7 @@ groups:
       type: kube
     expr: |
       sum by (env,environment) (
-        sli_aggregations:apiserver_request_duration_seconds_bucket:rate_5m{env="gprd",job="apiserver",le="1",scope!="",verb!~"^(?:CONNECT|WATCHLIST|WATCH|PROXY)$"}
+        sli_aggregations:apiserver_request_sli_duration_seconds_bucket:rate_5m{env="gprd",job="apiserver",le="1",scope!="",subresource!~"proxy|attach|log|exec|portforward|/readyz|/livez|/healthz|",verb=~"LIST|GET"}
       )
   - record: gitlab_component_apdex:weight:score_5m
     labels:
@@ -24,7 +24,7 @@ groups:
       type: kube
     expr: |
       sum by (env,environment) (
-        sli_aggregations:apiserver_request_duration_seconds_bucket:rate_5m{env="gprd",job="apiserver",le="+Inf",scope!="",verb!~"^(?:CONNECT|WATCHLIST|WATCH|PROXY)$"}
+        sli_aggregations:apiserver_request_sli_duration_seconds_bucket:rate_5m{env="gprd",job="apiserver",le="+Inf",scope!="",subresource!~"proxy|attach|log|exec|portforward|/readyz|/livez|/healthz|",verb=~"LIST|GET"}
       )
   - record: gitlab_component_ops:rate_5m
     labels:
@@ -35,7 +35,7 @@ groups:
       type: kube
     expr: |
       sum by (env,environment) (
-        sli_aggregations:apiserver_request_total:rate_5m{env="gprd",job="apiserver",scope!=""} offset 30s
+        sli_aggregations:apiserver_request_total:rate_5m{env="gprd",job="apiserver",scope!="",subresource!~"proxy|attach|log|exec|portforward|/readyz|/livez|/healthz|",verb=~"LIST|GET"} offset 30s
       )
   - record: gitlab_component_errors:rate_5m
     labels:
@@ -47,7 +47,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          sli_aggregations:apiserver_request_total:rate_5m{code=~"5..",env="gprd",job="apiserver",scope!=""} offset 30s
+          sli_aggregations:apiserver_request_total:rate_5m{code=~"5..",env="gprd",job="apiserver",scope!="",subresource!~"proxy|attach|log|exec|portforward|/readyz|/livez|/healthz|",verb=~"LIST|GET"} offset 30s
         )
       )
       or
@@ -162,7 +162,7 @@ groups:
       type: kube
     expr: |
       sum by (env,environment) (
-        sli_aggregations:apiserver_request_duration_seconds_bucket:rate_30m{env="gprd",job="apiserver",le="1",scope!="",verb!~"^(?:CONNECT|WATCHLIST|WATCH|PROXY)$"}
+        sli_aggregations:apiserver_request_sli_duration_seconds_bucket:rate_30m{env="gprd",job="apiserver",le="1",scope!="",subresource!~"proxy|attach|log|exec|portforward|/readyz|/livez|/healthz|",verb=~"LIST|GET"}
       )
   - record: gitlab_component_apdex:weight:score_30m
     labels:
@@ -173,7 +173,7 @@ groups:
       type: kube
     expr: |
       sum by (env,environment) (
-        sli_aggregations:apiserver_request_duration_seconds_bucket:rate_30m{env="gprd",job="apiserver",le="+Inf",scope!="",verb!~"^(?:CONNECT|WATCHLIST|WATCH|PROXY)$"}
+        sli_aggregations:apiserver_request_sli_duration_seconds_bucket:rate_30m{env="gprd",job="apiserver",le="+Inf",scope!="",subresource!~"proxy|attach|log|exec|portforward|/readyz|/livez|/healthz|",verb=~"LIST|GET"}
       )
   - record: gitlab_component_ops:rate_30m
     labels:
@@ -184,7 +184,7 @@ groups:
       type: kube
     expr: |
       sum by (env,environment) (
-        sli_aggregations:apiserver_request_total:rate_30m{env="gprd",job="apiserver",scope!=""} offset 30s
+        sli_aggregations:apiserver_request_total:rate_30m{env="gprd",job="apiserver",scope!="",subresource!~"proxy|attach|log|exec|portforward|/readyz|/livez|/healthz|",verb=~"LIST|GET"} offset 30s
       )
   - record: gitlab_component_errors:rate_30m
     labels:
@@ -196,7 +196,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          sli_aggregations:apiserver_request_total:rate_30m{code=~"5..",env="gprd",job="apiserver",scope!=""} offset 30s
+          sli_aggregations:apiserver_request_total:rate_30m{code=~"5..",env="gprd",job="apiserver",scope!="",subresource!~"proxy|attach|log|exec|portforward|/readyz|/livez|/healthz|",verb=~"LIST|GET"} offset 30s
         )
       )
       or
@@ -311,7 +311,7 @@ groups:
       type: kube
     expr: |
       sum by (env,environment) (
-        sli_aggregations:apiserver_request_duration_seconds_bucket:rate_1h{env="gprd",job="apiserver",le="1",scope!="",verb!~"^(?:CONNECT|WATCHLIST|WATCH|PROXY)$"}
+        sli_aggregations:apiserver_request_sli_duration_seconds_bucket:rate_1h{env="gprd",job="apiserver",le="1",scope!="",subresource!~"proxy|attach|log|exec|portforward|/readyz|/livez|/healthz|",verb=~"LIST|GET"}
       )
   - record: gitlab_component_apdex:weight:score_1h
     labels:
@@ -322,7 +322,7 @@ groups:
       type: kube
     expr: |
       sum by (env,environment) (
-        sli_aggregations:apiserver_request_duration_seconds_bucket:rate_1h{env="gprd",job="apiserver",le="+Inf",scope!="",verb!~"^(?:CONNECT|WATCHLIST|WATCH|PROXY)$"}
+        sli_aggregations:apiserver_request_sli_duration_seconds_bucket:rate_1h{env="gprd",job="apiserver",le="+Inf",scope!="",subresource!~"proxy|attach|log|exec|portforward|/readyz|/livez|/healthz|",verb=~"LIST|GET"}
       )
   - record: gitlab_component_ops:rate_1h
     labels:
@@ -333,7 +333,7 @@ groups:
       type: kube
     expr: |
       sum by (env,environment) (
-        sli_aggregations:apiserver_request_total:rate_1h{env="gprd",job="apiserver",scope!=""} offset 30s
+        sli_aggregations:apiserver_request_total:rate_1h{env="gprd",job="apiserver",scope!="",subresource!~"proxy|attach|log|exec|portforward|/readyz|/livez|/healthz|",verb=~"LIST|GET"} offset 30s
       )
   - record: gitlab_component_errors:rate_1h
     labels:
@@ -345,7 +345,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          sli_aggregations:apiserver_request_total:rate_1h{code=~"5..",env="gprd",job="apiserver",scope!=""} offset 30s
+          sli_aggregations:apiserver_request_total:rate_1h{code=~"5..",env="gprd",job="apiserver",scope!="",subresource!~"proxy|attach|log|exec|portforward|/readyz|/livez|/healthz|",verb=~"LIST|GET"} offset 30s
         )
       )
       or
