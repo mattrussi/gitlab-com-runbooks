@@ -41,7 +41,7 @@ metricsCatalog.serviceDefinition({
     apiserver: {
       userImpacting: false,
       featureCategory: 'not_owned',
-      team: 'sre_reliability',
+      team: 'reliability_foundations',
       description: |||
         The Kubernetes API server validates and configures data for the api objects which
         include pods, services, and others. The API Server services REST operations
@@ -54,11 +54,13 @@ metricsCatalog.serviceDefinition({
       local baseSelector = {
         job: 'apiserver',
         scope: { ne: '' },  // scope="" is used for health check endpoints
+        subresource: { nre: 'proxy|attach|log|exec|portforward|/readyz|/livez|/healthz|' },
+        verb: { re: 'LIST|GET' },
       },
 
       apdex: histogramApdex(
-        histogram='apiserver_request_duration_seconds_bucket',
-        selector=baseSelector { verb: { nre: '^(?:CONNECT|WATCHLIST|WATCH|PROXY)$' } },  // Exclude long-polling
+        histogram='apiserver_request_sli_duration_seconds_bucket',
+        selector=baseSelector,
         satisfiedThreshold=1,
       ),
 
