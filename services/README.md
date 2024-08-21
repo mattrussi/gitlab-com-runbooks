@@ -33,6 +33,8 @@ are:
 
 The service catalog adheres to [JSON Schema](https://json-schema.org/) specification for document annotation and validation. If you are interested in learning more, check out guides for [getting started](https://json-schema.org/learn/getting-started-step-by-step.html).
 
+You can view the schema [here](https://gitlab-com.gitlab.io/runbooks/service-catalog-schema.html)
+
 ### Modification
 
 To modify the service catalog format, edit [schema](service-catalog-schema.json) directly. Additional properties are disabled by default, please add new properties sparingly. For dynamic data, consider linking to single source of truth instead.
