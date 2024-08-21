@@ -14,6 +14,9 @@ tiers:
 #
 # The full list of service labels can be viewed under
 # https://gitlab.com/groups/gitlab-com/gl-infra/-/labels?search=Service%3A%3A&sort=created_desc.
+#
+# You can check the schema for a service in `./services/service-catalog-schema.json`,
+# and read more about it in https://gitlab.com/gitlab-com/runbooks/-/blob/master/services/README.md#schema
 services:
   - name: api
     friendly_name: GitLab API
