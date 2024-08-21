@@ -1305,3 +1305,16 @@ commit-and-push-feature-categories-update:
     - git config user.email ops@ops.gitlab.net
     - git config user.name ops-gitlab-net
     - ./scripts/commit-and-push-feature-categories-update.sh
+
+pages:
+  image: python:3.12
+  stage: release
+  script:
+    - mkdir -p public
+    - pip install json-schema-for-humans==0.46
+    - generate-schema-doc --config examples_as_yaml=true --config expand_buttons=true services/service-catalog-schema.json public
+  artifacts:
+    paths:
+      - public
+  rules:
+    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $CI_PIPELINE_SOURCE != "schedule"'
