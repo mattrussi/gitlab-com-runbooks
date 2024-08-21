@@ -258,6 +258,9 @@ metricsCatalog.serviceDefinition({
 
         significantLabels: ['endpoint_id'],
 
+        monitoringThresholds+: {
+          errorRatio: 0.999,
+        },
       },
     },
 })
