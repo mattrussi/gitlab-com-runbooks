@@ -36,7 +36,7 @@ You need the Teleport CLI client [tsh](https://goteleport.com/docs/reference/cli
 
 ### Installing tsh
 
-Official packages for [macOS](hhttps://goteleport.com/docs/installation/#macos) and
+Official packages for [macOS](https://goteleport.com/docs/installation/#macos) and
 [Linux](https://goteleport.com/docs/installation/#linux) can be found at Teleport's website.
 
 ### Installing psql
@@ -50,142 +50,81 @@ brew install postgresql@14
 
 ### Accessing The Database Console
 
-NOTE: we now have only one Teleport instance available at <https://production.teleport.gitlab.net>.
+Follow the guide corresponding to the database instance and access level required:
 
-The typical workflow for accessing a database is as follows.
+- [Non-Production](#non-production-gstg-or-pre) (`gstg` or `pre`)
+  - [Read-only access](#read-only-access)
+  - [Read/write access](#readwrite-access) (requires an [Access Request](#access-request-required))
+- [Production](#production-gprd) (`gprd`) (requires an [Access Request](#access-request-required))
+
+#### Access Request Required
+
+`Non-Production Read/write` or `Production` access requires an access request using Teleport for the appropriate role. The access will be temporary (12 hours from the time of approval) and can be approved by any SRE or Reliability Manager.
+
+The typical workflow for accessing a database which requires an access request is as follows:
 
 1. Authenticate to the Teleport instance.
 2. Submit an access request for the database role that you need.
 3. After your request is approved, log in to the database with the appropriate database user.
 4. Connect to the database shell.
 
-The read-only access to non-production (`gstg` or `pre`) databases is given to everyone by default via the `non-prod-database-ro` role.
-Hence, you do NOT need to submit an access request for read-only access in non-production environments (`gstg` or `pre`).
-If read-write access or production data are strictly necessary for the job, submit an access request using Teleport for the appropriate role.
-
-The access will be temporary (12 hours) and can be approved by any SRE or Reliability Manager.
 If the request is urgent, you can ping `@sre-oncall`, but to spread out the workload,
 please try to allow some time for others to review first if possible.
 Access can be extended before or after expiration using the same process.
 
-#### Non-Production
+NOTE: we now have only one Teleport instance available at <https://production.teleport.gitlab.net>.
 
-1. Authenticate to the Teleport instance. This command opens Okta in a browser window:
+#### Non-Production (`gstg` or `pre`)
 
-   ```bash
-   $ tsh login --proxy=production.teleport.gitlab.net
+The following database instances are available:
+
+| Description                              | Database Name               |
+|------------------------------------------|-----------------------------|
+| Main                                     | db-main-replica-gstg        |
+| CI                                       | db-ci-replica-gstg          |
+| Registry                                 | db-registry-replica-gstg    |
+| Delayed Replica (DR) archive of main     | db-main-dr-archive-gstg     |
+| Delayed Replica (DR) archive of CI       | db-ci-dr-archive-gstg       |
+| Delayed Replica (DR) archive of registry | db-registry-dr-archive-gstg |
+
+This list is available using `tsh db ls environment=gstg`.
+
+Replace `<Database Name>` in the following examples with the desired value from the above table.
+
+##### Read-only access
+
+Read-only access to non-production (`gstg` or `pre`) databases is given to everyone by default via the `non-prod-database-ro` role.
+Hence, you do NOT need to submit an access request for read-only access in non-production environments (`gstg` or `pre`), and can instead just authenticate and connect to the database using the following process:
+
+1. Authenticate to the Teleport instance and login to the database. This command opens Okta in a browser window:
+
+   ```shell
+   $ tsh db login --proxy=production.teleport.gitlab.net --db-user=console-ro --db-name=gitlabhq_production <Database Name>
    ```
 
-2. Request approval for the database role that you need.
-
-   Note: The `non-prod-database-ro` role in the `gstg` or `pre` environments does not require a request or approval, so you can skip this step.
-   Use the `non-prod-database-ro` role unless you know for sure that you need something else.
-   For Package Team members, they additionaly have `non-prod-database-registry-ro` role in the `gstg` and `pre`,
-   which gives them access to registry database without approval.
-
-   Request any of the following roles, if you need a role which includes elevated permissions for the database console.
-
-   Non-production (`gstg` or `pre`) `main` and `CI` database roles:
-
-   - Read-only:  `non-prod-database-ro`
-   - Read-Write: `non-prod-database-rw`
-
-   Non-production (`gstg` or `pre`) `registry` database roles:
-
-   - Read-only:  `non-prod-database-registry-ro`
-   - Read-Write: `non-prod-database-registry-rw`
+1. Connect to the database:
 
    ```bash
-   $ tsh login --proxy=production.teleport.gitlab.net --request-roles=non-prod-database-rw --request-reason="GitLab Issue URL or ZenDesk Ticket URL"
+   $ tsh db connect <Database Name>
    ```
 
-   This command will pause while it waits for the reviewer to approve the request.
-   It may appear to hang, but it is waiting for someone to approve it.
-   The command will return as soon as the request is approved, denied, or expires.
+   See the [troubleshooting section](#psql-error-ssl-syscall-error-undefined-error-0-error-signal-segmentation-fault) if the above command returns `ERROR: signal: segmentation fault`.
 
-   If the command is stopped or times out, but the request is approved, you do not need to request another approval.
-   Simply login and provide the approved request ID (output by the previous command, or find it in the web interface).
+##### Read/write access
 
-3. Login with the approved request ID.
+Read/write access to non-production (`gstg` or `pre`) databases requires an access request using Teleport for the appropriate role:
 
-   The request ID is shown in the output of `tsh login` when making the initial request, and can also be found attached to
-   your request notification in [#teleport-requests](https://gitlab.enterprise.slack.com/archives/C06Q2JK3YPM).
+1. Authenticate to the Teleport instance and request approval for the required DB role. This command opens Okta in a browser window:
 
-   ```bash
-   $ tsh login --request-id=<request-id>
-   ```
+   | Database       | Role                            | Note                     |
+   |----------------|---------------------------------|--------------------------|
+   | `main` or `ci` | `non-prod-database-rw`          |                          |
+   | `registry`     | `non-prod-database-registry-rw` | For Package Team members |
 
-4. Login to the database.
-
-   Once an approval (if required) is issued, the next step is to log in to the database.
-   The database name at the end of the line refers to the database host that Teleport is pointing to (which you can see with `tsh db ls`).
+   Use the following command to request approval:
 
    ```bash
-   # Main Database
-   $ tsh db login --db-user=console-rw --db-name=gitlabhq_production db-main-replica-gstg
-
-   # CI Database
-   $ tsh db login --db-user=console-rw --db-name=gitlabhq_production db-ci-replica-gstg
-
-   # Registry Database
-   $ tsh db login --db-user=console-rw --db-name=gitlabhq_registry db-registry-replica-gstg
-
-   # Delayed Replica (DR) archive of main Database
-   $ tsh db login --db-user=console-rw --db-name=gitlabhq_production db-main-dr-archive-gstg
-
-   # Delayed Replica (DR) archive of CI Database
-   $ tsh db login --db-user=console-rw --db-name=gitlabhq_production db-ci-dr-archive-gstg
-
-   # Delayed Replica (DR) archive of registry Database
-   $ tsh db login --db-user=console-rw --db-name=gitlabhq_registry db-registry-dr-archive-gstg
-   ```
-
-5. Connect to the database.
-
-   Once logged in, you can connect and disconnect from the console as many times as needed.
-
-   ```bash
-   # Main Database
-   $ tsh db connect db-main-replica-gstg
-
-   # CI Database
-   $ tsh db connect db-ci-replica-gstg
-
-   # Registry Database
-   $ tsh db connect db-registry-replica-gstg
-
-   # Delayed Replica (DR) archive of main Database
-   $ tsh db connect db-main-dr-archive-gstg
-
-   # Delayed Replica (DR) archive of CI Database
-   $ tsh db connect db-ci-dr-archive-gstg
-
-   # Delayed Replica (DR) archive of registry Database
-   $ tsh db connect db-registry-dr-archive-gstg
-   ```
-
-#### Production
-
-1. Authenticate to the Teleport instance. This command opens Okta in a browser window:
-
-   ```bash
-   $ tsh login --proxy=production.teleport.gitlab.net
-   ```
-
-2. Request approval for the database role that you need.
-
-   Production (`gprd`) `main` and `CI` database roles:
-
-   - Read-only:  `prod-database-ro`
-   - Read-Write: `prod-database-rw`
-
-   Production (`gprd`) `registry` database roles:
-
-   - Read-only:  `prod-database-registry-ro`
-   - Read-Write: `prod-database-registry-rw`
-
-   ```bash
-   $ tsh login --proxy=production.teleport.gitlab.net --request-roles=prod-database-ro --request-reason="GitLab Issue URL or ZenDesk Ticket URL"
+   $ tsh login --proxy=production.teleport.gitlab.net --request-roles=<Role> --request-reason="GitLab Issue URL or ZenDesk Ticket URL"
    ```
 
    This command will pause while it waits for the reviewer to approve the request.
@@ -195,7 +134,7 @@ Access can be extended before or after expiration using the same process.
    If the command is stopped or times out, but the request is approved, you do not need to request another approval.
    Simply login and provide the approved request ID (output by the previous command, or find it in the web interface).
 
-   3. Login with the approved request ID.
+1. Login with the approved request ID.
 
    The request ID is shown in the output of `tsh login` when making the initial request, and can also be found attached to
    your request notification in [#teleport-requests](https://gitlab.enterprise.slack.com/archives/C06Q2JK3YPM).
@@ -204,54 +143,96 @@ Access can be extended before or after expiration using the same process.
    $ tsh login --request-id=<request-id>
    ```
 
-4. Login to the database.
+1. Login to the database.
 
    Once an approval is issued, the next step is to log in to the database.
    The database name at the end of the line refers to the database host that Teleport is pointing to (which you can see with `tsh db ls`).
 
    ```bash
-   # Main Database
-   $ tsh db login --db-user=console-ro --db-name=gitlabhq_production db-main-replica-gprd
-
-   # CI Database
-   $ tsh db login --db-user=console-ro --db-name=gitlabhq_production db-ci-replica-gprd
-
-   # Registry Database
-   $ tsh db login --db-user=console-ro --db-name=gitlabhq_registry db-registry-replica-gprd
-
-   # Delayed Replica (DR) archive of main Database
-   $ tsh db login --db-user=console-ro --db-name=gitlabhq_production db-main-dr-archive-gprd
-
-   # Delayed Replica (DR) archive of CI Database
-   $ tsh db login --db-user=console-ro --db-name=gitlabhq_production db-ci-dr-archive-gprd
-
-   # Delayed Replica (DR) archive of registry Database
-   $ tsh db login --db-user=console-ro --db-name=gitlabhq_registry db-registry-dr-archive-gprd
+   $ tsh db login --db-user=console-rw --db-name=gitlabhq_production <Database Name>
    ```
 
-5. Connect to the database.
+1. Connect to the database.
 
    Once logged in, you can connect and disconnect from the console as many times as needed.
 
    ```bash
-   # Main Database
-   tsh db connect db-main-replica-gprd
-
-   # CI Database
-   tsh db connect db-ci-replica-gprd
-
-   # Registry Database
-   tsh db connect db-registry-replica-gprd
-
-   # Delayed Replica (DR) archive of main Database
-   tsh db connect db-main-dr-archive-gprd
-
-   # Delayed Replica (DR) archive of CI Database
-   tsh db connect db-ci-dr-archive-gprd
-
-   # Delayed Replica (DR) archive of registry Database
-   tsh db connect db-registry-dr-archive-gprd
+   $ tsh db connect <Database Name>
    ```
+
+   See the [troubleshooting section](#psql-error-ssl-syscall-error-undefined-error-0-error-signal-segmentation-fault) if the above command returns `ERROR: signal: segmentation fault`.
+
+#### Production (`gprd`)
+
+The following database instances are available:
+
+| Description                              | Database Name               |
+|------------------------------------------|-----------------------------|
+| Main                                     | db-main-replica-gprd        |
+| CI                                       | db-ci-replica-gprd          |
+| Registry                                 | db-registry-replica-gprd    |
+| Delayed Replica (DR) archive of main     | db-main-dr-archive-gprd     |
+| Delayed Replica (DR) archive of CI       | db-ci-dr-archive-gprd       |
+| Delayed Replica (DR) archive of registry | db-registry-dr-archive-gprd |
+
+This list is available using `tsh db ls environment=gprd`.
+
+Replace `<Database Name>` in the following examples with the desired value from the above table.
+
+1. Authenticate to the Teleport instance. This command opens Okta in a browser window:
+
+   ```bash
+   $ tsh login --proxy=production.teleport.gitlab.net
+   ```
+
+1. Request approval for the database role that you need.
+
+   | Database       | Type       | Role                        |
+   |----------------|------------|-----------------------------|
+   | `main` or `ci` | Read-only  | `prod-database-ro`          |
+   | `main` or `ci` | Read/Write | `prod-database-rw`          |
+   | `registry`     | Read-only  | `prod-database-registry-ro` |
+   | `registry`     | Read/Write | `prod-database-registry-rw` |
+
+   Use the following command to request approval:
+
+   ```bash
+   $ tsh login --proxy=production.teleport.gitlab.net --request-roles=<Role> --request-reason="GitLab Issue URL or ZenDesk Ticket URL"
+   ```
+
+   This command will pause while it waits for the reviewer to approve the request.
+   It may appear to hang, but it is waiting for someone to approve it.
+   The command will return as soon as the request is approved, denied, or expires.
+
+   If the command is stopped or times out, but the request is approved, you do not need to request another approval.
+   Simply login and provide the approved request ID (output by the previous command, or find it in the web interface).
+
+1. Login with the approved request ID.
+
+   The request ID is shown in the output of `tsh login` when making the initial request, and can also be found attached to
+   your request notification in [#teleport-requests](https://gitlab.enterprise.slack.com/archives/C06Q2JK3YPM).
+
+   ```bash
+   $ tsh login --request-id=<request-id>
+   ```
+
+1. Login to the database.
+
+   Once an approval is issued, the next step is to log in to the database.
+
+   ```bash
+   $ tsh db login --db-user=console-ro --db-name=gitlabhq_production <Database Name>
+   ```
+
+1. Connect to the database.
+
+   Once logged in, you can connect and disconnect from the console as many times as needed.
+
+   ```bash
+   tsh db connect <Database Name>
+   ```
+
+   See the [troubleshooting section](#psql-error-ssl-syscall-error-undefined-error-0-error-signal-segmentation-fault) if the above command returns `ERROR: signal: segmentation fault`.
 
 #### Request Superuser Privileges (DBREs Only)
 
