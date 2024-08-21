@@ -101,6 +101,28 @@ Snapshot backups are saved [across multiple regions in the United States](https:
   * [staging configuration](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/main/environments/vault-staging)
   * [production configuration](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/main/environments/vault-production)
 
+#### Maintenance automation
+
+Some Kubernetes cron jobs have been setup to help with regular maintenance of the Vault cluster:
+
+##### `vault-identity-entities-cleaner`
+
+* Cronjob definition: <https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/blob/master/releases/vault/charts/vault-extras/templates/vault-identity-entities-cleaner-job.yaml>
+* Container image: <https://gitlab.com/gitlab-com/gl-infra/ci-images/-/tree/master/vault-identity-entities-cleaner>
+* Script: <https://gitlab.com/gitlab-com/gl-infra/ci-images/-/blob/master/vault-identity-entities-cleaner/scripts/cleaner.rb>
+
+Vault creates an [identity entities](https://developer.hashicorp.com/vault/docs/concepts/identity#entities-and-aliases) for each user authenticating into it, which includes humans via OIDC, Kubernetes service accounts and GitLab CI jobs authenticating via JWT. In particular, each CI job has its own unique identity based on their job ID claim, that are then never used again (unless the job is retried later). Vault currently doesn't have any mechanism to automatically cleanup old unused identities so they keep accumulating indefinitely, filling the storage, causing high memory usage and degrading performances (see [this issue](https://github.com/hashicorp/vault/issues/8761)).
+
+This job remediates this problem by deleting in small batches all identity entities that are older than 7 days (max TTL for OIDC logins) every hour, keeping the storage size under control.
+
+##### `vault-pvc-rotater`
+
+* Cronjob definition: <https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/blob/master/releases/vault/charts/vault-extras/templates/pvc-rotater-job.yaml>
+
+Vault uses a BoltDB database as its Raft logs storage, which cannot shrink to recover space when data is deleted. Although it tries to reuse old pages when possible, the database file inevitably keeps growing indefinitely (see [BoltDB Raft logs](https://developer.hashicorp.com/vault/docs/internals/integrated-storage#boltdb-raft-logs)). This eventually leads to memory pressure and/or OOM events as the database file is loaded into memory as page cache which increases memory usage as the file keeps growing.
+
+This job remediates this problem by deleting the oldest Persistent Volume Claim and rotating its attached pod once a week, so that the node bootstraps itself with a fresh Raft snapshot. This also serves as a chaos monkey ensuring that automatic Vault node recovery keeps working properly.
+
 ### Authentication
 
 #### User authentication
