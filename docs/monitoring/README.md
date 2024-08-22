@@ -52,6 +52,7 @@
 * [Postgresql minor upgrade](../patroni/pg_minor_upgrade.md)
 * [Pg_repack using gitlab-pgrepack](../patroni/pg_repack.md)
 * [../patroni/postgres-checkup.md](../patroni/postgres-checkup.md)
+* [../patroni/postgresql-backups-wale-walg.md](../patroni/postgresql-backups-wale-walg.md)
 * [../patroni/postgresql-locking.md](../patroni/postgresql-locking.md)
 * [How to evaluate load from queries](../patroni/postgresql-query-load-evaluation.md)
 * [PostgreSQL VACUUM](../patroni/postgresql-vacuum.md)
