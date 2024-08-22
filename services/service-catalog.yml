@@ -1280,7 +1280,7 @@ services:
         grafana_folder: thanos
         primary_grafana_dashboard: thanos-main/thanos-overview
 
-  - name: topology
+  - name: topology_service
     tier: sv
     friendly_name: Topology Service
     label: Topology
@@ -1288,6 +1288,7 @@ services:
     technical:
       project:
         - https://gitlab.com/gitlab-org/cells/topology-service
+        - https://gitlab.com/gitlab-com/gl-infra/cells/topology-service-deployer
       documents:
         architecture: https://handbook.gitlab.com/handbook/engineering/architecture/design-documents/cells/topology_service
       logging:
