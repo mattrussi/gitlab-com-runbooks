@@ -83,6 +83,10 @@ metrics labeled with different fqdn and thus getting alerts if the job didn't
 happen to run on the same node for a while. For gstg, gprd and ops you can use
 the blackbox nodes as central pushgateway.
 
+## Removing Job Metrics
+
+To remove metrics from the pushgateway check [how to delete metrics](../monitoring/pushgateway.md#how-to-delete-metrics)
+
 ## Alerting
 
 Any metric reporting created like above automatically has alerting enabled. These alerts will be sent out to s4.

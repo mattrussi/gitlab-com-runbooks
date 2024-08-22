@@ -22,6 +22,7 @@
 * [Investors Relations (ir.gitlab.com) main troubleshoot documentation](../ir.gitlab.com/overview.md)
 * [Tuning and Modifying Alerts](../monitoring/alert_tuning.md)
 * [An impatient SRE's guide to deleting alerts](../monitoring/deleting-alerts.md)
+* [Push Gateway](../monitoring/pushgateway.md)
 * [../patroni/postgres.md](../patroni/postgres.md)
 * [../patroni/postgresql-backups-wale-walg.md](../patroni/postgresql-backups-wale-walg.md)
 * [Container Registry CDN](../registry/cdn.md)
