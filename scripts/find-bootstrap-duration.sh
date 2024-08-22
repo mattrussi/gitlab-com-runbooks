@@ -29,10 +29,10 @@ fi
 
 file_prefix="/var/tmp/bootstrap-$date"
 
-start_date="$(grep 'Bootstrap start' $file_prefix* | grep -v echo | head -n1 | cut -f2- -d':' | sed 's/: Bootstrap start//')"
+start_date="$(grep -h 'Bootstrap start' $file_prefix* | grep -v echo | head -n1 | sed 's/: Bootstrap start//')"
 start_seconds="$(date --date="$start_date" "+%s")"
 
-end_date="$(grep 'Bootstrap finished' $file_prefix* | grep -v echo | tail -n1 | cut -f2- -d':' | sed 's/: Bootstrap finished.*//')"
+end_date="$(grep -h 'Bootstrap finished' $file_prefix* | grep -v echo | tail -n1 | sed 's/: Bootstrap finished.*//')"
 end_seconds="$(date --date="$end_date" "+%s")"
 
 chef_durations="$(grep 'Chef Client finished' $file_prefix* | awk -F'in ' '{print $2}' | awk '{print $1":"$3}')"
