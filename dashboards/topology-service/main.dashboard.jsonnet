@@ -2,5 +2,5 @@
 // Please feel free to customize this file.
 local serviceDashboard = import 'gitlab-dashboards/service_dashboard.libsonnet';
 
-serviceDashboard.overview('topology')
+serviceDashboard.overview('topology-service')
 .overviewTrailer()
