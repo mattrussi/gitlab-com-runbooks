@@ -39,36 +39,7 @@ deployment. Details on the configuration syntax found [here](https://gitlab.com/
 Topology service is a Go container deployed using Runway. It sits in its own GCP project and responds
 to router requests for information pertaining to Cells.
 
-```mermaid
-graph TD;
-    user((User));
-    http_router[HTTP Routing Service];
-    ssh_router[SSH Routing Service];
-    topology[Topology Service];
-    cell_1{Cell 1};
-    cell_N{Cell N};
-    spanner[Google Cloud Spanner];
-    user--HTTP-->http_router;
-    user--SSH-->ssh_router;
-    http_router--REST-->topology;
-    http_router--HTTP-->cell_1;
-    http_router--HTTP-->cell_N;
-    ssh_router--gRPC-->topology;
-    ssh_router--HTTP-->cell_1;
-    ssh_router--HTTP-->cell_N;
-    cell_1--gRPC-->topology;
-    cell_N--gRPC-->topology;
-    topology-->spanner;
-    subgraph Cloudflare
-        http_router;
-    end
-    subgraph GitLab.com Cluster
-        ssh_router;
-        cell_1;
-        cell_N;
-        topology;
-    end
-```
+More detailed documentation found [here](https://handbook.gitlab.com/handbook/engineering/architecture/design-documents/cells/topology_service/#architecture)
 
 <!-- ## Performance -->
 
@@ -81,7 +52,6 @@ Topology service is deployed using Runway and it's scaling is handled by Cloud R
 Topology service is deployed to multiple regions. In future, when storing data, the storage system (Cloud Spanner)
 will also be configured in multiple regions.
 
-<!-- ## Durability -->
 ## Security/Compliance
 
 Currently, no customer data is stored in Cells or in the topology service and is available as a public endpoint
@@ -89,5 +59,3 @@ Currently, no customer data is stored in Cells or in the topology service and is
 ## Monitoring/Alerting
 
 Topology service is deployed using Runway, which [supports observability by integrating with the monitoring stack](https://docs.runway.gitlab.com/reference/observability/). You can see the metrics via the general [Runway Service Metrics dashboard](https://dashboards.gitlab.net/d/runway-service/runway3a-runway-service-metrics).
-
-<!-- ## Links to further Documentation -->

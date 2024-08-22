@@ -1283,17 +1283,17 @@ services:
   - name: topology_service
     tier: sv
     friendly_name: Topology Service
-    label: Topology
+    label: Topology Service
     owner: tenant_scale
     technical:
       project:
         - https://gitlab.com/gitlab-org/cells/topology-service
         - https://gitlab.com/gitlab-com/gl-infra/cells/topology-service-deployer
       documents:
-        architecture: https://handbook.gitlab.com/handbook/engineering/architecture/design-documents/cells/topology_service
+        architecture: https://handbook.gitlab.com/handbook/engineering/architecture/design-documents/cells/topology_service/#architecture
       logging:
-        - name:
-          permalink:
+        - name: dev/gstg
+          permalink: https://cloudlogging.app.goo.gl/Ku5v9DimYBw4sGyi9
     observability:
       monitors:
         primary_grafana_dashboard: topology-service-main/topology-service-overview
