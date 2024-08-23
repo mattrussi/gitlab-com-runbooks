@@ -7,19 +7,13 @@
 # Topology Service
 
 * [Service Overview](https://dashboards.gitlab.net/d/topology-service-main/topology-service-overview)
-* **Alerts**: <https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22topology%22%2C%20tier%3D%22sv%22%7D>
-* **Label**: gitlab-com/gl-infra/production~"Service::Topology"
+* **Alerts**: <https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22topology-service%22%2C%20tier%3D%22sv%22%7D>
+* **Label**: gitlab-com/gl-infra/production~"Service::Topology Service"
 
 ## Logging
 
-* []()
+* [dev/gstg](https://cloudlogging.app.goo.gl/Ku5v9DimYBw4sGyi9)
 
-## Troubleshooting Pointers
-
-* [../pgbouncer/patroni-consul-postgres-pgbouncer-interactions.md](../pgbouncer/patroni-consul-postgres-pgbouncer-interactions.md)
-* [Redis Cluster](../redis/redis-cluster.md)
-* [../redis/redis.md](../redis/redis.md)
-* [../uncategorized/gcp-network-intelligence.md](../uncategorized/gcp-network-intelligence.md)
 <!-- END_MARKER -->
 
 ## Summary

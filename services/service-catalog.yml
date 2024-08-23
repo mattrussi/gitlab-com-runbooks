@@ -1280,7 +1280,7 @@ services:
         grafana_folder: thanos
         primary_grafana_dashboard: thanos-main/thanos-overview
 
-  - name: topology_service
+  - name: topology-service
     tier: sv
     friendly_name: Topology Service
     label: Topology Service
