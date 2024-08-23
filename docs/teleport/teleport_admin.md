@@ -160,11 +160,11 @@ $ kubectl exec --namespace=teleport-cluster-production --stdin --tty <teleport-p
 ```
 
 <details>
-<summar>example output</summary>
+<summary>Example output</summary>
 
 ```
 Cluster       production.teleport.gitlab.net
-Version       15.4.9
+Version       16.1.7
 host CA       never updated
 user CA       never updated
 db CA         never updated
@@ -174,7 +174,7 @@ jwt CA        never updated
 saml_idp CA   never updated
 oidc_idp CA   never updated
 spiffe CA     never updated
-CA pin        sha256:25869bcdc1a347668dd9a83110f96a9a7fb70c2791bf839180b3abeadded2891
+CA pin        sha256:d4ac1c9af5d25e6cf3c60c8078efe443c1186c071c99641dcd9b11eb0831f46d
 ```
 
 </details>
@@ -198,7 +198,7 @@ Add the new license to Vault.
 $ glsh vault proxy
 
 # Write the new license to Vault
-$ vault login -method oidc role=admin
+$ vault login -method oidc
 $ vault kv put k8s/ops-central/teleport-cluster-production/license license.pem=@license.pem
 ```
 
@@ -215,17 +215,155 @@ $ glsh kube use-cluster ops-central
 $ kubectl rollout restart deployment/teleport-production-auth --namespace=teleport-cluster-production
 ```
 
+## Terraform Integration
+
+[Terraform](https://www.terraform.io) needs a user with required permissions to manage the Teleport cluster.
+See this [guide](https://goteleport.com/docs/admin-guides/infrastructure-as-code/terraform-provider/) for more information.
+
+Currently, we use a user `terraform` and generate an auth identity for this user using
+[impersonation](https://goteleport.com/docs/admin-guides/access-controls/guides/impersonation/).
+We generate this identity to be valid for one year and it needs to be regenerated once year.
+**We should switch to Machine ID for running this plugin which does not manualy renewal.**
+Please refer to this [issue](https://gitlab.com/gitlab-com/gl-infra/production-engineering/-/issues/25244).
+
+- The following roles and user are created via the
+  [teleport-bootstrap](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/blob/master/releases/teleport-cluster/charts/teleport-bootstrap/templates/terraform.yaml) chart.
+  - Role `terraform-cluster-manager`
+  - Role `terraform-impersonator`
+  - User `terraform`
+
+### Update Auth Identity
+
+Use the following *Makefile*, if you need to update or rotate the auth identity for the `terraform` user.
+
+<details>
+<summary>Makefile</summary>
+
+```makefile
+okta_group        := GitLab - SRE
+impersonator_role := terraform-impersonator
+target_user       := terraform
+authid_ttl        := 8760h
+
+define update_auth_id
+  tsh login --proxy=$(1).teleport.gitlab.net
+  tctl get saml/okta --with-secrets > user-saml-$(1).yaml
+  # Add the impersonator role to the Okta group
+  yq eval '.spec.attributes_to_roles[] |= select(.value == "$(okta_group)") .roles += ["$(impersonator_role)"]' -i user-saml-$(1).yaml
+  tctl create -f user-saml-$(1).yaml
+  # Login again to assume the new role
+  tsh logout
+  tsh login --proxy=$(1).teleport.gitlab.net
+  # Request and sign an identity certificate for the user
+  tctl auth sign --user=$(target_user) --ttl=$(authid_ttl) --out=auth-id-$(1)
+  # Write the new auth identity to Vault
+  vault login -method oidc
+  vault kv patch -mount=ci ops-gitlab-net/gitlab-com/gl-infra/config-mgmt/teleport-$(1)/teleport auth_id=@auth-id-$(1)
+  # Remove created files
+  rm user-saml-$(1).yaml auth-id-$(1)
+  # Display the latest version of Vault secret
+  vault kv get -format=json -mount=ci ops-gitlab-net/gitlab-com/gl-infra/config-mgmt/teleport-$(1)/teleport | jq '.data.metadata.version' | xargs -I {} echo "The latest secret version: {}"
+endef
+
+.PHONY: update-production
+update-production:
+  $(call update_auth_id,production)
+
+.PHONY: update-staging
+update-staging:
+  $(call update_auth_id,staging)
+```
+
+</details>
+
+1. Run the `glsh vault proxy` command in a separate terminal.
+1. Run `make update-staging` or `make update-production`.
+1. Terraform will pick up the latest version of the Vault secret.
+
 ## Slack Integration
 
-The `teleport-plugin-slack` authenticated to the Teleport cluster as a user with the name `teleport-plugin-slack`.
-This user is assigned a role with the same name (`teleport-plugin-slack`).
-Both of this user and it roles are created in this [file](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/blob/master/releases/teleport-cluster/charts/teleport-bootstrap/templates/slack.yaml).
+The `teleport-plugin-slack` is used for communicating with [Slack](https://slack.com).
+See this [guide](https://goteleport.com/docs/admin-guides/access-controls/access-request-plugins/ssh-approval-slack/) for running this plugin.
 
-The `teleport-plugin-slack` user needs an identity. We generate this idendity to be valid for 1 year.
-**Currently, this user identity does NOT renew automatically and we need to renew it manually once a year**.
-Please follow the Teleport
-[documentation](https://goteleport.com/docs/access-controls/access-request-plugins/ssh-approval-slack/#step-48-export-the-access-plugin-identity)
-for temporarily creating an `impersonator` role and assign it to the `teleport-plugin-slack` user, and then generate a new identity.
+Currently, we use a user `slack` and generate an auth identity for this user using
+[impersonation](https://goteleport.com/docs/admin-guides/access-controls/guides/impersonation/).
+We generate this identity to be valid for one year and it needs to be regenerated once year.
+**We should switch to Machine ID for running this plugin which does not manualy renewal.**
+Please refer to this [issue](https://gitlab.com/gitlab-com/gl-infra/production-engineering/-/issues/25244).
+
+- This plugin is installed using
+  [teleport-plugin-slack](https://goteleport.com/docs/reference/helm-reference/teleport-plugin-slack/) Helm chart
+  (see [this](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/blob/master/releases/teleport-cluster/helmfile.yaml)).
+- The following roles and user are created via the
+  [teleport-bootstrap](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/blob/master/releases/teleport-cluster/charts/teleport-bootstrap/templates/slack.yaml) chart.
+  - Role `slack-access-requests-viewer`
+  - Role `slack-access-requests-manager`
+  - Role `slack-impersonator`
+  - User `slack`
+
+### Update Auth Identity
+
+Use the following *Makefile*, if you need to update or rotate the auth identity for the `slack` user.
+
+<details>
+<summary>Makefile</summary>
+
+```makefile
+okta_group        := GitLab - SRE
+impersonator_role := slack-impersonator
+target_user       := slack
+authid_ttl        := 8760h
+
+define update_auth_id
+  $(eval cluster=$(if $(filter production,$(1)),ops-central,$(if $(filter staging,$(1)),ops-gitlab-gke,invalid)))
+
+  tsh login --proxy=$(1).teleport.gitlab.net
+  tctl get saml/okta --with-secrets > user-saml-$(1).yaml
+  # Add the impersonator role to the Okta group
+  yq eval '.spec.attributes_to_roles[] |= select(.value == "$(okta_group)") .roles += ["$(impersonator_role)"]' -i user-saml-$(1).yaml
+  tctl create -f user-saml-$(1).yaml
+  # Login again to assume the new role
+  tsh logout
+  tsh login --proxy=$(1).teleport.gitlab.net
+  # Request and sign an identity certificate for the user
+  tctl auth sign --user=$(target_user) --ttl=$(authid_ttl) --out=auth-id-$(1)
+  # Write the new auth identity to Vault
+  vault login -method oidc
+  vault kv patch -mount=k8s $(cluster)/teleport-cluster-$(1)/slack auth_id=@auth-id-$(1)
+  # Remove created files
+  rm user-saml-$(1).yaml auth-id-$(1)
+  # Display the latest version of Vault secret
+  vault kv get -format=json -mount=k8s $(cluster)/teleport-cluster-$(1)/slack | jq '.data.metadata.version' | xargs -I {} echo "The latest secret version: {}"
+endef
+
+.PHONY: update-production
+update-production:
+  $(call update_auth_id,production)
+
+.PHONY: update-staging
+update-staging:
+  $(call update_auth_id,staging)
+```
+
+</details>
+
+1. Run the `glsh vault proxy` command in a separate terminal.
+1. Run `make update-staging` or `make update-production`.
+1. The last line of the output shows the latest version of the Vault secret.
+   Grab it and update the `teleport-cluster` release with it
+   ([staging](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/blob/9b84829c320822d99d9cef0321b16377a8bdce24/releases/teleport-cluster/values-secrets/ops-staging.yaml.gotmpl#L63) and
+   [production](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/blob/9b84829c320822d99d9cef0321b16377a8bdce24/releases/teleport-cluster/values-secrets/ops-central-production.yaml.gotmpl#L63)).
+1. Restart the `teleport-staging-slack` deployment to pick the new auth identity.
+
+   ```bash
+   # Staging
+   $ glsh kube use-cluster ops
+   $ kubectl rollout restart deployment/teleport-staging-slack --namespace=teleport-cluster-staging
+
+   # Production
+   $ glsh kube use-cluster ops-central
+   $ kubectl rollout restart deployment/teleport-production-slack --namespace=teleport-cluster-production
+   ```
 
 ## SIEM Integration
 
@@ -233,49 +371,87 @@ The `teleport-plugin-event-handler` is used for handling Teleport audit events a
 so such events can be further shipped to other systems (i.e. SIEM) for security and auditing purposes.
 Read more about exporting exporting Teleport audit events [here](https://goteleport.com/docs/management/export-audit-events/).
 
+See this [guide](https://goteleport.com/docs/management/export-audit-events/fluentd/) and
+[this](https://github.com/gravitational/teleport-plugins/tree/master/event-handler) one for further instructions.
+
+Currently, we use a user `event-handler` and generate an auth identity for this user using
+[impersonation](https://goteleport.com/docs/admin-guides/access-controls/guides/impersonation/).
+We generate this identity to be valid for one year and it needs to be regenerated once year.
+**We should switch to Machine ID for running this plugin which does not manualy renewal.**
+Please refer to this [issue](https://gitlab.com/gitlab-com/gl-infra/production-engineering/-/issues/25244).
+
 - This plugin is installed using
   [teleport-plugin-event-handler](https://goteleport.com/docs/reference/helm-reference/teleport-plugin-event-handler/) Helm chart
   (see [this](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/blob/master/releases/teleport-cluster/helmfile.yaml)).
-- A user and role named `teleport-event-handler` are created via the `teleport-bootstrap` chart
-  (see [this](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/blob/master/releases/teleport-cluster/charts/teleport-bootstrap/templates/event-handler.yaml)).
-- An impersonator role needs to be created and assigned for requesting an identity certificate for the `teleport-event-handler` user.
+- The following roles and user are created via the
+  [teleport-bootstrap](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/blob/master/releases/teleport-cluster/charts/teleport-bootstrap/templates/event-handler.yaml) chart.
+  - Role `event-handler-events-sessions-viewer`
+  - Role `event-handler-impersonator`
+  - User `event-handler`
 
-See this [guide](https://goteleport.com/docs/management/export-audit-events/fluentd/) or
-[this](https://github.com/gravitational/teleport-plugins/tree/master/event-handler) one for further instructions.
+### Update Auth Identity
 
-### Export an Identity File
-
-If you need to update or rotate the auth identity for `teleport-event-handler` user,
-follow the steps below for each Teleport cluster.
+Use the following *Makefile*, if you need to update or rotate the auth identity for the `event-handler` user.
 
 <details>
-<summary>Commands</summary>
+<summary>Makefile</summary>
 
-```bash
-$ tsh login --proxy=production.teleport.gitlab.net
-$ tctl get saml/okta --with-secrets > user-saml-production.yaml
+```makefile
+okta_group        := GitLab - SRE
+impersonator_role := event-handler-impersonator
+target_user       := event-handler
+authid_ttl        := 8760h
 
-# 1. Open user-saml-production.yaml
-# 2. Add `teleport-event-handler-impersonator` to your "GitLab - SRE" group roles.
-tctl create -f user-saml-production.yaml
+define update_auth_id
+  $(eval cluster=$(if $(filter production,$(1)),ops-central,$(if $(filter staging,$(1)),ops-gitlab-gke,invalid)))
 
-# Login again to assume the teleport-event-handler-impersonator role
-$ tsh logout
-$ tsh login --proxy=production.teleport.gitlab.net
+  tsh login --proxy=$(1).teleport.gitlab.net
+  tctl get saml/okta --with-secrets > user-saml-$(1).yaml
+  # Add the impersonator role to the Okta group
+  yq eval '.spec.attributes_to_roles[] |= select(.value == "$(okta_group)") .roles += ["$(impersonator_role)"]' -i user-saml-$(1).yaml
+  tctl create -f user-saml-$(1).yaml
+  # Login again to assume the new role
+  tsh logout
+  tsh login --proxy=$(1).teleport.gitlab.net
+  # Request and sign an identity certificate for the user
+  tctl auth sign --user=$(target_user) --ttl=$(authid_ttl) --out=auth-id-$(1)
+  # Write the new auth identity to Vault
+  vault login -method oidc
+  vault kv patch -mount=k8s $(cluster)/teleport-cluster-$(1)/event-handler auth_id=@auth-id-$(1)
+  # Remove created files
+  rm user-saml-$(1).yaml auth-id-$(1)
+  # Display the latest version of Vault secret
+  vault kv get -format=json -mount=k8s $(cluster)/teleport-cluster-$(1)/event-handler | jq '.data.metadata.version' | xargs -I {} echo "The latest secret version: {}"
+endef
 
-# Request and sign an identity certificate for the teleport-event-handler user
-$ tctl auth sign --user=teleport-event-handler --ttl=8760h --out=auth-id-production
+.PHONY: update-production
+update-production:
+  $(call update_auth_id,production)
 
-# Write the secret to Vault
-$ vault login -method oidc
-$ vault kv put k8s/ops-central/teleport-cluster-production/event-handler auth_id=@auth-id-production
-$ vault kv get -format=json k8s/ops-central/teleport-cluster-production/event-handler | jq '.data.metadata.version'
+.PHONY: update-staging
+update-staging:
+  $(call update_auth_id,staging)
 ```
 
 </details>
 
-Get the lastest secret version from Vault and update the `teleport-cluster` release with it
-[here](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/blob/1191371c0675c947ff40ed9bb76f58f2bdee24f9/releases/teleport-cluster/values-secrets/ops-central-production.yaml.gotmpl#L22)
+1. Run the `glsh vault proxy` command in a separate terminal.
+1. Run `make update-staging` or `make update-production`.
+1. The last line of the output shows the latest version of the Vault secret.
+   Grab it and update the `teleport-cluster` release with it
+   ([staging](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/blob/9b84829c320822d99d9cef0321b16377a8bdce24/releases/teleport-cluster/values-secrets/ops-staging.yaml.gotmpl#L22) and
+   [production](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/blob/9b84829c320822d99d9cef0321b16377a8bdce24/releases/teleport-cluster/values-secrets/ops-central-production.yaml.gotmpl#L22)).
+1. Restart the `teleport-staging-event-handler` deployment to pick the new auth identity.
+
+   ```bash
+   # Staging
+   $ glsh kube use-cluster ops
+   $ kubectl rollout restart deployment/teleport-staging-event-handler --namespace=teleport-cluster-staging
+
+   # Production
+   $ glsh kube use-cluster ops-central
+   $ kubectl rollout restart deployment/teleport-production-event-handler --namespace=teleport-cluster-production
+   ```
 
 ### Configuring mTLS Communication
 
