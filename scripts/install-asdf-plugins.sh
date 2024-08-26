@@ -2,18 +2,15 @@
 # Vendored from https://gitlab.com/gitlab-com/gl-infra/common-template-copier
 # Consider contributing upstream when updating this file
 
-# This script will install the ASDF plugins required for this project
+# This file is deprecated: going forward running `mise install` should be sufficient.
 
 set -euo pipefail
 IFS=$'\n\t'
 
-# Temporary transition over to mise from asdf
-# see https://gitlab.com/gitlab-com/runbooks/-/issues/134
-# for details
-setup_asdf() {
-  # shellcheck source=/dev/null
-  source "$ASDF_DIR/asdf.sh"
+echo >&2 -e "2024-08-07: this file is deprecated: going forward, simply run 'mise install' to install plugins."
+echo >&2 -e "Recommended reading: https://gitlab.com/gitlab-com/gl-infra/common-ci-tasks/-/blob/main/docs/developer-setup.md"
 
+<<<<<<< before updating
   plugin_list=$(asdf plugin list || echo "")
 
   install_plugin() {
@@ -196,3 +193,6 @@ install_plugin yq
 install_plugin pre-commit
 install_plugin python
 install_plugin mimirtool https://github.com/asdf-community/asdf-mimirtool
+=======
+mise install
+>>>>>>> after updating

@@ -2,8 +2,12 @@
 extends: default
 
 ignore: |
+<<<<<<< before updating
   vendor/
   mimir-rules/
+=======
+  .copier-*.yml
+>>>>>>> after updating
 
 rules:
   document-start: disable
