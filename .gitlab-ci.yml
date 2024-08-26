@@ -1,13 +1,14 @@
+---
 include:
   # Import GL_ASDF_* variables to match versions declared in ASDF
   - local: .gitlab-ci-asdf-versions.yml
 
-  # variables needed for other tasks
+  # Variables needed for other tasks
   - project: gitlab-com/gl-infra/common-ci-tasks
     ref: v2.30.1
     file: .gitlab-ci-other-versions.yml
 
-  # automatically tag releases using semantic-releases, based on conventional commit messages
+  # Automatically tag releases using semantic-releases, based on conventional commit messages
   - project: gitlab-com/gl-infra/common-ci-tasks
     ref: v2.30.1
     file: semantic-release.yml
@@ -25,22 +26,23 @@ include:
     ref: v2.30.1
     file: renovate-bot.yml
 
-  # validate .editorconfig
+  # Validate .editorconfig
   # see https://gitlab.com/gitlab-com/gl-infra/common-ci-tasks/-/blob/main/editorconfig-check.md
   - project: gitlab-com/gl-infra/common-ci-tasks
     ref: v2.30.1
     file: editorconfig-check.yml
 
-  # validate YAML files
+  # Validate YAML files
   # see https://gitlab.com/gitlab-com/gl-infra/common-ci-tasks/-/blob/main/yamllint.md
   - project: gitlab-com/gl-infra/common-ci-tasks
     ref: v2.30.1
     file: yamllint.yml
 
-  # Import the danger-review job
-  - project: gitlab-org/quality/pipeline-common
-    file:
-      - /ci/danger-review.yml
+  # Merge request review tasks
+  # see https://gitlab.com/gitlab-com/gl-infra/common-ci-tasks/-/blob/main/danger.md
+  - project: gitlab-com/gl-infra/common-ci-tasks
+    ref: v2.30.1
+    file: danger.yml
 
 stages:
   - notify
@@ -342,20 +344,6 @@ build-docker-image:
     - *if-tag-rule
 
 ################
-# Danger
-################
-
-danger-review:
-  <<: *id-tokens
-  secrets:
-    DANGER_GITLAB_API_TOKEN:
-      file: false
-      vault: access_tokens/gitlab-com/${CI_PROJECT_PATH}/danger/token@ci
-  before_script:
-    - gem install bundler --no-document -v $BUNDLER_VERSION
-    - bundle install --with=danger
-
-################
 # Common checks
 ################
 
@@ -370,34 +358,6 @@ yamllint:
     - *gitlab-com-only-rule
     - *avoid-merge-train-rule
     - *if-merge-request-rule
-
-################
-# Renovate
-################
-
-renovate_validate:
-  rules:
-    - *gitlab-com-only-rule
-    - *avoid-schedule-rule
-    - *avoid-merge-train-rule
-    - *if-merge-request-rule
-
-renovate_bot:
-  extends:
-    - .base_renovate_bot
-    - .id-tokens
-  rules:
-    - *gitlab-com-only-rule
-    - if: $CI_PIPELINE_SOURCE == "schedule" && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $RENOVATE_SCHEDULED && ($RENOVATE_IMMEDIATE == '' || $RENOVATE_IMMEDIATE == null)
-      exists:
-        - renovate.json
-  secrets:
-    RENOVATE_GITHUB_TOKEN:
-      file: false
-      vault: renovate/github/token@shared
-    RENOVATE_GITLAB_TOKEN:
-      file: false
-      vault: access_tokens/${VAULT_SECRETS_PATH}/renovate/token@ci
 
 ################
 # Linting
