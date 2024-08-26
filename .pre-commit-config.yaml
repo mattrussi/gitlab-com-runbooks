@@ -18,41 +18,12 @@ repos:
       - id: mixed-line-ending
         args: ["--fix=lf"]
       - id: no-commit-to-branch
-<<<<<<< before updating
         args: [--branch, master]
-  - repo: https://github.com/compilerla/conventional-pre-commit
-    rev: v3.4.0
-    hooks:
-      - id: conventional-pre-commit
-        stages: [commit-msg]
   - repo: https://github.com/google/go-jsonnet
     rev: v0.20.0
     hooks:
       - id: jsonnet-format
         args: [-i, --string-style, s, -n, "2"]
-  - repo: local
-    hooks:
-      - id: shellcheck
-        name: shellcheck
-        entry: shellcheck -e SC1090,SC1091,SC2002
-        language: system
-        files: '^(.*\.sh|bin/[^\.]*)$'
-  - repo: https://github.com/scop/pre-commit-shfmt
-    rev: v3.6.0-2  # Note: keep this in sync with .tool-versions
-    hooks:
-      - id: shfmt
-        args: ["-i", "2", "-ci"]
-  - repo: https://github.com/adrienverge/yamllint.git
-    rev: v1.35.1  # renovate:managed
-    hooks:
-      - id: yamllint
-        args: [-c=.yamllint.yaml]
-  - repo: https://github.com/zricethezav/gitleaks
-    rev: v8.18.4  # renovate:managed
-    hooks:
-      - id: gitleaks
-=======
-        args: [--branch, main]
       - id: pretty-format-json
         args: [--autofix, --no-sort-keys]
 
@@ -60,7 +31,7 @@ repos:
   # Documentation available at
   # https://gitlab.com/gitlab-com/gl-infra/common-ci-tasks/-/blob/main/docs/pre-commit.md
   - repo: https://gitlab.com/gitlab-com/gl-infra/common-ci-tasks
-    rev: v2.25  # renovate:managed
+    rev: v2.31  # renovate:managed
 
     hooks:
       - id: shellcheck  # Run shellcheck for changed Shell files
@@ -76,4 +47,3 @@ repos:
       - id: go-mod-tidy  # Run go mod tidy for changed Go files
       - id: go-test  # Run go test for the project if any go files have changed
       - id: golangci-lint  # Run golangci-lint for changed Go files
->>>>>>> after updating
