@@ -42,6 +42,8 @@ stages:
 variables:
   BUNDLER_VERSION: 2.4.12
   GOLANG_IMAGE: golang:${GL_ASDF_GOLANG_VERSION}
+  COMMON_TASK_VALIDATIONS_EXCLUDES_REGEXP: "test/lib/shunit2|vendor"
+  SHELLCHECK_ARGS: "-e SC1090,SC1091,SC2002"
 
 .id-tokens: &id-tokens
   id_tokens:

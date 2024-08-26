@@ -171,6 +171,7 @@ function jsonnet_compile() {
   )"
   echo "$out"
 
+  # shellcheck disable=SC2320,SC2181
   if [[ $? != 0 ]]; then
     echo >&2 "Failed to compile:" "$source_file"
     return 1

@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# SC2154
 
 set -efo pipefail
 
@@ -347,6 +348,7 @@ repositories_checksum() {
     clone_url="$(jq -r .ssh_url_to_repo <<<"$project_json")"
     project="$(jq -r '.path_with_namespace' <<<"$project_json")"
   else
+    # shellcheck disable=SC2154
     clone_url="git@${gitlab_host}/${project}.git"
   fi
   project_name="$(awk -F'/' '{print $NF}' <<<"$project")"
@@ -357,6 +359,7 @@ repositories_checksum() {
   git clone "$clone_url" "$temp_dir/$project"
 
   pushd "$temp_dir/$project" >/dev/null
+  # shellcheck disable=SC2155
   local sums="$(find . -type f | grep -v '.git' | sort | xargs md5sum)"
   popd >/dev/null
 
@@ -591,12 +594,14 @@ find_project_on_storage() {
   local group="$2"
   local curl_opts
 
+  # shellcheck disable=SC2206
   curl_uri="$(api_for_env)/projects?repository_storage=${storage}&order_by=created_at&sort=asc"
 
   if [[ -n $group ]]; then
     curl_uri="${curl_uri}&search=${group}/"
   fi
 
+  # shellcheck disable=SC2206
   curl_opts=(
     --silent --fail-with-body --show-error
     --header "PRIVATE-TOKEN: $pat"
