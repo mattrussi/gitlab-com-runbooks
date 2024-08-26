@@ -8,6 +8,6 @@ _src_path: https://gitlab.com/gitlab-com/gl-infra/common-template-copier.git
 ee_licensed: false
 golang: true
 initial_codeowners: '@andrewn @pguinoiseau @sxuereb @f_santos @jarv @reprazent'
-jsonnet: false
+jsonnet: true
 project_name: runbooks
 terraform: false
