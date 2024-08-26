@@ -3,40 +3,19 @@ include:
   # Import GL_ASDF_* variables to match versions declared in ASDF
   - local: .gitlab-ci-asdf-versions.yml
 
-  # Variables needed for other tasks
-  - project: gitlab-com/gl-infra/common-ci-tasks
-    ref: v2.31.0
-    file: .gitlab-ci-other-versions.yml
+  # This template should be included in all Infrastructure projects.
+  # It includes standard checks, gitlab-scanners, validations and release processes
+  # common to all projects using this template library.
+  # see https://gitlab.com/gitlab-com/gl-infra/common-ci-tasks/-/blob/main/README.md#templatesstandardyml
+  - project: 'gitlab-com/gl-infra/common-ci-tasks'
+    ref: v2.31  # renovate:managed
+    file: templates/standard.yml
 
-  # Automatically tag releases using semantic-releases, based on conventional commit messages
-  - project: gitlab-com/gl-infra/common-ci-tasks
-    ref: v2.31.0
-    file: semantic-release.yml
-
-  # Checks that the `.tool-versions` file is synced with .gitlab-ci-asdf-versions.yml,
-  # that all the plugins are declared in `./scripts/install-asdf-plugins.sh`
-  # and that ASDF is generally working
-  - project: gitlab-com/gl-infra/common-ci-tasks
-    ref: v2.31.0
-    file: asdf-tool-versions.yml
-
-  # Upgrades dependencies on a schedule
-  # see https://gitlab.com/gitlab-com/gl-infra/common-ci-tasks/-/blob/main/renovate-bot.md
-  - project: gitlab-com/gl-infra/common-ci-tasks
-    ref: v2.31.0
-    file: renovate-bot.yml
-
-  # Validate .editorconfig
-  # see https://gitlab.com/gitlab-com/gl-infra/common-ci-tasks/-/blob/main/editorconfig-check.md
-  - project: gitlab-com/gl-infra/common-ci-tasks
-    ref: v2.31.0
-    file: editorconfig-check.yml
-
-  # Validate YAML files
-  # see https://gitlab.com/gitlab-com/gl-infra/common-ci-tasks/-/blob/main/yamllint.md
-  - project: gitlab-com/gl-infra/common-ci-tasks
-    ref: v2.31.0
-    file: yamllint.yml
+  # Runs golang standard tests, including tests, goreleaser, golangci-lint and go-mod-tidy
+  # see https://gitlab.com/gitlab-com/gl-infra/common-ci-tasks/-/blob/main/templates/golang.md
+  - project: 'gitlab-com/gl-infra/common-ci-tasks'
+    ref: v2.31  # renovate:managed
+    file: templates/golang.yml
 
   # Merge request review tasks
   # see https://gitlab.com/gitlab-com/gl-infra/common-ci-tasks/-/blob/main/danger.md
@@ -1266,7 +1245,6 @@ commit-and-push-feature-categories-update:
     - git config user.name ops-gitlab-net
     - ./scripts/commit-and-push-feature-categories-update.sh
 
-<<<<<<< before updating
 pages:
   image: python:3.12
   stage: release
@@ -1279,18 +1257,3 @@ pages:
       - public
   rules:
     - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $CI_PIPELINE_SOURCE != "schedule"'
-=======
-  # This template should be included in all Infrastructure projects.
-  # It includes standard checks, gitlab-scanners, validations and release processes
-  # common to all projects using this template library.
-  # see https://gitlab.com/gitlab-com/gl-infra/common-ci-tasks/-/blob/main/README.md#templatesstandardyml
-  - project: 'gitlab-com/gl-infra/common-ci-tasks'
-    ref: v2.25  # renovate:managed
-    file: templates/standard.yml
-
-  # Runs golang standard tests, including tests, goreleaser, golangci-lint and go-mod-tidy
-  # see https://gitlab.com/gitlab-com/gl-infra/common-ci-tasks/-/blob/main/templates/golang.md
-  - project: 'gitlab-com/gl-infra/common-ci-tasks'
-    ref: v2.25  # renovate:managed
-    file: templates/golang.yml
->>>>>>> after updating
