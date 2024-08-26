@@ -54,8 +54,6 @@ metricsCatalog.serviceDefinition({
       local baseSelector = {
         job: 'apiserver',
         scope: { ne: '' },  // scope="" is used for health check endpoints
-        subresource: { nre: 'proxy|attach|log|exec|portforward|/readyz|/livez|/healthz|' },
-        verb: { re: 'LIST|GET' },
       },
 
       requestRate: rateMetric(
