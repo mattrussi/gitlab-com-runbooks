@@ -22,14 +22,14 @@ read -rp "THIS WILL RESET YOUR YUBIKEY WITH PIN=$PIN, type "CTRL+C" to cancel"
 ykman piv reset -f
 
 # Using PIN $PIN just for the sake of example, ofc.
-ykman piv access change-pin -P 123456 -n $PIN
+ykman piv access change-pin -P 123456 -n "$PIN"
 # Set the same PUK
-ykman piv access change-puk -p 12345678 -n $PIN
+ykman piv access change-puk -p 12345678 -n "$PIN"
 # Store management key on the device, protect by pin
-ykman piv access change-management-key -P $PIN -p
+ykman piv access change-management-key -P "$PIN" -p
 
 # Generate a key in slot 9a
-ykman piv keys generate --pin=$PIN -a ECCP256 --pin-policy=ONCE --touch-policy=CACHED 9a /var/tmp/pkey.pub
+ykman piv keys generate --pin="$PIN" -a ECCP256 --pin-policy=ONCE --touch-policy=CACHED 9a /var/tmp/pkey.pub
 # Generate cert
 ykman piv certificates generate --subject="CN=SSH Name+O=yubikey-agent+OU=0.1.5" --valid-days=10950 9a /var/tmp/pkey.pub
 

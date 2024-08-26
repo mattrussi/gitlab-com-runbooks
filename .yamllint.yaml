@@ -4,6 +4,7 @@ extends: default
 ignore: |
   vendor/
   mimir-rules/
+  .copier-*.yml
 
 rules:
   document-start: disable

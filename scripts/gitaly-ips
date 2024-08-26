@@ -1,9 +1,10 @@
 #!/bin/bash
-
+# shellcheck disable=SC2155
 set -eo pipefail
 
 collect_instances() {
   local project="$1"
+
   local all_instances="$(gcloud compute instances list --project "$project" | awk '!/NAME/ {print $1","$4","$5}')"
 
   for instance in $all_instances; do

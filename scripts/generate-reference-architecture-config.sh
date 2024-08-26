@@ -66,6 +66,7 @@ function main() {
   echo "Destination Directory: ${dest_dir}"
 
   local source_file="${reference_architecture_src_dir}/generate.jsonnet"
+  # shellcheck disable=SC2155
   local args_hash="$(echo "$@" | sha256sum | awk '{ print $1 }')"
   local sha256sum_file="${REPO_DIR}/.cache/$source_file.$args_hash.sha256sum"
   local cache_out_file="${REPO_DIR}/.cache/$source_file.$args_hash.out"
@@ -85,6 +86,7 @@ function main() {
     [[ ${GL_JSONNET_CACHE_DEBUG:-} == 'true' ]] && echo >&2 "jsonnet_cache: miss: $source_file"
   fi
 
+  # shellcheck disable=SC2155
   local out=$(generate_output "$dest_dir" "$source_file" "${paths[@]}" "${params[@]}")
 
   if [[ $generate_mixins_flag == true ]]; then
@@ -93,7 +95,7 @@ function main() {
     else
       mixins_file="${reference_architecture_src_dir}/mixins/mixins.jsonnet"
     fi
-
+    # shellcheck disable=SC2155
     local mixins_out=$(generate_mixins "$mixins_src_dir" "$mixins_file" "$dest_dir" "$reference_architecture_src_dir")
     out="$out"$'\n'"$mixins_out"
   fi
@@ -179,7 +181,7 @@ function generate_mixins() {
 
   if [[ -f $mixins_file ]]; then
     "${REPO_DIR}/scripts/ensure-mixtool.sh"
-
+    # shellcheck disable=SC2155
     local original_dir=$(pwd)
 
     mixins_out=$(jsonnet "$mixins_file" | jq -r '.mixins[]' | while IFS= read -r mixin; do
