@@ -4,7 +4,7 @@
 amtool       0.27.0 # datasource=github-releases depName=prometheus/alertmanager
 go-jsonnet   0.20.0 # datasource=github-releases depName=google/go-jsonnet
 golang       1.23.0 # datasource=golang-version depName=go
-jb           0.5.1 # datasource=github-releases depName=jsonnet-bundler/jsonnet-bundler
+jb           0.6.0 # datasource=github-releases depName=jsonnet-bundler/jsonnet-bundler
 jsonnet-tool 1.15.7 # datasource=gitlab-releases depName=gitlab-com/gl-infra/jsonnet-tool
 kubectl      1.31.0 # datasource=github-releases depName=kubernetes/kubernetes
 kubeconform  0.6.7 # datasource=github-releases depName=yannh/kubeconform
