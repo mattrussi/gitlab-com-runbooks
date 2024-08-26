@@ -37,7 +37,7 @@ You can find other helpful log searches by looking at saved Kibana objects with 
 
 ## Types of Duo Chat Errors
 
-All of GitLab Duo Chat [error codes are documented in the following](https://gitlab.com/gitlab-org/gitlab/-/blob/master/doc/user/gitlab_duo_chat/troubleshooting.md#the-gitlab-duo-chat-button-is-not-displayed) page. To discover what the issue is, please use the error code prefix letter to help choose where to search in Elastic logs.
+All of GitLab Duo Chat error codes are documented [here](https://gitlab.com/gitlab-org/gitlab/-/blob/master/doc/user/gitlab_duo_chat/troubleshooting.md#the-gitlab-duo-chat-button-is-not-displayed). The error code prefix letter can help you choose which Kibana logs to search.
 
 ### Error Code Layer Identifier
 
@@ -49,21 +49,18 @@ All of GitLab Duo Chat [error codes are documented in the following](https://git
 
 ### Debugging Error Codes A1000-6000
 
-Normally, when you recieve an error code starting with 'A', there's an issue regarding either a timeout or limit access due to rate limiting, etc with our third party llm provider. The first step to take is make sure there are no on-going outages.
+When you receive an error code starting with 'A', there's an error coming from the AI Gateway.
 
-Here are the following steps to go through:
+This can mean that the AI Gateway service itself is erroring or that a third-party LLM provider is returning an error to the AI Gateway.
 
-Check to see the Anthropic Status page is not reporting any issues:
-
-- [Anthropic API Status Page](https://status.anthropic.com/)
-
-Check to see if Google Cloud Platform is currently not reporting any issues:
-
-- [Google Cloud Platform Issues](https://status.cloud.google.com/)
-
-If there's a degredation of service from one of our LLM providers, you still won't know what blast radius the degredation of services is causing to Duo Chat. We have a Grafana dashboard that provides a better overivew of the following issues we may be seeing [Grafana AIGW Dashboard](https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway3a-overview?orgId=1)
-
-The most valuable dashboards to provide an overall health status are `Aggregated Service Level Indicators (𝙎𝙇𝙄𝙨)`
+1. Check for any ongoing outages with our third-party LLM providers:
+   - [Anthropic API Status](https://status.anthropic.com/)
+   - [Google Cloud Platform Status](https://status.cloud.google.com/)
+1. Use the [Grafana Dashboard](https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway3a-overview?orgId=1) to determine the overall impact. The `Aggregated Service Level Indicators (𝙎𝙇𝙄𝙨)` metric on that page indicates what percentage of users/requests are encountering errors.
+1. Track down the specific error
+   - Search for any Chat requests with errors for the user in the Sidekiq logs (`pubsub-sidekiq-inf-gprd-*`): `json.meta.user : "username-that-received-error" and json.subcomponent : "llm" and json.error : *`. The log line with the `json.error` value that matches what the user is seeing is what you want to use. Copy the `json.correlation_id` value.
+   - Search for the request in the AI Gateway logs (`pubsub-mlops-inf-gprd-*`): `json.jsonPayload.correlation_id : "correlation_id-from-last-result"`
+   - The `json.payload.Message` value in the AI Gateway log results should indicate what error message we are receiving from Anthropic, if any.
 
 ### Debugging Error Codes M3002 - M3004
 
