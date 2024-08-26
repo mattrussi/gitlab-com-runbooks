@@ -16,6 +16,7 @@
 ## Troubleshooting Pointers
 
 * [Upgrade camoproxy](../camoproxy/upgrade-camoproxy.md)
+* [Cells and Auto-Deploy](../cells/auto-deploy.md)
 * [../certificates/cloudflare.md](../certificates/cloudflare.md)
 * [../certificates/gkms.md](../certificates/gkms.md)
 * [../ci-runners/ci_pending_builds.md](../ci-runners/ci_pending_builds.md)
