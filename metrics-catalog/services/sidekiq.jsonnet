@@ -24,6 +24,7 @@ metricsCatalog.serviceDefinition({
   tier: 'sv',
   tenants: ['gitlab-gprd', 'gitlab-gstg', 'gitlab-pre'],
   tags: ['rails', 'kube_container_rss'],
+  shards: sidekiqHelpers.shards.listByName(),
 
   // overrides monitoringThresholds for specific shards and SLIs
   monitoring: {

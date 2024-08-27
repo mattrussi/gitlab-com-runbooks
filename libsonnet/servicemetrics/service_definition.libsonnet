@@ -7,6 +7,10 @@ local misc = import 'utils/misc.libsonnet';
 local objects = import 'utils/objects.libsonnet';
 local validator = import 'utils/validator.libsonnet';
 
+local serviceDefinitionValidator = validator.new({
+  shards: validator.optional(validator.arrayOfStrings),
+});
+
 local capacityPlanningValidator = validator.new({
   capacityPlanning: {
     saturation_dimensions: validator.optional(validator.arrayOfStrings),
@@ -100,7 +104,9 @@ local validate(serviceDefinition) =
   +
   validateMonitoring(serviceDefinition)
   +
-  capacityPlanningValidator.assertValid(serviceDefinition);
+  capacityPlanningValidator.assertValid(serviceDefinition)
+  +
+  serviceDefinitionValidator.assertValid(serviceDefinition);
 
 // Convenience method, will wrap a raw definition in a serviceLevelIndicatorDefinition if needed
 local prepareComponent(definition) =
