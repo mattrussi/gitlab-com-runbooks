@@ -15,7 +15,7 @@ metricsCatalog.serviceDefinition({
 
   provisioning: {
     kubernetes: true,
-    vms: false,
+    vms: true,
   },
 
   kubeResources: {
