@@ -1,35 +1,33 @@
 # Engineer On Call (EOC)
 
-To start with the right foot let's define a set of tasks
-that are nice things to do before you go any further in your week.
+To start with the right foot let's define a set of tasks that are nice things to do before you go any further in your week.
 
-By performing these tasks we will keep the [broken window effect](https://en.wikipedia.org/wiki/Broken_windows_theory)
-under control, preventing future pain and mess.
+By performing these tasks we will keep the [broken window effect][broken_window_effect] under control, preventing future pain and mess.
 
 ## Going on call
 
 Here is a suggested checklist of things to do at the start of an on-call shift:
 
-- *Change Slack Icon*: Click name. Click `Set status`. Click grey smile face.
-  Type `:pagerduty:`. Set `Clear after` to end of on-call shift. Click `Save`
+- *Change Slack Icon*: Click name. Click `Set status`.
+  Click grey smile face.
+  Type `:pagerduty:`.
+  Set `Clear after` to end of on-call shift.
+  Click `Save`
 - *Join alert slack channels if not already a member*:
   - `#production`
+  - `#incident-management`
   - `#alerts-prod-abuse`
-  - `#tenable-notifications`
-  - `#marquee_account_alrts`
+  - `#g_security_vulnmgmt_notifications`
 - *Turn on slack channel notifications for these slack channels for
   `All new messages`*:
-  - `#production`
   - `#incident-management`
-- At the start of each on-call day, read the on-call handover issue that has
-  been assigned to you by the previous EOC, and familiarize yourself with any
-  ongoing incidents.
+- At the start of each on-call day, read the on-call handover issue that has been assigned to you by the previous EOC, and familiarize yourself with any ongoing incidents.
 
 At the end of a shift:
 
 - *Turn off slack channel notifications*: Open notification preferences in monitored Slack channels from the previous checklist and return alerts to the desired values.
 - *Leave noisy alert channels*: `/leave` alert channels (It's good to stay in `#alerts` and `#alerts-general`)
-- Comment on any open S1 incidents at: https://gitlab.com/gitlab-com/gl-infra/production/issues?scope=all&utf8=✓&state=opened&label_name%5B%5D=incident&label_name%5B%5D=S1
+- [Comment on any open S1 incidents][open_s1_incidents]
 - At the end of each on-call day, post a quick update in slack so the next person is aware of anything ongoing, any false alerts, or anything that needs to be handed over.
 
 ## Going off call
@@ -43,15 +41,12 @@ At the end of a shift:
 
 ### On-call issues
 
-First check [active production incident issues][active-production-incident-issues]
-to familiarize yourself with what has been happening lately. Also, keep an eye
-on the [#production][slack-production] and
-[#incident-management][slack-incident-management] channels for discussion around
-any on-going issues.
+First check [active production incident issues][active-production-incident-issues] to familiarize yourself with what has been happening lately.
+Also, keep an eye on the [#production][slack-production] and [#incident-management][slack-incident-management] channels for discussion around any on-going issues.
 
 ### Useful Dashboard to keep open
 
-- [GitLab Triage](https://dashboards.gitlab.net/d/RZmbBr7mk/gitlab-triage?orgId=1)
+- [Platform Triage](https://dashboards.gitlab.net/goto/EEjfId3Ig?orgId=1)
 
 ### Alerts
 
@@ -86,26 +81,19 @@ If you find any abnormal or suspicious activity during the course of your on cal
 ## Rotation Schedule
 
 We use [PagerDuty](https://gitlab.pagerduty.com) to manage our on-call rotation schedule and alerting for emergency issues.
-We currently have a split schedule between
-[EMEA][pagerduty-emea], [AMER][pagerduty-amer], and [APAC][pagerduty-apac] for on-call rotations in each geographical region.
+We currently have a split schedule between [EMEA][pagerduty-emea], [AMER][pagerduty-amer], and [APAC][pagerduty-apac] for on-call rotations in each geographical region.
 
-The AMER, APAC, and EMEA schedules have a [shadow schedule][pagerduty-shadow]
-which we use for on-boarding new engineers to the on-call rotations.
+The AMER, APAC, and EMEA schedules have a [shadow schedule][pagerduty-shadow] which we use for on-boarding new engineers to the on-call rotations.
 
-When a new engineer joins the team and is ready to start shadowing for an on-call rotation,
-[overrides][pagerduty-overrides] should be enabled for the relevant on-call hours during that rotation.
-Once they have completed shadowing and are comfortable/ready to be inserted into the primary rotations,
-update the membership list for the appropriate schedule to [add the new team member][pagerduty-add-user].
+When a new engineer joins the team and is ready to start shadowing for an on-call rotation, [overrides][pagerduty-overrides] should be enabled for the relevant on-call hours during that rotation.
+Once they have completed shadowing and are comfortable/ready to be inserted into the primary rotations, update the membership list for the appropriate schedule to [add the new team member][pagerduty-add-user].
 
-This [pagerduty forum post][pagerduty-shadow-schedule] was referenced when setting up the
-[blank shadow schedule][pagerduty-blank-schedule] and initial [overrides][pagerduty-overrides] for on-boarding new team members.
+This [pagerduty forum post][pagerduty-shadow-schedule] was referenced when setting up the [blank shadow schedule][pagerduty-blank-schedule] and initial [overrides][pagerduty-overrides] for on-boarding new team members.
 
 ### Creating temporary PagerDuty maintenance windows
 
-A temporary maintenance window may be created at any time using the `/chatops run pager pause`
-command in the [`#production` slack channel](https://gitlab.slack.com/archives/C101F3796). The
-default window duration is `1 hour`. To schedule a window for another duration a
-[`ruby chronic`-compatible time specification](https://github.com/mojombo/chronic#examples) can be used like so: `--duration="2 hours"`.
+A temporary maintenance window may be created at any time using the `/chatops run pager pause` command in the [`#production` slack channel](https://gitlab.slack.com/archives/C101F3796).
+The default window duration is `1 hour`. To schedule a window for another duration a [`ruby chronic`-compatible time specification](https://github.com/mojombo/chronic#examples) can be used like so: `--duration="2 hours"`.
 
 For more options, use `/chatops run pager --help`:
 
@@ -126,8 +114,8 @@ Currently a maintenance window cannot be created for a duration smaller than 1 m
 to undocumented implementation in the PagerDuty API.
 
 
-[on-call-issues]:                   https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues?scope=all&utf8=%E2%9C%93&&state=all&label_name[]=oncall
 [active-production-incident-issues]:https://gitlab.com/gitlab-com/gl-infra/production/issues?state=open&label_name[]=Incident::Active
+[open_s1_incidents]:                https://gitlab.com/gitlab-com/gl-infra/production/issues?scope=all&utf8=✓&state=opened&label_name%5B%5D=incident&label_name%5B%5D=S1
 
 [pagerduty-add-user]:               https://support.pagerduty.com/docs/editing-schedules#section-adding-users
 [pagerduty-amer]:                   https://gitlab.pagerduty.com/schedules#POL1GSQ
@@ -149,6 +137,7 @@ to undocumented implementation in the PagerDuty API.
 
 [slack-alerts]:                     https://gitlab.slack.com/channels/alerts
 [slack-alerts-general]:             https://gitlab.slack.com/channels/feed_alerts-general
-[slack-alerts-gstg]:                https://gitlab.slack.com/channels/alerts-gstg
 [slack-incident-management]:        https://gitlab.slack.com/channels/incident-management
 [slack-production]:                 https://gitlab.slack.com/channels/production
+
+[broken_window_effect]:             https://en.wikipedia.org/wiki/Broken_windows_theory
