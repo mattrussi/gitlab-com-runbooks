@@ -38,14 +38,24 @@ local resourceDashboardPerComponent(service) =
     for component in saturationPointsByService(service)
   };
 
-local services(services) = {
-  [service]: {
-    capacityPlanning: metricsCatalog.getService(service).capacityPlanning,
+local serviceDefinition(service) =
+  local definition = metricsCatalog.getService(service);
+  local shards = std.get(definition, 'shards');
+  {
+    // The shards field can be dropped after the shard mapping is not in use as a custom dimension
+    // and the saturation_dimensions from capacityPlanning is being fully used instead.
+    // TODO: https://gitlab.com/gitlab-com/gl-infra/tamland/-/issues/184
+    [if shards != null then 'shards']: shards,
+    capacityPlanning: definition.capacityPlanning,
     overviewDashboard: dashboard.overviewDashboard(service),
     resourceDashboard: resourceDashboardPerComponent(service),
-  } + truncateRawCatalogService(serviceCatalog.lookupService(service))
-  for service in services
-};
+  };
+
+local services(services) =
+  {
+    [service]: serviceDefinition(service) + truncateRawCatalogService(serviceCatalog.lookupService(service))
+    for service in services
+  };
 
 local page(path, title, service_pattern) =
   {
@@ -105,7 +115,7 @@ local saturationPoints = {
       'saas-macos-medium-m1',
       'saas-macos-large-m2pro',
       'windows-shared',
-    ]
+    ],
   },
   teams: serviceCatalog.getRawCatalogTeams(),
   report: {
