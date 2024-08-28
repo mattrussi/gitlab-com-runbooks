@@ -2947,14 +2947,6 @@
             {
               "colorMode": "custom",
               "fill": true,
-              "fillColor": "rgba(242, 73, 92, 0.5)",
-              "line": false,
-              "op": "gt",
-              "yaxis": "left"
-            },
-            {
-              "colorMode": "custom",
-              "fill": true,
               "fillColor": "rgba(242, 73, 92, 0.25)",
               "line": false,
               "op": "gt",
@@ -3191,14 +3183,6 @@
             }
           ],
           "thresholds": [
-            {
-              "colorMode": "custom",
-              "fill": true,
-              "fillColor": "rgba(242, 73, 92, 0.5)",
-              "line": false,
-              "op": "gt",
-              "yaxis": "left"
-            },
             {
               "colorMode": "custom",
               "fill": true,
@@ -3441,14 +3425,6 @@
             {
               "colorMode": "custom",
               "fill": true,
-              "fillColor": "rgba(242, 73, 92, 0.5)",
-              "line": false,
-              "op": "gt",
-              "yaxis": "left"
-            },
-            {
-              "colorMode": "custom",
-              "fill": true,
               "fillColor": "rgba(242, 73, 92, 0.25)",
               "line": false,
               "op": "gt",
@@ -3688,14 +3664,6 @@
             {
               "colorMode": "custom",
               "fill": true,
-              "fillColor": "rgba(242, 73, 92, 0.5)",
-              "line": false,
-              "op": "gt",
-              "yaxis": "left"
-            },
-            {
-              "colorMode": "custom",
-              "fill": true,
               "fillColor": "rgba(242, 73, 92, 0.25)",
               "line": false,
               "op": "gt",
@@ -3932,14 +3900,6 @@
             }
           ],
           "thresholds": [
-            {
-              "colorMode": "custom",
-              "fill": true,
-              "fillColor": "rgba(242, 73, 92, 0.5)",
-              "line": false,
-              "op": "gt",
-              "yaxis": "left"
-            },
             {
               "colorMode": "custom",
               "fill": true,
