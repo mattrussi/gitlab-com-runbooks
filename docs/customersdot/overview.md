@@ -39,7 +39,6 @@ SSH connectivity is normally established through Teleport. In the event that Tel
 * You might need to refer to
 [these instructions](https://gitlab.com/gitlab-org/customers-gitlab-com/-/blob/staging/doc/testing/staging.md#ssh-config)
 
-
 **NOTE:** Ensure you revert the MR once you're back to using Teleport.
 
 Once the firewall rule has been added, you should be able to do the following:
