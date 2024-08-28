@@ -312,7 +312,10 @@ teams:
   - graphql_query
 
 - name: cloud_connector
+  label: group::cloud connector
   product_stage_group: cloud_connector
+  slack_channel: g_cloud_connector
+  slack_alerts_channel: cloud-connector-events
   ignored_components:
   - graphql_query
 
