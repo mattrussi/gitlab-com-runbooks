@@ -27,6 +27,7 @@ SSH connectivity to customer-dot VMs is established through Teleport. SREs don't
 $ tsh login --proxy=production.teleport.gitlab.net
 $ tsh ssh customers-01-inf-prdsub
 ```
+
 **NOTE:** if your user ID in Okta differs from that in Chef, you would need to make sure they match in order for this to work.
 
 ##### Break-glass procedure for SSH access
