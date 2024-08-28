@@ -77,5 +77,22 @@ basic.dashboard(
       yAxisLabel='rps',
       linewidth=1,
     ),
+    basic.heatmap(
+      title='I/O task submission latency',
+      description='The time it takes to submit a tunnel tracking task',
+      query='sum by (le) (rate(registry_async_submission_duration_seconds_bucket{%s}[$__rate_interval]))' % selectorString,
+      dataFormat='tsbuckets',
+      color_cardColor='#0000ff',
+      legendFormat='__auto',
+    ),
+    basic.timeseries(
+      title='Number of I/O tasks submitted',
+      description='',
+      query=|||
+        sum by (pod) (increase(registry_async_submission_total{%s}[$__rate_interval]))
+      ||| % selectorString,
+      legendFormat='__auto',
+      linewidth=1,
+    ),
   ], cols=3, rowHeight=10)
 )
