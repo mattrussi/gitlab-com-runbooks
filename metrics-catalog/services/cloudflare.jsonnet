@@ -80,6 +80,35 @@ metricsCatalog.serviceDefinition({
 
       significantLabels: [],
     },
+    cloud_gitlab_zone: {
+      severity: 's3',
+      team: 'cloud_connector',
+      userImpacting: true,  // Low until CF exporter metric quality increases https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/10294
+      featureCategory: 'cloud_connector',
+      description: |||
+        Aggregation of all public traffic for cloud.gitlab.com passing through Cloudflare.
+
+        Errors on this SLI may indicate that the WAF has detected
+        malicious traffic and is blocking it. It may also indicate
+        serious upstream failures in GitLab-operated backends.
+      |||,
+
+      local zoneSelector = { zone: { re: 'cloud.gitlab.com|cloud.staging.gitlab.com' } },
+      requestRate: rateMetric(
+        counter='cloudflare_zone_requests_total',
+        selector=zoneSelector
+      ),
+
+      errorRate: rateMetric(
+        counter='cloudflare_zone_requests_status',
+        selector=zoneSelector {
+          status: { re: '5..' },
+        },
+      ),
+
+      significantLabels: [],
+    },
+
   },
   skippedMaturityCriteria: {
     'Developer guides exist in developer documentation': 'WAF is an infrastructure component, powered by Cloudflare',

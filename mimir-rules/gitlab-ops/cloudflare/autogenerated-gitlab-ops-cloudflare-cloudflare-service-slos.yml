@@ -6,6 +6,16 @@ groups:
   rules:
   - record: gitlab_component_service:mapping
     labels:
+      component: cloud_gitlab_zone
+      global_aggregation: "no"
+      monitor: global
+      regional_aggregation: "no"
+      service_aggregation: "yes"
+      tier: lb
+      type: cloudflare
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
       component: gitlab_net_zone
       global_aggregation: "no"
       monitor: global
