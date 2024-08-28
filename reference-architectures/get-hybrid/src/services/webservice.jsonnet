@@ -86,6 +86,7 @@ metricsCatalog.serviceDefinition({
           ne: workhorseRoutes.escapeForLiterals(|||
             ^/-/health$
             ^/-/(readiness|liveness)$
+            ^/-/cable\z
           |||),
         },
       },
@@ -110,20 +111,23 @@ metricsCatalog.serviceDefinition({
         featureCategory: 'not_owned',
         description: |||
           Aggregation of most rails requests that pass through workhorse, monitored via the HTTP interface.
-          Excludes API requests, git requests, health, readiness and liveness requests. Some known slow requests,
-          such as HTTP uploads, are excluded from the apdex score.
+          Excludes known slow requests that typically transfer large amounts of data and are expected to be slower.
         |||,
 
         apdex: histogramApdex(
           histogram='gitlab_workhorse_http_request_duration_seconds_bucket',
           selector=nonAPIWorkhorseSelector {
             // In addition to excluding all git and API traffic, exclude
-            // these routes from apdex as they have variable durations
-            route+: {
+            // these uris from apdex as they have variable durations
+            // Note that the route field is not always set, so we use the uri field instead.
+            uri+: {
               ne+: workhorseRoutes.escapeForLiterals(|||
-                ^/([^/]+/){1,}[^/]+/uploads\z
-                ^/-/cable\z
-                ^/v2/.+/containers/.+/blobs/sha256:[a-z0-9]+\z
+                /uploads\b
+                /containers/
+                /gitlab-lfs/
+                /archive/
+                /download\b
+                /raw/
               |||),
             },
           },
@@ -143,7 +147,7 @@ metricsCatalog.serviceDefinition({
           },
         ),
 
-        significantLabels: ['route', 'code'],
+        significantLabels: ['uri', 'code'],
 
         toolingLinks: [],
       },
