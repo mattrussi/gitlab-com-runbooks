@@ -55,6 +55,7 @@ Ideally, this measurement is designed to inform the overall flow and duration of
 
 | Date | Environment | VM Provision Time | Bootstrap Time | Notes |
 | ---- | ----------- | ------------------------ | -------------- | ----- |
+| 2024-08-28 | GSTG | 00:19:25 | 00:12:58 | [GSTG Patroni Gameday](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/18412) |
 | 2024-08-08 | GSTG | 00:20:49 | 00:10:57 | [GSTG Patroni Gameday](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/18358) , [This is calculated from the slowest Patroni node among all the clusters.](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/18358#note_2037567888) |
 | 2024-08-06 | GPRD | 00:17:41 | 00:11:03 | GPRD Patroni [provisioning test](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/18334) with the registry cluster. |
 | 2024-04-25 | GSTG | HH:MM:SS | 00:06:00 | Collection of a Patroni bootstrap duration baseline while using OS disk snapshots. Terraform apply duration was not recorded. |
@@ -64,6 +65,7 @@ Ideally, this measurement is designed to inform the overall flow and duration of
 
 | Date | Environment | Duration | Notes |
 | ---- | ----------- | -------- | ----- |
+| 2024-08-28 | GSTG | 00:39:00 | For this [Gameday excersize on GSTG](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/18412) |
 | 2024-08-08 | GSTG | 01:12:SS | For this [Gameday excersize on GSTG](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/18358) , attempted to create new patroni nodes in recovery zones , took longer than expected because we hit the snapshot quota|
 
 ## HAProxy/Traffic Routing Zonal Outage DR Process Time
