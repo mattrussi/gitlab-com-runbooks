@@ -348,6 +348,8 @@ teams:
 
 - name: optimize
   product_stage_group: optimize
+  slack_error_budget_channel: g_plan_optimize
+  send_error_budget_weekly_to_slack: true
   ignored_components:
   - graphql_query
 
@@ -385,6 +387,8 @@ teams:
 
 - name: project_management
   product_stage_group: project_management
+  slack_error_budget_channel: g_project-management
+  send_error_budget_weekly_to_slack: true
   ignored_components:
   - graphql_query
 
