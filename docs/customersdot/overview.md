@@ -21,8 +21,14 @@ The production and staging environments reside in Google Cloud projects.
 
 #### SSH
 
-For remote access to the VMs, refer to
-[these instructions](https://gitlab.com/gitlab-org/customers-gitlab-com/-/blob/staging/doc/testing/staging.md#ssh-config)
+SSH connectivity to customer-dot VMs is established through Teleport. SREs don't require any additional teleport permissions to access these VMs, and can do so directly as follow:
+
+```shell
+$ tsh login --proxy=production.teleport.gitlab.net
+$ tsh ssh customers-01-inf-prdsub
+```
+
+**NOTE:** if your user ID in Okta differs from that in Chef, you would need to make sure they match in order for this to work.
 
 ##### Break-glass procedure for SSH access
 
@@ -30,6 +36,8 @@ SSH connectivity is normally established through Teleport. In the event that Tel
 
 * [Staging](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/846107df82d30b78cb8c36c1410ad766dde9b15f/environments/stgsub/variables.tf#L212)
 * [Production](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/846107df82d30b78cb8c36c1410ad766dde9b15f/environments/prdsub/variables.tf#L225)
+* You might need to refer to
+[these instructions](https://gitlab.com/gitlab-org/customers-gitlab-com/-/blob/staging/doc/testing/staging.md#ssh-config)
 
 **NOTE:** Ensure you revert the MR once you're back to using Teleport.
 

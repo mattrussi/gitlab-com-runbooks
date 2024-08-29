@@ -75,20 +75,28 @@ test.suite({
     local servicesHaveExpectedFields = std.map(
       function(name)
         local fields = std.objectFields(self.actual.services[name]);
-        fields == [
+        local expectedFields = [
           'capacityPlanning',
           'label',
           'name',
           'overviewDashboard',
           'owner',
           'resourceDashboard',
-        ],
+          'shards',
+        ];
+        std.all(
+          std.map(
+            function(field)
+              std.member(expectedFields, field),
+            fields
+          )
+        ),
       std.objectFields(self.actual.services)
     ),
     actual: manifest,
     expectThat: {
-      result: std.objectHas(self.actual, 'services') && std.all(servicesHaveExpectedFields),
-      description: 'Expect object to have serviceCatalog field',
+      result: std.all(servicesHaveExpectedFields),
+      description: 'Expect object to have serviceCatalog fields',
     },
   },
   testHasServiceCatalogTeamsField: {

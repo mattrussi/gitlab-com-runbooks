@@ -7,6 +7,7 @@ local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 local kubeLabelSelectors = metricsCatalog.kubeLabelSelectors;
 local sliLibrary = import 'gitlab-slis/library.libsonnet';
 local findServicesWithTag = (import 'servicemetrics/metrics-catalog.libsonnet').findServicesWithTag;
+local selectors = import 'promql/selectors.libsonnet';
 
 // Some workers have known performance issues that surpass our thresholds.
 // Each worker should have a link to an issue to fix the performance issues.
@@ -24,6 +25,7 @@ metricsCatalog.serviceDefinition({
   tier: 'sv',
   tenants: ['gitlab-gprd', 'gitlab-gstg', 'gitlab-pre'],
   tags: ['rails', 'kube_container_rss'],
+  shards: sidekiqHelpers.shards.listByName(),
 
   // overrides monitoringThresholds for specific shards and SLIs
   monitoring: {
@@ -189,6 +191,9 @@ metricsCatalog.serviceDefinition({
   }),
 
   capacityPlanning: {
+    saturation_dimensions: [
+      selectors.serializeHash({ shard: shard }) for shard in $.shards
+    ],
     components: [
       {
         name: 'rails_db_connection_pool',

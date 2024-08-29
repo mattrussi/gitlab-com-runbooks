@@ -29,11 +29,12 @@ metricsCatalog.serviceDefinition({
       userImpacting: false,  // Low until CF exporter metric quality increases https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/10294
       featureCategory: 'not_owned',
       description: |||
-        Aggregation of all public traffic for GitLab.com passing through the WAF.
+        Aggregation of all public traffic for GitLab.com passing through Cloudflare.
 
-        Errors on this SLI may indicate that the WAF has detected
-        malicious traffic and is blocking it. It may also indicate
-        serious upstream failures on GitLab.com.
+        Errors on this SLI may indicate serious upstream failures on GitLab.com.
+        They could also indicate connectivity issues between Cloudflare and the origin.
+        See https://developers.cloudflare.com/support/troubleshooting/cloudflare-errors/troubleshooting-cloudflare-5xx-errors/
+        for more information.
       |||,
 
       local zoneSelector = { zone: { re: 'gitlab.com|staging.gitlab.com' } },
@@ -58,10 +59,12 @@ metricsCatalog.serviceDefinition({
       userImpacting: false,  // Low until CF exporter metric quality increases https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/10294
       featureCategory: 'not_owned',
       description: |||
-        Aggregation of all GitLab.net (non-pulic) traffic passing through the WAF.
+        Aggregation of all GitLab.net (non-pulic) traffic passing through Cloudflare.
 
-        Errors on this SLI may indicate that the WAF has detected
-        malicious traffic and is blocking it.
+        Errors on this SLI may indicate serious upstream failures on GitLab.net.
+        They could also indicate connectivity issues between Cloudflare and the origin.
+        See https://developers.cloudflare.com/support/troubleshooting/cloudflare-errors/troubleshooting-cloudflare-5xx-errors/
+        for more information.
       |||,
 
       local zoneSelector = { zone: 'gitlab.net' },
@@ -80,6 +83,36 @@ metricsCatalog.serviceDefinition({
 
       significantLabels: [],
     },
+    cloud_gitlab_zone: {
+      severity: 's3',
+      team: 'cloud_connector',
+      userImpacting: true,  // Low until CF exporter metric quality increases https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/10294
+      featureCategory: 'cloud_connector',
+      description: |||
+        Aggregation of all public traffic for cloud.gitlab.com passing through Cloudflare.
+
+        Errors on this SLI most likely indicate upstream failures in GitLab-operated backends.
+        They could also indicate connectivity issues between Cloudflare and the origin.
+        See https://developers.cloudflare.com/support/troubleshooting/cloudflare-errors/troubleshooting-cloudflare-5xx-errors/
+        for more information.
+      |||,
+
+      local zoneSelector = { zone: { re: 'cloud.gitlab.com|cloud.staging.gitlab.com' } },
+      requestRate: rateMetric(
+        counter='cloudflare_zone_requests_total',
+        selector=zoneSelector
+      ),
+
+      errorRate: rateMetric(
+        counter='cloudflare_zone_requests_status',
+        selector=zoneSelector {
+          status: { re: '5..' },
+        },
+      ),
+
+      significantLabels: [],
+    },
+
   },
   skippedMaturityCriteria: {
     'Developer guides exist in developer documentation': 'WAF is an infrastructure component, powered by Cloudflare',
