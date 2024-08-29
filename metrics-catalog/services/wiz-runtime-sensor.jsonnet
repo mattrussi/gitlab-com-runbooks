@@ -3,7 +3,6 @@ local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 metricsCatalog.serviceDefinition({
   type: 'wiz-runtime-sensor',
   tier: 'inf',
-  groupname: 'wiz-sensor',
   tenants: [ 'gitlab-gprd', 'gitlab-gstg', 'gitlab-ops', 'gitlab-pre' ],
   tags: ['wiz-sensor'],
 
