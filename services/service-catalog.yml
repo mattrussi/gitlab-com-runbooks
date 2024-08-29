@@ -483,7 +483,7 @@ services:
     technical:
       logging:
         - name: GKE logs
-          permalink: https://cloudlogging.app.goo.gl/QWoCS2kDVF5LaTqG9
+          permalink: https://cloudlogging.app.goo.gl/g6td7zD8QnUTStzt7
       project:
         - https://gitlab.com/gitlab-org/analytics-section/product-analytics
       documents:

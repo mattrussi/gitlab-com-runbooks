@@ -52,6 +52,7 @@
 * [Rotating Rails' PostgreSQL password](../patroni/rotating-rails-postgresql-password.md)
 * [../pd-event-logger-7760xa/events.md](../pd-event-logger-7760xa/events.md)
 * [../product_analytics/clickhouse-backup-restore.md](../product_analytics/clickhouse-backup-restore.md)
+* [../product_analytics/k8s-architecture.md](../product_analytics/k8s-architecture.md)
 * [Provisioning Redis Cluster](../redis/provisioning-redis-cluster.md)
 * [../redis/redis-functional-partitioning.md](../redis/redis-functional-partitioning.md)
 * [Scaling Redis Cluster](../redis/scaling-redis-cluster.md)
