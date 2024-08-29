@@ -116,7 +116,7 @@ We do allow the option to enable enhanced ai logging by enabling the `expanded_a
 To enable expanded AI logging, access the `#production` Slack channel and run the following command.
 
 ```
-/chatops run features set expanded_ai_logging --user=<USERNAME>
+/chatops run feature set --user=$USERNAME expanded_ai_logging true
 ```
 
 After the the `expanded_ai_logging` feature flag is enabled for a user, you view the user input and LLM output for any the GitLab Duo Chat requests made by the user.
