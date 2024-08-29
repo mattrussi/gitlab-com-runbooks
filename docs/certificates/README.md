@@ -131,14 +131,11 @@ when those certificates are going to expire.
 
 See [SSL certificate expiration rules](../../legacy-prometheus-rules/ssl-certificate-expirations.yml).
 
-#### Modify list of hosts with SSL certificate
+#### Add a host to the certificate monitoring
 
-By editing list inside `prometheus.jobs.blackbox-ssl.target` attribute in the
-role `prometheus-server` on Chef, you can add or remove server from monitoring
-for SSL certificate expiration. By adding server there you will be receiving
-alerts when there is less than 30 days remain for certificate expiration. Do
-not forget to save your changes to `chef-repo` and run `chef-client` on the
-Prometheus host to see changes.
+The list of hosts that will have their certificate expiry scraped by Prometheus
+is defined in [this file](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/blob/ad013112a14af1be2cc1eba8f61efe4faa9cbe4a/releases/prometheus-agent/gprd.jsonnet#L564).
+By adding a server there, you will receive alerts when there are less than 30 days remaining until certificate expiration.
 
 ### Safe execution of a update involving Chef nodes
 
@@ -237,6 +234,12 @@ Prometheus host to see changes.
 | `*.pre.gitlab.io` | Sectigo RSA Domain Validation Secure Server CA | PRE GitLab Pages from SSLMate | [HCVault][hcvault] | Path: `/v1/k8s/data/env/pre/ns/gitlab/pages/tls` |
 | `*.qa-tunnel.gitlab.info`                                                                                                            | Sectigo RSA Domain Validation Secure Server CA                         | QA Tunnel                                                                                                                                | [Chef Vault][chef-vault]                            | data bag: `gitlab-qa-tunnel`, item: `ci-prd`, fields: `"gitlab-qa-tunnel".ssl_certificate`, `"gitlab-qa-tunnel".ssl_key`                                                                            |
 | `*.staging.gitlab.net`                                                                                                               | CloudFlare Inc ECC CA-2                                                |                                                                                                                                          | Automated [Cloudflare][cloudflare]                  |                                                                                                                                                                                                     |
+
+### Certificates managed by other GitLab teams
+
+| Domains | Issuer | Comments | Management | Owner |
+|---------|--------|----------|------------|-------|
+| `workspaces.gitlab.dev` | Sectigo RSA Domain Validation Secure Server CA | GitLab workspaces for internal use only | SSLMate, manually updated in GKMS | [Engineering Productivity team](https://gitlab.com/gitlab-org/quality/engineering-productivity) |
 
 ### Defunct certificates (dead hosts, no longer used, etc)
 
