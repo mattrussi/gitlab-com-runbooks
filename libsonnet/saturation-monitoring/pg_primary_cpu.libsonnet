@@ -31,7 +31,7 @@ local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
       )
     |||,
     slos: {
-      soft: 0.80,
+      soft: 0.70,
       hard: 0.90,
     },
     capacityPlanning: {
