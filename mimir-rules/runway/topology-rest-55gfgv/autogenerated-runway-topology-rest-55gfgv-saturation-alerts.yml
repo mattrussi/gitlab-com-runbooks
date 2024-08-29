@@ -5,15 +5,15 @@ groups:
   interval: 5m
   rules:
   - record: gitlab_component_saturation:ratio_quantile95_1w
-    expr: quantile_over_time(0.95, gitlab_component_saturation:ratio{type="topology-service"}[1w])
+    expr: quantile_over_time(0.95, gitlab_component_saturation:ratio{type="topology-rest-55gfgv"}[1w])
   - record: gitlab_component_saturation:ratio_quantile99_1w
-    expr: quantile_over_time(0.99, gitlab_component_saturation:ratio{type="topology-service"}[1w])
+    expr: quantile_over_time(0.99, gitlab_component_saturation:ratio{type="topology-rest-55gfgv"}[1w])
   - record: gitlab_component_saturation:ratio_quantile95_1h
-    expr: quantile_over_time(0.95, gitlab_component_saturation:ratio{type="topology-service"}[1h])
+    expr: quantile_over_time(0.95, gitlab_component_saturation:ratio{type="topology-rest-55gfgv"}[1h])
   - record: gitlab_component_saturation:ratio_quantile99_1h
-    expr: quantile_over_time(0.99, gitlab_component_saturation:ratio{type="topology-service"}[1h])
+    expr: quantile_over_time(0.99, gitlab_component_saturation:ratio{type="topology-rest-55gfgv"}[1h])
   - record: gitlab_component_saturation:ratio_avg_1h
-    expr: avg_over_time(gitlab_component_saturation:ratio{type="topology-service"}[1h])
+    expr: avg_over_time(gitlab_component_saturation:ratio{type="topology-rest-55gfgv"}[1h])
 - name: GitLab Saturation Alerts
   interval: 1m
   rules:
@@ -88,7 +88,7 @@ groups:
       rules_domain: general
       severity: s2
     expr: |
-      gitlab_component_saturation:ratio{component="open_fds",type="topology-service"} > on(component) group_left
+      gitlab_component_saturation:ratio{component="open_fds",type="topology-rest-55gfgv"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="open_fds"}
   - alert: component_saturation_slo_out_of_bounds:runway_container_cpu_utilization
     for: 5m
@@ -150,7 +150,7 @@ groups:
       rules_domain: general
       severity: s4
     expr: |
-      gitlab_component_saturation:ratio{component="runway_container_cpu_utilization",type="topology-service"} > on(component) group_left
+      gitlab_component_saturation:ratio{component="runway_container_cpu_utilization",type="topology-rest-55gfgv"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="runway_container_cpu_utilization"}
   - alert: component_saturation_slo_out_of_bounds:runway_container_instance_utilization
     for: 5m
@@ -208,7 +208,7 @@ groups:
       rules_domain: general
       severity: s4
     expr: |
-      gitlab_component_saturation:ratio{component="runway_container_instance_utilization",type="topology-service"} > on(component) group_left
+      gitlab_component_saturation:ratio{component="runway_container_instance_utilization",type="topology-rest-55gfgv"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="runway_container_instance_utilization"}
   - alert: component_saturation_slo_out_of_bounds:runway_container_max_concurrent_requests
     for: 5m
@@ -270,7 +270,7 @@ groups:
       rules_domain: general
       severity: s4
     expr: |
-      gitlab_component_saturation:ratio{component="runway_container_max_concurrent_requests",type="topology-service"} > on(component) group_left
+      gitlab_component_saturation:ratio{component="runway_container_max_concurrent_requests",type="topology-rest-55gfgv"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="runway_container_max_concurrent_requests"}
   - alert: component_saturation_slo_out_of_bounds:runway_container_memory_utilization
     for: 5m
@@ -332,5 +332,5 @@ groups:
       rules_domain: general
       severity: s4
     expr: |
-      gitlab_component_saturation:ratio{component="runway_container_memory_utilization",type="topology-service"} > on(component) group_left
+      gitlab_component_saturation:ratio{component="runway_container_memory_utilization",type="topology-rest-55gfgv"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="runway_container_memory_utilization"}

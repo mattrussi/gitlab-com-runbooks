@@ -1309,10 +1309,10 @@ services:
         grafana_folder: thanos
         primary_grafana_dashboard: thanos-main/thanos-overview
 
-  - name: topology-service
+  - name: topology-rest-55gfgv
     tier: sv
-    friendly_name: Topology Service
-    label: Topology Service
+    friendly_name: Topology Service Rest
+    label: TopologyServiceRest
     owner: tenant_scale
     technical:
       project:
