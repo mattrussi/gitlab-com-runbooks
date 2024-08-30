@@ -147,10 +147,10 @@ local sliDetailLatencyPanel(
     min=min,
     intervalFactor=intervalFactor,
   ) + {
-    thresholds: [
-      thresholds.errorLevel('gt', sli.apdex.toleratedThreshold),
+    thresholds: std.prune([
+      if sli.apdex.toleratedThreshold != null then thresholds.errorLevel('gt', sli.apdex.toleratedThreshold),
       thresholds.warningLevel('gt', sli.apdex.satisfiedThreshold),
-    ],
+    ]),
   };
 
 local sliDetailOpsRatePanel(
