@@ -3,7 +3,7 @@ local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 metricsCatalog.serviceDefinition({
   type: 'wiz-runtime-sensor',
   tier: 'inf',
-
+  tenants: [ 'gitlab-gprd', 'gitlab-gstg', 'gitlab-ops', 'gitlab-pre' ],
   tags: ['wiz-sensor'],
 
   serviceIsStageless: true,
@@ -15,7 +15,7 @@ metricsCatalog.serviceDefinition({
 
   provisioning: {
     kubernetes: true,
-    vms: false,
+    vms: true,
   },
 
   kubeResources: {

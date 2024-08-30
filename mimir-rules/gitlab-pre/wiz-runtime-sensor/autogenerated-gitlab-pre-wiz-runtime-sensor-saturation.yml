@@ -12,7 +12,7 @@ groups:
         clamp_min(
           clamp_max(
             1 - avg by (env, environment, tier, type, stage, shard) (
-              rate(node_cpu_seconds_total{mode="idle", env="gstg",type="wiz-runtime-sensor"}[5m])
+              rate(node_cpu_seconds_total{mode="idle", env="pre",type="wiz-runtime-sensor"}[5m])
             )
             ,
             1)
@@ -27,9 +27,9 @@ groups:
         clamp_min(
           clamp_max(
             1 - (
-              node_filesystem_files_free{fstype=~"(ext.|xfs)", env="gstg",type="wiz-runtime-sensor"}
+              node_filesystem_files_free{fstype=~"(ext.|xfs)", env="pre",type="wiz-runtime-sensor"}
               /
-              node_filesystem_files{fstype=~"(ext.|xfs)", env="gstg",type="wiz-runtime-sensor"}
+              node_filesystem_files{fstype=~"(ext.|xfs)", env="pre",type="wiz-runtime-sensor"}
             )
             ,
             1)
@@ -44,7 +44,7 @@ groups:
         clamp_min(
           clamp_max(
             (
-              1 - node_filesystem_avail_bytes{fstype=~"ext.|xfs", env="gstg",type="wiz-runtime-sensor"} / node_filesystem_size_bytes{fstype=~"ext.|xfs", env="gstg",type="wiz-runtime-sensor"}
+              1 - node_filesystem_avail_bytes{fstype=~"ext.|xfs", env="pre",type="wiz-runtime-sensor"} / node_filesystem_size_bytes{fstype=~"ext.|xfs", env="pre",type="wiz-runtime-sensor"}
             )
             ,
             1)
@@ -61,15 +61,15 @@ groups:
           clamp_max(
             (
               sum by (env, environment, tier, type, stage, shard, pod, container) (
-                rate(container_cpu_usage_seconds_total:labeled{container!="", container!="POD", env="gstg",type="wiz-runtime-sensor"}[1h])
+                rate(container_cpu_usage_seconds_total:labeled{container!="", container!="POD", env="pre",type="wiz-runtime-sensor"}[1h])
               )
               unless on(env, environment, tier, type, stage, shard, pod, container) (
-                last_over_time(container_spec_cpu_quota:labeled{container!="", container!="POD", env="gstg",type="wiz-runtime-sensor"}[1h])
+                last_over_time(container_spec_cpu_quota:labeled{container!="", container!="POD", env="pre",type="wiz-runtime-sensor"}[1h])
               )
             )
             /
             sum by(env, environment, tier, type, stage, shard, pod, container) (
-              kube_pod_container_resource_requests:labeled{container!="", container!="POD", resource="cpu", env="gstg",type="wiz-runtime-sensor"}
+              kube_pod_container_resource_requests:labeled{container!="", container!="POD", resource="cpu", env="pre",type="wiz-runtime-sensor"}
             )
             ,
             1)
@@ -84,13 +84,13 @@ groups:
         clamp_min(
           clamp_max(
             sum by (env, environment, tier, type, stage, shard, pod, container) (
-              rate(container_cpu_usage_seconds_total:labeled{container!="", container!="POD", env="gstg",type="wiz-runtime-sensor"}[5m])
+              rate(container_cpu_usage_seconds_total:labeled{container!="", container!="POD", env="pre",type="wiz-runtime-sensor"}[5m])
             )
             /
             sum by(env, environment, tier, type, stage, shard, pod, container) (
-              container_spec_cpu_quota:labeled{container!="", container!="POD", env="gstg",type="wiz-runtime-sensor"}
+              container_spec_cpu_quota:labeled{container!="", container!="POD", env="pre",type="wiz-runtime-sensor"}
               /
-              container_spec_cpu_period:labeled{container!="", container!="POD", env="gstg",type="wiz-runtime-sensor"}
+              container_spec_cpu_period:labeled{container!="", container!="POD", env="pre",type="wiz-runtime-sensor"}
             )
             ,
             1)
@@ -104,9 +104,9 @@ groups:
       max by(env, environment, tier, type, stage, shard) (
         clamp_min(
           clamp_max(
-            container_memory_working_set_bytes:labeled{container!="", container!="POD", env="gstg",type="wiz-runtime-sensor"}
+            container_memory_working_set_bytes:labeled{container!="", container!="POD", env="pre",type="wiz-runtime-sensor"}
             /
-            (container_spec_memory_limit_bytes:labeled{container!="", container!="POD", env="gstg",type="wiz-runtime-sensor"} > 0)
+            (container_spec_memory_limit_bytes:labeled{container!="", container!="POD", env="pre",type="wiz-runtime-sensor"} > 0)
             ,
             1)
         ,
@@ -121,9 +121,9 @@ groups:
         clamp_min(
           clamp_max(
             avg by (env, environment, tier, type, stage, shard, pod, container)(
-              rate(container_cpu_cfs_throttled_periods_total:labeled{container!="", env="gstg",type="wiz-runtime-sensor"}[5m])
+              rate(container_cpu_cfs_throttled_periods_total:labeled{container!="", env="pre",type="wiz-runtime-sensor"}[5m])
               /
-              rate(container_cpu_cfs_periods_total:labeled{container!="", env="gstg",type="wiz-runtime-sensor"}[5m])
+              rate(container_cpu_cfs_periods_total:labeled{container!="", env="pre",type="wiz-runtime-sensor"}[5m])
             )
             ,
             1)
@@ -137,9 +137,9 @@ groups:
       max by(env, environment, tier, type, stage, shard) (
         clamp_min(
           clamp_max(
-            kube_horizontalpodautoscaler_status_desired_replicas:labeled{env="gstg",type="wiz-runtime-sensor", shard!~"database-throttled|elasticsearch|gitaly-throttled|urgent-authorized-projects", namespace!~"pubsubbeat"}
+            kube_horizontalpodautoscaler_status_desired_replicas:labeled{env="pre",type="wiz-runtime-sensor", shard!~"database-throttled|elasticsearch|gitaly-throttled|urgent-authorized-projects", namespace!~"pubsubbeat"}
             /
-            kube_horizontalpodautoscaler_spec_max_replicas:labeled{env="gstg",type="wiz-runtime-sensor", shard!~"database-throttled|elasticsearch|gitaly-throttled|urgent-authorized-projects", namespace!~"pubsubbeat"}
+            kube_horizontalpodautoscaler_spec_max_replicas:labeled{env="pre",type="wiz-runtime-sensor", shard!~"database-throttled|elasticsearch|gitaly-throttled|urgent-authorized-projects", namespace!~"pubsubbeat"}
             ,
             1)
         ,
@@ -152,7 +152,7 @@ groups:
       max by(env, environment, tier, type, stage, shard) (
         clamp_min(
           clamp_max(
-            instance:node_memory_utilization:ratio{env="gstg",type="wiz-runtime-sensor"} or instance:node_memory_utilisation:ratio{env="gstg",type="wiz-runtime-sensor"}
+            instance:node_memory_utilization:ratio{env="pre",type="wiz-runtime-sensor"} or instance:node_memory_utilisation:ratio{env="pre",type="wiz-runtime-sensor"}
             ,
             1)
         ,
@@ -165,9 +165,9 @@ groups:
       max by(env, environment, tier, type, stage, shard) (
         clamp_min(
           clamp_max(
-            max_over_time(node_nf_conntrack_entries{env="gstg",type="wiz-runtime-sensor"}[1m])
+            max_over_time(node_nf_conntrack_entries{env="pre",type="wiz-runtime-sensor"}[1m])
             /
-            node_nf_conntrack_entries_limit{env="gstg",type="wiz-runtime-sensor"}
+            node_nf_conntrack_entries_limit{env="pre",type="wiz-runtime-sensor"}
             ,
             1)
         ,
@@ -180,7 +180,7 @@ groups:
       max by(env, environment, tier, type, stage, shard) (
         clamp_min(
           clamp_max(
-            avg without (cpu) (rate(node_schedstat_waiting_seconds_total{env="gstg",type="wiz-runtime-sensor"}[1h]))
+            avg without (cpu) (rate(node_schedstat_waiting_seconds_total{env="pre",type="wiz-runtime-sensor"}[1h]))
             ,
             1)
         ,
@@ -194,15 +194,15 @@ groups:
         clamp_min(
           clamp_max(
             (
-              process_open_fds{env="gstg",type="wiz-runtime-sensor"}
+              process_open_fds{env="pre",type="wiz-runtime-sensor"}
               /
-              process_max_fds{env="gstg",type="wiz-runtime-sensor"}
+              process_max_fds{env="pre",type="wiz-runtime-sensor"}
             )
             or
             (
-              ruby_file_descriptors{env="gstg",type="wiz-runtime-sensor"}
+              ruby_file_descriptors{env="pre",type="wiz-runtime-sensor"}
               /
-              ruby_process_max_fds{env="gstg",type="wiz-runtime-sensor"}
+              ruby_process_max_fds{env="pre",type="wiz-runtime-sensor"}
             )
             ,
             1)
@@ -217,7 +217,7 @@ groups:
         clamp_min(
           clamp_max(
             1 - avg by (env, environment, tier, type, stage, shard, shard) (
-              rate(node_cpu_seconds_total{mode="idle", env="gstg",type="wiz-runtime-sensor"}[5m])
+              rate(node_cpu_seconds_total{mode="idle", env="pre",type="wiz-runtime-sensor"}[5m])
             )
             ,
             1)
@@ -231,7 +231,7 @@ groups:
       max by(env, environment, tier, type, stage, shard) (
         clamp_min(
           clamp_max(
-            avg without(cpu, mode) (1 - rate(node_cpu_seconds_total{mode="idle", env="gstg",type="wiz-runtime-sensor"}[5m]))
+            avg without(cpu, mode) (1 - rate(node_cpu_seconds_total{mode="idle", env="pre",type="wiz-runtime-sensor"}[5m]))
             ,
             1)
         ,
