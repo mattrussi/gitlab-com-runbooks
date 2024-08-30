@@ -18,6 +18,7 @@
 ## Troubleshooting Pointers
 
 * [CustomersDot main troubleshoot documentation](overview.md)
+* [../duo/triage.md](../duo/triage.md)
 * [How GitLab.com uses Mailgun](../mailgun/mailgun.md)
 * [../patroni/postgresql-backups-wale-walg.md](../patroni/postgresql-backups-wale-walg.md)
 * [Connecting To a Database via Teleport](../teleport/Connect_to_Database_Console_via_Teleport.md)

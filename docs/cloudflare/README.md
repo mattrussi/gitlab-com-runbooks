@@ -27,6 +27,7 @@
 * [Accessing and Using CloudFlare](vendor.md)
 * [contributors.gitlab.com](../contributors/contributors-dashboard.md)
 * [CustomersDot main troubleshoot documentation](../customersdot/overview.md)
+* [../duo/triage.md](../duo/triage.md)
 * [Blocking individual IPs and Net Blocks on HA Proxy](../frontend/ban-netblocks-on-haproxy.md)
 * [Blocking and Disabling Things in HAProxy](../frontend/block-things-in-haproxy.md)
 * [HAProxy Management at GitLab](../frontend/haproxy.md)
