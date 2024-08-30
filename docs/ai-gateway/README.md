@@ -16,6 +16,9 @@
 * [request rate](https://log.gprd.gitlab.net/goto/c4faac00-f612-11ed-a017-0d32180b1390)
 * [request latency](https://log.gprd.gitlab.net/goto/b423c240-f612-11ed-8afc-c9851e4645c0)
 
+## Troubleshooting Pointers
+
+* [../duo/triage.md](../duo/triage.md)
 <!-- END_MARKER -->
 
 ## Summary
