@@ -1,7 +1,7 @@
 [settings]
 legacy_version_file = false
 
-# [tools]
+[tools]
 # Please continue to use `.tool-versions` to specify tools, rather than adding them directly here.
 
 [plugins]
