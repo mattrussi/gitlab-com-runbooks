@@ -38,6 +38,13 @@ We provide a Grafana API key through 1Password stored in `Grafana Playground API
 Load this key into the `GRAFANA_API_TOKEN` environment variable by running `./dashboards/load-creds.sh`.
 This expects the [1Password CLI tool to be installed](https://1password.com/downloads/command-line) and signed into your 1Password account.
 
+We can also export the value directly into the GRAFANA_API_TOKEN environment variable using this commands:
+
+```sh
+op signin
+export GRAFANA_API_TOKEN=$(op read "op://Engineering/Grafana playground API token/Tokens/developer-playground-key API Key")
+```
+
 Alternatively, grab the API key from 1Password and set it with `export GRAFANA_API_TOKEN=...`.
 
 ## Modify a dashboard
