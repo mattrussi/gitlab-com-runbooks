@@ -6,7 +6,7 @@
 
 ## Overview
 
-- The alert BlackboxProbeFailures is designed to notify you when the success rate of HTTP probes monitored by the Blackbox exporter falls below 75% for 10 minutes , the instances in `gprd` are taken into consideration by the alert excluding the following
+- The alert BlackboxProbeFailures is designed to notify you when the success rate of probes executed by the Blackbox exporter falls below 75% for 10 minutes. The instances in `gprd` are taken into consideration by the alert excluding the following
   - `https://ops.gitlab.net/users/sign_in`
   - `https://dev.gitlab.org.*`
   - `https://pre.gitlab.com`
@@ -15,22 +15,22 @@
   - `https://status.gitlab.com`
   - `https://new-sentry.gitlab.net`
 
-- A variety of factors can cause this , a GCP outage , Cloudfare event , Expired SSL certificate , or a breaking change.
+- A variety of factors can cause a probe to fail: a GCP outage, Cloudflare event, expired SSL certificate, or a breaking change.
 
-- The service affected depends on the endpoint the probes failed for , team owning the service can be determined in the [Service Catalog](https://gitlab.com/gitlab-com/runbooks/-/blob/master/services/service-catalog.yml?ref_type=heads) by searching for the service name.
+- The service affected depends on the endpoint the probes failed for, the team owning the service can be determined in the [Service Catalog](https://gitlab.com/gitlab-com/runbooks/-/blob/master/services/service-catalog.yml?ref_type=heads) by searching for the service name.
 
-- The recipient is supposed to check if the endpoint is reachable if not check for logs and try to figure out the cause of a endpoint being unreachable and fix it or escalate it.
+- The recipient is supposed to check if the endpoint is reachable; if not, check for logs and try to figure out the cause of a endpoint being unreachable, and then fix it or escalate it.
 
 ## Services
 
 - [Blackbox Exporter Service](https://github.com/prometheus/blackbox_exporter/blob/master/README.md)
-- Team that owns the service: [Scalibility : Observability](https://handbook.gitlab.com/handbook/engineering/infrastructure/team/scalability/observability/)
+- Team that owns the service: [Scalibility:Observability](https://handbook.gitlab.com/handbook/engineering/infrastructure/team/scalability/observability/)
 
 ## Metrics
 
-- The metric in the provided Prometheus query is based on the success rate of HTTP requests monitored by a Prometheus blackbox exporter. Link to the [metrics catalogue](https://gitlab.com/gitlab-com/runbooks/-/blob/master/mimir-rules/gitlab-gprd/blackbox_alerts.yml#L5)
+- The metric in the provided Prometheus query is based on the success rate of probes executed by a Prometheus blackbox exporter. Link to the [metrics catalog](https://gitlab.com/gitlab-com/runbooks/-/blob/master/mimir-rules/gitlab-gprd/blackbox_alerts.yml#L5)
 
-  `avg_over_time(probe_success{...}[10m]) * 100 < 75`: This part of the query calculates the average success rate over the past 10 minutes. The probe_success metric indicates whether the HTTP request was successful (1 for success, 0 for failure). Multiplying by 100 converts this rate to a percentage. The condition < 75 triggers the alert if the average success rate falls below 75%.
+  `avg_over_time(probe_success{...}[10m]) * 100 < 75`: This part of the query calculates the average success rate over the past 10 minutes. The probe_success metric indicates whether the probe was successful (1 for success, 0 for failure). Multiplying by 100 converts this rate to a percentage. The condition < 75 triggers the alert if the average success rate falls below 75%.
 
 - Given the reliance on DNS and network connectivity, the blackbox thresholds are chosen to minimize false alerts for minor and transient problems outside our control. It's still possible that a false alarm could result, but even if there is a non-service related cause for more than 10 minutes, we would want the engineer on call to be aware of it.
 
@@ -46,16 +46,16 @@
 
 ## Alert Behavior
 
-- We can silence this alert by going [here](https://alerts.gitlab.net/#/alerts), finding the `BlackboxProbeFailures` and click on silence option, Silencing might be required if the alerts is caused by an external dependency out of our control.
+- We can silence this alert by going [here](https://alerts.gitlab.net/#/alerts), finding the `BlackboxProbeFailures` and click on silence option. Silencing might be required if the alerts is caused by an external dependency out of our control.
 
-- This alert is fairly common , past hits can be seen [here](https://nonprod-log.gitlab.net/app/r/s/vIAAl)
+- This alert is fairly common, past hits can be seen [here](https://nonprod-log.gitlab.net/app/r/s/vIAAl)
 
 - [Previous incidents of this alert firing](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/?sort=created_date&state=all&label_name%5B%5D=a%3ABlackboxProbeFailures&first_page_size=100)
 
 ## Severities
 
-- The incident severity can range from sev4 to sev1 depending on the endpoint
-- The impact depends on the endpoint being affected , potentially can have impact on our customers.
+- The incident severity can range from Sev4 to Sev1 depending on the endpoint.
+- The impact depends on the endpoint being affected, as failures on certain endpoints will impact our customers.
 - [Handbook Link]( https://handbook.gitlab.com/handbook/engineering/infrastructure/incident-management/#incident-severity) to better decide the severity of the incident.
 
 ## Verification
@@ -72,7 +72,7 @@
 
 ## Troubleshooting
 
-- The blackbox exporter keeps logs from failed probes in memory and exposes them over an HTTP         interface.
+- The blackbox exporter keeps logs from failed probes in memory and exposes them over a web interface.
   You can access it by using port forwarding, and then navigating to `http://localhost:9115`
 
   ```bash
@@ -82,27 +82,27 @@
 Please note that the exporter will only keep up to 1000 results, and drop older
 ones. So make sure to grab these as quickly as possible, before they expire.
 
-- The troubleshooting process might differ depending on the endpoint that the blackbox probes failed for
-A good place to start is to trying figure out if it is an internal or external dependency
-A recent deployment could have caused this issue and a good place to confirm it would be checking the web service [dashboard](https://dashboards.gitlab.net/d/web-main/web3a-overview?from=now-6h%2Fm&orgId=1&to=now-1m%2Fm&var-environment=gprd&var-stage=cny&viewPanel=1806708210)
-The next step in that case would be to contact the release managers and disabling canary and blocking deployments due to the incident
-Additionally it is also might be helpful to notice the Error ratio of the reated endpoint being affected or looking at the GCP and Cloudfare events if they co-incide with the downtime.
+- The troubleshooting process might differ depending on the endpoint that the blackbox probes failed for.
+  - A good place to start is to trying figure out if it is an internal or external dependency.
+  - A recent deployment could have caused this issue and a good place to confirm it would be checking the web service [dashboard](https://dashboards.gitlab.net/d/web-main/web3a-overview?from=now-6h%2Fm&orgId=1&to=now-1m%2Fm&var-environment=gprd&var-stage=cny&viewPanel=1806708210).
+    - The next step in that case would be to contact the release managers and disabling canary and blocking deployments due to the incident
+  - Check for [GCP](https://status.cloud.google.com/) and [Cloudflare](https://www.cloudflarestatus.com/) outages reported on their public status pages to see if they coincide with the downtime.
 
-  - [Blackbox git exporter is down](https://ops.gitlab.net/gitlab-com/runbooks/-/blob/master/docs/blackbox/blackbox-git-exporter.md)
-  - [design.gitlab.com Runbook](../design/design-gitlab-com.md)
-  - [GitLab Docs website troubleshooting](../docs.gitlab.com/docsWebsite.md)
-  - [CI Artifacts CDN](../google-cloud-storage/artifacts-cdn.md)
-  - [Investors Relations (ir.gitlab.com) main troubleshoot documentation](../ir.gitlab.com/overview.md)
-  - [Tuning and Modifying Alerts](../monitoring/alert_tuning.md)
-  - [An impatient SRE's guide to deleting alerts](../monitoring/deleting-alerts.md)
-  - [../patroni/postgres.md](../patroni/postgres.md)
-  - [../patroni/postgresql-backups-wale-walg.md](../patroni/postgresql-backups-wale-walg.md)
-  - [Container Registry CDN](../registry/cdn.md)
-  - [../spamcheck/index.md](../spamcheck/index.md)
-  - [GitLab Job Completion](../uncategorized/job_completion.md)
-  - [version.gitlab.com Runbook](../version/version-gitlab-com.md)
-
-- [Elastic Search](https://log.gprd.gitlab.net/app/discover#/?_g=h@44136fa&_a=h@4de5c9b)
+- [Blackbox git exporter is down](https://ops.gitlab.net/gitlab-com/runbooks/-/blob/master/docs/blackbox/blackbox-git-exporter.md)
+- [design.gitlab.com Runbook](../design/design-gitlab-com.md)
+- [GitLab Docs website troubleshooting](../docs.gitlab.com/docsWebsite.md)
+- [CI Artifacts CDN](../google-cloud-storage/artifacts-cdn.md)
+- [Investors Relations (ir.gitlab.com) main troubleshoot documentation](../ir.gitlab.com/overview.md)
+- [Tuning and Modifying Alerts](../monitoring/alert_tuning.md)
+- [An impatient SRE's guide to deleting alerts](../monitoring/deleting-alerts.md)
+- [../patroni/postgres.md](../patroni/postgres.md)
+- [../patroni/postgresql-backups-wale-walg.md](../patroni/postgresql-backups-wale-walg.md)
+- [Container Registry CDN](../registry/cdn.md)
+- [../spamcheck/index.md](../spamcheck/index.md)
+- [GitLab Job Completion](../uncategorized/job_completion.md)
+- [version.gitlab.com Runbook](../version/version-gitlab-com.md)
+- [Elasticsearch](https://log.gprd.gitlab.net/app/discover#/?_g=h@44136fa&_a=h@4de5c9b)
+- For certificate expiry alerts, it may be helpful to refer to [this runbook](../../certificates/README.md) on certificates.
 
 ## Possible Resolutions
 
@@ -111,23 +111,23 @@ Additionally it is also might be helpful to notice the Error ratio of the reated
 
 ## Dependencies
 
-- The alert might becaused due to a variety of factors can cause this both internal and external for example  a GCP outage , Cloudfare event , Expired SSL certificate ,a breaking change related to the endpoint.
+- The alert might trigger due to a variety of factors, such as: a GCP outage, Cloudflare event, expired SSL certificate, or a breaking change related to the endpoint.
 
 # Escalation
 
 Slack channels to look for assistance:
 
-- `[#production_engineering](https://gitlab.enterprise.slack.com/archives/C03QC5KNW5N)`
-- `[#infrastructure-lounge](https://gitlab.enterprise.slack.com/archives/CB3LSMEJV)`
+- [`#production_engineering`](https://gitlab.enterprise.slack.com/archives/C03QC5KNW5N)
+- [`#infrastructure-lounge`](https://gitlab.enterprise.slack.com/archives/CB3LSMEJV)
 
 # Definitions
 
 - [Link to tune alert](https://gitlab.com/gitlab-com/runbooks/-/blob/master/mimir-rules/gitlab-gprd/blackbox_alerts.yml#L5)
-- > Advice or limitations on how we should or shouldn't tune the alert
-- [Link to edit this playbook](https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/patroni/alerts/BlackboxProbeFailures.md?ref_type=heads)
+<!--- Advice or limitations on how we should or shouldn't tune the alert -->
+- [Link to edit this playbook](https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/blackbox/alerts/BlackboxProbeFailures.md?ref_type=heads)
 - [Update the template used to format this playbook](https://gitlab.com/gitlab-com/runbooks/-/edit/master/docs/template-alert-playbook.md?ref_type=heads)
 
 # Related Links
 
 - [Related alerts](./)
-- > Related documentation
+<!--- Related documentation -->

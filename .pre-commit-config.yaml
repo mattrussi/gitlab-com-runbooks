@@ -19,13 +19,13 @@ repos:
         args: ["--fix=lf"]
       - id: no-commit-to-branch
         args: [--branch, master]
+      - id: pretty-format-json
+        args: [--autofix, --no-sort-keys]
   - repo: https://github.com/google/go-jsonnet
     rev: v0.20.0
     hooks:
       - id: jsonnet-format
         args: [-i, --string-style, s, -n, "2"]
-      - id: pretty-format-json
-        args: [--autofix, --no-sort-keys]
 
   # pre-commit tasks from common-ci-tasks
   # Documentation available at
