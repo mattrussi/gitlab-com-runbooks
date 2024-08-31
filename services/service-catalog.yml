@@ -2675,7 +2675,7 @@ services:
         design:
         architecture: https://internal.gitlab.com/handbook/security/product_security/infrastructure_security/tooling/wiz-sensor/#architecture
         readiness_review: https://gitlab.com/gitlab-com/gl-infra/readiness/-/merge_requests/208/
-        sre_guide: https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/uncategorized/wiz-runtime-sensor-k8s.md
+        sre_guide: https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/wiz-runtime-sensor-k8s/README.md
         service:
         security:
       logging:
@@ -2693,7 +2693,7 @@ services:
         design:
         architecture: https://internal.gitlab.com/handbook/security/product_security/infrastructure_security/tooling/wiz-sensor/#architecture
         readiness_review: https://gitlab.com/gitlab-com/gl-infra/readiness/-/merge_requests/208/
-        sre_guide: https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/uncategorized/wiz-runtime-sensor-linux.md
+        sre_guide: https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/wiz-runtime-sensor-linux/README.md
         service:
         security:
       logging:
