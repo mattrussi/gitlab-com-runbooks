@@ -2666,7 +2666,7 @@ services:
 
   - name: wiz-runtime-sensor-k8s
     tier: inf
-    friendly_name: Wiz Sensor
+    friendly_name: Wiz Sensor K8s
     label: WizSensorK8s
     owner: infrasec_team
     technical:
@@ -2684,7 +2684,7 @@ services:
 
   - name: wiz-runtime-sensor-linux
     tier: inf
-    friendly_name: Wiz Sensor
+    friendly_name: Wiz Sensor Linux
     label: WizSensorLinux
     owner: infrasec_team
     technical:
