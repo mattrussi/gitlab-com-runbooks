@@ -2664,7 +2664,7 @@ services:
         - name: stackdriver
           permalink: https://console.cloud.google.com/run/detail/us-central1/pd-event-logger-7760xa/logs?project=gitlab-runway-production
 
-  - name: wiz-runtime-sensor-k8s
+  - name: wiz-runtime-sensor
     tier: inf
     friendly_name: Wiz Sensor K8s
     label: WizSensorK8s
@@ -2682,7 +2682,7 @@ services:
         - name:
           permalink:
 
-  - name: wiz-runtime-sensor-linux
+  - name: wiz-runtime-sensor
     tier: inf
     friendly_name: Wiz Sensor Linux
     label: WizSensorLinux
