@@ -37,7 +37,7 @@ GEM
       googleapis-common-protos-types (>= 1.11.0, < 2.a)
       googleauth (~> 1.9)
       grpc (~> 1.59)
-    git (2.2.0)
+    git (2.3.0)
       activesupport (>= 5.0)
       addressable (~> 2.8)
       process_executer (~> 1.1)
