@@ -2666,8 +2666,8 @@ services:
 
   - name: wiz-runtime-sensor
     tier: inf
-    friendly_name: Wiz Sensor K8s
-    label: WizSensorK8s
+    friendly_name: Wiz Sensor
+    label: WizSensor
     owner: infrasec_team
     technical:
       project:
@@ -2675,25 +2675,7 @@ services:
         design:
         architecture: https://internal.gitlab.com/handbook/security/product_security/infrastructure_security/tooling/wiz-sensor/#architecture
         readiness_review: https://gitlab.com/gitlab-com/gl-infra/readiness/-/merge_requests/208/
-        sre_guide: https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/wiz-runtime-sensor-k8s/README.md
-        service:
-        security:
-      logging:
-        - name:
-          permalink:
-
-  - name: wiz-runtime-sensor
-    tier: inf
-    friendly_name: Wiz Sensor Linux
-    label: WizSensorLinux
-    owner: infrasec_team
-    technical:
-      project:
-      documents:
-        design:
-        architecture: https://internal.gitlab.com/handbook/security/product_security/infrastructure_security/tooling/wiz-sensor/#architecture
-        readiness_review: https://gitlab.com/gitlab-com/gl-infra/readiness/-/merge_requests/208/
-        sre_guide: https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/wiz-runtime-sensor-linux/README.md
+        sre_guide: https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/uncategorized/wiz-runtime-sensor.md
         service:
         security:
       logging:
