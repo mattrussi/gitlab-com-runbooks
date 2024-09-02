@@ -46,9 +46,11 @@ In addition, an [alert for OOM kills](https://gitlab.com/gitlab-com/runbooks/-/b
 
 # Troubleshooting
 
-## Service Management
+## Wiz Runtime Sensor Kubernetes
 
-### Deploy Wiz Runtime Sensor
+### Service Management
+
+#### Deploy Wiz Runtime Sensor
 
 All of our workload deployments are taken care of from the [GitLab helm repo](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles).
 
@@ -63,7 +65,7 @@ wiz-sensor:
 
 ```
 
-### Disable Wiz Runtime Sensor
+#### Disable Wiz Runtime Sensor
 
 **Note: Before disabling the Wiz Runtime Sensor we have to update the compliance team to track the GAP in coverage. Create the issue to disable the Wiz Sensor and tag `@gitlab-com/gl-security/security-assurance/team-commercial-compliance` team.**
 
@@ -84,7 +86,7 @@ To remove/disable the sensor we need to follow the below steps.
     ```
 
 <!--Import from Wiz Doc Starts here -->
-## Verify the Runtime Sensor is installed and running
+### Verify the Runtime Sensor is installed and running
 
 Start any investigation by first verifying that the Runtime Sensor is installed on your cluster, and checking its current status.
 Verify the Runtime Sensor is deployed
@@ -107,7 +109,7 @@ Inspect the output:
 * If your output is as expected, continue to the other scenarios listed on this page to locate your problem.
 * If you do not see a similar output, it could indicate something went wrong with the Runtime Sensor installation. Refer back to the installation guide to verify proper installation, and to perform a sanity check.
 
-## Check the Runtime Sensor status
+### Check the Runtime Sensor status
 
 Run the following command to check the status of all the Runtime Sensors in your cluster:
 
@@ -133,7 +135,7 @@ Inspect the output:
 
 * If one or more Runtime Sensor pods are neither in Running nor Pending status, refer to the Runtime Sensor is not running troubleshooting procedure below.
 
-## Check the Runtime Sensor version
+### Check the Runtime Sensor version
 
 You can retrieve the version number directly from a specific running Runtime Sensor pod:
 
@@ -152,7 +154,7 @@ Review the output. You can see the Runtime Sensor version, including the build n
 
 Identify what is the latest Sensor version from the Sensor Release Notes. If you are running an older version, consider upgrading it.
 
-## The Runtime Sensor is not running
+### The Runtime Sensor is not running
 
 When a Runtime Sensor pod is not in Running status, it could indicate that the Runtime Sensor image was not pulled successfully.
 
@@ -184,7 +186,7 @@ Inspect the output and search for any errors in the Message column. If you detec
 * There is outbound connectivity to "wizio.azurecr.io"
 * The correct credentials were used to pull the container image
 
-## There is outbound connectivity to "wizio.azurecr.io"
+### There is outbound connectivity to "wizio.azurecr.io"
 
 Run the following command that downloads a popular curl container image:
 
@@ -223,7 +225,7 @@ Inspect the output:
 
 The correct credentials were used to pull the container image
 
-## Verify you installed the Runtime Sensor using the correct credentials to pull the container image
+### Verify you installed the Runtime Sensor using the correct credentials to pull the container image
 
 * Retrieve the values you used for imagePullSecret.username and imagePullSecret.password, in either the helm install command or the YAML file.
 
@@ -237,7 +239,7 @@ Compare the set of values.
 
 * If the credentials are identical but your pods are not in Running or Pending status, please contact support.
 
-## Verify the Kubernetes nodes have enough resources to run the Runtime Sensor
+### Verify the Kubernetes nodes have enough resources to run the Runtime Sensor
 
 If some of the pods are in an error state, that could indicate that their corresponding node lacks the required resources needed to run the Sensor pod. These cases are usually resolved once the nodes have enough resources and there is no need for intervention.
 
@@ -273,7 +275,7 @@ The output should indicate the reason for the error. For example, line 6 of the 
 6m46s       Normal    Killing            pod/wiz-sensor-zx2xk   Stopping container wiz-sensor
 ```
 
-## The Runtime Sensor does not appear on the Deployments page
+### The Runtime Sensor does not appear on the Deployments page
 
 When you verify the Runtime Sensor pod is running but it does not appear on the Settings > Deployments > Sensor page in the Wiz portal, it indicates there is a communication error between the Sensor and your Wiz tenant.
 
@@ -290,7 +292,7 @@ According to the output, proceed to one of the following use cases:
 * Invalid credentials (status code 401)
 * Service Account token is not mounted
 
-### Invalid TLS/SSL certificate
+#### Invalid TLS/SSL certificate
 
 Displayed error
 
@@ -311,7 +313,7 @@ daemonset.httpProxyPassword
 daemonset.httpProxyCaCert
 ```
 
-### Invalid service account type (status code 400)
+#### Invalid service account type (status code 400)
 
 Displayed error
 
@@ -328,7 +330,7 @@ For security reasons, the Runtime Sensor uses a special service account type, wh
 Set the proper service account type wizApiToken.clientId and wizApiToken.clientToken helm chart values. Refer to Create a service account for the Runtime Sensor to learn how.
 Re-install the Runtime Sensor using the new values.
 
-### Invalid credentials (status code 401)
+#### Invalid credentials (status code 401)
 
 Displayed error
 
@@ -357,7 +359,7 @@ If you used different values, update them and Re-install the Runtime Sensor usin
 
 If you used the correct values, contact support as explained below.
 
-### Service Account token is not mounted
+#### Service Account token is not mounted
 
 Displayed error
 
@@ -384,11 +386,11 @@ kubectl get sa -n wiz <insert-service-account> -o yaml
 
 If you see automountServiceAccountToken=false, service account token mount is disabled. It should be set to true or removed.
 
-## Communication-related errors
+### Communication-related errors
 
 If there are temporary connectivity problems, the Runtime Sensor uses a retry mechanism to resolve this. Let's look for example at a DNS resolution error.
 
-### DNS resolution error
+#### DNS resolution error
 
 Assuming this error persists:
 
@@ -410,7 +412,7 @@ curl: (6) Could not resolve host: wizio.azurecr.io
 
 Once the DNS issue is resolved, the Sensor should recover from the error.
 
-### Connection reset by peer error
+#### Connection reset by peer error
 
 The following error message might indicate that there is a firewall blocking the communication to `https://auth.app.wiz.io`:
 
@@ -442,7 +444,7 @@ kernel version smaller than minimum 266752
 
 In this case, check the Supported Architectures and Platforms documentation to ensure that your platform is supported. If your platform is listed as supported, reach out to our support team using the instructions provided below.
 
-### Verify the node architecture is supported
+#### Verify the node architecture is supported
 
 Displayed error
 
@@ -517,7 +519,7 @@ Below is an example error log message:
 }
 ```
 
-## Retrieve log messages
+### Retrieve log messages
 
 To obtain a summarized version of all log messages generated by the Sensor pods, where each error is displayed only once per cluster, execute the following command:
 
@@ -531,9 +533,9 @@ If you wish to view the detailed errors messages , use the following command:
 kubectl -n wiz logs daemonsets/wiz-sensor | grep ERROR | jq '.fields.e' | sort -u
 ```
 
-## Adjust logging verbosity
+### Adjust logging verbosity
 
-### Increasing verbosity risks
+#### Increasing verbosity risks
 
 Before increasing the log verbosity, keep in mind that:
 
@@ -552,7 +554,7 @@ Increase the verbosity level of a specific Sensor component–For example, to se
 
 Deploy the Runtime Sensor.
 
-## Troubleshoot authentication errors using Sensor logs
+### Troubleshoot authentication errors using Sensor logs
 
 Follow the steps below to increase the verbosity level of the Sensor, which will result in the output of the credentials of the Wiz service account it is using to communicate with the Wiz backend.
 
@@ -566,7 +568,7 @@ The credentials for the Wiz service account username and password are printed in
 
 Once the troubleshooting is complete, reinstall the Sensor. This time, remove the logLevel configurable variable to set the verbosity of the Sensor back to its default level.
 
-## Restart the Runtime Sensor
+### Restart the Runtime Sensor
 
 To restart all running Sensor pods, run the following command:
 
@@ -579,7 +581,7 @@ If none of the scenarios above match your case, please contact support:
 Create a support package for the Runtime Sensor
 Contact Wiz support and include the support package.
 
-## Create a support package for the Runtime Sensor
+### Create a support package for the Runtime Sensor
 
 The following script executes various troubleshooting commands and saves the output to an archive named k8s_outputs.tar.gz. Please attach this file when contacting Wiz support.
 
@@ -653,15 +655,11 @@ The output is saved to a file named k8s_outputs.tar.gz. Attach it when contactin
 
 <!--Import from Wiz Doc Ends here -->
 
-# Wiz Sensor Service Linux
+## Wiz Sensor Service Linux
 
-# Monitoring/Alerting
+### Service Managment
 
-The agent should not create many performance implications as the configured limits are very resource-conservative. We have the CPU and Memory limits configured
-
-# Service Managment
-
-## Deploy Wiz Runtime Sensor for Linux
+#### Deploy Wiz Runtime Sensor for Linux
 
 Following are the steps to Deploy Wiz Runtime Sensor.
 
@@ -678,7 +676,7 @@ Following are the steps to Deploy Wiz Runtime Sensor.
 
 Refer the [sample MR](https://gitlab.com/gitlab-com/gl-infra/chef-repo/-/merge_requests/4945) that was created to enable the service on the VM hosts.
 
-## Disable Wiz Runtime Sensor for Linux
+#### Disable Wiz Runtime Sensor for Linux
 
 **Note: Before disabling the Wiz Runtime Sensor we have to update the compliance team to track the GAP in coverage. Create the issue to disable the Wiz Sensor and tag `@gitlab-com/gl-security/security-assurance/team-commercial-compliance` team.**
 
@@ -700,7 +698,7 @@ Refer the [sample MR](https://gitlab.com/gitlab-com/gl-infra/chef-repo/-/merge_r
 
 <!--Import from Wiz Doc Starts here -->
 
-## Working with logs
+### Working with logs
 
 The Linux Runtime Sensor stores error logs and some informational logs on the host machine. When you start any investigation, you should first review the logs to verify the Sensor can communicate with the Wiz backed.
 
@@ -726,7 +724,7 @@ When the Sensor installation is successful and communication exists, you should 
 
 If you do not see this message, read on to learn what is wrong and how you can fix it.
 
-## Understanding common errors
+### Understanding common errors
 
 Below is a list of some common Sensor errors and what they mean.,
 
@@ -749,9 +747,9 @@ The table below lists common errors and how to resolve them:
 | failed loading ebpf skeleton | There is policy that restricts the usage of eBPF.  This could be caused by a SELinux policy. |
 | invalid peer certificate contents | The Sensor could not validate the TLS certificate of the remote server. make sure you provided the WIZ_HTTP_PROXY_CERT or WIZ_EXTRA_SSL_CERT_DIR environment variables. |
 
-## Troubleshooting the installation script and downloader
+### Troubleshooting the installation script and downloader
 
-### Installation script
+#### Installation script
 
 The installation script (sensor_install.sh) returns a zero exit code upon successful execution, and a non-zero value for any of the following scenarios:
 
@@ -764,7 +762,7 @@ The installation script (sensor_install.sh) returns a zero exit code upon succes
 * Installation failure (e.g. inability to create directories or add packages to the package manager)
 * No outbound connectivity to the required domains (e.g. rpm.wiz.io, dpkg.wiz.io, downloads.wiz.io)
 
-### Downloader
+#### Downloader
 
 The installation script utilizes your native package manager (yum/apt) to install the Sensor downloader. This downloader then connects to the Wiz backend, using the provided credentials, in order to download the Sensor binary and install it on the machine.
 
@@ -782,9 +780,9 @@ sudo cat /opt/wiz/sensor/host-store/downloader_logs/downloader.log | grep ERROR 
 
 If the Sensor installation was successful, you should not see any ERROR messages in the downloader logs.
 
-## Troubleshooting Linux issues
+### Troubleshooting Linux issues
 
-### SELinux policy
+#### SELinux policy
 
 When you have an SELinux policy that prevents the Sensor from running (usually due to a policy that restricts the use of bpf), you will see an error message such as:
 
@@ -822,7 +820,7 @@ After you've established that your SELinux policy is causing the problem, you ne
 
     `semodule -i wiz-sensor.pp`
 
-### How to restart the Linux Sensor
+#### How to restart the Linux Sensor
 
 The Linux Sensor runs as systemd daemon.
 
@@ -830,18 +828,18 @@ To restart it, run the following command:
 
 `sudo systemctl restart wiz-sensor`
 
-## Contact support
+### Contact support
 
-If none of the scenarios above match your case, please contact us:
+If none of the scenarios above match the case, please contact support:
 
 1. [Create a support package for the Runtime Sensor](#create-a-support-package-for-the-runtime-sensor-1)
 2. Open the Support Case and include the support package.
 
-### Create a support package for the Runtime Sensor
+#### Create a support package for the Runtime Sensor
 
 The following script executes various troubleshooting commands and saves the output to an archive named support_package_linux.tar.gz. Please attach this file when contacting Wiz support.
 
-:warning: You should run the script as the root user because it will collect sensor related information from the /opt/wiz/sensor folder which requires root permissions
+:warning: Run the script as the root user because it will collect sensor related information from the /opt/wiz/sensor folder which requires root permissions
 
 ```
 #!/bin/bash
