@@ -11,11 +11,11 @@ The scope of the backup only includes Gitaly, and not other components of the in
 ## Procedure
 
 1. If you haven't already, set your `kubectl` context to the `ops-central` GKE cluster and connect to it: `glsh kube use-cluster ops-central`
-1. Scale down the Gitaly StatefulSet: `kubectl scale statefulsets ops-gitlab-gitaly --replicas=0 --namespace gitlab`
-1. Delete the Gitaly PVC: `kubectl delete pvc repo-data-ops-gitlab-gitaly-0 --namespace gitlab`.
-     - As long as the `ReclaimPolicy` of the PV is `Retain`, no data will be lost by doing this. You can double check by running `kubectl get pv <name-of-pv> --namespace gitlab`
+2. Check that the existing Gitaly PV has a `ReclaimPolicy` of `Retain`: `kubectl get pv <name-of-pvc> --namespace gitlab`
+3. Scale down the Gitaly StatefulSet: `kubectl scale statefulsets ops-gitlab-gitaly --replicas=0 --namespace gitlab`
+4. Delete the Gitaly PVC: `kubectl delete pvc repo-data-ops-gitlab-gitaly-0 --namespace gitlab`.
      - After this the status of the PV should be `Released`.
-1. Run the restore plan. You can do this via the GCP console or using `gcloud` (note that the `gcloud` interface is on the beta provider)
+5. Run the restore plan. You can do this via the GCP console or using `gcloud` (note that the `gcloud` interface is under the beta component)
      - **In the GCP console**:
        - Click on the **Set up a restore** button next to the latest backup on the [backups page](https://console.cloud.google.com/kubernetes/backups/locations/us-west1/backupPlans/ops-gitaly-backup-plan/backups?project=gitlab-ops)
        - In the form:
@@ -36,9 +36,9 @@ The scope of the backup only includes Gitaly, and not other components of the in
 
        - Get the name of the backup you want to restore on [this page](https://console.cloud.google.com/kubernetes/backups/locations/us-west1/backupPlans/ops-gitaly-backup-plan/backups?project=gitlab-ops). If in doubt just use the latest one.
        - Run the following command: `gcloud beta container backup-restore restores create ops-gitaly-restore --project=gitlab-ops --location=us-west1 --restore-plan=ops-gitaly-restore-plan --backup=<name-of-backup> --filter-file=filter.yaml`
-1. A new PVC `repo-data-ops-gitlab-gitaly-0` should have been created.
+6. A new PVC `repo-data-ops-gitlab-gitaly-0` should have been created.
     - If its status is stuck at `waiting for first consumer to be created before binding`, this is expected!
-1. Scale the Gitaly STS back to 1: `kubectl scale statefulsets ops-gitlab-gitaly --replicas=1 --namespace gitlab`
-1. After a few minutes, that the restored PV is now claimed by the PVC: `kubectl get pvc repo-data-ops-gitlab-gitaly-0 --namespace gitlab`
+7. Scale the Gitaly STS back to 1: `kubectl scale statefulsets ops-gitlab-gitaly --replicas=1 --namespace gitlab`
+8. After a few minutes, that the restored PV is now claimed by the PVC: `kubectl get pvc repo-data-ops-gitlab-gitaly-0 --namespace gitlab`
 
 After restoration, it might be a good idea to check that all Git operations work as expected.
