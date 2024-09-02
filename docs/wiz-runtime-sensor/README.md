@@ -840,7 +840,7 @@ To restart it, run the following command:
 
 If none of the scenarios above match your case, please contact us:
 
-1. [Create a support package for the Runtime Sensor](#create-a-support-package-for-the-runtime-sensor)
+1. [Create a support package for the Runtime Sensor](#create-a-support-package-for-the-runtime-sensor-1)
 2. Open the Support Case and include the support package.
 
 ### Create a support package for the Runtime Sensor
