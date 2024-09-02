@@ -653,12 +653,6 @@ The output is saved to a file named k8s_outputs.tar.gz. Attach it when contactin
 
 <!--Import from Wiz Doc Ends here -->
 
-<!-- ## Links to further Documentation -->
-# Links to further Documentation
-
-* [Wiz Helm Chart](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/tree/master/releases/wiz-sensor)
-* [Internal Handbook Page](https://internal.gitlab.com/handbook/security/infrastructure_security/tooling/wiz-sensor/)
-
 # Wiz Sensor Service Linux
 
 # Monitoring/Alerting
@@ -967,3 +961,10 @@ echo "Support package created at ./support_package_linux.tar.gz"
 
 ```
 <!--Import from Wiz Doc Ends here -->
+
+<!-- ## Links to further Documentation -->
+# Links to further Documentation
+
+* [Wiz Helm Chart for k8s Deployment](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/tree/master/releases/wiz-sensor)
+* [Wiz Cookbook for Linux Deployment](https://gitlab.com/gitlab-cookbooks/gitlab-wiz-sensor/-/tree/main)
+* [Internal Handbook Page](https://internal.gitlab.com/handbook/security/infrastructure_security/tooling/wiz-sensor/)
