@@ -657,7 +657,7 @@ The output is saved to a file named k8s_outputs.tar.gz. Attach it when contactin
 
 ## Wiz Sensor Service Linux
 
-### Service Managment
+### Service Management
 
 #### Deploy Wiz Runtime Sensor for Linux
 
@@ -694,27 +694,21 @@ Following are the steps to disable Wiz Runtime Sensor.
     }
    ```
 
-Refer the [sample MR](https://gitlab.com/gitlab-com/gl-infra/chef-repo/-/merge_requests/4945) that was created to stop the service on the VM hosts.
+Refer the [sample MR](https://gitlab.com/gitlab-com/gl-infra/chef-repo/-/merge_requests/5008) that was created to stop the service on the VM hosts.
 
 <!--Import from Wiz Doc Starts here -->
 
 ### Working with logs
 
-The Linux Runtime Sensor stores error logs and some informational logs on the host machine. When you start any investigation, you should first review the logs to verify the Sensor can communicate with the Wiz backed.
+The Linux Runtime Sensor stores error logs and some informational logs on the host machine. When you start any investigation, you should first review the logs to verify the Sensor can communicate with the Wiz backend.
 
 The following commands can be used on a typical Linux host.
 
-To access the logs folder and view its contents, you need root permissions. Switch to root use by running:
+To access the logs folder and view its contents, you need root permissions. Verify that the Sensor can communicate with the Wiz backend by running:
 
-`sudo su`
-
-Then, navigate to the Sensor logs folder by running:
-
-`sudo cd /opt/wiz/sensor/host-store/sensor_logs`
-
-Verify that the Sensor can communicate with the Wiz backend by running:
-
-`sudo cat /opt/wiz/sensor/host-store/sensor_logs/sensor.log | grep "content update"`
+```sh
+sudo grep "content update" /opt/wiz/sensor/host-store/sensor_logs/sensor.log"
+```
 
 When the Sensor installation is successful and communication exists, you should see the following message:
 
@@ -726,32 +720,32 @@ If you do not see this message, read on to learn what is wrong and how you can f
 
 ### Understanding common errors
 
-Below is a list of some common Sensor errors and what they mean.,
+Below is a list of some common Sensor errors and what they mean.
 
 Not all error messages are considered fatal. If you encounter an error that is not documented and your Sensor is operating properly (i.e. appears Active on the Setting > Deployments page), you can safely ignore the error.
 
 Start by obtaining a summarized version of all error log messages by running the following command:
 
-```
-sudo cat /opt/wiz/sensor/host-store/sensor_logs/sensor.log | grep ERROR | jq -r '"\(.fields.message), \(.fields.resp)"' | sort -u
+```sh
+sudo grep ERROR /opt/wiz/sensor/host-store/sensor_logs/sensor.log | jq -r '"\(.fields.message), \(.fields.resp)"' | sort -u
 ```
 
 The table below lists common errors and how to resolve them:
 
 | Error Message | Explanation |
 | --- | --- |
-| comm error (400) | Invalid service account type. Indicates that the Wiz service account you are using is not of type `Sensor`. |
-| comm error (401) | Invalid credentials in the install script. <br><br>Make sure you provided the WIZ_API_CLIENT_ID and WIZ_API_CLIENT_SECRET environment variables. |
-| Connection Failed: tls connection init failed | This could be caused by a firewall that is blocking the communication to Wiz. Verify there is connectivity by running the following command:<br><br>`curl -I https://auth.app.wiz.io/oauth/token` |
-| dns error | This could be a temporary issue. If it persists, check that there is outbound connectivity to  `auth.app.wiz.io` by running the following command:<br><br>`curl -I https://auth.app.wiz.io` |
-| failed loading ebpf skeleton | There is policy that restricts the usage of eBPF.  This could be caused by a SELinux policy. |
-| invalid peer certificate contents | The Sensor could not validate the TLS certificate of the remote server. make sure you provided the WIZ_HTTP_PROXY_CERT or WIZ_EXTRA_SSL_CERT_DIR environment variables. |
+| `comm error (400)` | Invalid service account type. Indicates that the Wiz service account you are using is not of type `Sensor`. |
+| `comm error (401)` | Invalid credentials in the install script. <br><br>Make sure you provided the `WIZ_API_CLIENT_ID` and `WIZ_API_CLIENT_SECRET` environment variables. |
+| `Connection Failed: tls connection init failed` | This could be caused by a firewall that is blocking the communication to Wiz. Verify there is connectivity by running the following command:<br><br>`curl -I https://auth.app.wiz.io/oauth/token` |
+| `dns error` | This could be a temporary issue. If it persists, check that there is outbound connectivity to `auth.app.wiz.io` by running the following command:<br><br>`curl -I https://auth.app.wiz.io` |
+| `failed loading ebpf skeleton` | There is policy that restricts the usage of eBPF.  This could be caused by a SELinux policy. |
+| `invalid peer certificate contents` | The Sensor could not validate the TLS certificate of the remote server. Make sure you provided the `WIZ_HTTP_PROXY_CERT` or `WIZ_EXTRA_SSL_CERT_DIR` environment variables. |
 
 ### Troubleshooting the installation script and downloader
 
 #### Installation script
 
-The installation script (sensor_install.sh) returns a zero exit code upon successful execution, and a non-zero value for any of the following scenarios:
+The installation script (`sensor_install.sh`) returns a zero exit code upon successful execution, and a non-zero value for any of the following scenarios:
 
 * Outdated kernel
 * Invalid Wiz API key
@@ -774,8 +768,8 @@ sudo cd /opt/wiz/sensor/host-store/downloader_logs
 
 Obtain a summarized version of all error log messages by running the following command:
 
-```
-sudo cat /opt/wiz/sensor/host-store/downloader_logs/downloader.log | grep ERROR | jq  '.fields.message' | sort -u
+```sh
+sudo grep ERROR /opt/wiz/sensor/host-store/downloader_logs/downloader.log | jq  '.fields.message' | sort -u
 ```
 
 If the Sensor installation was successful, you should not see any ERROR messages in the downloader logs.
@@ -796,7 +790,7 @@ To verify that this is the case and that the SELinux is the one preventing the S
 
 After you've established that your SELinux policy is causing the problem, you need to modify it to allow the Sensor to interact with BPF. Since the Sensor runs as `unconfined_service_t`, you need to allow `unconfined_service_t` to access bpf:
 
-1. Create a wiz-sensor.te file, with the following content:
+1. Create a `wiz-sensor.te` file, with the following content:
 
     ```output
     module wiz-sensor 1.0;
@@ -810,15 +804,21 @@ After you've established that your SELinux policy is causing the problem, you ne
 
 2. Build the policy by running:
 
-    `checkmodule -M -m -o wiz-sensor.mod wiz-sensor.te`
+    ```sh
+    checkmodule -M -m -o wiz-sensor.mod wiz-sensor.te
+    ```
 
 3. Create the SELinux policy module package by running:
 
-    `semodule_package -o wiz-sensor.pp -m wiz-sensor.mod`
+    ```sh
+    semodule_package -o wiz-sensor.pp -m wiz-sensor.mod
+    ```
 
 4. Insert the new policy by running:
 
-    `semodule -i wiz-sensor.pp`
+    ```sh
+    semodule -i wiz-sensor.pp
+    ```
 
 #### How to restart the Linux Sensor
 
@@ -826,7 +826,9 @@ The Linux Sensor runs as systemd daemon.
 
 To restart it, run the following command:
 
-`sudo systemctl restart wiz-sensor`
+```sh
+sudo systemctl restart wiz-sensor
+```
 
 ### Contact support
 
@@ -837,11 +839,11 @@ If none of the scenarios above match the case, please contact support:
 
 #### Create a support package for the Runtime Sensor
 
-The following script executes various troubleshooting commands and saves the output to an archive named support_package_linux.tar.gz. Please attach this file when contacting Wiz support.
+The following script executes various troubleshooting commands and saves the output to an archive named `support_package_linux.tar.gz`. Please attach this file when contacting Wiz support.
 
-:warning: Run the script as the root user because it will collect sensor related information from the /opt/wiz/sensor folder which requires root permissions
+:warning: Run the script as the root user because it will collect sensor related information from the `/opt/wiz/sensor` folder which requires root permissions.
 
-```
+```bash
 #!/bin/bash
 
 # Check if the script is run as root
