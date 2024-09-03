@@ -76,8 +76,6 @@ local validateAndApplySLIDefaults(sliName, component, inheritedDefaults) =
   +
   validateHasField(withDefaults, 'userImpacting', '%s component requires a userImpacting attribute' % [sliName])
   +
-  validateFeatureCategory(withDefaults, '%s is not a valid feature category for %s' % [withDefaults.featureCategory, sliName])
-  +
   validateSeverity(withDefaults, '%s does not have a valid severity, must be s1-s4' % [sliName])
   +
   validateFeatureCategory(withDefaults, sliName)
