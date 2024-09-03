@@ -27,6 +27,7 @@
 * [Service Apdex](../monitoring/definition-service-apdex.md)
 * [Session: Application architecture](../onboarding/architecture.md)
 * [Diagnosis with Kibana](../onboarding/kibana-diagnosis.md)
+* [Restore Gitaly data on `ops.gitlab.net`](../ops-gitlab-net/gitaly-restore.md)
 * [Packagecloud Infrastructure and Backups](../packagecloud/infrastructure.md)
 * [Rotating Rails' PostgreSQL password](../patroni/rotating-rails-postgresql-password.md)
 * [Removing cache entries from Redis](../redis-cluster-cache/remove-cache-entries.md)
