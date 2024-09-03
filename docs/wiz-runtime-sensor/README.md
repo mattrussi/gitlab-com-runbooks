@@ -762,10 +762,6 @@ The installation script utilizes your native package manager (yum/apt) to instal
 
 The downloader logs format is identical to the Sensor logs format (json messages with either an INFO or ERROR level).
 
-Access the downloader logs folder and view its contents by running:
-
-sudo cd /opt/wiz/sensor/host-store/downloader_logs
-
 Obtain a summarized version of all error log messages by running the following command:
 
 ```sh
