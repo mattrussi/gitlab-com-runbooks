@@ -118,6 +118,7 @@ module DisasterRecoveryHelper
     def initialize(path)
       @glob = path
       @repository_updates = {}
+      @protected_strings = [' name: ', ' "name": ', ': {', '"path":']
     end
 
     def set_path(path)
@@ -127,7 +128,7 @@ module DisasterRecoveryHelper
     def find_and_replace_string(existing, new)
       matching_files.each do |file|
         content = File.read(file)
-        new_content = content.gsub(existing, new)
+        new_content = replace_lines(content, existing, new)
         next unless content != new_content
 
         File.open(file, 'w') { |f| f.write new_content }
@@ -141,6 +142,23 @@ module DisasterRecoveryHelper
     attr_reader :repository_updates
 
     private
+
+    def replace_lines(content, existing, new)
+      new_content = []
+      content.each_line do |line|
+        skipped = false
+        @protected_strings.each do |ps|
+          next unless line.include? ps
+
+          skipped = true
+          new_content << line
+          break
+        end
+        new_content << line.gsub(existing, new) unless skipped
+      end
+
+      new_content.join('')
+    end
 
     def git_repo(file)
       directory = File.dirname(file)
@@ -327,7 +345,7 @@ app_config = DisasterRecoveryHelper::ConfigUpdate.new("#{working_dir}/#{gitaly_t
 app_config.find_and_replace_string('DONOTEDIT', '')
 
 if opts[:app_config]
-  app_config = app_config.set_path("#{working_dir}/gitlab-com/**/*#{environment}*.yaml*")
+  app_config.set_path("#{working_dir}/gitlab-com/**/*#{environment}*.yaml*")
   replacements.each do |existing, replacement|
     app_config.find_and_replace_string("#{existing}-", "#{replacement['name']}-")
   end
