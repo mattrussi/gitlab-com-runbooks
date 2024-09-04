@@ -14,7 +14,7 @@ The alert will tell you what endpoint is executing the long running transaction.
 
 This is important as long running transactions can prevent Postgres from running routine vacuuming, which can lead to bloat and slowdowns of the database.
 
-Long-running transactions are one of the main drivers for [`pg_txid_xmin_age`](pg_xid_xmin_age_alert.md), and can result in severe performance degradation if left unaddressed.
+Long-running transactions are one of the main drivers for [`pg_txid_xmin_age`](../pg_xid_xmin_age_alert.md), and can result in severe performance degradation if left unaddressed.
 
 The recipient of this alert should investigate what the long running transaction is, and whether it is going to
 cause performance problems. In most cases we are going to want to cancel the transaction.
@@ -44,7 +44,7 @@ cause performance problems. In most cases we are going to want to cancel the tra
 
 ## Verification
 
-- [Prometheus query](https://thanos.gitlab.net/graph?g0.expr=topk+by+%28environment%2C+type%2C+stage%2C+shard%29+%281%2C+max+by+%28environment%2C+type%2C+stage%2C+shard%2C+application%2C+endpoint%2C+fqdn%29+%28pg_stat_activity_marginalia_sampler_max_tx_age_in_seconds%7Bcommand%21%3D%22autovacuum%22%2Ccommand%21~%22%28%3Fi%3AALTER%29%22%2Ccommand%21~%22%28%3Fi%3AANALYZE%29%22%2Ccommand%21~%22%28%3Fi%3ACREATE%29%22%2Ccommand%21~%22%28%3Fi%3ADROP%29%22%2Ccommand%21~%22%28%3Fi%3AREINDEX%29%22%2Ccommand%21~%22%28%3Fi%3AVACUUM%29%22%2Cenv%3D%22gprd%22%2Cshard%3D%22default%22%2Ctier%3D%22db%22%2Ctype%21~%22.%2Aarchive%22%2Ctype%21~%22.%2Adelayed%22%7D%29+%3E+540%29&g0.tab=1)
+- [Prometheus query](https://dashboards.gitlab.net/explore?schemaVersion=1&panes=%7B%222u6%22:%7B%22datasource%22:%22mimir-gitlab-gprd%22,%22queries%22:%5B%7B%22refId%22:%22A%22,%22expr%22:%22topk%20by%20%28environment,%20type,%20stage,%20shard%29%20%281,%20max%20by%20%28environment,%20type,%20stage,%20shard,%20application,%20endpoint,%20fqdn%29%20%28pg_stat_activity_marginalia_sampler_max_tx_age_in_seconds%7Bcommand%21%3D%5C%22autovacuum%5C%22,command%21~%5C%22%28%3Fi:ALTER%29%5C%22,command%21~%5C%22%28%3Fi:ANALYZE%29%5C%22,command%21~%5C%22%28%3Fi:CREATE%29%5C%22,command%21~%5C%22%28%3Fi:DROP%29%5C%22,command%21~%5C%22%28%3Fi:REINDEX%29%5C%22,command%21~%5C%22%28%3Fi:VACUUM%29%5C%22,env%3D%5C%22gprd%5C%22,shard%3D%5C%22default%5C%22,tier%3D%5C%22db%5C%22,type%21~%5C%22.%2Aarchive%5C%22,type%21~%5C%22.%2Adelayed%5C%22%7D%29%20%3E%20540%29%22,%22range%22:true,%22instant%22:true,%22datasource%22:%7B%22type%22:%22prometheus%22,%22uid%22:%22mimir-gitlab-gprd%22%7D,%22editorMode%22:%22code%22,%22legendFormat%22:%22__auto%22%7D%5D,%22range%22:%7B%22from%22:%22now-3h%22,%22to%22:%22now%22%7D%7D%7D&orgId=1)
 - [Long running transactions dashboard](https://dashboards.gitlab.net/d/alerts-long_running_transactions/alerts3a-long-running-transactions?from=now-6h%2Fm&to=now-1m%2Fm&var-environment=gprd&orgId=1)
 
 ## Recent changes
