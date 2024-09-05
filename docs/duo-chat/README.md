@@ -28,6 +28,16 @@ Different deployments use different indexes. The following indexes are most help
   - When searching this index, filtering on `json.subcomponent : "llm"` ensures only LLM logs are returned
 - GitLab Rails logs are in the `pubsub-rails-inf-gprd-*` index
 
+Chat GraphQL request logs for a user can be found with the following Kibana query in the Rails (`pubsub-rails-inf-gprd-*`) index:
+
+> `json.meta.user : "your-gitlab-username" and json.meta.caller_id : "graphql:chat"`
+
+If you find requests for a user there but do not find any results for them using a Kibana query in the Sidekiq (`pubsub-sidekiq-inf-gprd*`) index:
+
+> ``json.meta.user : "username-that-received-error" and json.subcomponent : "llm"`
+
+That probably indicates a problem with Sidekiq where the job is not being kicked off. Check the `#incident-management` to see if there are any ongoing Sidekiq issues. Chat relies on Sidekiq and should be considered "down" if Sidekiq is backed up.
+
 ### Extra Kibana links
 
 You can find other helpful log searches by looking at saved Kibana objects with the [`group::ai_framework` tag](https://log.gprd.gitlab.net/app/management/kibana/objects).
