@@ -125,7 +125,7 @@ groups:
       tier: inf
       type: kube
     expr: |
-      max by(env, environment, shard) (
+      max by(env, environment, shard, cluster, namespace, persistentvolumeclaim) (
         clamp_min(
           clamp_max(
             kubelet_volume_stats_used_bytes

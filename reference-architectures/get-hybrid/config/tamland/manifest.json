@@ -213,6 +213,7 @@
         "changepoints_count": 25,
         "forecast_days": 90,
         "historical_days": 365,
+        "saturation_dimension_dynamic_lookup_query": "sum by(persistentvolumeclaim) (\n  last_over_time(kubelet_volume_stats_used_bytes[1w])\n)\n",
         "strategy": "quantile95_1h"
       },
       "description": "disk space utilization on persistent volume claims.\n",
