@@ -192,8 +192,10 @@ metricsCatalog.serviceDefinition({
 
   capacityPlanning: {
     saturation_dimensions: [
-      selectors.serializeHash({ shard: shard }) for shard in $.shards
+      selectors.serializeHash({ shard: shard })
+      for shard in $.shards
     ],
+    saturation_dimensions_keep_aggregate: false,
     components: [
       {
         name: 'rails_db_connection_pool',
