@@ -14,6 +14,7 @@ local serviceDefinitionValidator = validator.new({
 local capacityPlanningValidator = validator.new({
   capacityPlanning: {
     saturation_dimensions: validator.optional(validator.arrayOfStrings),
+    saturation_dimensions_keep_aggregate: validator.optional(validator.boolean),
   },
 });
 
