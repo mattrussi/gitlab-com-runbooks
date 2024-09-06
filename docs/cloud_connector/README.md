@@ -53,7 +53,7 @@ Self-managed customers are _not_ expected to set this variable.
 
 #### Alerts
 
-- [CloudflareCloudConnectorRateLimitEvents](./alerts/CloudflareCloudConnectorRateLimitEvents.md)
+- [CloudflareCloudConnectorRateLimitExhaustion](./alerts/CloudflareCloudConnectorRateLimitEvents.md)
 
 #### Edge logs
 

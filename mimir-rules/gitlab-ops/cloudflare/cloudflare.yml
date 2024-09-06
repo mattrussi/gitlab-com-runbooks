@@ -13,17 +13,19 @@ groups:
             minutes. Note that this refers to a background scrape loop in the
             exporter itself, and that prometheus may be successfully scraping
             the exporter.
-      - alert: CloudflareCloudConnectorRateLimitEvents
-        for: 10m
-        expr: >
-          rate(cloudflare_zone_firewall_events_count{zone="cloud.gitlab.com", source="ratelimit", action="block"}[5m]) > 0
+      - alert: CloudflareCloudConnectorRateLimitExhaustion
+        for: 5m
+        expr: |
+          sum by (zone) (
+            rate(cloudflare_zone_firewall_events_count{zone=~"cloud.gitlab.com|cloud.staging.gitlab.com", source="ratelimit", action="block"}[5m])
+          ) > 0
         labels:
           severity: s4
           alert_type: cause
           team: cloud_connector
         annotations:
-          title: Client was rate limited while dialing cloud.gitlab.com
+          title: Clients are being rate limited on {{ $labels.zone }}
           description: >
             One or more clients consuming features delivered through Cloud Connector was blocked by
-            our rate limit rules in Cloudflare for 10 minutes or more. This could be OK but should
+            our rate limit rules in Cloudflare for 5 minutes or more. This could be OK but should
             be investigated for false positives.

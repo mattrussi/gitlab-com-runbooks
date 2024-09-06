@@ -1,4 +1,4 @@
-# CloudflareCloudConnectorRateLimitEvents
+# CloudflareCloudConnectorRateLimitExhaustion
 
 **Table of Contents**
 
@@ -23,10 +23,10 @@ rate limits we allocate to this customer based on the number of user seats they 
 ## Metrics
 
 The alert fires when the `cloudflare_zone_firewall_events_count` rate exceeds a given threshold for
-a certain time window.
+a given time window.
 
-- [Grafana link](https://dashboards.gitlab.net/alerting/list?search=CloudflareCloudConnectorRateLimitEvents)
-- [alert definition](../../../mimir-rules/cloudflare/cloudflare.yml)
+- [Grafana link](https://dashboards.gitlab.net/alerting/list?search=CloudflareCloudConnectorRateLimitExhaustion)
+- [alert definition](../../../mimir-rules/gitlab-ops/cloudflare/cloudflare.yml)
 
 ## Alert Behavior
 
