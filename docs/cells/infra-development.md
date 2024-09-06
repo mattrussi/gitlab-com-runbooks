@@ -11,7 +11,7 @@ Why this is may vary, one should use your sandbox as often as feasible.
 
 1. Do development inside of [Instrumentor] - use the standard documentation provided by [Instrumentor] where possible
 1. Find the appropriate image from the MR Pipeline - note that branch names are modified, example `me/fix-thing` creates an image tag such as `me-fix-thing`
-1. Create branch in [`cells/tissue`] - modify the [Instrumentor] version to the tag name from the above step
+1. Create a branch in [`cells/tissue`] - modify the [Instrumentor] version in a Cell in the [cellsdev ring](https://gitlab.com/gitlab-com/gl-infra/cells/tissue/-/tree/main/rings/cellsdev/0?ref_type=heads) to the tag name from the above step
 1. Ensure branch exists on the Ops repo of [`cells/tissue`] - non-protected branches are not mirrored
 1. Execute `ringctl deploy -e <desired environment> --ring <desired_ring> -b me/fix-thing` to generate a test pipeline - this command will need to be modified pending your needs as by default `ringctl` assumes an auto-deploy
 
