@@ -5,11 +5,14 @@ local rateMetric = metricsCatalog.rateMetric;
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 local haproxyComponents = import './lib/haproxy_components.libsonnet';
 local dependOnRedisSidekiq = import 'inhibit-rules/depend_on_redis_sidekiq.libsonnet';
+local ciRunnersHelpers = import './lib/ci-runners-helpers.libsonnet';
+local selectors = import 'promql/selectors.libsonnet';
 
 metricsCatalog.serviceDefinition({
   type: 'ci-runners',
   tier: 'runners',
   tenants: ['gitlab-gprd', 'gitlab-gstg', 'gitlab-ops', 'gitlab-pre'],
+  shards: ciRunnersHelpers.shards,
   shardLevelMonitoring: true,
   contractualThresholds: {
     apdexRatio: 0.95,
@@ -283,8 +286,13 @@ metricsCatalog.serviceDefinition({
     },
 
   },
-} + {
+
   capacityPlanning+: {
+    saturation_dimensions: [
+      selectors.serializeHash({ shard: shard })
+      for shard in $.shards
+    ] + [selectors.serializeHash({ shard: { noneOf: $.shards } })],
+    saturation_dimensions_keep_aggregate: false,
     components: [
       {
         name: 'node_schedstat_waiting',
