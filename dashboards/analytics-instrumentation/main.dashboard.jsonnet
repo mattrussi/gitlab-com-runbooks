@@ -5,8 +5,8 @@ local row = grafana.row;
 local basic = import 'grafana/basic.libsonnet';
 
 basic.dashboard(
-  'Product Intelligence',
-  tags=['product_intelligence'],
+  'Analytics Instrumentation',
+  tags=['analytics_instrumentation'],
   time_from='now-7d',
 )
 .addPanel(
