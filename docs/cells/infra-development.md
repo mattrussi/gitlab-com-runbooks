@@ -1,13 +1,18 @@
 # Infrastructure Development
 
-This documentation is to provide rudimentary guidance where development inside of a sandbox, is for whatever reason, deemed not good enough.
-Why this is may vary, one should use your sandbox as often as feasible.
+[[_TOC_]]
 
-[[ _TOC_ ]]
+## Development
+
+1. Create GitLab Dedicated [on-boarding issue].
+1. Follow [Instrumentor Development] for sandbox development.
+
+## Testing Instrumentor change in Cell without merge
 
 :warning: This is a tad dangerous as it Targets and entire Ring :warning:
 
-## How-To
+This provides rudimentary guidance where development inside of a sandbox, is for whatever reason, deemed not good enough.
+Why this is may vary, one should use your sandbox as often as feasible.
 
 1. Do development inside of [Instrumentor] - use the standard documentation provided by [Instrumentor] where possible
 1. Find the appropriate image from the MR Pipeline - note that branch names are modified, example `me/fix-thing` creates an image tag such as `me-fix-thing`
@@ -17,3 +22,5 @@ Why this is may vary, one should use your sandbox as often as feasible.
 
 [Instrumentor]: https://gitlab.com/gitlab-com/gl-infra/gitlab-dedicated/instrumentor
 [`cells/tissue`]: https://gitlab.com/gitlab-com/gl-infra/cells/tissue
+[on-boarding issue]: https://gitlab.com/gitlab-com/gl-infra/gitlab-dedicated/team/-/blob/8168e8e318f79136cd50f6cc59351796b2e85422/.gitlab/issue_templates/non-Dedicated_GitLab_team_member_onboarding.md
+[Instrumentor Development]: https://gitlab.com/gitlab-com/gl-infra/gitlab-dedicated/instrumentor/-/blob/main/DEVELOPMENT.md
