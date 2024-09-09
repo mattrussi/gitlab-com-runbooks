@@ -3,7 +3,7 @@
 {
   import_and_integrate: {
     name: 'Import and Integrate',
-    stage: 'manage',
+    stage: 'foundations',
     feature_categories: [
       'api',
       'integrations',
@@ -13,8 +13,8 @@
     ],
   },
   personal_productivity: {
-    name: 'Personal productivity',
-    stage: 'manage',
+    name: 'Personal Productivity',
+    stage: 'foundations',
     feature_categories: [
       'navigation',
       'settings',
@@ -23,14 +23,14 @@
   },
   design_system: {
     name: 'Design System',
-    stage: 'manage',
+    stage: 'foundations',
     feature_categories: [
       'design_system',
     ],
   },
   ux_paper_cuts: {
     name: 'UX Paper Cuts',
-    stage: 'manage',
+    stage: 'foundations',
     feature_categories: [
 
     ],
@@ -132,6 +132,7 @@
     stage: 'verify',
     feature_categories: [
       'pipeline_composition',
+      'ci_variables',
     ],
   },
   runner: {
