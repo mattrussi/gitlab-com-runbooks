@@ -64,7 +64,7 @@ groups:
     labels:
       feature_category: api
       monitor: global
-      product_stage: manage
+      product_stage: foundations
       stage_group: import_and_integrate
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
@@ -136,6 +136,13 @@ groups:
       monitor: global
       product_stage: verify
       stage_group: ci_platform
+    expr: "1"
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
+      feature_category: ci_variables
+      monitor: global
+      product_stage: verify
+      stage_group: pipeline_authoring
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -295,7 +302,7 @@ groups:
     labels:
       feature_category: design_system
       monitor: global
-      product_stage: manage
+      product_stage: foundations
       stage_group: design_system
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
@@ -456,7 +463,7 @@ groups:
     labels:
       feature_category: importers
       monitor: global
-      product_stage: manage
+      product_stage: foundations
       stage_group: import_and_integrate
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
@@ -498,14 +505,14 @@ groups:
     labels:
       feature_category: integrations
       monitor: global
-      product_stage: manage
+      product_stage: foundations
       stage_group: import_and_integrate
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: internationalization
       monitor: global
-      product_stage: manage
+      product_stage: foundations
       stage_group: import_and_integrate
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
@@ -561,7 +568,7 @@ groups:
     labels:
       feature_category: navigation
       monitor: global
-      product_stage: manage
+      product_stage: foundations
       stage_group: personal_productivity
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
@@ -575,7 +582,7 @@ groups:
     labels:
       feature_category: notifications
       monitor: global
-      product_stage: manage
+      product_stage: foundations
       stage_group: personal_productivity
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
@@ -790,13 +797,6 @@ groups:
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
-      feature_category: custom_models
-      monitor: global
-      product_stage: ai-powered
-      stage_group: custom_models
-    expr: "1"
-  - record: gitlab:feature_category:stage_group:mapping
-    labels:
       feature_category: service_desk
       monitor: global
       product_stage: plan
@@ -813,7 +813,7 @@ groups:
     labels:
       feature_category: settings
       monitor: global
-      product_stage: manage
+      product_stage: foundations
       stage_group: personal_productivity
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
@@ -932,7 +932,7 @@ groups:
     labels:
       feature_category: webhooks
       monitor: global
-      product_stage: manage
+      product_stage: foundations
       stage_group: import_and_integrate
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
@@ -945,13 +945,6 @@ groups:
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: workspaces
-      monitor: global
-      product_stage: create
-      stage_group: remote_development
-    expr: "1"
-  - record: gitlab:feature_category:stage_group:mapping
-    labels:
-      feature_category: remote_development
       monitor: global
       product_stage: create
       stage_group: remote_development

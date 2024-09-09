@@ -232,13 +232,13 @@ groups:
       product_stage: data_stores
       stage_group: global_search
     expr: "1"
-- name: 'Stage group Ignored components: manage - Import and Integrate'
+- name: 'Stage group Ignored components: foundations - Import and Integrate'
   interval: 1m
   rules:
   - record: gitlab:ignored_component:stage_group
     labels:
       component: graphql_query
-      product_stage: manage
+      product_stage: foundations
       stage_group: import_and_integrate
     expr: "1"
 - name: 'Stage group Ignored components: modelops - MLOps'
@@ -286,13 +286,13 @@ groups:
       product_stage: package
       stage_group: package_registry
     expr: "1"
-- name: 'Stage group Ignored components: manage - Personal productivity'
+- name: 'Stage group Ignored components: foundations - Personal Productivity'
   interval: 1m
   rules:
   - record: gitlab:ignored_component:stage_group
     labels:
       component: graphql_query
-      product_stage: manage
+      product_stage: foundations
       stage_group: personal_productivity
     expr: "1"
 - name: 'Stage group Ignored components: verify - Pipeline Authoring'

@@ -6,6 +6,4 @@
 //
 // Blank values will be ignored.
 {
-  custom_models: 'self-hosted_models',
-  remote_development: 'workspaces',
 }
