@@ -36,7 +36,8 @@ If you find requests for a user there but do not find any results for them using
 
 > ``json.meta.user : "username-that-received-error" and json.subcomponent : "llm"`
 
-That probably indicates a problem with Sidekiq where the job is not being kicked off. Check the `#incident-management` to see if there are any ongoing Sidekiq issues. Chat relies on Sidekiq and should be considered "down" if Sidekiq is backed up.
+That probably indicates a problem with Sidekiq where the job is not being kicked off. Check the `#incident-management` to see if there are any ongoing Sidekiq issues. Chat relies on Sidekiq and should be considered "down" if Sidekiq is backed up. See [Duo Chat does not respond or responds very slowly](#duo-chat-does-not-respond-or-responds-very-slowly) below.
+
 
 ### Extra Kibana links
 
@@ -105,6 +106,12 @@ The following all relate towards a slash command issues.
 | /summarize_comments             |      |  `#f_plan_ai`          |
 | /refactor            |      |  `#g_code_creation`          |
 | /vulnerability_explain            |      | `#f_ci_rca`           |
+
+### Duo Chat does not respond or responds very slowly
+This could be caused by an issue with Sidekiq queues getting backed up.
+First, check the [GitLab status page](https://status.gitlab.com/) to see if there are any reported problems with Sidekiq or "background job processing".
+Then, ceck [this dashboard](https://log.gprd.gitlab.net/app/dashboards#/view/3684dc90-73f6-11ee-ac5b-8f88ebd04638). If you see that 'scheduling time for the completion worker' and 'duration time for the completion worker' values are much higher than normal, it indicates the Sidekiq backup may be the problem.
+
 
 ### Tracing request logs from GitLab Rails to the AI Gateway
 
