@@ -101,6 +101,7 @@
 * [Scaling Redis Cluster](../redis/scaling-redis-cluster.md)
 * [Container Registry database post-deployment migrations](../registry/db-post-deployment-migrations.md)
 * [../registry/gitlab-registry.md](../registry/gitlab-registry.md)
+* [Privileged Access Management](../runway/privileged_access_management.md)
 * [Managing Sentry in Kubernetes](../sentry/sentry.md)
 * [Disabling Sidekiq workers](../sidekiq/disabling-a-worker.md)
 * [../sidekiq/sharding.md](../sidekiq/sharding.md)
