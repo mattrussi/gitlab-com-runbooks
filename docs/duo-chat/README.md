@@ -110,7 +110,7 @@ The following all relate towards a slash command issues.
 ### Duo Chat does not respond or responds very slowly
 This could be caused by an issue with Sidekiq queues getting backed up.
 First, check the [GitLab status page](https://status.gitlab.com/) to see if there are any reported problems with Sidekiq or "background job processing".
-Then, check [this dashboard](https://log.gprd.gitlab.net/app/dashboards#/view/3684dc90-73f6-11ee-ac5b-8f88ebd04638). If you see that 'scheduling time for the completion worker' and 'duration time for the completion worker' values are much higher than normal, it indicates the Sidekiq backup may be the problem.
+Then, check [this dashboard](https://log.gprd.gitlab.net/app/dashboards#/view/3684dc90-73f6-11ee-ac5b-8f88ebd04638). If you see that 'scheduling time for the completion worker' values are much higher than normal, it indicates the Sidekiq backup may be the problem.
 
 
 ### Tracing request logs from GitLab Rails to the AI Gateway
