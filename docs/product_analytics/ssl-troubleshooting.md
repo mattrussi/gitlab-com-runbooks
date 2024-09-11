@@ -57,6 +57,12 @@ Failed authentication with <REDACTED_CLUSTER_NAME>-kafka/<REDACTED_IP> (SSL hand
 │ [2023-12-14 10:14:23,906] INFO [SocketServer listenerType=ZK_BROKER, nodeId=0] Failed authentication with /<REDACTED_IP> (channelId=<REDACTED_CHANNEL_ID>) (SSL handshake failed) (org.apache.kafka.common.network.Selector)
 ```
 
+**Kafka exporter**
+
+```
+Cannot get current offset of topic __consumer_offsets partition 46: x509: certificate has expired or is not yet valid: current time 2024-09-09T11:12:31Z is after 2024-09-09T10:50:48Z
+```
+
 **LoadBalancer**
 
 GKE events from Ingress type can be found in [this panel](https://dashboards.gitlab.net/d/da6cf9ea-d593-41ed-91c5-8536fd15c2fa/product-analytics-service-health?viewPanel=25)
@@ -143,3 +149,13 @@ kubectl describe issuer [issuer_name]
 
 which will give you detailed information on the issuer. You can check the Status field and look for "Reason" and "Message".
 These fields should give information on why the issuer is not ready.
+
+### Kafka exporter
+
+The Kafka exporter uses a self-signed certificate, which does not auto-renew. This can mean that the certificate expires if we haven't made any changes for a longer period of time.
+
+If you're seeing [Kafka export errors in Grafana](https://dashboards.gitlab.net/goto/jjH0zheSg?orgId=1), then the easy fix is to restart the deployment:
+
+```shell
+kubectl rollout restart deployment <CLUSTER_NAME>-kafka-exporter
+```
