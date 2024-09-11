@@ -2,6 +2,10 @@
 
 [[_TOC_]]
 
+## Background
+
+By default, GitLab Team Members have no access to GCP resources created by Runway provisioner. PAM (Privileged Access Management) allows users to temporarily _escalate_ their access by requesting an _entitlement_ for a given duration.
+
 ## When to escalate
 
 Refer to [cells breakglass documentation](../cells/breakglass.md) on when to escalate.
