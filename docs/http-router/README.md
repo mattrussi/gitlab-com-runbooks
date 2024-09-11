@@ -11,7 +11,8 @@
 
 ## Logging
 
-* []()
+* [pre.gitlab.com](https://dash.cloudflare.com/852e9d53d0f8adbd9205389356f2303d/workers/services/view/pre-gitlab-com-cells-http-router/production/logs/live)
+* [staging.gitlab.com](https://dash.cloudflare.com/852e9d53d0f8adbd9205389356f2303d/workers/services/view/staging-gitlab-com-cells-http-router/production/logs/live)
 
 <!-- END_MARKER -->
 
