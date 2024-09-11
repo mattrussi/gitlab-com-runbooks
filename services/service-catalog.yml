@@ -762,12 +762,13 @@ services:
         security:
       dependencies:
       logging:
-        - name:
-          permalink:
+        - name: pre.gitlab.com
+          permalink: https://dash.cloudflare.com/852e9d53d0f8adbd9205389356f2303d/workers/services/view/pre-gitlab-com-cells-http-router/production/logs/live
+        - name: staging.gitlab.com
+          permalink: https://dash.cloudflare.com/852e9d53d0f8adbd9205389356f2303d/workers/services/view/staging-gitlab-com-cells-http-router/production/logs/live
     observability:
       monitors:
-        primary_grafana_dashboard:
-        sentry_slug:
+        gitlab_dashboard: https://dash.cloudflare.com/852e9d53d0f8adbd9205389356f2303d/workers/services/view/staging-gitlab-com-cells-http-router/production
 
   - name: influxdb
     tier: inf
