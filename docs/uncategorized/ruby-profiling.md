@@ -69,14 +69,6 @@ visualization:
 cat stacks.api-cny-01-sv-gprd.gz | gunzip | flamegraph.pl > flamegraph.svg
 ```
 
-### `sidekiq`
-
-To initiate profiling for all sidekiq processes on a sidekiq host:
-
-```
-sudo pkill -USR2 -f bin/sidekiq-cluster
-```
-
 ### `sidekiq` on kubernetes
 
 To initiate profiling for all sidekiq processes on a pod in kubernetes (from a
@@ -91,12 +83,14 @@ kubectl get pods -n gitlab
 Now you can initiate the profile collection:
 
 ```
-kubectl exec -n gitlab -it gitlab-sidekiq-urgent-other-v1-8bc47b7b4-d6g8f -- /usr/bin/pkill -USR2 -f sidekiq
+kubectl exec -n gitlab -it gitlab-sidekiq-urgent-other-v1-8bc47b7b4-d6g8f -- /usr/bin/pkill -USR2 -f bin/sidekiq-cluster
 ```
 
 List profiles:
 
+```
 kubectl exec -n gitlab -it gitlab-sidekiq-urgent-other-v1-8bc47b7b4-d6g8f -- /bin/ls -lah /tmp
+```
 
 Peek at the profile:
 
