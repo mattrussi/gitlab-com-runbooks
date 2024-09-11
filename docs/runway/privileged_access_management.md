@@ -15,9 +15,9 @@ Refer to [cells breakglass documentation](../cells/breakglass.md) on when to esc
 By default the following groups are able to escalate:
 
 - `group:runway-maintainers@gitlab.com` for `project_read`
-- `group:infrasec@gitlab.com` for `project_read`,  `project_admin` and `breakglass`
-- `group:gcp-sirt-sg@gitlab.com` for `project_read`,  `project_admin` and `breakglass`
-- `group:gcp-ops-sg@gitlab.com` for `project_read`,  `project_admin` and `breakglass`
+- `group:infrasec@gitlab.com` for `project_read`, `project_admin` and `breakglass`
+- `group:gcp-sirt-sg@gitlab.com` for `project_read`, `project_admin` and `breakglass`
+- `group:gcp-ops-sg@gitlab.com` for `project_read`, `project_admin` and `breakglass`
 
 Refer to the [provisioner](https://gitlab.com/gitlab-com/gl-infra/platform/runway/provisioner/-/blob/66677a59bf00146b23a8f9584d94a15b0fce4682/modules/managed_project/locals.tf#L64) for the default list of principals.
 
