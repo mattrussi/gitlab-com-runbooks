@@ -278,6 +278,7 @@ local validateTags(tags) =
     pointradius=5,
     stableId=null,
     stack=false,
+    bars=false,
   )::
     graphPanel.new(
       title=title,
@@ -301,6 +302,7 @@ local validateTags(tags) =
       points=points,
       pointradius=pointradius,
       stack=stack,
+      bars=bars
     ) + panelOverrides(stableId),
 
   heatmap(
@@ -389,6 +391,7 @@ local validateTags(tags) =
     stableId=null,
     fill=0,
     stack=false,
+    bars=false,
     datasource='$PROMETHEUS_DS',
   )::
     local panel = self.graphPanel(
@@ -412,6 +415,7 @@ local validateTags(tags) =
       thresholds=thresholds,
       stableId=stableId,
       stack=stack,
+      bars=bars,
     );
 
     local addPanelTarget(panel, query) =
@@ -453,6 +457,7 @@ local validateTags(tags) =
     stableId=null,
     fill=0,
     stack=false,
+    bars=false,
     datasource='$PROMETHEUS_DS',
   )::
     self.multiTimeseries(
@@ -476,6 +481,7 @@ local validateTags(tags) =
       fill=fill,
       stack=stack,
       datasource=datasource,
+      bars=bars,
     ),
 
   queueLengthTimeseries(
