@@ -16,6 +16,7 @@ When you encounter a Duo Chat error code, it is not always clear where the error
 
 - [Anthropic API Status Page](https://status.anthropic.com/)
 - [AI Gateway Grafana Dashboard](https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway3a-overview?orgId=1)
+- [Status of GitLab Duo Chat Integrations](https://jannik_lehmann.gitlab.io/gitlab-ui-hosts-status-page/)
 
 ### Logs
 
@@ -49,6 +50,8 @@ You can find other helpful log searches by looking at saved Kibana objects with 
 
 All of GitLab Duo Chat error codes are documented [here](https://gitlab.com/gitlab-org/gitlab/-/blob/master/doc/user/gitlab_duo_chat/troubleshooting.md#the-gitlab-duo-chat-button-is-not-displayed). The error code prefix letter can help you choose which Kibana logs to search.
 
+If no error code layer identifier is displayed there is likely a [client-side error](#client-side-errors) at play.
+
 ### Error Code Layer Identifier
 
 | Code | Layer           |
@@ -56,6 +59,23 @@ All of GitLab Duo Chat error codes are documented [here](https://gitlab.com/gitl
 | M    | Monolith - A network communication error in the monolith layer.     |
 | G    | AI Gateway - A data formatting/processing error in the AI gateway layer.     |
 | A    | Third-party API - An authentication or data access permissions error in a third-party API.|
+
+### Client-side errors
+
+The _AI-Powered:Duo Chat_ group owns:
+
+1. `gitlab-org/gitlab`
+1. `gitlab-org/gitlab-ui`
+
+The _Create:Editor Extensions_ group owns:
+
+1. `gitlab-org/gitlab-vscode-extension` (GitLab Workflow)
+1. `gitlab-org/editor-extensions/gitlab-jetbrains-plugin` (GitLab Duo for JetBrains IDEs)
+
+While _Create:Remote Development_ group owns the `gitlab-org/gitlab-web-ide` the Web IDE Duo Chat integration simply depends on the VS Code extension.
+The Web IDE is tagged and released separately from the VS Code extension which can cause a delay in the gitlab-web-ide package being updated in the monolith to refer to the new `gitlab-vscode-extension` release.
+
+When an error is only being reproduced inside an editor extension an issue should be opened in the relevant project including both IDE, extension, and GitLab instance version information.
 
 ### Debugging Error Codes A1000-6000
 
