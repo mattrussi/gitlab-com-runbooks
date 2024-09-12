@@ -67,6 +67,8 @@ local union(sets) = std.foldl(function(memo, a) std.setUnion(std.set(a), memo), 
         'FvOt_fNZk',
         // Brendan O'Leary/Andrew Newdigate: Vanity metrics dashboard
         'vanity-metrics',
+        // donnaalexandra: Rate Limiting WIP dashboard while we work on https://gitlab.com/gitlab-com/gl-infra/production-engineering/-/issues/25743
+        'bdw6yx0ukk7pce'
       ],
 
       // bjk's dashboards
