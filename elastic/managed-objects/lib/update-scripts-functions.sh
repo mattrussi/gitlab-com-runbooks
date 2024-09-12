@@ -83,11 +83,13 @@ function ES7_put_json() {
   # args:
   # $1 URL to use when uploading
   for i in "${SCRIPT_DIR}"/*.json; do
-    base_name=$(basename "$i")
-    echo ""
-    echo "$base_name"
-    name=${base_name%.json}
-    es_client "$1${name}" -X PUT --data-binary "@${i}"
+    if [[ -e $i ]]; then
+      base_name=$(basename "$i")
+      echo ""
+      echo "$base_name"
+      name=${base_name%.json}
+      es_client "$1${name}" -X PUT --data-binary "@${i}"
+    fi
   done
 }
 
@@ -154,6 +156,7 @@ function ES7_index-template_exec_jsonnet_and_upload_json() {
 function ES7_set_cluster_settings() {
   url="_cluster/settings"
   get_json_and_jsonnet
+  # shellcheck disable=SC1090
   source "${array_file_path}"
 
   for json in "${json_array[@]}"; do
