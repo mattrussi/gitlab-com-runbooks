@@ -15,8 +15,7 @@ local serverSelector = baseSelector {
         '/v2/code/completions',
         '/v2/completions',
         '/v2/code/generations',
-        '/v1/chat/agent',
-        '/v2/chat/agent',
+        '/v(1|2)/chat/.*',
         '/v1/x-ray/libraries',
       ],
   },
@@ -25,7 +24,7 @@ local serverCodeCompletionsSelector = baseSelector {
   handler: { oneOf: ['/v2/code/completions', '/v2/completions'] },
 };
 local serverCodeGenerationsSelector = baseSelector { handler: '/v2/code/generations' };
-local serverChatSelector = baseSelector { handler: { oneOf: ['/v1/chat/{chat_invokable}', '/v1/chat/.*'] },};
+local serverChatSelector = baseSelector { handler: { re: '/v(1|2)/chat/.*'},};
 local serverXRaySelector = baseSelector { handler: '/v1/x-ray/libraries' };
 
 metricsCatalog.serviceDefinition(

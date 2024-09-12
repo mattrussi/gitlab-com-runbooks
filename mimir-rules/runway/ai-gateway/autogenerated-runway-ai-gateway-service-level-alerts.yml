@@ -1828,7 +1828,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
-            rate(http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",handler!~"/v1/chat/agent|/v1/x-ray/libraries|/v2/chat/agent|/v2/code/completions|/v2/code/generations|/v2/completions",stage="{{ $labels.stage }}",status!~"4xx|5xx",type="ai-gateway"}[5m])
+            rate(http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",handler!~"(/v(1|2)/chat/.*)|/v1/x-ray/libraries|/v2/code/completions|/v2/code/generations|/v2/completions",stage="{{ $labels.stage }}",status!~"4xx|5xx",type="ai-gateway"}[5m])
           )
         )
       runbook: docs/ai-gateway/README.md
@@ -1879,7 +1879,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
-            rate(http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",handler!~"/v1/chat/agent|/v1/x-ray/libraries|/v2/chat/agent|/v2/code/completions|/v2/code/generations|/v2/completions",stage="{{ $labels.stage }}",status!~"4xx|5xx",type="ai-gateway"}[5m])
+            rate(http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",handler!~"(/v(1|2)/chat/.*)|/v1/x-ray/libraries|/v2/code/completions|/v2/code/generations|/v2/completions",stage="{{ $labels.stage }}",status!~"4xx|5xx",type="ai-gateway"}[5m])
           )
         )
       runbook: docs/ai-gateway/README.md
@@ -1932,7 +1932,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,region,le) (
-            rate(http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",handler!~"/v1/chat/agent|/v1/x-ray/libraries|/v2/chat/agent|/v2/code/completions|/v2/code/generations|/v2/completions",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status!~"4xx|5xx",type="ai-gateway"}[5m])
+            rate(http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",handler!~"(/v(1|2)/chat/.*)|/v1/x-ray/libraries|/v2/code/completions|/v2/code/generations|/v2/completions",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status!~"4xx|5xx",type="ai-gateway"}[5m])
           )
         )
       runbook: docs/ai-gateway/README.md
@@ -1985,7 +1985,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,region,le) (
-            rate(http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",handler!~"/v1/chat/agent|/v1/x-ray/libraries|/v2/chat/agent|/v2/code/completions|/v2/code/generations|/v2/completions",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status!~"4xx|5xx",type="ai-gateway"}[5m])
+            rate(http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",handler!~"(/v(1|2)/chat/.*)|/v1/x-ray/libraries|/v2/code/completions|/v2/code/generations|/v2/completions",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status!~"4xx|5xx",type="ai-gateway"}[5m])
           )
         )
       runbook: docs/ai-gateway/README.md
@@ -2034,7 +2034,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(http_request_duration_seconds_count{environment="{{ $labels.environment }}",handler!~"/v1/chat/agent|/v1/x-ray/libraries|/v2/chat/agent|/v2/code/completions|/v2/code/generations|/v2/completions",stage="{{ $labels.stage }}",status="5xx",type="ai-gateway"}[5m])
+          rate(http_request_duration_seconds_count{environment="{{ $labels.environment }}",handler!~"(/v(1|2)/chat/.*)|/v1/x-ray/libraries|/v2/code/completions|/v2/code/generations|/v2/completions",stage="{{ $labels.stage }}",status="5xx",type="ai-gateway"}[5m])
         )
       runbook: docs/ai-gateway/README.md
     labels:
@@ -2082,7 +2082,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(http_request_duration_seconds_count{environment="{{ $labels.environment }}",handler!~"/v1/chat/agent|/v1/x-ray/libraries|/v2/chat/agent|/v2/code/completions|/v2/code/generations|/v2/completions",stage="{{ $labels.stage }}",status="5xx",type="ai-gateway"}[5m])
+          rate(http_request_duration_seconds_count{environment="{{ $labels.environment }}",handler!~"(/v(1|2)/chat/.*)|/v1/x-ray/libraries|/v2/code/completions|/v2/code/generations|/v2/completions",stage="{{ $labels.stage }}",status="5xx",type="ai-gateway"}[5m])
         )
       runbook: docs/ai-gateway/README.md
     labels:
@@ -2132,7 +2132,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage,region) (
-          rate(http_request_duration_seconds_count{environment="{{ $labels.environment }}",handler!~"/v1/chat/agent|/v1/x-ray/libraries|/v2/chat/agent|/v2/code/completions|/v2/code/generations|/v2/completions",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status="5xx",type="ai-gateway"}[5m])
+          rate(http_request_duration_seconds_count{environment="{{ $labels.environment }}",handler!~"(/v(1|2)/chat/.*)|/v1/x-ray/libraries|/v2/code/completions|/v2/code/generations|/v2/completions",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status="5xx",type="ai-gateway"}[5m])
         )
       runbook: docs/ai-gateway/README.md
     labels:
@@ -2182,7 +2182,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage,region) (
-          rate(http_request_duration_seconds_count{environment="{{ $labels.environment }}",handler!~"/v1/chat/agent|/v1/x-ray/libraries|/v2/chat/agent|/v2/code/completions|/v2/code/generations|/v2/completions",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status="5xx",type="ai-gateway"}[5m])
+          rate(http_request_duration_seconds_count{environment="{{ $labels.environment }}",handler!~"(/v(1|2)/chat/.*)|/v1/x-ray/libraries|/v2/code/completions|/v2/code/generations|/v2/completions",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status="5xx",type="ai-gateway"}[5m])
         )
       runbook: docs/ai-gateway/README.md
     labels:
@@ -2232,7 +2232,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
-            rate(http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",handler=~"/v1/chat/.*|/v1/chat/{chat_invokable}",stage="{{ $labels.stage }}",status!~"4xx|5xx",type="ai-gateway"}[5m])
+            rate(http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",handler=~"/v(1|2)/chat/.*",stage="{{ $labels.stage }}",status!~"4xx|5xx",type="ai-gateway"}[5m])
           )
         )
       runbook: docs/ai-gateway/README.md
@@ -2284,7 +2284,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
-            rate(http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",handler=~"/v1/chat/.*|/v1/chat/{chat_invokable}",stage="{{ $labels.stage }}",status!~"4xx|5xx",type="ai-gateway"}[5m])
+            rate(http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",handler=~"/v(1|2)/chat/.*",stage="{{ $labels.stage }}",status!~"4xx|5xx",type="ai-gateway"}[5m])
           )
         )
       runbook: docs/ai-gateway/README.md
@@ -2338,7 +2338,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,region,le) (
-            rate(http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",handler=~"/v1/chat/.*|/v1/chat/{chat_invokable}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status!~"4xx|5xx",type="ai-gateway"}[5m])
+            rate(http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",handler=~"/v(1|2)/chat/.*",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status!~"4xx|5xx",type="ai-gateway"}[5m])
           )
         )
       runbook: docs/ai-gateway/README.md
@@ -2392,7 +2392,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,region,le) (
-            rate(http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",handler=~"/v1/chat/.*|/v1/chat/{chat_invokable}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status!~"4xx|5xx",type="ai-gateway"}[5m])
+            rate(http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",handler=~"/v(1|2)/chat/.*",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status!~"4xx|5xx",type="ai-gateway"}[5m])
           )
         )
       runbook: docs/ai-gateway/README.md
@@ -2442,7 +2442,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(http_request_duration_seconds_count{environment="{{ $labels.environment }}",handler=~"/v1/chat/.*|/v1/chat/{chat_invokable}",stage="{{ $labels.stage }}",status="5xx",type="ai-gateway"}[5m])
+          rate(http_request_duration_seconds_count{environment="{{ $labels.environment }}",handler=~"/v(1|2)/chat/.*",stage="{{ $labels.stage }}",status="5xx",type="ai-gateway"}[5m])
         )
       runbook: docs/ai-gateway/README.md
     labels:
@@ -2491,7 +2491,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(http_request_duration_seconds_count{environment="{{ $labels.environment }}",handler=~"/v1/chat/.*|/v1/chat/{chat_invokable}",stage="{{ $labels.stage }}",status="5xx",type="ai-gateway"}[5m])
+          rate(http_request_duration_seconds_count{environment="{{ $labels.environment }}",handler=~"/v(1|2)/chat/.*",stage="{{ $labels.stage }}",status="5xx",type="ai-gateway"}[5m])
         )
       runbook: docs/ai-gateway/README.md
     labels:
@@ -2542,7 +2542,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage,region) (
-          rate(http_request_duration_seconds_count{environment="{{ $labels.environment }}",handler=~"/v1/chat/.*|/v1/chat/{chat_invokable}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status="5xx",type="ai-gateway"}[5m])
+          rate(http_request_duration_seconds_count{environment="{{ $labels.environment }}",handler=~"/v(1|2)/chat/.*",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status="5xx",type="ai-gateway"}[5m])
         )
       runbook: docs/ai-gateway/README.md
     labels:
@@ -2593,7 +2593,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage,region) (
-          rate(http_request_duration_seconds_count{environment="{{ $labels.environment }}",handler=~"/v1/chat/.*|/v1/chat/{chat_invokable}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status="5xx",type="ai-gateway"}[5m])
+          rate(http_request_duration_seconds_count{environment="{{ $labels.environment }}",handler=~"/v(1|2)/chat/.*",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status="5xx",type="ai-gateway"}[5m])
         )
       runbook: docs/ai-gateway/README.md
     labels:
