@@ -16,6 +16,7 @@
 
 ## Troubleshooting Pointers
 
+* [Privileged Access Management](privileged_access_management.md)
 * [../uncategorized/subnet-allocations.md](../uncategorized/subnet-allocations.md)
 <!-- END_MARKER -->
 
