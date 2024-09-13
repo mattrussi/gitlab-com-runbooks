@@ -1,7 +1,7 @@
 local watcher = import 'watcher.libsonnet';
 
 watcher.percentileThresholdAlert(
-  title='Sidekiq p95 Main Primary DB query duration per Endpoint',
+  title='Sidekiq Main Primary DB p95 query duration per Endpoint',
   identifier=std.thisFile,
   scheduleHours=24,
   schedule={ daily: { at: '03:02' } },
