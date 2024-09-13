@@ -100,5 +100,15 @@ basic.dashboard(
       legendFormat='__auto',
       linewidth=1,
     ),
+    basic.heatmap(
+      title='Size of the Redis I/O batch',
+      query='sum by (le) (rate(registry_async_submission_batch_size_bucket{%s}[$__rate_interval]))' % selectorString,
+      dataFormat='tsbuckets',
+      yAxis_format='',
+      color_cardColor='#0000ff',
+      color_colorScheme='Spectral',
+      color_mode='spectrum',
+      legendFormat='__auto',
+    ),
   ], cols=3, rowHeight=10)
 )
