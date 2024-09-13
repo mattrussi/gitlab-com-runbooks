@@ -21,6 +21,8 @@ basic.dashboard(
       query='sum by (le) (rate(tunnel_routing_duration_seconds_bucket{%s, status="success"}[$__rate_interval]))' % selectorString,
       dataFormat='tsbuckets',
       color_cardColor='#00ff00',
+      color_colorScheme='Spectral',
+      color_mode='spectrum',
       legendFormat='__auto',
     ),
     basic.heatmap(
@@ -29,6 +31,8 @@ basic.dashboard(
       query='sum by (le) (rate(tunnel_routing_duration_seconds_bucket{%s, status="aborted"}[$__rate_interval]))' % selectorString,
       dataFormat='tsbuckets',
       color_cardColor='#0000ff',
+      color_colorScheme='Spectral',
+      color_mode='spectrum',
       legendFormat='__auto',
     ),
     basic.timeseries(
@@ -83,6 +87,8 @@ basic.dashboard(
       query='sum by (le) (rate(registry_async_submission_duration_seconds_bucket{%s}[$__rate_interval]))' % selectorString,
       dataFormat='tsbuckets',
       color_cardColor='#0000ff',
+      color_colorScheme='Spectral',
+      color_mode='spectrum',
       legendFormat='__auto',
     ),
     basic.timeseries(
