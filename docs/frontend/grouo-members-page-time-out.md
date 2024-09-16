@@ -10,4 +10,4 @@ It could happen that the Members page times out, fails  to render and returns a 
 
 ## Mitigation
 
-Enable the `avoid_exposing_member_is_using_seat` at the root Namespace level to mitigate the problem.
+Enable the `avoid_exposing_member_is_using_seat` feature flag at the root Namespace level to mitigate the problem.
