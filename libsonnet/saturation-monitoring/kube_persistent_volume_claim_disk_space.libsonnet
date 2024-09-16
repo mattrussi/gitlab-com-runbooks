@@ -1,5 +1,6 @@
 local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local resourceSaturationPoint = metricsCatalog.resourceSaturationPoint;
+local selectors = import 'promql/selectors.libsonnet';
 
 {
   kube_persistent_volume_claim_disk_space: resourceSaturationPoint({
@@ -29,6 +30,21 @@ local resourceSaturationPoint = metricsCatalog.resourceSaturationPoint;
     slos: {
       soft: 0.85,
       hard: 0.90,
+    },
+    capacityPlanning: {
+      saturation_dimensions: [
+        { label: 'zoekt', selector: selectors.serializeHash({ persistentvolumeclaim: { re: 'zoekt-.*' } }) },
+        { label: 'fluentd', selector: selectors.serializeHash({ persistentvolumeclaim: { re: 'fluentd-.*' } }) },
+        { label: 'prom-agent', selector: selectors.serializeHash({ persistentvolumeclaim: { re: 'prom-agent-.*' } }) },
+        { label: 'redis-pubsub', selector: selectors.serializeHash({ persistentvolumeclaim: { re: 'redis-data-redis-pubsub-.*' } }) },
+        { label: 'redis-registry', selector: selectors.serializeHash({ persistentvolumeclaim: { re: 'redis-data-redis-registry-.*' } }) },
+        { label: 'consul', selector: selectors.serializeHash({ persistentvolumeclaim: { re: 'data-consul-.*' } }) },
+      ] + [
+        {
+          label: 'others',
+          selector: selectors.serializeHash({ persistentvolumeclaim: { nre: 'zoekt-.*|fluentd-.*|prom-agent-.*|redis-data-redis-pubsub-.*|redis-data-redis-registry-.*|data-consul-.*' } }),
+        },
+      ],
     },
   }),
 }
