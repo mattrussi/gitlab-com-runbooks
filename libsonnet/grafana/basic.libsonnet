@@ -314,9 +314,11 @@ local validateTags(tags) =
     intervalFactor=1,
     legend_show=false,
     yAxis_format='s',
+    color_mode='opacity',
     stableId=null,
     dataFormat='timeseries',
     color_cardColor='#b4ff00',
+    color_colorScheme='interpolateOranges',
     hideZeroBuckets=true,
     datasource='$PROMETHEUS_DS',
   )::
@@ -326,8 +328,9 @@ local validateTags(tags) =
       datasource=datasource,
       legend_show=legend_show,
       yAxis_format=yAxis_format,
-      color_mode='opacity',
+      color_mode=color_mode,
       color_cardColor=color_cardColor,
+      color_colorScheme=color_colorScheme,
       dataFormat=dataFormat,
       hideZeroBuckets=hideZeroBuckets
     )

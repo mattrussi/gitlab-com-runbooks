@@ -28,6 +28,8 @@ basic.dashboard(
           )' % selectorString,
           dataFormat='tsbuckets',
           color_cardColor='#00ff00',
+          color_colorScheme='Spectral',
+          color_mode='spectrum',
           legendFormat='__auto',
         ),
         basic.heatmap(
@@ -38,6 +40,8 @@ basic.dashboard(
           )' % selectorString,
           dataFormat='tsbuckets',
           color_cardColor='#ff0000',
+          color_colorScheme='Spectral',
+          color_mode='spectrum',
           legendFormat='__auto',
         ),
 
@@ -49,6 +53,8 @@ basic.dashboard(
           )' % selectorString,
           dataFormat='tsbuckets',
           color_cardColor='#00ff00',
+          color_colorScheme='Spectral',
+          color_mode='spectrum',
           legendFormat='__auto',
         ),
         basic.heatmap(
@@ -59,6 +65,8 @@ basic.dashboard(
           )' % selectorString,
           dataFormat='tsbuckets',
           color_cardColor='#ff0000',
+          color_colorScheme='Spectral',
+          color_mode='spectrum',
           legendFormat='__auto',
         ),
 
@@ -70,6 +78,8 @@ basic.dashboard(
           )' % selectorString,
           dataFormat='tsbuckets',
           color_cardColor='#00ff00',
+          color_colorScheme='Spectral',
+          color_mode='spectrum',
           legendFormat='__auto',
         ),
         basic.heatmap(
@@ -80,6 +90,8 @@ basic.dashboard(
           )' % selectorString,
           dataFormat='tsbuckets',
           color_cardColor='#ff0000',
+          color_colorScheme='Spectral',
+          color_mode='spectrum',
           legendFormat='__auto',
         ),
 
@@ -168,7 +180,7 @@ basic.dashboard(
           title='Running version',
           description='Running version of kas',
           query=|||
-            count by (version, stage) (gitlab_build_info{%s})
+            count by (git_ref, stage) (gitlab_build_info{%s})
           ||| % envSelectorString,
           yAxisLabel='pods',
           legend_show=false,
