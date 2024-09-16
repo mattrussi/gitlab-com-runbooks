@@ -14,8 +14,6 @@ AMTOOL_PATH=$(dir $(AMTOOL))
 JSONET_COMMAND = $(shell which jsonnetfmt || (which jsonnet && echo " fmt"))
 PROMTOOL_COMMAND = $(shell which promtool || echo "/prometheus/promtool")
 
-PROM_RULE_FILES = $(shell find legacy-prometheus-rules \( -name "*.yml" -o -name "*.yaml" \) -type f)
-
 SHELLCHECK_FLAGS := -e SC1090,SC1091,SC2002
 
 .PHONY: help
@@ -74,9 +72,6 @@ validate-service-dashboards:
 .PHONY: validate-prom-rules
 validate-prom-rules:
 	./scripts/validate-recording-rule-groups
-	@$(PROMTOOL_COMMAND) check rules $(PROM_RULE_FILES)
-	# Prometheus config checks are stricter than rules checks, so use a fake config to check this too
-	$(PROMTOOL_COMMAND) check config scripts/prometheus.yml
 
 .PHONY: validate-kibana-urls
 validate-kibana-urls:

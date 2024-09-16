@@ -18,13 +18,6 @@ class Validator
   # Validates Prometheus and Mimir rules
   # Returns true if validation succeeded
   def validate
-    # Check Prometheus rules
-    directory_path = File.join(__dir__, "..", "legacy-prometheus-rules")
-    alert_files = Dir.glob(File.join(directory_path, "**", "*.{yml,yaml}"))
-    alert_files.each do |file|
-      validate_file File.expand_path(file)
-    end
-
     # Check Mimir rules
     directory_path = File.join(__dir__, "..", "mimir-rules")
     mimir_alert_files = Dir.glob(File.join(directory_path, "**", "*.{yml,yaml}"))
