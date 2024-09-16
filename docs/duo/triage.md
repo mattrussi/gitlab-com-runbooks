@@ -152,7 +152,7 @@ The `Authorization` header did not include a JWT at all or it was not well-forme
 The `Authorization` header included a well-formed JWT, but its expiration date is in the past.
 
 - **Identified by:** Response payload is `Forbidden by auth provider` and [log events](https://log.gprd.gitlab.net/app/r/s/jfMlg) exist
-  with `exception_class: ExpiredSignatureError` and `message: Signature has expired`.
+  with `exception_class: ExpiredSignatureError` and `message: Signature has expired`. If the request is from a self-managed/Dedicated instance, inspect token expiration dates of the [instance's CDot sync logs](https://log.gprd.gitlab.net/app/r/s/7RCOF).
 - **Solution:** Self-managed instances should refresh their token by [manually synchronizing their subscription](https://docs.gitlab.com/ee/subscriptions/self_managed/index.html#synchronize-your-subscription). Should never happen on gitlab.com since we self-issue tokens for every request here.
 
 #### Cause: JWT access token signature invalid
@@ -186,7 +186,7 @@ A mandatory Cloud Connector header field was not sent by the client.
 
 The caller is accessing an endpoint with a token that lacks the permission to do so.
 
-- **Identified by:** [Log events](https://log.gprd.gitlab.net/app/r/s/rF5as) exist with `http_exception_details: 403: Unauthorized to access <feature>`.
+- **Identified by:** [Log events](https://log.gprd.gitlab.net/app/r/s/rF5as) exist with `http_exception_details: 403: Unauthorized to access <feature>`. If the request is from a self-managed/Dedicated instance, inspect token scopes of the [instance's CDot sync logs](https://log.gprd.gitlab.net/app/r/s/o1e3K).
 - **Solution:** Endpoint permissions map to JWT token `scopes`, which are in turn mapped to Unit Primitives ("features"). There are several reasons why this might fail:
   - The token is outdated and its `scopes` claim is missing features that were recently acquired. This can only happen on self-managed instances that sync with CDot. Refresh the token by [resynchronizing your subscription](https://docs.gitlab.com/ee/subscriptions/self_managed/#manually-synchronize-subscription-data).
   - The token is current, but it isn't being granted the necessary `scopes` to begin with. Consult the [Cloud Connector developer docs](https://docs.gitlab.com/ee/development/cloud_connector/) to make sure the feature is mapping Unit Primitives correctly to add-ons and/or license tiers since otherwise, they won't be included in access tokens.

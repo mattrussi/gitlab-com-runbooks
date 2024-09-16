@@ -49,7 +49,8 @@ Self-managed customers are _not_ expected to set this variable.
 
 #### Dashboards
 
-- [Cloudflare service dashboard (`cloud_gitlab_zone`)](https://dashboards.gitlab.net/d/cloudflare-main/cloudflare3a-overview)
+- [Cloudflare dashboard](https://dash.cloudflare.com/852e9d53d0f8adbd9205389356f2303d/cloud.gitlab.com)
+- [Grafana Cloudflare dashboard for `cloud_gitlab_zone`](https://dashboards.gitlab.net/d/cloudflare-main/cloudflare3a-overview)
 
 #### Alerts
 
@@ -57,8 +58,12 @@ Self-managed customers are _not_ expected to set this variable.
 
 #### Edge logs
 
-We don't currently store persistent logs. See https://gitlab.com/groups/gitlab-org/-/epics/14573.
-Until then, you can use Cloudflare [Instant Logs](https://dash.cloudflare.com/852e9d53d0f8adbd9205389356f2303d/cloud.gitlab.com/analytics/instant-logs) to monitor traffic.
+We don't yet store persistent logs at GitLab (see https://gitlab.com/gitlab-org/gitlab/-/issues/473983).
+
+Until then, you can use these Cloudflare features to observe Cloud Connector edge traffic:
+
+- [Instant Logs](https://dash.cloudflare.com/852e9d53d0f8adbd9205389356f2303d/cloud.gitlab.com/analytics/instant-logs) to monitor live traffic.
+- [Log Explorer](https://dash.cloudflare.com/852e9d53d0f8adbd9205389356f2303d/cloud.gitlab.com/analytics/log-explorer) to query historic logs using an SQL-like query language.
 
 ### Routing
 
@@ -104,6 +109,10 @@ flowchart LR
 ```
 
 The rate limits enforced in Cloudflare are specified per backend and can be classified as follows.
+
+#### Rate limit events
+
+You can observe WAF events for custom rate limit rules [here](https://dash.cloudflare.com/852e9d53d0f8adbd9205389356f2303d/cloud.gitlab.com/security/events?service=ratelimit).
 
 #### Kinds of rate limits
 
