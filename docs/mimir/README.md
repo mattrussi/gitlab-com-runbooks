@@ -22,6 +22,7 @@
 * [Auditing Metrics](auditing-metrics.md)
 * [Cardinality Management](cardinality-management.md)
 * [Mimir Onboarding](getting-started.md)
+* [Alerting](../monitoring/alerts_manual.md)
 * [Mixins](../monitoring/mixins.md)
 * [High Number of Pending or Failed Outgoing Webhook Notifications](../registry/webhook-notifications.md)
 <!-- END_MARKER -->

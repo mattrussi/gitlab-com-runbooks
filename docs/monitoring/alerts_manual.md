@@ -116,12 +116,12 @@ Alerts raised by Prometheus, as defined by alert rules, are sent to alertmanager
 
 ### Manual alerts
 
-1. Create a new file in [`/legacy-prometheus-rules`](../../legacy-prometheus-rules) or add to an existing one.
+1. Create a new file in [`/mimir-rules/<tenant>`](../../mimir-rules) or add to an existing one.
 1. Add the appropriate [fields](#fields)
     1. Add `team` label if you want it routed to a specific Slack channel for a product team.
     1. Add [severity](https://about.gitlab.com/handbook/engineering/infrastructure/incident-management/#severities) (`severity: s2`/`severity: s1`) & `pager: pagerduty` if you want it to page the on-call.
 
-Example: [registry queue](../../legacy-prometheus-rules/registry-gc-queues.yml)
+Example: [registry queue](../../mimir-rules/gitlab-ops/alertman)
 
 ### Templating alerts
 
@@ -129,11 +129,11 @@ Sometimes you need to template alerts, and tie them with our [metric
 catalog](../../metrics-catalog/README.md). Writing them
 [manually](#manual-alerts) might not be ideal.
 
-1. Create a new jsonnet file in [`/legacy-prometheus-rules-jsonnet`](../../legacy-prometheus-rules-jsonnet)
+1. Create a new jsonnet file in [`/mimir-rules-jsonnet`](../../mimir-rules-jsonnet)
 1. Add a new alert
 1. Run `make generate`
 
-Example: [patroni alerts](../../legacy-prometheus-rules-jsonnet/patroni-cause-alerts.jsonnet)
+Example: [patroni alerts](../../mimir-rules-jsonnet/patroni-cause-alerts.jsonnet)
 
 ## Where to find things
 
@@ -188,7 +188,7 @@ To create one, navigate to <https://alerts.gitlab.net/#/silences> and add a sile
 
 ## References
 
-* [Alertmanager configuration](../../legacy-prometheus-rules/README.md)
+* [Alertmanager configuration](../../alertmanager/README.md)
 * [Prometheus template source code](https://github.com/prometheus/prometheus/blob/master/template/template.go#L115)
 * [Prometheus default alert manager expansion template](https://github.com/prometheus/alertmanager/blob/master/template/default.tmpl)
 * [Go text/template documentation](https://golang.org/pkg/text/template/)
