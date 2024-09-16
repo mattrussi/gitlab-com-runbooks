@@ -1,0 +1,32 @@
+# Runner Managers
+
+## Overview
+
+The Runner Manager fleet are responsible for creating ephemeral runners used to carry out CI jobs for GitLab.com.
+
+The Runner Manager fleet uses a blue/green deployment strategy that can be leveraged to apply security patches to the set of instances that are not currently active without disruption to service.
+
+## Lead Time
+
+Because there should always be an inactive set of runner instances, there should be minimal lead time required to begin patching these systems.
+
+## Process
+
+See [Linux Patching Overview](../linux-os-patching.md#linux-patching-overview) for generic processes applied to all Linux systems.
+
+We will take advantage of the Runner Manager's blue/green deployment to apply patches to the currently inactive color, make them active, then apply patches to the color that was removed from active service.
+
+- Identify the currently inactive color
+  - Select the current shard on the [ci-runners: Deployment overview](https://dashboards.gitlab.net/d/ci-runners-deployment/ci-runners3a-deployment-overview?orgId=1) dashboard. The ***active*** color will appear in the deployment column of the `GitLab Runner Versions` panel.
+- Initiate package updates across these nodes.
+- Reboot
+- Perform a deployment to make this color active.
+- Wait for the now-inactive color to completely drain.
+  - You can use this [Prometheus query](https://dashboards.gitlab.net/explore?schemaVersion=1&panes=%7B%22wm9%22:%7B%22datasource%22:%22mimir-gitlab-gprd%22,%22queries%22:%5B%7B%22refId%22:%22A%22,%22expr%22:%22sum%28gitlab_runner_jobs%29%20by%20%28deployment,%20shard%29%22,%22range%22:true,%22instant%22:true,%22datasource%22:%7B%22type%22:%22prometheus%22,%22uid%22:%22mimir-gitlab-gprd%22%7D,%22editorMode%22:%22code%22,%22legendFormat%22:%22__auto%22%7D%5D,%22range%22:%7B%22from%22:%22now-1h%22,%22to%22:%22now%22%7D%7D%7D&orgId=1) to help determine when the inactive color of a given shard is no longer processing jobs.
+- Patch and reboot these instances.
+
+## Additional Automation Tooling
+
+No targeted automation exists currently.
+
+The current deployment process does automatically swap the active color on each deployment, this could likely be extended to include system reboots on the instances before making them active to achieve automation here.
