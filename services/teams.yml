@@ -143,6 +143,11 @@ teams:
   label: team::Scalability-Practices
   slack_alerts_channel: g_scalability-practices
 
+- name: runway
+  label: team::Scalability-Practices
+  send_slo_alerts_to_team_slack_channel: true
+  slack_alerts_channel: f_runway_alerts
+
 - name: scalability:observability
   url: https://about.gitlab.com/handbook/engineering/infrastructure/team/scalability/#scalabilityobservability
   manager: lmcandrew
