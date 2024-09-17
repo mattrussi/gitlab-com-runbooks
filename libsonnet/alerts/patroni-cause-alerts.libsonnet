@@ -225,11 +225,7 @@ local rules(extraSelector={}, tenant=null) = {
               for more than 10m. This could lead to dead-tuples and performance degradation in our Patroni fleet.
 
               Ideally, no transaction should remain open for more than a few seconds.
-
-              <%(kibanaUrl)s|Check the slowlog for changes in the usual trends>.
-            ||| % {
-              kibanaUrl: elasticsearchLinks.buildElasticLineCountVizURL('postgres', [], splitSeries=true, timeRange=''),
-            },
+            |||,
             grafana_dashboard_id: 'alerts-long_running_transactions/alerts-long-running-transactions',
             grafana_min_zoom_hours: '6',
             grafana_variables: 'environment',
