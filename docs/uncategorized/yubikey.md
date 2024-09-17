@@ -33,11 +33,11 @@ You'll be using the following tooling:
       ssh-add -L | grep YubiKey >~/.ssh/id_ecdsa_yubikey.pub
       ```
 
-   1. [Configure Git to use your SSH key for signing](https://docs.gitlab.com/ee/user/project/repository/ssh_signed_commits/#configure-git-to-sign-commits-with-your-ssh-key), referencing the file created above.
+   1. [Configure Git to use your SSH key for signing](https://docs.gitlab.com/ee/user/project/repository/signed_commits/ssh.html#configure-git-to-sign-commits-with-your-ssh-key), referencing the file created above.
    1. Add the SSH key to your GitLab profile:
-      * [gitlab.com](https://gitlab.com/-/profile/keys)
-      * [ops.gitlab.net](https://ops.gitlab.net/-/profile/keys)
-      * [dev.gitlab.org](https://dev.gitlab.org/-/profile/keys)
+      * [gitlab.com](https://gitlab.com/-/user_settings/ssh_keys)
+      * [ops.gitlab.net](https://ops.gitlab.net/-/user_settings/ssh_keys)
+      * [dev.gitlab.org](https://dev.gitlab.org/-/user_settings/ssh_keys/)
 
 1. Enable 2FA with the Yubikey for your favorite services, e.g.:
    * GitLab
