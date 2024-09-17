@@ -30,5 +30,12 @@ local resourceSaturationPoint = metricsCatalog.resourceSaturationPoint;
       soft: 0.85,
       hard: 0.90,
     },
+    capacityPlanning: {
+      saturation_dimension_dynamic_lookup_query: |||
+        sum by(persistentvolumeclaim) (
+          last_over_time(kubelet_volume_stats_used_bytes[1w])
+        )
+      |||,
+    },
   }),
 }
