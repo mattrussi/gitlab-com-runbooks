@@ -1309,7 +1309,7 @@ services:
         grafana_folder: thanos
         primary_grafana_dashboard: thanos-main/thanos-overview
 
-  - name: topology-rest-55gfgv
+  - name: topology-rest
     tier: sv
     friendly_name: Topology Service Rest
     label: TopologyServiceRest

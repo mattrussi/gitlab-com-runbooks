@@ -3,7 +3,7 @@ local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 
 metricsCatalog.serviceDefinition(
   runwayArchetype(
-    type='topology-rest-55gfgv',
+    type='topology-rest',
     team='tenant_scale',
     regional=true
   )

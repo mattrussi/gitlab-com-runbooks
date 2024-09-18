@@ -7,7 +7,7 @@
 # Topology Service Rest
 
 * [Service Overview](https://dashboards.gitlab.net/d/topology-service-main/topology-service-overview)
-* **Alerts**: <https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22topology-rest-55gfgv%22%2C%20tier%3D%22sv%22%7D>
+* **Alerts**: <https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22topology-rest%22%2C%20tier%3D%22sv%22%7D>
 * **Label**: gitlab-com/gl-infra/production~"Service::TopologyServiceRest"
 
 ## Logging
