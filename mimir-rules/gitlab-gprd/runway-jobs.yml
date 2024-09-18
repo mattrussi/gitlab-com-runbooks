@@ -13,4 +13,4 @@ groups:
     annotations:
       grafana_datasource_id: mimir-gitlab-gprd
       description: Runway Job execution failed for {{ $labels.type }}
-      title: Runway Job Failed
+      title: Runway Job Execution Failure
