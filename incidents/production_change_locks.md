@@ -6,9 +6,9 @@ This is a runbook for the steps to take to put a PCL in place.
 
 ### Who to consult
 
-1. Check with the release managers to confirm the state of the monthly release or any security releases.
+1. Check with the @release-managers in the #releases Slack channel to confirm the state of the monthly release or any security releases.
 2. Check with security if there are any imminent security patches that release managers may not be notified of yet.
-3. Check with the IM Coordinator and the EOC Coordinator to see if there are any concerns.
+3. Check with @incident-managers and @sre-oncall in the Slack #production channel to see if there are any concerns.
 
 ### Steps to put the PCL in place
 
@@ -17,7 +17,8 @@ This is a runbook for the steps to take to put a PCL in place.
 3. Add a CR ([see example](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/18551)) that will block deployments and feature flags.
    1. On the CR, notify the release managers who will be on duty during this period.
    2. If needed, get advance written confirmation on the CR issue in a comment as to who has permission to approve exempt changes during the PCL. 
-
+ 
+In case of the need to deploy or execute Post Deployment Migrations during a PCL, Release Managers will open a CR (examples: [deployment CR](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/17150), [PDM CR](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/17152)) to track the deployment. SRE On Call approval, Sr. Director+ of Infrastructure (or designated) is needed for each deployment CR. More details in [Release Docs](https://gitlab.com/gitlab-org/release/docs/-/blob/master/release_manager/pcl-guide.md)
 When these are merged:
 
 1. Put a message in the `#cto` Slack channel that the PCL is in place and cross post this to the other relevant Slack channels.
