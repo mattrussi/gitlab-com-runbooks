@@ -42,10 +42,6 @@ local serviceDefinition(service) =
   local definition = metricsCatalog.getService(service);
   local shards = std.get(definition, 'shards');
   {
-    // The shards field can be dropped after the shard mapping is not in use as a custom dimension
-    // and the saturation_dimensions from capacityPlanning is being fully used instead.
-    // TODO: https://gitlab.com/gitlab-com/gl-infra/tamland/-/issues/184
-    [if shards != null then 'shards']: shards,
     capacityPlanning: definition.capacityPlanning,
     overviewDashboard: dashboard.overviewDashboard(service),
     resourceDashboard: resourceDashboardPerComponent(service),
@@ -99,24 +95,6 @@ local saturationPoints = {
   },
   services: services(uniqServices(saturation)),
   saturationPoints: saturationPoints,
-  shardMapping: {
-    sidekiq: sidekiqHelpers.shards.listByName(),
-    'ci-runners': [
-      'private',
-      'shared-gitlab-org',
-      'saas-linux-small-amd64',
-      'saas-linux-medium-amd64',
-      'saas-linux-medium-arm64',
-      'saas-linux-medium-amd64-gpu-standard',
-      'saas-linux-large-amd64',
-      'saas-linux-large-arm64',
-      'saas-linux-xlarge-amd64',
-      'saas-linux-2xlarge-amd64',
-      'saas-macos-medium-m1',
-      'saas-macos-large-m2pro',
-      'windows-shared',
-    ],
-  },
   teams: serviceCatalog.getRawCatalogTeams(),
   report: {
     pages: [
