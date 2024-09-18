@@ -1,0 +1,16 @@
+groups:
+- name: runway-jobs.rules
+  rules:
+  - alert: RunwayJobFailure
+    expr: |
+      sum by (type) (
+        clamp_min(stackdriver_cloud_run_job_run_googleapis_com_job_completed_execution_count{env="gprd", result="failed"}, 1)
+      ) > 0
+    labels:
+      severity: s4
+      alert_type: symptom
+      team: runway
+    annotations:
+      grafana_datasource_id: mimir-gitlab-gprd
+      description: Runway Job execution failed for {{ $labels.type }}
+      title: Runway Job Execution Failure
