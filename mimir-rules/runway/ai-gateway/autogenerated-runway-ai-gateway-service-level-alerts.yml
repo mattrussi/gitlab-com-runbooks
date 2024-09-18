@@ -28,7 +28,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
-            rate(inference_request_duration_seconds_bucket{environment="{{ $labels.environment }}",error="no",stage="{{ $labels.stage }}",streaming="no",type="ai-gateway"}[5m])
+            rate(inference_request_duration_seconds_bucket{environment="{{ $labels.environment }}",error="no",model_engine="anthropic",stage="{{ $labels.stage }}",streaming="no",type="ai-gateway"}[5m])
           )
         )
       runbook: docs/ai-gateway/README.md
@@ -36,6 +36,7 @@ groups:
       aggregation: component
       alert_class: slo_violation
       alert_type: symptom
+      confidence: 98%
       feature_category: in_source_metrics
       pager: pagerduty
       rules_domain: general
@@ -47,12 +48,12 @@ groups:
     expr: |
       (
         (
-          gitlab_component_apdex:ratio_1h{component="inference_anthropic",monitor="global",type="ai-gateway"}
+          gitlab_component_apdex:confidence:ratio_1h{component="inference_anthropic",confidence="98%",monitor="global",type="ai-gateway"}
           < (1 - 14.4 * 0.020000)
         )
         and
         (
-          gitlab_component_apdex:ratio_5m{component="inference_anthropic",monitor="global",type="ai-gateway"}
+          gitlab_component_apdex:confidence:ratio_5m{component="inference_anthropic",confidence="98%",monitor="global",type="ai-gateway"}
           < (1 - 14.4 * 0.020000)
         )
       )
@@ -84,7 +85,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
-            rate(inference_request_duration_seconds_bucket{environment="{{ $labels.environment }}",error="no",stage="{{ $labels.stage }}",streaming="no",type="ai-gateway"}[5m])
+            rate(inference_request_duration_seconds_bucket{environment="{{ $labels.environment }}",error="no",model_engine="anthropic",stage="{{ $labels.stage }}",streaming="no",type="ai-gateway"}[5m])
           )
         )
       runbook: docs/ai-gateway/README.md
@@ -92,6 +93,7 @@ groups:
       aggregation: component
       alert_class: slo_violation
       alert_type: symptom
+      confidence: 98%
       feature_category: in_source_metrics
       pager: pagerduty
       rules_domain: general
@@ -103,12 +105,12 @@ groups:
     expr: |
       (
         (
-          gitlab_component_apdex:ratio_6h{component="inference_anthropic",monitor="global",type="ai-gateway"}
+          gitlab_component_apdex:confidence:ratio_6h{component="inference_anthropic",confidence="98%",monitor="global",type="ai-gateway"}
           < (1 - 6 * 0.020000)
         )
         and
         (
-          gitlab_component_apdex:ratio_30m{component="inference_anthropic",monitor="global",type="ai-gateway"}
+          gitlab_component_apdex:confidence:ratio_30m{component="inference_anthropic",confidence="98%",monitor="global",type="ai-gateway"}
           < (1 - 6 * 0.020000)
         )
       )
@@ -142,7 +144,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,region,le) (
-            rate(inference_request_duration_seconds_bucket{environment="{{ $labels.environment }}",error="no",region="{{ $labels.region }}",stage="{{ $labels.stage }}",streaming="no",type="ai-gateway"}[5m])
+            rate(inference_request_duration_seconds_bucket{environment="{{ $labels.environment }}",error="no",model_engine="anthropic",region="{{ $labels.region }}",stage="{{ $labels.stage }}",streaming="no",type="ai-gateway"}[5m])
           )
         )
       runbook: docs/ai-gateway/README.md
@@ -200,7 +202,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,region,le) (
-            rate(inference_request_duration_seconds_bucket{environment="{{ $labels.environment }}",error="no",region="{{ $labels.region }}",stage="{{ $labels.stage }}",streaming="no",type="ai-gateway"}[5m])
+            rate(inference_request_duration_seconds_bucket{environment="{{ $labels.environment }}",error="no",model_engine="anthropic",region="{{ $labels.region }}",stage="{{ $labels.stage }}",streaming="no",type="ai-gateway"}[5m])
           )
         )
       runbook: docs/ai-gateway/README.md
@@ -261,6 +263,7 @@ groups:
       aggregation: component
       alert_class: slo_violation
       alert_type: symptom
+      confidence: 98%
       feature_category: in_source_metrics
       pager: pagerduty
       rules_domain: general
@@ -272,12 +275,12 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_1h{component="inference_anthropic",monitor="global",type="ai-gateway"}
+          gitlab_component_errors:confidence:ratio_1h{component="inference_anthropic",confidence="98%",monitor="global",type="ai-gateway"}
           > (14.4 * 0.020000)
         )
         and
         (
-          gitlab_component_errors:ratio_5m{component="inference_anthropic",monitor="global",type="ai-gateway"}
+          gitlab_component_errors:confidence:ratio_5m{component="inference_anthropic",confidence="98%",monitor="global",type="ai-gateway"}
           > (14.4 * 0.020000)
         )
       )
@@ -314,6 +317,7 @@ groups:
       aggregation: component
       alert_class: slo_violation
       alert_type: symptom
+      confidence: 98%
       feature_category: in_source_metrics
       pager: pagerduty
       rules_domain: general
@@ -325,12 +329,12 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_6h{component="inference_anthropic",monitor="global",type="ai-gateway"}
+          gitlab_component_errors:confidence:ratio_6h{component="inference_anthropic",confidence="98%",monitor="global",type="ai-gateway"}
           > (6 * 0.020000)
         )
         and
         (
-          gitlab_component_errors:ratio_30m{component="inference_anthropic",monitor="global",type="ai-gateway"}
+          gitlab_component_errors:confidence:ratio_30m{component="inference_anthropic",confidence="98%",monitor="global",type="ai-gateway"}
           > (6 * 0.020000)
         )
       )
@@ -456,7 +460,7 @@ groups:
       description: |
         Inferences to the vertex-ai engines used by the AI-gateway.
 
-        Apdex applies to non-streaming inferences, they are considered fast enough when the request took less than 30s. Errors don't count toward apdex
+        Apdex applies to non-streaming inferences, they are considered fast enough when the request took less than 2s. Errors don't count toward apdex
 
         A failure means an inference threw an error, for example when the model is not available.
 
@@ -472,7 +476,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
-            rate(inference_request_duration_seconds_bucket{environment="{{ $labels.environment }}",error="no",stage="{{ $labels.stage }}",streaming="no",type="ai-gateway"}[5m])
+            rate(inference_request_duration_seconds_bucket{environment="{{ $labels.environment }}",error="no",model_engine="vertex-ai",stage="{{ $labels.stage }}",streaming="no",type="ai-gateway"}[5m])
           )
         )
       runbook: docs/ai-gateway/README.md
@@ -480,6 +484,7 @@ groups:
       aggregation: component
       alert_class: slo_violation
       alert_type: symptom
+      confidence: 98%
       feature_category: in_source_metrics
       pager: pagerduty
       rules_domain: general
@@ -491,12 +496,12 @@ groups:
     expr: |
       (
         (
-          gitlab_component_apdex:ratio_1h{component="inference_vertex",monitor="global",type="ai-gateway"}
+          gitlab_component_apdex:confidence:ratio_1h{component="inference_vertex",confidence="98%",monitor="global",type="ai-gateway"}
           < (1 - 14.4 * 0.020000)
         )
         and
         (
-          gitlab_component_apdex:ratio_5m{component="inference_vertex",monitor="global",type="ai-gateway"}
+          gitlab_component_apdex:confidence:ratio_5m{component="inference_vertex",confidence="98%",monitor="global",type="ai-gateway"}
           < (1 - 14.4 * 0.020000)
         )
       )
@@ -512,7 +517,7 @@ groups:
       description: |
         Inferences to the vertex-ai engines used by the AI-gateway.
 
-        Apdex applies to non-streaming inferences, they are considered fast enough when the request took less than 30s. Errors don't count toward apdex
+        Apdex applies to non-streaming inferences, they are considered fast enough when the request took less than 2s. Errors don't count toward apdex
 
         A failure means an inference threw an error, for example when the model is not available.
 
@@ -528,7 +533,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
-            rate(inference_request_duration_seconds_bucket{environment="{{ $labels.environment }}",error="no",stage="{{ $labels.stage }}",streaming="no",type="ai-gateway"}[5m])
+            rate(inference_request_duration_seconds_bucket{environment="{{ $labels.environment }}",error="no",model_engine="vertex-ai",stage="{{ $labels.stage }}",streaming="no",type="ai-gateway"}[5m])
           )
         )
       runbook: docs/ai-gateway/README.md
@@ -536,6 +541,7 @@ groups:
       aggregation: component
       alert_class: slo_violation
       alert_type: symptom
+      confidence: 98%
       feature_category: in_source_metrics
       pager: pagerduty
       rules_domain: general
@@ -547,12 +553,12 @@ groups:
     expr: |
       (
         (
-          gitlab_component_apdex:ratio_6h{component="inference_vertex",monitor="global",type="ai-gateway"}
+          gitlab_component_apdex:confidence:ratio_6h{component="inference_vertex",confidence="98%",monitor="global",type="ai-gateway"}
           < (1 - 6 * 0.020000)
         )
         and
         (
-          gitlab_component_apdex:ratio_30m{component="inference_vertex",monitor="global",type="ai-gateway"}
+          gitlab_component_apdex:confidence:ratio_30m{component="inference_vertex",confidence="98%",monitor="global",type="ai-gateway"}
           < (1 - 6 * 0.020000)
         )
       )
@@ -568,7 +574,7 @@ groups:
       description: |
         Inferences to the vertex-ai engines used by the AI-gateway.
 
-        Apdex applies to non-streaming inferences, they are considered fast enough when the request took less than 30s. Errors don't count toward apdex
+        Apdex applies to non-streaming inferences, they are considered fast enough when the request took less than 2s. Errors don't count toward apdex
 
         A failure means an inference threw an error, for example when the model is not available.
 
@@ -586,7 +592,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,region,le) (
-            rate(inference_request_duration_seconds_bucket{environment="{{ $labels.environment }}",error="no",region="{{ $labels.region }}",stage="{{ $labels.stage }}",streaming="no",type="ai-gateway"}[5m])
+            rate(inference_request_duration_seconds_bucket{environment="{{ $labels.environment }}",error="no",model_engine="vertex-ai",region="{{ $labels.region }}",stage="{{ $labels.stage }}",streaming="no",type="ai-gateway"}[5m])
           )
         )
       runbook: docs/ai-gateway/README.md
@@ -626,7 +632,7 @@ groups:
       description: |
         Inferences to the vertex-ai engines used by the AI-gateway.
 
-        Apdex applies to non-streaming inferences, they are considered fast enough when the request took less than 30s. Errors don't count toward apdex
+        Apdex applies to non-streaming inferences, they are considered fast enough when the request took less than 2s. Errors don't count toward apdex
 
         A failure means an inference threw an error, for example when the model is not available.
 
@@ -644,7 +650,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,region,le) (
-            rate(inference_request_duration_seconds_bucket{environment="{{ $labels.environment }}",error="no",region="{{ $labels.region }}",stage="{{ $labels.stage }}",streaming="no",type="ai-gateway"}[5m])
+            rate(inference_request_duration_seconds_bucket{environment="{{ $labels.environment }}",error="no",model_engine="vertex-ai",region="{{ $labels.region }}",stage="{{ $labels.stage }}",streaming="no",type="ai-gateway"}[5m])
           )
         )
       runbook: docs/ai-gateway/README.md
@@ -684,7 +690,7 @@ groups:
       description: |
         Inferences to the vertex-ai engines used by the AI-gateway.
 
-        Apdex applies to non-streaming inferences, they are considered fast enough when the request took less than 30s. Errors don't count toward apdex
+        Apdex applies to non-streaming inferences, they are considered fast enough when the request took less than 2s. Errors don't count toward apdex
 
         A failure means an inference threw an error, for example when the model is not available.
 
@@ -705,6 +711,7 @@ groups:
       aggregation: component
       alert_class: slo_violation
       alert_type: symptom
+      confidence: 98%
       feature_category: in_source_metrics
       pager: pagerduty
       rules_domain: general
@@ -716,12 +723,12 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_1h{component="inference_vertex",monitor="global",type="ai-gateway"}
+          gitlab_component_errors:confidence:ratio_1h{component="inference_vertex",confidence="98%",monitor="global",type="ai-gateway"}
           > (14.4 * 0.020000)
         )
         and
         (
-          gitlab_component_errors:ratio_5m{component="inference_vertex",monitor="global",type="ai-gateway"}
+          gitlab_component_errors:confidence:ratio_5m{component="inference_vertex",confidence="98%",monitor="global",type="ai-gateway"}
           > (14.4 * 0.020000)
         )
       )
@@ -737,7 +744,7 @@ groups:
       description: |
         Inferences to the vertex-ai engines used by the AI-gateway.
 
-        Apdex applies to non-streaming inferences, they are considered fast enough when the request took less than 30s. Errors don't count toward apdex
+        Apdex applies to non-streaming inferences, they are considered fast enough when the request took less than 2s. Errors don't count toward apdex
 
         A failure means an inference threw an error, for example when the model is not available.
 
@@ -758,6 +765,7 @@ groups:
       aggregation: component
       alert_class: slo_violation
       alert_type: symptom
+      confidence: 98%
       feature_category: in_source_metrics
       pager: pagerduty
       rules_domain: general
@@ -769,12 +777,12 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_6h{component="inference_vertex",monitor="global",type="ai-gateway"}
+          gitlab_component_errors:confidence:ratio_6h{component="inference_vertex",confidence="98%",monitor="global",type="ai-gateway"}
           > (6 * 0.020000)
         )
         and
         (
-          gitlab_component_errors:ratio_30m{component="inference_vertex",monitor="global",type="ai-gateway"}
+          gitlab_component_errors:confidence:ratio_30m{component="inference_vertex",confidence="98%",monitor="global",type="ai-gateway"}
           > (6 * 0.020000)
         )
       )
@@ -790,7 +798,7 @@ groups:
       description: |
         Inferences to the vertex-ai engines used by the AI-gateway.
 
-        Apdex applies to non-streaming inferences, they are considered fast enough when the request took less than 30s. Errors don't count toward apdex
+        Apdex applies to non-streaming inferences, they are considered fast enough when the request took less than 2s. Errors don't count toward apdex
 
         A failure means an inference threw an error, for example when the model is not available.
 
@@ -845,7 +853,7 @@ groups:
       description: |
         Inferences to the vertex-ai engines used by the AI-gateway.
 
-        Apdex applies to non-streaming inferences, they are considered fast enough when the request took less than 30s. Errors don't count toward apdex
+        Apdex applies to non-streaming inferences, they are considered fast enough when the request took less than 2s. Errors don't count toward apdex
 
         A failure means an inference threw an error, for example when the model is not available.
 

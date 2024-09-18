@@ -297,7 +297,7 @@ metricsCatalog.serviceDefinition(
 
         apdex: histogramApdex(
           histogram='inference_request_duration_seconds_bucket',
-          selector=baseSelector { 'error': 'no', streaming: 'no' },
+          selector=baseSelector { 'error': 'no', streaming: 'no', model_engine: 'anthropic' },
           satisfiedThreshold=30,
           toleratedThreshold=60,
         ),
@@ -310,6 +310,7 @@ metricsCatalog.serviceDefinition(
         ),
 
         significantLabels: ['model_name', 'feature_category'] + runwayLabels,
+        useConfidenceLevelForSLIAlerts: '98%',
 
         toolingLinks: [
           toolingLinks.kibana(
@@ -331,7 +332,7 @@ metricsCatalog.serviceDefinition(
           Inferences to the vertex-ai engines used by the AI-gateway.
 
           Apdex applies to non-streaming inferences, they are considered fast enough
-          when the request took less than 30s. Errors don't count toward apdex
+          when the request took less than 2s. Errors don't count toward apdex
 
           A failure means an inference threw an error, for example when the model is
           not available.
@@ -339,9 +340,9 @@ metricsCatalog.serviceDefinition(
 
         apdex: histogramApdex(
           histogram='inference_request_duration_seconds_bucket',
-          selector=baseSelector { 'error': 'no', streaming: 'no' },
-          satisfiedThreshold=30,
-          toleratedThreshold=60,
+          selector=baseSelector { 'error': 'no', streaming: 'no', model_engine: 'vertex-ai'},
+          satisfiedThreshold=2,
+          toleratedThreshold=5,
         ),
 
         errorRate: rateMetric(counter='model_inferences_total', selector=baseSelector { model_engine: 'vertex-ai', 'error': 'yes' }),
@@ -350,8 +351,10 @@ metricsCatalog.serviceDefinition(
           counter='model_inferences_total',
           selector=baseSelector {model_engine: 'vertex-ai'},
         ),
+        
 
         significantLabels: ['model_name', 'feature_category'] + runwayLabels,
+        useConfidenceLevelForSLIAlerts: '98%',
 
         toolingLinks: [
           toolingLinks.kibana(

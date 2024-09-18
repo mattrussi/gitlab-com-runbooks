@@ -6,8 +6,8 @@ groups:
   rules:
   - record: sli_aggregations:inference_request_duration_seconds_bucket:rate_5m
     expr: |
-      sum by (component,env,environment,error,feature_category,fqdn,le,model_name,product_stage,region,shard,stage,stage_group,streaming,tier,type) (
-        rate(inference_request_duration_seconds_bucket{error=~"no",streaming=~"no",type=~"ai-gateway"}[5m] offset 30s)
+      sum by (component,env,environment,error,feature_category,fqdn,le,model_engine,model_name,product_stage,region,shard,stage,stage_group,streaming,tier,type) (
+        rate(inference_request_duration_seconds_bucket{error=~"no",model_engine=~"anthropic|vertex-ai",streaming=~"no",type=~"ai-gateway"}[5m] offset 30s)
       )
   - record: sli_aggregations:model_inferences_total:rate_5m
     expr: |
@@ -61,8 +61,8 @@ groups:
   rules:
   - record: sli_aggregations:inference_request_duration_seconds_bucket:rate_30m
     expr: |
-      sum by (component,env,environment,error,feature_category,fqdn,le,model_name,product_stage,region,shard,stage,stage_group,streaming,tier,type) (
-        rate(inference_request_duration_seconds_bucket{error=~"no",streaming=~"no",type=~"ai-gateway"}[30m] offset 30s)
+      sum by (component,env,environment,error,feature_category,fqdn,le,model_engine,model_name,product_stage,region,shard,stage,stage_group,streaming,tier,type) (
+        rate(inference_request_duration_seconds_bucket{error=~"no",model_engine=~"anthropic|vertex-ai",streaming=~"no",type=~"ai-gateway"}[30m] offset 30s)
       )
   - record: sli_aggregations:model_inferences_total:rate_30m
     expr: |
@@ -116,8 +116,8 @@ groups:
   rules:
   - record: sli_aggregations:inference_request_duration_seconds_bucket:rate_1h
     expr: |
-      sum by (component,env,environment,error,feature_category,fqdn,le,model_name,product_stage,region,shard,stage,stage_group,streaming,tier,type) (
-        rate(inference_request_duration_seconds_bucket{error=~"no",streaming=~"no",type=~"ai-gateway"}[1h] offset 30s)
+      sum by (component,env,environment,error,feature_category,fqdn,le,model_engine,model_name,product_stage,region,shard,stage,stage_group,streaming,tier,type) (
+        rate(inference_request_duration_seconds_bucket{error=~"no",model_engine=~"anthropic|vertex-ai",streaming=~"no",type=~"ai-gateway"}[1h] offset 30s)
       )
   - record: sli_aggregations:model_inferences_total:rate_1h
     expr: |
