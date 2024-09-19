@@ -6,7 +6,7 @@ groups:
   rules:
   - record: gitlab_regional_sli_apdex:success:rate_5m
     labels:
-      component: inference
+      component: inference_anthropic
       monitor: global
       stage: main
       tier: sv
@@ -14,40 +14,40 @@ groups:
     expr: |
       (
         sum by (env,environment,region) (
-          sli_aggregations:inference_request_duration_seconds_bucket:rate_5m{error="no",le="30",streaming="no",type="ai-gateway"}
+          sli_aggregations:inference_request_duration_seconds_bucket:rate_5m{error="no",le="30",model_engine="anthropic",streaming="no",type="ai-gateway"}
         )
         +
         sum by (env,environment,region) (
-          sli_aggregations:inference_request_duration_seconds_bucket:rate_5m{error="no",le="60",streaming="no",type="ai-gateway"}
+          sli_aggregations:inference_request_duration_seconds_bucket:rate_5m{error="no",le="60",model_engine="anthropic",streaming="no",type="ai-gateway"}
         )
       )
       /
       2
   - record: gitlab_regional_sli_apdex:weight:score_5m
     labels:
-      component: inference
+      component: inference_anthropic
       monitor: global
       stage: main
       tier: sv
       type: ai-gateway
     expr: |
       sum by (env,environment,region) (
-        sli_aggregations:inference_request_duration_seconds_bucket:rate_5m{error="no",le="+Inf",streaming="no",type="ai-gateway"}
+        sli_aggregations:inference_request_duration_seconds_bucket:rate_5m{error="no",le="+Inf",model_engine="anthropic",streaming="no",type="ai-gateway"}
       )
   - record: gitlab_regional_sli_ops:rate_5m
     labels:
-      component: inference
+      component: inference_anthropic
       monitor: global
       stage: main
       tier: sv
       type: ai-gateway
     expr: |
       sum by (env,environment,region) (
-        sli_aggregations:model_inferences_total:rate_5m{type="ai-gateway"} offset 30s
+        sli_aggregations:model_inferences_total:rate_5m{model_engine="anthropic",type="ai-gateway"} offset 30s
       )
   - record: gitlab_regional_sli_errors:rate_5m
     labels:
-      component: inference
+      component: inference_anthropic
       monitor: global
       stage: main
       tier: sv
@@ -55,42 +55,130 @@ groups:
     expr: |
       (
         sum by (env,environment,region) (
-          sli_aggregations:model_inferences_total:rate_5m{error="yes",type="ai-gateway"} offset 30s
+          sli_aggregations:model_inferences_total:rate_5m{error="yes",model_engine="anthropic",type="ai-gateway"} offset 30s
         )
       )
       or
       (
         0 * group by(env,environment,region) (
-          gitlab_regional_sli_ops:rate_5m{component="inference",monitor="global",stage="main",tier="sv",type="ai-gateway"}
+          gitlab_regional_sli_ops:rate_5m{component="inference_anthropic",monitor="global",stage="main",tier="sv",type="ai-gateway"}
         )
       )
   - record: gitlab_regional_sli_errors:ratio_5m
     labels:
-      component: inference
+      component: inference_anthropic
       monitor: global
       tier: sv
       type: ai-gateway
     expr: |
       sum by (env,environment,stage,region) (
-        gitlab_regional_sli_errors:rate_5m{component="inference",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+        gitlab_regional_sli_errors:rate_5m{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"} offset 30s
       )
       /
       sum by (env,environment,stage,region) (
-        gitlab_regional_sli_ops:rate_5m{component="inference",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+        gitlab_regional_sli_ops:rate_5m{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"} offset 30s
       )
   - record: gitlab_regional_sli_apdex:ratio_5m
     labels:
-      component: inference
+      component: inference_anthropic
       monitor: global
       tier: sv
       type: ai-gateway
     expr: |
       sum by (env,environment,stage,region) (
-        gitlab_regional_sli_apdex:success:rate_5m{component="inference",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+        gitlab_regional_sli_apdex:success:rate_5m{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"} offset 30s
       )
       /
       sum by (env,environment,stage,region) (
-        gitlab_regional_sli_apdex:weight:score_5m{component="inference",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+        gitlab_regional_sli_apdex:weight:score_5m{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+  - record: gitlab_regional_sli_apdex:success:rate_5m
+    labels:
+      component: inference_vertex
+      monitor: global
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      (
+        sum by (env,environment,region) (
+          sli_aggregations:inference_request_duration_seconds_bucket:rate_5m{error="no",le="2",model_engine="vertex-ai",streaming="no",type="ai-gateway"}
+        )
+        +
+        sum by (env,environment,region) (
+          sli_aggregations:inference_request_duration_seconds_bucket:rate_5m{error="no",le="5",model_engine="vertex-ai",streaming="no",type="ai-gateway"}
+        )
+      )
+      /
+      2
+  - record: gitlab_regional_sli_apdex:weight:score_5m
+    labels:
+      component: inference_vertex
+      monitor: global
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment,region) (
+        sli_aggregations:inference_request_duration_seconds_bucket:rate_5m{error="no",le="+Inf",model_engine="vertex-ai",streaming="no",type="ai-gateway"}
+      )
+  - record: gitlab_regional_sli_ops:rate_5m
+    labels:
+      component: inference_vertex
+      monitor: global
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment,region) (
+        sli_aggregations:model_inferences_total:rate_5m{model_engine="vertex-ai",type="ai-gateway"} offset 30s
+      )
+  - record: gitlab_regional_sli_errors:rate_5m
+    labels:
+      component: inference_vertex
+      monitor: global
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      (
+        sum by (env,environment,region) (
+          sli_aggregations:model_inferences_total:rate_5m{error="yes",model_engine="vertex-ai",type="ai-gateway"} offset 30s
+        )
+      )
+      or
+      (
+        0 * group by(env,environment,region) (
+          gitlab_regional_sli_ops:rate_5m{component="inference_vertex",monitor="global",stage="main",tier="sv",type="ai-gateway"}
+        )
+      )
+  - record: gitlab_regional_sli_errors:ratio_5m
+    labels:
+      component: inference_vertex
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment,stage,region) (
+        gitlab_regional_sli_errors:rate_5m{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+      /
+      sum by (env,environment,stage,region) (
+        gitlab_regional_sli_ops:rate_5m{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+  - record: gitlab_regional_sli_apdex:ratio_5m
+    labels:
+      component: inference_vertex
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment,stage,region) (
+        gitlab_regional_sli_apdex:success:rate_5m{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+      /
+      sum by (env,environment,stage,region) (
+        gitlab_regional_sli_apdex:weight:score_5m{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"} offset 30s
       )
   - record: gitlab_regional_sli_apdex:success:rate_5m
     labels:
@@ -240,11 +328,11 @@ groups:
     expr: |
       (
         sum by (env,environment,region) (
-          sli_aggregations:http_request_duration_seconds_bucket:rate_5m{handler!~"/v1/chat/agent|/v1/x-ray/libraries|/v2/code/completions|/v2/code/generations|/v2/completions",le=~"5|5\\.0",status!~"4xx|5xx",type="ai-gateway"}
+          sli_aggregations:http_request_duration_seconds_bucket:rate_5m{handler!~"(/v(1|2)/chat/.*)|/v1/x-ray/libraries|/v2/code/completions|/v2/code/generations|/v2/completions",le=~"5|5\\.0",status!~"4xx|5xx",type="ai-gateway"}
         )
         +
         sum by (env,environment,region) (
-          sli_aggregations:http_request_duration_seconds_bucket:rate_5m{handler!~"/v1/chat/agent|/v1/x-ray/libraries|/v2/code/completions|/v2/code/generations|/v2/completions",le=~"10|10\\.0",status!~"4xx|5xx",type="ai-gateway"}
+          sli_aggregations:http_request_duration_seconds_bucket:rate_5m{handler!~"(/v(1|2)/chat/.*)|/v1/x-ray/libraries|/v2/code/completions|/v2/code/generations|/v2/completions",le=~"10|10\\.0",status!~"4xx|5xx",type="ai-gateway"}
         )
       )
       /
@@ -258,7 +346,7 @@ groups:
       type: ai-gateway
     expr: |
       sum by (env,environment,region) (
-        sli_aggregations:http_request_duration_seconds_bucket:rate_5m{handler!~"/v1/chat/agent|/v1/x-ray/libraries|/v2/code/completions|/v2/code/generations|/v2/completions",le="+Inf",status!~"4xx|5xx",type="ai-gateway"}
+        sli_aggregations:http_request_duration_seconds_bucket:rate_5m{handler!~"(/v(1|2)/chat/.*)|/v1/x-ray/libraries|/v2/code/completions|/v2/code/generations|/v2/completions",le="+Inf",status!~"4xx|5xx",type="ai-gateway"}
       )
   - record: gitlab_regional_sli_ops:rate_5m
     labels:
@@ -269,7 +357,7 @@ groups:
       type: ai-gateway
     expr: |
       sum by (env,environment,region) (
-        rate(http_request_duration_seconds_count{handler!~"/v1/chat/agent|/v1/x-ray/libraries|/v2/code/completions|/v2/code/generations|/v2/completions",type="ai-gateway"}[5m] offset 30s)
+        rate(http_request_duration_seconds_count{handler!~"(/v(1|2)/chat/.*)|/v1/x-ray/libraries|/v2/code/completions|/v2/code/generations|/v2/completions",type="ai-gateway"}[5m] offset 30s)
       )
   - record: gitlab_regional_sli_errors:rate_5m
     labels:
@@ -281,7 +369,7 @@ groups:
     expr: |
       (
         sum by (env,environment,region) (
-          rate(http_request_duration_seconds_count{handler!~"/v1/chat/agent|/v1/x-ray/libraries|/v2/code/completions|/v2/code/generations|/v2/completions",status="5xx",type="ai-gateway"}[5m] offset 30s)
+          rate(http_request_duration_seconds_count{handler!~"(/v(1|2)/chat/.*)|/v1/x-ray/libraries|/v2/code/completions|/v2/code/generations|/v2/completions",status="5xx",type="ai-gateway"}[5m] offset 30s)
         )
       )
       or
@@ -328,11 +416,11 @@ groups:
     expr: |
       (
         sum by (env,environment,region) (
-          sli_aggregations:http_request_duration_seconds_bucket:rate_5m{handler="/v1/chat/agent",le=~"30|30\\.0",status!~"4xx|5xx",type="ai-gateway"}
+          sli_aggregations:http_request_duration_seconds_bucket:rate_5m{handler=~"/v(1|2)/chat/.*",le=~"30|30\\.0",status!~"4xx|5xx",type="ai-gateway"}
         )
         +
         sum by (env,environment,region) (
-          sli_aggregations:http_request_duration_seconds_bucket:rate_5m{handler="/v1/chat/agent",le=~"60|60\\.0",status!~"4xx|5xx",type="ai-gateway"}
+          sli_aggregations:http_request_duration_seconds_bucket:rate_5m{handler=~"/v(1|2)/chat/.*",le=~"60|60\\.0",status!~"4xx|5xx",type="ai-gateway"}
         )
       )
       /
@@ -346,7 +434,7 @@ groups:
       type: ai-gateway
     expr: |
       sum by (env,environment,region) (
-        sli_aggregations:http_request_duration_seconds_bucket:rate_5m{handler="/v1/chat/agent",le="+Inf",status!~"4xx|5xx",type="ai-gateway"}
+        sli_aggregations:http_request_duration_seconds_bucket:rate_5m{handler=~"/v(1|2)/chat/.*",le="+Inf",status!~"4xx|5xx",type="ai-gateway"}
       )
   - record: gitlab_regional_sli_ops:rate_5m
     labels:
@@ -357,7 +445,7 @@ groups:
       type: ai-gateway
     expr: |
       sum by (env,environment,region) (
-        rate(http_request_duration_seconds_count{handler="/v1/chat/agent",type="ai-gateway"}[5m] offset 30s)
+        rate(http_request_duration_seconds_count{handler=~"/v(1|2)/chat/.*",type="ai-gateway"}[5m] offset 30s)
       )
   - record: gitlab_regional_sli_errors:rate_5m
     labels:
@@ -369,7 +457,7 @@ groups:
     expr: |
       (
         sum by (env,environment,region) (
-          rate(http_request_duration_seconds_count{handler="/v1/chat/agent",status="5xx",type="ai-gateway"}[5m] offset 30s)
+          rate(http_request_duration_seconds_count{handler=~"/v(1|2)/chat/.*",status="5xx",type="ai-gateway"}[5m] offset 30s)
         )
       )
       or
@@ -725,7 +813,7 @@ groups:
   rules:
   - record: gitlab_regional_sli_apdex:success:rate_30m
     labels:
-      component: inference
+      component: inference_anthropic
       monitor: global
       stage: main
       tier: sv
@@ -733,40 +821,40 @@ groups:
     expr: |
       (
         sum by (env,environment,region) (
-          sli_aggregations:inference_request_duration_seconds_bucket:rate_30m{error="no",le="30",streaming="no",type="ai-gateway"}
+          sli_aggregations:inference_request_duration_seconds_bucket:rate_30m{error="no",le="30",model_engine="anthropic",streaming="no",type="ai-gateway"}
         )
         +
         sum by (env,environment,region) (
-          sli_aggregations:inference_request_duration_seconds_bucket:rate_30m{error="no",le="60",streaming="no",type="ai-gateway"}
+          sli_aggregations:inference_request_duration_seconds_bucket:rate_30m{error="no",le="60",model_engine="anthropic",streaming="no",type="ai-gateway"}
         )
       )
       /
       2
   - record: gitlab_regional_sli_apdex:weight:score_30m
     labels:
-      component: inference
+      component: inference_anthropic
       monitor: global
       stage: main
       tier: sv
       type: ai-gateway
     expr: |
       sum by (env,environment,region) (
-        sli_aggregations:inference_request_duration_seconds_bucket:rate_30m{error="no",le="+Inf",streaming="no",type="ai-gateway"}
+        sli_aggregations:inference_request_duration_seconds_bucket:rate_30m{error="no",le="+Inf",model_engine="anthropic",streaming="no",type="ai-gateway"}
       )
   - record: gitlab_regional_sli_ops:rate_30m
     labels:
-      component: inference
+      component: inference_anthropic
       monitor: global
       stage: main
       tier: sv
       type: ai-gateway
     expr: |
       sum by (env,environment,region) (
-        sli_aggregations:model_inferences_total:rate_30m{type="ai-gateway"} offset 30s
+        sli_aggregations:model_inferences_total:rate_30m{model_engine="anthropic",type="ai-gateway"} offset 30s
       )
   - record: gitlab_regional_sli_errors:rate_30m
     labels:
-      component: inference
+      component: inference_anthropic
       monitor: global
       stage: main
       tier: sv
@@ -774,42 +862,130 @@ groups:
     expr: |
       (
         sum by (env,environment,region) (
-          sli_aggregations:model_inferences_total:rate_30m{error="yes",type="ai-gateway"} offset 30s
+          sli_aggregations:model_inferences_total:rate_30m{error="yes",model_engine="anthropic",type="ai-gateway"} offset 30s
         )
       )
       or
       (
         0 * group by(env,environment,region) (
-          gitlab_regional_sli_ops:rate_30m{component="inference",monitor="global",stage="main",tier="sv",type="ai-gateway"}
+          gitlab_regional_sli_ops:rate_30m{component="inference_anthropic",monitor="global",stage="main",tier="sv",type="ai-gateway"}
         )
       )
   - record: gitlab_regional_sli_errors:ratio_30m
     labels:
-      component: inference
+      component: inference_anthropic
       monitor: global
       tier: sv
       type: ai-gateway
     expr: |
       sum by (env,environment,stage,region) (
-        gitlab_regional_sli_errors:rate_30m{component="inference",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+        gitlab_regional_sli_errors:rate_30m{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"} offset 30s
       )
       /
       sum by (env,environment,stage,region) (
-        gitlab_regional_sli_ops:rate_30m{component="inference",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+        gitlab_regional_sli_ops:rate_30m{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"} offset 30s
       )
   - record: gitlab_regional_sli_apdex:ratio_30m
     labels:
-      component: inference
+      component: inference_anthropic
       monitor: global
       tier: sv
       type: ai-gateway
     expr: |
       sum by (env,environment,stage,region) (
-        gitlab_regional_sli_apdex:success:rate_30m{component="inference",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+        gitlab_regional_sli_apdex:success:rate_30m{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"} offset 30s
       )
       /
       sum by (env,environment,stage,region) (
-        gitlab_regional_sli_apdex:weight:score_30m{component="inference",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+        gitlab_regional_sli_apdex:weight:score_30m{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+  - record: gitlab_regional_sli_apdex:success:rate_30m
+    labels:
+      component: inference_vertex
+      monitor: global
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      (
+        sum by (env,environment,region) (
+          sli_aggregations:inference_request_duration_seconds_bucket:rate_30m{error="no",le="2",model_engine="vertex-ai",streaming="no",type="ai-gateway"}
+        )
+        +
+        sum by (env,environment,region) (
+          sli_aggregations:inference_request_duration_seconds_bucket:rate_30m{error="no",le="5",model_engine="vertex-ai",streaming="no",type="ai-gateway"}
+        )
+      )
+      /
+      2
+  - record: gitlab_regional_sli_apdex:weight:score_30m
+    labels:
+      component: inference_vertex
+      monitor: global
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment,region) (
+        sli_aggregations:inference_request_duration_seconds_bucket:rate_30m{error="no",le="+Inf",model_engine="vertex-ai",streaming="no",type="ai-gateway"}
+      )
+  - record: gitlab_regional_sli_ops:rate_30m
+    labels:
+      component: inference_vertex
+      monitor: global
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment,region) (
+        sli_aggregations:model_inferences_total:rate_30m{model_engine="vertex-ai",type="ai-gateway"} offset 30s
+      )
+  - record: gitlab_regional_sli_errors:rate_30m
+    labels:
+      component: inference_vertex
+      monitor: global
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      (
+        sum by (env,environment,region) (
+          sli_aggregations:model_inferences_total:rate_30m{error="yes",model_engine="vertex-ai",type="ai-gateway"} offset 30s
+        )
+      )
+      or
+      (
+        0 * group by(env,environment,region) (
+          gitlab_regional_sli_ops:rate_30m{component="inference_vertex",monitor="global",stage="main",tier="sv",type="ai-gateway"}
+        )
+      )
+  - record: gitlab_regional_sli_errors:ratio_30m
+    labels:
+      component: inference_vertex
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment,stage,region) (
+        gitlab_regional_sli_errors:rate_30m{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+      /
+      sum by (env,environment,stage,region) (
+        gitlab_regional_sli_ops:rate_30m{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+  - record: gitlab_regional_sli_apdex:ratio_30m
+    labels:
+      component: inference_vertex
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment,stage,region) (
+        gitlab_regional_sli_apdex:success:rate_30m{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+      /
+      sum by (env,environment,stage,region) (
+        gitlab_regional_sli_apdex:weight:score_30m{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"} offset 30s
       )
   - record: gitlab_regional_sli_apdex:success:rate_30m
     labels:
@@ -959,11 +1135,11 @@ groups:
     expr: |
       (
         sum by (env,environment,region) (
-          sli_aggregations:http_request_duration_seconds_bucket:rate_30m{handler!~"/v1/chat/agent|/v1/x-ray/libraries|/v2/code/completions|/v2/code/generations|/v2/completions",le=~"5|5\\.0",status!~"4xx|5xx",type="ai-gateway"}
+          sli_aggregations:http_request_duration_seconds_bucket:rate_30m{handler!~"(/v(1|2)/chat/.*)|/v1/x-ray/libraries|/v2/code/completions|/v2/code/generations|/v2/completions",le=~"5|5\\.0",status!~"4xx|5xx",type="ai-gateway"}
         )
         +
         sum by (env,environment,region) (
-          sli_aggregations:http_request_duration_seconds_bucket:rate_30m{handler!~"/v1/chat/agent|/v1/x-ray/libraries|/v2/code/completions|/v2/code/generations|/v2/completions",le=~"10|10\\.0",status!~"4xx|5xx",type="ai-gateway"}
+          sli_aggregations:http_request_duration_seconds_bucket:rate_30m{handler!~"(/v(1|2)/chat/.*)|/v1/x-ray/libraries|/v2/code/completions|/v2/code/generations|/v2/completions",le=~"10|10\\.0",status!~"4xx|5xx",type="ai-gateway"}
         )
       )
       /
@@ -977,7 +1153,7 @@ groups:
       type: ai-gateway
     expr: |
       sum by (env,environment,region) (
-        sli_aggregations:http_request_duration_seconds_bucket:rate_30m{handler!~"/v1/chat/agent|/v1/x-ray/libraries|/v2/code/completions|/v2/code/generations|/v2/completions",le="+Inf",status!~"4xx|5xx",type="ai-gateway"}
+        sli_aggregations:http_request_duration_seconds_bucket:rate_30m{handler!~"(/v(1|2)/chat/.*)|/v1/x-ray/libraries|/v2/code/completions|/v2/code/generations|/v2/completions",le="+Inf",status!~"4xx|5xx",type="ai-gateway"}
       )
   - record: gitlab_regional_sli_ops:rate_30m
     labels:
@@ -988,7 +1164,7 @@ groups:
       type: ai-gateway
     expr: |
       sum by (env,environment,region) (
-        rate(http_request_duration_seconds_count{handler!~"/v1/chat/agent|/v1/x-ray/libraries|/v2/code/completions|/v2/code/generations|/v2/completions",type="ai-gateway"}[30m] offset 30s)
+        rate(http_request_duration_seconds_count{handler!~"(/v(1|2)/chat/.*)|/v1/x-ray/libraries|/v2/code/completions|/v2/code/generations|/v2/completions",type="ai-gateway"}[30m] offset 30s)
       )
   - record: gitlab_regional_sli_errors:rate_30m
     labels:
@@ -1000,7 +1176,7 @@ groups:
     expr: |
       (
         sum by (env,environment,region) (
-          rate(http_request_duration_seconds_count{handler!~"/v1/chat/agent|/v1/x-ray/libraries|/v2/code/completions|/v2/code/generations|/v2/completions",status="5xx",type="ai-gateway"}[30m] offset 30s)
+          rate(http_request_duration_seconds_count{handler!~"(/v(1|2)/chat/.*)|/v1/x-ray/libraries|/v2/code/completions|/v2/code/generations|/v2/completions",status="5xx",type="ai-gateway"}[30m] offset 30s)
         )
       )
       or
@@ -1047,11 +1223,11 @@ groups:
     expr: |
       (
         sum by (env,environment,region) (
-          sli_aggregations:http_request_duration_seconds_bucket:rate_30m{handler="/v1/chat/agent",le=~"30|30\\.0",status!~"4xx|5xx",type="ai-gateway"}
+          sli_aggregations:http_request_duration_seconds_bucket:rate_30m{handler=~"/v(1|2)/chat/.*",le=~"30|30\\.0",status!~"4xx|5xx",type="ai-gateway"}
         )
         +
         sum by (env,environment,region) (
-          sli_aggregations:http_request_duration_seconds_bucket:rate_30m{handler="/v1/chat/agent",le=~"60|60\\.0",status!~"4xx|5xx",type="ai-gateway"}
+          sli_aggregations:http_request_duration_seconds_bucket:rate_30m{handler=~"/v(1|2)/chat/.*",le=~"60|60\\.0",status!~"4xx|5xx",type="ai-gateway"}
         )
       )
       /
@@ -1065,7 +1241,7 @@ groups:
       type: ai-gateway
     expr: |
       sum by (env,environment,region) (
-        sli_aggregations:http_request_duration_seconds_bucket:rate_30m{handler="/v1/chat/agent",le="+Inf",status!~"4xx|5xx",type="ai-gateway"}
+        sli_aggregations:http_request_duration_seconds_bucket:rate_30m{handler=~"/v(1|2)/chat/.*",le="+Inf",status!~"4xx|5xx",type="ai-gateway"}
       )
   - record: gitlab_regional_sli_ops:rate_30m
     labels:
@@ -1076,7 +1252,7 @@ groups:
       type: ai-gateway
     expr: |
       sum by (env,environment,region) (
-        rate(http_request_duration_seconds_count{handler="/v1/chat/agent",type="ai-gateway"}[30m] offset 30s)
+        rate(http_request_duration_seconds_count{handler=~"/v(1|2)/chat/.*",type="ai-gateway"}[30m] offset 30s)
       )
   - record: gitlab_regional_sli_errors:rate_30m
     labels:
@@ -1088,7 +1264,7 @@ groups:
     expr: |
       (
         sum by (env,environment,region) (
-          rate(http_request_duration_seconds_count{handler="/v1/chat/agent",status="5xx",type="ai-gateway"}[30m] offset 30s)
+          rate(http_request_duration_seconds_count{handler=~"/v(1|2)/chat/.*",status="5xx",type="ai-gateway"}[30m] offset 30s)
         )
       )
       or
@@ -1444,7 +1620,7 @@ groups:
   rules:
   - record: gitlab_regional_sli_apdex:success:rate_1h
     labels:
-      component: inference
+      component: inference_anthropic
       monitor: global
       stage: main
       tier: sv
@@ -1452,40 +1628,40 @@ groups:
     expr: |
       (
         sum by (env,environment,region) (
-          sli_aggregations:inference_request_duration_seconds_bucket:rate_1h{error="no",le="30",streaming="no",type="ai-gateway"}
+          sli_aggregations:inference_request_duration_seconds_bucket:rate_1h{error="no",le="30",model_engine="anthropic",streaming="no",type="ai-gateway"}
         )
         +
         sum by (env,environment,region) (
-          sli_aggregations:inference_request_duration_seconds_bucket:rate_1h{error="no",le="60",streaming="no",type="ai-gateway"}
+          sli_aggregations:inference_request_duration_seconds_bucket:rate_1h{error="no",le="60",model_engine="anthropic",streaming="no",type="ai-gateway"}
         )
       )
       /
       2
   - record: gitlab_regional_sli_apdex:weight:score_1h
     labels:
-      component: inference
+      component: inference_anthropic
       monitor: global
       stage: main
       tier: sv
       type: ai-gateway
     expr: |
       sum by (env,environment,region) (
-        sli_aggregations:inference_request_duration_seconds_bucket:rate_1h{error="no",le="+Inf",streaming="no",type="ai-gateway"}
+        sli_aggregations:inference_request_duration_seconds_bucket:rate_1h{error="no",le="+Inf",model_engine="anthropic",streaming="no",type="ai-gateway"}
       )
   - record: gitlab_regional_sli_ops:rate_1h
     labels:
-      component: inference
+      component: inference_anthropic
       monitor: global
       stage: main
       tier: sv
       type: ai-gateway
     expr: |
       sum by (env,environment,region) (
-        sli_aggregations:model_inferences_total:rate_1h{type="ai-gateway"} offset 30s
+        sli_aggregations:model_inferences_total:rate_1h{model_engine="anthropic",type="ai-gateway"} offset 30s
       )
   - record: gitlab_regional_sli_errors:rate_1h
     labels:
-      component: inference
+      component: inference_anthropic
       monitor: global
       stage: main
       tier: sv
@@ -1493,42 +1669,130 @@ groups:
     expr: |
       (
         sum by (env,environment,region) (
-          sli_aggregations:model_inferences_total:rate_1h{error="yes",type="ai-gateway"} offset 30s
+          sli_aggregations:model_inferences_total:rate_1h{error="yes",model_engine="anthropic",type="ai-gateway"} offset 30s
         )
       )
       or
       (
         0 * group by(env,environment,region) (
-          gitlab_regional_sli_ops:rate_1h{component="inference",monitor="global",stage="main",tier="sv",type="ai-gateway"}
+          gitlab_regional_sli_ops:rate_1h{component="inference_anthropic",monitor="global",stage="main",tier="sv",type="ai-gateway"}
         )
       )
   - record: gitlab_regional_sli_errors:ratio_1h
     labels:
-      component: inference
+      component: inference_anthropic
       monitor: global
       tier: sv
       type: ai-gateway
     expr: |
       sum by (env,environment,stage,region) (
-        gitlab_regional_sli_errors:rate_1h{component="inference",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+        gitlab_regional_sli_errors:rate_1h{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"} offset 30s
       )
       /
       sum by (env,environment,stage,region) (
-        gitlab_regional_sli_ops:rate_1h{component="inference",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+        gitlab_regional_sli_ops:rate_1h{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"} offset 30s
       )
   - record: gitlab_regional_sli_apdex:ratio_1h
     labels:
-      component: inference
+      component: inference_anthropic
       monitor: global
       tier: sv
       type: ai-gateway
     expr: |
       sum by (env,environment,stage,region) (
-        gitlab_regional_sli_apdex:success:rate_1h{component="inference",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+        gitlab_regional_sli_apdex:success:rate_1h{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"} offset 30s
       )
       /
       sum by (env,environment,stage,region) (
-        gitlab_regional_sli_apdex:weight:score_1h{component="inference",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+        gitlab_regional_sli_apdex:weight:score_1h{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+  - record: gitlab_regional_sli_apdex:success:rate_1h
+    labels:
+      component: inference_vertex
+      monitor: global
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      (
+        sum by (env,environment,region) (
+          sli_aggregations:inference_request_duration_seconds_bucket:rate_1h{error="no",le="2",model_engine="vertex-ai",streaming="no",type="ai-gateway"}
+        )
+        +
+        sum by (env,environment,region) (
+          sli_aggregations:inference_request_duration_seconds_bucket:rate_1h{error="no",le="5",model_engine="vertex-ai",streaming="no",type="ai-gateway"}
+        )
+      )
+      /
+      2
+  - record: gitlab_regional_sli_apdex:weight:score_1h
+    labels:
+      component: inference_vertex
+      monitor: global
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment,region) (
+        sli_aggregations:inference_request_duration_seconds_bucket:rate_1h{error="no",le="+Inf",model_engine="vertex-ai",streaming="no",type="ai-gateway"}
+      )
+  - record: gitlab_regional_sli_ops:rate_1h
+    labels:
+      component: inference_vertex
+      monitor: global
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment,region) (
+        sli_aggregations:model_inferences_total:rate_1h{model_engine="vertex-ai",type="ai-gateway"} offset 30s
+      )
+  - record: gitlab_regional_sli_errors:rate_1h
+    labels:
+      component: inference_vertex
+      monitor: global
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      (
+        sum by (env,environment,region) (
+          sli_aggregations:model_inferences_total:rate_1h{error="yes",model_engine="vertex-ai",type="ai-gateway"} offset 30s
+        )
+      )
+      or
+      (
+        0 * group by(env,environment,region) (
+          gitlab_regional_sli_ops:rate_1h{component="inference_vertex",monitor="global",stage="main",tier="sv",type="ai-gateway"}
+        )
+      )
+  - record: gitlab_regional_sli_errors:ratio_1h
+    labels:
+      component: inference_vertex
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment,stage,region) (
+        gitlab_regional_sli_errors:rate_1h{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+      /
+      sum by (env,environment,stage,region) (
+        gitlab_regional_sli_ops:rate_1h{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+  - record: gitlab_regional_sli_apdex:ratio_1h
+    labels:
+      component: inference_vertex
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment,stage,region) (
+        gitlab_regional_sli_apdex:success:rate_1h{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+      /
+      sum by (env,environment,stage,region) (
+        gitlab_regional_sli_apdex:weight:score_1h{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"} offset 30s
       )
   - record: gitlab_regional_sli_apdex:success:rate_1h
     labels:
@@ -1678,11 +1942,11 @@ groups:
     expr: |
       (
         sum by (env,environment,region) (
-          sli_aggregations:http_request_duration_seconds_bucket:rate_1h{handler!~"/v1/chat/agent|/v1/x-ray/libraries|/v2/code/completions|/v2/code/generations|/v2/completions",le=~"5|5\\.0",status!~"4xx|5xx",type="ai-gateway"}
+          sli_aggregations:http_request_duration_seconds_bucket:rate_1h{handler!~"(/v(1|2)/chat/.*)|/v1/x-ray/libraries|/v2/code/completions|/v2/code/generations|/v2/completions",le=~"5|5\\.0",status!~"4xx|5xx",type="ai-gateway"}
         )
         +
         sum by (env,environment,region) (
-          sli_aggregations:http_request_duration_seconds_bucket:rate_1h{handler!~"/v1/chat/agent|/v1/x-ray/libraries|/v2/code/completions|/v2/code/generations|/v2/completions",le=~"10|10\\.0",status!~"4xx|5xx",type="ai-gateway"}
+          sli_aggregations:http_request_duration_seconds_bucket:rate_1h{handler!~"(/v(1|2)/chat/.*)|/v1/x-ray/libraries|/v2/code/completions|/v2/code/generations|/v2/completions",le=~"10|10\\.0",status!~"4xx|5xx",type="ai-gateway"}
         )
       )
       /
@@ -1696,7 +1960,7 @@ groups:
       type: ai-gateway
     expr: |
       sum by (env,environment,region) (
-        sli_aggregations:http_request_duration_seconds_bucket:rate_1h{handler!~"/v1/chat/agent|/v1/x-ray/libraries|/v2/code/completions|/v2/code/generations|/v2/completions",le="+Inf",status!~"4xx|5xx",type="ai-gateway"}
+        sli_aggregations:http_request_duration_seconds_bucket:rate_1h{handler!~"(/v(1|2)/chat/.*)|/v1/x-ray/libraries|/v2/code/completions|/v2/code/generations|/v2/completions",le="+Inf",status!~"4xx|5xx",type="ai-gateway"}
       )
   - record: gitlab_regional_sli_ops:rate_1h
     labels:
@@ -1707,7 +1971,7 @@ groups:
       type: ai-gateway
     expr: |
       sum by (env,environment,region) (
-        rate(http_request_duration_seconds_count{handler!~"/v1/chat/agent|/v1/x-ray/libraries|/v2/code/completions|/v2/code/generations|/v2/completions",type="ai-gateway"}[1h] offset 30s)
+        rate(http_request_duration_seconds_count{handler!~"(/v(1|2)/chat/.*)|/v1/x-ray/libraries|/v2/code/completions|/v2/code/generations|/v2/completions",type="ai-gateway"}[1h] offset 30s)
       )
   - record: gitlab_regional_sli_errors:rate_1h
     labels:
@@ -1719,7 +1983,7 @@ groups:
     expr: |
       (
         sum by (env,environment,region) (
-          rate(http_request_duration_seconds_count{handler!~"/v1/chat/agent|/v1/x-ray/libraries|/v2/code/completions|/v2/code/generations|/v2/completions",status="5xx",type="ai-gateway"}[1h] offset 30s)
+          rate(http_request_duration_seconds_count{handler!~"(/v(1|2)/chat/.*)|/v1/x-ray/libraries|/v2/code/completions|/v2/code/generations|/v2/completions",status="5xx",type="ai-gateway"}[1h] offset 30s)
         )
       )
       or
@@ -1766,11 +2030,11 @@ groups:
     expr: |
       (
         sum by (env,environment,region) (
-          sli_aggregations:http_request_duration_seconds_bucket:rate_1h{handler="/v1/chat/agent",le=~"30|30\\.0",status!~"4xx|5xx",type="ai-gateway"}
+          sli_aggregations:http_request_duration_seconds_bucket:rate_1h{handler=~"/v(1|2)/chat/.*",le=~"30|30\\.0",status!~"4xx|5xx",type="ai-gateway"}
         )
         +
         sum by (env,environment,region) (
-          sli_aggregations:http_request_duration_seconds_bucket:rate_1h{handler="/v1/chat/agent",le=~"60|60\\.0",status!~"4xx|5xx",type="ai-gateway"}
+          sli_aggregations:http_request_duration_seconds_bucket:rate_1h{handler=~"/v(1|2)/chat/.*",le=~"60|60\\.0",status!~"4xx|5xx",type="ai-gateway"}
         )
       )
       /
@@ -1784,7 +2048,7 @@ groups:
       type: ai-gateway
     expr: |
       sum by (env,environment,region) (
-        sli_aggregations:http_request_duration_seconds_bucket:rate_1h{handler="/v1/chat/agent",le="+Inf",status!~"4xx|5xx",type="ai-gateway"}
+        sli_aggregations:http_request_duration_seconds_bucket:rate_1h{handler=~"/v(1|2)/chat/.*",le="+Inf",status!~"4xx|5xx",type="ai-gateway"}
       )
   - record: gitlab_regional_sli_ops:rate_1h
     labels:
@@ -1795,7 +2059,7 @@ groups:
       type: ai-gateway
     expr: |
       sum by (env,environment,region) (
-        rate(http_request_duration_seconds_count{handler="/v1/chat/agent",type="ai-gateway"}[1h] offset 30s)
+        rate(http_request_duration_seconds_count{handler=~"/v(1|2)/chat/.*",type="ai-gateway"}[1h] offset 30s)
       )
   - record: gitlab_regional_sli_errors:rate_1h
     labels:
@@ -1807,7 +2071,7 @@ groups:
     expr: |
       (
         sum by (env,environment,region) (
-          rate(http_request_duration_seconds_count{handler="/v1/chat/agent",status="5xx",type="ai-gateway"}[1h] offset 30s)
+          rate(http_request_duration_seconds_count{handler=~"/v(1|2)/chat/.*",status="5xx",type="ai-gateway"}[1h] offset 30s)
         )
       )
       or
@@ -2163,75 +2427,147 @@ groups:
   rules:
   - record: gitlab_regional_sli_apdex:success:rate_6h
     labels:
-      component: inference
+      component: inference_anthropic
       monitor: global
       stage: main
       tier: sv
       type: ai-gateway
     expr: |
       sum by (env,environment,region) (
-        avg_over_time(gitlab_regional_sli_apdex:success:rate_1h{component="inference",monitor="global",tier="sv",type="ai-gateway"}[6h] offset 30s)
+        avg_over_time(gitlab_regional_sli_apdex:success:rate_1h{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"}[6h] offset 30s)
       )
   - record: gitlab_regional_sli_apdex:weight:score_6h
     labels:
-      component: inference
+      component: inference_anthropic
       monitor: global
       stage: main
       tier: sv
       type: ai-gateway
     expr: |
       sum by (env,environment,region) (
-        avg_over_time(gitlab_regional_sli_apdex:weight:score_1h{component="inference",monitor="global",tier="sv",type="ai-gateway"}[6h] offset 30s)
+        avg_over_time(gitlab_regional_sli_apdex:weight:score_1h{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"}[6h] offset 30s)
       )
   - record: gitlab_regional_sli_ops:rate_6h
     labels:
-      component: inference
+      component: inference_anthropic
       monitor: global
       stage: main
       tier: sv
       type: ai-gateway
     expr: |
       sum by (env,environment,region) (
-        avg_over_time(gitlab_regional_sli_ops:rate_1h{component="inference",monitor="global",tier="sv",type="ai-gateway"}[6h] offset 30s)
+        avg_over_time(gitlab_regional_sli_ops:rate_1h{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"}[6h] offset 30s)
       )
   - record: gitlab_regional_sli_errors:rate_6h
     labels:
-      component: inference
+      component: inference_anthropic
       monitor: global
       stage: main
       tier: sv
       type: ai-gateway
     expr: |
       sum by (env,environment,region) (
-        avg_over_time(gitlab_regional_sli_errors:rate_1h{component="inference",monitor="global",tier="sv",type="ai-gateway"}[6h] offset 30s)
+        avg_over_time(gitlab_regional_sli_errors:rate_1h{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"}[6h] offset 30s)
       )
   - record: gitlab_regional_sli_errors:ratio_6h
     labels:
-      component: inference
+      component: inference_anthropic
       monitor: global
       tier: sv
       type: ai-gateway
     expr: |
       sum by (env,environment,stage,region) (
-        gitlab_regional_sli_errors:rate_6h{component="inference",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+        gitlab_regional_sli_errors:rate_6h{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"} offset 30s
       )
       /
       sum by (env,environment,stage,region) (
-        gitlab_regional_sli_ops:rate_6h{component="inference",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+        gitlab_regional_sli_ops:rate_6h{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"} offset 30s
       )
   - record: gitlab_regional_sli_apdex:ratio_6h
     labels:
-      component: inference
+      component: inference_anthropic
       monitor: global
       tier: sv
       type: ai-gateway
     expr: |
       sum by (env,environment,stage,region) (
-        gitlab_regional_sli_apdex:success:rate_6h{component="inference",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+        gitlab_regional_sli_apdex:success:rate_6h{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"} offset 30s
       )
       /
       sum by (env,environment,stage,region) (
-        gitlab_regional_sli_apdex:weight:score_6h{component="inference",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+        gitlab_regional_sli_apdex:weight:score_6h{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+  - record: gitlab_regional_sli_apdex:success:rate_6h
+    labels:
+      component: inference_vertex
+      monitor: global
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment,region) (
+        avg_over_time(gitlab_regional_sli_apdex:success:rate_1h{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"}[6h] offset 30s)
+      )
+  - record: gitlab_regional_sli_apdex:weight:score_6h
+    labels:
+      component: inference_vertex
+      monitor: global
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment,region) (
+        avg_over_time(gitlab_regional_sli_apdex:weight:score_1h{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"}[6h] offset 30s)
+      )
+  - record: gitlab_regional_sli_ops:rate_6h
+    labels:
+      component: inference_vertex
+      monitor: global
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment,region) (
+        avg_over_time(gitlab_regional_sli_ops:rate_1h{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"}[6h] offset 30s)
+      )
+  - record: gitlab_regional_sli_errors:rate_6h
+    labels:
+      component: inference_vertex
+      monitor: global
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment,region) (
+        avg_over_time(gitlab_regional_sli_errors:rate_1h{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"}[6h] offset 30s)
+      )
+  - record: gitlab_regional_sli_errors:ratio_6h
+    labels:
+      component: inference_vertex
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment,stage,region) (
+        gitlab_regional_sli_errors:rate_6h{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+      /
+      sum by (env,environment,stage,region) (
+        gitlab_regional_sli_ops:rate_6h{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+  - record: gitlab_regional_sli_apdex:ratio_6h
+    labels:
+      component: inference_vertex
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment,stage,region) (
+        gitlab_regional_sli_apdex:success:rate_6h{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+      /
+      sum by (env,environment,stage,region) (
+        gitlab_regional_sli_apdex:weight:score_6h{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"} offset 30s
       )
   - record: gitlab_regional_sli_apdex:success:rate_6h
     labels:
@@ -2814,75 +3150,147 @@ groups:
   rules:
   - record: gitlab_regional_sli_apdex:success:rate_3d
     labels:
-      component: inference
+      component: inference_anthropic
       monitor: global
       stage: main
       tier: sv
       type: ai-gateway
     expr: |
       sum by (env,environment,region) (
-        avg_over_time(gitlab_regional_sli_apdex:success:rate_1h{component="inference",monitor="global",tier="sv",type="ai-gateway"}[3d] offset 30s)
+        avg_over_time(gitlab_regional_sli_apdex:success:rate_1h{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"}[3d] offset 30s)
       )
   - record: gitlab_regional_sli_apdex:weight:score_3d
     labels:
-      component: inference
+      component: inference_anthropic
       monitor: global
       stage: main
       tier: sv
       type: ai-gateway
     expr: |
       sum by (env,environment,region) (
-        avg_over_time(gitlab_regional_sli_apdex:weight:score_1h{component="inference",monitor="global",tier="sv",type="ai-gateway"}[3d] offset 30s)
+        avg_over_time(gitlab_regional_sli_apdex:weight:score_1h{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"}[3d] offset 30s)
       )
   - record: gitlab_regional_sli_ops:rate_3d
     labels:
-      component: inference
+      component: inference_anthropic
       monitor: global
       stage: main
       tier: sv
       type: ai-gateway
     expr: |
       sum by (env,environment,region) (
-        avg_over_time(gitlab_regional_sli_ops:rate_1h{component="inference",monitor="global",tier="sv",type="ai-gateway"}[3d] offset 30s)
+        avg_over_time(gitlab_regional_sli_ops:rate_1h{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"}[3d] offset 30s)
       )
   - record: gitlab_regional_sli_errors:rate_3d
     labels:
-      component: inference
+      component: inference_anthropic
       monitor: global
       stage: main
       tier: sv
       type: ai-gateway
     expr: |
       sum by (env,environment,region) (
-        avg_over_time(gitlab_regional_sli_errors:rate_1h{component="inference",monitor="global",tier="sv",type="ai-gateway"}[3d] offset 30s)
+        avg_over_time(gitlab_regional_sli_errors:rate_1h{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"}[3d] offset 30s)
       )
   - record: gitlab_regional_sli_errors:ratio_3d
     labels:
-      component: inference
+      component: inference_anthropic
       monitor: global
       tier: sv
       type: ai-gateway
     expr: |
       sum by (env,environment,stage,region) (
-        gitlab_regional_sli_errors:rate_3d{component="inference",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+        gitlab_regional_sli_errors:rate_3d{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"} offset 30s
       )
       /
       sum by (env,environment,stage,region) (
-        gitlab_regional_sli_ops:rate_3d{component="inference",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+        gitlab_regional_sli_ops:rate_3d{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"} offset 30s
       )
   - record: gitlab_regional_sli_apdex:ratio_3d
     labels:
-      component: inference
+      component: inference_anthropic
       monitor: global
       tier: sv
       type: ai-gateway
     expr: |
       sum by (env,environment,stage,region) (
-        gitlab_regional_sli_apdex:success:rate_3d{component="inference",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+        gitlab_regional_sli_apdex:success:rate_3d{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"} offset 30s
       )
       /
       sum by (env,environment,stage,region) (
-        gitlab_regional_sli_apdex:weight:score_3d{component="inference",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+        gitlab_regional_sli_apdex:weight:score_3d{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+  - record: gitlab_regional_sli_apdex:success:rate_3d
+    labels:
+      component: inference_vertex
+      monitor: global
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment,region) (
+        avg_over_time(gitlab_regional_sli_apdex:success:rate_1h{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"}[3d] offset 30s)
+      )
+  - record: gitlab_regional_sli_apdex:weight:score_3d
+    labels:
+      component: inference_vertex
+      monitor: global
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment,region) (
+        avg_over_time(gitlab_regional_sli_apdex:weight:score_1h{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"}[3d] offset 30s)
+      )
+  - record: gitlab_regional_sli_ops:rate_3d
+    labels:
+      component: inference_vertex
+      monitor: global
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment,region) (
+        avg_over_time(gitlab_regional_sli_ops:rate_1h{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"}[3d] offset 30s)
+      )
+  - record: gitlab_regional_sli_errors:rate_3d
+    labels:
+      component: inference_vertex
+      monitor: global
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment,region) (
+        avg_over_time(gitlab_regional_sli_errors:rate_1h{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"}[3d] offset 30s)
+      )
+  - record: gitlab_regional_sli_errors:ratio_3d
+    labels:
+      component: inference_vertex
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment,stage,region) (
+        gitlab_regional_sli_errors:rate_3d{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+      /
+      sum by (env,environment,stage,region) (
+        gitlab_regional_sli_ops:rate_3d{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+  - record: gitlab_regional_sli_apdex:ratio_3d
+    labels:
+      component: inference_vertex
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment,stage,region) (
+        gitlab_regional_sli_apdex:success:rate_3d{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+      /
+      sum by (env,environment,stage,region) (
+        gitlab_regional_sli_apdex:weight:score_3d{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"} offset 30s
       )
   - record: gitlab_regional_sli_apdex:success:rate_3d
     labels:

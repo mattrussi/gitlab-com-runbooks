@@ -18,14 +18,28 @@ groups:
     expr: "0.020000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
-      component: inference
+      component: inference_anthropic
       monitor: global
       tier: sv
       type: ai-gateway
     expr: "0.980000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
-      component: inference
+      component: inference_anthropic
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: "0.020000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      component: inference_vertex
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: "0.980000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      component: inference_vertex
       monitor: global
       tier: sv
       type: ai-gateway
@@ -144,7 +158,17 @@ groups:
     expr: "0.020000"
   - record: gitlab_component_service:mapping
     labels:
-      component: inference
+      component: inference_anthropic
+      global_aggregation: "yes"
+      monitor: global
+      regional_aggregation: "yes"
+      service_aggregation: "no"
+      tier: sv
+      type: ai-gateway
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: inference_vertex
       global_aggregation: "yes"
       monitor: global
       regional_aggregation: "yes"

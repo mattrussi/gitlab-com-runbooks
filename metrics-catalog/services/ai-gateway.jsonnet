@@ -15,7 +15,7 @@ local serverSelector = baseSelector {
         '/v2/code/completions',
         '/v2/completions',
         '/v2/code/generations',
-        '/v1/chat/agent',
+        '/v(1|2)/chat/.*',
         '/v1/x-ray/libraries',
       ],
   },
@@ -24,7 +24,7 @@ local serverCodeCompletionsSelector = baseSelector {
   handler: { oneOf: ['/v2/code/completions', '/v2/completions'] },
 };
 local serverCodeGenerationsSelector = baseSelector { handler: '/v2/code/generations' };
-local serverChatSelector = baseSelector { handler: '/v1/chat/agent' };
+local serverChatSelector = baseSelector { handler: { re: '/v(1|2)/chat/.*'},};
 local serverXRaySelector = baseSelector { handler: '/v1/x-ray/libraries' };
 
 metricsCatalog.serviceDefinition(
@@ -278,7 +278,7 @@ metricsCatalog.serviceDefinition(
           ),
         ],
       },
-      inference: {
+      inference_anthropic: {
         severity: 's2',
         userImpacting: true,
         serviceAggregation: false,
@@ -286,7 +286,7 @@ metricsCatalog.serviceDefinition(
         featureCategory: serviceLevelIndicatorDefinition.featureCategoryFromSourceMetrics,
         trafficCessationAlertConfig: false,
         description: |||
-          Inferences to the different model engines used by the AI-gateway.
+          Inferences to the anthropic model used by the AI-gateway.
 
           Apdex applies to non-streaming inferences, they are considered fast enough
           when the request took less than 30s. Errors don't count toward apdex
@@ -297,26 +297,70 @@ metricsCatalog.serviceDefinition(
 
         apdex: histogramApdex(
           histogram='inference_request_duration_seconds_bucket',
-          selector=baseSelector { 'error': 'no', streaming: 'no' },
+          selector=baseSelector { 'error': 'no', streaming: 'no', model_engine: 'anthropic' },
           satisfiedThreshold=30,
           toleratedThreshold=60,
         ),
 
-        errorRate: rateMetric(counter='model_inferences_total', selector=baseSelector { 'error': 'yes' }),
+        errorRate: rateMetric(counter='model_inferences_total', selector=baseSelector { model_engine: 'anthropic', 'error': 'yes' }),
 
         requestRate: rateMetric(
           counter='model_inferences_total',
-          selector=baseSelector,
+          selector=baseSelector {model_engine: 'anthropic'},
         ),
 
-        significantLabels: ['model_engine', 'model_name', 'feature_category'] + runwayLabels,
+        significantLabels: ['model_name', 'feature_category'] + runwayLabels,
+        useConfidenceLevelForSLIAlerts: '98%',
 
         toolingLinks: [
           toolingLinks.kibana(
             title='Model Inference',
             index='mlops',
             includeMatchersForPrometheusSelector=false,
-            filters=[matching.existsFilter('json.jsonPayload.model_engine')],
+            filters=[matching.existsFilter('json.jsonPayload.model_engine: anthropic')],
+          ),
+        ],
+      },
+      inference_vertex: {
+        severity: 's2',
+        userImpacting: true,
+        serviceAggregation: false,
+        team: 'code_creation',
+        featureCategory: serviceLevelIndicatorDefinition.featureCategoryFromSourceMetrics,
+        trafficCessationAlertConfig: false,
+        description: |||
+          Inferences to the vertex-ai engines used by the AI-gateway.
+
+          Apdex applies to non-streaming inferences, they are considered fast enough
+          when the request took less than 2s. Errors don't count toward apdex
+
+          A failure means an inference threw an error, for example when the model is
+          not available.
+        |||,
+
+        apdex: histogramApdex(
+          histogram='inference_request_duration_seconds_bucket',
+          selector=baseSelector { 'error': 'no', streaming: 'no', model_engine: 'vertex-ai'},
+          satisfiedThreshold=2,
+          toleratedThreshold=5,
+        ),
+
+        errorRate: rateMetric(counter='model_inferences_total', selector=baseSelector { model_engine: 'vertex-ai', 'error': 'yes' }),
+
+        requestRate: rateMetric(
+          counter='model_inferences_total',
+          selector=baseSelector {model_engine: 'vertex-ai'},
+        ),
+
+        significantLabels: ['model_name', 'feature_category'] + runwayLabels,
+        useConfidenceLevelForSLIAlerts: '98%',
+
+        toolingLinks: [
+          toolingLinks.kibana(
+            title='Model Inference',
+            index='mlops',
+            includeMatchersForPrometheusSelector=false,
+            filters=[matching.existsFilter('json.jsonPayload.model_engine: vertex-ai')],
           ),
         ],
       },

@@ -4,13 +4,13 @@ groups:
 - name: 'Service Component Alerts: ai-gateway'
   interval: 1m
   rules:
-  - alert: AiGatewayServiceInferenceApdexSLOViolation
+  - alert: AiGatewayServiceInferenceAnthropicApdexSLOViolation
     for: 2m
     annotations:
-      title: The inference SLI of the ai-gateway service (`{{ $labels.stage }}` stage)
-        has an apdex violating SLO
+      title: The inference_anthropic SLI of the ai-gateway service (`{{ $labels.stage
+        }}` stage) has an apdex violating SLO
       description: |
-        Inferences to the different model engines used by the AI-gateway.
+        Inferences to the anthropic model used by the AI-gateway.
 
         Apdex applies to non-streaming inferences, they are considered fast enough when the request took less than 30s. Errors don't count toward apdex
 
@@ -22,13 +22,13 @@ groups:
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_datasource_id: mimir-runway
       grafana_min_zoom_hours: "6"
-      grafana_panel_id: "4259195235"
+      grafana_panel_id: "1848688516"
       grafana_variables: environment,stage
       promql_template_1: |
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
-            rate(inference_request_duration_seconds_bucket{environment="{{ $labels.environment }}",error="no",stage="{{ $labels.stage }}",streaming="no",type="ai-gateway"}[5m])
+            rate(inference_request_duration_seconds_bucket{environment="{{ $labels.environment }}",error="no",model_engine="anthropic",stage="{{ $labels.stage }}",streaming="no",type="ai-gateway"}[5m])
           )
         )
       runbook: docs/ai-gateway/README.md
@@ -36,6 +36,7 @@ groups:
       aggregation: component
       alert_class: slo_violation
       alert_type: symptom
+      confidence: 98%
       feature_category: in_source_metrics
       pager: pagerduty
       rules_domain: general
@@ -47,26 +48,26 @@ groups:
     expr: |
       (
         (
-          gitlab_component_apdex:ratio_1h{component="inference",monitor="global",type="ai-gateway"}
+          gitlab_component_apdex:confidence:ratio_1h{component="inference_anthropic",confidence="98%",monitor="global",type="ai-gateway"}
           < (1 - 14.4 * 0.020000)
         )
         and
         (
-          gitlab_component_apdex:ratio_5m{component="inference",monitor="global",type="ai-gateway"}
+          gitlab_component_apdex:confidence:ratio_5m{component="inference_anthropic",confidence="98%",monitor="global",type="ai-gateway"}
           < (1 - 14.4 * 0.020000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="inference",monitor="global",type="ai-gateway"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="inference_anthropic",monitor="global",type="ai-gateway"}) >= 1
       )
-  - alert: AiGatewayServiceInferenceApdexSLOViolation
+  - alert: AiGatewayServiceInferenceAnthropicApdexSLOViolation
     for: 2m
     annotations:
-      title: The inference SLI of the ai-gateway service (`{{ $labels.stage }}` stage)
-        has an apdex violating SLO
+      title: The inference_anthropic SLI of the ai-gateway service (`{{ $labels.stage
+        }}` stage) has an apdex violating SLO
       description: |
-        Inferences to the different model engines used by the AI-gateway.
+        Inferences to the anthropic model used by the AI-gateway.
 
         Apdex applies to non-streaming inferences, they are considered fast enough when the request took less than 30s. Errors don't count toward apdex
 
@@ -78,13 +79,13 @@ groups:
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_datasource_id: mimir-runway
       grafana_min_zoom_hours: "6"
-      grafana_panel_id: "4259195235"
+      grafana_panel_id: "1848688516"
       grafana_variables: environment,stage
       promql_template_1: |
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
-            rate(inference_request_duration_seconds_bucket{environment="{{ $labels.environment }}",error="no",stage="{{ $labels.stage }}",streaming="no",type="ai-gateway"}[5m])
+            rate(inference_request_duration_seconds_bucket{environment="{{ $labels.environment }}",error="no",model_engine="anthropic",stage="{{ $labels.stage }}",streaming="no",type="ai-gateway"}[5m])
           )
         )
       runbook: docs/ai-gateway/README.md
@@ -92,6 +93,7 @@ groups:
       aggregation: component
       alert_class: slo_violation
       alert_type: symptom
+      confidence: 98%
       feature_category: in_source_metrics
       pager: pagerduty
       rules_domain: general
@@ -103,26 +105,26 @@ groups:
     expr: |
       (
         (
-          gitlab_component_apdex:ratio_6h{component="inference",monitor="global",type="ai-gateway"}
+          gitlab_component_apdex:confidence:ratio_6h{component="inference_anthropic",confidence="98%",monitor="global",type="ai-gateway"}
           < (1 - 6 * 0.020000)
         )
         and
         (
-          gitlab_component_apdex:ratio_30m{component="inference",monitor="global",type="ai-gateway"}
+          gitlab_component_apdex:confidence:ratio_30m{component="inference_anthropic",confidence="98%",monitor="global",type="ai-gateway"}
           < (1 - 6 * 0.020000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="inference",monitor="global",type="ai-gateway"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="inference_anthropic",monitor="global",type="ai-gateway"}) >= 0.16667
       )
-  - alert: AiGatewayServiceInferenceApdexSLOViolationRegional
+  - alert: AiGatewayServiceInferenceAnthropicApdexSLOViolationRegional
     for: 2m
     annotations:
-      title: The inference SLI of the ai-gateway service in region `{{ $labels.region
+      title: The inference_anthropic SLI of the ai-gateway service in region `{{ $labels.region
         }}` has an apdex violating SLO
       description: |
-        Inferences to the different model engines used by the AI-gateway.
+        Inferences to the anthropic model used by the AI-gateway.
 
         Apdex applies to non-streaming inferences, they are considered fast enough when the request took less than 30s. Errors don't count toward apdex
 
@@ -136,13 +138,13 @@ groups:
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_datasource_id: mimir-runway
       grafana_min_zoom_hours: "6"
-      grafana_panel_id: "4259195235"
+      grafana_panel_id: "1848688516"
       grafana_variables: environment,stage
       promql_template_1: |
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,region,le) (
-            rate(inference_request_duration_seconds_bucket{environment="{{ $labels.environment }}",error="no",region="{{ $labels.region }}",stage="{{ $labels.stage }}",streaming="no",type="ai-gateway"}[5m])
+            rate(inference_request_duration_seconds_bucket{environment="{{ $labels.environment }}",error="no",model_engine="anthropic",region="{{ $labels.region }}",stage="{{ $labels.stage }}",streaming="no",type="ai-gateway"}[5m])
           )
         )
       runbook: docs/ai-gateway/README.md
@@ -161,26 +163,26 @@ groups:
     expr: |
       (
         (
-          gitlab_regional_sli_apdex:ratio_1h{component="inference",monitor="global",type="ai-gateway"}
+          gitlab_regional_sli_apdex:ratio_1h{component="inference_anthropic",monitor="global",type="ai-gateway"}
           < (1 - 14.4 * 0.020000)
         )
         and
         (
-          gitlab_regional_sli_apdex:ratio_5m{component="inference",monitor="global",type="ai-gateway"}
+          gitlab_regional_sli_apdex:ratio_5m{component="inference_anthropic",monitor="global",type="ai-gateway"}
           < (1 - 14.4 * 0.020000)
         )
       )
       and on(env,environment,tier,type,stage,region,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="inference",monitor="global",type="ai-gateway"}) >= 1
+        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="inference_anthropic",monitor="global",type="ai-gateway"}) >= 1
       )
-  - alert: AiGatewayServiceInferenceApdexSLOViolationRegional
+  - alert: AiGatewayServiceInferenceAnthropicApdexSLOViolationRegional
     for: 2m
     annotations:
-      title: The inference SLI of the ai-gateway service in region `{{ $labels.region
+      title: The inference_anthropic SLI of the ai-gateway service in region `{{ $labels.region
         }}` has an apdex violating SLO
       description: |
-        Inferences to the different model engines used by the AI-gateway.
+        Inferences to the anthropic model used by the AI-gateway.
 
         Apdex applies to non-streaming inferences, they are considered fast enough when the request took less than 30s. Errors don't count toward apdex
 
@@ -194,13 +196,13 @@ groups:
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_datasource_id: mimir-runway
       grafana_min_zoom_hours: "6"
-      grafana_panel_id: "4259195235"
+      grafana_panel_id: "1848688516"
       grafana_variables: environment,stage
       promql_template_1: |
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,region,le) (
-            rate(inference_request_duration_seconds_bucket{environment="{{ $labels.environment }}",error="no",region="{{ $labels.region }}",stage="{{ $labels.stage }}",streaming="no",type="ai-gateway"}[5m])
+            rate(inference_request_duration_seconds_bucket{environment="{{ $labels.environment }}",error="no",model_engine="anthropic",region="{{ $labels.region }}",stage="{{ $labels.stage }}",streaming="no",type="ai-gateway"}[5m])
           )
         )
       runbook: docs/ai-gateway/README.md
@@ -219,26 +221,26 @@ groups:
     expr: |
       (
         (
-          gitlab_regional_sli_apdex:ratio_6h{component="inference",monitor="global",type="ai-gateway"}
+          gitlab_regional_sli_apdex:ratio_6h{component="inference_anthropic",monitor="global",type="ai-gateway"}
           < (1 - 6 * 0.020000)
         )
         and
         (
-          gitlab_regional_sli_apdex:ratio_30m{component="inference",monitor="global",type="ai-gateway"}
+          gitlab_regional_sli_apdex:ratio_30m{component="inference_anthropic",monitor="global",type="ai-gateway"}
           < (1 - 6 * 0.020000)
         )
       )
       and on(env,environment,tier,type,stage,region,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="inference",monitor="global",type="ai-gateway"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="inference_anthropic",monitor="global",type="ai-gateway"}) >= 0.16667
       )
-  - alert: AiGatewayServiceInferenceErrorSLOViolation
+  - alert: AiGatewayServiceInferenceAnthropicErrorSLOViolation
     for: 2m
     annotations:
-      title: The inference SLI of the ai-gateway service (`{{ $labels.stage }}` stage)
-        has an error rate violating SLO
+      title: The inference_anthropic SLI of the ai-gateway service (`{{ $labels.stage
+        }}` stage) has an error rate violating SLO
       description: |
-        Inferences to the different model engines used by the AI-gateway.
+        Inferences to the anthropic model used by the AI-gateway.
 
         Apdex applies to non-streaming inferences, they are considered fast enough when the request took less than 30s. Errors don't count toward apdex
 
@@ -250,17 +252,18 @@ groups:
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_datasource_id: mimir-runway
       grafana_min_zoom_hours: "6"
-      grafana_panel_id: "873407058"
+      grafana_panel_id: "2053187990"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(model_inferences_total{environment="{{ $labels.environment }}",error="yes",stage="{{ $labels.stage }}",type="ai-gateway"}[5m])
+          rate(model_inferences_total{environment="{{ $labels.environment }}",error="yes",model_engine="anthropic",stage="{{ $labels.stage }}",type="ai-gateway"}[5m])
         )
       runbook: docs/ai-gateway/README.md
     labels:
       aggregation: component
       alert_class: slo_violation
       alert_type: symptom
+      confidence: 98%
       feature_category: in_source_metrics
       pager: pagerduty
       rules_domain: general
@@ -272,26 +275,26 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_1h{component="inference",monitor="global",type="ai-gateway"}
+          gitlab_component_errors:confidence:ratio_1h{component="inference_anthropic",confidence="98%",monitor="global",type="ai-gateway"}
           > (14.4 * 0.020000)
         )
         and
         (
-          gitlab_component_errors:ratio_5m{component="inference",monitor="global",type="ai-gateway"}
+          gitlab_component_errors:confidence:ratio_5m{component="inference_anthropic",confidence="98%",monitor="global",type="ai-gateway"}
           > (14.4 * 0.020000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="inference",monitor="global",type="ai-gateway"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="inference_anthropic",monitor="global",type="ai-gateway"}) >= 1
       )
-  - alert: AiGatewayServiceInferenceErrorSLOViolation
+  - alert: AiGatewayServiceInferenceAnthropicErrorSLOViolation
     for: 2m
     annotations:
-      title: The inference SLI of the ai-gateway service (`{{ $labels.stage }}` stage)
-        has an error rate violating SLO
+      title: The inference_anthropic SLI of the ai-gateway service (`{{ $labels.stage
+        }}` stage) has an error rate violating SLO
       description: |
-        Inferences to the different model engines used by the AI-gateway.
+        Inferences to the anthropic model used by the AI-gateway.
 
         Apdex applies to non-streaming inferences, they are considered fast enough when the request took less than 30s. Errors don't count toward apdex
 
@@ -303,17 +306,18 @@ groups:
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_datasource_id: mimir-runway
       grafana_min_zoom_hours: "6"
-      grafana_panel_id: "873407058"
+      grafana_panel_id: "2053187990"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(model_inferences_total{environment="{{ $labels.environment }}",error="yes",stage="{{ $labels.stage }}",type="ai-gateway"}[5m])
+          rate(model_inferences_total{environment="{{ $labels.environment }}",error="yes",model_engine="anthropic",stage="{{ $labels.stage }}",type="ai-gateway"}[5m])
         )
       runbook: docs/ai-gateway/README.md
     labels:
       aggregation: component
       alert_class: slo_violation
       alert_type: symptom
+      confidence: 98%
       feature_category: in_source_metrics
       pager: pagerduty
       rules_domain: general
@@ -325,26 +329,26 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_6h{component="inference",monitor="global",type="ai-gateway"}
+          gitlab_component_errors:confidence:ratio_6h{component="inference_anthropic",confidence="98%",monitor="global",type="ai-gateway"}
           > (6 * 0.020000)
         )
         and
         (
-          gitlab_component_errors:ratio_30m{component="inference",monitor="global",type="ai-gateway"}
+          gitlab_component_errors:confidence:ratio_30m{component="inference_anthropic",confidence="98%",monitor="global",type="ai-gateway"}
           > (6 * 0.020000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="inference",monitor="global",type="ai-gateway"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="inference_anthropic",monitor="global",type="ai-gateway"}) >= 0.16667
       )
-  - alert: AiGatewayServiceInferenceErrorSLOViolationRegional
+  - alert: AiGatewayServiceInferenceAnthropicErrorSLOViolationRegional
     for: 2m
     annotations:
-      title: The inference SLI of the ai-gateway service in region `{{ $labels.region
+      title: The inference_anthropic SLI of the ai-gateway service in region `{{ $labels.region
         }}` has an error rate violating SLO
       description: |
-        Inferences to the different model engines used by the AI-gateway.
+        Inferences to the anthropic model used by the AI-gateway.
 
         Apdex applies to non-streaming inferences, they are considered fast enough when the request took less than 30s. Errors don't count toward apdex
 
@@ -358,11 +362,11 @@ groups:
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_datasource_id: mimir-runway
       grafana_min_zoom_hours: "6"
-      grafana_panel_id: "873407058"
+      grafana_panel_id: "2053187990"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage,region) (
-          rate(model_inferences_total{environment="{{ $labels.environment }}",error="yes",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="ai-gateway"}[5m])
+          rate(model_inferences_total{environment="{{ $labels.environment }}",error="yes",model_engine="anthropic",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="ai-gateway"}[5m])
         )
       runbook: docs/ai-gateway/README.md
     labels:
@@ -380,26 +384,26 @@ groups:
     expr: |
       (
         (
-          gitlab_regional_sli_errors:ratio_1h{component="inference",monitor="global",type="ai-gateway"}
+          gitlab_regional_sli_errors:ratio_1h{component="inference_anthropic",monitor="global",type="ai-gateway"}
           > (14.4 * 0.020000)
         )
         and
         (
-          gitlab_regional_sli_errors:ratio_5m{component="inference",monitor="global",type="ai-gateway"}
+          gitlab_regional_sli_errors:ratio_5m{component="inference_anthropic",monitor="global",type="ai-gateway"}
           > (14.4 * 0.020000)
         )
       )
       and on(env,environment,tier,type,stage,region,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="inference",monitor="global",type="ai-gateway"}) >= 1
+        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="inference_anthropic",monitor="global",type="ai-gateway"}) >= 1
       )
-  - alert: AiGatewayServiceInferenceErrorSLOViolationRegional
+  - alert: AiGatewayServiceInferenceAnthropicErrorSLOViolationRegional
     for: 2m
     annotations:
-      title: The inference SLI of the ai-gateway service in region `{{ $labels.region
+      title: The inference_anthropic SLI of the ai-gateway service in region `{{ $labels.region
         }}` has an error rate violating SLO
       description: |
-        Inferences to the different model engines used by the AI-gateway.
+        Inferences to the anthropic model used by the AI-gateway.
 
         Apdex applies to non-streaming inferences, they are considered fast enough when the request took less than 30s. Errors don't count toward apdex
 
@@ -413,11 +417,11 @@ groups:
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_datasource_id: mimir-runway
       grafana_min_zoom_hours: "6"
-      grafana_panel_id: "873407058"
+      grafana_panel_id: "2053187990"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage,region) (
-          rate(model_inferences_total{environment="{{ $labels.environment }}",error="yes",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="ai-gateway"}[5m])
+          rate(model_inferences_total{environment="{{ $labels.environment }}",error="yes",model_engine="anthropic",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="ai-gateway"}[5m])
         )
       runbook: docs/ai-gateway/README.md
     labels:
@@ -435,18 +439,466 @@ groups:
     expr: |
       (
         (
-          gitlab_regional_sli_errors:ratio_6h{component="inference",monitor="global",type="ai-gateway"}
+          gitlab_regional_sli_errors:ratio_6h{component="inference_anthropic",monitor="global",type="ai-gateway"}
           > (6 * 0.020000)
         )
         and
         (
-          gitlab_regional_sli_errors:ratio_30m{component="inference",monitor="global",type="ai-gateway"}
+          gitlab_regional_sli_errors:ratio_30m{component="inference_anthropic",monitor="global",type="ai-gateway"}
           > (6 * 0.020000)
         )
       )
       and on(env,environment,tier,type,stage,region,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="inference",monitor="global",type="ai-gateway"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="inference_anthropic",monitor="global",type="ai-gateway"}) >= 0.16667
+      )
+  - alert: AiGatewayServiceInferenceVertexApdexSLOViolation
+    for: 2m
+    annotations:
+      title: The inference_vertex SLI of the ai-gateway service (`{{ $labels.stage
+        }}` stage) has an apdex violating SLO
+      description: |
+        Inferences to the vertex-ai engines used by the AI-gateway.
+
+        Apdex applies to non-streaming inferences, they are considered fast enough when the request took less than 2s. Errors don't count toward apdex
+
+        A failure means an inference threw an error, for example when the model is not available.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-runway
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "1423891675"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,le) (
+            rate(inference_request_duration_seconds_bucket{environment="{{ $labels.environment }}",error="no",model_engine="vertex-ai",stage="{{ $labels.stage }}",streaming="no",type="ai-gateway"}[5m])
+          )
+        )
+      runbook: docs/ai-gateway/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      confidence: 98%
+      feature_category: in_source_metrics
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 1h
+    expr: |
+      (
+        (
+          gitlab_component_apdex:confidence:ratio_1h{component="inference_vertex",confidence="98%",monitor="global",type="ai-gateway"}
+          < (1 - 14.4 * 0.020000)
+        )
+        and
+        (
+          gitlab_component_apdex:confidence:ratio_5m{component="inference_vertex",confidence="98%",monitor="global",type="ai-gateway"}
+          < (1 - 14.4 * 0.020000)
+        )
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="inference_vertex",monitor="global",type="ai-gateway"}) >= 1
+      )
+  - alert: AiGatewayServiceInferenceVertexApdexSLOViolation
+    for: 2m
+    annotations:
+      title: The inference_vertex SLI of the ai-gateway service (`{{ $labels.stage
+        }}` stage) has an apdex violating SLO
+      description: |
+        Inferences to the vertex-ai engines used by the AI-gateway.
+
+        Apdex applies to non-streaming inferences, they are considered fast enough when the request took less than 2s. Errors don't count toward apdex
+
+        A failure means an inference threw an error, for example when the model is not available.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-runway
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "1423891675"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,le) (
+            rate(inference_request_duration_seconds_bucket{environment="{{ $labels.environment }}",error="no",model_engine="vertex-ai",stage="{{ $labels.stage }}",streaming="no",type="ai-gateway"}[5m])
+          )
+        )
+      runbook: docs/ai-gateway/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      confidence: 98%
+      feature_category: in_source_metrics
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+    expr: |
+      (
+        (
+          gitlab_component_apdex:confidence:ratio_6h{component="inference_vertex",confidence="98%",monitor="global",type="ai-gateway"}
+          < (1 - 6 * 0.020000)
+        )
+        and
+        (
+          gitlab_component_apdex:confidence:ratio_30m{component="inference_vertex",confidence="98%",monitor="global",type="ai-gateway"}
+          < (1 - 6 * 0.020000)
+        )
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="inference_vertex",monitor="global",type="ai-gateway"}) >= 0.16667
+      )
+  - alert: AiGatewayServiceInferenceVertexApdexSLOViolationRegional
+    for: 2m
+    annotations:
+      title: The inference_vertex SLI of the ai-gateway service in region `{{ $labels.region
+        }}` has an apdex violating SLO
+      description: |
+        Inferences to the vertex-ai engines used by the AI-gateway.
+
+        Apdex applies to non-streaming inferences, they are considered fast enough when the request took less than 2s. Errors don't count toward apdex
+
+        A failure means an inference threw an error, for example when the model is not available.
+
+        Note that this alert is specific to the `{{ $labels.region }}` region.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-runway
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "1423891675"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,region,le) (
+            rate(inference_request_duration_seconds_bucket{environment="{{ $labels.environment }}",error="no",model_engine="vertex-ai",region="{{ $labels.region }}",stage="{{ $labels.stage }}",streaming="no",type="ai-gateway"}[5m])
+          )
+        )
+      runbook: docs/ai-gateway/README.md
+    labels:
+      aggregation: regional_component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: in_source_metrics
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 1h
+    expr: |
+      (
+        (
+          gitlab_regional_sli_apdex:ratio_1h{component="inference_vertex",monitor="global",type="ai-gateway"}
+          < (1 - 14.4 * 0.020000)
+        )
+        and
+        (
+          gitlab_regional_sli_apdex:ratio_5m{component="inference_vertex",monitor="global",type="ai-gateway"}
+          < (1 - 14.4 * 0.020000)
+        )
+      )
+      and on(env,environment,tier,type,stage,region,component)
+      (
+        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="inference_vertex",monitor="global",type="ai-gateway"}) >= 1
+      )
+  - alert: AiGatewayServiceInferenceVertexApdexSLOViolationRegional
+    for: 2m
+    annotations:
+      title: The inference_vertex SLI of the ai-gateway service in region `{{ $labels.region
+        }}` has an apdex violating SLO
+      description: |
+        Inferences to the vertex-ai engines used by the AI-gateway.
+
+        Apdex applies to non-streaming inferences, they are considered fast enough when the request took less than 2s. Errors don't count toward apdex
+
+        A failure means an inference threw an error, for example when the model is not available.
+
+        Note that this alert is specific to the `{{ $labels.region }}` region.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-runway
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "1423891675"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,region,le) (
+            rate(inference_request_duration_seconds_bucket{environment="{{ $labels.environment }}",error="no",model_engine="vertex-ai",region="{{ $labels.region }}",stage="{{ $labels.stage }}",streaming="no",type="ai-gateway"}[5m])
+          )
+        )
+      runbook: docs/ai-gateway/README.md
+    labels:
+      aggregation: regional_component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: in_source_metrics
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+    expr: |
+      (
+        (
+          gitlab_regional_sli_apdex:ratio_6h{component="inference_vertex",monitor="global",type="ai-gateway"}
+          < (1 - 6 * 0.020000)
+        )
+        and
+        (
+          gitlab_regional_sli_apdex:ratio_30m{component="inference_vertex",monitor="global",type="ai-gateway"}
+          < (1 - 6 * 0.020000)
+        )
+      )
+      and on(env,environment,tier,type,stage,region,component)
+      (
+        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="inference_vertex",monitor="global",type="ai-gateway"}) >= 0.16667
+      )
+  - alert: AiGatewayServiceInferenceVertexErrorSLOViolation
+    for: 2m
+    annotations:
+      title: The inference_vertex SLI of the ai-gateway service (`{{ $labels.stage
+        }}` stage) has an error rate violating SLO
+      description: |
+        Inferences to the vertex-ai engines used by the AI-gateway.
+
+        Apdex applies to non-streaming inferences, they are considered fast enough when the request took less than 2s. Errors don't count toward apdex
+
+        A failure means an inference threw an error, for example when the model is not available.
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-runway
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3292268489"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(model_inferences_total{environment="{{ $labels.environment }}",error="yes",model_engine="vertex-ai",stage="{{ $labels.stage }}",type="ai-gateway"}[5m])
+        )
+      runbook: docs/ai-gateway/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      confidence: 98%
+      feature_category: in_source_metrics
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: error
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 1h
+    expr: |
+      (
+        (
+          gitlab_component_errors:confidence:ratio_1h{component="inference_vertex",confidence="98%",monitor="global",type="ai-gateway"}
+          > (14.4 * 0.020000)
+        )
+        and
+        (
+          gitlab_component_errors:confidence:ratio_5m{component="inference_vertex",confidence="98%",monitor="global",type="ai-gateway"}
+          > (14.4 * 0.020000)
+        )
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="inference_vertex",monitor="global",type="ai-gateway"}) >= 1
+      )
+  - alert: AiGatewayServiceInferenceVertexErrorSLOViolation
+    for: 2m
+    annotations:
+      title: The inference_vertex SLI of the ai-gateway service (`{{ $labels.stage
+        }}` stage) has an error rate violating SLO
+      description: |
+        Inferences to the vertex-ai engines used by the AI-gateway.
+
+        Apdex applies to non-streaming inferences, they are considered fast enough when the request took less than 2s. Errors don't count toward apdex
+
+        A failure means an inference threw an error, for example when the model is not available.
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-runway
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3292268489"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(model_inferences_total{environment="{{ $labels.environment }}",error="yes",model_engine="vertex-ai",stage="{{ $labels.stage }}",type="ai-gateway"}[5m])
+        )
+      runbook: docs/ai-gateway/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      confidence: 98%
+      feature_category: in_source_metrics
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: error
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+    expr: |
+      (
+        (
+          gitlab_component_errors:confidence:ratio_6h{component="inference_vertex",confidence="98%",monitor="global",type="ai-gateway"}
+          > (6 * 0.020000)
+        )
+        and
+        (
+          gitlab_component_errors:confidence:ratio_30m{component="inference_vertex",confidence="98%",monitor="global",type="ai-gateway"}
+          > (6 * 0.020000)
+        )
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="inference_vertex",monitor="global",type="ai-gateway"}) >= 0.16667
+      )
+  - alert: AiGatewayServiceInferenceVertexErrorSLOViolationRegional
+    for: 2m
+    annotations:
+      title: The inference_vertex SLI of the ai-gateway service in region `{{ $labels.region
+        }}` has an error rate violating SLO
+      description: |
+        Inferences to the vertex-ai engines used by the AI-gateway.
+
+        Apdex applies to non-streaming inferences, they are considered fast enough when the request took less than 2s. Errors don't count toward apdex
+
+        A failure means an inference threw an error, for example when the model is not available.
+
+        Note that this alert is specific to the `{{ $labels.region }}` region.
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-runway
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3292268489"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage,region) (
+          rate(model_inferences_total{environment="{{ $labels.environment }}",error="yes",model_engine="vertex-ai",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="ai-gateway"}[5m])
+        )
+      runbook: docs/ai-gateway/README.md
+    labels:
+      aggregation: regional_component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: in_source_metrics
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: error
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 1h
+    expr: |
+      (
+        (
+          gitlab_regional_sli_errors:ratio_1h{component="inference_vertex",monitor="global",type="ai-gateway"}
+          > (14.4 * 0.020000)
+        )
+        and
+        (
+          gitlab_regional_sli_errors:ratio_5m{component="inference_vertex",monitor="global",type="ai-gateway"}
+          > (14.4 * 0.020000)
+        )
+      )
+      and on(env,environment,tier,type,stage,region,component)
+      (
+        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="inference_vertex",monitor="global",type="ai-gateway"}) >= 1
+      )
+  - alert: AiGatewayServiceInferenceVertexErrorSLOViolationRegional
+    for: 2m
+    annotations:
+      title: The inference_vertex SLI of the ai-gateway service in region `{{ $labels.region
+        }}` has an error rate violating SLO
+      description: |
+        Inferences to the vertex-ai engines used by the AI-gateway.
+
+        Apdex applies to non-streaming inferences, they are considered fast enough when the request took less than 2s. Errors don't count toward apdex
+
+        A failure means an inference threw an error, for example when the model is not available.
+
+        Note that this alert is specific to the `{{ $labels.region }}` region.
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: ai-gateway-main/ai-gateway-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_datasource_id: mimir-runway
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3292268489"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage,region) (
+          rate(model_inferences_total{environment="{{ $labels.environment }}",error="yes",model_engine="vertex-ai",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="ai-gateway"}[5m])
+        )
+      runbook: docs/ai-gateway/README.md
+    labels:
+      aggregation: regional_component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: in_source_metrics
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: error
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+    expr: |
+      (
+        (
+          gitlab_regional_sli_errors:ratio_6h{component="inference_vertex",monitor="global",type="ai-gateway"}
+          > (6 * 0.020000)
+        )
+        and
+        (
+          gitlab_regional_sli_errors:ratio_30m{component="inference_vertex",monitor="global",type="ai-gateway"}
+          > (6 * 0.020000)
+        )
+      )
+      and on(env,environment,tier,type,stage,region,component)
+      (
+        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="inference_vertex",monitor="global",type="ai-gateway"}) >= 0.16667
       )
   - alert: AiGatewayServiceRunwayIngressApdexSLOViolation
     for: 2m
@@ -1384,7 +1836,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
-            rate(http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",handler!~"/v1/chat/agent|/v1/x-ray/libraries|/v2/code/completions|/v2/code/generations|/v2/completions",stage="{{ $labels.stage }}",status!~"4xx|5xx",type="ai-gateway"}[5m])
+            rate(http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",handler!~"(/v(1|2)/chat/.*)|/v1/x-ray/libraries|/v2/code/completions|/v2/code/generations|/v2/completions",stage="{{ $labels.stage }}",status!~"4xx|5xx",type="ai-gateway"}[5m])
           )
         )
       runbook: docs/ai-gateway/README.md
@@ -1435,7 +1887,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
-            rate(http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",handler!~"/v1/chat/agent|/v1/x-ray/libraries|/v2/code/completions|/v2/code/generations|/v2/completions",stage="{{ $labels.stage }}",status!~"4xx|5xx",type="ai-gateway"}[5m])
+            rate(http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",handler!~"(/v(1|2)/chat/.*)|/v1/x-ray/libraries|/v2/code/completions|/v2/code/generations|/v2/completions",stage="{{ $labels.stage }}",status!~"4xx|5xx",type="ai-gateway"}[5m])
           )
         )
       runbook: docs/ai-gateway/README.md
@@ -1488,7 +1940,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,region,le) (
-            rate(http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",handler!~"/v1/chat/agent|/v1/x-ray/libraries|/v2/code/completions|/v2/code/generations|/v2/completions",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status!~"4xx|5xx",type="ai-gateway"}[5m])
+            rate(http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",handler!~"(/v(1|2)/chat/.*)|/v1/x-ray/libraries|/v2/code/completions|/v2/code/generations|/v2/completions",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status!~"4xx|5xx",type="ai-gateway"}[5m])
           )
         )
       runbook: docs/ai-gateway/README.md
@@ -1541,7 +1993,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,region,le) (
-            rate(http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",handler!~"/v1/chat/agent|/v1/x-ray/libraries|/v2/code/completions|/v2/code/generations|/v2/completions",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status!~"4xx|5xx",type="ai-gateway"}[5m])
+            rate(http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",handler!~"(/v(1|2)/chat/.*)|/v1/x-ray/libraries|/v2/code/completions|/v2/code/generations|/v2/completions",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status!~"4xx|5xx",type="ai-gateway"}[5m])
           )
         )
       runbook: docs/ai-gateway/README.md
@@ -1590,7 +2042,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(http_request_duration_seconds_count{environment="{{ $labels.environment }}",handler!~"/v1/chat/agent|/v1/x-ray/libraries|/v2/code/completions|/v2/code/generations|/v2/completions",stage="{{ $labels.stage }}",status="5xx",type="ai-gateway"}[5m])
+          rate(http_request_duration_seconds_count{environment="{{ $labels.environment }}",handler!~"(/v(1|2)/chat/.*)|/v1/x-ray/libraries|/v2/code/completions|/v2/code/generations|/v2/completions",stage="{{ $labels.stage }}",status="5xx",type="ai-gateway"}[5m])
         )
       runbook: docs/ai-gateway/README.md
     labels:
@@ -1638,7 +2090,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(http_request_duration_seconds_count{environment="{{ $labels.environment }}",handler!~"/v1/chat/agent|/v1/x-ray/libraries|/v2/code/completions|/v2/code/generations|/v2/completions",stage="{{ $labels.stage }}",status="5xx",type="ai-gateway"}[5m])
+          rate(http_request_duration_seconds_count{environment="{{ $labels.environment }}",handler!~"(/v(1|2)/chat/.*)|/v1/x-ray/libraries|/v2/code/completions|/v2/code/generations|/v2/completions",stage="{{ $labels.stage }}",status="5xx",type="ai-gateway"}[5m])
         )
       runbook: docs/ai-gateway/README.md
     labels:
@@ -1688,7 +2140,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage,region) (
-          rate(http_request_duration_seconds_count{environment="{{ $labels.environment }}",handler!~"/v1/chat/agent|/v1/x-ray/libraries|/v2/code/completions|/v2/code/generations|/v2/completions",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status="5xx",type="ai-gateway"}[5m])
+          rate(http_request_duration_seconds_count{environment="{{ $labels.environment }}",handler!~"(/v(1|2)/chat/.*)|/v1/x-ray/libraries|/v2/code/completions|/v2/code/generations|/v2/completions",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status="5xx",type="ai-gateway"}[5m])
         )
       runbook: docs/ai-gateway/README.md
     labels:
@@ -1738,7 +2190,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage,region) (
-          rate(http_request_duration_seconds_count{environment="{{ $labels.environment }}",handler!~"/v1/chat/agent|/v1/x-ray/libraries|/v2/code/completions|/v2/code/generations|/v2/completions",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status="5xx",type="ai-gateway"}[5m])
+          rate(http_request_duration_seconds_count{environment="{{ $labels.environment }}",handler!~"(/v(1|2)/chat/.*)|/v1/x-ray/libraries|/v2/code/completions|/v2/code/generations|/v2/completions",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status="5xx",type="ai-gateway"}[5m])
         )
       runbook: docs/ai-gateway/README.md
     labels:
@@ -1788,7 +2240,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
-            rate(http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",handler="/v1/chat/agent",stage="{{ $labels.stage }}",status!~"4xx|5xx",type="ai-gateway"}[5m])
+            rate(http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",handler=~"/v(1|2)/chat/.*",stage="{{ $labels.stage }}",status!~"4xx|5xx",type="ai-gateway"}[5m])
           )
         )
       runbook: docs/ai-gateway/README.md
@@ -1840,7 +2292,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
-            rate(http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",handler="/v1/chat/agent",stage="{{ $labels.stage }}",status!~"4xx|5xx",type="ai-gateway"}[5m])
+            rate(http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",handler=~"/v(1|2)/chat/.*",stage="{{ $labels.stage }}",status!~"4xx|5xx",type="ai-gateway"}[5m])
           )
         )
       runbook: docs/ai-gateway/README.md
@@ -1894,7 +2346,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,region,le) (
-            rate(http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",handler="/v1/chat/agent",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status!~"4xx|5xx",type="ai-gateway"}[5m])
+            rate(http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",handler=~"/v(1|2)/chat/.*",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status!~"4xx|5xx",type="ai-gateway"}[5m])
           )
         )
       runbook: docs/ai-gateway/README.md
@@ -1948,7 +2400,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,region,le) (
-            rate(http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",handler="/v1/chat/agent",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status!~"4xx|5xx",type="ai-gateway"}[5m])
+            rate(http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",handler=~"/v(1|2)/chat/.*",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status!~"4xx|5xx",type="ai-gateway"}[5m])
           )
         )
       runbook: docs/ai-gateway/README.md
@@ -1998,7 +2450,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(http_request_duration_seconds_count{environment="{{ $labels.environment }}",handler="/v1/chat/agent",stage="{{ $labels.stage }}",status="5xx",type="ai-gateway"}[5m])
+          rate(http_request_duration_seconds_count{environment="{{ $labels.environment }}",handler=~"/v(1|2)/chat/.*",stage="{{ $labels.stage }}",status="5xx",type="ai-gateway"}[5m])
         )
       runbook: docs/ai-gateway/README.md
     labels:
@@ -2047,7 +2499,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(http_request_duration_seconds_count{environment="{{ $labels.environment }}",handler="/v1/chat/agent",stage="{{ $labels.stage }}",status="5xx",type="ai-gateway"}[5m])
+          rate(http_request_duration_seconds_count{environment="{{ $labels.environment }}",handler=~"/v(1|2)/chat/.*",stage="{{ $labels.stage }}",status="5xx",type="ai-gateway"}[5m])
         )
       runbook: docs/ai-gateway/README.md
     labels:
@@ -2098,7 +2550,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage,region) (
-          rate(http_request_duration_seconds_count{environment="{{ $labels.environment }}",handler="/v1/chat/agent",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status="5xx",type="ai-gateway"}[5m])
+          rate(http_request_duration_seconds_count{environment="{{ $labels.environment }}",handler=~"/v(1|2)/chat/.*",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status="5xx",type="ai-gateway"}[5m])
         )
       runbook: docs/ai-gateway/README.md
     labels:
@@ -2149,7 +2601,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage,region) (
-          rate(http_request_duration_seconds_count{environment="{{ $labels.environment }}",handler="/v1/chat/agent",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status="5xx",type="ai-gateway"}[5m])
+          rate(http_request_duration_seconds_count{environment="{{ $labels.environment }}",handler=~"/v(1|2)/chat/.*",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status="5xx",type="ai-gateway"}[5m])
         )
       runbook: docs/ai-gateway/README.md
     labels:
