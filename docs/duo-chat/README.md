@@ -24,7 +24,7 @@ This page explains how to investigate Duo Chat issues on production.
   - [GitLab Sidekiq LLM log](https://log.gprd.gitlab.net/app/r/s/vZlVW)
   - [LLM Completion worker](https://dashboards.gitlab.net/d/sidekiq-worker-detail/sidekiq3a-worker-detail?orgId=1&var-PROMETHEUS_DS=mimir-gitlab-gprd&var-environment=gprd&var-stage=main&var-worker=Llm::CompletionWorker)
 - [Duo Chat specific error codes](#duo-chat-specific-error-codes)
-  - [Logs](https://log.gprd.gitlab.net/app/r/s/8VwIT):
+  - [Logs](https://log.gprd.gitlab.net/app/r/s/8VwIT)
 - Redis:
   - [Redis Chat Storage](https://dashboards.gitlab.net/d/redis-cluster-chat-cache-main/redis-cluster-chat-cache3a-overview?orgId=1)
 - AI Gateway:
