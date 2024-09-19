@@ -69,7 +69,7 @@
   import 'sentry.jsonnet',
   import 'sidekiq.jsonnet',
   import 'tracing.jsonnet',
-  import 'topology-service.jsonnet',
+  import 'topology-service-rest.jsonnet',
   import 'vault.jsonnet',
   import 'web-pages.jsonnet',
   import 'web.jsonnet',
