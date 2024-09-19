@@ -14,20 +14,20 @@ This page explains how to investigate Duo Chat issues on production.
 
 ## Quick Links
 
+- Dashboard:
+  - [Kibana based dashboard](https://log.gprd.gitlab.net/app/r/s/ngzVp)
+  - Prometheus based dashboard ... TBD
 - GitLab-Rails:
   - [GitLab Rails GraphQL log (Chat)](https://log.gprd.gitlab.net/app/r/s/qaxwx)
 - GitLab-Sidekiq:
   - [GitLab Sidekiq worker log](https://log.gprd.gitlab.net/app/r/s/8PKAT)
   - [GitLab Sidekiq LLM log](https://log.gprd.gitlab.net/app/r/s/vZlVW)
   - [LLM Completion worker](https://dashboards.gitlab.net/d/sidekiq-worker-detail/sidekiq3a-worker-detail?orgId=1&var-PROMETHEUS_DS=mimir-gitlab-gprd&var-environment=gprd&var-stage=main&var-worker=Llm::CompletionWorker)
-- GitLab-Sidekiq and GitLab-Rails:
-  - [Duo Chat specific error codes](#duo-chat-specific-error-codes)
-    - [Dashboard](https://log.gprd.gitlab.net/app/dashboards#/view/52e09bf4-a739-4686-9bb3-2f6bf1d69cab?_g=h@2294574):
-    - [Logs](https://log.gprd.gitlab.net/app/r/s/8VwIT):
+- [Duo Chat specific error codes](#duo-chat-specific-error-codes)
+  - [Logs](https://log.gprd.gitlab.net/app/r/s/8VwIT)
 - Redis:
   - [Redis Chat Storage](https://dashboards.gitlab.net/d/redis-cluster-chat-cache-main/redis-cluster-chat-cache3a-overview?orgId=1)
 - AI Gateway:
-  - [AI Gateway log dashabord (Duo Chat)](https://log.gprd.gitlab.net/app/r/s/ngzVp)
   - [AI Gateway log (Duo Chat)](https://log.gprd.gitlab.net/app/r/s/DhMe1)
   - [AI Gateway log (Error requests)](https://log.gprd.gitlab.net/app/r/s/xHtJB)
   - [AI Gateway log (Exceptions)](https://log.gprd.gitlab.net/app/r/s/c3BRR)
