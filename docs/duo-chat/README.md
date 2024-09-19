@@ -4,20 +4,70 @@
 
 - [Overview](#overview)
 - [Quick Links](#quick-links)
-- [Duo Chat Error Codes](#types-of-duo-chat-errors)
-- [Further troubleshooting](#further-troubleshooting)
-- [Tracing Llm Logs](#tracing-request-logs-from-gitlab-rails-to-the-ai-gateway)
+- [Duo Chat specific Error Codes](#duo-chat-specific-error-codes)
+- [Expanded AI logging](#expanded-ai-logging)
+- [Tracing requests across different services](#tracing-requests-across-different-services)
 
 ## Overview
 
-When you encounter a Duo Chat error code, it is not always clear where the error comes from and which team is responsible. The following runbook should give any GitLab team member a quick start guide for debugging Duo Chat errors.
+This page explains how to investigate Duo Chat issues on production.
 
 ## Quick Links
 
-- [Anthropic API Status Page](https://status.anthropic.com/)
-- [AI Gateway Grafana Dashboard](https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway3a-overview?orgId=1)
+- GitLab-Rails:
+  - [GitLab Rails GraphQL log (Chat)](https://log.gprd.gitlab.net/app/r/s/qaxwx)
+- GitLab-Sidekiq:
+  - [GitLab Sidekiq worker log](https://log.gprd.gitlab.net/app/r/s/8PKAT)
+  - [GitLab Sidekiq LLM log](https://log.gprd.gitlab.net/app/r/s/vZlVW)
+  - [LLM Completion worker](https://dashboards.gitlab.net/d/sidekiq-worker-detail/sidekiq3a-worker-detail?orgId=1&var-PROMETHEUS_DS=mimir-gitlab-gprd&var-environment=gprd&var-stage=main&var-worker=Llm::CompletionWorker)
+- GitLab-Sidekiq and GitLab-Rails:
+  - [Duo Chat specific error codes](#duo-chat-specific-error-codes)
+    - [Dashboard](https://log.gprd.gitlab.net/app/dashboards#/view/52e09bf4-a739-4686-9bb3-2f6bf1d69cab?_g=h@2294574):
+    - [Logs](https://log.gprd.gitlab.net/app/r/s/8VwIT):
+- Redis:
+  - [Redis Chat Storage](https://dashboards.gitlab.net/d/redis-cluster-chat-cache-main/redis-cluster-chat-cache3a-overview?orgId=1)
+- AI Gateway:
+  - [AI Gateway log dashabord (Duo Chat)](https://log.gprd.gitlab.net/app/r/s/ngzVp)
+  - [AI Gateway log (Duo Chat)](https://log.gprd.gitlab.net/app/r/s/DhMe1)
+  - [AI Gateway log (Error requests)](https://log.gprd.gitlab.net/app/r/s/xHtJB)
+  - [AI Gateway log (Exceptions)](https://log.gprd.gitlab.net/app/r/s/c3BRR)
+  - [AI Gateway metrics (Chat SLI)](https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway3a-overview?orgId=1)
+  - [Runway AI Gateway metrics](https://dashboards.gitlab.net/d/runway-service/runway3a-runway-service-metrics?orgId=1)
+  - [V1 vs V2 request volumes](https://log.gprd.gitlab.net/app/r/s/uvDXu)
+  - [V1 vs V2 request errors](https://log.gprd.gitlab.net/app/r/s/T2sZj)
+  - [V1 vs V2 request duration](https://log.gprd.gitlab.net/app/r/s/B3Lg7)
+- Anthropic APIs:
+  - We'll have [a SLI/SLO dashboard for our Anthrpic usage](https://gitlab.com/gitlab-org/modelops/applied-ml/code-suggestions/ai-assist/-/issues/631).
+  - In the meantime, we use the [Anthropic API Status Page](https://status.anthropic.com/).
+     Since this contains entire Anthropic system operational status, it could be unrelated to our usage.
+- Others:
+  - [Error budget dashboard](https://dashboards.gitlab.net/d/stage-groups-detail-duo_chat/6c28d63a-60e8-5db3-9797-39f988a1900b?orgId=1)
+  - [Kibana](https://log.gitlab.net/app/kibana)
+  - [Prometheus](https://dashboards.gitlab.net/goto/hrMaiq3SR?orgId=1)
+  - [Tableau (Duo Chat usage)](https://10az.online.tableau.com/#/site/gitlab/views/AiFeatures/DuoChatCRM?:iid=1)
 
-### Logs
+## Before start investigation
+
+NOTE: Do **NOT** expose customer's RED data in public issues. Redact them or make a confidential issue if you're unsure.
+
+Before starting the investigation, please collect the following information:
+
+- User name who encountered the bug (e.g. `@johndoe`)
+- What happened (e.g. User asked a question in Duo chat and saw an error code A1001)
+- When it happened (e.g. Around 2024/09/16 01:00 UTC)
+- Where it happened (e.g. VS Code, Web UI)
+- How often it happens (e.g. It happens everytime)
+- Steps to reproduce (e.g. 1. Ask a question "xxx" 2. Click ...)
+- Whether we can enable [Expanded AI logging](#expanded-ai-logging) and retry the bug so that we can collect process-level logging.
+- (V2 Chat Agent only) Whether the bug can be reproduced with Chat Agent V1 as well. See [how to disable the feature flag for a specific user](https://gitlab.com/gitlab-org/gitlab/-/issues/466910#how-to-disable-the-feature-flag-for-a-specific-user).
+- (Self-managed only) GitLab version (e.g. v17.4)
+- (Self-managed only) GitLab host name (e.g. `my-org.gitlab.io`)
+- (Self-managed only) whether they use GitLab-managed AI Gateway or self-managed AI Gateway (If they use custom models, it's likely latter.)
+- A link to a Slack discussion, if any.
+
+and create an issue in the [GitLab Issue tracker](https://gitlab.com/gitlab-org/gitlab/-/issues) and ping `@gitlab-org/ai-powered/duo-chat`.
+
+## Logs
 
 Log links for various environments can be found [here](../logging#quick-start).
 
@@ -38,6 +88,23 @@ If you find requests for a user there but do not find any results for them using
 
 That probably indicates a problem with Sidekiq where the job is not being kicked off. Check the `#incident-management` to see if there are any ongoing Sidekiq issues. Chat relies on Sidekiq and should be considered "down" if Sidekiq is backed up. See [Duo Chat does not respond or responds very slowly](#duo-chat-does-not-respond-or-responds-very-slowly) below.
 
+### Tracing requests across different services
+
+We utilize a `correlation_id` attribute to track and correlate log entries across different services. This unique identifier serves as a key to tie together logs for different systems and components.
+
+In Duo Chat case, mainly these components are invovled:
+
+- GitLab-Rails ... It provides the GraphQL API interface for frontend clients (VS Code extension, WebUI).
+  Since it invokes a sidekiq job to perform the actual process as _a separate process_, this correlation ID can't be used for tracing the actual processes.
+- GitLab-Sidekiq ... It performs the main process of Duo Chat request. If you're debugging Duo Chat functionalities, you need to grab a correlation ID in the Sidekiq logs.
+- AI Gateway ... It performs the AI related process of Duo Chat request. You can find a correlated logs from the Sidekiq's correlation ID.
+
+Here is an example of how to find correlated logs in the AI Gateway:
+
+- Access the `pubsub-mlops-inf-gprd-*` index:
+- Filter for the logs with `json.jsonPayload.correlation_id : <correlation_id`
+- _optional_: Click on the expanded logs icon and select "Surrounding documents" to view logs within relative same time stamp.
+
 ### Extra Kibana links
 
 You can find other helpful log searches by looking at saved Kibana objects with the [`group::ai_framework` tag](https://log.gprd.gitlab.net/app/management/kibana/objects).
@@ -45,7 +112,7 @@ You can find other helpful log searches by looking at saved Kibana objects with 
 - [AI Gateway error rates and response statuses](https://log.gprd.gitlab.net/app/dashboards#/view/5f334d60-cfd7-11ee-bc6b-0b206b291ea1?_g=h@2294574)
 - [AI Gateway Error Rate](https://log.gprd.gitlab.net/app/dashboards#/view/52e09bf4-a739-4686-9bb3-2f6bf1d69cab?_g=h@2294574)
 
-## Types of Duo Chat Errors
+## Duo Chat specific error codes
 
 All of GitLab Duo Chat error codes are documented [here](https://gitlab.com/gitlab-org/gitlab/-/blob/master/doc/user/gitlab_duo_chat/troubleshooting.md#the-gitlab-duo-chat-button-is-not-displayed). The error code prefix letter can help you choose which Kibana logs to search.
 
@@ -112,17 +179,7 @@ This could be caused by an issue with Sidekiq queues getting backed up.
 First, check the [GitLab status page](https://status.gitlab.com/) to see if there are any reported problems with Sidekiq or "background job processing".
 Then, check [this dashboard](https://log.gprd.gitlab.net/app/dashboards#/view/3684dc90-73f6-11ee-ac5b-8f88ebd04638). If you see that 'scheduling time for the completion worker' values are much higher than normal, it indicates the Sidekiq backup may be the problem.
 
-### Tracing request logs from GitLab Rails to the AI Gateway
-
-We utilize a `correlation_id` attribute to track and correlate log entries across both our Rails application and AIGW environments. This unique identifier serves as a key to tie together logs for different systems and components.
-
-With a `correlation_id` from GitLab Rails or Sidekiq logs, you can find the same request in the AI Gateway:
-
-- Access the `pubsub-mlops-inf-gprd-*` index:
-- Filter for the logs with `json.jsonPayload.correlation_id : <correlation_id`
-- _optional_: Click on the expanded logs icon and select "Surrounding documents" to view logs within relative same time stamp.
-
-## Further troubleshooting
+## Expanded AI logging
 
 **WARNING**: **DO NOT ENABLE FOR CUSTOMERS**.
 GitLab does not retain input and output data unless customers provide consent through a [GitLab Support Ticket](https://docs.gitlab.com/ee/user/gitlab_duo/data_usage.html#:~:text=GitLab%20does%20not%20retain%20input%20and%20output%20data%20unless%20customers%20provide%20consent%20through%20a%20GitLab%20Support%20Ticket.).
@@ -136,3 +193,42 @@ To enable expanded AI logging, access the `#production` Slack channel and run th
 ```
 
 After the the `expanded_ai_logging` feature flag is enabled for a user, you view the user input and LLM output for any the GitLab Duo Chat requests made by the user.
+
+Tips:
+We only need to enable the flag while we reproduce the bug on production. After we sampled a couple of problematic requests, we can disable the flag again
+and continue examining the logs.
+
+## Chat Agent V2 specific
+
+We're currently switching from V1 to V2 chat agent endpoint for the [Switch to Chat Agent V2](https://gitlab.com/groups/gitlab-org/-/epics/13533) epic.
+
+- [Current status](https://gitlab.com/groups/gitlab-org/-/epics/13533)
+- [Timeline](https://gitlab.com/groups/gitlab-org/-/epics/13533)
+- [Blockers / High priority](https://gitlab.com/groups/gitlab-org/-/epics/13533)
+- [Feature flag issue](https://gitlab.com/gitlab-org/gitlab/-/issues/466910)
+
+### How to disable the feature flag for a specific user
+
+```
+/chatops run feature set --user=<your-user-name> v2_chat_agent_integration_override true
+```
+
+**Important**: The flag name is **v2_chat_agent_integration_override**. It's NOT `v2_chat_agent_integration`.
+
+We have a flag for [Selectively disable by actor](https://docs.gitlab.com/ee/development/feature_flags/controls.html#selectively-disable-by-actor) so that we can disable the flag for a specific user while we keep enabling the flag for the rest of the users. This is to take a balance between collecting bug reports by exposing the V2 feature as long as possible and de-risking the feature operation on the critical workflow.
+
+For example, if you're in the sales division and need to demonstrate the Duo Chat for customers but the feature is not working at the moment, this feature flag can be disabled only for you. Please reach out the `@gitlab-org/ai-powered/duo-chat` team for the assistance.
+
+See [this issue](https://gitlab.com/gitlab-org/gitlab/-/issues/484753) for more information.
+
+### Use Expanded AI logging if it's possible
+
+We've [extended the support](https://gitlab.com/gitlab-org/gitlab/-/issues/485490) of `expanded_ai_logging` feature flag to AI Gateway.
+This means you can get a process-level logging, including actual request parameters and LLM response in the log.
+This is a great help to understand what's happening in AI Gateway.
+
+To do so:
+
+1. Make sure that the user provides consent for [Expanded AI logging](#expanded-ai-logging).
+1. Enable the expanded AI logging.
+1. [Tracing requests across different services](#tracing-requests-across-different-services)
