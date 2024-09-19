@@ -15,8 +15,8 @@ This page explains how to investigate Duo Chat issues on production.
 ## Quick Links
 
 - Dashboard:
-  - [Kibana based dashabord](https://log.gprd.gitlab.net/app/r/s/ngzVp)
-  - Prometheus based dashabord ... TBD
+  - [Kibana based dashboard](https://log.gprd.gitlab.net/app/r/s/ngzVp)
+  - Prometheus based dashboard ... TBD
 - GitLab-Rails:
   - [GitLab Rails GraphQL log (Chat)](https://log.gprd.gitlab.net/app/r/s/qaxwx)
 - GitLab-Sidekiq:
