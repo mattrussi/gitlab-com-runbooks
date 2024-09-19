@@ -24,7 +24,7 @@ fi
 
 help() {
   cat <<EOF 1>&2
-Usage: $0 -e <gprd,gstg,ops> [-1|-2] [-d <ISO8601 date>=current date] [-t <http,spectrum>=http] [-b <lookback in minutes (multiple of 5)>]
+Usage: $0 -e <gprd,gstg,ops,cloud-connect-stg,cloud-connect-prd> [-1|-2] [-d <ISO8601 date>=current date] [-t <http,spectrum>=http] [-b <lookback in minutes (multiple of 5)>]
 
 -1: Use this to search in historic Logpush v1 data (prior to 2022-04-15)
 -2: Use this to search in Logpush v2 data (default)
@@ -39,11 +39,11 @@ while getopts "e:b:d:t:h12" OPTION; do
   case $OPTION in
   e)
     case $OPTARG in
-    gprd)
+    gprd | cloud-connect-prd)
       ENVIRONMENT="${OPTARG}"
       PROJECT="gitlab-production"
       ;;
-    gstg)
+    gstg | cloud-connect-stg)
       ENVIRONMENT="${OPTARG}"
       PROJECT="gitlab-staging-1"
       ;;
