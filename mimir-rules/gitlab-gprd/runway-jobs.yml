@@ -3,7 +3,7 @@ groups:
   rules:
   - alert: RunwayJobFailure
     expr: |
-      sum by (type) (
+      sum by (type, env) (
         clamp_min(stackdriver_cloud_run_job_run_googleapis_com_job_completed_execution_count{env="gprd", result="failed"}, 1)
       ) > 0
     labels:
