@@ -351,7 +351,6 @@ metricsCatalog.serviceDefinition(
           counter='model_inferences_total',
           selector=baseSelector {model_engine: 'vertex-ai'},
         ),
-        
 
         significantLabels: ['model_name', 'feature_category'] + runwayLabels,
         useConfidenceLevelForSLIAlerts: '98%',
