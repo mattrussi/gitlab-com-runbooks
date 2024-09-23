@@ -311,6 +311,17 @@ metricsCatalog.serviceDefinition({
           ],
         },
       },
+      {
+        name: 'disk_space',
+        parameters: {
+          ignore_outliers: [
+            {
+              start: '2023-11-01',
+              end: '2023-12-15',
+            },
+          ],
+        },
+      },
     ],
   },
 })
