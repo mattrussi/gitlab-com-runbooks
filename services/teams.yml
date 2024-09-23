@@ -341,7 +341,7 @@ teams:
 
 - name: observability
   product_stage_group: observability
-  slack_alerts_channel: g_observability_alerts
+  slack_alerts_channel: g_monitor_platform_insights_infra_alerts
   send_error_budget_weekly_to_slack: true
   slack_error_budget_channel: s_monitor
   alerts:
