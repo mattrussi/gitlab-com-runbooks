@@ -7,7 +7,7 @@ This is a runbook for the steps to take to put a PCL in place.
 ### Who to consult
 
 1. Check with the @release-managers in the #releases Slack channel to confirm the state of the monthly release or any security releases.
-2. Check with security if there are any imminent security patches that release managers may not be notified of yet.
+2. Check with security in the #security Slack channel if there are any imminent security patches that release managers may not be notified of yet.
 3. Check with @incident-managers and @sre-oncall in the Slack #production channel to see if there are any concerns.
 
 ### Steps to put the PCL in place
