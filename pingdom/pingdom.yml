@@ -4,7 +4,7 @@ defaults:
   timeout_ms: 2000
 integrations:
   - name: pagerduty
-    id: 65172
+    id: 139568
 checks:
   - url: https://gitlab.com/gitlab-org/gitlab-foss/
     timeout_ms: 20000
@@ -60,7 +60,7 @@ checks:
     integrations:
       - pagerduty
 
-  - url: https://gitlab.com/api/v4/projects/13083  # GitLab-CE / GitLab-FOSS
+  - url: https://gitlab.com/api/v4/projects/13083 # GitLab-CE / GitLab-FOSS
     timeout_ms: 20000
     resolution_minutes: 5
     notify_when_restored: true
