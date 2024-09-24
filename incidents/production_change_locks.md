@@ -16,9 +16,9 @@ This is a runbook for the steps to take to put a PCL in place.
 2. Create an MR to add the PCL to the [changelock.yml](https://gitlab.com/gitlab-com/gl-infra/change-lock/-/blob/master/config/changelock.yml?ref_type=heads). An example MR is [here](https://gitlab.com/gitlab-com/gl-infra/change-lock/-/merge_requests/49).
 3. Add a CR ([see example](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/18551)) that will block deployments and feature flags.
    1. On the CR, notify the release managers who will be on duty during this period.
-   2. If needed, get advance written confirmation on the CR issue in a comment as to who has permission to approve exempt changes during the PCL. 
+   2. If needed, get advance written confirmation on the CR issue in a comment as to who has permission to approve exempt changes during the PCL.
    3. Make sure someone marks the CR issue as ~"change::in-progress" at the start of the PCL.
- 
+
 In case of the need to deploy or execute Post Deployment Migrations during a PCL, Release Managers will open a CR (examples: [deployment CR](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/17150), [PDM CR](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/17152)) to track the deployment. SRE On Call approval, Sr. Director+ of Infrastructure (or designated) is needed for each deployment CR. More details in [Release Docs](https://gitlab.com/gitlab-org/release/docs/-/blob/master/release_manager/pcl-guide.md)
 When these are merged:
 
