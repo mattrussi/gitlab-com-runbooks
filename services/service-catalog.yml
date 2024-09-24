@@ -1142,6 +1142,29 @@ services:
         grafana_folder: RNfEDpLmz # TODO: Update when provisioned
         primary_grafana_dashboard: patroni-ci-main/patroni-ci-overview
 
+  - name: pingdom
+    tier: inf
+    friendly_name: Pingdom
+    label: Pingdom
+    owner: scalability:observability
+    technical:
+      project:
+        - https://www.pingdom.com/
+      documents:
+        design:
+        architecture:
+        readiness_review:
+        sre_guide: https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/pingdom
+        developer_guide:
+        service:
+          - https://www.pingdom.com/synthetic-monitoring/
+        security:
+      dependencies:
+      components:
+      logging:
+        - name: PagerDuty logs
+          permalink: https://nonprod-log.gitlab.net/app/r/s/Q3aOK
+
   - name: plantuml
     tier: sv
     friendly_name: PlantUML
