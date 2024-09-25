@@ -95,7 +95,7 @@ too many (or overly large) queued jobs we could OOM the Redis cluster, which wou
 of this tied into our saturation alerting, so we should be made aware of this with plenty of time to spare. At this
 writing, the memory saturation is below 5%, so there's plenty of headroom.
 
-It may be interesting to read the [sidekiq style guide](https://docs.gitlab.com/ee/development/sidekiq_style_guide.html)
+It may be interesting to read the [sidekiq style guide](https://docs.gitlab.com/ee/development/sidekiq/)
 for GitLab as that describes some of this in more detail, from a backend engineers perspective.
 
 # How do jobs get picked up
@@ -111,9 +111,8 @@ them into Redis needs to be *compatible* with the codebase running on Sidekiq. W
 scale, as in GitLab.com), there is an opportunity for odd behavior. For example, should the web app push a job with a
 changed set of arguments, the workers may not be able to process them successfully; there are also other possible
 failure modes, and having a canary web/api fleet is related to these. Changes to existing jobs need to be managed in a
-similar way to how [DB migrations](https://docs.gitlab.com/ee/development/background_migrations.html) are, sometimes
-requiring multiple releases to safely migrate with zero-downtime. This is discussed at
-<https://docs.gitlab.com/ee/development/sidekiq_style_guide.html#sidekiq-compatibility-across-updates>
+similar way to how [DB migrations](https://docs.gitlab.com/ee/development/sidekiq/) are, sometimes
+requiring multiple releases to safely migrate with zero-downtime. This is discussed at [](https://docs.gitlab.com/ee/development/sidekiq/compatibility_across_updates.html)
 
 ## Sidekiq Cluster (historical)
 
@@ -173,8 +172,8 @@ type of queue, on suitably provisioned VMs. This was fragile, easily misconfigur
 different types of Sidekiq VMs), and difficult to reason about, particularly during incidents if capacity was limited by
 our per-queue configuration but Sidekiq VMs were not actually busy.
 
-So we created the [queue selector](https://docs.gitlab.com/ee/administration/operations/extra_sidekiq_processes.html#queue-selector)
-This uses the [execution characteristics](#job-characteristics) of jobs to select jobs allowing for a more effective
+So we created the [Routing rules](https://docs.gitlab.com/ee/administration/sidekiq/processing_specific_job_classes.html#routing-rules)
+which uses the [execution characteristics](#job-characteristics) of jobs to select jobs allowing for a more effective
 allocation of resources with more predictable and reliable effects. We choose
 the threading concurrency for a shard carefully. For example, a shard that will be processing jobs with long
 running external I/O (e.g. webhooks) can run with a high concurrency, as most of the time the Sidekiq thread will be
@@ -193,7 +192,7 @@ the `why` for each such exception.
 ## Job Characteristics
 
 To support the routing of jobs by characteristics, there is metadata included in the worker class (see [Sidekiq Style
-Guide](https://gitlab.com/gitlab-org/gitlab/-/blob/master/doc/development/sidekiq_style_guide.md)). A [rake
+Guide](https://docs.gitlab.com/ee/development/sidekiq/)). A [rake
 task](https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/tasks/gitlab/sidekiq.rake) looks for all the Sidekiq
 workers in the code base and generates `app/workers/all_queues.yml` (and `ee/app/workers/all_queues.yml` for EE-specific
 jobs).
@@ -364,7 +363,7 @@ Just remember that Sidekiq will execute your job at least once, not exactly once
 
 As noted in [restarts](#restarts), it's important jobs are 'safe', but there is an additional possibility
 when they are strictly Idempotent, i.e. running the same job more than once would have no additional effect.
-<https://gitlab.com/gitlab-org/gitlab/-/blob/master/doc/development/sidekiq_style_guide.md#idempotent-jobs> describes this
+[Sidekiq idempotent jobs](https://docs.gitlab.com/ee/development/sidekiq/idempotent_jobs.html) describes this
 in detail, and may be interesting to read, as a job properly marked can be de-duplicated from the queue, reducing the
 load on Sidekiq from running redundant jobs.
 
@@ -405,7 +404,7 @@ where the job then actually runs; that is subject to all the usual queue configu
 
 ## Inspecting/manipulating active state
 
-<https://gitlab.com/admin/sidekiq/queues> is always a starting point; our dashboards are better for inspecting (IMO), but
+<https://docs.gitlab.com/ee/administration/sidekiq/sidekiq_troubleshooting.html#managing-sidekiq-queues> is always a starting point; our dashboards are better for inspecting (IMO), but
 in the event you need to e.g. delete all the jobs in a given queue (reasons include: jobs orphaned by insufficient
 migration when being removed from the app, or perhaps causing incidents), this can be a quick way to achieve that.
 
