@@ -257,9 +257,9 @@ services:
     tier: sv
     friendly_name: ErrorTracking
     teams:
-      - observability
+      - platform_insights
     label: ErrorTracking
-    owner: observability
+    owner: platform_insights
     technical:
       project:
         - https://gitlab.com/gitlab-org/opstrace/opstrace
@@ -278,9 +278,9 @@ services:
     tier: sv
     friendly_name: Distributed Tracing
     teams:
-      - observability
+      - platform_insights
     label: Tracing
-    owner: observability
+    owner: platform_insights
     technical:
       project:
         - https://gitlab.com/gitlab-org/opstrace/opstrace

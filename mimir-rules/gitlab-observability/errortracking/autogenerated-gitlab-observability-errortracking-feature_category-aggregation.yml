@@ -7,7 +7,7 @@ groups:
   - record: gitlab:component:feature_category:execution:apdex:success:rate_5m
     labels:
       component: loadbalancer
-      feature_category: error_tracking
+      feature_category: observability
       monitor: global
       tier: sv
       type: errortracking
@@ -26,7 +26,7 @@ groups:
   - record: gitlab:component:feature_category:execution:apdex:weight:score_5m
     labels:
       component: loadbalancer
-      feature_category: error_tracking
+      feature_category: observability
       monitor: global
       tier: sv
       type: errortracking
@@ -37,7 +37,7 @@ groups:
   - record: gitlab:component:feature_category:execution:ops:rate_5m
     labels:
       component: loadbalancer
-      feature_category: error_tracking
+      feature_category: observability
       monitor: global
       tier: sv
       type: errortracking
@@ -48,7 +48,7 @@ groups:
   - record: gitlab:component:feature_category:execution:error:rate_5m
     labels:
       component: loadbalancer
-      feature_category: error_tracking
+      feature_category: observability
       monitor: global
       tier: sv
       type: errortracking
@@ -61,7 +61,7 @@ groups:
       or
       (
         0 * group by(env,environment,stage) (
-          gitlab:component:feature_category:execution:ops:rate_5m{component="loadbalancer",feature_category="error_tracking",monitor="global",tier="sv",type="errortracking"}
+          gitlab:component:feature_category:execution:ops:rate_5m{component="loadbalancer",feature_category="observability",monitor="global",tier="sv",type="errortracking"}
         )
       )
 - name: 'Feature Category Metrics: errortracking - Burn-Rate 30m'
@@ -70,7 +70,7 @@ groups:
   - record: gitlab:component:feature_category:execution:apdex:success:rate_30m
     labels:
       component: loadbalancer
-      feature_category: error_tracking
+      feature_category: observability
       monitor: global
       tier: sv
       type: errortracking
@@ -89,7 +89,7 @@ groups:
   - record: gitlab:component:feature_category:execution:apdex:weight:score_30m
     labels:
       component: loadbalancer
-      feature_category: error_tracking
+      feature_category: observability
       monitor: global
       tier: sv
       type: errortracking
@@ -100,7 +100,7 @@ groups:
   - record: gitlab:component:feature_category:execution:ops:rate_30m
     labels:
       component: loadbalancer
-      feature_category: error_tracking
+      feature_category: observability
       monitor: global
       tier: sv
       type: errortracking
@@ -111,7 +111,7 @@ groups:
   - record: gitlab:component:feature_category:execution:error:rate_30m
     labels:
       component: loadbalancer
-      feature_category: error_tracking
+      feature_category: observability
       monitor: global
       tier: sv
       type: errortracking
@@ -124,7 +124,7 @@ groups:
       or
       (
         0 * group by(env,environment,stage) (
-          gitlab:component:feature_category:execution:ops:rate_30m{component="loadbalancer",feature_category="error_tracking",monitor="global",tier="sv",type="errortracking"}
+          gitlab:component:feature_category:execution:ops:rate_30m{component="loadbalancer",feature_category="observability",monitor="global",tier="sv",type="errortracking"}
         )
       )
 - name: 'Feature Category Metrics: errortracking - Burn-Rate 1h'
@@ -133,7 +133,7 @@ groups:
   - record: gitlab:component:feature_category:execution:apdex:success:rate_1h
     labels:
       component: loadbalancer
-      feature_category: error_tracking
+      feature_category: observability
       monitor: global
       tier: sv
       type: errortracking
@@ -152,7 +152,7 @@ groups:
   - record: gitlab:component:feature_category:execution:apdex:weight:score_1h
     labels:
       component: loadbalancer
-      feature_category: error_tracking
+      feature_category: observability
       monitor: global
       tier: sv
       type: errortracking
@@ -163,7 +163,7 @@ groups:
   - record: gitlab:component:feature_category:execution:ops:rate_1h
     labels:
       component: loadbalancer
-      feature_category: error_tracking
+      feature_category: observability
       monitor: global
       tier: sv
       type: errortracking
@@ -174,7 +174,7 @@ groups:
   - record: gitlab:component:feature_category:execution:error:rate_1h
     labels:
       component: loadbalancer
-      feature_category: error_tracking
+      feature_category: observability
       monitor: global
       tier: sv
       type: errortracking
@@ -187,7 +187,7 @@ groups:
       or
       (
         0 * group by(env,environment,stage) (
-          gitlab:component:feature_category:execution:ops:rate_1h{component="loadbalancer",feature_category="error_tracking",monitor="global",tier="sv",type="errortracking"}
+          gitlab:component:feature_category:execution:ops:rate_1h{component="loadbalancer",feature_category="observability",monitor="global",tier="sv",type="errortracking"}
         )
       )
 - name: 'Feature Category Metrics: errortracking - Burn-Rate 6h'
@@ -196,46 +196,46 @@ groups:
   - record: gitlab:component:feature_category:execution:apdex:success:rate_6h
     labels:
       component: loadbalancer
-      feature_category: error_tracking
+      feature_category: observability
       monitor: global
       tier: sv
       type: errortracking
     expr: |
       sum by (env,environment,stage) (
-        avg_over_time(gitlab:component:feature_category:execution:apdex:success:rate_1h{component="loadbalancer",feature_category="error_tracking",monitor="global",tier="sv",type="errortracking"}[6h] offset 30s)
+        avg_over_time(gitlab:component:feature_category:execution:apdex:success:rate_1h{component="loadbalancer",feature_category="observability",monitor="global",tier="sv",type="errortracking"}[6h] offset 30s)
       )
   - record: gitlab:component:feature_category:execution:apdex:weight:score_6h
     labels:
       component: loadbalancer
-      feature_category: error_tracking
+      feature_category: observability
       monitor: global
       tier: sv
       type: errortracking
     expr: |
       sum by (env,environment,stage) (
-        avg_over_time(gitlab:component:feature_category:execution:apdex:weight:score_1h{component="loadbalancer",feature_category="error_tracking",monitor="global",tier="sv",type="errortracking"}[6h] offset 30s)
+        avg_over_time(gitlab:component:feature_category:execution:apdex:weight:score_1h{component="loadbalancer",feature_category="observability",monitor="global",tier="sv",type="errortracking"}[6h] offset 30s)
       )
   - record: gitlab:component:feature_category:execution:ops:rate_6h
     labels:
       component: loadbalancer
-      feature_category: error_tracking
+      feature_category: observability
       monitor: global
       tier: sv
       type: errortracking
     expr: |
       sum by (env,environment,stage) (
-        avg_over_time(gitlab:component:feature_category:execution:ops:rate_1h{component="loadbalancer",feature_category="error_tracking",monitor="global",tier="sv",type="errortracking"}[6h] offset 30s)
+        avg_over_time(gitlab:component:feature_category:execution:ops:rate_1h{component="loadbalancer",feature_category="observability",monitor="global",tier="sv",type="errortracking"}[6h] offset 30s)
       )
   - record: gitlab:component:feature_category:execution:error:rate_6h
     labels:
       component: loadbalancer
-      feature_category: error_tracking
+      feature_category: observability
       monitor: global
       tier: sv
       type: errortracking
     expr: |
       sum by (env,environment,stage) (
-        avg_over_time(gitlab:component:feature_category:execution:error:rate_1h{component="loadbalancer",feature_category="error_tracking",monitor="global",tier="sv",type="errortracking"}[6h] offset 30s)
+        avg_over_time(gitlab:component:feature_category:execution:error:rate_1h{component="loadbalancer",feature_category="observability",monitor="global",tier="sv",type="errortracking"}[6h] offset 30s)
       )
 - name: 'Feature Category Metrics: errortracking - Burn-Rate 3d'
   interval: 2m
@@ -243,44 +243,44 @@ groups:
   - record: gitlab:component:feature_category:execution:apdex:success:rate_3d
     labels:
       component: loadbalancer
-      feature_category: error_tracking
+      feature_category: observability
       monitor: global
       tier: sv
       type: errortracking
     expr: |
       sum by (env,environment,stage) (
-        avg_over_time(gitlab:component:feature_category:execution:apdex:success:rate_1h{component="loadbalancer",feature_category="error_tracking",monitor="global",tier="sv",type="errortracking"}[3d] offset 30s)
+        avg_over_time(gitlab:component:feature_category:execution:apdex:success:rate_1h{component="loadbalancer",feature_category="observability",monitor="global",tier="sv",type="errortracking"}[3d] offset 30s)
       )
   - record: gitlab:component:feature_category:execution:apdex:weight:score_3d
     labels:
       component: loadbalancer
-      feature_category: error_tracking
+      feature_category: observability
       monitor: global
       tier: sv
       type: errortracking
     expr: |
       sum by (env,environment,stage) (
-        avg_over_time(gitlab:component:feature_category:execution:apdex:weight:score_1h{component="loadbalancer",feature_category="error_tracking",monitor="global",tier="sv",type="errortracking"}[3d] offset 30s)
+        avg_over_time(gitlab:component:feature_category:execution:apdex:weight:score_1h{component="loadbalancer",feature_category="observability",monitor="global",tier="sv",type="errortracking"}[3d] offset 30s)
       )
   - record: gitlab:component:feature_category:execution:ops:rate_3d
     labels:
       component: loadbalancer
-      feature_category: error_tracking
+      feature_category: observability
       monitor: global
       tier: sv
       type: errortracking
     expr: |
       sum by (env,environment,stage) (
-        avg_over_time(gitlab:component:feature_category:execution:ops:rate_1h{component="loadbalancer",feature_category="error_tracking",monitor="global",tier="sv",type="errortracking"}[3d] offset 30s)
+        avg_over_time(gitlab:component:feature_category:execution:ops:rate_1h{component="loadbalancer",feature_category="observability",monitor="global",tier="sv",type="errortracking"}[3d] offset 30s)
       )
   - record: gitlab:component:feature_category:execution:error:rate_3d
     labels:
       component: loadbalancer
-      feature_category: error_tracking
+      feature_category: observability
       monitor: global
       tier: sv
       type: errortracking
     expr: |
       sum by (env,environment,stage) (
-        avg_over_time(gitlab:component:feature_category:execution:error:rate_1h{component="loadbalancer",feature_category="error_tracking",monitor="global",tier="sv",type="errortracking"}[3d] offset 30s)
+        avg_over_time(gitlab:component:feature_category:execution:error:rate_1h{component="loadbalancer",feature_category="observability",monitor="global",tier="sv",type="errortracking"}[3d] offset 30s)
       )

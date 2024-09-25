@@ -339,8 +339,8 @@ teams:
   ignored_components:
   - graphql_query
 
-- name: observability
-  product_stage_group: observability
+- name: platform_insights
+  product_stage_group: monitor
   slack_alerts_channel: g_monitor_platform_insights_infra_alerts
   send_error_budget_weekly_to_slack: true
   slack_error_budget_channel: s_monitor
