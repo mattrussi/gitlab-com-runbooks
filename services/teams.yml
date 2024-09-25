@@ -385,6 +385,8 @@ teams:
 - name: product_planning
   product_stage_group: product_planning
   slack_alerts_channel: s_plan-be
+  slack_error_budget_channel: g_product-planning
+  send_error_budget_weekly_to_slack: true
   ignored_components:
   - graphql_query
 
