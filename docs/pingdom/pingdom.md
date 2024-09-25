@@ -85,3 +85,9 @@ This will generate raw data in a CSV format. This data can then be analysed furt
 
 An example of this analysis is [Pingdom Availability Statistics](https://docs.google.com/spreadsheets/d/1Wn760s-neVJU5Jzd--24BwsoSkezF5vacBaHpxwgMpA/edit) spreadsheet, which pivots the data to generate availability
 [KPI values](https://docs.google.com/document/d/1NNne33rOtkrogqWRzdQZ4U3kiZdc2PC6B44WCpmQpNc/edit#) for GitLab.com.
+
+## PagerDuty integration
+
+PagerDuty to Pingdom integration is used for the Uptime checks and alert notifications.
+
+The `pingdom` integration is configured in the PagerDuty for `GitLab Production` Service with a webhook. The webhook is attached to the Uptime checks in the Pingdom. The Uptime checks are configured in the `pingdom.yml` file and updated with CI.
