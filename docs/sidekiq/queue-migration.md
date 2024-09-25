@@ -69,7 +69,7 @@ At a high level, migrating workers looks like this:
 1. Ensure that we are listening to _both_ the generated queue name and the
    chosen actual queue name. If we are not, jobs will not be processed
    correctly.
-1. Update the application configuration (in VMs and Kubernetes) to have
+1. Update the application configuration (in VMs and [Kubernetes]([modifying the routing rules](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-com/-/blob/51e2015528d332b48a0b72b76bb36cba530b624d/releases/gitlab/values/gprd.yaml.gotmpl?page=2#L1031)) to have
    a routing rule that routes those workers to the desired actual queue
    name. This has to be done for all instances of the application, as
    this configuration is used when scheduling a job.
@@ -84,15 +84,28 @@ At a high level, migrating workers looks like this:
     ]
     ```
 
-1. [Migrate jobs] from the special scheduled and retry sets to match the
-   newly-configured queue name: `gitlab-rake
-   gitlab:sidekiq:migrate_jobs:retry
-   gitlab:sidekiq:migrate_jobs:schedule`. This can be run anywhere that
-   has the new configuration applied.
+    * Example MR that moves the [Members::DestroyWorker](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-com/-/merge_requests/3822) to the quarantine queue as that quueue has less concurrency and should put less load on the database.
+    * Another MR [Re-route urgent-cpu-bound jobs to urgent_cpu_bound queue](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-com/-/merge_requests/1175) to moves all jobs on the `urgent-cpu-bound` shard to move to the `urgent_cpu_bound` queue rather than that worker's queue.
+
+1. [Migrate jobs](https://docs.gitlab.com/ee/administration/sidekiq/sidekiq_job_migration.html) from the special scheduled and retry sets to match the newly-configured queue name. There are two sets of jobs to run in future: scheduled jobs and jobs to be retried. We provide a separate Rake task to migrate each set:
+
+    * `gitlab:sidekiq:migrate_jobs:retry` for jobs to be retried.
+    * `gitlab:sidekiq:migrate_jobs:schedule` for scheduled jobs.
+
+    Queued jobs that are yet to be run can also be migrated with a Rake task
+
+    * `gitlab:sidekiq:migrate_jobs:queued` for queued jobs to be performed asynchronously.
+
+    Most of the time, running all three at the same time is the correct choice. There are three separate tasks to allow for more fine-grained control where needed.
+
+    * On the rails node run the following to run the rake command:
+
+    ```ruby
+    sudo gitlab-rake gitlab:sidekiq:migrate_jobs:retry gitlab:sidekiq:migrate_jobs:schedule gitlab:sidekiq:migrate_jobs:queued
+    ```
+
 1. Wait for the generated queues for the workers to be empty.
 1. Stop listening to the generated queue names for those workers.
-
-[migrate jobs]: https://docs.gitlab.com/ee/raketasks/sidekiq_job_migration.html
 
 ## Troubleshooting
 

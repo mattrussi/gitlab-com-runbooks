@@ -21,7 +21,7 @@ new Sidekiq shard.
   execution, etc.
 * Much of the above will be found while working with the appropriate engineering
   team.  Our [documentation for Engineers for
-  Sidekiq](https://docs.gitlab.com/ee/development/sidekiq_style_guide.html) is an
+  Sidekiq](https://docs.gitlab.com/ee/development/sidekiq/) is an
   excellent resource.
 
 ## Shard Characteristics

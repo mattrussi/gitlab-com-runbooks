@@ -1,4 +1,4 @@
-# (Title: SidekiqQueueTooLarge)
+# Title: SidekiqQueueTooLarge
 
 **Table of Contents**
 
@@ -78,6 +78,102 @@ To display a breakdown of all the workers, run:
 ```
 sudo gitlab-rails runner /tmp/sq.rb
 ```
+
+### How to disable a worker
+
+In case of an incident caused by a misbehaving sidekiq worker, here's the immediate actions you should take.
+
+1. Identify which sidekiq job class (worker) is causing the incident.
+
+The [sidekiq: Worker Detail dashboard](https://dashboards.gitlab.net/d/sidekiq-worker-detail/sidekiq3a-worker-detail) may be helpful in checking a worker's enqueue rate, queue size, and summed execution time spent in shared dependencies like the DB.
+
+2. Defer execution of all jobs of that class, using either:
+
+- Chatops: This should be run in the `#production`
+
+```shell
+/chatops run feature set run_sidekiq_jobs_Example::SlowWorker false --ignore-feature-flag-consistency-check --ignore-production-check
+```
+
+- On the production rails node run the following to start the rails console:
+
+```shell
+sudo gitlab-rails console
+```
+
+After it starts, run:
+
+```ruby
+Feature.disable(:"run_sidekiq_jobs_Example::SlowWorker")
+```
+
+The action will cause sidekiq workers to defer (rather than execute) all jobs of that class, including jobs currently waiting in the queue.  This should provide some immediate relief. For more details [Disabling a worker](../disabling-a-worker.md)
+
+### Examples of disabling workers via ChatOps
+
+When the feature flag is set to true, 100% of the jobs will be deferred. But, we can also use **percentage of actors** rollout (an actor being each execution of job)
+to progressively let the jobs processed. For example:
+
+```shell
+# not running any jobs, deferring all 100% of the jobs
+/chatops run feature set run_sidekiq_jobs_SlowRunningWorker false --ignore-feature-flag-consistency-check
+
+# only running 10% of the jobs, deferring 90% of the jobs
+/chatops run feature set run_sidekiq_jobs_SlowRunningWorker --actors 10 --ignore-feature-flag-consistency-check
+
+# running 50% of the jobs, deferring 50% of the jobs
+/chatops run feature set run_sidekiq_jobs_SlowRunningWorker --actors 50 --ignore-feature-flag-consistency-check
+
+# back to running all jobs normally
+/chatops run feature delete run_sidekiq_jobs_SlowRunningWorker --ignore-feature-flag-consistency-check
+```
+
+Note that `--ignore-feature-flag-consistency-check` is necessary as it bypasses the consistency check between staging and production.
+It is totally safe to pass this flag as we don't need to turn on the feature flag in staging during an incident.
+
+To ensure we are not leaving any worker being deferred forever, check all feature flags matching `run_sidekiq_jobs`:
+
+```shell
+/chatops run feature list --match run_sidekiq_jobs
+```
+
+### Dropping jobs using feature flags via ChatOps
+
+Similar to deferring the jobs, we could enable `drop_sidekiq_jobs_{WorkerName}` FF (disabled by default) to drop the jobs entirely (removed from the queue).
+
+Example:
+
+```shell
+# drop all jobs
+/chatops run feature set drop_sidekiq_jobs_SlowRunningWorker true --ignore-feature-flag-consistency-check
+
+# back to running all jobs normally
+/chatops run feature delete drop_sidekiq_jobs_SlowRunningWorker --ignore-feature-flag-consistency-check
+```
+
+Note that `drop_sidekiq_jobs` FF has precedence over the `run_sidekiq_jobs` FF. This means when `drop_sidekiq_jobs` FF is enabled and `run_sidekiq_jobs` FF is disabled,
+`drop_sidekiq_jobs` FF takes priority, thus the job is dropped. Once `drop_sidekiq_jobs` FF is back to disabled, jobs are then deferred due to `run_sidekiq_jobs` still disabled.
+
+### Disabling a Sidekiq queue
+
+When the system is under strain due to job processing, it may be necessary to completely disable a queue so that jobs will queue and not be processed. To disable a queue it needs to be excluded from the routing rules
+
+1. Identify which shard is associated to the queue, the ways to determine this are:
+1. Find the queue in the [Shard Overview Dashboard](https://dashboards.gitlab.net/d/sidekiq-shard-detail/sidekiq-shard-detail)
+1. Find the `resource_boundary` for the queue [app/workers/all_queues.yml](https://gitlab.com/gitlab-org/gitlab/-/blob/master/app/workers/all_queues.yml) or [ee/app/workers/all_queues.yml](https://gitlab.com/gitlab-org/gitlab/-/blob/master/ee/app/workers/all_queues.yml) and see which routing rules in [values.yml](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-com/-/blob/51e2015528d332b48a0b72b76bb36cba530b624d/releases/gitlab/values/gprd.yaml.gotmpl?page=2#L1031)
+1. If the queue is being processed by catchall on K8s, remove the queue from [values.yml](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-com/-/blob/51e2015528d332b48a0b72b76bb36cba530b624d/releases/gitlab/values/gprd.yaml.gotmpl?page=2#L1031)
+1. If the queue is being processed by one of the other shards in K8s, add a selector ` routingRules: resource_boundary=memory&name!=<queue name>`
+
+### How to transfer a queue from an existing shard to a new one
+
+In situations where one of the worker is flooding the queue, you can [create a new shard](../creating-a-shard.md) or use an existing one. Once that is done transfer queue traffic to an existing shard by [modifying the routing rules](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-com/-/blob/51e2015528d332b48a0b72b76bb36cba530b624d/releases/gitlab/values/gprd.yaml.gotmpl?page=2#L1031)
+
+Example MRs:
+
+    - [[Gprd] Route elasticsearch shard's workers to elasticsearch queue](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-com/-/merge_requests/974) to update elasticsearch queue to route elasticsearch shard's workers to elasticsearch queue.
+    - [Move Members::DestroyWorker to quarantine queue](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-com/-/merge_requests/3822)
+    - [Define `urgent-authorized-projects` sidekiq shard](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-com/-/merge_requests/1963)
+    - [[gprd] Re-route quarantine, gitaly_throttled + database_throttled jobs to a single queue per shard](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-com/-/merge_requests/1196)
 
 ### Remove jobs with certain metadata from a queue (e.g. all jobs from a certain user)
 
