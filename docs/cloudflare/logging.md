@@ -75,6 +75,27 @@ code:
 Note: Due to the way logs are shipped into GCS, there might be a delay of up
 to 10 minutes for logs to be available.
 
+## Spectrum logs
+
+The analytics API for Spectrum apps is very limited so querying the logs via BigQuery is the only way to do detailed analysis of non-HTTP/S traffic passing through a Spectrum app (e.g. SSH traffic).
+
+Run the following commands to load the logs into a table:
+
+```bash
+curl -s https://raw.githubusercontent.com/cloudflare/cloudflare-gcp/refs/heads/master/logpush-to-bigquery/schema-spectrum.json > schema-spectrum.json
+bq load --project_id gitlab-production --source_format NEWLINE_DELIMITED_JSON cloudflare_spectrum_logs.latest 'gs://gitlab-gprd-cloudflare-logpush/v2/spectrum/*.log.gz' schema-spectrum.json
+```
+
+Note that this will load all Spectrum logs inside the retention period into the table, as we are limited to using one wildcard pattern in the path. If you're only interested in one day, adjust the URI as necessary.
+
+After the load completes (it's expected to take a while, close to 2 hours), you can then run queries to your heart's content.
+
+For example, to query if we've had connections from embargoed countries, you can run:
+
+```sql
+SELECT * FROM `gitlab-production.cloudflare_spectrum_logs.latest` where upper(ClientCountry) in ("SY","KP","CU","IR") and Event = 'disconnect'
+```
+
 ## Cloudflare Audit Logs
 
 Different than traffic logging, Cloudflare audit information provides logs
