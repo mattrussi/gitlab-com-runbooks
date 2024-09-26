@@ -95,7 +95,10 @@ disabling AI features or `Direct Access` in instance or namespace settings.
 A [rate limit](https://docs.gitlab.com/ee/security/rate_limits.html) was enforced by the application.
 
 - **Identified by:** [Log events](https://log.gprd.gitlab.net/app/r/s/qI2yt) exist for the Rails application with `status: 429`
-  but no such events exist in Cloudflare logs, i.e. if a 429 was observed but the request passed successfully through the GitLab application, then it originates [from Cloudflare](#symptom-429-too-many-requests-cloudflare).
+  but no such events exist in [Cloudflare logs](../cloud_connector/README.md#logs).
+  This implies the request was rejected before it was forwarded to Cloudflare.
+  If instead it passed successfully through the GitLab application, but Cloudflare logs show it
+  was rejected with 429, then it originates [from Cloudflare](#symptom-429-too-many-requests-cloudflare).
 - **Solution:** Consider increasing endpoint RLs if you think requests are throttled too aggressively.
   Reach out to the respective codeowner of the endpoint that is enforcing the rate limit.
 
@@ -117,7 +120,7 @@ This may be intentional to thwart DDoS attacks or misbehaving clients, but could
 cutting off paying customers too.
 
 - **Identified by:** The client receives 429s but they weren't issued by the application itself.
-  This situation can be identified by the presence of correlated 429s in both [application logs](#symptom-429-too-many-requests-gitlab-rails) and Cloudflare logs.
+  This situation can be identified by the presence of correlated 429s in both [application logs](#symptom-429-too-many-requests-gitlab-rails) and [Cloudflare logs](../cloud_connector/README.md#logs).
 - **Solution:** Consider increasing instance or user bucket RLs if you think requests are throttled too aggressively.
   Only do this in tandem with reviewing potential upstream limits such as AI vendor quotas and which are difficult
   to scale horizontally. Reach out to `#g_cloud_connector` for help.

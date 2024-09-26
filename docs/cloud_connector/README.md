@@ -56,14 +56,40 @@ Self-managed customers are _not_ expected to set this variable.
 
 - [CloudflareCloudConnectorRateLimitExhaustion](./alerts/CloudflareCloudConnectorRateLimitEvents.md)
 
-#### Edge logs
+#### Logs
 
-We don't yet store persistent logs at GitLab (see https://gitlab.com/gitlab-org/gitlab/-/issues/473983).
+There are three ways to monitor traffic going through `cloud.gitlab.com`, each with their pros and cons:
 
-Until then, you can use these Cloudflare features to observe Cloud Connector edge traffic:
+- [Instant Logs](https://dash.cloudflare.com/852e9d53d0f8adbd9205389356f2303d/cloud.gitlab.com/analytics/instant-logs).
+  Use this to monitor live traffic. This stream will only display the most basic properties of an HTTP request,
+  such as method and path, but can be useful to filter and monitor traffic on-the-fly.
+- [Log Explorer](https://dash.cloudflare.com/852e9d53d0f8adbd9205389356f2303d/cloud.gitlab.com/analytics/log-explorer).
+  This tool allows querying historic logs using an SQL-like query language. It can surface all available information
+  about HTTP requests, but has limited filtering capabilities. For example, since HTTP header fields are stored as
+  an embedded JSON string, you cannot correlate log records with backend logs by filtering on e.g. correlation IDs.
+- [LogPush](../cloudflare/logging.md). This approach first pushes logs from Cloudflare to a Google Cloud Storage bucket, from which you can then
+  stream these files to your machine as JSON, or load them into BigQuery for further analysis. To stream the last 30m
+  of HTTP request logs from a given timestamp into `jq`, run:
 
-- [Instant Logs](https://dash.cloudflare.com/852e9d53d0f8adbd9205389356f2303d/cloud.gitlab.com/analytics/instant-logs) to monitor live traffic.
-- [Log Explorer](https://dash.cloudflare.com/852e9d53d0f8adbd9205389356f2303d/cloud.gitlab.com/analytics/log-explorer) to query historic logs using an SQL-like query language.
+  ```shell
+  scripts/cloudflare_logs.sh -e cloud-connect-prd -d 2024-09-25T00:00 -t http -b 30 | jq .
+  ```
+
+If you wish to correlate log events between Cloudflare logs and the Rails application or Cloud Connector backends:
+
+- **Via request correlation IDs:** Look for `x-request-id` in the Cloudflare `RequestHeaders` field.
+  Correlate it with `correlation_id` in application services.
+  This identifies an individual request.
+- **Via instance ID:** Look for `x-gitlab-instance-id` in the Cloudflare `RequestHeaders` field.
+  Correlate it with `gitlab_instance_id` in application services.
+  This identifies an individual GitLab instance (both SM/Dedicated and gitlab.com).
+- **Via global user ID:** Look for `x-gitlab-global-user-id` in the Cloudflare `RequestHeaders` field.
+  Correlate it with `gitlab_global_user_id` in application services.
+  This identifies an individual GitLab end-user (both SM/Dedicated and gitlab.com).
+- **Via caller IP:** Look for `ClientIP` in Cloudflare logs.
+  Correlate it with `client_ip` (or similar fields) in application services.
+  This identifies either a GitLab instance or end-user client such as an IDE from which the
+  request originated.
 
 ### Routing
 
