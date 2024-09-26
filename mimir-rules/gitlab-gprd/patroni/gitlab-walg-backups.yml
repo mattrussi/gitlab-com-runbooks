@@ -42,7 +42,7 @@ groups:
           runbook: docs/patroni/alerts/walgBaseBackup.md
           title: Last WAL was archived {{ .Value | humanizeDuration }} ago for env {{ $labels.environment }}.
       - alert: walgBaseBackupDelayed
-        expr: gitlab_com:last_walg_successful_basebackup_age_in_hours{env="gprd", exported_type!~"gprd-pg14-patroni-registry"} >= 30
+        expr: gitlab_com:last_walg_successful_basebackup_age_in_hours{env="gprd", exported_type!~"gprd-pg14-patroni-registry|gprd-patroni-security"} >= 30
         for: 5m
         labels:
           severity: s3
