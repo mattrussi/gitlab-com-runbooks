@@ -17,6 +17,7 @@
 
 * [Chef Guidelines](../config_management/chef-guidelines.md)
 * [design.gitlab.com Runbook](design-gitlab-com.md)
+* [../disaster-recovery/gameday.md](../disaster-recovery/gameday.md)
 * [Gitaly multi-project migration](../gitaly/multi-project-migration.md)
 * [../kube/k8s-operations.md](../kube/k8s-operations.md)
 * [../patroni/postgres-checkup.md](../patroni/postgres-checkup.md)
