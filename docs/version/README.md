@@ -39,6 +39,7 @@
 * [Ad hoc observability tools on Kubernetes nodes](../kube/k8s-adhoc-observability.md)
 * [Rebuilding a kubernetes cluster](../kube/k8s-cluster-rebuild.md)
 * [GKE Cluster Upgrade Procedure](../kube/k8s-cluster-upgrade.md)
+* [Isolating a pod](../kube/k8s-isolate-pod.md)
 * [../kube/k8s-oncall-setup.md](../kube/k8s-oncall-setup.md)
 * [../kube/k8s-operations.md](../kube/k8s-operations.md)
 * [GKE/Kubernetes Administration](../kube/kube-administration.md)
