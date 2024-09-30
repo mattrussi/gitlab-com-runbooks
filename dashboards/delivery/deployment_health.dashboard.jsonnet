@@ -56,6 +56,58 @@ basic.dashboard(
     |||
   ), gridPos={ x: 16, y: 0, w: 8, h: 12 }
 )
+.addPanel(
+  basic.statPanel(
+    title='',
+    panelTitle='Percentage of time healthy',
+    description='Percentage of time that the selected environment has been healthy over the selected time period.',
+    query='gitlab_deployment_health:stage{environment="$environment",stage="$stage"}',
+    reducerFunction='mean',
+    colorMode='value',
+    graphMode='area',
+    decimals=2,
+    instant=false,
+    unit='percentunit',
+    color=[
+      { color: 'red', value: null },
+      { color: 'yellow', value: 0.98 },
+      { color: 'green', value: 0.9995 },
+    ],
+  ), gridPos={ x: 0, y: 0, w: 8, h: 12 }
+)
+.addPanel(
+  basic.statPanel(
+    title='',
+    panelTitle='Amount of time unhealthy',
+    description='Amount of time that the selected environment has been unhealthy over the selected time period.',
+    query='(1 - gitlab_deployment_health:stage{environment="$environment",stage="$stage"}) * $__range_s',
+    reducerFunction='mean',
+    colorMode='value',
+    graphMode='area',
+    decimals=2,
+    instant=false,
+    unit='s',
+    thresholdsMode='percentage',
+    color=[
+      { color: 'green', value: null },
+      { color: 'yellow', value: 0.05 },
+      { color: 'red', value: 2 },
+    ],
+  ), gridPos={ x: 8, y: 0, w: 8, h: 12 }
+)
+.addPanel(
+  textPanel.new(
+    title='Details',
+    content=|||
+      These panels show the percentage of time that the selected environment ($environment-$stage)
+      has been healthy and the amount of time it has been unhealthy. They take into account
+      all services for $environment-$stage.
+
+      View the **Service Deployment Health** for a breakdown of each
+      contributing service that is rolled into this metric.
+    |||
+  ), gridPos={ x: 16, y: 0, w: 8, h: 12 }
+)
 
 .addPanel(
   row.new(title='Service Breakdown'),
