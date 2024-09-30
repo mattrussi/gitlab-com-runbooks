@@ -67,6 +67,9 @@ basic.dashboard(
       interval='1m',
       linewidth=1,
       legend_show=true,
+      lines=false,
+      bars=true,
+      stack=true
     ),
     basic.timeseries(
       title='Aggregated By Endpoint',
@@ -80,6 +83,9 @@ basic.dashboard(
       interval='1m',
       linewidth=1,
       legend_show=true,
+      lines=false,
+      bars=true,
+      stack=true
     ),
     basic.timeseries(
       title='Aggregated By State and Wait Event Type',
