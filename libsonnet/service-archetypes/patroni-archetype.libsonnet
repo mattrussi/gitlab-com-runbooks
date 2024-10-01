@@ -49,7 +49,6 @@ function(
   // the appropriate aggregations based on this set.
   // Use sparingly, and don't overuse.
   recordingRuleMetrics: [
-    'gitlab_sql_duration_seconds_bucket',
     'gitlab_sql_primary_duration_seconds_bucket',
     'gitlab_sql_replica_duration_seconds_bucket',
   ],

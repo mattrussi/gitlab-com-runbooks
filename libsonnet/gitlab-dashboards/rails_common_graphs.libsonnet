@@ -93,25 +93,6 @@ local layout = import 'grafana/layout.libsonnet';
       .addDataLink(elasticRailsDataLink)
       .addDataLink(elasticRailsVisDataLink),
       basic.timeseries(
-        title='Total SQL Time',
-        description='Total seconds spent doing SQL processing, per second',
-        query=|||
-          sum(
-            job_environment:gitlab_sql_duration_seconds_bucket:rate1m{
-              environment="$environment",
-              type="%(serviceType)s",
-              stage="%(serviceStage)s"}
-          ) by (job)
-        ||| % formatConfig,
-        legendFormat='{{ job }}',
-        interval='1m',
-        format='s',
-        intervalFactor=5,
-        legend_show=true,
-      )
-      .addDataLink(elasticRailsDataLink)
-      .addDataLink(elasticRailsVisDataLink),
-      basic.timeseries(
         title='Cache Operations',
         description='Cache Operations per Second',
         query=|||
