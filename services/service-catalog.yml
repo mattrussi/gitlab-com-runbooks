@@ -1735,15 +1735,15 @@ services:
     tier: sv
     friendly_name: Container Registry
     teams:
-      - package
+      - container_registry
     label: Registry
-    owner: reliability_unowned
+    owner: container_registry
     business:
       SLA:
         overall_sla_weighting: 1 # If this exists, this service will be included in the overall SLA, using this value as a weighted average
     technical:
       project:
-        - https://github.com/docker/distribution
+        - https://gitlab.com/gitlab-org/container-registry
       documents:
         design:
         architecture:
@@ -1751,10 +1751,13 @@ services:
         sre_guide: https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/registry
         developer_guide: https://docs.gitlab.com/ee/development/packages/#package-registry-development
         service:
-          - https://github.com/docker/distribution/blob/364d2e4a5bed94e9393dd88232ea3be29ca8f27a/README.md
+          - https://gitlab.com/gitlab-org/container-registry/-/blob/master/README.md
         security:
       dependencies:
         - service: web # For JWT authentication
+        - service: patroni-registry
+        - service: pgbouncer-registry
+        - service: redis-registry-cache
       logging:
         - name: Registry
           permalink: https://log.gprd.gitlab.net/goto/9ec8a738ca23a17a9d7b61b4c3a9c96e
