@@ -59,7 +59,7 @@ test.suite({
         error:ratio_1h{monitor="global",type="web"}
         > (14.4 * 0.990000)
       )
-      and
+      and on (environment,tier,type,stage)
       (
         error:ratio_5m{monitor="global",type="web"}
         > (14.4 * 0.990000)
@@ -69,7 +69,7 @@ test.suite({
         error:ratio_6h{monitor="global",type="web"}
         > (6 * 0.990000)
       )
-      and
+      and on (environment,tier,type,stage)
       (
         error:ratio_30m{monitor="global",type="web"}
         > (6 * 0.990000)
@@ -90,7 +90,7 @@ test.suite({
           error:ratio_1h{monitor="global",type="web"}
           > (14.4 * 0.010000)
         )
-        and
+        and on (environment,tier,type,stage)
         (
           error:ratio_5m{monitor="global",type="web"}
           > (14.4 * 0.010000)
@@ -100,7 +100,7 @@ test.suite({
           error:ratio_6h{monitor="global",type="web"}
           > (6 * 0.010000)
         )
-        and
+        and on (environment,tier,type,stage)
         (
           error:ratio_30m{monitor="global",type="web"}
           > (6 * 0.010000)
@@ -124,7 +124,7 @@ test.suite({
         apdex:ratio_1h{monitor="global",type="web"}
         < (1 - 14.4 * 0.010000)
       )
-      and
+      and on (environment,tier,type,stage)
       (
         apdex:ratio_5m{monitor="global",type="web"}
         < (1 - 14.4 * 0.010000)
@@ -134,7 +134,7 @@ test.suite({
         apdex:ratio_6h{monitor="global",type="web"}
         < (1 - 6 * 0.010000)
       )
-      and
+      and on (environment,tier,type,stage)
       (
         apdex:ratio_30m{monitor="global",type="web"}
         < (1 - 6 * 0.010000)
@@ -153,7 +153,7 @@ test.suite({
         apdex:ratio_1h{monitor="global",type="web"}
         < (1 - 14.4 * 0.000500)
       )
-      and
+      and on (environment,tier,type,stage)
       (
         apdex:ratio_5m{monitor="global",type="web"}
         < (1 - 14.4 * 0.000500)
@@ -163,7 +163,7 @@ test.suite({
         apdex:ratio_6h{monitor="global",type="web"}
         < (1 - 6 * 0.000500)
       )
-      and
+      and on (environment,tier,type,stage)
       (
         apdex:ratio_30m{monitor="global",type="web"}
         < (1 - 6 * 0.000500)
@@ -186,7 +186,7 @@ test.suite({
           apdex:ratio_1h{monitor="global",type="web"}
           < (1 - 14.4 * 0.010000)
         )
-        and
+        and on (environment,tier,type,stage)
         (
           apdex:ratio_5m{monitor="global",type="web"}
           < (1 - 14.4 * 0.010000)

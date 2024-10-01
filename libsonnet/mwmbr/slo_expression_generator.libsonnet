@@ -94,10 +94,11 @@ local selectors = import 'promql/selectors.libsonnet';
     windows=['1h', '6h'],  // Sets of windows in this SLO expression, identified by longWindow duration
     isApdexExpression=false,
     sloExpressionComparator=if isApdexExpression then '<' else '>',
-    termJoinOperator='and',
+    termJoinOperator='and on (%(aggregationLabels)s)',
     windowPairJoinOperator='or',
   )::
     local metricSelector = selectors.merge(aggregationSet.selector, metricSelectorHash);
+    local termJoinExpression = termJoinOperator % { aggregationLabels: aggregations.serialize(aggregationSet.labels) };
 
     local windowPairExpressions = std.map(
       function(longWindow)
@@ -110,7 +111,7 @@ local selectors = import 'promql/selectors.libsonnet';
           termGenerator(metric=metricLong, metricSelector=metricSelector, comparator=sloExpressionComparator, factor=factor, invertedForApdex=isApdexExpression),
           termGenerator(metric=metricShort, metricSelector=metricSelector, comparator=sloExpressionComparator, factor=factor, invertedForApdex=isApdexExpression),
         ];
-        joins.join(termJoinOperator, termExpressions, wrapTerms=true),
+        joins.join(termJoinExpression, termExpressions, wrapTerms=true),
       windows
     );
 

@@ -41,7 +41,7 @@ groups:
           gitlab_component_errors:ratio_1h{component="jaeger_agent",env="gprd",monitor="global",type="jaeger"}
           > (14.4 * 0.001000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_5m{component="jaeger_agent",env="gprd",monitor="global",type="jaeger"}
           > (14.4 * 0.001000)
@@ -88,7 +88,7 @@ groups:
           gitlab_component_errors:ratio_6h{component="jaeger_agent",env="gprd",monitor="global",type="jaeger"}
           > (6 * 0.001000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_30m{component="jaeger_agent",env="gprd",monitor="global",type="jaeger"}
           > (6 * 0.001000)
@@ -205,7 +205,7 @@ groups:
           gitlab_component_errors:ratio_1h{component="jaeger_collector",env="gprd",monitor="global",type="jaeger"}
           > (14.4 * 0.001000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_5m{component="jaeger_collector",env="gprd",monitor="global",type="jaeger"}
           > (14.4 * 0.001000)
@@ -252,7 +252,7 @@ groups:
           gitlab_component_errors:ratio_6h{component="jaeger_collector",env="gprd",monitor="global",type="jaeger"}
           > (6 * 0.001000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_30m{component="jaeger_collector",env="gprd",monitor="global",type="jaeger"}
           > (6 * 0.001000)
@@ -369,7 +369,7 @@ groups:
           gitlab_component_errors:ratio_1h{component="jaeger_query",env="gprd",monitor="global",type="jaeger"}
           > (14.4 * 0.001000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_5m{component="jaeger_query",env="gprd",monitor="global",type="jaeger"}
           > (14.4 * 0.001000)
@@ -416,7 +416,7 @@ groups:
           gitlab_component_errors:ratio_6h{component="jaeger_query",env="gprd",monitor="global",type="jaeger"}
           > (6 * 0.001000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_30m{component="jaeger_query",env="gprd",monitor="global",type="jaeger"}
           > (6 * 0.001000)

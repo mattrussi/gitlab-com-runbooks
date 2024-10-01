@@ -339,7 +339,7 @@ groups:
           gitlab_component_errors:ratio_1h{component="fluentd_log_output",env="gstg",monitor="global",type="logging"}
           > (14.4 * 0.001000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_5m{component="fluentd_log_output",env="gstg",monitor="global",type="logging"}
           > (14.4 * 0.001000)
@@ -388,7 +388,7 @@ groups:
           gitlab_component_errors:ratio_6h{component="fluentd_log_output",env="gstg",monitor="global",type="logging"}
           > (6 * 0.001000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_30m{component="fluentd_log_output",env="gstg",monitor="global",type="logging"}
           > (6 * 0.001000)
@@ -509,7 +509,7 @@ groups:
           gitlab_component_errors:ratio_1h{component="kibana_googlelb",env="gstg",monitor="global",type="logging"}
           > (14.4 * 0.005000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_5m{component="kibana_googlelb",env="gstg",monitor="global",type="logging"}
           > (14.4 * 0.005000)
@@ -556,7 +556,7 @@ groups:
           gitlab_component_errors:ratio_6h{component="kibana_googlelb",env="gstg",monitor="global",type="logging"}
           > (6 * 0.005000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_30m{component="kibana_googlelb",env="gstg",monitor="global",type="logging"}
           > (6 * 0.005000)
@@ -753,7 +753,7 @@ groups:
           gitlab_component_errors:ratio_1h{component="pubsubbeat",env="gstg",monitor="global",type="logging"}
           > (14.4 * 0.001000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_5m{component="pubsubbeat",env="gstg",monitor="global",type="logging"}
           > (14.4 * 0.001000)
@@ -802,7 +802,7 @@ groups:
           gitlab_component_errors:ratio_6h{component="pubsubbeat",env="gstg",monitor="global",type="logging"}
           > (6 * 0.001000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_30m{component="pubsubbeat",env="gstg",monitor="global",type="logging"}
           > (6 * 0.001000)

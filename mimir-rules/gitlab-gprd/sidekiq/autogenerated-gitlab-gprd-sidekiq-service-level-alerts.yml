@@ -120,7 +120,7 @@ groups:
           gitlab_component_apdex:ratio_1h{component="llm_completion",env="gprd",monitor="global",type="sidekiq"}
           < (1 - 14.4 * 0.005000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_apdex:ratio_5m{component="llm_completion",env="gprd",monitor="global",type="sidekiq"}
           < (1 - 14.4 * 0.005000)
@@ -172,7 +172,7 @@ groups:
           gitlab_component_apdex:ratio_6h{component="llm_completion",env="gprd",monitor="global",type="sidekiq"}
           < (1 - 6 * 0.005000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_apdex:ratio_30m{component="llm_completion",env="gprd",monitor="global",type="sidekiq"}
           < (1 - 6 * 0.005000)
@@ -228,7 +228,7 @@ groups:
           gitlab_component_errors:ratio_1h{component="llm_completion",env="gprd",monitor="global",type="sidekiq"}
           > (14.4 * 0.005000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_5m{component="llm_completion",env="gprd",monitor="global",type="sidekiq"}
           > (14.4 * 0.005000)
@@ -284,7 +284,7 @@ groups:
           gitlab_component_errors:ratio_6h{component="llm_completion",env="gprd",monitor="global",type="sidekiq"}
           > (6 * 0.005000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_30m{component="llm_completion",env="gprd",monitor="global",type="sidekiq"}
           > (6 * 0.005000)
@@ -422,7 +422,7 @@ groups:
           gitlab_component_shard_apdex:ratio_1h{component="sidekiq_execution",env="gprd",monitor="global",shard!~"urgent-authorized-projects|urgent-cpu-bound|urgent-other",type="sidekiq"}
           < (1 - 14.4 * 0.005000)
         )
-        and
+        and on (env,environment,tier,type,stage,shard,component)
         (
           gitlab_component_shard_apdex:ratio_5m{component="sidekiq_execution",env="gprd",monitor="global",shard!~"urgent-authorized-projects|urgent-cpu-bound|urgent-other",type="sidekiq"}
           < (1 - 14.4 * 0.005000)
@@ -472,7 +472,7 @@ groups:
           gitlab_component_shard_apdex:ratio_6h{component="sidekiq_execution",env="gprd",monitor="global",shard!~"urgent-authorized-projects|urgent-cpu-bound|urgent-other",type="sidekiq"}
           < (1 - 6 * 0.005000)
         )
-        and
+        and on (env,environment,tier,type,stage,shard,component)
         (
           gitlab_component_shard_apdex:ratio_30m{component="sidekiq_execution",env="gprd",monitor="global",shard!~"urgent-authorized-projects|urgent-cpu-bound|urgent-other",type="sidekiq"}
           < (1 - 6 * 0.005000)
@@ -522,7 +522,7 @@ groups:
           gitlab_component_shard_apdex:ratio_1h{component="sidekiq_execution",env="gprd",monitor="global",shard="urgent-authorized-projects",type="sidekiq"}
           < (1 - 14.4 * 0.050000)
         )
-        and
+        and on (env,environment,tier,type,stage,shard,component)
         (
           gitlab_component_shard_apdex:ratio_5m{component="sidekiq_execution",env="gprd",monitor="global",shard="urgent-authorized-projects",type="sidekiq"}
           < (1 - 14.4 * 0.050000)
@@ -572,7 +572,7 @@ groups:
           gitlab_component_shard_apdex:ratio_6h{component="sidekiq_execution",env="gprd",monitor="global",shard="urgent-authorized-projects",type="sidekiq"}
           < (1 - 6 * 0.050000)
         )
-        and
+        and on (env,environment,tier,type,stage,shard,component)
         (
           gitlab_component_shard_apdex:ratio_30m{component="sidekiq_execution",env="gprd",monitor="global",shard="urgent-authorized-projects",type="sidekiq"}
           < (1 - 6 * 0.050000)
@@ -622,7 +622,7 @@ groups:
           gitlab_component_shard_apdex:ratio_1h{component="sidekiq_execution",env="gprd",monitor="global",shard="urgent-cpu-bound",type="sidekiq"}
           < (1 - 14.4 * 0.010000)
         )
-        and
+        and on (env,environment,tier,type,stage,shard,component)
         (
           gitlab_component_shard_apdex:ratio_5m{component="sidekiq_execution",env="gprd",monitor="global",shard="urgent-cpu-bound",type="sidekiq"}
           < (1 - 14.4 * 0.010000)
@@ -672,7 +672,7 @@ groups:
           gitlab_component_shard_apdex:ratio_6h{component="sidekiq_execution",env="gprd",monitor="global",shard="urgent-cpu-bound",type="sidekiq"}
           < (1 - 6 * 0.010000)
         )
-        and
+        and on (env,environment,tier,type,stage,shard,component)
         (
           gitlab_component_shard_apdex:ratio_30m{component="sidekiq_execution",env="gprd",monitor="global",shard="urgent-cpu-bound",type="sidekiq"}
           < (1 - 6 * 0.010000)
@@ -722,7 +722,7 @@ groups:
           gitlab_component_shard_apdex:ratio_1h{component="sidekiq_execution",env="gprd",monitor="global",shard="urgent-other",type="sidekiq"}
           < (1 - 14.4 * 0.015000)
         )
-        and
+        and on (env,environment,tier,type,stage,shard,component)
         (
           gitlab_component_shard_apdex:ratio_5m{component="sidekiq_execution",env="gprd",monitor="global",shard="urgent-other",type="sidekiq"}
           < (1 - 14.4 * 0.015000)
@@ -772,7 +772,7 @@ groups:
           gitlab_component_shard_apdex:ratio_6h{component="sidekiq_execution",env="gprd",monitor="global",shard="urgent-other",type="sidekiq"}
           < (1 - 6 * 0.015000)
         )
-        and
+        and on (env,environment,tier,type,stage,shard,component)
         (
           gitlab_component_shard_apdex:ratio_30m{component="sidekiq_execution",env="gprd",monitor="global",shard="urgent-other",type="sidekiq"}
           < (1 - 6 * 0.015000)
@@ -826,7 +826,7 @@ groups:
           gitlab_component_shard_errors:ratio_1h{component="sidekiq_execution",env="gprd",monitor="global",type="sidekiq"}
           > (14.4 * 0.005000)
         )
-        and
+        and on (env,environment,tier,type,stage,shard,component)
         (
           gitlab_component_shard_errors:ratio_5m{component="sidekiq_execution",env="gprd",monitor="global",type="sidekiq"}
           > (14.4 * 0.005000)
@@ -880,7 +880,7 @@ groups:
           gitlab_component_shard_errors:ratio_6h{component="sidekiq_execution",env="gprd",monitor="global",type="sidekiq"}
           > (6 * 0.005000)
         )
-        and
+        and on (env,environment,tier,type,stage,shard,component)
         (
           gitlab_component_shard_errors:ratio_30m{component="sidekiq_execution",env="gprd",monitor="global",type="sidekiq"}
           > (6 * 0.005000)
@@ -1010,7 +1010,7 @@ groups:
           gitlab_component_apdex:ratio_1h{component="sidekiq_execution_with_external_dependency",env="gprd",monitor="global",type="sidekiq"}
           < (1 - 14.4 * 0.005000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_apdex:ratio_5m{component="sidekiq_execution_with_external_dependency",env="gprd",monitor="global",type="sidekiq"}
           < (1 - 14.4 * 0.005000)
@@ -1056,7 +1056,7 @@ groups:
           gitlab_component_apdex:ratio_6h{component="sidekiq_execution_with_external_dependency",env="gprd",monitor="global",type="sidekiq"}
           < (1 - 6 * 0.005000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_apdex:ratio_30m{component="sidekiq_execution_with_external_dependency",env="gprd",monitor="global",type="sidekiq"}
           < (1 - 6 * 0.005000)
@@ -1106,7 +1106,7 @@ groups:
           gitlab_component_errors:ratio_1h{component="sidekiq_execution_with_external_dependency",env="gprd",monitor="global",type="sidekiq"}
           > (14.4 * 0.100000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_5m{component="sidekiq_execution_with_external_dependency",env="gprd",monitor="global",type="sidekiq"}
           > (14.4 * 0.100000)
@@ -1156,7 +1156,7 @@ groups:
           gitlab_component_errors:ratio_6h{component="sidekiq_execution_with_external_dependency",env="gprd",monitor="global",type="sidekiq"}
           > (6 * 0.100000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_30m{component="sidekiq_execution_with_external_dependency",env="gprd",monitor="global",type="sidekiq"}
           > (6 * 0.100000)
@@ -1282,7 +1282,7 @@ groups:
           gitlab_component_shard_apdex:ratio_1h{component="sidekiq_queueing",env="gprd",monitor="global",shard!~"urgent-authorized-projects",type="sidekiq"}
           < (1 - 14.4 * 0.001000)
         )
-        and
+        and on (env,environment,tier,type,stage,shard,component)
         (
           gitlab_component_shard_apdex:ratio_5m{component="sidekiq_queueing",env="gprd",monitor="global",shard!~"urgent-authorized-projects",type="sidekiq"}
           < (1 - 14.4 * 0.001000)
@@ -1332,7 +1332,7 @@ groups:
           gitlab_component_shard_apdex:ratio_6h{component="sidekiq_queueing",env="gprd",monitor="global",shard!~"urgent-authorized-projects",type="sidekiq"}
           < (1 - 6 * 0.001000)
         )
-        and
+        and on (env,environment,tier,type,stage,shard,component)
         (
           gitlab_component_shard_apdex:ratio_30m{component="sidekiq_queueing",env="gprd",monitor="global",shard!~"urgent-authorized-projects",type="sidekiq"}
           < (1 - 6 * 0.001000)
@@ -1382,7 +1382,7 @@ groups:
           gitlab_component_shard_apdex:ratio_1h{component="sidekiq_queueing",env="gprd",monitor="global",shard="urgent-authorized-projects",type="sidekiq"}
           < (1 - 14.4 * 0.060000)
         )
-        and
+        and on (env,environment,tier,type,stage,shard,component)
         (
           gitlab_component_shard_apdex:ratio_5m{component="sidekiq_queueing",env="gprd",monitor="global",shard="urgent-authorized-projects",type="sidekiq"}
           < (1 - 14.4 * 0.060000)
@@ -1432,7 +1432,7 @@ groups:
           gitlab_component_shard_apdex:ratio_6h{component="sidekiq_queueing",env="gprd",monitor="global",shard="urgent-authorized-projects",type="sidekiq"}
           < (1 - 6 * 0.060000)
         )
-        and
+        and on (env,environment,tier,type,stage,shard,component)
         (
           gitlab_component_shard_apdex:ratio_30m{component="sidekiq_queueing",env="gprd",monitor="global",shard="urgent-authorized-projects",type="sidekiq"}
           < (1 - 6 * 0.060000)
@@ -1562,7 +1562,7 @@ groups:
           gitlab_component_apdex:ratio_1h{component="sidekiq_queueing_with_external_dependency",env="gprd",monitor="global",type="sidekiq"}
           < (1 - 14.4 * 0.005000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_apdex:ratio_5m{component="sidekiq_queueing_with_external_dependency",env="gprd",monitor="global",type="sidekiq"}
           < (1 - 14.4 * 0.005000)
@@ -1608,7 +1608,7 @@ groups:
           gitlab_component_apdex:ratio_6h{component="sidekiq_queueing_with_external_dependency",env="gprd",monitor="global",type="sidekiq"}
           < (1 - 6 * 0.005000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_apdex:ratio_30m{component="sidekiq_queueing_with_external_dependency",env="gprd",monitor="global",type="sidekiq"}
           < (1 - 6 * 0.005000)

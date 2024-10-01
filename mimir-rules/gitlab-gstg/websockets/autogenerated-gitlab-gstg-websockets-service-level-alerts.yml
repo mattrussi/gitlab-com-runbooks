@@ -39,7 +39,7 @@ groups:
           gitlab_component_errors:ratio_1h{component="loadbalancer",env="gstg",monitor="global",type="websockets"}
           > (14.4 * 0.000500)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_5m{component="loadbalancer",env="gstg",monitor="global",type="websockets"}
           > (14.4 * 0.000500)
@@ -84,7 +84,7 @@ groups:
           gitlab_component_errors:ratio_6h{component="loadbalancer",env="gstg",monitor="global",type="websockets"}
           > (6 * 0.000500)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_30m{component="loadbalancer",env="gstg",monitor="global",type="websockets"}
           > (6 * 0.000500)
@@ -131,7 +131,7 @@ groups:
           gitlab_regional_sli_errors:ratio_1h{component="loadbalancer",env="gstg",monitor="global",type="websockets"}
           > (14.4 * 0.000500)
         )
-        and
+        and on (env,environment,tier,type,stage,region,component)
         (
           gitlab_regional_sli_errors:ratio_5m{component="loadbalancer",env="gstg",monitor="global",type="websockets"}
           > (14.4 * 0.000500)
@@ -178,7 +178,7 @@ groups:
           gitlab_regional_sli_errors:ratio_6h{component="loadbalancer",env="gstg",monitor="global",type="websockets"}
           > (6 * 0.000500)
         )
-        and
+        and on (env,environment,tier,type,stage,region,component)
         (
           gitlab_regional_sli_errors:ratio_30m{component="loadbalancer",env="gstg",monitor="global",type="websockets"}
           > (6 * 0.000500)
@@ -362,7 +362,7 @@ groups:
           gitlab_component_apdex:confidence:ratio_1h{component="rails_request",confidence="98%",env="gstg",monitor="global",type="websockets"}
           < (1 - 14.4 * 0.050000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_apdex:confidence:ratio_5m{component="rails_request",confidence="98%",env="gstg",monitor="global",type="websockets"}
           < (1 - 14.4 * 0.050000)
@@ -410,7 +410,7 @@ groups:
           gitlab_component_apdex:confidence:ratio_6h{component="rails_request",confidence="98%",env="gstg",monitor="global",type="websockets"}
           < (1 - 6 * 0.050000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_apdex:confidence:ratio_30m{component="rails_request",confidence="98%",env="gstg",monitor="global",type="websockets"}
           < (1 - 6 * 0.050000)
@@ -459,7 +459,7 @@ groups:
           gitlab_regional_sli_apdex:ratio_1h{component="rails_request",env="gstg",monitor="global",type="websockets"}
           < (1 - 14.4 * 0.050000)
         )
-        and
+        and on (env,environment,tier,type,stage,region,component)
         (
           gitlab_regional_sli_apdex:ratio_5m{component="rails_request",env="gstg",monitor="global",type="websockets"}
           < (1 - 14.4 * 0.050000)
@@ -508,7 +508,7 @@ groups:
           gitlab_regional_sli_apdex:ratio_6h{component="rails_request",env="gstg",monitor="global",type="websockets"}
           < (1 - 6 * 0.050000)
         )
-        and
+        and on (env,environment,tier,type,stage,region,component)
         (
           gitlab_regional_sli_apdex:ratio_30m{component="rails_request",env="gstg",monitor="global",type="websockets"}
           < (1 - 6 * 0.050000)
@@ -560,7 +560,7 @@ groups:
           gitlab_component_errors:confidence:ratio_1h{component="rails_request",confidence="98%",env="gstg",monitor="global",type="websockets"}
           > (14.4 * 0.000500)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:confidence:ratio_5m{component="rails_request",confidence="98%",env="gstg",monitor="global",type="websockets"}
           > (14.4 * 0.000500)
@@ -612,7 +612,7 @@ groups:
           gitlab_component_errors:confidence:ratio_6h{component="rails_request",confidence="98%",env="gstg",monitor="global",type="websockets"}
           > (6 * 0.000500)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:confidence:ratio_30m{component="rails_request",confidence="98%",env="gstg",monitor="global",type="websockets"}
           > (6 * 0.000500)
@@ -665,7 +665,7 @@ groups:
           gitlab_regional_sli_errors:ratio_1h{component="rails_request",env="gstg",monitor="global",type="websockets"}
           > (14.4 * 0.000500)
         )
-        and
+        and on (env,environment,tier,type,stage,region,component)
         (
           gitlab_regional_sli_errors:ratio_5m{component="rails_request",env="gstg",monitor="global",type="websockets"}
           > (14.4 * 0.000500)
@@ -718,7 +718,7 @@ groups:
           gitlab_regional_sli_errors:ratio_6h{component="rails_request",env="gstg",monitor="global",type="websockets"}
           > (6 * 0.000500)
         )
-        and
+        and on (env,environment,tier,type,stage,region,component)
         (
           gitlab_regional_sli_errors:ratio_30m{component="rails_request",env="gstg",monitor="global",type="websockets"}
           > (6 * 0.000500)
@@ -926,7 +926,7 @@ groups:
           gitlab_component_errors:ratio_1h{component="workhorse",env="gstg",monitor="global",type="websockets"}
           > (14.4 * 0.000500)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_5m{component="workhorse",env="gstg",monitor="global",type="websockets"}
           > (14.4 * 0.000500)
@@ -974,7 +974,7 @@ groups:
           gitlab_component_errors:ratio_6h{component="workhorse",env="gstg",monitor="global",type="websockets"}
           > (6 * 0.000500)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_30m{component="workhorse",env="gstg",monitor="global",type="websockets"}
           > (6 * 0.000500)
@@ -1024,7 +1024,7 @@ groups:
           gitlab_regional_sli_errors:ratio_1h{component="workhorse",env="gstg",monitor="global",type="websockets"}
           > (14.4 * 0.000500)
         )
-        and
+        and on (env,environment,tier,type,stage,region,component)
         (
           gitlab_regional_sli_errors:ratio_5m{component="workhorse",env="gstg",monitor="global",type="websockets"}
           > (14.4 * 0.000500)
@@ -1074,7 +1074,7 @@ groups:
           gitlab_regional_sli_errors:ratio_6h{component="workhorse",env="gstg",monitor="global",type="websockets"}
           > (6 * 0.000500)
         )
-        and
+        and on (env,environment,tier,type,stage,region,component)
         (
           gitlab_regional_sli_errors:ratio_30m{component="workhorse",env="gstg",monitor="global",type="websockets"}
           > (6 * 0.000500)

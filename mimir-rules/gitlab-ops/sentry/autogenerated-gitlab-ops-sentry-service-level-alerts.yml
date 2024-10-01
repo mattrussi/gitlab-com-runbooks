@@ -42,7 +42,7 @@ groups:
           gitlab_component_errors:ratio_1h{component="pg_transactions",env="ops",monitor="global",type="sentry"}
           > (14.4 * 0.010000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_5m{component="pg_transactions",env="ops",monitor="global",type="sentry"}
           > (14.4 * 0.010000)
@@ -90,7 +90,7 @@ groups:
           gitlab_component_errors:ratio_6h{component="pg_transactions",env="ops",monitor="global",type="sentry"}
           > (6 * 0.010000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_30m{component="pg_transactions",env="ops",monitor="global",type="sentry"}
           > (6 * 0.010000)
@@ -217,7 +217,7 @@ groups:
           gitlab_component_apdex:ratio_1h{component="sentry_events",env="ops",monitor="global",type="sentry"}
           < (1 - 14.4 * 0.010000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_apdex:ratio_5m{component="sentry_events",env="ops",monitor="global",type="sentry"}
           < (1 - 14.4 * 0.010000)
@@ -268,7 +268,7 @@ groups:
           gitlab_component_apdex:ratio_6h{component="sentry_events",env="ops",monitor="global",type="sentry"}
           < (1 - 6 * 0.010000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_apdex:ratio_30m{component="sentry_events",env="ops",monitor="global",type="sentry"}
           < (1 - 6 * 0.010000)
@@ -316,7 +316,7 @@ groups:
           gitlab_component_errors:ratio_1h{component="sentry_events",env="ops",monitor="global",type="sentry"}
           > (14.4 * 0.010000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_5m{component="sentry_events",env="ops",monitor="global",type="sentry"}
           > (14.4 * 0.010000)
@@ -364,7 +364,7 @@ groups:
           gitlab_component_errors:ratio_6h{component="sentry_events",env="ops",monitor="global",type="sentry"}
           > (6 * 0.010000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_30m{component="sentry_events",env="ops",monitor="global",type="sentry"}
           > (6 * 0.010000)

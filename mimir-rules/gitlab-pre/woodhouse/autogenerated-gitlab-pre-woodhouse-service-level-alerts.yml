@@ -46,7 +46,7 @@ groups:
           gitlab_component_apdex:ratio_1h{component="async_jobs",env="pre",monitor="global",type="woodhouse"}
           < (1 - 14.4 * 0.001000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_apdex:ratio_5m{component="async_jobs",env="pre",monitor="global",type="woodhouse"}
           < (1 - 14.4 * 0.001000)
@@ -98,7 +98,7 @@ groups:
           gitlab_component_apdex:ratio_6h{component="async_jobs",env="pre",monitor="global",type="woodhouse"}
           < (1 - 6 * 0.001000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_apdex:ratio_30m{component="async_jobs",env="pre",monitor="global",type="woodhouse"}
           < (1 - 6 * 0.001000)
@@ -147,7 +147,7 @@ groups:
           gitlab_component_errors:ratio_1h{component="async_jobs",env="pre",monitor="global",type="woodhouse"}
           > (14.4 * 0.001000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_5m{component="async_jobs",env="pre",monitor="global",type="woodhouse"}
           > (14.4 * 0.001000)
@@ -196,7 +196,7 @@ groups:
           gitlab_component_errors:ratio_6h{component="async_jobs",env="pre",monitor="global",type="woodhouse"}
           > (6 * 0.001000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_30m{component="async_jobs",env="pre",monitor="global",type="woodhouse"}
           > (6 * 0.001000)
@@ -248,7 +248,7 @@ groups:
           gitlab_component_apdex:ratio_1h{component="http",env="pre",monitor="global",type="woodhouse"}
           < (1 - 14.4 * 0.001000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_apdex:ratio_5m{component="http",env="pre",monitor="global",type="woodhouse"}
           < (1 - 14.4 * 0.001000)
@@ -300,7 +300,7 @@ groups:
           gitlab_component_apdex:ratio_6h{component="http",env="pre",monitor="global",type="woodhouse"}
           < (1 - 6 * 0.001000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_apdex:ratio_30m{component="http",env="pre",monitor="global",type="woodhouse"}
           < (1 - 6 * 0.001000)
@@ -349,7 +349,7 @@ groups:
           gitlab_component_errors:ratio_1h{component="http",env="pre",monitor="global",type="woodhouse"}
           > (14.4 * 0.001000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_5m{component="http",env="pre",monitor="global",type="woodhouse"}
           > (14.4 * 0.001000)
@@ -398,7 +398,7 @@ groups:
           gitlab_component_errors:ratio_6h{component="http",env="pre",monitor="global",type="woodhouse"}
           > (6 * 0.001000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_30m{component="http",env="pre",monitor="global",type="woodhouse"}
           > (6 * 0.001000)

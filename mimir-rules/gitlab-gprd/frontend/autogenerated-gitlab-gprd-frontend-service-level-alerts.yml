@@ -41,7 +41,7 @@ groups:
           gitlab_component_errors:ratio_1h{component="cnyHttpsServices",env="gprd",monitor="global",type="frontend"}
           > (14.4 * 0.000100)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_5m{component="cnyHttpsServices",env="gprd",monitor="global",type="frontend"}
           > (14.4 * 0.000100)
@@ -88,7 +88,7 @@ groups:
           gitlab_component_errors:ratio_6h{component="cnyHttpsServices",env="gprd",monitor="global",type="frontend"}
           > (6 * 0.000100)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_30m{component="cnyHttpsServices",env="gprd",monitor="global",type="frontend"}
           > (6 * 0.000100)
@@ -205,7 +205,7 @@ groups:
           gitlab_component_errors:ratio_1h{component="mainHttpsServices",env="gprd",monitor="global",type="frontend"}
           > (14.4 * 0.000100)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_5m{component="mainHttpsServices",env="gprd",monitor="global",type="frontend"}
           > (14.4 * 0.000100)
@@ -252,7 +252,7 @@ groups:
           gitlab_component_errors:ratio_6h{component="mainHttpsServices",env="gprd",monitor="global",type="frontend"}
           > (6 * 0.000100)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_30m{component="mainHttpsServices",env="gprd",monitor="global",type="frontend"}
           > (6 * 0.000100)
@@ -369,7 +369,7 @@ groups:
           gitlab_component_errors:ratio_1h{component="sshServices",env="gprd",monitor="global",type="frontend"}
           > (14.4 * 0.001000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_5m{component="sshServices",env="gprd",monitor="global",type="frontend"}
           > (14.4 * 0.001000)
@@ -416,7 +416,7 @@ groups:
           gitlab_component_errors:ratio_6h{component="sshServices",env="gprd",monitor="global",type="frontend"}
           > (6 * 0.001000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_30m{component="sshServices",env="gprd",monitor="global",type="frontend"}
           > (6 * 0.001000)
@@ -533,7 +533,7 @@ groups:
           gitlab_component_errors:ratio_1h{component="websocketsServices",env="gprd",monitor="global",type="frontend"}
           > (14.4 * 0.010000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_5m{component="websocketsServices",env="gprd",monitor="global",type="frontend"}
           > (14.4 * 0.010000)
@@ -580,7 +580,7 @@ groups:
           gitlab_component_errors:ratio_6h{component="websocketsServices",env="gprd",monitor="global",type="frontend"}
           > (6 * 0.010000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_30m{component="websocketsServices",env="gprd",monitor="global",type="frontend"}
           > (6 * 0.010000)

@@ -38,7 +38,7 @@ groups:
           gitlab_component_apdex:ratio_1h{component="global_search",env="gstg",monitor="global",type="api"}
           < (1 - 14.4 * 0.005000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_apdex:ratio_5m{component="global_search",env="gstg",monitor="global",type="api"}
           < (1 - 14.4 * 0.005000)
@@ -82,7 +82,7 @@ groups:
           gitlab_component_apdex:ratio_6h{component="global_search",env="gstg",monitor="global",type="api"}
           < (1 - 6 * 0.005000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_apdex:ratio_30m{component="global_search",env="gstg",monitor="global",type="api"}
           < (1 - 6 * 0.005000)
@@ -128,7 +128,7 @@ groups:
           gitlab_regional_sli_apdex:ratio_1h{component="global_search",env="gstg",monitor="global",type="api"}
           < (1 - 14.4 * 0.005000)
         )
-        and
+        and on (env,environment,tier,type,stage,region,component)
         (
           gitlab_regional_sli_apdex:ratio_5m{component="global_search",env="gstg",monitor="global",type="api"}
           < (1 - 14.4 * 0.005000)
@@ -174,7 +174,7 @@ groups:
           gitlab_regional_sli_apdex:ratio_6h{component="global_search",env="gstg",monitor="global",type="api"}
           < (1 - 6 * 0.005000)
         )
-        and
+        and on (env,environment,tier,type,stage,region,component)
         (
           gitlab_regional_sli_apdex:ratio_30m{component="global_search",env="gstg",monitor="global",type="api"}
           < (1 - 6 * 0.005000)
@@ -374,7 +374,7 @@ groups:
           gitlab_component_apdex:confidence:ratio_1h{component="graphql_query",confidence="98%",env="gstg",monitor="global",type="api"}
           < (1 - 14.4 * 0.005000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_apdex:confidence:ratio_5m{component="graphql_query",confidence="98%",env="gstg",monitor="global",type="api"}
           < (1 - 14.4 * 0.005000)
@@ -426,7 +426,7 @@ groups:
           gitlab_component_apdex:confidence:ratio_6h{component="graphql_query",confidence="98%",env="gstg",monitor="global",type="api"}
           < (1 - 6 * 0.005000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_apdex:confidence:ratio_30m{component="graphql_query",confidence="98%",env="gstg",monitor="global",type="api"}
           < (1 - 6 * 0.005000)
@@ -479,7 +479,7 @@ groups:
           gitlab_regional_sli_apdex:ratio_1h{component="graphql_query",env="gstg",monitor="global",type="api"}
           < (1 - 14.4 * 0.005000)
         )
-        and
+        and on (env,environment,tier,type,stage,region,component)
         (
           gitlab_regional_sli_apdex:ratio_5m{component="graphql_query",env="gstg",monitor="global",type="api"}
           < (1 - 14.4 * 0.005000)
@@ -532,7 +532,7 @@ groups:
           gitlab_regional_sli_apdex:ratio_6h{component="graphql_query",env="gstg",monitor="global",type="api"}
           < (1 - 6 * 0.005000)
         )
-        and
+        and on (env,environment,tier,type,stage,region,component)
         (
           gitlab_regional_sli_apdex:ratio_30m{component="graphql_query",env="gstg",monitor="global",type="api"}
           < (1 - 6 * 0.005000)
@@ -588,7 +588,7 @@ groups:
           gitlab_component_errors:confidence:ratio_1h{component="graphql_query",confidence="98%",env="gstg",monitor="global",type="api"}
           > (14.4 * 0.001000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:confidence:ratio_5m{component="graphql_query",confidence="98%",env="gstg",monitor="global",type="api"}
           > (14.4 * 0.001000)
@@ -644,7 +644,7 @@ groups:
           gitlab_component_errors:confidence:ratio_6h{component="graphql_query",confidence="98%",env="gstg",monitor="global",type="api"}
           > (6 * 0.001000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:confidence:ratio_30m{component="graphql_query",confidence="98%",env="gstg",monitor="global",type="api"}
           > (6 * 0.001000)
@@ -701,7 +701,7 @@ groups:
           gitlab_regional_sli_errors:ratio_1h{component="graphql_query",env="gstg",monitor="global",type="api"}
           > (14.4 * 0.001000)
         )
-        and
+        and on (env,environment,tier,type,stage,region,component)
         (
           gitlab_regional_sli_errors:ratio_5m{component="graphql_query",env="gstg",monitor="global",type="api"}
           > (14.4 * 0.001000)
@@ -758,7 +758,7 @@ groups:
           gitlab_regional_sli_errors:ratio_6h{component="graphql_query",env="gstg",monitor="global",type="api"}
           > (6 * 0.001000)
         )
-        and
+        and on (env,environment,tier,type,stage,region,component)
         (
           gitlab_regional_sli_errors:ratio_30m{component="graphql_query",env="gstg",monitor="global",type="api"}
           > (6 * 0.001000)
@@ -985,7 +985,7 @@ groups:
           gitlab_component_errors:confidence:ratio_1h{component="group_management",confidence="98%",env="gstg",monitor="global",type="api"}
           > (14.4 * 0.001000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:confidence:ratio_5m{component="group_management",confidence="98%",env="gstg",monitor="global",type="api"}
           > (14.4 * 0.001000)
@@ -1036,7 +1036,7 @@ groups:
           gitlab_component_errors:confidence:ratio_6h{component="group_management",confidence="98%",env="gstg",monitor="global",type="api"}
           > (6 * 0.001000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:confidence:ratio_30m{component="group_management",confidence="98%",env="gstg",monitor="global",type="api"}
           > (6 * 0.001000)
@@ -1088,7 +1088,7 @@ groups:
           gitlab_regional_sli_errors:ratio_1h{component="group_management",env="gstg",monitor="global",type="api"}
           > (14.4 * 0.001000)
         )
-        and
+        and on (env,environment,tier,type,stage,region,component)
         (
           gitlab_regional_sli_errors:ratio_5m{component="group_management",env="gstg",monitor="global",type="api"}
           > (14.4 * 0.001000)
@@ -1140,7 +1140,7 @@ groups:
           gitlab_regional_sli_errors:ratio_6h{component="group_management",env="gstg",monitor="global",type="api"}
           > (6 * 0.001000)
         )
-        and
+        and on (env,environment,tier,type,stage,region,component)
         (
           gitlab_regional_sli_errors:ratio_30m{component="group_management",env="gstg",monitor="global",type="api"}
           > (6 * 0.001000)
@@ -1341,7 +1341,7 @@ groups:
           gitlab_component_errors:ratio_1h{component="loadbalancer",env="gstg",monitor="global",type="api"}
           > (14.4 * 0.001000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_5m{component="loadbalancer",env="gstg",monitor="global",type="api"}
           > (14.4 * 0.001000)
@@ -1386,7 +1386,7 @@ groups:
           gitlab_component_errors:ratio_6h{component="loadbalancer",env="gstg",monitor="global",type="api"}
           > (6 * 0.001000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_30m{component="loadbalancer",env="gstg",monitor="global",type="api"}
           > (6 * 0.001000)
@@ -1433,7 +1433,7 @@ groups:
           gitlab_regional_sli_errors:ratio_1h{component="loadbalancer",env="gstg",monitor="global",type="api"}
           > (14.4 * 0.001000)
         )
-        and
+        and on (env,environment,tier,type,stage,region,component)
         (
           gitlab_regional_sli_errors:ratio_5m{component="loadbalancer",env="gstg",monitor="global",type="api"}
           > (14.4 * 0.001000)
@@ -1480,7 +1480,7 @@ groups:
           gitlab_regional_sli_errors:ratio_6h{component="loadbalancer",env="gstg",monitor="global",type="api"}
           > (6 * 0.001000)
         )
-        and
+        and on (env,environment,tier,type,stage,region,component)
         (
           gitlab_regional_sli_errors:ratio_30m{component="loadbalancer",env="gstg",monitor="global",type="api"}
           > (6 * 0.001000)
@@ -1665,7 +1665,7 @@ groups:
           gitlab_component_errors:ratio_1h{component="nginx_ingress",env="gstg",monitor="global",type="api"}
           > (14.4 * 0.001000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_5m{component="nginx_ingress",env="gstg",monitor="global",type="api"}
           > (14.4 * 0.001000)
@@ -1714,7 +1714,7 @@ groups:
           gitlab_component_errors:ratio_6h{component="nginx_ingress",env="gstg",monitor="global",type="api"}
           > (6 * 0.001000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_30m{component="nginx_ingress",env="gstg",monitor="global",type="api"}
           > (6 * 0.001000)
@@ -1765,7 +1765,7 @@ groups:
           gitlab_regional_sli_errors:ratio_1h{component="nginx_ingress",env="gstg",monitor="global",type="api"}
           > (14.4 * 0.001000)
         )
-        and
+        and on (env,environment,tier,type,stage,region,component)
         (
           gitlab_regional_sli_errors:ratio_5m{component="nginx_ingress",env="gstg",monitor="global",type="api"}
           > (14.4 * 0.001000)
@@ -1816,7 +1816,7 @@ groups:
           gitlab_regional_sli_errors:ratio_6h{component="nginx_ingress",env="gstg",monitor="global",type="api"}
           > (6 * 0.001000)
         )
-        and
+        and on (env,environment,tier,type,stage,region,component)
         (
           gitlab_regional_sli_errors:ratio_30m{component="nginx_ingress",env="gstg",monitor="global",type="api"}
           > (6 * 0.001000)
@@ -2015,7 +2015,7 @@ groups:
           gitlab_component_apdex:ratio_1h{component="rails_request",env="gstg",monitor="global",type="api"}
           < (1 - 14.4 * 0.010000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_apdex:ratio_5m{component="rails_request",env="gstg",monitor="global",type="api"}
           < (1 - 14.4 * 0.010000)
@@ -2062,7 +2062,7 @@ groups:
           gitlab_component_apdex:ratio_6h{component="rails_request",env="gstg",monitor="global",type="api"}
           < (1 - 6 * 0.010000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_apdex:ratio_30m{component="rails_request",env="gstg",monitor="global",type="api"}
           < (1 - 6 * 0.010000)
@@ -2111,7 +2111,7 @@ groups:
           gitlab_regional_sli_apdex:ratio_1h{component="rails_request",env="gstg",monitor="global",type="api"}
           < (1 - 14.4 * 0.010000)
         )
-        and
+        and on (env,environment,tier,type,stage,region,component)
         (
           gitlab_regional_sli_apdex:ratio_5m{component="rails_request",env="gstg",monitor="global",type="api"}
           < (1 - 14.4 * 0.010000)
@@ -2160,7 +2160,7 @@ groups:
           gitlab_regional_sli_apdex:ratio_6h{component="rails_request",env="gstg",monitor="global",type="api"}
           < (1 - 6 * 0.010000)
         )
-        and
+        and on (env,environment,tier,type,stage,region,component)
         (
           gitlab_regional_sli_apdex:ratio_30m{component="rails_request",env="gstg",monitor="global",type="api"}
           < (1 - 6 * 0.010000)
@@ -2211,7 +2211,7 @@ groups:
           gitlab_component_errors:ratio_1h{component="rails_request",env="gstg",monitor="global",type="api"}
           > (14.4 * 0.001000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_5m{component="rails_request",env="gstg",monitor="global",type="api"}
           > (14.4 * 0.001000)
@@ -2262,7 +2262,7 @@ groups:
           gitlab_component_errors:ratio_6h{component="rails_request",env="gstg",monitor="global",type="api"}
           > (6 * 0.001000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_30m{component="rails_request",env="gstg",monitor="global",type="api"}
           > (6 * 0.001000)
@@ -2315,7 +2315,7 @@ groups:
           gitlab_regional_sli_errors:ratio_1h{component="rails_request",env="gstg",monitor="global",type="api"}
           > (14.4 * 0.001000)
         )
-        and
+        and on (env,environment,tier,type,stage,region,component)
         (
           gitlab_regional_sli_errors:ratio_5m{component="rails_request",env="gstg",monitor="global",type="api"}
           > (14.4 * 0.001000)
@@ -2368,7 +2368,7 @@ groups:
           gitlab_regional_sli_errors:ratio_6h{component="rails_request",env="gstg",monitor="global",type="api"}
           > (6 * 0.001000)
         )
-        and
+        and on (env,environment,tier,type,stage,region,component)
         (
           gitlab_regional_sli_errors:ratio_30m{component="rails_request",env="gstg",monitor="global",type="api"}
           > (6 * 0.001000)
@@ -2580,7 +2580,7 @@ groups:
           gitlab_component_apdex:ratio_1h{component="workhorse",env="gstg",monitor="global",type="api"}
           < (1 - 14.4 * 0.005000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_apdex:ratio_5m{component="workhorse",env="gstg",monitor="global",type="api"}
           < (1 - 14.4 * 0.005000)
@@ -2632,7 +2632,7 @@ groups:
           gitlab_component_apdex:ratio_6h{component="workhorse",env="gstg",monitor="global",type="api"}
           < (1 - 6 * 0.005000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_apdex:ratio_30m{component="workhorse",env="gstg",monitor="global",type="api"}
           < (1 - 6 * 0.005000)
@@ -2686,7 +2686,7 @@ groups:
           gitlab_regional_sli_apdex:ratio_1h{component="workhorse",env="gstg",monitor="global",type="api"}
           < (1 - 14.4 * 0.005000)
         )
-        and
+        and on (env,environment,tier,type,stage,region,component)
         (
           gitlab_regional_sli_apdex:ratio_5m{component="workhorse",env="gstg",monitor="global",type="api"}
           < (1 - 14.4 * 0.005000)
@@ -2740,7 +2740,7 @@ groups:
           gitlab_regional_sli_apdex:ratio_6h{component="workhorse",env="gstg",monitor="global",type="api"}
           < (1 - 6 * 0.005000)
         )
-        and
+        and on (env,environment,tier,type,stage,region,component)
         (
           gitlab_regional_sli_apdex:ratio_30m{component="workhorse",env="gstg",monitor="global",type="api"}
           < (1 - 6 * 0.005000)
@@ -2789,7 +2789,7 @@ groups:
           gitlab_component_errors:ratio_1h{component="workhorse",env="gstg",monitor="global",type="api"}
           > (14.4 * 0.001000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_5m{component="workhorse",env="gstg",monitor="global",type="api"}
           > (14.4 * 0.001000)
@@ -2838,7 +2838,7 @@ groups:
           gitlab_component_errors:ratio_6h{component="workhorse",env="gstg",monitor="global",type="api"}
           > (6 * 0.001000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_30m{component="workhorse",env="gstg",monitor="global",type="api"}
           > (6 * 0.001000)
@@ -2889,7 +2889,7 @@ groups:
           gitlab_regional_sli_errors:ratio_1h{component="workhorse",env="gstg",monitor="global",type="api"}
           > (14.4 * 0.001000)
         )
-        and
+        and on (env,environment,tier,type,stage,region,component)
         (
           gitlab_regional_sli_errors:ratio_5m{component="workhorse",env="gstg",monitor="global",type="api"}
           > (14.4 * 0.001000)
@@ -2940,7 +2940,7 @@ groups:
           gitlab_regional_sli_errors:ratio_6h{component="workhorse",env="gstg",monitor="global",type="api"}
           > (6 * 0.001000)
         )
-        and
+        and on (env,environment,tier,type,stage,region,component)
         (
           gitlab_regional_sli_errors:ratio_30m{component="workhorse",env="gstg",monitor="global",type="api"}
           > (6 * 0.001000)

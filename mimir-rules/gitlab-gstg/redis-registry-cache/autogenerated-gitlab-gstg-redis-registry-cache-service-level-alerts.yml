@@ -119,7 +119,7 @@ groups:
           gitlab_component_apdex:ratio_1h{component="registry_redis_client",env="gstg",monitor="global",type="redis-registry-cache"}
           < (1 - 14.4 * 0.000500)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_apdex:ratio_5m{component="registry_redis_client",env="gstg",monitor="global",type="redis-registry-cache"}
           < (1 - 14.4 * 0.000500)
@@ -170,7 +170,7 @@ groups:
           gitlab_component_apdex:ratio_6h{component="registry_redis_client",env="gstg",monitor="global",type="redis-registry-cache"}
           < (1 - 6 * 0.000500)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_apdex:ratio_30m{component="registry_redis_client",env="gstg",monitor="global",type="redis-registry-cache"}
           < (1 - 6 * 0.000500)
@@ -218,7 +218,7 @@ groups:
           gitlab_component_errors:ratio_1h{component="registry_redis_client",env="gstg",monitor="global",type="redis-registry-cache"}
           > (14.4 * 0.001000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_5m{component="registry_redis_client",env="gstg",monitor="global",type="redis-registry-cache"}
           > (14.4 * 0.001000)
@@ -266,7 +266,7 @@ groups:
           gitlab_component_errors:ratio_6h{component="registry_redis_client",env="gstg",monitor="global",type="redis-registry-cache"}
           > (6 * 0.001000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_30m{component="registry_redis_client",env="gstg",monitor="global",type="redis-registry-cache"}
           > (6 * 0.001000)

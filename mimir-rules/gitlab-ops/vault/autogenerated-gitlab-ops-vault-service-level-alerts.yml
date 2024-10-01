@@ -44,7 +44,7 @@ groups:
           gitlab_component_apdex:ratio_1h{component="istio_internal_ingress",env="ops",monitor="global",type="vault"}
           < (1 - 14.4 * 0.001000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_apdex:ratio_5m{component="istio_internal_ingress",env="ops",monitor="global",type="vault"}
           < (1 - 14.4 * 0.001000)
@@ -94,7 +94,7 @@ groups:
           gitlab_component_apdex:ratio_6h{component="istio_internal_ingress",env="ops",monitor="global",type="vault"}
           < (1 - 6 * 0.001000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_apdex:ratio_30m{component="istio_internal_ingress",env="ops",monitor="global",type="vault"}
           < (1 - 6 * 0.001000)
@@ -141,7 +141,7 @@ groups:
           gitlab_component_errors:ratio_1h{component="istio_internal_ingress",env="ops",monitor="global",type="vault"}
           > (14.4 * 0.001000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_5m{component="istio_internal_ingress",env="ops",monitor="global",type="vault"}
           > (14.4 * 0.001000)
@@ -188,7 +188,7 @@ groups:
           gitlab_component_errors:ratio_6h{component="istio_internal_ingress",env="ops",monitor="global",type="vault"}
           > (6 * 0.001000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_30m{component="istio_internal_ingress",env="ops",monitor="global",type="vault"}
           > (6 * 0.001000)
@@ -238,7 +238,7 @@ groups:
           gitlab_component_apdex:ratio_1h{component="istio_public_ingress",env="ops",monitor="global",type="vault"}
           < (1 - 14.4 * 0.001000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_apdex:ratio_5m{component="istio_public_ingress",env="ops",monitor="global",type="vault"}
           < (1 - 14.4 * 0.001000)
@@ -288,7 +288,7 @@ groups:
           gitlab_component_apdex:ratio_6h{component="istio_public_ingress",env="ops",monitor="global",type="vault"}
           < (1 - 6 * 0.001000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_apdex:ratio_30m{component="istio_public_ingress",env="ops",monitor="global",type="vault"}
           < (1 - 6 * 0.001000)
@@ -335,7 +335,7 @@ groups:
           gitlab_component_errors:ratio_1h{component="istio_public_ingress",env="ops",monitor="global",type="vault"}
           > (14.4 * 0.001000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_5m{component="istio_public_ingress",env="ops",monitor="global",type="vault"}
           > (14.4 * 0.001000)
@@ -382,7 +382,7 @@ groups:
           gitlab_component_errors:ratio_6h{component="istio_public_ingress",env="ops",monitor="global",type="vault"}
           > (6 * 0.001000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_30m{component="istio_public_ingress",env="ops",monitor="global",type="vault"}
           > (6 * 0.001000)
@@ -431,7 +431,7 @@ groups:
           gitlab_component_errors:ratio_1h{component="vault_audit_log_request",env="ops",monitor="global",type="vault"}
           > (14.4 * 0.001000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_5m{component="vault_audit_log_request",env="ops",monitor="global",type="vault"}
           > (14.4 * 0.001000)
@@ -480,7 +480,7 @@ groups:
           gitlab_component_errors:ratio_6h{component="vault_audit_log_request",env="ops",monitor="global",type="vault"}
           > (6 * 0.001000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_30m{component="vault_audit_log_request",env="ops",monitor="global",type="vault"}
           > (6 * 0.001000)
@@ -529,7 +529,7 @@ groups:
           gitlab_component_errors:ratio_1h{component="vault_audit_log_response",env="ops",monitor="global",type="vault"}
           > (14.4 * 0.001000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_5m{component="vault_audit_log_response",env="ops",monitor="global",type="vault"}
           > (14.4 * 0.001000)
@@ -578,7 +578,7 @@ groups:
           gitlab_component_errors:ratio_6h{component="vault_audit_log_response",env="ops",monitor="global",type="vault"}
           > (6 * 0.001000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_30m{component="vault_audit_log_response",env="ops",monitor="global",type="vault"}
           > (6 * 0.001000)
@@ -625,7 +625,7 @@ groups:
           gitlab_component_errors:ratio_1h{component="vault_google_lb",env="ops",monitor="global",type="vault"}
           > (14.4 * 0.001000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_5m{component="vault_google_lb",env="ops",monitor="global",type="vault"}
           > (14.4 * 0.001000)
@@ -672,7 +672,7 @@ groups:
           gitlab_component_errors:ratio_6h{component="vault_google_lb",env="ops",monitor="global",type="vault"}
           > (6 * 0.001000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_30m{component="vault_google_lb",env="ops",monitor="global",type="vault"}
           > (6 * 0.001000)

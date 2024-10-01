@@ -38,7 +38,7 @@ groups:
           gitlab_component_apdex:ratio_1h{component="customers_dot_requests",monitor="global",type="customersdot"}
           < (1 - 14.4 * 0.100000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_apdex:ratio_5m{component="customers_dot_requests",monitor="global",type="customersdot"}
           < (1 - 14.4 * 0.100000)
@@ -82,7 +82,7 @@ groups:
           gitlab_component_apdex:ratio_6h{component="customers_dot_requests",monitor="global",type="customersdot"}
           < (1 - 6 * 0.100000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_apdex:ratio_30m{component="customers_dot_requests",monitor="global",type="customersdot"}
           < (1 - 6 * 0.100000)
@@ -130,7 +130,7 @@ groups:
           gitlab_component_errors:ratio_1h{component="customers_dot_requests",monitor="global",type="customersdot"}
           > (14.4 * 0.050000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_5m{component="customers_dot_requests",monitor="global",type="customersdot"}
           > (14.4 * 0.050000)
@@ -178,7 +178,7 @@ groups:
           gitlab_component_errors:ratio_6h{component="customers_dot_requests",monitor="global",type="customersdot"}
           > (6 * 0.050000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_30m{component="customers_dot_requests",monitor="global",type="customersdot"}
           > (6 * 0.050000)
@@ -294,7 +294,7 @@ groups:
           gitlab_component_apdex:ratio_1h{component="customers_dot_sidekiq_jobs",monitor="global",type="customersdot"}
           < (1 - 14.4 * 0.100000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_apdex:ratio_5m{component="customers_dot_sidekiq_jobs",monitor="global",type="customersdot"}
           < (1 - 14.4 * 0.100000)
@@ -338,7 +338,7 @@ groups:
           gitlab_component_apdex:ratio_6h{component="customers_dot_sidekiq_jobs",monitor="global",type="customersdot"}
           < (1 - 6 * 0.100000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_apdex:ratio_30m{component="customers_dot_sidekiq_jobs",monitor="global",type="customersdot"}
           < (1 - 6 * 0.100000)
@@ -386,7 +386,7 @@ groups:
           gitlab_component_errors:ratio_1h{component="customers_dot_sidekiq_jobs",monitor="global",type="customersdot"}
           > (14.4 * 0.050000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_5m{component="customers_dot_sidekiq_jobs",monitor="global",type="customersdot"}
           > (14.4 * 0.050000)
@@ -434,7 +434,7 @@ groups:
           gitlab_component_errors:ratio_6h{component="customers_dot_sidekiq_jobs",monitor="global",type="customersdot"}
           > (6 * 0.050000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_30m{component="customers_dot_sidekiq_jobs",monitor="global",type="customersdot"}
           > (6 * 0.050000)

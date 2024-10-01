@@ -46,7 +46,7 @@ groups:
           gitlab_component_shard_apdex:ratio_1h{component="ci_runner_jobs",env="gstg",monitor="global",type="ci-runners"}
           < (1 - 14.4 * 0.030000)
         )
-        and
+        and on (env,environment,tier,type,stage,shard,component)
         (
           gitlab_component_shard_apdex:ratio_5m{component="ci_runner_jobs",env="gstg",monitor="global",type="ci-runners"}
           < (1 - 14.4 * 0.030000)
@@ -98,7 +98,7 @@ groups:
           gitlab_component_shard_apdex:ratio_6h{component="ci_runner_jobs",env="gstg",monitor="global",type="ci-runners"}
           < (1 - 6 * 0.030000)
         )
-        and
+        and on (env,environment,tier,type,stage,shard,component)
         (
           gitlab_component_shard_apdex:ratio_30m{component="ci_runner_jobs",env="gstg",monitor="global",type="ci-runners"}
           < (1 - 6 * 0.030000)
@@ -154,7 +154,7 @@ groups:
           gitlab_component_shard_errors:ratio_1h{component="ci_runner_jobs",env="gstg",monitor="global",type="ci-runners"}
           > (14.4 * 0.001000)
         )
-        and
+        and on (env,environment,tier,type,stage,shard,component)
         (
           gitlab_component_shard_errors:ratio_5m{component="ci_runner_jobs",env="gstg",monitor="global",type="ci-runners"}
           > (14.4 * 0.001000)
@@ -210,7 +210,7 @@ groups:
           gitlab_component_shard_errors:ratio_6h{component="ci_runner_jobs",env="gstg",monitor="global",type="ci-runners"}
           > (6 * 0.001000)
         )
-        and
+        and on (env,environment,tier,type,stage,shard,component)
         (
           gitlab_component_shard_errors:ratio_30m{component="ci_runner_jobs",env="gstg",monitor="global",type="ci-runners"}
           > (6 * 0.001000)
@@ -343,7 +343,7 @@ groups:
           gitlab_component_errors:ratio_1h{component="loadbalancer",env="gstg",monitor="global",type="ci-runners"}
           > (14.4 * 0.001000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_5m{component="loadbalancer",env="gstg",monitor="global",type="ci-runners"}
           > (14.4 * 0.001000)
@@ -388,7 +388,7 @@ groups:
           gitlab_component_errors:ratio_6h{component="loadbalancer",env="gstg",monitor="global",type="ci-runners"}
           > (6 * 0.001000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_30m{component="loadbalancer",env="gstg",monitor="global",type="ci-runners"}
           > (6 * 0.001000)
@@ -505,7 +505,7 @@ groups:
           gitlab_component_errors:ratio_1h{component="polling",env="gstg",monitor="global",type="ci-runners"}
           > (14.4 * 0.001000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_5m{component="polling",env="gstg",monitor="global",type="ci-runners"}
           > (14.4 * 0.001000)
@@ -556,7 +556,7 @@ groups:
           gitlab_component_errors:ratio_6h{component="polling",env="gstg",monitor="global",type="ci-runners"}
           > (6 * 0.001000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_30m{component="polling",env="gstg",monitor="global",type="ci-runners"}
           > (6 * 0.001000)
@@ -682,7 +682,7 @@ groups:
           gitlab_component_apdex:ratio_1h{component="qa_runner_jobs",env="gstg",monitor="global",type="ci-runners"}
           < (1 - 14.4 * 0.100000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_apdex:ratio_5m{component="qa_runner_jobs",env="gstg",monitor="global",type="ci-runners"}
           < (1 - 14.4 * 0.100000)
@@ -730,7 +730,7 @@ groups:
           gitlab_component_apdex:ratio_6h{component="qa_runner_jobs",env="gstg",monitor="global",type="ci-runners"}
           < (1 - 6 * 0.100000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_apdex:ratio_30m{component="qa_runner_jobs",env="gstg",monitor="global",type="ci-runners"}
           < (1 - 6 * 0.100000)
@@ -782,7 +782,7 @@ groups:
           gitlab_component_errors:ratio_1h{component="qa_runner_jobs",env="gstg",monitor="global",type="ci-runners"}
           > (14.4 * 0.050000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_5m{component="qa_runner_jobs",env="gstg",monitor="global",type="ci-runners"}
           > (14.4 * 0.050000)
@@ -834,7 +834,7 @@ groups:
           gitlab_component_errors:ratio_6h{component="qa_runner_jobs",env="gstg",monitor="global",type="ci-runners"}
           > (6 * 0.050000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_30m{component="qa_runner_jobs",env="gstg",monitor="global",type="ci-runners"}
           > (6 * 0.050000)
@@ -969,7 +969,7 @@ groups:
           gitlab_component_apdex:ratio_1h{component="queuing_queries_duration",env="gstg",monitor="global",type="ci-runners"}
           < (1 - 14.4 * 0.001000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_apdex:ratio_5m{component="queuing_queries_duration",env="gstg",monitor="global",type="ci-runners"}
           < (1 - 14.4 * 0.001000)
@@ -1024,7 +1024,7 @@ groups:
           gitlab_component_apdex:ratio_6h{component="queuing_queries_duration",env="gstg",monitor="global",type="ci-runners"}
           < (1 - 6 * 0.001000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_apdex:ratio_30m{component="queuing_queries_duration",env="gstg",monitor="global",type="ci-runners"}
           < (1 - 6 * 0.001000)
@@ -1153,7 +1153,7 @@ groups:
           gitlab_component_errors:ratio_1h{component="saas_linux_runner_image_pull_failures",env="gstg",monitor="global",type="ci-runners"}
           > (14.4 * 0.010000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_5m{component="saas_linux_runner_image_pull_failures",env="gstg",monitor="global",type="ci-runners"}
           > (14.4 * 0.010000)
@@ -1202,7 +1202,7 @@ groups:
           gitlab_component_errors:ratio_6h{component="saas_linux_runner_image_pull_failures",env="gstg",monitor="global",type="ci-runners"}
           > (6 * 0.010000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_30m{component="saas_linux_runner_image_pull_failures",env="gstg",monitor="global",type="ci-runners"}
           > (6 * 0.010000)
@@ -1325,7 +1325,7 @@ groups:
           gitlab_component_errors:ratio_1h{component="trace_archiving_ci_jobs",env="gstg",monitor="global",type="ci-runners"}
           > (14.4 * 0.001000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_5m{component="trace_archiving_ci_jobs",env="gstg",monitor="global",type="ci-runners"}
           > (14.4 * 0.001000)
@@ -1374,7 +1374,7 @@ groups:
           gitlab_component_errors:ratio_6h{component="trace_archiving_ci_jobs",env="gstg",monitor="global",type="ci-runners"}
           > (6 * 0.001000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_30m{component="trace_archiving_ci_jobs",env="gstg",monitor="global",type="ci-runners"}
           > (6 * 0.001000)

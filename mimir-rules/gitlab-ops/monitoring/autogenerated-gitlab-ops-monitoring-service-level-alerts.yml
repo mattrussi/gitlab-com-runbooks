@@ -46,7 +46,7 @@ groups:
           gitlab_component_apdex:ratio_1h{component="grafana",env="ops",monitor="global",type="monitoring"}
           < (1 - 14.4 * 0.080000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_apdex:ratio_5m{component="grafana",env="ops",monitor="global",type="monitoring"}
           < (1 - 14.4 * 0.080000)
@@ -98,7 +98,7 @@ groups:
           gitlab_component_apdex:ratio_6h{component="grafana",env="ops",monitor="global",type="monitoring"}
           < (1 - 6 * 0.080000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_apdex:ratio_30m{component="grafana",env="ops",monitor="global",type="monitoring"}
           < (1 - 6 * 0.080000)
@@ -147,7 +147,7 @@ groups:
           gitlab_component_errors:ratio_1h{component="grafana",env="ops",monitor="global",type="monitoring"}
           > (14.4 * 0.001000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_5m{component="grafana",env="ops",monitor="global",type="monitoring"}
           > (14.4 * 0.001000)
@@ -196,7 +196,7 @@ groups:
           gitlab_component_errors:ratio_6h{component="grafana",env="ops",monitor="global",type="monitoring"}
           > (6 * 0.001000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_30m{component="grafana",env="ops",monitor="global",type="monitoring"}
           > (6 * 0.001000)
@@ -245,7 +245,7 @@ groups:
           gitlab_component_errors:ratio_1h{component="grafana_datasources",env="ops",monitor="global",type="monitoring"}
           > (14.4 * 0.001000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_5m{component="grafana_datasources",env="ops",monitor="global",type="monitoring"}
           > (14.4 * 0.001000)
@@ -294,7 +294,7 @@ groups:
           gitlab_component_errors:ratio_6h{component="grafana_datasources",env="ops",monitor="global",type="monitoring"}
           > (6 * 0.001000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_30m{component="grafana_datasources",env="ops",monitor="global",type="monitoring"}
           > (6 * 0.001000)
@@ -340,7 +340,7 @@ groups:
           gitlab_component_errors:ratio_1h{component="grafana_google_lb",env="ops",monitor="global",type="monitoring"}
           > (14.4 * 0.001000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_5m{component="grafana_google_lb",env="ops",monitor="global",type="monitoring"}
           > (14.4 * 0.001000)
@@ -386,7 +386,7 @@ groups:
           gitlab_component_errors:ratio_6h{component="grafana_google_lb",env="ops",monitor="global",type="monitoring"}
           > (6 * 0.001000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_30m{component="grafana_google_lb",env="ops",monitor="global",type="monitoring"}
           > (6 * 0.001000)
@@ -438,7 +438,7 @@ groups:
           gitlab_component_apdex:ratio_1h{component="grafana_image_renderer",env="ops",monitor="global",type="monitoring"}
           < (1 - 14.4 * 0.080000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_apdex:ratio_5m{component="grafana_image_renderer",env="ops",monitor="global",type="monitoring"}
           < (1 - 14.4 * 0.080000)
@@ -490,7 +490,7 @@ groups:
           gitlab_component_apdex:ratio_6h{component="grafana_image_renderer",env="ops",monitor="global",type="monitoring"}
           < (1 - 6 * 0.080000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_apdex:ratio_30m{component="grafana_image_renderer",env="ops",monitor="global",type="monitoring"}
           < (1 - 6 * 0.080000)
@@ -539,7 +539,7 @@ groups:
           gitlab_component_errors:ratio_1h{component="grafana_image_renderer",env="ops",monitor="global",type="monitoring"}
           > (14.4 * 0.001000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_5m{component="grafana_image_renderer",env="ops",monitor="global",type="monitoring"}
           > (14.4 * 0.001000)
@@ -588,7 +588,7 @@ groups:
           gitlab_component_errors:ratio_6h{component="grafana_image_renderer",env="ops",monitor="global",type="monitoring"}
           > (6 * 0.001000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_30m{component="grafana_image_renderer",env="ops",monitor="global",type="monitoring"}
           > (6 * 0.001000)
@@ -640,7 +640,7 @@ groups:
           gitlab_component_apdex:ratio_1h{component="prometheus",env="ops",monitor="global",type="monitoring"}
           < (1 - 14.4 * 0.001000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_apdex:ratio_5m{component="prometheus",env="ops",monitor="global",type="monitoring"}
           < (1 - 14.4 * 0.001000)
@@ -692,7 +692,7 @@ groups:
           gitlab_component_apdex:ratio_6h{component="prometheus",env="ops",monitor="global",type="monitoring"}
           < (1 - 6 * 0.001000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_apdex:ratio_30m{component="prometheus",env="ops",monitor="global",type="monitoring"}
           < (1 - 6 * 0.001000)
@@ -741,7 +741,7 @@ groups:
           gitlab_component_errors:ratio_1h{component="prometheus",env="ops",monitor="global",type="monitoring"}
           > (14.4 * 0.001000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_5m{component="prometheus",env="ops",monitor="global",type="monitoring"}
           > (14.4 * 0.001000)
@@ -790,7 +790,7 @@ groups:
           gitlab_component_errors:ratio_6h{component="prometheus",env="ops",monitor="global",type="monitoring"}
           > (6 * 0.001000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_30m{component="prometheus",env="ops",monitor="global",type="monitoring"}
           > (6 * 0.001000)
@@ -913,7 +913,7 @@ groups:
           gitlab_component_errors:ratio_1h{component="prometheus_alert_sender",env="ops",monitor="global",type="monitoring"}
           > (14.4 * 0.005000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_5m{component="prometheus_alert_sender",env="ops",monitor="global",type="monitoring"}
           > (14.4 * 0.005000)
@@ -962,7 +962,7 @@ groups:
           gitlab_component_errors:ratio_6h{component="prometheus_alert_sender",env="ops",monitor="global",type="monitoring"}
           > (6 * 0.005000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_30m{component="prometheus_alert_sender",env="ops",monitor="global",type="monitoring"}
           > (6 * 0.005000)
@@ -1086,7 +1086,7 @@ groups:
           gitlab_component_apdex:ratio_1h{component="rule_evaluation",env="ops",monitor="global",type="monitoring"}
           < (1 - 14.4 * 0.001000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_apdex:ratio_5m{component="rule_evaluation",env="ops",monitor="global",type="monitoring"}
           < (1 - 14.4 * 0.001000)
@@ -1136,7 +1136,7 @@ groups:
           gitlab_component_apdex:ratio_6h{component="rule_evaluation",env="ops",monitor="global",type="monitoring"}
           < (1 - 6 * 0.001000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_apdex:ratio_30m{component="rule_evaluation",env="ops",monitor="global",type="monitoring"}
           < (1 - 6 * 0.001000)
@@ -1190,7 +1190,7 @@ groups:
           gitlab_component_errors:ratio_1h{component="rule_evaluation",env="ops",monitor="global",type="monitoring"}
           > (14.4 * 0.001000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_5m{component="rule_evaluation",env="ops",monitor="global",type="monitoring"}
           > (14.4 * 0.001000)
@@ -1244,7 +1244,7 @@ groups:
           gitlab_component_errors:ratio_6h{component="rule_evaluation",env="ops",monitor="global",type="monitoring"}
           > (6 * 0.001000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_30m{component="rule_evaluation",env="ops",monitor="global",type="monitoring"}
           > (6 * 0.001000)

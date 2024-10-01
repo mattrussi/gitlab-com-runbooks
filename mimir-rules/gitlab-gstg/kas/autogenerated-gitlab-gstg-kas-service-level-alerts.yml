@@ -44,7 +44,7 @@ groups:
           gitlab_component_apdex:ratio_1h{component="grpc_requests",env="gstg",monitor="global",type="kas"}
           < (1 - 14.4 * 0.050000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_apdex:ratio_5m{component="grpc_requests",env="gstg",monitor="global",type="kas"}
           < (1 - 14.4 * 0.050000)
@@ -94,7 +94,7 @@ groups:
           gitlab_component_apdex:ratio_6h{component="grpc_requests",env="gstg",monitor="global",type="kas"}
           < (1 - 6 * 0.050000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_apdex:ratio_30m{component="grpc_requests",env="gstg",monitor="global",type="kas"}
           < (1 - 6 * 0.050000)
@@ -141,7 +141,7 @@ groups:
           gitlab_component_errors:ratio_1h{component="grpc_requests",env="gstg",monitor="global",type="kas"}
           > (14.4 * 0.000500)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_5m{component="grpc_requests",env="gstg",monitor="global",type="kas"}
           > (14.4 * 0.000500)
@@ -188,7 +188,7 @@ groups:
           gitlab_component_errors:ratio_6h{component="grpc_requests",env="gstg",monitor="global",type="kas"}
           > (6 * 0.000500)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_30m{component="grpc_requests",env="gstg",monitor="global",type="kas"}
           > (6 * 0.000500)
