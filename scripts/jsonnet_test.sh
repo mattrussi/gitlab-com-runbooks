@@ -7,7 +7,7 @@ REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
 find_tests() {
   if [ -z "$1" ]; then
-    find "$REPO_DIR" -name '*_test.jsonnet' -not -path "$REPO_DIR/vendor/*"
+    find "$REPO_DIR" -name '*_test.jsonnet' -not -path "$REPO_DIR/vendor/*" -not -path "$REPO_DIR/**/vendor/*"
   else
     echo "$1"
   fi
