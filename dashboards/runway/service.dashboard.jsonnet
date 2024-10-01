@@ -225,12 +225,15 @@ basic.dashboard(
         decimals=2,
       ),
       basic.latencyTimeseries(
-        title='Runway Service Container Startup Latency',
+        title='Runway Service Container p99 Startup Latency',
         description='Distribution of time spent starting a new container instance, in milliseconds.',
         query=|||
-          sum by (revision_name, region, location) (
-            stackdriver_cloud_run_revision_run_googleapis_com_container_startup_latencies_sum{%(selector)s}
-          ) / 60
+          histogram_quantile(
+            0.99,
+            sum by (le, revision_name, region, location) (
+              max_over_time(stackdriver_cloud_run_revision_run_googleapis_com_container_startup_latencies_bucket{%(selector)s}[$__interval])
+            )
+          )
         ||| % formatConfig,
         legendFormat='{{revision_name}} {{region}} {{location}}',
         format='ms',
@@ -248,7 +251,7 @@ basic.dashboard(
         intervalFactor=2,
       ),
       basic.latencyTimeseries(
-        title='Runway Service Container Healthcheck Latency',
+        title='Runway Service Container p99 Healthcheck Latency',
         description='Distribution of time spent probing a container instance, in milliseconds.',
         query=|||
           histogram_quantile(
