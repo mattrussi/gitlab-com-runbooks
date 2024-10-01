@@ -83,13 +83,6 @@ local validateAndApplySLIDefaults(sliName, component, inheritedDefaults) =
     name: sliName,
   };
 
-// Currently, we use 1h metrics for upscaling source
-local getUpscaleLabels(sli, burnRate) =
-  if sli.upscaleLongerBurnRates && burnRate == '1h' then
-    { upscale_source: 'yes' }
-  else
-    {};
-
 // Currently we only do upscaling on 6h burn rates
 local isUpscalingTarget(sli, burnRate) =
   sli.upscaleLongerBurnRates && burnRate == '6h';
@@ -217,8 +210,7 @@ local serviceLevelIndicatorDefinition(sliName, serviceLevelIndicator) =
     generateApdexRecordingRules(burnRate, aggregationSet, recordingRuleStaticLabels, selector={}, config={})::
       if self.hasApdex() && !isUpscalingTarget(self, burnRate) then
         local apdexMetric = serviceLevelIndicator.apdex { config+: config };
-        local upscaleLabels = getUpscaleLabels(self, burnRate);
-        local allStaticLabels = recordingRuleStaticLabels + serviceLevelIndicator.staticLabels + upscaleLabels;
+        local allStaticLabels = recordingRuleStaticLabels + serviceLevelIndicator.staticLabels;
         local aggregationLabelsWithoutStaticLabels = filterLabelsFromLabelsHash(aggregationSet.labels, allStaticLabels);
 
         local apdexSuccessRateRecordingRuleName = aggregationSet.getApdexSuccessRateMetricForBurnRate(burnRate);
@@ -280,9 +272,8 @@ local serviceLevelIndicatorDefinition(sliName, serviceLevelIndicator) =
     generateRequestRateRecordingRules(burnRate, aggregationSet, recordingRuleStaticLabels, selector={}, config={})::
       if !isUpscalingTarget(self, burnRate) then
         local requestRateMetric = serviceLevelIndicator.requestRate { config+: config };
-        local upscaleLabels = getUpscaleLabels(self, burnRate);
         local requestRateRecordingRuleName = aggregationSet.getOpsRateMetricForBurnRate(burnRate, required=true);
-        local allStaticLabels = recordingRuleStaticLabels + serviceLevelIndicator.staticLabels + upscaleLabels;
+        local allStaticLabels = recordingRuleStaticLabels + serviceLevelIndicator.staticLabels;
 
         [{
           record: requestRateRecordingRuleName,
@@ -302,8 +293,7 @@ local serviceLevelIndicatorDefinition(sliName, serviceLevelIndicator) =
       if self.hasErrorRate() && !isUpscalingTarget(self, burnRate) then
         local errorRateMetric = serviceLevelIndicator.errorRate { config+: config };
         local opsRateMetric = serviceLevelIndicator.requestRate { config+: config };
-        local upscaleLabels = getUpscaleLabels(self, burnRate);
-        local allStaticLabels = recordingRuleStaticLabels + serviceLevelIndicator.staticLabels + upscaleLabels;
+        local allStaticLabels = recordingRuleStaticLabels + serviceLevelIndicator.staticLabels;
         local requestRateRecordingRuleName = aggregationSet.getOpsRateMetricForBurnRate(burnRate, required=true);
         local errorRateRecordingRuleName = aggregationSet.getErrorRateMetricForBurnRate(burnRate, required=true);
         local filteredAggregationLabels = filterLabelsFromLabelsHash(aggregationSet.labels, allStaticLabels);

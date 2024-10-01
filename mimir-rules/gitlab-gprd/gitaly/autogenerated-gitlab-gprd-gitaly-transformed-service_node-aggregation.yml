@@ -125,66 +125,32 @@ groups:
     labels:
       monitor: global
     expr: |
-      (
-        sum by (env,environment,tier,type,stage,shard,fqdn) (
-          (gitlab_component_node_ops:rate_6h{env="gprd",monitor="global",type="gitaly"} offset 30s >= 0) and on(component, type) (gitlab_component_service:mapping{monitor="global",service_aggregation="yes"})
-        )
-      )
-      or
-      (
-        sum by (env,environment,tier,type,stage,shard,fqdn) (
-          avg_over_time(gitlab_component_node_ops:rate_1h{env="gprd",monitor="global",type="gitaly",upscale_source="yes"}[6h] offset 30s) and on(component, type) (gitlab_component_service:mapping{monitor="global",service_aggregation="yes"})
-        )
+      sum by (env,environment,tier,type,stage,shard,fqdn) (
+        (gitlab_component_node_ops:rate_6h{env="gprd",monitor="global",type="gitaly"} offset 30s >= 0) and on(component, type) (gitlab_component_service:mapping{monitor="global",service_aggregation="yes"})
       )
   - record: gitlab_service_node_errors:ratio_6h
     labels:
       monitor: global
     expr: |
-      (
-        sum by (env,environment,tier,type,stage,shard,fqdn)(
-          (gitlab_component_node_errors:rate_6h{env="gprd",monitor="global",type="gitaly"} offset 30s >= 0) and on(component, type) (gitlab_component_service:mapping{monitor="global",service_aggregation="yes"})
-        )
-        /
-        sum by (env,environment,tier,type,stage,shard,fqdn)(
-          (gitlab_component_node_ops:rate_6h{env="gprd",monitor="global",type="gitaly"} offset 30s >= 0) and on(component, type) (gitlab_component_service:mapping{monitor="global",service_aggregation="yes"})
-          and
-          (gitlab_component_node_errors:rate_6h{env="gprd",monitor="global",type="gitaly"} offset 30s >= 0) and on(component, type) (gitlab_component_service:mapping{monitor="global",service_aggregation="yes"})
-        )
+      sum by (env,environment,tier,type,stage,shard,fqdn)(
+        (gitlab_component_node_errors:rate_6h{env="gprd",monitor="global",type="gitaly"} offset 30s >= 0) and on(component, type) (gitlab_component_service:mapping{monitor="global",service_aggregation="yes"})
       )
-      or
-      (
-        sum by (env,environment,tier,type,stage,shard,fqdn) (
-          sum_over_time(gitlab_component_node_errors:rate_1h{env="gprd",monitor="global",type="gitaly",upscale_source="yes"}[6h] offset 30s) and on(component, type) (gitlab_component_service:mapping{monitor="global",service_aggregation="yes"})
-        )
-        /
-        sum by (env,environment,tier,type,stage,shard,fqdn) (
-          sum_over_time(gitlab_component_node_ops:rate_1h{env="gprd",monitor="global",type="gitaly",upscale_source="yes"}[6h] offset 30s) and on(component, type) (gitlab_component_service:mapping{monitor="global",service_aggregation="yes"})
-          and
-          (gitlab_component_node_errors:rate_1h{env="gprd",monitor="global",type="gitaly",upscale_source="yes"} offset 30s >= 0) and on(component, type) (gitlab_component_service:mapping{monitor="global",service_aggregation="yes"})
-        )
+      /
+      sum by (env,environment,tier,type,stage,shard,fqdn)(
+        (gitlab_component_node_ops:rate_6h{env="gprd",monitor="global",type="gitaly"} offset 30s >= 0) and on(component, type) (gitlab_component_service:mapping{monitor="global",service_aggregation="yes"})
+        and
+        (gitlab_component_node_errors:rate_6h{env="gprd",monitor="global",type="gitaly"} offset 30s >= 0) and on(component, type) (gitlab_component_service:mapping{monitor="global",service_aggregation="yes"})
       )
   - record: gitlab_service_node_apdex:ratio_6h
     labels:
       monitor: global
     expr: |
-      (
-        sum by (env,environment,tier,type,stage,shard,fqdn) (
-          (gitlab_component_node_apdex:success:rate_6h{env="gprd",monitor="global",type="gitaly"} offset 30s >= 0) and on(component, type) (gitlab_component_service:mapping{monitor="global",service_aggregation="yes"})
-        )
-        /
-        sum by (env,environment,tier,type,stage,shard,fqdn) (
-          (gitlab_component_node_apdex:weight:score_6h{env="gprd",monitor="global",type="gitaly"} offset 30s >= 0) and on(component, type) (gitlab_component_service:mapping{monitor="global",service_aggregation="yes"})
-        )
+      sum by (env,environment,tier,type,stage,shard,fqdn) (
+        (gitlab_component_node_apdex:success:rate_6h{env="gprd",monitor="global",type="gitaly"} offset 30s >= 0) and on(component, type) (gitlab_component_service:mapping{monitor="global",service_aggregation="yes"})
       )
-      or
-      (
-        sum by (env,environment,tier,type,stage,shard,fqdn) (
-          sum_over_time(gitlab_component_node_apdex:success:rate_1h{env="gprd",monitor="global",type="gitaly",upscale_source="yes"}[6h] offset 30s) and on(component, type) (gitlab_component_service:mapping{monitor="global",service_aggregation="yes"})
-        )
-        /
-        sum by (env,environment,tier,type,stage,shard,fqdn) (
-          sum_over_time(gitlab_component_node_apdex:weight:score_1h{env="gprd",monitor="global",type="gitaly",upscale_source="yes"}[6h] offset 30s) and on(component, type) (gitlab_component_service:mapping{monitor="global",service_aggregation="yes"})
-        )
+      /
+      sum by (env,environment,tier,type,stage,shard,fqdn) (
+        (gitlab_component_node_apdex:weight:score_6h{env="gprd",monitor="global",type="gitaly"} offset 30s >= 0) and on(component, type) (gitlab_component_service:mapping{monitor="global",service_aggregation="yes"})
       )
   - record: gitlab_service_node_ops:rate_3d
     labels:

@@ -307,7 +307,6 @@ groups:
       stage: main
       tier: sv
       type: mailroom
-      upscale_source: "yes"
     expr: |
       sum by (env,environment) (
         sli_aggregations:gitlab_sli_sidekiq_execution_total:rate_1h{env="gprd",worker=~"EmailReceiverWorker|ServiceDeskEmailReceiverWorker"} offset 30s
@@ -319,7 +318,6 @@ groups:
       stage: main
       tier: sv
       type: mailroom
-      upscale_source: "yes"
     expr: |
       (
         sum by (env,environment) (
@@ -329,7 +327,7 @@ groups:
       or
       (
         0 * group by(env,environment) (
-          gitlab_component_ops:rate_1h{component="emailsProcessed",env="gprd",monitor="global",stage="main",tier="sv",type="mailroom",upscale_source="yes"}
+          gitlab_component_ops:rate_1h{component="emailsProcessed",env="gprd",monitor="global",stage="main",tier="sv",type="mailroom"}
         )
       )
   - record: gitlab_component_errors:ratio_1h

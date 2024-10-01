@@ -351,7 +351,6 @@ groups:
       stage: main
       tier: sv
       type: camoproxy
-      upscale_source: "yes"
     expr: |
       sum by (env,environment) (
         sli_aggregations:camo_response_duration_seconds_bucket:rate_1h{env="gstg",le="10"}
@@ -363,7 +362,6 @@ groups:
       stage: main
       tier: sv
       type: camoproxy
-      upscale_source: "yes"
     expr: |
       sum by (env,environment) (
         sli_aggregations:camo_response_duration_seconds_bucket:rate_1h{env="gstg",le="+Inf"}
@@ -375,7 +373,6 @@ groups:
       stage: main
       tier: sv
       type: camoproxy
-      upscale_source: "yes"
     expr: |
       sum by (env,environment) (
         sli_aggregations:camo_response_duration_seconds_bucket:rate_1h{env="gstg",le="+Inf"} offset 30s
@@ -387,7 +384,6 @@ groups:
       stage: main
       tier: sv
       type: camoproxy
-      upscale_source: "yes"
     expr: |
       (
         sum by (env,environment) (
@@ -397,7 +393,7 @@ groups:
       or
       (
         0 * group by(env,environment) (
-          gitlab_component_ops:rate_1h{component="server",env="gstg",monitor="global",stage="main",tier="sv",type="camoproxy",upscale_source="yes"}
+          gitlab_component_ops:rate_1h{component="server",env="gstg",monitor="global",stage="main",tier="sv",type="camoproxy"}
         )
       )
   - record: gitlab_component_errors:ratio_1h
