@@ -18,8 +18,10 @@
     "editable": true,
     "fiscalYearStartMonth": 0,
     "graphTooltip": 1,
-    "id": 3294,
-    "links": [],
+    "id": null,
+    "links": [
+  
+    ],
     "panels": [
       {
         "datasource": {
@@ -39,7 +41,9 @@
               },
               "inspect": false
             },
-            "mappings": [],
+            "mappings": [
+  
+            ],
             "thresholds": {
               "mode": "absolute",
               "steps": [
@@ -1170,7 +1174,8 @@
                 "datname 8": true,
                 "datname 9": true
               },
-              "includeByName": {},
+              "includeByName": {
+              },
               "indexByName": {
                 "Time 1": 1,
                 "Time 10": 30,
@@ -1324,7 +1329,9 @@
               },
               "inspect": false
             },
-            "mappings": [],
+            "mappings": [
+  
+            ],
             "thresholds": {
               "mode": "absolute",
               "steps": [
@@ -1493,7 +1500,9 @@
           },
           "frameIndex": 0,
           "showHeader": true,
-          "sortBy": []
+          "sortBy": [
+  
+          ]
         },
         "pluginVersion": "11.1.0",
         "targets": [
@@ -1682,8 +1691,10 @@
                 "datname 2": true,
                 "datname 3": true
               },
-              "includeByName": {},
-              "indexByName": {},
+              "includeByName": {
+              },
+              "indexByName": {
+              },
               "renameByName": {
                 "Value #B": "CPU exec system time(s)",
                 "Value #C": "CPU exec total time (s)",
@@ -1717,7 +1728,9 @@
               },
               "inspect": false
             },
-            "mappings": [],
+            "mappings": [
+  
+            ],
             "thresholds": {
               "mode": "absolute",
               "steps": [
@@ -1732,7 +1745,9 @@
               ]
             }
           },
-          "overrides": []
+          "overrides": [
+  
+          ]
         },
         "gridPos": {
           "h": 8,
@@ -1790,7 +1805,9 @@
               },
               "inspect": false
             },
-            "mappings": [],
+            "mappings": [
+  
+            ],
             "thresholds": {
               "mode": "absolute",
               "steps": [
@@ -1805,7 +1822,9 @@
               ]
             }
           },
-          "overrides": []
+          "overrides": [
+  
+          ]
         },
         "gridPos": {
           "h": 8,
@@ -1863,7 +1882,9 @@
               },
               "inspect": false
             },
-            "mappings": [],
+            "mappings": [
+  
+            ],
             "thresholds": {
               "mode": "absolute",
               "steps": [
@@ -1878,7 +1899,9 @@
               ]
             }
           },
-          "overrides": []
+          "overrides": [
+  
+          ]
         },
         "gridPos": {
           "h": 8,
@@ -1936,7 +1959,9 @@
               },
               "inspect": false
             },
-            "mappings": [],
+            "mappings": [
+  
+            ],
             "thresholds": {
               "mode": "absolute",
               "steps": [
@@ -1951,7 +1976,9 @@
               ]
             }
           },
-          "overrides": []
+          "overrides": [
+  
+          ]
         },
         "gridPos": {
           "h": 8,
@@ -2009,7 +2036,9 @@
               },
               "inspect": false
             },
-            "mappings": [],
+            "mappings": [
+  
+            ],
             "thresholds": {
               "mode": "absolute",
               "steps": [
@@ -2024,7 +2053,9 @@
               ]
             }
           },
-          "overrides": []
+          "overrides": [
+  
+          ]
         },
         "gridPos": {
           "h": 8,
@@ -2082,7 +2113,9 @@
               },
               "inspect": false
             },
-            "mappings": [],
+            "mappings": [
+  
+            ],
             "thresholds": {
               "mode": "absolute",
               "steps": [
@@ -2097,7 +2130,9 @@
               ]
             }
           },
-          "overrides": []
+          "overrides": [
+  
+          ]
         },
         "gridPos": {
           "h": 8,
@@ -2155,7 +2190,9 @@
               },
               "inspect": false
             },
-            "mappings": [],
+            "mappings": [
+  
+            ],
             "thresholds": {
               "mode": "absolute",
               "steps": [
@@ -2170,7 +2207,9 @@
               ]
             }
           },
-          "overrides": []
+          "overrides": [
+  
+          ]
         },
         "gridPos": {
           "h": 8,
@@ -2228,7 +2267,9 @@
               },
               "inspect": false
             },
-            "mappings": [],
+            "mappings": [
+  
+            ],
             "thresholds": {
               "mode": "absolute",
               "steps": [
@@ -2243,7 +2284,9 @@
               ]
             }
           },
-          "overrides": []
+          "overrides": [
+  
+          ]
         },
         "gridPos": {
           "h": 8,
@@ -2301,7 +2344,9 @@
               },
               "inspect": false
             },
-            "mappings": [],
+            "mappings": [
+  
+            ],
             "thresholds": {
               "mode": "absolute",
               "steps": [
@@ -2316,7 +2361,9 @@
               ]
             }
           },
-          "overrides": []
+          "overrides": [
+  
+          ]
         },
         "gridPos": {
           "h": 8,
@@ -2376,7 +2423,9 @@
           "label": "Datasource",
           "multi": false,
           "name": "prometheus",
-          "options": [],
+          "options": [
+  
+          ],
           "query": "prometheus",
           "queryValue": "",
           "refresh": 1,
@@ -2400,7 +2449,9 @@
           "label": "Environment",
           "multi": false,
           "name": "environment",
-          "options": [],
+          "options": [
+  
+          ],
           "query": {
             "qryType": 1,
             "query": "label_values(node_exporter_build_info,env)",
@@ -2428,7 +2479,9 @@
           "includeAll": false,
           "multi": false,
           "name": "type",
-          "options": [],
+          "options": [
+  
+          ],
           "query": {
             "qryType": 1,
             "query": "label_values(node_exporter_build_info,type)",
@@ -2456,7 +2509,9 @@
           "includeAll": false,
           "multi": false,
           "name": "fqdn",
-          "options": [],
+          "options": [
+  
+          ],
           "query": {
             "qryType": 1,
             "query": "label_values(node_exporter_build_info{tier=\"db\", type=\"$type\", environment=\"$environment\"},fqdn)",
@@ -2473,7 +2528,9 @@
             "type": "prometheus",
             "uid": "e58c2f51-20f8-4f4b-ad48-2968782ca7d6"
           },
-          "filters": [],
+          "filters": [
+  
+          ],
           "hide": 0,
           "name": "Filters",
           "skipUrlSync": false,
@@ -2485,7 +2542,8 @@
       "from": "now-5m",
       "to": "now"
     },
-    "timepicker": {},
+    "timepicker": {
+    },
     "timezone": "browser",
     "title": "[Draft][postgres.ai] Postgres aggregated query performance analysis",
     "uid": "edxi03vbar9q8a",
