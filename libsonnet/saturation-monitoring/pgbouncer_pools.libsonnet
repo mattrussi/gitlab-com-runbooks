@@ -18,14 +18,14 @@ local pgbouncerAsyncPool(tag, role) =
     burnRatePeriod: '5m',
     query: |||
       (
-        avg_over_time(pgbouncer_pools_server_active_connections{user="gitlab", database="gitlabhq_production_sidekiq", %(selector)s}[%(rangeInterval)s]) +
-        avg_over_time(pgbouncer_pools_server_testing_connections{user="gitlab", database="gitlabhq_production_sidekiq", %(selector)s}[%(rangeInterval)s]) +
-        avg_over_time(pgbouncer_pools_server_used_connections{user="gitlab", database="gitlabhq_production_sidekiq", %(selector)s}[%(rangeInterval)s]) +
-        avg_over_time(pgbouncer_pools_server_login_connections{user="gitlab", database="gitlabhq_production_sidekiq", %(selector)s}[%(rangeInterval)s])
+        avg_over_time(pgbouncer_pools_server_active_connections{user="gitlab", database=~"gitlabhq_production_sidekiq.*", %(selector)s}[%(rangeInterval)s]) +
+        avg_over_time(pgbouncer_pools_server_testing_connections{user="gitlab", database=~"gitlabhq_production_sidekiq.*", %(selector)s}[%(rangeInterval)s]) +
+        avg_over_time(pgbouncer_pools_server_used_connections{user="gitlab", database=~"gitlabhq_production_sidekiq.*", %(selector)s}[%(rangeInterval)s]) +
+        avg_over_time(pgbouncer_pools_server_login_connections{user="gitlab", database=~"gitlabhq_production_sidekiq.*", %(selector)s}[%(rangeInterval)s])
       )
       / on(%(aggregationLabels)s) group_left()
       sum by (%(aggregationLabels)s) (
-        avg_over_time(pgbouncer_databases_pool_size{name="gitlabhq_production_sidekiq", %(selector)s}[%(rangeInterval)s])
+        avg_over_time(pgbouncer_databases_pool_size{name=~"gitlabhq_production_sidekiq.*", %(selector)s}[%(rangeInterval)s])
       )
     |||,
     slos: {
