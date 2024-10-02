@@ -380,14 +380,14 @@ groups:
         clamp_min(
           clamp_max(
             (
-              avg_over_time(pgbouncer_pools_server_active_connections{user="gitlab", database="gitlabhq_production_sidekiq", env="pre",type="patroni-ci"}[5m]) +
-              avg_over_time(pgbouncer_pools_server_testing_connections{user="gitlab", database="gitlabhq_production_sidekiq", env="pre",type="patroni-ci"}[5m]) +
-              avg_over_time(pgbouncer_pools_server_used_connections{user="gitlab", database="gitlabhq_production_sidekiq", env="pre",type="patroni-ci"}[5m]) +
-              avg_over_time(pgbouncer_pools_server_login_connections{user="gitlab", database="gitlabhq_production_sidekiq", env="pre",type="patroni-ci"}[5m])
+              avg_over_time(pgbouncer_pools_server_active_connections{user="gitlab", database=~"gitlabhq_production_sidekiq.*", env="pre",type="patroni-ci"}[5m]) +
+              avg_over_time(pgbouncer_pools_server_testing_connections{user="gitlab", database=~"gitlabhq_production_sidekiq.*", env="pre",type="patroni-ci"}[5m]) +
+              avg_over_time(pgbouncer_pools_server_used_connections{user="gitlab", database=~"gitlabhq_production_sidekiq.*", env="pre",type="patroni-ci"}[5m]) +
+              avg_over_time(pgbouncer_pools_server_login_connections{user="gitlab", database=~"gitlabhq_production_sidekiq.*", env="pre",type="patroni-ci"}[5m])
             )
             / on(env, environment, tier, type, stage, shard, fqdn, instance) group_left()
             sum by (env, environment, tier, type, stage, shard, fqdn, instance) (
-              avg_over_time(pgbouncer_databases_pool_size{name="gitlabhq_production_sidekiq", env="pre",type="patroni-ci"}[5m])
+              avg_over_time(pgbouncer_databases_pool_size{name=~"gitlabhq_production_sidekiq.*", env="pre",type="patroni-ci"}[5m])
             )
             ,
             1)
