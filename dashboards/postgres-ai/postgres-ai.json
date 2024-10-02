@@ -20,7 +20,6 @@
     "graphTooltip": 1,
     "id": null,
     "links": [
-  
     ],
     "panels": [
       {
@@ -42,7 +41,6 @@
               "inspect": false
             },
             "mappings": [
-  
             ],
             "thresholds": {
               "mode": "absolute",
@@ -1330,7 +1328,6 @@
               "inspect": false
             },
             "mappings": [
-  
             ],
             "thresholds": {
               "mode": "absolute",
@@ -1501,7 +1498,6 @@
           "frameIndex": 0,
           "showHeader": true,
           "sortBy": [
-  
           ]
         },
         "pluginVersion": "11.1.0",
@@ -1729,7 +1725,6 @@
               "inspect": false
             },
             "mappings": [
-  
             ],
             "thresholds": {
               "mode": "absolute",
@@ -1746,7 +1741,6 @@
             }
           },
           "overrides": [
-  
           ]
         },
         "gridPos": {
@@ -1806,7 +1800,6 @@
               "inspect": false
             },
             "mappings": [
-  
             ],
             "thresholds": {
               "mode": "absolute",
@@ -1823,7 +1816,6 @@
             }
           },
           "overrides": [
-  
           ]
         },
         "gridPos": {
@@ -1883,7 +1875,6 @@
               "inspect": false
             },
             "mappings": [
-  
             ],
             "thresholds": {
               "mode": "absolute",
@@ -1900,7 +1891,6 @@
             }
           },
           "overrides": [
-  
           ]
         },
         "gridPos": {
@@ -1960,7 +1950,6 @@
               "inspect": false
             },
             "mappings": [
-  
             ],
             "thresholds": {
               "mode": "absolute",
@@ -1977,7 +1966,6 @@
             }
           },
           "overrides": [
-  
           ]
         },
         "gridPos": {
@@ -2037,7 +2025,6 @@
               "inspect": false
             },
             "mappings": [
-  
             ],
             "thresholds": {
               "mode": "absolute",
@@ -2054,7 +2041,6 @@
             }
           },
           "overrides": [
-  
           ]
         },
         "gridPos": {
@@ -2114,7 +2100,6 @@
               "inspect": false
             },
             "mappings": [
-  
             ],
             "thresholds": {
               "mode": "absolute",
@@ -2131,7 +2116,6 @@
             }
           },
           "overrides": [
-  
           ]
         },
         "gridPos": {
@@ -2191,7 +2175,6 @@
               "inspect": false
             },
             "mappings": [
-  
             ],
             "thresholds": {
               "mode": "absolute",
@@ -2208,7 +2191,6 @@
             }
           },
           "overrides": [
-  
           ]
         },
         "gridPos": {
@@ -2268,7 +2250,6 @@
               "inspect": false
             },
             "mappings": [
-  
             ],
             "thresholds": {
               "mode": "absolute",
@@ -2285,7 +2266,6 @@
             }
           },
           "overrides": [
-  
           ]
         },
         "gridPos": {
@@ -2345,7 +2325,6 @@
               "inspect": false
             },
             "mappings": [
-  
             ],
             "thresholds": {
               "mode": "absolute",
@@ -2362,7 +2341,6 @@
             }
           },
           "overrides": [
-  
           ]
         },
         "gridPos": {
@@ -2424,7 +2402,6 @@
           "multi": false,
           "name": "prometheus",
           "options": [
-  
           ],
           "query": "prometheus",
           "queryValue": "",
@@ -2450,7 +2427,6 @@
           "multi": false,
           "name": "environment",
           "options": [
-  
           ],
           "query": {
             "qryType": 1,
@@ -2480,7 +2456,6 @@
           "multi": false,
           "name": "type",
           "options": [
-  
           ],
           "query": {
             "qryType": 1,
@@ -2510,7 +2485,6 @@
           "multi": false,
           "name": "fqdn",
           "options": [
-  
           ],
           "query": {
             "qryType": 1,
@@ -2529,7 +2503,6 @@
             "uid": "e58c2f51-20f8-4f4b-ad48-2968782ca7d6"
           },
           "filters": [
-  
           ],
           "hide": 0,
           "name": "Filters",
