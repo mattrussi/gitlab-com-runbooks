@@ -76,7 +76,7 @@ local simpleDefaults = {
   dangerouslyThanosEvaluated: false,
   quantileAggregation: 'max',
   linear_prediction_saturation_alert: null,  // No linear interpolation by default
-  useResourceLabelsAsMaxAggregationLabels: false,
+  useResourceLabelsAsMaxAggregationLabels: true,
 };
 
 local nestedDefaults = {
