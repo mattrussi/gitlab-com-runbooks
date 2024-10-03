@@ -103,6 +103,12 @@ basic.dashboard(
       has been healthy and the amount of time it has been unhealthy. They take into account
       all services for $environment-$stage.
 
+      The deployment health metric (and consequently the environment) is considered to be in
+      "unhealthy" state when the apdex or error metric for one or more services
+      crosses the deployment threshold. See
+      https://gitlab.com/gitlab-org/release-tools/-/blob/master/doc/deployment_health_metrics.md
+      for details about the deployment health metrics.
+
       View the **Service Deployment Health** for a breakdown of each
       contributing service that is rolled into this metric.
     |||
