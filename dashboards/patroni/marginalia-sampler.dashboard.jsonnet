@@ -55,13 +55,22 @@ basic.dashboard(
   allValues='.*',
   includeAll=true,
 ))
+.addTemplate(template.new(
+  'type',
+  '$PROMETHEUS_DS',
+  'label_values(pg_stat_activity_marginalia_sampler_active_count{env="$environment", environment="$environment"}, type)',
+  refresh='time',
+  sort=1,
+  allValues='.*',
+  includeAll=true,
+))
 .addPanels(
   layout.grid([
     basic.timeseries(
       title='Unaggregated Series',
       query=|||
         topk(10,
-          avg_over_time(pg_stat_activity_marginalia_sampler_active_count{env="$environment", environment="$environment", application=~"$application", fqdn=~"$fqdn", endpoint=~"$endpoint", state=~"$state", wait_event_type=~"$wait_event_type"}[$__interval])
+          avg_over_time(pg_stat_activity_marginalia_sampler_active_count{env="$environment", environment="$environment", application=~"$application", fqdn=~"$fqdn", endpoint=~"$endpoint", state=~"$state", wait_event_type=~"$wait_event_type", type=~"$type"}[$__interval])
         )
       |||,
       interval='1m',
@@ -76,7 +85,7 @@ basic.dashboard(
       query=|||
         topk(10,
           sum by (endpoint) (
-            avg_over_time(pg_stat_activity_marginalia_sampler_active_count{env="$environment", environment="$environment", application=~"$application", fqdn=~"$fqdn", endpoint=~"$endpoint", state=~"$state", wait_event_type=~"$wait_event_type"}[$__interval])
+            avg_over_time(pg_stat_activity_marginalia_sampler_active_count{env="$environment", environment="$environment", application=~"$application", fqdn=~"$fqdn", endpoint=~"$endpoint", state=~"$state", wait_event_type=~"$wait_event_type", type=~"$type"}[$__interval])
           )
         )
       |||,
@@ -92,7 +101,7 @@ basic.dashboard(
       query=|||
         topk(10,
           sum by (state, wait_event_type) (
-            avg_over_time(pg_stat_activity_marginalia_sampler_active_count{env="$environment", environment="$environment", application=~"$application", fqdn=~"$fqdn", endpoint=~"$endpoint", state=~"$state", wait_event_type=~"$wait_event_type"}[$__interval])
+            avg_over_time(pg_stat_activity_marginalia_sampler_active_count{env="$environment", environment="$environment", application=~"$application", fqdn=~"$fqdn", endpoint=~"$endpoint", state=~"$state", wait_event_type=~"$wait_event_type", type=~"$type"}[$__interval])
           )
         )
       |||,
