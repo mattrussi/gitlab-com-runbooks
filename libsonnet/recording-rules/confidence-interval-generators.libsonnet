@@ -10,6 +10,7 @@ local wilsonScore = import 'wilson-score/wilson-score.libsonnet';
     local targetMetric = aggregationSet.getErrorRatioConfidenceIntervalMetricForBurnRate(burnRate);
     local errorRateMetric = aggregationSet.getErrorRateMetricForBurnRate(burnRate);
     local opsRateMetric = aggregationSet.getOpsRateMetricForBurnRate(burnRate);
+    local allStaticLabels = aggregationSet.recordingRuleStaticLabels + staticLabels + { confidence: confidenceLevel };
 
     if targetMetric == null || errorRateMetric == null || opsRateMetric == null then
       []

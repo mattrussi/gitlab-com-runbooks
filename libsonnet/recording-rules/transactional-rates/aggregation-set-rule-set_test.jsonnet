@@ -28,6 +28,7 @@ local target = AggregationSet({
   },
   aggregationFilter: 'service',
   offset: '30s',
+  upscaleLongerBurnRates: true,
 });
 
 test.suite({
@@ -58,7 +59,7 @@ test.suite({
       {
         expr: |||
           sum by (type,component,recorded_rate) (
-            avg_over_time(gitlab_component_error:rates_1h{monitor="default"}[6h] offset 30s) and on(component, type) (gitlab_component_service:mapping{monitor="global",service_aggregation="yes"})
+            avg_over_time(gitlab_component_error:rates_1h{monitor="global"}[6h] offset 30s) and on(component, type) (gitlab_component_service:mapping{monitor="global",service_aggregation="yes"})
           )
         |||,
         record: 'gitlab_component_error:rates_6h',
@@ -66,7 +67,7 @@ test.suite({
       {
         expr: |||
           sum by (type,component,recorded_rate) (
-            avg_over_time(gitlab_component_apdex:rates_1h{monitor="default"}[6h] offset 30s) and on(component, type) (gitlab_component_service:mapping{monitor="global",service_aggregation="yes"})
+            avg_over_time(gitlab_component_apdex:rates_1h{monitor="global"}[6h] offset 30s) and on(component, type) (gitlab_component_service:mapping{monitor="global",service_aggregation="yes"})
           )
         |||,
         record: 'gitlab_component_apdex:rates_6h',

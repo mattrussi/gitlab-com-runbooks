@@ -8714,7 +8714,6 @@ groups:
       component: shard_catchall
       tier: sv
       type: sidekiq
-      upscale_source: "yes"
     record: gitlab_component_apdex:success:rate_1h
   - expr: |
       sum by () (
@@ -8757,7 +8756,6 @@ groups:
       component: shard_catchall
       tier: sv
       type: sidekiq
-      upscale_source: "yes"
     record: gitlab_component_apdex:weight:score_1h
   - expr: |
       sum by () (
@@ -8767,7 +8765,6 @@ groups:
       component: shard_catchall
       tier: sv
       type: sidekiq
-      upscale_source: "yes"
     record: gitlab_component_ops:rate_1h
   - expr: |
       (
@@ -8778,14 +8775,13 @@ groups:
       or
       (
         0 * group by() (
-          gitlab_component_ops:rate_1h{component="shard_catchall",tier="sv",type="sidekiq",upscale_source="yes"}
+          gitlab_component_ops:rate_1h{component="shard_catchall",tier="sv",type="sidekiq"}
         )
       )
     labels:
       component: shard_catchall
       tier: sv
       type: sidekiq
-      upscale_source: "yes"
     record: gitlab_component_errors:rate_1h
   - expr: |
       sum by () (

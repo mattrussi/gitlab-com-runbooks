@@ -167,111 +167,53 @@ groups:
     labels:
       monitor: global
     expr: |
-      (
-        sum by (env,environment,tier,type,stage) (
-          (gitlab_component_errors:rate_6h{env="ops",monitor="global",type="istio"} offset 30s >= 0) and on(component, type) (gitlab_component_service:mapping{monitor="global",service_aggregation="yes"})
-        )
-      )
-      or
-      (
-        sum by (env,environment,tier,type,stage) (
-          avg_over_time(gitlab_component_errors:rate_1h{env="ops",monitor="global",type="istio",upscale_source="yes"}[6h] offset 30s) and on(component, type) (gitlab_component_service:mapping{monitor="global",service_aggregation="yes"})
-        )
+      sum by (env,environment,tier,type,stage) (
+        (gitlab_component_errors:rate_6h{env="ops",monitor="global",type="istio"} offset 30s >= 0) and on(component, type) (gitlab_component_service:mapping{monitor="global",service_aggregation="yes"})
       )
   - record: gitlab_service_ops:rate_6h
     labels:
       monitor: global
     expr: |
-      (
-        sum by (env,environment,tier,type,stage) (
-          (gitlab_component_ops:rate_6h{env="ops",monitor="global",type="istio"} offset 30s >= 0) and on(component, type) (gitlab_component_service:mapping{monitor="global",service_aggregation="yes"})
-        )
-      )
-      or
-      (
-        sum by (env,environment,tier,type,stage) (
-          avg_over_time(gitlab_component_ops:rate_1h{env="ops",monitor="global",type="istio",upscale_source="yes"}[6h] offset 30s) and on(component, type) (gitlab_component_service:mapping{monitor="global",service_aggregation="yes"})
-        )
+      sum by (env,environment,tier,type,stage) (
+        (gitlab_component_ops:rate_6h{env="ops",monitor="global",type="istio"} offset 30s >= 0) and on(component, type) (gitlab_component_service:mapping{monitor="global",service_aggregation="yes"})
       )
   - record: gitlab_service_errors:ratio_6h
     labels:
       monitor: global
     expr: |
-      (
-        sum by (env,environment,tier,type,stage)(
-          (gitlab_component_errors:rate_6h{env="ops",monitor="global",type="istio"} offset 30s >= 0) and on(component, type) (gitlab_component_service:mapping{monitor="global",service_aggregation="yes"})
-        )
-        /
-        sum by (env,environment,tier,type,stage)(
-          (gitlab_component_ops:rate_6h{env="ops",monitor="global",type="istio"} offset 30s >= 0) and on(component, type) (gitlab_component_service:mapping{monitor="global",service_aggregation="yes"})
-          and
-          (gitlab_component_errors:rate_6h{env="ops",monitor="global",type="istio"} offset 30s >= 0) and on(component, type) (gitlab_component_service:mapping{monitor="global",service_aggregation="yes"})
-        )
+      sum by (env,environment,tier,type,stage)(
+        (gitlab_component_errors:rate_6h{env="ops",monitor="global",type="istio"} offset 30s >= 0) and on(component, type) (gitlab_component_service:mapping{monitor="global",service_aggregation="yes"})
       )
-      or
-      (
-        sum by (env,environment,tier,type,stage) (
-          sum_over_time(gitlab_component_errors:rate_1h{env="ops",monitor="global",type="istio",upscale_source="yes"}[6h] offset 30s) and on(component, type) (gitlab_component_service:mapping{monitor="global",service_aggregation="yes"})
-        )
-        /
-        sum by (env,environment,tier,type,stage) (
-          sum_over_time(gitlab_component_ops:rate_1h{env="ops",monitor="global",type="istio",upscale_source="yes"}[6h] offset 30s) and on(component, type) (gitlab_component_service:mapping{monitor="global",service_aggregation="yes"})
-          and
-          (gitlab_component_errors:rate_1h{env="ops",monitor="global",type="istio",upscale_source="yes"} offset 30s >= 0) and on(component, type) (gitlab_component_service:mapping{monitor="global",service_aggregation="yes"})
-        )
+      /
+      sum by (env,environment,tier,type,stage)(
+        (gitlab_component_ops:rate_6h{env="ops",monitor="global",type="istio"} offset 30s >= 0) and on(component, type) (gitlab_component_service:mapping{monitor="global",service_aggregation="yes"})
+        and
+        (gitlab_component_errors:rate_6h{env="ops",monitor="global",type="istio"} offset 30s >= 0) and on(component, type) (gitlab_component_service:mapping{monitor="global",service_aggregation="yes"})
       )
   - record: gitlab_service_apdex:weight:score_6h
     labels:
       monitor: global
     expr: |
-      (
-        sum by (env,environment,tier,type,stage) (
-          (gitlab_component_apdex:weight:score_6h{env="ops",monitor="global",type="istio"} offset 30s >= 0) and on(component, type) (gitlab_component_service:mapping{monitor="global",service_aggregation="yes"})
-        )
-      )
-      or
-      (
-        sum by (env,environment,tier,type,stage) (
-          avg_over_time(gitlab_component_apdex:weight:score_1h{env="ops",monitor="global",type="istio",upscale_source="yes"}[6h] offset 30s) and on(component, type) (gitlab_component_service:mapping{monitor="global",service_aggregation="yes"})
-        )
+      sum by (env,environment,tier,type,stage) (
+        (gitlab_component_apdex:weight:score_6h{env="ops",monitor="global",type="istio"} offset 30s >= 0) and on(component, type) (gitlab_component_service:mapping{monitor="global",service_aggregation="yes"})
       )
   - record: gitlab_service_apdex:success:rate_6h
     labels:
       monitor: global
     expr: |
-      (
-        sum by (env,environment,tier,type,stage) (
-          (gitlab_component_apdex:success:rate_6h{env="ops",monitor="global",type="istio"} offset 30s >= 0) and on(component, type) (gitlab_component_service:mapping{monitor="global",service_aggregation="yes"})
-        )
-      )
-      or
-      (
-        sum by (env,environment,tier,type,stage) (
-          avg_over_time(gitlab_component_apdex:success:rate_1h{env="ops",monitor="global",type="istio",upscale_source="yes"}[6h] offset 30s) and on(component, type) (gitlab_component_service:mapping{monitor="global",service_aggregation="yes"})
-        )
+      sum by (env,environment,tier,type,stage) (
+        (gitlab_component_apdex:success:rate_6h{env="ops",monitor="global",type="istio"} offset 30s >= 0) and on(component, type) (gitlab_component_service:mapping{monitor="global",service_aggregation="yes"})
       )
   - record: gitlab_service_apdex:ratio_6h
     labels:
       monitor: global
     expr: |
-      (
-        sum by (env,environment,tier,type,stage) (
-          (gitlab_component_apdex:success:rate_6h{env="ops",monitor="global",type="istio"} offset 30s >= 0) and on(component, type) (gitlab_component_service:mapping{monitor="global",service_aggregation="yes"})
-        )
-        /
-        sum by (env,environment,tier,type,stage) (
-          (gitlab_component_apdex:weight:score_6h{env="ops",monitor="global",type="istio"} offset 30s >= 0) and on(component, type) (gitlab_component_service:mapping{monitor="global",service_aggregation="yes"})
-        )
+      sum by (env,environment,tier,type,stage) (
+        (gitlab_component_apdex:success:rate_6h{env="ops",monitor="global",type="istio"} offset 30s >= 0) and on(component, type) (gitlab_component_service:mapping{monitor="global",service_aggregation="yes"})
       )
-      or
-      (
-        sum by (env,environment,tier,type,stage) (
-          sum_over_time(gitlab_component_apdex:success:rate_1h{env="ops",monitor="global",type="istio",upscale_source="yes"}[6h] offset 30s) and on(component, type) (gitlab_component_service:mapping{monitor="global",service_aggregation="yes"})
-        )
-        /
-        sum by (env,environment,tier,type,stage) (
-          sum_over_time(gitlab_component_apdex:weight:score_1h{env="ops",monitor="global",type="istio",upscale_source="yes"}[6h] offset 30s) and on(component, type) (gitlab_component_service:mapping{monitor="global",service_aggregation="yes"})
-        )
+      /
+      sum by (env,environment,tier,type,stage) (
+        (gitlab_component_apdex:weight:score_6h{env="ops",monitor="global",type="istio"} offset 30s >= 0) and on(component, type) (gitlab_component_service:mapping{monitor="global",service_aggregation="yes"})
       )
   - record: gitlab_service_errors:rate_3d
     labels:

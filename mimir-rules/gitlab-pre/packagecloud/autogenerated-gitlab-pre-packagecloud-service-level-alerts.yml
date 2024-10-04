@@ -115,7 +115,7 @@ groups:
           gitlab_component_errors:ratio_1h{component="loadbalancer",env="pre",monitor="global",type="packagecloud"}
           > (14.4 * 0.001000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_5m{component="loadbalancer",env="pre",monitor="global",type="packagecloud"}
           > (14.4 * 0.001000)
@@ -162,7 +162,7 @@ groups:
           gitlab_component_errors:ratio_6h{component="loadbalancer",env="pre",monitor="global",type="packagecloud"}
           > (6 * 0.001000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_30m{component="loadbalancer",env="pre",monitor="global",type="packagecloud"}
           > (6 * 0.001000)

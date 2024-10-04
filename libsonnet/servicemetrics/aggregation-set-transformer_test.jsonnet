@@ -3,6 +3,7 @@ local aggregationSet = import './aggregation-set.libsonnet';
 local test = import 'test.libsonnet';
 
 local sourceSet = aggregationSet.AggregationSet({
+  id: 'source',
   name: 'source',
   intermediateSource: true,
   labels: ['a', 'b'],
@@ -15,9 +16,11 @@ local sourceSet = aggregationSet.AggregationSet({
 });
 
 local targetSet = aggregationSet.AggregationSet({
+  id: 'target',
   name: 'target',
   intermediateSource: true,
   supportedBurnRates: ['1h', '6h'],
+  upscaleLongerBurnRates: true,
   labels: ['a', 'b'],
   selector: {},
   metricFormats: {
@@ -58,14 +61,14 @@ test.suite({
         rules: [{
           expr: |||
             sum by (a,b) (
-              avg_over_time(source_1h_error_rate{hello="world"}[6h])
+              avg_over_time(target_1h_error_rate{}[6h])
             )
           |||,
           record: 'target_6h_error_rate',
         }, {
           expr: |||
             sum by (a,b) (
-              avg_over_time(source_1h_ops_rate{hello="world"}[6h])
+              avg_over_time(target_1h_ops_rate{}[6h])
             )
           |||,
           record: 'target_6h_ops_rate',

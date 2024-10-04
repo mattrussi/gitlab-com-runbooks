@@ -46,7 +46,7 @@ groups:
           gitlab_component_errors:ratio_1h{component="apiserver",env="ops",monitor="global",type="kube"}
           > (14.4 * 0.000500)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_5m{component="apiserver",env="ops",monitor="global",type="kube"}
           > (14.4 * 0.000500)
@@ -98,7 +98,7 @@ groups:
           gitlab_component_errors:ratio_6h{component="apiserver",env="ops",monitor="global",type="kube"}
           > (6 * 0.000500)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_30m{component="apiserver",env="ops",monitor="global",type="kube"}
           > (6 * 0.000500)
@@ -231,7 +231,7 @@ groups:
           gitlab_component_errors:ratio_1h{component="cluster_scaleups",env="ops",monitor="global",type="kube"}
           > (14.4 * 0.050000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_5m{component="cluster_scaleups",env="ops",monitor="global",type="kube"}
           > (14.4 * 0.050000)
@@ -284,7 +284,7 @@ groups:
           gitlab_component_errors:ratio_6h{component="cluster_scaleups",env="ops",monitor="global",type="kube"}
           > (6 * 0.050000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_30m{component="cluster_scaleups",env="ops",monitor="global",type="kube"}
           > (6 * 0.050000)

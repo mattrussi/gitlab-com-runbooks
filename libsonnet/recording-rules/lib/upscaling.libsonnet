@@ -180,28 +180,6 @@ local combineUpscaleAndDirectTransformationExpressions(upscaledExprType, upscale
     // key so we don't add the join
     local aggregationSetWithoutJoin = objects.objectWithout(targetAggregationSet, 'joinSource');
     upscaleExpressionFn(aggregationSetWithoutJoin, aggregationSetWithoutJoin, burnRate)
-  // For 6h burn rate, we'll use either a combination of upscaling and direct aggregation,
-  // or, if the source aggregations, don't exist, only use the upscaled metric
-  else if burnRate == '6h' then
-    local upscaledExpr = upscaleExpressionFn(sourceAggregationSet, targetAggregationSet, burnRate, extraSelectors={ upscale_source: 'yes' });
-
-    if directExpr != null then
-      |||
-        (
-          %(directExpr)s
-        )
-        or
-        (
-          %(upscaledExpr)s
-        )
-      ||| % {
-        directExpr: strings.indent(directExpr, 2),
-        upscaledExpr: strings.indent(upscaledExpr, 2),
-      }
-    else
-      // If we there is no source burnRate, use only upscaling
-      upscaleExpressionFn(sourceAggregationSet, targetAggregationSet, burnRate)
-
   else if burnRate == '3d' then
     // For 3d expressions, we always use upscaling
     upscaleExpressionFn(sourceAggregationSet, targetAggregationSet, burnRate)

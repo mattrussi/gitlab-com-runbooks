@@ -40,7 +40,7 @@ groups:
           gitlab_component_errors:ratio_1h{component="mail_delivery",env="ops",monitor="global",type="mailgun"}
           > (14.4 * 0.100000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_5m{component="mail_delivery",env="ops",monitor="global",type="mailgun"}
           > (14.4 * 0.100000)
@@ -86,7 +86,7 @@ groups:
           gitlab_component_errors:ratio_6h{component="mail_delivery",env="ops",monitor="global",type="mailgun"}
           > (6 * 0.100000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_30m{component="mail_delivery",env="ops",monitor="global",type="mailgun"}
           > (6 * 0.100000)

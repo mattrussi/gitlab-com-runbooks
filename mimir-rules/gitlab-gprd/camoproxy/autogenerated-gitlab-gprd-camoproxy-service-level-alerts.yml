@@ -41,7 +41,7 @@ groups:
           gitlab_component_errors:ratio_1h{component="loadbalancer",env="gprd",monitor="global",type="camoproxy"}
           > (14.4 * 0.200000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_5m{component="loadbalancer",env="gprd",monitor="global",type="camoproxy"}
           > (14.4 * 0.200000)
@@ -88,7 +88,7 @@ groups:
           gitlab_component_errors:ratio_6h{component="loadbalancer",env="gprd",monitor="global",type="camoproxy"}
           > (6 * 0.200000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_30m{component="loadbalancer",env="gprd",monitor="global",type="camoproxy"}
           > (6 * 0.200000)
@@ -210,7 +210,7 @@ groups:
           gitlab_component_apdex:ratio_1h{component="server",env="gprd",monitor="global",type="camoproxy"}
           < (1 - 14.4 * 0.001000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_apdex:ratio_5m{component="server",env="gprd",monitor="global",type="camoproxy"}
           < (1 - 14.4 * 0.001000)
@@ -262,7 +262,7 @@ groups:
           gitlab_component_apdex:ratio_6h{component="server",env="gprd",monitor="global",type="camoproxy"}
           < (1 - 6 * 0.001000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_apdex:ratio_30m{component="server",env="gprd",monitor="global",type="camoproxy"}
           < (1 - 6 * 0.001000)
@@ -311,7 +311,7 @@ groups:
           gitlab_component_errors:ratio_1h{component="server",env="gprd",monitor="global",type="camoproxy"}
           > (14.4 * 0.200000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_5m{component="server",env="gprd",monitor="global",type="camoproxy"}
           > (14.4 * 0.200000)
@@ -360,7 +360,7 @@ groups:
           gitlab_component_errors:ratio_6h{component="server",env="gprd",monitor="global",type="camoproxy"}
           > (6 * 0.200000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_30m{component="server",env="gprd",monitor="global",type="camoproxy"}
           > (6 * 0.200000)

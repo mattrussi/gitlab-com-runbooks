@@ -46,7 +46,7 @@ groups:
           gitlab_component_apdex:ratio_1h{component="database",env="gstg",monitor="global",type="registry"}
           < (1 - 14.4 * 0.003000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_apdex:ratio_5m{component="database",env="gstg",monitor="global",type="registry"}
           < (1 - 14.4 * 0.003000)
@@ -98,7 +98,7 @@ groups:
           gitlab_component_apdex:ratio_6h{component="database",env="gstg",monitor="global",type="registry"}
           < (1 - 6 * 0.003000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_apdex:ratio_30m{component="database",env="gstg",monitor="global",type="registry"}
           < (1 - 6 * 0.003000)
@@ -152,7 +152,7 @@ groups:
           gitlab_regional_sli_apdex:ratio_1h{component="database",env="gstg",monitor="global",type="registry"}
           < (1 - 14.4 * 0.003000)
         )
-        and
+        and on (env,environment,tier,type,stage,region,component)
         (
           gitlab_regional_sli_apdex:ratio_5m{component="database",env="gstg",monitor="global",type="registry"}
           < (1 - 14.4 * 0.003000)
@@ -206,7 +206,7 @@ groups:
           gitlab_regional_sli_apdex:ratio_6h{component="database",env="gstg",monitor="global",type="registry"}
           < (1 - 6 * 0.003000)
         )
-        and
+        and on (env,environment,tier,type,stage,region,component)
         (
           gitlab_regional_sli_apdex:ratio_30m{component="database",env="gstg",monitor="global",type="registry"}
           < (1 - 6 * 0.003000)
@@ -409,7 +409,7 @@ groups:
           gitlab_component_apdex:ratio_1h{component="garbagecollector",env="gstg",monitor="global",type="registry"}
           < (1 - 14.4 * 0.003000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_apdex:ratio_5m{component="garbagecollector",env="gstg",monitor="global",type="registry"}
           < (1 - 14.4 * 0.003000)
@@ -460,7 +460,7 @@ groups:
           gitlab_component_apdex:ratio_6h{component="garbagecollector",env="gstg",monitor="global",type="registry"}
           < (1 - 6 * 0.003000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_apdex:ratio_30m{component="garbagecollector",env="gstg",monitor="global",type="registry"}
           < (1 - 6 * 0.003000)
@@ -513,7 +513,7 @@ groups:
           gitlab_regional_sli_apdex:ratio_1h{component="garbagecollector",env="gstg",monitor="global",type="registry"}
           < (1 - 14.4 * 0.003000)
         )
-        and
+        and on (env,environment,tier,type,stage,region,component)
         (
           gitlab_regional_sli_apdex:ratio_5m{component="garbagecollector",env="gstg",monitor="global",type="registry"}
           < (1 - 14.4 * 0.003000)
@@ -566,7 +566,7 @@ groups:
           gitlab_regional_sli_apdex:ratio_6h{component="garbagecollector",env="gstg",monitor="global",type="registry"}
           < (1 - 6 * 0.003000)
         )
-        and
+        and on (env,environment,tier,type,stage,region,component)
         (
           gitlab_regional_sli_apdex:ratio_30m{component="garbagecollector",env="gstg",monitor="global",type="registry"}
           < (1 - 6 * 0.003000)
@@ -614,7 +614,7 @@ groups:
           gitlab_component_errors:ratio_1h{component="garbagecollector",env="gstg",monitor="global",type="registry"}
           > (14.4 * 0.000100)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_5m{component="garbagecollector",env="gstg",monitor="global",type="registry"}
           > (14.4 * 0.000100)
@@ -662,7 +662,7 @@ groups:
           gitlab_component_errors:ratio_6h{component="garbagecollector",env="gstg",monitor="global",type="registry"}
           > (6 * 0.000100)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_30m{component="garbagecollector",env="gstg",monitor="global",type="registry"}
           > (6 * 0.000100)
@@ -712,7 +712,7 @@ groups:
           gitlab_regional_sli_errors:ratio_1h{component="garbagecollector",env="gstg",monitor="global",type="registry"}
           > (14.4 * 0.000100)
         )
-        and
+        and on (env,environment,tier,type,stage,region,component)
         (
           gitlab_regional_sli_errors:ratio_5m{component="garbagecollector",env="gstg",monitor="global",type="registry"}
           > (14.4 * 0.000100)
@@ -762,7 +762,7 @@ groups:
           gitlab_regional_sli_errors:ratio_6h{component="garbagecollector",env="gstg",monitor="global",type="registry"}
           > (6 * 0.000100)
         )
-        and
+        and on (env,environment,tier,type,stage,region,component)
         (
           gitlab_regional_sli_errors:ratio_30m{component="garbagecollector",env="gstg",monitor="global",type="registry"}
           > (6 * 0.000100)
@@ -955,7 +955,7 @@ groups:
           gitlab_component_errors:ratio_1h{component="loadbalancer",env="gstg",monitor="global",type="registry"}
           > (14.4 * 0.000100)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_5m{component="loadbalancer",env="gstg",monitor="global",type="registry"}
           > (14.4 * 0.000100)
@@ -1000,7 +1000,7 @@ groups:
           gitlab_component_errors:ratio_6h{component="loadbalancer",env="gstg",monitor="global",type="registry"}
           > (6 * 0.000100)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_30m{component="loadbalancer",env="gstg",monitor="global",type="registry"}
           > (6 * 0.000100)
@@ -1047,7 +1047,7 @@ groups:
           gitlab_regional_sli_errors:ratio_1h{component="loadbalancer",env="gstg",monitor="global",type="registry"}
           > (14.4 * 0.000100)
         )
-        and
+        and on (env,environment,tier,type,stage,region,component)
         (
           gitlab_regional_sli_errors:ratio_5m{component="loadbalancer",env="gstg",monitor="global",type="registry"}
           > (14.4 * 0.000100)
@@ -1094,7 +1094,7 @@ groups:
           gitlab_regional_sli_errors:ratio_6h{component="loadbalancer",env="gstg",monitor="global",type="registry"}
           > (6 * 0.000100)
         )
-        and
+        and on (env,environment,tier,type,stage,region,component)
         (
           gitlab_regional_sli_errors:ratio_30m{component="loadbalancer",env="gstg",monitor="global",type="registry"}
           > (6 * 0.000100)
@@ -1282,7 +1282,7 @@ groups:
           gitlab_component_apdex:ratio_1h{component="redis",env="gstg",monitor="global",type="registry"}
           < (1 - 14.4 * 0.003000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_apdex:ratio_5m{component="redis",env="gstg",monitor="global",type="registry"}
           < (1 - 14.4 * 0.003000)
@@ -1334,7 +1334,7 @@ groups:
           gitlab_component_apdex:ratio_6h{component="redis",env="gstg",monitor="global",type="registry"}
           < (1 - 6 * 0.003000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_apdex:ratio_30m{component="redis",env="gstg",monitor="global",type="registry"}
           < (1 - 6 * 0.003000)
@@ -1388,7 +1388,7 @@ groups:
           gitlab_regional_sli_apdex:ratio_1h{component="redis",env="gstg",monitor="global",type="registry"}
           < (1 - 14.4 * 0.003000)
         )
-        and
+        and on (env,environment,tier,type,stage,region,component)
         (
           gitlab_regional_sli_apdex:ratio_5m{component="redis",env="gstg",monitor="global",type="registry"}
           < (1 - 14.4 * 0.003000)
@@ -1442,7 +1442,7 @@ groups:
           gitlab_regional_sli_apdex:ratio_6h{component="redis",env="gstg",monitor="global",type="registry"}
           < (1 - 6 * 0.003000)
         )
-        and
+        and on (env,environment,tier,type,stage,region,component)
         (
           gitlab_regional_sli_apdex:ratio_30m{component="redis",env="gstg",monitor="global",type="registry"}
           < (1 - 6 * 0.003000)
@@ -1491,7 +1491,7 @@ groups:
           gitlab_component_errors:ratio_1h{component="redis",env="gstg",monitor="global",type="registry"}
           > (14.4 * 0.000100)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_5m{component="redis",env="gstg",monitor="global",type="registry"}
           > (14.4 * 0.000100)
@@ -1540,7 +1540,7 @@ groups:
           gitlab_component_errors:ratio_6h{component="redis",env="gstg",monitor="global",type="registry"}
           > (6 * 0.000100)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_30m{component="redis",env="gstg",monitor="global",type="registry"}
           > (6 * 0.000100)
@@ -1591,7 +1591,7 @@ groups:
           gitlab_regional_sli_errors:ratio_1h{component="redis",env="gstg",monitor="global",type="registry"}
           > (14.4 * 0.000100)
         )
-        and
+        and on (env,environment,tier,type,stage,region,component)
         (
           gitlab_regional_sli_errors:ratio_5m{component="redis",env="gstg",monitor="global",type="registry"}
           > (14.4 * 0.000100)
@@ -1642,7 +1642,7 @@ groups:
           gitlab_regional_sli_errors:ratio_6h{component="redis",env="gstg",monitor="global",type="registry"}
           > (6 * 0.000100)
         )
-        and
+        and on (env,environment,tier,type,stage,region,component)
         (
           gitlab_regional_sli_errors:ratio_30m{component="redis",env="gstg",monitor="global",type="registry"}
           > (6 * 0.000100)
@@ -1841,7 +1841,7 @@ groups:
           gitlab_component_errors:ratio_1h{component="registry_cdn",env="gstg",monitor="global",type="registry"}
           > (14.4 * 0.000100)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_5m{component="registry_cdn",env="gstg",monitor="global",type="registry"}
           > (14.4 * 0.000100)
@@ -1888,7 +1888,7 @@ groups:
           gitlab_component_errors:ratio_6h{component="registry_cdn",env="gstg",monitor="global",type="registry"}
           > (6 * 0.000100)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_30m{component="registry_cdn",env="gstg",monitor="global",type="registry"}
           > (6 * 0.000100)
@@ -1937,7 +1937,7 @@ groups:
           gitlab_regional_sli_errors:ratio_1h{component="registry_cdn",env="gstg",monitor="global",type="registry"}
           > (14.4 * 0.000100)
         )
-        and
+        and on (env,environment,tier,type,stage,region,component)
         (
           gitlab_regional_sli_errors:ratio_5m{component="registry_cdn",env="gstg",monitor="global",type="registry"}
           > (14.4 * 0.000100)
@@ -1986,7 +1986,7 @@ groups:
           gitlab_regional_sli_errors:ratio_6h{component="registry_cdn",env="gstg",monitor="global",type="registry"}
           > (6 * 0.000100)
         )
-        and
+        and on (env,environment,tier,type,stage,region,component)
         (
           gitlab_regional_sli_errors:ratio_30m{component="registry_cdn",env="gstg",monitor="global",type="registry"}
           > (6 * 0.000100)
@@ -2182,7 +2182,7 @@ groups:
           gitlab_component_apdex:ratio_1h{component="registry_server",env="gstg",monitor="global",type="registry"}
           < (1 - 14.4 * 0.003000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_apdex:ratio_5m{component="registry_server",env="gstg",monitor="global",type="registry"}
           < (1 - 14.4 * 0.003000)
@@ -2234,7 +2234,7 @@ groups:
           gitlab_component_apdex:ratio_6h{component="registry_server",env="gstg",monitor="global",type="registry"}
           < (1 - 6 * 0.003000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_apdex:ratio_30m{component="registry_server",env="gstg",monitor="global",type="registry"}
           < (1 - 6 * 0.003000)
@@ -2288,7 +2288,7 @@ groups:
           gitlab_regional_sli_apdex:ratio_1h{component="registry_server",env="gstg",monitor="global",type="registry"}
           < (1 - 14.4 * 0.003000)
         )
-        and
+        and on (env,environment,tier,type,stage,region,component)
         (
           gitlab_regional_sli_apdex:ratio_5m{component="registry_server",env="gstg",monitor="global",type="registry"}
           < (1 - 14.4 * 0.003000)
@@ -2342,7 +2342,7 @@ groups:
           gitlab_regional_sli_apdex:ratio_6h{component="registry_server",env="gstg",monitor="global",type="registry"}
           < (1 - 6 * 0.003000)
         )
-        and
+        and on (env,environment,tier,type,stage,region,component)
         (
           gitlab_regional_sli_apdex:ratio_30m{component="registry_server",env="gstg",monitor="global",type="registry"}
           < (1 - 6 * 0.003000)
@@ -2391,7 +2391,7 @@ groups:
           gitlab_component_errors:ratio_1h{component="registry_server",env="gstg",monitor="global",type="registry"}
           > (14.4 * 0.000100)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_5m{component="registry_server",env="gstg",monitor="global",type="registry"}
           > (14.4 * 0.000100)
@@ -2440,7 +2440,7 @@ groups:
           gitlab_component_errors:ratio_6h{component="registry_server",env="gstg",monitor="global",type="registry"}
           > (6 * 0.000100)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_30m{component="registry_server",env="gstg",monitor="global",type="registry"}
           > (6 * 0.000100)
@@ -2491,7 +2491,7 @@ groups:
           gitlab_regional_sli_errors:ratio_1h{component="registry_server",env="gstg",monitor="global",type="registry"}
           > (14.4 * 0.000100)
         )
-        and
+        and on (env,environment,tier,type,stage,region,component)
         (
           gitlab_regional_sli_errors:ratio_5m{component="registry_server",env="gstg",monitor="global",type="registry"}
           > (14.4 * 0.000100)
@@ -2542,7 +2542,7 @@ groups:
           gitlab_regional_sli_errors:ratio_6h{component="registry_server",env="gstg",monitor="global",type="registry"}
           > (6 * 0.000100)
         )
-        and
+        and on (env,environment,tier,type,stage,region,component)
         (
           gitlab_regional_sli_errors:ratio_30m{component="registry_server",env="gstg",monitor="global",type="registry"}
           > (6 * 0.000100)
@@ -2748,7 +2748,7 @@ groups:
           gitlab_component_apdex:ratio_1h{component="server_route_blob_upload_uuid_deletes",env="gstg",monitor="global",type="registry"}
           < (1 - 14.4 * 0.003000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_apdex:ratio_5m{component="server_route_blob_upload_uuid_deletes",env="gstg",monitor="global",type="registry"}
           < (1 - 14.4 * 0.003000)
@@ -2802,7 +2802,7 @@ groups:
           gitlab_component_apdex:ratio_6h{component="server_route_blob_upload_uuid_deletes",env="gstg",monitor="global",type="registry"}
           < (1 - 6 * 0.003000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_apdex:ratio_30m{component="server_route_blob_upload_uuid_deletes",env="gstg",monitor="global",type="registry"}
           < (1 - 6 * 0.003000)
@@ -2858,7 +2858,7 @@ groups:
           gitlab_regional_sli_apdex:ratio_1h{component="server_route_blob_upload_uuid_deletes",env="gstg",monitor="global",type="registry"}
           < (1 - 14.4 * 0.003000)
         )
-        and
+        and on (env,environment,tier,type,stage,region,component)
         (
           gitlab_regional_sli_apdex:ratio_5m{component="server_route_blob_upload_uuid_deletes",env="gstg",monitor="global",type="registry"}
           < (1 - 14.4 * 0.003000)
@@ -2914,7 +2914,7 @@ groups:
           gitlab_regional_sli_apdex:ratio_6h{component="server_route_blob_upload_uuid_deletes",env="gstg",monitor="global",type="registry"}
           < (1 - 6 * 0.003000)
         )
-        and
+        and on (env,environment,tier,type,stage,region,component)
         (
           gitlab_regional_sli_apdex:ratio_30m{component="server_route_blob_upload_uuid_deletes",env="gstg",monitor="global",type="registry"}
           < (1 - 6 * 0.003000)
@@ -3132,7 +3132,7 @@ groups:
           gitlab_component_apdex:ratio_1h{component="server_route_blob_upload_uuid_reads",env="gstg",monitor="global",type="registry"}
           < (1 - 14.4 * 0.003000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_apdex:ratio_5m{component="server_route_blob_upload_uuid_reads",env="gstg",monitor="global",type="registry"}
           < (1 - 14.4 * 0.003000)
@@ -3188,7 +3188,7 @@ groups:
           gitlab_component_apdex:ratio_6h{component="server_route_blob_upload_uuid_reads",env="gstg",monitor="global",type="registry"}
           < (1 - 6 * 0.003000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_apdex:ratio_30m{component="server_route_blob_upload_uuid_reads",env="gstg",monitor="global",type="registry"}
           < (1 - 6 * 0.003000)
@@ -3246,7 +3246,7 @@ groups:
           gitlab_regional_sli_apdex:ratio_1h{component="server_route_blob_upload_uuid_reads",env="gstg",monitor="global",type="registry"}
           < (1 - 14.4 * 0.003000)
         )
-        and
+        and on (env,environment,tier,type,stage,region,component)
         (
           gitlab_regional_sli_apdex:ratio_5m{component="server_route_blob_upload_uuid_reads",env="gstg",monitor="global",type="registry"}
           < (1 - 14.4 * 0.003000)
@@ -3304,7 +3304,7 @@ groups:
           gitlab_regional_sli_apdex:ratio_6h{component="server_route_blob_upload_uuid_reads",env="gstg",monitor="global",type="registry"}
           < (1 - 6 * 0.003000)
         )
-        and
+        and on (env,environment,tier,type,stage,region,component)
         (
           gitlab_regional_sli_apdex:ratio_30m{component="server_route_blob_upload_uuid_reads",env="gstg",monitor="global",type="registry"}
           < (1 - 6 * 0.003000)
@@ -3360,7 +3360,7 @@ groups:
           gitlab_component_apdex:ratio_1h{component="server_route_blob_upload_uuid_writes",env="gstg",monitor="global",type="registry"}
           < (1 - 14.4 * 0.030000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_apdex:ratio_5m{component="server_route_blob_upload_uuid_writes",env="gstg",monitor="global",type="registry"}
           < (1 - 14.4 * 0.030000)
@@ -3416,7 +3416,7 @@ groups:
           gitlab_component_apdex:ratio_6h{component="server_route_blob_upload_uuid_writes",env="gstg",monitor="global",type="registry"}
           < (1 - 6 * 0.030000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_apdex:ratio_30m{component="server_route_blob_upload_uuid_writes",env="gstg",monitor="global",type="registry"}
           < (1 - 6 * 0.030000)
@@ -3474,7 +3474,7 @@ groups:
           gitlab_regional_sli_apdex:ratio_1h{component="server_route_blob_upload_uuid_writes",env="gstg",monitor="global",type="registry"}
           < (1 - 14.4 * 0.030000)
         )
-        and
+        and on (env,environment,tier,type,stage,region,component)
         (
           gitlab_regional_sli_apdex:ratio_5m{component="server_route_blob_upload_uuid_writes",env="gstg",monitor="global",type="registry"}
           < (1 - 14.4 * 0.030000)
@@ -3532,7 +3532,7 @@ groups:
           gitlab_regional_sli_apdex:ratio_6h{component="server_route_blob_upload_uuid_writes",env="gstg",monitor="global",type="registry"}
           < (1 - 6 * 0.030000)
         )
-        and
+        and on (env,environment,tier,type,stage,region,component)
         (
           gitlab_regional_sli_apdex:ratio_30m{component="server_route_blob_upload_uuid_writes",env="gstg",monitor="global",type="registry"}
           < (1 - 6 * 0.030000)
@@ -3754,7 +3754,7 @@ groups:
           gitlab_component_apdex:ratio_1h{component="server_route_manifest_reads",env="gstg",monitor="global",type="registry"}
           < (1 - 14.4 * 0.001000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_apdex:ratio_5m{component="server_route_manifest_reads",env="gstg",monitor="global",type="registry"}
           < (1 - 14.4 * 0.001000)
@@ -3806,7 +3806,7 @@ groups:
           gitlab_component_apdex:ratio_6h{component="server_route_manifest_reads",env="gstg",monitor="global",type="registry"}
           < (1 - 6 * 0.001000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_apdex:ratio_30m{component="server_route_manifest_reads",env="gstg",monitor="global",type="registry"}
           < (1 - 6 * 0.001000)
@@ -3860,7 +3860,7 @@ groups:
           gitlab_regional_sli_apdex:ratio_1h{component="server_route_manifest_reads",env="gstg",monitor="global",type="registry"}
           < (1 - 14.4 * 0.001000)
         )
-        and
+        and on (env,environment,tier,type,stage,region,component)
         (
           gitlab_regional_sli_apdex:ratio_5m{component="server_route_manifest_reads",env="gstg",monitor="global",type="registry"}
           < (1 - 14.4 * 0.001000)
@@ -3914,7 +3914,7 @@ groups:
           gitlab_regional_sli_apdex:ratio_6h{component="server_route_manifest_reads",env="gstg",monitor="global",type="registry"}
           < (1 - 6 * 0.001000)
         )
-        and
+        and on (env,environment,tier,type,stage,region,component)
         (
           gitlab_regional_sli_apdex:ratio_30m{component="server_route_manifest_reads",env="gstg",monitor="global",type="registry"}
           < (1 - 6 * 0.001000)
@@ -4122,7 +4122,7 @@ groups:
           gitlab_component_apdex:ratio_1h{component="server_route_manifest_writes",env="gstg",monitor="global",type="registry"}
           < (1 - 14.4 * 0.005000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_apdex:ratio_5m{component="server_route_manifest_writes",env="gstg",monitor="global",type="registry"}
           < (1 - 14.4 * 0.005000)
@@ -4178,7 +4178,7 @@ groups:
           gitlab_component_apdex:ratio_6h{component="server_route_manifest_writes",env="gstg",monitor="global",type="registry"}
           < (1 - 6 * 0.005000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_apdex:ratio_30m{component="server_route_manifest_writes",env="gstg",monitor="global",type="registry"}
           < (1 - 6 * 0.005000)
@@ -4236,7 +4236,7 @@ groups:
           gitlab_regional_sli_apdex:ratio_1h{component="server_route_manifest_writes",env="gstg",monitor="global",type="registry"}
           < (1 - 14.4 * 0.005000)
         )
-        and
+        and on (env,environment,tier,type,stage,region,component)
         (
           gitlab_regional_sli_apdex:ratio_5m{component="server_route_manifest_writes",env="gstg",monitor="global",type="registry"}
           < (1 - 14.4 * 0.005000)
@@ -4294,7 +4294,7 @@ groups:
           gitlab_regional_sli_apdex:ratio_6h{component="server_route_manifest_writes",env="gstg",monitor="global",type="registry"}
           < (1 - 6 * 0.005000)
         )
-        and
+        and on (env,environment,tier,type,stage,region,component)
         (
           gitlab_regional_sli_apdex:ratio_30m{component="server_route_manifest_writes",env="gstg",monitor="global",type="registry"}
           < (1 - 6 * 0.005000)

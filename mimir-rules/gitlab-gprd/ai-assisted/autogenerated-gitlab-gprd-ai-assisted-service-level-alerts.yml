@@ -40,7 +40,7 @@ groups:
           gitlab_component_apdex:ratio_1h{component="rails_request",env="gprd",monitor="global",type="ai-assisted"}
           < (1 - 14.4 * 0.010000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_apdex:ratio_5m{component="rails_request",env="gprd",monitor="global",type="ai-assisted"}
           < (1 - 14.4 * 0.010000)
@@ -86,7 +86,7 @@ groups:
           gitlab_component_apdex:ratio_6h{component="rails_request",env="gprd",monitor="global",type="ai-assisted"}
           < (1 - 6 * 0.010000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_apdex:ratio_30m{component="rails_request",env="gprd",monitor="global",type="ai-assisted"}
           < (1 - 6 * 0.010000)
@@ -136,7 +136,7 @@ groups:
           gitlab_component_errors:ratio_1h{component="rails_request",env="gprd",monitor="global",type="ai-assisted"}
           > (14.4 * 0.001000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_5m{component="rails_request",env="gprd",monitor="global",type="ai-assisted"}
           > (14.4 * 0.001000)
@@ -186,7 +186,7 @@ groups:
           gitlab_component_errors:ratio_6h{component="rails_request",env="gprd",monitor="global",type="ai-assisted"}
           > (6 * 0.001000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_30m{component="rails_request",env="gprd",monitor="global",type="ai-assisted"}
           > (6 * 0.001000)
@@ -313,7 +313,7 @@ groups:
           gitlab_component_apdex:ratio_1h{component="workhorse",env="gprd",monitor="global",type="ai-assisted"}
           < (1 - 14.4 * 0.005000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_apdex:ratio_5m{component="workhorse",env="gprd",monitor="global",type="ai-assisted"}
           < (1 - 14.4 * 0.005000)
@@ -364,7 +364,7 @@ groups:
           gitlab_component_apdex:ratio_6h{component="workhorse",env="gprd",monitor="global",type="ai-assisted"}
           < (1 - 6 * 0.005000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_apdex:ratio_30m{component="workhorse",env="gprd",monitor="global",type="ai-assisted"}
           < (1 - 6 * 0.005000)
@@ -412,7 +412,7 @@ groups:
           gitlab_component_errors:ratio_1h{component="workhorse",env="gprd",monitor="global",type="ai-assisted"}
           > (14.4 * 0.001000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_5m{component="workhorse",env="gprd",monitor="global",type="ai-assisted"}
           > (14.4 * 0.001000)
@@ -460,7 +460,7 @@ groups:
           gitlab_component_errors:ratio_6h{component="workhorse",env="gprd",monitor="global",type="ai-assisted"}
           > (6 * 0.001000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_30m{component="workhorse",env="gprd",monitor="global",type="ai-assisted"}
           > (6 * 0.001000)

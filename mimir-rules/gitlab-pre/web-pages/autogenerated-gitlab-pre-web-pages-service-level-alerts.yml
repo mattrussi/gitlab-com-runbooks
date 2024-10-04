@@ -39,7 +39,7 @@ groups:
           gitlab_component_errors:ratio_1h{component="loadbalancer",env="pre",monitor="global",type="web-pages"}
           > (14.4 * 0.000500)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_5m{component="loadbalancer",env="pre",monitor="global",type="web-pages"}
           > (14.4 * 0.000500)
@@ -84,7 +84,7 @@ groups:
           gitlab_component_errors:ratio_6h{component="loadbalancer",env="pre",monitor="global",type="web-pages"}
           > (6 * 0.000500)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_30m{component="loadbalancer",env="pre",monitor="global",type="web-pages"}
           > (6 * 0.000500)
@@ -131,7 +131,7 @@ groups:
           gitlab_regional_sli_errors:ratio_1h{component="loadbalancer",env="pre",monitor="global",type="web-pages"}
           > (14.4 * 0.000500)
         )
-        and
+        and on (env,environment,tier,type,stage,region,component)
         (
           gitlab_regional_sli_errors:ratio_5m{component="loadbalancer",env="pre",monitor="global",type="web-pages"}
           > (14.4 * 0.000500)
@@ -178,7 +178,7 @@ groups:
           gitlab_regional_sli_errors:ratio_6h{component="loadbalancer",env="pre",monitor="global",type="web-pages"}
           > (6 * 0.000500)
         )
-        and
+        and on (env,environment,tier,type,stage,region,component)
         (
           gitlab_regional_sli_errors:ratio_30m{component="loadbalancer",env="pre",monitor="global",type="web-pages"}
           > (6 * 0.000500)
@@ -359,7 +359,7 @@ groups:
           gitlab_component_errors:ratio_1h{component="loadbalancer_https",env="pre",monitor="global",type="web-pages"}
           > (14.4 * 0.000500)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_5m{component="loadbalancer_https",env="pre",monitor="global",type="web-pages"}
           > (14.4 * 0.000500)
@@ -404,7 +404,7 @@ groups:
           gitlab_component_errors:ratio_6h{component="loadbalancer_https",env="pre",monitor="global",type="web-pages"}
           > (6 * 0.000500)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_30m{component="loadbalancer_https",env="pre",monitor="global",type="web-pages"}
           > (6 * 0.000500)
@@ -451,7 +451,7 @@ groups:
           gitlab_regional_sli_errors:ratio_1h{component="loadbalancer_https",env="pre",monitor="global",type="web-pages"}
           > (14.4 * 0.000500)
         )
-        and
+        and on (env,environment,tier,type,stage,region,component)
         (
           gitlab_regional_sli_errors:ratio_5m{component="loadbalancer_https",env="pre",monitor="global",type="web-pages"}
           > (14.4 * 0.000500)
@@ -498,7 +498,7 @@ groups:
           gitlab_regional_sli_errors:ratio_6h{component="loadbalancer_https",env="pre",monitor="global",type="web-pages"}
           > (6 * 0.000500)
         )
-        and
+        and on (env,environment,tier,type,stage,region,component)
         (
           gitlab_regional_sli_errors:ratio_30m{component="loadbalancer_https",env="pre",monitor="global",type="web-pages"}
           > (6 * 0.000500)
@@ -686,7 +686,7 @@ groups:
           gitlab_component_apdex:ratio_1h{component="web_pages_server",env="pre",monitor="global",type="web-pages"}
           < (1 - 14.4 * 0.005000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_apdex:ratio_5m{component="web_pages_server",env="pre",monitor="global",type="web-pages"}
           < (1 - 14.4 * 0.005000)
@@ -738,7 +738,7 @@ groups:
           gitlab_component_apdex:ratio_6h{component="web_pages_server",env="pre",monitor="global",type="web-pages"}
           < (1 - 6 * 0.005000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_apdex:ratio_30m{component="web_pages_server",env="pre",monitor="global",type="web-pages"}
           < (1 - 6 * 0.005000)
@@ -792,7 +792,7 @@ groups:
           gitlab_regional_sli_apdex:ratio_1h{component="web_pages_server",env="pre",monitor="global",type="web-pages"}
           < (1 - 14.4 * 0.005000)
         )
-        and
+        and on (env,environment,tier,type,stage,region,component)
         (
           gitlab_regional_sli_apdex:ratio_5m{component="web_pages_server",env="pre",monitor="global",type="web-pages"}
           < (1 - 14.4 * 0.005000)
@@ -846,7 +846,7 @@ groups:
           gitlab_regional_sli_apdex:ratio_6h{component="web_pages_server",env="pre",monitor="global",type="web-pages"}
           < (1 - 6 * 0.005000)
         )
-        and
+        and on (env,environment,tier,type,stage,region,component)
         (
           gitlab_regional_sli_apdex:ratio_30m{component="web_pages_server",env="pre",monitor="global",type="web-pages"}
           < (1 - 6 * 0.005000)
@@ -895,7 +895,7 @@ groups:
           gitlab_component_errors:ratio_1h{component="web_pages_server",env="pre",monitor="global",type="web-pages"}
           > (14.4 * 0.000500)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_5m{component="web_pages_server",env="pre",monitor="global",type="web-pages"}
           > (14.4 * 0.000500)
@@ -944,7 +944,7 @@ groups:
           gitlab_component_errors:ratio_6h{component="web_pages_server",env="pre",monitor="global",type="web-pages"}
           > (6 * 0.000500)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_30m{component="web_pages_server",env="pre",monitor="global",type="web-pages"}
           > (6 * 0.000500)
@@ -995,7 +995,7 @@ groups:
           gitlab_regional_sli_errors:ratio_1h{component="web_pages_server",env="pre",monitor="global",type="web-pages"}
           > (14.4 * 0.000500)
         )
-        and
+        and on (env,environment,tier,type,stage,region,component)
         (
           gitlab_regional_sli_errors:ratio_5m{component="web_pages_server",env="pre",monitor="global",type="web-pages"}
           > (14.4 * 0.000500)
@@ -1046,7 +1046,7 @@ groups:
           gitlab_regional_sli_errors:ratio_6h{component="web_pages_server",env="pre",monitor="global",type="web-pages"}
           > (6 * 0.000500)
         )
-        and
+        and on (env,environment,tier,type,stage,region,component)
         (
           gitlab_regional_sli_errors:ratio_30m{component="web_pages_server",env="pre",monitor="global",type="web-pages"}
           > (6 * 0.000500)

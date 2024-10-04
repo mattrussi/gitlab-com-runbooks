@@ -198,7 +198,7 @@ groups:
           gitlab_component_apdex:ratio_1h{component="gitlab_sshd",env="pre",monitor="global",type="git"}
           < (1 - 14.4 * 0.002000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_apdex:ratio_5m{component="gitlab_sshd",env="pre",monitor="global",type="git"}
           < (1 - 14.4 * 0.002000)
@@ -250,7 +250,7 @@ groups:
           gitlab_component_apdex:ratio_6h{component="gitlab_sshd",env="pre",monitor="global",type="git"}
           < (1 - 6 * 0.002000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_apdex:ratio_30m{component="gitlab_sshd",env="pre",monitor="global",type="git"}
           < (1 - 6 * 0.002000)
@@ -304,7 +304,7 @@ groups:
           gitlab_regional_sli_apdex:ratio_1h{component="gitlab_sshd",env="pre",monitor="global",type="git"}
           < (1 - 14.4 * 0.002000)
         )
-        and
+        and on (env,environment,tier,type,stage,region,component)
         (
           gitlab_regional_sli_apdex:ratio_5m{component="gitlab_sshd",env="pre",monitor="global",type="git"}
           < (1 - 14.4 * 0.002000)
@@ -358,7 +358,7 @@ groups:
           gitlab_regional_sli_apdex:ratio_6h{component="gitlab_sshd",env="pre",monitor="global",type="git"}
           < (1 - 6 * 0.002000)
         )
-        and
+        and on (env,environment,tier,type,stage,region,component)
         (
           gitlab_regional_sli_apdex:ratio_30m{component="gitlab_sshd",env="pre",monitor="global",type="git"}
           < (1 - 6 * 0.002000)
@@ -407,7 +407,7 @@ groups:
           gitlab_component_errors:ratio_1h{component="gitlab_sshd",env="pre",monitor="global",type="git"}
           > (14.4 * 0.001000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_5m{component="gitlab_sshd",env="pre",monitor="global",type="git"}
           > (14.4 * 0.001000)
@@ -456,7 +456,7 @@ groups:
           gitlab_component_errors:ratio_6h{component="gitlab_sshd",env="pre",monitor="global",type="git"}
           > (6 * 0.001000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_30m{component="gitlab_sshd",env="pre",monitor="global",type="git"}
           > (6 * 0.001000)
@@ -507,7 +507,7 @@ groups:
           gitlab_regional_sli_errors:ratio_1h{component="gitlab_sshd",env="pre",monitor="global",type="git"}
           > (14.4 * 0.001000)
         )
-        and
+        and on (env,environment,tier,type,stage,region,component)
         (
           gitlab_regional_sli_errors:ratio_5m{component="gitlab_sshd",env="pre",monitor="global",type="git"}
           > (14.4 * 0.001000)
@@ -558,7 +558,7 @@ groups:
           gitlab_regional_sli_errors:ratio_6h{component="gitlab_sshd",env="pre",monitor="global",type="git"}
           > (6 * 0.001000)
         )
-        and
+        and on (env,environment,tier,type,stage,region,component)
         (
           gitlab_regional_sli_errors:ratio_30m{component="gitlab_sshd",env="pre",monitor="global",type="git"}
           > (6 * 0.001000)
@@ -755,7 +755,7 @@ groups:
           gitlab_component_errors:ratio_1h{component="loadbalancer",env="pre",monitor="global",type="git"}
           > (14.4 * 0.000100)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_5m{component="loadbalancer",env="pre",monitor="global",type="git"}
           > (14.4 * 0.000100)
@@ -800,7 +800,7 @@ groups:
           gitlab_component_errors:ratio_6h{component="loadbalancer",env="pre",monitor="global",type="git"}
           > (6 * 0.000100)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_30m{component="loadbalancer",env="pre",monitor="global",type="git"}
           > (6 * 0.000100)
@@ -847,7 +847,7 @@ groups:
           gitlab_regional_sli_errors:ratio_1h{component="loadbalancer",env="pre",monitor="global",type="git"}
           > (14.4 * 0.000100)
         )
-        and
+        and on (env,environment,tier,type,stage,region,component)
         (
           gitlab_regional_sli_errors:ratio_5m{component="loadbalancer",env="pre",monitor="global",type="git"}
           > (14.4 * 0.000100)
@@ -894,7 +894,7 @@ groups:
           gitlab_regional_sli_errors:ratio_6h{component="loadbalancer",env="pre",monitor="global",type="git"}
           > (6 * 0.000100)
         )
-        and
+        and on (env,environment,tier,type,stage,region,component)
         (
           gitlab_regional_sli_errors:ratio_30m{component="loadbalancer",env="pre",monitor="global",type="git"}
           > (6 * 0.000100)
@@ -1075,7 +1075,7 @@ groups:
           gitlab_component_errors:ratio_1h{component="loadbalancer_ssh",env="pre",monitor="global",type="git"}
           > (14.4 * 0.000100)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_5m{component="loadbalancer_ssh",env="pre",monitor="global",type="git"}
           > (14.4 * 0.000100)
@@ -1120,7 +1120,7 @@ groups:
           gitlab_component_errors:ratio_6h{component="loadbalancer_ssh",env="pre",monitor="global",type="git"}
           > (6 * 0.000100)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_30m{component="loadbalancer_ssh",env="pre",monitor="global",type="git"}
           > (6 * 0.000100)
@@ -1167,7 +1167,7 @@ groups:
           gitlab_regional_sli_errors:ratio_1h{component="loadbalancer_ssh",env="pre",monitor="global",type="git"}
           > (14.4 * 0.000100)
         )
-        and
+        and on (env,environment,tier,type,stage,region,component)
         (
           gitlab_regional_sli_errors:ratio_5m{component="loadbalancer_ssh",env="pre",monitor="global",type="git"}
           > (14.4 * 0.000100)
@@ -1214,7 +1214,7 @@ groups:
           gitlab_regional_sli_errors:ratio_6h{component="loadbalancer_ssh",env="pre",monitor="global",type="git"}
           > (6 * 0.000100)
         )
-        and
+        and on (env,environment,tier,type,stage,region,component)
         (
           gitlab_regional_sli_errors:ratio_30m{component="loadbalancer_ssh",env="pre",monitor="global",type="git"}
           > (6 * 0.000100)
@@ -1397,7 +1397,7 @@ groups:
           gitlab_component_apdex:ratio_1h{component="rails_request",env="pre",monitor="global",type="git"}
           < (1 - 14.4 * 0.003000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_apdex:ratio_5m{component="rails_request",env="pre",monitor="global",type="git"}
           < (1 - 14.4 * 0.003000)
@@ -1444,7 +1444,7 @@ groups:
           gitlab_component_apdex:ratio_6h{component="rails_request",env="pre",monitor="global",type="git"}
           < (1 - 6 * 0.003000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_apdex:ratio_30m{component="rails_request",env="pre",monitor="global",type="git"}
           < (1 - 6 * 0.003000)
@@ -1493,7 +1493,7 @@ groups:
           gitlab_regional_sli_apdex:ratio_1h{component="rails_request",env="pre",monitor="global",type="git"}
           < (1 - 14.4 * 0.003000)
         )
-        and
+        and on (env,environment,tier,type,stage,region,component)
         (
           gitlab_regional_sli_apdex:ratio_5m{component="rails_request",env="pre",monitor="global",type="git"}
           < (1 - 14.4 * 0.003000)
@@ -1542,7 +1542,7 @@ groups:
           gitlab_regional_sli_apdex:ratio_6h{component="rails_request",env="pre",monitor="global",type="git"}
           < (1 - 6 * 0.003000)
         )
-        and
+        and on (env,environment,tier,type,stage,region,component)
         (
           gitlab_regional_sli_apdex:ratio_30m{component="rails_request",env="pre",monitor="global",type="git"}
           < (1 - 6 * 0.003000)
@@ -1593,7 +1593,7 @@ groups:
           gitlab_component_errors:ratio_1h{component="rails_request",env="pre",monitor="global",type="git"}
           > (14.4 * 0.000100)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_5m{component="rails_request",env="pre",monitor="global",type="git"}
           > (14.4 * 0.000100)
@@ -1644,7 +1644,7 @@ groups:
           gitlab_component_errors:ratio_6h{component="rails_request",env="pre",monitor="global",type="git"}
           > (6 * 0.000100)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_30m{component="rails_request",env="pre",monitor="global",type="git"}
           > (6 * 0.000100)
@@ -1697,7 +1697,7 @@ groups:
           gitlab_regional_sli_errors:ratio_1h{component="rails_request",env="pre",monitor="global",type="git"}
           > (14.4 * 0.000100)
         )
-        and
+        and on (env,environment,tier,type,stage,region,component)
         (
           gitlab_regional_sli_errors:ratio_5m{component="rails_request",env="pre",monitor="global",type="git"}
           > (14.4 * 0.000100)
@@ -1750,7 +1750,7 @@ groups:
           gitlab_regional_sli_errors:ratio_6h{component="rails_request",env="pre",monitor="global",type="git"}
           > (6 * 0.000100)
         )
-        and
+        and on (env,environment,tier,type,stage,region,component)
         (
           gitlab_regional_sli_errors:ratio_30m{component="rails_request",env="pre",monitor="global",type="git"}
           > (6 * 0.000100)
@@ -1962,7 +1962,7 @@ groups:
           gitlab_component_apdex:ratio_1h{component="workhorse",env="pre",monitor="global",type="git"}
           < (1 - 14.4 * 0.002000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_apdex:ratio_5m{component="workhorse",env="pre",monitor="global",type="git"}
           < (1 - 14.4 * 0.002000)
@@ -2014,7 +2014,7 @@ groups:
           gitlab_component_apdex:ratio_6h{component="workhorse",env="pre",monitor="global",type="git"}
           < (1 - 6 * 0.002000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_apdex:ratio_30m{component="workhorse",env="pre",monitor="global",type="git"}
           < (1 - 6 * 0.002000)
@@ -2068,7 +2068,7 @@ groups:
           gitlab_regional_sli_apdex:ratio_1h{component="workhorse",env="pre",monitor="global",type="git"}
           < (1 - 14.4 * 0.002000)
         )
-        and
+        and on (env,environment,tier,type,stage,region,component)
         (
           gitlab_regional_sli_apdex:ratio_5m{component="workhorse",env="pre",monitor="global",type="git"}
           < (1 - 14.4 * 0.002000)
@@ -2122,7 +2122,7 @@ groups:
           gitlab_regional_sli_apdex:ratio_6h{component="workhorse",env="pre",monitor="global",type="git"}
           < (1 - 6 * 0.002000)
         )
-        and
+        and on (env,environment,tier,type,stage,region,component)
         (
           gitlab_regional_sli_apdex:ratio_30m{component="workhorse",env="pre",monitor="global",type="git"}
           < (1 - 6 * 0.002000)
@@ -2171,7 +2171,7 @@ groups:
           gitlab_component_errors:ratio_1h{component="workhorse",env="pre",monitor="global",type="git"}
           > (14.4 * 0.000100)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_5m{component="workhorse",env="pre",monitor="global",type="git"}
           > (14.4 * 0.000100)
@@ -2220,7 +2220,7 @@ groups:
           gitlab_component_errors:ratio_6h{component="workhorse",env="pre",monitor="global",type="git"}
           > (6 * 0.000100)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_30m{component="workhorse",env="pre",monitor="global",type="git"}
           > (6 * 0.000100)
@@ -2271,7 +2271,7 @@ groups:
           gitlab_regional_sli_errors:ratio_1h{component="workhorse",env="pre",monitor="global",type="git"}
           > (14.4 * 0.000100)
         )
-        and
+        and on (env,environment,tier,type,stage,region,component)
         (
           gitlab_regional_sli_errors:ratio_5m{component="workhorse",env="pre",monitor="global",type="git"}
           > (14.4 * 0.000100)
@@ -2322,7 +2322,7 @@ groups:
           gitlab_regional_sli_errors:ratio_6h{component="workhorse",env="pre",monitor="global",type="git"}
           > (6 * 0.000100)
         )
-        and
+        and on (env,environment,tier,type,stage,region,component)
         (
           gitlab_regional_sli_errors:ratio_30m{component="workhorse",env="pre",monitor="global",type="git"}
           > (6 * 0.000100)
@@ -2526,7 +2526,7 @@ groups:
           gitlab_component_apdex:ratio_1h{component="workhorse_auth_api",env="pre",monitor="global",type="git"}
           < (1 - 14.4 * 0.002000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_apdex:ratio_5m{component="workhorse_auth_api",env="pre",monitor="global",type="git"}
           < (1 - 14.4 * 0.002000)
@@ -2578,7 +2578,7 @@ groups:
           gitlab_component_apdex:ratio_6h{component="workhorse_auth_api",env="pre",monitor="global",type="git"}
           < (1 - 6 * 0.002000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_apdex:ratio_30m{component="workhorse_auth_api",env="pre",monitor="global",type="git"}
           < (1 - 6 * 0.002000)
@@ -2632,7 +2632,7 @@ groups:
           gitlab_regional_sli_apdex:ratio_1h{component="workhorse_auth_api",env="pre",monitor="global",type="git"}
           < (1 - 14.4 * 0.002000)
         )
-        and
+        and on (env,environment,tier,type,stage,region,component)
         (
           gitlab_regional_sli_apdex:ratio_5m{component="workhorse_auth_api",env="pre",monitor="global",type="git"}
           < (1 - 14.4 * 0.002000)
@@ -2686,7 +2686,7 @@ groups:
           gitlab_regional_sli_apdex:ratio_6h{component="workhorse_auth_api",env="pre",monitor="global",type="git"}
           < (1 - 6 * 0.002000)
         )
-        and
+        and on (env,environment,tier,type,stage,region,component)
         (
           gitlab_regional_sli_apdex:ratio_30m{component="workhorse_auth_api",env="pre",monitor="global",type="git"}
           < (1 - 6 * 0.002000)
@@ -2735,7 +2735,7 @@ groups:
           gitlab_component_errors:ratio_1h{component="workhorse_auth_api",env="pre",monitor="global",type="git"}
           > (14.4 * 0.000100)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_5m{component="workhorse_auth_api",env="pre",monitor="global",type="git"}
           > (14.4 * 0.000100)
@@ -2784,7 +2784,7 @@ groups:
           gitlab_component_errors:ratio_6h{component="workhorse_auth_api",env="pre",monitor="global",type="git"}
           > (6 * 0.000100)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_30m{component="workhorse_auth_api",env="pre",monitor="global",type="git"}
           > (6 * 0.000100)
@@ -2835,7 +2835,7 @@ groups:
           gitlab_regional_sli_errors:ratio_1h{component="workhorse_auth_api",env="pre",monitor="global",type="git"}
           > (14.4 * 0.000100)
         )
-        and
+        and on (env,environment,tier,type,stage,region,component)
         (
           gitlab_regional_sli_errors:ratio_5m{component="workhorse_auth_api",env="pre",monitor="global",type="git"}
           > (14.4 * 0.000100)
@@ -2886,7 +2886,7 @@ groups:
           gitlab_regional_sli_errors:ratio_6h{component="workhorse_auth_api",env="pre",monitor="global",type="git"}
           > (6 * 0.000100)
         )
-        and
+        and on (env,environment,tier,type,stage,region,component)
         (
           gitlab_regional_sli_errors:ratio_30m{component="workhorse_auth_api",env="pre",monitor="global",type="git"}
           > (6 * 0.000100)

@@ -120,7 +120,7 @@ groups:
           gitlab_component_apdex:ratio_1h{component="rails_cache",env="pre",monitor="global",type="redis-cluster-feature-flag"}
           < (1 - 14.4 * 0.000500)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_apdex:ratio_5m{component="rails_cache",env="pre",monitor="global",type="redis-cluster-feature-flag"}
           < (1 - 14.4 * 0.000500)
@@ -172,7 +172,7 @@ groups:
           gitlab_component_apdex:ratio_6h{component="rails_cache",env="pre",monitor="global",type="redis-cluster-feature-flag"}
           < (1 - 6 * 0.000500)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_apdex:ratio_30m{component="rails_cache",env="pre",monitor="global",type="redis-cluster-feature-flag"}
           < (1 - 6 * 0.000500)
@@ -298,7 +298,7 @@ groups:
           gitlab_component_apdex:ratio_1h{component="rails_redis_client",env="pre",monitor="global",type="redis-cluster-feature-flag"}
           < (1 - 14.4 * 0.000500)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_apdex:ratio_5m{component="rails_redis_client",env="pre",monitor="global",type="redis-cluster-feature-flag"}
           < (1 - 14.4 * 0.000500)
@@ -350,7 +350,7 @@ groups:
           gitlab_component_apdex:ratio_6h{component="rails_redis_client",env="pre",monitor="global",type="redis-cluster-feature-flag"}
           < (1 - 6 * 0.000500)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_apdex:ratio_30m{component="rails_redis_client",env="pre",monitor="global",type="redis-cluster-feature-flag"}
           < (1 - 6 * 0.000500)
@@ -399,7 +399,7 @@ groups:
           gitlab_component_errors:ratio_1h{component="rails_redis_client",env="pre",monitor="global",type="redis-cluster-feature-flag"}
           > (14.4 * 0.001000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_5m{component="rails_redis_client",env="pre",monitor="global",type="redis-cluster-feature-flag"}
           > (14.4 * 0.001000)
@@ -448,7 +448,7 @@ groups:
           gitlab_component_errors:ratio_6h{component="rails_redis_client",env="pre",monitor="global",type="redis-cluster-feature-flag"}
           > (6 * 0.001000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_30m{component="rails_redis_client",env="pre",monitor="global",type="redis-cluster-feature-flag"}
           > (6 * 0.001000)

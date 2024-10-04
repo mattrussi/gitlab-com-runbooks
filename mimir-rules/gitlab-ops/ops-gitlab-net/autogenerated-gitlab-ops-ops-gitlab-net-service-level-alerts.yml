@@ -46,7 +46,7 @@ groups:
           gitlab_component_apdex:ratio_1h{component="gitlab_sshd",env="ops",monitor="global",type="ops-gitlab-net"}
           < (1 - 14.4 * 0.002000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_apdex:ratio_5m{component="gitlab_sshd",env="ops",monitor="global",type="ops-gitlab-net"}
           < (1 - 14.4 * 0.002000)
@@ -98,7 +98,7 @@ groups:
           gitlab_component_apdex:ratio_6h{component="gitlab_sshd",env="ops",monitor="global",type="ops-gitlab-net"}
           < (1 - 6 * 0.002000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_apdex:ratio_30m{component="gitlab_sshd",env="ops",monitor="global",type="ops-gitlab-net"}
           < (1 - 6 * 0.002000)
@@ -147,7 +147,7 @@ groups:
           gitlab_component_errors:ratio_1h{component="gitlab_sshd",env="ops",monitor="global",type="ops-gitlab-net"}
           > (14.4 * 0.001000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_5m{component="gitlab_sshd",env="ops",monitor="global",type="ops-gitlab-net"}
           > (14.4 * 0.001000)
@@ -196,7 +196,7 @@ groups:
           gitlab_component_errors:ratio_6h{component="gitlab_sshd",env="ops",monitor="global",type="ops-gitlab-net"}
           > (6 * 0.001000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_30m{component="gitlab_sshd",env="ops",monitor="global",type="ops-gitlab-net"}
           > (6 * 0.001000)
@@ -326,7 +326,7 @@ groups:
           gitlab_component_apdex:ratio_1h{component="goserver",env="ops",monitor="global",type="ops-gitlab-net"}
           < (1 - 14.4 * 0.002000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_apdex:ratio_5m{component="goserver",env="ops",monitor="global",type="ops-gitlab-net"}
           < (1 - 14.4 * 0.002000)
@@ -382,7 +382,7 @@ groups:
           gitlab_component_apdex:ratio_6h{component="goserver",env="ops",monitor="global",type="ops-gitlab-net"}
           < (1 - 6 * 0.002000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_apdex:ratio_30m{component="goserver",env="ops",monitor="global",type="ops-gitlab-net"}
           < (1 - 6 * 0.002000)
@@ -433,7 +433,7 @@ groups:
           gitlab_component_errors:ratio_1h{component="goserver",env="ops",monitor="global",type="ops-gitlab-net"}
           > (14.4 * 0.001000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_5m{component="goserver",env="ops",monitor="global",type="ops-gitlab-net"}
           > (14.4 * 0.001000)
@@ -484,7 +484,7 @@ groups:
           gitlab_component_errors:ratio_6h{component="goserver",env="ops",monitor="global",type="ops-gitlab-net"}
           > (6 * 0.001000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_30m{component="goserver",env="ops",monitor="global",type="ops-gitlab-net"}
           > (6 * 0.001000)
@@ -603,7 +603,7 @@ groups:
           gitlab_component_apdex:ratio_1h{component="puma",env="ops",monitor="global",type="ops-gitlab-net"}
           < (1 - 14.4 * 0.002000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_apdex:ratio_5m{component="puma",env="ops",monitor="global",type="ops-gitlab-net"}
           < (1 - 14.4 * 0.002000)
@@ -648,7 +648,7 @@ groups:
           gitlab_component_apdex:ratio_6h{component="puma",env="ops",monitor="global",type="ops-gitlab-net"}
           < (1 - 6 * 0.002000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_apdex:ratio_30m{component="puma",env="ops",monitor="global",type="ops-gitlab-net"}
           < (1 - 6 * 0.002000)
@@ -697,7 +697,7 @@ groups:
           gitlab_component_errors:ratio_1h{component="puma",env="ops",monitor="global",type="ops-gitlab-net"}
           > (14.4 * 0.001000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_5m{component="puma",env="ops",monitor="global",type="ops-gitlab-net"}
           > (14.4 * 0.001000)
@@ -746,7 +746,7 @@ groups:
           gitlab_component_errors:ratio_6h{component="puma",env="ops",monitor="global",type="ops-gitlab-net"}
           > (6 * 0.001000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_30m{component="puma",env="ops",monitor="global",type="ops-gitlab-net"}
           > (6 * 0.001000)
@@ -872,7 +872,7 @@ groups:
           gitlab_component_apdex:ratio_1h{component="rails_sql",env="ops",monitor="global",type="ops-gitlab-net"}
           < (1 - 14.4 * 0.002000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_apdex:ratio_5m{component="rails_sql",env="ops",monitor="global",type="ops-gitlab-net"}
           < (1 - 14.4 * 0.002000)
@@ -924,7 +924,7 @@ groups:
           gitlab_component_apdex:ratio_6h{component="rails_sql",env="ops",monitor="global",type="ops-gitlab-net"}
           < (1 - 6 * 0.002000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_apdex:ratio_30m{component="rails_sql",env="ops",monitor="global",type="ops-gitlab-net"}
           < (1 - 6 * 0.002000)
@@ -1050,7 +1050,7 @@ groups:
           gitlab_component_apdex:ratio_1h{component="registry_server",env="ops",monitor="global",type="ops-gitlab-net"}
           < (1 - 14.4 * 0.002000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_apdex:ratio_5m{component="registry_server",env="ops",monitor="global",type="ops-gitlab-net"}
           < (1 - 14.4 * 0.002000)
@@ -1102,7 +1102,7 @@ groups:
           gitlab_component_apdex:ratio_6h{component="registry_server",env="ops",monitor="global",type="ops-gitlab-net"}
           < (1 - 6 * 0.002000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_apdex:ratio_30m{component="registry_server",env="ops",monitor="global",type="ops-gitlab-net"}
           < (1 - 6 * 0.002000)
@@ -1151,7 +1151,7 @@ groups:
           gitlab_component_errors:ratio_1h{component="registry_server",env="ops",monitor="global",type="ops-gitlab-net"}
           > (14.4 * 0.001000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_5m{component="registry_server",env="ops",monitor="global",type="ops-gitlab-net"}
           > (14.4 * 0.001000)
@@ -1200,7 +1200,7 @@ groups:
           gitlab_component_errors:ratio_6h{component="registry_server",env="ops",monitor="global",type="ops-gitlab-net"}
           > (6 * 0.001000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_30m{component="registry_server",env="ops",monitor="global",type="ops-gitlab-net"}
           > (6 * 0.001000)
@@ -1321,7 +1321,7 @@ groups:
           gitlab_component_apdex:ratio_1h{component="sidekiq_execution",env="ops",monitor="global",type="ops-gitlab-net"}
           < (1 - 14.4 * 0.002000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_apdex:ratio_5m{component="sidekiq_execution",env="ops",monitor="global",type="ops-gitlab-net"}
           < (1 - 14.4 * 0.002000)
@@ -1368,7 +1368,7 @@ groups:
           gitlab_component_apdex:ratio_6h{component="sidekiq_execution",env="ops",monitor="global",type="ops-gitlab-net"}
           < (1 - 6 * 0.002000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_apdex:ratio_30m{component="sidekiq_execution",env="ops",monitor="global",type="ops-gitlab-net"}
           < (1 - 6 * 0.002000)
@@ -1419,7 +1419,7 @@ groups:
           gitlab_component_errors:ratio_1h{component="sidekiq_execution",env="ops",monitor="global",type="ops-gitlab-net"}
           > (14.4 * 0.001000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_5m{component="sidekiq_execution",env="ops",monitor="global",type="ops-gitlab-net"}
           > (14.4 * 0.001000)
@@ -1470,7 +1470,7 @@ groups:
           gitlab_component_errors:ratio_6h{component="sidekiq_execution",env="ops",monitor="global",type="ops-gitlab-net"}
           > (6 * 0.001000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_30m{component="sidekiq_execution",env="ops",monitor="global",type="ops-gitlab-net"}
           > (6 * 0.001000)
@@ -1595,7 +1595,7 @@ groups:
           gitlab_component_apdex:ratio_1h{component="sidekiq_queueing",env="ops",monitor="global",type="ops-gitlab-net"}
           < (1 - 14.4 * 0.002000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_apdex:ratio_5m{component="sidekiq_queueing",env="ops",monitor="global",type="ops-gitlab-net"}
           < (1 - 14.4 * 0.002000)
@@ -1642,7 +1642,7 @@ groups:
           gitlab_component_apdex:ratio_6h{component="sidekiq_queueing",env="ops",monitor="global",type="ops-gitlab-net"}
           < (1 - 6 * 0.002000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_apdex:ratio_30m{component="sidekiq_queueing",env="ops",monitor="global",type="ops-gitlab-net"}
           < (1 - 6 * 0.002000)
@@ -1772,7 +1772,7 @@ groups:
           gitlab_component_apdex:ratio_1h{component="workhorse",env="ops",monitor="global",type="ops-gitlab-net"}
           < (1 - 14.4 * 0.002000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_apdex:ratio_5m{component="workhorse",env="ops",monitor="global",type="ops-gitlab-net"}
           < (1 - 14.4 * 0.002000)
@@ -1824,7 +1824,7 @@ groups:
           gitlab_component_apdex:ratio_6h{component="workhorse",env="ops",monitor="global",type="ops-gitlab-net"}
           < (1 - 6 * 0.002000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_apdex:ratio_30m{component="workhorse",env="ops",monitor="global",type="ops-gitlab-net"}
           < (1 - 6 * 0.002000)
@@ -1873,7 +1873,7 @@ groups:
           gitlab_component_errors:ratio_1h{component="workhorse",env="ops",monitor="global",type="ops-gitlab-net"}
           > (14.4 * 0.005000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_5m{component="workhorse",env="ops",monitor="global",type="ops-gitlab-net"}
           > (14.4 * 0.005000)
@@ -1922,7 +1922,7 @@ groups:
           gitlab_component_errors:ratio_6h{component="workhorse",env="ops",monitor="global",type="ops-gitlab-net"}
           > (6 * 0.005000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_30m{component="workhorse",env="ops",monitor="global",type="ops-gitlab-net"}
           > (6 * 0.005000)

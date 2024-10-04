@@ -43,7 +43,7 @@ groups:
           gitlab_component_errors:ratio_1h{component="consul",env="gstg",monitor="global",type="consul"}
           > (14.4 * 0.001000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_5m{component="consul",env="gstg",monitor="global",type="consul"}
           > (14.4 * 0.001000)
@@ -92,7 +92,7 @@ groups:
           gitlab_component_errors:ratio_6h{component="consul",env="gstg",monitor="global",type="consul"}
           > (6 * 0.001000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_30m{component="consul",env="gstg",monitor="global",type="consul"}
           > (6 * 0.001000)
@@ -143,7 +143,7 @@ groups:
           gitlab_regional_sli_errors:ratio_1h{component="consul",env="gstg",monitor="global",type="consul"}
           > (14.4 * 0.001000)
         )
-        and
+        and on (env,environment,tier,type,stage,region,component)
         (
           gitlab_regional_sli_errors:ratio_5m{component="consul",env="gstg",monitor="global",type="consul"}
           > (14.4 * 0.001000)
@@ -194,7 +194,7 @@ groups:
           gitlab_regional_sli_errors:ratio_6h{component="consul",env="gstg",monitor="global",type="consul"}
           > (6 * 0.001000)
         )
-        and
+        and on (env,environment,tier,type,stage,region,component)
         (
           gitlab_regional_sli_errors:ratio_30m{component="consul",env="gstg",monitor="global",type="consul"}
           > (6 * 0.001000)

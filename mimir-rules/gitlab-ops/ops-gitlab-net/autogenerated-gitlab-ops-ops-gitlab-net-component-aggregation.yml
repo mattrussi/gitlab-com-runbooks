@@ -1689,7 +1689,6 @@ groups:
       stage: main
       tier: sv
       type: ops-gitlab-net
-      upscale_source: "yes"
     expr: |
       (
         sum by (env,environment) (
@@ -1709,7 +1708,6 @@ groups:
       stage: main
       tier: sv
       type: ops-gitlab-net
-      upscale_source: "yes"
     expr: |
       sum by (env,environment) (
         sli_aggregations:gitlab_sql_primary_duration_seconds_bucket:rate_1h{env="ops",job!="sidekiq",le="+Inf",type="ops-gitlab-net"}
@@ -1721,7 +1719,6 @@ groups:
       stage: main
       tier: sv
       type: ops-gitlab-net
-      upscale_source: "yes"
     expr: |
       sum by (env,environment) (
         sli_aggregations:gitlab_sql_primary_duration_seconds_bucket:rate_1h{env="ops",job!="sidekiq",le="+Inf",type="ops-gitlab-net"} offset 30s

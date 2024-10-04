@@ -42,7 +42,7 @@ groups:
           gitlab_component_errors:ratio_1h{component="email_receiver",env="gstg",monitor="global",type="mailroom"}
           > (14.4 * 0.300000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_5m{component="email_receiver",env="gstg",monitor="global",type="mailroom"}
           > (14.4 * 0.300000)
@@ -90,7 +90,7 @@ groups:
           gitlab_component_errors:ratio_6h{component="email_receiver",env="gstg",monitor="global",type="mailroom"}
           > (6 * 0.300000)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_30m{component="email_receiver",env="gstg",monitor="global",type="mailroom"}
           > (6 * 0.300000)
@@ -211,7 +211,7 @@ groups:
           gitlab_component_errors:ratio_1h{component="emailsProcessed",env="gstg",monitor="global",type="mailroom"}
           > (14.4 * 0.000500)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_5m{component="emailsProcessed",env="gstg",monitor="global",type="mailroom"}
           > (14.4 * 0.000500)
@@ -260,7 +260,7 @@ groups:
           gitlab_component_errors:ratio_6h{component="emailsProcessed",env="gstg",monitor="global",type="mailroom"}
           > (6 * 0.000500)
         )
-        and
+        and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_30m{component="emailsProcessed",env="gstg",monitor="global",type="mailroom"}
           > (6 * 0.000500)
