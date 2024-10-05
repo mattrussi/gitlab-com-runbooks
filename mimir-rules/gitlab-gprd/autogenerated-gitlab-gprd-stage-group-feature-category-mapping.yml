@@ -237,6 +237,13 @@ groups:
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
+      feature_category: custom_dashboards_foundation
+      monitor: global
+      product_stage: monitor
+      stage_group: platform_insights
+    expr: "1"
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
       feature_category: customersdot_and_quote_to_cash_integrations
       monitor: global
       product_stage: fulfillment
@@ -367,13 +374,6 @@ groups:
       monitor: global
       product_stage: platforms
       stage_group: scalability
-    expr: "1"
-  - record: gitlab:feature_category:stage_group:mapping
-    labels:
-      feature_category: error_tracking
-      monitor: global
-      product_stage: monitor
-      stage_group: observability
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -524,10 +524,10 @@ groups:
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
-      feature_category: logging
+      feature_category: markdown
       monitor: global
-      product_stage: monitor
-      stage_group: observability
+      product_stage: plan
+      stage_group: knowledge
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -535,13 +535,6 @@ groups:
       monitor: global
       product_stage: verify
       stage_group: pipeline_execution
-    expr: "1"
-  - record: gitlab:feature_category:stage_group:mapping
-    labels:
-      feature_category: metrics
-      monitor: global
-      product_stage: monitor
-      stage_group: observability
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -584,6 +577,13 @@ groups:
       monitor: global
       product_stage: foundations
       stage_group: personal_productivity
+    expr: "1"
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
+      feature_category: observability
+      monitor: global
+      product_stage: monitor
+      stage_group: platform_insights
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -671,17 +671,10 @@ groups:
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
-      feature_category: product_analytics_data_management
+      feature_category: product_analytics
       monitor: global
       product_stage: monitor
-      stage_group: product_analytics
-    expr: "1"
-  - record: gitlab:feature_category:stage_group:mapping
-    labels:
-      feature_category: product_analytics_visualization
-      monitor: global
-      product_stage: monitor
-      stage_group: product_analytics
+      stage_group: platform_insights
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -874,10 +867,10 @@ groups:
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
-      feature_category: tracing
+      feature_category: text_editors
       monitor: global
-      product_stage: monitor
-      stage_group: observability
+      product_stage: plan
+      stage_group: knowledge
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:

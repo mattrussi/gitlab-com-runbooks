@@ -32,8 +32,8 @@ metricsCatalog.serviceDefinition({
       severity: 's3',  // Don't page SREs for this SLI
       userImpacting: false,
       serviceAggregation: true,
-      team: 'observability',
-      featureCategory: 'tracing',
+      team: 'platform_insights',
+      featureCategory: 'observability',
       description: |||
         With distributed tracing, you can troubleshoot application performance issues by
         inspecting how a request moves through different services and systems, the timing

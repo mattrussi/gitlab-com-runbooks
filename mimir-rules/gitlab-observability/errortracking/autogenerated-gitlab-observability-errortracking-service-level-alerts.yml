@@ -32,7 +32,7 @@ groups:
       aggregation: component
       alert_class: slo_violation
       alert_type: symptom
-      feature_category: error_tracking
+      feature_category: observability
       rules_domain: general
       severity: s3
       sli_type: apdex
@@ -83,7 +83,7 @@ groups:
       aggregation: component
       alert_class: slo_violation
       alert_type: symptom
-      feature_category: error_tracking
+      feature_category: observability
       rules_domain: general
       severity: s3
       sli_type: apdex
@@ -131,7 +131,7 @@ groups:
       aggregation: component
       alert_class: slo_violation
       alert_type: symptom
-      feature_category: error_tracking
+      feature_category: observability
       rules_domain: general
       severity: s3
       sli_type: error
@@ -179,7 +179,7 @@ groups:
       aggregation: component
       alert_class: slo_violation
       alert_type: symptom
-      feature_category: error_tracking
+      feature_category: observability
       rules_domain: general
       severity: s3
       sli_type: error
@@ -227,7 +227,7 @@ groups:
       aggregation: component
       alert_class: traffic_cessation
       alert_type: cause
-      feature_category: error_tracking
+      feature_category: observability
       rules_domain: general
       severity: s3
       sli_type: ops
@@ -264,7 +264,7 @@ groups:
       aggregation: component
       alert_class: traffic_cessation
       alert_type: cause
-      feature_category: error_tracking
+      feature_category: observability
       rules_domain: general
       severity: s3
       sli_type: ops
