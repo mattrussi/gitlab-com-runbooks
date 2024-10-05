@@ -22,6 +22,7 @@ A collection of info about gitlab.com on K8S
       gitlab-sidekiq-memory-bound-v1
       gitlab-sidekiq-urgent-cpu-bound-v1
       gitlab-sidekiq-urgent-other-v1
+    ```
 
   - Zonal
 
@@ -30,6 +31,7 @@ A collection of info about gitlab.com on K8S
        gitlab-registry
        gitlab-webservice-git
        gitlab-webservice-websockets
+    ```
 
 - Staging:
   - Regional:
@@ -38,6 +40,7 @@ A collection of info about gitlab.com on K8S
        Production:Regional
        gitlab-nginx-ingress-controller
        gitlab-nginx-ingress-default-backend
+    ```
 
   - Zonal:
 
@@ -46,6 +49,7 @@ A collection of info about gitlab.com on K8S
        gitlab-nginx-ingress-controller
        gitlab-nginx-ingress-default-backend
        gitlab-webservice-api
+    ```
 
 ## Image building
 
