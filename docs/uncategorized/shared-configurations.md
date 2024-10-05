@@ -98,8 +98,7 @@ Currently there are a few downsides that we are attempting to address:
   are currently attempting to build a tool to make this much easier as this is
   very specific to our use case and desired SSOT.
 
-One can follow improvements to the above in [Delivery Issue 699
-](https://gitlab.com/gitlab-com/gl-infra/delivery/-/issues/699)
+One can follow improvements to the above in [Delivery Issue 699](https://gitlab.com/gitlab-com/gl-infra/delivery/-/issues/699)
 
 [`chef-repo`]: https://ops.gitlab.net/gitlab-cookbooks/chef-repo
 [`helmfile`]: https://github.com/roboll/helmfile
