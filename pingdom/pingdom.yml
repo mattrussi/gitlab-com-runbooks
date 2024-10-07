@@ -317,3 +317,56 @@ checks:
       - people-engineering
     teams:
       - People Group Engineering
+
+  #######################################
+  # Phase 2.3 Internal Users Routes: https://gitlab.com/groups/gitlab-org/-/epics/14414
+  #######################################
+  - url: https://gitlab.com/api/v4/users/210928
+    timeout_ms: 20000
+    resolution_minutes: 5
+    notify_when_restored: true
+    tags:
+      - http-router
+      - api-user
+    teams:
+      - Infrastructure
+
+  - url: https://gitlab.com/api/v4/users/21085035
+    timeout_ms: 20000
+    resolution_minutes: 5
+    notify_when_restored: true
+    tags:
+      - http-router
+      - api-user
+    teams:
+      - Infrastructure
+
+  - url: https://gitlab.com/ayufan
+    timeout_ms: 20000
+    resolution_minutes: 5
+    notify_when_restored: true
+    tags:
+      - http-router
+      - web-user
+    teams:
+      - Infrastructure
+
+  - url: https://gitlab.com/tkhandelwal3
+    timeout_ms: 20000
+    resolution_minutes: 5
+    notify_when_restored: true
+    tags:
+      - http-router
+      - web-user
+    teams:
+      - Infrastructure
+
+  - url: https://gitlab.com/gitlab-org/tenant-scale-group/test-cloudflare-worker-in-production
+    timeout_ms: 30000
+    resolution_minutes: 5
+    notify_when_restored: true
+    tags:
+      - http-router
+      - test-git-repo
+    teams:
+      - Infrastructure
