@@ -34,7 +34,7 @@
 * [customers.gitlab.com](../customersdot/api-key-rotation.md)
 * [CustomersDot main troubleshoot documentation](../customersdot/overview.md)
 * [Google Cloud Snapshots](../disaster-recovery/gcp-snapshots.md)
-* [What is Programmable Search Engine?](../docs.gitlab.com/programmableSearch.md)
+* [Elasticsearch for docs.gitlab.com](../docs.gitlab.com/elasticsearch.md)
 * [../duo/triage.md](../duo/triage.md)
 * [../elastic/advanced-search-in-gitlab.md](../elastic/advanced-search-in-gitlab.md)
 * [Elastic Nodes Disk Space Saturation](../elastic/disk_space_saturation.md)
