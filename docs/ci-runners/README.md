@@ -30,48 +30,36 @@ They all have acronyms as well, which are indicated next to each name.
 * [Logging](#logging)
 * [Troubleshooting Pointers](#troubleshooting-pointers)
 * [Configuration management for the Linux based Runners fleet](linux/README.md)
-* [Runner Descriptions](#runner-descriptions)
-  * [shared-runners-manager (SRM)](#shared-runners-manager-srm)
-  * [gitlab-shared-runners-manager (GSRM)](#gitlab-shared-runners-manager-gsrm)
-  * [private-runners-manager (PRM)](#private-runners-manager-prm)
-  * [gitlab-docker-shared-runners-manager (GDSRM)](#gitlab-docker-shared-runners-manager-gdsrm)
-  * [windows-shared-runners-manager (WSRM)](#windows-shared-runners-manager-wsrm)
+* [SSH access](#ssh)
+* [Runner Shards](#runner-shards)
+  * [Internal Runners](#internal-runners)
+  * [External Runners](#external-runners)
 * [Cost Factors](#cost-factors)
 * [Network Info](#network-info)
 * [Monitoring](#monitoring)
 * [Production Change Lock (PCL)](#production-change-lock-pcl)
 
-## Runner Descriptions
+## SSH
 
-### shared-runners-manager (SRM)
+To ssh into any VM under the `gitlab-ci-155816` GCP project which hosts the runner-manager VMs, add the following to your `.config/ssh` file:
 
-These are the main runners our customers use. They are housed in the `gitlab-ci` project.
-Each machine is used for one build and then rebuilt. See [`gitlab-ci` network](#gitlab-ci-project)
-for subnet information.
+```
+# ci-runner manager VMs
+Host *.gitlab-ci-155816.internal
+        ProxyJump   lb-bastion.ci.gitlab.com
+```
 
-### gitlab-shared-runners-manager (GSRM)
+## Runner Shards
 
-These runners are used for GitLab application tests. They can be used by customer forks of the
-GitLab application. These are also housed in the `gitlab-ci` project. See [`gitlab-ci` network](#gitlab-ci-project)
-for subnet information.
+### Internal Runners
 
-### private-runners-manager (PRM)
+* Private shard
+* gitlab-org shard
+* macos-staging shard
 
-These runners are added to the `gitlab-com` and `gitlab-org` groups for internal GitLab use
-only. They are also added to the ops instance as shared runners for the same purpose. They
-have privileged mode on. See [`gitlab-ci` network](#gitlab-ci-project) for subnet information.
+### External Runners
 
-### gitlab-docker-shared-runners-manager (GDSRM)
-
-These are the newest runners we have. They are used for all of our open source projects under
-the `gitlab-org` group. They are also referred to as `org-ci` runners. These are housed in the
-`gitlab-org-ci` project. For further info please see the [org-ci README](./cicd/org-ci/README.md).
-
-### windows-shared-runners-manager (WSRM)
-
-As the name suggests, these are runners that spawn Windows machines. They are currently in
-beta. They are housed in the `gitlab-ci-windows` project. For further info please see the
-[windows CI README](./cicd/windows/README.md). For network information see [gitlab-ci-windows networking](#gitlab-ci-windows-project).
+See [Hosted runners for -com](https://docs.gitlab.com/ee/ci/runners/index.html#hosted-runners-for-gitlabcom).
 
 ## Runner Deployments
 
