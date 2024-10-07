@@ -26,5 +26,4 @@ sure it only has read-only access.
 
 The key is loaded from a CI variable.
 
-// @todo add link after we merge https://gitlab.com/gitlab-org/gitlab-docs/-/merge_requests/5071
-See [] for directions for rotating the key.
+See [this page](https://gitlab.com/gitlab-org/gitlab-docs/-/blob/main/doc/search.md?ref_type=heads) for directions for rotating the key.
