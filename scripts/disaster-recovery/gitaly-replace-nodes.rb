@@ -22,6 +22,7 @@ opts = Optimist.options do
   opt :working_dir, "Working directory to checkout repositories", type: :string, default: '/tmp/'
   opt :dr_restore, "Push config-mgmt changes to the dr-testing environment instead of the active env", type: :bool, default: false
   opt :os_snapshot_host_identifier, 'The Gitaly node to use OS disk snapshots from. This is the short name as written in the Terraform configs.', type: :string, default: 'gitaly-01'
+  opt :node_to_replace, 'Set this flag to move a single node. It must be in the zone specified by --zone.', type: :string
 end
 
 module DisasterRecoveryHelper
@@ -178,15 +179,16 @@ module DisasterRecoveryHelper
   end
 
   class GitalyNodeReplacements
-    def initialize(environment, all_zones, zone, dr_restore, os_snapshot_host_identifier)
+    def initialize(environment, all_zones, zone, dr_restore, os_snapshot_host_identifier, node_to_replace = nil)
       @environment = environment
       @google_client = DisasterRecoveryHelper::GoogleClient.new(@environment)
       @zones = all_zones.strip.split(',')
       @zone_to_replace = zone
       @surviving_zones = @zones.reject { |z| z == @zone_to_replace }
       @projects = find_projects
+      @single_node_to_replace = node_to_replace
       @all_nodes = get_all_nodes
-      @nodes_to_replace = @all_nodes.select { |n| n.zone =~ /#{@zone_to_replace}/ }
+      @nodes_to_replace = find_nodes_to_replace
       @dr_restore = dr_restore
       @os_snapshot_host_identifier = os_snapshot_host_identifier
     end
@@ -206,6 +208,23 @@ module DisasterRecoveryHelper
     end
 
     private
+
+    def find_nodes_to_replace
+      nodes = []
+      @all_nodes.map do |_z, a|
+        nodes += a.select do |n|
+          if n.zone =~ /#{@zone_to_replace}/
+            if @single_node_to_replace
+              true if n.name == @single_node_to_replace
+            else
+              true
+            end
+          end
+        end
+      end
+
+      nodes.flatten
+    end
 
     def generate_replacement_map
       map = {}
@@ -227,7 +246,9 @@ module DisasterRecoveryHelper
     def choose_zone
       if @allocated_zone_counts.nil?
         @allocated_zone_counts = {}
-        @surviving_zones.each { |z| @allocated_zone_counts[z] = 0 }
+        @surviving_zones.each do |z|
+          @allocated_zone_counts[z] = @all_nodes[z].length || 0
+        end
       end
 
       selected_zone = @allocated_zone_counts.sort_by { |_zone, count| count }.to_h.keys.first
@@ -254,12 +275,14 @@ module DisasterRecoveryHelper
 
     def get_all_nodes
       client = @google_client.instances_client
-      gitaly_nodes = []
+      gitaly_nodes = {}
       @projects.each do |project|
         @zones.each do |zone|
+          gitaly_nodes[zone] ||= []
+
           nodes = client.list(zone:, project:)
-          gitaly_nodes += nodes.select do |node|
-            node.labels['type'] == 'gitaly' && gitaly_nodes.select do |gn|
+          gitaly_nodes[zone] += nodes.select do |node|
+            node.labels['type'] == 'gitaly' && gitaly_nodes[zone].select do |gn|
               gn.name == node.name
             end.empty?
           end
@@ -284,11 +307,6 @@ module DisasterRecoveryHelper
       @repo_map.each_key do |path|
         repo = Git.open("#{@working_dir}/#{path}")
 
-        # if repo.diff.size == 0
-        #   puts "commit: skipping #{@working_dir}/#{path} due to lack of updates"
-        #   next
-        # end
-
         repo.add(all: true)
         repo.commit_all(message)
       end
@@ -297,11 +315,6 @@ module DisasterRecoveryHelper
     def push
       @repo_map.each_key do |path|
         repo = Git.open("#{@working_dir}/#{path}")
-
-        # if repo.diff.size == 0
-        #  puts "push: skipping #{@working_dir}/#{path} due to lack of updates"
-        #  next
-        # end
 
         repo.push(repo.remote('origin'), @branch)
       end
@@ -335,7 +348,7 @@ branch = opts[:branch]
 
 repos = DisasterRecoveryHelper::GitRepos.new(working_dir, repo_map, branch)
 
-gitaly = DisasterRecoveryHelper::GitalyNodeReplacements.new(environment, all_zones, zone, opts[:dr_restore], opts[:os_snapshot_host_identifier])
+gitaly = DisasterRecoveryHelper::GitalyNodeReplacements.new(environment, all_zones, zone, opts[:dr_restore], opts[:os_snapshot_host_identifier], opts[:node_to_replace])
 replacements = gitaly.replacement_map
 
 gitaly_terraform = DisasterRecoveryHelper::GitalyConfig.new("#{working_dir}/config-mgmt", environment, replacements, opts[:dr_restore])
