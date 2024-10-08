@@ -4,11 +4,9 @@
 
 [TOC]
 
-## Updated Documentation
+The handbook is the source of truth for [Rate Limiting information](https://handbook.gitlab.com/handbook/engineering/infrastructure/rate-limiting/).
 
-The handbook is the new source of truth for [Rate Limiting information](https://handbook.gitlab.com/handbook/engineering/infrastructure/rate-limiting/).
-
-If you are looking for information about requesting a rate limit bypass for GitLab.com, please see the [Rate Limit bypass policy](bypass-policy.md).
+If you are looking for information about requesting a rate limit bypass for GitLab.com, please see the [Rate Limit bypass policy](https://handbook.gitlab.com/handbook/engineering/infrastructure/rate-limiting/bypass-policy/).
 
 ## Bypasses and Special Cases
 
