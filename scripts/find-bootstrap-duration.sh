@@ -22,13 +22,11 @@ if [[ -n $DATE_OVERRIDE ]]; then
 fi
 
 if [[ -n $host ]]; then
-  # Determine if the remote script is already in place
-  remote_script_exists=$(ssh -o StrictHostKeyChecking=no "$host" 'if [[ -f /tmp/find-bootstrap.sh ]]; then echo "exists"; else echo "not-exists"; fi' 2>/dev/null)
-  # If the remote script exists, remove it
-  if [[ $remote_script_exists == "exists" ]]; then
-    ssh -o StrictHostKeyChecking=no "$host" 'sudo rm -f /tmp/find-bootstrap.sh'
-  fi
+  ## If the remote script exists, remove it
+  ssh -o StrictHostKeyChecking=no "$host" 'if [[ -f /tmp/find-bootstrap.sh ]]; then sudo rm -f /tmp/find-bootstrap.sh; fi' 2>/dev/null)
+  ## Install a new version of the script to the remote host
   scp -o StrictHostKeyChecking=no -q "$0" "$host:/tmp/find-bootstrap.sh"
+  ## Execute and remove the remote script
   ssh -o StrictHostKeyChecking=no "$host" "DATE_OVERRIDE=$DATE_OVERRIDE bash /tmp/find-bootstrap.sh; rm -f /tmp/find-bootstrap.sh"
   exit 0
 fi
