@@ -321,23 +321,33 @@ checks:
   #######################################
   # Phase 2.3 Internal Users Routes: https://gitlab.com/groups/gitlab-org/-/epics/14414
   #######################################
-  - url: https://gitlab.com/api/v4/users/210928
+  - url: https://gitlab.com/api/v4/projects/278964 # gitlab-org/gitlab
     timeout_ms: 20000
     resolution_minutes: 5
     notify_when_restored: true
     tags:
       - http-router
-      - api-user
+      - api-gitlab
     teams:
       - Infrastructure
 
-  - url: https://gitlab.com/api/v4/users/21085035
+  - url: https://gitlab.com/giltab-org/gitlab
     timeout_ms: 20000
     resolution_minutes: 5
     notify_when_restored: true
     tags:
       - http-router
-      - api-user
+      - web-gitlab
+    teams:
+      - Infrastructure
+
+  - url: https://gitlab.com/giltab-org/gitlab.git
+    timeout_ms: 20000
+    resolution_minutes: 5
+    notify_when_restored: true
+    tags:
+      - http-router
+      - gitlab
     teams:
       - Infrastructure
 
