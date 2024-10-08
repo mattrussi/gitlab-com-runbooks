@@ -29,8 +29,7 @@ if [[ -n $host ]]; then
     ssh -o StrictHostKeyChecking=no "$host" 'sudo rm -f /tmp/find-bootstrap.sh'
   fi
   scp -o StrictHostKeyChecking=no -q "$0" "$host:/tmp/find-bootstrap.sh"
-  ssh -o StrictHostKeyChecking=no "$host" "DATE_OVERRIDE=$DATE_OVERRIDE bash /tmp/find-bootstrap.sh"
-  ssh -o StrictHostKeyChecking=no "$host" 'rm -f /tmp/find-bootstrap.sh'
+  ssh -o StrictHostKeyChecking=no "$host" "DATE_OVERRIDE=$DATE_OVERRIDE bash /tmp/find-bootstrap.sh; rm -f /tmp/find-bootstrap.sh"
   exit 0
 fi
 
