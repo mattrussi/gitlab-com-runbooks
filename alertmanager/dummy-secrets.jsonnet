@@ -13,7 +13,7 @@
     { name: 'slo_dr', serviceKey: 'secret' },
     { name: 'slo_gprd_cny', serviceKey: 'secret' },
     { name: 'slo_gprd_main', serviceKey: 'secret' },
-    { name: 'slo_non_prod', serviceKey: 'secret' },
+    { name: 'slo_non_prod', serviceKey: 'secret' },snitchChannels
     { name: 'observability_pagerduty', serviceKey: 'secret' },
   ],
   // GitLab Slack.
@@ -32,6 +32,7 @@
     { name: 'gstg-ref', apiKey: 'secret', cluster: 'staging-ref-3k-hybrid-us' },
     { name: 'pre', apiKey: 'secret', cluster: '' },
     { name: 'thanos-rule', apiKey: 'secret', cluster: '' },
+    { name: 'mimir-rule', apiKey: 'secret', cluster: ''},
     { name: 'other-rule', apiKey: 'secret', cluster: '', sendResolved: true },
   ],
   // Generic webhook configs.
