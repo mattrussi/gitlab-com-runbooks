@@ -21,10 +21,10 @@ if [[ -n $DATE_OVERRIDE ]]; then
   date="$DATE_OVERRIDE"
 fi
 
-# Determine if the remote script is already in place
-remote_script_exists=$(ssh -o StrictHostKeyChecking=no "$host" 'if [[ -f /tmp/find-bootstrap.sh ]]; then echo "exists"; else echo "not-exists"; fi' 2>/dev/null)
 
 if [[ -n $host ]]; then
+  # Determine if the remote script is already in place
+  remote_script_exists=$(ssh -o StrictHostKeyChecking=no "$host" 'if [[ -f /tmp/find-bootstrap.sh ]]; then echo "exists"; else echo "not-exists"; fi' 2>/dev/null)
   if [[ $remote_script_exists == "not-exists" ]]; then
     scp -o StrictHostKeyChecking=no -q "$0" "$host:/tmp/find-bootstrap.sh"
   fi
