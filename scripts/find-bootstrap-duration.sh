@@ -23,7 +23,7 @@ fi
 
 if [[ -n $host ]]; then
   ## If the remote script exists, remove it
-  ssh -o StrictHostKeyChecking=no "$host" 'if [[ -f /tmp/find-bootstrap.sh ]]; then sudo rm -f /tmp/find-bootstrap.sh; fi' 2>/dev/null)
+  ssh -o StrictHostKeyChecking=no "$host" 'if [[ -f /tmp/find-bootstrap.sh ]]; then sudo rm -f /tmp/find-bootstrap.sh; fi' 2>/dev/null
   ## Install a new version of the script to the remote host
   scp -o StrictHostKeyChecking=no -q "$0" "$host:/tmp/find-bootstrap.sh"
   ## Execute and remove the remote script
