@@ -24,7 +24,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
-            rate(traefik_service_request_duration_seconds_bucket{code!~"4xx|5xx",environment="{{ $labels.environment }}",job="default/traefik",service=~"tenant.*otel-collector-traces.*",stage="{{ $labels.stage }}",team="observability"}[5m])
+            rate(traefik_service_request_duration_seconds_bucket{code!~"4xx|5xx",environment="{{ $labels.environment }}",job="default/traefik",service=~"tenant.*otel-collector-traces.*",stage="{{ $labels.stage }}",team="platform_insights"}[5m])
           )
         )
       runbook: docs/tracing/README.md
@@ -32,7 +32,7 @@ groups:
       aggregation: component
       alert_class: slo_violation
       alert_type: symptom
-      feature_category: tracing
+      feature_category: observability
       rules_domain: general
       severity: s3
       sli_type: apdex
@@ -75,7 +75,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
-            rate(traefik_service_request_duration_seconds_bucket{code!~"4xx|5xx",environment="{{ $labels.environment }}",job="default/traefik",service=~"tenant.*otel-collector-traces.*",stage="{{ $labels.stage }}",team="observability"}[5m])
+            rate(traefik_service_request_duration_seconds_bucket{code!~"4xx|5xx",environment="{{ $labels.environment }}",job="default/traefik",service=~"tenant.*otel-collector-traces.*",stage="{{ $labels.stage }}",team="platform_insights"}[5m])
           )
         )
       runbook: docs/tracing/README.md
@@ -83,7 +83,7 @@ groups:
       aggregation: component
       alert_class: slo_violation
       alert_type: symptom
-      feature_category: tracing
+      feature_category: observability
       rules_domain: general
       severity: s3
       sli_type: apdex
@@ -124,14 +124,14 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(traefik_service_requests_total{code=~"^5.*",environment="{{ $labels.environment }}",job="default/traefik",service=~"tenant.*otel-collector-traces.*",stage="{{ $labels.stage }}",team="observability"}[5m])
+          rate(traefik_service_requests_total{code=~"^5.*",environment="{{ $labels.environment }}",job="default/traefik",service=~"tenant.*otel-collector-traces.*",stage="{{ $labels.stage }}",team="platform_insights"}[5m])
         )
       runbook: docs/tracing/README.md
     labels:
       aggregation: component
       alert_class: slo_violation
       alert_type: symptom
-      feature_category: tracing
+      feature_category: observability
       rules_domain: general
       severity: s3
       sli_type: error
@@ -172,14 +172,14 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(traefik_service_requests_total{code=~"^5.*",environment="{{ $labels.environment }}",job="default/traefik",service=~"tenant.*otel-collector-traces.*",stage="{{ $labels.stage }}",team="observability"}[5m])
+          rate(traefik_service_requests_total{code=~"^5.*",environment="{{ $labels.environment }}",job="default/traefik",service=~"tenant.*otel-collector-traces.*",stage="{{ $labels.stage }}",team="platform_insights"}[5m])
         )
       runbook: docs/tracing/README.md
     labels:
       aggregation: component
       alert_class: slo_violation
       alert_type: symptom
-      feature_category: tracing
+      feature_category: observability
       rules_domain: general
       severity: s3
       sli_type: error
@@ -220,14 +220,14 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(traefik_service_requests_total{environment="{{ $labels.environment }}",job="default/traefik",service=~"tenant.*otel-collector-traces.*",stage="{{ $labels.stage }}",team="observability"}[5m])
+          rate(traefik_service_requests_total{environment="{{ $labels.environment }}",job="default/traefik",service=~"tenant.*otel-collector-traces.*",stage="{{ $labels.stage }}",team="platform_insights"}[5m])
         )
       runbook: docs/tracing/README.md
     labels:
       aggregation: component
       alert_class: traffic_cessation
       alert_type: cause
-      feature_category: tracing
+      feature_category: observability
       rules_domain: general
       severity: s3
       sli_type: ops
@@ -257,14 +257,14 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(traefik_service_requests_total{environment="{{ $labels.environment }}",job="default/traefik",service=~"tenant.*otel-collector-traces.*",stage="{{ $labels.stage }}",team="observability"}[5m])
+          rate(traefik_service_requests_total{environment="{{ $labels.environment }}",job="default/traefik",service=~"tenant.*otel-collector-traces.*",stage="{{ $labels.stage }}",team="platform_insights"}[5m])
         )
       runbook: docs/tracing/README.md
     labels:
       aggregation: component
       alert_class: traffic_cessation
       alert_type: cause
-      feature_category: tracing
+      feature_category: observability
       rules_domain: general
       severity: s3
       sli_type: ops

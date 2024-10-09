@@ -383,48 +383,48 @@ generateTests([
     ],
   },
   {
-    name: 'pages, observability team, gstg env -> observability pagerduty, observability slack',
+    name: 'pages, platform_insights team, gstg env -> platform_insights pagerduty, platform_insights slack',
     labels: {
       env: 'gstg',
-      team: 'observability',
-      pager: 'observability_pagerduty',
+      team: 'platform_insights',
+      pager: 'platform_insights_pagerduty',
     },
     receivers: [
-      'team_observability_alerts_channel',
-      'observability_pagerduty',
+      'team_platform_insights_alerts_channel',
+      'platform_insights_pagerduty',
     ],
   },
   {
-    name: 'pages, observability team, gprd env -> observability pagerduty, observability slack',
+    name: 'pages, platform_insights team, gprd env -> platform_insights pagerduty, platform_insights slack',
     labels: {
       env: 'gprd',
-      team: 'observability',
-      pager: 'observability_pagerduty',
+      team: 'platform_insights',
+      pager: 'platform_insights_pagerduty',
     },
     receivers: [
-      'team_observability_alerts_channel',
-      'observability_pagerduty',
+      'team_platform_insights_alerts_channel',
+      'platform_insights_pagerduty',
     ],
   },
   {
-    name: 'observability team, gstg env -> observability slack',
+    name: 'platform_insights team, gstg env -> platform_insights slack',
     labels: {
       env: 'gstg',
-      team: 'observability',
+      team: 'platform_insights',
     },
     receivers: [
-      'team_observability_alerts_channel',
+      'team_platform_insights_alerts_channel',
       'blackhole',
     ],
   },
   {
-    name: 'observability team, gprd env -> observability slack',
+    name: 'platform_insights team, gprd env -> platform_insights slack',
     labels: {
       env: 'gprd',
-      team: 'observability',
+      team: 'platform_insights',
     },
     receivers: [
-      'team_observability_alerts_channel',
+      'team_platform_insights_alerts_channel',
       // We are ok with #alerts channel getting notifications for services that
       // SREs are not responsible ATM.
       'prod_alerts_slack_channel',

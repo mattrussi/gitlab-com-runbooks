@@ -259,15 +259,6 @@ groups:
       product_stage: mobile
       stage_group: mobile_devops
     expr: "1"
-- name: 'Stage group Ignored components: monitor - Observability'
-  interval: 1m
-  rules:
-  - record: gitlab:ignored_component:stage_group
-    labels:
-      component: graphql_query
-      product_stage: monitor
-      stage_group: observability
-    expr: "1"
 - name: 'Stage group Ignored components: plan - Optimize'
   interval: 1m
   rules:
@@ -322,6 +313,15 @@ groups:
       product_stage: govern
       stage_group: pipeline_security
     expr: "1"
+- name: 'Stage group Ignored components: monitor - Platform Insights'
+  interval: 1m
+  rules:
+  - record: gitlab:ignored_component:stage_group
+    labels:
+      component: graphql_query
+      product_stage: monitor
+      stage_group: platform_insights
+    expr: "1"
 - name: 'Stage group Ignored components: plan - Product Planning'
   interval: 1m
   rules:
@@ -357,15 +357,6 @@ groups:
       component: graphql_query
       product_stage: create
       stage_group: remote_development
-    expr: "1"
-- name: 'Stage group Ignored components: monitor - Respond'
-  interval: 1m
-  rules:
-  - record: gitlab:ignored_component:stage_group
-    labels:
-      component: graphql_query
-      product_stage: monitor
-      stage_group: respond
     expr: "1"
 - name: 'Stage group Ignored components: verify - Runner'
   interval: 1m
