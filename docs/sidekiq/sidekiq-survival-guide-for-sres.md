@@ -274,7 +274,7 @@ Spikes in Sidekiq workers worker volume could potentially saturate the pgbouncer
 This could happen for reasons such as:
 
 1. Lock contention between multiple workers
-1. Non-performant query
+1. Non-performant queries
 
 The marginalia sampler dashboard is useful in detecting such offending workers by examining [active-counts](https://dashboards.gitlab.net/d/patroni-marginalia-sampler/patroni3a-marginalia-sampler?orgId=1&from=now-3h&to=now&var-PROMETHEUS_DS=mimir-gitlab-gprd&var-environment=gprd&var-fqdn=All&var-application=sidekiq&var-endpoint=All&var-state=active&var-wait_event_type=All&var-type=patroni) and [idle-in-transaction counts](https://dashboards.gitlab.net/d/patroni-marginalia-sampler/patroni3a-marginalia-sampler?orgId=1&from=now-3h&to=now&var-PROMETHEUS_DS=mimir-gitlab-gprd&var-environment=gprd&var-fqdn=All&var-application=sidekiq&var-endpoint=All&var-state=idle%20in%20transaction&var-wait_event_type=All&var-type=patroni).
 
