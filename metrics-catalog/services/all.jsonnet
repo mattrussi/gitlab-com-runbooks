@@ -66,6 +66,7 @@
   import 'registry.jsonnet',
   import 'runway.jsonnet',
   import 'search.jsonnet',
+  import 'secret-detection.jsonnet',
   import 'sentry.jsonnet',
   import 'sidekiq.jsonnet',
   import 'tracing.jsonnet',

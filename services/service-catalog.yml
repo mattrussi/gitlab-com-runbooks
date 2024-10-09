@@ -2673,3 +2673,25 @@ services:
       logging:
         - name:
           permalink:
+
+  - name: secret-detection
+    tier: sv
+    friendly_name: Detects secret leaks in the given payloads
+    label: SecretDetection
+    owner: secret_detection
+    teams:
+      - secret_detection
+    technical:
+      project:
+        - https://gitlab.com/gitlab-org/security-products/secret-detection/secret-detection-service
+      documents:
+        architecture: https://handbook.gitlab.com/handbook/engineering/architecture/design-documents/secret_detection/decisions/004_secret_detection_scanner_service
+        readiness_review: https://gitlab.com/gitlab-com/gl-infra/readiness/-/merge_requests/225
+        service:
+          - https://gitlab.com/gitlab-org/security-products/secret-detection/secret-detection-service/-/blob/main/README.md
+      logging:
+        - name: secret-detection
+          permalink: https://console.cloud.google.com/run/detail/us-east1/secret-detection/logs?project=gitlab-runway-production
+    observability:
+      monitors:
+        primary_grafana_dashboard:
