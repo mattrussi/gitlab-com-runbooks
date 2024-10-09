@@ -69,6 +69,20 @@ metricsCatalog.serviceDefinition(
           },
         },
         {
+          name: 'pg_primary_cpu',
+          parameters: {
+            changepoints: [
+              '2024-09-23',  // https://gitlab.com/gitlab-com/gl-infra/production/-/issues/18532
+            ],
+            events: [
+              {
+                date: '2024-09-23',
+                name: 'Upgraded hardware for writer note to C3',
+              },
+            ],
+          },
+        },
+        {
           name: 'disk_space',
           parameters: {
             ignore_outliers: [
