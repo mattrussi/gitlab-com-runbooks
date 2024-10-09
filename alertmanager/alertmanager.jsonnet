@@ -452,7 +452,7 @@ local routingTree = Route(
       continue=true,
       matchers={
         env: 'gprd',
-        type: { oneOf: ['api', 'git', 'web', 'sidekiq', 'kas', 'gitaly', 'internal-api', 'ai_assisted', 'gitlab-shell', 'websockets', 'pages']},
+        type: { oneOf: ['api', 'git', 'web', 'sidekiq', 'kas', 'gitaly', 'internal-api', 'ai_assisted', 'gitlab-shell', 'websockets', 'pages'] },
         alert_trigger: { re: '.*_anomaly' },
       }
     ),
@@ -491,11 +491,11 @@ local routingTree = Route(
   + [
     // Terminators go last
     Route(
-      receiver='observability_pagerduty',
+      receiver='platform_insights_pagerduty',
       matchers={
-        pager: 'observability_pagerduty',
+        pager: 'platform_insights_pagerduty',
         env: { re: 'gprd|gstg|thanos' },
-        team: 'observability',
+        team: 'platform_insights',
       },
       group_by=groupByType,
       continue=false,

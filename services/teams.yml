@@ -73,17 +73,6 @@ teams:
   engagement_policy:  # Link to doc that talks about engagement and escalation policy
   oncall_schedule:    # Link to pagerduty oncall schedule
 
-- name: product_analytics
-  product_stage_group: product_analytics
-  url: https://about.gitlab.com/handbook/engineering/development/analytics/product-analytics/
-  slack_channel: g_monitor_product_analytics
-  slack_alerts_channel: g_monitor_product_analytics_infra_alerts
-  slack_error_budget_channel: g_monitor_product_analytics
-  send_error_budget_weekly_to_slack: true
-  alerts:
-  - prod-1
-  - prd-278964
-
 - name: support
   url: https://about.gitlab.com/handbook/support/
   slack_channel: support_gitlab-com
@@ -332,15 +321,8 @@ teams:
   ignored_components:
   - graphql_query
 
-- name: respond
-  product_stage_group: respond
-  send_error_budget_weekly_to_slack: true
-  slack_error_budget_channel: s_monitor
-  ignored_components:
-  - graphql_query
-
-- name: observability
-  product_stage_group: observability
+- name: platform_insights
+  product_stage_group: platform_insights
   slack_alerts_channel: g_monitor_platform_insights_infra_alerts
   send_error_budget_weekly_to_slack: true
   slack_error_budget_channel: s_monitor
