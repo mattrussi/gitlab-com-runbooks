@@ -6,7 +6,7 @@ local resourceSaturationPoint = (import 'servicemetrics/metrics.libsonnet').reso
     title: 'Open file descriptor utilization per instance',
     severity: 's2',
     horizontallyScalable: true,
-    appliesTo: metricsCatalog.findServicesExcluding(excluding=['cloud-sql', 'gitlab-static', 'kube', 'nat', 'cloudflare']),
+    appliesTo: metricsCatalog.findServicesExcluding(excluding=['cloud-sql', 'gitlab-static', 'kube', 'nat', 'cloudflare', 'http-router']),
     description: |||
       Open file descriptor utilization per instance.
 
