@@ -36,7 +36,7 @@ setup() {
   echo "Running gcloud commands to create kube contexts"
   jq -r '.[] | "\(.name) --project \(.project) --region \(.region)"' "${CLUSTERS_JSON}" | while read -r cluster_params; do
     # shellcheck disable=SC2086
-    gcloud container clusters get-credentials ${cluster_params}
+    gcloud container clusters get-credentials ${cluster_params} || true
   done
 
   socks_port=1080
