@@ -10,12 +10,12 @@ local railsCacheSelector = redisHelpers.storeSelector('RedisRepositoryCache');
 metricsCatalog.serviceDefinition(
   redisArchetype(
     type='redis-cluster-repo-cache',  // name is shortened due to CloudDNS 255 char limits
-    railsStorageSelector=redisHelpers.storageSelector({ oneOf: ['cluster_repository_cache', 'repository_cache'] }),  // TODO switch to repository_cache after application-side clean up
+    railsStorageSelector=redisHelpers.storageSelector('repository_cache'),
     descriptiveName='Redis Repository Cache in Redis Cluster',
     redisCluster=true
   )
   {
-    tenants: [ 'gitlab-gprd', 'gitlab-gstg', 'gitlab-pre' ],
+    tenants: ['gitlab-gprd', 'gitlab-gstg', 'gitlab-pre'],
     monitoringThresholds+: {
       apdexScore: 0.9995,
     },

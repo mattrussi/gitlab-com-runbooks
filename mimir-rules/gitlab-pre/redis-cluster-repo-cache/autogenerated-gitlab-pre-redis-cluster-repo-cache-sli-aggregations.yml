@@ -128,17 +128,17 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_exceptions_total{env="pre",storage=~"cluster_repository_cache|repository_cache",type=~"ai-assisted"}[5m] offset 30s)
+        rate(gitlab_redis_client_exceptions_total{env="pre",storage=~"repository_cache",type=~"ai-assisted"}[5m] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{env="pre",storage=~"cluster_repository_cache|repository_cache",type=~"ai-assisted"}[5m] offset 30s)
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{env="pre",storage=~"repository_cache",type=~"ai-assisted"}[5m] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_total{env="pre",storage=~"cluster_repository_cache|repository_cache",type=~"ai-assisted"}[5m] offset 30s)
+        rate(gitlab_redis_client_requests_total{env="pre",storage=~"repository_cache",type=~"ai-assisted"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: redis-cluster-repo-cache - rails_redis_client - 5m burn-rate
     - emitted by api'
@@ -147,17 +147,17 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_exceptions_total{env="pre",storage=~"cluster_repository_cache|repository_cache",type=~"api"}[5m] offset 30s)
+        rate(gitlab_redis_client_exceptions_total{env="pre",storage=~"repository_cache",type=~"api"}[5m] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{env="pre",storage=~"cluster_repository_cache|repository_cache",type=~"api"}[5m] offset 30s)
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{env="pre",storage=~"repository_cache",type=~"api"}[5m] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_total{env="pre",storage=~"cluster_repository_cache|repository_cache",type=~"api"}[5m] offset 30s)
+        rate(gitlab_redis_client_requests_total{env="pre",storage=~"repository_cache",type=~"api"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: redis-cluster-repo-cache - rails_redis_client - 5m burn-rate
     - emitted by git'
@@ -166,17 +166,17 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_exceptions_total{env="pre",storage=~"cluster_repository_cache|repository_cache",type=~"git"}[5m] offset 30s)
+        rate(gitlab_redis_client_exceptions_total{env="pre",storage=~"repository_cache",type=~"git"}[5m] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{env="pre",storage=~"cluster_repository_cache|repository_cache",type=~"git"}[5m] offset 30s)
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{env="pre",storage=~"repository_cache",type=~"git"}[5m] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_total{env="pre",storage=~"cluster_repository_cache|repository_cache",type=~"git"}[5m] offset 30s)
+        rate(gitlab_redis_client_requests_total{env="pre",storage=~"repository_cache",type=~"git"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: redis-cluster-repo-cache - rails_redis_client - 5m burn-rate
     - emitted by internal-api'
@@ -185,17 +185,17 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_exceptions_total{env="pre",storage=~"cluster_repository_cache|repository_cache",type=~"internal-api"}[5m] offset 30s)
+        rate(gitlab_redis_client_exceptions_total{env="pre",storage=~"repository_cache",type=~"internal-api"}[5m] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{env="pre",storage=~"cluster_repository_cache|repository_cache",type=~"internal-api"}[5m] offset 30s)
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{env="pre",storage=~"repository_cache",type=~"internal-api"}[5m] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_total{env="pre",storage=~"cluster_repository_cache|repository_cache",type=~"internal-api"}[5m] offset 30s)
+        rate(gitlab_redis_client_requests_total{env="pre",storage=~"repository_cache",type=~"internal-api"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: redis-cluster-repo-cache - rails_redis_client - 5m burn-rate
     - emitted by ops-gitlab-net'
@@ -204,17 +204,17 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_exceptions_total{env="pre",storage=~"cluster_repository_cache|repository_cache",type=~"ops-gitlab-net"}[5m] offset 30s)
+        rate(gitlab_redis_client_exceptions_total{env="pre",storage=~"repository_cache",type=~"ops-gitlab-net"}[5m] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{env="pre",storage=~"cluster_repository_cache|repository_cache",type=~"ops-gitlab-net"}[5m] offset 30s)
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{env="pre",storage=~"repository_cache",type=~"ops-gitlab-net"}[5m] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_total{env="pre",storage=~"cluster_repository_cache|repository_cache",type=~"ops-gitlab-net"}[5m] offset 30s)
+        rate(gitlab_redis_client_requests_total{env="pre",storage=~"repository_cache",type=~"ops-gitlab-net"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: redis-cluster-repo-cache - rails_redis_client - 5m burn-rate
     - emitted by sidekiq'
@@ -223,17 +223,17 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_exceptions_total{env="pre",storage=~"cluster_repository_cache|repository_cache",type=~"sidekiq"}[5m] offset 30s)
+        rate(gitlab_redis_client_exceptions_total{env="pre",storage=~"repository_cache",type=~"sidekiq"}[5m] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{env="pre",storage=~"cluster_repository_cache|repository_cache",type=~"sidekiq"}[5m] offset 30s)
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{env="pre",storage=~"repository_cache",type=~"sidekiq"}[5m] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_total{env="pre",storage=~"cluster_repository_cache|repository_cache",type=~"sidekiq"}[5m] offset 30s)
+        rate(gitlab_redis_client_requests_total{env="pre",storage=~"repository_cache",type=~"sidekiq"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: redis-cluster-repo-cache - rails_redis_client - 5m burn-rate
     - emitted by web'
@@ -242,17 +242,17 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_exceptions_total{env="pre",storage=~"cluster_repository_cache|repository_cache",type=~"web"}[5m] offset 30s)
+        rate(gitlab_redis_client_exceptions_total{env="pre",storage=~"repository_cache",type=~"web"}[5m] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{env="pre",storage=~"cluster_repository_cache|repository_cache",type=~"web"}[5m] offset 30s)
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{env="pre",storage=~"repository_cache",type=~"web"}[5m] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_total{env="pre",storage=~"cluster_repository_cache|repository_cache",type=~"web"}[5m] offset 30s)
+        rate(gitlab_redis_client_requests_total{env="pre",storage=~"repository_cache",type=~"web"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: redis-cluster-repo-cache - rails_redis_client - 5m burn-rate
     - emitted by websockets'
@@ -261,17 +261,17 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_exceptions_total{env="pre",storage=~"cluster_repository_cache|repository_cache",type=~"websockets"}[5m] offset 30s)
+        rate(gitlab_redis_client_exceptions_total{env="pre",storage=~"repository_cache",type=~"websockets"}[5m] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{env="pre",storage=~"cluster_repository_cache|repository_cache",type=~"websockets"}[5m] offset 30s)
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{env="pre",storage=~"repository_cache",type=~"websockets"}[5m] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_5m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_total{env="pre",storage=~"cluster_repository_cache|repository_cache",type=~"websockets"}[5m] offset 30s)
+        rate(gitlab_redis_client_requests_total{env="pre",storage=~"repository_cache",type=~"websockets"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: redis-cluster-repo-cache - primary_server - 30m burn-rate'
   interval: 2m
@@ -400,17 +400,17 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_exceptions_total{env="pre",storage=~"cluster_repository_cache|repository_cache",type=~"ai-assisted"}[30m] offset 30s)
+        rate(gitlab_redis_client_exceptions_total{env="pre",storage=~"repository_cache",type=~"ai-assisted"}[30m] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{env="pre",storage=~"cluster_repository_cache|repository_cache",type=~"ai-assisted"}[30m] offset 30s)
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{env="pre",storage=~"repository_cache",type=~"ai-assisted"}[30m] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_total{env="pre",storage=~"cluster_repository_cache|repository_cache",type=~"ai-assisted"}[30m] offset 30s)
+        rate(gitlab_redis_client_requests_total{env="pre",storage=~"repository_cache",type=~"ai-assisted"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: redis-cluster-repo-cache - rails_redis_client - 30m burn-rate
     - emitted by api'
@@ -419,17 +419,17 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_exceptions_total{env="pre",storage=~"cluster_repository_cache|repository_cache",type=~"api"}[30m] offset 30s)
+        rate(gitlab_redis_client_exceptions_total{env="pre",storage=~"repository_cache",type=~"api"}[30m] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{env="pre",storage=~"cluster_repository_cache|repository_cache",type=~"api"}[30m] offset 30s)
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{env="pre",storage=~"repository_cache",type=~"api"}[30m] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_total{env="pre",storage=~"cluster_repository_cache|repository_cache",type=~"api"}[30m] offset 30s)
+        rate(gitlab_redis_client_requests_total{env="pre",storage=~"repository_cache",type=~"api"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: redis-cluster-repo-cache - rails_redis_client - 30m burn-rate
     - emitted by git'
@@ -438,17 +438,17 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_exceptions_total{env="pre",storage=~"cluster_repository_cache|repository_cache",type=~"git"}[30m] offset 30s)
+        rate(gitlab_redis_client_exceptions_total{env="pre",storage=~"repository_cache",type=~"git"}[30m] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{env="pre",storage=~"cluster_repository_cache|repository_cache",type=~"git"}[30m] offset 30s)
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{env="pre",storage=~"repository_cache",type=~"git"}[30m] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_total{env="pre",storage=~"cluster_repository_cache|repository_cache",type=~"git"}[30m] offset 30s)
+        rate(gitlab_redis_client_requests_total{env="pre",storage=~"repository_cache",type=~"git"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: redis-cluster-repo-cache - rails_redis_client - 30m burn-rate
     - emitted by internal-api'
@@ -457,17 +457,17 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_exceptions_total{env="pre",storage=~"cluster_repository_cache|repository_cache",type=~"internal-api"}[30m] offset 30s)
+        rate(gitlab_redis_client_exceptions_total{env="pre",storage=~"repository_cache",type=~"internal-api"}[30m] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{env="pre",storage=~"cluster_repository_cache|repository_cache",type=~"internal-api"}[30m] offset 30s)
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{env="pre",storage=~"repository_cache",type=~"internal-api"}[30m] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_total{env="pre",storage=~"cluster_repository_cache|repository_cache",type=~"internal-api"}[30m] offset 30s)
+        rate(gitlab_redis_client_requests_total{env="pre",storage=~"repository_cache",type=~"internal-api"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: redis-cluster-repo-cache - rails_redis_client - 30m burn-rate
     - emitted by ops-gitlab-net'
@@ -476,17 +476,17 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_exceptions_total{env="pre",storage=~"cluster_repository_cache|repository_cache",type=~"ops-gitlab-net"}[30m] offset 30s)
+        rate(gitlab_redis_client_exceptions_total{env="pre",storage=~"repository_cache",type=~"ops-gitlab-net"}[30m] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{env="pre",storage=~"cluster_repository_cache|repository_cache",type=~"ops-gitlab-net"}[30m] offset 30s)
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{env="pre",storage=~"repository_cache",type=~"ops-gitlab-net"}[30m] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_total{env="pre",storage=~"cluster_repository_cache|repository_cache",type=~"ops-gitlab-net"}[30m] offset 30s)
+        rate(gitlab_redis_client_requests_total{env="pre",storage=~"repository_cache",type=~"ops-gitlab-net"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: redis-cluster-repo-cache - rails_redis_client - 30m burn-rate
     - emitted by sidekiq'
@@ -495,17 +495,17 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_exceptions_total{env="pre",storage=~"cluster_repository_cache|repository_cache",type=~"sidekiq"}[30m] offset 30s)
+        rate(gitlab_redis_client_exceptions_total{env="pre",storage=~"repository_cache",type=~"sidekiq"}[30m] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{env="pre",storage=~"cluster_repository_cache|repository_cache",type=~"sidekiq"}[30m] offset 30s)
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{env="pre",storage=~"repository_cache",type=~"sidekiq"}[30m] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_total{env="pre",storage=~"cluster_repository_cache|repository_cache",type=~"sidekiq"}[30m] offset 30s)
+        rate(gitlab_redis_client_requests_total{env="pre",storage=~"repository_cache",type=~"sidekiq"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: redis-cluster-repo-cache - rails_redis_client - 30m burn-rate
     - emitted by web'
@@ -514,17 +514,17 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_exceptions_total{env="pre",storage=~"cluster_repository_cache|repository_cache",type=~"web"}[30m] offset 30s)
+        rate(gitlab_redis_client_exceptions_total{env="pre",storage=~"repository_cache",type=~"web"}[30m] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{env="pre",storage=~"cluster_repository_cache|repository_cache",type=~"web"}[30m] offset 30s)
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{env="pre",storage=~"repository_cache",type=~"web"}[30m] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_total{env="pre",storage=~"cluster_repository_cache|repository_cache",type=~"web"}[30m] offset 30s)
+        rate(gitlab_redis_client_requests_total{env="pre",storage=~"repository_cache",type=~"web"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: redis-cluster-repo-cache - rails_redis_client - 30m burn-rate
     - emitted by websockets'
@@ -533,17 +533,17 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_exceptions_total{env="pre",storage=~"cluster_repository_cache|repository_cache",type=~"websockets"}[30m] offset 30s)
+        rate(gitlab_redis_client_exceptions_total{env="pre",storage=~"repository_cache",type=~"websockets"}[30m] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{env="pre",storage=~"cluster_repository_cache|repository_cache",type=~"websockets"}[30m] offset 30s)
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{env="pre",storage=~"repository_cache",type=~"websockets"}[30m] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_30m
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_total{env="pre",storage=~"cluster_repository_cache|repository_cache",type=~"websockets"}[30m] offset 30s)
+        rate(gitlab_redis_client_requests_total{env="pre",storage=~"repository_cache",type=~"websockets"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: redis-cluster-repo-cache - primary_server - 1h burn-rate'
   interval: 1m
@@ -672,17 +672,17 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_exceptions_total{env="pre",storage=~"cluster_repository_cache|repository_cache",type=~"ai-assisted"}[1h] offset 30s)
+        rate(gitlab_redis_client_exceptions_total{env="pre",storage=~"repository_cache",type=~"ai-assisted"}[1h] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{env="pre",storage=~"cluster_repository_cache|repository_cache",type=~"ai-assisted"}[1h] offset 30s)
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{env="pre",storage=~"repository_cache",type=~"ai-assisted"}[1h] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_total{env="pre",storage=~"cluster_repository_cache|repository_cache",type=~"ai-assisted"}[1h] offset 30s)
+        rate(gitlab_redis_client_requests_total{env="pre",storage=~"repository_cache",type=~"ai-assisted"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: redis-cluster-repo-cache - rails_redis_client - 1h burn-rate
     - emitted by api'
@@ -691,17 +691,17 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_exceptions_total{env="pre",storage=~"cluster_repository_cache|repository_cache",type=~"api"}[1h] offset 30s)
+        rate(gitlab_redis_client_exceptions_total{env="pre",storage=~"repository_cache",type=~"api"}[1h] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{env="pre",storage=~"cluster_repository_cache|repository_cache",type=~"api"}[1h] offset 30s)
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{env="pre",storage=~"repository_cache",type=~"api"}[1h] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_total{env="pre",storage=~"cluster_repository_cache|repository_cache",type=~"api"}[1h] offset 30s)
+        rate(gitlab_redis_client_requests_total{env="pre",storage=~"repository_cache",type=~"api"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: redis-cluster-repo-cache - rails_redis_client - 1h burn-rate
     - emitted by git'
@@ -710,17 +710,17 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_exceptions_total{env="pre",storage=~"cluster_repository_cache|repository_cache",type=~"git"}[1h] offset 30s)
+        rate(gitlab_redis_client_exceptions_total{env="pre",storage=~"repository_cache",type=~"git"}[1h] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{env="pre",storage=~"cluster_repository_cache|repository_cache",type=~"git"}[1h] offset 30s)
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{env="pre",storage=~"repository_cache",type=~"git"}[1h] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_total{env="pre",storage=~"cluster_repository_cache|repository_cache",type=~"git"}[1h] offset 30s)
+        rate(gitlab_redis_client_requests_total{env="pre",storage=~"repository_cache",type=~"git"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: redis-cluster-repo-cache - rails_redis_client - 1h burn-rate
     - emitted by internal-api'
@@ -729,17 +729,17 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_exceptions_total{env="pre",storage=~"cluster_repository_cache|repository_cache",type=~"internal-api"}[1h] offset 30s)
+        rate(gitlab_redis_client_exceptions_total{env="pre",storage=~"repository_cache",type=~"internal-api"}[1h] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{env="pre",storage=~"cluster_repository_cache|repository_cache",type=~"internal-api"}[1h] offset 30s)
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{env="pre",storage=~"repository_cache",type=~"internal-api"}[1h] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_total{env="pre",storage=~"cluster_repository_cache|repository_cache",type=~"internal-api"}[1h] offset 30s)
+        rate(gitlab_redis_client_requests_total{env="pre",storage=~"repository_cache",type=~"internal-api"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: redis-cluster-repo-cache - rails_redis_client - 1h burn-rate
     - emitted by ops-gitlab-net'
@@ -748,17 +748,17 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_exceptions_total{env="pre",storage=~"cluster_repository_cache|repository_cache",type=~"ops-gitlab-net"}[1h] offset 30s)
+        rate(gitlab_redis_client_exceptions_total{env="pre",storage=~"repository_cache",type=~"ops-gitlab-net"}[1h] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{env="pre",storage=~"cluster_repository_cache|repository_cache",type=~"ops-gitlab-net"}[1h] offset 30s)
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{env="pre",storage=~"repository_cache",type=~"ops-gitlab-net"}[1h] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_total{env="pre",storage=~"cluster_repository_cache|repository_cache",type=~"ops-gitlab-net"}[1h] offset 30s)
+        rate(gitlab_redis_client_requests_total{env="pre",storage=~"repository_cache",type=~"ops-gitlab-net"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: redis-cluster-repo-cache - rails_redis_client - 1h burn-rate
     - emitted by sidekiq'
@@ -767,17 +767,17 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_exceptions_total{env="pre",storage=~"cluster_repository_cache|repository_cache",type=~"sidekiq"}[1h] offset 30s)
+        rate(gitlab_redis_client_exceptions_total{env="pre",storage=~"repository_cache",type=~"sidekiq"}[1h] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{env="pre",storage=~"cluster_repository_cache|repository_cache",type=~"sidekiq"}[1h] offset 30s)
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{env="pre",storage=~"repository_cache",type=~"sidekiq"}[1h] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_total{env="pre",storage=~"cluster_repository_cache|repository_cache",type=~"sidekiq"}[1h] offset 30s)
+        rate(gitlab_redis_client_requests_total{env="pre",storage=~"repository_cache",type=~"sidekiq"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: redis-cluster-repo-cache - rails_redis_client - 1h burn-rate
     - emitted by web'
@@ -786,17 +786,17 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_exceptions_total{env="pre",storage=~"cluster_repository_cache|repository_cache",type=~"web"}[1h] offset 30s)
+        rate(gitlab_redis_client_exceptions_total{env="pre",storage=~"repository_cache",type=~"web"}[1h] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{env="pre",storage=~"cluster_repository_cache|repository_cache",type=~"web"}[1h] offset 30s)
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{env="pre",storage=~"repository_cache",type=~"web"}[1h] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_total{env="pre",storage=~"cluster_repository_cache|repository_cache",type=~"web"}[1h] offset 30s)
+        rate(gitlab_redis_client_requests_total{env="pre",storage=~"repository_cache",type=~"web"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: redis-cluster-repo-cache - rails_redis_client - 1h burn-rate
     - emitted by websockets'
@@ -805,15 +805,15 @@ groups:
   - record: sli_aggregations:gitlab_redis_client_exceptions_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_exceptions_total{env="pre",storage=~"cluster_repository_cache|repository_cache",type=~"websockets"}[1h] offset 30s)
+        rate(gitlab_redis_client_exceptions_total{env="pre",storage=~"repository_cache",type=~"websockets"}[1h] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_duration_seconds_bucket:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,le,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{env="pre",storage=~"cluster_repository_cache|repository_cache",type=~"websockets"}[1h] offset 30s)
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{env="pre",storage=~"repository_cache",type=~"websockets"}[1h] offset 30s)
       )
   - record: sli_aggregations:gitlab_redis_client_requests_total:rate_1h
     expr: |
       sum by (component,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,storage,tier,type) (
-        rate(gitlab_redis_client_requests_total{env="pre",storage=~"cluster_repository_cache|repository_cache",type=~"websockets"}[1h] offset 30s)
+        rate(gitlab_redis_client_requests_total{env="pre",storage=~"repository_cache",type=~"websockets"}[1h] offset 30s)
       )
