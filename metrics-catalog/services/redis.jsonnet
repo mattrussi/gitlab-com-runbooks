@@ -11,7 +11,7 @@ metricsCatalog.serviceDefinition(
     descriptiveName='Persistent Redis',
   )
   {
-    tenants: [ 'gitlab-gprd', 'gitlab-gstg', 'gitlab-pre' ],
+    tenants: ['gitlab-gprd', 'gitlab-gstg', 'gitlab-pre'],
   }
   + redisHelpers.gitlabcomObservabilityToolingForRedis('redis')
   + {
@@ -37,6 +37,30 @@ metricsCatalog.serviceDefinition(
                 // https://gitlab.com/gitlab-com/gl-infra/production/-/issues/17753
                 start: '2024-03-08',
                 end: '2024-03-25',
+              },
+            ],
+          },
+        },
+        {
+          name: 'redis_secondary_cpu',
+          parameters: {
+            ignore_outliers: [
+              {
+                // https://gitlab.com/gitlab-com/gl-infra/production/-/issues/18676
+                start: '2024-10-02',
+                end: '2024-10-09',
+              },
+            ],
+          },
+        },
+        {
+          name: 'redis_cluster_primary_cpu',
+          parameters: {
+            ignore_outliers: [
+              {
+                // https://gitlab.com/gitlab-com/gl-infra/production/-/issues/18676
+                start: '2024-10-02',
+                end: '2024-10-09',
               },
             ],
           },
