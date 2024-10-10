@@ -398,6 +398,8 @@ teams:
   product_stage_group: secret_detection
   slack_error_budget_channel: g_secure-secret-detection
   send_error_budget_weekly_to_slack: true
+  slack_alerts_channel: g_secure-secret-detection
+  send_slo_alerts_to_team_slack_channel: true
 
 - name: pipeline_security
   product_stage_group: pipeline_security

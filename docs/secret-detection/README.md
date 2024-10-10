@@ -6,6 +6,7 @@
 
 # Detects secret leaks in the given payloads Service
 
+* [Service Overview](https://dashboards.gitlab.net/d/secret-detection-main/secret-detection3a-overview)
 * **Alerts**: <https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22secret-detection%22%2C%20tier%3D%22sv%22%7D>
 * **Label**: gitlab-com/gl-infra/production~"Service::SecretDetection"
 
