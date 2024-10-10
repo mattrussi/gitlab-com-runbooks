@@ -118,12 +118,12 @@ groups:
       (
         (
           gitlab_component_apdex:ratio_1h{component="rails_cache",env="gstg",monitor="global",type="redis-cluster-repo-cache"}
-          < (1 - 14.4 * 0.000500)
+          < (1 - 14.4 * 0.000100)
         )
         and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_apdex:ratio_5m{component="rails_cache",env="gstg",monitor="global",type="redis-cluster-repo-cache"}
-          < (1 - 14.4 * 0.000500)
+          < (1 - 14.4 * 0.000100)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -170,12 +170,12 @@ groups:
       (
         (
           gitlab_component_apdex:ratio_6h{component="rails_cache",env="gstg",monitor="global",type="redis-cluster-repo-cache"}
-          < (1 - 6 * 0.000500)
+          < (1 - 6 * 0.000100)
         )
         and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_apdex:ratio_30m{component="rails_cache",env="gstg",monitor="global",type="redis-cluster-repo-cache"}
-          < (1 - 6 * 0.000500)
+          < (1 - 6 * 0.000100)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -296,12 +296,12 @@ groups:
       (
         (
           gitlab_component_apdex:ratio_1h{component="rails_redis_client",env="gstg",monitor="global",type="redis-cluster-repo-cache"}
-          < (1 - 14.4 * 0.000500)
+          < (1 - 14.4 * 0.000100)
         )
         and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_apdex:ratio_5m{component="rails_redis_client",env="gstg",monitor="global",type="redis-cluster-repo-cache"}
-          < (1 - 14.4 * 0.000500)
+          < (1 - 14.4 * 0.000100)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -348,12 +348,12 @@ groups:
       (
         (
           gitlab_component_apdex:ratio_6h{component="rails_redis_client",env="gstg",monitor="global",type="redis-cluster-repo-cache"}
-          < (1 - 6 * 0.000500)
+          < (1 - 6 * 0.000100)
         )
         and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_apdex:ratio_30m{component="rails_redis_client",env="gstg",monitor="global",type="redis-cluster-repo-cache"}
-          < (1 - 6 * 0.000500)
+          < (1 - 6 * 0.000100)
         )
       )
       and on(env,environment,tier,type,stage,component)
