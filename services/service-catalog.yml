@@ -2694,4 +2694,4 @@ services:
           permalink: https://console.cloud.google.com/run/detail/us-east1/secret-detection/logs?project=gitlab-runway-production
     observability:
       monitors:
-        primary_grafana_dashboard:
+        primary_grafana_dashboard: secret-detection-main/secret-detection3a-overview
