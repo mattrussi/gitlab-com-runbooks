@@ -88,7 +88,7 @@ To add an IP to the RackAttack allowlist:
 - Create a MR to remove the old secret version from our k8s deployment. Example MR:
   <https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-com/-/merge_requests/3058>
 
-### HaProxy
+### HAProxy
 
 HAProxy is responsible for handling the `X-GitLab-Rate-Limit-Bypass` header. This header allows for a configured list of IP addresses to bypass rate limits.
 
