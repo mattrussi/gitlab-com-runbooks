@@ -9,7 +9,7 @@ groups:
       monitor: global
       tier: db
       type: redis-cluster-repo-cache
-    expr: "0.999500"
+    expr: "0.999900"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       monitor: global
@@ -22,7 +22,7 @@ groups:
       monitor: global
       tier: db
       type: redis-cluster-repo-cache
-    expr: "0.999500"
+    expr: "0.999900"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: primary_server
@@ -36,7 +36,7 @@ groups:
       monitor: global
       tier: db
       type: redis-cluster-repo-cache
-    expr: "0.999500"
+    expr: "0.999900"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: rails_cache
@@ -50,7 +50,7 @@ groups:
       monitor: global
       tier: db
       type: redis-cluster-repo-cache
-    expr: "0.999500"
+    expr: "0.999900"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: rails_redis_client
@@ -64,7 +64,7 @@ groups:
       monitor: global
       tier: db
       type: redis-cluster-repo-cache
-    expr: "0.999500"
+    expr: "0.999900"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: secondary_servers

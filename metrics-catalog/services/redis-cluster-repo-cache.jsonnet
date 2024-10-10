@@ -17,7 +17,7 @@ metricsCatalog.serviceDefinition(
   {
     tenants: ['gitlab-gprd', 'gitlab-gstg', 'gitlab-pre'],
     monitoringThresholds+: {
-      apdexScore: 0.9995,
+      apdexScore: 0.9999,
     },
     serviceLevelIndicators+: {
       rails_cache: {
