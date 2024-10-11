@@ -33,7 +33,7 @@ local layout = import 'grafana/layout.libsonnet';
         title='p95 Latency Estimate',
         description='95th percentile Latency. Lower is better',
         query=|||
-          histogram_quantile(0.90,
+          histogram_quantile(0.95,
             sum(job_environment:gitlab_transaction_duration_seconds_bucket:rate5m{
               environment="$environment",
               type="%(serviceType)s",
