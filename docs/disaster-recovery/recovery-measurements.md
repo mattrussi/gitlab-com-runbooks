@@ -80,4 +80,5 @@ Ideally, this measurement is designed to inform the overall flow and duration of
 
 | Date | Environment | Duration | Notes |
 | ---- | ----------- | -------- | ----- |
+| 2024-10-10 | GSTG | 01:30:00 | [Game Day change issue on GSTG](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/18662). First time run by a non-Ops team member |
 | 2024-08-14 | GSTG | 00:53:00 | [Game Day change issue on GSTG](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/18356) |
