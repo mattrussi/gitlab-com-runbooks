@@ -16,35 +16,32 @@ This page explains how to investigate Duo Chat issues on production.
 
 - Dashboard:
   - [Kibana based dashboard](https://log.gprd.gitlab.net/app/r/s/ngzVp)
-  - Prometheus based dashboard ... TBD
+  - Prometheus based dashboard ... [TBD](https://gitlab.com/gitlab-org/gitlab/-/issues/493174)
+  - [Evaluation by Prompt Library on staging environment](https://lookerstudio.google.com/u/0/reporting/151b233a-d6ad-413a-9ebf-ea6efbf5387b)
+  - [Error budget dashboard](https://dashboards.gitlab.net/d/stage-groups-detail-duo_chat/6c28d63a-60e8-5db3-9797-39f988a1900b?orgId=1)
 - GitLab-Rails:
   - [GitLab Rails GraphQL log (Chat)](https://log.gprd.gitlab.net/app/r/s/qaxwx)
 - GitLab-Sidekiq:
-  - [GitLab Sidekiq worker log](https://log.gprd.gitlab.net/app/r/s/8PKAT)
+  - [GitLab Sidekiq worker log](https://log.gprd.gitlab.net/app/r/s/CaUYv)
   - [GitLab Sidekiq LLM log](https://log.gprd.gitlab.net/app/r/s/vZlVW)
   - [LLM Completion worker](https://dashboards.gitlab.net/d/sidekiq-worker-detail/sidekiq3a-worker-detail?orgId=1&var-PROMETHEUS_DS=mimir-gitlab-gprd&var-environment=gprd&var-stage=main&var-worker=Llm::CompletionWorker)
-- [Duo Chat specific error codes](#duo-chat-specific-error-codes)
-  - [Logs](https://log.gprd.gitlab.net/app/r/s/8VwIT)
+  - [Duo Chat specific error codes](https://log.gprd.gitlab.net/app/r/s/eeO5a)
 - Redis:
   - [Redis Chat Storage](https://dashboards.gitlab.net/d/redis-cluster-chat-cache-main/redis-cluster-chat-cache3a-overview?orgId=1)
 - AI Gateway:
   - [AI Gateway log (Duo Chat)](https://log.gprd.gitlab.net/app/r/s/DhMe1)
-  - [AI Gateway log (Error requests)](https://log.gprd.gitlab.net/app/r/s/xHtJB)
-  - [AI Gateway log (Exceptions)](https://log.gprd.gitlab.net/app/r/s/c3BRR)
+  - [AI Gateway log (Request errors)](https://log.gprd.gitlab.net/app/r/s/xdtM7)
   - [AI Gateway metrics (Chat SLI)](https://dashboards.gitlab.net/d/ai-gateway-main/ai-gateway3a-overview?orgId=1)
   - [Runway AI Gateway metrics](https://dashboards.gitlab.net/d/runway-service/runway3a-runway-service-metrics?orgId=1)
-  - [V1 vs V2 request volumes](https://log.gprd.gitlab.net/app/r/s/uvDXu)
-  - [V1 vs V2 request errors](https://log.gprd.gitlab.net/app/r/s/T2sZj)
-  - [V1 vs V2 request duration](https://log.gprd.gitlab.net/app/r/s/B3Lg7)
 - Anthropic APIs:
-  - We'll have [a SLI/SLO dashboard for our Anthrpic usage](https://gitlab.com/gitlab-org/modelops/applied-ml/code-suggestions/ai-assist/-/issues/631).
-  - In the meantime, we use the [Anthropic API Status Page](https://status.anthropic.com/).
-     Since this contains entire Anthropic system operational status, it could be unrelated to our usage.
+  - SLI/SLO dashboard ... [TBD](https://gitlab.com/gitlab-org/modelops/applied-ml/code-suggestions/ai-assist/-/issues/631)
+  - [Anthropic API Status Page](https://status.anthropic.com/)
+    (NOTE: This displays entire Anthropic system operational status, which might be unrelated to our workload)
 - Others:
-  - [Error budget dashboard](https://dashboards.gitlab.net/d/stage-groups-detail-duo_chat/6c28d63a-60e8-5db3-9797-39f988a1900b?orgId=1)
   - [Kibana](https://log.gitlab.net/app/kibana)
   - [Prometheus](https://dashboards.gitlab.net/goto/hrMaiq3SR?orgId=1)
   - [Tableau (Duo Chat usage)](https://10az.online.tableau.com/#/site/gitlab/views/AiFeatures/DuoChatCRM?:iid=1)
+  - [Tableau (Unit primitives)](https://10az.online.tableau.com/#/site/gitlab/views/AIGatewayReporting/Overview?:iid=1)
 
 ## Before start investigation
 
