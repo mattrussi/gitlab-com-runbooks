@@ -17,7 +17,7 @@ This page explains how to investigate Duo Chat issues on production.
 - Dashboard:
   - [Kibana based dashboard](https://log.gprd.gitlab.net/app/r/s/ngzVp)
   - Prometheus based dashboard ... [TBD](https://gitlab.com/gitlab-org/gitlab/-/issues/493174)
-  - [Evaluation by Prompt Library on staging environment](https://lookerstudio.google.com/u/0/reporting/151b233a-d6ad-413a-9ebf-ea6efbf5387b)
+  - [Evaluation by Prompt Library](https://lookerstudio.google.com/u/0/reporting/151b233a-d6ad-413a-9ebf-ea6efbf5387b)
   - [Error budget dashboard](https://dashboards.gitlab.net/d/stage-groups-detail-duo_chat/6c28d63a-60e8-5db3-9797-39f988a1900b?orgId=1)
 - GitLab-Rails:
   - [GitLab Rails GraphQL log (Chat)](https://log.gprd.gitlab.net/app/r/s/qaxwx)
