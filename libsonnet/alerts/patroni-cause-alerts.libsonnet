@@ -193,8 +193,8 @@ local rules(extraSelector={}, tenant=null) = {
         alerts.processAlertRule({
           alert: 'PatroniLongRunningTransactionDetected',
           expr: |||
-            topk by (environment, type, stage, shard) (1,
-              max by (environment, type, stage, shard, application, endpoint, fqdn) (
+            topk by (environment, env, type, stage, shard) (1,
+              max by (environment, env, type, stage, shard, application, endpoint, fqdn) (
                 pg_stat_activity_marginalia_sampler_max_tx_age_in_seconds{%(selector)s}
               )
               > 540
