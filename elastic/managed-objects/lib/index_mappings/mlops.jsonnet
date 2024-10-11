@@ -603,6 +603,10 @@
             variants: {
               type: 'long',
             },
+            request_content_json: {
+              type: 'object',
+              enabled: false,
+            },
           },
         },
         labels: {
