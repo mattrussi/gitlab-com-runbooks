@@ -189,6 +189,63 @@ groups:
       predict_linear(gitlab_component_saturation:ratio{component="disk_inodes",env="gprd",type="redis-tracechunks"}[6h], 21600)
       > on (component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="disk_inodes"}
+  - alert: component_saturation_slo_out_of_bounds:disk_maximum_capacity
+    for: 5m
+    annotations:
+      title: The Maximum per-disk capacity resource of the {{ $labels.type }} service
+        ({{ $labels.stage }} stage) has a saturation exceeding SLO and is close to
+        its capacity limit.
+      description: |
+        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
+
+        Details of the Maximum per-disk capacity resource:
+
+        The maximum capacity for a single disk can be limited by the cloud provider. This tracks the saturation as a ratio of the storage utilization to the maximum size limit enforced per disk.
+
+        In order to resolve a saturation alert, storage needed on a single disk needs to be reduced. Possible ways of doing this include reducing utilization overall or partitioning data across multiple disks.
+
+        (64*2^40) = 64TiB is the maximum value for many types of GCP disks, see https://cloud.google.com/compute/docs/disks#introduction.
+      grafana_dashboard_id: alerts-sat_gcp_maximum_disk_capacity
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_gcp_maximum_disk_capacity?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}
+      grafana_datasource_id: mimir-gitlab-gprd
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "1042809451"
+      grafana_variables: environment,type,stage
+      promql_query: |
+        max by(environment, tier, type, stage, shard, fqdn, device) (
+          clamp_min(
+            clamp_max(
+              max by (environment, tier, type, stage, shard, fqdn, device) (
+                node_filesystem_size_bytes{fstype=~"ext.|xfs", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"} - node_filesystem_avail_bytes{fstype=~"ext.|xfs", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
+              ) / (64*2^40)
+              ,
+              1)
+          ,
+          0)
+        )
+      promql_template_1: |
+        max by(environment, tier, type, stage, shard, fqdn, device) (
+          clamp_min(
+            clamp_max(
+              max by (environment, tier, type, stage, shard, fqdn, device) (
+                node_filesystem_size_bytes{fstype=~"ext.|xfs", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"} - node_filesystem_avail_bytes{fstype=~"ext.|xfs", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
+              ) / (64*2^40)
+              ,
+              1)
+          ,
+          0)
+        )
+      runbook: docs/{{ $labels.type }}/README.md
+    labels:
+      alert_type: cause
+      pager: pagerduty
+      rules_domain: general
+      severity: s1
+    expr: |
+      gitlab_component_saturation:ratio{component="disk_maximum_capacity",env="gprd",type="redis-tracechunks"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="disk_maximum_capacity"}
   - alert: component_saturation_slo_out_of_bounds:disk_space
     for: 15m
     annotations:
