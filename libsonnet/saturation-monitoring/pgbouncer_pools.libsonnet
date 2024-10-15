@@ -15,6 +15,7 @@ local pgbouncerAsyncPool(tag, role) =
     ||| % { role: role },
     grafana_dashboard_uid: 'sat_pgbouncer_async_pool_' + role,
     resourceLabels: ['fqdn', 'instance'],
+    extraMaxAggregationLabels: ['database'],
     burnRatePeriod: '5m',
     query: |||
       (

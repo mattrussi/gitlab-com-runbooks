@@ -67,7 +67,7 @@ local definitionValidor = validator.new({
     soft: sloValidator,
     hard: sloValidator,
   },
-  useResourceLabelsAsMaxAggregationLabels: validator.boolean,
+  extraMaxAggregationLabels: validator.array,
 });
 
 local simpleDefaults = {
@@ -76,7 +76,7 @@ local simpleDefaults = {
   dangerouslyThanosEvaluated: false,
   quantileAggregation: 'max',
   linear_prediction_saturation_alert: null,  // No linear interpolation by default
-  useResourceLabelsAsMaxAggregationLabels: false,
+  extraMaxAggregationLabels: [],
 };
 
 local nestedDefaults = {
@@ -320,7 +320,7 @@ local resourceSaturationPoint = function(options)
         local query = definition.getQuery(
           selectorHash,
           definition.getBurnRatePeriod(),
-          maxAggregationLabels=if definition.useResourceLabelsAsMaxAggregationLabels then definition.resourceLabels else [],
+          maxAggregationLabels=definition.extraMaxAggregationLabels,
           extraStaticLabels=staticLabels
         );
 
