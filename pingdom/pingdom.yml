@@ -327,7 +327,7 @@ checks:
     notify_when_restored: true
     tags:
       - http-router
-      - api-gitlab
+      - api
     teams:
       - Infrastructure
 
@@ -337,17 +337,7 @@ checks:
     notify_when_restored: true
     tags:
       - http-router
-      - web-gitlab
-    teams:
-      - Infrastructure
-
-  - url: https://gitlab.com/giltab-org/gitlab.git
-    timeout_ms: 20000
-    resolution_minutes: 5
-    notify_when_restored: true
-    tags:
-      - http-router
-      - gitlab
+      - web
     teams:
       - Infrastructure
 
@@ -357,17 +347,7 @@ checks:
     notify_when_restored: true
     tags:
       - http-router
-      - web-user
-    teams:
-      - Infrastructure
-
-  - url: https://gitlab.com/tkhandelwal3
-    timeout_ms: 20000
-    resolution_minutes: 5
-    notify_when_restored: true
-    tags:
-      - http-router
-      - web-user
+      - web
     teams:
       - Infrastructure
 
@@ -377,6 +357,6 @@ checks:
     notify_when_restored: true
     tags:
       - http-router
-      - test-git-repo
+      - web
     teams:
       - Infrastructure
