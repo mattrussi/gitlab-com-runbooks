@@ -483,7 +483,7 @@ groups:
       grafana_panel_id: "172578411"
       grafana_variables: type
       promql_query: |
-        max by(type) (
+        max by(type, deployment) (
           clamp_min(
             clamp_max(
               container_memory_working_set_bytes:labeled{container!="", container!="POD", type="{{ $labels.type }}"}
@@ -495,7 +495,7 @@ groups:
           0)
         )
       promql_template_1: |
-        max by(type) (
+        max by(type, deployment) (
           clamp_min(
             clamp_max(
               container_memory_working_set_bytes:labeled{container!="", container!="POD", type="{{ $labels.type }}"}

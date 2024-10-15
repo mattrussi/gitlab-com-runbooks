@@ -108,7 +108,7 @@ groups:
       component: kube_container_cpu_limit
     record: gitlab_component_saturation:ratio
   - expr: |
-      max by(type) (
+      max by(type, deployment) (
         clamp_min(
           clamp_max(
             container_memory_working_set_bytes:labeled{container!="", container!="POD", type=~"consul|gitlab-shell|registry"}
