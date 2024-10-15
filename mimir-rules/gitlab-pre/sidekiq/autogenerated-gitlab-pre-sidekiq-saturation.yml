@@ -104,9 +104,9 @@ groups:
       max by(env, environment, tier, type, stage, shard) (
         clamp_min(
           clamp_max(
-            kube_horizontalpodautoscaler_status_desired_replicas:labeled{env="pre",type="sidekiq", shard!~"database-throttled|elasticsearch|gitaly-throttled|urgent-authorized-projects", namespace!~"pubsubbeat"}
+            kube_horizontalpodautoscaler_status_desired_replicas:labeled{env="pre",type="sidekiq", shard!~"ai-abstraction-layer|database-throttled|elasticsearch|gitaly-throttled|urgent-authorized-projects", namespace!~"pubsubbeat"}
             /
-            kube_horizontalpodautoscaler_spec_max_replicas:labeled{env="pre",type="sidekiq", shard!~"database-throttled|elasticsearch|gitaly-throttled|urgent-authorized-projects", namespace!~"pubsubbeat"}
+            kube_horizontalpodautoscaler_spec_max_replicas:labeled{env="pre",type="sidekiq", shard!~"ai-abstraction-layer|database-throttled|elasticsearch|gitaly-throttled|urgent-authorized-projects", namespace!~"pubsubbeat"}
             ,
             1)
         ,
@@ -162,11 +162,11 @@ groups:
         clamp_min(
           clamp_max(
             sum by (env, environment, tier, type, stage, shard, shard) (
-              avg_over_time(sidekiq_running_jobs{shard!~"database-throttled|elasticsearch|gitaly-throttled|urgent-authorized-projects", env="pre",type="sidekiq"}[5m])
+              avg_over_time(sidekiq_running_jobs{shard!~"ai-abstraction-layer|database-throttled|elasticsearch|gitaly-throttled|urgent-authorized-projects", env="pre",type="sidekiq"}[5m])
             )
             /
             sum by (env, environment, tier, type, stage, shard, shard) (
-              avg_over_time(sidekiq_concurrency{shard!~"database-throttled|elasticsearch|gitaly-throttled|urgent-authorized-projects", env="pre",type="sidekiq"}[5m])
+              avg_over_time(sidekiq_concurrency{shard!~"ai-abstraction-layer|database-throttled|elasticsearch|gitaly-throttled|urgent-authorized-projects", env="pre",type="sidekiq"}[5m])
             )
             ,
             1)
@@ -198,11 +198,11 @@ groups:
         clamp_min(
           clamp_max(
             sum by (environment, tier, type, stage, shard, shard) (
-              avg_over_time(sidekiq_running_jobs{shard!~"database-throttled|elasticsearch|gitaly-throttled|urgent-authorized-projects", env="pre",type="sidekiq"}[5m])
+              avg_over_time(sidekiq_running_jobs{shard!~"ai-abstraction-layer|database-throttled|elasticsearch|gitaly-throttled|urgent-authorized-projects", env="pre",type="sidekiq"}[5m])
             )
             /
             sum by (environment, tier, type, stage, shard, shard) (
-              avg_over_time(sidekiq_concurrency{shard!~"database-throttled|elasticsearch|gitaly-throttled|urgent-authorized-projects", env="pre",type="sidekiq"}[5m])
+              avg_over_time(sidekiq_concurrency{shard!~"ai-abstraction-layer|database-throttled|elasticsearch|gitaly-throttled|urgent-authorized-projects", env="pre",type="sidekiq"}[5m])
             )
             ,
             1)

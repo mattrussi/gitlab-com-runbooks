@@ -48,8 +48,6 @@ configuration choices:
 * Modify the necessary items in [runbooks] to ensure the new shard will have it's
   own dedicated metrics.  Includes at least the following:
   * Add an entry in `shards` in [metrics-catalog/services/lib/sidekiq-helpers.libsonnet](https://gitlab.com/gitlab-com/runbooks/-/blob/master/metrics-catalog/services/lib/sidekiq-helpers.libsonnet)
-  * Add a line to `services` in [dashboards/delivery/k8s_migration_overview.dashboard.jsonnet](https://gitlab.com/gitlab-com/runbooks/-/blob/master/dashboards/delivery/k8s_migration_overview.dashboard.jsonnet)
-  * Here is [an example of how to add a new service shard](https://gitlab.com/gitlab-com/runbooks/-/merge_requests/4773/diffs).
 * Modify the necessary items in [k8s-workloads/gitlab-helmfiles] such that logging is configured for the new shard.
   * Add a new section in [`lib/fluentd/logging-config.yaml`](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/tanka-deployments/-/blob/master/lib/fluentd/logging-config.yaml).
     * Here is [an example of how to add new logging configuration for a shard](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/tanka-deployments/-/merge_requests/440/diffs).
