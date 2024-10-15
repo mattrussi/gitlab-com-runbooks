@@ -5,6 +5,7 @@
   import 'saturation-monitoring/cloudsql_memory.libsonnet',
   import 'saturation-monitoring/cpu.libsonnet',
   import 'saturation-monitoring/disk_inodes.libsonnet',
+  import 'saturation-monitoring/disk_maximum_capacity.libsonnet',
   import 'saturation-monitoring/disk_space.libsonnet',
   import 'saturation-monitoring/disk_sustained_read_iops.libsonnet',
   import 'saturation-monitoring/disk_sustained_read_throughput.libsonnet',

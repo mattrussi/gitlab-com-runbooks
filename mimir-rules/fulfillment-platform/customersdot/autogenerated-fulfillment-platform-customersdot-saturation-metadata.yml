@@ -22,6 +22,14 @@ groups:
     expr: "0.8"
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:
+      component: disk_maximum_capacity
+    expr: "0.7"
+  - record: slo:max:hard:gitlab_component_saturation:ratio
+    labels:
+      component: disk_maximum_capacity
+    expr: "0.95"
+  - record: slo:max:soft:gitlab_component_saturation:ratio
+    labels:
       component: disk_space
     expr: "0.85"
   - record: slo:max:hard:gitlab_component_saturation:ratio

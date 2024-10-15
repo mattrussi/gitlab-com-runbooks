@@ -38,6 +38,21 @@ groups:
       )
   - record: gitlab_component_saturation:ratio
     labels:
+      component: disk_maximum_capacity
+    expr: |
+      max by(env, environment, tier, type, stage, shard) (
+        clamp_min(
+          clamp_max(
+            max by (env, environment, tier, type, stage, shard, fqdn, device) (
+              node_filesystem_size_bytes{fstype=~"ext.|xfs", env="gstg",type="patroni-registry"} - node_filesystem_avail_bytes{fstype=~"ext.|xfs", env="gstg",type="patroni-registry"}
+            ) / (64*2^40)
+            ,
+            1)
+        ,
+        0)
+      )
+  - record: gitlab_component_saturation:ratio
+    labels:
       component: disk_space
     expr: |
       max by(env, environment, tier, type, stage, shard) (
