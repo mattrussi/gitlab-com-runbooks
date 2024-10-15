@@ -562,9 +562,9 @@ groups:
         max by(environment, tier, type, stage, shard, horizontalpodautoscaler, shard) (
           clamp_min(
             clamp_max(
-              kube_horizontalpodautoscaler_status_desired_replicas:labeled{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}", shard!~"database-throttled|elasticsearch|gitaly-throttled|urgent-authorized-projects", namespace!~"pubsubbeat"}
+              kube_horizontalpodautoscaler_status_desired_replicas:labeled{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}", shard!~"ai-abstraction-layer|database-throttled|elasticsearch|gitaly-throttled|urgent-authorized-projects", namespace!~"pubsubbeat"}
               /
-              kube_horizontalpodautoscaler_spec_max_replicas:labeled{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}", shard!~"database-throttled|elasticsearch|gitaly-throttled|urgent-authorized-projects", namespace!~"pubsubbeat"}
+              kube_horizontalpodautoscaler_spec_max_replicas:labeled{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}", shard!~"ai-abstraction-layer|database-throttled|elasticsearch|gitaly-throttled|urgent-authorized-projects", namespace!~"pubsubbeat"}
               ,
               1)
           ,
@@ -574,9 +574,9 @@ groups:
         max by(environment, tier, type, stage, shard, horizontalpodautoscaler, shard) (
           clamp_min(
             clamp_max(
-              kube_horizontalpodautoscaler_status_desired_replicas:labeled{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}", shard!~"database-throttled|elasticsearch|gitaly-throttled|urgent-authorized-projects", namespace!~"pubsubbeat"}
+              kube_horizontalpodautoscaler_status_desired_replicas:labeled{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}", shard!~"ai-abstraction-layer|database-throttled|elasticsearch|gitaly-throttled|urgent-authorized-projects", namespace!~"pubsubbeat"}
               /
-              kube_horizontalpodautoscaler_spec_max_replicas:labeled{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}", shard!~"database-throttled|elasticsearch|gitaly-throttled|urgent-authorized-projects", namespace!~"pubsubbeat"}
+              kube_horizontalpodautoscaler_spec_max_replicas:labeled{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}", shard!~"ai-abstraction-layer|database-throttled|elasticsearch|gitaly-throttled|urgent-authorized-projects", namespace!~"pubsubbeat"}
               ,
               1)
           ,
