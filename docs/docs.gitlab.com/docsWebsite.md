@@ -31,14 +31,8 @@ are a few scripts that connect to third-party services.
 
 The Docs website runs analytics scripts from third-party sites such as OneTrust,
 Google Tag Manager, and Marketo.
-Issues with these scripts can interfere with website functionality and can occur without
-code changes to the Docs website.
 
-In the event of an analytics-related problem, all of these scripts can be temporarily removed:
-
-- Comment-out or remove scripts from [`analytics.html`](https://gitlab.com/gitlab-org/gitlab-docs/-/blob/main/layouts/analytics.html?ref_type=heads).
-- If needed, remove OneTrust (cookie consent provider) from [`head.html`](https://gitlab.com/gitlab-org/gitlab-docs/-/blob/main/layouts/head.html?ref_type=heads#L78).
-  - For data privacy compliance, if we need to remove OneTrust, all other analytics scripts should also be removed.
+In the event of an analytics-related problem, these scripts can be temporarily removed.
 
 See [Docs site analytics](https://gitlab.com/gitlab-org/gitlab-docs/-/blob/main/doc/analytics.md?ref_type=heads) for more details.
 
@@ -58,7 +52,7 @@ The primary docs website, `docs.gitlab.com`, is monitored for uptime with a blac
 
 - [GitLab Docs project](https://gitlab.com/gitlab-org/gitlab-docs)
 - [Docs Archives project](https://gitlab.com/gitlab-org/gitlab-docs-archives)
-- [Docs site infrastructure](https://gitlab.com/gitlab-org/gitlab-docs/-/blob/main/doc/infrastructure.md?ref_type=heads)
+- [Docs site infrastructure and escalation guidance](https://gitlab.com/gitlab-org/gitlab-docs/-/blob/main/doc/infrastructure.md?ref_type=heads)
 - [Docs site architecture](https://gitlab.com/gitlab-org/gitlab-docs/-/blob/main/doc/architecture.md?ref_type=heads)
 - [Docs site analytics](https://gitlab.com/gitlab-org/gitlab-docs/-/blob/main/doc/analytics.md?ref_type=heads)
 - [Docs site search](https://gitlab.com/gitlab-org/gitlab-docs/-/blob/main/doc/search.md?ref_type=heads)
