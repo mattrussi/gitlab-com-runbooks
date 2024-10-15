@@ -20,8 +20,8 @@ local servicesUsingRssSaturationMonitoring = std.set((import './kube_container_r
       instead of being OOM killed.
     |||,
     grafana_dashboard_uid: 'sat_kube_container_memory',
-    resourceLabels: [],
-    // burnRatePeriod: '5m',
+    resourceLabels: ['deployment'],
+    useResourceLabelsAsMaxAggregationLabels: true,
     query: |||
       container_memory_working_set_bytes:labeled{container!="", container!="POD", %(selector)s}
       /
@@ -31,6 +31,13 @@ local servicesUsingRssSaturationMonitoring = std.set((import './kube_container_r
       soft: 0.80,
       hard: 0.90,
       alertTriggerDuration: '15m',
+    },
+    capacityPlanning: {
+      saturation_dimension_dynamic_lookup_query: |||
+        count by(deployment) (
+          last_over_time(container_memory_working_set_bytes:labeled{container!="|POD"}[1w])
+        )
+      |||,
     },
   }),
 }

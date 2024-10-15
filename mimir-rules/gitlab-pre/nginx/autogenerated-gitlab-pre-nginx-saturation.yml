@@ -54,7 +54,7 @@ groups:
     labels:
       component: kube_container_memory
     expr: |
-      max by(env, environment, tier, type, stage, shard) (
+      max by(env, environment, tier, type, stage, shard, deployment) (
         clamp_min(
           clamp_max(
             container_memory_working_set_bytes:labeled{container!="", container!="POD", env="pre",type="nginx"}
