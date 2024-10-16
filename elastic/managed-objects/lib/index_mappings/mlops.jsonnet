@@ -603,6 +603,9 @@
             variants: {
               type: 'long',
             },
+            request_content_json: {
+              type: 'flattened'
+            },
           },
         },
         labels: {
