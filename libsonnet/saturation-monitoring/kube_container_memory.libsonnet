@@ -35,7 +35,7 @@ local servicesUsingRssSaturationMonitoring = std.set((import './kube_container_r
     capacityPlanning: {
       saturation_dimension_dynamic_lookup_query: |||
         count by(deployment) (
-          last_over_time(container_memory_working_set_bytes:labeled{container!="|POD"}[1w])
+          last_over_time(container_memory_working_set_bytes:labeled{deployment!="", %(selector)s}[1w:1d] @ end())
         )
       |||,
     },
