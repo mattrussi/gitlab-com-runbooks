@@ -170,7 +170,7 @@
         "changepoints_count": 25,
         "forecast_days": 90,
         "historical_days": 365,
-        "saturation_dimension_dynamic_lookup_query": "count by(deployment) (\n  last_over_time(container_memory_working_set_bytes:labeled{container!=\"|POD\"}[1w])\n)\n",
+        "saturation_dimension_dynamic_lookup_query": "count by(deployment) (\n  last_over_time(container_memory_working_set_bytes:labeled{deployment!=\"\", %(selector)s}[1w:1d] @ end())\n)\n",
         "strategy": "quantile95_1h"
       },
       "description": "This uses the working set size from cAdvisor for the cgroup's memory usage. That may\nnot be a good measure as it includes filesystem cache pages that are not necessarily\nattributable to the application inside the cgroup, and are permitted to be evicted\ninstead of being OOM killed.\n",
