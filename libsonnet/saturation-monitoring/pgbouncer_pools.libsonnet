@@ -1,5 +1,6 @@
 local resourceSaturationPoint = (import 'servicemetrics/metrics.libsonnet').resourceSaturationPoint;
 local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
+local aggregations = import 'promql/aggregations.libsonnet';
 
 local pgbouncerAsyncPool(tag, role) =
   resourceSaturationPoint({
@@ -14,7 +15,8 @@ local pgbouncerAsyncPool(tag, role) =
       database operations may queue, leading to additional latency in background processing.
     ||| % { role: role },
     grafana_dashboard_uid: 'sat_pgbouncer_async_pool_' + role,
-    resourceLabels: ['fqdn', 'instance'],
+    resourceLabels: ['fqdn', 'instance', 'database'],
+    useResourceLabelsAsMaxAggregationLabels: true,
     burnRatePeriod: '5m',
     query: |||
       (
@@ -23,11 +25,14 @@ local pgbouncerAsyncPool(tag, role) =
         avg_over_time(pgbouncer_pools_server_used_connections{user="gitlab", database=~"gitlabhq_production_sidekiq.*", %(selector)s}[%(rangeInterval)s]) +
         avg_over_time(pgbouncer_pools_server_login_connections{user="gitlab", database=~"gitlabhq_production_sidekiq.*", %(selector)s}[%(rangeInterval)s])
       )
-      / on(%(aggregationLabels)s) group_left()
+      / on(%(matcherLabels)s) group_left()
       sum by (%(aggregationLabels)s) (
         avg_over_time(pgbouncer_databases_pool_size{name=~"gitlabhq_production_sidekiq.*", %(selector)s}[%(rangeInterval)s])
       )
     |||,
+    queryFormatConfig: {
+      matcherLabels: aggregations.join(['environment', 'tier', 'type', 'stage', 'shard', 'fqdn']),
+    },
     slos: {
       soft: 0.90,
       hard: 0.95,
