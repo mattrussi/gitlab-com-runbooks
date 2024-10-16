@@ -25,14 +25,14 @@ local pgbouncerAsyncPool(tag, role) =
         avg_over_time(pgbouncer_pools_server_used_connections{user="gitlab", database=~"gitlabhq_production_sidekiq.*", %(selector)s}[%(rangeInterval)s]) +
         avg_over_time(pgbouncer_pools_server_login_connections{user="gitlab", database=~"gitlabhq_production_sidekiq.*", %(selector)s}[%(rangeInterval)s])
       )
-      / on(%(matcherLabels)s) group_left()
+      / on(%(aggregationLabels)s) group_left()
       sum by (%(aggregationLabels)s) (
-        avg_over_time(pgbouncer_databases_pool_size{name=~"gitlabhq_production_sidekiq.*", %(selector)s}[%(rangeInterval)s])
+        label_replace(
+          avg_over_time(pgbouncer_databases_pool_size{name=~"gitlabhq_production_sidekiq.*", %(selector)s}[%(rangeInterval)s]),
+          "database", "$1", "name", "(.*)"
+        )
       )
     |||,
-    queryFormatConfig: {
-      matcherLabels: aggregations.join(['environment', 'tier', 'type', 'stage', 'shard', 'fqdn']),
-    },
     slos: {
       soft: 0.90,
       hard: 0.95,
