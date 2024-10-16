@@ -604,8 +604,7 @@
               type: 'long',
             },
             request_content_json: {
-              type: 'object',
-              enabled: false,
+              type: 'flattened'
             },
           },
         },
