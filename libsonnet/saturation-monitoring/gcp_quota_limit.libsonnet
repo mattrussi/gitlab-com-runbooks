@@ -19,7 +19,7 @@ local selectors = import 'promql/selectors.libsonnet';
     |||,
     grafana_dashboard_uid: 'gcp_quota_limit',
     resourceLabels: ['project', 'metric', 'quotaregion', 'region'],
-    extraMaxAggregationLabels: self.resourceLabels,
+    useResourceLabelsAsMaxAggregationLabels: true,
     query: |||
       (
         gcp_quota_usage{%(selector)s}
@@ -51,7 +51,6 @@ local selectors = import 'promql/selectors.libsonnet';
     // the `region` label is overridden as an external label advertised by prometheus
     // https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/3398
     resourceLabels: ['base_model', 'region', 'location'],
-    extraMaxAggregationLabels: self.resourceLabels,
     burnRatePeriod: '5m',
     description: |||
       GCP Quota utilization / limit ratio for all vertex AI models except code-gecko.

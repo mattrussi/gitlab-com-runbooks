@@ -119,7 +119,7 @@ groups:
     labels:
       component: pgbouncer_async_primary_pool
     expr: |
-      max by(env, environment, tier, type, stage, shard, database) (
+      max by(env, environment, tier, type, stage, shard) (
         clamp_min(
           clamp_max(
             (
