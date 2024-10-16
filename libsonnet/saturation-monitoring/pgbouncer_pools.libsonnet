@@ -1,6 +1,5 @@
 local resourceSaturationPoint = (import 'servicemetrics/metrics.libsonnet').resourceSaturationPoint;
 local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
-local aggregations = import 'promql/aggregations.libsonnet';
 
 local pgbouncerAsyncPool(tag, role) =
   resourceSaturationPoint({
