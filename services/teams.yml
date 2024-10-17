@@ -383,6 +383,7 @@ teams:
   product_stage_group: tenant_scale
   ignored_components:
   - graphql_query
+  slack_alerts_channel: g_tenant-scale
 
 - name: source_code
   product_stage_group: source_code
