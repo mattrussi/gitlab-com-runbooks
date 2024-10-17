@@ -6,6 +6,7 @@ local stableIds = import 'stable-ids/stable-ids.libsonnet';
 local durationParser = import 'utils/duration-parser.libsonnet';
 local strings = import 'utils/strings.libsonnet';
 local validator = import 'utils/validator.libsonnet';
+local capacityPlanning = (import 'capacity-planning/validator.libsonnet');
 local filterLabelsFromLabelsHash = (import 'promql/labels.libsonnet').filterLabelsFromLabelsHash;
 
 // The severity labels that we allow on resources
@@ -25,14 +26,6 @@ local defaultAlertingLabels =
   labelTaxonomy.labels.stage;
 
 local recordedQuantiles = [0.95, 0.99];
-local capacityPlanningStrategies = std.set(
-  std.foldl(
-    function(memo, quantile)
-      memo + ['quantile%i_1h' % [quantile * 100], 'quantile%i_1w' % [quantile * 100]],
-    recordedQuantiles,
-    []
-  ) + ['exclude']
-);
 
 local sloValidator = validator.validator(function(v) v > 0 && v <= 1, 'SLO threshold should be in the range (0,1]');
 
@@ -51,13 +44,6 @@ local definitionValidor = validator.new({
   query: validator.string,
   quantileAggregation: quantileValidator,
   linear_prediction_saturation_alert: validator.optional(validator.duration),
-  capacityPlanning: {
-    strategy: validator.setMember(capacityPlanningStrategies),
-    forecast_days: positiveNumber,
-    historical_days: positiveNumber,
-    changepoints_count: positiveNumber,
-    saturation_dimensions: validator.optional(validator.arrayOfStrings),
-  },
   alerting: {
     // TODO: we should move all of the alerting attributes in here
     // https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/2562
@@ -68,7 +54,7 @@ local definitionValidor = validator.new({
     hard: sloValidator,
   },
   useResourceLabelsAsMaxAggregationLabels: validator.boolean,
-});
+} + capacityPlanning);
 
 local simpleDefaults = {
   queryFormatConfig: {},
