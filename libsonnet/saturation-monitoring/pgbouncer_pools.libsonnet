@@ -14,7 +14,8 @@ local pgbouncerAsyncPool(tag, role) =
       database operations may queue, leading to additional latency in background processing.
     ||| % { role: role },
     grafana_dashboard_uid: 'sat_pgbouncer_async_pool_' + role,
-    resourceLabels: ['fqdn', 'instance'],
+    resourceLabels: ['fqdn', 'instance', 'database'],
+    useResourceLabelsAsMaxAggregationLabels: true,
     burnRatePeriod: '5m',
     query: |||
       (
@@ -25,7 +26,10 @@ local pgbouncerAsyncPool(tag, role) =
       )
       / on(%(aggregationLabels)s) group_left()
       sum by (%(aggregationLabels)s) (
-        avg_over_time(pgbouncer_databases_pool_size{name=~"gitlabhq_production_sidekiq.*", %(selector)s}[%(rangeInterval)s])
+        label_replace(
+          avg_over_time(pgbouncer_databases_pool_size{name=~"gitlabhq_production_sidekiq.*", %(selector)s}[%(rangeInterval)s]),
+          "database", "$1", "name", "(.*)"
+        )
       )
     |||,
     slos: {

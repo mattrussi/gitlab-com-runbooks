@@ -1488,7 +1488,7 @@ groups:
       grafana_panel_id: "4069682945"
       grafana_variables: environment,type,stage
       promql_query: |
-        max by(environment, tier, type, stage, shard, fqdn, instance) (
+        max by(environment, tier, type, stage, shard, fqdn, instance, database) (
           clamp_min(
             clamp_max(
               (
@@ -1497,9 +1497,12 @@ groups:
                 avg_over_time(pgbouncer_pools_server_used_connections{user="gitlab", database=~"gitlabhq_production_sidekiq.*", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[5m]) +
                 avg_over_time(pgbouncer_pools_server_login_connections{user="gitlab", database=~"gitlabhq_production_sidekiq.*", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[5m])
               )
-              / on(environment, tier, type, stage, shard, fqdn, instance) group_left()
-              sum by (environment, tier, type, stage, shard, fqdn, instance) (
-                avg_over_time(pgbouncer_databases_pool_size{name=~"gitlabhq_production_sidekiq.*", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[5m])
+              / on(environment, tier, type, stage, shard, fqdn, instance, database) group_left()
+              sum by (environment, tier, type, stage, shard, fqdn, instance, database) (
+                label_replace(
+                  avg_over_time(pgbouncer_databases_pool_size{name=~"gitlabhq_production_sidekiq.*", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[5m]),
+                  "database", "$1", "name", "(.*)"
+                )
               )
               ,
               1)
@@ -1507,7 +1510,7 @@ groups:
           0)
         )
       promql_template_1: |
-        max by(environment, tier, type, stage, shard, fqdn, instance) (
+        max by(environment, tier, type, stage, shard, fqdn, instance, database) (
           clamp_min(
             clamp_max(
               (
@@ -1516,9 +1519,12 @@ groups:
                 avg_over_time(pgbouncer_pools_server_used_connections{user="gitlab", database=~"gitlabhq_production_sidekiq.*", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[5m]) +
                 avg_over_time(pgbouncer_pools_server_login_connections{user="gitlab", database=~"gitlabhq_production_sidekiq.*", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[5m])
               )
-              / on(environment, tier, type, stage, shard, fqdn, instance) group_left()
-              sum by (environment, tier, type, stage, shard, fqdn, instance) (
-                avg_over_time(pgbouncer_databases_pool_size{name=~"gitlabhq_production_sidekiq.*", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[5m])
+              / on(environment, tier, type, stage, shard, fqdn, instance, database) group_left()
+              sum by (environment, tier, type, stage, shard, fqdn, instance, database) (
+                label_replace(
+                  avg_over_time(pgbouncer_databases_pool_size{name=~"gitlabhq_production_sidekiq.*", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[5m]),
+                  "database", "$1", "name", "(.*)"
+                )
               )
               ,
               1)

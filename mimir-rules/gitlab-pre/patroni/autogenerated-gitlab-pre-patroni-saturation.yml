@@ -391,7 +391,7 @@ groups:
     labels:
       component: pgbouncer_async_replica_pool
     expr: |
-      max by(env, environment, tier, type, stage, shard) (
+      max by(env, environment, tier, type, stage, shard, fqdn, instance, database) (
         clamp_min(
           clamp_max(
             (
@@ -400,9 +400,12 @@ groups:
               avg_over_time(pgbouncer_pools_server_used_connections{user="gitlab", database=~"gitlabhq_production_sidekiq.*", env="pre",type="patroni"}[5m]) +
               avg_over_time(pgbouncer_pools_server_login_connections{user="gitlab", database=~"gitlabhq_production_sidekiq.*", env="pre",type="patroni"}[5m])
             )
-            / on(env, environment, tier, type, stage, shard, fqdn, instance) group_left()
-            sum by (env, environment, tier, type, stage, shard, fqdn, instance) (
-              avg_over_time(pgbouncer_databases_pool_size{name=~"gitlabhq_production_sidekiq.*", env="pre",type="patroni"}[5m])
+            / on(env, environment, tier, type, stage, shard, fqdn, instance, database) group_left()
+            sum by (env, environment, tier, type, stage, shard, fqdn, instance, database) (
+              label_replace(
+                avg_over_time(pgbouncer_databases_pool_size{name=~"gitlabhq_production_sidekiq.*", env="pre",type="patroni"}[5m]),
+                "database", "$1", "name", "(.*)"
+              )
             )
             ,
             1)
