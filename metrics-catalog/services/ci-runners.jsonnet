@@ -292,11 +292,10 @@ metricsCatalog.serviceDefinition({
       selectors.serializeHash({ shard: shard })
       for shard in $.shards
     ] + [
-      // TODO: https://gitlab.com/gitlab-com/gl-infra/tamland/-/issues/192
-      // The catch all case is raising errors on Tamland side with the
-      // file system limitation (https://en.wikipedia.org/wiki/Comparison_of_file_systems#Limits).
-      // Issue: https://gitlab.com/gitlab-com/gl-infra/tamland/-/issues/191
-      // selectors.serializeHash({ shard: { noneOf: $.shards } })
+      {
+        selector: selectors.serializeHash({ shard: { noneOf: $.shards } }),
+        label: 'shard=rest-aggregated',
+      },
     ],
     saturation_dimensions_keep_aggregate: false,
     components: [

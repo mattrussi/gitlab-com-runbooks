@@ -6,17 +6,14 @@ local serviceLevelIndicatorDefinition = import 'service_level_indicator_definiti
 local misc = import 'utils/misc.libsonnet';
 local objects = import 'utils/objects.libsonnet';
 local validator = import 'utils/validator.libsonnet';
+local capacityPlanning = (import 'capacity-planning/validator.libsonnet');
 
-local serviceDefinitionValidator = validator.new({
-  shards: validator.optional(validator.arrayOfStrings),
-});
-
-local capacityPlanningValidator = validator.new({
-  capacityPlanning: {
-    saturation_dimensions: validator.optional(validator.arrayOfStrings),
-    saturation_dimensions_keep_aggregate: validator.optional(validator.boolean),
-  },
-});
+local serviceDefinitionValidator = validator.new(
+  {
+    shards: validator.optional(validator.arrayOfStrings),
+  }
+  + capacityPlanning
+);
 
 // For now we assume that services are provisioned on vms and not kubernetes
 local provisioningDefaults = { vms: true, kubernetes: false, runway: false };
@@ -104,8 +101,6 @@ local validate(serviceDefinition) =
   validateTenants(serviceDefinition)
   +
   validateMonitoring(serviceDefinition)
-  +
-  capacityPlanningValidator.assertValid(serviceDefinition)
   +
   serviceDefinitionValidator.assertValid(serviceDefinition);
 
