@@ -44,6 +44,20 @@ Our PostgreSQL exporter, exports metrics to Thanos from pg_stat_statements, whic
 
 Having these metrics in a timeline we execute a search for what is being executed in a range of 15 minutes by some criteria:
 
+#### Total CPU time
+
+To obtain the top 10 statements by CPI time, the PROMQL query is:
+
+```
+topk(10,
+  sum by (queryid) (
+    rate(pg_stat_kcache_exec_total_time{env="gprd", type="patroni"}[1m]) and on (instance) pg_replication_is_replica == 0
+  )
+)
+```
+
+Click the link below: <https://dashboards.gitlab.net/explore?schemaVersion=1&panes=%7B%22pum%22:%7B%22datasource%22:%22mimir-gitlab-gprd%22,%22queries%22:%5B%7B%22refId%22:%22B%22,%22expr%22:%22topk%2810,%5Cn%20%20sum%20by%20%28queryid%29%20%28%5Cn%20%20%20%20rate%28pg_stat_kcache_exec_total_time%7Benv%3D%5C%22gprd%5C%22,%20type%3D%5C%22patroni%5C%22%7D%5B1m%5D%29%20and%20on%20%28instance%29%20pg_replication_is_replica%20%3D%3D%200%5Cn%20%20%29%5Cn%29%22,%22range%22:true,%22instant%22:true,%22datasource%22:%7B%22type%22:%22prometheus%22,%22uid%22:%22mimir-gitlab-gprd%22%7D,%22editorMode%22:%22code%22,%22legendFormat%22:%22__auto%22%7D%5D,%22range%22:%7B%22from%22:%22now-15m%22,%22to%22:%22now%22%7D%7D%7D&orgId=1>
+
 #### total time
 
 we filter for the 10 statements that consumed more time during the peak time.
