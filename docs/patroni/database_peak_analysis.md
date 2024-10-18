@@ -46,7 +46,7 @@ Having these metrics in a timeline we execute a search for what is being execute
 
 #### Total CPU time
 
-To obtain the top 10 statements by CPI time, the PROMQL query is:
+To obtain the top 10 statements by CPU time, the PROMQL query is:
 
 ```
 topk(10,
