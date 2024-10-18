@@ -85,28 +85,16 @@ exist inside of 1Password, and even better, inside a Chef vault.
 
 #### Status.io-specific instructions
 
-Status.io SSL certificate is being renewed manually. Status.io would silently
-fail if provided with mismatching private key or certificate chain.
+The SSL certificate for `status.gitlab.com` is no longer managed using SSLMate, meaning there should not be any manual steps to do once renewal time comes. :party:
 
-To update the certificate:
+Instead, we use a dedicated certificate from AWS as detailed in the [`status.io` docs](https://kb.status.io/security/ssl-certificates/). This means [Amazon Certificate Manager](https://aws.amazon.com/certificate-manager/) should handle renewals automatically ahead of the expiry date.
 
-1. Login into <https://status.io/> using the `ops-contact+statusio@gitlab.com` username. Password is found in Production 1password vault.
-1. Navigate to [settings > TLS/SSL](https://app.status.io/dashboard/5b36dc6502d06804c08349f7/settings/ssl).
-1. Install [`sslmate` CLI tool](https://sslmate.com/help/cmdline/install).
-1. Download the content of `status.gitlab.com.key.pem` from 1password Production vault.
-1. Download the certificates from sslmate: `sslmate download status.gitlab.com`.
-1. Upload the following keys in the [ssl settings](https://app.status.io/dashboard/5b36dc6502d06804c08349f7/settings/ssl)
+<!-- TODO: link to MR adding record here -->
+The Amazon certificate is provisioned through the use of a CNAME record for domain validation that **must remain in our DNS zone permanently**.
 
-   1. Certificate: `status.gitlab.com.crt`
-   1. Private Key: `status.gitlab.com.key.pem`
-   1. Certificate Chain: `status.gitlab.com.chain.crt` **NOT** `status.gitlab.com.chained.crt`
+Should we ever decide to change back to a customer-provided certificate for whatever reason, we would likely need to contact `status.io` support to request a switch back to the custom certificate setting.
 
-1. Click upload.
-
-Previous renewals:
-
-1. <https://gitlab.com/gitlab-com/gl-infra/production/-/issues/5260>
-1. <https://gitlab.com/gitlab-com/gl-infra/production/-/issues/7562>
+See [this issue](https://gitlab.com/gitlab-com/gl-infra/production-engineering/-/issues/25625) for more context on why we opted for an Amazon certificate.
 
 ### Re-keying a certificate
 
