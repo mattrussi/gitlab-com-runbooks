@@ -256,7 +256,7 @@ checks:
       - Infrastructure
     integrations:
       - pagerduty
-  
+
   - url: https://snowplowprd.trx.gitlab.net/health
     timeout_ms: 30000
     resolution_minutes: 5
