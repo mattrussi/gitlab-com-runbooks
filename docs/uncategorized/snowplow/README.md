@@ -81,9 +81,20 @@ Cloudwatch [aws-snowplow](https://us-east-2.console.aws.amazon.com/cloudwatch/ho
 
 In the past, the 2 most important dashboards have been:
 
-1. `stream records age`: the most important because it measures how long events are sitting in Kinesis (which means they’re not getting enriched, in the past we’ve had problem with it backing up)
+1. `stream records age`: the most important because it measures how long events are sitting in Kinesis (which means they’re not getting enriched, in the past we have had problem with it backing up)
 1. `Auto-scaling group size`: if we see collectors scaling up, but not scaling back down, we may need to increase the number of collectors to make sure we’re always ready to ingest bigger event traffic
 
 ## How to SSH into EC2 instances
 
-You will need the `snowplow.pem` file from 1Password Production Vault and you will connect to the nodes as the `ec2-user`.
+There are 2 ways to SSH into EC2 instance:
+
+1. Using `EC2 Instance Connect` (AWS UI):
+    * Login to AWS and go to [EC2 Instances](https://us-east-2.console.aws.amazon.com/ec2/home?region=us-east-2#Instances:)
+    * click the `instance_id` that you want to enter, then click the 'Connect' tab
+    * Select `Connect using EC2 Instance Connect` (it should be selected by default), and then click 'Connect'
+1. From bastion host:
+    * you will need the `snowplow.pem` file from 1Password Production Vault and you will connect to the nodes as the `ec2-user`. Your command should look something like this:
+
+        ```sh
+        ssh -i "snowplow.pem"  ec2-user@<ec2-ip-address>
+        ```
