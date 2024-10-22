@@ -12,15 +12,14 @@ local capacityPlanningStrategies = std.set(
 
 local positiveNumber = validator.validator(function(v) v >= 0, 'Number should be >= 0');
 
-local isSaturationDimension(v) =
+local isSaturationDimension(dimensions) =
   local isDimensionObject(obj) =
     std.isObject(obj) &&
-    std.isString(std.get(obj, 'selector')) &&
-    std.isString(std.get(obj, 'label'));
+    std.isString(std.get(obj, 'selector'));
 
-  std.isArray(v) && std.all(std.map(function(elem) std.isString(elem) || isDimensionObject(elem), v));
+  std.isArray(dimensions) && std.all(std.map(isDimensionObject, dimensions));
 
-local dimensionValidator = validator.validator(isSaturationDimension, 'expected an array[string] or an object[label: string, selector: string]');
+local dimensionValidator = validator.validator(isSaturationDimension, 'expected an array[object[optional(label): string, selector: string]]');
 
 {
   capacityPlanning: {

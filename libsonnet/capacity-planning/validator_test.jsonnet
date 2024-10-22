@@ -134,15 +134,15 @@ test.suite({
       },
     },
     actual: capacityPlanningValidator._validationMessages(obj),
-    expect: ['field capacityPlanning.saturation_dimensions: expected an array[string] or an object[label: string, selector: string] or null'],
+    expect: ['field capacityPlanning.saturation_dimensions: expected an array[object[optional(label): string, selector: string]] or null'],
   },
   testValidSaturationDimensions: {
     local obj = {
       capacityPlanning: {
         strategy: 'exclude',
         saturation_dimensions: [
-          'region="us-east-1"',
-          'deployment="prometheus"',
+          { selector: 'region="us-east-1"' },
+          { selector: 'deployment="prometheus"' },
           { selector: 'shard!="asdf|lkjh|123456"', label: 'shard=weirdos' },
         ],
       },
