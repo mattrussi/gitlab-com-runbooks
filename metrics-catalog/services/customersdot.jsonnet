@@ -26,6 +26,7 @@ metricsCatalog.serviceDefinition({
 
   serviceLevelIndicators:
     sliLibrary.get('customers_dot_requests').generateServiceLevelIndicator({}, {
+      team: 'fulfillment_platform',
       severity: 's3',
       toolingLinks: [
         toolingLinks.stackdriverLogs(
@@ -41,6 +42,7 @@ metricsCatalog.serviceDefinition({
     })
     +
     sliLibrary.get('customers_dot_sidekiq_jobs').generateServiceLevelIndicator({ type: 'customersdot' }, {
+      team: 'fulfillment_platform',
       severity: 's3',
       serviceAggregation: false,
     }),

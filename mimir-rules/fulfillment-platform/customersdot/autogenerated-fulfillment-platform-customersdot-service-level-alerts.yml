@@ -30,6 +30,7 @@ groups:
       severity: s3
       sli_type: apdex
       slo_alert: "yes"
+      team: fulfillment_platform
       user_impacting: "yes"
       window: 1h
     expr: |
@@ -74,6 +75,7 @@ groups:
       severity: s3
       sli_type: apdex
       slo_alert: "yes"
+      team: fulfillment_platform
       user_impacting: "yes"
       window: 6h
     expr: |
@@ -122,6 +124,7 @@ groups:
       severity: s3
       sli_type: error
       slo_alert: "yes"
+      team: fulfillment_platform
       user_impacting: "yes"
       window: 1h
     expr: |
@@ -170,6 +173,7 @@ groups:
       severity: s3
       sli_type: error
       slo_alert: "yes"
+      team: fulfillment_platform
       user_impacting: "yes"
       window: 6h
     expr: |
@@ -218,6 +222,7 @@ groups:
       severity: s3
       sli_type: ops
       slo_alert: "no"
+      team: fulfillment_platform
       user_impacting: "yes"
     expr: |
       gitlab_component_ops:rate_30m{component="customers_dot_requests",monitor="global",stage="main",type="customersdot"} == 0
@@ -255,6 +260,7 @@ groups:
       severity: s3
       sli_type: ops
       slo_alert: "no"
+      team: fulfillment_platform
       user_impacting: "yes"
     expr: |
       gitlab_component_ops:rate_5m{component="customers_dot_requests",monitor="global",stage="main",type="customersdot"} offset 1h
@@ -286,6 +292,7 @@ groups:
       severity: s3
       sli_type: apdex
       slo_alert: "yes"
+      team: fulfillment_platform
       user_impacting: "yes"
       window: 1h
     expr: |
@@ -330,6 +337,7 @@ groups:
       severity: s3
       sli_type: apdex
       slo_alert: "yes"
+      team: fulfillment_platform
       user_impacting: "yes"
       window: 6h
     expr: |
@@ -378,6 +386,7 @@ groups:
       severity: s3
       sli_type: error
       slo_alert: "yes"
+      team: fulfillment_platform
       user_impacting: "yes"
       window: 1h
     expr: |
@@ -426,6 +435,7 @@ groups:
       severity: s3
       sli_type: error
       slo_alert: "yes"
+      team: fulfillment_platform
       user_impacting: "yes"
       window: 6h
     expr: |
@@ -474,6 +484,7 @@ groups:
       severity: s3
       sli_type: ops
       slo_alert: "no"
+      team: fulfillment_platform
       user_impacting: "yes"
     expr: |
       gitlab_component_ops:rate_30m{component="customers_dot_sidekiq_jobs",monitor="global",stage="main",type="customersdot"} == 0
@@ -511,6 +522,7 @@ groups:
       severity: s3
       sli_type: ops
       slo_alert: "no"
+      team: fulfillment_platform
       user_impacting: "yes"
     expr: |
       gitlab_component_ops:rate_5m{component="customers_dot_sidekiq_jobs",monitor="global",stage="main",type="customersdot"} offset 1h
