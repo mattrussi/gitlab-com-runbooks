@@ -67,6 +67,7 @@
   import 'runway.jsonnet',
   import 'search.jsonnet',
   import 'secret-detection.jsonnet',
+  import 'sast-scanner-service.jsonnet',
   import 'sentry.jsonnet',
   import 'sidekiq.jsonnet',
   import 'tracing.jsonnet',
