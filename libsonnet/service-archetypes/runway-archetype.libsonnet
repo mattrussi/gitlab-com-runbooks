@@ -11,6 +11,8 @@ function(
   team,
   apdexScore=0.999,
   errorRatio=0.999,
+  // When using stackdriver_cloud_run_revision_run_googleapis_com_request_latencies_bucket as source metrics request latencies are put into specific
+  // buckets this number is chosen to align with the closest desirable bucket see buckets here https://dashboards.gitlab.net/goto/vnxXtRZHg?orgId=1
   apdexSatisfiedThreshold='1067.1895716335973',
   featureCategory='not_owned',
   userImpacting=true,
