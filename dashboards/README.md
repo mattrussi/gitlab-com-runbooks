@@ -18,6 +18,8 @@ Example, the Container Registry is of service type `registry`.  Therefore,
 
 # Extending Grafana dashboards
 
+[Video guide on how to extend dashboards](https://www.youtube.com/watch?v=yZ2RiY_Akz0)
+
 In order to extend Grafana dashboard you don't need to run Grafana locally. The most common scheme for extending dashboards is updating their definitions in your local repository and pushing changes to a testing playground on `dashboards.gitlab.net`.
 
 An alternative way to check simple changes, that does not require installing dependencies on your local machine, is using a Grafana Playground folder. All users with viewer access to dashboards.gitlab.net, (ie, all GitLab team members), have full permission to edit all dashboards in the [Playground Grafana folder](https://dashboards.gitlab.net/dashboards/f/playground-FOR-TESTING-ONLY/playground-for-testing-purposes-only). You can create dashboards in this folder using the Grafana Web UI.
