@@ -6,9 +6,9 @@
 
 # SAST Scanner Service for SAST in the IDE
 
-* [Service Overview](https://dashboards.gitlab.net/d/sast-main/sast-overview)
-* **Alerts**: <https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22sast-scanner-service%22%2C%20tier%3D%22sv%22%7D>
-* **Label**: gitlab-com/gl-infra/production~"Service::SastScannerService"
+* [Service Overview](https://dashboards.gitlab.net/d/sast-service-main/sast-service-overview)
+* **Alerts**: <https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22sast-service%22%2C%20tier%3D%22sv%22%7D>
+* **Label**: gitlab-com/gl-infra/production~"Service::SastService"
 
 ## Logging
 
@@ -56,7 +56,7 @@ The service is stateless; it does not log/store any customer-related data.
 
 The service is deployed using Runway so that we can use the built-in
 observability features particularly [monitoring stack](https://docs.runway.gitlab.com/reference/observability/). Default Runway
-metrics for the service is available at [Runway Service Metrics dashboard](https://dashboards.gitlab.net/d/sast-scanner-service-main).
+metrics for the service is available at [Runway Service Metrics dashboard](https://dashboards.gitlab.net/d/sast-service-main).
 
 ## Links to further Documentation
 
