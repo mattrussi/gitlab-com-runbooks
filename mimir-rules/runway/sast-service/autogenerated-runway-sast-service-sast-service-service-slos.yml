@@ -8,41 +8,41 @@ groups:
     labels:
       monitor: global
       tier: sv
-      type: sast-scanner-service
+      type: sast-service
     expr: "0.999000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       monitor: global
       tier: sv
-      type: sast-scanner-service
+      type: sast-service
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: runway_ingress
       monitor: global
       tier: sv
-      type: sast-scanner-service
+      type: sast-service
     expr: "0.999000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: runway_ingress
       monitor: global
       tier: sv
-      type: sast-scanner-service
+      type: sast-service
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: runway_lb
       monitor: global
       tier: sv
-      type: sast-scanner-service
+      type: sast-service
     expr: "0.999000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: runway_lb
       monitor: global
       tier: sv
-      type: sast-scanner-service
+      type: sast-service
     expr: "0.001000"
   - record: gitlab_component_service:mapping
     labels:
@@ -52,7 +52,7 @@ groups:
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: sv
-      type: sast-scanner-service
+      type: sast-service
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:
@@ -62,5 +62,5 @@ groups:
       regional_aggregation: "no"
       service_aggregation: "no"
       tier: sv
-      type: sast-scanner-service
+      type: sast-service
     expr: "1"

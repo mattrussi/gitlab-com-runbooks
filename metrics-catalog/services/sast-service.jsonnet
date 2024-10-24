@@ -3,7 +3,7 @@ local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 
 metricsCatalog.serviceDefinition(
   runwayArchetype(
-    type='sast-scanner-service',
+    type='sast-service',
     team='static_analysis',
     featureCategory='static_application_security_testing'
   )

@@ -2696,10 +2696,10 @@ services:
       monitors:
         primary_grafana_dashboard: secret-detection-main/secret-detection3a-overview
 
-  - name: sast-scanner-service
+  - name: sast-service
     tier: sv
     friendly_name: SAST Scanner Service for SAST in the IDE
-    label: SastScannerService
+    label: SastService
     owner: static_analysis
     teams:
       - static_analysis
@@ -2716,4 +2716,4 @@ services:
           permalink: https://console.cloud.google.com/run/detail/us-central1/sast-service/logs?project=gitlab-runway-staging
     observability:
       monitors:
-        primary_grafana_dashboard: sast-main/sast-overview
+        primary_grafana_dashboard: sast-service-main/sast-service-overview
