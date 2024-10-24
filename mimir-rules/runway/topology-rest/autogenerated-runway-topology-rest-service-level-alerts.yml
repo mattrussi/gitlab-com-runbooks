@@ -34,7 +34,7 @@ groups:
       alert_type: symptom
       feature_category: not_owned
       rules_domain: general
-      severity: s4
+      severity: s3
       sli_type: apdex
       slo_alert: "yes"
       user_impacting: "yes"
@@ -43,12 +43,12 @@ groups:
       (
         (
           gitlab_component_apdex:ratio_1h{component="runway_ingress",monitor="global",type="topology-rest"}
-          < (1 - 14.4 * 0.001000)
+          < (1 - 14.4 * 0.000500)
         )
         and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_apdex:ratio_5m{component="runway_ingress",monitor="global",type="topology-rest"}
-          < (1 - 14.4 * 0.001000)
+          < (1 - 14.4 * 0.000500)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -85,7 +85,7 @@ groups:
       alert_type: symptom
       feature_category: not_owned
       rules_domain: general
-      severity: s4
+      severity: s3
       sli_type: apdex
       slo_alert: "yes"
       user_impacting: "yes"
@@ -94,12 +94,12 @@ groups:
       (
         (
           gitlab_component_apdex:ratio_6h{component="runway_ingress",monitor="global",type="topology-rest"}
-          < (1 - 6 * 0.001000)
+          < (1 - 6 * 0.000500)
         )
         and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_apdex:ratio_30m{component="runway_ingress",monitor="global",type="topology-rest"}
-          < (1 - 6 * 0.001000)
+          < (1 - 6 * 0.000500)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -138,7 +138,7 @@ groups:
       alert_type: symptom
       feature_category: not_owned
       rules_domain: general
-      severity: s4
+      severity: s3
       sli_type: apdex
       slo_alert: "yes"
       user_impacting: "yes"
@@ -147,12 +147,12 @@ groups:
       (
         (
           gitlab_regional_sli_apdex:ratio_1h{component="runway_ingress",monitor="global",type="topology-rest"}
-          < (1 - 14.4 * 0.001000)
+          < (1 - 14.4 * 0.000500)
         )
         and on (env,environment,tier,type,stage,region,component)
         (
           gitlab_regional_sli_apdex:ratio_5m{component="runway_ingress",monitor="global",type="topology-rest"}
-          < (1 - 14.4 * 0.001000)
+          < (1 - 14.4 * 0.000500)
         )
       )
       and on(env,environment,tier,type,stage,region,component)
@@ -191,7 +191,7 @@ groups:
       alert_type: symptom
       feature_category: not_owned
       rules_domain: general
-      severity: s4
+      severity: s3
       sli_type: apdex
       slo_alert: "yes"
       user_impacting: "yes"
@@ -200,12 +200,12 @@ groups:
       (
         (
           gitlab_regional_sli_apdex:ratio_6h{component="runway_ingress",monitor="global",type="topology-rest"}
-          < (1 - 6 * 0.001000)
+          < (1 - 6 * 0.000500)
         )
         and on (env,environment,tier,type,stage,region,component)
         (
           gitlab_regional_sli_apdex:ratio_30m{component="runway_ingress",monitor="global",type="topology-rest"}
-          < (1 - 6 * 0.001000)
+          < (1 - 6 * 0.000500)
         )
       )
       and on(env,environment,tier,type,stage,region,component)
@@ -239,7 +239,7 @@ groups:
       alert_type: symptom
       feature_category: not_owned
       rules_domain: general
-      severity: s4
+      severity: s3
       sli_type: error
       slo_alert: "yes"
       user_impacting: "yes"
@@ -248,12 +248,12 @@ groups:
       (
         (
           gitlab_component_errors:ratio_1h{component="runway_ingress",monitor="global",type="topology-rest"}
-          > (14.4 * 0.001000)
+          > (14.4 * 0.000500)
         )
         and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_5m{component="runway_ingress",monitor="global",type="topology-rest"}
-          > (14.4 * 0.001000)
+          > (14.4 * 0.000500)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -287,7 +287,7 @@ groups:
       alert_type: symptom
       feature_category: not_owned
       rules_domain: general
-      severity: s4
+      severity: s3
       sli_type: error
       slo_alert: "yes"
       user_impacting: "yes"
@@ -296,12 +296,12 @@ groups:
       (
         (
           gitlab_component_errors:ratio_6h{component="runway_ingress",monitor="global",type="topology-rest"}
-          > (6 * 0.001000)
+          > (6 * 0.000500)
         )
         and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_30m{component="runway_ingress",monitor="global",type="topology-rest"}
-          > (6 * 0.001000)
+          > (6 * 0.000500)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -337,7 +337,7 @@ groups:
       alert_type: symptom
       feature_category: not_owned
       rules_domain: general
-      severity: s4
+      severity: s3
       sli_type: error
       slo_alert: "yes"
       user_impacting: "yes"
@@ -346,12 +346,12 @@ groups:
       (
         (
           gitlab_regional_sli_errors:ratio_1h{component="runway_ingress",monitor="global",type="topology-rest"}
-          > (14.4 * 0.001000)
+          > (14.4 * 0.000500)
         )
         and on (env,environment,tier,type,stage,region,component)
         (
           gitlab_regional_sli_errors:ratio_5m{component="runway_ingress",monitor="global",type="topology-rest"}
-          > (14.4 * 0.001000)
+          > (14.4 * 0.000500)
         )
       )
       and on(env,environment,tier,type,stage,region,component)
@@ -387,7 +387,7 @@ groups:
       alert_type: symptom
       feature_category: not_owned
       rules_domain: general
-      severity: s4
+      severity: s3
       sli_type: error
       slo_alert: "yes"
       user_impacting: "yes"
@@ -396,12 +396,12 @@ groups:
       (
         (
           gitlab_regional_sli_errors:ratio_6h{component="runway_ingress",monitor="global",type="topology-rest"}
-          > (6 * 0.001000)
+          > (6 * 0.000500)
         )
         and on (env,environment,tier,type,stage,region,component)
         (
           gitlab_regional_sli_errors:ratio_30m{component="runway_ingress",monitor="global",type="topology-rest"}
-          > (6 * 0.001000)
+          > (6 * 0.000500)
         )
       )
       and on(env,environment,tier,type,stage,region,component)
@@ -435,7 +435,7 @@ groups:
       alert_type: cause
       feature_category: not_owned
       rules_domain: general
-      severity: s4
+      severity: s3
       sli_type: ops
       slo_alert: "no"
       user_impacting: "yes"
@@ -472,7 +472,7 @@ groups:
       alert_type: cause
       feature_category: not_owned
       rules_domain: general
-      severity: s4
+      severity: s3
       sli_type: ops
       slo_alert: "no"
       user_impacting: "yes"
@@ -509,7 +509,7 @@ groups:
       alert_type: cause
       feature_category: not_owned
       rules_domain: general
-      severity: s4
+      severity: s3
       sli_type: ops
       slo_alert: "no"
       user_impacting: "yes"
@@ -548,7 +548,7 @@ groups:
       alert_type: cause
       feature_category: not_owned
       rules_domain: general
-      severity: s4
+      severity: s3
       sli_type: ops
       slo_alert: "no"
       user_impacting: "yes"
@@ -583,7 +583,7 @@ groups:
       alert_type: symptom
       feature_category: not_owned
       rules_domain: general
-      severity: s4
+      severity: s3
       sli_type: error
       slo_alert: "yes"
       user_impacting: "yes"
@@ -592,12 +592,12 @@ groups:
       (
         (
           gitlab_component_errors:ratio_1h{component="runway_lb",monitor="global",type="topology-rest"}
-          > (14.4 * 0.001000)
+          > (14.4 * 0.000500)
         )
         and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_5m{component="runway_lb",monitor="global",type="topology-rest"}
-          > (14.4 * 0.001000)
+          > (14.4 * 0.000500)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -631,7 +631,7 @@ groups:
       alert_type: symptom
       feature_category: not_owned
       rules_domain: general
-      severity: s4
+      severity: s3
       sli_type: error
       slo_alert: "yes"
       user_impacting: "yes"
@@ -640,12 +640,12 @@ groups:
       (
         (
           gitlab_component_errors:ratio_6h{component="runway_lb",monitor="global",type="topology-rest"}
-          > (6 * 0.001000)
+          > (6 * 0.000500)
         )
         and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_30m{component="runway_lb",monitor="global",type="topology-rest"}
-          > (6 * 0.001000)
+          > (6 * 0.000500)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -681,7 +681,7 @@ groups:
       alert_type: symptom
       feature_category: not_owned
       rules_domain: general
-      severity: s4
+      severity: s3
       sli_type: error
       slo_alert: "yes"
       user_impacting: "yes"
@@ -690,12 +690,12 @@ groups:
       (
         (
           gitlab_regional_sli_errors:ratio_1h{component="runway_lb",monitor="global",type="topology-rest"}
-          > (14.4 * 0.001000)
+          > (14.4 * 0.000500)
         )
         and on (env,environment,tier,type,stage,region,component)
         (
           gitlab_regional_sli_errors:ratio_5m{component="runway_lb",monitor="global",type="topology-rest"}
-          > (14.4 * 0.001000)
+          > (14.4 * 0.000500)
         )
       )
       and on(env,environment,tier,type,stage,region,component)
@@ -731,7 +731,7 @@ groups:
       alert_type: symptom
       feature_category: not_owned
       rules_domain: general
-      severity: s4
+      severity: s3
       sli_type: error
       slo_alert: "yes"
       user_impacting: "yes"
@@ -740,12 +740,12 @@ groups:
       (
         (
           gitlab_regional_sli_errors:ratio_6h{component="runway_lb",monitor="global",type="topology-rest"}
-          > (6 * 0.001000)
+          > (6 * 0.000500)
         )
         and on (env,environment,tier,type,stage,region,component)
         (
           gitlab_regional_sli_errors:ratio_30m{component="runway_lb",monitor="global",type="topology-rest"}
-          > (6 * 0.001000)
+          > (6 * 0.000500)
         )
       )
       and on(env,environment,tier,type,stage,region,component)
@@ -779,7 +779,7 @@ groups:
       alert_type: cause
       feature_category: not_owned
       rules_domain: general
-      severity: s4
+      severity: s3
       sli_type: ops
       slo_alert: "no"
       user_impacting: "yes"
@@ -816,7 +816,7 @@ groups:
       alert_type: cause
       feature_category: not_owned
       rules_domain: general
-      severity: s4
+      severity: s3
       sli_type: ops
       slo_alert: "no"
       user_impacting: "yes"
@@ -853,7 +853,7 @@ groups:
       alert_type: cause
       feature_category: not_owned
       rules_domain: general
-      severity: s4
+      severity: s3
       sli_type: ops
       slo_alert: "no"
       user_impacting: "yes"
@@ -892,7 +892,7 @@ groups:
       alert_type: cause
       feature_category: not_owned
       rules_domain: general
-      severity: s4
+      severity: s3
       sli_type: ops
       slo_alert: "no"
       user_impacting: "yes"
