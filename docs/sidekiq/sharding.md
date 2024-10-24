@@ -190,8 +190,8 @@ Refer to [a previous change issue](https://gitlab.com/gitlab-com/gl-infra/produc
 
 The migration can be considered completed after the feature flag is fully enabled and there are no more jobs being enqueued to the queue in the migration source. This can be verified by measuring `sidekiq_jobs_completion_count` rates and `sidekiq_queue_size` value. Refer to the linked charts:
 
-- completion count chart - [thanos](https://thanos-query.ops.gitlab.net/graph?g0.expr=sum(rate(sidekiq_jobs_completion_count%7Benv%3D'gprd'%7D%5B1m%5D))%20by%20(shard)&g0.tab=0&g0.stacked=0&g0.range_input=1h&g0.max_source_resolution=0s&g0.deduplicate=1&g0.partial_response=0&g0.store_matches=%5B%5D)
-- queue size chart - [thanos](https://thanos-query.ops.gitlab.net/graph?g0.expr=max%20by(name)%20(sidekiq_queue_size%7Benv%3D%22gprd%22%7D)&g0.tab=0&g0.stacked=0&g0.range_input=1h&g0.max_source_resolution=0s&g0.deduplicate=1&g0.partial_response=0&g0.store_matches=%5B%5D)
+* completion count chart - [thanos](https://thanos-query.ops.gitlab.net/graph?g0.expr=sum(rate(sidekiq_jobs_completion_count%7Benv%3D'gprd'%7D%5B1m%5D))%20by%20(shard)&g0.tab=0&g0.stacked=0&g0.range_input=1h&g0.max_source_resolution=0s&g0.deduplicate=1&g0.partial_response=0&g0.store_matches=%5B%5D)
+* queue size chart - [thanos](https://thanos-query.ops.gitlab.net/graph?g0.expr=max%20by(name)%20(sidekiq_queue_size%7Benv%3D%22gprd%22%7D)&g0.tab=0&g0.stacked=0&g0.range_input=1h&g0.max_source_resolution=0s&g0.deduplicate=1&g0.partial_response=0&g0.store_matches=%5B%5D)
 
 For example, we should observe a decrease in job completion rate on the Sidekiq shard polling the migration source and an increase on the temporary migration K8s deployment that polls the migration target. The effects will be more pronounced as the feature flag percentage increases. Refer to the example below:
 
