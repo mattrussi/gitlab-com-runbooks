@@ -39,4 +39,8 @@
     { name: 'slack_bridge-nonprod', url: 'http://staging.cloudfunctions.net/alertManagerBridge', token: 'staging_secret' },
     { name: 'slack_bridge-prod', url: 'http://production.cloudfunctions.net/alertManagerBridge', token: 'production_secret', sendResolved: false },
   ],
+  // incident.io configs.
+  incidentioChannels: [
+    { name: 'incidentio_gstg', url: 'https://api.incident.io/v2/alert_events/alertmanager/urlkey', token: 'secret' },
+  ],
 }
