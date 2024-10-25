@@ -114,7 +114,7 @@ local patroni(
           description="Percentage of Memory in Use out of Total Memory",
           query=|||
             (
-              avg_over_time(node_memory_MemAvailable_bytes{environment="$environment",type="patroni",shard="default"}[$__interval])/node_memory_MemTotal_bytes{environment="$environment",type="patroni",shard="default"} * 100
+              avg_over_time(node_memory_MemAvailable_bytes{environment="$environment",type="patroni",shard="default"}[$__interval])/node_memory_MemTotal_bytes{environment="$environment",type="patroni",shard="default"}
             )
           |||,
           interval='1m',
@@ -123,7 +123,8 @@ local patroni(
           legendFormat='{{fqdn}}',
           lines=true,
           bars=false,
-          stack=false
+          stack=false,
+          format="percentunit"
         )
       ], cols=1)
   )
@@ -151,7 +152,7 @@ local patroni(
               ) / node_memory_MemTotal_bytes{environment="$environment",
                   type="patroni",
                   shard="default"}
-            ) * 100
+            )
           |||,
           interval='1m',
           linewidth=2,
@@ -159,7 +160,8 @@ local patroni(
           legendFormat='{{fqdn}}',
           lines=true,
           bars=false,
-          stack=false
+          stack=false,
+          format="percentunit"
         )
       ], cols=1)
   )
