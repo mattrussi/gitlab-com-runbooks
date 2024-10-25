@@ -79,7 +79,6 @@ generateTests([
     },
     receivers: [
       'slack_bridge-nonprod',
-      'incidentio_gstg',
       'blackhole',
     ],
   },
@@ -118,7 +117,6 @@ generateTests([
     },
     receivers: [
       'slack_bridge-nonprod',
-      'incidentio_gstg',
       'blackhole',
     ],
   },
@@ -139,7 +137,6 @@ generateTests([
       env: 'gstg',
     },
     receivers: [
-      'incidentio_gstg',
       'blackhole',
     ],
   },
@@ -345,7 +342,6 @@ generateTests([
       env: 'gstg',
     },
     receivers: [
-      'incidentio_gstg',
       'blackhole',
     ],
   },
@@ -357,7 +353,6 @@ generateTests([
       env: 'gstg',
     },
     receivers: [
-      'incidentio_gstg',
       'blackhole',
     ],
   },
@@ -369,7 +364,6 @@ generateTests([
       env: 'gstg',
     },
     receivers: [
-      'incidentio_gstg',
       'blackhole',
     ],
   },
@@ -397,7 +391,6 @@ generateTests([
     },
     receivers: [
       'team_platform_insights_alerts_channel',
-      'incidentio_gstg',
       'platform_insights_pagerduty',
     ],
   },
@@ -421,7 +414,6 @@ generateTests([
     },
     receivers: [
       'team_platform_insights_alerts_channel',
-      'incidentio_gstg',
       'blackhole',
     ],
   },
@@ -474,12 +466,12 @@ generateTests([
   {
     name: 'slo_alert=yes, env=gstg type=web should go to feed_alerts_staging and blackhole',
     labels: { env: 'gstg', slo_alert: 'yes', type: 'web' },
-    receivers: ['feed_alerts_staging', 'incidentio_gstg', 'blackhole'],
+    receivers: ['feed_alerts_staging', 'blackhole'],
   },
   {
     name: 'slo_alert=yes, env=gstg type=web, aggregation=regional_component should go to blackhole',
     labels: { env: 'gstg', slo_alert: 'yes', type: 'web', aggregation: 'regional_component' },
-    receivers: ['incidentio_gstg', 'blackhole'],
+    receivers: ['blackhole'],
   },
   {
     name: 'slo_alert=yes, env=gprd, team=ai_model_validation should go to g_mlops-alerts',

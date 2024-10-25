@@ -114,21 +114,6 @@ local PagerDutyReceiver(channel) = {
   ],
 };
 
-local IncidentioReceiver(channel) = {
-  name: channel.name,
-  webhook_configs: [
-    {
-      url: channel.url,
-      send_resolved: true,
-      http_config: {
-        authorization: {
-          credentials: channel.token,
-        },
-      },
-    },
-  ],
-};
-
 local webhookReceiverDefaults = {
   httpConfig: {},
 };
@@ -504,13 +489,6 @@ local routingTree = Route(
     ),
   ]
   + [
-    Route(
-      receiver='incidentio_gstg',
-      continue=true,
-      matchers={ env: 'gstg' },
-    ),
-  ]
-  + [
     // Terminators go last
     Route(
       receiver='platform_insights_pagerduty',
@@ -569,7 +547,6 @@ local receivers =
     channel: team.slack_alerts_channel,
   }) for team in teamsWithAlertingSlackChannels()] +
   [WebhookReceiver(c) for c in webhookChannels] +
-  [IncidentioReceiver(c) for c in secrets.incidentioChannels] +
   [
     // receiver that does nothing with the alert, blackholing it
     {
