@@ -206,3 +206,15 @@ unavailable to every other user.
 TODO: Not clear yet how this surfaces: https://gitlab.com/gitlab-com/runbooks/-/issues/166
 
 <!-- markdownlint-enable MD034 -->
+
+## Self-managed customers: issue log
+
+This section acts as a knowledge base for issues we have seen with self-managed customers that
+were difficult to triage, often due to bespoke networking setups. Use this log as a reference
+so that we do not repeat time intensive diagnosis on customer instances. Extend this log as you
+find new classes of issues.
+
+| Symptom | What happened | Issue links | Workaround | Solution |
+| ------- | ------------- | ----------- | ---------- | -------- |
+| Chat responses take a long time to complete | The customer was using a proxy server between the IDE and GitLab that stripped out the `X-Accel-Buffer: no` HTTP header, breaking streaming support. | [triage issue](https://gitlab.com/gitlab-org/gitlab/-/issues/459054), [discussion issue](https://gitlab.com/gitlab-org/gitlab/-/issues/480872) | N/A | Configure proxies to not strip out this header, provide health check that detects missing headers |
+| Chat responses take a long time to complete | The customer was using a proxy server between GitLab and cloud.gitlab.com and a custom DNS setup that prevented GitLab from resolving cloud.gitlab.com, resulting in DNS timeouts | [triage issue](https://gitlab.com/gitlab-com/core-sub-department/section-core-request-for-help/-/issues/115) | Disable `DNS rebinding` in admin settings | Auto-disable `DNS rebinding` when we detect customers use proxies |
