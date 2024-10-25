@@ -35,9 +35,12 @@ Follow the guidelines for setting up your development environment with `asdf` an
 
 ## Obtain the Grafana Playground API Key
 
-We provide a Grafana API key through 1Password stored in `Grafana Playground API token` under the `developer-playground-key API-key` section.
+We provide a Grafana API key through 1Password:
+* Vault: `Engineering`
+* Item: `Grafana playground API token`
+* Field: `developer-playground-key API Key`
 
-Load this key into the `GRAFANA_API_TOKEN` environment variable by running `./dashboards/load-creds.sh`.
+Load this key into the `GRAFANA_API_TOKEN` environment variable by running `source ./dashboards/load-creds.sh`.
 This expects the [1Password CLI tool to be installed](https://1password.com/downloads/command-line) and signed into your 1Password account.
 
 We can also export the value directly into the GRAFANA_API_TOKEN environment variable using this commands:
