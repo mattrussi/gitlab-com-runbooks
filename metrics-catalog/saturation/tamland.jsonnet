@@ -96,7 +96,6 @@ local saturationPoints = {
   services: services(uniqServices(saturation)),
   saturationPoints: saturationPoints,
   teams: serviceCatalog.getRawCatalogTeams(),
-  shardMapping: {},
   report: {
     pages: [
       page('api-git-web.md', 'API, Git, and Web', 'api|git|internal-api|web|websockets'),
