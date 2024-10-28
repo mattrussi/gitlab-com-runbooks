@@ -49,7 +49,7 @@ op signin
 export GRAFANA_API_TOKEN=$(op read "op://Engineering/Grafana playground API token/Tokens/developer-playground-key API Key")
 ```
 
-Alternatively, grab the API key from 1Password manually and set it with `export GRAFANA_API_TOKEN=...`.
+This will be automatically done when using the `test-dashboard.sh` script. Alternatively, grab the API key from 1Password manually and set it with `export GRAFANA_API_TOKEN=...`.
 
 ## Modify a dashboard
 
