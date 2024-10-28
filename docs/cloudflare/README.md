@@ -32,6 +32,7 @@
 * [Blocking and Disabling Things in HAProxy](../frontend/block-things-in-haproxy.md)
 * [HAProxy Management at GitLab](../frontend/haproxy.md)
 * [Web IDE Assets](../gitlab-static/web-ide-assets.md)
+* [HTTP Router Worker Logs](../http-router/logging.md)
 * [Kubernetes-Agent Basic Troubleshooting](../kas/kubernetes-agent-basic-troubleshooting.md)
 * [Upgrading Monitoring Components](../monitoring/upgrades.md)
 * [Session: Application architecture](../onboarding/architecture.md)
