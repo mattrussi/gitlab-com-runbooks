@@ -64,6 +64,11 @@ if [[ -n $dry_run ]]; then
   generate_dashboards_for_file "${dashboard_file}"
   exit 0
 else
+  if command -v op; then
+    op signin
+    GRAFANA_API_TOKEN=$(op read "op://Engineering/Grafana playground API token/Tokens/developer-playground-key API Key")
+    export GRAFANA_API_TOKEN
+  fi
   if [[ -z ${GRAFANA_API_TOKEN:-} ]]; then
     echo "You must set GRAFANA_API_TOKEN to use this script. Review the instructions in dashboards/README.md to details of how to obtain this token."
     exit 1
