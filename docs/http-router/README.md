@@ -15,6 +15,9 @@
 * [staging.gitlab.com](https://dash.cloudflare.com/852e9d53d0f8adbd9205389356f2303d/workers/services/view/staging-gitlab-com-cells-http-router/production/observability/logs)
 * [gitlab.com](https://dash.cloudflare.com/852e9d53d0f8adbd9205389356f2303d/workers/services/view/production-gitlab-com-cells-http-router/production/observability/logs)
 
+## Troubleshooting Pointers
+
+* [HTTP Router Worker Logs](logging.md)
 <!-- END_MARKER -->
 
 <!-- ## Summary -->

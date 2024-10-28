@@ -28,6 +28,7 @@
 * [HAProxy Management at GitLab](../frontend/haproxy.md)
 * [Possible Breach of SSH MaxStartups](../frontend/ssh-maxstartups-breach.md)
 * [Purge Git data](../git/purge-git-data.md)
+* [HTTP Router Worker Logs](../http-router/logging.md)
 * [Kubernetes-Agent Basic Troubleshooting](../kas/kubernetes-agent-basic-troubleshooting.md)
 * [Kubernetes](../kube/kubernetes.md)
 * [logging_gcs_archive_bigquery.md](logging_gcs_archive_bigquery.md)
