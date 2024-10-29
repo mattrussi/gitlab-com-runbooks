@@ -45,10 +45,10 @@ local serviceApplicableSaturationTypes(service)
       null,
 
   findServicesExcluding(first=null, excluding)::
-    findServiceTypesWithFirst(first, function(s) !std.setMember(s.type, excluding)),
+    findServiceTypesWithFirst(first, function(s) !std.member(excluding, s.type)),
 
   findServicesWithTag(first=null, tag)::
-    findServiceTypesWithFirst(first, function(s) std.setMember(tag, s.tags)),
+    findServiceTypesWithFirst(first, function(s) std.member(s.tags, tag)),
 
   findKubeProvisionedServices(first=null)::
     findServiceTypesWithFirst(first, function(s) s.provisioning.kubernetes),
