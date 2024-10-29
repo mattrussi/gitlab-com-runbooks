@@ -37,7 +37,7 @@ Check the first panel "Active session history (ASH)", often, it help identify is
 
 To review Wait events in more details and from various point of views, please use "Wait events analysis dashboard" (WIP).
 
-### Step 2. From ASH to Host stats to find correlation
+### Step 2. From ASH down to Host stats
 Verify problem symptoms observed on the ASH panel by reviewing the Host Stats section:
 
 - CPU: 
