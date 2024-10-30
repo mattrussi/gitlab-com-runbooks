@@ -80,10 +80,22 @@ checks:
     tags:
       - web
       - sla
+      - pingdom-exporter-check
     teams:
       - Infrastructure
     integrations:
       - pagerduty
+
+  - url: https://staging.gitlab.com/
+    timeout_ms: 30000
+    resolution_minutes: 5
+    notify_when_restored: true
+    tags:
+      - web
+      - staging
+      - pingdom-exporter-check
+    teams:
+      - Infrastructure
 
   - url: https://gitlab.com/projects/new
     timeout_ms: 30000
@@ -130,6 +142,7 @@ checks:
     notify_when_restored: true
     tags:
       - haproxy
+      - pingdom-exporter-check
     teams:
       - Infrastructure
     integrations:
@@ -193,6 +206,7 @@ checks:
     notify_when_restored: true
     tags:
       - cloudflare
+      - pingdom-exporter-check
     teams:
       - Infrastructure
   # integrations:
@@ -204,6 +218,7 @@ checks:
     notify_when_restored: true
     tags:
       - cloudflare
+      - pingdom-exporter-check
     teams:
       - Infrastructure
   # integrations:
@@ -241,6 +256,7 @@ checks:
     notify_when_restored: true
     tags:
       - version-gitlab
+      - pingdom-exporter-check
     teams:
       - Infrastructure
     integrations:
