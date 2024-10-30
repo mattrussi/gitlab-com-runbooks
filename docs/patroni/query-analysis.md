@@ -50,8 +50,6 @@ The view `pg_stat_statements` has 3 kinds of columns:
 2. Descriptive columns: ID of database (`dbid`), user (`userid`), and the query itself (`query`).
 3. Metrics. Almost all of them are cumulative: `calls`, `total_time`, `rows`, etc. Non-cumulative: `stddev_plan_time`, `stddev_exec_time`, `min_exec_time`, etc. In this post, we'll focus only on cumulative ones.
 
-// Below I sometimes call normalized query "query group" or simply "group".
-
 Let's mention some metrics that are usually most frequently used in macro optimization ([full list](https://postgresql.org/docs/current/pgstatstatements.html#PGSTATSTATEMENTS-PG-STAT-STATEMENTS)):
 1. `calls` – how many query calls happened for this query group (normalized query)
 2. `total_plan_time` and `total_exec_time` – aggregated duration for planning and execution for this group (again, remember: failed queries are not tracked, including those that failed on `statement_timeout`)
