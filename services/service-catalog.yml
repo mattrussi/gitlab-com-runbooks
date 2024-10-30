@@ -730,12 +730,14 @@ services:
       dependencies:
       logging:
         - name: pre.gitlab.com
-          permalink: https://dash.cloudflare.com/852e9d53d0f8adbd9205389356f2303d/workers/services/view/pre-gitlab-com-cells-http-router/production/logs/live
+          permalink: https://dash.cloudflare.com/852e9d53d0f8adbd9205389356f2303d/workers/services/view/pre-gitlab-com-cells-http-router/production/observability/logs
         - name: staging.gitlab.com
-          permalink: https://dash.cloudflare.com/852e9d53d0f8adbd9205389356f2303d/workers/services/view/staging-gitlab-com-cells-http-router/production/logs/live
+          permalink: https://dash.cloudflare.com/852e9d53d0f8adbd9205389356f2303d/workers/services/view/staging-gitlab-com-cells-http-router/production/observability/logs
+        - name: gitlab.com
+          permalink: https://dash.cloudflare.com/852e9d53d0f8adbd9205389356f2303d/workers/services/view/production-gitlab-com-cells-http-router/production/observability/logs
     observability:
       monitors:
-        gitlab_dashboard: https://dash.cloudflare.com/852e9d53d0f8adbd9205389356f2303d/workers/services/view/staging-gitlab-com-cells-http-router/production
+        gitlab_dashboard: https://dash.cloudflare.com/852e9d53d0f8adbd9205389356f2303d/workers/services/view/production-gitlab-com-cells-http-router/production
 
   - name: influxdb
     tier: inf
@@ -2695,3 +2697,25 @@ services:
     observability:
       monitors:
         primary_grafana_dashboard: secret-detection-main/secret-detection3a-overview
+
+  - name: sast-service
+    tier: sv
+    friendly_name: SAST Scanner Service for SAST in the IDE
+    label: SastService
+    owner: static_analysis
+    teams:
+      - static_analysis
+    technical:
+      project:
+        - https://gitlab.com/gitlab-org/secure/sast-ide-integration
+      documents:
+        architecture: https://handbook.gitlab.com/handbook/engineering/architecture/design-documents/sast_ide_integration/
+        readiness_review: https://gitlab.com/gitlab-com/gl-infra/readiness/-/merge_requests/226
+        service:
+          - https://gitlab.com/gitlab-org/secure/sast-scanner-service
+      logging:
+        - name: sast-service
+          permalink: https://console.cloud.google.com/run/detail/us-central1/sast-service/logs?project=gitlab-runway-staging
+    observability:
+      monitors:
+        primary_grafana_dashboard: sast-service-main/sast-service-overview

@@ -23,6 +23,7 @@
 
 ## Troubleshooting Pointers
 
+* [Atlantis Web UI](../atlantis/webui.md)
 * [../certificates/chef_hybrid.md](../certificates/chef_hybrid.md)
 * [../certificates/chef_vault.md](../certificates/chef_vault.md)
 * [../certificates/cloudflare.md](../certificates/cloudflare.md)

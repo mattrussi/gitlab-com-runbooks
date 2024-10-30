@@ -78,6 +78,7 @@
 * [Postgres Replicas](../postgres-dr-delayed/postgres-dr-replicas.md)
 * [Container Registry Database Index Bloat](../registry/db-index-bloat.md)
 * [Container Registry database post-deployment migrations](../registry/db-post-deployment-migrations.md)
+* [A survival guide for SREs to working with Sidekiq at GitLab](../sidekiq/sidekiq-survival-guide-for-sres.md)
 * [Teleport Administration](../teleport/teleport_admin.md)
 * [How to use flamegraphs for performance profiling](../tutorials/how_to_use_flamegraphs_for_perf_profiling.md)
 * [Deleted Project Restoration](../uncategorized/deleted-project-restore.md)

@@ -36,6 +36,7 @@ Ideally, this measurement is designed to inform the overall flow and duration of
 
 | Date | Environment | VM Provision Time | Bootstrap Time | Notes |
 | ---- | ----------- | ------------------------ | -------------- | ----- |
+| 2024-10-21 | GPRD | 00:39:00 | 00:10:41 | [Gameday change issue](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/18645), the VM provision time is for 45 Production Gitaly VMs |
 | 2024-10-15 | GSTG | 00:14:10 | 00:07:01 | [Gameday change issue](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/18627), this time is calculated from the slowest Gitaly node in the recreation process. |
 | 2024-08-22 | GSTG | 00:14:49 | 00:07:07 | [Gameday change issue](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/18413), this time is calculated from the slowest Gitaly node in the recreation process. |
 | 2024-07-10 | GSTG | 00:18:21 | 00:08:48 | [Change issue](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/18221) |
@@ -46,6 +47,7 @@ Ideally, this measurement is designed to inform the overall flow and duration of
 
 | Date | Environment | Duration | Notes |
 | ---- | ----------- | -------- | ----- |
+| 2024-10-21 | GPRD | 02:05:00 | [Change Issue](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/18645) , this was a limited Gameday that only measured creating and removing VMs |
 | 2024-10-15 | GSTG | 01:38:00 | [Change Issue](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/18627) , Time difference is between the change::in-progress & change::complete labels being set it includes time required to create MRs and time taken to SSH connection to Staging. |
 | 2024-08-22 | GSTG | 02:07:00 | [Change Issue](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/18413) , Time difference is between the change::in-progress & change::complete labels being set it includes time required to create MRs and time taken to create PAT and SSH connection to Staging. |
 | 2024-07-10 | GSTG | 01:15:00 | [Change issue](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/18221) |

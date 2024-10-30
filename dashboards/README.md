@@ -18,6 +18,8 @@ Example, the Container Registry is of service type `registry`.  Therefore,
 
 # Extending Grafana dashboards
 
+[Video guide on how to extend dashboards](https://www.youtube.com/watch?v=yZ2RiY_Akz0)
+
 In order to extend Grafana dashboard you don't need to run Grafana locally. The most common scheme for extending dashboards is updating their definitions in your local repository and pushing changes to a testing playground on `dashboards.gitlab.net`.
 
 An alternative way to check simple changes, that does not require installing dependencies on your local machine, is using a Grafana Playground folder. All users with viewer access to dashboards.gitlab.net, (ie, all GitLab team members), have full permission to edit all dashboards in the [Playground Grafana folder](https://dashboards.gitlab.net/dashboards/f/playground-FOR-TESTING-ONLY/playground-for-testing-purposes-only). You can create dashboards in this folder using the Grafana Web UI.
@@ -33,19 +35,21 @@ Follow the guidelines for setting up your development environment with `asdf` an
 
 ## Obtain the Grafana Playground API Key
 
-We provide a Grafana API key through 1Password stored in `Grafana Playground API token` under the `developer-playground-key API-key` section.
+We provide a Grafana API key through 1Password:
+* Vault: `Engineering`
+* Item: `Grafana playground API token`
+* Field: `developer-playground-key API Key`
 
-Load this key into the `GRAFANA_API_TOKEN` environment variable by running `./dashboards/load-creds.sh`.
-This expects the [1Password CLI tool to be installed](https://1password.com/downloads/command-line) and signed into your 1Password account.
+Load this key into the `GRAFANA_API_TOKEN` environment variable.
 
-We can also export the value directly into the GRAFANA_API_TOKEN environment variable using this commands:
+This expects the [1Password CLI tool to be installed](https://1password.com/downloads/command-line):
 
 ```sh
 op signin
 export GRAFANA_API_TOKEN=$(op read "op://Engineering/Grafana playground API token/Tokens/developer-playground-key API Key")
 ```
 
-Alternatively, grab the API key from 1Password and set it with `export GRAFANA_API_TOKEN=...`.
+This will be automatically done when using the `test-dashboard.sh` script. Alternatively, grab the API key from 1Password manually and set it with `export GRAFANA_API_TOKEN=...`.
 
 ## Modify a dashboard
 

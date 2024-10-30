@@ -289,7 +289,7 @@ metricsCatalog.serviceDefinition({
 
   capacityPlanning+: {
     saturation_dimensions: [
-      selectors.serializeHash({ shard: shard })
+      { selector: selectors.serializeHash({ shard: shard }) }
       for shard in $.shards
     ] + [
       {

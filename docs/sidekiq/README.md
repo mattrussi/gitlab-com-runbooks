@@ -50,7 +50,6 @@
 * [Redis-Sidekiq catchall workloads reduction](../redis/redis-sidekiq-catchall-workloads-reduction.md)
 * [A survival guide for SREs to working with Redis at GitLab](../redis/redis-survival-guide-for-sres.md)
 * [../redis/redis.md](../redis/redis.md)
-* [Creating a Sidekiq Shard](creating-a-shard.md)
 * [Disabling Sidekiq workers](disabling-a-worker.md)
 * [Pull mirror overdue queue is too large](large-pull-mirror-queue.md)
 * [[`SidekiqQueueTooLarge`](../../legacy-prometheus-rules/sidekiq-queues.yml)](large-sidekiq-queue.md)

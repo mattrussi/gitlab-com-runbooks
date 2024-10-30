@@ -25,6 +25,7 @@
 * [Alerting](../monitoring/alerts_manual.md)
 * [Mixins](../monitoring/mixins.md)
 * [High Number of Pending or Failed Outgoing Webhook Notifications](../registry/webhook-notifications.md)
+* [A survival guide for SREs to working with Sidekiq at GitLab](../sidekiq/sidekiq-survival-guide-for-sres.md)
 <!-- END_MARKER -->
 
 <!-- ## Summary -->

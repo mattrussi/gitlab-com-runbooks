@@ -1,0 +1,20 @@
+groups:
+- name: Primary Database CPU Saturation
+  rules:
+  - alert: PrimaryDatabaseCPUSaturation
+    expr: |
+        (
+        (avg_over_time(node_pressure_cpu_waiting_seconds_total{env="gprd", type=~"patroni"}[1m]) and on (fqdn) pg_replication_is_replica == 0)
+        -
+        (avg_over_time(node_pressure_cpu_waiting_seconds_total{env="gprd", type="patroni"}[1d]) and on (fqdn) pg_replication_is_replica == 0)
+        ) /
+        (stddev_over_time(node_pressure_cpu_waiting_seconds_total{env="gprd", type="patroni"}[1d]) and on (fqdn) pg_replication_is_replica == 0) > 3
+    for: 1s
+    labels:
+      team: database
+      severity: s3
+      alert_type: cause
+    annotations:
+      title: "Primary Database Node CPU Saturation"
+      description: |
+          The CPU utilization on the primary database is over three standard deviations above average.

@@ -86,7 +86,6 @@ local page(path, title, service_pattern) =
     },
     services: services(uniqServices(metrics.saturationMonitoring)),
     saturationPoints: saturationPoints,
-    shardMapping: {},
     teams: [],
     report: {
       pages: [

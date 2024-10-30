@@ -16,6 +16,7 @@
 
 ## Troubleshooting Pointers
 
+* [Atlantis Web UI](webui.md)
 * [Teleport Disaster Recovery](../teleport/teleport_disaster_recovery.md)
 <!-- END_MARKER -->
 

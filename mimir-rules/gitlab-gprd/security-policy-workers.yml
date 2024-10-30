@@ -1,0 +1,21 @@
+groups:
+- name: security_policy_management_worker_db_duration
+  rules:
+  - alert: HighSecurityPolicyWorkerDatabaseDuration
+    expr: >
+      sum by (worker) (rate(sidekiq_jobs_db_seconds_sum{environment="gprd",stage="main",type="sidekiq",feature_category="security_policy_management"}[10m]))
+      /
+      sum by (worker) (
+        rate(sidekiq_jobs_completion_count{environment="gprd",stage="main",type="sidekiq",feature_category="security_policy_management"}[10m])
+        or
+        rate(sidekiq_jobs_db_seconds_count{environment="gprd",stage="main",type="sidekiq",feature_category="security_policy_management"}[10m])
+      ) > 50
+    for: 10m
+    labels:
+      severity: 's4'
+      team: security_policies
+      alert_type: symptom
+      type: logging
+    annotations:
+      title: "High database duration for {{ $labels.worker }}"
+      description: "The avg. database time for {{ $labels.worker }} exceeded 50 seconds over 10 minutes."

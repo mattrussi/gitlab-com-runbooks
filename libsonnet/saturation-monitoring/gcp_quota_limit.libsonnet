@@ -34,9 +34,9 @@ local selectors = import 'promql/selectors.libsonnet';
     },
     capacityPlanning: {
       saturation_dimensions: [
-        selectors.serializeHash({ region: 'us-central1' }),
-        selectors.serializeHash({ region: 'us-east1' }),
-        selectors.serializeHash({ region: 'us-east4' }),
+        { selector: selectors.serializeHash({ region: 'us-central1' }) },
+        { selector: selectors.serializeHash({ region: 'us-east1' }) },
+        { selector: selectors.serializeHash({ region: 'us-east4' }) },
       ],
     },
   }),
@@ -68,7 +68,7 @@ local selectors = import 'promql/selectors.libsonnet';
     |||,
     capacityPlanning: {
       saturation_dimensions: [
-        selectors.serializeHash({ region: 'us-east4' }),
+        { selector: selectors.serializeHash({ region: 'us-east4' }) },
       ],
     },
   }),
@@ -91,12 +91,12 @@ local selectors = import 'promql/selectors.libsonnet';
     |||,
     capacityPlanning: {
       saturation_dimensions: [
-        selectors.serializeHash({ region: 'asia-northeast1' }),
-        selectors.serializeHash({ region: 'asia-northeast3' }),
-        selectors.serializeHash({ region: 'europe-west2' }),
-        selectors.serializeHash({ region: 'europe-west3' }),
-        selectors.serializeHash({ region: 'europe-west9' }),
-        selectors.serializeHash({ region: 'us-central1' }),
+        { selector: selectors.serializeHash({ region: 'asia-northeast1' }) },
+        { selector: selectors.serializeHash({ region: 'asia-northeast3' }) },
+        { selector: selectors.serializeHash({ region: 'europe-west2' }) },
+        { selector: selectors.serializeHash({ region: 'europe-west3' }) },
+        { selector: selectors.serializeHash({ region: 'europe-west9' }) },
+        { selector: selectors.serializeHash({ region: 'us-central1' }) },
       ],
     },
   }),

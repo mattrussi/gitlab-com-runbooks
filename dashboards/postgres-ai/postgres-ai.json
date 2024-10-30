@@ -2384,10 +2384,7 @@
     ],
     "refresh": "5m",
     "schemaVersion": 39,
-    "tags": [
-      "unmanaged",
-      "protected"
-    ],
+    "tags": [],
     "templating": {
       "list": [
         {
