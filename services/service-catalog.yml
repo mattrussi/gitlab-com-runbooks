@@ -272,6 +272,7 @@ services:
         security:
       dependencies:
         - service: elasticsearch
+        - service: web-pages
       logging:
         - name: elasticsearch logs and metrics
           permalink: https://cloud.elastic.co/deployments/6812a4f2d673478cabffaf43ffbaab56/logs-metrics
