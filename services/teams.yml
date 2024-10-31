@@ -530,6 +530,12 @@ teams:
   url: https://about.gitlab.com/handbook/marketing/developer-relations/
   slack_channel: developer-relations
 
+# UX
+
+- name: technical_writing
+  url: https://handbook.gitlab.com/handbook/product/ux/technical-writing/
+  slack_channel: docs
+
 # Test and Tools Infrastructure Team
 
 - name: test_tools_infrastructure

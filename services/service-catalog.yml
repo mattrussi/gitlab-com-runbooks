@@ -253,6 +253,33 @@ services:
         primary_grafana_dashboard:
         sentry_slug:
 
+  - name: docs.gitlab.com
+    tier: sv
+    friendly_name: docs.gitlab.com
+    label: docs.gitlab.com
+    owner: technical_writing
+    technical:
+      project:
+        - https://gitlab.com/gitlab-org/gitlab-docs
+      documents:
+        design:
+        architecture: https://gitlab.com/gitlab-org/gitlab-docs/-/blob/main/doc/architecture.md
+        readiness_review:
+        sre_guide: https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/docs.gitlab.com
+        developer_guide: https://gitlab.com/gitlab-org/gitlab-docs/-/blob/main/doc/development.md
+        service:
+          - https://gitlab.com/gitlab-org/gitlab-docs/-/blob/main/doc
+        security:
+      dependencies:
+        - service: elasticsearch
+      logging:
+        - name: elasticsearch logs and metrics
+          permalink: https://cloud.elastic.co/deployments/6812a4f2d673478cabffaf43ffbaab56/logs-metrics
+    observability:
+      monitors:
+        primary_grafana_dashboard:
+        sentry_slug:
+
   - name: errortracking
     tier: sv
     friendly_name: ErrorTracking
