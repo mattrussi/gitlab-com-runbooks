@@ -39,7 +39,6 @@
 * [CustomersDot main troubleshoot documentation](../customersdot/overview.md)
 * [../disaster-recovery/gameday.md](../disaster-recovery/gameday.md)
 * [Measuring Recovery Activities](../disaster-recovery/recovery-measurements.md)
-* [What is Programmable Search Engine?](../docs.gitlab.com/programmableSearch.md)
 * [../elastic/advanced-search-in-gitlab.md](../elastic/advanced-search-in-gitlab.md)
 * [Elastic Nodes Disk Space Saturation](../elastic/disk_space_saturation.md)
 * [HAProxy Logging](../frontend/haproxy-logging.md)
