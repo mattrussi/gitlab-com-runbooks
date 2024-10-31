@@ -20,7 +20,7 @@ groups:
       grafana_dashboard_id: http-router-main/http-router-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/http-router-main/http-router-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_datasource_id: mimir-gitlab-gprd
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1908761530"
       grafana_variables: environment,stage
@@ -43,18 +43,18 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_1h{component="worker_requests",env="gprd",monitor="global",type="http-router"}
+          gitlab_component_errors:ratio_1h{component="worker_requests",env=~"gprd|gstg",monitor="global",type="http-router"}
           > (14.4 * 0.001000)
         )
         and on (env,environment,tier,type,stage,component)
         (
-          gitlab_component_errors:ratio_5m{component="worker_requests",env="gprd",monitor="global",type="http-router"}
+          gitlab_component_errors:ratio_5m{component="worker_requests",env=~"gprd|gstg",monitor="global",type="http-router"}
           > (14.4 * 0.001000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="worker_requests",env="gprd",monitor="global",type="http-router"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="worker_requests",env=~"gprd|gstg",monitor="global",type="http-router"}) >= 1
       )
   - alert: HttpRouterServiceWorkerRequestsErrorSLOViolation
     for: 2m
@@ -72,7 +72,7 @@ groups:
       grafana_dashboard_id: http-router-main/http-router-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/http-router-main/http-router-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_datasource_id: mimir-gitlab-gprd
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1908761530"
       grafana_variables: environment,stage
@@ -95,18 +95,18 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_6h{component="worker_requests",env="gprd",monitor="global",type="http-router"}
+          gitlab_component_errors:ratio_6h{component="worker_requests",env=~"gprd|gstg",monitor="global",type="http-router"}
           > (6 * 0.001000)
         )
         and on (env,environment,tier,type,stage,component)
         (
-          gitlab_component_errors:ratio_30m{component="worker_requests",env="gprd",monitor="global",type="http-router"}
+          gitlab_component_errors:ratio_30m{component="worker_requests",env=~"gprd|gstg",monitor="global",type="http-router"}
           > (6 * 0.001000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="worker_requests",env="gprd",monitor="global",type="http-router"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="worker_requests",env=~"gprd|gstg",monitor="global",type="http-router"}) >= 0.16667
       )
   - alert: HttpRouterServiceWorkerRequestsTrafficCessation
     for: 5m
@@ -124,7 +124,7 @@ groups:
       grafana_dashboard_id: http-router-main/http-router-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/http-router-main/http-router-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_datasource_id: mimir-gitlab-gprd
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "296992239"
       grafana_variables: environment,stage
@@ -144,9 +144,9 @@ groups:
       slo_alert: "no"
       user_impacting: "no"
     expr: |
-      gitlab_component_ops:rate_30m{component="worker_requests",env="gprd",monitor="global",stage="main",type="http-router"} == 0
+      gitlab_component_ops:rate_30m{component="worker_requests",env=~"gprd|gstg",monitor="global",stage="main",type="http-router"} == 0
       and
-      gitlab_component_ops:rate_30m{component="worker_requests",env="gprd",monitor="global",stage="main",type="http-router"} offset 1h >= 0.16666666666666666
+      gitlab_component_ops:rate_30m{component="worker_requests",env=~"gprd|gstg",monitor="global",stage="main",type="http-router"} offset 1h >= 0.16666666666666666
   - alert: HttpRouterServiceWorkerRequestsTrafficAbsent
     for: 30m
     annotations:
@@ -165,7 +165,7 @@ groups:
       grafana_dashboard_id: http-router-main/http-router-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/http-router-main/http-router-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_datasource_id: mimir-gitlab-gprd
+      grafana_datasource_id: mimir-gitlab-ops
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "296992239"
       grafana_variables: environment,stage
@@ -185,6 +185,6 @@ groups:
       slo_alert: "no"
       user_impacting: "no"
     expr: |
-      gitlab_component_ops:rate_5m{component="worker_requests",env="gprd",monitor="global",stage="main",type="http-router"} offset 1h
+      gitlab_component_ops:rate_5m{component="worker_requests",env=~"gprd|gstg",monitor="global",stage="main",type="http-router"} offset 1h
       unless
-      gitlab_component_ops:rate_5m{component="worker_requests",env="gprd",monitor="global",stage="main",type="http-router"}
+      gitlab_component_ops:rate_5m{component="worker_requests",env=~"gprd|gstg",monitor="global",stage="main",type="http-router"}
