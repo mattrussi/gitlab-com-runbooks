@@ -22,6 +22,7 @@
   import 'saturation-monitoring/gitaly_total_disk_space.libsonnet',
   import 'saturation-monitoring/go_goroutines.libsonnet',
   import 'saturation-monitoring/go_memory.libsonnet',
+  import 'saturation-monitoring/http_router_cpu.libsonnet',
   import 'saturation-monitoring/kube_container_cpu_requests.libsonnet',
   import 'saturation-monitoring/kube_container_cpu_limits.libsonnet',
   import 'saturation-monitoring/kube_container_memory.libsonnet',
