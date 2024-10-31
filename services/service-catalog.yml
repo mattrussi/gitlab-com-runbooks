@@ -253,7 +253,7 @@ services:
         primary_grafana_dashboard:
         sentry_slug:
 
-  - name: docs.gitlab.com
+  - name: docs
     tier: sv
     friendly_name: docs.gitlab.com
     label: docs.gitlab.com
