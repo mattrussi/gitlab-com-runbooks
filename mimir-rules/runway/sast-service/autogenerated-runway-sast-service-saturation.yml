@@ -109,3 +109,20 @@ groups:
         ,
         0)
       )
+  - record: gitlab_component_saturation:ratio
+    labels:
+      component: runway_labkit_go_goroutines
+    expr: |
+      max by(env, environment, tier, type, stage, shard) (
+        clamp_min(
+          clamp_max(
+            sum by (env, environment, tier, type, stage, shard, region, instance) (
+              go_goroutines{type="sast-service"}
+            )
+            /
+            250000
+            ,
+            1)
+        ,
+        0)
+      )
