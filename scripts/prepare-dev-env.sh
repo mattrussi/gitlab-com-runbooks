@@ -53,6 +53,7 @@ fi
 
 # install mise/asdf dependencies
 echo "installing required plugins with mise install.."
+mise plugins update
 mise install
 
 # pre-commit is optional
