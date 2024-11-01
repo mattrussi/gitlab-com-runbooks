@@ -4,25 +4,6 @@
 
 [TOC]
 
-<!-- markdown-toc start - Don't edit this section. Run M-x markdown-toc-refresh-toc -->
-
-**Table of Contents**
-
-1. [Repository](#repository)
-2. [Content](#content)
-3. [Traffic Routing](#traffic-routing)
-    * [Review Apps](#review-apps)
-    * [Production](#production)
-4. [www-gitlab-com CI config](#www-gitlab-com-ci-config)
-5. [Q&A](#qa)
-6. [Availability Issues](#availability-issues)
-    * [about.gitlab.com is down](#aboutgitlabcom-is-down)
-7. [Escalation](#escalation)
-
-<!-- markdown-toc end -->
-
-# about.gitlab.com
-
 The [about.gitlab.com](https://gitlab.com/gitlab-com/www-gitlab-com) website is the go-to place to learn pretty much everything about GitLab: the product, pricing, various resources, blogs, support and a large part of our handbook. There is a project [underway](https://about.gitlab.com/handbook/content-websites-responsibility/migration-plan/) to migrate the handbook to <https://handbook.gitlab.com>.
 
 ## Repository
