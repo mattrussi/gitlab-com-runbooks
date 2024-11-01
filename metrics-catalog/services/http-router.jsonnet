@@ -6,7 +6,9 @@ metricsCatalog.serviceDefinition({
   tier: 'lb',
   // Metrics are collected in ops and relabelled with `env` and `environment`
   // based on their intended environment pairing.
-  tenants: ['gitlab-gprd', 'gitlab-gstg'],
+  tenants: ['gitlab-ops'],
+  tenantEnvironmentTargets: ['gprd', 'gstg'],
+
   monitoringThresholds: {
     errorRatio: 0.999,
   },

@@ -43,7 +43,20 @@ local namespaceFormat(tenant, serviceDefinition, baseName) =
               tenantName: tenantName,
               serviceName: serviceDefinition.type,
             },
-          filesForSeparateSelector(serviceDefinition, metricsConfig.separateMimirRecordingSelectors[tenantName].selector, extraArgs, 'mimir-%s' % tenantName)
+
+          filesForSeparateSelector(
+            serviceDefinition,
+            metricsConfig.separateMimirRecordingSelectors[tenantName].selector + (
+              if serviceDefinition == null then {} else (
+                local tenantEnvironmentTargets = std.get(serviceDefinition, 'tenantEnvironmentTargets', []);
+                if std.length(tenantEnvironmentTargets) > 0
+                then { env: { oneOf: tenantEnvironmentTargets } }
+                else {}
+              )
+            ),
+            extraArgs,
+            'mimir-%s' % tenantName,
+          ),
         ),
       tenants,
       {},
