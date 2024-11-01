@@ -48,9 +48,9 @@ local namespaceFormat(tenant, serviceDefinition, baseName) =
             serviceDefinition,
             metricsConfig.separateMimirRecordingSelectors[tenantName].selector + (
               if serviceDefinition == null then {} else (
-                local envOverrides = std.get(serviceDefinition, 'envOverrides', []);
-                if std.length(envOverrides) > 0
-                then { env: { oneOf: envOverrides } }
+                local tenantEnvironmentTargets = std.get(serviceDefinition, 'tenantEnvironmentTargets', []);
+                if std.length(tenantEnvironmentTargets) > 0
+                then { env: { oneOf: tenantEnvironmentTargets } }
                 else {}
               )
             ),

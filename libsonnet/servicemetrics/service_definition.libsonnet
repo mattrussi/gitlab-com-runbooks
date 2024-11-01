@@ -93,6 +93,7 @@ local validateTenants(serviceDefinition) =
       tenantMemberValidator
     ),
     defaultTenant: validator.optional(validator.setMember(mimirTenants)),
+    tenantEnvironmentTargets: validator.optional(validator.arrayOfStrings),
   });
 
   tenantsValidator.assertValid(serviceDefinition);
