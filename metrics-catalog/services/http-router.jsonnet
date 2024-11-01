@@ -1,5 +1,6 @@
 local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local rateMetric = metricsCatalog.rateMetric;
+local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 
 metricsCatalog.serviceDefinition({
   type: 'http-router',
@@ -48,6 +49,17 @@ metricsCatalog.serviceDefinition({
       ),
 
       significantLabels: ['script_name'],
+
+      toolingLinks: std.flattenArrays([
+        [
+          toolingLinks.cloudflareWorker.logs.live(scriptName='%s-gitlab-com-cells-http-router' % environment),
+          toolingLinks.cloudflareWorker.logs.historical(scriptName='%s-gitlab-com-cells-http-router' % environment),
+        ]
+        for environment in [
+          'production',
+          'staging',
+        ]
+      ]),
     },
   },
   skippedMaturityCriteria: {
