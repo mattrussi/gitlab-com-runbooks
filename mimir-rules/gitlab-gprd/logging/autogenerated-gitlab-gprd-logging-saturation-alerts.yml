@@ -325,9 +325,9 @@ groups:
           clamp_min(
             clamp_max(
               (
-                avg_over_time(elasticsearch_thread_pool_active_count{exported_type!="snapshot", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[5m])
+                avg_over_time(elasticsearch_thread_pool_active_count{exported_type!~"snapshot|force_merge", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[5m])
                 /
-                (avg_over_time(elasticsearch_thread_pool_threads_count{exported_type!="snapshot", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[5m]) > 0)
+                (avg_over_time(elasticsearch_thread_pool_threads_count{exported_type!~"snapshot|force_merge", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[5m]) > 0)
               )
               ,
               1)
@@ -339,9 +339,9 @@ groups:
           clamp_min(
             clamp_max(
               (
-                avg_over_time(elasticsearch_thread_pool_active_count{exported_type!="snapshot", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[5m])
+                avg_over_time(elasticsearch_thread_pool_active_count{exported_type!~"snapshot|force_merge", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[5m])
                 /
-                (avg_over_time(elasticsearch_thread_pool_threads_count{exported_type!="snapshot", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[5m]) > 0)
+                (avg_over_time(elasticsearch_thread_pool_threads_count{exported_type!~"snapshot|force_merge", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[5m]) > 0)
               )
               ,
               1)

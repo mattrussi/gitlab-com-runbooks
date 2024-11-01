@@ -95,9 +95,9 @@ groups:
         clamp_min(
           clamp_max(
             (
-              avg_over_time(elasticsearch_thread_pool_active_count{exported_type!="snapshot", env="gstg",type="search"}[5m])
+              avg_over_time(elasticsearch_thread_pool_active_count{exported_type!~"snapshot|force_merge", env="gstg",type="search"}[5m])
               /
-              (avg_over_time(elasticsearch_thread_pool_threads_count{exported_type!="snapshot", env="gstg",type="search"}[5m]) > 0)
+              (avg_over_time(elasticsearch_thread_pool_threads_count{exported_type!~"snapshot|force_merge", env="gstg",type="search"}[5m]) > 0)
             )
             ,
             1)
