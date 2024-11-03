@@ -1066,7 +1066,7 @@ commit-and-push-feature-categories-update:
     - ./scripts/commit-and-push-feature-categories-update.sh
 
 pages:
-  image: python:3.12
+  image: python:3.13
   stage: release
   script:
     - mkdir -p public
