@@ -17,7 +17,7 @@ GEM
     ast (2.4.2)
     base64 (0.2.0)
     bigdecimal (3.1.8)
-    chef-utils (18.4.12)
+    chef-utils (18.5.0)
       concurrent-ruby
     concurrent-ruby (1.3.4)
     connection_pool (2.4.1)
@@ -128,7 +128,7 @@ GEM
     logger (1.6.1)
     mini_mime (1.1.5)
     minitest (5.25.1)
-    mixlib-shellout (3.2.8)
+    mixlib-shellout (3.3.3)
       chef-utils
     multi_json (1.15.0)
     net-http (0.4.1)
