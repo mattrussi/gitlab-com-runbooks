@@ -125,7 +125,7 @@ GEM
     i18n (1.14.5)
       concurrent-ruby (~> 1.0)
     io-console (0.7.2)
-    json (2.7.4)
+    json (2.7.5)
     jwt (2.8.1)
       base64
     kramdown (2.4.0)
