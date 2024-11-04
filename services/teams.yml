@@ -263,7 +263,7 @@ teams:
 
 - name: database
   product_stage_group: database
-  slack_alerts_channel: g_database
+  slack_alerts_channel: g_database_frameworks
   ignored_components:
   - graphql_query
 
