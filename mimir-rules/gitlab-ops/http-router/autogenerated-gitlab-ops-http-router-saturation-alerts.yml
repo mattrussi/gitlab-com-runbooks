@@ -33,8 +33,8 @@ groups:
         The more time on the CPU we spend the more latency the HTTP Router is adding to every request. This also has a direct impact on [cost](https://developers.cloudflare.com/workers/platform/pricing/#workers) for HTTP Router.
 
         For profiling a worker follow https://developers.cloudflare.com/workers/observability/dev-tools/cpu-usage/
-      grafana_dashboard_id: alerts-http_router_cpu
-      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-http_router_cpu?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_id: alerts-http-router-capacity-review
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-http-router-capacity-review?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
         }}
       grafana_datasource_id: mimir-gitlab-ops

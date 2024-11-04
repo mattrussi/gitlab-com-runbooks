@@ -15,7 +15,7 @@ local resourceSaturationPoint = (import 'servicemetrics/resource_saturation_poin
 
       For profiling a worker follow https://developers.cloudflare.com/workers/observability/dev-tools/cpu-usage/
     |||,
-    grafana_dashboard_uid: 'http_router_cpu',
+    grafana_dashboard_uid: 'http-router-capacity-review',
     resourceLabels: ['script_name'],
     queryFormatConfig: {
       maxResponseTimeMs: 50,
