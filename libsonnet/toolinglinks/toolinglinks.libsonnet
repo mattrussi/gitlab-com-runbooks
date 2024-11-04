@@ -23,9 +23,9 @@ local generateMarkdown(toolingLinks, options={}) =
   std.join('', generateMarkdownLinks(renderLinks(toolingLinks, options)));
 
 {
-  aesthetics: (import './aesthetics.libsonnet'),
+  aesthetics:: (import './aesthetics.libsonnet'),
   cloudflare:: (import './cloudflare.libsonnet').cloudflare,
-  cloudSQL: (import './cloud_sql.libsonnet').cloudSQL,
+  cloudSQL:: (import './cloud_sql.libsonnet').cloudSQL,
   continuousProfiler:: (import './continuous_profiler.libsonnet').continuousProfiler,
   elasticAPM:: (import './elastic_apm.libsonnet').elasticAPM,
   grafana:: (import './grafana.libsonnet').grafana,
@@ -34,9 +34,10 @@ local generateMarkdown(toolingLinks, options={}) =
   bigquery:: (import './bigquery.libsonnet').bigquery,
   kibana:: (import './kibana.libsonnet').kibana,
   gkeDeployment:: (import './gke_deployment.libsonnet').gkeDeployment,
-  googleLoadBalancer: (import './google_load_balancer.libsonnet').googleLoadBalancer,
-  googleCloudRun: (import './google_cloud_run.libsonnet').googleCloudRun,
-  stackdriverLogs: (import './stackdriver_logs.libsonnet').stackdriverLogs,
+  googleLoadBalancer:: (import './google_load_balancer.libsonnet').googleLoadBalancer,
+  googleCloudRun:: (import './google_cloud_run.libsonnet').googleCloudRun,
+  serviceCatalogLogging:: (import './service_catalog_logging.libsonnet').serviceCatalogLogging,
+  stackdriverLogs:: (import './stackdriver_logs.libsonnet').stackdriverLogs,
   generateMarkdown:: generateMarkdown,
   renderLinks:: renderLinks,
 }

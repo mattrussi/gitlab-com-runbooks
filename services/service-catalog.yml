@@ -751,18 +751,22 @@ services:
         design:
         architecture: https://docs.gitlab.com/ee/architecture/blueprints/cells/routing-service.html
         readiness_review: https://gitlab.com/gitlab-com/gl-infra/readiness/-/tree/master/http-router
-        sre_guide:
+        sre_guide: https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/http-router/logging.md
         developer_guide:
         service:
         security:
       dependencies:
       logging:
-        - name: pre.gitlab.com
+        - name: pre.gitlab.com (historical)
           permalink: https://dash.cloudflare.com/852e9d53d0f8adbd9205389356f2303d/workers/services/view/pre-gitlab-com-cells-http-router/production/observability/logs
-        - name: staging.gitlab.com
+        - name: staging.gitlab.com (historical)
           permalink: https://dash.cloudflare.com/852e9d53d0f8adbd9205389356f2303d/workers/services/view/staging-gitlab-com-cells-http-router/production/observability/logs
-        - name: gitlab.com
+        - name: staging.gitlab.com (live)
+          permalink: https://dash.cloudflare.com/852e9d53d0f8adbd9205389356f2303d/workers/services/live-logs/staging-gitlab-com-cells-http-router/production
+        - name: gitlab.com (historical)
           permalink: https://dash.cloudflare.com/852e9d53d0f8adbd9205389356f2303d/workers/services/view/production-gitlab-com-cells-http-router/production/observability/logs
+        - name: gitlab.com (live)
+          permalink: https://dash.cloudflare.com/852e9d53d0f8adbd9205389356f2303d/workers/services/live-logs/production-gitlab-com-cells-http-router/production
     observability:
       monitors:
         gitlab_dashboard: https://dash.cloudflare.com/852e9d53d0f8adbd9205389356f2303d/workers/services/view/production-gitlab-com-cells-http-router/production

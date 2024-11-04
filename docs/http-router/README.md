@@ -11,9 +11,11 @@
 
 ## Logging
 
-* [pre.gitlab.com](https://dash.cloudflare.com/852e9d53d0f8adbd9205389356f2303d/workers/services/view/pre-gitlab-com-cells-http-router/production/observability/logs)
-* [staging.gitlab.com](https://dash.cloudflare.com/852e9d53d0f8adbd9205389356f2303d/workers/services/view/staging-gitlab-com-cells-http-router/production/observability/logs)
-* [gitlab.com](https://dash.cloudflare.com/852e9d53d0f8adbd9205389356f2303d/workers/services/view/production-gitlab-com-cells-http-router/production/observability/logs)
+* [pre.gitlab.com (historical)](https://dash.cloudflare.com/852e9d53d0f8adbd9205389356f2303d/workers/services/view/pre-gitlab-com-cells-http-router/production/observability/logs)
+* [staging.gitlab.com (historical)](https://dash.cloudflare.com/852e9d53d0f8adbd9205389356f2303d/workers/services/view/staging-gitlab-com-cells-http-router/production/observability/logs)
+* [staging.gitlab.com (live)](https://dash.cloudflare.com/852e9d53d0f8adbd9205389356f2303d/workers/services/live-logs/staging-gitlab-com-cells-http-router/production)
+* [gitlab.com (historical)](https://dash.cloudflare.com/852e9d53d0f8adbd9205389356f2303d/workers/services/view/production-gitlab-com-cells-http-router/production/observability/logs)
+* [gitlab.com (live)](https://dash.cloudflare.com/852e9d53d0f8adbd9205389356f2303d/workers/services/live-logs/production-gitlab-com-cells-http-router/production)
 
 ## Troubleshooting Pointers
 
