@@ -23,7 +23,6 @@
 * [Chef Guidelines](../config_management/chef-guidelines.md)
 * [Chef troubleshooting](../config_management/chef-troubleshooting.md)
 * [Chef Tips and Tools](../config_management/chef-workflow.md)
-* [What is Programmable Search Engine?](../docs.gitlab.com/programmableSearch.md)
 * [../elastic/advanced-search-in-gitlab.md](../elastic/advanced-search-in-gitlab.md)
 * [HAProxy Logging](../frontend/haproxy-logging.md)
 * [Find a project from its hashed storage path](../gitaly/find-project-from-hashed-storage.md)

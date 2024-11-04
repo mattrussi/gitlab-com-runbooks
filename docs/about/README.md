@@ -34,8 +34,6 @@
 * [CI Mirrored Tables](../decomposition/ci-mirrored-tables.md)
 * [design.gitlab.com Runbook](../design/design-gitlab-com.md)
 * [../disaster-recovery/gameday.md](../disaster-recovery/gameday.md)
-* [GitLab Docs website troubleshooting](../docs.gitlab.com/docsWebsite.md)
-* [What is Programmable Search Engine?](../docs.gitlab.com/programmableSearch.md)
 * [../elastic/advanced-search-in-gitlab.md](../elastic/advanced-search-in-gitlab.md)
 * [ErrorTracking main troubleshooting document](../errortracking/overview.md)
 * [Management for forum.gitlab.com](../forum/discourse-forum.md)
