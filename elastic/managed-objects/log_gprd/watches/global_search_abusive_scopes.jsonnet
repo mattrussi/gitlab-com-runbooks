@@ -170,7 +170,7 @@ local es_query = {
           ],
           text: |||
             There have been {{ ctx.payload.hits.total }} searches with abusive scopes in the past 24 hours.
-            :kibana: <https://log.gprd.gitlab.net/app/discover#/view/ea2d4430-4d6a-11ec-a012-eb2e5674cacf?_g=(filters%3A!()%2CrefreshInterval%3A(pause%3A!t%2Cvalue%3A0)%2Ctime%3A(from%3Anow-7d%2Cto%3Anow))|Kibana query>
+            :kibana: <https://log.gprd.gitlab.net/app/discover#/view/ea2d4430-4d6a-11ec-a012-eb2e5674cacf?_g=(filters%3A!()%2CrefreshInterval%3A(pause%3A!t%2Cvalue%3A0)%2Ctime%3A(from%3Anow-1d%2Cto%3Anow))|Kibana query>
           |||,
         },
       },
