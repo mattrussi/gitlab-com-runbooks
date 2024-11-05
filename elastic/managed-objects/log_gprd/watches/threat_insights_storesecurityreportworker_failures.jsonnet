@@ -59,7 +59,7 @@ local es_query = {
       slack: {
         message: {
           to: [
-            'g_govern_threat_insights',
+            'g_srm_security_insights',
 
           ],
           text: 'Watch [{{ctx.metadata.name}}] has exceeded the threshold.',
