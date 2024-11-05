@@ -83,6 +83,10 @@ The `Member` role does not allow people to create new projects or teams in Sentr
 * The project is assigned to the appropriate team, if the user is also requesting a new Sentry team to be created
   * Otherwise it can go into the `gitlab` Sentry team
 
+### Data
+
+Sentry stores it's data in a combination of CloudSQL running Postgresql and BigTable. The event data is stored for 30 days before deleted.
+
 ## Integrations
 
 The [Slack](https://docs.sentry.io/product/integrations/notification-incidents/slack/) and [GitLab](https://docs.sentry.io/product/integrations/source-code-mgmt/gitlab/) integrations have been set up. For more details see [this issue](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/17483).
