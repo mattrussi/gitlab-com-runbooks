@@ -87,7 +87,11 @@ function main() {
   fi
 
   # shellcheck disable=SC2155
-  local out=$(generate_output "$dest_dir" "$source_file" "${paths[@]}" "${params[@]}")
+  if [[ ${#paths[@]} -eq 0 ]]; then
+    local out=$(generate_output "$dest_dir" "$source_file" "${params[@]}")
+  else
+    local out=$(generate_output "$dest_dir" "$source_file" "${paths[@]}" "${params[@]}")
+  fi
 
   if [[ $generate_mixins_flag == true ]]; then
     if [[ -f "$overrides_dir/mixins.jsonnet" ]]; then

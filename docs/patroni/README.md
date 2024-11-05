@@ -24,6 +24,7 @@
 * [Interacting with Consul](../consul/interaction.md)
 * [Google Cloud Snapshots](../disaster-recovery/gcp-snapshots.md)
 * [Measuring Recovery Activities](../disaster-recovery/recovery-measurements.md)
+* [Zonal and Regional Recovery Guide](../disaster-recovery/recovery.md)
 * [Alerting](../monitoring/alerts_manual.md)
 * [../monitoring/prometheus-failing-rule-evaluations.md](../monitoring/prometheus-failing-rule-evaluations.md)
 * [Diagnosis with Kibana](../onboarding/kibana-diagnosis.md)
