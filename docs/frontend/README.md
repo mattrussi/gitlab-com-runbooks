@@ -21,6 +21,7 @@
 * [../certificates/gkms.md](../certificates/gkms.md)
 * [Chef Guidelines](../config_management/chef-guidelines.md)
 * [Disk space alerts (production)](../customersdot/disk-space.md)
+* [Zonal and Regional Recovery Guide](../disaster-recovery/recovery.md)
 * [HAProxy Management at GitLab](haproxy.md)
 * [Deploying a change to gitlab.rb](../git/deploy-gitlab-rb-change.md)
 * [Gitaly latency is too high](../gitaly/gitaly-latency.md)

@@ -32,6 +32,7 @@
 * [Chef Tips and Tools](../config_management/chef-workflow.md)
 * [Interacting with Consul](../consul/interaction.md)
 * [CustomersDot main troubleshoot documentation](../customersdot/overview.md)
+* [Zonal and Regional Recovery Guide](../disaster-recovery/recovery.md)
 * [../duo/triage.md](../duo/triage.md)
 * [../elastic/elastic-cloud.md](../elastic/elastic-cloud.md)
 * [../elastic/kibana.md](../elastic/kibana.md)

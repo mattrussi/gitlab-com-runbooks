@@ -19,6 +19,7 @@
 * [ApdexSLOViolation](../alerts/ApdexSLOViolation.md)
 * [ci-apdex-violating-slo.md](ci-apdex-violating-slo.md)
 * [service-ci-runners.md](service-ci-runners.md)
+* [Zonal and Regional Recovery Guide](../disaster-recovery/recovery.md)
 * [Rails SQL Apdex alerts](../patroni/rails-sql-apdex-slow.md)
 <!-- END_MARKER -->
 

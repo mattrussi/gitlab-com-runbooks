@@ -34,6 +34,7 @@
 * [CI Mirrored Tables](../decomposition/ci-mirrored-tables.md)
 * [design.gitlab.com Runbook](../design/design-gitlab-com.md)
 * [../disaster-recovery/gameday.md](../disaster-recovery/gameday.md)
+* [Zonal and Regional Recovery Guide](../disaster-recovery/recovery.md)
 * [../duo/triage.md](../duo/triage.md)
 * [../elastic/advanced-search-in-gitlab.md](../elastic/advanced-search-in-gitlab.md)
 * [ErrorTracking main troubleshooting document](../errortracking/overview.md)
