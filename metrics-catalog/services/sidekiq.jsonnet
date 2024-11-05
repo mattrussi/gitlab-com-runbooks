@@ -192,8 +192,9 @@ metricsCatalog.serviceDefinition({
 
   capacityPlanning: {
     saturation_dimensions: [
-      { selector: selectors.serializeHash({ shard: shard }) }
-      for shard in $.shards
+      { selector: selectors.serializeHash({ shard: shard.name }) }
+      for shard in sidekiqHelpers.shards.listAll()
+      if shard.capacityPlanning
     ],
     saturation_dimensions_keep_aggregate: false,
     components: [
