@@ -23,7 +23,6 @@ metricsCatalog.serviceDefinition({
   monitoringThresholds: {
     apdexScore: 0.99,
     // Setting the Error SLO at 99% because we see high transaction rollback rates
-    // TODO: investigate
     errorRatio: 0.99,
   },
   /*
@@ -32,10 +31,11 @@ metricsCatalog.serviceDefinition({
    * disable ops-rate anomaly detection on this service.
    */
   provisioning: {
-    kubernetes: false,
-    vms: true,
+    kubernetes: true,
+    vms: false,
   },
   serviceLevelIndicators: {
+    local baseSelector = { type: 'sentry' },
 
     sentry_events: {
       severity: 's3',
@@ -43,34 +43,33 @@ metricsCatalog.serviceDefinition({
       featureCategory: 'not_owned',
       description: |||
         Sentry is an application monitoring platform.
-         This SLI monitors the sentry API. 5xx responses are considered failures.
+        This SLI monitors the sentry API. 5xx responses are considered failures.
       |||,
 
-      local sentryQuerySelector = {
-        job: 'statsd_exporter',
-        type: 'sentry',
+      local sentryQuerySelector = baseSelector {
+        job: 'sentry-metrics',
       },
 
       apdex: histogramApdex(
-        histogram='sentry_events_latency_seconds_bucket',
+        histogram='sentry_events_latency',
         selector=sentryQuerySelector,
         satisfiedThreshold=10,
       ),
 
       requestRate: rateMetric(
-        counter='sentry_client_api_responses_total',
+        counter='sentry_events_processed',
         selector=sentryQuerySelector,
       ),
 
       errorRate: rateMetric(
-        counter='sentry_client_api_responses_total',
-        selector=sentryQuerySelector { status: { re: '^5.*' } },
+        counter='sentry_events_failed',
+        selector=sentryQuerySelector,
       ),
 
-      significantLabels: ['api_version', 'status'],
+      significantLabels: [],
     },
 
-    pg_transactions: {
+    postgresql_transactions: {
       severity: 's3',
       userImpacting: false,
       serviceAggregation: false,
@@ -80,22 +79,14 @@ metricsCatalog.serviceDefinition({
         Errors represent transaction rollbacks.
       |||,
 
-      local baseSelector = { type: 'sentry', job: 'postgres', datname: 'sentry' },
-
-      requestRate: combined([
-        rateMetric(
-          counter='pg_stat_database_xact_commit',
-          selector=baseSelector,
-        ),
-        rateMetric(
-          counter='pg_stat_database_xact_rollback',
-          selector=baseSelector,
-        ),
-      ]),
+      requestRate: rateMetric(
+        counter='stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count',
+        selector=baseSelector,
+      ),
 
       errorRate: rateMetric(
-        counter='pg_stat_database_xact_rollback',
-        selector=baseSelector,
+        counter='stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count',
+        selector=baseSelector { transaction_type: 'rollback' },
       ),
 
       significantLabels: [],
@@ -104,13 +95,81 @@ metricsCatalog.serviceDefinition({
           title='Stackdriver Logs: Sentry',
           project='gitlab-ops',
           queryHash={
-            'resource.type': 'gce_instance',
-            'labels."compute.googleapis.com/resource_name"': { contains: 'sentry' },
+            'resource.type': 'cloudsql_database',
+            'resource.labels.database_id': { contains: 'sentry' },
           },
         ),
       ],
     },
 
+    memcached_commands: {
+      severity: 's3',
+      userImpacting: false,
+      serviceAggregation: false,
+      featureCategory: 'not_owned',
+      description: |||
+        Represents all commands the Sentry Memcached pods processed with a hit status.
+        Errors represent all commands the Sentry Memcached pods failed to process with a badval status.
+      |||,
+
+      requestRate: rateMetric(
+        counter='memcached_commands_total',
+        selector=baseSelector,
+      ),
+
+      errorRate: rateMetric(
+        counter='memcached_commands_total',
+        selector=baseSelector { status: 'badval' },
+      ),
+
+      significantLabels: [],
+    },
+
+    kafka_topics: {
+      severity: 's3',
+      userImpacting: false,
+      serviceAggregation: false,
+      featureCategory: 'not_owned',
+      description: |||
+        Represents all messages the Sentry Kafka pods processed.
+        Errors represent all failed requests the Sentry Kafka pods failed to process.
+      |||,
+
+      requestRate: rateMetric(
+        counter='kafka_server_brokertopicmetrics_total_totalproducerequestspersec_count',
+        selector=baseSelector,
+      ),
+
+      errorRate: rateMetric(
+        counter='kafka_server_brokertopicmetrics_total_failedproducerequestspersec_count',
+        selector=baseSelector,
+      ),
+
+      significantLabels: [],
+    },
+
+    redis_latency: {
+      severity: 's3',
+      userImpacting: false,
+      serviceAggregation: false,
+      featureCategory: 'not_owned',
+      description: |||
+        Represents the latency of Redis commands.
+      |||,
+
+      apdex: histogramApdex(
+        histogram='redis_commands_duration_seconds_total',
+        selector=baseSelector,
+        satisfiedThreshold=10,
+      ),
+
+      requestRate: rateMetric(
+        counter='redis_commands_total',
+        selector=baseSelector,
+      ),
+
+      significantLabels: [],
+    },
   },
   skippedMaturityCriteria: {
     'Structured logs available in Kibana': 'We are migrating our self-managed Sentry instance to the hosted one. For more information: https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/13963. Besides, Sentry logs are also available in Stackdriver.',

@@ -6,61 +6,229 @@ groups:
   rules:
   - record: gitlab_component_ops:rate_5m
     labels:
-      component: pg_transactions
+      component: kafka_topics
       monitor: global
       tier: inf
       type: sentry
     expr: |
       sum by (env,environment,stage) (
-        label_replace(rate(pg_stat_database_xact_commit{datname="sentry",env="ops",job="postgres",type="sentry"}[5m] offset 30s), "_c", "0", "", "")
-        or
-        label_replace(rate(pg_stat_database_xact_rollback{datname="sentry",env="ops",job="postgres",type="sentry"}[5m] offset 30s), "_c", "1", "", "")
+        sli_aggregations:kafka_server_brokertopicmetrics_total_totalproducerequestspersec_count:rate_5m{env="ops",type="sentry"} offset 30s
       )
   - record: gitlab_component_errors:rate_5m
     labels:
-      component: pg_transactions
+      component: kafka_topics
       monitor: global
       tier: inf
       type: sentry
     expr: |
       (
         sum by (env,environment,stage) (
-          sli_aggregations:pg_stat_database_xact_rollback:rate_5m{datname="sentry",env="ops",job="postgres",type="sentry"} offset 30s
+          sli_aggregations:kafka_server_brokertopicmetrics_total_failedproducerequestspersec_count:rate_5m{env="ops",type="sentry"} offset 30s
         )
       )
       or
       (
         0 * group by(env,environment,stage) (
-          gitlab_component_ops:rate_5m{component="pg_transactions",env="ops",monitor="global",tier="inf",type="sentry"}
+          gitlab_component_ops:rate_5m{component="kafka_topics",env="ops",monitor="global",tier="inf",type="sentry"}
         )
       )
   - record: gitlab_component_errors:ratio_5m
     labels:
-      component: pg_transactions
+      component: kafka_topics
       monitor: global
       tier: inf
       type: sentry
     expr: |
       sum by (env,environment,stage) (
-        gitlab_component_errors:rate_5m{component="pg_transactions",env="ops",monitor="global",tier="inf",type="sentry"} offset 30s
+        gitlab_component_errors:rate_5m{component="kafka_topics",env="ops",monitor="global",tier="inf",type="sentry"} offset 30s
       )
       /
       sum by (env,environment,stage) (
-        gitlab_component_ops:rate_5m{component="pg_transactions",env="ops",monitor="global",tier="inf",type="sentry"} offset 30s
+        gitlab_component_ops:rate_5m{component="kafka_topics",env="ops",monitor="global",tier="inf",type="sentry"} offset 30s
       )
   - record: gitlab_component_apdex:ratio_5m
     labels:
-      component: pg_transactions
+      component: kafka_topics
       monitor: global
       tier: inf
       type: sentry
     expr: |
       sum by (env,environment,stage) (
-        gitlab_component_apdex:success:rate_5m{component="pg_transactions",env="ops",monitor="global",tier="inf",type="sentry"} offset 30s
+        gitlab_component_apdex:success:rate_5m{component="kafka_topics",env="ops",monitor="global",tier="inf",type="sentry"} offset 30s
       )
       /
       sum by (env,environment,stage) (
-        gitlab_component_apdex:weight:score_5m{component="pg_transactions",env="ops",monitor="global",tier="inf",type="sentry"} offset 30s
+        gitlab_component_apdex:weight:score_5m{component="kafka_topics",env="ops",monitor="global",tier="inf",type="sentry"} offset 30s
+      )
+  - record: gitlab_component_ops:rate_5m
+    labels:
+      component: memcached_commands
+      monitor: global
+      tier: inf
+      type: sentry
+    expr: |
+      sum by (env,environment,stage) (
+        sli_aggregations:memcached_commands_total:rate_5m{env="ops",type="sentry"} offset 30s
+      )
+  - record: gitlab_component_errors:rate_5m
+    labels:
+      component: memcached_commands
+      monitor: global
+      tier: inf
+      type: sentry
+    expr: |
+      (
+        sum by (env,environment,stage) (
+          sli_aggregations:memcached_commands_total:rate_5m{env="ops",status="badval",type="sentry"} offset 30s
+        )
+      )
+      or
+      (
+        0 * group by(env,environment,stage) (
+          gitlab_component_ops:rate_5m{component="memcached_commands",env="ops",monitor="global",tier="inf",type="sentry"}
+        )
+      )
+  - record: gitlab_component_errors:ratio_5m
+    labels:
+      component: memcached_commands
+      monitor: global
+      tier: inf
+      type: sentry
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_5m{component="memcached_commands",env="ops",monitor="global",tier="inf",type="sentry"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_5m{component="memcached_commands",env="ops",monitor="global",tier="inf",type="sentry"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_5m
+    labels:
+      component: memcached_commands
+      monitor: global
+      tier: inf
+      type: sentry
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_5m{component="memcached_commands",env="ops",monitor="global",tier="inf",type="sentry"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_5m{component="memcached_commands",env="ops",monitor="global",tier="inf",type="sentry"} offset 30s
+      )
+  - record: gitlab_component_ops:rate_5m
+    labels:
+      component: postgresql_transactions
+      monitor: global
+      tier: inf
+      type: sentry
+    expr: |
+      sum by (env,environment,stage) (
+        sli_aggregations:stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count:rate_5m{env="ops",type="sentry"} offset 30s
+      )
+  - record: gitlab_component_errors:rate_5m
+    labels:
+      component: postgresql_transactions
+      monitor: global
+      tier: inf
+      type: sentry
+    expr: |
+      (
+        sum by (env,environment,stage) (
+          sli_aggregations:stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count:rate_5m{env="ops",transaction_type="rollback",type="sentry"} offset 30s
+        )
+      )
+      or
+      (
+        0 * group by(env,environment,stage) (
+          gitlab_component_ops:rate_5m{component="postgresql_transactions",env="ops",monitor="global",tier="inf",type="sentry"}
+        )
+      )
+  - record: gitlab_component_errors:ratio_5m
+    labels:
+      component: postgresql_transactions
+      monitor: global
+      tier: inf
+      type: sentry
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_5m{component="postgresql_transactions",env="ops",monitor="global",tier="inf",type="sentry"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_5m{component="postgresql_transactions",env="ops",monitor="global",tier="inf",type="sentry"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_5m
+    labels:
+      component: postgresql_transactions
+      monitor: global
+      tier: inf
+      type: sentry
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_5m{component="postgresql_transactions",env="ops",monitor="global",tier="inf",type="sentry"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_5m{component="postgresql_transactions",env="ops",monitor="global",tier="inf",type="sentry"} offset 30s
+      )
+  - record: gitlab_component_apdex:success:rate_5m
+    labels:
+      component: redis_latency
+      monitor: global
+      tier: inf
+      type: sentry
+    expr: |
+      sum by (env,environment,stage) (
+        sli_aggregations:redis_commands_duration_seconds_total:rate_5m{env="ops",le="10",type="sentry"}
+      )
+  - record: gitlab_component_apdex:weight:score_5m
+    labels:
+      component: redis_latency
+      monitor: global
+      tier: inf
+      type: sentry
+    expr: |
+      sum by (env,environment,stage) (
+        sli_aggregations:redis_commands_duration_seconds_total:rate_5m{env="ops",le="+Inf",type="sentry"}
+      )
+  - record: gitlab_component_ops:rate_5m
+    labels:
+      component: redis_latency
+      monitor: global
+      tier: inf
+      type: sentry
+    expr: |
+      sum by (env,environment,stage) (
+        sli_aggregations:redis_commands_total:rate_5m{env="ops",type="sentry"} offset 30s
+      )
+  - record: gitlab_component_errors:ratio_5m
+    labels:
+      component: redis_latency
+      monitor: global
+      tier: inf
+      type: sentry
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_5m{component="redis_latency",env="ops",monitor="global",tier="inf",type="sentry"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_5m{component="redis_latency",env="ops",monitor="global",tier="inf",type="sentry"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_5m
+    labels:
+      component: redis_latency
+      monitor: global
+      tier: inf
+      type: sentry
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_5m{component="redis_latency",env="ops",monitor="global",tier="inf",type="sentry"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_5m{component="redis_latency",env="ops",monitor="global",tier="inf",type="sentry"} offset 30s
       )
   - record: gitlab_component_apdex:success:rate_5m
     labels:
@@ -70,7 +238,7 @@ groups:
       type: sentry
     expr: |
       sum by (env,environment,stage) (
-        sli_aggregations:sentry_events_latency_seconds_bucket:rate_5m{env="ops",job="statsd_exporter",le="10",type="sentry"}
+        sli_aggregations:sentry_events_latency:rate_5m{env="ops",job="sentry-metrics",le="10",type="sentry"}
       )
   - record: gitlab_component_apdex:weight:score_5m
     labels:
@@ -80,7 +248,7 @@ groups:
       type: sentry
     expr: |
       sum by (env,environment,stage) (
-        sli_aggregations:sentry_events_latency_seconds_bucket:rate_5m{env="ops",job="statsd_exporter",le="+Inf",type="sentry"}
+        sli_aggregations:sentry_events_latency:rate_5m{env="ops",job="sentry-metrics",le="+Inf",type="sentry"}
       )
   - record: gitlab_component_ops:rate_5m
     labels:
@@ -90,7 +258,7 @@ groups:
       type: sentry
     expr: |
       sum by (env,environment,stage) (
-        sli_aggregations:sentry_client_api_responses_total:rate_5m{env="ops",job="statsd_exporter",type="sentry"} offset 30s
+        sli_aggregations:sentry_events_processed:rate_5m{env="ops",job="sentry-metrics",type="sentry"} offset 30s
       )
   - record: gitlab_component_errors:rate_5m
     labels:
@@ -101,7 +269,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          sli_aggregations:sentry_client_api_responses_total:rate_5m{env="ops",job="statsd_exporter",status=~"^5.*",type="sentry"} offset 30s
+          sli_aggregations:sentry_events_failed:rate_5m{env="ops",job="sentry-metrics",type="sentry"} offset 30s
         )
       )
       or
@@ -143,61 +311,229 @@ groups:
   rules:
   - record: gitlab_component_ops:rate_30m
     labels:
-      component: pg_transactions
+      component: kafka_topics
       monitor: global
       tier: inf
       type: sentry
     expr: |
       sum by (env,environment,stage) (
-        label_replace(rate(pg_stat_database_xact_commit{datname="sentry",env="ops",job="postgres",type="sentry"}[30m] offset 30s), "_c", "0", "", "")
-        or
-        label_replace(rate(pg_stat_database_xact_rollback{datname="sentry",env="ops",job="postgres",type="sentry"}[30m] offset 30s), "_c", "1", "", "")
+        sli_aggregations:kafka_server_brokertopicmetrics_total_totalproducerequestspersec_count:rate_30m{env="ops",type="sentry"} offset 30s
       )
   - record: gitlab_component_errors:rate_30m
     labels:
-      component: pg_transactions
+      component: kafka_topics
       monitor: global
       tier: inf
       type: sentry
     expr: |
       (
         sum by (env,environment,stage) (
-          sli_aggregations:pg_stat_database_xact_rollback:rate_30m{datname="sentry",env="ops",job="postgres",type="sentry"} offset 30s
+          sli_aggregations:kafka_server_brokertopicmetrics_total_failedproducerequestspersec_count:rate_30m{env="ops",type="sentry"} offset 30s
         )
       )
       or
       (
         0 * group by(env,environment,stage) (
-          gitlab_component_ops:rate_30m{component="pg_transactions",env="ops",monitor="global",tier="inf",type="sentry"}
+          gitlab_component_ops:rate_30m{component="kafka_topics",env="ops",monitor="global",tier="inf",type="sentry"}
         )
       )
   - record: gitlab_component_errors:ratio_30m
     labels:
-      component: pg_transactions
+      component: kafka_topics
       monitor: global
       tier: inf
       type: sentry
     expr: |
       sum by (env,environment,stage) (
-        gitlab_component_errors:rate_30m{component="pg_transactions",env="ops",monitor="global",tier="inf",type="sentry"} offset 30s
+        gitlab_component_errors:rate_30m{component="kafka_topics",env="ops",monitor="global",tier="inf",type="sentry"} offset 30s
       )
       /
       sum by (env,environment,stage) (
-        gitlab_component_ops:rate_30m{component="pg_transactions",env="ops",monitor="global",tier="inf",type="sentry"} offset 30s
+        gitlab_component_ops:rate_30m{component="kafka_topics",env="ops",monitor="global",tier="inf",type="sentry"} offset 30s
       )
   - record: gitlab_component_apdex:ratio_30m
     labels:
-      component: pg_transactions
+      component: kafka_topics
       monitor: global
       tier: inf
       type: sentry
     expr: |
       sum by (env,environment,stage) (
-        gitlab_component_apdex:success:rate_30m{component="pg_transactions",env="ops",monitor="global",tier="inf",type="sentry"} offset 30s
+        gitlab_component_apdex:success:rate_30m{component="kafka_topics",env="ops",monitor="global",tier="inf",type="sentry"} offset 30s
       )
       /
       sum by (env,environment,stage) (
-        gitlab_component_apdex:weight:score_30m{component="pg_transactions",env="ops",monitor="global",tier="inf",type="sentry"} offset 30s
+        gitlab_component_apdex:weight:score_30m{component="kafka_topics",env="ops",monitor="global",tier="inf",type="sentry"} offset 30s
+      )
+  - record: gitlab_component_ops:rate_30m
+    labels:
+      component: memcached_commands
+      monitor: global
+      tier: inf
+      type: sentry
+    expr: |
+      sum by (env,environment,stage) (
+        sli_aggregations:memcached_commands_total:rate_30m{env="ops",type="sentry"} offset 30s
+      )
+  - record: gitlab_component_errors:rate_30m
+    labels:
+      component: memcached_commands
+      monitor: global
+      tier: inf
+      type: sentry
+    expr: |
+      (
+        sum by (env,environment,stage) (
+          sli_aggregations:memcached_commands_total:rate_30m{env="ops",status="badval",type="sentry"} offset 30s
+        )
+      )
+      or
+      (
+        0 * group by(env,environment,stage) (
+          gitlab_component_ops:rate_30m{component="memcached_commands",env="ops",monitor="global",tier="inf",type="sentry"}
+        )
+      )
+  - record: gitlab_component_errors:ratio_30m
+    labels:
+      component: memcached_commands
+      monitor: global
+      tier: inf
+      type: sentry
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_30m{component="memcached_commands",env="ops",monitor="global",tier="inf",type="sentry"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_30m{component="memcached_commands",env="ops",monitor="global",tier="inf",type="sentry"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_30m
+    labels:
+      component: memcached_commands
+      monitor: global
+      tier: inf
+      type: sentry
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_30m{component="memcached_commands",env="ops",monitor="global",tier="inf",type="sentry"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_30m{component="memcached_commands",env="ops",monitor="global",tier="inf",type="sentry"} offset 30s
+      )
+  - record: gitlab_component_ops:rate_30m
+    labels:
+      component: postgresql_transactions
+      monitor: global
+      tier: inf
+      type: sentry
+    expr: |
+      sum by (env,environment,stage) (
+        sli_aggregations:stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count:rate_30m{env="ops",type="sentry"} offset 30s
+      )
+  - record: gitlab_component_errors:rate_30m
+    labels:
+      component: postgresql_transactions
+      monitor: global
+      tier: inf
+      type: sentry
+    expr: |
+      (
+        sum by (env,environment,stage) (
+          sli_aggregations:stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count:rate_30m{env="ops",transaction_type="rollback",type="sentry"} offset 30s
+        )
+      )
+      or
+      (
+        0 * group by(env,environment,stage) (
+          gitlab_component_ops:rate_30m{component="postgresql_transactions",env="ops",monitor="global",tier="inf",type="sentry"}
+        )
+      )
+  - record: gitlab_component_errors:ratio_30m
+    labels:
+      component: postgresql_transactions
+      monitor: global
+      tier: inf
+      type: sentry
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_30m{component="postgresql_transactions",env="ops",monitor="global",tier="inf",type="sentry"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_30m{component="postgresql_transactions",env="ops",monitor="global",tier="inf",type="sentry"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_30m
+    labels:
+      component: postgresql_transactions
+      monitor: global
+      tier: inf
+      type: sentry
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_30m{component="postgresql_transactions",env="ops",monitor="global",tier="inf",type="sentry"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_30m{component="postgresql_transactions",env="ops",monitor="global",tier="inf",type="sentry"} offset 30s
+      )
+  - record: gitlab_component_apdex:success:rate_30m
+    labels:
+      component: redis_latency
+      monitor: global
+      tier: inf
+      type: sentry
+    expr: |
+      sum by (env,environment,stage) (
+        sli_aggregations:redis_commands_duration_seconds_total:rate_30m{env="ops",le="10",type="sentry"}
+      )
+  - record: gitlab_component_apdex:weight:score_30m
+    labels:
+      component: redis_latency
+      monitor: global
+      tier: inf
+      type: sentry
+    expr: |
+      sum by (env,environment,stage) (
+        sli_aggregations:redis_commands_duration_seconds_total:rate_30m{env="ops",le="+Inf",type="sentry"}
+      )
+  - record: gitlab_component_ops:rate_30m
+    labels:
+      component: redis_latency
+      monitor: global
+      tier: inf
+      type: sentry
+    expr: |
+      sum by (env,environment,stage) (
+        sli_aggregations:redis_commands_total:rate_30m{env="ops",type="sentry"} offset 30s
+      )
+  - record: gitlab_component_errors:ratio_30m
+    labels:
+      component: redis_latency
+      monitor: global
+      tier: inf
+      type: sentry
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_30m{component="redis_latency",env="ops",monitor="global",tier="inf",type="sentry"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_30m{component="redis_latency",env="ops",monitor="global",tier="inf",type="sentry"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_30m
+    labels:
+      component: redis_latency
+      monitor: global
+      tier: inf
+      type: sentry
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_30m{component="redis_latency",env="ops",monitor="global",tier="inf",type="sentry"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_30m{component="redis_latency",env="ops",monitor="global",tier="inf",type="sentry"} offset 30s
       )
   - record: gitlab_component_apdex:success:rate_30m
     labels:
@@ -207,7 +543,7 @@ groups:
       type: sentry
     expr: |
       sum by (env,environment,stage) (
-        sli_aggregations:sentry_events_latency_seconds_bucket:rate_30m{env="ops",job="statsd_exporter",le="10",type="sentry"}
+        sli_aggregations:sentry_events_latency:rate_30m{env="ops",job="sentry-metrics",le="10",type="sentry"}
       )
   - record: gitlab_component_apdex:weight:score_30m
     labels:
@@ -217,7 +553,7 @@ groups:
       type: sentry
     expr: |
       sum by (env,environment,stage) (
-        sli_aggregations:sentry_events_latency_seconds_bucket:rate_30m{env="ops",job="statsd_exporter",le="+Inf",type="sentry"}
+        sli_aggregations:sentry_events_latency:rate_30m{env="ops",job="sentry-metrics",le="+Inf",type="sentry"}
       )
   - record: gitlab_component_ops:rate_30m
     labels:
@@ -227,7 +563,7 @@ groups:
       type: sentry
     expr: |
       sum by (env,environment,stage) (
-        sli_aggregations:sentry_client_api_responses_total:rate_30m{env="ops",job="statsd_exporter",type="sentry"} offset 30s
+        sli_aggregations:sentry_events_processed:rate_30m{env="ops",job="sentry-metrics",type="sentry"} offset 30s
       )
   - record: gitlab_component_errors:rate_30m
     labels:
@@ -238,7 +574,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          sli_aggregations:sentry_client_api_responses_total:rate_30m{env="ops",job="statsd_exporter",status=~"^5.*",type="sentry"} offset 30s
+          sli_aggregations:sentry_events_failed:rate_30m{env="ops",job="sentry-metrics",type="sentry"} offset 30s
         )
       )
       or
@@ -280,61 +616,229 @@ groups:
   rules:
   - record: gitlab_component_ops:rate_1h
     labels:
-      component: pg_transactions
+      component: kafka_topics
       monitor: global
       tier: inf
       type: sentry
     expr: |
       sum by (env,environment,stage) (
-        label_replace(rate(pg_stat_database_xact_commit{datname="sentry",env="ops",job="postgres",type="sentry"}[1h] offset 30s), "_c", "0", "", "")
-        or
-        label_replace(rate(pg_stat_database_xact_rollback{datname="sentry",env="ops",job="postgres",type="sentry"}[1h] offset 30s), "_c", "1", "", "")
+        sli_aggregations:kafka_server_brokertopicmetrics_total_totalproducerequestspersec_count:rate_1h{env="ops",type="sentry"} offset 30s
       )
   - record: gitlab_component_errors:rate_1h
     labels:
-      component: pg_transactions
+      component: kafka_topics
       monitor: global
       tier: inf
       type: sentry
     expr: |
       (
         sum by (env,environment,stage) (
-          sli_aggregations:pg_stat_database_xact_rollback:rate_1h{datname="sentry",env="ops",job="postgres",type="sentry"} offset 30s
+          sli_aggregations:kafka_server_brokertopicmetrics_total_failedproducerequestspersec_count:rate_1h{env="ops",type="sentry"} offset 30s
         )
       )
       or
       (
         0 * group by(env,environment,stage) (
-          gitlab_component_ops:rate_1h{component="pg_transactions",env="ops",monitor="global",tier="inf",type="sentry"}
+          gitlab_component_ops:rate_1h{component="kafka_topics",env="ops",monitor="global",tier="inf",type="sentry"}
         )
       )
   - record: gitlab_component_errors:ratio_1h
     labels:
-      component: pg_transactions
+      component: kafka_topics
       monitor: global
       tier: inf
       type: sentry
     expr: |
       sum by (env,environment,stage) (
-        gitlab_component_errors:rate_1h{component="pg_transactions",env="ops",monitor="global",tier="inf",type="sentry"} offset 30s
+        gitlab_component_errors:rate_1h{component="kafka_topics",env="ops",monitor="global",tier="inf",type="sentry"} offset 30s
       )
       /
       sum by (env,environment,stage) (
-        gitlab_component_ops:rate_1h{component="pg_transactions",env="ops",monitor="global",tier="inf",type="sentry"} offset 30s
+        gitlab_component_ops:rate_1h{component="kafka_topics",env="ops",monitor="global",tier="inf",type="sentry"} offset 30s
       )
   - record: gitlab_component_apdex:ratio_1h
     labels:
-      component: pg_transactions
+      component: kafka_topics
       monitor: global
       tier: inf
       type: sentry
     expr: |
       sum by (env,environment,stage) (
-        gitlab_component_apdex:success:rate_1h{component="pg_transactions",env="ops",monitor="global",tier="inf",type="sentry"} offset 30s
+        gitlab_component_apdex:success:rate_1h{component="kafka_topics",env="ops",monitor="global",tier="inf",type="sentry"} offset 30s
       )
       /
       sum by (env,environment,stage) (
-        gitlab_component_apdex:weight:score_1h{component="pg_transactions",env="ops",monitor="global",tier="inf",type="sentry"} offset 30s
+        gitlab_component_apdex:weight:score_1h{component="kafka_topics",env="ops",monitor="global",tier="inf",type="sentry"} offset 30s
+      )
+  - record: gitlab_component_ops:rate_1h
+    labels:
+      component: memcached_commands
+      monitor: global
+      tier: inf
+      type: sentry
+    expr: |
+      sum by (env,environment,stage) (
+        sli_aggregations:memcached_commands_total:rate_1h{env="ops",type="sentry"} offset 30s
+      )
+  - record: gitlab_component_errors:rate_1h
+    labels:
+      component: memcached_commands
+      monitor: global
+      tier: inf
+      type: sentry
+    expr: |
+      (
+        sum by (env,environment,stage) (
+          sli_aggregations:memcached_commands_total:rate_1h{env="ops",status="badval",type="sentry"} offset 30s
+        )
+      )
+      or
+      (
+        0 * group by(env,environment,stage) (
+          gitlab_component_ops:rate_1h{component="memcached_commands",env="ops",monitor="global",tier="inf",type="sentry"}
+        )
+      )
+  - record: gitlab_component_errors:ratio_1h
+    labels:
+      component: memcached_commands
+      monitor: global
+      tier: inf
+      type: sentry
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_1h{component="memcached_commands",env="ops",monitor="global",tier="inf",type="sentry"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_1h{component="memcached_commands",env="ops",monitor="global",tier="inf",type="sentry"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_1h
+    labels:
+      component: memcached_commands
+      monitor: global
+      tier: inf
+      type: sentry
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_1h{component="memcached_commands",env="ops",monitor="global",tier="inf",type="sentry"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_1h{component="memcached_commands",env="ops",monitor="global",tier="inf",type="sentry"} offset 30s
+      )
+  - record: gitlab_component_ops:rate_1h
+    labels:
+      component: postgresql_transactions
+      monitor: global
+      tier: inf
+      type: sentry
+    expr: |
+      sum by (env,environment,stage) (
+        sli_aggregations:stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count:rate_1h{env="ops",type="sentry"} offset 30s
+      )
+  - record: gitlab_component_errors:rate_1h
+    labels:
+      component: postgresql_transactions
+      monitor: global
+      tier: inf
+      type: sentry
+    expr: |
+      (
+        sum by (env,environment,stage) (
+          sli_aggregations:stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count:rate_1h{env="ops",transaction_type="rollback",type="sentry"} offset 30s
+        )
+      )
+      or
+      (
+        0 * group by(env,environment,stage) (
+          gitlab_component_ops:rate_1h{component="postgresql_transactions",env="ops",monitor="global",tier="inf",type="sentry"}
+        )
+      )
+  - record: gitlab_component_errors:ratio_1h
+    labels:
+      component: postgresql_transactions
+      monitor: global
+      tier: inf
+      type: sentry
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_1h{component="postgresql_transactions",env="ops",monitor="global",tier="inf",type="sentry"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_1h{component="postgresql_transactions",env="ops",monitor="global",tier="inf",type="sentry"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_1h
+    labels:
+      component: postgresql_transactions
+      monitor: global
+      tier: inf
+      type: sentry
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_1h{component="postgresql_transactions",env="ops",monitor="global",tier="inf",type="sentry"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_1h{component="postgresql_transactions",env="ops",monitor="global",tier="inf",type="sentry"} offset 30s
+      )
+  - record: gitlab_component_apdex:success:rate_1h
+    labels:
+      component: redis_latency
+      monitor: global
+      tier: inf
+      type: sentry
+    expr: |
+      sum by (env,environment,stage) (
+        sli_aggregations:redis_commands_duration_seconds_total:rate_1h{env="ops",le="10",type="sentry"}
+      )
+  - record: gitlab_component_apdex:weight:score_1h
+    labels:
+      component: redis_latency
+      monitor: global
+      tier: inf
+      type: sentry
+    expr: |
+      sum by (env,environment,stage) (
+        sli_aggregations:redis_commands_duration_seconds_total:rate_1h{env="ops",le="+Inf",type="sentry"}
+      )
+  - record: gitlab_component_ops:rate_1h
+    labels:
+      component: redis_latency
+      monitor: global
+      tier: inf
+      type: sentry
+    expr: |
+      sum by (env,environment,stage) (
+        sli_aggregations:redis_commands_total:rate_1h{env="ops",type="sentry"} offset 30s
+      )
+  - record: gitlab_component_errors:ratio_1h
+    labels:
+      component: redis_latency
+      monitor: global
+      tier: inf
+      type: sentry
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_1h{component="redis_latency",env="ops",monitor="global",tier="inf",type="sentry"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_1h{component="redis_latency",env="ops",monitor="global",tier="inf",type="sentry"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_1h
+    labels:
+      component: redis_latency
+      monitor: global
+      tier: inf
+      type: sentry
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_1h{component="redis_latency",env="ops",monitor="global",tier="inf",type="sentry"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_1h{component="redis_latency",env="ops",monitor="global",tier="inf",type="sentry"} offset 30s
       )
   - record: gitlab_component_apdex:success:rate_1h
     labels:
@@ -344,7 +848,7 @@ groups:
       type: sentry
     expr: |
       sum by (env,environment,stage) (
-        sli_aggregations:sentry_events_latency_seconds_bucket:rate_1h{env="ops",job="statsd_exporter",le="10",type="sentry"}
+        sli_aggregations:sentry_events_latency:rate_1h{env="ops",job="sentry-metrics",le="10",type="sentry"}
       )
   - record: gitlab_component_apdex:weight:score_1h
     labels:
@@ -354,7 +858,7 @@ groups:
       type: sentry
     expr: |
       sum by (env,environment,stage) (
-        sli_aggregations:sentry_events_latency_seconds_bucket:rate_1h{env="ops",job="statsd_exporter",le="+Inf",type="sentry"}
+        sli_aggregations:sentry_events_latency:rate_1h{env="ops",job="sentry-metrics",le="+Inf",type="sentry"}
       )
   - record: gitlab_component_ops:rate_1h
     labels:
@@ -364,7 +868,7 @@ groups:
       type: sentry
     expr: |
       sum by (env,environment,stage) (
-        sli_aggregations:sentry_client_api_responses_total:rate_1h{env="ops",job="statsd_exporter",type="sentry"} offset 30s
+        sli_aggregations:sentry_events_processed:rate_1h{env="ops",job="sentry-metrics",type="sentry"} offset 30s
       )
   - record: gitlab_component_errors:rate_1h
     labels:
@@ -375,7 +879,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          sli_aggregations:sentry_client_api_responses_total:rate_1h{env="ops",job="statsd_exporter",status=~"^5.*",type="sentry"} offset 30s
+          sli_aggregations:sentry_events_failed:rate_1h{env="ops",job="sentry-metrics",type="sentry"} offset 30s
         )
       )
       or
@@ -417,71 +921,275 @@ groups:
   rules:
   - record: gitlab_component_apdex:success:rate_6h
     labels:
-      component: pg_transactions
+      component: kafka_topics
       monitor: global
       tier: inf
       type: sentry
     expr: |
       sum by (env,environment,stage) (
-        avg_over_time(gitlab_component_apdex:success:rate_1h{component="pg_transactions",env="ops",monitor="global",tier="inf",type="sentry"}[6h] offset 30s)
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="kafka_topics",env="ops",monitor="global",tier="inf",type="sentry"}[6h] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_6h
     labels:
-      component: pg_transactions
+      component: kafka_topics
       monitor: global
       tier: inf
       type: sentry
     expr: |
       sum by (env,environment,stage) (
-        avg_over_time(gitlab_component_apdex:weight:score_1h{component="pg_transactions",env="ops",monitor="global",tier="inf",type="sentry"}[6h] offset 30s)
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="kafka_topics",env="ops",monitor="global",tier="inf",type="sentry"}[6h] offset 30s)
       )
   - record: gitlab_component_ops:rate_6h
     labels:
-      component: pg_transactions
+      component: kafka_topics
       monitor: global
       tier: inf
       type: sentry
     expr: |
       sum by (env,environment,stage) (
-        avg_over_time(gitlab_component_ops:rate_1h{component="pg_transactions",env="ops",monitor="global",tier="inf",type="sentry"}[6h] offset 30s)
+        avg_over_time(gitlab_component_ops:rate_1h{component="kafka_topics",env="ops",monitor="global",tier="inf",type="sentry"}[6h] offset 30s)
       )
   - record: gitlab_component_errors:rate_6h
     labels:
-      component: pg_transactions
+      component: kafka_topics
       monitor: global
       tier: inf
       type: sentry
     expr: |
       sum by (env,environment,stage) (
-        avg_over_time(gitlab_component_errors:rate_1h{component="pg_transactions",env="ops",monitor="global",tier="inf",type="sentry"}[6h] offset 30s)
+        avg_over_time(gitlab_component_errors:rate_1h{component="kafka_topics",env="ops",monitor="global",tier="inf",type="sentry"}[6h] offset 30s)
       )
   - record: gitlab_component_errors:ratio_6h
     labels:
-      component: pg_transactions
+      component: kafka_topics
       monitor: global
       tier: inf
       type: sentry
     expr: |
       sum by (env,environment,stage) (
-        gitlab_component_errors:rate_6h{component="pg_transactions",env="ops",monitor="global",tier="inf",type="sentry"} offset 30s
+        gitlab_component_errors:rate_6h{component="kafka_topics",env="ops",monitor="global",tier="inf",type="sentry"} offset 30s
       )
       /
       sum by (env,environment,stage) (
-        gitlab_component_ops:rate_6h{component="pg_transactions",env="ops",monitor="global",tier="inf",type="sentry"} offset 30s
+        gitlab_component_ops:rate_6h{component="kafka_topics",env="ops",monitor="global",tier="inf",type="sentry"} offset 30s
       )
   - record: gitlab_component_apdex:ratio_6h
     labels:
-      component: pg_transactions
+      component: kafka_topics
       monitor: global
       tier: inf
       type: sentry
     expr: |
       sum by (env,environment,stage) (
-        gitlab_component_apdex:success:rate_6h{component="pg_transactions",env="ops",monitor="global",tier="inf",type="sentry"} offset 30s
+        gitlab_component_apdex:success:rate_6h{component="kafka_topics",env="ops",monitor="global",tier="inf",type="sentry"} offset 30s
       )
       /
       sum by (env,environment,stage) (
-        gitlab_component_apdex:weight:score_6h{component="pg_transactions",env="ops",monitor="global",tier="inf",type="sentry"} offset 30s
+        gitlab_component_apdex:weight:score_6h{component="kafka_topics",env="ops",monitor="global",tier="inf",type="sentry"} offset 30s
+      )
+  - record: gitlab_component_apdex:success:rate_6h
+    labels:
+      component: memcached_commands
+      monitor: global
+      tier: inf
+      type: sentry
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="memcached_commands",env="ops",monitor="global",tier="inf",type="sentry"}[6h] offset 30s)
+      )
+  - record: gitlab_component_apdex:weight:score_6h
+    labels:
+      component: memcached_commands
+      monitor: global
+      tier: inf
+      type: sentry
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="memcached_commands",env="ops",monitor="global",tier="inf",type="sentry"}[6h] offset 30s)
+      )
+  - record: gitlab_component_ops:rate_6h
+    labels:
+      component: memcached_commands
+      monitor: global
+      tier: inf
+      type: sentry
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_ops:rate_1h{component="memcached_commands",env="ops",monitor="global",tier="inf",type="sentry"}[6h] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_6h
+    labels:
+      component: memcached_commands
+      monitor: global
+      tier: inf
+      type: sentry
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_errors:rate_1h{component="memcached_commands",env="ops",monitor="global",tier="inf",type="sentry"}[6h] offset 30s)
+      )
+  - record: gitlab_component_errors:ratio_6h
+    labels:
+      component: memcached_commands
+      monitor: global
+      tier: inf
+      type: sentry
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_6h{component="memcached_commands",env="ops",monitor="global",tier="inf",type="sentry"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_6h{component="memcached_commands",env="ops",monitor="global",tier="inf",type="sentry"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_6h
+    labels:
+      component: memcached_commands
+      monitor: global
+      tier: inf
+      type: sentry
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_6h{component="memcached_commands",env="ops",monitor="global",tier="inf",type="sentry"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_6h{component="memcached_commands",env="ops",monitor="global",tier="inf",type="sentry"} offset 30s
+      )
+  - record: gitlab_component_apdex:success:rate_6h
+    labels:
+      component: postgresql_transactions
+      monitor: global
+      tier: inf
+      type: sentry
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="postgresql_transactions",env="ops",monitor="global",tier="inf",type="sentry"}[6h] offset 30s)
+      )
+  - record: gitlab_component_apdex:weight:score_6h
+    labels:
+      component: postgresql_transactions
+      monitor: global
+      tier: inf
+      type: sentry
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="postgresql_transactions",env="ops",monitor="global",tier="inf",type="sentry"}[6h] offset 30s)
+      )
+  - record: gitlab_component_ops:rate_6h
+    labels:
+      component: postgresql_transactions
+      monitor: global
+      tier: inf
+      type: sentry
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_ops:rate_1h{component="postgresql_transactions",env="ops",monitor="global",tier="inf",type="sentry"}[6h] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_6h
+    labels:
+      component: postgresql_transactions
+      monitor: global
+      tier: inf
+      type: sentry
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_errors:rate_1h{component="postgresql_transactions",env="ops",monitor="global",tier="inf",type="sentry"}[6h] offset 30s)
+      )
+  - record: gitlab_component_errors:ratio_6h
+    labels:
+      component: postgresql_transactions
+      monitor: global
+      tier: inf
+      type: sentry
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_6h{component="postgresql_transactions",env="ops",monitor="global",tier="inf",type="sentry"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_6h{component="postgresql_transactions",env="ops",monitor="global",tier="inf",type="sentry"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_6h
+    labels:
+      component: postgresql_transactions
+      monitor: global
+      tier: inf
+      type: sentry
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_6h{component="postgresql_transactions",env="ops",monitor="global",tier="inf",type="sentry"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_6h{component="postgresql_transactions",env="ops",monitor="global",tier="inf",type="sentry"} offset 30s
+      )
+  - record: gitlab_component_apdex:success:rate_6h
+    labels:
+      component: redis_latency
+      monitor: global
+      tier: inf
+      type: sentry
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="redis_latency",env="ops",monitor="global",tier="inf",type="sentry"}[6h] offset 30s)
+      )
+  - record: gitlab_component_apdex:weight:score_6h
+    labels:
+      component: redis_latency
+      monitor: global
+      tier: inf
+      type: sentry
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="redis_latency",env="ops",monitor="global",tier="inf",type="sentry"}[6h] offset 30s)
+      )
+  - record: gitlab_component_ops:rate_6h
+    labels:
+      component: redis_latency
+      monitor: global
+      tier: inf
+      type: sentry
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_ops:rate_1h{component="redis_latency",env="ops",monitor="global",tier="inf",type="sentry"}[6h] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_6h
+    labels:
+      component: redis_latency
+      monitor: global
+      tier: inf
+      type: sentry
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_errors:rate_1h{component="redis_latency",env="ops",monitor="global",tier="inf",type="sentry"}[6h] offset 30s)
+      )
+  - record: gitlab_component_errors:ratio_6h
+    labels:
+      component: redis_latency
+      monitor: global
+      tier: inf
+      type: sentry
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_6h{component="redis_latency",env="ops",monitor="global",tier="inf",type="sentry"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_6h{component="redis_latency",env="ops",monitor="global",tier="inf",type="sentry"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_6h
+    labels:
+      component: redis_latency
+      monitor: global
+      tier: inf
+      type: sentry
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_6h{component="redis_latency",env="ops",monitor="global",tier="inf",type="sentry"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_6h{component="redis_latency",env="ops",monitor="global",tier="inf",type="sentry"} offset 30s
       )
   - record: gitlab_component_apdex:success:rate_6h
     labels:
@@ -556,71 +1264,275 @@ groups:
   rules:
   - record: gitlab_component_apdex:success:rate_3d
     labels:
-      component: pg_transactions
+      component: kafka_topics
       monitor: global
       tier: inf
       type: sentry
     expr: |
       sum by (env,environment,stage) (
-        avg_over_time(gitlab_component_apdex:success:rate_1h{component="pg_transactions",env="ops",monitor="global",tier="inf",type="sentry"}[3d] offset 30s)
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="kafka_topics",env="ops",monitor="global",tier="inf",type="sentry"}[3d] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_3d
     labels:
-      component: pg_transactions
+      component: kafka_topics
       monitor: global
       tier: inf
       type: sentry
     expr: |
       sum by (env,environment,stage) (
-        avg_over_time(gitlab_component_apdex:weight:score_1h{component="pg_transactions",env="ops",monitor="global",tier="inf",type="sentry"}[3d] offset 30s)
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="kafka_topics",env="ops",monitor="global",tier="inf",type="sentry"}[3d] offset 30s)
       )
   - record: gitlab_component_ops:rate_3d
     labels:
-      component: pg_transactions
+      component: kafka_topics
       monitor: global
       tier: inf
       type: sentry
     expr: |
       sum by (env,environment,stage) (
-        avg_over_time(gitlab_component_ops:rate_1h{component="pg_transactions",env="ops",monitor="global",tier="inf",type="sentry"}[3d] offset 30s)
+        avg_over_time(gitlab_component_ops:rate_1h{component="kafka_topics",env="ops",monitor="global",tier="inf",type="sentry"}[3d] offset 30s)
       )
   - record: gitlab_component_errors:rate_3d
     labels:
-      component: pg_transactions
+      component: kafka_topics
       monitor: global
       tier: inf
       type: sentry
     expr: |
       sum by (env,environment,stage) (
-        avg_over_time(gitlab_component_errors:rate_1h{component="pg_transactions",env="ops",monitor="global",tier="inf",type="sentry"}[3d] offset 30s)
+        avg_over_time(gitlab_component_errors:rate_1h{component="kafka_topics",env="ops",monitor="global",tier="inf",type="sentry"}[3d] offset 30s)
       )
   - record: gitlab_component_errors:ratio_3d
     labels:
-      component: pg_transactions
+      component: kafka_topics
       monitor: global
       tier: inf
       type: sentry
     expr: |
       sum by (env,environment,stage) (
-        gitlab_component_errors:rate_3d{component="pg_transactions",env="ops",monitor="global",tier="inf",type="sentry"} offset 30s
+        gitlab_component_errors:rate_3d{component="kafka_topics",env="ops",monitor="global",tier="inf",type="sentry"} offset 30s
       )
       /
       sum by (env,environment,stage) (
-        gitlab_component_ops:rate_3d{component="pg_transactions",env="ops",monitor="global",tier="inf",type="sentry"} offset 30s
+        gitlab_component_ops:rate_3d{component="kafka_topics",env="ops",monitor="global",tier="inf",type="sentry"} offset 30s
       )
   - record: gitlab_component_apdex:ratio_3d
     labels:
-      component: pg_transactions
+      component: kafka_topics
       monitor: global
       tier: inf
       type: sentry
     expr: |
       sum by (env,environment,stage) (
-        gitlab_component_apdex:success:rate_3d{component="pg_transactions",env="ops",monitor="global",tier="inf",type="sentry"} offset 30s
+        gitlab_component_apdex:success:rate_3d{component="kafka_topics",env="ops",monitor="global",tier="inf",type="sentry"} offset 30s
       )
       /
       sum by (env,environment,stage) (
-        gitlab_component_apdex:weight:score_3d{component="pg_transactions",env="ops",monitor="global",tier="inf",type="sentry"} offset 30s
+        gitlab_component_apdex:weight:score_3d{component="kafka_topics",env="ops",monitor="global",tier="inf",type="sentry"} offset 30s
+      )
+  - record: gitlab_component_apdex:success:rate_3d
+    labels:
+      component: memcached_commands
+      monitor: global
+      tier: inf
+      type: sentry
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="memcached_commands",env="ops",monitor="global",tier="inf",type="sentry"}[3d] offset 30s)
+      )
+  - record: gitlab_component_apdex:weight:score_3d
+    labels:
+      component: memcached_commands
+      monitor: global
+      tier: inf
+      type: sentry
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="memcached_commands",env="ops",monitor="global",tier="inf",type="sentry"}[3d] offset 30s)
+      )
+  - record: gitlab_component_ops:rate_3d
+    labels:
+      component: memcached_commands
+      monitor: global
+      tier: inf
+      type: sentry
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_ops:rate_1h{component="memcached_commands",env="ops",monitor="global",tier="inf",type="sentry"}[3d] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_3d
+    labels:
+      component: memcached_commands
+      monitor: global
+      tier: inf
+      type: sentry
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_errors:rate_1h{component="memcached_commands",env="ops",monitor="global",tier="inf",type="sentry"}[3d] offset 30s)
+      )
+  - record: gitlab_component_errors:ratio_3d
+    labels:
+      component: memcached_commands
+      monitor: global
+      tier: inf
+      type: sentry
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_3d{component="memcached_commands",env="ops",monitor="global",tier="inf",type="sentry"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_3d{component="memcached_commands",env="ops",monitor="global",tier="inf",type="sentry"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_3d
+    labels:
+      component: memcached_commands
+      monitor: global
+      tier: inf
+      type: sentry
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_3d{component="memcached_commands",env="ops",monitor="global",tier="inf",type="sentry"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_3d{component="memcached_commands",env="ops",monitor="global",tier="inf",type="sentry"} offset 30s
+      )
+  - record: gitlab_component_apdex:success:rate_3d
+    labels:
+      component: postgresql_transactions
+      monitor: global
+      tier: inf
+      type: sentry
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="postgresql_transactions",env="ops",monitor="global",tier="inf",type="sentry"}[3d] offset 30s)
+      )
+  - record: gitlab_component_apdex:weight:score_3d
+    labels:
+      component: postgresql_transactions
+      monitor: global
+      tier: inf
+      type: sentry
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="postgresql_transactions",env="ops",monitor="global",tier="inf",type="sentry"}[3d] offset 30s)
+      )
+  - record: gitlab_component_ops:rate_3d
+    labels:
+      component: postgresql_transactions
+      monitor: global
+      tier: inf
+      type: sentry
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_ops:rate_1h{component="postgresql_transactions",env="ops",monitor="global",tier="inf",type="sentry"}[3d] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_3d
+    labels:
+      component: postgresql_transactions
+      monitor: global
+      tier: inf
+      type: sentry
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_errors:rate_1h{component="postgresql_transactions",env="ops",monitor="global",tier="inf",type="sentry"}[3d] offset 30s)
+      )
+  - record: gitlab_component_errors:ratio_3d
+    labels:
+      component: postgresql_transactions
+      monitor: global
+      tier: inf
+      type: sentry
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_3d{component="postgresql_transactions",env="ops",monitor="global",tier="inf",type="sentry"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_3d{component="postgresql_transactions",env="ops",monitor="global",tier="inf",type="sentry"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_3d
+    labels:
+      component: postgresql_transactions
+      monitor: global
+      tier: inf
+      type: sentry
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_3d{component="postgresql_transactions",env="ops",monitor="global",tier="inf",type="sentry"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_3d{component="postgresql_transactions",env="ops",monitor="global",tier="inf",type="sentry"} offset 30s
+      )
+  - record: gitlab_component_apdex:success:rate_3d
+    labels:
+      component: redis_latency
+      monitor: global
+      tier: inf
+      type: sentry
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="redis_latency",env="ops",monitor="global",tier="inf",type="sentry"}[3d] offset 30s)
+      )
+  - record: gitlab_component_apdex:weight:score_3d
+    labels:
+      component: redis_latency
+      monitor: global
+      tier: inf
+      type: sentry
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="redis_latency",env="ops",monitor="global",tier="inf",type="sentry"}[3d] offset 30s)
+      )
+  - record: gitlab_component_ops:rate_3d
+    labels:
+      component: redis_latency
+      monitor: global
+      tier: inf
+      type: sentry
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_ops:rate_1h{component="redis_latency",env="ops",monitor="global",tier="inf",type="sentry"}[3d] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_3d
+    labels:
+      component: redis_latency
+      monitor: global
+      tier: inf
+      type: sentry
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_errors:rate_1h{component="redis_latency",env="ops",monitor="global",tier="inf",type="sentry"}[3d] offset 30s)
+      )
+  - record: gitlab_component_errors:ratio_3d
+    labels:
+      component: redis_latency
+      monitor: global
+      tier: inf
+      type: sentry
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_3d{component="redis_latency",env="ops",monitor="global",tier="inf",type="sentry"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_3d{component="redis_latency",env="ops",monitor="global",tier="inf",type="sentry"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_3d
+    labels:
+      component: redis_latency
+      monitor: global
+      tier: inf
+      type: sentry
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_3d{component="redis_latency",env="ops",monitor="global",tier="inf",type="sentry"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_3d{component="redis_latency",env="ops",monitor="global",tier="inf",type="sentry"} offset 30s
       )
   - record: gitlab_component_apdex:success:rate_3d
     labels:
