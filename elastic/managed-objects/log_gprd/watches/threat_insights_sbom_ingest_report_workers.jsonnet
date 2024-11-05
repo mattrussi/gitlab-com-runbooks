@@ -8,6 +8,7 @@ local es_query = {
     'pubsub-sidekiq-inf-gprd',
   ],
   rest_total_hits_as_int: true,
+
   body: {
     size: 0,
     query: {
@@ -75,13 +76,13 @@ local es_query = {
         },
       },
     },
-    transform: {
-      script: {
-        source: 'HashMap result = new HashMap(); result.result = ctx.payload.hits.total; return result;',
-        lang: 'painless',
-        params: {
-          threshold: 20,
-        },
+  },
+  transform: {
+    script: {
+      source: 'HashMap result = new HashMap(); result.result = ctx.payload.hits.total; return result;',
+      lang: 'painless',
+      params: {
+        threshold: 20,
       },
     },
   },

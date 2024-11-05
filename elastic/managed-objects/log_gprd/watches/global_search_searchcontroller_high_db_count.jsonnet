@@ -1,4 +1,4 @@
-local query_period = '24h';
+local query_period = 1440;
 local run_time = '01:00';
 local alert_threshold = 1;
 
