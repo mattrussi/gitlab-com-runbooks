@@ -1,4 +1,4 @@
-local query_period = '24h';
+local query_period = 1440;
 local run_time = '01:00';
 local alert_threshold = 1;
 
@@ -137,7 +137,7 @@ local es_query = {
   condition: {
     compare: {
       'ctx.payload.hits.total': {
-        gt: alert_threshold,
+        gte: alert_threshold,
       },
     },
   },

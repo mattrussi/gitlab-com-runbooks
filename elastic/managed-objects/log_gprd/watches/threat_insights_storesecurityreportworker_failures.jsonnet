@@ -66,13 +66,13 @@ local es_query = {
         },
       },
     },
-    transform: {
-      script: {
-        source: 'HashMap result = new HashMap(); result.result = ctx.payload.hits.total; return result;',
-        lang: 'painless',
-        params: {
-          threshold: 5,
-        },
+  },
+  transform: {
+    script: {
+      source: 'HashMap result = new HashMap(); result.result = ctx.payload.hits.total; return result;',
+      lang: 'painless',
+      params: {
+        threshold: 5,
       },
     },
   },
