@@ -21,9 +21,17 @@ NELs are also already available as metrics [here](https://dashboards.gitlab.net/
 
 The logs for a particular day can be imported into BigQuery by using the `bq` tool:
 
+Download [schema-http.json](schema-http.json) or create it from scratch with the following command:
+
 ```bash
-curl -s https://raw.githubusercontent.com/cloudflare/cloudflare-gcp/master/logpush-to-bigquery/schema-http.json | jq '. += [{"name": "RequestHeaders","type": "JSON","mode": "NULLABLE"}, {"name": "ResponseHeaders","type": "JSON","mode": "NULLABLE"}]' > schema-http.json
-bq load --project_id gitlab-production --source_format NEWLINE_DELIMITED_JSON cloudflare.logpush_20200610 'gs://gitlab-gprd-cloudflare-logpush/v2/http/20200610/*.log.gz' schema-http.json
+curl -s https://raw.githubusercontent.com/cloudflare/cloudflare-gcp/master/logpush-to-bigquery/schema-http.json | jq '. += [{"name": "RequestHeaders","type": "JSON","mode": "NULLABLE"}, {"name": "ResponseHeaders","type": "JSON","mode": "NULLABLE"}, {"name": "CacheReserveUsed","type": "JSON","mode": "NULLABLE"}, {"name": "ClientRegionCode","type": "JSON","mode": "NULLABLE"}, {"name": "ContentScanObjResults","type": "JSON","mode": "NULLABLE"}, {"name": "ContentScanObjSizes","type": "JSON","mode": "NULLABLE"}, {"name": "ContentScanObjTypes","type": "JSON","mode": "NULLABLE"}, {"name": "LeakedCredentialCheckResult","type": "JSON","mode": "NULLABLE"}, {"name": "SecurityAction","type": "JSON","mode": "NULLABLE"}, {"name": "SecurityActions","type": "JSON","mode": "NULLABLE"}, {"name": "SecurityRuleDescription","type": "JSON","mode": "NULLABLE"}, {"name": "SecurityRuleID","type": "JSON","mode": "NULLABLE"}, {"name": "SecurityRuleIDs","type": "JSON","mode": "NULLABLE"}, {"name": "SecuritySources","type": "JSON","mode": "NULLABLE"}, {"name": "WAFAttackScore","type": "JSON","mode": "NULLABLE"}, {"name": "WAFRCEAttackScore","type": "JSON","mode": "NULLABLE"}, {"name": "WAFSQLiAttackScore","type": "JSON","mode": "NULLABLE"}, {"name": "WAFXSSAttackScore","type": "JSON","mode": "NULLABLE"}, {"name": "WorkerWallTimeUs","type": "JSON","mode": "NULLABLE"}]' > schema-http.json
+```
+
+Execute the following command to populate BigQuery dataset with Cloudflare logs stored in GCS. Update DATE variable with the correct date you would like to review.
+
+```bash
+export DATE=20241106
+bq load --project_id gitlab-production --source_format NEWLINE_DELIMITED_JSON "cloudflare.logpush_$DATE" "gs://gitlab-gprd-cloudflare-logpush/v2/http/$DATE/*.log.gz" schema-http.json
 ```
 
 This will make the logs for that particular day available for querying with SQL
