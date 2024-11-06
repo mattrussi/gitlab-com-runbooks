@@ -2747,3 +2747,29 @@ services:
     observability:
       monitors:
         primary_grafana_dashboard: sast-service-main/sast-service-overview
+
+  - name: spamcheck
+    tier: sv
+    friendly_name: Spamcheck Service
+    label: SpamcheckService
+    owner: authorization
+    technical:
+      project:
+        - https://gitlab.com/gitlab-org/modelops/anti-abuse/spam/spamcheck
+        - https://gitlab.com/gitlab-org/modelops/anti-abuse/spam/spam-classifier
+      documents:
+        design:
+        architecture:
+        readiness_review:
+        sre_guide: https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/spamcheck
+        developer_guide:
+        service:
+        security:
+      dependencies:
+      logging:
+        - name: stackdriver
+          permalink: https://cloudlogging.app.goo.gl/bdSg6UmtgiwMTBKs6
+    observability:
+      monitors:
+        grafana_folder: spamcheck
+        primary_grafana_dashboard: spamcheck-main/spamcheck-overview
