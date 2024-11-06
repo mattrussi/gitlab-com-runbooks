@@ -2,6 +2,7 @@
 legacy_version_file = false
 
 [tools]
+jsonnet-tool = "1.15.7"
 # Please continue to use `.tool-versions` to specify tools, rather than adding them directly here.
 
 [plugins]

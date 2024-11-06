@@ -15,7 +15,7 @@ groups:
       monitor: global
       tier: inf
       type: sentry
-    expr: "0.010000"
+    expr: "1.000000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: kafka_topics
@@ -29,7 +29,7 @@ groups:
       monitor: global
       tier: inf
       type: sentry
-    expr: "0.010000"
+    expr: "1.000000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: memcached_commands
@@ -43,7 +43,7 @@ groups:
       monitor: global
       tier: inf
       type: sentry
-    expr: "0.010000"
+    expr: "1.000000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: postgresql_transactions
@@ -57,7 +57,21 @@ groups:
       monitor: global
       tier: inf
       type: sentry
-    expr: "0.010000"
+    expr: "1.000000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      component: rabbitmq_messages
+      monitor: global
+      tier: inf
+      type: sentry
+    expr: "0.990000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      component: rabbitmq_messages
+      monitor: global
+      tier: inf
+      type: sentry
+    expr: "1.000000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: redis_latency
@@ -71,7 +85,7 @@ groups:
       monitor: global
       tier: inf
       type: sentry
-    expr: "0.010000"
+    expr: "1.000000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: sentry_events
@@ -85,7 +99,7 @@ groups:
       monitor: global
       tier: inf
       type: sentry
-    expr: "0.010000"
+    expr: "1.000000"
   - record: gitlab_component_service:mapping
     labels:
       component: kafka_topics
@@ -109,6 +123,16 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: postgresql_transactions
+      global_aggregation: "no"
+      monitor: global
+      regional_aggregation: "no"
+      service_aggregation: "no"
+      tier: inf
+      type: sentry
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: rabbitmq_messages
       global_aggregation: "no"
       monitor: global
       regional_aggregation: "no"

@@ -22,8 +22,8 @@ metricsCatalog.serviceDefinition({
 
   monitoringThresholds: {
     apdexScore: 0.99,
-    // Setting the Error SLO at 99% because we see high transaction rollback rates
-    errorRatio: 0.99,
+    // Setting the Error SLO at 0% because we see high transaction rollback rates
+    errorRatio: 0,
   },
   /*
    * Our anomaly detection uses normal distributions and the monitoring service
@@ -35,8 +35,6 @@ metricsCatalog.serviceDefinition({
     vms: false,
   },
   serviceLevelIndicators: {
-    local baseSelector = { type: 'sentry' },
-
     sentry_events: {
       severity: 's3',
       userImpacting: false,
@@ -46,24 +44,9 @@ metricsCatalog.serviceDefinition({
         This SLI monitors the sentry API. 5xx responses are considered failures.
       |||,
 
-      local sentryQuerySelector = baseSelector {
-        job: 'sentry-metrics',
-      },
-
-      apdex: histogramApdex(
-        histogram='sentry_events_latency',
-        selector=sentryQuerySelector,
-        satisfiedThreshold=10,
-      ),
-
       requestRate: rateMetric(
         counter='sentry_events_processed',
-        selector=sentryQuerySelector,
-      ),
-
-      errorRate: rateMetric(
-        counter='sentry_events_failed',
-        selector=sentryQuerySelector,
+        selector={ job: 'sentry-metrics' },
       ),
 
       significantLabels: [],
@@ -79,14 +62,16 @@ metricsCatalog.serviceDefinition({
         Errors represent transaction rollbacks.
       |||,
 
+      local postgresqlSelector = { database_id: 'gitlab-ops:sentry-63' },
+
       requestRate: rateMetric(
         counter='stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count',
-        selector=baseSelector,
+        selector=postgresqlSelector,
       ),
 
       errorRate: rateMetric(
         counter='stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count',
-        selector=baseSelector { transaction_type: 'rollback' },
+        selector=postgresqlSelector { transaction_type: 'rollback' },
       ),
 
       significantLabels: [],
@@ -112,14 +97,16 @@ metricsCatalog.serviceDefinition({
         Errors represent all commands the Sentry Memcached pods failed to process with a badval status.
       |||,
 
+      local memcachedSelector = { job: 'sentry-memcached-metrics' },
+
       requestRate: rateMetric(
         counter='memcached_commands_total',
-        selector=baseSelector,
+        selector=memcachedSelector,
       ),
 
       errorRate: rateMetric(
         counter='memcached_commands_total',
-        selector=baseSelector { status: 'badval' },
+        selector=memcachedSelector { status: 'badval' },
       ),
 
       significantLabels: [],
@@ -135,14 +122,16 @@ metricsCatalog.serviceDefinition({
         Errors represent all failed requests the Sentry Kafka pods failed to process.
       |||,
 
+      local kafkaSelector = { type: 'sentry' },
+
       requestRate: rateMetric(
         counter='kafka_server_brokertopicmetrics_total_totalproducerequestspersec_count',
-        selector=baseSelector,
+        selector=kafkaSelector,
       ),
 
       errorRate: rateMetric(
         counter='kafka_server_brokertopicmetrics_total_failedproducerequestspersec_count',
-        selector=baseSelector,
+        selector=kafkaSelector,
       ),
 
       significantLabels: [],
@@ -157,15 +146,42 @@ metricsCatalog.serviceDefinition({
         Represents the latency of Redis commands.
       |||,
 
+      local redisSelector = { job: 'sentry-redis-metrics' },
+
       apdex: histogramApdex(
         histogram='redis_commands_duration_seconds_total',
-        selector=baseSelector,
+        selector=redisSelector,
         satisfiedThreshold=10,
       ),
 
       requestRate: rateMetric(
         counter='redis_commands_total',
-        selector=baseSelector,
+        selector=redisSelector,
+      ),
+
+      significantLabels: [],
+    },
+
+    rabbitmq_messages: {
+      severity: 's3',
+      userImpacting: false,
+      serviceAggregation: false,
+      featureCategory: 'not_owned',
+      description: |||
+        Represents all messages the Sentry RabbitMQ pods processed.
+        Errors represent all the messages the Sentry RabbitMQ pods attempted to process but were unroutable.
+      |||,
+
+      local rabbitmqSelector = { job: 'sentry-rabbitmq' },
+
+      requestRate: rateMetric(
+        counter='rabbitmq_global_messages_acknowledged_total',
+        selector=rabbitmqSelector,
+      ),
+
+      errorRate: rateMetric(
+        counter='rabbitmq_global_messages_unroutable_returned_total',
+        selector=rabbitmqSelector,
       ),
 
       significantLabels: [],
