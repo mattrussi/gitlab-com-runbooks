@@ -20,7 +20,7 @@ local resourceSaturationPoint = (import 'servicemetrics/resource_saturation_poin
       it's a sign of a leak and it should be dealt with.
     |||,
     grafana_dashboard_uid: 'sat_go_goroutines',
-    resourceLabels: ['fqdn'],
+    resourceLabels: ['fqdn', 'region', 'instance'],
     queryFormatConfig: {
       maxGoroutines: 250000,
     },

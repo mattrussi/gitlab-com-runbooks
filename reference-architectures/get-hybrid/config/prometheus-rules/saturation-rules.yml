@@ -54,7 +54,7 @@ groups:
       max by(type) (
         clamp_min(
           clamp_max(
-            sum by (type, fqdn) (
+            sum by (type, fqdn, region, instance) (
               go_goroutines{type=~"gitaly|praefect"}
             )
             /

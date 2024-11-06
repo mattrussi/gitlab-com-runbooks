@@ -104,7 +104,7 @@
       },
       "description": "Go goroutines utilization per node.\n\nGoroutines leaks can cause memory saturation which can cause service degradation.\n\nA limit of 250k goroutines is very generous, so if a service exceeds this limit,\nit's a sign of a leak and it should be dealt with.\n",
       "horizontallyScalable": true,
-      "raw_query": "sum by (fqdn) (\n  go_goroutines{%(selector)s}\n)\n/\n250000\n",
+      "raw_query": "sum by (fqdn,region,instance) (\n  go_goroutines{%(selector)s}\n)\n/\n250000\n",
       "severity": "s2",
       "slos": {
         "alertTriggerDuration": "5m",
