@@ -2769,7 +2769,3 @@ services:
       logging:
         - name: stackdriver
           permalink: https://cloudlogging.app.goo.gl/bdSg6UmtgiwMTBKs6
-    observability:
-      monitors:
-        grafana_folder: spamcheck
-        primary_grafana_dashboard: spamcheck-main/spamcheck-overview
