@@ -9,7 +9,7 @@ local resourceSaturationPoint = (import 'servicemetrics/resource_saturation_poin
     horizontallyScalable: true,
     appliesTo: std.setInter(
       std.set(metricsCatalog.findServicesWithTag(tag='golang')),
-      std.set(metricsCatalog.findVMProvisionedServices())
+      std.set(metricsCatalog.findVMProvisionedServices() + metricsCatalog.findRunwayProvisionedServices())
     ),
     description: |||
       Go goroutines utilization per node.

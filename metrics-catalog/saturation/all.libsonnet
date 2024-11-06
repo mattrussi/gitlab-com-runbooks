@@ -63,7 +63,6 @@
   import 'saturation-monitoring/redis_primary_cpu.libsonnet',
   import 'saturation-monitoring/redis_secondary_cpu.libsonnet',
   import 'saturation-monitoring/ruby_thread_contention.libsonnet',
-  import 'saturation-monitoring/runway_labkit_go.libsonnet',
   import 'saturation-monitoring/runway_utilization.libsonnet',
   import 'saturation-monitoring/saas_runners.libsonnet',
   import 'saturation-monitoring/shard_cpu.libsonnet',
