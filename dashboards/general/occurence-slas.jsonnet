@@ -12,6 +12,6 @@ occurenceSLADashboard.dashboard(
   serviceWeights,
   metricsConfig.aggregationSets.serviceSLIs,
   metricsConfig.slaTarget,
-  { stage: 'main', environment: '$environment', monitor: 'global' },
+  { stage: 'main', environment: '$environment' },
   sortedServices=sortedServices,
 )
