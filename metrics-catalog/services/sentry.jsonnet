@@ -22,8 +22,8 @@ metricsCatalog.serviceDefinition({
 
   monitoringThresholds: {
     apdexScore: 0.99,
-    // Setting the Error SLO at 0% because we see high transaction rollback rates
-    errorRatio: 0,
+    // Setting the Error SLO at 99% because we see high transaction rollback rates
+    errorRatio: 0.99,
   },
   /*
    * Our anomaly detection uses normal distributions and the monitoring service
@@ -73,6 +73,8 @@ metricsCatalog.serviceDefinition({
         counter='stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count',
         selector=postgresqlSelector { transaction_type: 'rollback' },
       ),
+
+      emittedBy: ['monitoring'],
 
       significantLabels: [],
       toolingLinks: [

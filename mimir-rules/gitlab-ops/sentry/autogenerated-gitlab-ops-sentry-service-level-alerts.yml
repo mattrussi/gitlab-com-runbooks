@@ -40,12 +40,12 @@ groups:
       (
         (
           gitlab_component_errors:ratio_1h{component="kafka_topics",env="ops",monitor="global",type="sentry"}
-          > (14.4 * 1.000000)
+          > (14.4 * 0.010000)
         )
         and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_5m{component="kafka_topics",env="ops",monitor="global",type="sentry"}
-          > (14.4 * 1.000000)
+          > (14.4 * 0.010000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -88,12 +88,12 @@ groups:
       (
         (
           gitlab_component_errors:ratio_6h{component="kafka_topics",env="ops",monitor="global",type="sentry"}
-          > (6 * 1.000000)
+          > (6 * 0.010000)
         )
         and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_30m{component="kafka_topics",env="ops",monitor="global",type="sentry"}
-          > (6 * 1.000000)
+          > (6 * 0.010000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -208,12 +208,12 @@ groups:
       (
         (
           gitlab_component_errors:ratio_1h{component="memcached_commands",env="ops",monitor="global",type="sentry"}
-          > (14.4 * 1.000000)
+          > (14.4 * 0.010000)
         )
         and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_5m{component="memcached_commands",env="ops",monitor="global",type="sentry"}
-          > (14.4 * 1.000000)
+          > (14.4 * 0.010000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -256,12 +256,12 @@ groups:
       (
         (
           gitlab_component_errors:ratio_6h{component="memcached_commands",env="ops",monitor="global",type="sentry"}
-          > (6 * 1.000000)
+          > (6 * 0.010000)
         )
         and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_30m{component="memcached_commands",env="ops",monitor="global",type="sentry"}
-          > (6 * 1.000000)
+          > (6 * 0.010000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -376,12 +376,12 @@ groups:
       (
         (
           gitlab_component_errors:ratio_1h{component="postgresql_transactions",env="ops",monitor="global",type="sentry"}
-          > (14.4 * 1.000000)
+          > (14.4 * 0.010000)
         )
         and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_5m{component="postgresql_transactions",env="ops",monitor="global",type="sentry"}
-          > (14.4 * 1.000000)
+          > (14.4 * 0.010000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -424,12 +424,12 @@ groups:
       (
         (
           gitlab_component_errors:ratio_6h{component="postgresql_transactions",env="ops",monitor="global",type="sentry"}
-          > (6 * 1.000000)
+          > (6 * 0.010000)
         )
         and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_30m{component="postgresql_transactions",env="ops",monitor="global",type="sentry"}
-          > (6 * 1.000000)
+          > (6 * 0.010000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -544,12 +544,12 @@ groups:
       (
         (
           gitlab_component_errors:ratio_1h{component="rabbitmq_messages",env="ops",monitor="global",type="sentry"}
-          > (14.4 * 1.000000)
+          > (14.4 * 0.010000)
         )
         and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_5m{component="rabbitmq_messages",env="ops",monitor="global",type="sentry"}
-          > (14.4 * 1.000000)
+          > (14.4 * 0.010000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -592,12 +592,12 @@ groups:
       (
         (
           gitlab_component_errors:ratio_6h{component="rabbitmq_messages",env="ops",monitor="global",type="sentry"}
-          > (6 * 1.000000)
+          > (6 * 0.010000)
         )
         and on (env,environment,tier,type,stage,component)
         (
           gitlab_component_errors:ratio_30m{component="rabbitmq_messages",env="ops",monitor="global",type="sentry"}
-          > (6 * 1.000000)
+          > (6 * 0.010000)
         )
       )
       and on(env,environment,tier,type,stage,component)

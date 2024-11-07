@@ -22,13 +22,14 @@ groups:
       sum by (component,env,environment,feature_category,fqdn,job,product_stage,region,shard,stage,stage_group,status,tier,type) (
         rate(memcached_commands_total{env="ops",job=~"sentry-memcached-metrics",type=~"sentry"}[5m] offset 30s)
       )
-- name: 'SLI Aggregations: sentry - postgresql_transactions - 5m burn-rate'
+- name: 'SLI Aggregations: sentry - postgresql_transactions - 5m burn-rate - emitted
+    by monitoring'
   interval: 1m
   rules:
   - record: sli_aggregations:stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count:rate_5m
     expr: |
       sum by (component,database_id,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,transaction_type,type) (
-        rate(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count{database_id=~"gitlab-ops:sentry-63",env="ops",type=~"sentry"}[5m] offset 30s)
+        rate(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count{database_id=~"gitlab-ops:sentry-63",env="ops",type=~"monitoring"}[5m] offset 30s)
       )
 - name: 'SLI Aggregations: sentry - rabbitmq_messages - 5m burn-rate'
   interval: 1m
@@ -85,13 +86,14 @@ groups:
       sum by (component,env,environment,feature_category,fqdn,job,product_stage,region,shard,stage,stage_group,status,tier,type) (
         rate(memcached_commands_total{env="ops",job=~"sentry-memcached-metrics",type=~"sentry"}[30m] offset 30s)
       )
-- name: 'SLI Aggregations: sentry - postgresql_transactions - 30m burn-rate'
+- name: 'SLI Aggregations: sentry - postgresql_transactions - 30m burn-rate - emitted
+    by monitoring'
   interval: 2m
   rules:
   - record: sli_aggregations:stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count:rate_30m
     expr: |
       sum by (component,database_id,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,transaction_type,type) (
-        rate(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count{database_id=~"gitlab-ops:sentry-63",env="ops",type=~"sentry"}[30m] offset 30s)
+        rate(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count{database_id=~"gitlab-ops:sentry-63",env="ops",type=~"monitoring"}[30m] offset 30s)
       )
 - name: 'SLI Aggregations: sentry - rabbitmq_messages - 30m burn-rate'
   interval: 2m
@@ -148,13 +150,14 @@ groups:
       sum by (component,env,environment,feature_category,fqdn,job,product_stage,region,shard,stage,stage_group,status,tier,type) (
         rate(memcached_commands_total{env="ops",job=~"sentry-memcached-metrics",type=~"sentry"}[1h] offset 30s)
       )
-- name: 'SLI Aggregations: sentry - postgresql_transactions - 1h burn-rate'
+- name: 'SLI Aggregations: sentry - postgresql_transactions - 1h burn-rate - emitted
+    by monitoring'
   interval: 1m
   rules:
   - record: sli_aggregations:stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count:rate_1h
     expr: |
       sum by (component,database_id,env,environment,feature_category,fqdn,product_stage,region,shard,stage,stage_group,tier,transaction_type,type) (
-        rate(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count{database_id=~"gitlab-ops:sentry-63",env="ops",type=~"sentry"}[1h] offset 30s)
+        rate(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count{database_id=~"gitlab-ops:sentry-63",env="ops",type=~"monitoring"}[1h] offset 30s)
       )
 - name: 'SLI Aggregations: sentry - rabbitmq_messages - 1h burn-rate'
   interval: 1m
