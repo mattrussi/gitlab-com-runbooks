@@ -22,23 +22,7 @@
             ]
           else
             []
-        ) +
-        (
-          if serviceDefinition.disableApdexSuccessRatePrediction then
-            [
-              {
-                record: 'gitlab_service:mapping:disable_apdex_success_rate_prediction',
-                labels: {
-                  type: serviceDefinition.type,
-                  tier: serviceDefinition.tier,
-                },
-                expr: '1',
-              },
-            ]
-          else
-            []
         ),
-
     },
 
 }

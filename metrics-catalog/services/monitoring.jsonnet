@@ -24,7 +24,6 @@ metricsCatalog.serviceDefinition({
    * disable ops-rate anomaly detection on this service.
    */
   disableOpsRatePrediction: true,
-  disableApdexSuccessRatePrediction: true,
   provisioning: {
     kubernetes: true,
     vms: true,

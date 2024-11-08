@@ -134,12 +134,6 @@ groups:
       tier: inf
       type: mimir
     expr: "1"
-  - record: gitlab_service:mapping:disable_apdex_success_rate_prediction
-    labels:
-      monitor: global
-      tier: inf
-      type: mimir
-    expr: "1"
   - record: gitlab_component_service:mapping
     labels:
       component: mimir_compactor

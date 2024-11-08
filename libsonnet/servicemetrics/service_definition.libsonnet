@@ -22,7 +22,6 @@ local serviceDefaults = {
   serviceIsStageless: false,  // Set to true for services that don't use stage labels
   autogenerateRecordingRules: true,
   disableOpsRatePrediction: false,
-  disableApdexSuccessRatePrediction: false,
   nodeLevelMonitoring: false,  // By default we do not use node-level monitoring
   monitoring: {
     shard: {

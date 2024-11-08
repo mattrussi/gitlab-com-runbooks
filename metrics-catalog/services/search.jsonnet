@@ -11,7 +11,6 @@ metricsCatalog.serviceDefinition({
    * disable anomaly detection for RPS
    */
   disableOpsRatePrediction: true,
-  disableApdexSuccessRatePrediction: true,
   provisioning: {
     /* Provisioned with Elastic Cloud, no VMs, no Kube */
     vms: false,
