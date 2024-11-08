@@ -83,6 +83,8 @@ order by now() - xact_start desc nulls last
 ;
 ```
 
+In the event that the alert has already cleared because the query in question has completed, or been canceled, it may still be possible to find the query in the Postgres [`pg_stat_activity` logs](https://log.gprd.gitlab.net/app/r/s/kcFjj). These transactions are dumped to Kibana every several minutes, so the same query may appear multiple times if it spans multiple dumps.
+
 ### Getting the pgbouncer instance
 
 Usually postgres connections go through a pgbouncer. The `client_addr` and `client_port` will tell you which one.
