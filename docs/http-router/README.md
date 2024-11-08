@@ -17,6 +17,7 @@
 
 ## Troubleshooting Pointers
 
+* [Deployments](deployments.md)
 * [HTTP Router Worker Logs](logging.md)
 <!-- END_MARKER -->
 
