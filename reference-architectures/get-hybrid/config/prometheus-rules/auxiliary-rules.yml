@@ -306,10 +306,10 @@ groups:
       grafana_panel_id: "3712788301"
       grafana_variables: type
       promql_query: |
-        max by(type, fqdn) (
+        max by(type, fqdn, region, instance) (
           clamp_min(
             clamp_max(
-              sum by (type, fqdn) (
+              sum by (type, fqdn, region, instance) (
                 go_goroutines{type="{{ $labels.type }}"}
               )
               /
@@ -320,10 +320,10 @@ groups:
           0)
         )
       promql_template_1: |
-        max by(type, fqdn) (
+        max by(type, fqdn, region, instance) (
           clamp_min(
             clamp_max(
-              sum by (type, fqdn) (
+              sum by (type, fqdn, region, instance) (
                 go_goroutines{type="{{ $labels.type }}"}
               )
               /

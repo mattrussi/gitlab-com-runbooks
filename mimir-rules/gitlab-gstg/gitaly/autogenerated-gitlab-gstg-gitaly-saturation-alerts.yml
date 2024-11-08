@@ -808,10 +808,10 @@ groups:
       grafana_panel_id: "3712788301"
       grafana_variables: environment,type,stage
       promql_query: |
-        max by(env, environment, tier, type, stage, shard, fqdn) (
+        max by(env, environment, tier, type, stage, shard, fqdn, region, instance) (
           clamp_min(
             clamp_max(
-              sum by (env, environment, tier, type, stage, shard, fqdn) (
+              sum by (env, environment, tier, type, stage, shard, fqdn, region, instance) (
                 go_goroutines{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
               )
               /
@@ -822,10 +822,10 @@ groups:
           0)
         )
       promql_template_1: |
-        max by(env, environment, tier, type, stage, shard, fqdn) (
+        max by(env, environment, tier, type, stage, shard, fqdn, region, instance) (
           clamp_min(
             clamp_max(
-              sum by (env, environment, tier, type, stage, shard, fqdn) (
+              sum by (env, environment, tier, type, stage, shard, fqdn, region, instance) (
                 go_goroutines{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
               )
               /

@@ -3342,11 +3342,11 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "clamp_min(\n  clamp_max(\n    max by(type, fqdn) (\n  clamp_min(\n    clamp_max(\n      sum by (type, fqdn) (\n        go_goroutines{type=\"gitaly\"}\n      )\n      /\n      250000\n      ,\n      1)\n  ,\n  0)\n)\n\n  ,1)\n,0)\n",
+              "expr": "clamp_min(\n  clamp_max(\n    max by(type, fqdn, region, instance) (\n  clamp_min(\n    clamp_max(\n      sum by (type, fqdn, region, instance) (\n        go_goroutines{type=\"gitaly\"}\n      )\n      /\n      250000\n      ,\n      1)\n  ,\n  0)\n)\n\n  ,1)\n,0)\n",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
-              "legendFormat": "{{ fqdn }}",
+              "legendFormat": "{{ fqdn }} {{ region }} {{ instance }}",
               "refId": "A"
             },
             {

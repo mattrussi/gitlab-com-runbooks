@@ -11,6 +11,7 @@ metricsCatalog.serviceDefinition(
     apdexSatisfiedThreshold='19.48717100000001',
     apdexScore=0.9995,
     errorRatio=0.9995,
-    severity='s3'
+    severity='s3',
+    tags=['golang']
   )
 )
