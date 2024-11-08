@@ -743,7 +743,7 @@ services:
     tier: lb
     friendly_name: Cloudflare HTTP Router
     label: HttpRouter
-    owner: tenant_scale
+    owner: cells_infrastructure
     technical:
       project:
         - https://gitlab.com/gitlab-org/cells/router
@@ -751,11 +751,8 @@ services:
         design:
         architecture: https://docs.gitlab.com/ee/architecture/blueprints/cells/routing-service.html
         readiness_review: https://gitlab.com/gitlab-com/gl-infra/readiness/-/tree/master/http-router
-        sre_guide:
-        developer_guide:
-        service:
-        security:
-      dependencies:
+        sre_guide: https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/http-router/README.md
+        developer_guide: https://gitlab.com/gitlab-org/cells/http-router/-/tree/main/docs
       logging:
         - name: pre.gitlab.com
           permalink: https://dash.cloudflare.com/852e9d53d0f8adbd9205389356f2303d/workers/services/view/pre-gitlab-com-cells-http-router/production/observability/logs
@@ -1334,7 +1331,7 @@ services:
     tier: sv
     friendly_name: Topology Service Rest
     label: TopologyServiceRest
-    owner: tenant_scale
+    owner: cells_infrastructure
     technical:
       project:
         - https://gitlab.com/gitlab-org/cells/topology-service

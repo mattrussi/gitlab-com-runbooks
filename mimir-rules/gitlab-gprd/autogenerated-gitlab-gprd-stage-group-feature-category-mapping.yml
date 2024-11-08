@@ -29,7 +29,7 @@ groups:
     labels:
       feature_category: advisory_database
       monitor: global
-      product_stage: secure
+      product_stage: application_security_testing
       stage_group: vulnerability_research
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
@@ -71,7 +71,7 @@ groups:
     labels:
       feature_category: api_security
       monitor: global
-      product_stage: secure
+      product_stage: application_security_testing
       stage_group: dynamic_analysis
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
@@ -85,14 +85,14 @@ groups:
     labels:
       feature_category: attack_emulation
       monitor: global
-      product_stage: secure
+      product_stage: application_security_testing
       stage_group: dynamic_analysis
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: audit_events
       monitor: global
-      product_stage: govern
+      product_stage: software_supply_chain_security
       stage_group: compliance
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
@@ -106,8 +106,8 @@ groups:
     labels:
       feature_category: backup_restore
       monitor: global
-      product_stage: systems
-      stage_group: geo
+      product_stage: data_access
+      stage_group: durability
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -127,8 +127,8 @@ groups:
     labels:
       feature_category: cell
       monitor: global
-      product_stage: data_stores
-      stage_group: tenant_scale
+      product_stage: tenant_scale
+      stage_group: cells_infrastructure
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -162,7 +162,7 @@ groups:
     labels:
       feature_category: code_quality
       monitor: global
-      product_stage: secure
+      product_stage: application_security_testing
       stage_group: static_analysis
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
@@ -197,7 +197,7 @@ groups:
     labels:
       feature_category: compliance_management
       monitor: global
-      product_stage: govern
+      product_stage: software_supply_chain_security
       stage_group: compliance
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
@@ -225,7 +225,7 @@ groups:
     labels:
       feature_category: container_scanning
       monitor: global
-      product_stage: secure
+      product_stage: application_security_testing
       stage_group: composition_analysis
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
@@ -260,8 +260,8 @@ groups:
     labels:
       feature_category: database
       monitor: global
-      product_stage: data_stores
-      stage_group: database
+      product_stage: data_access
+      stage_group: database_frameworks
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -295,8 +295,8 @@ groups:
     labels:
       feature_category: dependency_management
       monitor: global
-      product_stage: govern
-      stage_group: threat_insights
+      product_stage: security_risk_management
+      stage_group: security_insights
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -330,7 +330,7 @@ groups:
     labels:
       feature_category: disaster_recovery
       monitor: global
-      product_stage: systems
+      product_stage: tenant_scale
       stage_group: geo
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
@@ -358,7 +358,7 @@ groups:
     labels:
       feature_category: dynamic_application_security_testing
       monitor: global
-      product_stage: secure
+      product_stage: application_security_testing
       stage_group: dynamic_analysis
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
@@ -414,28 +414,28 @@ groups:
     labels:
       feature_category: fuzz_testing
       monitor: global
-      product_stage: secure
+      product_stage: application_security_testing
       stage_group: dynamic_analysis
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: geo_replication
       monitor: global
-      product_stage: systems
+      product_stage: tenant_scale
       stage_group: geo
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: git
       monitor: global
-      product_stage: systems
-      stage_group: gitaly
+      product_stage: data_access
+      stage_group: git
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: gitaly
       monitor: global
-      product_stage: systems
+      product_stage: data_access
       stage_group: gitaly
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
@@ -456,8 +456,8 @@ groups:
     labels:
       feature_category: groups_and_projects
       monitor: global
-      product_stage: data_stores
-      stage_group: tenant_scale
+      product_stage: tenant_scale
+      stage_group: organizations
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -505,14 +505,14 @@ groups:
     labels:
       feature_category: insider_threat
       monitor: global
-      product_stage: govern
+      product_stage: software_supply_chain_security
       stage_group: anti-abuse
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: instance_resiliency
       monitor: global
-      product_stage: govern
+      product_stage: software_supply_chain_security
       stage_group: anti-abuse
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
@@ -659,8 +659,8 @@ groups:
     labels:
       feature_category: organization
       monitor: global
-      product_stage: data_stores
-      stage_group: tenant_scale
+      product_stage: tenant_scale
+      stage_group: organizations
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -680,7 +680,7 @@ groups:
     labels:
       feature_category: permissions
       monitor: global
-      product_stage: govern
+      product_stage: software_supply_chain_security
       stage_group: authorization
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
@@ -764,7 +764,7 @@ groups:
     labels:
       feature_category: release_evidence
       monitor: global
-      product_stage: govern
+      product_stage: software_supply_chain_security
       stage_group: compliance
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
@@ -813,28 +813,28 @@ groups:
     labels:
       feature_category: secret_detection
       monitor: global
-      product_stage: secure
+      product_stage: application_security_testing
       stage_group: secret_detection
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: secrets_management
       monitor: global
-      product_stage: govern
+      product_stage: software_supply_chain_security
       stage_group: pipeline_security
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: secure_artifacts
       monitor: global
-      product_stage: govern
+      product_stage: software_supply_chain_security
       stage_group: pipeline_security
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: security_policy_management
       monitor: global
-      product_stage: govern
+      product_stage: security_risk_management
       stage_group: security_policies
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
@@ -869,7 +869,7 @@ groups:
     labels:
       feature_category: software_composition_analysis
       monitor: global
-      product_stage: secure
+      product_stage: application_security_testing
       stage_group: composition_analysis
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
@@ -883,14 +883,14 @@ groups:
     labels:
       feature_category: sscs
       monitor: global
-      product_stage: govern
+      product_stage: software_supply_chain_security
       stage_group: compliance
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: static_application_security_testing
       monitor: global
-      product_stage: secure
+      product_stage: application_security_testing
       stage_group: static_analysis
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
@@ -911,7 +911,7 @@ groups:
     labels:
       feature_category: system_access
       monitor: global
-      product_stage: govern
+      product_stage: software_supply_chain_security
       stage_group: authentication
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
@@ -939,15 +939,15 @@ groups:
     labels:
       feature_category: user_management
       monitor: global
-      product_stage: govern
+      product_stage: software_supply_chain_security
       stage_group: authentication
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: user_profile
       monitor: global
-      product_stage: data_stores
-      stage_group: tenant_scale
+      product_stage: tenant_scale
+      stage_group: organizations
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -967,8 +967,8 @@ groups:
     labels:
       feature_category: vulnerability_management
       monitor: global
-      product_stage: govern
-      stage_group: threat_insights
+      product_stage: security_risk_management
+      stage_group: security_insights
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:

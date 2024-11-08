@@ -61,6 +61,13 @@ teams:
   ignored_components:
   - graphql_query
 
+- name: git
+  product_stage_group: git
+
+- name: durability
+  product_stage_group: durability
+  slack_alerts_channel: g_durability
+
 - name: manage
   url: https://about.gitlab.com/handbook/engineering/dev-backend/manage/
   slack_channel: g_manage
@@ -247,7 +254,7 @@ teams:
   product_stage_group: duo_workflow
   ignored_components:
   - graphql_query
-  slack_error_budget_channel: duo-chat-lounge
+  slack_error_budget_channel: duo-workflow-lounge
   send_error_budget_weekly_to_slack: true
 
 - name: code_review
@@ -276,9 +283,15 @@ teams:
   ignored_components:
   - graphql_query
 
-- name: database
-  product_stage_group: database
+- name: database_frameworks
+  product_stage_group: database_frameworks
   slack_alerts_channel: g_database_frameworks
+  ignored_components:
+  - graphql_query
+
+- name: database_operations
+  product_stage_group: database_operations
+  slack_alerts_channel: g_database_operations
   ignored_components:
   - graphql_query
 
@@ -395,11 +408,13 @@ teams:
   ignored_components:
   - graphql_query
 
-- name: tenant_scale
-  product_stage_group: tenant_scale
-  ignored_components:
-  - graphql_query
-  slack_alerts_channel: g_tenant-scale
+- name: cells_infrastructure
+  product_stage_group: cells_infrastructure
+  slack_alerts_channel: g_cells_infrasucture
+
+- name: organizations
+  product_stage_group: organizations
+  slack_alerts_channel: g_organizations
 
 - name: source_code
   product_stage_group: source_code
@@ -427,13 +442,6 @@ teams:
   send_error_budget_weekly_to_slack: true
   ignored_components:
   - graphql_query
-
-- name: threat_insights
-  product_stage_group: threat_insights
-  ignored_components:
-  - graphql_query
-  slack_error_budget_channel: g_govern_threat_insights
-  send_error_budget_weekly_to_slack: true
 
 - name: ai_framework
   url: https://about.gitlab.com/handbook/engineering/development/data-science/ai-framework/
@@ -487,6 +495,17 @@ teams:
   - s_plan
   send_error_budget_weekly_to_slack: true
 
+- name: security_insights
+  product_stage_group: security_insights
+  slack_channel: g_srm_security_insights
+
+- name: security_infrastructure
+  product_stage_group: security_infrastructure
+  slack_channel: g_srm_security_infrastructure
+
+- name: security_platform_management
+  product_stage_group: security_platform_management
+  slack_channel: g_srm_security_platform_management
 
 # Infrastructure Reliability
 
