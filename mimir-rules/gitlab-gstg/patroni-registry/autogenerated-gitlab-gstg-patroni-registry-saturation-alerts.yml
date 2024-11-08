@@ -354,54 +354,6 @@ groups:
       predict_linear(gitlab_component_saturation:ratio{component="disk_space",env="gstg",type="patroni-registry"}[6h], 21600)
       > on (component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="disk_space"}
-  - alert: component_saturation_slo_out_of_bounds:memory
-    for: 5m
-    annotations:
-      title: The Memory Utilization per Node resource of the {{ $labels.type }} service
-        ({{ $labels.stage }} stage) has a saturation exceeding SLO and is close to
-        its capacity limit.
-      description: |
-        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
-
-        Details of the Memory Utilization per Node resource:
-
-        Memory utilization per device per node.
-      grafana_dashboard_id: alerts-sat_memory
-      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_memory?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
-        }}
-      grafana_datasource_id: mimir-gitlab-gstg
-      grafana_min_zoom_hours: "6"
-      grafana_panel_id: "1955556769"
-      grafana_variables: environment,type,stage
-      promql_query: |
-        max by(environment, tier, type, stage, shard, fqdn) (
-          clamp_min(
-            clamp_max(
-              instance:node_memory_utilization:ratio{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"} or instance:node_memory_utilisation:ratio{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
-              ,
-              1)
-          ,
-          0)
-        )
-      promql_template_1: |
-        max by(environment, tier, type, stage, shard, fqdn) (
-          clamp_min(
-            clamp_max(
-              instance:node_memory_utilization:ratio{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"} or instance:node_memory_utilisation:ratio{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
-              ,
-              1)
-          ,
-          0)
-        )
-      runbook: docs/{{ $labels.type }}/README.md
-    labels:
-      alert_type: cause
-      rules_domain: general
-      severity: s4
-    expr: |
-      gitlab_component_saturation:ratio{component="memory",env="gstg",type="patroni-registry"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="memory"}
   - alert: component_saturation_slo_out_of_bounds:nf_conntrack_entries
     for: 5m
     annotations:
@@ -697,6 +649,73 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="pg_active_db_connections_replica",env="gstg",type="patroni-registry"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="pg_active_db_connections_replica"}
+  - alert: component_saturation_slo_out_of_bounds:pg_anon_memory
+    for: 5m
+    annotations:
+      title: The Anonymous Memory Utilization per Patroni Node (malloc) resource of
+        the {{ $labels.type }} service ({{ $labels.stage }} stage) has a saturation
+        exceeding SLO and is close to its capacity limit.
+      description: |
+        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
+
+        Details of the Anonymous Memory Utilization per Patroni Node (malloc) resource:
+
+        Tracking for explicitly allocated memory (malloc).
+
+        On PostgreSQL nodes this will most likely be shared_buffers, or work_mem. If this value is higher than usual, that does not necessarily indicate imminant danger. Exceeding the treshold indicates that the DBRE's assumption of the memory distribution was incorrect. More memory is used for allocations like shared_buffers or work_mem and less memory is available for the vital file system cache. This can lead to increased query execution times.
+
+        Notify the DBREs in #g_database_operations.
+
+        More information about memory pressure on PostgreSQL systems can be found here, https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/patroni/unhealthy_patroni_node_handling.md?ref_type=heads#oom-and-memory-pressure
+      grafana_dashboard_id: alerts-sat_patroni_anon_memory
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_patroni_anon_memory?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}
+      grafana_datasource_id: mimir-gitlab-gstg
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "1671220473"
+      grafana_variables: environment,type,stage
+      promql_query: |
+        max by(environment, tier, type, stage, shard, fqdn) (
+          clamp_min(
+            clamp_max(
+              (
+                node_memory_Active_anon_bytes{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
+                +
+                node_memory_Inactive_anon_bytes{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
+              )
+              /
+              node_memory_MemTotal_bytes{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
+              ,
+              1)
+          ,
+          0)
+        )
+      promql_template_1: |
+        max by(environment, tier, type, stage, shard, fqdn) (
+          clamp_min(
+            clamp_max(
+              (
+                node_memory_Active_anon_bytes{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
+                +
+                node_memory_Inactive_anon_bytes{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
+              )
+              /
+              node_memory_MemTotal_bytes{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
+              ,
+              1)
+          ,
+          0)
+        )
+      runbook: docs/{{ $labels.type }}/README.md
+    labels:
+      alert_type: cause
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+    expr: |
+      gitlab_component_saturation:ratio{component="pg_anon_memory",env="gstg",type="patroni-registry"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="pg_anon_memory"}
   - alert: component_saturation_slo_out_of_bounds:pg_btree_bloat
     for: 5m
     annotations:
@@ -753,6 +772,69 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="pg_btree_bloat",env="gstg",type="patroni-registry"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="pg_btree_bloat"}
+  - alert: component_saturation_slo_out_of_bounds:pg_memory
+    for: 5m
+    annotations:
+      title: The Memory Utilization per Patroni Node resource of the {{ $labels.type
+        }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
+        is close to its capacity limit.
+      description: |
+        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
+
+        Details of the Memory Utilization per Patroni Node resource:
+
+        Memory utilization per Patroni node.
+
+        On our PostgreSQL nodes the majority of memory is not explicitly allocated but used for the file system cache, to reduce the needed read iops and improve query performance. Therefore we set a very low alerting treshold. Should it be reached this does not indicate that no memory is available for allocation, but that we might not have enough memory to cache our hot data. This can lead to performance degradation.
+
+        Notify the DBREs in #g_database_operations.
+
+        More information about memory presure on PostgreSQL systems can be found here, https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/patroni/unhealthy_patroni_node_handling.md?ref_type=heads#oom-and-memory-pressure
+      grafana_dashboard_id: alerts-sat_patroni_memory
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_patroni_memory?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}
+      grafana_datasource_id: mimir-gitlab-gstg
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "1735812993"
+      grafana_variables: environment,type,stage
+      promql_query: |
+        max by(environment, tier, type, stage, shard, fqdn) (
+          clamp_min(
+            clamp_max(
+              1 - (
+                node_memory_MemAvailable_bytes{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
+                /
+                node_memory_MemTotal_bytes{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
+              )
+              ,
+              1)
+          ,
+          0)
+        )
+      promql_template_1: |
+        max by(environment, tier, type, stage, shard, fqdn) (
+          clamp_min(
+            clamp_max(
+              1 - (
+                node_memory_MemAvailable_bytes{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
+                /
+                node_memory_MemTotal_bytes{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
+              )
+              ,
+              1)
+          ,
+          0)
+        )
+      runbook: docs/{{ $labels.type }}/README.md
+    labels:
+      alert_type: cause
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+    expr: |
+      gitlab_component_saturation:ratio{component="pg_memory",env="gstg",type="patroni-registry"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="pg_memory"}
   - alert: component_saturation_slo_out_of_bounds:pg_primary_cpu
     for: 5m
     annotations:

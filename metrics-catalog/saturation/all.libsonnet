@@ -46,6 +46,7 @@
   import 'saturation-monitoring/pg_active_db_connections_replica.libsonnet',
   import 'saturation-monitoring/pg_btree_bloat.libsonnet',
   import 'saturation-monitoring/pg_int4_id.libsonnet',
+  import 'saturation-monitoring/pg_memory.libsonnet',
   import 'saturation-monitoring/pg_primary_cpu.libsonnet',
   import 'saturation-monitoring/pg_table_bloat.libsonnet',
   import 'saturation-monitoring/pg_txid_vacuum_to_wraparound.libsonnet',

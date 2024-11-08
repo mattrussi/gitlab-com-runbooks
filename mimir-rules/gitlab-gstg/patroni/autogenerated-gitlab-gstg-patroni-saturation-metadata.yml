@@ -70,14 +70,6 @@ groups:
     expr: "0.8"
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:
-      component: memory
-    expr: "0.9"
-  - record: slo:max:hard:gitlab_component_saturation:ratio
-    labels:
-      component: memory
-    expr: "0.98"
-  - record: slo:max:soft:gitlab_component_saturation:ratio
-    labels:
       component: nf_conntrack_entries
     expr: "0.95"
   - record: slo:max:hard:gitlab_component_saturation:ratio
@@ -118,6 +110,14 @@ groups:
     expr: "0.9"
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:
+      component: pg_anon_memory
+    expr: "0.25"
+  - record: slo:max:hard:gitlab_component_saturation:ratio
+    labels:
+      component: pg_anon_memory
+    expr: "0.3"
+  - record: slo:max:soft:gitlab_component_saturation:ratio
+    labels:
       component: pg_btree_bloat
     expr: "0.5"
   - record: slo:max:hard:gitlab_component_saturation:ratio
@@ -132,6 +132,14 @@ groups:
     labels:
       component: pg_int4_id
     expr: "0.9"
+  - record: slo:max:soft:gitlab_component_saturation:ratio
+    labels:
+      component: pg_memory
+    expr: "0.55"
+  - record: slo:max:hard:gitlab_component_saturation:ratio
+    labels:
+      component: pg_memory
+    expr: "0.6"
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:
       component: pg_primary_cpu

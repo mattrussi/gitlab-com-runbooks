@@ -25,7 +25,9 @@ local memoryDefinition = {
   memory: resourceSaturationPoint(memoryDefinition {
     // Exclude redis-cluster-cache because it always runs at its maxmemory
     // level, and the oscillations mean the forecasts aren't useful
-    appliesTo: std.filter(function(s) s != 'redis-cluster-cache', metricsCatalog.findVMProvisionedServices(first='gitaly')),
+    // Exclude patroni, those are added in through `pg_memory.libsonnet`.
+    local excludedServices = ['redis-cluster-cache'] + metricsCatalog.findServicesWithTag(tag='patroni'),
+    appliesTo: std.filter(function(s) !std.member(excludedServices, s), metricsCatalog.findVMProvisionedServices(first='gitaly')),
   }),
   memory_redis_cache: resourceSaturationPoint(memoryDefinition {
     // Give redis-cluster-cache its own non-capacity-planning saturation point.

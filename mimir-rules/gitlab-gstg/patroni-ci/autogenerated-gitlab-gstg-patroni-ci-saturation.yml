@@ -128,19 +128,6 @@ groups:
       )
   - record: gitlab_component_saturation:ratio
     labels:
-      component: memory
-    expr: |
-      max by(env, environment, tier, type, stage, shard) (
-        clamp_min(
-          clamp_max(
-            instance:node_memory_utilization:ratio{env="gstg",type="patroni-ci"} or instance:node_memory_utilisation:ratio{env="gstg",type="patroni-ci"}
-            ,
-            1)
-        ,
-        0)
-      )
-  - record: gitlab_component_saturation:ratio
-    labels:
       component: nf_conntrack_entries
     expr: |
       max by(env, environment, tier, type, stage, shard) (
@@ -226,6 +213,25 @@ groups:
       )
   - record: gitlab_component_saturation:ratio
     labels:
+      component: pg_anon_memory
+    expr: |
+      max by(env, environment, tier, type, stage, shard) (
+        clamp_min(
+          clamp_max(
+            (
+              node_memory_Active_anon_bytes{env="gstg",type="patroni-ci"}
+              +
+              node_memory_Inactive_anon_bytes{env="gstg",type="patroni-ci"}
+            )
+            /
+            node_memory_MemTotal_bytes{env="gstg",type="patroni-ci"}
+            ,
+            1)
+        ,
+        0)
+      )
+  - record: gitlab_component_saturation:ratio
+    labels:
       component: pg_btree_bloat
     expr: |
       max by(env, environment, tier, type, stage, shard) (
@@ -248,6 +254,23 @@ groups:
           clamp_max(
             max by (env, environment, tier, type, stage, shard, column_name) (
               pg_int4_saturation_current_largest_value{env="gstg",type="patroni-ci",column_name!~".+(.|-|_)iid"} / pg_int4_saturation_column_max_value{env="gstg",type="patroni-ci",column_name!~".+(.|-|_)iid"}
+            )
+            ,
+            1)
+        ,
+        0)
+      )
+  - record: gitlab_component_saturation:ratio
+    labels:
+      component: pg_memory
+    expr: |
+      max by(env, environment, tier, type, stage, shard) (
+        clamp_min(
+          clamp_max(
+            1 - (
+              node_memory_MemAvailable_bytes{env="gstg",type="patroni-ci"}
+              /
+              node_memory_MemTotal_bytes{env="gstg",type="patroni-ci"}
             )
             ,
             1)
