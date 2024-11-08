@@ -24,7 +24,7 @@ test.suite({
     actual: mappingWithOverride.gitaly,
     expectContains: {
       stage: 'systems',
-      feature_categories: ['gitaly'],  // feature categories collected by source group(s)
+      feature_categories: ['gitaly', 'git'],  // feature categories collected by source group(s)
     },
   },
 })
