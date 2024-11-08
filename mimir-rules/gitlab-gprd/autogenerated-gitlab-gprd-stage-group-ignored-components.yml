@@ -187,6 +187,15 @@ groups:
       product_stage: ai-powered
       stage_group: duo_chat
     expr: "1"
+- name: 'Stage group Ignored components: ai-powered - Duo Workflow'
+  interval: 1m
+  rules:
+  - record: gitlab:ignored_component:stage_group
+    labels:
+      component: graphql_query
+      product_stage: ai-powered
+      stage_group: duo_workflow
+    expr: "1"
 - name: 'Stage group Ignored components: secure - Dynamic Analysis'
   interval: 1m
   rules:

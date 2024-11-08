@@ -135,6 +135,7 @@
     feature_categories: [
       'pipeline_composition',
       'ci_variables',
+      'component_catalog',
     ],
   },
   runner: {
@@ -373,11 +374,11 @@
       'gitaly',
     ],
   },
-  gitaly_git: {
-    name: 'Gitaly::Git',
+  git: {
+    name: 'Git',
     stage: 'systems',
     feature_categories: [
-
+      'git',
     ],
   },
   geo: {
@@ -474,7 +475,6 @@
     stage: 'ai-powered',
     feature_categories: [
       'ai_abstraction_layer',
-      'duo_workflow',
     ],
   },
   duo_chat: {
@@ -482,6 +482,13 @@
     stage: 'ai-powered',
     feature_categories: [
       'duo_chat',
+    ],
+  },
+  duo_workflow: {
+    name: 'Duo Workflow',
+    stage: 'ai-powered',
+    feature_categories: [
+      'duo_workflow',
     ],
   },
   ai_model_validation: {
