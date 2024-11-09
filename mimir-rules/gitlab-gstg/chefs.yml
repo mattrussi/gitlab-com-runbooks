@@ -14,7 +14,7 @@ groups:
       runbook: docs/config_management/chef-troubleshooting.md
       title: Chef client failed for more than 5hs
   - alert: ChefClientErrorCritical
-    expr: avg(chef_client_error{env="gstg"}) * 100 > 10
+    expr: avg(chef_client_error{env="gstg"}) by (env) * 100 > 10
     for: 1h
     labels:
       severity: s4
