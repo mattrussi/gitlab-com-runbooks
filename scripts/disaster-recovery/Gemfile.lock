@@ -128,7 +128,7 @@ GEM
     logger (1.6.1)
     mini_mime (1.1.5)
     minitest (5.25.1)
-    mixlib-shellout (3.3.3)
+    mixlib-shellout (3.3.4)
       chef-utils
     multi_json (1.15.0)
     net-http (0.4.1)
@@ -215,4 +215,4 @@ DEPENDENCIES
   rubocop
 
 BUNDLED WITH
-   2.5.16
+   2.5.22
