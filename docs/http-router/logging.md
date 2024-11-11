@@ -6,7 +6,7 @@
 
 # Logging in HTTP Router
 
-The [http-router](https://gitlab.com/gitlab-org/cells/http-router) leverages [Cloudflare Workers](https://developers.cloudflare.com/workers/) for its operations. For log persistence and analysis, we utilize a combination of [Worker Logs](https://developers.cloudflare.com/workers/observability/logs/workers-logs/) and [Worker Logpush](https://developers.cloudflare.com/workers/observability/logs/logpush/) services.
+The [http-router](https://gitlab.com/gitlab-org/cells/http-router) leverages [Cloudflare Workers](https://developers.cloudflare.com/workers/) for its operations. For logs we use a o[Worker Logs](https://developers.cloudflare.com/workers/observability/logs/workers-logs/) with a 1% head-based sampling rate and [Sentry SDK for Cloudflare](https://www.npmjs.com/package/@sentry/cloudflare) for handling all the exceptions.
 
 ## Worker Logs Overview
 
@@ -25,14 +25,8 @@ Log configuration is managed through the [`wrangler.toml`](https://gitlab.com/gi
 
 To optimize costs while maintaining meaningful insights, we leverage head-based sampling with a [1% sampling rate](https://gitlab.com/gitlab-org/cells/http-router/-/blob/c0bbfaae75be7d534713564aa29866af78705dd1/wrangler.toml#L82) as described in the configuration file.
 
-## Worker Logpush
+## Worker Sentry Integration
 
-Cloudflare Worker Logpush is a feature that allows us to export detailed logs from the Cloudflare Workers to a GCS bucket and analyze the logs. We primarily use it for error tracking and don't sample the request.
+We leverage the [Sentry SDK for Cloudflare](https://www.npmjs.com/package/@sentry/cloudflare) to ship all exception logs to our [Sentry Instance](https://new-sentry.gitlab.net/).
 
-### Querying Logs through Big Query
-
-TBD - Docs will be added after, we complete the [Persist Error logs from worker issue](https://gitlab.com/gitlab-org/cells/http-router/-/issues/94)
-
-### Configuration
-
-TBD - Docs will be added after, we complete the [Persist Error logs from worker issue](https://gitlab.com/gitlab-org/cells/http-router/-/issues/94)
+We have set up the [http-router](https://new-sentry.gitlab.net/organizations/gitlab/projects/http-router/?project=39) project in Sentry. This single project hosts all environments, including `gprd` and `gstg`.

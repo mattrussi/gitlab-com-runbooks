@@ -20,6 +20,7 @@
 * [ErrorTracking main troubleshooting document](../errortracking/overview.md)
 * [Increased Error Rate](../frontend/high-error-rate.md)
 * [Gitaly is down](../gitaly/gitaly-down.md)
+* [HTTP Router Worker Logs](../http-router/logging.md)
 * [Tuning and Modifying Alerts](../monitoring/alert_tuning.md)
 * [`pg_xid_wraparound` Saturation Alert](../patroni/pg_xid_wraparound_alert.md)
 * [../patroni/postgres.md](../patroni/postgres.md)
