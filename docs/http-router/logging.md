@@ -6,7 +6,7 @@
 
 # Logging in HTTP Router
 
-The [http-router](https://gitlab.com/gitlab-org/cells/http-router) leverages [Cloudflare Workers](https://developers.cloudflare.com/workers/) for its operations. For logs we use a o[Worker Logs](https://developers.cloudflare.com/workers/observability/logs/workers-logs/) with a 1% head-based sampling rate and [Sentry SDK for Cloudflare](https://www.npmjs.com/package/@sentry/cloudflare) for handling all the exceptions.
+The [http-router](https://gitlab.com/gitlab-org/cells/http-router) leverages [Cloudflare Workers](https://developers.cloudflare.com/workers/) for its operations. For logs we use [Worker Logs](https://developers.cloudflare.com/workers/observability/logs/workers-logs/) with a 1% head-based sampling rate and [Sentry SDK for Cloudflare](https://www.npmjs.com/package/@sentry/cloudflare) for handling all the exceptions.
 
 ## Worker Logs Overview
 
