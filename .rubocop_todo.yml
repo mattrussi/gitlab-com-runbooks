@@ -167,7 +167,7 @@ RSpec/VerifiedDoubleReference:
 # SupportedStyles: ruby19, hash_rockets, no_mixed_keys, ruby19_no_mixed_keys
 # SupportedShorthandSyntax: always, never, either, consistent, either_consistent
 Style/HashSyntax:
-  EnforcedStyle: ruby19
+  EnforcedShorthandSyntax: either
 
 # Offense count: 1
 # This cop supports unsafe autocorrection (--autocorrect-all).
