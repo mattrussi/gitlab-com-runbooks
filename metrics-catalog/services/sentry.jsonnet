@@ -139,31 +139,6 @@ metricsCatalog.serviceDefinition({
       significantLabels: [],
     },
 
-    redis_latency: {
-      severity: 's3',
-      userImpacting: false,
-      serviceAggregation: false,
-      featureCategory: 'not_owned',
-      description: |||
-        Represents the latency of Redis commands.
-      |||,
-
-      local redisSelector = { job: 'sentry-redis-metrics' },
-
-      apdex: histogramApdex(
-        histogram='redis_commands_duration_seconds_total',
-        selector=redisSelector,
-        satisfiedThreshold=10,
-      ),
-
-      requestRate: rateMetric(
-        counter='redis_commands_total',
-        selector=redisSelector,
-      ),
-
-      significantLabels: [],
-    },
-
     rabbitmq_messages: {
       severity: 's3',
       userImpacting: false,
