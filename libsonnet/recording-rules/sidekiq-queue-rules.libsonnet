@@ -152,7 +152,7 @@ local sidekiqAlerts(registry, extraSelector) =
       },
       'for': '3h',
       labels: {
-        team: 'scalability:practices',
+        team: 'data-access:durability',
         severity: 's4',
         alert_type: 'cause',
       },

@@ -126,11 +126,11 @@ teams:
   ignored_components:
   - graphql_query
 
-- name: scalability:practices
+- name: production-engineering:runway
   url: https://about.gitlab.com/handbook/engineering/infrastructure/team/scalability/#scalabilitypractices
-  manager: kwanyangu
-  label: team::Scalability-Practices
-  slack_alerts_channel: g_scalability-practices
+  manager: devin
+  label: team::Runway
+  slack_alerts_channel: g_runway
 
 - name: runway
   slack_alerts_channel: f_runway_alerts
@@ -552,3 +552,10 @@ teams:
 - name: test_tools_infrastructure
   url: https://about.gitlab.com/handbook/marketing/developer-relations/
   slack_alerts_channel: test-tools-infrastructure-team
+
+# Data Access
+- name: data-access:durability
+  url: https://about.gitlab.com/handbook/engineering/infrastructure/team/durability
+  manager: jarv
+  label: team::Durability
+  slack_alerts_channel: g_durability

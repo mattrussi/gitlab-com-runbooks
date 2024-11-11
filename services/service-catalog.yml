@@ -1352,7 +1352,7 @@ services:
     tier: db
     friendly_name: Persistent Redis
     label: Redis
-    owner: scalability:practices
+    owner: data-access:durability
     technical:
       project:
         - https://github.com/antirez/redis/
@@ -1382,7 +1382,7 @@ services:
     tier: db
     friendly_name: Redis Pub/Sub
     label: RedisPubsub
-    owner: scalability:practices
+    owner: data-access:durability
     technical:
       project:
         - https://github.com/antirez/redis/
@@ -1410,7 +1410,7 @@ services:
     tier: db
     friendly_name: Redis Cluster SharedState
     label: RedisClusterSharedState
-    owner: scalability:practices
+    owner: data-access:durability
     technical:
       project:
         - https://github.com/antirez/redis/
@@ -1437,7 +1437,7 @@ services:
     tier: db
     friendly_name: Redis Cluster Feature Flag
     label: RedisClusterFeatureFlag
-    owner: scalability:practices
+    owner: data-access:durability
     technical:
       project:
         - https://github.com/antirez/redis/
@@ -1464,7 +1464,7 @@ services:
     tier: db
     friendly_name: Redis Cluster Cache
     label: RedisClusterCache
-    owner: scalability:practices
+    owner: data-access:durability
     technical:
       project:
         - https://github.com/antirez/redis/
@@ -1491,7 +1491,7 @@ services:
     tier: db
     friendly_name: Redis Cluster RateLimiting
     label: RedisClusterRateLimiting
-    owner: scalability:practices
+    owner: data-access:durability
     technical:
       project:
         - https://github.com/redis/redis
@@ -1518,7 +1518,7 @@ services:
     tier: db
     friendly_name: Redis Cluster Chat Cache
     label: RedisClusterChatCache
-    owner: scalability:practices
+    owner: data-access:durability
     technical:
       project:
         - https://github.com/redis/redis
@@ -1545,7 +1545,7 @@ services:
     tier: db
     friendly_name: Redis Cluster Repo Cache
     label: RedisClusterRepoCache
-    owner: scalability:practices
+    owner: data-access:durability
     technical:
       project:
         - https://github.com/redis/redis
@@ -1572,7 +1572,7 @@ services:
     tier: db
     friendly_name: Redis Sessions
     label: RedisSessions
-    owner: scalability:practices
+    owner: data-access:durability
     technical:
       project:
         - https://github.com/antirez/redis/
@@ -1599,7 +1599,7 @@ services:
     tier: db
     friendly_name: Redis Sidekiq
     label: RedisSidekiq
-    owner: scalability:practices
+    owner: data-access:durability
     technical:
       project:
         - https://github.com/antirez/redis/
@@ -1626,7 +1626,7 @@ services:
     tier: db
     friendly_name: Redis Cluster Queues Meta
     label: RedisClusterQueuesMeta
-    owner: scalability:practices
+    owner: data-access:durability
     technical:
       project:
         - https://github.com/redis/redis
@@ -1653,7 +1653,7 @@ services:
     tier: db
     friendly_name: Redis TraceChunks
     label: RedisTraceChunks
-    owner: scalability:practices
+    owner: data-access:durability
     technical:
       project:
         - https://github.com/antirez/redis/
@@ -1680,7 +1680,7 @@ services:
     tier: db
     friendly_name: Redis Registry Cache
     label: RedisRegistryCache
-    owner: scalability:practices
+    owner: data-access:durability
     technical:
       project:
         - https://github.com/antirez/redis/
@@ -1705,7 +1705,7 @@ services:
     tier: db
     friendly_name: Redis Database Load Balancing
     label: RedisDbLoadBalancing
-    owner: scalability:practices
+    owner: data-access:durability
     technical:
       project:
         - https://github.com/redis/redis
@@ -1771,7 +1771,7 @@ services:
     tier: inf
     friendly_name: Runway Platform
     label: Runway
-    owner: scalability:practices
+    owner: production-engineering:runway
     technical:
       project:
         - https://gitlab.com/gitlab-com/gl-infra/platform/runway
@@ -1852,7 +1852,7 @@ services:
       - manage
       - plan
     label: Sidekiq
-    owner: scalability:practices
+    owner: data-access:durability
     business:
       SLA:
         overall_sla_weighting: 0 # Treated as a primary service, but with a zero weight for now
@@ -2001,7 +2001,7 @@ services:
     tier: sv
     friendly_name: CI Runners
     label: CI Runners
-    owner: scalability:practices
+    owner: reliability_ops
     business:
       SLA:
         overall_sla_weighting: 0 # Treated as a primary service, but with a zero weight for now
