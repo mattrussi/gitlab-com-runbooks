@@ -32,7 +32,7 @@ TODO: link here design docs once they are ready
 
 ## Administrative access/login
 
-We've locked down OKTA access to read only for both non-prod and prod logging clusters.  Both clusters can still be accessed for read/write by SRE on-call through the ops-contact+elastic@gitlab.com account.
+We've locked down OKTA access to read only for both non-prod and prod logging clusters.  Both clusters can still be accessed for read/write by SRE on-call through the `ops-contact+elastic@gitlab.com` account.
 
 Once logged into Elastic Cloud, select 'open' for any of the clusters and you'll be logged into Kibana as a super user.
 
