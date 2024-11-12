@@ -68,19 +68,6 @@ groups:
       )
   - record: gitlab_component_saturation:ratio
     labels:
-      component: memory
-    expr: |
-      max by(env, environment, tier, type, stage, shard) (
-        clamp_min(
-          clamp_max(
-            instance:node_memory_utilization:ratio{env="gprd",type="patroni-embedding"} or instance:node_memory_utilisation:ratio{env="gprd",type="patroni-embedding"}
-            ,
-            1)
-        ,
-        0)
-      )
-  - record: gitlab_component_saturation:ratio
-    labels:
       component: nf_conntrack_entries
     expr: |
       max by(env, environment, tier, type, stage, shard) (
@@ -166,6 +153,25 @@ groups:
       )
   - record: gitlab_component_saturation:ratio
     labels:
+      component: pg_anon_memory
+    expr: |
+      max by(env, environment, tier, type, stage, shard) (
+        clamp_min(
+          clamp_max(
+            (
+              node_memory_Active_anon_bytes{env="gprd",type="patroni-embedding"}
+              +
+              node_memory_Inactive_anon_bytes{env="gprd",type="patroni-embedding"}
+            )
+            /
+            node_memory_MemTotal_bytes{env="gprd",type="patroni-embedding"}
+            ,
+            1)
+        ,
+        0)
+      )
+  - record: gitlab_component_saturation:ratio
+    labels:
       component: pg_btree_bloat
     expr: |
       max by(env, environment, tier, type, stage, shard) (
@@ -174,6 +180,23 @@ groups:
             sum by (env, environment, tier, type, stage, shard, fqdn) (last_over_time(gitlab_database_bloat_btree_bloat_size{env="gprd",type="patroni-embedding"}[1h]))
             /
             sum by (env, environment, tier, type, stage, shard, fqdn) (last_over_time(gitlab_database_bloat_btree_real_size{env="gprd",type="patroni-embedding"}[1h]))
+            ,
+            1)
+        ,
+        0)
+      )
+  - record: gitlab_component_saturation:ratio
+    labels:
+      component: pg_memory
+    expr: |
+      max by(env, environment, tier, type, stage, shard) (
+        clamp_min(
+          clamp_max(
+            1 - (
+              node_memory_MemAvailable_bytes{env="gprd",type="patroni-embedding"}
+              /
+              node_memory_MemTotal_bytes{env="gprd",type="patroni-embedding"}
+            )
             ,
             1)
         ,
