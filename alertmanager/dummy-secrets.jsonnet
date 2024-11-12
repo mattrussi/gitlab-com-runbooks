@@ -43,4 +43,8 @@
   incidentioChannels: [
     { name: 'incidentio_gstg', url: 'https://api.incident.io/v2/alert_events/alertmanager/urlkey', token: 'secret' },
   ],
+  // rootly configs.
+  rootlyChannels: [
+    { name: 'rootly_gstg', url: 'https://webhooks.rootly.com/webhooks/incoming/alertmanager_webhooks', token: 'secret' },
+  ],
 }
