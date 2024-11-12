@@ -25,7 +25,7 @@ test.suite({
     ),
     expect: joinMulti(|||
       https://log.gprd.gitlab.net/app/kibana#/discover?
-      _a=(columns:!(json.class,json.queue,json.meta.project,json.job_status,json.scheduling_latency_s,json.duration_s),filters:!((meta:(index:'AWNABDRwNDuQHTm2tH6l'),query:(match:(json.shard:(query:throttled,type:phrase))))),index:'AWNABDRwNDuQHTm2tH6l')&
+      _a=(columns:!(json.class,json.queue,json.meta.project,json.job_status,json.queueing_duration_s,json.duration_s),filters:!((meta:(index:'AWNABDRwNDuQHTm2tH6l'),query:(match:(json.shard:(query:throttled,type:phrase))))),index:'AWNABDRwNDuQHTm2tH6l')&
       _g=(time:(from:'${__from:date:iso}',to:'${__to:date:iso}'))
     |||),
   },
@@ -37,7 +37,7 @@ test.suite({
     ),
     expect: joinMulti(|||
       https://log.gprd.gitlab.net/app/kibana#/discover?
-      _a=(columns:!(json.class,json.queue,json.meta.project,json.job_status,json.scheduling_latency_s,json.duration_s,json.username),filters:!(),index:'AWNABDRwNDuQHTm2tH6l')
+      _a=(columns:!(json.class,json.queue,json.meta.project,json.job_status,json.queueing_duration_s,json.duration_s,json.username),filters:!(),index:'AWNABDRwNDuQHTm2tH6l')
     |||),
   },
   testBuildElasticLineCountVizURL: {
