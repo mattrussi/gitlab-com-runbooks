@@ -223,7 +223,7 @@ basic.dashboard(
     .addSeriesOverride(seriesOverrides.goldenMetric('/.* queue apdex$/'))
     .addDataLink(elasticsearchLogSearchDataLink)
     .addDataLink({
-      url: elasticsearchLinks.buildElasticLinePercentileVizURL('sidekiq', elasticFilters, elasticQueries, 'json.scheduling_latency_s'),
+      url: elasticsearchLinks.buildElasticLinePercentileVizURL('sidekiq', elasticFilters, elasticQueries, 'json.queueing_duration_s'),
       title: 'ElasticSearch: queue latency visualization',
       targetBlank: true,
     }),

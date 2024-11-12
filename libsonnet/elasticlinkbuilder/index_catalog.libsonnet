@@ -367,7 +367,7 @@ local indexDefaults = {
   sidekiq: indexDefaults {
     timestamp: 'json.time',
     indexPattern: 'AWNABDRwNDuQHTm2tH6l',
-    defaultColumns: ['json.class', 'json.queue', 'json.meta.project', 'json.job_status', 'json.scheduling_latency_s', 'json.duration_s'],
+    defaultColumns: ['json.class', 'json.queue', 'json.meta.project', 'json.job_status', 'json.queueing_duration_s', 'json.duration_s'],
     defaultSeriesSplitField: 'json.meta.project.keyword',
     failureFilter: [matchFilter('json.job_status', 'fail')],
     defaultLatencyField: 'json.duration_s',
@@ -383,7 +383,7 @@ local indexDefaults = {
       'json.meta.project',
       'json.meta.feature_category',
       'json.job_status',
-      'json.scheduling_latency_s',
+      'json.queueing_duration_s',
       'json.urgency',
       'json.duration_s',
       'json.target_duration_s',
@@ -410,19 +410,19 @@ local indexDefaults = {
       'json.meta.project',
       'json.job_status',
       'json.urgency',
-      'json.scheduling_latency_s',
+      'json.queueing_duration_s',
       'json.target_scheduling_latency_s',
       'json.duration_s',
     ],
     defaultSeriesSplitField: 'json.meta.project.keyword',
-    defaultLatencyField: 'json.scheduling_latency_s',
+    defaultLatencyField: 'json.queueing_duration_s',
     latencyFieldUnitMultiplier: 1,
     slowRequestFilter: [
       // These need to be present for the script to work.
       // Only job completion logs have target_duration_s and duration_s
       existsFilter('json.target_scheduling_latency_s'),
-      existsFilter('json.scheduling_latency_s'),
-      matching.matchers({ anyScript: ["doc['json.scheduling_latency_s'].value > doc['json.target_scheduling_latency_s'].value"] }),
+      existsFilter('json.queueing_duration_s'),
+      matching.matchers({ anyScript: ["doc['json.queueing_duration_s'].value > doc['json.target_scheduling_latency_s'].value"] }),
     ],
   },
 
@@ -465,7 +465,7 @@ local indexDefaults = {
   },
 
   sidekiq_queueing_viz: sidekiq_viz {
-    defaultLatencyField: 'json.scheduling_latency_s',
+    defaultLatencyField: 'json.queueing_duration_s',
   },
 
   sidekiq_queueing_viz_by_shard: self.sidekiq_queueing_viz {
