@@ -71,6 +71,7 @@
   import 'sast-service.jsonnet',
   import 'sentry.jsonnet',
   import 'sidekiq.jsonnet',
+  import 'spamcheck.jsonnet',
   import 'tracing.jsonnet',
   import 'topology-service-rest.jsonnet',
   import 'vault.jsonnet',
