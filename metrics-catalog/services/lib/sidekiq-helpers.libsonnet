@@ -3,6 +3,7 @@
 local shardDefaults = {
   autoScaling: true,
   trafficCessationAlertConfig: true,
+  capacityPlanning: true,
 };
 
 local shardDefinitions = {
@@ -10,13 +11,13 @@ local shardDefinitions = {
   'gitaly-throttled': { urgency: 'throttled', gkeDeployment: 'gitlab-sidekiq-gitaly-throttled-v2', trafficCessationAlertConfig: false },
   'low-urgency-cpu-bound': { urgency: 'low', gkeDeployment: 'gitlab-sidekiq-low-urgency-cpu-bound-v2' },
   'memory-bound': { urgency: null, gkeDeployment: 'gitlab-sidekiq-memory-bound-v2', trafficCessationAlertConfig: false },
-  quarantine: { urgency: null, gkeDeployment: 'gitlab-sidekiq-catchall-v2', trafficCessationAlertConfig: false },
+  quarantine: { urgency: null, gkeDeployment: 'gitlab-sidekiq-catchall-v2', trafficCessationAlertConfig: false, capacityPlanning: false },
   'urgent-cpu-bound': { urgency: 'high', gkeDeployment: 'gitlab-sidekiq-urgent-cpu-bound-v2' },
   'urgent-other': { urgency: 'high', gkeDeployment: 'gitlab-sidekiq-urgent-other-v2' },
   'urgent-authorized-projects': { urgency: 'throttled', gkeDeployment: 'gitlab-sidekiq-urgent-authorized-projects-v2', trafficCessationAlertConfig: false },
   catchall: { urgency: null, gkeDeployment: 'gitlab-sidekiq-catchall-v2' },
   elasticsearch: { urgency: 'throttled', gkeDeployment: 'gitlab-sidekiq-elasticsearch-v2', trafficCessationAlertConfig: false },
-  'ai-abstraction-layer': {urgency: 'throttled', gkeDeployment: 'gitlab-sidekiq-ai-abstraction-layer-v2', trafficCessationAlertConfig: false}
+  'ai-abstraction-layer': { urgency: 'throttled', gkeDeployment: 'gitlab-sidekiq-ai-abstraction-layer-v2', trafficCessationAlertConfig: false },
 };
 
 local shards = std.foldl(
