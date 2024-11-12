@@ -129,6 +129,22 @@ local IncidentioReceiver(channel) = {
   ],
 };
 
+
+local RootlyReceiver(channel) = {
+  name: channel.name,
+  webhook_configs: [
+    {
+      url: channel.url,
+      send_resolved: true,
+      http_config: {
+        authorization: {
+          credentials: channel.token,
+        },
+      },
+    },
+  ],
+};
+
 local webhookReceiverDefaults = {
   httpConfig: {},
 };
@@ -511,6 +527,13 @@ local routingTree = Route(
     ),
   ]
   + [
+    Route(
+      receiver='rootly_gstg',
+      continue=true,
+      matchers={ env: 'gstg' },
+    ),
+  ]
+  + [
     // Terminators go last
     Route(
       receiver='platform_insights_pagerduty',
@@ -570,6 +593,7 @@ local receivers =
   }) for team in teamsWithAlertingSlackChannels()] +
   [WebhookReceiver(c) for c in webhookChannels] +
   [IncidentioReceiver(c) for c in secrets.incidentioChannels] +
+  [RootlyReceiver(c) for c in secrets.rootlyChannels] +
   [
     // receiver that does nothing with the alert, blackholing it
     {
