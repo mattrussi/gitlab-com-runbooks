@@ -168,19 +168,19 @@ serviceDashboard.overview('sidekiq', expectMultipleSeries=true)
         queries=[
           {
             query: |||
-              quantile(0.10, global_search_awaiting_indexing_queue_size{environment="$environment"})
+              quantile(0.10, search_advanced_awaiting_indexing_queue_size{environment="$environment"})
             |||,
             legendFormat: 'p10',
           },
           {
             query: |||
-              quantile(0.50, global_search_awaiting_indexing_queue_size{environment="$environment"})
+              quantile(0.50, search_advanced_awaiting_indexing_queue_size{environment="$environment"})
             |||,
             legendFormat: 'p50',
           },
           {
             query: |||
-              quantile(0.90, global_search_awaiting_indexing_queue_size{environment="$environment"})
+              quantile(0.90, search_advanced_awaiting_indexing_queue_size{environment="$environment"})
             |||,
             legendFormat: 'p90',
           },
