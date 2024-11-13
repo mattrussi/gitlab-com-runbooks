@@ -4,7 +4,7 @@ groups:
       - alert: gitlab_search_initial_indexing_queue_backing_up
         expr: >
           avg by (environment,stage) (
-            global_search_bulk_cron_initial_queue_size{env="gstg"}
+            search_advanced_bulk_cron_initial_queue_size{env="gstg"}
           ) > 10000
           unless
           search_advanced_boolean_settings{name="elasticsearch_pause_indexing", env="gstg"} == 1
@@ -28,7 +28,7 @@ groups:
       - alert: gitlab_search_incremental_indexing_queue_backing_up
         expr: >
           avg by (environment, stage) (
-            global_search_bulk_cron_queue_size{env="gstg"}
+            search_advanced_bulk_cron_queue_size{env="gstg"}
           ) > 10000
           unless
           search_advanced_boolean_settings{name="elasticsearch_pause_indexing", env="gstg"} == 1
