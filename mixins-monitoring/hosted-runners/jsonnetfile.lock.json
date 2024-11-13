@@ -28,7 +28,7 @@
           "subdir": "gen/grafonnet-latest"
         }
       },
-      "version": "119d65363dff84a1976bba609f2ac3a8f450e760",
+      "version": "733beadbc8dab55c5fe1bcdcf0d8a2d215759a55",
       "sum": "eyuJ0jOXeA4MrobbNgU4/v5a7ASDHslHZ0eS6hDdWoI="
     },
     {
@@ -38,8 +38,8 @@
           "subdir": "gen/grafonnet-v11.0.0"
         }
       },
-      "version": "119d65363dff84a1976bba609f2ac3a8f450e760",
-      "sum": "Fuo+qTZZzF+sHDBWX/8fkPsUmwW6qhH8hRVz45HznfI="
+      "version": "733beadbc8dab55c5fe1bcdcf0d8a2d215759a55",
+      "sum": "0BvzR0i4bS4hc2O3xDv6i9m52z7mPrjvqxtcPrGhynA="
     },
     {
       "source": {
@@ -48,8 +48,8 @@
           "subdir": "grafana-builder"
         }
       },
-      "version": "0ed0fe46fea3c7f47cc5859103f81684f59a85bc",
-      "sum": "EEPwMLfUIJT9iEUI/gCW9x6PxWoTBPSJOfabTF4rp1M="
+      "version": "349a4d4936014ab83ace72f500424d6ef098201e",
+      "sum": "yxqWcq/N3E/a/XreeU6EuE6X7kYPnG0AspAQFKOjASo="
     },
     {
       "source": {
@@ -58,8 +58,8 @@
           "subdir": "memcached-mixin"
         }
       },
-      "version": "0ed0fe46fea3c7f47cc5859103f81684f59a85bc",
-      "sum": "G3IC/oaEuUanywC4+6pbWusZm5QRRwnxaczfESyX/8k="
+      "version": "349a4d4936014ab83ace72f500424d6ef098201e",
+      "sum": "nhwKgMyvN5NOoRk+YrSv+HNPrZQmzo4O35zfpep3Jcw="
     },
     {
       "source": {
@@ -88,8 +88,8 @@
           "subdir": ""
         }
       },
-      "version": "de834e9a291b49396125768f041e2078763f48b5",
-      "sum": "E6z1j4MS6/NnIVZkUuk+gb0m9FvRmZ77H6SSopIZEa8="
+      "version": "3cb7958a56688386e8f6cb0f1258bdb1234797d6",
+      "sum": "f+GOrDpxTRmyYkaZKy6CCwqGoCs9MMCmEGT1cTJ0m6k="
     },
     {
       "source": {
@@ -98,8 +98,8 @@
           "subdir": "mixin"
         }
       },
-      "version": "35c0dbec856f97683a846e9c53f83156a3a44ff3",
-      "sum": "HhSSbGGCNHCMy1ee5jElYDm0yS9Vesa7QB2/SHKdjsY="
+      "version": "6ff5e1b3a2b3dd94886c62f5f76f0fcd7df35824",
+      "sum": "ieCD4eMgGbOlrI8GmckGPHBGQDcLasE1rULYq56W/bs="
     },
     {
       "source": {
@@ -118,8 +118,8 @@
           "subdir": ""
         }
       },
-      "version": "9ef55ee4963242eb6acb0bdc1e536d16792edff9",
-      "sum": "559rJbOt7rXArRI2JaIf6xN9kq2Td9doJ0gYdtEm1SM="
+      "version": "8f40d2d99e1d40920c51b32fdec8b863aaa2b8bc",
+      "sum": "IEPDcZklQuczE9ulvLP7gOgTOnIDK83PnFUp20G+RBg="
     }
   ],
   "legacyImports": false

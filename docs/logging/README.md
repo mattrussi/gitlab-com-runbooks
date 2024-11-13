@@ -28,6 +28,8 @@
 * [HAProxy Management at GitLab](../frontend/haproxy.md)
 * [Possible Breach of SSH MaxStartups](../frontend/ssh-maxstartups-breach.md)
 * [Purge Git data](../git/purge-git-data.md)
+* [HostedRunnersServicePendingBuildsSaturationSingleShard](../hosted-runners/pending_queue_duration.md)
+* [../hosted-runners/runner_system_failure.md](../hosted-runners/runner_system_failure.md)
 * [HTTP Router Worker Logs](../http-router/logging.md)
 * [Kubernetes-Agent Basic Troubleshooting](../kas/kubernetes-agent-basic-troubleshooting.md)
 * [Kubernetes](../kube/kubernetes.md)

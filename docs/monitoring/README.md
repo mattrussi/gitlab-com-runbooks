@@ -27,6 +27,7 @@
 * [ErrorTracking main troubleshooting document](../errortracking/overview.md)
 * [Upgrading the OS of Gitaly VMs](../gitaly/gitaly-os-upgrade.md)
 * [Gitaly repository cgroups](../gitaly/gitaly-repos-cgroup.md)
+* [HostedRunnersServiceCiRunnerJobsApdexSLOViolationSingleShard](../hosted-runners/jobs_apdex_slo_violation.md)
 * [HTTP Router Worker Logs](../http-router/logging.md)
 * [Rebuilding a kubernetes cluster](../kube/k8s-cluster-rebuild.md)
 * [GitLab.com on Kubernetes](../kube/k8s-new-cluster.md)

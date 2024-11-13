@@ -13,6 +13,9 @@
 
 * [Rails](https://eu-central-1.console.aws.amazon.com/cloudwatch/home?region=eu-central-1#logsV2:log-groups/log-group/production-switchboard)
 
+## Troubleshooting Pointers
+
+* [HostedRunnersServiceRunnerManagerDownSingleShard](../hosted-runners/runners_manager_is_down.md)
 <!-- END_MARKER -->
 
 ## Summary

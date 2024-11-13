@@ -1,5 +1,6 @@
+
 {
   prometheusAlerts+:: {
-    // Nothing here for now
-  },
+    groups+: $.prometheusAlertsGroups
+  }
 }
