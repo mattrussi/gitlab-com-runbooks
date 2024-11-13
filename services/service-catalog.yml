@@ -29,7 +29,7 @@ services:
       - manage
       - plan
     label: API
-    owner: reliability_unowned
+    owner: production_engineering_unowned
     business:
       SLA:
         overall_sla_weighting: 5 # If this exists, this service will be included in the overall SLA, using this value as a weighted average
@@ -68,7 +68,7 @@ services:
     tier: inf
     friendly_name: Atlantis
     label: atlantis
-    owner: reliability_foundations
+    owner: saas_platforms_foundations
     technical:
       project:
       documents:
@@ -139,7 +139,7 @@ services:
     tier: sv
     friendly_name: Camoproxy
     label: Camoproxy
-    owner: reliability_unowned
+    owner: production_engineering_unowned
     technical:
       project:
         - https://github.com/cactus/go-camo
@@ -190,7 +190,7 @@ services:
     tier: sv
     friendly_name: Console Access
     label: Console
-    owner: reliability_foundations
+    owner: saas_platforms_foundations
     technical:
       project:
         - https://gitlab.com/gitlab-cookbooks/gitlab_users
@@ -215,7 +215,7 @@ services:
     tier: inf
     friendly_name: Consul
     label: Consul
-    owner: reliability_foundations
+    owner: saas_platforms_foundations
     technical:
       project:
         - https://github.com/hashicorp/consul
@@ -409,7 +409,7 @@ services:
     tier: inf
     friendly_name: Kubernetes
     label: Kube
-    owner: reliability_foundations
+    owner: saas_platforms_foundations
     technical:
       project:
         - https://gitlab.com/gitlab-com/gitlab-com-infrastructure
@@ -477,7 +477,7 @@ services:
     teams:
       - distribution_deploy
     label: NGINX
-    owner: reliability_unowned
+    owner: production_engineering_unowned
     technical:
       project:
         - https://gitlab.com/gitlab-org/omnibus-gitlab
@@ -566,7 +566,7 @@ services:
       - manage
       - plan
     label: Web
-    owner: reliability_unowned
+    owner: production_engineering_unowned
     business:
       SLA:
         overall_sla_weighting: 5 # If this exists, this service will be included in the overall SLA, using this value as a weighted average
@@ -606,7 +606,7 @@ services:
     tier: lb
     friendly_name: HAProxy (Frontend)
     label: HAProxy
-    owner: reliability_foundations
+    owner: saas_platforms_foundations
     technical:
       project:
         - https://gitlab.com/gitlab-cookbooks/gitlab-haproxy
@@ -637,7 +637,7 @@ services:
     tier: inf
     friendly_name: Google Cloud Storage
     label: GoogleCloudStorage
-    owner: reliability_foundations
+    owner: saas_platforms_foundations
     technical:
       documents:
         sre_guide: https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/google-cloud-storage
@@ -663,7 +663,7 @@ services:
       - manage
       - plan
     label: Git
-    owner: reliability_unowned
+    owner: production_engineering_unowned
     business:
       SLA:
         overall_sla_weighting: 5 # If this exists, this service will be included in the overall SLA, using this value as a weighted average
@@ -817,7 +817,7 @@ services:
     tier: sv
     friendly_name: Mailgun
     label: mailgun
-    owner: reliability_unowned
+    owner: production_engineering_unowned
     technical:
       logging:
         - name:
@@ -841,7 +841,7 @@ services:
       - manage
       - plan
     label: Mailroom
-    owner: reliability_unowned
+    owner: production_engineering_unowned
     technical:
       project:
         - https://github.com/tpitale/mail_room
@@ -868,7 +868,7 @@ services:
     tier: sv
     friendly_name: GitLab Pages
     label: Pages
-    owner: reliability_unowned
+    owner: production_engineering_unowned
     business:
       SLA:
         overall_sla_weighting: 0 # Treated as a primary service, but with a zero weight for now
@@ -903,7 +903,7 @@ services:
     tier: db
     friendly_name: PGBouncer Primary Database Pool
     label: Pgbouncer
-    owner: reliability_database_reliability
+    owner: database_reliability
     technical:
       project:
         - https://github.com/pgbouncer/pgbouncer
@@ -932,7 +932,7 @@ services:
     tier: db
     friendly_name: Registry PGBouncer Primary Database Pool
     label: PgbouncerRegistry
-    owner: reliability_database_reliability
+    owner: database_reliability
     technical:
       project:
         - https://github.com/pgbouncer/pgbouncer
@@ -961,7 +961,7 @@ services:
     tier: db
     friendly_name: Embedding PGBouncer Primary Database Pool
     label: PgbouncerEmbedding
-    owner: reliability_database_reliability
+    owner: database_reliability
     technical:
       project:
         - https://github.com/pgbouncer/pgbouncer
@@ -990,7 +990,7 @@ services:
     tier: db
     friendly_name: CI PGBouncer Primary Database Pool
     label: pgbouncerCI
-    owner: reliability_database_reliability
+    owner: database_reliability
     technical:
       project:
         - https://github.com/pgbouncer/pgbouncer
@@ -1019,7 +1019,7 @@ services:
     tier: db
     friendly_name: Postgres (Patroni)
     label: Patroni
-    owner: reliability_database_reliability
+    owner: database_reliability
     technical:
       project:
         - https://github.com/postgres/postgres
@@ -1050,7 +1050,7 @@ services:
     tier: db
     friendly_name: Registry Postgres (Patroni)
     label: PatroniRegistry
-    owner: reliability_database_reliability
+    owner: database_reliability
     technical:
       project:
         - https://github.com/postgres/postgres
@@ -1081,7 +1081,7 @@ services:
     tier: db
     friendly_name: Embedding Postgres (Patroni)
     label: PatroniEmbedding
-    owner: reliability_database_reliability
+    owner: database_reliability
     technical:
       project:
         - https://github.com/postgres/postgres
@@ -1112,7 +1112,7 @@ services:
     tier: db
     friendly_name: CI Postgres (Patroni)
     label: PatroniCI
-    owner: reliability_database_reliability
+    owner: database_reliability
     technical:
       project:
         - https://github.com/postgres/postgres
@@ -1166,7 +1166,7 @@ services:
     tier: sv
     friendly_name: PlantUML
     label: PlantUML
-    owner: reliability_unowned
+    owner: production_engineering_unowned
     technical:
       project:
         - https://plantuml.com/
@@ -1192,7 +1192,7 @@ services:
     tier: db
     friendly_name: Postgres DR Archive
     label: PostgresArchive
-    owner: reliability_database_reliability
+    owner: database_reliability
     technical:
       project:
         - https://github.com/postgres/postgres
@@ -1220,7 +1220,7 @@ services:
     tier: db
     friendly_name: Postgres DR Delayed Replica
     label: PostgresDelayed
-    owner: reliability_database_reliability
+    owner: database_reliability
     technical:
       project:
         - https://github.com/postgres/postgres
@@ -1244,7 +1244,7 @@ services:
     tier: inf
     friendly_name: PSQL Timings
     label: PsqlTimings
-    owner: reliability_database_reliability
+    owner: database_reliability
     technical:
       project:
       documents:
@@ -1796,7 +1796,7 @@ services:
     tier: inf
     friendly_name: NAT
     label: NAT
-    owner: reliability_foundations
+    owner: saas_platforms_foundations
     technical:
       project:
       documents:
@@ -1894,7 +1894,7 @@ services:
     tier: sv
     friendly_name: version.gitlab.com
     label: Version
-    owner: reliability_ops
+    owner: production_engineering
     technical:
       project:
         - https://gitlab.com/gitlab-org/gitlab-services/version.gitlab.com
@@ -1919,7 +1919,7 @@ services:
     tier: sv
     friendly_name: about.gitlab.com
     label: About
-    owner: reliability_unowned
+    owner: production_engineering_unowned
     technical:
       project:
         - https://gitlab.com/gitlab-com/www-gitlab-com
@@ -1944,7 +1944,7 @@ services:
     tier: sv
     friendly_name: design.gitlab.com
     label: Design
-    owner: reliability_ops
+    owner: production_engineering
     technical:
       project:
         - https://gitlab.com/gitlab-org/gitlab-services/design.gitlab.com
@@ -2054,7 +2054,7 @@ services:
     tier: lb
     friendly_name: Cloudflare Web Application Firewall
     label: cloudflare
-    owner: reliability_foundations
+    owner: saas_platforms_foundations
     technical:
       project:
       documents:
@@ -2078,7 +2078,7 @@ services:
     tier: inf
     friendly_name: Hashicorp Vault for Infrastructure
     label: Vault
-    owner: reliability_foundations
+    owner: saas_platforms_foundations
     technical:
       project:
       documents:
@@ -2156,7 +2156,7 @@ services:
     tier: sv
     friendly_name: Woodhouse
     label: Woodhouse
-    owner: reliability_ops
+    owner: production_engineering
     technical:
       project:
         - https://gitlab.com/gitlab-com/gl-infra/woodhouse
@@ -2180,7 +2180,7 @@ services:
     tier: sv
     friendly_name: Woodhouse Slack bot
     label: WoodhouseSlack
-    owner: reliability_ops
+    owner: production_engineering
     technical:
       project:
         - https://gitlab.com/gitlab-com/gl-infra/woodhouse
@@ -2229,7 +2229,7 @@ services:
     tier: sv
     friendly_name: Websockets
     label: Websockets
-    owner: reliability_unowned
+    owner: production_engineering_unowned
     technical:
       project:
         - https://gitlab.com/gitlab-org/gitlab
@@ -2255,7 +2255,7 @@ services:
     tier: sv
     friendly_name: AI-Assisted
     label: AI-Assisted
-    owner: reliability_unowned
+    owner: production_engineering_unowned
     technical:
       project:
         - https://gitlab.com/gitlab-org/gitlab
@@ -2281,7 +2281,7 @@ services:
     tier: inf
     friendly_name: Google Cloud SQL
     label: CloudSQL
-    owner: reliability_database_reliability
+    owner: database_reliability
     technical:
       project:
       documents:
@@ -2304,7 +2304,7 @@ services:
     tier: sv
     friendly_name: ExternalDNS
     label: ExternalDNS
-    owner: reliability_foundations
+    owner: saas_platforms_foundations
     technical:
       project:
         - https://github.com/kubernetes-sigs/external-dns
@@ -2329,7 +2329,7 @@ services:
     tier: inf
     friendly_name: Artifact Registry
     label: ArtifactRegistry
-    owner: reliability_unowned
+    owner: production_engineering_unowned
     technical:
       project:
       documents:
@@ -2352,7 +2352,7 @@ services:
     tier: inf
     friendly_name: Package GCS Bucket
     label: PackageGCSBucket
-    owner: reliability_unowned
+    owner: production_engineering_unowned
     technical:
       project:
       documents:
@@ -2375,7 +2375,7 @@ services:
     tier: inf
     friendly_name: PackageCloud (packages.gitlab.com)
     label: PackageCloud
-    owner: reliability_unowned
+    owner: production_engineering_unowned
     technical:
       project:
         - https://gitlab.com/gitlab-com/gl-infra/charts/-/tree/main/gitlab/packagecloud
@@ -2408,7 +2408,7 @@ services:
       - manage
       - plan
     label: Internal-API
-    owner: reliability_unowned
+    owner: production_engineering_unowned
     business:
       SLA:
         overall_sla_weighting: 5
@@ -2462,7 +2462,7 @@ services:
     tier: sv
     friendly_name: ops.gitlab.net
     label: OpsGitlabNet
-    owner: reliability_foundations
+    owner: saas_platforms_foundations
     technical:
       project:
         - https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/tree/master/releases/gitlab
@@ -2486,7 +2486,7 @@ services:
     tier: inf
     friendly_name: Istio
     label: Istio
-    owner: reliability_foundations
+    owner: saas_platforms_foundations
     technical:
       project:
         - https://github.com/istio/istio
@@ -2518,7 +2518,7 @@ services:
     tier: inf
     friendly_name: gitlab-static.net zone hosted on Cloudflare
     label: GitlabStaticNet
-    owner: reliability_unowned
+    owner: production_engineering_unowned
     technical:
       project:
       documents:
@@ -2542,7 +2542,7 @@ services:
     tier: inf
     friendly_name: GitLab Omnibus Package
     label: omnibus
-    owner: reliability_unowned
+    owner: production_engineering_unowned
     teams:
       - distribution_deploy
     technical:
@@ -2569,7 +2569,7 @@ services:
     tier: inf
     friendly_name: Google Cloud Memorystore
     label: GoogleCloudMemorystore
-    owner: reliability_foundations
+    owner: saas_platforms_foundations
     technical:
       project:
       documents:
@@ -2670,7 +2670,7 @@ services:
     tier: inf
     friendly_name: Logs PagerDuty incident events to ElasticSearch
     label: PDEventLogger
-    owner: reliability_unowned
+    owner: production_engineering_unowned
     technical:
       project:
         - https://gitlab.com/gitlab-com/gl-infra/pd-event-logger
