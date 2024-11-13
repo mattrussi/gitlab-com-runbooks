@@ -264,7 +264,7 @@ teams:
 
 - name: composition_analysis
   product_stage_group: composition_analysis
-  slack_error_budget_channel: g_secure-composition-analysis
+  slack_error_budget_channel: g_ast-composition-analysis
   send_error_budget_weekly_to_slack: true
   ignored_components:
   - graphql_query
@@ -289,7 +289,7 @@ teams:
 
 - name: dynamic_analysis
   product_stage_group: dynamic_analysis
-  slack_error_budget_channel: g_secure-dynamic-analysis
+  slack_error_budget_channel: g_ast-dynamic-analysis
   send_error_budget_weekly_to_slack: true
   ignored_components:
   - graphql_query
