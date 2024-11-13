@@ -163,35 +163,6 @@ serviceDashboard.overview('sidekiq', expectMultipleSeries=true)
         yAxisLabel='Queue Length',
       ),
       basic.multiTimeseries(
-        title='Global search embedding indexing queue length',
-        description='The number of embedding updates waiting to be synced to Elasticsearch for Global Search. These are picked up in batches every minute. Lower is better but the batching every minute means it will not usually stay at 0. Steady growth over a sustained period of time indicates that Search::ElasticIndexEmbeddingBulkCronWorker is not keeping up.',
-        queries=[
-          {
-            query: |||
-              quantile(0.10, search_advanced_bulk_cron_embedding_queue_size{environment="$environment"})
-            |||,
-            legendFormat: 'p10',
-          },
-          {
-            query: |||
-              quantile(0.50, search_advanced_bulk_cron_embedding_queue_size{environment="$environment"})
-            |||,
-            legendFormat: 'p50',
-          },
-          {
-            query: |||
-              quantile(0.90, search_advanced_bulk_cron_embedding_queue_size{environment="$environment"})
-            |||,
-            legendFormat: 'p90',
-          },
-        ],
-        format='short',
-        interval='1m',
-        linewidth=1,
-        intervalFactor=3,
-        yAxisLabel='Queue Length',
-      ),
-      basic.multiTimeseries(
         title='Global search awaiting indexing queue length',
         description='The number of records waiting to be synced to Elasticsearch for Global Search while indexing is paused.',
         queries=[
@@ -210,6 +181,35 @@ serviceDashboard.overview('sidekiq', expectMultipleSeries=true)
           {
             query: |||
               quantile(0.90, global_search_awaiting_indexing_queue_size{environment="$environment"})
+            |||,
+            legendFormat: 'p90',
+          },
+        ],
+        format='short',
+        interval='1m',
+        linewidth=1,
+        intervalFactor=3,
+        yAxisLabel='Queue Length',
+      ),
+      basic.multiTimeseries(
+        title='Global search embedding indexing queue length',
+        description='The number of embedding updates waiting to be synced to Elasticsearch for Global Search. These are picked up in batches every minute. Lower is better but the batching every minute means it will not usually stay at 0. Steady growth over a sustained period of time indicates that Search::ElasticIndexEmbeddingBulkCronWorker is not keeping up.',
+        queries=[
+          {
+            query: |||
+              quantile(0.10, search_advanced_bulk_cron_embedding_queue_size{environment="$environment"})
+            |||,
+            legendFormat: 'p10',
+          },
+          {
+            query: |||
+              quantile(0.50, search_advanced_bulk_cron_embedding_queue_size{environment="$environment"})
+            |||,
+            legendFormat: 'p50',
+          },
+          {
+            query: |||
+              quantile(0.90, search_advanced_bulk_cron_embedding_queue_size{environment="$environment"})
             |||,
             legendFormat: 'p90',
           },
