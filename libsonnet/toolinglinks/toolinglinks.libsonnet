@@ -24,7 +24,6 @@ local generateMarkdown(toolingLinks, options={}) =
 
 {
   aesthetics: (import './aesthetics.libsonnet'),
-  cloudflare:: (import './cloudflare.libsonnet').cloudflare,
   cloudSQL: (import './cloud_sql.libsonnet').cloudSQL,
   continuousProfiler:: (import './continuous_profiler.libsonnet').continuousProfiler,
   elasticAPM:: (import './elastic_apm.libsonnet').elasticAPM,
@@ -39,4 +38,5 @@ local generateMarkdown(toolingLinks, options={}) =
   stackdriverLogs: (import './stackdriver_logs.libsonnet').stackdriverLogs,
   generateMarkdown:: generateMarkdown,
   renderLinks:: renderLinks,
-}
+} +
+(import './cloudflare.libsonnet')
