@@ -185,23 +185,14 @@ function generate_mixins() {
 
   if [[ -f $mixins_file ]]; then
     "${REPO_DIR}/scripts/ensure-mixtool.sh"
-    # shellcheck disable=SC2155
-    local original_dir=$(pwd)
 
     mixins_out=$(jsonnet "$mixins_file" | jq -r '.mixins[]' | while IFS= read -r mixin; do
-      cd "$mixins_src_dir/$mixin"
-      jb install -q
-      mixtool generate all "-J" "vendor" "-J" "vendor/gitlab.com/gitlab-com/runbooks/libsonnet" \
-        -d "$dest_dir/dashboards" \
-        -r "$dest_dir/prometheus-rules/${mixin}.rules.yaml" \
-        -a "$dest_dir/prometheus-rules/${mixin}.alerts.yaml" \
-        -y "$mixins_src_dir/$mixin/mixin.libsonnet"
+      "$mixins_src_dir"/generate-mixin.sh all "$mixin" "$dest_dir"
       echo "$dest_dir/dashboards/${mixin}.json"
-      echo "$dest_dir/prometheus-rules/${mixin}.rules.yaml"
-      echo "$dest_dir/prometheus-rules/${mixin}.alerts.yaml"
+      echo "$dest_dir/prometheus-rules/${mixin}.rules.mixin.yml"
+      echo "$dest_dir/prometheus-rules/${mixin}.alerts.mixin.yml"
     done)
 
-    cd "$original_dir"
   else
     mixins_out="mixins.jsonnet file does not exist in $overrides_dir or ${reference_architecture_src_dir}/mixins"
   fi

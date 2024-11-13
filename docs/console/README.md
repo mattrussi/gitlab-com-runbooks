@@ -52,6 +52,7 @@
 * [Moving repositories from one Gitaly node to another](../gitaly/move-repositories.md)
 * [Gitaly multi-project migration](../gitaly/multi-project-migration.md)
 * [GitLab Storage Re-balancing](../gitaly/storage-rebalancing.md)
+* [HostedRunnersServiceRunnerManagerDownSingleShard](../hosted-runners/runners_manager_is_down.md)
 * [Kubernetes-Agent Basic Troubleshooting](../kas/kubernetes-agent-basic-troubleshooting.md)
 * [GKE Cluster Upgrade Procedure](../kube/k8s-cluster-upgrade.md)
 * [../kube/k8s-oncall-setup.md](../kube/k8s-oncall-setup.md)

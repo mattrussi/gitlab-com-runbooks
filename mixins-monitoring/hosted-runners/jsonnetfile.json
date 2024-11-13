@@ -28,5 +28,5 @@
       "version": "master"
     }
   ],
-  "legacyImports": false
+  "legacyImports": true
 }
