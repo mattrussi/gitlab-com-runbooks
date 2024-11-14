@@ -53,3 +53,10 @@ After the primary LLM provider is back online, we can disable the feature flag, 
 ```
 /chatops run feature set incident_fail_over_completion_provider false
 ```
+
+## How to verify
+* Go to [kibana](https://log.gprd.gitlab.net/app/home#/) Analytics -> Discover 
+* select pubsub-mlops-inf-gprod-* as Data views from the top left
+* For code generation, search for `json.jsonPayload.message: "Executing code generation with prompt registry"`, and then we can find the name that is currently in use, eg:
+![kibana logs](img/aigw_code_gen_log.png)
+* For code completion, search for `json.jsonPayload.message: "code completion input:"`
