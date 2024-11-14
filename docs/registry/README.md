@@ -24,6 +24,7 @@
 * [Interacting with Consul](../consul/interaction.md)
 * [Measuring Recovery Activities](../disaster-recovery/recovery-measurements.md)
 * [Zonal and Regional Recovery Guide](../disaster-recovery/recovery.md)
+* [../duo/code_suggestion_failover.md](../duo/code_suggestion_failover.md)
 * [Blocking individual IPs and Net Blocks on HA Proxy](../frontend/ban-netblocks-on-haproxy.md)
 * [HAProxy Management at GitLab](../frontend/haproxy.md)
 * [../gitlab-com-artifact-registry/overview.md](../gitlab-com-artifact-registry/overview.md)
