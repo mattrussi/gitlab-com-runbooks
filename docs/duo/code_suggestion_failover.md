@@ -55,6 +55,7 @@ After the primary LLM provider is back online, we can disable the feature flag, 
 ```
 
 ## How to verify
+
 * Go to [kibana](https://log.gprd.gitlab.net/app/home#/) Analytics -> Discover
 * select pubsub-mlops-inf-gprod-* as Data views from the top left
 * For code generation, search for `json.jsonPayload.message: "Executing code generation with prompt registry"`, and then we can find the name that is currently in use, eg:
