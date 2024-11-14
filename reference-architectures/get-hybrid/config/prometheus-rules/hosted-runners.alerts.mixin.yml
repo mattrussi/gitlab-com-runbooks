@@ -29,7 +29,7 @@ groups:
                 gitlab_component_shard_errors:ratio_1h{component="api_requests",type="hosted-runners"}
                 > (14.4 * 0.001000)
               )
-              and
+              and on (type,component,shard)
               (
                 gitlab_component_shard_errors:ratio_5m{component="api_requests",type="hosted-runners"}
                 > (14.4 * 0.001000)
@@ -79,7 +79,7 @@ groups:
                 gitlab_component_shard_errors:ratio_6h{component="api_requests",type="hosted-runners"}
                 > (6 * 0.001000)
               )
-              and
+              and on (type,component,shard)
               (
                 gitlab_component_shard_errors:ratio_30m{component="api_requests",type="hosted-runners"}
                 > (6 * 0.001000)
@@ -201,7 +201,7 @@ groups:
                 gitlab_component_shard_apdex:ratio_1h{component="ci_runner_jobs",type="hosted-runners"}
                 < (1 - 14.4 * 0.030000)
               )
-              and
+              and on (type,component,shard)
               (
                 gitlab_component_shard_apdex:ratio_5m{component="ci_runner_jobs",type="hosted-runners"}
                 < (1 - 14.4 * 0.030000)
@@ -247,7 +247,7 @@ groups:
                 gitlab_component_shard_apdex:ratio_6h{component="ci_runner_jobs",type="hosted-runners"}
                 < (1 - 6 * 0.030000)
               )
-              and
+              and on (type,component,shard)
               (
                 gitlab_component_shard_apdex:ratio_30m{component="ci_runner_jobs",type="hosted-runners"}
                 < (1 - 6 * 0.030000)
@@ -297,7 +297,7 @@ groups:
                 gitlab_component_shard_errors:ratio_1h{component="ci_runner_jobs",type="hosted-runners"}
                 > (14.4 * 0.001000)
               )
-              and
+              and on (type,component,shard)
               (
                 gitlab_component_shard_errors:ratio_5m{component="ci_runner_jobs",type="hosted-runners"}
                 > (14.4 * 0.001000)
@@ -347,7 +347,7 @@ groups:
                 gitlab_component_shard_errors:ratio_6h{component="ci_runner_jobs",type="hosted-runners"}
                 > (6 * 0.001000)
               )
-              and
+              and on (type,component,shard)
               (
                 gitlab_component_shard_errors:ratio_30m{component="ci_runner_jobs",type="hosted-runners"}
                 > (6 * 0.001000)
@@ -400,7 +400,7 @@ groups:
                 gitlab_component_shard_apdex:ratio_1h{component="pending_builds",type="hosted-runners"}
                 < (1 - 14.4 * 0.030000)
               )
-              and
+              and on (type,component,shard)
               (
                 gitlab_component_shard_apdex:ratio_5m{component="pending_builds",type="hosted-runners"}
                 < (1 - 14.4 * 0.030000)
@@ -452,7 +452,7 @@ groups:
                 gitlab_component_shard_apdex:ratio_6h{component="pending_builds",type="hosted-runners"}
                 < (1 - 6 * 0.030000)
               )
-              and
+              and on (type,component,shard)
               (
                 gitlab_component_shard_apdex:ratio_30m{component="pending_builds",type="hosted-runners"}
                 < (1 - 6 * 0.030000)
@@ -499,7 +499,7 @@ groups:
                 gitlab_component_errors:ratio_1h{component="polling",type="hosted-runners"}
                 > (14.4 * 0.001000)
               )
-              and
+              and on (type,component)
               (
                 gitlab_component_errors:ratio_5m{component="polling",type="hosted-runners"}
                 > (14.4 * 0.001000)
@@ -547,7 +547,7 @@ groups:
                 gitlab_component_errors:ratio_6h{component="polling",type="hosted-runners"}
                 > (6 * 0.001000)
               )
-              and
+              and on (type,component)
               (
                 gitlab_component_errors:ratio_30m{component="polling",type="hosted-runners"}
                 > (6 * 0.001000)
@@ -598,7 +598,7 @@ groups:
                 gitlab_component_apdex:ratio_1h{component="queuing_queries_duration",type="hosted-runners"}
                 < (1 - 14.4 * 0.001000)
               )
-              and
+              and on (type,component)
               (
                 gitlab_component_apdex:ratio_5m{component="queuing_queries_duration",type="hosted-runners"}
                 < (1 - 14.4 * 0.001000)
@@ -649,7 +649,7 @@ groups:
                 gitlab_component_apdex:ratio_6h{component="queuing_queries_duration",type="hosted-runners"}
                 < (1 - 6 * 0.001000)
               )
-              and
+              and on (type,component)
               (
                 gitlab_component_apdex:ratio_30m{component="queuing_queries_duration",type="hosted-runners"}
                 < (1 - 6 * 0.001000)
