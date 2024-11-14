@@ -38,6 +38,7 @@ local servicesUsingRssSaturationMonitoring = std.set((import './kube_container_r
           last_over_time(container_memory_working_set_bytes:labeled{deployment!="", %(selector)s}[1w:1d] @ end())
         )
       |||,
+      saturation_dimension_dynamic_lookup_limit: 40,
     },
   }),
 }
