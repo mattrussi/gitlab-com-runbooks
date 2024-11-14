@@ -99,6 +99,19 @@ you can remove a namespace from Zoekt manually as a last resort.
 
 1. Post namespace_ids on the incident issue as a private comment so that we can add these back later
 
+#### Marking a zoekt node as lost
+
+When a Zoekt node PVC is over 80% of usage and reallocating or removing namespaces doesn't reduce the usage, you can quickly remove all namespaces from a Zoekt node by manually mark the node as lost. This is a safe operation because the lost node will reregister itself as a new node and the [Zoekt Architecture](https://handbook.gitlab.com/handbook/engineering/architecture/design-documents/code_search_with_zoekt/) will handle allocating all namespaces and projects.
+
+Warning: The new UUID must not exist in the table.
+
+```ruby
+node_name = 'gitlab-gitlab-zoekt-29'
+uuid = SecureRandom.uuid
+
+Search::Zoekt::Node.by_name(node_name).update_all(uuid: uuid, last_seen_at: 24.hours.ago)
+```
+
 #### When to add a Zoekt node
 
 Increase the number of [Zoekt replicas](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-com/-/blob/cda7e4434d3836592b08e16bad8a35705af9f72c/releases/gitlab/values/gprd.yaml.gotmpl#L5) (nodes) by 20% of total capacity if all Zoekt nodes are above 65% of disk utilization. For example, if there are 22 nodes, add 4.4 (4 nodes).
@@ -114,10 +127,6 @@ Zoekt indexing can be completely disabled by unchecking the checkbox `Enable ind
 
 WARNING:
 Indexed data will be stale after indexing is re-enabled. Reindexing from scratch may be necessary to ensure up to date search results.
-
-#### Shards management
-
-At the moment, we have the `zoekt_shards` table for assigning shards. In order to move namespace from one shard to another, we need to reindex the data.
 
 #### Limitations
 
@@ -221,6 +230,6 @@ As for `gitlab-zoekt-indexer` and `zoekt-webserver`, they write logs to stdout.
 
 ### `kube_persistent_volume_claim_disk_space`
 
-Zoekt has logic which detects when nodes disk usage is over the limit. Projects will be removed from each node until it the node disk usage under the limit. If the disk space is not coming down quick enough, remove namespaces using the [reallocation task](#reallocating-namespaces-from-one-zoekt-node-to-another) or [remove namepaces manually](#removing-a-namespace-from-the-zoekt-node-manually).
+[Zoekt architecture](https://handbook.gitlab.com/handbook/engineering/architecture/design-documents/code_search_with_zoekt/) has logic which detects when nodes disk usage is over the limit. Projects will be removed from each node until it the node disk usage under the limit. If the disk space is not coming down quick enough, remove namespaces using the [reallocation task](#reallocating-namespaces-from-one-zoekt-node-to-another), [remove namepaces manually](#removing-a-namespace-from-the-zoekt-node-manually), or [mark the node as lost a last resort](#marking-a-zoekt-node-as-lost).
 
 WARNING: The PVC disk size must not be increased manually. Zoekt nodes are sized with a specific PVC size and it must remain consistant across all nodes.
