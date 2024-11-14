@@ -20,6 +20,8 @@ local utilizationDefinitionDefaults = {
   queryFormatConfig: {},
   /* When topk is set we record the topk items */
   topk: null,
+  // When emittedBy is not null we should use this as the type selector
+  emittedBy: null,
 };
 
 local validateAndApplyDefaults(definition) =
@@ -30,13 +32,16 @@ local utilizationMetric = function(options)
   local serviceApplicator = function(type) std.setMember(type, std.set(definition.appliesTo));
 
   definition {
-    getTypeFilter()::
-      (
-        if std.length(definition.appliesTo) > 1 then
-          { type: { re: std.join('|', definition.appliesTo) } }
+    getTypeFilter():: {
+      type: (
+        if
+          definition.emittedBy != null
+        then
+          definition.emittedBy
         else
-          { type: definition.appliesTo[0] }
+          super.type
       ),
+    },
 
     getFormatConfig(environmentLabels, extraSelector={})::
       local s = self;
@@ -55,7 +60,11 @@ local utilizationMetric = function(options)
 
       s.queryFormatConfig {
         rangeDuration: s.rangeDuration,
-        selector: selectors.serializeHash(selectorWithoutStaticLabels + extraSelector),
+        selector: selectors.serializeHash(
+          selectorWithoutStaticLabels +
+          extraSelector +
+          s.getTypeFilter()
+        ),
         aggregationLabels: aggregations.serialize(aggregationLabelsWithoutStaticLabels),
         environmentLabels: aggregations.serialize(environmentLabels),
       },
@@ -112,6 +121,9 @@ local utilizationMetric = function(options)
         // In future, it might make more sense to move some of these labels onto a static "info" recording rule
         summaryType: if s.topk == null then 'aggregate' else 'topk',
         [if s.resourceLabels != [] then 'resource_labels']: std.join(',', s.resourceLabels),
+        // Get the type label from the incoming selector.
+        // This is set at the entrypoint level.
+        type: extraSelector.type,
       } + s.getStaticLabels();
 
       [{
