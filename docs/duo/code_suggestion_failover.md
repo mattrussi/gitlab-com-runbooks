@@ -47,7 +47,8 @@ To enable failover solution in production when the primary LLM is down, send thi
 ```
 /chatops run feature set incident_fail_over_completion_provider true
 ```
-Note: Please use indirect access in failover, we can use direct access after switching back to primary LLM provider, eg: 
+
+Note: Please use indirect access in failover, we can switch back to direct access after switching back to primary LLM provider, eg: 
 ![failover access](img/code_completion_failover_set.png)
 
 After the primary LLM provider is back online, we can disable the feature flag, so that we are switching back to the primary LLM provider:
