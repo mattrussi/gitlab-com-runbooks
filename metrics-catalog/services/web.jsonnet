@@ -114,6 +114,7 @@ metricsCatalog.serviceDefinition({
           route: {
             ne: [
               '^/([^/]+/){1,}[^/]+/uploads\\\\z',
+              '^/api/graphql\\\\z', // ^/api/graphql\z
               '^/-/health$',
               '^/-/(readiness|liveness)$',
               // Technically none of these git endpoints should end up in cny, but sometimes they do,
@@ -126,7 +127,6 @@ metricsCatalog.serviceDefinition({
               '^/.+\\\\.git/git-upload-pack\\\\z',  // ^/.+\.git/git-upload-pack\z
               '^/.+\\\\.git/info/refs\\\\z',  // ^/.+\.git/info/refs\z
               '^/.+\\\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\\\z',  // /.+\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\z
-              '^/api/graphql\\\\z', // ^/api/graphql\z
             ],
           },
         },
