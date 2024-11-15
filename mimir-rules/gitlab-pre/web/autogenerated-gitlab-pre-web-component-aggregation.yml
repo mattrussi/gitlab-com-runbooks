@@ -537,11 +537,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          sli_aggregations:gitlab_workhorse_http_request_duration_seconds_bucket:rate_5m{env="pre",job=~"gitlab-workhorse|gitlab-workhorse-web",le="1",route!="^/([^/]+/){1,}[^/]+/uploads\\z",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/([^/]+/){1,}[^/]+\\.git/git-receive-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/git-upload-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/info/refs\\z",route!="^/([^/]+/){1,}[^/]+\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\z",route!="^/.+\\.git/git-receive-pack\\z",route!="^/.+\\.git/git-upload-pack\\z",route!="^/.+\\.git/info/refs\\z",route!="^/.+\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\z",type="web"}
+          sli_aggregations:gitlab_workhorse_http_request_duration_seconds_bucket:rate_5m{env="pre",job=~"gitlab-workhorse|gitlab-workhorse-web",le="1",route!="^/([^/]+/){1,}[^/]+/uploads\\z",route!="^/api/graphql\\z",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/([^/]+/){1,}[^/]+\\.git/git-receive-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/git-upload-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/info/refs\\z",route!="^/([^/]+/){1,}[^/]+\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\z",route!="^/.+\\.git/git-receive-pack\\z",route!="^/.+\\.git/git-upload-pack\\z",route!="^/.+\\.git/info/refs\\z",route!="^/.+\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\z",type="web"}
         )
         +
         sum by (env,environment,stage) (
-          sli_aggregations:gitlab_workhorse_http_request_duration_seconds_bucket:rate_5m{env="pre",job=~"gitlab-workhorse|gitlab-workhorse-web",le="10",route!="^/([^/]+/){1,}[^/]+/uploads\\z",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/([^/]+/){1,}[^/]+\\.git/git-receive-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/git-upload-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/info/refs\\z",route!="^/([^/]+/){1,}[^/]+\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\z",route!="^/.+\\.git/git-receive-pack\\z",route!="^/.+\\.git/git-upload-pack\\z",route!="^/.+\\.git/info/refs\\z",route!="^/.+\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\z",type="web"}
+          sli_aggregations:gitlab_workhorse_http_request_duration_seconds_bucket:rate_5m{env="pre",job=~"gitlab-workhorse|gitlab-workhorse-web",le="10",route!="^/([^/]+/){1,}[^/]+/uploads\\z",route!="^/api/graphql\\z",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/([^/]+/){1,}[^/]+\\.git/git-receive-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/git-upload-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/info/refs\\z",route!="^/([^/]+/){1,}[^/]+\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\z",route!="^/.+\\.git/git-receive-pack\\z",route!="^/.+\\.git/git-upload-pack\\z",route!="^/.+\\.git/info/refs\\z",route!="^/.+\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\z",type="web"}
         )
       )
       /
@@ -554,7 +554,7 @@ groups:
       type: web
     expr: |
       sum by (env,environment,stage) (
-        sli_aggregations:gitlab_workhorse_http_request_duration_seconds_bucket:rate_5m{env="pre",job=~"gitlab-workhorse|gitlab-workhorse-web",le="+Inf",route!="^/([^/]+/){1,}[^/]+/uploads\\z",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/([^/]+/){1,}[^/]+\\.git/git-receive-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/git-upload-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/info/refs\\z",route!="^/([^/]+/){1,}[^/]+\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\z",route!="^/.+\\.git/git-receive-pack\\z",route!="^/.+\\.git/git-upload-pack\\z",route!="^/.+\\.git/info/refs\\z",route!="^/.+\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\z",route!="^/api/graphql\\z",type="web"}
+        sli_aggregations:gitlab_workhorse_http_request_duration_seconds_bucket:rate_5m{env="pre",job=~"gitlab-workhorse|gitlab-workhorse-web",le="+Inf",route!="^/([^/]+/){1,}[^/]+/uploads\\z",route!="^/api/graphql\\z",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/([^/]+/){1,}[^/]+\\.git/git-receive-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/git-upload-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/info/refs\\z",route!="^/([^/]+/){1,}[^/]+\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\z",route!="^/.+\\.git/git-receive-pack\\z",route!="^/.+\\.git/git-upload-pack\\z",route!="^/.+\\.git/info/refs\\z",route!="^/.+\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\z",type="web"}
       )
   - record: gitlab_component_ops:rate_5m
     labels:
@@ -1148,11 +1148,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          sli_aggregations:gitlab_workhorse_http_request_duration_seconds_bucket:rate_30m{env="pre",job=~"gitlab-workhorse|gitlab-workhorse-web",le="1",route!="^/([^/]+/){1,}[^/]+/uploads\\z",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/([^/]+/){1,}[^/]+\\.git/git-receive-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/git-upload-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/info/refs\\z",route!="^/([^/]+/){1,}[^/]+\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\z",route!="^/.+\\.git/git-receive-pack\\z",route!="^/.+\\.git/git-upload-pack\\z",route!="^/.+\\.git/info/refs\\z",route!="^/.+\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\z",type="web"}
+          sli_aggregations:gitlab_workhorse_http_request_duration_seconds_bucket:rate_30m{env="pre",job=~"gitlab-workhorse|gitlab-workhorse-web",le="1",route!="^/([^/]+/){1,}[^/]+/uploads\\z",route!="^/api/graphql\\z",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/([^/]+/){1,}[^/]+\\.git/git-receive-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/git-upload-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/info/refs\\z",route!="^/([^/]+/){1,}[^/]+\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\z",route!="^/.+\\.git/git-receive-pack\\z",route!="^/.+\\.git/git-upload-pack\\z",route!="^/.+\\.git/info/refs\\z",route!="^/.+\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\z",type="web"}
         )
         +
         sum by (env,environment,stage) (
-          sli_aggregations:gitlab_workhorse_http_request_duration_seconds_bucket:rate_30m{env="pre",job=~"gitlab-workhorse|gitlab-workhorse-web",le="10",route!="^/([^/]+/){1,}[^/]+/uploads\\z",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/([^/]+/){1,}[^/]+\\.git/git-receive-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/git-upload-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/info/refs\\z",route!="^/([^/]+/){1,}[^/]+\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\z",route!="^/.+\\.git/git-receive-pack\\z",route!="^/.+\\.git/git-upload-pack\\z",route!="^/.+\\.git/info/refs\\z",route!="^/.+\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\z",type="web"}
+          sli_aggregations:gitlab_workhorse_http_request_duration_seconds_bucket:rate_30m{env="pre",job=~"gitlab-workhorse|gitlab-workhorse-web",le="10",route!="^/([^/]+/){1,}[^/]+/uploads\\z",route!="^/api/graphql\\z",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/([^/]+/){1,}[^/]+\\.git/git-receive-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/git-upload-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/info/refs\\z",route!="^/([^/]+/){1,}[^/]+\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\z",route!="^/.+\\.git/git-receive-pack\\z",route!="^/.+\\.git/git-upload-pack\\z",route!="^/.+\\.git/info/refs\\z",route!="^/.+\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\z",type="web"}
         )
       )
       /
@@ -1165,7 +1165,7 @@ groups:
       type: web
     expr: |
       sum by (env,environment,stage) (
-        sli_aggregations:gitlab_workhorse_http_request_duration_seconds_bucket:rate_30m{env="pre",job=~"gitlab-workhorse|gitlab-workhorse-web",le="+Inf",route!="^/([^/]+/){1,}[^/]+/uploads\\z",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/([^/]+/){1,}[^/]+\\.git/git-receive-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/git-upload-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/info/refs\\z",route!="^/([^/]+/){1,}[^/]+\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\z",route!="^/.+\\.git/git-receive-pack\\z",route!="^/.+\\.git/git-upload-pack\\z",route!="^/.+\\.git/info/refs\\z",route!="^/.+\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\z",route!="^/api/graphql\\z",type="web"}
+        sli_aggregations:gitlab_workhorse_http_request_duration_seconds_bucket:rate_30m{env="pre",job=~"gitlab-workhorse|gitlab-workhorse-web",le="+Inf",route!="^/([^/]+/){1,}[^/]+/uploads\\z",route!="^/api/graphql\\z",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/([^/]+/){1,}[^/]+\\.git/git-receive-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/git-upload-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/info/refs\\z",route!="^/([^/]+/){1,}[^/]+\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\z",route!="^/.+\\.git/git-receive-pack\\z",route!="^/.+\\.git/git-upload-pack\\z",route!="^/.+\\.git/info/refs\\z",route!="^/.+\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\z",type="web"}
       )
   - record: gitlab_component_ops:rate_30m
     labels:
@@ -1759,11 +1759,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          sli_aggregations:gitlab_workhorse_http_request_duration_seconds_bucket:rate_1h{env="pre",job=~"gitlab-workhorse|gitlab-workhorse-web",le="1",route!="^/([^/]+/){1,}[^/]+/uploads\\z",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/([^/]+/){1,}[^/]+\\.git/git-receive-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/git-upload-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/info/refs\\z",route!="^/([^/]+/){1,}[^/]+\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\z",route!="^/.+\\.git/git-receive-pack\\z",route!="^/.+\\.git/git-upload-pack\\z",route!="^/.+\\.git/info/refs\\z",route!="^/.+\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\z",type="web"}
+          sli_aggregations:gitlab_workhorse_http_request_duration_seconds_bucket:rate_1h{env="pre",job=~"gitlab-workhorse|gitlab-workhorse-web",le="1",route!="^/([^/]+/){1,}[^/]+/uploads\\z",route!="^/api/graphql\\z",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/([^/]+/){1,}[^/]+\\.git/git-receive-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/git-upload-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/info/refs\\z",route!="^/([^/]+/){1,}[^/]+\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\z",route!="^/.+\\.git/git-receive-pack\\z",route!="^/.+\\.git/git-upload-pack\\z",route!="^/.+\\.git/info/refs\\z",route!="^/.+\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\z",type="web"}
         )
         +
         sum by (env,environment,stage) (
-          sli_aggregations:gitlab_workhorse_http_request_duration_seconds_bucket:rate_1h{env="pre",job=~"gitlab-workhorse|gitlab-workhorse-web",le="10",route!="^/([^/]+/){1,}[^/]+/uploads\\z",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/([^/]+/){1,}[^/]+\\.git/git-receive-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/git-upload-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/info/refs\\z",route!="^/([^/]+/){1,}[^/]+\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\z",route!="^/.+\\.git/git-receive-pack\\z",route!="^/.+\\.git/git-upload-pack\\z",route!="^/.+\\.git/info/refs\\z",route!="^/.+\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\z",type="web"}
+          sli_aggregations:gitlab_workhorse_http_request_duration_seconds_bucket:rate_1h{env="pre",job=~"gitlab-workhorse|gitlab-workhorse-web",le="10",route!="^/([^/]+/){1,}[^/]+/uploads\\z",route!="^/api/graphql\\z",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/([^/]+/){1,}[^/]+\\.git/git-receive-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/git-upload-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/info/refs\\z",route!="^/([^/]+/){1,}[^/]+\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\z",route!="^/.+\\.git/git-receive-pack\\z",route!="^/.+\\.git/git-upload-pack\\z",route!="^/.+\\.git/info/refs\\z",route!="^/.+\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\z",type="web"}
         )
       )
       /
@@ -1776,7 +1776,7 @@ groups:
       type: web
     expr: |
       sum by (env,environment,stage) (
-        sli_aggregations:gitlab_workhorse_http_request_duration_seconds_bucket:rate_1h{env="pre",job=~"gitlab-workhorse|gitlab-workhorse-web",le="+Inf",route!="^/([^/]+/){1,}[^/]+/uploads\\z",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/([^/]+/){1,}[^/]+\\.git/git-receive-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/git-upload-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/info/refs\\z",route!="^/([^/]+/){1,}[^/]+\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\z",route!="^/.+\\.git/git-receive-pack\\z",route!="^/.+\\.git/git-upload-pack\\z",route!="^/.+\\.git/info/refs\\z",route!="^/.+\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\z",route!="^/api/graphql\\z",type="web"}
+        sli_aggregations:gitlab_workhorse_http_request_duration_seconds_bucket:rate_1h{env="pre",job=~"gitlab-workhorse|gitlab-workhorse-web",le="+Inf",route!="^/([^/]+/){1,}[^/]+/uploads\\z",route!="^/api/graphql\\z",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/([^/]+/){1,}[^/]+\\.git/git-receive-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/git-upload-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/info/refs\\z",route!="^/([^/]+/){1,}[^/]+\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\z",route!="^/.+\\.git/git-receive-pack\\z",route!="^/.+\\.git/git-upload-pack\\z",route!="^/.+\\.git/info/refs\\z",route!="^/.+\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\z",type="web"}
       )
   - record: gitlab_component_ops:rate_1h
     labels:
