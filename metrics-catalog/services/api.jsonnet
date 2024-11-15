@@ -151,6 +151,7 @@ metricsCatalog.serviceDefinition({
             ne: [
               '\\\\A/api/v4/jobs/request\\\\z',
               '^/api/v4/jobs/request\\\\z',
+              '^/api/graphql\\\\z',
               '^/-/health$',
               '^/-/(readiness|liveness)$',
             ],
