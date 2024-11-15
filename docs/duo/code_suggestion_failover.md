@@ -47,6 +47,8 @@ To enable failover solution in production when the primary LLM is down, send thi
 ```
 /chatops run feature set incident_fail_over_completion_provider true
 ```
+Note: Please use indirect access in failover, we can use direct access after switching back to primary LLM provider, eg: 
+![failover access](img/code_completion_failover_set.png)
 
 After the primary LLM provider is back online, we can disable the feature flag, so that we are switching back to the primary LLM provider:
 
@@ -59,5 +61,10 @@ After the primary LLM provider is back online, we can disable the feature flag, 
 * Go to [kibana](https://log.gprd.gitlab.net/app/home#/) Analytics -> Discover
 * select pubsub-mlops-inf-gprod-* as Data views from the top left
 * For code generation, search for `json.jsonPayload.message: "Executing code generation with prompt registry"`, and then we can find the name that is currently in use, eg:
-![kibana logs](img/aigw_code_gen_log.png)
-* For code completion, search for `json.jsonPayload.message: "code completion input:"`
+![kibana code gen logs](img/aigw_code_gen_log.png)
+  * if you see "json.jsonPayload.prompt_model_class: RunnableBinding", then we are using claude-3-5-sonnet-20240620 provided by vertex_ai
+  * if you see "json.jsonPayload.prompt_model_class: ChatAnthropic", then we are using claude-3-5-sonnet-20240620 provided by anthropic
+* For code completion, search for `json.jsonPayload.message: "code completion input:"`, and then we can find the name that is currently in use, eg:
+![kibana code completion logs](img/aigw_code_completion_log.png)
+  * if you see "json.jsonPayload.model_provider: vertex-ai", then we are using codestral@2405 provided by vertex_ai
+  * if you see "json.jsonPayload.model_provider: anthropic", then we are using claude-3-5-sonnet-20240620 provided by anthropic
