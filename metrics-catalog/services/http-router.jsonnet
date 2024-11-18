@@ -28,7 +28,7 @@ metricsCatalog.serviceDefinition({
   serviceLevelIndicators: {
     worker_requests: {
       severity: 's3',
-      team: 'tenant_scale',
+      team: 'cells_infrastructure',
       // TODO: enable `userImpacting` when we've validated thresholds for alerting.
       userImpacting: false,
       featureCategory: 'not_owned',

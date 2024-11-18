@@ -23,7 +23,7 @@ test.suite({
   testLookupByMergeGroup: {
     actual: mappingWithOverride.gitaly,
     expectContains: {
-      stage: 'systems',
+      stage: 'data_access',
       feature_categories: ['gitaly', 'git'],  // feature categories collected by source group(s)
     },
   },

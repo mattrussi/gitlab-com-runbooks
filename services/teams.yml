@@ -276,8 +276,8 @@ teams:
   ignored_components:
   - graphql_query
 
-- name: database
-  product_stage_group: database
+- name: database_frameworks
+  product_stage_group: database_frameworks
   slack_alerts_channel: g_database_frameworks
   ignored_components:
   - graphql_query
@@ -395,11 +395,11 @@ teams:
   ignored_components:
   - graphql_query
 
-- name: tenant_scale
-  product_stage_group: tenant_scale
+- name: organizations
+  product_stage_group: organizations
   ignored_components:
   - graphql_query
-  slack_alerts_channel: g_tenant-scale
+  slack_alerts_channel: g_organizations
 
 - name: source_code
   product_stage_group: source_code
@@ -428,12 +428,18 @@ teams:
   ignored_components:
   - graphql_query
 
-- name: threat_insights
-  product_stage_group: threat_insights
+- name: security_insights
+  product_stage_group: security_insights
   ignored_components:
   - graphql_query
   slack_error_budget_channel: g_govern_threat_insights
   send_error_budget_weekly_to_slack: true
+
+- name: security_infrastructure
+  product_stage_group: security_infrastructure
+
+- name: security_platform_management
+  product_stage_group: security_platform_management
 
 - name: ai_framework
   url: https://about.gitlab.com/handbook/engineering/development/data-science/ai-framework/
@@ -487,6 +493,9 @@ teams:
   - s_plan
   send_error_budget_weekly_to_slack: true
 
+- name: cells_infrastructure
+  product_stage_group: cells_infrastructure
+  manager: nhxnguyen
 
 # Infrastructure Reliability
 
@@ -512,7 +521,8 @@ teams:
   url: https://handbook.gitlab.com/handbook/engineering/infrastructure/
   label: team::Unowned
 
-- name: reliability_database_reliability
+- name: database_operations
+  product_stage_group: database_operations
   url: https://about.gitlab.com/handbook/engineering/infrastructure/team/reliability/database-reliability.html#ownership
   manager: rmar1
   label: team::Database Reliability
@@ -563,3 +573,4 @@ teams:
   manager: jarv
   label: team::Durability
   slack_alerts_channel: g_durability
+  product_stage_group: durability

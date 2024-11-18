@@ -11,7 +11,7 @@ groups:
         (stddev_over_time(node_pressure_cpu_waiting_seconds_total{env="gprd", type="patroni"}[1d]) and on (fqdn) pg_replication_is_replica == 0) > 3
     for: 1s
     labels:
-      team: database
+      team: database_operations
       severity: s3
       alert_type: cause
     annotations:
