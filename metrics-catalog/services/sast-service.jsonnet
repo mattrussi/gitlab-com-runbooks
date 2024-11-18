@@ -5,6 +5,7 @@ metricsCatalog.serviceDefinition(
   runwayArchetype(
     type='sast-service',
     team='static_analysis',
+    regional=true,
     featureCategory='static_application_security_testing',
     tags=['golang']
   )
