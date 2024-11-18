@@ -435,7 +435,6 @@ Every new CIDR should start at directly after the previously reserved one ends.
 | `GCP/gitlab-r-saas-l-l-arm64-1`            | `ephemeral-runners/tmp-ephemeral-runners`   | `10.12.8.0/21`   |
 | `GCP/gitlab-r-saas-l-l-arm64-2`            | `ephemeral-runners/tmp-ephemeral-runners`   | `10.12.16.0/21`  |
 | `GCP/gitlab-r-saas-l-l-arm64-3`            | `ephemeral-runners/tmp-ephemeral-runners`   | `10.12.24.0/21`  |
-| `GCP/gitlab-ci-private-1`                  | `ci/gitlab-ci-private-1`                    | `10.12.32.0/21`  |
 | `GCP/gitlab-ci`                            | `gitlab-ci-private/private-services`        | `10.12.40.0/21`  |
 | `GCP/gitlab-r-saas-l-p-amd64-1`            | `gitlab-ci-private/p1`                      | `10.13.0.0/21`   |
 | `GCP/gitlab-r-saas-l-p-amd64-2`            | `gitlab-ci-private/p2`                      | `10.13.8.0/21`   |
