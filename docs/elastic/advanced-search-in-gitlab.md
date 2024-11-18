@@ -316,3 +316,11 @@ end
 The indexing queue should drain slowly once the records have been cleared from the queue. It is
 important to understand what caused the records to be queued for indexing. An issue must be opened
 to ensure the records do not get indexed again or the issue will reoccur.
+
+## Shard reassignment failure
+
+When shard allocation fails the [Cluster Reroute API](https://www.elastic.co/guide/en/elasticsearch/reference/current/cluster-reroute.html) may be used to retry failed shard allocation. The API request may be run as a curl command or from the Elasticsearch UI DevTools Console
+
+```
+curl -XPOST "$ELASTIC_URL/_cluster/reroute?retry_failed"
+```
