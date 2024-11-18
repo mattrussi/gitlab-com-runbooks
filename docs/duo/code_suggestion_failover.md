@@ -63,7 +63,7 @@ After the primary LLM provider is back online, we can disable the feature flag, 
 * select `pubsub-mlops-inf-gprod-*` as Data views from the top left
 * For code generation, search for `json.jsonPayload.message: "Executing code generation with prompt registry"`, and then we can find the name that is currently in use, eg:
 ![kibana code gen logs](img/aigw_code_gen_log.png)
-  * if you see "json.jsonPayload.prompt_model_class: RunnableBinding", then we are using claude-3-5-sonnet-20240620 provided by vertex_ai
+  * if you see `json.jsonPayload.prompt_model_class: RunnableBinding`, then we are using `claude-3-5-sonnet-20240620` provided by `vertex_ai`
   * if you see "json.jsonPayload.prompt_model_class: ChatAnthropic", then we are using claude-3-5-sonnet-20240620 provided by anthropic
 * For code completion, search for `json.jsonPayload.message: "code completion input:"`, and then we can find the name that is currently in use, eg:
 ![kibana code completion logs](img/aigw_code_completion_log.png)
