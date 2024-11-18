@@ -67,5 +67,5 @@ After the primary LLM provider is back online, we can disable the feature flag, 
   * if you see `json.jsonPayload.prompt_model_class: ChatAnthropic`, then we are using `claude-3-5-sonnet-20240620` provided by `anthropic`
 * For code completion, search for `json.jsonPayload.message: "code completion input:"`, and then we can find the name that is currently in use, eg:
 ![kibana code completion logs](img/aigw_code_completion_log.png)
-  * if you see "json.jsonPayload.model_provider: vertex-ai", then we are using codestral@2405 provided by vertex_ai
-  * if you see "json.jsonPayload.model_provider: anthropic", then we are using claude-3-5-sonnet-20240620 provided by anthropic
+  * if you see `json.jsonPayload.model_provider: anthropic`, then we are using the failover model `claude-3-5-sonnet-20240620` provided by `anthropic`
+  * if you see another value for `json.jsonPayload.model_provider`, then we are using a non-failover model
