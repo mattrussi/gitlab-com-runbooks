@@ -33,14 +33,14 @@ class Validator
       validate_file File.expand_path(file)
     end
 
-    has_errors = false
+    errors = []
     @failures.each do |failure|
-      has_errors = true if failure[:level] == :error
+      errors << failure if failure[:level] == :error
 
       warn "#{failure[:level]}: #{failure[:context].join(', ')}: #{failure[:message]}"
     end
 
-    !has_errors
+    errors
   end
 
   private
@@ -188,7 +188,14 @@ class Validator
 end
 
 begin
-  exit 1 unless Validator.new.validate
+  failures = Validator.new.validate
+
+  if failures.any?
+    warn "\n\nFound the following breaking errors:"
+    warn failures.join("\n")
+
+    exit 1
+  end
 rescue StandardError => e
   warn "error: #{e.message}"
   warn e.backtrace.join("\n")
