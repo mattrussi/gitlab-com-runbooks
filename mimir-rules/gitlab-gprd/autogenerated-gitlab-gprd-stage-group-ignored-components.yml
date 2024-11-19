@@ -46,22 +46,22 @@ groups:
       product_stage: monitor
       stage_group: analytics_instrumentation
     expr: "1"
-- name: 'Stage group Ignored components: govern - Authentication'
+- name: 'Stage group Ignored components: software_supply_chain_security - Authentication'
   interval: 1m
   rules:
   - record: gitlab:ignored_component:stage_group
     labels:
       component: graphql_query
-      product_stage: govern
+      product_stage: software_supply_chain_security
       stage_group: authentication
     expr: "1"
-- name: 'Stage group Ignored components: govern - Authorization'
+- name: 'Stage group Ignored components: software_supply_chain_security - Authorization'
   interval: 1m
   rules:
   - record: gitlab:ignored_component:stage_group
     labels:
       component: graphql_query
-      product_stage: govern
+      product_stage: software_supply_chain_security
       stage_group: authorization
     expr: "1"
 - name: 'Stage group Ignored components: systems - Cloud Connector'
@@ -97,22 +97,23 @@ groups:
       product_stage: create
       stage_group: code_review
     expr: "1"
-- name: 'Stage group Ignored components: govern - Compliance'
+- name: 'Stage group Ignored components: software_supply_chain_security - Compliance'
   interval: 1m
   rules:
   - record: gitlab:ignored_component:stage_group
     labels:
       component: graphql_query
-      product_stage: govern
+      product_stage: software_supply_chain_security
       stage_group: compliance
     expr: "1"
-- name: 'Stage group Ignored components: secure - Composition Analysis'
+- name: 'Stage group Ignored components: application_security_testing - Composition
+    Analysis'
   interval: 1m
   rules:
   - record: gitlab:ignored_component:stage_group
     labels:
       component: graphql_query
-      product_stage: secure
+      product_stage: application_security_testing
       stage_group: composition_analysis
     expr: "1"
 - name: 'Stage group Ignored components: package - Container Registry'
@@ -123,15 +124,6 @@ groups:
       component: graphql_query
       product_stage: package
       stage_group: container_registry
-    expr: "1"
-- name: 'Stage group Ignored components: data_stores - Database'
-  interval: 1m
-  rules:
-  - record: gitlab:ignored_component:stage_group
-    labels:
-      component: graphql_query
-      product_stage: data_stores
-      stage_group: database
     expr: "1"
 - name: 'Stage group Ignored components: modelops - DataOps'
   interval: 1m
@@ -196,13 +188,13 @@ groups:
       product_stage: ai-powered
       stage_group: duo_workflow
     expr: "1"
-- name: 'Stage group Ignored components: secure - Dynamic Analysis'
+- name: 'Stage group Ignored components: application_security_testing - Dynamic Analysis'
   interval: 1m
   rules:
   - record: gitlab:ignored_component:stage_group
     labels:
       component: graphql_query
-      product_stage: secure
+      product_stage: application_security_testing
       stage_group: dynamic_analysis
     expr: "1"
 - name: 'Stage group Ignored components: fulfillment - Fulfillment Platform'
@@ -214,22 +206,22 @@ groups:
       product_stage: fulfillment
       stage_group: fulfillment_platform
     expr: "1"
-- name: 'Stage group Ignored components: systems - Geo'
+- name: 'Stage group Ignored components: tenant_scale - Geo'
   interval: 1m
   rules:
   - record: gitlab:ignored_component:stage_group
     labels:
       component: graphql_query
-      product_stage: systems
+      product_stage: tenant_scale
       stage_group: geo
     expr: "1"
-- name: 'Stage group Ignored components: systems - Gitaly'
+- name: 'Stage group Ignored components: data_access - Gitaly'
   interval: 1m
   rules:
   - record: gitlab:ignored_component:stage_group
     labels:
       component: graphql_query
-      product_stage: systems
+      product_stage: data_access
       stage_group: gitaly
     expr: "1"
 - name: 'Stage group Ignored components: data_stores - Global Search'
@@ -313,13 +305,14 @@ groups:
       product_stage: verify
       stage_group: pipeline_execution
     expr: "1"
-- name: 'Stage group Ignored components: govern - Pipeline Security'
+- name: 'Stage group Ignored components: software_supply_chain_security - Pipeline
+    Security'
   interval: 1m
   rules:
   - record: gitlab:ignored_component:stage_group
     labels:
       component: graphql_query
-      product_stage: govern
+      product_stage: software_supply_chain_security
       stage_group: pipeline_security
     expr: "1"
 - name: 'Stage group Ignored components: monitor - Platform Insights'
@@ -394,24 +387,6 @@ groups:
       product_stage: fulfillment
       stage_group: subscription_management
     expr: "1"
-- name: 'Stage group Ignored components: data_stores - Tenant Scale'
-  interval: 1m
-  rules:
-  - record: gitlab:ignored_component:stage_group
-    labels:
-      component: graphql_query
-      product_stage: data_stores
-      stage_group: tenant_scale
-    expr: "1"
-- name: 'Stage group Ignored components: govern - Threat Insights'
-  interval: 1m
-  rules:
-  - record: gitlab:ignored_component:stage_group
-    labels:
-      component: graphql_query
-      product_stage: govern
-      stage_group: threat_insights
-    expr: "1"
 - name: 'Stage group Ignored components: fulfillment - Utilization'
   interval: 1m
   rules:
@@ -421,12 +396,13 @@ groups:
       product_stage: fulfillment
       stage_group: utilization
     expr: "1"
-- name: 'Stage group Ignored components: secure - Vulnerability Research'
+- name: 'Stage group Ignored components: application_security_testing - Vulnerability
+    Research'
   interval: 1m
   rules:
   - record: gitlab:ignored_component:stage_group
     labels:
       component: graphql_query
-      product_stage: secure
+      product_stage: application_security_testing
       stage_group: vulnerability_research
     expr: "1"
