@@ -6,7 +6,7 @@ groups:
           avg by (environment,stage) (
             search_advanced_bulk_cron_initial_queue_size{env="gstg"}
           ) > 10000
-          unless
+          unless on (environment, stage)
           search_advanced_boolean_settings{name="elasticsearch_pause_indexing", env="gstg"} == 1
         for: 15m
         labels:
@@ -30,7 +30,7 @@ groups:
           avg by (environment, stage) (
             search_advanced_bulk_cron_queue_size{env="gstg"}
           ) > 10000
-          unless
+          unless on (environment, stage)
           search_advanced_boolean_settings{name="elasticsearch_pause_indexing", env="gstg"} == 1
         for: 15m
         labels:
@@ -54,7 +54,7 @@ groups:
           avg by (environment, stage) (
             search_advanced_bulk_cron_embedding_queue_size{env="gstg"}
           ) > 10000
-          unless
+          unless on (environment, stage)
           search_advanced_boolean_settings{name="elasticsearch_pause_indexing", env="gstg"} == 1
         for: 15m
         labels:

@@ -6,7 +6,7 @@ groups:
           avg by (env, environment, stage) (
             search_advanced_bulk_cron_initial_queue_size{env="gprd"}
           ) > 50000
-          unless
+          unless on (env, environment, stage)
           search_advanced_boolean_settings{name="elasticsearch_pause_indexing", env="gprd"} == 1
         for: 15m
         labels:
@@ -27,10 +27,10 @@ groups:
             cannot keep up with the number of elements being enqueued. Reach out to  #g_global_search to see what is causing this.
       - alert: gitlab_search_incremental_indexing_queue_backing_up
         expr: >
-          avg by (env,environment, stage) (
+          avg by (env, environment, stage) (
             search_advanced_bulk_cron_queue_size{env="gprd"}
           ) > 50000
-          unless
+          unless on (env, environment, stage)
           search_advanced_boolean_settings{name="elasticsearch_pause_indexing", env="gprd"} == 1
         for: 15m
         labels:
@@ -51,10 +51,10 @@ groups:
             cannot keep up with the number of elements being enqueued. Reach out to  #g_global_search to see what is causing this.
       - alert: gitlab_search_embedding_indexing_queue_backing_up
         expr: >
-          avg by (env,environment, stage) (
+          avg by (env, environment, stage) (
             search_advanced_bulk_cron_embedding_queue_size{env="gprd"}
           ) > 50000
-          unless
+          unless on (env, environment, stage)
           search_advanced_boolean_settings{name="elasticsearch_pause_indexing", env="gprd"} == 1
         for: 15m
         labels:
