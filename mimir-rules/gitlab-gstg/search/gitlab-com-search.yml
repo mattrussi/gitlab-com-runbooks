@@ -66,7 +66,7 @@ groups:
           title: "Embedding queue: Large number of documents waiting to be indexed by Elasticsearch"
           environment: "{{ $labels.environment }}"
           grafana_dashboard_id: stage-groups-global_search/stage-groups-group-dashboard-enablement-global-search
-          grafana_panel_id: "TODO" # stableId=global-search-queue-size-overall
+          grafana_panel_id: "1526686247"
           grafana_dashobard_link: >
             https://dashboards.gitlab.net/d/stage-groups-global_search/stage-groups-group-dashboard-enablement-global-search?orgId=1&var-environment={{ $labels.environment }}&var-stage={{ $labels.stage }}
           description: >
