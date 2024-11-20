@@ -275,17 +275,11 @@
         db: {
           type: 'float',
         },
-        db_cached_count: {
-          type: 'long',
-        },
         db_ci_duration_s: {
           type: 'float',
         },
         db_ci_replica_duration_s: {
           type: 'float',
-        },
-        db_count: {
-          type: 'long',
         },
         db_duration_s: {
           type: 'float',
@@ -306,27 +300,6 @@
           type: 'float',
         },
         db_port: {
-          type: 'long',
-        },
-        db_primary_cached_count: {
-          type: 'long',
-        },
-        db_primary_count: {
-          type: 'long',
-        },
-        db_primary_duration_s: {
-          type: 'float',
-        },
-        db_replica_cached_count: {
-          type: 'long',
-        },
-        db_replica_count: {
-          type: 'long',
-        },
-        db_replica_duration_s: {
-          type: 'float',
-        },
-        db_write_count: {
           type: 'long',
         },
         depth: {
