@@ -60,11 +60,9 @@ After the primary LLM provider is back online, we can disable the feature flag, 
 
 * Go to [Kibana](https://log.gprd.gitlab.net/app/home#/) Analytics -> Discover
 * select `pubsub-mlops-inf-gprod-*` as Data views from the top left
-* For code generation, search for `json.jsonPayload.message: "Executing code generation with prompt registry"`, and then we can find the name that is currently in use, eg:
-![kibana code gen logs](img/aigw_code_gen_log.png)
+* For code generation, search for `json.jsonPayload.message: "Executing code generation with prompt registry"`, and then we can find the provider that is currently in use:
   * if you see `json.jsonPayload.prompt_model_class: RunnableBinding`, then we are using `claude-3-5-sonnet-20240620` provided by `vertex_ai`
   * if you see `json.jsonPayload.prompt_model_class: ChatAnthropic`, then we are using `claude-3-5-sonnet-20240620` provided by `anthropic`
-* For code completion, search for `json.jsonPayload.message: "code completion input:"`, and then we can find the name that is currently in use, eg:
-![kibana code completion logs](img/aigw_code_completion_log.png)
+* For code completion, search for `json.jsonPayload.message: "code completion input:"`, and then we can find the provider that is currently in use:
   * if you see `json.jsonPayload.model_provider: anthropic`, then we are using the failover model `claude-3-5-sonnet-20240620` provided by `anthropic`
   * if you see another value for `json.jsonPayload.model_provider`, then we are using a non-failover model
