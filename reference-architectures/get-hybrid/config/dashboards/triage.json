@@ -1039,6 +1039,14 @@
         {
           "title": "gitlab-shell Service | kube_container_memory resource Dashboard",
           "url": "https://dashboards.gitlab.net/d/alerts-sat_kube_container_memory/?var-environment=gprd\u0026var-type=gitlab-shell\u0026var-stage=main\u0026var-component=kube_container_memory"
+        },
+        {
+          "title": "gitlab-shell Service | kube_persistent_volume_claim_disk_space resource Dashboard",
+          "url": "https://dashboards.gitlab.net/d/alerts-sat_kube_pvc_disk_space/?var-environment=gprd\u0026var-type=gitlab-shell\u0026var-stage=main\u0026var-component=kube_persistent_volume_claim_disk_space"
+        },
+        {
+          "title": "gitlab-shell Service | kube_persistent_volume_claim_inodes resource Dashboard",
+          "url": "https://dashboards.gitlab.net/d/alerts-sat_kube_pvc_inodes/?var-environment=gprd\u0026var-type=gitlab-shell\u0026var-stage=main\u0026var-component=kube_persistent_volume_claim_inodes"
         }
       ],
       "nullPointMode": "null",
@@ -2076,6 +2084,14 @@
         {
           "title": "registry Service | kube_container_memory resource Dashboard",
           "url": "https://dashboards.gitlab.net/d/alerts-sat_kube_container_memory/?var-environment=gprd\u0026var-type=registry\u0026var-stage=main\u0026var-component=kube_container_memory"
+        },
+        {
+          "title": "registry Service | kube_persistent_volume_claim_disk_space resource Dashboard",
+          "url": "https://dashboards.gitlab.net/d/alerts-sat_kube_pvc_disk_space/?var-environment=gprd\u0026var-type=registry\u0026var-stage=main\u0026var-component=kube_persistent_volume_claim_disk_space"
+        },
+        {
+          "title": "registry Service | kube_persistent_volume_claim_inodes resource Dashboard",
+          "url": "https://dashboards.gitlab.net/d/alerts-sat_kube_pvc_inodes/?var-environment=gprd\u0026var-type=registry\u0026var-stage=main\u0026var-component=kube_persistent_volume_claim_inodes"
         }
       ],
       "nullPointMode": "null",
@@ -3113,6 +3129,14 @@
         {
           "title": "sidekiq Service | kube_container_rss resource Dashboard",
           "url": "https://dashboards.gitlab.net/d/alerts-sat_kube_container_rss/?var-environment=gprd\u0026var-type=sidekiq\u0026var-stage=main\u0026var-component=kube_container_rss"
+        },
+        {
+          "title": "sidekiq Service | kube_persistent_volume_claim_disk_space resource Dashboard",
+          "url": "https://dashboards.gitlab.net/d/alerts-sat_kube_pvc_disk_space/?var-environment=gprd\u0026var-type=sidekiq\u0026var-stage=main\u0026var-component=kube_persistent_volume_claim_disk_space"
+        },
+        {
+          "title": "sidekiq Service | kube_persistent_volume_claim_inodes resource Dashboard",
+          "url": "https://dashboards.gitlab.net/d/alerts-sat_kube_pvc_inodes/?var-environment=gprd\u0026var-type=sidekiq\u0026var-stage=main\u0026var-component=kube_persistent_volume_claim_inodes"
         }
       ],
       "nullPointMode": "null",
@@ -4150,6 +4174,14 @@
         {
           "title": "webservice Service | kube_container_rss resource Dashboard",
           "url": "https://dashboards.gitlab.net/d/alerts-sat_kube_container_rss/?var-environment=gprd\u0026var-type=webservice\u0026var-stage=main\u0026var-component=kube_container_rss"
+        },
+        {
+          "title": "webservice Service | kube_persistent_volume_claim_disk_space resource Dashboard",
+          "url": "https://dashboards.gitlab.net/d/alerts-sat_kube_pvc_disk_space/?var-environment=gprd\u0026var-type=webservice\u0026var-stage=main\u0026var-component=kube_persistent_volume_claim_disk_space"
+        },
+        {
+          "title": "webservice Service | kube_persistent_volume_claim_inodes resource Dashboard",
+          "url": "https://dashboards.gitlab.net/d/alerts-sat_kube_pvc_inodes/?var-environment=gprd\u0026var-type=webservice\u0026var-stage=main\u0026var-component=kube_persistent_volume_claim_inodes"
         },
         {
           "title": "webservice Service | puma_workers resource Dashboard",
@@ -6418,6 +6450,14 @@
           "url": "https://dashboards.gitlab.net/d/alerts-sat_kube_container_memory/?var-environment=gprd\u0026var-type=consul\u0026var-stage=main\u0026var-component=kube_container_memory"
         },
         {
+          "title": "consul Service | kube_persistent_volume_claim_disk_space resource Dashboard",
+          "url": "https://dashboards.gitlab.net/d/alerts-sat_kube_pvc_disk_space/?var-environment=gprd\u0026var-type=consul\u0026var-stage=main\u0026var-component=kube_persistent_volume_claim_disk_space"
+        },
+        {
+          "title": "consul Service | kube_persistent_volume_claim_inodes resource Dashboard",
+          "url": "https://dashboards.gitlab.net/d/alerts-sat_kube_pvc_inodes/?var-environment=gprd\u0026var-type=consul\u0026var-stage=main\u0026var-component=kube_persistent_volume_claim_inodes"
+        },
+        {
           "title": "consul Service | memory resource Dashboard",
           "url": "https://dashboards.gitlab.net/d/alerts-sat_memory/?var-environment=gprd\u0026var-type=consul\u0026var-stage=main\u0026var-component=memory"
         },
@@ -7458,14 +7498,6 @@
       "lines": true,
       "linewidth": 1,
       "links": [
-        {
-          "title": "kube Service | kube_persistent_volume_claim_disk_space resource Dashboard",
-          "url": "https://dashboards.gitlab.net/d/alerts-sat_kube_pvc_disk_space/?var-environment=gprd\u0026var-type=kube\u0026var-stage=main\u0026var-component=kube_persistent_volume_claim_disk_space"
-        },
-        {
-          "title": "kube Service | kube_persistent_volume_claim_inodes resource Dashboard",
-          "url": "https://dashboards.gitlab.net/d/alerts-sat_kube_pvc_inodes/?var-environment=gprd\u0026var-type=kube\u0026var-stage=main\u0026var-component=kube_persistent_volume_claim_inodes"
-        },
         {
           "title": "kube Service | node_group_cpu resource Dashboard",
           "url": "https://dashboards.gitlab.net/d/alerts-sat_node_group_cpu/?var-environment=gprd\u0026var-type=kube\u0026var-stage=main\u0026var-component=node_group_cpu"

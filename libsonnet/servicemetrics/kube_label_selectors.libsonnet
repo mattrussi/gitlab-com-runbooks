@@ -34,6 +34,8 @@ local identityFieldsForKubeMetricTypes = {
   node: 'node',
   ingress: 'ingress',
   deployment: 'deployment',
+  volumeattachment: 'volumeattachment',
+  pvc: 'persistentvolumeclaim',
 };
 
 local kubeSelectorToPromSelector(kubeMetricType, selector) =
@@ -60,12 +62,16 @@ function(
   nodeSelector=null,  // by default we don't define service fleets
   ingressSelector=defaultValue,
   deploymentSelector=defaultValue,
+  volumeAttachmentSelector=defaultValue,
+  pvcSelector=defaultValue,
 
   podStaticLabels=defaultValue,
   hpaStaticLabels=defaultValue,
   nodeStaticLabels=defaultValue,
   ingressStaticLabels=defaultValue,
   deploymentStaticLabels=defaultValue,
+  volumeAttachmentStaticLabels=defaultValue,
+  pvcStaticLabels=defaultValue,
 )
   {
     init(type, tier)::
@@ -78,6 +84,8 @@ function(
         node: nodeSelector,
         ingress: if ingressSelector == defaultValue then defaultSelector else ingressSelector,
         deployment: if deploymentSelector == defaultValue then defaultSelector else deploymentSelector,
+        volumeattachment: if volumeAttachmentSelector == defaultValue then defaultSelector else volumeAttachmentSelector,
+        pvc: if pvcSelector == defaultValue then defaultSelector else pvcSelector,
 
         staticLabels:: {
           pod: if podStaticLabels == defaultValue then defaultStaticLabels else podStaticLabels,
@@ -85,6 +93,8 @@ function(
           node: if nodeStaticLabels == defaultValue then defaultStaticLabels else nodeStaticLabels,
           ingress: if ingressStaticLabels == defaultValue then defaultStaticLabels else ingressStaticLabels,
           deployment: if deploymentStaticLabels == defaultValue then defaultStaticLabels else deploymentStaticLabels,
+          volumeattachment: if volumeAttachmentStaticLabels == defaultValue then defaultStaticLabels else volumeAttachmentStaticLabels,
+          pvc: if pvcStaticLabels == defaultValue then defaultStaticLabels else pvcStaticLabels,
         },
 
         hasNodeSelector():: nodeSelector != null,

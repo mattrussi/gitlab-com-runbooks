@@ -147,6 +147,29 @@ local kubeStateMetricTypeDescriptors = {
     ],
     metricsFilter: null,
   },
+
+  volumeattachment: {
+    kubeLabelMetric: 'kube_pod_labels',
+    keyLabel: 'pod',
+    extraLabels: [],
+    metrics: [
+      'kube_pod_spec_volumes_persistentvolumeclaims_info'
+    ],
+    metricsFilter: null,
+  },
+
+  pvc: {
+    kubeLabelMetric: 'kube_pod_spec_volumes_persistentvolumeclaims_info:labeled',
+    keyLabel: 'pod',
+    extraLabels: [],
+    metrics: [
+      'kubelet_volume_stats_used_bytes',
+      'kubelet_volume_stats_capacity_bytes',
+      'kubelet_volume_stats_inodes_used',
+      'kubelet_volume_stats_inodes',
+    ],
+    metricsFilter: null,
+  }
 };
 
 local groupLeftJoinExpression(descriptor, extraSelector, serviceSelector) =
@@ -267,11 +290,16 @@ local generateKubeSelectorRulesForService(service, extraSelector) =
     name: 'kube-state-metrics-recording-rules: %(type)s' % formatConfig,
     interval: '1m',
     rules:
-      generateLabeledMetricsForServiceType(service, 'pod', extraSelector) +
-      generateLabeledMetricsForServiceType(service, 'hpa', extraSelector) +
-      generateLabeledMetricsForServiceType(service, 'node', extraSelector) +
-      generateLabeledMetricsForServiceType(service, 'ingress', extraSelector) +
-      generateLabeledMetricsForServiceType(service, 'deployment', extraSelector),
+      std.set(
+        generateLabeledMetricsForServiceType(service, 'pod', extraSelector) +
+        generateLabeledMetricsForServiceType(service, 'hpa', extraSelector) +
+        generateLabeledMetricsForServiceType(service, 'node', extraSelector) +
+        generateLabeledMetricsForServiceType(service, 'ingress', extraSelector) +
+        generateLabeledMetricsForServiceType(service, 'deployment', extraSelector) +
+        generateLabeledMetricsForServiceType(service, 'volumeattachment', extraSelector) +
+        generateLabeledMetricsForServiceType(service, 'pvc', extraSelector),
+        keyF=function(i) i.record
+      ),
   };
 
 // For a given kubernetes resource type, will generate recording rules tha enrich the labelling
@@ -308,6 +336,8 @@ local kubeServices = std.filter(function(s) s.provisioning.kubernetes, metricsCa
           generateEnrichedLabelsForType('hpa', extraSelector, serviceSelector) +
           generateEnrichedLabelsForType('node', extraSelector, serviceSelector) +
           generateEnrichedLabelsForType('ingress', extraSelector, serviceSelector) +
-          generateEnrichedLabelsForType('deployment', extraSelector, serviceSelector),
+          generateEnrichedLabelsForType('deployment', extraSelector, serviceSelector) +
+          generateEnrichedLabelsForType('volumeattachment', extraSelector, serviceSelector) +
+          generateEnrichedLabelsForType('pvc', extraSelector, serviceSelector),
       }],
 }

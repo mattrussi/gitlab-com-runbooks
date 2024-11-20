@@ -4,6 +4,34 @@ groups:
 - name: 'kube-state-metrics-recording-rules: woodhouse'
   interval: 1m
   rules:
+  - record: kube_deployment_labels:labeled
+    labels:
+      tier: sv
+      type: woodhouse
+    expr: |
+      group without(label_stage,label_shard) (
+        label_replace(
+          label_replace(
+            topk by(environment,cluster,deployment) (1, kube_deployment_labels{env="pre",label_stage="main",label_type="woodhouse"}),
+            "stage", "$0", "label_stage", ".*"
+          ),
+          "shard", "$0", "label_shard", ".*"
+        )
+      )
+  - record: kube_ingress_labels:labeled
+    labels:
+      tier: sv
+      type: woodhouse
+    expr: |
+      group without(label_stage,label_shard) (
+        label_replace(
+          label_replace(
+            topk by(environment,cluster,ingress) (1, kube_ingress_labels{env="pre",label_stage="main",label_type="woodhouse"}),
+            "stage", "$0", "label_stage", ".*"
+          ),
+          "shard", "$0", "label_shard", ".*"
+        )
+      )
   - record: kube_pod_labels:labeled
     labels:
       tier: sv
@@ -21,7 +49,7 @@ groups:
           "deployment", "$0", "label_deployment", ".*"
         )
       )
-  - record: kube_ingress_labels:labeled
+  - record: kube_pod_spec_volumes_persistentvolumeclaims_info:labeled:labeled
     labels:
       tier: sv
       type: woodhouse
@@ -29,21 +57,7 @@ groups:
       group without(label_stage,label_shard) (
         label_replace(
           label_replace(
-            topk by(environment,cluster,ingress) (1, kube_ingress_labels{env="pre",label_stage="main",label_type="woodhouse"}),
-            "stage", "$0", "label_stage", ".*"
-          ),
-          "shard", "$0", "label_shard", ".*"
-        )
-      )
-  - record: kube_deployment_labels:labeled
-    labels:
-      tier: sv
-      type: woodhouse
-    expr: |
-      group without(label_stage,label_shard) (
-        label_replace(
-          label_replace(
-            topk by(environment,cluster,deployment) (1, kube_deployment_labels{env="pre",label_stage="main",label_type="woodhouse"}),
+            topk by(environment,cluster,pod) (1, kube_pod_spec_volumes_persistentvolumeclaims_info:labeled{env="pre",label_type="woodhouse"}),
             "stage", "$0", "label_stage", ".*"
           ),
           "shard", "$0", "label_shard", ".*"
@@ -430,3 +444,33 @@ groups:
       *
       on(environment,cluster,deployment) group_left(tier,type,stage,shard)
       topk by (environment,cluster,deployment) (1, kube_deployment_labels:labeled{env="pre",type=~"woodhouse"})
+  - record: kube_pod_spec_volumes_persistentvolumeclaims_info:labeled
+    expr: |
+      kube_pod_spec_volumes_persistentvolumeclaims_info{env="pre"}
+      *
+      on(environment,cluster,pod) group_left(tier,type,stage,shard)
+      topk by (environment,cluster,pod) (1, kube_pod_labels:labeled{env="pre",type=~"woodhouse"})
+  - record: kubelet_volume_stats_used_bytes:labeled
+    expr: |
+      kubelet_volume_stats_used_bytes{env="pre"}
+      *
+      on(environment,cluster,pod) group_left(tier,type,stage,shard)
+      topk by (environment,cluster,pod) (1, kube_pod_spec_volumes_persistentvolumeclaims_info:labeled:labeled{env="pre",type=~"woodhouse"})
+  - record: kubelet_volume_stats_capacity_bytes:labeled
+    expr: |
+      kubelet_volume_stats_capacity_bytes{env="pre"}
+      *
+      on(environment,cluster,pod) group_left(tier,type,stage,shard)
+      topk by (environment,cluster,pod) (1, kube_pod_spec_volumes_persistentvolumeclaims_info:labeled:labeled{env="pre",type=~"woodhouse"})
+  - record: kubelet_volume_stats_inodes_used:labeled
+    expr: |
+      kubelet_volume_stats_inodes_used{env="pre"}
+      *
+      on(environment,cluster,pod) group_left(tier,type,stage,shard)
+      topk by (environment,cluster,pod) (1, kube_pod_spec_volumes_persistentvolumeclaims_info:labeled:labeled{env="pre",type=~"woodhouse"})
+  - record: kubelet_volume_stats_inodes:labeled
+    expr: |
+      kubelet_volume_stats_inodes{env="pre"}
+      *
+      on(environment,cluster,pod) group_left(tier,type,stage,shard)
+      topk by (environment,cluster,pod) (1, kube_pod_spec_volumes_persistentvolumeclaims_info:labeled:labeled{env="pre",type=~"woodhouse"})

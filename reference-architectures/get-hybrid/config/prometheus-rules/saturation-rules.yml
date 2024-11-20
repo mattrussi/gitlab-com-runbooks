@@ -141,9 +141,9 @@ groups:
       max by() (
         clamp_min(
           clamp_max(
-            kubelet_volume_stats_used_bytes
+            kubelet_volume_stats_used_bytes:labeled{}
             /
-            kubelet_volume_stats_capacity_bytes
+            kubelet_volume_stats_capacity_bytes:labeled{}
             ,
             1)
         ,
@@ -159,9 +159,9 @@ groups:
       max by() (
         clamp_min(
           clamp_max(
-            kubelet_volume_stats_inodes_used
+            kubelet_volume_stats_inodes_used:labeled{}
             /
-            kubelet_volume_stats_inodes
+            kubelet_volume_stats_inodes:labeled{}
             ,
             1)
         ,
