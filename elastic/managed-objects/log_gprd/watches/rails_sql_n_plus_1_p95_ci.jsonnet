@@ -7,7 +7,7 @@ watcher.percentileThresholdAlert(
   schedule={ daily: { at: '02:52' } },
   keyField='json.meta.caller_id.keyword',
   percentileValueField='json.db_ci_count',
-  thresholdValue=100,
+  thresholdValue=50,
   elasticsearchIndexName='rails',
   emoji=':postgres:',
   unit=' db calls',
