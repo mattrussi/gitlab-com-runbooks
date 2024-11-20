@@ -48,8 +48,21 @@ To enable failover solution in production when the primary LLM is down, send thi
 /chatops run feature set incident_fail_over_completion_provider true
 ```
 
+Note: on failover mode, direct access is automatically forbidden and all Code Suggestion requests become indirect access. For more details about direct vs indirect access, please refer to [the documentation](https://docs.gitlab.com/ee/user/project/repository/code_suggestions/#direct-and-indirect-connections).
+
 After the primary LLM provider is back online, we can disable the feature flag, so that we are switching back to the primary LLM provider:
 
 ```
 /chatops run feature set incident_fail_over_completion_provider false
 ```
+
+## How to verify
+
+* Go to [Kibana](https://log.gprd.gitlab.net/app/home#/) Analytics -> Discover
+* select `pubsub-mlops-inf-gprod-*` as Data views from the top left
+* For code generation, search for `json.jsonPayload.message: "Executing code generation with prompt registry"`, and then we can find the provider that is currently in use:
+  * if you see `json.jsonPayload.prompt_model_class: RunnableBinding`, then we are using `claude-3-5-sonnet-20240620` provided by `vertex_ai`
+  * if you see `json.jsonPayload.prompt_model_class: ChatAnthropic`, then we are using `claude-3-5-sonnet-20240620` provided by `anthropic`
+* For code completion, search for `json.jsonPayload.message: "code completion input:"`, and then we can find the provider that is currently in use:
+  * if you see `json.jsonPayload.model_provider: anthropic`, then we are using the failover model `claude-3-5-sonnet-20240620` provided by `anthropic`
+  * if you see another value for `json.jsonPayload.model_provider`, then we are using a non-failover model
