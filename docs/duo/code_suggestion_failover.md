@@ -48,6 +48,8 @@ To enable failover solution in production when the primary LLM is down, send thi
 /chatops run feature set incident_fail_over_completion_provider true
 ```
 
+Note: on failover mode, direct access is automatically forbidden and all Code Suggestion requests become indirect access. For more details about direct vs indirect access, please refer to [the documentation](https://docs.gitlab.com/ee/user/project/repository/code_suggestions/#direct-and-indirect-connections).
+
 After the primary LLM provider is back online, we can disable the feature flag, so that we are switching back to the primary LLM provider:
 
 ```
