@@ -1343,7 +1343,9 @@ services:
         architecture: https://handbook.gitlab.com/handbook/engineering/architecture/design-documents/cells/topology_service/#architecture
       logging:
         - name: dev/gstg
-          permalink: https://cloudlogging.app.goo.gl/Ku5v9DimYBw4sGyi9
+          permalink: https://cloudlogging.app.goo.gl/CRjH7wThDvE5dKZn8
+        - name: prod
+          permalink: https://cloudlogging.app.goo.gl/PfFvQWMqtdZk2D217
     observability:
       monitors:
         primary_grafana_dashboard: topology-service-main/topology-service-overview

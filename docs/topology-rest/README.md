@@ -12,7 +12,8 @@
 
 ## Logging
 
-* [dev/gstg](https://cloudlogging.app.goo.gl/Ku5v9DimYBw4sGyi9)
+* [dev/gstg](https://cloudlogging.app.goo.gl/CRjH7wThDvE5dKZn8)
+* [prod](https://cloudlogging.app.goo.gl/PfFvQWMqtdZk2D217)
 
 <!-- END_MARKER -->
 
