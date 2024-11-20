@@ -496,6 +496,7 @@ teams:
 - name: cells_infrastructure
   product_stage_group: cells_infrastructure
   manager: nhxnguyen
+  slack_alerts_channel: g_cells_infrastructure
 
 # Infrastructure Reliability
 
