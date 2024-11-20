@@ -22,7 +22,7 @@ local es_query = {
           },
           {
             range: {
-              'json.db_count': {
+              'json.db_main_count': {
                 gte: 300,
               },
             },
