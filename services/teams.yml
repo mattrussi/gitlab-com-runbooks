@@ -434,7 +434,7 @@ teams:
   product_stage_group: security_insights
   ignored_components:
   - graphql_query
-  slack_error_budget_channel: g_govern_threat_insights
+  slack_error_budget_channel: g_srm_security_insights
   send_error_budget_weekly_to_slack: true
 
 - name: security_infrastructure
