@@ -882,7 +882,7 @@ validate-alerts:
           - legacy-prometheus-rules/**/*
           - mimir-rules/**/*
           - services/**/*
-          - script/validate-alerts
+          - scripts/validate-alerts
   script:
     - make validate-alerts
 
