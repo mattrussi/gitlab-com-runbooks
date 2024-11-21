@@ -18,9 +18,9 @@
 1. Design documents in `www-gitlab-com` repo:
 TODO: link here design docs once they are ready
 1. Logging working group: <https://about.gitlab.com/company/team/structure/working-groups/log-aggregation/>
-1. Elastic engineering team within Enablement
 1. vendor issue tracker: <https://gitlab.com/gitlab-com/gl-infra/elastic/issues>
-1. Slack channel `g_search`
+1. [Global Search](https://handbook.gitlab.com/handbook/engineering/infrastructure/core-platform/data_stores/search/) engineering team
+1. Slack channel `#g_global_search`
 1. Discussions in different issues across multiple projects (e.g. regarding costs for indexing entire gitlab.com)
 1. Discussions in PM&Engineering meetings
 
@@ -99,7 +99,7 @@ TODO: link here design docs once they are ready
 
 #### Metric: Search controller performance
 
-* Location: <https://dashboards.gitlab.net/d/web-rails-controller/web-rails-controller?orgId=1&var-PROMETHEUS_DS=Global&var-environment=gprd&var-stage=main&var-controller=SearchController&var-action=show>
+* Location: <https://dashboards.gitlab.net/d/web-rails-controller/web3a-rails-controller?orgId=1&var-PROMETHEUS_DS=mimir-gitlab-gprd&var-environment=gprd&var-stage=main&var-controller=SearchController&var-action=show>
 * What changes to this metric should prompt a rollback: Massive spike in latency
 
 #### Metric: Search sidekiq indexing queues (Sidekiq Queues (Global Search))
@@ -109,7 +109,7 @@ TODO: link here design docs once they are ready
 
 #### Metric: Search sidekiq in flight jobs
 
-* Location: <https://dashboards.gitlab.net/d/sidekiq-shard-detail/sidekiq-shard-detail?orgId=1&from=now-30m&to=now&var-PROMETHEUS_DS=Global&var-environment=gprd&var-stage=main&var-shard=elasticsearch>
+* Location: <https://dashboards.gitlab.net/d/sidekiq-shard-detail/sidekiq3a-shard-detail?orgId=1&var-PROMETHEUS_DS=mimir-gitlab-gprd&var-environment=gprd&var-stage=main&var-shard=elasticsearch>
 * What changes to this metric should prompt a rollback: No jobs in flight
 
 #### Metric: Elastic Cloud outages
