@@ -1401,6 +1401,9 @@ services:
         security:
       dependencies:
         - service:
+      logging:
+        - name: gcp
+          permalink:
     observability:
       monitors:
         grafana_folder: runway

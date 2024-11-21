@@ -12,6 +12,7 @@
 
 ## Logging
 
+* [gcp]()
 
 <!-- END_MARKER -->
 
