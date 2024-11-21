@@ -37,4 +37,11 @@ metricsCatalog.serviceDefinition(
       },
     },
   }
+  +
+  {
+    skippedMaturityCriteria: {
+      'Structured logs available in Kibana': 'GCP-managed Memorystore Redis does not have kibana logs',
+      'Service exists in the dependency graph': 'For now, no service is depending on this the redis service',
+    },
+  }
 )
