@@ -1380,6 +1380,32 @@ services:
         grafana_folder: redis
         primary_grafana_dashboard: redis-main/redis-overview
 
+  - name: redis-runway-managed
+    tier: db
+    friendly_name: Runway-managed Redis
+    label: RedisRunwayManaged
+    owner: production-engineering:runway
+    technical:
+      project:
+        - https://github.com/antirez/redis/
+      documents:
+        design:
+        architecture:
+        readiness_review:
+        sre_guide: https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/redis
+        developer_guide: https://docs.gitlab.com/ee/development/redis.html#redis-guidelines
+        service:
+          - https://redis.io/documentation
+          - https://docs.gitlab.com/omnibus/settings/redis.html
+          - https://cloud.google.com/memorystore/docs/redis/memorystore-for-redis-overview
+        security:
+      dependencies:
+        - service:
+    observability:
+      monitors:
+        grafana_folder: runway
+        primary_grafana_dashboard: runway/redis-overview
+
   - name: redis-pubsub
     tier: db
     friendly_name: Redis Pub/Sub

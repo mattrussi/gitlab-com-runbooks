@@ -60,6 +60,7 @@
   import 'redis-db-load-balancing.jsonnet',
   import 'redis-pubsub.jsonnet',
   import 'redis-registry-cache.jsonnet',
+  import 'redis-runway-managed.jsonnet',
   import 'redis-sessions.jsonnet',
   import 'redis-sidekiq.jsonnet',
   import 'redis-tracechunks.jsonnet',
