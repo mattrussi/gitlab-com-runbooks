@@ -12,7 +12,6 @@
 
 ## Logging
 
-
 <!-- END_MARKER -->
 
 ## Summary
