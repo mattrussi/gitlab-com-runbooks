@@ -1406,8 +1406,8 @@ services:
           permalink:
     observability:
       monitors:
-        grafana_folder: runway
-        primary_grafana_dashboard: runway/redis-overview
+        grafana_folder: redis
+        primary_grafana_dashboard: redis-runway-managed-main/redis-runway-managed-overview
 
   - name: redis-pubsub
     tier: db
