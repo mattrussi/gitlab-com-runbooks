@@ -15,7 +15,7 @@ One option is to find the last [Woodhouse deploy pipeline](https://gitlab.com/gi
 
 If, for some reason, a job cannot be retried, a non functional change can be pushed to Woodhouse to trigger a deploy.
 
-Example MR: https://gitlab.com/gitlab-com/gl-infra/woodhouse/-/merge_requests/553
+Example MR: `https://gitlab.com/gitlab-com/gl-infra/woodhouse/-/merge_requests/553`
 
 ## Token Expiration
 
@@ -31,3 +31,4 @@ Unable to access gitlab.com API we will try using Ops instead! reason: GET https
 
 ## Other Woodhouse Components
 
+- [Woodhouse](https://gitlab.com/gitlab-com/gl-infra/woodhouse)
