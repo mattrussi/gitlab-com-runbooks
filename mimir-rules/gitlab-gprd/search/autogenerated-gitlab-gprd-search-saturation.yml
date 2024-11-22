@@ -26,12 +26,14 @@ groups:
       max by(env, environment, tier, type, stage, shard) (
         clamp_min(
           clamp_max(
-            sum by (env, environment, tier, type, stage, shard, host) (
-              (elasticsearch_filesystem_data_size_bytes{env="gprd",type="search"} - elasticsearch_filesystem_data_free_bytes{env="gprd",type="search"})
-            )
-            /
-            sum by (env, environment, tier, type, stage, shard, host) (
-              elasticsearch_filesystem_data_size_bytes{env="gprd",type="search"}
+            1 - (
+              sum by (env, environment, tier, type, stage, shard) (
+                (elasticsearch_filesystem_data_free_bytes{env="gprd",type="search"})
+              )
+              /
+              sum by (env, environment, tier, type, stage, shard) (
+                elasticsearch_filesystem_data_size_bytes{env="gprd",type="search"}
+              )
             )
             ,
             1)

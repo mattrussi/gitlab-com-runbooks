@@ -92,15 +92,17 @@ groups:
       grafana_panel_id: "2419103084"
       grafana_variables: environment,type,stage
       promql_query: |
-        max by(environment, tier, type, stage, shard, host) (
+        max by(environment, tier, type, stage, shard) (
           clamp_min(
             clamp_max(
-              sum by (environment, tier, type, stage, shard, host) (
-                (elasticsearch_filesystem_data_size_bytes{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"} - elasticsearch_filesystem_data_free_bytes{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"})
-              )
-              /
-              sum by (environment, tier, type, stage, shard, host) (
-                elasticsearch_filesystem_data_size_bytes{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
+              1 - (
+                sum by (environment, tier, type, stage, shard) (
+                  (elasticsearch_filesystem_data_free_bytes{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"})
+                )
+                /
+                sum by (environment, tier, type, stage, shard) (
+                  elasticsearch_filesystem_data_size_bytes{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
+                )
               )
               ,
               1)
@@ -108,15 +110,17 @@ groups:
           0)
         )
       promql_template_1: |
-        max by(environment, tier, type, stage, shard, host) (
+        max by(environment, tier, type, stage, shard) (
           clamp_min(
             clamp_max(
-              sum by (environment, tier, type, stage, shard, host) (
-                (elasticsearch_filesystem_data_size_bytes{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"} - elasticsearch_filesystem_data_free_bytes{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"})
-              )
-              /
-              sum by (environment, tier, type, stage, shard, host) (
-                elasticsearch_filesystem_data_size_bytes{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
+              1 - (
+                sum by (environment, tier, type, stage, shard) (
+                  (elasticsearch_filesystem_data_free_bytes{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"})
+                )
+                /
+                sum by (environment, tier, type, stage, shard) (
+                  elasticsearch_filesystem_data_size_bytes{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
+                )
               )
               ,
               1)
