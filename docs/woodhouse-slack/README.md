@@ -13,6 +13,9 @@
 
 * [Woodhouse GCP logs](https://cloudlogging.app.goo.gl/8fxWBxq18peA4ssE6)
 
+## Troubleshooting Pointers
+
+* [Woodhouse-Slack Overview](overview.md)
 <!-- END_MARKER -->
 
 <!-- ## Summary -->

@@ -12,11 +12,12 @@
 
 ## Logging
 
-* [Woodhouse](https://console.cloud.google.com/logs/viewer?project=gitlab-ops&minLogLevel=0&expandAll=false)
+* [Woodhouse](https://cloudlogging.app.goo.gl/wYmS4kzq3PNHnt8aA)
 
 ## Troubleshooting Pointers
 
 * [`gitalyctl`](../gitaly/gitalyctl.md)
+* [Woodhouse-Slack Overview](../woodhouse-slack/overview.md)
 <!-- END_MARKER -->
 
 <!-- ## Summary -->
