@@ -2173,7 +2173,7 @@ services:
       dependencies:
       logging:
         - name: Woodhouse
-          permalink: https://console.cloud.google.com/logs/viewer?project=gitlab-ops&minLogLevel=0&expandAll=false
+          permalink: https://cloudlogging.app.goo.gl/wYmS4kzq3PNHnt8aA
     observability:
       monitors:
         primary_grafana_dashboard: woodhouse/woodhouse-overview
