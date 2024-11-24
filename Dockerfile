@@ -12,7 +12,8 @@ ARG GL_ASDF_YQ_VERSION
 ARG GL_ASDF_GOLANG_VERSION
 # renovate: datasource=github-releases depName=grafana/mimir
 ARG MIMIRTOOL_VERSION=2.14.2
-ARG TENANT_OBSERVABILITY_CONFIG_MANAGER_VERSION=main
+# renovate: datasource=docker depName=registry.gitlab.com/gitlab-com/gl-infra/observability/tenant-observability/config-manager
+ARG TENANT_OBSERVABILITY_CONFIG_MANAGER_VERSION=v1.8.2
 
 # Referenced container images
 FROM bitnami/kubectl:${GL_ASDF_KUBECTL_VERSION} AS kubectl
@@ -71,7 +72,7 @@ COPY --from=vault /bin/vault /bin/vault
 COPY --from=yq /usr/bin/yq /usr/bin/yq
 COPY --from=mimirtool /bin/mimirtool /bin/mimirtool
 COPY --from=mixtool /go/bin/mixtool /bin/mixtool
-COPY --from=tenant-observability-config-manager /config-manager-app /usr/bin/tenant-observability-config-manager
+COPY --from=tenant-observability-config-manager /usr/bin/tenant-observability-config-manager /usr/bin/tenant-observability-config-manager
 
 # Ship jsonnet dependencies as a part of this image
 RUN mkdir /jsonnet-deps
