@@ -105,8 +105,8 @@ test.suite({
       product_stage_group: 'authentication',
       send_error_budget_weekly_to_slack: true,
       send_slo_alerts_to_team_slack_channel: false,
-      slack_alerts_channel: 'g_govern_authentication',
-      slack_error_budget_channel: 'g_govern_authentication',
+      slack_alerts_channel: 'g_sscs_authentication',
+      slack_error_budget_channel: 'g_sscs_authentication',
       ignored_components: ['graphql_query'],
     },
     testLookupNonExistingTeamForStageGroup: {

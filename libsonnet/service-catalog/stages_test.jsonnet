@@ -24,7 +24,7 @@ test.suite({
   },
   testStageGroupAddsTeam: {
     actual: stages.stageGroup('authentication').slack_alerts_channel,
-    expect: 'g_govern_authentication',
+    expect: 'g_sscs_authentication',
   },
   testStageGroupNotOwnedLookup: {
     actual: stages.notOwned,
