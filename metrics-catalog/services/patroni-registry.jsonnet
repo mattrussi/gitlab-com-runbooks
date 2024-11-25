@@ -1,6 +1,12 @@
 local patroniHelpers = import './lib/patroni-helpers.libsonnet';
 local patroniArchetype = import 'service-archetypes/patroni-archetype.libsonnet';
 local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
+local histogramApdex = metricsCatalog.histogramApdex;
+local rateMetric = metricsCatalog.rateMetric;
+
+local registryBaseSelector = {
+  type: 'registry',
+};
 
 metricsCatalog.serviceDefinition(
   patroniArchetype(
@@ -17,6 +23,31 @@ metricsCatalog.serviceDefinition(
     ],
   )
   {
+    serviceLevelIndicators+: {
+      dns_lookups: {
+        userImpacting: false,
+        severity: 's4',
+        featureCategory: 'container_registry',
+        description: |||
+          Aggregation of all container registry load balancing DNS lookups used to resolve replica addresses
+        |||,
+
+        apdex: histogramApdex(
+          histogram='registry_database_lb_lookup_seconds_bucket',
+          selector=registryBaseSelector,
+          satisfiedThreshold=0.05,
+          toleratedThreshold=0.1
+        ),
+
+        requestRate: rateMetric(
+          counter='registry_database_lb_lookup_seconds_count',
+          selector=registryBaseSelector
+        ),
+
+        emittedBy: ['registry'],
+        significantLabels: ['lookup_type'],
+      },
+    },
     skippedMaturityCriteria: {
       'Developer guides exist in developer documentation': 'patroni is an infrastructure component, developers do not interact with it',
     },

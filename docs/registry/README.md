@@ -41,6 +41,7 @@
 * [Database Connection Pool Saturation](app-db-conn-pool-saturation.md)
 * [Container Registry CDN](cdn.md)
 * [Container Registry Database Index Bloat](db-index-bloat.md)
+* [Container Registry Database Load Balancing](db-load-balancing.md)
 * [Container Registry database post-deployment migrations](db-post-deployment-migrations.md)
 * [gitlab-registry.md](gitlab-registry.md)
 * [High Number of Overdue Online GC Tasks](online-gc-high-overdue-tasks.md)
