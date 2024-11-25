@@ -14,7 +14,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/general-service/service-platform-metrics?from=now-12h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
         }}
-      grafana_datasource_id: mimir-gitlab-gstg
+      grafana_datasource_id: mimir-runway
       grafana_min_zoom_hours: "12"
       grafana_panel_id: "2633741645"
       grafana_variables: environment,type,stage
@@ -33,8 +33,8 @@ groups:
     expr: |
       (
           (
-            (gitlab_service_ops:rate_5m{env="gstg",monitor="global",type="redis-runway-managed"} -  gitlab_service_ops:rate:prediction{env="gstg",monitor="global",type="redis-runway-managed"}) /
-          gitlab_service_ops:rate:stddev_over_time_1w{env="gstg",monitor="global",type="redis-runway-managed"}
+            (gitlab_service_ops:rate_5m{monitor="global",type="redis-runway-managed"} -  gitlab_service_ops:rate:prediction{monitor="global",type="redis-runway-managed"}) /
+          gitlab_service_ops:rate:stddev_over_time_1w{monitor="global",type="redis-runway-managed"}
         )
         >
         3
@@ -52,7 +52,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/general-service/service-platform-metrics?from=now-12h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
         }}
-      grafana_datasource_id: mimir-gitlab-gstg
+      grafana_datasource_id: mimir-runway
       grafana_min_zoom_hours: "12"
       grafana_panel_id: "2633741645"
       grafana_variables: environment,type,stage
@@ -70,8 +70,8 @@ groups:
     expr: |
       (
           (
-            (gitlab_service_ops:rate_5m{env="gstg",monitor="global",type="redis-runway-managed"} -  gitlab_service_ops:rate:prediction{env="gstg",monitor="global",type="redis-runway-managed"}) /
-          gitlab_service_ops:rate:stddev_over_time_1w{env="gstg",monitor="global",type="redis-runway-managed"}
+            (gitlab_service_ops:rate_5m{monitor="global",type="redis-runway-managed"} -  gitlab_service_ops:rate:prediction{monitor="global",type="redis-runway-managed"}) /
+          gitlab_service_ops:rate:stddev_over_time_1w{monitor="global",type="redis-runway-managed"}
         )
         <
         -3

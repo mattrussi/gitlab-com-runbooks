@@ -14,7 +14,7 @@ metricsCatalog.serviceDefinition(
       'runway-managed-redis',
     ],
     provisioning: { runway: false, vms: false, kubernetes: false },
-    tenants: ['gitlab-gprd', 'gitlab-gstg'],
+    tenants: ['runway'],
     monitoring: { shard: { enabled: true } },
     serviceLevelIndicators: {
       primary_server: {

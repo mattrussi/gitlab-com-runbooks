@@ -19,7 +19,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/redis-runway-managed-main/redis-runway-managed-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}&var-shard={{ $labels.shard
         }}
-      grafana_datasource_id: mimir-gitlab-gprd
+      grafana_datasource_id: mimir-runway
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "175328272"
       grafana_variables: environment,stage,shard
@@ -40,9 +40,9 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_shard_ops:rate_30m{component="primary_server",env="gprd",monitor="global",type="redis-runway-managed"} == 0
+      gitlab_component_shard_ops:rate_30m{component="primary_server",monitor="global",type="redis-runway-managed"} == 0
       and
-      gitlab_component_shard_ops:rate_30m{component="primary_server",env="gprd",monitor="global",type="redis-runway-managed"} offset 1h >= 0.16666666666666666
+      gitlab_component_shard_ops:rate_30m{component="primary_server",monitor="global",type="redis-runway-managed"} offset 1h >= 0.16666666666666666
   - alert: RedisRunwayManagedServicePrimaryServerTrafficAbsentSingleShard
     for: 30m
     annotations:
@@ -60,7 +60,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/redis-runway-managed-main/redis-runway-managed-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}&var-shard={{ $labels.shard
         }}
-      grafana_datasource_id: mimir-gitlab-gprd
+      grafana_datasource_id: mimir-runway
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "175328272"
       grafana_variables: environment,stage,shard
@@ -81,6 +81,6 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_shard_ops:rate_5m{component="primary_server",env="gprd",monitor="global",type="redis-runway-managed"} offset 1h
+      gitlab_component_shard_ops:rate_5m{component="primary_server",monitor="global",type="redis-runway-managed"} offset 1h
       unless
-      gitlab_component_shard_ops:rate_5m{component="primary_server",env="gprd",monitor="global",type="redis-runway-managed"}
+      gitlab_component_shard_ops:rate_5m{component="primary_server",monitor="global",type="redis-runway-managed"}

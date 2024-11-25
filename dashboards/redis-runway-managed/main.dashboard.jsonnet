@@ -3,6 +3,7 @@
 local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
 local serviceDashboard = import 'gitlab-dashboards/service_dashboard.libsonnet';
 local row = grafana.row;
+local datasource = import './datasource.libsonnet';
 local basic = import 'grafana/basic.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
 local promQuery = import 'grafana/prom_query.libsonnet';
@@ -238,9 +239,6 @@ local data(serviceType, startRow) =
   local charts = [
     basic.saturationTimeseries(
       title='Memory Saturation',
-      // TODO: After upgrading to Redis 4, we should include the rdb_last_cow_size in this value
-      // so that we include the RDB snapshot utilization in our memory usage
-      // See https://gitlab.com/gitlab-org/omnibus-gitlab/issues/3785#note_234689504
       description='Redis holds all data in memory. Avoid memory saturation in Redis at all cost ',
       query=|||
         max by (shard) (
@@ -339,7 +337,11 @@ local data(serviceType, startRow) =
   );
 
 local redisDashboard(service) =
-  serviceDashboard.overview(service, includeStandardEnvironmentAnnotations=false)
+  serviceDashboard.overview(
+    service,
+    includeStandardEnvironmentAnnotations=false,
+    defaultDatasource=datasource.defaultDatasourceForService('runway')
+  )
   .addTemplate(templates.runwayManagedRedisShard)
   .addPanels(clientPanels(serviceType=service, startRow=1000))
   .addPanels(workload(serviceType=service, startRow=2000))
