@@ -3,7 +3,6 @@
 local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
 local serviceDashboard = import 'gitlab-dashboards/service_dashboard.libsonnet';
 local row = grafana.row;
-local datasource = import './datasource.libsonnet';
 local basic = import 'grafana/basic.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
 local promQuery = import 'grafana/prom_query.libsonnet';
@@ -339,8 +338,7 @@ local data(serviceType, startRow) =
 local redisDashboard(service) =
   serviceDashboard.overview(
     service,
-    includeStandardEnvironmentAnnotations=false,
-    defaultDatasource=datasource.defaultDatasourceForService('runway')
+    includeStandardEnvironmentAnnotations=false
   )
   .addTemplate(templates.runwayManagedRedisShard)
   .addPanels(clientPanels(serviceType=service, startRow=1000))

@@ -1,6 +1,21 @@
 local redisArchetype = import 'service-archetypes/redis-archetype.libsonnet';
 local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 
+local exemptedShards = [];
+
+local trafficCessationAlertConfig = if std.length(exemptedShards) > 0 then
+  {
+    component_shard: {
+      shard: {
+        // By default all memorystore redis instances are monitored for alerts.
+        // This allows us to exclude instances meant for testing.
+        noneOf: exemptedShards,
+      },
+    },
+  }
+else
+  true;
+
 metricsCatalog.serviceDefinition(
   redisArchetype(
     type='redis-runway-managed',
@@ -22,6 +37,8 @@ metricsCatalog.serviceDefinition(
         userImpacting: true,
         featureCategory: 'not_owned',
         serviceAggregation: false,
+        shardLevelMonitoring: true,
+        trafficCessationAlertConfig: trafficCessationAlertConfig,
         description: |||
           Operations on the Redis primary for Runway managed memorystore instances.
         |||,
