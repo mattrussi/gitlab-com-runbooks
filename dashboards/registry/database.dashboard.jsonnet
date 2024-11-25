@@ -20,7 +20,6 @@ basic.dashboard(
   'Database Detail',
   tags=['container registry', 'docker', 'registry'],
 )
-.addTemplate(templates.gkeCluster)
 .addTemplate(templates.stage)
 .addTemplate(templates.namespaceGitlab)
 .addTemplate(
