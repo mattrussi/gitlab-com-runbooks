@@ -45,6 +45,7 @@
 * [Sidekiq or Web/API is using most of its PgBouncer connections](../pgbouncer/pgbouncer-saturation.md)
 * [../pgbouncer/service-pgbouncer.md](../pgbouncer/service-pgbouncer.md)
 * [PubSub Queuing Rate Increasing](../pubsub/pubsub-queing.md)
+* [Container Registry Database Load Balancing](../registry/db-load-balancing.md)
 * [../registry/gitlab-registry.md](../registry/gitlab-registry.md)
 * [Disabling Sidekiq workers](../sidekiq/disabling-a-worker.md)
 * [../sidekiq/sharding.md](../sidekiq/sharding.md)
