@@ -12,8 +12,6 @@ ARG GL_ASDF_YQ_VERSION
 ARG GL_ASDF_GOLANG_VERSION
 # renovate: datasource=github-releases depName=grafana/mimir
 ARG MIMIRTOOL_VERSION=2.14.2
-# renovate: datasource=docker depName=registry.gitlab.com/gitlab-com/gl-infra/observability/tenant-observability/config-manager
-ARG TENANT_OBSERVABILITY_CONFIG_MANAGER_VERSION=v1.8.3
 
 # Referenced container images
 FROM bitnami/kubectl:${GL_ASDF_KUBECTL_VERSION} AS kubectl
@@ -27,7 +25,6 @@ FROM quay.io/thanos/thanos:v${GL_ASDF_THANOS_VERSION} AS thanos
 FROM registry.gitlab.com/gitlab-com/gl-infra/jsonnet-tool:v${GL_ASDF_JSONNET_TOOL_VERSION} AS jsonnet-tool
 FROM registry.gitlab.com/gitlab-com/gl-infra/third-party-container-images/go-jsonnet:v${GL_ASDF_GO_JSONNET_VERSION} AS go-jsonnet
 FROM registry.gitlab.com/gitlab-com/gl-infra/third-party-container-images/jb:v${GL_ASDF_JB_VERSION} AS jb
-FROM registry.gitlab.com/gitlab-com/gl-infra/observability/tenant-observability/config-manager:${TENANT_OBSERVABILITY_CONFIG_MANAGER_VERSION} AS tenant-observability-config-manager
 # There is no official mixtool Docker image from the author, so we need to create one
 FROM golang:${GL_ASDF_GOLANG_VERSION}-alpine AS mixtool
 
@@ -72,7 +69,6 @@ COPY --from=vault /bin/vault /bin/vault
 COPY --from=yq /usr/bin/yq /usr/bin/yq
 COPY --from=mimirtool /bin/mimirtool /bin/mimirtool
 COPY --from=mixtool /go/bin/mixtool /bin/mixtool
-COPY --from=tenant-observability-config-manager /usr/bin/tenant-observability-config-manager /usr/bin/tenant-observability-config-manager
 
 # Ship jsonnet dependencies as a part of this image
 RUN mkdir /jsonnet-deps
