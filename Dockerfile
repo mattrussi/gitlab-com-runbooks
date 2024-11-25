@@ -13,7 +13,7 @@ ARG GL_ASDF_GOLANG_VERSION
 # renovate: datasource=github-releases depName=grafana/mimir
 ARG MIMIRTOOL_VERSION=2.14.2
 # renovate: datasource=docker depName=registry.gitlab.com/gitlab-com/gl-infra/observability/tenant-observability/config-manager
-ARG TENANT_OBSERVABILITY_CONFIG_MANAGER_VERSION=v1.8.2
+ARG TENANT_OBSERVABILITY_CONFIG_MANAGER_VERSION=v1.8.3
 
 # Referenced container images
 FROM bitnami/kubectl:${GL_ASDF_KUBECTL_VERSION} AS kubectl
