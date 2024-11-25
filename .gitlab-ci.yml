@@ -1061,7 +1061,7 @@ commit-and-push-feature-categories-update:
 
 pages:
   # python:3.13 is not currently supported by json-schema-for-humans, see https://github.com/coveooss/json-schema-for-humans/issues/269.
-  image: python:3.12
+  image: python:3.13
   stage: release
   script:
     - mkdir -p public
