@@ -18,6 +18,7 @@
 ## Troubleshooting Pointers
 
 * [Deployments](deployments.md)
+* [Disabling routing requests through `http-router`](disable-http-router.md)
 * [HTTP Router Worker Logs](logging.md)
 <!-- END_MARKER -->
 
