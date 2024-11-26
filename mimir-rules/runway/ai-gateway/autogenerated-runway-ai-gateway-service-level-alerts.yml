@@ -152,6 +152,7 @@ groups:
       aggregation: regional_component
       alert_class: slo_violation
       alert_type: symptom
+      confidence: 98%
       feature_category: in_source_metrics
       pager: pagerduty
       rules_domain: general
@@ -163,12 +164,12 @@ groups:
     expr: |
       (
         (
-          gitlab_regional_sli_apdex:ratio_1h{component="inference_anthropic",monitor="global",type="ai-gateway"}
+          gitlab_component_apdex:confidence:ratio_1h{component="inference_anthropic",confidence="98%",monitor="global",type="ai-gateway"}
           < (1 - 14.4 * 0.020000)
         )
         and on (env,environment,tier,type,stage,region,component)
         (
-          gitlab_regional_sli_apdex:ratio_5m{component="inference_anthropic",monitor="global",type="ai-gateway"}
+          gitlab_component_apdex:confidence:ratio_5m{component="inference_anthropic",confidence="98%",monitor="global",type="ai-gateway"}
           < (1 - 14.4 * 0.020000)
         )
       )
@@ -210,6 +211,7 @@ groups:
       aggregation: regional_component
       alert_class: slo_violation
       alert_type: symptom
+      confidence: 98%
       feature_category: in_source_metrics
       pager: pagerduty
       rules_domain: general
@@ -221,12 +223,12 @@ groups:
     expr: |
       (
         (
-          gitlab_regional_sli_apdex:ratio_6h{component="inference_anthropic",monitor="global",type="ai-gateway"}
+          gitlab_component_apdex:confidence:ratio_6h{component="inference_anthropic",confidence="98%",monitor="global",type="ai-gateway"}
           < (1 - 6 * 0.020000)
         )
         and on (env,environment,tier,type,stage,region,component)
         (
-          gitlab_regional_sli_apdex:ratio_30m{component="inference_anthropic",monitor="global",type="ai-gateway"}
+          gitlab_component_apdex:confidence:ratio_30m{component="inference_anthropic",confidence="98%",monitor="global",type="ai-gateway"}
           < (1 - 6 * 0.020000)
         )
       )
@@ -373,6 +375,7 @@ groups:
       aggregation: regional_component
       alert_class: slo_violation
       alert_type: symptom
+      confidence: 98%
       feature_category: in_source_metrics
       pager: pagerduty
       rules_domain: general
@@ -384,12 +387,12 @@ groups:
     expr: |
       (
         (
-          gitlab_regional_sli_errors:ratio_1h{component="inference_anthropic",monitor="global",type="ai-gateway"}
+          gitlab_component_errors:confidence:ratio_1h{component="inference_anthropic",confidence="98%",monitor="global",type="ai-gateway"}
           > (14.4 * 0.020000)
         )
         and on (env,environment,tier,type,stage,region,component)
         (
-          gitlab_regional_sli_errors:ratio_5m{component="inference_anthropic",monitor="global",type="ai-gateway"}
+          gitlab_component_errors:confidence:ratio_5m{component="inference_anthropic",confidence="98%",monitor="global",type="ai-gateway"}
           > (14.4 * 0.020000)
         )
       )
@@ -428,6 +431,7 @@ groups:
       aggregation: regional_component
       alert_class: slo_violation
       alert_type: symptom
+      confidence: 98%
       feature_category: in_source_metrics
       pager: pagerduty
       rules_domain: general
@@ -439,12 +443,12 @@ groups:
     expr: |
       (
         (
-          gitlab_regional_sli_errors:ratio_6h{component="inference_anthropic",monitor="global",type="ai-gateway"}
+          gitlab_component_errors:confidence:ratio_6h{component="inference_anthropic",confidence="98%",monitor="global",type="ai-gateway"}
           > (6 * 0.020000)
         )
         and on (env,environment,tier,type,stage,region,component)
         (
-          gitlab_regional_sli_errors:ratio_30m{component="inference_anthropic",monitor="global",type="ai-gateway"}
+          gitlab_component_errors:confidence:ratio_30m{component="inference_anthropic",confidence="98%",monitor="global",type="ai-gateway"}
           > (6 * 0.020000)
         )
       )
@@ -598,6 +602,7 @@ groups:
       aggregation: regional_component
       alert_class: slo_violation
       alert_type: symptom
+      confidence: 98%
       feature_category: in_source_metrics
       rules_domain: general
       severity: s4
@@ -608,12 +613,12 @@ groups:
     expr: |
       (
         (
-          gitlab_regional_sli_apdex:ratio_1h{component="inference_other",monitor="global",type="ai-gateway"}
+          gitlab_component_apdex:confidence:ratio_1h{component="inference_other",confidence="98%",monitor="global",type="ai-gateway"}
           < (1 - 14.4 * 0.020000)
         )
         and on (env,environment,tier,type,stage,region,component)
         (
-          gitlab_regional_sli_apdex:ratio_5m{component="inference_other",monitor="global",type="ai-gateway"}
+          gitlab_component_apdex:confidence:ratio_5m{component="inference_other",confidence="98%",monitor="global",type="ai-gateway"}
           < (1 - 14.4 * 0.020000)
         )
       )
@@ -655,6 +660,7 @@ groups:
       aggregation: regional_component
       alert_class: slo_violation
       alert_type: symptom
+      confidence: 98%
       feature_category: in_source_metrics
       rules_domain: general
       severity: s4
@@ -665,12 +671,12 @@ groups:
     expr: |
       (
         (
-          gitlab_regional_sli_apdex:ratio_6h{component="inference_other",monitor="global",type="ai-gateway"}
+          gitlab_component_apdex:confidence:ratio_6h{component="inference_other",confidence="98%",monitor="global",type="ai-gateway"}
           < (1 - 6 * 0.020000)
         )
         and on (env,environment,tier,type,stage,region,component)
         (
-          gitlab_regional_sli_apdex:ratio_30m{component="inference_other",monitor="global",type="ai-gateway"}
+          gitlab_component_apdex:confidence:ratio_30m{component="inference_other",confidence="98%",monitor="global",type="ai-gateway"}
           < (1 - 6 * 0.020000)
         )
       )
@@ -815,6 +821,7 @@ groups:
       aggregation: regional_component
       alert_class: slo_violation
       alert_type: symptom
+      confidence: 98%
       feature_category: in_source_metrics
       rules_domain: general
       severity: s4
@@ -825,12 +832,12 @@ groups:
     expr: |
       (
         (
-          gitlab_regional_sli_errors:ratio_1h{component="inference_other",monitor="global",type="ai-gateway"}
+          gitlab_component_errors:confidence:ratio_1h{component="inference_other",confidence="98%",monitor="global",type="ai-gateway"}
           > (14.4 * 0.020000)
         )
         and on (env,environment,tier,type,stage,region,component)
         (
-          gitlab_regional_sli_errors:ratio_5m{component="inference_other",monitor="global",type="ai-gateway"}
+          gitlab_component_errors:confidence:ratio_5m{component="inference_other",confidence="98%",monitor="global",type="ai-gateway"}
           > (14.4 * 0.020000)
         )
       )
@@ -869,6 +876,7 @@ groups:
       aggregation: regional_component
       alert_class: slo_violation
       alert_type: symptom
+      confidence: 98%
       feature_category: in_source_metrics
       rules_domain: general
       severity: s4
@@ -879,12 +887,12 @@ groups:
     expr: |
       (
         (
-          gitlab_regional_sli_errors:ratio_6h{component="inference_other",monitor="global",type="ai-gateway"}
+          gitlab_component_errors:confidence:ratio_6h{component="inference_other",confidence="98%",monitor="global",type="ai-gateway"}
           > (6 * 0.020000)
         )
         and on (env,environment,tier,type,stage,region,component)
         (
-          gitlab_regional_sli_errors:ratio_30m{component="inference_other",monitor="global",type="ai-gateway"}
+          gitlab_component_errors:confidence:ratio_30m{component="inference_other",confidence="98%",monitor="global",type="ai-gateway"}
           > (6 * 0.020000)
         )
       )
@@ -1040,6 +1048,7 @@ groups:
       aggregation: regional_component
       alert_class: slo_violation
       alert_type: symptom
+      confidence: 98%
       feature_category: in_source_metrics
       pager: pagerduty
       rules_domain: general
@@ -1051,12 +1060,12 @@ groups:
     expr: |
       (
         (
-          gitlab_regional_sli_apdex:ratio_1h{component="inference_vertex",monitor="global",type="ai-gateway"}
+          gitlab_component_apdex:confidence:ratio_1h{component="inference_vertex",confidence="98%",monitor="global",type="ai-gateway"}
           < (1 - 14.4 * 0.020000)
         )
         and on (env,environment,tier,type,stage,region,component)
         (
-          gitlab_regional_sli_apdex:ratio_5m{component="inference_vertex",monitor="global",type="ai-gateway"}
+          gitlab_component_apdex:confidence:ratio_5m{component="inference_vertex",confidence="98%",monitor="global",type="ai-gateway"}
           < (1 - 14.4 * 0.020000)
         )
       )
@@ -1098,6 +1107,7 @@ groups:
       aggregation: regional_component
       alert_class: slo_violation
       alert_type: symptom
+      confidence: 98%
       feature_category: in_source_metrics
       pager: pagerduty
       rules_domain: general
@@ -1109,12 +1119,12 @@ groups:
     expr: |
       (
         (
-          gitlab_regional_sli_apdex:ratio_6h{component="inference_vertex",monitor="global",type="ai-gateway"}
+          gitlab_component_apdex:confidence:ratio_6h{component="inference_vertex",confidence="98%",monitor="global",type="ai-gateway"}
           < (1 - 6 * 0.020000)
         )
         and on (env,environment,tier,type,stage,region,component)
         (
-          gitlab_regional_sli_apdex:ratio_30m{component="inference_vertex",monitor="global",type="ai-gateway"}
+          gitlab_component_apdex:confidence:ratio_30m{component="inference_vertex",confidence="98%",monitor="global",type="ai-gateway"}
           < (1 - 6 * 0.020000)
         )
       )
@@ -1261,6 +1271,7 @@ groups:
       aggregation: regional_component
       alert_class: slo_violation
       alert_type: symptom
+      confidence: 98%
       feature_category: in_source_metrics
       pager: pagerduty
       rules_domain: general
@@ -1272,12 +1283,12 @@ groups:
     expr: |
       (
         (
-          gitlab_regional_sli_errors:ratio_1h{component="inference_vertex",monitor="global",type="ai-gateway"}
+          gitlab_component_errors:confidence:ratio_1h{component="inference_vertex",confidence="98%",monitor="global",type="ai-gateway"}
           > (14.4 * 0.020000)
         )
         and on (env,environment,tier,type,stage,region,component)
         (
-          gitlab_regional_sli_errors:ratio_5m{component="inference_vertex",monitor="global",type="ai-gateway"}
+          gitlab_component_errors:confidence:ratio_5m{component="inference_vertex",confidence="98%",monitor="global",type="ai-gateway"}
           > (14.4 * 0.020000)
         )
       )
@@ -1316,6 +1327,7 @@ groups:
       aggregation: regional_component
       alert_class: slo_violation
       alert_type: symptom
+      confidence: 98%
       feature_category: in_source_metrics
       pager: pagerduty
       rules_domain: general
@@ -1327,12 +1339,12 @@ groups:
     expr: |
       (
         (
-          gitlab_regional_sli_errors:ratio_6h{component="inference_vertex",monitor="global",type="ai-gateway"}
+          gitlab_component_errors:confidence:ratio_6h{component="inference_vertex",confidence="98%",monitor="global",type="ai-gateway"}
           > (6 * 0.020000)
         )
         and on (env,environment,tier,type,stage,region,component)
         (
-          gitlab_regional_sli_errors:ratio_30m{component="inference_vertex",monitor="global",type="ai-gateway"}
+          gitlab_component_errors:confidence:ratio_30m{component="inference_vertex",confidence="98%",monitor="global",type="ai-gateway"}
           > (6 * 0.020000)
         )
       )
