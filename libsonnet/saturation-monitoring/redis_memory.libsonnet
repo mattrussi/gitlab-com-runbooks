@@ -66,7 +66,7 @@ local redisMemoryDefinition = commonDefinition {
 // All the redis except redis-tracechunks; includes sessions as well as
 // the other sessions-specific metric below, as this measures something
 // subtly different and distinctly valid
-local excludedRedisInstances = ['redis-tracechunks', 'redis-runway-managed'];
+local excludedRedisInstances = ['redis-tracechunks'];
 
 {
   redis_memory: resourceSaturationPoint(redisMemoryDefinition {
