@@ -167,8 +167,8 @@ teams:
   send_slo_alerts_to_team_slack_channel: true
 
 - name: authentication
-  slack_alerts_channel: g_govern_authentication
-  slack_error_budget_channel: g_govern_authentication
+  slack_alerts_channel: g_sscs_authentication
+  slack_error_budget_channel: g_sscs_authentication
   send_error_budget_weekly_to_slack: true
   send_slo_alerts_to_team_slack_channel: false
   product_stage_group: authentication
@@ -423,9 +423,9 @@ teams:
 
 - name: pipeline_security
   product_stage_group: pipeline_security
-  slack_channel: g_govern_pipeline-security
-  slack_alerts_channel: g_govern_pipeline-security_alerts
-  slack_error_budget_channel: g_govern_pipeline-security_alerts
+  slack_channel: g_sscs_pipeline-security
+  slack_alerts_channel: g_sscs_pipeline-security_alerts
+  slack_error_budget_channel: g_sscs_pipeline-security_alerts
   send_error_budget_weekly_to_slack: true
   ignored_components:
   - graphql_query
@@ -479,7 +479,7 @@ teams:
 
 - name: security_policies
   product_stage_group: security_policies
-  slack_error_budget_channel: g_govern_security_policies
+  slack_error_budget_channel: g_srm_security_policies
   send_error_budget_weekly_to_slack: true
 
 - name: ops
