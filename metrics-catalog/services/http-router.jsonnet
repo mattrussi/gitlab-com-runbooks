@@ -27,10 +27,9 @@ metricsCatalog.serviceDefinition({
 
   serviceLevelIndicators: {
     worker_requests: {
-      severity: 's3',
+      severity: 's2',
       team: 'cells_infrastructure',
-      // TODO: enable `userImpacting` when we've validated thresholds for alerting.
-      userImpacting: false,
+      userImpacting: true,
       featureCategory: 'not_owned',
       description: |||
         Aggregation of request that are flowing through the `http-router`.

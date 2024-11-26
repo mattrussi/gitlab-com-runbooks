@@ -4,7 +4,7 @@ local resourceSaturationPoint = (import 'servicemetrics/resource_saturation_poin
 {
   http_router_cpu: resourceSaturationPoint({
     title: 'HTTP Router CPU P999 Budget',
-    severity: 's3',
+    severity: 's2',
     horizontallyScalable: true,
     appliesTo: ['http-router'],
     description: |||
