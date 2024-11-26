@@ -35,7 +35,7 @@ metricsCatalog.serviceDefinition(
     apdexScore=0.98,
     errorRatio=0.98,  // Temporary reduce until https://gitlab.com/gitlab-com/gl-infra/production/-/issues/17366 is fixed.
     featureCategory='code_suggestions',
-    // Runway is using stackdriver metrics, these metrics use many buckets in miliseconds
+    // Runway is using stackdriver metrics, these metrics use many buckets in milliseconds
     // To pick an available bucket, we need to look at the source metrics
     // https://dashboards.gitlab.net/goto/GiFs0eTIR?orgId=1
     // Pick a value that is larger than the server SLIs this encapsulates
@@ -121,6 +121,11 @@ metricsCatalog.serviceDefinition(
         description: |||
           FastAPI server for AI Gateway - code completions.
         |||,
+
+
+        monitoringThresholds+: {
+          apdexScore: 0.95,
+        },
 
         apdex: histogramApdex(
           histogram='http_request_duration_seconds_bucket',
