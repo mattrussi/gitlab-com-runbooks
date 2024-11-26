@@ -823,6 +823,7 @@ groups:
       aggregation: regional_component
       alert_class: slo_violation
       alert_type: symptom
+      confidence: 98%
       feature_category: groups_and_projects
       rules_domain: general
       severity: s3
@@ -833,12 +834,12 @@ groups:
     expr: |
       (
         (
-          gitlab_regional_sli_errors:ratio_1h{component="group_management",env="gprd",monitor="global",type="web"}
+          gitlab_component_errors:confidence:ratio_1h{component="group_management",confidence="98%",env="gprd",monitor="global",type="web"}
           > (14.4 * 0.001000)
         )
         and on (env,environment,tier,type,stage,region,component)
         (
-          gitlab_regional_sli_errors:ratio_5m{component="group_management",env="gprd",monitor="global",type="web"}
+          gitlab_component_errors:confidence:ratio_5m{component="group_management",confidence="98%",env="gprd",monitor="global",type="web"}
           > (14.4 * 0.001000)
         )
       )
@@ -875,6 +876,7 @@ groups:
       aggregation: regional_component
       alert_class: slo_violation
       alert_type: symptom
+      confidence: 98%
       feature_category: groups_and_projects
       rules_domain: general
       severity: s3
@@ -885,12 +887,12 @@ groups:
     expr: |
       (
         (
-          gitlab_regional_sli_errors:ratio_6h{component="group_management",env="gprd",monitor="global",type="web"}
+          gitlab_component_errors:confidence:ratio_6h{component="group_management",confidence="98%",env="gprd",monitor="global",type="web"}
           > (6 * 0.001000)
         )
         and on (env,environment,tier,type,stage,region,component)
         (
-          gitlab_regional_sli_errors:ratio_30m{component="group_management",env="gprd",monitor="global",type="web"}
+          gitlab_component_errors:confidence:ratio_30m{component="group_management",confidence="98%",env="gprd",monitor="global",type="web"}
           > (6 * 0.001000)
         )
       )

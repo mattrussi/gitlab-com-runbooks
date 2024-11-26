@@ -465,6 +465,7 @@ groups:
       aggregation: regional_component
       alert_class: slo_violation
       alert_type: symptom
+      confidence: 98%
       feature_category: in_source_metrics
       pager: pagerduty
       rules_domain: general
@@ -476,12 +477,12 @@ groups:
     expr: |
       (
         (
-          gitlab_regional_sli_apdex:ratio_1h{component="graphql_query",env="gstg",monitor="global",type="api"}
+          gitlab_component_apdex:confidence:ratio_1h{component="graphql_query",confidence="98%",env="gstg",monitor="global",type="api"}
           < (1 - 14.4 * 0.005000)
         )
         and on (env,environment,tier,type,stage,region,component)
         (
-          gitlab_regional_sli_apdex:ratio_5m{component="graphql_query",env="gstg",monitor="global",type="api"}
+          gitlab_component_apdex:confidence:ratio_5m{component="graphql_query",confidence="98%",env="gstg",monitor="global",type="api"}
           < (1 - 14.4 * 0.005000)
         )
       )
@@ -518,6 +519,7 @@ groups:
       aggregation: regional_component
       alert_class: slo_violation
       alert_type: symptom
+      confidence: 98%
       feature_category: in_source_metrics
       pager: pagerduty
       rules_domain: general
@@ -529,12 +531,12 @@ groups:
     expr: |
       (
         (
-          gitlab_regional_sli_apdex:ratio_6h{component="graphql_query",env="gstg",monitor="global",type="api"}
+          gitlab_component_apdex:confidence:ratio_6h{component="graphql_query",confidence="98%",env="gstg",monitor="global",type="api"}
           < (1 - 6 * 0.005000)
         )
         and on (env,environment,tier,type,stage,region,component)
         (
-          gitlab_regional_sli_apdex:ratio_30m{component="graphql_query",env="gstg",monitor="global",type="api"}
+          gitlab_component_apdex:confidence:ratio_30m{component="graphql_query",confidence="98%",env="gstg",monitor="global",type="api"}
           < (1 - 6 * 0.005000)
         )
       )
@@ -687,6 +689,7 @@ groups:
       aggregation: regional_component
       alert_class: slo_violation
       alert_type: symptom
+      confidence: 98%
       feature_category: in_source_metrics
       pager: pagerduty
       rules_domain: general
@@ -698,12 +701,12 @@ groups:
     expr: |
       (
         (
-          gitlab_regional_sli_errors:ratio_1h{component="graphql_query",env="gstg",monitor="global",type="api"}
+          gitlab_component_errors:confidence:ratio_1h{component="graphql_query",confidence="98%",env="gstg",monitor="global",type="api"}
           > (14.4 * 0.001000)
         )
         and on (env,environment,tier,type,stage,region,component)
         (
-          gitlab_regional_sli_errors:ratio_5m{component="graphql_query",env="gstg",monitor="global",type="api"}
+          gitlab_component_errors:confidence:ratio_5m{component="graphql_query",confidence="98%",env="gstg",monitor="global",type="api"}
           > (14.4 * 0.001000)
         )
       )
@@ -744,6 +747,7 @@ groups:
       aggregation: regional_component
       alert_class: slo_violation
       alert_type: symptom
+      confidence: 98%
       feature_category: in_source_metrics
       pager: pagerduty
       rules_domain: general
@@ -755,12 +759,12 @@ groups:
     expr: |
       (
         (
-          gitlab_regional_sli_errors:ratio_6h{component="graphql_query",env="gstg",monitor="global",type="api"}
+          gitlab_component_errors:confidence:ratio_6h{component="graphql_query",confidence="98%",env="gstg",monitor="global",type="api"}
           > (6 * 0.001000)
         )
         and on (env,environment,tier,type,stage,region,component)
         (
-          gitlab_regional_sli_errors:ratio_30m{component="graphql_query",env="gstg",monitor="global",type="api"}
+          gitlab_component_errors:confidence:ratio_30m{component="graphql_query",confidence="98%",env="gstg",monitor="global",type="api"}
           > (6 * 0.001000)
         )
       )
@@ -1075,6 +1079,7 @@ groups:
       aggregation: regional_component
       alert_class: slo_violation
       alert_type: symptom
+      confidence: 98%
       feature_category: groups_and_projects
       rules_domain: general
       severity: s3
@@ -1085,12 +1090,12 @@ groups:
     expr: |
       (
         (
-          gitlab_regional_sli_errors:ratio_1h{component="group_management",env="gstg",monitor="global",type="api"}
+          gitlab_component_errors:confidence:ratio_1h{component="group_management",confidence="98%",env="gstg",monitor="global",type="api"}
           > (14.4 * 0.001000)
         )
         and on (env,environment,tier,type,stage,region,component)
         (
-          gitlab_regional_sli_errors:ratio_5m{component="group_management",env="gstg",monitor="global",type="api"}
+          gitlab_component_errors:confidence:ratio_5m{component="group_management",confidence="98%",env="gstg",monitor="global",type="api"}
           > (14.4 * 0.001000)
         )
       )
@@ -1127,6 +1132,7 @@ groups:
       aggregation: regional_component
       alert_class: slo_violation
       alert_type: symptom
+      confidence: 98%
       feature_category: groups_and_projects
       rules_domain: general
       severity: s3
@@ -1137,12 +1143,12 @@ groups:
     expr: |
       (
         (
-          gitlab_regional_sli_errors:ratio_6h{component="group_management",env="gstg",monitor="global",type="api"}
+          gitlab_component_errors:confidence:ratio_6h{component="group_management",confidence="98%",env="gstg",monitor="global",type="api"}
           > (6 * 0.001000)
         )
         and on (env,environment,tier,type,stage,region,component)
         (
-          gitlab_regional_sli_errors:ratio_30m{component="group_management",env="gstg",monitor="global",type="api"}
+          gitlab_component_errors:confidence:ratio_30m{component="group_management",confidence="98%",env="gstg",monitor="global",type="api"}
           > (6 * 0.001000)
         )
       )

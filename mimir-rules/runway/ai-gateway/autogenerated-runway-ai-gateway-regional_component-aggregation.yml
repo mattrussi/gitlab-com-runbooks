@@ -92,6 +92,74 @@ groups:
       sum by (env,environment,stage,region) (
         gitlab_regional_sli_apdex:weight:score_5m{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"} offset 30s
       )
+  - record: gitlab_component_errors:confidence:ratio_5m
+    labels:
+      component: inference_anthropic
+      confidence: 98%
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      (gitlab_regional_sli_ops:rate_5m{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"} == 0)
+      or
+      clamp(
+        (
+          (
+            (gitlab_regional_sli_errors:rate_5m{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"} / gitlab_regional_sli_ops:rate_5m{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"})
+            +
+            5.411894 / (2 * (gitlab_regional_sli_ops:rate_5m{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"} * 300))
+          )
+          -
+          2.326348
+          *
+          sqrt(
+            (
+              (gitlab_regional_sli_errors:rate_5m{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"} / gitlab_regional_sli_ops:rate_5m{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"}) * (1 - (gitlab_regional_sli_errors:rate_5m{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"} / gitlab_regional_sli_ops:rate_5m{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"}))
+              +
+              5.411894 / (4 * (gitlab_regional_sli_ops:rate_5m{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"} * 300))
+            )
+            /
+            (gitlab_regional_sli_ops:rate_5m{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"} * 300)
+          )
+        )
+        /
+        (1 + 5.411894 / (gitlab_regional_sli_ops:rate_5m{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"} * 300)),
+        0, 1
+      )
+  - record: gitlab_component_apdex:confidence:ratio_5m
+    labels:
+      component: inference_anthropic
+      confidence: 98%
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      clamp_min(gitlab_regional_sli_apdex:weight:score_5m{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"} == 0, 1)
+      or
+      clamp(
+        (
+          (
+            (gitlab_regional_sli_apdex:success:rate_5m{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"} / gitlab_regional_sli_apdex:weight:score_5m{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"})
+            +
+            5.411894 / (2 * (gitlab_regional_sli_apdex:weight:score_5m{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"} * 300))
+          )
+          +
+          2.326348
+          *
+          sqrt(
+            (
+              (gitlab_regional_sli_apdex:success:rate_5m{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"} / gitlab_regional_sli_apdex:weight:score_5m{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"}) * (1 - (gitlab_regional_sli_apdex:success:rate_5m{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"} / gitlab_regional_sli_apdex:weight:score_5m{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"}))
+              +
+              5.411894 / (4 * (gitlab_regional_sli_apdex:weight:score_5m{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"} * 300))
+            )
+            /
+            (gitlab_regional_sli_apdex:weight:score_5m{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"} * 300)
+          )
+        )
+        /
+        (1 + 5.411894 / (gitlab_regional_sli_apdex:weight:score_5m{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"} * 300)),
+        0, 1
+      )
   - record: gitlab_regional_sli_apdex:success:rate_5m
     labels:
       component: inference_other
@@ -171,6 +239,74 @@ groups:
       /
       sum by (env,environment,stage,region) (
         gitlab_regional_sli_apdex:weight:score_5m{component="inference_other",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+  - record: gitlab_component_errors:confidence:ratio_5m
+    labels:
+      component: inference_other
+      confidence: 98%
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      (gitlab_regional_sli_ops:rate_5m{component="inference_other",monitor="global",tier="sv",type="ai-gateway"} == 0)
+      or
+      clamp(
+        (
+          (
+            (gitlab_regional_sli_errors:rate_5m{component="inference_other",monitor="global",tier="sv",type="ai-gateway"} / gitlab_regional_sli_ops:rate_5m{component="inference_other",monitor="global",tier="sv",type="ai-gateway"})
+            +
+            5.411894 / (2 * (gitlab_regional_sli_ops:rate_5m{component="inference_other",monitor="global",tier="sv",type="ai-gateway"} * 300))
+          )
+          -
+          2.326348
+          *
+          sqrt(
+            (
+              (gitlab_regional_sli_errors:rate_5m{component="inference_other",monitor="global",tier="sv",type="ai-gateway"} / gitlab_regional_sli_ops:rate_5m{component="inference_other",monitor="global",tier="sv",type="ai-gateway"}) * (1 - (gitlab_regional_sli_errors:rate_5m{component="inference_other",monitor="global",tier="sv",type="ai-gateway"} / gitlab_regional_sli_ops:rate_5m{component="inference_other",monitor="global",tier="sv",type="ai-gateway"}))
+              +
+              5.411894 / (4 * (gitlab_regional_sli_ops:rate_5m{component="inference_other",monitor="global",tier="sv",type="ai-gateway"} * 300))
+            )
+            /
+            (gitlab_regional_sli_ops:rate_5m{component="inference_other",monitor="global",tier="sv",type="ai-gateway"} * 300)
+          )
+        )
+        /
+        (1 + 5.411894 / (gitlab_regional_sli_ops:rate_5m{component="inference_other",monitor="global",tier="sv",type="ai-gateway"} * 300)),
+        0, 1
+      )
+  - record: gitlab_component_apdex:confidence:ratio_5m
+    labels:
+      component: inference_other
+      confidence: 98%
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      clamp_min(gitlab_regional_sli_apdex:weight:score_5m{component="inference_other",monitor="global",tier="sv",type="ai-gateway"} == 0, 1)
+      or
+      clamp(
+        (
+          (
+            (gitlab_regional_sli_apdex:success:rate_5m{component="inference_other",monitor="global",tier="sv",type="ai-gateway"} / gitlab_regional_sli_apdex:weight:score_5m{component="inference_other",monitor="global",tier="sv",type="ai-gateway"})
+            +
+            5.411894 / (2 * (gitlab_regional_sli_apdex:weight:score_5m{component="inference_other",monitor="global",tier="sv",type="ai-gateway"} * 300))
+          )
+          +
+          2.326348
+          *
+          sqrt(
+            (
+              (gitlab_regional_sli_apdex:success:rate_5m{component="inference_other",monitor="global",tier="sv",type="ai-gateway"} / gitlab_regional_sli_apdex:weight:score_5m{component="inference_other",monitor="global",tier="sv",type="ai-gateway"}) * (1 - (gitlab_regional_sli_apdex:success:rate_5m{component="inference_other",monitor="global",tier="sv",type="ai-gateway"} / gitlab_regional_sli_apdex:weight:score_5m{component="inference_other",monitor="global",tier="sv",type="ai-gateway"}))
+              +
+              5.411894 / (4 * (gitlab_regional_sli_apdex:weight:score_5m{component="inference_other",monitor="global",tier="sv",type="ai-gateway"} * 300))
+            )
+            /
+            (gitlab_regional_sli_apdex:weight:score_5m{component="inference_other",monitor="global",tier="sv",type="ai-gateway"} * 300)
+          )
+        )
+        /
+        (1 + 5.411894 / (gitlab_regional_sli_apdex:weight:score_5m{component="inference_other",monitor="global",tier="sv",type="ai-gateway"} * 300)),
+        0, 1
       )
   - record: gitlab_regional_sli_apdex:success:rate_5m
     labels:
@@ -259,6 +395,74 @@ groups:
       /
       sum by (env,environment,stage,region) (
         gitlab_regional_sli_apdex:weight:score_5m{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+  - record: gitlab_component_errors:confidence:ratio_5m
+    labels:
+      component: inference_vertex
+      confidence: 98%
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      (gitlab_regional_sli_ops:rate_5m{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"} == 0)
+      or
+      clamp(
+        (
+          (
+            (gitlab_regional_sli_errors:rate_5m{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"} / gitlab_regional_sli_ops:rate_5m{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"})
+            +
+            5.411894 / (2 * (gitlab_regional_sli_ops:rate_5m{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"} * 300))
+          )
+          -
+          2.326348
+          *
+          sqrt(
+            (
+              (gitlab_regional_sli_errors:rate_5m{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"} / gitlab_regional_sli_ops:rate_5m{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"}) * (1 - (gitlab_regional_sli_errors:rate_5m{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"} / gitlab_regional_sli_ops:rate_5m{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"}))
+              +
+              5.411894 / (4 * (gitlab_regional_sli_ops:rate_5m{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"} * 300))
+            )
+            /
+            (gitlab_regional_sli_ops:rate_5m{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"} * 300)
+          )
+        )
+        /
+        (1 + 5.411894 / (gitlab_regional_sli_ops:rate_5m{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"} * 300)),
+        0, 1
+      )
+  - record: gitlab_component_apdex:confidence:ratio_5m
+    labels:
+      component: inference_vertex
+      confidence: 98%
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      clamp_min(gitlab_regional_sli_apdex:weight:score_5m{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"} == 0, 1)
+      or
+      clamp(
+        (
+          (
+            (gitlab_regional_sli_apdex:success:rate_5m{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"} / gitlab_regional_sli_apdex:weight:score_5m{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"})
+            +
+            5.411894 / (2 * (gitlab_regional_sli_apdex:weight:score_5m{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"} * 300))
+          )
+          +
+          2.326348
+          *
+          sqrt(
+            (
+              (gitlab_regional_sli_apdex:success:rate_5m{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"} / gitlab_regional_sli_apdex:weight:score_5m{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"}) * (1 - (gitlab_regional_sli_apdex:success:rate_5m{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"} / gitlab_regional_sli_apdex:weight:score_5m{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"}))
+              +
+              5.411894 / (4 * (gitlab_regional_sli_apdex:weight:score_5m{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"} * 300))
+            )
+            /
+            (gitlab_regional_sli_apdex:weight:score_5m{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"} * 300)
+          )
+        )
+        /
+        (1 + 5.411894 / (gitlab_regional_sli_apdex:weight:score_5m{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"} * 300)),
+        0, 1
       )
   - record: gitlab_regional_sli_apdex:success:rate_5m
     labels:
@@ -979,6 +1183,74 @@ groups:
       sum by (env,environment,stage,region) (
         gitlab_regional_sli_apdex:weight:score_30m{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"} offset 30s
       )
+  - record: gitlab_component_errors:confidence:ratio_30m
+    labels:
+      component: inference_anthropic
+      confidence: 98%
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      (gitlab_regional_sli_ops:rate_30m{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"} == 0)
+      or
+      clamp(
+        (
+          (
+            (gitlab_regional_sli_errors:rate_30m{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"} / gitlab_regional_sli_ops:rate_30m{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"})
+            +
+            5.411894 / (2 * (gitlab_regional_sli_ops:rate_30m{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"} * 1800))
+          )
+          -
+          2.326348
+          *
+          sqrt(
+            (
+              (gitlab_regional_sli_errors:rate_30m{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"} / gitlab_regional_sli_ops:rate_30m{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"}) * (1 - (gitlab_regional_sli_errors:rate_30m{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"} / gitlab_regional_sli_ops:rate_30m{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"}))
+              +
+              5.411894 / (4 * (gitlab_regional_sli_ops:rate_30m{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"} * 1800))
+            )
+            /
+            (gitlab_regional_sli_ops:rate_30m{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"} * 1800)
+          )
+        )
+        /
+        (1 + 5.411894 / (gitlab_regional_sli_ops:rate_30m{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"} * 1800)),
+        0, 1
+      )
+  - record: gitlab_component_apdex:confidence:ratio_30m
+    labels:
+      component: inference_anthropic
+      confidence: 98%
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      clamp_min(gitlab_regional_sli_apdex:weight:score_30m{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"} == 0, 1)
+      or
+      clamp(
+        (
+          (
+            (gitlab_regional_sli_apdex:success:rate_30m{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"} / gitlab_regional_sli_apdex:weight:score_30m{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"})
+            +
+            5.411894 / (2 * (gitlab_regional_sli_apdex:weight:score_30m{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"} * 1800))
+          )
+          +
+          2.326348
+          *
+          sqrt(
+            (
+              (gitlab_regional_sli_apdex:success:rate_30m{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"} / gitlab_regional_sli_apdex:weight:score_30m{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"}) * (1 - (gitlab_regional_sli_apdex:success:rate_30m{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"} / gitlab_regional_sli_apdex:weight:score_30m{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"}))
+              +
+              5.411894 / (4 * (gitlab_regional_sli_apdex:weight:score_30m{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"} * 1800))
+            )
+            /
+            (gitlab_regional_sli_apdex:weight:score_30m{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"} * 1800)
+          )
+        )
+        /
+        (1 + 5.411894 / (gitlab_regional_sli_apdex:weight:score_30m{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"} * 1800)),
+        0, 1
+      )
   - record: gitlab_regional_sli_apdex:success:rate_30m
     labels:
       component: inference_other
@@ -1058,6 +1330,74 @@ groups:
       /
       sum by (env,environment,stage,region) (
         gitlab_regional_sli_apdex:weight:score_30m{component="inference_other",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+  - record: gitlab_component_errors:confidence:ratio_30m
+    labels:
+      component: inference_other
+      confidence: 98%
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      (gitlab_regional_sli_ops:rate_30m{component="inference_other",monitor="global",tier="sv",type="ai-gateway"} == 0)
+      or
+      clamp(
+        (
+          (
+            (gitlab_regional_sli_errors:rate_30m{component="inference_other",monitor="global",tier="sv",type="ai-gateway"} / gitlab_regional_sli_ops:rate_30m{component="inference_other",monitor="global",tier="sv",type="ai-gateway"})
+            +
+            5.411894 / (2 * (gitlab_regional_sli_ops:rate_30m{component="inference_other",monitor="global",tier="sv",type="ai-gateway"} * 1800))
+          )
+          -
+          2.326348
+          *
+          sqrt(
+            (
+              (gitlab_regional_sli_errors:rate_30m{component="inference_other",monitor="global",tier="sv",type="ai-gateway"} / gitlab_regional_sli_ops:rate_30m{component="inference_other",monitor="global",tier="sv",type="ai-gateway"}) * (1 - (gitlab_regional_sli_errors:rate_30m{component="inference_other",monitor="global",tier="sv",type="ai-gateway"} / gitlab_regional_sli_ops:rate_30m{component="inference_other",monitor="global",tier="sv",type="ai-gateway"}))
+              +
+              5.411894 / (4 * (gitlab_regional_sli_ops:rate_30m{component="inference_other",monitor="global",tier="sv",type="ai-gateway"} * 1800))
+            )
+            /
+            (gitlab_regional_sli_ops:rate_30m{component="inference_other",monitor="global",tier="sv",type="ai-gateway"} * 1800)
+          )
+        )
+        /
+        (1 + 5.411894 / (gitlab_regional_sli_ops:rate_30m{component="inference_other",monitor="global",tier="sv",type="ai-gateway"} * 1800)),
+        0, 1
+      )
+  - record: gitlab_component_apdex:confidence:ratio_30m
+    labels:
+      component: inference_other
+      confidence: 98%
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      clamp_min(gitlab_regional_sli_apdex:weight:score_30m{component="inference_other",monitor="global",tier="sv",type="ai-gateway"} == 0, 1)
+      or
+      clamp(
+        (
+          (
+            (gitlab_regional_sli_apdex:success:rate_30m{component="inference_other",monitor="global",tier="sv",type="ai-gateway"} / gitlab_regional_sli_apdex:weight:score_30m{component="inference_other",monitor="global",tier="sv",type="ai-gateway"})
+            +
+            5.411894 / (2 * (gitlab_regional_sli_apdex:weight:score_30m{component="inference_other",monitor="global",tier="sv",type="ai-gateway"} * 1800))
+          )
+          +
+          2.326348
+          *
+          sqrt(
+            (
+              (gitlab_regional_sli_apdex:success:rate_30m{component="inference_other",monitor="global",tier="sv",type="ai-gateway"} / gitlab_regional_sli_apdex:weight:score_30m{component="inference_other",monitor="global",tier="sv",type="ai-gateway"}) * (1 - (gitlab_regional_sli_apdex:success:rate_30m{component="inference_other",monitor="global",tier="sv",type="ai-gateway"} / gitlab_regional_sli_apdex:weight:score_30m{component="inference_other",monitor="global",tier="sv",type="ai-gateway"}))
+              +
+              5.411894 / (4 * (gitlab_regional_sli_apdex:weight:score_30m{component="inference_other",monitor="global",tier="sv",type="ai-gateway"} * 1800))
+            )
+            /
+            (gitlab_regional_sli_apdex:weight:score_30m{component="inference_other",monitor="global",tier="sv",type="ai-gateway"} * 1800)
+          )
+        )
+        /
+        (1 + 5.411894 / (gitlab_regional_sli_apdex:weight:score_30m{component="inference_other",monitor="global",tier="sv",type="ai-gateway"} * 1800)),
+        0, 1
       )
   - record: gitlab_regional_sli_apdex:success:rate_30m
     labels:
@@ -1146,6 +1486,74 @@ groups:
       /
       sum by (env,environment,stage,region) (
         gitlab_regional_sli_apdex:weight:score_30m{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+  - record: gitlab_component_errors:confidence:ratio_30m
+    labels:
+      component: inference_vertex
+      confidence: 98%
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      (gitlab_regional_sli_ops:rate_30m{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"} == 0)
+      or
+      clamp(
+        (
+          (
+            (gitlab_regional_sli_errors:rate_30m{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"} / gitlab_regional_sli_ops:rate_30m{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"})
+            +
+            5.411894 / (2 * (gitlab_regional_sli_ops:rate_30m{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"} * 1800))
+          )
+          -
+          2.326348
+          *
+          sqrt(
+            (
+              (gitlab_regional_sli_errors:rate_30m{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"} / gitlab_regional_sli_ops:rate_30m{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"}) * (1 - (gitlab_regional_sli_errors:rate_30m{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"} / gitlab_regional_sli_ops:rate_30m{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"}))
+              +
+              5.411894 / (4 * (gitlab_regional_sli_ops:rate_30m{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"} * 1800))
+            )
+            /
+            (gitlab_regional_sli_ops:rate_30m{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"} * 1800)
+          )
+        )
+        /
+        (1 + 5.411894 / (gitlab_regional_sli_ops:rate_30m{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"} * 1800)),
+        0, 1
+      )
+  - record: gitlab_component_apdex:confidence:ratio_30m
+    labels:
+      component: inference_vertex
+      confidence: 98%
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      clamp_min(gitlab_regional_sli_apdex:weight:score_30m{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"} == 0, 1)
+      or
+      clamp(
+        (
+          (
+            (gitlab_regional_sli_apdex:success:rate_30m{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"} / gitlab_regional_sli_apdex:weight:score_30m{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"})
+            +
+            5.411894 / (2 * (gitlab_regional_sli_apdex:weight:score_30m{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"} * 1800))
+          )
+          +
+          2.326348
+          *
+          sqrt(
+            (
+              (gitlab_regional_sli_apdex:success:rate_30m{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"} / gitlab_regional_sli_apdex:weight:score_30m{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"}) * (1 - (gitlab_regional_sli_apdex:success:rate_30m{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"} / gitlab_regional_sli_apdex:weight:score_30m{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"}))
+              +
+              5.411894 / (4 * (gitlab_regional_sli_apdex:weight:score_30m{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"} * 1800))
+            )
+            /
+            (gitlab_regional_sli_apdex:weight:score_30m{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"} * 1800)
+          )
+        )
+        /
+        (1 + 5.411894 / (gitlab_regional_sli_apdex:weight:score_30m{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"} * 1800)),
+        0, 1
       )
   - record: gitlab_regional_sli_apdex:success:rate_30m
     labels:
@@ -1866,6 +2274,74 @@ groups:
       sum by (env,environment,stage,region) (
         gitlab_regional_sli_apdex:weight:score_1h{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"} offset 30s
       )
+  - record: gitlab_component_errors:confidence:ratio_1h
+    labels:
+      component: inference_anthropic
+      confidence: 98%
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      (gitlab_regional_sli_ops:rate_1h{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"} == 0)
+      or
+      clamp(
+        (
+          (
+            (gitlab_regional_sli_errors:rate_1h{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"} / gitlab_regional_sli_ops:rate_1h{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"})
+            +
+            5.411894 / (2 * (gitlab_regional_sli_ops:rate_1h{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"} * 3600))
+          )
+          -
+          2.326348
+          *
+          sqrt(
+            (
+              (gitlab_regional_sli_errors:rate_1h{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"} / gitlab_regional_sli_ops:rate_1h{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"}) * (1 - (gitlab_regional_sli_errors:rate_1h{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"} / gitlab_regional_sli_ops:rate_1h{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"}))
+              +
+              5.411894 / (4 * (gitlab_regional_sli_ops:rate_1h{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"} * 3600))
+            )
+            /
+            (gitlab_regional_sli_ops:rate_1h{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"} * 3600)
+          )
+        )
+        /
+        (1 + 5.411894 / (gitlab_regional_sli_ops:rate_1h{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"} * 3600)),
+        0, 1
+      )
+  - record: gitlab_component_apdex:confidence:ratio_1h
+    labels:
+      component: inference_anthropic
+      confidence: 98%
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      clamp_min(gitlab_regional_sli_apdex:weight:score_1h{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"} == 0, 1)
+      or
+      clamp(
+        (
+          (
+            (gitlab_regional_sli_apdex:success:rate_1h{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"} / gitlab_regional_sli_apdex:weight:score_1h{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"})
+            +
+            5.411894 / (2 * (gitlab_regional_sli_apdex:weight:score_1h{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"} * 3600))
+          )
+          +
+          2.326348
+          *
+          sqrt(
+            (
+              (gitlab_regional_sli_apdex:success:rate_1h{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"} / gitlab_regional_sli_apdex:weight:score_1h{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"}) * (1 - (gitlab_regional_sli_apdex:success:rate_1h{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"} / gitlab_regional_sli_apdex:weight:score_1h{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"}))
+              +
+              5.411894 / (4 * (gitlab_regional_sli_apdex:weight:score_1h{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"} * 3600))
+            )
+            /
+            (gitlab_regional_sli_apdex:weight:score_1h{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"} * 3600)
+          )
+        )
+        /
+        (1 + 5.411894 / (gitlab_regional_sli_apdex:weight:score_1h{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"} * 3600)),
+        0, 1
+      )
   - record: gitlab_regional_sli_apdex:success:rate_1h
     labels:
       component: inference_other
@@ -1945,6 +2421,74 @@ groups:
       /
       sum by (env,environment,stage,region) (
         gitlab_regional_sli_apdex:weight:score_1h{component="inference_other",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+  - record: gitlab_component_errors:confidence:ratio_1h
+    labels:
+      component: inference_other
+      confidence: 98%
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      (gitlab_regional_sli_ops:rate_1h{component="inference_other",monitor="global",tier="sv",type="ai-gateway"} == 0)
+      or
+      clamp(
+        (
+          (
+            (gitlab_regional_sli_errors:rate_1h{component="inference_other",monitor="global",tier="sv",type="ai-gateway"} / gitlab_regional_sli_ops:rate_1h{component="inference_other",monitor="global",tier="sv",type="ai-gateway"})
+            +
+            5.411894 / (2 * (gitlab_regional_sli_ops:rate_1h{component="inference_other",monitor="global",tier="sv",type="ai-gateway"} * 3600))
+          )
+          -
+          2.326348
+          *
+          sqrt(
+            (
+              (gitlab_regional_sli_errors:rate_1h{component="inference_other",monitor="global",tier="sv",type="ai-gateway"} / gitlab_regional_sli_ops:rate_1h{component="inference_other",monitor="global",tier="sv",type="ai-gateway"}) * (1 - (gitlab_regional_sli_errors:rate_1h{component="inference_other",monitor="global",tier="sv",type="ai-gateway"} / gitlab_regional_sli_ops:rate_1h{component="inference_other",monitor="global",tier="sv",type="ai-gateway"}))
+              +
+              5.411894 / (4 * (gitlab_regional_sli_ops:rate_1h{component="inference_other",monitor="global",tier="sv",type="ai-gateway"} * 3600))
+            )
+            /
+            (gitlab_regional_sli_ops:rate_1h{component="inference_other",monitor="global",tier="sv",type="ai-gateway"} * 3600)
+          )
+        )
+        /
+        (1 + 5.411894 / (gitlab_regional_sli_ops:rate_1h{component="inference_other",monitor="global",tier="sv",type="ai-gateway"} * 3600)),
+        0, 1
+      )
+  - record: gitlab_component_apdex:confidence:ratio_1h
+    labels:
+      component: inference_other
+      confidence: 98%
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      clamp_min(gitlab_regional_sli_apdex:weight:score_1h{component="inference_other",monitor="global",tier="sv",type="ai-gateway"} == 0, 1)
+      or
+      clamp(
+        (
+          (
+            (gitlab_regional_sli_apdex:success:rate_1h{component="inference_other",monitor="global",tier="sv",type="ai-gateway"} / gitlab_regional_sli_apdex:weight:score_1h{component="inference_other",monitor="global",tier="sv",type="ai-gateway"})
+            +
+            5.411894 / (2 * (gitlab_regional_sli_apdex:weight:score_1h{component="inference_other",monitor="global",tier="sv",type="ai-gateway"} * 3600))
+          )
+          +
+          2.326348
+          *
+          sqrt(
+            (
+              (gitlab_regional_sli_apdex:success:rate_1h{component="inference_other",monitor="global",tier="sv",type="ai-gateway"} / gitlab_regional_sli_apdex:weight:score_1h{component="inference_other",monitor="global",tier="sv",type="ai-gateway"}) * (1 - (gitlab_regional_sli_apdex:success:rate_1h{component="inference_other",monitor="global",tier="sv",type="ai-gateway"} / gitlab_regional_sli_apdex:weight:score_1h{component="inference_other",monitor="global",tier="sv",type="ai-gateway"}))
+              +
+              5.411894 / (4 * (gitlab_regional_sli_apdex:weight:score_1h{component="inference_other",monitor="global",tier="sv",type="ai-gateway"} * 3600))
+            )
+            /
+            (gitlab_regional_sli_apdex:weight:score_1h{component="inference_other",monitor="global",tier="sv",type="ai-gateway"} * 3600)
+          )
+        )
+        /
+        (1 + 5.411894 / (gitlab_regional_sli_apdex:weight:score_1h{component="inference_other",monitor="global",tier="sv",type="ai-gateway"} * 3600)),
+        0, 1
       )
   - record: gitlab_regional_sli_apdex:success:rate_1h
     labels:
@@ -2033,6 +2577,74 @@ groups:
       /
       sum by (env,environment,stage,region) (
         gitlab_regional_sli_apdex:weight:score_1h{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+  - record: gitlab_component_errors:confidence:ratio_1h
+    labels:
+      component: inference_vertex
+      confidence: 98%
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      (gitlab_regional_sli_ops:rate_1h{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"} == 0)
+      or
+      clamp(
+        (
+          (
+            (gitlab_regional_sli_errors:rate_1h{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"} / gitlab_regional_sli_ops:rate_1h{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"})
+            +
+            5.411894 / (2 * (gitlab_regional_sli_ops:rate_1h{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"} * 3600))
+          )
+          -
+          2.326348
+          *
+          sqrt(
+            (
+              (gitlab_regional_sli_errors:rate_1h{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"} / gitlab_regional_sli_ops:rate_1h{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"}) * (1 - (gitlab_regional_sli_errors:rate_1h{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"} / gitlab_regional_sli_ops:rate_1h{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"}))
+              +
+              5.411894 / (4 * (gitlab_regional_sli_ops:rate_1h{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"} * 3600))
+            )
+            /
+            (gitlab_regional_sli_ops:rate_1h{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"} * 3600)
+          )
+        )
+        /
+        (1 + 5.411894 / (gitlab_regional_sli_ops:rate_1h{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"} * 3600)),
+        0, 1
+      )
+  - record: gitlab_component_apdex:confidence:ratio_1h
+    labels:
+      component: inference_vertex
+      confidence: 98%
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      clamp_min(gitlab_regional_sli_apdex:weight:score_1h{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"} == 0, 1)
+      or
+      clamp(
+        (
+          (
+            (gitlab_regional_sli_apdex:success:rate_1h{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"} / gitlab_regional_sli_apdex:weight:score_1h{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"})
+            +
+            5.411894 / (2 * (gitlab_regional_sli_apdex:weight:score_1h{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"} * 3600))
+          )
+          +
+          2.326348
+          *
+          sqrt(
+            (
+              (gitlab_regional_sli_apdex:success:rate_1h{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"} / gitlab_regional_sli_apdex:weight:score_1h{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"}) * (1 - (gitlab_regional_sli_apdex:success:rate_1h{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"} / gitlab_regional_sli_apdex:weight:score_1h{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"}))
+              +
+              5.411894 / (4 * (gitlab_regional_sli_apdex:weight:score_1h{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"} * 3600))
+            )
+            /
+            (gitlab_regional_sli_apdex:weight:score_1h{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"} * 3600)
+          )
+        )
+        /
+        (1 + 5.411894 / (gitlab_regional_sli_apdex:weight:score_1h{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"} * 3600)),
+        0, 1
       )
   - record: gitlab_regional_sli_apdex:success:rate_1h
     labels:
@@ -2737,6 +3349,74 @@ groups:
       sum by (env,environment,stage,region) (
         gitlab_regional_sli_apdex:weight:score_6h{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"} offset 30s
       )
+  - record: gitlab_component_errors:confidence:ratio_6h
+    labels:
+      component: inference_anthropic
+      confidence: 98%
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      (gitlab_regional_sli_ops:rate_6h{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"} == 0)
+      or
+      clamp(
+        (
+          (
+            (gitlab_regional_sli_errors:rate_6h{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"} / gitlab_regional_sli_ops:rate_6h{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"})
+            +
+            5.411894 / (2 * (gitlab_regional_sli_ops:rate_6h{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"} * 21600))
+          )
+          -
+          2.326348
+          *
+          sqrt(
+            (
+              (gitlab_regional_sli_errors:rate_6h{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"} / gitlab_regional_sli_ops:rate_6h{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"}) * (1 - (gitlab_regional_sli_errors:rate_6h{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"} / gitlab_regional_sli_ops:rate_6h{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"}))
+              +
+              5.411894 / (4 * (gitlab_regional_sli_ops:rate_6h{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"} * 21600))
+            )
+            /
+            (gitlab_regional_sli_ops:rate_6h{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"} * 21600)
+          )
+        )
+        /
+        (1 + 5.411894 / (gitlab_regional_sli_ops:rate_6h{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"} * 21600)),
+        0, 1
+      )
+  - record: gitlab_component_apdex:confidence:ratio_6h
+    labels:
+      component: inference_anthropic
+      confidence: 98%
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      clamp_min(gitlab_regional_sli_apdex:weight:score_6h{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"} == 0, 1)
+      or
+      clamp(
+        (
+          (
+            (gitlab_regional_sli_apdex:success:rate_6h{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"} / gitlab_regional_sli_apdex:weight:score_6h{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"})
+            +
+            5.411894 / (2 * (gitlab_regional_sli_apdex:weight:score_6h{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"} * 21600))
+          )
+          +
+          2.326348
+          *
+          sqrt(
+            (
+              (gitlab_regional_sli_apdex:success:rate_6h{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"} / gitlab_regional_sli_apdex:weight:score_6h{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"}) * (1 - (gitlab_regional_sli_apdex:success:rate_6h{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"} / gitlab_regional_sli_apdex:weight:score_6h{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"}))
+              +
+              5.411894 / (4 * (gitlab_regional_sli_apdex:weight:score_6h{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"} * 21600))
+            )
+            /
+            (gitlab_regional_sli_apdex:weight:score_6h{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"} * 21600)
+          )
+        )
+        /
+        (1 + 5.411894 / (gitlab_regional_sli_apdex:weight:score_6h{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"} * 21600)),
+        0, 1
+      )
   - record: gitlab_regional_sli_apdex:success:rate_6h
     labels:
       component: inference_other
@@ -2809,6 +3489,74 @@ groups:
       sum by (env,environment,stage,region) (
         gitlab_regional_sli_apdex:weight:score_6h{component="inference_other",monitor="global",tier="sv",type="ai-gateway"} offset 30s
       )
+  - record: gitlab_component_errors:confidence:ratio_6h
+    labels:
+      component: inference_other
+      confidence: 98%
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      (gitlab_regional_sli_ops:rate_6h{component="inference_other",monitor="global",tier="sv",type="ai-gateway"} == 0)
+      or
+      clamp(
+        (
+          (
+            (gitlab_regional_sli_errors:rate_6h{component="inference_other",monitor="global",tier="sv",type="ai-gateway"} / gitlab_regional_sli_ops:rate_6h{component="inference_other",monitor="global",tier="sv",type="ai-gateway"})
+            +
+            5.411894 / (2 * (gitlab_regional_sli_ops:rate_6h{component="inference_other",monitor="global",tier="sv",type="ai-gateway"} * 21600))
+          )
+          -
+          2.326348
+          *
+          sqrt(
+            (
+              (gitlab_regional_sli_errors:rate_6h{component="inference_other",monitor="global",tier="sv",type="ai-gateway"} / gitlab_regional_sli_ops:rate_6h{component="inference_other",monitor="global",tier="sv",type="ai-gateway"}) * (1 - (gitlab_regional_sli_errors:rate_6h{component="inference_other",monitor="global",tier="sv",type="ai-gateway"} / gitlab_regional_sli_ops:rate_6h{component="inference_other",monitor="global",tier="sv",type="ai-gateway"}))
+              +
+              5.411894 / (4 * (gitlab_regional_sli_ops:rate_6h{component="inference_other",monitor="global",tier="sv",type="ai-gateway"} * 21600))
+            )
+            /
+            (gitlab_regional_sli_ops:rate_6h{component="inference_other",monitor="global",tier="sv",type="ai-gateway"} * 21600)
+          )
+        )
+        /
+        (1 + 5.411894 / (gitlab_regional_sli_ops:rate_6h{component="inference_other",monitor="global",tier="sv",type="ai-gateway"} * 21600)),
+        0, 1
+      )
+  - record: gitlab_component_apdex:confidence:ratio_6h
+    labels:
+      component: inference_other
+      confidence: 98%
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      clamp_min(gitlab_regional_sli_apdex:weight:score_6h{component="inference_other",monitor="global",tier="sv",type="ai-gateway"} == 0, 1)
+      or
+      clamp(
+        (
+          (
+            (gitlab_regional_sli_apdex:success:rate_6h{component="inference_other",monitor="global",tier="sv",type="ai-gateway"} / gitlab_regional_sli_apdex:weight:score_6h{component="inference_other",monitor="global",tier="sv",type="ai-gateway"})
+            +
+            5.411894 / (2 * (gitlab_regional_sli_apdex:weight:score_6h{component="inference_other",monitor="global",tier="sv",type="ai-gateway"} * 21600))
+          )
+          +
+          2.326348
+          *
+          sqrt(
+            (
+              (gitlab_regional_sli_apdex:success:rate_6h{component="inference_other",monitor="global",tier="sv",type="ai-gateway"} / gitlab_regional_sli_apdex:weight:score_6h{component="inference_other",monitor="global",tier="sv",type="ai-gateway"}) * (1 - (gitlab_regional_sli_apdex:success:rate_6h{component="inference_other",monitor="global",tier="sv",type="ai-gateway"} / gitlab_regional_sli_apdex:weight:score_6h{component="inference_other",monitor="global",tier="sv",type="ai-gateway"}))
+              +
+              5.411894 / (4 * (gitlab_regional_sli_apdex:weight:score_6h{component="inference_other",monitor="global",tier="sv",type="ai-gateway"} * 21600))
+            )
+            /
+            (gitlab_regional_sli_apdex:weight:score_6h{component="inference_other",monitor="global",tier="sv",type="ai-gateway"} * 21600)
+          )
+        )
+        /
+        (1 + 5.411894 / (gitlab_regional_sli_apdex:weight:score_6h{component="inference_other",monitor="global",tier="sv",type="ai-gateway"} * 21600)),
+        0, 1
+      )
   - record: gitlab_regional_sli_apdex:success:rate_6h
     labels:
       component: inference_vertex
@@ -2880,6 +3628,74 @@ groups:
       /
       sum by (env,environment,stage,region) (
         gitlab_regional_sli_apdex:weight:score_6h{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+  - record: gitlab_component_errors:confidence:ratio_6h
+    labels:
+      component: inference_vertex
+      confidence: 98%
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      (gitlab_regional_sli_ops:rate_6h{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"} == 0)
+      or
+      clamp(
+        (
+          (
+            (gitlab_regional_sli_errors:rate_6h{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"} / gitlab_regional_sli_ops:rate_6h{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"})
+            +
+            5.411894 / (2 * (gitlab_regional_sli_ops:rate_6h{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"} * 21600))
+          )
+          -
+          2.326348
+          *
+          sqrt(
+            (
+              (gitlab_regional_sli_errors:rate_6h{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"} / gitlab_regional_sli_ops:rate_6h{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"}) * (1 - (gitlab_regional_sli_errors:rate_6h{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"} / gitlab_regional_sli_ops:rate_6h{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"}))
+              +
+              5.411894 / (4 * (gitlab_regional_sli_ops:rate_6h{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"} * 21600))
+            )
+            /
+            (gitlab_regional_sli_ops:rate_6h{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"} * 21600)
+          )
+        )
+        /
+        (1 + 5.411894 / (gitlab_regional_sli_ops:rate_6h{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"} * 21600)),
+        0, 1
+      )
+  - record: gitlab_component_apdex:confidence:ratio_6h
+    labels:
+      component: inference_vertex
+      confidence: 98%
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      clamp_min(gitlab_regional_sli_apdex:weight:score_6h{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"} == 0, 1)
+      or
+      clamp(
+        (
+          (
+            (gitlab_regional_sli_apdex:success:rate_6h{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"} / gitlab_regional_sli_apdex:weight:score_6h{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"})
+            +
+            5.411894 / (2 * (gitlab_regional_sli_apdex:weight:score_6h{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"} * 21600))
+          )
+          +
+          2.326348
+          *
+          sqrt(
+            (
+              (gitlab_regional_sli_apdex:success:rate_6h{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"} / gitlab_regional_sli_apdex:weight:score_6h{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"}) * (1 - (gitlab_regional_sli_apdex:success:rate_6h{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"} / gitlab_regional_sli_apdex:weight:score_6h{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"}))
+              +
+              5.411894 / (4 * (gitlab_regional_sli_apdex:weight:score_6h{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"} * 21600))
+            )
+            /
+            (gitlab_regional_sli_apdex:weight:score_6h{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"} * 21600)
+          )
+        )
+        /
+        (1 + 5.411894 / (gitlab_regional_sli_apdex:weight:score_6h{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"} * 21600)),
+        0, 1
       )
   - record: gitlab_regional_sli_apdex:success:rate_6h
     labels:
@@ -3532,6 +4348,74 @@ groups:
       sum by (env,environment,stage,region) (
         gitlab_regional_sli_apdex:weight:score_3d{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"} offset 30s
       )
+  - record: gitlab_component_errors:confidence:ratio_3d
+    labels:
+      component: inference_anthropic
+      confidence: 98%
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      (gitlab_regional_sli_ops:rate_3d{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"} == 0)
+      or
+      clamp(
+        (
+          (
+            (gitlab_regional_sli_errors:rate_3d{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"} / gitlab_regional_sli_ops:rate_3d{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"})
+            +
+            5.411894 / (2 * (gitlab_regional_sli_ops:rate_3d{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"} * 259200))
+          )
+          -
+          2.326348
+          *
+          sqrt(
+            (
+              (gitlab_regional_sli_errors:rate_3d{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"} / gitlab_regional_sli_ops:rate_3d{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"}) * (1 - (gitlab_regional_sli_errors:rate_3d{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"} / gitlab_regional_sli_ops:rate_3d{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"}))
+              +
+              5.411894 / (4 * (gitlab_regional_sli_ops:rate_3d{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"} * 259200))
+            )
+            /
+            (gitlab_regional_sli_ops:rate_3d{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"} * 259200)
+          )
+        )
+        /
+        (1 + 5.411894 / (gitlab_regional_sli_ops:rate_3d{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"} * 259200)),
+        0, 1
+      )
+  - record: gitlab_component_apdex:confidence:ratio_3d
+    labels:
+      component: inference_anthropic
+      confidence: 98%
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      clamp_min(gitlab_regional_sli_apdex:weight:score_3d{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"} == 0, 1)
+      or
+      clamp(
+        (
+          (
+            (gitlab_regional_sli_apdex:success:rate_3d{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"} / gitlab_regional_sli_apdex:weight:score_3d{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"})
+            +
+            5.411894 / (2 * (gitlab_regional_sli_apdex:weight:score_3d{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"} * 259200))
+          )
+          +
+          2.326348
+          *
+          sqrt(
+            (
+              (gitlab_regional_sli_apdex:success:rate_3d{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"} / gitlab_regional_sli_apdex:weight:score_3d{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"}) * (1 - (gitlab_regional_sli_apdex:success:rate_3d{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"} / gitlab_regional_sli_apdex:weight:score_3d{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"}))
+              +
+              5.411894 / (4 * (gitlab_regional_sli_apdex:weight:score_3d{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"} * 259200))
+            )
+            /
+            (gitlab_regional_sli_apdex:weight:score_3d{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"} * 259200)
+          )
+        )
+        /
+        (1 + 5.411894 / (gitlab_regional_sli_apdex:weight:score_3d{component="inference_anthropic",monitor="global",tier="sv",type="ai-gateway"} * 259200)),
+        0, 1
+      )
   - record: gitlab_regional_sli_apdex:success:rate_3d
     labels:
       component: inference_other
@@ -3604,6 +4488,74 @@ groups:
       sum by (env,environment,stage,region) (
         gitlab_regional_sli_apdex:weight:score_3d{component="inference_other",monitor="global",tier="sv",type="ai-gateway"} offset 30s
       )
+  - record: gitlab_component_errors:confidence:ratio_3d
+    labels:
+      component: inference_other
+      confidence: 98%
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      (gitlab_regional_sli_ops:rate_3d{component="inference_other",monitor="global",tier="sv",type="ai-gateway"} == 0)
+      or
+      clamp(
+        (
+          (
+            (gitlab_regional_sli_errors:rate_3d{component="inference_other",monitor="global",tier="sv",type="ai-gateway"} / gitlab_regional_sli_ops:rate_3d{component="inference_other",monitor="global",tier="sv",type="ai-gateway"})
+            +
+            5.411894 / (2 * (gitlab_regional_sli_ops:rate_3d{component="inference_other",monitor="global",tier="sv",type="ai-gateway"} * 259200))
+          )
+          -
+          2.326348
+          *
+          sqrt(
+            (
+              (gitlab_regional_sli_errors:rate_3d{component="inference_other",monitor="global",tier="sv",type="ai-gateway"} / gitlab_regional_sli_ops:rate_3d{component="inference_other",monitor="global",tier="sv",type="ai-gateway"}) * (1 - (gitlab_regional_sli_errors:rate_3d{component="inference_other",monitor="global",tier="sv",type="ai-gateway"} / gitlab_regional_sli_ops:rate_3d{component="inference_other",monitor="global",tier="sv",type="ai-gateway"}))
+              +
+              5.411894 / (4 * (gitlab_regional_sli_ops:rate_3d{component="inference_other",monitor="global",tier="sv",type="ai-gateway"} * 259200))
+            )
+            /
+            (gitlab_regional_sli_ops:rate_3d{component="inference_other",monitor="global",tier="sv",type="ai-gateway"} * 259200)
+          )
+        )
+        /
+        (1 + 5.411894 / (gitlab_regional_sli_ops:rate_3d{component="inference_other",monitor="global",tier="sv",type="ai-gateway"} * 259200)),
+        0, 1
+      )
+  - record: gitlab_component_apdex:confidence:ratio_3d
+    labels:
+      component: inference_other
+      confidence: 98%
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      clamp_min(gitlab_regional_sli_apdex:weight:score_3d{component="inference_other",monitor="global",tier="sv",type="ai-gateway"} == 0, 1)
+      or
+      clamp(
+        (
+          (
+            (gitlab_regional_sli_apdex:success:rate_3d{component="inference_other",monitor="global",tier="sv",type="ai-gateway"} / gitlab_regional_sli_apdex:weight:score_3d{component="inference_other",monitor="global",tier="sv",type="ai-gateway"})
+            +
+            5.411894 / (2 * (gitlab_regional_sli_apdex:weight:score_3d{component="inference_other",monitor="global",tier="sv",type="ai-gateway"} * 259200))
+          )
+          +
+          2.326348
+          *
+          sqrt(
+            (
+              (gitlab_regional_sli_apdex:success:rate_3d{component="inference_other",monitor="global",tier="sv",type="ai-gateway"} / gitlab_regional_sli_apdex:weight:score_3d{component="inference_other",monitor="global",tier="sv",type="ai-gateway"}) * (1 - (gitlab_regional_sli_apdex:success:rate_3d{component="inference_other",monitor="global",tier="sv",type="ai-gateway"} / gitlab_regional_sli_apdex:weight:score_3d{component="inference_other",monitor="global",tier="sv",type="ai-gateway"}))
+              +
+              5.411894 / (4 * (gitlab_regional_sli_apdex:weight:score_3d{component="inference_other",monitor="global",tier="sv",type="ai-gateway"} * 259200))
+            )
+            /
+            (gitlab_regional_sli_apdex:weight:score_3d{component="inference_other",monitor="global",tier="sv",type="ai-gateway"} * 259200)
+          )
+        )
+        /
+        (1 + 5.411894 / (gitlab_regional_sli_apdex:weight:score_3d{component="inference_other",monitor="global",tier="sv",type="ai-gateway"} * 259200)),
+        0, 1
+      )
   - record: gitlab_regional_sli_apdex:success:rate_3d
     labels:
       component: inference_vertex
@@ -3675,6 +4627,74 @@ groups:
       /
       sum by (env,environment,stage,region) (
         gitlab_regional_sli_apdex:weight:score_3d{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"} offset 30s
+      )
+  - record: gitlab_component_errors:confidence:ratio_3d
+    labels:
+      component: inference_vertex
+      confidence: 98%
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      (gitlab_regional_sli_ops:rate_3d{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"} == 0)
+      or
+      clamp(
+        (
+          (
+            (gitlab_regional_sli_errors:rate_3d{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"} / gitlab_regional_sli_ops:rate_3d{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"})
+            +
+            5.411894 / (2 * (gitlab_regional_sli_ops:rate_3d{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"} * 259200))
+          )
+          -
+          2.326348
+          *
+          sqrt(
+            (
+              (gitlab_regional_sli_errors:rate_3d{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"} / gitlab_regional_sli_ops:rate_3d{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"}) * (1 - (gitlab_regional_sli_errors:rate_3d{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"} / gitlab_regional_sli_ops:rate_3d{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"}))
+              +
+              5.411894 / (4 * (gitlab_regional_sli_ops:rate_3d{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"} * 259200))
+            )
+            /
+            (gitlab_regional_sli_ops:rate_3d{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"} * 259200)
+          )
+        )
+        /
+        (1 + 5.411894 / (gitlab_regional_sli_ops:rate_3d{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"} * 259200)),
+        0, 1
+      )
+  - record: gitlab_component_apdex:confidence:ratio_3d
+    labels:
+      component: inference_vertex
+      confidence: 98%
+      monitor: global
+      tier: sv
+      type: ai-gateway
+    expr: |
+      clamp_min(gitlab_regional_sli_apdex:weight:score_3d{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"} == 0, 1)
+      or
+      clamp(
+        (
+          (
+            (gitlab_regional_sli_apdex:success:rate_3d{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"} / gitlab_regional_sli_apdex:weight:score_3d{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"})
+            +
+            5.411894 / (2 * (gitlab_regional_sli_apdex:weight:score_3d{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"} * 259200))
+          )
+          +
+          2.326348
+          *
+          sqrt(
+            (
+              (gitlab_regional_sli_apdex:success:rate_3d{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"} / gitlab_regional_sli_apdex:weight:score_3d{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"}) * (1 - (gitlab_regional_sli_apdex:success:rate_3d{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"} / gitlab_regional_sli_apdex:weight:score_3d{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"}))
+              +
+              5.411894 / (4 * (gitlab_regional_sli_apdex:weight:score_3d{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"} * 259200))
+            )
+            /
+            (gitlab_regional_sli_apdex:weight:score_3d{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"} * 259200)
+          )
+        )
+        /
+        (1 + 5.411894 / (gitlab_regional_sli_apdex:weight:score_3d{component="inference_vertex",monitor="global",tier="sv",type="ai-gateway"} * 259200)),
+        0, 1
       )
   - record: gitlab_regional_sli_apdex:success:rate_3d
     labels:

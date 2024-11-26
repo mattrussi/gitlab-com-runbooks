@@ -108,6 +108,9 @@ local mimirAggregetionSetDefaults = {
       opsRate: 'gitlab_regional_sli_ops:rate_%s',
       errorRate: 'gitlab_regional_sli_errors:rate_%s',
       errorRatio: 'gitlab_regional_sli_errors:ratio_%s',
+      // Confidence Interval Ratios
+      apdexConfidenceRatio: 'gitlab_component_apdex:confidence:ratio_%s',
+      errorConfidenceRatio: 'gitlab_component_errors:confidence:ratio_%s',
     },
   }),
 
