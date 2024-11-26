@@ -367,7 +367,7 @@ Every new CIDR should start at directly after the previously reserved one ends.
 **When adding any new ephemeral-runners subnetwork don't forget to update the
 [`ci-gateway` firewall](#ci-gateway-ilb-firewall)!**
 
-| Environment                                | Network `$VPC/$SUBNETWORK`                  | CIDR             |
+| Environment                                | Network `{$PROJECT/}$VPC/$SUBNETWORK        | CIDR             |
 |--------------------------------------------|---------------------------------------------|------------------|
 | `GCP/gitlab-ci-plan-free-7`                | `ephemeral-runners/ephemeral-runners`       | `10.10.0.0/21`   |
 | `GCP/gitlab-ci-plan-free-6`                | `ephemeral-runners/ephemeral-runners`       | `10.10.8.0/21`   |
@@ -429,9 +429,9 @@ Every new CIDR should start at directly after the previously reserved one ends.
 | `GCP/gitlab-r-saas-l-l-arm64-1`            | `ephemeral-runners/ephemeral-runners`       | `10.11.208.0/21` |
 | `GCP/gitlab-r-saas-l-l-arm64-2`            | `ephemeral-runners/ephemeral-runners`       | `10.11.216.0/21` |
 | `GCP/gitlab-r-saas-l-l-arm64-3`            | `ephemeral-runners/ephemeral-runners`       | `10.11.224.0/21` |
-| `GCP/gitlab-r-saas-l-s-arm64-1`            | `ephemeral-runners/ephemeral-runners`       | `10.12.48.0/21`  |
-| `GCP/gitlab-r-saas-l-s-arm64-2`            | `ephemeral-runners/ephemeral-runners`       | `10.12.56.0/21`  |
-| `GCP/gitlab-r-saas-l-s-arm64-3`            | `ephemeral-runners/ephemeral-runners`       | `10.12.64.0/21`  |
+| `GCP/gitlab-r-saas-l-s-arm64-1`            | `gitlab-ci/saas-l-s-arm64/p1`               | `10.12.48.0/21`  |
+| `GCP/gitlab-r-saas-l-s-arm64-2`            | `gitlab-ci/saas-l-s-arm64/p2`               | `10.12.56.0/21`  |
+| `GCP/gitlab-r-saas-l-s-arm64-3`            | `gitlab-ci/saas-l-s-arm64/p3`               | `10.12.64.0/21`  |
 | `GCP/gitlab-r-saas-l-m-arm64-1`            | `ephemeral-runners/tmp-ephemeral-runners`   | `10.11.232.0/21` |
 | `GCP/gitlab-r-saas-l-m-arm64-2`            | `ephemeral-runners/tmp-ephemeral-runners`   | `10.11.240.0/21` |
 | `GCP/gitlab-r-saas-l-m-arm64-3`            | `ephemeral-runners/tmp-ephemeral-runners`   | `10.11.248.0/21` |
@@ -442,14 +442,14 @@ Every new CIDR should start at directly after the previously reserved one ends.
 | `GCP/gitlab-r-saas-l-s-arm64-2`            | `ephemeral-runners/tmp-ephemeral-runners`   | `10.12.80.0/21`  |
 | `GCP/gitlab-r-saas-l-s-arm64-3`            | `ephemeral-runners/tmp-ephemeral-runners`   | `10.12.88.0/21`  |
 | `GCP/gitlab-ci`                            | `gitlab-ci-private/private-services`        | `10.12.40.0/21`  |
-| `GCP/gitlab-r-saas-l-p-amd64-1`            | `gitlab-ci-private/p1`                      | `10.13.0.0/21`   |
-| `GCP/gitlab-r-saas-l-p-amd64-2`            | `gitlab-ci-private/p2`                      | `10.13.8.0/21`   |
-| `GCP/gitlab-ci-private-1`                  | `gitlab-ci-private/p3`                      | `10.13.16.0/21`  |
-| `GCP/gitlab-ci-private-2`                  | `gitlab-ci-private/p4`                      | `10.13.24.0/21`  |
-| `GCP/gitlab-ci-private-3`                  | `gitlab-ci-private/p5`                      | `10.13.32.0/21`  |
-| `GCP/gitlab-ci-private-4`                  | `gitlab-ci-private/p6`                      | `10.13.40.0/21`  |
-| `GCP/gitlab-ci-private-5`                  | `gitlab-ci-private/p7`                      | `10.13.48.0/21`  |
-| `GCP/gitlab-ci-private-6`                  | `gitlab-ci-private/p8`                      | `10.13.56.0/21`  |
+| `GCP/gitlab-r-saas-l-p-amd64-1`            | `gitlab-ci/gitlab-ci-private/p1`            | `10.13.0.0/21`   |
+| `GCP/gitlab-r-saas-l-p-amd64-2`            | `gitlab-ci/gitlab-ci-private/p2`            | `10.13.8.0/21`   |
+| `GCP/gitlab-ci-private-1`                  | `gitlab-ci/gitlab-ci-private/p3`            | `10.13.16.0/21`  |
+| `GCP/gitlab-ci-private-2`                  | `gitlab-ci/gitlab-ci-private/p4`            | `10.13.24.0/21`  |
+| `GCP/gitlab-ci-private-3`                  | `gitlab-ci/gitlab-ci-private/p5`            | `10.13.32.0/21`  |
+| `GCP/gitlab-ci-private-4`                  | `gitlab-ci/gitlab-ci-private/p6`            | `10.13.40.0/21`  |
+| `GCP/gitlab-ci-private-5`                  | `gitlab-ci/gitlab-ci-private/p7`            | `10.13.48.0/21`  |
+| `GCP/gitlab-ci-private-6`                  | `gitlab-ci/gitlab-ci-private/p8`            | `10.13.56.0/21`  |
 | `AWS/r-saas-m-staging`                     | `jobs-vpc/saas-macos-staging-blue-1`        | `10.20.0.0/21`   |
 | `AWS/r-saas-m-staging`                     | `jobs-vpc/saas-macos-staging-blue-2`        | `10.20.8.0/21`   |
 | `AWS/r-saas-m-staging`                     | `jobs-vpc/saas-macos-staging-green-1`       | `10.20.16.0/21`  |
