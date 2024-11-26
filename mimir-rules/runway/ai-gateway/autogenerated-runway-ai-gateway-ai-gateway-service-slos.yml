@@ -120,7 +120,7 @@ groups:
       monitor: global
       tier: sv
       type: ai-gateway
-    expr: "0.980000"
+    expr: "0.950000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: server_code_completions
