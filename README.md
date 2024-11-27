@@ -97,7 +97,7 @@ Remember to close out the incident when the issue is resolved.  Also, when possi
 
 # Production Incidents
 
-## [Reporting and incident](https://about.gitlab.com/handbook/engineering/infrastructure/incident-management/#reporting-an-incident)
+## [Reporting an incident](https://about.gitlab.com/handbook/engineering/infrastructure/incident-management/#reporting-an-incident)
 
 ## Roles
 
