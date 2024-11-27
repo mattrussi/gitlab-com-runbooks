@@ -6,7 +6,7 @@
 
 # Example Runway-managed Redis Service
 
-* [Service Overview](https://dashboards.gitlab.net/d/redis-runway-managed-main/redis-runway-managed-overview)
+* [Service Overview](https://dashboards.gitlab.net/d/runway-redis-example-main/runway-redis-example-overview)
 * **Alerts**: <https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22runway-redis-example%22%2C%20tier%3D%22db%22%7D>
 * **Label**: gitlab-com/gl-infra/production~"Service::RunwayRedisExample"
 
