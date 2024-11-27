@@ -189,48 +189,15 @@ To enable expanded AI logging, access the `#production` Slack channel and run th
 /chatops run feature set --user=$USERNAME expanded_ai_logging true
 ```
 
-After the the `expanded_ai_logging` feature flag is enabled for a user, you view the user input and LLM output for any the GitLab Duo Chat requests made by the user.
+After the the `expanded_ai_logging` feature flag is enabled for a user, you view the user input and LLM output for any the GitLab Duo Chat requests made by the user. We've [extended the support](https://gitlab.com/gitlab-org/gitlab/-/issues/485490) to AI Gateway as well,
+so you can get a process-level logging, including actual request parameters and LLM response in the AI Gateway logs.
 
 Tips:
-We only need to enable the flag while we reproduce the bug on production. After we sampled a couple of problematic requests, we can disable the flag again
+- To trace the request across differnt services, [use correlation-id](#tracing-requests-across-different-services).
+- We only need to enable the flag while we reproduce the bug on production. After we sampled a couple of problematic requests, we can disable the flag again
 and continue examining the logs.
 
-## Chat Agent V2 specific
-
-We're currently switching from V1 to V2 chat agent endpoint for the [Switch to Chat Agent V2](https://gitlab.com/groups/gitlab-org/-/epics/13533) epic.
-
-- [Current status](https://gitlab.com/groups/gitlab-org/-/epics/13533)
-- [Timeline](https://gitlab.com/groups/gitlab-org/-/epics/13533)
-- [Blockers / High priority](https://gitlab.com/groups/gitlab-org/-/epics/13533)
-- [Feature flag issue](https://gitlab.com/gitlab-org/gitlab/-/issues/466910)
-
-### How to disable the feature flag for a specific user
-
-```
-/chatops run feature set --user=<your-user-name> v2_chat_agent_integration_override true
-```
-
-**Important**: The flag name is **v2_chat_agent_integration_override**. It's NOT `v2_chat_agent_integration`.
-
-We have a flag for [Selectively disable by actor](https://docs.gitlab.com/ee/development/feature_flags/controls.html#selectively-disable-by-actor) so that we can disable the flag for a specific user while we keep enabling the flag for the rest of the users. This is to take a balance between collecting bug reports by exposing the V2 feature as long as possible and de-risking the feature operation on the critical workflow.
-
-For example, if you're in the sales division and need to demonstrate the Duo Chat for customers but the feature is not working at the moment, this feature flag can be disabled only for you. Please reach out the `@gitlab-org/ai-powered/duo-chat` team for the assistance.
-
-See [this issue](https://gitlab.com/gitlab-org/gitlab/-/issues/484753) for more information.
-
-### Use Expanded AI logging if it's possible
-
-We've [extended the support](https://gitlab.com/gitlab-org/gitlab/-/issues/485490) of `expanded_ai_logging` feature flag to AI Gateway.
-This means you can get a process-level logging, including actual request parameters and LLM response in the log.
-This is a great help to understand what's happening in AI Gateway.
-
-To do so:
-
-1. Make sure that the user provides consent for [Expanded AI logging](#expanded-ai-logging).
-1. Enable the expanded AI logging.
-1. [Tracing requests across different services](#tracing-requests-across-different-services)
-
-### When problem is only identified on staging
+## When problem is only identified on staging
 
 Here are the log links for staging:
 
