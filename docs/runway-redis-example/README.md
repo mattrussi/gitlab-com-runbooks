@@ -4,11 +4,11 @@
 
 [[_TOC_]]
 
-# Runway-managed Redis Service
+# Example Runway-managed Redis Service
 
 * [Service Overview](https://dashboards.gitlab.net/d/redis-runway-managed-main/redis-runway-managed-overview)
-* **Alerts**: <https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22redis-runway-managed%22%2C%20tier%3D%22db%22%7D>
-* **Label**: gitlab-com/gl-infra/production~"Service::RedisRunwayManaged"
+* **Alerts**: <https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22runway-redis-example%22%2C%20tier%3D%22db%22%7D>
+* **Label**: gitlab-com/gl-infra/production~"Service::RunwayRedisExample"
 
 ## Logging
 
@@ -18,7 +18,7 @@
 
 ## Summary
 
-This service represents all Runway-managed Redis instances. The IAC definition for the Redis instances can be found in the [provisioner project](https://gitlab.com/gitlab-com/gl-infra/platform/runway/provisioner/-/blob/main/memorystore.tf).
+This service represents an example Runway-managed Redis instance. The IAC definition for the Redis instances can be found in the [provisioner project](https://gitlab.com/gitlab-com/gl-infra/platform/runway/provisioner/-/blob/main/memorystore.tf).
 
 The Redis instances are [GCP Memorystore Redis instances](https://cloud.google.com/memorystore/docs/redis/memorystore-for-redis-overview).
 

@@ -3,7 +3,7 @@ local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 
 metricsCatalog.serviceDefinition(
   redisArchetype(
-    type='redis-runway-managed',
-    descriptiveName='Redis managed by Runway'
+    type='example-basic-redis',
+    descriptiveName='Example Redis managed by Runway'
   )
 )
