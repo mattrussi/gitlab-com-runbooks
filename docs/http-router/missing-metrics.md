@@ -2,12 +2,13 @@
 
 Occasionally, we experience a lack of metrics for Cloudflare workers, resulting in an empty [HTTP Router dashboard](https://dashboards.gitlab.net/d/http-router-main/http-router3a-overview?from=now-24h&orgId=1&timezone=utc&to=now&var-PROMETHEUS_DS=e58c2f51-20f8-4f4b-ad48-2968782ca7d6&var-environment=gprd). A previous occurrence was noted from 2024-11-21 20:02 to 2024-11-22 00:50.
 
+![](./missing_metrics.png)
+
 ## Verifying Metric Existence
 
 If this issue recurs, first verify whether the metrics exist for the affected time frame using the following GraphQL query:
 
 ```bash
-
 echo '{ "query":
   "query GetWorkersAnalytics($accountTag: string, $datetimeStart: string, $datetimeEnd: string, $scriptName: string) {
     viewer {
@@ -53,9 +54,11 @@ https://api.cloudflare.com/client/v4/graphql \
 
 Replace the following placeholders:
 
-- `<CLOUDFLARE_API_TOKEN>`: Your Cloudflare API token (create using the "Read analytics and logs" template)
-- `<START_TIME>`: Beginning of the affected time period
-- `<END_TIME>`: End of the affected time period
+- `<CLOUDFLARE_API_TOKEN>`: [Cloudflare API token](https://developers.cloudflare.com/fundamentals/api/get-started/create-token/).
+  - Use the `Read analytics and logs` template when creating the token.
+  - Set a short expiry date for this account-bound token for security purposes.
+- `<START_TIME>`: Beginning of the affected time period, e.g. `2024-11-25T00:00:00.000Z`
+- `<END_TIME>`: End of the affected time period, e.g. `2024-11-25T01:00:00.000Z`
 
 ## Interpreting Results
 
