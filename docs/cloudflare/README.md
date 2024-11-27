@@ -34,6 +34,7 @@
 * [Web IDE Assets](../gitlab-static/web-ide-assets.md)
 * [Disabling routing requests through `http-router`](../http-router/disable-http-router.md)
 * [HTTP Router Worker Logs](../http-router/logging.md)
+* [Missing Metrics in HTTP Router Dashboard](../http-router/missing-metrics.md)
 * [Kubernetes-Agent Basic Troubleshooting](../kas/kubernetes-agent-basic-troubleshooting.md)
 * [Upgrading Monitoring Components](../monitoring/upgrades.md)
 * [Session: Application architecture](../onboarding/architecture.md)

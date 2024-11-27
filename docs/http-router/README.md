@@ -20,6 +20,7 @@
 * [Deployments](deployments.md)
 * [Disabling routing requests through `http-router`](disable-http-router.md)
 * [HTTP Router Worker Logs](logging.md)
+* [Missing Metrics in HTTP Router Dashboard](missing-metrics.md)
 <!-- END_MARKER -->
 
 <!-- ## Summary -->
