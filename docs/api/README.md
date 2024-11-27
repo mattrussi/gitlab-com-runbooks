@@ -51,6 +51,7 @@
 * [GitLab Storage Re-balancing](../gitaly/storage-rebalancing.md)
 * [Web IDE Assets](../gitlab-static/web-ide-assets.md)
 * [HostedRunnersServiceCiRunnerJobsApdexSLOViolationSingleShard](../hosted-runners/jobs_apdex_slo_violation.md)
+* [Missing Metrics in HTTP Router Dashboard](../http-router/missing-metrics.md)
 * [Kubernetes-Agent Basic Troubleshooting](../kas/kubernetes-agent-basic-troubleshooting.md)
 * [Kubernetes-Agent Disable Integrations](../kas/kubernetes-agent-disable-integrations.md)
 * [Helm Upgrade is Stuck](../kube/helm-upgrade-stuck.md)
