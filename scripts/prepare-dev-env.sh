@@ -73,3 +73,8 @@ fi
 
 # Install jsonnet-bundler packages
 ./scripts/bundler.sh
+
+# we need `mixtool` to generate mixins from the reference architecture
+# go is installed by mise.
+echo "installing mixtool.."
+go install github.com/monitoring-mixins/mixtool/cmd/mixtool@main
