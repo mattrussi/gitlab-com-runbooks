@@ -33,12 +33,11 @@ groups:
       alert_class: traffic_cessation
       alert_type: cause
       feature_category: not_owned
-      pager: pagerduty
       rules_domain: general
-      severity: s2
+      severity: s4
       sli_type: ops
       slo_alert: "no"
-      user_impacting: "yes"
+      user_impacting: "no"
     expr: |
       gitlab_component_shard_ops:rate_30m{component="primary_server",monitor="global",type="example-basic-redis"} == 0
       and
@@ -74,12 +73,11 @@ groups:
       alert_class: traffic_cessation
       alert_type: cause
       feature_category: not_owned
-      pager: pagerduty
       rules_domain: general
-      severity: s2
+      severity: s4
       sli_type: ops
       slo_alert: "no"
-      user_impacting: "yes"
+      user_impacting: "no"
     expr: |
       gitlab_component_shard_ops:rate_5m{component="primary_server",monitor="global",type="example-basic-redis"} offset 1h
       unless

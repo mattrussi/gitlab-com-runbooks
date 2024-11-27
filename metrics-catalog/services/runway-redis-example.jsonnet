@@ -5,5 +5,12 @@ metricsCatalog.serviceDefinition(
   redisArchetype(
     type='example-basic-redis',
     descriptiveName='Example Redis managed by Runway'
-  )
+  ) {
+    serviceLevelIndicators+: {
+      primary_server+: {
+        userImpacting: false,
+        severity: 's4',
+      },
+    },
+  }
 )
