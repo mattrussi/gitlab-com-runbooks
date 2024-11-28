@@ -19,6 +19,7 @@
 * [ErrorSLOViolation](../alerts/ErrorSLOViolation.md)
 * [../certificates/gcp.md](../certificates/gcp.md)
 * [../certificates/gkms.md](../certificates/gkms.md)
+* [Cloudflare: Managing Traffic](../cloudflare/managing-traffic.md)
 * [Chef Guidelines](../config_management/chef-guidelines.md)
 * [Disk space alerts (production)](../customersdot/disk-space.md)
 * [Zonal and Regional Recovery Guide](../disaster-recovery/recovery.md)
