@@ -251,7 +251,13 @@ teams:
   send_error_budget_weekly_to_slack: true
 
 - name: code_review
+  url: https://handbook.gitlab.com/handbook/engineering/development/dev/create/code-review/
   product_stage_group: code_review
+  slack_channel: g_create_code-review
+  send_error_budget_weekly_to_slack: true
+  slack_error_budget_channel: g_create_code-review
+  send_slo_alerts_to_team_slack_channel: true
+  slack_alerts_channel: g_create_code-review_alerts
   ignored_components:
   - graphql_query
 
