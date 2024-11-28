@@ -129,6 +129,18 @@ local library = import 'gitlab-slis/library.libsonnet';
       includeAll=true,
       allValues='.*',
     ),
+  runwayManagedRedisShard::
+    template.new(
+      'shard',
+      '$PROMETHEUS_DS',
+      'label_values(stackdriver_redis_instance_redis_googleapis_com_clients_connected{environment="$environment"}, shard)',
+      current='.*',
+      refresh='load',
+      sort=1,
+      multi=true,
+      includeAll=true,
+      allValues='.*',
+    ),
   sigma::
     template.custom(
       'sigma',
