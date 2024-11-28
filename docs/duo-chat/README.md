@@ -193,6 +193,7 @@ After the the `expanded_ai_logging` feature flag is enabled for a user, you view
 so you can get a process-level logging, including actual request parameters and LLM response in the AI Gateway logs.
 
 Tips:
+
 - To trace the request across differnt services, [use correlation-id](#tracing-requests-across-different-services).
 - We only need to enable the flag while we reproduce the bug on production. After we sampled a couple of problematic requests, we can disable the flag again
 and continue examining the logs.
