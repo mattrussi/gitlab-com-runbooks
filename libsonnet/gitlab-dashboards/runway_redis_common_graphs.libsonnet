@@ -201,9 +201,9 @@ local templates = import 'grafana/templates.libsonnet';
         legend_show=false,
         format='us',
         query=|||
-          max by (shard, cmd) (
+          sum by (shard, cmd) (
             stackdriver_redis_instance_redis_googleapis_com_commands_total_time{%(selector)s, role = "primary"}
-          )
+          ) / 60
         ||| % formatConfig,
         legendFormat='{{ cmd }}',
         intervalFactor=2,
@@ -213,9 +213,9 @@ local templates = import 'grafana/templates.libsonnet';
         legend_show=false,
         format='us',
         query=|||
-          max by (shard, cmd) (
+          sum by (shard, cmd) (
             stackdriver_redis_instance_redis_googleapis_com_commands_total_time{%(selector)s, role = "replica"}
-          )
+          ) / 60
         ||| % formatConfig,
         legendFormat='{{ cmd }}',
         intervalFactor=2,
