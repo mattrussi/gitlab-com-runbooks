@@ -31,7 +31,8 @@ local labelTaxonomy = import 'label-taxonomy/label-taxonomy.libsonnet';
       hard: 0.95,
     },
     capacityPlanning: {
-      forecast_days: 365,
+      forecast_days: 180,
+      changepoint_range: 0.8,  // Less reactive to recent changes in trend, as this is a long-term metric
       strategy: 'quantile99_1w',
     },
   }),
