@@ -577,3 +577,6 @@ teams:
   label: team::Durability
   slack_alerts_channel: g_durability
   product_stage_group: durability
+
+- name: clickhouse
+  slack_alerts_channel: f_clickhouse_infra_alerts
