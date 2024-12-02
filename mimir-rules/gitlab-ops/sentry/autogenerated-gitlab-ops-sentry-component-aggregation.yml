@@ -266,6 +266,82 @@ groups:
       sum by (env,environment,stage) (
         gitlab_component_apdex:weight:score_5m{component="sentry_events",env="ops",monitor="global",tier="inf",type="sentry"} offset 30s
       )
+  - record: gitlab_component_apdex:success:rate_5m
+    labels:
+      component: sentry_nginx
+      monitor: global
+      tier: inf
+      type: sentry
+    expr: |
+      sum by (env,environment,stage) (
+        sli_aggregations:nginx_ingress_controller_request_duration_seconds_bucket:rate_5m{env="ops",le="10",namespace="sentry"}
+      )
+  - record: gitlab_component_apdex:weight:score_5m
+    labels:
+      component: sentry_nginx
+      monitor: global
+      tier: inf
+      type: sentry
+    expr: |
+      sum by (env,environment,stage) (
+        sli_aggregations:nginx_ingress_controller_request_duration_seconds_bucket:rate_5m{env="ops",le="+Inf",namespace="sentry"}
+      )
+  - record: gitlab_component_ops:rate_5m
+    labels:
+      component: sentry_nginx
+      monitor: global
+      tier: inf
+      type: sentry
+    expr: |
+      sum by (env,environment,stage) (
+        sli_aggregations:nginx_ingress_controller_requests:rate_5m{env="ops",namespace="sentry"} offset 30s
+      )
+  - record: gitlab_component_errors:rate_5m
+    labels:
+      component: sentry_nginx
+      monitor: global
+      tier: inf
+      type: sentry
+    expr: |
+      (
+        sum by (env,environment,stage) (
+          sli_aggregations:nginx_ingress_controller_requests:rate_5m{env="ops",namespace="sentry",status=~"^5.*"} offset 30s
+        )
+      )
+      or
+      (
+        0 * group by(env,environment,stage) (
+          gitlab_component_ops:rate_5m{component="sentry_nginx",env="ops",monitor="global",tier="inf",type="sentry"}
+        )
+      )
+  - record: gitlab_component_errors:ratio_5m
+    labels:
+      component: sentry_nginx
+      monitor: global
+      tier: inf
+      type: sentry
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_5m{component="sentry_nginx",env="ops",monitor="global",tier="inf",type="sentry"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_5m{component="sentry_nginx",env="ops",monitor="global",tier="inf",type="sentry"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_5m
+    labels:
+      component: sentry_nginx
+      monitor: global
+      tier: inf
+      type: sentry
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_5m{component="sentry_nginx",env="ops",monitor="global",tier="inf",type="sentry"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_5m{component="sentry_nginx",env="ops",monitor="global",tier="inf",type="sentry"} offset 30s
+      )
 - name: 'Global SLI Metrics: sentry - Burn-Rate 30m'
   interval: 2m
   rules:
@@ -531,6 +607,82 @@ groups:
       sum by (env,environment,stage) (
         gitlab_component_apdex:weight:score_30m{component="sentry_events",env="ops",monitor="global",tier="inf",type="sentry"} offset 30s
       )
+  - record: gitlab_component_apdex:success:rate_30m
+    labels:
+      component: sentry_nginx
+      monitor: global
+      tier: inf
+      type: sentry
+    expr: |
+      sum by (env,environment,stage) (
+        sli_aggregations:nginx_ingress_controller_request_duration_seconds_bucket:rate_30m{env="ops",le="10",namespace="sentry"}
+      )
+  - record: gitlab_component_apdex:weight:score_30m
+    labels:
+      component: sentry_nginx
+      monitor: global
+      tier: inf
+      type: sentry
+    expr: |
+      sum by (env,environment,stage) (
+        sli_aggregations:nginx_ingress_controller_request_duration_seconds_bucket:rate_30m{env="ops",le="+Inf",namespace="sentry"}
+      )
+  - record: gitlab_component_ops:rate_30m
+    labels:
+      component: sentry_nginx
+      monitor: global
+      tier: inf
+      type: sentry
+    expr: |
+      sum by (env,environment,stage) (
+        sli_aggregations:nginx_ingress_controller_requests:rate_30m{env="ops",namespace="sentry"} offset 30s
+      )
+  - record: gitlab_component_errors:rate_30m
+    labels:
+      component: sentry_nginx
+      monitor: global
+      tier: inf
+      type: sentry
+    expr: |
+      (
+        sum by (env,environment,stage) (
+          sli_aggregations:nginx_ingress_controller_requests:rate_30m{env="ops",namespace="sentry",status=~"^5.*"} offset 30s
+        )
+      )
+      or
+      (
+        0 * group by(env,environment,stage) (
+          gitlab_component_ops:rate_30m{component="sentry_nginx",env="ops",monitor="global",tier="inf",type="sentry"}
+        )
+      )
+  - record: gitlab_component_errors:ratio_30m
+    labels:
+      component: sentry_nginx
+      monitor: global
+      tier: inf
+      type: sentry
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_30m{component="sentry_nginx",env="ops",monitor="global",tier="inf",type="sentry"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_30m{component="sentry_nginx",env="ops",monitor="global",tier="inf",type="sentry"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_30m
+    labels:
+      component: sentry_nginx
+      monitor: global
+      tier: inf
+      type: sentry
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_30m{component="sentry_nginx",env="ops",monitor="global",tier="inf",type="sentry"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_30m{component="sentry_nginx",env="ops",monitor="global",tier="inf",type="sentry"} offset 30s
+      )
 - name: 'Global SLI Metrics: sentry - Burn-Rate 1h'
   interval: 1m
   rules:
@@ -795,6 +947,82 @@ groups:
       /
       sum by (env,environment,stage) (
         gitlab_component_apdex:weight:score_1h{component="sentry_events",env="ops",monitor="global",tier="inf",type="sentry"} offset 30s
+      )
+  - record: gitlab_component_apdex:success:rate_1h
+    labels:
+      component: sentry_nginx
+      monitor: global
+      tier: inf
+      type: sentry
+    expr: |
+      sum by (env,environment,stage) (
+        sli_aggregations:nginx_ingress_controller_request_duration_seconds_bucket:rate_1h{env="ops",le="10",namespace="sentry"}
+      )
+  - record: gitlab_component_apdex:weight:score_1h
+    labels:
+      component: sentry_nginx
+      monitor: global
+      tier: inf
+      type: sentry
+    expr: |
+      sum by (env,environment,stage) (
+        sli_aggregations:nginx_ingress_controller_request_duration_seconds_bucket:rate_1h{env="ops",le="+Inf",namespace="sentry"}
+      )
+  - record: gitlab_component_ops:rate_1h
+    labels:
+      component: sentry_nginx
+      monitor: global
+      tier: inf
+      type: sentry
+    expr: |
+      sum by (env,environment,stage) (
+        sli_aggregations:nginx_ingress_controller_requests:rate_1h{env="ops",namespace="sentry"} offset 30s
+      )
+  - record: gitlab_component_errors:rate_1h
+    labels:
+      component: sentry_nginx
+      monitor: global
+      tier: inf
+      type: sentry
+    expr: |
+      (
+        sum by (env,environment,stage) (
+          sli_aggregations:nginx_ingress_controller_requests:rate_1h{env="ops",namespace="sentry",status=~"^5.*"} offset 30s
+        )
+      )
+      or
+      (
+        0 * group by(env,environment,stage) (
+          gitlab_component_ops:rate_1h{component="sentry_nginx",env="ops",monitor="global",tier="inf",type="sentry"}
+        )
+      )
+  - record: gitlab_component_errors:ratio_1h
+    labels:
+      component: sentry_nginx
+      monitor: global
+      tier: inf
+      type: sentry
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_1h{component="sentry_nginx",env="ops",monitor="global",tier="inf",type="sentry"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_1h{component="sentry_nginx",env="ops",monitor="global",tier="inf",type="sentry"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_1h
+    labels:
+      component: sentry_nginx
+      monitor: global
+      tier: inf
+      type: sentry
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_1h{component="sentry_nginx",env="ops",monitor="global",tier="inf",type="sentry"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_1h{component="sentry_nginx",env="ops",monitor="global",tier="inf",type="sentry"} offset 30s
       )
 - name: 'Global SLI Metrics: sentry - Burn-Rate 6h'
   interval: 2m
@@ -1139,6 +1367,74 @@ groups:
       sum by (env,environment,stage) (
         gitlab_component_apdex:weight:score_6h{component="sentry_events",env="ops",monitor="global",tier="inf",type="sentry"} offset 30s
       )
+  - record: gitlab_component_apdex:success:rate_6h
+    labels:
+      component: sentry_nginx
+      monitor: global
+      tier: inf
+      type: sentry
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="sentry_nginx",env="ops",monitor="global",tier="inf",type="sentry"}[6h] offset 30s)
+      )
+  - record: gitlab_component_apdex:weight:score_6h
+    labels:
+      component: sentry_nginx
+      monitor: global
+      tier: inf
+      type: sentry
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="sentry_nginx",env="ops",monitor="global",tier="inf",type="sentry"}[6h] offset 30s)
+      )
+  - record: gitlab_component_ops:rate_6h
+    labels:
+      component: sentry_nginx
+      monitor: global
+      tier: inf
+      type: sentry
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_ops:rate_1h{component="sentry_nginx",env="ops",monitor="global",tier="inf",type="sentry"}[6h] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_6h
+    labels:
+      component: sentry_nginx
+      monitor: global
+      tier: inf
+      type: sentry
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_errors:rate_1h{component="sentry_nginx",env="ops",monitor="global",tier="inf",type="sentry"}[6h] offset 30s)
+      )
+  - record: gitlab_component_errors:ratio_6h
+    labels:
+      component: sentry_nginx
+      monitor: global
+      tier: inf
+      type: sentry
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_6h{component="sentry_nginx",env="ops",monitor="global",tier="inf",type="sentry"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_6h{component="sentry_nginx",env="ops",monitor="global",tier="inf",type="sentry"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_6h
+    labels:
+      component: sentry_nginx
+      monitor: global
+      tier: inf
+      type: sentry
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_6h{component="sentry_nginx",env="ops",monitor="global",tier="inf",type="sentry"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_6h{component="sentry_nginx",env="ops",monitor="global",tier="inf",type="sentry"} offset 30s
+      )
 - name: 'Global SLI Metrics: sentry - Burn-Rate 3d'
   interval: 2m
   rules:
@@ -1481,4 +1777,72 @@ groups:
       /
       sum by (env,environment,stage) (
         gitlab_component_apdex:weight:score_3d{component="sentry_events",env="ops",monitor="global",tier="inf",type="sentry"} offset 30s
+      )
+  - record: gitlab_component_apdex:success:rate_3d
+    labels:
+      component: sentry_nginx
+      monitor: global
+      tier: inf
+      type: sentry
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_apdex:success:rate_1h{component="sentry_nginx",env="ops",monitor="global",tier="inf",type="sentry"}[3d] offset 30s)
+      )
+  - record: gitlab_component_apdex:weight:score_3d
+    labels:
+      component: sentry_nginx
+      monitor: global
+      tier: inf
+      type: sentry
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_apdex:weight:score_1h{component="sentry_nginx",env="ops",monitor="global",tier="inf",type="sentry"}[3d] offset 30s)
+      )
+  - record: gitlab_component_ops:rate_3d
+    labels:
+      component: sentry_nginx
+      monitor: global
+      tier: inf
+      type: sentry
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_ops:rate_1h{component="sentry_nginx",env="ops",monitor="global",tier="inf",type="sentry"}[3d] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_3d
+    labels:
+      component: sentry_nginx
+      monitor: global
+      tier: inf
+      type: sentry
+    expr: |
+      sum by (env,environment,stage) (
+        avg_over_time(gitlab_component_errors:rate_1h{component="sentry_nginx",env="ops",monitor="global",tier="inf",type="sentry"}[3d] offset 30s)
+      )
+  - record: gitlab_component_errors:ratio_3d
+    labels:
+      component: sentry_nginx
+      monitor: global
+      tier: inf
+      type: sentry
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_errors:rate_3d{component="sentry_nginx",env="ops",monitor="global",tier="inf",type="sentry"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_ops:rate_3d{component="sentry_nginx",env="ops",monitor="global",tier="inf",type="sentry"} offset 30s
+      )
+  - record: gitlab_component_apdex:ratio_3d
+    labels:
+      component: sentry_nginx
+      monitor: global
+      tier: inf
+      type: sentry
+    expr: |
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:success:rate_3d{component="sentry_nginx",env="ops",monitor="global",tier="inf",type="sentry"} offset 30s
+      )
+      /
+      sum by (env,environment,stage) (
+        gitlab_component_apdex:weight:score_3d{component="sentry_nginx",env="ops",monitor="global",tier="inf",type="sentry"} offset 30s
       )
