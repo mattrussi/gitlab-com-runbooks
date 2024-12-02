@@ -37,6 +37,8 @@
   import 'saturation-monitoring/kube_pool_max_nodes.libsonnet',
   import 'saturation-monitoring/max_concurrent_inferences.libsonnet',
   import 'saturation-monitoring/memory.libsonnet',
+  import 'saturation-monitoring/memorystore_redis_cpu.libsonnet',
+  import 'saturation-monitoring/memorystore_redis_memory.libsonnet',
   import 'saturation-monitoring/nat_gateway_port_allocation.libsonnet',
   import 'saturation-monitoring/nat_host_port_allocation.libsonnet',
   import 'saturation-monitoring/nf_conntrack_entries.libsonnet',
