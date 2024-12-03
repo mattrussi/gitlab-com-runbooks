@@ -541,11 +541,6 @@ teams:
 - name: trust_and_safety
   url: https://about.gitlab.com/handbook/security/security-operations/trustandsafety/
 
-- name: anti-abuse
-  product_stage_group: anti-abuse
-  slack_error_budget_channel: g_govern_anti-abuse
-  send_error_budget_weekly_to_slack: true
-
 - name: infrasec_team
   url: https://handbook.gitlab.com/handbook/security/product-security/infrastructure-security/
   slack_alerts_channel: infrasec-notifications
@@ -586,3 +581,10 @@ teams:
 
 - name: clickhouse
   slack_alerts_channel: f_clickhouse_infra_alerts
+
+# Unlisted
+
+- name: developer_tooling
+  url: https://about.gitlab.com/handbook/engineering/infrastructure/engineering-productivity/
+  slack_channel: g_developer_tooling
+  slack_alerts_channel: g_developer_tooling

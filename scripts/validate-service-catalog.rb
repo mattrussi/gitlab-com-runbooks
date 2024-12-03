@@ -69,7 +69,7 @@ class ValidateStageGroupMapping
     ci_platform contributor_success custom_models design_system distribution_build
     editor_extensions engineering_analytics engineering_productivity gdk
     hosted_runners infrastructure not_owned pubsec_services quality scalability
-    secret_detection switchboard technical_writing ux_paper_cuts
+    secret_detection switchboard technical_writing ux_paper_cuts developer_tooling
   ].freeze
 
   def initialize(service_catalog, stage_group_mapping = DEFAULT_STAGE_GROUP_MAPPING)
