@@ -5,7 +5,7 @@ metricsCatalog.serviceDefinition(
   // Default Runway SLIs
   runwayArchetype(
     type='ext-pvs',
-    team='anti-abuse',
+    team='authorization',
     apdexScore=0.999,
     errorRatio=0.999,
     apdexSatisfiedThreshold='4052.650622296292',

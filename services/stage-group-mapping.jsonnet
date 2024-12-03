@@ -35,6 +35,14 @@
 
     ],
   },
+  global_search: {
+    name: 'Global Search',
+    stage: 'foundations',
+    feature_categories: [
+      'global_search',
+      'code_search',
+    ],
+  },
   project_management: {
     name: 'Project Management',
     stage: 'plan',
@@ -227,7 +235,6 @@
     name: 'Authentication',
     stage: 'software_supply_chain_security',
     feature_categories: [
-      'user_management',
       'system_access',
     ],
   },
@@ -236,6 +243,8 @@
     stage: 'software_supply_chain_security',
     feature_categories: [
       'permissions',
+      'instance_resiliency',
+      'insider_threat',
     ],
   },
   compliance: {
@@ -248,19 +257,11 @@
       'sscs',
     ],
   },
-  'anti-abuse': {
-    name: 'Anti-Abuse',
-    stage: 'software_supply_chain_security',
-    feature_categories: [
-      'instance_resiliency',
-      'insider_threat',
-    ],
-  },
   pipeline_security: {
     name: 'Pipeline Security',
     stage: 'software_supply_chain_security',
     feature_categories: [
-      'secure_artifacts',
+      'artifact_security',
       'secrets_management',
     ],
   },
@@ -318,6 +319,7 @@
     feature_categories: [
       'plan_provisioning',
       'add-on_provisioning',
+      'user_management',
     ],
   },
   utilization: {
@@ -440,14 +442,6 @@
       'disaster_recovery',
     ],
   },
-  global_search: {
-    name: 'Global Search',
-    stage: 'data_stores',
-    feature_categories: [
-      'global_search',
-      'code_search',
-    ],
-  },
   delivery: {
     name: 'Delivery',
     stage: 'platforms',
@@ -547,16 +541,16 @@
       'mobile_devops',
     ],
   },
-  gdk: {
-    name: 'GDK',
+  engineering_productivity: {
+    name: 'Engineering Productivity',
     stage: 'engineering_productivity',
     feature_categories: [
 
     ],
   },
-  engineering_productivity: {
-    name: 'Engineering Productivity',
-    stage: 'engineering_productivity',
+  developer_tooling: {
+    name: 'Developer Tooling',
+    stage: 'developer_experience',
     feature_categories: [
 
     ],

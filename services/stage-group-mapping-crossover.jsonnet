@@ -6,4 +6,5 @@
 //
 // Blank values will be ignored.
 {
+  secure_artifacts: 'artifact_security',
 }

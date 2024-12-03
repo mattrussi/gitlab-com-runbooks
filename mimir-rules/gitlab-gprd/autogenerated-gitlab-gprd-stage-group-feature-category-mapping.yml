@@ -83,6 +83,20 @@ groups:
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
+      feature_category: artifact_security
+      monitor: global
+      product_stage: software_supply_chain_security
+      stage_group: pipeline_security
+    expr: "1"
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
+      feature_category: secure_artifacts
+      monitor: global
+      product_stage: software_supply_chain_security
+      stage_group: pipeline_security
+    expr: "1"
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
       feature_category: attack_emulation
       monitor: global
       product_stage: application_security_testing
@@ -176,7 +190,7 @@ groups:
     labels:
       feature_category: code_search
       monitor: global
-      product_stage: data_stores
+      product_stage: foundations
       stage_group: global_search
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
@@ -449,7 +463,7 @@ groups:
     labels:
       feature_category: global_search
       monitor: global
-      product_stage: data_stores
+      product_stage: foundations
       stage_group: global_search
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
@@ -506,14 +520,14 @@ groups:
       feature_category: insider_threat
       monitor: global
       product_stage: software_supply_chain_security
-      stage_group: anti-abuse
+      stage_group: authorization
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: instance_resiliency
       monitor: global
       product_stage: software_supply_chain_security
-      stage_group: anti-abuse
+      stage_group: authorization
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -783,13 +797,6 @@ groups:
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
-      feature_category: secure_artifacts
-      monitor: global
-      product_stage: software_supply_chain_security
-      stage_group: pipeline_security
-    expr: "1"
-  - record: gitlab:feature_category:stage_group:mapping
-    labels:
       feature_category: security_policy_management
       monitor: global
       product_stage: security_risk_management
@@ -897,8 +904,8 @@ groups:
     labels:
       feature_category: user_management
       monitor: global
-      product_stage: software_supply_chain_security
-      stage_group: authentication
+      product_stage: fulfillment
+      stage_group: provision
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
