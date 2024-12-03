@@ -17,7 +17,7 @@ local shardDefinitions = {
   'urgent-authorized-projects': { urgency: 'throttled', gkeDeployment: 'gitlab-sidekiq-urgent-authorized-projects-v2', trafficCessationAlertConfig: false },
   catchall: { urgency: null, gkeDeployment: 'gitlab-sidekiq-catchall-v2' },
   elasticsearch: { urgency: 'throttled', gkeDeployment: 'gitlab-sidekiq-elasticsearch-v2', trafficCessationAlertConfig: false },
-  'ai-abstraction-layer': { urgency: 'throttled', gkeDeployment: 'gitlab-sidekiq-ai-abstraction-layer-v2', trafficCessationAlertConfig: false },
+  'urgent-ai-abstraction-layer': { urgency: 'high', gkeDeployment: 'urgent-ai-abstraction-layer-v1', trafficCessationAlertConfig: false },
 };
 
 local shards = std.foldl(

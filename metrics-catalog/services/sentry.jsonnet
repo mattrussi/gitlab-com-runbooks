@@ -52,6 +52,37 @@ metricsCatalog.serviceDefinition({
       significantLabels: [],
     },
 
+    sentry_nginx: {
+      severity: 's3',
+      userImpacting: false,
+      featureCategory: 'not_owned',
+      description: |||
+        Sentry is an application monitoring platform.
+        This SLI monitors the sentry API. 5xx responses are considered failures.
+      |||,
+
+      local sentryQuerySelector = { namespace: 'sentry' },
+
+
+      apdex: histogramApdex(
+        histogram='nginx_ingress_controller_request_duration_seconds_bucket',
+        selector=sentryQuerySelector,
+        satisfiedThreshold=10,
+      ),
+
+      requestRate: rateMetric(
+        counter='nginx_ingress_controller_requests',
+        selector=sentryQuerySelector,
+      ),
+
+      errorRate: rateMetric(
+        counter='nginx_ingress_controller_requests',
+        selector=sentryQuerySelector { status: { re: '^5.*' } },
+      ),
+
+      significantLabels: [],
+    },
+
     postgresql_transactions: {
       severity: 's3',
       userImpacting: false,

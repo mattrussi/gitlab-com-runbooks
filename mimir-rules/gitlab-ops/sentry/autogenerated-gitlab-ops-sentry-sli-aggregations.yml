@@ -52,6 +52,19 @@ groups:
       sum by (component,env,environment,feature_category,fqdn,job,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(sentry_events_processed{env="ops",job=~"sentry-metrics",type=~"sentry"}[5m] offset 30s)
       )
+- name: 'SLI Aggregations: sentry - sentry_nginx - 5m burn-rate'
+  interval: 1m
+  rules:
+  - record: sli_aggregations:nginx_ingress_controller_request_duration_seconds_bucket:rate_5m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,le,namespace,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(nginx_ingress_controller_request_duration_seconds_bucket{env="ops",namespace=~"sentry",type=~"sentry"}[5m] offset 30s)
+      )
+  - record: sli_aggregations:nginx_ingress_controller_requests:rate_5m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,namespace,product_stage,region,shard,stage,stage_group,status,tier,type) (
+        rate(nginx_ingress_controller_requests{env="ops",namespace=~"sentry",type=~"sentry"}[5m] offset 30s)
+      )
 - name: 'SLI Aggregations: sentry - kafka_topics - 30m burn-rate'
   interval: 2m
   rules:
@@ -103,6 +116,19 @@ groups:
       sum by (component,env,environment,feature_category,fqdn,job,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(sentry_events_processed{env="ops",job=~"sentry-metrics",type=~"sentry"}[30m] offset 30s)
       )
+- name: 'SLI Aggregations: sentry - sentry_nginx - 30m burn-rate'
+  interval: 2m
+  rules:
+  - record: sli_aggregations:nginx_ingress_controller_request_duration_seconds_bucket:rate_30m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,le,namespace,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(nginx_ingress_controller_request_duration_seconds_bucket{env="ops",namespace=~"sentry",type=~"sentry"}[30m] offset 30s)
+      )
+  - record: sli_aggregations:nginx_ingress_controller_requests:rate_30m
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,namespace,product_stage,region,shard,stage,stage_group,status,tier,type) (
+        rate(nginx_ingress_controller_requests{env="ops",namespace=~"sentry",type=~"sentry"}[30m] offset 30s)
+      )
 - name: 'SLI Aggregations: sentry - kafka_topics - 1h burn-rate'
   interval: 1m
   rules:
@@ -153,4 +179,17 @@ groups:
     expr: |
       sum by (component,env,environment,feature_category,fqdn,job,product_stage,region,shard,stage,stage_group,tier,type) (
         rate(sentry_events_processed{env="ops",job=~"sentry-metrics",type=~"sentry"}[1h] offset 30s)
+      )
+- name: 'SLI Aggregations: sentry - sentry_nginx - 1h burn-rate'
+  interval: 1m
+  rules:
+  - record: sli_aggregations:nginx_ingress_controller_request_duration_seconds_bucket:rate_1h
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,le,namespace,product_stage,region,shard,stage,stage_group,tier,type) (
+        rate(nginx_ingress_controller_request_duration_seconds_bucket{env="ops",namespace=~"sentry",type=~"sentry"}[1h] offset 30s)
+      )
+  - record: sli_aggregations:nginx_ingress_controller_requests:rate_1h
+    expr: |
+      sum by (component,env,environment,feature_category,fqdn,namespace,product_stage,region,shard,stage,stage_group,status,tier,type) (
+        rate(nginx_ingress_controller_requests{env="ops",namespace=~"sentry",type=~"sentry"}[1h] offset 30s)
       )

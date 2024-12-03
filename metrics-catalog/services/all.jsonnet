@@ -66,6 +66,7 @@
   import 'redis.jsonnet',
   import 'registry.jsonnet',
   import 'runway.jsonnet',
+  import 'runway-redis-example.jsonnet',
   import 'search.jsonnet',
   import 'secret-detection.jsonnet',
   import 'sast-service.jsonnet',
