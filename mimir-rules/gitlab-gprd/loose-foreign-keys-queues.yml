@@ -1,0 +1,16 @@
+groups:
+- name: Loose Foreign Key Processed Deleted Queue
+  rules:
+  - alert: LooseForeignKeyProcessedDeletedQueueTooLarge
+    expr: >
+      sum by(table) (increase(loose_foreign_key_processed_deleted_records{env="gprd"}[60m])) > 1000000
+    for: 60m
+    labels:
+      severity: 's3'
+      team: security_infrastructure
+      alert_type: symptom
+      type: logging
+    annotations:
+      title: "Large amount of enqueued loose foreign key records for deletion"
+      description: "There have been over 1m LooseForeignKey records enqueued in env {{ $labels.env }} for table {{ $labels.table }} for the last 60 minutes."
+      grafana_dashboard_id: sidekiq-loose-foreign-keys/sidekiq3a-loose-foreign-keys-processing

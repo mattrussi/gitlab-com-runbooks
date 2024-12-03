@@ -121,7 +121,7 @@ Alerts raised by Prometheus, as defined by alert rules, are sent to alertmanager
     1. Add `team` label if you want it routed to a specific Slack channel for a product team.
     1. Add [severity](https://about.gitlab.com/handbook/engineering/infrastructure/incident-management/#severities) (`severity: s2`/`severity: s1`) & `pager: pagerduty` if you want it to page the on-call.
 
-Example: [registry queue](../../mimir-rules/gitlab-ops/alertman)
+Example: [registry queue](../../mimir-rules/gitlab-gprd/registry/registry-gc-queues.yml)
 
 ### Templating alerts
 
