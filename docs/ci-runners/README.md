@@ -375,7 +375,7 @@ Every new CIDR should start at directly after the previously reserved one ends.
 | `GCP/gitlab-ci-plan-free-4`                | `ephemeral-runners/ephemeral-runners`       | `10.10.24.0/21`  |
 | `GCP/gitlab-ci-plan-free-3`                | `ephemeral-runners/ephemeral-runners`       | `10.10.32.0/21`  |
 | `GCP/gitlab-ci`                            | `ci/ephemeral-runners-private`              | `10.10.40.0/21`  |
-| `GCP/gitlab-r-saas-l-m-amd64-gpu-1`        | `gitlab-ci/saas-l-m-amd64-gpu-s/p1`         | `10.10.48.0/21`  |
+| `GCP/gl-r-saas-l-m-amd64-gpu-1`            | `gitlab-ci/saas-l-m-gpu-s/p1`               | `10.10.48.0/21`  |
 | `GCP/gitlab-ci`                            | `ci/ephemeral-runners-private-2`            | `10.10.56.0/21`  |
 | `GCP/gitlab-ci-private-1`                  | `ephemeral-runners/ephemeral-runners`       | `10.10.64.0/21`  |
 | `GCP/gitlab-ci-private-2`                  | `ephemeral-runners/ephemeral-runners`       | `10.10.72.0/21`  |
@@ -400,8 +400,8 @@ Every new CIDR should start at directly after the previously reserved one ends.
 | `GCP/gitlab-r-saas-l-s-amd64-4`            | `ephemeral-runners/ephemeral-runners`       | `10.10.224.0/21` |
 | `GCP/gitlab-r-saas-l-s-amd64-5`            | `ephemeral-runners/ephemeral-runners`       | `10.10.232.0/21` |
 | `GCP/gitlab-r-saas-l-s-amd64-6`            | `ephemeral-runners/ephemeral-runners`       | `10.10.240.0/21` |
-| `GCP/gitlab-r-saas-l-m-amd64-gpu-2`        | `gitlab-ci/saas-l-m-amd64-gpu-s/p2`         | `10.10.248.0/21` |
-| `GCP/gitlab-r-saas-l-m-amd64-gpu-3`        | `gitlab-ci/saas-l-m-amd64-gpu-s/p3`         | `10.11.8.0/21`   |
+| `GCP/gl-r-saas-l-m-amd64-gpu-2`            | `gitlab-ci/saas-l-m-gpu-s/p2`               | `10.10.248.0/21` |
+| `GCP/gl-r-saas-l-m-amd64-gpu-3`            | `gitlab-ci/saas-l-m-gpu-s/p3`               | `10.11.8.0/21`   |
 | `GCP/gitlab-r-saas-l-m-amd64-gitlab-org-5` | `ephemeral-runners/ephemeral-runners`       | `10.11.16.0/21`  |
 | `GCP/gitlab-r-saas-l-m-amd64-gitlab-org-6` | `ephemeral-runners/ephemeral-runners`       | `10.11.24.0/21`  |
 | `GCP/gitlab-r-saas-l-m-amd64-gitlab-org-1` | `ephemeral-runners/ephemeral-runners`       | `10.11.32.0/21`  |
