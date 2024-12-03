@@ -2,6 +2,7 @@ local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local rateMetric = metricsCatalog.rateMetric;
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 
+
 metricsCatalog.serviceDefinition({
   type: 'http-router',
   tier: 'lb',
@@ -23,7 +24,11 @@ metricsCatalog.serviceDefinition({
   },
   serviceIsStageless: true,
 
-  tags: ['cloudflare-worker'],
+  tags: [
+    'cloudflare-worker',
+    'monitored::pingdom',
+    'monitored::blackbox',
+  ],
 
   serviceLevelIndicators: {
     worker_requests: {

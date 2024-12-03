@@ -10,6 +10,7 @@ groups:
       metrics_subsystem: utilization
       resource_labels: zone
       summaryType: aggregate
+      type: cloudflare
       unit: bytes
     expr: |
       sum by (env,tier,type,stage) (

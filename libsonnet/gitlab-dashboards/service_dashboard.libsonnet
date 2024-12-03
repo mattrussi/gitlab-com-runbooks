@@ -6,6 +6,7 @@ local metricsCatalogDashboards = import './metrics_catalog_dashboards.libsonnet'
 local nodeMetrics = import './node_metrics.libsonnet';
 local platformLinks = import './platform_links.libsonnet';
 local saturationDetail = import './saturation_detail.libsonnet';
+local utilizationDetail = import './utilization_detail.libsonnet';
 local systemDiagramPanel = import './system_diagram_panel.libsonnet';
 local basic = import 'grafana/basic.libsonnet';
 local templates = import 'grafana/templates.libsonnet';
@@ -70,6 +71,7 @@ local overviewDashboard(
   startRow=0,
   environmentSelectorHash=defaultEnvironmentSelector,
   saturationEnvironmentSelectorHash=defaultEnvironmentSelector,
+  utilizationEnvironmentSelectorHash=defaultEnvironmentSelector,
   omitEnvironmentDropdown=false,
   includeStandardEnvironmentAnnotations=true,
 
@@ -81,6 +83,7 @@ local overviewDashboard(
 
   local metricsCatalogServiceInfo = metricsCatalog.getService(type);
   local saturationComponents = metricsCatalogServiceInfo.applicableSaturationTypes();
+  local utilizationComponents = metricsCatalogServiceInfo.applicableUtilizationTypes();
 
   local stageLabels =
     if metricsCatalogServiceInfo.serviceIsStageless || !gitlabMetricsConfig.useEnvironmentStages then
@@ -155,6 +158,15 @@ local overviewDashboard(
         local saturationSelector = saturationEnvironmentSelectorHash + stageLabels + { type: type };
         saturationDetail.saturationDetailPanels(saturationSelector, components=saturationComponents)
         { gridPos: { x: 0, y: 500, w: 24, h: 1 } },
+      ]
+    )
+    .addPanelsIf(
+      std.length(utilizationComponents) > 0,
+      [
+        // saturationSelector is env + type + stage
+        local utilizationSelector = utilizationEnvironmentSelectorHash + stageLabels + { type: type };
+        utilizationDetail.utilizationDetailPanels(utilizationSelector, components=utilizationComponents)
+        { gridPos: { x: 0, y: 600, w: 24, h: 1 } },
       ]
     );
 

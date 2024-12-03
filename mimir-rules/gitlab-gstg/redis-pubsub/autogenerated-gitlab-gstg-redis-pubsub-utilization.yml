@@ -10,6 +10,7 @@ groups:
       metrics_subsystem: utilization
       resource_labels: type,shard
       summaryType: aggregate
+      type: redis-pubsub
       unit: percent
     expr: |
       avg by (env,tier,type,stage,shard) (
@@ -26,6 +27,7 @@ groups:
       metrics_subsystem: utilization
       resource_labels: type,shard
       summaryType: aggregate
+      type: redis-pubsub
       unit: percent
     expr: |
       avg by (env,tier,type,stage,shard) (

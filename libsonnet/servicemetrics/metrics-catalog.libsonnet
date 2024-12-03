@@ -1,5 +1,6 @@
 local services = (import 'gitlab-metrics-config.libsonnet').monitoredServices;
 local saturationResource = import './saturation-resources.libsonnet';
+local utilizationResource = import './utilization-metrics.libsonnet';
 
 // Index services by `type`
 local serviceMap = std.foldl(function(running, service) running { [service.type]: service }, services, {});
@@ -23,6 +24,8 @@ local findServiceTypesWithFirst(defaultType, predicate) =
 
 local serviceApplicableSaturationTypes(service)
       = saturationResource.listApplicableServicesFor(service.type);
+local serviceApplicableUtilizationTypes(service)
+      = utilizationResource.listApplicableServicesFor(service.type);
 
 {
   services:: services,
@@ -36,6 +39,7 @@ local serviceApplicableSaturationTypes(service)
 
     service {
       applicableSaturationTypes():: serviceApplicableSaturationTypes(service),
+      applicableUtilizationTypes():: serviceApplicableUtilizationTypes(service),
     },
 
   getServiceOptional(serviceType)::
