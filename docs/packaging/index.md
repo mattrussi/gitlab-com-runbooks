@@ -146,6 +146,7 @@ _The items below will be reviewed by the Infrasec team._
   - Other (anything relevant that might be worth mention):
     - GCP global load balancers are only accessible via HTTPS (no redirects from HTTP). This is to prevent accidental credential exposure via an unencrypted channel and to prevent MITM attacks.
 - [ ] Were the [GitLab security development guidelines](https://docs.gitlab.com/ee/development/secure_coding_guidelines.html) followed for this feature?
+  - Yes. The Terraform code is mostly not applicable to the guidelines, but the Python code written for BlobSigner was written according to the guidelines.
 - [ ] Was an [Application Security Review](https://handbook.gitlab.com/handbook/security/security-engineering/application-security/appsec-reviews/) requested, if appropriate? Link it here.
 - [ ] Do we have an automatic procedure to update the infrastructure (OS, container images, packages, etc...). For example, using unattended upgrade or [renovate bot](https://github.com/renovatebot/renovate) to keep dependencies up-to-date?
   - Cloud Run Functions: 
