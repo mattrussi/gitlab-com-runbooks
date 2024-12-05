@@ -138,7 +138,7 @@ groups:
       component: kube_container_rss
     record: gitlab_component_saturation:ratio
   - expr: |
-      max by() (
+      max by(cluster, namespace, persistentvolumeclaim) (
         clamp_min(
           clamp_max(
             kubelet_volume_stats_used_bytes

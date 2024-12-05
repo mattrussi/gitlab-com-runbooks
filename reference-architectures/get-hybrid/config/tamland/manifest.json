@@ -215,6 +215,36 @@
         "changepoints_count": 25,
         "forecast_days": 90,
         "historical_days": 365,
+        "saturation_dimensions": [
+          {
+            "label": "zoekt",
+            "selector": "persistentvolumeclaim=~\"zoekt-.*\""
+          },
+          {
+            "label": "fluentd",
+            "selector": "persistentvolumeclaim=~\"fluentd-.*\""
+          },
+          {
+            "label": "prom-agent",
+            "selector": "persistentvolumeclaim=~\"prom-agent-.*\""
+          },
+          {
+            "label": "redis-pubsub",
+            "selector": "persistentvolumeclaim=~\"redis-data-redis-pubsub-.*\""
+          },
+          {
+            "label": "redis-registry",
+            "selector": "persistentvolumeclaim=~\"redis-data-redis-registry-.*\""
+          },
+          {
+            "label": "consul",
+            "selector": "persistentvolumeclaim=~\"data-consul-.*\""
+          },
+          {
+            "label": "others",
+            "selector": "persistentvolumeclaim!~\"zoekt-.*|fluentd-.*|prom-agent-.*|redis-data-redis-pubsub-.*|redis-data-redis-registry-.*|data-consul-.*\""
+          }
+        ],
         "strategy": "quantile95_1h"
       },
       "description": "disk space utilization on persistent volume claims.\n",
