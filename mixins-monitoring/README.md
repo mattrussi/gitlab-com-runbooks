@@ -1,7 +1,7 @@
 
 # Understanding Mixins
 
-This readme includes the basic of how to create new mixin. 
+This readme includes the basic of how to create new mixin.
 
 ## Mixins
 A mixin is a set of Grafana dashboards and Prometheus rules and alerts, packaged together in a reuseable and extensible bundle. Mixins are written in jsonnet, and are typically installed and updated with jsonnet-bundler. This promotes consistency, efficiency, and maintainability across your monitoring infrastructure.
@@ -21,23 +21,24 @@ Mixtool is a command-line tool designed to simplify working with mixins. It help
 ### Setting Up Mixtool
 You can install mixtool by running the script `./scripts/prepare-dev-env.sh`.
 
-### Using Mixins  
+### Using Mixins
 
 Mixins offer a modular approach to building configurations for Prometheus and Grafana. Here's a basic workflow:
 
 1. Create Configuration File (config.libsonnet): This file defines your main configuration and utilizes mixins:
-	```jsonnet
-	{
-	  _config+:: {
-	    gitlabMetricsConfig+:: gitlabServiceMetricsConfig,
-	    # Other configurations also go here
-	  },
+```jsonnet
+{
+    _config+:: {
+    gitlabMetricsConfig+:: gitlabServiceMetricsConfig,
+    # Other configurations also go here
+    },
 
-	  prometheusRulesGroups+:: aggregationRulesForServices(self._config),
-	  prometheusAlertsGroups+:: alertsForServices(self._config)
+    prometheusRulesGroups+:: aggregationRulesForServices(self._config),
+    prometheusAlertsGroups+:: alertsForServices(self._config)
 
-	}
-	```
+}
+```
+
 -   `gitlabMetricsConfig+::`: containing service definiation metrics configurations.
 -   `prometheusRulesGroups+::` Uses the `aggregationRulesForServices` to generate Prometheus rules based on the `gitlabMetricsConfig`.
 -   `prometheusAlertsGroups+::` Uses the `alertsForServices` mixin to generate alert rules based on the `gitlabMetricsConfig`.
