@@ -1,12 +1,13 @@
-local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
-local resourceSaturationPoint = metricsCatalog.resourceSaturationPoint;
+local metrics = import 'servicemetrics/metrics.libsonnet';
+local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
+local resourceSaturationPoint = metrics.resourceSaturationPoint;
 
 {
   kube_persistent_volume_claim_inodes: resourceSaturationPoint({
     title: 'Kube Persistent Volume Claim inode Utilisation',
     severity: 's2',
     horizontallyScalable: true,
-    appliesTo: ['kube'],
+    appliesTo: metricsCatalog.findKubeProvisionedServices(first='web'),
     description: |||
       inode utilization on persistent volume claims.
     |||,
@@ -21,9 +22,9 @@ local resourceSaturationPoint = metricsCatalog.resourceSaturationPoint;
       stage: 'main',
     },
     query: |||
-      kubelet_volume_stats_inodes_used
+      kubelet_volume_stats_inodes_used:labeled{%(selector)s}
       /
-      kubelet_volume_stats_inodes
+      kubelet_volume_stats_inodes:labeled{%(selector)s}
     |||,
     slos: {
       soft: 0.85,

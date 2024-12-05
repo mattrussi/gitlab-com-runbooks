@@ -209,7 +209,11 @@
     },
     "kube_persistent_volume_claim_disk_space": {
       "appliesTo": [
-        "kube"
+        "consul",
+        "gitlab-shell",
+        "registry",
+        "sidekiq",
+        "webservice"
       ],
       "capacityPlanning": {
         "changepoints_count": 25,
@@ -219,7 +223,7 @@
       },
       "description": "disk space utilization on persistent volume claims.\n",
       "horizontallyScalable": true,
-      "raw_query": "kubelet_volume_stats_used_bytes\n/\nkubelet_volume_stats_capacity_bytes\n",
+      "raw_query": "kubelet_volume_stats_used_bytes:labeled{%(selector)s}\n/\nkubelet_volume_stats_capacity_bytes:labeled{%(selector)s}\n",
       "severity": "s2",
       "slos": {
         "alertTriggerDuration": "5m",
@@ -230,7 +234,11 @@
     },
     "kube_persistent_volume_claim_inodes": {
       "appliesTo": [
-        "kube"
+        "consul",
+        "gitlab-shell",
+        "registry",
+        "sidekiq",
+        "webservice"
       ],
       "capacityPlanning": {
         "changepoints_count": 25,
@@ -240,7 +248,7 @@
       },
       "description": "inode utilization on persistent volume claims.\n",
       "horizontallyScalable": true,
-      "raw_query": "kubelet_volume_stats_inodes_used\n/\nkubelet_volume_stats_inodes\n",
+      "raw_query": "kubelet_volume_stats_inodes_used:labeled{%(selector)s}\n/\nkubelet_volume_stats_inodes:labeled{%(selector)s}\n",
       "severity": "s2",
       "slos": {
         "alertTriggerDuration": "5m",

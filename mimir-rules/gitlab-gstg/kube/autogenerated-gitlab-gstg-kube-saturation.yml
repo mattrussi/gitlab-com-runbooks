@@ -128,9 +128,9 @@ groups:
       max by(env, environment, shard) (
         clamp_min(
           clamp_max(
-            kubelet_volume_stats_used_bytes
+            kubelet_volume_stats_used_bytes:labeled{env="gstg",type="kube"}
             /
-            kubelet_volume_stats_capacity_bytes
+            kubelet_volume_stats_capacity_bytes:labeled{env="gstg",type="kube"}
             ,
             1)
         ,
@@ -146,9 +146,9 @@ groups:
       max by(env, environment, shard) (
         clamp_min(
           clamp_max(
-            kubelet_volume_stats_inodes_used
+            kubelet_volume_stats_inodes_used:labeled{env="gstg",type="kube"}
             /
-            kubelet_volume_stats_inodes
+            kubelet_volume_stats_inodes:labeled{env="gstg",type="kube"}
             ,
             1)
         ,

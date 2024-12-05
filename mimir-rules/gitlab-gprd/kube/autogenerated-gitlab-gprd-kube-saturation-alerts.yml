@@ -333,9 +333,9 @@ groups:
         max by(environment, shard, cluster, namespace, persistentvolumeclaim) (
           clamp_min(
             clamp_max(
-              kubelet_volume_stats_used_bytes
+              kubelet_volume_stats_used_bytes:labeled{environment="{{ $labels.environment }}"}
               /
-              kubelet_volume_stats_capacity_bytes
+              kubelet_volume_stats_capacity_bytes:labeled{environment="{{ $labels.environment }}"}
               ,
               1)
           ,
@@ -345,9 +345,9 @@ groups:
         max by(environment, shard, cluster, namespace, persistentvolumeclaim) (
           clamp_min(
             clamp_max(
-              kubelet_volume_stats_used_bytes
+              kubelet_volume_stats_used_bytes:labeled{environment="{{ $labels.environment }}"}
               /
-              kubelet_volume_stats_capacity_bytes
+              kubelet_volume_stats_capacity_bytes:labeled{environment="{{ $labels.environment }}"}
               ,
               1)
           ,
@@ -386,9 +386,9 @@ groups:
         max by(environment, shard, persistentvolumeclaim) (
           clamp_min(
             clamp_max(
-              kubelet_volume_stats_inodes_used
+              kubelet_volume_stats_inodes_used:labeled{environment="{{ $labels.environment }}"}
               /
-              kubelet_volume_stats_inodes
+              kubelet_volume_stats_inodes:labeled{environment="{{ $labels.environment }}"}
               ,
               1)
           ,
@@ -398,9 +398,9 @@ groups:
         max by(environment, shard, persistentvolumeclaim) (
           clamp_min(
             clamp_max(
-              kubelet_volume_stats_inodes_used
+              kubelet_volume_stats_inodes_used:labeled{environment="{{ $labels.environment }}"}
               /
-              kubelet_volume_stats_inodes
+              kubelet_volume_stats_inodes:labeled{environment="{{ $labels.environment }}"}
               ,
               1)
           ,
