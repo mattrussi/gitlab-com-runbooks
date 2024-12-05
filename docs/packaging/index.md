@@ -261,6 +261,7 @@ _The items below will be reviewed by the Infrasec team._
 - [ ] How is data rated according to our [data classification standard](https://about.gitlab.com/handbook/engineering/security/data-classification-standard/) (customer data is RED)?
   - Public packages: GREEN
   - Private packages: ORANGE (due to possible CVE embargo)
+  - PGP keys and other secrets: RED
 - [ ] Do we have audit logs for when data is accessed? If you are unsure or if using the central logging and a new pubsub topic was created, create an issue in the [Security Logging Project](https://gitlab.com/gitlab-com/gl-security/engineering-and-research/security-logging/security-logging/-/issues/new?issuable_template=add-remove-change-log-source) using the `add-remove-change-log-source` template.
   - Logging available
     - BlobSigner emits basic error and access logs to GCP logs
