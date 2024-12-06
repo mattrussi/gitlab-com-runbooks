@@ -27,7 +27,8 @@ _The items below will be reviewed by the Scalability:Practices team._
   - We have a dedicated project for all related IaC and automation: https://gitlab.com/gitlab-org/distribution/build-architecture/framework/foundation/gitlab-packages
   - A separate project is used to produce a packaging tools container that builds packages and package repositories, which is used in the publishing automation: https://gitlab.com/gitlab-org/distribution/build-architecture/framework/foundation/gitlab-package-tools
 - [ ] Is the service covered by any DDoS protection solution (GCP/AWS load-balancers or Cloudflare usually cover this)?
-  - The service is fronted by a dual-stack GCP global load balancer (included in the Terraform code), which has basic request rate protection enabled.
+  - The service is fronted by a dual-stack GCP global load balancer (included in the Terraform code).
+  - The backend services for the public storage bucket and BlobSigner have firewalls with a basic rate-limiting rule.
 - [ ] Are all cloud infrastructure resources labeled according to the [Infrastructure Labels and Tags](https://about.gitlab.com/handbook/infrastructure-standards/labels-tags/) guidelines?
   - Yes. This is included in the Terraform code.
 
@@ -227,6 +228,8 @@ _The items below will be reviewed by the Infrasec team._
   - The only "service" running outside of GitLab is `blobsigner`, which only has read-only access to private package repositories.
   - The `blobsigner` service is restricted to internal network access (via load balancers) only. 
 - [ ] Is the service covered by a [WAF (Web Application Firewall)](https://cheatsheetseries.owasp.org/cheatsheets/Secure_Cloud_Architecture_Cheat_Sheet.html#web-application-firewall) in [Cloudflare](https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/cloudflare#how-we-use-page-rules-and-waf-rules-to-counter-abuse-and-attacks)?
+  - Yes. Basic firewalls with simple rate-limit rules are enabled on the public bucket and BlobSigner backend services.
+  - The basic firewall in front of BlobSigner should be updated with more comprehensive rules based on AppSec review.
 
 ### Logging, Audit and Data Access
 
