@@ -28,7 +28,11 @@ $ tsh login --proxy=production.teleport.gitlab.net
 $ tsh ssh customers-01-inf-prdsub
 ```
 
-**NOTE:** if your user ID in Okta differs from that in Chef, you would need to make sure they match in order for this to work.
+**NOTE:** if your user ID in Okta differs from that in Chef, you would need to make sure they match in order for this to work. Your Okta user ID is the one that is part of your `@gitlab.com` email address. In this case, you can use:
+
+```
+$ tsh ssh <okta_user_id>@customers-01-inf-prdsub
+```
 
 ##### Break-glass procedure for SSH access
 
