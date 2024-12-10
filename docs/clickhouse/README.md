@@ -86,9 +86,9 @@ Runbook for restoring a ClickHouse Cloud instance from a backup after failure of
 
 ## Monitoring/Alerting
 
-Built in Monitoring Dashboards can be accessed via the [ClickHouse Cloud Console](https://clickhouse.cloud/services).  
+Built in Monitoring Dashboards can be accessed via the [ClickHouse Cloud Console](https://clickhouse.cloud/services).
 
-A dashboard for monitoring and alerting performance metrics has been configured in [Runbooks](https://gitlab.com/gitlab-com/runbooks/-/blob/master/dashboards/clickhouse/clickhouse_service.json), https://dashboards.gitlab.net/d/clickhouse-clickhouse_service/clickhouse3a-clickhouse-cloud-services
+A dashboard for monitoring and alerting performance metrics has been configured in [Runbooks](https://gitlab.com/gitlab-com/runbooks/-/blob/master/dashboards/clickhouse/clickhouse_service.json), [clickhouse-cloud-services](https://dashboards.gitlab.net/d/clickhouse-clickhouse_service/clickhouse3a-clickhouse-cloud-services)
 
 Alerting has been configured through Runbooks to alert into Slack channel `#f_clickhouse_infra_alerts`
 
