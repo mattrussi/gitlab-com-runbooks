@@ -476,8 +476,8 @@ Every new CIDR should start at directly after the previously reserved one ends.
 | `GCP/gitlab-r-saas-l-p-amd64-4`            | `gitlab-ci/gitlab-r-saas-l-p-amd64/p4`      | `10.12.72.0/21`  |
 | `GCP/gitlab-r-saas-l-p-amd64-5`            | `gitlab-ci/gitlab-r-saas-l-p-amd64/p5`      | `10.12.80.0/21`  |
 | `GCP/gitlab-r-saas-l-p-amd64-6`            | `gitlab-ci/gitlab-r-saas-l-p-amd64/p6`      | `10.12.88.0/21`  |
-| `GCP/gitlab-r-saas-l-p-amd64-7`            | `gitlab-ci/gitlab-r-saas-l-p-amd64/p7`      | `10.13.0.0/21`   |
-| `GCP/gitlab-r-saas-l-p-amd64-8`            | `gitlab-ci/gitlab-r-saas-l-p-amd64/p8`      | `10.13.8.0/21`   |
+| `GCP/gitlab-r-saas-l-p-amd64-7`            | `gitlab-ci/gitlab-r-saas-l-p-amd64/p7`      | `10.12.96.0/21`  |
+| `GCP/gitlab-r-saas-l-p-amd64-8`            | `gitlab-ci/gitlab-r-saas-l-p-amd64/p8`      | `10.12.104.0/21` |
 | `GCP/gitlab-ci-private-1`                  | `gitlab-ci/gitlab-ci-private/p3`            | `10.13.16.0/21`  |
 | `GCP/gitlab-ci-private-2`                  | `gitlab-ci/gitlab-ci-private/p4`            | `10.13.24.0/21`  |
 | `GCP/gitlab-ci-private-3`                  | `gitlab-ci/gitlab-ci-private/p5`            | `10.13.32.0/21`  |
