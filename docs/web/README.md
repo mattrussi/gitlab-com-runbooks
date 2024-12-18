@@ -96,6 +96,7 @@
 * [How to Use Vault for Secrets Management in Infrastructure](../vault/usage.md)
 * [Vault Secrets Management](../vault/vault.md)
 * [Workhorse Image Scaler](workhorse-image-scaler.md)
+* [Rails middleware path traversal check](rails-middleware-path-traversal.md)
 <!-- END_MARKER -->
 
 <!-- ## Summary -->
