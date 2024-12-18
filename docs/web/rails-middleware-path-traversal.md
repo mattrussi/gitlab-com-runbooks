@@ -31,11 +31,11 @@ The middleware is currently controlled by two feature flags:
 
 In case of an incident with this middleware, look at:
 
-1. The two `Middleware check path traversal *` dashboards in the `Rails` components panel for the current performance. It is available in the [web: Overview](https://dashboards.gitlab.net/d/web-main/web-overview?orgId=1).
+* The two `Middleware check path traversal *` dashboards in the `Rails` components panel for the current performance. It is available in the [web: Overview](https://dashboards.gitlab.net/d/web-main/web-overview?orgId=1).
   * The first dashboard will show the executions rate.
   * The second dashboard is an Apdex chart on the execution time with a threshold of `1 ms`.
   * Each dashboard will show two lines: one for rejected request and one for accepted requests.
-1. [Kibana logs](https://log.gprd.gitlab.net/app/r/s/8bYSz) for a detailed report on requests detected as attempts.
+* [Kibana logs](https://log.gprd.gitlab.net/app/r/s/8bYSz) for a detailed report on requests detected as attempts.
 
 ## Failures
 
