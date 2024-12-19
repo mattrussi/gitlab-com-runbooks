@@ -1,18 +1,26 @@
-# GitLab Service Level Indicators (SLIs)
+# User Journeys and Service Level Indicators
 
-This page outlines key user journeys for understanding, implementing, and monitoring Service Level Indicators (SLIs) within our infrastructure. These user journeys will guide the development and maintenance of SLIs to ensure they align with business objectives and user expectations.
+In software systems, a user journey represents the sequence of interactions and steps a user takes to accomplish a specific goal. Each of these steps represents a real human interaction with your system. User journeys help us understand the complete experience from the user's perspective, including their goals, challenges, and expectations.
 
-SLIs are a fundamental part of our observability and reliability to better reflect the end user experience. They enable teams to measure the performance of applications, services, and features, against defined objectives and prioritize improvements effectively.
+Service Level Indicators (SLIs), on the other hand, are the specific measurements we use to evaluate how well our system is serving users during these journeys.
 
-A well defined SLI should answer a simple question: how well are we performing (in a certain use case)?
+For example, a user journey could be **searching for a product in an e-commerce website**. A relevant SLI covering this user journey will be **search response time (measuring how quickly search results appear)**.
 
-The use case covered by the SLI can be broad, such as: what is latency of HTTP endpoints overall? Or, they can be more specific: what is the error rate of the security scan? Both allow the engineers to assess how well the system is behaving from different points of view. How specific we should implement the SLI will depend on how we want to measure the user experience. A SLI should aim capturing the experience the user is having while interacting with the system. General and specific SLIs aren't excludent, they often can be used in conjunction to help drilling down the overall user experience.
+The key distinction is that user journeys tell us WHAT users are trying to do, while SLIs tell us HOW WELL our system is performing during those journeys. User journeys are qualitative and experience-focused, while SLIs are quantitative and performance-focused.
 
-At GitLab, our SLI framework is comprised of [Apdex](https://en.wikipedia.org/wiki/Apdex) and ErrorRate. Apdex uses a success rate to calculate a success ratio, and ErrorRate uses an error rate to calculate an error ratio.
+We start by understanding the user journeys -- the actual paths people take through our system. Then we can identify the critical points along those journeys where we need to measure performance using SLIs. This ensures that we're measuring things that actually matter to our users' experience, rather than just tracking metrics that are easy to measure but might not reflect real user satisfaction. User journeys will guide the implementation and maintenance of SLIs, that will ensure that the business objectives are aligned with user expectations.
+
+SLIs are a fundamental part of our observability and reliability. They enable teams to measure the performance of applications, services, and features, against defined objectives and prioritize improvements effectively.
+
+## GitLab SLIs
+
+A well-defined SLI should answer a fundamental question: How effectively are we delivering our service for a specific use case? At GitLab, we have an SLI framework to do that, comprised of [Apdex](https://en.wikipedia.org/wiki/Apdex) and ErrorRate. Apdex uses a success rate to calculate a success ratio, and ErrorRate uses an error rate to calculate an error ratio.
 
 You should use Apdex to measure the performance of successful operations. You don’t have to measure the performance of a failing request because that performance should be tracked with ErrorRate. For example, you can measure whether a request is performing within a specified latency threshold.
 
 You should use ErrorRate to measure the rate of unsuccessful operations. For example, you can measure whether a failed request returns an HTTP status greater than or equal to 500.
+
+By using this framework, we can leverage automations for measuring Service Level Objectives (SLOs). This gives us error budget dashboards and alerting in case of SLO breaches.
 
 ## The SLI abstraction
 
@@ -52,11 +60,13 @@ flowchart LR
 
 Check below the implementation details of some concrete SLIs at GitLab, or jump to the [implementation steps](#implementation).
 
-## From user journeys to SLIs
+## From User Journeys to SLIs
 
-### The security scanning user journey
+### The security scan user journey
 
-Given an end-user pushed code to the repository and opened a merge request, then CI should run and report the results of security scans.
+**The user story**
+
+Given an end-user pushed code to the repository and opened a merge request, when the security scan is completed, then results are presented in the merge request.
 
 **The implementation**
 
@@ -94,14 +104,15 @@ The merge request ([Record error rate on security scan reports](https://gitlab.c
 
 The merge request ([Adding the security scan SLI to the library](https://gitlab.com/gitlab-com/runbooks/-/merge_requests/8210)) adds the SLI definition to our SLI library, which makes it avaialable in the [metrics catalog in Runbooks](https://gitlab.com/gitlab-com/runbooks/-/tree/master/metrics-catalog?ref_type=heads).
 
-
 ### The web request user journey
+
+**The user story**
 
 Given an end-user requested a HTTP endpoint, then endpoint should be rendered.
 
 **The implementation**
 
-The `rails_request` SLI captures the use case described by implementing an apdex and an error rate. For the apdex, it aims to answer the question: is the endpoint performing at a reasonable latency? For the error rate, it aims to answer the  question: is the endpoint responding successfully?
+The `rails_request` SLI captures the use case described by implementing an apdex and an error rate. For the apdex, it aims to answer the question: is the endpoint performing at a reasonable latency? For the error rate, it aims to answer the question: is the endpoint responding successfully?
 
 The graphical representation of its implementation:
 
@@ -134,7 +145,6 @@ flowchart LR
 ```
 
 More details [here](https://docs.gitlab.com/ee/development/application_slis/rails_request.html).
-
 
 ### <a id="implementation">Implementation</a>
 
@@ -373,6 +383,10 @@ These files are recording rules. They are part of the [metrics catalog](metrics-
 
 If you'd like to view the changes above in a merge request, you can do so in [this URL](https://gitlab.com/gitlab-com/runbooks/-/merge_requests/8305).
 
-### Need help?
+## Useful links
+
+- [Application SLI Violations Dashboard](https://dashboards.gitlab.net/d/general-application-sli-violations/general3a-application-sli-violations?orgId=1&from=now-7d%2Fm&to=now%2Fm&timezone=utc&var-PROMETHEUS_DS=mimir-gitlab-gprd&var-environment=gprd&var-environment-2=gprd&var-stage=main&var-product_stage=$__all&var-stage_group=$__all&var-component=$__all): this dashboard can be used to check the overall availability, apdex, and error rate over time. As well as drill down by significant labels, e.g. inspecting error budget per `endpoint_id` for the `rails_request` SLI or `worker` for the `sidekiq_execution`.
+
+## Need help?
 
 Need help or noticed anything missing? Please reach out to the observability team in [Slack](https://gitlab.enterprise.slack.com/archives/C065RLJB8HK) and let us know.
